@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_NOTATION_INSTRUMENTSCONVERTER_H
-#define MU_NOTATION_INSTRUMENTSCONVERTER_H
+#ifndef MU_NOTATION_INSTRUMENTSDATAFORMATTER_H
+#define MU_NOTATION_INSTRUMENTSDATAFORMATTER_H
 
 #include "instruments/instrumentstypes.h"
 
@@ -28,16 +28,21 @@ struct NamedEventList;
 }
 
 namespace mu::notation {
-class InstrumentsConverter
+class InstrumentsDataFormatter
 {
 public:
     static Ms::Instrument convertInstrument(const instruments::Instrument& instrument);
     static instruments::Instrument convertInstrument(const Ms::Instrument& insturment);
 
+    static QString buildInstrumentName(const QString& format, const QString& instrumentName, const QString& transpositionName, int instrumentNumber);
+
 private:
     static instruments::MidiActionList convertMidiActions(const QList<Ms::NamedEventList>& midiActions);
     static QList<Ms::NamedEventList> convertMidiActions(const instruments::MidiActionList& midiActions);
+
+    static bool needUseDefaultNameFormat(const QString& format);
+    static QString buildDefaultInstrumentName(const QString& instrumentName, const QString& transpositionName, int instrumentNumber);
 };
 }
 
-#endif // MU_NOTATION_INSTRUMENTSCONVERTER_H
+#endif // MU_NOTATION_INSTRUMENTSDATAFORMATTER_H

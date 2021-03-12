@@ -112,6 +112,10 @@ struct Instrument
     QString name;
     QString description;
 
+    QString transpositionName;
+    QString shortNameFormat;
+    QString longNameFormat;
+
     bool extended = false;
     int staves = 1;
 
@@ -155,7 +159,6 @@ struct InstrumentTemplate
 {
     QString id;
     Instrument instrument;
-    QString transpositionName;
 
     bool isValid() const { return !id.isEmpty(); }
 };

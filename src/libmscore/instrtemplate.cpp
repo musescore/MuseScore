@@ -410,6 +410,10 @@ void InstrumentTemplate::read(XmlReader& e)
             description = e.readElementText();
         } else if (tag == "transpositionName") {
             transpositionName = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
+        } else if (tag == "longNameFormat") {
+            longNameFormat = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
+        } else if (tag == "shortNameFormat") {
+            shortNameFormat = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
         } else if (tag == "extended") {
             extended = e.readInt();
         } else if (tag == "staves") {

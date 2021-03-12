@@ -274,6 +274,9 @@ class Instrument
 {
     StaffNameList _longNames;
     StaffNameList _shortNames;
+    QString _longNameFormat;
+    QString _shortNameFormat;
+    QString _transpositionName;
     QString _trackName;
     QString _id;
 
@@ -353,6 +356,9 @@ public:
 
     void setLongName(const QString& f);
     void setShortName(const QString& f);
+    void setLongNameFormat(const QString& format);
+    void setShortNameFormat(const QString& format);
+    void setTranspositionName(const QString& transpositionName);
 
     void addLongName(const StaffName& f);
     void addShortName(const StaffName& f);
@@ -370,8 +376,13 @@ public:
     QList<StaffName>& shortNames();
     QString trackName() const;
     void setTrackName(const QString& s);
+
     QString name() const;
     QString abbreviature() const;
+    QString longNameFormat() const;
+    QString shortNameFormat() const;
+    QString transpositionName() const;
+
     static Instrument fromTemplate(const InstrumentTemplate* t);
 
     void updateInstrumentId();

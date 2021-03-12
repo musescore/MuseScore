@@ -145,8 +145,8 @@ QVariantList InstrumentListModel::instruments() const
             continue;
         }
 
-        if (!templ.transpositionName.isEmpty()) {
-            transpositions[instrument.name] << templ.transpositionName;
+        if (!instrument.transpositionName.isEmpty()) {
+            transpositions[instrument.name] << instrument.transpositionName;
         }
 
         QVariantMap instrumentObj;
@@ -213,7 +213,9 @@ void InstrumentListModel::selectInstrument(const QString& instrumentName, const 
     InstrumentTemplate suitedTemplate;
 
     for (const InstrumentTemplate& templ : m_instrumentsMeta.templates) {
-        if (templ.instrument.name == instrumentName && templ.transpositionName == transpositionName) {
+        const Instrument& instrument = templ.instrument;
+
+        if (instrument.name == instrumentName && transpositionName == transpositionName) {
             suitedTemplate = templ;
             break;
         }
@@ -293,8 +295,8 @@ QVariantList InstrumentListModel::selectedInstruments() const
     for (const InstrumentTemplate& templ: m_selectedInstruments) {
         QString instrumentName = templ.instrument.name;
 
-        if (!templ.transpositionName.isEmpty()) {
-            instrumentName += " " + templ.transpositionName;
+        if (!templ.instrument.transpositionName.isEmpty()) {
+            instrumentName += " " + templ.instrument.transpositionName;
         }
 
         QVariantMap obj;

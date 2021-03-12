@@ -188,7 +188,11 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
         } else if (reader.name() == "description") {
             instrument.description = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
         } else if (reader.name() == "transpositionName") {
-            instrumentTemplate.transpositionName = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
+            instrument.transpositionName = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
+        } else if (reader.name() == "longNameFormat") {
+            instrument.longNameFormat = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
+        } else if (reader.name() == "shortNameFormat") {
+            instrument.shortNameFormat = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
         } else if (reader.name() == "extended") {
             instrument.extended = reader.readElementText().toInt();
         } else if (reader.name() == "staves") {

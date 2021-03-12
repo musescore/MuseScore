@@ -17,14 +17,19 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "instrumentsconverter.h"
+#include "instrumentsdataformatter.h"
 
 #include "libmscore/instrument.h"
 
 using namespace mu::notation;
 using namespace mu::instruments;
 
-Ms::Instrument InstrumentsConverter::convertInstrument(const mu::instruments::Instrument& instrument)
+const QString INSTRUMENT_NAME_KEY("{instrument}");
+const QString TRANSPOSITION_NAME_KEY("{transposition}");
+const QString INSTRUMENT_NUMBER_KEY("{number}");
+const QString DEFAULT_FORMAT_KEY("{default}");
+
+Ms::Instrument InstrumentsDataFormatter::convertInstrument(const mu::instruments::Instrument& instrument)
 {
     Ms::Instrument result;
     result.setAmateurPitchRange(instrument.amateurPitchRange.min, instrument.amateurPitchRange.max);
@@ -39,6 +44,9 @@ Ms::Instrument InstrumentsConverter::convertInstrument(const mu::instruments::In
     }
 
     result.setTrackName(instrument.name);
+    result.setTranspositionName(instrument.transpositionName);
+    result.setLongNameFormat(instrument.longNameFormat);
+    result.setShortNameFormat(instrument.shortNameFormat);
     result.setTranspose(instrument.transpose);
     result.setInstrumentId(instrument.id);
 
@@ -63,7 +71,7 @@ Ms::Instrument InstrumentsConverter::convertInstrument(const mu::instruments::In
     return result;
 }
 
-mu::instruments::Instrument InstrumentsConverter::convertInstrument(const Ms::Instrument& instrument)
+mu::instruments::Instrument InstrumentsDataFormatter::convertInstrument(const Ms::Instrument& instrument)
 {
     mu::instruments::Instrument result;
     result.amateurPitchRange = PitchRange(instrument.minPitchA(), instrument.maxPitchA());
@@ -82,6 +90,9 @@ mu::instruments::Instrument InstrumentsConverter::convertInstrument(const Ms::In
     result.id = instrument.instrumentId();
     result.useDrumset = instrument.useDrumset();
     result.drumset = instrument.drumset();
+    result.transpositionName = instrument.transpositionName();
+    result.longNameFormat = instrument.longNameFormat();
+    result.shortNameFormat = instrument.shortNameFormat();
 
     for (int i = 0; i < instrument.cleffTypeCount(); ++i) {
         result.clefs[i] = instrument.clefType(i);
@@ -100,7 +111,7 @@ mu::instruments::Instrument InstrumentsConverter::convertInstrument(const Ms::In
     return result;
 }
 
-QList<Ms::NamedEventList> InstrumentsConverter::convertMidiActions(const MidiActionList& midiActions)
+QList<Ms::NamedEventList> InstrumentsDataFormatter::convertMidiActions(const MidiActionList& midiActions)
 {
     QList<Ms::NamedEventList> result;
 
@@ -122,7 +133,7 @@ QList<Ms::NamedEventList> InstrumentsConverter::convertMidiActions(const MidiAct
     return result;
 }
 
-MidiActionList InstrumentsConverter::convertMidiActions(const QList<Ms::NamedEventList>& midiActions)
+MidiActionList InstrumentsDataFormatter::convertMidiActions(const QList<Ms::NamedEventList>& midiActions)
 {
     MidiActionList result;
 
@@ -140,6 +151,55 @@ MidiActionList InstrumentsConverter::convertMidiActions(const QList<Ms::NamedEve
 
             action.events.push_back(midiEvent);
         }
+    }
+
+    return result;
+}
+
+bool InstrumentsDataFormatter::needUseDefaultNameFormat(const QString& format)
+{
+    return format.isEmpty() ||
+           format.contains(DEFAULT_FORMAT_KEY) ||
+           !format.contains(INSTRUMENT_NAME_KEY);
+}
+
+QString InstrumentsDataFormatter::buildDefaultInstrumentName(const QString& instrumentName, const QString& transpositionName, int instrumentNumber)
+{
+    QString result;
+
+    if (!transpositionName.isEmpty()) {
+        result += transpositionName + " ";
+    }
+
+    result += " " + instrumentName;
+
+    if (instrumentNumber > 0) {
+        result += " " + QString::number(instrumentNumber);
+    }
+
+    return result;
+}
+
+QString InstrumentsDataFormatter::buildInstrumentName(const QString& format, const QString& instrumentName, const QString& transpositionName, int instrumentNumber)
+{
+    QString formatLower = format.toLower();
+
+    if (needUseDefaultNameFormat(formatLower)) {
+        return buildDefaultInstrumentName(instrumentName, transpositionName, instrumentNumber);
+    }
+
+    QString result = formatLower.replace(INSTRUMENT_NAME_KEY, instrumentName);
+
+    if (!transpositionName.isEmpty()) {
+        result = result.replace(TRANSPOSITION_NAME_KEY, transpositionName);
+    } else {
+        result = result.remove(TRANSPOSITION_NAME_KEY);
+    }
+
+    if (instrumentNumber > 0) {
+        result = result.replace(INSTRUMENT_NUMBER_KEY, QString::number(instrumentNumber));
+    } else {
+        result = result.remove(INSTRUMENT_NUMBER_KEY);
     }
 
     return result;

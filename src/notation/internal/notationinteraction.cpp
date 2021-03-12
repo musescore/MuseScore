@@ -52,7 +52,7 @@
 #include "notationnoteinput.h"
 #include "notationselection.h"
 
-#include "instrumentsconverter.h"
+#include "instrumentsdataformatter.h"
 
 using namespace mu::notation;
 
@@ -925,7 +925,7 @@ void NotationInteraction::selectInstrument(Ms::InstrumentChange* instrumentChang
         return;
     }
 
-    Ms::Instrument instrument = InstrumentsConverter::convertInstrument(selectedIstrument);
+    Ms::Instrument instrument = InstrumentsDataFormatter::convertInstrument(selectedIstrument);
 
     instrumentChange->setInit(true);
     instrumentChange->setupInstrument(&instrument);

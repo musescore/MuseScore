@@ -1475,6 +1475,21 @@ void Instrument::setShortName(const QString& f)
     }
 }
 
+void Instrument::setLongNameFormat(const QString& format)
+{
+    _longNameFormat = format;
+}
+
+void Instrument::setShortNameFormat(const QString& format)
+{
+    _shortNameFormat = format;
+}
+
+void Instrument::setTranspositionName(const QString& transpositionName)
+{
+    _transpositionName = transpositionName;
+}
+
 //---------------------------------------------------------
 //   addLongName
 //---------------------------------------------------------
@@ -1675,6 +1690,21 @@ QString Instrument::abbreviature() const
     return !_shortNames.isEmpty() ? _shortNames.first().name() : QString();
 }
 
+QString Instrument::longNameFormat() const
+{
+    return _longNameFormat;
+}
+
+QString Instrument::shortNameFormat() const
+{
+    return _shortNameFormat;
+}
+
+QString Instrument::transpositionName() const
+{
+    return _transpositionName;
+}
+
 //---------------------------------------------------------
 //   fromTemplate
 //---------------------------------------------------------
@@ -1691,6 +1721,9 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
         instr.addShortName(StaffName(sn.name(), sn.pos()));
     }
     instr.setTrackName(t->trackName);
+    instr.setLongNameFormat(t->longNameFormat);
+    instr.setShortNameFormat(t->shortNameFormat);
+    instr.setTranspositionName(t->transpositionName);
     instr.setTranspose(t->transpose);
     instr.setInstrumentId(t->musicXMLid);
     if (t->useDrumset) {

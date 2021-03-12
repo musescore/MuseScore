@@ -107,10 +107,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationselectionrange.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconverter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconverter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/addmenucontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/addmenucontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsdataformatter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsdataformatter.h
     ${CMAKE_CURRENT_LIST_DIR}/view/inotationcontextmenu.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h

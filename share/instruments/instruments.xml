@@ -222,6 +222,8 @@
                   <family>flutes</family>
                   <longName>Piccolo</longName>
                   <shortName>Picc.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Piccolo Flute in D♭</description>
                   <musicXMLid>wind.flutes.flute.piccolo</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -240,6 +242,8 @@
                   <family>flutes</family>
                   <longName>Piccolo</longName>
                   <shortName>Picc.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Piccolo Flute in E♭</description>
                   <musicXMLid>wind.flutes.flute.piccolo</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -2114,6 +2118,8 @@
                   <transpositionName>C</transpositionName>
                   <longName>Pocket Sax</longName>
                   <shortName>Pkt. Sax</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Xaphoon/Pocket Sax in C</description>
                   <musicXMLid>wind.reed.xaphoon</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -2132,6 +2138,8 @@
                   <longName>Pocket Sax</longName>
                   <shortName>Pkt. Sax</shortName>
                   <description>Xaphoon/Pocket Sax in B♭</description>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <musicXMLid>wind.reed.xaphoon</musicXMLid>
                   <transposingClef>G</transposingClef>
                   <concertClef>G8vb</concertClef>
@@ -2151,6 +2159,8 @@
                   <longName>Pocket Sax</longName>
                   <shortName>Pkt. Sax</shortName>
                   <description>Xaphoon/Pocket Sax in D</description>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <musicXMLid>wind.reed.xaphoon</musicXMLid>
                   <transposingClef>G</transposingClef>
                   <concertClef>G8vb</concertClef>
@@ -2169,6 +2179,8 @@
                   <transpositionName>G</transpositionName>
                   <longName>Pocket Sax in G</longName>
                   <shortName>G Pkt. Sax</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Xaphoon/Pocket Sax in G</description>
                   <musicXMLid>wind.reed.xaphoon</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -2624,6 +2636,7 @@
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="melody-saxophone">
+                  <transpositionName>C</transpositionName>
                   <family>saxophones</family>
                   <longName>Melody Saxophone</longName>
                   <shortName>Mel. Sax.</shortName>
@@ -2861,6 +2874,8 @@
                   <transpositionName>C</transpositionName>
                   <longName>12 Hole Chromatic Harmonica</longName>
                   <shortName>Harm.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>12 Hole Chromatic Harmonica in C</description>
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
@@ -2875,6 +2890,8 @@
                   <transpositionName>G</transpositionName>
                   <longName>12 Hole Chromatic Harmonica</longName>
                   <shortName>Harm.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>12 Hole Chromatic Harmonica in G</description>
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
@@ -2889,6 +2906,8 @@
                   <transpositionName>Tenor C</transpositionName>
                   <longName>12 Hole Chromatic Harmonica</longName>
                   <shortName>Harm.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>12 Hole Chromatic Harmonica in Tenor C</description>
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G8vb</clef>
@@ -2903,6 +2922,8 @@
                   <transpositionName>C</transpositionName>
                   <longName>14 Hole Chromatic Harmonica</longName>
                   <shortName>Harm.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>14 Hole Chromatic Harmonica in C</description>
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
@@ -2917,6 +2938,8 @@
                   <transpositionName>C</transpositionName>
                   <longName>16 Hole Chromatic Harmonica</longName>
                   <shortName>Harm.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>16 Hole Chromatic Harmonica in C</description>
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
@@ -3165,6 +3188,8 @@
                   <family>horns</family>
                   <longName>Horn</longName>
                   <shortName>Hn.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Horn in B♭ alto</description>
                   <musicXMLid>brass.french-horn</musicXMLid>
                   <clef>G</clef>
@@ -3185,6 +3210,8 @@
                   <family>horns</family>
                   <longName>Horn</longName>
                   <shortName>Hn.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Horn in C alto</description>
                   <musicXMLid>brass.natural-horn</musicXMLid>
                   <clef>G</clef>
@@ -3203,6 +3230,8 @@
                   <family>horns</family>
                   <longName>Horn</longName>
                   <shortName>Hn.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Horn in B♭ basso</description>
                   <musicXMLid>brass.natural-horn</musicXMLid>
                   <clef>G</clef>
@@ -3343,6 +3372,8 @@
                   <family>horns</family>
                   <longName>Horn</longName>
                   <shortName>Hn.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Horn in C</description>
                   <musicXMLid>brass.natural-horn</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -3365,6 +3396,8 @@
                   <trackName>Horn (bass clef)</trackName>
                   <longName>Horn (bass clef)</longName>
                   <shortName>Hn.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Horn in C</description>
                   <musicXMLid>brass.natural-horn</musicXMLid>
                   <clef>F</clef>
@@ -3656,6 +3689,8 @@
                   <family>trumpets</family>
                   <longName>Piccolo Trumpet</longName>
                   <shortName>P. Tpt.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Piccolo Trumpet in B♭</description>
                   <musicXMLid>brass.trumpet.piccolo</musicXMLid>
                   <clef>G</clef>
@@ -3676,6 +3711,8 @@
                   <family>trumpets</family>
                   <longName>Piccolo Trumpet</longName>
                   <shortName>P. Tpt.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Piccolo Trumpet in A</description>
                   <musicXMLid>brass.trumpet.piccolo</musicXMLid>
                   <clef>G</clef>
@@ -3898,6 +3935,8 @@
                   <family>trumpets</family>
                   <longName>Bass Trumpet</longName>
                   <shortName>B. Tpt.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Bass Trumpet in C</description>
                   <musicXMLid>brass.trumpet.bass</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -3962,6 +4001,8 @@
                   <family>trumpets</family>
                   <longName>Baroque Trumpet</longName>
                   <shortName>Bq. Tpt.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Baroque Trumpet in D</description>
                   <musicXMLid>brass.trumpet.baroque</musicXMLid>
                   <clef>G</clef>
@@ -3983,6 +4024,8 @@
                   <family>trumpets</family>
                   <longName>Baroque Trumpet</longName>
                   <shortName>Bq. Tpt.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Baroque Trumpet in F</description>
                   <musicXMLid>brass.trumpet.baroque</musicXMLid>
                   <clef>G</clef>
@@ -4004,6 +4047,8 @@
                   <family>trumpets</family>
                   <longName>Baroque Trumpet</longName>
                   <shortName>Bq. Tpt.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Baroque Trumpet in E♭</description>
                   <musicXMLid>brass.trumpet.baroque</musicXMLid>
                   <clef>G</clef>
@@ -4025,6 +4070,8 @@
                   <family>trumpets</family>
                   <longName>Baroque Trumpet</longName>
                   <shortName>Bq. Tpt.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Baroque Trumpet in C</description>
                   <musicXMLid>brass.trumpet.baroque</musicXMLid>
                   <clef>G</clef>
@@ -4044,6 +4091,8 @@
                   <family>trumpets</family>
                   <longName>Baroque Trumpet</longName>
                   <shortName>Bq. Tpt.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Baroque Trumpet in B♭</description>
                   <musicXMLid>brass.trumpet.baroque</musicXMLid>
                   <clef>G</clef>
@@ -4745,6 +4794,8 @@
                   <family>tubas</family>
                   <longName>Bass Tuba</longName>
                   <shortName>Ba. Tb.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Bass Tuba in F</description>
                   <musicXMLid>brass.tuba.bass</musicXMLid>
                   <clef>F</clef>
@@ -4760,6 +4811,8 @@
                   <family>tubas</family>
                   <longName>Bass Tuba</longName>
                   <shortName>Ba. Tb.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Bass Tuba in E♭</description>
                   <musicXMLid>brass.tuba.bass</musicXMLid>
                   <clef>F</clef>

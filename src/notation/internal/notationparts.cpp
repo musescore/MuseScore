@@ -25,7 +25,7 @@
 #include "libmscore/instrchange.h"
 #include "libmscore/page.h"
 
-#include "instrumentsconverter.h"
+#include "instrumentsdataformatter.h"
 
 #include "igetscore.h"
 
@@ -100,7 +100,7 @@ NotifyList<mu::instruments::Instrument> NotationParts::instrumentList(const ID& 
     NotifyList<mu::instruments::Instrument> result;
 
     for (const Ms::Instrument* instrument: instruments(part).values()) {
-        result.push_back(InstrumentsConverter::convertInstrument(*instrument));
+        result.push_back(InstrumentsDataFormatter::convertInstrument(*instrument));
     }
 
     ChangedNotifier<mu::instruments::Instrument>* notifier = partNotifier(partId);
@@ -240,7 +240,7 @@ void NotationParts::setInstrumentVisible(const ID& instrumentId, const ID& fromP
     updateScore();
 
     ChangedNotifier<mu::instruments::Instrument>* notifier = partNotifier(fromPartId);
-    notifier->itemChanged(InstrumentsConverter::convertInstrument(*instrumentInfo.instrument));
+    notifier->itemChanged(InstrumentsDataFormatter::convertInstrument(*instrumentInfo.instrument));
 }
 
 Ms::ChordRest* NotationParts::selectedChord() const
@@ -316,7 +316,7 @@ void NotationParts::assignIstrumentToSelectedChord(Ms::Instrument* instrument)
     updateScore();
 
     ChangedNotifier<mu::instruments::Instrument>* notifier = partNotifier(part->id());
-    notifier->itemChanged(InstrumentsConverter::convertInstrument(*instrument));
+    notifier->itemChanged(InstrumentsDataFormatter::convertInstrument(*instrument));
 }
 
 void NotationParts::updatePartTitles()
@@ -621,7 +621,7 @@ void NotationParts::appendDoublingInstrument(const mu::instruments::Instrument& 
         lastTick = std::max(fraction.ticks(), lastTick);
     }
 
-    part->setInstrument(InstrumentsConverter::convertInstrument(instrument), Ms::Fraction::fromTicks(lastTick + 1));
+    part->setInstrument(InstrumentsDataFormatter::convertInstrument(instrument), Ms::Fraction::fromTicks(lastTick + 1));
     doSetPartName(part, formatPartName(part));
     updateScore();
 
@@ -682,12 +682,12 @@ void NotationParts::replaceInstrument(const ID& instrumentId, const ID& fromPart
         return;
     }
 
-    part->setInstrument(InstrumentsConverter::convertInstrument(newInstrument), oldInstrumentInfo.fraction);
+    part->setInstrument(InstrumentsDataFormatter::convertInstrument(newInstrument), oldInstrumentInfo.fraction);
     doSetPartName(part, formatPartName(part));
     updateScore();
 
     ChangedNotifier<mu::instruments::Instrument>* notifier = partNotifier(part->id());
-    notifier->itemReplaced(InstrumentsConverter::convertInstrument(*oldInstrumentInfo.instrument), newInstrument);
+    notifier->itemReplaced(InstrumentsDataFormatter::convertInstrument(*oldInstrumentInfo.instrument), newInstrument);
 
     m_partsNotifier->itemChanged(part);
 }
@@ -1253,22 +1253,33 @@ void NotationParts::appendNewInstruments(const InstrumentList& instruments)
     }
 
     IDList existedInstrumentIds = allInstrumentsIds();
-    IDList newInstruentIds = instrumentIds;
+    IDList newInstrumentIds = instrumentIds;
     for (const ID& instrumentId: existedInstrumentIds) {
-        newInstruentIds.removeOne(instrumentId);
+        newInstrumentIds.removeOne(instrumentId);
     }
 
     for (const mu::instruments::Instrument& instrument: instruments) {
-        if (!newInstruentIds.contains(instrument.id)) {
+        if (!newInstrumentIds.contains(instrument.id)) {
             continue;
         }
 
-        newInstruentIds.removeOne(instrument.id);
+        newInstrumentIds.removeOne(instrument.id);
 
         Part* part = new Part(score());
 
+        part->setInstrument(InstrumentsDataFormatter::convertInstrument(instrument));
         part->setPartName(instrument.name);
-        part->setInstrument(InstrumentsConverter::convertInstrument(instrument));
+
+        int instrumentNumber = allInstrumentsIds().count(instrument.id);
+
+        QString longName = !instrument.longNames.empty() ? instrument.longNames.first().name() : QString();
+        QString shortName = !instrument.shortNames.empty() ? instrument.shortNames.first().name() : QString();
+
+        QString formattedLongName = InstrumentsDataFormatter::buildInstrumentName(instrument.longNameFormat, longName, instrument.transpositionName, instrumentNumber);
+        QString formattedShortName = InstrumentsDataFormatter::buildInstrumentName(instrument.shortNameFormat, shortName, instrument.transpositionName, instrumentNumber);
+
+        part->setLongName(formattedLongName);
+        part->setShortName(formattedShortName);
 
         score()->undo(new Ms::InsertPart(part, lastStaffIndex()));
         appendStaves(part, instrument);
