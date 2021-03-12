@@ -40,6 +40,7 @@ QPainter* BufferedPaintProvider::qpainter() const
 void BufferedPaintProvider::beginTarget(const std::string& name)
 {
     clear();
+    m_buf.name = name;
     beginObject(name + "_default", QPointF());
     m_isActive = true;
 }

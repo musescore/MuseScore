@@ -31,8 +31,6 @@ DockPage {
         pageModel.isNoteInputBarVisible = notationNoteInputBar.visible
         notationNoteInputBar.visible = Qt.binding(function() { return pageModel.isNoteInputBarVisible })
 
-        autobotPanel.visible = Qt.binding(function() { return pageModel.isInspectorPanelVisible })
-
         pageModel.init()
     }
 
@@ -149,6 +147,7 @@ DockPage {
             area: Qt.RightDockWidgetArea
             floatable: true
             closable: true
+            visible: false
 
             Loader {
                 anchors.fill: parent

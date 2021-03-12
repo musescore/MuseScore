@@ -16,29 +16,18 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUTOBOT_ABPAINTPROVIDER_H
-#define MU_AUTOBOT_ABPAINTPROVIDER_H
+#include "autobotconfiguration.h"
 
-#include <memory>
-#include "libmscore/draw/bufferedpaintprovider.h"
+#include <cstdlib>
 
-namespace mu::autobot {
-class AbPaintProvider : public draw::BufferedPaintProvider
+using namespace mu::autobot;
+
+mu::io::path AutobotConfiguration::dataPath() const
 {
-public:
-
-    static const std::shared_ptr<AbPaintProvider>& instance();
-
-    void beginTarget(const std::string& name) override;
-    bool endTarget(bool endDraw = false) override;
-
-    QByteArray serialize() const;
-
-private:
-    AbPaintProvider();
-
-    draw::DrawBuffer m_notationViewDrawBuf;
-};
+    return io::path(std::getenv("MU_AUTOBOT_DATA_PATH"));
 }
 
-#endif // MU_AUTOBOT_ABPAINTPROVIDER_H
+mu::io::path AutobotConfiguration::drawDataPath() const
+{
+    return dataPath() + "/draw_data";
+}
