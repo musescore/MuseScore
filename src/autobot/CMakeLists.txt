@@ -35,8 +35,11 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/autobotmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/autobotmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iautobot.h
+    ${CMAKE_CURRENT_LIST_DIR}/iautobotconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobot.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobot.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abrunner.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/abrunner.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abscorelist.cpp

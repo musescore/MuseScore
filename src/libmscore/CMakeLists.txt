@@ -364,10 +364,13 @@ set(MODULE_SRC
     draw/bufferedpaintprovider.h
     draw/drawobjectslogger.cpp
     draw/drawobjectslogger.h
+    draw/drawbufferjson.cpp
+    draw/drawbufferjson.h
     )
 
 set(MODULE_INCLUDE
     ${PROJECT_SOURCE_DIR}/thirdparty/dtl
+    ${Qt5Gui_PRIVATE_INCLUDE_DIRS} # for drawbufferjson.cpp
     )
 
 set(FREETYPE_LIB )

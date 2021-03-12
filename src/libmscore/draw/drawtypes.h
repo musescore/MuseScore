@@ -68,7 +68,7 @@ struct DrawPolygon {
 };
 
 struct DrawText {
-    QPointF point;
+    QPointF pos;
     QString text;
 };
 
@@ -84,7 +84,7 @@ struct DrawGlyphRun {
 };
 
 struct DrawPixmap {
-    QPointF point;
+    QPointF pos;
     QPixmap pm;
 };
 
@@ -92,6 +92,57 @@ struct DrawTiledPixmap {
     QRectF rect;
     QPixmap pm;
     QPointF offset;
+};
+
+struct DrawBuffer
+{
+    struct State {
+        QPen pen;
+        QBrush brush;
+        QFont font;
+        bool isAntialiasing = false;
+        QTransform transform;
+        CompositionMode compositionMode = CompositionMode::SourceOver;
+    };
+
+    struct Data {
+        State state;
+
+        std::vector<DrawPath> paths;
+        std::vector<DrawPolygon> polygons;
+        std::vector<DrawText> texts;
+        std::vector<DrawRectText> rectTexts;
+        std::vector<DrawGlyphRun> glyphs;
+        std::vector<DrawPixmap> pixmaps;
+        std::vector<DrawTiledPixmap> tiledPixmap;
+
+        bool empty() const
+        {
+            return paths.empty()
+                   && polygons.empty()
+                   && texts.empty()
+                   && rectTexts.empty()
+                   && glyphs.empty()
+                   && pixmaps.empty()
+                   && tiledPixmap.empty();
+        }
+    };
+
+    struct Object {
+        std::string name;
+        QPointF pagePos;
+        std::vector<Data> datas;
+
+        Object(const std::string& n, const QPointF& p)
+            : name(n), pagePos(p)
+        {
+            //! NOTE Make data with default state
+            datas.push_back(DrawBuffer::Data());
+        }
+    };
+
+    std::string name;
+    std::vector<Object> objects;
 };
 }
 #endif // MU_DRAW_DRAWTYPES_H

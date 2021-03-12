@@ -18,6 +18,8 @@
 //=============================================================================
 #include "abdrawserializationstep.h"
 
+#include <QFile>
+
 #include "log.h"
 #include "../draw/abpaintprovider.h"
 
@@ -25,8 +27,28 @@ using namespace mu::autobot;
 
 void AbDrawSerializationStep::doRun(AbContext ctx)
 {
-    std::string data;
-    AbPaintProvider::instance()->serialize(data);
-    LOGI() << data;
+    io::path drawDataPath = configuration()->drawDataPath();
+    if (!fileSystem()->exists(drawDataPath)) {
+        Ret ret = fileSystem()->makePath(drawDataPath);
+        if (!ret) {
+            LOGE() << "failed make path: " << drawDataPath;
+            doFinish(ctx);
+            return;
+        }
+    }
+
+    QByteArray data = AbPaintProvider::instance()->serialize();
+
+    io::path scorePath = ctx.val<io::path>(AbContext::Key::ScoreFile);
+    io::path filePath = drawDataPath + "/" + io::basename(scorePath) + ".json";
+    QFile file(filePath.toQString());
+    if (!file.open(QIODevice::WriteOnly)) {
+        LOGE() << "failed open file to write draw data, path: " << filePath;
+        doFinish(ctx);
+        return;
+    }
+
+    file.write(data);
+
     doFinish(ctx);
 }
