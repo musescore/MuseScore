@@ -103,7 +103,7 @@ Rectangle {
             }
 
             onSelectInstrumentRequested: {
-                instrumentsModel.selectInstrument(instrumentId, transposition)
+                instrumentsModel.selectInstrument(instrumentName, transpositionName)
                 Qt.callLater(selectedInstrumentsView.scrollViewToEnd)
             }
 
@@ -112,7 +112,7 @@ Rectangle {
                 familyView.focusGroup(currentSelection.instrument.groupId)
 
                 if (!root.canSelectMultipleInstruments) {
-                    instrumentsModel.selectInstrument(currentSelection.instrument.id, currentSelection.transposition)
+                    instrumentsModel.selectInstrument(currentSelection.instrument.name, currentSelection.transposition)
                 }
             }
 
@@ -141,7 +141,7 @@ Rectangle {
 
             onClicked: {
                 var currentSelect = instrumentsView.currentInstrument()
-                instrumentsModel.selectInstrument(currentSelect.instrument.id, currentSelect.transpositionName)
+                instrumentsModel.selectInstrument(currentSelect.instrument.name, currentSelect.transpositionName)
             }
         }
 
@@ -162,7 +162,7 @@ Rectangle {
             instrumentOrderTypes: instrumentsModel.instrumentOrderTypes
 
             onUnselectInstrumentRequested: {
-                instrumentsModel.unselectInstrument(id)
+                instrumentsModel.unselectInstrument(index)
             }
 
             onOrderChanged: {

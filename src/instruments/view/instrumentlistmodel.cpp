@@ -146,25 +146,18 @@ QVariantList InstrumentListModel::instruments() const
         }
 
         if (!templ.transpositionName.isEmpty()) {
-            transpositions[instrument.id] << templ.transpositionName;
-        }
-
-        QString instrumentName = instrument.name;
-        if (!templ.transpositionName.isEmpty()) {
-            instrumentName = instrumentName.replace(templ.transpositionName + " ", "")
-                    .replace("in " + templ.transpositionName, "");
+            transpositions[instrument.name] << templ.transpositionName;
         }
 
         QVariantMap instrumentObj;
-        instrumentObj[ID_KEY] = instrument.id;
-        instrumentObj[NAME_KEY] = instrumentName;
+        instrumentObj[NAME_KEY] = instrument.name;
         instrumentObj[GROUP_ID] = instrument.groupId;
 
-        if (transpositions.contains(instrument.id)) {
-            instrumentObj[TRANSPOSITIONS_KEY] = transpositions[instrument.id];
+        if (transpositions.contains(instrument.name)) {
+            instrumentObj[TRANSPOSITIONS_KEY] = transpositions[instrument.name];
         }
 
-        availableInstruments[instrument.id] = instrumentObj;
+        availableInstruments[instrument.name] = instrumentObj;
     }
 
     QVariantList result = availableInstruments.values();
@@ -215,12 +208,12 @@ void InstrumentListModel::selectGroup(const QString& groupId)
     emit selectedGroupChanged(groupId);
 }
 
-void InstrumentListModel::selectInstrument(const QString& instrumentId, const QString& transpositionName)
+void InstrumentListModel::selectInstrument(const QString& instrumentName, const QString& transpositionName)
 {
     InstrumentTemplate suitedTemplate;
 
     for (const InstrumentTemplate& templ : m_instrumentsMeta.templates) {
-        if (templ.instrument.id == instrumentId && templ.transpositionName == transpositionName) {
+        if (templ.instrument.name == instrumentName && templ.transpositionName == transpositionName) {
             suitedTemplate = templ;
             break;
         }
@@ -228,7 +221,7 @@ void InstrumentListModel::selectInstrument(const QString& instrumentId, const QS
 
     if (!suitedTemplate.isValid()) {
         LOGE() << QString("Template of instrument %1 with transposition %2 does not exist")
-                  .arg(instrumentId)
+                  .arg(instrumentName)
                   .arg(transpositionName);
         return;
     }
@@ -241,20 +234,19 @@ void InstrumentListModel::selectInstrument(const QString& instrumentId, const QS
     emit selectedInstrumentsChanged();
 }
 
-void InstrumentListModel::makeSoloist(const QString&)
+void InstrumentListModel::makeSoloist(int)
 {
     NOT_IMPLEMENTED;
 }
 
-void InstrumentListModel::unselectInstrument(const QString& instrumentId)
+void InstrumentListModel::unselectInstrument(int index)
 {
-    for (int i = 0; i < m_selectedInstruments.count(); ++i) {
-        if (m_selectedInstruments[i].id == instrumentId) {
-            m_selectedInstruments.removeAt(i);
-            emit selectedInstrumentsChanged();
-            return;
-        }
+    if (index < 0 || index >= m_selectedInstruments.size()) {
+        return;
     }
+
+    m_selectedInstruments.removeAt(index);
+    emit selectedInstrumentsChanged();
 }
 
 void InstrumentListModel::swapSelectedInstruments(int firstIndex, int secondIndex)
@@ -301,7 +293,7 @@ QVariantList InstrumentListModel::selectedInstruments() const
     for (const InstrumentTemplate& templ: m_selectedInstruments) {
         QString instrumentName = templ.instrument.name;
 
-        if (templ.transpositionName.isEmpty()) {
+        if (!templ.transpositionName.isEmpty()) {
             instrumentName += " " + templ.transpositionName;
         }
 

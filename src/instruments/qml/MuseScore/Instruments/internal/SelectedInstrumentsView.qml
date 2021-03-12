@@ -18,11 +18,16 @@ Item {
     property bool isInstrumentSelected: currentInstrumentIndex != -1
     property int currentInstrumentIndex: -1
 
-    signal unselectInstrumentRequested(string id)
+    signal unselectInstrumentRequested(var index)
     signal orderChanged(string id)
 
     function scrollViewToEnd() {
         instrumentsView.positionViewAtEnd()
+    }
+
+    function unselectCurrentInstrument() {
+        unselectInstrumentRequested(currentInstrumentIndex)
+        currentInstrumentIndex--
     }
 
     StyledTextLabel {
@@ -79,8 +84,7 @@ Item {
             icon: IconCode.DELETE_TANK
 
             onClicked: {
-                unselectInstrumentRequested(instruments[currentInstrumentIndex].id)
-                currentInstrumentIndex--
+                root.unselectCurrentInstrument()
             }
         }
     }
@@ -125,7 +129,7 @@ Item {
             }
 
             onDoubleClicked: {
-                root.unselectInstrumentRequested(modelData.id)
+                root.unselectCurrentInstrument()
             }
         }
     }

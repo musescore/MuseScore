@@ -14,7 +14,7 @@ Item {
 
     property bool isInstrumentSelected: privateProperties.currentInstrumentIndex != -1
 
-    signal selectInstrumentRequested(var instrumentId, var transposition)
+    signal selectInstrumentRequested(var instrumentName, var transpositionName)
     signal instrumentClicked()
 
     QtObject {
@@ -117,7 +117,7 @@ Item {
 
             onDoubleClicked: {
                 var currentSelection = root.currentInstrument()
-                root.selectInstrumentRequested(currentSelection.instrument.id, currentSelection.transposition)
+                root.selectInstrumentRequested(currentSelection.instrument.name, currentSelection.transpositionName)
             }
 
             StyledComboBox {
