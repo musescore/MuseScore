@@ -641,11 +641,27 @@ PalettePanel* PaletteCreator::newRepeatsPalettePanel()
     sp->setGrid(75, 28);
     sp->setDrawGrid(true);
 
-    auto rm = makeElement<MeasureRepeat>(gscore);
-    sp->append(rm, mu::qtrc("symUserNames", Sym::symUserNames[int(SymId::repeat1Bar)]));
+    struct MeasureRepeatInfo
+    {
+        SymId id = SymId::noSym;
+        int measuresCount = 0;
+    };
+
+    std::vector<MeasureRepeatInfo> measureRepeats {
+        { SymId::repeat1Bar, 1 },
+        { SymId::repeat2Bars, 2 },
+        { SymId::repeat4Bars, 4 }
+    };
+
+    for (MeasureRepeatInfo repeat: measureRepeats) {
+        auto rm = makeElement<MeasureRepeat>(gscore);
+        rm->setSymId(repeat.id);
+        rm->setNumMeasures(repeat.measuresCount);
+        sp->append(rm, mu::qtrc("symUserNames", Sym::symUserNames[int(repeat.id)]));
+    }
 
     for (int i = 0; i < markerTypeTableSize(); i++) {
-        if (markerTypeTable[i].type == Marker::Type::CODETTA) {   // not in SMuFL
+        if (markerTypeTable[i].type == Marker::Type::CODETTA) { // not in SMuFL
             continue;
         }
 

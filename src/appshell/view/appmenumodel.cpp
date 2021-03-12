@@ -211,7 +211,7 @@ MenuItem AppMenuModel::formatItem() const
         makeAction("edit-style"),
         makeAction("page-settings"), // need implement
         makeSeparator(),
-        makeAction("add-remove-breaks", scoreOpened()),
+        makeAction("add-remove-breaks"),
         makeMenu(trc("appshell", "&Stretch"), stretchItems),
         makeSeparator(),
         makeAction("reset-text-style-overrides"),
