@@ -97,34 +97,34 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Pitch up by an octave or move text or articulation up")
                ),
     ActionItem("cut",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Cut")
                ),
     ActionItem("copy",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Copy")
                ),
     ActionItem("paste",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Paste")
                ),
     ActionItem("paste-half",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Paste Half Duration"),
                QT_TRANSLATE_NOOP("action", "Paste half duration")
                ),
     ActionItem("paste-double",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Paste Double Duration"),
                QT_TRANSLATE_NOOP("action", "Paste double duration")
                ),
     ActionItem("paste-special",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Paste Special"),
                QT_TRANSLATE_NOOP("action", "Paste special")
                ),
     ActionItem("swap",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Swap with Clipboard"),
                QT_TRANSLATE_NOOP("action", "Swap with clipboard")
                ),
@@ -134,68 +134,68 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Select all")
                ),
     ActionItem("delete",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Delete"),
                QT_TRANSLATE_NOOP("action", "Delete the selected element(s)"),
                IconCode::Code::DELETE_TANK
                ),
     ActionItem("select-similar",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Select: similar"),
                QT_TRANSLATE_NOOP("action", "Select all similar elements")
                ),
     ActionItem("select-similar-staff",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Select: in same staff"),
                QT_TRANSLATE_NOOP("action", "Select all similar elements in same staff")
                ),
     ActionItem("select-similar-range",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Select: in the range"),
                QT_TRANSLATE_NOOP("action", "Select all similar elements in the range selection")
                ),
     ActionItem("select-dialog",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Select Dialog"),
                QT_TRANSLATE_NOOP("action", "Select all similar elements with more options")
                ),
     ActionItem("edit-style",
                ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Style…"),
+               QT_TRANSLATE_NOOP("action", "Style..."),
                QT_TRANSLATE_NOOP("action", "Edit style")
                ),
     ActionItem("page-settings",
                ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Page Settings…"),
+               QT_TRANSLATE_NOOP("action", "Page Settings..."),
                QT_TRANSLATE_NOOP("action", "Page settings")
                ),
     ActionItem("load-style",
                ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action","Load Style…"),
+               QT_TRANSLATE_NOOP("action","Load Style..."),
                QT_TRANSLATE_NOOP("action","Load style")
                ),
     ActionItem("transpose",
                ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "&Transpose…"),
+               QT_TRANSLATE_NOOP("action", "&Transpose..."),
                QT_TRANSLATE_NOOP("action", "Transpose")
                ),
     ActionItem("explode",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Explode"),
                QT_TRANSLATE_NOOP("action", "Explode contents of top selected staff into staves below")
                ),
     ActionItem("implode",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Implode"),
                QT_TRANSLATE_NOOP("action", "Implode contents of selected staves into top selected staff")
                ),
     ActionItem("realize-chord-symbols",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Realize Chord Symbols"),
                QT_TRANSLATE_NOOP("action", "Convert chord symbols into notes")
                ),
     ActionItem("time-delete",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Remove Selected Range"),
                QT_TRANSLATE_NOOP("action", "Remove selected range")
                ),
@@ -205,27 +205,27 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Fill with slashes")
                ),
     ActionItem("slash-rhythm",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Toggle Rhythmic Slash Notation"),
                QT_TRANSLATE_NOOP("action", "Toggle 'Rhythmic Slash Notation'")
                ),
     ActionItem("pitch-spell",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Respell Pitches"),
                QT_TRANSLATE_NOOP("action", "Respell pitches")
                ),
     ActionItem("reset-groupings",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Regroup Rhythms"),
                QT_TRANSLATE_NOOP("action", "Combine rests and tied notes from selection and resplit at rhythmical")
                ),
     ActionItem("resequence-rehearsal-marks",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Resequence Rehearsal Marks"),
                QT_TRANSLATE_NOOP("action", "Resequence rehearsal marks")
                ),
     ActionItem("unroll-repeats",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Unroll Repeats"),
                QT_TRANSLATE_NOOP("action", "Unroll Repeats")
                ),
@@ -235,7 +235,7 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Copy lyrics to clipboard")
                ),
     ActionItem("del-empty-measures",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Remove Empty Trailing Measures"),
                QT_TRANSLATE_NOOP("action", "Remove empty trailing measures")
                ),
@@ -266,7 +266,7 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Staff/Part Properties")
                ),
     ActionItem("add-remove-breaks",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Add/Remove System Breaks…"),
                QT_TRANSLATE_NOOP("action", "Add/remove system breaks")
                ),
@@ -276,484 +276,484 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Edit score properties")
                ),
     ActionItem("undo",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationUndoRedo,
                QT_TRANSLATE_NOOP("action", "Undo"),
                QT_TRANSLATE_NOOP("action", "Undo last change"),
                IconCode::Code::UNDO
                ),
     ActionItem("redo",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationUndoRedo,
                QT_TRANSLATE_NOOP("action", "Redo"),
                QT_TRANSLATE_NOOP("action", "Redo last undo"),
                IconCode::Code::REDO
                ),
     ActionItem("voice-x12",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Exchange Voice 1-2"),
                QT_TRANSLATE_NOOP("action", "Exchange voice 1-2")
                ),
     ActionItem("voice-x13",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Exchange Voice 1-3"),
                QT_TRANSLATE_NOOP("action", "Exchange voice 1-3")
                ),
     ActionItem("voice-x14",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Exchange Voice 1-4"),
                QT_TRANSLATE_NOOP("action", "Exchange voice 1-4")
                ),
     ActionItem("voice-x23",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Exchange Voice 2-3"),
                QT_TRANSLATE_NOOP("action", "Exchange voice 2-3")
                ),
     ActionItem("voice-x24",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Exchange Voice 2-4"),
                QT_TRANSLATE_NOOP("action", "Exchange voice 2-4")
                ),
     ActionItem("voice-x34",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Exchange Voice 3-4"),
                QT_TRANSLATE_NOOP("action", "Exchange voice 3-4")
                ),
     ActionItem("split-measure",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Split Measure Before Selected Note/Rest"),
                QT_TRANSLATE_NOOP("action", "Split measure before selected note/rest")
                ),
     ActionItem("join-measures",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Join Selected Measures"),
                QT_TRANSLATE_NOOP("action", "Join selected measures")
                ),
     ActionItem("insert-measure",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert One Measure"),
                QT_TRANSLATE_NOOP("action", "Insert one measure")
                ),
     ActionItem("insert-measures",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert Measures"),
                QT_TRANSLATE_NOOP("action", "Insert measures")
                ),
     ActionItem("append-measure",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Append One Measure"),
                QT_TRANSLATE_NOOP("action", "Append one measure")
                ),
     ActionItem("append-measures",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Append Measures"),
                QT_TRANSLATE_NOOP("action", "Append measures")
                ),
     ActionItem("insert-hbox",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert Horizontal Frame"),
                QT_TRANSLATE_NOOP("action", "Insert horizontal frame")
                ),
     ActionItem("insert-vbox",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert Vertical Frame"),
                QT_TRANSLATE_NOOP("action", "Insert vertical frame")
                ),
     ActionItem("insert-textframe",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert Text Frame"),
                QT_TRANSLATE_NOOP("action", "Insert text frame")
                ),
     ActionItem("append-hbox",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Append Horizontal Frame"),
                QT_TRANSLATE_NOOP("action", "Append horizontal frame")
                ),
     ActionItem("append-vbox",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Append Vertical Frame"),
                QT_TRANSLATE_NOOP("action", "Append vertical frame")
                ),
     ActionItem("append-textframe",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Append Text Frame"),
                QT_TRANSLATE_NOOP("action", "Append text frame")
                ),
     ActionItem("interval1",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Unison Above"),
                QT_TRANSLATE_NOOP("action", "Enter unison above")
                ),
     ActionItem("interval2",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Second Above"),
                QT_TRANSLATE_NOOP("action", "Enter second above")
                ),
     ActionItem("interval3",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Third Above"),
                QT_TRANSLATE_NOOP("action", "Enter third above")
                ),
     ActionItem("interval4",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Fourth Above"),
                QT_TRANSLATE_NOOP("action", "Enter fourth above")
                ),
     ActionItem("interval5",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Fifth Above"),
                QT_TRANSLATE_NOOP("action", "Enter fifth above")
                ),
     ActionItem("interval6",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Sixth Above"),
                QT_TRANSLATE_NOOP("action", "Enter sixth above")
                ),
     ActionItem("interval7",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Seventh Above"),
                QT_TRANSLATE_NOOP("action", "Enter seventh above")
                ),
     ActionItem("interval8",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Octave Above"),
                QT_TRANSLATE_NOOP("action", "Enter octave above")
                ),
     ActionItem("interval9",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Ninth Above"),
                QT_TRANSLATE_NOOP("action", "Enter ninth above")
                ),
     ActionItem("interval-2",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Second Below"),
                QT_TRANSLATE_NOOP("action", "Enter second below")
                ),
     ActionItem("interval-3",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Third Below"),
                QT_TRANSLATE_NOOP("action", "Enter third below")
                ),
     ActionItem("interval-4",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Fourth Below"),
                QT_TRANSLATE_NOOP("action", "Enter fourth below")
                ),
     ActionItem("interval-5",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Fifth Below"),
                QT_TRANSLATE_NOOP("action", "Enter fifth below")
                ),
     ActionItem("interval-6",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Sixth Below"),
                QT_TRANSLATE_NOOP("action", "Enter sixth below")
                ),
     ActionItem("interval-7",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Seventh Below"),
                QT_TRANSLATE_NOOP("action", "Enter seventh below")
                ),
     ActionItem("interval-8",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Octave Below"),
                QT_TRANSLATE_NOOP("action", "Enter octave below")
                ),
     ActionItem("interval-9",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Ninth Below"),
                QT_TRANSLATE_NOOP("action", "Enter ninth below")
                ),
     ActionItem("note-c",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "C"),
                QT_TRANSLATE_NOOP("action", "Enter note C")
                ),
     ActionItem("note-d",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "D"),
                QT_TRANSLATE_NOOP("action", "Enter note D")
                ),
     ActionItem("note-e",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "E"),
                QT_TRANSLATE_NOOP("action", "Enter note E")
                ),
     ActionItem("note-f",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "F"),
                QT_TRANSLATE_NOOP("action", "Enter note F")
                ),
     ActionItem("note-g",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "G"),
                QT_TRANSLATE_NOOP("action", "Enter note G")
                ),
     ActionItem("note-a",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "A"),
                QT_TRANSLATE_NOOP("action", "Enter note A")
                ),
     ActionItem("note-b",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "B"),
                QT_TRANSLATE_NOOP("action", "Enter note B")
                ),
     ActionItem("chord-c",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Add C to Chord"),
                QT_TRANSLATE_NOOP("action", "Add note C to chord")
                ),
     ActionItem("chord-d",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Add D to Chord"),
                QT_TRANSLATE_NOOP("action", "Add note D to chord")
                ),
     ActionItem("chord-e",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Add E to Chord"),
                QT_TRANSLATE_NOOP("action", "Add note E to chord")
                ),
     ActionItem("chord-f",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Add F to Chord"),
                QT_TRANSLATE_NOOP("action", "Add note F to chord")
                ),
     ActionItem("chord-g",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Add G to Chord"),
                QT_TRANSLATE_NOOP("action", "Add note G to chord")
                ),
     ActionItem("chord-a",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Add A to Chord"),
                QT_TRANSLATE_NOOP("action", "Add note A to chord")
                ),
     ActionItem("chord-b",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Add B to Chord"),
                QT_TRANSLATE_NOOP("action", "Add note B to chord")
                ),
     ActionItem("insert-c",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert C"),
                QT_TRANSLATE_NOOP("action", "Insert note C")
                ),
     ActionItem("insert-d",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert D"),
                QT_TRANSLATE_NOOP("action", "Insert note D")
                ),
     ActionItem("insert-e",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert E"),
                QT_TRANSLATE_NOOP("action", "Insert note E")
                ),
     ActionItem("insert-f",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert F"),
                QT_TRANSLATE_NOOP("action", "Insert note F")
                ),
     ActionItem("insert-g",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert G"),
                QT_TRANSLATE_NOOP("action", "Insert note G")
                ),
     ActionItem("insert-a",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert A"),
                QT_TRANSLATE_NOOP("action", "Insert note A")
                ),
     ActionItem("insert-b",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert B"),
                QT_TRANSLATE_NOOP("action", "Insert note B")
                ),
     ActionItem("add-8va",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Ottava 8va alta"),
                QT_TRANSLATE_NOOP("action", "Add ottava 8va alta")
                ),
     ActionItem("add-8vb",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Ottava 8va bassa"),
                QT_TRANSLATE_NOOP("action", "Add ottava 8va bassa")
                ),
     ActionItem("add-hairpin",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Crescendo"),
                QT_TRANSLATE_NOOP("action", "Add crescendo")
                ),
     ActionItem("add-hairpin-reverse",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Decrescendo"),
                QT_TRANSLATE_NOOP("action", "Add decrescendo")
                ),
     ActionItem("add-noteline",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action","Note Anchored Line"),
                QT_TRANSLATE_NOOP("action","Note anchored line")
                ),
     ActionItem("title-text",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Title"),
                QT_TRANSLATE_NOOP("action", "Add title text")
                ),
     ActionItem("subtitle-text",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Subtitle"),
                QT_TRANSLATE_NOOP("action", "Add subtitle text")
                ),
     ActionItem("composer-text",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Composer"),
                QT_TRANSLATE_NOOP("action", "Add composer text")
                ),
     ActionItem("poet-text",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Lirycist"),
                QT_TRANSLATE_NOOP("action", "Add lirycist text")
                ),
     ActionItem("part-text",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Part Name"),
                QT_TRANSLATE_NOOP("action", "Add part name")
                ),
     ActionItem("system-text",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "System Text"),
                QT_TRANSLATE_NOOP("action", "Add system text")
                ),
     ActionItem("staff-text",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Staff Text"),
                QT_TRANSLATE_NOOP("action", "Add staff text")
                ),
     ActionItem("expression-text",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Expression Text"),
                QT_TRANSLATE_NOOP("action", "Add expression text")
                ),
     ActionItem("rehearsalmark-text",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Rehearsal Mark"),
                QT_TRANSLATE_NOOP("action", "Add rehearsal mark")
                ),
     ActionItem("instrument-change-text",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Instrument Change"),
                QT_TRANSLATE_NOOP("action", "Add instrument change")
                ),
     ActionItem("fingering-text",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Fingering"),
                QT_TRANSLATE_NOOP("action", "Add fingering")
                ),
     ActionItem("sticking-text",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Sticking"),
                QT_TRANSLATE_NOOP("action", "Add sticking")
                ),
     ActionItem("chord-text",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Chord Symbol"),
                QT_TRANSLATE_NOOP("action", "Add chord symbol")
                ),
     ActionItem("roman-numeral-text",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Roman Numeral Analysis"),
                QT_TRANSLATE_NOOP("action", "Add Roman numeral analysis")
                ),
     ActionItem("nashville-number-text",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Nashville Number"),
                QT_TRANSLATE_NOOP("action", "Add Nashville number")
                ),
     ActionItem("lyrics",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Lyrics"),
                QT_TRANSLATE_NOOP("action", "Add lyrics")
                ),
     ActionItem("figured-bass",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Figured Bass"),
                QT_TRANSLATE_NOOP("action", "Add figured bass")
                ),
     ActionItem("tempo",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Tempo Marking"),
                QT_TRANSLATE_NOOP("action", "Add tempo marking")
                ),
     ActionItem("duplet",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Duplet"),
                QT_TRANSLATE_NOOP("action", "Add duplet")
                ),
     ActionItem("triplet",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Triplet"),
                QT_TRANSLATE_NOOP("action", "Add triplet")
                ),
     ActionItem("quadruplet",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Quadruplet"),
                QT_TRANSLATE_NOOP("action", "Add quadruplet")
                ),
     ActionItem("quintuplet",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Quintuplet"),
                QT_TRANSLATE_NOOP("action", "Add quintuplet")
                ),
     ActionItem("sextuplet",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "sextuplet"),
                QT_TRANSLATE_NOOP("action", "Add sextuplet")
                ),
     ActionItem("septuplet",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Septuplet"),
                QT_TRANSLATE_NOOP("action", "Add septuplet")
                ),
     ActionItem("octuplet",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Octuplet"),
                QT_TRANSLATE_NOOP("action", "Add octuplet")
                ),
     ActionItem("nonuplet",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Nontuplet"),
                QT_TRANSLATE_NOOP("action", "Add nontuplet")
                ),
     ActionItem("tuplet-dialog",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Other…"),
                QT_TRANSLATE_NOOP("action", "Other tuplets")
                ),
     ActionItem("stretch-",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Increase Layout Stretch"),
                QT_TRANSLATE_NOOP("action", "Increase layout stretch factor of selected measures")
                ),
     ActionItem("stretch+",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Decrease Layout Stretch"),
                QT_TRANSLATE_NOOP("action", "Decrease layout stretch factor of selected measures")
                ),
     ActionItem("reset-stretch",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Reset Layout Stretch"),
                QT_TRANSLATE_NOOP("action", "Reset layout stretch factor of selected measures or entire score")
                ),
     ActionItem("reset-text-style-overrides",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Reset Text Style Overrides"),
                QT_TRANSLATE_NOOP("action", "Reset all text style overrides to default")
                ),
     ActionItem("reset-beammode",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Reset Beams"),
                QT_TRANSLATE_NOOP("action", "Reset beams of selected measures")
                ),
     ActionItem("reset",
-               ShortcutContext::NotationActive,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Reset Shapes and Positions"),
                QT_TRANSLATE_NOOP("action", "Reset shapes and positions of selected elements to their defaults")
                ),
@@ -1049,6 +1049,24 @@ const ActionItem& NotationActions::action(const ActionCode& actionCode) const
 
     static ActionItem null;
     return null;
+}
+
+const ActionCodeList NotationActions::actionCodes(ShortcutContext context)
+{
+    ActionCodeList codes;
+    for (const ActionItem& action : m_actions) {
+        if (action.shortcutContext == context) {
+            codes.push_back(action.code);
+        }
+    }
+
+    for (const ActionItem& action : m_noteInputActions) {
+        if (action.shortcutContext == context) {
+            codes.push_back(action.code);
+        }
+    }
+
+    return codes;
 }
 
 ActionList NotationActions::defaultNoteInputActions()

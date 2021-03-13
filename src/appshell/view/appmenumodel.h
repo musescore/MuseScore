@@ -24,37 +24,26 @@
 #include "modularity/ioc.h"
 
 #include "async/asyncable.h"
-#include "actions/iactionsregister.h"
 #include "actions/iactionsdispatcher.h"
-#include "shortcuts/ishortcutsregister.h"
 #include "uicomponents/uicomponentstypes.h"
-#include "context/iglobalcontext.h"
 #include "workspace/iworkspacemanager.h"
-#include "palette/ipaletteactionscontroller.h"
 #include "iappshellconfiguration.h"
 #include "userscores/iuserscoresservice.h"
-#include "iapplicationactioncontroller.h"
-#include "iinteractive.h"
-#include "inotationpagestate.h"
+
+#include "uicomponents/view/abstractmenumodel.h"
+#include "uicomponents/imenucontrollersregister.h"
 
 namespace mu::appshell {
-class AppMenuModel : public QObject, public async::Asyncable
+class AppMenuModel : public uicomponents::AbstractMenuModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(appshell, actions::IActionsRegister, actionsRegister)
     INJECT(appshell, actions::IActionsDispatcher, actionsDispatcher)
-    INJECT(appshell, shortcuts::IShortcutsRegister, shortcutsRegister)
-    INJECT(appshell, context::IGlobalContext, globalContext)
     INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
-    INJECT(appshell, palette::IPaletteActionsController, paletteController)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, userscores::IUserScoresService, userScoresService)
-    INJECT(appshell, IApplicationActionController, controller)
-    INJECT(appshell, framework::IInteractive, interactive)
-    INJECT(appshell, INotationPageState, notationPageState)
 
-    Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
+    INJECT(appshell, uicomponents::IMenuControllersRegister, menuControllersRegister)
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
@@ -62,30 +51,18 @@ public:
     Q_INVOKABLE void load();
     Q_INVOKABLE void handleAction(const QString& actionCodeStr, int actionIndex);
 
-    QVariantList items();
-
-signals:
-    void itemsChanged();
+    uicomponents::ActionState actionState(const actions::ActionCode& actionCode) const override;
 
 private:
-    notation::IMasterNotationPtr currentMasterNotation() const;
-    notation::INotationPtr currentNotation() const;
-    notation::INotationInteractionPtr notationInteraction() const;
-    notation::INotationSelectionPtr notationSelection() const;
-
     void setupConnections();
 
-    uicomponents::MenuItem& item(const actions::ActionCode& actionCode);
-    uicomponents::MenuItem& itemByIndex(const actions::ActionCode& menuActionCode, int actionIndex);
-    uicomponents::MenuItem& menu(uicomponents::MenuItemList& items, const actions::ActionCode& subitemsActionCode);
-
-    uicomponents::MenuItem fileItem();
-    uicomponents::MenuItem editItem();
-    uicomponents::MenuItem viewItem();
-    uicomponents::MenuItem addItem();
-    uicomponents::MenuItem formatItem();
-    uicomponents::MenuItem toolsItem();
-    uicomponents::MenuItem helpItem();
+    uicomponents::MenuItem fileItem() const;
+    uicomponents::MenuItem editItem() const;
+    uicomponents::MenuItem viewItem() const;
+    uicomponents::MenuItem addItem() const;
+    uicomponents::MenuItem formatItem() const;
+    uicomponents::MenuItem toolsItem() const;
+    uicomponents::MenuItem helpItem() const;
 
     uicomponents::MenuItemList recentScores() const;
     uicomponents::MenuItemList notesItems() const;
@@ -97,26 +74,6 @@ private:
     uicomponents::MenuItemList linesItems() const;
     uicomponents::MenuItemList toolbarsItems() const;
     uicomponents::MenuItemList workspacesItems() const;
-
-    uicomponents::MenuItem makeMenu(const std::string& title, const uicomponents::MenuItemList& actions, bool enabled = true,
-                                    const actions::ActionCode& menuActionCode = "");
-    uicomponents::MenuItem makeAction(const actions::ActionCode& actionCode, bool enabled = true) const;
-    uicomponents::MenuItem makeAction(const actions::ActionCode& actionCode, bool enabled, bool checked) const;
-    uicomponents::MenuItem makeSeparator() const;
-
-    bool needSaveScore() const;
-    bool scoreOpened() const;
-    bool canUndo() const;
-    bool canRedo() const;
-    bool selectedElementOnScore() const;
-    bool selectedRangeOnScore() const;
-    bool hasSelectionOnScore() const;
-    bool isNoteInputMode() const;
-    bool isNotationPage() const;
-
-    notation::ScoreConfig scoreConfig() const;
-
-    uicomponents::MenuItemList m_items;
 };
 }
 

@@ -20,6 +20,7 @@
 #include "dockpanel.h"
 
 #include "log.h"
+#include "eventswatcher.h"
 
 using namespace mu::dock;
 
@@ -39,9 +40,9 @@ DockPanel::DockPanel(QQuickItem* parent)
         }
     });
 
-    connect(m_dock.panel, &QDockWidget::visibilityChanged, [this](bool) {
-        setVisible(m_dock.panel->isVisible());
-    });
+    m_eventsWatcher = new EventsWatcher(this);
+    m_dock.panel->installEventFilter(m_eventsWatcher);
+    connect(m_eventsWatcher, &EventsWatcher::eventReceived, this, &DockPanel::onWidgetEvent);
 }
 
 DockPanel::~DockPanel()
@@ -173,6 +174,15 @@ void DockPanel::setClosable(bool closable)
     setFeature(QDockWidget::DockWidgetClosable, closable);
 
     emit closableChanged(closable);
+}
+
+void DockPanel::onWidgetEvent(QEvent* event)
+{
+    if (QEvent::Close == event->type()) {
+        emit closed();
+    } else {
+        DockView::onWidgetEvent(event);
+    }
 }
 
 void DockPanel::setFeature(QDockWidget::DockWidgetFeature feature, bool value)

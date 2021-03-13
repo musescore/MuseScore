@@ -53,6 +53,18 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/aboutmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/aboutmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/filemenucontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/filemenucontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/editmenucontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/editmenucontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/viewmenucontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/viewmenucontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/formatmenucontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/formatmenucontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/toolsmenucontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/toolsmenucontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/helpmenucontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/helpmenucontroller.h
     ${DOCKWINDOW_SRC}
     )
 

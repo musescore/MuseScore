@@ -23,15 +23,18 @@
 #include "iuserscoresconfiguration.h"
 #include "modularity/ioc.h"
 #include "iinteractive.h"
-#include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
+#include "actions/iactionsdispatcher.h"
+#include "actions/iactionsregister.h"
+#include "async/asyncable.h"
 #include "notation/inotationcreator.h"
 #include "context/iglobalcontext.h"
 
 namespace mu::userscores {
-class FileScoreController : public IFileScoreController, public actions::Actionable
+class FileScoreController : public IFileScoreController, public actions::Actionable, public async::Asyncable
 {
     INJECT(scores, actions::IActionsDispatcher, dispatcher)
+    INJECT(scores, actions::IActionsRegister, actionsRegister)
     INJECT(scores, framework::IInteractive, interactive)
     INJECT(scores, notation::INotationCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
@@ -42,8 +45,16 @@ public:
 
     Ret openScore(const io::path& scorePath) override;
 
+    bool actionAvailable(const actions::ActionCode& actionCode) const override;
+    async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
+
 private:
+    void setupConnections();
+
     notation::IMasterNotationPtr currentMasterNotation() const;
+    notation::INotationPtr currentNotation() const;
+    notation::INotationInteractionPtr currentInteraction() const;
+    notation::INotationSelectionPtr currentNotationSelection() const;
 
     void openScore(const actions::ActionData& args);
     void importScore();
@@ -61,11 +72,17 @@ private:
     io::path selectScoreOpenningFile(const QStringList& filter);
     io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
     Ret doOpenScore(const io::path& filePath);
-    void doSaveScore(const io::path& filePath = io::path(), notation::SaveMode saveMode = notation::SaveMode::Unknown);
+    void doSaveScore(const io::path& filePath = io::path(), notation::SaveMode saveMode = notation::SaveMode::Save);
 
     io::path defaultSavingFilePath() const;
 
     void prependToRecentScoreList(const io::path& filePath);
+
+    bool isScoreOpened() const;
+    bool isNeedSaveScore() const;
+    bool hasSelection() const;
+
+    async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
 

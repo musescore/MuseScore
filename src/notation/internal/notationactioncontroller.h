@@ -21,17 +21,21 @@
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
+#include "actions/iactionsregister.h"
 #include "actions/actionable.h"
+#include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "inotation.h"
 #include "iinteractive.h"
 #include "audio/isequencer.h"
 #include "inotationconfiguration.h"
+#include "inotationactionscontroller.h"
 
 namespace mu::notation {
-class NotationActionController : public actions::Actionable
+class NotationActionController : public INotationActionsController, public actions::Actionable, public async::Asyncable
 {
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(notation, actions::IActionsRegister, actionsRegister)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, framework::IInteractive, interactive)
     INJECT(notation, audio::ISequencer, sequencer)
@@ -40,14 +44,20 @@ class NotationActionController : public actions::Actionable
 public:
     void init();
 
+    bool actionAvailable(const actions::ActionCode& actionCode) const override;
+    async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
+
 private:
     bool canReceiveAction(const actions::ActionCode& actionCode) const override;
+
+    void setupConnections();
 
     INotationPtr currentNotation() const;
     INotationInteractionPtr currentNotationInteraction() const;
     INotationElementsPtr currentNotationElements() const;
     INotationSelectionPtr currentNotationSelection() const;
     INotationNoteInputPtr currentNotationNoteInput() const;
+    INotationUndoStackPtr currentNotationUndoStack() const;
 
     void toggleNoteInputMethod(NoteInputMethod method);
     void addNote(NoteName note, NoteAddingMode addingMode);
@@ -129,22 +139,11 @@ private:
     void openPartsDialog();
     void openTupletOtherDialog();
 
-    void toggleShowingInvisibleElements();
-    void toggleShowingUnprintableElements();
-    void toggleShowingFrames();
-    void toggleShowingPageMargins();
-    void toggleMarkIrregularMeasures();
+    void toggleScoreConfig(ScoreConfigType configType);
     void toggleNavigator();
     void toggleMixer();
 
     bool isTextEditting() const;
-
-    enum class PastingType {
-        Default,
-        Half,
-        Double,
-        Special
-    };
 
     void pasteSelection(PastingType type = PastingType::Default);
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
@@ -152,6 +151,13 @@ private:
     FilterElementsOptions elementsFilterOptions(const Element* element) const;
 
     void startNoteInputIfNeed();
+
+    bool hasSelection() const;
+    bool canUndo() const;
+    bool canRedo() const;
+    bool isNotationPage() const;
+
+    async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
 

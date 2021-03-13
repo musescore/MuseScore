@@ -55,6 +55,7 @@ public:
     explicit NotationPageModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void init();
+    Q_INVOKABLE void setPanelsState(const QVariantList& states);
 
     bool isPalettePanelVisible() const;
     bool isInstrumentsPanelVisible() const;
@@ -92,6 +93,8 @@ private:
     void notifyAboutPanelChanged(PanelType type);
 
     void togglePanel(PanelType type);
+
+    PanelType panelTypeFromString(const QString& string) const;
 };
 }
 

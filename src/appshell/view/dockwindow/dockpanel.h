@@ -67,6 +67,9 @@ public slots:
     void setFloatable(bool floatable);
     void setClosable(bool closable);
 
+private slots:
+    void onWidgetEvent(QEvent* event) override;
+
 signals:
     void titleChanged(QString title);
     void areaChanged(Qt::DockWidgetArea area);
@@ -74,6 +77,7 @@ signals:
     void minimumWidthChanged(int width);
     void floatableChanged(bool floatable);
     void closableChanged(bool closable);
+    void closed();
 
 protected:
     void onComponentCompleted() override;
@@ -87,6 +91,7 @@ private:
 
     Widget m_dock;
     QString m_title;
+    EventsWatcher* m_eventsWatcher = nullptr;
 
     int m_preferedWidth = 0;
 };

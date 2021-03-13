@@ -22,9 +22,12 @@
 #include <QMainWindow>
 
 #include "translation.h"
+#include "applicationactions.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;
+using namespace mu::actions;
+using namespace mu::shortcuts;
 
 void ApplicationActionController::init()
 {
@@ -42,14 +45,51 @@ void ApplicationActionController::init()
     dispatcher()->reg(this, "leave-feedback", this, &ApplicationActionController::openLeaveFeedbackPage);
 
     dispatcher()->reg(this, "revert-factory", this, &ApplicationActionController::revertToFactorySettings);
+
+    setupConnections();
 }
 
 mu::ValCh<bool> ApplicationActionController::isFullScreen() const
 {
     ValCh<bool> result;
     result.ch = m_fullScreenChannel;
-    result.val = mainWindow()->qMainWindow() ? mainWindow()->qMainWindow()->isFullScreen() : false;
+    // todo
+//    result.val = mainWindow()->qMainWindow() ? mainWindow()->qMainWindow()->isFullScreen() : false;
     return result;
+}
+
+bool ApplicationActionController::actionAvailable(const mu::actions::ActionCode& actionCode) const
+{
+    if (!canReceiveAction(actionCode)) {
+        return false;
+    }
+
+    ActionItem action = actionsRegister()->action(actionCode);
+    if (!action.isValid()) {
+        return false;
+    }
+
+    switch (action.shortcutContext) {
+    case ShortcutContext::NotationActive:
+        return isNotationPage();
+    default:
+        break;
+    }
+
+    return true;
+}
+
+mu::async::Channel<mu::actions::ActionCodeList> ApplicationActionController::actionsAvailableChanged() const
+{
+    return m_actionsReceiveAvailableChanged;
+}
+
+void ApplicationActionController::setupConnections()
+{
+    interactive()->currentUri().ch.onReceive(this, [this](const Uri&) {
+        ActionCodeList actionCodes = ApplicationActions::actionCodes(ShortcutContext::NotationActive);
+        m_actionsReceiveAvailableChanged.send(actionCodes);
+    });
 }
 
 void ApplicationActionController::quit()
@@ -127,4 +167,9 @@ void ApplicationActionController::revertToFactorySettings()
     if (button == IInteractive::Button::Yes) {
         configuration()->revertToFactorySettings();
     }
+}
+
+bool ApplicationActionController::isNotationPage() const
+{
+    return interactive()->isOpened("musescore://notation").val;
 }

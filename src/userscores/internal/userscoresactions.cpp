@@ -34,37 +34,37 @@ const ActionList UserScoresActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Create new score")
                ),
     ActionItem("file-close",
-               ShortcutContext::Any,
+               ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Close"),
                QT_TRANSLATE_NOOP("action", "Close current score")
                ),
     ActionItem("file-save",
-               ShortcutContext::Any,
+               ShortcutContext::NotationNeedSave,
                QT_TRANSLATE_NOOP("action", "Save"),
                QT_TRANSLATE_NOOP("action", "Save score to file")
                ),
     ActionItem("file-save-online",
-               ShortcutContext::Any,
+               ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Save Online..."),
                QT_TRANSLATE_NOOP("action", "Save score on musescore.com")
                ),
     ActionItem("file-save-as",
-               ShortcutContext::Any,
+               ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Save Score As..."),
                QT_TRANSLATE_NOOP("action", "Save score under a new file name")
                ),
     ActionItem("file-save-a-copy",
-               ShortcutContext::Any,
+               ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Save a Copy..."),
                QT_TRANSLATE_NOOP("action", "Save a copy of the score in addition to the current file")
                ),
     ActionItem("file-save-selection",
-               ShortcutContext::Any,
+               ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Save Selection..."),
                QT_TRANSLATE_NOOP("action", "Save current selection as new score")
                ),
     ActionItem("file-export",
-               ShortcutContext::Any,
+               ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Export..."),
                QT_TRANSLATE_NOOP("action", "Save a copy of the score in various formats")
                ),
@@ -94,4 +94,16 @@ const ActionItem& UserScoresActions::action(const ActionCode& actionCode) const
 
     static ActionItem null;
     return null;
+}
+
+const ActionCodeList UserScoresActions::actionCodes(ShortcutContext context)
+{
+    ActionCodeList codes;
+    for (const ActionItem& action : m_actions) {
+        if (action.shortcutContext == context) {
+            codes.push_back(action.code);
+        }
+    }
+
+    return codes;
 }

@@ -25,6 +25,17 @@
 #include "actions/actiontypes.h"
 
 namespace mu::uicomponents {
+enum class MenuType
+{
+    File,
+    Edit,
+    View,
+    Add,
+    Format,
+    Tools,
+    Help
+};
+
 struct MenuItem : public actions::ActionItem
 {
     std::string shortcut;
@@ -86,6 +97,13 @@ struct MenuItem : public actions::ActionItem
 };
 
 using MenuItemList = QList<MenuItem>;
+
+struct ActionState
+{
+    bool enabled = false;
+    bool checkable = false;
+    bool checked = false;
+};
 }
 
 #endif // MU_UICOMPONENTS_UICOMPONENTSTYPES_H

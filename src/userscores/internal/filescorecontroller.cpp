@@ -24,11 +24,14 @@
 #include "translation.h"
 
 #include "userscoresconfiguration.h"
+#include "userscoresactions.h"
 
 using namespace mu;
 using namespace mu::userscores;
 using namespace mu::notation;
 using namespace mu::framework;
+using namespace mu::actions;
+using namespace mu::shortcuts;
 
 void FileScoreController::init()
 {
@@ -44,6 +47,8 @@ void FileScoreController::init()
     dispatcher()->reg(this, "file-import-pdf", this, &FileScoreController::importPdf);
 
     dispatcher()->reg(this, "clear-recent", this, &FileScoreController::clearRecentScores);
+
+    setupConnections();
 }
 
 IMasterNotationPtr FileScoreController::currentMasterNotation() const
@@ -51,9 +56,76 @@ IMasterNotationPtr FileScoreController::currentMasterNotation() const
     return globalContext()->currentMasterNotation();
 }
 
+INotationPtr FileScoreController::currentNotation() const
+{
+    return currentMasterNotation() ? currentMasterNotation()->notation() : nullptr;
+}
+
+INotationInteractionPtr FileScoreController::currentInteraction() const
+{
+    return currentNotation() ? currentNotation()->interaction() : nullptr;
+}
+
+INotationSelectionPtr FileScoreController::currentNotationSelection() const
+{
+    return currentNotation() ? currentInteraction()->selection() : nullptr;
+}
+
 Ret FileScoreController::openScore(const io::path& scorePath)
 {
     return doOpenScore(scorePath);
+}
+
+bool FileScoreController::actionAvailable(const actions::ActionCode& actionCode) const
+{
+    if (!canReceiveAction(actionCode)) {
+        return false;
+    }
+
+    ActionItem action = actionsRegister()->action(actionCode);
+    if (!action.isValid()) {
+        return false;
+    }
+
+    switch (action.shortcutContext) {
+    case ShortcutContext::NotationActive:
+        return isScoreOpened();
+    case ShortcutContext::NotationNeedSave:
+        return isNeedSaveScore();
+    case ShortcutContext::NotationHasSelection:
+        return hasSelection();
+    default:
+        break;
+    }
+
+    return true;
+}
+
+async::Channel<std::vector<ActionCode> > FileScoreController::actionsAvailableChanged() const
+{
+    return m_actionsReceiveAvailableChanged;
+}
+
+void FileScoreController::setupConnections()
+{
+    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
+        ActionCodeList actionCodes = UserScoresActions::actionCodes(ShortcutContext::NotationActive);
+        m_actionsReceiveAvailableChanged.send(actionCodes);
+
+        if (!currentMasterNotation()) {
+            return;
+        }
+
+        currentMasterNotation()->needSave().notification.onNotify(this, [this]() {
+            ActionCodeList actionCodes = UserScoresActions::actionCodes(ShortcutContext::NotationNeedSave);
+            m_actionsReceiveAvailableChanged.send(actionCodes);
+        });
+
+        currentMasterNotation()->notation()->interaction()->selectionChanged().onNotify(this, [this]() {
+            ActionCodeList actionCodes = UserScoresActions::actionCodes(ShortcutContext::NotationHasSelection);
+            m_actionsReceiveAvailableChanged.send(actionCodes);
+        });
+    });
 }
 
 void FileScoreController::openScore(const actions::ActionData& args)
@@ -267,4 +339,19 @@ void FileScoreController::prependToRecentScoreList(const io::path& filePath)
 
     recentScorePaths.insert(recentScorePaths.begin(), filePath);
     configuration()->setRecentScorePaths(recentScorePaths);
+}
+
+bool FileScoreController::isScoreOpened() const
+{
+    return currentMasterNotation() != nullptr;
+}
+
+bool FileScoreController::isNeedSaveScore() const
+{
+    return currentMasterNotation() && currentMasterNotation()->needSave().val;
+}
+
+bool FileScoreController::hasSelection() const
+{
+    return currentNotationSelection() ? !currentNotationSelection()->isNone() : false;
 }
