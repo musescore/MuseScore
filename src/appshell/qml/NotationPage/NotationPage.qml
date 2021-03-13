@@ -16,19 +16,33 @@ DockPage {
     property var color: ui.theme.backgroundPrimaryColor
     property var borderColor: ui.theme.strokeColor
 
+    property bool isNotationToolBarVisible: false
+    property bool isPlaybackToolBarVisible: false
+    property bool isUndoRedoToolBarVisible: false
+    property bool isNotationNavigatorVisible: false
+
     property NotationPageModel pageModel: NotationPageModel {}
 
+    function updatePageState() {
+        var states = [
+                    {"Palette": palettePanel.visible},
+                    {"Instruments": instrumentsPanel.visible},
+                    {"Inspector": inspectorPanel.visible},
+                    {"NoteInputBar": notationNoteInputBar.visible},
+                    {"NotationToolBar": isNotationToolBarVisible},
+                    {"PlaybackToolBar": isPlaybackToolBarVisible},
+                    {"UndoRedoToolBar": isUndoRedoToolBarVisible}
+                ]
+
+        pageModel.setPanelsState(states)
+    }
+
     Component.onCompleted: {
-        pageModel.isPalettePanelVisible = palettePanel.visible
+        updatePageState()
+
         palettePanel.visible = Qt.binding(function() { return pageModel.isPalettePanelVisible })
-
-        pageModel.isInstrumentsPanelVisible = instrumentsPanel.visible
         instrumentsPanel.visible = Qt.binding(function() { return pageModel.isInstrumentsPanelVisible })
-
-        pageModel.isInspectorPanelVisible = inspectorPanel.visible
         inspectorPanel.visible = Qt.binding(function() { return pageModel.isInspectorPanelVisible })
-
-        pageModel.isNoteInputBarVisible = notationNoteInputBar.visible
         notationNoteInputBar.visible = Qt.binding(function() { return pageModel.isNoteInputBarVisible })
 
         pageModel.init()
@@ -42,10 +56,6 @@ DockPage {
         minimumHeight: orientation == Qt.Horizontal ? 48 : 0
 
         color: notationPage.color
-
-        onVisibleEdited: {
-            notationPage.pageModel.isNoteInputBarVisible = visible
-        }
 
         content: NoteInputBar {
             color: notationNoteInputBar.color
@@ -72,8 +82,8 @@ DockPage {
             floatable: true
             closable: true
 
-            onVisibleEdited: {
-                notationPage.pageModel.isPalettePanelVisible = visible
+            onClosed: {
+                notationPage.pageModel.isPalettePanelVisible = false
             }
 
             PalettesWidget {}
@@ -96,8 +106,8 @@ DockPage {
             floatable: true
             closable: true
 
-            onVisibleEdited: {
-                notationPage.pageModel.isInstrumentsPanelVisible = visible
+            onClosed: {
+                notationPage.pageModel.isInstrumentsPanelVisible = false
             }
 
             InstrumentsPanel {
@@ -122,8 +132,8 @@ DockPage {
             floatable: true
             closable: true
 
-            onVisibleEdited: {
-                notationPage.pageModel.isInspectorPanelVisible = visible
+            onClosed: {
+                notationPage.pageModel.isInspectorPanelVisible = false
             }
 
             InspectorForm {

@@ -11,6 +11,8 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
+#include "internal/menucontrollersregister.h"
+
 using namespace mu::uicomponents;
 using namespace mu::framework;
 
@@ -22,6 +24,11 @@ static void uicomponents_init_qrc()
 std::string UiComponentsModule::moduleName() const
 {
     return "uicomponents";
+}
+
+void UiComponentsModule::registerExports()
+{
+    ioc()->registerExport<IMenuControllersRegister>(moduleName(), new MenuControllersRegister());
 }
 
 void UiComponentsModule::registerResources()

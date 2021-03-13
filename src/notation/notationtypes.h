@@ -154,10 +154,11 @@ enum class NoteAddingMode
 
 enum class SaveMode
 {
-    Unknown,
+    Save,
     SaveAs,
     SaveCopy,
-    SaveSelection
+    SaveSelection,
+    SaveOnline
 };
 
 enum class ResettableValueType
@@ -166,6 +167,31 @@ enum class ResettableValueType
     BeamMode,
     ShapesAndPosition,
     TextStyleOverriders
+};
+
+enum class IntervalType
+{
+    Above,
+    Below
+};
+
+enum class TupletType
+{
+    Duplet,
+    Triplet,
+    Quadruplet,
+    Quintuplet,
+    Sextuplet,
+    Septuplet,
+    Octuplet,
+    Nonuplet
+};
+
+enum class PastingType {
+    Default,
+    Half,
+    Double,
+    Special
 };
 
 struct NoteInputState
@@ -379,6 +405,15 @@ struct LoopBoundaries
     {
         return !(*this == boundaries);
     }
+};
+
+enum class ScoreConfigType
+{
+    ShowInvisibleElements,
+    ShowUnprintableElements,
+    ShowFrames,
+    ShowPageMargins,
+    MarkIrregularMeasures
 };
 
 struct ScoreConfig

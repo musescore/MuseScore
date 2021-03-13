@@ -514,10 +514,12 @@ mu::Ret MasterNotation::save(const io::path& path, SaveMode saveMode)
     switch (saveMode) {
     case SaveMode::SaveSelection:
         return saveSelectionOnScore(path);
-    case SaveMode::Unknown:
+    case SaveMode::Save:
     case SaveMode::SaveAs:
     case SaveMode::SaveCopy:
         return saveScore(path);
+    case SaveMode::SaveOnline:
+        return make_ret(Ret::Code::NotSupported);
     }
 
     return make_ret(Err::UnknownError);

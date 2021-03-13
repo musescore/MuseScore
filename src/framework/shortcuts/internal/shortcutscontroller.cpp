@@ -32,7 +32,6 @@ void ShortcutsController::activate(const std::string& sequence)
         return;
     }
 
-    ShortcutContext activeCtx = contextResolver()->currentShortcutContext();
     for (const Shortcut& sc: shortcuts) {
         const ActionItem& a = aregister()->action(sc.action);
         if (!a.isValid()) {
@@ -40,10 +39,6 @@ void ShortcutsController::activate(const std::string& sequence)
             continue;
         }
 
-        if (a.shortcutContext == ShortcutContext::Any || a.shortcutContext == activeCtx) {
-            dispatcher()->dispatch(sc.action);
-        } else {
-            LOGD() << "context is not active for action: " << sc.action;
-        }
+        dispatcher()->dispatch(sc.action);
     }
 }

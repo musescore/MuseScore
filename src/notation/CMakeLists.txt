@@ -35,6 +35,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotation.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationreader.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationreadersregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationactionscontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationwritersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/abstractnotationwriter.h
@@ -108,6 +109,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationselectionrange.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconverter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/addmenucontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/addmenucontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/inotationcontextmenu.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h

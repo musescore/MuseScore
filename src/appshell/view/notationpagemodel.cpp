@@ -29,8 +29,10 @@ NotationPageModel::NotationPageModel(QObject* parent)
 
 void NotationPageModel::init()
 {
-    pageState()->panelVisibleChanged().onReceive(this, [this](PanelType type) {
-        notifyAboutPanelChanged(type);
+    pageState()->panelsVisibleChanged().onReceive(this, [this](const PanelTypeList& panels) {
+        for (PanelType panelType: panels) {
+            notifyAboutPanelChanged(panelType);
+        }
     });
 
     dispatcher()->reg(this, "toggle-navigator", [this]() { togglePanel(PanelType::NotationNavigator); });
@@ -43,6 +45,20 @@ void NotationPageModel::init()
     dispatcher()->reg(this, "toggle-notationtoolbar", [this]() { togglePanel(PanelType::NotationToolBar); });
     dispatcher()->reg(this, "toggle-undoredo", [this]() { togglePanel(PanelType::UndoRedoToolBar); });
     dispatcher()->reg(this, "toggle-transport", [this]() { togglePanel(PanelType::PlaybackToolBar); });
+}
+
+void NotationPageModel::setPanelsState(const QVariantList& states)
+{
+    std::map<PanelType, bool> panelsState;
+    for (const QVariant& state: states) {
+        QMap<QString, QVariant> stateMap = state.toMap();
+        for (const QString& key: stateMap.keys()) {
+            PanelType panelType = panelTypeFromString(key);
+            panelsState[panelType] = stateMap.value(key).toBool();
+        }
+    }
+
+    pageState()->setIsPanelsVisible(panelsState);
 }
 
 bool NotationPageModel::isPalettePanelVisible() const
@@ -96,7 +112,7 @@ void NotationPageModel::setIsPalettePanelVisible(bool visible)
         return;
     }
 
-    pageState()->setIsPanelVisible(PanelType::Palette, visible);
+    pageState()->setIsPanelsVisible({ { PanelType::Palette, visible } });
     emit isPalettePanelVisibleChanged();
 }
 
@@ -106,7 +122,7 @@ void NotationPageModel::setIsInstrumentsPanelVisible(bool visible)
         return;
     }
 
-    pageState()->setIsPanelVisible(PanelType::Instruments, visible);
+    pageState()->setIsPanelsVisible({ { PanelType::Instruments, visible } });
     emit isInstrumentsPanelVisibleChanged();
 }
 
@@ -116,7 +132,7 @@ void NotationPageModel::setIsInspectorPanelVisible(bool visible)
         return;
     }
 
-    pageState()->setIsPanelVisible(PanelType::Inspector, visible);
+    pageState()->setIsPanelsVisible({ { PanelType::Inspector, visible } });
     emit isInspectorPanelVisibleChanged();
 }
 
@@ -126,7 +142,7 @@ void NotationPageModel::setIsStatusBarVisible(bool visible)
         return;
     }
 
-    pageState()->setIsPanelVisible(PanelType::NotationStatusBar, visible);
+    pageState()->setIsPanelsVisible({ { PanelType::NotationStatusBar, visible } });
     emit isStatusBarVisibleChanged();
 }
 
@@ -136,7 +152,7 @@ void NotationPageModel::setIsNoteInputBarVisible(bool visible)
         return;
     }
 
-    pageState()->setIsPanelVisible(PanelType::NoteInputBar, visible);
+    pageState()->setIsPanelsVisible({ { PanelType::NoteInputBar, visible } });
     emit isNoteInputBarVisibleChanged();
 }
 
@@ -146,7 +162,7 @@ void NotationPageModel::setIsNotationToolBarVisible(bool visible)
         return;
     }
 
-    pageState()->setIsPanelVisible(PanelType::NotationToolBar, visible);
+    pageState()->setIsPanelsVisible({ { PanelType::NotationToolBar, visible } });
     emit isNotationToolBarVisibleChanged();
 }
 
@@ -156,7 +172,7 @@ void NotationPageModel::setIsPlaybackToolBarVisible(bool visible)
         return;
     }
 
-    pageState()->setIsPanelVisible(PanelType::PlaybackToolBar, visible);
+    pageState()->setIsPanelsVisible({ { PanelType::PlaybackToolBar, visible } });
     emit isPlaybackToolBarVisibleChanged();
 }
 
@@ -166,7 +182,7 @@ void NotationPageModel::setIsUndoRedoToolBarVisible(bool visible)
         return;
     }
 
-    pageState()->setIsPanelVisible(PanelType::UndoRedoToolBar, visible);
+    pageState()->setIsPanelsVisible({ { PanelType::UndoRedoToolBar, visible } });
     emit isUndoRedoToolBarVisibleChanged();
 }
 
@@ -176,7 +192,7 @@ void NotationPageModel::setIsNotationNavigatorVisible(bool visible)
         return;
     }
 
-    pageState()->setIsPanelVisible(PanelType::NotationNavigator, visible);
+    pageState()->setIsPanelsVisible({ { PanelType::NotationNavigator, visible } });
     emit isNotationNavigatorVisibleChanged();
 }
 
@@ -210,7 +226,7 @@ void NotationPageModel::notifyAboutPanelChanged(PanelType type)
     case PanelType::NotationNavigator:
         emit isNotationNavigatorVisibleChanged();
         break;
-    case PanelType::Mixer:
+    default:
         NOT_IMPLEMENTED;
         break;
     }
@@ -219,5 +235,22 @@ void NotationPageModel::notifyAboutPanelChanged(PanelType type)
 void NotationPageModel::togglePanel(PanelType type)
 {
     bool visible = pageState()->isPanelVisible(type);
-    pageState()->setIsPanelVisible(type, !visible);
+    pageState()->setIsPanelsVisible({ { type, !visible } });
+}
+
+PanelType NotationPageModel::panelTypeFromString(const QString& string) const
+{
+    std::map<QString, PanelType> types = {
+        { "Palette", PanelType::Palette },
+        { "Instruments", PanelType::Instruments },
+        { "Inspector", PanelType::Inspector },
+        { "StatusBar", PanelType::NotationStatusBar },
+        { "NoteInputBar", PanelType::NoteInputBar },
+        { "NotationToolBar", PanelType::NotationToolBar },
+        { "PlaybackToolBar", PanelType::PlaybackToolBar },
+        { "UndoRedoToolBar", PanelType::UndoRedoToolBar },
+        { "NotationNavigator", PanelType::NotationNavigator }
+    };
+
+    return types[string];
 }

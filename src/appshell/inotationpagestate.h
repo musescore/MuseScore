@@ -32,8 +32,8 @@ public:
     virtual ~INotationPageState() = default;
 
     virtual bool isPanelVisible(PanelType type) const = 0;
-    virtual void setIsPanelVisible(PanelType type, bool visible) = 0;
-    virtual async::Channel<PanelType> panelVisibleChanged() const = 0;
+    virtual void setIsPanelsVisible(const std::map<PanelType, bool>& panelsVisible) = 0;
+    virtual async::Channel<PanelTypeList> panelsVisibleChanged() const = 0;
 };
 }
 

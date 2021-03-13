@@ -26,6 +26,7 @@
 
 using namespace mu::notation;
 using namespace mu::uicomponents;
+using namespace mu::framework;
 
 PartListModel::PartListModel(QObject* parent)
     : QAbstractListModel(parent), m_selectionModel(new ItemMultiSelectionModel(this))

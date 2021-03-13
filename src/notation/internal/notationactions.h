@@ -21,6 +21,7 @@
 
 #include "actions/imoduleactions.h"
 #include "notationtypes.h"
+#include "shortcuts/shortcutstypes.h"
 
 namespace mu::notation {
 class NotationActions : public actions::IModuleActions
@@ -29,6 +30,7 @@ public:
 
     const actions::ActionItem& action(const actions::ActionCode& actionCode) const override;
 
+    static const actions::ActionCodeList actionCodes(shortcuts::ShortcutContext context);
     static actions::ActionList defaultNoteInputActions();
 
     static DurationType actionDurationType(const actions::ActionCode& actionCode);
