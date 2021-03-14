@@ -1206,8 +1206,8 @@ void Voice::update_param(int _gen)
             case GEN_STARTADDRCOARSEOFS:        /* SF2.01 section 8.1.3 # 4 */
                   if (sample != 0) {
                         start = (sample->start
-			         + (int) GEN(GEN_STARTADDROFS)
-			         + 32768 * (int) GEN(GEN_STARTADDRCOARSEOFS));
+			         + (unsigned int) GEN(GEN_STARTADDROFS)
+			         + 32768U * (unsigned int) GEN(GEN_STARTADDRCOARSEOFS));
                         check_sample_sanity_flag = FLUID_SAMPLESANITY_CHECK;
                         }
                   break;
@@ -1216,8 +1216,8 @@ void Voice::update_param(int _gen)
             case GEN_ENDADDRCOARSEOFS:           /* SF2.01 section 8.1.3 # 12 */
                   if (sample != 0) {
                         end = (sample->end
-			         + (int) GEN(GEN_ENDADDROFS)
-			         + 32768 * (int) GEN(GEN_ENDADDRCOARSEOFS));
+			         + (unsigned int) GEN(GEN_ENDADDROFS)
+			         + 32768U * (unsigned int) GEN(GEN_ENDADDRCOARSEOFS));
                         check_sample_sanity_flag = FLUID_SAMPLESANITY_CHECK;
                         }
                   break;
@@ -1226,8 +1226,8 @@ void Voice::update_param(int _gen)
             case GEN_STARTLOOPADDRCOARSEOFS:     /* SF2.01 section 8.1.3 # 45 */
                   if (sample != 0) {
                         loopstart = (sample->loopstart
-				  + (int) GEN(GEN_STARTLOOPADDROFS)
-				  + 32768 * (int) GEN(GEN_STARTLOOPADDRCOARSEOFS));
+				  + (unsigned int) GEN(GEN_STARTLOOPADDROFS)
+				  + 32768U * (unsigned int) GEN(GEN_STARTLOOPADDRCOARSEOFS));
                         check_sample_sanity_flag = FLUID_SAMPLESANITY_CHECK;
                         }
                   break;
@@ -1236,8 +1236,8 @@ void Voice::update_param(int _gen)
             case GEN_ENDLOOPADDRCOARSEOFS:       /* SF2.01 section 8.1.3 # 50 */
                   if (sample != 0) {
                         loopend = (sample->loopend
-				   + (int) GEN(GEN_ENDLOOPADDROFS)
-				   + 32768 * (int) GEN(GEN_ENDLOOPADDRCOARSEOFS));
+				   + (unsigned int) GEN(GEN_ENDLOOPADDROFS)
+				   + 32768U * (unsigned int) GEN(GEN_ENDLOOPADDRCOARSEOFS));
                         check_sample_sanity_flag = FLUID_SAMPLESANITY_CHECK;
                         }
                   break;
@@ -1681,22 +1681,22 @@ float Voice::get_lower_boundary_for_attenuation()
  */
 void Voice::check_sample_sanity()
       {
-      int min_index_nonloop=(int) sample->start;
-      int max_index_nonloop=(int) sample->end;
+      unsigned int min_index_nonloop = sample->start;
+      unsigned int max_index_nonloop = sample->end;
 
       /* make sure we have enough samples surrounding the loop */
-      int min_index_loop=(int) sample->start + FLUID_MIN_LOOP_PAD;
-      int max_index_loop=(int) sample->end - FLUID_MIN_LOOP_PAD;
+      unsigned int min_index_loop = sample->start + FLUID_MIN_LOOP_PAD;
+      unsigned int max_index_loop = sample->end - FLUID_MIN_LOOP_PAD;
       fluid_check_fpe("voice_check_sample_sanity start");
 
       if (!check_sample_sanity_flag)
 	      return;
 
 #if 0
-printf("Sample from %i to %i\n", sample->start, sample->end);
-printf("Sample loop from %i %i\n", sample->loopstart, sample->loopend);
-printf("Playback from %i to %i\n", start, end);
-printf("Playback loop from %i to %i\n", loopstart, loopend);
+printf("Sample from %u to %u\n", sample->start, sample->end);
+printf("Sample loop from %u to %u\n", sample->loopstart, sample->loopend);
+printf("Playback from %u to %u\n", start, end);
+printf("Playback loop from %u to %u\n", loopstart, loopend);
 #endif
 
       /* Keep the start point within the sample data */
@@ -1713,7 +1713,7 @@ printf("Playback loop from %i to %i\n", loopstart, loopend);
 
       /* Keep start and end point in the right order */
       if (start > end) {
-            int temp = start;
+            unsigned int temp = start;
             start    = end;
             end      = temp;
             }
@@ -1739,7 +1739,7 @@ printf("Playback loop from %i to %i\n", loopstart, loopend);
 
             /* Keep loop start and end point in the right order */
             if (loopstart > loopend){
-	            int temp  = loopstart;
+	            unsigned int temp  = loopstart;
 	            loopstart = loopend;
 	            loopend   = temp;
                   }
@@ -1751,7 +1751,7 @@ printf("Playback loop from %i to %i\n", loopstart, loopend);
             /* The loop points may have changed. Obtain a new estimate for the loop volume. */
             /* Is the voice loop within the sample loop?
              */
-            if ((int)loopstart >= (int)sample->loopstart && (int)loopend <= (int)sample->loopend){
+            if (loopstart >= sample->loopstart && loopend <= sample->loopend){
 	            /* Is there a valid peak amplitude available for the loop? */
 	            if (sample->amplitude_that_reaches_noise_floor_is_valid) {
 	                  amplitude_that_reaches_noise_floor_loop = sample->amplitude_that_reaches_noise_floor;
@@ -1790,13 +1790,13 @@ printf("Playback loop from %i to %i\n", loopstart, loopend);
             * the sample, enter the loop and proceed as expected => no
             * actions required.
             */
-            int index_in_sample = phase.index();
+            unsigned int index_in_sample = (unsigned int)phase.index();
             if (index_in_sample >= loopend) {
      	            /* FLUID_LOG(FLUID_DBG, "Loop / sample sanity check: Phase after 2nd loop point!"); */
      	            phase.setInt(loopstart);
                   }
             }
-/*    FLUID_LOG(FLUID_DBG, "Loop / sample sanity check: Sample from %i to %i, loop from %i to %i", voice->start, voice->end, voice->loopstart, voice->loopend); */
+/*    FLUID_LOG(FLUID_DBG, "Loop / sample sanity check: Sample from %u to %u, loop from %u to %u", voice->start, voice->end, voice->loopstart, voice->loopend); */
 
     /* Sample sanity has been assured. Don't check again, until some
        sample parameter is changed by modulation.
@@ -1844,14 +1844,6 @@ void Sample::optimize()
       /* ignore ROM and other(?) invalid samples */
       if (!s->valid())
             return;
-
-      IF_ASSERT_FAILED(s->loopstart >= s->start) {
-            s->loopstart = s->start;
-            }
-
-      if (s->loopend > s->end) {
-            s->loopend = s->end;
-            }
 
       if (!s->amplitude_that_reaches_noise_floor_is_valid) { /* Only once */
             /* Scan the loop */

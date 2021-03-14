@@ -150,8 +150,10 @@ class Sample {
           filled out automatically */
       /* Set this to zero, when submitting a new sample. */
 
-      bool amplitude_that_reaches_noise_floor_is_valid;
       double amplitude_that_reaches_noise_floor;
+      bool amplitude_that_reaches_noise_floor_is_valid;
+
+      char name[21];
 
       Sample(SFont*);
       ~Sample();
@@ -162,7 +164,7 @@ class Sample {
       bool valid() const    { return _valid; }
       void setValid(bool v) { _valid = v; }
 #ifdef SOUNDFONT3
-      bool decompressOggVorbis(char* p, int size);
+      bool decompressOggVorbis(char* p, unsigned int size);
 #endif
       };
 
