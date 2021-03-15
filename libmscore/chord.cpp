@@ -518,20 +518,30 @@ void Chord::add(Element* e)
             case ElementType::NOTE:
                   {
                   Note* note = toNote(e);
+                  bool tab = staff() && staff()->isTabStaff(tick());
                   bool found = false;
 
-                  // _notes should be sorted by line position,
-                  // but it's often not yet possible since line is unknown
-                  // use pitch instead, and line as a second sort criteria.
-
                   for (unsigned idx = 0; idx < _notes.size(); ++idx) {
-                        if (note->pitch() <= _notes[idx]->pitch()) {
-                              if (note->pitch() == _notes[idx]->pitch() && note->line() >= _notes[idx]->line())
-                                    _notes.insert(_notes.begin()+idx+1, note);
-                              else
-                                    _notes.insert(_notes.begin()+idx, note);
-                              found = true;
-                              break;
+                        if (tab) {
+                              // _notes should be sorted by string
+                              if (note->string() > _notes[idx]->string()) {
+                                    _notes.insert(_notes.begin() + idx, note);
+                                    found = true;
+                                    break;
+                                    }
+                              }
+                        else {
+                              // _notes should be sorted by line position,
+                              // but it's often not yet possible since line is unknown
+                              // use pitch instead, and line as a second sort criteria.
+                              if (note->pitch() <= _notes[idx]->pitch()) {
+                                    if (note->pitch() == _notes[idx]->pitch() && note->line() >= _notes[idx]->line())
+                                          _notes.insert(_notes.begin() + idx + 1, note);
+                                    else
+                                          _notes.insert(_notes.begin() + idx, note);
+                                    found = true;
+                                    break;
+                                    }
                               }
                         }
                   if (!found)
