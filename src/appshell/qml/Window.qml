@@ -9,7 +9,6 @@ import MuseScore.Shortcuts 1.0
 
 import "./HomePage"
 import "./NotationPage"
-import "./Settings"
 import "./DevTools"
 
 DockWindow {
