@@ -31,18 +31,19 @@
 #include "internal/applicationactioncontroller.h"
 #include "internal/appshellconfiguration.h"
 #include "internal/notationpagestate.h"
+
+#include "view/devtools/settingslistmodel.h"
 #include "view/dockwindow/docksetup.h"
-#include "view/settings/settingslistmodel.h"
 #include "view/appmenumodel.h"
 #include "view/notationpagemodel.h"
 #include "view/aboutmodel.h"
-
 #include "view/filemenucontroller.h"
 #include "view/editmenucontroller.h"
 #include "view/viewmenucontroller.h"
 #include "view/formatmenucontroller.h"
 #include "view/toolsmenucontroller.h"
 #include "view/helpmenucontroller.h"
+#include "view/preferencesmodel.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;
@@ -97,6 +98,7 @@ void AppShellModule::resolveImports()
         ir->registerUri(Uri("musescore://devtools"), ContainerMeta(ContainerType::PrimaryPage));
         ir->registerUri(Uri("musescore://about/musescore"), ContainerMeta(ContainerType::QmlDialog, "AboutDialog.qml"));
         ir->registerUri(Uri("musescore://about/musicxml"), ContainerMeta(ContainerType::QmlDialog, "AboutMusicXMLDialog.qml"));
+        ir->registerUri(Uri("musescore://preferences"), ContainerMeta(ContainerType::QmlDialog, "Preferences/PreferencesDialog.qml"));
     }
 
     auto mcr = ioc()->resolve<IMenuControllersRegister>(moduleName());
@@ -119,7 +121,8 @@ void AppShellModule::registerUiTypes()
 {
     dock::DockSetup::registerQmlTypes();
 
-    qmlRegisterType<SettingListModel>("MuseScore.Settings", 1, 0, "SettingListModel");
+    qmlRegisterType<SettingListModel>("MuseScore.Preferences", 1, 0, "SettingListModel");
+    qmlRegisterType<PreferencesModel>("MuseScore.Preferences", 1, 0, "PreferencesModel");
     qmlRegisterType<AppMenuModel>("MuseScore.AppMenu", 1, 0, "AppMenuModel");
     qmlRegisterType<NotationPageModel>("MuseScore.AppShell", 1, 0, "NotationPageModel");
     qmlRegisterType<AboutModel>("MuseScore.AppShell", 1, 0, "AboutModel");

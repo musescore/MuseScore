@@ -120,6 +120,11 @@ const ActionList ApplicationActions::m_actions = {
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Playback Controls"),
                QT_TRANSLATE_NOOP("action", "Toggle Playback Controls toolbar")
+               ),
+    ActionItem("preference-dialog",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Preferences"),
+               QT_TRANSLATE_NOOP("action", "Open preferences dialog")
                )
 };
 

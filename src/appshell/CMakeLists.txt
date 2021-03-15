@@ -45,8 +45,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationpagestate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationpagestate.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/settings/settingslistmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/settings/settingslistmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/devtools/settingslistmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/devtools/settingslistmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferencesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.cpp

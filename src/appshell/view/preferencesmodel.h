@@ -16,27 +16,28 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DRAW_DRAWOBJECTSLOGGER_H
-#define MU_DRAW_DRAWOBJECTSLOGGER_H
+#ifndef MU_APPSHELL_PREFERENCESMODEL_H
+#define MU_APPSHELL_PREFERENCESMODEL_H
 
-#include <stack>
-#include <string>
+#include <QObject>
 
-class QPointF;
+#include "actions/iactionsdispatcher.h"
+#include "actions/iactionsregister.h"
+#include "modularity/ioc.h"
 
-namespace mu::draw {
-class DrawObjectsLogger
+namespace mu::appshell {
+class PreferencesModel : public QObject
 {
+    INJECT(appshell, actions::IActionsDispatcher, dispatcher)
+    INJECT(appshell, actions::IActionsRegister, actionsRegister)
+
 public:
-    DrawObjectsLogger() = default;
+    explicit PreferencesModel(QObject* parent = nullptr);
 
-    void beginObject(const std::string& name, const QPointF& pagePos);
-    void endObject();
-
-private:
-
-    std::stack<std::string> m_objects;
+    Q_INVOKABLE void load();
+    Q_INVOKABLE void resetFactorySettings();
+    Q_INVOKABLE bool apply();
 };
 }
 
-#endif // MU_DRAW_DRAWOBJECTSLOGGER_H
+#endif // MU_APPSHELL_PREFERENCESMODEL_H

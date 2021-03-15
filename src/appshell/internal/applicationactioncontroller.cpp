@@ -38,11 +38,11 @@ void ApplicationActionController::init()
     dispatcher()->reg(this, "about", this, &ApplicationActionController::openAboutDialog);
     dispatcher()->reg(this, "about-qt", this, &ApplicationActionController::openAboutQtDialog);
     dispatcher()->reg(this, "about-musicxml", this, &ApplicationActionController::openAboutMusicXMLDialog);
-
     dispatcher()->reg(this, "online-handbook", this, &ApplicationActionController::openOnlineHandbookPage);
     dispatcher()->reg(this, "ask-help", this, &ApplicationActionController::openAskForHelpPage);
     dispatcher()->reg(this, "report-bug", this, &ApplicationActionController::openBugReportPage);
     dispatcher()->reg(this, "leave-feedback", this, &ApplicationActionController::openLeaveFeedbackPage);
+    dispatcher()->reg(this, "preference-dialog", this, &ApplicationActionController::openPreferencesDialog);
 
     dispatcher()->reg(this, "revert-factory", this, &ApplicationActionController::revertToFactorySettings);
 
@@ -150,6 +150,11 @@ void ApplicationActionController::openLeaveFeedbackPage()
 {
     std::string leaveFeedbackUrl = configuration()->leaveFeedbackUrl();
     interactive()->openUrl(leaveFeedbackUrl);
+}
+
+void ApplicationActionController::openPreferencesDialog()
+{
+    interactive()->open("musescore://preferences");
 }
 
 void ApplicationActionController::revertToFactorySettings()
