@@ -69,7 +69,7 @@ GridView {
     state: "default"
 
     // internal property: whether the palette fits to one row
-    readonly property bool oneRow: cellDefaultWidth * ncells + moreButton.implicitWidth < width
+    readonly property bool oneRow: cellDefaultWidth * ncells + moreButtonRect.implicitWidth < width
 
     implicitHeight: {
         if (!ncells) {
@@ -80,7 +80,7 @@ GridView {
             return contentHeight;
         }
 
-        const moreButtonCells = Math.ceil(moreButton.implicitWidth / cellWidth);
+        const moreButtonCells = Math.ceil(moreButtonRect.implicitWidth / cellWidth);
         const rowCells = Math.floor(width / cellWidth);
         const lastRowCells = ncells % rowCells;
         const freeCells = lastRowCells ? rowCells - lastRowCells : 0;

@@ -70,6 +70,8 @@ private:
     void addArticulation(SymbolId articulationSymbolId);
 
     void putTuplet(int tupletCount);
+    void addBeamToSelectedChordRests(BeamMode mode);
+    void addBracketsToSelection(BracketsType type);
 
     void moveAction(const actions::ActionCode& actionCode);
     void moveText(INotationInteractionPtr interaction, const actions::ActionCode& actionCode);
@@ -94,6 +96,7 @@ private:
     void selectAllSimilarElementsInRange();
     void openSelectionMoreOptions();
     void selectAll();
+    void selectSection();
 
     void splitMeasure();
     void joinSelectedMeasures();
@@ -124,6 +127,7 @@ private:
     void resequenceRehearsalMarks();
     void unrollRepeats();
     void copyLyrics();
+    void addGraceNotesToSelectedNotes(GraceNoteType type);
 
     void resetState();
     void resetStretch();

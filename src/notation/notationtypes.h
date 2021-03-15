@@ -88,6 +88,8 @@ using HairpinType = Ms::HairpinType;
 using TextType = Ms::Tid;
 using TupletNumberType = Ms::TupletNumberType;
 using TupletBracketType = Ms::TupletBracketType;
+using GraceNoteType = Ms::NoteType;
+using BeamMode = Ms::Beam::Mode;
 
 using PageList = std::vector<const Page*>;
 using StaffList = QList<const Staff*>;
@@ -447,6 +449,13 @@ struct MeasureBeat
     int maxMeasureIndex = 0;
     int beatIndex = 0;
     int maxBeatIndex = 0;
+};
+
+enum class BracketsType
+{
+    Brackets,
+    Braces,
+    Parentheses
 };
 
 static constexpr int MIN_NOTES_INTERVAL = -9;

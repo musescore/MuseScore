@@ -69,17 +69,6 @@ void PaletteModule::registerExports()
     ioc()->registerExport<IPaletteAdapter>(moduleName(), s_adapter);
     ioc()->registerExport<IPaletteConfiguration>(moduleName(), std::make_shared<PaletteConfiguration>());
     ioc()->registerExport<IPaletteActionsController>(moduleName(), s_actionsController);
-
-    // create a score for internal use
-    Ms::gscore = new Ms::MasterScore();
-    Ms::gscore->setPaletteMode(true);
-    Ms::gscore->setMovements(new Ms::Movements());
-    Ms::gscore->setStyle(Ms::MScore::baseStyle());
-
-    Ms::gscore->style().set(Ms::Sid::MusicalTextFont, QString("Bravura Text"));
-    Ms::ScoreFont* scoreFont = Ms::ScoreFont::fontFactory("Bravura");
-    Ms::gscore->setScoreFont(scoreFont);
-    Ms::gscore->setNoteHeadWidth(scoreFont->width(Ms::SymId::noteheadBlack, Ms::gscore->spatium()) / Ms::SPATIUM20);
 }
 
 void PaletteModule::resolveImports()

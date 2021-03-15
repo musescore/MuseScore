@@ -50,7 +50,7 @@ const ActionList UserScoresActions::m_actions = {
                ),
     ActionItem("file-save-as",
                ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Save Score As..."),
+               QT_TRANSLATE_NOOP("action", "Save As..."),
                QT_TRANSLATE_NOOP("action", "Save score under a new file name")
                ),
     ActionItem("file-save-a-copy",

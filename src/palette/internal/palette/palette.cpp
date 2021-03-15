@@ -24,6 +24,8 @@
 #include <QToolTip>
 #include <QBuffer>
 
+#include "actions/actiontypes.h"
+
 #include "libmscore/element.h"
 #include "libmscore/style.h"
 #include "libmscore/sym.h"
@@ -52,6 +54,8 @@
 #include "libmscore/slur.h"
 #include "libmscore/fret.h"
 
+#include "libmscore/draw/qpainterprovider.h"
+
 #include "translation.h"
 
 #include "widgetstatestore.h"
@@ -61,6 +65,7 @@
 
 using namespace mu::framework;
 using namespace mu::palette;
+using namespace mu::actions;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -919,12 +924,6 @@ PaletteCellPtr Palette::add(int idx, ElementPtr element, const QString& name, QS
     cell->readOnly  = false;
 
     update();
-
-    if (element && element->isIcon()) {
-        const Icon* icon = toIcon(element.get());
-        connect(adapter()->getAction(icon->action()), SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
-    }
-
     updateGeometry();
 
     return cell;
@@ -940,18 +939,18 @@ void Palette::paintPaletteElement(void* data, Element* element)
     painter->save();
     painter->translate(element->pos()); // necessary for drawing child elements
 
-    QColor color = configuration()->elementsColor();
-
-    QColor colorBackup = element->color();
-    element->undoSetColor(color);
-
+    QColor colorBackup = element->getProperty(Pid::COLOR).value<QColor>();
     QColor frameColorBackup = element->getProperty(Pid::FRAME_FG_COLOR).value<QColor>();
-    element->undoChangeProperty(Pid::FRAME_FG_COLOR, color);
+
+    QColor color = configuration()->elementsColor();
+    element->setProperty(Pid::COLOR, color);
+    element->setProperty(Pid::FRAME_FG_COLOR, color);
 
     element->draw(painter);
 
-    element->undoSetColor(colorBackup);
-    element->undoChangeProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
+    element->setProperty(Pid::COLOR, colorBackup);
+    element->setProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
+
     painter->restore();
 }
 
@@ -996,11 +995,11 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
     qreal mag      = magS / _spatium;
     gscore->setSpatium(SPATIUM20);
 
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
+    mu::draw::Painter painter(mu::draw::QPainterProvider::make(this), "palette");
+    painter.setAntialiasing(true);
 
     painter.setPen(configuration()->gridColor());
-    painter.drawRoundedRect(0, 0, width(), height(), 2, 2);
+    painter.drawRoundedRect(QRectF(0, 0, width(), height()), 2, 2);
 
     //
     // draw grid
@@ -1170,8 +1169,9 @@ QPixmap Palette::pixmap(int paletteIdx) const
 
     QPixmap pm(w, h);
     pm.fill(configuration()->elementsBackgroundColor());
-    QPainter painter(&pm);
-    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    mu::draw::Painter painter(mu::draw::QPainterProvider::make(&pm), "palette");
+    painter.setAntialiasing(true);
 
     if (element->isIcon()) {
         toIcon(element.get())->setExtent(w < h ? w : h);
@@ -1517,14 +1517,15 @@ void Palette::read(XmlReader& e)
                     } else {
                         cell->element->read(e);
                         cell->element->styleChanged();
+
                         if (cell->element->type() == ElementType::ICON) {
                             Icon* icon = static_cast<Icon*>(cell->element.get());
-                            QAction* ac = adapter()->getAction(icon->action());
-                            if (ac) {
-                                QIcon qicon(ac->icon());
-                                icon->setAction(icon->action(), qicon);
+                            ActionItem actionItem = adapter()->getAction(icon->actionCode());
+
+                            if (actionItem.isValid()) {
+                                icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
                             } else {
-                                add = false;                 // action is not valid, don't add it to the palette.
+                                add = false;
                             }
                         }
                     }
@@ -1612,27 +1613,6 @@ QSize Palette::sizeHint() const
     int h = heightForWidth(width());
     int hgridM = gridWidthM();
     return QSize((width() / hgridM) * hgridM, h);
-}
-
-//---------------------------------------------------------
-//   actionToggled
-//---------------------------------------------------------
-
-void Palette::actionToggled(bool /*val*/)
-{
-    m_selectedIdx = -1;
-    int nn = ccp().size();
-    for (int n = 0; n < nn; ++n) {
-        const ElementPtr element = cellAt(n)->element;
-        if (element && element->type() == ElementType::ICON) {
-            QAction* a = adapter()->getAction(std::dynamic_pointer_cast<Icon>(element)->action());
-            if (a->isChecked()) {
-                m_selectedIdx = n;
-                break;
-            }
-        }
-    }
-    update();
 }
 
 //---------------------------------------------------------
@@ -1745,7 +1725,7 @@ void Palette::dropEvent(QDropEvent* event)
         QList<QUrl> ul = event->mimeData()->urls();
         QUrl u = ul.front();
         if (u.scheme() == "file") {
-            std::shared_ptr<Image> image = std::make_shared<Image>(gscore);
+            auto image = makeElement<Image>(gscore);
             QString filePath(u.toLocalFile());
             image->load(filePath);
             element = image;
@@ -1760,7 +1740,7 @@ void Palette::dropEvent(QDropEvent* event)
         ElementType type = Element::readType(xml, &dragOffset, &duration);
 
         if (type == ElementType::SYMBOL) {
-            std::shared_ptr<Symbol> symbol = std::make_shared<Symbol>(gscore);
+            auto symbol = makeElement<Symbol>(gscore);
             symbol->read(xml);
             element = symbol;
         } else {
@@ -1768,15 +1748,13 @@ void Palette::dropEvent(QDropEvent* event)
             if (element) {
                 element->read(xml);
                 element->setTrack(0);
+
                 if (element->isIcon()) {
-                    Icon* i = toIcon(element.get());
-                    const QByteArray& action = i->action();
-                    if (!action.isEmpty()) {
-                        QAction* a = adapter()->getAction(action);
-                        if (a) {
-                            QIcon icon(a->icon());
-                            i->setAction(action, icon);
-                        }
+                    Icon* icon = toIcon(element.get());
+                    ActionItem actionItem = adapter()->getAction(icon->actionCode());
+
+                    if (actionItem.isValid()) {
+                        icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
                     }
                 }
             }

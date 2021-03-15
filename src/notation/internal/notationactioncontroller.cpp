@@ -37,6 +37,7 @@ static const ActionCode REDO_ACTION_CODE = "redo";
 
 void NotationActionController::init()
 {
+    //! NOTE For historical reasons, the name of the action does not match what needs to be done
     dispatcher()->reg(this, ESCAPE_ACTION_CODE, this, &NotationActionController::resetState);
 
     dispatcher()->reg(this, "note-input", [this]() { toggleNoteInputMethod(NoteInputMethod::STEPTIME); });
@@ -112,7 +113,6 @@ void NotationActionController::init()
 
     dispatcher()->reg(this, "put-note", this, &NotationActionController::putNote);
 
-    //! NOTE For historical reasons, the name of the action does not match what needs to be done.
     dispatcher()->reg(this, "next-element", [this](const ActionCode& actionCode) { moveAction(actionCode); });
     dispatcher()->reg(this, "prev-element", [this](const ActionCode& actionCode) { moveAction(actionCode); });
     dispatcher()->reg(this, "next-chord", [this](const ActionCode& actionCode) { moveAction(actionCode); });
@@ -146,6 +146,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "select-similar-range", this, &NotationActionController::selectAllSimilarElementsInRange);
     dispatcher()->reg(this, "select-dialog", this, &NotationActionController::openSelectionMoreOptions);
     dispatcher()->reg(this, "select-all", this, &NotationActionController::selectAll);
+    dispatcher()->reg(this, "select-section", this, &NotationActionController::selectSection);
 
     dispatcher()->reg(this, "split-measure", this, &NotationActionController::splitMeasure);
     dispatcher()->reg(this, "join-measures", this, &NotationActionController::joinSelectedMeasures);
@@ -225,6 +226,26 @@ void NotationActionController::init()
     dispatcher()->reg(this, "resequence-rehearsal-marks", this, &NotationActionController::resequenceRehearsalMarks);
     dispatcher()->reg(this, "unroll-repeats", this, &NotationActionController::unrollRepeats);
     dispatcher()->reg(this, "copy-lyrics-to-clipboard", this, &NotationActionController::copyLyrics);
+
+    dispatcher()->reg(this, "acciaccatura", [this]() { addGraceNotesToSelectedNotes(GraceNoteType::ACCIACCATURA); });
+    dispatcher()->reg(this, "appoggiatura", [this]() { addGraceNotesToSelectedNotes(GraceNoteType::APPOGGIATURA); });
+    dispatcher()->reg(this, "grace4", [this]() { addGraceNotesToSelectedNotes(GraceNoteType::GRACE4); });
+    dispatcher()->reg(this, "grace16", [this]() { addGraceNotesToSelectedNotes(GraceNoteType::GRACE16); });
+    dispatcher()->reg(this, "grace32", [this]() { addGraceNotesToSelectedNotes(GraceNoteType::GRACE32); });
+    dispatcher()->reg(this, "grace8after", [this]() { addGraceNotesToSelectedNotes(GraceNoteType::GRACE8_AFTER); });
+    dispatcher()->reg(this, "grace16after", [this]() { addGraceNotesToSelectedNotes(GraceNoteType::GRACE16_AFTER); });
+    dispatcher()->reg(this, "grace32after", [this]() { addGraceNotesToSelectedNotes(GraceNoteType::GRACE32_AFTER); });
+
+    dispatcher()->reg(this, "beam-start", [this]() { addBeamToSelectedChordRests(BeamMode::BEGIN); });
+    dispatcher()->reg(this, "beam-mid", [this]() { addBeamToSelectedChordRests(BeamMode::MID); });
+    dispatcher()->reg(this, "no-beam", [this]() { addBeamToSelectedChordRests(BeamMode::NONE); });
+    dispatcher()->reg(this, "beam-32", [this]() { addBeamToSelectedChordRests(BeamMode::BEGIN32); });
+    dispatcher()->reg(this, "beam-64", [this]() { addBeamToSelectedChordRests(BeamMode::BEGIN64); });
+    dispatcher()->reg(this, "auto-beam", [this]() { addBeamToSelectedChordRests(BeamMode::AUTO); });
+
+    dispatcher()->reg(this, "add-brackets", [this]() { addBracketsToSelection(BracketsType::Brackets); });
+    dispatcher()->reg(this, "add-parentheses", [this]() { addBracketsToSelection(BracketsType::Parentheses); });
+    dispatcher()->reg(this, "add-braces", [this]() { addBracketsToSelection(BracketsType::Braces); });
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
@@ -535,8 +556,28 @@ void NotationActionController::putTuplet(int tupletCount)
     if (noteInput->isNoteInputMode()) {
         noteInput->addTuplet(options);
     } else {
-        interaction->addTupletToSelectedChords(options);
+        interaction->addTupletToSelectedChordRests(options);
     }
+}
+
+void NotationActionController::addBeamToSelectedChordRests(BeamMode mode)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->addBeamToSelectedChordRests(mode);
+}
+
+void NotationActionController::addBracketsToSelection(BracketsType type)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->addBracketsToSelection(type);
 }
 
 void NotationActionController::moveAction(const actions::ActionCode& actionCode)
@@ -546,26 +587,26 @@ void NotationActionController::moveAction(const actions::ActionCode& actionCode)
         return;
     }
 
-    Element* el = interaction->selection()->element();
-    if (!el) {
+    Element* element = interaction->selection()->element();
+    if (!element) {
         LOGW() << "no selection element";
         return;
     }
 
-    if (el->isLyrics()) {
+    if (element->isLyrics()) {
         NOT_IMPLEMENTED;
-    } else if (el->isTextBase()) {
+    } else if (element->isTextBase()) {
         moveText(interaction, actionCode);
     } else {
         if ("pitch-up" == actionCode) {
-            if (el->isRest()) {
-                NOT_IMPLEMENTED << actionCode << ", el->isRest";
+            if (element->isRest()) {
+                NOT_IMPLEMENTED << actionCode << ", element->isRest";
             } else {
                 interaction->movePitch(MoveDirection::Up, PitchMode::CHROMATIC);
             }
         } else if ("pitch-down" == actionCode) {
-            if (el->isRest()) {
-                NOT_IMPLEMENTED << actionCode << ", el->isRest";
+            if (element->isRest()) {
+                NOT_IMPLEMENTED << actionCode << ", element->isRest";
             } else {
                 interaction->movePitch(MoveDirection::Down, PitchMode::CHROMATIC);
             }
@@ -863,6 +904,16 @@ void NotationActionController::selectAllSimilarElementsInRange()
     NOT_IMPLEMENTED;
 }
 
+void NotationActionController::selectSection()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->selectSection();
+}
+
 void NotationActionController::openSelectionMoreOptions()
 {
     auto interaction = currentNotationInteraction();
@@ -1117,6 +1168,16 @@ void NotationActionController::copyLyrics()
     }
 
     interaction->copyLyrics();
+}
+
+void NotationActionController::addGraceNotesToSelectedNotes(GraceNoteType type)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->addGraceNotesToSelectedNotes(type);
 }
 
 void NotationActionController::addStretch(qreal value)

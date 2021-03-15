@@ -129,7 +129,7 @@ void TupletDialog::apply()
     if (noteInput->isNoteInputMode()) {
         noteInput->addTuplet(options);
     } else {
-        interaction->addTupletToSelectedChords(options);
+        interaction->addTupletToSelectedChordRests(options);
     }
 }
 

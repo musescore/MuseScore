@@ -57,13 +57,9 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
         chord->setStemDirection(Direction::UP);
         chords->push_back(chord);
     }
-    //c.score()->style().set(Sid::pageOddTopMargin, 16.0/INCH);
-    c.score()->style().set(Sid::pageOddLeftMargin, 0.0);
 
-    c.score()->parts().front()->setLongName("");
-    c.score()->style().set(Sid::linearStretch, 1.3);
-    c.score()->style().set(Sid::MusicalSymbolFont, QString("Bravura"));
-    c.score()->style().set(Sid::MusicalTextFont, QString("Bravura Text"));
+    c.score()->style().set(Sid::pageOddLeftMargin, 0.0);
+    c.score()->style().set(Sid::pageOddTopMargin, 10.0 / INCH);
     c.score()->style().set(Sid::startBarlineSingle, true);
 
     StaffType* st = c.score()->staff(0)->staffType(Fraction(0,1));

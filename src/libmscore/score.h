@@ -34,12 +34,6 @@
 #include "property.h"
 #include "sym.h"
 
-namespace mu {
-namespace notation {
-class NotationNoteInput;
-}
-}
-
 namespace Ms {
 namespace Avs {
 class AvsOmr;
@@ -514,13 +508,8 @@ private:
     QString accInfo;                      ///< information about selected element(s) for use by screen-readers
     QString accMessage;                   ///< temporary status message for use by screen-readers
 
-    //------------------
-
-    friend class mu::notation::NotationNoteInput;
-
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
-    void cmdSetBeamMode(Beam::Mode);
     void cmdResetAllStyle();
 
     Note* getSelectedNote();
@@ -529,19 +518,14 @@ private:
     ChordRest* nextTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
     ChordRest* prevTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
 
-    void padToggle(Pad p, const EditData& ed);
     void addTempo();
     void addMetronome();
 
     void cmdInsertClef(ClefType);
-    void cmdAddGrace(NoteType, int);
     void removeChordRest(ChordRest* cr, bool clearSegment);
     void cmdMoveRest(Rest*, Direction);
     void cmdMoveLyrics(Lyrics*, Direction);
     void cmdIncDecDuration(int nSteps, bool stepDotted = false);
-    void cmdAddBracket();
-    void cmdAddParentheses();
-    void cmdAddBraces();
 
     void createMMRest(Measure*, Measure*, const Fraction&);
 
@@ -562,7 +546,6 @@ private:
     void selectAdd(Element* e);
     void selectRange(Element* e, int staffIdx);
 
-    void cmdAddPitch(const EditData&, int note, bool addFlag, bool insert);
     void cmdAddFret(int fret);
     void cmdToggleVisible();
 
@@ -649,6 +632,10 @@ public:
 
     void resetAllPositions();
 
+    void cmdAddBracket();
+    void cmdAddParentheses();
+    void cmdAddBraces();
+    void cmdSetBeamMode(Beam::Mode);
     void cmdRemovePart(Part*);
     void cmdAddTie(bool addToChord = false);
     void cmdToggleTie();
@@ -656,7 +643,10 @@ public:
     void cmdAddOttava(OttavaType);
     void addHairpin(HairpinType);
     void addNoteLine();
+    void padToggle(Pad p, const EditData& ed);
+    void cmdAddPitch(const EditData&, int note, bool addFlag, bool insert);
     void cmdAddStretch(qreal);
+    void cmdAddGrace(NoteType, int);
     void cmdResetNoteAndRestGroupings();
     void cmdResetAllPositions(bool undoable = true);
     void cmdDoubleDuration() { cmdIncDecDuration(-1, false); }
