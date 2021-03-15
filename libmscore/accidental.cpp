@@ -196,6 +196,17 @@ static Acc accList[] = {
       Acc(AccidentalVal::NATURAL, 107.9, SymId::accSagittalSharp5v7kDown),
       Acc(AccidentalVal::NATURAL,-113.7, SymId::accSagittalFlat),
       Acc(AccidentalVal::NATURAL, 113.7, SymId::accSagittalSharp),
+
+      // Turkish folk music accidentals
+      Acc(AccidentalVal::NATURAL, -22.2, SymId::accidental1CommaFlat),
+      Acc(AccidentalVal::NATURAL,  22.2, SymId::accidental1CommaSharp),
+      Acc(AccidentalVal::NATURAL, -44.4, SymId::accidental2CommaFlat),
+      Acc(AccidentalVal::NATURAL,  44.4, SymId::accidental2CommaSharp),
+      Acc(AccidentalVal::NATURAL, -66.7, SymId::accidental3CommaFlat),
+      Acc(AccidentalVal::NATURAL,  66.7, SymId::accidental3CommaSharp),
+      Acc(AccidentalVal::NATURAL, -88.9, SymId::accidental4CommaFlat),
+      //Acc(AccidentalVal::NATURAL,  88.9, SymId::accidentalSharp),
+      Acc(AccidentalVal::NATURAL, 111.1, SymId::accidental5CommaSharp),
       };
 
 //---------------------------------------------------------
