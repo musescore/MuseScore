@@ -20,7 +20,7 @@ TabPanel 1.0 TabPanel.qml
 TextInputField 1.0 TextInputField.qml
 ValueAdjustControl 1.0 ValueAdjustControl.qml
 ContextMenu 1.0 ContextMenu.qml
-StyledMenuItem 1.0 StyledMenuItem.qml
+StyledContextMenuItem 1.0 StyledContextMenuItem.qml
 RoundedRectangle 1.0 RoundedRectangle.qml
 SearchField 1.0 SearchField.qml
 StyledTabButton 1.0 StyledTabButton.qml
@@ -37,3 +37,4 @@ NumberInputField 1.0 NumberInputField.qml
 TimeInputField 1.0 TimeInputField.qml
 StyledPopupView 1.0 StyledPopupView.qml
 StyledMenu 1.0 StyledMenu.qml
+StyledMenuItem 1.0 StyledMenuItem.qml

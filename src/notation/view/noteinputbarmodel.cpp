@@ -86,13 +86,14 @@ QHash<int,QByteArray> NoteInputBarModel::roleNames() const
     return roles;
 }
 
-bool NoteInputBarModel::actionEnabled(const ActionCode& actionCode) const
+ActionState NoteInputBarModel::actionState(const ActionCode& actionCode) const
 {
-    if (addMenuController()->contains(actionCode)) {
-        return addMenuController()->actionAvailable(actionCode);
+    IMenuControllerPtr addMenuController = menuControllersRegister()->controller(MenuType::Add);
+    if (addMenuController && addMenuController->contains(actionCode)) {
+        return addMenuController->actionState(actionCode);
     }
 
-    return true;
+    return AbstractMenuModel::actionState(actionCode);
 }
 
 void NoteInputBarModel::load()
@@ -143,10 +144,13 @@ void NoteInputBarModel::load()
         updateState();
     });
 
-    addMenuController()->actionsAvailableChanged().onReceive(this, [this](const std::vector<ActionCode>&) {
-        notifyAboutTupletItemChanged();
-        notifyAboutAddItemChanged();
-    });
+    IMenuControllerPtr addMenuController = menuControllersRegister()->controller(MenuType::Add);
+    if (addMenuController) {
+        addMenuController->actionsAvailableChanged().onReceive(this, [this](const ActionCodeList&) {
+            notifyAboutTupletItemChanged();
+            notifyAboutAddItemChanged();
+        });
+    }
 }
 
 MenuItem& NoteInputBarModel::item(const ActionCode& actionCode)
@@ -667,7 +671,7 @@ MenuItemList NoteInputBarModel::addItems() const
 MenuItemList NoteInputBarModel::notesItems() const
 {
     MenuItemList items {
-        makeAction("note-input", isNoteInputMode()),
+        makeAction("note-input"),
         makeSeparator(),
         makeAction("note-c"),
         makeAction("note-d"),
@@ -771,26 +775,6 @@ MenuItemList NoteInputBarModel::textItems() const
     return items;
 }
 
-void NoteInputBarModel::notifyAboutTupletItemChanged()
-{
-    int tupletItemIndex = itemIndex(TUPLET_ACTION_CODE);
-    if (tupletItemIndex == -1) {
-        return;
-    }
-
-    emit dataChanged(index(tupletItemIndex), index(tupletItemIndex));
-}
-
-void NoteInputBarModel::notifyAboutAddItemChanged()
-{
-    int addItemIndex = itemIndex(ADD_ACTION_CODE);
-    if (addItemIndex == -1) {
-        return;
-    }
-
-    emit dataChanged(index(addItemIndex), index(addItemIndex));
-}
-
 MenuItemList NoteInputBarModel::linesItems() const
 {
     MenuItemList items {
@@ -812,6 +796,26 @@ bool NoteInputBarModel::isNeedShowSubitemsByClick(const ActionCode& actionCode) 
     }
 
     return true;
+}
+
+void NoteInputBarModel::notifyAboutTupletItemChanged()
+{
+    int tupletItemIndex = itemIndex(TUPLET_ACTION_CODE);
+    if (tupletItemIndex == -1) {
+        return;
+    }
+
+    emit dataChanged(index(tupletItemIndex), index(tupletItemIndex));
+}
+
+void NoteInputBarModel::notifyAboutAddItemChanged()
+{
+    int addItemIndex = itemIndex(ADD_ACTION_CODE);
+    if (addItemIndex == -1) {
+        return;
+    }
+
+    emit dataChanged(index(addItemIndex), index(addItemIndex));
 }
 
 std::vector<std::string> NoteInputBarModel::currentWorkspaceActions() const

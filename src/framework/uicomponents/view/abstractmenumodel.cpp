@@ -34,7 +34,9 @@ QVariantList AbstractMenuModel::items() const
 
 ActionState AbstractMenuModel::actionState(const ActionCode&) const
 {
-    return ActionState();
+    ActionState state;
+    state.enabled = true;
+    return state;
 }
 
 void AbstractMenuModel::clear()

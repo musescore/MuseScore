@@ -778,7 +778,7 @@ GridView {
         property var modelIndex: null
         property bool canEdit: true
 
-        StyledMenuItem {
+        StyledContextMenuItem {
             hintIcon: IconCode.DELETE_TANK
             text: qsTrc("palette", "Delete")
             enabled: contextMenu.canEdit
@@ -788,7 +788,7 @@ GridView {
             }
         }
 
-        StyledMenuItem {
+        StyledContextMenuItem {
             text: qsTrc("palette", "Properties…")
             enabled: contextMenu.canEdit
 
