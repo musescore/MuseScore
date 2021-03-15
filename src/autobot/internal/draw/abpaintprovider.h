@@ -32,7 +32,7 @@ public:
     void beginTarget(const std::string& name) override;
     bool endTarget(bool endDraw = false) override;
 
-    QByteArray serialize() const;
+    const draw::DrawBuffer& notationViewBuffer() const;
 
 private:
     AbPaintProvider();

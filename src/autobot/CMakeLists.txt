@@ -49,6 +49,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/abcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abinvoker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/abinvoker.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/draw/abpaintprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/draw/abpaintprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abscoreloadstep.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abscoreloadstep.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abscoreclosestep.cpp
@@ -57,8 +59,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abscorezoom.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawserializationstep.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawserializationstep.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/draw/abpaintprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/draw/abpaintprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawdeserializationstep.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawdeserializationstep.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawcompstep.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawcompstep.h
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotmodel.h
     )

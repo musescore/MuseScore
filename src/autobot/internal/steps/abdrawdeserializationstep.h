@@ -16,23 +16,26 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "autobotconfiguration.h"
+#ifndef MU_AUTOBOT_ABDRAWDESERIALIZATIONSTEP_H
+#define MU_AUTOBOT_ABDRAWDESERIALIZATIONSTEP_H
 
-#include <cstdlib>
+#include "../abbasestep.h"
+#include "modularity/ioc.h"
+#include "iautobotconfiguration.h"
+#include "system/ifilesystem.h"
 
-using namespace mu::autobot;
-
-mu::io::path AutobotConfiguration::dataPath() const
+namespace mu::autobot {
+class AbDrawDeserializationStep : public AbBaseStep
 {
-    return io::path(std::getenv("MU_AUTOBOT_DATA_PATH"));
+    INJECT(autobot, IAutobotConfiguration, configuration)
+    INJECT(autobot, system::IFileSystem, fileSystem)
+
+public:
+    AbDrawDeserializationStep() = default;
+
+protected:
+    void doRun(AbContext ctx) override;
+};
 }
 
-mu::io::path AutobotConfiguration::drawDataPath() const
-{
-    return dataPath() + "/draw_data";
-}
-
-mu::io::path AutobotConfiguration::scoreDrawData(const io::path& scorePath) const
-{
-    return drawDataPath() + "/" + io::basename(scorePath) + ".json";
-}
+#endif // MU_AUTOBOT_ABDRAWDESERIALIZATIONSTEP_H
