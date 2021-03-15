@@ -157,6 +157,7 @@ DockPage {
             area: Qt.RightDockWidgetArea
             floatable: true
             closable: true
+            visible: false
 
             Loader {
                 anchors.fill: parent

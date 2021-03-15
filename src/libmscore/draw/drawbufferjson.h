@@ -16,29 +16,18 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUTOBOT_ABPAINTPROVIDER_H
-#define MU_AUTOBOT_ABPAINTPROVIDER_H
+#ifndef MU_DRAW_DRAWBUFFERJSON_H
+#define MU_DRAW_DRAWBUFFERJSON_H
 
-#include <memory>
-#include "libmscore/draw/bufferedpaintprovider.h"
+#include <QByteArray>
+#include "drawtypes.h"
 
-namespace mu::autobot {
-class AbPaintProvider : public draw::BufferedPaintProvider
+namespace mu::draw {
+class DrawBufferJson
 {
 public:
 
-    static const std::shared_ptr<AbPaintProvider>& instance();
-
-    void beginTarget(const std::string& name) override;
-    bool endTarget(bool endDraw = false) override;
-
-    QByteArray serialize() const;
-
-private:
-    AbPaintProvider();
-
-    draw::DrawBuffer m_notationViewDrawBuf;
+    static QByteArray toJson(const DrawBuffer& buf);
 };
 }
-
-#endif // MU_AUTOBOT_ABPAINTPROVIDER_H
+#endif // MU_DRAW_DRAWBUFFERJSON_H

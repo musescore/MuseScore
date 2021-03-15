@@ -30,34 +30,6 @@
 #include "drawobjectslogger.h"
 
 namespace mu::draw {
-struct DrawBuffer
-{
-    struct State {
-        QPen pen;
-        QBrush brush;
-        QFont font;
-        bool isAntialiasing = false;
-        QTransform transform;
-        CompositionMode compositionMode = CompositionMode::SourceOver;
-    };
-
-    struct Data {
-        State state;
-
-        std::vector<DrawPath> paths;
-        std::vector<DrawPolygon> polygons;
-        std::vector<DrawText> texts;
-        std::vector<DrawRectText> rectTexts;
-        std::vector<DrawGlyphRun> glyphs;
-        std::vector<DrawPixmap> pixmaps;
-        std::vector<DrawTiledPixmap> tiledPixmap;
-    };
-
-    QRect window;
-    QRect viewport;
-    std::vector<Data> datas;
-};
-
 class BufferedPaintProvider : public IPaintProvider
 {
 public:
@@ -68,10 +40,10 @@ public:
 
     bool isActive() const override;
     void beginTarget(const std::string& name) override;
-    bool endTarget(const std::string& name, bool endDraw = false) override;
+    bool endTarget(bool endDraw = false) override;
 
     void beginObject(const std::string& name, const QPointF& pagePos) override;
-    void endObject(const std::string& name, const QPointF& pagePos) override;
+    void endObject() override;
 
     void setAntialiasing(bool arg) override;
     void setCompositionMode(CompositionMode mode) override;
@@ -110,12 +82,14 @@ public:
 
 private:
 
-    const DrawBuffer::State& currentState() const;
-    DrawBuffer::State& editableState();
+    const DrawBuffer::Data& currentData() const;
     DrawBuffer::Data& editableData();
 
+    const DrawBuffer::State& currentState() const;
+    DrawBuffer::State& editableState();
+
     DrawBuffer m_buf;
-    bool m_isCurDataEmpty = true;
+    std::stack<DrawBuffer::Object> m_currentObjects;
     bool m_isActive = false;
     DrawObjectsLogger m_drawObjectsLogger;
 };
