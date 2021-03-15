@@ -21,6 +21,7 @@
 
 #include <QByteArray>
 #include "drawtypes.h"
+#include "retval.h"
 
 namespace mu::draw {
 class DrawBufferJson
@@ -28,6 +29,7 @@ class DrawBufferJson
 public:
 
     static QByteArray toJson(const DrawBuffer& buf);
+    static RetVal<DrawBufferPtr> fromJson(const QByteArray& json);
 };
 }
 #endif // MU_DRAW_DRAWBUFFERJSON_H

@@ -16,23 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "autobotconfiguration.h"
+#include "abdrawcompstep.h"
 
-#include <cstdlib>
+#include "libmscore/draw/drawtypes.h"
+
+#include "log.h"
 
 using namespace mu::autobot;
 
-mu::io::path AutobotConfiguration::dataPath() const
+void AbDrawCompStep::doRun(AbContext ctx)
 {
-    return io::path(std::getenv("MU_AUTOBOT_DATA_PATH"));
-}
+    draw::DrawBufferPtr curBuf = ctx.val<draw::DrawBufferPtr>(AbContext::Key::CurDrawBuf);
+    if (!curBuf) {
+        LOGW() << "not set current draw buffer";
+        doFinish(ctx);
+    }
 
-mu::io::path AutobotConfiguration::drawDataPath() const
-{
-    return dataPath() + "/draw_data";
-}
+    draw::DrawBufferPtr refBuf = ctx.val<draw::DrawBufferPtr>(AbContext::Key::RefDrawBuf);
+    if (!refBuf) {
+        LOGW() << "not set reference draw buffer";
+        doFinish(ctx);
+    }
 
-mu::io::path AutobotConfiguration::scoreDrawData(const io::path& scorePath) const
-{
-    return drawDataPath() + "/" + io::basename(scorePath) + ".json";
+    //! NOTE This is just a very simple comparator,
+    //! In the next PR will be doing a real comparator
+    if (curBuf->objects.size() != refBuf->objects.size()) {
+        LOGE() << "the current and reference draw buffers are different";
+    }
+
+    doFinish(ctx);
 }

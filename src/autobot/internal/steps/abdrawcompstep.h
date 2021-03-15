@@ -16,23 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "autobotconfiguration.h"
+#ifndef MU_AUTOBOT_ABDRAWCOMPSTEP_H
+#define MU_AUTOBOT_ABDRAWCOMPSTEP_H
 
-#include <cstdlib>
+#include "../abbasestep.h"
 
-using namespace mu::autobot;
-
-mu::io::path AutobotConfiguration::dataPath() const
+namespace mu::autobot {
+class AbDrawCompStep : public AbBaseStep
 {
-    return io::path(std::getenv("MU_AUTOBOT_DATA_PATH"));
+public:
+    AbDrawCompStep() = default;
+
+protected:
+    void doRun(AbContext ctx) override;
+};
 }
 
-mu::io::path AutobotConfiguration::drawDataPath() const
-{
-    return dataPath() + "/draw_data";
-}
-
-mu::io::path AutobotConfiguration::scoreDrawData(const io::path& scorePath) const
-{
-    return drawDataPath() + "/" + io::basename(scorePath) + ".json";
-}
+#endif // MU_AUTOBOT_ABDRAWCOMPSTEP_H
