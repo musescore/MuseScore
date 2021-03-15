@@ -11,7 +11,7 @@ ListItemBlank {
     defaultColor: ui.theme.accentColor
     enabled: Boolean(modelData) && Boolean(modelData.enabled)
 
-    isSelected: privateProperties.showedSubMenu != undefined || (privateProperties.isSelectable && Boolean(modelData.selected))
+    isSelected: privateProperties.showedSubMenu != undefined || (privateProperties.hasIcon && privateProperties.isSelectable && privateProperties.isSelected)
 
     property var modelData
     property bool reserveSpaceForInvisibleItems: true
@@ -31,6 +31,9 @@ ListItemBlank {
         property bool isChecked: isCheckable && Boolean(modelData.checked)
 
         property bool isSelectable: Boolean(modelData) && Boolean(modelData.selectable)
+        property bool isSelected: isSelectable && Boolean(modelData.selected)
+
+        property bool hasIcon: Boolean(modelData) && Boolean(modelData.icon)
 
         function showSubMenu() {
             if (privateProperties.showedSubMenu) {
@@ -62,7 +65,6 @@ ListItemBlank {
         }
     }
 
-
     RowLayout {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
@@ -78,9 +80,13 @@ ListItemBlank {
             iconCode: {
                 if (privateProperties.isCheckable) {
                     return privateProperties.isChecked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
-                } else {
-                    return Boolean(modelData) && Boolean(modelData.icon) ? modelData.icon : IconCode.NONE
+                } else if (privateProperties.hasIcon) {
+                    return privateProperties.hasIcon ? modelData.icon : IconCode.NONE
+                } else if (privateProperties.isSelectable) {
+                    return privateProperties.isSelected ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
                 }
+
+                return IconCode.NONE
             }
 
             visible: !isEmpty || reserveSpaceForInvisibleItems
@@ -121,10 +127,12 @@ ListItemBlank {
         } else {
             var mouseOnShowedSubMenu = mapToItem(privateProperties.showedSubMenu, mouseX, mouseY)
             var eps = 4
+            var subMenuWidth = privateProperties.showedSubMenu.x + privateProperties.showedSubMenu.width
+            var subMenuHeight = privateProperties.showedSubMenu.y + privateProperties.showedSubMenu.height
             var isHoveredOnShowedSubMenu = (0 < mouseOnShowedSubMenu.x + eps &&
-                                            mouseOnShowedSubMenu.x - eps < privateProperties.showedSubMenu.x + privateProperties.showedSubMenu.width) &&
+                                            mouseOnShowedSubMenu.x - eps < subMenuWidth) &&
                                            (0 < mouseOnShowedSubMenu.y + eps &&
-                                            mouseOnShowedSubMenu.y - eps < privateProperties.showedSubMenu.y + privateProperties.showedSubMenu.height)
+                                            mouseOnShowedSubMenu.y - eps < subMenuHeight)
 
             if (isHoveredOnShowedSubMenu) {
                 return
