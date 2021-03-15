@@ -24,7 +24,6 @@
 #include "libmscore/utils.h"
 #include "libmscore/xml.h"
 
-using namespace mu;
 using namespace mu::instruments;
 using namespace mu::midi;
 
@@ -39,7 +38,7 @@ Instrument findInstrumentByTemplateId(const InstrumentList& instruments, const Q
     return Instrument();
 }
 
-RetVal<InstrumentsMeta> InstrumentsReader::readMeta(const io::path& path) const
+mu::RetVal<InstrumentsMeta> InstrumentsReader::readMeta(const io::path& path) const
 {
     RetVal<InstrumentsMeta> result;
 

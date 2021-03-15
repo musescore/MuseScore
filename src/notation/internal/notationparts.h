@@ -150,6 +150,8 @@ private:
     void appendNewInstruments(const instruments::InstrumentList& instruments);
     void sortParts(const instruments::InstrumentList& instruments);
 
+    int resolveInstrumentNumber(const instruments::InstrumentList& newInstruments, const instruments::Instrument& currentInstrument) const;
+
     IDList allInstrumentsIds() const;
     int lastStaffIndex() const;
 

@@ -199,6 +199,8 @@
                   <family>flutes</family>
                   <longName>Piccolo</longName>
                   <shortName>Picc.</shortName>
+                  <longNameFormat>{instrument} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} {number}</shortNameFormat>
                   <description>Piccolo Flute</description>
                   <musicXMLid>wind.flutes.flute.piccolo</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -222,8 +224,6 @@
                   <family>flutes</family>
                   <longName>Piccolo</longName>
                   <shortName>Picc.</shortName>
-                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
-                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Piccolo Flute in D♭</description>
                   <musicXMLid>wind.flutes.flute.piccolo</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -242,8 +242,6 @@
                   <family>flutes</family>
                   <longName>Piccolo</longName>
                   <shortName>Picc.</shortName>
-                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
-                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>Piccolo Flute in E♭</description>
                   <musicXMLid>wind.flutes.flute.piccolo</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -2001,6 +1999,8 @@
                   <family>clarinets</family>
                   <longName>Bass Clarinet</longName>
                   <shortName>B. Cl.</shortName>
+                  <longNameFormat>{instrument} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} {number}</shortNameFormat>
                   <description>B♭ Bass Clarinet</description>
                   <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
                   <transposingClef>G</transposingClef>
@@ -2044,6 +2044,8 @@
                   <trackName>Bass Clarinet (bass clef)</trackName>
                   <longName>Bass Clarinet</longName>
                   <shortName>B. Cl.</shortName>
+                  <longNameFormat>{instrument} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} {number}</shortNameFormat>
                   <description>B♭ Bass Clarinet (bass clef)</description>
                   <musicXMLid>wind.reed.clarinet.bass</musicXMLid>
                   <transposingClef>F</transposingClef>
@@ -2177,7 +2179,7 @@
             </Instrument>
             <Instrument id="g-xaphoon">
                   <transpositionName>G</transpositionName>
-                  <longName>Pocket Sax in G</longName>
+                  <longName>Pocket Sax</longName>
                   <shortName>G Pkt. Sax</shortName>
                   <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
                   <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
@@ -4704,6 +4706,8 @@
                   <family>tubas</family>
                   <longName>Tuba</longName>
                   <shortName>Tb.</shortName>
+                  <longNameFormat>{instrument} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} {number}</shortNameFormat>
                   <description>C Tuba</description>
                   <musicXMLid>brass.tuba</musicXMLid>
                   <clef>F</clef>

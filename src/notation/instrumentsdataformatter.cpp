@@ -158,12 +158,13 @@ MidiActionList InstrumentsDataFormatter::convertMidiActions(const QList<Ms::Name
 
 bool InstrumentsDataFormatter::needUseDefaultNameFormat(const QString& format)
 {
-    return format.isEmpty() ||
-           format.contains(DEFAULT_FORMAT_KEY) ||
-           !format.contains(INSTRUMENT_NAME_KEY);
+    return format.isEmpty()
+           || format.contains(DEFAULT_FORMAT_KEY)
+           || !format.contains(INSTRUMENT_NAME_KEY);
 }
 
-QString InstrumentsDataFormatter::buildDefaultInstrumentName(const QString& instrumentName, const QString& transpositionName, int instrumentNumber)
+QString InstrumentsDataFormatter::buildDefaultInstrumentName(const QString& instrumentName, const QString& transpositionName,
+                                                             int instrumentNumber)
 {
     QString result;
 
@@ -180,7 +181,8 @@ QString InstrumentsDataFormatter::buildDefaultInstrumentName(const QString& inst
     return result;
 }
 
-QString InstrumentsDataFormatter::buildInstrumentName(const QString& format, const QString& instrumentName, const QString& transpositionName, int instrumentNumber)
+QString InstrumentsDataFormatter::buildInstrumentName(const QString& format, const QString& instrumentName,
+                                                      const QString& transpositionName, int instrumentNumber)
 {
     QString formatLower = format.toLower();
 

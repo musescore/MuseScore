@@ -34,7 +34,8 @@ public:
     static Ms::Instrument convertInstrument(const instruments::Instrument& instrument);
     static instruments::Instrument convertInstrument(const Ms::Instrument& insturment);
 
-    static QString buildInstrumentName(const QString& format, const QString& instrumentName, const QString& transpositionName, int instrumentNumber = 0);
+    static QString buildInstrumentName(const QString& format, const QString& instrumentName, const QString& transpositionName,
+                                       int instrumentNumber = 0);
 
 private:
     static instruments::MidiActionList convertMidiActions(const QList<Ms::NamedEventList>& midiActions);

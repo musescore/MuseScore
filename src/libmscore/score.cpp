@@ -2316,6 +2316,26 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
     return true;
 }
 
+QList<Ms::Staff*>& Ms::Score::staves()
+{
+    return _staves;
+}
+
+const QList<Staff*>& Score::staves() const
+{
+    return _staves;
+}
+
+int Score::nstaves() const
+{
+    return _staves.size();
+}
+
+int Score::ntracks() const
+{
+    return _staves.size() * VOICES;
+}
+
 //---------------------------------------------------------
 //   splitStaff
 //---------------------------------------------------------

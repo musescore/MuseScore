@@ -68,7 +68,7 @@ set(MODULE_SRC
     )
 
 set(MODULE_LINK
-    libmscore
+    notation
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

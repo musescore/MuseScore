@@ -1202,7 +1202,7 @@ int NotationParts::resolvePartIndex(Part* part) const
 void NotationParts::appendStaves(Part* part, const mu::instruments::Instrument& instrument)
 {
     for (int staffIndex = 0; staffIndex < instrument.staves; ++staffIndex) {
-        int lastStaffIndex = this->lastStaffIndex();
+        int lastStaffIndex = !score()->staves().isEmpty() ? score()->staves().last()->idx() : 0;
 
         Staff* staff = new Staff(score());
         staff->setPart(part);
@@ -1270,20 +1270,51 @@ void NotationParts::appendNewInstruments(const InstrumentList& instruments)
         part->setInstrument(InstrumentsDataFormatter::convertInstrument(instrument));
         part->setPartName(instrument.name);
 
-        int instrumentNumber = allInstrumentsIds().count(instrument.id);
+        int instrumentNumber = resolveInstrumentNumber(instruments, instrument);
 
         QString longName = !instrument.longNames.empty() ? instrument.longNames.first().name() : QString();
+        QString formattedLongName = InstrumentsDataFormatter::buildInstrumentName(instrument.longNameFormat, longName,
+                                                                                  instrument.transpositionName, instrumentNumber);
+
         QString shortName = !instrument.shortNames.empty() ? instrument.shortNames.first().name() : QString();
-
-        QString formattedLongName = InstrumentsDataFormatter::buildInstrumentName(instrument.longNameFormat, longName, instrument.transpositionName, instrumentNumber);
-        QString formattedShortName = InstrumentsDataFormatter::buildInstrumentName(instrument.shortNameFormat, shortName, instrument.transpositionName, instrumentNumber);
-
+        QString formattedShortName = InstrumentsDataFormatter::buildInstrumentName(instrument.shortNameFormat, shortName,
+                                                                                   instrument.transpositionName, instrumentNumber);
         part->setLongName(formattedLongName);
         part->setShortName(formattedShortName);
 
-        score()->undo(new Ms::InsertPart(part, lastStaffIndex()));
+        int partIndex = score()->staves().size();
+        score()->undo(new Ms::InsertPart(part, partIndex));
+
         appendStaves(part, instrument);
     }
+}
+
+int NotationParts::resolveInstrumentNumber(const instruments::InstrumentList& newInstruments,
+                                           const instruments::Instrument& currentInstrument) const
+{
+    int count = 0;
+
+    for (const Part* part : score()->parts()) {
+        const Ms::Instrument* partInstrument = part->instrument();
+
+        if (partInstrument->instrumentId() == currentInstrument.id
+            && partInstrument->transpositionName() == currentInstrument.transpositionName) {
+            ++count;
+        }
+    }
+
+    if (count > 0) {
+        return count + 1;
+    }
+
+    for (const Instrument& newInstrument: newInstruments) {
+        if (newInstrument.id == currentInstrument.id
+            && newInstrument.transpositionName == currentInstrument.transpositionName) {
+            ++count;
+        }
+    }
+
+    return count > 1 ? 1 : 0;
 }
 
 void NotationParts::sortParts(const InstrumentList& instruments)
@@ -1325,11 +1356,6 @@ IDList NotationParts::allInstrumentsIds() const
     }
 
     return result;
-}
-
-int NotationParts::lastStaffIndex() const
-{
-    return !score()->staves().isEmpty() ? score()->staves().last()->idx() : 0;
 }
 
 void NotationParts::initStaff(Staff* staff, const mu::instruments::Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex)

@@ -149,6 +149,7 @@ QVariantList InstrumentListModel::instruments() const
         }
 
         QVariantMap instrumentObj;
+        instrumentObj[ID_KEY] = instrument.id;
         instrumentObj[NAME_KEY] = instrument.name;
         instrumentObj[GROUP_ID] = instrument.groupId;
 
@@ -220,8 +221,8 @@ void InstrumentListModel::selectInstrument(const QString& instrumentName, const 
 
     if (!suitedInstrument.isValid()) {
         LOGE() << QString("Instrument %1 with transposition %2 does not exist")
-                  .arg(instrumentName)
-                  .arg(transpositionName);
+            .arg(instrumentName)
+            .arg(transpositionName);
         return;
     }
 

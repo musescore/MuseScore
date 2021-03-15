@@ -675,10 +675,10 @@ public:
     void write(XmlWriter&, bool onlySelection);
     void writeMovement(XmlWriter&, bool onlySelection);
 
-    QList<Staff*>& staves() { return _staves; }
-    const QList<Staff*>& staves() const { return _staves; }
-    int nstaves() const { return _staves.size(); }
-    int ntracks() const { return _staves.size() * VOICES; }
+    QList<Staff*>& staves();
+    const QList<Staff*>& staves() const;
+    int nstaves() const;
+    int ntracks() const;
 
     int staffIdx(const Part*) const;
     Staff* staff(int n) const { return ((n >= 0) && (n < _staves.size())) ? _staves.at(n) : nullptr; }
