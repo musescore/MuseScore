@@ -1845,14 +1845,6 @@ void Sample::optimize()
       if (!s->valid())
             return;
 
-      IF_ASSERT_FAILED(s->loopstart >= s->start) {
-            s->loopstart = s->start;
-            }
-
-      if (s->loopend > s->end) {
-            s->loopend = s->end;
-            }
-
       if (!s->amplitude_that_reaches_noise_floor_is_valid) { /* Only once */
             /* Scan the loop */
             for (size_t i = s->loopstart; i < s->loopend; i++) {
