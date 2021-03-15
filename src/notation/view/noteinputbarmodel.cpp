@@ -627,6 +627,7 @@ MenuItemList NoteInputBarModel::noteInputMethodItems() const
 
     for (const ActionCode& actionCode: noteInputModeActions.keys()) {
         MenuItem item = makeAction(actionCode);
+        item.checkable = false;
         item.selectable = true;
         if (actionCode == currentNoteInputModeAction().code) {
             item.selected = true;

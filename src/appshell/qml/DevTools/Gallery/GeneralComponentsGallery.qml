@@ -264,36 +264,39 @@ Rectangle {
                 text: "Show Menu"
 
                 onClicked: {
-                    menu.clear()
-
-                    var _subitems = [
-                                {code: "2", icon: IconCode.PAGE, title: "first action", checkable: false, shortcut: "", subitems: []},
-                                {code: "3", icon: IconCode.PAGE, title: "second action", checkable: false, shortcut: "", subitems: [
-                                        {code: "2", icon: IconCode.PAGE, title: "first action", checkable: false, shortcut: "", subitems: []}
-                                    ]}
-                            ]
-
-                    var items = [
-                                {code: "0", icon: IconCode.PAGE, title: "first action", checkable: false, shortcut: "", subitems: []},
-                                {code: "1", icon: IconCode.AMBITUS, title: "second action", checkable: false, shortcut: "Ctrl+A", subitems: _subitems },
-                                {},
-                                {code: "4", title: "pre pre last action", checkable: false, shortcut: "Ctrl+Shift+G", subitems: []},
-                                {code: "5", icon: IconCode.PAGE, title: "pre last action", checkable: false, shortcut: "", subitems: []},
-                                {code: "6", icon: IconCode.CLEF_BASS, title: "last action", checkable: false, shortcut: "", subitems: []}
-                            ]
-
-                    for (var i in items) {
-                        menu.addMenuItem(items[i])
-                    }
-
                     menu.toggleOpened()
                 }
 
                 StyledMenu {
                     id: menu
 
+                    model: {
+                        var _subitems = [
+                                    {code: "2", icon: IconCode.PAGE, title: "first action", enabled: true},
+                                    {code: "3", icon: IconCode.PAGE, title: "with subitems", enabled: true, subitems: [
+                                            {code: "4", title: "first action", enabled: true, selectable: true},
+                                            {code: "5", title: "second action", enabled: true, selectable: true, selected: true},
+                                            {code: "6", title: "third action", enabled: true, selectable: true},
+                                            {},
+                                            {code: "7", title: "clear"}
+                                        ]}
+                                ]
+
+                        var items = [
+                                    {code: "0", icon: IconCode.PAGE, title: "enabled action", enabled: true},
+                                    {code: "1", icon: IconCode.AMBITUS, title: "with subitems", enabled: true, shortcut: "Ctrl+A", subitems: _subitems },
+                                    {},
+                                    {code: "5", title: "with shortcut", enabled: true, shortcut: "Ctrl+Shift+G"},
+                                    {code: "6", icon: IconCode.PAGE, title: "disabled action", enabled: false},
+                                    {code: "7", icon: IconCode.CLEF_BASS, title: "checkable action", enabled: true, checkable: true, checked: true}
+                                ]
+
+                        return items
+                    }
+
                     onHandleAction: {
-                        console.log("selected " + actionCode)
+                        console.log("selected " + actionCode + " index " + actionIndex)
+                        menu.close()
                     }
                 }
             }
