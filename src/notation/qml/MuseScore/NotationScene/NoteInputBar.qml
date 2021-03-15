@@ -34,6 +34,7 @@ Rectangle {
 
         itemDelegate: FlatButton {
             property var item: Boolean(itemModel) ? itemModel : null
+            property var hasSubitems: item.subitemsRole.length !== 0
 
             normalStateColor: Boolean(item) && item.checkedRole ? ui.theme.accentColor : "transparent"
 
@@ -46,16 +47,16 @@ Rectangle {
             height: gridView.cellWidth
 
             onClicked: {
-                if (menu.isOpened || item.showSubitemsByClickRole) {
+                if (menu.isOpened || (hasSubitems && !item.showSubitemsByPressAndHoldRole)) {
                     menu.toggleOpened()
                     return
                 }
 
-                noteInputModel.handleAction(item.codeRole, -1)
+                Qt.callLater(noteInputModel.handleAction, item.codeRole)
             }
 
             onPressAndHold: {
-                if (menu.isOpened || item.subitemsRole.length === 0) {
+                if (menu.isOpened || !hasSubitems) {
                     return
                 }
 

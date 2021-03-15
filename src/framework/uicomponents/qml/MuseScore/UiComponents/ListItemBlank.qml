@@ -10,7 +10,7 @@ Item {
     property bool isSelected: false
     property alias radius: background.radius
 
-    property color defaultColor: ui.theme.buttonColor
+    property color backgroundColor: ui.theme.buttonColor
 
     signal clicked()
     signal doubleClicked()
@@ -39,7 +39,7 @@ Item {
             PropertyChanges {
                 target: background
                 opacity: ui.theme.buttonOpacityHover
-                color: defaultColor
+                color: backgroundColor
             }
         },
 
@@ -50,7 +50,7 @@ Item {
             PropertyChanges {
                 target: background
                 opacity: ui.theme.buttonOpacityHit
-                color: defaultColor
+                color: backgroundColor
             }
         },
 

@@ -8,10 +8,10 @@ import MuseScore.Ui 1.0
 ListItemBlank {
     id: root
 
-    defaultColor: ui.theme.accentColor
+    backgroundColor: ui.theme.accentColor
     enabled: Boolean(modelData) && Boolean(modelData.enabled)
 
-    isSelected: privateProperties.showedSubMenu != undefined || (privateProperties.hasIcon && privateProperties.isSelectable && privateProperties.isSelected)
+    isSelected: Boolean(privateProperties.showedSubMenu) || (privateProperties.hasIcon && privateProperties.isSelectable && privateProperties.isSelected)
 
     property var modelData
     property bool reserveSpaceForInvisibleItems: true

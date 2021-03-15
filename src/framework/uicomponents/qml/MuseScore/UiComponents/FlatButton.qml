@@ -1,4 +1,4 @@
-import QtQuick 2.8
+import QtQuick 2.15
 import MuseScore.UiComponents 1.0
 
 FocusableItem {
@@ -112,6 +112,7 @@ FocusableItem {
         anchors.fill: parent
 
         hoverEnabled: true
+        pressAndHoldInterval: 100
 
         onClicked: {
             root.clicked()

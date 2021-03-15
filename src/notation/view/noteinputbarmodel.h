@@ -59,7 +59,7 @@ public:
     uicomponents::ActionState actionState(const actions::ActionCode& actionCode) const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void handleAction(const QString& action, int actionIndex);
+    Q_INVOKABLE void handleAction(const QString& action, int actionIndex = -1);
 
     Q_INVOKABLE QVariantMap get(int index);
 
@@ -74,7 +74,7 @@ private:
         CheckedRole,
         HintRole,
         SubitemsRole,
-        ShowSubitemsByClickRole
+        ShowSubitemsByPressAndHoldRole
     };
 
     INotationPtr notation() const;
@@ -117,7 +117,7 @@ private:
     uicomponents::MenuItemList textItems() const;
     uicomponents::MenuItemList linesItems() const;
 
-    bool isNeedShowSubitemsByClick(const actions::ActionCode& actionCode) const;
+    bool isNeedShowSubitemsByPressAndHold(const actions::ActionCode& actionCode) const;
 
     void notifyAboutTupletItemChanged();
     void notifyAboutAddItemChanged();
