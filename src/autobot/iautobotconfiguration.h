@@ -16,29 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUTOBOT_ABPAINTPROVIDER_H
-#define MU_AUTOBOT_ABPAINTPROVIDER_H
+#ifndef MU_AUTOBOT_IAUTOBOTCONFIGURATION_H
+#define MU_AUTOBOT_IAUTOBOTCONFIGURATION_H
 
-#include <memory>
-#include "libmscore/draw/bufferedpaintprovider.h"
+#include "modularity/imoduleexport.h"
+#include "io/path.h"
 
 namespace mu::autobot {
-class AbPaintProvider : public draw::BufferedPaintProvider
+class IAutobotConfiguration : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IAutobotConfiguration)
 public:
+    virtual ~IAutobotConfiguration() = default;
 
-    static const std::shared_ptr<AbPaintProvider>& instance();
-
-    void beginTarget(const std::string& name) override;
-    bool endTarget(bool endDraw = false) override;
-
-    QByteArray serialize() const;
-
-private:
-    AbPaintProvider();
-
-    draw::DrawBuffer m_notationViewDrawBuf;
+    virtual io::path dataPath() const = 0;
+    virtual io::path drawDataPath() const = 0;
 };
 }
 
-#endif // MU_AUTOBOT_ABPAINTPROVIDER_H
+#endif // MU_AUTOBOT_IAUTOBOTCONFIGURATION_H

@@ -28,7 +28,7 @@ public:
     DrawObjectsLogger() = default;
 
     void beginObject(const std::string& name, const QPointF& pagePos);
-    void endObject(const std::string& name, const QPointF& pagePos);
+    void endObject();
 
 private:
 

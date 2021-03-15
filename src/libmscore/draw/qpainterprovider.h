@@ -39,11 +39,11 @@ public:
     QPainter* qpainter() const override;
 
     void beginTarget(const std::string& name) override;
-    bool endTarget(const std::string& name, bool endDraw = false) override;
+    bool endTarget(bool endDraw = false) override;
     bool isActive() const override;
 
     void beginObject(const std::string& name, const QPointF& pagePos) override;
-    void endObject(const std::string& name, const QPointF& pagePos) override;
+    void endObject() override;
 
     void setAntialiasing(bool arg) override;
     void setCompositionMode(CompositionMode mode) override;

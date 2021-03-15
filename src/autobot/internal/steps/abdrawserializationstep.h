@@ -20,10 +20,16 @@
 #define MU_AUTOBOT_ABDRAWSERIALIZATIONSTEP_H
 
 #include "../abbasestep.h"
+#include "modularity/ioc.h"
+#include "iautobotconfiguration.h"
+#include "system/ifilesystem.h"
 
 namespace mu::autobot {
 class AbDrawSerializationStep : public AbBaseStep
 {
+    INJECT(autobot, IAutobotConfiguration, configuration)
+    INJECT(autobot, system::IFileSystem, fileSystem)
+
 public:
     AbDrawSerializationStep() = default;
 

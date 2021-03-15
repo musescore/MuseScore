@@ -80,6 +80,7 @@ option(BUILD_PCH "Build using precompiled headers." ON)
 option(BUILD_UNITY "Build using unity build." ON)
 option(TRY_BUILD_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" OFF)
 option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
+option(TRACE_DRAW_OBJ_ENABLED "Trace draw objects" OFF)
 
 option(USE_SYSTEM_FREETYPE "Use system FreeType" OFF) # requires freetype >= 2.5.2, does not work on win
 option(BUILD_WEBENGINE "Built in webengine support" ON)

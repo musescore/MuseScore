@@ -23,6 +23,7 @@
 #include "modularity/ioc.h"
 
 #include "internal/autobot.h"
+#include "internal/autobotconfiguration.h"
 #include "view/autobotmodel.h"
 
 #include "libmscore/draw/painter.h"
@@ -40,8 +41,9 @@ std::string AutobotModule::moduleName() const
 void AutobotModule::registerExports()
 {
     framework::ioc()->registerExport<IAutobot>(moduleName(), s_autobot);
+    framework::ioc()->registerExport<IAutobotConfiguration>(moduleName(), new AutobotConfiguration());
 
-    //draw::Painter::extended = AbPaintProvider::instance();
+    draw::Painter::extended = AbPaintProvider::instance();
 }
 
 void AutobotModule::registerUiTypes()
