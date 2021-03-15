@@ -21,6 +21,8 @@
 #include "log.h"
 #include "translation.h"
 
+#include "notation/instrumentsdataformatter.h"
+
 using namespace mu::instruments;
 using namespace mu::notation;
 
@@ -283,15 +285,9 @@ QVariantList InstrumentListModel::selectedInstruments() const
     QVariantList result;
 
     for (const Instrument& instrument : m_selectedInstruments) {
-        QString instrumentName = instrument.name;
-
-        if (!instrument.transpositionName.isEmpty()) {
-            instrumentName += " " + instrument.transpositionName;
-        }
-
         QVariantMap obj;
         obj[ID_KEY] = instrument.id;
-        obj[NAME_KEY] = instrumentName;
+        obj[NAME_KEY] = buildInstrumentName(instrument);
         obj[CONFIG_KEY] = QVariant::fromValue(instrument);
 
         result << obj;
@@ -379,4 +375,9 @@ Instrument InstrumentListModel::findInstrument(const QString& instrumentId) cons
     }
 
     return Instrument();
+}
+
+QString InstrumentListModel::buildInstrumentName(const Instrument& instrument) const
+{
+    return InstrumentsDataFormatter::buildInstrumentName(instrument.longNameFormat, instrument.name, instrument.transpositionName);
 }

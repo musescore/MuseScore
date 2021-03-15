@@ -90,6 +90,8 @@ private:
 
     Instrument findInstrument(const QString& instrumentId) const;
 
+    QString buildInstrumentName(const Instrument& instrument) const;
+
     bool m_canSelectMultipleInstruments = false;
 
     QString m_selectedFamilyId;

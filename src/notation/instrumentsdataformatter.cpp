@@ -21,6 +21,7 @@
 
 #include "libmscore/instrument.h"
 
+using namespace mu::notation;
 using namespace mu::instruments;
 
 const QString INSTRUMENT_NAME_KEY("{instrument}");
@@ -28,7 +29,7 @@ const QString TRANSPOSITION_NAME_KEY("{transposition}");
 const QString INSTRUMENT_NUMBER_KEY("{number}");
 const QString DEFAULT_FORMAT_KEY("{default}");
 
-Ms::Instrument InstrumentsDataFormatter::convertInstrument(const Instrument& instrument)
+Ms::Instrument InstrumentsDataFormatter::convertInstrument(const mu::instruments::Instrument& instrument)
 {
     Ms::Instrument result;
     result.setAmateurPitchRange(instrument.amateurPitchRange.min, instrument.amateurPitchRange.max);
@@ -72,7 +73,7 @@ Ms::Instrument InstrumentsDataFormatter::convertInstrument(const Instrument& ins
 
 mu::instruments::Instrument InstrumentsDataFormatter::convertInstrument(const Ms::Instrument& instrument)
 {
-    Instrument result;
+    mu::instruments::Instrument result;
     result.amateurPitchRange = PitchRange(instrument.minPitchA(), instrument.maxPitchA());
     result.professionalPitchRange = PitchRange(instrument.minPitchP(), instrument.maxPitchP());
 
@@ -167,10 +168,10 @@ QString InstrumentsDataFormatter::buildDefaultInstrumentName(const QString& inst
     QString result;
 
     if (!transpositionName.isEmpty()) {
-        result += transpositionName + " ";
+        result = transpositionName + " ";
     }
 
-    result += " " + instrumentName;
+    result += instrumentName;
 
     if (instrumentNumber > 0) {
         result += " " + QString::number(instrumentNumber);
@@ -187,11 +188,19 @@ QString InstrumentsDataFormatter::buildInstrumentName(const QString& format, con
         return buildDefaultInstrumentName(instrumentName, transpositionName, instrumentNumber);
     }
 
-    QString result = formatLower;
+    QString result = formatLower.replace(INSTRUMENT_NAME_KEY, instrumentName);
 
-    result = result.replace(TRANSPOSITION_NAME_KEY, transpositionName);
-    result = result.replace(INSTRUMENT_NAME_KEY, instrumentName);
-    result = result.replace(INSTRUMENT_NUMBER_KEY, QString::number(instrumentNumber));
+    if (!transpositionName.isEmpty()) {
+        result = result.replace(TRANSPOSITION_NAME_KEY, transpositionName);
+    } else {
+        result = result.remove(TRANSPOSITION_NAME_KEY);
+    }
 
-    return result;
+    if (instrumentNumber > 0) {
+        result = result.replace(INSTRUMENT_NUMBER_KEY, QString::number(instrumentNumber));
+    } else {
+        result = result.remove(INSTRUMENT_NUMBER_KEY);
+    }
+
+    return result.trimmed();
 }

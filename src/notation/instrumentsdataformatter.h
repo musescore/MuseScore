@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_INSTRUMENTS_INSTRUMENTSDATAFORAMTTER_H
-#define MU_INSTRUMENTS_INSTRUMENTSDATAFORAMTTER_H
+#ifndef MU_NOTATION_INSTRUMENTSDATAFORMATTER_H
+#define MU_NOTATION_INSTRUMENTSDATAFORMATTER_H
 
 #include "instruments/instrumentstypes.h"
 
@@ -27,23 +27,22 @@ class Instrument;
 struct NamedEventList;
 }
 
-namespace mu::instruments {
+namespace mu::notation {
 class InstrumentsDataFormatter
 {
 public:
-    static Ms::Instrument convertInstrument(const Instrument& instrument);
-    static Instrument convertInstrument(const Ms::Instrument& insturment);
+    static Ms::Instrument convertInstrument(const instruments::Instrument& instrument);
+    static instruments::Instrument convertInstrument(const Ms::Instrument& insturment);
 
-    static QString buildInstrumentName(const QString& format, const QString& instrumentName, const QString& transpositionName, int instrumentNumber);
+    static QString buildInstrumentName(const QString& format, const QString& instrumentName, const QString& transpositionName, int instrumentNumber = 0);
 
 private:
-    static MidiActionList convertMidiActions(const QList<Ms::NamedEventList>& midiActions);
-    static QList<Ms::NamedEventList> convertMidiActions(const MidiActionList& midiActions);
+    static instruments::MidiActionList convertMidiActions(const QList<Ms::NamedEventList>& midiActions);
+    static QList<Ms::NamedEventList> convertMidiActions(const instruments::MidiActionList& midiActions);
 
     static bool needUseDefaultNameFormat(const QString& format);
     static QString buildDefaultInstrumentName(const QString& instrumentName, const QString& transpositionName, int instrumentNumber);
 };
 }
 
-#endif // MU_INSTRUMENTS_INSTRUMENTSDATAFORAMTTER_H
-
+#endif // MU_NOTATION_INSTRUMENTSDATAFORMATTER_H

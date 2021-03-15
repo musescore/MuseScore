@@ -194,11 +194,14 @@ InstrumentTemplate::InstrumentTemplate(const InstrumentTemplate& t)
 
 void InstrumentTemplate::init(const InstrumentTemplate& t)
 {
-    longNames  = t.longNames;
+    longNames = t.longNames;
     shortNames = t.shortNames;
+    longNameFormat = t.longNameFormat;
+    shortNameFormat = t.shortNameFormat;
+    transpositionName = t.transpositionName;
     musicXMLid = t.musicXMLid;
-    staves     = t.staves;
-    extended   = t.extended;
+    staves = t.staves;
+    extended = t.extended;
 
     for (int i = 0; i < MAX_STAVES; ++i) {
         clefTypes[i]   = t.clefTypes[i];
