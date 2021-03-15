@@ -46,13 +46,8 @@ Rectangle {
             height: gridView.cellWidth
 
             onClicked: {
-                if (menu.isOpened) {
+                if (menu.isOpened || item.showSubitemsByClickRole) {
                     menu.toggleOpened()
-                    return
-                }
-
-                if (item.showSubitemsByClickRole) {
-                    showSubitemsMenu()
                     return
                 }
 
@@ -64,21 +59,13 @@ Rectangle {
                     return
                 }
 
-                showSubitemsMenu()
-            }
-
-            function showSubitemsMenu() {
-                menu.clear()
-
-                for (var i in item.subitemsRole) {
-                    menu.addMenuItem(item.subitemsRole[i])
-                }
-
                 menu.toggleOpened()
             }
 
             StyledMenu {
                 id: menu
+
+                model: item.subitemsRole
 
                 onHandleAction: {
                     Qt.callLater(noteInputModel.handleAction, actionCode, actionIndex)

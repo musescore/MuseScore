@@ -73,14 +73,14 @@ QmlDialog {
         ContextMenu {
             id: menu
 
-            StyledMenuItem {
+            StyledContextMenuItem {
                 hintIcon: IconCode.UNDO
 
                 text: "Undo"
                 shortcut: "Ctrl+Z"
             }
 
-            StyledMenuItem {
+            StyledContextMenuItem {
                 hintIcon: IconCode.REDO
 
                 text: "Redo"
@@ -91,13 +91,13 @@ QmlDialog {
 
             SeparatorLine {}
 
-            StyledMenuItem {
+            StyledContextMenuItem {
                 hintIcon: IconCode.ZOOM_IN
 
                 text: "Zoom in"
             }
 
-            StyledMenuItem {
+            StyledContextMenuItem {
                 hintIcon: IconCode.ZOOM_OUT
 
                 text: "Zoom out"
@@ -105,7 +105,7 @@ QmlDialog {
 
             SeparatorLine {}
 
-            StyledMenuItem {
+            StyledContextMenuItem {
                 text: "Checkable"
 
                 checkable: true

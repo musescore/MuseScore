@@ -34,7 +34,7 @@ Menu {
     Component {
         id: menuItem
 
-        StyledMenuItem {
+        StyledContextMenuItem {
             hintIcon: Boolean(action) ? action.icon.name : ""
         }
     }

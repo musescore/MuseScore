@@ -41,12 +41,6 @@ Item {
                 return
             }
 
-            menu.clear()
-
-            for (var i in model.items) {
-                menu.addMenuItem(model.items[i])
-            }
-
             menu.toggleOpened()
         }
 
@@ -56,6 +50,8 @@ Item {
             opensUpward: true
             itemWidth: 220
             reserveSpaceForInvisibleItems: false
+
+            model: model.items
 
             onHandleAction: {
                 Qt.callLater(model.selectViewMode, actionCode)

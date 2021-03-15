@@ -1,89 +1,145 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.3
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
+import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
-MenuItem {
+ListItemBlank {
     id: root
 
-    implicitHeight: 30
-    implicitWidth: 220
+    defaultColor: ui.theme.accentColor
+    enabled: Boolean(modelData) && Boolean(modelData.enabled)
 
-    property var hintIcon: checkable && checked ? IconCode.TICK : IconCode.NONE
-    property string shortcut: ""
+    isSelected: privateProperties.showedSubMenu != undefined || (privateProperties.isSelectable && Boolean(modelData.selected))
 
-    background: Rectangle {
-        id: background
+    property var modelData
+    property bool reserveSpaceForInvisibleItems: true
 
-        anchors.fill: parent
+    signal subMenuShowed()
+    signal subMenuClosed()
 
-        color: "transparent"
-        opacity: 1
+    signal handleAction(string actionCode, int actionIndex)
 
-        states: [
-            State {
-                name: "HOVERED"
-                when: root.hovered && !root.pressed
+    QtObject {
+        id: privateProperties
 
-                PropertyChanges {
-                    target: background
-                    color: ui.theme.accentColor
-                    opacity: ui.theme.buttonOpacityHover
-                }
-            },
+        property bool hasSubMenu: Boolean(modelData) && Boolean(modelData.subitems) && modelData.subitems.length > 0
+        property var showedSubMenu: undefined
 
-            State {
-                name: "PRESSED"
-                when: root.pressed
+        property bool isCheckable: Boolean(modelData) && Boolean(modelData.checkable)
+        property bool isChecked: isCheckable && Boolean(modelData.checked)
 
-                PropertyChanges {
-                    target: background
-                    color: ui.theme.accentColor
-                    opacity: ui.theme.buttonOpacityHit
-                }
+        property bool isSelectable: Boolean(modelData) && Boolean(modelData.selectable)
+
+        function showSubMenu() {
+            if (privateProperties.showedSubMenu) {
+                return
             }
-        ]
+
+            var menuComponent = Qt.createComponent("StyledMenu.qml");
+            var menu = menuComponent.createObject(root)
+            menu.positionDisplacementX = root.width
+            menu.positionDisplacementY = 0
+
+            menu.model = modelData.subitems
+
+            menu.handleAction.connect(function(actionCode, actionIndex){
+                Qt.callLater(root.handleAction, actionCode, actionIndex)
+                menu.close()
+            })
+
+            menu.closed.connect(function() {
+                privateProperties.showedSubMenu = undefined
+                menu.destroy()
+                subMenuClosed()
+            })
+
+            subMenuShowed()
+
+            privateProperties.showedSubMenu = menu
+            menu.toggleOpened()
+        }
     }
 
-    indicator: Item {}
 
-    contentItem: RowLayout {
-        id: contentRow
+    RowLayout {
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 12
+        anchors.right: parent.right
+        anchors.rightMargin: 12
 
-        implicitHeight: root.implicitHeight
-        implicitWidth: root.implicitWidth
+        spacing: 12
 
-        spacing: 0
-
-        Item {
-            readonly property int size: 16
-
-            Layout.preferredWidth: size
-            Layout.preferredHeight: size
-            Layout.leftMargin: 6
-            Layout.rightMargin: 10
-
-            StyledIconLabel {
-                iconCode: root.hintIcon
+        StyledIconLabel {
+            Layout.alignment: Qt.AlignLeft
+            width: 16
+            iconCode: {
+                if (privateProperties.isCheckable) {
+                    return privateProperties.isChecked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
+                } else {
+                    return Boolean(modelData) && Boolean(modelData.icon) ? modelData.icon : IconCode.NONE
+                }
             }
+
+            visible: !isEmpty || reserveSpaceForInvisibleItems
         }
 
         StyledTextLabel {
             Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            text: root.text
+            text: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
             horizontalAlignment: Text.AlignLeft
+
+            visible: Boolean(text) || reserveSpaceForInvisibleItems
         }
 
         StyledTextLabel {
             Layout.alignment: Qt.AlignRight
-            Layout.rightMargin: 14
+            text: Boolean(modelData) && Boolean(modelData.shortcut) ? modelData.shortcut : ""
+            horizontalAlignment: Text.AlignRight
 
-            text: root.shortcut
-
-            visible: Boolean(text)
+            visible: Boolean(text) || reserveSpaceForInvisibleItems
         }
+
+        StyledIconLabel {
+            Layout.alignment: Qt.AlignRight
+            width: 16
+            iconCode: privateProperties.hasSubMenu ? IconCode.SMALL_ARROW_RIGHT : IconCode.NONE
+
+            visible: !isEmpty || reserveSpaceForInvisibleItems
+        }
+    }
+
+    onHovered: {
+        if (!privateProperties.hasSubMenu) {
+            return
+        }
+
+        if (isHovered) {
+            privateProperties.showSubMenu()
+        } else {
+            var mouseOnShowedSubMenu = mapToItem(privateProperties.showedSubMenu, mouseX, mouseY)
+            var eps = 4
+            var isHoveredOnShowedSubMenu = (0 < mouseOnShowedSubMenu.x + eps &&
+                                            mouseOnShowedSubMenu.x - eps < privateProperties.showedSubMenu.x + privateProperties.showedSubMenu.width) &&
+                                           (0 < mouseOnShowedSubMenu.y + eps &&
+                                            mouseOnShowedSubMenu.y - eps < privateProperties.showedSubMenu.y + privateProperties.showedSubMenu.height)
+
+            if (isHoveredOnShowedSubMenu) {
+                return
+            }
+
+            privateProperties.showedSubMenu.close()
+        }
+    }
+
+    onClicked: {
+        if (privateProperties.hasSubMenu) {
+            privateProperties.showSubMenu()
+            return
+        }
+
+        root.handleAction(modelData.code, privateProperties.isSelectable ? index : -1)
     }
 }

@@ -31,9 +31,8 @@
 #include "shortcuts/ishortcutsregister.h"
 
 #include "uicomponents/uicomponentstypes.h"
+#include "uicomponents/imenucontrollersregister.h"
 #include "uicomponents/view/abstractmenumodel.h"
-
-#include "iaddmenucontroller.h"
 
 namespace mu::notation {
 class NoteInputBarModel : public QAbstractListModel, public uicomponents::AbstractMenuModel, public async::Asyncable
@@ -46,7 +45,7 @@ class NoteInputBarModel : public QAbstractListModel, public uicomponents::Abstra
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, workspace::IWorkspaceManager, workspaceManager)
     INJECT(notation, shortcuts::IShortcutsRegister, shortcutsRegister)
-    INJECT(notation, IAddMenuController, addMenuController)
+    INJECT(notation, uicomponents::IMenuControllersRegister, menuControllersRegister)
 
     Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 
@@ -57,7 +56,7 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int,QByteArray> roleNames() const override;
 
-    bool actionEnabled(const actions::ActionCode& actionCode) const override;
+    uicomponents::ActionState actionState(const actions::ActionCode& actionCode) const override;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void handleAction(const QString& action, int actionIndex);

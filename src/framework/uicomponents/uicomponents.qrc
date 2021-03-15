@@ -21,7 +21,7 @@
         <file>qml/MuseScore/UiComponents/FlatRadioButton.qml</file>
         <file>qml/MuseScore/UiComponents/ColorPicker.qml</file>
         <file>qml/MuseScore/UiComponents/ContextMenu.qml</file>
-        <file>qml/MuseScore/UiComponents/StyledMenuItem.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledContextMenuItem.qml</file>
         <file>qml/MuseScore/UiComponents/RoundedRectangle.qml</file>
         <file>qml/MuseScore/UiComponents/SearchField.qml</file>
         <file>qml/MuseScore/UiComponents/StyledTabButton.qml</file>
@@ -41,5 +41,6 @@
         <file>qml/MuseScore/UiComponents/StyledPopupView.qml</file>
         <file>qml/MuseScore/UiComponents/Border.qml</file>
         <file>qml/MuseScore/UiComponents/StyledMenu.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledMenuItem.qml</file>
     </qresource>
 </RCC>
