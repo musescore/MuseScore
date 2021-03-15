@@ -2769,10 +2769,28 @@
       </InstrumentGroup>
       <InstrumentGroup id="free-reed">
             <name>Free Reed</name>
+            <Instrument id="harmonica-d10a">
+                  <transpositionName>A</transpositionName>
+                  <longName>10 Hole Diatonic Harmonica</longName>
+                  <shortName>Harm.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
+                  <description>10 Hole Diatonic Harmonica in A</description>
+                  <musicXMLid>wind.reed.harmonica</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>57-93</aPitchRange>
+                  <pPitchRange>57-93</pPitchRange>
+                  <Channel>
+                        <program value="22"/> <!--Harmonica-->
+                  </Channel>
+            </Instrument>
             <Instrument id="harmonica-d10c">
                   <transpositionName>C</transpositionName>
                   <longName>10 Hole Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>10 Hole Diatonic Harmonica in C</description>
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
@@ -2786,24 +2804,12 @@
                   <genre>jazz</genre>
                   <genre>popular</genre>
             </Instrument>
-            <Instrument id="harmonica-d10a">
-                  <transpositionName>A</transpositionName>
-                  <longName>10 Hole Diatonic Harmonica</longName>
-                  <shortName>Harm.</shortName>
-                  <description>10 Hole Diatonic Harmonica in A</description>
-                  <musicXMLid>wind.reed.harmonica</musicXMLid>
-                  <clef>G</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>57-93</aPitchRange>
-                  <pPitchRange>57-93</pPitchRange>
-                  <Channel>
-                        <program value="22"/> <!--Harmonica-->
-                  </Channel>
-            </Instrument>
             <Instrument id="harmonica-d10d">
                   <transpositionName>D</transpositionName>
                   <longName>10 Hole Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>10 Hole Diatonic Harmonica in D</description>
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
@@ -2818,6 +2824,8 @@
                   <transpositionName>F</transpositionName>
                   <longName>10 Hole Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>10 Hole Diatonic Harmonica in F</description>
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
@@ -2832,6 +2840,8 @@
                   <transpositionName>G</transpositionName>
                   <longName>10 Hole Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>10 Hole Diatonic Harmonica in G</description>
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
@@ -2846,6 +2856,8 @@
                   <transpositionName>High G</transpositionName>
                   <longName>10 Hole Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>10 Hole Diatonic Harmonica in High G</description>
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G</clef>
@@ -2860,6 +2872,8 @@
                   <transpositionName>Low D</transpositionName>
                   <longName>10 Hole Diatonic Harmonica</longName>
                   <shortName>Harm.</shortName>
+                  <longNameFormat>{instrument} in {transposition} {number}</longNameFormat>
+                  <shortNameFormat>{instrument} in {transposition} {number}</shortNameFormat>
                   <description>10 Hole Diatonic Harmonica in Low D</description>
                   <musicXMLid>wind.reed.harmonica</musicXMLid>
                   <clef>G8vb</clef>

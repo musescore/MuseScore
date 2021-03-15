@@ -64,8 +64,6 @@ public:
     Q_INVOKABLE QVariantList instrumentOrderTypes() const;
     Q_INVOKABLE void selectOrderType(const QString& id);
 
-    Q_INVOKABLE QString findInstrument(const QString& instrumentId) const;
-
 signals:
     void dataChanged();
 
@@ -90,7 +88,7 @@ private:
 
     bool isInstrumentAccepted(const Instrument& instrument, bool compareWithSelectedGroup = true) const;
 
-    InstrumentTemplate instrumentTemplate(const QString& instrumentId) const;
+    Instrument findInstrument(const QString& instrumentId) const;
 
     bool m_canSelectMultipleInstruments = false;
 
@@ -101,7 +99,7 @@ private:
     InstrumentsMeta m_instrumentsMeta;
     QString m_searchText;
 
-    InstrumentTemplateList m_selectedInstruments;
+    InstrumentList m_selectedInstruments;
 };
 }
 

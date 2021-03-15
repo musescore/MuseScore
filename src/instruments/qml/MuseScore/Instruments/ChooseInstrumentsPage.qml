@@ -38,14 +38,13 @@ Rectangle {
         var groupId = instrumentsModel.selectedGroupId()
         familyView.focusGroup(groupId)
 
-        if (currentInstrumentId !== "") {
-            focusOnCurrentInstrument()
-        }
+        focusOnCurrentInstrument()
     }
 
     function focusOnCurrentInstrument() {
-        var instrumentId = instrumentsModel.findInstrument(currentInstrumentId)
-        Qt.callLater(instrumentsView.focusInstrument, instrumentId)
+        if (Boolean(currentInstrumentId)) {
+            Qt.callLater(instrumentsView.focusInstrument, currentInstrumentId)
+        }
     }
 
     RowLayout {

@@ -28,15 +28,15 @@ using namespace mu;
 using namespace mu::instruments;
 using namespace mu::midi;
 
-InstrumentTemplate findInstrumentTemplate(const InstrumentTemplateList& templates, const QString& templateId)
+Instrument findInstrumentByTemplateId(const InstrumentList& instruments, const QString& templateId)
 {
-    for (const InstrumentTemplate& templ : templates) {
-        if (templ.id == templateId) {
-            return templ;
+    for (const Instrument& instrument : instruments) {
+        if (instrument.templateId == templateId) {
+            return instrument;
         }
     }
 
-    return InstrumentTemplate();
+    return Instrument();
 }
 
 RetVal<InstrumentsMeta> InstrumentsReader::readMeta(const io::path& path) const
@@ -89,12 +89,12 @@ void InstrumentsReader::loadGroupMeta(Ms::XmlReader& reader, InstrumentsMeta& ge
 
     while (reader.readNextStartElement()) {
         if (reader.name().toString().toLower() == "instrument") {
-            InstrumentTemplate templ = readInstrumentTemplate(reader, generalMeta);
-            templ.instrument.groupId = group.id;
-            generalMeta.templates << templ;
+            Instrument instrument = readInstrument(reader, generalMeta);
+            instrument.groupId = group.id;
+            generalMeta.instrumentTemplates << instrument;
         } else if (reader.name() == "ref") {
             QString templateId = reader.readElementText();
-            generalMeta.templates << findInstrumentTemplate(generalMeta.templates, templateId);
+            generalMeta.instrumentTemplates << findInstrumentByTemplateId(generalMeta.instrumentTemplates, templateId);
         } else if (reader.name() == "name") {
             group.name = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data()); // TODO: translate
         } else if (reader.name() == "extended") {
@@ -155,12 +155,10 @@ InstrumentGenre InstrumentsReader::readGenre(Ms::XmlReader& reader) const
     return genre;
 }
 
-InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& reader, InstrumentsMeta& generalMeta) const
+Instrument InstrumentsReader::readInstrument(Ms::XmlReader& reader, InstrumentsMeta& generalMeta) const
 {
-    InstrumentTemplate instrumentTemplate;
-    Instrument& instrument = instrumentTemplate.instrument;
-
-    instrumentTemplate.id = reader.attributes().value("id").toString();
+    Instrument instrument;
+    instrument.templateId = reader.attributes().value("id").toString();
 
     bool customDrumset = false;
 
@@ -304,8 +302,8 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
             }
         } else if (reader.name() == "init") {
             QString templateId = reader.readElementText();
-            InstrumentTemplate templ = findInstrumentTemplate(generalMeta.templates, templateId);
-            initInstrument(instrument, templ.instrument);
+            Instrument templ = findInstrumentByTemplateId(generalMeta.instrumentTemplates, templateId);
+            initInstrument(instrument, templ);
         } else if (reader.name() == "musicXMLid") {
             instrument.id = reader.readElementText();
         } else if (reader.name() == "genre") {
@@ -319,7 +317,7 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
 
     fillByDeffault(instrument);
 
-    return instrumentTemplate;
+    return instrument;
 }
 
 int InstrumentsReader::readStaffIndex(Ms::XmlReader& reader) const

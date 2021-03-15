@@ -86,7 +86,7 @@ void InstrumentsRepository::load()
             continue;
         }
 
-        m_instrumentsMeta.templates << metaInstrument.val.templates;
+        m_instrumentsMeta.instrumentTemplates << metaInstrument.val.instrumentTemplates;
         m_instrumentsMeta.articulations << metaInstrument.val.articulations;
         m_instrumentsMeta.genres << metaInstrument.val.genres;
 
@@ -107,7 +107,7 @@ void InstrumentsRepository::clear()
 {
     Ms::clearInstrumentTemplates();
 
-    m_instrumentsMeta.templates.clear();
+    m_instrumentsMeta.instrumentTemplates.clear();
     m_instrumentsMeta.genres.clear();
     m_instrumentsMeta.groups.clear();
     m_instrumentsMeta.articulations.clear();

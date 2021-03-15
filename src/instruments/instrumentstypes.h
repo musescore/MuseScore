@@ -121,6 +121,7 @@ struct Instrument
 
     QString groupId;
     QStringList genreIds;
+    QString templateId;
 
     PitchRange amateurPitchRange;
     PitchRange professionalPitchRange;
@@ -155,19 +156,9 @@ struct Instrument
 
 using InstrumentList = QList<Instrument>;
 
-struct InstrumentTemplate
-{
-    QString id;
-    Instrument instrument;
-
-    bool isValid() const { return !id.isEmpty(); }
-};
-
-using InstrumentTemplateList = QList<InstrumentTemplate>;
-
 struct InstrumentsMeta
 {
-    InstrumentTemplateList templates;
+    InstrumentList instrumentTemplates;
     InstrumentGroupList groups;
     InstrumentGenreList genres;
     MidiActiculationList articulations;
