@@ -36,6 +36,8 @@ PopupView {
     property color fillColor: ui.theme.backgroundPrimaryColor
     readonly property int borderWidth: 1
 
+    property bool animationEnabled: true
+
     closePolicy: PopupView.CloseOnPressOutsideParent
 
     onAboutToShow: {
@@ -153,6 +155,6 @@ PopupView {
     ]
 
     transitions: Transition {
-        NumberAnimation { properties: "scale, opacity"; easing.type: Easing.OutQuint; duration: 140 }
+        NumberAnimation { properties: "scale, opacity"; easing.type: Easing.OutQuint; duration: animationEnabled ? 140 : 0 }
     }
 }

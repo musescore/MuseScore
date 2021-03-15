@@ -38,6 +38,8 @@ static const IconCode::Code ADD_ACTION_ICON_CODE = IconCode::Code::PLUS;
 
 static const ActionCode TUPLET_ACTION_CODE("tuplet");
 
+static int INVALID_INDEX = -1;
+
 static QMap<ActionCode, NoteInputMethod> noteInputModeActions = {
     { "note-input", NoteInputMethod::STEPTIME },
     { "note-input-rhythm", NoteInputMethod::RHYTHM },
@@ -62,7 +64,7 @@ QVariant NoteInputBarModel::data(const QModelIndex& index, int role) const
     case CheckedRole: return item.checked;
     case HintRole: return QString::fromStdString(item.description);
     case SubitemsRole: return subitems(item.code);
-    case ShowSubitemsByClickRole: return isNeedShowSubitemsByClick(item.code);
+    case ShowSubitemsByPressAndHoldRole: return isNeedShowSubitemsByPressAndHold(item.code);
     }
     return QVariant();
 }
@@ -81,7 +83,7 @@ QHash<int,QByteArray> NoteInputBarModel::roleNames() const
         { CheckedRole, "checkedRole" },
         { HintRole, "hintRole" },
         { SubitemsRole, "subitemsRole" },
-        { ShowSubitemsByClickRole, "showSubitemsByClickRole" }
+        { ShowSubitemsByPressAndHoldRole, "showSubitemsByPressAndHoldRole" },
     };
     return roles;
 }
@@ -173,7 +175,7 @@ int NoteInputBarModel::findNoteInputModeItemIndex() const
         }
     }
 
-    return -1;
+    return INVALID_INDEX;
 }
 
 void NoteInputBarModel::onNotationChanged()
@@ -260,7 +262,7 @@ void NoteInputBarModel::updateNoteInputState()
 void NoteInputBarModel::updateNoteInputModeState()
 {
     int noteInputModeIndex = findNoteInputModeItemIndex();
-    if (noteInputModeIndex == -1) {
+    if (noteInputModeIndex == INVALID_INDEX) {
         return;
     }
 
@@ -580,7 +582,7 @@ int NoteInputBarModel::itemIndex(const ActionCode& actionCode) const
         }
     }
 
-    return -1;
+    return INVALID_INDEX;
 }
 
 MenuItem NoteInputBarModel::makeActionItem(const ActionItem& action, const std::string& section)
@@ -790,19 +792,19 @@ MenuItemList NoteInputBarModel::linesItems() const
     return items;
 }
 
-bool NoteInputBarModel::isNeedShowSubitemsByClick(const ActionCode& actionCode) const
+bool NoteInputBarModel::isNeedShowSubitemsByPressAndHold(const ActionCode& actionCode) const
 {
     if (isNoteInputModeAction(actionCode)) {
-        return false;
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 void NoteInputBarModel::notifyAboutTupletItemChanged()
 {
     int tupletItemIndex = itemIndex(TUPLET_ACTION_CODE);
-    if (tupletItemIndex == -1) {
+    if (tupletItemIndex == INVALID_INDEX) {
         return;
     }
 
@@ -812,7 +814,7 @@ void NoteInputBarModel::notifyAboutTupletItemChanged()
 void NoteInputBarModel::notifyAboutAddItemChanged()
 {
     int addItemIndex = itemIndex(ADD_ACTION_CODE);
-    if (addItemIndex == -1) {
+    if (addItemIndex == INVALID_INDEX) {
         return;
     }
 
@@ -841,7 +843,7 @@ void NoteInputBarModel::handleAction(const QString& action, int actionIndex)
 {
     ActionCode actionCode = codeFromQString(action);
     if (isNoteInputModeAction(actionCode)) {
-        if (actionIndex != -1) {
+        if (actionIndex != INVALID_INDEX) {
             toggleNoteInputMethod(actionCode);
         } else {
             toggleNoteInput();

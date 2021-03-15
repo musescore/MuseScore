@@ -13,6 +13,7 @@ StyledPopupView {
     positionDisplacementY: opensUpward ? -view.implicitHeight : parent.height
     padding: 0
     margins: 0
+    animationEnabled: false
 
     height: view.implicitHeight
     width: itemWidth
@@ -34,6 +35,7 @@ StyledPopupView {
         implicitWidth: root.itemWidth
 
         spacing: 2
+        interactive: false
 
         delegate: Loader {
             id: loader
