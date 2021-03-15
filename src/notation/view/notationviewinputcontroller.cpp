@@ -108,7 +108,7 @@ int NotationViewInputController::currentZoomIndex() const
 
 int NotationViewInputController::currentZoomPercentage() const
 {
-    return m_view->currentScaling() * 100.0 / notationScaling();
+    return qRound(m_view->currentScaling() * 100.0 / notationScaling());
 }
 
 qreal NotationViewInputController::notationScaling() const
@@ -166,8 +166,10 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
 
     // Windows touch pad pinches also execute this
     if (keyState & Qt::ControlModifier) {
+        double zoomSpeed = 1.01;
         int absSteps = sqrt(stepsX * stepsX + stepsY * stepsY) * (stepsY > -stepsX ? 1 : -1);
-        int zoom = currentZoomPercentage() * qPow(1.01, absSteps);
+        double zoomAmount = currentZoomPercentage() * qPow(zoomSpeed, absSteps);
+        int zoom = absSteps > 0 ? qCeil(zoomAmount) : qFloor(zoomAmount);
         setZoom(zoom, event->position().toPoint());
     } else if (keyState & Qt::ShiftModifier) {
         int abs = sqrt(dx * dx + dy * dy) * (dy > -dx ? 1 : -1);
