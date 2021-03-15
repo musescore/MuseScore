@@ -366,7 +366,7 @@ void KeyEditor::addClicked()
         s.spos      = pos / spatium;
         e.keySymbols().append(s);
     }
-    std::shared_ptr<KeySig> ks = std::make_shared<KeySig>(gscore);
+    auto ks = makeElement<KeySig>(gscore);
     ks->setKeySigEvent(e);
     sp->append(ks, "custom");
     _dirty = true;

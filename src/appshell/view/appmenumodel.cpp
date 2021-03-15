@@ -133,12 +133,11 @@ MenuItem AppMenuModel::editItem() const
         makeAction("paste"),
         makeAction("paste-half"),
         makeAction("paste-double"),
-        makeAction("paste-special"),
         makeAction("swap"),
         makeAction("delete"),
         makeSeparator(),
         makeAction("select-all"),
-        makeAction("select-similar"),
+        makeAction("select-section"),
         makeAction("find"),
         makeSeparator(),
         makeAction("preference-dialog")
@@ -176,7 +175,7 @@ MenuItem AppMenuModel::viewItem() const
         makeAction("show-unprintable"),
         makeAction("show-frames"),
         makeAction("show-pageborders"),
-        makeAction("mark-irregular"),
+        makeAction("show-irregular"),
         makeSeparator(),
         makeAction("fullscreen")
     };
@@ -212,6 +211,7 @@ MenuItem AppMenuModel::formatItem() const
         makeAction("edit-style"),
         makeAction("page-settings"), // need implement
         makeSeparator(),
+        makeAction("add-remove-breaks"),
         makeMenu(trc("appshell", "&Stretch"), stretchItems),
         makeSeparator(),
         makeAction("reset-text-style-overrides"),

@@ -66,34 +66,27 @@ Palette* MasterPalette::createPalette(int w, int h, bool grid, double mag)
 //   keyPressEvent
 //---------------------------------------------------------
 
-void MasterPalette::keyPressEvent(QKeyEvent* ev)
+void MasterPalette::keyPressEvent(QKeyEvent* event)
 {
-    if (ev->key() == Qt::Key_Escape && ev->modifiers() == Qt::NoModifier) {
+    if (event->key() == Qt::Key_Escape && event->modifiers() == Qt::NoModifier) {
         close();
         return;
     }
-    QWidget::keyPressEvent(ev);
+    QWidget::keyPressEvent(event);
 }
 
-//---------------------------------------------------------
-//   selectItem
-//---------------------------------------------------------
-
-void MasterPalette::selectItem(const QString& s)
+void MasterPalette::setSelectedPaletteName(const QString& name)
 {
     for (int idx = 0; idx < treeWidget->topLevelItemCount(); ++idx) {
-        if (treeWidget->topLevelItem(idx)->text(0) == s) {
+        if (treeWidget->topLevelItem(idx)->text(0) == name) {
             treeWidget->setCurrentItem(treeWidget->topLevelItem(idx));
+            emit selectedPaletteNameChanged(name);
             break;
         }
     }
 }
 
-//---------------------------------------------------------
-//   selectedItem
-//---------------------------------------------------------
-
-QString MasterPalette::selectedItem()
+QString MasterPalette::selectedPaletteName() const
 {
     return treeWidget->currentItem()->text(0);
 }
@@ -128,18 +121,18 @@ MasterPalette::MasterPalette(QWidget* parent)
     treeWidget->clear();
 
     addPalette(PaletteCreator::newClefsPalette());
-    keyEditor = new KeyEditor;
+    m_keyEditor = new KeyEditor;
 
-    keyItem = new QTreeWidgetItem();
-    keyItem->setData(0, Qt::UserRole, stack->count());
-    stack->addWidget(keyEditor);
-    treeWidget->addTopLevelItem(keyItem);
+    m_keyItem = new QTreeWidgetItem();
+    m_keyItem->setData(0, Qt::UserRole, stack->count());
+    stack->addWidget(m_keyEditor);
+    treeWidget->addTopLevelItem(m_keyItem);
 
-    timeItem = new QTreeWidgetItem();
-    timeItem->setData(0, Qt::UserRole, stack->count());
-    timeDialog = new TimeDialog;
-    stack->addWidget(timeDialog);
-    treeWidget->addTopLevelItem(timeItem);
+    m_timeItem = new QTreeWidgetItem();
+    m_timeItem->setData(0, Qt::UserRole, stack->count());
+    m_timeDialog = new TimeDialog;
+    stack->addWidget(m_timeDialog);
+    treeWidget->addTopLevelItem(m_timeItem);
 
     addPalette(PaletteCreator::newBracketsPalette());
     addPalette(PaletteCreator::newAccidentalsPalette());
@@ -163,17 +156,17 @@ MasterPalette::MasterPalette(QWidget* parent)
     addPalette(PaletteCreator::newLayoutPalette());
     addPalette(PaletteCreator::newBeamPalette());
 
-    symbolItem = new QTreeWidgetItem();
-    idxAllSymbols = stack->count();
-    symbolItem->setData(0, Qt::UserRole, idxAllSymbols);
-    symbolItem->setText(0, QT_TRANSLATE_NOOP("palette", "Symbols"));
-    treeWidget->addTopLevelItem(symbolItem);
+    m_symbolItem = new QTreeWidgetItem();
+    m_idxAllSymbols = stack->count();
+    m_symbolItem->setData(0, Qt::UserRole, m_idxAllSymbols);
+    m_symbolItem->setText(0, QT_TRANSLATE_NOOP("palette", "Symbols"));
+    treeWidget->addTopLevelItem(m_symbolItem);
     stack->addWidget(new SymbolDialog(mu::SMUFL_ALL_SYMBOLS));
 
     // Add "All symbols" entry to be first in the list of categories
     QTreeWidgetItem* child = new QTreeWidgetItem(QStringList(mu::SMUFL_ALL_SYMBOLS));
-    child->setData(0, Qt::UserRole, idxAllSymbols);
-    symbolItem->addChild(child);
+    child->setData(0, Qt::UserRole, m_idxAllSymbols);
+    m_symbolItem->addChild(child);
 
     for (const QString& s : mu::smuflRanges()->keys()) {
         if (s == mu::SMUFL_ALL_SYMBOLS) {
@@ -181,7 +174,7 @@ MasterPalette::MasterPalette(QWidget* parent)
         }
         QTreeWidgetItem* chld = new QTreeWidgetItem(QStringList(s));
         chld->setData(0, Qt::UserRole, stack->count());
-        symbolItem->addChild(chld);
+        m_symbolItem->addChild(chld);
         stack->addWidget(new SymbolDialog(s));
     }
 
@@ -208,9 +201,9 @@ int MasterPalette::metaTypeId() const
 
 void MasterPalette::retranslate(bool firstTime)
 {
-    keyItem->setText(0, mu::qtrc("palette", "Key Signatures"));
-    timeItem->setText(0, mu::qtrc("palette", "Time Signatures"));
-    symbolItem->setText(0, mu::qtrc("palette", "Symbols"));
+    m_keyItem->setText(0, mu::qtrc("palette", "Key Signatures"));
+    m_timeItem->setText(0, mu::qtrc("palette", "Time Signatures"));
+    m_symbolItem->setText(0, mu::qtrc("palette", "Symbols"));
     if (!firstTime) {
         retranslateUi(this);
     }
@@ -235,7 +228,7 @@ void MasterPalette::currentChanged(QTreeWidgetItem* item, QTreeWidgetItem*)
 void MasterPalette::clicked(QTreeWidgetItem* item, int)
 {
     int idx = item->data(0, Qt::UserRole).toInt();
-    if (idx == idxAllSymbols) {
+    if (idx == m_idxAllSymbols) {
         item->setExpanded(!item->isExpanded());
         if (idx != -1) {
             stack->setCurrentIndex(idx);
@@ -247,17 +240,17 @@ void MasterPalette::clicked(QTreeWidgetItem* item, int)
 //   closeEvent
 //---------------------------------------------------------
 
-void MasterPalette::closeEvent(QCloseEvent* ev)
+void MasterPalette::closeEvent(QCloseEvent* event)
 {
     WidgetStateStore::saveGeometry(this);
-    if (timeDialog->dirty()) {
-        timeDialog->save();
+    if (m_timeDialog->dirty()) {
+        m_timeDialog->save();
     }
-    if (keyEditor->dirty()) {
-        keyEditor->save();
+    if (m_keyEditor->dirty()) {
+        m_keyEditor->save();
     }
     emit finished(QDialog::Accepted);
-    QWidget::closeEvent(ev);
+    QWidget::closeEvent(event);
 }
 
 //---------------------------------------------------------

@@ -24,25 +24,19 @@ namespace Ms {
 
 class Icon final : public Element
 {
-    IconType _iconType { IconType::NONE };
-    QByteArray _action;
-    QIcon _icon;
-    int _extent { 40 };
-
 public:
-    Icon(Score* s)
-        : Element(s) { }
-    virtual ~Icon() {}
+    Icon(Score* score);
+    ~Icon() override = default;
 
-    Icon* clone() const override { return new Icon(*this); }
-    ElementType type() const override { return ElementType::ICON; }
-    IconType iconType() const { return _iconType; }
-    void setIconType(IconType val) { _iconType = val; }
-    void setAction(const QByteArray& a, const QIcon& i) { _action = a; _icon = i; }
-    const QByteArray& action() const { return _action; }
-    QIcon icon() const { return _icon; }
-    void setExtent(int v) { _extent = v; }
-    int extent() const { return _extent; }
+    Icon* clone() const override;
+    ElementType type() const override;
+    IconType iconType() const;
+    const std::string& actionCode() const;
+
+    void setIconType(IconType val);
+    void setAction(const std::string& actionCode, char16_t icon);
+    void setExtent(int extent);
+
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
     void draw(mu::draw::Painter*) const override;
@@ -50,6 +44,14 @@ public:
 
     QVariant getProperty(Pid) const override;
     bool setProperty(Pid, const QVariant&) override;
+
+private:
+    QRectF boundingBox() const;
+
+    IconType _iconType { IconType::NONE };
+    std::string _actionCode;
+    char16_t _icon = 0;
+    int _extent { 40 };
 };
 }     // namespace Ms
 #endif

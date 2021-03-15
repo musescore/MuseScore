@@ -18,8 +18,6 @@
 //=============================================================================
 #include "noteinputcursor.h"
 
-#include <QPainter>
-
 using namespace mu::notation;
 
 void NoteInputCursor::paint(mu::draw::Painter* painter)

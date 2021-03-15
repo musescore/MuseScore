@@ -35,27 +35,20 @@ MU4PaletteAdapter::MU4PaletteAdapter()
     m_paletteEnabled.val = true;
 }
 
-QAction* MU4PaletteAdapter::getAction(const char* id_) const
+actions::ActionItem MU4PaletteAdapter::getAction(const actions::ActionCode& code) const
 {
-    QString id(id_);
-    QAction* a = m_actions.value(id, nullptr);
-    if (!a) {
-        a = new QAction();
-        m_actions.insert(id, a);
-    }
-    return a;
+    return actionsRegister()->action(code);
 }
 
-QString MU4PaletteAdapter::actionHelp(const char* id) const
+void MU4PaletteAdapter::showMasterPalette(const QString& selectedPaletteName)
 {
-    return QString(id);
-}
+    QStringList params {
+        "sync=false",
+        QString("selectedPaletteName=%1").arg(selectedPaletteName)
+    };
 
-void MU4PaletteAdapter::showMasterPalette(const QString& arg)
-{
-    Q_UNUSED(arg);
-
-    interactive()->open("musescore://palette/masterpalette?sync=false");
+    QString uri = QString("musescore://palette/masterpalette?%1").arg(params.join('&'));
+    interactive()->open(uri.toStdString());
 }
 
 bool MU4PaletteAdapter::isSelected() const

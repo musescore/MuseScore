@@ -65,6 +65,7 @@ public:
     int hitStaffIndex(const QPointF& pos) const override;
     void select(const std::vector<Element*>& elements, SelectType type, int staffIndex = 0) override;
     void selectAll() override;
+    void selectSection() override;
     INotationSelectionPtr selection() const override;
     void clearSelection() override;
     async::Notification selectionChanged() const override;
@@ -123,8 +124,11 @@ public:
     void addOttavaToSelection(OttavaType type) override;
     void addHairpinToSelection(HairpinType type) override;
     void addAccidentalToSelection(AccidentalType type) override;
+    void addBracketsToSelection(BracketsType type) override;
     void changeSelectedNotesArticulation(SymbolId articulationSymbolId) override;
-    void addTupletToSelectedChords(const TupletOptions& options) override;
+    void addGraceNotesToSelectedNotes(GraceNoteType type) override;
+    void addTupletToSelectedChordRests(const TupletOptions& options) override;
+    void addBeamToSelectedChordRests(BeamMode mode) override;
 
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
     void transpose(const TransposeOptions& options) override;

@@ -133,11 +133,10 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Select All"),
                QT_TRANSLATE_NOOP("action", "Select all")
                ),
-    ActionItem("delete",
-               ShortcutContext::NotationHasSelection,
-               QT_TRANSLATE_NOOP("action", "Delete"),
-               QT_TRANSLATE_NOOP("action", "Delete the selected element(s)"),
-               IconCode::Code::DELETE_TANK
+    ActionItem("select-section",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Select Section"),
+               QT_TRANSLATE_NOOP("action", "Select section")
                ),
     ActionItem("select-similar",
                ShortcutContext::NotationHasSelection,
@@ -158,6 +157,12 @@ const ActionList NotationActions::m_actions = {
                ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Select Dialog"),
                QT_TRANSLATE_NOOP("action", "Select all similar elements with more options")
+               ),
+    ActionItem("delete",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Delete"),
+               QT_TRANSLATE_NOOP("action", "Delete the selected element(s)"),
+               IconCode::Code::DELETE_TANK
                ),
     ActionItem("edit-style",
                ShortcutContext::NotationActive,
@@ -350,17 +355,20 @@ const ActionList NotationActions::m_actions = {
     ActionItem("insert-hbox",
                ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert Horizontal Frame"),
-               QT_TRANSLATE_NOOP("action", "Insert horizontal frame")
+               QT_TRANSLATE_NOOP("action", "Insert horizontal frame"),
+               IconCode::Code::HORIZONTAL_FRAME
                ),
     ActionItem("insert-vbox",
                ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert Vertical Frame"),
-               QT_TRANSLATE_NOOP("action", "Insert vertical frame")
+               QT_TRANSLATE_NOOP("action", "Insert vertical frame"),
+               IconCode::Code::VERTICAL_FRAME
                ),
     ActionItem("insert-textframe",
                ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Insert Text Frame"),
-               QT_TRANSLATE_NOOP("action", "Insert text frame")
+               QT_TRANSLATE_NOOP("action", "Insert text frame"),
+               IconCode::Code::TEXT_FRAME
                ),
     ActionItem("append-hbox",
                ShortcutContext::NotationHasSelection,
@@ -376,6 +384,92 @@ const ActionList NotationActions::m_actions = {
                ShortcutContext::NotationHasSelection,
                QT_TRANSLATE_NOOP("action", "Append Text Frame"),
                QT_TRANSLATE_NOOP("action", "Append text frame")
+               ),
+    ActionItem("acciaccatura",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Acciaccatura")
+               ),
+    ActionItem("appoggiatura",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Appoggiatura")
+               ),
+    ActionItem("grace4",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Grace: quarter")
+               ),
+    ActionItem("grace16",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Grace: 16th")
+               ),
+    ActionItem("grace32",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Grace: 32nd")
+               ),
+    ActionItem("grace8after",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Grace: 8th after")
+               ),
+    ActionItem("grace16after",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Grace: 16th after")
+               ),
+    ActionItem("grace32after",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Grace: 32nd after")
+               ),
+    ActionItem("beam-start",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Beam Start"),
+               QT_TRANSLATE_NOOP("action", "Beam start"),
+               IconCode::Code::BEAM_START
+               ),
+    ActionItem("beam-mid",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Beam Middle"),
+               QT_TRANSLATE_NOOP("action", "Beam middle"),
+               IconCode::Code::BEAM_MIDDLE
+               ),
+    ActionItem("no-beam",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "No Beam"),
+               QT_TRANSLATE_NOOP("action", "No beam"),
+               IconCode::Code::NOTE_HEAD_EIGHTH
+               ),
+    ActionItem("beam-32",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Beam 16th Sub"),
+               QT_TRANSLATE_NOOP("action", "Beam 16th sub"),
+               IconCode::Code::BEAM_32
+               ),
+    ActionItem("beam-64",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Beam 32th Sub"),
+               QT_TRANSLATE_NOOP("action", "Beam 32th sub"),
+               IconCode::Code::BEAM_64
+               ),
+    ActionItem("auto-beam",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Auto beam"),
+               QT_TRANSLATE_NOOP("action", "Auto beam"),
+               IconCode::Code::AUTO_TEXT
+               ),
+    ActionItem("add-brackets",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Add Brackets to Accidental"),
+               QT_TRANSLATE_NOOP("action", "Add brackets to accidental"),
+               IconCode::Code::BRACKET
+               ),
+    ActionItem("add-braces",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Add Braces to Element"),
+               QT_TRANSLATE_NOOP("action", "Add Braces to element"),
+               IconCode::Code::BRACE
+               ),
+    ActionItem("add-parentheses",
+               ShortcutContext::NotationHasSelection,
+               QT_TRANSLATE_NOOP("action", "Add Parentheses to Element"),
+               QT_TRANSLATE_NOOP("action", "Add parentheses to element"),
+               IconCode::Code::BRACKET_PARENTHESES
                ),
     ActionItem("interval1",
                ShortcutContext::NotationHasSelection,
@@ -704,7 +798,7 @@ const ActionList NotationActions::m_actions = {
                ),
     ActionItem("sextuplet",
                ShortcutContext::NotationHasSelection,
-               QT_TRANSLATE_NOOP("action", "sextuplet"),
+               QT_TRANSLATE_NOOP("action", "Sextuplet"),
                QT_TRANSLATE_NOOP("action", "Add sextuplet")
                ),
     ActionItem("septuplet",

@@ -399,10 +399,9 @@
             <sigD>2</sigD>
             </TimeSig>
           </Cell>
-        <Cell name="Time Signature" custom="1">
+        <Cell name="2/2">
           <staff>1</staff>
           <TimeSig>
-            <track>0</track>
             <sigN>2</sigN>
             <sigD>2</sigD>
             </TimeSig>
@@ -503,48 +502,6 @@
         <mag>1</mag>
         <grid>1</grid>
         <moreElements>0</moreElements>
-        <Cell name="Fermata above">
-          <Fermata>
-            <subtype>fermataAbove</subtype>
-            <placement>above</placement>
-            </Fermata>
-          </Cell>
-        <Cell name="Short fermata above">
-          <Fermata>
-            <subtype>fermataShortAbove</subtype>
-            <placement>above</placement>
-            </Fermata>
-          </Cell>
-        <Cell name="Long fermata above">
-          <Fermata>
-            <subtype>fermataLongAbove</subtype>
-            <placement>above</placement>
-            </Fermata>
-          </Cell>
-        <Cell name="Long fermata (Henze) above">
-          <Fermata>
-            <subtype>fermataLongHenzeAbove</subtype>
-            <placement>above</placement>
-            </Fermata>
-          </Cell>
-        <Cell name="Short fermata (Henze) above">
-          <Fermata>
-            <subtype>fermataShortHenzeAbove</subtype>
-            <placement>above</placement>
-            </Fermata>
-          </Cell>
-        <Cell name="Very long fermata above">
-          <Fermata>
-            <subtype>fermataVeryLongAbove</subtype>
-            <placement>above</placement>
-            </Fermata>
-          </Cell>
-        <Cell name="Very short fermata above">
-          <Fermata>
-            <subtype>fermataVeryShortAbove</subtype>
-            <placement>above</placement>
-            </Fermata>
-          </Cell>
         <Cell name="Accent above">
           <Articulation>
             <subtype>articAccentAbove</subtype>
@@ -812,6 +769,24 @@
         <grid>1</grid>
         <moreElements>0</moreElements>
         <visible>0</visible>
+        <Cell name="Fermata above">
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <placement>above</placement>
+            </Fermata>
+          </Cell>
+        <Cell name="Short fermata above">
+          <Fermata>
+            <subtype>fermataShortAbove</subtype>
+            <placement>above</placement>
+            </Fermata>
+          </Cell>
+        <Cell name="Long fermata above">
+          <Fermata>
+            <subtype>fermataLongAbove</subtype>
+            <placement>above</placement>
+            </Fermata>
+          </Cell>
         <Cell name="Breath mark (comma)">
           <Breath>
             <symbol>breathMarkComma</symbol>
@@ -822,20 +797,9 @@
             <symbol>breathMarkTick</symbol>
             </Breath>
           </Cell>
-        <Cell name="Breath mark (Salzedo)" visible="0">
-          <Breath>
-            <symbol>breathMarkSalzedo</symbol>
-            </Breath>
-          </Cell>
         <Cell name="Breath mark (upbow-like)">
           <Breath>
             <symbol>breathMarkUpbow</symbol>
-            </Breath>
-          </Cell>
-        <Cell name="Curved caesura" visible="0">
-          <Breath>
-            <symbol>caesuraCurved</symbol>
-            <pause>2</pause>
             </Breath>
           </Cell>
         <Cell name="Caesura">
@@ -844,15 +808,50 @@
             <pause>2</pause>
             </Breath>
           </Cell>
-        <Cell name="Short caesura" visible="0">
-          <Breath>
-            <symbol>caesuraShort</symbol>
-            <pause>2</pause>
-            </Breath>
-          </Cell>
         <Cell name="Thick caesura">
           <Breath>
             <symbol>caesuraThick</symbol>
+            <pause>2</pause>
+            </Breath>
+          </Cell>
+        <Cell name="Long fermata (Henze) above" visible = "0">
+          <Fermata>
+            <subtype>fermataLongHenzeAbove</subtype>
+            <placement>above</placement>
+            </Fermata>
+          </Cell>
+        <Cell name="Short fermata (Henze) above" visible = "0">
+          <Fermata>
+            <subtype>fermataShortHenzeAbove</subtype>
+            <placement>above</placement>
+            </Fermata>
+          </Cell>
+        <Cell name="Very long fermata above" visible = "0">
+          <Fermata>
+            <subtype>fermataVeryLongAbove</subtype>
+            <placement>above</placement>
+            </Fermata>
+          </Cell>
+        <Cell name="Very short fermata above" visible = "0">
+          <Fermata>
+            <subtype>fermataVeryShortAbove</subtype>
+            <placement>above</placement>
+            </Fermata>
+          </Cell>
+        <Cell name="Breath mark (Salzedo)" visible="0">
+          <Breath>
+            <symbol>breathMarkSalzedo</symbol>
+            </Breath>
+          </Cell>
+        <Cell name="Curved caesura" visible="0">
+          <Breath>
+            <symbol>caesuraCurved</symbol>
+            <pause>2</pause>
+            </Breath>
+          </Cell>
+        <Cell name="Short caesura" visible="0">
+          <Breath>
+            <symbol>caesuraShort</symbol>
             <pause>2</pause>
             </Breath>
           </Cell>
@@ -2281,16 +2280,6 @@
             <subtype>1</subtype>
             </MeasureRepeat>
           </Cell>
-        <Cell name="Two-measure repeat">
-          <MeasureRepeat>
-            <subtype>2</subtype>
-            </MeasureRepeat>
-          </Cell>
-        <Cell name="Four-measure repeat">
-          <MeasureRepeat>
-            <subtype>4</subtype>
-            </MeasureRepeat>
-          </Cell>
         <Cell name="Segno">
           <Marker>
             <style>Repeat Text Left</style>
@@ -2310,13 +2299,6 @@
             <style>Repeat Text Left</style>
             <text><sym>coda</sym></text>
             <label>codab</label>
-            </Marker>
-          </Cell>
-        <Cell name="Varied coda" visible="0">
-          <Marker>
-            <style>Repeat Text Left</style>
-            <text><sym>codaSquare</sym></text>
-            <label>varcoda</label>
             </Marker>
           </Cell>
         <Cell name="Fine">
@@ -2402,6 +2384,23 @@
             <subtype>end-start-repeat</subtype>
             </BarLine>
           </Cell>
+        <Cell name="Two-measure repeat" visible = "0">
+          <MeasureRepeat>
+            <subtype>2</subtype>
+            </MeasureRepeat>
+          </Cell>
+        <Cell name="Four-measure repeat" visible = "0">
+          <MeasureRepeat>
+            <subtype>4</subtype>
+            </MeasureRepeat>
+          </Cell>
+       <Cell name="Varied coda" visible = "0">
+          <Marker>
+            <style>Repeat Text Left</style>
+            <text><sym>codaSquare</sym></text>
+            <label>varcoda</label>
+            </Marker>
+         </Cell>
         </Palette>
       <Palette name="Layout">
         <type>Layout</type>
@@ -2409,6 +2408,7 @@
         <gridHeight>48</gridHeight>
         <mag>1</mag>
         <moreElements>0</moreElements>
+        <visible>0</visible>
         <Cell name="System break">
           <mag>1.2</mag>
           <LayoutBreak>

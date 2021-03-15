@@ -430,6 +430,13 @@ void NotationInteraction::selectAll()
     notifyAboutSelectionChanged();
 }
 
+void NotationInteraction::selectSection()
+{
+    score()->cmdSelectSection();
+
+    notifyAboutSelectionChanged();
+}
+
 INotationSelectionPtr NotationInteraction::selection() const
 {
     return m_selection;
@@ -2175,6 +2182,31 @@ void NotationInteraction::addAccidentalToSelection(AccidentalType type)
     notifyAboutSelectionChanged();
 }
 
+void NotationInteraction::addBracketsToSelection(BracketsType type)
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+
+    switch (type) {
+    case BracketsType::Brackets:
+        score()->cmdAddBracket();
+        break;
+    case BracketsType::Braces:
+        score()->cmdAddBraces();
+        break;
+    case BracketsType::Parentheses:
+        score()->cmdAddParentheses();
+        break;
+    }
+
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationSymbolId)
 {
     if (selection()->isNone()) {
@@ -2203,7 +2235,43 @@ void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationS
     notifyAboutSelectionChanged();
 }
 
-void NotationInteraction::addTupletToSelectedChords(const TupletOptions& options)
+void NotationInteraction::addGraceNotesToSelectedNotes(GraceNoteType type)
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    int denominator = 1;
+
+    switch (type) {
+    case GraceNoteType::GRACE4:
+    case GraceNoteType::INVALID:
+    case GraceNoteType::NORMAL:
+        denominator = 1;
+        break;
+    case GraceNoteType::ACCIACCATURA:
+    case GraceNoteType::APPOGGIATURA:
+    case GraceNoteType::GRACE8_AFTER:
+        denominator = 2;
+        break;
+    case GraceNoteType::GRACE16:
+    case GraceNoteType::GRACE16_AFTER:
+        denominator = 4;
+        break;
+    case GraceNoteType::GRACE32:
+    case GraceNoteType::GRACE32_AFTER:
+        denominator = 8;
+        break;
+    }
+
+    startEdit();
+    score()->cmdAddGrace(type, Ms::MScore::division / denominator);
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& options)
 {
     if (selection()->isNone()) {
         return;
@@ -2218,6 +2286,19 @@ void NotationInteraction::addTupletToSelectedChords(const TupletOptions& options
     apply();
 
     notifyAboutSelectionChanged();
+}
+
+void NotationInteraction::addBeamToSelectedChordRests(BeamMode mode)
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdSetBeamMode(mode);
+    apply();
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval)

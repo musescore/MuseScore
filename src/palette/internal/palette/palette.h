@@ -144,9 +144,6 @@ public:
     QSize sizeHint() const override;
     int idx(const QPoint&) const;
 
-private slots:
-    void actionToggled(bool val);
-
 private:
     void paintEvent(QPaintEvent*) override;
     void mousePressEvent(QMouseEvent*) override;

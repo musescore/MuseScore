@@ -178,6 +178,13 @@ public:
 
         GRADUATION_CAP = 0xF19D,
 
+        AUTO_TEXT = 0xF329,
+        NOTE_HEAD_EIGHTH = 0xF33A,
+        BEAM_START = 0xF33B,
+        BEAM_MIDDLE = 0xF33D,
+        BEAM_32 = 0xF33E,
+        BEAM_64 = 0xF33F,
+
         QUESTION_MARK = 0xF340,
 
         NOTE_HEAD_QUARTER = 0xF341,

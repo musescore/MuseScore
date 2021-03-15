@@ -87,7 +87,7 @@ TimeDialog::TimeDialog(QWidget* parent)
 
 void TimeDialog::addClicked()
 {
-    std::shared_ptr<TimeSig> ts = std::make_shared<TimeSig>(gscore);
+    auto ts = makeElement<TimeSig>(gscore);
     ts->setSig(Fraction(zNominal->value(), denominator()));
     ts->setGroups(groups->groups());
 
