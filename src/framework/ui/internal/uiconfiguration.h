@@ -38,6 +38,7 @@ class UiConfiguration : public IUiConfiguration
 public:
     void init();
 
+    QStringList possibleFontFamilies() const override;
     ThemeList themes() const override;
 
     ThemeInfo currentTheme() const override;
@@ -45,7 +46,9 @@ public:
     async::Notification currentThemeChanged() const override;
 
     std::string fontFamily() const override;
+    void setFontFamily(const std::string& family) override;
     int fontSize(FontSizeType type) const override;
+    void setBodyFontSize(int size) override;
     async::Notification fontChanged() const override;
 
     std::string iconsFontFamily() const override;

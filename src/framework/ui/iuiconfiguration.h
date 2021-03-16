@@ -37,27 +37,17 @@ class IUiConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUiConfiguration() = default;
 
+    virtual QStringList possibleFontFamilies() const = 0;
     virtual ThemeList themes() const = 0;
 
     virtual ThemeInfo currentTheme() const = 0;
     virtual void setCurrentThemeType(ThemeType type) = 0;
     virtual async::Notification currentThemeChanged() const = 0;
 
-    enum class FontSizeType {
-        BODY,
-        BODY_LARGE,
-        TAB,
-        HEADER,
-        TITLE
-    };
-
-    enum class IconSizeType {
-        Regular,
-        Toolbar
-    };
-
     virtual std::string fontFamily() const = 0;
+    virtual void setFontFamily(const std::string& family) = 0;
     virtual int fontSize(FontSizeType type) const = 0;
+    virtual void setBodyFontSize(int size) = 0;
     virtual async::Notification fontChanged() const = 0;
 
     virtual std::string iconsFontFamily() const = 0;
