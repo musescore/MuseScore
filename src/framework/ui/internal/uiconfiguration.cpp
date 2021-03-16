@@ -29,13 +29,16 @@ void UiConfiguration::init()
     settings()->setDefaultValue(UI_MUSICAL_FONT_FAMILY_KEY, Val("Leland"));
     settings()->setDefaultValue(UI_MUSICAL_FONT_SIZE_KEY, Val(12));
 
-    settings()->valueChanged(UI_THEME_TYPE_KEY).onReceive(nullptr, [this](const Val& val) {
-        m_currentPreferredThemeTypeChannel.send(static_cast<ThemeType>(val.toInt()));
-        m_currentActualThemeTypeChannel.send(actualThemeType());
+    settings()->valueChanged(UI_THEME_TYPE_KEY).onReceive(nullptr, [this](const Val&) {
+        m_currentThemeChanged.notify();
     });
 
-    platformTheme()->darkModeSwitched().onReceive(nullptr, [this](const bool) {
-        m_currentActualThemeTypeChannel.send(actualThemeType());
+    settings()->valueChanged(UI_THEME_TYPE_KEY).onReceive(nullptr, [this](const Val&) {
+        m_currentThemeChanged.notify();
+    });
+
+    platformTheme()->darkModeSwitched().onReceive(nullptr, [this](bool) {
+        m_currentThemeChanged.notify();
     });
 
     settings()->valueChanged(UI_FONT_FAMILY_KEY).onReceive(nullptr, [this](const Val&) {
@@ -64,32 +67,26 @@ void UiConfiguration::init()
     });
 }
 
-ThemeType UiConfiguration::preferredThemeType() const
+ThemeType UiConfiguration::currentThemeType() const
 {
-    return static_cast<ThemeType>(settings()->value(UI_THEME_TYPE_KEY).toInt());
-}
+    Val preferredThemeType = settings()->value(UI_THEME_TYPE_KEY);
+    bool followSystemTheme = preferredThemeType.isNull();
 
-Channel<ThemeType> UiConfiguration::preferredThemeTypeChanged() const
-{
-    return m_currentPreferredThemeTypeChannel;
-}
-
-ThemeType UiConfiguration::actualThemeType() const
-{
-    switch (preferredThemeType()) {
-    case IUiConfiguration::ThemeType::LIGHT_THEME:
-    case IUiConfiguration::ThemeType::DARK_THEME:
-        return preferredThemeType();
-    case IUiConfiguration::ThemeType::FOLLOW_SYSTEM_THEME:
+    if (followSystemTheme) {
         return platformTheme()->isDarkMode() ? IUiConfiguration::ThemeType::DARK_THEME : IUiConfiguration::ThemeType::LIGHT_THEME;
     }
 
-    return IUiConfiguration::ThemeType::LIGHT_THEME;
+    return static_cast<ThemeType>(preferredThemeType.toInt());
 }
 
-Channel<ThemeType> UiConfiguration::actualThemeTypeChanged() const
+void UiConfiguration::setCurrentThemeType(ThemeType type)
 {
-    return m_currentActualThemeTypeChannel;
+    settings()->setValue(UI_THEME_TYPE_KEY, Val(static_cast<int>(type)));
+}
+
+Notification UiConfiguration::currentThemeChanged() const
+{
+    return m_currentThemeChanged;
 }
 
 std::string UiConfiguration::fontFamily() const

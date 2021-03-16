@@ -50,6 +50,29 @@ enum StyleKeys {
     ITEM_OPACITY_DISABLED
 };
 
+static const QHash<int, QVariant> LIGHT_THEME {
+    { BACKGROUND_PRIMARY_COLOR, "#F5F5F6" },
+    { BACKGROUND_SECONDARY_COLOR, "#E6E9ED" },
+    { POPUP_BACKGROUND_COLOR, "#F5F5F6" },
+    { TEXT_FIELD_COLOR, "#FFFFFF" },
+    { ACCENT_COLOR, "#70AFEA" },
+    { STROKE_COLOR, "#CED1D4" },
+    { BUTTON_COLOR, "#CFD5DD" },
+    { FONT_PRIMARY_COLOR, "#111132" },
+    { FONT_SECONDARY_COLOR, "#FFFFFF" },
+    { LINK_COLOR, "#70AFEA" },
+
+    { ACCENT_OPACITY_NORMAL, 0.3 },
+    { ACCENT_OPACITY_HOVER, 0.15 },
+    { ACCENT_OPACITY_HIT, 0.5 },
+
+    { BUTTON_OPACITY_NORMAL, 0.7 },
+    { BUTTON_OPACITY_HOVER, 0.5 },
+    { BUTTON_OPACITY_HIT, 1.0 },
+
+    { ITEM_OPACITY_DISABLED, 0.3 }
+};
+
 static const QHash<int, QVariant> DARK_THEME {
     { BACKGROUND_PRIMARY_COLOR, "#2D2D30" },
     { BACKGROUND_SECONDARY_COLOR, "#363638" },
@@ -73,15 +96,15 @@ static const QHash<int, QVariant> DARK_THEME {
     { ITEM_OPACITY_DISABLED, 0.3 }
 };
 
-static const QHash<int, QVariant> LIGHT_THEME {
-    { BACKGROUND_PRIMARY_COLOR, "#F5F5F6" },
-    { BACKGROUND_SECONDARY_COLOR, "#E6E9ED" },
-    { POPUP_BACKGROUND_COLOR, "#F5F5F6" },
+static const QHash<int, QVariant> HIGH_CONTRAST_THEME {
+    { BACKGROUND_PRIMARY_COLOR, "#000000" },
+    { BACKGROUND_SECONDARY_COLOR, "#000000" },
+    { POPUP_BACKGROUND_COLOR, "#FFFFFF" },
     { TEXT_FIELD_COLOR, "#FFFFFF" },
-    { ACCENT_COLOR, "#70AFEA" },
-    { STROKE_COLOR, "#CED1D4" },
-    { BUTTON_COLOR, "#CFD5DD" },
-    { FONT_PRIMARY_COLOR, "#111132" },
+    { ACCENT_COLOR, "#19EBFF" },
+    { STROKE_COLOR, "#FFFFFF" },
+    { BUTTON_COLOR, "#000000" },
+    { FONT_PRIMARY_COLOR, "#FFFFFF" },
     { FONT_SECONDARY_COLOR, "#FFFFFF" },
     { LINK_COLOR, "#70AFEA" },
 
@@ -111,7 +134,7 @@ Theme::Theme(QObject* parent)
 
 void Theme::init()
 {
-    configuration()->actualThemeTypeChanged().onReceive(this, [this](const IUiConfiguration::ThemeType) {
+    configuration()->currentThemeChanged().onNotify(this, [this]() {
         update();
     });
 
@@ -281,7 +304,7 @@ mu::async::Notification Theme::themeChanged() const
 
 QHash<int, QVariant> Theme::currentThemeProperties() const
 {
-    if (configuration()->actualThemeType() == IUiConfiguration::ThemeType::DARK_THEME) {
+    if (configuration()->currentThemeType() == IUiConfiguration::ThemeType::DARK_THEME) {
         return DARK_THEME;
     }
 
@@ -408,7 +431,7 @@ void Theme::setupWidgetTheme()
     widgetsFont.setPointSize(configuration()->fontSize(FontSizeType::BODY));
     QApplication::setFont(widgetsFont);
 
-    platformTheme()->setAppThemeDark(configuration()->actualThemeType() == IUiConfiguration::ThemeType::DARK_THEME);
+    platformTheme()->setAppThemeDark(configuration()->currentThemeType() == IUiConfiguration::ThemeType::DARK_THEME);
 }
 
 void Theme::notifyAboutThemeChanged()
