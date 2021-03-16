@@ -10,10 +10,18 @@ Flickable {
     ScrollBar.vertical: StyledScrollBar {}
 
     AppearancePreferencesModel {
-        id: model
+        id: appearanceModel
     }
 
     Component.onCompleted: {
-        model.load()
+        appearanceModel.load()
+    }
+
+    ThemesView {
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        themes: appearanceModel.themes
+        currentThemeIndex: appearanceModel.currentThemeIndex
     }
 }
