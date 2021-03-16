@@ -322,6 +322,17 @@ enum class AccidentalType {
     SAGITTAL_FLAT,
     SAGITTAL_SHARP,
 
+    // Turkish folk music
+    ONE_COMMA_FLAT,
+    ONE_COMMA_SHARP,
+    TWO_COMMA_FLAT,
+    TWO_COMMA_SHARP,
+    THREE_COMMA_FLAT,
+    THREE_COMMA_SHARP,
+    FOUR_COMMA_FLAT,
+    //FOUR_COMMA_SHARP,
+    FIVE_COMMA_SHARP,
+
     END
     ///\}
 };
