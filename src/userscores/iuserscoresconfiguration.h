@@ -43,7 +43,7 @@ public:
     virtual io::path defaultSavingFilePath(const io::path& fileName) const = 0;
 
     virtual QColor templatePreviewBackgroundColor() const = 0;
-    virtual async::Channel<QColor> templatePreviewBackgroundColorChanged() const = 0;
+    virtual async::Notification templatePreviewBackgroundChanged() const = 0;
 
     enum class PreferredScoreCreationMode {
         FromInstruments,

@@ -91,9 +91,11 @@ void NotationPaintView::load()
 void NotationPaintView::initBackground()
 {
     setBackgroundColor(configuration()->backgroundColor());
+    m_backgroundWallpaperPath = configuration()->backgroundWallpaperPath();
 
-    configuration()->backgroundColorChanged().onReceive(this, [this](const QColor& color) {
-        setBackgroundColor(color);
+    configuration()->backgroundChanged().onNotify(this, [this]() {
+        setBackgroundColor(configuration()->backgroundColor());
+        m_backgroundWallpaperPath = configuration()->backgroundWallpaperPath();
         update();
     });
 }
@@ -339,7 +341,8 @@ void NotationPaintView::paint(QPainter* qp)
     mu::draw::Painter* painter = &mup;
 
     QRect rect(0, 0, width(), height());
-    painter->fillRect(rect, m_backgroundColor);
+    paintBackground(rect, painter);
+
     painter->setWorldTransform(m_matrix);
 
     notation()->paint(painter, toLogical(rect));
@@ -348,6 +351,16 @@ void NotationPaintView::paint(QPainter* qp)
     m_noteInputCursor->paint(painter);
     m_loopInMarker->paint(painter);
     m_loopOutMarker->paint(painter);
+}
+
+void NotationPaintView::paintBackground(const QRect& rect, mu::draw::Painter* painter)
+{
+    if (m_backgroundWallpaperPath.empty()) {
+        painter->fillRect(rect, m_backgroundColor);
+    } else {
+        QPixmap pixmap(m_backgroundWallpaperPath.toQString());
+        painter->drawTiledPixmap(rect, pixmap, rect.topLeft() - QPoint(m_matrix.m31(), m_matrix.m32()));
+    }
 }
 
 QColor NotationPaintView::backgroundColor() const

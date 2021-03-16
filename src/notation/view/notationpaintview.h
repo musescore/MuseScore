@@ -172,7 +172,10 @@ private:
     const Page* pointToPage(const QPointF& point) const;
     QPointF alignToCurrentPageBorder(const QRectF& showRect, const QPointF& pos) const;
 
+    void paintBackground(const QRect& rect, mu::draw::Painter* painter);
+
     QColor m_backgroundColor;
+    io::path m_backgroundWallpaperPath;
     notation::INotationPtr m_notation;
     QTransform m_matrix;
     std::unique_ptr<NotationViewInputController> m_inputController;

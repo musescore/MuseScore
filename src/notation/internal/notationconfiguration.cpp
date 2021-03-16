@@ -43,6 +43,7 @@ static const std::string module_name("notation");
 static const Settings::Key ANCHORLINE_COLOR(module_name, "ui/score/voice4/color");
 
 static const Settings::Key BACKGROUND_COLOR(module_name, "ui/canvas/background/color");
+static const Settings::Key BACKGROUND_WALLPAPER_PATH(module_name, "ui/canvas/background/wallpaper");
 
 //! TODO Understand the conflict between "use color" and "use user color"
 static const Settings::Key FOREGROUND_USE_COLOR(module_name, "ui/canvas/foreground/useColor");
@@ -72,9 +73,13 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(ANCHORLINE_COLOR, Val(QColor("#C31989")));
 
     settings()->setDefaultValue(BACKGROUND_COLOR, Val(QColor("#385f94")));
-    settings()->valueChanged(BACKGROUND_COLOR).onReceive(nullptr, [this](const Val& val) {
-        LOGD() << "BACKGROUND_COLOR changed: " << val.toString();
-        m_backgroundColorChanged.send(val.toQColor());
+    settings()->valueChanged(BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
+        m_backgroundChanged.notify();
+    });
+
+    settings()->setDefaultValue(BACKGROUND_WALLPAPER_PATH, Val());
+    settings()->valueChanged(BACKGROUND_WALLPAPER_PATH).onReceive(nullptr, [this](const Val&) {
+        m_backgroundChanged.notify();
     });
 
     settings()->setDefaultValue(FOREGROUND_COLOR, Val(QColor("#f9f9f9")));
@@ -120,9 +125,24 @@ QColor NotationConfiguration::backgroundColor() const
     return settings()->value(BACKGROUND_COLOR).toQColor();
 }
 
-async::Channel<QColor> NotationConfiguration::backgroundColorChanged() const
+void NotationConfiguration::setBackgroundColor(const QColor& color)
 {
-    return m_backgroundColorChanged;
+    settings()->setValue(BACKGROUND_COLOR, Val(color));
+}
+
+io::path NotationConfiguration::backgroundWallpaperPath() const
+{
+    return settings()->value(BACKGROUND_WALLPAPER_PATH).toString();
+}
+
+void NotationConfiguration::setBackgroundWallpaperPath(const io::path& path)
+{
+    settings()->setValue(BACKGROUND_WALLPAPER_PATH, Val(path.toStdString()));
+}
+
+async::Notification NotationConfiguration::backgroundChanged() const
+{
+    return m_backgroundChanged;
 }
 
 QColor NotationConfiguration::pageColor() const

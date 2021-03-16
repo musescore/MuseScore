@@ -48,7 +48,7 @@ public:
     io::path defaultSavingFilePath(const io::path& fileName) const override;
 
     QColor templatePreviewBackgroundColor() const override;
-    async::Channel<QColor> templatePreviewBackgroundColorChanged() const override;
+    async::Notification templatePreviewBackgroundChanged() const override;
 
     PreferredScoreCreationMode preferredScoreCreationMode() const override;
     void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) override;

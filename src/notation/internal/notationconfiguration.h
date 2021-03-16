@@ -40,7 +40,12 @@ public:
     QColor anchorLineColor() const override;
 
     QColor backgroundColor() const override;
-    async::Channel<QColor> backgroundColorChanged() const override;
+    void setBackgroundColor(const QColor& color) override;
+
+    io::path backgroundWallpaperPath() const override;
+    void setBackgroundWallpaperPath(const io::path& path) override;
+
+    async::Notification backgroundChanged() const override;
 
     QColor pageColor() const override;
     QColor borderColor() const override;
@@ -100,7 +105,7 @@ private:
 
     framework::Settings::Key toolbarSettingsKey(const std::string& toolbarName) const;
 
-    async::Channel<QColor> m_backgroundColorChanged;
+    async::Notification m_backgroundChanged;
     async::Channel<QColor> m_foregroundColorChanged;
     async::Channel<int> m_currentZoomChanged;
     async::Channel<framework::Orientation> m_canvasOrientationChanged;
