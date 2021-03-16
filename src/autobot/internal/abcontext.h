@@ -31,8 +31,9 @@ struct AbContext
         Undefined = 0,
         ScoreFile,
         ViewZoom,
-        CurDrawBuf,
-        RefDrawBuf
+        CurDrawData,
+        RefDrawData,
+        DiffDrawData
     };
 
     Ret ret;

@@ -16,29 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUTOBOT_ABPAINTPROVIDER_H
-#define MU_AUTOBOT_ABPAINTPROVIDER_H
+#ifndef MU_DRAW_DRAWLOGGER_H
+#define MU_DRAW_DRAWLOGGER_H
 
-#include <memory>
-#include "libmscore/draw/bufferedpaintprovider.h"
+#include <stack>
+#include <string>
 
-namespace mu::autobot {
-class AbPaintProvider : public draw::BufferedPaintProvider
+class QPointF;
+
+namespace mu::draw {
+class DrawObjectsLogger
 {
 public:
+    DrawObjectsLogger() = default;
 
-    static const std::shared_ptr<AbPaintProvider>& instance();
-
-    void beginTarget(const std::string& name) override;
-    bool endTarget(bool endDraw = false) override;
-
-    const draw::DrawData& notationViewDrawData() const;
+    void beginObject(const std::string& name, const QPointF& pagePos);
+    void endObject();
 
 private:
-    AbPaintProvider();
 
-    draw::DrawData m_notationViewDrawData;
+    std::stack<std::string> m_objects;
 };
 }
 
-#endif // MU_AUTOBOT_ABPAINTPROVIDER_H
+#endif // MU_DRAW_DRAWLOGGER_H

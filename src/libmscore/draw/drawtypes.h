@@ -95,14 +95,14 @@ struct DrawTiledPixmap {
     QPointF offset;
 };
 
-struct DrawBuffer
+struct DrawData
 {
     struct State {
         QPen pen;
         QBrush brush;
         QFont font;
-        bool isAntialiasing = false;
         QTransform transform;
+        bool isAntialiasing = false;
         CompositionMode compositionMode = CompositionMode::SourceOver;
     };
 
@@ -139,7 +139,7 @@ struct DrawBuffer
             : name(n), pagePos(p)
         {
             //! NOTE Make data with default state
-            datas.push_back(DrawBuffer::Data());
+            datas.push_back(DrawData::Data());
         }
     };
 
@@ -147,6 +147,6 @@ struct DrawBuffer
     std::vector<Object> objects;
 };
 
-using DrawBufferPtr = std::shared_ptr<DrawBuffer>;
+using DrawDataPtr = std::shared_ptr<DrawData>;
 }
 #endif // MU_DRAW_DRAWTYPES_H

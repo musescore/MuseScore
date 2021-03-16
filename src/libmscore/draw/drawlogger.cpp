@@ -16,27 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DRAW_DRAWOBJECTSLOGGER_H
-#define MU_DRAW_DRAWOBJECTSLOGGER_H
+#include "drawlogger.h"
 
-#include <stack>
-#include <string>
+#include "log.h"
 
-class QPointF;
+#include <QPointF>
 
-namespace mu::draw {
-class DrawObjectsLogger
+using namespace mu::draw;
+
+static const std::string DRAW_OBJ_TAG("DRAW_OBJ");
+
+void DrawObjectsLogger::beginObject(const std::string& name, const QPointF& pagePos)
 {
-public:
-    DrawObjectsLogger() = default;
-
-    void beginObject(const std::string& name, const QPointF& pagePos);
-    void endObject();
-
-private:
-
-    std::stack<std::string> m_objects;
-};
+    m_objects.push(name);
+    std::string gap;
+    gap.resize(m_objects.size());
+    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG) << "Begin: " << gap << name << "{" << pagePos.x() << "," << pagePos.y() << "}";
 }
 
-#endif // MU_DRAW_DRAWOBJECTSLOGGER_H
+void DrawObjectsLogger::endObject()
+{
+    IF_ASSERT_FAILED(!m_objects.empty()) {
+        return;
+    }
+
+    std::string gap;
+    gap.resize(m_objects.size());
+    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG) << "End:   " << gap << m_objects.top();
+
+    m_objects.pop();
+}

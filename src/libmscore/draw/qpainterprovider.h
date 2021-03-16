@@ -20,7 +20,7 @@
 #define MU_DRAW_QPAINTERPROVIDER_H
 
 #include "ipaintprovider.h"
-#include "drawobjectslogger.h"
+#include "drawlogger.h"
 
 class QPainter;
 class QImage;
