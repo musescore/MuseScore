@@ -7,6 +7,13 @@ import MuseScore.Preferences 1.0
 Flickable {
     id: root
 
+    contentWidth: width
+    contentHeight: content.height
+
+    clip: true
+    boundsBehavior: Flickable.StopAtBounds
+    interactive: height < contentHeight
+
     ScrollBar.vertical: StyledScrollBar {}
 
     AppearancePreferencesModel {
@@ -17,11 +24,55 @@ Flickable {
         appearanceModel.load()
     }
 
-    ThemesView {
-        anchors.left: parent.left
-        anchors.right: parent.right
+    Column {
+        id: content
 
-        themes: appearanceModel.themes
-        currentThemeIndex: appearanceModel.currentThemeIndex
+        width: parent.width
+        height: childrenRect.height
+
+        spacing: 24
+
+        ThemesView {
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            themes: appearanceModel.themes
+            currentThemeIndex: appearanceModel.currentThemeIndex
+        }
+
+        AccentColorsView {
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            colors: appearanceModel.accentColorSamples()
+            currentColorIndex: appearanceModel.currentAccentColorIndex
+        }
+
+        SeparatorLine {}
+
+        Rectangle {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            color: "red"
+            height: 80
+        }
+
+        SeparatorLine {}
+
+        Rectangle {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            color: "red"
+            height: 80
+        }
+
+        SeparatorLine {}
+
+        Rectangle {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            color: "red"
+            height: 80
+        }
     }
 }
