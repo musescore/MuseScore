@@ -20,7 +20,7 @@
 #ifndef MU_NOTATION_VIEWMODECONTROLMODEL_H
 #define MU_NOTATION_VIEWMODECONTROLMODEL_H
 
-#include <QAbstractListModel>
+#include <QObject>
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
@@ -28,51 +28,36 @@
 #include "async/asyncable.h"
 #include "notation/notationtypes.h"
 
+#include "uicomponents/view/abstractmenumodel.h"
+
 namespace mu::notation {
-class ViewModeControlModel : public QAbstractListModel, public async::Asyncable
+class ViewModeControlModel : public QObject, public uicomponents::AbstractMenuModel, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, context)
 
-    Q_PROPERTY(int currentViewModeId READ currentViewModeId WRITE setCurrentViewModeId NOTIFY currentViewModeIdChanged)
+    Q_PROPERTY(QVariant currentViewMode READ currentViewMode NOTIFY currentViewModeChanged)
+    Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
 
 public:
     explicit ViewModeControlModel(QObject* parent = nullptr);
 
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex& index, int role) const override;
-    QHash<int, QByteArray> roleNames() const override;
-
-    int currentViewModeId() const;
+    QVariant currentViewMode();
 
     Q_INVOKABLE void load();
+    Q_INVOKABLE void selectViewMode(const QString& actionCode);
 
 signals:
-    void currentViewModeIdChanged(int viewModeId);
-
-public slots:
-    void setCurrentViewModeId(int newViewModeId);
+    void currentViewModeChanged();
+    void itemsChanged();
 
 private:
     void updateState();
+    actions::ActionCode viewModeActionCode(ViewMode viewMode) const;
 
-    enum RoleNames {
-        IdRole = Qt::UserRole + 1,
-        NameRole
-    };
-
-    struct ViewModeOption {
-        QString displayString;
-        QString actionString;
-        ViewMode viewMode;
-    };
-
-    int viewModeToId(const ViewMode& viewMode);
-    int m_currentViewModeId = 0;  // default to page view
-
-    QList<ViewModeOption> m_viewModeOptions;
+    uicomponents::MenuItem m_currentViewMode;
 };
 }
 

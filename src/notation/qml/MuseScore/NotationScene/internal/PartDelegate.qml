@@ -158,7 +158,7 @@ ListItemBlank {
     ContextMenu {
         id: contextMenu
 
-        StyledMenuItem {
+        StyledContextMenuItem {
             id: duplicateItem
 
             text: qsTrc("notation", "Duplicate")
@@ -168,7 +168,7 @@ ListItemBlank {
             }
         }
 
-        StyledMenuItem {
+        StyledContextMenuItem {
             id: deleteItem
 
             text: qsTrc("notation", "Delete score")
@@ -178,7 +178,7 @@ ListItemBlank {
             }
         }
 
-        StyledMenuItem {
+        StyledContextMenuItem {
             id: renameItem
 
             text: qsTrc("notation", "Rename")

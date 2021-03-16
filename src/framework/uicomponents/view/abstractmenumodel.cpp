@@ -21,11 +21,6 @@
 using namespace mu::uicomponents;
 using namespace mu::actions;
 
-AbstractMenuModel::AbstractMenuModel(QObject* parent)
-    : QObject(parent)
-{
-}
-
 QVariantList AbstractMenuModel::items() const
 {
     QVariantList menuItems;
@@ -39,7 +34,9 @@ QVariantList AbstractMenuModel::items() const
 
 ActionState AbstractMenuModel::actionState(const ActionCode&) const
 {
-    return ActionState();
+    ActionState state;
+    state.enabled = true;
+    return state;
 }
 
 void AbstractMenuModel::clear()
@@ -131,8 +128,6 @@ void AbstractMenuModel::updateItemsState(const ActionCodeList& actionCodes)
             actionItem.checked = actionState.checked;
         }
     }
-
-    emit itemsChanged();
 }
 
 MenuItem& AbstractMenuModel::item(MenuItemList& items, const ActionCode& actionCode)

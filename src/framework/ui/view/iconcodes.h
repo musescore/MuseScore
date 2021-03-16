@@ -274,6 +274,8 @@ public:
 
         PAGE = 0xF3A5,
 
+        CONTINUOUS_VIEW_VERTICAL = 0xF3AF,
+
         PAN_SCORE = 0xF3B0,
         COUNT_IN = 0xF3B1,
         LOOP_IN = 0xF3C7,

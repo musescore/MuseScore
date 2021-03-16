@@ -36,6 +36,8 @@ PopupView {
     property color fillColor: ui.theme.backgroundPrimaryColor
     readonly property int borderWidth: 1
 
+    property bool animationEnabled: true
+
     closePolicy: PopupView.CloseOnPressOutsideParent
 
     onAboutToShow: {
@@ -49,13 +51,14 @@ PopupView {
     positionDisplacementY: opensUpward ? -height : parent.height
 
     padding: 24
+    property int margins: 12
 
     backgroundItem: Item {
         anchors.fill: parent
-        anchors.topMargin: opensUpward ? 12 : 0
-        anchors.leftMargin: 12
-        anchors.rightMargin: 12
-        anchors.bottomMargin: opensUpward ? 0 : 12
+        anchors.topMargin: opensUpward ? margins : 0
+        anchors.leftMargin: margins
+        anchors.rightMargin: margins
+        anchors.bottomMargin: opensUpward ? 0 : margins
 
         Item {
             id: mainBackground
@@ -98,10 +101,8 @@ PopupView {
                 radius: 3
 
                 anchors {
-                    top: opensUpward ? parent.top : arrow.bottom
-                    topMargin: opensUpward ? 0 : -1
-                    bottom: opensUpward ? arrow.top : parent.bottom
-                    bottomMargin: opensUpward ? -1 : 0
+                    top: opensUpward ? parent.top : (arrow.visible ? arrow.bottom : parent.top)
+                    bottom: opensUpward ? (arrow.visible ? arrow.top : parent.bottom) : parent.bottom
                     left: parent.left
                     right: parent.right
                 }
@@ -154,6 +155,6 @@ PopupView {
     ]
 
     transitions: Transition {
-        NumberAnimation { properties: "scale, opacity"; easing.type: Easing.OutQuint; duration: 140 }
+        NumberAnimation { properties: "scale, opacity"; easing.type: Easing.OutQuint; duration: animationEnabled ? 140 : 0 }
     }
 }

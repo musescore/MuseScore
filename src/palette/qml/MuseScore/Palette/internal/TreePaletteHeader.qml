@@ -141,7 +141,7 @@ Item {
         x: paletteHeaderMenuButton.x + paletteHeaderMenuButton.width
         y: paletteHeaderMenuButton.y + paletteHeaderMenuButton.height
 
-        StyledMenuItem {
+        StyledContextMenuItem {
             text: custom ? qsTrc("palette", "Hide/Delete Palette") : qsTrc("palette", "Hide Palette")
 
             onTriggered: {
@@ -149,7 +149,7 @@ Item {
             }
         }
 
-        StyledMenuItem {
+        StyledContextMenuItem {
             text: qsTrc("palette", "Insert New Palette")
 
             onTriggered: {
@@ -159,7 +159,7 @@ Item {
 
         SeparatorLine {}
 
-        StyledMenuItem {
+        StyledContextMenuItem {
             text: qsTrc("palette", "Enable Editing")
             checkable: true
             checked: paletteHeader.editingEnabled
@@ -171,7 +171,7 @@ Item {
 
         SeparatorLine {}
 
-        StyledMenuItem {
+        StyledContextMenuItem {
             text: qsTrc("palette", "Reset Palette")
 
             onTriggered: {
@@ -179,7 +179,7 @@ Item {
             }
         }
 
-        StyledMenuItem {
+        StyledContextMenuItem {
             text: qsTrc("palette", "Save Palette…")
 
             onTriggered: {
@@ -187,7 +187,7 @@ Item {
             }
         }
 
-        StyledMenuItem {
+        StyledContextMenuItem {
             text: qsTrc("palette", "Load Palette…")
 
             onTriggered: {
@@ -197,7 +197,7 @@ Item {
 
         SeparatorLine {}
 
-        StyledMenuItem {
+        StyledContextMenuItem {
             text: qsTrc("palette", "Palette Properties…")
             enabled: paletteHeader.editingEnabled
 

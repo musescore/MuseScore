@@ -34,7 +34,7 @@
 #include "uicomponents/imenucontrollersregister.h"
 
 namespace mu::appshell {
-class AppMenuModel : public uicomponents::AbstractMenuModel, public async::Asyncable
+class AppMenuModel : public QObject, public uicomponents::AbstractMenuModel, public async::Asyncable
 {
     Q_OBJECT
 
@@ -45,6 +45,8 @@ class AppMenuModel : public uicomponents::AbstractMenuModel, public async::Async
 
     INJECT(appshell, uicomponents::IMenuControllersRegister, menuControllersRegister)
 
+    Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
+
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
 
@@ -52,6 +54,9 @@ public:
     Q_INVOKABLE void handleAction(const QString& actionCodeStr, int actionIndex);
 
     uicomponents::ActionState actionState(const actions::ActionCode& actionCode) const override;
+
+signals:
+    void itemsChanged();
 
 private:
     void setupConnections();
