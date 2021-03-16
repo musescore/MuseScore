@@ -90,12 +90,10 @@ void NotationPaintView::load()
 
 void NotationPaintView::initBackground()
 {
-    setBackgroundColor(configuration()->backgroundColor());
-    m_backgroundWallpaperPath = configuration()->backgroundWallpaperPath();
+    emit backgroundColorChanged(configuration()->backgroundColor());
 
     configuration()->backgroundChanged().onNotify(this, [this]() {
-        setBackgroundColor(configuration()->backgroundColor());
-        m_backgroundWallpaperPath = configuration()->backgroundWallpaperPath();
+        emit backgroundColorChanged(configuration()->backgroundColor());
         update();
     });
 }
@@ -355,17 +353,17 @@ void NotationPaintView::paint(QPainter* qp)
 
 void NotationPaintView::paintBackground(const QRect& rect, mu::draw::Painter* painter)
 {
-    if (m_backgroundWallpaperPath.empty()) {
-        painter->fillRect(rect, m_backgroundColor);
+    if (configuration()->backgroundUseColor()) {
+        painter->fillRect(rect, configuration()->backgroundColor());
     } else {
-        QPixmap pixmap(m_backgroundWallpaperPath.toQString());
+        QPixmap pixmap(configuration()->backgroundWallpaperPath().toQString());
         painter->drawTiledPixmap(rect, pixmap, rect.topLeft() - QPoint(m_matrix.m31(), m_matrix.m32()));
     }
 }
 
 QColor NotationPaintView::backgroundColor() const
 {
-    return m_backgroundColor;
+    return configuration()->backgroundColor();
 }
 
 QRect NotationPaintView::viewport() const
@@ -658,16 +656,6 @@ void NotationPaintView::setNotation(INotationPtr notation)
 void NotationPaintView::setReadonly(bool readonly)
 {
     m_inputController->setReadonly(readonly);
-}
-
-void NotationPaintView::setBackgroundColor(const QColor& color)
-{
-    if (m_backgroundColor == color) {
-        return;
-    }
-
-    m_backgroundColor = color;
-    emit backgroundColorChanged(color);
 }
 
 void NotationPaintView::clear()

@@ -44,13 +44,11 @@ static const Settings::Key ANCHORLINE_COLOR(module_name, "ui/score/voice4/color"
 
 static const Settings::Key BACKGROUND_COLOR(module_name, "ui/canvas/background/color");
 static const Settings::Key BACKGROUND_WALLPAPER_PATH(module_name, "ui/canvas/background/wallpaper");
-
-//! TODO Understand the conflict between "use color" and "use user color"
-static const Settings::Key FOREGROUND_USE_COLOR(module_name, "ui/canvas/foreground/useColor");
-static const Settings::Key FOREGROUND_USE_USER_COLOR(module_name, "ui/canvas/foreground/useColor");
+static const Settings::Key BACKGROUND_USE_COLOR(module_name, "ui/canvas/background/useColor");
 
 static const Settings::Key FOREGROUND_COLOR(module_name, "ui/canvas/foreground/color");
-static const Settings::Key FOREGROUND_WALLPAPER(module_name, "ui/canvas/foreground/wallpaper");
+static const Settings::Key FOREGROUND_WALLPAPER_PATH(module_name, "ui/canvas/foreground/wallpaper");
+static const Settings::Key FOREGROUND_USE_COLOR(module_name, "ui/canvas/foreground/useColor");
 
 static const Settings::Key SELECTION_PROXIMITY(module_name, "ui/canvas/misc/selectionProximity");
 
@@ -72,6 +70,11 @@ void NotationConfiguration::init()
 {
     settings()->setDefaultValue(ANCHORLINE_COLOR, Val(QColor("#C31989")));
 
+    settings()->setDefaultValue(BACKGROUND_USE_COLOR, Val(true));
+    settings()->valueChanged(BACKGROUND_USE_COLOR).onReceive(nullptr, [this](const Val&) {
+        m_backgroundChanged.notify();
+    });
+
     settings()->setDefaultValue(BACKGROUND_COLOR, Val(QColor("#385f94")));
     settings()->valueChanged(BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
         m_backgroundChanged.notify();
@@ -82,16 +85,19 @@ void NotationConfiguration::init()
         m_backgroundChanged.notify();
     });
 
-    settings()->setDefaultValue(FOREGROUND_COLOR, Val(QColor("#f9f9f9")));
-    settings()->valueChanged(FOREGROUND_COLOR).onReceive(nullptr, [this](const Val& val) {
-        LOGD() << "FOREGROUND_COLOR changed: " << val.toString();
-        m_foregroundColorChanged.send(foregroundColor());
+    settings()->setDefaultValue(FOREGROUND_USE_COLOR, Val(true));
+    settings()->valueChanged(FOREGROUND_USE_COLOR).onReceive(nullptr, [this](const Val&) {
+        m_foregroundChanged.notify();
     });
 
-    settings()->setDefaultValue(FOREGROUND_USE_USER_COLOR, Val(true));
-    settings()->valueChanged(FOREGROUND_USE_USER_COLOR).onReceive(nullptr, [this](const Val& val) {
-        LOGD() << "FOREGROUND_USE_USER_COLOR changed: " << val.toString();
-        m_foregroundColorChanged.send(foregroundColor());
+    settings()->setDefaultValue(FOREGROUND_COLOR, Val(QColor("#f9f9f9")));
+    settings()->valueChanged(FOREGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
+        m_foregroundChanged.notify();
+    });
+
+    settings()->setDefaultValue(FOREGROUND_WALLPAPER_PATH, Val());
+    settings()->valueChanged(FOREGROUND_WALLPAPER_PATH).onReceive(nullptr, [this](const Val&) {
+        m_foregroundChanged.notify();
     });
 
     settings()->setDefaultValue(CURRENT_ZOOM, Val(100));
@@ -140,14 +146,58 @@ void NotationConfiguration::setBackgroundWallpaperPath(const io::path& path)
     settings()->setValue(BACKGROUND_WALLPAPER_PATH, Val(path.toStdString()));
 }
 
+bool NotationConfiguration::backgroundUseColor() const
+{
+    return settings()->value(BACKGROUND_USE_COLOR).toBool();
+}
+
+void NotationConfiguration::setBackgroundUseColor(bool value)
+{
+    settings()->setValue(BACKGROUND_USE_COLOR, Val(value));
+}
+
 async::Notification NotationConfiguration::backgroundChanged() const
 {
     return m_backgroundChanged;
 }
 
-QColor NotationConfiguration::pageColor() const
+QColor NotationConfiguration::foregroundColor() const
 {
-    return QColor("#ffffff");
+    if (settings()->value(FOREGROUND_USE_COLOR).toBool()) {
+        return settings()->value(FOREGROUND_COLOR).toQColor();
+    }
+
+    return settings()->defaultValue(FOREGROUND_COLOR).toQColor();
+}
+
+void NotationConfiguration::setForegroundColor(const QColor& color)
+{
+    settings()->setValue(FOREGROUND_COLOR, Val(color));
+}
+
+io::path NotationConfiguration::foregroundWallpaperPath() const
+{
+    return settings()->value(FOREGROUND_WALLPAPER_PATH).toString();
+}
+
+void NotationConfiguration::setForegroundWallpaperPath(const io::path& path)
+{
+    return settings()->setValue(FOREGROUND_WALLPAPER_PATH, Val(path.toStdString()));
+}
+
+bool NotationConfiguration::foregroundUseColor() const
+{
+    return settings()->value(FOREGROUND_USE_COLOR).toBool();
+}
+
+void NotationConfiguration::setForegroundUseColor(bool value)
+{
+    settings()->setValue(FOREGROUND_USE_COLOR, Val(value));
+}
+
+async::Notification NotationConfiguration::foregroundChanged() const
+{
+    return m_foregroundChanged;
 }
 
 QColor NotationConfiguration::borderColor() const
@@ -158,30 +208,6 @@ QColor NotationConfiguration::borderColor() const
 int NotationConfiguration::borderWidth() const
 {
     return 1;
-}
-
-bool NotationConfiguration::foregroundUseColor() const
-{
-    return settings()->value(FOREGROUND_USE_COLOR).toBool();
-}
-
-QColor NotationConfiguration::foregroundColor() const
-{
-    if (settings()->value(FOREGROUND_USE_USER_COLOR).toBool()) {
-        return settings()->value(FOREGROUND_COLOR).toQColor();
-    }
-
-    return settings()->defaultValue(FOREGROUND_COLOR).toQColor();
-}
-
-async::Channel<QColor> NotationConfiguration::foregroundColorChanged() const
-{
-    return m_foregroundColorChanged;
-}
-
-io::path NotationConfiguration::foregroundWallpaper() const
-{
-    return settings()->defaultValue(FOREGROUND_WALLPAPER).toQString();
 }
 
 QColor NotationConfiguration::playbackCursorColor() const

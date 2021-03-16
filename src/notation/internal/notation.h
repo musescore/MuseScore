@@ -79,6 +79,7 @@ private:
 
     void paintPages(mu::draw::Painter* painter, const QRectF& frameRect, const QList<Ms::Page*>& pages, bool paintBorders) const;
     void paintPageBorder(mu::draw::Painter* painter, const Ms::Page* page) const;
+    void paintForeground(mu::draw::Painter* painter, const QRectF& pageRect) const;
 
     QSizeF viewSize() const;
 
