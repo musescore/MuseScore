@@ -20,6 +20,7 @@ Column {
 
         width: parent.width
         height: contentHeight
+        contentHeight: 120
 
         orientation: Qt.Horizontal
         interactive: false
