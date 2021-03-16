@@ -37,7 +37,12 @@ public:
     virtual ~INotationConfiguration() = default;
 
     virtual QColor backgroundColor() const = 0;
-    virtual async::Channel<QColor> backgroundColorChanged() const = 0;
+    virtual void setBackgroundColor(const QColor& color) = 0;
+
+    virtual io::path backgroundWallpaperPath() const = 0;
+    virtual void setBackgroundWallpaperPath(const io::path& path) = 0;
+
+    virtual async::Notification backgroundChanged() const = 0;
 
     virtual QColor pageColor() const = 0;
     virtual QColor borderColor() const = 0;
