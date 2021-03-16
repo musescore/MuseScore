@@ -38,7 +38,9 @@ class UiConfiguration : public IUiConfiguration
 public:
     void init();
 
-    ThemeType currentThemeType() const override;
+    ThemeList themes() const override;
+
+    ThemeInfo currentTheme() const override;
     void setCurrentThemeType(ThemeType type) override;
     async::Notification currentThemeChanged() const override;
 
@@ -64,6 +66,9 @@ public:
     async::Notification pageStateChanged() const override;
 
 private:
+    ThemeType currentThemeType() const;
+    ThemeInfo makeTheme(ThemeType type) const;
+
     QByteArray stringToByteArray(const std::string& string) const;
     std::string byteArrayToString(const QByteArray& byteArray) const;
 

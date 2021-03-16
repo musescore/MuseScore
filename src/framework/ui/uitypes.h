@@ -23,8 +23,48 @@
 #include <QMetaType>
 
 #include "ret.h"
+#include "val.h"
 
 namespace mu::ui {
+enum class ThemeType {
+    DARK_THEME = 0,
+    LIGHT_THEME,
+    HIGH_CONTRAST
+};
+
+enum ThemeStyleKey
+{
+    BACKGROUND_PRIMARY_COLOR = 0,
+    BACKGROUND_SECONDARY_COLOR,
+    POPUP_BACKGROUND_COLOR,
+    TEXT_FIELD_COLOR,
+    ACCENT_COLOR,
+    STROKE_COLOR,
+    BUTTON_COLOR,
+    FONT_PRIMARY_COLOR,
+    FONT_SECONDARY_COLOR,
+    LINK_COLOR,
+
+    ACCENT_OPACITY_NORMAL,
+    ACCENT_OPACITY_HOVER,
+    ACCENT_OPACITY_HIT,
+
+    BUTTON_OPACITY_NORMAL,
+    BUTTON_OPACITY_HOVER,
+    BUTTON_OPACITY_HIT,
+
+    ITEM_OPACITY_DISABLED
+};
+
+struct ThemeInfo
+{
+    ThemeType type;
+    std::string title;
+    std::map<ThemeStyleKey, QVariant> values;
+};
+
+using ThemeList = std::vector<ThemeInfo>;
+
 class ContainerType
 {
     Q_GADGET
