@@ -43,6 +43,8 @@ Rectangle {
 
             iconFont: ui.theme.toolbarIconsFont
 
+            pressAndHoldInterval: 200
+
             width: gridView.cellWidth
             height: gridView.cellWidth
 

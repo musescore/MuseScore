@@ -17,6 +17,7 @@ FocusableItem {
     property bool accentButton: false
 
     property int orientation: Qt.Vertical
+    property alias pressAndHoldInterval: mouseArea.pressAndHoldInterval
 
     signal clicked()
     signal pressAndHold()
@@ -112,7 +113,6 @@ FocusableItem {
         anchors.fill: parent
 
         hoverEnabled: true
-        pressAndHoldInterval: 100
 
         onClicked: {
             root.clicked()
