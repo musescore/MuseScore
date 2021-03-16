@@ -38,10 +38,9 @@ class UiConfiguration : public IUiConfiguration
 public:
     void init();
 
-    ThemeType preferredThemeType() const override;
-    async::Channel<ThemeType> preferredThemeTypeChanged() const override;
-    ThemeType actualThemeType() const override;
-    async::Channel<ThemeType> actualThemeTypeChanged() const override;
+    ThemeType currentThemeType() const override;
+    void setCurrentThemeType(ThemeType type) override;
+    async::Notification currentThemeChanged() const override;
 
     std::string fontFamily() const override;
     int fontSize(FontSizeType type) const override;
@@ -68,9 +67,7 @@ private:
     QByteArray stringToByteArray(const std::string& string) const;
     std::string byteArrayToString(const QByteArray& byteArray) const;
 
-    async::Channel<ThemeType> m_currentPreferredThemeTypeChannel;
-    async::Channel<ThemeType> m_currentActualThemeTypeChannel;
-
+    async::Notification m_currentThemeChanged;
     async::Notification m_fontChanged;
     async::Notification m_musicalFontChanged;
     async::Notification m_iconsFontChanged;

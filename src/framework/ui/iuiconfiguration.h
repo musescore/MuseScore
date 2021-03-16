@@ -21,11 +21,11 @@
 #define IUICONFIGURATION_H
 
 #include <optional>
-#include <QString>
 
 #include "modularity/imoduleexport.h"
-#include "async/channel.h"
 #include "async/notification.h"
+
+class QByteArray;
 
 namespace mu::ui {
 class IUiConfiguration : MODULE_EXPORT_INTERFACE
@@ -38,13 +38,12 @@ public:
     enum class ThemeType {
         DARK_THEME = 0,
         LIGHT_THEME,
-        FOLLOW_SYSTEM_THEME
+        HIGH_CONTRAST
     };
 
-    virtual ThemeType preferredThemeType() const = 0;
-    virtual async::Channel<ThemeType> preferredThemeTypeChanged() const = 0;
-    virtual ThemeType actualThemeType() const = 0;
-    virtual async::Channel<ThemeType> actualThemeTypeChanged() const = 0;
+    virtual ThemeType currentThemeType() const = 0;
+    virtual void setCurrentThemeType(ThemeType type) = 0;
+    virtual async::Notification currentThemeChanged() const = 0;
 
     enum class FontSizeType {
         BODY,
