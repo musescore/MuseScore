@@ -1,4 +1,4 @@
-import QtQuick 2.8
+import QtQuick 2.15
 import MuseScore.UiComponents 1.0
 
 FocusableItem {
@@ -19,6 +19,7 @@ FocusableItem {
     property int orientation: Qt.Vertical
 
     signal clicked()
+    signal pressAndHold()
 
     QtObject {
         id: privateProperties
@@ -111,9 +112,14 @@ FocusableItem {
         anchors.fill: parent
 
         hoverEnabled: true
+        pressAndHoldInterval: 100
 
-        onReleased: {
+        onClicked: {
             root.clicked()
+        }
+
+        onPressAndHold: {
+            root.pressAndHold()
         }
 
         onContainsMouseChanged: {

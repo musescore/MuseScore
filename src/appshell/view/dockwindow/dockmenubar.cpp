@@ -86,8 +86,6 @@ QMenu* DockMenuBar::makeMenu(const QVariantMap& menuItem) const
     menu->setTitle(menuItem.value("title").toString());
     menu->setEnabled(menuItem.value("enabled").toBool());
 
-    QString menuCode = menuItem.value("code").toString();
-
     QActionGroup* group = new QActionGroup(view());
 
     for (const QVariant& menuObj: menuItem.value("subitems").toList()) {
@@ -97,7 +95,7 @@ QMenu* DockMenuBar::makeMenu(const QVariantMap& menuItem) const
         } else if (!menuMap.value("subitems").toList().empty()) {
             menu->addMenu(makeMenu(menuMap));
         } else {
-            bool isFromGroup = menuCode == menuMap.value("code").toString();
+            bool isFromGroup = menuMap.value("selectable").toBool();
             menu->addAction(makeAction(menuMap, isFromGroup ? group : nullptr));
         }
     }
@@ -128,6 +126,11 @@ QAction* DockMenuBar::makeAction(const QVariantMap& menuItem, QActionGroup* grou
     if (menuItem.value("checkable").toBool()) {
         action->setCheckable(true);
         action->setChecked(menuItem.value("checked").toBool());
+    }
+
+    if (menuItem.value("selectable").toBool()) {
+        action->setCheckable(true);
+        action->setChecked(menuItem.value("selected").toBool());
     }
 
     return action;

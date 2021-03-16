@@ -58,7 +58,7 @@ Column {
 
             y: menuButton.y + menuButton.height
 
-            StyledMenuItem {
+            StyledContextMenuItem {
                 id: resetToDefaultItem
 
                 text: root.isStyled ? qsTrc("inspector", "Reset to style default") : qsTrc("inspector", "Reset to default")
@@ -72,7 +72,7 @@ Column {
                 }
             }
 
-            StyledMenuItem {
+            StyledContextMenuItem {
                 id: applyToStyleItem
 
                 text: qsTrc("inspector", "Set as style")

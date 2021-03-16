@@ -31,9 +31,11 @@
 #include "shortcuts/ishortcutsregister.h"
 
 #include "uicomponents/uicomponentstypes.h"
+#include "uicomponents/imenucontrollersregister.h"
+#include "uicomponents/view/abstractmenumodel.h"
 
 namespace mu::notation {
-class NoteInputBarModel : public QAbstractListModel, public async::Asyncable
+class NoteInputBarModel : public QAbstractListModel, public uicomponents::AbstractMenuModel, public async::Asyncable
 {
     Q_OBJECT
 
@@ -43,6 +45,7 @@ class NoteInputBarModel : public QAbstractListModel, public async::Asyncable
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, workspace::IWorkspaceManager, workspaceManager)
     INJECT(notation, shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(notation, uicomponents::IMenuControllersRegister, menuControllersRegister)
 
     Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 
@@ -53,8 +56,10 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int,QByteArray> roleNames() const override;
 
+    uicomponents::ActionState actionState(const actions::ActionCode& actionCode) const override;
+
     Q_INVOKABLE void load();
-    Q_INVOKABLE void handleAction(const QString& action);
+    Q_INVOKABLE void handleAction(const QString& action, int actionIndex = -1);
 
     Q_INVOKABLE QVariantMap get(int index);
 
@@ -67,7 +72,9 @@ private:
         IconRole,
         SectionRole,
         CheckedRole,
-        HintRole
+        HintRole,
+        SubitemsRole,
+        ShowSubitemsByPressAndHoldRole
     };
 
     INotationPtr notation() const;
@@ -75,6 +82,7 @@ private:
     void onNotationChanged();
 
     void toggleNoteInput();
+    void toggleNoteInputMethod(const actions::ActionCode& actionCode);
 
     void updateState();
     void updateNoteInputState();
@@ -93,8 +101,26 @@ private:
 
     actions::ActionItem currentNoteInputModeAction() const;
 
+    int itemIndex(const actions::ActionCode& actionCode) const;
+
     uicomponents::MenuItem makeActionItem(const actions::ActionItem& action, const std::string& section);
     uicomponents::MenuItem makeAddItem(const std::string& section);
+
+    QVariantList subitems(const actions::ActionCode& actionCode) const;
+    uicomponents::MenuItemList noteInputMethodItems() const;
+    uicomponents::MenuItemList tupletItems() const;
+    uicomponents::MenuItemList addItems() const;
+    uicomponents::MenuItemList notesItems() const;
+    uicomponents::MenuItemList intervalsItems() const;
+    uicomponents::MenuItemList measuresItems() const;
+    uicomponents::MenuItemList framesItems() const;
+    uicomponents::MenuItemList textItems() const;
+    uicomponents::MenuItemList linesItems() const;
+
+    bool isNeedShowSubitemsByPressAndHold(const actions::ActionCode& actionCode) const;
+
+    void notifyAboutTupletItemChanged();
+    void notifyAboutAddItemChanged();
 
     std::vector<std::string> currentWorkspaceActions() const;
 

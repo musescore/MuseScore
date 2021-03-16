@@ -252,15 +252,18 @@ const ActionList NotationActions::m_actions = {
                ),
     ActionItem("view-mode-page",
                ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Page View")
+               QT_TRANSLATE_NOOP("action", "Page View"),
+               IconCode::Code::PAGE_VIEW
                ),
     ActionItem("view-mode-continuous",
                ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Continuous View")
+               QT_TRANSLATE_NOOP("action", "Continuous View (horizontal)"),
+               IconCode::Code::CONTINUOUS_VIEW
                ),
     ActionItem("view-mode-single",
                ShortcutContext::NotationActive,
-               QT_TRANSLATE_NOOP("action", "Single Page")
+               QT_TRANSLATE_NOOP("action", "Continuous View (vertical)"),
+               IconCode::Code::CONTINUOUS_VIEW_VERTICAL
                ),
     ActionItem("find",
                ShortcutContext::NotationActive,

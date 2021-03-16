@@ -40,7 +40,7 @@ void NotationActionController::init()
     //! NOTE For historical reasons, the name of the action does not match what needs to be done
     dispatcher()->reg(this, ESCAPE_ACTION_CODE, this, &NotationActionController::resetState);
 
-    dispatcher()->reg(this, "note-input", [this]() { toggleNoteInputMethod(NoteInputMethod::STEPTIME); });
+    dispatcher()->reg(this, "note-input", [this]() { toggleNoteInput(); });
     dispatcher()->reg(this, "note-input-rhythm", [this]() { toggleNoteInputMethod(NoteInputMethod::RHYTHM); });
     dispatcher()->reg(this, "note-input-repitch", [this]() { toggleNoteInputMethod(NoteInputMethod::REPITCH); });
     dispatcher()->reg(this, "note-input-realtime-auto", [this]() { toggleNoteInputMethod(NoteInputMethod::REALTIME_AUTO); });
@@ -375,6 +375,20 @@ INotationUndoStackPtr NotationActionController::currentNotationUndoStack() const
     }
 
     return notation->undoStack();
+}
+
+void NotationActionController::toggleNoteInput()
+{
+    auto noteInput = currentNotationNoteInput();
+    if (!noteInput) {
+        return;
+    }
+
+    if (noteInput->isNoteInputMode()) {
+        noteInput->endNoteInput();
+    } else {
+        noteInput->startNoteInput();
+    }
 }
 
 void NotationActionController::resetState()
