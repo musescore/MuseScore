@@ -25,6 +25,8 @@
 #include "modularity/imoduleexport.h"
 #include "async/notification.h"
 
+#include "uitypes.h"
+
 class QByteArray;
 
 namespace mu::ui {
@@ -35,13 +37,9 @@ class IUiConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUiConfiguration() = default;
 
-    enum class ThemeType {
-        DARK_THEME = 0,
-        LIGHT_THEME,
-        HIGH_CONTRAST
-    };
+    virtual ThemeList themes() const = 0;
 
-    virtual ThemeType currentThemeType() const = 0;
+    virtual ThemeInfo currentTheme() const = 0;
     virtual void setCurrentThemeType(ThemeType type) = 0;
     virtual async::Notification currentThemeChanged() const = 0;
 

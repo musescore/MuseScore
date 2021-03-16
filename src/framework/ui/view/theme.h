@@ -119,7 +119,8 @@ signals:
     void dataChanged();
 
 private:
-    QHash<int, QVariant> currentThemeProperties() const;
+    QColor colorByKey(ThemeStyleKey key) const;
+    qreal realByKey(ThemeStyleKey key) const;
 
     void initUiFonts();
     void initIconsFont();
@@ -133,6 +134,7 @@ private:
 
     void notifyAboutThemeChanged();
 
+    mutable ThemeInfo m_currentTheme;
     QFont m_bodyFont;
     QFont m_bodyBoldFont;
     QFont m_largeBodyFont;
