@@ -45,16 +45,24 @@ public:
     io::path backgroundWallpaperPath() const override;
     void setBackgroundWallpaperPath(const io::path& path) override;
 
+    bool backgroundUseColor() const override;
+    void setBackgroundUseColor(bool value) override;
+
     async::Notification backgroundChanged() const override;
 
-    QColor pageColor() const override;
-    QColor borderColor() const override;
-    int borderWidth() const override;
+    QColor foregroundColor() const override;
+    void setForegroundColor(const QColor& color) override;
+
+    io::path foregroundWallpaperPath() const override;
+    void setForegroundWallpaperPath(const io::path& path) override;
 
     bool foregroundUseColor() const override;
-    QColor foregroundColor() const override;
-    async::Channel<QColor> foregroundColorChanged() const override;
-    io::path foregroundWallpaper() const override;
+    void setForegroundUseColor(bool value) override;
+
+    async::Notification foregroundChanged() const override;
+
+    QColor borderColor() const override;
+    int borderWidth() const override;
 
     QColor playbackCursorColor() const override;
     QColor loopMarkerColor() const override;
@@ -106,7 +114,7 @@ private:
     framework::Settings::Key toolbarSettingsKey(const std::string& toolbarName) const;
 
     async::Notification m_backgroundChanged;
-    async::Channel<QColor> m_foregroundColorChanged;
+    async::Notification m_foregroundChanged;
     async::Channel<int> m_currentZoomChanged;
     async::Channel<framework::Orientation> m_canvasOrientationChanged;
 };
