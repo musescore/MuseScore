@@ -106,6 +106,17 @@ inline double RealRound(float value, int prec)
 {
     return RealRound(static_cast<double>(value), prec);
 }
+
+inline double RealFloor(double value, int prec)
+{
+    int round = _pow10(prec);
+    return std::floor(value * round) / round;
+}
+
+inline double RealFloor(float value, int prec)
+{
+    return RealRound(static_cast<double>(value), prec);
+}
 }
 
 #endif // MU_FRAMEWORK_REALFN_H
