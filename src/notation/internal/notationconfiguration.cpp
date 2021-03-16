@@ -31,6 +31,7 @@ using namespace mu;
 using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::async;
+using namespace mu::ui;
 
 // Global variable
 namespace Ms {
@@ -265,7 +266,7 @@ std::string NotationConfiguration::fontFamily() const
 
 int NotationConfiguration::fontSize() const
 {
-    return uiConfiguration()->fontSize(ui::IUiConfiguration::FontSizeType::BODY);
+    return uiConfiguration()->fontSize(FontSizeType::BODY);
 }
 
 io::path NotationConfiguration::stylesDirPath() const

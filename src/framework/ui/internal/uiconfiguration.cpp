@@ -6,6 +6,7 @@
 
 #include <QMainWindow>
 #include <QScreen>
+#include <QFontDatabase>
 
 using namespace mu::ui;
 using namespace mu::framework;
@@ -136,6 +137,12 @@ void UiConfiguration::init()
     });
 }
 
+QStringList UiConfiguration::possibleFontFamilies() const
+{
+    QFontDatabase db;
+    return db.families();
+}
+
 ThemeList UiConfiguration::themes() const
 {
     static const std::vector<ThemeType> allTypes {
@@ -215,6 +222,11 @@ std::string UiConfiguration::fontFamily() const
     return settings()->value(UI_FONT_FAMILY_KEY).toString();
 }
 
+void UiConfiguration::setFontFamily(const std::string& family)
+{
+    settings()->setValue(UI_FONT_FAMILY_KEY, Val(family));
+}
+
 int UiConfiguration::fontSize(FontSizeType type) const
 {
     int bodyFontSize = settings()->value(UI_FONT_SIZE_KEY).toInt();
@@ -236,6 +248,11 @@ int UiConfiguration::fontSize(FontSizeType type) const
     }
 
     return bodyFontSize;
+}
+
+void UiConfiguration::setBodyFontSize(int size)
+{
+    settings()->setValue(UI_FONT_SIZE_KEY, Val(size));
 }
 
 Notification UiConfiguration::fontChanged() const

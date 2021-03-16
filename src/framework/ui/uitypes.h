@@ -56,6 +56,31 @@ enum ThemeStyleKey
     ITEM_OPACITY_DISABLED
 };
 
+inline QString themeStyleKeyToString(ThemeStyleKey key)
+{
+    switch (key) {
+    case BACKGROUND_PRIMARY_COLOR: return "backgroundPrimaryColor";
+    case BACKGROUND_SECONDARY_COLOR: return "backgroundSecondaryColor";
+    case POPUP_BACKGROUND_COLOR: return "popupBackgroundColor";
+    case TEXT_FIELD_COLOR: return "textFieldColor";
+    case ACCENT_COLOR: return "accentColor";
+    case STROKE_COLOR: return "strokeColor";
+    case BUTTON_COLOR: return "buttonColor";
+    case FONT_PRIMARY_COLOR: return "fontPrimaryColor";
+    case FONT_SECONDARY_COLOR: return "fontSecondaryColor";
+    case LINK_COLOR: return "linkColor";
+    case ACCENT_OPACITY_NORMAL: return "accentOpacityNormal";
+    case ACCENT_OPACITY_HOVER: return "accentOpacityHover";
+    case ACCENT_OPACITY_HIT: return "accentOpacityHit";
+    case BUTTON_OPACITY_NORMAL: return "buttonOpacityNormal";
+    case BUTTON_OPACITY_HOVER: return "buttonOpacityHover";
+    case BUTTON_OPACITY_HIT: return "buttonOpacityHit";
+    case ITEM_OPACITY_DISABLED: return "itemOpacityDisabled";
+    }
+
+    return QString();
+}
+
 struct ThemeInfo
 {
     ThemeType type;
@@ -64,6 +89,20 @@ struct ThemeInfo
 };
 
 using ThemeList = std::vector<ThemeInfo>;
+
+enum class FontSizeType {
+    BODY,
+    BODY_LARGE,
+    TAB,
+    HEADER,
+    TITLE
+};
+
+enum class IconSizeType {
+    Regular,
+    Toolbar
+};
+
 
 class ContainerType
 {

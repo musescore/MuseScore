@@ -27,8 +27,6 @@ using namespace mu::ui;
 
 static const QString SEMIBOLD_STYLE_NAME("SemiBold");
 
-using FontSizeType = IUiConfiguration::FontSizeType;
-
 struct FontConfig
 {
     QFont::Weight weight = QFont::Normal;
@@ -287,10 +285,10 @@ void Theme::setupIconsFont()
     QString family = QString::fromStdString(configuration()->iconsFontFamily());
 
     m_iconsFont.setFamily(family);
-    m_iconsFont.setPixelSize(configuration()->iconsFontSize(IUiConfiguration::IconSizeType::Regular));
+    m_iconsFont.setPixelSize(configuration()->iconsFontSize(IconSizeType::Regular));
 
     m_toolbarIconsFont.setFamily(family);
-    m_toolbarIconsFont.setPixelSize(configuration()->iconsFontSize(IUiConfiguration::IconSizeType::Toolbar));
+    m_toolbarIconsFont.setPixelSize(configuration()->iconsFontSize(IconSizeType::Toolbar));
 }
 
 void Theme::setupMusicFont()
