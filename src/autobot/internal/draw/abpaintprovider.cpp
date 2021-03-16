@@ -48,7 +48,7 @@ bool AbPaintProvider::endTarget(bool endDraw)
     return ok;
 }
 
-QByteArray AbPaintProvider::serialize() const
+const mu::draw::DrawBuffer& AbPaintProvider::notationViewBuffer() const
 {
-    return draw::DrawBufferJson::toJson(m_notationViewDrawBuf);
+    return m_notationViewDrawBuf;
 }

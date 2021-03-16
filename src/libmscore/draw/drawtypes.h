@@ -19,6 +19,7 @@
 #ifndef MU_DRAW_DRAWTYPES_H
 #define MU_DRAW_DRAWTYPES_H
 
+#include <memory>
 #include <QPainterPath>
 #include <QBrush>
 #include <QPen>
@@ -133,6 +134,7 @@ struct DrawBuffer
         QPointF pagePos;
         std::vector<Data> datas;
 
+        Object() = default;
         Object(const std::string& n, const QPointF& p)
             : name(n), pagePos(p)
         {
@@ -144,5 +146,7 @@ struct DrawBuffer
     std::string name;
     std::vector<Object> objects;
 };
+
+using DrawBufferPtr = std::shared_ptr<DrawBuffer>;
 }
 #endif // MU_DRAW_DRAWTYPES_H
