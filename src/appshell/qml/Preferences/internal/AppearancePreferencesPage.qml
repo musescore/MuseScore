@@ -39,6 +39,10 @@ Flickable {
 
             themes: appearanceModel.themes
             currentThemeIndex: appearanceModel.currentThemeIndex
+
+            onThemeChangeRequested: {
+                appearanceModel.currentThemeIndex = newThemeIndex
+            }
         }
 
         AccentColorsView {
