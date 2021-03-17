@@ -4,15 +4,21 @@ import QtQuick.Controls 2.15
 import MuseScore.UiComponents 1.0
 
 Row {
+    id: root
+
     property alias colors: view.model
     property alias currentColorIndex: view.currentIndex
 
-    height: 36
+    property int firstColumnWidth: 0
 
-    spacing: 142
+    height: 36
+    spacing: 0
 
     StyledTextLabel {
+        width: root.firstColumnWidth
+
         anchors.verticalCenter: parent.verticalCenter
+        horizontalAlignment: Qt.AlignLeft
 
         text: qsTrc("preferences", "Accent colour:")
     }

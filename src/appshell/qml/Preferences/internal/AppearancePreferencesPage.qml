@@ -32,6 +32,8 @@ Flickable {
 
         spacing: 24
 
+        readonly property int firstColumnWidth: 212
+
         ThemesView {
             width: parent.width
 
@@ -44,6 +46,7 @@ Flickable {
 
             colors: appearanceModel.accentColorSamples()
             currentColorIndex: appearanceModel.currentAccentColorIndex
+            firstColumnWidth: parent.firstColumnWidth
         }
 
         SeparatorLine {}
@@ -54,24 +57,39 @@ Flickable {
             allFonts: appearanceModel.allFonts()
             currentFontIndex: appearanceModel.currentFontIndex
             bodyTextSize: appearanceModel.bodyTextSize
+            firstColumnWidth: parent.firstColumnWidth
         }
 
         SeparatorLine {}
 
-        Rectangle {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            color: "red"
-            height: 80
+        ColorAndWallpaperView {
+            width: parent.width
+
+            title: qsTrc("preferences", "Background")
+            color: appearanceModel.backgroundColor
+            wallpaperPath: appearanceModel.backgroundWallpaperPath
+            firstColumnWidth: parent.firstColumnWidth
         }
 
         SeparatorLine {}
 
-        Rectangle {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            color: "red"
-            height: 80
+        ColorAndWallpaperView {
+            width: parent.width
+
+            title: qsTrc("preferences", "Paper")
+            color: appearanceModel.foregroundColor
+            wallpaperPath: appearanceModel.foregroundWallpaperPath
+            firstColumnWidth: parent.firstColumnWidth
+        }
+
+        CheckBox {
+            text: qsTrc("preferences", "Use the same colour in palettes")
+
+            checked: appearanceModel.useSameColorInPalettes
+
+            onClicked: {
+                appearanceModel.useSameColorInPalettes = !checked
+            }
         }
     }
 }
