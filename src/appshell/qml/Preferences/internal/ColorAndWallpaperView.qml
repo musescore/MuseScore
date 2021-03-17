@@ -13,6 +13,10 @@ Column {
     property bool useColor: true
     property int firstColumnWidth: 0
 
+    signal useColorChangeRequested(var newValue)
+    signal colorChangeRequested(var newColor)
+    signal wallpaperPathChangeRequested(var newWallpaperPath)
+
     spacing: 18
 
     StyledTextLabel {
@@ -36,6 +40,10 @@ Column {
 
             checked: root.useColor
 
+            onClicked: {
+                root.useColorChangeRequested(true)
+            }
+
             StyledTextLabel {
                 horizontalAlignment: Qt.AlignLeft
                 text: qsTrc("preferences", "Colour:")
@@ -46,6 +54,12 @@ Column {
             id: colorPicker
 
             width: 112
+
+            enabled: root.useColor
+
+            onNewColorSelected: {
+                root.colorChangeRequested(newColor)
+            }
         }
 
         RoundedRadioButton {
@@ -55,6 +69,10 @@ Column {
             spacing: 6
 
             checked: !root.useColor
+
+            onClicked: {
+                root.useColorChangeRequested(false)
+            }
 
             StyledTextLabel {
                 horizontalAlignment: Qt.AlignLeft
@@ -66,6 +84,12 @@ Column {
             id: wallpaperPicker
 
             width: 208
+
+            enabled: !root.useColor
+
+            onPathEdited: {
+                root.wallpaperPathChangeRequested(newPath)
+            }
         }
     }
 }

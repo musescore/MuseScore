@@ -1,5 +1,6 @@
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Dialogs 1.2
+
 import MuseScore.Ui 1.0
 
 Rectangle {
@@ -11,6 +12,9 @@ Rectangle {
 
     height: 26
     width: parent.width
+
+    opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
+
     radius: 2
     color: "#000000"
 

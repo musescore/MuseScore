@@ -41,8 +41,11 @@ class AppearancePreferencesModel : public QObject
     Q_PROPERTY(int currentFontIndex READ currentFontIndex WRITE setCurrentFontIndex NOTIFY currentFontIndexChanged)
     Q_PROPERTY(int bodyTextSize READ bodyTextSize WRITE setBodyTextSize NOTIFY bodyTextSizeChanged)
 
+    Q_PROPERTY(bool backgroundUseColor READ backgroundUseColor WRITE setBackgroundUseColor NOTIFY backgroundUseColorChanged)
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(QString backgroundWallpaperPath READ backgroundWallpaperPath WRITE setBackgroundWallpaperPath NOTIFY backgroundWallpaperPathChanged)
+
+    Q_PROPERTY(bool foregroundUseColor READ foregroundUseColor WRITE setForegroundUseColor NOTIFY foregroundUseColorChanged)
     Q_PROPERTY(QColor foregroundColor READ foregroundColor WRITE setForegroundColor NOTIFY foregroundColorChanged)
     Q_PROPERTY(QString foregroundWallpaperPath READ foregroundWallpaperPath WRITE setForegroundWallpaperPath NOTIFY foregroundWallpaperPathChanged)
 
@@ -59,9 +62,11 @@ public:
     int currentFontIndex() const;
     int bodyTextSize() const;
 
+    bool backgroundUseColor() const;
     QColor backgroundColor() const;
     QString backgroundWallpaperPath() const;
 
+    bool foregroundUseColor() const;
     QColor foregroundColor() const;
     QString foregroundWallpaperPath() const;
 
@@ -76,8 +81,10 @@ public slots:
     void setCurrentAccentColorIndex(int index);
     void setCurrentFontIndex(int index);
     void setBodyTextSize(int size);
+    void setBackgroundUseColor(bool value);
     void setBackgroundColor(const QColor& color);
     void setBackgroundWallpaperPath(const QString& path);
+    void setForegroundUseColor(bool value);
     void setForegroundColor(const QColor& color);
     void setForegroundWallpaperPath(const QString& path);
     void setUseSameColorInPalettes(bool value);
@@ -86,8 +93,10 @@ signals:
     void themesChanged();
     void currentFontIndexChanged(int index);
     void bodyTextSizeChanged(int size);
+    void backgroundUseColorChanged(bool value);
     void backgroundColorChanged(const QColor& color);
     void backgroundWallpaperPathChanged(const QString& path);
+    void foregroundUseColorChanged(bool value);
     void foregroundColorChanged(const QColor& color);
     void foregroundWallpaperPathChanged(const QString& path);
     void useSameColorInPalettesChanged(bool value);
