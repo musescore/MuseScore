@@ -24,15 +24,19 @@ using namespace mu::uicomponents;
 
 void EditMenuController::init()
 {
-    controller()->actionsAvailableChanged().onReceive(this, [this](const ActionCodeList& actionCodes) {
+    notationController()->actionsAvailableChanged().onReceive(this, [this](const ActionCodeList& actionCodes) {
+        m_actionsReceiveAvailableChanged.send(actionCodes);
+    });
+
+    applicationController()->actionsAvailableChanged().onReceive(this, [this](const ActionCodeList& actionCodes) {
         m_actionsReceiveAvailableChanged.send(actionCodes);
     });
 }
 
 bool EditMenuController::contains(const ActionCode& actionCode) const
 {
-    ActionCodeList actions = this->actions();
-    return std::find(actions.begin(), actions.end(), actionCode) != actions.end();
+    return notationControllerContains(actionCode)
+           || applicationControllerContains(actionCode);
 }
 
 ActionState EditMenuController::actionState(const ActionCode& actionCode) const
@@ -48,7 +52,7 @@ mu::async::Channel<ActionCodeList> EditMenuController::actionsAvailableChanged()
     return m_actionsReceiveAvailableChanged;
 }
 
-ActionCodeList EditMenuController::actions() const
+ActionCodeList EditMenuController::notationControllerActions() const
 {
     static ActionCodeList actions = {
         "undo",
@@ -62,14 +66,42 @@ ActionCodeList EditMenuController::actions() const
         "delete",
         "select-all",
         "select-section",
-        "find",
+        "find"
+    };
+
+    return actions;
+}
+
+ActionCodeList EditMenuController::applicationControllerActions() const
+{
+    static ActionCodeList actions = {
         "preference-dialog"
     };
 
     return actions;
 }
 
+bool EditMenuController::notationControllerContains(const ActionCode& actionCode) const
+{
+    ActionCodeList notationActions = notationControllerActions();
+    return std::find(notationActions.begin(), notationActions.end(), actionCode) != notationActions.end();
+}
+
+bool EditMenuController::applicationControllerContains(const ActionCode& actionCode) const
+{
+    ActionCodeList applicationActions = applicationControllerActions();
+    return std::find(applicationActions.begin(), applicationActions.end(), actionCode) != applicationActions.end();
+}
+
 bool EditMenuController::actionEnabled(const ActionCode& actionCode) const
 {
-    return controller()->actionAvailable(actionCode);
+    if (notationControllerContains(actionCode)) {
+        return notationController()->actionAvailable(actionCode);
+    }
+
+    if (applicationControllerContains(actionCode)) {
+        return applicationController()->actionAvailable(actionCode);
+    }
+
+    return false;
 }
