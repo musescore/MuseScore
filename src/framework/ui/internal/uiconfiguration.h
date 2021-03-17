@@ -43,6 +43,7 @@ public:
 
     ThemeInfo currentTheme() const override;
     void setCurrentThemeType(ThemeType type) override;
+    void setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val) override;
     async::Notification currentThemeChanged() const override;
 
     std::string fontFamily() const override;

@@ -42,6 +42,7 @@ public:
 
     virtual ThemeInfo currentTheme() const = 0;
     virtual void setCurrentThemeType(ThemeType type) = 0;
+    virtual void setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val) = 0;
     virtual async::Notification currentThemeChanged() const = 0;
 
     virtual std::string fontFamily() const = 0;

@@ -25,9 +25,10 @@
 #include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "palette/ipaletteconfiguration.h"
+#include "async/asyncable.h"
 
 namespace mu::appshell {
-class AppearancePreferencesModel : public QObject
+class AppearancePreferencesModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
