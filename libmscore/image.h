@@ -46,6 +46,7 @@ class Image final : public BSymbol {
       bool _autoScale;              ///< fill parent frame
       bool _sizeIsSpatium;
       mutable bool _dirty;
+      bool _used;
 
       bool isEditable() const override { return true; }
       void startEditDrag(EditData&) override;
@@ -75,6 +76,8 @@ class Image final : public BSymbol {
       ImageStoreItem* storeItem() const  { return _storeItem;     }
       bool sizeIsSpatium() const         { return _sizeIsSpatium; }
       void setSizeIsSpatium(bool val)    { _sizeIsSpatium = val;  }
+      bool isUsed() const                { return _used;          }
+      void setUsed(bool val)             { _used = val;           }
 
       QVariant getProperty(Pid ) const override;
       bool setProperty(Pid propertyId, const QVariant&) override;

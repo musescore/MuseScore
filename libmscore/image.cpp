@@ -43,6 +43,7 @@ Image::Image(Score* s)
       _autoScale       = defaultAutoScale;
       _sizeIsSpatium   = defaultSizeIsSpatium;
       _linkIsValid     = false;
+      _used            = false;
       }
 
 Image::Image(const Image& img)
@@ -60,6 +61,7 @@ Image::Image(const Image& img)
             _storeItem->reference(this);
       _linkPath        = img._linkPath;
       _linkIsValid     = img._linkIsValid;
+      _used            = false;
       if (imageType == ImageType::RASTER)
             rasterDoc = img.rasterDoc ? new QImage(*img.rasterDoc) : 0;
       else if (imageType == ImageType::SVG)
