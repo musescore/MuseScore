@@ -151,8 +151,7 @@ QString AppearancePreferencesModel::foregroundWallpaperPath() const
 
 bool AppearancePreferencesModel::useSameColorInPalettes() const
 {
-    NOT_IMPLEMENTED;
-    return false;
+    return paletteConfiguration()->useNotationForegroundColor();
 }
 
 void AppearancePreferencesModel::setCurrentThemeIndex(int index)
@@ -259,6 +258,10 @@ void AppearancePreferencesModel::setForegroundWallpaperPath(const QString& path)
 
 void AppearancePreferencesModel::setUseSameColorInPalettes(bool value)
 {
-    NOT_IMPLEMENTED;
-    UNUSED(value);
+    if (value == useSameColorInPalettes()) {
+        return;
+    }
+
+    paletteConfiguration()->setUseNotationForegroundColor(value);
+    emit useSameColorInPalettesChanged(value);
 }

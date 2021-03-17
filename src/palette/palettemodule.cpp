@@ -53,6 +53,7 @@ using namespace mu::ui;
 
 static std::shared_ptr<MU4PaletteAdapter> s_adapter = std::make_shared<MU4PaletteAdapter>();
 static std::shared_ptr<PaletteActionsController> s_actionsController = std::make_shared<PaletteActionsController>();
+static std::shared_ptr<PaletteConfiguration> s_configuration = std::make_shared<PaletteConfiguration>();
 
 static void palette_init_qrc()
 {
@@ -67,7 +68,7 @@ std::string PaletteModule::moduleName() const
 void PaletteModule::registerExports()
 {
     ioc()->registerExport<IPaletteAdapter>(moduleName(), s_adapter);
-    ioc()->registerExport<IPaletteConfiguration>(moduleName(), std::make_shared<PaletteConfiguration>());
+    ioc()->registerExport<IPaletteConfiguration>(moduleName(), s_configuration);
     ioc()->registerExport<IPaletteActionsController>(moduleName(), s_actionsController);
 }
 
@@ -128,5 +129,6 @@ void PaletteModule::onInit(const IApplication::RunMode& mode)
     PaletteWorkspaceSetup w;
     w.setup();
 
+    s_configuration->init();
     s_actionsController->init();
 }
