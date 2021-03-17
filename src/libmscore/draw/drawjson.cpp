@@ -91,21 +91,18 @@ static QJsonArray toArr(const QTransform& t)
 {
     return QJsonArray({ rtoi(t.m11()), rtoi(t.m12()), rtoi(t.m13()),
                         rtoi(t.m21()), rtoi(t.m22()), rtoi(t.m23()),
-                        rtoi(t.m31()), rtoi(t.m32()), rtoi(t.m33()),
-                        rtoi(t.dx()), rtoi(t.dy()) });
+                        rtoi(t.m31()), rtoi(t.m32()), rtoi(t.m33()) });
 }
 
 static void fromArr(const QJsonArray& arr, QTransform& t)
 {
-    IF_ASSERT_FAILED(arr.size() == 11) {
+    IF_ASSERT_FAILED(arr.size() == 9) {
         return;
     }
 
     t.setMatrix(itor(arr.at(0).toInt()), itor(arr.at(1).toInt()), itor(arr.at(2).toInt()),
                 itor(arr.at(3).toInt()), itor(arr.at(4).toInt()), itor(arr.at(5).toInt()),
                 itor(arr.at(6).toInt()), itor(arr.at(7).toInt()), itor(arr.at(8).toInt()));
-
-    t.translate(itor(arr.at(9).toInt()), itor(arr.at(10).toInt()));
 }
 
 static QJsonArray toArr(const QPointF& p)
@@ -389,6 +386,10 @@ QByteArray DrawBufferJson::toJson(const DrawData& buf)
         objObj["a_pagePos"] = toArr(obj.pagePos);
         QJsonArray datasArr;
         for (const DrawData::Data& data : obj.datas) {
+            if (data.empty()) {
+                continue;
+            }
+
             QJsonObject dataObj;
             dataObj["state"] = toObj(data.state);
             dataObj["paths"] = toArr(data.paths);
@@ -408,7 +409,7 @@ QByteArray DrawBufferJson::toJson(const DrawData& buf)
 
     root["objects"] = objsArr;
 
-    return QJsonDocument(root).toJson(QJsonDocument::Compact);
+    return QJsonDocument(root).toJson(QJsonDocument::Indented);
 }
 
 mu::RetVal<DrawDataPtr> DrawBufferJson::fromJson(const QByteArray& json)

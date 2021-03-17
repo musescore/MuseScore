@@ -39,6 +39,7 @@ public:
     QPainter* qpainter() const override;
 
     void beginTarget(const std::string& name) override;
+    void beforeEndTargetHook(Painter* painter) override;
     bool endTarget(bool endDraw = false) override;
     bool isActive() const override;
 
@@ -80,6 +81,8 @@ private:
     QPainter* m_painter = nullptr;
     bool m_overship = false;
     DrawObjectsLogger m_drawObjectsLogger;
+
+    QTransform m_transform;
 };
 }
 

@@ -55,6 +55,7 @@ public:
 
     QPaintDevice* device() const;
     QPainter* qpainter() const;
+    IPaintProviderPtr provider() const;
 
     bool isActive() const;
     bool endDraw();
@@ -171,6 +172,8 @@ private:
     const State& state() const;
     QTransform makeViewTransform() const;
     void updateMatrix();
+
+    bool endTarget(bool endDraw);
 
     IPaintProviderPtr m_provider;
     std::string m_name;
