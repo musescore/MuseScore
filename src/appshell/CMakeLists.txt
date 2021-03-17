@@ -49,6 +49,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/devtools/settingslistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/preferencesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/preferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferencepageitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferencepageitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.cpp

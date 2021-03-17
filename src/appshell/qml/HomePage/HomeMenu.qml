@@ -36,9 +36,6 @@ RadioButtonGroup {
         title: modelData["title"]
 
         iconComponent: StyledIconLabel {
-            Layout.fillWidth: true
-            Layout.preferredWidth: parent.width * 0.3
-
             iconCode: modelData["icon"]
         }
 
