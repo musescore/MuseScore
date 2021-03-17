@@ -178,6 +178,8 @@ public:
 
         GRADUATION_CAP = 0xF19D,
 
+        SCORE = 0xF319,
+
         AUTO_TEXT = 0xF329,
         NOTE_HEAD_EIGHTH = 0xF33A,
         BEAM_START = 0xF33B,
@@ -200,7 +202,10 @@ public:
         CHORD_SYMBOL = 0xF352,
         GUITAR_BEND = 0xF353,
         MULTIMEASURE_REST = 0xF355,
+        IMPORT = 0xF357,
+        UPDATE = 0xF358,
         GUITAR_TREMOLO_BAR = 0xF35C,
+        SHORTCUTS = 0xF35D,
 
         TREMOLO_TWO_NOTES = 0xF35F,
         TREMOLO_STYLE_DEFAULT = 0xF35F,

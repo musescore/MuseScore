@@ -10,7 +10,7 @@ QmlDialog {
     id: root
 
     width: 880
-    height: 600
+    height: 672
 
     title: qsTrc("appshell", "Preferences")
 
@@ -18,6 +18,10 @@ QmlDialog {
         anchors.fill: parent
 
         color: ui.theme.backgroundSecondaryColor
+
+        Component.onCompleted: {
+            preferencesModel.load()
+        }
 
         PreferencesModel {
             id: preferencesModel
@@ -31,6 +35,8 @@ QmlDialog {
             anchors.top: topSeparator.bottom
             anchors.bottom: buttonsPanel.top
             anchors.left: parent.left
+
+            model: preferencesModel
 
             SeparatorLine { orientation: Qt.Vertical; anchors.right: parent.right }
         }
