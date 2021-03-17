@@ -24,6 +24,7 @@
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
+#include "palette/ipaletteconfiguration.h"
 
 namespace mu::appshell {
 class AppearancePreferencesModel : public QObject
@@ -32,6 +33,7 @@ class AppearancePreferencesModel : public QObject
 
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
+    INJECT(appshell, palette::IPaletteConfiguration, paletteConfiguration)
 
     Q_PROPERTY(QVariantList themes READ themes NOTIFY themesChanged)
 

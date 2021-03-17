@@ -29,6 +29,24 @@ using namespace mu::framework;
 static const std::string MODULE_NAME("palette");
 static const Settings::Key PALETTE_SCALE(MODULE_NAME, "application/paletteScale");
 static const Settings::Key PALETTE_USE_SINGLE(MODULE_NAME, "application/useSinglePalette");
+static const Settings::Key USE_NOTATION_FOREGROUND_COLOR(MODULE_NAME, "ui/canvas/foreground/useColorInPalettes");
+
+void PaletteConfiguration::init()
+{
+    settings()->valueChanged(USE_NOTATION_FOREGROUND_COLOR).onReceive(this, [this](const Val&) {
+        m_colorsChanged.notify();
+    });
+
+    theme()->themeChanged().onNotify(this, [this]() {
+        m_colorsChanged.notify();
+    });
+
+    notationConfiguration()->foregroundChanged().onNotify(this, [this]() {
+       if (useNotationForegroundColor()) {
+           m_colorsChanged.notify();
+       }
+    });
+}
 
 double PaletteConfiguration::paletteScaling() const
 {
@@ -48,6 +66,10 @@ bool PaletteConfiguration::isSinglePalette() const
 
 QColor PaletteConfiguration::elementsBackgroundColor() const
 {
+    if (useNotationForegroundColor()) {
+        return notationConfiguration()->foregroundColor();
+    }
+
     return theme()->backgroundPrimaryColor();
 }
 
@@ -68,7 +90,17 @@ QColor PaletteConfiguration::accentColor() const
 
 mu::async::Notification PaletteConfiguration::colorsChanged() const
 {
-    return theme()->themeChanged();
+    return m_colorsChanged;
+}
+
+bool PaletteConfiguration::useNotationForegroundColor() const
+{
+    return settings()->value(USE_NOTATION_FOREGROUND_COLOR).toBool();
+}
+
+void PaletteConfiguration::setUseNotationForegroundColor(bool value)
+{
+    settings()->setValue(USE_NOTATION_FOREGROUND_COLOR, Val(value));
 }
 
 mu::io::path PaletteConfiguration::keySignaturesDirPath() const
