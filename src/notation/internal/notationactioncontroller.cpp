@@ -141,6 +141,8 @@ void NotationActionController::init()
     dispatcher()->reg(this, UNDO_ACTION_CODE, this, &NotationActionController::undo);
     dispatcher()->reg(this, REDO_ACTION_CODE, this, &NotationActionController::redo);
 
+    dispatcher()->reg(this, "select-next-chord", [this]() { addChordToSelection(MoveDirection::Right); });
+    dispatcher()->reg(this, "select-prev-chord", [this]() { addChordToSelection(MoveDirection::Left); });
     dispatcher()->reg(this, "select-similar", this, &NotationActionController::selectAllSimilarElements);
     dispatcher()->reg(this, "select-similar-staff", this, &NotationActionController::selectAllSimilarElementsInStaff);
     dispatcher()->reg(this, "select-similar-range", this, &NotationActionController::selectAllSimilarElementsInRange);
@@ -860,6 +862,21 @@ void NotationActionController::redo()
     }
 
     notation->undoStack()->redo();
+}
+
+void NotationActionController::addChordToSelection(MoveDirection direction)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    if (interaction->selection()->elements().size() == 1
+        && interaction->selection()->elements().front()->type() == ElementType::SLUR) {
+        return;
+    }
+
+    interaction->addChordToSelection(direction);
 }
 
 void NotationActionController::selectAllSimilarElements()

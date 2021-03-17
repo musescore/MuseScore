@@ -76,6 +76,16 @@ const ActionList NotationActions::m_actions = {
                QT_TRANSLATE_NOOP("action", "Previous staff or voice"),
                QT_TRANSLATE_NOOP("action", "Previous staff or voice")
                ),
+    ActionItem("select-next-chord",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Add next chord to selection"),
+               QT_TRANSLATE_NOOP("action", "Add next chord to selection")
+               ),
+    ActionItem("select-prev-chord",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Add previous chord to selection"),
+               QT_TRANSLATE_NOOP("action", "Add previous chord to selection")
+               ),
     ActionItem("pitch-up",
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Up"),

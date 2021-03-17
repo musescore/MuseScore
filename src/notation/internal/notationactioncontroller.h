@@ -92,6 +92,7 @@ private:
     void undo();
     void redo();
 
+    void addChordToSelection(MoveDirection direction);
     void selectAllSimilarElements();
     void selectAllSimilarElementsInStaff();
     void selectAllSimilarElementsInRange();
