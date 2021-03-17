@@ -148,5 +148,24 @@ struct DrawData
 };
 
 using DrawDataPtr = std::shared_ptr<DrawData>;
+
+struct Diff {
+    DrawDataPtr dataAdded;
+    DrawDataPtr dataRemoved;
+
+    bool empty() const
+    {
+        bool ret = true;
+        if (dataAdded) {
+            ret = dataAdded->objects.empty();
+        }
+
+        if (ret && dataRemoved) {
+            ret = dataRemoved->objects.empty();
+        }
+
+        return ret;
+    }
+};
 }
 #endif // MU_DRAW_DRAWTYPES_H

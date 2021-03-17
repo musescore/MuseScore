@@ -40,6 +40,7 @@ public:
 
     bool isActive() const override;
     void beginTarget(const std::string& name) override;
+    void beforeEndTargetHook(Painter* painter) override;
     bool endTarget(bool endDraw = false) override;
 
     void beginObject(const std::string& name, const QPointF& pagePos) override;

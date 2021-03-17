@@ -16,25 +16,21 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DRAW_DRAWCOMP_H
-#define MU_DRAW_DRAWCOMP_H
+#include "abdiffdrawstep.h"
 
-#include <functional>
+#include "log.h"
+#include "../draw/abpaintprovider.h"
 
-#include "drawtypes.h"
+#include "libmscore/draw/drawtypes.h"
+#include "libmscore/draw/drawcomp.h"
 
-namespace mu::draw {
-class DrawComp
+using namespace mu::autobot;
+
+void AbDiffDrawStep::doRun(AbContext ctx)
 {
-public:
+    draw::Diff diff = ctx.val<draw::Diff>(AbContext::Key::DiffDrawData);
+    AbPaintProvider::instance()->setDiff(diff);
+    AbPaintProvider::instance()->setIsDiffDrawEnabled(true);
 
-    struct Tolerance {
-        double base = -1.0;
-        Tolerance() {}
-    };
-
-    static Diff compare(const DrawDataPtr& data, const DrawDataPtr& origin, Tolerance tolerance = Tolerance());
-};
+    dispatcher()->dispatch("dev-notationview-redraw");
 }
-
-#endif // MU_DRAW_DRAWCOMP_H

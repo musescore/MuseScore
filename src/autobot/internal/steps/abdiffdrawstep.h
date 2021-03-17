@@ -16,26 +16,24 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUTOBOT_ABDRAWDESERIALIZATIONSTEP_H
-#define MU_AUTOBOT_ABDRAWDESERIALIZATIONSTEP_H
+#ifndef MU_AUTOBOT_ABDIFFDRAWSTEP_H
+#define MU_AUTOBOT_ABDIFFDRAWSTEP_H
 
 #include "../abbasestep.h"
 #include "modularity/ioc.h"
-#include "iautobotconfiguration.h"
-#include "system/ifilesystem.h"
+#include "actions/iactionsdispatcher.h"
 
 namespace mu::autobot {
-class AbDrawDeserializationStep : public AbBaseStep
+class AbDiffDrawStep : public AbBaseStep
 {
-    INJECT(autobot, IAutobotConfiguration, configuration)
-    INJECT(autobot, system::IFileSystem, fileSystem)
+    INJECT(autobot, actions::IActionsDispatcher, dispatcher)
 
 public:
-    AbDrawDeserializationStep() = default;
+    AbDiffDrawStep() = default;
 
 protected:
     void doRun(AbContext ctx) override;
 };
 }
 
-#endif // MU_AUTOBOT_ABDRAWDESERIALIZATIONSTEP_H
+#endif // MU_AUTOBOT_ABDIFFDRAWSTEP_H

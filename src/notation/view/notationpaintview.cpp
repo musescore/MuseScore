@@ -23,6 +23,7 @@
 
 #include "log.h"
 #include "actions/actiontypes.h"
+#include "stringutils.h"
 
 using namespace mu::notation;
 using namespace mu::uicomponents;
@@ -58,6 +59,11 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
 
     m_loopInMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopIn);
     m_loopOutMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopOut);
+
+    //! NOTE For Autobot tests tool
+    dispatcher()->reg(this, "dev-notationview-redraw", [this]() {
+        update();
+    });
 }
 
 void NotationPaintView::load()
@@ -150,6 +156,10 @@ void NotationPaintView::handleAction(const QString& actionCode)
 bool NotationPaintView::canReceiveAction(const actions::ActionCode& actionCode) const
 {
     if (actionCode == "file-open") {
+        return true;
+    }
+
+    if (QString::fromStdString(actionCode).startsWith("dev-")) {
         return true;
     }
 
