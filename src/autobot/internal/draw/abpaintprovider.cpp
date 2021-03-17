@@ -19,7 +19,6 @@
 #include "abpaintprovider.h"
 
 #include "log.h"
-#include "libmscore/draw/drawbufferjson.h"
 
 using namespace mu::autobot;
 
@@ -42,13 +41,13 @@ void AbPaintProvider::beginTarget(const std::string& name)
 bool AbPaintProvider::endTarget(bool endDraw)
 {
     bool ok = BufferedPaintProvider::endTarget(endDraw);
-    if (ok && buffer().name == "notationview") {
-        m_notationViewDrawBuf = buffer();
+    if (ok && drawData().name == "notationview") {
+        m_notationViewDrawData = drawData();
     }
     return ok;
 }
 
-const mu::draw::DrawBuffer& AbPaintProvider::notationViewBuffer() const
+const mu::draw::DrawData& AbPaintProvider::notationViewDrawData() const
 {
-    return m_notationViewDrawBuf;
+    return m_notationViewDrawData;
 }

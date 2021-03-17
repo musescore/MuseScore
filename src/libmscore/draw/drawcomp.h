@@ -16,20 +16,44 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DRAW_DRAWBUFFERJSON_H
-#define MU_DRAW_DRAWBUFFERJSON_H
+#ifndef MU_DRAW_DRAWCOMP_H
+#define MU_DRAW_DRAWCOMP_H
 
-#include <QByteArray>
+#include <functional>
+
 #include "drawtypes.h"
-#include "retval.h"
 
 namespace mu::draw {
-class DrawBufferJson
+class DrawComp
 {
 public:
 
-    static QByteArray toJson(const DrawBuffer& buf);
-    static RetVal<DrawBufferPtr> fromJson(const QByteArray& json);
+    struct Diff {
+        DrawDataPtr dataAdded;
+        DrawDataPtr dataRemoved;
+
+        bool empty() const
+        {
+            bool ret = true;
+            if (dataAdded) {
+                ret = dataAdded->objects.empty();
+            }
+
+            if (ret && dataRemoved) {
+                ret = dataRemoved->objects.empty();
+            }
+
+            return ret;
+        }
+    };
+
+    struct Tolerance {
+        double base = -1.0;
+        Tolerance() {}
+    };
+
+    static Diff compare(const DrawDataPtr& data, const DrawDataPtr& origin, Tolerance tolerance = Tolerance());
 };
 }
-#endif // MU_DRAW_DRAWBUFFERJSON_H
+
+#endif // MU_DRAW_DRAWCOMP_H

@@ -16,7 +16,7 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "drawbufferjson.h"
+#include "drawjson.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -24,13 +24,14 @@
 #include <QJsonValue>
 #include <QJsonParseError>
 
+#include "realfn.h"
 #include "log.h"
 
 using namespace mu::draw;
 
 static int rtoi(qreal v)
 {
-    return v * 1000;
+    return static_cast<int>(v * 1000.0);
 }
 
 static qreal itor(int v)
@@ -147,7 +148,7 @@ static void fromArr(const QJsonArray& arr, QSize& sz)
     sz = QSize(arr.at(0).toInt(), arr.at(1).toInt());
 }
 
-static QJsonObject toObj(const DrawBuffer::State& st)
+static QJsonObject toObj(const DrawData::State& st)
 {
     QJsonObject obj;
     obj["pen"] = toObj(st.pen);
@@ -159,7 +160,7 @@ static QJsonObject toObj(const DrawBuffer::State& st)
     return obj;
 }
 
-static void fromObj(const QJsonObject& obj, DrawBuffer::State& st)
+static void fromObj(const QJsonObject& obj, DrawData::State& st)
 {
     fromObj(obj["pen"].toObject(), st.pen);
     fromObj(obj["brush"].toObject(), st.brush);
@@ -374,7 +375,7 @@ static void fromArr(const QJsonArray& arr, std::vector<T>& vals)
     }
 }
 
-QByteArray DrawBufferJson::toJson(const DrawBuffer& buf)
+QByteArray DrawBufferJson::toJson(const DrawData& buf)
 {
     //! NOTE 'a' added to the beginning of some field names for convenient sorting
 
@@ -382,12 +383,12 @@ QByteArray DrawBufferJson::toJson(const DrawBuffer& buf)
     root["a_name"] = QString::fromStdString(buf.name);
 
     QJsonArray objsArr;
-    for (const DrawBuffer::Object& obj : buf.objects) {
+    for (const DrawData::Object& obj : buf.objects) {
         QJsonObject objObj;
         objObj["a_name"] = QString::fromStdString(obj.name);
         objObj["a_pagePos"] = toArr(obj.pagePos);
         QJsonArray datasArr;
-        for (const DrawBuffer::Data& data : obj.datas) {
+        for (const DrawData::Data& data : obj.datas) {
             QJsonObject dataObj;
             dataObj["state"] = toObj(data.state);
             dataObj["paths"] = toArr(data.paths);
@@ -410,30 +411,30 @@ QByteArray DrawBufferJson::toJson(const DrawBuffer& buf)
     return QJsonDocument(root).toJson(QJsonDocument::Compact);
 }
 
-mu::RetVal<DrawBufferPtr> DrawBufferJson::fromJson(const QByteArray& json)
+mu::RetVal<DrawDataPtr> DrawBufferJson::fromJson(const QByteArray& json)
 {
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(json, &err);
     if (err.error != QJsonParseError::NoError) {
-        RetVal<DrawBufferPtr> rv;
+        RetVal<DrawDataPtr> rv;
         rv.ret = make_ret(Ret::Code::UnknownError, err.errorString().toStdString());
         return rv;
     }
 
     QJsonObject root = doc.object();
 
-    DrawBufferPtr buf = std::make_shared<DrawBuffer>();
+    DrawDataPtr buf = std::make_shared<DrawData>();
     buf->name = root["a_name"].toString().toStdString();
     QJsonArray objsArr = root["objects"].toArray();
     for (const QJsonValue& objVal: objsArr) {
         QJsonObject objObj = objVal.toObject();
-        DrawBuffer::Object obj;
+        DrawData::Object obj;
         obj.name = objObj["a_name"].toString().toStdString();
         fromArr(objObj["a_pagePos"].toArray(), obj.pagePos);
         QJsonArray datasArr = objObj["datas"].toArray();
         for (const QJsonValue& dataVal : datasArr) {
             QJsonObject dataObj = dataVal.toObject();
-            DrawBuffer::Data data;
+            DrawData::Data data;
             fromObj(dataObj["state"].toObject(), data.state);
             fromArr(dataObj["paths"].toArray(), data.paths);
             fromArr(dataObj["polygons"].toArray(), data.polygons);
@@ -448,5 +449,5 @@ mu::RetVal<DrawBufferPtr> DrawBufferJson::fromJson(const QByteArray& json)
         buf->objects.push_back(std::move(obj));
     }
 
-    return RetVal<DrawBufferPtr>::make_ok(buf);
+    return RetVal<DrawDataPtr>::make_ok(buf);
 }

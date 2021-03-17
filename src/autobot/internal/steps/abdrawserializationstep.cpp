@@ -22,7 +22,7 @@
 
 #include "log.h"
 #include "../draw/abpaintprovider.h"
-#include "libmscore/draw/drawbufferjson.h"
+#include "libmscore/draw/drawjson.h"
 
 using namespace mu::autobot;
 
@@ -38,8 +38,8 @@ void AbDrawSerializationStep::doRun(AbContext ctx)
         }
     }
 
-    const draw::DrawBuffer& buf = AbPaintProvider::instance()->notationViewBuffer();
-    ctx.setVal<draw::DrawBufferPtr>(AbContext::Key::CurDrawBuf, std::make_shared<draw::DrawBuffer>(buf));
+    const draw::DrawData& buf = AbPaintProvider::instance()->notationViewDrawData();
+    ctx.setVal<draw::DrawDataPtr>(AbContext::Key::CurDrawData, std::make_shared<draw::DrawData>(buf));
 
     QByteArray data = draw::DrawBufferJson::toJson(buf);
 

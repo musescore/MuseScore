@@ -62,7 +62,7 @@ void BufferedPaintProvider::beginObject(const std::string& name, const QPointF& 
 {
     m_drawObjectsLogger.beginObject(name, pagePos);
     // add new object
-    m_currentObjects.push(DrawBuffer::Object(name, pagePos));
+    m_currentObjects.push(DrawData::Object(name, pagePos));
 }
 
 void BufferedPaintProvider::endObject()
@@ -75,30 +75,30 @@ void BufferedPaintProvider::endObject()
     m_currentObjects.pop();
 }
 
-const DrawBuffer::Data& BufferedPaintProvider::currentData() const
+const DrawData::Data& BufferedPaintProvider::currentData() const
 {
     return m_currentObjects.top().datas.back();
 }
 
-const DrawBuffer::State& BufferedPaintProvider::currentState() const
+const DrawData::State& BufferedPaintProvider::currentState() const
 {
     return currentData().state;
 }
 
-DrawBuffer::Data& BufferedPaintProvider::editableData()
+DrawData::Data& BufferedPaintProvider::editableData()
 {
     return m_currentObjects.top().datas.back();
 }
 
-DrawBuffer::State& BufferedPaintProvider::editableState()
+DrawData::State& BufferedPaintProvider::editableState()
 {
-    DrawBuffer::Data& data = m_currentObjects.top().datas.back();
+    DrawData::Data& data = m_currentObjects.top().datas.back();
     if (data.empty()) {
         return data.state;
     }
 
     {
-        DrawBuffer::Data newData;
+        DrawData::Data newData;
         newData.state = data.state;
         m_currentObjects.top().datas.push_back(std::move(newData));
     }
@@ -160,7 +160,7 @@ void BufferedPaintProvider::restore()
 
 void BufferedPaintProvider::setTransform(const QTransform& transform)
 {
-    DrawBuffer::State& st = editableState();
+    DrawData::State& st = editableState();
     st.transform = transform;
 }
 
@@ -173,7 +173,7 @@ const QTransform& BufferedPaintProvider::transform() const
 
 void BufferedPaintProvider::drawPath(const QPainterPath& path)
 {
-    const DrawBuffer::State& st = currentState();
+    const DrawData::State& st = currentState();
     DrawMode mode = DrawMode::StrokeAndFill;
     if (st.pen.style() == Qt::NoPen) {
         mode = DrawMode::Fill;
@@ -220,14 +220,14 @@ void BufferedPaintProvider::drawTiledPixmap(const QRectF& rect, const QPixmap& p
     editableData().tiledPixmap.push_back(DrawTiledPixmap { rect, pm, offset });
 }
 
-const DrawBuffer& BufferedPaintProvider::buffer() const
+const DrawData& BufferedPaintProvider::drawData() const
 {
     return m_buf;
 }
 
 void BufferedPaintProvider::clear()
 {
-    m_buf = DrawBuffer();
-    std::stack<DrawBuffer::Object> empty;
+    m_buf = DrawData();
+    std::stack<DrawData::Object> empty;
     m_currentObjects.swap(empty);
 }

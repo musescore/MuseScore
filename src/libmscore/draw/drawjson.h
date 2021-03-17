@@ -16,33 +16,20 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "drawobjectslogger.h"
+#ifndef MU_DRAW_DRAWJSON_H
+#define MU_DRAW_DRAWJSON_H
 
-#include "log.h"
+#include <QByteArray>
+#include "drawtypes.h"
+#include "retval.h"
 
-#include <QPointF>
-
-using namespace mu::draw;
-
-static const std::string DRAW_OBJ_TAG("DRAW_OBJ");
-
-void DrawObjectsLogger::beginObject(const std::string& name, const QPointF& pagePos)
+namespace mu::draw {
+class DrawBufferJson
 {
-    m_objects.push(name);
-    std::string gap;
-    gap.resize(m_objects.size());
-    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG) << "Begin: " << gap << name << "{" << pagePos.x() << "," << pagePos.y() << "}";
+public:
+
+    static QByteArray toJson(const DrawData& buf);
+    static RetVal<DrawDataPtr> fromJson(const QByteArray& json);
+};
 }
-
-void DrawObjectsLogger::endObject()
-{
-    IF_ASSERT_FAILED(!m_objects.empty()) {
-        return;
-    }
-
-    std::string gap;
-    gap.resize(m_objects.size());
-    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG) << "End:   " << gap << m_objects.top();
-
-    m_objects.pop();
-}
+#endif // MU_DRAW_DRAWJSON_H
