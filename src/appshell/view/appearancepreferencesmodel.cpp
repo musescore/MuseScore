@@ -34,10 +34,24 @@ AppearancePreferencesModel::AppearancePreferencesModel(QObject* parent)
 
 void AppearancePreferencesModel::load()
 {
-    NOT_IMPLEMENTED;
+    TRACEFUNC;
 
     m_themes = uiConfiguration()->themes();
+
+    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
+        m_themes = uiConfiguration()->themes();
+    });
+
     emit themesChanged();
+    emit currentFontIndexChanged(currentFontIndex());
+    emit bodyTextSizeChanged(bodyTextSize());
+    emit backgroundUseColorChanged(backgroundUseColor());
+    emit backgroundColorChanged(backgroundColor());
+    emit backgroundWallpaperPathChanged(backgroundWallpaperPath());
+    emit foregroundUseColorChanged(foregroundUseColor());
+    emit foregroundColorChanged(foregroundColor());
+    emit foregroundWallpaperPathChanged(foregroundWallpaperPath());
+    emit useSameColorInPalettesChanged(useSameColorInPalettes());
 }
 
 QVariantList AppearancePreferencesModel::themes() const
@@ -93,9 +107,10 @@ int AppearancePreferencesModel::currentThemeIndex() const
 int AppearancePreferencesModel::currentAccentColorIndex() const
 {
     QStringList samples = accentColorSamples();
+    QString color = currentTheme().values[ACCENT_COLOR].toString().toLower();
 
     for (int i = 0; i < static_cast<int>(samples.size()); ++i) {
-        if (samples[i] == currentTheme().values[ACCENT_COLOR].toString()) {
+        if (samples[i].toLower() == color) {
             return i;
         }
     }
@@ -170,8 +185,17 @@ void AppearancePreferencesModel::setCurrentThemeIndex(int index)
 
 void AppearancePreferencesModel::setCurrentAccentColorIndex(int index)
 {
-    NOT_IMPLEMENTED;
-    UNUSED(index);
+    if (index < 0 || index >= accentColorSamples().size()) {
+        return;
+    }
+
+    if (index == currentAccentColorIndex()) {
+        return;
+    }
+
+    QColor color = accentColorSamples()[index];
+    uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(color));
+    emit themesChanged();
 }
 
 void AppearancePreferencesModel::setCurrentFontIndex(int index)

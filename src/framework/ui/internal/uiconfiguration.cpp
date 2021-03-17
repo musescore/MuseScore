@@ -21,7 +21,7 @@ static const Settings::Key UI_MUSICAL_FONT_SIZE_KEY("ui", "ui/theme/musicalFontS
 
 static const std::string STATES_PATH("ui/states");
 
-static const std::map<ThemeStyleKey, QVariant> LIGHT_THEME {
+static std::map<ThemeStyleKey, QVariant> LIGHT_THEME {
     { BACKGROUND_PRIMARY_COLOR, "#F5F5F6" },
     { BACKGROUND_SECONDARY_COLOR, "#E6E9ED" },
     { POPUP_BACKGROUND_COLOR, "#F5F5F6" },
@@ -44,7 +44,7 @@ static const std::map<ThemeStyleKey, QVariant> LIGHT_THEME {
     { ITEM_OPACITY_DISABLED, 0.3 }
 };
 
-static const std::map<ThemeStyleKey, QVariant> DARK_THEME {
+static std::map<ThemeStyleKey, QVariant> DARK_THEME {
     { BACKGROUND_PRIMARY_COLOR, "#2D2D30" },
     { BACKGROUND_SECONDARY_COLOR, "#363638" },
     { POPUP_BACKGROUND_COLOR, "#323236" },
@@ -67,7 +67,7 @@ static const std::map<ThemeStyleKey, QVariant> DARK_THEME {
     { ITEM_OPACITY_DISABLED, 0.3 }
 };
 
-static const std::map<ThemeStyleKey, QVariant> HIGH_CONTRAST_THEME {
+static std::map<ThemeStyleKey, QVariant> HIGH_CONTRAST_THEME {
     { BACKGROUND_PRIMARY_COLOR, "#000000" },
     { BACKGROUND_SECONDARY_COLOR, "#000000" },
     { POPUP_BACKGROUND_COLOR, "#FFFFFF" },
@@ -210,6 +210,24 @@ ThemeType UiConfiguration::currentThemeType() const
 void UiConfiguration::setCurrentThemeType(ThemeType type)
 {
     settings()->setValue(UI_THEME_TYPE_KEY, Val(static_cast<int>(type)));
+}
+
+void UiConfiguration::setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val)
+{
+    // TODO: temporary solution
+    switch (currentThemeType()) {
+    case ThemeType::LIGHT_THEME:
+        LIGHT_THEME[key] = val.toQVariant();
+        break;
+    case ThemeType::DARK_THEME:
+        DARK_THEME[key] = val.toQVariant();
+        break;
+    case ThemeType::HIGH_CONTRAST:
+        HIGH_CONTRAST_THEME[key] = val.toQVariant();
+        break;
+    }
+
+    m_currentThemeChanged.notify();
 }
 
 Notification UiConfiguration::currentThemeChanged() const

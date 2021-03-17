@@ -14,8 +14,6 @@ Item {
     width: 338
     height: childrenRect.height
 
-    opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
-
     TextInputField {
         id: pathField
 
