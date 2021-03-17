@@ -19,6 +19,7 @@
 #include "abdrawcompstep.h"
 
 #include "libmscore/draw/drawtypes.h"
+#include "libmscore/draw/drawcomp.h"
 
 #include "log.h"
 
@@ -26,22 +27,29 @@ using namespace mu::autobot;
 
 void AbDrawCompStep::doRun(AbContext ctx)
 {
-    draw::DrawBufferPtr curBuf = ctx.val<draw::DrawBufferPtr>(AbContext::Key::CurDrawBuf);
+    draw::DrawDataPtr curBuf = ctx.val<draw::DrawDataPtr>(AbContext::Key::CurDrawData);
     if (!curBuf) {
         LOGW() << "not set current draw buffer";
         doFinish(ctx);
     }
 
-    draw::DrawBufferPtr refBuf = ctx.val<draw::DrawBufferPtr>(AbContext::Key::RefDrawBuf);
+    draw::DrawDataPtr refBuf = ctx.val<draw::DrawDataPtr>(AbContext::Key::RefDrawData);
     if (!refBuf) {
         LOGW() << "not set reference draw buffer";
         doFinish(ctx);
     }
 
-    //! NOTE This is just a very simple comparator,
-    //! In the next PR will be doing a real comparator
-    if (curBuf->objects.size() != refBuf->objects.size()) {
-        LOGE() << "the current and reference draw buffers are different";
+    draw::DrawComp::Tolerance tolerance;
+    tolerance.base = 0.01;
+    draw::DrawComp::Diff diff = draw::DrawComp::compare(curBuf, refBuf, tolerance);
+    ctx.setVal<draw::DrawComp::Diff>(AbContext::Key::DiffDrawData, diff);
+
+    if (diff.empty()) {
+        LOGI() << "draw data equals";
+    } else {
+        LOGE() << "draw data not equals"
+               << ", added objects: " << diff.dataAdded->objects.size()
+               << ", removed objects: " << diff.dataRemoved->objects.size();
     }
 
     doFinish(ctx);

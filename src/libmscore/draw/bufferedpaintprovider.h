@@ -27,7 +27,7 @@
 
 #include "ipaintprovider.h"
 #include "drawtypes.h"
-#include "drawobjectslogger.h"
+#include "drawlogger.h"
 
 namespace mu::draw {
 class BufferedPaintProvider : public IPaintProvider
@@ -77,19 +77,19 @@ public:
 
     // ---
 
-    const DrawBuffer& buffer() const;
+    const DrawData& drawData() const;
     void clear();
 
 private:
 
-    const DrawBuffer::Data& currentData() const;
-    DrawBuffer::Data& editableData();
+    const DrawData::Data& currentData() const;
+    DrawData::Data& editableData();
 
-    const DrawBuffer::State& currentState() const;
-    DrawBuffer::State& editableState();
+    const DrawData::State& currentState() const;
+    DrawData::State& editableState();
 
-    DrawBuffer m_buf;
-    std::stack<DrawBuffer::Object> m_currentObjects;
+    DrawData m_buf;
+    std::stack<DrawData::Object> m_currentObjects;
     bool m_isActive = false;
     DrawObjectsLogger m_drawObjectsLogger;
 };

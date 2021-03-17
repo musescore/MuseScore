@@ -20,7 +20,7 @@
 
 #include "log.h"
 #include "io/path.h"
-#include "libmscore/draw/drawbufferjson.h"
+#include "libmscore/draw/drawjson.h"
 
 using namespace mu::autobot;
 
@@ -40,12 +40,12 @@ void AbDrawDeserializationStep::doRun(AbContext ctx)
         doFinish(ctx);
     }
 
-    RetVal<draw::DrawBufferPtr> buf = draw::DrawBufferJson::fromJson(data.val);
+    RetVal<draw::DrawDataPtr> buf = draw::DrawBufferJson::fromJson(data.val);
     if (!buf.ret) {
         LOGE() << "failed parse, err: " << buf.ret.toString() << ", file: " << filePath;
         doFinish(ctx);
     }
 
-    ctx.setVal<draw::DrawBufferPtr>(AbContext::Key::RefDrawBuf, buf.val);
+    ctx.setVal<draw::DrawDataPtr>(AbContext::Key::RefDrawData, buf.val);
     doFinish(ctx);
 }
