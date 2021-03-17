@@ -9,12 +9,7 @@ import MuseScore.UiComponents 1.0
 Item {
     id: root
 
-    width: 220
-    height: parent.height
-
     property alias model: treeView.model
-
-    signal menuSelected(string id)
 
     Rectangle {
         id: background
@@ -74,7 +69,7 @@ Item {
                 selectedStateFont: ui.theme.bodyBoldFont
 
                 title: Boolean(model) ? model.itemRole.title : ""
-                checked: Boolean(model) && model.itemRole.id === treeView.model.currentMenuId
+                checked: Boolean(model) && model.itemRole.id === treeView.model.currentPageId
 
                 iconComponent: StyledIconLabel {
                     width: 24
@@ -87,7 +82,7 @@ Item {
                 }
 
                 onClicked: {
-                    treeView.model.currentMenuId = model.itemRole.id
+                    treeView.model.currentPageId = model.itemRole.id
                 }
             }
         }

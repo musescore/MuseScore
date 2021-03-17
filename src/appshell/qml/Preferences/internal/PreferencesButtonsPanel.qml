@@ -11,9 +11,6 @@ Rectangle {
     signal applyRequested()
     signal rejectRequested()
 
-    height: 70
-    width: parent.width
-
     color: ui.theme.backgroundPrimaryColor
 
     Item {
