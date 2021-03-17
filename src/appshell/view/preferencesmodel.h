@@ -36,7 +36,7 @@ class PreferencesModel : public QAbstractItemModel
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
     INJECT(appshell, actions::IActionsRegister, actionsRegister)
 
-    Q_PROPERTY(QString currentMenuId READ currentMenuId WRITE setCurrentMenuId NOTIFY currentMenuIdChanged)
+    Q_PROPERTY(QString currentPageId READ currentPageId WRITE setCurrentPageId NOTIFY currentPageIdChanged)
 
 public:
     explicit PreferencesModel(QObject* parent = nullptr);
@@ -49,17 +49,19 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    QString currentMenuId() const;
+    QString currentPageId() const;
 
-    Q_INVOKABLE void load();
+    Q_INVOKABLE void load(const QString& currentPageId);
     Q_INVOKABLE void resetFactorySettings();
     Q_INVOKABLE bool apply();
 
+    Q_INVOKABLE QVariantList availablePages() const;
+
 public slots:
-    void setCurrentMenuId(QString currentMenuId);
+    void setCurrentPageId(QString currentPageId);
 
 signals:
-    void currentMenuIdChanged(QString currentMenuId);
+    void currentPageIdChanged(QString currentPageId);
 
 private:
 
@@ -68,12 +70,12 @@ private:
     };
 
     PreferencePageItem* makeItem(const QString& id, const QString& title, ui::IconCode::Code icon = mu::ui::IconCode::Code::NONE,
-                                 const QList<PreferencePageItem*>& children = {}) const;
+                                 const QString& path = "",const QList<PreferencePageItem*>& children = {}) const;
 
     PreferencePageItem* modelIndexToItem(const QModelIndex& index) const;
 
     PreferencePageItem* m_rootItem = nullptr;
-    QString m_currentMenuId;
+    QString m_currentPageId;
 };
 }
 

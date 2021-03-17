@@ -121,12 +121,12 @@ QHash<int, QByteArray> PreferencesModel::roleNames() const
     return { { ItemRole, "itemRole" } };
 }
 
-QString PreferencesModel::currentMenuId() const
+QString PreferencesModel::currentPageId() const
 {
-    return m_currentMenuId;
+    return m_currentPageId;
 }
 
-void PreferencesModel::load()
+void PreferencesModel::load(const QString& currentPageId)
 {
     beginResetModel();
 
@@ -138,7 +138,8 @@ void PreferencesModel::load()
     };
 
     QList<PreferencePageItem*> items {
-        makeItem("general", qtrc("appshell", "General"), IconCode::Code::SETTINGS_COG, generalItems),
+        makeItem("general", qtrc("appshell", "General"), IconCode::Code::SETTINGS_COG,
+                 "Preferences/GeneralPreferencesPage.qml", generalItems),
         makeItem("appearance", qtrc("appshell", "Appearance"), IconCode::Code::VISIBILITY_ON),
         makeItem("canvas", qtrc("appshell", "Canvas"), IconCode::Code::NEW_FILE),
         makeItem("note-input", qtrc("appshell", "Note Input"), IconCode::Code::EDIT),
@@ -155,6 +156,12 @@ void PreferencesModel::load()
         m_rootItem->appendChild(item);
     }
 
+    if (!currentPageId.isEmpty()) {
+        setCurrentPageId(currentPageId);
+    } else {
+        setCurrentPageId("general");
+    }
+
     endResetModel();
 }
 
@@ -169,23 +176,49 @@ bool PreferencesModel::apply()
     return false;
 }
 
-void PreferencesModel::setCurrentMenuId(QString currentMenuId)
+QVariantList PreferencesModel::availablePages() const
 {
-    if (m_currentMenuId == currentMenuId) {
+    std::function<QVariantList(const PreferencePageItem*)> childPages;
+    childPages = [&childPages](const PreferencePageItem* item) {
+        QVariantList result;
+
+        for (int i = 0; i < item->childCount(); ++i) {
+            PreferencePageItem* child = item->childAtRow(i);
+            QVariantMap childObj;
+            childObj["id"] = child->id();
+            childObj["path"] = child->path();
+            result << childObj;
+
+            QVariantList pages = childPages(child);
+            for (const QVariant& page: pages) {
+                result << page;
+            }
+        }
+
+        return result;
+    };
+
+    return childPages(m_rootItem);
+}
+
+void PreferencesModel::setCurrentPageId(QString currentPageId)
+{
+    if (m_currentPageId == currentPageId) {
         return;
     }
 
-    m_currentMenuId = currentMenuId;
-    emit currentMenuIdChanged(m_currentMenuId);
+    m_currentPageId = currentPageId;
+    emit currentPageIdChanged(m_currentPageId);
 }
 
 PreferencePageItem* PreferencesModel::makeItem(const QString& id, const QString& title, mu::ui::IconCode::Code icon,
-                                               const QList<PreferencePageItem*>& children) const
+                                               const QString& path, const QList<PreferencePageItem*>& children) const
 {
     PreferencePageItem* item = new PreferencePageItem();
     item->setId(id);
     item->setTitle(title);
     item->setIcon(icon);
+    item->setPath(path);
 
     for (PreferencePageItem* child: children) {
         item->appendChild(child);

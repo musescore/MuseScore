@@ -47,6 +47,11 @@ int PreferencePageItem::icon() const
     return static_cast<int>(m_icon);
 }
 
+QString PreferencePageItem::path() const
+{
+    return m_path;
+}
+
 PreferencePageItem* PreferencePageItem::parentItem() const
 {
     return m_parent;
@@ -129,4 +134,14 @@ void PreferencePageItem::setIcon(ui::IconCode::Code icon)
 
     m_icon = icon;
     emit iconChanged(this->icon());
+}
+
+void PreferencePageItem::setPath(QString path)
+{
+    if (m_path == path) {
+        return;
+    }
+
+    m_path = path;
+    emit pathChanged(m_path);
 }

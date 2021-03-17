@@ -28,9 +28,10 @@ class PreferencePageItem : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(QString id READ id NOTIFY idChanged)
+    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(int icon READ icon NOTIFY iconChanged)
+    Q_PROPERTY(QString path READ path NOTIFY pathChanged)
 
 public:
     explicit PreferencePageItem(QObject* parent = nullptr);
@@ -39,6 +40,7 @@ public:
     QString id() const;
     QString title() const;
     int icon() const;
+    QString path() const;
 
     PreferencePageItem* parentItem() const;
     void setParentItem(PreferencePageItem* parent);
@@ -57,11 +59,13 @@ public slots:
     void setTitle(QString title);
     void setId(QString id);
     void setIcon(ui::IconCode::Code icon);
+    void setPath(QString path);
 
 signals:
     void idChanged(QString id);
     void titleChanged(QString title);
     void iconChanged(int icon);
+    void pathChanged(QString path);
 
 private:
     QList<PreferencePageItem*> m_children;
@@ -70,6 +74,7 @@ private:
     QString m_title;
     QString m_id;
     ui::IconCode::Code m_icon = ui::IconCode::Code::NONE;
+    QString m_path;
 };
 }
 

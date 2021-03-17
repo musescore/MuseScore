@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -14,13 +15,38 @@ QmlDialog {
 
     title: qsTrc("appshell", "Preferences")
 
+    property string currentPageId: ""
+
+    property QtObject privatesProperties: QtObject {
+        property var pagesComponents: (new Map())
+        property bool inited: false
+    }
+
     Rectangle {
+        id: content
+
         anchors.fill: parent
 
         color: ui.theme.backgroundSecondaryColor
 
         Component.onCompleted: {
-            preferencesModel.load()
+            preferencesModel.load(root.currentPageId)
+
+            createPagesComponents()
+
+            root.privatesProperties.inited = true
+        }
+
+        function createPagesComponents() {
+            var pages = preferencesModel.availablePages()
+            for (var i in pages) {
+                var pageInfo = pages[i]
+
+                var pagePath = Boolean(pageInfo.path) ? pageInfo.path : "Preferences/StubPreferencesPage.qml"
+                var pageComponent = Qt.createComponent("../" + pagePath);
+
+                root.privatesProperties.pagesComponents[pageInfo.id] = pageComponent
+            }
         }
 
         PreferencesModel {
@@ -29,43 +55,57 @@ QmlDialog {
 
         SeparatorLine { id: topSeparator; anchors.top: parent.top }
 
-        PreferencesMenu {
-            id: menu
+        ColumnLayout {
+            anchors.fill: parent
 
-            anchors.top: topSeparator.bottom
-            anchors.bottom: buttonsPanel.top
-            anchors.left: parent.left
+            spacing: 0
 
-            model: preferencesModel
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
-            SeparatorLine { orientation: Qt.Vertical; anchors.right: parent.right }
-        }
+                spacing: 0
 
-        Item {
-            anchors.top: topSeparator.bottom
-            anchors.bottom: buttonsPanel.top
-            anchors.left: menu.right
-            anchors.right: parent.right
-        }
+                PreferencesMenu {
+                    id: menu
 
-        PreferencesButtonsPanel {
-            id: buttonsPanel
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: 220
 
-            anchors.bottom: parent.bottom
+                    model: preferencesModel
+                }
 
-            SeparatorLine { anchors.top: parent.top }
+                SeparatorLine { orientation: Qt.Vertical }
 
-            onRevertFactorySettingsRequested: {
-                preferencesModel.resetFactorySettings()
+                Loader {
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+
+                    sourceComponent: Boolean(root.privatesProperties.inited) ?
+                                         root.privatesProperties.pagesComponents[preferencesModel.currentPageId] : null
+                }
             }
 
-            onRejectRequested: {
-                root.reject()
-            }
+            SeparatorLine { }
 
-            onApplyRequested: {
-                if (preferencesModel.apply()) {
-                    root.hide()
+            PreferencesButtonsPanel {
+                id: buttonsPanel
+
+                Layout.fillWidth: true
+                Layout.preferredHeight: 70
+
+                onRevertFactorySettingsRequested: {
+                    preferencesModel.resetFactorySettings()
+                }
+
+                onRejectRequested: {
+                    root.reject()
+                }
+
+                onApplyRequested: {
+                    if (preferencesModel.apply()) {
+                        root.hide()
+                    }
                 }
             }
         }
