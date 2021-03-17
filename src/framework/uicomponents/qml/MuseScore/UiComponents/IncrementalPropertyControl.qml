@@ -6,7 +6,7 @@ Item {
     id: root
 
     property alias iconModeEnum: _iconModeEnum
-    property int iconMode: Boolean(icon) ? iconModeEnum.left : iconModeEnum.hidden
+    property int iconMode: !iconImage.isEmpty ? iconModeEnum.left : iconModeEnum.hidden
     property int iconBackgroundSize: 20
     property alias icon: iconImage.iconCode
 

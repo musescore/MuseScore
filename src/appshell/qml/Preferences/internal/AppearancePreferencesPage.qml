@@ -33,16 +33,14 @@ Flickable {
         spacing: 24
 
         ThemesView {
-            anchors.left: parent.left
-            anchors.right: parent.right
+            width: parent.width
 
             themes: appearanceModel.themes
             currentThemeIndex: appearanceModel.currentThemeIndex
         }
 
         AccentColorsView {
-            anchors.left: parent.left
-            anchors.right: parent.right
+            width: parent.width
 
             colors: appearanceModel.accentColorSamples()
             currentColorIndex: appearanceModel.currentAccentColorIndex
@@ -50,11 +48,12 @@ Flickable {
 
         SeparatorLine {}
 
-        Rectangle {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            color: "red"
-            height: 80
+        UiFontView {
+            width: parent.width
+
+            allFonts: appearanceModel.allFonts()
+            currentFontIndex: appearanceModel.currentFontIndex
+            bodyTextSize: appearanceModel.bodyTextSize
         }
 
         SeparatorLine {}

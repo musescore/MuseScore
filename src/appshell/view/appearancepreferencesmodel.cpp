@@ -74,7 +74,7 @@ QStringList AppearancePreferencesModel::accentColorSamples() const
     return samples;
 }
 
-QStringList AppearancePreferencesModel::possibleFontFamilies() const
+QStringList AppearancePreferencesModel::allFonts() const
 {
     return uiConfiguration()->possibleFontFamilies();
 }
@@ -108,9 +108,10 @@ ThemeInfo AppearancePreferencesModel::currentTheme() const
     return uiConfiguration()->currentTheme();
 }
 
-QString AppearancePreferencesModel::fontFace() const
+int AppearancePreferencesModel::currentFontIndex() const
 {
-    return QString::fromStdString(uiConfiguration()->fontFamily());
+    QString currentFont = QString::fromStdString(uiConfiguration()->fontFamily());
+    return allFonts().indexOf(currentFont);
 }
 
 int AppearancePreferencesModel::bodyTextSize() const
@@ -164,14 +165,16 @@ void AppearancePreferencesModel::setCurrentAccentColorIndex(int index)
     UNUSED(index);
 }
 
-void AppearancePreferencesModel::setFontFace(const QString& fontFace)
+void AppearancePreferencesModel::setCurrentFontIndex(int index)
 {
-    if (fontFace == this->fontFace()) {
+    QStringList fonts = allFonts();
+
+    if (index > 0 || index >= fonts.size()) {
         return;
     }
 
-    uiConfiguration()->setFontFamily(fontFace.toStdString());
-    emit fontFaceChanged(fontFace);
+    uiConfiguration()->setFontFamily(fonts[index].toStdString());
+    emit currentFontIndexChanged(index);
 }
 
 void AppearancePreferencesModel::setBodyTextSize(int size)
