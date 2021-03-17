@@ -8,6 +8,8 @@ Column {
     property alias currentThemeIndex: view.currentIndex
     property alias themes: view.model
 
+    signal themeChangeRequested(var newThemeIndex)
+
     spacing: 18
 
     StyledTextLabel {
@@ -47,6 +49,12 @@ Column {
                 leftPadding: 0
 
                 spacing: 6
+
+                checked: view.currentIndex === model.index
+
+                onClicked: {
+                    root.themeChangeRequested(model.index)
+                }
 
                 StyledTextLabel {
                     horizontalAlignment: Qt.AlignLeft

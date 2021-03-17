@@ -74,7 +74,7 @@ static const std::map<ThemeStyleKey, QVariant> HIGH_CONTRAST_THEME {
     { TEXT_FIELD_COLOR, "#FFFFFF" },
     { ACCENT_COLOR, "#19EBFF" },
     { STROKE_COLOR, "#FFFFFF" },
-    { BUTTON_COLOR, "#000000" },
+    { BUTTON_COLOR, "#FFFFFF" },
     { FONT_PRIMARY_COLOR, "#FFFFFF" },
     { FONT_SECONDARY_COLOR, "#FFFFFF" },
     { LINK_COLOR, "#70AFEA" },
