@@ -46,6 +46,7 @@ Rectangle {
                     { textRole: "RoundedRectangle (which allows to round the particular corners)", componentRole: roundedRectangleSample },
                     { textRole: "TextInputField", componentRole: textInputFieldSample },
                     { textRole: "SearchField", componentRole: searchFieldSample },
+                    { textRole: "FilePicker", componentRole: filePickerSample },
                     { textRole: "TabPanel", componentRole: tabPanelSample },
                     { textRole: "GradientTabButton", componentRole: gradientTabButtonsSample },
                     { textRole: "GridView", componentRole: gridViewVertical },
@@ -659,6 +660,14 @@ Rectangle {
         id: searchFieldSample
 
         SearchField {}
+    }
+
+    Component {
+        id: filePickerSample
+
+        FilePicker {
+            path: "/some/test/path/foo.txt"
+        }
     }
 
     Component {
