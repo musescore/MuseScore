@@ -38,7 +38,7 @@ class AppearancePreferencesModel : public QObject
     Q_PROPERTY(int currentThemeIndex READ currentThemeIndex WRITE setCurrentThemeIndex NOTIFY themesChanged)
     Q_PROPERTY(int currentAccentColorIndex READ currentAccentColorIndex WRITE setCurrentAccentColorIndex NOTIFY themesChanged)
 
-    Q_PROPERTY(QString fontFace READ fontFace WRITE setFontFace NOTIFY fontFaceChanged)
+    Q_PROPERTY(int currentFontIndex READ currentFontIndex WRITE setCurrentFontIndex NOTIFY currentFontIndexChanged)
     Q_PROPERTY(int bodyTextSize READ bodyTextSize WRITE setBodyTextSize NOTIFY bodyTextSizeChanged)
 
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
@@ -56,7 +56,7 @@ public:
     int currentThemeIndex() const;
     int currentAccentColorIndex() const;
 
-    QString fontFace() const;
+    int currentFontIndex() const;
     int bodyTextSize() const;
 
     QColor backgroundColor() const;
@@ -69,12 +69,12 @@ public:
 
     Q_INVOKABLE void load();
     Q_INVOKABLE QStringList accentColorSamples() const;
-    Q_INVOKABLE QStringList possibleFontFamilies() const;
+    Q_INVOKABLE QStringList allFonts() const;
 
 public slots:
     void setCurrentThemeIndex(int index);
     void setCurrentAccentColorIndex(int index);
-    void setFontFace(const QString& fontFace);
+    void setCurrentFontIndex(int index);
     void setBodyTextSize(int size);
     void setBackgroundColor(const QColor& color);
     void setBackgroundWallpaperPath(const QString& path);
@@ -84,7 +84,7 @@ public slots:
 
 signals:
     void themesChanged();
-    void fontFaceChanged(const QString& fontFace);
+    void currentFontIndexChanged(int index);
     void bodyTextSizeChanged(int size);
     void backgroundColorChanged(const QColor& color);
     void backgroundWallpaperPathChanged(const QString& path);
