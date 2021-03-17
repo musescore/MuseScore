@@ -11,6 +11,8 @@ Row {
 
     property int firstColumnWidth: 0
 
+    signal accentColorChangeRequested(var newColorIndex)
+
     height: 36
     spacing: 0
 
@@ -35,7 +37,11 @@ Row {
             padding: 0
             spacing: 0
 
-            checked: view.currentIndex === modelData.index
+            checked: view.currentIndex === model.index
+
+            onClicked: {
+                root.accentColorChangeRequested(model.index)
+            }
 
             indicator: Rectangle {
                 anchors.fill: parent

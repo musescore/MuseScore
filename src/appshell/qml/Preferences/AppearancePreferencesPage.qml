@@ -4,6 +4,8 @@ import QtQuick.Controls 2.15
 import MuseScore.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
+import "internal"
+
 Flickable {
     id: root
 
@@ -51,6 +53,10 @@ Flickable {
             colors: appearanceModel.accentColorSamples()
             currentColorIndex: appearanceModel.currentAccentColorIndex
             firstColumnWidth: parent.firstColumnWidth
+
+            onAccentColorChangeRequested: {
+                appearanceModel.currentAccentColorIndex = newColorIndex
+            }
         }
 
         SeparatorLine {}
