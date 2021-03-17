@@ -74,6 +74,7 @@
 #include "breath.h"
 #include "instrchange.h"
 #include "synthesizerstate.h"
+#include "image.h"
 
 namespace Ms {
 
@@ -1439,6 +1440,9 @@ void Score::addElement(Element* element)
             case ElementType::HARMONY:
                   element->part()->updateHarmonyChannels(true);
                   break;
+            case ElementType::IMAGE:
+                  toImage(element)->setUsed(true);
+                  break;
 
             default:
                   break;
@@ -1602,6 +1606,9 @@ void Score::removeElement(Element* element)
                   break;
             case ElementType::HARMONY:
                   element->part()->updateHarmonyChannels(true, true);
+                  break;
+            case ElementType::IMAGE:
+                  toImage(element)->setUsed(false);
                   break;
 
             default:
