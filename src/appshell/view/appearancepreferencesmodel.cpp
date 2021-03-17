@@ -119,6 +119,11 @@ int AppearancePreferencesModel::bodyTextSize() const
     return uiConfiguration()->fontSize(FontSizeType::BODY);
 }
 
+bool AppearancePreferencesModel::backgroundUseColor() const
+{
+    return notationConfiguration()->backgroundUseColor();
+}
+
 QColor AppearancePreferencesModel::backgroundColor() const
 {
     return notationConfiguration()->backgroundColor();
@@ -127,6 +132,11 @@ QColor AppearancePreferencesModel::backgroundColor() const
 QString AppearancePreferencesModel::backgroundWallpaperPath() const
 {
     return notationConfiguration()->backgroundWallpaperPath().toQString();
+}
+
+bool AppearancePreferencesModel::foregroundUseColor() const
+{
+    return notationConfiguration()->foregroundUseColor();
 }
 
 QColor AppearancePreferencesModel::foregroundColor() const
@@ -187,6 +197,16 @@ void AppearancePreferencesModel::setBodyTextSize(int size)
     emit bodyTextSizeChanged(size);
 }
 
+void AppearancePreferencesModel::setBackgroundUseColor(bool value)
+{
+    if (value == backgroundUseColor()) {
+        return;
+    }
+
+    notationConfiguration()->setBackgroundUseColor(value);
+    emit backgroundUseColorChanged(value);
+}
+
 void AppearancePreferencesModel::setBackgroundColor(const QColor& color)
 {
     if (color == backgroundColor()) {
@@ -205,6 +225,16 @@ void AppearancePreferencesModel::setBackgroundWallpaperPath(const QString& path)
 
     notationConfiguration()->setBackgroundWallpaperPath(path);
     emit backgroundWallpaperPathChanged(path);
+}
+
+void AppearancePreferencesModel::setForegroundUseColor(bool value)
+{
+    if (value == foregroundUseColor()) {
+        return;
+    }
+
+    notationConfiguration()->setForegroundUseColor(value);
+    emit foregroundUseColorChanged(value);
 }
 
 void AppearancePreferencesModel::setForegroundColor(const QColor& color)

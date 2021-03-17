@@ -84,6 +84,10 @@ void NotationPaintView::load()
         movePlaybackCursor(tick);
     });
 
+    configuration()->foregroundChanged().onNotify(this, [this]() {
+        update();
+    });
+
     initBackground();
     initNavigatorOrientation();
 }

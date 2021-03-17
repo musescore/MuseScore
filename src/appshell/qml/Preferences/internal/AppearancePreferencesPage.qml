@@ -78,9 +78,22 @@ Flickable {
             width: parent.width
 
             title: qsTrc("preferences", "Background")
+            useColor: appearanceModel.backgroundUseColor
             color: appearanceModel.backgroundColor
             wallpaperPath: appearanceModel.backgroundWallpaperPath
             firstColumnWidth: parent.firstColumnWidth
+
+            onUseColorChangeRequested: {
+                appearanceModel.backgroundUseColor = newValue
+            }
+
+            onColorChangeRequested: {
+                appearanceModel.backgroundColor = newColor
+            }
+
+            onWallpaperPathChangeRequested: {
+                appearanceModel.backgroundWallpaperPath = wallpaperPath
+            }
         }
 
         SeparatorLine {}
@@ -89,9 +102,22 @@ Flickable {
             width: parent.width
 
             title: qsTrc("preferences", "Paper")
+            useColor: appearanceModel.foregroundUseColor
             color: appearanceModel.foregroundColor
             wallpaperPath: appearanceModel.foregroundWallpaperPath
             firstColumnWidth: parent.firstColumnWidth
+
+            onUseColorChangeRequested: {
+                appearanceModel.foregroundUseColor = newValue
+            }
+
+            onColorChangeRequested: {
+                appearanceModel.foregroundColor = newColor
+            }
+
+            onWallpaperPathChangeRequested: {
+                appearanceModel.foregroundWallpaperPath = newWallpaperPath
+            }
         }
 
         CheckBox {
