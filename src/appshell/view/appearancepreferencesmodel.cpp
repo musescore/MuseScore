@@ -169,7 +169,7 @@ void AppearancePreferencesModel::setCurrentFontIndex(int index)
 {
     QStringList fonts = allFonts();
 
-    if (index > 0 || index >= fonts.size()) {
+    if (index < 0 || index >= fonts.size()) {
         return;
     }
 

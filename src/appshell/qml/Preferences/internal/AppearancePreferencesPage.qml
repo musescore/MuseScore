@@ -62,6 +62,14 @@ Flickable {
             currentFontIndex: appearanceModel.currentFontIndex
             bodyTextSize: appearanceModel.bodyTextSize
             firstColumnWidth: parent.firstColumnWidth
+
+            onFontChangeRequested: {
+                appearanceModel.currentFontIndex = newFontIndex
+            }
+
+            onBodyTextSizeChangeRequested: {
+                appearanceModel.bodyTextSize = newBodyTextSize
+            }
         }
 
         SeparatorLine {}
