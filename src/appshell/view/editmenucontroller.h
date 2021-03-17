@@ -21,6 +21,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "iapplicationactioncontroller.h"
 #include "notation/inotationactionscontroller.h"
 #include "notation/notationtypes.h"
 
@@ -29,7 +30,8 @@
 namespace mu::appshell {
 class EditMenuController : public uicomponents::IMenuController, public async::Asyncable
 {
-    INJECT(appshell, notation::INotationActionsController, controller)
+    INJECT(appshell, notation::INotationActionsController, notationController)
+    INJECT(appshell, IApplicationActionController, applicationController)
 
 public:
     void init();
@@ -40,7 +42,11 @@ public:
     async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
 
 private:
-    actions::ActionCodeList actions() const;
+    actions::ActionCodeList notationControllerActions() const;
+    actions::ActionCodeList applicationControllerActions() const;
+
+    bool notationControllerContains(const actions::ActionCode& actionCode) const;
+    bool applicationControllerContains(const actions::ActionCode& actionCode) const;
 
     bool actionEnabled(const actions::ActionCode& actionCode) const;
 

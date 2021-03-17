@@ -18,8 +18,6 @@
 //=============================================================================
 #include "notationpagestate.h"
 
-#include "log.h"
-
 using namespace mu::appshell;
 
 void NotationPageState::init()
@@ -49,7 +47,6 @@ bool NotationPageState::isPanelVisible(PanelType type) const
     case PanelType::NotationStatusBar:
         return configuration()->isNotationStatusBarVisible().val;
     default:
-        NOT_IMPLEMENTED;
         return false;
     }
 
@@ -94,7 +91,6 @@ void NotationPageState::setIsPanelVisible(PanelType type, bool visible)
         break;
     }
     default: {
-        NOT_IMPLEMENTED;
         break;
     }
     }

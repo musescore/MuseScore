@@ -14,7 +14,12 @@ RadioDelegate {
 
     property int orientation: Qt.Vertical
 
+    property var normalStateFont: ui.theme.tabFont
+    property var selectedStateFont: ui.theme.tabBoldFont
+
     height: 48
+
+    spacing: 26
 
     background: Item {
         anchors.fill: parent
@@ -93,23 +98,17 @@ RadioDelegate {
 
     contentItem: Row {
         anchors.left: parent.left
-        anchors.leftMargin: !Boolean(iconComponent) ? 8 : 0
+        anchors.leftMargin: !Boolean(iconComponent) ? 8 : root.spacing
         anchors.verticalCenter: parent.verticalCenter
 
-        spacing: 0
+        spacing: root.spacing
+        leftPadding: root.leftPadding
 
-        Item {
-            width: 76
-            height: parent.height
-
+        Loader {
             visible: Boolean(iconComponent)
+            anchors.verticalCenter: parent.verticalCenter
 
-            Loader {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-
-                sourceComponent: iconComponent
-            }
+            sourceComponent: iconComponent
         }
 
         StyledTextLabel {
@@ -121,7 +120,7 @@ RadioDelegate {
             visible: Boolean(title)
 
             horizontalAlignment: Text.AlignLeft
-            font: ui.theme.tabFont
+            font: normalStateFont
             text: title
         }
     }
@@ -167,7 +166,7 @@ RadioDelegate {
 
             PropertyChanges {
                 target: textLabel
-                font: ui.theme.tabBoldFont
+                font: selectedStateFont
             }
         }
     ]
