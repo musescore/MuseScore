@@ -16,25 +16,30 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_DRAW_DRAWCOMP_H
-#define MU_DRAW_DRAWCOMP_H
+#ifndef MU_AUTOBOT_ABDRAWCURRENTSTEP_H
+#define MU_AUTOBOT_ABDRAWCURRENTSTEP_H
 
-#include <functional>
+#include "../abbasestep.h"
+#include "modularity/ioc.h"
+#include "iautobotconfiguration.h"
+#include "system/ifilesystem.h"
 
-#include "drawtypes.h"
-
-namespace mu::draw {
-class DrawComp
+namespace mu::autobot {
+class AbDrawCurrentStep : public AbBaseStep
 {
+    INJECT(autobot, IAutobotConfiguration, configuration)
+    INJECT(autobot, system::IFileSystem, fileSystem)
+
 public:
+    AbDrawCurrentStep(bool isDoSave = false);
 
-    struct Tolerance {
-        double base = -1.0;
-        Tolerance() {}
-    };
+protected:
+    void doRun(AbContext ctx) override;
 
-    static Diff compare(const DrawDataPtr& data, const DrawDataPtr& origin, Tolerance tolerance = Tolerance());
+private:
+
+    bool m_isDoSave = false;
 };
 }
 
-#endif // MU_DRAW_DRAWCOMP_H
+#endif // MU_AUTOBOT_ABDRAWCURRENTSTEP_H

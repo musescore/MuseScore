@@ -137,16 +137,48 @@ static bool isEqual(const QFont& f1, const QFont& f2)
     return true;
 }
 
-static bool isEqual(const QTransform& t1, const QTransform& t2)
+static bool isEqual(const QTransform& t1, const QTransform& t2, double tolerance)
 {
-    if (t1 != t2) {
+    if (!isEqual(t1.m11(), t2.m11(), tolerance)) {
+        return false;
+    }
+
+    if (!isEqual(t1.m12(), t2.m12(), tolerance)) {
+        return false;
+    }
+
+    if (!isEqual(t1.m13(), t2.m13(), tolerance)) {
+        return false;
+    }
+
+    if (!isEqual(t1.m21(), t2.m21(), tolerance)) {
+        return false;
+    }
+
+    if (!isEqual(t1.m22(), t2.m22(), tolerance)) {
+        return false;
+    }
+
+    if (!isEqual(t1.m23(), t2.m23(), tolerance)) {
+        return false;
+    }
+
+    if (!isEqual(t1.m31(), t2.m31(), tolerance)) {
+        return false;
+    }
+
+    if (!isEqual(t1.m32(), t2.m32(), tolerance)) {
+        return false;
+    }
+
+    if (!isEqual(t1.m33(), t2.m33(), tolerance)) {
         return false;
     }
 
     return true;
 }
 
-static bool isEqual(const DrawData::State& s1, const DrawData::State& s2, DrawComp::Tolerance /*tolerance*/)
+static bool isEqual(const DrawData::State& s1, const DrawData::State& s2, DrawComp::Tolerance tolerance)
 {
     if (s1.isAntialiasing != s2.isAntialiasing) {
         return false;
@@ -168,7 +200,7 @@ static bool isEqual(const DrawData::State& s1, const DrawData::State& s2, DrawCo
         return false;
     }
 
-    if (!isEqual(s1.transform, s2.transform)) {
+    if (!isEqual(s1.transform, s2.transform, tolerance.base)) {
         return false;
     }
 
@@ -419,7 +451,7 @@ static void difference(std::vector<T>& diff, const std::vector<T>& v1, const std
 }
 } // mu::draw::comp
 
-DrawComp::Diff DrawComp::compare(const DrawDataPtr& data, const DrawDataPtr& origin, Tolerance tolerance)
+Diff DrawComp::compare(const DrawDataPtr& data, const DrawDataPtr& origin, Tolerance tolerance)
 {
     Diff diff;
     IF_ASSERT_FAILED(data) {
@@ -436,8 +468,8 @@ DrawComp::Diff DrawComp::compare(const DrawDataPtr& data, const DrawDataPtr& ori
     diff.dataRemoved = std::make_shared<DrawData>();
     diff.dataRemoved->name = data->name;
 
-    comp::difference(diff.dataAdded->objects, data->objects, origin->objects, tolerance);
-    comp::difference(diff.dataRemoved->objects, origin->objects, data->objects, tolerance);
+    comp::difference(diff.dataRemoved->objects, data->objects, origin->objects, tolerance);
+    comp::difference(diff.dataAdded->objects, origin->objects, data->objects, tolerance);
 
     return diff;
 }

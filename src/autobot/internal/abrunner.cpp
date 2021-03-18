@@ -23,9 +23,10 @@
 #include "steps/abscoreloadstep.h"
 #include "steps/abscorezoom.h"
 #include "steps/abscoreclosestep.h"
-#include "steps/abdrawserializationstep.h"
-#include "steps/abdrawdeserializationstep.h"
+#include "steps/abdrawcurrentstep.h"
+#include "steps/abdrawrefstep.h"
 #include "steps/abdrawcompstep.h"
+#include "steps/abdiffdrawstep.h"
 
 using namespace mu::autobot;
 
@@ -34,11 +35,14 @@ void AbRunner::init()
     m_steps = {
         Step(new AbScoreLoadStep()),
         Step(new AbScoreZoom(100), 10),
-        Step(new AbDrawSerializationStep(), 0),
-        Step(new AbDrawDeserializationStep(), 0),
+        Step(new AbDrawCurrentStep(false), 0),
+        Step(new AbDrawRefStep(), 0),
         Step(new AbDrawCompStep(), 0),
-        Step(new AbScoreZoom(50), 1000),
-        Step(new AbScoreZoom(100), 1000),
+        Step(new AbDiffDrawStep(), 0),
+
+        //Step(new AbScoreZoom(50), 1000),
+        //Step(new AbScoreZoom(100), 1000),
+
         Step(new AbScoreCloseStep(), 1000)
     };
 

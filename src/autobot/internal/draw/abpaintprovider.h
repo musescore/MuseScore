@@ -21,6 +21,7 @@
 
 #include <memory>
 #include "libmscore/draw/bufferedpaintprovider.h"
+#include "libmscore/draw/drawtypes.h"
 
 namespace mu::autobot {
 class AbPaintProvider : public draw::BufferedPaintProvider
@@ -30,14 +31,23 @@ public:
     static const std::shared_ptr<AbPaintProvider>& instance();
 
     void beginTarget(const std::string& name) override;
+    void beforeEndTargetHook(draw::Painter* painter) override;
     bool endTarget(bool endDraw = false) override;
 
     const draw::DrawData& notationViewDrawData() const;
 
+    void setDiff(const draw::Diff& diff);
+    void setIsDiffDrawEnabled(bool arg);
+
 private:
-    AbPaintProvider();
+    AbPaintProvider() = default;
+
+    void paintData(draw::IPaintProviderPtr provider, const draw::DrawDataPtr& data, const QColor& overcolor);
 
     draw::DrawData m_notationViewDrawData;
+
+    draw::Diff m_diff;
+    bool m_isDiffDrawEnabled = false;
 };
 }
 

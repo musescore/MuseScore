@@ -57,12 +57,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abscoreclosestep.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abscorezoom.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abscorezoom.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawserializationstep.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawserializationstep.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawdeserializationstep.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawdeserializationstep.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawcurrentstep.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawcurrentstep.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawrefstep.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawrefstep.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawcompstep.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawcompstep.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdiffdrawstep.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdiffdrawstep.h
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotmodel.h
     )

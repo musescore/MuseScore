@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUTOBOT_ABDRAWSERIALIZATIONSTEP_H
-#define MU_AUTOBOT_ABDRAWSERIALIZATIONSTEP_H
+#ifndef MU_AUTOBOT_ABDRAWREFSTEP_H
+#define MU_AUTOBOT_ABDRAWREFSTEP_H
 
 #include "../abbasestep.h"
 #include "modularity/ioc.h"
@@ -25,17 +25,17 @@
 #include "system/ifilesystem.h"
 
 namespace mu::autobot {
-class AbDrawSerializationStep : public AbBaseStep
+class AbDrawRefStep : public AbBaseStep
 {
     INJECT(autobot, IAutobotConfiguration, configuration)
     INJECT(autobot, system::IFileSystem, fileSystem)
 
 public:
-    AbDrawSerializationStep() = default;
+    AbDrawRefStep() = default;
 
 protected:
     void doRun(AbContext ctx) override;
 };
 }
 
-#endif // MU_AUTOBOT_ABDRAWSERIALIZATIONSTEP_H
+#endif // MU_AUTOBOT_ABDRAWREFSTEP_H
