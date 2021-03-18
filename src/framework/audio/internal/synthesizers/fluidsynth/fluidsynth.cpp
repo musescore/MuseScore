@@ -102,8 +102,11 @@ Ret FluidSynth::init()
     fluid_settings_setint(m_fluid->settings, "synth.audio-channels", 1);
     fluid_settings_setint(m_fluid->settings, "synth.lock-memory", 0);
     fluid_settings_setint(m_fluid->settings, "synth.threadsafe-api", 0);
-    fluid_settings_setnum(m_fluid->settings, "synth.sample-rate", static_cast<double>(m_sampleRate));
     fluid_settings_setint(m_fluid->settings, "synth.midi-channels", 80);
+
+    if (m_sampleRate > 0) {
+        fluid_settings_setnum(m_fluid->settings, "synth.sample-rate", static_cast<double>(m_sampleRate));
+    }
 
     //fluid_settings_setint(_fluid->settings, "synth.min-note-length", 50);
     //fluid_settings_setint(_fluid->settings, "synth.polyphony", conf.polyphony);
