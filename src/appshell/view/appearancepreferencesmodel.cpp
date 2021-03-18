@@ -81,6 +81,11 @@ QStringList AppearancePreferencesModel::allFonts() const
     return uiConfiguration()->possibleFontFamilies();
 }
 
+QString AppearancePreferencesModel::wallpapersDir() const
+{
+    return notationConfiguration()->wallpapersDefaultDirPath().toQString();
+}
+
 int AppearancePreferencesModel::currentThemeIndex() const
 {
     ThemeList themes = allThemes();

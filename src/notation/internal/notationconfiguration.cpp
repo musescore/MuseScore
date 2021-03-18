@@ -197,6 +197,11 @@ async::Notification NotationConfiguration::foregroundChanged() const
     return m_foregroundChanged;
 }
 
+io::path NotationConfiguration::wallpapersDefaultDirPath() const
+{
+    return globalConfiguration()->sharePath() + "/wallpapers";
+}
+
 QColor NotationConfiguration::borderColor() const
 {
     return QColor(0, 0, 0, 102);

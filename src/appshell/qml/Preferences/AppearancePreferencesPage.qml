@@ -84,9 +84,11 @@ Flickable {
             width: parent.width
 
             title: qsTrc("appshell", "Background")
+            wallpaperDialogTitle: qsTrc("appshell", "Choose Background Wallpaper")
             useColor: appearanceModel.backgroundUseColor
             color: appearanceModel.backgroundColor
             wallpaperPath: appearanceModel.backgroundWallpaperPath
+            wallpapersDir: appearanceModel.wallpapersDir()
             firstColumnWidth: parent.firstColumnWidth
 
             onUseColorChangeRequested: {
@@ -108,9 +110,11 @@ Flickable {
             width: parent.width
 
             title: qsTrc("appshell", "Paper")
+            wallpaperDialogTitle: qsTrc("appshell", "Choose Notepaper")
             useColor: appearanceModel.foregroundUseColor
             color: appearanceModel.foregroundColor
             wallpaperPath: appearanceModel.foregroundWallpaperPath
+            wallpapersDir: appearanceModel.wallpapersDir()
             firstColumnWidth: parent.firstColumnWidth
 
             onUseColorChangeRequested: {
