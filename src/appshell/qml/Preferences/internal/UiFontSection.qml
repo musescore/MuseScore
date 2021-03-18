@@ -19,7 +19,7 @@ Column {
     spacing: 18
 
     StyledTextLabel {
-        text: qsTrc("preferences", "Appearance")
+        text: qsTrc("appshell", "Appearance")
         font: ui.theme.bodyBoldFont
     }
 
@@ -36,7 +36,7 @@ Column {
 
             StyledTextLabel {
                 horizontalAlignment: Qt.AlignLeft
-                text: qsTrc("preferences", "Font face:")
+                text: qsTrc("appshell", "Font face:")
             }
         }
 
@@ -69,7 +69,7 @@ Column {
 
             StyledTextLabel {
                 horizontalAlignment: Qt.AlignLeft
-                text: qsTrc("preferences", "Body text size:")
+                text: qsTrc("appshell", "Body text size:")
             }
         }
 
@@ -83,7 +83,7 @@ Column {
             decimals: 0
             step: 1
 
-            measureUnitsSymbol: qsTrc("preferences", "pt")
+            measureUnitsSymbol: qsTrc("appshell", "pt")
 
             onValueEdited: {
                 root.bodyTextSizeChangeRequested(newValue)

@@ -46,7 +46,7 @@ Column {
 
             StyledTextLabel {
                 horizontalAlignment: Qt.AlignLeft
-                text: qsTrc("preferences", "Colour:")
+                text: qsTrc("appshell", "Colour:")
             }
         }
 
@@ -76,7 +76,7 @@ Column {
 
             StyledTextLabel {
                 horizontalAlignment: Qt.AlignLeft
-                text: qsTrc("preferences", "Wallpaper:")
+                text: qsTrc("appshell", "Wallpaper:")
             }
         }
 

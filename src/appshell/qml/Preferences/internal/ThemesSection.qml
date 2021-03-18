@@ -13,7 +13,7 @@ Column {
     spacing: 18
 
     StyledTextLabel {
-        text: qsTrc("preferences", "Themes")
+        text: qsTrc("appshell", "Themes")
         font: ui.theme.bodyBoldFont
     }
 
