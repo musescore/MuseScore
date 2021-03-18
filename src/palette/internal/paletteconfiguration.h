@@ -24,14 +24,13 @@
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 #include "ui/iuiconfiguration.h"
-#include "ui/itheme.h"
 #include "notation/inotationconfiguration.h"
 #include "async/asyncable.h"
 
 namespace mu::palette {
 class PaletteConfiguration : public IPaletteConfiguration, public async::Asyncable
 {
-    INJECT(palette, ui::ITheme, theme)
+    INJECT(palette, ui::IUiConfiguration, uiConfiguration)
     INJECT(palette, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(palette, notation::INotationConfiguration, notationConfiguration)
 
@@ -63,6 +62,8 @@ public:
     void setPaletteCellConfig(const QString& cellId, const PaletteCellConfig& config) override;
 
 private:
+    QColor themeColor(ui::ThemeStyleKey key) const;
+
     mutable QHash<QString, ValCh<PaletteConfig> > m_paletteConfigs;
     mutable QHash<QString, ValCh<PaletteCellConfig> > m_paletteCellsConfigs;
     async::Notification m_colorsChanged;

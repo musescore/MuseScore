@@ -26,7 +26,7 @@
 #include "async/asyncable.h"
 #include "inotationconfiguration.h"
 #include "context/iglobalcontext.h"
-#include "ui/itheme.h"
+#include "ui/iuiconfiguration.h"
 #include "notationpaintview.h"
 
 namespace mu::notation {
@@ -36,7 +36,7 @@ class NotationNavigator : public NotationPaintView
 
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, ui::ITheme, theme)
+    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
 
     Q_PROPERTY(int orientation READ orientation NOTIFY orientationChanged)
 

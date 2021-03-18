@@ -17,7 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "theme.h"
+#include "uitheme.h"
 
 #include <QApplication>
 #include <QPalette>
@@ -33,12 +33,12 @@ struct FontConfig
     FontSizeType sizeType = FontSizeType::BODY;
 };
 
-Theme::Theme(QObject* parent)
+UiTheme::UiTheme(QObject* parent)
     : QObject(parent)
 {
 }
 
-void Theme::init()
+void UiTheme::init()
 {
     configuration()->currentThemeChanged().onNotify(this, [this]() {
         update();
@@ -51,179 +51,174 @@ void Theme::init()
     setupWidgetTheme();
 }
 
-void Theme::update()
+void UiTheme::update()
 {
     setupWidgetTheme();
 
     notifyAboutThemeChanged();
 }
 
-QColor Theme::backgroundPrimaryColor() const
+QColor UiTheme::backgroundPrimaryColor() const
 {
     return colorByKey(BACKGROUND_PRIMARY_COLOR);
 }
 
-QColor Theme::backgroundSecondaryColor() const
+QColor UiTheme::backgroundSecondaryColor() const
 {
     return colorByKey(BACKGROUND_SECONDARY_COLOR);
 }
 
-QColor Theme::popupBackgroundColor() const
+QColor UiTheme::popupBackgroundColor() const
 {
     return colorByKey(POPUP_BACKGROUND_COLOR);
 }
 
-QColor Theme::textFieldColor() const
+QColor UiTheme::textFieldColor() const
 {
     return colorByKey(TEXT_FIELD_COLOR);
 }
 
-QColor Theme::accentColor() const
+QColor UiTheme::accentColor() const
 {
     return colorByKey(ACCENT_COLOR);
 }
 
-QColor Theme::strokeColor() const
+QColor UiTheme::strokeColor() const
 {
     return colorByKey(STROKE_COLOR);
 }
 
-QColor Theme::buttonColor() const
+QColor UiTheme::buttonColor() const
 {
     return colorByKey(BUTTON_COLOR);
 }
 
-QColor Theme::fontPrimaryColor() const
+QColor UiTheme::fontPrimaryColor() const
 {
     return colorByKey(FONT_PRIMARY_COLOR);
 }
 
-QColor Theme::fontSecondaryColor() const
+QColor UiTheme::fontSecondaryColor() const
 {
     return colorByKey(FONT_SECONDARY_COLOR);
 }
 
-QColor Theme::linkColor() const
+QColor UiTheme::linkColor() const
 {
     return colorByKey(LINK_COLOR);
 }
 
-QFont Theme::bodyFont() const
+QFont UiTheme::bodyFont() const
 {
     return m_bodyFont;
 }
 
-QFont Theme::bodyBoldFont() const
+QFont UiTheme::bodyBoldFont() const
 {
     return m_bodyBoldFont;
 }
 
-QFont Theme::largeBodyFont() const
+QFont UiTheme::largeBodyFont() const
 {
     return m_largeBodyFont;
 }
 
-QFont Theme::largeBodyBoldFont() const
+QFont UiTheme::largeBodyBoldFont() const
 {
     return m_largeBodyBoldFont;
 }
 
-QFont Theme::tabFont() const
+QFont UiTheme::tabFont() const
 {
     return m_tabFont;
 }
 
-QFont Theme::tabBoldFont() const
+QFont UiTheme::tabBoldFont() const
 {
     return m_tabBoldFont;
 }
 
-QFont Theme::headerFont() const
+QFont UiTheme::headerFont() const
 {
     return m_headerFont;
 }
 
-QFont Theme::headerBoldFont() const
+QFont UiTheme::headerBoldFont() const
 {
     return m_headerBoldFont;
 }
 
-QFont Theme::titleBoldFont() const
+QFont UiTheme::titleBoldFont() const
 {
     return m_titleBoldFont;
 }
 
-QFont Theme::iconsFont() const
+QFont UiTheme::iconsFont() const
 {
     return m_iconsFont;
 }
 
-QFont Theme::toolbarIconsFont() const
+QFont UiTheme::toolbarIconsFont() const
 {
     return m_toolbarIconsFont;
 }
 
-QFont Theme::musicalFont() const
+QFont UiTheme::musicalFont() const
 {
     return m_musicalFont;
 }
 
-qreal Theme::accentOpacityNormal() const
+qreal UiTheme::accentOpacityNormal() const
 {
     return realByKey(ACCENT_OPACITY_NORMAL);
 }
 
-qreal Theme::accentOpacityHover() const
+qreal UiTheme::accentOpacityHover() const
 {
     return realByKey(ACCENT_OPACITY_HOVER);
 }
 
-qreal Theme::accentOpacityHit() const
+qreal UiTheme::accentOpacityHit() const
 {
     return realByKey(ACCENT_OPACITY_HIT);
 }
 
-qreal Theme::buttonOpacityNormal() const
+qreal UiTheme::buttonOpacityNormal() const
 {
     return realByKey(BUTTON_OPACITY_NORMAL);
 }
 
-qreal Theme::buttonOpacityHover() const
+qreal UiTheme::buttonOpacityHover() const
 {
     return realByKey(BUTTON_OPACITY_HOVER);
 }
 
-qreal Theme::buttonOpacityHit() const
+qreal UiTheme::buttonOpacityHit() const
 {
     return realByKey(BUTTON_OPACITY_HIT);
 }
 
-qreal Theme::itemOpacityDisabled() const
+qreal UiTheme::itemOpacityDisabled() const
 {
     return realByKey(ITEM_OPACITY_DISABLED);
 }
 
-mu::async::Notification Theme::themeChanged() const
-{
-    return m_themeChanged;
-}
-
-QColor Theme::colorByKey(ThemeStyleKey key) const
+QColor UiTheme::colorByKey(ThemeStyleKey key) const
 {
     return currentTheme().values[key].toString();
 }
 
-qreal Theme::realByKey(ThemeStyleKey key) const
+qreal UiTheme::realByKey(ThemeStyleKey key) const
 {
     return currentTheme().values[key].toDouble();
 }
 
-ThemeInfo Theme::currentTheme() const
+ThemeInfo UiTheme::currentTheme() const
 {
     return configuration()->currentTheme();
 }
 
-void Theme::initUiFonts()
+void UiTheme::initUiFonts()
 {
     setupUiFonts();
 
@@ -233,7 +228,7 @@ void Theme::initUiFonts()
     });
 }
 
-void Theme::initIconsFont()
+void UiTheme::initIconsFont()
 {
     setupIconsFont();
 
@@ -243,7 +238,7 @@ void Theme::initIconsFont()
     });
 }
 
-void Theme::initMusicalFont()
+void UiTheme::initMusicalFont()
 {
     setupMusicFont();
 
@@ -253,7 +248,7 @@ void Theme::initMusicalFont()
     });
 }
 
-void Theme::setupUiFonts()
+void UiTheme::setupUiFonts()
 {
     QMap<QFont*, FontConfig> fonts {
         { &m_bodyFont, { QFont::Normal, FontSizeType::BODY } },
@@ -281,7 +276,7 @@ void Theme::setupUiFonts()
     }
 }
 
-void Theme::setupIconsFont()
+void UiTheme::setupIconsFont()
 {
     QString family = QString::fromStdString(configuration()->iconsFontFamily());
 
@@ -292,13 +287,13 @@ void Theme::setupIconsFont()
     m_toolbarIconsFont.setPixelSize(configuration()->iconsFontSize(IconSizeType::Toolbar));
 }
 
-void Theme::setupMusicFont()
+void UiTheme::setupMusicFont()
 {
     m_musicalFont.setFamily(QString::fromStdString(configuration()->musicalFontFamily()));
     m_musicalFont.setPixelSize(configuration()->musicalFontSize());
 }
 
-void Theme::setupWidgetTheme()
+void UiTheme::setupWidgetTheme()
 {
     QColor fontPrimaryColorDisabled = fontPrimaryColor();
     fontPrimaryColorDisabled.setAlphaF(itemOpacityDisabled());
@@ -344,8 +339,7 @@ void Theme::setupWidgetTheme()
     QApplication::setFont(widgetsFont);
 }
 
-void Theme::notifyAboutThemeChanged()
+void UiTheme::notifyAboutThemeChanged()
 {
-    m_themeChanged.notify();
-    emit dataChanged();
+    emit themeChanged();
 }

@@ -146,8 +146,8 @@ void UiConfiguration::deinit()
 
 bool UiConfiguration::needFollowSystemTheme() const
 {
-    return settings()->value(UI_CURRENT_THEME_CODE_KEY).isNull() &&
-           platformTheme()->isFollowSystemThemeAvailable();
+    return settings()->value(UI_CURRENT_THEME_CODE_KEY).isNull()
+           && platformTheme()->isFollowSystemThemeAvailable();
 }
 
 void UiConfiguration::initThemes()

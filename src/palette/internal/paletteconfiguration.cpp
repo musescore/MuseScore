@@ -25,6 +25,7 @@
 
 using namespace mu::palette;
 using namespace mu::framework;
+using namespace mu::ui;
 
 static const std::string MODULE_NAME("palette");
 static const Settings::Key PALETTE_SCALE(MODULE_NAME, "application/paletteScale");
@@ -37,7 +38,7 @@ void PaletteConfiguration::init()
         m_colorsChanged.notify();
     });
 
-    theme()->themeChanged().onNotify(this, [this]() {
+    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         m_colorsChanged.notify();
     });
 
@@ -70,22 +71,27 @@ QColor PaletteConfiguration::elementsBackgroundColor() const
         return notationConfiguration()->foregroundColor();
     }
 
-    return theme()->backgroundPrimaryColor();
+    return themeColor(BACKGROUND_PRIMARY_COLOR);
 }
 
 QColor PaletteConfiguration::elementsColor() const
 {
-    return theme()->fontPrimaryColor();
+    return themeColor(FONT_PRIMARY_COLOR);
 }
 
 QColor PaletteConfiguration::gridColor() const
 {
-    return theme()->strokeColor();
+    return themeColor(STROKE_COLOR);
 }
 
 QColor PaletteConfiguration::accentColor() const
 {
-    return theme()->accentColor();
+    return themeColor(ACCENT_COLOR);
+}
+
+QColor PaletteConfiguration::themeColor(ThemeStyleKey key) const
+{
+    return uiConfiguration()->currentTheme().values[key].toString();
 }
 
 mu::async::Notification PaletteConfiguration::colorsChanged() const

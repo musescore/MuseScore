@@ -42,18 +42,15 @@ public:
     bool isDarkMode() const override;
     async::Channel<bool> darkModeSwitched() const override;
 
-    void setAppThemeDark(bool) override;
-    void applyPlatformStyle(QWidget*) override;
+    void setAppThemeDark(bool isDark) override;
+    void applyPlatformStyle(QWidget* window) override;
 
 private:
     async::Channel<bool> m_darkModeSwitched;
     int m_buildNumber = 0;
     std::atomic<bool> m_isListening = false;
     std::thread m_listenThread;
-    void updateListeningStatus(IUiConfiguration::ThemeType themeType);
-    void startListening();
     void th_listen();
-    void stopListening();
 };
 }
 
