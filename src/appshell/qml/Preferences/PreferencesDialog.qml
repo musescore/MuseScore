@@ -78,12 +78,20 @@ QmlDialog {
                 SeparatorLine { orientation: Qt.Vertical }
 
                 Loader {
+                    id: loader
+
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     Layout.margins: 30
 
                     sourceComponent: Boolean(root.privatesProperties.inited) ?
                                          root.privatesProperties.pagesComponents[preferencesModel.currentPageId] : null
+
+                    onLoaded: {
+                        loader.item.hideRequested.connect(function() {
+                            root.hide()
+                        })
+                    }
                 }
             }
 

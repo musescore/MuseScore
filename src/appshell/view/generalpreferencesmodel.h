@@ -24,6 +24,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
+#include "global/iinteractive.h"
 #include "languages/ilanguagesservice.h"
 #include "telemetry/itelemetryconfiguration.h"
 
@@ -32,6 +33,7 @@ class GeneralPreferencesModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
+    INJECT(appshell, framework::IInteractive, interactive)
     INJECT(appshell, languages::ILanguagesService, languagesService)
     INJECT(appshell, telemetry::ITelemetryConfiguration, telemetryConfiguration)
 
@@ -48,7 +50,7 @@ public:
     explicit GeneralPreferencesModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void updateTranslations();
+    Q_INVOKABLE void openUpdateTranslationsPage();
 
     QVariantList languages() const;
     QString currentLanguageCode() const;
