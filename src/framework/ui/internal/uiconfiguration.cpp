@@ -21,7 +21,7 @@ static const Settings::Key UI_MUSICAL_FONT_SIZE_KEY("ui", "ui/theme/musicalFontS
 
 static const std::string STATES_PATH("ui/states");
 
-static std::map<ThemeStyleKey, QVariant> LIGHT_THEME {
+static QMap<ThemeStyleKey, QVariant> LIGHT_THEME_VALUES {
     { BACKGROUND_PRIMARY_COLOR, "#F5F5F6" },
     { BACKGROUND_SECONDARY_COLOR, "#E6E9ED" },
     { POPUP_BACKGROUND_COLOR, "#F5F5F6" },
@@ -44,7 +44,7 @@ static std::map<ThemeStyleKey, QVariant> LIGHT_THEME {
     { ITEM_OPACITY_DISABLED, 0.3 }
 };
 
-static std::map<ThemeStyleKey, QVariant> DARK_THEME {
+static QMap<ThemeStyleKey, QVariant> DARK_THEME_VALUES {
     { BACKGROUND_PRIMARY_COLOR, "#2D2D30" },
     { BACKGROUND_SECONDARY_COLOR, "#363638" },
     { POPUP_BACKGROUND_COLOR, "#323236" },
@@ -67,7 +67,7 @@ static std::map<ThemeStyleKey, QVariant> DARK_THEME {
     { ITEM_OPACITY_DISABLED, 0.3 }
 };
 
-static std::map<ThemeStyleKey, QVariant> HIGH_CONTRAST_THEME {
+static QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_THEME_VALUES {
     { BACKGROUND_PRIMARY_COLOR, "#000000" },
     { BACKGROUND_SECONDARY_COLOR, "#000000" },
     { POPUP_BACKGROUND_COLOR, "#FFFFFF" },
@@ -92,7 +92,7 @@ static std::map<ThemeStyleKey, QVariant> HIGH_CONTRAST_THEME {
 
 void UiConfiguration::init()
 {
-    settings()->setDefaultValue(UI_THEME_TYPE_KEY, Val(static_cast<int>(ThemeType::LIGHT_THEME)));
+    settings()->setDefaultValue(UI_THEME_TYPE_KEY, Val(LIGHT_THEME_CODE));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val("Fira Sans"));
     settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(12));
     settings()->setDefaultValue(UI_ICONS_FONT_FAMILY_KEY, Val("MusescoreIcon"));
@@ -145,38 +145,28 @@ QStringList UiConfiguration::possibleFontFamilies() const
 
 ThemeList UiConfiguration::themes() const
 {
-    static const std::vector<ThemeType> allTypes {
-        ThemeType::LIGHT_THEME,
-        ThemeType::DARK_THEME,
-        ThemeType::HIGH_CONTRAST
-    };
-
     ThemeList result;
-    for (ThemeType type : allTypes) {
-        result.push_back(makeTheme(type));
+    for (const std::string& codeKey : allStandardThemeCodes()) {
+        result.push_back(makeStandardTheme(codeKey));
     }
 
     return result;
 }
 
-ThemeInfo UiConfiguration::makeTheme(ThemeType type) const
+ThemeInfo UiConfiguration::makeStandardTheme(const std::string& codeKey) const
 {
     ThemeInfo theme;
-    theme.type = type;
+    theme.codeKey = codeKey;
 
-    switch (type) {
-    case ThemeType::LIGHT_THEME:
+    if (codeKey == LIGHT_THEME_CODE) {
         theme.title = trc("ui", "Light");
-        theme.values = LIGHT_THEME;
-        break;
-    case ThemeType::DARK_THEME:
+        theme.values = LIGHT_THEME_VALUES;
+    } else if (codeKey == DARK_THEME_CODE) {
         theme.title = trc("ui", "Dark");
-        theme.values = DARK_THEME;
-        break;
-    case ThemeType::HIGH_CONTRAST:
+        theme.values = DARK_THEME_VALUES;
+    } else if (codeKey == HIGH_CONTRAST_THEME_CODE) {
         theme.title = trc("ui", "High contrast");
-        theme.values = HIGH_CONTRAST_THEME;
-        break;
+        theme.values = HIGH_CONTRAST_THEME_VALUES;
     }
 
     return theme;
@@ -184,10 +174,10 @@ ThemeInfo UiConfiguration::makeTheme(ThemeType type) const
 
 ThemeInfo UiConfiguration::currentTheme() const
 {
-    ThemeType currentType = currentThemeType();
+    std::string currentCodeKey = currentThemeCodeKey();
 
     for (const ThemeInfo& theme: themes()) {
-        if (theme.type == currentType) {
+        if (theme.codeKey == currentCodeKey) {
             return theme;
         }
     }
@@ -195,36 +185,34 @@ ThemeInfo UiConfiguration::currentTheme() const
     return ThemeInfo();
 }
 
-ThemeType UiConfiguration::currentThemeType() const
+std::string UiConfiguration::currentThemeCodeKey() const
 {
-    Val preferredThemeType = settings()->value(UI_THEME_TYPE_KEY);
-    bool followSystemTheme = preferredThemeType.isNull();
+    std::string preferredThemeCode = settings()->value(UI_THEME_TYPE_KEY).toString();
+    bool followSystemTheme = preferredThemeCode.empty() && platformTheme()->isFollowSystemThemeAvailable();
 
     if (followSystemTheme) {
-        return platformTheme()->isDarkMode() ? ThemeType::DARK_THEME : ThemeType::LIGHT_THEME;
+        return platformTheme()->isDarkMode() ? DARK_THEME_CODE : LIGHT_THEME_CODE;
     }
 
-    return static_cast<ThemeType>(preferredThemeType.toInt());
+    return preferredThemeCode.empty() ? LIGHT_THEME_CODE : preferredThemeCode;
 }
 
-void UiConfiguration::setCurrentThemeType(ThemeType type)
+void UiConfiguration::setCurrentTheme(const std::string& codeKey)
 {
-    settings()->setValue(UI_THEME_TYPE_KEY, Val(static_cast<int>(type)));
+    settings()->setValue(UI_THEME_TYPE_KEY, Val(codeKey));
 }
 
 void UiConfiguration::setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val)
 {
     // TODO: temporary solution
-    switch (currentThemeType()) {
-    case ThemeType::LIGHT_THEME:
-        LIGHT_THEME[key] = val.toQVariant();
-        break;
-    case ThemeType::DARK_THEME:
-        DARK_THEME[key] = val.toQVariant();
-        break;
-    case ThemeType::HIGH_CONTRAST:
-        HIGH_CONTRAST_THEME[key] = val.toQVariant();
-        break;
+    std::string currentCode = currentThemeCodeKey();
+
+    if (currentCode == DARK_THEME_CODE) {
+        DARK_THEME_VALUES[key] = val.toQVariant();
+    } else if (currentCode == LIGHT_THEME_CODE) {
+        LIGHT_THEME_VALUES[key] = val.toQVariant();
+    } else if (currentCode == HIGH_CONTRAST_THEME_CODE) {
+        HIGH_CONTRAST_THEME_VALUES[key] = val.toQVariant();
     }
 
     m_currentThemeChanged.notify();

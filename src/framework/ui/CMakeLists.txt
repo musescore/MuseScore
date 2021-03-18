@@ -65,6 +65,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/themeconverter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/themeconverter.h
     ${PLATFORM_THEME_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.cpp

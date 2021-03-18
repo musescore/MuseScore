@@ -42,7 +42,7 @@ public:
     ThemeList themes() const override;
 
     ThemeInfo currentTheme() const override;
-    void setCurrentThemeType(ThemeType type) override;
+    void setCurrentTheme(const std::string& codeKey) override;
     void setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val) override;
     async::Notification currentThemeChanged() const override;
 
@@ -70,8 +70,8 @@ public:
     async::Notification pageStateChanged() const override;
 
 private:
-    ThemeType currentThemeType() const;
-    ThemeInfo makeTheme(ThemeType type) const;
+    std::string currentThemeCodeKey() const;
+    ThemeInfo makeStandardTheme(const std::string& codeKey) const;
 
     QByteArray stringToByteArray(const std::string& string) const;
     std::string byteArrayToString(const QByteArray& byteArray) const;
