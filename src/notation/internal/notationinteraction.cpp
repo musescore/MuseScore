@@ -408,6 +408,23 @@ bool NotationInteraction::elementIsLess(const Ms::Element* e1, const Ms::Element
     return e1->z() <= e2->z();
 }
 
+void NotationInteraction::addChordToSelection(MoveDirection d)
+{
+    IF_ASSERT_FAILED(MoveDirection::Left == d || MoveDirection::Right == d) {
+        return;
+    }
+
+    QString cmd;
+    if (MoveDirection::Left == d) {
+        cmd = "select-prev-chord";
+    } else if (MoveDirection::Right == d) {
+        cmd = "select-next-chord";
+    }
+
+    score()->selectMove(cmd);
+    notifyAboutSelectionChanged();
+}
+
 void NotationInteraction::select(const std::vector<Element*>& elements, SelectType type, int staffIndex)
 {
     if (needEndTextEditing(elements)) {
