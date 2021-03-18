@@ -38,12 +38,6 @@ void AppearancePreferencesModel::load()
 {
     TRACEFUNC;
 
-    m_themes = uiConfiguration()->themes();
-
-    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
-        m_themes = uiConfiguration()->themes();
-    });
-
     emit themesChanged();
     emit currentFontIndexChanged(currentFontIndex());
     emit bodyTextSizeChanged(bodyTextSize());
@@ -60,7 +54,7 @@ QVariantList AppearancePreferencesModel::themes() const
 {
     QVariantList result;
 
-    for (const ThemeInfo& theme: m_themes) {
+    for (const ThemeInfo& theme: allThemes()) {
         result << ThemeConverter::toMap(theme);
     }
 
@@ -89,8 +83,10 @@ QStringList AppearancePreferencesModel::allFonts() const
 
 int AppearancePreferencesModel::currentThemeIndex() const
 {
-    for (int i = 0; i < static_cast<int>(m_themes.size()); ++i) {
-        if (m_themes[i].codeKey == currentTheme().codeKey) {
+    ThemeList themes = allThemes();
+
+    for (int i = 0; i < static_cast<int>(themes.size()); ++i) {
+        if (themes[i].codeKey == currentTheme().codeKey) {
             return i;
         }
     }
@@ -115,6 +111,11 @@ int AppearancePreferencesModel::currentAccentColorIndex() const
 ThemeInfo AppearancePreferencesModel::currentTheme() const
 {
     return uiConfiguration()->currentTheme();
+}
+
+ThemeList AppearancePreferencesModel::allThemes() const
+{
+    return uiConfiguration()->themes();
 }
 
 int AppearancePreferencesModel::currentFontIndex() const
@@ -165,7 +166,9 @@ bool AppearancePreferencesModel::useSameColorInPalettes() const
 
 void AppearancePreferencesModel::setCurrentThemeIndex(int index)
 {
-    if (index < 0 || index >= static_cast<int>(m_themes.size())) {
+    ThemeList themes = allThemes();
+
+    if (index < 0 || index >= static_cast<int>(themes.size())) {
         return;
     }
 
@@ -173,7 +176,7 @@ void AppearancePreferencesModel::setCurrentThemeIndex(int index)
         return;
     }
 
-    uiConfiguration()->setCurrentTheme(m_themes[index].codeKey);
+    uiConfiguration()->setCurrentTheme(themes[index].codeKey);
     emit themesChanged();
 }
 
