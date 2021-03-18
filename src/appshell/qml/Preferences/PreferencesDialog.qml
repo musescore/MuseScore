@@ -80,6 +80,7 @@ QmlDialog {
                 Loader {
                     Layout.fillHeight: true
                     Layout.fillWidth: true
+                    Layout.margins: 30
 
                     sourceComponent: Boolean(root.privatesProperties.inited) ?
                                          root.privatesProperties.pagesComponents[preferencesModel.currentPageId] : null

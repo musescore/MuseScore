@@ -204,7 +204,7 @@ void LanguageListModel::uninstall(QString code)
 
 void LanguageListModel::openPreferences()
 {
-    interactive()->open("musescore://devtools");
+    interactive()->open("musescore://preferences?currentPageId=general");
 }
 
 QVariantMap LanguageListModel::language(QString code)
