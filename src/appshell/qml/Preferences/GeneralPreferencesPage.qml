@@ -135,7 +135,7 @@ Item {
                     measureUnitsSymbol: qsTrc("appshell", "min")
 
                     onValueEdited: {
-//                        preferencesModel.autoSavePeriod = newValue
+                        preferencesModel.autoSavePeriod = newValue
                     }
                 }
             }

@@ -60,6 +60,8 @@ Item {
             }
 
             itemDelegate: GradientTabButton {
+                property bool expanded: Boolean(model) ? model.itemRole.expanded : false
+
                 orientation: Qt.Horizontal
 
                 spacing: 16
@@ -69,7 +71,23 @@ Item {
                 selectedStateFont: ui.theme.bodyBoldFont
 
                 title: Boolean(model) ? model.itemRole.title : ""
-                checked: Boolean(model) && model.itemRole.id === treeView.model.currentPageId
+                checked: Boolean(model) && Boolean(model.itemRole) ? model.itemRole.id === treeView.model.currentPageId : false
+
+                Component.onCompleted: {
+                    updateExpandedState()
+                }
+
+                onExpandedChanged: {
+                    updateExpandedState()
+                }
+
+                function updateExpandedState() {
+                    if (expanded) {
+                        treeView.expand(styleData.index)
+                    } else {
+                        treeView.collapse(styleData.index)
+                    }
+                }
 
                 iconComponent: StyledIconLabel {
                     width: 24
@@ -77,12 +95,8 @@ Item {
                     iconCode: Boolean(model) ? model.itemRole.icon : IconCode.NONE
                 }
 
-                Component.onCompleted: {
-                    treeView.expand(styleData.index)
-                }
-
                 onClicked: {
-                    treeView.model.currentPageId = model.itemRole.id
+                    treeView.model.selectRow(styleData.index)
                 }
             }
         }
