@@ -8,6 +8,8 @@ import MuseScore.Preferences 1.0
 Item {
     id: root
 
+    signal hideRequested()
+
     Component.onCompleted: {
         preferencesModel.load()
     }
@@ -58,6 +60,11 @@ Item {
 
                 FlatButton {
                     text: qsTrc("appshell", "Update Translations")
+
+                    onClicked: {
+                        root.hideRequested()
+                        preferencesModel.openUpdateTranslationsPage()
+                    }
                 }
             }
         }

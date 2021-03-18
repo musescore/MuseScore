@@ -43,9 +43,9 @@ void GeneralPreferencesModel::load()
     });
 }
 
-void GeneralPreferencesModel::updateTranslations()
+void GeneralPreferencesModel::openUpdateTranslationsPage()
 {
-    NOT_IMPLEMENTED;
+    interactive()->open("musescore://home?initiallyPageName=add-ons&initiallySubPageName=languages");
 }
 
 QVariantList GeneralPreferencesModel::languages() const
