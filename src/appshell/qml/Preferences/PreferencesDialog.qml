@@ -88,6 +88,10 @@ QmlDialog {
                                          root.privatesProperties.pagesComponents[preferencesModel.currentPageId] : null
 
                     onLoaded: {
+                        if (!Boolean(loader.item.hideRequested)) {
+                            return
+                        }
+
                         loader.item.hideRequested.connect(function() {
                             root.hide()
                         })

@@ -54,6 +54,7 @@ public:
     Q_INVOKABLE void load(const QString& currentPageId);
     Q_INVOKABLE void resetFactorySettings();
     Q_INVOKABLE bool apply();
+    Q_INVOKABLE void selectRow(const QModelIndex& rowIndex);
 
     Q_INVOKABLE QVariantList availablePages() const;
 
