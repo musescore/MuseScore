@@ -70,8 +70,15 @@ public:
     async::Notification pageStateChanged() const override;
 
 private:
+    void initThemes();
+    void notifyAboutCurrentThemeChanged();
+    void updateCurrentTheme();
+
     std::string currentThemeCodeKey() const;
     ThemeInfo makeStandardTheme(const std::string& codeKey) const;
+
+    ThemeList readThemes() const;
+    void writeThemes(const ThemeList& themes);
 
     QByteArray stringToByteArray(const std::string& string) const;
     std::string byteArrayToString(const QByteArray& byteArray) const;
@@ -82,6 +89,8 @@ private:
     async::Notification m_iconsFontChanged;
     async::Notification m_pageStateChanged;
 
+    ThemeList m_themes;
+    size_t m_currentThemeIndex = 0;
     std::optional<float> m_customDPI;
 };
 }

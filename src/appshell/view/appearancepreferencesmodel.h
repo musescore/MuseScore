@@ -106,8 +106,7 @@ signals:
 
 private:
     ui::ThemeInfo currentTheme() const;
-
-    ui::ThemeList m_themes;
+    ui::ThemeList allThemes() const;
 };
 }
 

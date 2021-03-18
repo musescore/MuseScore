@@ -3,16 +3,20 @@
 #include "settings.h"
 #include "log.h"
 #include "translation.h"
+#include "themeconverter.h"
 
 #include <QMainWindow>
 #include <QScreen>
 #include <QFontDatabase>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 using namespace mu::ui;
 using namespace mu::framework;
 using namespace mu::async;
 
-static const Settings::Key UI_THEME_TYPE_KEY("ui", "ui/application/globalStyle");
+static const Settings::Key UI_THEMES_KEY("ui", "ui/application/themes");
+static const Settings::Key UI_CURRENT_THEME_KEY("ui", "ui/application/globalStyle");
 static const Settings::Key UI_FONT_FAMILY_KEY("ui", "ui/theme/fontFamily");
 static const Settings::Key UI_FONT_SIZE_KEY("ui", "ui/theme/fontSize");
 static const Settings::Key UI_ICONS_FONT_FAMILY_KEY("ui", "ui/theme/iconsFontFamily");
@@ -21,7 +25,7 @@ static const Settings::Key UI_MUSICAL_FONT_SIZE_KEY("ui", "ui/theme/musicalFontS
 
 static const std::string STATES_PATH("ui/states");
 
-static QMap<ThemeStyleKey, QVariant> LIGHT_THEME_VALUES {
+static const QMap<ThemeStyleKey, QVariant> LIGHT_THEME_VALUES {
     { BACKGROUND_PRIMARY_COLOR, "#F5F5F6" },
     { BACKGROUND_SECONDARY_COLOR, "#E6E9ED" },
     { POPUP_BACKGROUND_COLOR, "#F5F5F6" },
@@ -44,7 +48,7 @@ static QMap<ThemeStyleKey, QVariant> LIGHT_THEME_VALUES {
     { ITEM_OPACITY_DISABLED, 0.3 }
 };
 
-static QMap<ThemeStyleKey, QVariant> DARK_THEME_VALUES {
+static const QMap<ThemeStyleKey, QVariant> DARK_THEME_VALUES {
     { BACKGROUND_PRIMARY_COLOR, "#2D2D30" },
     { BACKGROUND_SECONDARY_COLOR, "#363638" },
     { POPUP_BACKGROUND_COLOR, "#323236" },
@@ -67,7 +71,7 @@ static QMap<ThemeStyleKey, QVariant> DARK_THEME_VALUES {
     { ITEM_OPACITY_DISABLED, 0.3 }
 };
 
-static QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_THEME_VALUES {
+static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_THEME_VALUES {
     { BACKGROUND_PRIMARY_COLOR, "#000000" },
     { BACKGROUND_SECONDARY_COLOR, "#000000" },
     { POPUP_BACKGROUND_COLOR, "#FFFFFF" },
@@ -92,23 +96,23 @@ static QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_THEME_VALUES {
 
 void UiConfiguration::init()
 {
-    settings()->setDefaultValue(UI_THEME_TYPE_KEY, Val(LIGHT_THEME_CODE));
+    settings()->setDefaultValue(UI_CURRENT_THEME_KEY, Val(LIGHT_THEME_CODE));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val("Fira Sans"));
     settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(12));
     settings()->setDefaultValue(UI_ICONS_FONT_FAMILY_KEY, Val("MusescoreIcon"));
     settings()->setDefaultValue(UI_MUSICAL_FONT_FAMILY_KEY, Val("Leland"));
     settings()->setDefaultValue(UI_MUSICAL_FONT_SIZE_KEY, Val(12));
 
-    settings()->valueChanged(UI_THEME_TYPE_KEY).onReceive(nullptr, [this](const Val&) {
-        m_currentThemeChanged.notify();
+    settings()->valueChanged(UI_THEMES_KEY).onReceive(nullptr, [this](const Val&) {
+        notifyAboutCurrentThemeChanged();
     });
 
-    settings()->valueChanged(UI_THEME_TYPE_KEY).onReceive(nullptr, [this](const Val&) {
-        m_currentThemeChanged.notify();
+    settings()->valueChanged(UI_CURRENT_THEME_KEY).onReceive(nullptr, [this](const Val&) {
+        notifyAboutCurrentThemeChanged();
     });
 
     platformTheme()->darkModeSwitched().onReceive(nullptr, [this](bool) {
-        m_currentThemeChanged.notify();
+        notifyAboutCurrentThemeChanged();
     });
 
     settings()->valueChanged(UI_FONT_FAMILY_KEY).onReceive(nullptr, [this](const Val&) {
@@ -135,22 +139,48 @@ void UiConfiguration::init()
     workspaceSettings()->valuesChanged().onNotify(nullptr, [this]() {
         m_pageStateChanged.notify();
     });
+
+    initThemes();
 }
 
-QStringList UiConfiguration::possibleFontFamilies() const
+void UiConfiguration::initThemes()
 {
-    QFontDatabase db;
-    return db.families();
-}
-
-ThemeList UiConfiguration::themes() const
-{
-    ThemeList result;
     for (const std::string& codeKey : allStandardThemeCodes()) {
-        result.push_back(makeStandardTheme(codeKey));
+        m_themes.push_back(makeStandardTheme(codeKey));
     }
 
-    return result;
+    ThemeList modifiedThemes = readThemes();
+
+    for (ThemeInfo& theme: m_themes) {
+        auto it = std::find_if(modifiedThemes.begin(), modifiedThemes.end(), [theme](const ThemeInfo& modifiedTheme) {
+            return modifiedTheme.codeKey == theme.codeKey;
+        });
+
+        bool isModified = it != modifiedThemes.end();
+        if (isModified) {
+            theme = *it;
+        }
+    }
+
+    updateCurrentTheme();
+}
+
+void UiConfiguration::updateCurrentTheme()
+{
+    std::string currentCodeKey = currentThemeCodeKey();
+
+    for (size_t i = 0; i < m_themes.size(); ++i) {
+        if (m_themes[i].codeKey == currentCodeKey) {
+            m_currentThemeIndex = i;
+            break;
+        }
+    }
+}
+
+void UiConfiguration::notifyAboutCurrentThemeChanged()
+{
+    updateCurrentTheme();
+    m_currentThemeChanged.notify();
 }
 
 ThemeInfo UiConfiguration::makeStandardTheme(const std::string& codeKey) const
@@ -172,22 +202,72 @@ ThemeInfo UiConfiguration::makeStandardTheme(const std::string& codeKey) const
     return theme;
 }
 
-ThemeInfo UiConfiguration::currentTheme() const
+ThemeList UiConfiguration::readThemes() const
 {
-    std::string currentCodeKey = currentThemeCodeKey();
+    TRACEFUNC;
 
-    for (const ThemeInfo& theme: themes()) {
-        if (theme.codeKey == currentCodeKey) {
-            return theme;
-        }
+    ThemeList result;
+
+    QByteArray json = settings()->value(UI_THEMES_KEY).toQString().toUtf8();
+    if (json.isEmpty()) {
+        return result;
     }
 
-    return ThemeInfo();
+    QJsonParseError err;
+    QJsonDocument jsodDoc = QJsonDocument::fromJson(json, &err);
+    if (err.error != QJsonParseError::NoError) {
+        LOGE() << "Couldn't read themes: " << err.errorString();
+        return result;
+    }
+
+    if (!jsodDoc.isArray()) {
+        return result;
+    }
+
+    QVariantList objList = jsodDoc.array().toVariantList();
+
+    for (const QVariant& themeObj: objList) {
+        result.push_back(ThemeConverter::fromMap(themeObj.toMap()));
+    }
+
+    return result;
+}
+
+void UiConfiguration::writeThemes(const ThemeList& themes)
+{
+    TRACEFUNC;
+
+    QJsonArray jsonArray;
+    for (const ThemeInfo& theme : themes) {
+        QVariantMap map = ThemeConverter::toMap(theme);
+        jsonArray << QJsonObject::fromVariantMap(map);
+    }
+
+    QJsonDocument jsonDoc(jsonArray);
+
+    Val value(jsonDoc.toJson(QJsonDocument::Compact).constData());
+    settings()->setValue(UI_THEMES_KEY, value);
+}
+
+QStringList UiConfiguration::possibleFontFamilies() const
+{
+    QFontDatabase db;
+    return db.families();
+}
+
+ThemeList UiConfiguration::themes() const
+{
+    return m_themes;
+}
+
+ThemeInfo UiConfiguration::currentTheme() const
+{
+    return m_themes[m_currentThemeIndex];
 }
 
 std::string UiConfiguration::currentThemeCodeKey() const
 {
-    std::string preferredThemeCode = settings()->value(UI_THEME_TYPE_KEY).toString();
+    std::string preferredThemeCode = settings()->value(UI_CURRENT_THEME_KEY).toString();
     bool followSystemTheme = preferredThemeCode.empty() && platformTheme()->isFollowSystemThemeAvailable();
 
     if (followSystemTheme) {
@@ -199,23 +279,26 @@ std::string UiConfiguration::currentThemeCodeKey() const
 
 void UiConfiguration::setCurrentTheme(const std::string& codeKey)
 {
-    settings()->setValue(UI_THEME_TYPE_KEY, Val(codeKey));
+    settings()->setValue(UI_CURRENT_THEME_KEY, Val(codeKey));
 }
 
 void UiConfiguration::setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val)
 {
-    // TODO: temporary solution
-    std::string currentCode = currentThemeCodeKey();
+    ThemeInfo& currentTheme = m_themes[m_currentThemeIndex];
+    currentTheme.values[key] = val.toQVariant();
 
-    if (currentCode == DARK_THEME_CODE) {
-        DARK_THEME_VALUES[key] = val.toQVariant();
-    } else if (currentCode == LIGHT_THEME_CODE) {
-        LIGHT_THEME_VALUES[key] = val.toQVariant();
-    } else if (currentCode == HIGH_CONTRAST_THEME_CODE) {
-        HIGH_CONTRAST_THEME_VALUES[key] = val.toQVariant();
+    ThemeList modifiedThemes = readThemes();
+
+    auto it = std::find_if(modifiedThemes.begin(), modifiedThemes.end(), [currentTheme](const ThemeInfo& theme) {
+        return theme.codeKey == currentTheme.codeKey;
+    });
+
+    if (it != modifiedThemes.end()) {
+        modifiedThemes.erase(it);
     }
 
-    m_currentThemeChanged.notify();
+    modifiedThemes.push_back(currentTheme);
+    writeThemes(modifiedThemes);
 }
 
 Notification UiConfiguration::currentThemeChanged() const
