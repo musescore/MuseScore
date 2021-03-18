@@ -36,9 +36,9 @@
         <file>qml/Preferences/internal/PreferencesButtonsPanel.qml</file>
         <file>qml/Preferences/internal/PreferencesMenu.qml</file>
         <file>qml/Preferences/internal/ThemeSample.qml</file>
-        <file>qml/Preferences/internal/ThemesView.qml</file>
-        <file>qml/Preferences/internal/AccentColorsView.qml</file>
-        <file>qml/Preferences/internal/UiFontView.qml</file>
-        <file>qml/Preferences/internal/ColorAndWallpaperView.qml</file>
+        <file>qml/Preferences/internal/ThemesSection.qml</file>
+        <file>qml/Preferences/internal/AccentColorsSection.qml</file>
+        <file>qml/Preferences/internal/UiFontSection.qml</file>
+        <file>qml/Preferences/internal/ColorAndWallpaperSection.qml</file>
     </qresource>
 </RCC>

@@ -22,7 +22,7 @@ Row {
         anchors.verticalCenter: parent.verticalCenter
         horizontalAlignment: Qt.AlignLeft
 
-        text: qsTrc("preferences", "Accent colour:")
+        text: qsTrc("appshell", "Accent colour:")
     }
 
     RadioButtonGroup {

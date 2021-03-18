@@ -36,7 +36,7 @@ Flickable {
 
         readonly property int firstColumnWidth: 212
 
-        ThemesView {
+        ThemesSection {
             width: parent.width
 
             themes: appearanceModel.themes
@@ -47,7 +47,7 @@ Flickable {
             }
         }
 
-        AccentColorsView {
+        AccentColorsSection {
             width: parent.width
 
             colors: appearanceModel.accentColorSamples()
@@ -61,7 +61,7 @@ Flickable {
 
         SeparatorLine {}
 
-        UiFontView {
+        UiFontSection {
             width: parent.width
 
             allFonts: appearanceModel.allFonts()
@@ -80,10 +80,10 @@ Flickable {
 
         SeparatorLine {}
 
-        ColorAndWallpaperView {
+        ColorAndWallpaperSection {
             width: parent.width
 
-            title: qsTrc("preferences", "Background")
+            title: qsTrc("appshell", "Background")
             useColor: appearanceModel.backgroundUseColor
             color: appearanceModel.backgroundColor
             wallpaperPath: appearanceModel.backgroundWallpaperPath
@@ -104,10 +104,10 @@ Flickable {
 
         SeparatorLine {}
 
-        ColorAndWallpaperView {
+        ColorAndWallpaperSection {
             width: parent.width
 
-            title: qsTrc("preferences", "Paper")
+            title: qsTrc("appshell", "Paper")
             useColor: appearanceModel.foregroundUseColor
             color: appearanceModel.foregroundColor
             wallpaperPath: appearanceModel.foregroundWallpaperPath
@@ -127,7 +127,7 @@ Flickable {
         }
 
         CheckBox {
-            text: qsTrc("preferences", "Use the same colour in palettes")
+            text: qsTrc("appshell", "Use the same colour in palettes")
 
             checked: appearanceModel.useSameColorInPalettes
 

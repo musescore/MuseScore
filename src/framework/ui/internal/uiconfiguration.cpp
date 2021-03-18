@@ -16,7 +16,7 @@ using namespace mu::framework;
 using namespace mu::async;
 
 static const Settings::Key UI_THEMES_KEY("ui", "ui/application/themes");
-static const Settings::Key UI_CURRENT_THEME_KEY("ui", "ui/application/globalStyle");
+static const Settings::Key UI_CURRENT_THEME_CODE_KEY("ui", "ui/application/currentThemeCode");
 static const Settings::Key UI_FONT_FAMILY_KEY("ui", "ui/theme/fontFamily");
 static const Settings::Key UI_FONT_SIZE_KEY("ui", "ui/theme/fontSize");
 static const Settings::Key UI_ICONS_FONT_FAMILY_KEY("ui", "ui/theme/iconsFontFamily");
@@ -96,7 +96,7 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_THEME_VALUES {
 
 void UiConfiguration::init()
 {
-    settings()->setDefaultValue(UI_CURRENT_THEME_KEY, Val(LIGHT_THEME_CODE));
+    settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val("Fira Sans"));
     settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(12));
     settings()->setDefaultValue(UI_ICONS_FONT_FAMILY_KEY, Val("MusescoreIcon"));
@@ -107,7 +107,7 @@ void UiConfiguration::init()
         notifyAboutCurrentThemeChanged();
     });
 
-    settings()->valueChanged(UI_CURRENT_THEME_KEY).onReceive(nullptr, [this](const Val&) {
+    settings()->valueChanged(UI_CURRENT_THEME_CODE_KEY).onReceive(nullptr, [this](const Val&) {
         notifyAboutCurrentThemeChanged();
     });
 
@@ -267,7 +267,7 @@ ThemeInfo UiConfiguration::currentTheme() const
 
 std::string UiConfiguration::currentThemeCodeKey() const
 {
-    std::string preferredThemeCode = settings()->value(UI_CURRENT_THEME_KEY).toString();
+    std::string preferredThemeCode = settings()->value(UI_CURRENT_THEME_CODE_KEY).toString();
     bool followSystemTheme = preferredThemeCode.empty() && platformTheme()->isFollowSystemThemeAvailable();
 
     if (followSystemTheme) {
@@ -279,7 +279,7 @@ std::string UiConfiguration::currentThemeCodeKey() const
 
 void UiConfiguration::setCurrentTheme(const std::string& codeKey)
 {
-    settings()->setValue(UI_CURRENT_THEME_KEY, Val(codeKey));
+    settings()->setValue(UI_CURRENT_THEME_CODE_KEY, Val(codeKey));
 }
 
 void UiConfiguration::setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val)
