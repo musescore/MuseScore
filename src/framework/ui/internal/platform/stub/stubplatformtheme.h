@@ -20,16 +20,14 @@
 #ifndef MU_UI_STUBPLATFORMTHEME_H
 #define MU_UI_STUBPLATFORMTHEME_H
 
-#include "iplatformtheme.h"
+#include "internal/iplatformtheme.h"
 
 namespace mu::ui {
 class StubPlatformTheme : public IPlatformTheme
 {
 public:
-    StubPlatformTheme() = default;
-    ~StubPlatformTheme() = default;
-
-    void init() override;
+    void startListening() override;
+    void stopListening() override;
 
     bool isFollowSystemThemeAvailable() const override;
 
@@ -37,7 +35,7 @@ public:
     async::Channel<bool> darkModeSwitched() const override;
 
     void setAppThemeDark(bool) override;
-    void styleWindow(QWidget*) override;
+    void applyPlatformStyle(QWidget*) override;
 
 private:
     async::Channel<bool> m_darkModeSwitched;

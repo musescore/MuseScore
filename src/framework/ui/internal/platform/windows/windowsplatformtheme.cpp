@@ -46,29 +46,6 @@ WindowsPlatformTheme::WindowsPlatformTheme()
     }
 }
 
-WindowsPlatformTheme::~WindowsPlatformTheme()
-{
-    stopListening();
-}
-
-void WindowsPlatformTheme::init()
-{
-    updateListeningStatus(configuration()->preferredThemeType());
-
-    configuration()->preferredThemeTypeChanged().onReceive(this, [this](const ThemeType& newThemeType) {
-        updateListeningStatus(newThemeType);
-    });
-}
-
-void WindowsPlatformTheme::updateListeningStatus(ThemeType themeType)
-{
-    if (themeType == ThemeType::FOLLOW_SYSTEM_THEME) {
-        startListening();
-    } else {
-        stopListening();
-    }
-}
-
 void WindowsPlatformTheme::startListening()
 {
     if (m_isListening) {

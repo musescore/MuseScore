@@ -33,7 +33,8 @@ class IPlatformTheme : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPlatformTheme() = default;
 
-    virtual void init() = 0;
+    virtual void startListening() = 0;
+    virtual void stopListening() = 0;
 
     virtual bool isFollowSystemThemeAvailable() const = 0;
 
@@ -41,10 +42,10 @@ public:
     virtual async::Channel<bool> darkModeSwitched() const = 0;
 
     /// Performs platform-specific styling of the application.
-    virtual void setAppThemeDark(bool) = 0;
+    virtual void setAppThemeDark(bool isDark) = 0;
 
     /// Performs platform-specific styling of the window.
-    virtual void styleWindow(QWidget*) = 0;
+    virtual void applyPlatformStyle(QWidget* window) = 0;
 };
 }
 

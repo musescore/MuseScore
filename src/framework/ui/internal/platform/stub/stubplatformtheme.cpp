@@ -22,7 +22,11 @@
 using namespace mu::ui;
 using namespace mu::async;
 
-void StubPlatformTheme::init()
+void StubPlatformTheme::startListening()
+{
+}
+
+void StubPlatformTheme::stopListening()
 {
 }
 
@@ -45,6 +49,6 @@ void StubPlatformTheme::setAppThemeDark(bool)
 {
 }
 
-void StubPlatformTheme::styleWindow(QWidget*)
+void StubPlatformTheme::applyPlatformStyle(QWidget*)
 {
 }
