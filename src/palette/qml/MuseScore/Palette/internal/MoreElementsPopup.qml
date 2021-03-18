@@ -55,6 +55,8 @@ StyledPopup {
 
     property bool enablePaletteAnimations: false // disabled by default to avoid unnecessary "add" animations on opening this popup at first time
 
+    property color elementsBackgroundColor: ui.theme.textFieldColor
+
     signal addElementsRequested(var mimeDataList)
 
     Column {
@@ -196,6 +198,8 @@ StyledPopup {
                     selectionModel: masterPaletteSelectionModel
 
                     enableAnimations: moreElementsPopup.enablePaletteAnimations
+
+                    elementsBackgroundColor: moreElementsPopup.elementsBackgroundColor
                 }
 
                 Item {
@@ -245,6 +249,8 @@ StyledPopup {
                     selectionModel: customPaletteSelectionModel
 
                     enableAnimations: moreElementsPopup.enablePaletteAnimations
+
+                    elementsBackgroundColor: moreElementsPopup.elementsBackgroundColor
                 }
             }
         }

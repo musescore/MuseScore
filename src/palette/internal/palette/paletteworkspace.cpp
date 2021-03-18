@@ -646,6 +646,15 @@ PaletteWorkspace::PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* mas
     m_visibilityFilterModel->setFilterRole(PaletteTreeModel::VisibleRole);
     m_visibilityFilterModel->setFilterFixedString("true");
     m_visibilityFilterModel->setSourceModel(userPalette);
+
+    configuration()->colorsChanged().onNotify(this, [this]() {
+        emit elementsBackgroundColorChanged(elementsBackgroundColor());
+    });
+}
+
+QColor PaletteWorkspace::elementsBackgroundColor() const
+{
+    return configuration()->elementsBackgroundColor();
 }
 
 //---------------------------------------------------------

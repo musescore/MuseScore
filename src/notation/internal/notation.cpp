@@ -329,10 +329,12 @@ void Notation::paintForeground(mu::draw::Painter* painter, const QRectF& pageRec
         return;
     }
 
-    if (configuration()->foregroundUseColor()) {
+    QString wallpaperPath = configuration()->foregroundWallpaperPath().toQString();
+
+    if (configuration()->foregroundUseColor() || wallpaperPath.isEmpty()) {
         painter->fillRect(pageRect, configuration()->foregroundColor());
     } else {
-        QPixmap pixmap(configuration()->foregroundWallpaperPath().toQString());
+        QPixmap pixmap(wallpaperPath);
         painter->drawTiledPixmap(pageRect, pixmap);
     }
 }

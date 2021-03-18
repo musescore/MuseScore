@@ -164,11 +164,7 @@ async::Notification NotationConfiguration::backgroundChanged() const
 
 QColor NotationConfiguration::foregroundColor() const
 {
-    if (settings()->value(FOREGROUND_USE_COLOR).toBool()) {
-        return settings()->value(FOREGROUND_COLOR).toQColor();
-    }
-
-    return settings()->defaultValue(FOREGROUND_COLOR).toQColor();
+    return settings()->value(FOREGROUND_COLOR).toQColor();
 }
 
 void NotationConfiguration::setForegroundColor(const QColor& color)
