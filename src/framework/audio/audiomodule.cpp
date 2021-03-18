@@ -200,15 +200,8 @@ void AudioModule::onInit(const framework::IApplication::RunMode&)
     s_audioWorker->channel()->send(
         rpc::Msg(
             rpc::TargetName::AudioEngine,
-            "setSampleRate",
-            rpc::Args::make_arg1<int>(activeSpec.sampleRate)
-            ));
-
-    s_audioWorker->channel()->send(
-        rpc::Msg(
-            rpc::TargetName::AudioEngine,
-            "setReadBufferSize",
-            rpc::Args::make_arg1<uint16_t>(activeSpec.samples)
+            "onDriverOpened",
+            rpc::Args::make_arg2<int, uint16_t>(activeSpec.sampleRate, activeSpec.samples)
             ));
 }
 

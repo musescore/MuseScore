@@ -33,6 +33,12 @@ void RpcAudioEngineController::doBind()
         AudioEngine::instance()->init();
     });
 
+    bindMethod("onDriverOpened", [](const Args& args) {
+        int sampleRate = args.arg<int>(0);
+        uint16_t readBufferSize = args.arg<uint16_t>(1);
+        AudioEngine::instance()->onDriverOpened(sampleRate, readBufferSize);
+    });
+
     bindMethod("setSampleRate", [](const Args& args) {
         int sampleRate = args.arg<int>(0);
         AudioEngine::instance()->setSampleRate(sampleRate);

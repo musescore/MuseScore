@@ -49,13 +49,14 @@ public:
 
     Ret init();
     void deinit();
+    void onDriverOpened(unsigned int sampleRate, uint16_t readBufferSize);
+
     void setSampleRate(unsigned int sampleRate);
     void setReadBufferSize(uint16_t readBufferSize);
 
     bool isInited() const override;
     async::Channel<bool> initChanged() const override;
     unsigned int sampleRate() const override;
-    IMixer::ChannelID startSynthesizer(synth::ISynthesizerPtr synthesizer) override;
     std::shared_ptr<IMixer> mixer() const override;
     std::shared_ptr<ISequencer> sequencer() const override;
     IAudioBufferPtr buffer() const override;
