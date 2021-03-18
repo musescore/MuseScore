@@ -24,8 +24,6 @@
 using namespace mu::ui;
 using namespace mu::async;
 
-using ThemeType = IUiConfiguration::ThemeType;
-
 static const std::wstring windowsThemeKey = L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
 static const std::wstring windowsThemeSubkey = L"AppsUseLightTheme";
 
@@ -129,6 +127,6 @@ void WindowsPlatformTheme::setAppThemeDark(bool)
 {
 }
 
-void WindowsPlatformTheme::styleWindow(QWidget*)
+void WindowsPlatformTheme::applyPlatformStyle(QWidget*)
 {
 }

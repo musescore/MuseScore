@@ -46,7 +46,7 @@ UiEngine::UiEngine()
     m_interactiveProvider = std::make_shared<InteractiveProvider>();
     m_api = new QmlApi(this);
     m_tooltip = new QmlToolTip(this);
-    m_theme = new Theme(this);
+    m_theme = new UiTheme(this);
 }
 
 UiEngine::~UiEngine()
@@ -138,7 +138,7 @@ QmlApi* UiEngine::api() const
     return m_api;
 }
 
-Theme* UiEngine::theme() const
+UiTheme* UiEngine::theme() const
 {
     return m_theme;
 }
