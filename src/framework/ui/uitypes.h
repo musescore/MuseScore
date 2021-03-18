@@ -87,7 +87,6 @@ enum class IconSizeType {
     Toolbar
 };
 
-
 class ContainerType
 {
     Q_GADGET

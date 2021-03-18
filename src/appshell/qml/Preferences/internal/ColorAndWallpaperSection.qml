@@ -7,10 +7,14 @@ Column {
     id: root
 
     property alias title: titleLabel.text
-    property alias color: colorPicker.color
-    property alias wallpaperPath: wallpaperPicker.path
+    property alias wallpaperDialogTitle: wallpaperPicker.dialogTitle
 
     property bool useColor: true
+    property alias color: colorPicker.color
+
+    property alias wallpaperPath: wallpaperPicker.path
+    property alias wallpapersDir: wallpaperPicker.dir
+
     property int firstColumnWidth: 0
 
     signal useColorChangeRequested(var newValue)
@@ -86,6 +90,7 @@ Column {
             width: 208
 
             enabled: !root.useColor
+            filter: qsTrc("appshell", "Images") + " (*.jpg *.jpeg *.png)"
 
             onPathEdited: {
                 root.wallpaperPathChangeRequested(newPath)

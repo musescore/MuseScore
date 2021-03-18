@@ -42,9 +42,9 @@ void PaletteConfiguration::init()
     });
 
     notationConfiguration()->foregroundChanged().onNotify(this, [this]() {
-       if (useNotationForegroundColor()) {
-           m_colorsChanged.notify();
-       }
+        if (useNotationForegroundColor()) {
+            m_colorsChanged.notify();
+        }
     });
 }
 

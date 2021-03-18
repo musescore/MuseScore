@@ -46,11 +46,13 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
 
     Q_PROPERTY(bool backgroundUseColor READ backgroundUseColor WRITE setBackgroundUseColor NOTIFY backgroundUseColorChanged)
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
-    Q_PROPERTY(QString backgroundWallpaperPath READ backgroundWallpaperPath WRITE setBackgroundWallpaperPath NOTIFY backgroundWallpaperPathChanged)
+    Q_PROPERTY(
+        QString backgroundWallpaperPath READ backgroundWallpaperPath WRITE setBackgroundWallpaperPath NOTIFY backgroundWallpaperPathChanged)
 
     Q_PROPERTY(bool foregroundUseColor READ foregroundUseColor WRITE setForegroundUseColor NOTIFY foregroundUseColorChanged)
     Q_PROPERTY(QColor foregroundColor READ foregroundColor WRITE setForegroundColor NOTIFY foregroundColorChanged)
-    Q_PROPERTY(QString foregroundWallpaperPath READ foregroundWallpaperPath WRITE setForegroundWallpaperPath NOTIFY foregroundWallpaperPathChanged)
+    Q_PROPERTY(
+        QString foregroundWallpaperPath READ foregroundWallpaperPath WRITE setForegroundWallpaperPath NOTIFY foregroundWallpaperPathChanged)
 
     Q_PROPERTY(bool useSameColorInPalettes READ useSameColorInPalettes WRITE setUseSameColorInPalettes NOTIFY useSameColorInPalettesChanged)
 
@@ -78,6 +80,7 @@ public:
     Q_INVOKABLE void load();
     Q_INVOKABLE QStringList accentColorSamples() const;
     Q_INVOKABLE QStringList allFonts() const;
+    Q_INVOKABLE QString wallpapersDir() const;
 
 public slots:
     void setCurrentThemeIndex(int index);

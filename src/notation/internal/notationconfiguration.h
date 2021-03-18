@@ -61,6 +61,8 @@ public:
 
     async::Notification foregroundChanged() const override;
 
+    io::path wallpapersDefaultDirPath() const override;
+
     QColor borderColor() const override;
     int borderWidth() const override;
 

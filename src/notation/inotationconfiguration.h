@@ -58,6 +58,8 @@ public:
 
     virtual async::Notification foregroundChanged() const = 0;
 
+    virtual io::path wallpapersDefaultDirPath() const = 0;
+
     virtual QColor borderColor() const = 0;
     virtual int borderWidth() const = 0;
 

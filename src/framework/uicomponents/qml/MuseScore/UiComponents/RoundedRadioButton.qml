@@ -29,7 +29,7 @@ RadioButton {
 
     indicator: Item {
         x: root.leftPadding
-        y: parent.height / 2 - height / 2
+        y: Boolean(parent) ? parent.height / 2 - height / 2 : 0
         implicitWidth: 20
         implicitHeight: implicitWidth
 
