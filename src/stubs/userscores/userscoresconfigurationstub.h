@@ -25,15 +25,15 @@ namespace mu::userscores {
 class UserScoresConfigurationStub : public IUserScoresConfiguration
 {
 public:
-    ValCh<QStringList> recentScoreList() const override;
-    void setRecentScoreList(const QStringList& recentScoreList) override;
+    ValCh<QStringList> recentScorePaths() const override;
+    void setRecentScorePaths(const QStringList& recentScorePaths) override;
 
     io::paths templatesDirPaths() const override;
     io::path scoresPath() const override;
     io::path defaultSavingFilePath(const std::string& fileName) const override;
 
     QColor templatePreviewBackgroundColor() const override;
-    async::Channel<QColor> templatePreviewBackgroundColorChanged() const override;
+    async::Channel<QColor> templatePreviewBackgroundChanged() const override;
 };
 }
 

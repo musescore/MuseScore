@@ -40,11 +40,7 @@ Theme::Theme(QObject* parent)
 
 void Theme::init()
 {
-    m_currentTheme = configuration()->currentTheme();
-
     configuration()->currentThemeChanged().onNotify(this, [this]() {
-        m_currentTheme = configuration()->currentTheme();
-
         update();
     });
 
@@ -214,12 +210,17 @@ mu::async::Notification Theme::themeChanged() const
 
 QColor Theme::colorByKey(ThemeStyleKey key) const
 {
-    return m_currentTheme.values[key].toString();
+    return currentTheme().values[key].toString();
 }
 
 qreal Theme::realByKey(ThemeStyleKey key) const
 {
-    return m_currentTheme.values[key].toDouble();
+    return currentTheme().values[key].toDouble();
+}
+
+ThemeInfo Theme::currentTheme() const
+{
+    return configuration()->currentTheme();
 }
 
 void Theme::initUiFonts()
@@ -341,8 +342,6 @@ void Theme::setupWidgetTheme()
     QFont widgetsFont = bodyFont();
     widgetsFont.setPointSize(configuration()->fontSize(FontSizeType::BODY));
     QApplication::setFont(widgetsFont);
-
-    platformTheme()->setAppThemeDark(m_currentTheme.codeKey == DARK_THEME_CODE);
 }
 
 void Theme::notifyAboutThemeChanged()

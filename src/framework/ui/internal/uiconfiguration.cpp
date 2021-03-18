@@ -111,10 +111,6 @@ void UiConfiguration::init()
         notifyAboutCurrentThemeChanged();
     });
 
-    platformTheme()->darkModeSwitched().onReceive(nullptr, [this](bool) {
-        notifyAboutCurrentThemeChanged();
-    });
-
     settings()->valueChanged(UI_FONT_FAMILY_KEY).onReceive(nullptr, [this](const Val&) {
         m_fontChanged.notify();
     });
@@ -143,8 +139,27 @@ void UiConfiguration::init()
     initThemes();
 }
 
+void UiConfiguration::deinit()
+{
+    platformTheme()->stopListening();
+}
+
+bool UiConfiguration::needFollowSystemTheme() const
+{
+    return settings()->value(UI_CURRENT_THEME_CODE_KEY).isNull() &&
+           platformTheme()->isFollowSystemThemeAvailable();
+}
+
 void UiConfiguration::initThemes()
 {
+    if (needFollowSystemTheme()) {
+        platformTheme()->startListening();
+    }
+
+    platformTheme()->darkModeSwitched().onReceive(nullptr, [this](bool) {
+        notifyAboutCurrentThemeChanged();
+    });
+
     for (const std::string& codeKey : allStandardThemeCodes()) {
         m_themes.push_back(makeStandardTheme(codeKey));
     }
@@ -175,6 +190,8 @@ void UiConfiguration::updateCurrentTheme()
             break;
         }
     }
+
+    platformTheme()->setAppThemeDark(currentCodeKey == DARK_THEME_CODE);
 }
 
 void UiConfiguration::notifyAboutCurrentThemeChanged()
@@ -268,9 +285,8 @@ ThemeInfo UiConfiguration::currentTheme() const
 std::string UiConfiguration::currentThemeCodeKey() const
 {
     std::string preferredThemeCode = settings()->value(UI_CURRENT_THEME_CODE_KEY).toString();
-    bool followSystemTheme = preferredThemeCode.empty() && platformTheme()->isFollowSystemThemeAvailable();
 
-    if (followSystemTheme) {
+    if (needFollowSystemTheme()) {
         return platformTheme()->isDarkMode() ? DARK_THEME_CODE : LIGHT_THEME_CODE;
     }
 
@@ -445,6 +461,11 @@ void UiConfiguration::setPageState(const std::string& pageName, const QByteArray
 Notification UiConfiguration::pageStateChanged() const
 {
     return m_pageStateChanged;
+}
+
+void UiConfiguration::applyPlatformStyle(QWidget* window)
+{
+    platformTheme()->applyPlatformStyle(window);
 }
 
 QByteArray UiConfiguration::stringToByteArray(const std::string& string) const

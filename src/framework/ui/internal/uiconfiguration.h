@@ -17,12 +17,12 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef UICONFIGURATION_H
-#define UICONFIGURATION_H
+#ifndef MU_UI_UICONFIGURATION_H
+#define MU_UI_UICONFIGURATION_H
 
 #include "iuiconfiguration.h"
 #include "imainwindow.h"
-#include "iplatformtheme.h"
+#include "internal/iplatformtheme.h"
 #include "iworkspacesettings.h"
 #include "val.h"
 
@@ -37,6 +37,7 @@ class UiConfiguration : public IUiConfiguration
 
 public:
     void init();
+    void deinit();
 
     QStringList possibleFontFamilies() const override;
     ThemeList themes() const override;
@@ -69,7 +70,11 @@ public:
     void setPageState(const std::string& pageName, const QByteArray& state) override;
     async::Notification pageStateChanged() const override;
 
+    void applyPlatformStyle(QWidget* window) override;
+
 private:
+    bool needFollowSystemTheme() const;
+
     void initThemes();
     void notifyAboutCurrentThemeChanged();
     void updateCurrentTheme();
@@ -95,4 +100,4 @@ private:
 };
 }
 
-#endif // UICONFIGURATION_H
+#endif // MU_UI_UICONFIGURATION_H

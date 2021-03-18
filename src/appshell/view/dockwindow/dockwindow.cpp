@@ -103,7 +103,7 @@ void DockWindow::onMainWindowEvent(QEvent* event)
 {
     switch (event->type()) {
     case QEvent::Paint: {
-        platformTheme()->styleWindow(m_window);
+        configuration()->applyPlatformStyle(m_window);
     } break;
     case QEvent::Resize: {
         QResizeEvent* resizeEvent = static_cast<QResizeEvent*>(event);
@@ -281,7 +281,7 @@ void DockWindow::updateStyle()
 {
     m_window->setStyleSheet(WINDOW_QSS.arg(m_color.name()).arg(m_borderColor.name()));
     m_statusbar->setStyleSheet(STATUS_QSS.arg(m_color.name()).arg(m_borderColor.name()));
-    platformTheme()->styleWindow(m_window);
+    configuration()->applyPlatformStyle(m_window);
 }
 
 void DockWindow::onMenusChanged(const QList<QMenu*>& menus)

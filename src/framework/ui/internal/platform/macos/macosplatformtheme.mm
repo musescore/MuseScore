@@ -26,7 +26,7 @@ using namespace mu::async;
 
 id<NSObject> darkModeObserverToken;
 
-MacOSPlatformTheme::MacOSPlatformTheme()
+void MacOSPlatformTheme::startListening()
 {
     NSDistributedNotificationCenter* n = [NSDistributedNotificationCenter defaultCenter];
     darkModeObserverToken = [n addObserverForName:@"AppleInterfaceThemeChangedNotification"
@@ -35,14 +35,10 @@ MacOSPlatformTheme::MacOSPlatformTheme()
                                        usingBlock:^(NSNotification*) { m_darkModeSwitched.send(isDarkMode()); }];
 }
 
-MacOSPlatformTheme::~MacOSPlatformTheme()
+void MacOSPlatformTheme::stopListening()
 {
     NSDistributedNotificationCenter* n = [NSDistributedNotificationCenter defaultCenter];
     [n removeObserver:darkModeObserverToken];
-}
-
-void MacOSPlatformTheme::init()
-{
 }
 
 bool MacOSPlatformTheme::isFollowSystemThemeAvailable() const

@@ -57,7 +57,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uitypes.h
     ${CMAKE_CURRENT_LIST_DIR}/imainwindow.h
     ${CMAKE_CURRENT_LIST_DIR}/itheme.h
-    ${CMAKE_CURRENT_LIST_DIR}/iplatformtheme.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.h
@@ -67,6 +66,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/themeconverter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/themeconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/iplatformtheme.h
     ${PLATFORM_THEME_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.cpp
