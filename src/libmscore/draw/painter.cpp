@@ -58,7 +58,11 @@ Painter::~Painter()
 
 void Painter::init()
 {
-    m_states.push(State());
+    State st;
+    st.worldTransform = m_provider->transform();
+    st.isWxF = true;
+    m_states.push(std::move(st));
+
     m_provider->beginTarget(m_name);
     if (extended) {
         extended->beginTarget(m_name);
