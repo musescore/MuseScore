@@ -52,8 +52,10 @@ void BufferedPaintProvider::beforeEndTargetHook(Painter*)
 bool BufferedPaintProvider::endTarget(bool endDraw)
 {
     UNUSED(endDraw);
-    m_isActive = false;
-    endObject();
+    if (m_isActive) {
+        m_isActive = false;
+        endObject();
+    }
     return true;
 }
 
