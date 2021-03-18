@@ -1574,6 +1574,7 @@ static void distributeStaves(Page* page)
       int    ngaps { 0 };
       qreal  prevYBottom  { page->tm() };
       qreal  yBottom      { 0.0        };
+      qreal  spacerOffset { 0.0        };
       bool   vbox         { false      };
       Spacer* nextSpacer  { nullptr    };
       bool transferNormalBracket { false };
@@ -1640,8 +1641,9 @@ static void distributeStaves(Page* page)
                               vbox = false;
                               }
 
-                        prevYBottom = system->y() + sysStaff->y() + sysStaff->bbox().height();
-                        yBottom     = system->y() + sysStaff->y() + sysStaff->yBottom();
+                        prevYBottom  = system->y() + sysStaff->y() + sysStaff->bbox().height();
+                        yBottom      = system->y() + sysStaff->y() + sysStaff->skyline().south().max();
+                        spacerOffset = sysStaff->skyline().south().max() - sysStaff->bbox().height();
                         vgdl.append(vgd);
                         }
                   transferNormalBracket = endNormalBracket >= 0;
@@ -1651,8 +1653,8 @@ static void distributeStaves(Page* page)
       --ngaps;
 
       qreal spaceLeft { page->height() - page->bm() - score->styleP(Sid::staffLowerBorder) - yBottom };
-      if (nextSpacer && (nextSpacer->spacerType() == SpacerType::DOWN))
-          spaceLeft -= nextSpacer->gap();
+      if (nextSpacer)
+            spaceLeft -= qMax(0.0, nextSpacer->gap() - spacerOffset - score->styleP(Sid::staffLowerBorder));
       if (spaceLeft <= 0.0)
             return;
 
