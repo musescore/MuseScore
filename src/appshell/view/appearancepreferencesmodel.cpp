@@ -19,6 +19,8 @@
 
 #include "appearancepreferencesmodel.h"
 
+#include "ui/internal/themeconverter.h"
+
 #include "log.h"
 
 using namespace mu::appshell;
@@ -59,15 +61,7 @@ QVariantList AppearancePreferencesModel::themes() const
     QVariantList result;
 
     for (const ThemeInfo& theme: m_themes) {
-        QVariantMap obj;
-
-        obj["title"] = QString::fromStdString(theme.title);
-
-        for (auto it = theme.values.cbegin(); it != theme.values.cend(); ++it) {
-            obj[themeStyleKeyToString(it->first)] = it->second.toString();
-        }
-
-        result << obj;
+        result << ThemeConverter::toMap(theme);
     }
 
     return result;
@@ -96,7 +90,7 @@ QStringList AppearancePreferencesModel::allFonts() const
 int AppearancePreferencesModel::currentThemeIndex() const
 {
     for (int i = 0; i < static_cast<int>(m_themes.size()); ++i) {
-        if (m_themes[i].type == currentTheme().type) {
+        if (m_themes[i].codeKey == currentTheme().codeKey) {
             return i;
         }
     }
@@ -179,7 +173,7 @@ void AppearancePreferencesModel::setCurrentThemeIndex(int index)
         return;
     }
 
-    uiConfiguration()->setCurrentThemeType(m_themes[index].type);
+    uiConfiguration()->setCurrentTheme(m_themes[index].codeKey);
     emit themesChanged();
 }
 

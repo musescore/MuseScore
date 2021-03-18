@@ -26,14 +26,23 @@
 #include "val.h"
 
 namespace mu::ui {
-enum class ThemeType {
-    DARK_THEME = 0,
-    LIGHT_THEME,
-    HIGH_CONTRAST
-};
+static std::string DARK_THEME_CODE("dark");
+static std::string LIGHT_THEME_CODE("light");
+static std::string HIGH_CONTRAST_THEME_CODE("high_contrast");
+
+inline std::vector<std::string> allStandardThemeCodes()
+{
+    return {
+        LIGHT_THEME_CODE,
+        DARK_THEME_CODE,
+        HIGH_CONTRAST_THEME_CODE
+    };
+}
 
 enum ThemeStyleKey
 {
+    UNKNOWN = -1,
+
     BACKGROUND_PRIMARY_COLOR = 0,
     BACKGROUND_SECONDARY_COLOR,
     POPUP_BACKGROUND_COLOR,
@@ -56,36 +65,11 @@ enum ThemeStyleKey
     ITEM_OPACITY_DISABLED
 };
 
-inline QString themeStyleKeyToString(ThemeStyleKey key)
-{
-    switch (key) {
-    case BACKGROUND_PRIMARY_COLOR: return "backgroundPrimaryColor";
-    case BACKGROUND_SECONDARY_COLOR: return "backgroundSecondaryColor";
-    case POPUP_BACKGROUND_COLOR: return "popupBackgroundColor";
-    case TEXT_FIELD_COLOR: return "textFieldColor";
-    case ACCENT_COLOR: return "accentColor";
-    case STROKE_COLOR: return "strokeColor";
-    case BUTTON_COLOR: return "buttonColor";
-    case FONT_PRIMARY_COLOR: return "fontPrimaryColor";
-    case FONT_SECONDARY_COLOR: return "fontSecondaryColor";
-    case LINK_COLOR: return "linkColor";
-    case ACCENT_OPACITY_NORMAL: return "accentOpacityNormal";
-    case ACCENT_OPACITY_HOVER: return "accentOpacityHover";
-    case ACCENT_OPACITY_HIT: return "accentOpacityHit";
-    case BUTTON_OPACITY_NORMAL: return "buttonOpacityNormal";
-    case BUTTON_OPACITY_HOVER: return "buttonOpacityHover";
-    case BUTTON_OPACITY_HIT: return "buttonOpacityHit";
-    case ITEM_OPACITY_DISABLED: return "itemOpacityDisabled";
-    }
-
-    return QString();
-}
-
 struct ThemeInfo
 {
-    ThemeType type;
+    std::string codeKey;
     std::string title;
-    std::map<ThemeStyleKey, QVariant> values;
+    QMap<ThemeStyleKey, QVariant> values;
 };
 
 using ThemeList = std::vector<ThemeInfo>;

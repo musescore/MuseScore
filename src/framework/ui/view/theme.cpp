@@ -342,7 +342,7 @@ void Theme::setupWidgetTheme()
     widgetsFont.setPointSize(configuration()->fontSize(FontSizeType::BODY));
     QApplication::setFont(widgetsFont);
 
-    platformTheme()->setAppThemeDark(m_currentTheme.type == ThemeType::DARK_THEME);
+    platformTheme()->setAppThemeDark(m_currentTheme.codeKey == DARK_THEME_CODE);
 }
 
 void Theme::notifyAboutThemeChanged()
