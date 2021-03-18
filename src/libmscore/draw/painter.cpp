@@ -53,10 +53,7 @@ Painter::Painter(QPainter* qp, const std::string& name, bool overship)
 
 Painter::~Painter()
 {
-    m_provider->endTarget();
-    if (extended) {
-        extended->endTarget();
-    }
+    endTarget(false);
 }
 
 void Painter::init()
@@ -78,11 +75,26 @@ QPainter* Painter::qpainter() const
     return m_provider->qpainter();
 }
 
+IPaintProviderPtr Painter::provider() const
+{
+    return m_provider;
+}
+
 bool Painter::endDraw()
 {
-    bool ok = m_provider->endTarget(true);
+    return endTarget(true);
+}
+
+bool Painter::endTarget(bool endDraw)
+{
+    m_provider->beforeEndTargetHook(this);
     if (extended) {
-        extended->endTarget(true);
+        extended->beforeEndTargetHook(this);
+    }
+
+    bool ok = m_provider->endTarget(endDraw);
+    if (extended) {
+        extended->endTarget(endDraw);
     }
     return ok;
 }
@@ -463,4 +475,7 @@ void Painter::updateMatrix()
     }
 
     m_provider->setTransform(st.transform);
+    if (extended) {
+        extended->setTransform(st.transform);
+    }
 }

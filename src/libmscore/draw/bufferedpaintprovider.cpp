@@ -45,6 +45,10 @@ void BufferedPaintProvider::beginTarget(const std::string& name)
     m_isActive = true;
 }
 
+void BufferedPaintProvider::beforeEndTargetHook(Painter*)
+{
+}
+
 bool BufferedPaintProvider::endTarget(bool endDraw)
 {
     UNUSED(endDraw);
@@ -69,8 +73,16 @@ void BufferedPaintProvider::endObject()
 {
     TRACEFUNC;
     m_drawObjectsLogger.endObject();
+
+    // remove last empty state
+    DrawData::Object& obj = m_currentObjects.top();
+    if (!obj.datas.empty() && obj.datas.back().empty()) {
+        obj.datas.pop_back();
+    }
+
     // move object to buffer
-    m_buf.objects.push_back(m_currentObjects.top());
+    m_buf.objects.push_back(obj);
+
     // remove obj
     m_currentObjects.pop();
 }

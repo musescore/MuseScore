@@ -41,8 +41,8 @@ void AbDrawCompStep::doRun(AbContext ctx)
 
     draw::DrawComp::Tolerance tolerance;
     tolerance.base = 0.01;
-    draw::DrawComp::Diff diff = draw::DrawComp::compare(curBuf, refBuf, tolerance);
-    ctx.setVal<draw::DrawComp::Diff>(AbContext::Key::DiffDrawData, diff);
+    draw::Diff diff = draw::DrawComp::compare(curBuf, refBuf, tolerance);
+    ctx.setVal<draw::Diff>(AbContext::Key::DiffDrawData, diff);
 
     if (diff.empty()) {
         LOGI() << "draw data equals";

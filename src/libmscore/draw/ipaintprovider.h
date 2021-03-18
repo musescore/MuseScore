@@ -31,6 +31,7 @@
 #include "drawtypes.h"
 
 namespace mu::draw {
+class Painter;
 class IPaintProvider
 {
 public:
@@ -41,6 +42,7 @@ public:
 
     virtual bool isActive() const = 0;
     virtual void beginTarget(const std::string& name) = 0;
+    virtual void beforeEndTargetHook(Painter* painter) = 0;
     virtual bool endTarget(bool endDraw = false) = 0;
     virtual void beginObject(const std::string& name, const QPointF& pagePos) = 0;
     virtual void endObject() = 0;

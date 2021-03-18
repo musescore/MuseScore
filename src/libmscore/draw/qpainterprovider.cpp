@@ -59,6 +59,10 @@ void QPainterProvider::beginTarget(const std::string&)
 {
 }
 
+void QPainterProvider::beforeEndTargetHook(Painter*)
+{
+}
+
 bool QPainterProvider::endTarget(bool endDraw)
 {
     if (endDraw) {
@@ -147,6 +151,7 @@ void QPainterProvider::restore()
 
 void QPainterProvider::setTransform(const QTransform& transform)
 {
+    m_transform = transform;
     m_painter->setTransform(transform);
 }
 
