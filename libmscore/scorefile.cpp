@@ -447,16 +447,7 @@ bool MasterScore::saveFile(bool generateBackup)
                   dir.mkdir(backupSubdirString);
 #ifdef Q_OS_WIN
                   const QString backupDirNativePath = QDir::toNativeSeparators(backupDirString);
-#if (defined (_MSCVER) || defined (_MSC_VER))
-   #if (defined (UNICODE))
-                  SetFileAttributes((LPCTSTR)backupDirNativePath.unicode(), FILE_ATTRIBUTE_HIDDEN);
-   #else
-                  // Use byte-based Windows function
-                  SetFileAttributes((LPCTSTR)backupDirNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
-   #endif
-#else
-                  SetFileAttributes((LPCTSTR)backupDirNativePath.toLocal8Bit(), FILE_ATTRIBUTE_HIDDEN);
-#endif
+                  SetFileAttributesW(reinterpret_cast<LPCWSTR>(backupDirNativePath.utf16()), FILE_ATTRIBUTE_HIDDEN);
 #endif
                   }
             const QString backupName = QString(".") + info.fileName() + QString(",");
