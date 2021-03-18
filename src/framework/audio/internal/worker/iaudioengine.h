@@ -43,7 +43,6 @@ public:
     virtual async::Channel<bool> initChanged() const = 0;
     virtual unsigned int sampleRate() const = 0;
     virtual ISequencerPtr sequencer() const = 0;
-    virtual unsigned int startSynthesizer(synth::ISynthesizerPtr synthesizer) = 0;
     virtual IMixerPtr mixer() const = 0;
     virtual IAudioBufferPtr buffer() const = 0;
     virtual void setAudioBuffer(IAudioBufferPtr) = 0;

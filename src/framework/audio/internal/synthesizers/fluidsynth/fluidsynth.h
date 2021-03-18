@@ -88,7 +88,7 @@ private:
     std::vector<float> m_preallocated; // used to flush a sound
     bool m_isActive = false;
 
-    unsigned int m_sampleRate = 1;
+    unsigned int m_sampleRate = 0;
     std::vector<float> m_buffer = {};
     async::Channel<unsigned int> m_streamsCountChanged;
 };
