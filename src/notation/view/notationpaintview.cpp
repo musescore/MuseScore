@@ -357,10 +357,12 @@ void NotationPaintView::paint(QPainter* qp)
 
 void NotationPaintView::paintBackground(const QRect& rect, mu::draw::Painter* painter)
 {
-    if (configuration()->backgroundUseColor()) {
+    QString wallpaperPath = configuration()->backgroundWallpaperPath().toQString();
+
+    if (configuration()->backgroundUseColor() || wallpaperPath.isEmpty()) {
         painter->fillRect(rect, configuration()->backgroundColor());
     } else {
-        QPixmap pixmap(configuration()->backgroundWallpaperPath().toQString());
+        QPixmap pixmap(wallpaperPath);
         painter->drawTiledPixmap(rect, pixmap, rect.topLeft() - QPoint(m_matrix.m31(), m_matrix.m32()));
     }
 }

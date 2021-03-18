@@ -193,12 +193,13 @@ public:
 //   PaletteWorkspace
 //---------------------------------------------------------
 
-class PaletteWorkspace : public QObject
+class PaletteWorkspace : public QObject, mu::async::Asyncable
 {
     Q_OBJECT
 
     INJECT(palette, mu::ui::IMainWindow, mainWindow)
     INJECT(palette, mu::framework::IInteractive, interactive)
+    INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
     PaletteTreeModel* userPalette;
     PaletteTreeModel* masterPalette;
@@ -224,6 +225,8 @@ class PaletteWorkspace : public QObject
     Q_PROPERTY(
         Ms::AbstractPaletteController* customElementsPaletteController READ getCustomElementsPaletteController CONSTANT)
 
+    Q_PROPERTY(QColor elementsBackgroundColor READ elementsBackgroundColor NOTIFY elementsBackgroundColorChanged)
+
     QAbstractItemModel* mainPaletteModel();
     AbstractPaletteController* getMainPaletteController();
 
@@ -240,9 +243,12 @@ class PaletteWorkspace : public QObject
 signals:
     void userPaletteChanged();
     void mainPaletteChanged();
+    void elementsBackgroundColorChanged(QColor color);
 
 public:
     explicit PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* master = nullptr, QObject* parent = nullptr);
+
+    QColor elementsBackgroundColor() const;
 
     Q_INVOKABLE QModelIndex poolPaletteIndex(const QModelIndex& index, Ms::FilterPaletteTreeModel* poolPalette);
     Q_INVOKABLE QModelIndex customElementsPaletteIndex(const QModelIndex& index);
