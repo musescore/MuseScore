@@ -75,9 +75,9 @@ void WindowsPlatformTheme::startListening()
         return;
     }
     m_isListening = true;
-    if (RegOpenKeyEx(HKEY_CURRENT_USER, windowsThemeKey.c_str(), 0,
-                     KEY_NOTIFY | KEY_CREATE_SUB_KEY | KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE | KEY_WOW64_64KEY,
-                     &hKey) == ERROR_SUCCESS) {
+    if (RegOpenKeyExW(HKEY_CURRENT_USER, windowsThemeKey.c_str(), 0,
+                      KEY_NOTIFY | KEY_CREATE_SUB_KEY | KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE | KEY_WOW64_64KEY,
+                      &hKey) == ERROR_SUCCESS) {
         m_listenThread = std::thread([this]() { th_listen(); });
     } else {
         LOGD() << "Failed opening key for listening dark theme changes.";
