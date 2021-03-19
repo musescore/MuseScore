@@ -23,6 +23,8 @@
 
 static const std::string module_name("appshell");
 
+static const Settings::Key CHECK_FOR_UPDATE_KEY(module_name, "application/checkForUpdate");
+
 static const std::string ONLINE_HANDBOOK_URL("https://musescore.org/redirect/help?tag=handbook&locale=");
 static const std::string ASK_FOR_HELP_URL("https://musescore.org/redirect/post/question?locale=");
 static const std::string BUG_REPORT_URL("https://musescore.org/redirect/post/bug-report?locale=");
@@ -43,6 +45,8 @@ using namespace mu::framework;
 
 void AppShellConfiguration::init()
 {
+    settings()->setDefaultValue(CHECK_FOR_UPDATE_KEY, Val(isAppUpdatable()));
+
     settings()->setDefaultValue(NOTATION_NAVIGATOR_VISIBLE_KEY, Val(false));
     settings()->valueChanged(NOTATION_NAVIGATOR_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
         m_notationNavigatorVisibleChanged.send(isNotationNavigatorVisible().val);
@@ -65,6 +69,16 @@ bool AppShellConfiguration::isAppUpdatable() const
 #else
     return false;
 #endif
+}
+
+bool AppShellConfiguration::needCheckForUpdate() const
+{
+    return settings()->value(CHECK_FOR_UPDATE_KEY).toBool();
+}
+
+void AppShellConfiguration::setNeedCheckForUpdate(bool needCheck)
+{
+    settings()->setValue(CHECK_FOR_UPDATE_KEY, Val(needCheck));
 }
 
 std::string AppShellConfiguration::handbookUrl() const

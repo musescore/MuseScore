@@ -23,33 +23,36 @@
 
 #include "modularity/ioc.h"
 #include "extensions/iextensionsconfiguration.h"
+#include "iappshellconfiguration.h"
 
 namespace mu::appshell {
 class UpdatePreferencesModel : public QObject
 {
     Q_OBJECT
 
+    INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, extensions::IExtensionsConfiguration, extensionsConfiguration)
 
     Q_PROPERTY(
-        bool needCheckForNewMuseScoreVersion READ needCheckForNewMuseScoreVersion WRITE setNeedCheckForNewMuseScoreVersion NOTIFY needCheckForNewMuseScoreVersionChanged)
+        bool needCheckForNewAppVersion READ needCheckForNewAppVersion WRITE setNeedCheckForNewAppVersion NOTIFY needCheckForNewAppVersionChanged)
     Q_PROPERTY(
-        bool needCheckForNewExtensionsVersion READ needCheckForNewExtensionsVersion WRITE setNeedCheckForNewExtensionsVersion NOTIFY needCheckForNewMuseScoreVersionChanged)
+        bool needCheckForNewExtensionsVersion READ needCheckForNewExtensionsVersion WRITE setNeedCheckForNewExtensionsVersion NOTIFY needCheckForNewExtensionsVersionChanged)
 
 public:
     explicit UpdatePreferencesModel(QObject* parent = nullptr);
 
-    bool needCheckForNewMuseScoreVersion() const;
+    bool needCheckForNewAppVersion() const;
     bool needCheckForNewExtensionsVersion() const;
 
     Q_INVOKABLE void load();
+    Q_INVOKABLE bool isAppUpdatable() const;
 
 public slots:
-    void setNeedCheckForNewMuseScoreVersion(bool value);
+    void setNeedCheckForNewAppVersion(bool value);
     void setNeedCheckForNewExtensionsVersion(bool value);
 
 signals:
-    void needCheckForNewMuseScoreVersionChanged(bool value);
+    void needCheckForNewAppVersionChanged(bool value);
     void needCheckForNewExtensionsVersionChanged(bool value);
 };
 }

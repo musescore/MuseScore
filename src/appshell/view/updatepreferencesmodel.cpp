@@ -30,13 +30,18 @@ UpdatePreferencesModel::UpdatePreferencesModel(QObject* parent)
 
 void UpdatePreferencesModel::load()
 {
-    emit needCheckForNewMuseScoreVersionChanged(needCheckForNewMuseScoreVersion());
+    emit needCheckForNewAppVersionChanged(needCheckForNewAppVersion());
     emit needCheckForNewExtensionsVersionChanged(needCheckForNewExtensionsVersion());
 }
 
-bool UpdatePreferencesModel::needCheckForNewMuseScoreVersion() const
+bool UpdatePreferencesModel::isAppUpdatable() const
 {
-    return false;
+    return configuration()->isAppUpdatable();
+}
+
+bool UpdatePreferencesModel::needCheckForNewAppVersion() const
+{
+    return configuration()->needCheckForUpdate();
 }
 
 bool UpdatePreferencesModel::needCheckForNewExtensionsVersion() const
@@ -44,15 +49,14 @@ bool UpdatePreferencesModel::needCheckForNewExtensionsVersion() const
     return extensionsConfiguration()->needCheckForUpdate();
 }
 
-void UpdatePreferencesModel::setNeedCheckForNewMuseScoreVersion(bool value)
+void UpdatePreferencesModel::setNeedCheckForNewAppVersion(bool value)
 {
-    NOT_IMPLEMENTED;
-
-    if (value == needCheckForNewMuseScoreVersion()) {
+    if (value == needCheckForNewAppVersion()) {
         return;
     }
 
-    emit needCheckForNewMuseScoreVersionChanged(value);
+    configuration()->setNeedCheckForUpdate(value);
+    emit needCheckForNewAppVersionChanged(value);
 }
 
 void UpdatePreferencesModel::setNeedCheckForNewExtensionsVersion(bool value)
