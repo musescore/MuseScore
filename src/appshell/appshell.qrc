@@ -32,6 +32,7 @@
         <file>qml/AboutMusicXMLDialog.qml</file>
         <file>qml/resources/mu_logo.svg</file>
         <file>qml/Preferences/GeneralPreferencesPage.qml</file>
+        <file>qml/Preferences/UpdatePreferencesPage.qml</file>
         <file>qml/Preferences/StubPreferencesPage.qml</file>
     </qresource>
 </RCC>
