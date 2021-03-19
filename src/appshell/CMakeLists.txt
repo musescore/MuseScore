@@ -71,6 +71,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/helpmenucontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/generalpreferencesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/generalpreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/updatepreferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/updatepreferencesmodel.h
     ${DOCKWINDOW_SRC}
     )
 
