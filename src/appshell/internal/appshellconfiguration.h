@@ -41,6 +41,9 @@ public:
 
     bool isAppUpdatable() const override;
 
+    bool needCheckForUpdate() const override;
+    void setNeedCheckForUpdate(bool needCheck) override;
+
     std::string handbookUrl() const override;
     std::string askForHelpUrl() const override;
     std::string bugReportUrl() const override;
