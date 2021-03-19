@@ -65,7 +65,7 @@ Item {
                 orientation: Qt.Horizontal
 
                 spacing: 16
-                leftPadding: spacing * styleData.depth
+                leftPadding: spacing * (styleData.depth + 1)
 
                 normalStateFont: ui.theme.bodyFont
                 selectedStateFont: ui.theme.bodyBoldFont

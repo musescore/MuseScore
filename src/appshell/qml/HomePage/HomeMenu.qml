@@ -31,6 +31,9 @@ RadioButtonGroup {
 
         width: parent.width
 
+        spacing: 30
+        leftPadding: spacing
+
         ButtonGroup.group: radioButtonList.radioButtonGroup
         orientation: Qt.Horizontal
         checked: modelData["name"] === radioButtonList.currentPageName
