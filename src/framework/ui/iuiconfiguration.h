@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef IUICONFIGURATION_H
-#define IUICONFIGURATION_H
+#ifndef MU_UI_IUICONFIGURATION_H
+#define MU_UI_IUICONFIGURATION_H
 
 #include <optional>
 
@@ -73,4 +73,4 @@ public:
 };
 }
 
-#endif // IUICONFIGURATION_H
+#endif // MU_UI_IUICONFIGURATION_H

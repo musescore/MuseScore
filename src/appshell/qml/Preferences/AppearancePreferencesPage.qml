@@ -22,10 +22,6 @@ Flickable {
         id: appearanceModel
     }
 
-    Component.onCompleted: {
-        appearanceModel.load()
-    }
-
     Column {
         id: content
 
