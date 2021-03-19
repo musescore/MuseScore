@@ -34,7 +34,7 @@ void TelemetryConfiguration::init()
     settings()->setDefaultValue(IS_TELEMETRY_ALLOWED, Val(false));
     settings()->setDefaultValue(IS_DUMP_UPLOAD_ALLOWED, Val(true));
 
-    settings()->valueChanged(IS_TELEMETRY_ALLOWED).onReceive(this, [this](const Val& allowed){
+    settings()->valueChanged(IS_TELEMETRY_ALLOWED).onReceive(this, [this](const Val& allowed) {
         m_isTelemetryAllowedChannel.send(allowed.toBool());
     });
 }

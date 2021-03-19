@@ -45,7 +45,7 @@ void GeneralPreferencesModel::load()
 
 void GeneralPreferencesModel::openUpdateTranslationsPage()
 {
-    interactive()->open("musescore://home?initiallyPageName=add-ons&initiallySubPageName=languages");
+    interactive()->open("musescore://home?item=add-ons&subItem=languages");
 }
 
 QVariantList GeneralPreferencesModel::languages() const

@@ -11,14 +11,14 @@ FocusScope {
     id: root
 
     property var color: ui.theme.backgroundSecondaryColor
-    property string initiallyPageName: ""
+    property string item: ""
 
-    onInitiallyPageNameChanged: {
-        if (!Boolean(root.initiallyPageName)) {
+    onItemChanged: {
+        if (!Boolean(root.item)) {
             return
         }
 
-        bar.selectPage(root.initiallyPageName)
+        bar.selectPage(root.item)
     }
 
     Rectangle {

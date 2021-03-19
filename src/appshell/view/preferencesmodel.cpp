@@ -81,7 +81,7 @@ QModelIndex PreferencesModel::parent(const QModelIndex& child) const
 
 int PreferencesModel::rowCount(const QModelIndex& parent) const
 {
-    PreferencePageItem* parentItem;
+    PreferencePageItem* parentItem = nullptr;
 
     if (!parent.isValid()) {
         parentItem = m_rootItem;
@@ -179,7 +179,7 @@ bool PreferencesModel::apply()
 void PreferencesModel::selectRow(const QModelIndex& rowIndex)
 {
     QModelIndex parentItemIndex = parent(rowIndex);
-    PreferencePageItem* parentItem;
+    PreferencePageItem* parentItem = nullptr;
     if (!parentItemIndex.isValid()) {
         parentItem = m_rootItem;
     } else {
