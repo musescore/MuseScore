@@ -13,16 +13,16 @@ DockPage {
 
     objectName: "Home"
 
-    property string initiallyPageName: ""
-    property string initiallySubPageName: ""
+    property string item: ""
+    property string subItem: ""
 
-    onInitiallyPageNameChanged: {
-        if (!Boolean(initiallyPageName)) {
+    onItemChanged: {
+        if (!Boolean(item)) {
             return
         }
 
-        if (homeCentral.currentCompName !== initiallyPageName) {
-            Qt.callLater(homeCentral.load, initiallyPageName)
+        if (homeCentral.currentCompName !== item) {
+            Qt.callLater(homeCentral.load, item)
         }
     }
 
@@ -124,7 +124,7 @@ DockPage {
     Component {
         id: addonsComp
         AddonsContent {
-            initiallyPageName: homePage.initiallySubPageName
+            item: homePage.subItem
         }
     }
 
