@@ -53,6 +53,9 @@ elseif(CC_IS_MINGW)
         set(CMAKE_EXE_LINKER_FLAGS "-Wl,--large-address-aware")
     endif (NOT BUILD_64)
 
+    add_definitions(-D_UNICODE)
+    add_definitions(-DUNICODE)
+
 elseif(CC_IS_CLANG)
     message(STATUS "Using Compiler CLANG ${CMAKE_CXX_COMPILER_VERSION}")
 
