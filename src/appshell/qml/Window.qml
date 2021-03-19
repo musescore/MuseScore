@@ -75,7 +75,7 @@ DockWindow {
     toolbars: [
         DockToolBar {
             objectName: "mainToolBar"
-            minimumWidth: 282
+            minimumWidth: 296
             minimumHeight: dockWindow.toolbarHeight
 
             color: dockWindow.color
