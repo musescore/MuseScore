@@ -33,6 +33,10 @@ void TelemetryConfiguration::init()
     settings()->setDefaultValue(REQUEST_TELEMETRY_PERMISSION, Val(true));
     settings()->setDefaultValue(IS_TELEMETRY_ALLOWED, Val(false));
     settings()->setDefaultValue(IS_DUMP_UPLOAD_ALLOWED, Val(true));
+
+    settings()->valueChanged(IS_TELEMETRY_ALLOWED).onReceive(this, [this](const Val& allowed) {
+        m_isTelemetryAllowedChannel.send(allowed.toBool());
+    });
 }
 
 bool TelemetryConfiguration::needRequestTelemetryPermission() const
@@ -40,10 +44,14 @@ bool TelemetryConfiguration::needRequestTelemetryPermission() const
     return settings()->value(REQUEST_TELEMETRY_PERMISSION).toBool();
 }
 
-bool TelemetryConfiguration::isTelemetryAllowed() const
+mu::ValCh<bool> TelemetryConfiguration::isTelemetryAllowed() const
 {
+    mu::ValCh<bool> allowed;
+    allowed.ch = m_isTelemetryAllowedChannel;
     static QString id(TELEMETRY_TRACK_ID);
-    return !id.isEmpty() && settings()->value(IS_TELEMETRY_ALLOWED).toBool();
+    allowed.val = !id.isEmpty() && settings()->value(IS_TELEMETRY_ALLOWED).toBool();
+
+    return allowed;
 }
 
 void TelemetryConfiguration::setIsTelemetryAllowed(bool val)

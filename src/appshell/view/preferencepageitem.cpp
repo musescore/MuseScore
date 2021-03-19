@@ -52,6 +52,11 @@ QString PreferencePageItem::path() const
     return m_path;
 }
 
+bool PreferencePageItem::expanded() const
+{
+    return m_expanded;
+}
+
 PreferencePageItem* PreferencePageItem::parentItem() const
 {
     return m_parent;
@@ -144,4 +149,14 @@ void PreferencePageItem::setPath(QString path)
 
     m_path = path;
     emit pathChanged(m_path);
+}
+
+void PreferencePageItem::setExpanded(bool expanded)
+{
+    if (m_expanded == expanded) {
+        return;
+    }
+
+    m_expanded = expanded;
+    emit expandedChanged(m_expanded);
 }

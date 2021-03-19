@@ -11,6 +11,15 @@ FocusScope {
     id: root
 
     property var color: ui.theme.backgroundSecondaryColor
+    property string item: ""
+
+    onItemChanged: {
+        if (!Boolean(root.item)) {
+            return
+        }
+
+        bar.selectPage(root.item)
+    }
 
     Rectangle {
         anchors.fill: parent
@@ -117,6 +126,20 @@ FocusScope {
             }
 
             return result
+        }
+
+        function pageIndex(pageName) {
+            switch (pageName) {
+            case "plugins": return 0
+            case "extensions": return 1
+            case "languages": return 2
+            }
+
+            return 0
+        }
+
+        function selectPage(pageName) {
+            currentIndex = pageIndex(pageName)
         }
 
         StyledTabButton {

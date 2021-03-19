@@ -8,7 +8,7 @@ Item {
     property var topParent: null
     property var provider: ui._interactiveProvider
 
-    signal requestedDockPage(var uri)
+    signal requestedDockPage(var uri, var params)
 
     anchors.fill: parent
 
@@ -31,7 +31,7 @@ Item {
             }
 
             if (page.type === ContainerType.PrimaryPage) {
-                root.requestedDockPage(data.value("uri"))
+                root.requestedDockPage(data.value("uri"), page.params)
                 root.provider.onOpen(page.type, {})
                 data.setValue("ret", {errcode: 0 })
                 return;

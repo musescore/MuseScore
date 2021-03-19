@@ -65,11 +65,11 @@ QModelIndex PreferencesModel::index(int row, int column, const QModelIndex& pare
 
 QModelIndex PreferencesModel::parent(const QModelIndex& child) const
 {
-    if (!child.isValid()) {
+    PreferencePageItem* childItem = modelIndexToItem(child);
+    if (!childItem) {
         return QModelIndex();
     }
 
-    PreferencePageItem* childItem = modelIndexToItem(child);
     PreferencePageItem* parentItem = qobject_cast<PreferencePageItem*>(childItem->parentItem());
 
     if (parentItem == m_rootItem) {
@@ -81,7 +81,7 @@ QModelIndex PreferencesModel::parent(const QModelIndex& child) const
 
 int PreferencesModel::rowCount(const QModelIndex& parent) const
 {
-    PreferencePageItem* parentItem;
+    PreferencePageItem* parentItem = nullptr;
 
     if (!parent.isValid()) {
         parentItem = m_rootItem;
@@ -130,6 +130,12 @@ void PreferencesModel::load(const QString& currentPageId)
 {
     beginResetModel();
 
+    if (!currentPageId.isEmpty()) {
+        setCurrentPageId(currentPageId);
+    } else {
+        setCurrentPageId("general");
+    }
+
     m_rootItem = new PreferencePageItem();
 
     QList<PreferencePageItem*> generalItems {
@@ -156,12 +162,6 @@ void PreferencesModel::load(const QString& currentPageId)
         m_rootItem->appendChild(item);
     }
 
-    if (!currentPageId.isEmpty()) {
-        setCurrentPageId(currentPageId);
-    } else {
-        setCurrentPageId("general");
-    }
-
     endResetModel();
 }
 
@@ -174,6 +174,30 @@ bool PreferencesModel::apply()
 {
     NOT_IMPLEMENTED;
     return false;
+}
+
+void PreferencesModel::selectRow(const QModelIndex& rowIndex)
+{
+    QModelIndex parentItemIndex = parent(rowIndex);
+    PreferencePageItem* parentItem = nullptr;
+    if (!parentItemIndex.isValid()) {
+        parentItem = m_rootItem;
+    } else {
+        parentItem = modelIndexToItem(parentItemIndex);
+    }
+
+    QList<PreferencePageItem*> children = parentItem->childrenItems();
+    for (PreferencePageItem* child: children) {
+        child->setExpanded(false);
+    }
+
+    PreferencePageItem* selectedItem = parentItem->childAtRow(rowIndex.row());
+    if (!selectedItem) {
+        return;
+    }
+
+    selectedItem->setExpanded(true);
+    setCurrentPageId(selectedItem->id());
 }
 
 QVariantList PreferencesModel::availablePages() const
@@ -219,9 +243,14 @@ PreferencePageItem* PreferencesModel::makeItem(const QString& id, const QString&
     item->setTitle(title);
     item->setIcon(icon);
     item->setPath(path);
+    item->setExpanded(id == currentPageId());
 
     for (PreferencePageItem* child: children) {
         item->appendChild(child);
+
+        if (child->id() == currentPageId()) {
+            item->setExpanded(true);
+        }
     }
 
     return item;
