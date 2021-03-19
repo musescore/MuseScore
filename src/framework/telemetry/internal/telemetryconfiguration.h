@@ -20,9 +20,10 @@
 #define MU_TELEMETRY_TELEMETRYCONFIGURATION_H
 
 #include "../itelemetryconfiguration.h"
+#include "async/asyncable.h"
 
 namespace mu::telemetry {
-class TelemetryConfiguration : public ITelemetryConfiguration
+class TelemetryConfiguration : public ITelemetryConfiguration, public async::Asyncable
 {
 public:
     TelemetryConfiguration() = default;
@@ -31,11 +32,14 @@ public:
 
     bool needRequestTelemetryPermission() const override;
 
-    bool isTelemetryAllowed() const override;
+    ValCh<bool> isTelemetryAllowed() const override;
     void setIsTelemetryAllowed(bool val) override;
 
     bool isDumpUploadAllowed() const override;
     void setIsDumpUploadAllowed(bool val) override;
+
+private:
+    async::Channel<bool> m_isTelemetryAllowedChannel;
 };
 }
 

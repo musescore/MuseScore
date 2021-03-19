@@ -44,6 +44,7 @@
 #include "view/toolsmenucontroller.h"
 #include "view/helpmenucontroller.h"
 #include "view/preferencesmodel.h"
+#include "view/generalpreferencesmodel.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;
@@ -123,6 +124,7 @@ void AppShellModule::registerUiTypes()
 
     qmlRegisterType<SettingListModel>("MuseScore.Preferences", 1, 0, "SettingListModel");
     qmlRegisterType<PreferencesModel>("MuseScore.Preferences", 1, 0, "PreferencesModel");
+    qmlRegisterType<GeneralPreferencesModel>("MuseScore.Preferences", 1, 0, "GeneralPreferencesModel");
     qmlRegisterType<AppMenuModel>("MuseScore.AppMenu", 1, 0, "AppMenuModel");
     qmlRegisterType<NotationPageModel>("MuseScore.AppShell", 1, 0, "NotationPageModel");
     qmlRegisterType<AboutModel>("MuseScore.AppShell", 1, 0, "AboutModel");

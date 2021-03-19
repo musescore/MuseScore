@@ -28,7 +28,31 @@ DockWindow {
     property var provider: InteractiveProvider {
         topParent: dockWindow
         onRequestedDockPage: {
+            initParams(uri, params)
             dockWindow.currentPageUri = uri
+        }
+
+        function initParams(uri, params) {
+            if (!Boolean(params)) {
+                return
+            }
+
+            for (var i in dockWindow.pages) {
+                var page = dockWindow.pages[i]
+                if (page.uri !== uri) {
+                    continue
+                }
+
+                var props = Object.keys(page)
+                for (var p in params) {
+                    if (props.indexOf(p) !== -1) {
+                        var value = params[p]
+                        // NOTE: needed reset the value for emitting a signal with new value
+                        page[p] = null
+                        page[p] = value
+                    }
+                }
+            }
         }
     }
 

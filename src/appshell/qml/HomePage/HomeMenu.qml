@@ -8,18 +8,20 @@ import MuseScore.Ui 1.0
 RadioButtonGroup {
     id: radioButtonList
 
+    property string currentPageName: ""
+
     orientation: ListView.Vertical
     spacing: 0
 
     signal selected(string name)
 
     model: [
-        { "name": qsTrc("appshell", "scores"), "title": qsTrc("appshell", "Scores"), "icon": IconCode.MUSIC_NOTES },
-        { "name": qsTrc("appshell", "add-ons"), "title": qsTrc("appshell", "Add-ons"), "icon":  IconCode.PLUS },
-        { "name": qsTrc("appshell", "audio"), "title": qsTrc("appshell", "Audio"), "icon":  IconCode.AUDIO },
-        { "name": qsTrc("appshell", "feautured"), "title": qsTrc("appshell", "Featured"), "icon":  IconCode.STAR },
-        { "name": qsTrc("appshell", "learn"), "title": qsTrc("appshell", "Learn"), "icon":  IconCode.MORTAR_BOARD },
-        { "name": qsTrc("appshell", "support"), "title": qsTrc("appshell", "Support"), "icon": IconCode.FEEDBACK },
+        { "name": "scores", "title": qsTrc("appshell", "Scores"), "icon": IconCode.MUSIC_NOTES },
+        { "name": "add-ons", "title": qsTrc("appshell", "Add-ons"), "icon":  IconCode.PLUS },
+        { "name": "audio", "title": qsTrc("appshell", "Audio"), "icon":  IconCode.AUDIO },
+        { "name": "feautured", "title": qsTrc("appshell", "Featured"), "icon":  IconCode.STAR },
+        { "name": "learn", "title": qsTrc("appshell", "Learn"), "icon":  IconCode.MORTAR_BOARD },
+        { "name": "support", "title": qsTrc("appshell", "Support"), "icon": IconCode.FEEDBACK },
     ]
 
     currentIndex: 0
@@ -31,7 +33,7 @@ RadioButtonGroup {
 
         ButtonGroup.group: radioButtonList.radioButtonGroup
         orientation: Qt.Horizontal
-        checked: index === radioButtonList.currentIndex
+        checked: modelData["name"] === radioButtonList.currentPageName
 
         title: modelData["title"]
 

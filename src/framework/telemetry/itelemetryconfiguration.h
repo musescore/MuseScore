@@ -20,6 +20,7 @@
 #define MU_TELEMETRY_ITELEMETRYCONFIGURATION_H
 
 #include "modularity/imoduleexport.h"
+#include "retval.h"
 
 namespace mu::telemetry {
 class ITelemetryConfiguration : MODULE_EXPORT_INTERFACE
@@ -31,7 +32,7 @@ public:
 
     virtual bool needRequestTelemetryPermission() const = 0;
 
-    virtual bool isTelemetryAllowed() const = 0;
+    virtual ValCh<bool> isTelemetryAllowed() const = 0;
     virtual void setIsTelemetryAllowed(bool val) = 0;
 
     virtual bool isDumpUploadAllowed() const = 0;

@@ -13,6 +13,19 @@ DockPage {
 
     objectName: "Home"
 
+    property string item: ""
+    property string subItem: ""
+
+    onItemChanged: {
+        if (!Boolean(item)) {
+            return
+        }
+
+        if (homeCentral.currentCompName !== item) {
+            Qt.callLater(homeCentral.load, item)
+        }
+    }
+
     panels: [
         DockPanel {
             id: homePanel
@@ -55,6 +68,8 @@ DockPage {
                         id: homeMenuButtons
                         Layout.topMargin: 20
                         Layout.fillWidth: true
+
+                        currentPageName: homeCentral.currentCompName
 
                         onSelected: {
                             homeCentral.load(name)
@@ -108,7 +123,9 @@ DockPage {
 
     Component {
         id: addonsComp
-        AddonsContent {}
+        AddonsContent {
+            item: homePage.subItem
+        }
     }
 
     Component {

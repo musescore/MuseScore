@@ -64,5 +64,5 @@ void TelemetryService::endSession()
 
 bool TelemetryService::isTelemetryAllowed() const
 {
-    return configuration()->isTelemetryAllowed();
+    return configuration()->isTelemetryAllowed().val;
 }
