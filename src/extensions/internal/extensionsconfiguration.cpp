@@ -31,6 +31,7 @@ using namespace mu::framework;
 using namespace mu::extensions;
 
 static const Settings::Key EXTENSIONS_JSON("extensions", "extensions/extensionsJson");
+static const Settings::Key CHECK_FOR_UPDATE("extensions", "extensions/checkForUpdate");
 
 static const io::path EXTENSIONS_DIR("/extensions");
 static const io::path WORKSPACES_DIR("/workspaces");
@@ -44,6 +45,8 @@ static const QString XML_FILTER("*.xml");
 
 void ExtensionsConfiguration::init()
 {
+    settings()->setDefaultValue(CHECK_FOR_UPDATE, Val(true));
+
     settings()->valueChanged(EXTENSIONS_JSON).onReceive(nullptr, [this](const Val& val) {
         LOGD() << "EXTENSION_Json changed: " << val.toString();
 
@@ -61,6 +64,16 @@ QUrl ExtensionsConfiguration::extensionFileServerUrl(const QString& extensionCod
 {
     io::path fileName = extensionFileName(extensionCode);
     return QUrl("http://extensions.musescore.org/4.0/extensions/" + fileName.toQString());
+}
+
+bool ExtensionsConfiguration::needCheckForUpdate() const
+{
+    return settings()->value(CHECK_FOR_UPDATE).toBool();
+}
+
+void ExtensionsConfiguration::setNeedCheckForUpdate(bool needCheck)
+{
+    settings()->setValue(CHECK_FOR_UPDATE, Val(needCheck));
 }
 
 ValCh<ExtensionsHash> ExtensionsConfiguration::extensions() const

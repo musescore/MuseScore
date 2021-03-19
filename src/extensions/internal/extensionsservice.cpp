@@ -39,7 +39,10 @@ void ExtensionsService::init()
 {
     fileSystem()->makePath(configuration()->extensionsSharePath());
     fileSystem()->makePath(configuration()->extensionsDataPath());
-    QtConcurrent::run(this, &ExtensionsService::th_refreshExtensions);
+
+    if (configuration()->needCheckForUpdate()) {
+        QtConcurrent::run(this, &ExtensionsService::th_refreshExtensions);
+    }
 }
 
 ValCh<ExtensionsHash> ExtensionsService::extensions() const
