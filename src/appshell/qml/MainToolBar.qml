@@ -46,6 +46,9 @@ Rectangle {
 
             ButtonGroup.group: radioButtonList.radioButtonGroup
 
+            spacing: 0
+            leftPadding: 12
+
             checked: modelData["uri"] === root.currentUri
             title: modelData["title"]
 

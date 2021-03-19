@@ -16,6 +16,9 @@ GradientTabButton {
 
     orientation: Qt.Horizontal
 
+    spacing: Boolean(avatarUrl) ? 18 : 30
+    leftPadding: spacing
+
     title: Boolean(userName) ? userName : qsTrc("cloud", "My Account")
     iconComponent: Boolean(avatarUrl) ? avatarComp : stubAvatarComp
 

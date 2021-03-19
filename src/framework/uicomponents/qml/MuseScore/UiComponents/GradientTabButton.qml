@@ -19,7 +19,9 @@ RadioDelegate {
 
     height: 48
 
-    spacing: 26
+    spacing: 30
+    leftPadding: 0
+    rightPadding: 0
 
     background: Item {
         anchors.fill: parent
@@ -98,24 +100,24 @@ RadioDelegate {
 
     contentItem: Row {
         anchors.left: parent.left
-        anchors.leftMargin: !Boolean(iconComponent) ? 8 : root.spacing
         anchors.verticalCenter: parent.verticalCenter
 
         spacing: root.spacing
         leftPadding: root.leftPadding
+        rightPadding: root.rightPadding
 
         Loader {
-            visible: Boolean(iconComponent)
             anchors.verticalCenter: parent.verticalCenter
 
             sourceComponent: iconComponent
+            visible: Boolean(iconComponent)
         }
 
         StyledTextLabel {
             id: textLabel
 
             anchors.verticalCenter: parent.verticalCenter
-            width: implicitWidth + 8
+            width: implicitWidth
 
             visible: Boolean(title)
 
