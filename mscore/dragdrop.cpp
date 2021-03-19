@@ -428,9 +428,12 @@ void ScoreView::dropEvent(QDropEvent* event)
             Q_ASSERT(editData.dropElement->score() == score());
             _score->addRefresh(editData.dropElement->canvasBoundingRect());
             switch (editData.dropElement->type()) {
+                  case ElementType::TEXTLINE:
+                        firstStaffOnly = editData.dropElement->systemFlag();
+                        // fall-thru
                   case ElementType::VOLTA:
                         // voltas drop to first staff by default, or closest staff if Control is held
-                        firstStaffOnly = !(editData.modifiers & Qt::ControlModifier);
+                        firstStaffOnly = firstStaffOnly || !(editData.modifiers & Qt::ControlModifier);
                         // fall-thru
                   case ElementType::OTTAVA:
                   case ElementType::TRILL:
@@ -439,7 +442,6 @@ void ScoreView::dropEvent(QDropEvent* event)
                   case ElementType::VIBRATO:
                   case ElementType::PALM_MUTE:
                   case ElementType::HAIRPIN:
-                  case ElementType::TEXTLINE:
                         {
                         Spanner* spanner = static_cast<Spanner*>(editData.dropElement);
                         score()->cmdAddSpanner(spanner, pos, firstStaffOnly);
