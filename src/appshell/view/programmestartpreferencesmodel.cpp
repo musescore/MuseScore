@@ -65,24 +65,9 @@ QVariantList ProgrammeStartPreferencesModel::startModes() const
 
 QVariantList ProgrammeStartPreferencesModel::panels() const
 {
-    NOT_IMPLEMENTED;
-
-    struct Panel
-    {
-        QString title;
-        bool visible = false;
-    };
-
-    QList<Panel> panels {
-       { qtrc("appshell", "Show splash screen"), true },
-       { qtrc("appshell", "Show start centre"), true },
-       { qtrc("appshell", "Show play panel"), true },
-       { qtrc("appshell", "Show navigator"), true },
-       { qtrc("appshell", "Show tours"), true }
-    };
-
     QVariantList result;
-    for (const Panel& panel: panels) {
+
+    for (const Panel& panel: allPanels()) {
         QVariantMap obj;
         obj["title"] = panel.title;
         obj["visible"] = panel.visible;
@@ -91,6 +76,17 @@ QVariantList ProgrammeStartPreferencesModel::panels() const
     }
 
     return result;
+}
+
+ProgrammeStartPreferencesModel::PanelList ProgrammeStartPreferencesModel::allPanels() const
+{
+    PanelList panels {
+       Panel { SplashScreen, qtrc("appshell", "Show splash screen"), configuration()->needShowSplashScreen() },
+       Panel { Navigator, qtrc("appshell", "Show navigator"), configuration()->isNotationNavigatorVisible().val },
+       Panel { Tours, qtrc("appshell", "Show tours"), configuration()->needShowTours() }
+    };
+
+    return panels;
 }
 
 void ProgrammeStartPreferencesModel::setCurrentStartMode(int modeIndex, const QString& scorePath)
@@ -105,10 +101,27 @@ void ProgrammeStartPreferencesModel::setCurrentStartMode(int modeIndex, const QS
 
 void ProgrammeStartPreferencesModel::setPanelVisible(int panelIndex, bool visible)
 {
-    NOT_IMPLEMENTED;
+    PanelList panels = allPanels();
 
-    UNUSED(panelIndex);
-    UNUSED(visible);
+    if (panelIndex < 0 || panelIndex >= panels.size()) {
+        return;
+    }
+
+    Panel panel = panels[panelIndex];
+
+    switch (panel.type) {
+    case SplashScreen:
+        configuration()->setNeedShowSplashScreen(visible);
+        break;
+    case Navigator:
+        configuration()->setIsNotationNavigatorVisible(visible);
+        break;
+    case Tours:
+        configuration()->setNeedShowTours(visible);
+        break;
+    case Unknown:
+        return;
+    }
 
     emit panelsChanged();
 }

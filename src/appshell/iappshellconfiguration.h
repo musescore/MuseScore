@@ -56,6 +56,12 @@ public:
     virtual ValCh<bool> isNotationNavigatorVisible() const = 0;
     virtual void setIsNotationNavigatorVisible(bool visible) const = 0;
 
+    virtual bool needShowSplashScreen() const = 0;
+    virtual void setNeedShowSplashScreen(bool show) = 0;
+
+    virtual bool needShowTours() const = 0;
+    virtual void setNeedShowTours(bool show) = 0;
+
     virtual void revertToFactorySettings(bool keepDefaultSettings = false) const = 0;
 };
 }

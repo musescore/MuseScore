@@ -21,10 +21,15 @@
 
 #include <QObject>
 
+#include "modularity/ioc.h"
+#include "iappshellconfiguration.h"
+
 namespace mu::appshell {
 class ProgrammeStartPreferencesModel : public QObject
 {
     Q_OBJECT
+
+    INJECT(appshell, IAppShellConfiguration, configuration)
 
     Q_PROPERTY(QVariantList startModes READ startModes NOTIFY startModesChanged)
     Q_PROPERTY(QVariantList panels READ panels NOTIFY panelsChanged)
@@ -41,6 +46,25 @@ public:
 signals:
     void startModesChanged();
     void panelsChanged();
+
+private:
+    enum PanelType {
+        Unknown,
+        SplashScreen,
+        Navigator,
+        Tours
+    };
+
+    struct Panel
+    {
+        PanelType type = Unknown;
+        QString title;
+        bool visible = false;
+    };
+
+    using PanelList = QList<Panel>;
+
+    PanelList allPanels() const;
 };
 }
 

@@ -63,6 +63,12 @@ public:
     ValCh<bool> isNotationNavigatorVisible() const override;
     void setIsNotationNavigatorVisible(bool visible) const override;
 
+    bool needShowSplashScreen() const override;
+    void setNeedShowSplashScreen(bool show) override;
+
+    bool needShowTours() const override;
+    void setNeedShowTours(bool show) override;
+
     void revertToFactorySettings(bool keepDefaultSettings = false) const override;
 
 private:
