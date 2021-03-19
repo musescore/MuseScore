@@ -31,7 +31,7 @@ public:
     MOCK_METHOD(void, setRecentScorePaths, (const io::paths&), (override));
 
     MOCK_METHOD(io::path, myFirstScorePath, (), (const, override));
-    
+
     MOCK_METHOD(io::paths, availableTemplatesPaths, (), (const, override));
 
     MOCK_METHOD(ValCh<io::path>, templatesPath, (), (const, override));

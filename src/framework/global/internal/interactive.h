@@ -47,6 +47,9 @@ public:
     io::path selectOpeningFile(const QString& title, const io::path& dir, const QString& filter) override;
     io::path selectSavingFile(const QString& title, const io::path& dir, const QString& filter) override;
 
+    // dirs
+    io::path selectDirectory(const QString& title, const io::path& dir) override;
+
     // custom
     RetVal<Val> open(const std::string& uri) const override;
     RetVal<Val> open(const UriQuery& uri) const override;

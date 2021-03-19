@@ -39,7 +39,7 @@ public:
     virtual void setRecentScorePaths(const io::paths& recentScorePaths) = 0;
 
     virtual io::path myFirstScorePath() const = 0;
-    
+
     virtual io::paths availableTemplatesPaths() const = 0;
 
     virtual ValCh<io::path> templatesPath() const = 0;

@@ -1,5 +1,5 @@
 import QtQuick 2.15
-import Qt.labs.platform 1.1
+import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
@@ -7,41 +7,58 @@ import MuseScore.Ui 1.0
 Item {
     id: root
 
+    enum PickerType {
+        File,
+        Directory
+    }
+    property int pickerType: FilePicker.PickerType.File
+
     property alias path: pathField.currentText
 
-    property alias dialogTitle: model.title
-    property alias filter: model.filter
-    property alias dir: model.dir
+    property alias dialogTitle: filePickerModel.title
+    property alias filter: filePickerModel.filter
+    property alias dir: filePickerModel.dir
 
     signal pathEdited(var newPath)
 
-    width: 338
-    height: childrenRect.height
+    height: 30
 
     FilePickerModel {
-        id: model
+        id: filePickerModel
     }
 
-    TextInputField {
-        id: pathField
+    RowLayout {
+        anchors.fill: parent
+        spacing: 8
 
-        width: parent.width
+        TextInputField {
+            id: pathField
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter
 
-        onCurrentTextEdited: {
-            root.pathEdited(newTextValue)
+            onCurrentTextEdited: {
+                root.pathEdited(newTextValue)
+            }
         }
-    }
 
-    FlatButton {
-        anchors.left: pathField.right
-        anchors.leftMargin: 8
+        FlatButton {
+            Layout.alignment: Qt.AlignVCenter
+            icon: IconCode.OPEN_FILE
 
-        icon: IconCode.OPEN_FILE
+            onClicked: {
+                var selectedPath
+                if (pickerType === FilePicker.PickerType.File) {
+                    selectedPath = filePickerModel.selectFile()
+                } else {
+                    selectedPath = filePickerModel.selectDirectory()
+                }
 
-        onClicked: {
-            var file = model.selectFile()
-            pathField.currentText = file
-            root.pathEdited(file)
+                if (!Boolean(selectedPath)) {
+                    return
+                }
+
+                root.pathEdited(selectedPath)
+            }
         }
     }
 }

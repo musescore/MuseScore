@@ -43,6 +43,7 @@ public:
     QString filter() const;
 
     Q_INVOKABLE QString selectFile();
+    Q_INVOKABLE QString selectDirectory();
 
 public slots:
     void setTitle(const QString& title);

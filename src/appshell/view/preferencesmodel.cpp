@@ -141,7 +141,8 @@ void PreferencesModel::load(const QString& currentPageId)
     QList<PreferencePageItem*> generalItems {
         makeItem("general-start", qtrc("appshell", "Programme Start"), IconCode::Code::NONE,
                  "Preferences/ProgrammeStartPreferencesPage.qml"),
-        makeItem("general-folders", qtrc("appshell", "Folders"))
+        makeItem("general-folders", qtrc("appshell", "Folders"), IconCode::Code::NONE,
+                 "Preferences/FoldersPreferencesPage.qml")
     };
 
     QList<PreferencePageItem*> items {

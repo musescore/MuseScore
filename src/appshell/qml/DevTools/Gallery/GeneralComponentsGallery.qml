@@ -666,6 +666,8 @@ Rectangle {
         id: filePickerSample
 
         FilePicker {
+            width: 220
+
             path: "/some/test/path/foo.txt"
         }
     }
