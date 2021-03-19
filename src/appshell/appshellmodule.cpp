@@ -48,6 +48,7 @@
 #include "view/updatepreferencesmodel.h"
 #include "view/appearancepreferencesmodel.h"
 #include "view/programmestartpreferencesmodel.h"
+#include "view/folderspreferencesmodel.h"
 #include "view/startupmodel.h"
 
 using namespace mu::appshell;
@@ -132,6 +133,7 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<UpdatePreferencesModel>("MuseScore.Preferences", 1, 0, "UpdatePreferencesModel");
     qmlRegisterType<AppearancePreferencesModel>("MuseScore.Preferences", 1, 0, "AppearancePreferencesModel");
     qmlRegisterType<ProgrammeStartPreferencesModel>("MuseScore.Preferences", 1, 0, "ProgrammeStartPreferencesModel");
+    qmlRegisterType<FoldersPreferencesModel>("MuseScore.Preferences", 1, 0, "FoldersPreferencesModel");
     qmlRegisterType<AppMenuModel>("MuseScore.AppShell", 1, 0, "AppMenuModel");
     qmlRegisterType<NotationPageModel>("MuseScore.AppShell", 1, 0, "NotationPageModel");
     qmlRegisterType<AboutModel>("MuseScore.AppShell", 1, 0, "AboutModel");
