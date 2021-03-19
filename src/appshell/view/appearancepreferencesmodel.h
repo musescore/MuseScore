@@ -77,7 +77,6 @@ public:
 
     bool useSameColorInPalettes() const;
 
-    Q_INVOKABLE void load();
     Q_INVOKABLE QStringList accentColorSamples() const;
     Q_INVOKABLE QStringList allFonts() const;
     Q_INVOKABLE QString wallpapersDir() const;

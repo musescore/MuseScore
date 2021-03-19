@@ -34,22 +34,6 @@ AppearancePreferencesModel::AppearancePreferencesModel(QObject* parent)
 {
 }
 
-void AppearancePreferencesModel::load()
-{
-    TRACEFUNC;
-
-    emit themesChanged();
-    emit currentFontIndexChanged(currentFontIndex());
-    emit bodyTextSizeChanged(bodyTextSize());
-    emit backgroundUseColorChanged(backgroundUseColor());
-    emit backgroundColorChanged(backgroundColor());
-    emit backgroundWallpaperPathChanged(backgroundWallpaperPath());
-    emit foregroundUseColorChanged(foregroundUseColor());
-    emit foregroundColorChanged(foregroundColor());
-    emit foregroundWallpaperPathChanged(foregroundWallpaperPath());
-    emit useSameColorInPalettesChanged(useSameColorInPalettes());
-}
-
 QVariantList AppearancePreferencesModel::themes() const
 {
     QVariantList result;
