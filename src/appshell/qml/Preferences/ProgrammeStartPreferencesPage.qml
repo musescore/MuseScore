@@ -25,16 +25,42 @@ Item {
 
             width: parent.width
 
-            model: programmeStartModel.startModes
+            model: programmeStartModel.startupModes
 
-            delegate: Loader {
-                id: loader
+            delegate: Row {
+                spacing: 0
 
-                sourceComponent: modelData.canSelectScorePath ? modeRadioButtonWithPath : modeRadioButton
+                RoundedRadioButton {
+                    anchors.verticalCenter: parent.verticalCenter
 
-                onLoaded: {
-                    loader.item.modelData = modelData
-                    loader.item.index = model.index
+                    width: 220
+                    padding: 0
+                    spacing: 6
+
+                    checked: modelData.checked
+
+                    onClicked: {
+                        programmeStartModel.setCurrentStartupMode(model.index)
+                    }
+
+                    StyledTextLabel {
+                        text: modelData.title
+                        horizontalAlignment: Qt.AlignLeft
+                    }
+                }
+
+                FilePicker {
+                    width: 240
+
+                    dialogTitle: qsTrc("appshell", "Choose Starting Score")
+                    filter: programmeStartModel.scorePathFilter()
+
+                    visible: modelData.canSelectScorePath
+                    path: modelData.scorePath
+
+                    onPathEdited: {
+                        programmeStartModel.setStartupScorePath(newPath)
+                    }
                 }
             }
         }
@@ -55,58 +81,6 @@ Item {
                 onClicked: {
                     programmeStartModel.setPanelVisible(model.index, !checked)
                 }
-            }
-        }
-    }
-
-    Component {
-        id: modeRadioButton
-
-        RoundedRadioButton {
-            property var modelData
-            property int index: -1
-
-            width: 220
-            padding: 0
-            spacing: 6
-
-            checked: modelData.checked
-
-            onClicked: {
-                programmeStartModel.setCurrentStartMode(index, "")
-            }
-
-            StyledTextLabel {
-                text: modelData.title
-                horizontalAlignment: Qt.AlignLeft
-            }
-        }
-    }
-
-    Component {
-        id: modeRadioButtonWithPath
-
-        Row {
-            property var modelData
-            property int index: -1
-
-            spacing: 0
-
-            Loader {
-                id: radioButtonLoader
-
-                sourceComponent: modeRadioButton
-            }
-
-            onModelDataChanged: {
-                radioButtonLoader.item.modelData = modelData
-                radioButtonLoader.item.index = index
-            }
-
-            FilePicker {
-                width: 240
-
-                path: modelData.scorePath
             }
         }
     }

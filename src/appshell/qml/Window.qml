@@ -4,7 +4,7 @@ import MuseScore.Dock 1.0
 import MuseScore.Ui 1.0
 import MuseScore.Playback 1.0
 import MuseScore.NotationScene 1.0
-import MuseScore.AppMenu 1.0
+import MuseScore.AppShell 1.0
 import MuseScore.Shortcuts 1.0
 
 import "./HomePage"
@@ -22,7 +22,7 @@ DockWindow {
     Component.onCompleted: {
         shortcutsModel.load()
         appMenuModel.load()
-        api.launcher.open(homePage.uri)
+        startupModel.load()
     }
 
     property var provider: InteractiveProvider {
@@ -61,6 +61,7 @@ DockWindow {
 
     property ShortcutsInstanceModel shortcutsModel: ShortcutsInstanceModel {}
     property AppMenuModel appMenuModel: AppMenuModel {}
+    property StartupModel startupModel: StartupModel {}
 
     menuBar: DockMenuBar {
         objectName: "mainMenuBar"

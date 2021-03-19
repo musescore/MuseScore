@@ -29,28 +29,11 @@ ProgrammeStartPreferencesModel::ProgrammeStartPreferencesModel(QObject* parent)
 {
 }
 
-QVariantList ProgrammeStartPreferencesModel::startModes() const
+QVariantList ProgrammeStartPreferencesModel::startupModes() const
 {
-    NOT_IMPLEMENTED;
-
-    struct StartMode
-    {
-        QString title;
-        bool checked = false;
-        bool canSelectScorePath = false;
-        QString scorePath;
-    };
-
-    QList<StartMode> modes {
-        { qtrc("appshell", "Start empty"), false, false, "" },
-        { qtrc("appshell", "Continue last session"), false, false, "" },
-        { qtrc("appshell", "Start with new score"), false, false, "" },
-        { qtrc("appshell", "Start with score:"), true, true, "/tmp/test/foo.mscz" }
-    };
-
     QVariantList result;
 
-    for (const StartMode& mode: modes) {
+    for (const StartMode& mode: allStartupModes()) {
         QVariantMap obj;
         obj["title"] = mode.title;
         obj["checked"] = mode.checked;
@@ -58,9 +41,36 @@ QVariantList ProgrammeStartPreferencesModel::startModes() const
         obj["scorePath"] = mode.scorePath;
 
         result << obj;
-    };
+    }
 
     return result;
+}
+
+ProgrammeStartPreferencesModel::StartModeList ProgrammeStartPreferencesModel::allStartupModes() const
+{
+    static const QMap<StartupSessionType, QString> sessionTitles {
+        { StartupSessionType::StartEmpty,  qtrc("appshell", "Start empty") },
+        { StartupSessionType::ContinueLastSession, qtrc("appshell", "Continue last session") },
+        { StartupSessionType::StartWithNewScore, qtrc("appshell", "Start with new score") },
+        { StartupSessionType::StartWithScore, qtrc("appshell", "Start with score:") }
+    };
+
+    StartModeList modes;
+
+    for (StartupSessionType type : sessionTitles.keys()) {
+        bool canSelectScorePath = (type == StartupSessionType::StartWithScore);
+
+        StartMode mode;
+        mode.sessionType = type;
+        mode.title = sessionTitles[type];
+        mode.checked = configuration()->startupSessionType() == type;
+        mode.scorePath = canSelectScorePath ? configuration()->startupScorePath().toQString() : QString();
+        mode.canSelectScorePath = canSelectScorePath;
+
+        modes << mode;
+    }
+
+    return modes;
 }
 
 QVariantList ProgrammeStartPreferencesModel::panels() const
@@ -81,22 +91,46 @@ QVariantList ProgrammeStartPreferencesModel::panels() const
 ProgrammeStartPreferencesModel::PanelList ProgrammeStartPreferencesModel::allPanels() const
 {
     PanelList panels {
-       Panel { SplashScreen, qtrc("appshell", "Show splash screen"), configuration()->needShowSplashScreen() },
-       Panel { Navigator, qtrc("appshell", "Show navigator"), configuration()->isNotationNavigatorVisible().val },
-       Panel { Tours, qtrc("appshell", "Show tours"), configuration()->needShowTours() }
+        Panel { SplashScreen, qtrc("appshell", "Show splash screen"), configuration()->needShowSplashScreen() },
+        Panel { Navigator, qtrc("appshell", "Show navigator"), configuration()->isNotationNavigatorVisible().val },
+        Panel { Tours, qtrc("appshell", "Show tours"), configuration()->needShowTours() }
     };
 
     return panels;
 }
 
-void ProgrammeStartPreferencesModel::setCurrentStartMode(int modeIndex, const QString& scorePath)
+QString ProgrammeStartPreferencesModel::scorePathFilter() const
 {
-    NOT_IMPLEMENTED;
+    return qtrc("appshell", "MuseScore Files") + " (*.mscz *.mscx);;"
+           + qtrc("appshell", "All") + " (*)";
+}
 
-    UNUSED(modeIndex);
-    UNUSED(scorePath);
+void ProgrammeStartPreferencesModel::setCurrentStartupMode(int modeIndex)
+{
+    StartModeList modes = allStartupModes();
 
-    emit startModesChanged();
+    if (modeIndex < 0 || modeIndex >= modes.size()) {
+        return;
+    }
+
+    StartupSessionType selectedType = modes[modeIndex].sessionType;
+    if (selectedType == configuration()->startupSessionType()) {
+        return;
+    }
+
+    configuration()->setStartupSessionType(selectedType);
+    emit startupModesChanged();
+}
+
+void ProgrammeStartPreferencesModel::setStartupScorePath(const QString& scorePath)
+{
+    if (scorePath.isEmpty() || scorePath == configuration()->startupScorePath().toQString()) {
+        return;
+    }
+
+    configuration()->setStartupScorePath(scorePath);
+
+    emit startupModesChanged();
 }
 
 void ProgrammeStartPreferencesModel::setPanelVisible(int panelIndex, bool visible)
