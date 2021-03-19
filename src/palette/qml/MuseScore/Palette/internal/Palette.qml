@@ -50,6 +50,8 @@ GridView {
 
     property bool enableAnimations: true
 
+    property color elementsBackgroundColor: ui.theme.textFieldColor
+
     states: [
         State {
             name: "default"
@@ -112,7 +114,7 @@ GridView {
         id: background
         anchors.fill: parent
         z: -1
-        color: ui.theme.textFieldColor
+        color: paletteView.elementsBackgroundColor
     }
 
     StyledTextLabel {
@@ -552,7 +554,7 @@ GridView {
         width: paletteView.cellWidth
         height: paletteView.cellHeight
 
-        color: ui.theme.textFieldColor
+        color: paletteView.elementsBackgroundColor
         visible: false
 
         property alias source: view.icon

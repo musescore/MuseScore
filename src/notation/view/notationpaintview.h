@@ -107,7 +107,6 @@ signals:
 protected:
     void setNotation(INotationPtr notation);
     void setReadonly(bool readonly);
-    void setBackgroundColor(const QColor& color);
 
     void moveCanvasToCenter();
     void moveCanvasToPosition(const QPoint& logicPos);
@@ -172,7 +171,8 @@ private:
     const Page* pointToPage(const QPointF& point) const;
     QPointF alignToCurrentPageBorder(const QRectF& showRect, const QPointF& pos) const;
 
-    QColor m_backgroundColor;
+    void paintBackground(const QRect& rect, mu::draw::Painter* painter);
+
     notation::INotationPtr m_notation;
     QTransform m_matrix;
     std::unique_ptr<NotationViewInputController> m_inputController;

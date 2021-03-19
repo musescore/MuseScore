@@ -291,7 +291,7 @@ void Notation::paintPages(draw::Painter* painter, const QRectF& frameRect, const
 
         QPointF pagePosition(page->pos());
         painter->translate(pagePosition);
-        painter->fillRect(page->bbox(), configuration()->pageColor());
+        paintForeground(painter, page->bbox());
 
         QList<Element*> elements = page->items(frameRect.translated(-page->pos()));
         Ms::paintElements(*painter, elements);
@@ -319,6 +319,23 @@ void Notation::paintPageBorder(draw::Painter* painter, const Ms::Page* page) con
 
     if (!page->isOdd()) {
         painter->drawLine(boundingRect.right(), 0.0, boundingRect.right(), boundingRect.bottom());
+    }
+}
+
+void Notation::paintForeground(mu::draw::Painter* painter, const QRectF& pageRect) const
+{
+    if (score()->printing()) {
+        painter->fillRect(pageRect, Qt::white);
+        return;
+    }
+
+    QString wallpaperPath = configuration()->foregroundWallpaperPath().toQString();
+
+    if (configuration()->foregroundUseColor() || wallpaperPath.isEmpty()) {
+        painter->fillRect(pageRect, configuration()->foregroundColor());
+    } else {
+        QPixmap pixmap(wallpaperPath);
+        painter->drawTiledPixmap(pageRect, pixmap);
     }
 }
 

@@ -26,7 +26,7 @@ using namespace mu::async;
 
 id<NSObject> darkModeObserverToken;
 
-MacOSPlatformTheme::MacOSPlatformTheme()
+void MacOSPlatformTheme::startListening()
 {
     NSDistributedNotificationCenter* n = [NSDistributedNotificationCenter defaultCenter];
     darkModeObserverToken = [n addObserverForName:@"AppleInterfaceThemeChangedNotification"
@@ -35,14 +35,10 @@ MacOSPlatformTheme::MacOSPlatformTheme()
                                        usingBlock:^(NSNotification*) { m_darkModeSwitched.send(isDarkMode()); }];
 }
 
-MacOSPlatformTheme::~MacOSPlatformTheme()
+void MacOSPlatformTheme::stopListening()
 {
     NSDistributedNotificationCenter* n = [NSDistributedNotificationCenter defaultCenter];
     [n removeObserver:darkModeObserverToken];
-}
-
-void MacOSPlatformTheme::init()
-{
 }
 
 bool MacOSPlatformTheme::isFollowSystemThemeAvailable() const
@@ -66,7 +62,7 @@ void MacOSPlatformTheme::setAppThemeDark(bool dark)
     [NSApp setAppearance:[NSAppearance appearanceNamed:dark ? NSAppearanceNameDarkAqua : NSAppearanceNameAqua]];
 }
 
-void MacOSPlatformTheme::styleWindow(QWidget* widget)
+void MacOSPlatformTheme::applyPlatformStyle(QWidget* widget)
 {
     QColor backgroundColor = widget->palette().window().color();
     NSView* nsView = (__bridge NSView*)reinterpret_cast<void*>(widget->winId());

@@ -84,16 +84,20 @@ void NotationPaintView::load()
         movePlaybackCursor(tick);
     });
 
+    configuration()->foregroundChanged().onNotify(this, [this]() {
+        update();
+    });
+
     initBackground();
     initNavigatorOrientation();
 }
 
 void NotationPaintView::initBackground()
 {
-    setBackgroundColor(configuration()->backgroundColor());
+    emit backgroundColorChanged(configuration()->backgroundColor());
 
-    configuration()->backgroundColorChanged().onReceive(this, [this](const QColor& color) {
-        setBackgroundColor(color);
+    configuration()->backgroundChanged().onNotify(this, [this]() {
+        emit backgroundColorChanged(configuration()->backgroundColor());
         update();
     });
 }
@@ -339,7 +343,8 @@ void NotationPaintView::paint(QPainter* qp)
     mu::draw::Painter* painter = &mup;
 
     QRect rect(0, 0, width(), height());
-    painter->fillRect(rect, m_backgroundColor);
+    paintBackground(rect, painter);
+
     painter->setWorldTransform(m_matrix);
 
     notation()->paint(painter, toLogical(rect));
@@ -350,9 +355,21 @@ void NotationPaintView::paint(QPainter* qp)
     m_loopOutMarker->paint(painter);
 }
 
+void NotationPaintView::paintBackground(const QRect& rect, mu::draw::Painter* painter)
+{
+    QString wallpaperPath = configuration()->backgroundWallpaperPath().toQString();
+
+    if (configuration()->backgroundUseColor() || wallpaperPath.isEmpty()) {
+        painter->fillRect(rect, configuration()->backgroundColor());
+    } else {
+        QPixmap pixmap(wallpaperPath);
+        painter->drawTiledPixmap(rect, pixmap, rect.topLeft() - QPoint(m_matrix.m31(), m_matrix.m32()));
+    }
+}
+
 QColor NotationPaintView::backgroundColor() const
 {
-    return m_backgroundColor;
+    return configuration()->backgroundColor();
 }
 
 QRect NotationPaintView::viewport() const
@@ -645,16 +662,6 @@ void NotationPaintView::setNotation(INotationPtr notation)
 void NotationPaintView::setReadonly(bool readonly)
 {
     m_inputController->setReadonly(readonly);
-}
-
-void NotationPaintView::setBackgroundColor(const QColor& color)
-{
-    if (m_backgroundColor == color) {
-        return;
-    }
-
-    m_backgroundColor = color;
-    emit backgroundColorChanged(color);
 }
 
 void NotationPaintView::clear()

@@ -17,29 +17,36 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_UI_STUBPLATFORMTHEME_H
-#define MU_UI_STUBPLATFORMTHEME_H
+#ifndef MU_UI_IPLATFORMTHEME_H
+#define MU_UI_IPLATFORMTHEME_H
 
-#include "internal/iplatformtheme.h"
+#include "modularity/imoduleexport.h"
+#include "async/channel.h"
+
+#include <QWidget>
 
 namespace mu::ui {
-class StubPlatformTheme : public IPlatformTheme
+class IPlatformTheme : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IPlatformTheme)
+
 public:
-    void startListening() override;
-    void stopListening() override;
+    virtual ~IPlatformTheme() = default;
 
-    bool isFollowSystemThemeAvailable() const override;
+    virtual void startListening() = 0;
+    virtual void stopListening() = 0;
 
-    bool isDarkMode() const override;
-    async::Channel<bool> darkModeSwitched() const override;
+    virtual bool isFollowSystemThemeAvailable() const = 0;
 
-    void setAppThemeDark(bool) override;
-    void applyPlatformStyle(QWidget*) override;
+    virtual bool isDarkMode() const = 0;
+    virtual async::Channel<bool> darkModeSwitched() const = 0;
 
-private:
-    async::Channel<bool> m_darkModeSwitched;
+    /// Performs platform-specific styling of the application.
+    virtual void setAppThemeDark(bool isDark) = 0;
+
+    /// Performs platform-specific styling of the window.
+    virtual void applyPlatformStyle(QWidget* window) = 0;
 };
 }
 
-#endif // MU_UI_STUBPLATFORMTHEME_H
+#endif // MU_UI_IPLATFORMTHEME_H

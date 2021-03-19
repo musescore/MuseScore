@@ -28,12 +28,6 @@ UpdatePreferencesModel::UpdatePreferencesModel(QObject* parent)
 {
 }
 
-void UpdatePreferencesModel::load()
-{
-    emit needCheckForNewAppVersionChanged(needCheckForNewAppVersion());
-    emit needCheckForNewExtensionsVersionChanged(needCheckForNewExtensionsVersion());
-}
-
 bool UpdatePreferencesModel::isAppUpdatable() const
 {
     return configuration()->isAppUpdatable();

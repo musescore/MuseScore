@@ -24,8 +24,6 @@
 using namespace mu::ui;
 using namespace mu::async;
 
-using ThemeType = IUiConfiguration::ThemeType;
-
 static const std::wstring windowsThemeKey = L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
 static const std::wstring windowsThemeSubkey = L"AppsUseLightTheme";
 
@@ -43,29 +41,6 @@ WindowsPlatformTheme::WindowsPlatformTheme()
         DWORD major, minor, buildNumber;
         rtlGetNtVersionNumbers(&major, &minor, &buildNumber);
         m_buildNumber = buildNumber & ~0xF0000000;
-    }
-}
-
-WindowsPlatformTheme::~WindowsPlatformTheme()
-{
-    stopListening();
-}
-
-void WindowsPlatformTheme::init()
-{
-    updateListeningStatus(configuration()->preferredThemeType());
-
-    configuration()->preferredThemeTypeChanged().onReceive(this, [this](const ThemeType& newThemeType) {
-        updateListeningStatus(newThemeType);
-    });
-}
-
-void WindowsPlatformTheme::updateListeningStatus(ThemeType themeType)
-{
-    if (themeType == ThemeType::FOLLOW_SYSTEM_THEME) {
-        startListening();
-    } else {
-        stopListening();
     }
 }
 
@@ -152,6 +127,6 @@ void WindowsPlatformTheme::setAppThemeDark(bool)
 {
 }
 
-void WindowsPlatformTheme::styleWindow(QWidget*)
+void WindowsPlatformTheme::applyPlatformStyle(QWidget*)
 {
 }

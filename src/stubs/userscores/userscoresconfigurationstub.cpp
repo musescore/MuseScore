@@ -21,12 +21,12 @@
 using namespace mu::userscores;
 using namespace mu;
 
-ValCh<QStringList> UserScoresConfigurationStub::recentScoreList() const
+ValCh<QStringList> UserScoresConfigurationStub::recentScorePaths() const
 {
     return ValCh<QStringList>();
 }
 
-void UserScoresConfigurationStub::setRecentScoreList(const QStringList&)
+void UserScoresConfigurationStub::setRecentScorePaths(const QStringList&)
 {
 }
 

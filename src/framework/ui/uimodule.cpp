@@ -51,7 +51,6 @@ void UiModule::registerExports()
 {
     ioc()->registerExport<IUiConfiguration>(moduleName(), s_configuration);
     ioc()->registerExportNoDelete<IUiEngine>(moduleName(), UiEngine::instance());
-    ioc()->registerExportNoDelete<ITheme>(moduleName(), UiEngine::instance()->theme());
     ioc()->registerExport<IInteractiveProvider>(moduleName(), UiEngine::instance()->interactiveProvider());
     ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
     ioc()->registerExport<IPlatformTheme>(moduleName(), s_platformTheme);
@@ -76,7 +75,7 @@ void UiModule::registerResources()
 void UiModule::registerUiTypes()
 {
     qmlRegisterUncreatableType<UiEngine>("MuseScore.Ui", 1, 0, "UiEngine", "Cannot create an UiEngine");
-    qmlRegisterUncreatableType<Theme>("MuseScore.Ui", 1, 0, "QmlTheme", "Cannot create a QmlTheme");
+    qmlRegisterUncreatableType<UiTheme>("MuseScore.Ui", 1, 0, "QmlTheme", "Cannot create a QmlTheme");
     qmlRegisterUncreatableType<QmlToolTip>("MuseScore.Ui", 1, 0, "QmlToolTip", "Cannot create a QmlToolTip");
     qmlRegisterUncreatableType<IconCode>("MuseScore.Ui", 1, 0, "IconCode", "Cannot create an IconCode");
     qmlRegisterUncreatableType<MusicalSymbolCodes>("MuseScore.Ui", 1, 0, "MusicalSymbolCodes",
@@ -92,11 +91,12 @@ void UiModule::registerUiTypes()
     framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(ui_QML_IMPORT);
 }
 
-void UiModule::onInit(const IApplication::RunMode& runMode)
+void UiModule::onInit(const IApplication::RunMode&)
 {
-    //! NOTE It is also needed in converter mode, because it defines the notation rendering settings
     s_configuration->init();
-    if (runMode == IApplication::RunMode::Editor) {
-        s_platformTheme->init();
-    }
+}
+
+void UiModule::onDeinit()
+{
+    s_configuration->deinit();
 }

@@ -17,12 +17,12 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef UICONFIGURATION_H
-#define UICONFIGURATION_H
+#ifndef MU_UI_UICONFIGURATION_H
+#define MU_UI_UICONFIGURATION_H
 
 #include "iuiconfiguration.h"
 #include "imainwindow.h"
-#include "iplatformtheme.h"
+#include "internal/iplatformtheme.h"
 #include "iworkspacesettings.h"
 #include "val.h"
 
@@ -37,14 +37,20 @@ class UiConfiguration : public IUiConfiguration
 
 public:
     void init();
+    void deinit();
 
-    ThemeType preferredThemeType() const override;
-    async::Channel<ThemeType> preferredThemeTypeChanged() const override;
-    ThemeType actualThemeType() const override;
-    async::Channel<ThemeType> actualThemeTypeChanged() const override;
+    QStringList possibleFontFamilies() const override;
+    ThemeList themes() const override;
+
+    ThemeInfo currentTheme() const override;
+    void setCurrentTheme(const std::string& codeKey) override;
+    void setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val) override;
+    async::Notification currentThemeChanged() const override;
 
     std::string fontFamily() const override;
+    void setFontFamily(const std::string& family) override;
     int fontSize(FontSizeType type) const override;
+    void setBodyFontSize(int size) override;
     async::Notification fontChanged() const override;
 
     std::string iconsFontFamily() const override;
@@ -64,20 +70,34 @@ public:
     void setPageState(const std::string& pageName, const QByteArray& state) override;
     async::Notification pageStateChanged() const override;
 
+    void applyPlatformStyle(QWidget* window) override;
+
 private:
+    bool needFollowSystemTheme() const;
+
+    void initThemes();
+    void notifyAboutCurrentThemeChanged();
+    void updateCurrentTheme();
+
+    std::string currentThemeCodeKey() const;
+    ThemeInfo makeStandardTheme(const std::string& codeKey) const;
+
+    ThemeList readThemes() const;
+    void writeThemes(const ThemeList& themes);
+
     QByteArray stringToByteArray(const std::string& string) const;
     std::string byteArrayToString(const QByteArray& byteArray) const;
 
-    async::Channel<ThemeType> m_currentPreferredThemeTypeChannel;
-    async::Channel<ThemeType> m_currentActualThemeTypeChannel;
-
+    async::Notification m_currentThemeChanged;
     async::Notification m_fontChanged;
     async::Notification m_musicalFontChanged;
     async::Notification m_iconsFontChanged;
     async::Notification m_pageStateChanged;
 
+    ThemeList m_themes;
+    size_t m_currentThemeIndex = 0;
     std::optional<float> m_customDPI;
 };
 }
 
-#endif // UICONFIGURATION_H
+#endif // MU_UI_UICONFIGURATION_H

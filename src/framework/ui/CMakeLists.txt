@@ -56,8 +56,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uierrors.h
     ${CMAKE_CURRENT_LIST_DIR}/uitypes.h
     ${CMAKE_CURRENT_LIST_DIR}/imainwindow.h
-    ${CMAKE_CURRENT_LIST_DIR}/itheme.h
-    ${CMAKE_CURRENT_LIST_DIR}/iplatformtheme.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.h
@@ -65,14 +63,17 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/themeconverter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/themeconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/iplatformtheme.h
     ${PLATFORM_THEME_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/theme.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/theme.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/uitheme.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/uitheme.h
     ${CMAKE_CURRENT_LIST_DIR}/view/iconcodes.h
     ${CMAKE_CURRENT_LIST_DIR}/view/musicalsymbolcodes.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltranslation.cpp

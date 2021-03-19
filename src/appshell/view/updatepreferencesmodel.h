@@ -44,7 +44,6 @@ public:
     bool needCheckForNewAppVersion() const;
     bool needCheckForNewExtensionsVersion() const;
 
-    Q_INVOKABLE void load();
     Q_INVOKABLE bool isAppUpdatable() const;
 
 public slots:
