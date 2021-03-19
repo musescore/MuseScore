@@ -154,7 +154,8 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("io", qtrc("appshell", "I/O"), IconCode::Code::AUDIO),
         makeItem("import", qtrc("appshell", "Import"), IconCode::Code::IMPORT),
         makeItem("shortcuts", qtrc("appshell", "Shortcuts"), IconCode::Code::SHORTCUTS),
-        makeItem("update", qtrc("appshell", "Update"), IconCode::Code::UPDATE),
+        makeItem("update", qtrc("appshell", "Update"), IconCode::Code::UPDATE,
+                 "Preferences/UpdatePreferencesPage.qml"),
         makeItem("advanced", qtrc("appshell", "Advanced"), IconCode::Code::CONFIGURE)
     };
 

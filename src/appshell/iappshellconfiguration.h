@@ -34,6 +34,9 @@ public:
 
     virtual bool isAppUpdatable() const = 0;
 
+    virtual bool needCheckForUpdate() const = 0;
+    virtual void setNeedCheckForUpdate(bool needCheck) = 0;
+
     virtual std::string handbookUrl() const = 0;
     virtual std::string askForHelpUrl() const = 0;
     virtual std::string bugReportUrl() const = 0;
