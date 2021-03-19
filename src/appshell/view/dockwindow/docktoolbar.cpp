@@ -24,6 +24,7 @@
 #include "eventswatcher.h"
 
 using namespace mu::dock;
+using namespace mu::ui;
 
 static const qreal TOOLBAR_GRIP_WIDTH(32);
 static const qreal TOOLBAR_GRIP_HEIGHT(36);
@@ -82,7 +83,7 @@ void DockToolBar::onComponentCompleted()
 
 void DockToolBar::updateStyle()
 {
-    QString theme = uiConfiguration()->actualThemeType() == ui::IUiConfiguration::ThemeType::LIGHT_THEME
+    QString theme = uiConfiguration()->currentTheme().codeKey == LIGHT_THEME_CODE
                     ? "light"
                     : "dark";
     toolBar()->setStyleSheet(TOOLBAR_QSS.arg(theme, color().name()));

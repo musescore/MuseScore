@@ -9,10 +9,6 @@ Item {
         id: updateModel
     }
 
-    Component.onCompleted: {
-        updateModel.load()
-    }
-
     Column {
         anchors.fill: parent
 

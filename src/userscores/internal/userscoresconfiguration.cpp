@@ -131,9 +131,9 @@ QColor UserScoresConfiguration::templatePreviewBackgroundColor() const
     return notationConfiguration()->backgroundColor();
 }
 
-async::Channel<QColor> UserScoresConfiguration::templatePreviewBackgroundColorChanged() const
+async::Notification UserScoresConfiguration::templatePreviewBackgroundChanged() const
 {
-    return notationConfiguration()->backgroundColorChanged();
+    return notationConfiguration()->backgroundChanged();
 }
 
 UserScoresConfiguration::PreferredScoreCreationMode UserScoresConfiguration::preferredScoreCreationMode() const

@@ -159,7 +159,7 @@ void GridCanvas::paint(QPainter* painter)
     QPen pen = painter->pen();
     pen.setWidth(1);
 
-    QColor primaryLinesColor(uiConfig()->actualThemeType() == IUiConfiguration::ThemeType::DARK_THEME ? Qt::white : Qt::black);
+    QColor primaryLinesColor(uiConfig()->currentTheme().codeKey == DARK_THEME_CODE ? Qt::white : Qt::black);
     QColor secondaryLinesColor(Qt::gray);
     // draw vertical lines
     for (int i = 0; i < m_columns; ++i) {

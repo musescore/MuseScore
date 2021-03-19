@@ -17,15 +17,17 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef IUICONFIGURATION_H
-#define IUICONFIGURATION_H
+#ifndef MU_UI_IUICONFIGURATION_H
+#define MU_UI_IUICONFIGURATION_H
 
 #include <optional>
-#include <QString>
 
 #include "modularity/imoduleexport.h"
-#include "async/channel.h"
 #include "async/notification.h"
+
+#include "uitypes.h"
+
+class QByteArray;
 
 namespace mu::ui {
 class IUiConfiguration : MODULE_EXPORT_INTERFACE
@@ -35,32 +37,18 @@ class IUiConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUiConfiguration() = default;
 
-    enum class ThemeType {
-        DARK_THEME = 0,
-        LIGHT_THEME,
-        FOLLOW_SYSTEM_THEME
-    };
+    virtual QStringList possibleFontFamilies() const = 0;
+    virtual ThemeList themes() const = 0;
 
-    virtual ThemeType preferredThemeType() const = 0;
-    virtual async::Channel<ThemeType> preferredThemeTypeChanged() const = 0;
-    virtual ThemeType actualThemeType() const = 0;
-    virtual async::Channel<ThemeType> actualThemeTypeChanged() const = 0;
-
-    enum class FontSizeType {
-        BODY,
-        BODY_LARGE,
-        TAB,
-        HEADER,
-        TITLE
-    };
-
-    enum class IconSizeType {
-        Regular,
-        Toolbar
-    };
+    virtual ThemeInfo currentTheme() const = 0;
+    virtual void setCurrentTheme(const std::string& codeKey) = 0;
+    virtual void setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val) = 0;
+    virtual async::Notification currentThemeChanged() const = 0;
 
     virtual std::string fontFamily() const = 0;
+    virtual void setFontFamily(const std::string& family) = 0;
     virtual int fontSize(FontSizeType type) const = 0;
+    virtual void setBodyFontSize(int size) = 0;
     virtual async::Notification fontChanged() const = 0;
 
     virtual std::string iconsFontFamily() const = 0;
@@ -80,7 +68,9 @@ public:
     virtual QByteArray pageState(const std::string& pageName) const = 0;
     virtual void setPageState(const std::string& pageName, const QByteArray& state) = 0;
     virtual async::Notification pageStateChanged() const = 0;
+
+    virtual void applyPlatformStyle(QWidget* window) = 0;
 };
 }
 
-#endif // IUICONFIGURATION_H
+#endif // MU_UI_IUICONFIGURATION_H

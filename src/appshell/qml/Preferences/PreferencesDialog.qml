@@ -11,7 +11,7 @@ QmlDialog {
     id: root
 
     width: 880
-    height: 672
+    height: 600
 
     title: qsTrc("appshell", "Preferences")
 

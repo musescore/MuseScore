@@ -9,12 +9,18 @@ Item {
 
     property alias path: pathField.currentText
 
+    property alias dialogTitle: model.title
+    property alias filter: model.filter
+    property alias dir: model.dir
+
     signal pathEdited(var newPath)
 
     width: 338
     height: childrenRect.height
 
-    opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
+    FilePickerModel {
+        id: model
+    }
 
     TextInputField {
         id: pathField
@@ -33,16 +39,9 @@ Item {
         icon: IconCode.OPEN_FILE
 
         onClicked: {
-            dialog.open()
-        }
-    }
-
-    FileDialog {
-        id: dialog
-
-        onAccepted: {
-            pathField.currentText = dialog.file
-            root.pathEdited(dialog.file)
+            var file = model.selectFile()
+            pathField.currentText = file
+            root.pathEdited(file)
         }
     }
 }

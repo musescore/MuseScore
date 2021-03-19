@@ -33,7 +33,7 @@ void NotationNavigator::load()
     initOrientation();
     initVisible();
 
-    theme()->themeChanged().onNotify(this, [this]() {
+    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         update();
     });
 

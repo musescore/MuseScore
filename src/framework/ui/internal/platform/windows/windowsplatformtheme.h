@@ -20,7 +20,7 @@
 #ifndef MU_UI_WINDOWSPLATFORMTHEME_H
 #define MU_UI_WINDOWSPLATFORMTHEME_H
 
-#include "iplatformtheme.h"
+#include "internal/iplatformtheme.h"
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -33,27 +33,24 @@ class WindowsPlatformTheme : public IPlatformTheme, public async::Asyncable
 
 public:
     WindowsPlatformTheme();
-    ~WindowsPlatformTheme();
 
-    void init() override;
+    void startListening() override;
+    void stopListening() override;
 
     bool isFollowSystemThemeAvailable() const override;
 
     bool isDarkMode() const override;
     async::Channel<bool> darkModeSwitched() const override;
 
-    void setAppThemeDark(bool) override;
-    void styleWindow(QWidget*) override;
+    void setAppThemeDark(bool isDark) override;
+    void applyPlatformStyle(QWidget* window) override;
 
 private:
     async::Channel<bool> m_darkModeSwitched;
     int m_buildNumber = 0;
     std::atomic<bool> m_isListening = false;
     std::thread m_listenThread;
-    void updateListeningStatus(IUiConfiguration::ThemeType themeType);
-    void startListening();
     void th_listen();
-    void stopListening();
 };
 }
 

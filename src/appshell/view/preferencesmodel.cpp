@@ -146,7 +146,8 @@ void PreferencesModel::load(const QString& currentPageId)
     QList<PreferencePageItem*> items {
         makeItem("general", qtrc("appshell", "General"), IconCode::Code::SETTINGS_COG,
                  "Preferences/GeneralPreferencesPage.qml", generalItems),
-        makeItem("appearance", qtrc("appshell", "Appearance"), IconCode::Code::VISIBILITY_ON),
+        makeItem("appearance", qtrc("appshell", "Appearance"), IconCode::Code::VISIBILITY_ON,
+                 "Preferences/AppearancePreferencesPage.qml"),
         makeItem("canvas", qtrc("appshell", "Canvas"), IconCode::Code::NEW_FILE),
         makeItem("note-input", qtrc("appshell", "Note Input"), IconCode::Code::EDIT),
         makeItem("midi-device-mapping", qtrc("appshell", "Midi Device Mapping"), IconCode::Code::MIDI_INPUT),

@@ -17,7 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "theme.h"
+#include "uitheme.h"
 
 #include <QApplication>
 #include <QPalette>
@@ -27,91 +27,20 @@ using namespace mu::ui;
 
 static const QString SEMIBOLD_STYLE_NAME("SemiBold");
 
-enum StyleKeys {
-    BACKGROUND_PRIMARY_COLOR = 0,
-    BACKGROUND_SECONDARY_COLOR,
-    POPUP_BACKGROUND_COLOR,
-    TEXT_FIELD_COLOR,
-    ACCENT_COLOR,
-    STROKE_COLOR,
-    BUTTON_COLOR,
-    FONT_PRIMARY_COLOR,
-    FONT_SECONDARY_COLOR,
-    LINK_COLOR,
-
-    ACCENT_OPACITY_NORMAL,
-    ACCENT_OPACITY_HOVER,
-    ACCENT_OPACITY_HIT,
-
-    BUTTON_OPACITY_NORMAL,
-    BUTTON_OPACITY_HOVER,
-    BUTTON_OPACITY_HIT,
-
-    ITEM_OPACITY_DISABLED
-};
-
-static const QHash<int, QVariant> DARK_THEME {
-    { BACKGROUND_PRIMARY_COLOR, "#2D2D30" },
-    { BACKGROUND_SECONDARY_COLOR, "#363638" },
-    { POPUP_BACKGROUND_COLOR, "#323236" },
-    { TEXT_FIELD_COLOR, "#242427" },
-    { ACCENT_COLOR, "#FF4848" },
-    { STROKE_COLOR, "#1E1E1E" },
-    { BUTTON_COLOR, "#595959" },
-    { FONT_PRIMARY_COLOR, "#EBEBEB" },
-    { FONT_SECONDARY_COLOR, "#BDBDBD" },
-    { LINK_COLOR, "#70AFEA" },
-
-    { ACCENT_OPACITY_NORMAL, 0.8 },
-    { ACCENT_OPACITY_HOVER, 1.0 },
-    { ACCENT_OPACITY_HIT, 0.5 },
-
-    { BUTTON_OPACITY_NORMAL, 0.8 },
-    { BUTTON_OPACITY_HOVER, 1.0 },
-    { BUTTON_OPACITY_HIT, 0.5 },
-
-    { ITEM_OPACITY_DISABLED, 0.3 }
-};
-
-static const QHash<int, QVariant> LIGHT_THEME {
-    { BACKGROUND_PRIMARY_COLOR, "#F5F5F6" },
-    { BACKGROUND_SECONDARY_COLOR, "#E6E9ED" },
-    { POPUP_BACKGROUND_COLOR, "#F5F5F6" },
-    { TEXT_FIELD_COLOR, "#FFFFFF" },
-    { ACCENT_COLOR, "#70AFEA" },
-    { STROKE_COLOR, "#CED1D4" },
-    { BUTTON_COLOR, "#CFD5DD" },
-    { FONT_PRIMARY_COLOR, "#111132" },
-    { FONT_SECONDARY_COLOR, "#FFFFFF" },
-    { LINK_COLOR, "#70AFEA" },
-
-    { ACCENT_OPACITY_NORMAL, 0.3 },
-    { ACCENT_OPACITY_HOVER, 0.15 },
-    { ACCENT_OPACITY_HIT, 0.5 },
-
-    { BUTTON_OPACITY_NORMAL, 0.7 },
-    { BUTTON_OPACITY_HOVER, 0.5 },
-    { BUTTON_OPACITY_HIT, 1.0 },
-
-    { ITEM_OPACITY_DISABLED, 0.3 }
-};
-
-using FontSizeType = IUiConfiguration::FontSizeType;
-
 struct FontConfig
 {
     QFont::Weight weight = QFont::Normal;
     FontSizeType sizeType = FontSizeType::BODY;
 };
 
-Theme::Theme(QObject* parent)
+UiTheme::UiTheme(QObject* parent)
     : QObject(parent)
 {
 }
 
-void Theme::init()
+void UiTheme::init()
 {
-    configuration()->actualThemeTypeChanged().onReceive(this, [this](const IUiConfiguration::ThemeType) {
+    configuration()->currentThemeChanged().onNotify(this, [this]() {
         update();
     });
 
@@ -122,173 +51,174 @@ void Theme::init()
     setupWidgetTheme();
 }
 
-void Theme::update()
+void UiTheme::update()
 {
     setupWidgetTheme();
 
     notifyAboutThemeChanged();
 }
 
-QColor Theme::backgroundPrimaryColor() const
+QColor UiTheme::backgroundPrimaryColor() const
 {
-    return currentThemeProperties().value(BACKGROUND_PRIMARY_COLOR).toString();
+    return colorByKey(BACKGROUND_PRIMARY_COLOR);
 }
 
-QColor Theme::backgroundSecondaryColor() const
+QColor UiTheme::backgroundSecondaryColor() const
 {
-    return currentThemeProperties().value(BACKGROUND_SECONDARY_COLOR).toString();
+    return colorByKey(BACKGROUND_SECONDARY_COLOR);
 }
 
-QColor Theme::popupBackgroundColor() const
+QColor UiTheme::popupBackgroundColor() const
 {
-    return currentThemeProperties().value(POPUP_BACKGROUND_COLOR).toString();
+    return colorByKey(POPUP_BACKGROUND_COLOR);
 }
 
-QColor Theme::textFieldColor() const
+QColor UiTheme::textFieldColor() const
 {
-    return currentThemeProperties().value(TEXT_FIELD_COLOR).toString();
+    return colorByKey(TEXT_FIELD_COLOR);
 }
 
-QColor Theme::accentColor() const
+QColor UiTheme::accentColor() const
 {
-    return currentThemeProperties().value(ACCENT_COLOR).toString();
+    return colorByKey(ACCENT_COLOR);
 }
 
-QColor Theme::strokeColor() const
+QColor UiTheme::strokeColor() const
 {
-    return currentThemeProperties().value(STROKE_COLOR).toString();
+    return colorByKey(STROKE_COLOR);
 }
 
-QColor Theme::buttonColor() const
+QColor UiTheme::buttonColor() const
 {
-    return currentThemeProperties().value(BUTTON_COLOR).toString();
+    return colorByKey(BUTTON_COLOR);
 }
 
-QColor Theme::fontPrimaryColor() const
+QColor UiTheme::fontPrimaryColor() const
 {
-    return currentThemeProperties().value(FONT_PRIMARY_COLOR).toString();
+    return colorByKey(FONT_PRIMARY_COLOR);
 }
 
-QColor Theme::fontSecondaryColor() const
+QColor UiTheme::fontSecondaryColor() const
 {
-    return currentThemeProperties().value(FONT_SECONDARY_COLOR).toString();
+    return colorByKey(FONT_SECONDARY_COLOR);
 }
 
-QColor Theme::linkColor() const
+QColor UiTheme::linkColor() const
 {
-    return currentThemeProperties().value(LINK_COLOR).toString();
+    return colorByKey(LINK_COLOR);
 }
 
-QFont Theme::bodyFont() const
+QFont UiTheme::bodyFont() const
 {
     return m_bodyFont;
 }
 
-QFont Theme::bodyBoldFont() const
+QFont UiTheme::bodyBoldFont() const
 {
     return m_bodyBoldFont;
 }
 
-QFont Theme::largeBodyFont() const
+QFont UiTheme::largeBodyFont() const
 {
     return m_largeBodyFont;
 }
 
-QFont Theme::largeBodyBoldFont() const
+QFont UiTheme::largeBodyBoldFont() const
 {
     return m_largeBodyBoldFont;
 }
 
-QFont Theme::tabFont() const
+QFont UiTheme::tabFont() const
 {
     return m_tabFont;
 }
 
-QFont Theme::tabBoldFont() const
+QFont UiTheme::tabBoldFont() const
 {
     return m_tabBoldFont;
 }
 
-QFont Theme::headerFont() const
+QFont UiTheme::headerFont() const
 {
     return m_headerFont;
 }
 
-QFont Theme::headerBoldFont() const
+QFont UiTheme::headerBoldFont() const
 {
     return m_headerBoldFont;
 }
 
-QFont Theme::titleBoldFont() const
+QFont UiTheme::titleBoldFont() const
 {
     return m_titleBoldFont;
 }
 
-QFont Theme::iconsFont() const
+QFont UiTheme::iconsFont() const
 {
     return m_iconsFont;
 }
 
-QFont Theme::toolbarIconsFont() const
+QFont UiTheme::toolbarIconsFont() const
 {
     return m_toolbarIconsFont;
 }
 
-QFont Theme::musicalFont() const
+QFont UiTheme::musicalFont() const
 {
     return m_musicalFont;
 }
 
-qreal Theme::accentOpacityNormal() const
+qreal UiTheme::accentOpacityNormal() const
 {
-    return currentThemeProperties().value(ACCENT_OPACITY_NORMAL).toReal();
+    return realByKey(ACCENT_OPACITY_NORMAL);
 }
 
-qreal Theme::accentOpacityHover() const
+qreal UiTheme::accentOpacityHover() const
 {
-    return currentThemeProperties().value(ACCENT_OPACITY_HOVER).toReal();
+    return realByKey(ACCENT_OPACITY_HOVER);
 }
 
-qreal Theme::accentOpacityHit() const
+qreal UiTheme::accentOpacityHit() const
 {
-    return currentThemeProperties().value(ACCENT_OPACITY_HIT).toReal();
+    return realByKey(ACCENT_OPACITY_HIT);
 }
 
-qreal Theme::buttonOpacityNormal() const
+qreal UiTheme::buttonOpacityNormal() const
 {
-    return currentThemeProperties().value(BUTTON_OPACITY_NORMAL).toReal();
+    return realByKey(BUTTON_OPACITY_NORMAL);
 }
 
-qreal Theme::buttonOpacityHover() const
+qreal UiTheme::buttonOpacityHover() const
 {
-    return currentThemeProperties().value(BUTTON_OPACITY_HOVER).toReal();
+    return realByKey(BUTTON_OPACITY_HOVER);
 }
 
-qreal Theme::buttonOpacityHit() const
+qreal UiTheme::buttonOpacityHit() const
 {
-    return currentThemeProperties().value(BUTTON_OPACITY_HIT).toReal();
+    return realByKey(BUTTON_OPACITY_HIT);
 }
 
-qreal Theme::itemOpacityDisabled() const
+qreal UiTheme::itemOpacityDisabled() const
 {
-    return currentThemeProperties().value(ITEM_OPACITY_DISABLED).toReal();
+    return realByKey(ITEM_OPACITY_DISABLED);
 }
 
-mu::async::Notification Theme::themeChanged() const
+QColor UiTheme::colorByKey(ThemeStyleKey key) const
 {
-    return m_themeChanged;
+    return currentTheme().values[key].toString();
 }
 
-QHash<int, QVariant> Theme::currentThemeProperties() const
+qreal UiTheme::realByKey(ThemeStyleKey key) const
 {
-    if (configuration()->actualThemeType() == IUiConfiguration::ThemeType::DARK_THEME) {
-        return DARK_THEME;
-    }
-
-    return LIGHT_THEME;
+    return currentTheme().values[key].toDouble();
 }
 
-void Theme::initUiFonts()
+ThemeInfo UiTheme::currentTheme() const
+{
+    return configuration()->currentTheme();
+}
+
+void UiTheme::initUiFonts()
 {
     setupUiFonts();
 
@@ -298,7 +228,7 @@ void Theme::initUiFonts()
     });
 }
 
-void Theme::initIconsFont()
+void UiTheme::initIconsFont()
 {
     setupIconsFont();
 
@@ -308,7 +238,7 @@ void Theme::initIconsFont()
     });
 }
 
-void Theme::initMusicalFont()
+void UiTheme::initMusicalFont()
 {
     setupMusicFont();
 
@@ -318,7 +248,7 @@ void Theme::initMusicalFont()
     });
 }
 
-void Theme::setupUiFonts()
+void UiTheme::setupUiFonts()
 {
     QMap<QFont*, FontConfig> fonts {
         { &m_bodyFont, { QFont::Normal, FontSizeType::BODY } },
@@ -346,24 +276,24 @@ void Theme::setupUiFonts()
     }
 }
 
-void Theme::setupIconsFont()
+void UiTheme::setupIconsFont()
 {
     QString family = QString::fromStdString(configuration()->iconsFontFamily());
 
     m_iconsFont.setFamily(family);
-    m_iconsFont.setPixelSize(configuration()->iconsFontSize(IUiConfiguration::IconSizeType::Regular));
+    m_iconsFont.setPixelSize(configuration()->iconsFontSize(IconSizeType::Regular));
 
     m_toolbarIconsFont.setFamily(family);
-    m_toolbarIconsFont.setPixelSize(configuration()->iconsFontSize(IUiConfiguration::IconSizeType::Toolbar));
+    m_toolbarIconsFont.setPixelSize(configuration()->iconsFontSize(IconSizeType::Toolbar));
 }
 
-void Theme::setupMusicFont()
+void UiTheme::setupMusicFont()
 {
     m_musicalFont.setFamily(QString::fromStdString(configuration()->musicalFontFamily()));
     m_musicalFont.setPixelSize(configuration()->musicalFontSize());
 }
 
-void Theme::setupWidgetTheme()
+void UiTheme::setupWidgetTheme()
 {
     QColor fontPrimaryColorDisabled = fontPrimaryColor();
     fontPrimaryColorDisabled.setAlphaF(itemOpacityDisabled());
@@ -407,12 +337,9 @@ void Theme::setupWidgetTheme()
     QFont widgetsFont = bodyFont();
     widgetsFont.setPointSize(configuration()->fontSize(FontSizeType::BODY));
     QApplication::setFont(widgetsFont);
-
-    platformTheme()->setAppThemeDark(configuration()->actualThemeType() == IUiConfiguration::ThemeType::DARK_THEME);
 }
 
-void Theme::notifyAboutThemeChanged()
+void UiTheme::notifyAboutThemeChanged()
 {
-    m_themeChanged.notify();
-    emit dataChanged();
+    emit themeChanged();
 }
