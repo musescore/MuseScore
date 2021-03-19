@@ -14,6 +14,7 @@ Column {
 
     property alias wallpaperPath: wallpaperPicker.path
     property alias wallpapersDir: wallpaperPicker.dir
+    property alias wallpaperFilter: wallpaperPicker.filter
 
     property int firstColumnWidth: 0
 
@@ -90,7 +91,6 @@ Column {
             width: 208
 
             enabled: !root.useColor
-            filter: qsTrc("appshell", "Images") + " (*.jpg *.jpeg *.png)"
 
             onPathEdited: {
                 root.wallpaperPathChangeRequested(newPath)

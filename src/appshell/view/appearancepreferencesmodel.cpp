@@ -65,6 +65,12 @@ QStringList AppearancePreferencesModel::allFonts() const
     return uiConfiguration()->possibleFontFamilies();
 }
 
+QString AppearancePreferencesModel::wallpaperPathFilter() const
+{
+    return qtrc("appshell", "Images") + " (*.jpg *.jpeg *.png);;"
+           + qtrc("appshell", "All") + " (*)";
+}
+
 QString AppearancePreferencesModel::wallpapersDir() const
 {
     return notationConfiguration()->wallpapersDefaultDirPath().toQString();

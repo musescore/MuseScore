@@ -48,6 +48,8 @@ void FileScoreController::init()
 
     dispatcher()->reg(this, "clear-recent", this, &FileScoreController::clearRecentScores);
 
+    dispatcher()->reg(this, "continue-last-session", this, &FileScoreController::continueLastSession);
+
     setupConnections();
 }
 
@@ -250,6 +252,18 @@ void FileScoreController::importPdf()
 void FileScoreController::clearRecentScores()
 {
     configuration()->setRecentScorePaths({});
+}
+
+void FileScoreController::continueLastSession()
+{
+    io::paths recentScorePaths = configuration()->recentScorePaths().val;
+
+    if (recentScorePaths.empty()) {
+        return;
+    }
+
+    io::path lastScorePath = recentScorePaths.front();
+    openScore(lastScorePath);
 }
 
 io::path FileScoreController::selectScoreOpenningFile(const QStringList& filter)

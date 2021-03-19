@@ -39,6 +39,12 @@ class AppShellConfiguration : public IAppShellConfiguration
 public:
     void init();
 
+    StartupSessionType startupSessionType() const override;
+    void setStartupSessionType(StartupSessionType type) override;
+
+    io::path startupScorePath() const override;
+    void setStartupScorePath(const io::path& scorePath) override;
+
     bool isAppUpdatable() const override;
 
     bool needCheckForUpdate() const override;

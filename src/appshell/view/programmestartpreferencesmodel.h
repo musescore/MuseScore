@@ -23,6 +23,7 @@
 
 #include "modularity/ioc.h"
 #include "iappshellconfiguration.h"
+#include "userscores/iuserscoresconfiguration.h"
 
 namespace mu::appshell {
 class ProgrammeStartPreferencesModel : public QObject
@@ -31,20 +32,23 @@ class ProgrammeStartPreferencesModel : public QObject
 
     INJECT(appshell, IAppShellConfiguration, configuration)
 
-    Q_PROPERTY(QVariantList startModes READ startModes NOTIFY startModesChanged)
+    Q_PROPERTY(QVariantList startupModes READ startupModes NOTIFY startupModesChanged)
     Q_PROPERTY(QVariantList panels READ panels NOTIFY panelsChanged)
 
 public:
     explicit ProgrammeStartPreferencesModel(QObject* parent = nullptr);
 
-    QVariantList startModes() const;
+    QVariantList startupModes() const;
     QVariantList panels() const;
 
-    Q_INVOKABLE void setCurrentStartMode(int modeIndex, const QString& scorePath);
+    Q_INVOKABLE QString scorePathFilter() const;
+
+    Q_INVOKABLE void setCurrentStartupMode(int modeIndex);
+    Q_INVOKABLE void setStartupScorePath(const QString& scorePath);
     Q_INVOKABLE void setPanelVisible(int panelIndex, bool visible);
 
 signals:
-    void startModesChanged();
+    void startupModesChanged();
     void panelsChanged();
 
 private:
@@ -64,7 +68,19 @@ private:
 
     using PanelList = QList<Panel>;
 
+    struct StartMode
+    {
+        StartupSessionType sessionType = StartupSessionType::StartWithNewScore;
+        QString title;
+        bool checked = false;
+        bool canSelectScorePath = false;
+        QString scorePath;
+    };
+
+    using StartModeList = QList<StartMode>;
+
     PanelList allPanels() const;
+    StartModeList allStartupModes() const;
 };
 }
 
