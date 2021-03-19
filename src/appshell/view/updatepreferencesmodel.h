@@ -21,10 +21,15 @@
 
 #include <QObject>
 
+#include "modularity/ioc.h"
+#include "extensions/iextensionsconfiguration.h"
+
 namespace mu::appshell {
 class UpdatePreferencesModel : public QObject
 {
     Q_OBJECT
+
+    INJECT(appshell, extensions::IExtensionsConfiguration, extensionsConfiguration)
 
     Q_PROPERTY(
         bool needCheckForNewMuseScoreVersion READ needCheckForNewMuseScoreVersion WRITE setNeedCheckForNewMuseScoreVersion NOTIFY needCheckForNewMuseScoreVersionChanged)

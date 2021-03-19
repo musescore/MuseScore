@@ -41,7 +41,7 @@ bool UpdatePreferencesModel::needCheckForNewMuseScoreVersion() const
 
 bool UpdatePreferencesModel::needCheckForNewExtensionsVersion() const
 {
-    return false;
+    return extensionsConfiguration()->needCheckForUpdate();
 }
 
 void UpdatePreferencesModel::setNeedCheckForNewMuseScoreVersion(bool value)
@@ -57,11 +57,10 @@ void UpdatePreferencesModel::setNeedCheckForNewMuseScoreVersion(bool value)
 
 void UpdatePreferencesModel::setNeedCheckForNewExtensionsVersion(bool value)
 {
-    NOT_IMPLEMENTED;
-
     if (value == needCheckForNewExtensionsVersion()) {
         return;
     }
 
+    extensionsConfiguration()->setNeedCheckForUpdate(value);
     emit needCheckForNewExtensionsVersionChanged(value);
 }

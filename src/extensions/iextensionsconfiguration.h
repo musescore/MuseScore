@@ -35,6 +35,9 @@ public:
     virtual QUrl extensionsUpdateUrl() const = 0;
     virtual QUrl extensionFileServerUrl(const QString& extensionCode) const = 0;
 
+    virtual bool needCheckForUpdate() const = 0;
+    virtual void setNeedCheckForUpdate(bool needCheck) = 0;
+
     virtual ValCh<ExtensionsHash> extensions() const = 0;
     virtual Ret setExtensions(const ExtensionsHash& extensions) const = 0;
 
