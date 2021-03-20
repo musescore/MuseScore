@@ -317,7 +317,14 @@
 			"textTupletBracketEndShortStem",
 			"textTupletBracketStartLongStem",
 			"textTuplet3LongStem",
-			"textTupletBracketEndLongStem"
+			"textTupletBracketEndLongStem",
+			"textHeadlessBlackNoteShortStem",
+			"textHeadlessBlackNoteLongStem",
+			"textHeadlessBlackNoteFrac8thShortStem",
+			"textHeadlessBlackNoteFrac8thLongStem",
+			"textHeadlessBlackNoteFrac16thShortStem",
+			"textHeadlessBlackNoteFrac16thLongStem",
+			"textHeadlessBlackNoteFrac32ndLongStem"
 		],
 		"range_end": "U+E20F",
 		"range_start": "U+E1F0"
@@ -544,6 +551,25 @@
 		],
 		"range_end": "U+E6CF",
 		"range_start": "U+E6C0"
+	},
+	"chopNotation": {
+		"description": "Chop (percussive bowing) notation",
+		"glyphs": [
+			"stringsDownBowTowardsBody",
+			"stringsUpBowTowardsBody",
+			"stringsDownBowAwayFromBody",
+			"stringsUpBowAwayFromBody",
+			"stringsDownBowBeyondBridge",
+			"stringsUpBowBeyondBridge",
+			"stringsScrapeParallelInward",
+			"stringsScrapeParallelOutward",
+			"stringsScrapeCircularClockwise",
+			"stringsScrapeCircularCounterclockwise",
+			"stringsTripleChopInward",
+			"stringsTripleChopOutward"
+		],
+		"range_end": "U+EE8F",
+		"range_start": "U+EE80"
 	},
 	"chordDiagrams": {
 		"description": "Chord diagrams",
@@ -1001,6 +1027,23 @@
 		"range_end": "U+E2FF",
 		"range_start": "U+E2C0"
 	},
+	"extendedHelmholtzEllisAccidentalsJustIntonationSupplement": {
+		"description": "Extended Helmholtz-Ellis accidentals (just intonation) supplement",
+		"glyphs": [
+			"accidentalCombiningLower29LimitComma",
+			"accidentalCombiningRaise29LimitComma",
+			"accidentalCombiningLower37Quartertone",
+			"accidentalCombiningRaise37Quartertone",
+			"accidentalCombiningLower41Comma",
+			"accidentalCombiningRaise41Comma",
+			"accidentalCombiningLower43Comma",
+			"accidentalCombiningRaise43Comma",
+			"accidentalCombiningLower47Quartertone",
+			"accidentalCombiningRaise47Quartertone"
+		],
+		"range_end": "U+EE5F",
+		"range_start": "U+EE50"
+	},
 	"extendedSteinZimmermannAccidentals": {
 		"description": "Extended Stein-Zimmermann accidentals",
 		"glyphs": [
@@ -1063,7 +1106,9 @@
 	"figuredBassSupplement": {
 		"description": "Figured bass supplement",
 		"glyphs": [
-			"figbass7Diminished"
+			"figbass7Diminished",
+			"figbassTripleFlat",
+			"figbassTripleSharp"
 		],
 		"range_end": "U+ECCF",
 		"range_start": "U+ECC0"
@@ -1122,7 +1167,9 @@
 			"fingeringLeftParenthesisItalic",
 			"fingeringRightParenthesisItalic",
 			"fingeringLeftBracketItalic",
-			"fingeringRightBracketItalic"
+			"fingeringRightBracketItalic",
+			"fingeringQLower",
+			"fingeringSLower"
 		],
 		"range_end": "U+ED9F",
 		"range_start": "U+ED80"
@@ -1349,7 +1396,11 @@
 			"guitarStrumUp",
 			"guitarStrumDown",
 			"guitarBarreFull",
-			"guitarBarreHalf"
+			"guitarBarreHalf",
+			"guitarString10",
+			"guitarString11",
+			"guitarString12",
+			"guitarString13"
 		],
 		"range_end": "U+E84F",
 		"range_start": "U+E830"
@@ -1452,7 +1503,8 @@
 			"caesuraShort",
 			"caesuraCurved",
 			"breathMarkSalzedo",
-			"curlewSign"
+			"curlewSign",
+			"caesuraSingleStroke"
 		],
 		"range_end": "U+E4DF",
 		"range_start": "U+E4C0"
@@ -1720,7 +1772,28 @@
 	},
 	"magratheanSagittalExtensionInsanePrecisionAccidentalDiacritics": {
 		"description": "Magrathean Sagittal extension (insane precision) accidental diacritics",
-		"glyphs": [],
+		"glyphs": [
+			"accSagittal1TinaUp",
+			"accSagittal1TinaDown",
+			"accSagittal2TinasUp",
+			"accSagittal2TinasDown",
+			"accSagittal3TinasUp",
+			"accSagittal3TinasDown",
+			"accSagittal4TinasUp",
+			"accSagittal4TinasDown",
+			"accSagittal5TinasUp",
+			"accSagittal5TinasDown",
+			"accSagittal6TinasUp",
+			"accSagittal6TinasDown",
+			"accSagittal7TinasUp",
+			"accSagittal7TinasDown",
+			"accSagittal8TinasUp",
+			"accSagittal8TinasDown",
+			"accSagittal9TinasUp",
+			"accSagittal9TinasDown",
+			"accSagittalFractionalTinaUp",
+			"accSagittalFractionalTinaDown"
+		],
 		"range_end": "U+E41F",
 		"range_start": "U+E3F8"
 	},
@@ -1776,7 +1849,8 @@
 			"mensuralWhiteBrevis",
 			"mensuralWhiteMinima",
 			"mensuralWhiteSemiminima",
-			"mensuralWhiteFusa"
+			"mensuralWhiteFusa",
+			"mensuralWhiteSemibrevis"
 		],
 		"range_end": "U+E96F",
 		"range_start": "U+E950"
@@ -1989,6 +2063,18 @@
 		],
 		"range_end": "U+E92F",
 		"range_start": "U+E910"
+	},
+	"medievalAndRenaissanceProlationsSupplement": {
+		"description": "Medieval and Renaissance prolations supplement",
+		"glyphs": [
+			"mensuralProportion5",
+			"mensuralProportion6",
+			"mensuralProportion7",
+			"mensuralProportion8",
+			"mensuralProportion9"
+		],
+		"range_end": "U+EE9F",
+		"range_start": "U+EE90"
 	},
 	"medievalAndRenaissanceRests": {
 		"description": "Medieval and Renaissance rests",
@@ -2364,6 +2450,40 @@
 		"range_end": "U+E1AF",
 		"range_start": "U+E150"
 	},
+	"noteNameNoteheadsSupplement": {
+		"description": "Note name noteheads supplement",
+		"glyphs": [
+			"noteDiWhole",
+			"noteRiWhole",
+			"noteRaWhole",
+			"noteMeWhole",
+			"noteFiWhole",
+			"noteSeWhole",
+			"noteLiWhole",
+			"noteLeWhole",
+			"noteTeWhole",
+			"noteDiHalf",
+			"noteRiHalf",
+			"noteRaHalf",
+			"noteMeHalf",
+			"noteFiHalf",
+			"noteSeHalf",
+			"noteLiHalf",
+			"noteLeHalf",
+			"noteTeHalf",
+			"noteDiBlack",
+			"noteRiBlack",
+			"noteRaBlack",
+			"noteMeBlack",
+			"noteFiBlack",
+			"noteSeBlack",
+			"noteLiBlack",
+			"noteLeBlack",
+			"noteTeBlack"
+		],
+		"range_end": "U+EEFF",
+		"range_start": "U+EEE0"
+	},
 	"noteheads": {
 		"description": "Noteheads",
 		"glyphs": [
@@ -2464,6 +2584,35 @@
 		"range_end": "U+E0FF",
 		"range_start": "U+E0A0"
 	},
+	"noteheadsSupplement": {
+		"description": "Noteheads supplement",
+		"glyphs": [
+			"noteheadNancarrowSine",
+			"noteheadCowellThirdNoteSeriesWhole",
+			"noteheadCowellThirdNoteSeriesHalf",
+			"noteheadCowellThirdNoteSeriesBlack",
+			"noteheadCowellFifthNoteSeriesWhole",
+			"noteheadCowellFifthNoteSeriesHalf",
+			"noteheadCowellFifthNoteSeriesBlack",
+			"noteheadCowellSeventhNoteSeriesWhole",
+			"noteheadCowellSeventhNoteSeriesHalf",
+			"noteheadCowellSeventhNoteSeriesBlack",
+			"noteheadCowellNinthNoteSeriesWhole",
+			"noteheadCowellNinthNoteSeriesHalf",
+			"noteheadCowellNinthNoteSeriesBlack",
+			"noteheadCowellEleventhNoteSeriesWhole",
+			"noteheadCowellEleventhNoteSeriesHalf",
+			"noteheadCowellEleventhSeriesBlack",
+			"noteheadCowellThirteenthNoteSeriesWhole",
+			"noteheadCowellThirteenthNoteSeriesHalf",
+			"noteheadCowellThirteenthNoteSeriesBlack",
+			"noteheadCowellFifteenthNoteSeriesWhole",
+			"noteheadCowellFifteenthNoteSeriesHalf",
+			"noteheadCowellFifteenthNoteSeriesBlack"
+		],
+		"range_end": "U+EEDF",
+		"range_start": "U+EEA0"
+	},
 	"octaves": {
 		"description": "Octaves",
 		"glyphs": [
@@ -2505,7 +2654,12 @@
 	},
 	"olympianSagittalExtensionExtremePrecisionAccidentalDiacritics": {
 		"description": "Olympian Sagittal extension (extreme precision) accidental diacritics",
-		"glyphs": [],
+		"glyphs": [
+			"accSagittal1MinaUp",
+			"accSagittal1MinaDown",
+			"accSagittal2MinasUp",
+			"accSagittal2MinasDown"
+		],
 		"range_end": "U+E3F7",
 		"range_start": "U+E3F4"
 	},
@@ -2619,6 +2773,23 @@
 		"range_end": "U+E49F",
 		"range_start": "U+E470"
 	},
+	"otherAccidentalsSupplement": {
+		"description": "Other accidentals supplement",
+		"glyphs": [
+			"accidentalUpsAndDownsUp",
+			"accidentalUpsAndDownsDown",
+			"accidentalUpsAndDownsMore",
+			"accidentalUpsAndDownsLess",
+			"accidentalHabaQuarterToneHigher",
+			"accidentalHabaFlatQuarterToneHigher",
+			"accidentalHabaSharpThreeQuarterTonesHigher",
+			"accidentalHabaQuarterToneLower",
+			"accidentalHabaSharpQuarterToneLower",
+			"accidentalHabaFlatThreeQuarterTonesLower"
+		],
+		"range_end": "U+EE6F",
+		"range_start": "U+EE60"
+	},
 	"otherBaroqueOrnaments": {
 		"description": "Other baroque ornaments",
 		"glyphs": [
@@ -2713,7 +2884,8 @@
 			"pluckedDamp",
 			"pluckedDampAll",
 			"pluckedPlectrum",
-			"pluckedDampOnStem"
+			"pluckedDampOnStem",
+			"arpeggiato"
 		],
 		"range_end": "U+E63F",
 		"range_start": "U+E630"
@@ -2953,6 +3125,22 @@
 		],
 		"range_end": "U+E11F",
 		"range_start": "U+E110"
+	},
+	"scaleDegrees": {
+		"description": "Scale degrees",
+		"glyphs": [
+			"scaleDegree1",
+			"scaleDegree2",
+			"scaleDegree3",
+			"scaleDegree4",
+			"scaleDegree5",
+			"scaleDegree6",
+			"scaleDegree7",
+			"scaleDegree8",
+			"scaleDegree9"
+		],
+		"range_end": "U+EF0F",
+		"range_start": "U+EF00"
 	},
 	"shakersOrRattlesPictograms": {
 		"description": "Shakers or rattles pictograms",
@@ -3318,6 +3506,17 @@
 		],
 		"range_end": "U+E62F",
 		"range_start": "U+E610"
+	},
+	"techniquesNoteheads": {
+		"description": "Techniques noteheads",
+		"glyphs": [
+			"swissRudimentsNoteheadBlackFlam",
+			"swissRudimentsNoteheadHalfFlam",
+			"swissRudimentsNoteheadBlackDouble",
+			"swissRudimentsNoteheadHalfDouble"
+		],
+		"range_end": "U+EE7F",
+		"range_start": "U+EE70"
 	},
 	"timeSignatures": {
 		"description": "Time signatures",
