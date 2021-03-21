@@ -1641,7 +1641,7 @@ static void distributeStaves(Page* page)
                               }
 
                         prevYBottom = system->y() + sysStaff->y() + sysStaff->bbox().height();
-                        yBottom     = system->y() + sysStaff->y() + sysStaff->skyline().south().max();
+                        yBottom     = system->y() + sysStaff->y() + sysStaff->yBottom();
                         vgdl.append(vgd);
                         }
                   transferNormalBracket = endNormalBracket >= 0;

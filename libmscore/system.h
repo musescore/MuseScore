@@ -63,6 +63,7 @@ class SysStaff {
       qreal y() const               { return _bbox.y() + _yOff; }
       void setYOff(qreal offset)    { _yOff = offset; }
       qreal yOffset() const         { return _yOff; }
+      qreal yBottom() const;
 
       void saveLayout();
       void restoreLayout();
