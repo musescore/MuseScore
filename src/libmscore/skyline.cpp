@@ -286,6 +286,11 @@ void SkylineLine::paint(QPainter& p) const
     }
 }
 
+bool SkylineLine::valid() const
+{
+    return !seg.empty();
+}
+
 bool SkylineLine::valid(const SkylineSegment& s) const
 {
     return north ? (s.y != MAXIMUM_Y) : (s.y != MINIMUM_Y);
