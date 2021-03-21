@@ -65,6 +65,7 @@ public:
     void dump() const;
     qreal minDistance(const SkylineLine&) const;
     qreal max() const;
+    bool valid() const;
     bool valid(const SkylineSegment& s) const;
     bool isNorth() const { return north; }
 
