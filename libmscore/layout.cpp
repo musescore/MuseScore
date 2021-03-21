@@ -5120,7 +5120,7 @@ VerticalGapData::VerticalGapData(bool first, System *sys, Staff *st, SysStaff *s
             _normalisedSpacing = system->y() + (sysStaff ? sysStaff->y() : 0.0) - y;
             _maxActualSpacing = system->score()->styleP(Sid::maxStaffSpread);
 
-            Spacer* spacer { sys->upSpacer(st->idx(), nextSpacer) };
+            Spacer* spacer { staff ? system->upSpacer(staff->idx(), nextSpacer) : nullptr };
 
             if (spacer) {
                   _fixedSpacer = spacer->spacerType() == SpacerType::FIXED;
