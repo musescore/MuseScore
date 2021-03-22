@@ -286,11 +286,21 @@ void DockWindow::updateStyle()
 
 void DockWindow::onMenusChanged(const QList<QMenu*>& menus)
 {
-    m_window->menuBar()->clear();
+    QMenuBar* menuBar = m_window->menuBar();
+    menuBar->clear();
 
     for (QMenu* menu: menus) {
-        m_window->menuBar()->addMenu(menu);
+        menuBar->addMenu(menu);
     }
+
+#ifdef Q_OS_MAC
+    // Without the following code, the menu bar on macOS is hidden from view.
+    // If this were to be done on systems where the menu bar is loated at the top of the window,
+    // there would be noticeable flicker as the location of all widgets is adjusted
+    // as the menu bar is hidden and then reshown.
+    menuBar->setParent(nullptr);
+    m_window->setMenuBar(menuBar);
+#endif
 }
 
 DockPage* DockWindow::currentPage() const
@@ -409,7 +419,6 @@ void DockWindow::setMenuBar(DockMenuBar* menuBar)
     m_menuBar = menuBar;
 
     connect(menuBar, &DockMenuBar::changed, this, &DockWindow::onMenusChanged);
-    connect(m_window->menuBar(), &QMenuBar::triggered, menuBar, &DockMenuBar::onActionTriggered);
 
     emit menuBarChanged(m_menuBar);
 }

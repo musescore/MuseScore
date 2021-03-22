@@ -100,6 +100,7 @@ QMenu* DockMenuBar::makeMenu(const QVariantMap& menuItem) const
         }
     }
 
+    connect(menu, &QMenu::triggered, this, &DockMenuBar::onActionTriggered);
     return menu;
 }
 
