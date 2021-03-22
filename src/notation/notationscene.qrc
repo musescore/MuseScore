@@ -23,5 +23,6 @@
         <file>qml/MuseScore/NotationScene/internal/NoteInputBarActionDelegate.qml</file>
         <file>qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml</file>
         <file>qml/MuseScore/NotationScene/UndoRedoToolBar.qml</file>
+        <file>qml/MuseScore/NotationScene/NoteInputPreferencesPage.qml</file>
     </qresource>
 </RCC>
