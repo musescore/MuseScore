@@ -29,8 +29,6 @@ void TemplatesModel::load()
 
     updateTemplatesByCategory();
     emit categoriesChanged();
-    emit templatesChanged();
-    emit currentTemplateChanged();
 }
 
 QStringList TemplatesModel::categoriesTitles() const
