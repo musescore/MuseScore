@@ -30,119 +30,105 @@ NoteInputPreferencesModel::NoteInputPreferencesModel(QObject* parent)
 
 bool NoteInputPreferencesModel::advanceToNextNoteOnKeyRelease() const
 {
-    NOT_IMPLEMENTED;
-    return false;
+    return configuration()->advanceToNextNoteOnKeyRelease();
 }
 
 bool NoteInputPreferencesModel::colorNotesOusideOfUsablePitchRange() const
 {
-    NOT_IMPLEMENTED;
-    return false;
+    return configuration()->colorNotesOusideOfUsablePitchRange();
 }
 
 int NoteInputPreferencesModel::delayBetweenNotesInRealTimeModeMilliseconds() const
 {
-    NOT_IMPLEMENTED;
-    return 0;
+    return configuration()->delayBetweenNotesInRealTimeModeMilliseconds();
 }
 
 bool NoteInputPreferencesModel::playNotesWhenEditing() const
 {
-    NOT_IMPLEMENTED;
-    return true;
+    return configuration()->playNotesWhenEditing();
 }
 
 int NoteInputPreferencesModel::notePlayDurationMilliseconds() const
 {
-    NOT_IMPLEMENTED;
-    return 0;
+    return configuration()->notePlayDurationMilliseconds();
 }
 
 bool NoteInputPreferencesModel::playChordWhenEditing() const
 {
-    NOT_IMPLEMENTED;
-    return false;
+    return configuration()->playChordWhenEditing();
 }
 
 bool NoteInputPreferencesModel::playChordSymbolWhenEditing() const
 {
-    NOT_IMPLEMENTED;
-    return false;
+    return configuration()->playChordSymbolWhenEditing();
 }
 
 void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)
 {
-    NOT_IMPLEMENTED;
-
     if (value == advanceToNextNoteOnKeyRelease()) {
         return;
     }
 
+    configuration()->setAdvanceToNextNoteOnKeyRelease(value);
     emit advanceToNextNoteOnKeyReleaseChanged(value);
 }
 
 void NoteInputPreferencesModel::setColorNotesOusideOfUsablePitchRange(bool value)
 {
-    NOT_IMPLEMENTED;
-
     if (value == colorNotesOusideOfUsablePitchRange()) {
         return;
     }
 
+    configuration()->setColorNotesOusideOfUsablePitchRange(value);
     emit colorNotesOusideOfUsablePitchRangeChanged(value);
 }
 
 void NoteInputPreferencesModel::setDelayBetweenNotesInRealTimeModeMilliseconds(int delay)
 {
-    NOT_IMPLEMENTED;
-
     if (delay == delayBetweenNotesInRealTimeModeMilliseconds()) {
         return;
     }
 
+    configuration()->setDelayBetweenNotesInRealTimeModeMilliseconds(delay);
     emit delayBetweenNotesInRealTimeModeMillisecondsChanged(delay);
 }
 
 void NoteInputPreferencesModel::setPlayNotesWhenEditing(bool value)
 {
-    NOT_IMPLEMENTED;
-
     if (value == playNotesWhenEditing()) {
         return;
     }
 
+    configuration()->setPlayNotesWhenEditing(value);
     emit playNotesWhenEditingChanged(value);
 }
 
 void NoteInputPreferencesModel::setNotePlayDurationMilliseconds(int duration)
 {
-    NOT_IMPLEMENTED;
-
     if (duration == notePlayDurationMilliseconds()) {
         return;
     }
 
+    configuration()->setNotePlayDurationMilliseconds(duration);
     emit notePlayDurationMillisecondsChanged(duration);
 }
 
 void NoteInputPreferencesModel::setPlayChordWhenEditing(bool value)
 {
-    NOT_IMPLEMENTED;
-
     if (value == playChordWhenEditing()) {
         return;
     }
 
+    configuration()->setPlayChordWhenEditing(value);
     emit playChordWhenEditingChanged(value);
 }
 
 void NoteInputPreferencesModel::setPlayChordSymbolWhenEditing(bool value)
 {
-    NOT_IMPLEMENTED;
-
     if (value == playChordSymbolWhenEditing()) {
         return;
     }
 
+    configuration()->setPlayChordSymbolWhenEditing(value);
     emit playChordSymbolWhenEditingChanged(value);
 }

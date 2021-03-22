@@ -78,7 +78,7 @@ Item {
             checked: noteInputModel.playNotesWhenEditing
 
             onClicked: {
-                noteInputModel.playChordWhenEditing = !checked
+                noteInputModel.playNotesWhenEditing = !checked
             }
         }
 

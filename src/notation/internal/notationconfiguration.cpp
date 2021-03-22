@@ -67,6 +67,14 @@ static const Settings::Key TOOLBAR_KEY(module_name, "ui/toolbar/");
 
 static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/canvas/scroll/verticalOrientation");
 
+static const Settings::Key ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE(module_name, "io/midi/advanceOnRelease");
+static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name, "score/note/warnPitchRange");
+static const Settings::Key REALTIME_DELAY(module_name, "io/midi/realtimeDelay");
+static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/defaultPlayDuration");
+static const Settings::Key PLAY_NOTE_WHEN_EDITING(module_name, "score/note/playOnClick");
+static const Settings::Key PLAY_CHORD_WHEN_EDITING(module_name, "score/chord/playOnAddNote");
+static const Settings::Key PLAY_CHORD_SYMBOL_WHEN_EDITING(module_name, "score/harmony/play/onedit");
+
 void NotationConfiguration::init()
 {
     settings()->setDefaultValue(ANCHORLINE_COLOR, Val(QColor("#C31989")));
@@ -123,10 +131,21 @@ void NotationConfiguration::init()
         m_canvasOrientationChanged.send(canvasOrientation().val);
     });
 
+    settings()->setDefaultValue(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE, Val(true));
+    settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
+    settings()->setDefaultValue(REALTIME_DELAY, Val(750));
+    settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(300));
+    settings()->setDefaultValue(PLAY_NOTE_WHEN_EDITING, Val(true));
+    settings()->setDefaultValue(PLAY_CHORD_WHEN_EDITING, Val(true));
+    settings()->setDefaultValue(PLAY_CHORD_SYMBOL_WHEN_EDITING, Val(true));
+
+    fileSystem()->makePath(stylesPath().val);
+
     // libmscore
     preferences().setBackupDirPath(globalConfiguration()->backupPath().toQString());
 
-    fileSystem()->makePath(stylesPath().val);
+    Ms::MScore::warnPitchRange = colorNotesOusideOfUsablePitchRange();
+    Ms::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
 }
 
 QColor NotationConfiguration::anchorLineColor() const
@@ -411,4 +430,76 @@ Settings::Key NotationConfiguration::toolbarSettingsKey(const std::string& toolb
     Settings::Key toolbarKey = TOOLBAR_KEY;
     toolbarKey.key += toolbarName;
     return toolbarKey;
+}
+
+bool NotationConfiguration::advanceToNextNoteOnKeyRelease() const
+{
+    return settings()->value(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE).toBool();
+}
+
+void NotationConfiguration::setAdvanceToNextNoteOnKeyRelease(bool value)
+{
+    settings()->setValue(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE, Val(value));
+}
+
+bool NotationConfiguration::colorNotesOusideOfUsablePitchRange() const
+{
+    return settings()->value(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE).toBool();
+}
+
+void NotationConfiguration::setColorNotesOusideOfUsablePitchRange(bool value)
+{
+    Ms::MScore::warnPitchRange = value;
+    settings()->setValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(value));
+}
+
+int NotationConfiguration::delayBetweenNotesInRealTimeModeMilliseconds() const
+{
+    return settings()->value(REALTIME_DELAY).toInt();
+}
+
+void NotationConfiguration::setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs)
+{
+    settings()->setValue(REALTIME_DELAY, Val(delayMs));
+}
+
+bool NotationConfiguration::playNotesWhenEditing() const
+{
+    return settings()->value(PLAY_NOTE_WHEN_EDITING).toBool();
+}
+
+void NotationConfiguration::setPlayNotesWhenEditing(bool value)
+{
+    settings()->setValue(PLAY_NOTE_WHEN_EDITING, Val(value));
+}
+
+int NotationConfiguration::notePlayDurationMilliseconds() const
+{
+    return settings()->value(NOTE_DEFAULT_PLAY_DURATION).toInt();
+}
+
+void NotationConfiguration::setNotePlayDurationMilliseconds(int durationMs)
+{
+    Ms::MScore::defaultPlayDuration = durationMs;
+    settings()->setValue(NOTE_DEFAULT_PLAY_DURATION, Val(durationMs));
+}
+
+bool NotationConfiguration::playChordWhenEditing() const
+{
+    return settings()->value(PLAY_CHORD_WHEN_EDITING).toBool();
+}
+
+void NotationConfiguration::setPlayChordWhenEditing(bool value)
+{
+    settings()->setValue(PLAY_CHORD_WHEN_EDITING, Val(value));
+}
+
+bool NotationConfiguration::playChordSymbolWhenEditing() const
+{
+    return settings()->value(PLAY_CHORD_SYMBOL_WHEN_EDITING).toBool();
+}
+
+void NotationConfiguration::setPlayChordSymbolWhenEditing(bool value)
+{
+    settings()->setValue(PLAY_CHORD_SYMBOL_WHEN_EDITING, Val(value));
 }
