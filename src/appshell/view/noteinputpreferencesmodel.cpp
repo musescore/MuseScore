@@ -21,7 +21,7 @@
 
 #include "log.h"
 
-using namespace mu::notation;
+using namespace mu::appshell;
 
 NoteInputPreferencesModel::NoteInputPreferencesModel(QObject* parent)
     : QObject(parent)
@@ -30,37 +30,37 @@ NoteInputPreferencesModel::NoteInputPreferencesModel(QObject* parent)
 
 bool NoteInputPreferencesModel::advanceToNextNoteOnKeyRelease() const
 {
-    return configuration()->advanceToNextNoteOnKeyRelease();
+    return notationConfiguration()->advanceToNextNoteOnKeyRelease();
 }
 
 bool NoteInputPreferencesModel::colorNotesOusideOfUsablePitchRange() const
 {
-    return configuration()->colorNotesOusideOfUsablePitchRange();
+    return notationConfiguration()->colorNotesOusideOfUsablePitchRange();
 }
 
 int NoteInputPreferencesModel::delayBetweenNotesInRealTimeModeMilliseconds() const
 {
-    return configuration()->delayBetweenNotesInRealTimeModeMilliseconds();
+    return notationConfiguration()->delayBetweenNotesInRealTimeModeMilliseconds();
 }
 
 bool NoteInputPreferencesModel::playNotesWhenEditing() const
 {
-    return configuration()->playNotesWhenEditing();
+    return playbackConfiguration()->playNotesWhenEditing();
 }
 
 int NoteInputPreferencesModel::notePlayDurationMilliseconds() const
 {
-    return configuration()->notePlayDurationMilliseconds();
+    return notationConfiguration()->notePlayDurationMilliseconds();
 }
 
 bool NoteInputPreferencesModel::playChordWhenEditing() const
 {
-    return configuration()->playChordWhenEditing();
+    return playbackConfiguration()->playChordWhenEditing();
 }
 
 bool NoteInputPreferencesModel::playChordSymbolWhenEditing() const
 {
-    return configuration()->playChordSymbolWhenEditing();
+    return playbackConfiguration()->playHarmonyWhenEditing();
 }
 
 void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)
@@ -69,7 +69,7 @@ void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)
         return;
     }
 
-    configuration()->setAdvanceToNextNoteOnKeyRelease(value);
+    notationConfiguration()->setAdvanceToNextNoteOnKeyRelease(value);
     emit advanceToNextNoteOnKeyReleaseChanged(value);
 }
 
@@ -79,7 +79,7 @@ void NoteInputPreferencesModel::setColorNotesOusideOfUsablePitchRange(bool value
         return;
     }
 
-    configuration()->setColorNotesOusideOfUsablePitchRange(value);
+    notationConfiguration()->setColorNotesOusideOfUsablePitchRange(value);
     emit colorNotesOusideOfUsablePitchRangeChanged(value);
 }
 
@@ -89,7 +89,7 @@ void NoteInputPreferencesModel::setDelayBetweenNotesInRealTimeModeMilliseconds(i
         return;
     }
 
-    configuration()->setDelayBetweenNotesInRealTimeModeMilliseconds(delay);
+    notationConfiguration()->setDelayBetweenNotesInRealTimeModeMilliseconds(delay);
     emit delayBetweenNotesInRealTimeModeMillisecondsChanged(delay);
 }
 
@@ -99,7 +99,7 @@ void NoteInputPreferencesModel::setPlayNotesWhenEditing(bool value)
         return;
     }
 
-    configuration()->setPlayNotesWhenEditing(value);
+    playbackConfiguration()->setPlayNotesWhenEditing(value);
     emit playNotesWhenEditingChanged(value);
 }
 
@@ -109,7 +109,7 @@ void NoteInputPreferencesModel::setNotePlayDurationMilliseconds(int duration)
         return;
     }
 
-    configuration()->setNotePlayDurationMilliseconds(duration);
+    notationConfiguration()->setNotePlayDurationMilliseconds(duration);
     emit notePlayDurationMillisecondsChanged(duration);
 }
 
@@ -119,7 +119,7 @@ void NoteInputPreferencesModel::setPlayChordWhenEditing(bool value)
         return;
     }
 
-    configuration()->setPlayChordWhenEditing(value);
+    playbackConfiguration()->setPlayChordWhenEditing(value);
     emit playChordWhenEditingChanged(value);
 }
 
@@ -129,6 +129,6 @@ void NoteInputPreferencesModel::setPlayChordSymbolWhenEditing(bool value)
         return;
     }
 
-    configuration()->setPlayChordSymbolWhenEditing(value);
+    playbackConfiguration()->setPlayHarmonyWhenEditing(value);
     emit playChordSymbolWhenEditingChanged(value);
 }

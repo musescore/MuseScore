@@ -16,29 +16,36 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_NOTATION_NOTEINPUTPREFERENCESMODEL_H
-#define MU_NOTATION_NOTEINPUTPREFERENCESMODEL_H
+#ifndef MU_APPSHELL_NOTEINPUTPREFERENCESMODEL_H
+#define MU_APPSHELL_NOTEINPUTPREFERENCESMODEL_H
 
 #include <QObject>
 
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
+#include "playback/iplaybackconfiguration.h"
 
-namespace mu::notation {
+namespace mu::appshell {
 class NoteInputPreferencesModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(notation, INotationConfiguration, configuration)
+    INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
+    INJECT(appshell, playback::IPlaybackConfiguration, playbackConfiguration)
 
-    Q_PROPERTY(bool advanceToNextNoteOnKeyRelease READ advanceToNextNoteOnKeyRelease WRITE setAdvanceToNextNoteOnKeyRelease NOTIFY advanceToNextNoteOnKeyReleaseChanged)
-    Q_PROPERTY(bool colorNotesOusideOfUsablePitchRange READ colorNotesOusideOfUsablePitchRange WRITE setColorNotesOusideOfUsablePitchRange NOTIFY colorNotesOusideOfUsablePitchRangeChanged)
-    Q_PROPERTY(int delayBetweenNotesInRealTimeModeMilliseconds READ delayBetweenNotesInRealTimeModeMilliseconds WRITE setDelayBetweenNotesInRealTimeModeMilliseconds NOTIFY delayBetweenNotesInRealTimeModeMillisecondsChanged)
+    Q_PROPERTY(
+        bool advanceToNextNoteOnKeyRelease READ advanceToNextNoteOnKeyRelease WRITE setAdvanceToNextNoteOnKeyRelease NOTIFY advanceToNextNoteOnKeyReleaseChanged)
+    Q_PROPERTY(
+        bool colorNotesOusideOfUsablePitchRange READ colorNotesOusideOfUsablePitchRange WRITE setColorNotesOusideOfUsablePitchRange NOTIFY colorNotesOusideOfUsablePitchRangeChanged)
+    Q_PROPERTY(
+        int delayBetweenNotesInRealTimeModeMilliseconds READ delayBetweenNotesInRealTimeModeMilliseconds WRITE setDelayBetweenNotesInRealTimeModeMilliseconds NOTIFY delayBetweenNotesInRealTimeModeMillisecondsChanged)
 
     Q_PROPERTY(bool playNotesWhenEditing READ playNotesWhenEditing WRITE setPlayNotesWhenEditing NOTIFY playNotesWhenEditingChanged)
-    Q_PROPERTY(int notePlayDurationMilliseconds READ notePlayDurationMilliseconds WRITE setNotePlayDurationMilliseconds NOTIFY notePlayDurationMillisecondsChanged)
+    Q_PROPERTY(
+        int notePlayDurationMilliseconds READ notePlayDurationMilliseconds WRITE setNotePlayDurationMilliseconds NOTIFY notePlayDurationMillisecondsChanged)
     Q_PROPERTY(bool playChordWhenEditing READ playChordWhenEditing WRITE setPlayChordWhenEditing NOTIFY playChordWhenEditingChanged)
-    Q_PROPERTY(bool playChordSymbolWhenEditing READ playChordSymbolWhenEditing WRITE setPlayChordSymbolWhenEditing NOTIFY playChordSymbolWhenEditingChanged)
+    Q_PROPERTY(
+        bool playChordSymbolWhenEditing READ playChordSymbolWhenEditing WRITE setPlayChordSymbolWhenEditing NOTIFY playChordSymbolWhenEditingChanged)
 
 public:
     explicit NoteInputPreferencesModel(QObject* parent = nullptr);
@@ -72,4 +79,4 @@ signals:
 };
 }
 
-#endif // MU_NOTATION_NOTEINPUTPREFERENCESMODEL_H
+#endif // MU_APPSHELL_NOTEINPUTPREFERENCESMODEL_H

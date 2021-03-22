@@ -152,7 +152,7 @@ void PreferencesModel::load(const QString& currentPageId)
                  "Preferences/AppearancePreferencesPage.qml"),
         makeItem("canvas", qtrc("appshell", "Canvas"), IconCode::Code::NEW_FILE),
         makeItem("note-input", qtrc("appshell", "Note Input"), IconCode::Code::EDIT,
-                 "MuseScore/NotationScene/NoteInputPreferencesPage.qml"),
+                 "Preferences/NoteInputPreferencesPage.qml"),
         makeItem("midi-device-mapping", qtrc("appshell", "Midi Device Mapping"), IconCode::Code::MIDI_INPUT),
         makeItem("score", qtrc("appshell", "Score"), IconCode::Code::SCORE),
         makeItem("io", qtrc("appshell", "I/O"), IconCode::Code::AUDIO),

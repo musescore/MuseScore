@@ -16,12 +16,12 @@ Item {
         spacing: 22
 
         StyledTextLabel {
-            text: qsTrc("notation", "Note Input")
+            text: qsTrc("appshell", "Note Input")
             font: ui.theme.bodyBoldFont
         }
 
         CheckBox {
-            text: qsTrc("notation", "Advance to next note on key release (MIDI)")
+            text: qsTrc("appshell", "Advance to next note on key release (MIDI)")
 
             checked: noteInputModel.advanceToNextNoteOnKeyRelease
 
@@ -32,7 +32,7 @@ Item {
 
         CheckBox {
             width: 170
-            text: qsTrc("notation", "Colour notes outside of usable pitch range")
+            text: qsTrc("appshell", "Colour notes outside of usable pitch range")
 
             checked: noteInputModel.colorNotesOusideOfUsablePitchRange
 
@@ -54,14 +54,15 @@ Item {
                 wrapMode: Text.WordWrap
                 maximumLineCount: 2
 
-                text: qsTrc("notation", "Delay between notes in automatic real time mode:")
+                text: qsTrc("appshell", "Delay between notes in automatic real time mode:")
             }
 
             IncrementalPropertyControl {
                 width: 102
 
                 currentValue: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
-                measureUnitsSymbol: qsTrc("notation", "ms")
+                measureUnitsSymbol: qsTrc("appshell", "ms")
+                step: 1
 
                 onValueEdited: {
                     noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds = newValue
@@ -72,8 +73,8 @@ Item {
         SeparatorLine {}
 
         CheckBox {
-            text: qsTrc("notation", "Play Notes When Editing")
-            textFont: ui.theme.bodyBoldFont
+            text: qsTrc("appshell", "Play Notes When Editing")
+            font: ui.theme.bodyBoldFont
 
             checked: noteInputModel.playNotesWhenEditing
 
@@ -92,14 +93,15 @@ Item {
                 width: 93
                 horizontalAlignment: Qt.AlignLeft
 
-                text: qsTrc("notation", "Default duration:")
+                text: qsTrc("appshell", "Default duration:")
             }
 
             IncrementalPropertyControl {
                 width: 102
 
                 currentValue: noteInputModel.notePlayDurationMilliseconds
-                measureUnitsSymbol: qsTrc("notation", "ms")
+                measureUnitsSymbol: qsTrc("appshell", "ms")
+                step: 1
 
                 onValueEdited: {
                     noteInputModel.notePlayDurationMilliseconds = newValue
@@ -108,7 +110,7 @@ Item {
         }
 
         CheckBox {
-            text: qsTrc("notation", "Play chord when editing")
+            text: qsTrc("appshell", "Play chord when editing")
 
             checked: noteInputModel.playChordWhenEditing
             enabled: noteInputModel.playNotesWhenEditing
@@ -119,7 +121,7 @@ Item {
         }
 
         CheckBox {
-            text: qsTrc("notation", "Play chord symbol when editing")
+            text: qsTrc("appshell", "Play chord symbol when editing")
 
             checked: noteInputModel.playChordSymbolWhenEditing
             enabled: noteInputModel.playNotesWhenEditing

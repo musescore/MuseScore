@@ -119,17 +119,8 @@ public:
     virtual int delayBetweenNotesInRealTimeModeMilliseconds() const = 0;
     virtual void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) = 0;
 
-    virtual bool playNotesWhenEditing() const = 0;
-    virtual void setPlayNotesWhenEditing(bool value) = 0;
-
     virtual int notePlayDurationMilliseconds() const = 0;
     virtual void setNotePlayDurationMilliseconds(int durationMs) = 0;
-
-    virtual bool playChordWhenEditing() const = 0;
-    virtual void setPlayChordWhenEditing(bool value) = 0;
-
-    virtual bool playChordSymbolWhenEditing() const = 0;
-    virtual void setPlayChordSymbolWhenEditing(bool value) = 0;
 };
 }
 

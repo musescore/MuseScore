@@ -30,8 +30,14 @@ class IPlaybackConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPlaybackConfiguration() = default;
 
-    virtual bool isPlayElementOnClick() const = 0;
-    virtual bool isPlayHarmonyOnClick() const = 0;
+    virtual bool playNotesWhenEditing() const = 0;
+    virtual void setPlayNotesWhenEditing(bool value) = 0;
+
+    virtual bool playChordWhenEditing() const = 0;
+    virtual void setPlayChordWhenEditing(bool value) = 0;
+
+    virtual bool playHarmonyWhenEditing() const = 0;
+    virtual void setPlayHarmonyWhenEditing(bool value) = 0;
 
     virtual PlaybackCursorType cursorType() const = 0;
 };
