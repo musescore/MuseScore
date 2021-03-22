@@ -23,12 +23,11 @@ void TemplatesModel::load()
         }
     }
 
-    m_visibleTemplates = m_allTemplates;
-
     for (const Template& templ: m_allTemplates) {
         m_visibleCategoriesTitles << templ.categoryTitle;
     }
 
+    updateTemplatesByCategory();
     emit categoriesChanged();
     emit templatesChanged();
     emit currentTemplateChanged();
