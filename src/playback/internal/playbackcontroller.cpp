@@ -139,7 +139,7 @@ float PlaybackController::playbackPositionInSeconds() const
 
 void PlaybackController::playElementOnClick(const notation::Element* element)
 {
-    if (!configuration()->isPlayElementOnClick()) {
+    if (!configuration()->playNotesWhenEditing()) {
         return;
     }
 
@@ -151,7 +151,7 @@ void PlaybackController::playElementOnClick(const notation::Element* element)
         return;
     }
 
-    if (element->isHarmony() && !configuration()->isPlayHarmonyOnClick()) {
+    if (element->isHarmony() && !configuration()->playHarmonyWhenEditing()) {
         return;
     }
 

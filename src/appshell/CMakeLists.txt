@@ -79,6 +79,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/appearancepreferencesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/programmestartpreferencesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/programmestartpreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/noteinputpreferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/noteinputpreferencesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/startupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/startupmodel.h
     ${DOCKWINDOW_SRC}

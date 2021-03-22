@@ -27,8 +27,14 @@ class PlaybackConfiguration : public IPlaybackConfiguration
 public:
     void init();
 
-    bool isPlayElementOnClick() const override;
-    bool isPlayHarmonyOnClick() const override;
+    bool playNotesWhenEditing() const override;
+    void setPlayNotesWhenEditing(bool value) override;
+
+    bool playChordWhenEditing() const override;
+    void setPlayChordWhenEditing(bool value) override;
+
+    bool playHarmonyWhenEditing() const override;
+    void setPlayHarmonyWhenEditing(bool value) override;
 
     PlaybackCursorType cursorType() const override;
 };
