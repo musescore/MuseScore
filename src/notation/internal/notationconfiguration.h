@@ -113,6 +113,27 @@ public:
     ValCh<framework::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(framework::Orientation orientation) override;
 
+    bool advanceToNextNoteOnKeyRelease() const override;
+    void setAdvanceToNextNoteOnKeyRelease(bool value) override;
+
+    bool colorNotesOusideOfUsablePitchRange() const override;
+    void setColorNotesOusideOfUsablePitchRange(bool value) override;
+
+    int delayBetweenNotesInRealTimeModeMilliseconds() const override;
+    void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) override;
+
+    bool playNotesWhenEditing() const override;
+    void setPlayNotesWhenEditing(bool value) override;
+
+    int notePlayDurationMilliseconds() const override;
+    void setNotePlayDurationMilliseconds(int durationMs) override;
+
+    bool playChordWhenEditing() const override;
+    void setPlayChordWhenEditing(bool value) override;
+
+    bool playChordSymbolWhenEditing() const override;
+    void setPlayChordSymbolWhenEditing(bool value) override;
+
 private:
     std::vector<std::string> parseToolbarActions(const std::string& actions) const;
 

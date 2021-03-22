@@ -21,10 +21,15 @@
 
 #include <QObject>
 
+#include "modularity/ioc.h"
+#include "notation/inotationconfiguration.h"
+
 namespace mu::notation {
 class NoteInputPreferencesModel : public QObject
 {
     Q_OBJECT
+
+    INJECT(notation, INotationConfiguration, configuration)
 
     Q_PROPERTY(bool advanceToNextNoteOnKeyRelease READ advanceToNextNoteOnKeyRelease WRITE setAdvanceToNextNoteOnKeyRelease NOTIFY advanceToNextNoteOnKeyReleaseChanged)
     Q_PROPERTY(bool colorNotesOusideOfUsablePitchRange READ colorNotesOusideOfUsablePitchRange WRITE setColorNotesOusideOfUsablePitchRange NOTIFY colorNotesOusideOfUsablePitchRangeChanged)
