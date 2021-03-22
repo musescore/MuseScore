@@ -43,6 +43,7 @@ public:
     ValCh<io::paths> recentScorePaths() const override;
     void setRecentScorePaths(const io::paths& recentScorePaths) override;
 
+    io::path myFirstScorePath() const override;
     io::paths templatesDirPaths() const override;
     io::path scoresPath() const override;
     io::path defaultSavingFilePath(const io::path& fileName) const override;
@@ -54,6 +55,8 @@ public:
     void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) override;
 
 private:
+    io::path mainTemplatesDirPath() const;
+
     io::paths actualRecentScorePaths() const;
     io::paths parsePaths(const mu::Val& value) const;
 

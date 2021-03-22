@@ -24,6 +24,8 @@
 install(FILES
       drumset_fr.drm
       orchestral.drm
+      My_First_Score.mscx
+      Create_New_Score.mscz
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates
       )
 install(FILES

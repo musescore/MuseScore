@@ -85,6 +85,7 @@ Flickable {
             color: appearanceModel.backgroundColor
             wallpaperPath: appearanceModel.backgroundWallpaperPath
             wallpapersDir: appearanceModel.wallpapersDir()
+            wallpaperFilter: appearanceModel.wallpaperPathFilter()
             firstColumnWidth: parent.firstColumnWidth
 
             onUseColorChangeRequested: {
@@ -111,6 +112,7 @@ Flickable {
             color: appearanceModel.foregroundColor
             wallpaperPath: appearanceModel.foregroundWallpaperPath
             wallpapersDir: appearanceModel.wallpapersDir()
+            wallpaperFilter: appearanceModel.wallpaperPathFilter()
             firstColumnWidth: parent.firstColumnWidth
 
             onUseColorChangeRequested: {

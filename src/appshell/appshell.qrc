@@ -30,6 +30,7 @@
         <file>qml/resources/mu_logo.svg</file>
         <file>qml/Preferences/GeneralPreferencesPage.qml</file>
         <file>qml/Preferences/UpdatePreferencesPage.qml</file>
+        <file>qml/Preferences/ProgrammeStartPreferencesPage.qml</file>
         <file>qml/Preferences/StubPreferencesPage.qml</file>
         <file>qml/Preferences/AppearancePreferencesPage.qml</file>
         <file>qml/Preferences/PreferencesDialog.qml</file>

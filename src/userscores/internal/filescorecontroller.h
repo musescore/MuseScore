@@ -69,6 +69,8 @@ private:
 
     void clearRecentScores();
 
+    void continueLastSession();
+
     io::path selectScoreOpenningFile(const QStringList& filter);
     io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
     Ret doOpenScore(const io::path& filePath);
