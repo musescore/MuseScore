@@ -38,6 +38,7 @@ public:
     virtual ValCh<io::paths> recentScorePaths() const = 0;
     virtual void setRecentScorePaths(const io::paths& recentScorePaths) = 0;
 
+    virtual io::path myFirstScorePath() const = 0;
     virtual io::paths templatesDirPaths() const = 0;
     virtual io::path scoresPath() const = 0;
     virtual io::path defaultSavingFilePath(const io::path& fileName) const = 0;

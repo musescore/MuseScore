@@ -79,6 +79,7 @@ public:
 
     Q_INVOKABLE QStringList accentColorSamples() const;
     Q_INVOKABLE QStringList allFonts() const;
+    Q_INVOKABLE QString wallpaperPathFilter() const;
     Q_INVOKABLE QString wallpapersDir() const;
 
 public slots:

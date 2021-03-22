@@ -50,6 +50,11 @@ void UserScoresConfiguration::init()
     setRecentScorePaths(paths);
 }
 
+io::path UserScoresConfiguration::mainTemplatesDirPath() const
+{
+    return globalConfiguration()->sharePath() + "templates";
+}
+
 io::paths UserScoresConfiguration::actualRecentScorePaths() const
 {
     io::paths allPaths = parsePaths(settings()->value(RECENT_SCORE_PATHS));
@@ -103,11 +108,16 @@ io::paths UserScoresConfiguration::parsePaths(const Val& value) const
     return result;
 }
 
+io::path UserScoresConfiguration::myFirstScorePath() const
+{
+    return mainTemplatesDirPath() + "/My_First_Score.mscx";
+}
+
 io::paths UserScoresConfiguration::templatesDirPaths() const
 {
     io::paths dirs;
 
-    dirs.push_back(globalConfiguration()->sharePath() + "templates");
+    dirs.push_back(mainTemplatesDirPath());
     dirs.push_back(settings()->value(USER_TEMPLATES_PATH).toQString());
 
     io::paths temps = extensionsConfiguration()->templatesPaths();

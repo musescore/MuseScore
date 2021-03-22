@@ -16,38 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+#ifndef MU_APPSHELL_STARTUPMODEL_H
+#define MU_APPSHELL_STARTUPMODEL_H
 
-#ifndef MU_APPSHELL_APPSHELLTYPES_H
-#define MU_APPSHELL_APPSHELLTYPES_H
+#include <QObject>
+
+#include "modularity/ioc.h"
+#include "iinteractive.h"
+#include "iappshellconfiguration.h"
+#include "actions/iactionsdispatcher.h"
 
 namespace mu::appshell {
-enum class PanelType
+class StartupModel : public QObject
 {
-    Palette,
-    Instruments,
-    Inspector,
-    NotationToolBar,
-    NoteInputBar,
-    UndoRedoToolBar,
-    NotationNavigator,
-    NotationStatusBar,
-    PlaybackToolBar,
-    Mixer,
-    TimeLine,
-    Synthesizer,
-    SelectionFilter,
-    Piano,
-    ComparisonTool
-};
-using PanelTypeList = std::vector<PanelType>;
+    Q_OBJECT
 
-enum class StartupSessionType
-{
-    StartEmpty,
-    ContinueLastSession,
-    StartWithNewScore,
-    StartWithScore
+    INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(appshell, framework::IInteractive, interactive)
+    INJECT(appshell, actions::IActionsDispatcher, dispatcher)
+
+public:
+    explicit StartupModel(QObject* parent = nullptr);
+
+    Q_INVOKABLE void load();
+
+private:
+    std::string startupPageUri() const;
 };
 }
 
-#endif // MU_APPSHELL_APPSHELLTYPES_H
+#endif // MU_APPSHELL_STARTUPMODEL_H
