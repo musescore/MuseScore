@@ -4162,7 +4162,28 @@
             ]
         }
     },
-    "glyphsWithAlternates": {},
+    "glyphsWithAlternates": {
+        "brace":{
+            "alternates":[
+                {
+                    "codepoint":"U+F400",
+                    "name":"braceSmall"
+                },
+                {
+                    "codepoint":"U+F401",
+                    "name":"braceLarge"
+                },
+                {
+                    "codepoint":"U+F402",
+                    "name":"braceLarger"
+                },
+                {
+                    "codepoint":"U+F403",
+                    "name":"braceFlat"
+                }
+            ]
+        }
+    },
     "glyphsWithAnchors": {
         "accidentalBakiyeFlat": {
             "cutOutNE": [
