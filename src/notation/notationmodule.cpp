@@ -64,6 +64,7 @@
 #include "view/widgets/selectdialog.h"
 #include "view/widgets/tupletdialog.h"
 #include "view/notationcontextmenu.h"
+#include "view/noteinputpreferencesmodel.h"
 #include "view/internal/undoredomodel.h"
 
 #include "uicomponents/imenucontrollersregister.h"
@@ -176,6 +177,8 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
     qmlRegisterType<NotationNavigator>("MuseScore.NotationScene", 1, 0, "NotationNavigator");
     qmlRegisterType<UndoRedoModel>("MuseScore.NotationScene", 1, 0, "UndoRedoModel");
+
+    qmlRegisterType<NoteInputPreferencesModel>("MuseScore.Preferences", 1, 0, "NoteInputPreferencesModel");
 
     qRegisterMetaType<EditStyle>("EditStyle");
     qRegisterMetaType<EditStaff>("EditStaff");

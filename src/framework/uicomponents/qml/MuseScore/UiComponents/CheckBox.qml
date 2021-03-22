@@ -9,6 +9,7 @@ FocusableItem {
     property bool isIndeterminate: false
 
     property alias text: label.text
+    property alias textFont: label.font
     property alias wrapMode: label.wrapMode
 
     signal clicked
