@@ -70,7 +70,8 @@ public:
     static Val fromQVariant(const QVariant& var);
 #endif
 
-    inline bool operator ==(const Val& v) const { return v.m_val == m_val && v.m_type == m_type; }
+    bool operator ==(const Val& v) const;
+    bool operator <(const Val& v) const;
 
 private:
     QVariant m_val; //! NOTE In C++17 can be replaced by std::any or std::variant

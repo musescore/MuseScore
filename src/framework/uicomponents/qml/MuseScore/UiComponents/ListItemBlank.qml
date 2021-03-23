@@ -10,7 +10,9 @@ Item {
     property bool isSelected: false
     property alias radius: background.radius
 
-    property color backgroundColor: ui.theme.buttonColor
+    property color normalStateColor: "transparent"
+    property color hoveredStateColor: privateProperties.defaultColor
+    property color pressedStateColor: privateProperties.defaultColor
 
     signal clicked()
     signal doubleClicked()
@@ -22,12 +24,18 @@ Item {
     Accessible.selectable: true
     Accessible.selected: isSelected
 
+    QtObject {
+        id: privateProperties
+
+        property color defaultColor: ui.theme.buttonColor
+    }
+
     Rectangle {
         id: background
 
         anchors.fill: parent
 
-        color: "transparent"
+        color: normalStateColor
         opacity: root.enabled ? 1 : ui.theme.itemOpacityDisabled
     }
 
@@ -39,7 +47,7 @@ Item {
             PropertyChanges {
                 target: background
                 opacity: ui.theme.buttonOpacityHover
-                color: backgroundColor
+                color: hoveredStateColor
             }
         },
 
@@ -50,7 +58,7 @@ Item {
             PropertyChanges {
                 target: background
                 opacity: ui.theme.buttonOpacityHit
-                color: backgroundColor
+                color: pressedStateColor
             }
         },
 
