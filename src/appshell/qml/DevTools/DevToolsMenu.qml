@@ -19,6 +19,8 @@ RadioButtonGroup {
 
         width: parent.width
 
+        leftPadding: 30
+
         ButtonGroup.group: radioButtonList.radioButtonGroup
         orientation: Qt.Horizontal
         checked: index === radioButtonList.currentIndex

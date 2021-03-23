@@ -23,7 +23,7 @@ Item {
         view.currentIndex = -1
     }
 
-    FilterProxyModel {
+    SortFilterProxyModel {
         id: filterModel
 
         filters: [
