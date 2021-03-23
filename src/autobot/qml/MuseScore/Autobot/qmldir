@@ -1,2 +1,3 @@
 module MuseScore.Autobot
 AutobotPanel 1.0 AutobotPanel.qml
+AutobotDialog 1.0 AutobotDialog.qml

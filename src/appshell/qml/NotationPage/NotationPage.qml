@@ -9,8 +9,6 @@ import MuseScore.Palette 1.0
 import MuseScore.Inspector 1.0
 import MuseScore.Instruments 1.0
 
-import "../DevTools/Autobot"
-
 DockPage {
     id: notationPage
     objectName: "Notation"
@@ -46,9 +44,6 @@ DockPage {
         instrumentsPanel.visible = Qt.binding(function() { return pageModel.isInstrumentsPanelVisible })
         inspectorPanel.visible = Qt.binding(function() { return pageModel.isInspectorPanelVisible })
         notationNoteInputBar.visible = Qt.binding(function() { return pageModel.isNoteInputBarVisible })
-
-        autobotPanel.visible = Qt.binding(function() { return pageModel.isNoteInputBarVisible })
-
 
         pageModel.init()
     }
@@ -142,30 +137,6 @@ DockPage {
             }
 
             InspectorForm {
-                anchors.fill: parent
-            }
-        },
-
-        //! NOTE Please, don't remove this code (igorkorsukov)
-        DockPanel {
-            id: autobotPanel
-            objectName: "autobotPanel"
-
-            title: "Autobot"
-
-            width: defaultPanelWidth
-            minimumWidth: minimumPanelWidth
-
-            color: notationPage.color
-            borderColor: notationPage.borderColor
-
-            tabifyObjectName: "autobotPanel"
-            area: Qt.RightDockWidgetArea
-            floatable: true
-            closable: true
-            visible: false
-
-            AutobotLoader {
                 anchors.fill: parent
             }
         }

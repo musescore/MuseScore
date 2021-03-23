@@ -567,7 +567,11 @@ void NotationPaintView::scale(qreal scaling, const QPoint& pos)
     int dx = pointAfterScaling.x() - pointBeforeScaling.x();
     int dy = pointAfterScaling.y() - pointBeforeScaling.y();
 
-    moveCanvas(dx, dy);
+    if (dx != 0 || dy != 0) {
+        moveCanvas(dx, dy);
+    } else {
+        update();
+    }
 }
 
 void NotationPaintView::wheelEvent(QWheelEvent* event)
