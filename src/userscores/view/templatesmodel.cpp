@@ -24,7 +24,9 @@ void TemplatesModel::load()
     }
 
     for (const Template& templ: m_allTemplates) {
-        m_visibleCategoriesTitles << templ.categoryTitle;
+        if (!m_visibleCategoriesTitles.contains(templ.categoryTitle)) {
+            m_visibleCategoriesTitles << templ.categoryTitle;
+        }
     }
 
     updateTemplatesByCategory();
@@ -33,7 +35,7 @@ void TemplatesModel::load()
 
 QStringList TemplatesModel::categoriesTitles() const
 {
-    return m_visibleCategoriesTitles.values();
+    return m_visibleCategoriesTitles;
 }
 
 QString TemplatesModel::currentTemplatePath() const
@@ -114,7 +116,9 @@ void TemplatesModel::updateTemplatesAndCategoriesBySearch()
     for (const Template& templ: m_allTemplates) {
         if (titleAccepted(templ.title) || titleAccepted(templ.categoryTitle)) {
             m_visibleTemplates << templ;
-            m_visibleCategoriesTitles << templ.categoryTitle;
+            if (!m_visibleCategoriesTitles.contains(templ.categoryTitle)) {
+                m_visibleCategoriesTitles << templ.categoryTitle;
+            }
         }
     }
 
