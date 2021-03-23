@@ -143,3 +143,19 @@ Val Val::fromQVariant(const QVariant& var)
     default: return Val(var);
     }
 }
+
+bool Val::operator ==(const Val& v) const
+{
+    return v.m_val == m_val && v.m_type == m_type;
+}
+
+bool Val::operator <(const Val& v) const
+{
+    switch (v.type()) {
+    case Type::Bool: return toBool() < v.toBool();
+    case Type::Int: return toInt() < v.toInt();
+    case Type::Double: return toDouble() < v.toDouble();
+    case Type::String: return toString() < v.toString();
+    default: return toString() < v.toString();
+    }
+}

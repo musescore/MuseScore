@@ -44,7 +44,7 @@ Rectangle {
 
                 spacing: 4
 
-                model: FilterProxyModel {
+                model: SortFilterProxyModel {
                     sourceModel: playbackModel
 
                     filters: [

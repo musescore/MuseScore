@@ -24,7 +24,7 @@ Item {
     width: gridView.width
     height: gridView.height
 
-    FilterProxyModel {
+    SortFilterProxyModel {
         id: filterModel
 
         sourceModel: root.model

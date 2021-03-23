@@ -97,7 +97,7 @@ FocusScope {
 
         backgroundColor: background.color
 
-        model: FilterProxyModel {
+        model: SortFilterProxyModel {
             sourceModel: recentScoresModel
 
             filters: [
