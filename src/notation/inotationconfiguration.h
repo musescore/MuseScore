@@ -81,7 +81,8 @@ public:
     virtual std::string fontFamily() const = 0;
     virtual int fontSize() const = 0;
 
-    virtual io::path stylesDirPath() const = 0;
+    virtual ValCh<io::path> stylesPath() const = 0;
+    virtual void setStylesPath(const io::path& path) = 0;
 
     virtual bool isMidiInputEnabled() const = 0;
     virtual void setIsMidiInputEnabled(bool enabled) = 0;

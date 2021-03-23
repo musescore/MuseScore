@@ -33,7 +33,10 @@ class IPluginsConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPluginsConfiguration() = default;
 
-    virtual io::paths pluginsDirPaths() const = 0;
+    virtual io::paths availablePluginsPaths() const = 0;
+
+    virtual ValCh<io::path> pluginsPath() const = 0;
+    virtual void setPluginsPath(const io::path& path) = 0;
 
     virtual ValCh<CodeKeyList> installedPlugins() const = 0;
     virtual void setInstalledPlugins(const CodeKeyList& codeKeyList) = 0;

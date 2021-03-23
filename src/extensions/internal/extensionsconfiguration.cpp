@@ -30,13 +30,16 @@ using namespace mu;
 using namespace mu::framework;
 using namespace mu::extensions;
 
-static const Settings::Key EXTENSIONS_JSON("extensions", "extensions/extensionsJson");
-static const Settings::Key CHECK_FOR_UPDATE("extensions", "extensions/checkForUpdate");
+static const std::string module_name("extensions");
 
-static const io::path EXTENSIONS_DIR("/extensions");
-static const io::path WORKSPACES_DIR("/workspaces");
-static const io::path INSTRUMENTS_DIR("/instruments");
-static const io::path TEMPLATES_DIR("/templates");
+static const Settings::Key EXTENSIONS_JSON(module_name, "extensions/extensionsJson");
+static const Settings::Key CHECK_FOR_UPDATE(module_name, "extensions/checkForUpdate");
+static const Settings::Key USER_EXTENSIONS_PATH(module_name, "application/paths/myExtensions");
+
+static const io::path EXTENSIONS_DIR("Extensions");
+static const io::path WORKSPACES_DIR("workspaces");
+static const io::path INSTRUMENTS_DIR("instruments");
+static const io::path TEMPLATES_DIR("templates");
 
 static const QString WORKSPACE_FILTER("*.workspace");
 static const QString MSCZ_FILTER("*.mscz");
@@ -47,12 +50,18 @@ void ExtensionsConfiguration::init()
 {
     settings()->setDefaultValue(CHECK_FOR_UPDATE, Val(true));
 
-    settings()->valueChanged(EXTENSIONS_JSON).onReceive(nullptr, [this](const Val& val) {
-        LOGD() << "EXTENSION_Json changed: " << val.toString();
+    settings()->setDefaultValue(USER_EXTENSIONS_PATH, Val(globalConfiguration()->sharePath().toStdString() + EXTENSIONS_DIR.toStdString()));
+    settings()->valueChanged(USER_EXTENSIONS_PATH).onReceive(nullptr, [this](const Val& val) {
+        m_extensionsPathChanged.send(val.toString());
+    });
 
+    settings()->valueChanged(EXTENSIONS_JSON).onReceive(nullptr, [this](const Val& val) {
         ExtensionsHash extensionHash = parseExtensionConfig(val.toQString().toLocal8Bit());
         m_extensionHashChanged.send(extensionHash);
     });
+
+    fileSystem()->makePath(extensionsPath().val);
+    fileSystem()->makePath(extensionsDataPath());
 }
 
 QUrl ExtensionsConfiguration::extensionsUpdateUrl() const
@@ -105,12 +114,12 @@ Ret ExtensionsConfiguration::setExtensions(const ExtensionsHash& extensions) con
 
 io::path ExtensionsConfiguration::extensionPath(const QString& extensionCode) const
 {
-    return extensionsSharePath() + "/" + extensionCode;
+    return extensionsPath().val + "/" + extensionCode;
 }
 
 io::path ExtensionsConfiguration::extensionWorkspacesPath(const QString& extensionCode) const
 {
-    return extensionsSharePath() + "/" + extensionCode + WORKSPACES_DIR;
+    return extensionsPath().val + "/" + extensionCode + "/" + WORKSPACES_DIR;
 }
 
 io::path ExtensionsConfiguration::extensionArchivePath(const QString& extensionCode) const
@@ -167,17 +176,7 @@ io::paths ExtensionsConfiguration::fileList(const io::path& directory, const QSt
 
 io::path ExtensionsConfiguration::extensionInstrumentsPath(const QString& extensionCode) const
 {
-    return extensionsSharePath() + "/" + extensionCode + INSTRUMENTS_DIR;
-}
-
-io::path mu::extensions::ExtensionsConfiguration::extensionsSharePath() const
-{
-    return globalConfiguration()->sharePath() + EXTENSIONS_DIR;
-}
-
-io::path ExtensionsConfiguration::extensionsDataPath() const
-{
-    return globalConfiguration()->dataPath() + EXTENSIONS_DIR;
+    return extensionsPath().val + "/" + extensionCode + "/" + INSTRUMENTS_DIR;
 }
 
 io::paths ExtensionsConfiguration::extensionWorkspaceFiles(const QString& extensionCode) const
@@ -246,7 +245,26 @@ io::paths ExtensionsConfiguration::templatesPaths() const
     return paths;
 }
 
+ValCh<io::path> ExtensionsConfiguration::extensionsPath() const
+{
+    ValCh<io::path> result;
+    result.ch = m_extensionsPathChanged;
+    result.val = settings()->value(USER_EXTENSIONS_PATH).toString();
+
+    return result;
+}
+
+void ExtensionsConfiguration::setExtensionsPath(const io::path& path)
+{
+    settings()->setValue(USER_EXTENSIONS_PATH, Val(path.toStdString()));
+}
+
 io::path ExtensionsConfiguration::extensionTemplatesPath(const QString& extensionCode) const
 {
-    return extensionsSharePath() + "/" + extensionCode + TEMPLATES_DIR;
+    return extensionsPath().val + "/" + extensionCode + "/" + TEMPLATES_DIR;
+}
+
+io::path ExtensionsConfiguration::extensionsDataPath() const
+{
+    return globalConfiguration()->dataPath() + EXTENSIONS_DIR;
 }

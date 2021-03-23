@@ -47,6 +47,12 @@ QString FilePickerModel::selectFile()
     return file.toQString();
 }
 
+QString FilePickerModel::selectDirectory()
+{
+    io::path directory = interactive()->selectDirectory(m_title, m_dir);
+    return directory.toQString();
+}
+
 void FilePickerModel::setTitle(const QString& title)
 {
     if (title == m_title) {

@@ -26,6 +26,7 @@
 #include "iglobalconfiguration.h"
 #include "settings.h"
 #include "iworkspacesettings.h"
+#include "system/ifilesystem.h"
 
 namespace mu::notation {
 class NotationConfiguration : public INotationConfiguration, public async::Asyncable
@@ -33,6 +34,7 @@ class NotationConfiguration : public INotationConfiguration, public async::Async
     INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(notation, framework::IWorkspaceSettings, workspaceSettings)
+    INJECT(notation, system::IFileSystem, fileSystem)
 
 public:
     void init();
@@ -82,7 +84,8 @@ public:
     std::string fontFamily() const override;
     int fontSize() const override;
 
-    io::path stylesDirPath() const override;
+    ValCh<io::path> stylesPath() const override;
+    void setStylesPath(const io::path& path) override;
 
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled) override;
@@ -119,6 +122,7 @@ private:
     async::Notification m_foregroundChanged;
     async::Channel<int> m_currentZoomChanged;
     async::Channel<framework::Orientation> m_canvasOrientationChanged;
+    async::Channel<io::path> m_stylesPathChnaged;
 };
 }
 
