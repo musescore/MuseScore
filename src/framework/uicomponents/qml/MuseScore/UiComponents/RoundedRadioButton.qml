@@ -10,7 +10,8 @@ RadioButton {
     implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
                                  : 30
 
-    spacing: 30
+    spacing: 6
+    padding: 0
 
     hoverEnabled: true
 
