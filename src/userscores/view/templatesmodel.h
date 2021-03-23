@@ -61,7 +61,7 @@ private:
 
     Templates m_allTemplates;
     Templates m_visibleTemplates;
-    QSet<QString> m_visibleCategoriesTitles;
+    QList<QString> m_visibleCategoriesTitles;
 
     QString m_searchText;
 
