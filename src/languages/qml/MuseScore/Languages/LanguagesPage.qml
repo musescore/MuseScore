@@ -51,7 +51,7 @@ Item {
         }
     }
 
-    FilterProxyModel {
+    SortFilterProxyModel {
         id: filterModel
 
         sourceModel: languageListModel

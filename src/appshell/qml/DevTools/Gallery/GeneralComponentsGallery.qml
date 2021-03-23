@@ -9,7 +9,7 @@ import MuseScore.Ui 1.0
 Rectangle {
     id: root
 
-    color: ui.theme.backgroundPrimaryColor
+    color: ui.theme.backgroundSecondaryColor
 
     Flickable {
         id: flickableWrapper
@@ -52,7 +52,8 @@ Rectangle {
                     { textRole: "GridView", componentRole: gridViewVertical },
                     { textRole: "StyledSlider", componentRole: slidersSample },
                     { textRole: "NumberInputField", componentRole: numberInputFieldSample },
-                    { textRole: "TimeInputField", componentRole: timeInputFieldSample }
+                    { textRole: "TimeInputField", componentRole: timeInputFieldSample },
+                    { textRole: "ValueList", componentRole: valueListSample }
                 ]
 
                 delegate: Column {
@@ -903,6 +904,51 @@ Rectangle {
         TimeInputField {
             Component.onCompleted: {
                 time = new Date(2021, 1, 3, 1, 23, 44, 3)
+            }
+        }
+    }
+
+    Component {
+        id: valueListSample
+
+        ValueList {
+
+            width: 560
+            height: 226
+
+            keyRoleName: "name"
+            keyTitle: "Name"
+            valueRoleName: "age"
+            valueTitle: "Age"
+
+            model: ListModel {
+                ListElement {
+                    name: "Alex"
+                    age: 12
+                    valueType: "Int"
+                    min: 1
+                    max: 15
+                }
+                ListElement {
+                    name: "Tony"
+                    age: 15
+                    valueType: "Int"
+                }
+                ListElement {
+                    name: "Fred"
+                    age: 10
+                    valueType: "Int"
+                }
+                ListElement {
+                    name: "Emma"
+                    age: 5
+                    valueType: "Int"
+                }
+                ListElement {
+                    name: "Anna"
+                    age: 11
+                    valueType: "Int"
+                }
             }
         }
     }

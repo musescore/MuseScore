@@ -20,7 +20,7 @@ Item {
 
     signal clicked(int index, var extension)
 
-    FilterProxyModel {
+    SortFilterProxyModel {
         id: filterModel
     }
 

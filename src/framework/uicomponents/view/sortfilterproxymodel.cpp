@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2019 Werner Schweer and others
+//  Copyright (C) 2020 Werner Schweer and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,12 +16,16 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "filterproxymodel.h"
+#include "sortfilterproxymodel.h"
+
+#include "val.h"
 
 using namespace mu::uicomponents;
 
-FilterProxyModel::FilterProxyModel(QObject* parent)
-    : QSortFilterProxyModel(parent), m_filters(this)
+static const int INVALID_KEY = -1;
+
+SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
+    : QSortFilterProxyModel(parent), m_filters(this), m_sorters(this)
 {
     connect(m_filters.notifier(), &QmlListPropertyNotifier::appended, this, [this](int index) {
         connect(m_filters.at(index), &FilterValue::dataChanged, this, [this]() {
@@ -30,23 +34,44 @@ FilterProxyModel::FilterProxyModel(QObject* parent)
             }
         });
     });
+
+    connect(m_sorters.notifier(), &QmlListPropertyNotifier::appended, this, [this](int index) {
+        connect(m_sorters.at(index), &SorterValue::dataChanged, this, [this, index]() {
+            SorterValue* sorter = currentSorterValue();
+            invalidate();
+
+            if (!sorter) {
+                return;
+            }
+
+            if (sourceModel()) {
+                sort(0, sorter->sortOrder());
+            }
+        });
+    });
 }
 
-QQmlListProperty<FilterValue> FilterProxyModel::filters()
+QQmlListProperty<FilterValue> SortFilterProxyModel::filters()
 {
     return m_filters.property();
 }
 
-void FilterProxyModel::refresh()
+QQmlListProperty<SorterValue> SortFilterProxyModel::sorters()
 {
-    setFilterFixedString(filterRegExp().pattern());
+    return m_sorters.property();
 }
 
-bool FilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+void SortFilterProxyModel::refresh()
+{
+    setFilterFixedString(filterRegExp().pattern());
+    setSortCaseSensitivity(sortCaseSensitivity());
+}
+
+bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
 
-    QHashIterator<int, FilterValue*> it(m_roleIdToValueHash);
+    QHashIterator<int, FilterValue*> it(m_roleIdToFilterValueHash);
     while (it.hasNext()) {
         it.next();
 
@@ -73,16 +98,31 @@ bool FilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& source
     return true;
 }
 
-void FilterProxyModel::reset()
+bool SortFilterProxyModel::lessThan(const QModelIndex& left, const QModelIndex& right) const
+{
+    SorterValue* sorter = currentSorterValue();
+    if (!sorter) {
+        return false;
+    }
+
+    int sorterRoleKey = roleKey(sorter->roleName());
+
+    Val leftData = Val::fromQVariant(sourceModel()->data(left, sorterRoleKey));
+    Val rightData = Val::fromQVariant(sourceModel()->data(right, sorterRoleKey));
+
+    return leftData < rightData;
+}
+
+void SortFilterProxyModel::reset()
 {
     beginResetModel();
     resetInternalData();
     endResetModel();
 }
 
-void FilterProxyModel::fillRoleIds()
+void SortFilterProxyModel::fillRoleIds()
 {
-    m_roleIdToValueHash.clear();
+    m_roleIdToFilterValueHash.clear();
 
     if (!sourceModel()) {
         return;
@@ -98,10 +138,34 @@ void FilterProxyModel::fillRoleIds()
     QHash<int, QByteArray>::const_iterator it = roles.constBegin();
     while (it != roles.constEnd()) {
         if (roleNameToValueHash.contains(it.value())) {
-            m_roleIdToValueHash.insert(it.key(), roleNameToValueHash[it.value()]);
+            m_roleIdToFilterValueHash.insert(it.key(), roleNameToValueHash[it.value()]);
         }
         ++it;
     }
 
     setFilterFixedString(filterRegExp().pattern());
+}
+
+SorterValue* SortFilterProxyModel::currentSorterValue() const
+{
+    QList<SorterValue*> sorterList = m_sorters.list();
+    for (SorterValue* sorter: sorterList) {
+        if (sorter->enabled()) {
+            return sorter;
+        }
+    }
+
+    return nullptr;
+}
+
+int SortFilterProxyModel::roleKey(const QString& roleName) const
+{
+    QHash<int, QByteArray> roles = sourceModel()->roleNames();
+    for (const QByteArray& roleNameByte: roles.values()) {
+        if (roleName == QString(roleNameByte)) {
+            return roles.key(roleNameByte);
+        }
+    }
+
+    return INVALID_KEY;
 }
