@@ -38,7 +38,7 @@ ListItemBlank {
             return textComp
         }
 
-        function isNumberComponent(type) {
+        function isNumberComponent() {
             return item.valueType === "Int" || type.valueType === "Double"
         }
     }
