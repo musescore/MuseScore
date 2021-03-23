@@ -34,6 +34,10 @@ TemplatePaintView::TemplatePaintView(QQuickItem* parent)
 
 void TemplatePaintView::load(const QString& templatePath)
 {
+    if (templatePath.isEmpty()) {
+        return;
+    }
+
     if (m_templatePath == templatePath) {
         return;
     }
