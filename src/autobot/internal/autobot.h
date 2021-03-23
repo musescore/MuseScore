@@ -29,21 +29,33 @@ namespace mu::autobot {
 class Autobot : public IAutobot, public async::Asyncable
 {
 public:
-    Autobot() = default;
+    Autobot();
 
     void init();
 
-    void run() override;
+    std::vector<ITestCasePtr> testCases() const override;
+    ITestCasePtr testCase(const std::string& name) const override;
+
+    void runAll(const std::string& testCaseName) override;
+    void runFile(const std::string& testCaseName, int fileIndex) override;
     void stop() override;
+    const ValCh<Status>& status() const override;
+
+    const ValNt<Files>& files() const override;
+    const ValCh<int>& currentFileIndex() const override;
 
 private:
 
     void nextScore();
 
-    io::paths m_scores;
-    int m_currentIndex = -1;
+    std::vector<ITestCasePtr> m_testCases;
 
-    bool m_running = false;
+    ITestCasePtr m_currentTC;
+
+    ValNt<Files> m_files;
+    ValCh<int> m_fileIndex;
+
+    ValCh<Status> m_status;
     AbRunner m_runner;
 };
 }

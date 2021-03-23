@@ -11,6 +11,7 @@ Rectangle {
     }
 
     Row {
+        id: topPanel
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
@@ -28,6 +29,22 @@ Rectangle {
             width: 64
             text: "Stop"
             onClicked: autobot.stop()
+        }
+    }
+
+    ListView {
+        anchors.top: topPanel.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right:  parent.right
+
+        model: autobot.filesModel
+
+        delegate: ListItemBlank {
+            Text {
+                anchors.fill: parent
+                text: fileTitle
+            }
         }
     }
 }

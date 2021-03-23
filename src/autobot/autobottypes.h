@@ -16,41 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUTOBOT_IAUTOBOT_H
-#define MU_AUTOBOT_IAUTOBOT_H
+#ifndef MU_AUTOBOT_AUTOBOTTYPES_H
+#define MU_AUTOBOT_AUTOBOTTYPES_H
 
+#include <string>
 #include <vector>
 
-#include "modularity/imoduleexport.h"
-#include "retval.h"
 #include "io/path.h"
-#include "autobottypes.h"
-#include "itestcase.h"
+#include "iteststep.h"
 
 namespace mu::autobot {
-class IAutobot : MODULE_EXPORT_INTERFACE
-{
-    INTERFACE_ID(IAutobot)
-public:
-    virtual ~IAutobot() = default;
-
-    enum class Status {
-        Stoped = 0,
-        RunningAll,
-        RunningFile
-    };
-
-    virtual std::vector<ITestCasePtr> testCases() const = 0;
-    virtual ITestCasePtr testCase(const std::string& name) const = 0;
-
-    virtual void runAll(const std::string& testCaseName) = 0;
-    virtual void runFile(const std::string& testCaseName, int fileIndex) = 0;
-    virtual void stop() = 0;
-    virtual const ValCh<Status>& status() const = 0;
-
-    virtual const ValNt<Files>& files() const = 0;
-    virtual const ValCh<int>& currentFileIndex() const = 0;
+enum class FileStatus {
+    Undefined = 0,
+    None,
+    Success,
+    Failed
 };
+
+struct File {
+    io::path path;
+    FileStatus status = FileStatus::Undefined;
+};
+
+using Files = std::vector<File>;
 }
 
-#endif // MU_AUTOBOT_IAUTOBOT_H
+#endif // MU_AUTOBOT_AUTOBOTTYPES_H

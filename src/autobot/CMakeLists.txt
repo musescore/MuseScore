@@ -34,7 +34,11 @@ set(MODULE_DEF
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/autobotmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/autobotmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/autobottypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iautobot.h
+    ${CMAKE_CURRENT_LIST_DIR}/itestcase.h
+    ${CMAKE_CURRENT_LIST_DIR}/iteststep.h
+    ${CMAKE_CURRENT_LIST_DIR}/abcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/iautobotconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobot.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobot.h
@@ -44,9 +48,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/abrunner.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abscorelist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/abscorelist.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/typicaltc.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/typicaltc.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abbasestep.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/abbasestep.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/abcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abinvoker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/abinvoker.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/draw/abpaintprovider.cpp
@@ -67,6 +72,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdiffdrawstep.h
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
