@@ -16,41 +16,41 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUTOBOT_IAUTOBOT_H
-#define MU_AUTOBOT_IAUTOBOT_H
+#ifndef MU_AUTOBOT_ABFILESMODEL_H
+#define MU_AUTOBOT_ABFILESMODEL_H
 
-#include <vector>
+#include <QAbstractListModel>
 
-#include "modularity/imoduleexport.h"
-#include "retval.h"
-#include "io/path.h"
-#include "autobottypes.h"
-#include "itestcase.h"
+#include "modularity/ioc.h"
+#include "iautobot.h"
+#include "async/asyncable.h"
 
 namespace mu::autobot {
-class IAutobot : MODULE_EXPORT_INTERFACE
+class AbFilesModel : public QAbstractListModel, public async::Asyncable
 {
-    INTERFACE_ID(IAutobot)
-public:
-    virtual ~IAutobot() = default;
+    Q_OBJECT
+    INJECT(autobot, IAutobot, autobot)
 
-    enum class Status {
-        Stoped = 0,
-        RunningAll,
-        RunningFile
+public:
+    explicit AbFilesModel(QObject* parent = nullptr);
+
+    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QHash<int,QByteArray> roleNames() const override;
+
+private:
+
+    void update();
+
+    enum Roles {
+        FileTitle = Qt::UserRole + 1,
+        FileIndex,
+        IsCurrentFile
     };
 
-    virtual std::vector<ITestCasePtr> testCases() const = 0;
-    virtual ITestCasePtr testCase(const std::string& name) const = 0;
-
-    virtual void runAll(const std::string& testCaseName) = 0;
-    virtual void runFile(const std::string& testCaseName, int fileIndex) = 0;
-    virtual void stop() = 0;
-    virtual const ValCh<Status>& status() const = 0;
-
-    virtual const ValNt<Files>& files() const = 0;
-    virtual const ValCh<int>& currentFileIndex() const = 0;
+    ValNt<Files> m_files;
+    ValCh<int> m_fileIndex;
 };
 }
 
-#endif // MU_AUTOBOT_IAUTOBOT_H
+#endif // MU_AUTOBOT_ABFILESMODEL_H

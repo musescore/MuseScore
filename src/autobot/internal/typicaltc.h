@@ -16,21 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#include "abscorezoom.h"
-#include "../abinvoker.h"
+#ifndef MU_AUTOBOT_TYPICALTC_H
+#define MU_AUTOBOT_TYPICALTC_H
 
-using namespace mu::autobot;
-using namespace mu::actions;
+#include "../itestcase.h"
 
-AbScoreZoom::AbScoreZoom(int percent, Delay delay)
-    : AbBaseStep(delay), m_percent(percent)
+namespace mu::autobot {
+class TypicalTC : public ITestCase
 {
+public:
+    TypicalTC() = default;
+    TypicalTC(const std::string& name, std::vector<ITestStep*> steps);
+
+    std::string name() const override;
+    const std::vector<ITestStepPtr>& steps() const override;
+
+private:
+    std::string m_name;
+    std::vector<ITestStepPtr> m_steps;
+};
 }
 
-void AbScoreZoom::doRun(AbContext ctx)
-{
-    dispatcher()->dispatch("zoom-x-percent", ActionData::make_arg1<int>(m_percent));
-    ctx.setVal<int>(AbContext::Key::ViewZoom, m_percent);
-    ctx.ret = make_ret(Ret::Code::Ok);
-    doFinish(ctx);
-}
+#endif // MU_AUTOBOT_TYPICALTC_H

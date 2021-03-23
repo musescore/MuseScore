@@ -22,24 +22,25 @@
 #include <memory>
 
 #include "ret.h"
-#include "abcontext.h"
-#include "async/channel.h"
+#include "../iteststep.h"
 
 namespace mu::autobot {
-class AbBaseStep
+class AbBaseStep : public ITestStep
 {
 public:
-    AbBaseStep() = default;
+    AbBaseStep(Delay delay = Delay::Fast);
     virtual ~AbBaseStep() = default;
 
-    void make(const AbContext& ctx);
-    async::Channel<AbContext> finished() const;
+    Delay delay() const override;
+    void make(const AbContext& ctx) override;
+    async::Channel<AbContext> finished() const override;
 
 protected:
     virtual void doRun(AbContext ctx) = 0;
     void doFinish(const AbContext& ctx);
 
 private:
+    Delay m_delay = Delay::Fast;
     async::Channel<AbContext> m_finished;
 };
 

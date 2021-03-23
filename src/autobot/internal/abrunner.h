@@ -29,6 +29,7 @@
 
 #include "abcontext.h"
 #include "abbasestep.h"
+#include "../itestcase.h"
 
 namespace mu::autobot {
 class AbRunner : public async::Asyncable
@@ -36,27 +37,18 @@ class AbRunner : public async::Asyncable
 public:
     AbRunner() = default;
 
-    void init();
-    void run(const io::path& scorePath);
-
+    void run(const ITestCasePtr& tc, const io::path& scorePath);
     async::Channel<AbContext> finished() const;
 
 private:
 
-    struct Step
-    {
-        int delayMSec = 10;
-        AbBaseStepPtr step;
-        Step(AbBaseStep* s)
-            : step(std::shared_ptr<AbBaseStep>(s)) {}
-        Step(AbBaseStep* s, int d)
-            : delayMSec(d), step(std::shared_ptr<AbBaseStep>(s)) {}
-    };
-
     void nextStep(const AbContext& ctx);
+    void doFinish(const AbContext& ctx);
 
-    std::vector<Step> m_steps;
-    int m_currentIndex = -1;
+    int delayToMSec(ITestStep::Delay d) const;
+
+    ITestCasePtr m_testCase;
+    int m_stepIndex = -1;
     async::Channel<AbContext> m_finished;
 };
 }
