@@ -12,10 +12,14 @@ Item {
 
     property alias model: sortFilterProxyModel.sourceModel
 
+    property bool readOnly: false
+
     property string keyRoleName: "key"
     property string keyTitle: qsTrc("uicomponents", "Key")
     property string valueRoleName: "value"
     property string valueTitle: qsTrc("uicomponents", "Value")
+
+    signal clicked(int index)
 
     QtObject {
         id: privateProperties
@@ -136,9 +140,15 @@ Item {
             keyRoleName: root.keyRoleName
             valueRoleName: root.valueRoleName
 
+            readOnly: root.readOnly
+
             spacing: privateProperties.spacing
             sideMargin: privateProperties.sideMargin
             valueItemWidth: privateProperties.valueItemWidth
+
+            onClicked: {
+                root.clicked(index)
+            }
         }
     }
 }

@@ -12,6 +12,8 @@ ListItemBlank {
     property string keyRoleName: "key"
     property string valueRoleName: "value"
 
+    property bool readOnly: false
+
     property alias spacing: row.spacing
     property real sideMargin: 0
     property real valueItemWidth: 126
@@ -69,12 +71,12 @@ ListItemBlank {
             Layout.preferredWidth: root.valueItemWidth
             Layout.rightMargin: root.sideMargin
 
-            sourceComponent: privateProperties.componentByType(root.item.valueType)
+            sourceComponent: !root.readOnly ? privateProperties.componentByType(root.item.valueType) : readOnlyComponent
 
             onLoaded: {
                 loader.item.val = loader.val
 
-                if (privateProperties.isNumberComponent()) {
+                if (privateProperties.isNumberComponent() && !root.readOnly) {
                     if (Boolean(root.item.min)) {
                         loader.item.minValue = root.item.min
                     }
@@ -164,6 +166,18 @@ ListItemBlank {
             onClicked: {
                 boolControl.changed(!boolControl.checked)
             }
+        }
+    }
+
+    Component {
+        id: readOnlyComponent
+
+        StyledTextLabel {
+            property var val
+            signal changed(var stub)
+
+            text: val
+            horizontalAlignment: Text.AlignLeft
         }
     }
 }
