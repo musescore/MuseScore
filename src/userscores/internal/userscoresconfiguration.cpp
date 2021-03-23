@@ -35,9 +35,20 @@ static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "users
 
 const QString UserScoresConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
 
+static const std::string TEMPLATES_PATH("/templates");
+
 void UserScoresConfiguration::init()
 {
+    settings()->setDefaultValue(USER_TEMPLATES_PATH, Val(globalConfiguration()->sharePath().toStdString() + "Templates"));
+    settings()->valueChanged(USER_TEMPLATES_PATH).onReceive(nullptr, [this](const Val& val) {
+        m_templatesPathChanged.send(val.toString());
+    });
+
     settings()->setDefaultValue(USER_SCORES_PATH, Val(globalConfiguration()->sharePath().toStdString() + "Scores"));
+    settings()->valueChanged(USER_SCORES_PATH).onReceive(nullptr, [this](const Val& val) {
+        m_scoresPathChanged.send(val.toString());
+    });
+
     settings()->valueChanged(RECENT_SCORE_PATHS).onReceive(nullptr, [this](const Val& val) {
         io::paths paths = parsePaths(val);
         m_recentScorePathsChanged.send(paths);
@@ -48,6 +59,9 @@ void UserScoresConfiguration::init()
 
     io::paths paths = actualRecentScorePaths();
     setRecentScorePaths(paths);
+
+    fileSystem()->makePath(templatesPath().val);
+    fileSystem()->makePath(scoresPath().val);
 }
 
 io::path UserScoresConfiguration::mainTemplatesDirPath() const
@@ -110,15 +124,32 @@ io::paths UserScoresConfiguration::parsePaths(const Val& value) const
 
 io::path UserScoresConfiguration::myFirstScorePath() const
 {
-    return mainTemplatesDirPath() + "/My_First_Score.mscx";
+    return templatesPath().val + "/My_First_Score.mscx";
 }
 
-io::paths UserScoresConfiguration::templatesDirPaths() const
+io::path UserScoresConfiguration::userTemplatesPath() const
+{
+    return settings()->value(USER_TEMPLATES_PATH).toString();
+}
+
+io::path UserScoresConfiguration::defaultTemplatesPath() const
+{
+    return settings()->defaultValue(USER_TEMPLATES_PATH).toString();
+}
+
+io::paths UserScoresConfiguration::availableTemplatesPaths() const
 {
     io::paths dirs;
 
-    dirs.push_back(mainTemplatesDirPath());
-    dirs.push_back(settings()->value(USER_TEMPLATES_PATH).toQString());
+    dirs.push_back(globalConfiguration()->dataPath().toStdString() + TEMPLATES_PATH);
+
+    io::path defaultTemplatesPath  = this->defaultTemplatesPath();
+    dirs.push_back(defaultTemplatesPath);
+
+    io::path userTemplatesPath = this->userTemplatesPath();
+    if (!userTemplatesPath.empty() && userTemplatesPath != defaultTemplatesPath) {
+        dirs.push_back(userTemplatesPath);
+    }
 
     io::paths temps = extensionsConfiguration()->templatesPaths();
     dirs.insert(dirs.end(), temps.begin(), temps.end());
@@ -126,14 +157,37 @@ io::paths UserScoresConfiguration::templatesDirPaths() const
     return dirs;
 }
 
-io::path UserScoresConfiguration::scoresPath() const
+ValCh<io::path> UserScoresConfiguration::templatesPath() const
 {
-    return settings()->value(USER_SCORES_PATH).toString();
+    ValCh<io::path> result;
+    result.ch = m_templatesPathChanged;
+    result.val = userTemplatesPath();
+
+    return result;
+}
+
+void UserScoresConfiguration::setTemplatesPath(const io::path& path)
+{
+    settings()->setValue(USER_TEMPLATES_PATH, Val(path.toStdString()));
+}
+
+ValCh<io::path> UserScoresConfiguration::scoresPath() const
+{
+    ValCh<io::path> result;
+    result.ch = m_scoresPathChanged;
+    result.val = settings()->value(USER_SCORES_PATH).toString();
+
+    return result;
+}
+
+void UserScoresConfiguration::setScoresPath(const io::path& path)
+{
+    settings()->setValue(USER_SCORES_PATH, Val(path.toStdString()));
 }
 
 io::path UserScoresConfiguration::defaultSavingFilePath(const io::path& fileName) const
 {
-    return scoresPath() + "/" + fileName + DEFAULT_FILE_SUFFIX;
+    return scoresPath().val + "/" + fileName + DEFAULT_FILE_SUFFIX;
 }
 
 QColor UserScoresConfiguration::templatePreviewBackgroundColor() const

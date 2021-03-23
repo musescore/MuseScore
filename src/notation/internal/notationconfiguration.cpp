@@ -55,7 +55,7 @@ static const Settings::Key SELECTION_PROXIMITY(module_name, "ui/canvas/misc/sele
 
 static const Settings::Key CURRENT_ZOOM(module_name, "ui/canvas/misc/currentZoom");
 
-static const Settings::Key STYLES_DIR_KEY(module_name, "application/paths/myStyles");
+static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
 
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
 static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
@@ -106,6 +106,11 @@ void NotationConfiguration::init()
         m_currentZoomChanged.send(val.toInt());
     });
 
+    settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->sharePath().toStdString() + "Styles"));
+    settings()->valueChanged(USER_STYLES_PATH).onReceive(nullptr, [this](const Val& val) {
+        m_stylesPathChnaged.send(val.toString());
+    });
+
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(6));
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(false));
     settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
@@ -120,6 +125,8 @@ void NotationConfiguration::init()
 
     // libmscore
     preferences().setBackupDirPath(globalConfiguration()->backupPath().toQString());
+
+    fileSystem()->makePath(stylesPath().val);
 }
 
 QColor NotationConfiguration::anchorLineColor() const
@@ -270,9 +277,18 @@ int NotationConfiguration::fontSize() const
     return uiConfiguration()->fontSize(FontSizeType::BODY);
 }
 
-io::path NotationConfiguration::stylesDirPath() const
+ValCh<io::path> NotationConfiguration::stylesPath() const
 {
-    return settings()->value(STYLES_DIR_KEY).toString();
+    ValCh<io::path> result;
+    result.ch = m_stylesPathChnaged;
+    result.val = settings()->value(USER_STYLES_PATH).toString();
+
+    return result;
+}
+
+void NotationConfiguration::setStylesPath(const io::path& path)
+{
+    settings()->setValue(USER_STYLES_PATH, Val(path.toStdString()));
 }
 
 bool NotationConfiguration::isMidiInputEnabled() const
