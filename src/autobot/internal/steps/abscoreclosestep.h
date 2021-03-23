@@ -28,7 +28,7 @@ class AbScoreCloseStep : public AbBaseStep
 {
     INJECT(autobot, context::IGlobalContext, context)
 public:
-    AbScoreCloseStep() = default;
+    AbScoreCloseStep(Delay delay = Delay::Fast);
 
 protected:
     void doRun(AbContext ctx) override;

@@ -44,10 +44,10 @@ Autobot::Autobot()
     m_testCases = {
         makeTypicalTC("Zoom", {
             new AbScoreLoadStep(),
-            new AbScoreZoom(100, ITestStep::Delay::Normal),
+            new AbScoreZoom(100),
             new AbScoreZoom(50, ITestStep::Delay::Long),
             new AbScoreZoom(100, ITestStep::Delay::Long),
-            new AbScoreCloseStep()
+            new AbScoreCloseStep(ITestStep::Delay::Long)
         }),
         makeTypicalTC("Create Draw Ref", {
             new AbScoreLoadStep(),

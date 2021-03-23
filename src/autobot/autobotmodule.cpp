@@ -21,6 +21,7 @@
 #include <QQmlEngine>
 
 #include "modularity/ioc.h"
+#include "ui/iinteractiveuriregister.h"
 
 #include "internal/autobot.h"
 #include "internal/autobotconfiguration.h"
@@ -44,6 +45,14 @@ void AutobotModule::registerExports()
     framework::ioc()->registerExport<IAutobotConfiguration>(moduleName(), new AutobotConfiguration());
 
     draw::Painter::extended = AbPaintProvider::instance();
+}
+
+void AutobotModule::resolveImports()
+{
+    auto ir = framework::ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerQmlUri(Uri("musescore://autobot/main"), "MuseScore/Autobot/AutobotDialog.qml");
+    }
 }
 
 void AutobotModule::registerUiTypes()
