@@ -85,3 +85,12 @@ io::paths ExtensionsConfigurationStub::templatesPaths() const
 {
     return {};
 }
+
+ValCh<mu::io::path> mu::extensions::ExtensionsConfigurationStub::extensionsPath() const
+{
+    return ValCh<io::path>();
+}
+
+void ExtensionsConfigurationStub::setExtensionsPath(const io::path&)
+{
+}

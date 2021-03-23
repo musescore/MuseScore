@@ -36,7 +36,7 @@ using namespace mu::audio::synth;
 //TODO: add other setting: audio device etc
 static const Settings::Key AUDIO_BUFFER_SIZE("audio", "driver_buffer");
 
-static const Settings::Key MY_SOUNDFONTS("midi", "application/paths/mySoundfonts");
+static const Settings::Key USER_SOUNDFONTS_PATH("midi", "application/paths/mySoundfonts");
 
 //! FIXME Temporary for tests
 static const std::string DEFAULT_FLUID_SOUNDFONT = "MuseScore_General.sf3";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
@@ -60,7 +60,7 @@ unsigned int AudioConfiguration::driverBufferSize() const
 
 std::vector<io::path> AudioConfiguration::soundFontPaths() const
 {
-    std::string pathsStr = settings()->value(MY_SOUNDFONTS).toString();
+    std::string pathsStr = settings()->value(USER_SOUNDFONTS_PATH).toString();
     std::vector<io::path> paths = io::path::pathsFromString(pathsStr, ";");
     paths.push_back(globalConfiguration()->sharePath());
 

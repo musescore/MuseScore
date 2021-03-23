@@ -81,7 +81,7 @@ mu::io::paths PluginsService::scanFileSystemForPlugins() const
 {
     io::paths result;
 
-    for (const io::path& dirPath: configuration()->pluginsDirPaths()) {
+    for (const io::path& dirPath: configuration()->availablePluginsPaths()) {
         RetVal<io::paths> files = fileSystem()->scanFiles(dirPath, { "*.qml" });
 
         if (!files.ret) {

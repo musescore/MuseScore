@@ -105,6 +105,9 @@ public:
     virtual io::path selectOpeningFile(const QString& title, const io::path& dir, const QString& filter) = 0;
     virtual io::path selectSavingFile(const QString& title, const io::path& dir, const QString& filter) = 0;
 
+    // dirs
+    virtual io::path selectDirectory(const QString& title, const io::path& dir) = 0;
+
     // custom
     virtual RetVal<Val> open(const std::string& uri) const = 0;
     virtual RetVal<Val> open(const UriQuery& uri) const = 0;

@@ -22,6 +22,7 @@
 #include "ui/internal/themeconverter.h"
 
 #include "log.h"
+#include "translation.h"
 
 using namespace mu::appshell;
 using namespace mu::notation;

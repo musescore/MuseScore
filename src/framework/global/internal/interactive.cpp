@@ -160,6 +160,12 @@ io::path Interactive::selectSavingFile(const QString& title, const io::path& dir
     return path;
 }
 
+io::path Interactive::selectDirectory(const QString& title, const io::path& dir)
+{
+    QString path = QFileDialog::getExistingDirectory(mainWindow()->qMainWindow(), title, dir.toQString());
+    return path;
+}
+
 RetVal<Val> Interactive::open(const std::string& uri) const
 {
     if (uri.find("sync=") != std::string::npos) {
