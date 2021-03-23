@@ -46,9 +46,6 @@ Column {
 
             RoundedRadioButton {
                 width: parent.width
-                leftPadding: 0
-
-                spacing: 6
 
                 checked: view.currentIndex === model.index
 

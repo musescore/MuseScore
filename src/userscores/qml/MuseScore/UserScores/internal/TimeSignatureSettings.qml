@@ -66,6 +66,8 @@ FlatButton {
                 ButtonGroup.group: radioButtonList.radioButtonGroup
                 width: parent.width
 
+                spacing: 30
+
                 contentComponent: modelData["comp"]
                 checked: (root.model.timeSignatureType === modelData["valueRole"])
 

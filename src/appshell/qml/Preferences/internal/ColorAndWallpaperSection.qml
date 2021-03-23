@@ -40,9 +40,6 @@ Column {
         RoundedRadioButton {
             implicitWidth: root.firstColumnWidth
 
-            padding: 0
-            spacing: 6
-
             checked: root.useColor
 
             onClicked: {
@@ -69,9 +66,6 @@ Column {
 
         RoundedRadioButton {
             implicitWidth: root.firstColumnWidth
-
-            padding: 0
-            spacing: 6
 
             checked: !root.useColor
 
