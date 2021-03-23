@@ -109,6 +109,18 @@ public:
 
     virtual ValCh<framework::Orientation> canvasOrientation() const = 0;
     virtual void setCanvasOrientation(framework::Orientation orientation) = 0;
+
+    virtual bool advanceToNextNoteOnKeyRelease() const = 0;
+    virtual void setAdvanceToNextNoteOnKeyRelease(bool value) = 0;
+
+    virtual bool colorNotesOusideOfUsablePitchRange() const = 0;
+    virtual void setColorNotesOusideOfUsablePitchRange(bool value) = 0;
+
+    virtual int delayBetweenNotesInRealTimeModeMilliseconds() const = 0;
+    virtual void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) = 0;
+
+    virtual int notePlayDurationMilliseconds() const = 0;
+    virtual void setNotePlayDurationMilliseconds(int durationMs) = 0;
 };
 }
 
