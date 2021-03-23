@@ -23,16 +23,21 @@
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 #include "val.h"
+#include "system/ifilesystem.h"
 
 namespace mu::plugins {
 class PluginsConfiguration : public IPluginsConfiguration
 {
-    INJECT(extensions, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(plugins, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(plugins, system::IFileSystem, fileSystem)
 
 public:
     void init();
 
-    io::paths pluginsDirPaths() const override;
+    io::paths availablePluginsPaths() const override;
+
+    ValCh<io::path> pluginsPath() const override;
+    void setPluginsPath(const io::path& path) override;
 
     ValCh<CodeKeyList> installedPlugins() const override;
     void setInstalledPlugins(const CodeKeyList& codeKeyList) override;
@@ -40,7 +45,11 @@ public:
 private:
     CodeKeyList parseInstalledPlugins(const mu::Val& val) const;
 
+    io::path userPluginsPath() const;
+    io::path defaultPluginsPath() const;
+
     async::Channel<CodeKeyList> m_installedPluginsChanged;
+    async::Channel<io::path> m_pluginsPathChanged;
 };
 }
 

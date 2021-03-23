@@ -44,9 +44,6 @@ public:
     virtual io::path extensionPath(const QString& extensionCode) const = 0;
     virtual io::path extensionArchivePath(const QString& extensionCode) const = 0;
 
-    virtual io::path extensionsSharePath() const = 0;
-    virtual io::path extensionsDataPath() const = 0;
-
     virtual io::paths extensionWorkspaceFiles(const QString& extensionCode) const = 0;
     virtual io::paths workspacesPaths() const = 0;
 
@@ -54,6 +51,9 @@ public:
     virtual io::paths instrumentsPaths() const = 0;
 
     virtual io::paths templatesPaths() const = 0;
+
+    virtual ValCh<io::path> extensionsPath() const = 0;
+    virtual void setExtensionsPath(const io::path& path) = 0;
 };
 }
 

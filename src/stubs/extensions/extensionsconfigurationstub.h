@@ -34,9 +34,6 @@ public:
     io::path extensionPath(const QString& extensionCode) const override;
     io::path extensionArchivePath(const QString& extensionCode) const override;
 
-    io::path extensionsSharePath() const override;
-    io::path extensionsDataPath() const override;
-
     io::paths extensionWorkspaceFiles(const QString& extensionCode) const override;
     io::paths workspacesPaths() const override;
 
@@ -44,6 +41,9 @@ public:
     io::paths instrumentsPaths() const override;
 
     io::paths templatesPaths() const override;
+
+    ValCh<io::path> extensionsPath() const override;
+    void setExtensionsPath(const io::path& path) override;
 };
 }
 

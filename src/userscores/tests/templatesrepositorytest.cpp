@@ -87,7 +87,7 @@ TEST_F(TemplatesRepositoryTest, Templates)
         "/extensions/templates"
     };
 
-    EXPECT_CALL(*m_configuration, templatesDirPaths())
+    EXPECT_CALL(*m_configuration, availableTemplatesPaths())
     .WillOnce(Return(templatesDirPaths));
 
     // [GIVEN] All paths to mscz files
