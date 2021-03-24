@@ -37,7 +37,7 @@ class AbRunner : public async::Asyncable
 public:
     AbRunner() = default;
 
-    void run(const ITestCasePtr& tc, const io::path& scorePath);
+    void run(const ITestCasePtr& tc, const AbContext& ctx);
     async::Channel<AbContext> finished() const;
 
 private:

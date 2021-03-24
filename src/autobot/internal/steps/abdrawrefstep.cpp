@@ -26,7 +26,7 @@ using namespace mu::autobot;
 
 void AbDrawRefStep::doRun(AbContext ctx)
 {
-    io::path scorePath = ctx.val<io::path>(AbContext::Key::ScoreFile);
+    io::path scorePath = ctx.val<io::path>(AbContext::Key::FilePath);
     io::path filePath = configuration()->scoreDrawData(scorePath);
     if (!fileSystem()->exists(filePath)) {
         LOGE() << "failed open file to write draw data, path: " << filePath;

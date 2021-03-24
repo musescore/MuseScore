@@ -43,12 +43,16 @@ public:
     virtual std::vector<ITestCasePtr> testCases() const = 0;
     virtual ITestCasePtr testCase(const std::string& name) const = 0;
 
-    virtual void runAll(const std::string& testCaseName) = 0;
-    virtual void runFile(const std::string& testCaseName, int fileIndex) = 0;
+    virtual void setCurrentTestCase(const std::string& name) = 0;
+    virtual const ValCh<ITestCasePtr>& currentTestCase() const = 0;
+
+    virtual void runAllFiles() = 0;
+    virtual void runFile(int fileIndex) = 0;
     virtual void stop() = 0;
     virtual const ValCh<Status>& status() const = 0;
 
     virtual const ValNt<Files>& files() const = 0;
+    virtual async::Channel<File> fileFinished() const = 0;
     virtual const ValCh<int>& currentFileIndex() const = 0;
 };
 }

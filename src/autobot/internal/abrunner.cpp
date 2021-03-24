@@ -24,7 +24,7 @@
 
 using namespace mu::autobot;
 
-void AbRunner::run(const ITestCasePtr& tc, const io::path& scorePath)
+void AbRunner::run(const ITestCasePtr& tc, const AbContext& ctx)
 {
     IF_ASSERT_FAILED(tc) {
         return;
@@ -39,9 +39,6 @@ void AbRunner::run(const ITestCasePtr& tc, const io::path& scorePath)
             nextStep(ctx);
         });
     }
-
-    AbContext ctx;
-    ctx.setVal<io::path>(AbContext::Key::ScoreFile, scorePath);
 
     nextStep(ctx);
 }

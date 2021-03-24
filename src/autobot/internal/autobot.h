@@ -36,24 +36,30 @@ public:
     std::vector<ITestCasePtr> testCases() const override;
     ITestCasePtr testCase(const std::string& name) const override;
 
-    void runAll(const std::string& testCaseName) override;
-    void runFile(const std::string& testCaseName, int fileIndex) override;
+    void setCurrentTestCase(const std::string& name) override;
+    const ValCh<ITestCasePtr>& currentTestCase() const override;
+
+    void runAllFiles() override;
+    void runFile(int fileIndex) override;
     void stop() override;
     const ValCh<Status>& status() const override;
 
     const ValNt<Files>& files() const override;
+    async::Channel<File> fileFinished() const override;
     const ValCh<int>& currentFileIndex() const override;
 
 private:
 
-    void nextScore();
+    void nextFile();
+    void onFileFinished(const AbContext& ctx);
 
     std::vector<ITestCasePtr> m_testCases;
-
-    ITestCasePtr m_currentTC;
+    ValCh<ITestCasePtr> m_currentTestCase;
 
     ValNt<Files> m_files;
     ValCh<int> m_fileIndex;
+
+    async::Channel<File> m_fileFinished;
 
     ValCh<Status> m_status;
     AbRunner m_runner;

@@ -25,6 +25,6 @@ using namespace mu::autobot;
 void AbScoreLoadStep::doRun(AbContext ctx)
 {
     AbPaintProvider::instance()->clear();
-    ctx.ret = fileScoreController()->openScore(ctx.val<io::path>(AbContext::Key::ScoreFile));
+    ctx.ret = fileScoreController()->openScore(ctx.val<io::path>(AbContext::Key::FilePath));
     doFinish(ctx);
 }

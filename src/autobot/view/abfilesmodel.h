@@ -41,11 +41,14 @@ public:
 private:
 
     void update();
+    void updateFile(const File& f);
+    QString fileStatus(const File& f) const;
 
     enum Roles {
         FileTitle = Qt::UserRole + 1,
         FileIndex,
-        IsCurrentFile
+        IsCurrentFile,
+        FileStatus
     };
 
     ValNt<Files> m_files;

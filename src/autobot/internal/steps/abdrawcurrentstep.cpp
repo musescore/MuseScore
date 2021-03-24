@@ -54,7 +54,7 @@ void AbDrawCurrentStep::doRun(AbContext ctx)
 
     QByteArray data = draw::DrawBufferJson::toJson(buf);
 
-    io::path scorePath = ctx.val<io::path>(AbContext::Key::ScoreFile);
+    io::path scorePath = ctx.val<io::path>(AbContext::Key::FilePath);
     io::path filePath = configuration()->scoreDrawData(scorePath);
     QFile file(filePath.toQString());
     if (!file.open(QIODevice::WriteOnly)) {
