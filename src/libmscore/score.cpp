@@ -3418,7 +3418,7 @@ void Score::selectRange(Element* e, int staffIdx)
                 Segment* s1 = tick2segmentMM(t1, true, SegmentType::ChordRest);
                 Segment* s2 = tick2segmentMM(t2, true, SegmentType::ChordRest);
                 if (s2) {
-                    s2 = s2->next1MM(SegmentType::ChordRest);
+                    s2 = s2->next1MM(SegmentType::ChordRest | SegmentType::EndBarLine);
                 }
 
                 if (s1 && s2) {
