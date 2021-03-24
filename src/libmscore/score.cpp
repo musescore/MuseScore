@@ -3421,7 +3421,7 @@ void Score::selectRange(Element* e, int staffIdx)
                     s2 = s2->next1MM(SegmentType::ChordRest);
                 }
 
-                if (s1 && s2) {
+                if (s1) {
                     _selection.setRange(s1, s2, idx1, idx2 + 1);
                     selectSimilarInRange(e);
                     if (selectedElement->track() == e->track()) {
