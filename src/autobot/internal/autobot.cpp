@@ -84,25 +84,30 @@ ITestCasePtr Autobot::testCase(const std::string& name) const
     return nullptr;
 }
 
+void Autobot::setCurrentTestCase(const std::string& name)
+{
+    m_currentTestCase.set(testCase(name));
+
+    for (File& f : m_files.val) {
+        f.ret = Ret();
+    }
+    m_files.notification.notify();
+}
+
+const mu::ValCh<ITestCasePtr>& Autobot::currentTestCase() const
+{
+    return m_currentTestCase;
+}
+
 void Autobot::init()
 {
     m_status.val = Status::Stoped;
 
     m_runner.finished().onReceive(this, [this](const AbContext& ctx) {
-        if (ctx.ret) {
-            LOGI() << "success finished, score: " << ctx.val<io::path>(AbContext::Key::ScoreFile);
-        } else {
-            LOGE() << "failed finished, score: " << ctx.val<io::path>(AbContext::Key::ScoreFile);
-        }
-
-        if (m_status.val == Status::RunningAll) {
-            QTimer::singleShot(10, [this]() {
-                nextScore();
-            });
-        } else {
-            stop();
-        }
+        onFileFinished(ctx);
     });
+
+    m_currentTestCase.set(m_testCases.front());
 
     RetVal<io::paths> scores = AbScoreList().scoreList();
     if (!scores.ret) {
@@ -114,49 +119,44 @@ void Autobot::init()
     for (const io::path& p : scores.val) {
         File f;
         f.path = p;
-        f.status = FileStatus::None;
         m_files.val.push_back(std::move(f));
     }
 
     m_files.notification.notify();
 }
 
-void Autobot::runAll(const std::string& testCaseName)
+void Autobot::runAllFiles()
 {
     if (m_status.val != Status::Stoped) {
         LOGW() << "already running";
         return;
     }
 
-    ITestCasePtr tc = testCase(testCaseName);
-    IF_ASSERT_FAILED(tc) {
+    IF_ASSERT_FAILED(m_currentTestCase.val) {
         return;
     }
 
-    m_currentTC = tc;
     m_fileIndex.val = -1;
     m_status.set(Status::RunningAll);
 
-    nextScore();
+    nextFile();
 }
 
-void Autobot::runFile(const std::string& testCaseName, int fileIndex)
+void Autobot::runFile(int fileIndex)
 {
     if (m_status.val != Status::Stoped) {
         LOGW() << "already running";
         return;
     }
 
-    ITestCasePtr tc = testCase(testCaseName);
-    IF_ASSERT_FAILED(tc) {
+    IF_ASSERT_FAILED(m_currentTestCase.val) {
         return;
     }
 
-    m_currentTC = tc;
     m_fileIndex.val = fileIndex - 1;
     m_status.set(Status::RunningFile);
 
-    nextScore();
+    nextFile();
 }
 
 void Autobot::stop()
@@ -174,14 +174,19 @@ const mu::ValNt<Files>& Autobot::files() const
     return m_files;
 }
 
+mu::async::Channel<File> Autobot::fileFinished() const
+{
+    return m_fileFinished;
+}
+
 const mu::ValCh<int>& Autobot::currentFileIndex() const
 {
     return m_fileIndex;
 }
 
-void Autobot::nextScore()
+void Autobot::nextFile()
 {
-    IF_ASSERT_FAILED(m_currentTC) {
+    IF_ASSERT_FAILED(m_currentTestCase.val) {
         return;
     }
 
@@ -197,5 +202,37 @@ void Autobot::nextScore()
     }
 
     const File& file = m_files.val.at(size_t(m_fileIndex.val));
-    m_runner.run(m_currentTC, file.path);
+
+    AbContext ctx;
+    ctx.setVal<io::path>(AbContext::Key::FilePath, file.path);
+    ctx.setVal<size_t>(AbContext::Key::FileIndex, size_t(m_fileIndex.val));
+
+    m_runner.run(m_currentTestCase.val, ctx);
+}
+
+void Autobot::onFileFinished(const AbContext& ctx)
+{
+    if (ctx.ret) {
+        LOGI() << "success finished, score: " << ctx.val<io::path>(AbContext::Key::FilePath);
+    } else {
+        LOGE() << "failed finished, score: " << ctx.val<io::path>(AbContext::Key::FilePath);
+    }
+
+    size_t fileIndex = ctx.val<size_t>(AbContext::Key::FileIndex);
+    IF_ASSERT_FAILED(fileIndex < m_files.val.size()) {
+        return;
+    }
+
+    File& file = m_files.val.at(fileIndex);
+    file.ret = ctx.ret;
+
+    m_fileFinished.send(file);
+
+    if (m_status.val == Status::RunningAll) {
+        QTimer::singleShot(10, [this]() {
+            nextFile();
+        });
+    } else {
+        stop();
+    }
 }
