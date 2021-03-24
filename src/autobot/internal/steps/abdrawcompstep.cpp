@@ -31,12 +31,14 @@ void AbDrawCompStep::doRun(AbContext ctx)
     if (!curBuf) {
         LOGW() << "not set current draw buffer";
         doFinish(ctx);
+        return;
     }
 
     draw::DrawDataPtr refBuf = ctx.val<draw::DrawDataPtr>(AbContext::Key::RefDrawData);
     if (!refBuf) {
         LOGW() << "not set reference draw buffer";
         doFinish(ctx);
+        return;
     }
 
     draw::DrawComp::Tolerance tolerance;

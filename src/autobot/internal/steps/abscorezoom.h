@@ -29,7 +29,7 @@ class AbScoreZoom : public AbBaseStep
 {
     INJECT(autobot, actions::IActionsDispatcher, dispatcher)
 public:
-    AbScoreZoom(int percent);
+    AbScoreZoom(int percent, ITestStep::Delay delay = ITestStep::Delay::Fast);
 
 protected:
     void doRun(AbContext ctx) override;

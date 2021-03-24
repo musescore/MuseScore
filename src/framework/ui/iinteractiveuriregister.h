@@ -36,6 +36,17 @@ public:
 
     virtual void registerUri(const Uri& uri, const ContainerMeta& meta) = 0;
     virtual ContainerMeta meta(const Uri& uri) const = 0;
+
+    // userfull
+    void registerQmlUri(const Uri& uri, const QString& qmlPath)
+    {
+        registerUri(uri, ContainerMeta(ContainerType::Type::QmlDialog, qmlPath));
+    }
+
+    void registerWidgetUri(const Uri& uri, int widgetMetaTypeId)
+    {
+        registerUri(uri, ContainerMeta(ContainerType::Type::QWidgetDialog, widgetMetaTypeId));
+    }
 };
 }
 

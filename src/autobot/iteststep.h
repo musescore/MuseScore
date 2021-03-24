@@ -16,41 +16,31 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUTOBOT_IAUTOBOT_H
-#define MU_AUTOBOT_IAUTOBOT_H
+#ifndef MU_AUTOBOT_ITESTSTEP_H
+#define MU_AUTOBOT_ITESTSTEP_H
 
-#include <vector>
-
-#include "modularity/imoduleexport.h"
-#include "retval.h"
-#include "io/path.h"
-#include "autobottypes.h"
-#include "itestcase.h"
+#include <memory>
+#include "async/channel.h"
+#include "abcontext.h"
 
 namespace mu::autobot {
-class IAutobot : MODULE_EXPORT_INTERFACE
+class ITestStep
 {
-    INTERFACE_ID(IAutobot)
 public:
-    virtual ~IAutobot() = default;
+    virtual ~ITestStep() = default;
 
-    enum class Status {
-        Stoped = 0,
-        RunningAll,
-        RunningFile
+    enum class Delay {
+        Fast,
+        Normal,
+        Long
     };
 
-    virtual std::vector<ITestCasePtr> testCases() const = 0;
-    virtual ITestCasePtr testCase(const std::string& name) const = 0;
-
-    virtual void runAll(const std::string& testCaseName) = 0;
-    virtual void runFile(const std::string& testCaseName, int fileIndex) = 0;
-    virtual void stop() = 0;
-    virtual const ValCh<Status>& status() const = 0;
-
-    virtual const ValNt<Files>& files() const = 0;
-    virtual const ValCh<int>& currentFileIndex() const = 0;
+    virtual Delay delay() const = 0;
+    virtual void make(const AbContext& ctx) = 0;
+    virtual async::Channel<AbContext> finished() const = 0;
 };
+
+using ITestStepPtr = std::shared_ptr<ITestStep>;
 }
 
-#endif // MU_AUTOBOT_IAUTOBOT_H
+#endif // MU_AUTOBOT_ITESTSTEP_H

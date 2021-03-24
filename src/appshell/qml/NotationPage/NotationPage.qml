@@ -139,32 +139,7 @@ DockPage {
             InspectorForm {
                 anchors.fill: parent
             }
-        }//,
-
-//! NOTE Please, don't remove this code (igorkorsukov)
-//        DockPanel {
-//            id: autobotPanel
-//            objectName: "autobotPanel"
-
-//            title: "Autobot"
-
-//            width: defaultPanelWidth
-//            minimumWidth: minimumPanelWidth
-
-//            color: notationPage.color
-//            borderColor: notationPage.borderColor
-
-//            tabifyObjectName: "autobotPanel"
-//            area: Qt.RightDockWidgetArea
-//            floatable: true
-//            closable: true
-//            visible: false
-
-//            Loader {
-//                anchors.fill: parent
-//                source: "qrc:/qml/DevTools/Autobot/AutobotPanel.qml"
-//            }
-//        }
+        }
     ]
 
     central: DockCentral {

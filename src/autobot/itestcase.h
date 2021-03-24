@@ -16,41 +16,27 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUTOBOT_IAUTOBOT_H
-#define MU_AUTOBOT_IAUTOBOT_H
+#ifndef MU_AUTOBOT_ITESTCASE_H
+#define MU_AUTOBOT_ITESTCASE_H
 
+#include <string>
+#include <memory>
 #include <vector>
 
-#include "modularity/imoduleexport.h"
-#include "retval.h"
-#include "io/path.h"
+#include "iteststep.h"
 #include "autobottypes.h"
-#include "itestcase.h"
 
 namespace mu::autobot {
-class IAutobot : MODULE_EXPORT_INTERFACE
+class ITestCase
 {
-    INTERFACE_ID(IAutobot)
 public:
-    virtual ~IAutobot() = default;
+    virtual ~ITestCase() = default;
 
-    enum class Status {
-        Stoped = 0,
-        RunningAll,
-        RunningFile
-    };
-
-    virtual std::vector<ITestCasePtr> testCases() const = 0;
-    virtual ITestCasePtr testCase(const std::string& name) const = 0;
-
-    virtual void runAll(const std::string& testCaseName) = 0;
-    virtual void runFile(const std::string& testCaseName, int fileIndex) = 0;
-    virtual void stop() = 0;
-    virtual const ValCh<Status>& status() const = 0;
-
-    virtual const ValNt<Files>& files() const = 0;
-    virtual const ValCh<int>& currentFileIndex() const = 0;
+    virtual std::string name() const = 0;
+    virtual const std::vector<ITestStepPtr>& steps() const = 0;
 };
+
+using ITestCasePtr = std::shared_ptr<ITestCase>;
 }
 
-#endif // MU_AUTOBOT_IAUTOBOT_H
+#endif // MU_AUTOBOT_ITESTCASE_H

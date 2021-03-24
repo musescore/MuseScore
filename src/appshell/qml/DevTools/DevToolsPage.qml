@@ -12,7 +12,6 @@ import "./Interactive"
 import "./NotationDialogs"
 import "./Telemetry"
 import "./VST"
-import "./Autobot"
 
 DockPage {
     id: homePage
@@ -79,7 +78,7 @@ DockPage {
             case "midiports": currentComp = midiPortsComp; break
             case "vst": currentComp = vstComponent; break
             case "plugins": currentComp = pluginsComp; break
-            case "autobot": currentComp = autobotComp; break
+            case "autobot": api.launcher.open("musescore://autobot/main"); break
             }
         }
 
