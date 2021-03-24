@@ -23,6 +23,7 @@
 
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
+#include "async/asyncable.h"
 
 #include "context/iglobalcontext.h"
 
@@ -59,7 +60,7 @@ public:
     virtual INotationPlaybackPtr notationPlayback() const = 0;
 };
 
-class NotationViewInputController : public actions::Actionable
+class NotationViewInputController : public actions::Actionable, public async::Asyncable
 {
     INJECT(notation, INotationConfiguration, configuration)
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
@@ -86,10 +87,15 @@ public:
 
 private:
     INotationPtr currentNotation() const;
+    INotationStylePtr notationStyle() const;
 
+    void initZoom();
     void zoomIn();
     void zoomOut();
+
     void zoomToPageWidth();
+    void zoomToWholePage();
+    void zoomToTwoPages();
 
     int currentZoomIndex() const;
     int currentZoomPercentage() const;
@@ -110,6 +116,8 @@ private:
     float hitWidth() const;
 
     ElementType selectionType() const;
+
+    double guiScalling() const;
 
     IControlledView* m_view = nullptr;
     InteractData m_interactData;
