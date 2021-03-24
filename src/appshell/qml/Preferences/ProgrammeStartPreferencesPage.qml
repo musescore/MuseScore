@@ -38,14 +38,10 @@ PreferencesPage {
                     width: 220
 
                     checked: modelData.checked
+                    text: modelData.title
 
                     onClicked: {
                         programmeStartModel.setCurrentStartupMode(model.index)
-                    }
-
-                    StyledTextLabel {
-                        text: modelData.title
-                        horizontalAlignment: Qt.AlignLeft
                     }
                 }
 

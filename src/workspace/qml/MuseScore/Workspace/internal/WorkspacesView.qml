@@ -32,12 +32,8 @@ RadioButtonGroup {
         height: 46
         spacing: 12
 
-        StyledTextLabel {
-            text: model.name
-
-            horizontalAlignment: Qt.AlignLeft
-            font.bold: model.isSelected
-        }
+        text: model.name
+        font: model.isSelected ? ui.theme.bodyBoldFont : ui.theme.bodyFont
 
         checked: model.isSelected
 
