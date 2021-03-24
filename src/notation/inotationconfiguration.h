@@ -76,9 +76,22 @@ public:
     virtual QColor layoutBreakColor() const = 0;
 
     virtual int selectionProximity() const = 0;
+    virtual void setSelectionProximity(int proxymity) = 0;
+
+    virtual ZoomType defaultZoomType() const = 0;
+    virtual void setDefaultZoomType(ZoomType zoomType) = 0;
+
+    virtual int defaultZoom() const = 0;
+    virtual void setDefaultZoom(int zoomPercentage) = 0;
 
     virtual ValCh<int> currentZoom() const = 0;
     virtual void setCurrentZoom(int zoomPercentage) = 0;
+
+    virtual int keyboardZoomPrecision() const = 0;
+    virtual void setKeyboardZoomPrecision(int precision) const = 0;
+
+    virtual int mouseZoomPrecision() const = 0;
+    virtual void setMouseZoomPrecision(int precision) = 0;
 
     virtual std::string fontFamily() const = 0;
     virtual int fontSize() const = 0;
@@ -112,6 +125,9 @@ public:
     virtual ValCh<framework::Orientation> canvasOrientation() const = 0;
     virtual void setCanvasOrientation(framework::Orientation orientation) = 0;
 
+    virtual bool isLimitCanvasScrollArea() const = 0;
+    virtual void setIsLimitCanvasScrollArea(bool limited) = 0;
+
     virtual bool advanceToNextNoteOnKeyRelease() const = 0;
     virtual void setAdvanceToNextNoteOnKeyRelease(bool value) = 0;
 
@@ -123,6 +139,9 @@ public:
 
     virtual int notePlayDurationMilliseconds() const = 0;
     virtual void setNotePlayDurationMilliseconds(int durationMs) = 0;
+
+    virtual bool isAntialiasedDrawing() const = 0;
+    virtual void setIsAntialiasedDrawing(bool antialiased) = 0;
 };
 }
 

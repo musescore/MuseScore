@@ -79,9 +79,22 @@ public:
     QColor layoutBreakColor() const override;
 
     int selectionProximity() const override;
+    void setSelectionProximity(int proxymity);
+
+    ZoomType defaultZoomType() const override;
+    void setDefaultZoomType(ZoomType zoomType) override;
+
+    int defaultZoom() const override;
+    void setDefaultZoom(int zoomPercentage) override;
 
     ValCh<int> currentZoom() const override;
     void setCurrentZoom(int zoomPercentage) override;
+
+    int keyboardZoomPrecision() const override;
+    void setKeyboardZoomPrecision(int precision) const override;
+
+    int mouseZoomPrecision() const override;
+    void setMouseZoomPrecision(int precision) override;
 
     std::string fontFamily() const override;
     int fontSize() const override;
@@ -115,6 +128,9 @@ public:
     ValCh<framework::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(framework::Orientation orientation) override;
 
+    bool isLimitCanvasScrollArea() const override;
+    void setIsLimitCanvasScrollArea(bool limited) override;
+
     bool advanceToNextNoteOnKeyRelease() const override;
     void setAdvanceToNextNoteOnKeyRelease(bool value) override;
 
@@ -127,6 +143,9 @@ public:
     int notePlayDurationMilliseconds() const override;
     void setNotePlayDurationMilliseconds(int durationMs) override;
 
+    bool isAntialiasedDrawing() const override;
+    void setIsAntialiasedDrawing(bool antialiased) override;
+
 private:
     std::vector<std::string> parseToolbarActions(const std::string& actions) const;
 
@@ -136,7 +155,7 @@ private:
     async::Notification m_foregroundChanged;
     async::Channel<int> m_currentZoomChanged;
     async::Channel<framework::Orientation> m_canvasOrientationChanged;
-    async::Channel<io::path> m_stylesPathChnaged;
+    async::Channel<io::path> m_stylesPathChanged;
     async::Channel<int> m_selectionColorChanged;
 };
 }
