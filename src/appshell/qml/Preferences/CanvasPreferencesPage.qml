@@ -1,0 +1,276 @@
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+
+import MuseScore.UiComponents 1.0
+import MuseScore.Preferences 1.0
+
+
+Item {
+    id: root
+
+    signal hideRequested()
+
+    Component.onCompleted: {
+        preferencesModel.load()
+    }
+
+    CanvasPreferencesModel {
+        id: preferencesModel
+    }
+
+    Rectangle {
+        anchors.fill: parent
+
+        color: ui.theme.backgroundSecondaryColor
+
+        MouseArea {
+            anchors.fill: parent
+
+            onClicked: {
+                root.forceActiveFocus()
+            }
+        }
+    }
+
+    Column {
+        anchors.fill: parent
+        spacing: 24
+
+        Column {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            spacing: 18
+
+            StyledTextLabel {
+                text: qsTrc("appshell", "Scroll Pages")
+                font: ui.theme.bodyBoldFont
+            }
+
+            Column {
+                spacing: 12
+
+                Row {
+                    spacing: 12
+
+                    StyledTextLabel {
+                        width: 208
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTrc("appshell", "Default zoom:")
+                        horizontalAlignment: Text.AlignLeft
+                    }
+
+                    StyledComboBox {
+                        implicitWidth: 208
+
+                        textRoleName: "title"
+                        valueRoleName: "value"
+
+                        currentIndex: indexOfValue(preferencesModel.defaultZoom.type)
+
+                        model: preferencesModel.zoomTypes()
+
+                        onValueChanged: {
+                            preferencesModel.setDefaultZoomType(value)
+                        }
+                    }
+
+                    IncrementalPropertyControl {
+                        id: defaultZoomControl
+                        width: 64
+                        iconMode: iconModeEnum.hidden
+                        maxValue: 1600
+                        minValue: 10
+                        step: 10
+                        validator: IntInputValidator {
+                            top: defaultZoomControl.maxValue
+                            bottom: defaultZoomControl.minValue
+                        }
+
+                        measureUnitsSymbol: "%"
+
+                        currentValue: preferencesModel.defaultZoom.level
+                        enabled: preferencesModel.defaultZoom.isPercentage
+
+                        onValueEdited: {
+                            preferencesModel.setDefaultZoomLevel(newValue)
+                        }
+                    }
+                }
+
+                Row {
+                    spacing: 12
+
+                    StyledTextLabel {
+                        width: 208
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTrc("appshell", "Keyboard zoom precision:")
+                        horizontalAlignment: Text.AlignLeft
+                    }
+
+                    IncrementalPropertyControl {
+                        id: keyboardZoomPrecisionControl
+                        width: 60
+                        iconMode: iconModeEnum.hidden
+                        maxValue: 16
+                        minValue: 1
+                        step: 1
+                        validator: IntInputValidator {
+                            top: keyboardZoomPrecisionControl.maxValue
+                            bottom: keyboardZoomPrecisionControl.minValue
+                        }
+
+                        currentValue: preferencesModel.keyboardZoomPrecision
+
+                        onValueEdited: {
+                            preferencesModel.keyboardZoomPrecision = newValue
+                        }
+                    }
+                }
+
+                Row {
+                    spacing: 12
+
+                    StyledTextLabel {
+                        width: 208
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTrc("appshell", "Mouse zoom precision:")
+                        horizontalAlignment: Text.AlignLeft
+                    }
+
+                    IncrementalPropertyControl {
+                        id: mouseZoomPrecisionControl
+                        width: 60
+                        iconMode: iconModeEnum.hidden
+                        maxValue: 16
+                        minValue: 1
+                        step: 1
+                        validator: IntInputValidator {
+                            top: mouseZoomPrecisionControl.maxValue
+                            bottom: mouseZoomPrecisionControl.minValue
+                        }
+
+                        currentValue: preferencesModel.mouseZoomPrecision
+
+                        onValueEdited: {
+                            preferencesModel.mouseZoomPrecision = newValue
+                        }
+                    }
+                }
+            }
+        }
+
+        SeparatorLine { }
+
+        Column {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            spacing: 18
+
+            StyledTextLabel {
+                text: qsTrc("appshell", "Scroll Pages")
+                font: ui.theme.bodyBoldFont
+            }
+
+            Column {
+                spacing: 12
+
+                RadioButtonGroup {
+                    id: radioButtonList
+
+                    width: 100
+                    height: implicitHeight
+
+                    spacing: 12
+                    orientation: ListView.Vertical
+
+                    model: [
+                        { title: qsTrc("appshell", "Horizontal"), value: Qt.Horizontal },
+                        { title: qsTrc("appshell", "Vertical"), value: Qt.Vertical }
+                    ]
+
+                    delegate: RoundedRadioButton {
+                        width: parent.width
+                        leftPadding: 0
+                        spacing: 6
+
+                        ButtonGroup.group: radioButtonList.radioButtonGroup
+
+                        checked: preferencesModel.scrollPagesOrientation === modelData["value"]
+
+                        StyledTextLabel {
+                            text: modelData["title"]
+                            horizontalAlignment: Text.AlignLeft
+                        }
+
+                        onToggled: {
+                            preferencesModel.scrollPagesOrientation = modelData["value"]
+                        }
+                    }
+                }
+
+                CheckBox {
+                    text: qsTrc("appshell", "Limit scroll area to page borders")
+                    checked: preferencesModel.limitScrollArea
+
+                    onClicked: {
+                        preferencesModel.limitScrollArea = !preferencesModel.limitScrollArea
+                    }
+                }
+            }
+        }
+
+        SeparatorLine { }
+
+        Column {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            spacing: 18
+
+            StyledTextLabel {
+                text: qsTrc("appshell", "Miscellaneous")
+                font: ui.theme.bodyBoldFont
+            }
+
+            Column {
+                spacing: 12
+
+                Row {
+                    spacing: 4
+
+                    StyledTextLabel {
+                        width: 216
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTrc("appshell", "Proximity for selecting elements:")
+                        horizontalAlignment: Text.AlignLeft
+                    }
+
+                    IncrementalPropertyControl {
+                        width: 60
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        minValue: 1
+                        maxValue: 99
+                        iconMode: iconModeEnum.hidden
+                        measureUnitsSymbol: "px"
+
+                        currentValue: preferencesModel.selectionProximity
+
+                        onValueEdited: {
+                            preferencesModel.selectionProximity = newValue
+                        }
+                    }
+                }
+
+                CheckBox {
+                    text: qsTrc("appshell", "Draw antialiased")
+                    checked: preferencesModel.antialiasedDrawing
+
+                    onClicked: {
+                        preferencesModel.antialiasedDrawing = !preferencesModel.antialiasedDrawing
+                    }
+                }
+            }
+        }
+    }
+}
