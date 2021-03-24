@@ -26,16 +26,9 @@
 #include "iteststep.h"
 
 namespace mu::autobot {
-enum class FileStatus {
-    Undefined = 0,
-    None,
-    Success,
-    Failed
-};
-
 struct File {
     io::path path;
-    FileStatus status = FileStatus::Undefined;
+    Ret ret;
 };
 
 using Files = std::vector<File>;

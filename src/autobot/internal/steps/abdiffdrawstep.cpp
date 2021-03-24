@@ -33,4 +33,6 @@ void AbDiffDrawStep::doRun(AbContext ctx)
     AbPaintProvider::instance()->setIsDiffDrawEnabled(true);
 
     dispatcher()->dispatch("dev-notationview-redraw");
+
+    doFinish(ctx);
 }
