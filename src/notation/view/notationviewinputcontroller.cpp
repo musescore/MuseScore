@@ -58,7 +58,11 @@ NotationViewInputController::NotationViewInputController(IControlledView* view)
         });
     }
 
-    setZoom(configuration()->currentZoom().val);
+    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
+        initZoom();
+    });
+
+    initZoom();
 }
 
 void NotationViewInputController::setReadonly(bool readonly)
@@ -69,6 +73,30 @@ void NotationViewInputController::setReadonly(bool readonly)
 INotationPtr NotationViewInputController::currentNotation() const
 {
     return globalContext()->currentNotation();
+}
+
+INotationStylePtr NotationViewInputController::notationStyle() const
+{
+    return currentNotation() ? currentNotation()->style() : nullptr;
+}
+
+void NotationViewInputController::initZoom()
+{
+    ZoomType defaultZoomType = configuration()->defaultZoomType();
+    switch (defaultZoomType) {
+    case ZoomType::Percentage:
+        setZoom(configuration()->defaultZoom());
+        break;
+    case ZoomType::PageWidth:
+        zoomToPageWidth();
+        break;
+    case ZoomType::WholePage:
+        zoomToWholePage();
+        break;
+    case ZoomType::TwoPages:
+        zoomToTwoPages();
+        break;
+    }
 }
 
 void NotationViewInputController::zoomIn()
@@ -92,7 +120,55 @@ void NotationViewInputController::zoomOut()
 
 void NotationViewInputController::zoomToPageWidth()
 {
-    NOT_IMPLEMENTED;
+    if (!notationStyle()) {
+        return;
+    }
+
+    qreal pageWidth = notationStyle()->styleValue(Ms::Sid::pageWidth).toDouble();
+
+    setZoom((m_view->width() * guiScalling() / pageWidth) * 100);
+}
+
+void NotationViewInputController::zoomToWholePage()
+{
+    if (!notationStyle()) {
+        return;
+    }
+
+    const qreal pageWidth = notationStyle()->styleValue(Ms::Sid::pageWidth).toDouble();
+    const qreal pageHeight = notationStyle()->styleValue(Ms::Sid::pageHeight).toDouble();
+
+    const qreal pageWidthZoom = m_view->width() * guiScalling() / pageWidth;
+    const qreal pageHeightZoom = m_view->height() * guiScalling() / pageHeight;
+
+    setZoom(std::min(pageWidthZoom, pageHeightZoom) * 100);
+}
+
+void NotationViewInputController::zoomToTwoPages()
+{
+    if (!notationStyle()) {
+        return;
+    }
+
+    const qreal viewWidth = m_view->width();
+    const qreal viewHeight = m_view->height();
+    const qreal pageWidth = notationStyle()->styleValue(Ms::Sid::pageWidth).toDouble();
+    const qreal pageHeight = notationStyle()->styleValue(Ms::Sid::pageHeight).toDouble();
+
+    qreal pageHeightZoom = 0.0;
+    qreal pageWidthZoom = 0.0;
+
+    if (configuration()->canvasOrientation().val == framework::Orientation::Vertical) {
+        static const qreal VERTICAL_PAGE_GAP = 5.0;
+        pageHeightZoom = viewHeight * guiScalling() / (pageHeight * 2.0 + VERTICAL_PAGE_GAP);
+        pageWidthZoom = viewWidth * guiScalling() / pageWidth;
+    } else {
+        static const qreal HORIZONTAL_PAGE_GAP = 50.0;
+        pageHeightZoom = viewHeight * guiScalling() / pageHeight;
+        pageWidthZoom = viewWidth * guiScalling() / (pageWidth * 2.0 + HORIZONTAL_PAGE_GAP);
+    }
+
+    setZoom(std::min(pageHeightZoom, pageWidthZoom) * 100);
 }
 
 int NotationViewInputController::currentZoomIndex() const
@@ -459,4 +535,9 @@ ElementType NotationViewInputController::selectionType() const
     }
 
     return type;
+}
+
+double NotationViewInputController::guiScalling() const
+{
+    return configuration()->guiScaling();
 }

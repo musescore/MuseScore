@@ -201,7 +201,7 @@ void BufferedPaintProvider::drawPath(const QPainterPath& path)
     } else if (st.brush.style() == Qt::NoBrush) {
         mode = DrawMode::Stroke;
     } else {
-        LOGW() << "not set pen or brush, path will not draw";
+//        LOGW() << "not set pen or brush, path will not draw";
         return;
     }
     editableData().paths.push_back({ path, st.pen, st.brush, mode });
