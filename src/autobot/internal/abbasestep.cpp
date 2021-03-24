@@ -20,6 +20,16 @@
 
 using namespace mu::autobot;
 
+AbBaseStep::AbBaseStep(Delay delay)
+    : m_delay(delay)
+{
+}
+
+ITestStep::Delay AbBaseStep::delay() const
+{
+    return m_delay;
+}
+
 void AbBaseStep::make(const AbContext& ctx)
 {
     doRun(ctx);

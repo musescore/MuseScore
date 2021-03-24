@@ -20,6 +20,11 @@
 
 using namespace mu::autobot;
 
+AbScoreCloseStep::AbScoreCloseStep(Delay delay)
+    : AbBaseStep(delay)
+{
+}
+
 void AbScoreCloseStep::doRun(AbContext ctx)
 {
     auto notation = context()->currentNotation();

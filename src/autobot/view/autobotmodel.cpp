@@ -25,14 +25,60 @@ using namespace mu::autobot;
 AutobotModel::AutobotModel(QObject* parent)
     : QObject(parent)
 {
+    m_files = new AbFilesModel(this);
+
+    auto status = autobot()->status();
+    status.ch.onReceive(this, [this](IAutobot::Status) {
+        emit statusChanged();
+    });
 }
 
-void AutobotModel::run()
+void AutobotModel::runAll(const QString& testCaseName)
 {
-    autobot()->run();
+    autobot()->runAll(testCaseName.toStdString());
+}
+
+void AutobotModel::runFile(const QString& testCaseName, int fileIndex)
+{
+    autobot()->runFile(testCaseName.toStdString(), fileIndex);
 }
 
 void AutobotModel::stop()
 {
     autobot()->stop();
+}
+
+QVariantList AutobotModel::testCases() const
+{
+    QVariantList list;
+    std::vector<ITestCasePtr> tests = autobot()->testCases();
+    if (tests.empty()) {
+        QVariantMap item = { { "name", "None" } };
+        list << item;
+        return list;
+    }
+
+    for (const ITestCasePtr& tc : tests) {
+        QVariantMap item;
+        item["name"] = QString::fromStdString(tc->name());
+        list << item;
+    }
+
+    return list;
+}
+
+AbFilesModel* AutobotModel::files() const
+{
+    return m_files;
+}
+
+QString AutobotModel::status() const
+{
+    IAutobot::Status st = autobot()->status().val;
+    switch (st) {
+    case IAutobot::Status::Stoped: return "Stoped";
+    case IAutobot::Status::RunningAll: return "RunningAll";
+    case IAutobot::Status::RunningFile: return "RunningFile";
+    }
+    return "Unknown";
 }
