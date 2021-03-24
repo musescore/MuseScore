@@ -215,7 +215,7 @@ enum class NoteFilter
 };
 
 enum class ZoomType {
-    Persentage,
+    Percentage,
     PageWidth,
     WholePage,
     TwoPages

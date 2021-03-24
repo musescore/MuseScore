@@ -22,8 +22,9 @@
 namespace mu::framework {
 enum class Orientation
 {
-    Horizontal,
-    Vertical
+    // Note: values from Qt::Orientation
+    Horizontal = 1,
+    Vertical = 2
 };
 }
 

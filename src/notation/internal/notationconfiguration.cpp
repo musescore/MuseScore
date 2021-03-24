@@ -124,7 +124,7 @@ void NotationConfiguration::init()
         m_foregroundChanged.notify();
     });
 
-    settings()->setDefaultValue(DEFAULT_ZOOM_TYPE, Val(static_cast<int>(ZoomType::Persentage)));
+    settings()->setDefaultValue(DEFAULT_ZOOM_TYPE, Val(static_cast<int>(ZoomType::Percentage)));
     settings()->setDefaultValue(DEFAULT_ZOOM, Val(100));
     settings()->setDefaultValue(KEYBOARD_ZOOM_PRECISION, Val(2));
     settings()->setDefaultValue(MOUSE_ZOOM_PRECISION, Val(6));
@@ -503,6 +503,8 @@ ValCh<Orientation> NotationConfiguration::canvasOrientation() const
 void NotationConfiguration::setCanvasOrientation(Orientation orientation)
 {
     bool isVertical = orientation == Orientation::Vertical;
+    Ms::MScore::setVerticalOrientation(isVertical);
+
     settings()->setValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(isVertical));
 }
 
