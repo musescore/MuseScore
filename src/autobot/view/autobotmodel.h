@@ -34,6 +34,7 @@ class AutobotModel : public QObject, public async::Asyncable
 
     Q_OBJECT
     Q_PROPERTY(QVariantList testCases READ testCases CONSTANT)
+    Q_PROPERTY(QString currentTestCase READ currentTestCase NOTIFY currentTestCaseChanged)
     Q_PROPERTY(AbFilesModel * files READ files CONSTANT)
     Q_PROPERTY(QString status READ status NOTIFY statusChanged)
 
@@ -41,15 +42,18 @@ public:
     explicit AutobotModel(QObject* parent = nullptr);
 
     QVariantList testCases() const;
+    QString currentTestCase() const;
     AbFilesModel* files() const;
     QString status() const;
 
-    Q_INVOKABLE void runAll(const QString& testCaseName);
-    Q_INVOKABLE void runFile(const QString& testCaseName, int fileIndex);
+    Q_INVOKABLE void setCurrentTestCase(const QString& testCaseName);
+    Q_INVOKABLE void runAllFiles();
+    Q_INVOKABLE void runFile(int fileIndex);
     Q_INVOKABLE void stop();
 
 signals:
     void statusChanged();
+    void currentTestCaseChanged();
 
 private:
 

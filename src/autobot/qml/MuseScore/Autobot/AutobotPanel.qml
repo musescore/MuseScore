@@ -17,8 +17,8 @@ Rectangle {
         textRoleName: "name"
         valueRoleName: "name"
 
-        currentIndex: 0
         model: autobot.testCases
+        onValueChanged: autobot.setCurrentTestCase(value)
     }
 
     Row {
@@ -33,7 +33,7 @@ Rectangle {
         FlatButton {
             width: 64
             text: "Run All"
-            onClicked: autobot.runAll(selectTestCase.currentValue)
+            onClicked: autobot.runAllFiles()
         }
 
         FlatButton {
@@ -59,21 +59,43 @@ Rectangle {
         model: autobot.files
 
         delegate: ListItemBlank {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: 32
+            anchors.left: parent ? parent.left : undefined
+            anchors.right: parent ? parent.right : undefined
+            height: 48
             isSelected: isCurrentFile
 
             StyledTextLabel {
-                anchors.fill: parent
+                id: titleLabel
+                anchors.left: parent.left
+                anchors.right: parent.right
                 anchors.leftMargin: 8
                 anchors.rightMargin: 8
+                anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignLeft
                 text: fileTitle
             }
 
+            StyledTextLabel {
+                anchors.top: titleLabel.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.topMargin: 2
+                anchors.leftMargin: 8
+                anchors.rightMargin: 8
+                horizontalAlignment: Text.AlignLeft
+                text: fileStatus
+                color: {
+                    switch (fileStatus) {
+                    case "none":    return "#666666"
+                    case "success": return "#009900"
+                    case "failed":  return "#cc0000"
+                    }
+                    return "#666666"
+                }
+            }
+
             onClicked: {
-                autobot.runFile(selectTestCase.currentValue, fileIndex)
+                autobot.runFile(fileIndex)
             }
         }
     }
