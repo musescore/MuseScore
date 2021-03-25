@@ -23,6 +23,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "shortcutstypes.h"
+#include "async/notification.h"
 
 namespace mu::shortcuts {
 class IShortcutsRegister : MODULE_EXPORT_INTERFACE
@@ -32,6 +33,7 @@ public:
     virtual ~IShortcutsRegister() = default;
 
     virtual const ShortcutList& shortcuts() const = 0;
+    virtual async::Notification shortcutsChanged() const = 0;
     virtual Shortcut shortcut(const std::string& actionCode) const = 0;
     virtual ShortcutList shortcutsForSequence(const std::string& sequence) const = 0;
 };

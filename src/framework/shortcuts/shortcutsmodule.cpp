@@ -37,7 +37,8 @@ using namespace mu::shortcuts;
 using namespace mu::framework;
 using namespace mu::ui;
 
-static ShortcutsRegister* m_shortcutsRegister = new ShortcutsRegister();
+static std::shared_ptr<ShortcutsRegister> s_shortcutsRegister = std::make_shared<ShortcutsRegister>();
+static std::shared_ptr<ShortcutsConfiguration> s_configuration = std::make_shared<ShortcutsConfiguration>();
 
 static void shortcuts_init_qrc()
 {
@@ -51,10 +52,10 @@ std::string ShortcutsModule::moduleName() const
 
 void ShortcutsModule::registerExports()
 {
-    ioc()->registerExport<IShortcutsRegister>(moduleName(), m_shortcutsRegister);
+    ioc()->registerExport<IShortcutsRegister>(moduleName(), s_shortcutsRegister);
     ioc()->registerExport<IShortcutsController>(moduleName(), new ShortcutsController());
     ioc()->registerExport<IMidiRemote>(moduleName(), new MidiRemote());
-    ioc()->registerExport<IShortcutsConfiguration>(moduleName(), new ShortcutsConfiguration());
+    ioc()->registerExport<IShortcutsConfiguration>(moduleName(), s_configuration);
 }
 
 void ShortcutsModule::resolveImports()
@@ -85,5 +86,7 @@ void ShortcutsModule::onInit(const IApplication::RunMode& mode)
     if (mode == IApplication::RunMode::Converter) {
         return;
     }
-    m_shortcutsRegister->load();
+
+    s_configuration->init();
+    s_shortcutsRegister->load();
 }
