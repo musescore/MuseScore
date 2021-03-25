@@ -34,6 +34,7 @@ public:
     Val globalVal(const Key& key) const override;
 
     void addStep(const std::string& name) override;
+    const StepContext& currentStep() const override;
     void setStepVal(const Key& key, const Val& val) override;
     void setStepRet(const Ret& ret) override;
 

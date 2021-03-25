@@ -57,8 +57,9 @@ public:
     virtual void setGlobalVal(const Key& key, const Val& val) = 0;
     virtual Val globalVal(const Key& key) const = 0;
 
-    // work with last step
-    virtual void addStep(const std::string& name) = 0;
+    // work with current (last) step
+    virtual void addStep(const std::string& name) = 0;  // become current
+    virtual const StepContext& currentStep() const = 0; // last step
     virtual void setStepVal(const Key& key, const Val& val) = 0;
     virtual void setStepRet(const Ret& ret) = 0;
 

@@ -175,7 +175,15 @@ void Autobot::runFile(int fileIndex)
 void Autobot::stop()
 {
     m_status.set(Status::Stoped);
+}
+
+void Autobot::doStop()
+{
     m_report.endReport();
+
+    if (m_status.val != Status::Stoped) {
+        m_status.set(Status::Stoped);
+    }
 }
 
 const mu::ValCh<IAutobot::Status>& Autobot::status() const
@@ -205,6 +213,7 @@ void Autobot::nextFile()
     }
 
     if (m_status.val == Status::Stoped) {
+        doStop();
         return;
     }
 
@@ -251,6 +260,6 @@ void Autobot::onFileFinished(const IAbContextPtr& ctx)
             nextFile();
         });
     } else {
-        stop();
+        doStop();
     }
 }

@@ -29,7 +29,7 @@ AbScoreZoom::AbScoreZoom(int percent, Delay delay)
 
 std::string AbScoreZoom::name() const
 {
-    return "Zoom";
+    return std::string("Zoom_") + std::to_string(m_percent);
 }
 
 void AbScoreZoom::doRun(IAbContextPtr ctx)

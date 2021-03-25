@@ -28,7 +28,7 @@
 namespace mu::autobot {
 struct File {
     io::path path;
-    Ret completeRet; // is undefined - then not tested
+    Ret completeRet; // if undefined - means not tested
 };
 
 using Files = std::vector<File>;
