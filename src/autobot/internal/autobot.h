@@ -53,6 +53,7 @@ private:
 
     void nextFile();
     void onFileFinished(const IAbContextPtr& ctx);
+    void doStop();
 
     std::vector<ITestCasePtr> m_testCases;
     ValCh<ITestCasePtr> m_currentTestCase;

@@ -19,8 +19,12 @@
 #ifndef MU_AUTOBOT_ABREPORT_H
 #define MU_AUTOBOT_ABREPORT_H
 
+#include <QFile>
+#include <QTextStream>
+
 #include "modularity/ioc.h"
 #include "../iautobotconfiguration.h"
+#include "system/ifilesystem.h"
 
 #include "../itestcase.h"
 #include "../abtypes.h"
@@ -30,10 +34,12 @@ namespace mu::autobot {
 class AbReport
 {
     INJECT(autobot, IAutobotConfiguration, configuration)
+    INJECT(autobot, system::IFileSystem, fileSystem)
+
 public:
     AbReport() = default;
 
-    void beginReport(const ITestCasePtr& testCase);
+    Ret beginReport(const ITestCasePtr& testCase);
     void endReport();
 
     void beginFile(const File& file);
@@ -41,6 +47,12 @@ public:
 
     void beginStep(const IAbContextPtr& ctx);
     void endStep(const IAbContextPtr& ctx);
+
+private:
+
+    QFile m_file;
+    QTextStream m_stream;
+    bool m_opened = false;
 };
 }
 

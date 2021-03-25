@@ -34,6 +34,16 @@ void AbContext::addStep(const std::string& name)
     m_steps.push_back(std::move(c));
 }
 
+const IAbContext::StepContext& AbContext::currentStep() const
+{
+    if (!m_steps.empty()) {
+        return m_steps.back();
+    }
+
+    static StepContext dummy;
+    return dummy;
+}
+
 const IAbContext::StepContext& AbContext::step(const std::string& name) const
 {
     // search from back to front
