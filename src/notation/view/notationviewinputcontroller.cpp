@@ -242,7 +242,7 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
 
     // Windows touch pad pinches also execute this
     if (keyState & Qt::ControlModifier) {
-        double zoomSpeed = 1.01;
+        double zoomSpeed = qPow(2.0, 1.0 / configuration()->mouseZoomPrecision());
         int absSteps = sqrt(stepsX * stepsX + stepsY * stepsY) * (stepsY > -stepsX ? 1 : -1);
         double zoomAmount = currentZoomPercentage() * qPow(zoomSpeed, absSteps);
         int zoom = absSteps > 0 ? qCeil(zoomAmount) : qFloor(zoomAmount);
