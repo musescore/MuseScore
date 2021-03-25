@@ -36,7 +36,6 @@ const std::shared_ptr<AbPaintProvider>& AbPaintProvider::instance()
 
 void AbPaintProvider::beginTarget(const std::string& name)
 {
-    LOGI() << name;
     BufferedPaintProvider::beginTarget(name);
 }
 

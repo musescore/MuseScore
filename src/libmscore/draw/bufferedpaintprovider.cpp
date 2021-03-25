@@ -19,6 +19,7 @@
 #include "bufferedpaintprovider.h"
 
 #include "log.h"
+#include "config.h"
 
 using namespace mu::draw;
 
@@ -66,15 +67,17 @@ bool BufferedPaintProvider::isActive() const
 
 void BufferedPaintProvider::beginObject(const std::string& name, const QPointF& pagePos)
 {
-    m_drawObjectsLogger.beginObject(name, pagePos);
     // add new object
     m_currentObjects.push(DrawData::Object(name, pagePos));
+
+#ifdef TRACE_DRAW_OBJ_ENABLED
+    m_drawObjectsLogger.beginObject(name, pagePos);
+#endif
 }
 
 void BufferedPaintProvider::endObject()
 {
     TRACEFUNC;
-    m_drawObjectsLogger.endObject();
 
     // remove last empty state
     DrawData::Object& obj = m_currentObjects.top();
@@ -87,6 +90,10 @@ void BufferedPaintProvider::endObject()
 
     // remove obj
     m_currentObjects.pop();
+
+#ifdef TRACE_DRAW_OBJ_ENABLED
+    m_drawObjectsLogger.endObject();
+#endif
 }
 
 const DrawData::Data& BufferedPaintProvider::currentData() const
