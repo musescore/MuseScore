@@ -37,19 +37,26 @@ class AbRunner : public async::Asyncable
 public:
     AbRunner() = default;
 
-    void run(const ITestCasePtr& tc, const AbContext& ctx);
-    async::Channel<AbContext> finished() const;
+    void run(const ITestCasePtr& tc, const IAbContextPtr& ctx);
+
+    async::Channel<IAbContextPtr> stepStarted() const;
+    async::Channel<IAbContextPtr> stepFinished() const;
+
+    async::Channel<IAbContextPtr> allFinished() const;
 
 private:
 
-    void nextStep(const AbContext& ctx);
-    void doFinish(const AbContext& ctx);
+    void nextStep(const IAbContextPtr& ctx);
+    void doFinish(const IAbContextPtr& ctx);
 
     int delayToMSec(ITestStep::Delay d) const;
 
     ITestCasePtr m_testCase;
     int m_stepIndex = -1;
-    async::Channel<AbContext> m_finished;
+
+    async::Channel<IAbContextPtr> m_stepStarted;
+    async::Channel<IAbContextPtr> m_stepFinished;
+    async::Channel<IAbContextPtr> m_allFinished;
 };
 }
 

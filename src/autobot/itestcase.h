@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "iteststep.h"
-#include "autobottypes.h"
 
 namespace mu::autobot {
 class ITestCase

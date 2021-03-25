@@ -34,16 +34,18 @@ set(MODULE_DEF
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/autobotmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/autobotmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/autobottypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/abtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iautobot.h
     ${CMAKE_CURRENT_LIST_DIR}/itestcase.h
     ${CMAKE_CURRENT_LIST_DIR}/iteststep.h
-    ${CMAKE_CURRENT_LIST_DIR}/abcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/iabcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/iautobotconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobot.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobot.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobotconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobotconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/abcontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/abcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abrunner.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/abrunner.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abscorelist.cpp
@@ -54,6 +56,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/abbasestep.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abinvoker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/abinvoker.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/abreport.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/abreport.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/draw/abpaintprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/draw/abpaintprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abscoreloadstep.cpp

@@ -102,11 +102,11 @@ void AbFilesModel::updateFile(const File& f)
 
 QString AbFilesModel::fileStatus(const File& f) const
 {
-    if (!f.ret.valid()) {
+    if (!f.completeRet.valid()) {
         return STATUS_NONE;
     }
 
-    if (f.ret.success()) {
+    if (f.completeRet.success()) {
         return STATUS_SUCCESS;
     }
 

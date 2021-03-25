@@ -30,8 +30,10 @@ class AbScoreCloseStep : public AbBaseStep
 public:
     AbScoreCloseStep(Delay delay = Delay::Fast);
 
+    std::string name() const override;
+
 protected:
-    void doRun(AbContext ctx) override;
+    void doRun(IAbContextPtr ctx) override;
 };
 }
 
