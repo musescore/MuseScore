@@ -25,6 +25,7 @@
 #include "modularity/ioc.h"
 #include "ishortcutsregister.h"
 #include "actions/iactionsregister.h"
+#include "iinteractive.h"
 
 namespace mu::shortcuts {
 class ShortcutsModel : public QAbstractListModel
@@ -33,6 +34,7 @@ class ShortcutsModel : public QAbstractListModel
 
     INJECT(shortcuts, IShortcutsRegister, shortcutsRegister)
     INJECT(shortcuts, actions::IActionsRegister, actionsRegister)
+    INJECT(shortcuts, framework::IInteractive, interactive)
 
 public:
     explicit ShortcutsModel(QObject* parent = nullptr);
@@ -42,6 +44,8 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
+
+    Q_INVOKABLE void editShortcut(int index);
 
 private:
     QString actionTitle(const std::string& actionCode) const;

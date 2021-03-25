@@ -28,12 +28,14 @@
 #include "internal/shortcutscontroller.h"
 #include "internal/midiremote.h"
 #include "internal/shortcutsconfiguration.h"
+#include "ui/iinteractiveuriregister.h"
 #include "view/shortcutsmodel.h"
 
 #include "ui/iuiengine.h"
 
 using namespace mu::shortcuts;
 using namespace mu::framework;
+using namespace mu::ui;
 
 static ShortcutsRegister* m_shortcutsRegister = new ShortcutsRegister();
 
@@ -53,6 +55,16 @@ void ShortcutsModule::registerExports()
     ioc()->registerExport<IShortcutsController>(moduleName(), new ShortcutsController());
     ioc()->registerExport<IMidiRemote>(moduleName(), new MidiRemote());
     ioc()->registerExport<IShortcutsConfiguration>(moduleName(), new ShortcutsConfiguration());
+}
+
+void ShortcutsModule::resolveImports()
+{
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://shortcut/edit"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Shortcuts/EditShortcutDialog.qml"));
+    }
+
 }
 
 void ShortcutsModule::registerResources()

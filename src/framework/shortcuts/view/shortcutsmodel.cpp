@@ -20,6 +20,7 @@
 #include "shortcutsmodel.h"
 
 #include "ui/view/iconcodes.h"
+#include "iinteractive.h"
 
 using namespace mu::shortcuts;
 using namespace mu::actions;
@@ -86,4 +87,10 @@ void ShortcutsModel::load()
     }
 
     endResetModel();
+}
+
+void ShortcutsModel::editShortcut(int index)
+{
+    Q_UNUSED(index);
+    interactive()->open("musescore://shortcut/edit");
 }
