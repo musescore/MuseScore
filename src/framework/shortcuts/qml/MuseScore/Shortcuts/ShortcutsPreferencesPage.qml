@@ -78,6 +78,10 @@ Item {
                     }
                 ]
             }
+
+            onClicked: {
+                shortcutsModel.editShortcut(index)
+            }
         }
 
         RowLayout {
