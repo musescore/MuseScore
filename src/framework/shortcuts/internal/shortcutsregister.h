@@ -22,13 +22,14 @@
 #include "../ishortcutsregister.h"
 #include "modularity/ioc.h"
 #include "ishortcutsconfiguration.h"
+#include "async/asyncable.h"
 
 namespace mu::framework {
 class XmlReader;
 }
 
 namespace mu::shortcuts {
-class ShortcutsRegister : public IShortcutsRegister
+class ShortcutsRegister : public IShortcutsRegister, public async::Asyncable
 {
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
 
@@ -38,6 +39,7 @@ public:
     void load();
 
     const ShortcutList& shortcuts() const override;
+    async::Notification shortcutsChanged() const override;
     Shortcut shortcut(const std::string& actionCode) const override;
     ShortcutList shortcutsForSequence(const std::string& sequence) const override;
 
@@ -48,6 +50,7 @@ private:
     void expandStandardKeys(ShortcutList& shortcuts) const;
 
     ShortcutList m_shortcuts;
+    async::Notification m_shortcutsChanged;
 };
 }
 

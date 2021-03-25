@@ -21,17 +21,24 @@
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
-
 #include "ishortcutsconfiguration.h"
+#include "async/asyncable.h"
 
 namespace mu::shortcuts {
-class ShortcutsConfiguration : public IShortcutsConfiguration
+class ShortcutsConfiguration : public IShortcutsConfiguration, public async::Asyncable
 {
     INJECT(shortcuts, framework::IGlobalConfiguration, globalConfiguration)
 
 public:
-    io::path shortcutsUserPath() const override;
+    void init();
+
+    ValCh<io::path> shortcutsUserPath() const override;
+    void setShortcutsUserPath(const io::path& path) override;
+
     io::path shortcutsDefaultPath() const override;
+
+private:
+    async::Channel<io::path> m_userPathChanged;
 };
 }
 

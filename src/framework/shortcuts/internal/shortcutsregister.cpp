@@ -26,21 +26,26 @@
 
 using namespace mu::shortcuts;
 using namespace mu::framework;
+using namespace mu::async;
 
 void ShortcutsRegister::load()
 {
     m_shortcuts.clear();
 
-    io::path shortcutsPath = configuration()->shortcutsUserPath();
-    bool ok = loadFromFile(m_shortcuts, shortcutsPath);
+    ValCh<io::path> userPath = configuration()->shortcutsUserPath();
+    userPath.ch.onReceive(this, [this](const io::path&) {
+        load();
+    });
+
+    bool ok = loadFromFile(m_shortcuts, userPath.val);
 
     if (!ok) {
-        shortcutsPath = configuration()->shortcutsDefaultPath();
-        ok = loadFromFile(m_shortcuts, shortcutsPath);
+        ok = loadFromFile(m_shortcuts, configuration()->shortcutsDefaultPath());
     }
 
     if (ok) {
         expandStandardKeys(m_shortcuts);
+        m_shortcutsChanged.notify();
     }
 }
 
@@ -142,6 +147,11 @@ Shortcut ShortcutsRegister::readShortcut(framework::XmlReader& reader) const
 const ShortcutList& ShortcutsRegister::shortcuts() const
 {
     return m_shortcuts;
+}
+
+Notification ShortcutsRegister::shortcutsChanged() const
+{
+    return m_shortcutsChanged;
 }
 
 Shortcut ShortcutsRegister::shortcut(const std::string& actionCode) const

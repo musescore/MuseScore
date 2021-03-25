@@ -92,6 +92,10 @@ Item {
                 Layout.preferredWidth: privateProperties.buttonWidth
 
                 text: qsTrc("shortcuts", "Load...")
+
+                onClicked: {
+                    shortcutsModel.selectShortcutsFile()
+                }
             }
 
             FlatButton {

@@ -20,7 +20,7 @@
 #include "shortcutsmodel.h"
 
 #include "ui/view/iconcodes.h"
-#include "iinteractive.h"
+#include "translation.h"
 
 using namespace mu::shortcuts;
 using namespace mu::actions;
@@ -86,7 +86,20 @@ void ShortcutsModel::load()
         m_shortcuts << shortcut;
     }
 
+    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
+        load();
+    });
+
     endResetModel();
+}
+
+void ShortcutsModel::selectShortcutsFile()
+{
+    QString filter = qtrc("shortcuts", "MuseScore Shortcuts File") +  " (*.xml)";
+    io::path selectedPath = interactive()->selectOpeningFile(qtrc("shortcuts", "Load Shortcuts"),
+                                                             configuration()->shortcutsUserPath().val,
+                                                             filter);
+    configuration()->setShortcutsUserPath(selectedPath);
 }
 
 void ShortcutsModel::editShortcut(int index)
