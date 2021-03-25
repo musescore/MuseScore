@@ -16,22 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUTOBOT_ABDRAWCOMPSTEP_H
-#define MU_AUTOBOT_ABDRAWCOMPSTEP_H
+#ifndef MU_AUTOBOT_ABREPORT_H
+#define MU_AUTOBOT_ABREPORT_H
 
-#include "../abbasestep.h"
+#include "modularity/ioc.h"
+#include "../iautobotconfiguration.h"
+
+#include "../itestcase.h"
+#include "../abtypes.h"
+#include "../iabcontext.h"
 
 namespace mu::autobot {
-class AbDrawCompStep : public AbBaseStep
+class AbReport
 {
+    INJECT(autobot, IAutobotConfiguration, configuration)
 public:
-    AbDrawCompStep() = default;
+    AbReport() = default;
 
-    std::string name() const override;
+    void beginReport(const ITestCasePtr& testCase);
+    void endReport();
 
-protected:
-    void doRun(IAbContextPtr ctx) override;
+    void beginFile(const File& file);
+    void endFile(const IAbContextPtr& ctx);
+
+    void beginStep(const IAbContextPtr& ctx);
+    void endStep(const IAbContextPtr& ctx);
 };
 }
 
-#endif // MU_AUTOBOT_ABDRAWCOMPSTEP_H
+#endif // MU_AUTOBOT_ABREPORT_H

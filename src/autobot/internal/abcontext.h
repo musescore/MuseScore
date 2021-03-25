@@ -16,30 +16,38 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUTOBOT_ABSCOREZOOM_H
-#define MU_AUTOBOT_ABSCOREZOOM_H
+#ifndef MU_AUTOBOT_ABCONTEXT_H
+#define MU_AUTOBOT_ABCONTEXT_H
 
-#include "../abbasestep.h"
-
-#include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
+#include "../iabcontext.h"
 
 namespace mu::autobot {
-class AbScoreZoom : public AbBaseStep
+struct AbContext : public IAbContext
 {
-    INJECT(autobot, actions::IActionsDispatcher, dispatcher)
 public:
-    AbScoreZoom(int percent, ITestStep::Delay delay = ITestStep::Delay::Fast);
+    AbContext() = default;
 
-    std::string name() const override;
+    const std::vector<StepContext>& steps() const override;
+    const StepContext& step(const std::string& name) const override;
 
-protected:
-    void doRun(IAbContextPtr ctx) override;
+    void setGlobalVal(const Key& key, const Val& val) override;
+    Val globalVal(const Key& key) const override;
+
+    void addStep(const std::string& name) override;
+    void setStepVal(const Key& key, const Val& val) override;
+    void setStepRet(const Ret& ret) override;
+
+    Val stepVal(const std::string& stepName, const Key& key) const override;
+    Ret stepRet(const std::string& stepName) const override;
+
+    Val findVal(const Key& key) const override;
+
+    Ret completeRet() const override;
 
 private:
 
-    int m_percent = 100;
+    std::map<Key, Val > m_globalVals;
+    std::vector<StepContext> m_steps;
 };
 }
-
-#endif // MU_AUTOBOT_ABSCOREZOOM_H
+#endif // MU_AUTOBOT_ABCONTEXT_H

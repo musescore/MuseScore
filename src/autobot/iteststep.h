@@ -21,7 +21,7 @@
 
 #include <memory>
 #include "async/channel.h"
-#include "abcontext.h"
+#include "iabcontext.h"
 
 namespace mu::autobot {
 class ITestStep
@@ -35,9 +35,10 @@ public:
         Long
     };
 
+    virtual std::string name() const = 0;
     virtual Delay delay() const = 0;
-    virtual void make(const AbContext& ctx) = 0;
-    virtual async::Channel<AbContext> finished() const = 0;
+    virtual void make(const IAbContextPtr& ctx) = 0;
+    virtual async::Channel<IAbContextPtr> finished() const = 0;
 };
 
 using ITestStepPtr = std::shared_ptr<ITestStep>;

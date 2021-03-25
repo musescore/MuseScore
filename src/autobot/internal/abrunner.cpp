@@ -24,7 +24,7 @@
 
 using namespace mu::autobot;
 
-void AbRunner::run(const ITestCasePtr& tc, const AbContext& ctx)
+void AbRunner::run(const ITestCasePtr& tc, const IAbContextPtr& ctx)
 {
     IF_ASSERT_FAILED(tc) {
         return;
@@ -35,7 +35,8 @@ void AbRunner::run(const ITestCasePtr& tc, const AbContext& ctx)
 
     auto steps = m_testCase->steps();
     for (ITestStepPtr& step : steps) {
-        step->finished().onReceive(this, [this](const AbContext& ctx) {
+        step->finished().onReceive(this, [this](const IAbContextPtr& ctx) {
+            m_stepFinished.send(ctx);
             nextStep(ctx);
         });
     }
@@ -53,7 +54,7 @@ int AbRunner::delayToMSec(ITestStep::Delay d) const
     return 10;
 }
 
-void AbRunner::nextStep(const AbContext& ctx)
+void AbRunner::nextStep(const IAbContextPtr& ctx)
 {
     m_stepIndex += 1;
     if (size_t(m_stepIndex) >= m_testCase->steps().size()) {
@@ -62,25 +63,33 @@ void AbRunner::nextStep(const AbContext& ctx)
     }
 
     const ITestStepPtr& step = m_testCase->steps().at(m_stepIndex);
-    step->finished().onReceive(this, [this, step](const AbContext& ctx) {
-        nextStep(ctx);
-    });
-
     QTimer::singleShot(delayToMSec(step->delay()), [this, step, ctx]() {
+        ctx->addStep(step->name());
+        m_stepStarted.send(ctx);
         step->make(ctx);
     });
 }
 
-void AbRunner::doFinish(const AbContext& ctx)
+void AbRunner::doFinish(const IAbContextPtr& ctx)
 {
     auto steps = m_testCase->steps();
     for (ITestStepPtr& step : steps) {
         step->finished().resetOnReceive(this);
     }
-    m_finished.send(ctx);
+    m_allFinished.send(ctx);
 }
 
-mu::async::Channel<AbContext> AbRunner::finished() const
+mu::async::Channel<IAbContextPtr> AbRunner::stepStarted() const
 {
-    return m_finished;
+    return m_stepStarted;
+}
+
+mu::async::Channel<IAbContextPtr> AbRunner::stepFinished() const
+{
+    return m_stepFinished;
+}
+
+mu::async::Channel<IAbContextPtr> AbRunner::allFinished() const
+{
+    return m_allFinished;
 }

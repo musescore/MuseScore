@@ -33,8 +33,10 @@ class AbDrawRefStep : public AbBaseStep
 public:
     AbDrawRefStep() = default;
 
+    std::string name() const override;
+
 protected:
-    void doRun(AbContext ctx) override;
+    void doRun(IAbContextPtr ctx) override;
 };
 }
 

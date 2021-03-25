@@ -16,8 +16,8 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUTOBOT_AUTOBOTTYPES_H
-#define MU_AUTOBOT_AUTOBOTTYPES_H
+#ifndef MU_AUTOBOT_ABTYPES_H
+#define MU_AUTOBOT_ABTYPES_H
 
 #include <string>
 #include <vector>
@@ -28,7 +28,7 @@
 namespace mu::autobot {
 struct File {
     io::path path;
-    Ret ret;
+    Ret completeRet; // is undefined - then not tested
 };
 
 using Files = std::vector<File>;

@@ -36,3 +36,8 @@ mu::io::path AutobotConfiguration::scoreDrawData(const io::path& scorePath) cons
 {
     return drawDataPath() + "/" + io::basename(scorePath) + ".json";
 }
+
+mu::io::path AutobotConfiguration::reportsPath() const
+{
+    return dataPath() + "/reports";
+}
