@@ -57,10 +57,12 @@ void GlobalContext::setCurrentMasterNotation(const IMasterNotationPtr& masterNot
     }
 
     m_currentMasterNotation = masterNotation;
-    m_currentMasterNotationChanged.notify();
 
     INotationPtr notation = masterNotation ? masterNotation->notation() : nullptr;
-    setCurrentNotation(notation);
+    doSetCurrentNotation(notation);
+
+    m_currentMasterNotationChanged.notify();
+    m_currentNotationChanged.notify();
 }
 
 IMasterNotationPtr GlobalContext::currentMasterNotation() const
@@ -75,16 +77,7 @@ Notification GlobalContext::currentMasterNotationChanged() const
 
 void GlobalContext::setCurrentNotation(const INotationPtr& notation)
 {
-    if (m_currentNotation == notation) {
-        return;
-    }
-
-    m_currentNotation = notation;
-
-    if (m_currentNotation) {
-        m_currentNotation->setOpened(true);
-    }
-
+    doSetCurrentNotation(notation);
     m_currentNotationChanged.notify();
 }
 
@@ -106,4 +99,17 @@ ShortcutContext GlobalContext::currentShortcutContext() const
         return ShortcutContext::NotationActive;
     }
     return ShortcutContext::Undefined;
+}
+
+void GlobalContext::doSetCurrentNotation(const INotationPtr& notation)
+{
+    if (m_currentNotation == notation) {
+        return;
+    }
+
+    m_currentNotation = notation;
+
+    if (m_currentNotation) {
+        m_currentNotation->setOpened(true);
+    }
 }
