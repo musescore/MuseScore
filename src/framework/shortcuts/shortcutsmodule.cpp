@@ -30,6 +30,7 @@
 #include "internal/shortcutsconfiguration.h"
 #include "ui/iinteractiveuriregister.h"
 #include "view/shortcutsmodel.h"
+#include "view/editshortcutmodel.h"
 
 #include "ui/iuiengine.h"
 
@@ -77,6 +78,7 @@ void ShortcutsModule::registerUiTypes()
 {
     qmlRegisterType<ShortcutsInstanceModel>("MuseScore.Shortcuts", 1, 0, "ShortcutsInstanceModel");
     qmlRegisterType<ShortcutsModel>("MuseScore.Shortcuts", 1, 0, "ShortcutsModel");
+    qmlRegisterType<EditShortcutModel>("MuseScore.Shortcuts", 1, 0, "EditShortcutModel");
 
     framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(shortcuts_QML_IMPORT);
 }

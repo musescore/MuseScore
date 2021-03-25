@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.12
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Shortcuts 1.0
 
 QmlDialog {
     id: root
@@ -12,10 +13,20 @@ QmlDialog {
 
     title: qsTrc("shortcuts", "Enter Shortcut Sequence")
 
+    property string sequence: ""
+
     Rectangle {
         anchors.fill: parent
 
         color: ui.theme.backgroundPrimaryColor
+
+        EditShortcutModel {
+            id: model
+        }
+
+        Component.onCompleted: {
+            model.load(root.sequence)
+        }
 
         Column {
             spacing: 30
@@ -49,6 +60,9 @@ QmlDialog {
 
                     TextInputField {
                         Layout.fillWidth: true
+
+                        enabled: false
+                        currentText: model.originSequence
                     }
                 }
 
@@ -65,9 +79,17 @@ QmlDialog {
                     }
 
                     TextInputField {
+                        id: newSequenceField
+
                         Layout.fillWidth: true
 
                         hint: qsTrc("shortcuts", "Type to set shortcut")
+                        readOnly: true
+                        currentText: model.inputedSequence
+
+                        Keys.onPressed: {
+                            model.handleKey(event.key, event.modifiers)
+                        }
                     }
                 }
             }
@@ -82,6 +104,10 @@ QmlDialog {
                     width: parent.buttonWidth
 
                     text: qsTrc("global", "Clear")
+
+                    onClicked: {
+                        newSequenceField.clear()
+                    }
                 }
 
                 Item { Layout.fillWidth: true }
@@ -90,12 +116,24 @@ QmlDialog {
                     width: parent.buttonWidth
 
                     text: qsTrc("global", "Add")
+                    enabled: newSequenceField.hasText
+
+                    onClicked: {
+                        root.ret = { errcode: 0, value: model.unitedSequence() }
+                        root.hide()
+                    }
                 }
 
                 FlatButton {
                     width: parent.buttonWidth
 
                     text: qsTrc("global", "Replace")
+                    enabled: newSequenceField.hasText
+
+                    onClicked: {
+                        root.ret = { errcode: 0, value: model.inputedSequence }
+                        root.hide()
+                    }
                 }
 
                 FlatButton {

@@ -21,6 +21,7 @@
 
 #include "ui/view/iconcodes.h"
 #include "translation.h"
+#include "log.h"
 
 using namespace mu::shortcuts;
 using namespace mu::actions;
@@ -83,6 +84,10 @@ void ShortcutsModel::load()
     beginResetModel();
 
     for (const Shortcut& shortcut: shortcutsRegister()->shortcuts()) {
+        if (actionTitle(shortcut.action).isEmpty()) {
+            continue;
+        }
+
         m_shortcuts << shortcut;
     }
 
@@ -104,6 +109,16 @@ void ShortcutsModel::selectShortcutsFile()
 
 void ShortcutsModel::editShortcut(int index)
 {
-    Q_UNUSED(index);
-    interactive()->open("musescore://shortcut/edit");
+    if (index < 0 || index >= m_shortcuts.size()) {
+        return;
+    }
+
+    std::string uri = "musescore://shortcut/edit?sequence=" + m_shortcuts[index].sequence;
+    RetVal<Val> sequence = interactive()->open(uri);
+
+    if (!sequence.ret) {
+        return;
+    }
+
+    LOGD() << sequence.val.toString();
 }
