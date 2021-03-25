@@ -3266,6 +3266,11 @@ void Score::selectRange(Element* e, int staffIdx)
             if (selectedElement && e->type() == selectedElement->type()) {
                   int idx1 = selectedElement->staffIdx();
                   int idx2 = e->staffIdx();
+                  if (idx2 < idx1) {
+                      int temp = idx1;
+                      idx1 = idx2;
+                      idx2 = temp;
+                  }
                   if (idx1 >= 0 && idx2 >= 0) {
                         Fraction t1 = selectedElement->tick();
                         Fraction t2 = e->tick();
