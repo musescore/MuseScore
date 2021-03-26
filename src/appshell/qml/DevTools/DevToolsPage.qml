@@ -45,7 +45,7 @@ DockPage {
                         { "name": "telemetry", "title": "Telemetry" },
                         { "name": "audio", "title": "Audio" },
                         { "name": "synth", "title": "Synth" },
-                        { "name": "midiports", "title": "Midi ports" },
+                        { "name": "midiports", "title": "MIDI ports" },
                         { "name": "vst", "title": "VST" },
                         { "name": "plugins", "title": "Plugins" },
                         { "name": "autobot", "title": "Autobot" }

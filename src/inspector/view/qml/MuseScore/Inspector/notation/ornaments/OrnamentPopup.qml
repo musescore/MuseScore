@@ -86,7 +86,7 @@ StyledPopup {
         FlatButton {
             width: parent.width
 
-            text: qsTrc("inspector", "Channel & Midi properties")
+            text: qsTrc("inspector", "Channel & MIDI properties")
 
             onClicked: {
                 if (root.model) {
