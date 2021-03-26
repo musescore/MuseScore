@@ -20,7 +20,7 @@ Item {
     property string valueTitle: qsTrc("uicomponents", "Value")
     property string valueTypeRole: "valueType"
 
-    signal clicked(int index)
+    signal clicked(var item)
 
     QtObject {
         id: privateProperties
@@ -149,7 +149,7 @@ Item {
             valueItemWidth: privateProperties.valueItemWidth
 
             onClicked: {
-                root.clicked(index)
+                root.clicked(item)
             }
         }
     }

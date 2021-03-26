@@ -83,6 +83,9 @@ void ShortcutsModel::load()
 {
     beginResetModel();
 
+    m_shortcuts.clear();
+    m_editedShortcutIndexes.clear();
+
     for (const Shortcut& shortcut: shortcutsRegister()->shortcuts()) {
         if (actionTitle(shortcut.action).isEmpty()) {
             continue;
@@ -96,6 +99,23 @@ void ShortcutsModel::load()
     });
 
     endResetModel();
+
+    emit shortcutsChanged();
+}
+
+QVariantList ShortcutsModel::shortcuts() const
+{
+    QVariantList result;
+
+    for (const Shortcut& shortcut: m_shortcuts) {
+        QVariantMap obj;
+        obj["title"] = actionTitle(shortcut.action);
+        obj["sequence"] = QString::fromStdString(shortcut.sequence);
+
+        result << obj;
+    }
+
+    return result;
 }
 
 void ShortcutsModel::selectShortcutsFile()
@@ -107,18 +127,16 @@ void ShortcutsModel::selectShortcutsFile()
     configuration()->setShortcutsUserPath(selectedPath);
 }
 
-void ShortcutsModel::editShortcut(int index)
+void ShortcutsModel::applySequence(int shortcutIndex, const QString& newSequence)
 {
-    if (index < 0 || index >= m_shortcuts.size()) {
+    if (shortcutIndex < 0 || shortcutIndex >= m_shortcuts.size()) {
         return;
     }
 
-    std::string uri = "musescore://shortcut/edit?sequence=" + m_shortcuts[index].sequence;
-    RetVal<Val> sequence = interactive()->open(uri);
+    m_shortcuts[shortcutIndex].sequence = newSequence.toStdString();
+    m_editedShortcutIndexes << shortcutIndex;
 
-    if (!sequence.ret) {
-        return;
-    }
-
-    LOGD() << sequence.val.toString();
+    QModelIndex modelIndex = index(shortcutIndex);
+    emit dataChanged(modelIndex, modelIndex);
+    emit shortcutsChanged();
 }

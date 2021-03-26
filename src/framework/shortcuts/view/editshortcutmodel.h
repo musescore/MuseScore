@@ -22,37 +22,47 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
-#include "ishortcutsregister.h"
 
 namespace mu::shortcuts {
 class EditShortcutModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(shortcuts, IShortcutsRegister, shortcutRegister)
-
+    Q_PROPERTY(QVariantList allShortcuts READ allShortcuts WRITE setAllShortcuts NOTIFY allShortcutsChanged)
     Q_PROPERTY(QString originSequence READ originSequence NOTIFY originSequenceChanged)
     Q_PROPERTY(QString inputedSequence READ inputedSequence NOTIFY inputedSequenceChanged)
+    Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY inputedSequenceChanged)
+    Q_PROPERTY(bool canApplySequence READ canApplySequence NOTIFY inputedSequenceChanged)
 
 public:
     explicit EditShortcutModel(QObject* parent = nullptr);
 
+    QVariantList allShortcuts() const;
     QString originSequence() const;
     QString inputedSequence() const;
+    QString errorMessage() const;
+    bool canApplySequence() const;
 
     Q_INVOKABLE void load(const QString& sequence);
-    Q_INVOKABLE void handleKey(int key, Qt::KeyboardModifiers modifiers);
+    Q_INVOKABLE void inputKey(int key, Qt::KeyboardModifiers modifiers);
     Q_INVOKABLE QString unitedSequence() const;
 
+public slots:
+    void setAllShortcuts(const QVariantList& shortcuts);
+
 signals:
+    void allShortcutsChanged(const QVariantList& shortcuts);
     void originSequenceChanged(const QString& sequence);
     void inputedSequenceChanged(const QString& sequence);
 
 private:
     bool needIgnoreKey(int key) const;
+    void validateInputedSequence();
 
-    QKeySequence m_sequence;
+    QVariantList m_allShortcuts;
+    QKeySequence m_inputedSequence;
     QString m_originSequence;
+    QString m_errorMessage;
 };
 }
 

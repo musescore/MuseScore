@@ -23,6 +23,18 @@ Item {
         readonly property int buttonWidth: 105
     }
 
+    EditShortcutDialog {
+        id: editShortcutDialog
+
+        property int shortcutIndex: -1
+
+        allShortcuts: shortcutsModel.shortcuts
+
+        onApplySequenceRequested: {
+            shortcutsModel.applySequence(shortcutIndex, newSequence)
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
 
@@ -80,7 +92,8 @@ Item {
             }
 
             onClicked: {
-                shortcutsModel.editShortcut(index)
+                editShortcutDialog.shortcutIndex = item.index
+                editShortcutDialog.startEdit(item.sequence)
             }
         }
 
