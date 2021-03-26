@@ -29,6 +29,8 @@
 #include "async/asyncable.h"
 #include "iinteractive.h"
 
+class QItemSelection;
+
 namespace mu::shortcuts {
 class ShortcutsModel : public QAbstractListModel, public async::Asyncable
 {
@@ -53,7 +55,9 @@ public:
     Q_INVOKABLE void load();
 
     Q_INVOKABLE void selectShortcutsFile();
-    Q_INVOKABLE void applySequence(int shortcutIndex, const QString& newSequence);
+
+    Q_INVOKABLE void applySequence(const QModelIndex& shortcutIndex, const QString& newSequence);
+    Q_INVOKABLE void clearSelectedShortcuts(const QItemSelection& selection);
 
 signals:
     void shortcutsChanged();

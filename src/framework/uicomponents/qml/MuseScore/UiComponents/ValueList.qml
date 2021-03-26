@@ -20,7 +20,10 @@ Item {
     property string valueTitle: qsTrc("uicomponents", "Value")
     property string valueTypeRole: "valueType"
 
-    signal clicked(var item)
+    property alias hasSelection: selectionModel.hasSelection
+    readonly property var selection: sortFilterProxyModel.mapSelectionToSource(selectionModel.selection)
+
+    signal doubleClicked(var index, var item)
 
     QtObject {
         id: privateProperties
@@ -37,6 +40,8 @@ Item {
             } else {
                 setSorterEnabled(sorter, false)
             }
+
+            selectionModel.clear()
         }
 
         function setSorterEnabled(sorter, enable) {
@@ -66,6 +71,12 @@ Item {
                 roleName: valueRoleName
             }
         ]
+    }
+
+    ItemMultiSelectionModel {
+        id: selectionModel
+
+        model: sortFilterProxyModel
     }
 
     RowLayout {
@@ -138,10 +149,14 @@ Item {
 
         delegate: ValueListItem {
             item: model
+
+            property var modelIndex: sortFilterProxyModel.index(item.index, 0)
+
             keyRoleName: root.keyRoleName
             valueRoleName: root.valueRoleName
             valueTypeRole: root.valueTypeRole
 
+            isSelected: selectionModel.hasSelection && selectionModel.isSelected(modelIndex)
             readOnly: root.readOnly
 
             spacing: privateProperties.spacing
@@ -149,7 +164,11 @@ Item {
             valueItemWidth: privateProperties.valueItemWidth
 
             onClicked: {
-                root.clicked(item)
+                selectionModel.select(modelIndex)
+            }
+
+            onDoubleClicked: {
+                root.doubleClicked(sortFilterProxyModel.mapToSource(modelIndex), item)
             }
         }
     }

@@ -26,7 +26,7 @@ Item {
     EditShortcutDialog {
         id: editShortcutDialog
 
-        property int shortcutIndex: -1
+        property var shortcutIndex
 
         allShortcuts: shortcutsModel.shortcuts
 
@@ -53,7 +53,12 @@ Item {
             FlatButton {
                 Layout.preferredWidth: privateProperties.buttonWidth
 
+                enabled: view.hasSelection
                 text: qsTrc("shortcuts", "Clear")
+
+                onClicked: {
+                    shortcutsModel.clearSelectedShortcuts(view.selection)
+                }
             }
 
             Item { Layout.fillWidth: true }
@@ -91,8 +96,8 @@ Item {
                 ]
             }
 
-            onClicked: {
-                editShortcutDialog.shortcutIndex = item.index
+            onDoubleClicked: {
+                editShortcutDialog.shortcutIndex = index
                 editShortcutDialog.startEdit(item.sequence)
             }
         }
