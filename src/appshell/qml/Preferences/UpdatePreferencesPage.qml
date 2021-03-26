@@ -20,7 +20,7 @@ Item {
         }
 
         CheckBox {
-            text: qsTrc("appshell", "Check for new version of Musescore")
+            text: qsTrc("appshell", "Check for new version of MuseScore")
 
             visible: updateModel.isAppUpdatable()
             checked: updateModel.needCheckForNewAppVersion
