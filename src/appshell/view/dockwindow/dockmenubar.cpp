@@ -67,7 +67,7 @@ void DockMenuBar::onActionTriggered(QAction* action)
 {
     QVariantMap data = action->data().toMap();
     int actionIndex = actionIndexInGroup(action);
-    emit actionTringgered(data.value("code").toString(), actionIndex);
+    emit actionTriggered(data.value("code").toString(), actionIndex);
 }
 
 void DockMenuBar::updateMenus()
