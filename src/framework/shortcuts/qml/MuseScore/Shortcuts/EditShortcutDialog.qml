@@ -1,35 +1,42 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.12
+import QtQuick.Dialogs 1.3
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Shortcuts 1.0
 
-QmlDialog {
+Dialog {
     id: root
 
-    height: 223
+    property alias allShortcuts: model.allShortcuts
+
+    signal applySequenceRequested(var newSequence)
+
+    function startEdit(sequence) {
+        open()
+        model.load(sequence)
+        newSequenceField.forceActiveFocus()
+    }
+
+    height: 240
     width: 538
 
     title: qsTrc("shortcuts", "Enter Shortcut Sequence")
 
-    property string sequence: ""
+    standardButtons: Dialog.NoButton
+
+    EditShortcutModel {
+        id: model
+    }
 
     Rectangle {
         anchors.fill: parent
 
         color: ui.theme.backgroundPrimaryColor
 
-        EditShortcutModel {
-            id: model
-        }
-
-        Component.onCompleted: {
-            model.load(root.sequence)
-        }
-
         Column {
-            spacing: 30
+            spacing: 20
 
             anchors.fill: parent
             anchors.margins: 16
@@ -45,6 +52,13 @@ QmlDialog {
                 width: parent.width
 
                 spacing: 12
+
+                StyledTextLabel {
+                    width: parent.width
+                    horizontalAlignment: Qt.AlignLeft
+
+                    text: model.errorMessage
+                }
 
                 RowLayout {
                     width: parent.width
@@ -88,7 +102,13 @@ QmlDialog {
                         currentText: model.inputedSequence
 
                         Keys.onPressed: {
-                            model.handleKey(event.key, event.modifiers)
+                            model.inputKey(event.key, event.modifiers)
+                        }
+
+                        onActiveFocusChanged: {
+                            if (!activeFocus) {
+                                forceActiveFocus()
+                            }
                         }
                     }
                 }
@@ -116,11 +136,11 @@ QmlDialog {
                     width: parent.buttonWidth
 
                     text: qsTrc("global", "Add")
-                    enabled: newSequenceField.hasText
+                    enabled: model.canApplySequence
 
                     onClicked: {
-                        root.ret = { errcode: 0, value: model.unitedSequence() }
-                        root.hide()
+                        root.applySequenceRequested(model.unitedSequence())
+                        root.accept()
                     }
                 }
 
@@ -128,11 +148,11 @@ QmlDialog {
                     width: parent.buttonWidth
 
                     text: qsTrc("global", "Replace")
-                    enabled: newSequenceField.hasText
+                    enabled: model.canApplySequence
 
                     onClicked: {
-                        root.ret = { errcode: 0, value: model.inputedSequence }
-                        root.hide()
+                        root.applySequenceRequested(model.inputedSequence)
+                        root.accept()
                     }
                 }
 

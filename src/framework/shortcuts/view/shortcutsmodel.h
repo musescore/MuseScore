@@ -39,6 +39,8 @@ class ShortcutsModel : public QAbstractListModel, public async::Asyncable
     INJECT(shortcuts, framework::IInteractive, interactive)
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
 
+    Q_PROPERTY(QVariantList shortcuts READ shortcuts NOTIFY shortcutsChanged)
+
 public:
     explicit ShortcutsModel(QObject* parent = nullptr);
 
@@ -46,10 +48,15 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    QVariantList shortcuts() const;
+
     Q_INVOKABLE void load();
 
     Q_INVOKABLE void selectShortcutsFile();
-    Q_INVOKABLE void editShortcut(int index);
+    Q_INVOKABLE void applySequence(int shortcutIndex, const QString& newSequence);
+
+signals:
+    void shortcutsChanged();
 
 private:
     QString actionTitle(const std::string& actionCode) const;
@@ -61,6 +68,7 @@ private:
     };
 
     QList<Shortcut> m_shortcuts;
+    QSet<int> m_editedShortcutIndexes;
 };
 }
 

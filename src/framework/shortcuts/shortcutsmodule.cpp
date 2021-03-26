@@ -28,7 +28,6 @@
 #include "internal/shortcutscontroller.h"
 #include "internal/midiremote.h"
 #include "internal/shortcutsconfiguration.h"
-#include "ui/iinteractiveuriregister.h"
 #include "view/shortcutsmodel.h"
 #include "view/editshortcutmodel.h"
 
@@ -59,16 +58,6 @@ void ShortcutsModule::registerExports()
     ioc()->registerExport<IShortcutsConfiguration>(moduleName(), s_configuration);
 }
 
-void ShortcutsModule::resolveImports()
-{
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
-    if (ir) {
-        ir->registerUri(Uri("musescore://shortcut/edit"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Shortcuts/EditShortcutDialog.qml"));
-    }
-
-}
-
 void ShortcutsModule::registerResources()
 {
     shortcuts_init_qrc();
@@ -80,7 +69,7 @@ void ShortcutsModule::registerUiTypes()
     qmlRegisterType<ShortcutsModel>("MuseScore.Shortcuts", 1, 0, "ShortcutsModel");
     qmlRegisterType<EditShortcutModel>("MuseScore.Shortcuts", 1, 0, "EditShortcutModel");
 
-    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(shortcuts_QML_IMPORT);
+    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(shortcuts_QML_IMPORT);
 }
 
 void ShortcutsModule::onInit(const IApplication::RunMode& mode)
