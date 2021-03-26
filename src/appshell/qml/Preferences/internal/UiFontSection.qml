@@ -6,7 +6,7 @@ import MuseScore.UiComponents 1.0
 Column {
     id: root
 
-    property var allFonts: []
+    property alias allFonts: selectFontControl.model
 
     property alias currentFontIndex: selectFontControl.currentIndex
     property alias bodyTextSize: bodyTextSizeControl.currentValue
@@ -44,19 +44,6 @@ Column {
             id: selectFontControl
 
             implicitWidth: 208
-
-            textRoleName: "text"
-            valueRoleName: "value"
-
-            model: {
-                var result = []
-
-                for (var i = 0; i < root.allFonts.length; ++i) {
-                    result.push({"text" : root.allFonts[i], "value" : root.allFonts[i]})
-                }
-
-                return result
-            }
 
             onActivated: {
                 root.fontChangeRequested(index)
