@@ -74,7 +74,9 @@ void DockMenuBar::updateMenus()
 {
     QList<QMenu*> menus;
     for (const QVariant& item: m_items) {
-        menus << makeMenu(item.toMap());
+        QMenu* menu = makeMenu(item.toMap());
+        connect(menu, &QMenu::triggered, this, &DockMenuBar::onActionTriggered);
+        menus << menu;
     }
 
     emit changed(menus);
@@ -100,7 +102,6 @@ QMenu* DockMenuBar::makeMenu(const QVariantMap& menuItem) const
         }
     }
 
-    connect(menu, &QMenu::triggered, this, &DockMenuBar::onActionTriggered);
     return menu;
 }
 
