@@ -18,7 +18,6 @@
 //=============================================================================
 #include "notationconfiguration.h"
 
-#include "libmscore/preferences.h"
 #include "libmscore/mscore.h"
 
 #include "log.h"
@@ -71,6 +70,18 @@ static const Settings::Key ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE(module_name, "io/
 static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name, "score/note/warnPitchRange");
 static const Settings::Key REALTIME_DELAY(module_name, "io/midi/realtimeDelay");
 static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/defaultPlayDuration");
+
+static const Settings::Key VOICE1_COLOR_KEY(module_name, "ui/score/voice1/color");
+static const Settings::Key VOICE2_COLOR_KEY(module_name, "ui/score/voice2/color");
+static const Settings::Key VOICE3_COLOR_KEY(module_name, "ui/score/voice3/color");
+static const Settings::Key VOICE4_COLOR_KEY(module_name, "ui/score/voice4/color");
+
+static std::map<int, Settings::Key> voicesKeys {
+    { 0, VOICE1_COLOR_KEY },
+    { 1, VOICE2_COLOR_KEY },
+    { 2, VOICE3_COLOR_KEY },
+    { 3, VOICE4_COLOR_KEY }
+};
 
 void NotationConfiguration::init()
 {
@@ -133,10 +144,25 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(REALTIME_DELAY, Val(750));
     settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(300));
 
-    fileSystem()->makePath(stylesPath().val);
+    std::vector<std::pair<Settings::Key, QColor> > voicesColors {
+        { VOICE1_COLOR_KEY, QColor(0x0065BF) },
+        { VOICE2_COLOR_KEY, QColor(0x007F00) },
+        { VOICE3_COLOR_KEY, QColor(0xC53F00) },
+        { VOICE4_COLOR_KEY, QColor(0xC31989) }
+    };
 
-    // libmscore
-    preferences().setBackupDirPath(globalConfiguration()->backupPath().toQString());
+    for (int i = 0; i < static_cast<int>(voicesColors.size()); ++i) {
+        Settings::Key key = voicesColors[i].first;
+        QColor color = voicesColors[i].second;
+        settings()->setDefaultValue(key, Val(color));
+        settings()->setCanBeMannualyEdited(key, true);
+        settings()->valueChanged(key).onReceive(nullptr, [this, i](const Val& color) {
+            Ms::MScore::selectColor[i] = color.toQColor();
+            m_selectionColorChanged.send(i);
+        });
+    }
+
+    fileSystem()->makePath(stylesPath().val);
 
     Ms::MScore::warnPitchRange = colorNotesOusideOfUsablePitchRange();
     Ms::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
@@ -258,7 +284,21 @@ QColor NotationConfiguration::selectionColor(int voiceIndex) const
         return QColor();
     }
 
-    return Ms::MScore::selectColor[voiceIndex];
+    return settings()->value(voicesKeys[voiceIndex]).toQColor();
+}
+
+void NotationConfiguration::setSelectionColor(int voiceIndex, const QColor& color)
+{
+    if (!isVoiceIndexValid(voiceIndex)) {
+        return;
+    }
+
+    settings()->setValue(voicesKeys[voiceIndex], Val(color));
+}
+
+async::Channel<int> NotationConfiguration::selctionColorChanged()
+{
+    return m_selectionColorChanged;
 }
 
 int NotationConfiguration::selectionProximity() const

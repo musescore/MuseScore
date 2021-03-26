@@ -117,6 +117,10 @@ Notation::Notation(Ms::Score* score)
         notifyAboutNotationChanged();
     });
 
+    configuration()->selctionColorChanged().onReceive(this, [this](int) {
+        notifyAboutNotationChanged();
+    });
+
     setScore(score);
 }
 
@@ -150,6 +154,10 @@ void Notation::init()
     Ms::ScoreFont* scoreFont = Ms::ScoreFont::fontFactory("Leland");
     Ms::gscore->setScoreFont(scoreFont);
     Ms::gscore->setNoteHeadWidth(scoreFont->width(Ms::SymId::noteheadBlack, Ms::gscore->spatium()) / Ms::SPATIUM20);
+
+    for (int i = 0; i < VOICES; ++i) {
+        Ms::MScore::selectColor[i] = configuration()->selectionColor(i);
+    }
 }
 
 void Notation::setScore(Ms::Score* score)

@@ -34,6 +34,12 @@ static const Settings::Key USE_NOTATION_FOREGROUND_COLOR(MODULE_NAME, "ui/canvas
 
 void PaletteConfiguration::init()
 {
+    settings()->setDefaultValue(PALETTE_SCALE, Val(1.0));
+    settings()->setCanBeMannualyEdited(PALETTE_SCALE, true);
+
+    settings()->setDefaultValue(PALETTE_USE_SINGLE, Val(false));
+    settings()->setCanBeMannualyEdited(PALETTE_USE_SINGLE, true);
+
     settings()->valueChanged(USE_NOTATION_FOREGROUND_COLOR).onReceive(this, [this](const Val&) {
         m_colorsChanged.notify();
     });
@@ -51,18 +57,22 @@ void PaletteConfiguration::init()
 
 double PaletteConfiguration::paletteScaling() const
 {
-    double pref = 1.0;
-    Val val = settings()->value(PALETTE_SCALE);
-    if (!val.isNull()) {
-        pref = val.toDouble();
-    }
+    return settings()->value(PALETTE_SCALE).toDouble();
+}
 
-    return pref;
+void PaletteConfiguration::setPaletteScaling(double scale)
+{
+    settings()->setValue(PALETTE_SCALE, Val(scale));
 }
 
 bool PaletteConfiguration::isSinglePalette() const
 {
     return settings()->value(PALETTE_USE_SINGLE).toBool();
+}
+
+void PaletteConfiguration::setIsSinglePalette(bool isSingle)
+{
+    settings()->setValue(PALETTE_USE_SINGLE, Val(isSingle));
 }
 
 QColor PaletteConfiguration::elementsBackgroundColor() const

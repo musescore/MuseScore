@@ -28,11 +28,15 @@ class GlobalConfiguration : public IGlobalConfiguration
 public:
     GlobalConfiguration() = default;
 
+    void init();
+
     io::path appDirPath() const override;
     io::path sharePath() const override;
     io::path dataPath() const override;
     io::path logsPath() const override;
-    io::path backupPath() const override;
+
+    std::string backupDirName() const override;
+    void setBackupDirName(const std::string& name) override;
 
     bool useFactorySettings() const override;
     bool enableExperimental() const override;
