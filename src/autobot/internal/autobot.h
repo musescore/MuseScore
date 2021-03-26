@@ -24,6 +24,7 @@
 #include "async/asyncable.h"
 
 #include "abrunner.h"
+#include "abreport.h"
 
 namespace mu::autobot {
 class Autobot : public IAutobot, public async::Asyncable
@@ -51,7 +52,8 @@ public:
 private:
 
     void nextFile();
-    void onFileFinished(const AbContext& ctx);
+    void onFileFinished(const IAbContextPtr& ctx);
+    void doStop();
 
     std::vector<ITestCasePtr> m_testCases;
     ValCh<ITestCasePtr> m_currentTestCase;
@@ -63,6 +65,7 @@ private:
 
     ValCh<Status> m_status;
     AbRunner m_runner;
+    AbReport m_report;
 };
 }
 

@@ -22,6 +22,7 @@
 
 #include "log.h"
 
+#include "abcontext.h"
 #include "abscorelist.h"
 #include "typicaltc.h"
 
@@ -89,7 +90,7 @@ void Autobot::setCurrentTestCase(const std::string& name)
     m_currentTestCase.set(testCase(name));
 
     for (File& f : m_files.val) {
-        f.ret = Ret();
+        f.completeRet = Ret();
     }
     m_files.notification.notify();
 }
@@ -103,8 +104,16 @@ void Autobot::init()
 {
     m_status.val = Status::Stoped;
 
-    m_runner.finished().onReceive(this, [this](const AbContext& ctx) {
+    m_runner.allFinished().onReceive(this, [this](const IAbContextPtr& ctx) {
         onFileFinished(ctx);
+    });
+
+    m_runner.stepStarted().onReceive(this, [this](const IAbContextPtr& ctx) {
+        m_report.beginStep(ctx);
+    });
+
+    m_runner.stepFinished().onReceive(this, [this](const IAbContextPtr& ctx) {
+        m_report.endStep(ctx);
     });
 
     m_currentTestCase.set(m_testCases.front());
@@ -139,6 +148,8 @@ void Autobot::runAllFiles()
     m_fileIndex.val = -1;
     m_status.set(Status::RunningAll);
 
+    m_report.beginReport(m_currentTestCase.val);
+
     nextFile();
 }
 
@@ -156,12 +167,23 @@ void Autobot::runFile(int fileIndex)
     m_fileIndex.val = fileIndex - 1;
     m_status.set(Status::RunningFile);
 
+    m_report.beginReport(m_currentTestCase.val);
+
     nextFile();
 }
 
 void Autobot::stop()
 {
     m_status.set(Status::Stoped);
+}
+
+void Autobot::doStop()
+{
+    m_report.endReport();
+
+    if (m_status.val != Status::Stoped) {
+        m_status.set(Status::Stoped);
+    }
 }
 
 const mu::ValCh<IAutobot::Status>& Autobot::status() const
@@ -191,6 +213,7 @@ void Autobot::nextFile()
     }
 
     if (m_status.val == Status::Stoped) {
+        doStop();
         return;
     }
 
@@ -203,28 +226,32 @@ void Autobot::nextFile()
 
     const File& file = m_files.val.at(size_t(m_fileIndex.val));
 
-    AbContext ctx;
-    ctx.setVal<io::path>(AbContext::Key::FilePath, file.path);
-    ctx.setVal<size_t>(AbContext::Key::FileIndex, size_t(m_fileIndex.val));
+    IAbContextPtr ctx = std::make_shared<AbContext>();
+    ctx->setGlobalVal(AbContext::Key::FilePath, file.path);
+    ctx->setGlobalVal(AbContext::Key::FileIndex, size_t(m_fileIndex.val));
 
+    m_report.beginFile(file);
     m_runner.run(m_currentTestCase.val, ctx);
 }
 
-void Autobot::onFileFinished(const AbContext& ctx)
+void Autobot::onFileFinished(const IAbContextPtr& ctx)
 {
-    if (ctx.ret) {
-        LOGI() << "success finished, score: " << ctx.val<io::path>(AbContext::Key::FilePath);
+    Ret completeRet = ctx->completeRet();
+    if (completeRet) {
+        LOGI() << "success finished, score: " << ctx->globalVal<io::path>(IAbContext::Key::FilePath);
     } else {
-        LOGE() << "failed finished, score: " << ctx.val<io::path>(AbContext::Key::FilePath);
+        LOGE() << "failed finished, score: " << ctx->globalVal<io::path>(IAbContext::Key::FilePath);
     }
 
-    size_t fileIndex = ctx.val<size_t>(AbContext::Key::FileIndex);
+    m_report.endFile(ctx);
+
+    size_t fileIndex = ctx->globalVal<size_t>(IAbContext::Key::FileIndex);
     IF_ASSERT_FAILED(fileIndex < m_files.val.size()) {
         return;
     }
 
     File& file = m_files.val.at(fileIndex);
-    file.ret = ctx.ret;
+    file.completeRet = completeRet;
 
     m_fileFinished.send(file);
 
@@ -233,6 +260,6 @@ void Autobot::onFileFinished(const AbContext& ctx)
             nextFile();
         });
     } else {
-        stop();
+        doStop();
     }
 }

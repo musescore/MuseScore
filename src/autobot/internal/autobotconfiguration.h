@@ -31,6 +31,8 @@ public:
     io::path drawDataPath() const override;
 
     io::path scoreDrawData(const io::path& scorePath) const override;
+
+    io::path reportsPath() const override;
 };
 }
 

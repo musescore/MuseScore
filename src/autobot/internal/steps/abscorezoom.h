@@ -31,8 +31,10 @@ class AbScoreZoom : public AbBaseStep
 public:
     AbScoreZoom(int percent, ITestStep::Delay delay = ITestStep::Delay::Fast);
 
+    std::string name() const override;
+
 protected:
-    void doRun(AbContext ctx) override;
+    void doRun(IAbContextPtr ctx) override;
 
 private:
 

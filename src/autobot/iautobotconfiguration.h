@@ -33,6 +33,8 @@ public:
     virtual io::path drawDataPath() const = 0;
 
     virtual io::path scoreDrawData(const io::path& scorePath) const = 0;
+
+    virtual io::path reportsPath() const = 0;
 };
 }
 

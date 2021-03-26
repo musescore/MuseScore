@@ -24,7 +24,7 @@
 #include "modularity/imoduleexport.h"
 #include "retval.h"
 #include "io/path.h"
-#include "autobottypes.h"
+#include "abtypes.h"
 #include "itestcase.h"
 
 namespace mu::autobot {
