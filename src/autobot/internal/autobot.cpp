@@ -23,7 +23,6 @@
 #include "log.h"
 
 #include "abcontext.h"
-#include "abscorelist.h"
 #include "typicaltc.h"
 
 #include "steps/abscoreloadstep.h"
@@ -100,6 +99,16 @@ const mu::ValCh<ITestCasePtr>& Autobot::currentTestCase() const
     return m_currentTestCase;
 }
 
+mu::RetVal<mu::io::paths> Autobot::filesList() const
+{
+    using namespace mu::system;
+
+    io::path filesPath = configuration()->filesPath();
+    LOGI() << "filesPath: " << filesPath;
+    RetVal<io::paths> paths = fileSystem()->scanFiles(filesPath, QStringList(), IFileSystem::ScanMode::OnlyCurrentDir);
+    return paths;
+}
+
 void Autobot::init()
 {
     m_status.val = Status::Stoped;
@@ -118,14 +127,14 @@ void Autobot::init()
 
     m_currentTestCase.set(m_testCases.front());
 
-    RetVal<io::paths> scores = AbScoreList().scoreList();
-    if (!scores.ret) {
-        LOGE() << "failed get score list, err: " << scores.ret.toString();
+    RetVal<io::paths> files = filesList();
+    if (!files.ret) {
+        LOGE() << "failed get score list, err: " << files.ret.toString();
         return;
     }
 
     m_files.val.clear();
-    for (const io::path& p : scores.val) {
+    for (const io::path& p : files.val) {
         File f;
         f.path = p;
         m_files.val.push_back(std::move(f));
@@ -209,6 +218,10 @@ const mu::ValCh<int>& Autobot::currentFileIndex() const
 void Autobot::nextFile()
 {
     IF_ASSERT_FAILED(m_currentTestCase.val) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(!m_files.val.empty()) {
         return;
     }
 

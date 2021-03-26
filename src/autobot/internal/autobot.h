@@ -22,6 +22,9 @@
 #include "../iautobot.h"
 #include "io/path.h"
 #include "async/asyncable.h"
+#include "modularity/ioc.h"
+#include "../iautobotconfiguration.h"
+#include "system/ifilesystem.h"
 
 #include "abrunner.h"
 #include "abreport.h"
@@ -29,6 +32,9 @@
 namespace mu::autobot {
 class Autobot : public IAutobot, public async::Asyncable
 {
+    INJECT(autobot, IAutobotConfiguration, configuration)
+    INJECT(autobot, system::IFileSystem, fileSystem)
+
 public:
     Autobot();
 
@@ -51,6 +57,7 @@ public:
 
 private:
 
+    mu::RetVal<mu::io::paths> filesList() const;
     void nextFile();
     void onFileFinished(const IAbContextPtr& ctx);
     void doStop();

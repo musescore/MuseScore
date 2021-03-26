@@ -27,10 +27,6 @@ set(MODULE_QRC autobot.qrc)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 
-set(MODULE_DEF
-    SCORES_ROOT="${PROJECT_SOURCE_DIR}/vtest/scores"
-)
-
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/autobotmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/autobotmodule.h
@@ -48,8 +44,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/abcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abrunner.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/abrunner.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/abscorelist.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/abscorelist.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/typicaltc.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/typicaltc.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abbasestep.cpp

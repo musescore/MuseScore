@@ -57,6 +57,7 @@
 #cmakedefine BUILD_PALETTE_MODULE
 #cmakedefine BUILD_INSTRUMENTS_MODULE
 #cmakedefine BUILD_INSPECTOR_MODULE
+#cmakedefine BUILD_AUTOBOT_MODULE
 #cmakedefine BUILD_VST
 
 #cmakedefine WIN_SPARKLE_ENABLED
