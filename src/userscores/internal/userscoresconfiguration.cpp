@@ -39,7 +39,7 @@ static const std::string TEMPLATES_PATH("/templates");
 
 void UserScoresConfiguration::init()
 {
-    settings()->setDefaultValue(USER_TEMPLATES_PATH, Val(globalConfiguration()->sharePath().toStdString() + "Templates"));
+    settings()->setDefaultValue(USER_TEMPLATES_PATH, Val(globalConfiguration()->sharePath().toStdString() + "templates"));
     settings()->valueChanged(USER_TEMPLATES_PATH).onReceive(nullptr, [this](const Val& val) {
         m_templatesPathChanged.send(val.toString());
     });

@@ -46,20 +46,12 @@ Column {
 
             RoundedRadioButton {
                 width: parent.width
-                leftPadding: 0
-
-                spacing: 6
 
                 checked: view.currentIndex === model.index
+                text: modelData.title
 
                 onClicked: {
                     root.themeChangeRequested(model.index)
-                }
-
-                StyledTextLabel {
-                    horizontalAlignment: Qt.AlignLeft
-
-                    text: modelData.title
                 }
             }
         }
