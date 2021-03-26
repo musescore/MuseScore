@@ -78,7 +78,7 @@ DockPage {
             case "midiports": currentComp = midiPortsComp; break
             case "vst": currentComp = vstComponent; break
             case "plugins": currentComp = pluginsComp; break
-            case "autobot": api.launcher.open("musescore://autobot/main"); break
+            case "autobot": currentComp = autobotComp; break
             }
         }
 
@@ -149,7 +149,7 @@ DockPage {
     Component {
         id: autobotComp
         Loader {
-            source: "qrc:/qml/DevTools/Autobot/AutobotPanel.qml"
+            source: "qrc:/qml/DevTools/Autobot/AutobotControl.qml"
         }
     }
 }

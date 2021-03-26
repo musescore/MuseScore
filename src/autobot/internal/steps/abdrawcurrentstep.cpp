@@ -60,7 +60,7 @@ void AbDrawCurrentStep::doRun(IAbContextPtr ctx)
     QByteArray data = draw::DrawBufferJson::toJson(buf);
 
     io::path scorePath = ctx->globalVal<io::path>(IAbContext::Key::FilePath);
-    io::path filePath = configuration()->scoreDrawData(scorePath);
+    io::path filePath = configuration()->fileDrawDataPath(scorePath);
     QFile file(filePath.toQString());
     if (!file.open(QIODevice::WriteOnly)) {
         LOGE() << "failed open file to write draw data, path: " << filePath;
