@@ -35,13 +35,13 @@ Rectangle {
             height:  40
             spacing: 8
             FlatButton {
-                text: "Play Sequencer Midi"
+                text: "Play Sequencer MIDI"
                 width: 120
                 onClicked: devtools.playSequencerMidi()
             }
 
             FlatButton {
-                text: "Stop Source Midi"
+                text: "Stop Source MIDI"
                 width: 120
                 onClicked: devtools.stopSequencerMidi()
             }
@@ -53,13 +53,13 @@ Rectangle {
             height:  40
             spacing: 8
             FlatButton {
-                text: "Play Player Midi"
+                text: "Play Player MIDI"
                 width: 120
                 onClicked: devtools.playPlayerMidi()
             }
 
             FlatButton {
-                text: "Stop Player Midi"
+                text: "Stop Player MIDI"
                 width: 120
                 onClicked: devtools.stopPlayerMidi()
             }
