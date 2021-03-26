@@ -23,6 +23,8 @@
 #include "translation.h"
 #include "log.h"
 
+#include <QItemSelection>
+
 using namespace mu::shortcuts;
 using namespace mu::actions;
 using namespace mu::ui;
@@ -127,16 +129,26 @@ void ShortcutsModel::selectShortcutsFile()
     configuration()->setShortcutsUserPath(selectedPath);
 }
 
-void ShortcutsModel::applySequence(int shortcutIndex, const QString& newSequence)
+void ShortcutsModel::applySequence(const QModelIndex& shortcutIndex, const QString& newSequence)
 {
-    if (shortcutIndex < 0 || shortcutIndex >= m_shortcuts.size()) {
+    int row = shortcutIndex.row();
+
+    if (!shortcutIndex.isValid() || row >= m_shortcuts.size()) {
         return;
     }
 
-    m_shortcuts[shortcutIndex].sequence = newSequence.toStdString();
-    m_editedShortcutIndexes << shortcutIndex;
+    m_shortcuts[row].sequence = newSequence.toStdString();
+    m_editedShortcutIndexes << row;
 
-    QModelIndex modelIndex = index(shortcutIndex);
-    emit dataChanged(modelIndex, modelIndex);
+    emit dataChanged(shortcutIndex, shortcutIndex);
     emit shortcutsChanged();
+}
+
+void ShortcutsModel::clearSelectedShortcuts(const QItemSelection& selection)
+{
+    for (const QModelIndex& index : selection.indexes()) {
+        m_shortcuts[index.row()].sequence.clear();
+        m_editedShortcutIndexes << index.row();
+        emit dataChanged(index, index);
+    }
 }
