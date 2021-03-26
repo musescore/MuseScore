@@ -38,7 +38,10 @@ public:
     void init();
 
     double paletteScaling() const override;
+    void setPaletteScaling(double scale) override;
+
     bool isSinglePalette() const override;
+    void setIsSinglePalette(bool isSingle) override;
 
     QColor elementsBackgroundColor() const override;
     QColor elementsColor() const override;

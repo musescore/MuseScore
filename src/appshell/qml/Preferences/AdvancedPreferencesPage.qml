@@ -9,8 +9,6 @@ import MuseScore.Preferences 1.0
 Item {
     id: root
 
-    signal hideRequested()
-
     Component.onCompleted: {
         preferencesModel.load()
     }
