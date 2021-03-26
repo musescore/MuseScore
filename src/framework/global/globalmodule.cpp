@@ -56,8 +56,6 @@ void GlobalModule::registerExports()
 
 void GlobalModule::onInit(const IApplication::RunMode&)
 {
-    s_globalConf->init();
-
     mu::runtime::mainThreadId(); //! NOTE Needs only call
     mu::runtime::setThreadName("main");
 

@@ -117,7 +117,7 @@ Notation::Notation(Ms::Score* score)
         notifyAboutNotationChanged();
     });
 
-    configuration()->selctionColorChanged().onReceive(this, [this](int) {
+    configuration()->selectionColorChanged().onReceive(this, [this](int) {
         notifyAboutNotationChanged();
     });
 

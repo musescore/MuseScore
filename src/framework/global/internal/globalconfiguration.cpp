@@ -23,8 +23,6 @@
 #include <QDir>
 #include <QCoreApplication>
 
-#include "libmscore/preferences.h"
-
 #include "config.h"
 #include "settings.h"
 
@@ -32,12 +30,6 @@ using namespace mu;
 using namespace mu::framework;
 
 static const Settings::Key BACKUP_KEY("global", "application/backup/subfolder");
-
-void GlobalConfiguration::init()
-{
-    settings()->setDefaultValue(BACKUP_KEY, Val(".mscbackup"));
-    settings()->setCanBeMannualyEdited(BACKUP_KEY, true);
-}
 
 io::path GlobalConfiguration::appDirPath() const
 {
@@ -99,17 +91,9 @@ io::path GlobalConfiguration::logsPath() const
     return dataPath() + "/logs";
 }
 
-std::string GlobalConfiguration::backupDirName() const
+io::path GlobalConfiguration::backupPath() const
 {
     return settings()->value(BACKUP_KEY).toString();
-}
-
-void GlobalConfiguration::setBackupDirName(const std::string& name)
-{
-    // libmscore
-    preferences().setBackupDirPath(QString::fromStdString(name));
-
-    settings()->setValue(BACKUP_KEY, Val(name));
 }
 
 bool GlobalConfiguration::useFactorySettings() const
