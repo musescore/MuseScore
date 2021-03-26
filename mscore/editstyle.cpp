@@ -80,7 +80,7 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       fbStyle->addButton(radioFBModern, 0);
       fbStyle->addButton(radioFBHistoric, 1);
 
-      int dta = 1;
+      int dta = 0;
       voltaLineStyle->clear();
       ottavaLineStyle->clear();
       pedalLineStyle->clear();
@@ -449,10 +449,8 @@ EditStyle::EditStyle(Score* s, QWidget* parent)
       accidentalsGroup->setVisible(false); // disable, not yet implemented
 
       musicalSymbolFont->clear();
-      int idx = 0;
       for (auto i : ScoreFont::scoreFonts()) {
             musicalSymbolFont->addItem(i.name(), i.name());
-            ++idx;
             }
 
       static const SymId ids[] = {
@@ -773,7 +771,6 @@ void EditStyle::retranslate()
       int index = 0;
       for (const char* p : lineStyles) {
             QString trs = qApp->translate("EditStyleBase", p);
-            voltaLineStyle->setItemText(index, trs);
             voltaLineStyle->setItemText(index, trs);
             ottavaLineStyle->setItemText(index, trs);
             pedalLineStyle->setItemText(index, trs);
