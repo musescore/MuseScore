@@ -68,7 +68,7 @@ DockWindow {
 
         items: appMenuModel.items
 
-        onActionTringgered: {
+        onActionTriggered: {
             appMenuModel.handleAction(actionCode, actionIndex)
         }
     }
