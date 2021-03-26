@@ -116,6 +116,8 @@ QmlDialog {
 
                 model: customiseModel
 
+                maximumFlickVelocity: 1000
+
                 boundsBehavior: Flickable.StopAtBounds
                 clip: true
 
