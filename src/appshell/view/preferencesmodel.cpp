@@ -160,7 +160,7 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("io", qtrc("appshell", "I/O"), IconCode::Code::AUDIO),
         makeItem("import", qtrc("appshell", "Import"), IconCode::Code::IMPORT),
         makeItem("shortcuts", qtrc("appshell", "Shortcuts"), IconCode::Code::SHORTCUTS,
-                 "MuseScore/Shortcuts/ShortcutsPreferencesPage.qml"),
+                 "Preferences/ShortcutsPreferencesPage.qml"),
         makeItem("update", qtrc("appshell", "Update"), IconCode::Code::UPDATE,
                  "Preferences/UpdatePreferencesPage.qml"),
         makeItem("advanced", qtrc("appshell", "Advanced"), IconCode::Code::CONFIGURE,
