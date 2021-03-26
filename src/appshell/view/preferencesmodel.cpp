@@ -160,7 +160,8 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("shortcuts", qtrc("appshell", "Shortcuts"), IconCode::Code::SHORTCUTS),
         makeItem("update", qtrc("appshell", "Update"), IconCode::Code::UPDATE,
                  "Preferences/UpdatePreferencesPage.qml"),
-        makeItem("advanced", qtrc("appshell", "Advanced"), IconCode::Code::CONFIGURE)
+        makeItem("advanced", qtrc("appshell", "Advanced"), IconCode::Code::CONFIGURE,
+                 "Preferences/AdvancedPreferencesPage.qml")
     };
 
     for (PreferencePageItem* item: items) {

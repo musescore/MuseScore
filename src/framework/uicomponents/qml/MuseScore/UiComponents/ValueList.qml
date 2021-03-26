@@ -18,6 +18,7 @@ Item {
     property string keyTitle: qsTrc("uicomponents", "Key")
     property string valueRoleName: "value"
     property string valueTitle: qsTrc("uicomponents", "Value")
+    property string valueTypeRole: "valueType"
 
     signal clicked(int index)
 
@@ -139,6 +140,7 @@ Item {
             item: model
             keyRoleName: root.keyRoleName
             valueRoleName: root.valueRoleName
+            valueTypeRole: root.valueTypeRole
 
             readOnly: root.readOnly
 

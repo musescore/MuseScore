@@ -11,6 +11,7 @@ ListItemBlank {
     property var item: null
     property string keyRoleName: "key"
     property string valueRoleName: "value"
+    property string valueTypeRole: "valueType"
 
     property bool readOnly: false
 
@@ -41,7 +42,7 @@ ListItemBlank {
         }
 
         function isNumberComponent() {
-            return item.valueType === "Int" || type.valueType === "Double"
+            return item.valueType === "Int" || item.valueType === "Double"
         }
     }
 
@@ -71,7 +72,7 @@ ListItemBlank {
             Layout.preferredWidth: root.valueItemWidth
             Layout.rightMargin: root.sideMargin
 
-            sourceComponent: !root.readOnly ? privateProperties.componentByType(root.item.valueType) : readOnlyComponent
+            sourceComponent: !root.readOnly ? privateProperties.componentByType(root.item[valueTypeRole]) : readOnlyComponent
 
             onLoaded: {
                 loader.item.val = loader.val
