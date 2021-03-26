@@ -290,6 +290,7 @@ void DockWindow::onMenusChanged(const QList<QMenu*>& menus)
     menuBar->clear();
 
     for (QMenu* menu: menus) {
+        menu->setParent(menuBar);
         menuBar->addMenu(menu);
     }
 
@@ -419,6 +420,7 @@ void DockWindow::setMenuBar(DockMenuBar* menuBar)
     m_menuBar = menuBar;
 
     connect(menuBar, &DockMenuBar::changed, this, &DockWindow::onMenusChanged);
+    connect(m_window->menuBar(), &QMenuBar::triggered, menuBar, &DockMenuBar::onActionTriggered);
 
     emit menuBarChanged(m_menuBar);
 }
