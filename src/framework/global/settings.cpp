@@ -165,6 +165,18 @@ void Settings::setDefaultValue(const Key& key, const Val& value)
         m_items[key] = Item{ key, value, value };
     } else {
         item.defaultValue = value;
+        item.value.setType(value.type());
+    }
+}
+
+void Settings::setCanBeMannualyEdited(const Settings::Key& key, bool canBeMannualyEdited)
+{
+    Item& item = findItem(key);
+
+    if (item.isNull()) {
+        m_items[key] = Item{ key, Val(), Val(), canBeMannualyEdited };
+    } else {
+        item.canBeMannualyEdited = canBeMannualyEdited;
     }
 }
 

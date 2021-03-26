@@ -56,6 +56,7 @@ public:
         Key key;
         Val value;
         Val defaultValue;
+        bool canBeMannualyEdited = false;
 
         bool isNull() const { return key.isNull(); }
     };
@@ -74,6 +75,7 @@ public:
 
     void setValue(const Key& key, const Val& value);
     void setDefaultValue(const Key& key, const Val& value);
+    void setCanBeMannualyEdited(const Settings::Key& key, bool canBeMannualyEdited);
 
     async::Channel<Val> valueChanged(const Key& key) const;
 
