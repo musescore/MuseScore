@@ -16,22 +16,22 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUTOBOT_ABDRAWCOMPSTEP_H
-#define MU_AUTOBOT_ABDRAWCOMPSTEP_H
+#ifndef MU_AUTOBOT_ABTYPES_H
+#define MU_AUTOBOT_ABTYPES_H
 
-#include "../abbasestep.h"
+#include <string>
+#include <vector>
+
+#include "io/path.h"
+#include "iteststep.h"
 
 namespace mu::autobot {
-class AbDrawCompStep : public AbBaseStep
-{
-public:
-    AbDrawCompStep() = default;
-
-    std::string name() const override;
-
-protected:
-    void doRun(IAbContextPtr ctx) override;
+struct File {
+    io::path path;
+    Ret completeRet; // if undefined - means not tested
 };
+
+using Files = std::vector<File>;
 }
 
-#endif // MU_AUTOBOT_ABDRAWCOMPSTEP_H
+#endif // MU_AUTOBOT_AUTOBOTTYPES_H

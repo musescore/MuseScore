@@ -30,17 +30,18 @@ ITestStep::Delay AbBaseStep::delay() const
     return m_delay;
 }
 
-void AbBaseStep::make(const AbContext& ctx)
+void AbBaseStep::make(const IAbContextPtr& ctx)
 {
     doRun(ctx);
 }
 
-void AbBaseStep::doFinish(const AbContext& ctx)
+void AbBaseStep::doFinish(IAbContextPtr ctx, const Ret& ret)
 {
+    ctx->setStepRet(ret);
     m_finished.send(ctx);
 }
 
-mu::async::Channel<AbContext> AbBaseStep::finished() const
+mu::async::Channel<IAbContextPtr> AbBaseStep::finished() const
 {
     return m_finished;
 }

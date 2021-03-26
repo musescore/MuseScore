@@ -27,10 +27,14 @@ AbScoreZoom::AbScoreZoom(int percent, Delay delay)
 {
 }
 
-void AbScoreZoom::doRun(AbContext ctx)
+std::string AbScoreZoom::name() const
+{
+    return std::string("Zoom_") + std::to_string(m_percent);
+}
+
+void AbScoreZoom::doRun(IAbContextPtr ctx)
 {
     dispatcher()->dispatch("zoom-x-percent", ActionData::make_arg1<int>(m_percent));
-    ctx.setVal<int>(AbContext::Key::ViewZoom, m_percent);
-    ctx.ret = make_ret(Ret::Code::Ok);
-    doFinish(ctx);
+    ctx->setStepVal(IAbContext::Key::ViewZoom, m_percent);
+    doFinish(ctx, make_ret(Ret::Code::Ok));
 }

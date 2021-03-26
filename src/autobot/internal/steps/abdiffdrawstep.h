@@ -31,8 +31,10 @@ class AbDiffDrawStep : public AbBaseStep
 public:
     AbDiffDrawStep() = default;
 
+    std::string name() const override;
+
 protected:
-    void doRun(AbContext ctx) override;
+    void doRun(IAbContextPtr ctx) override;
 };
 }
 

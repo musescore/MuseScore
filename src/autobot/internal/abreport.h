@@ -16,22 +16,44 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_AUTOBOT_AUTOBOTTYPES_H
-#define MU_AUTOBOT_AUTOBOTTYPES_H
+#ifndef MU_AUTOBOT_ABREPORT_H
+#define MU_AUTOBOT_ABREPORT_H
 
-#include <string>
-#include <vector>
+#include <QFile>
+#include <QTextStream>
 
-#include "io/path.h"
-#include "iteststep.h"
+#include "modularity/ioc.h"
+#include "../iautobotconfiguration.h"
+#include "system/ifilesystem.h"
+
+#include "../itestcase.h"
+#include "../abtypes.h"
+#include "../iabcontext.h"
 
 namespace mu::autobot {
-struct File {
-    io::path path;
-    Ret ret;
-};
+class AbReport
+{
+    INJECT(autobot, IAutobotConfiguration, configuration)
+    INJECT(autobot, system::IFileSystem, fileSystem)
 
-using Files = std::vector<File>;
+public:
+    AbReport() = default;
+
+    Ret beginReport(const ITestCasePtr& testCase);
+    void endReport();
+
+    void beginFile(const File& file);
+    void endFile(const IAbContextPtr& ctx);
+
+    void beginStep(const IAbContextPtr& ctx);
+    void endStep(const IAbContextPtr& ctx);
+
+private:
+
+    QFile m_file;
+    QTextStream m_stream;
+    bool m_opened = false;
+};
 }
 
-#endif // MU_AUTOBOT_AUTOBOTTYPES_H
+#endif // MU_AUTOBOT_ABREPORT_H

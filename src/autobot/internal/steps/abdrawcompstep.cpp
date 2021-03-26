@@ -25,26 +25,31 @@
 
 using namespace mu::autobot;
 
-void AbDrawCompStep::doRun(AbContext ctx)
+std::string AbDrawCompStep::name() const
 {
-    draw::DrawDataPtr curBuf = ctx.val<draw::DrawDataPtr>(AbContext::Key::CurDrawData);
+    return "DrawComp";
+}
+
+void AbDrawCompStep::doRun(IAbContextPtr ctx)
+{
+    draw::DrawDataPtr curBuf = ctx->findVal<draw::DrawDataPtr>(IAbContext::Key::CurDrawData);
     if (!curBuf) {
         LOGW() << "not set current draw buffer";
-        doFinish(ctx);
+        doFinish(ctx, make_ret(Ret::Code::UnknownError)); //! TODO add specific error code
         return;
     }
 
-    draw::DrawDataPtr refBuf = ctx.val<draw::DrawDataPtr>(AbContext::Key::RefDrawData);
+    draw::DrawDataPtr refBuf = ctx->findVal<draw::DrawDataPtr>(IAbContext::Key::RefDrawData);
     if (!refBuf) {
         LOGW() << "not set reference draw buffer";
-        doFinish(ctx);
+        doFinish(ctx, make_ret(Ret::Code::UnknownError)); //! TODO add specific error code
         return;
     }
 
     draw::DrawComp::Tolerance tolerance;
     tolerance.base = 0.01;
     draw::Diff diff = draw::DrawComp::compare(curBuf, refBuf, tolerance);
-    ctx.setVal<draw::Diff>(AbContext::Key::DiffDrawData, diff);
+    ctx->setStepVal(IAbContext::Key::DiffDrawData, diff);
 
     if (diff.empty()) {
         LOGI() << "draw data equals";
@@ -54,5 +59,5 @@ void AbDrawCompStep::doRun(AbContext ctx)
                << ", removed objects: " << diff.dataRemoved->objects.size();
     }
 
-    doFinish(ctx);
+    doFinish(ctx, make_ret(Ret::Code::Ok));
 }
