@@ -34,7 +34,7 @@ Rectangle {
 
         itemDelegate: FlatButton {
             property var item: Boolean(itemModel) ? itemModel : null
-            property var hasSubitems: item.subitemsRole.length !== 0
+            property var hasSubitems: Boolean(item) && item.subitemsRole.length !== 0
 
             normalStateColor: Boolean(item) && item.checkedRole ? ui.theme.accentColor : "transparent"
 
@@ -68,7 +68,7 @@ Rectangle {
             StyledMenu {
                 id: menu
 
-                model: item.subitemsRole
+                model: Boolean(item) ? item.subitemsRole : null
 
                 onHandleAction: {
                     Qt.callLater(noteInputModel.handleAction, actionCode, actionIndex)

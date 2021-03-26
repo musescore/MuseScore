@@ -35,7 +35,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
 
             visible: isSorterEnabled
-            iconCode: sortOrder === Qt.AscendingOrder ? IconCode.SMALL_ARROW_UP : IconCode.SMALL_ARROW_DOWN
+            iconCode: sortOrder === Qt.AscendingOrder ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_UP
 
             opacity: ui.theme.buttonOpacityNormal
         }

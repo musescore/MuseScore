@@ -61,6 +61,7 @@ void AppShellConfiguration::init()
     });
 
     settings()->setDefaultValue(NOTATION_STATUSBAR_VISIBLE_KEY, Val(true));
+    settings()->setCanBeMannualyEdited(NOTATION_STATUSBAR_VISIBLE_KEY, true);
     settings()->valueChanged(NOTATION_STATUSBAR_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
         m_notationStatusBarVisibleChanged.send(isNotationStatusBarVisible().val);
     });
