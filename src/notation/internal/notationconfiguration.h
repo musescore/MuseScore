@@ -74,7 +74,7 @@ public:
 
     QColor selectionColor(int voiceIndex = 0) const override;
     void setSelectionColor(int voiceIndex, const QColor& color) override;
-    async::Channel<int> selctionColorChanged() override;
+    async::Channel<int> selectionColorChanged() override;
 
     QColor layoutBreakColor() const override;
 

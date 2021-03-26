@@ -34,9 +34,7 @@ public:
     virtual io::path sharePath() const = 0;
     virtual io::path dataPath() const = 0;
     virtual io::path logsPath() const = 0;
-
-    virtual std::string backupDirName() const = 0;
-    virtual void setBackupDirName(const std::string& name) = 0;
+    virtual io::path backupPath() const = 0;
 
     virtual bool useFactorySettings() const = 0;
     virtual bool enableExperimental() const = 0;

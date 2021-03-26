@@ -18,6 +18,7 @@
 //=============================================================================
 #include "notationconfiguration.h"
 
+#include "libmscore/preferences.h"
 #include "libmscore/mscore.h"
 
 #include "log.h"
@@ -164,6 +165,9 @@ void NotationConfiguration::init()
 
     fileSystem()->makePath(stylesPath().val);
 
+    // libmscore
+    preferences().setBackupDirPath(globalConfiguration()->backupPath().toQString());
+
     Ms::MScore::warnPitchRange = colorNotesOusideOfUsablePitchRange();
     Ms::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
 }
@@ -296,7 +300,7 @@ void NotationConfiguration::setSelectionColor(int voiceIndex, const QColor& colo
     settings()->setValue(voicesKeys[voiceIndex], Val(color));
 }
 
-async::Channel<int> NotationConfiguration::selctionColorChanged()
+async::Channel<int> NotationConfiguration::selectionColorChanged()
 {
     return m_selectionColorChanged;
 }
