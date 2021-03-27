@@ -34,14 +34,10 @@ class CanvasPreferencesModel : public QObject, public async::Asyncable
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
 
     Q_PROPERTY(QVariantMap defaultZoom READ defaultZoom NOTIFY defaultZoomChanged)
-    Q_PROPERTY(int keyboardZoomPrecision READ keyboardZoomPrecision WRITE setKeyboardZoomPrecision NOTIFY keyboardZoomPrecisionChanged)
     Q_PROPERTY(int mouseZoomPrecision READ mouseZoomPrecision WRITE setMouseZoomPrecision NOTIFY mouseZoomPrecisionChanged)
 
     Q_PROPERTY(int scrollPagesOrientation READ scrollPagesOrientation WRITE setScrollPagesOrientation NOTIFY scrollPagesOrientationChanged)
     Q_PROPERTY(bool limitScrollArea READ limitScrollArea WRITE setLimitScrollArea NOTIFY limitScrollAreaChanged)
-
-    Q_PROPERTY(int selectionProximity READ selectionProximity WRITE setSelectionProximity NOTIFY selectionProximityChanged)
-    Q_PROPERTY(bool antialiasedDrawing READ antialiasedDrawing WRITE setAntialiasedDrawing NOTIFY antialiasedDrawingChanged)
 
 public:
     explicit CanvasPreferencesModel(QObject* parent = nullptr);
@@ -53,33 +49,22 @@ public:
     Q_INVOKABLE void setDefaultZoomType(int zoomType);
     Q_INVOKABLE void setDefaultZoomLevel(int zoom);
 
-    int keyboardZoomPrecision() const;
     int mouseZoomPrecision() const;
 
     int scrollPagesOrientation() const;
     bool limitScrollArea() const;
 
-    int selectionProximity() const;
-    bool antialiasedDrawing() const;
-
 public slots:
-    void setKeyboardZoomPrecision(int precision);
     void setMouseZoomPrecision(int precision);
 
     void setScrollPagesOrientation(int orientation);
     void setLimitScrollArea(bool limit);
 
-    void setSelectionProximity(int proximity);
-    void setAntialiasedDrawing(bool antialiased);
-
 signals:
     void defaultZoomChanged();
-    void keyboardZoomPrecisionChanged();
     void mouseZoomPrecisionChanged();
     void scrollPagesOrientationChanged();
     void limitScrollAreaChanged();
-    void selectionProximityChanged();
-    void antialiasedDrawingChanged();
 
 private:
     void setupConnections();
