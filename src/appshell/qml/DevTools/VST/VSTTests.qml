@@ -18,83 +18,45 @@
 //=============================================================================
 import QtQuick 2.7
 import MuseScore.UiComponents 1.0
-import MuseScore.VST 1.0
+import MuseScore.Vst 1.0
 
 Rectangle {
 
-    color: "#0fb9b1"
+    color: ui.theme.backgroundPrimaryColor
 
-    VSTDevTools {
-        id: devtools
+    VstPluginListModelExample {
+        id: pluginListModel
+
+        Component.onCompleted: {
+            load()
+        }
     }
 
     Column {
-        id: column
-        padding: 5
-        anchors.fill: parent
-        spacing: 2
 
-        Row {
-            id: selector
-            height: 75
-            anchors.right: parent.right
-            anchors.left: parent.left
+        ValueList {
+            width: 560
+            height: 226
 
-            StyledComboBox {
-                id: pluginSelector
-                width: parent.width / 2
+            keyRoleName: "idRole"
+            keyTitle: "id"
+            valueRoleName: "nameRole"
+            valueTitle: "Name"
 
-                valueRoleName: "uid"
-                textRoleName: "name"
+            model: pluginListModel
 
-                model: devtools.plugins
-            }
-
-            FlatButton {
-                text: "Add instance"
-                onClicked: devtools.addInstance(pluginSelector.currentIndex)
+            onClicked: {
+                pluginListModel.selectedItemIndex = index
             }
         }
 
-        Row {
-            id: instances
-            anchors.top: selector.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
+        FlatButton {
+            width: 560
+            height: 80
+            text: "Show editor"
 
-            Column {
-                anchors.fill: parent
-
-                Repeater {
-                    anchors.fill: parent
-                    model: devtools.instances
-                    Row {
-                        height: 50
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-
-                        StyledTextLabel {
-                            id: element
-                            text: modelData.name;
-                            width: parent.width - 240
-                        }
-
-                        FlatButton {
-                            width: 120
-                            text: "edit"
-                            onClicked: devtools.showEditor(index)
-
-                        }
-
-                        FlatButton {
-                            width: 120
-                            text: "play"
-                            onClicked: devtools.play(index)
-                        }
-
-                    }
-                }
+            onClicked: {
+                pluginListModel.showPluginEditor()
             }
         }
     }
