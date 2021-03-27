@@ -70,6 +70,11 @@ class NotationViewInputController : public actions::Actionable, public async::As
 public:
     NotationViewInputController(IControlledView* view);
 
+    void init();
+
+    bool isZoomInited();
+    void initZoom();
+
     void setReadonly(bool readonly);
 
     void wheelEvent(QWheelEvent* event);
@@ -89,7 +94,6 @@ private:
     INotationPtr currentNotation() const;
     INotationStylePtr notationStyle() const;
 
-    void initZoom();
     void zoomIn();
     void zoomOut();
 
@@ -126,6 +130,8 @@ private:
 
     bool m_readonly = false;
     bool m_isCanvasDragged = false;
+
+    bool m_isZoomInited = false;
 };
 }
 

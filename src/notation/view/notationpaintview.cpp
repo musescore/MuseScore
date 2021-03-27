@@ -90,6 +90,8 @@ void NotationPaintView::load()
 
     initBackground();
     initNavigatorOrientation();
+
+    m_inputController->init();
 }
 
 void NotationPaintView::initBackground()
@@ -228,6 +230,10 @@ void NotationPaintView::onViewSizeChanged()
         return;
     }
 
+    if (viewport().isValid() && !m_inputController->isZoomInited()) {
+        m_inputController->initZoom();
+    }
+
     notation()->setViewSize(viewport().size());
 
     emit horizontalScrollChanged();
@@ -335,7 +341,7 @@ void NotationPaintView::showContextMenu(const ElementType& elementType, const QP
 void NotationPaintView::paint(QPainter* qp)
 {
     TRACEFUNC;
-    if (!notation()) {
+    if (!isInited()) {
         return;
     }
 
