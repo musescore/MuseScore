@@ -23,11 +23,15 @@ if (NOT VST3_SDK_PATH)
     message(FATAL_ERROR "VST3_SDK path is not setted")
 endif()
 
+include(GetPlatformInfo)
+
 if (MUSESCORE_BUILD_CONFIG EQUAL "release")
     set(MODULE_DEF -DRELEASE)
 else()
     set(MODULE_DEF -DDEVELOPMENT)
 endif()
+
+set(MODULE_USE_UNITY_NONE ON)
 
 set(MODULE_USE_PCH_NONE ON)
 
@@ -35,6 +39,8 @@ if (OS_IS_WIN)
     set(PLATFORM_SRC
         ${VST3_SDK_PATH}/public.sdk/source/vst/hosting/module_win32.cpp
         ${VST3_SDK_PATH}/public.sdk/source/common/threadchecker_win32.cpp
+        ${VST3_SDK_PATH}/public.sdk/source/common/systemclipboard_win32.cpp
+        ${VST3_SDK_PATH}/public.sdk/source/common/systemclipboard.h
         )
 elseif(OS_IS_LIN)
     set(PLATFORM_SRC
@@ -107,11 +113,7 @@ set(VST_SDK_COMMON_SRC
     ${VST3_SDK_PATH}/public.sdk/source/common/commoniids.cpp
     ${VST3_SDK_PATH}/public.sdk/source/common/openurl.cpp
     ${VST3_SDK_PATH}/public.sdk/source/common/openurl.h
-    ${VST3_SDK_PATH}/public.sdk/source/common/systemclipboard.h
-    ${VST3_SDK_PATH}/public.sdk/source/common/systemclipboard_win32.cpp
     ${VST3_SDK_PATH}/public.sdk/source/common/threadchecker.h
-    ${VST3_SDK_PATH}/public.sdk/source/vst/vstpresetfile.cpp
-    ${VST3_SDK_PATH}/public.sdk/source/vst/vstpresetfile.h
     ${VST3_SDK_PATH}/public.sdk/source/common/pluginview.cpp
     ${VST3_SDK_PATH}/public.sdk/source/common/pluginview.h
     ${VST3_SDK_PATH}/public.sdk/source/main/pluginfactory.cpp

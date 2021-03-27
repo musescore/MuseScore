@@ -50,8 +50,8 @@ SET "QT_DIR=C:\Qt\5.15.1"
 SET "PATH=%QT_DIR%\msvc2019_64\bin;%JACK_DIR%;%PATH%"
 
 :: At the moment not compiling yet.
-SET BUILD_VST=OFF 
-SET VST3_SDK_PATH="C:\vst\VST3_SDK"
+SET BUILD_VST=ON 
+SET VST3_SDK_PATH=C:\vst\VST3_SDK
 
 bash ./build/ci/tools/make_revision_env.sh 
 SET /p MUSESCORE_REVISION=<%ARTIFACTS_DIR%\env\release_channel.env

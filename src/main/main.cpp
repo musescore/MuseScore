@@ -208,6 +208,7 @@ int main(int argc, char** argv)
 #else
     app.addModule(new mu::instruments::InstrumentsStubModule());
 #endif
+
 #ifdef BUILD_VST
     app.addModule(new mu::vst::VSTModule());
 #endif
