@@ -19,8 +19,8 @@ ComboBox {
     function valueFromModel(index, roleName) {
 
         // Simple models (like JS array) with single predefined role name - modelData
-        if (Boolean(model[index])) {
-            if (!Boolean(model[index][roleName])) {
+        if (model[index] !== undefined) {
+            if (model[index][roleName] === undefined) {
                 return model[index]
             }
 
