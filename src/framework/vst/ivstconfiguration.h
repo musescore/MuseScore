@@ -17,19 +17,25 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef VSTCONFIGURATION_H
-#define VSTCONFIGURATION_H
+#ifndef MU_VST_IVSTCONFIGURATION_H
+#define MU_VST_IVSTCONFIGURATION_H
 
-#include "ivstconfiguration.h"
+#include "modularity/imoduleexport.h"
+
+#include "io/path.h"
+#include "vsttypes.h"
 
 namespace mu::vst {
-class VstConfiguration : public IVstConfiguration
-{   
-public:
-    io::path customSearchPath() const override;
+class IVstConfiguration : MODULE_EXPORT_INTERFACE
+{
+    INTERFACE_ID(IVstConfiguration)
 
-    Steinberg::FIDString currentPlatformType() const;
+public:
+    virtual ~IVstConfiguration() = default;
+
+    virtual mu::io::path customSearchPath() const = 0;
+    virtual Steinberg::FIDString currentPlatformType() const = 0;
 };
 }
 
-#endif // VSTCONFIGURATION_H
+#endif // IVSTCONFIGURATION_H
