@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -20,10 +20,9 @@
 #define MU_VST_MODULE_H
 
 #include "modularity/imodulesetup.h"
-#include "internal/vstconfiguration.h"
 
-namespace mu {
-namespace vst {
+namespace mu::vst {
+
 class VSTModule : public framework::IModuleSetup
 {
 public:
@@ -34,10 +33,6 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
-
-private:
-    static VSTConfiguration m_configuration;
 };
-} //vst
-} //mu
+}
 #endif // MU_VST_MODULE_H
