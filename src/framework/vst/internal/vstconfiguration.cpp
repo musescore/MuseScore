@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,28 +16,29 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
+
 #include "vstconfiguration.h"
 #include "settings.h"
 
 using namespace mu::vst;
 using namespace mu::framework;
 
-const Settings::Key VSTConfiguration::SEARCH_PATHS = Settings::Key("vst", "search_path");
+static const Settings::Key CUSTOM_SEARCH_PATH_KEY = Settings::Key("vst", "custom_search_path");
 
-#ifdef Q_OS_MAC
-const std::string VSTConfiguration::DEFAULT_PATHS = "/Library/Audio/Plug-Ins/VST3";
-#elif defined(Q_OS_WIN)
-const std::string VSTConfiguration::DEFAULT_PATHS = "C:\Program Files (x86)\Common Files\VST3";
-#else
-const std::string VSTConfiguration::DEFAULT_PATHS = "";
-#endif
-
-void VSTConfiguration::init()
+mu::io::path VstConfiguration::customSearchPath() const
 {
-    settings()->setDefaultValue(SEARCH_PATHS, Val(VSTConfiguration::DEFAULT_PATHS));
+    return mu::io::path(settings()->value(CUSTOM_SEARCH_PATH_KEY).toString());
 }
 
-std::string VSTConfiguration::searchPaths() const
+Steinberg::FIDString VstConfiguration::currentPlatformType() const
 {
-    return settings()->value(SEARCH_PATHS).toString();
+#ifdef Q_OS_MAC
+    return Steinberg::kPlatformTypeNSView;
+#elif defined(Q_OS_IOS)
+    return Steinberg::kPlatformTypeUIView;
+#elif defined(Q_OS_WIN)
+    return Steinberg::kPlatformTypeHWND;
+#elif defined(Q_OS_LINUX)
+    return Steinberg::kPlatformTypeX11EmbedWindowID;
+#endif
 }
