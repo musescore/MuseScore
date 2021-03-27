@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -20,23 +20,29 @@
 
 #include <QQmlEngine>
 
-#include "settings.h"
-#include "internal/vstscanner.h"
-#include "devtools/vstdevtools.h"
-#include "internal/plugineditorview.h"
-#include "internal/vstinstanceregister.h"
-#include "view/vstinstanceeditormodel.h"
 #include "ui/iinteractiveuriregister.h"
-#include "modularity/ioc.h"
+#include "ui/iuiengine.h"
 #include "log.h"
+#include "settings.h"
+#include "modularity/ioc.h"
+
+#include "internal/vstconfiguration.h"
+#include "internal/vstpluginrepository.h"
+
+#include "devtools/vstpluginlistmodelexample.h"
+#include "view/vstplugineditorview.h"
 
 using namespace mu::vst;
 using namespace mu::framework;
 using namespace mu::ui;
 
-VSTConfiguration VSTModule::m_configuration = VSTConfiguration();
-static std::shared_ptr<VSTScanner> s_vstScanner = std::make_shared<VSTScanner>();
-static std::shared_ptr<VSTInstanceRegister> s_register = std::make_shared<VSTInstanceRegister>();
+static std::shared_ptr<IVstConfiguration> s_configuration = std::make_shared<VstConfiguration>();
+static std::shared_ptr<IVstPluginRepository> s_pluginRepo = std::make_shared<VstPluginRepository>();
+
+static void vst_init_qrc()
+{
+    Q_INIT_RESOURCE(vst);
+}
 
 std::string VSTModule::moduleName() const
 {
@@ -45,8 +51,8 @@ std::string VSTModule::moduleName() const
 
 void VSTModule::registerExports()
 {
-    framework::ioc()->registerExport<VSTScanner>(moduleName(), s_vstScanner);
-    framework::ioc()->registerExport<IVSTInstanceRegister>(moduleName(), s_register);
+    ioc()->registerExport<IVstConfiguration>(moduleName(), s_configuration);
+    ioc()->registerExport<IVstPluginRepository>(moduleName(), s_pluginRepo);
 }
 
 void VSTModule::resolveImports()
@@ -54,13 +60,8 @@ void VSTModule::resolveImports()
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerUri(Uri("musescore://vst/editor"),
-                        ContainerMeta(ContainerType::QWidgetDialog, PluginEditorView::metaTypeId()));
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<VstPluginEditorView>("VstPluginEditorView")));
     }
-}
-
-static void vst_init_qrc()
-{
-    Q_INIT_RESOURCE(vst);
 }
 
 void VSTModule::registerResources()
@@ -70,10 +71,9 @@ void VSTModule::registerResources()
 
 void VSTModule::registerUiTypes()
 {
-    qmlRegisterType<VSTDevTools>("MuseScore.VST", 1, 0, "VSTDevTools");
-    qmlRegisterType<VSTInstanceEditorModel>("MuseScore.VST", 1, 0, "VSTInstanceEditorModel");
-    qmlRegisterType<PluginListModel>("MuseScore.VST", 1, 0, "VSTPluginListModel");
-    qRegisterMetaType<PluginEditorView>("PluginEditorView");
+    qmlRegisterType<VstPluginListModelExample>("MuseScore.Vst", 1, 0, "VstPluginListModelExample");
+
+    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(vst_QML_IMPORT);
 }
 
 void VSTModule::onInit(const IApplication::RunMode& mode)
@@ -82,6 +82,5 @@ void VSTModule::onInit(const IApplication::RunMode& mode)
         return;
     }
 
-    m_configuration.init();
-    s_vstScanner->setPaths(m_configuration.searchPaths());
+    s_pluginRepo->loadAvailablePlugins();
 }
