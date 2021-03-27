@@ -173,6 +173,9 @@ private:
 
     void paintBackground(const QRect& rect, mu::draw::Painter* painter);
 
+    QPoint canvasCenter() const;
+    std::pair<int, int> constraintCanvas(int dx, int dy) const;
+
     notation::INotationPtr m_notation;
     QTransform m_matrix;
     std::unique_ptr<NotationViewInputController> m_inputController;
