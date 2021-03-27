@@ -90,9 +90,6 @@ public:
     ValCh<int> currentZoom() const override;
     void setCurrentZoom(int zoomPercentage) override;
 
-    int keyboardZoomPrecision() const override;
-    void setKeyboardZoomPrecision(int precision) const override;
-
     int mouseZoomPrecision() const override;
     void setMouseZoomPrecision(int precision) override;
 
@@ -142,9 +139,6 @@ public:
 
     int notePlayDurationMilliseconds() const override;
     void setNotePlayDurationMilliseconds(int durationMs) override;
-
-    bool isAntialiasedDrawing() const override;
-    void setIsAntialiasedDrawing(bool antialiased) override;
 
 private:
     std::vector<std::string> parseToolbarActions(const std::string& actions) const;

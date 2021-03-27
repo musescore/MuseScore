@@ -52,7 +52,6 @@ static const Settings::Key FOREGROUND_WALLPAPER_PATH(module_name, "ui/canvas/for
 static const Settings::Key FOREGROUND_USE_COLOR(module_name, "ui/canvas/foreground/useColor");
 
 static const Settings::Key SELECTION_PROXIMITY(module_name, "ui/canvas/misc/selectionProximity");
-static const Settings::Key IS_ANTIALIASED_DRAWING(module_name, "ui/canvas/misc/antialiasedDrawing");
 
 static const Settings::Key DEFAULT_ZOOM_TYPE(module_name, "ui/canvas/zoomDefaultType");
 static const Settings::Key DEFAULT_ZOOM(module_name, "ui/canvas/zoomDefaultLevel");
@@ -156,8 +155,6 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
     settings()->setDefaultValue(REALTIME_DELAY, Val(750));
     settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(300));
-
-    settings()->setDefaultValue(IS_ANTIALIASED_DRAWING, Val(false));
 
     std::vector<std::pair<Settings::Key, QColor> > voicesColors {
         { VOICE1_COLOR_KEY, QColor(0x0065BF) },
@@ -361,16 +358,6 @@ mu::ValCh<int> NotationConfiguration::currentZoom() const
 void NotationConfiguration::setCurrentZoom(int zoomPercentage)
 {
     settings()->setValue(CURRENT_ZOOM, Val(zoomPercentage));
-}
-
-int NotationConfiguration::keyboardZoomPrecision() const
-{
-    return settings()->value(KEYBOARD_ZOOM_PRECISION).toInt();
-}
-
-void NotationConfiguration::setKeyboardZoomPrecision(int precision) const
-{
-    settings()->setValue(KEYBOARD_ZOOM_PRECISION, Val(precision));
 }
 
 int NotationConfiguration::mouseZoomPrecision() const
@@ -581,14 +568,4 @@ void NotationConfiguration::setNotePlayDurationMilliseconds(int durationMs)
 {
     Ms::MScore::defaultPlayDuration = durationMs;
     settings()->setValue(NOTE_DEFAULT_PLAY_DURATION, Val(durationMs));
-}
-
-bool NotationConfiguration::isAntialiasedDrawing() const
-{
-    return settings()->value(IS_ANTIALIASED_DRAWING).toBool();
-}
-
-void NotationConfiguration::setIsAntialiasedDrawing(bool antialiased)
-{
-    settings()->setValue(IS_ANTIALIASED_DRAWING, Val(antialiased));
 }

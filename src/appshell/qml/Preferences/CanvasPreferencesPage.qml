@@ -43,12 +43,12 @@ Item {
             spacing: 18
 
             StyledTextLabel {
-                text: qsTrc("appshell", "Scroll Pages")
+                text: qsTrc("appshell", "Zoom")
                 font: ui.theme.bodyBoldFont
             }
 
             Column {
-                spacing: 12
+                spacing: 8
 
                 Row {
                     spacing: 12
@@ -104,36 +104,6 @@ Item {
                     StyledTextLabel {
                         width: 208
                         anchors.verticalCenter: parent.verticalCenter
-                        text: qsTrc("appshell", "Keyboard zoom precision:")
-                        horizontalAlignment: Text.AlignLeft
-                    }
-
-                    IncrementalPropertyControl {
-                        id: keyboardZoomPrecisionControl
-                        width: 60
-                        iconMode: iconModeEnum.hidden
-                        maxValue: 16
-                        minValue: 1
-                        step: 1
-                        validator: IntInputValidator {
-                            top: keyboardZoomPrecisionControl.maxValue
-                            bottom: keyboardZoomPrecisionControl.minValue
-                        }
-
-                        currentValue: preferencesModel.keyboardZoomPrecision
-
-                        onValueEdited: {
-                            preferencesModel.keyboardZoomPrecision = newValue
-                        }
-                    }
-                }
-
-                Row {
-                    spacing: 12
-
-                    StyledTextLabel {
-                        width: 208
-                        anchors.verticalCenter: parent.verticalCenter
                         text: qsTrc("appshell", "Mouse zoom precision:")
                         horizontalAlignment: Text.AlignLeft
                     }
@@ -173,7 +143,7 @@ Item {
             }
 
             Column {
-                spacing: 12
+                spacing: 16
 
                 RadioButtonGroup {
                     id: radioButtonList
@@ -215,59 +185,6 @@ Item {
 
                     onClicked: {
                         preferencesModel.limitScrollArea = !preferencesModel.limitScrollArea
-                    }
-                }
-            }
-        }
-
-        SeparatorLine { }
-
-        Column {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            spacing: 18
-
-            StyledTextLabel {
-                text: qsTrc("appshell", "Miscellaneous")
-                font: ui.theme.bodyBoldFont
-            }
-
-            Column {
-                spacing: 12
-
-                Row {
-                    spacing: 4
-
-                    StyledTextLabel {
-                        width: 216
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: qsTrc("appshell", "Proximity for selecting elements:")
-                        horizontalAlignment: Text.AlignLeft
-                    }
-
-                    IncrementalPropertyControl {
-                        width: 60
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        minValue: 1
-                        maxValue: 99
-                        iconMode: iconModeEnum.hidden
-                        measureUnitsSymbol: "px"
-
-                        currentValue: preferencesModel.selectionProximity
-
-                        onValueEdited: {
-                            preferencesModel.selectionProximity = newValue
-                        }
-                    }
-                }
-
-                CheckBox {
-                    text: qsTrc("appshell", "Draw antialiased")
-                    checked: preferencesModel.antialiasedDrawing
-
-                    onClicked: {
-                        preferencesModel.antialiasedDrawing = !preferencesModel.antialiasedDrawing
                     }
                 }
             }

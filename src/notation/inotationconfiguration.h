@@ -87,9 +87,6 @@ public:
     virtual ValCh<int> currentZoom() const = 0;
     virtual void setCurrentZoom(int zoomPercentage) = 0;
 
-    virtual int keyboardZoomPrecision() const = 0;
-    virtual void setKeyboardZoomPrecision(int precision) const = 0;
-
     virtual int mouseZoomPrecision() const = 0;
     virtual void setMouseZoomPrecision(int precision) = 0;
 
@@ -139,9 +136,6 @@ public:
 
     virtual int notePlayDurationMilliseconds() const = 0;
     virtual void setNotePlayDurationMilliseconds(int durationMs) = 0;
-
-    virtual bool isAntialiasedDrawing() const = 0;
-    virtual void setIsAntialiasedDrawing(bool antialiased) = 0;
 };
 }
 

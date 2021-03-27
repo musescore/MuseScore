@@ -57,11 +57,6 @@ QVariantMap CanvasPreferencesModel::defaultZoom() const
     return zoom;
 }
 
-int CanvasPreferencesModel::keyboardZoomPrecision() const
-{
-    return notationConfiguration()->keyboardZoomPrecision();
-}
-
 int CanvasPreferencesModel::mouseZoomPrecision() const
 {
     return notationConfiguration()->mouseZoomPrecision();
@@ -75,16 +70,6 @@ int CanvasPreferencesModel::scrollPagesOrientation() const
 bool CanvasPreferencesModel::limitScrollArea() const
 {
     return notationConfiguration()->isLimitCanvasScrollArea();
-}
-
-int CanvasPreferencesModel::selectionProximity() const
-{
-    return notationConfiguration()->selectionProximity();
-}
-
-bool CanvasPreferencesModel::antialiasedDrawing() const
-{
-    return notationConfiguration()->isAntialiasedDrawing();
 }
 
 void CanvasPreferencesModel::setDefaultZoomType(int zoomType)
@@ -106,16 +91,6 @@ void CanvasPreferencesModel::setDefaultZoomLevel(int zoom)
 
     notationConfiguration()->setDefaultZoom(zoom);
     emit defaultZoomChanged();
-}
-
-void CanvasPreferencesModel::setKeyboardZoomPrecision(int precision)
-{
-    if (keyboardZoomPrecision() == precision) {
-        return;
-    }
-
-    notationConfiguration()->setKeyboardZoomPrecision(precision);
-    emit keyboardZoomPrecisionChanged();
 }
 
 void CanvasPreferencesModel::setMouseZoomPrecision(int precision)
@@ -145,26 +120,6 @@ void CanvasPreferencesModel::setLimitScrollArea(bool limit)
 
     notationConfiguration()->setIsLimitCanvasScrollArea(limit);
     emit limitScrollAreaChanged();
-}
-
-void CanvasPreferencesModel::setSelectionProximity(int proximity)
-{
-    if (selectionProximity() == proximity) {
-        return;
-    }
-
-    notationConfiguration()->setSelectionProximity(proximity);
-    emit selectionProximityChanged();
-}
-
-void CanvasPreferencesModel::setAntialiasedDrawing(bool antialiased)
-{
-    if (antialiasedDrawing() == antialiased) {
-        return;
-    }
-
-    notationConfiguration()->setIsAntialiasedDrawing(antialiased);
-    emit antialiasedDrawingChanged();
 }
 
 void CanvasPreferencesModel::setupConnections()
