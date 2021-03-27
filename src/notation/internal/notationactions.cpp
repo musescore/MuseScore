@@ -888,6 +888,16 @@ const ActionList NotationActions::m_actions = {
                ShortcutContext::NotationActive,
                QT_TRANSLATE_NOOP("action", "Mark Irregular Measures"),
                QT_TRANSLATE_NOOP("action", "Mark irregular measures")
+               ),
+    ActionItem("zoomin",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Zoom In"),
+               QT_TRANSLATE_NOOP("action", "Zoom in")
+               ),
+    ActionItem("zoomout",
+               ShortcutContext::NotationActive,
+               QT_TRANSLATE_NOOP("action", "Zoom Out"),
+               QT_TRANSLATE_NOOP("action", "Zoom out")
                )
 };
 
