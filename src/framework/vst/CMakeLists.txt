@@ -21,6 +21,8 @@ set(MODULE vst)
 
 add_subdirectory("sdk")
 
+include(GetPlatformInfo)
+
 set(MODULE_QRC vst.qrc)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
@@ -53,6 +55,13 @@ set(MODULE_INCLUDE
 set(MODULE_LINK
     vst_sdk_3
     )
+
+if (OS_IS_LIN)
+    set(MODULE_LINK
+        ${MODULE_LINK}
+        stdc++fs
+        )
+endif()
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 

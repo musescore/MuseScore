@@ -25,8 +25,8 @@
 
 namespace mu::vst {
 enum class Err {
-    Undefined       = Ret::Code::Undefined,
-    UnknownError    = Ret::Code::VstFirst,
+    Undefined       = static_cast<int>(Ret::Code::Undefined),
+    UnknownError    = static_cast<int>(Ret::Code::VstFirst),
 
     NoPluginModule = 1401,
     NoPluginFactory = 1402,
