@@ -81,7 +81,7 @@ private:
     QString pluginsPath() const;
     QString extensionsPath() const;
 
-    void setPath(FolderType folderType, const QString&);
+    void setPath(FolderType folderType, const QString& path);
     QModelIndex folderIndex(FolderType folderType);
 
     QList<FolderInfo> m_folders;

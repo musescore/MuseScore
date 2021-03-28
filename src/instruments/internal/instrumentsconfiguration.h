@@ -39,23 +39,29 @@ public:
     io::paths instrumentListPaths() const override;
     async::Notification instrumentListPathsChanged() const override;
 
-    io::path firstInstrumentListPath() const override;
-    void setFirstInstrumentListPath(const io::path& path) override;
-
-    io::path secondInstrumentListPath() const override;
-    void setSecondInstrumentListPath(const io::path& path) override;
+    io::paths userInstrumentListPaths() const override;
+    void setUserInstrumentListPaths(const io::paths& paths) override;
 
     io::paths scoreOrderListPaths() const override;
     async::Notification scoreOrderListPathsChanged() const override;
 
-    io::path firstScoreOrderListPath() const override;
-    void setFirstScireOrderListPath(const io::path& path) override;
-
-    io::path secondScoreOrderListPath() const override;
-    void setSecondScoreOrderListPath(const io::path& path) override;
+    io::paths userScoreOrderListPaths() const override;
+    void setUserScoreOrderListPaths(const io::paths& paths) override;
 
 private:
     io::paths extensionsPaths() const;
+
+    io::path firstInstrumentListPath() const;
+    void setFirstInstrumentListPath(const io::path& path);
+
+    io::path secondInstrumentListPath() const;
+    void setSecondInstrumentListPath(const io::path& path);
+
+    io::path firstScoreOrderListPath() const;
+    void setFirstScoreOrderListPath(const io::path& path);
+
+    io::path secondScoreOrderListPath() const;
+    void setSecondScoreOrderListPath(const io::path& path);
 
     async::Notification m_instrumentListPathsChanged;
     async::Notification m_scoreOrderListPathsChanged;
