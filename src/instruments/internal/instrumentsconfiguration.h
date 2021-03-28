@@ -22,6 +22,7 @@
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 #include "extensions/iextensionsconfiguration.h"
+#include "system/ifilesystem.h"
 
 #include "iinstrumentsconfiguration.h"
 
@@ -30,12 +31,34 @@ class InstrumentsConfiguration : public IInstrumentsConfiguration
 {
     INJECT(instruments, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(instruments, extensions::IExtensionsConfiguration, extensionsConfigurator)
+    INJECT(instruments, system::IFileSystem, fileSystem)
 
 public:
-    io::paths instrumentPaths() const override;
+    void init();
+
+    io::paths instrumentListPaths() const override;
+    async::Notification instrumentListPathsChanged() const override;
+
+    io::path firstInstrumentListPath() const override;
+    void setFirstInstrumentListPath(const io::path& path) override;
+
+    io::path secondInstrumentListPath() const override;
+    void setSecondInstrumentListPath(const io::path& path) override;
+
+    io::paths scoreOrderListPaths() const override;
+    async::Notification scoreOrderListPathsChanged() const override;
+
+    io::path firstScoreOrderListPath() const override;
+    void setFirstScireOrderListPath(const io::path& path) override;
+
+    io::path secondScoreOrderListPath() const override;
+    void setSecondScoreOrderListPath(const io::path& path) override;
 
 private:
     io::paths extensionsPaths() const;
+
+    async::Notification m_instrumentListPathsChanged;
+    async::Notification m_scoreOrderListPathsChanged;
 };
 }
 
