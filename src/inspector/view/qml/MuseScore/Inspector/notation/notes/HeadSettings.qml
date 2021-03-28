@@ -16,13 +16,15 @@ FocusableItem {
 
     ScrollView {
         height: noteheadGridView.height
-        width: parent.width
+        width: parent.width + 10
         clip: true
 
         Column {
             id: contentColumn
-            width: root.width
+            width: root.width - (2 * anchors.leftMargin)
             spacing: 16
+            anchors.left: parent.left
+            anchors.leftMargin: 5
 
             CheckBox {
                 isIndeterminate: model ? model.isHeadHidden.isUndefined : false
@@ -91,7 +93,7 @@ FocusableItem {
                     width: parent.width
 
                     InspectorPropertyView {
-                        width: root.width
+                        width: parent.width
                         height: implicitHeight
 
                         titleText: qsTrc("inspector", "Head type (visual only)")
@@ -132,7 +134,7 @@ FocusableItem {
                     }
 
                     InspectorPropertyView {
-                        width: root.width
+                        width: parent.width
                         height: implicitHeight
 
                         titleText: qsTrc("inspector", "Note direction")
