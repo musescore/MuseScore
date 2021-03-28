@@ -60,11 +60,20 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
-        validator: DoubleInputValidator {
+        DoubleInputValidator {
+            id: doubleInputValidator
             top: maxValue
             bottom: minValue
             decimal: decimals
         }
+
+        IntInputValidator {
+            id: intInputValidator
+            top: maxValue
+            bottom: minValue
+        }
+
+        validator: decimals > 0 ? doubleInputValidator : intInputValidator
 
         ValueAdjustControl {
             id: valueAdjustControl
