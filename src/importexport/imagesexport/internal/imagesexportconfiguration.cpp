@@ -31,9 +31,34 @@ static const Settings::Key EXPORT_PNG_USE_TRASNPARENCY_KEY("iex_imagesexport", "
 
 void ImagesExportConfiguration::init()
 {
-    settings()->setDefaultValue(EXPORT_PNG_DPI_RESOLUTION_KEY, Val(Ms::DPI));
-    settings()->setDefaultValue(EXPORT_PNG_USE_TRASNPARENCY_KEY, Val(true));
     settings()->setDefaultValue(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(Ms::DPI));
+    settings()->setInfo(EXPORT_PDF_DPI_RESOLUTION_KEY, std::make_shared<NumberSpinnerInfo>(
+                            QT_TRANSLATE_NOOP("settings", "Resolution:"),
+                            72, 2400, 1, 0,
+                            QT_TRANSLATE_NOOP("settings", "dpi"))
+                        );
+
+    // Might be used for testing in Export Dialog
+    //std::vector<std::pair<QVariant, const char*>> options {
+    //    { 100, "100" },
+    //    { 200, "200" },
+    //    { 300, "300" },
+    //    { 400, "400" }
+    //};
+    //
+    //settings()->setInfo(EXPORT_PDF_DPI_RESOLUTION_KEY, std::make_shared<PickerInfo>(PickerInfo::RadioButtonGroup, "Resolution:", options));
+
+    settings()->setDefaultValue(EXPORT_PNG_DPI_RESOLUTION_KEY, Val(Ms::DPI));
+    settings()->setInfo(EXPORT_PNG_DPI_RESOLUTION_KEY, std::make_shared<NumberSpinnerInfo>(
+                            QT_TRANSLATE_NOOP("settings", "Resolution:"),
+                            32, 5000, 1, 0,
+                            QT_TRANSLATE_NOOP("settings", "dpi"))
+                        );
+
+    settings()->setDefaultValue(EXPORT_PNG_USE_TRASNPARENCY_KEY, Val(true));
+    settings()->setInfo(EXPORT_PNG_USE_TRASNPARENCY_KEY, std::make_shared<SettingsInfo>(
+                            QT_TRANSLATE_NOOP("settings", "Transparent background"))
+                        );
 }
 
 int ImagesExportConfiguration::exportPdfDpiResolution() const

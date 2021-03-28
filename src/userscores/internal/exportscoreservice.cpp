@@ -47,8 +47,10 @@ void ExportScoreService::exportScores(INotationPtrList& notations, io::path& exp
 
 bool ExportScoreService::askForRetry(QString filename) const
 {
-    int btn = interactive()->question(trc("userscores", "Error"),
-                                      qtrc("userscores", "An error occured while writing the file %1. Do you want to retry?").arg(filename).toStdString(), {
+    int btn = interactive()->question(
+        trc("userscores", "Error"),
+        qtrc("userscores", "An error occured while writing the file %1. Do you want to retry?")
+        .arg(filename).toStdString(), {
         interactive()->buttonData(IInteractive::Button::Retry),
         interactive()->buttonData(IInteractive::Button::Abort)
     });
@@ -69,8 +71,10 @@ bool ExportScoreService::shouldReplaceFile(QString filename)
         static const int Skip = static_cast<int>(IInteractive::Button::CustomButton) + 3;
         static const int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
 
-        int btn = interactive()->question(trc("userscores", "File already exists"),
-                                          qtrc("userscores", "A file already exists with the filename %1. Do you want to replace it?").arg(filename).toStdString(), {
+        int btn = interactive()->question(
+            trc("userscores", "File already exists"),
+            qtrc("userscores", "A file already exists with the filename %1. Do you want to replace it?")
+            .arg(filename).toStdString(), {
                 IInteractive::ButtonData(Replace, trc("userscores", "Replace")),
                 IInteractive::ButtonData(ReplaceAll, trc("userscores", "Replace All")),
                 IInteractive::ButtonData(Skip, trc("userscores", "Skip")),

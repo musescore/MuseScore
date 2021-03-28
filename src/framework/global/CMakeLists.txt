@@ -52,6 +52,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/val.h
     ${CMAKE_CURRENT_LIST_DIR}/settings.cpp
     ${CMAKE_CURRENT_LIST_DIR}/settings.h
+    ${CMAKE_CURRENT_LIST_DIR}/settingsinfo.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/settingsinfo.h
     ${CMAKE_CURRENT_LIST_DIR}/version.cpp
     ${CMAKE_CURRENT_LIST_DIR}/version.h
     ${CMAKE_CURRENT_LIST_DIR}/stringutils.cpp

@@ -23,41 +23,46 @@
 #include "modularity/ioc.h"
 
 #include "settings.h"
+#include "async/asyncable.h"
 
 #include <QAbstractListModel>
 
 namespace mu::userscores {
-class ExportScoreSettingsModel : public QAbstractListModel
+class ExportScoreSettingsModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
 public:
     explicit ExportScoreSettingsModel(QObject* parent = nullptr);
 
+    Q_INVOKABLE void load(QString suffix);
+
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void load();
-    Q_INVOKABLE void changeVal(int index, QVariant newVal);
-
-    Q_INVOKABLE void changeType(QString type);
+    Q_INVOKABLE void setValue(int index, QVariant newVal);
 
 private:
     enum Roles {
-        SectionRole = Qt::UserRole + 1,
-        KeyRole,
-        FriendlyNameRole,
+        LabelRole = Qt::UserRole + 1,
         TypeRole,
-        ValRole
+        ValRole,
+        InfoRole
     };
 
-    QString typeToString(Val::Type t) const;
+    QString typeToString(const framework::Settings::Item& item) const;
 
-    QString friendlyNameFromKey(QString key) const;
+    using KeyList = QList<framework::Settings::Key>;
 
-    QList<framework::Settings::Item> m_completeItems;
-    QList<framework::Settings::Item> m_currentItems;
+    KeyList pdfKeys() const;
+    KeyList pngKeys() const;
+    KeyList mp3Keys() const;
+    KeyList audioKeys() const;
+    KeyList midiKeys() const;
+    KeyList xmlKeys() const;
+
+    KeyList m_keys;
 };
 }
 

@@ -29,24 +29,58 @@ ExportScoreSettingsModel::ExportScoreSettingsModel(QObject* parent)
 {
 }
 
+void ExportScoreSettingsModel::load(QString suffix)
+{
+    beginResetModel();
+
+    for (auto key : m_keys) {
+        settings()->valueChanged(key).resetOnReceive(this);
+    }
+
+    if (suffix == "pdf") {
+        m_keys = pdfKeys();
+    } else if (suffix == "png") {
+        m_keys = pngKeys();
+    } else if (suffix == "mp3") {
+        m_keys = mp3Keys();
+    } else if (suffix == "wav" || suffix == "ogg" || suffix == "flac") {
+        m_keys = audioKeys();
+    } else if (suffix == "midi") {
+        m_keys = midiKeys();
+    } else if (suffix == "musicxml") {
+        m_keys = xmlKeys();
+    } else {
+        m_keys.clear();
+    }
+
+    for (int i = 0; i < m_keys.size(); i++) {
+        settings()->valueChanged(m_keys[i]).onReceive(this, [this, i](const Val&) {
+            emit dataChanged(index(i), index(i));
+        });
+    }
+
+    endResetModel();
+}
+
 QVariant ExportScoreSettingsModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid() || index.row() >= rowCount()) {
         return QVariant();
     }
 
-    const Settings::Item& item = m_currentItems.at(index.row());
+    auto key = m_keys[index.row()];
+    auto item = settings()->findItem(key);
+    auto info = item.info;
+
     switch (role) {
-    case SectionRole:
-        return QString::fromStdString(item.key.moduleName);
-    case KeyRole:
-        return QString::fromStdString(item.key.key);
-    case FriendlyNameRole:
-        return friendlyNameFromKey(QString::fromStdString(item.key.key));
+    case LabelRole:
+        return info ? info->translatedLabel() : QString::fromStdString(key.key).replace(QRegularExpression("^export/"), "");
     case TypeRole:
-        return typeToString(item.value.type());
+        return typeToString(item);
     case ValRole:
-        return item.value.toQVariant();
+        return settings()->value(item.key).toQVariant();
+    case InfoRole:
+        return info ? info->toQVariant() : QVariant();
     }
 
     return QVariant();
@@ -54,85 +88,107 @@ QVariant ExportScoreSettingsModel::data(const QModelIndex& index, int role) cons
 
 int ExportScoreSettingsModel::rowCount(const QModelIndex&) const
 {
-    return m_currentItems.size();
+    return m_keys.size();
 }
 
 QHash<int, QByteArray> ExportScoreSettingsModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
-        { SectionRole, "sectionRole" },
-        { KeyRole, "keyRole" },
-        { FriendlyNameRole, "friendlyNameRole" },
+        { LabelRole, "labelRole" },
         { TypeRole, "typeRole" },
-        { ValRole, "valRole" }
+        { ValRole, "valRole" },
+        { InfoRole, "infoRole" }
     };
 
     return roles;
 }
 
-void ExportScoreSettingsModel::load()
+void ExportScoreSettingsModel::setValue(int idx, QVariant newVal)
 {
-    beginResetModel();
+    settings()->setValue(m_keys[idx], Val::fromQVariant(newVal));
+}
 
-    m_completeItems.clear();
-    m_currentItems.clear();
-
-    Settings::Items items = settings()->items();
-
-    for (auto it = items.cbegin(); it != items.cend(); ++it) {
-        if (it->second.key.key.find("export") != std::string::npos) {
-            m_completeItems << it->second;
-            m_currentItems << it->second;
+QString ExportScoreSettingsModel::typeToString(const Settings::Item& item) const
+{
+    if (!item.info || item.info->type() == SettingsInfo::Auto) {
+        switch (item.value.type()) {
+        case Val::Type::Bool: return "Bool";
+        case Val::Type::Int: return "Int";
+        case Val::Type::Double: return "Double";
+        case Val::Type::String: return "String";
+        case Val::Type::Color: return "Color";
+        default: return "Undefined";
         }
     }
 
-    endResetModel();
-}
-
-void ExportScoreSettingsModel::changeVal(int idx, QVariant newVal)
-{
-    Settings::Item& item = m_currentItems[idx];
-    Val::Type type = item.value.type();
-    item.value = Val::fromQVariant(newVal);
-    item.value.setType(type);
-
-    settings()->setValue(item.key, item.value);
-
-    emit dataChanged(index(idx), index(idx));
-}
-
-void ExportScoreSettingsModel::changeType(QString type)
-{
-    m_currentItems.clear();
-
-    beginResetModel();
-
-    for (auto item : m_completeItems) {
-        if (item.key.key.find(type.toStdString()) != std::string::npos) {
-            m_currentItems << item;
-        }
+    switch (item.info->type()) {
+    case SettingsInfo::NumberSpinner: return "NumberSpinner";
+    case SettingsInfo::RadioButtonGroup: return "RadioButtonGroup";
+    case SettingsInfo::ComboBox: return "ComboBox";
+    default: return "Undefined";
     }
-
-    endResetModel();
 }
 
-QString ExportScoreSettingsModel::typeToString(Val::Type t) const
+ExportScoreSettingsModel::KeyList ExportScoreSettingsModel::pdfKeys() const
 {
-    switch (t) {
-    case Val::Type::Undefined: return "Undefined";
-    case Val::Type::Bool:      return "Bool";
-    case Val::Type::Int:       return "Int";
-    case Val::Type::Double:    return "Double";
-    case Val::Type::String:    return "String";
-    case Val::Type::Color:     return "Color";
-    case Val::Type::Variant:   return "Variant";
-    }
-    return "Undefined";
+    KeyList keys {
+        Settings::Key("iex_imagesexport", "export/pdf/dpi")
+    };
+
+    return keys;
 }
 
-QString ExportScoreSettingsModel::friendlyNameFromKey(QString key) const
+ExportScoreSettingsModel::KeyList ExportScoreSettingsModel::pngKeys() const
 {
-    QString name = key.split("/", Qt::SkipEmptyParts).last();
-    name.replace(QRegularExpression("([A-Z](?=[a-z]+)|[A-Z]+(?![a-z]))"), " \\1");
-    return name;
+    KeyList keys {
+        Settings::Key("iex_imagesexport", "export/png/resolution"),
+        Settings::Key("iex_imagesexport", "export/png/useTransparency")
+    };
+
+    return keys;
+}
+
+ExportScoreSettingsModel::KeyList ExportScoreSettingsModel::mp3Keys() const
+{
+    NOT_IMPLEMENTED;
+
+    KeyList keys = audioKeys();
+    //keys << Settings::Key(); //! TODO: Bit rate key
+
+    return keys;
+}
+
+ExportScoreSettingsModel::KeyList ExportScoreSettingsModel::audioKeys() const
+{
+    NOT_IMPLEMENTED;
+
+    KeyList keys {
+        //! TODO: Normalize key
+        //! TODO: Sample rate key
+    };
+
+    return keys;
+}
+
+ExportScoreSettingsModel::KeyList ExportScoreSettingsModel::midiKeys() const
+{
+    NOT_IMPLEMENTED;
+
+    KeyList keys {
+        //! TODO: Expand Repeats key
+        //! TODO: Export RPNs key
+    };
+
+    return keys;
+}
+
+ExportScoreSettingsModel::KeyList ExportScoreSettingsModel::xmlKeys() const
+{
+    NOT_IMPLEMENTED;
+
+    KeyList keys {
+        //! TODO: MusicXML Layout key
+    };
+
+    return keys;
 }

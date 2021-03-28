@@ -46,7 +46,7 @@ QmlDialog {
         Component.onCompleted: {
             scoresModel.load();
             suffixModel.load();
-            settingsModel.load();
+            settingsModel.load("pdf");
 
             scoresModel.selectCurrentNotation()
         }
@@ -110,13 +110,18 @@ QmlDialog {
                     font: ui.theme.bodyBoldFont
                 }
 
-                ExportOptionsView {
-                    id: exportOptionsView
+                Column {
                     Layout.fillHeight: true
+                    Layout.fillWidth: true
 
-                    scoresModel: scoresModel
-                    suffixModel: suffixModel
-                    settingsModel: settingsModel
+                    ExportOptionsView {
+                        id: exportOptionsView
+                        width: parent.width
+
+                        scoresModel: scoresModel
+                        suffixModel: suffixModel
+                        settingsModel: settingsModel
+                    }
                 }
 
                 RowLayout {

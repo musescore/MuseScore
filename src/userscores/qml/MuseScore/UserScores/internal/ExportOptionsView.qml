@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Dialogs 1.2
 
@@ -7,70 +8,26 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 ColumnLayout {
+    id: root
     required property ExportScoreModel scoresModel
     required property ExportScoreSuffixModel suffixModel
     required property ExportScoreSettingsModel settingsModel
 
     spacing: 12
+    property var firstColumnWidth: 66
 
-    Column {
-        spacing: 6
-        Layout.fillWidth: true
-
-        StyledTextLabel {
-            Layout.fillWidth: true
-            text: qsTrc("userscores", "Export To:")
-            font.capitalization: Font.AllUppercase
-        }
-
-        Row {
-            spacing: 6
-            width: parent.width
-
-            TextInputField {
-                id: fileExportPathInput
-
-                // Would be better to use `RowLayout` and `Layout.fillWidth: true`,
-                // but causes crash like https://bugreports.qt.io/browse/QTBUG-77337
-                width: parent.width - parent.spacing - browsePathButton.width
-
-                currentText: scoresModel.getExportPath()
-
-                onCurrentTextEdited: {
-                    scoresModel.setExportPath(newTextValue);
-                }
-            }
-
-            FlatButton {
-                id: browsePathButton
-                icon: IconCode.NEW_FILE
-
-                height: 30
-
-                onClicked: {
-                    fileExportPathInput.currentText = scoresModel.chooseExportPath();
-                }
-            }
-        }
-    }
-
-    Column {
+    RowLayout {
         id: exportSuffixSelection
-
-        Layout.fillWidth: true
-
-        spacing: 6
+        spacing: 12
 
         StyledTextLabel {
-            Layout.fillWidth: true
-            Layout.topMargin: 24
-
-            text: qsTrc("userscores", "Export As:")
-            font.capitalization: Font.AllUppercase
+            Layout.preferredWidth: firstColumnWidth
+            horizontalAlignment: Text.AlignLeft
+            text: qsTrc("userscores", "Format:")
         }
 
         StyledComboBox {
-            width: parent.width
+            Layout.fillWidth: true
 
             textRoleName: "suffix"
             valueRoleName: "value"
@@ -80,9 +37,7 @@ ColumnLayout {
             onValueChanged: {
                 currentIndex = indexOfValue(value)
                 scoresModel.setExportSuffix(valueFromModel(currentIndex, "suffix"));
-                fileExportPathInput.currentText = scoresModel.exportPath();
-
-                settingsModel.changeType(valueFromModel(currentIndex, "suffix"));
+                settingsModel.load(valueFromModel(currentIndex, "suffix"));
             }
 
             Component.onCompleted: {
@@ -94,72 +49,115 @@ ColumnLayout {
     Repeater {
         model: settingsModel
 
-        delegate: Column {
-            spacing: 6
-            height: textLabel.height + spacing + control.height
+        delegate: Loader {
+            Layout.fillWidth: true
 
-            StyledTextLabel {
-                id: textLabel
-                text: friendlyNameRole
-                font.capitalization: Font.AllUppercase
+            sourceComponent: {
+                switch (type) {
+                case "Bool": return checkboxComp
+                case "String": return textComp
+                case "Color": return colorComp
+                case "Int":
+                case "Double":
+                case "NumberSpinner": return spinboxComp
+                case "ComboBox": return comboBoxComp
+                case "RadioButtonGroup": return radioButtonGroupComp
+                default: console.error("Unknown type", type); return textComp
+                }
             }
 
-            Item {
-                id: control
-                height: 30
-                width: 150
+            property string type: typeRole
+            property var val: valRole
+            property string label: labelRole
+            property var info: infoRole
 
-                Loader {
-                    id: loader
-                    property var val: valRole
-                    anchors.fill: parent
-                    sourceComponent: componentByType(typeRole)
-                    onLoaded: loader.item.val = loader.val
-                    onValChanged: {
-                        if (loader.item) {
-                            loader.item.val = loader.val
-                        }
-                    }
-                }
-
-                Connections {
-                    target: loader.item
-                    function onChanged(newVal) {
-                        settingsModel.changeVal(model.index, newVal)
-                    }
+            Connections {
+                target: item
+                function onChanged(newValue) {
+                    settingsModel.setValue(index, newValue)
                 }
             }
         }
     }
 
-    function componentByType(type) {
-        switch (type) {
-        case "Undefined": return textComp;
-        case "Bool": return boolComp;
-        case "Int": return intComp;
-        case "Double": return doubleComp;
-        case "String": return textComp;
-        case "Color": return colorComp;
-        }
+    Component {
+        id: checkboxComp
 
-        return textComp;
+        CheckBox {
+            text: label
+            signal changed(var newValue)
+            checked: val
+            onClicked: changed(!checked)
+        }
+    }
+
+    Component {
+        id: spinboxComp
+
+        Row {
+            id: spinboxCompRow
+            spacing: 12
+
+            signal changed(var newValue)
+
+            StyledTextLabel {
+                width: firstColumnWidth
+                text: label
+                horizontalAlignment: Text.AlignLeft
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            IncrementalPropertyControl {
+                width: 80
+                iconMode: iconModeEnum.hidden
+
+                currentValue: val
+
+                // When type is just "int" or "double", info won't have values
+                minValue: type === "NumberSpinner" ? info.minValue : 0
+                maxValue: type === "NumberSpinner" ? info.maxValue : 999
+                step:     type === "NumberSpinner" ? info.step     : 1
+                decimals: {
+                    if (type === "NumberSpinner") {
+                        return info.decimals
+                    } else if (type === "Int") {
+                        return 0
+                    } else if (type === "Double") {
+                        return 2
+                    }
+                    return 0
+                }
+                measureUnitsSymbol: type === "NumberSpinner" ? info.measureUnitsSymbol : ""
+
+                onValueEdited: {
+                    spinboxCompRow.changed(newValue)
+                }
+            }
+        }
     }
 
     Component {
         id: textComp
 
-        TextInputField {
-            id: textControl
-            anchors.fill: parent
+        RowLayout {
+            id: textCompRow
+            spacing: 12
 
-            property var val
+            signal changed(var newValue)
 
-            currentText: val
+            StyledTextLabel {
+                Layout.preferredWidth: firstColumnWidth
+                text: label
+                horizontalAlignment: Text.AlignLeft
+            }
 
-            signal changed(var newVal)
+            TextInputField {
+                Layout.fillWidth: true
+                currentText: val
 
-            onCurrentTextEdited: {
-                changed(newVal)
+                onCurrentTextEdited: {
+                    textCompRow.changed(newTextValue)
+                }
             }
         }
     }
@@ -169,10 +167,14 @@ ColumnLayout {
 
         Rectangle {
             id: colorControl
-            property var val
-            signal changed(var newVal)
-            anchors.fill: parent
             color: val
+
+            signal changed(var newValue)
+
+            Component.onCompleted: {
+                console.warn("colorComp in Export Dialog has not been tested yet.
+Please review its functionality, make changes if necessary and remove this message.")
+            }
 
             ColorDialog {
                 id: colorDialog
@@ -188,64 +190,69 @@ ColumnLayout {
     }
 
     Component {
-        id: intComp
+        id: comboBoxComp
 
-        IncrementalPropertyControl {
-            iconMode: iconModeEnum.hidden
+        RowLayout {
+            id: comboBoxCompRow
+            spacing: 12
 
-            property var val
-            currentValue: val.toString()
+            signal changed(var newValue)
 
-            step: 1
-            minValue: 72
-            maxValue: 2400
+            StyledTextLabel {
+                Layout.preferredWidth: firstColumnWidth
+                text: label
+                horizontalAlignment: Text.AlignLeft
+            }
 
-            signal changed(var newVal)
+            StyledComboBox {
+                Layout.fillWidth: true
 
-            onValueEdited: {
-                currentValue = newValue
-                changed(newValue)
+                model: info.model
+
+                textRoleName: "textRole"
+                valueRoleName: "valueRole"
+                currentIndex: indexOfValue(val)
+                onValueChanged: {
+                    comboBoxCompRow.changed(newValue)
+                }
             }
         }
     }
 
     Component {
-        id: doubleComp
+        id: radioButtonGroupComp
 
-        IncrementalPropertyControl {
-            iconMode: iconModeEnum.hidden
+        ColumnLayout {
+            id: radioButtonGroupCompRow
+            spacing: 12
 
-            property var val
-            currentValue: val.toString()
+            signal changed(var newValue)
 
-            step: 1
-            minValue: 72
-            maxValue: 2400
+            StyledTextLabel {
+                Layout.fillWidth: true
+                text: label
+                horizontalAlignment: Text.AlignLeft
+            }
 
-            signal changed(var newVal)
+            RadioButtonGroup {
+                id: radioButtonGroup
+                Layout.fillWidth: true
+                orientation: Qt.Vertical
+                spacing: 12
 
-            onValueEdited: {
-                currentValue = newValue
-                changed(newValue)
+                model: info.model
+
+                delegate: RoundedRadioButton {
+                    text: textRole
+                    ButtonGroup.group: radioButtonGroup.radioButtonGroup
+
+                    checked: valueRole === val
+
+                    onToggled: {
+                        radioButtonGroupCompRow.changed(valueRole)
+                    }
+                }
             }
         }
-    }
-
-    Component {
-        id: boolComp
-
-        CheckBox {
-            id: checkbox
-            property var val
-            signal changed(var newVal)
-            anchors.fill: parent
-            checked: val ? true : false
-            onClicked: changed(!checked)
-        }
-    }
-
-    Item { // spacer
-        Layout.fillHeight: true
-        Layout.topMargin: -parent.spacing
     }
 }

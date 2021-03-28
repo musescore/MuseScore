@@ -120,6 +120,11 @@ Val Settings::defaultValue(const Key& key) const
     return findItem(key).defaultValue;
 }
 
+SettingsInfoPtr Settings::info(const Key& key) const
+{
+    return findItem(key).info;
+}
+
 void Settings::setValue(const Key& key, const Val& value)
 {
     Item& item = findItem(key);
@@ -243,6 +248,19 @@ void Settings::rollbackTransaction()
     }
 
     m_localSettings.clear();
+}
+
+void Settings::setInfo(const Key& key, SettingsInfoPtr info)
+{
+    {
+        Item& item = findItem(key);
+
+        if (item.isNull()) {
+            m_items[key] = Item { key, Val(), Val(), false, std::move(info) };
+        } else {
+            item.info = std::move(info);
+        }
+    }
 }
 
 Settings::Item& Settings::findItem(const Key& key) const

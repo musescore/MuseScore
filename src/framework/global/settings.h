@@ -23,6 +23,7 @@
 #include <vector>
 
 #include "val.h"
+#include "settingsinfo.h"
 #include "async/channel.h"
 
 //! NOTE We are gradually abandoning Qt in non-GUI classes.
@@ -57,6 +58,7 @@ public:
         Val value;
         Val defaultValue;
         bool canBeMannualyEdited = false;
+        SettingsInfoPtr info = nullptr;
 
         bool isNull() const { return key.isNull(); }
     };
@@ -64,6 +66,7 @@ public:
     using Items = std::map<Key, Item>;
 
     const Items& items() const;
+    Item& findItem(const Key& key) const;
 
     void reload();
     void load();
@@ -72,10 +75,12 @@ public:
 
     Val value(const Key& key) const;
     Val defaultValue(const Key& key) const;
+    SettingsInfoPtr info(const Key& key) const;
 
     void setValue(const Key& key, const Val& value);
     void setDefaultValue(const Key& key, const Val& value);
     void setCanBeMannualyEdited(const Settings::Key& key, bool canBeMannualyEdited);
+    void setInfo(const Key& key, SettingsInfoPtr info);
 
     void beginTransaction();
     void commitTransaction();
@@ -87,7 +92,6 @@ private:
     Settings();
     ~Settings();
 
-    Item& findItem(const Key& key) const;
     async::Channel<Val>& findChannel(const Key& key) const;
 
     void insertNewItem(const Key& key, const Val& value);
