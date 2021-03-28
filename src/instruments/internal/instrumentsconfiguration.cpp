@@ -34,7 +34,7 @@ static const Settings::Key SECOND_SCORE_ORDER_LIST_KEY(module_name, "application
 void InstrumentsConfiguration::init()
 {
     settings()->setDefaultValue(FIRST_INSTRUMENT_LIST_KEY,
-                                Val(globalConfiguration()->dataPath().toStdString() + "instruments/instruments.xml"));
+                                Val(globalConfiguration()->sharePath().toStdString() + "instruments/instruments.xml"));
     settings()->valueChanged(FIRST_INSTRUMENT_LIST_KEY).onReceive(nullptr, [this](const Val&) {
         m_instrumentListPathsChanged.notify();
     });
@@ -45,7 +45,7 @@ void InstrumentsConfiguration::init()
     });
 
     settings()->setDefaultValue(FIRST_SCORE_ORDER_LIST_KEY,
-                                Val(globalConfiguration()->dataPath().toStdString() + "instruments/orders.xml"));
+                                Val(globalConfiguration()->sharePath().toStdString() + "instruments/orders.xml"));
     settings()->valueChanged(FIRST_SCORE_ORDER_LIST_KEY).onReceive(nullptr, [this](const Val&) {
         m_scoreOrderListPathsChanged.notify();
     });
@@ -77,6 +77,28 @@ io::paths InstrumentsConfiguration::instrumentListPaths() const
 async::Notification InstrumentsConfiguration::instrumentListPathsChanged() const
 {
     return m_instrumentListPathsChanged;
+}
+
+io::paths InstrumentsConfiguration::userInstrumentListPaths() const
+{
+    io::paths paths = {
+        firstInstrumentListPath(),
+        secondInstrumentListPath()
+    };
+
+    return paths;
+}
+
+void InstrumentsConfiguration::setUserInstrumentListPaths(const io::paths& paths)
+{
+    if (paths.empty()) {
+        return;
+    }
+
+    setFirstInstrumentListPath(paths[0]);
+    if (paths.size() > 1) {
+        setSecondInstrumentListPath(paths[1]);
+    }
 }
 
 io::path InstrumentsConfiguration::firstInstrumentListPath() const
@@ -119,12 +141,34 @@ async::Notification InstrumentsConfiguration::scoreOrderListPathsChanged() const
     return m_scoreOrderListPathsChanged;
 }
 
+io::paths InstrumentsConfiguration::userScoreOrderListPaths() const
+{
+    io::paths paths = {
+        firstScoreOrderListPath(),
+        secondScoreOrderListPath()
+    };
+
+    return paths;
+}
+
+void InstrumentsConfiguration::setUserScoreOrderListPaths(const io::paths& paths)
+{
+    if (paths.empty()) {
+        return;
+    }
+
+    setFirstScoreOrderListPath(paths[0]);
+    if (paths.size() > 1) {
+        setSecondScoreOrderListPath(paths[1]);
+    }
+}
+
 io::path InstrumentsConfiguration::firstScoreOrderListPath() const
 {
     return settings()->value(FIRST_SCORE_ORDER_LIST_KEY).toString();
 }
 
-void InstrumentsConfiguration::setFirstScireOrderListPath(const io::path& path)
+void InstrumentsConfiguration::setFirstScoreOrderListPath(const io::path& path)
 {
     settings()->setValue(FIRST_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
 }
