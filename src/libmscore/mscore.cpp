@@ -286,11 +286,6 @@ void MScore::init()
     }
 #endif
 
-    selectColor[0].setNamedColor("#0065BF");     //blue
-    selectColor[1].setNamedColor("#007F00");     //green
-    selectColor[2].setNamedColor("#C53F00");     //orange
-    selectColor[3].setNamedColor("#C31989");     //purple
-
     defaultColor        = Qt::black;
     dropColor           = QColor("#1778db");
     defaultPlayDuration = 300;        // ms
@@ -310,39 +305,6 @@ void MScore::init()
     //  initialize styles
     //
     _baseStyle.precomputeValues();
-
-//BUG: QSettings with emscripten has memory access error (read out of bounds)
-//if IndexedDB not inited construct of QSettings may cause runtime error.
-// also, @see https://wiki.qt.io/Qt_for_WebAssembly
-#ifndef Q_OS_WASM
-    QSettings s;
-    QString defStyle = s.value("score/style/defaultStyleFile").toString();
-#else
-    QString defStyle;
-#endif
-    if (!(MScore::testMode || defStyle.isEmpty())) {
-        QFile f(defStyle);
-        if (f.open(QIODevice::ReadOnly)) {
-            qDebug("load default style <%s>", qPrintable(defStyle));
-            _defaultStyle.load(&f);
-            f.close();
-        }
-    }
-    _defaultStyle.precomputeValues();
-#ifndef Q_OS_WASM
-    QString partStyle = s.value("score/style/partStyleFile").toString();
-#else
-    QString partStyle;
-#endif
-    if (!(MScore::testMode || partStyle.isEmpty())) {
-        QFile f(partStyle);
-        if (f.open(QIODevice::ReadOnly)) {
-            qDebug("load default style for parts <%s>", qPrintable(partStyle));
-            _defaultStyleForParts = new MStyle(_defaultStyle);
-            _defaultStyleForParts->load(&f);
-            _defaultStyleForParts->precomputeValues();
-        }
-    }
 
     initScoreFonts();
     StaffType::initStaffTypes();
@@ -419,6 +381,22 @@ bool MScore::readDefaultStyle(QString file)
         setDefaultStyle(style);
     }
     f.close();
+    return rv;
+}
+
+bool MScore::readPartStyle(QString filePath)
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return false;
+    }
+
+    _defaultStyleForParts = new MStyle(_defaultStyle);
+    bool rv = _defaultStyleForParts->load(&file, true);
+    if (rv) {
+        _defaultStyleForParts->precomputeValues();
+    }
+    file.close();
     return rv;
 }
 

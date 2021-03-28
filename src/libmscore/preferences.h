@@ -31,11 +31,12 @@ public:
     QString backupDirPath() const;
     void setBackupDirPath(const QString& path);
 
-    QString defaultStyleFile() const;
+    QString defaultStyleFilePath() const;
+    void setDefaultStyleFilePath(const QString& path);
 
 private:
-
     QString m_backupDirPath;
+    QString m_defaultStyleFilePath;
 };
 }
 
