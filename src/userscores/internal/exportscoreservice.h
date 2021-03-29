@@ -42,7 +42,11 @@ class ExportScoreService : public IExportScoreService
     INJECT(userscores, system::IFileSystem, fileSystem)
 
 public:
-    void exportScores(notation::INotationPtrList& notations, io::path& exportPath) override;
+    std::vector<ExportUnitType> supportedUnitTypes(const std::string& suffix) const override;
+
+    bool willCreateOnlyOneFile(ExportUnitType unitType, notation::INotationPtrList& notations) const override;
+
+    void exportScores(notation::INotationPtrList& notations, io::path& exportPath, ExportUnitType unitType) override;
 
 private:
     enum class FileConflictPolicy {
@@ -56,8 +60,10 @@ private:
     bool shouldReplaceFile(QString filename);
     bool askForRetry(QString filename) const;
 
-    bool exportSingleScore(notation::INotationWriterPtr writer, io::path exportPath, notation::INotationPtr score, int page = 0);
-    bool shouldExportIndividualPage(io::path suffix) const;
+    bool exportSingleScore(notation::INotationWriterPtr writer, io::path exportPath, bool pathIsDefinitive, notation::INotationPtr score,
+                           int page = 0);
+    bool exportScoreList(notation::INotationWriterPtr writer, io::path exportPath, notation::INotationPtrList notations);
+    bool shouldExportIndividualPage(std::string suffix) const;
 
     FileConflictPolicy m_fileConflictPolicy;
 };

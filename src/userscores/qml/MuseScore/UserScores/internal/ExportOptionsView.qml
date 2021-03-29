@@ -1,251 +1,270 @@
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import QtQuick.Dialogs 1.2
 
 import MuseScore.UserScores 1.0
-import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 ColumnLayout {
-    required property ExportScoreModel scoresModel
-    required property ExportScoreSuffixModel suffixModel
-    required property ExportScoreSettingsModel settingsModel
+    id: root
+    required property ExportDialogModel exportModel
 
     spacing: 12
+    property var firstColumnWidth: 72
 
-    Column {
-        spacing: 6
-        Layout.fillWidth: true
-
-        StyledTextLabel {
-            Layout.fillWidth: true
-            text: qsTrc("userscores", "Export To:")
-            font.capitalization: Font.AllUppercase
-        }
-
-        Row {
-            spacing: 6
-            width: parent.width
-
-            TextInputField {
-                id: fileExportPathInput
-
-                // Would be better to use `RowLayout` and `Layout.fillWidth: true`,
-                // but causes crash like https://bugreports.qt.io/browse/QTBUG-77337
-                width: parent.width - parent.spacing - browsePathButton.width
-
-                currentText: scoresModel.getExportPath()
-
-                onCurrentTextEdited: {
-                    scoresModel.setExportPath(newTextValue);
-                }
-            }
-
-            FlatButton {
-                id: browsePathButton
-                icon: IconCode.NEW_FILE
-
-                height: 30
-
-                onClicked: {
-                    fileExportPathInput.currentText = scoresModel.chooseExportPath();
-                }
-            }
-        }
-    }
-
-    Column {
-        id: exportSuffixSelection
-
-        Layout.fillWidth: true
-
-        spacing: 6
-
-        StyledTextLabel {
-            Layout.fillWidth: true
-            Layout.topMargin: 24
-
-            text: qsTrc("userscores", "Export As:")
-            font.capitalization: Font.AllUppercase
-        }
+    ExportOptionItem {
+        firstColumnWidth: root.firstColumnWidth
+        text: qsTrc("userscores", "Format:")
 
         StyledComboBox {
-            width: parent.width
+            id: fileTypeComboBox
+            Layout.fillWidth: true
 
-            textRoleName: "suffix"
-            valueRoleName: "value"
+            model: [
+                { textRole: qsTrc("userscores", "PDF File"), valueRole: "pdf" },
+                { textRole: qsTrc("userscores", "PNG Images"), valueRole: "png" },
+                { textRole: qsTrc("userscores", "SVG Images"), valueRole: "svg" },
+                { textRole: qsTrc("userscores", "MP3 Audio"), valueRole: "mp3" },
+                { textRole: qsTrc("userscores", "WAV Audio"), valueRole: "wav" },
+                { textRole: qsTrc("userscores", "OGG Audio"), valueRole: "ogg" },
+                { textRole: qsTrc("userscores", "FLAC Audio"), valueRole: "flac" },
+                { textRole: qsTrc("userscores", "MIDI File"), valueRole: "mid" },
+                { textRole: qsTrc("userscores", "MusicXML"), valueRole: "xml" }
+            ]
 
-            model: suffixModel
+            maxVisibleItemCount: count
+
+            textRoleName: "textRole"
+            valueRoleName: "valueRole"
+
+            currentIndex: {
+                if (exportModel.selectedExportSuffix === "musicxml" || exportModel.selectedExportSuffix === "mxl") {
+                    return indexOfValue("xml")
+                } else {
+                    return indexOfValue(exportModel.selectedExportSuffix)
+                }
+            }
 
             onValueChanged: {
-                currentIndex = indexOfValue(value)
-                scoresModel.setExportSuffix(valueFromModel(currentIndex, "suffix"));
-                fileExportPathInput.currentText = scoresModel.exportPath();
-
-                settingsModel.changeType(valueFromModel(currentIndex, "suffix"));
-            }
-
-            Component.onCompleted: {
-                value = suffixModel.getDefaultRow()
-            }
-        }
-    }
-
-    Repeater {
-        model: settingsModel
-
-        delegate: Column {
-            spacing: 6
-            height: textLabel.height + spacing + control.height
-
-            StyledTextLabel {
-                id: textLabel
-                text: friendlyNameRole
-                font.capitalization: Font.AllUppercase
-            }
-
-            Item {
-                id: control
-                height: 30
-                width: 150
-
-                Loader {
-                    id: loader
-                    property var val: valRole
-                    anchors.fill: parent
-                    sourceComponent: componentByType(typeRole)
-                    onLoaded: loader.item.val = loader.val
-                    onValChanged: {
-                        if (loader.item) {
-                            loader.item.val = loader.val
-                        }
-                    }
-                }
-
-                Connections {
-                    target: loader.item
-                    function onChanged(newVal) {
-                        settingsModel.changeVal(model.index, newVal)
-                    }
+                if (value === "xml") {
+                    exportModel.selectedExportSuffix = "mxl";
+                } else {
+                    exportModel.selectedExportSuffix = value
                 }
             }
         }
     }
 
-    function componentByType(type) {
-        switch (type) {
-        case "Undefined": return textComp;
-        case "Bool": return boolComp;
-        case "Int": return intComp;
-        case "Double": return doubleComp;
-        case "String": return textComp;
-        case "Color": return colorComp;
-        }
-
-        return textComp;
-    }
-
-    Component {
-        id: textComp
-
-        TextInputField {
-            id: textControl
-            anchors.fill: parent
-
-            property var val
-
-            currentText: val
-
-            signal changed(var newVal)
-
-            onCurrentTextEdited: {
-                changed(newVal)
-            }
-        }
-    }
-
-    Component {
-        id: colorComp
-
-        Rectangle {
-            id: colorControl
-            property var val
-            signal changed(var newVal)
-            anchors.fill: parent
-            color: val
-
-            ColorDialog {
-                id: colorDialog
-                title: qsTrc("userscores", "Please choose a color")
-                onAccepted: colorControl.changed(colorDialog.color)
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: colorDialog.open()
-            }
-        }
-    }
-
-    Component {
-        id: intComp
+    ExportOptionItem {
+        visible: exportModel.selectedExportSuffix === "pdf"
+        text: qsTrc("userscores", "Resolution:")
+        firstColumnWidth: root.firstColumnWidth
 
         IncrementalPropertyControl {
-            iconMode: iconModeEnum.hidden
-
-            property var val
-            currentValue: val.toString()
-
-            step: 1
+            Layout.preferredWidth: 80
+            currentValue: exportModel.pdfResolution
             minValue: 72
             maxValue: 2400
-
-            signal changed(var newVal)
-
-            onValueEdited: {
-                currentValue = newValue
-                changed(newValue)
-            }
+            step: 1
+            decimals: 0
+            measureUnitsSymbol: qsTrc("userscores", "dpi")
+            onValueEdited: exportModel.pdfResolution = newValue
         }
     }
 
-    Component {
-        id: doubleComp
+    ColumnLayout {
+        visible: exportModel.selectedExportSuffix === "png"
+        spacing: 12
 
-        IncrementalPropertyControl {
-            iconMode: iconModeEnum.hidden
+        ExportOptionItem {
+            text: qsTrc("userscores", "Resolution:")
+            firstColumnWidth: root.firstColumnWidth
 
-            property var val
-            currentValue: val.toString()
-
-            step: 1
-            minValue: 72
-            maxValue: 2400
-
-            signal changed(var newVal)
-
-            onValueEdited: {
-                currentValue = newValue
-                changed(newValue)
+            IncrementalPropertyControl {
+                Layout.preferredWidth: 80
+                currentValue: exportModel.pngResolution
+                minValue: 32
+                maxValue: 5000
+                step: 1
+                decimals: 0
+                measureUnitsSymbol: qsTrc("userscores", "dpi")
+                onValueEdited: exportModel.pngResolution = newValue
             }
         }
-    }
-
-    Component {
-        id: boolComp
 
         CheckBox {
-            id: checkbox
-            property var val
-            signal changed(var newVal)
-            anchors.fill: parent
-            checked: val ? true : false
-            onClicked: changed(!checked)
+            text: qsTrc("userscores", "Transparent background")
+            checked: exportModel.pngTransparentBackground
+            onClicked: exportModel.pngTransparentBackground = !checked
+        }
+
+        StyledTextLabel {
+            Layout.fillWidth: true
+            text: qsTrc("userscores", "Each page of the selected parts will be exported as a separate PNG file.")
+            horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.WordWrap
         }
     }
 
-    Item { // spacer
-        Layout.fillHeight: true
-        Layout.topMargin: -parent.spacing
+    StyledTextLabel {
+        visible: exportModel.selectedExportSuffix === "svg"
+        Layout.fillWidth: true
+        text: qsTrc("userscores", "Each page of the selected parts will be exported as a separate SVG file.")
+        horizontalAlignment: Text.AlignLeft
+        wrapMode: Text.WordWrap
+    }
+
+    ColumnLayout {
+        id: audioOptions
+        spacing: 12
+
+        visible: ["mp3", "wav", "ogg", "flac"].includes(exportModel.selectedExportSuffix)
+
+        CheckBox {
+            text: qsTrc("userscores", "Normalize")
+            checked: exportModel.normalizeAudio
+            onClicked: exportModel.normalizeAudio = !checked
+        }
+
+        ExportOptionItem {
+            text: qsTrc("userscores", "Sample rate:")
+            firstColumnWidth: root.firstColumnWidth
+
+            StyledComboBox {
+                Layout.preferredWidth: 126
+
+                model: exportModel.availableSampleRates().map(
+                           (sampleRate) => ({ textRole: qsTrc("userscores", "%1 Hz").arg(sampleRate), valueRole: sampleRate })
+                           )
+
+                textRoleName: "textRole"
+                valueRoleName: "valueRole"
+
+                currentIndex: indexOfValue(exportModel.sampleRate)
+                onValueChanged: exportModel.sampleRate = value
+            }
+        }
+
+        ExportOptionItem {
+            visible: exportModel.selectedExportSuffix === "mp3"
+            text: qsTrc("userscores", "Bitrate:")
+            firstColumnWidth: root.firstColumnWidth
+
+            StyledComboBox {
+                Layout.preferredWidth: 126
+
+                model: exportModel.availableBitRates().map(
+                           (bitRate) => ({ textRole: qsTrc("userscores", "%1 kBit/s").arg(bitRate), valueRole: bitRate })
+                           )
+
+                textRoleName: "textRole"
+                valueRoleName: "valueRole"
+
+                currentIndex: indexOfValue(exportModel.bitRate)
+                onValueChanged: exportModel.bitRate = value
+            }
+        }
+
+        StyledTextLabel {
+            Layout.fillWidth: true
+            text: qsTrc("userscores", "Each selected part will be exported as a separate audio file.")
+            horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.WordWrap
+        }
+    }
+
+    ColumnLayout {
+        visible: fileTypeComboBox.value === "mid"
+        spacing: 12
+
+        CheckBox {
+            text: qsTrc("userscores", "Expand repeats")
+            checked: exportModel.midiExpandRepeats
+            onClicked: exportModel.midiExpandRepeats = !checked
+        }
+
+        CheckBox {
+            text: qsTrc("userscores", "Export RPNs")
+            checked: exportModel.midiExportRpns
+            onClicked: exportModel.midiExportRpns = !checked
+        }
+
+        StyledTextLabel {
+            Layout.fillWidth: true
+            text: qsTrc("userscores", "Each selected part will be exported as a separate MIDI file.")
+            horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.WordWrap
+        }
+    }
+
+    ColumnLayout {
+        Layout.fillWidth: true
+        visible: fileTypeComboBox.value === "xml"
+        spacing: 12
+
+        ExportOptionItem {
+            text: qsTrc("userscores", "File type:")
+            firstColumnWidth: root.firstColumnWidth
+
+            StyledComboBox {
+                id: xmlTypeComboBox
+                Layout.fillWidth: true
+
+                model: [
+                    { textRole: qsTrc("userscores", "Compressed") + " (*.mxl)", valueRole: "mxl" },
+                    { textRole: qsTrc("userscores", "Uncompressed") + " (*.musicxml)", valueRole: "musicxml" },
+                    { textRole: qsTrc("userscores", "Uncompressed (outdated)") + " (*.xml)", valueRole: "xml" }
+                ]
+
+                textRoleName: "textRole"
+                valueRoleName: "valueRole"
+
+                currentIndex: indexOfValue(exportModel.selectedExportSuffix)
+                onValueChanged: exportModel.selectedExportSuffix = value
+            }
+        }
+
+        RadioButtonGroup {
+            spacing: 12
+            orientation: Qt.Vertical
+            Layout.fillWidth: true
+            model: [
+                { valueRole: ExportDialogModel.AllLayout, textRole: qsTrc("userscores", "All layout") },
+                { valueRole: ExportDialogModel.AllBreaks, textRole: qsTrc("userscores", "System and page breaks") },
+                { valueRole: ExportDialogModel.ManualBreaks, textRole: qsTrc("userscores", "Manually added system and page breaks only") },
+                { valueRole: ExportDialogModel.None, textRole: qsTrc("userscores", "No system or page breaks") }
+            ]
+
+            delegate: RoundedRadioButton {
+                text: modelData.textRole
+                width: parent.width
+                checked: exportModel.musicXmlLayoutType === modelData.valueRole
+                onToggled: exportModel.musicXmlLayoutType = modelData.valueRole
+            }
+        }
+    }
+
+    RadioButtonGroup {
+        Layout.fillWidth: true
+        visible: model.length > 1
+        spacing: 12
+        orientation: Qt.Vertical
+
+        model: {
+            // Keep in sync with mu::notation::INotationWriter::UnitType
+            var allOptions = [
+                { textRole: qsTrc("userscores", "Each page to a separate file"), valueRole: 0 },
+                { textRole: qsTrc("userscores", "Each part to a separate file"), valueRole: 1 },
+                { textRole: qsTrc("userscores", "All parts combined in one file"), valueRole: 2 }
+            ]
+            return allOptions.filter((option) => exportModel.availableUnitTypes.includes(option.valueRole))
+        }
+
+        delegate: RoundedRadioButton {
+            text: modelData.textRole
+            width: parent.width
+            checked: exportModel.selectedUnitType === modelData.valueRole
+            onToggled: exportModel.selectedUnitType = modelData.valueRole
+        }
     }
 }

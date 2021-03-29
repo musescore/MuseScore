@@ -29,6 +29,12 @@ namespace mu::notation {
 class AbstractNotationWriter : public INotationWriter
 {
 public:
+    std::vector<UnitType> supportedUnitTypes() const override;
+    bool supportsUnitType(UnitType unitType) const override;
+
+    virtual Ret writeList(const INotationPtrList& notations, system::IODevice& destinationDevice,
+                          const Options& options = Options()) override;
+
     void abort() override;
     framework::ProgressChannel progress() const override;
 

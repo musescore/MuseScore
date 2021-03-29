@@ -36,6 +36,11 @@
 using namespace mu::iex::imagesexport;
 using namespace mu::system;
 
+std::vector<INotationWriter::UnitType> PngWriter::supportedUnitTypes() const
+{
+    return { UnitType::PER_PAGE };
+}
+
 mu::Ret PngWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(notation) {

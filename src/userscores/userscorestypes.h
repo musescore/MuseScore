@@ -26,6 +26,7 @@
 #include <QList>
 
 #include "notation/notationtypes.h"
+#include "notation/inotationwriter.h"
 
 namespace mu::userscores {
 struct Template : public notation::Meta {
@@ -37,6 +38,8 @@ struct Template : public notation::Meta {
 };
 
 using Templates = QList<Template>;
+
+using ExportUnitType = notation::INotationWriter::UnitType;
 }
 
 #endif // MU_USERSCORES_TYPES_H

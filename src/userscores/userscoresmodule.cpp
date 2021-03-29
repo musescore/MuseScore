@@ -32,9 +32,7 @@
 #include "view/scorethumbnail.h"
 #include "view/templatesmodel.h"
 #include "view/templatepaintview.h"
-#include "view/exportscoremodel.h"
-#include "view/exportscoresuffixmodel.h"
-#include "view/exportscoresettingsmodel.h"
+#include "view/exportdialogmodel.h"
 #include "internal/filescorecontroller.h"
 #include "internal/userscoresconfiguration.h"
 #include "internal/userscoresservice.h"
@@ -100,9 +98,7 @@ void UserScoresModule::registerUiTypes()
     qmlRegisterType<RecentScoresModel>("MuseScore.UserScores", 1, 0, "RecentScoresModel");
     qmlRegisterType<NewScoreModel>("MuseScore.UserScores", 1, 0, "NewScoreModel");
     qmlRegisterType<AdditionalInfoModel>("MuseScore.UserScores", 1, 0, "AdditionalInfoModel");
-    qmlRegisterType<ExportScoreModel>("MuseScore.UserScores", 1, 0, "ExportScoreModel");
-    qmlRegisterType<ExportScoreSuffixModel>("MuseScore.UserScores", 1, 0, "ExportScoreSuffixModel");
-    qmlRegisterType<ExportScoreSettingsModel>("MuseScore.UserScores", 1, 0, "ExportScoreSettingsModel");
+    qmlRegisterType<ExportDialogModel>("MuseScore.UserScores", 1, 0, "ExportDialogModel");
 
     qmlRegisterType<ScoreThumbnail>("MuseScore.UserScores", 1, 0, "ScoreThumbnail");
     qmlRegisterType<TemplatesModel>("MuseScore.UserScores", 1, 0, "TemplatesModel");

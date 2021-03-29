@@ -25,7 +25,29 @@ using namespace mu::userscores;
 using namespace mu::notation;
 using namespace mu::framework;
 
-void ExportScoreService::exportScores(INotationPtrList& notations, io::path& exportPath)
+std::vector<ExportUnitType> ExportScoreService::supportedUnitTypes(const std::string& suffix) const
+{
+    auto writer = writers()->writer(suffix);
+    if (!writer) {
+        return {};
+    }
+
+    return writer->supportedUnitTypes();
+}
+
+bool ExportScoreService::willCreateOnlyOneFile(INotationWriter::UnitType unitType, INotationPtrList& notations) const
+{
+    switch (unitType) {
+    case ExportUnitType::PER_PAGE:
+        return notations.size() == 1 && notations.front()->elements()->pages().size() == 1;
+    case ExportUnitType::PER_PART:
+        return notations.size() == 1;
+    case ExportUnitType::MULTI_PART:
+        return true;
+    }
+}
+
+void ExportScoreService::exportScores(INotationPtrList& notations, io::path& exportPath, ExportUnitType unitType)
 {
     std::string suffix = io::syffix(exportPath);
 
@@ -34,14 +56,25 @@ void ExportScoreService::exportScores(INotationPtrList& notations, io::path& exp
         return;
     }
 
-    for (INotationPtr currentNotation : notations) {
-        if (shouldExportIndividualPage(suffix)) {
+    bool oneFile = willCreateOnlyOneFile(unitType, notations);
+    m_fileConflictPolicy = oneFile ? FileConflictPolicy::ReplaceAll : FileConflictPolicy::Undefined;
+
+    switch (unitType) {
+    case ExportUnitType::PER_PAGE:
+        for (INotationPtr currentNotation : notations) {
             for (int page = 0; page < currentNotation->elements()->msScore()->pages().size(); page++) {
-                exportSingleScore(writer, exportPath, currentNotation, page);
+                exportSingleScore(writer, exportPath, oneFile, currentNotation, page);
             }
-        } else {
-            exportSingleScore(writer, exportPath, currentNotation);
         }
+        break;
+    case ExportUnitType::PER_PART:
+        for (INotationPtr currentNotation : notations) {
+            exportSingleScore(writer, exportPath, oneFile, currentNotation);
+        }
+        break;
+    case ExportUnitType::MULTI_PART:
+        exportScoreList(writer, exportPath, notations);
+        break;
     }
 }
 
@@ -96,13 +129,16 @@ bool ExportScoreService::shouldReplaceFile(QString filename)
     }
 }
 
-bool ExportScoreService::exportSingleScore(INotationWriterPtr writer, io::path exportPath, INotationPtr notation, int page)
+bool ExportScoreService::exportSingleScore(INotationWriterPtr writer, io::path exportPath, bool pathIsDefinitive, INotationPtr notation,
+                                           int page)
 {
-    io::path outPath = configuration()->completeExportPath(exportPath,
-                                                           notation,
-                                                           isMainNotation(notation),
-                                                           shouldExportIndividualPage(io::syffix(exportPath)),
-                                                           page);
+    io::path outPath;
+    if (pathIsDefinitive) {
+        outPath = exportPath;
+    } else {
+        outPath = configuration()->completeExportPath(exportPath, notation, isMainNotation(notation),
+                                                      shouldExportIndividualPage(io::syffix(exportPath)), page);
+    }
 
     QString completeFileName = io::filename(outPath).toQString();
 
@@ -141,9 +177,44 @@ bool ExportScoreService::exportSingleScore(INotationWriterPtr writer, io::path e
     return true;
 }
 
-bool ExportScoreService::shouldExportIndividualPage(io::path suffix) const
+bool ExportScoreService::exportScoreList(INotationWriterPtr writer, io::path exportPath, INotationPtrList notations)
 {
-    return suffix == "png" || suffix == "svg";
+    QString completeFileName = io::filename(exportPath).toQString();
+
+    INotationWriter::Options options({
+        { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
+    });
+
+    while (true) {
+        QFile outFile(exportPath.toQString());
+        if (!outFile.open(QFile::WriteOnly)) {
+            if (askForRetry(completeFileName)) {
+                continue;
+            } else {
+                return false;
+            }
+        }
+
+        if (!writer->writeList(notations, outFile, options)) {
+            outFile.close();
+            if (askForRetry(completeFileName)) {
+                continue;
+            } else {
+                return false;
+            }
+        }
+
+        outFile.close();
+        break;
+    }
+
+    return true;
+}
+
+bool ExportScoreService::shouldExportIndividualPage(std::string suffix) const
+{
+    static const std::vector<INotationWriter::UnitType> perPageOnly = { INotationWriter::UnitType::PER_PAGE };
+    return supportedUnitTypes(suffix) == perPageOnly;
 }
 
 bool ExportScoreService::isMainNotation(INotationPtr notation) const

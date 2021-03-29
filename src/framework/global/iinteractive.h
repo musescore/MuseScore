@@ -106,7 +106,7 @@ public:
 
     // files
     virtual io::path selectOpeningFile(const QString& title, const io::path& dir, const QString& filter) = 0;
-    virtual io::path selectSavingFile(const QString& title, const io::path& dir, const QString& filter) = 0;
+    virtual io::path selectSavingFile(const QString& title, const io::path& dir, const QString& filter, bool confirmOverwrite = true) = 0;
 
     // dirs
     virtual io::path selectDirectory(const QString& title, const io::path& dir) = 0;

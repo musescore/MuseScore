@@ -48,7 +48,7 @@ public:
 
     // files
     io::path selectOpeningFile(const QString& title, const io::path& dir, const QString& filter) override;
-    io::path selectSavingFile(const QString& title, const io::path& dir, const QString& filter) override;
+    io::path selectSavingFile(const QString& title, const io::path& dir, const QString& filter, bool confirmOverwrite = true) override;
 
     // dirs
     io::path selectDirectory(const QString& title, const io::path& dir) override;
