@@ -145,9 +145,14 @@ void NotationPaintView::scrollVertical(qreal position)
     moveCanvasVertical(-dy);
 }
 
-void NotationPaintView::handleAction(const QString& actionCode)
+void NotationPaintView::zoomIn()
 {
-    dispatcher()->dispatch(actionCode.toStdString());
+    m_inputController->zoomIn();
+}
+
+void NotationPaintView::zoomOut()
+{
+    m_inputController->zoomOut();
 }
 
 bool NotationPaintView::canReceiveAction(const actions::ActionCode& actionCode) const

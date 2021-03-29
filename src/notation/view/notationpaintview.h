@@ -64,7 +64,8 @@ public:
     Q_INVOKABLE void scrollHorizontal(qreal position);
     Q_INVOKABLE void scrollVertical(qreal position);
 
-    Q_INVOKABLE void handleAction(const QString& actionCode);
+    Q_INVOKABLE void zoomIn();
+    Q_INVOKABLE void zoomOut();
 
     qreal width() const override;
     qreal height() const override;
