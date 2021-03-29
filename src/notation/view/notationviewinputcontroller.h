@@ -74,6 +74,8 @@ public:
 
     bool isZoomInited();
     void initZoom();
+    void zoomIn();
+    void zoomOut();
 
     void setReadonly(bool readonly);
 
@@ -93,9 +95,6 @@ public:
 private:
     INotationPtr currentNotation() const;
     INotationStylePtr notationStyle() const;
-
-    void zoomIn();
-    void zoomOut();
 
     void zoomToPageWidth();
     void zoomToWholePage();
