@@ -121,6 +121,13 @@ Notation::Notation(Ms::Score* score)
         notifyAboutNotationChanged();
     });
 
+    configuration()->canvasOrientation().ch.onReceive(this, [this](framework::Orientation) {
+        m_score->doLayout();
+        for (Ms::Score* score : m_score->scoreList()) {
+            score->doLayout();
+        }
+    });
+
     setScore(score);
 }
 

@@ -1,6 +1,6 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.UserScores 1.0
@@ -84,6 +84,22 @@ Item {
                     templateView.scrollHorizontal(position)
                 }
             }
+        }
+    }
+
+    Shortcut {
+        sequences: [templateView.zoomInSequence()]
+
+        onActivated: {
+            templateView.zoomIn()
+        }
+    }
+
+    Shortcut {
+        sequences: [templateView.zoomOutSequence()]
+
+        onActivated: {
+            templateView.zoomOut()
         }
     }
 }

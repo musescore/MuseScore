@@ -37,8 +37,11 @@ NotationViewInputController::NotationViewInputController(IControlledView* view)
     m_possibleZoomsPercentage = {
         5, 10, 15, 25, 50, 75, 100, 150, 200, 400, 800, 1600
     };
+}
 
-    if (dispatcher()) {
+void NotationViewInputController::init()
+{
+    if (dispatcher() && !m_readonly) {
         dispatcher()->reg(this, "zoomin", this, &NotationViewInputController::zoomIn);
         dispatcher()->reg(this, "zoomout", this, &NotationViewInputController::zoomOut);
         dispatcher()->reg(this, "zoom-page-width", this, &NotationViewInputController::zoomToPageWidth);
@@ -58,7 +61,35 @@ NotationViewInputController::NotationViewInputController(IControlledView* view)
         });
     }
 
-    setZoom(configuration()->currentZoom().val);
+    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
+        m_isZoomInited = false;
+        initZoom();
+    });
+}
+
+bool NotationViewInputController::isZoomInited()
+{
+    return m_isZoomInited;
+}
+
+void NotationViewInputController::initZoom()
+{
+    ZoomType defaultZoomType = configuration()->defaultZoomType();
+    switch (defaultZoomType) {
+    case ZoomType::Percentage:
+        setZoom(configuration()->defaultZoom());
+        m_isZoomInited = true;
+        break;
+    case ZoomType::PageWidth:
+        zoomToPageWidth();
+        break;
+    case ZoomType::WholePage:
+        zoomToWholePage();
+        break;
+    case ZoomType::TwoPages:
+        zoomToTwoPages();
+        break;
+    }
 }
 
 void NotationViewInputController::setReadonly(bool readonly)
@@ -69,6 +100,11 @@ void NotationViewInputController::setReadonly(bool readonly)
 INotationPtr NotationViewInputController::currentNotation() const
 {
     return globalContext()->currentNotation();
+}
+
+INotationStylePtr NotationViewInputController::notationStyle() const
+{
+    return currentNotation() ? currentNotation()->style() : nullptr;
 }
 
 void NotationViewInputController::zoomIn()
@@ -92,7 +128,63 @@ void NotationViewInputController::zoomOut()
 
 void NotationViewInputController::zoomToPageWidth()
 {
-    NOT_IMPLEMENTED;
+    if (!notationStyle()) {
+        return;
+    }
+
+    qreal pageWidth = notationStyle()->styleValue(Ms::Sid::pageWidth).toDouble() * Ms::DPI;
+    qreal scale = m_view->width() / pageWidth / configuration()->notationScaling();
+
+    setZoom(scale * 100, QPoint());
+    m_isZoomInited = true;
+}
+
+void NotationViewInputController::zoomToWholePage()
+{
+    if (!notationStyle()) {
+        return;
+    }
+
+    qreal pageWidth = notationStyle()->styleValue(Ms::Sid::pageWidth).toDouble() * Ms::DPI;
+    qreal pageHeight = notationStyle()->styleValue(Ms::Sid::pageHeight).toDouble() * Ms::DPI;
+
+    qreal pageWidthScale = m_view->width() / pageWidth;
+    qreal pageHeightScale = m_view->height() / pageHeight;
+
+    qreal scale = std::min(pageWidthScale, pageHeightScale) / configuration()->notationScaling();
+
+    setZoom(scale * 100, QPoint());
+    m_isZoomInited = true;
+}
+
+void NotationViewInputController::zoomToTwoPages()
+{
+    if (!notationStyle()) {
+        return;
+    }
+
+    qreal viewWidth = m_view->width();
+    qreal viewHeight = m_view->height();
+    qreal pageWidth = notationStyle()->styleValue(Ms::Sid::pageWidth).toDouble() * Ms::DPI;
+    qreal pageHeight = notationStyle()->styleValue(Ms::Sid::pageHeight).toDouble() * Ms::DPI;
+
+    qreal pageHeightScale = 0.0;
+    qreal pageWidthScale = 0.0;
+
+    if (configuration()->canvasOrientation().val == framework::Orientation::Vertical) {
+        static const qreal VERTICAL_PAGE_GAP = 5.0;
+        pageHeightScale = viewHeight / (pageHeight * 2.0 + VERTICAL_PAGE_GAP);
+        pageWidthScale = viewWidth / pageWidth;
+    } else {
+        static const qreal HORIZONTAL_PAGE_GAP = 50.0;
+        pageHeightScale = viewHeight / pageHeight;
+        pageWidthScale = viewWidth / (pageWidth * 2.0 + HORIZONTAL_PAGE_GAP);
+    }
+
+    qreal scale = std::min(pageHeightScale, pageWidthScale) / configuration()->notationScaling();
+
+    setZoom(scale * 100, QPoint());
+    m_isZoomInited = true;
 }
 
 int NotationViewInputController::currentZoomIndex() const
@@ -166,7 +258,7 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
 
     // Windows touch pad pinches also execute this
     if (keyState & Qt::ControlModifier) {
-        double zoomSpeed = 1.01;
+        double zoomSpeed = qPow(2.0, 1.0 / configuration()->mouseZoomPrecision());
         int absSteps = sqrt(stepsX * stepsX + stepsY * stepsY) * (stepsY > -stepsX ? 1 : -1);
         double zoomAmount = currentZoomPercentage() * qPow(zoomSpeed, absSteps);
         int zoom = absSteps > 0 ? qCeil(zoomAmount) : qFloor(zoomAmount);
@@ -459,4 +551,9 @@ ElementType NotationViewInputController::selectionType() const
     }
 
     return type;
+}
+
+double NotationViewInputController::guiScalling() const
+{
+    return configuration()->guiScaling();
 }

@@ -51,6 +51,8 @@ public:
     shortcuts::ShortcutContext currentShortcutContext() const override;
 
 private:
+    void doSetCurrentNotation(const notation::INotationPtr& notation);
+
     std::vector<notation::IMasterNotationPtr> m_masterNotations;
 
     notation::IMasterNotationPtr m_currentMasterNotation;
