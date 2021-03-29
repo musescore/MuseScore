@@ -21,6 +21,7 @@
 #define MU_SHORTCUTS_SHORTCUTSMODEL_H
 
 #include <QAbstractListModel>
+#include <QItemSelection>
 
 #include "modularity/ioc.h"
 #include "ishortcutsregister.h"
@@ -41,6 +42,8 @@ class ShortcutsModel : public QAbstractListModel, public async::Asyncable
     INJECT(shortcuts, framework::IInteractive, interactive)
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
 
+    Q_PROPERTY(QItemSelection selection READ selection WRITE setSelection NOTIFY selectionChanged)
+    Q_PROPERTY(QString currentSequence READ currentSequence NOTIFY selectionChanged)
     Q_PROPERTY(QVariantList shortcuts READ shortcuts NOTIFY shortcutsChanged)
 
 public:
@@ -50,20 +53,33 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    QItemSelection selection() const;
+    QString currentSequence() const;
     QVariantList shortcuts() const;
 
     Q_INVOKABLE void load();
 
-    Q_INVOKABLE void selectShortcutsFile();
+    Q_INVOKABLE void loadShortcutsFromFile();
+    Q_INVOKABLE void saveShortcutsToFile();
+    Q_INVOKABLE void printShortcuts();
 
-    Q_INVOKABLE void applySequence(const QModelIndex& shortcutIndex, const QString& newSequence);
-    Q_INVOKABLE void clearSelectedShortcuts(const QItemSelection& selection);
+    Q_INVOKABLE void applySequenceToCurrentShortcut(const QString& newSequence);
+
+    Q_INVOKABLE void clearSelectedShortcuts();
+    Q_INVOKABLE void resetToDefaultSelectedShortcuts();
+
+public slots:
+    void setSelection(const QItemSelection& selection);
 
 signals:
+    void selectionChanged();
     void shortcutsChanged();
 
 private:
     QString actionTitle(const std::string& actionCode) const;
+
+    QModelIndex currentShortcutIndex() const;
+    void notifyAboutShortcutChanged(const QModelIndex& index);
 
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
@@ -72,7 +88,7 @@ private:
     };
 
     QList<Shortcut> m_shortcuts;
-    QSet<int> m_editedShortcutIndexes;
+    QItemSelection m_selection;
 };
 }
 

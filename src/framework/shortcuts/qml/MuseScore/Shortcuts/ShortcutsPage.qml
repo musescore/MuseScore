@@ -11,6 +11,8 @@ Item {
 
     ShortcutsModel {
         id: shortcutsModel
+
+        selection: view.selection
     }
 
     Component.onCompleted: {
@@ -26,12 +28,16 @@ Item {
     EditShortcutDialog {
         id: editShortcutDialog
 
-        property var shortcutIndex
-
         allShortcuts: shortcutsModel.shortcuts
 
         onApplySequenceRequested: {
-            shortcutsModel.applySequence(shortcutIndex, newSequence)
+            shortcutsModel.applySequenceToCurrentShortcut(newSequence)
+        }
+
+        property bool canEditCurrentShortcut: Boolean(shortcutsModel.currentSequence)
+
+        function startEditCurrentShortcut() {
+            editShortcutDialog.startEdit(shortcutsModel.currentSequence)
         }
     }
 
@@ -48,16 +54,21 @@ Item {
                 Layout.preferredWidth: privateProperties.buttonWidth
 
                 text: qsTrc("shortcuts", "Define...")
+                enabled: editShortcutDialog.canEditCurrentShortcut
+
+                onClicked: {
+                    editShortcutDialog.startEditCurrentShortcut()
+                }
             }
 
             FlatButton {
                 Layout.preferredWidth: privateProperties.buttonWidth
 
-                enabled: view.hasSelection
                 text: qsTrc("shortcuts", "Clear")
+                enabled: view.hasSelection
 
                 onClicked: {
-                    shortcutsModel.clearSelectedShortcuts(view.selection)
+                    shortcutsModel.clearSelectedShortcuts()
                 }
             }
 
@@ -97,8 +108,7 @@ Item {
             }
 
             onDoubleClicked: {
-                editShortcutDialog.shortcutIndex = index
-                editShortcutDialog.startEdit(item.sequence)
+                editShortcutDialog.startEditCurrentShortcut()
             }
         }
 
@@ -112,7 +122,7 @@ Item {
                 text: qsTrc("shortcuts", "Load...")
 
                 onClicked: {
-                    shortcutsModel.selectShortcutsFile()
+                    shortcutsModel.loadShortcutsFromFile()
                 }
             }
 
@@ -120,6 +130,10 @@ Item {
                 Layout.preferredWidth: privateProperties.buttonWidth
 
                 text: qsTrc("shortcuts", "Save")
+
+                onClicked: {
+                    shortcutsModel.saveShortcutsToFile()
+                }
             }
 
             Item { Layout.fillWidth: true }
@@ -128,12 +142,21 @@ Item {
                 Layout.preferredWidth: privateProperties.buttonWidth
 
                 text: qsTrc("shortcuts", "Print")
+
+                onClicked: {
+                    shortcutsModel.printShortcuts()
+                }
             }
 
             FlatButton {
                 Layout.preferredWidth: privateProperties.buttonWidth
 
                 text: qsTrc("shortcuts", "Reset to default")
+                enabled: view.hasSelection
+
+                onClicked: {
+                    shortcutsModel.resetToDefaultSelectedShortcuts()
+                }
             }
         }
     }

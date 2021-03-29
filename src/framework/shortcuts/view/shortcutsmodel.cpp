@@ -23,8 +23,6 @@
 #include "translation.h"
 #include "log.h"
 
-#include <QItemSelection>
-
 using namespace mu::shortcuts;
 using namespace mu::actions;
 using namespace mu::ui;
@@ -84,9 +82,7 @@ QHash<int, QByteArray> ShortcutsModel::roleNames() const
 void ShortcutsModel::load()
 {
     beginResetModel();
-
     m_shortcuts.clear();
-    m_editedShortcutIndexes.clear();
 
     for (const Shortcut& shortcut: shortcutsRegister()->shortcuts()) {
         if (actionTitle(shortcut.action).isEmpty()) {
@@ -105,6 +101,41 @@ void ShortcutsModel::load()
     emit shortcutsChanged();
 }
 
+QItemSelection ShortcutsModel::selection() const
+{
+    return m_selection;
+}
+
+QString ShortcutsModel::currentSequence() const
+{
+    QModelIndex index = currentShortcutIndex();
+
+    if (index.isValid()) {
+        return QString::fromStdString(m_shortcuts[index.row()].sequence);
+    }
+
+    return QString();
+}
+
+QModelIndex ShortcutsModel::currentShortcutIndex() const
+{
+    if (m_selection.size() == 1) {
+        return m_selection.indexes().first();
+    }
+
+    return QModelIndex();
+}
+
+void ShortcutsModel::setSelection(const QItemSelection& selection)
+{
+    if (m_selection == selection) {
+        return;
+    }
+
+    m_selection = selection;
+    emit selectionChanged();
+}
+
 QVariantList ShortcutsModel::shortcuts() const
 {
     QVariantList result;
@@ -120,7 +151,7 @@ QVariantList ShortcutsModel::shortcuts() const
     return result;
 }
 
-void ShortcutsModel::selectShortcutsFile()
+void ShortcutsModel::loadShortcutsFromFile()
 {
     QString filter = qtrc("shortcuts", "MuseScore Shortcuts File") +  " (*.xml)";
     io::path selectedPath = interactive()->selectOpeningFile(qtrc("shortcuts", "Load Shortcuts"),
@@ -129,26 +160,44 @@ void ShortcutsModel::selectShortcutsFile()
     configuration()->setShortcutsUserPath(selectedPath);
 }
 
-void ShortcutsModel::applySequence(const QModelIndex& shortcutIndex, const QString& newSequence)
+void ShortcutsModel::saveShortcutsToFile()
 {
-    int row = shortcutIndex.row();
+    NOT_IMPLEMENTED;
+}
 
-    if (!shortcutIndex.isValid() || row >= m_shortcuts.size()) {
+void ShortcutsModel::printShortcuts()
+{
+    NOT_IMPLEMENTED;
+}
+
+void ShortcutsModel::applySequenceToCurrentShortcut(const QString& newSequence)
+{
+    QModelIndex index = currentShortcutIndex();
+    if (!index.isValid()) {
         return;
     }
 
+    int row = index.row();
     m_shortcuts[row].sequence = newSequence.toStdString();
-    m_editedShortcutIndexes << row;
 
-    emit dataChanged(shortcutIndex, shortcutIndex);
+    notifyAboutShortcutChanged(index);
+}
+
+void ShortcutsModel::clearSelectedShortcuts()
+{
+    for (const QModelIndex& index : m_selection.indexes()) {
+        m_shortcuts[index.row()].sequence.clear();
+        notifyAboutShortcutChanged(index);
+    }
+}
+
+void ShortcutsModel::notifyAboutShortcutChanged(const QModelIndex& index)
+{
+    emit dataChanged(index, index);
     emit shortcutsChanged();
 }
 
-void ShortcutsModel::clearSelectedShortcuts(const QItemSelection& selection)
+void ShortcutsModel::resetToDefaultSelectedShortcuts()
 {
-    for (const QModelIndex& index : selection.indexes()) {
-        m_shortcuts[index.row()].sequence.clear();
-        m_editedShortcutIndexes << index.row();
-        emit dataChanged(index, index);
-    }
+    NOT_IMPLEMENTED;
 }
