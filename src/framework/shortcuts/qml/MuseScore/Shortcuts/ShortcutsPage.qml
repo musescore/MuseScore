@@ -145,16 +145,6 @@ Item {
             FlatButton {
                 Layout.preferredWidth: privateProperties.buttonWidth
 
-                text: qsTrc("shortcuts", "Print")
-
-                onClicked: {
-                    shortcutsModel.printShortcuts()
-                }
-            }
-
-            FlatButton {
-                Layout.preferredWidth: privateProperties.buttonWidth
-
                 text: qsTrc("shortcuts", "Reset to default")
                 enabled: view.hasSelection
 

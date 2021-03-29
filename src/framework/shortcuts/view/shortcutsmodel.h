@@ -62,7 +62,6 @@ public:
 
     Q_INVOKABLE void loadShortcutsFromFile();
     Q_INVOKABLE void saveShortcutsToFile();
-    Q_INVOKABLE void printShortcuts();
 
     Q_INVOKABLE void applySequenceToCurrentShortcut(const QString& newSequence);
 
