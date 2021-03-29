@@ -38,6 +38,11 @@
 using namespace mu::iex::imagesexport;
 using namespace mu::system;
 
+std::vector<INotationWriter::UnitType> SvgWriter::supportedUnitTypes() const
+{
+    return { UnitType::PER_PAGE };
+}
+
 mu::Ret SvgWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(notation) {

@@ -40,6 +40,7 @@ public:
     void setMusicxmlExportLayout(bool value) override;
 
     MusicxmlExportBreaksType musicxmlExportBreaksType() const override;
+    void setMusicxmlExportBreaksType(MusicxmlExportBreaksType breaksType) override;
 
     bool needUseDefaultFont() const override;
     void setNeedUseDefaultFont(bool value) override;

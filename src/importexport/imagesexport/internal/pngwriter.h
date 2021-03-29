@@ -34,6 +34,7 @@ class PngWriter : public notation::AbstractNotationWriter
     INJECT(iex_imagesexport, IImagesExportConfiguration, configuration)
 
 public:
+    std::vector<INotationWriter::UnitType> supportedUnitTypes() const override;
     Ret write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
 };
 }

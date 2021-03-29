@@ -80,6 +80,11 @@ MusicXmlConfiguration::MusicxmlExportBreaksType MusicXmlConfiguration::musicxmlE
     return static_cast<MusicxmlExportBreaksType>(settings()->value(MUSICXML_EXPORT_BREAKS_TYPE_KEY).toInt());
 }
 
+void MusicXmlConfiguration::setMusicxmlExportBreaksType(MusicxmlExportBreaksType breaksType)
+{
+    settings()->setValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(static_cast<int>(breaksType)));
+}
+
 bool MusicXmlConfiguration::needUseDefaultFont() const
 {
     return settings()->value(MIGRATION_APPLY_EDWIN_FOR_XML).toBool();

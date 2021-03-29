@@ -22,6 +22,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "notation/inotation.h"
+#include "notation/inotationwriter.h"
 
 namespace mu::userscores {
 class IExportScoreService : MODULE_EXPORT_INTERFACE
@@ -29,7 +30,11 @@ class IExportScoreService : MODULE_EXPORT_INTERFACE
     INTERFACE_ID(IExportScoreService)
 
 public:
-    virtual void exportScores(notation::INotationPtrList& notations, io::path& basePath) = 0;
+    virtual std::vector<ExportUnitType> supportedUnitTypes(const std::string& suffix) const = 0;
+
+    virtual bool willCreateOnlyOneFile(ExportUnitType unitType, notation::INotationPtrList& notations) const = 0;
+
+    virtual void exportScores(notation::INotationPtrList& notations, io::path& basePath, ExportUnitType unitType) = 0;
 };
 }
 

@@ -25,16 +25,8 @@ QmlDialog {
 
         color: ui.theme.popupBackgroundColor
 
-        ExportScoreModel {
-            id: scoresModel
-        }
-
-        ExportScoreSuffixModel {
-            id: suffixModel
-        }
-
-        ExportScoreSettingsModel {
-            id: settingsModel
+        ExportDialogModel {
+            id: exportModel
         }
 
         QtObject {
@@ -44,11 +36,8 @@ QmlDialog {
         }
 
         Component.onCompleted: {
-            scoresModel.load();
-            suffixModel.load();
-            settingsModel.load();
-
-            scoresModel.selectCurrentNotation()
+            exportModel.load();
+            exportModel.selectCurrentNotation()
         }
 
         RowLayout {
@@ -71,7 +60,7 @@ QmlDialog {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
 
-                    scoresModel: scoresModel
+                    scoresModel: exportModel
                 }
 
                 RowLayout {
@@ -84,7 +73,7 @@ QmlDialog {
                         text: qsTrc("userscores", "Select all")
 
                         onClicked: {
-                            scoresModel.setAllSelected(true)
+                            exportModel.setAllSelected(true)
                         }
                     }
 
@@ -94,7 +83,7 @@ QmlDialog {
                         text: qsTrc("userscores", "Clear selection")
 
                         onClicked: {
-                            scoresModel.setAllSelected(false)
+                            exportModel.setAllSelected(false)
                         }
                     }
                 }
@@ -110,13 +99,16 @@ QmlDialog {
                     font: ui.theme.bodyBoldFont
                 }
 
-                ExportOptionsView {
-                    id: exportOptionsView
+                Column {
                     Layout.fillHeight: true
+                    Layout.fillWidth: true
 
-                    scoresModel: scoresModel
-                    suffixModel: suffixModel
-                    settingsModel: settingsModel
+                    ExportOptionsView {
+                        id: exportOptionsView
+                        width: parent.width
+
+                        exportModel: exportModel
+                    }
                 }
 
                 RowLayout {
@@ -137,10 +129,10 @@ QmlDialog {
                         id: exportButton
 
                         text: qsTrc("userscores", "Export…")
-                        enabled: scoresModel.selectionLength > 0;
+                        enabled: exportModel.selectionLength > 0;
                         accentButton: enabled
                         onClicked: {
-                            if (scoresModel.exportScores()) {
+                            if (exportModel.exportScores()) {
                                 root.hide();
                             }
                         }

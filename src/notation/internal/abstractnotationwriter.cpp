@@ -27,6 +27,28 @@
 using namespace mu::notation;
 using namespace mu::framework;
 
+std::vector<INotationWriter::UnitType> AbstractNotationWriter::supportedUnitTypes() const
+{
+    return { UnitType::PER_PART };
+}
+
+bool AbstractNotationWriter::supportsUnitType(UnitType unitType) const
+{
+    std::vector<UnitType> unitTypes = supportedUnitTypes();
+    return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
+}
+
+mu::Ret AbstractNotationWriter::writeList(const INotationPtrList&, system::IODevice&, const Options& options)
+{
+    if (supportsUnitType(static_cast<UnitType>(options.value(OptionKey::UNIT_TYPE, Val(0)).toInt()))) {
+        NOT_IMPLEMENTED;
+        return Ret(Ret::Code::NotImplemented);
+    }
+
+    NOT_SUPPORTED;
+    return Ret(Ret::Code::NotSupported);
+}
+
 void AbstractNotationWriter::abort()
 {
     NOT_IMPLEMENTED;

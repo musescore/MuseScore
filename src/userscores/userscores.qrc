@@ -24,5 +24,6 @@
         <file>qml/MuseScore/UserScores/internal/ScoreInfoPage.qml</file>
         <file>qml/MuseScore/UserScores/internal/ExportScoresListView.qml</file>
         <file>qml/MuseScore/UserScores/internal/ExportOptionsView.qml</file>
+        <file>qml/MuseScore/UserScores/internal/ExportOptionItem.qml</file>
     </qresource>
 </RCC>

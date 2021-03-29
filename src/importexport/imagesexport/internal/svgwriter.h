@@ -29,6 +29,7 @@ namespace mu::iex::imagesexport {
 class SvgWriter : public notation::AbstractNotationWriter
 {
 public:
+    std::vector<UnitType> supportedUnitTypes() const override;
     Ret write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
 
 private:

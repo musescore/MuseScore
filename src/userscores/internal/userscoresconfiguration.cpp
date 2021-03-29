@@ -208,7 +208,7 @@ io::path UserScoresConfiguration::completeExportPath(io::path basePath, INotatio
 
     std::string notationNameExtension
         = (isMain ? "" : "-" + io::escapeFileName(notation->metaInfo().title).toStdString());
-    std::string pageNameExtension = (singlePage ? "-" + std::to_string(pageNumber) : "");
+    std::string pageNameExtension = (singlePage ? "-" + std::to_string(pageNumber + 1) : "");
     std::string completeFileName = baseFilename.toStdString() + notationNameExtension + pageNameExtension + "." + suffix.toStdString();
 
     return exportDirectory + "/" + completeFileName;
