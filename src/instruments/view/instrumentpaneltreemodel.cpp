@@ -146,6 +146,11 @@ void InstrumentPanelTreeModel::selectRow(const QModelIndex& rowIndex)
 
 void InstrumentPanelTreeModel::addInstruments()
 {
+    notation::INotationInteractionPtr interaction = context()->currentNotation()->interaction();
+    if (interaction->isTextEditingStarted()) {
+        return;
+    }
+
     auto mode = ISelectInstrumentsScenario::SelectInstrumentsMode::ShowCurrentInstruments;
     RetVal<InstrumentList> selectedInstruments = selectInstrumentsScenario()->selectInstruments(mode);
     if (!selectedInstruments.ret) {
