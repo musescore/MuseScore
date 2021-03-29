@@ -41,6 +41,7 @@ public:
     const ShortcutList& shortcuts() const override;
     async::Notification shortcutsChanged() const override;
     Shortcut shortcut(const std::string& actionCode) const override;
+    Shortcut defaultShortcut(const std::string& actionCode) const override;
     ShortcutList shortcutsForSequence(const std::string& sequence) const override;
 
 private:
@@ -50,6 +51,7 @@ private:
     void expandStandardKeys(ShortcutList& shortcuts) const;
 
     ShortcutList m_shortcuts;
+    ShortcutList m_defaultShortcuts;
     async::Notification m_shortcutsChanged;
 };
 }

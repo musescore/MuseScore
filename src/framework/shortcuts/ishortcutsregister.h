@@ -35,6 +35,7 @@ public:
     virtual const ShortcutList& shortcuts() const = 0;
     virtual async::Notification shortcutsChanged() const = 0;
     virtual Shortcut shortcut(const std::string& actionCode) const = 0;
+    virtual Shortcut defaultShortcut(const std::string& actionCode) const = 0;
     virtual ShortcutList shortcutsForSequence(const std::string& sequence) const = 0;
 };
 }
