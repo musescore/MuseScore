@@ -186,7 +186,10 @@ void ShortcutsModel::applySequenceToCurrentShortcut(const QString& newSequence)
 void ShortcutsModel::clearSelectedShortcuts()
 {
     for (const QModelIndex& index : m_selection.indexes()) {
-        m_shortcuts[index.row()].sequence.clear();
+        Shortcut& shortcut = m_shortcuts[index.row()];
+        shortcut.sequence.clear();
+        shortcut.standardKey = QKeySequence::StandardKey::UnknownKey;
+
         notifyAboutShortcutChanged(index);
     }
 }
@@ -199,5 +202,10 @@ void ShortcutsModel::notifyAboutShortcutChanged(const QModelIndex& index)
 
 void ShortcutsModel::resetToDefaultSelectedShortcuts()
 {
-    NOT_IMPLEMENTED;
+    for (const QModelIndex& index : m_selection.indexes()) {
+        Shortcut& shortcut = m_shortcuts[index.row()];
+        shortcut = shortcutsRegister()->defaultShortcut(shortcut.action);
+
+        notifyAboutShortcutChanged(index);
+    }
 }

@@ -28,6 +28,17 @@ using namespace mu::shortcuts;
 using namespace mu::framework;
 using namespace mu::async;
 
+Shortcut findShortcut(const ShortcutList& shortcuts, const std::string& actionCode)
+{
+    for (const Shortcut& shortcut: shortcuts) {
+        if (shortcut.action == actionCode) {
+            return shortcut;
+        }
+    }
+
+    return Shortcut();
+}
+
 void ShortcutsRegister::load()
 {
     m_shortcuts.clear();
@@ -37,10 +48,15 @@ void ShortcutsRegister::load()
         load();
     });
 
-    bool ok = loadFromFile(m_shortcuts, userPath.val);
+    bool ok = loadFromFile(m_defaultShortcuts, configuration()->shortcutsDefaultPath());
 
-    if (!ok) {
-        ok = loadFromFile(m_shortcuts, configuration()->shortcutsDefaultPath());
+    if (ok) {
+        ok = loadFromFile(m_shortcuts, userPath.val);
+
+        if (!ok) {
+            m_shortcuts = m_defaultShortcuts;
+            ok = true;
+        }
     }
 
     if (ok) {
@@ -156,13 +172,12 @@ Notification ShortcutsRegister::shortcutsChanged() const
 
 Shortcut ShortcutsRegister::shortcut(const std::string& actionCode) const
 {
-    for (const Shortcut& shortcut: m_shortcuts) {
-        if (shortcut.action == actionCode) {
-            return shortcut;
-        }
-    }
+    return findShortcut(m_shortcuts, actionCode);
+}
 
-    return Shortcut();
+Shortcut ShortcutsRegister::defaultShortcut(const std::string& actionCode) const
+{
+    return findShortcut(m_defaultShortcuts, actionCode);
 }
 
 ShortcutList ShortcutsRegister::shortcutsForSequence(const std::string& sequence) const
