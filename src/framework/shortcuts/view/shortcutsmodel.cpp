@@ -212,11 +212,6 @@ void ShortcutsModel::saveShortcutsToFile()
     }
 }
 
-void ShortcutsModel::printShortcuts()
-{
-    NOT_IMPLEMENTED;
-}
-
 void ShortcutsModel::applySequenceToCurrentShortcut(const QString& newSequence)
 {
     QModelIndex index = currentShortcutIndex();
