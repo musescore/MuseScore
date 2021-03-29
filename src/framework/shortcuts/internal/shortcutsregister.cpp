@@ -23,10 +23,17 @@
 #include "log.h"
 
 #include "global/xmlreader.h"
+#include "global/xmlwriter.h"
 
 using namespace mu::shortcuts;
 using namespace mu::framework;
 using namespace mu::async;
+
+constexpr std::string_view SHORTCUTS_TAG("Shortcuts");
+constexpr std::string_view SHORTCUT_TAG("SC");
+constexpr std::string_view ACTION_CODE_TAG("key");
+constexpr std::string_view STANDARD_KEY_TAG("std");
+constexpr std::string_view SEQUENCE_TAG("seq");
 
 Shortcut findShortcut(const ShortcutList& shortcuts, const std::string& actionCode)
 {
@@ -48,10 +55,10 @@ void ShortcutsRegister::load()
         load();
     });
 
-    bool ok = loadFromFile(m_defaultShortcuts, configuration()->shortcutsDefaultPath());
+    bool ok = readFromFile(m_defaultShortcuts, configuration()->shortcutsDefaultPath());
 
     if (ok) {
-        ok = loadFromFile(m_shortcuts, userPath.val);
+        ok = readFromFile(m_shortcuts, userPath.val);
 
         if (!ok) {
             m_shortcuts = m_defaultShortcuts;
@@ -111,17 +118,17 @@ void ShortcutsRegister::expandStandardKeys(ShortcutList& shortcuts) const
     }
 }
 
-bool ShortcutsRegister::loadFromFile(ShortcutList& shortcuts, const io::path& path) const
+bool ShortcutsRegister::readFromFile(ShortcutList& shortcuts, const io::path& path) const
 {
     XmlReader reader(path);
 
     reader.readNextStartElement();
-    if (reader.tagName() != "Shortcuts") {
+    if (reader.tagName() != SHORTCUTS_TAG) {
         return false;
     }
 
     while (reader.readNextStartElement()) {
-        if (reader.tagName() != "SC") {
+        if (reader.tagName() != SHORTCUT_TAG) {
             reader.skipCurrentElement();
             continue;
         }
@@ -146,11 +153,11 @@ Shortcut ShortcutsRegister::readShortcut(framework::XmlReader& reader) const
     while (reader.readNextStartElement()) {
         std::string tag(reader.tagName());
 
-        if (tag == "key") {
+        if (tag == ACTION_CODE_TAG) {
             shortcut.action = reader.readString();
-        } else if (tag == "std") {
+        } else if (tag == STANDARD_KEY_TAG) {
             shortcut.standardKey = QKeySequence::StandardKey(reader.readInt());
-        } else if (tag == "seq") {
+        } else if (tag == SEQUENCE_TAG) {
             shortcut.sequence = reader.readString();
         } else {
             reader.skipCurrentElement();
@@ -163,6 +170,50 @@ Shortcut ShortcutsRegister::readShortcut(framework::XmlReader& reader) const
 const ShortcutList& ShortcutsRegister::shortcuts() const
 {
     return m_shortcuts;
+}
+
+mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
+{
+    bool ok = writeToFile(shortcuts, configuration()->shortcutsUserPath().val);
+
+    if (ok) {
+        m_shortcuts = shortcuts;
+        m_shortcutsChanged.notify();
+    }
+
+    return ok;
+}
+
+bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::path& path) const
+{
+    TRACEFUNC;
+
+    XmlWriter writer(path);
+
+    writer.writeStartDocument();
+    writer.writeStartElement(SHORTCUTS_TAG);
+
+    for (const Shortcut& shortcut : shortcuts) {
+        writeShortcut(writer, shortcut);
+    }
+
+    writer.writeEndElement();
+    writer.writeEndDocument();
+
+    return writer.success();
+}
+
+void ShortcutsRegister::writeShortcut(framework::XmlWriter& writer, const Shortcut& shortcut) const
+{
+    writer.writeStartElement(SHORTCUT_TAG);
+    writer.writeTextElement(ACTION_CODE_TAG, shortcut.action);
+
+    if (shortcut.standardKey != QKeySequence::UnknownKey) {
+        writer.writeTextElement(STANDARD_KEY_TAG, QString("%1").arg(shortcut.standardKey).toStdString());
+    }
+
+    writer.writeTextElement(SEQUENCE_TAG, shortcut.sequence);
+    writer.writeEndElement();
 }
 
 Notification ShortcutsRegister::shortcutsChanged() const
@@ -189,4 +240,9 @@ ShortcutList ShortcutsRegister::shortcutsForSequence(const std::string& sequence
         }
     }
     return list;
+}
+
+mu::Ret ShortcutsRegister::saveToFile(const io::path& filePath) const
+{
+    return writeToFile(m_shortcuts, filePath);
 }

@@ -15,6 +15,10 @@ Item {
         selection: view.selection
     }
 
+    function apply() {
+        return shortcutsModel.apply()
+    }
+
     Component.onCompleted: {
         shortcutsModel.load()
     }

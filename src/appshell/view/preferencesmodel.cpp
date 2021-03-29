@@ -182,7 +182,7 @@ void PreferencesModel::resetFactorySettings()
 bool PreferencesModel::apply()
 {
     NOT_IMPLEMENTED;
-    return false;
+    return true;
 }
 
 void PreferencesModel::selectRow(const QModelIndex& rowIndex)

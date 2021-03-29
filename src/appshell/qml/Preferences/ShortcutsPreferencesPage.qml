@@ -7,7 +7,13 @@ import MuseScore.Shortcuts 1.0
 PreferencesPage {
     id: root
 
+    function apply() {
+        return page.apply()
+    }
+
     ShortcutsPage {
+        id: page
+
         anchors.fill: parent
     }
 }

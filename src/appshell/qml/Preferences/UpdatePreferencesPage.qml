@@ -4,7 +4,9 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
-Item {
+PreferencesPage {
+    id: root
+
     UpdatePreferencesModel {
         id: updateModel
     }

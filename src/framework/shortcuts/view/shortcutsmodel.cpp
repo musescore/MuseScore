@@ -27,6 +27,11 @@ using namespace mu::shortcuts;
 using namespace mu::actions;
 using namespace mu::ui;
 
+QString shorcutsFileFilter()
+{
+    return mu::qtrc("shortcuts", "MuseScore Shortcuts File") +  " (*.xml)";
+}
+
 ShortcutsModel::ShortcutsModel(QObject* parent)
     : QAbstractListModel(parent)
 {
@@ -39,11 +44,11 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     }
 
     Shortcut shortcut = m_shortcuts[index.row()];
-    QString title = actionTitle(shortcut.action);
+    QString title = shortcutTitle(shortcut.action);
     QString sequence = QString::fromStdString(shortcut.sequence);
 
     switch (role) {
-    case RoleTitle: return actionTitle(shortcut.action);
+    case RoleTitle: return shortcutTitle(shortcut.action);
     case RoleSequence: return sequence;
     case RoleSearchKey: return title + sequence;
     }
@@ -51,7 +56,7 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-QString ShortcutsModel::actionTitle(const std::string& actionCode) const
+QString ShortcutsModel::shortcutTitle(const std::string& actionCode) const
 {
     ActionItem action = actionsRegister()->action(actionCode);
     QString title = QString::fromStdString(action.title);
@@ -61,6 +66,12 @@ QString ShortcutsModel::actionTitle(const std::string& actionCode) const
     }
 
     return QString(iconCodeToChar(action.iconCode)) + " " + title;
+}
+
+QString ShortcutsModel::actionTitle(const std::string& actionCode) const
+{
+    ActionItem action = actionsRegister()->action(actionCode);
+    return QString::fromStdString(action.title);
 }
 
 int ShortcutsModel::rowCount(const QModelIndex&) const
@@ -96,9 +107,30 @@ void ShortcutsModel::load()
         load();
     });
 
+    std::sort(m_shortcuts.begin(), m_shortcuts.end(), [this](const Shortcut& s1, const Shortcut& s2) {
+        return actionTitle(s1.action) < actionTitle(s2.action);
+    });
+
     endResetModel();
 
     emit shortcutsChanged();
+}
+
+bool ShortcutsModel::apply()
+{
+    ShortcutList shortcuts;
+
+    for (const Shortcut& shortcut: m_shortcuts) {
+        shortcuts.push_back(shortcut);
+    }
+
+    Ret ret = shortcutsRegister()->setShortcuts(shortcuts);
+
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
+
+    return ret;
 }
 
 QItemSelection ShortcutsModel::selection() const
@@ -153,16 +185,31 @@ QVariantList ShortcutsModel::shortcuts() const
 
 void ShortcutsModel::loadShortcutsFromFile()
 {
-    QString filter = qtrc("shortcuts", "MuseScore Shortcuts File") +  " (*.xml)";
-    io::path selectedPath = interactive()->selectOpeningFile(qtrc("shortcuts", "Load Shortcuts"),
-                                                             configuration()->shortcutsUserPath().val,
-                                                             filter);
-    configuration()->setShortcutsUserPath(selectedPath);
+    io::path path = interactive()->selectOpeningFile(
+                qtrc("shortcuts", "Load Shortcuts"),
+                configuration()->shortcutsUserPath().val,
+                shorcutsFileFilter());
+
+    if (!path.empty()) {
+        configuration()->setShortcutsUserPath(path);
+    }
 }
 
 void ShortcutsModel::saveShortcutsToFile()
 {
-    NOT_IMPLEMENTED;
+    io::path path = interactive()->selectSavingFile(
+                qtrc("shortcuts", "Save Shortcuts"),
+                configuration()->shortcutsUserPath().val,
+                shorcutsFileFilter());
+
+    if (path.empty()) {
+        return;
+    }
+
+    Ret ret = shortcutsRegister()->saveToFile(path);
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
 }
 
 void ShortcutsModel::printShortcuts()
