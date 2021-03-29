@@ -19,9 +19,8 @@
 #ifndef MU_IMPORTEXPORT_IMUSICXMLCONFIGURATION_H
 #define MU_IMPORTEXPORT_IMUSICXMLCONFIGURATION_H
 
-#include <string>
-#include <optional>
 #include "modularity/imoduleexport.h"
+#include "io/path.h"
 
 namespace mu::iex::musicxml {
 class IMusicXmlConfiguration : MODULE_EXPORT_INTERFACE
@@ -32,8 +31,13 @@ public:
     virtual ~IMusicXmlConfiguration() = default;
 
     virtual bool musicxmlImportBreaks() const = 0;
+    virtual void setMusicxmlImportBreaks(bool value) = 0;
+
     virtual bool musicxmlImportLayout() const = 0;
+    virtual void setMusicxmlImportLayout(bool value) = 0;
+
     virtual bool musicxmlExportLayout() const = 0;
+    virtual void setMusicxmlExportLayout(bool value) = 0;
 
     enum class MusicxmlExportBreaksType {
         All, Manual, No
@@ -42,6 +46,13 @@ public:
     virtual MusicxmlExportBreaksType musicxmlExportBreaksType() const = 0;
 
     virtual bool needUseDefaultFont() const = 0;
+    virtual void setNeedUseDefaultFont(bool value) = 0;
+
+    virtual bool needAskAboutApplyingNewStyle() const = 0;
+    virtual void setNeedAskAboutApplyingNewStyle(bool value) = 0;
+
+    virtual io::path styleFileImportPath() const = 0;
+    virtual void setStyleFileImportPath(const io::path& path) = 0;
 };
 }
 
