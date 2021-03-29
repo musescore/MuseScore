@@ -214,6 +214,13 @@ enum class NoteFilter
     WithSlur
 };
 
+enum class ZoomType {
+    Percentage,
+    PageWidth,
+    WholePage,
+    TwoPages
+};
+
 struct Meta
 {
     io::path fileName;

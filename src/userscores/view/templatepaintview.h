@@ -22,6 +22,7 @@
 #include "modularity/ioc.h"
 #include "notation/inotationcreator.h"
 #include "notation/view/notationpaintview.h"
+#include "shortcuts/ishortcutsregister.h"
 
 namespace mu::userscores {
 class TemplatePaintView : public notation::NotationPaintView
@@ -29,14 +30,15 @@ class TemplatePaintView : public notation::NotationPaintView
     Q_OBJECT
 
     INJECT(userscores, notation::INotationCreator, notationCreator)
+    INJECT(userscores, shortcuts::IShortcutsRegister, shortcutsRegister)
 
 public:
     explicit TemplatePaintView(QQuickItem* parent = nullptr);
 
     Q_INVOKABLE void load(const QString& templatePath);
 
-    Q_INVOKABLE void zoomIn();
-    Q_INVOKABLE void zoomOut();
+    Q_INVOKABLE QString zoomInSequence() const;
+    Q_INVOKABLE QString zoomOutSequence() const;
 
 private slots:
     void onViewSizeChanged() override;

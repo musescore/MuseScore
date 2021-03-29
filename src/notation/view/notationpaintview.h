@@ -64,7 +64,8 @@ public:
     Q_INVOKABLE void scrollHorizontal(qreal position);
     Q_INVOKABLE void scrollVertical(qreal position);
 
-    Q_INVOKABLE void handleAction(const QString& actionCode);
+    Q_INVOKABLE void zoomIn();
+    Q_INVOKABLE void zoomOut();
 
     qreal width() const override;
     qreal height() const override;
@@ -172,6 +173,9 @@ private:
     QPointF alignToCurrentPageBorder(const QRectF& showRect, const QPointF& pos) const;
 
     void paintBackground(const QRect& rect, mu::draw::Painter* painter);
+
+    QPoint canvasCenter() const;
+    std::pair<int, int> constraintCanvas(int dx, int dy) const;
 
     notation::INotationPtr m_notation;
     QTransform m_matrix;

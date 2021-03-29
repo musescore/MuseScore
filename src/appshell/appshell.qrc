@@ -44,5 +44,6 @@
         <file>qml/Preferences/internal/ColorAndWallpaperSection.qml</file>
         <file>qml/Preferences/FoldersPreferencesPage.qml</file>
         <file>qml/Preferences/AdvancedPreferencesPage.qml</file>
+        <file>qml/Preferences/CanvasPreferencesPage.qml</file>
     </qresource>
 </RCC>

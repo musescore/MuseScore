@@ -53,7 +53,11 @@ static const Settings::Key FOREGROUND_USE_COLOR(module_name, "ui/canvas/foregrou
 
 static const Settings::Key SELECTION_PROXIMITY(module_name, "ui/canvas/misc/selectionProximity");
 
+static const Settings::Key DEFAULT_ZOOM_TYPE(module_name, "ui/canvas/zoomDefaultType");
+static const Settings::Key DEFAULT_ZOOM(module_name, "ui/canvas/zoomDefaultLevel");
 static const Settings::Key CURRENT_ZOOM(module_name, "ui/canvas/misc/currentZoom");
+static const Settings::Key KEYBOARD_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionKeyboard");
+static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionMouse");
 
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
 
@@ -66,6 +70,7 @@ static const Settings::Key IS_COUNT_IN_ENABLED(module_name, "application/playbac
 static const Settings::Key TOOLBAR_KEY(module_name, "ui/toolbar/");
 
 static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/canvas/scroll/verticalOrientation");
+static const Settings::Key IS_LIMIT_CANVAS_SCROLL_AREA_KEY(module_name, "ui/canvas/scroll/limitScrollArea");
 
 static const Settings::Key ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE(module_name, "io/midi/advanceOnRelease");
 static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name, "score/note/warnPitchRange");
@@ -118,6 +123,10 @@ void NotationConfiguration::init()
         m_foregroundChanged.notify();
     });
 
+    settings()->setDefaultValue(DEFAULT_ZOOM_TYPE, Val(static_cast<int>(ZoomType::Percentage)));
+    settings()->setDefaultValue(DEFAULT_ZOOM, Val(100));
+    settings()->setDefaultValue(KEYBOARD_ZOOM_PRECISION, Val(2));
+    settings()->setDefaultValue(MOUSE_ZOOM_PRECISION, Val(6));
     settings()->setDefaultValue(CURRENT_ZOOM, Val(100));
     settings()->valueChanged(CURRENT_ZOOM).onReceive(nullptr, [this](const Val& val) {
         m_currentZoomChanged.send(val.toInt());
@@ -125,7 +134,7 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->sharePath().toStdString() + "Styles"));
     settings()->valueChanged(USER_STYLES_PATH).onReceive(nullptr, [this](const Val& val) {
-        m_stylesPathChnaged.send(val.toString());
+        m_stylesPathChanged.send(val.toString());
     });
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(6));
@@ -139,6 +148,8 @@ void NotationConfiguration::init()
     settings()->valueChanged(IS_CANVAS_ORIENTATION_VERTICAL_KEY).onReceive(nullptr, [this](const Val&) {
         m_canvasOrientationChanged.send(canvasOrientation().val);
     });
+
+    settings()->setDefaultValue(IS_LIMIT_CANVAS_SCROLL_AREA_KEY, Val(false));
 
     settings()->setDefaultValue(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE, Val(true));
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
@@ -310,6 +321,31 @@ int NotationConfiguration::selectionProximity() const
     return settings()->value(SELECTION_PROXIMITY).toInt();
 }
 
+void NotationConfiguration::setSelectionProximity(int proxymity)
+{
+    settings()->setValue(SELECTION_PROXIMITY, Val(proxymity));
+}
+
+ZoomType NotationConfiguration::defaultZoomType() const
+{
+    return static_cast<ZoomType>(settings()->value(DEFAULT_ZOOM_TYPE).toInt());
+}
+
+void NotationConfiguration::setDefaultZoomType(ZoomType zoomType)
+{
+    settings()->setValue(DEFAULT_ZOOM_TYPE, Val(static_cast<int>(zoomType)));
+}
+
+int NotationConfiguration::defaultZoom() const
+{
+    return settings()->value(DEFAULT_ZOOM).toInt();
+}
+
+void NotationConfiguration::setDefaultZoom(int zoomPercentage)
+{
+    settings()->setValue(DEFAULT_ZOOM, Val(zoomPercentage));
+}
+
 mu::ValCh<int> NotationConfiguration::currentZoom() const
 {
     mu::ValCh<int> zoom;
@@ -322,6 +358,16 @@ mu::ValCh<int> NotationConfiguration::currentZoom() const
 void NotationConfiguration::setCurrentZoom(int zoomPercentage)
 {
     settings()->setValue(CURRENT_ZOOM, Val(zoomPercentage));
+}
+
+int NotationConfiguration::mouseZoomPrecision() const
+{
+    return settings()->value(MOUSE_ZOOM_PRECISION).toInt();
+}
+
+void NotationConfiguration::setMouseZoomPrecision(int precision)
+{
+    settings()->setValue(MOUSE_ZOOM_PRECISION, Val(precision));
 }
 
 std::string NotationConfiguration::fontFamily() const
@@ -337,7 +383,7 @@ int NotationConfiguration::fontSize() const
 ValCh<io::path> NotationConfiguration::stylesPath() const
 {
     ValCh<io::path> result;
-    result.ch = m_stylesPathChnaged;
+    result.ch = m_stylesPathChanged;
     result.val = settings()->value(USER_STYLES_PATH).toString();
 
     return result;
@@ -444,7 +490,19 @@ ValCh<Orientation> NotationConfiguration::canvasOrientation() const
 void NotationConfiguration::setCanvasOrientation(Orientation orientation)
 {
     bool isVertical = orientation == Orientation::Vertical;
+    Ms::MScore::setVerticalOrientation(isVertical);
+
     settings()->setValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(isVertical));
+}
+
+bool NotationConfiguration::isLimitCanvasScrollArea() const
+{
+    return settings()->value(IS_LIMIT_CANVAS_SCROLL_AREA_KEY).toBool();
+}
+
+void NotationConfiguration::setIsLimitCanvasScrollArea(bool limited)
+{
+    settings()->setValue(IS_LIMIT_CANVAS_SCROLL_AREA_KEY, Val(limited));
 }
 
 std::vector<std::string> NotationConfiguration::parseToolbarActions(const std::string& actions) const

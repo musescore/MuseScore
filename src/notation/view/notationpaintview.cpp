@@ -90,6 +90,8 @@ void NotationPaintView::load()
 
     initBackground();
     initNavigatorOrientation();
+
+    m_inputController->init();
 }
 
 void NotationPaintView::initBackground()
@@ -115,17 +117,8 @@ void NotationPaintView::moveCanvasToCenter()
         return;
     }
 
-    QRectF canvasRect = m_matrix.mapRect(notationContentRect());
-
-    int canvasWidth = canvasRect.width() / guiScaling();
-    int canvasHeight = canvasRect.height() / guiScaling();
-
-    int dx = (width() - canvasWidth) / 2;
-    int dy = (height() - canvasHeight) / 2;
-
-    QPoint newTopLeft = toLogical(QPoint(dx, dy));
-
-    moveCanvas(newTopLeft.x(), newTopLeft.y());
+    QPoint canvasCenter = this->canvasCenter();
+    moveCanvas(canvasCenter.x(), canvasCenter.y());
 }
 
 void NotationPaintView::scrollHorizontal(qreal position)
@@ -152,9 +145,14 @@ void NotationPaintView::scrollVertical(qreal position)
     moveCanvasVertical(-dy);
 }
 
-void NotationPaintView::handleAction(const QString& actionCode)
+void NotationPaintView::zoomIn()
 {
-    dispatcher()->dispatch(actionCode.toStdString());
+    m_inputController->zoomIn();
+}
+
+void NotationPaintView::zoomOut()
+{
+    m_inputController->zoomOut();
 }
 
 bool NotationPaintView::canReceiveAction(const actions::ActionCode& actionCode) const
@@ -226,6 +224,10 @@ void NotationPaintView::onViewSizeChanged()
 {
     if (!notation()) {
         return;
+    }
+
+    if (viewport().isValid() && !m_inputController->isZoomInited()) {
+        m_inputController->initZoom();
     }
 
     notation()->setViewSize(viewport().size());
@@ -335,7 +337,7 @@ void NotationPaintView::showContextMenu(const ElementType& elementType, const QP
 void NotationPaintView::paint(QPainter* qp)
 {
     TRACEFUNC;
-    if (!notation()) {
+    if (!isInited()) {
         return;
     }
 
@@ -365,6 +367,44 @@ void NotationPaintView::paintBackground(const QRect& rect, mu::draw::Painter* pa
         QPixmap pixmap(wallpaperPath);
         painter->drawTiledPixmap(rect, pixmap, rect.topLeft() - QPoint(m_matrix.m31(), m_matrix.m32()));
     }
+}
+
+QPoint NotationPaintView::canvasCenter() const
+{
+    QRectF canvasRect = m_matrix.mapRect(notationContentRect());
+
+    int canvasWidth = canvasRect.width() / guiScaling();
+    int canvasHeight = canvasRect.height() / guiScaling();
+
+    int x = (width() - canvasWidth) / 2;
+    int y = (height() - canvasHeight) / 2;
+
+    return toLogical(QPoint(x, y));
+}
+
+std::pair<int, int> NotationPaintView::constraintCanvas(int dx, int dy) const
+{
+    QRectF contentRect = notationContentRect();
+    QRectF viewport = this->viewport();
+
+    QPoint canvasCenter = this->canvasCenter();
+    if (contentRect.width() <= viewport.width()) {
+        dx = canvasCenter.x();
+    } else if (viewport.left() - dx < contentRect.left()) {
+        dx = viewport.left() - contentRect.left();
+    } else if (viewport.right() - dx > contentRect.right()) {
+        dx = viewport.right() - contentRect.right();
+    }
+
+    if (contentRect.height() <= viewport.height()) {
+        dy = canvasCenter.y();
+    } else if (viewport.top() - dy < contentRect.top()) {
+        dy = viewport.top() - contentRect.top();
+    } else if (viewport.bottom() - dy > contentRect.bottom()) {
+        dy = viewport.bottom() - contentRect.bottom();
+    }
+
+    return { dx, dy };
 }
 
 QColor NotationPaintView::backgroundColor() const
@@ -520,6 +560,12 @@ void NotationPaintView::moveCanvas(int dx, int dy)
 {
     if (dx == 0 && dy == 0) {
         return;
+    }
+
+    if (configuration()->isLimitCanvasScrollArea()) {
+        std::pair<int, int> corrected = constraintCanvas(dx, dy);
+        dx = corrected.first;
+        dy = corrected.second;
     }
 
     m_matrix.translate(dx, dy);
