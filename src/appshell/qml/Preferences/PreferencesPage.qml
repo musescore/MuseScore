@@ -11,4 +11,10 @@ Flickable {
     interactive: height < contentHeight
 
     ScrollBar.vertical: StyledScrollBar {}
+
+    signal hideRequested()
+
+    function apply() {
+        return true
+    }
 }

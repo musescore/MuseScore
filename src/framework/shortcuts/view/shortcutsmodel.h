@@ -58,6 +58,7 @@ public:
     QVariantList shortcuts() const;
 
     Q_INVOKABLE void load();
+    Q_INVOKABLE bool apply();
 
     Q_INVOKABLE void loadShortcutsFromFile();
     Q_INVOKABLE void saveShortcutsToFile();
@@ -76,6 +77,7 @@ signals:
     void shortcutsChanged();
 
 private:
+    QString shortcutTitle(const std::string& actionCode) const;
     QString actionTitle(const std::string& actionCode) const;
 
     QModelIndex currentShortcutIndex() const;
