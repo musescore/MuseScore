@@ -1,5 +1,5 @@
 import QtQuick 2.15
-import QtQuick.Layouts 1.12
+import QtQuick.Layouts 1.15
 import QtQuick.Dialogs 1.3
 
 import MuseScore.Ui 1.0
@@ -9,13 +9,11 @@ import MuseScore.Shortcuts 1.0
 Dialog {
     id: root
 
-    property alias allShortcuts: model.allShortcuts
-
     signal applySequenceRequested(var newSequence)
 
-    function startEdit(sequence) {
+    function startEdit(sequence, allShortcuts) {
         open()
-        model.load(sequence)
+        model.load(sequence, allShortcuts)
         newSequenceField.forceActiveFocus()
     }
 

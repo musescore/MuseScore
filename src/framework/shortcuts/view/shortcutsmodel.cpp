@@ -44,11 +44,13 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     }
 
     Shortcut shortcut = m_shortcuts[index.row()];
-    QString title = shortcutTitle(shortcut.action);
     QString sequence = QString::fromStdString(shortcut.sequence);
+    ActionItem action = this->action(shortcut.action);
+    QString title = QString::fromStdString(action.title);
 
     switch (role) {
-    case RoleTitle: return shortcutTitle(shortcut.action);
+    case RoleTitle: return title;
+    case RoleIcon: return static_cast<int>(action.iconCode);
     case RoleSequence: return sequence;
     case RoleSearchKey: return title + sequence;
     }
@@ -56,21 +58,14 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-QString ShortcutsModel::shortcutTitle(const std::string& actionCode) const
+ActionItem ShortcutsModel::action(const std::string& actionCode) const
 {
-    ActionItem action = actionsRegister()->action(actionCode);
-    QString title = QString::fromStdString(action.title);
-
-    if (action.iconCode == IconCode::Code::NONE) {
-        return title;
-    }
-
-    return QString(iconCodeToChar(action.iconCode)) + " " + title;
+    return actionsRegister()->action(actionCode);
 }
 
 QString ShortcutsModel::actionTitle(const std::string& actionCode) const
 {
-    ActionItem action = actionsRegister()->action(actionCode);
+    ActionItem action = this->action(actionCode);
     return QString::fromStdString(action.title);
 }
 
@@ -83,6 +78,7 @@ QHash<int, QByteArray> ShortcutsModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
         { RoleTitle, "title" },
+        { RoleIcon, "icon" },
         { RoleSequence, "sequence" },
         { RoleSearchKey, "searchKey" }
     };
@@ -112,8 +108,6 @@ void ShortcutsModel::load()
     });
 
     endResetModel();
-
-    emit shortcutsChanged();
 }
 
 bool ShortcutsModel::apply()
@@ -166,21 +160,6 @@ void ShortcutsModel::setSelection(const QItemSelection& selection)
 
     m_selection = selection;
     emit selectionChanged();
-}
-
-QVariantList ShortcutsModel::shortcuts() const
-{
-    QVariantList result;
-
-    for (const Shortcut& shortcut: m_shortcuts) {
-        QVariantMap obj;
-        obj["title"] = actionTitle(shortcut.action);
-        obj["sequence"] = QString::fromStdString(shortcut.sequence);
-
-        result << obj;
-    }
-
-    return result;
 }
 
 void ShortcutsModel::loadShortcutsFromFile()
@@ -239,7 +218,6 @@ void ShortcutsModel::clearSelectedShortcuts()
 void ShortcutsModel::notifyAboutShortcutChanged(const QModelIndex& index)
 {
     emit dataChanged(index, index);
-    emit shortcutsChanged();
 }
 
 void ShortcutsModel::resetToDefaultSelectedShortcuts()
@@ -250,4 +228,19 @@ void ShortcutsModel::resetToDefaultSelectedShortcuts()
 
         notifyAboutShortcutChanged(index);
     }
+}
+
+QVariantList ShortcutsModel::shortcuts() const
+{
+    QVariantList result;
+
+    for (const Shortcut& shortcut: m_shortcuts) {
+        QVariantMap obj;
+        obj["title"] = actionTitle(shortcut.action);
+        obj["sequence"] = QString::fromStdString(shortcut.sequence);
+
+        result << obj;
+    }
+
+    return result;
 }
