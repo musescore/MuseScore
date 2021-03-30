@@ -83,8 +83,8 @@ QHash<int, QByteArray> VstPluginListModelExample::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
         { NameRole, "nameRole" },
-        { IdRole, "idRole"},
-        { PathRole, "pathRole"}
+        { IdRole, "idRole" },
+        { PathRole, "pathRole" }
     };
     return roles;
 }
