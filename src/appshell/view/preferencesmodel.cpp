@@ -159,7 +159,8 @@ void PreferencesModel::load(const QString& currentPageId)
                  "Preferences/ScorePreferencesPage.qml"),
         makeItem("io", qtrc("appshell", "I/O"), IconCode::Code::AUDIO),
         makeItem("import", qtrc("appshell", "Import"), IconCode::Code::IMPORT),
-        makeItem("shortcuts", qtrc("appshell", "Shortcuts"), IconCode::Code::SHORTCUTS),
+        makeItem("shortcuts", qtrc("appshell", "Shortcuts"), IconCode::Code::SHORTCUTS,
+                 "Preferences/ShortcutsPreferencesPage.qml"),
         makeItem("update", qtrc("appshell", "Update"), IconCode::Code::UPDATE,
                  "Preferences/UpdatePreferencesPage.qml"),
         makeItem("advanced", qtrc("appshell", "Advanced"), IconCode::Code::CONFIGURE,
@@ -181,7 +182,7 @@ void PreferencesModel::resetFactorySettings()
 bool PreferencesModel::apply()
 {
     NOT_IMPLEMENTED;
-    return false;
+    return true;
 }
 
 void PreferencesModel::selectRow(const QModelIndex& rowIndex)

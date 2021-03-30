@@ -12,6 +12,7 @@ ListItemBlank {
     property string keyRoleName: "key"
     property string valueRoleName: "value"
     property string valueTypeRole: "valueType"
+    property string iconRoleName: "icon"
 
     property bool readOnly: false
 
@@ -55,13 +56,21 @@ ListItemBlank {
 
         anchors.fill: parent
 
-        StyledTextLabel {
+        Row {
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
             Layout.fillWidth: true
             Layout.leftMargin: root.sideMargin
 
-            text: root.item[keyRoleName]
-            horizontalAlignment: Text.AlignLeft
+            spacing: 8
+
+            StyledIconLabel {
+                iconCode: Boolean(root.item[iconRoleName]) ? root.item[iconRoleName] : IconCode.NONE
+            }
+
+            StyledTextLabel {
+                text: root.item[keyRoleName]
+                horizontalAlignment: Text.AlignLeft
+            }
         }
 
         Loader {

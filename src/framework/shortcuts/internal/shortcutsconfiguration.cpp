@@ -18,14 +18,38 @@
 //=============================================================================
 #include "shortcutsconfiguration.h"
 
+#include "settings.h"
+
 using namespace mu::shortcuts;
+using namespace mu::framework;
 
 static const std::string SHORTCUTS_FILE_NAME("shortcuts.xml");
 static const std::string SHORTCUTS_DEFAULT_FILE_PATH(":/data/" + SHORTCUTS_FILE_NAME);
 
-mu::io::path ShortcutsConfiguration::shortcutsUserPath() const
+static const Settings::Key USER_PATH_KEY("shortcuts", "application/paths/myShortcuts");
+
+void ShortcutsConfiguration::init()
 {
-    return globalConfiguration()->dataPath() + "/" + SHORTCUTS_FILE_NAME;
+    io::path defaultUserPath = globalConfiguration()->dataPath() + "/" + SHORTCUTS_FILE_NAME;
+    settings()->setDefaultValue(USER_PATH_KEY, Val(defaultUserPath.toStdString()));
+
+    settings()->valueChanged(USER_PATH_KEY).onReceive(this, [this](const Val& val) {
+        m_userPathChanged.send(val.toString());
+    });
+}
+
+mu::ValCh<mu::io::path> ShortcutsConfiguration::shortcutsUserPath() const
+{
+    ValCh<io::path> result;
+    result.ch = m_userPathChanged;
+    result.val = settings()->value(USER_PATH_KEY).toString();
+
+    return result;
+}
+
+void ShortcutsConfiguration::setShortcutsUserPath(const io::path& path)
+{
+    settings()->setValue(USER_PATH_KEY, Val(path.toStdString()));
 }
 
 mu::io::path ShortcutsConfiguration::shortcutsDefaultPath() const

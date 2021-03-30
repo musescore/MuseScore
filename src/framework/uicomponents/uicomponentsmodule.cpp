@@ -26,6 +26,7 @@
 #include "view/sortfilterproxymodel.h"
 #include "view/popupview.h"
 #include "view/filepickermodel.h"
+#include "view/itemmultiselectionmodel.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
@@ -74,6 +75,7 @@ void UiComponentsModule::registerUiTypes()
 
     qmlRegisterType<PopupView>("MuseScore.UiComponents", 1, 0, "PopupView");
     qmlRegisterType<FilePickerModel>("MuseScore.UiComponents", 1, 0, "FilePickerModel");
+    qmlRegisterType<ItemMultiSelectionModel>("MuseScore.UiComponents", 1, 0, "ItemMultiSelectionModel");
 
     auto ui = framework::ioc()->resolve<ui::IUiEngine>(moduleName());
     if (ui) {

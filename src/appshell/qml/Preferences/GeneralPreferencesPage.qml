@@ -8,20 +8,12 @@ import MuseScore.Preferences 1.0
 PreferencesPage {
     id: root
 
-    signal hideRequested()
-
     Component.onCompleted: {
         preferencesModel.load()
     }
 
     GeneralPreferencesModel {
         id: preferencesModel
-    }
-
-    Rectangle {
-        anchors.fill: parent
-
-        color: ui.theme.backgroundSecondaryColor
     }
 
     Column {
