@@ -36,7 +36,7 @@ SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
     });
 
     connect(m_sorters.notifier(), &QmlListPropertyNotifier::appended, this, [this](int index) {
-        connect(m_sorters.at(index), &SorterValue::dataChanged, this, [this, index]() {
+        connect(m_sorters.at(index), &SorterValue::dataChanged, this, [this]() {
             SorterValue* sorter = currentSorterValue();
             invalidate();
 

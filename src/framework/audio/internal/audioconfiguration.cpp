@@ -38,6 +38,8 @@ static const Settings::Key AUDIO_BUFFER_SIZE("audio", "driver_buffer");
 
 static const Settings::Key USER_SOUNDFONTS_PATH("midi", "application/paths/mySoundfonts");
 
+static const Settings::Key SHOW_CONTROLS_IN_MIXER("midi", "io/midi/showControlsInMixer");
+
 //! FIXME Temporary for tests
 static const std::string DEFAULT_FLUID_SOUNDFONT = "MuseScore_General.sf3";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
 static const std::string DEFAULT_ZERBERUS_SOUNDFONT = "FM-Piano1-20190916.sfz"; // "";
@@ -51,6 +53,8 @@ void AudioConfiguration::init()
     defaultBufferSize = 1024;
 #endif
     settings()->setDefaultValue(AUDIO_BUFFER_SIZE, Val(defaultBufferSize));
+
+    settings()->setDefaultValue(SHOW_CONTROLS_IN_MIXER, Val(true));
 }
 
 unsigned int AudioConfiguration::driverBufferSize() const
@@ -69,6 +73,16 @@ std::vector<io::path> AudioConfiguration::soundFontPaths() const
     //QStringList extensionsDir = Ms::Extension::getDirectoriesByType(Ms::Extension::soundfontsDir);
 
     return paths;
+}
+
+bool AudioConfiguration::isShowControlsInMixer() const
+{
+    return settings()->value(SHOW_CONTROLS_IN_MIXER).toBool();
+}
+
+void AudioConfiguration::setIsShowControlsInMixer(bool show)
+{
+    settings()->setValue(SHOW_CONTROLS_IN_MIXER, Val(show));
 }
 
 const SynthesizerState& AudioConfiguration::defaultSynthesizerState() const

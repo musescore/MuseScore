@@ -79,7 +79,7 @@ public:
     QColor layoutBreakColor() const override;
 
     int selectionProximity() const override;
-    void setSelectionProximity(int proxymity);
+    void setSelectionProximity(int proxymity) override;
 
     ZoomType defaultZoomType() const override;
     void setDefaultZoomType(ZoomType zoomType) override;
@@ -98,6 +98,12 @@ public:
 
     ValCh<io::path> stylesPath() const override;
     void setStylesPath(const io::path& path) override;
+
+    io::path defaultStyleFilePath() const override;
+    void setDefaultStyleFilePath(const io::path& path) override;
+
+    io::path partStyleFilePath() const override;
+    void setPartStyleFilePath(const io::path& path) override;
 
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled) override;
