@@ -32,18 +32,18 @@ QmlDialog {
         Component.onCompleted: {
             preferencesModel.load(root.currentPageId)
 
-            createPagesObjects()
+            initPagesObjects()
 
             root.privatesProperties.inited = true
         }
 
-        function createPagesObjects() {
+        function initPagesObjects() {
             var pages = preferencesModel.availablePages()
             for (var i in pages) {
                 var pageInfo = pages[i]
 
                 var pagePath = Boolean(pageInfo.path) ? pageInfo.path : "Preferences/StubPreferencesPage.qml"
-                var pageComponent = Qt.createComponent("../" + pagePath);
+                var pageComponent = Qt.createComponent("../" + pagePath)
 
                 var obj = pageComponent.createObject(stack)
 
@@ -128,10 +128,7 @@ QmlDialog {
                     for (var i in pages) {
                         var page = pages[i]
                         var obj = root.privatesProperties.pagesObjects[page.id]
-
-                        if (Boolean(obj.apply)) {
-                            ok &= obj.apply()
-                        }
+                        ok &= obj.apply()
                     }
 
                     if (ok) {

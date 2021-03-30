@@ -6,7 +6,7 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
-Item {
+PreferencesPage {
     id: root
 
     Component.onCompleted: {
@@ -15,12 +15,6 @@ Item {
 
     AdvancedPreferencesModel {
         id: preferencesModel
-    }
-
-    Rectangle {
-        anchors.fill: parent
-
-        color: ui.theme.backgroundSecondaryColor
     }
 
     ColumnLayout {

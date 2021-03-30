@@ -16,12 +16,6 @@ PreferencesPage {
         id: preferencesModel
     }
 
-    Rectangle {
-        anchors.fill: parent
-
-        color: ui.theme.backgroundSecondaryColor
-    }
-
     Column {
         anchors.fill: parent
         spacing: 24

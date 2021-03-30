@@ -174,6 +174,10 @@ const ShortcutList& ShortcutsRegister::shortcuts() const
 
 mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
 {
+    if (shortcuts == m_shortcuts) {
+        return true;
+    }
+
     bool ok = writeToFile(shortcuts, configuration()->shortcutsUserPath().val);
 
     if (ok) {
