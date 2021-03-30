@@ -46,19 +46,9 @@ QVariantList AppearancePreferencesModel::themes() const
     return result;
 }
 
-QStringList AppearancePreferencesModel::accentColorSamples() const
+QStringList AppearancePreferencesModel::accentColors() const
 {
-    static const QStringList samples {
-        "#F36565",
-        "#F39048",
-        "#FFC52F",
-        "#63D47B",
-        "#70AFEA",
-        "#A488F2",
-        "#F87BDC"
-    };
-
-    return samples;
+    return uiConfiguration()->possibleAccentColors();
 }
 
 QStringList AppearancePreferencesModel::allFonts() const
@@ -92,11 +82,11 @@ int AppearancePreferencesModel::currentThemeIndex() const
 
 int AppearancePreferencesModel::currentAccentColorIndex() const
 {
-    QStringList samples = accentColorSamples();
+    QStringList allColors = accentColors();
     QString color = currentTheme().values[ACCENT_COLOR].toString().toLower();
 
-    for (int i = 0; i < static_cast<int>(samples.size()); ++i) {
-        if (samples[i].toLower() == color) {
+    for (int i = 0; i < static_cast<int>(allColors.size()); ++i) {
+        if (allColors[i].toLower() == color) {
             return i;
         }
     }
@@ -178,7 +168,7 @@ void AppearancePreferencesModel::setCurrentThemeIndex(int index)
 
 void AppearancePreferencesModel::setCurrentAccentColorIndex(int index)
 {
-    if (index < 0 || index >= accentColorSamples().size()) {
+    if (index < 0 || index >= accentColors().size()) {
         return;
     }
 
@@ -186,7 +176,7 @@ void AppearancePreferencesModel::setCurrentAccentColorIndex(int index)
         return;
     }
 
-    QColor color = accentColorSamples()[index];
+    QColor color = accentColors()[index];
     uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(color));
     emit themesChanged();
 }
