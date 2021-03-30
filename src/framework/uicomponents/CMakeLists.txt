@@ -26,11 +26,6 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uicomponentsmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/uicomponentsmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/uicomponentstypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/imenucontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/imenucontrollersregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/menucontrollersregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/menucontrollersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/view/sampleobject.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/sampleobject.h
     ${CMAKE_CURRENT_LIST_DIR}/view/validators/doubleinputvalidator.cpp
@@ -51,8 +46,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/qmllistproperty.h
     ${CMAKE_CURRENT_LIST_DIR}/view/popupview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/popupview.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/filepickermodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/filepickermodel.h
     )

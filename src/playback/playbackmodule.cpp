@@ -23,11 +23,11 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
-#include "actions/iactionsregister.h"
+#include "ui/iuiactionsregister.h"
 #include "ui/iinteractiveuriregister.h"
 
 #include "internal/playbackcontroller.h"
-#include "internal/playbackactions.h"
+#include "internal/playbackuiactions.h"
 #include "internal/playbackconfiguration.h"
 
 #include "view/playbacktoolbarmodel.h"
@@ -59,9 +59,9 @@ void PlaybackModule::registerExports()
 
 void PlaybackModule::resolveImports()
 {
-    auto ar = ioc()->resolve<IActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(std::make_shared<PlaybackActions>());
+        ar->reg(std::make_shared<PlaybackUiActions>(s_playbackController));
     }
 }
 

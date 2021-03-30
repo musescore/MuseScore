@@ -24,7 +24,6 @@
 #include "log.h"
 
 using namespace mu::shortcuts;
-using namespace mu::actions;
 using namespace mu::ui;
 
 QString shorcutsFileFilter()
@@ -45,8 +44,8 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
 
     Shortcut shortcut = m_shortcuts[index.row()];
     QString sequence = QString::fromStdString(shortcut.sequence);
-    ActionItem action = this->action(shortcut.action);
-    QString title = QString::fromStdString(action.title);
+    const UiAction& action = this->action(shortcut.action);
+    QString title = action.title;
 
     switch (role) {
     case RoleTitle: return title;
@@ -58,15 +57,15 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-ActionItem ShortcutsModel::action(const std::string& actionCode) const
+const UiAction& ShortcutsModel::action(const std::string& actionCode) const
 {
-    return actionsRegister()->action(actionCode);
+    return uiactionsRegister()->action(actionCode);
 }
 
 QString ShortcutsModel::actionTitle(const std::string& actionCode) const
 {
-    ActionItem action = this->action(actionCode);
-    return QString::fromStdString(action.title);
+    const UiAction& action = this->action(actionCode);
+    return action.title;
 }
 
 int ShortcutsModel::rowCount(const QModelIndex&) const

@@ -56,6 +56,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uierrors.h
     ${CMAKE_CURRENT_LIST_DIR}/uitypes.h
     ${CMAKE_CURRENT_LIST_DIR}/imainwindow.h
+    ${CMAKE_CURRENT_LIST_DIR}/iuiactionsregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/iuiactionsmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/iuicontextresolver.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.h
@@ -66,6 +69,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/themeconverter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/themeconverter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/iplatformtheme.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/uiactionsregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/uiactionsregister.h
     ${PLATFORM_THEME_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.cpp
@@ -86,6 +91,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltooltip.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetdialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetdialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.h
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.h

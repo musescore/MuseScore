@@ -25,16 +25,14 @@
 
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
-#include "uicomponents/uicomponentstypes.h"
 #include "workspace/iworkspacemanager.h"
 #include "iappshellconfiguration.h"
 #include "userscores/iuserscoresservice.h"
 
-#include "uicomponents/view/abstractmenumodel.h"
-#include "uicomponents/imenucontrollersregister.h"
+#include "ui/view/abstractmenumodel.h"
 
 namespace mu::appshell {
-class AppMenuModel : public QObject, public uicomponents::AbstractMenuModel, public async::Asyncable
+class AppMenuModel : public QObject, public ui::AbstractMenuModel
 {
     Q_OBJECT
 
@@ -42,8 +40,6 @@ class AppMenuModel : public QObject, public uicomponents::AbstractMenuModel, pub
     INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, userscores::IUserScoresService, userScoresService)
-
-    INJECT(appshell, uicomponents::IMenuControllersRegister, menuControllersRegister)
 
     Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
 
@@ -53,32 +49,31 @@ public:
     Q_INVOKABLE void load();
     Q_INVOKABLE void handleAction(const QString& actionCodeStr, int actionIndex);
 
-    uicomponents::ActionState actionState(const actions::ActionCode& actionCode) const override;
-
 signals:
     void itemsChanged();
 
 private:
     void setupConnections();
+    void onActionsStateChanges(const actions::ActionCodeList& codes) override;
 
-    uicomponents::MenuItem fileItem() const;
-    uicomponents::MenuItem editItem() const;
-    uicomponents::MenuItem viewItem() const;
-    uicomponents::MenuItem addItem() const;
-    uicomponents::MenuItem formatItem() const;
-    uicomponents::MenuItem toolsItem() const;
-    uicomponents::MenuItem helpItem() const;
+    ui::MenuItem fileItem() const;
+    ui::MenuItem editItem() const;
+    ui::MenuItem viewItem() const;
+    ui::MenuItem addItem() const;
+    ui::MenuItem formatItem() const;
+    ui::MenuItem toolsItem() const;
+    ui::MenuItem helpItem() const;
 
-    uicomponents::MenuItemList recentScores() const;
-    uicomponents::MenuItemList notesItems() const;
-    uicomponents::MenuItemList intervalsItems() const;
-    uicomponents::MenuItemList tupletsItems() const;
-    uicomponents::MenuItemList measuresItems() const;
-    uicomponents::MenuItemList framesItems() const;
-    uicomponents::MenuItemList textItems() const;
-    uicomponents::MenuItemList linesItems() const;
-    uicomponents::MenuItemList toolbarsItems() const;
-    uicomponents::MenuItemList workspacesItems() const;
+    ui::MenuItemList recentScores() const;
+    ui::MenuItemList notesItems() const;
+    ui::MenuItemList intervalsItems() const;
+    ui::MenuItemList tupletsItems() const;
+    ui::MenuItemList measuresItems() const;
+    ui::MenuItemList framesItems() const;
+    ui::MenuItemList textItems() const;
+    ui::MenuItemList linesItems() const;
+    ui::MenuItemList toolbarsItems() const;
+    ui::MenuItemList workspacesItems() const;
 };
 }
 

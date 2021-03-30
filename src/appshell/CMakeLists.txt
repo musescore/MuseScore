@@ -29,14 +29,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/appshell.cpp
     ${CMAKE_CURRENT_LIST_DIR}/appshell.h
-    ${CMAKE_CURRENT_LIST_DIR}/iapplicationactioncontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationpagestate.h
     ${CMAKE_CURRENT_LIST_DIR}/commandlinecontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commandlinecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iappshellconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/appshelltypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationuiactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/applicationuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.cpp
@@ -61,18 +60,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/aboutmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/aboutmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/filemenucontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/filemenucontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/editmenucontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/editmenucontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/viewmenucontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/viewmenucontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/formatmenucontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/formatmenucontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/toolsmenucontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/toolsmenucontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/helpmenucontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/helpmenucontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/generalpreferencesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/generalpreferencesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/updatepreferencesmodel.cpp

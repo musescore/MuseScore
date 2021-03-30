@@ -26,7 +26,7 @@
 #include "stringutils.h"
 
 using namespace mu::notation;
-using namespace mu::uicomponents;
+using namespace mu::ui;
 
 static constexpr qreal MIN_SCROLL_SIZE = 0.2;
 static constexpr qreal MAX_SCROLL_SIZE = 1.0;

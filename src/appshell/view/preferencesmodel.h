@@ -23,7 +23,7 @@
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
-#include "actions/iactionsregister.h"
+#include "ui/iuiactionsregister.h"
 #include "ui/view/iconcodes.h"
 
 #include "iappshellconfiguration.h"
@@ -35,8 +35,8 @@ class PreferencesModel : public QAbstractItemModel
     Q_OBJECT
 
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
-    INJECT(appshell, actions::IActionsRegister, actionsRegister)
     INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(appshell, ui::IUiActionsRegister, actionsRegister)
 
     Q_PROPERTY(QString currentPageId READ currentPageId WRITE setCurrentPageId NOTIFY currentPageIdChanged)
 

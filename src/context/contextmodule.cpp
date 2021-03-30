@@ -20,10 +20,12 @@
 
 #include "modularity/ioc.h"
 #include "internal/globalcontext.h"
+#include "internal/uicontextresolver.h"
 
 using namespace mu::context;
 
 static std::shared_ptr<GlobalContext> s_globalContext = std::make_shared<GlobalContext>();
+static std::shared_ptr<UiContextResolver> s_uicontextResolver = std::make_shared<UiContextResolver>();
 
 std::string ContextModule::moduleName() const
 {
@@ -33,7 +35,16 @@ std::string ContextModule::moduleName() const
 void ContextModule::registerExports()
 {
     framework::ioc()->registerExport<IGlobalContext>(moduleName(), s_globalContext);
-    framework::ioc()->registerExport<shortcuts::IShortcutContextResolver>(moduleName(), s_globalContext);
+    framework::ioc()->registerExport<IUiContextResolver>(moduleName(), s_uicontextResolver);
+}
+
+void ContextModule::onInit(const framework::IApplication::RunMode& mode)
+{
+    if (mode != framework::IApplication::RunMode::Editor) {
+        return;
+    }
+
+    s_uicontextResolver->init();
 }
 
 void ContextModule::onDeinit()

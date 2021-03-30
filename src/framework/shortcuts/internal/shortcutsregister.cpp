@@ -35,7 +35,7 @@ constexpr std::string_view ACTION_CODE_TAG("key");
 constexpr std::string_view STANDARD_KEY_TAG("std");
 constexpr std::string_view SEQUENCE_TAG("seq");
 
-Shortcut findShortcut(const ShortcutList& shortcuts, const std::string& actionCode)
+static const Shortcut& findShortcut(const ShortcutList& shortcuts, const std::string& actionCode)
 {
     for (const Shortcut& shortcut: shortcuts) {
         if (shortcut.action == actionCode) {
@@ -43,7 +43,8 @@ Shortcut findShortcut(const ShortcutList& shortcuts, const std::string& actionCo
         }
     }
 
-    return Shortcut();
+    static Shortcut null;
+    return null;
 }
 
 void ShortcutsRegister::load()
@@ -225,12 +226,12 @@ Notification ShortcutsRegister::shortcutsChanged() const
     return m_shortcutsChanged;
 }
 
-Shortcut ShortcutsRegister::shortcut(const std::string& actionCode) const
+const Shortcut& ShortcutsRegister::shortcut(const std::string& actionCode) const
 {
     return findShortcut(m_shortcuts, actionCode);
 }
 
-Shortcut ShortcutsRegister::defaultShortcut(const std::string& actionCode) const
+const Shortcut& ShortcutsRegister::defaultShortcut(const std::string& actionCode) const
 {
     return findShortcut(m_defaultShortcuts, actionCode);
 }

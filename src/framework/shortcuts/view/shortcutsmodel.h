@@ -26,7 +26,7 @@
 #include "modularity/ioc.h"
 #include "ishortcutsregister.h"
 #include "ishortcutsconfiguration.h"
-#include "actions/iactionsregister.h"
+#include "ui/iuiactionsregister.h"
 #include "async/asyncable.h"
 #include "iinteractive.h"
 
@@ -38,7 +38,7 @@ class ShortcutsModel : public QAbstractListModel, public async::Asyncable
     Q_OBJECT
 
     INJECT(shortcuts, IShortcutsRegister, shortcutsRegister)
-    INJECT(shortcuts, actions::IActionsRegister, actionsRegister)
+    INJECT(shortcuts, ui::IUiActionsRegister, uiactionsRegister)
     INJECT(shortcuts, framework::IInteractive, interactive)
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
 
@@ -75,7 +75,7 @@ signals:
     void selectionChanged();
 
 private:
-    actions::ActionItem action(const std::string& actionCode) const;
+    const ui::UiAction& action(const std::string& actionCode) const;
     QString actionTitle(const std::string& actionCode) const;
 
     QModelIndex currentShortcutIndex() const;

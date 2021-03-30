@@ -25,8 +25,6 @@
 
 using namespace mu::notation;
 using namespace mu::ui;
-using namespace mu::uicomponents;
-using namespace mu::actions;
 
 NotationToolBarModel::NotationToolBarModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -47,11 +45,11 @@ QVariant NotationToolBarModel::data(const QModelIndex& index, int role) const
     MenuItem item = m_items[index.row()];
 
     switch (role) {
-    case TitleRole: return QString::fromStdString(item.title);
+    case TitleRole: return item.title;
     case CodeRole: return QString::fromStdString(item.code);
-    case HintRole: return QString::fromStdString(item.description);
+    case HintRole: return item.description;
     case IconRole: return static_cast<int>(item.iconCode);
-    case EnabledRole: return item.enabled;
+    case EnabledRole: return item.state.enabled;
     }
 
     return QVariant();
@@ -94,7 +92,7 @@ void NotationToolBarModel::handleAction(const QString& actionCode)
 MenuItem NotationToolBarModel::makeItem(const ActionCode& actionCode) const
 {
     MenuItem item = actionsRegister()->action(actionCode);
-    item.enabled = context()->currentNotation() != nullptr;
+    item.state.enabled = context()->currentNotation() != nullptr;
 
     return item;
 }
