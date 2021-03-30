@@ -79,7 +79,7 @@ public:
     QColor layoutBreakColor() const override;
 
     int selectionProximity() const override;
-    void setSelectionProximity(int proxymity);
+    void setSelectionProximity(int proxymity) override;
 
     ZoomType defaultZoomType() const override;
     void setDefaultZoomType(ZoomType zoomType) override;
