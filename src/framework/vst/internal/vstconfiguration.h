@@ -24,7 +24,7 @@
 
 namespace mu::vst {
 class VstConfiguration : public IVstConfiguration
-{   
+{
 public:
     io::path customSearchPath() const override;
 

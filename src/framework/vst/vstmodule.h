@@ -22,7 +22,6 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::vst {
-
 class VSTModule : public framework::IModuleSetup
 {
 public:
