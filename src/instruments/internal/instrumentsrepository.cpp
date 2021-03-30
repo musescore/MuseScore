@@ -30,10 +30,7 @@ using namespace mu::framework;
 
 void InstrumentsRepository::init()
 {
-    RetCh<Extension> extensionChanged;
-    if (extensionsService()) {
-        extensionChanged = extensionsService()->extensionChanged();
-    }
+    RetCh<Extension> extensionChanged = extensionsService()->extensionChanged();
     if (extensionChanged.ret) {
         extensionChanged.ch.onReceive(this, [this](const Extension& newExtension) {
             if (newExtension.types.testFlag(Extension::Instruments)) {
@@ -41,6 +38,10 @@ void InstrumentsRepository::init()
             }
         });
     }
+
+    configuration()->instrumentListPathsChanged().onNotify(this, [this]() {
+        load();
+    });
 
     load();
 }
@@ -62,19 +63,7 @@ void InstrumentsRepository::load()
 
     clear();
 
-    io::paths instrumentsPaths = configuration()->instrumentPaths();
-    io::paths instrumentsFiles;
-
-    for (const io::path& path: instrumentsPaths) {
-        RetVal<io::paths> files = fileSystem()->scanFiles(path, { QString("*.xml") });
-        if (!files.ret) {
-            LOGE() << files.ret.toString();
-        }
-
-        for (const io::path& file: files.val) {
-            instrumentsFiles.push_back(file);
-        }
-    }
+    io::paths instrumentsFiles = configuration()->instrumentListPaths();
 
     int globalGroupsSequenceOrder = 0;
     auto correctGroupSequenceOrder = [&globalGroupsSequenceOrder](const InstrumentGroup& group) {

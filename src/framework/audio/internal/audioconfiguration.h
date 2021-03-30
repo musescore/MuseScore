@@ -36,6 +36,9 @@ public:
 
     std::vector<io::path> soundFontPaths() const override;
 
+    bool isShowControlsInMixer() const override;
+    void setIsShowControlsInMixer(bool show) override;
+
     const synth::SynthesizerState& defaultSynthesizerState() const;
     const synth::SynthesizerState& synthesizerState() const override;
     Ret saveSynthesizerState(const synth::SynthesizerState& state) override;

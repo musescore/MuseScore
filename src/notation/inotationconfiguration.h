@@ -96,6 +96,12 @@ public:
     virtual ValCh<io::path> stylesPath() const = 0;
     virtual void setStylesPath(const io::path& path) = 0;
 
+    virtual io::path defaultStyleFilePath() const = 0;
+    virtual void setDefaultStyleFilePath(const io::path& path) = 0;
+
+    virtual io::path partStyleFilePath() const = 0;
+    virtual void setPartStyleFilePath(const io::path& path) = 0;
+
     virtual bool isMidiInputEnabled() const = 0;
     virtual void setIsMidiInputEnabled(bool enabled) = 0;
 

@@ -34,6 +34,9 @@ public:
 
     virtual unsigned int driverBufferSize() const = 0; // samples
 
+    virtual bool isShowControlsInMixer() const = 0;
+    virtual void setIsShowControlsInMixer(bool show) = 0;
+
     // synthesizers
     virtual std::vector<io::path> soundFontPaths() const = 0;
     virtual const synth::SynthesizerState& synthesizerState() const = 0;

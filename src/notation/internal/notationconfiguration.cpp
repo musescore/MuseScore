@@ -41,8 +41,6 @@ QString revision;
 
 static const std::string module_name("notation");
 
-static const Settings::Key ANCHORLINE_COLOR(module_name, "ui/score/voice4/color");
-
 static const Settings::Key BACKGROUND_COLOR(module_name, "ui/canvas/background/color");
 static const Settings::Key BACKGROUND_WALLPAPER_PATH(module_name, "ui/canvas/background/wallpaper");
 static const Settings::Key BACKGROUND_USE_COLOR(module_name, "ui/canvas/background/useColor");
@@ -60,6 +58,8 @@ static const Settings::Key KEYBOARD_ZOOM_PRECISION(module_name, "ui/canvas/zoomP
 static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionMouse");
 
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
+static const Settings::Key DEFAULT_STYLE_FILE_PATH(module_name, "score/style/defaultStyleFile");
+static const Settings::Key PART_STYLE_FILE_PATH(module_name, "score/style/partStyleFile");
 
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
 static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
@@ -91,8 +91,6 @@ static std::map<int, Settings::Key> voicesKeys {
 
 void NotationConfiguration::init()
 {
-    settings()->setDefaultValue(ANCHORLINE_COLOR, Val(QColor("#C31989")));
-
     settings()->setDefaultValue(BACKGROUND_USE_COLOR, Val(true));
     settings()->valueChanged(BACKGROUND_USE_COLOR).onReceive(nullptr, [this](const Val&) {
         m_backgroundChanged.notify();
@@ -178,6 +176,7 @@ void NotationConfiguration::init()
 
     // libmscore
     preferences().setBackupDirPath(globalConfiguration()->backupPath().toQString());
+    preferences().setDefaultStyleFilePath(defaultStyleFilePath().toQString());
 
     Ms::MScore::warnPitchRange = colorNotesOusideOfUsablePitchRange();
     Ms::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
@@ -185,7 +184,7 @@ void NotationConfiguration::init()
 
 QColor NotationConfiguration::anchorLineColor() const
 {
-    return settings()->value(ANCHORLINE_COLOR).toQColor();
+    return selectionColor(3);
 }
 
 QColor NotationConfiguration::backgroundColor() const
@@ -392,6 +391,27 @@ ValCh<io::path> NotationConfiguration::stylesPath() const
 void NotationConfiguration::setStylesPath(const io::path& path)
 {
     settings()->setValue(USER_STYLES_PATH, Val(path.toStdString()));
+}
+
+io::path NotationConfiguration::defaultStyleFilePath() const
+{
+    return settings()->value(DEFAULT_STYLE_FILE_PATH).toString();
+}
+
+void NotationConfiguration::setDefaultStyleFilePath(const io::path& path)
+{
+    preferences().setDefaultStyleFilePath(path.toQString());
+    settings()->setValue(DEFAULT_STYLE_FILE_PATH, Val(path.toStdString()));
+}
+
+io::path NotationConfiguration::partStyleFilePath() const
+{
+    return settings()->value(PART_STYLE_FILE_PATH).toString();
+}
+
+void NotationConfiguration::setPartStyleFilePath(const io::path& path)
+{
+    settings()->setValue(PART_STYLE_FILE_PATH, Val(path.toStdString()));
 }
 
 bool NotationConfiguration::isMidiInputEnabled() const
