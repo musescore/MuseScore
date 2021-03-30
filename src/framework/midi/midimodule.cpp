@@ -29,7 +29,8 @@
 #include "internal/platform/lin/alsamidioutport.h"
 
 #include "ui/iuiengine.h"
-#include "devtools/midiportdevmodel.h"
+#include "view/devtools/midiportdevmodel.h"
+#include "view/mididevicemappingsmodel.h"
 
 using namespace mu::midi;
 
@@ -74,4 +75,5 @@ void MidiModule::registerExports()
 void MidiModule::registerUiTypes()
 {
     qmlRegisterType<MidiPortDevModel>("MuseScore.Midi", 1, 0, "MidiPortDevModel");
+    qmlRegisterType<MidiDeviceMappingsModel>("MuseScore.Midi", 1, 0, "MidiDeviceMappingsModel");
 }

@@ -18,8 +18,21 @@
 //=============================================================================
 #include "midiconfiguration.h"
 
-using namespace mu::midi;
+#include "settings.h"
 
-MidiConfiguration::MidiConfiguration()
+using namespace mu::midi;
+using namespace mu::framework;
+
+static const std::string module_name("midi");
+
+static const Settings::Key USE_REMOTE_CONTROL_KEY(module_name, "io/midi/useRemoteControl");
+
+bool MidiConfiguration::useRemoteControl() const
 {
+    return settings()->value(USE_REMOTE_CONTROL_KEY).toBool();
+}
+
+void MidiConfiguration::setUseRemoteControl(bool value)
+{
+    return settings()->setValue(USE_REMOTE_CONTROL_KEY, Val(value));
 }

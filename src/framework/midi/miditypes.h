@@ -141,6 +141,52 @@ struct MidiDevice {
     MidiDeviceID id;
     std::string name;
 };
+
+enum class MidiActionType
+{
+    Rewind,
+    Play,
+    Stop,
+    Loop,
+    Note1,
+    Note2,
+    Note4,
+    Note8,
+    Note16,
+    Note32,
+    Note64,
+    Rest,
+    Dot,
+    DotDot,
+    Tie,
+    Undo,
+    NoteEditMode,
+    RealtimeAdvance
+};
+
+inline std::vector<MidiActionType> allMidiActionTypes()
+{
+    return {
+        MidiActionType::Rewind,
+        MidiActionType::Play,
+        MidiActionType::Stop,
+        MidiActionType::Loop,
+        MidiActionType::Note1,
+        MidiActionType::Note2,
+        MidiActionType::Note4,
+        MidiActionType::Note8,
+        MidiActionType::Note16,
+        MidiActionType::Note32,
+        MidiActionType::Note64,
+        MidiActionType::Rest,
+        MidiActionType::Dot,
+        MidiActionType::DotDot,
+        MidiActionType::Tie,
+        MidiActionType::Undo,
+        MidiActionType::NoteEditMode,
+        MidiActionType::RealtimeAdvance
+    };
+}
 }
 
 #endif // MU_MIDI_MIDITYPES_H
