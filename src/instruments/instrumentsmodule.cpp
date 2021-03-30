@@ -42,6 +42,7 @@ using namespace mu::framework;
 using namespace mu::ui;
 
 static InstrumentsRepository* m_instrumentsRepository = new InstrumentsRepository();
+static std::shared_ptr<InstrumentsConfiguration> s_configuration = std::make_shared<InstrumentsConfiguration>();
 
 static void instruments_init_qrc()
 {
@@ -55,7 +56,7 @@ std::string InstrumentsModule::moduleName() const
 
 void InstrumentsModule::registerExports()
 {
-    ioc()->registerExport<IInstrumentsConfiguration>(moduleName(), new InstrumentsConfiguration());
+    ioc()->registerExport<IInstrumentsConfiguration>(moduleName(), s_configuration);
     ioc()->registerExport<IInstrumentsRepository>(moduleName(), m_instrumentsRepository);
     ioc()->registerExport<IInstrumentsReader>(moduleName(), new InstrumentsReader());
     ioc()->registerExport<ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenario());
@@ -97,5 +98,6 @@ void InstrumentsModule::registerUiTypes()
 
 void InstrumentsModule::onInit(const IApplication::RunMode&)
 {
+    s_configuration->init();
     m_instrumentsRepository->init();
 }

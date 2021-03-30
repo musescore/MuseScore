@@ -22,7 +22,9 @@
 #include "modularity/imoduleexport.h"
 
 #include <vector>
+
 #include "io/path.h"
+#include "async/notification.h"
 
 namespace mu::instruments {
 class IInstrumentsConfiguration : MODULE_EXPORT_INTERFACE
@@ -32,7 +34,17 @@ class IInstrumentsConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IInstrumentsConfiguration() = default;
 
-    virtual io::paths instrumentPaths() const = 0;
+    virtual io::paths instrumentListPaths() const = 0;
+    virtual async::Notification instrumentListPathsChanged() const = 0;
+
+    virtual io::paths userInstrumentListPaths() const = 0;
+    virtual void setUserInstrumentListPaths(const io::paths& paths) = 0;
+
+    virtual io::paths scoreOrderListPaths() const = 0;
+    virtual async::Notification scoreOrderListPathsChanged() const = 0;
+
+    virtual io::paths userScoreOrderListPaths() const = 0;
+    virtual void setUserScoreOrderListPaths(const io::paths& paths) = 0;
 };
 }
 
