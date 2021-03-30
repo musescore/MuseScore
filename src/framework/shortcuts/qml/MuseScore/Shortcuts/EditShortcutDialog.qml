@@ -126,7 +126,7 @@ Dialog {
                     text: qsTrc("global", "Clear")
 
                     onClicked: {
-                        newSequenceField.clear()
+                        model.clear()
                     }
                 }
 
