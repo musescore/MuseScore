@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.12
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -32,8 +32,6 @@ Item {
     EditShortcutDialog {
         id: editShortcutDialog
 
-        allShortcuts: shortcutsModel.shortcuts
-
         onApplySequenceRequested: {
             shortcutsModel.applySequenceToCurrentShortcut(newSequence)
         }
@@ -41,7 +39,7 @@ Item {
         property bool canEditCurrentShortcut: Boolean(shortcutsModel.currentSequence)
 
         function startEditCurrentShortcut() {
-            editShortcutDialog.startEdit(shortcutsModel.currentSequence)
+            editShortcutDialog.startEdit(shortcutsModel.currentSequence, shortcutsModel.shortcuts())
         }
     }
 
@@ -94,9 +92,10 @@ Item {
             Layout.fillHeight: true
 
             keyRoleName: "title"
-            keyTitle: qsTrc("shortcuts", "ACTION")
+            keyTitle: qsTrc("shortcuts", "action")
             valueRoleName: "sequence"
-            valueTitle: qsTrc("shortcuts", "SHORTCUT")
+            valueTitle: qsTrc("shortcuts", "shortcut")
+            iconRoleName: "icon"
             readOnly: true
 
             model: SortFilterProxyModel {

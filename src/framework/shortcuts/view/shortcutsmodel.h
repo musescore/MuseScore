@@ -44,7 +44,6 @@ class ShortcutsModel : public QAbstractListModel, public async::Asyncable
 
     Q_PROPERTY(QItemSelection selection READ selection WRITE setSelection NOTIFY selectionChanged)
     Q_PROPERTY(QString currentSequence READ currentSequence NOTIFY selectionChanged)
-    Q_PROPERTY(QVariantList shortcuts READ shortcuts NOTIFY shortcutsChanged)
 
 public:
     explicit ShortcutsModel(QObject* parent = nullptr);
@@ -55,7 +54,6 @@ public:
 
     QItemSelection selection() const;
     QString currentSequence() const;
-    QVariantList shortcuts() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE bool apply();
@@ -68,15 +66,16 @@ public:
     Q_INVOKABLE void clearSelectedShortcuts();
     Q_INVOKABLE void resetToDefaultSelectedShortcuts();
 
+    Q_INVOKABLE QVariantList shortcuts() const;
+
 public slots:
     void setSelection(const QItemSelection& selection);
 
 signals:
     void selectionChanged();
-    void shortcutsChanged();
 
 private:
-    QString shortcutTitle(const std::string& actionCode) const;
+    actions::ActionItem action(const std::string& actionCode) const;
     QString actionTitle(const std::string& actionCode) const;
 
     QModelIndex currentShortcutIndex() const;
@@ -84,6 +83,7 @@ private:
 
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
+        RoleIcon,
         RoleSequence,
         RoleSearchKey
     };

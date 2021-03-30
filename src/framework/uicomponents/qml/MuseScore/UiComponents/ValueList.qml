@@ -19,6 +19,7 @@ Item {
     property string valueRoleName: "value"
     property string valueTitle: qsTrc("uicomponents", "Value")
     property string valueTypeRole: "valueType"
+    property string iconRoleName: "icon"
 
     property alias hasSelection: selectionModel.hasSelection
     readonly property var selection: sortFilterProxyModel.mapSelectionToSource(selectionModel.selection)

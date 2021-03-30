@@ -29,10 +29,11 @@ EditShortcutModel::EditShortcutModel(QObject* parent)
 {
 }
 
-void EditShortcutModel::load(const QString& sequence)
+void EditShortcutModel::load(const QString& sequence, const QVariantList& allShortcuts)
 {
     clear();
 
+    m_allShortcuts = allShortcuts;
     m_originSequence = sequence;
     emit originSequenceChanged(sequence);
 }
@@ -43,21 +44,6 @@ void EditShortcutModel::clear()
     m_errorMessage.clear();
 
     emit inputedSequenceChanged(QString());
-}
-
-QVariantList EditShortcutModel::allShortcuts() const
-{
-    return m_allShortcuts;
-}
-
-void EditShortcutModel::setAllShortcuts(const QVariantList& shortcuts)
-{
-    if (m_allShortcuts == shortcuts) {
-        return;
-    }
-
-    m_allShortcuts = shortcuts;
-    emit allShortcutsChanged(shortcuts);
 }
 
 void EditShortcutModel::inputKey(int key, Qt::KeyboardModifiers modifiers)
