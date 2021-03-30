@@ -58,7 +58,7 @@ public:
     bool floating() const;
     bool floatable() const;
     bool movable() const;
-    bool visible() const;
+    bool visible() const override;
 
 public slots:
     void setMinimumHeight(int minimumHeight);
@@ -66,7 +66,7 @@ public slots:
     void setAllowedAreas(Qt::ToolBarAreas allowedAreas);
     void setFloatable(bool floatable);
     void setMovable(bool movable);
-    void setVisible(bool visible);
+    void setVisible(bool visible) override;
 
 signals:
     void orientationChanged(int orientation);

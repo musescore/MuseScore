@@ -197,7 +197,7 @@ static void fromObj(const QJsonObject& obj, QPainterPath& path)
 
     QJsonArray elsArr = obj["elements"].toArray();
     std::vector<QPainterPath::Element> curveEls;
-    for (const QJsonValue& elVal : elsArr) {
+    for (const QJsonValue elVal : elsArr) {
         QJsonArray elArr = elVal.toArray();
         IF_ASSERT_FAILED(elArr.size() == 3) {
             continue;
@@ -427,13 +427,13 @@ mu::RetVal<DrawDataPtr> DrawBufferJson::fromJson(const QByteArray& json)
     DrawDataPtr buf = std::make_shared<DrawData>();
     buf->name = root["a_name"].toString().toStdString();
     QJsonArray objsArr = root["objects"].toArray();
-    for (const QJsonValue& objVal: objsArr) {
+    for (const QJsonValue objVal: objsArr) {
         QJsonObject objObj = objVal.toObject();
         DrawData::Object obj;
         obj.name = objObj["a_name"].toString().toStdString();
         fromArr(objObj["a_pagePos"].toArray(), obj.pagePos);
         QJsonArray datasArr = objObj["datas"].toArray();
-        for (const QJsonValue& dataVal : datasArr) {
+        for (const QJsonValue dataVal : datasArr) {
             QJsonObject dataObj = dataVal.toObject();
             DrawData::Data data;
             fromObj(dataObj["state"].toObject(), data.state);
