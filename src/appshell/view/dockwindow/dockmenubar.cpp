@@ -40,6 +40,20 @@ static int actionIndexInGroup(const QAction* action)
     return -1;
 }
 
+QAction::MenuRole menuRoleForActionCode(const QString& code)
+{
+    if (code == "about-qt") {
+        return QAction::AboutQtRole;
+    } else if (code == "about") {
+        return QAction::AboutRole;
+    } else if (code == "preference-dialog") {
+        return QAction::PreferencesRole;
+    } else if (code == "quit") {
+        return QAction::QuitRole;
+    }
+    return QAction::NoRole;
+}
+
 DockMenuBar::DockMenuBar(QQuickItem* parent)
     : DockView(parent)
 {
@@ -134,6 +148,8 @@ QAction* DockMenuBar::makeAction(const QVariantMap& menuItem, QActionGroup* grou
         action->setCheckable(true);
         action->setChecked(menuItem.value("selected").toBool());
     }
+
+    action->setMenuRole(menuRoleForActionCode(menuItem.value("code").toString()));
 
     return action;
 }
