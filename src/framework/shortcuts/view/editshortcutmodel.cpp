@@ -31,11 +31,17 @@ EditShortcutModel::EditShortcutModel(QObject* parent)
 
 void EditShortcutModel::load(const QString& sequence)
 {
+    clear();
+
     m_originSequence = sequence;
+    emit originSequenceChanged(sequence);
+}
+
+void EditShortcutModel::clear()
+{
     m_inputedSequence = QKeySequence();
     m_errorMessage.clear();
 
-    emit originSequenceChanged(sequence);
     emit inputedSequenceChanged(QString());
 }
 

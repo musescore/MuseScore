@@ -44,6 +44,8 @@ public:
     bool canApplySequence() const;
 
     Q_INVOKABLE void load(const QString& sequence);
+    Q_INVOKABLE void clear();
+
     Q_INVOKABLE void inputKey(int key, Qt::KeyboardModifiers modifiers);
     Q_INVOKABLE QString unitedSequence() const;
 
