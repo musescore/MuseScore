@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/MuseScore/Shortcuts/qmldir</file>
+        <file>qml/MuseScore/Shortcuts/ShortcutsPage.qml</file>
+        <file>qml/MuseScore/Shortcuts/EditShortcutDialog.qml</file>
         <file>data/shortcuts.xml</file>
         <file>data/shortcuts_AZERTY.xml</file>
         <file>data/shortcuts-Mac.xml</file>

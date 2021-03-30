@@ -46,5 +46,6 @@
         <file>qml/Preferences/AdvancedPreferencesPage.qml</file>
         <file>qml/Preferences/CanvasPreferencesPage.qml</file>
         <file>qml/Preferences/ScorePreferencesPage.qml</file>
+        <file>qml/Preferences/ShortcutsPreferencesPage.qml</file>
     </qresource>
 </RCC>
