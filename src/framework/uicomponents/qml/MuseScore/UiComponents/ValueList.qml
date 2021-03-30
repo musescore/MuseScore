@@ -156,6 +156,7 @@ Item {
             keyRoleName: root.keyRoleName
             valueRoleName: root.valueRoleName
             valueTypeRole: root.valueTypeRole
+            iconRoleName: root.iconRoleName
 
             isSelected: selectionModel.hasSelection && selectionModel.isSelected(modelIndex)
             readOnly: root.readOnly

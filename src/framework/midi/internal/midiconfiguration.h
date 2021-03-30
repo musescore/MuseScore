@@ -25,7 +25,8 @@ namespace mu::midi {
 class MidiConfiguration : public IMidiConfiguration
 {
 public:
-    MidiConfiguration();
+    bool useRemoteControl() const override;
+    void setUseRemoteControl(bool value) override;
 };
 }
 

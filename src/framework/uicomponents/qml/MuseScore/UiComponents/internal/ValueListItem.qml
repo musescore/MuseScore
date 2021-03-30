@@ -57,9 +57,9 @@ ListItemBlank {
         anchors.fill: parent
 
         Row {
+            Layout.leftMargin: root.sideMargin
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
             Layout.fillWidth: true
-            Layout.leftMargin: root.sideMargin
 
             spacing: 8
 
