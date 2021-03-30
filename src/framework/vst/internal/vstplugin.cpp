@@ -24,7 +24,8 @@
 using namespace mu;
 using namespace mu::vst;
 
-VstPlugin::VstPlugin() : m_factory(nullptr)
+VstPlugin::VstPlugin()
+    : m_factory(nullptr)
 {
 }
 
@@ -79,7 +80,7 @@ std::string VstPlugin::id() const
     m_pluginProvider->getComponentUID(id);
 
     VST3::UID uid = VST3::UID::fromTUID(id.toTUID());
-    
+
     return uid.toString(false);
 }
 
@@ -111,10 +112,10 @@ PluginView VstPlugin::view()
 
 bool VstPlugin::isValid() const
 {
-    if (!m_module ||
-        !m_factory.get() ||
-        !m_pluginProvider ||
-        !m_pluginController) {
+    if (!m_module
+        || !m_factory.get()
+        || !m_pluginProvider
+        || !m_pluginController) {
         return false;
     }
 

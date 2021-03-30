@@ -56,8 +56,9 @@ QString VstPluginEditorView::pluginId() const
 
 void VstPluginEditorView::setPluginId(QString pluginId)
 {
-    if (m_pluginId == pluginId)
+    if (m_pluginId == pluginId) {
         return;
+    }
 
     wrapPluginView(pluginId);
 
