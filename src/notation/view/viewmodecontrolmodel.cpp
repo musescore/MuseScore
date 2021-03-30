@@ -22,10 +22,9 @@
 #include "translation.h"
 
 using namespace mu::notation;
-using namespace mu::actions;
-using namespace mu::uicomponents;
+using namespace mu::ui;
 
-static QMap<ViewMode, ActionCode> viewModes = {
+static QMap<ViewMode, mu::actions::ActionCode> viewModes = {
     { ViewMode::PAGE, "view-mode-page" },
     { ViewMode::LINE, "view-mode-continuous" },
     { ViewMode::SYSTEM, "view-mode-single" }
@@ -43,13 +42,13 @@ QVariant ViewModeControlModel::currentViewMode()
         return QVariant();
     }
 
-    auto correctedTitle = [](ViewMode viewMode, const std::string& title) {
+    auto correctedTitle = [](ViewMode viewMode, const QString& title) {
         switch (viewMode) {
         case ViewMode::PAGE:
             return title;
         case ViewMode::LINE:
         case ViewMode::SYSTEM:
-            return trc("notation", "Continuous View");
+            return qtrc("notation", "Continuous View");
         default:
             return title;
         }
@@ -58,7 +57,7 @@ QVariant ViewModeControlModel::currentViewMode()
     ViewMode viewMode = notation->viewMode();
     MenuItem viewModeItem = findItem(viewModeActionCode(viewMode));
     QVariantMap viewModeObj;
-    viewModeObj["title"] = QString::fromStdString(correctedTitle(viewMode, viewModeItem.title));
+    viewModeObj["title"] = correctedTitle(viewMode, viewModeItem.title);
     viewModeObj["icon"] = static_cast<int>(viewModeItem.iconCode);
 
     return viewModeObj;
@@ -88,10 +87,10 @@ void ViewModeControlModel::load()
 
 void ViewModeControlModel::selectViewMode(const QString& actionCode)
 {
-    dispatcher()->dispatch(codeFromQString(actionCode));
+    dispatcher()->dispatch(actions::codeFromQString(actionCode));
 }
 
-ActionCode ViewModeControlModel::viewModeActionCode(ViewMode viewMode) const
+mu::actions::ActionCode ViewModeControlModel::viewModeActionCode(ViewMode viewMode) const
 {
     return viewModes[viewMode];
 }
@@ -103,8 +102,8 @@ void ViewModeControlModel::updateState()
         return;
     }
 
-    ActionCode currentViewModeActionCode = viewModeActionCode(notation->viewMode());
-    for (const ActionCode& actionCode: viewModes.values()) {
+    actions::ActionCode currentViewModeActionCode = viewModeActionCode(notation->viewMode());
+    for (const actions::ActionCode& actionCode: viewModes.values()) {
         MenuItem& viewModeItem = findItem(actionCode);
         viewModeItem.selectable = true;
         viewModeItem.selected = viewModeItem.code == currentViewModeActionCode;

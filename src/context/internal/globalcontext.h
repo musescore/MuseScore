@@ -19,21 +19,11 @@
 #ifndef MU_CONTEXT_GLOBALCONTEXT_H
 #define MU_CONTEXT_GLOBALCONTEXT_H
 
-#include <vector>
-
 #include "../iglobalcontext.h"
-#include "shortcuts/ishortcutcontextresolver.h"
-#include "modularity/ioc.h"
-#include "playback/iplaybackcontroller.h"
-#include "iinteractive.h"
 
-namespace mu {
-namespace context {
-class GlobalContext : public IGlobalContext, public shortcuts::IShortcutContextResolver
+namespace mu::context {
+class GlobalContext : public IGlobalContext
 {
-    INJECT(context, framework::IInteractive, interactive)
-    INJECT(context, playback::IPlaybackController, playbackController)
-
 public:
     void addMasterNotation(const notation::IMasterNotationPtr& notation) override;
     void removeMasterNotation(const notation::IMasterNotationPtr& notation) override;
@@ -48,8 +38,6 @@ public:
     notation::INotationPtr currentNotation() const override;
     async::Notification currentNotationChanged() const override;
 
-    shortcuts::ShortcutContext currentShortcutContext() const override;
-
 private:
     void doSetCurrentNotation(const notation::INotationPtr& notation);
 
@@ -61,7 +49,6 @@ private:
     notation::INotationPtr m_currentNotation;
     async::Notification m_currentNotationChanged;
 };
-}
 }
 
 #endif // MU_CONTEXT_GLOBALCONTEXT_H

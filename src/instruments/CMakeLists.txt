@@ -39,8 +39,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/selectinstrumentscenario.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/selectinstrumentscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsactions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsuiactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentlistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentlistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractinstrumentpaneltreeitem.cpp

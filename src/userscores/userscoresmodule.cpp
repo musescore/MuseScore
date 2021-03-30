@@ -33,10 +33,10 @@
 #include "internal/userscoresconfiguration.h"
 #include "internal/userscoresservice.h"
 #include "internal/templatesrepository.h"
-#include "internal/userscoresactions.h"
+#include "internal/userscoresuiactions.h"
 
 #include "ui/iinteractiveuriregister.h"
-#include "actions/iactionsregister.h"
+#include "ui/iuiactionsregister.h"
 
 using namespace mu::userscores;
 using namespace mu::framework;
@@ -66,9 +66,9 @@ void UserScoresModule::registerExports()
 
 void UserScoresModule::resolveImports()
 {
-    auto ar = ioc()->resolve<actions::IActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(std::make_shared<UserScoresActions>());
+        ar->reg(std::make_shared<UserScoresUiActions>(s_fileController));
     }
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());

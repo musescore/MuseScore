@@ -1520,8 +1520,7 @@ void Palette::read(XmlReader& e)
 
                         if (cell->element->type() == ElementType::ICON) {
                             Icon* icon = static_cast<Icon*>(cell->element.get());
-                            ActionItem actionItem = adapter()->getAction(icon->actionCode());
-
+                            const mu::ui::UiAction& actionItem = adapter()->getAction(icon->actionCode());
                             if (actionItem.isValid()) {
                                 icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
                             } else {
@@ -1751,8 +1750,7 @@ void Palette::dropEvent(QDropEvent* event)
 
                 if (element->isIcon()) {
                     Icon* icon = toIcon(element.get());
-                    ActionItem actionItem = adapter()->getAction(icon->actionCode());
-
+                    const mu::ui::UiAction& actionItem = adapter()->getAction(icon->actionCode());
                     if (actionItem.isValid()) {
                         icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
                     }

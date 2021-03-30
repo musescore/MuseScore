@@ -22,19 +22,18 @@
 #include "modularity/ioc.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
-#include "actions/iactionsregister.h"
+#include "ui/iuiactionsregister.h"
 #include "async/asyncable.h"
 #include "ui/imainwindow.h"
-#include "iapplicationactioncontroller.h"
 #include "languages/ilanguagesservice.h"
 #include "iinteractive.h"
 #include "iappshellconfiguration.h"
 
 namespace mu::appshell {
-class ApplicationActionController : public IApplicationActionController, public actions::Actionable, public async::Asyncable
+class ApplicationActionController : public actions::Actionable, public async::Asyncable
 {
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
-    INJECT(appshell, actions::IActionsRegister, actionsRegister)
+    INJECT(appshell, ui::IUiActionsRegister, actionsRegister)
     INJECT(appshell, ui::IMainWindow, mainWindow)
     INJECT(appshell, languages::ILanguagesService, languagesService)
     INJECT(appshell, framework::IInteractive, interactive)
@@ -43,10 +42,7 @@ class ApplicationActionController : public IApplicationActionController, public 
 public:
     void init();
 
-    ValCh<bool> isFullScreen() const override;
-
-    bool actionAvailable(const actions::ActionCode& actionCode) const override;
-    async::Channel<actions::ActionCodeList> actionsAvailableChanged() const override;
+    ValCh<bool> isFullScreen() const;
 
 private:
     void setupConnections();
@@ -64,8 +60,6 @@ private:
     void openPreferencesDialog();
 
     void revertToFactorySettings();
-
-    bool isNotationPage() const;
 
     async::Channel<bool> m_fullScreenChannel;
     async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;

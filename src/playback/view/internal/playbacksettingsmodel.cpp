@@ -19,13 +19,12 @@
 
 #include "playbacksettingsmodel.h"
 
-#include "playback/internal/playbackactions.h"
+#include "playback/internal/playbackuiactions.h"
 
 #include <QSet>
 
 using namespace mu::playback;
-using namespace mu::uicomponents;
-using namespace mu::actions;
+using namespace mu::ui;
 
 PlaybackSettingsModel::PlaybackSettingsModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -42,10 +41,10 @@ QVariant PlaybackSettingsModel::data(const QModelIndex& index, int role) const
 
     switch (role) {
     case IconRole: return static_cast<int>(item.iconCode);
-    case DescriptionRole: return QString::fromStdString(item.description);
+    case DescriptionRole: return item.description;
     case CodeRole: return QString::fromStdString(item.code);
-    case SectionRole: return QString::fromStdString(item.section);
-    case CheckedRole: return item.checked;
+    case SectionRole: return item.section;
+    case CheckedRole: return item.state.checked;
     }
 
     return QVariant();
@@ -74,32 +73,32 @@ void PlaybackSettingsModel::load()
     beginResetModel();
     m_items.clear();
 
-    ActionList settingsActions = PlaybackActions::settingsActions();
-    ActionList loopBoundaryActions = PlaybackActions::loopBoundaryActions();
-    ActionList allActions(settingsActions.begin(), settingsActions.end());
-    allActions.insert(allActions.end(), loopBoundaryActions.begin(), loopBoundaryActions.end());
+    UiActionList settingsActions = PlaybackUiActions::settingsActions();
+    UiActionList loopBoundaryActions = PlaybackUiActions::loopBoundaryActions();
+    UiActionList allActions(settingsActions.begin(), settingsActions.end());
+    allActions.insert(allActions.end(), loopBoundaryActions.cbegin(), loopBoundaryActions.cend());
 
-    for (const ActionItem& action : PlaybackActions::settingsActions()) {
+    for (const UiAction& action : PlaybackUiActions::settingsActions()) {
         MenuItem item(action);
         item.section = resolveSection(action.code);
-        item.checked = isActionEnabled(action.code);
+        item.state.checked = isActionEnabled(action.code);
         m_items.push_back(item);
     }
 
-    controller()->actionEnabledChanged().onReceive(this, [this](const ActionCode& actionCode) {
+    controller()->actionEnabledChanged().onReceive(this, [this](const actions::ActionCode& actionCode) {
         updateCheckedState(actionCode);
     });
 
     endResetModel();
 }
 
-void PlaybackSettingsModel::updateCheckedState(const ActionCode& actionCode)
+void PlaybackSettingsModel::updateCheckedState(const actions::ActionCode& actionCode)
 {
     for (int i = 0; i < m_items.size(); ++i) {
         MenuItem& item = m_items[i];
 
         if (item.code == actionCode) {
-            item.checked = isActionEnabled(actionCode);
+            item.state.checked = isActionEnabled(actionCode);
             QModelIndex index = this->index(i);
             emit dataChanged(index, index, { CheckedRole });
             return;
@@ -107,12 +106,12 @@ void PlaybackSettingsModel::updateCheckedState(const ActionCode& actionCode)
     }
 }
 
-std::string PlaybackSettingsModel::resolveSection(const actions::ActionCode& actionCode) const
+QString PlaybackSettingsModel::resolveSection(const actions::ActionCode& actionCode) const
 {
-    return containsAction(PlaybackActions::loopBoundaryActions(), actionCode) ? "loop" : "main";
+    return PlaybackUiActions::loopBoundaryActions().contains(actionCode) ? "loop" : "main";
 }
 
-bool PlaybackSettingsModel::isActionEnabled(const ActionCode& actionCode) const
+bool PlaybackSettingsModel::isActionEnabled(const actions::ActionCode& actionCode) const
 {
     return controller()->isActionEnabled(actionCode);
 }

@@ -7,6 +7,7 @@
 #include "internal/uiengine.h"
 #include "internal/uiconfiguration.h"
 #include "internal/interactiveuriregister.h"
+#include "internal/uiactionsregister.h"
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosplatformtheme.h"
@@ -28,6 +29,7 @@ using namespace mu::ui;
 using namespace mu::framework;
 
 static std::shared_ptr<UiConfiguration> s_configuration = std::make_shared<UiConfiguration>();
+static std::shared_ptr<UiActionsRegister> s_uiactionsRegister = std::make_shared<UiActionsRegister>();
 
 #ifdef Q_OS_MAC
 static std::shared_ptr<MacOSPlatformTheme> s_platformTheme = std::make_shared<MacOSPlatformTheme>();
@@ -54,6 +56,7 @@ void UiModule::registerExports()
     ioc()->registerExport<IInteractiveProvider>(moduleName(), UiEngine::instance()->interactiveProvider());
     ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
     ioc()->registerExport<IPlatformTheme>(moduleName(), s_platformTheme);
+    ioc()->registerExport<IUiActionsRegister>(moduleName(), s_uiactionsRegister);
 }
 
 void UiModule::resolveImports()
@@ -94,6 +97,7 @@ void UiModule::registerUiTypes()
 void UiModule::onInit(const IApplication::RunMode&)
 {
     s_configuration->init();
+    s_uiactionsRegister->init();
 }
 
 void UiModule::onDeinit()
