@@ -562,11 +562,9 @@ void NotationPaintView::moveCanvas(int dx, int dy)
         return;
     }
 
-    if (configuration()->isLimitCanvasScrollArea()) {
-        std::pair<int, int> corrected = constraintCanvas(dx, dy);
-        dx = corrected.first;
-        dy = corrected.second;
-    }
+    std::pair<int, int> corrected = constraintCanvas(dx, dy);
+    dx = corrected.first;
+    dy = corrected.second;
 
     m_matrix.translate(dx, dy);
     update();
