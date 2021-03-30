@@ -12,6 +12,13 @@ Item {
         return mappingsModel.apply()
     }
 
+    EditMidiActionDialog {
+        id: editActionDialog
+
+        actionTitle: "Rewind"
+        actionIcon: IconCode.REWIND
+    }
+
     MidiDeviceMappingsModel {
         id: mappingsModel
 
@@ -54,6 +61,10 @@ Item {
             iconRoleName: "icon"
 
             model: mappingsModel
+
+            onDoubleClicked: {
+                editActionDialog.open()
+            }
         }
 
         Row {
