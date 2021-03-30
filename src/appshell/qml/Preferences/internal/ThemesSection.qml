@@ -42,6 +42,21 @@ Column {
                 fontPrimaryColor: modelData.fontPrimaryColor
                 buttonColor: modelData.buttonColor
                 accentColor: modelData.accentColor
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        root.themeChangeRequested(model.index)
+                    }
+                    hoverEnabled: true
+                    onEntered: {
+                        parent.border.color = modelData.accentColor
+                        isHovered = true
+                    }
+                    onExited: {
+                        parent.border.color = modelData.backgroundPrimaryColor
+                        isHovered = false
+                    }
+                }
             }
 
             RoundedRadioButton {
