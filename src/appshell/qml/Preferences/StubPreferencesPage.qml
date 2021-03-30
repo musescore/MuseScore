@@ -5,14 +5,9 @@ import MuseScore.UiComponents 1.0
 PreferencesPage {
     id: root
 
-    Rectangle {
-        anchors.fill: parent
+    StyledTextLabel {
+        anchors.centerIn: parent
 
-        color: ui.theme.backgroundSecondaryColor
-
-        StyledTextLabel {
-            anchors.centerIn: parent
-            text: qsTrc("appshell", "Not implemented")
-        }
+        text: qsTrc("appshell", "Not implemented")
     }
 }

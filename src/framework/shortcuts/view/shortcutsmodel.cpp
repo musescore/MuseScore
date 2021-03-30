@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -29,7 +29,7 @@ using namespace mu::ui;
 
 QString shorcutsFileFilter()
 {
-    return mu::qtrc("shortcuts", "MuseScore Shortcuts File") +  " (*.xml)";
+    return mu::qtrc("shortcuts", "MuseScore Shortcuts File") + " (*.xml)";
 }
 
 ShortcutsModel::ShortcutsModel(QObject* parent)
@@ -186,9 +186,9 @@ QVariantList ShortcutsModel::shortcuts() const
 void ShortcutsModel::loadShortcutsFromFile()
 {
     io::path path = interactive()->selectOpeningFile(
-                qtrc("shortcuts", "Load Shortcuts"),
-                configuration()->shortcutsUserPath().val,
-                shorcutsFileFilter());
+        qtrc("shortcuts", "Load Shortcuts"),
+        configuration()->shortcutsUserPath().val,
+        shorcutsFileFilter());
 
     if (!path.empty()) {
         configuration()->setShortcutsUserPath(path);
@@ -198,9 +198,9 @@ void ShortcutsModel::loadShortcutsFromFile()
 void ShortcutsModel::saveShortcutsToFile()
 {
     io::path path = interactive()->selectSavingFile(
-                qtrc("shortcuts", "Save Shortcuts"),
-                configuration()->shortcutsUserPath().val,
-                shorcutsFileFilter());
+        qtrc("shortcuts", "Save Shortcuts"),
+        configuration()->shortcutsUserPath().val,
+        shorcutsFileFilter());
 
     if (path.empty()) {
         return;
