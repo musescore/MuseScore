@@ -65,8 +65,8 @@ Column {
 
             implicitWidth: 112
 
-            minValue: 0
-            maxValue: 100
+            minValue: 8
+            maxValue: 24
             decimals: 0
             step: 1
 
