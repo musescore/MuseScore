@@ -104,6 +104,7 @@ void UiConfiguration::init()
     settings()->setDefaultValue(UI_MUSICAL_FONT_SIZE_KEY, Val(12));
 
     settings()->valueChanged(UI_THEMES_KEY).onReceive(nullptr, [this](const Val&) {
+        updateThemes();
         notifyAboutCurrentThemeChanged();
     });
 
@@ -164,19 +165,7 @@ void UiConfiguration::initThemes()
         m_themes.push_back(makeStandardTheme(codeKey));
     }
 
-    ThemeList modifiedThemes = readThemes();
-
-    for (ThemeInfo& theme: m_themes) {
-        auto it = std::find_if(modifiedThemes.begin(), modifiedThemes.end(), [theme](const ThemeInfo& modifiedTheme) {
-            return modifiedTheme.codeKey == theme.codeKey;
-        });
-
-        bool isModified = it != modifiedThemes.end();
-        if (isModified) {
-            theme = *it;
-        }
-    }
-
+    updateThemes();
     updateCurrentTheme();
 }
 
@@ -192,6 +181,22 @@ void UiConfiguration::updateCurrentTheme()
     }
 
     platformTheme()->setAppThemeDark(currentCodeKey == DARK_THEME_CODE);
+}
+
+void UiConfiguration::updateThemes()
+{
+    ThemeList modifiedThemes = readThemes();
+
+    for (ThemeInfo& theme: m_themes) {
+        auto it = std::find_if(modifiedThemes.begin(), modifiedThemes.end(), [theme](const ThemeInfo& modifiedTheme) {
+            return modifiedTheme.codeKey == theme.codeKey;
+        });
+
+        bool isModified = it != modifiedThemes.end();
+        if (isModified) {
+            theme = *it;
+        }
+    }
 }
 
 void UiConfiguration::notifyAboutCurrentThemeChanged()

@@ -114,13 +114,12 @@ QmlDialog {
                 }
 
                 onRejectRequested: {
+                    preferencesModel.cancel()
                     root.reject()
                 }
 
                 onApplyRequested: {
-                    if (!preferencesModel.apply()) {
-                        return
-                    }
+                    preferencesModel.apply()
 
                     var ok = true
                     var pages = preferencesModel.availablePages()

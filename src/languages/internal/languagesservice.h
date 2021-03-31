@@ -48,13 +48,14 @@ public:
     Ret uninstall(const QString& languageCode) override;
 
     ValCh<Language> currentLanguage() const override;
-    Ret setCurrentLanguage(const QString& languageCode) override;
 
     RetCh<Language> languageChanged() override;
 
 private:
     RetVal<LanguagesHash> parseLanguagesConfig(const QByteArray& json) const;
     LanguageFiles parseLanguageFiles(const QJsonObject& languageObject) const;
+
+    void setCurrentLanguage(const QString& languageCode);
 
     bool isLanguageExists(const QString& languageCode) const;
     bool checkLanguageFilesHash(const QString& languageCode, const LanguageFiles& languageFiles) const;
@@ -69,7 +70,7 @@ private:
 
     Ret loadLanguage(const QString& languageCode);
 
-    void resetLanguageByDefault();
+    void resetLanguageToDefault();
 
     void th_refreshLanguages();
     void th_install(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel, async::Channel<Ret>* finishChannel);
