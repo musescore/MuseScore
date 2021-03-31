@@ -9,8 +9,7 @@ import MuseScore.Midi 1.0
 Dialog {
     id: root
 
-    property alias actionTitle: actionNameLabel.text
-    property alias actionIcon: actionIconLabel.iconCode
+    signal mapToValueRequested(int value)
 
     title: qsTrc("midi", "MIDI Remote Control")
 
@@ -18,6 +17,18 @@ Dialog {
     width: 538
 
     standardButtons: Dialog.NoButton
+
+    function startEdit(action) {
+        model.load(action.mappedValue)
+        open()
+
+        actionNameLabel.text = action.title
+        actionIconLabel.iconCode = action.icon
+    }
+
+    EditMidiMappingModel {
+        id: model
+    }
 
     Rectangle {
         anchors.fill: parent
@@ -62,10 +73,13 @@ Dialog {
                 }
 
                 TextInputField {
+                    id: mappingField
+
                     Layout.fillWidth: true
 
                     readOnly: true
 
+                    currentText: model.mappingTitle
                     hint: qsTrc("global", "Waiting...")
                 }
             }
@@ -79,8 +93,10 @@ Dialog {
                     width: 100
 
                     text: qsTrc("global", "Add")
+                    enabled: mappingField.hasText
 
                     onClicked: {
+                        root.mapToValueRequested(model.inputedValue())
                         root.close()
                     }
                 }

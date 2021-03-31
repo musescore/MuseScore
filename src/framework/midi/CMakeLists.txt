@@ -69,9 +69,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.h
     ${CMAKE_CURRENT_LIST_DIR}/view/mididevicemappingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/mididevicemappingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/editmidimappingmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/editmidimappingmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/devtools/midiportdevmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/devtools/midiportdevmodel.h
-
     )
 
 set(MODULE_LINK

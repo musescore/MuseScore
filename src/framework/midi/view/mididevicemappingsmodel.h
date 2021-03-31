@@ -27,18 +27,21 @@
 #include "imidiconfiguration.h"
 #include "midi/miditypes.h"
 
-#include "actions/iactionsregister.h"
+#include "ui/iuiactionsregister.h"
+#include "ui/uitypes.h"
 
 namespace mu::midi {
 class MidiDeviceMappingsModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool useRemoteControl READ useRemoteControl WRITE setUseRemoteControl NOTIFY useRemoteControlChanged)
-    Q_PROPERTY(QItemSelection selection READ selection WRITE setSelection NOTIFY selectionChanged)
-
     INJECT(midi, IMidiConfiguration, configuration)
-    INJECT(Midi, actions::IActionsRegister, actionsRegister)
+    INJECT(midi, ui::IUiActionsRegister, uiActionsRegister)
+
+    Q_PROPERTY(bool useRemoteControl READ useRemoteControl WRITE setUseRemoteControl NOTIFY useRemoteControlChanged)
+
+    Q_PROPERTY(QItemSelection selection READ selection WRITE setSelection NOTIFY selectionChanged)
+    Q_PROPERTY(bool canEditAction READ canEditAction NOTIFY selectionChanged)
 
 public:
     explicit MidiDeviceMappingsModel(QObject* parent = nullptr);
@@ -49,12 +52,16 @@ public:
 
     bool useRemoteControl() const;
     QItemSelection selection() const;
+    bool canEditAction() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE bool apply();
 
     Q_INVOKABLE void clearSelectedActions();
     Q_INVOKABLE void clearAllActions();
+
+    Q_INVOKABLE QVariant currentAction() const;
+    Q_INVOKABLE void mapCurrentActionToMidiValue(int value);
 
 public slots:
     void setUseRemoteControl(bool value);
@@ -69,13 +76,13 @@ private:
         RoleTitle = Qt::UserRole + 1,
         RoleIcon,
         RoleEnabled,
-        RoleStatus
+        RoleStatus,
+        RoleMappedValue
     };
 
-    actions::ActionCode actionCode(MidiActionType type) const;
-    QString formatActionTitle(const actions::ActionItem& action) const;
+    QVariantMap actionToObject(const ui::UiAction& action) const;
 
-    actions::ActionList m_actions;
+    ui::UiActionList m_actions;
     QItemSelection m_selection;
 };
 }

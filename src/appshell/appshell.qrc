@@ -40,7 +40,7 @@
         <file>qml/Preferences/ScorePreferencesPage.qml</file>
         <file>qml/Preferences/ShortcutsPreferencesPage.qml</file>
         <file>qml/Preferences/ImportPreferencesPage.qml</file>
-        <file>qml/Preferences/MidiDeviceMappingsPreferencesPage.qml</file>
+        <file>qml/Preferences/MidiDeviceMappingPreferencesPage.qml</file>
         <file>qml/Preferences/PreferencesDialog.qml</file>
         <file>qml/Preferences/internal/PreferencesButtonsPanel.qml</file>
         <file>qml/Preferences/internal/PreferencesMenu.qml</file>

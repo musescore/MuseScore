@@ -12,11 +12,16 @@ Item {
         return mappingsModel.apply()
     }
 
-    EditMidiActionDialog {
-        id: editActionDialog
+    EditMidiMappingDialog {
+        id: editMappingDialog
 
-        actionTitle: "Rewind"
-        actionIcon: IconCode.REWIND
+        function startEditCurrentAction() {
+            editMappingDialog.startEdit(mappingsModel.currentAction())
+        }
+
+        onMapToValueRequested: {
+            mappingsModel.mapCurrentActionToMidiValue(value)
+        }
     }
 
     MidiDeviceMappingsModel {
@@ -64,7 +69,7 @@ Item {
             model: mappingsModel
 
             onDoubleClicked: {
-                editActionDialog.open()
+                editMappingDialog.startEditCurrentAction()
             }
         }
 
@@ -76,10 +81,11 @@ Item {
             spacing: 8
 
             FlatButton {
+                enabled: mappingsModel.canEditAction
                 text: qsTrc("midi", "Assign MIDI mapping...")
 
                 onClicked: {
-
+                    editMappingDialog.startEditCurrentAction()
                 }
             }
 

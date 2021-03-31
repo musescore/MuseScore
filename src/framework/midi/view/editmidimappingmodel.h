@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,22 +16,34 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_MIDIMODULE_H
-#define MU_MIDI_MIDIMODULE_H
 
-#include "modularity/imodulesetup.h"
+#ifndef MU_MIDI_EDITMIDIMAPPINGMODEL_H
+#define MU_MIDI_EDITMIDIMAPPINGMODEL_H
+
+#include <QObject>
 
 namespace mu::midi {
-class MidiModule : public framework::IModuleSetup
+class EditMidiMappingModel : public QObject
 {
+    Q_OBJECT
+
+    Q_PROPERTY(QString mappingTitle READ mappingTitle NOTIFY mappingTitleChanged)
+
 public:
+    explicit EditMidiMappingModel(QObject* parent = nullptr);
 
-    std::string moduleName() const override;
+    QString mappingTitle() const;
 
-    void registerExports() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+    Q_INVOKABLE void load(int originValue);
+    Q_INVOKABLE int inputedValue() const;
+
+signals:
+    void mappingTitleChanged(const QString& title);
+
+private:
+    int m_originValue = -1;
+    int m_inputedValue = -1;
 };
 }
 
-#endif // MU_MIDI_MIDIMODULE_H
+#endif // MU_MIDI_EDITMIDIMAPPINGMODEL_H
