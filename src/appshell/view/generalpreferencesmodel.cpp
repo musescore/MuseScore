@@ -30,8 +30,8 @@ GeneralPreferencesModel::GeneralPreferencesModel(QObject* parent)
 
 void GeneralPreferencesModel::load()
 {
-    languagesService()->currentLanguage().ch.onReceive(this, [this](const Language&) {
-        emit currentLanguageCodeChanged(currentLanguageCode());
+    languagesConfiguration()->currentLanguageCode().ch.onReceive(this, [this](const QString& languageCode) {
+        emit currentLanguageCodeChanged(languageCode);
     });
 
     languagesService()->languages().ch.onReceive(this, [this](const LanguagesHash&) {
@@ -76,7 +76,7 @@ QVariantList GeneralPreferencesModel::languages() const
 
 QString GeneralPreferencesModel::currentLanguageCode() const
 {
-    return languagesService()->currentLanguage().val.code;
+    return languagesConfiguration()->currentLanguageCode().val;
 }
 
 bool GeneralPreferencesModel::isTelemetryAllowed() const
@@ -110,7 +110,7 @@ void GeneralPreferencesModel::setCurrentLanguageCode(QString currentLanguageCode
         return;
     }
 
-    languagesService()->setCurrentLanguage(currentLanguageCode);
+    languagesConfiguration()->setCurrentLanguageCode(currentLanguageCode);
     emit currentLanguageCodeChanged(currentLanguageCode);
 }
 
