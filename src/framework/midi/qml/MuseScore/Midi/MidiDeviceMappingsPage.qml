@@ -55,10 +55,11 @@ Item {
             readOnly: true
 
             keyRoleName: "title"
-            keyTitle: qsTrc("midi", "ACTION")
+            keyTitle: qsTrc("midi", "action")
             valueRoleName: "status"
-            valueTitle: qsTrc("midi", "STATUS")
+            valueTitle: qsTrc("midi", "status")
             iconRoleName: "icon"
+            valueEnabledRoleName: "enabled"
 
             model: mappingsModel
 

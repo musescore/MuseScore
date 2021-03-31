@@ -45,6 +45,7 @@ QVariant MidiDeviceMappingsModel::data(const QModelIndex& index, int role) const
     case RoleTitle: return QString::fromStdString(action.title);
     case RoleIcon: return static_cast<int>(action.iconCode);
     case RoleStatus: return "Inactive";
+    case RoleEnabled: return false;
     }
 
     return QVariant();
@@ -60,7 +61,8 @@ QHash<int, QByteArray> MidiDeviceMappingsModel::roleNames() const
     return {
         { RoleTitle, "title" },
         { RoleIcon, "icon" },
-        { RoleStatus, "status" }
+        { RoleStatus, "status" },
+        { RoleEnabled, "enabled" }
     };
 }
 
@@ -91,9 +93,10 @@ ActionCode MidiDeviceMappingsModel::actionCode(MidiActionType type) const
 {
     switch (type) {
     case MidiActionType::Rewind: return "rewind";
+    case MidiActionType::Loop: return "loop";
     case MidiActionType::Play: return "play";
     case MidiActionType::Stop: return "stop";
-    case MidiActionType::Loop: return "loop";
+    case MidiActionType::NoteInputMode: return "note-input";
     case MidiActionType::Note1: return "pad-note-1";
     case MidiActionType::Note2: return "pad-note-2";
     case MidiActionType::Note4: return "pad-note-4";
@@ -106,8 +109,6 @@ ActionCode MidiDeviceMappingsModel::actionCode(MidiActionType type) const
     case MidiActionType::DotDot: return "pad-dotdot";
     case MidiActionType::Tie: return "tie";
     case MidiActionType::Undo: return "undo";
-    case MidiActionType::NoteEditMode: return "note-input";
-    case MidiActionType::RealtimeAdvance: return "realtime-advance";
     }
 
     return ActionCode();
