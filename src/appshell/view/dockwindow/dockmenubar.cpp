@@ -40,6 +40,14 @@ static int actionIndexInGroup(const QAction* action)
     return -1;
 }
 
+static void addMenu(QMenu* child, QMenu* parent)
+{
+#ifdef Q_OS_MAC
+    child->setParent(parent);
+#endif
+    parent->addMenu(child);
+}
+
 DockMenuBar::DockMenuBar(QQuickItem* parent)
     : DockView(parent)
 {
@@ -95,8 +103,7 @@ QMenu* DockMenuBar::makeMenu(const QVariantMap& menuItem) const
             menu->addSeparator();
         } else if (!menuMap.value("subitems").toList().empty()) {
             QMenu* subMenu = makeMenu(menuMap);
-            subMenu->setParent(menu);
-            menu->addMenu(subMenu);
+            addMenu(subMenu, menu);
         } else {
             bool isFromGroup = menuMap.value("selectable").toBool();
             menu->addAction(makeAction(menuMap, isFromGroup ? group : nullptr));

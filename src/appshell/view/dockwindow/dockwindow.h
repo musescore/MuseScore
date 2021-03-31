@@ -32,6 +32,7 @@
 class QMainWindow;
 class QStackedWidget;
 class QStatusBar;
+class QMenuBar;
 
 namespace mu::dock {
 class EventsWatcher;
@@ -68,6 +69,7 @@ public:
     QString currentPageUri() const;
 
     QMainWindow* qMainWindow() override;
+    QMenuBar* qMenuBar();
     void stackUnder(QWidget* w) override;
 
 public slots:
