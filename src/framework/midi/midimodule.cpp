@@ -31,8 +31,11 @@
 #include "ui/iuiengine.h"
 #include "view/devtools/midiportdevmodel.h"
 #include "view/mididevicemappingsmodel.h"
+#include "view/editmidimappingmodel.h"
 
 using namespace mu::midi;
+
+static std::shared_ptr<MidiConfiguration> s_configuration = std::make_shared<MidiConfiguration>();
 
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/alsamidioutport.h"
@@ -66,7 +69,7 @@ std::string MidiModule::moduleName() const
 
 void MidiModule::registerExports()
 {
-    framework::ioc()->registerExport<IMidiConfiguration>(moduleName(), new MidiConfiguration());
+    framework::ioc()->registerExport<IMidiConfiguration>(moduleName(), s_configuration);
     framework::ioc()->registerExport<IMidiPortDataSender>(moduleName(), new MidiPortDataSender());
     framework::ioc()->registerExport<IMidiOutPort>(moduleName(), midiOutPort);
     framework::ioc()->registerExport<IMidiInPort>(moduleName(), midiInPort);
@@ -76,4 +79,10 @@ void MidiModule::registerUiTypes()
 {
     qmlRegisterType<MidiPortDevModel>("MuseScore.Midi", 1, 0, "MidiPortDevModel");
     qmlRegisterType<MidiDeviceMappingsModel>("MuseScore.Midi", 1, 0, "MidiDeviceMappingsModel");
+    qmlRegisterType<EditMidiMappingModel>("MuseScore.Midi", 1, 0, "EditMidiMappingModel");
+}
+
+void MidiModule::onInit(const framework::IApplication::RunMode&)
+{
+    s_configuration->init();
 }

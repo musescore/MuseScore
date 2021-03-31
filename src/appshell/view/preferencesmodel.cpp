@@ -163,8 +163,8 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("note-input", qtrc("appshell", "Note Input"), IconCode::Code::EDIT,
                  "Preferences/NoteInputPreferencesPage.qml"),
 
-        makeItem("midi-device-mapping", qtrc("appshell", "MIDI Device Mappings"), IconCode::Code::MIDI_INPUT,
-                 "Preferences/MidiDeviceMappingsPreferencesPage.qml"),
+        makeItem("midi-device-mapping", qtrc("appshell", "MIDI Device Mapping"), IconCode::Code::MIDI_INPUT,
+                 "Preferences/MidiDeviceMappingPreferencesPage.qml"),
 
         makeItem("score", qtrc("appshell", "Score"), IconCode::Code::SCORE,
                  "Preferences/ScorePreferencesPage.qml"),

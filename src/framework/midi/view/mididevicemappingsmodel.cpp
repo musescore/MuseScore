@@ -28,6 +28,35 @@ using namespace mu::midi;
 using namespace mu::actions;
 using namespace mu::ui;
 
+static const QString TITLE_KEY("title");
+static const QString ICON_KEY("icon");
+static const QString STATUS_KEY("status");
+static const QString ENABLED_KEY("enabled");
+static const QString MAPPED_VALUE_KEY("mappedValue");
+
+inline std::vector<std::string> allMidiActions()
+{
+    return {
+        "rewind",
+        "loop",
+        "play",
+        "stop",
+        "note-input",
+        "pad-note-1",
+        "pad-note-2",
+        "pad-note-4",
+        "pad-note-8",
+        "pad-note-16",
+        "pad-note-32",
+        "pad-note-64",
+        "pad-rest",
+        "pad-dot",
+        "pad-dotdot",
+        "tie",
+        "undo"
+    };
+}
+
 MidiDeviceMappingsModel::MidiDeviceMappingsModel(QObject* parent)
     : QAbstractListModel(parent)
 {
@@ -39,16 +68,32 @@ QVariant MidiDeviceMappingsModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    ActionItem action = m_actions[index.row()];
+    QVariantMap obj = actionToObject(m_actions[index.row()]);
 
     switch (role) {
-    case RoleTitle: return QString::fromStdString(action.title);
-    case RoleIcon: return static_cast<int>(action.iconCode);
-    case RoleStatus: return "Inactive";
-    case RoleEnabled: return false;
+    case RoleTitle: return obj[TITLE_KEY].toString();
+    case RoleIcon: return obj[ICON_KEY].toInt();
+    case RoleStatus: return obj[STATUS_KEY].toString();
+    case RoleEnabled: return obj[ENABLED_KEY].toBool();
+    case RoleMappedValue: return obj[MAPPED_VALUE_KEY].toInt();
     }
 
     return QVariant();
+}
+
+QVariantMap MidiDeviceMappingsModel::actionToObject(const UiAction& action) const
+{
+    QVariantMap obj;
+
+    obj[TITLE_KEY] = action.title;
+    obj[ICON_KEY] = static_cast<int>(action.iconCode);
+
+    // not implemented:
+    obj[STATUS_KEY] = "Inactive";
+    obj[ENABLED_KEY] = false;
+    obj[MAPPED_VALUE_KEY] = 0;
+
+    return obj;
 }
 
 int MidiDeviceMappingsModel::rowCount(const QModelIndex&) const
@@ -59,10 +104,11 @@ int MidiDeviceMappingsModel::rowCount(const QModelIndex&) const
 QHash<int, QByteArray> MidiDeviceMappingsModel::roleNames() const
 {
     return {
-        { RoleTitle, "title" },
-        { RoleIcon, "icon" },
-        { RoleStatus, "status" },
-        { RoleEnabled, "enabled" }
+        { RoleTitle, TITLE_KEY.toUtf8() },
+        { RoleIcon, ICON_KEY.toUtf8() },
+        { RoleStatus, STATUS_KEY.toUtf8() },
+        { RoleEnabled, ENABLED_KEY.toUtf8() },
+        { RoleMappedValue, MAPPED_VALUE_KEY.toUtf8() }
     };
 }
 
@@ -71,9 +117,8 @@ void MidiDeviceMappingsModel::load()
     beginResetModel();
     m_actions.clear();
 
-    for (MidiActionType type : allMidiActionTypes()) {
-        ActionCode code = actionCode(type);
-        ActionItem action = actionsRegister()->action(code);
+    for (const std::string& actionCode : allMidiActions()) {
+        UiAction action = uiActionsRegister()->action(actionCode);
 
         if (action.isValid()) {
             m_actions.push_back(action);
@@ -87,31 +132,6 @@ bool MidiDeviceMappingsModel::apply()
 {
     NOT_IMPLEMENTED;
     return true;
-}
-
-ActionCode MidiDeviceMappingsModel::actionCode(MidiActionType type) const
-{
-    switch (type) {
-    case MidiActionType::Rewind: return "rewind";
-    case MidiActionType::Loop: return "loop";
-    case MidiActionType::Play: return "play";
-    case MidiActionType::Stop: return "stop";
-    case MidiActionType::NoteInputMode: return "note-input";
-    case MidiActionType::Note1: return "pad-note-1";
-    case MidiActionType::Note2: return "pad-note-2";
-    case MidiActionType::Note4: return "pad-note-4";
-    case MidiActionType::Note8: return "pad-note-8";
-    case MidiActionType::Note16: return "pad-note-16";
-    case MidiActionType::Note32: return "pad-note-32";
-    case MidiActionType::Note64: return "pad-note-64";
-    case MidiActionType::Rest: return "pad-rest";
-    case MidiActionType::Dot: return "pad-dot";
-    case MidiActionType::DotDot: return "pad-dotdot";
-    case MidiActionType::Tie: return "tie";
-    case MidiActionType::Undo: return "undo";
-    }
-
-    return ActionCode();
 }
 
 bool MidiDeviceMappingsModel::useRemoteControl() const
@@ -134,6 +154,11 @@ QItemSelection MidiDeviceMappingsModel::selection() const
     return m_selection;
 }
 
+bool MidiDeviceMappingsModel::canEditAction() const
+{
+    return currentAction().isValid();
+}
+
 void MidiDeviceMappingsModel::setSelection(const QItemSelection& selection)
 {
     if (selection == m_selection) {
@@ -151,5 +176,21 @@ void MidiDeviceMappingsModel::clearSelectedActions()
 
 void MidiDeviceMappingsModel::clearAllActions()
 {
+    NOT_IMPLEMENTED;
+}
+
+QVariant MidiDeviceMappingsModel::currentAction() const
+{
+    if (m_selection.size() != 1) {
+        return QVariant();
+    }
+
+    UiAction action = m_actions[m_selection.indexes().first().row()];
+    return actionToObject(action);
+}
+
+void MidiDeviceMappingsModel::mapCurrentActionToMidiValue(int value)
+{
+    UNUSED(value);
     NOT_IMPLEMENTED;
 }
