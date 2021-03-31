@@ -238,10 +238,8 @@ void Settings::rollbackTransaction()
             continue;
         }
 
-        LOGD() << "=========== rollback " << it->first.key << " " << it->second.value.toString();
-
         Channel<Val>& channel = findChannel(it->first);
-        channel.send(it->second.value);
+        channel.send(item.value);
     }
 
     m_localSettings.clear();

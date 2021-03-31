@@ -25,6 +25,7 @@
 #include "async/asyncable.h"
 
 #include "global/iinteractive.h"
+#include "languages/ilanguagesconfiguration.h"
 #include "languages/ilanguagesservice.h"
 #include "telemetry/itelemetryconfiguration.h"
 
@@ -34,6 +35,7 @@ class GeneralPreferencesModel : public QObject, public async::Asyncable
     Q_OBJECT
 
     INJECT(appshell, framework::IInteractive, interactive)
+    INJECT(appshell, languages::ILanguagesConfiguration, languagesConfiguration)
     INJECT(appshell, languages::ILanguagesService, languagesService)
     INJECT(appshell, telemetry::ITelemetryConfiguration, telemetryConfiguration)
 
