@@ -34,3 +34,8 @@ std::string OveConfiguration::importOvertuneCharset() const
 {
     return settings()->value(IMPORT_OVERTUNE_CHARSET_KEY).toString();
 }
+
+void OveConfiguration::setImportOvertuneCharset(const std::string& charset)
+{
+    settings()->setValue(IMPORT_OVERTUNE_CHARSET_KEY, Val(charset));
+}

@@ -28,12 +28,24 @@ public:
     void init();
 
     bool musicxmlImportBreaks() const override;
+    void setMusicxmlImportBreaks(bool value) override;
+
     bool musicxmlImportLayout() const override;
+    void setMusicxmlImportLayout(bool value) override;
+
     bool musicxmlExportLayout() const override;
+    void setMusicxmlExportLayout(bool value) override;
 
     MusicxmlExportBreaksType musicxmlExportBreaksType() const override;
 
     bool needUseDefaultFont() const override;
+    void setNeedUseDefaultFont(bool value) override;
+
+    bool needAskAboutApplyingNewStyle() const override;
+    void setNeedAskAboutApplyingNewStyle(bool value) override;
+
+    io::path styleFileImportPath() const override;
+    void setStyleFileImportPath(const io::path& path) override;
 };
 }
 
