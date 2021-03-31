@@ -75,7 +75,6 @@ void DockMenuBar::updateMenus()
     QList<QMenu*> menus;
     for (const QVariant& item: m_items) {
         QMenu* menu = makeMenu(item.toMap());
-        connect(menu, &QMenu::triggered, this, &DockMenuBar::onActionTriggered);
         menus << menu;
     }
 
@@ -95,7 +94,9 @@ QMenu* DockMenuBar::makeMenu(const QVariantMap& menuItem) const
         if (menuMap.value("title").toString().isEmpty()) {
             menu->addSeparator();
         } else if (!menuMap.value("subitems").toList().empty()) {
-            menu->addMenu(makeMenu(menuMap));
+            QMenu* subMenu = makeMenu(menuMap);
+            subMenu->setParent(menu);
+            menu->addMenu(subMenu);
         } else {
             bool isFromGroup = menuMap.value("selectable").toBool();
             menu->addAction(makeAction(menuMap, isFromGroup ? group : nullptr));
