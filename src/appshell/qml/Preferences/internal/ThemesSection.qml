@@ -43,21 +43,8 @@ Column {
                 buttonColor: modelData.buttonColor
                 accentColor: modelData.accentColor
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-
-                    onClicked: {
-                        root.themeChangeRequested(model.index)
-                    }
-
-                    onEntered: {
-                        parent.border.color = modelData.accentColor
-                    }
-
-                    onExited: {
-                        parent.border.color = modelData.backgroundPrimaryColor
-                    }
+                onClicked: {
+                    root.themeChangeRequested(model.index)
                 }
             }
 

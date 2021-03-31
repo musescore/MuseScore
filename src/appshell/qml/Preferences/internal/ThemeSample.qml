@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import MuseScore.UiComponents 1.0
 
 Rectangle {
     id: root
@@ -10,16 +11,15 @@ Rectangle {
     property color buttonColor
     property color accentColor
 
+    signal clicked
+
     width: 112
     height: 84
 
     radius: 4
     color: backgroundPrimaryColor
 
-    border.color: strokeColor
-    border.width: 1
-
-    Rectangle {
+    RoundedRectangle {
         anchors.fill: parent
         anchors.topMargin: 12
         anchors.leftMargin: 16
@@ -28,6 +28,8 @@ Rectangle {
 
         border.color: root.strokeColor
         border.width: 1
+
+        bottomRightRadius: borderRect.radius
 
         Column {
             anchors.fill: parent
@@ -103,5 +105,21 @@ Rectangle {
                 }
             }
         }
+    }
+
+    Rectangle {
+        id: borderRect
+        anchors.fill: parent
+        color: "transparent"
+        radius: 4
+        border.width: 1
+        border.color: mouseArea.containsMouse ? root.accentColor : root.strokeColor
+    }
+
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        hoverEnabled: true
+        onClicked: root.clicked()
     }
 }
