@@ -207,6 +207,8 @@ ComboBox {
             boundsBehavior: Flickable.StopAtBounds
             highlightMoveDuration: 250
 
+            ScrollBar.vertical: StyledScrollBar { }
+
             populate: Transition {
                 NumberAnimation { property: "opacity"; from: 0.5; to: 1; duration: 200; easing.type: Easing.OutCubic }
             }
