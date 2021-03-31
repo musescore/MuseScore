@@ -153,11 +153,7 @@ bool UiConfiguration::needFollowSystemTheme() const
 
 void UiConfiguration::initThemes()
 {
-    if (needFollowSystemTheme()) {
-        platformTheme()->startListening();
-    }
-
-    platformTheme()->darkModeSwitched().onReceive(nullptr, [this](bool) {
+    platformTheme()->themeCodeChanged().onReceive(nullptr, [this](std::string) {
         notifyAboutCurrentThemeChanged();
     });
 
@@ -171,6 +167,12 @@ void UiConfiguration::initThemes()
 
 void UiConfiguration::updateCurrentTheme()
 {
+    if (needFollowSystemTheme()) {
+        platformTheme()->startListening();
+    } else {
+        platformTheme()->stopListening();
+    }
+
     std::string currentCodeKey = currentThemeCodeKey();
 
     for (size_t i = 0; i < m_themes.size(); ++i) {
@@ -180,7 +182,7 @@ void UiConfiguration::updateCurrentTheme()
         }
     }
 
-    platformTheme()->setAppThemeDark(currentCodeKey == DARK_THEME_CODE);
+    platformTheme()->applyPlatformStyleOnAppForTheme(currentCodeKey);
 }
 
 void UiConfiguration::updateThemes()
@@ -321,7 +323,7 @@ std::string UiConfiguration::currentThemeCodeKey() const
     std::string preferredThemeCode = settings()->value(UI_CURRENT_THEME_CODE_KEY).toString();
 
     if (needFollowSystemTheme()) {
-        return platformTheme()->isDarkMode() ? DARK_THEME_CODE : LIGHT_THEME_CODE;
+        return platformTheme()->themeCode();
     }
 
     return preferredThemeCode.empty() ? LIGHT_THEME_CODE : preferredThemeCode;
@@ -499,7 +501,7 @@ Notification UiConfiguration::pageStateChanged() const
 
 void UiConfiguration::applyPlatformStyle(QWidget* window)
 {
-    platformTheme()->applyPlatformStyle(window);
+    platformTheme()->applyPlatformStyleOnWindowForTheme(window, currentThemeCodeKey());
 }
 
 QByteArray UiConfiguration::stringToByteArray(const std::string& string) const

@@ -22,15 +22,9 @@
 
 #include "internal/iplatformtheme.h"
 
-#include "modularity/ioc.h"
-#include "async/asyncable.h"
-#include "iuiconfiguration.h"
-
 namespace mu::ui {
-class WindowsPlatformTheme : public IPlatformTheme, public async::Asyncable
+class WindowsPlatformTheme : public IPlatformTheme
 {
-    INJECT(ui, IUiConfiguration, configuration)
-
 public:
     WindowsPlatformTheme();
 
@@ -39,18 +33,23 @@ public:
 
     bool isFollowSystemThemeAvailable() const override;
 
-    bool isDarkMode() const override;
-    async::Channel<bool> darkModeSwitched() const override;
+    std::string themeCode() const override;
+    async::Channel<std::string> themeCodeChanged() const override;
 
-    void setAppThemeDark(bool isDark) override;
-    void applyPlatformStyle(QWidget* window) override;
+    void applyPlatformStyleOnAppForTheme(std::string themeCode) override;
+    void applyPlatformStyleOnWindowForTheme(QWidget* window, std::string themeCode) override;
 
 private:
-    async::Channel<bool> m_darkModeSwitched;
     int m_buildNumber = 0;
+
+    async::Channel<std::string> m_channel;
     std::atomic<bool> m_isListening = false;
     std::thread m_listenThread;
+
     void th_listen();
+
+    bool isSystemDarkMode() const;
+    bool isSystemHighContrast() const;
 };
 }
 

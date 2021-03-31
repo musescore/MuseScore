@@ -31,14 +31,17 @@ public:
 
     bool isFollowSystemThemeAvailable() const override;
 
-    bool isDarkMode() const override;
-    async::Channel<bool> darkModeSwitched() const override;
+    std::string themeCode() const override;
+    async::Channel<std::string> themeCodeChanged() const override;
 
-    void setAppThemeDark(bool) override;
-    void applyPlatformStyle(QWidget*) override;
+    void applyPlatformStyleOnAppForTheme(std::string themeCode) override;
+    void applyPlatformStyleOnWindowForTheme(QWidget* window, std::string themeCode) override;
 
 private:
-    async::Channel<bool> m_darkModeSwitched;
+    bool isSystemDarkMode() const;
+    bool isSystemHighContrast() const;
+
+    async::Channel<std::string> m_channel;
 };
 }
 
