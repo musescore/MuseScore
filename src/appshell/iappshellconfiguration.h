@@ -69,6 +69,10 @@ public:
     virtual bool needShowTours() const = 0;
     virtual void setNeedShowTours(bool show) = 0;
 
+    virtual void startEditSettings() = 0;
+    virtual void applySettings() = 0;
+    virtual void rollbackSettings() = 0;
+
     virtual void revertToFactorySettings(bool keepDefaultSettings = false) const = 0;
 };
 }
