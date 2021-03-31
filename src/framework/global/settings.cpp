@@ -56,7 +56,7 @@ Settings::~Settings()
 
 const Settings::Items& Settings::items() const
 {
-    return m_items;
+    return m_isTransactionStarted ? m_localSettings : m_items;
 }
 
 /**
@@ -79,6 +79,9 @@ void Settings::load()
 void Settings::reset(bool keepDefaultSettings)
 {
     m_settings->clear();
+
+    m_isTransactionStarted = false;
+    m_localSettings.clear();
 
     if (!keepDefaultSettings) {
         QDir(dataPath()).removeRecursively();
@@ -125,10 +128,12 @@ void Settings::setValue(const Key& key, const Val& value)
         return;
     }
 
-    writeValue(key, value);
+    if (!m_isTransactionStarted) {
+        writeValue(key, value);
+    }
 
     if (item.isNull()) {
-        m_items[key] = Item{ key, value, value };
+        insertNewItem(key, value);
     } else {
         item.value = value;
     }
@@ -180,11 +185,73 @@ void Settings::setCanBeMannualyEdited(const Settings::Key& key, bool canBeMannua
     }
 }
 
+void Settings::insertNewItem(const Settings::Key& key, const Val& value)
+{
+    Item item = Item{ key, value, value };
+    if (m_isTransactionStarted) {
+        m_localSettings[key] = item;
+    } else {
+        m_items[key] = item;
+    }
+}
+
+void Settings::beginTransaction()
+{
+    if (m_isTransactionStarted) {
+        LOGW() << "Transaction is already started";
+        return;
+    }
+
+    m_localSettings = m_items;
+    m_isTransactionStarted = true;
+}
+
+void Settings::commitTransaction()
+{
+    m_isTransactionStarted = false;
+
+    for (auto it = m_localSettings.begin(); it != m_localSettings.end(); ++it) {
+        Item& item = findItem(it->first);
+        if (item.value == it->second.value) {
+            continue;
+        }
+
+        if (item.isNull()) {
+            insertNewItem(it->first, it->second.value);
+        } else {
+            item.value = it->second.value;
+        }
+
+        writeValue(item.key, item.value);
+    }
+
+    m_localSettings.clear();
+}
+
+void Settings::rollbackTransaction()
+{
+    m_isTransactionStarted = false;
+
+    for (auto it = m_localSettings.begin(); it != m_localSettings.end(); ++it) {
+        Item item = findItem(it->first);
+        if (item.value == it->second.value) {
+            continue;
+        }
+
+        Channel<Val>& channel = findChannel(it->first);
+        channel.send(item.value);
+    }
+
+    m_localSettings.clear();
+}
+
 Settings::Item& Settings::findItem(const Key& key) const
 {
-    auto it = m_items.find(key);
+    Items& items = m_isTransactionStarted ? m_localSettings : m_items;
 
-    if (it == m_items.end()) {
+    auto it = items.find(key);
+
+    if (it == items.end()) {
         static Item null;
         return null;
     }

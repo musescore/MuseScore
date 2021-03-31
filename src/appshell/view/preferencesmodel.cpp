@@ -32,6 +32,8 @@ PreferencesModel::PreferencesModel(QObject* parent)
 
 PreferencesModel::~PreferencesModel()
 {
+    apply();
+
     delete m_rootItem;
     m_rootItem = nullptr;
 }
@@ -128,6 +130,8 @@ QString PreferencesModel::currentPageId() const
 
 void PreferencesModel::load(const QString& currentPageId)
 {
+    configuration()->startEditSettings();
+
     beginResetModel();
 
     if (!currentPageId.isEmpty()) {
@@ -177,13 +181,18 @@ void PreferencesModel::load(const QString& currentPageId)
 
 void PreferencesModel::resetFactorySettings()
 {
-    NOT_IMPLEMENTED;
+    configuration()->revertToFactorySettings();
+    configuration()->startEditSettings();
 }
 
-bool PreferencesModel::apply()
+void PreferencesModel::apply()
 {
-    NOT_IMPLEMENTED;
-    return true;
+    configuration()->applySettings();
+}
+
+void PreferencesModel::cancel()
+{
+    configuration()->rollbackSettings();
 }
 
 void PreferencesModel::selectRow(const QModelIndex& rowIndex)

@@ -228,6 +228,21 @@ void AppShellConfiguration::setNeedShowTours(bool show)
     settings()->setValue(TOURS_VISIBLE_KEY, Val(show));
 }
 
+void AppShellConfiguration::startEditSettings()
+{
+    settings()->beginTransaction();
+}
+
+void AppShellConfiguration::applySettings()
+{
+    settings()->commitTransaction();
+}
+
+void AppShellConfiguration::rollbackSettings()
+{
+    settings()->rollbackTransaction();
+}
+
 void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings) const
 {
     settings()->reset(keepDefaultSettings);

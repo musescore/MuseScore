@@ -78,6 +78,7 @@ private:
     void initThemes();
     void notifyAboutCurrentThemeChanged();
     void updateCurrentTheme();
+    void updateThemes();
 
     std::string currentThemeCodeKey() const;
     ThemeInfo makeStandardTheme(const std::string& codeKey) const;

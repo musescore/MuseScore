@@ -26,6 +26,7 @@
 #include "actions/iactionsregister.h"
 #include "ui/view/iconcodes.h"
 
+#include "iappshellconfiguration.h"
 #include "preferencepageitem.h"
 
 namespace mu::appshell {
@@ -35,6 +36,7 @@ class PreferencesModel : public QAbstractItemModel
 
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
     INJECT(appshell, actions::IActionsRegister, actionsRegister)
+    INJECT(appshell, IAppShellConfiguration, configuration)
 
     Q_PROPERTY(QString currentPageId READ currentPageId WRITE setCurrentPageId NOTIFY currentPageIdChanged)
 
@@ -53,7 +55,8 @@ public:
 
     Q_INVOKABLE void load(const QString& currentPageId);
     Q_INVOKABLE void resetFactorySettings();
-    Q_INVOKABLE bool apply();
+    Q_INVOKABLE void apply();
+    Q_INVOKABLE void cancel();
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex);
 
     Q_INVOKABLE QVariantList availablePages() const;

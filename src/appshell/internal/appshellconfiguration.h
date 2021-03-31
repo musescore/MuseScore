@@ -75,6 +75,10 @@ public:
     bool needShowTours() const override;
     void setNeedShowTours(bool show) override;
 
+    void startEditSettings() override;
+    void applySettings() override;
+    void rollbackSettings() override;
+
     void revertToFactorySettings(bool keepDefaultSettings = false) const override;
 
 private:
