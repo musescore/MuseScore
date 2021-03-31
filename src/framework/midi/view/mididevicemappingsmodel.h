@@ -68,6 +68,7 @@ private:
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
         RoleIcon,
+        RoleEnabled,
         RoleStatus
     };
 

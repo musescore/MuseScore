@@ -146,8 +146,9 @@ enum class MidiActionType
 {
     Rewind,
     Play,
-    Stop,
     Loop,
+    Stop,
+    NoteInputMode,
     Note1,
     Note2,
     Note4,
@@ -160,17 +161,16 @@ enum class MidiActionType
     DotDot,
     Tie,
     Undo,
-    NoteEditMode,
-    RealtimeAdvance
 };
 
 inline std::vector<MidiActionType> allMidiActionTypes()
 {
     return {
         MidiActionType::Rewind,
+        MidiActionType::Loop,
         MidiActionType::Play,
         MidiActionType::Stop,
-        MidiActionType::Loop,
+        MidiActionType::NoteInputMode,
         MidiActionType::Note1,
         MidiActionType::Note2,
         MidiActionType::Note4,
@@ -182,9 +182,7 @@ inline std::vector<MidiActionType> allMidiActionTypes()
         MidiActionType::Dot,
         MidiActionType::DotDot,
         MidiActionType::Tie,
-        MidiActionType::Undo,
-        MidiActionType::NoteEditMode,
-        MidiActionType::RealtimeAdvance
+        MidiActionType::Undo
     };
 }
 }
