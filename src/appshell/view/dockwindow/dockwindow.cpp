@@ -44,6 +44,14 @@ static const QString WINDOW_QSS = QString("QMainWindow { background: %1; } "
 
 static const QString STATUS_QSS = QString("QStatusBar { background: %1; border-top: 1px solid %2; } QStatusBar::item { border: 0 }");
 
+static void addMenu(QMenu* menu, QMenuBar* menuBar)
+{
+#ifdef Q_OS_MAC
+    menu->setParent(menuBar);
+#endif
+    menuBar->addMenu(menu);
+}
+
 DockWindow::DockWindow(QQuickItem* parent)
     : QQuickItem(parent), m_toolbars(this), m_pages(this)
 {
@@ -286,22 +294,12 @@ void DockWindow::updateStyle()
 
 void DockWindow::onMenusChanged(const QList<QMenu*>& menus)
 {
-    QMenuBar* menuBar = m_window->menuBar();
+    QMenuBar* menuBar = qMenuBar();
     menuBar->clear();
 
     for (QMenu* menu: menus) {
-        menu->setParent(menuBar);
-        menuBar->addMenu(menu);
+        addMenu(menu, menuBar);
     }
-
-#ifdef Q_OS_MAC
-    // Without the following code, the menu bar on macOS is hidden from view.
-    // If this were to be done on systems where the menu bar is loated at the top of the window,
-    // there would be noticeable flicker as the location of all widgets is adjusted
-    // as the menu bar is hidden and then reshown.
-    menuBar->setParent(nullptr);
-    m_window->setMenuBar(menuBar);
-#endif
 }
 
 DockPage* DockWindow::currentPage() const
@@ -420,7 +418,7 @@ void DockWindow::setMenuBar(DockMenuBar* menuBar)
     m_menuBar = menuBar;
 
     connect(menuBar, &DockMenuBar::changed, this, &DockWindow::onMenusChanged);
-    connect(m_window->menuBar(), &QMenuBar::triggered, menuBar, &DockMenuBar::onActionTriggered);
+    connect(qMenuBar(), &QMenuBar::triggered, menuBar, &DockMenuBar::onActionTriggered);
 
     emit menuBarChanged(m_menuBar);
 }
@@ -428,6 +426,16 @@ void DockWindow::setMenuBar(DockMenuBar* menuBar)
 QMainWindow* DockWindow::qMainWindow()
 {
     return m_window;
+}
+
+QMenuBar* DockWindow::qMenuBar()
+{
+#ifdef Q_OS_MAC
+    static QMenuBar menuBar;
+    return &menuBar;
+#else
+    return m_window->menuBar();
+#endif
 }
 
 void DockWindow::stackUnder(QWidget* w)
