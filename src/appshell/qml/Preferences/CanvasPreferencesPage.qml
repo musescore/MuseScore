@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.15
 import MuseScore.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
+import "internal"
 
 PreferencesPage {
     id: root
@@ -51,25 +52,19 @@ PreferencesPage {
                 Row {
                     spacing: 12
 
-                    StyledTextLabel {
-                        width: 208
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: qsTrc("appshell", "Default zoom:")
-                        horizontalAlignment: Text.AlignLeft
-                    }
+                    ComboBoxWithTitle {
+                        title: qsTrc("appshell", "Default zoom:")
+                        titleWidth: 210
 
-                    StyledComboBox {
-                        implicitWidth: 208
+                        control.textRoleName: "title"
+                        control.valueRoleName: "value"
 
-                        textRoleName: "title"
-                        valueRoleName: "value"
-
-                        currentIndex: indexOfValue(preferencesModel.defaultZoom.type)
+                        currentIndex: control.indexOfValue(preferencesModel.defaultZoom.type)
 
                         model: preferencesModel.zoomTypes()
 
-                        onValueChanged: {
-                            preferencesModel.setDefaultZoomType(value)
+                        onValueEdited: {
+                            preferencesModel.setDefaultZoomType(newValue)
                         }
                     }
 
@@ -96,33 +91,18 @@ PreferencesPage {
                     }
                 }
 
-                Row {
-                    spacing: 12
+                IncrementalPropertyControlWithTitle {
+                    title: qsTrc("appshell", "Mouse zoom precision:")
 
-                    StyledTextLabel {
-                        width: 208
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: qsTrc("appshell", "Mouse zoom precision:")
-                        horizontalAlignment: Text.AlignLeft
-                    }
+                    titleWidth: 208
+                    control.width: 60
 
-                    IncrementalPropertyControl {
-                        id: mouseZoomPrecisionControl
-                        width: 60
-                        iconMode: iconModeEnum.hidden
-                        maxValue: 16
-                        minValue: 1
-                        step: 1
-                        validator: IntInputValidator {
-                            top: mouseZoomPrecisionControl.maxValue
-                            bottom: mouseZoomPrecisionControl.minValue
-                        }
+                    minValue: 1
+                    maxValue: 16
+                    currentValue: preferencesModel.mouseZoomPrecision
 
-                        currentValue: preferencesModel.mouseZoomPrecision
-
-                        onValueEdited: {
-                            preferencesModel.mouseZoomPrecision = newValue
-                        }
+                    onValueEdited: {
+                        preferencesModel.mouseZoomPrecision = newValue
                     }
                 }
             }

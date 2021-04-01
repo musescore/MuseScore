@@ -56,5 +56,8 @@
         <file>qml/Preferences/internal/MusicXmlSection.qml</file>
         <file>qml/Preferences/internal/MidiDevicesSection.qml</file>
         <file>qml/Preferences/internal/AudioEngineSection.qml</file>
+        <file>qml/Preferences/internal/AudioApiSection.qml</file>
+        <file>qml/Preferences/internal/ComboBoxWithTitle.qml</file>
+        <file>qml/Preferences/internal/IncrementalPropertyControlWithTitle.qml</file>
     </qresource>
 </RCC>

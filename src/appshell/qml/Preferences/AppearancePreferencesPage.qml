@@ -50,8 +50,6 @@ PreferencesPage {
         SeparatorLine {}
 
         UiFontSection {
-            width: parent.width
-
             allFonts: appearanceModel.allFonts()
             currentFontIndex: appearanceModel.currentFontIndex
             bodyTextSize: appearanceModel.bodyTextSize

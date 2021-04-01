@@ -22,6 +22,18 @@ PreferencesPage {
 
         readonly property int firstColumnWidth: 220
 
+        AudioApiSection {
+            currentAudioApiIndex: ioModel.currentAudioApiIndex
+            audioApiList: ioModel.audioApiList()
+            firstColumnWidth: content.firstColumnWidth
+
+            onCurrentAudioApiIndexChangeRequested: {
+                ioModel.currentAudioApiIndex = newIndex
+            }
+        }
+
+        SeparatorLine {}
+
         MidiDevicesSection {
             currentInputDeviceIndex: ioModel.currentMidiInputDeviceIndex
             currentOutputDeviceIndex: ioModel.currentMidiOutputDeviceIndex

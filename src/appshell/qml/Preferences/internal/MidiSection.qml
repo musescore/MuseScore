@@ -13,29 +13,18 @@ Column {
         font: ui.theme.bodyBoldFont
     }
 
-    Row {
-        spacing: 12
+    ComboBoxWithTitle {
+        title: qsTrc("appshell", "Shortest note:")
+        titleWidth: 220
 
-        StyledTextLabel {
-            width: 208
-            anchors.verticalCenter: parent.verticalCenter
-            text: qsTrc("appshell", "Shortest note:")
-            horizontalAlignment: Text.AlignLeft
-        }
+        currentIndex: control.indexOfValue(preferencesModel.currentShortestNote)
+        model: preferencesModel.shortestNotes()
 
-        StyledComboBox {
-            implicitWidth: 208
+        control.textRoleName: "title"
+        control.valueRoleName: "value"
 
-            textRoleName: "title"
-            valueRoleName: "value"
-
-            currentIndex: indexOfValue(preferencesModel.currentShortestNote)
-
-            model: preferencesModel.shortestNotes()
-
-            onValueChanged: {
-                preferencesModel.currentShortestNote = value
-            }
+        onValueEdited: {
+            preferencesModel.currentShortestNote = newValue
         }
     }
 }
