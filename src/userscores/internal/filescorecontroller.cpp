@@ -24,14 +24,12 @@
 #include "translation.h"
 
 #include "userscoresconfiguration.h"
-#include "userscoresactions.h"
 
 using namespace mu;
 using namespace mu::userscores;
 using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::actions;
-using namespace mu::shortcuts;
 
 void FileScoreController::init()
 {
@@ -49,8 +47,6 @@ void FileScoreController::init()
     dispatcher()->reg(this, "clear-recent", this, &FileScoreController::clearRecentScores);
 
     dispatcher()->reg(this, "continue-last-session", this, &FileScoreController::continueLastSession);
-
-    setupConnections();
 }
 
 IMasterNotationPtr FileScoreController::currentMasterNotation() const
@@ -76,58 +72,6 @@ INotationSelectionPtr FileScoreController::currentNotationSelection() const
 Ret FileScoreController::openScore(const io::path& scorePath)
 {
     return doOpenScore(scorePath);
-}
-
-bool FileScoreController::actionAvailable(const actions::ActionCode& actionCode) const
-{
-    if (!canReceiveAction(actionCode)) {
-        return false;
-    }
-
-    ActionItem action = actionsRegister()->action(actionCode);
-    if (!action.isValid()) {
-        return false;
-    }
-
-    switch (action.shortcutContext) {
-    case ShortcutContext::NotationActive:
-        return isScoreOpened();
-    case ShortcutContext::NotationNeedSave:
-        return isNeedSaveScore();
-    case ShortcutContext::NotationHasSelection:
-        return hasSelection();
-    default:
-        break;
-    }
-
-    return true;
-}
-
-async::Channel<std::vector<ActionCode> > FileScoreController::actionsAvailableChanged() const
-{
-    return m_actionsReceiveAvailableChanged;
-}
-
-void FileScoreController::setupConnections()
-{
-    globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
-        ActionCodeList actionCodes = UserScoresActions::actionCodes(ShortcutContext::NotationActive);
-        m_actionsReceiveAvailableChanged.send(actionCodes);
-
-        if (!currentMasterNotation()) {
-            return;
-        }
-
-        currentMasterNotation()->needSave().notification.onNotify(this, [this]() {
-            ActionCodeList actionCodes = UserScoresActions::actionCodes(ShortcutContext::NotationNeedSave);
-            m_actionsReceiveAvailableChanged.send(actionCodes);
-        });
-
-        currentMasterNotation()->notation()->interaction()->selectionChanged().onNotify(this, [this]() {
-            ActionCodeList actionCodes = UserScoresActions::actionCodes(ShortcutContext::NotationHasSelection);
-            m_actionsReceiveAvailableChanged.send(actionCodes);
-        });
-    });
 }
 
 void FileScoreController::openScore(const actions::ActionData& args)

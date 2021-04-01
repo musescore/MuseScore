@@ -43,8 +43,8 @@ public:
     Ret setShortcuts(const ShortcutList& shortcuts) override;
     async::Notification shortcutsChanged() const override;
 
-    Shortcut shortcut(const std::string& actionCode) const override;
-    Shortcut defaultShortcut(const std::string& actionCode) const override;
+    const Shortcut& shortcut(const std::string& actionCode) const override;
+    const Shortcut& defaultShortcut(const std::string& actionCode) const override;
     ShortcutList shortcutsForSequence(const std::string& sequence) const override;
 
     Ret saveToFile(const io::path& filePath) const override;

@@ -21,8 +21,7 @@
 #include "ui/view/iconcodes.h"
 
 using namespace mu::notation;
-using namespace mu::actions;
-using namespace mu::uicomponents;
+using namespace mu::ui;
 
 MenuItemList NotationContextMenu::items(const ElementType& elementType) const
 {
@@ -36,18 +35,12 @@ MenuItemList NotationContextMenu::items(const ElementType& elementType) const
     }
 }
 
-MenuItem NotationContextMenu::makeItem(const ActionItem& actionItem, const std::string& section, bool enabled, bool checked) const
+MenuItem NotationContextMenu::makeItem(const UiAction& action, const QString& section, bool enabled, bool checked) const
 {
-    MenuItem item = actionItem;
+    MenuItem item = action;
     item.section = section;
-    item.enabled = enabled;
-    item.checked = checked;
-
-    shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut(actionItem.code);
-    if (shortcut.isValid()) {
-        item.shortcut = shortcut.sequence;
-    }
-
+    item.state.enabled = enabled;
+    item.state.checked = checked;
     return item;
 }
 

@@ -22,7 +22,7 @@
 #include <QObject>
 
 #include "context/iglobalcontext.h"
-#include "actions/iactionsregister.h"
+#include "ui/iuiactionsregister.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
@@ -35,7 +35,7 @@ class UndoRedoModel : public QObject, public async::Asyncable
     Q_PROPERTY(QVariant redoItem READ redoItem NOTIFY stackChanged)
 
     INJECT(notation, context::IGlobalContext, context)
-    INJECT(notation, actions::IActionsRegister, actionsRegister)
+    INJECT(notation, ui::IUiActionsRegister, actionsRegister)
 
 public:
     explicit UndoRedoModel(QObject* parent = nullptr);

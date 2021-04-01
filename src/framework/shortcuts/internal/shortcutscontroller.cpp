@@ -33,9 +33,8 @@ void ShortcutsController::activate(const std::string& sequence)
     }
 
     for (const Shortcut& sc: shortcuts) {
-        const ActionItem& a = aregister()->action(sc.action);
-        if (!a.isValid()) {
-            LOGE() << "not found action: " << sc.action;
+        ui::UiActionState st = aregister()->actionState(sc.action);
+        if (!st.enabled) {
             continue;
         }
 

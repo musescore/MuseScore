@@ -23,11 +23,10 @@
 
 #include "modularity/ioc.h"
 
-#include "actions/iactionsregister.h"
+#include "ui/iuiactionsregister.h"
 #include "ui/iinteractiveuriregister.h"
-#include "uicomponents/imenucontrollersregister.h"
 
-#include "internal/applicationactions.h"
+#include "internal/applicationuiactions.h"
 #include "internal/applicationactioncontroller.h"
 #include "internal/appshellconfiguration.h"
 #include "internal/notationpagestate.h"
@@ -37,12 +36,6 @@
 #include "view/appmenumodel.h"
 #include "view/notationpagemodel.h"
 #include "view/aboutmodel.h"
-#include "view/filemenucontroller.h"
-#include "view/editmenucontroller.h"
-#include "view/viewmenucontroller.h"
-#include "view/formatmenucontroller.h"
-#include "view/toolsmenucontroller.h"
-#include "view/helpmenucontroller.h"
 #include "view/preferencesmodel.h"
 #include "view/generalpreferencesmodel.h"
 #include "view/updatepreferencesmodel.h"
@@ -59,18 +52,11 @@
 using namespace mu::appshell;
 using namespace mu::framework;
 using namespace mu::ui;
-using namespace mu::uicomponents;
 
 static std::shared_ptr<ApplicationActionController> s_applicationActionController = std::make_shared<ApplicationActionController>();
+static std::shared_ptr<ApplicationUiActions> s_applicationUiActions = std::make_shared<ApplicationUiActions>(s_applicationActionController);
 static std::shared_ptr<AppShellConfiguration> s_appShellConfiguration = std::make_shared<AppShellConfiguration>();
 static std::shared_ptr<NotationPageState> s_notationPageState = std::make_shared<NotationPageState>();
-
-static std::shared_ptr<FileMenuController> s_fileMenuController = std::make_shared<FileMenuController>();
-static std::shared_ptr<EditMenuController> s_editMenuController = std::make_shared<EditMenuController>();
-static std::shared_ptr<ViewMenuController> s_viewMenuController = std::make_shared<ViewMenuController>();
-static std::shared_ptr<FormatMenuController> s_formatMenuController = std::make_shared<FormatMenuController>();
-static std::shared_ptr<ToolsMenuController> s_toolsMenuController = std::make_shared<ToolsMenuController>();
-static std::shared_ptr<HelpMenuController> s_helpMenuController = std::make_shared<HelpMenuController>();
 
 static void appshell_init_qrc()
 {
@@ -89,15 +75,14 @@ std::string AppShellModule::moduleName() const
 void AppShellModule::registerExports()
 {
     ioc()->registerExport<IAppShellConfiguration>(moduleName(), s_appShellConfiguration);
-    ioc()->registerExport<IApplicationActionController>(moduleName(), s_applicationActionController);
     ioc()->registerExport<INotationPageState>(moduleName(), s_notationPageState);
 }
 
 void AppShellModule::resolveImports()
 {
-    auto ar = ioc()->resolve<actions::IActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(std::make_shared<ApplicationActions>());
+        ar->reg(s_applicationUiActions);
     }
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
@@ -110,16 +95,6 @@ void AppShellModule::resolveImports()
         ir->registerUri(Uri("musescore://about/musescore"), ContainerMeta(ContainerType::QmlDialog, "AboutDialog.qml"));
         ir->registerUri(Uri("musescore://about/musicxml"), ContainerMeta(ContainerType::QmlDialog, "AboutMusicXMLDialog.qml"));
         ir->registerUri(Uri("musescore://preferences"), ContainerMeta(ContainerType::QmlDialog, "Preferences/PreferencesDialog.qml"));
-    }
-
-    auto mcr = ioc()->resolve<IMenuControllersRegister>(moduleName());
-    if (mcr) {
-        mcr->registerController(MenuType::File, s_fileMenuController);
-        mcr->registerController(MenuType::Edit, s_editMenuController);
-        mcr->registerController(MenuType::View, s_viewMenuController);
-        mcr->registerController(MenuType::Format, s_formatMenuController);
-        mcr->registerController(MenuType::Tools, s_toolsMenuController);
-        mcr->registerController(MenuType::Help, s_helpMenuController);
     }
 }
 
@@ -155,11 +130,5 @@ void AppShellModule::onInit(const IApplication::RunMode&)
     s_appShellConfiguration->init();
     s_applicationActionController->init();
     s_notationPageState->init();
-
-    s_fileMenuController->init();
-    s_editMenuController->init();
-    s_viewMenuController->init();
-    s_formatMenuController->init();
-    s_toolsMenuController->init();
-    s_helpMenuController->init();
+    s_applicationUiActions->init();
 }

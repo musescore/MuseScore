@@ -20,7 +20,7 @@
 #define MU_NOTATION_INOTATIONCONTEXTMENU_H
 
 #include "modularity/imoduleexport.h"
-#include "uicomponents/uicomponentstypes.h"
+#include "ui/uitypes.h"
 #include "notation/notationtypes.h"
 
 namespace mu::notation {
@@ -31,7 +31,7 @@ class INotationContextMenu : MODULE_EXPORT_INTERFACE
 public:
     virtual ~INotationContextMenu() = default;
 
-    virtual uicomponents::MenuItemList items(const ElementType& elementType) const = 0;
+    virtual ui::MenuItemList items(const ElementType& elementType) const = 0;
 };
 }
 

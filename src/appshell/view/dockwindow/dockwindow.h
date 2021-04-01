@@ -23,7 +23,6 @@
 #include <QQuickItem>
 
 #include "uicomponents/view/qmllistproperty.h"
-#include "uicomponents/uicomponentstypes.h"
 #include "dockpage.h"
 #include "dockmenubar.h"
 

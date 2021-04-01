@@ -19,56 +19,23 @@
 #ifndef MU_ACTIONS_ACTIONTYPES_H
 #define MU_ACTIONS_ACTIONTYPES_H
 
-#include <functional>
 #include <string>
 #include <vector>
 #include <memory>
 #include <QString>
 
-#include "shortcuts/shortcutstypes.h"
-#include "ui/view/iconcodes.h"
-
 namespace mu::actions {
 using ActionCode = std::string;
 using ActionCodeList = std::vector<ActionCode>;
 
-inline static ActionCode codeFromQString(const QString& s)
-{
-    return s.toStdString();
-}
-
-struct ActionItem {
-    ActionCode code;
-    shortcuts::ShortcutContext shortcutContext = shortcuts::ShortcutContext::Undefined;
-
-    std::string title;
-    std::string description;
-    ui::IconCode::Code iconCode = ui::IconCode::Code::NONE;
-
-    ActionItem() = default;
-    ActionItem(const ActionCode& code, shortcuts::ShortcutContext shortcutContext,
-               const std::string& title, const std::string& description,
-               ui::IconCode::Code iconCode = ui::IconCode::Code::NONE)
-        : code(code), shortcutContext(shortcutContext), title(title), description(description), iconCode(iconCode) {}
-
-    ActionItem(const ActionCode& code, shortcuts::ShortcutContext shortcutContext,
-               const std::string& title, ui::IconCode::Code iconCode = ui::IconCode::Code::NONE)
-        : code(code), shortcutContext(shortcutContext), title(title), iconCode(iconCode) {}
-
-    bool isValid() const { return !code.empty(); }
-};
-using ActionList = std::vector<ActionItem>;
-
-inline bool containsAction(const ActionList& list, const ActionCode& actionCode)
-{
-    return std::find_if(list.cbegin(), list.cend(), [actionCode](const ActionItem& item) {
-        return item.code == actionCode;
-    }) != list.cend();
-}
-
 inline bool containsAction(const ActionCodeList& list, const ActionCode& actionCode)
 {
     return std::find(list.cbegin(), list.cend(), actionCode) != list.cend();
+}
+
+inline static ActionCode codeFromQString(const QString& s)
+{
+    return s.toStdString();
 }
 
 class ActionData

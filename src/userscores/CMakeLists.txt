@@ -51,8 +51,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/itemplatesrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/templatesrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/templatesrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresactions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresuiactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresuiactions.h
     )
 
 set(MODULE_LINK notation)
