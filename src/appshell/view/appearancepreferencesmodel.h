@@ -37,6 +37,7 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
     INJECT(appshell, palette::IPaletteConfiguration, paletteConfiguration)
 
     Q_PROPERTY(QVariantList themes READ themes NOTIFY themesChanged)
+    Q_PROPERTY(QStringList accentColors READ accentColors NOTIFY themesChanged)
 
     Q_PROPERTY(int currentThemeIndex READ currentThemeIndex WRITE setCurrentThemeIndex NOTIFY themesChanged)
     Q_PROPERTY(int currentAccentColorIndex READ currentAccentColorIndex WRITE setCurrentAccentColorIndex NOTIFY themesChanged)
@@ -60,6 +61,7 @@ public:
     explicit AppearancePreferencesModel(QObject* parent = nullptr);
 
     QVariantList themes() const;
+    QStringList accentColors() const;
 
     int currentThemeIndex() const;
     int currentAccentColorIndex() const;
@@ -77,7 +79,6 @@ public:
 
     bool useSameColorInPalettes() const;
 
-    Q_INVOKABLE QStringList accentColorSamples() const;
     Q_INVOKABLE QStringList allFonts() const;
     Q_INVOKABLE QString wallpaperPathFilter() const;
     Q_INVOKABLE QString wallpapersDir() const;

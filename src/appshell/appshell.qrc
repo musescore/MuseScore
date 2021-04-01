@@ -34,6 +34,13 @@
         <file>qml/Preferences/NoteInputPreferencesPage.qml</file>
         <file>qml/Preferences/StubPreferencesPage.qml</file>
         <file>qml/Preferences/AppearancePreferencesPage.qml</file>
+        <file>qml/Preferences/FoldersPreferencesPage.qml</file>
+        <file>qml/Preferences/AdvancedPreferencesPage.qml</file>
+        <file>qml/Preferences/CanvasPreferencesPage.qml</file>
+        <file>qml/Preferences/ScorePreferencesPage.qml</file>
+        <file>qml/Preferences/ShortcutsPreferencesPage.qml</file>
+        <file>qml/Preferences/ImportPreferencesPage.qml</file>
+        <file>qml/Preferences/MidiDeviceMappingPreferencesPage.qml</file>
         <file>qml/Preferences/PreferencesDialog.qml</file>
         <file>qml/Preferences/internal/PreferencesButtonsPanel.qml</file>
         <file>qml/Preferences/internal/PreferencesMenu.qml</file>
@@ -42,12 +49,6 @@
         <file>qml/Preferences/internal/AccentColorsSection.qml</file>
         <file>qml/Preferences/internal/UiFontSection.qml</file>
         <file>qml/Preferences/internal/ColorAndWallpaperSection.qml</file>
-        <file>qml/Preferences/FoldersPreferencesPage.qml</file>
-        <file>qml/Preferences/AdvancedPreferencesPage.qml</file>
-        <file>qml/Preferences/CanvasPreferencesPage.qml</file>
-        <file>qml/Preferences/ScorePreferencesPage.qml</file>
-        <file>qml/Preferences/ShortcutsPreferencesPage.qml</file>
-        <file>qml/Preferences/ImportPreferencesPage.qml</file>
         <file>qml/Preferences/internal/ImportStyleSection.qml</file>
         <file>qml/Preferences/internal/CharsetsSection.qml</file>
         <file>qml/Preferences/internal/MidiSection.qml</file>

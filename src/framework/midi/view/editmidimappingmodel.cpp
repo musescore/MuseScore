@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,22 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_MIDI_MIDIMODULE_H
-#define MU_MIDI_MIDIMODULE_H
 
-#include "modularity/imodulesetup.h"
+#include "editmidimappingmodel.h"
 
-namespace mu::midi {
-class MidiModule : public framework::IModuleSetup
+#include "log.h"
+
+using namespace mu::midi;
+
+EditMidiMappingModel::EditMidiMappingModel(QObject* parent)
+    : QObject(parent)
 {
-public:
-
-    std::string moduleName() const override;
-
-    void registerExports() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-};
 }
 
-#endif // MU_MIDI_MIDIMODULE_H
+void EditMidiMappingModel::load(int originValue)
+{
+    NOT_IMPLEMENTED;
+
+    m_originValue = originValue;
+    emit mappingTitleChanged(mappingTitle());
+}
+
+QString EditMidiMappingModel::mappingTitle() const
+{
+    NOT_IMPLEMENTED;
+    return "MIDI Keyboard > Note C3";
+}
+
+int EditMidiMappingModel::inputedValue() const
+{
+    return m_inputedValue;
+}

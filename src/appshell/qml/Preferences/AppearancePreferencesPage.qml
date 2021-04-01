@@ -38,7 +38,7 @@ PreferencesPage {
         AccentColorsSection {
             width: parent.width
 
-            colors: appearanceModel.accentColorSamples()
+            colors: appearanceModel.accentColors
             currentColorIndex: appearanceModel.currentAccentColorIndex
             firstColumnWidth: parent.firstColumnWidth
 
