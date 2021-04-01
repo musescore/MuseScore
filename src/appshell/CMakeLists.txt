@@ -78,6 +78,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/importpreferencesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/iopreferencesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/iopreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/commonaudioapiconfigurationmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/commonaudioapiconfigurationmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/startupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/startupmodel.h
     ${DOCKWINDOW_SRC}

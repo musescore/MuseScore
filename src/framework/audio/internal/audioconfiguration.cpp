@@ -34,6 +34,7 @@ using namespace mu::audio;
 using namespace mu::audio::synth;
 
 //TODO: add other setting: audio device etc
+static const Settings::Key AUDIO_API_KEY("audio", "io/audioApi");
 static const Settings::Key AUDIO_BUFFER_SIZE("audio", "driver_buffer");
 
 static const Settings::Key USER_SOUNDFONTS_PATH("midi", "application/paths/mySoundfonts");
@@ -55,6 +56,29 @@ void AudioConfiguration::init()
     settings()->setDefaultValue(AUDIO_BUFFER_SIZE, Val(defaultBufferSize));
 
     settings()->setDefaultValue(SHOW_CONTROLS_IN_MIXER, Val(true));
+    settings()->setDefaultValue(AUDIO_API_KEY, Val("Core Audio"));
+}
+
+std::vector<std::string> AudioConfiguration::availableAudioApiList() const
+{
+    std::vector<std::string> names {
+        "Core Audio",
+        "ALSA Audio",
+        "PulseAudio",
+        "JACK Audio Server"
+    };
+
+    return names;
+}
+
+std::string AudioConfiguration::currentAudioApi() const
+{
+    return settings()->value(AUDIO_API_KEY).toString();
+}
+
+void AudioConfiguration::setCurrentAudioApi(const std::string& name)
+{
+    settings()->setValue(AUDIO_API_KEY, Val(name));
 }
 
 unsigned int AudioConfiguration::driverBufferSize() const

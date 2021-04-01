@@ -12,13 +12,10 @@ Column {
     property alias inputDevices: inputDevicesBox.model
     property alias outputDevices: outputDevicesBox.model
 
-    property alias outputLatency: latencyControl.currentValue
-
     property int firstColumnWidth: 0
 
     signal currentInputDeviceIndexChangeRequested(int newIndex)
     signal currentOuputDeviceIndexChangeRequested(int newIndex)
-    signal outputLatencyChangeRequested(int newLatencyMs)
 
     spacing: 18
 
@@ -50,21 +47,6 @@ Column {
 
             onValueEdited: {
                 root.currentOuputDeviceIndexChangeRequested(currentIndex)
-            }
-        }
-
-        IncrementalPropertyControlWithTitle {
-            id: latencyControl
-
-            title: qsTrc("appshell", "MIDI ouput latency:")
-
-            titleWidth: root.firstColumnWidth
-            control.width: 75
-
-            measureUnitsSymbol: qsTrc("global", "ms")
-
-            onValueEdited: {
-                root.outputLatencyChangeRequested(newValue)
             }
         }
     }
