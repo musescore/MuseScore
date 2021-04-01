@@ -9,7 +9,8 @@ Item {
 
     enum PickerType {
         File,
-        Directory
+        Directory,
+        MultipleDirectories
     }
     property int pickerType: FilePicker.PickerType.File
 
@@ -47,10 +48,17 @@ Item {
 
             onClicked: {
                 var selectedPath
-                if (pickerType === FilePicker.PickerType.File) {
+
+                switch (pickerType) {
+                case FilePicker.PickerType.File:
                     selectedPath = filePickerModel.selectFile()
-                } else {
+                    break
+                case FilePicker.PickerType.Directory:
                     selectedPath = filePickerModel.selectDirectory()
+                    break
+                case FilePicker.PickerType.MultipleDirectories:
+                    selectedPath = filePickerModel.selectMultipleDirectories(root.path)
+                    break
                 }
 
                 if (!Boolean(selectedPath)) {

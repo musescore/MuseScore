@@ -27,12 +27,17 @@
 #include "view/popupview.h"
 #include "view/filepickermodel.h"
 #include "view/itemmultiselectionmodel.h"
+#include "view/selectmultipledirectoriesmodel.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
+#include "ui/uitypes.h"
+#include "ui/iinteractiveuriregister.h"
+
 using namespace mu::uicomponents;
 using namespace mu::framework;
+using namespace mu::ui;
 
 static void uicomponents_init_qrc()
 {
@@ -46,6 +51,15 @@ std::string UiComponentsModule::moduleName() const
 
 void UiComponentsModule::registerExports()
 {
+}
+
+void UiComponentsModule::resolveImports()
+{
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://interactive/selectMultipleDirectories"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/UiComponents/SelectMultipleDirectoriesDialog.qml"));
+    }
 }
 
 void UiComponentsModule::registerResources()
@@ -73,6 +87,8 @@ void UiComponentsModule::registerUiTypes()
     qmlRegisterType<PopupView>("MuseScore.UiComponents", 1, 0, "PopupView");
     qmlRegisterType<FilePickerModel>("MuseScore.UiComponents", 1, 0, "FilePickerModel");
     qmlRegisterType<ItemMultiSelectionModel>("MuseScore.UiComponents", 1, 0, "ItemMultiSelectionModel");
+
+    qmlRegisterType<SelectMultipleDirectoriesModel>("MuseScore.UiComponents", 1, 0, "SelectMultipleDirectoriesModel");
 
     auto ui = framework::ioc()->resolve<ui::IUiEngine>(moduleName());
     if (ui) {
