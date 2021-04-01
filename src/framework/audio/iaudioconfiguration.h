@@ -32,6 +32,11 @@ class IAudioConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAudioConfiguration() = default;
 
+    virtual std::vector<std::string> availableAudioApiList() const = 0;
+
+    virtual std::string currentAudioApi() const = 0;
+    virtual void setCurrentAudioApi(const std::string& name) = 0;
+
     virtual unsigned int driverBufferSize() const = 0; // samples
 
     virtual bool isShowControlsInMixer() const = 0;

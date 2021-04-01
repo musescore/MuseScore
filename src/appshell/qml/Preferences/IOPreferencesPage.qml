@@ -39,7 +39,6 @@ PreferencesPage {
             currentOutputDeviceIndex: ioModel.currentMidiOutputDeviceIndex
             inputDevices: ioModel.midiInputDeviceList()
             outputDevices: ioModel.midiOutputDeviceList()
-            outputLatency: ioModel.midiOutputLatencyMilliseconds
             firstColumnWidth: content.firstColumnWidth
 
             onCurrentInputDeviceIndexChangeRequested: {
@@ -48,10 +47,6 @@ PreferencesPage {
 
             onCurrentOuputDeviceIndexChangeRequested: {
                 ioModel.currentMidiOutputDeviceIndex = newIndex
-            }
-
-            onOutputLatencyChangeRequested: {
-                ioModel.midiOutputLatencyMilliseconds = newLatencyMs
             }
         }
 

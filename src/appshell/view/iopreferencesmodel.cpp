@@ -31,25 +31,28 @@ IOPreferencesModel::IOPreferencesModel(QObject* parent)
 
 int IOPreferencesModel::currentAudioApiIndex() const
 {
-    NOT_IMPLEMENTED;
-    return 0;
+    QString currentApi = QString::fromStdString(audioConfiguration()->currentAudioApi());
+    return audioApiList().indexOf(currentApi);
 }
 
 void IOPreferencesModel::setCurrentAudioApiIndex(int index)
 {
-    NOT_IMPLEMENTED;
-
     if (index == currentAudioApiIndex()) {
         return;
     }
 
+    std::vector<std::string> apiList = audioConfiguration()->availableAudioApiList();
+    if (index < 0 || index >= static_cast<int>(apiList.size())) {
+        return;
+    }
+
+    audioConfiguration()->setCurrentAudioApi(apiList[index]);
     emit currentAudioApiIndexChanged(index);
 }
 
 int IOPreferencesModel::currentMidiInputDeviceIndex() const
 {
-    NOT_IMPLEMENTED;
-    return 0;
+    return m_currentMidiInputDeviceIndex;
 }
 
 void IOPreferencesModel::setCurrentMidiInputDeviceIndex(int index)
@@ -60,13 +63,13 @@ void IOPreferencesModel::setCurrentMidiInputDeviceIndex(int index)
         return;
     }
 
+    m_currentMidiInputDeviceIndex = index;
     emit currentMidiInputDeviceIndexChanged(index);
 }
 
 int IOPreferencesModel::currentMidiOutputDeviceIndex() const
 {
-    NOT_IMPLEMENTED;
-    return 0;
+    return m_currentMidiOutputDeviceIndex;
 }
 
 void IOPreferencesModel::setCurrentMidiOutputDeviceIndex(int index)
@@ -77,42 +80,37 @@ void IOPreferencesModel::setCurrentMidiOutputDeviceIndex(int index)
         return;
     }
 
+    m_currentMidiOutputDeviceIndex = index;
     emit currentMidiOutputDeviceIndexChanged(index);
-}
-
-int IOPreferencesModel::midiOutputLatencyMilliseconds() const
-{
-    NOT_IMPLEMENTED;
-    return 0;
-}
-
-void IOPreferencesModel::setMidiOutputLatencyMilliseconds(int latencyMs)
-{
-    NOT_IMPLEMENTED;
-
-    if (latencyMs ==  midiOutputLatencyMilliseconds()) {
-        return;
-    }
-
-    emit midiOutputLatencyMillisecondsChanged(latencyMs);
 }
 
 QStringList IOPreferencesModel::audioApiList() const
 {
-    NOT_IMPLEMENTED;
-    return QStringList();
+    QStringList result;
+
+    for (const std::string& api: audioConfiguration()->availableAudioApiList()) {
+        result.push_back(QString::fromStdString(api));
+    }
+
+    return result;
 }
 
 QStringList IOPreferencesModel::midiInputDeviceList() const
 {
-    NOT_IMPLEMENTED;
-    return QStringList();
+    return QStringList {
+        "Universal Audio Keyboard",
+        "Test device 1",
+        "Test device 2"
+    };
 }
 
 QStringList IOPreferencesModel::midiOutputDeviceList() const
 {
-    NOT_IMPLEMENTED;
-    return QStringList();
+    return QStringList {
+        "Universal Audio Keyboard",
+        "Test device 1",
+        "Test device 2"
+    };
 }
 
 void IOPreferencesModel::restartAudioAndMidiDevices()

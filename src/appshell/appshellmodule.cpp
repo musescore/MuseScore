@@ -49,6 +49,7 @@
 #include "view/importpreferencesmodel.h"
 #include "view/iopreferencesmodel.h"
 #include "view/startupmodel.h"
+#include "view/commonaudioapiconfigurationmodel.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;
@@ -121,6 +122,7 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<ScorePreferencesModel>("MuseScore.Preferences", 1, 0, "ScorePreferencesModel");
     qmlRegisterType<ImportPreferencesModel>("MuseScore.Preferences", 1, 0, "ImportPreferencesModel");
     qmlRegisterType<IOPreferencesModel>("MuseScore.Preferences", 1, 0, "IOPreferencesModel");
+    qmlRegisterType<CommonAudioApiConfigurationModel>("MuseScore.Preferences", 1, 0, "CommonAudioApiConfigurationModel");
     qmlRegisterType<AppMenuModel>("MuseScore.AppShell", 1, 0, "AppMenuModel");
     qmlRegisterType<NotationPageModel>("MuseScore.AppShell", 1, 0, "NotationPageModel");
     qmlRegisterType<AboutModel>("MuseScore.AppShell", 1, 0, "AboutModel");

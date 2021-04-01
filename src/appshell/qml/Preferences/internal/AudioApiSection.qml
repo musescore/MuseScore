@@ -21,14 +21,22 @@ Column {
         font: ui.theme.bodyBoldFont
     }
 
-    ComboBoxWithTitle {
-        id: apiComboBox
+    Column {
+        spacing: 12
 
-        title: qsTrc("appshell", "Audio API:")
-        titleWidth: root.firstColumnWidth
+        ComboBoxWithTitle {
+            id: apiComboBox
 
-        onValueEdited: {
-            root.currentAudioApiIndexChangeRequested(currentIndex)
+            title: qsTrc("appshell", "Audio API:")
+            titleWidth: root.firstColumnWidth
+
+            onValueEdited: {
+                root.currentAudioApiIndexChangeRequested(currentIndex)
+            }
+        }
+
+        CommonAudioApiConfiguration {
+            firstColumnWidth: root.firstColumnWidth
         }
     }
 }

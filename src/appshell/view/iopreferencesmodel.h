@@ -34,7 +34,6 @@ class IOPreferencesModel : public QObject
     Q_PROPERTY(int currentAudioApiIndex READ currentAudioApiIndex WRITE setCurrentAudioApiIndex NOTIFY currentAudioApiIndexChanged)
     Q_PROPERTY(int currentMidiInputDeviceIndex READ currentMidiInputDeviceIndex WRITE setCurrentMidiInputDeviceIndex NOTIFY currentMidiInputDeviceIndexChanged)
     Q_PROPERTY(int currentMidiOutputDeviceIndex READ currentMidiOutputDeviceIndex WRITE setCurrentMidiOutputDeviceIndex NOTIFY currentMidiOutputDeviceIndexChanged)
-    Q_PROPERTY(int midiOutputLatencyMilliseconds READ midiOutputLatencyMilliseconds WRITE setMidiOutputLatencyMilliseconds NOTIFY midiOutputLatencyMillisecondsChanged)
 
 public:
     explicit IOPreferencesModel(QObject* parent = nullptr);
@@ -42,7 +41,6 @@ public:
     int currentAudioApiIndex() const;
     int currentMidiInputDeviceIndex() const;
     int currentMidiOutputDeviceIndex() const;
-    int midiOutputLatencyMilliseconds() const;
 
     Q_INVOKABLE QStringList audioApiList() const;
     Q_INVOKABLE QStringList midiInputDeviceList() const;
@@ -54,13 +52,15 @@ public slots:
     void setCurrentAudioApiIndex(int index);
     void setCurrentMidiInputDeviceIndex(int index);
     void setCurrentMidiOutputDeviceIndex(int index);
-    void setMidiOutputLatencyMilliseconds(int latencyMs);
 
 signals:
     void currentAudioApiIndexChanged(int index);
     void currentMidiInputDeviceIndexChanged(int index);
     void currentMidiOutputDeviceIndexChanged(int index);
-    void midiOutputLatencyMillisecondsChanged(int latencyMs);
+
+private:
+    int m_currentMidiInputDeviceIndex = 0;
+    int m_currentMidiOutputDeviceIndex = 0;
 };
 }
 
