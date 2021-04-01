@@ -4779,14 +4779,20 @@ static void directionMarker(XmlWriter& xml, const Marker* const m)
 //  findTrackForAnnotations
 //---------------------------------------------------------
 
-// An annotation is attached to the staff, with track set
-// to the lowest track in the staff. Find a track for it
-// (the lowest track in this staff that has a chord or rest)
+// Annotations must be attached to chords or rests. If there is no chord or
+// rest in the annotation's track then we must use a different track that
+// does have a chord or a rest.
 
 static int findTrackForAnnotations(int track, Segment* seg)
       {
       if (seg->segmentType() != SegmentType::ChordRest)
             return -1;
+
+      if (seg->element(track))
+            return track; // able to use annotation's own track
+
+      // No chords or rests in the annotation's own track so look for chord and
+      // rests in the other tracks in this staff.
 
       int staff = track / VOICES;
       int strack = staff * VOICES;      // start track of staff containing track
