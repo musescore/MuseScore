@@ -21,8 +21,6 @@ Column {
         RoundedRadioButton {
             anchors.left: parent.left
             anchors.right: parent.right
-            leftPadding: 0
-            spacing: 6
 
             checked: preferencesModel.styleFileImportPath === ""
 
@@ -40,9 +38,6 @@ Column {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            leftPadding: 0
-            spacing: 6
-
             checked: preferencesModel.styleFileImportPath !== ""
 
             onToggled: {
@@ -52,6 +47,7 @@ Column {
             Item {
                 StyledTextLabel {
                     id: title
+
                     width: 193
                     anchors.verticalCenter: parent.verticalCenter
 

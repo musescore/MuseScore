@@ -5,6 +5,8 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
+import "internal"
+
 PreferencesPage {
     id: root
 
@@ -43,32 +45,17 @@ PreferencesPage {
             }
         }
 
-        Row {
-            width: parent.width
-            height: childrenRect.height
+        IncrementalPropertyControlWithTitle {
+            title: qsTrc("appshell", "Delay between notes in automatic real time mode:")
 
+            titleWidth: 173
             spacing: 46
 
-            StyledTextLabel {
-                width: 173
+            currentValue: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
+            measureUnitsSymbol: qsTrc("appshell", "ms")
 
-                horizontalAlignment: Qt.AlignLeft
-                wrapMode: Text.WordWrap
-                maximumLineCount: 2
-
-                text: qsTrc("appshell", "Delay between notes in automatic real time mode:")
-            }
-
-            IncrementalPropertyControl {
-                width: 102
-
-                currentValue: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
-                measureUnitsSymbol: qsTrc("appshell", "ms")
-                step: 1
-
-                onValueEdited: {
-                    noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds = newValue
-                }
+            onValueEdited: {
+                noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds = newValue
             }
         }
 
@@ -85,29 +72,16 @@ PreferencesPage {
             }
         }
 
-        Row {
-            enabled: noteInputModel.playNotesWhenEditing
+        IncrementalPropertyControlWithTitle {
+            title: qsTrc("appshell", "Default duration:")
+
             spacing: 126
 
-            StyledTextLabel {
-                anchors.verticalCenter: parent.verticalCenter
+            currentValue: noteInputModel.notePlayDurationMilliseconds
+            measureUnitsSymbol: qsTrc("appshell", "ms")
 
-                width: 93
-                horizontalAlignment: Qt.AlignLeft
-
-                text: qsTrc("appshell", "Default duration:")
-            }
-
-            IncrementalPropertyControl {
-                width: 102
-
-                currentValue: noteInputModel.notePlayDurationMilliseconds
-                measureUnitsSymbol: qsTrc("appshell", "ms")
-                step: 1
-
-                onValueEdited: {
-                    noteInputModel.notePlayDurationMilliseconds = newValue
-                }
+            onValueEdited: {
+                noteInputModel.notePlayDurationMilliseconds = newValue
             }
         }
 

@@ -6,11 +6,11 @@ import MuseScore.UiComponents 1.0
 Column {
     id: root
 
-    property alias currentInputDeviceIndex: inputDevicesComboBox.currentIndex
-    property alias currentOutputDeviceIndex: ouputDevicesComboBox.currentIndex
+    property alias currentInputDeviceIndex: inputDevicesBox.currentIndex
+    property alias currentOutputDeviceIndex: outputDevicesBox.currentIndex
 
-    property alias inputDevices: inputDevicesComboBox.model
-    property alias outputDevices: ouputDevicesComboBox.model
+    property alias inputDevices: inputDevicesBox.model
+    property alias outputDevices: outputDevicesBox.model
 
     property alias outputLatency: latencyControl.currentValue
 
@@ -31,77 +31,40 @@ Column {
         width: parent.width
         spacing: 12
 
-        Row {
-            spacing: 0
+        ComboBoxWithTitle {
+            id: inputDevicesBox
 
-            StyledTextLabel {
-                anchors.verticalCenter: parent.verticalCenter
+            title: qsTrc("appshell", "MIDI input:")
+            titleWidth: root.firstColumnWidth
 
-                width: root.firstColumnWidth
-                horizontalAlignment: Qt.AlignLeft
-
-                text: qsTrc("appshell", "MIDI input:")
-            }
-
-            StyledComboBox {
-                id: inputDevicesComboBox
-
-                width: 210
-
-                onAccepted: {
-                    root.currentInputDeviceIndexChangeRequested(currentIndex)
-                }
+            onValueEdited: {
+                root.currentInputDeviceIndexChangeRequested(currentIndex)
             }
         }
 
-        Row {
-            spacing: 0
+        ComboBoxWithTitle {
+            id: outputDevicesBox
 
-            StyledTextLabel {
-                anchors.verticalCenter: parent.verticalCenter
+            title: qsTrc("appshell", "MIDI ouput:")
+            titleWidth: root.firstColumnWidth
 
-                width: root.firstColumnWidth
-                horizontalAlignment: Qt.AlignLeft
-
-                text: qsTrc("appshell", "MIDI ouput:")
-            }
-
-            StyledComboBox {
-                id: ouputDevicesComboBox
-
-                width: inputDevicesComboBox.width
-
-                onAccepted: {
-                    root.currentOuputDeviceIndexChangeRequested(currentIndex)
-                }
+            onValueEdited: {
+                root.currentOuputDeviceIndexChangeRequested(currentIndex)
             }
         }
 
-        Row {
-            spacing: 0
+        IncrementalPropertyControlWithTitle {
+            id: latencyControl
 
-            StyledTextLabel {
-                anchors.verticalCenter: parent.verticalCenter
+            title: qsTrc("appshell", "MIDI ouput latency:")
 
-                width: root.firstColumnWidth
-                horizontalAlignment: Qt.AlignLeft
+            titleWidth: root.firstColumnWidth
+            control.width: 75
 
-                text: qsTrc("appshell", "MIDI ouput latency:")
-            }
+            measureUnitsSymbol: qsTrc("global", "ms")
 
-            IncrementalPropertyControl {
-                id: latencyControl
-
-                width: 75
-
-                measureUnitsSymbol: qsTrc("global", "ms")
-
-                decimals: 0
-                step: 1
-
-                onValueEdited: {
-                    root.outputLatencyChangeRequested(newValue)
-                }
+            onValueEdited: {
+                root.outputLatencyChangeRequested(newValue)
             }
         }
     }
