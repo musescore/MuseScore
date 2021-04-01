@@ -271,15 +271,44 @@ void UiConfiguration::writeThemes(const ThemeList& themes)
     settings()->setValue(UI_THEMES_KEY, value);
 }
 
+ThemeList UiConfiguration::themes() const
+{
+    return m_themes;
+}
+
 QStringList UiConfiguration::possibleFontFamilies() const
 {
     QFontDatabase db;
     return db.families();
 }
 
-ThemeList UiConfiguration::themes() const
+QStringList UiConfiguration::possibleAccentColors() const
 {
-    return m_themes;
+    static const QStringList lightAccentColors {
+        "#F36565",
+        "#F39048",
+        "#FFC52F",
+        "#63D47B",
+        "#70AFEA",
+        "#A488F2",
+        "#F87BDC"
+    };
+
+    static const QStringList darkAccentColors {
+        "#F25555",
+        "#E1720B",
+        "#AC8C1A",
+        "#27A341",
+        "#2093FE",
+        "#926BFF",
+        "#E454C4"
+    };
+
+    if (currentTheme().codeKey == DARK_THEME_CODE) {
+        return darkAccentColors;
+    }
+
+    return lightAccentColors;
 }
 
 ThemeInfo UiConfiguration::currentTheme() const

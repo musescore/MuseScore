@@ -19,6 +19,7 @@ Item {
     property string valueRoleName: "value"
     property string valueTitle: qsTrc("uicomponents", "Value")
     property string valueTypeRole: "valueType"
+    property string valueEnabledRoleName: "enabled"
     property string iconRoleName: "icon"
 
     property alias hasSelection: selectionModel.hasSelection
@@ -156,6 +157,8 @@ Item {
             keyRoleName: root.keyRoleName
             valueRoleName: root.valueRoleName
             valueTypeRole: root.valueTypeRole
+            valueEnabledRoleName: root.valueEnabledRoleName
+            iconRoleName: root.iconRoleName
 
             isSelected: selectionModel.hasSelection && selectionModel.isSelected(modelIndex)
             readOnly: root.readOnly

@@ -37,8 +37,9 @@ class IUiConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUiConfiguration() = default;
 
-    virtual QStringList possibleFontFamilies() const = 0;
     virtual ThemeList themes() const = 0;
+    virtual QStringList possibleFontFamilies() const = 0;
+    virtual QStringList possibleAccentColors() const = 0;
 
     virtual ThemeInfo currentTheme() const = 0;
     virtual void setCurrentTheme(const std::string& codeKey) = 0;

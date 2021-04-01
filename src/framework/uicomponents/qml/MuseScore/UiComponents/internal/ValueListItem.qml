@@ -12,6 +12,7 @@ ListItemBlank {
     property string keyRoleName: "key"
     property string valueRoleName: "value"
     property string valueTypeRole: "valueType"
+    property string valueEnabledRoleName: "enabled"
     property string iconRoleName: "icon"
 
     property bool readOnly: false
@@ -80,6 +81,8 @@ ListItemBlank {
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             Layout.preferredWidth: root.valueItemWidth
             Layout.rightMargin: root.sideMargin
+
+            enabled: root.item[valueEnabledRoleName] !== undefined ? root.item[valueEnabledRoleName] : true
 
             sourceComponent: !root.readOnly ? privateProperties.componentByType(root.item[valueTypeRole]) : readOnlyComponent
 

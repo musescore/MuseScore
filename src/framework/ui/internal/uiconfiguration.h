@@ -39,8 +39,9 @@ public:
     void init();
     void deinit();
 
-    QStringList possibleFontFamilies() const override;
     ThemeList themes() const override;
+    QStringList possibleFontFamilies() const override;
+    QStringList possibleAccentColors() const override;
 
     ThemeInfo currentTheme() const override;
     void setCurrentTheme(const std::string& codeKey) override;

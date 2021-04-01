@@ -29,8 +29,12 @@ namespace mu::midi {
 class IMidiConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMidiConfiguration)
+
 public:
     virtual ~IMidiConfiguration() = default;
+
+    virtual bool useRemoteControl() const = 0;
+    virtual void setUseRemoteControl(bool value) = 0;
 };
 }
 

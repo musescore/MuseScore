@@ -1,0 +1,3 @@
+module MuseScore.Midi
+MidiDeviceMappingsPage 1.0 MidiDeviceMappingsPage.qml
+EditMidiMappingDialog 1.0 EditMidiMappingDialog.qml

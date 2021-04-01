@@ -34,10 +34,10 @@ Dialog {
         color: ui.theme.backgroundPrimaryColor
 
         Column {
-            spacing: 20
-
             anchors.fill: parent
-            anchors.margins: 16
+            anchors.margins: 8
+
+            spacing: 20
 
             StyledTextLabel {
                 anchors.horizontalCenter: parent.horizontalCenter
