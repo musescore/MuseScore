@@ -25,11 +25,10 @@
 #include "context/iglobalcontext.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "actions/iactionsregister.h"
+#include "ui/iuiactionsregister.h"
 #include "actions/iactionsdispatcher.h"
 
 #include "framework/ui/view/iconcodes.h"
-#include "framework/uicomponents/uicomponentstypes.h"
 
 namespace mu::notation {
 class NotationToolBarModel : public QAbstractListModel, public async::Asyncable
@@ -37,7 +36,7 @@ class NotationToolBarModel : public QAbstractListModel, public async::Asyncable
     Q_OBJECT
 
     INJECT(notation, context::IGlobalContext, context)
-    INJECT(notation, actions::IActionsRegister, actionsRegister)
+    INJECT(notation, ui::IUiActionsRegister, actionsRegister)
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
 
 public:
@@ -59,9 +58,9 @@ private:
         HintRole
     };
 
-    uicomponents::MenuItem makeItem(const actions::ActionCode& actionCode) const;
+    ui::MenuItem makeItem(const actions::ActionCode& actionCode) const;
 
-    QList<uicomponents::MenuItem> m_items;
+    QList<ui::MenuItem> m_items;
 };
 }
 

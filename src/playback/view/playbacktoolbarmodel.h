@@ -24,10 +24,9 @@
 #include "modularity/ioc.h"
 #include "iplaybackcontroller.h"
 #include "actions/iactionsdispatcher.h"
-#include "actions/iactionsregister.h"
+#include "ui/iuiactionsregister.h"
 #include "async/asyncable.h"
 #include "actions/actiontypes.h"
-#include "uicomponents/uicomponentstypes.h"
 #include "workspace/iworkspacemanager.h"
 #include "iinteractive.h"
 
@@ -37,7 +36,7 @@ class PlaybackToolBarModel : public QAbstractListModel, public async::Asyncable
     Q_OBJECT
 
     INJECT(playback, actions::IActionsDispatcher, dispatcher)
-    INJECT(playback, actions::IActionsRegister, actionsRegister)
+    INJECT(playback, ui::IUiActionsRegister, uiactionsRegister)
     INJECT(playback, IPlaybackController, playbackController)
     INJECT(playback, workspace::IWorkspaceManager, workspaceManager)
 
@@ -112,14 +111,14 @@ private:
 
     void updateState();
 
-    actions::ActionList currentWorkspaceActions() const;
+    ui::UiActionList currentWorkspaceActions() const;
 
-    uicomponents::MenuItem& item(const actions::ActionCode& actionCode);
-    uicomponents::MenuItem settingsItem() const;
+    ui::MenuItem& item(const actions::ActionCode& actionCode);
+    ui::MenuItem settingsItem() const;
 
     bool isAdditionalAction(const actions::ActionCode& actionCode) const;
 
-    QList<uicomponents::MenuItem> m_items;
+    QList<ui::MenuItem> m_items;
     QTime m_playTime;
 };
 }

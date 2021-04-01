@@ -33,8 +33,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playbacktypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackcontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/playbackactions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/playbackactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/playbackuiactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/playbackuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbacktoolbarmodel.cpp

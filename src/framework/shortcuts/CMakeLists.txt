@@ -26,7 +26,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/ishortcutsregister.h
     ${CMAKE_CURRENT_LIST_DIR}/ishortcutscontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/ishortcutsconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/ishortcutcontextresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiremote.h
     ${CMAKE_CURRENT_LIST_DIR}/view/shortcutsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/shortcutsmodel.h

@@ -24,8 +24,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/contextmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/contextmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iglobalcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/uicontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/iuicontextresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/globalcontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/globalcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/uicontextresolver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/uicontextresolver.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

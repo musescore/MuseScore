@@ -115,7 +115,7 @@ void NotationNoteInput::startNoteInput()
     }
     is.setAccidentalType(Ms::AccidentalType::NONE);
 
-    score()->select(el, SelectType::SINGLE, 0);
+    m_interaction->select({ el }, SelectType::SINGLE, 0);
 
     is.setRest(false);
     is.setNoteEntryMode(true);

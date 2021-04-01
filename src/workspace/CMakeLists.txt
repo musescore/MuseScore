@@ -54,8 +54,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacecreator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacesettings.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacesettings.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceactions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceuiactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceactioncontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceactioncontroller.h
     )

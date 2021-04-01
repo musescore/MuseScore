@@ -27,15 +27,15 @@
 #include "internal/instrumentsrepository.h"
 #include "internal/instrumentsconfiguration.h"
 #include "internal/selectinstrumentscenario.h"
-#include "internal/instrumentsactions.h"
+#include "internal/instrumentsuiactions.h"
 
 #include "view/instrumentpaneltreemodel.h"
 #include "view/instrumentlistmodel.h"
 #include "view/instrumentsettingsmodel.h"
 #include "view/staffsettingsmodel.h"
 #include "ui/iinteractiveuriregister.h"
+#include "ui/iuiactionsregister.h"
 #include "instrumentstypes.h"
-#include "actions/iactionsregister.h"
 
 using namespace mu::instruments;
 using namespace mu::framework;
@@ -64,9 +64,9 @@ void InstrumentsModule::registerExports()
 
 void InstrumentsModule::resolveImports()
 {
-    auto ar = framework::ioc()->resolve<actions::IActionsRegister>(moduleName());
+    auto ar = framework::ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(std::make_shared<InstrumentsActions>());
+        ar->reg(std::make_shared<InstrumentsUiActions>());
     }
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());

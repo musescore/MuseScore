@@ -26,12 +26,13 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 #include "ui/iinteractiveuriregister.h"
+#include "ui/iuiactionsregister.h"
 
 #include "internal/mu4paletteadapter.h"
 #include "internal/paletteconfiguration.h"
 #include "internal/palette/masterpalette.h"
 #include "internal/paletteactionscontroller.h"
-#include "internal/paletteactions.h"
+#include "internal/paletteuiactions.h"
 
 #include "view/paletterootmodel.h"
 #include "view/palettepropertiesmodel.h"
@@ -45,14 +46,13 @@
 #include "libmscore/score.h"
 #include "libmscore/sym.h"
 
-#include "actions/iactionsregister.h"
-
 using namespace mu::palette;
 using namespace mu::framework;
 using namespace mu::ui;
 
 static std::shared_ptr<MU4PaletteAdapter> s_adapter = std::make_shared<MU4PaletteAdapter>();
 static std::shared_ptr<PaletteActionsController> s_actionsController = std::make_shared<PaletteActionsController>();
+static std::shared_ptr<PaletteUiActions> s_paletteUiActions = std::make_shared<PaletteUiActions>(s_actionsController);
 static std::shared_ptr<PaletteConfiguration> s_configuration = std::make_shared<PaletteConfiguration>();
 
 static void palette_init_qrc()
@@ -69,7 +69,6 @@ void PaletteModule::registerExports()
 {
     ioc()->registerExport<IPaletteAdapter>(moduleName(), s_adapter);
     ioc()->registerExport<IPaletteConfiguration>(moduleName(), s_configuration);
-    ioc()->registerExport<IPaletteActionsController>(moduleName(), s_actionsController);
 }
 
 void PaletteModule::resolveImports()
@@ -79,9 +78,9 @@ void PaletteModule::resolveImports()
         workspaceStreams->regStream(std::make_shared<WorkspacePaletteStream>());
     }
 
-    auto ar = ioc()->resolve<actions::IActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(std::make_shared<PaletteActions>());
+        ar->reg(s_paletteUiActions);
     }
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
@@ -131,4 +130,5 @@ void PaletteModule::onInit(const IApplication::RunMode& mode)
 
     s_configuration->init();
     s_actionsController->init();
+    s_paletteUiActions->init();
 }

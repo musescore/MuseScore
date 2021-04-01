@@ -24,14 +24,14 @@
 
 #include "framework/ui/iinteractiveuriregister.h"
 #include "framework/ui/iuiengine.h"
-#include "actions/iactionsregister.h"
+#include "framework/ui/iuiactionsregister.h"
 
 #include "internal/workspaceconfiguration.h"
 #include "internal/workspacemanager.h"
 #include "internal/workspacedatastreamregister.h"
 #include "internal/workspacecreator.h"
 #include "internal/workspaceactioncontroller.h"
-#include "internal/workspaceactions.h"
+#include "internal/workspaceuiactions.h"
 
 #include "internal/workspacesettingsstream.h"
 #include "internal/workspacetoolbarstream.h"
@@ -77,9 +77,9 @@ void WorkspaceModule::resolveImports()
     s_streamRegister->regStream(std::make_shared<WorkspaceSettingsStream>(WorkspaceTag::UiArrangement));
     s_streamRegister->regStream(std::make_shared<WorkspaceToolbarStream>());
 
-    auto ar = ioc()->resolve<actions::IActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(std::make_shared<WorkspaceActions>());
+        ar->reg(std::make_shared<WorkspaceUiActions>(s_actionController));
     }
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
