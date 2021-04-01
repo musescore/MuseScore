@@ -47,6 +47,7 @@
 #include "view/canvaspreferencesmodel.h"
 #include "view/scorepreferencesmodel.h"
 #include "view/importpreferencesmodel.h"
+#include "view/iopreferencesmodel.h"
 #include "view/startupmodel.h"
 
 using namespace mu::appshell;
@@ -119,6 +120,7 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<CanvasPreferencesModel>("MuseScore.Preferences", 1, 0, "CanvasPreferencesModel");
     qmlRegisterType<ScorePreferencesModel>("MuseScore.Preferences", 1, 0, "ScorePreferencesModel");
     qmlRegisterType<ImportPreferencesModel>("MuseScore.Preferences", 1, 0, "ImportPreferencesModel");
+    qmlRegisterType<IOPreferencesModel>("MuseScore.Preferences", 1, 0, "IOPreferencesModel");
     qmlRegisterType<AppMenuModel>("MuseScore.AppShell", 1, 0, "AppMenuModel");
     qmlRegisterType<NotationPageModel>("MuseScore.AppShell", 1, 0, "NotationPageModel");
     qmlRegisterType<AboutModel>("MuseScore.AppShell", 1, 0, "AboutModel");

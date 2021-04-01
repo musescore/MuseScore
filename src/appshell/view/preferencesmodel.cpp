@@ -169,7 +169,8 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("score", qtrc("appshell", "Score"), IconCode::Code::SCORE,
                  "Preferences/ScorePreferencesPage.qml"),
 
-        makeItem("io", qtrc("appshell", "I/O"), IconCode::Code::AUDIO),
+        makeItem("io", qtrc("appshell", "I/O"), IconCode::Code::AUDIO,
+                 "Preferences/IOPreferencesPage.qml"),
 
         makeItem("import", qtrc("appshell", "Import"), IconCode::Code::IMPORT,
                  "Preferences/ImportPreferencesPage.qml"),

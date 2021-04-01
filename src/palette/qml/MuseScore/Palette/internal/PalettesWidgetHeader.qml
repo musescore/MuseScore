@@ -61,7 +61,11 @@ Item {
         anchors.right: searchTextButton.left
         anchors.rightMargin: 8
         text: qsTrc("palette", "Add Palettes")
-        onClicked: palettePopup.visible = !palettePopup.visible
+        onClicked: {
+            //palettePopup.visible = !palettePopup.visible
+            api.launcher.open("musescore://preferences")
+        }
+
     }
 
     FlatButton {

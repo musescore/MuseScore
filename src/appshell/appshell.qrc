@@ -41,6 +41,7 @@
         <file>qml/Preferences/ShortcutsPreferencesPage.qml</file>
         <file>qml/Preferences/ImportPreferencesPage.qml</file>
         <file>qml/Preferences/MidiDeviceMappingPreferencesPage.qml</file>
+        <file>qml/Preferences/IOPreferencesPage.qml</file>
         <file>qml/Preferences/PreferencesDialog.qml</file>
         <file>qml/Preferences/internal/PreferencesButtonsPanel.qml</file>
         <file>qml/Preferences/internal/PreferencesMenu.qml</file>
@@ -53,5 +54,7 @@
         <file>qml/Preferences/internal/CharsetsSection.qml</file>
         <file>qml/Preferences/internal/MidiSection.qml</file>
         <file>qml/Preferences/internal/MusicXmlSection.qml</file>
+        <file>qml/Preferences/internal/MidiDevicesSection.qml</file>
+        <file>qml/Preferences/internal/AudioEngineSection.qml</file>
     </qresource>
 </RCC>
