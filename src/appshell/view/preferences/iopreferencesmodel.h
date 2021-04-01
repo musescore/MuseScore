@@ -32,8 +32,10 @@ class IOPreferencesModel : public QObject
     INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
 
     Q_PROPERTY(int currentAudioApiIndex READ currentAudioApiIndex WRITE setCurrentAudioApiIndex NOTIFY currentAudioApiIndexChanged)
-    Q_PROPERTY(int currentMidiInputDeviceIndex READ currentMidiInputDeviceIndex WRITE setCurrentMidiInputDeviceIndex NOTIFY currentMidiInputDeviceIndexChanged)
-    Q_PROPERTY(int currentMidiOutputDeviceIndex READ currentMidiOutputDeviceIndex WRITE setCurrentMidiOutputDeviceIndex NOTIFY currentMidiOutputDeviceIndexChanged)
+    Q_PROPERTY(
+        int currentMidiInputDeviceIndex READ currentMidiInputDeviceIndex WRITE setCurrentMidiInputDeviceIndex NOTIFY currentMidiInputDeviceIndexChanged)
+    Q_PROPERTY(
+        int currentMidiOutputDeviceIndex READ currentMidiOutputDeviceIndex WRITE setCurrentMidiOutputDeviceIndex NOTIFY currentMidiOutputDeviceIndexChanged)
 
 public:
     explicit IOPreferencesModel(QObject* parent = nullptr);
