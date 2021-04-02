@@ -18,7 +18,6 @@
 //=============================================================================
 
 #include "stubplatformtheme.h"
-#include "uitypes.h"
 
 using namespace mu::ui;
 using namespace mu::async;
@@ -36,20 +35,20 @@ bool StubPlatformTheme::isFollowSystemThemeAvailable() const
     return false;
 }
 
-std::string StubPlatformTheme::themeCode() const
+ThemeCode StubPlatformTheme::themeCode() const
 {
     return LIGHT_THEME_CODE;
 }
 
-Channel<std::string> StubPlatformTheme::themeCodeChanged() const
+Channel<ThemeCode> StubPlatformTheme::themeCodeChanged() const
 {
     return m_channel;
 }
 
-void StubPlatformTheme::applyPlatformStyleOnAppForTheme(std::string)
+void StubPlatformTheme::applyPlatformStyleOnAppForTheme(ThemeCode)
 {
 }
 
-void StubPlatformTheme::applyPlatformStyleOnWindowForTheme(QWidget*, std::string)
+void StubPlatformTheme::applyPlatformStyleOnWindowForTheme(QWidget*, ThemeCode)
 {
 }

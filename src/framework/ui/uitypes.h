@@ -31,11 +31,13 @@
 #include "view/iconcodes.h"
 
 namespace mu::ui {
-static std::string DARK_THEME_CODE("dark");
-static std::string LIGHT_THEME_CODE("light");
-static std::string HIGH_CONTRAST_THEME_CODE("high_contrast");
+using ThemeCode = std::string;
 
-inline std::vector<std::string> allStandardThemeCodes()
+static ThemeCode DARK_THEME_CODE("dark");
+static ThemeCode LIGHT_THEME_CODE("light");
+static ThemeCode HIGH_CONTRAST_THEME_CODE("high_contrast");
+
+inline std::vector<ThemeCode> allStandardThemeCodes()
 {
     return {
         LIGHT_THEME_CODE,
@@ -72,7 +74,7 @@ enum ThemeStyleKey
 
 struct ThemeInfo
 {
-    std::string codeKey;
+    ThemeCode codeKey;
     std::string title;
     QMap<ThemeStyleKey, QVariant> values;
 };

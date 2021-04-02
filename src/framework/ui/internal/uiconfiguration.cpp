@@ -153,11 +153,11 @@ bool UiConfiguration::needFollowSystemTheme() const
 
 void UiConfiguration::initThemes()
 {
-    platformTheme()->themeCodeChanged().onReceive(nullptr, [this](std::string) {
+    platformTheme()->themeCodeChanged().onReceive(nullptr, [this](ThemeCode) {
         notifyAboutCurrentThemeChanged();
     });
 
-    for (const std::string& codeKey : allStandardThemeCodes()) {
+    for (const ThemeCode& codeKey : allStandardThemeCodes()) {
         m_themes.push_back(makeStandardTheme(codeKey));
     }
 
@@ -173,7 +173,7 @@ void UiConfiguration::updateCurrentTheme()
         platformTheme()->stopListening();
     }
 
-    std::string currentCodeKey = currentThemeCodeKey();
+    ThemeCode currentCodeKey = currentThemeCodeKey();
 
     for (size_t i = 0; i < m_themes.size(); ++i) {
         if (m_themes[i].codeKey == currentCodeKey) {
@@ -207,7 +207,7 @@ void UiConfiguration::notifyAboutCurrentThemeChanged()
     m_currentThemeChanged.notify();
 }
 
-ThemeInfo UiConfiguration::makeStandardTheme(const std::string& codeKey) const
+ThemeInfo UiConfiguration::makeStandardTheme(const ThemeCode& codeKey) const
 {
     ThemeInfo theme;
     theme.codeKey = codeKey;
@@ -318,18 +318,18 @@ ThemeInfo UiConfiguration::currentTheme() const
     return m_themes[m_currentThemeIndex];
 }
 
-std::string UiConfiguration::currentThemeCodeKey() const
+ThemeCode UiConfiguration::currentThemeCodeKey() const
 {
-    std::string preferredThemeCode = settings()->value(UI_CURRENT_THEME_CODE_KEY).toString();
-
     if (needFollowSystemTheme()) {
         return platformTheme()->themeCode();
     }
 
+    ThemeCode preferredThemeCode = settings()->value(UI_CURRENT_THEME_CODE_KEY).toString();
+
     return preferredThemeCode.empty() ? LIGHT_THEME_CODE : preferredThemeCode;
 }
 
-void UiConfiguration::setCurrentTheme(const std::string& codeKey)
+void UiConfiguration::setCurrentTheme(const ThemeCode& codeKey)
 {
     settings()->setValue(UI_CURRENT_THEME_CODE_KEY, Val(codeKey));
 }
