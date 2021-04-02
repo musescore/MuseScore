@@ -18,9 +18,7 @@
 //=============================================================================
 
 #include "windowsplatformtheme.h"
-
 #include "log.h"
-#include "uitypes.h"
 
 #include <Windows.h>
 
@@ -80,7 +78,7 @@ bool WindowsPlatformTheme::isFollowSystemThemeAvailable() const
     return m_buildNumber >= 17763; // Dark theme was introduced in Windows 1809
 }
 
-std::string WindowsPlatformTheme::themeCode() const
+ThemeCode WindowsPlatformTheme::themeCode() const
 {
     if (isSystemHighContrast()) {
         return HIGH_CONTRAST_THEME_CODE;
@@ -96,7 +94,7 @@ std::string WindowsPlatformTheme::themeCode() const
     return LIGHT_THEME_CODE;
 }
 
-Channel<std::string> WindowsPlatformTheme::themeCodeChanged() const
+Channel<ThemeCode> WindowsPlatformTheme::themeCodeChanged() const
 {
     return m_channel;
 }
@@ -133,14 +131,14 @@ void WindowsPlatformTheme::th_listen()
         hStopListeningEvent = CreateEvent(NULL, FALSE, TRUE, TEXT("StopListening"));
         hThemeChangeEvent = CreateEvent(NULL, FALSE, TRUE, TEXT("ThemeSettingChange"));
         if (RegNotifyChangeKeyValue(hKey, TRUE, dwFilter, hThemeChangeEvent, TRUE) == ERROR_SUCCESS) {
-            std::string oldBestSuited = themeCode();
+            ThemeCode oldBestSuited = themeCode();
             HANDLE handles[2] = { hStopListeningEvent, hThemeChangeEvent };
             DWORD dwRet = WaitForMultipleObjects(2, handles, FALSE, 4000);
             if (dwRet != WAIT_TIMEOUT && dwRet != WAIT_FAILED) {
                 if (m_isListening) {
                     //! NOTE There might be some delay before `isSystemHighContrast` returns the correct value
                     Sleep(100);
-                    std::string newBestSuited = themeCode();
+                    ThemeCode newBestSuited = themeCode();
                     if (newBestSuited != oldBestSuited) {
                         m_channel.send(newBestSuited);
                     }
@@ -154,10 +152,10 @@ void WindowsPlatformTheme::th_listen()
     RegCloseKey(hKey);
 }
 
-void WindowsPlatformTheme::applyPlatformStyleOnAppForTheme(std::string)
+void WindowsPlatformTheme::applyPlatformStyleOnAppForTheme(ThemeCode)
 {
 }
 
-void WindowsPlatformTheme::applyPlatformStyleOnWindowForTheme(QWidget*, std::string)
+void WindowsPlatformTheme::applyPlatformStyleOnWindowForTheme(QWidget*, ThemeCode)
 {
 }

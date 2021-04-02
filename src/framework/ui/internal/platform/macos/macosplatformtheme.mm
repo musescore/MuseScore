@@ -18,7 +18,6 @@
 //=============================================================================
 
 #include "macosplatformtheme.h"
-#include "uitypes.h"
 #include "log.h"
 
 #include <Cocoa/Cocoa.h>
@@ -72,7 +71,7 @@ bool MacOSPlatformTheme::isFollowSystemThemeAvailable() const
     return true;
 }
 
-std::string MacOSPlatformTheme::themeCode() const
+ThemeCode MacOSPlatformTheme::themeCode() const
 {
     if (isSystemDarkMode()) {
         if (isSystemHighContrast()) {
@@ -86,7 +85,7 @@ std::string MacOSPlatformTheme::themeCode() const
     return LIGHT_THEME_CODE;
 }
 
-Channel<std::string> MacOSPlatformTheme::themeCodeChanged() const
+Channel<ThemeCode> MacOSPlatformTheme::themeCodeChanged() const
 {
     return m_channel;
 }
@@ -102,7 +101,7 @@ bool MacOSPlatformTheme::isSystemHighContrast() const
     return [[NSWorkspace sharedWorkspace] accessibilityDisplayShouldIncreaseContrast];
 }
 
-void MacOSPlatformTheme::applyPlatformStyleOnAppForTheme(std::string themeCode)
+void MacOSPlatformTheme::applyPlatformStyleOnAppForTheme(ThemeCode themeCode)
 {
     // The system will turn these appearance names into their high contrast
     // counterparts automatically if system high contrast is enabled
@@ -113,7 +112,7 @@ void MacOSPlatformTheme::applyPlatformStyleOnAppForTheme(std::string themeCode)
     }
 }
 
-void MacOSPlatformTheme::applyPlatformStyleOnWindowForTheme(QWidget* widget, std::string)
+void MacOSPlatformTheme::applyPlatformStyleOnWindowForTheme(QWidget* widget, ThemeCode)
 {
     QColor backgroundColor = widget->palette().window().color();
     NSView* nsView = (__bridge NSView*)reinterpret_cast<void*>(widget->winId());

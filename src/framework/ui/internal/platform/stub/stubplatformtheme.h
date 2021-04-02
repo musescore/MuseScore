@@ -31,14 +31,14 @@ public:
 
     bool isFollowSystemThemeAvailable() const override;
 
-    std::string themeCode() const override;
-    async::Channel<std::string> themeCodeChanged() const override;
+    ThemeCode themeCode() const override;
+    async::Channel<ThemeCode> themeCodeChanged() const override;
 
-    void applyPlatformStyleOnAppForTheme(std::string themeCode) override;
-    void applyPlatformStyleOnWindowForTheme(QWidget* window, std::string themeCode) override;
+    void applyPlatformStyleOnAppForTheme(ThemeCode themeCode) override;
+    void applyPlatformStyleOnWindowForTheme(QWidget* window, ThemeCode themeCode) override;
 
 private:
-    async::Channel<std::string> m_channel;
+    async::Channel<ThemeCode> m_channel;
 };
 }
 

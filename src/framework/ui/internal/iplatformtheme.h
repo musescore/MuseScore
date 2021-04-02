@@ -22,6 +22,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"
+#include "uitypes.h"
 
 class QWidget;
 
@@ -38,11 +39,11 @@ public:
 
     virtual bool isFollowSystemThemeAvailable() const = 0;
 
-    virtual std::string themeCode() const = 0;
-    virtual async::Channel<std::string> themeCodeChanged() const = 0;
+    virtual ThemeCode themeCode() const = 0;
+    virtual async::Channel<ThemeCode> themeCodeChanged() const = 0;
 
-    virtual void applyPlatformStyleOnAppForTheme(std::string themeCode) = 0;
-    virtual void applyPlatformStyleOnWindowForTheme(QWidget* window, std::string themeCode) = 0;
+    virtual void applyPlatformStyleOnAppForTheme(ThemeCode themeCode) = 0;
+    virtual void applyPlatformStyleOnWindowForTheme(QWidget* window, ThemeCode themeCode) = 0;
 };
 }
 
