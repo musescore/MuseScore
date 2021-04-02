@@ -65,19 +65,6 @@ const char* path::c_str() const
     return m_path.data();
 }
 
-paths path::pathsFromString(const std::string& str, const std::string& delim)
-{
-    std::vector<std::string> strs;
-    strings::split(str, strs, delim);
-
-    paths ps;
-    ps.reserve(strs.size());
-    for (const std::string& s : strs) {
-        ps.push_back(path(s));
-    }
-    return ps;
-}
-
 std::string mu::io::syffix(const mu::io::path& path)
 {
     QFileInfo fi(path.toQString());
@@ -127,4 +114,31 @@ mu::io::path mu::io::escapeFileName(const mu::io::path& fn_)
     fn = fn.replace(QChar(0x266f),"#");   // musical sharp sign, can happen in titles, so can happen in score (file) names
     fn = fn.replace(QRegExp("[" + QRegExp::escape("\\/:*?\"<>|") + "]"), "_");         //FAT/NTFS special chars
     return fn;
+}
+
+paths mu::io::pathsFromString(const std::string& str, const std::string& delim)
+{
+    std::vector<std::string> strs;
+    strings::split(str, strs, delim);
+
+    paths ps;
+    ps.reserve(strs.size());
+    for (const std::string& s : strs) {
+        ps.push_back(path(s));
+    }
+    return ps;
+}
+
+std::string mu::io::pathsToString(const paths& ps, const std::string& delim)
+{
+    std::string result;
+    for (const path& _path: ps) {
+        result += _path.toStdString() + delim;
+    }
+
+    for (size_t i = 0; i < delim.length(); ++i) {
+        result.pop_back();
+    }
+
+    return result;
 }

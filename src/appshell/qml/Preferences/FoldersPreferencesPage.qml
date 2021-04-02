@@ -55,8 +55,8 @@ PreferencesPage {
                     Layout.alignment: Qt.AlignRight
                     Layout.preferredWidth: 380
 
-                    pickerType: FilePicker.PickerType.Directory
-                    dialogTitle: qsTrc("appshell", "Choose %1 Folder").arg(model.title)
+                    pickerType: !isMultiplePaths ? FilePicker.PickerType.Directory : FilePicker.PickerType.MultipleDirectories
+                    dialogTitle: !isMultiplePaths ? qsTrc("appshell", "Choose %1 Folder").arg(model.title) : qsTrc("appshell", "Directories")
                     dir: model.path
 
                     path: model.path

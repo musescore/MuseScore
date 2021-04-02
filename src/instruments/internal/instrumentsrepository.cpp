@@ -25,20 +25,10 @@
 
 using namespace mu;
 using namespace mu::instruments;
-using namespace mu::extensions;
 using namespace mu::framework;
 
 void InstrumentsRepository::init()
 {
-    RetCh<Extension> extensionChanged = extensionsService()->extensionChanged();
-    if (extensionChanged.ret) {
-        extensionChanged.ch.onReceive(this, [this](const Extension& newExtension) {
-            if (newExtension.types.testFlag(Extension::Instruments)) {
-                load();
-            }
-        });
-    }
-
     configuration()->instrumentListPathsChanged().onNotify(this, [this]() {
         load();
     });

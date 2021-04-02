@@ -22,7 +22,7 @@
 #include "iuserscoresconfiguration.h"
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
-#include "extensions/iextensionsconfiguration.h"
+#include "global/iextensionprovider.h"
 #include "notation/inotationconfiguration.h"
 #include "global/val.h"
 #include "system/ifilesystem.h"
@@ -31,7 +31,7 @@ namespace mu::userscores {
 class UserScoresConfiguration : public IUserScoresConfiguration
 {
     INJECT(userscores, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(userscores, extensions::IExtensionsConfiguration, extensionsConfiguration)
+    INJECT(userscores, framework::IExtensionContentProvider, extensionProvider)
     INJECT(userscores, notation::INotationConfiguration, notationConfiguration)
     INJECT(userscores, system::IFileSystem, fileSystem)
 
@@ -45,12 +45,12 @@ public:
 
     io::path myFirstScorePath() const override;
 
-    io::paths availableTemplatesPaths() const override;
+    io::paths templatesPaths() const override;
 
-    ValCh<io::path> templatesPath() const override;
-    void setTemplatesPath(const io::path& path) override;
+    io::path userTemplatesPath() const override;
+    void setUserTemplatesPath(const io::path& path) override;
 
-    ValCh<io::path> scoresPath() const override;
+    io::path scoresPath() const override;
     void setScoresPath(const io::path& path) override;
 
     io::path defaultSavingFilePath(const io::path& fileName) const override;
@@ -67,12 +67,9 @@ private:
     io::paths actualRecentScorePaths() const;
     io::paths parsePaths(const mu::Val& value) const;
 
-    io::path userTemplatesPath() const;
     io::path defaultTemplatesPath() const;
 
     async::Channel<io::paths> m_recentScorePathsChanged;
-    async::Channel<io::path> m_templatesPathChanged;
-    async::Channel<io::path> m_scoresPathChanged;
 };
 }
 

@@ -54,6 +54,12 @@ void InstrumentsConfiguration::init()
     settings()->valueChanged(SECOND_SCORE_ORDER_LIST_KEY).onReceive(nullptr, [this](const Val&) {
         m_scoreOrderListPathsChanged.notify();
     });
+
+    extensionProvider()->extensionPathsChanged().onReceive(nullptr, [this](IExtensionContentProvider::ExtensionContentType contentType) {
+        if (contentType == IExtensionContentProvider::Instruments) {
+            m_instrumentListPathsChanged.notify();
+        }
+    });
 }
 
 io::paths InstrumentsConfiguration::instrumentListPaths() const
@@ -185,7 +191,7 @@ void InstrumentsConfiguration::setSecondScoreOrderListPath(const io::path& path)
 
 io::paths InstrumentsConfiguration::extensionsPaths() const
 {
-    io::paths extensionsInstrumentsPaths = extensionsConfigurator()->instrumentsPaths();
+    io::paths extensionsInstrumentsPaths = extensionProvider()->extensionPaths(IExtensionContentProvider::Instruments);
     io::paths paths;
 
     for (const io::path& path: extensionsInstrumentsPaths) {

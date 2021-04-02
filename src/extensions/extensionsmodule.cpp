@@ -29,9 +29,10 @@
 #include "ui/iuiengine.h"
 
 using namespace mu::extensions;
+using namespace mu::framework;
 
-static ExtensionsConfiguration* m_extensionsConfiguration = new ExtensionsConfiguration();
-static ExtensionsService* m_extensionsService = new ExtensionsService();
+static std::shared_ptr<ExtensionsConfiguration> s_configuration = std::make_shared<ExtensionsConfiguration>();
+static std::shared_ptr<ExtensionsService> s_extensionsService = std::make_shared<ExtensionsService>();
 
 static void extensions_init_qrc()
 {
@@ -45,9 +46,10 @@ std::string ExtensionsModule::moduleName() const
 
 void ExtensionsModule::registerExports()
 {
-    framework::ioc()->registerExport<IExtensionsConfiguration>(moduleName(), m_extensionsConfiguration);
-    framework::ioc()->registerExport<IExtensionsService>(moduleName(), m_extensionsService);
-    framework::ioc()->registerExport<IExtensionUnpacker>(moduleName(), new ExtensionUnpacker());
+    ioc()->registerExport<IExtensionsConfiguration>(moduleName(), s_configuration);
+    ioc()->registerExport<IExtensionContentProvider>(moduleName(), s_configuration);
+    ioc()->registerExport<IExtensionsService>(moduleName(), s_extensionsService);
+    ioc()->registerExport<IExtensionUnpacker>(moduleName(), new ExtensionUnpacker());
 }
 
 void ExtensionsModule::registerResources()
@@ -60,15 +62,15 @@ void ExtensionsModule::registerUiTypes()
     qmlRegisterType<ExtensionListModel>("MuseScore.Extensions", 1, 0, "ExtensionListModel");
     qmlRegisterUncreatableType<ExtensionStatus>("MuseScore.Extensions", 1, 0, "ExtensionStatus", "Cannot create an ExtensionStatus");
 
-    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(extensions_QML_IMPORT);
+    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(extensions_QML_IMPORT);
 }
 
-void ExtensionsModule::onInit(const framework::IApplication::RunMode& runMode)
+void ExtensionsModule::onInit(const IApplication::RunMode& runMode)
 {
-    if (framework::IApplication::RunMode::Editor != runMode) {
+    if (IApplication::RunMode::Editor != runMode) {
         return;
     }
 
-    m_extensionsService->init();
-    m_extensionsConfiguration->init();
+    s_configuration->init();
+    s_extensionsService->init();
 }

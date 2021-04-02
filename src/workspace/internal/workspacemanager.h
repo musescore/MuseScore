@@ -25,13 +25,13 @@
 #include "../iworkspaceconfiguration.h"
 #include "../system/ifilesystem.h"
 #include "workspace.h"
-#include "extensions/iextensionsservice.h"
+#include "global/iextensionprovider.h"
 
 namespace mu::workspace {
 class WorkspaceManager : public IWorkspaceManager, async::Asyncable
 {
     INJECT(workspace, IWorkspaceConfiguration, configuration)
-    INJECT(workspace, extensions::IExtensionsService, extensionsService)
+    INJECT(workspace, framework::IExtensionContentProvider, extensionProvider)
     INJECT(workspace, system::IFileSystem, fileSystem)
 
 public:

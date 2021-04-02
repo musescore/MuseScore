@@ -38,10 +38,12 @@ static const Settings::Key USER_EXTENSIONS_PATH(module_name, "application/paths/
 
 static const io::path EXTENSIONS_DIR("Extensions");
 static const io::path WORKSPACES_DIR("workspaces");
+static const io::path SOUNDFONTS_DIR("soundfonts");
 static const io::path INSTRUMENTS_DIR("instruments");
 static const io::path TEMPLATES_DIR("templates");
 
 static const QString WORKSPACE_FILTER("*.workspace");
+static const QString SOUNDFONT_FILTER("*.sf3");
 static const QString MSCZ_FILTER("*.mscz");
 static const QString MSCX_FILTER(".mscx");
 static const QString XML_FILTER("*.xml");
@@ -60,7 +62,7 @@ void ExtensionsConfiguration::init()
         m_extensionHashChanged.send(extensionHash);
     });
 
-    fileSystem()->makePath(extensionsPath().val);
+    fileSystem()->makePath(userExtensionsPath());
     fileSystem()->makePath(extensionsDataPath());
 }
 
@@ -114,18 +116,47 @@ Ret ExtensionsConfiguration::setExtensions(const ExtensionsHash& extensions) con
 
 io::path ExtensionsConfiguration::extensionPath(const QString& extensionCode) const
 {
-    return extensionsPath().val + "/" + extensionCode;
+    return userExtensionsPath() + "/" + extensionCode;
 }
 
-io::path ExtensionsConfiguration::extensionWorkspacesPath(const QString& extensionCode) const
+io::path ExtensionsConfiguration::extensionWorkspacesDir(const QString& extensionCode) const
 {
-    return extensionsPath().val + "/" + extensionCode + "/" + WORKSPACES_DIR;
+    return userExtensionsPath() + "/" + extensionCode + "/" + WORKSPACES_DIR;
+}
+
+io::path ExtensionsConfiguration::extensionSoundFontsDir(const QString& extensionCode) const
+{
+    return userExtensionsPath() + "/" + extensionCode + "/" + SOUNDFONTS_DIR;
 }
 
 io::path ExtensionsConfiguration::extensionArchivePath(const QString& extensionCode) const
 {
     io::path fileName = extensionFileName(extensionCode);
     return extensionsDataPath() + "/" + fileName;
+}
+
+io::paths ExtensionsConfiguration::extensionPaths(IExtensionContentProvider::ExtensionContentType extensionType) const
+{
+    switch (extensionType) {
+    case IExtensionContentProvider::Workspaces:
+        return workspacesPaths();
+    case IExtensionContentProvider::SoundFonts:
+        return soundFontsPaths();
+    case IExtensionContentProvider::Templates:
+        return templatesPaths();
+    case IExtensionContentProvider::Instruments:
+        return instrumentsPaths();
+    case IExtensionContentProvider::Undefined:
+    case IExtensionContentProvider::SFZS:
+        return io::paths();
+    }
+
+    return io::paths();
+}
+
+async::Channel<IExtensionContentProvider::ExtensionContentType> ExtensionsConfiguration::extensionPathsChanged() const
+{
+    return m_extensionPathsChanged;
 }
 
 ExtensionsHash ExtensionsConfiguration::parseExtensionConfig(const QByteArray& json) const
@@ -174,15 +205,21 @@ io::paths ExtensionsConfiguration::fileList(const io::path& directory, const QSt
     return files.val;
 }
 
-io::path ExtensionsConfiguration::extensionInstrumentsPath(const QString& extensionCode) const
+io::path ExtensionsConfiguration::extensionInstrumentsDir(const QString& extensionCode) const
 {
-    return extensionsPath().val + "/" + extensionCode + "/" + INSTRUMENTS_DIR;
+    return userExtensionsPath() + "/" + extensionCode + "/" + INSTRUMENTS_DIR;
 }
 
-io::paths ExtensionsConfiguration::extensionWorkspaceFiles(const QString& extensionCode) const
+io::paths ExtensionsConfiguration::extensionWorkspacesFiles(const QString& extensionCode) const
 {
-    io::path _extensionWorkspacesPath = extensionWorkspacesPath(extensionCode);
-    return fileList(_extensionWorkspacesPath, { WORKSPACE_FILTER });
+    io::path _extensionWorkspacesDir = extensionWorkspacesDir(extensionCode);
+    return fileList(_extensionWorkspacesDir, { WORKSPACE_FILTER });
+}
+
+io::paths ExtensionsConfiguration::extensionSoundFontsFiles(const QString& extensionCode) const
+{
+    io::path _extensionSoundFontsDir = extensionWorkspacesDir(extensionCode);
+    return fileList(_extensionSoundFontsDir, { SOUNDFONT_FILTER });
 }
 
 io::paths ExtensionsConfiguration::workspacesPaths() const
@@ -192,7 +229,7 @@ io::paths ExtensionsConfiguration::workspacesPaths() const
     ExtensionsHash extensions = this->extensions().val;
 
     for (const Extension& extension : extensions.values()) {
-        io::path _extensionWorkspacesPath = extensionWorkspacesPath(extension.code);
+        io::path _extensionWorkspacesPath = extensionWorkspacesDir(extension.code);
         io::paths files = fileList(_extensionWorkspacesPath, { WORKSPACE_FILTER });
 
         if (!files.empty()) {
@@ -203,10 +240,34 @@ io::paths ExtensionsConfiguration::workspacesPaths() const
     return paths;
 }
 
-io::paths ExtensionsConfiguration::extensionInstrumentFiles(const QString& extensionCode) const
+io::paths ExtensionsConfiguration::soundFontsPaths() const
 {
-    io::path _extensionInstrumentsPath = extensionInstrumentsPath(extensionCode);
-    return fileList(_extensionInstrumentsPath, { XML_FILTER });
+    io::paths paths;
+
+    ExtensionsHash extensions = this->extensions().val;
+
+    for (const Extension& extension : extensions.values()) {
+        io::path _extensionSoundFontsDir = extensionSoundFontsDir(extension.code);
+        io::paths files = fileList(_extensionSoundFontsDir, { SOUNDFONT_FILTER });
+
+        if (!files.empty()) {
+            paths.push_back(_extensionSoundFontsDir);
+        }
+    }
+
+    return paths;
+}
+
+io::paths ExtensionsConfiguration::extensionInstrumentsFiles(const QString& extensionCode) const
+{
+    io::path _extensionInstrumentsDir = extensionInstrumentsDir(extensionCode);
+    return fileList(_extensionInstrumentsDir, { XML_FILTER });
+}
+
+io::paths ExtensionsConfiguration::extensionTemplatesFiles(const QString& extensionCode) const
+{
+    io::path _extensionTemplatesDir = extensionTemplatesDir(extensionCode);
+    return fileList(_extensionTemplatesDir, { XML_FILTER });
 }
 
 io::paths ExtensionsConfiguration::instrumentsPaths() const
@@ -216,11 +277,11 @@ io::paths ExtensionsConfiguration::instrumentsPaths() const
     ExtensionsHash extensions = this->extensions().val;
 
     for (const Extension& extension: extensions.values()) {
-        io::path _extensionInstrumentsPath = extensionInstrumentsPath(extension.code);
-        io::paths files = fileList(_extensionInstrumentsPath, { XML_FILTER });
+        io::path _extensionInstrumentsDir = extensionInstrumentsDir(extension.code);
+        io::paths files = fileList(_extensionInstrumentsDir, { XML_FILTER });
 
         if (!files.empty()) {
-            paths.push_back(_extensionInstrumentsPath);
+            paths.push_back(_extensionInstrumentsDir);
         }
     }
 
@@ -234,7 +295,7 @@ io::paths ExtensionsConfiguration::templatesPaths() const
     ExtensionsHash extensions = this->extensions().val;
 
     for (const Extension& extension: extensions.values()) {
-        io::path _extensionTemplatesPath = extensionTemplatesPath(extension.code);
+        io::path _extensionTemplatesPath = extensionTemplatesDir(extension.code);
         io::paths files = fileList(_extensionTemplatesPath, { MSCZ_FILTER, MSCX_FILTER });
 
         if (!files.empty()) {
@@ -245,23 +306,19 @@ io::paths ExtensionsConfiguration::templatesPaths() const
     return paths;
 }
 
-ValCh<io::path> ExtensionsConfiguration::extensionsPath() const
+io::path ExtensionsConfiguration::userExtensionsPath() const
 {
-    ValCh<io::path> result;
-    result.ch = m_extensionsPathChanged;
-    result.val = settings()->value(USER_EXTENSIONS_PATH).toString();
-
-    return result;
+    return settings()->value(USER_EXTENSIONS_PATH).toString();
 }
 
-void ExtensionsConfiguration::setExtensionsPath(const io::path& path)
+void ExtensionsConfiguration::setUserExtensionsPath(const io::path& path)
 {
     settings()->setValue(USER_EXTENSIONS_PATH, Val(path.toStdString()));
 }
 
-io::path ExtensionsConfiguration::extensionTemplatesPath(const QString& extensionCode) const
+io::path ExtensionsConfiguration::extensionTemplatesDir(const QString& extensionCode) const
 {
-    return extensionsPath().val + "/" + extensionCode + "/" + TEMPLATES_DIR;
+    return userExtensionsPath() + "/" + extensionCode + "/" + TEMPLATES_DIR;
 }
 
 io::path ExtensionsConfiguration::extensionsDataPath() const

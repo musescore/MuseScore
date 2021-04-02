@@ -23,9 +23,10 @@
 #include "iextensionsconfiguration.h"
 #include "iglobalconfiguration.h"
 #include "framework/system/ifilesystem.h"
+#include "global/iextensionprovider.h"
 
 namespace mu::extensions {
-class ExtensionsConfiguration : public IExtensionsConfiguration
+class ExtensionsConfiguration : public IExtensionsConfiguration, public framework::IExtensionContentProvider
 {
     INJECT(extensions, framework::IGlobalConfiguration, globalConfiguration)
     INJECT(extensions, system::IFileSystem, fileSystem)
@@ -45,16 +46,16 @@ public:
     io::path extensionPath(const QString& extensionCode) const override;
     io::path extensionArchivePath(const QString& extensionCode) const override;
 
-    io::paths extensionWorkspaceFiles(const QString& extensionCode) const override;
-    io::paths workspacesPaths() const override;
+    io::paths extensionPaths(ExtensionContentType extensionType) const override;
+    async::Channel<ExtensionContentType> extensionPathsChanged() const override;
 
-    io::paths extensionInstrumentFiles(const QString& extensionCode) const override;
-    io::paths instrumentsPaths() const override;
+    io::paths extensionWorkspacesFiles(const QString& extensionCode) const override;
+    io::paths extensionSoundFontsFiles(const QString& extensionCode) const override;
+    io::paths extensionInstrumentsFiles(const QString& extensionCode) const override;
+    io::paths extensionTemplatesFiles(const QString& extensionCode) const override;
 
-    io::paths templatesPaths() const override;
-
-    ValCh<io::path> extensionsPath() const override;
-    void setExtensionsPath(const io::path& path) override;
+    io::path userExtensionsPath() const override;
+    void setUserExtensionsPath(const io::path& path) override;
 
 private:
     ExtensionsHash parseExtensionConfig(const QByteArray& json) const;
@@ -62,14 +63,21 @@ private:
     io::path extensionFileName(const QString& extensionCode) const;
     io::paths fileList(const io::path& directory, const QStringList& filters) const;
 
-    io::path extensionWorkspacesPath(const QString& extensionCode) const;
-    io::path extensionInstrumentsPath(const QString& extensionCode) const;
-    io::path extensionTemplatesPath(const QString& extensionCode) const;
+    io::path extensionWorkspacesDir(const QString& extensionCode) const;
+    io::path extensionSoundFontsDir(const QString& extensionCode) const;
+    io::path extensionInstrumentsDir(const QString& extensionCode) const;
+    io::path extensionTemplatesDir(const QString& extensionCode) const;
+
+    io::paths workspacesPaths() const;
+    io::paths soundFontsPaths() const;
+    io::paths instrumentsPaths() const;
+    io::paths templatesPaths() const;
 
     io::path extensionsDataPath() const;
 
     async::Channel<ExtensionsHash> m_extensionHashChanged;
     async::Channel<io::path> m_extensionsPathChanged;
+    async::Channel<ExtensionContentType> m_extensionPathsChanged;
 };
 }
 

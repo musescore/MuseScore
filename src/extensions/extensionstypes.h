@@ -55,16 +55,6 @@ struct ExtensionProgress
 
 struct Extension
 {
-    enum ExtensionType {
-        Undefined = 0x0000,
-        Workspaces = 0x0001,
-        SFZS = 0x0002,
-        Soundfonts = 0x0003,
-        Templates = 0x0004,
-        Instruments = 0x0005
-    };
-    Q_DECLARE_FLAGS(ExtensionTypes, ExtensionType)
-
     QString code;
     QString name;
     QString description;
@@ -72,7 +62,6 @@ struct Extension
     double fileSize = 0.0;
     QVersionNumber version;
     ExtensionStatus::Status status = ExtensionStatus::Undefined;
-    ExtensionTypes types = { };
 
     Extension() = default;
 
@@ -86,8 +75,6 @@ struct Extension
             { "status", QString::number(static_cast<int>(status)) } };
     }
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Extension::ExtensionTypes)
 
 using ExtensionsHash = QHash<QString /*code*/, Extension>;
 }

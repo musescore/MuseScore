@@ -34,6 +34,12 @@ void WorkspaceConfiguration::init()
     settings()->valueChanged(CURRENT_WORKSPACE).onReceive(this, [this](const Val& name) {
         m_currentWorkspaceNameChanged.send(name.toString());
     });
+
+    extensionProvider()->extensionPathsChanged().onReceive(this, [this](IExtensionContentProvider::ExtensionContentType contentType) {
+        if (contentType == IExtensionContentProvider::Workspaces) {
+            m_workspacePathsChanged.notify();
+        }
+    });
 }
 
 io::paths WorkspaceConfiguration::workspacePaths() const
@@ -48,6 +54,11 @@ io::paths WorkspaceConfiguration::workspacePaths() const
     paths.insert(paths.end(), extensionsPath.begin(), extensionsPath.end());
 
     return paths;
+}
+
+async::Notification WorkspaceConfiguration::workspacePathsChanged() const
+{
+    return m_workspacePathsChanged;
 }
 
 io::path WorkspaceConfiguration::userWorkspacesDirPath() const
@@ -76,5 +87,5 @@ void WorkspaceConfiguration::setCurrentWorkspaceName(const std::string& workspac
 
 io::paths WorkspaceConfiguration::extensionsPaths() const
 {
-    return extensionsConfiguration()->workspacesPaths();
+    return extensionProvider()->extensionPaths(IExtensionContentProvider::Workspaces);
 }

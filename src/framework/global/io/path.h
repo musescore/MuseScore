@@ -49,8 +49,6 @@ struct path {
     std::wstring toStdWString() const;
     const char* c_str() const;
 
-    static paths pathsFromString(const std::string& str, const std::string& delim = ";");
-
 private:
     QByteArray m_path;
 };
@@ -68,6 +66,9 @@ path dirname(const path& path);
 path dirpath(const path& path);
 
 path escapeFileName(const path& fn);
+
+paths pathsFromString(const std::string& str, const std::string& delim = ";");
+std::string pathsToString(const paths& ps, const std::string& delim = ";");
 }
 }
 

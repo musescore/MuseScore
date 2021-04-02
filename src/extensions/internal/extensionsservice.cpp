@@ -77,19 +77,7 @@ RetCh<ExtensionProgress> ExtensionsService::install(const QString& extensionCode
             return;
         }
 
-        ExtensionsHash extensionHash = this->extensions().val;
-
-        extensionHash[extensionCode].status = ExtensionStatus::Installed;
-        extensionHash[extensionCode].types = extensionTypes(extensionCode);
-
-        Ret updateConfigRet = configuration()->setExtensions(extensionHash);
-        if (!updateConfigRet) {
-            LOGE() << "Error when set extensions" << updateConfigRet.toString();
-            closeOperation(extensionCode, extensionProgressStatus);
-            return;
-        }
-
-        m_extensionChanged.send(extensionHash[extensionCode]);
+        markExtensionAsInstalled(extensionCode);
         closeOperation(extensionCode, extensionProgressStatus);
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
@@ -118,26 +106,16 @@ RetCh<ExtensionProgress> ExtensionsService::update(const QString& extensionCode)
     result.ret = make_ret(Err::NoError);
     m_operationsHash.insert(extensionCode, Operation(OperationType::Update, extensionProgressStatus));
 
+    QSet<IExtensionContentProvider::ExtensionContentType> oldExtensionContentTypes = this->extensionContentTypes(extensionCode);
+
     async::Channel<Ret>* extensionFinishChannel = new async::Channel<Ret>();
-    extensionFinishChannel->onReceive(this, [this, extensionCode, extensionProgressStatus](const Ret& ret) {
+    extensionFinishChannel->onReceive(this, [this, extensionCode, extensionProgressStatus, oldExtensionContentTypes](const Ret& ret) {
         if (!ret) {
             closeOperation(extensionCode, extensionProgressStatus);
             return;
         }
 
-        ExtensionsHash extensionHash = extensions().val;
-
-        extensionHash[extensionCode].status = ExtensionStatus::Installed;
-        extensionHash[extensionCode].types = extensionTypes(extensionCode);
-
-        Ret updateConfigRet = configuration()->setExtensions(extensionHash);
-        if (!updateConfigRet) {
-            LOGE() << "Error when set extensions" << updateConfigRet.toString();
-            closeOperation(extensionCode, extensionProgressStatus);
-            return;
-        }
-
-        m_extensionChanged.send(extensionHash[extensionCode]);
+        markExtensionAsInstalled(extensionCode, oldExtensionContentTypes);
         closeOperation(extensionCode, extensionProgressStatus);
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
@@ -154,6 +132,8 @@ Ret ExtensionsService::uninstall(const QString& extensionCode)
         return make_ret(Err::ErrorExtensionNotFound);
     }
 
+    QSet<IExtensionContentProvider::ExtensionContentType> removedExtensionContentTypes = this->extensionContentTypes(extensionCode);
+
     Ret remove = removeExtension(extensionCode);
     if (!remove) {
         return remove;
@@ -166,6 +146,7 @@ Ret ExtensionsService::uninstall(const QString& extensionCode)
     }
 
     m_extensionChanged.send(extensionHash[extensionCode]);
+    notifyAboutExtensionPathsChanged(removedExtensionContentTypes);
 
     return make_ret(Err::NoError);
 }
@@ -205,7 +186,6 @@ RetVal<ExtensionsHash> ExtensionsService::parseExtensionConfig(const QByteArray&
         extension.fileName = value.value("file_name").toString();
         extension.fileSize = value.value("file_size").toDouble();
         extension.version = QVersionNumber::fromString(value.value("version").toString());
-        extension.types = {};
 
         result.val.insert(key, extension);
     }
@@ -228,8 +208,6 @@ RetVal<ExtensionsHash> ExtensionsService::correctExtensionsStates(ExtensionsHash
             extension.status = ExtensionStatus::NoInstalled;
             isNeedUpdate = true;
         }
-
-        extension.types = extensionTypes(extension.code);
     }
 
     if (isNeedUpdate) {
@@ -290,18 +268,29 @@ Ret ExtensionsService::removeExtension(const QString& extensionCode) const
     return make_ret(Err::NoError);
 }
 
-Extension::ExtensionTypes ExtensionsService::extensionTypes(const QString& extensionCode) const
+QSet<framework::IExtensionContentProvider::ExtensionContentType> ExtensionsService::extensionContentTypes(const QString& extensionCode)
+const
 {
-    Extension::ExtensionTypes result;
+    QSet<framework::IExtensionContentProvider::ExtensionContentType> result;
 
-    io::paths workspaceFiles = configuration()->extensionWorkspaceFiles(extensionCode);
+    io::paths workspaceFiles = configuration()->extensionWorkspacesFiles(extensionCode);
     if (!workspaceFiles.empty()) {
-        result.setFlag(Extension::Workspaces);
+        result << IExtensionContentProvider::Workspaces;
     }
 
-    io::paths instrumentFiles = configuration()->extensionInstrumentFiles(extensionCode);
-    if (!instrumentFiles.empty()) {
-        result.setFlag(Extension::Instruments);
+    io::paths soundFontsFiles = configuration()->extensionSoundFontsFiles(extensionCode);
+    if (!soundFontsFiles.empty()) {
+        result << IExtensionContentProvider::SoundFonts;
+    }
+
+    io::paths instrumentsFiles = configuration()->extensionInstrumentsFiles(extensionCode);
+    if (!instrumentsFiles.empty()) {
+        result << IExtensionContentProvider::Instruments;
+    }
+
+    io::paths templatesFiles = configuration()->extensionTemplatesFiles(extensionCode);
+    if (!templatesFiles.empty()) {
+        result << IExtensionContentProvider::Templates;
     }
 
     return result;
@@ -371,7 +360,7 @@ void ExtensionsService::th_install(const QString& extensionCode,
 
     QString extensionArchivePath = download.val;
 
-    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsPath().val.toQString());
+    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->userExtensionsPath().toQString());
     if (!unpack) {
         LOGE() << "Error unpack" << unpack.toString();
         fileSystem()->remove(extensionArchivePath);
@@ -404,7 +393,7 @@ void ExtensionsService::th_update(const QString& extensionCode, async::Channel<E
         finishChannel->send(remove);
     }
 
-    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsPath().val.toQString());
+    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->userExtensionsPath().toQString());
     if (!unpack) {
         LOGE() << "Error unpack" << unpack.toString();
         finishChannel->send(unpack);
@@ -419,4 +408,34 @@ void ExtensionsService::closeOperation(const QString& extensionCode, async::Chan
 {
     progressChannel->close();
     m_operationsHash.remove(extensionCode);
+}
+
+void ExtensionsService::markExtensionAsInstalled(const QString& extensionCode,
+                                                 const QSet<IExtensionContentProvider::ExtensionContentType>& oldExtensionContentTypes)
+{
+    ExtensionsHash extensionHash = extensions().val;
+
+    extensionHash[extensionCode].status = ExtensionStatus::Installed;
+
+    QSet<IExtensionContentProvider::ExtensionContentType> changedExtensionContentTypes = this->extensionContentTypes(extensionCode);
+    for (IExtensionContentProvider::ExtensionContentType type: oldExtensionContentTypes) {
+        changedExtensionContentTypes << type;
+    }
+
+    Ret updateConfigRet = configuration()->setExtensions(extensionHash);
+    if (!updateConfigRet) {
+        LOGE() << "Error when set extensions" << updateConfigRet.toString();
+        return;
+    }
+
+    m_extensionChanged.send(extensionHash[extensionCode]);
+    notifyAboutExtensionPathsChanged(changedExtensionContentTypes);
+}
+
+void ExtensionsService::notifyAboutExtensionPathsChanged(const QSet<IExtensionContentProvider::ExtensionContentType>& extensionContentTypes)
+const
+{
+    for (IExtensionContentProvider::ExtensionContentType type: extensionContentTypes) {
+        extensionProvider()->extensionPathsChanged().send(type);
+    }
 }

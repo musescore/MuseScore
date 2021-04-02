@@ -22,11 +22,14 @@
 #include "../iaudioconfiguration.h"
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
+#include "global/iextensionprovider.h"
 
 namespace mu::audio {
 class AudioConfiguration : public IAudioConfiguration
 {
     INJECT(audio, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(audio, framework::IExtensionContentProvider, extensionProvider)
+
 public:
     AudioConfiguration() = default;
 
@@ -39,7 +42,9 @@ public:
 
     unsigned int driverBufferSize() const override;
 
-    std::vector<io::path> soundFontPaths() const override;
+    io::paths soundFontPaths() const override;
+    io::paths userSoundFontPaths() const override;
+    void setUserSoundFontPaths(const io::paths& paths) override;
 
     bool isShowControlsInMixer() const override;
     void setIsShowControlsInMixer(bool show) override;

@@ -26,7 +26,6 @@
 #include "retval.h"
 #include "async/channel.h"
 #include "async/asyncable.h"
-#include "extensions/iextensionsservice.h"
 
 #include "instrumentstypes.h"
 #include "iinstrumentsrepository.h"
@@ -38,7 +37,6 @@ class InstrumentsRepository : public IInstrumentsRepository, public async::Async
 {
     INJECT(instruments, IInstrumentsConfiguration, configuration)
     INJECT(instruments, IInstrumentsReader, reader)
-    INJECT(instruments, extensions::IExtensionsService, extensionsService)
 
 public:
     void init();

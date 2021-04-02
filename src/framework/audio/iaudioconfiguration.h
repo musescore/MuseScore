@@ -43,7 +43,9 @@ public:
     virtual void setIsShowControlsInMixer(bool show) = 0;
 
     // synthesizers
-    virtual std::vector<io::path> soundFontPaths() const = 0;
+    virtual io::paths soundFontPaths() const = 0;
+    virtual io::paths userSoundFontPaths() const = 0;
+    virtual void setUserSoundFontPaths(const io::paths& paths) = 0;
     virtual const synth::SynthesizerState& synthesizerState() const = 0;
     virtual Ret saveSynthesizerState(const synth::SynthesizerState& state) = 0;
     virtual async::Notification synthesizerStateChanged() const = 0;

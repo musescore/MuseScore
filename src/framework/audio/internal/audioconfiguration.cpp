@@ -38,6 +38,7 @@ static const Settings::Key AUDIO_API_KEY("audio", "io/audioApi");
 static const Settings::Key AUDIO_BUFFER_SIZE("audio", "driver_buffer");
 
 static const Settings::Key USER_SOUNDFONTS_PATH("midi", "application/paths/mySoundfonts");
+static const std::string USER_SOUNDFONTS_DELIMETER(";");
 
 static const Settings::Key SHOW_CONTROLS_IN_MIXER("midi", "io/midi/showControlsInMixer");
 
@@ -86,17 +87,37 @@ unsigned int AudioConfiguration::driverBufferSize() const
     return settings()->value(AUDIO_BUFFER_SIZE).toInt();
 }
 
-std::vector<io::path> AudioConfiguration::soundFontPaths() const
+io::paths AudioConfiguration::soundFontPaths() const
 {
-    std::string pathsStr = settings()->value(USER_SOUNDFONTS_PATH).toString();
-    std::vector<io::path> paths = io::path::pathsFromString(pathsStr, ";");
+    io::paths paths;
+    io::paths userPaths = userSoundFontPaths();
+    if (!userPaths.empty()) {
+        paths = userPaths;
+    }
+
     paths.push_back(globalConfiguration()->sharePath());
 
-    //! TODO Implement me
-    // append extensions directory
-    //QStringList extensionsDir = Ms::Extension::getDirectoriesByType(Ms::Extension::soundfontsDir);
+    io::paths extensionsSoundFonts = extensionProvider()->extensionPaths(IExtensionContentProvider::SoundFonts);
+    paths.insert(paths.end(), extensionsSoundFonts.begin(), extensionsSoundFonts.end());
 
     return paths;
+}
+
+io::paths AudioConfiguration::userSoundFontPaths() const
+{
+    std::string pathsStr = settings()->value(USER_SOUNDFONTS_PATH).toString();
+    return io::pathsFromString(pathsStr, USER_SOUNDFONTS_DELIMETER);
+}
+
+void AudioConfiguration::setUserSoundFontPaths(const io::paths& paths)
+{
+    QStringList pathList;
+    for (const io::path& path: paths) {
+        pathList << path.toQString();
+    }
+
+    std::string pathsStr = pathList.join(QString::fromStdString(USER_SOUNDFONTS_DELIMETER)).toStdString();
+    settings()->setValue(USER_SOUNDFONTS_PATH, Val(pathsStr));
 }
 
 bool AudioConfiguration::isShowControlsInMixer() const

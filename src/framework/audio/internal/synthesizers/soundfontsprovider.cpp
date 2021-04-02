@@ -91,7 +91,7 @@ async::Notification SoundFontsProvider::soundFontPathsForSynthChanged(const Synt
 std::vector<io::path> SoundFontsProvider::soundFontPaths(SoundFontFormats formats) const
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
-    std::vector<io::path> paths = configuration()->soundFontPaths();
+    io::paths paths = configuration()->soundFontPaths();
 
     QStringList filter;
     if (formats.find(SoundFontFormat::SF2) != formats.cend()) {

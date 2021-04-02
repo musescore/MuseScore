@@ -44,16 +44,13 @@ public:
     virtual io::path extensionPath(const QString& extensionCode) const = 0;
     virtual io::path extensionArchivePath(const QString& extensionCode) const = 0;
 
-    virtual io::paths extensionWorkspaceFiles(const QString& extensionCode) const = 0;
-    virtual io::paths workspacesPaths() const = 0;
+    virtual io::paths extensionWorkspacesFiles(const QString& extensionCode) const = 0;
+    virtual io::paths extensionSoundFontsFiles(const QString& extensionCode) const = 0;
+    virtual io::paths extensionInstrumentsFiles(const QString& extensionCode) const = 0;
+    virtual io::paths extensionTemplatesFiles(const QString& extensionCode) const = 0;
 
-    virtual io::paths extensionInstrumentFiles(const QString& extensionCode) const = 0;
-    virtual io::paths instrumentsPaths() const = 0;
-
-    virtual io::paths templatesPaths() const = 0;
-
-    virtual ValCh<io::path> extensionsPath() const = 0;
-    virtual void setExtensionsPath(const io::path& path) = 0;
+    virtual io::path userExtensionsPath() const = 0;
+    virtual void setUserExtensionsPath(const io::path& path) = 0;
 };
 }
 

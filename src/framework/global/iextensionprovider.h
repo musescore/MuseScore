@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -16,32 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_WORKSPACE_IWORKSPACECONFIGURATION_H
-#define MU_WORKSPACE_IWORKSPACECONFIGURATION_H
+#ifndef MU_FRAMEWORK_IEXTENSIONPROVIDER_H
+#define MU_FRAMEWORK_IEXTENSIONPROVIDER_H
 
-#include <vector>
-
-#include "io/path.h"
 #include "modularity/imoduleexport.h"
-#include "retval.h"
+#include "io/path.h"
+#include "async/channel.h"
 
-namespace mu::workspace {
-class IWorkspaceConfiguration : MODULE_EXPORT_INTERFACE
+namespace mu::framework {
+class IExtensionContentProvider : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IWorkspaceConfiguration)
+    INTERFACE_ID(IExtensionContentProvider)
 
 public:
-    virtual ~IWorkspaceConfiguration() = default;
+    virtual ~IExtensionContentProvider() = default;
 
-    virtual io::paths workspacePaths() const = 0;
-    virtual async::Notification workspacePathsChanged() const = 0;
+    enum ExtensionContentType {
+        Undefined,
+        Workspaces,
+        SFZS,
+        SoundFonts,
+        Templates,
+        Instruments
+    };
 
-    virtual io::path userWorkspacesDirPath() const = 0;
-    virtual io::path userWorkspacePath(const std::string& workspaceName) const = 0;
-
-    virtual ValCh<std::string> currentWorkspaceName() const = 0;
-    virtual void setCurrentWorkspaceName(const std::string& workspaceName) = 0;
+    virtual io::paths extensionPaths(ExtensionContentType extensionType) const = 0;
+    virtual async::Channel<ExtensionContentType> extensionPathsChanged() const = 0;
 };
 }
 
-#endif // MU_WORKSPACE_IWORKSPACECONFIGURATION_H
+#endif // MU_FRAMEWORK_IEXTENSIONPROVIDER_H

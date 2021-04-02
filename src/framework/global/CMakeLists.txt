@@ -42,6 +42,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/application.h
     ${CMAKE_CURRENT_LIST_DIR}/iinteractive.h
     ${CMAKE_CURRENT_LIST_DIR}/iglobalconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/iextensionprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/path.h
     ${CMAKE_CURRENT_LIST_DIR}/log.h
@@ -83,6 +84,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.h
+
 )
 
 set(FS_LIB )

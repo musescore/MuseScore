@@ -27,6 +27,7 @@
 #include "notation/inotationconfiguration.h"
 #include "plugins/ipluginsconfiguration.h"
 #include "extensions/iextensionsconfiguration.h"
+#include "audio/iaudioconfiguration.h"
 
 namespace mu::appshell {
 class FoldersPreferencesModel : public QAbstractListModel, public async::Asyncable
@@ -37,6 +38,7 @@ class FoldersPreferencesModel : public QAbstractListModel, public async::Asyncab
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, plugins::IPluginsConfiguration, pluginsConfiguration)
     INJECT(appshell, extensions::IExtensionsConfiguration, extensionsConfiguration)
+    INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
 
 public:
     explicit FoldersPreferencesModel(QObject* parent = nullptr);
@@ -49,11 +51,10 @@ public:
     Q_INVOKABLE void load();
 
 private:
-    void setupConnections();
-
     enum Roles {
         TitleRole = Qt::UserRole + 1,
-        PathRole
+        PathRole,
+        IsMultiplePathsRole
     };
 
     enum class FolderType {
@@ -71,6 +72,7 @@ private:
         FolderType type = FolderType::Undefined;
         QString title;
         QString path;
+        bool isMultiplePaths = false;
     };
 
     void savePath(FolderType folderType, const QString& path);
@@ -79,6 +81,7 @@ private:
     QString stylesPath() const;
     QString templatesPath() const;
     QString pluginsPath() const;
+    QString soundFontsPaths() const;
     QString extensionsPath() const;
 
     void setPath(FolderType folderType, const QString& path);
