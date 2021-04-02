@@ -38,7 +38,6 @@ void EditMidiMappingModel::load(int originValue)
 
 QString EditMidiMappingModel::mappingTitle() const
 {
-    NOT_IMPLEMENTED;
     return "MIDI Keyboard > Note C3";
 }
 
