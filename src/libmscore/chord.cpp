@@ -2136,9 +2136,10 @@ void Chord::layoutPitched()
 void Chord::layoutTablature()
 {
     qreal _spatium          = spatium();
-    qreal dotNoteDistance   = score()->styleP(Sid::dotNoteDistance);
-    qreal minNoteDistance   = score()->styleP(Sid::minNoteDistance);
-    qreal minTieLength      = score()->styleP(Sid::MinTieLength);
+    qreal mag_ = staff() ? staff()->staffMag(this) : 1.0;    // palette elements do not have a staff
+    qreal dotNoteDistance = score()->styleP(Sid::dotNoteDistance) * mag_;
+    qreal minNoteDistance = score()->styleP(Sid::minNoteDistance) * mag_;
+    qreal minTieLength = score()->styleP(Sid::MinTieLength) * mag_;
 
     for (Chord* c : qAsConst(_graceNotes)) {
         c->layoutTablature();
@@ -2384,7 +2385,7 @@ void Chord::layoutTablature()
     // allocate enough room for glissandi
     if (_endsGlissando) {
         if (!rtick().isZero()) {                          // if not at beginning of measure
-            lll += (0.5 + score()->styleS(Sid::MinTieLength).val()) * _spatium;
+            lll += _spatium * 0.5 + minTieLength;
         }
         // special case of system-initial glissando final note is handled in Glissando::layout() itself
     }
