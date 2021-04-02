@@ -30,7 +30,7 @@
 
 #include "ui/iuiengine.h"
 #include "view/devtools/midiportdevmodel.h"
-#include "view/mididevicemappingsmodel.h"
+#include "view/mididevicemappingmodel.h"
 #include "view/editmidimappingmodel.h"
 
 using namespace mu::midi;
@@ -78,7 +78,7 @@ void MidiModule::registerExports()
 void MidiModule::registerUiTypes()
 {
     qmlRegisterType<MidiPortDevModel>("MuseScore.Midi", 1, 0, "MidiPortDevModel");
-    qmlRegisterType<MidiDeviceMappingsModel>("MuseScore.Midi", 1, 0, "MidiDeviceMappingsModel");
+    qmlRegisterType<MidiDeviceMappingModel>("MuseScore.Midi", 1, 0, "MidiDeviceMappingModel");
     qmlRegisterType<EditMidiMappingModel>("MuseScore.Midi", 1, 0, "EditMidiMappingModel");
 }
 

@@ -17,8 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef MU_MIDI_MIDIDEVICEMAPPINGSMODEL_H
-#define MU_MIDI_MIDIDEVICEMAPPINGSMODEL_H
+#ifndef MU_MIDI_MIDIDEVICEMAPPINGMODEL_H
+#define MU_MIDI_MIDIDEVICEMAPPINGMODEL_H
 
 #include <QAbstractListModel>
 #include <QItemSelection>
@@ -31,7 +31,7 @@
 #include "ui/uitypes.h"
 
 namespace mu::midi {
-class MidiDeviceMappingsModel : public QAbstractListModel
+class MidiDeviceMappingModel : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -44,7 +44,7 @@ class MidiDeviceMappingsModel : public QAbstractListModel
     Q_PROPERTY(bool canEditAction READ canEditAction NOTIFY selectionChanged)
 
 public:
-    explicit MidiDeviceMappingsModel(QObject* parent = nullptr);
+    explicit MidiDeviceMappingModel(QObject* parent = nullptr);
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -87,4 +87,4 @@ private:
 };
 }
 
-#endif // MU_MIDI_MIDIDEVICEMAPPINGSMODEL_H
+#endif // MU_MIDI_MIDIDEVICEMAPPINGMODEL_H

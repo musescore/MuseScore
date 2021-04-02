@@ -11,7 +11,7 @@ PreferencesPage {
         return page.apply()
     }
 
-    MidiDeviceMappingsPage {
+    MidiDeviceMappingPage {
         id: page
 
         anchors.fill: parent

@@ -17,7 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "mididevicemappingsmodel.h"
+#include "mididevicemappingmodel.h"
 
 #include "ui/view/iconcodes.h"
 
@@ -25,7 +25,6 @@
 #include "translation.h"
 
 using namespace mu::midi;
-using namespace mu::actions;
 using namespace mu::ui;
 
 static const QString TITLE_KEY("title");
@@ -57,12 +56,12 @@ inline std::vector<std::string> allMidiActions()
     };
 }
 
-MidiDeviceMappingsModel::MidiDeviceMappingsModel(QObject* parent)
+MidiDeviceMappingModel::MidiDeviceMappingModel(QObject* parent)
     : QAbstractListModel(parent)
 {
 }
 
-QVariant MidiDeviceMappingsModel::data(const QModelIndex& index, int role) const
+QVariant MidiDeviceMappingModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
@@ -81,7 +80,7 @@ QVariant MidiDeviceMappingsModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-QVariantMap MidiDeviceMappingsModel::actionToObject(const UiAction& action) const
+QVariantMap MidiDeviceMappingModel::actionToObject(const UiAction& action) const
 {
     QVariantMap obj;
 
@@ -96,12 +95,12 @@ QVariantMap MidiDeviceMappingsModel::actionToObject(const UiAction& action) cons
     return obj;
 }
 
-int MidiDeviceMappingsModel::rowCount(const QModelIndex&) const
+int MidiDeviceMappingModel::rowCount(const QModelIndex&) const
 {
     return m_actions.size();
 }
 
-QHash<int, QByteArray> MidiDeviceMappingsModel::roleNames() const
+QHash<int, QByteArray> MidiDeviceMappingModel::roleNames() const
 {
     return {
         { RoleTitle, TITLE_KEY.toUtf8() },
@@ -112,7 +111,7 @@ QHash<int, QByteArray> MidiDeviceMappingsModel::roleNames() const
     };
 }
 
-void MidiDeviceMappingsModel::load()
+void MidiDeviceMappingModel::load()
 {
     beginResetModel();
     m_actions.clear();
@@ -128,18 +127,18 @@ void MidiDeviceMappingsModel::load()
     endResetModel();
 }
 
-bool MidiDeviceMappingsModel::apply()
+bool MidiDeviceMappingModel::apply()
 {
     NOT_IMPLEMENTED;
     return true;
 }
 
-bool MidiDeviceMappingsModel::useRemoteControl() const
+bool MidiDeviceMappingModel::useRemoteControl() const
 {
     return configuration()->useRemoteControl();
 }
 
-void MidiDeviceMappingsModel::setUseRemoteControl(bool value)
+void MidiDeviceMappingModel::setUseRemoteControl(bool value)
 {
     if (value == useRemoteControl()) {
         return;
@@ -149,17 +148,17 @@ void MidiDeviceMappingsModel::setUseRemoteControl(bool value)
     emit useRemoteControlChanged(value);
 }
 
-QItemSelection MidiDeviceMappingsModel::selection() const
+QItemSelection MidiDeviceMappingModel::selection() const
 {
     return m_selection;
 }
 
-bool MidiDeviceMappingsModel::canEditAction() const
+bool MidiDeviceMappingModel::canEditAction() const
 {
     return currentAction().isValid();
 }
 
-void MidiDeviceMappingsModel::setSelection(const QItemSelection& selection)
+void MidiDeviceMappingModel::setSelection(const QItemSelection& selection)
 {
     if (selection == m_selection) {
         return;
@@ -169,17 +168,17 @@ void MidiDeviceMappingsModel::setSelection(const QItemSelection& selection)
     emit selectionChanged(selection);
 }
 
-void MidiDeviceMappingsModel::clearSelectedActions()
+void MidiDeviceMappingModel::clearSelectedActions()
 {
     NOT_IMPLEMENTED;
 }
 
-void MidiDeviceMappingsModel::clearAllActions()
+void MidiDeviceMappingModel::clearAllActions()
 {
     NOT_IMPLEMENTED;
 }
 
-QVariant MidiDeviceMappingsModel::currentAction() const
+QVariant MidiDeviceMappingModel::currentAction() const
 {
     if (m_selection.size() != 1) {
         return QVariant();
@@ -189,7 +188,7 @@ QVariant MidiDeviceMappingsModel::currentAction() const
     return actionToObject(action);
 }
 
-void MidiDeviceMappingsModel::mapCurrentActionToMidiValue(int value)
+void MidiDeviceMappingModel::mapCurrentActionToMidiValue(int value)
 {
     UNUSED(value);
     NOT_IMPLEMENTED;
