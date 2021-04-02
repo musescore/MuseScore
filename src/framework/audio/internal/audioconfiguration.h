@@ -32,6 +32,11 @@ public:
 
     void init();
 
+    std::vector<std::string> availableAudioApiList() const override;
+
+    std::string currentAudioApi() const override;
+    void setCurrentAudioApi(const std::string& name) override;
+
     unsigned int driverBufferSize() const override;
 
     std::vector<io::path> soundFontPaths() const override;

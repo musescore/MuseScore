@@ -36,18 +36,20 @@
 #include "view/appmenumodel.h"
 #include "view/notationpagemodel.h"
 #include "view/aboutmodel.h"
-#include "view/preferencesmodel.h"
-#include "view/generalpreferencesmodel.h"
-#include "view/updatepreferencesmodel.h"
-#include "view/appearancepreferencesmodel.h"
-#include "view/programmestartpreferencesmodel.h"
-#include "view/folderspreferencesmodel.h"
-#include "view/noteinputpreferencesmodel.h"
-#include "view/advancedpreferencesmodel.h"
-#include "view/canvaspreferencesmodel.h"
-#include "view/scorepreferencesmodel.h"
-#include "view/importpreferencesmodel.h"
 #include "view/startupmodel.h"
+#include "view/preferences/preferencesmodel.h"
+#include "view/preferences/generalpreferencesmodel.h"
+#include "view/preferences/updatepreferencesmodel.h"
+#include "view/preferences/appearancepreferencesmodel.h"
+#include "view/preferences/programmestartpreferencesmodel.h"
+#include "view/preferences/folderspreferencesmodel.h"
+#include "view/preferences/noteinputpreferencesmodel.h"
+#include "view/preferences/advancedpreferencesmodel.h"
+#include "view/preferences/canvaspreferencesmodel.h"
+#include "view/preferences/scorepreferencesmodel.h"
+#include "view/preferences/importpreferencesmodel.h"
+#include "view/preferences/iopreferencesmodel.h"
+#include "view/preferences/commonaudioapiconfigurationmodel.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;
@@ -119,6 +121,8 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<CanvasPreferencesModel>("MuseScore.Preferences", 1, 0, "CanvasPreferencesModel");
     qmlRegisterType<ScorePreferencesModel>("MuseScore.Preferences", 1, 0, "ScorePreferencesModel");
     qmlRegisterType<ImportPreferencesModel>("MuseScore.Preferences", 1, 0, "ImportPreferencesModel");
+    qmlRegisterType<IOPreferencesModel>("MuseScore.Preferences", 1, 0, "IOPreferencesModel");
+    qmlRegisterType<CommonAudioApiConfigurationModel>("MuseScore.Preferences", 1, 0, "CommonAudioApiConfigurationModel");
     qmlRegisterType<AppMenuModel>("MuseScore.AppShell", 1, 0, "AppMenuModel");
     qmlRegisterType<NotationPageModel>("MuseScore.AppShell", 1, 0, "NotationPageModel");
     qmlRegisterType<AboutModel>("MuseScore.AppShell", 1, 0, "AboutModel");
