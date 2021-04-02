@@ -33,13 +33,14 @@ using namespace mu;
 using namespace mu::framework;
 using namespace mu::languages;
 
+static const QString SYSTEM_LANGUAGE_CODE("system");
 static const std::string module_name("languages");
 static const Settings::Key LANGUAGES_JSON(module_name, "languages/languagesJson");
 static const Settings::Key LANGUAGE("ui", "ui/application/language");
 
 void LanguagesConfiguration::init()
 {
-    settings()->setDefaultValue(LANGUAGE, Val("system"));
+    settings()->setDefaultValue(LANGUAGE, Val(SYSTEM_LANGUAGE_CODE.toStdString()));
     settings()->valueChanged(LANGUAGE).onReceive(nullptr, [this](const Val& val) {
         m_currentLanguageCodeChanged.send(val.toQString());
     });
@@ -52,9 +53,15 @@ void LanguagesConfiguration::init()
 
 ValCh<QString> LanguagesConfiguration::currentLanguageCode() const
 {
+    QString languageCode = settings()->value(LANGUAGE).toQString();
+
+    if (languageCode == SYSTEM_LANGUAGE_CODE) {
+        languageCode = QLocale::system().name();
+    }
+
     ValCh<QString> result;
     result.ch = m_currentLanguageCodeChanged;
-    result.val = settings()->value(LANGUAGE).toQString();
+    result.val = languageCode;
 
     return result;
 }
