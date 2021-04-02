@@ -22,6 +22,7 @@ FlatButton {
 
         numerator: root.model.musicSymbolCodes(root.model.timeSignature.numerator)
         denominator: root.model.musicSymbolCodes(root.model.timeSignature.denominator)
+        type: root.model.timeSignatureType
     }
 
     onClicked: {
