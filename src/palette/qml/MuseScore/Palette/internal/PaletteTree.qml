@@ -713,7 +713,6 @@ ListView {
                         paletteRootIndex: control.modelIndex
                         paletteController: paletteTree.paletteController
                         selectionModel: paletteSelectionModel
-                        elementsBackgroundColor: paletteTree.paletteWorkspace.elementsBackgroundColor
 
                         showMoreButton: !filter.length
                         onMoreButtonClicked: control.togglePopup();
@@ -748,7 +747,6 @@ ListView {
                     paletteName: model.display
                     paletteIsCustom: model.custom
                     paletteEditingEnabled: model.editable
-                    elementsBackgroundColor: paletteTree.paletteWorkspace.elementsBackgroundColor
 
                     onVisibleChanged: {
                         // build pool model on first popup appearance
