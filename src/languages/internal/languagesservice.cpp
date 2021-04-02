@@ -195,11 +195,6 @@ ValCh<Language> LanguagesService::currentLanguage() const
     ValCh<QString> languageCode = configuration()->currentLanguageCode();
     result.ch = m_currentLanguageChanged;
 
-    if (languageCode.val == DEFAULT_LANGUAGE) {
-        result.val.code = QLocale::system().name();
-        return result;
-    }
-
     LanguagesHash languageHash = languages().val;
     if (!languageHash.contains(languageCode.val)) {
         return result;
