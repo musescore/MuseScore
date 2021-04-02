@@ -16,47 +16,27 @@ Column {
     Column {
         spacing: 12
 
-        Row {
-            spacing: 12
+        ComboBoxWithTitle {
+            title: qsTrc("appshell", "Guitar Pro import character set:")
+            titleWidth: 220
 
-            StyledTextLabel {
-                width: 208
-                anchors.verticalCenter: parent.verticalCenter
-                text: qsTrc("appshell", "Guitar Pro import character set:")
-                horizontalAlignment: Text.AlignLeft
-            }
+            currentIndex: control.indexOfValue(preferencesModel.currentGuitarProCharset)
+            model: preferencesModel.charsets()
 
-            StyledComboBox {
-                implicitWidth: 208
-
-                currentIndex: indexOfValue(preferencesModel.currentGuitarProCharset)
-                model: preferencesModel.charsets()
-
-                onValueChanged: {
-                    preferencesModel.currentGuitarProCharset = value
-                }
+            onValueEdited: {
+                preferencesModel.currentGuitarProCharset = newValue
             }
         }
 
-        Row {
-            spacing: 12
+        ComboBoxWithTitle {
+            title: qsTrc("appshell", "Overture import character set:")
+            titleWidth: 220
 
-            StyledTextLabel {
-                width: 208
-                anchors.verticalCenter: parent.verticalCenter
-                text: qsTrc("appshell", "Overture import character set:")
-                horizontalAlignment: Text.AlignLeft
-            }
+            currentIndex: control.indexOfValue(preferencesModel.currentOvertuneCharset)
+            model: preferencesModel.charsets()
 
-            StyledComboBox {
-                implicitWidth: 208
-
-                currentIndex: indexOfValue(preferencesModel.currentOvertuneCharset)
-                model: preferencesModel.charsets()
-
-                onValueChanged: {
-                    preferencesModel.currentOvertuneCharset = value
-                }
+            onValueEdited: {
+                preferencesModel.currentOvertuneCharset = newValue
             }
         }
     }

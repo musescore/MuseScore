@@ -1,5 +1,4 @@
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 
@@ -23,53 +22,28 @@ Column {
         font: ui.theme.bodyBoldFont
     }
 
-    GridLayout {
-        rows: 2
-        columns: 2
+    Column {
+        spacing: 8
 
-        rowSpacing: 8
-        columnSpacing: 0
-
-        Item {
-            width: root.firstColumnWidth
-            height: childrenRect.height
-
-            StyledTextLabel {
-                horizontalAlignment: Qt.AlignLeft
-                text: qsTrc("appshell", "Font face:")
-            }
-        }
-
-        StyledComboBox {
+        ComboBoxWithTitle {
             id: selectFontControl
 
-            implicitWidth: 208
+            title: qsTrc("appshell", "Font face:")
+            titleWidth: root.firstColumnWidth
 
-            onActivated: {
-                root.fontChangeRequested(index)
+            onValueEdited: {
+                root.fontChangeRequested(currentIndex)
             }
         }
 
-        Item {
-            width: root.firstColumnWidth
-            height: childrenRect.height
-
-            StyledTextLabel {
-                horizontalAlignment: Qt.AlignLeft
-                text: qsTrc("appshell", "Body text size:")
-            }
-        }
-
-        IncrementalPropertyControl {
+        IncrementalPropertyControlWithTitle {
             id: bodyTextSizeControl
 
-            implicitWidth: 112
+            title: qsTrc("appshell", "Body text size:")
+            titleWidth: root.firstColumnWidth
 
             minValue: 8
             maxValue: 24
-            decimals: 0
-            step: 1
-
             measureUnitsSymbol: qsTrc("appshell", "pt")
 
             onValueEdited: {

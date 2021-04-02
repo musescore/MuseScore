@@ -46,38 +46,42 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationpagestate.h
     ${CMAKE_CURRENT_LIST_DIR}/view/devtools/settingslistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/devtools/settingslistmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferencepageitem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferencepageitem.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/folderspreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/folderspreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/canvaspreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/canvaspreferencesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/aboutmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/aboutmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/generalpreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/generalpreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/updatepreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/updatepreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/appearancepreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/appearancepreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/programmestartpreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/programmestartpreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/noteinputpreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/noteinputpreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/advancedpreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/advancedpreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/scorepreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/scorepreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/importpreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/importpreferencesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/startupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/startupmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/preferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/preferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/preferencepageitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/preferencepageitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/folderspreferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/folderspreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/canvaspreferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/canvaspreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/generalpreferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/generalpreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/updatepreferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/updatepreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/appearancepreferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/appearancepreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/programmestartpreferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/programmestartpreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/noteinputpreferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/noteinputpreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/advancedpreferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/advancedpreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/scorepreferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/scorepreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/importpreferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/importpreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/iopreferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/iopreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/commonaudioapiconfigurationmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/commonaudioapiconfigurationmodel.h
     ${DOCKWINDOW_SRC}
     )
 
