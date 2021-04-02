@@ -33,9 +33,9 @@
 namespace mu::ui {
 using ThemeCode = std::string;
 
-static ThemeCode DARK_THEME_CODE("dark");
-static ThemeCode LIGHT_THEME_CODE("light");
-static ThemeCode HIGH_CONTRAST_THEME_CODE("high_contrast");
+static const ThemeCode DARK_THEME_CODE("dark");
+static const ThemeCode LIGHT_THEME_CODE("light");
+static const ThemeCode HIGH_CONTRAST_THEME_CODE("high_contrast");
 
 inline std::vector<ThemeCode> allStandardThemeCodes()
 {
