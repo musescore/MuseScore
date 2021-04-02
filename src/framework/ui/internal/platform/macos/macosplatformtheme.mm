@@ -18,51 +18,101 @@
 //=============================================================================
 
 #include "macosplatformtheme.h"
+#include "log.h"
 
 #include <Cocoa/Cocoa.h>
+#include <QWidget>
 
 using namespace mu::ui;
 using namespace mu::async;
 
-id<NSObject> darkModeObserverToken;
+id<NSObject> darkModeObserverToken = nil;
+id<NSObject> contrastObserverToken = nil;
 
 void MacOSPlatformTheme::startListening()
 {
-    NSDistributedNotificationCenter* n = [NSDistributedNotificationCenter defaultCenter];
-    darkModeObserverToken = [n addObserverForName:@"AppleInterfaceThemeChangedNotification"
-                                           object:nil
-                                            queue:nil
-                                       usingBlock:^(NSNotification*) { m_darkModeSwitched.send(isDarkMode()); }];
+    if (!darkModeObserverToken) {
+        darkModeObserverToken = [[NSDistributedNotificationCenter defaultCenter]
+                                 addObserverForName:@"AppleInterfaceThemeChangedNotification"
+                                 object:nil
+                                 queue:nil
+                                 usingBlock:^(NSNotification*) {
+            m_channel.send(themeCode());
+        }];
+    }
+
+    if (!contrastObserverToken) {
+        contrastObserverToken = [[[NSWorkspace sharedWorkspace] notificationCenter]
+                                 addObserverForName:NSWorkspaceAccessibilityDisplayOptionsDidChangeNotification
+                                 object:nil
+                                 queue:nil
+                                 usingBlock:^(NSNotification*) {
+            m_channel.send(themeCode());
+        }];
+    }
 }
 
 void MacOSPlatformTheme::stopListening()
 {
-    NSDistributedNotificationCenter* n = [NSDistributedNotificationCenter defaultCenter];
-    [n removeObserver:darkModeObserverToken];
+    if (darkModeObserverToken) {
+        [[NSDistributedNotificationCenter defaultCenter] removeObserver:darkModeObserverToken];
+        darkModeObserverToken = nil;
+    }
+
+    if (contrastObserverToken) {
+        [[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:contrastObserverToken];
+        contrastObserverToken = nil;
+    }
 }
 
 bool MacOSPlatformTheme::isFollowSystemThemeAvailable() const
 {
+    // Supported from macOS 10.14, which is our minimum supported version
     return true;
 }
 
-bool MacOSPlatformTheme::isDarkMode() const
+ThemeCode MacOSPlatformTheme::themeCode() const
+{
+    if (isSystemDarkMode()) {
+        if (isSystemHighContrast()) {
+            return HIGH_CONTRAST_THEME_CODE;
+        }
+        return DARK_THEME_CODE;
+    }
+    //! NOTE When system is in light mode, don't automatically use
+    //! high contrast theme, because it is too dark.
+    //! Light high contrast theme would be nice.
+    return LIGHT_THEME_CODE;
+}
+
+Channel<ThemeCode> MacOSPlatformTheme::themeCodeChanged() const
+{
+    return m_channel;
+}
+
+bool MacOSPlatformTheme::isSystemDarkMode() const
 {
     NSString* systemMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
-    return ([systemMode isEqualToString:@"Dark"]);
+    return [systemMode isEqualToString:@"Dark"];
 }
 
-Channel<bool> MacOSPlatformTheme::darkModeSwitched() const
+bool MacOSPlatformTheme::isSystemHighContrast() const
 {
-    return m_darkModeSwitched;
+    return [[NSWorkspace sharedWorkspace] accessibilityDisplayShouldIncreaseContrast];
 }
 
-void MacOSPlatformTheme::setAppThemeDark(bool dark)
+void MacOSPlatformTheme::applyPlatformStyleOnAppForTheme(ThemeCode themeCode)
 {
-    [NSApp setAppearance:[NSAppearance appearanceNamed:dark ? NSAppearanceNameDarkAqua : NSAppearanceNameAqua]];
+    // The system will turn these appearance names into their high contrast
+    // counterparts automatically if system high contrast is enabled
+    if (themeCode == LIGHT_THEME_CODE) {
+        [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]];
+    } else {
+        [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua]];
+    }
 }
 
-void MacOSPlatformTheme::applyPlatformStyle(QWidget* widget)
+void MacOSPlatformTheme::applyPlatformStyleOnWindowForTheme(QWidget* widget, ThemeCode)
 {
     QColor backgroundColor = widget->palette().window().color();
     NSView* nsView = (__bridge NSView*)reinterpret_cast<void*>(widget->winId());

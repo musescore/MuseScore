@@ -35,20 +35,20 @@ bool StubPlatformTheme::isFollowSystemThemeAvailable() const
     return false;
 }
 
-bool StubPlatformTheme::isDarkMode() const
+ThemeCode StubPlatformTheme::themeCode() const
 {
-    return false;
+    return LIGHT_THEME_CODE;
 }
 
-Channel<bool> StubPlatformTheme::darkModeSwitched() const
+Channel<ThemeCode> StubPlatformTheme::themeCodeChanged() const
 {
-    return m_darkModeSwitched;
+    return m_channel;
 }
 
-void StubPlatformTheme::setAppThemeDark(bool)
+void StubPlatformTheme::applyPlatformStyleOnAppForTheme(ThemeCode)
 {
 }
 
-void StubPlatformTheme::applyPlatformStyle(QWidget*)
+void StubPlatformTheme::applyPlatformStyleOnWindowForTheme(QWidget*, ThemeCode)
 {
 }

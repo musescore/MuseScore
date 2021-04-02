@@ -22,8 +22,9 @@
 
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"
+#include "uitypes.h"
 
-#include <QWidget>
+class QWidget;
 
 namespace mu::ui {
 class IPlatformTheme : MODULE_EXPORT_INTERFACE
@@ -38,14 +39,11 @@ public:
 
     virtual bool isFollowSystemThemeAvailable() const = 0;
 
-    virtual bool isDarkMode() const = 0;
-    virtual async::Channel<bool> darkModeSwitched() const = 0;
+    virtual ThemeCode themeCode() const = 0;
+    virtual async::Channel<ThemeCode> themeCodeChanged() const = 0;
 
-    /// Performs platform-specific styling of the application.
-    virtual void setAppThemeDark(bool isDark) = 0;
-
-    /// Performs platform-specific styling of the window.
-    virtual void applyPlatformStyle(QWidget* window) = 0;
+    virtual void applyPlatformStyleOnAppForTheme(ThemeCode themeCode) = 0;
+    virtual void applyPlatformStyleOnWindowForTheme(QWidget* window, ThemeCode themeCode) = 0;
 };
 }
 
