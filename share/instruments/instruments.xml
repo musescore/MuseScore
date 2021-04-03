@@ -5852,7 +5852,7 @@
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Snare Drum 2</name>
+                        <name>Electric Snare</name>
                         <stem>2</stem>
                         <shortcut>B</shortcut>
                   </Drum>
@@ -5908,42 +5908,42 @@
                         <head>normal</head>
                         <line>6</line>
                         <voice>0</voice>
-                        <name>Low Tom 2</name>
+                        <name>Low Floor Tom</name>
                         <stem>1</stem>
                   </Drum>
                   <Drum pitch="43"> <!--Low Tom 1-->
                         <head>normal</head>
                         <line>5</line>
                         <voice>0</voice>
-                        <name>Low Tom 1</name>
+                        <name>High Floor Tom</name>
                         <stem>1</stem>
                   </Drum>
                   <Drum pitch="45"> <!--Mid Tom 2-->
                         <head>normal</head>
                         <line>4</line>
                         <voice>0</voice>
-                        <name>Mid Tom 2</name>
+                        <name>Low Tom</name>
                         <stem>1</stem>
                   </Drum>
                   <Drum pitch="47"> <!--Mid Tom 1-->
                         <head>normal</head>
                         <line>2</line>
                         <voice>0</voice>
-                        <name>Mid Tom 1</name>
+                        <name>Low-Mid Tom</name>
                         <stem>1</stem>
                   </Drum>
                   <Drum pitch="48"> <!--High Tom 2-->
                         <head>normal</head>
                         <line>1</line>
                         <voice>0</voice>
-                        <name>High Tom 2</name>
+                        <name>Hi-Mid Tom</name>
                         <stem>1</stem>
                   </Drum>
                   <Drum pitch="50"> <!--High Tom 1-->
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>High Tom 1</name>
+                        <name>High Tom</name>
                         <stem>1</stem>
                   </Drum>
                   <Channel>
@@ -5994,7 +5994,7 @@
                         <head>normal</head>
                         <line>-1</line>
                         <voice>0</voice>
-                        <name>High Bongo</name>
+                        <name>Hi Bongo</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -6032,7 +6032,7 @@
                         <head>cross</head>
                         <line>-1</line>
                         <voice>0</voice>
-                        <name>Mute High Conga</name>
+                        <name>Mute Hi Conga</name>
                         <stem>1</stem>
                         <shortcut>B</shortcut>
                   </Drum>
@@ -6040,7 +6040,7 @@
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>High Conga</name>
+                        <name>Open Hi Conga</name>
                         <stem>1</stem>
                         <shortcut>C</shortcut>
                   </Drum>
@@ -6112,7 +6112,7 @@
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>MiTom 2</name>
+                        <name>Low Tom</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -6136,7 +6136,7 @@
                         <head>normal</head>
                         <line>-1</line>
                         <voice>0</voice>
-                        <name>Mute High Conga</name>
+                        <name>Mute Hi Conga</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -6315,7 +6315,7 @@
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Cabasa</name>
+                        <name>Sleigh Bell</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -6340,7 +6340,7 @@
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Vibra Slap</name>
+                        <name>Vibraslap</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -6554,7 +6554,7 @@
                         <head>normal</head>
                         <line>-1</line>
                         <voice>0</voice>
-                        <name>High Wood Block</name>
+                        <name>Hi Wood Block</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -6591,7 +6591,7 @@
                         <head>normal</head>
                         <line>-1</line>
                         <voice>0</voice>
-                        <name>High Wood Block</name>
+                        <name>Hi Wood Block</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -6984,7 +6984,7 @@
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Vibra Slap</name>
+                        <name>Vibraslap</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -7034,7 +7034,7 @@
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>High Wood Block</name>
+                        <name>Hi Wood Block</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -7335,14 +7335,14 @@
                         <head>cross</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Ride</name>
+                        <name>Ride Cymbal 1</name>
                         <stem>1</stem>
                   </Drum>
                   <Drum pitch="36">
                         <head>normal</head>
                         <line>7</line>
                         <voice>1</voice>
-                        <name>Concert Bass Drum</name>
+                        <name>Bass Drum 1</name>
                         <stem>2</stem>
                         <shortcut>B</shortcut>
                   </Drum>
@@ -7350,14 +7350,14 @@
                         <head>cross</head>
                         <line>3</line>
                         <voice>0</voice>
-                        <name>Snare Side Stick</name>
+                        <name>Side Stick</name>
                         <stem>1</stem>
                   </Drum>
                   <Drum pitch="38">
                         <head>normal</head>
                         <line>3</line>
                         <voice>0</voice>
-                        <name>Concert Snare Drum</name>
+                        <name>Acoustic Snare</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -7365,7 +7365,7 @@
                         <head>normal</head>
                         <line>1</line>
                         <voice>0</voice>
-                        <name>Castanets</name>
+                        <name>Hand Clap</name>
                         <stem>1</stem>
                   </Drum>
                   <Drum pitch="54">
@@ -7400,7 +7400,7 @@
                         <head>cross</head>
                         <line>-2</line>
                         <voice>0</voice>
-                        <name>Concert Cymbal</name>
+                        <name>Ride Cymbal 2</name>
                         <stem>1</stem>
                         <shortcut>C</shortcut>
                   </Drum>
@@ -7408,14 +7408,14 @@
                         <head>cross</head>
                         <line>2</line>
                         <voice>0</voice>
-                        <name>Mute High Conga </name>
+                        <name>Mute Hi Conga</name>
                         <stem>1</stem>
                   </Drum>
                   <Drum pitch="63">
                         <head>cross</head>
                         <line>4</line>
                         <voice>0</voice>
-                        <name>Open High Conga</name>
+                        <name>Open Hi Conga</name>
                         <stem>1</stem>
                   </Drum>
                   <Drum pitch="64">
@@ -7459,6 +7459,13 @@
                         <line>2</line>
                         <voice>0</voice>
                         <name>Mark Tree</name>
+                        <stem>1</stem>
+                  </Drum>
+                  <Drum pitch="85">
+                        <head>normal</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Castanets</name>
                         <stem>1</stem>
                   </Drum>
                   <Channel>
@@ -7543,7 +7550,7 @@
                         <head>cross</head>
                         <line>1</line>
                         <voice>2</voice>
-                        <name>Ride Cymbal</name>
+                        <name>Ride Cymbal 1</name>
                   </Drum>
                   <Drum pitch="74">
                         <head>xcircle</head>
@@ -8069,11 +8076,11 @@
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
                   <singleNoteDynamics>0</singleNoteDynamics>
-                  <Drum pitch="41">
+                  <Drum pitch="28">
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Low Tom 2</name>
+                        <name>Slap</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -8100,7 +8107,7 @@
                         <head>normal</head>
                         <line>0</line>
                         <voice>0</voice>
-                        <name>Bass Drum 2</name>
+                        <name>Acoustic Bass Drum</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
@@ -9781,7 +9788,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <longName>Percussion Synthesizer</longName>
                   <shortName>Perc. Syn.</shortName>
                   <description>Percussion Synthesizer</description>
-                  <musicXMLid>drum.tom-tom.synth</musicXMLid>
+                  <musicXMLid>drum.snare-drum.electric</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
@@ -9790,7 +9797,7 @@ Aeolus organ synthesizer, currently disabled -->
                         <head>normal</head>
                         <line>4</line>
                         <voice>0</voice>
-                        <name>Snare Drum 2</name>
+                        <name>Electric Snare</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
