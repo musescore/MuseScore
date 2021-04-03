@@ -1028,7 +1028,7 @@
     </SC>
   <SC>
     <key>add-parentheses</key>
-    <seq>(</seq>
+    <seq>)</seq>
     </SC>
   <SC>
     <key>toggle-mmrest</key>
