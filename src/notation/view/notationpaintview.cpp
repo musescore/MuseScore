@@ -33,6 +33,9 @@ static constexpr qreal MAX_SCROLL_SIZE = 1.0;
 
 static constexpr qreal CANVAS_SIDE_MARGIN = 8000;
 
+static constexpr qreal SCROLL_LIMIT_OFF_OFFSET = 0.75;
+static constexpr qreal SCROLL_LIMIT_ON_OFFSET = 0.02;
+
 NotationPaintView::NotationPaintView(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
@@ -393,20 +396,29 @@ std::pair<int, int> NotationPaintView::constraintCanvas(int dx, int dy) const
     QRectF viewport = this->viewport();
 
     QPoint canvasCenter = this->canvasCenter();
-    if (contentRect.width() <= viewport.width()) {
-        dx = canvasCenter.x();
-    } else if (viewport.left() - dx < contentRect.left()) {
-        dx = viewport.left() - contentRect.left();
-    } else if (viewport.right() - dx > contentRect.right()) {
-        dx = viewport.right() - contentRect.right();
+
+    bool isScrollLimited = configuration()->isLimitCanvasScrollArea();
+
+    int offsetX = viewport.width() * SCROLL_LIMIT_OFF_OFFSET;
+    int offsetY = viewport.height() * SCROLL_LIMIT_OFF_OFFSET;
+    if (isScrollLimited) {
+        offsetX = offsetY = viewport.width() * SCROLL_LIMIT_ON_OFFSET;
     }
 
-    if (contentRect.height() <= viewport.height()) {
+    if (contentRect.width() <= viewport.width() && isScrollLimited) {
+        dx = canvasCenter.x();
+    } else if (viewport.left() - dx < contentRect.left() - offsetX) {
+        dx = viewport.left() - contentRect.left() + offsetX;
+    } else if (viewport.right() - dx > contentRect.right() + offsetX) {
+        dx = viewport.right() - contentRect.right() - offsetX;
+    }
+
+    if (contentRect.height() <= viewport.height() && isScrollLimited) {
         dy = canvasCenter.y();
-    } else if (viewport.top() - dy < contentRect.top()) {
-        dy = viewport.top() - contentRect.top();
-    } else if (viewport.bottom() - dy > contentRect.bottom()) {
-        dy = viewport.bottom() - contentRect.bottom();
+    } else if (viewport.top() - dy < contentRect.top() - offsetY) {
+        dy = viewport.top() - contentRect.top() + offsetY;
+    } else if (viewport.bottom() - dy > contentRect.bottom() + offsetY) {
+        dy = viewport.bottom() - contentRect.bottom() - offsetY;
     }
 
     return { dx, dy };
@@ -567,11 +579,9 @@ void NotationPaintView::moveCanvas(int dx, int dy)
         return;
     }
 
-    if (configuration()->isLimitCanvasScrollArea()) {
-        std::pair<int, int> corrected = constraintCanvas(dx, dy);
-        dx = corrected.first;
-        dy = corrected.second;
-    }
+    std::pair<int, int> corrected = constraintCanvas(dx, dy);
+    dx = corrected.first;
+    dy = corrected.second;
 
     m_matrix.translate(dx, dy);
     update();
