@@ -25,7 +25,17 @@ namespace mu::instruments {
 class InstrumentsConfigurationStub : public IInstrumentsConfiguration
 {
 public:
-    io::paths instrumentPaths() const override;
+    io::paths instrumentListPaths() const override;
+    async::Notification instrumentListPathsChanged() const override;
+
+    io::paths userInstrumentListPaths() const override;
+    void setUserInstrumentListPaths(const io::paths& paths) override;
+
+    io::paths scoreOrderListPaths() const override;
+    async::Notification scoreOrderListPathsChanged() const override;
+
+    io::paths userScoreOrderListPaths() const override;
+    void setUserScoreOrderListPaths(const io::paths& paths) override;
 };
 }
 
