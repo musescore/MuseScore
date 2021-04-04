@@ -52,14 +52,9 @@ QVariant NoteheadTypesModel::data(const QModelIndex& index, int role) const
 
 void NoteheadTypesModel::init(const Ms::NoteHead::Group noteHeadGroup)
 {
-    emit layoutAboutToBeChanged();
-
+    load();
     m_selectedHeadTypeIndex = indexOfHeadGroup(noteHeadGroup);
     emit selectedHeadTypeIndexChanged(m_selectedHeadTypeIndex);
-
-    load();
-
-    emit layoutChanged();
 }
 
 int NoteheadTypesModel::selectedHeadTypeIndex() const
@@ -76,7 +71,7 @@ void NoteheadTypesModel::setSelectedHeadTypeIndex(int selectedHeadTypeIndex)
     m_selectedHeadTypeIndex = selectedHeadTypeIndex;
     emit selectedHeadTypeIndexChanged(m_selectedHeadTypeIndex);
 
-    emit noteHeadGroupSelected(static_cast<int>(m_noteheadTypeDataList.at(selectedHeadTypeIndex).group));
+    emit noteHeadGroupSelected(selectedHeadTypeIndex);
 }
 
 int NoteheadTypesModel::indexOfHeadGroup(const Ms::NoteHead::Group group) const
