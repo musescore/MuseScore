@@ -82,6 +82,7 @@ FocusableItem {
                     property var contentHeight: implicitHeight
 
                     function viewBySectionType() {
+                        flickableArea.contentY = 0
 
                         switch (inspectorData.sectionType) {
                         case Inspector.SECTION_GENERAL: return generalInspector
