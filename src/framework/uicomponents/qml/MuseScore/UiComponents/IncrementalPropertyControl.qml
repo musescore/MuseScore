@@ -26,6 +26,37 @@ Item {
     implicitHeight: 30
     implicitWidth: parent.width
 
+    function increment() {
+        var value = root.isIndeterminate ? 0.0 : currentValue
+        var newValue = value + step
+
+        if (newValue > root.maxValue)
+            return
+
+        root.valueEdited(+newValue.toFixed(decimals))
+    }
+
+    function decrement() {
+        var value = root.isIndeterminate ? 0.0 : currentValue
+        var newValue = value - step
+
+        if (newValue < root.minValue)
+            return
+
+        root.valueEdited(+newValue.toFixed(decimals))
+    }
+
+    Keys.onPressed: {
+        switch (event.key) {
+        case Qt.Key_Up:
+            increment()
+            break
+        case Qt.Key_Down:
+            decrement()
+            break
+        }
+    }
+
     QtObject {
         id: _iconModeEnum
 
@@ -83,25 +114,9 @@ Item {
 
             icon: IconCode.SMALL_ARROW_DOWN
 
-            onIncreaseButtonClicked: {
-                var value = root.isIndeterminate ? 0.0 : currentValue
-                var newValue = value + step
+            onIncreaseButtonClicked: increment()
 
-                if (newValue > root.maxValue)
-                    return
-
-                root.valueEdited(+newValue.toFixed(decimals))
-            }
-
-            onDecreaseButtonClicked: {
-                var value = root.isIndeterminate ? 0.0 : currentValue
-                var newValue = value - step
-
-                if (newValue < root.minValue)
-                    return
-
-                root.valueEdited(+newValue.toFixed(decimals))
-            }
+            onDecreaseButtonClicked: decrement()
         }
 
         onCurrentTextEdited: {
