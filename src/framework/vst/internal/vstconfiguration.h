@@ -27,8 +27,6 @@ class VstConfiguration : public IVstConfiguration
 {
 public:
     io::path customSearchPath() const override;
-
-    Steinberg::FIDString currentPlatformType() const;
 };
 }
 

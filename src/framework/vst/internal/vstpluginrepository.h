@@ -41,7 +41,7 @@ public:
     VstPluginRepository() = default;
 
     Ret loadAvailablePlugins() override;
-    RetVal<VstPluginPtr> findPluginById(const std::string& id) const override;
+    RetVal<VstPluginPtr> findPluginById(const PluginId& id) const override;
     RetValCh<VstPluginMetaList> pluginsMetaList() const override;
 
 private:
@@ -52,7 +52,7 @@ private:
 
     VstPluginMetaList availablePluginsMetaList() const;
 
-    std::unordered_map<std::string, VstPluginPtr> m_pluginsMap;
+    std::unordered_map<PluginId, VstPluginPtr> m_pluginsMap;
 
     async::Channel<VstPluginMetaList> m_pluginMetaListChannel;
 };

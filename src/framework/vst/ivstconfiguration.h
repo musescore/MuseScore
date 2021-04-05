@@ -34,7 +34,6 @@ public:
     virtual ~IVstConfiguration() = default;
 
     virtual mu::io::path customSearchPath() const = 0;
-    virtual Steinberg::FIDString currentPlatformType() const = 0;
 };
 }
 

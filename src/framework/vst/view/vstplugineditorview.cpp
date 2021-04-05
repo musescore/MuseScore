@@ -80,14 +80,14 @@ void VstPluginEditorView::wrapPluginView(const QString& pluginId)
 
     m_view = plugin.val->view();
 
-    if (m_view->isPlatformTypeSupported(configuration()->currentPlatformType()) != Steinberg::kResultTrue) {
+    if (m_view->isPlatformTypeSupported(currentPlatformUiType()) != Steinberg::kResultTrue) {
         return;
     }
 
     m_view->setFrame(this);
 
     Steinberg::tresult attached;
-    attached = m_view->attached(reinterpret_cast<void*>(windowHandle()->winId()), configuration()->currentPlatformType());
+    attached = m_view->attached(reinterpret_cast<void*>(windowHandle()->winId()), currentPlatformUiType());
     if (attached != kResultOk) {
         return;
     }
@@ -95,4 +95,17 @@ void VstPluginEditorView::wrapPluginView(const QString& pluginId)
     ViewRect size;
     m_view->getSize(&size);
     resizeView(m_view, &size);
+}
+
+FIDString VstPluginEditorView::currentPlatformUiType() const
+{
+#ifdef Q_OS_MAC
+    return Steinberg::kPlatformTypeNSView;
+#elif defined(Q_OS_IOS)
+    return Steinberg::kPlatformTypeUIView;
+#elif defined(Q_OS_WIN)
+    return Steinberg::kPlatformTypeHWND;
+#else
+    return Steinberg::kPlatformTypeX11EmbedWindowID;
+#endif
 }

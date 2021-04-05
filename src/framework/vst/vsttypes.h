@@ -32,6 +32,7 @@ class VstPlugin;
 using VstPluginPtr = std::shared_ptr<VstPlugin>;
 using ClassInfo = VST3::Hosting::ClassInfo;
 
+using PluginId = std::string;
 using PluginModulePtr = VST3::Hosting::Module::Ptr;
 using PluginModule = VST3::Hosting::Module;
 using PluginFactory = VST3::Hosting::PluginFactory;
@@ -45,7 +46,7 @@ using FIDString = Steinberg::FIDString;
 namespace PluginEditorViewType = Steinberg::Vst::ViewType;
 
 struct VstPluginMeta {
-    std::string id;
+    PluginId id;
     std::string name;
     std::string path;
 };
