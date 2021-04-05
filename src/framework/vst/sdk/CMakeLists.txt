@@ -24,11 +24,12 @@ if (NOT VST3_SDK_PATH)
 endif()
 
 include(GetPlatformInfo)
+include(GetBuildType)
 
-if (MUSESCORE_BUILD_CONFIG EQUAL "release")
-    set(MODULE_DEF -DRELEASE)
-else()
+if (BUILD_IS_DEBUG)
     set(MODULE_DEF -DDEVELOPMENT)
+else()
+    set(MODULE_DEF -DRELEASE)
 endif()
 
 set(MODULE_USE_UNITY_NONE ON)
