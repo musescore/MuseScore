@@ -20,6 +20,8 @@
 #ifndef MU_VST_VSTPLUGIN_H
 #define MU_VST_VSTPLUGIN_H
 
+#include "io/path.h"
+
 #include "vsttypes.h"
 #include "vsterrors.h"
 
@@ -29,9 +31,9 @@ class VstPlugin
 public:
 
     VstPlugin();
-    Ret load(const std::string& pluginPath);
+    Ret load(const io::path& pluginPath);
 
-    std::string id() const;
+    PluginId id() const;
     VstPluginMeta meta() const;
     PluginView view();
 

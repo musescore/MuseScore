@@ -24,7 +24,6 @@
 #include <QWidget>
 
 #include "ivstpluginrepository.h"
-#include "ivstconfiguration.h"
 #include "modularity/ioc.h"
 
 namespace mu::vst {
@@ -35,7 +34,6 @@ class VstPluginEditorView : public QDialog, public Steinberg::IPlugFrame
     Q_PROPERTY(QString pluginId READ pluginId WRITE setPluginId NOTIFY pluginIdChanged)
 
     INJECT(vst, IVstPluginRepository, repository)
-    INJECT(vst, IVstConfiguration, configuration)
 
     DECLARE_FUNKNOWN_METHODS
 public:
@@ -54,6 +52,8 @@ signals:
 
 private:
     void wrapPluginView(const QString& pluginId);
+
+    FIDString currentPlatformUiType() const;
 
     PluginView m_view = nullptr;
     QString m_pluginId;

@@ -29,13 +29,13 @@ VstPlugin::VstPlugin()
 {
 }
 
-Ret VstPlugin::load(const std::string& pluginPath)
+Ret VstPlugin::load(const io::path& pluginPath)
 {
     PluginContextFactory::instance().setPluginContext(&m_pluginContext);
 
     std::string errorString;
 
-    m_module = PluginModule::create(pluginPath, errorString);
+    m_module = PluginModule::create(pluginPath.toStdString(), errorString);
 
     if (!m_module) {
         LOGE() << errorString;
@@ -50,6 +50,8 @@ Ret VstPlugin::load(const std::string& pluginPath)
 
     for (const ClassInfo& classInfo : m_factory.classInfos()) {
         if (classInfo.category() != kVstAudioEffectClass) {
+            LOGI() << "Non-audio plugins are not supported, plugin path: "
+                   << pluginPath;
             continue;
         }
 
@@ -70,7 +72,7 @@ Ret VstPlugin::load(const std::string& pluginPath)
     return Ret(true);
 }
 
-std::string VstPlugin::id() const
+PluginId VstPlugin::id() const
 {
     if (!m_pluginProvider) {
         return "";

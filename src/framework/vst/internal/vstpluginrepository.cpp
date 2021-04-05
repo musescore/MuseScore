@@ -54,7 +54,7 @@ Ret VstPluginRepository::loadAvailablePlugins()
     return result;
 }
 
-RetVal<VstPluginPtr> VstPluginRepository::findPluginById(const std::string& id) const
+RetVal<VstPluginPtr> VstPluginRepository::findPluginById(const PluginId& id) const
 {
     RetVal<VstPluginPtr> result;
     result.ret = make_ret(Ret::Code::Ok);

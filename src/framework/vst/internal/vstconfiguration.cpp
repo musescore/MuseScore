@@ -29,16 +29,3 @@ mu::io::path VstConfiguration::customSearchPath() const
 {
     return mu::io::path(settings()->value(CUSTOM_SEARCH_PATH_KEY).toString());
 }
-
-Steinberg::FIDString VstConfiguration::currentPlatformType() const
-{
-#ifdef Q_OS_MAC
-    return Steinberg::kPlatformTypeNSView;
-#elif defined(Q_OS_IOS)
-    return Steinberg::kPlatformTypeUIView;
-#elif defined(Q_OS_WIN)
-    return Steinberg::kPlatformTypeHWND;
-#elif defined(Q_OS_LINUX)
-    return Steinberg::kPlatformTypeX11EmbedWindowID;
-#endif
-}
