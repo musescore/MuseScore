@@ -89,7 +89,7 @@ unsigned int AudioConfiguration::driverBufferSize() const
 std::vector<io::path> AudioConfiguration::soundFontPaths() const
 {
     std::string pathsStr = settings()->value(USER_SOUNDFONTS_PATH).toString();
-    std::vector<io::path> paths = io::path::pathsFromString(pathsStr, ";");
+    std::vector<io::path> paths = io::pathsFromString(pathsStr, ";");
     paths.push_back(globalConfiguration()->sharePath());
 
     //! TODO Implement me
