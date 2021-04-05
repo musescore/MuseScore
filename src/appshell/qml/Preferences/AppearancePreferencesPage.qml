@@ -87,7 +87,7 @@ PreferencesPage {
             }
 
             onWallpaperPathChangeRequested: {
-                appearanceModel.backgroundWallpaperPath = wallpaperPath
+                appearanceModel.backgroundWallpaperPath = newWallpaperPath
             }
         }
 
