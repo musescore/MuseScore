@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
 
@@ -13,16 +13,13 @@ Item {
     property int cellWidth: 0
     property int cellHeight: 0
 
-    property int sectionWidth: 0
-    property int sectionHeight: 0
-
     property int rows: 0
     property int rowSpacing: 2
     property int columns: 0
     property int columnSpacing: 2
 
-    width: gridView.width
-    height: gridView.height
+    width: gridView.columns * gridView.cellWidth - root.columnSpacing
+    height: gridView.rows * gridView.cellHeight - root.rowSpacing
 
     SortFilterProxyModel {
         id: filterModel
@@ -41,14 +38,30 @@ Item {
     GridView {
         id: gridView
 
-        property int columns: root.columns !== -1 ? root.columns : gridView.count
-        property int rows: root.rows !== -1 ? root.rows : Math.ceil(gridView.count / gridView.columns)
+        readonly property int columns: {
+            if (root.columns === -1 && root.rows === -1) {
+                return gridView.count
+            }
 
-        width: gridView.columns * gridView.cellWidth
-        height: gridView.rows * gridView.cellHeight
+            return root.columns !== -1 ? root.columns : Math.ceil(gridView.count / gridView.rows)
+        }
 
-        cellWidth: root.cellWidth + root.columnSpacing * 2
-        cellHeight: root.cellHeight + root.rowSpacing * 2
+        readonly property int rows: {
+            if (root.columns === -1 && root.rows === -1) {
+                return 1
+            }
+
+            return root.rows !== -1 ? root.rows : Math.ceil(gridView.count / gridView.columns)
+        }
+
+        anchors.fill: parent
+        anchors.leftMargin: -root.columnSpacing / 2
+        anchors.rightMargin: anchors.leftMargin
+        anchors.topMargin: -root.rowSpacing / 2
+        anchors.bottomMargin: anchors.topMargin
+
+        cellWidth: root.cellWidth + root.columnSpacing
+        cellHeight: root.cellHeight + root.rowSpacing
 
         model: filterModel
 
@@ -68,10 +81,8 @@ Item {
                 property var itemModel: null
                 sourceComponent: root.itemDelegate
 
-                onStatusChanged: {
-                    if (status === Loader.Ready) {
-                        itemModel = Qt.binding( function() { return Boolean(model) ? model : null });
-                    }
+                onLoaded: {
+                    itemModel = Qt.binding( function() { return Boolean(model) ? model : null });
                 }
             }
         }

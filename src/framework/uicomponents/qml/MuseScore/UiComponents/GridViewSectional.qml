@@ -7,6 +7,7 @@ Item {
 
     property var model: null
     property int orientation: Qt.Horizontal
+    readonly property bool isHorizontal: orientation === Qt.Horizontal
 
     property Component sectionDelegate: Item {}
     property Component itemDelegate: Item {}
@@ -27,6 +28,9 @@ Item {
     QtObject {
         id: privateProperties
 
+        property int spacingBeforeSection: isHorizontal ? columnSpacing : rowSpacing
+        property int spacingAfterSection: spacingBeforeSection
+
         function modelSections() {
             var _sections = []
 
@@ -45,22 +49,25 @@ Item {
 
     Loader {
         anchors.fill: parent
-        sourceComponent: orientation === Qt.Horizontal ? horizontalView : verticalView
+        sourceComponent: isHorizontal ? horizontalView : verticalView
     }
 
     Component {
         id: horizontalView
 
         Row {
-            spacing: 0
+            spacing: privateProperties.spacingBeforeSection
 
             Repeater {
                 model: Boolean(root.model) ? privateProperties.modelSections() : []
 
                 Row {
-                    spacing: 0
+                    spacing: privateProperties.spacingAfterSection
+                    height: parent.height
 
                     GridViewSection {
+                        anchors.verticalCenter: parent.verticalCenter
+
                         width: root.sectionWidth
                         height: root.sectionHeight
 
@@ -78,9 +85,6 @@ Item {
                         cellWidth: root.cellWidth
                         cellHeight: root.cellHeight
 
-                        sectionWidth: root.sectionWidth
-                        sectionHeight: root.sectionHeight
-
                         rows: root.rows
                         rowSpacing: root.rowSpacing
                         columns: root.columns
@@ -95,17 +99,17 @@ Item {
         id: verticalView
 
         Column {
-            spacing: 0
+            spacing: privateProperties.spacingBeforeSection
 
             Repeater {
                 model: Boolean(root.model) ? privateProperties.modelSections() : []
 
                 Column {
-                    spacing: 0
+                    spacing: privateProperties.spacingAfterSection
+                    width: parent.width
 
                     GridViewSection {
-                        anchors.left: parent.left
-                        anchors.leftMargin: root.columnSpacing
+                        anchors.horizontalCenter: parent.horizontalCenter
 
                         width: root.sectionWidth
                         height: root.sectionHeight
@@ -123,9 +127,6 @@ Item {
 
                         cellWidth: root.cellWidth
                         cellHeight: root.cellHeight
-
-                        sectionWidth: root.sectionWidth
-                        sectionHeight: root.sectionHeight
 
                         rows: root.rows
                         rowSpacing: root.rowSpacing
