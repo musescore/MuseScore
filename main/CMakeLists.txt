@@ -514,7 +514,6 @@ if (APPLE)
       ../fonts/mscoreTab.ttf
       ../fonts/mscore-BC.ttf
       ../fonts/bravura/BravuraText.otf
-      ../fonts/leland/Leland.otf
       ../fonts/leland/LelandText.otf
       ../fonts/petaluma/PetalumaText.otf
       ../fonts/petaluma/PetalumaScript.otf
