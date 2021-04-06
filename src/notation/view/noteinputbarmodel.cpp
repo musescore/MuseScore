@@ -32,7 +32,7 @@ static const std::string TOOLBAR_TAG("Toolbar");
 static const std::string TOOLBAR_NAME("noteInput");
 
 static const std::string ADD_ACTION_CODE("add");
-static const QString ADD_ACTION_TITLE("Add");
+static const char* ADD_ACTION_TITLE("Add");
 static const IconCode::Code ADD_ACTION_ICON_CODE = IconCode::Code::PLUS;
 
 static const ActionCode TUPLET_ACTION_CODE("tuplet");

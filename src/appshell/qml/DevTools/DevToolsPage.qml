@@ -12,6 +12,7 @@ import "./Interactive"
 import "./NotationDialogs"
 import "./Telemetry"
 import "./VST"
+import "./KeyNav"
 
 DockPage {
     id: homePage
@@ -48,7 +49,8 @@ DockPage {
                         { "name": "midiports", "title": "MIDI ports" },
                         { "name": "vst", "title": "VST" },
                         { "name": "plugins", "title": "Plugins" },
-                        { "name": "autobot", "title": "Autobot" }
+                        { "name": "autobot", "title": "Autobot" },
+                        { "name": "keynav", "title": "KeyNav" }
                     ]
 
                     onSelected: {
@@ -79,6 +81,7 @@ DockPage {
             case "vst": currentComp = vstComponent; break
             case "plugins": currentComp = pluginsComp; break
             case "autobot": currentComp = autobotComp; break
+            case "keynav": currentComp = keynavComp; break
             }
         }
 
@@ -152,4 +155,10 @@ DockPage {
             source: "qrc:/qml/DevTools/Autobot/AutobotControl.qml"
         }
     }
+
+    Component {
+        id: keynavComp
+        KeyNavExample{}
+    }
+
 }

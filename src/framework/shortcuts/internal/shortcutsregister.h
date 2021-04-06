@@ -50,6 +50,7 @@ public:
     Ret saveToFile(const io::path& filePath) const override;
 
 private:
+
     bool readFromFile(ShortcutList& shortcuts, const io::path& path) const;
     Shortcut readShortcut(framework::XmlReader& reader) const;
 

@@ -147,7 +147,6 @@ MenuItem AppMenuModel::viewItem() const
         makeAction("toggle-timeline"), // need implement
         makeAction("toggle-mixer"), // need implement
         makeAction("synth-control"), // need implement
-        makeAction("toggle-selection-window"), // need implement
         makeAction("toggle-piano"), // need implement
         makeAction("toggle-scorecmp-tool"), // need implement
         makeSeparator(),

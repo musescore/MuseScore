@@ -153,7 +153,6 @@ const std::vector<std::pair<mu::actions::ActionCode, PanelType> > ApplicationUiA
     { "toggle-mixer", PanelType::Mixer },
     { "toggle-timeline", PanelType::TimeLine },
     { "synth-control", PanelType::Synthesizer },
-    { "toggle-selection-window", PanelType::SelectionFilter },
     { "toggle-piano", PanelType::Piano },
     { "toggle-scorecmp-tool", PanelType::ComparisonTool }
 };
