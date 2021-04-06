@@ -16,6 +16,7 @@ Rectangle {
 
             sectionName: "sect 2"
             sectionOrder: 2
+            subsecCount: 3
         }
 
         KeyNavSection {
@@ -25,6 +26,7 @@ Rectangle {
 
             sectionName: "sect 1"
             sectionOrder: 1
+            subsecCount: 1
         }
 
         KeyNavSection {
@@ -34,6 +36,7 @@ Rectangle {
 
             sectionName: "sect 3"
             sectionOrder: 3
+            subsecCount: 2
         }
 
         KeyNavSection {
@@ -43,6 +46,7 @@ Rectangle {
 
             sectionName: "sect 4"
             sectionOrder: 4
+            subsecCount: 4
         }
 
         KeyNavSection {
@@ -52,6 +56,7 @@ Rectangle {
 
             sectionName: "sect 5"
             sectionOrder: 5
+            subsecCount: 2
         }
     }
 }

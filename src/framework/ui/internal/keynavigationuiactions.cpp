@@ -30,6 +30,12 @@ const UiActionList KeyNavigationUiActions::m_actions = {
     UiAction("nav-prev-section",
              mu::context::UiCtxAny
              ),
+    UiAction("nav-next-subsection",
+             mu::context::UiCtxAny
+             ),
+    UiAction("nav-prev-subsection",
+             mu::context::UiCtxAny
+             )
 };
 
 const UiActionList& KeyNavigationUiActions::actionsList() const

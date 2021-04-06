@@ -63,5 +63,6 @@
         <file>qml/DevTools/Autobot/AutobotControl.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavExample.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSection.qml</file>
+        <file>qml/DevTools/KeyNav/KeyNavSubSection.qml</file>
     </qresource>
 </RCC>
