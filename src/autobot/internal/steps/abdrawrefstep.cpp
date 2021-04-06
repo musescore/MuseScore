@@ -32,7 +32,7 @@ std::string AbDrawRefStep::name() const
 void AbDrawRefStep::doRun(IAbContextPtr ctx)
 {
     io::path scorePath = ctx->globalVal<io::path>(IAbContext::Key::FilePath);
-    io::path filePath = configuration()->scoreDrawData(scorePath);
+    io::path filePath = configuration()->fileDrawDataPath(scorePath);
     Ret ret = fileSystem()->exists(filePath);
     if (!ret) {
         LOGE() << "failed open file to write draw data, path: " << filePath;
