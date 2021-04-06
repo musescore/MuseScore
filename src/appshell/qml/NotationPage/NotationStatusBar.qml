@@ -10,10 +10,15 @@ Rectangle {
     NotationAccessibilityInfo {
         anchors.left: parent.left
         anchors.leftMargin: 20
+        anchors.right: statusBarRow.left
         anchors.verticalCenter: parent.verticalCenter
+
+        horizontalAlignment: Text.AlignLeft
     }
 
     Row {
+        id: statusBarRow
+
         anchors.right: parent.right
         anchors.rightMargin: 20
 
