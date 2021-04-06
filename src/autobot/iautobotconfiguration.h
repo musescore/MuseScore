@@ -30,9 +30,11 @@ public:
     virtual ~IAutobotConfiguration() = default;
 
     virtual io::path dataPath() const = 0;
-    virtual io::path drawDataPath() const = 0;
 
-    virtual io::path scoreDrawData(const io::path& scorePath) const = 0;
+    virtual io::path filesPath() const = 0;
+
+    virtual io::path drawDataPath() const = 0;
+    virtual io::path fileDrawDataPath(const io::path& filePath) const = 0;
 
     virtual io::path reportsPath() const = 0;
 };
