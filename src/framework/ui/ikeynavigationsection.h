@@ -20,8 +20,21 @@
 #define MU_UI_IKEYNAVIGATIONSECTION_H
 
 #include <QString>
+#include <QList>
 
 namespace mu::ui {
+class IKeyNavigationSubSection
+{
+public:
+    virtual ~IKeyNavigationSubSection() = default;
+
+    virtual QString name() const = 0;
+    virtual int order() const = 0;
+    virtual bool enabled() const = 0;
+    virtual bool active() const = 0;
+    virtual void setActive(bool arg) = 0;
+};
+
 class IKeyNavigationSection
 {
 public:
@@ -32,6 +45,8 @@ public:
     virtual bool enabled() const = 0;
     virtual bool active() const = 0;
     virtual void setActive(bool arg) = 0;
+
+    virtual const QList<IKeyNavigationSubSection*>& subsections() const = 0;
 };
 }
 

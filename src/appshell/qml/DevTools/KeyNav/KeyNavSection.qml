@@ -9,6 +9,8 @@ Rectangle {
     property alias sectionName: keynavsec.name
     property alias sectionOrder: keynavsec.order
 
+    property alias subsecCount: subsecrepeater.model
+
     height: 48
 
     border.color: "#75507b"
@@ -19,13 +21,31 @@ Rectangle {
     }
 
     Text {
+        id: title
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        anchors.right: btn.left
         anchors.leftMargin: 8
         verticalAlignment: Text.AlignVCenter
+        width: 48
         text: root.sectionName
+    }
+
+    Row {
+        id: subs
+        anchors.left: title.right
+        anchors.right: btn.left
+        anchors.verticalCenter: parent.verticalCenter
+        spacing: 8
+
+        Repeater {
+            id: subsecrepeater
+            KeyNavSubSection {
+                keynavSection: keynavsec
+                subsectionName: "subsec" + model.index
+                subsectionOrder: model.index
+            }
+        }
     }
 
     FlatButton {

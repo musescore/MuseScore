@@ -19,7 +19,7 @@
 #ifndef MU_UI_KEYNAVIGATIONCONTROLLER_H
 #define MU_UI_KEYNAVIGATIONCONTROLLER_H
 
-#include <vector>
+#include <QList>
 
 #include "../ikeynavigationcontroller.h"
 #include "modularity/ioc.h"
@@ -41,18 +41,15 @@ public:
 private:
     void nextSection();
     void prevSection();
+    void nextSubSection();
+    void prevSubSection();
 
-    using Chain = std::vector<IKeyNavigationSection*>;
+    void activateSection(IKeyNavigationSection* s);
+    void deactivateSection(IKeyNavigationSection* s);
 
-    IKeyNavigationSection* firstSection() const;
-    IKeyNavigationSection* lastSection() const;
-    IKeyNavigationSection* nextSection(const IKeyNavigationSection* s) const;
-    IKeyNavigationSection* prevSection(const IKeyNavigationSection* s) const;
-    IKeyNavigationSection* findFirstEnabledSection(Chain::const_iterator from, Chain::const_iterator end) const;
-    IKeyNavigationSection* findLastEnabledSection(Chain::const_iterator from, Chain::const_iterator begin) const;
-    IKeyNavigationSection* activeSection() const;
+    const QList<IKeyNavigationSubSection*>& subsectionsOfActiveSection(bool doActiveIfNoAnyActive = true) const;
 
-    Chain m_chain;
+    QList<IKeyNavigationSection*> m_sections;
 };
 }
 

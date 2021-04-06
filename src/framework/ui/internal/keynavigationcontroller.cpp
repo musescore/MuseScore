@@ -24,87 +24,12 @@
 
 using namespace mu::ui;
 
-void KeyNavigationController::init()
-{
-    dispatcher()->reg(this, "nav-next-section", this, &KeyNavigationController::nextSection);
-    dispatcher()->reg(this, "nav-prev-section", this, &KeyNavigationController::prevSection);
-}
-
-static void print(const std::string& title, const std::vector<IKeyNavigationSection*>& chain)
-{
-    LOGI() << title;
-    for (size_t i = 0; i < chain.size(); ++i) {
-        LOGI() << "    " << i << chain.at(i)->name() << " order: " << chain.at(i)->order();
-    }
-}
-
-void KeyNavigationController::reg(IKeyNavigationSection* s)
-{
-    //! TODO add check on valid state
-
-    m_chain.push_back(s);
-    print("after push_back", m_chain);
-    std::sort(m_chain.begin(), m_chain.end(), [this](const IKeyNavigationSection* f, const IKeyNavigationSection* s) {
-        return f->order() < s->order();
-    });
-
-    print("after sort", m_chain);
-}
-
-void KeyNavigationController::unreg(IKeyNavigationSection* s)
-{
-    m_chain.erase(std::remove(m_chain.begin(), m_chain.end(), s), m_chain.end());
-}
-
-IKeyNavigationSection* KeyNavigationController::firstSection() const
-{
-    if (!m_chain.empty()) {
-        return findFirstEnabledSection(m_chain.cbegin(), m_chain.cend());
-    }
-    return nullptr;
-}
-
-IKeyNavigationSection* KeyNavigationController::lastSection() const
-{
-    if (!m_chain.empty()) {
-        auto last = --m_chain.cend();
-        return findLastEnabledSection(last, m_chain.cbegin());
-    }
-    return nullptr;
-}
-
-IKeyNavigationSection* KeyNavigationController::nextSection(const IKeyNavigationSection* s) const
-{
-    auto it = std::find(m_chain.begin(), m_chain.end(), s);
-    IF_ASSERT_FAILED(it != m_chain.end()) {
-        return nullptr;
-    }
-    ++it;
-    if (it == m_chain.end()) {
-        return nullptr;
-    }
-    return findFirstEnabledSection(it, m_chain.end());
-}
-
-IKeyNavigationSection* KeyNavigationController::prevSection(const IKeyNavigationSection* s) const
-{
-    auto it = std::find(m_chain.begin(), m_chain.end(), s);
-    IF_ASSERT_FAILED(it != m_chain.end()) {
-        return nullptr;
-    }
-    if (it == m_chain.begin()) {
-        return nullptr;
-    }
-
-    --it;
-
-    return findLastEnabledSection(it, m_chain.cbegin());
-}
-
-IKeyNavigationSection* KeyNavigationController::findFirstEnabledSection(Chain::const_iterator it, Chain::const_iterator end) const
+// algorithms
+template<class T>
+static T* findFirstEnabled(typename QList<T*>::const_iterator it, typename QList<T*>::const_iterator end)
 {
     for (; it != end; ++it) {
-        IKeyNavigationSection* s = *it;
+        T* s = *it;
         if (s->enabled()) {
             return s;
         }
@@ -112,16 +37,17 @@ IKeyNavigationSection* KeyNavigationController::findFirstEnabledSection(Chain::c
     return nullptr;
 }
 
-IKeyNavigationSection* KeyNavigationController::findLastEnabledSection(Chain::const_iterator it, Chain::const_iterator begin) const
+template<class T>
+static T* findLastEnabled(typename QList<T*>::const_iterator it, typename QList<T*>::const_iterator begin)
 {
     for (; it != begin; --it) {
-        IKeyNavigationSection* s = *it;
+        T* s = *it;
         if (s->enabled()) {
             return s;
         }
     }
 
-    IKeyNavigationSection* s = *begin;
+    T* s = *begin;
     if (s->enabled()) {
         return s;
     }
@@ -129,63 +55,270 @@ IKeyNavigationSection* KeyNavigationController::findLastEnabledSection(Chain::co
     return nullptr;
 }
 
-IKeyNavigationSection* KeyNavigationController::activeSection() const
+template<class T>
+static T* firstEnabled(const QList<T*>& list)
 {
-    auto it = std::find_if(m_chain.cbegin(), m_chain.cend(), [this](const IKeyNavigationSection* s) {
+    if (list.empty()) {
+        return nullptr;
+    }
+    return findFirstEnabled<T>(list.cbegin(), list.cend());
+}
+
+template<class T>
+static T* lastEnabled(const QList<T*>& list)
+{
+    if (list.empty()) {
+        return nullptr;
+    }
+    auto last = --list.cend();
+    return findLastEnabled<T>(last, list.cbegin());
+}
+
+template<class T>
+static T* nextEnabled(const QList<T*>& list, const T* s)
+{
+    auto it = std::find(list.begin(), list.end(), s);
+    IF_ASSERT_FAILED(it != list.end()) {
+        return nullptr;
+    }
+
+    ++it;
+
+    if (it == list.end()) {
+        return nullptr;
+    }
+
+    return findFirstEnabled<T>(it, list.end());
+}
+
+template<class T>
+static T* prevEnabled(const QList<T*>& list, const T* s)
+{
+    auto it = std::find(list.begin(), list.end(), s);
+    IF_ASSERT_FAILED(it != list.end()) {
+        return nullptr;
+    }
+    if (it == list.begin()) {
+        return nullptr;
+    }
+
+    --it;
+
+    return findLastEnabled<T>(it, list.cbegin());
+}
+
+template<class T>
+static T* findActive(const QList<T*>& list)
+{
+    auto it = std::find_if(list.cbegin(), list.cend(), [](const T* s) {
         return s->active();
     });
 
-    if (it != m_chain.cend()) {
+    if (it != list.cend()) {
         return *it;
     }
 
     return nullptr;
 }
 
+void KeyNavigationController::init()
+{
+    dispatcher()->reg(this, "nav-next-section", this, &KeyNavigationController::nextSection);
+    dispatcher()->reg(this, "nav-prev-section", this, &KeyNavigationController::prevSection);
+    dispatcher()->reg(this, "nav-next-subsection", this, &KeyNavigationController::nextSubSection);
+    dispatcher()->reg(this, "nav-prev-subsection", this, &KeyNavigationController::prevSubSection);
+}
+
+void KeyNavigationController::reg(IKeyNavigationSection* s)
+{
+    //! TODO add check on valid state
+
+    m_sections.push_back(s);
+    std::sort(m_sections.begin(), m_sections.end(), [this](const IKeyNavigationSection* f, const IKeyNavigationSection* s) {
+        return f->order() < s->order();
+    });
+}
+
+void KeyNavigationController::unreg(IKeyNavigationSection* s)
+{
+    m_sections.erase(std::remove(m_sections.begin(), m_sections.end(), s), m_sections.end());
+}
+
+void KeyNavigationController::activateSection(IKeyNavigationSection* s)
+{
+    IF_ASSERT_FAILED(s) {
+        return;
+    }
+
+    for (IKeyNavigationSubSection* sub : s->subsections()) {
+        sub->setActive(false);
+    }
+
+    s->setActive(true);
+
+    IKeyNavigationSubSection* firstSub = firstEnabled(s->subsections());
+    if (firstSub) {
+        firstSub->setActive(true);
+    }
+}
+
+void KeyNavigationController::deactivateSection(IKeyNavigationSection* s)
+{
+    IF_ASSERT_FAILED(s) {
+        return;
+    }
+
+    for (IKeyNavigationSubSection* sub : s->subsections()) {
+        sub->setActive(false);
+    }
+
+    s->setActive(false);
+}
+
 void KeyNavigationController::nextSection()
 {
     LOGI() << "====";
-    if (m_chain.empty()) {
+    if (m_sections.empty()) {
         return;
     }
 
-    IKeyNavigationSection* activeSec = activeSection();
+    IKeyNavigationSection* activeSec = findActive(m_sections);
     if (!activeSec) { // no any active
-        firstSection()->setActive(true);
+        IKeyNavigationSection* first = firstEnabled(m_sections);
+        if (first) {
+            activateSection(first);
+        }
         return;
     }
 
-    activeSec->setActive(false);
+    deactivateSection(activeSec);
 
-    IKeyNavigationSection* nextSec = nextSection(activeSec);
+    IKeyNavigationSection* nextSec = nextEnabled(m_sections, activeSec);
     if (!nextSec) { // active is last
-        firstSection()->setActive(true);
+        IKeyNavigationSection* first = firstEnabled(m_sections);
+        if (first) {
+            activateSection(first);
+        }
         return;
     }
 
-    nextSec->setActive(true);
+    activateSection(nextSec);
 }
 
 void KeyNavigationController::prevSection()
 {
     LOGI() << "====";
-    if (m_chain.empty()) {
+    if (m_sections.empty()) {
         return;
     }
 
-    IKeyNavigationSection* activeSec = activeSection();
+    IKeyNavigationSection* activeSec = findActive(m_sections);
     if (!activeSec) { // no any active
-        lastSection()->setActive(true);
+        IKeyNavigationSection* last = lastEnabled(m_sections);
+        if (last) {
+            activateSection(last);
+        }
         return;
     }
 
-    activeSec->setActive(false);
+    deactivateSection(activeSec);
 
-    IKeyNavigationSection* prevSec = prevSection(activeSec);
+    IKeyNavigationSection* prevSec = prevEnabled(m_sections, activeSec);
     if (!prevSec) { // active is first
-        lastSection()->setActive(true);
+        IKeyNavigationSection* last = lastEnabled(m_sections);
+        if (last) {
+            activateSection(last);
+        }
         return;
     }
 
-    prevSec->setActive(true);
+    activateSection(prevSec);
+}
+
+const QList<IKeyNavigationSubSection*>& KeyNavigationController::subsectionsOfActiveSection(bool doActiveIfNoAnyActive) const
+{
+    static const QList<IKeyNavigationSubSection*> null;
+
+    if (m_sections.empty()) {
+        return null;
+    }
+
+    IKeyNavigationSection* activeSec = findActive(m_sections);
+    if (!activeSec) { // no any active
+        if (!doActiveIfNoAnyActive) {
+            return null;
+        }
+
+        activeSec = firstEnabled(m_sections);
+        if (!activeSec) {
+            return null;
+        }
+        activeSec->setActive(true);
+    }
+
+    return activeSec->subsections();
+}
+
+void KeyNavigationController::nextSubSection()
+{
+    LOGI() << "====";
+
+    const QList<IKeyNavigationSubSection*>& subsections = subsectionsOfActiveSection();
+    if (subsections.isEmpty()) {
+        return;
+    }
+
+    IKeyNavigationSubSection* activeSubSec = findActive(subsections);
+    if (!activeSubSec) { // no any active
+        IKeyNavigationSubSection* firstSub = firstEnabled(subsections);
+        if (firstSub) {
+            firstSub->setActive(true);
+        }
+        return;
+    }
+
+    activeSubSec->setActive(false);
+
+    IKeyNavigationSubSection* nextSubSec = nextEnabled(subsections, activeSubSec);
+    if (!nextSubSec) { // active is last
+        IKeyNavigationSubSection* firstSub = firstEnabled(subsections);
+        if (firstSub) {
+            firstSub->setActive(true);
+        }
+        return;
+    }
+
+    nextSubSec->setActive(true);
+}
+
+void KeyNavigationController::prevSubSection()
+{
+    LOGI() << "====";
+
+    const QList<IKeyNavigationSubSection*>& subsections = subsectionsOfActiveSection();
+    if (subsections.isEmpty()) {
+        return;
+    }
+
+    IKeyNavigationSubSection* activeSubSec = findActive(subsections);
+    if (!activeSubSec) { // no any active
+        IKeyNavigationSubSection* lastSub = lastEnabled(subsections);
+        if (lastSub) {
+            lastSub->setActive(true);
+        }
+        return;
+    }
+
+    activeSubSec->setActive(false);
+
+    IKeyNavigationSubSection* prevSubSec = prevEnabled(subsections, activeSubSec);
+    if (!prevSubSec) { // active is first
+        IKeyNavigationSubSection* lastSub = lastEnabled(subsections);
+        if (lastSub) {
+            lastSub->setActive(true);
+        }
+        return;
+    }
+
+    prevSubSec->setActive(true);
 }
