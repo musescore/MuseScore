@@ -53,6 +53,7 @@ FocusableItem {
         InspectorPropertyView {
             titleText: qsTrc("inspector", "Noteheads")
             propertyItem: root.model ? root.model.headGroup : null
+            height: 120
 
             NoteheadsGrid {
                 id: noteheadGridView
