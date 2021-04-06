@@ -38,24 +38,24 @@ FocusableItem {
         default: return "qrc:/resources/icons/note.svg"
         }
     }
-
-    implicitHeight: gridView.height + 16
     width: parent.width
 
     Rectangle {
-        height: root.implicitHeight
+        id: gridViewEnclosure
+        height: 3 * gridView.cellHeight + 16
         width: parent.width
 
         color: ui.theme.textFieldColor
-
         radius: 3
     }
 
     GridView {
         id: gridView
 
-        height: contentHeight
-        anchors.top: parent.top
+        height: Math.min(contentHeight,3*cellHeight)
+
+        anchors.top: gridViewEnclosure.top
+        anchors.bottom: gridViewEnclosure.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: 8
@@ -63,10 +63,12 @@ FocusableItem {
         cellHeight: 40
         cellWidth: 40
 
-        interactive: false
+        interactive: true
+        boundsBehavior: Flickable.StopAtBounds
+        clip: true
+        maximumFlickVelocity: 1500
 
         delegate: FocusableItem {
-
             implicitHeight: gridView.cellHeight
             implicitWidth: gridView.cellWidth
 
