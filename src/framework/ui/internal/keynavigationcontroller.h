@@ -40,20 +40,20 @@ public:
     void init();
 
 private:
-    void nextSection();
-    void prevSection();
-    void nextSubSection();
-    void prevSubSection();
-    void nextControl();
-    void prevControl();
+    void goToNextSection();
+    void goToPrevSection();
+    void goToNextSubSection();
+    void goToPrevSubSection();
+    void goToNextControl();
+    void goToPrevControl();
 
-    void triggerControl();
+    void doTriggerControl();
     void onForceActiveRequested(IKeyNavigationSection* sec, IKeyNavigationSubSection* sub, IKeyNavigationControl* ctrl);
 
-    void activateSection(IKeyNavigationSection* s);
-    void deactivateSection(IKeyNavigationSection* s);
-    void activateSubSection(IKeyNavigationSubSection* s);
-    void deactivateSubSection(IKeyNavigationSubSection* s);
+    void doActivateSection(IKeyNavigationSection* s);
+    void doDeactivateSection(IKeyNavigationSection* s);
+    void doActivateSubSection(IKeyNavigationSubSection* s);
+    void doDeactivateSubSection(IKeyNavigationSubSection* s);
 
     const QList<IKeyNavigationSubSection*>& subsectionsOfActiveSection(bool doActiveIfNoAnyActive = true);
     const QList<IKeyNavigationControl*>& controlsOfActiveSubSection(bool doActiveIfNoAnyActive = false);

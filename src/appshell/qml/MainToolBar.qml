@@ -9,7 +9,7 @@ Rectangle {
     width: radioButtonList.contentWidth
     height: radioButtonList.contentHeight
 
-    property alias keynavSection: keynavSub.section
+    property alias keynav: keynavSub
 
     property var currentUri: "musescore://home"
     property var items: [
@@ -39,8 +39,7 @@ Rectangle {
 
     KeyNavigationSubSection {
         id: keynavSub
-        name: "mainToolBar"
-        order: 1
+        name: "MainToolBar"
     }
 
     RadioButtonGroup {
