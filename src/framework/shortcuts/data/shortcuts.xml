@@ -25,6 +25,11 @@
         <key>nav-left</key>
         <seq>Left</seq>
     </SC>
+    <SC>
+      <key>nav-trigger</key>
+      <seq>Return</seq>
+    </SC>
+
 <!-- end Keyboard navigation -->
 
   <SC>

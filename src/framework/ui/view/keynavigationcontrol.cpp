@@ -62,6 +62,11 @@ mu::async::Channel<bool> KeyNavigationControl::activeChanged() const
     return AbstractKeyNavigation::activeChanged();
 }
 
+void KeyNavigationControl::trigger()
+{
+    emit triggered();
+}
+
 void KeyNavigationControl::setSubSection(KeyNavigationSubSection* subsection)
 {
     if (m_subsection == subsection) {

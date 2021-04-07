@@ -46,6 +46,8 @@ private:
     void nextControl();
     void prevControl();
 
+    void triggerControl();
+
     void activateSection(IKeyNavigationSection* s);
     void deactivateSection(IKeyNavigationSection* s);
     void activateSubSection(IKeyNavigationSubSection* s);

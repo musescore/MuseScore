@@ -7,9 +7,26 @@ Rectangle {
 
     color: ui.theme.backgroundSecondaryColor
 
+    property string lastClickedInfo: ""
+
+    Rectangle {
+        id: infoPanel
+
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 64
+
+        Text {
+            anchors.fill: parent
+            anchors.margins: 8
+            verticalAlignment: Text.AlignVCenter
+            text: "Last clicked: " + root.lastClickedInfo
+        }
+    }
 
     KeyNavSection {
         id: mainMenu
+        anchors.top: infoPanel.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         height: 64
@@ -30,6 +47,7 @@ Rectangle {
                     keynavSection: mainMenu.keynavSection
                     subsectionName: "subsec" + model.index
                     subsectionOrder: model.index
+                    onClicked: root.lastClickedInfo = "sec: " + mainMenu.sectionName + ", " + info
                 }
             }
         }
@@ -57,6 +75,7 @@ Rectangle {
                     keynavSection: topTools.keynavSection
                     subsectionName: "subsec" + model.index
                     subsectionOrder: model.index
+                    onClicked: root.lastClickedInfo = "sec: " + topTools.sectionName + ", " + info
                 }
             }
         }
@@ -83,6 +102,7 @@ Rectangle {
                     keynavSection: leftPanel.keynavSection
                     subsectionName: "subsec" + model.index
                     subsectionOrder: model.index
+                    onClicked: root.lastClickedInfo = "sec: " + leftPanel.sectionName + ", " + info
                 }
             }
         }
@@ -108,6 +128,7 @@ Rectangle {
                     keynavSection: rightPanel.keynavSection
                     subsectionName: "subsec" + model.index
                     subsectionOrder: model.index
+                    onClicked: root.lastClickedInfo = "sec: " + rightPanel.sectionName + ", " + info
                 }
             }
         }
@@ -128,6 +149,7 @@ Rectangle {
             keynavSection: centerPanel.keynavSection
             subsectionName: "subsec0"
             subsectionOrder: 0
+            onClicked: root.lastClickedInfo = "sec: " + centerPanel.sectionName + ", " + info
         }
     }
 }

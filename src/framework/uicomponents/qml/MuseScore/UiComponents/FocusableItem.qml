@@ -17,6 +17,8 @@ FocusScope {
     signal internalClicked()
     signal internalPressAndHold()
 
+    signal internalTriggered()
+
     function insureActiveFocus() {
         root.forceActiveFocus()
     }
@@ -29,6 +31,10 @@ FocusScope {
             if (keynavItem.active) {
                 root.insureActiveFocus()
             }
+        }
+
+        onTriggered: {
+            root.internalTriggered()
         }
     }
 

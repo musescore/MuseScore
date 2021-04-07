@@ -41,6 +41,10 @@ FocusableItem {
         root.pressAndHold()
     }
 
+    onInternalTriggered: {
+        root.clicked()
+    }
+
     mouseArea.hoverEnabled: true
     mouseArea.onContainsMouseChanged: {
         if (!Boolean(root.hint)) {
