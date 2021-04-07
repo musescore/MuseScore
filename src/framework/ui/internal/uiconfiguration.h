@@ -43,7 +43,7 @@ public:
     QStringList possibleFontFamilies() const override;
     QStringList possibleAccentColors() const override;
 
-    ThemeInfo currentTheme() const override;
+    const ThemeInfo& currentTheme() const override;
     void setCurrentTheme(const ThemeCode& codeKey) override;
     void setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val) override;
     async::Notification currentThemeChanged() const override;

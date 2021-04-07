@@ -54,7 +54,7 @@ FocusScope {
             anchors.margins: 2
         }
 
-        border.color: "#75507b"
+        border.color: ui.theme.focusColor
         border.width: root.focus ? 2 : 0
     }
 
