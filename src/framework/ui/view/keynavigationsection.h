@@ -27,10 +27,11 @@
 
 #include "modularity/ioc.h"
 #include "../ikeynavigationcontroller.h"
+#include "async/asyncable.h"
 
 namespace mu::ui {
 class KeyNavigationSubSection;
-class KeyNavigationSection : public AbstractKeyNavigation, public IKeyNavigationSection
+class KeyNavigationSection : public AbstractKeyNavigation, public IKeyNavigationSection, public async::Asyncable
 {
     Q_OBJECT
     INJECT(ui, IKeyNavigationController, keyNavigationController)
@@ -46,6 +47,7 @@ public:
     void setActive(bool arg) override;
     async::Channel<bool> activeChanged() const override;
     const QList<IKeyNavigationSubSection*>& subsections() const override;
+    async::Channel<SectionSubSectionControl> forceActiveRequested() const override;
 
     void componentComplete() override;
 
@@ -55,6 +57,7 @@ public:
 private:
 
     QList<IKeyNavigationSubSection*> m_subsections;
+    async::Channel<SectionSubSectionControl> m_forceActiveRequested;
 };
 }
 

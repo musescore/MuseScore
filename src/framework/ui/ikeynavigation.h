@@ -19,11 +19,20 @@
 #ifndef MU_UI_IKEYNAVIGATION_H
 #define MU_UI_IKEYNAVIGATION_H
 
+#include <tuple>
 #include <QString>
 #include <QList>
 #include "async/channel.h"
+#include "async/notification.h"
 
 namespace mu::ui {
+class IKeyNavigationSection;
+class IKeyNavigationSubSection;
+class IKeyNavigationControl;
+
+using SubSectionControl = std::tuple<IKeyNavigationSubSection*, IKeyNavigationControl*>;
+using SectionSubSectionControl = std::tuple<IKeyNavigationSection*, IKeyNavigationSubSection*, IKeyNavigationControl*>;
+
 class IKeyNavigation
 {
 public:
@@ -43,6 +52,7 @@ public:
     virtual ~IKeyNavigationControl() = default;
 
     virtual void trigger() = 0;
+    virtual async::Channel<IKeyNavigationControl*> forceActiveRequested() const = 0;
 };
 
 class IKeyNavigationSubSection : public IKeyNavigation
@@ -51,6 +61,7 @@ public:
     virtual ~IKeyNavigationSubSection() = default;
 
     virtual const QList<IKeyNavigationControl*>& controls() const = 0;
+    virtual async::Channel<SubSectionControl> forceActiveRequested() const = 0;
 };
 
 class IKeyNavigationSection : public IKeyNavigation
@@ -59,6 +70,7 @@ public:
     virtual ~IKeyNavigationSection() = default;
 
     virtual const QList<IKeyNavigationSubSection*>& subsections() const = 0;
+    virtual async::Channel<SectionSubSectionControl> forceActiveRequested() const = 0;
 };
 }
 

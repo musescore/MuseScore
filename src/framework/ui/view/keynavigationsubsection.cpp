@@ -73,6 +73,11 @@ const QList<IKeyNavigationControl*>& KeyNavigationSubSection::controls() const
     return m_controls;
 }
 
+mu::async::Channel<SubSectionControl> KeyNavigationSubSection::forceActiveRequested() const
+{
+    return m_forceActiveRequested;
+}
+
 KeyNavigationSection* KeyNavigationSubSection::section() const
 {
     return m_section;
@@ -120,13 +125,26 @@ void KeyNavigationSubSection::componentComplete()
 
 void KeyNavigationSubSection::addControl(KeyNavigationControl* control)
 {
+    IF_ASSERT_FAILED(control) {
+        return;
+    }
+
     m_controls.append(control);
     std::sort(m_controls.begin(), m_controls.end(), [](const IKeyNavigationControl* f, const IKeyNavigationControl* s) {
         return f->order() < s->order();
+    });
+
+    control->forceActiveRequested().onReceive(this, [this](IKeyNavigationControl* c) {
+        m_forceActiveRequested.send(std::make_tuple(this, c));
     });
 }
 
 void KeyNavigationSubSection::removeControl(KeyNavigationControl* control)
 {
+    IF_ASSERT_FAILED(control) {
+        return;
+    }
+
     m_controls.removeOne(control);
+    control->forceActiveRequested().resetOnReceive(this);
 }

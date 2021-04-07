@@ -140,11 +140,16 @@ void KeyNavigationController::reg(IKeyNavigationSection* s)
     std::sort(m_sections.begin(), m_sections.end(), [](const IKeyNavigationSection* f, const IKeyNavigationSection* s) {
         return f->order() < s->order();
     });
+
+    s->forceActiveRequested().onReceive(this, [this](const SectionSubSectionControl& ssc) {
+        onForceActiveRequested(std::get<0>(ssc), std::get<1>(ssc), std::get<2>(ssc));
+    });
 }
 
 void KeyNavigationController::unreg(IKeyNavigationSection* s)
 {
     m_sections.erase(std::remove(m_sections.begin(), m_sections.end(), s), m_sections.end());
+    s->forceActiveRequested().resetOnReceive(this);
 }
 
 void KeyNavigationController::activateSection(IKeyNavigationSection* s)
@@ -460,4 +465,33 @@ void KeyNavigationController::triggerControl()
     }
 
     activeControl->trigger();
+}
+
+void KeyNavigationController::onForceActiveRequested(IKeyNavigationSection* sec, IKeyNavigationSubSection* sub, IKeyNavigationControl* ctrl)
+{
+    if (m_sections.empty()) {
+        return;
+    }
+
+    IKeyNavigationSection* activeSec = findActive(m_sections);
+    if (activeSec && activeSec != sec) {
+        deactivateSection(activeSec);
+    }
+    activeSec = sec;
+    activeSec->setActive(true);
+
+    IKeyNavigationSubSection* activeSub = findActive(activeSec->subsections());
+    if (activeSub && activeSub != sub) {
+        deactivateSubSection(activeSub);
+    }
+    activeSub = sub;
+    activeSub->setActive(true);
+
+    IKeyNavigationControl* activeCtrl = findActive(activeSub->controls());
+    if (activeCtrl && activeCtrl != ctrl) {
+        activeCtrl->setActive(false);
+    }
+
+    activeCtrl = ctrl;
+    activeCtrl->setActive(true);
 }

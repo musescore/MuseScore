@@ -82,26 +82,35 @@ mu::async::Channel<bool> KeyNavigationSection::activeChanged() const
     return AbstractKeyNavigation::activeChanged();
 }
 
-static void printSubList(const QList<IKeyNavigationSubSection*>& list)
+void KeyNavigationSection::addSubSection(KeyNavigationSubSection* sub)
 {
-    for (const IKeyNavigationSubSection* s : list) {
-        LOGI() << s->name() << " " << s->order();
+    IF_ASSERT_FAILED(sub) {
+        return;
     }
-}
 
-void KeyNavigationSection::addSubSection(KeyNavigationSubSection* s)
-{
-    m_subsections.append(s);
+    m_subsections.append(sub);
     std::sort(m_subsections.begin(), m_subsections.end(), [](const IKeyNavigationSubSection* f, const IKeyNavigationSubSection* s) {
         return f->order() < s->order();
     });
 
-    printSubList(m_subsections);
+    sub->forceActiveRequested().onReceive(this, [this](const SubSectionControl& subcon) {
+        m_forceActiveRequested.send(std::make_tuple(this, std::get<0>(subcon), std::get<1>(subcon)));
+    });
 }
 
-void KeyNavigationSection::removeSubSection(KeyNavigationSubSection* s)
+mu::async::Channel<SectionSubSectionControl> KeyNavigationSection::forceActiveRequested() const
 {
-    m_subsections.removeOne(s);
+    return m_forceActiveRequested;
+}
+
+void KeyNavigationSection::removeSubSection(KeyNavigationSubSection* sub)
+{
+    IF_ASSERT_FAILED(sub) {
+        return;
+    }
+
+    m_subsections.removeOne(sub);
+    sub->forceActiveRequested().resetOnReceive(this);
 }
 
 const QList<IKeyNavigationSubSection*>& KeyNavigationSection::subsections() const
