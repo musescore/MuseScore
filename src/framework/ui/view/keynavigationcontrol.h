@@ -16,27 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_UI_KEYNAVIGATIONSUBSECTION_H
-#define MU_UI_KEYNAVIGATIONSUBSECTION_H
+#ifndef MU_UI_KEYNAVIGATIONCONTROL_H
+#define MU_UI_KEYNAVIGATIONCONTROL_H
 
 #include <QObject>
-#include <QList>
 
 #include "abstractkeynavigation.h"
 #include "../ikeynavigation.h"
-#include "keynavigationsection.h"
+#include "keynavigationsubsection.h"
 #include "async/asyncable.h"
 
 namespace mu::ui {
-class KeyNavigationControl;
-class KeyNavigationSubSection : public AbstractKeyNavigation, public IKeyNavigationSubSection, public async::Asyncable
+class KeyNavigationControl : public AbstractKeyNavigation, public IKeyNavigationControl, public async::Asyncable
 {
     Q_OBJECT
-    Q_PROPERTY(KeyNavigationSection * section READ section WRITE setSection)
+    Q_PROPERTY(KeyNavigationSubSection * subsection READ subsection WRITE setSubSection NOTIFY subsectionChanged)
 
 public:
-    explicit KeyNavigationSubSection(QObject* parent = nullptr);
-    ~KeyNavigationSubSection() override;
+    explicit KeyNavigationControl(QObject* parent = nullptr);
+    ~KeyNavigationControl() override;
 
     QString name() const override;
     int order() const override;
@@ -44,27 +42,30 @@ public:
     bool active() const override;
     void setActive(bool arg) override;
     async::Channel<bool> activeChanged() const override;
-    const QList<IKeyNavigationControl*>& controls() const override;
-    async::Channel<SubSectionControl> forceActiveRequested() const override;
+    void trigger() override;
+    async::Channel<IKeyNavigationControl*> forceActiveRequested() const override;
 
-    KeyNavigationSection* section() const;
+    KeyNavigationSubSection* subsection() const;
+
+    Q_INVOKABLE void forceActive();
+
+public slots:
+    void setSubSection(KeyNavigationSubSection* subsection);
+
+signals:
+    void subsectionChanged(KeyNavigationSubSection* subsection);
+    void triggered();
+
+private slots:
+    void onSubSectionDestroyed();
+
+private:
 
     void componentComplete() override;
 
-    void addControl(KeyNavigationControl* control);
-    void removeControl(KeyNavigationControl* control);
-
-public slots:
-    void setSection(KeyNavigationSection* section);
-
-private slots:
-    void onSectionDestroyed();
-
-private:
-    KeyNavigationSection* m_section = nullptr;
-    QList<IKeyNavigationControl*> m_controls;
-    async::Channel<SubSectionControl> m_forceActiveRequested;
+    KeyNavigationSubSection* m_subsection = nullptr;
+    async::Channel<IKeyNavigationControl*> m_forceActiveRequested;
 };
 }
 
-#endif // MU_UI_KEYNAVIGATIONSUBSECTION_H
+#endif // MU_UI_KEYNAVIGATIONCONTROL_H

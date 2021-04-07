@@ -1,13 +1,20 @@
 import QtQuick 2.15
-
+import MuseScore.Ui 1.0
 import MuseScore.NotationScene 1.0
 import MuseScore.UiComponents 1.0
 
 Rectangle {
     id: root
 
+    property alias keynav: keynavSub
+
     Component.onCompleted: {
         toolbarModel.load()
+    }
+
+    KeyNavigationSubSection {
+        id: keynavSub
+        name: "NotationToolBar"
     }
 
     NotationToolBarModel {
@@ -36,6 +43,10 @@ Rectangle {
             hint: model.hint
             enabled: model.enabled
             textFont: ui.theme.tabFont
+
+            keynav.subsection: keynavSub
+            keynav.order: model.index
+            keynav.enabled: model.enabled
 
             normalStateColor: "transparent"
             orientation: Qt.Horizontal

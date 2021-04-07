@@ -20,7 +20,7 @@
 #define MU_UI_IKEYNAVIGATIONCONTROLLER_H
 
 #include "modularity/imoduleexport.h"
-#include "ikeynavigationsection.h"
+#include "ikeynavigation.h"
 
 namespace mu::ui {
 class IKeyNavigationController : MODULE_EXPORT_INTERFACE

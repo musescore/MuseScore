@@ -41,7 +41,7 @@ public:
     virtual QStringList possibleFontFamilies() const = 0;
     virtual QStringList possibleAccentColors() const = 0;
 
-    virtual ThemeInfo currentTheme() const = 0;
+    virtual const ThemeInfo& currentTheme() const = 0;
     virtual void setCurrentTheme(const ThemeCode& codeKey) = 0;
     virtual void setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val) = 0;
     virtual async::Notification currentThemeChanged() const = 0;
