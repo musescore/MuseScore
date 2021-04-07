@@ -36,6 +36,7 @@ static const QMap<ThemeStyleKey, QVariant> LIGHT_THEME_VALUES {
     { FONT_PRIMARY_COLOR, "#111132" },
     { FONT_SECONDARY_COLOR, "#FFFFFF" },
     { LINK_COLOR, "#70AFEA" },
+    { FOCUS_COLOR, "#75507b" },
 
     { ACCENT_OPACITY_NORMAL, 0.3 },
     { ACCENT_OPACITY_HOVER, 0.15 },
@@ -59,6 +60,7 @@ static const QMap<ThemeStyleKey, QVariant> DARK_THEME_VALUES {
     { FONT_PRIMARY_COLOR, "#EBEBEB" },
     { FONT_SECONDARY_COLOR, "#BDBDBD" },
     { LINK_COLOR, "#70AFEA" },
+    { FOCUS_COLOR, "#75507b" },
 
     { ACCENT_OPACITY_NORMAL, 0.8 },
     { ACCENT_OPACITY_HOVER, 1.0 },
@@ -82,6 +84,7 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_THEME_VALUES {
     { FONT_PRIMARY_COLOR, "#FFFFFF" },
     { FONT_SECONDARY_COLOR, "#FFFFFF" },
     { LINK_COLOR, "#70AFEA" },
+    { FOCUS_COLOR, "#75507b" },
 
     { ACCENT_OPACITY_NORMAL, 0.3 },
     { ACCENT_OPACITY_HOVER, 0.15 },
@@ -313,7 +316,7 @@ QStringList UiConfiguration::possibleAccentColors() const
     return lightAccentColors;
 }
 
-ThemeInfo UiConfiguration::currentTheme() const
+const ThemeInfo& UiConfiguration::currentTheme() const
 {
     return m_themes[m_currentThemeIndex];
 }

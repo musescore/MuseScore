@@ -6,54 +6,42 @@ import MuseScore.UiComponents 1.0
 Rectangle {
     id: root
 
+    property alias keynavSection: keynavsec
     property alias sectionName: keynavsec.name
     property alias sectionOrder: keynavsec.order
 
-    property alias subsecCount: subsecrepeater.model
-
-    height: 48
+    default property alias content: contentItem.data
 
     border.color: "#75507b"
     border.width: keynavsec.active ? 4 : 0
 
     KeyNavigationSection {
         id: keynavsec
-    }
+        onActiveChanged: {
+            console.debug("KeyNavSection.qml active: " + keynavsec.active)
+            if (keynavsec.active) {
 
-    Text {
-        id: title
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.leftMargin: 8
-        verticalAlignment: Text.AlignVCenter
-        width: 48
-        text: root.sectionName
-    }
+                var p = root.parent
+                while (p) {
+                    p.focus = true
+                    p = p.parent
+                }
 
-    Row {
-        id: subs
-        anchors.left: title.right
-        anchors.right: btn.left
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: 8
-
-        Repeater {
-            id: subsecrepeater
-            KeyNavSubSection {
-                keynavSection: keynavsec
-                subsectionName: "subsec" + model.index
-                subsectionOrder: model.index
+                root.focus = true
             }
         }
+    }
+
+    Item {
+        id: contentItem
+        anchors.fill: parent
     }
 
     FlatButton {
         id: btn
         anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.rightMargin: 8
-        width: 40
+        width: 20
+        height: 20
         text: keynavsec.enabled ? "ON" : "OFF"
         onClicked: keynavsec.enabled = !keynavsec.enabled
     }

@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Rectangle {
@@ -7,6 +8,8 @@ Rectangle {
 
     width: radioButtonList.contentWidth
     height: radioButtonList.contentHeight
+
+    property alias keynav: keynavSub
 
     property var currentUri: "musescore://home"
     property var items: [
@@ -34,6 +37,11 @@ Rectangle {
         root.selected(uri)
     }
 
+    KeyNavigationSubSection {
+        id: keynavSub
+        name: "MainToolBar"
+    }
+
     RadioButtonGroup {
         id: radioButtonList
 
@@ -48,6 +56,8 @@ Rectangle {
 
             spacing: 0
             leftPadding: 12
+            keynav.subsection: keynavSub
+            keynav.order: model.index
 
             checked: modelData["uri"] === root.currentUri
             title: modelData["title"]

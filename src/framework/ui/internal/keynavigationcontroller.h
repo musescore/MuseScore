@@ -25,9 +25,10 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
+#include "async/asyncable.h"
 
 namespace mu::ui {
-class KeyNavigationController : public IKeyNavigationController, public actions::Actionable
+class KeyNavigationController : public IKeyNavigationController, public actions::Actionable, public async::Asyncable
 {
     INJECT(ui, actions::IActionsDispatcher, dispatcher)
 public:
@@ -39,15 +40,23 @@ public:
     void init();
 
 private:
-    void nextSection();
-    void prevSection();
-    void nextSubSection();
-    void prevSubSection();
+    void goToNextSection();
+    void goToPrevSection();
+    void goToNextSubSection();
+    void goToPrevSubSection();
+    void goToNextControl();
+    void goToPrevControl();
 
-    void activateSection(IKeyNavigationSection* s);
-    void deactivateSection(IKeyNavigationSection* s);
+    void doTriggerControl();
+    void onForceActiveRequested(IKeyNavigationSection* sec, IKeyNavigationSubSection* sub, IKeyNavigationControl* ctrl);
 
-    const QList<IKeyNavigationSubSection*>& subsectionsOfActiveSection(bool doActiveIfNoAnyActive = true) const;
+    void doActivateSection(IKeyNavigationSection* s);
+    void doDeactivateSection(IKeyNavigationSection* s);
+    void doActivateSubSection(IKeyNavigationSubSection* s);
+    void doDeactivateSubSection(IKeyNavigationSubSection* s);
+
+    const QList<IKeyNavigationSubSection*>& subsectionsOfActiveSection(bool doActiveIfNoAnyActive = true);
+    const QList<IKeyNavigationControl*>& controlsOfActiveSubSection(bool doActiveIfNoAnyActive = false);
 
     QList<IKeyNavigationSection*> m_sections;
 };

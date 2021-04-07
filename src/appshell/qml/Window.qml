@@ -63,6 +63,12 @@ DockWindow {
     property AppMenuModel appMenuModel: AppMenuModel {}
     property StartupModel startupModel: StartupModel {}
 
+    property KeyNavigationSection topToolKeyNavSec: KeyNavigationSection {
+        id: keynavSec
+        name: "TopTool"
+        order: 1
+    }
+
     menuBar: DockMenuBar {
         objectName: "mainMenuBar"
 
@@ -84,6 +90,8 @@ DockWindow {
 
             content: MainToolBar {
                 color: dockWindow.color
+                keynav.section: topToolKeyNavSec
+                keynav.order: 1
                 currentUri: dockWindow.currentPageUri
 
                 onSelected: {
@@ -104,6 +112,10 @@ DockWindow {
             content: NotationToolBar {
                 id: notationToolBarContent
                 color: dockWindow.color
+
+                keynav.section: topToolKeyNavSec
+                keynav.order: 2
+                keynav.enabled: notationToolBar.visible
 
                 Connections {
                     target: notationToolBar
@@ -129,6 +141,11 @@ DockWindow {
             content: PlaybackToolBar {
                 id: playbackToolBarContent
                 color: dockWindow.color
+
+                keynav.section: topToolKeyNavSec
+                keynav.order: 3
+                keynav.enabled: dockWindow.isNotationPage
+
                 floating: playbackToolBar.floating
 
                 Connections {

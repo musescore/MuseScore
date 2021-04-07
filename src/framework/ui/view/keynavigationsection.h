@@ -20,61 +20,44 @@
 #define MU_UI_KEYNAVIGATIONSECTION_H
 
 #include <QObject>
-#include <QQmlParserStatus>
 #include <QList>
 
-#include "../ikeynavigationsection.h"
+#include "abstractkeynavigation.h"
+#include "../ikeynavigation.h"
 
 #include "modularity/ioc.h"
 #include "../ikeynavigationcontroller.h"
+#include "async/asyncable.h"
 
 namespace mu::ui {
 class KeyNavigationSubSection;
-class KeyNavigationSection : public QObject, public IKeyNavigationSection, public QQmlParserStatus
+class KeyNavigationSection : public AbstractKeyNavigation, public IKeyNavigationSection, public async::Asyncable
 {
     Q_OBJECT
-    Q_INTERFACES(QQmlParserStatus)
-    Q_PROPERTY(QString name READ name WRITE setName)
-    Q_PROPERTY(int order READ order WRITE setOrder)
-
-    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
-    Q_PROPERTY(bool active READ active NOTIFY activeChanged)
-
     INJECT(ui, IKeyNavigationController, keyNavigationController)
 
 public:
     explicit KeyNavigationSection(QObject* parent = nullptr);
-    ~KeyNavigationSection();
+    ~KeyNavigationSection() override;
 
     QString name() const override;
     int order() const override;
     bool enabled() const override;
     bool active() const override;
-    void setActive(bool active) override;
+    void setActive(bool arg) override;
+    async::Channel<bool> activeChanged() const override;
     const QList<IKeyNavigationSubSection*>& subsections() const override;
+    async::Channel<SectionSubSectionControl> forceActiveRequested() const override;
 
-    // QQmlParserStatus
-    void classBegin() override;
     void componentComplete() override;
 
-    void addSubSection(IKeyNavigationSubSection* s);
-
-public slots:
-    void setName(QString name);
-    void setOrder(int order);
-    void setEnabled(bool enabled);
-
-signals:
-    void enabledChanged(bool enabled);
-    void activeChanged(bool active);
+    void addSubSection(KeyNavigationSubSection* s);
+    void removeSubSection(KeyNavigationSubSection* s);
 
 private:
-    QString m_name;
-    int m_order = -1;
-    bool m_active = false;
-    bool m_enabled = true;
 
     QList<IKeyNavigationSubSection*> m_subsections;
+    async::Channel<SectionSubSectionControl> m_forceActiveRequested;
 };
 }
 

@@ -17,6 +17,20 @@
         <key>nav-prev-subsection</key>
         <seq>Shift+Tab</seq>
     </SC>
+    <SC>
+        <key>nav-right</key>
+        <seq>Right</seq>
+    </SC>
+    <SC>
+        <key>nav-left</key>
+        <seq>Left</seq>
+    </SC>
+    <SC>
+      <key>nav-trigger</key>
+      <seq>Return</seq>
+    </SC>
+
+<!-- end Keyboard navigation -->
 
   <SC>
     <key>plugin-creator</key>

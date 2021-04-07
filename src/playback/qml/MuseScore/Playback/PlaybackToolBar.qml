@@ -12,14 +12,29 @@ import "internal"
 Rectangle {
     id: root
 
+    property alias keynav: keynavSub
     property bool floating: false
 
     Component.onCompleted: {
         playbackModel.load()
     }
 
+    KeyNavigationSubSection {
+        id: keynavSub
+        name: "PlaybackToolBar"
+    }
+
     PlaybackToolBarModel {
         id: playbackModel
+    }
+
+    PlaybackSettingsPopup {
+        id: playbackSettings
+        onIsOpenedChanged: {
+            if (!isOpened) {
+                parent = root
+            }
+        }
     }
 
     Column {
@@ -65,19 +80,20 @@ Rectangle {
                     hint: model.hint
                     iconFont: ui.theme.toolbarIconsFont
 
-                    normalStateColor: model.checked || playbackSettings.isOpened ? ui.theme.accentColor : "transparent"
+                    keynav.subsection: keynavSub
+                    keynav.order: model.index
+                    keynav.enabled: playbackModel.isPlayAllowed
+
+                    normalStateColor: (model.checked || (model.isPlaybackSettings && playbackSettings.isOpened)) ? ui.theme.accentColor : "transparent"
 
                     onClicked: {
                         if (model.isPlaybackSettings) {
+                            playbackSettings.parent = this
                             playbackSettings.toggleOpened()
                             return
                         }
 
                         playbackModel.handleAction(model.code)
-                    }
-
-                    PlaybackSettingsPopup {
-                        id: playbackSettings
                     }
                 }
             }
