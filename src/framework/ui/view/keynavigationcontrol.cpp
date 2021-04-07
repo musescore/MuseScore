@@ -67,6 +67,16 @@ void KeyNavigationControl::trigger()
     emit triggered();
 }
 
+mu::async::Channel<IKeyNavigationControl*> KeyNavigationControl::forceActiveRequested() const
+{
+    return m_forceActiveRequested;
+}
+
+void KeyNavigationControl::forceActive()
+{
+    m_forceActiveRequested.send(this);
+}
+
 void KeyNavigationControl::setSubSection(KeyNavigationSubSection* subsection)
 {
     if (m_subsection == subsection) {

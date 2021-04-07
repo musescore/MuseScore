@@ -25,9 +25,10 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
+#include "async/asyncable.h"
 
 namespace mu::ui {
-class KeyNavigationController : public IKeyNavigationController, public actions::Actionable
+class KeyNavigationController : public IKeyNavigationController, public actions::Actionable, public async::Asyncable
 {
     INJECT(ui, actions::IActionsDispatcher, dispatcher)
 public:
@@ -47,6 +48,7 @@ private:
     void prevControl();
 
     void triggerControl();
+    void onForceActiveRequested(IKeyNavigationSection* sec, IKeyNavigationSubSection* sub, IKeyNavigationControl* ctrl);
 
     void activateSection(IKeyNavigationSection* s);
     void deactivateSection(IKeyNavigationSection* s);

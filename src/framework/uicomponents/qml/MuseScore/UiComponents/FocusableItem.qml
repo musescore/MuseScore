@@ -20,7 +20,13 @@ FocusScope {
     signal internalTriggered()
 
     function insureActiveFocus() {
-        root.forceActiveFocus()
+        if (!root.activeFocus) {
+            root.forceActiveFocus()
+        }
+
+        if (!keynavItem.active) {
+            keynavItem.forceActive()
+        }
     }
 
     KeyNavigationControl {

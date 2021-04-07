@@ -43,10 +43,11 @@ public:
     void setActive(bool arg) override;
     async::Channel<bool> activeChanged() const override;
     void trigger() override;
+    async::Channel<IKeyNavigationControl*> forceActiveRequested() const override;
 
     KeyNavigationSubSection* subsection() const;
 
-    void componentComplete() override;
+    Q_INVOKABLE void forceActive();
 
 public slots:
     void setSubSection(KeyNavigationSubSection* subsection);
@@ -59,7 +60,11 @@ private slots:
     void onSubSectionDestroyed();
 
 private:
+
+    void componentComplete() override;
+
     KeyNavigationSubSection* m_subsection = nullptr;
+    async::Channel<IKeyNavigationControl*> m_forceActiveRequested;
 };
 }
 
