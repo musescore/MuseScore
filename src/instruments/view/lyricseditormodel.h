@@ -20,13 +20,26 @@ class LyricsEditorModel : public QObject, public actions::Actionable, public asy
 
     INJECT(instruments, context::IGlobalContext, context)
 
+    Q_PROPERTY(bool mode READ mode WRITE setMode)
+    Q_PROPERTY(bool expandRepeats READ expandRepeats WRITE setExpandRepeats)
+
 public:
     LyricsEditorModel();
 
     Q_INVOKABLE QString updateLyrics();
 
+    bool mode() const { return m_mode; };
+    void setMode(bool b) { m_mode = b; };
+
+    bool expandRepeats() const { return m_expandRepeats; };
+    void setExpandRepeats(bool b) { m_expandRepeats = b; };
+
 signals:
     void lyricsUpdated();
+
+private:
+    bool m_mode { true };
+    bool m_expandRepeats { true };
 };
 }
 

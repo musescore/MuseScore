@@ -94,12 +94,69 @@ Item {
             }
         }
 
-        Button {
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: "Update text"
-            onClicked: {
-                textArea.text = lyricsModel.updateLyrics()
+        RowLayout {
+            id: buttonsRow
+            Layout.fillWidth: true
+            readonly property int sideMargin: parent.sideMargin
+
+            Button {
+                id: modeButton
+
+                Layout.leftMargin: parent.sideMargin
+                Layout.rightMargin: parent.sideMargin
+
+                text: "Mode"
+                onClicked: {
+                    lyricsModel.mode = !lyricsModel.mode
+                    textArea.text = lyricsModel.updateLyrics()
+                }
+
+                contentItem: Text {
+                    text: modeButton.text
+                    font: modeButton.font
+                    opacity: enabled ? 1.0 : 0.3
+                    color: modeButton.down ? "#17a81a" : "#21be2b"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                }
+
+                background: Rectangle {
+                    opacity: enabled ? 1 : 0.3
+                    border.color: modeButton.down ? "#17a81a" : "#21be2b"
+                    border.width: 1
+                    radius: 2
+                }
+            }
+
+            Button {
+                id: expandButton
+
+                Layout.leftMargin: parent.sideMargin
+                Layout.rightMargin: parent.sideMargin
+
+                text: "Expand Repeats"
+                onClicked: {
+                    lyricsModel.expandRepeats = !lyricsModel.expandRepeats
+                    textArea.text = lyricsModel.updateLyrics()
+                }
+
+                contentItem: Text {
+                    text: expandButton.text
+                    font: expandButton.font
+                    opacity: enabled ? 1.0 : 0.3
+                    color: expandButton.down ? "#17a81a" : "#21be2b"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                }
+
+                background: Rectangle {
+                    opacity: enabled ? 1 : 0.3
+                    border.color: expandButton.down ? "#17a81a" : "#21be2b"
+                    border.width: 1
+                    radius: 2
+                }
             }
         }
     }

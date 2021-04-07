@@ -1229,7 +1229,7 @@ public:
     bool hasHarmonies();
     int  lyricCount();
     int  harmonyCount();
-    QString extractLyrics();
+    QString extractLyrics(bool plaintext = true, bool expandRepeats = true);
     int keysig();
     int duration();
     int durationWithoutRepeats();

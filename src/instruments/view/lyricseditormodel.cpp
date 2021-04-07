@@ -10,6 +10,7 @@ mu::instruments::LyricsEditorModel::LyricsEditorModel()
             updateLyrics();
             emit lyricsUpdated();
         });
+        updateLyrics();
     });
 }
 
@@ -17,6 +18,6 @@ QString mu::instruments::LyricsEditorModel::updateLyrics()
 {
     auto notation = context()->currentNotation();
     auto interaction = notation->interaction();
-    interaction->copyLyrics();
+    interaction->copyLyrics(m_mode, m_expandRepeats);
     return QApplication::clipboard()->text();
 }

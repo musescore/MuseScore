@@ -4621,7 +4621,7 @@ int Score::harmonyCount()
 //   extractLyrics
 //---------------------------------------------------------
 
-QString Score::extractLyrics()
+QString Score::extractLyrics(bool plaintext, bool expandRepeats)
 {
     QString result;
     masterScore()->setExpandRepeats(true);
@@ -4635,6 +4635,11 @@ QString Score::extractLyrics()
         }
         // follow the repeat segments
         for (const RepeatSegment* rs : rlist) {
+            if (expandRepeats) {
+                for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
+                    m->setPlaybackCount(0);
+                }
+            }
             Fraction startTick  = Fraction::fromTicks(rs->tick);
             Fraction endTick    = startTick + Fraction::fromTicks(rs->len());
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
@@ -4642,6 +4647,11 @@ QString Score::extractLyrics()
                 for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
                     // consider voice 1 only
                     ChordRest* cr = toChordRest(seg->element(track));
+                    if (cr && cr->isMelismaEnd() && !plaintext) {
+                        result.chop(1);
+                        result += "_ ";
+                        continue;
+                    }
                     if (!cr || cr->lyrics().empty()) {
                         continue;
                     }
@@ -4660,7 +4670,7 @@ QString Score::extractLyrics()
                     if (l->syllabic() == Lyrics::Syllabic::SINGLE || l->syllabic() == Lyrics::Syllabic::END) {
                         result += lyric + " ";
                     } else if (l->syllabic() == Lyrics::Syllabic::BEGIN || l->syllabic() == Lyrics::Syllabic::MIDDLE) {
-                        result += lyric;
+                        result += plaintext ? lyric : (lyric + "-");
                     }
                 }
                 m->setPlaybackCount(m->playbackCount() + 1);
@@ -4695,7 +4705,7 @@ QString Score::extractLyrics()
                         if (l->syllabic() == Lyrics::Syllabic::SINGLE || l->syllabic() == Lyrics::Syllabic::END) {
                             result += lyric + " ";
                         } else if (l->syllabic() == Lyrics::Syllabic::BEGIN || l->syllabic() == Lyrics:: Syllabic::MIDDLE) {
-                            result += lyric;
+                            result += plaintext ? lyric : (lyric + "-");
                         }
                     }
                 }

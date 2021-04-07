@@ -98,7 +98,7 @@ public:
     virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex = -1) = 0;
 
     virtual void copySelection() = 0;
-    virtual void copyLyrics() = 0;
+    virtual void copyLyrics(bool plaintext = true, bool expandRepeats = false) = 0;
     virtual void pasteSelection(const Fraction& scale = Fraction(1, 1)) = 0;
     virtual void swapSelection() = 0;
     virtual void deleteSelection() = 0;

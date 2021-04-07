@@ -2046,9 +2046,9 @@ void NotationInteraction::copySelection()
     QApplication::clipboard()->setMimeData(mimeData);
 }
 
-void NotationInteraction::copyLyrics()
+void NotationInteraction::copyLyrics(bool plaintext, bool expandRepeats)
 {
-    QString text = score()->extractLyrics();
+    QString text = score()->extractLyrics(plaintext, expandRepeats);
     QApplication::clipboard()->setText(text);
 }
 
