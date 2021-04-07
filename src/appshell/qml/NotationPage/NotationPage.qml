@@ -23,6 +23,12 @@ DockPage {
 
     property NotationPageModel pageModel: NotationPageModel {}
 
+    property KeyNavigationSection noteInputKeyNavSec: KeyNavigationSection {
+        id: keynavSec
+        name: "NoteInputSection"
+        order: 2
+    }
+
     function updatePageState() {
         var states = [
                     {"Palette": palettePanel.visible},
@@ -60,6 +66,8 @@ DockPage {
         content: NoteInputBar {
             color: notationNoteInputBar.color
             orientation: notationNoteInputBar.orientation
+            keynav.section: noteInputKeyNavSec
+            keynav.order: 1
         }
     }
 

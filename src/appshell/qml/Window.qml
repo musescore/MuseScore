@@ -160,7 +160,7 @@ DockWindow {
         },
 
         DockToolBar	{
-            id:undoRedoToolBar
+            id: undoRedoToolBar
             objectName: "undoRedoToolBar"
 
             minimumWidth: 72

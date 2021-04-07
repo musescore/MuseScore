@@ -55,10 +55,10 @@ private:
     void doActivateSubSection(IKeyNavigationSubSection* s);
     void doDeactivateSubSection(IKeyNavigationSubSection* s);
 
-    const QList<IKeyNavigationSubSection*>& subsectionsOfActiveSection(bool doActiveIfNoAnyActive = true);
-    const QList<IKeyNavigationControl*>& controlsOfActiveSubSection(bool doActiveIfNoAnyActive = false);
+    const QSet<IKeyNavigationSubSection*>& subsectionsOfActiveSection(bool doActiveIfNoAnyActive = true);
+    const QSet<IKeyNavigationControl*>& controlsOfActiveSubSection(bool doActiveIfNoAnyActive = false);
 
-    QList<IKeyNavigationSection*> m_sections;
+    QSet<IKeyNavigationSection*> m_sections;
 };
 }
 

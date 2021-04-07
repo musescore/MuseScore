@@ -64,6 +64,7 @@ QVariant NoteInputBarModel::data(const QModelIndex& index, int role) const
     case HintRole: return item.description;
     case SubitemsRole: return subitems(item.code);
     case ShowSubitemsByPressAndHoldRole: return isNeedShowSubitemsByPressAndHold(item.code);
+    case OrderRole: return index.row();
     }
     return QVariant();
 }
@@ -83,6 +84,7 @@ QHash<int,QByteArray> NoteInputBarModel::roleNames() const
         { HintRole, "hintRole" },
         { SubitemsRole, "subitemsRole" },
         { ShowSubitemsByPressAndHoldRole, "showSubitemsByPressAndHoldRole" },
+        { OrderRole, "orderRole" },
     };
     return roles;
 }

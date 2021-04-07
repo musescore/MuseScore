@@ -19,102 +19,98 @@
 #include "keynavigationcontroller.h"
 
 #include <algorithm>
+#include <limits>
 
 #include "log.h"
 
 using namespace mu::ui;
 
 // algorithms
+enum class NavDirection {
+    Forward,
+    Back
+};
+
 template<class T>
-static T* findFirstEnabled(typename QList<T*>::const_iterator it, typename QList<T*>::const_iterator end)
+static T* findNearestEnabled(const QSet<T*>& set, const T* from, NavDirection direction)
 {
-    for (; it != end; ++it) {
-        T* s = *it;
-        if (s->enabled()) {
-            return s;
+    int fromOrder = from ? from->order() : (direction == NavDirection::Forward ? -1 : std::numeric_limits<int>::max());
+    T* ret = nullptr;
+    for (T* v : set) {
+        if (!v->enabled()) {
+            continue;
+        }
+
+        if (v == from) {
+            continue;
+        }
+
+        switch (direction) {
+        case NavDirection::Forward: {
+            if (v->order() >= fromOrder) {
+                if (!ret) {
+                    ret = v;
+                    continue;
+                }
+
+                if (v->order() < ret->order()) {
+                    ret = v;
+                }
+            }
+        } break;
+        case NavDirection::Back: {
+            if (v->order() <= fromOrder) {
+                if (!ret) {
+                    ret = v;
+                    continue;
+                }
+
+                if (v->order() > ret->order()) {
+                    ret = v;
+                }
+            }
+        } break;
         }
     }
-    return nullptr;
+
+    return ret;
 }
 
 template<class T>
-static T* findLastEnabled(typename QList<T*>::const_iterator it, typename QList<T*>::const_iterator begin)
+static T* firstEnabled(const QSet<T*>& set)
 {
-    for (; it != begin; --it) {
-        T* s = *it;
-        if (s->enabled()) {
-            return s;
-        }
+    if (set.empty()) {
+        return nullptr;
     }
-
-    T* s = *begin;
-    if (s->enabled()) {
-        return s;
-    }
-
-    return nullptr;
+    return findNearestEnabled<T>(set, nullptr, NavDirection::Forward);
 }
 
 template<class T>
-static T* firstEnabled(const QList<T*>& list)
+static T* lastEnabled(const QSet<T*>& set)
 {
-    if (list.empty()) {
-        return nullptr;
-    }
-    return findFirstEnabled<T>(list.cbegin(), list.cend());
+    return findNearestEnabled<T>(set, nullptr, NavDirection::Back);
 }
 
 template<class T>
-static T* lastEnabled(const QList<T*>& list)
+static T* nextEnabled(const QSet<T*>& set, const T* s)
 {
-    if (list.empty()) {
-        return nullptr;
-    }
-    auto last = --list.cend();
-    return findLastEnabled<T>(last, list.cbegin());
+    return findNearestEnabled<T>(set, s, NavDirection::Forward);
 }
 
 template<class T>
-static T* nextEnabled(const QList<T*>& list, const T* s)
+static T* prevEnabled(const QSet<T*>& set, const T* s)
 {
-    auto it = std::find(list.begin(), list.end(), s);
-    IF_ASSERT_FAILED(it != list.end()) {
-        return nullptr;
-    }
-
-    ++it;
-
-    if (it == list.end()) {
-        return nullptr;
-    }
-
-    return findFirstEnabled<T>(it, list.end());
+    return findNearestEnabled<T>(set, s, NavDirection::Back);
 }
 
 template<class T>
-static T* prevEnabled(const QList<T*>& list, const T* s)
+static T* findActive(const QSet<T*>& set)
 {
-    auto it = std::find(list.begin(), list.end(), s);
-    IF_ASSERT_FAILED(it != list.end()) {
-        return nullptr;
-    }
-    if (it == list.begin()) {
-        return nullptr;
-    }
-
-    --it;
-
-    return findLastEnabled<T>(it, list.cbegin());
-}
-
-template<class T>
-static T* findActive(const QList<T*>& list)
-{
-    auto it = std::find_if(list.cbegin(), list.cend(), [](const T* s) {
+    auto it = std::find_if(set.cbegin(), set.cend(), [](const T* s) {
         return s->active();
     });
 
-    if (it != list.cend()) {
+    if (it != set.cend()) {
         return *it;
     }
 
@@ -136,10 +132,7 @@ void KeyNavigationController::reg(IKeyNavigationSection* s)
 {
     //! TODO add check on valid state
 
-    m_sections.push_back(s);
-    std::sort(m_sections.begin(), m_sections.end(), [](const IKeyNavigationSection* f, const IKeyNavigationSection* s) {
-        return f->order() < s->order();
-    });
+    m_sections.insert(s);
 
     s->forceActiveRequested().onReceive(this, [this](const SectionSubSectionControl& ssc) {
         onForceActiveRequested(std::get<0>(ssc), std::get<1>(ssc), std::get<2>(ssc));
@@ -148,7 +141,7 @@ void KeyNavigationController::reg(IKeyNavigationSection* s)
 
 void KeyNavigationController::unreg(IKeyNavigationSection* s)
 {
-    m_sections.erase(std::remove(m_sections.begin(), m_sections.end(), s), m_sections.end());
+    m_sections.remove(s);
     s->forceActiveRequested().resetOnReceive(this);
 }
 
@@ -278,9 +271,9 @@ void KeyNavigationController::goToPrevSection()
     doActivateSection(prevSec);
 }
 
-const QList<IKeyNavigationSubSection*>& KeyNavigationController::subsectionsOfActiveSection(bool doActiveIfNoAnyActive)
+const QSet<IKeyNavigationSubSection*>& KeyNavigationController::subsectionsOfActiveSection(bool doActiveIfNoAnyActive)
 {
-    static const QList<IKeyNavigationSubSection*> null;
+    static const QSet<IKeyNavigationSubSection*> null;
 
     if (m_sections.empty()) {
         return null;
@@ -302,11 +295,11 @@ const QList<IKeyNavigationSubSection*>& KeyNavigationController::subsectionsOfAc
     return activeSec->subsections();
 }
 
-const QList<IKeyNavigationControl*>& KeyNavigationController::controlsOfActiveSubSection(bool doActiveIfNoAnyActive)
+const QSet<IKeyNavigationControl*>& KeyNavigationController::controlsOfActiveSubSection(bool doActiveIfNoAnyActive)
 {
-    static const QList<IKeyNavigationControl*> null;
+    static const QSet<IKeyNavigationControl*> null;
 
-    const QList<IKeyNavigationSubSection*>& subsections = subsectionsOfActiveSection(doActiveIfNoAnyActive);
+    const QSet<IKeyNavigationSubSection*>& subsections = subsectionsOfActiveSection(doActiveIfNoAnyActive);
     if (subsections.isEmpty()) {
         return null;
     }
@@ -331,7 +324,7 @@ void KeyNavigationController::goToNextSubSection()
 {
     LOGI() << "====";
 
-    const QList<IKeyNavigationSubSection*>& subsections = subsectionsOfActiveSection();
+    const QSet<IKeyNavigationSubSection*>& subsections = subsectionsOfActiveSection();
     if (subsections.isEmpty()) {
         return;
     }
@@ -363,7 +356,7 @@ void KeyNavigationController::goToPrevSubSection()
 {
     LOGI() << "====";
 
-    const QList<IKeyNavigationSubSection*>& subsections = subsectionsOfActiveSection();
+    const QSet<IKeyNavigationSubSection*>& subsections = subsectionsOfActiveSection();
     if (subsections.isEmpty()) {
         return;
     }
@@ -395,7 +388,7 @@ void KeyNavigationController::goToNextControl()
 {
     LOGI() << "====";
 
-    const QList<IKeyNavigationControl*>& controls = controlsOfActiveSubSection();
+    const QSet<IKeyNavigationControl*>& controls = controlsOfActiveSubSection();
     if (controls.isEmpty()) {
         return;
     }
@@ -427,7 +420,7 @@ void KeyNavigationController::goToPrevControl()
 {
     LOGI() << "====";
 
-    const QList<IKeyNavigationControl*>& controls = controlsOfActiveSubSection();
+    const QSet<IKeyNavigationControl*>& controls = controlsOfActiveSubSection();
     if (controls.isEmpty()) {
         return;
     }
@@ -458,7 +451,7 @@ void KeyNavigationController::goToPrevControl()
 void KeyNavigationController::doTriggerControl()
 {
     LOGI() << "====";
-    const QList<IKeyNavigationControl*>& controls = controlsOfActiveSubSection();
+    const QSet<IKeyNavigationControl*>& controls = controlsOfActiveSubSection();
     if (controls.isEmpty()) {
         return;
     }

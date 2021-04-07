@@ -66,7 +66,8 @@ private:
         CheckedRole,
         HintRole,
         SubitemsRole,
-        ShowSubitemsByPressAndHoldRole
+        ShowSubitemsByPressAndHoldRole,
+        OrderRole
     };
 
     void onActionsStateChanges(const actions::ActionCodeList& codes) override;
