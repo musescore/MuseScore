@@ -20,54 +20,47 @@
 #define MU_UI_KEYNAVIGATIONSUBSECTION_H
 
 #include <QObject>
-#include <QQmlParserStatus>
-#include "../ikeynavigationsection.h"
+#include <QList>
+
+#include "abstractkeynavigation.h"
+#include "../ikeynavigation.h"
 #include "keynavigationsection.h"
 
 namespace mu::ui {
-class KeyNavigationSubSection : public QObject, public IKeyNavigationSubSection, public QQmlParserStatus
+class KeyNavigationControl;
+class KeyNavigationSubSection : public AbstractKeyNavigation, public IKeyNavigationSubSection
 {
     Q_OBJECT
-    Q_INTERFACES(QQmlParserStatus)
     Q_PROPERTY(KeyNavigationSection * section READ section WRITE setSection)
-
-    Q_PROPERTY(QString name READ name WRITE setName)
-    Q_PROPERTY(int order READ order WRITE setOrder)
-
-    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
-    Q_PROPERTY(bool active READ active NOTIFY activeChanged)
 
 public:
     explicit KeyNavigationSubSection(QObject* parent = nullptr);
-
-    KeyNavigationSection* section() const;
+    ~KeyNavigationSubSection();
 
     QString name() const override;
     int order() const override;
     bool enabled() const override;
     bool active() const override;
-    void setActive(bool active) override;
+    void setActive(bool arg) override;
+    async::Channel<bool> activeChanged() const override;
+    const QList<IKeyNavigationControl*>& controls() const override;
 
-    // QQmlParserStatus
-    void classBegin() override;
+    KeyNavigationSection* section() const;
+
     void componentComplete() override;
+
+    void addControl(KeyNavigationControl* control);
+    void removeControl(KeyNavigationControl* control);
 
 public slots:
     void setSection(KeyNavigationSection* section);
-    void setName(QString name);
-    void setOrder(int order);
-    void setEnabled(bool enabled);
 
-signals:
-    void enabledChanged(bool enabled);
-    void activeChanged(bool active);
+private slots:
+    void onSectionDestroyed();
 
 private:
     KeyNavigationSection* m_section = nullptr;
-    QString m_name;
-    int m_order = -1;
-    bool m_active = false;
-    bool m_enabled = true;
+    QList<IKeyNavigationControl*> m_controls;
 };
 }
 

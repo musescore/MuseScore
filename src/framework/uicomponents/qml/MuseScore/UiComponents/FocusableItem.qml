@@ -1,33 +1,70 @@
-import QtQuick 2.5
+import QtQuick 2.15
+import MuseScore.Ui 1.0
 
 FocusScope {
     id: root
 
-    activeFocusOnTab: true
+    default property alias content: contentItem.data
+    property alias focusRect: focusRectItem
 
-    MouseArea {
+    property alias mouseArea: mouseAreaItem
+    property alias pressAndHoldInterval: mouseAreaItem.pressAndHoldInterval
+
+    property alias keynav: keynavItem
+
+    signal internalPressed()
+    signal internalReleased()
+    signal internalClicked()
+    signal internalPressAndHold()
+
+    function insureActiveFocus() {
+        root.forceActiveFocus()
+    }
+
+    KeyNavigationControl {
+        id: keynavItem
+        name: root.objectName
+
+        onActiveChanged: {
+            if (keynavItem.active) {
+                root.insureActiveFocus()
+            }
+        }
+    }
+
+    Rectangle {
+        id: focusRectItem
         anchors.fill: parent
 
-        propagateComposedEvents: true
+        Item {
+            id: contentItem
+            anchors.fill: parent
+            anchors.margins: 2
+        }
 
-        // ensure that mouse area is on the top of z order
-        // mouse event will be propagated to other overlapped mouse areas
-        z: 1000
+        border.color: "#75507b"
+        border.width: root.focus ? 2 : 0
+    }
+
+    MouseArea {
+        id: mouseAreaItem
+        anchors.fill: parent
 
         onClicked: {
-            if (!activeFocus) {
-                root.forceActiveFocus()
-            }
+            root.insureActiveFocus()
+            root.internalClicked()
+        }
 
-            mouse.accepted = false
+        onPressAndHold: {
+            root.internalPressAndHold()
         }
 
         onPressed: {
-            mouse.accepted = false
+            root.internalPressed()
         }
 
         onReleased: {
-            mouse.accepted = false
+            root.internalReleased()
         }
     }
 }

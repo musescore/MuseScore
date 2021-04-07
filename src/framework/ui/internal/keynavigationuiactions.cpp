@@ -35,6 +35,12 @@ const UiActionList KeyNavigationUiActions::m_actions = {
              ),
     UiAction("nav-prev-subsection",
              mu::context::UiCtxAny
+             ),
+    UiAction("nav-right",
+             mu::context::UiCtxAny
+             ),
+    UiAction("nav-left",
+             mu::context::UiCtxAny
              )
 };
 

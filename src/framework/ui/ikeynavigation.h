@@ -16,38 +16,50 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_UI_IKEYNAVIGATIONSECTION_H
-#define MU_UI_IKEYNAVIGATIONSECTION_H
+#ifndef MU_UI_IKEYNAVIGATION_H
+#define MU_UI_IKEYNAVIGATION_H
 
 #include <QString>
 #include <QList>
+#include "async/channel.h"
 
 namespace mu::ui {
-class IKeyNavigationSubSection
+class IKeyNavigation
+{
+public:
+    virtual ~IKeyNavigation() = default;
+
+    virtual QString name() const = 0;
+    virtual int order() const = 0;
+    virtual bool enabled() const = 0;
+    virtual bool active() const = 0;
+    virtual void setActive(bool arg) = 0;
+    virtual async::Channel<bool> activeChanged() const = 0;
+};
+
+class IKeyNavigationControl : public IKeyNavigation
+{
+public:
+    virtual ~IKeyNavigationControl() = default;
+
+    //! NOTE a notification will be added here
+};
+
+class IKeyNavigationSubSection : public IKeyNavigation
 {
 public:
     virtual ~IKeyNavigationSubSection() = default;
 
-    virtual QString name() const = 0;
-    virtual int order() const = 0;
-    virtual bool enabled() const = 0;
-    virtual bool active() const = 0;
-    virtual void setActive(bool arg) = 0;
+    virtual const QList<IKeyNavigationControl*>& controls() const = 0;
 };
 
-class IKeyNavigationSection
+class IKeyNavigationSection : public IKeyNavigation
 {
 public:
     virtual ~IKeyNavigationSection() = default;
-
-    virtual QString name() const = 0;
-    virtual int order() const = 0;
-    virtual bool enabled() const = 0;
-    virtual bool active() const = 0;
-    virtual void setActive(bool arg) = 0;
 
     virtual const QList<IKeyNavigationSubSection*>& subsections() const = 0;
 };
 }
 
-#endif // MU_UI_IKEYNAVIGATIONSECTION_H
+#endif // MU_UI_IKEYNAVIGATION_H

@@ -43,11 +43,16 @@ private:
     void prevSection();
     void nextSubSection();
     void prevSubSection();
+    void nextControl();
+    void prevControl();
 
     void activateSection(IKeyNavigationSection* s);
     void deactivateSection(IKeyNavigationSection* s);
+    void activateSubSection(IKeyNavigationSubSection* s);
+    void deactivateSubSection(IKeyNavigationSubSection* s);
 
-    const QList<IKeyNavigationSubSection*>& subsectionsOfActiveSection(bool doActiveIfNoAnyActive = true) const;
+    const QList<IKeyNavigationSubSection*>& subsectionsOfActiveSection(bool doActiveIfNoAnyActive = true);
+    const QList<IKeyNavigationControl*>& controlsOfActiveSubSection(bool doActiveIfNoAnyActive = false);
 
     QList<IKeyNavigationSection*> m_sections;
 };

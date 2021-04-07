@@ -16,46 +16,59 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_UI_KEYNAVIGATIONSECTION_H
-#define MU_UI_KEYNAVIGATIONSECTION_H
+#ifndef MU_UI_ABSTRACTKEYNAVIGATION_H
+#define MU_UI_ABSTRACTKEYNAVIGATION_H
 
 #include <QObject>
-#include <QList>
+#include <QQmlParserStatus>
 
-#include "abstractkeynavigation.h"
 #include "../ikeynavigation.h"
 
-#include "modularity/ioc.h"
-#include "../ikeynavigationcontroller.h"
-
 namespace mu::ui {
-class KeyNavigationSubSection;
-class KeyNavigationSection : public AbstractKeyNavigation, public IKeyNavigationSection
+class AbstractKeyNavigation : public QObject, public IKeyNavigation, public QQmlParserStatus
 {
     Q_OBJECT
-    INJECT(ui, IKeyNavigationController, keyNavigationController)
+    Q_INTERFACES(QQmlParserStatus)
+
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    Q_PROPERTY(int order READ order WRITE setOrder NOTIFY orderChanged)
+
+    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
+    Q_PROPERTY(bool active READ active NOTIFY activeChanged)
 
 public:
-    explicit KeyNavigationSection(QObject* parent = nullptr);
-    ~KeyNavigationSection();
+    explicit AbstractKeyNavigation(QObject* parent = nullptr);
 
     QString name() const override;
     int order() const override;
     bool enabled() const override;
     bool active() const override;
-    void setActive(bool arg) override;
     async::Channel<bool> activeChanged() const override;
-    const QList<IKeyNavigationSubSection*>& subsections() const override;
 
+    // QQmlParserStatus
+    void classBegin() override;
     void componentComplete() override;
 
-    void addSubSection(KeyNavigationSubSection* s);
-    void removeSubSection(KeyNavigationSubSection* s);
+public slots:
+    void setName(QString name);
+    void setOrder(int order);
+    void setEnabled(bool enabled);
+    void setActive(bool active) override;
 
-private:
+signals:
+    void nameChanged(QString name);
+    void orderChanged(int order);
+    void enabledChanged(bool enabled);
+    void activeChanged(bool active);
 
-    QList<IKeyNavigationSubSection*> m_subsections;
+protected:
+
+    QString m_name;
+    int m_order = -1;
+    bool m_enabled = true;
+    bool m_active = false;
+    async::Channel<bool> m_activeChanged;
 };
 }
 
-#endif // MU_UI_KEYNAVIGATIONSECTION_H
+#endif // MU_UI_ABSTRACTKEYNAVIGATION_H
