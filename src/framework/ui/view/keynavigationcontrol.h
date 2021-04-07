@@ -34,7 +34,7 @@ class KeyNavigationControl : public AbstractKeyNavigation, public IKeyNavigation
 
 public:
     explicit KeyNavigationControl(QObject* parent = nullptr);
-    ~KeyNavigationControl();
+    ~KeyNavigationControl() override;
 
     QString name() const override;
     int order() const override;

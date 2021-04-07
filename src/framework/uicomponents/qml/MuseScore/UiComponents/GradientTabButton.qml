@@ -62,7 +62,7 @@ RadioDelegate {
         Item {
             id: backgroundGradientRect
             anchors.fill: parent
-            anchors.margins: 2
+            anchors.margins: 2 //! NOTE margin needed to show focus border
 
             property bool isVertical: orientation === Qt.Vertical
             visible: false

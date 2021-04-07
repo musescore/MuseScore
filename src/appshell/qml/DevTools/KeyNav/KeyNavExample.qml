@@ -1,6 +1,7 @@
 import QtQuick 2.15
-import MuseScore.Ui 1.0
 import QtQuick.Layouts 1.15
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
 Rectangle {
     id: root
@@ -16,7 +17,7 @@ Rectangle {
         anchors.right: parent.right
         height: 64
 
-        Text {
+        StyledTextLabel {
             anchors.fill: parent
             anchors.margins: 8
             verticalAlignment: Text.AlignVCenter

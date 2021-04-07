@@ -58,17 +58,9 @@ FocusableItem {
         }
     }
 
-
-    Rectangle {
-        id: backgroundRect
-
-        anchors.fill: parent
-
-        color: normalStateColor
-        opacity: ui.theme.buttonOpacityNormal
-        border.width: 0
-        radius: 3
-    }
+    background.color: normalStateColor
+    background.opacity: ui.theme.buttonOpacityNormal
+    background.radius: 3
 
     Item {
         id: contentWrapper
@@ -138,7 +130,7 @@ FocusableItem {
             when: mouseArea.pressed
 
             PropertyChanges {
-                target: backgroundRect
+                target: root.background
                 color: pressedStateColor
                 opacity: ui.theme.buttonOpacityHit
             }
@@ -149,7 +141,7 @@ FocusableItem {
             when: mouseArea.containsMouse && !mouseArea.pressed
 
             PropertyChanges {
-                target: backgroundRect
+                target: root.background
                 color: hoveredStateColor
                 opacity: ui.theme.buttonOpacityHover
             }
