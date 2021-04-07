@@ -18,13 +18,59 @@
 //=============================================================================
 #include "keynavigationsubsection.h"
 
+#include <algorithm>
+
 #include "log.h"
+
+#include "keynavigationcontrol.h"
 
 using namespace mu::ui;
 
 KeyNavigationSubSection::KeyNavigationSubSection(QObject* parent)
-    : QObject(parent)
+    : AbstractKeyNavigation(parent)
 {
+}
+
+KeyNavigationSubSection::~KeyNavigationSubSection()
+{
+    if (m_section) {
+        m_section->removeSubSection(this);
+    }
+}
+
+QString KeyNavigationSubSection::name() const
+{
+    return AbstractKeyNavigation::name();
+}
+
+int KeyNavigationSubSection::order() const
+{
+    return AbstractKeyNavigation::order();
+}
+
+bool KeyNavigationSubSection::enabled() const
+{
+    return AbstractKeyNavigation::enabled();
+}
+
+bool KeyNavigationSubSection::active() const
+{
+    return AbstractKeyNavigation::active();
+}
+
+void KeyNavigationSubSection::setActive(bool arg)
+{
+    AbstractKeyNavigation::setActive(arg);
+}
+
+mu::async::Channel<bool> KeyNavigationSubSection::activeChanged() const
+{
+    return AbstractKeyNavigation::activeChanged();
+}
+
+const QList<IKeyNavigationControl*>& KeyNavigationSubSection::controls() const
+{
+    return m_controls;
 }
 
 KeyNavigationSection* KeyNavigationSubSection::section() const
@@ -34,69 +80,29 @@ KeyNavigationSection* KeyNavigationSubSection::section() const
 
 void KeyNavigationSubSection::setSection(KeyNavigationSection* section)
 {
-    m_section = section;
+    if (m_section == section) {
+        return;
+    }
+
     if (m_section) {
-        m_section->addSubSection(this);
+        m_section->removeSubSection(this);
+        m_section->disconnect(this);
+    }
+
+    m_section = section;
+
+    if (m_section) {
+        connect(m_section, &KeyNavigationSection::destroyed, this, &KeyNavigationSubSection::onSectionDestroyed);
     }
 }
 
-void KeyNavigationSubSection::setName(QString name)
+void KeyNavigationSubSection::onSectionDestroyed()
 {
-    m_name = name;
-}
-
-QString KeyNavigationSubSection::name() const
-{
-    return m_name;
-}
-
-void KeyNavigationSubSection::setOrder(int order)
-{
-    m_order = order;
-}
-
-int KeyNavigationSubSection::order() const
-{
-    return m_order;
-}
-
-void KeyNavigationSubSection::setEnabled(bool enabled)
-{
-    if (m_enabled == enabled) {
-        return;
-    }
-
-    m_enabled = enabled;
-    emit enabledChanged(m_enabled);
-}
-
-bool KeyNavigationSubSection::enabled() const
-{
-    return m_enabled;
-}
-
-void KeyNavigationSubSection::setActive(bool active)
-{
-    if (m_active == active) {
-        return;
-    }
-
-    m_active = active;
-    emit activeChanged(m_active);
-}
-
-bool KeyNavigationSubSection::active() const
-{
-    return m_active;
-}
-
-void KeyNavigationSubSection::classBegin()
-{
+    m_section = nullptr;
 }
 
 void KeyNavigationSubSection::componentComplete()
 {
-    //! NOTE Reg after set properties.
     LOGD() << "Completed: " << m_name << ", order: " << m_order;
 
     IF_ASSERT_FAILED(!m_name.isEmpty()) {
@@ -106,4 +112,21 @@ void KeyNavigationSubSection::componentComplete()
     IF_ASSERT_FAILED(m_order > -1) {
         return;
     }
+
+    if (m_section) {
+        m_section->addSubSection(this);
+    }
+}
+
+void KeyNavigationSubSection::addControl(KeyNavigationControl* control)
+{
+    m_controls.append(control);
+    std::sort(m_controls.begin(), m_controls.end(), [](const IKeyNavigationControl* f, const IKeyNavigationControl* s) {
+        return f->order() < s->order();
+    });
+}
+
+void KeyNavigationSubSection::removeControl(KeyNavigationControl* control)
+{
+    m_controls.removeOne(control);
 }

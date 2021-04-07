@@ -18,72 +18,22 @@
 //=============================================================================
 #include "keynavigationsection.h"
 
+#include <algorithm>
+
 #include "log.h"
+
+#include "keynavigationsubsection.h"
 
 using namespace mu::ui;
 
 KeyNavigationSection::KeyNavigationSection(QObject* parent)
-    : QObject(parent)
+    : AbstractKeyNavigation(parent)
 {
 }
 
 KeyNavigationSection::~KeyNavigationSection()
 {
     keyNavigationController()->unreg(this);
-}
-
-void KeyNavigationSection::setName(QString name)
-{
-    m_name = name;
-}
-
-QString KeyNavigationSection::name() const
-{
-    return m_name;
-}
-
-void KeyNavigationSection::setOrder(int order)
-{
-    m_order = order;
-}
-
-int KeyNavigationSection::order() const
-{
-    return m_order;
-}
-
-void KeyNavigationSection::setEnabled(bool enabled)
-{
-    if (m_enabled == enabled) {
-        return;
-    }
-
-    m_enabled = enabled;
-    emit enabledChanged(m_enabled);
-}
-
-bool KeyNavigationSection::enabled() const
-{
-    return m_enabled;
-}
-
-void KeyNavigationSection::setActive(bool active)
-{
-    if (m_active == active) {
-        return;
-    }
-
-    m_active = active;
-    emit activeChanged(m_active);
-}
-
-bool KeyNavigationSection::active() const
-{
-    return m_active;
-}
-
-void KeyNavigationSection::classBegin()
-{
 }
 
 void KeyNavigationSection::componentComplete()
@@ -102,9 +52,56 @@ void KeyNavigationSection::componentComplete()
     keyNavigationController()->reg(this);
 }
 
-void KeyNavigationSection::addSubSection(IKeyNavigationSubSection* s)
+QString KeyNavigationSection::name() const
+{
+    return AbstractKeyNavigation::name();
+}
+
+int KeyNavigationSection::order() const
+{
+    return AbstractKeyNavigation::order();
+}
+
+bool KeyNavigationSection::enabled() const
+{
+    return AbstractKeyNavigation::enabled();
+}
+
+bool KeyNavigationSection::active() const
+{
+    return AbstractKeyNavigation::active();
+}
+
+void KeyNavigationSection::setActive(bool arg)
+{
+    AbstractKeyNavigation::setActive(arg);
+}
+
+mu::async::Channel<bool> KeyNavigationSection::activeChanged() const
+{
+    return AbstractKeyNavigation::activeChanged();
+}
+
+static void printSubList(const QList<IKeyNavigationSubSection*>& list)
+{
+    for (const IKeyNavigationSubSection* s : list) {
+        LOGI() << s->name() << " " << s->order();
+    }
+}
+
+void KeyNavigationSection::addSubSection(KeyNavigationSubSection* s)
 {
     m_subsections.append(s);
+    std::sort(m_subsections.begin(), m_subsections.end(), [](const IKeyNavigationSubSection* f, const IKeyNavigationSubSection* s) {
+        return f->order() < s->order();
+    });
+
+    printSubList(m_subsections);
+}
+
+void KeyNavigationSection::removeSubSection(KeyNavigationSubSection* s)
+{
+    m_subsections.removeOne(s);
 }
 
 const QList<IKeyNavigationSubSection*>& KeyNavigationSection::subsections() const

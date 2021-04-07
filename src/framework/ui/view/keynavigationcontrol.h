@@ -16,28 +16,25 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_UI_KEYNAVIGATIONSECTION_H
-#define MU_UI_KEYNAVIGATIONSECTION_H
+#ifndef MU_UI_KEYNAVIGATIONCONTROL_H
+#define MU_UI_KEYNAVIGATIONCONTROL_H
 
 #include <QObject>
-#include <QList>
 
 #include "abstractkeynavigation.h"
 #include "../ikeynavigation.h"
-
-#include "modularity/ioc.h"
-#include "../ikeynavigationcontroller.h"
+#include "keynavigationsubsection.h"
+#include "async/asyncable.h"
 
 namespace mu::ui {
-class KeyNavigationSubSection;
-class KeyNavigationSection : public AbstractKeyNavigation, public IKeyNavigationSection
+class KeyNavigationControl : public AbstractKeyNavigation, public IKeyNavigationControl, public async::Asyncable
 {
     Q_OBJECT
-    INJECT(ui, IKeyNavigationController, keyNavigationController)
+    Q_PROPERTY(KeyNavigationSubSection * subsection READ subsection WRITE setSubSection NOTIFY subsectionChanged)
 
 public:
-    explicit KeyNavigationSection(QObject* parent = nullptr);
-    ~KeyNavigationSection();
+    explicit KeyNavigationControl(QObject* parent = nullptr);
+    ~KeyNavigationControl();
 
     QString name() const override;
     int order() const override;
@@ -45,17 +42,23 @@ public:
     bool active() const override;
     void setActive(bool arg) override;
     async::Channel<bool> activeChanged() const override;
-    const QList<IKeyNavigationSubSection*>& subsections() const override;
+
+    KeyNavigationSubSection* subsection() const;
 
     void componentComplete() override;
 
-    void addSubSection(KeyNavigationSubSection* s);
-    void removeSubSection(KeyNavigationSubSection* s);
+public slots:
+    void setSubSection(KeyNavigationSubSection* subsection);
+
+signals:
+    void subsectionChanged(KeyNavigationSubSection* subsection);
+
+private slots:
+    void onSubSectionDestroyed();
 
 private:
-
-    QList<IKeyNavigationSubSection*> m_subsections;
+    KeyNavigationSubSection* m_subsection = nullptr;
 };
 }
 
-#endif // MU_UI_KEYNAVIGATIONSECTION_H
+#endif // MU_UI_KEYNAVIGATIONCONTROL_H

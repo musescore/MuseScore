@@ -59,7 +59,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iuiactionsregister.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiactionsmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iuicontextresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/ikeynavigationsection.h
+    ${CMAKE_CURRENT_LIST_DIR}/ikeynavigation.h
     ${CMAKE_CURRENT_LIST_DIR}/ikeynavigationcontroller.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.cpp
@@ -99,10 +99,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetdialog.h
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractkeynavigation.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractkeynavigation.h
     ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationsection.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationsection.h
     ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationsubsection.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationsubsection.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationcontrol.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationcontrol.h
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.h

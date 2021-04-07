@@ -17,7 +17,6 @@ FocusableItem {
     property bool accentButton: false
 
     property int orientation: Qt.Vertical
-    property alias pressAndHoldInterval: mouseArea.pressAndHoldInterval
 
     signal clicked()
     signal pressAndHold()
@@ -33,6 +32,28 @@ FocusableItem {
     width: (Boolean(text) ? Math.max(contentWrapper.width + 32, privateProperties.isVertical ? 132 : 0) : contentWrapper.width + 16)
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
+
+    onInternalClicked: {
+        root.clicked()
+    }
+
+    onInternalPressAndHold: {
+        root.pressAndHold()
+    }
+
+    mouseArea.hoverEnabled: true
+    mouseArea.onContainsMouseChanged: {
+        if (!Boolean(root.hint)) {
+            return
+        }
+
+        if (mouseArea.containsMouse) {
+            ui.tooltip.show(this, root.hint)
+        } else {
+            ui.tooltip.hide(this)
+        }
+    }
+
 
     Rectangle {
         id: backgroundRect
@@ -105,34 +126,6 @@ FocusableItem {
                 }
             }
         ]
-    }
-
-    MouseArea {
-        id: mouseArea
-
-        anchors.fill: parent
-
-        hoverEnabled: true
-
-        onClicked: {
-            root.clicked()
-        }
-
-        onPressAndHold: {
-            root.pressAndHold()
-        }
-
-        onContainsMouseChanged: {
-            if (!Boolean(root.hint)) {
-                return
-            }
-
-            if (containsMouse) {
-                ui.tooltip.show(this, root.hint)
-            } else {
-                ui.tooltip.hide(this)
-            }
-        }
     }
 
     states: [

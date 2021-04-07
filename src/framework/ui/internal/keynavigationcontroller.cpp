@@ -127,6 +127,8 @@ void KeyNavigationController::init()
     dispatcher()->reg(this, "nav-prev-section", this, &KeyNavigationController::prevSection);
     dispatcher()->reg(this, "nav-next-subsection", this, &KeyNavigationController::nextSubSection);
     dispatcher()->reg(this, "nav-prev-subsection", this, &KeyNavigationController::prevSubSection);
+    dispatcher()->reg(this, "nav-right", this, &KeyNavigationController::nextControl);
+    dispatcher()->reg(this, "nav-left", this, &KeyNavigationController::prevControl);
 }
 
 void KeyNavigationController::reg(IKeyNavigationSection* s)
@@ -134,7 +136,7 @@ void KeyNavigationController::reg(IKeyNavigationSection* s)
     //! TODO add check on valid state
 
     m_sections.push_back(s);
-    std::sort(m_sections.begin(), m_sections.end(), [this](const IKeyNavigationSection* f, const IKeyNavigationSection* s) {
+    std::sort(m_sections.begin(), m_sections.end(), [](const IKeyNavigationSection* f, const IKeyNavigationSection* s) {
         return f->order() < s->order();
     });
 }
@@ -151,14 +153,14 @@ void KeyNavigationController::activateSection(IKeyNavigationSection* s)
     }
 
     for (IKeyNavigationSubSection* sub : s->subsections()) {
-        sub->setActive(false);
+        deactivateSubSection(sub);
     }
 
     s->setActive(true);
 
     IKeyNavigationSubSection* firstSub = firstEnabled(s->subsections());
     if (firstSub) {
-        firstSub->setActive(true);
+        activateSubSection(firstSub);
     }
 }
 
@@ -169,10 +171,41 @@ void KeyNavigationController::deactivateSection(IKeyNavigationSection* s)
     }
 
     for (IKeyNavigationSubSection* sub : s->subsections()) {
-        sub->setActive(false);
+        deactivateSubSection(sub);
     }
 
     s->setActive(false);
+}
+
+void KeyNavigationController::activateSubSection(IKeyNavigationSubSection* sub)
+{
+    IF_ASSERT_FAILED(sub) {
+        return;
+    }
+
+    for (IKeyNavigationControl* ctr : sub->controls()) {
+        ctr->setActive(false);
+    }
+
+    sub->setActive(true);
+
+    IKeyNavigationControl* firstCtr = firstEnabled(sub->controls());
+    if (firstCtr) {
+        firstCtr->setActive(true);
+    }
+}
+
+void KeyNavigationController::deactivateSubSection(IKeyNavigationSubSection* sub)
+{
+    IF_ASSERT_FAILED(sub) {
+        return;
+    }
+
+    for (IKeyNavigationControl* ctr : sub->controls()) {
+        ctr->setActive(false);
+    }
+
+    sub->setActive(false);
 }
 
 void KeyNavigationController::nextSection()
@@ -235,7 +268,7 @@ void KeyNavigationController::prevSection()
     activateSection(prevSec);
 }
 
-const QList<IKeyNavigationSubSection*>& KeyNavigationController::subsectionsOfActiveSection(bool doActiveIfNoAnyActive) const
+const QList<IKeyNavigationSubSection*>& KeyNavigationController::subsectionsOfActiveSection(bool doActiveIfNoAnyActive)
 {
     static const QList<IKeyNavigationSubSection*> null;
 
@@ -259,6 +292,31 @@ const QList<IKeyNavigationSubSection*>& KeyNavigationController::subsectionsOfAc
     return activeSec->subsections();
 }
 
+const QList<IKeyNavigationControl*>& KeyNavigationController::controlsOfActiveSubSection(bool doActiveIfNoAnyActive)
+{
+    static const QList<IKeyNavigationControl*> null;
+
+    const QList<IKeyNavigationSubSection*>& subsections = subsectionsOfActiveSection(doActiveIfNoAnyActive);
+    if (subsections.isEmpty()) {
+        return null;
+    }
+
+    IKeyNavigationSubSection* activeSubSec = findActive(subsections);
+    if (!activeSubSec) { // no any active
+        if (!doActiveIfNoAnyActive) {
+            return null;
+        }
+
+        activeSubSec = firstEnabled(subsections);
+        if (!activeSubSec) {
+            return null;
+        }
+        activeSubSec->setActive(true);
+    }
+
+    return activeSubSec->controls();
+}
+
 void KeyNavigationController::nextSubSection()
 {
     LOGI() << "====";
@@ -272,23 +330,23 @@ void KeyNavigationController::nextSubSection()
     if (!activeSubSec) { // no any active
         IKeyNavigationSubSection* firstSub = firstEnabled(subsections);
         if (firstSub) {
-            firstSub->setActive(true);
+            activateSubSection(firstSub);
         }
         return;
     }
 
-    activeSubSec->setActive(false);
+    deactivateSubSection(activeSubSec);
 
     IKeyNavigationSubSection* nextSubSec = nextEnabled(subsections, activeSubSec);
     if (!nextSubSec) { // active is last
         IKeyNavigationSubSection* firstSub = firstEnabled(subsections);
         if (firstSub) {
-            firstSub->setActive(true);
+            activateSubSection(firstSub);
         }
         return;
     }
 
-    nextSubSec->setActive(true);
+    activateSubSection(nextSubSec);
 }
 
 void KeyNavigationController::prevSubSection()
@@ -304,21 +362,85 @@ void KeyNavigationController::prevSubSection()
     if (!activeSubSec) { // no any active
         IKeyNavigationSubSection* lastSub = lastEnabled(subsections);
         if (lastSub) {
-            lastSub->setActive(true);
+            activateSubSection(lastSub);
         }
         return;
     }
 
-    activeSubSec->setActive(false);
+    deactivateSubSection(activeSubSec);
 
     IKeyNavigationSubSection* prevSubSec = prevEnabled(subsections, activeSubSec);
     if (!prevSubSec) { // active is first
         IKeyNavigationSubSection* lastSub = lastEnabled(subsections);
         if (lastSub) {
-            lastSub->setActive(true);
+            activateSubSection(lastSub);
         }
         return;
     }
 
-    prevSubSec->setActive(true);
+    activateSubSection(prevSubSec);
+}
+
+void KeyNavigationController::nextControl()
+{
+    LOGI() << "====";
+
+    const QList<IKeyNavigationControl*>& controls = controlsOfActiveSubSection();
+    if (controls.isEmpty()) {
+        return;
+    }
+
+    IKeyNavigationControl* activeControl = findActive(controls);
+    if (!activeControl) { // no any active
+        IKeyNavigationControl* first = firstEnabled(controls);
+        if (first) {
+            first->setActive(true);
+        }
+        return;
+    }
+
+    activeControl->setActive(false);
+
+    IKeyNavigationControl* nextControl = nextEnabled(controls, activeControl);
+    if (!nextControl) { // active is last
+        IKeyNavigationControl* first = firstEnabled(controls);
+        if (first) {
+            first->setActive(true);
+        }
+        return;
+    }
+
+    nextControl->setActive(true);
+}
+
+void KeyNavigationController::prevControl()
+{
+    LOGI() << "====";
+
+    const QList<IKeyNavigationControl*>& controls = controlsOfActiveSubSection();
+    if (controls.isEmpty()) {
+        return;
+    }
+
+    IKeyNavigationControl* activeControl = findActive(controls);
+    if (!activeControl) { // no any active
+        IKeyNavigationControl* last = lastEnabled(controls);
+        if (last) {
+            last->setActive(true);
+        }
+        return;
+    }
+
+    activeControl->setActive(false);
+
+    IKeyNavigationControl* prevControl = prevEnabled(controls, activeControl);
+    if (!prevControl) { // active is first
+        IKeyNavigationControl* last = lastEnabled(controls);
+        if (last) {
+            last->setActive(true);
+        }
+        return;
+    }
+
+    prevControl->setActive(true);
 }
