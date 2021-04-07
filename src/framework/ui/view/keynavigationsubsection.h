@@ -44,7 +44,7 @@ public:
     bool active() const override;
     void setActive(bool arg) override;
     async::Channel<bool> activeChanged() const override;
-    const QList<IKeyNavigationControl*>& controls() const override;
+    const QSet<IKeyNavigationControl*>& controls() const override;
     async::Channel<SubSectionControl> forceActiveRequested() const override;
 
     KeyNavigationSection* section() const;
@@ -62,7 +62,7 @@ private slots:
 
 private:
     KeyNavigationSection* m_section = nullptr;
-    QList<IKeyNavigationControl*> m_controls;
+    QSet<IKeyNavigationControl*> m_controls;
     async::Channel<SubSectionControl> m_forceActiveRequested;
 };
 }

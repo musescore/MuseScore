@@ -46,7 +46,7 @@ public:
     bool active() const override;
     void setActive(bool arg) override;
     async::Channel<bool> activeChanged() const override;
-    const QList<IKeyNavigationSubSection*>& subsections() const override;
+    const QSet<IKeyNavigationSubSection*>& subsections() const override;
     async::Channel<SectionSubSectionControl> forceActiveRequested() const override;
 
     void componentComplete() override;
@@ -56,7 +56,7 @@ public:
 
 private:
 
-    QList<IKeyNavigationSubSection*> m_subsections;
+    QSet<IKeyNavigationSubSection*> m_subsections;
     async::Channel<SectionSubSectionControl> m_forceActiveRequested;
 };
 }

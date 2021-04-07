@@ -1,81 +1,33 @@
-import QtQuick 2.15
-import MuseScore.Ui 1.0
+import QtQuick 2.5
 
 FocusScope {
     id: root
 
-    default property alias content: contentItem.data
-    property alias background: focusRectItem
-
-    property alias mouseArea: mouseAreaItem
-    property alias pressAndHoldInterval: mouseAreaItem.pressAndHoldInterval
-
-    property alias keynav: keynavItem
-
-    signal internalPressed()
-    signal internalReleased()
-    signal internalClicked()
-    signal internalPressAndHold()
-
-    signal internalTriggered()
-
-    function insureActiveFocus() {
-        if (!root.activeFocus) {
-            root.forceActiveFocus()
-        }
-
-        if (!keynavItem.active) {
-            keynavItem.forceActive()
-        }
-    }
-
-    KeyNavigationControl {
-        id: keynavItem
-        name: root.objectName
-
-        onActiveChanged: {
-            if (keynavItem.active) {
-                root.insureActiveFocus()
-            }
-        }
-
-        onTriggered: {
-            root.internalTriggered()
-        }
-    }
-
-    Rectangle {
-        id: focusRectItem
-        anchors.fill: parent
-        border.color: ui.theme.focusColor
-        border.width: keynavItem.active ? 2 : 0
-    }
-
-    Item {
-        id: contentItem
-        anchors.fill: focusRectItem
-        anchors.margins: 2 //! NOTE margin needed to show focus border
-    }
+    activeFocusOnTab: true
 
     MouseArea {
-        id: mouseAreaItem
         anchors.fill: parent
 
-        onClicked: {
-            root.insureActiveFocus()
-            root.internalClicked()
-        }
+        propagateComposedEvents: true
 
-        onPressAndHold: {
-            root.internalPressAndHold()
+        // ensure that mouse area is on the top of z order
+        // mouse event will be propagated to other overlapped mouse areas
+        z: 1000
+
+        onClicked: {
+            if (!activeFocus) {
+                root.forceActiveFocus()
+            }
+
+            mouse.accepted = false
         }
 
         onPressed: {
-            root.internalPressed()
+            mouse.accepted = false
         }
 
         onReleased: {
-            root.internalReleased()
+            mouse.accepted = false
         }
     }
 }

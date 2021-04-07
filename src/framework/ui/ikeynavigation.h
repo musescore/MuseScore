@@ -60,7 +60,7 @@ class IKeyNavigationSubSection : public IKeyNavigation
 public:
     virtual ~IKeyNavigationSubSection() = default;
 
-    virtual const QList<IKeyNavigationControl*>& controls() const = 0;
+    virtual const QSet<IKeyNavigationControl*>& controls() const = 0;
     virtual async::Channel<SubSectionControl> forceActiveRequested() const = 0;
 };
 
@@ -69,7 +69,7 @@ class IKeyNavigationSection : public IKeyNavigation
 public:
     virtual ~IKeyNavigationSection() = default;
 
-    virtual const QList<IKeyNavigationSubSection*>& subsections() const = 0;
+    virtual const QSet<IKeyNavigationSubSection*>& subsections() const = 0;
     virtual async::Channel<SectionSubSectionControl> forceActiveRequested() const = 0;
 };
 }
