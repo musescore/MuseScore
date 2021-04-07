@@ -16,6 +16,14 @@ Rectangle {
     border.color: "#75507b"
     border.width: keynavsec.active ? 4 : 0
 
+    signal clicked(string info)
+
+    function doClicked(control) {
+        var info = "sub: " + root.subsectionName + ", control: " + control
+        console.log(info)
+        root.clicked(info)
+    }
+
     KeyNavigationSubSection {
         id: keynavsec
 
@@ -39,10 +47,7 @@ Rectangle {
             height: 24
             width: 24
             text: "C1"
-            onClicked: {
-                console.log("onClicked " + text)
-                ui.tooltip.show(this, text)
-            }
+            onClicked: root.doClicked(text)
         }
 
         FlatButton {
@@ -53,10 +58,7 @@ Rectangle {
             height: 24
             width: 24
             text: "C2"
-            onClicked: {
-                console.log("onClicked " + text)
-                ui.tooltip.show(this, text)
-            }
+            onClicked: root.doClicked(text)
         }
 
         FlatButton {
@@ -67,10 +69,7 @@ Rectangle {
             height: 24
             width: 24
             text: "C3"
-            onClicked: {
-                console.log("onClicked " + text)
-                ui.tooltip.show(this, text)
-            }
+            onClicked: root.doClicked(text)
         }
     }
 }

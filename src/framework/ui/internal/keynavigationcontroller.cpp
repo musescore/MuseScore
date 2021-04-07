@@ -129,6 +129,7 @@ void KeyNavigationController::init()
     dispatcher()->reg(this, "nav-prev-subsection", this, &KeyNavigationController::prevSubSection);
     dispatcher()->reg(this, "nav-right", this, &KeyNavigationController::nextControl);
     dispatcher()->reg(this, "nav-left", this, &KeyNavigationController::prevControl);
+    dispatcher()->reg(this, "nav-trigger", this, &KeyNavigationController::triggerControl);
 }
 
 void KeyNavigationController::reg(IKeyNavigationSection* s)
@@ -443,4 +444,20 @@ void KeyNavigationController::prevControl()
     }
 
     prevControl->setActive(true);
+}
+
+void KeyNavigationController::triggerControl()
+{
+    LOGI() << "====";
+    const QList<IKeyNavigationControl*>& controls = controlsOfActiveSubSection();
+    if (controls.isEmpty()) {
+        return;
+    }
+
+    IKeyNavigationControl* activeControl = findActive(controls);
+    if (!activeControl) {
+        return;
+    }
+
+    activeControl->trigger();
 }

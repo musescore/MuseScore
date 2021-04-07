@@ -42,6 +42,7 @@ public:
     bool active() const override;
     void setActive(bool arg) override;
     async::Channel<bool> activeChanged() const override;
+    void trigger() override;
 
     KeyNavigationSubSection* subsection() const;
 
@@ -52,6 +53,7 @@ public slots:
 
 signals:
     void subsectionChanged(KeyNavigationSubSection* subsection);
+    void triggered();
 
 private slots:
     void onSubSectionDestroyed();

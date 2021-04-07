@@ -42,7 +42,7 @@ class IKeyNavigationControl : public IKeyNavigation
 public:
     virtual ~IKeyNavigationControl() = default;
 
-    //! NOTE a notification will be added here
+    virtual void trigger() = 0;
 };
 
 class IKeyNavigationSubSection : public IKeyNavigation
