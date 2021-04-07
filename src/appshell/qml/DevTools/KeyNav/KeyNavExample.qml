@@ -34,7 +34,7 @@ Rectangle {
         color: "#fce94f"
 
         sectionName: "mainMenu"
-        sectionOrder: 1
+        sectionOrder: 101
 
         RowLayout {
             anchors.fill: parent
@@ -63,7 +63,7 @@ Rectangle {
         color: "#e9b96e"
 
         sectionName: "topTools"
-        sectionOrder: 2
+        sectionOrder: 102
 
         Row {
             anchors.fill: parent
@@ -91,7 +91,7 @@ Rectangle {
         color: "#729fcf"
 
         sectionName: "leftPanel"
-        sectionOrder: 3
+        sectionOrder: 103
 
         Column {
             anchors.fill: parent
@@ -118,7 +118,8 @@ Rectangle {
         color: "#8ae234"
 
         sectionName: "rightPanel"
-        sectionOrder: 5
+        sectionOrder: 105
+
         Column {
             anchors.fill: parent
             spacing: 8
@@ -144,7 +145,7 @@ Rectangle {
         color: "#ef2929"
 
         sectionName: "centerPanel"
-        sectionOrder: 4
+        sectionOrder: 104
 
         KeyNavSubSection {
             keynavSection: centerPanel.keynavSection

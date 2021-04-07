@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import MuseScore.UiComponents 1.0
 
-FocusableItem {
+FocusableControl {
     id: root
 
     property alias icon: buttonIcon.iconCode

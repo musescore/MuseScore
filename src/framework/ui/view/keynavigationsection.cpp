@@ -88,10 +88,7 @@ void KeyNavigationSection::addSubSection(KeyNavigationSubSection* sub)
         return;
     }
 
-    m_subsections.append(sub);
-    std::sort(m_subsections.begin(), m_subsections.end(), [](const IKeyNavigationSubSection* f, const IKeyNavigationSubSection* s) {
-        return f->order() < s->order();
-    });
+    m_subsections.insert(sub);
 
     sub->forceActiveRequested().onReceive(this, [this](const SubSectionControl& subcon) {
         m_forceActiveRequested.send(std::make_tuple(this, std::get<0>(subcon), std::get<1>(subcon)));
@@ -109,11 +106,11 @@ void KeyNavigationSection::removeSubSection(KeyNavigationSubSection* sub)
         return;
     }
 
-    m_subsections.removeOne(sub);
+    m_subsections.remove(sub);
     sub->forceActiveRequested().resetOnReceive(this);
 }
 
-const QList<IKeyNavigationSubSection*>& KeyNavigationSection::subsections() const
+const QSet<IKeyNavigationSubSection*>& KeyNavigationSection::subsections() const
 {
     return m_subsections;
 }
