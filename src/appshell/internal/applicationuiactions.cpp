@@ -97,6 +97,12 @@ const UiActionList ApplicationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Toggle 'Instruments'"),
              Checkable::Yes
              ),
+    UiAction("toggle-lyrics",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Lyrics"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Lyrics Editor'"),
+             Checkable::Yes
+             ),
     UiAction("inspector",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Inspector"),
@@ -143,6 +149,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 const std::vector<std::pair<mu::actions::ActionCode, PanelType> > ApplicationUiActions::m_panels = {
     { "toggle-palette", PanelType::Palette },
     { "toggle-instruments", PanelType::Instruments },
+    { "toggle-lyrics", PanelType::Lyrics },
     { "inspector", PanelType::Inspector },
     { "toggle-notationtoolbar", PanelType::NotationToolBar },
     { "toggle-noteinput", PanelType::NoteInputBar },

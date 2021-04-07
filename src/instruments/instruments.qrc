@@ -13,5 +13,6 @@
         <file>qml/MuseScore/Instruments/internal/InstrumentsView.qml</file>
         <file>qml/MuseScore/Instruments/internal/SelectedInstrumentsView.qml</file>
         <file>qml/MuseScore/Instruments/internal/StaffSettingsPopup.qml</file>
+        <file>qml/MuseScore/Instruments/LyricsEditor.qml</file>
     </qresource>
 </RCC>

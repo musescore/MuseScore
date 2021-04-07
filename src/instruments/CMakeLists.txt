@@ -65,6 +65,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentpaneltreemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentpaneltreemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/lyricseditormodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/lyricseditormodel.h
     )
 
 set(MODULE_LINK

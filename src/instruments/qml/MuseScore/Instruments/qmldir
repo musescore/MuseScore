@@ -2,3 +2,4 @@ module MuseScore.Instruments
 ChooseInstrumentsPage 1.0 ChooseInstrumentsPage.qml
 InstrumentsPanel 1.0 InstrumentsPanel.qml
 InstrumentsDialog 1.0 InstrumentsDialog.qml
+LyricsEditor 1.0 LyricsEditor.qml

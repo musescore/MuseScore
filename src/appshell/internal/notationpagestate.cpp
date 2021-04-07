@@ -36,6 +36,7 @@ bool NotationPageState::isPanelVisible(PanelType type) const
     switch (type) {
     case PanelType::Palette:
     case PanelType::Instruments:
+    case PanelType::Lyrics:
     case PanelType::Inspector:
     case PanelType::NotationToolBar:
     case PanelType::NoteInputBar:
@@ -74,6 +75,7 @@ void NotationPageState::setIsPanelVisible(PanelType type, bool visible)
     switch (type) {
     case PanelType::Palette:
     case PanelType::Instruments:
+    case PanelType::Lyrics:
     case PanelType::Inspector:
     case PanelType::NotationToolBar:
     case PanelType::NoteInputBar:

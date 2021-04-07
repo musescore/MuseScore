@@ -39,6 +39,8 @@ class NotationPageModel : public QObject, public async::Asyncable, public action
     Q_PROPERTY(
         bool isInstrumentsPanelVisible READ isInstrumentsPanelVisible WRITE setIsInstrumentsPanelVisible NOTIFY isInstrumentsPanelVisibleChanged)
     Q_PROPERTY(
+        bool isLyricsPanelVisible READ isLyricsPanelVisible WRITE setIsLyricsPanelVisible NOTIFY isLyricsPanelVisibleChanged)
+    Q_PROPERTY(
         bool isInspectorPanelVisible READ isInspectorPanelVisible WRITE setIsInspectorPanelVisible NOTIFY isInspectorPanelVisibleChanged)
     Q_PROPERTY(bool isStatusBarVisible READ isStatusBarVisible WRITE setIsStatusBarVisible NOTIFY isStatusBarVisibleChanged)
     Q_PROPERTY(bool isNoteInputBarVisible READ isNoteInputBarVisible WRITE setIsNoteInputBarVisible NOTIFY isNoteInputBarVisibleChanged)
@@ -59,6 +61,7 @@ public:
 
     bool isPalettePanelVisible() const;
     bool isInstrumentsPanelVisible() const;
+    bool isLyricsPanelVisible() const;
     bool isInspectorPanelVisible() const;
     bool isStatusBarVisible() const;
     bool isNoteInputBarVisible() const;
@@ -70,6 +73,7 @@ public:
 public slots:
     void setIsPalettePanelVisible(bool visible);
     void setIsInstrumentsPanelVisible(bool visible);
+    void setIsLyricsPanelVisible(bool visible);
     void setIsInspectorPanelVisible(bool visible);
     void setIsStatusBarVisible(bool visible);
     void setIsNoteInputBarVisible(bool visible);
@@ -81,6 +85,7 @@ public slots:
 signals:
     void isPalettePanelVisibleChanged();
     void isInstrumentsPanelVisibleChanged();
+    void isLyricsPanelVisibleChanged();
     void isInspectorPanelVisibleChanged();
     void isStatusBarVisibleChanged();
     void isNotationToolBarVisibleChanged();

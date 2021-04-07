@@ -29,6 +29,7 @@ DockPage {
                     {"Instruments": instrumentsPanel.visible},
                     {"Inspector": inspectorPanel.visible},
                     {"NoteInputBar": notationNoteInputBar.visible},
+                    {"Lyrics": lyricsPanel.visible},
                     {"NotationToolBar": isNotationToolBarVisible},
                     {"PlaybackToolBar": isPlaybackToolBarVisible},
                     {"UndoRedoToolBar": isUndoRedoToolBarVisible}
@@ -42,6 +43,7 @@ DockPage {
 
         palettePanel.visible = Qt.binding(function() { return pageModel.isPalettePanelVisible })
         instrumentsPanel.visible = Qt.binding(function() { return pageModel.isInstrumentsPanelVisible })
+        lyricsPanel.visible = Qt.binding(function() { return pageModel.isLyricsPanelVisible })
         inspectorPanel.visible = Qt.binding(function() { return pageModel.isInspectorPanelVisible })
         notationNoteInputBar.visible = Qt.binding(function() { return pageModel.isNoteInputBarVisible })
 
@@ -137,6 +139,32 @@ DockPage {
             }
 
             InspectorForm {
+                anchors.fill: parent
+            }
+        },
+
+        DockPanel {
+            id: lyricsPanel
+            objectName: "lyricsPanel"
+
+            title: qsTrc("appshell", "Lyrics")
+
+            width: defaultPanelWidth
+            minimumWidth: minimumPanelWidth
+
+            color: notationPage.color
+            borderColor: notationPage.borderColor
+
+            tabifyObjectName: "inspectorPanel"
+
+            floatable: true
+            closable: true
+
+            onClosed: {
+                notationPage.pageModel.isLyricsPanelVisible = false
+            }
+            /*  RIGHT HERE */
+            LyricsEditor {
                 anchors.fill: parent
             }
         }

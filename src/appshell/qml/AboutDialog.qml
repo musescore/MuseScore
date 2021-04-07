@@ -10,7 +10,7 @@ QmlDialog {
 
     fixedSize: Qt.size(480, 424)
 
-    title: qsTrc("appshell", "About MuseScore")
+    title: qsTrc("appshell", "About Custom MuseScore")
 
     Rectangle {
         anchors.fill: parent
