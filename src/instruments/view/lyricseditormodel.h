@@ -28,11 +28,11 @@ public:
 
     Q_INVOKABLE QString updateLyrics();
 
-    bool mode() const { return m_mode; };
-    void setMode(bool b) { m_mode = b; };
+    bool mode() const { return m_mode; }
+    void setMode(bool b) { m_mode = b; }
 
-    bool expandRepeats() const { return m_expandRepeats; };
-    void setExpandRepeats(bool b) { m_expandRepeats = b; };
+    bool expandRepeats() const { return m_expandRepeats; }
+    void setExpandRepeats(bool b) { m_expandRepeats = b; }
 
 signals:
     void lyricsUpdated();
