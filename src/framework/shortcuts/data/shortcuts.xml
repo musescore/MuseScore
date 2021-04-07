@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Shortcuts>
+<!-- Keyboard navigation -->
+    <SC>
+        <key>nav-next-section</key>
+        <seq>F6</seq>
+    </SC>
+    <SC>
+        <key>nav-prev-section</key>
+        <seq>Shift+F6</seq>
+    </SC>
+    <SC>
+        <key>nav-next-subsection</key>
+        <seq>Tab</seq>
+    </SC>
+    <SC>
+        <key>nav-prev-subsection</key>
+        <seq>Shift+Tab</seq>
+    </SC>
+
   <SC>
     <key>plugin-creator</key>
     <seq>Ctrl+Shift+P</seq>
@@ -755,10 +773,6 @@
     <key>inspector</key>
     <seq>F8</seq>
     </SC>
-  <SC>
-    <key>toggle-selection-window</key>
-    <seq>F6</seq>
-    </SC>
 <!--
   <SC>
     <key>omr</key>
@@ -973,14 +987,6 @@
   <SC>
     <key>advance-64</key>
     <seq>Ctrl+1</seq>
-    </SC>
-  <SC>
-    <key>prev-measure-TEXT</key>
-    <seq>Shift+Tab</seq>
-    </SC>
-  <SC>
-    <key>next-measure-TEXT</key>
-    <seq>Tab</seq>
     </SC>
   <SC>
     <key>prev-beat-TEXT</key>

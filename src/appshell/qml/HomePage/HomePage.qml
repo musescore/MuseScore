@@ -102,6 +102,10 @@ DockPage {
         }
 
         Rectangle {
+            onVisibleChanged: {
+                console.log("Home central onVisibleChanged: " + visible)
+            }
+
             Loader {
                 id: centralLoader
                 anchors.fill: parent
