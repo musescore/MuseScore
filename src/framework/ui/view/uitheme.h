@@ -43,6 +43,7 @@ class UiTheme : public QObject, public async::Asyncable
     Q_PROPERTY(QColor fontPrimaryColor READ fontPrimaryColor NOTIFY themeChanged)
     Q_PROPERTY(QColor fontSecondaryColor READ fontSecondaryColor NOTIFY themeChanged)
     Q_PROPERTY(QColor linkColor READ linkColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor focusColor READ focusColor NOTIFY themeChanged)
 
     Q_PROPERTY(qreal accentOpacityNormal READ accentOpacityNormal NOTIFY themeChanged)
     Q_PROPERTY(qreal accentOpacityHit READ accentOpacityHit NOTIFY themeChanged)
@@ -85,6 +86,7 @@ public:
     QColor fontPrimaryColor() const;
     QColor fontSecondaryColor() const;
     QColor linkColor() const;
+    QColor focusColor() const;
 
     QFont bodyFont() const;
     QFont bodyBoldFont() const;
@@ -116,7 +118,7 @@ signals:
 private:
     QColor colorByKey(ThemeStyleKey key) const;
     qreal realByKey(ThemeStyleKey key) const;
-    ThemeInfo currentTheme() const;
+    const ThemeInfo& currentTheme() const;
 
     void initUiFonts();
     void initIconsFont();

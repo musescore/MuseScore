@@ -63,6 +63,12 @@ DockWindow {
     property AppMenuModel appMenuModel: AppMenuModel {}
     property StartupModel startupModel: StartupModel {}
 
+    property KeyNavigationSection topToolKeyNavSec: KeyNavigationSection {
+        id: keynavSec
+        name: "MainToolBar"
+        order: 1
+    }
+
     menuBar: DockMenuBar {
         objectName: "mainMenuBar"
 
@@ -84,6 +90,7 @@ DockWindow {
 
             content: MainToolBar {
                 color: dockWindow.color
+                keynavSection: topToolKeyNavSec
                 currentUri: dockWindow.currentPageUri
 
                 onSelected: {
