@@ -108,6 +108,27 @@ Rectangle {
                     menuLoader.menu.open()
                 }
             }
+
+            Canvas {
+                visible: item.showSubitemsByPressAndHoldRole
+
+                width: 4
+                height: 4
+
+                anchors.margins: 2
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+
+                onPaint: {
+                    const ctx = getContext("2d");
+                    ctx.fillStyle = ui.theme.fontPrimaryColor;
+                    ctx.moveTo(width, 0);
+                    ctx.lineTo(width, height);
+                    ctx.lineTo(0, height);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+            }
         }
     }
 
