@@ -2,7 +2,7 @@
     <qresource prefix="/">
         <file>qml/Main.qml</file>
         <file>qml/Main.KDAB.qml</file>
-        <file>qml/main.wasm.qml</file>
+        <file>qml/Main.wasm.qml</file>
         <file>qml/MainToolBar.qml</file>
         <file>qml/SequencerPage.qml</file>
         <file>qml/PublishPage.qml</file>
