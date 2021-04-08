@@ -146,7 +146,7 @@ int AppShell::run(int argc, char** argv)
         KDDockWidgets::Config::self().setQmlEngine(engine);
         const QString mainQmlFile = "/Main.KDAB.qml";
 #elif Q_OS_WASM
-        const QString mainQmlFile = "/main.wasm.qml";
+        const QString mainQmlFile = "/Main.wasm.qml";
 #else
         const QString mainQmlFile = "/Main.qml";
 #endif
