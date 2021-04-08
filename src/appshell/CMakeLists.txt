@@ -22,7 +22,11 @@ set(MODULE appshell)
 set(MODULE_QRC appshell.qrc)
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
-include(${CMAKE_CURRENT_LIST_DIR}/view/dockwindow/dockwindow.cmake)
+if (KDAB_DOCKWIDGETS)
+    include(${CMAKE_CURRENT_LIST_DIR}/view/dockwindow_kdab/dockwindow.cmake)
+else()
+    include(${CMAKE_CURRENT_LIST_DIR}/view/dockwindow/dockwindow.cmake)
+endif()
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.cpp
@@ -88,6 +92,7 @@ set(MODULE_SRC
 set(MODULE_LINK
     uicomponents
     ui
+    ${DOCKWINDOW_LIBS}
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
