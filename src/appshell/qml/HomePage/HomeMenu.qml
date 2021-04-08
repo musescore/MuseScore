@@ -5,48 +5,80 @@ import QtQuick.Layouts 1.3
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
-RadioButtonGroup {
-    id: radioButtonList
+import MuseScore.Cloud 1.0
+
+Rectangle {
+    id: root
 
     property string currentPageName: ""
 
-    orientation: ListView.Vertical
-    spacing: 0
-
     signal selected(string name)
 
-    model: [
-        { "name": "scores", "title": qsTrc("appshell", "Scores"), "icon": IconCode.MUSIC_NOTES },
-        { "name": "add-ons", "title": qsTrc("appshell", "Add-ons"), "icon":  IconCode.PLUS },
-        { "name": "audio", "title": qsTrc("appshell", "Audio"), "icon":  IconCode.AUDIO },
-        { "name": "feautured", "title": qsTrc("appshell", "Featured"), "icon":  IconCode.STAR },
-        { "name": "learn", "title": qsTrc("appshell", "Learn"), "icon":  IconCode.MORTAR_BOARD },
-        { "name": "support", "title": qsTrc("appshell", "Support"), "icon": IconCode.FEEDBACK },
-    ]
+    color: ui.theme.backgroundPrimaryColor
 
-    currentIndex: 0
+    ColumnLayout {
+        anchors.fill: parent
 
-    delegate: GradientTabButton {
-        id: radioButtonDelegate
+        spacing: 20
 
-        width: parent.width
+        AccountInfoButton {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 60
 
-        spacing: 30
-        leftPadding: spacing
+            checked: root.currentPageName === "account"
 
-        ButtonGroup.group: radioButtonList.radioButtonGroup
-        orientation: Qt.Horizontal
-        checked: modelData["name"] === radioButtonList.currentPageName
+            onToggled: {
+                root.selected("account")
+            }
 
-        title: modelData["title"]
-
-        iconComponent: StyledIconLabel {
-            iconCode: modelData["icon"]
+            onUserAuthorizedChanged: {
+                root.selected("scores")
+            }
         }
 
-        onToggled: {
-            radioButtonList.currentIndex = index
-            radioButtonList.selected(modelData["name"])
+        RadioButtonGroup {
+            id: radioButtonList
+
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            orientation: ListView.Vertical
+            spacing: 0
+
+            model: [
+                { "name": "scores", "title": qsTrc("appshell", "Scores"), "icon": IconCode.MUSIC_NOTES },
+                { "name": "add-ons", "title": qsTrc("appshell", "Add-ons"), "icon":  IconCode.PLUS },
+                { "name": "audio", "title": qsTrc("appshell", "Audio"), "icon":  IconCode.AUDIO },
+                { "name": "feautured", "title": qsTrc("appshell", "Featured"), "icon":  IconCode.STAR },
+                { "name": "learn", "title": qsTrc("appshell", "Learn"), "icon":  IconCode.MORTAR_BOARD },
+                { "name": "support", "title": qsTrc("appshell", "Support"), "icon": IconCode.FEEDBACK },
+            ]
+
+            currentIndex: 0
+
+            delegate: GradientTabButton {
+                id: radioButtonDelegate
+
+                width: parent.width
+
+                spacing: 30
+                leftPadding: spacing
+
+                ButtonGroup.group: radioButtonList.radioButtonGroup
+                orientation: Qt.Horizontal
+                checked: modelData["name"] === root.currentPageName
+
+                title: modelData["title"]
+
+                iconComponent: StyledIconLabel {
+                    iconCode: modelData["icon"]
+                }
+
+                onToggled: {
+                    radioButtonList.currentIndex = index
+                    root.selected(modelData["name"])
+                }
+            }
         }
     }
 }

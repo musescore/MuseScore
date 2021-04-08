@@ -2,6 +2,16 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import MuseScore.AppShell 1.0
+import MuseScore.Ui 1.0
+import MuseScore.Dock 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.UserScores 1.0
+import MuseScore.Cloud 1.0
+
+import "./docksystem"
+import "./HomePage"
+import "./NotationPage"
+import "./DevTools"
 
 import com.kdab.dockwidgets 1.0 as KDDW
 
@@ -11,36 +21,22 @@ ApplicationWindow {
     width: 800
     height: 600
 
-    KDDW.MainWindowLayout {
-        anchors.fill: parent
+    visible: true
 
-        uniqueName: "mainWindowLayout"
+    title: qsTrc("appshell", "MuseScore 4")
 
-        KDDW.DockWidget {
-            id: dock1
+    DockPage {
+        uri: "musescore://home/scores"
+        uniqueName: "scores"
 
-            uniqueName: "dock1"
+        panels: [
+            DockPanel {
+                uniqueName: "homeMenu"
 
-            Rectangle {
-                color: "red"
-                opacity: 0.5
+                HomeMenu {}
             }
-        }
+        ]
 
-        KDDW.DockWidget {
-            id: dock2
-
-            uniqueName: "dock2"
-
-            Rectangle {
-                color: "green"
-                opacity: 0.5
-            }
-        }
-
-        Component.onCompleted: {
-            addDockWidget(dock2, KDDW.KDDockWidgets.Location_OnLeft)
-            addDockWidget(dock1, KDDW.KDDockWidgets.Location_OnLeft)
-        }
+        central: ScoresPage {}
     }
 }

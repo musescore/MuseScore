@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/Main.qml</file>
-        <file>qml/Main.KDAB.qml</file>
         <file>qml/Main.wasm.qml</file>
         <file>qml/MainToolBar.qml</file>
         <file>qml/SequencerPage.qml</file>
@@ -66,5 +65,7 @@
         <file>qml/DevTools/KeyNav/KeyNavExample.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSection.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSubSection.qml</file>
+        <file>qml/docksystem/DockPage.qml</file>
+        <file>qml/docksystem/DockPanel.qml</file>
     </qresource>
 </RCC>
