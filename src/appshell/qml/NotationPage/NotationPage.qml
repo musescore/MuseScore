@@ -23,10 +23,38 @@ DockPage {
 
     property NotationPageModel pageModel: NotationPageModel {}
 
-    property KeyNavigationSection noteInputKeyNavSec: KeyNavigationSection {
-        id: keynavSec
+    property KeyNavigationSection keynavNoteInputSec: KeyNavigationSection {
         name: "NoteInputSection"
         order: 2
+    }
+
+    property KeyNavigationSection keynavLeftPanelSec: KeyNavigationSection {
+        name: "LeftPanel"
+        order: 3
+    }
+
+    property KeyNavigationSection keynavRightPanelSec: KeyNavigationSection {
+        name: "RightPanel"
+        order: 4
+    }
+
+    property KeyNavigationSubSection keynavLeftPanelHeaderSubSec: KeyNavigationSubSection {
+        name: "LeftPanelHeader"
+        section: keynavLeftPanelSec
+        order: 1
+    }
+
+    property KeyNavigationSubSection keynavRightPanelHeaderSubSec: KeyNavigationSubSection {
+        name: "RightPanelHeader"
+        section: keynavRightPanelSec
+        order: 1
+    }
+
+    function keynavPanelHeaderSubSec(area) {
+        if (area === Qt.LeftDockWidgetArea) {
+            return keynavLeftPanelHeaderSubSec
+        }
+        return keynavRightPanelHeaderSubSec
     }
 
     function updatePageState() {
@@ -68,7 +96,7 @@ DockPage {
         content: NoteInputBar {
             color: notationNoteInputBar.color
             orientation: notationNoteInputBar.orientation
-            keynav.section: noteInputKeyNavSec
+            keynav.section: keynavNoteInputSec
             keynav.order: 1
         }
     }
@@ -81,7 +109,8 @@ DockPage {
             id: palettePanel
             objectName: "palettePanel"
 
-            title: qsTrc("appshell", "Palette")
+            property string _title: qsTrc("appshell", "Palette")
+            title: palettePanel.keynavHeader.active ? ("[" + _title + "]") : _title //! NOTE just for test
 
             width: defaultPanelWidth
             minimumWidth: minimumPanelWidth
@@ -96,6 +125,15 @@ DockPage {
                 notationPage.pageModel.isPalettePanelVisible = false
             }
 
+            property KeyNavigationControl keynavHeader: KeyNavigationControl {
+                name: "PanelHeader"
+                order: 1 //! TODO Needs order from DockPanel
+                subsection: notationPage.keynavPanelHeaderSubSec(palettePanel.area)
+                onActiveChanged: {
+                    console.debug("PanelHeader active: " + palettePanel.keynavHeader.active )
+                }
+            }
+
             PalettesWidget {}
         },
 
@@ -103,7 +141,8 @@ DockPage {
             id: instrumentsPanel
             objectName: "instrumentsPanel"
 
-            title: qsTrc("appshell", "Instruments")
+            property string _title: qsTrc("appshell", "Instruments")
+            title: instrumentsPanel.keynavHeader.active ? ("[" + _title + "]") : _title //! NOTE just for test
 
             width: defaultPanelWidth
             minimumWidth: minimumPanelWidth
@@ -120,6 +159,12 @@ DockPage {
                 notationPage.pageModel.isInstrumentsPanelVisible = false
             }
 
+            property KeyNavigationControl keynavHeader: KeyNavigationControl {
+                name: "InstrumentsHeader"
+                order: 2 //! TODO Needs order from DockPanel
+                subsection: notationPage.keynavPanelHeaderSubSec(instrumentsPanel.area)
+            }
+
             InstrumentsPanel {
                 anchors.fill: parent
             }
@@ -128,8 +173,8 @@ DockPage {
         DockPanel {
             id: inspectorPanel
             objectName: "inspectorPanel"
-
-            title: qsTrc("appshell", "Properties")
+            property string _title: qsTrc("appshell", "Properties")
+            title: instrumentsPanel.keynavHeader.active ? ("[" + _title + "]") : _title //! NOTE just for test
 
             width: defaultPanelWidth
             minimumWidth: minimumPanelWidth
@@ -144,6 +189,12 @@ DockPage {
 
             onClosed: {
                 notationPage.pageModel.isInspectorPanelVisible = false
+            }
+
+            property KeyNavigationControl keynavHeader: KeyNavigationControl {
+                name: "InspectorHeader"
+                order: 3 //! TODO Needs order from DockPanel
+                subsection: notationPage.keynavPanelHeaderSubSec(inspectorPanel.area)
             }
 
             InspectorForm {
