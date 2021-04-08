@@ -119,7 +119,7 @@ DockPage {
             id: inspectorPanel
             objectName: "inspectorPanel"
 
-            title: qsTrc("appshell", "Inspector")
+            title: qsTrc("appshell", "Properties")
 
             width: defaultPanelWidth
             minimumWidth: minimumPanelWidth
