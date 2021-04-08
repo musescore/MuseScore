@@ -1,0 +1,149 @@
+{
+    "version": 1,
+    "configurePresets": [
+        {
+            "name": "dev-qtwidgets",
+            "displayName": "dev-qtwidgets",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-dev-qtwidgets",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "KDDockWidgets_DEVELOPER_MODE": "ON",
+                "ECM_ENABLE_SANITIZERS" : "'address;undefined'",
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON",
+                "KDDockWidgets_FUZZER" : "OFF"
+            },
+            "warnings" : {
+                "uninitialized" : true
+            }
+        },
+        {
+            "name": "clazy-qtwidgets",
+            "displayName": "clazy-qtwidgets",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-clazy-qtwidgets",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "KDDockWidgets_WERROR": "ON"
+            },
+            "environment": {
+                "CXX": "clazy"
+            }
+        },
+        {
+            "name": "qtwidgets",
+            "displayName": "qtwidgets",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-qtwidgets",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
+            }
+        },
+        {
+            "name": "qtquick",
+            "displayName": "qtquick",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-qtquick",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "KDDockWidgets_QTQUICK": "ON",
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
+            }
+        },
+        {
+            "name": "dev-qtquick",
+            "displayName": "dev-qtquick",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-dev-qtquick",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "KDDockWidgets_QTQUICK": "ON",
+                "KDDockWidgets_DEVELOPER_MODE": "ON",
+                "ECM_ENABLE_SANITIZERS" : "'address;undefined'",
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON",
+                "KDDockWidgets_FUZZER" : "OFF"
+            }
+        },
+        {
+            "name": "python",
+            "displayName": "python",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-python",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "KDDockWidgets_PYTHON_BINDINGS": "ON",
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
+            }
+        },
+        {
+            "name": "static-qtwidgets",
+            "displayName": "static-qtwidgets",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-static-qtwidgets",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "KDDockWidgets_STATIC": "ON",
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
+            }
+        },
+        {
+            "name": "static-qtquick",
+            "displayName": "static-qtquick",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-static-qtquick",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "KDDockWidgets_STATIC": "ON",
+                "KDDockWidgets_QTQUICK": "ON",
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
+            }
+        },
+        {
+            "name": "qtwidgets6",
+            "displayName": "qtwidgets6",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-qtwidgets6",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "KDDockWidgets_QT6": "ON",
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
+            },
+            "environment": {
+                "PATH": "$env{QT6_DIR}/bin:$penv{PATH}"
+            }
+        },
+        {
+            "name": "dev-qtwidgets6",
+            "displayName": "dev-qtwidgets6",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-dev-qtwidgets6",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "KDDockWidgets_QT6": "ON",
+                "KDDockWidgets_DEVELOPER_MODE": "ON",
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON",
+                "ECM_ENABLE_SANITIZERS" : "'address;undefined'",
+                "KDDockWidgets_FUZZER" : "OFF"
+            },
+            "environment": {
+                "PATH": "$env{QT6_DIR}/bin:$penv{PATH}"
+            }
+        },
+        {
+            "name": "qtquick6",
+            "displayName": "qtquick6",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-qtquick6",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "KDDockWidgets_QTQUICK": "ON",
+                 "KDDockWidgets_QT6": "ON",
+                 "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
+            },
+            "environment": {
+                "PATH": "$env{QT6_DIR}/bin:$penv{PATH}"
+            }
+        }
+    ]
+}

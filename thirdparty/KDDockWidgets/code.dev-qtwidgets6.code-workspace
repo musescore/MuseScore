@@ -1,0 +1,43 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/build-dev-qtwidgets6/compile_commands.json",
+    "C_Cpp.default.cStandard": "c17",
+    "files.trimTrailingWhitespace": true,
+    "editor.formatOnType": true
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "type": "shell",
+        "label": "cmake",
+        "command": "cmake",
+        "args": [
+          "--preset=dev-qtwidgets6"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder}/"
+        },
+        "group": "build"
+      },
+      {
+        "type": "shell",
+        "label": "make",
+        "command": "cmake",
+        "args": [
+          "--build",
+          "${workspaceFolder}/build-dev-qtwidgets6"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder}/"
+        },
+        "group": "build"
+      }
+    ]
+  }
+}
