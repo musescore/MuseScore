@@ -86,6 +86,7 @@ void DockPanel::setTitle(QString title)
     }
 
     m_title = title;
+    panel()->setWindowTitle(m_title);
     emit titleChanged(m_title);
 }
 
