@@ -25,6 +25,9 @@
 #ifndef Q_OS_WASM
 #include <QThreadPool>
 #endif
+#ifdef KDAB_DOCKWIDGETS
+#include "kddockwidgets/Config.h"
+#endif
 #include "log.h"
 #include "modularity/ioc.h"
 #include "ui/internal/uiengine.h"
@@ -138,14 +141,18 @@ int AppShell::run(int argc, char** argv)
         // Setup Qml Engine
         // ====================================================
         QQmlApplicationEngine* engine = new QQmlApplicationEngine();
+
+#ifdef KDAB_DOCKWIDGETS
+        KDDockWidgets::Config::self().setQmlEngine(engine);
+        const QString mainQmlFile = "/Main.KDAB.qml";
+#elif Q_OS_WASM
+        const QString mainQmlFile = "/main.wasm.qml";
+#else
+        const QString mainQmlFile = "/Main.qml";
+#endif
         //! NOTE Move ownership to UiEngine
         ui::UiEngine::instance()->moveQQmlEngine(engine);
 
-#ifndef Q_OS_WASM
-        const QString mainQmlFile = "/Main.qml";
-#else
-        const QString mainQmlFile = "/main.wasm.qml";
-#endif
 #ifdef QML_LOAD_FROM_SOURCE
         const QUrl url(QString(appshell_QML_IMPORT) + mainQmlFile);
 #else
