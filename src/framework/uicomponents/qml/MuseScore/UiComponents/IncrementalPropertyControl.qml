@@ -109,6 +109,8 @@ Item {
         ValueAdjustControl {
             id: valueAdjustControl
 
+            timerTimeInterval: 100
+
             anchors.verticalCenter: textInputField.verticalCenter
             anchors.right: textInputField.right
 
