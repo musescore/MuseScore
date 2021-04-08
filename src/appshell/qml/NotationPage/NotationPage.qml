@@ -45,7 +45,7 @@ DockPage {
     }
 
     property KeyNavigationSubSection keynavRightPanelTabsSubSec: KeyNavigationSubSection {
-        name: "RightPanelTabs"
+        name: "RightPanelTabs "
         section: keynavRightPanelSec
         order: 1
     }
