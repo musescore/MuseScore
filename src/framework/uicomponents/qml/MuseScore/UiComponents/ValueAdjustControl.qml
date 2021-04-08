@@ -9,6 +9,8 @@ Item {
     signal increaseButtonClicked
     signal decreaseButtonClicked
 
+    property int timerTimeInterval: 300
+
     height: childrenRect.height
     width: childrenRect.width
 
@@ -50,7 +52,7 @@ Item {
                 Timer {
                     id: continiousIncreaseTimer
 
-                    interval: 300
+                    interval: timerTimeInterval
 
                     repeat: true
 
@@ -89,7 +91,7 @@ Item {
                 Timer {
                     id: continiousDecreaseTimer
 
-                    interval: 300
+                    interval: timerTimeInterval
                     repeat: true
 
                     running: decreaseMouseArea.pressed
