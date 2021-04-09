@@ -68,5 +68,6 @@
         <file>qml/kdab/docksystem/DockPage.qml</file>
         <file>qml/kdab/docksystem/DockPanel.qml</file>
        <file>qml/kdab/HomePage/HomePage.qml</file>
+       <file>qml/kdab/NotationPage/NotationPage.qml</file>
     </qresource>
 </RCC>
