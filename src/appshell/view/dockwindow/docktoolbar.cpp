@@ -83,10 +83,7 @@ void DockToolBar::onComponentCompleted()
 
 void DockToolBar::updateStyle()
 {
-    QString theme = uiConfiguration()->currentTheme().codeKey == LIGHT_THEME_CODE
-                    ? "light"
-                    : "dark";
-    toolBar()->setStyleSheet(TOOLBAR_QSS.arg(theme, color().name()));
+    toolBar()->setStyleSheet(TOOLBAR_QSS.arg(QString::fromStdString(uiConfiguration()->currentTheme().codeKey), color().name()));
 }
 
 void DockToolBar::onWidgetEvent(QEvent* event)
