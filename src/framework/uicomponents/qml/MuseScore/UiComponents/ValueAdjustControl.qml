@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.15
 import MuseScore.Ui 1.0
 
 Item {
@@ -34,6 +34,8 @@ Item {
                 anchors.fill: parent
 
                 preventStealing: true
+
+                pressAndHoldInterval: 200
 
                 onClicked: {
                     root.increaseButtonClicked()
@@ -74,6 +76,10 @@ Item {
 
                 anchors.fill: parent
 
+                preventStealing: true
+
+                pressAndHoldInterval: 200
+
                 onClicked: {
                     root.decreaseButtonClicked()
                 }
@@ -90,9 +96,8 @@ Item {
                     id: continuousDecreaseTimer
 
                     interval: 100
-                    repeat: true
 
-                    running: decreaseMouseArea.pressed
+                    repeat: true
 
                     onTriggered: {
                         root.decreaseButtonClicked()
