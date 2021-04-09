@@ -262,6 +262,7 @@ bool InstrumentPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sou
 
 bool InstrumentPanelTreeModel::isSelected(const QModelIndex& rowIndex) const
 {
+    TRACEFUNC;
     if (m_selectionModel->selectedIndexes().isEmpty()) {
         return false;
     }
@@ -345,6 +346,7 @@ int InstrumentPanelTreeModel::columnCount(const QModelIndex&) const
 
 QVariant InstrumentPanelTreeModel::data(const QModelIndex& index, int role) const
 {
+    TRACEFUNC;
     if (!index.isValid() && role != ItemRole) {
         return QVariant();
     }
