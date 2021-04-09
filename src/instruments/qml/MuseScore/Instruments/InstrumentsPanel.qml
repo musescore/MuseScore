@@ -14,6 +14,8 @@ import "internal"
 Item {
     id: root
 
+    property KeyNavigationSection keynavSection: null
+
     Rectangle {
         id: background
 
@@ -30,6 +32,14 @@ Item {
         }
     }
 
+    KeyNavigationSubSection {
+        id: keynavTreeSub
+        name: "InstrumentsTree"
+        section: root.keynavSection
+        direction: KeyNavigationSubSection.Both
+        order: 3
+    }
+
     ColumnLayout {
         id: contentColumn
 
@@ -39,11 +49,15 @@ Item {
         spacing: sideMargin
 
         InstrumentsControlPanel {
+            id: controlPanel
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
 
             Layout.leftMargin: contentColumn.sideMargin
             Layout.rightMargin: contentColumn.sideMargin
+
+            keynav.section: root.keynavSection
+            keynav.order: 2
 
             isMovingUpAvailable: instrumentTreeModel.isMovingUpAvailable
             isMovingDownAvailable: instrumentTreeModel.isMovingDownAvailable
@@ -106,7 +120,7 @@ Item {
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: flickableItem.contentHeight
+                height: flickableItem.contentHeight + 2 //! HACK +2 needs for correct show focus border
 
                 visible: !instrumentTreeModel.isEmpty
 
@@ -125,7 +139,7 @@ Item {
 
                 function isControl(itemType) {
                     return itemType === InstrumentTreeItemType.CONTROL_ADD_STAFF ||
-                           itemType === InstrumentTreeItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
+                            itemType === InstrumentTreeItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
                 }
 
                 style: TreeViewStyle {
@@ -163,7 +177,7 @@ Item {
                         width: parent.width
 
                         sourceComponent: instrumentsTreeView.isControl(delegateType) ?
-                                         controlItemDelegateComponent : treeItemDelegateComponent
+                                             controlItemDelegateComponent : treeItemDelegateComponent
 
                         property bool isSelected: false
 
@@ -186,11 +200,18 @@ Item {
                                 attachedControl: instrumentsTreeView
                                 isSelected: treeItemDelegateLoader.isSelected
 
+                                keynavRow: model ? model.index : 0
+                                keynavSubSection: keynavTreeSub
+
                                 isDragAvailable: dropArea.isSelectable
                                 type: treeItemDelegateLoader.delegateType
                                 sideMargin: contentColumn.sideMargin
 
                                 onClicked: {
+                                    instrumentTreeModel.selectRow(styleData.index)
+                                }
+
+                                onFocusActived: {
                                     instrumentTreeModel.selectRow(styleData.index)
                                 }
 
@@ -223,6 +244,9 @@ Item {
 
                             InstrumentsTreeItemControl {
                                 isHighlighted: treeItemDelegateLoader.isSelected
+
+                                keynavRow: model ? model.index : 0
+                                keynavSubSection: keynavTreeSub
 
                                 onClicked: {
                                     styleData.value.appendNewItem()

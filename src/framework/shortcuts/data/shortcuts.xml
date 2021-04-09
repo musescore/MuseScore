@@ -10,6 +10,14 @@
         <seq>Shift+F6</seq>
     </SC>
     <SC>
+        <key>nav-next-section</key>
+        <seq>`</seq>
+    </SC>
+    <SC>
+        <key>nav-prev-section</key>
+        <seq>Shift+`</seq>
+    </SC>
+    <SC>
         <key>nav-next-subsection</key>
         <seq>Tab</seq>
     </SC>
@@ -26,10 +34,21 @@
         <seq>Left</seq>
     </SC>
     <SC>
+        <key>nav-up</key>
+        <seq>Up</seq>
+    </SC>
+    <SC>
+        <key>nav-down</key>
+        <seq>Down</seq>
+    </SC>
+    <SC>
       <key>nav-trigger</key>
       <seq>Return</seq>
     </SC>
-
+    <SC>
+      <key>nav-trigger</key>
+      <seq>Space</seq>
+    </SC>
 <!-- end Keyboard navigation -->
 
   <SC>

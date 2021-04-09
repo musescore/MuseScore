@@ -16,9 +16,13 @@ Item {
     property bool isDragAvailable: false
     property var type: InstrumentTreeItemType.UNDEFINED
 
+    property int keynavRow: 0
+    property KeyNavigationSubSection keynavSubSection: null
+
     property int sideMargin: 0
 
     signal clicked(var mouse)
+    signal focusActived()
 
     signal popupOpened(var popupX, var popupY, var popupHeight)
     signal popupClosed()
@@ -78,6 +82,21 @@ Item {
     Drag.hotSpot.x: width / 2
     Drag.hotSpot.y: height / 2
 
+    KeyNavigationControl {
+        id: keynavItem
+        name: "InstrumentsTreeItemDelegate"
+        subsection: root.keynavSubSection
+        row: root.keynavRow
+        column: 0
+        enabled: visible
+
+        onActiveChanged: {
+            if (active) {
+                root.focusActived()
+            }
+        }
+    }
+
     Rectangle {
         id: background
 
@@ -85,6 +104,9 @@ Item {
 
         color: ui.theme.backgroundPrimaryColor
         opacity: 1
+
+        border.color: ui.theme.focusColor
+        border.width: keynavItem.active ? 2 : 0
 
         states: [
             State {
@@ -172,6 +194,7 @@ Item {
         drag.axis: Drag.YAxis
 
         onClicked: {
+            keynavItem.forceActive()
             root.clicked(mouse)
             privateProperties.closeOpenedPopup()
         }
@@ -206,11 +229,16 @@ Item {
             Layout.alignment: Qt.AlignLeft
             Layout.preferredWidth: width
 
+            objectName: "instrumentVisibleBtn"
+            keynav.subsection: root.keynavSubSection
+            keynav.row: root.keynavRow
+            keynav.column: 1
+
             normalStateColor: "transparent"
             pressedStateColor: ui.theme.accentColor
 
             icon: model && model.itemRole.isVisible ? IconCode.VISIBILITY_ON : IconCode.VISIBILITY_OFF
-            enabled: model && model.itemRole.canChangeVisibility
+            enabled: root.visible && model && model.itemRole.canChangeVisibility
 
             onClicked: {
                 if (!model) {
@@ -230,6 +258,12 @@ Item {
                 id: expandButton
 
                 anchors.left: parent.left
+
+                objectName: "instrumentExpandBtn"
+                enabled: expandButton.visible
+                keynav.subsection: root.keynavSubSection
+                keynav.row: root.keynavRow
+                keynav.column: 2
 
                 normalStateColor: "transparent"
                 pressedStateColor: ui.theme.accentColor
@@ -275,6 +309,12 @@ Item {
 
             Layout.alignment: Qt.AlignRight
             Layout.preferredWidth: width
+
+            objectName: "instrumentSettingsBtn"
+            enabled: root.visible
+            keynav.subsection: root.keynavSubSection
+            keynav.row: root.keynavRow
+            keynav.column: 3
 
             pressedStateColor: ui.theme.accentColor
 

@@ -37,9 +37,9 @@ QString KeyNavigationControl::name() const
     return AbstractKeyNavigation::name();
 }
 
-int KeyNavigationControl::order() const
+const IKeyNavigation::Index& KeyNavigationControl::index() const
 {
-    return AbstractKeyNavigation::order();
+    return AbstractKeyNavigation::index();
 }
 
 bool KeyNavigationControl::enabled() const
