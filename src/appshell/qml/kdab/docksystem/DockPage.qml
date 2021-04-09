@@ -18,8 +18,6 @@ Page {
 
     property alias central: central.sourceComponent
 
-    anchors.fill: parent
-
     padding: 0
 
     background: Rectangle {
