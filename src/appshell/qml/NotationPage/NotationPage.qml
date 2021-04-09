@@ -38,23 +38,30 @@ DockPage {
         order: 4
     }
 
-    property KeyNavigationSubSection keynavLeftPanelHeaderSubSec: KeyNavigationSubSection {
-        name: "LeftPanelHeader"
+    property KeyNavigationSubSection keynavLeftPanelTabsSubSec: KeyNavigationSubSection {
+        name: "LeftPanelTabs"
         section: keynavLeftPanelSec
         order: 1
     }
 
-    property KeyNavigationSubSection keynavRightPanelHeaderSubSec: KeyNavigationSubSection {
-        name: "RightPanelHeader"
+    property KeyNavigationSubSection keynavRightPanelTabsSubSec: KeyNavigationSubSection {
+        name: "RightPanelTabs"
         section: keynavRightPanelSec
         order: 1
     }
 
-    function keynavPanelHeaderSubSec(area) {
+    function keynavPanelTabSubSec(area) {
         if (area === Qt.LeftDockWidgetArea) {
-            return keynavLeftPanelHeaderSubSec
+            return keynavLeftPanelTabsSubSec
         }
-        return keynavRightPanelHeaderSubSec
+        return keynavRightPanelTabsSubSec
+    }
+
+    function keynavPanelSec(area) {
+        if (area === Qt.LeftDockWidgetArea) {
+            return keynavLeftPanelSec
+        }
+        return keynavRightPanelSec
     }
 
     function updatePageState() {
@@ -110,7 +117,7 @@ DockPage {
             objectName: "palettePanel"
 
             property string _title: qsTrc("appshell", "Palette")
-            title: palettePanel.keynavHeader.active ? ("[" + _title + "]") : _title //! NOTE just for test
+            title: palettePanel.keynavTab.active ? ("[" + _title + "]") : _title //! NOTE just for test
 
             width: defaultPanelWidth
             minimumWidth: minimumPanelWidth
@@ -125,13 +132,10 @@ DockPage {
                 notationPage.pageModel.isPalettePanelVisible = false
             }
 
-            property KeyNavigationControl keynavHeader: KeyNavigationControl {
-                name: "PanelHeader"
+            property KeyNavigationControl keynavTab: KeyNavigationControl {
+                name: "PanelTab"
                 order: 1 //! TODO Needs order from DockPanel
-                subsection: notationPage.keynavPanelHeaderSubSec(palettePanel.area)
-                onActiveChanged: {
-                    console.debug("PanelHeader active: " + palettePanel.keynavHeader.active )
-                }
+                subsection: notationPage.keynavPanelTabSubSec(palettePanel.area)
             }
 
             PalettesWidget {}
@@ -142,7 +146,7 @@ DockPage {
             objectName: "instrumentsPanel"
 
             property string _title: qsTrc("appshell", "Instruments")
-            title: instrumentsPanel.keynavHeader.active ? ("[" + _title + "]") : _title //! NOTE just for test
+            title: instrumentsPanel.keynavTab.active ? ("[" + _title + "]") : _title //! NOTE just for test
 
             width: defaultPanelWidth
             minimumWidth: minimumPanelWidth
@@ -159,22 +163,24 @@ DockPage {
                 notationPage.pageModel.isInstrumentsPanelVisible = false
             }
 
-            property KeyNavigationControl keynavHeader: KeyNavigationControl {
-                name: "InstrumentsHeader"
+            property KeyNavigationControl keynavTab: KeyNavigationControl {
+                name: "InstrumentsTab"
                 order: 2 //! TODO Needs order from DockPanel
-                subsection: notationPage.keynavPanelHeaderSubSec(instrumentsPanel.area)
+                subsection: notationPage.keynavPanelTabSubSec(instrumentsPanel.area)
             }
 
             InstrumentsPanel {
                 anchors.fill: parent
+                keynavSection: notationPage.keynavPanelSec(instrumentsPanel.area)
             }
         },
 
         DockPanel {
             id: inspectorPanel
             objectName: "inspectorPanel"
+
             property string _title: qsTrc("appshell", "Properties")
-            title: instrumentsPanel.keynavHeader.active ? ("[" + _title + "]") : _title //! NOTE just for test
+            title: instrumentsPanel.keynavTab.active ? ("[" + _title + "]") : _title //! NOTE just for test
 
             width: defaultPanelWidth
             minimumWidth: minimumPanelWidth
@@ -191,10 +197,10 @@ DockPage {
                 notationPage.pageModel.isInspectorPanelVisible = false
             }
 
-            property KeyNavigationControl keynavHeader: KeyNavigationControl {
-                name: "InspectorHeader"
+            property KeyNavigationControl keynavTab: KeyNavigationControl {
+                name: "InspectorTab"
                 order: 3 //! TODO Needs order from DockPanel
-                subsection: notationPage.keynavPanelHeaderSubSec(inspectorPanel.area)
+                subsection: notationPage.keynavPanelTabSubSec(inspectorPanel.area)
             }
 
             InspectorForm {
