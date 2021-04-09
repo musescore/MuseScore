@@ -45,7 +45,7 @@ DockPage {
     }
 
     property KeyNavigationSubSection keynavRightPanelTabsSubSec: KeyNavigationSubSection {
-        name: "RightPanelTabs "
+        name: "RightPanelTabs"
         section: keynavRightPanelSec
         order: 1
     }
@@ -180,7 +180,7 @@ DockPage {
             objectName: "inspectorPanel"
 
             property string _title: qsTrc("appshell", "Properties")
-            title: instrumentsPanel.keynavTab.active ? ("[" + _title + "]") : _title //! NOTE just for test
+            title: inspectorPanel.keynavTab.active ? ("[" + _title + "]") : _title //! NOTE just for test
 
             width: defaultPanelWidth
             minimumWidth: minimumPanelWidth
