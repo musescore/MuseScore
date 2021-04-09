@@ -41,9 +41,8 @@ void ScoreAppearanceSettingsModel::loadProperties()
 
     m_pageTypeListModel->setCurrentPageSizeId(static_cast<int>(QPageSize::id(pageSize, QPageSize::Inch, QPageSize::FuzzyOrientationMatch)));
 
-    ScoreAppearanceTypes::OrientationType pageOrientationType = pageSize.width()
-                                                                > pageSize.height() ? ScoreAppearanceTypes::OrientationType::
-                                                                ORIENTATION_LANDSCAPE
+    ScoreAppearanceTypes::OrientationType pageOrientationType = pageSize.width() > pageSize.height()
+                                                                ? ScoreAppearanceTypes::OrientationType::ORIENTATION_LANDSCAPE
                                                                 : ScoreAppearanceTypes::OrientationType::ORIENTATION_PORTRAIT;
 
     setOrientationType(static_cast<int>(pageOrientationType));
