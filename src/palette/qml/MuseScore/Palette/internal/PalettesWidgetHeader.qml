@@ -17,12 +17,12 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-import QtQuick 2.8
+import QtQuick 2.15
 import QtQuick.Controls 2.1
 
-import MuseScore.Palette 1.0
-import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Palette 1.0
 
 import "utils.js" as Utils
 
@@ -35,6 +35,8 @@ Item {
     property bool searchOpened: searchTextInput.visible
 
     property alias popupMaxHeight: palettePopup.maxHeight
+
+    property alias keynav: keynavSub
 
     signal addCustomPaletteRequested(var paletteName)
 
@@ -55,20 +57,39 @@ Item {
         }
     }
 
+    KeyNavigationSubSection {
+        id: keynavSub
+        name: "PalettesHeader"
+        onActiveChanged: {
+            if (active) {
+                header.forceActiveFocus()
+            }
+        }
+    }
+
     FlatButton {
         id: morePalettesButton
         anchors.left: parent.left
         anchors.right: searchTextButton.left
         anchors.rightMargin: 8
+        objectName: "AddPalettesBtn"
+        keynav.subsection: keynavSub
+        keynav.order: 1
+        enabled: !searchTextInput.visible
         text: qsTrc("palette", "Add Palettes")
-        onClicked: palettePopup.visible = !palettePopup.visible
+        onClicked: {
+            palettePopup.visible = !palettePopup.visible
+        }
     }
 
     FlatButton {
         id: searchTextButton
         anchors.right: parent.right
+        objectName: "SearchPalettesBtn"
+        keynav.subsection: keynavSub
+        keynav.order: 2
+        enabled: !searchTextInput.visible
         icon: IconCode.SEARCH
-
         onClicked: {
             toggleSearch()
         }
@@ -78,12 +99,47 @@ Item {
         id: searchTextInput
         width: parent.width
 
+        //! TODO Move to SearchField inside
+        KeyNavigationControl {
+            id: keynavSearchField
+            name: "SearchPalettesField"
+            subsection: keynavSub
+            order: 3
+            enabled: searchTextInput.visible
+            onActiveChanged: {
+                if (keynavSearchField.active) {
+                    searchTextInput.forceActiveFocus()
+                }
+            }
+        }
+
+        KeyNavigationControl {
+            id: keynavSearchFieldClose
+            name: "SearchPalettesFieldClose"
+            subsection: keynavSub
+            order: 4
+            enabled: searchTextInput.visible && searchTextInput.clearTextButtonVisible
+            onTriggered: toggleSearch()
+        }
+
+        onVisibleChanged: {
+            if (!searchTextInput.visible) {
+                morePalettesButton.keynav.forceActive()
+            }
+        }
+
+        //! ----------
+
         visible: false
 
         onSearchTextChanged: resultsTimer.restart()
         onActiveFocusChanged: {
             resultsTimer.stop();
             Accessible.name = qsTrc("palette", "Palette Search")
+
+            if (searchTextInput.activeFocus) {
+                keynavSearchField.forceActive()
+            }
         }
 
         Timer {
@@ -94,10 +150,6 @@ Item {
             }
         }
 
-        KeyNavigation.tab: paletteTree.currentTreeItem
-
-        Keys.onDownPressed: paletteTree.focusFirstItem();
-        Keys.onUpPressed: paletteTree.focusLastItem();
         Keys.onEscapePressed: toggleSearch()
 
         clearTextButtonVisible: true
@@ -135,14 +187,6 @@ Item {
 
         onAddCustomPaletteRequested: {
             createCustomPalettePopup.open()
-        }
-    }
-
-    Connections {
-        target: palettesWidget
-        function onHasFocusChanged() {
-            if (!palettesWidget.hasFocus && !palettePopup.inMenuAction)
-                palettePopup.visible = false;
         }
     }
 }

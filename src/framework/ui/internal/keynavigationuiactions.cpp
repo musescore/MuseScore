@@ -48,7 +48,19 @@ const UiActionList KeyNavigationUiActions::m_actions = {
     UiAction("nav-down",
              mu::context::UiCtxAny
              ),
-    UiAction("nav-trigger",
+    UiAction("nav-trigger-control",
+             mu::context::UiCtxAny
+             ),
+    UiAction("nav-first-control",
+             mu::context::UiCtxAny
+             ),
+    UiAction("nav-last-control",
+             mu::context::UiCtxAny
+             ),
+    UiAction("nav-nextrow-control",
+             mu::context::UiCtxAny
+             ),
+    UiAction("nav-prevrow-control",
              mu::context::UiCtxAny
              )
 };

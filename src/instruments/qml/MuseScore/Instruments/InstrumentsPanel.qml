@@ -12,6 +12,7 @@ import MuseScore.Instruments 1.0
 import "internal"
 
 Item {
+
     id: root
 
     property KeyNavigationSection keynavSection: null
@@ -37,6 +38,7 @@ Item {
         name: "InstrumentsTree"
         section: root.keynavSection
         direction: KeyNavigationSubSection.Both
+        enabled: root.visible
         order: 3
     }
 
@@ -57,6 +59,7 @@ Item {
             Layout.rightMargin: contentColumn.sideMargin
 
             keynav.section: root.keynavSection
+            keynav.enabled: root.visible
             keynav.order: 2
 
             isMovingUpAvailable: instrumentTreeModel.isMovingUpAvailable

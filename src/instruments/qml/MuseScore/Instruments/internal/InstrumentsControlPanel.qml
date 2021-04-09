@@ -31,7 +31,7 @@ RowLayout {
 
     KeyNavigationSubSection {
         id: keynavSub
-        name: "InstrumentsControlPanel"
+        name: "InstrumentsHeader"
     }
 
     FlatButton {

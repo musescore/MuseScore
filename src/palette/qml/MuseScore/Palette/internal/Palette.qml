@@ -50,6 +50,10 @@ GridView {
 
     property bool enableAnimations: true
 
+    property KeyNavigationSubSection keynavSubSection: null
+    property int keynavRow: 0
+    property int keynavCol: 1
+
     states: [
         State {
             name: "default"
@@ -97,7 +101,8 @@ GridView {
     cellWidth: stretchWidth ? Math.floor(Utils.stretched(cellDefaultWidth, width)) : cellDefaultWidth
     cellHeight: cellSize.height
 
-    readonly property real ncolumns: Math.floor(width / cellWidth);
+    readonly property int nrows: Math.max(0, Math.floor(height / cellHeight))
+    readonly property int ncolumns: Math.max(0, Math.floor(width / cellWidth))
     readonly property real lastColumnCellWidth : cellWidth + (width % cellWidth) // width of last cell in a row: might be stretched to avoid a gap at row end
 
     signal moreButtonClicked()
@@ -164,7 +169,12 @@ GridView {
             id: moreButton
 
             anchors.fill: parent
-            activeFocusOnTab: this === paletteTree.currentTreeItem
+
+            keynav.subsection: paletteView.keynavSubSection
+            //! NOTE Just Up/Down navigation now
+            keynav.row: paletteView.ncells + paletteView.keynavRow
+            keynav.column: 1
+            keynav.enabled: paletteView.visible
 
             onActiveFocusChanged: {
                 if (activeFocus) {
@@ -183,42 +193,6 @@ GridView {
             pressedStateColor: ui.theme.accentColor
 
             onClicked: paletteView.moreButtonClicked()
-
-            Keys.onShortcutOverride: {
-                // Intercept all keys that we want to use with Keys.onPressed
-                // in case they are assigned as shortcuts in Preferences.
-                event.accepted = true; // intercept everything
-                switch (event.key) {
-                case Qt.Key_Up:
-                case Qt.Key_Down:
-                    return;
-                }
-                event.accepted = false; // allow key to function as shortcut (don't intercept)
-            }
-
-            Keys.onPressed: {
-                // NOTE: All keys must be intercepted with Keys.onShortcutOverride.
-                switch (event.key) {
-                case Qt.Key_Up:
-                    focusPreviousItem();
-                    break;
-                case Qt.Key_Down:
-                    paletteTree.focusNextItem(false);
-                    break;
-                default:
-                    return; // don't accept event
-                }
-                event.accepted = true;
-            }
-
-            function focusPreviousItem() {
-                if (paletteView.count == 0) {
-                    paletteTree.currentItem.forceActiveFocus();
-                } else {
-                    paletteView.currentIndex = paletteView.count - 1
-                    paletteView.currentItem.forceActiveFocus();
-                }
-            }
         }
     }
 
@@ -408,34 +382,6 @@ GridView {
         Utils.removeSelectedItems(paletteController, selectionModel, paletteRootIndex);
     }
 
-    function focusNextItem(flags) {
-        if (flags === undefined) {
-            flags = ItemSelectionModel.ClearAndSelect;
-        }
-
-        if (currentIndex == count - 1) {
-            if (moreButton.visible) {
-                moreButton.forceActiveFocus();
-            } else {
-                paletteTree.focusNextItem(false);
-            }
-        } else {
-            currentIndex++; // next grid item
-        }
-    }
-
-    function focusPreviousItem(flags) {
-        if (flags === undefined) {
-            flags = ItemSelectionModel.ClearAndSelect;
-        }
-
-        if (currentIndex == 0) {
-            paletteTree.currentItem.forceActiveFocus();
-        } else {
-            currentIndex--; // previous grid item
-        }
-    }
-
     function focusFirstItem() {
         if (count == 0 && moreButton.visible) {
             moreButton.forceActiveFocus();
@@ -504,48 +450,6 @@ GridView {
         }
     }
 
-    Keys.onShortcutOverride: {
-        // Intercept all keys that we want to use with Keys.onPressed
-        // in case they are assigned as shortcuts in Preferences.
-        event.accepted = true; // intercept everything
-        switch (event.key) {
-        case Qt.Key_Up:
-        case Qt.Key_Down:
-        case Qt.Key_Left:
-        case Qt.Key_Right:
-        case Qt.Key_Backspace:
-        case Qt.Key_Delete:
-            return;
-        }
-        event.accepted = false; // allow key to function as shortcut (don't intercept)
-    }
-
-    Keys.onPressed: {
-        // NOTE: All keys must be intercepted with Keys.onShortcutOverride.
-        switch (event.key) {
-        case Qt.Key_Up:
-            focusPreviousItem();
-            break;
-        case Qt.Key_Down:
-            focusNextItem();
-            break;
-        case Qt.Key_Left:
-            paletteTree.currentItem.forceActiveFocus();
-            break;
-        case Qt.Key_Right:
-            if (moreButton.visible)
-                moreButton.forceActiveFocus();
-            break;
-        case Qt.Key_Backspace:
-        case Qt.Key_Delete:
-            removeSelectedCells();
-            break;
-        default:
-            return; // don't accept event
-        }
-        event.accepted = true;
-    }
-
     Rectangle {
         id: draggedIcon
 
@@ -576,6 +480,10 @@ GridView {
             property var modelIndex: paletteView.model.modelIndex(index)
             property var parentModelIndex: paletteView.paletteRootIndex
 
+            //! NOTE Please, don't remove (igor.korsukov@gmail.com)
+            //property int cellRow: paletteView.ncolumns == 0 ? 0 : Math.floor(model.index / paletteView.ncolumns)
+            //property int cellCol: model.index - (cellRow * paletteView.ncolumns)
+
             onActiveFocusChanged: {
                 if (activeFocus) {
                     paletteTree.currentTreeItem = this;
@@ -593,7 +501,17 @@ GridView {
             width: paletteView.cellWidth
             height: paletteView.cellHeight
 
-            activeFocusOnTab: this === paletteTree.currentTreeItem
+            keynav.subsection: paletteView.keynavSubSection
+
+            //! NOTE Please, don't remove (igor.korsukov@gmail.com)
+            //keynav.row: paletteCell.cellRow + paletteView.keynavRow
+            //keynav.column: paletteCell.cellCol + paletteView.keynavCol
+
+            //! NOTE Just Up/Down navigation now
+            keynav.row: model.index + paletteView.keynavRow
+            keynav.column: 1
+            keynav.enabled: paletteView.visible
+            keynav.onTriggered: paletteCell.doClicked()
 
             IconView {
                 anchors.fill: parent
@@ -605,108 +523,37 @@ GridView {
 
             Accessible.name: model.accessibleText;
 
-            Keys.onShortcutOverride: {
-                // Intercept all keys that we want to use with Keys.onPressed
-                // in case they are assigned as shortcuts in Preferences.
-                event.accepted = true; // intercept everything
-                switch (event.key) {
-                case Qt.Key_Space:
-                case Qt.Key_Enter:
-                case Qt.Key_Return:
-                case Qt.Key_Menu:
-                case Qt.Key_Asterisk:
-                    return;
-                }
-
-                if (event.key === Qt.Key_F10 && event.modifiers & Qt.ShiftModifier) {
-                    return;
-                }
-
-                if (event.text.match(/[^\x00-\x20\x7F]+$/) !== null) {
-                    return;
-                }
-
-                event.accepted = false; // allow key to function as shortcut (don't intercept)
+            // leftClickArea
+            mouseArea.drag.target: this
+            mouseArea.onPressed: {
+                paletteView.currentIndex = paletteCell.rowIndex;
+                paletteCell.forceActiveFocus();
+                paletteView.updateSelection(true);
+                paletteCell.beginDrag();
             }
 
-            Keys.onPressed: {
-                // NOTE: All keys must be intercepted with Keys.onShortcutOverride.
-                const shiftHeld = event.modifiers & Qt.ShiftModifier;
-                const ctrlHeld = event.modifiers & Qt.ControlModifier;
-                switch (event.key) {
-                case Qt.Key_Space:
-                    if (paletteTree.typeAheadStr.length) {
-                        paletteView.typeAheadFind(' ');
-                    } else {
-                        paletteView.updateSelection(true);
-                    }
-                    break;
-                case Qt.Key_Enter:
-                case Qt.Key_Return:
-                    paletteView.selectionModel.setCurrentIndex(modelIndex, ItemSelectionModel.ClearAndSelect);
-                    paletteView.paletteController.applyPaletteElement(modelIndex, ui.keyboardModifiers());
-                    break;
-                case Qt.Key_F10:
-                    if (!shiftHeld) {
-                        return;
-                    }
-                    // fallthrough
-                case Qt.Key_Menu:
-                    showCellMenu();
-                    break;
-                case Qt.Key_Asterisk:
-                    if (paletteTree.typeAheadStr.length) {
-                        paletteView.typeAheadFind('*');
-                    } else if (!paletteTree.expandCollapseAll(null)) {
-                        paletteTree.currentItem.forceActiveFocus();
-                    }
-                    break;
-                default:
-                    if (event.text.match(/[^\x00-\x20\x7F]+$/) !== null) {
-                        // Pressed non-control character(s) (e.g. "D") so go
-                        // to matching item (e.g. "D Major" in keysig palette)
-                        paletteView.typeAheadFind(event.text);
-                    } else {
-                        return; // don't accept event
-                    }
+            function doClicked() {
+                if (paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, ui.keyboardModifiers())) {
+                    paletteView.selectionModel.setCurrentIndex(paletteCell.modelIndex, ItemSelectionModel.Current);
                 }
-                event.accepted = true;
             }
 
-            MouseArea {
-                id: leftClickArea
-                anchors.fill: parent
-                drag.target: this
+            onClicked: paletteCell.doClicked()
 
-                onPressed: {
-                    paletteView.currentIndex = paletteCell.rowIndex;
-                    paletteCell.forceActiveFocus();
-                    paletteView.updateSelection(true);
-                    paletteCell.beginDrag();
-                }
-
-                onClicked: {
-                    if (paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, ui.keyboardModifiers())) {
-                        paletteView.selectionModel.setCurrentIndex(paletteCell.modelIndex, ItemSelectionModel.Current);
-                    }
-                }
-
-                onDoubleClicked: {
-                    const index = paletteCell.modelIndex;
-                    paletteView.selectionModel.setCurrentIndex(index, ItemSelectionModel.Current);
-                    paletteView.paletteController.applyPaletteElement(index, mouse.modifiers);
-                }
+            onDoubleClicked: {
+                const index = paletteCell.modelIndex;
+                paletteView.selectionModel.setCurrentIndex(index, ItemSelectionModel.Current);
+                paletteView.paletteController.applyPaletteElement(index, mouseArea.mouse.modifiers);
             }
 
             MouseArea {
                 id: rightClickArea
                 anchors.fill: parent
                 acceptedButtons: Qt.RightButton
-
                 onClicked: showCellMenu(true)
             }
 
-            Drag.active: leftClickArea.drag.active
+            Drag.active: mouseArea.drag.active
             Drag.dragType: Drag.Automatic
             Drag.supportedActions: Qt.CopyAction | (model.editable ? Qt.MoveAction : 0)
             Drag.mimeData: Drag.active ? mimeData : {}

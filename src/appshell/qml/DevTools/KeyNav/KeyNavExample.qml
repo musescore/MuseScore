@@ -10,6 +10,8 @@ Rectangle {
 
     property string lastClickedInfo: ""
 
+    signal activeFocusRequested()
+
     Rectangle {
         id: infoPanel
 
@@ -35,6 +37,13 @@ Rectangle {
 
         sectionName: "mainMenu"
         sectionOrder: 101
+
+        onActiveChanged: {
+            if (active) {
+                root.activeFocusRequested()
+                root.forceActiveFocus()
+            }
+        }
 
         RowLayout {
             anchors.fill: parent

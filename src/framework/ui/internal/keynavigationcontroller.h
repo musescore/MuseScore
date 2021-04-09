@@ -35,7 +35,9 @@ public:
     KeyNavigationController() = default;
 
     enum MoveDirection {
-        Right = 0,
+        First = 0,
+        Last,
+        Right,
         Left,
         Up,
         Down
@@ -52,7 +54,12 @@ private:
     void goToNextSubSection();
     void goToPrevSubSection();
 
-    void goToControl(MoveDirection direction, IKeyNavigationSubSection* activeSubSec);
+    void goToFirstControl();
+    void goToLastControl();
+    void goToNextRowControl();
+    void goToPrevRowControl();
+
+    void goToControl(MoveDirection direction, IKeyNavigationSubSection* activeSubSec = nullptr);
 
     void onLeft();
     void onRight();

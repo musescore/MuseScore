@@ -37,6 +37,9 @@ Item {
     property PaletteWorkspace paletteWorkspace
     property var modelIndex: null
 
+    property KeyNavigationSubSection keynavSubsection: null
+    property int keynavRow: 0
+
     signal toggleExpandRequested()
     signal enableEditingToggled(bool val)
     signal hideSelectedElementsRequested()
@@ -65,6 +68,11 @@ Item {
         activeFocusOnTab: false // same focus object as parent palette
         icon: paletteHeader.expanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
         normalStateColor: "transparent"
+
+        enabled: paletteExpandArrow.visible
+        keynav.subsection: paletteHeader.keynavSubsection
+        keynav.row: paletteHeader.keynavRow
+        keynav.column: 1
 
         onClicked: paletteHeader.toggleExpandRequested()
     }
@@ -99,8 +107,10 @@ Item {
         activeFocusOnTab: mainPalette.currentItem === paletteTree.currentTreeItem
         normalStateColor: "transparent"
 
-        KeyNavigation.backtab: mainPalette.currentItem
-        KeyNavigation.tab: focusBreaker
+        enabled: deleteButton.visible
+        keynav.subsection: paletteHeader.keynavSubsection
+        keynav.row: paletteHeader.keynavRow
+        keynav.column: 2
 
         onClicked: {
             hideSelectedElementsRequested()
@@ -115,7 +125,10 @@ Item {
 
         visible: paletteHeader.expanded || paletteHeader.hovered || paletteHeaderMenu.visible
 
-        activeFocusOnTab: parent.parent.parent === paletteTree.currentTreeItem
+        enabled: paletteHeaderMenuButton.visible
+        keynav.subsection: paletteHeader.keynavSubsection
+        keynav.row: paletteHeader.keynavRow
+        keynav.column: 3
 
         icon: IconCode.MENU_THREE_DOTS
         normalStateColor: "transparent"

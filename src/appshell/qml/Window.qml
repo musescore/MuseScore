@@ -81,6 +81,7 @@ DockWindow {
 
     toolbars: [
         DockToolBar {
+            id: mainToolBar
             objectName: "mainToolBar"
             minimumWidth: 296
             minimumHeight: dockWindow.toolbarHeight
@@ -95,6 +96,12 @@ DockWindow {
                 keynav.section: topToolKeyNavSec
                 keynav.order: 1
                 currentUri: dockWindow.currentPageUri
+
+                keynav.onActiveChanged: {
+                    if (keynav.active) {
+                        mainToolBar.forceActiveFocus()
+                    }
+                }
 
                 onSelected: {
                     api.launcher.open(uri)
@@ -120,6 +127,11 @@ DockWindow {
                 keynav.section: topToolKeyNavSec
                 keynav.order: 2
                 keynav.enabled: notationToolBar.visible
+                onActiveFocusRequested: {
+                    if (keynav.active) {
+                        notationToolBar.forceActiveFocus()
+                    }
+                }
 
                 Connections {
                     target: notationToolBar
