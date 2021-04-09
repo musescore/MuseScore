@@ -214,14 +214,12 @@ void InspectorListModel::subscribeOnSelectionChanges()
             return;
         }
 
+        auto elements = m_notation->interaction()->selection()->elements();
+        setElementList(QList(elements.cbegin(), elements.cend()));
+
         m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
-            QList<Ms::Element*> elements;
-
-            for (Ms::Element* element: m_notation->interaction()->selection()->elements()) {
-                elements << element;
-            }
-
-            setElementList(elements);
+            auto elements = m_notation->interaction()->selection()->elements();
+            setElementList(QList(elements.cbegin(), elements.cend()));
         });
     });
 }
