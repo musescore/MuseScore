@@ -6,4 +6,6 @@ Item {
     property string uniqueName: ""
 
     default property Component content
+
+    property int minimumWidth: 0
 }

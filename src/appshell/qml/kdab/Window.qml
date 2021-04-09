@@ -9,6 +9,8 @@ import MuseScore.UiComponents 1.0
 
 import "./HomePage"
 import "./NotationPage"
+import "./PublishPage"
+import "./DevTools"
 
 ApplicationWindow {
     id: root
@@ -64,7 +66,9 @@ ApplicationWindow {
 
         property var allPagesUri: [
             homePage.uri,
-            notationPage.uri
+            notationPage.uri,
+            publishPage.uri,
+            devtoolsPage.uri
         ]
 
         HomePage {
@@ -77,6 +81,18 @@ ApplicationWindow {
             id: notationPage
 
             uri: "musescore://notation"
+        }
+
+        PublishPage {
+            id: publishPage
+
+            uri: "musescore://publish"
+        }
+
+        DevToolsPage {
+            id: devtoolsPage
+
+            uri: "musescore://devtools"
         }
     }
 }
