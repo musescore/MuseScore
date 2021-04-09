@@ -16,6 +16,7 @@ Page {
 
     property list<DockPanel> panels
 
+    property alias statusBar: root.footer
     property alias central: central.sourceComponent
 
     padding: 0
