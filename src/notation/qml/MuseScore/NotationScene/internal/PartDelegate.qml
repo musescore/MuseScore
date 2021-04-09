@@ -18,7 +18,7 @@ ListItemBlank {
 
     signal copyPartRequested()
     signal removePartRequested()
-    signal voicesVisibilityChangeRequested()
+    signal voicesVisibilityChangeRequested(var voiceIndex, var voiceVisible)
     signal partClicked()
 
     function startEditTitle() {
@@ -151,7 +151,7 @@ ListItemBlank {
         y: showVoicesPopupButton.y + showVoicesPopupButton.height
 
         onVoiceVisibilityChangeRequested: {
-            root.voicesVisibilityChangeRequested()
+            root.voicesVisibilityChangeRequested(voiceIndex, voiceVisible)
         }
     }
 
