@@ -44,6 +44,9 @@ DockPage {
         DockPanel {
             uniqueName: "homeMenu"
 
+            width: 292
+            minimumWidth: 76
+
             HomeMenu {
                 currentPageName: root.item
 
