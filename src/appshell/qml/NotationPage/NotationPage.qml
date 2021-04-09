@@ -63,6 +63,8 @@ DockPage {
 
         color: notationPage.color
 
+        title: qsTrc("appshell", "Note Input")
+
         content: NoteInputBar {
             color: notationNoteInputBar.color
             orientation: notationNoteInputBar.orientation

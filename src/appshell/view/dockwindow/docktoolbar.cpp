@@ -55,6 +55,8 @@ DockToolBar::DockToolBar(QQuickItem* parent)
         setFloating(floating);
     });
 
+    connect(m_tool.bar, &QToolBar::windowTitleChanged, this, &DockToolBar::titleChanged);
+
     m_eventsWatcher = new EventsWatcher(this);
     m_tool.bar->installEventFilter(m_eventsWatcher);
     connect(m_eventsWatcher, &EventsWatcher::eventReceived, this, &DockToolBar::onWidgetEvent);
@@ -166,6 +168,11 @@ bool DockToolBar::visible() const
     return toolBar()->isVisible();
 }
 
+QString DockToolBar::title() const
+{
+    return toolBar()->windowTitle();
+}
+
 void DockToolBar::setMinimumHeight(int minimumHeight)
 {
     if (m_minimumHeight == minimumHeight) {
@@ -231,4 +238,13 @@ void DockToolBar::setVisible(bool visible)
 
     m_visible = visible;
     emit visibleEdited(m_visible);
+}
+
+void DockToolBar::setTitle(const QString& title)
+{
+    if (title == this->title()) {
+        return;
+    }
+
+    toolBar()->setWindowTitle(title);
 }
