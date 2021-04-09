@@ -88,6 +88,8 @@ DockWindow {
             color: dockWindow.color
             allowedAreas: Qt.TopToolBarArea
 
+            title: qsTrc("appshell", "Main Toolbar")
+
             content: MainToolBar {
                 color: dockWindow.color
                 keynav.section: topToolKeyNavSec
@@ -108,6 +110,8 @@ DockWindow {
 
             color: dockWindow.color
             allowedAreas: Qt.TopToolBarArea
+
+            title: qsTrc("appshell", "Notation Toolbar")
 
             content: NotationToolBar {
                 id: notationToolBarContent
@@ -137,6 +141,8 @@ DockWindow {
 
             color: dockWindow.color
             allowedAreas: Qt.TopToolBarArea
+
+            title: qsTrc("appshell", "Playback Controls")
 
             content: PlaybackToolBar {
                 id: playbackToolBarContent
@@ -169,6 +175,8 @@ DockWindow {
             color: dockWindow.color
             floatable: false
             movable: false
+
+            title: qsTrc("appshell", "Undo/Redo Toolbar")
 
             content: UndoRedoToolBar {
                 id: undoRedoToolBarContent
