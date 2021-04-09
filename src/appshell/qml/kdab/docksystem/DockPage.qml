@@ -16,7 +16,7 @@ Page {
 
     property list<DockPanel> panels
 
-    default property alias central: central.sourceComponent
+    property alias central: central.sourceComponent
 
     anchors.fill: parent
 
