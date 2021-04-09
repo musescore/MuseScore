@@ -130,7 +130,7 @@ DockPage {
     }
 
     readonly property int defaultPanelWidth: 272
-    readonly property int minimumPanelWidth: 200
+    readonly property int minimumPanelWidth: 220
 
     panels: [
         DockPanel {
