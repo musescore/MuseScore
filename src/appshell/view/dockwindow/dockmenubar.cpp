@@ -143,5 +143,7 @@ QAction* DockMenuBar::makeAction(const QVariantMap& menuItem, QActionGroup* grou
         action->setChecked(menuItem.value("selected").toBool());
     }
 
+    action->setMenuRole(static_cast<QAction::MenuRole>(menuItem.value("role").toInt()));
+
     return action;
 }

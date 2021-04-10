@@ -49,7 +49,7 @@ protected:
 
     MenuItem makeMenu(const QString& title, const MenuItemList& items, bool enabled = true,
                       const actions::ActionCode& menuActionCode = "") const;
-    MenuItem makeAction(const actions::ActionCode& actionCode) const;
+    MenuItem makeAction(const actions::ActionCode& actionCode, MenuRole role = MenuRole::NoRole) const;
     MenuItem makeSeparator() const;
 
 private:

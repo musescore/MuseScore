@@ -236,12 +236,24 @@ struct UiActionState
     }
 };
 
+// This must be in sync with QAction::MenuRole
+enum class MenuRole {
+    NoRole = 0,
+    TextHeuristicRole,
+    ApplicationSpecificRole,
+    AboutQtRole,
+    AboutRole,
+    PreferencesRole,
+    QuitRole
+};
+
 struct MenuItem : public UiAction
 {
     QString section;
     UiActionState state;
     bool selectable = false;
     bool selected = false;
+    MenuRole role = MenuRole::NoRole;
     actions::ActionData args;
     QList<MenuItem> subitems;
 
@@ -268,6 +280,7 @@ struct MenuItem : public UiAction
             { "checked", state.checked },
             { "selectable", selectable },
             { "selected", selected },
+            { "role", static_cast<int>(role) },
             { "subitems", subitemsVariantList }
         };
     }

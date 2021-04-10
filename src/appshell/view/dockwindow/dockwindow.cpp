@@ -300,6 +300,11 @@ void DockWindow::onMenusChanged(const QList<QMenu*>& menus)
     for (QMenu* menu: menus) {
         addMenu(menu, menuBar);
     }
+
+#ifdef Q_OS_MAC
+    menuBar->setParent(nullptr);
+    m_window->setMenuBar(menuBar);
+#endif
 }
 
 DockPage* DockWindow::currentPage() const

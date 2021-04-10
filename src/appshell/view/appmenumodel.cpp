@@ -106,7 +106,7 @@ MenuItem AppMenuModel::fileItem() const
         makeSeparator(),
         makeAction("print"), // need implement
         makeSeparator(),
-        makeAction("quit")
+        makeAction("quit", MenuRole::QuitRole)
     };
 
     return makeMenu(qtrc("appshell", "&File"), fileItems);
@@ -130,7 +130,7 @@ MenuItem AppMenuModel::editItem() const
         makeAction("select-section"),
         makeAction("find"),
         makeSeparator(),
-        makeAction("preference-dialog")
+        makeAction("preference-dialog", MenuRole::PreferencesRole)
     };
 
     return makeMenu(qtrc("appshell", "&Edit"), editItems);
@@ -267,9 +267,9 @@ MenuItem AppMenuModel::helpItem() const
         makeAction("online-handbook"),
         makeMenu(qtrc("appshell", "&Tours"), toursItems),
         makeSeparator(),
-        makeAction("about"), // need implement
-        makeAction("about-qt"),
-        makeAction("about-musicxml"), // need implement
+        makeAction("about", MenuRole::AboutRole),
+        makeAction("about-qt", MenuRole::AboutQtRole),
+        makeAction("about-musicxml"),
     };
 
     if (configuration()->isAppUpdatable()) {
