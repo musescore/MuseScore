@@ -29,6 +29,7 @@ GridView {
     id: root
     
     property var currentSignature: null
+    property var mode: null
     signal signatureSelected(var signature)
 
     height: contentHeight
@@ -45,11 +46,11 @@ GridView {
         width: root.cellWidth
 
         radius: 3
-        isSelected: modelData.title === currentSignature.title
+        isSelected: modelData.titleMajor === currentSignature.titleMajor
 
         KeySignature {
             icon: modelData.icon
-            text: modelData.title
+            text: root.mode === "major" ? modelData.titleMajor : modelData.titleMinor
         }
         
         onClicked: {

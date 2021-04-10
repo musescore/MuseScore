@@ -31,13 +31,14 @@ FlatButton {
     id: root
 
     property var model: null
+    property var mode: bar.currentIndex === 0 ? "major" : "minor"
 
     height: 96
     accentButton: popup.visible
 
     KeySignature {
         icon: model.keySignature.icon
-        text: model.keySignature.title
+        text: mode === "major" ? model.keySignature.titleMajor : model.keySignature.titleMinor
     }
 
     onClicked: {
@@ -97,8 +98,9 @@ FlatButton {
                 currentIndex: bar.currentIndex
 
                 KeySignatureListView {
-                    model: root.model.keySignatureMajorList()
+                    model: root.model.keySignatureList()
                     currentSignature: root.model.keySignature
+                    mode: "major"
 
                     onSignatureSelected: {
                         root.model.keySignature = signature
@@ -106,8 +108,9 @@ FlatButton {
                 }
 
                 KeySignatureListView {
-                    model: root.model.keySignatureMinorList()
+                    model: root.model.keySignatureList()
                     currentSignature: root.model.keySignature
+                    mode: "minor"
 
                     onSignatureSelected: {
                         root.model.keySignature = signature
