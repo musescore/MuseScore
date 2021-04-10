@@ -52,8 +52,7 @@ public:
 
     Q_INVOKABLE void init();
 
-    Q_INVOKABLE QVariantList keySignatureMajorList() const;
-    Q_INVOKABLE QVariantList keySignatureMinorList() const;
+    Q_INVOKABLE QVariantList keySignatureList() const;
 
     QVariantMap keySignature() const;
 
@@ -112,14 +111,14 @@ signals:
 
 private:
     struct KeySignature {
-        QString title;
+        QString titleMajor;
+        QString titleMinor;
         ui::IconCode::Code icon = ui::IconCode::Code::NONE;
         notation::Key key = notation::Key::C;
-        notation::KeyMode mode = notation::KeyMode::UNKNOWN;
 
         KeySignature() = default;
         KeySignature(const QVariantMap& map);
-        KeySignature(const QString& title, ui::IconCode::Code icon, notation::Key key, notation::KeyMode mode);
+        KeySignature(const QString& titleMajor, const QString& titleMinor, ui::IconCode::Code icon, notation::Key key);
 
         QVariantMap toMap() const;
     };
