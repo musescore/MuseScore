@@ -57,22 +57,20 @@ FlatButton {
         arrowX: root.x + root.width / 2
         y: root.height
 
-        Column {
-            id: column
+        Item {
+            id: item
 
             anchors.fill: parent
             anchors.topMargin: 10
             anchors.margins: 20
 
-            spacing: 20
-
             TabBar {
                 id: bar
 
+                anchors.top: parent.top
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 implicitHeight: 28
-                spacing: 0
 
                 StyledTabButton {
                     text: qsTrc("userscores", "Major")
@@ -90,8 +88,11 @@ FlatButton {
             StackLayout {
                 id: pagesStack
 
+                anchors.top: bar.bottom
+                anchors.topMargin: 24
                 anchors.left: parent.left
                 anchors.right: parent.right
+                anchors.bottom: parent.bottom
 
                 currentIndex: bar.currentIndex
 
