@@ -18,6 +18,7 @@ Row {
         id: control
 
         implicitWidth: 68
+        anchors.verticalCenter: parent.verticalCenter
 
         iconMode: iconModeEnum.hidden
         currentValue: root.numerator
@@ -45,6 +46,7 @@ Row {
         id: timeComboBox
 
         implicitWidth: control.width
+        anchors.verticalCenter: parent.verticalCenter
 
         textRoleName: "text"
         valueRoleName: "value"
