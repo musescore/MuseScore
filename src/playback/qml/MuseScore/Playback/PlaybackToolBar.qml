@@ -137,7 +137,6 @@ Rectangle {
 
                     StyledMenu {
                         id: itemMenu
-                        unifyCheckMarksAndIcons: false
 
                         onHandleAction: {
                             Qt.callLater(playbackModel.handleAction, actionCode)

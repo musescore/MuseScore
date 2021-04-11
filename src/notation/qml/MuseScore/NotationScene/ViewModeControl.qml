@@ -49,7 +49,6 @@ Item {
 
             opensUpward: true
             itemWidth: 220
-            reserveSpaceForInvisibleItems: false
 
             model: model.items
 
