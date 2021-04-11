@@ -20,13 +20,41 @@ StyledPopupView {
 
     property alias model: view.model
     property int itemWidth: 300
-    property bool reserveSpaceForInvisibleItems: true
-    property bool unifyCheckMarksAndIcons: true
 
     signal handleAction(string actionCode, int actionIndex)
 
+    onModelChanged: {
+        privateProperties.hasItemsWithIconAndCheckable = false
+        privateProperties.hasItemsWithIconOrCheckable = false
+        privateProperties.hasItemsWithSubmenu = false
+        privateProperties.hasItemsWithShortcut = false
+
+        for (let i = 0; i < model.length; i++) {
+            let modelData = model[i]
+            let hasIcon = (Boolean(modelData.icon) && modelData.icon !== IconCode.NONE)
+
+            if (modelData.checkable && hasIcon) {
+                privateProperties.hasItemsWithIconAndCheckable = true
+                privateProperties.hasItemsWithIconOrCheckable = true
+            } else if (modelData.checkable || hasIcon) {
+                privateProperties.hasItemsWithIconOrCheckable = true
+            }
+
+            if (Boolean(modelData.subitems) && modelData.subitems.length > 0) {
+                privateProperties.hasItemsWithSubmenu = true
+            }
+
+            if (Boolean(modelData.shortcut)) {
+                privateProperties.hasItemsWithShortcut = true
+            }
+        }
+    }
+
     property QtObject privateProperties: QtObject {
-        property var items: []
+        property bool hasItemsWithIconAndCheckable: false
+        property bool hasItemsWithIconOrCheckable: false
+        property bool hasItemsWithSubmenu: false
+        property bool hasItemsWithShortcut: false
     }
 
     ListView {
@@ -54,8 +82,17 @@ StyledPopupView {
                 StyledMenuItem {
                     id: item
 
-                    reserveSpaceForInvisibleItems: root.reserveSpaceForInvisibleItems
-                    unifyCheckMarksAndIcons: root.unifyCheckMarksAndIcons
+                    iconAndCheckMarkMode: {
+                        if (privateProperties.hasItemsWithIconAndCheckable) {
+                            return StyledMenuItem.ShowBoth
+                        } else if (privateProperties.hasItemsWithIconOrCheckable) {
+                            return StyledMenuItem.ShowOne
+                        }
+                        return StyledMenuItem.None
+                    }
+
+                    reserveSpaceForShortcutOrSubmenuIndicator:
+                        privateProperties.hasItemsWithSubmenu || privateProperties.hasItemsWithShortcut
 
                     onSubMenuShowed: {
                         root.closePolicy = PopupView.NoAutoClose
