@@ -16,6 +16,7 @@ ListItemBlank {
 
     property var modelData
     property bool reserveSpaceForInvisibleItems: true
+    property bool unifyCheckMarksAndIcons: true
 
     signal subMenuShowed()
     signal subMenuClosed()
@@ -81,7 +82,7 @@ ListItemBlank {
             iconCode: {
                 if (privateProperties.isCheckable) {
                     return privateProperties.isChecked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
-                } else if (privateProperties.hasIcon) {
+                } else if (privateProperties.hasIcon && unifyCheckMarksAndIcons) {
                     return privateProperties.hasIcon ? modelData.icon : IconCode.NONE
                 } else if (privateProperties.isSelectable) {
                     return privateProperties.isSelected ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
@@ -91,6 +92,13 @@ ListItemBlank {
             }
 
             visible: !isEmpty || reserveSpaceForInvisibleItems
+        }
+
+        StyledIconLabel {
+            Layout.alignment: Qt.AlignLeft
+            width: 16
+            iconCode: privateProperties.hasIcon ? modelData.icon : IconCode.NONE
+            visible: !unifyCheckMarksAndIcons && (!isEmpty || reserveSpaceForInvisibleItems)
         }
 
         StyledTextLabel {

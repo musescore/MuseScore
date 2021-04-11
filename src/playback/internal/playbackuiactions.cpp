@@ -40,13 +40,15 @@ const UiActionList PlaybackUiActions::m_mainActions = {
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Loop Playback"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Loop Playback'"),
-             IconCode::Code::LOOP
+             IconCode::Code::LOOP,
+             Checkable::Yes
              ),
     UiAction("metronome",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Metronome"),
              QT_TRANSLATE_NOOP("action", "Play metronome during playback"),
-             IconCode::Code::METRONOME
+             IconCode::Code::METRONOME,
+             Checkable::Yes
              )
 };
 
@@ -55,37 +57,29 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "MIDI Input"),
              QT_TRANSLATE_NOOP("action", "Enable 'MIDI Input'"),
-             IconCode::Code::MIDI_INPUT
+             IconCode::Code::MIDI_INPUT,
+             Checkable::Yes
              ),
     UiAction("repeat",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Play Repeats"),
              QT_TRANSLATE_NOOP("action", "Play repeats"),
-             IconCode::Code::PLAY_REPEATS
+             IconCode::Code::PLAY_REPEATS,
+             Checkable::Yes
              ),
     UiAction("pan",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Pan Score"),
              QT_TRANSLATE_NOOP("action", "Pan score automatically"),
-             IconCode::Code::PAN_SCORE
+             IconCode::Code::PAN_SCORE,
+             Checkable::Yes
              ),
     UiAction("countin",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Count-In"),
              QT_TRANSLATE_NOOP("action", "Enable count-in when playing"),
-             IconCode::Code::COUNT_IN
-             ),
-    UiAction("loop-in",
-             mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Loop In"),
-             QT_TRANSLATE_NOOP("action", "Set loop marker left"),
-             IconCode::Code::LOOP_IN
-             ),
-    UiAction("loop-out",
-             mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Loop Out"),
-             QT_TRANSLATE_NOOP("action", "Set loop marker right"),
-             IconCode::Code::LOOP_OUT
+             IconCode::Code::COUNT_IN,
+             Checkable::Yes
              ),
 };
 
@@ -119,6 +113,13 @@ PlaybackUiActions::PlaybackUiActions(std::shared_ptr<PlaybackController> control
 {
 }
 
+void PlaybackUiActions::init()
+{
+    m_controller->actionCheckedChanged().onReceive(this, [this](const ActionCode& code) {
+        m_actionCheckedChanged.send({ code });
+    });
+}
+
 const UiActionList& PlaybackUiActions::actionsList() const
 {
     static UiActionList alist;
@@ -132,6 +133,10 @@ const UiActionList& PlaybackUiActions::actionsList() const
 
 bool PlaybackUiActions::actionEnabled(const UiAction& act) const
 {
+    if (!m_controller->isPlayAllowed()) {
+        return false;
+    }
+
     if (!m_controller->canReceiveAction(act.code)) {
         return false;
     }
@@ -139,9 +144,9 @@ bool PlaybackUiActions::actionEnabled(const UiAction& act) const
     return true;
 }
 
-bool PlaybackUiActions::actionChecked(const UiAction&) const
+bool PlaybackUiActions::actionChecked(const UiAction& act) const
 {
-    return false;
+    return m_controller->actionChecked(act.code);
 }
 
 mu::async::Channel<mu::actions::ActionCodeList> PlaybackUiActions::actionEnabledChanged() const

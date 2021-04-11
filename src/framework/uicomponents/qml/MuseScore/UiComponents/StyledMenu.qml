@@ -21,6 +21,7 @@ StyledPopupView {
     property alias model: view.model
     property int itemWidth: 300
     property bool reserveSpaceForInvisibleItems: true
+    property bool unifyCheckMarksAndIcons: true
 
     signal handleAction(string actionCode, int actionIndex)
 
@@ -54,6 +55,7 @@ StyledPopupView {
                     id: item
 
                     reserveSpaceForInvisibleItems: root.reserveSpaceForInvisibleItems
+                    unifyCheckMarksAndIcons: root.unifyCheckMarksAndIcons
 
                     onSubMenuShowed: {
                         root.closePolicy = PopupView.NoAutoClose
