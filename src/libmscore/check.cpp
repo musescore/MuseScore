@@ -334,7 +334,7 @@ bool Score::checkClefs()
 //   fillGap
 //---------------------------------------------------------
 
-void Measure::fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch)
+void Measure::fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch, bool useGapRests)
 {
     qDebug("measure %6d pos %d, len %d/%d, stretch %d/%d track %d",
            tick().ticks(),
@@ -349,7 +349,7 @@ void Measure::fillGap(const Fraction& pos, const Fraction& len, int track, const
         rest->setTicks(len);
         rest->setDurationType(d);
         rest->setTrack(track);
-        rest->setGap(true);
+        rest->setGap(useGapRests);
         score()->undoAddCR(rest, this, (pos / stretch) + tick());
     }
 }
@@ -361,7 +361,7 @@ void Measure::fillGap(const Fraction& pos, const Fraction& len, int track, const
 //    with invisible rests
 //---------------------------------------------------------
 
-void Measure::checkMeasure(int staffIdx)
+void Measure::checkMeasure(int staffIdx, bool useGapRests)
 {
     if (isMMRest()) {
         return;
@@ -392,7 +392,7 @@ void Measure::checkMeasure(int staffIdx)
             } else if (currentPos > expectedPos) {
                 qDebug("in measure underrun %6d at %d-%d track %d", tick().ticks(),
                        (currentPos / stretch).ticks(), (expectedPos / stretch).ticks(), track);
-                fillGap(expectedPos, currentPos - expectedPos, track, stretch);
+                fillGap(expectedPos, currentPos - expectedPos, track, stretch, useGapRests);
             }
 
             DurationElement* de = cr;
