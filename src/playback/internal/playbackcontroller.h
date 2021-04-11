@@ -54,8 +54,8 @@ public:
 
     void playElementOnClick(const notation::Element* element) override;
 
-    bool isActionEnabled(const actions::ActionCode& actionCode) const override;
-    async::Channel<actions::ActionCode> actionEnabledChanged() const override;
+    bool actionChecked(const actions::ActionCode& actionCode) const override;
+    async::Channel<actions::ActionCode> actionCheckedChanged() const override;
 
     QTime totalPlayTime() const override;
 
@@ -98,14 +98,14 @@ private:
     void showLoop();
     void hideLoop();
 
-    void notifyActionEnabledChanged(const actions::ActionCode& actionCode);
+    void notifyActionCheckedChanged(const actions::ActionCode& actionCode);
 
     notation::INotationPtr m_notation;
     async::Notification m_isPlayAllowedChanged;
     async::Notification m_isPlayingChanged;
     async::Notification m_playbackPositionChanged;
     async::Channel<uint32_t> m_tickPlayed;
-    async::Channel<actions::ActionCode> m_actionEnabledChanged;
+    async::Channel<actions::ActionCode> m_actionCheckedChanged;
 
     bool m_needRewindBeforePlay = false;
 };

@@ -46,8 +46,8 @@ public:
 
     virtual void playElementOnClick(const notation::Element* element) = 0;
 
-    virtual bool isActionEnabled(const actions::ActionCode& actionCode) const = 0;
-    virtual async::Channel<actions::ActionCode> actionEnabledChanged() const = 0;
+    virtual bool actionChecked(const actions::ActionCode& actionCode) const = 0;
+    virtual async::Channel<actions::ActionCode> actionCheckedChanged() const = 0;
 
     virtual QTime totalPlayTime() const = 0;
 

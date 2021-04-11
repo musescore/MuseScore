@@ -268,35 +268,35 @@ void PlaybackController::togglePlayRepeats()
 {
     bool playRepeatsEnabled = notationConfiguration()->isPlayRepeatsEnabled();
     notationConfiguration()->setIsPlayRepeatsEnabled(!playRepeatsEnabled);
-    notifyActionEnabledChanged(REPEAT_CODE);
+    notifyActionCheckedChanged(REPEAT_CODE);
 }
 
 void PlaybackController::toggleAutomaticallyPan()
 {
     bool panEnabled = notationConfiguration()->isAutomaticallyPanEnabled();
     notationConfiguration()->setIsAutomaticallyPanEnabled(!panEnabled);
-    notifyActionEnabledChanged(PAN_CODE);
+    notifyActionCheckedChanged(PAN_CODE);
 }
 
 void PlaybackController::toggleMetronome()
 {
     bool metronomeEnabled = notationConfiguration()->isMetronomeEnabled();
     notationConfiguration()->setIsMetronomeEnabled(!metronomeEnabled);
-    notifyActionEnabledChanged(METRONOME_CODE);
+    notifyActionCheckedChanged(METRONOME_CODE);
 }
 
 void PlaybackController::toggleMidiInput()
 {
     bool midiInputEnabled = notationConfiguration()->isMidiInputEnabled();
     notationConfiguration()->setIsMidiInputEnabled(!midiInputEnabled);
-    notifyActionEnabledChanged(MIDI_ON_CODE);
+    notifyActionCheckedChanged(MIDI_ON_CODE);
 }
 
 void PlaybackController::toggleCountIn()
 {
     bool countInEnabled = notationConfiguration()->isCountInEnabled();
     notationConfiguration()->setIsCountInEnabled(!countInEnabled);
-    notifyActionEnabledChanged(COUNT_IN_CODE);
+    notifyActionCheckedChanged(COUNT_IN_CODE);
 }
 
 void PlaybackController::toggleLoopPlayback()
@@ -353,7 +353,7 @@ void PlaybackController::setLoop(const LoopBoundaries& boundaries)
     sequencer()->setLoop(fromMilliseconds, toMilliseconds);
     showLoop();
 
-    notifyActionEnabledChanged(LOOP_CODE);
+    notifyActionCheckedChanged(LOOP_CODE);
 }
 
 void PlaybackController::showLoop()
@@ -368,18 +368,18 @@ void PlaybackController::hideLoop()
     if (playback()) {
         sequencer()->unsetLoop();
         playback()->setLoopBoundariesVisible(false);
-        notifyActionEnabledChanged(LOOP_CODE);
+        notifyActionCheckedChanged(LOOP_CODE);
     }
 }
 
-void PlaybackController::notifyActionEnabledChanged(const ActionCode& actionCode)
+void PlaybackController::notifyActionCheckedChanged(const ActionCode& actionCode)
 {
-    m_actionEnabledChanged.send(actionCode);
+    m_actionCheckedChanged.send(actionCode);
 }
 
-bool PlaybackController::isActionEnabled(const ActionCode& actionCode) const
+bool PlaybackController::actionChecked(const ActionCode& actionCode) const
 {
-    QMap<std::string, bool> isEnabled {
+    QMap<std::string, bool> isChecked {
         { LOOP_CODE, isLoopVisible() },
         { MIDI_ON_CODE, notationConfiguration()->isMidiInputEnabled() },
         { REPEAT_CODE, notationConfiguration()->isPlayRepeatsEnabled() },
@@ -388,12 +388,12 @@ bool PlaybackController::isActionEnabled(const ActionCode& actionCode) const
         { COUNT_IN_CODE, notationConfiguration()->isCountInEnabled() }
     };
 
-    return isEnabled[actionCode];
+    return isChecked[actionCode];
 }
 
-Channel<ActionCode> PlaybackController::actionEnabledChanged() const
+Channel<ActionCode> PlaybackController::actionCheckedChanged() const
 {
-    return m_actionEnabledChanged;
+    return m_actionCheckedChanged;
 }
 
 QTime PlaybackController::totalPlayTime() const

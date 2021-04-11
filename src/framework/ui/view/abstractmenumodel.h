@@ -21,8 +21,6 @@
 
 #include <QObject>
 
-#include <optional>
-
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "../uitypes.h"
@@ -40,6 +38,7 @@ public:
 protected:
     void clear();
     void appendItem(const MenuItem& item);
+    void appendItems(const MenuItemList& items);
     void listenActionsStateChanges();
     virtual void onActionsStateChanges(const actions::ActionCodeList& codes);
 
