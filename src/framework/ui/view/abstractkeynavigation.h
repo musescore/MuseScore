@@ -31,7 +31,11 @@ class AbstractKeyNavigation : public QObject, public IKeyNavigation, public QQml
     Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+
+    // see IKeyNavigation::Index
     Q_PROPERTY(int order READ order WRITE setOrder NOTIFY orderChanged)
+    Q_PROPERTY(int column READ column WRITE setColumn NOTIFY columnChanged)
+    Q_PROPERTY(int row READ row WRITE setRow NOTIFY rowChanged)
 
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
     Q_PROPERTY(bool active READ active NOTIFY activeChanged)
@@ -39,8 +43,12 @@ class AbstractKeyNavigation : public QObject, public IKeyNavigation, public QQml
 public:
     explicit AbstractKeyNavigation(QObject* parent = nullptr);
 
+    int order() const;
+    int column() const;
+    int row() const;
+
     QString name() const override;
-    int order() const override;
+    const Index& index() const override;
     bool enabled() const override;
     bool active() const override;
     async::Channel<bool> activeChanged() const override;
@@ -52,19 +60,23 @@ public:
 public slots:
     void setName(QString name);
     void setOrder(int order);
+    void setColumn(int column);
+    void setRow(int row);
     void setEnabled(bool enabled);
     void setActive(bool active) override;
 
 signals:
     void nameChanged(QString name);
     void orderChanged(int order);
+    void columnChanged(int column);
+    void rowChanged(int row);
     void enabledChanged(bool enabled);
     void activeChanged(bool active);
 
 protected:
 
     QString m_name;
-    int m_order = -1;
+    Index m_index;
     bool m_enabled = true;
     bool m_active = false;
     async::Channel<bool> m_activeChanged;

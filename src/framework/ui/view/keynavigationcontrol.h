@@ -36,16 +36,16 @@ public:
     explicit KeyNavigationControl(QObject* parent = nullptr);
     ~KeyNavigationControl() override;
 
+    KeyNavigationSubSection* subsection() const;
+
     QString name() const override;
-    int order() const override;
+    const Index& index() const override;
     bool enabled() const override;
     bool active() const override;
     void setActive(bool arg) override;
     async::Channel<bool> activeChanged() const override;
     void trigger() override;
     async::Channel<IKeyNavigationControl*> forceActiveRequested() const override;
-
-    KeyNavigationSubSection* subsection() const;
 
     Q_INVOKABLE void forceActive();
 

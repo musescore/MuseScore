@@ -9,14 +9,36 @@ Item {
 
     property bool isHighlighted: false
 
+    property int keynavRow: 0
+    property KeyNavigationSubSection keynavSubSection: null
+
     Rectangle {
         anchors.fill: parent
 
         color: root.isHighlighted ? ui.theme.accentColor : ui.theme.textFieldColor
         opacity: root.isHighlighted ? 0.5 : 1
+
+        border.color: ui.theme.focusColor
+        border.width: keynavItem.active ? 2 : 0
     }
 
     signal clicked()
+
+    KeyNavigationControl {
+        id: keynavItem
+        name: "InstrumentsTreeItemControl"
+        subsection: root.keynavSubSection
+        row: root.keynavRow
+        column: 0
+        enabled: visible
+
+        onActiveChanged: {
+            if (active) {
+                root.focusActived()
+            }
+        }
+    }
+
 
     RowLayout {
         anchors.top: parent.top
@@ -40,6 +62,11 @@ Item {
 
                 width: 24
                 height: width
+
+                objectName: "InstrumentsAddStaffBtn"
+                keynav.subsection: root.keynavSubSection
+                keynav.row: root.keynavRow
+                keynav.column: 1
 
                 icon: IconCode.PLUS
             }

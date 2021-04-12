@@ -25,7 +25,7 @@ using namespace mu::actions;
 
 void ShortcutsController::activate(const std::string& sequence)
 {
-    LOGD() << "activate: " << sequence;
+    LOGD() << sequence;
 
     ShortcutList shortcuts = shortcutsRegister()->shortcutsForSequence(sequence);
     IF_ASSERT_FAILED(!shortcuts.empty()) {

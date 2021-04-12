@@ -32,6 +32,7 @@ FocusScope {
     KeyNavigationControl {
         id: keynavItem
         name: root.objectName
+        enabled: root.enabled
 
         onActiveChanged: {
             if (keynavItem.active) {

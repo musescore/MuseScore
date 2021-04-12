@@ -43,9 +43,9 @@ QString KeyNavigationSubSection::name() const
     return AbstractKeyNavigation::name();
 }
 
-int KeyNavigationSubSection::order() const
+const IKeyNavigation::Index& KeyNavigationSubSection::index() const
 {
-    return AbstractKeyNavigation::order();
+    return AbstractKeyNavigation::index();
 }
 
 bool KeyNavigationSubSection::enabled() const
@@ -66,6 +66,26 @@ void KeyNavigationSubSection::setActive(bool arg)
 mu::async::Channel<bool> KeyNavigationSubSection::activeChanged() const
 {
     return AbstractKeyNavigation::activeChanged();
+}
+
+void KeyNavigationSubSection::setDirection(QmlDirection direction)
+{
+    if (m_direction == direction) {
+        return;
+    }
+
+    m_direction = direction;
+    emit directionChanged(m_direction);
+}
+
+KeyNavigationSubSection::QmlDirection KeyNavigationSubSection::direction_property() const
+{
+    return m_direction;
+}
+
+IKeyNavigationSubSection::Direction KeyNavigationSubSection::direction() const
+{
+    return static_cast<Direction>(m_direction);
 }
 
 const QSet<IKeyNavigationControl*>& KeyNavigationSubSection::controls() const
@@ -99,6 +119,8 @@ void KeyNavigationSubSection::setSection(KeyNavigationSection* section)
     if (m_section) {
         connect(m_section, &KeyNavigationSection::destroyed, this, &KeyNavigationSubSection::onSectionDestroyed);
     }
+
+    emit sectionChanged(m_section);
 }
 
 void KeyNavigationSubSection::onSectionDestroyed()
@@ -108,13 +130,13 @@ void KeyNavigationSubSection::onSectionDestroyed()
 
 void KeyNavigationSubSection::componentComplete()
 {
-    LOGD() << "Completed: " << m_name << ", order: " << m_order;
+    LOGD() << "Completed: " << m_name << ", order: " << order();
 
     IF_ASSERT_FAILED(!m_name.isEmpty()) {
         return;
     }
 
-    IF_ASSERT_FAILED(m_order > -1) {
+    IF_ASSERT_FAILED(order() > -1) {
         return;
     }
 

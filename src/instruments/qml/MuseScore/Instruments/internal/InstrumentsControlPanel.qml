@@ -12,6 +12,8 @@ RowLayout {
     property bool isRemovingAvailable: false
     property bool isAddingAvailable: value
 
+    property alias keynav: keynavSub
+
     signal addRequested()
     signal moveUpRequested()
     signal moveDownRequested()
@@ -27,8 +29,16 @@ RowLayout {
         }
     }
 
+    KeyNavigationSubSection {
+        id: keynavSub
+        name: "InstrumentsControlPanel"
+    }
+
     FlatButton {
         Layout.fillWidth: true
+
+        keynav.subsection: keynavSub
+        keynav.order: 1
 
         text: qsTrc("instruments", "Add")
 
@@ -42,6 +52,9 @@ RowLayout {
     FlatButton {
         Layout.preferredWidth: width
 
+        keynav.subsection: keynavSub
+        keynav.order: 2
+
         enabled: root.isMovingUpAvailable
 
         icon: IconCode.ARROW_UP
@@ -54,6 +67,9 @@ RowLayout {
     FlatButton {
         Layout.preferredWidth: width
 
+        keynav.subsection: keynavSub
+        keynav.order: 3
+
         enabled: root.isMovingDownAvailable
 
         icon: IconCode.ARROW_DOWN
@@ -65,6 +81,9 @@ RowLayout {
 
     FlatButton {
         Layout.preferredWidth: width
+
+        keynav.subsection: keynavSub
+        keynav.order: 4
 
         enabled: root.isRemovingAvailable
 

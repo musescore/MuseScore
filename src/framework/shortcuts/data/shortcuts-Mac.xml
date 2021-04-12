@@ -1,5 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Shortcuts>
+<!-- Keyboard navigation -->
+    <SC>
+        <key>nav-next-section</key>
+        <seq>F6</seq>
+    </SC>
+    <SC>
+        <key>nav-prev-section</key>
+        <seq>Shift+F6</seq>
+    </SC>
+    <SC>
+        <key>nav-next-section</key>
+        <seq>`</seq>
+    </SC>
+    <SC>
+        <key>nav-prev-section</key>
+        <seq>Shift+`</seq>
+    </SC>
+    <SC>
+        <key>nav-next-subsection</key>
+        <seq>Tab</seq>
+    </SC>
+    <SC>
+        <key>nav-prev-subsection</key>
+        <seq>Shift+Tab</seq>
+    </SC>
+    <SC>
+        <key>nav-right</key>
+        <seq>Right</seq>
+    </SC>
+    <SC>
+        <key>nav-left</key>
+        <seq>Left</seq>
+    </SC>
+    <SC>
+        <key>nav-up</key>
+        <seq>Up</seq>
+    </SC>
+    <SC>
+        <key>nav-down</key>
+        <seq>Down</seq>
+    </SC>
+    <SC>
+      <key>nav-trigger</key>
+      <seq>Return</seq>
+    </SC>
+    <SC>
+      <key>nav-trigger</key>
+      <seq>Space</seq>
+    </SC>
+<!-- end Keyboard navigation -->
+
   <SC>
     <key>plugin-creator</key>
     <seq>Ctrl+Shift+P</seq>

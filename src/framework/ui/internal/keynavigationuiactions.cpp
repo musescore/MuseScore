@@ -42,6 +42,12 @@ const UiActionList KeyNavigationUiActions::m_actions = {
     UiAction("nav-left",
              mu::context::UiCtxAny
              ),
+    UiAction("nav-up",
+             mu::context::UiCtxAny
+             ),
+    UiAction("nav-down",
+             mu::context::UiCtxAny
+             ),
     UiAction("nav-trigger",
              mu::context::UiCtxAny
              )
