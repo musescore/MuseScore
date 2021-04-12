@@ -93,19 +93,19 @@ mu::Ret PdfWriter::writeList(const notation::INotationPtrList& notations, system
         return make_ret(Ret::Code::UnknownError);
     }
 
-    auto notation1 = notations.front();
-    IF_ASSERT_FAILED(notation1) {
+    auto firstNotation = notations.front();
+    IF_ASSERT_FAILED(firstNotation) {
         return make_ret(Ret::Code::UnknownError);
     }
-    Ms::Score* score1 = notation1->elements()->msScore();
-    IF_ASSERT_FAILED(score1) {
+    Ms::Score* firstScore = firstNotation->elements()->msScore();
+    IF_ASSERT_FAILED(firstScore) {
         return make_ret(Ret::Code::UnknownError);
     }
 
     QPdfWriter pdfWriter(&destinationDevice);
     pdfWriter.setResolution(configuration()->exportPdfDpiResolution());
     pdfWriter.setCreator("MuseScore Version: " VERSION);
-    pdfWriter.setTitle(documentTitle(*(score1->masterScore())));
+    pdfWriter.setTitle(documentTitle(*(firstScore->masterScore())));
     pdfWriter.setPageMargins(QMarginsF());
 
     mu::draw::Painter painter(&pdfWriter, "pdfwriter");
@@ -122,7 +122,7 @@ mu::Ret PdfWriter::writeList(const notation::INotationPtrList& notations, system
             return make_ret(Ret::Code::UnknownError);
         }
 
-        if (score != score1) {
+        if (score != firstScore) {
             pdfWriter.newPage();
         }
 

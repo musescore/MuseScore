@@ -36,7 +36,7 @@
 #include "internal/filescorecontroller.h"
 #include "internal/userscoresconfiguration.h"
 #include "internal/userscoresservice.h"
-#include "internal/exportscoreservice.h"
+#include "internal/exportscorescenario.h"
 #include "internal/templatesrepository.h"
 #include "internal/userscoresuiactions.h"
 
@@ -50,7 +50,7 @@ using namespace mu::ui;
 static std::shared_ptr<FileScoreController> s_fileController = std::make_shared<FileScoreController>();
 static std::shared_ptr<UserScoresConfiguration> s_userScoresConfiguration = std::make_shared<UserScoresConfiguration>();
 static std::shared_ptr<UserScoresService> s_userScoresService = std::make_shared<UserScoresService>();
-static std::shared_ptr<ExportScoreService> s_exportScoreService = std::make_shared<ExportScoreService>();
+static std::shared_ptr<ExportScoreScenario> s_exportScoreScenario = std::make_shared<ExportScoreScenario>();
 
 static void userscores_init_qrc()
 {
@@ -68,7 +68,7 @@ void UserScoresModule::registerExports()
     ioc()->registerExport<IUserScoresService>(moduleName(), s_userScoresService);
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
     ioc()->registerExport<IFileScoreController>(moduleName(), s_fileController);
-    ioc()->registerExport<IExportScoreService>(moduleName(), s_exportScoreService);
+    ioc()->registerExport<IExportScoreScenario>(moduleName(), s_exportScoreScenario);
 }
 
 void UserScoresModule::resolveImports()

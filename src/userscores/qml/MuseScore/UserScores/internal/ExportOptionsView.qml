@@ -10,10 +10,15 @@ ColumnLayout {
     required property ExportDialogModel exportModel
 
     spacing: 12
-    property var firstColumnWidth: 72
+
+    QtObject {
+        id: privateProperties
+
+        readonly property int firstColumnWidth: 72
+    }
 
     ExportOptionItem {
-        firstColumnWidth: root.firstColumnWidth
+        firstColumnWidth: privateProperties.firstColumnWidth
         text: qsTrc("userscores", "Format:")
 
         StyledComboBox {
@@ -58,7 +63,7 @@ ColumnLayout {
     ExportOptionItem {
         visible: exportModel.selectedExportSuffix === "pdf"
         text: qsTrc("userscores", "Resolution:")
-        firstColumnWidth: root.firstColumnWidth
+        firstColumnWidth: privateProperties.firstColumnWidth
 
         IncrementalPropertyControl {
             Layout.preferredWidth: 80
@@ -68,7 +73,9 @@ ColumnLayout {
             step: 1
             decimals: 0
             measureUnitsSymbol: qsTrc("userscores", "dpi")
-            onValueEdited: exportModel.pdfResolution = newValue
+            onValueEdited: {
+                exportModel.pdfResolution = newValue
+            }
         }
     }
 
@@ -78,7 +85,7 @@ ColumnLayout {
 
         ExportOptionItem {
             text: qsTrc("userscores", "Resolution:")
-            firstColumnWidth: root.firstColumnWidth
+            firstColumnWidth: privateProperties.firstColumnWidth
 
             IncrementalPropertyControl {
                 Layout.preferredWidth: 80
@@ -88,14 +95,18 @@ ColumnLayout {
                 step: 1
                 decimals: 0
                 measureUnitsSymbol: qsTrc("userscores", "dpi")
-                onValueEdited: exportModel.pngResolution = newValue
+                onValueEdited: {
+                    exportModel.pngResolution = newValue
+                }
             }
         }
 
         CheckBox {
             text: qsTrc("userscores", "Transparent background")
             checked: exportModel.pngTransparentBackground
-            onClicked: exportModel.pngTransparentBackground = !checked
+            onClicked: {
+                exportModel.pngTransparentBackground = !checked
+            }
         }
 
         StyledTextLabel {
@@ -123,12 +134,14 @@ ColumnLayout {
         CheckBox {
             text: qsTrc("userscores", "Normalize")
             checked: exportModel.normalizeAudio
-            onClicked: exportModel.normalizeAudio = !checked
+            onClicked: {
+                exportModel.normalizeAudio = !checked
+            }
         }
 
         ExportOptionItem {
             text: qsTrc("userscores", "Sample rate:")
-            firstColumnWidth: root.firstColumnWidth
+            firstColumnWidth: privateProperties.firstColumnWidth
 
             StyledComboBox {
                 Layout.preferredWidth: 126
@@ -141,14 +154,16 @@ ColumnLayout {
                 valueRoleName: "valueRole"
 
                 currentIndex: indexOfValue(exportModel.sampleRate)
-                onValueChanged: exportModel.sampleRate = value
+                onValueChanged: {
+                    exportModel.sampleRate = value
+                }
             }
         }
 
         ExportOptionItem {
             visible: exportModel.selectedExportSuffix === "mp3"
             text: qsTrc("userscores", "Bitrate:")
-            firstColumnWidth: root.firstColumnWidth
+            firstColumnWidth: privateProperties.firstColumnWidth
 
             StyledComboBox {
                 Layout.preferredWidth: 126
@@ -161,7 +176,9 @@ ColumnLayout {
                 valueRoleName: "valueRole"
 
                 currentIndex: indexOfValue(exportModel.bitRate)
-                onValueChanged: exportModel.bitRate = value
+                onValueChanged: {
+                    exportModel.bitRate = value
+                }
             }
         }
 
@@ -180,13 +197,17 @@ ColumnLayout {
         CheckBox {
             text: qsTrc("userscores", "Expand repeats")
             checked: exportModel.midiExpandRepeats
-            onClicked: exportModel.midiExpandRepeats = !checked
+            onClicked: {
+                exportModel.midiExpandRepeats = !checked
+            }
         }
 
         CheckBox {
             text: qsTrc("userscores", "Export RPNs")
             checked: exportModel.midiExportRpns
-            onClicked: exportModel.midiExportRpns = !checked
+            onClicked: {
+                exportModel.midiExportRpns = !checked
+            }
         }
 
         StyledTextLabel {
@@ -204,7 +225,7 @@ ColumnLayout {
 
         ExportOptionItem {
             text: qsTrc("userscores", "File type:")
-            firstColumnWidth: root.firstColumnWidth
+            firstColumnWidth: privateProperties.firstColumnWidth
 
             StyledComboBox {
                 id: xmlTypeComboBox
@@ -220,7 +241,9 @@ ColumnLayout {
                 valueRoleName: "valueRole"
 
                 currentIndex: indexOfValue(exportModel.selectedExportSuffix)
-                onValueChanged: exportModel.selectedExportSuffix = value
+                onValueChanged: {
+                    exportModel.selectedExportSuffix = value
+                }
             }
         }
 
@@ -228,18 +251,15 @@ ColumnLayout {
             spacing: 12
             orientation: Qt.Vertical
             Layout.fillWidth: true
-            model: [
-                { valueRole: ExportDialogModel.AllLayout, textRole: qsTrc("userscores", "All layout") },
-                { valueRole: ExportDialogModel.AllBreaks, textRole: qsTrc("userscores", "System and page breaks") },
-                { valueRole: ExportDialogModel.ManualBreaks, textRole: qsTrc("userscores", "Manually added system and page breaks only") },
-                { valueRole: ExportDialogModel.None, textRole: qsTrc("userscores", "No system or page breaks") }
-            ]
+            model: exportModel.musicXmlLayoutTypes()
 
             delegate: RoundedRadioButton {
-                text: modelData.textRole
+                text: modelData["text"]
                 width: parent.width
-                checked: exportModel.musicXmlLayoutType === modelData.valueRole
-                onToggled: exportModel.musicXmlLayoutType = modelData.valueRole
+                checked: exportModel.musicXmlLayoutType === modelData["value"]
+                onToggled: {
+                    exportModel.musicXmlLayoutType = modelData["value"]
+                }
             }
         }
     }
@@ -250,21 +270,15 @@ ColumnLayout {
         spacing: 12
         orientation: Qt.Vertical
 
-        model: {
-            // Keep in sync with mu::notation::INotationWriter::UnitType
-            var allOptions = [
-                { textRole: qsTrc("userscores", "Each page to a separate file"), valueRole: 0 },
-                { textRole: qsTrc("userscores", "Each part to a separate file"), valueRole: 1 },
-                { textRole: qsTrc("userscores", "All parts combined in one file"), valueRole: 2 }
-            ]
-            return allOptions.filter((option) => exportModel.availableUnitTypes.includes(option.valueRole))
-        }
+        model: exportModel.availableUnitTypes
 
         delegate: RoundedRadioButton {
-            text: modelData.textRole
+            text: modelData["text"]
             width: parent.width
-            checked: exportModel.selectedUnitType === modelData.valueRole
-            onToggled: exportModel.selectedUnitType = modelData.valueRole
+            checked: exportModel.selectedUnitType === modelData["value"]
+            onToggled: {
+                exportModel.selectedUnitType = modelData["value"]
+            }
         }
     }
 }

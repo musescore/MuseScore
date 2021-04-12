@@ -30,7 +30,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iuserscoresconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iuserscoresservice.h
     ${CMAKE_CURRENT_LIST_DIR}/ifilescorecontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/iexportscoreservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/iexportscorescenario.h
     ${CMAKE_CURRENT_LIST_DIR}/userscorestypes.h
     ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.h
@@ -57,8 +57,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/templatesrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresuiactions.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/exportscoreservice.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/exportscoreservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/exportscorescenario.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/exportscorescenario.h
     )
 
 set(MODULE_LINK notation)

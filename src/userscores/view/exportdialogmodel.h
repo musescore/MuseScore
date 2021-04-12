@@ -23,35 +23,32 @@
 #include "userscorestypes.h"
 #include "modularity/ioc.h"
 
-#include "iinteractive.h"
 #include "context/iglobalcontext.h"
 #include "iuserscoresconfiguration.h"
 #include "notation/inotationwritersregister.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
-#include "iexportscoreservice.h"
+#include "iexportscorescenario.h"
 
-namespace mu::uicomponents {
-class ItemMultiSelectionModel;
-}
+class QItemSelectionModel;
 
 namespace mu::userscores {
 class ExportDialogModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    INJECT(userscores, framework::IInteractive, interactive)
     INJECT(userscores, context::IGlobalContext, context)
     INJECT(userscores, IUserScoresConfiguration, configuration)
     INJECT(userscores, notation::INotationWritersRegister, writers)
     INJECT(userscores, iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
     INJECT(userscores, iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
-    INJECT(userscores, IExportScoreService, exportScoreService)
+    INJECT(userscores, IExportScoreScenario, exportScoreScenario)
 
     Q_PROPERTY(int selectionLength READ selectionLength NOTIFY selectionChanged)
 
     Q_PROPERTY(QString selectedExportSuffix READ selectedExportSuffix WRITE setExportSuffix NOTIFY selectedExportSuffixChanged)
-    Q_PROPERTY(QList<int> availableUnitTypes READ availableUnitTypes NOTIFY selectedExportSuffixChanged)
+
+    Q_PROPERTY(QList<QVariantMap> availableUnitTypes READ availableUnitTypes NOTIFY selectedExportSuffixChanged)
     Q_PROPERTY(int selectedUnitType READ selectedUnitType WRITE setUnitType NOTIFY selectedUnitTypeChanged)
 
     Q_PROPERTY(int pdfResolution READ pdfResolution WRITE setPdfResolution NOTIFY pdfResolutionChanged)
@@ -70,6 +67,7 @@ class ExportDialogModel : public QAbstractListModel
 
 public:
     explicit ExportDialogModel(QObject* parent = nullptr);
+    ~ExportDialogModel();
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -86,7 +84,7 @@ public:
     QString selectedExportSuffix();
     void setExportSuffix(QString suffix);
 
-    QList<int> availableUnitTypes() const;
+    QList<QVariantMap> availableUnitTypes() const;
     int selectedUnitType() const;
     void setUnitType(int unitType);
     void setUnitType(ExportUnitType unitType);
@@ -127,6 +125,7 @@ public:
     };
     Q_ENUM(MusicXmlLayoutType)
 
+    Q_INVOKABLE QList<QVariantMap> musicXmlLayoutTypes() const;
     MusicXmlLayoutType musicXmlLayoutType() const;
     void setMusicXmlLayoutType(MusicXmlLayoutType layoutType);
 
@@ -157,19 +156,16 @@ private:
         RoleIsMain
     };
 
+    bool isIndexValid(int index) const;
+
     bool isMainNotation(notation::INotationPtr notation) const;
-
-    bool isNotationIndexValid(int index) const;
-
     notation::IMasterNotationPtr masterNotation() const;
 
-    uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
     QList<notation::INotationPtr> m_notations;
+    QItemSelectionModel* m_selectionModel;
 
-    QString exportFilter() const;
-
-    QString m_selectedExportSuffix = "pdf";
-    ExportUnitType m_selectedUnitType = ExportUnitType::PER_PART;
+    QString m_selectedExportSuffix;
+    ExportUnitType m_selectedUnitType;
 };
 }
 
