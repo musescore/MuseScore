@@ -154,6 +154,8 @@ if(${PROJECT_NAME}_QTQUICK)
       private/quick/QmlTypes.h
       private/quick/FrameQuick.cpp
       private/quick/FrameQuick_p.h
+      private/quick/LayoutSaverInstantiator.cpp
+      private/quick/LayoutSaverInstantiator_p.h
       private/quick/RubberBandQuick.cpp
       private/quick/RubberBandQuick.h
       private/quick/MainWindowQuick.cpp

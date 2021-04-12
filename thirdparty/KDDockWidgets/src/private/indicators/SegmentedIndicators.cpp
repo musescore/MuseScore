@@ -16,10 +16,14 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#define SEGMENT_GIRTH 50
-#define SEGMENT_PEN_WIDTH 4
-
 using namespace KDDockWidgets;
+
+int SegmentedIndicators::s_segmentGirth = 50;
+int SegmentedIndicators::s_segmentPenWidth = 4;
+qreal SegmentedIndicators::s_draggedWindowOpacity = 0.7;
+QColor SegmentedIndicators::s_segmentPenColor = Qt::black;
+QColor SegmentedIndicators::s_segmentBrushColor = QColor(0xbb, 0xd5, 0xee, /*alpha=*/200);
+QColor SegmentedIndicators::s_hoveredSegmentBrushColor = QColor(0x3574c5);
 
 
 SegmentedIndicators::SegmentedIndicators(DropArea *dropArea)
@@ -31,7 +35,7 @@ SegmentedIndicators::SegmentedIndicators(DropArea *dropArea)
     // dragged window translucent a bit, so we can see the indicators
     const bool userChoseOpacity = !qIsNaN(Config::self().draggedWindowOpacity());
     if (!userChoseOpacity)
-        Config::self().setDraggedWindowOpacity(0.7);
+        Config::self().setDraggedWindowOpacity(s_draggedWindowOpacity);
 }
 
 SegmentedIndicators::~SegmentedIndicators()
@@ -67,10 +71,9 @@ void SegmentedIndicators::paintEvent(QPaintEvent *)
 
 QVector<QPolygon> SegmentedIndicators::segmentsForRect(QRect r, QPolygon &center, bool useOffset) const
 {
-    const int penWidth = SEGMENT_PEN_WIDTH;
-    const int halfPenWidth = penWidth / 2;
+    const int halfPenWidth = s_segmentPenWidth / 2;
 
-    const int l = SEGMENT_GIRTH;
+    const int l = s_segmentGirth;
     const int top = (r.y() == 0 && useOffset) ? l : r.y();
     const int left = (r.x() == 0 && useOffset) ? l : r.x();
     const int right = (rect().right() == r.right() && useOffset) ? r.right() - l : r.right();
@@ -137,9 +140,12 @@ void SegmentedIndicators::updateSegments()
 {
     m_segments.clear();
 
-    const bool hasMultipleFrames = m_dropArea->count() > 1;
-    const bool needsInnerIndicators = hoveredFrameRect().isValid();
-    const bool needsOutterIndicators = hasMultipleFrames || !needsInnerIndicators;
+    const bool hasMultipleFrames = m_dropArea->visibleCount() > 1;
+    const bool needsOutterIndicators = true; // Can't think of a reason not to show them
+    const bool needsInnerIndicators = needsOutterIndicators &&
+                                      hasMultipleFrames &&
+                                      hoveredFrameRect().isValid();
+
     QPolygon center;
 
     if (needsInnerIndicators) {
@@ -171,13 +177,13 @@ void SegmentedIndicators::drawSegment(QPainter *p, const QPolygon &segment)
     if (segment.isEmpty())
         return;
 
-    QPen pen(Qt::black);
-    pen.setWidth(SEGMENT_PEN_WIDTH);
+    QPen pen(s_segmentPenColor);
+    pen.setWidth(s_segmentPenWidth);
     p->setPen(pen);
-    QColor brush(0xbb, 0xd5, 0xee, 200);
+    QColor brush(s_segmentBrushColor);
 
     if (segment.containsPoint(m_hoveredPt, Qt::OddEvenFill))
-        brush = QColor(0x3574c5);
+        brush = s_hoveredSegmentBrushColor;
 
     p->setBrush(brush);
     p->drawPolygon(segment);
