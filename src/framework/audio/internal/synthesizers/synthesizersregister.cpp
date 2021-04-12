@@ -20,6 +20,7 @@
 #include "internal/audiosanitizer.h"
 #include "sanitysynthesizer.h"
 
+using namespace mu;
 using namespace mu::audio::synth;
 
 void SynthesizersRegister::registerSynthesizer(const SynthName& name, ISynthesizerPtr s)
@@ -27,6 +28,8 @@ void SynthesizersRegister::registerSynthesizer(const SynthName& name, ISynthesiz
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
     std::lock_guard<std::mutex> lock(m_mutex);
     m_synths[name] = std::make_shared<SanitySynthesizer>(s);
+
+    m_synthNotificationChannel.send(m_synths[name]);
 }
 
 std::shared_ptr<ISynthesizer> SynthesizersRegister::synthesizer(const SynthName& name) const
@@ -49,6 +52,11 @@ std::vector<std::shared_ptr<ISynthesizer> > SynthesizersRegister::synthesizers()
         synths.push_back(it->second);
     }
     return synths;
+}
+
+async::Channel<ISynthesizerPtr> SynthesizersRegister::synthesizerAddedNotify() const
+{
+    return m_synthNotificationChannel;
 }
 
 void SynthesizersRegister::setDefaultSynthesizer(const SynthName& name)

@@ -39,6 +39,10 @@ void SynthesizerController::init()
         return;
     }
 
+    m_synthRegister->synthesizerAddedNotify().onReceive(this, [this](const ISynthesizerPtr& synth) {
+        synth->init();
+    });
+
     std::vector<ISynthesizerPtr> synthesizers = m_synthRegister->synthesizers();
     for (ISynthesizerPtr& synth : synthesizers) {
         synth->init();
