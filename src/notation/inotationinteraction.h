@@ -42,6 +42,9 @@ public:
     virtual void showShadowNote(const QPointF& pos) = 0;
     virtual void hideShadowNote() = 0;
 
+    // Visibility
+    virtual void toggleVisible() = 0;
+
     // Select
     virtual Element* hitElement(const QPointF& pos, float width) const = 0;
     virtual int hitStaffIndex(const QPointF& pos) const = 0;

@@ -60,6 +60,9 @@ public:
     void showShadowNote(const QPointF& pos) override;
     void hideShadowNote() override;
 
+    // Visibility
+    void toggleVisible() override;
+
     // Select
     Element* hitElement(const QPointF& pos, float width) const override;
     int hitStaffIndex(const QPointF& pos) const override;
