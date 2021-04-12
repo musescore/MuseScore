@@ -29,6 +29,14 @@ public:
 
     DropLocation dropLocationForPos(QPoint pos) const;
 
+
+    static int s_segmentGirth;
+    static int s_segmentPenWidth;
+    static qreal s_draggedWindowOpacity;
+    static QColor s_segmentPenColor;
+    static QColor s_segmentBrushColor;
+    static QColor s_hoveredSegmentBrushColor;
+
 protected:
     void paintEvent(QPaintEvent *) override;
     QPoint posForIndicator(DropLocation) const override;

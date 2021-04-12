@@ -23,6 +23,20 @@ ApplicationWindow {
             title: qsTr("&File")
 
             Action {
+                text: qsTr("Save layout")
+                onTriggered: {
+                    layoutSaver.saveToFile("mySavedLayout.json");
+                }
+            }
+
+            Action {
+                text: qsTr("Restore layout")
+                onTriggered: {
+                    layoutSaver.restoreFromFile("mySavedLayout.json");
+                }
+            }
+
+            Action {
                 text: qsTr("Toggle widget #4")
                 onTriggered: {
                     toggleDockWidget(dock4);
@@ -88,6 +102,10 @@ ApplicationWindow {
             // Add dock5 to the left of dock4
             addDockWidget(dock5, KDDW.KDDockWidgets.Location_OnRight, dock4);
         }
+    }
+
+    KDDW.LayoutSaver {
+        id: layoutSaver
     }
 
     function toggleDockWidget(dw) {

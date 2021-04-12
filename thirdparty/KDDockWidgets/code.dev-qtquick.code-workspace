@@ -138,7 +138,6 @@
         "program": "${workspaceFolder}/build-dev-qtquick/bin/kddockwidgets_customtitlebar_quick",
         "args": [],
         "cwd": "${workspaceFolder}",
-        "MIMode": "",
         "stopAtEntry": false,
         "externalConsole": false
       },
@@ -149,7 +148,6 @@
         "program": "${workspaceFolder}/build-dev-qtquick/bin/kddockwidgets_example_mdi_quick",
         "args": [],
         "cwd": "${workspaceFolder}",
-        "MIMode": "",
         "stopAtEntry": false,
         "externalConsole": false
       },
@@ -160,7 +158,6 @@
         "program": "${workspaceFolder}/build-dev-qtquick/bin/kddockwidgets_example_quick",
         "args": [],
         "cwd": "${workspaceFolder}",
-        "MIMode": "",
         "stopAtEntry": false,
         "externalConsole": false
       },
@@ -171,7 +168,6 @@
         "program": "${workspaceFolder}/build-dev-qtquick/bin/tst_docks",
         "args": [],
         "cwd": "${workspaceFolder}",
-        "MIMode": "",
         "stopAtEntry": false,
         "externalConsole": false
       }

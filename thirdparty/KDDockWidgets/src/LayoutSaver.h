@@ -33,6 +33,24 @@ namespace KDDockWidgets {
 
 class DockWidgetBase;
 
+
+/**
+ * @brief LayoutSaver allows to save or restore layouts.
+ *
+ * You can save a layout to a file or to a byte array.
+ * JSON is used as the serialized format.
+ *
+ * Example:
+ *     LayoutSaver saver;
+ *
+ *     // Save to a file:
+ *     saver.saveToFile(filename);
+ *
+ * The counterpart of saveToFile() is restoreFromFile().
+ *
+ * You can also save to a QByteArray instead, with serializeLayout().
+ * The counterpart of serializeLayout() is restoreLayout();
+ */
 class DOCKS_EXPORT LayoutSaver
 {
 public:
