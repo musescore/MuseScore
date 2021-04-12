@@ -225,7 +225,12 @@ add_subdirectory(thirdparty/qzip)
 add_subdirectory(src)
 
 if (KDAB_DOCKWIDGETS)
-    set(KDDockWidgets_QTQUICK 1)
+    if (NOT BUILD_SHARED_LIBS)
+        set(KDDockWidgets_STATIC ON)
+    endif(NOT BUILD_SHARED_LIBS)
+
+    set(KDDockWidgets_QTQUICK ON)
+    set(KDDockWidgets_EXAMPLES OFF)
     add_subdirectory(thirdparty/KDDockWidgets)
 endif(KDAB_DOCKWIDGETS)
 
