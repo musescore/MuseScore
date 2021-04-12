@@ -82,6 +82,10 @@ void VstAudioClient::process(float* output, unsigned int samples)
 
 void VstAudioClient::setBlockSize(unsigned int samples)
 {
+    if (m_samplesInfo.samplesPerBlock == samples) {
+        return;
+    }
+
     m_samplesInfo.samplesPerBlock = samples;
 
     updateProcessSetup();

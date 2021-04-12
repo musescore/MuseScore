@@ -62,10 +62,8 @@ public:
     bool channelPitch(midi::channel_t chan, int16_t pitch) override; // -12 - 12
 
     unsigned int streamCount() const override;
-    void forward(unsigned int sampleCount) override;
+    void forward(float* buffer, unsigned int sampleCount) override;
     async::Channel<unsigned int> streamsCountChanged() const override;
-    const float* data() const override;
-    void setBufferSize(unsigned int samples) override;
 
 private:
 
@@ -75,7 +73,6 @@ private:
     bool m_isActive = false;
 
     unsigned int m_sampleRate = 1;
-    std::vector<float> m_buffer = {};
     async::Channel<unsigned int> m_streamsCountChanged;
 };
 }

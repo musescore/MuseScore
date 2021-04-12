@@ -383,26 +383,12 @@ unsigned int FluidSynth::streamCount() const
     return synth::AUDIO_CHANNELS;
 }
 
-void FluidSynth::forward(unsigned int sampleCount)
+void FluidSynth::forward(float* buffer, unsigned int sampleCount)
 {
-    writeBuf(m_buffer.data(), sampleCount);
+    writeBuf(buffer, sampleCount);
 }
 
 async::Channel<unsigned int> FluidSynth::streamsCountChanged() const
 {
     return m_streamsCountChanged;
-}
-
-const float* FluidSynth::data() const
-{
-    return m_buffer.data();
-}
-
-void FluidSynth::setBufferSize(unsigned int samples)
-{
-    auto sc = streamCount();
-    auto targetSize = samples * sc;
-    if (targetSize > 0 && m_buffer.size() < targetSize) {
-        m_buffer.resize(samples * streamCount());
-    }
 }

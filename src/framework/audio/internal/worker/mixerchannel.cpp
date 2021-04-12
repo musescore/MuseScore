@@ -45,30 +45,18 @@ void MixerChannel::checkStreams()
     }
 }
 
-void MixerChannel::forward(unsigned int sampleCount)
+void MixerChannel::forward(float* buffer, unsigned int sampleCount)
 {
     IF_ASSERT_FAILED(m_source) {
         return;
     }
-    m_source->forward(sampleCount);
-
-    //you can use source's buffer as pre proccesing KEY, current buffer as post processing KEY
-    std::memcpy(m_buffer.data(), m_source->data(), m_buffer.size() * sizeof(float));
+    m_source->forward(buffer, sampleCount);
 
     for (std::pair<const unsigned int, IAudioProcessorPtr>& p : m_processorList) {
         if (p.second->active()) {
-            p.second->process(m_buffer.data(), m_buffer.data(), sampleCount);
+            p.second->process(buffer, buffer, sampleCount);
         }
     }
-}
-
-void MixerChannel::setBufferSize(unsigned int samples)
-{
-    AbstractAudioSource::setBufferSize(samples);
-    IF_ASSERT_FAILED(m_source) {
-        return;
-    }
-    m_source->setBufferSize(samples);
 }
 
 void MixerChannel::setSampleRate(unsigned int sampleRate)
