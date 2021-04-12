@@ -101,7 +101,7 @@ VstPluginMeta VstPlugin::meta() const
     return result;
 }
 
-PluginView VstPlugin::view()
+PluginViewPtr VstPlugin::view()
 {
     if (m_pluginView) {
         return m_pluginView;
@@ -110,6 +110,17 @@ PluginView VstPlugin::view()
     m_pluginView = owned(m_pluginController->createView(PluginEditorViewType::kEditor));
 
     return m_pluginView;
+}
+
+PluginComponentPtr VstPlugin::component()
+{
+    if (m_pluginComponent) {
+        return m_pluginComponent;
+    }
+
+    m_pluginComponent = m_pluginProvider->getComponent();
+
+    return m_pluginComponent;
 }
 
 bool VstPlugin::isValid() const

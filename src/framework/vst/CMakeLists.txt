@@ -41,6 +41,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstplugin.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/vstplugin.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synth/vstaudioclient.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synth/vstaudioclient.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synth/vstsynthesiser.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synth/vstsynthesiser.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/vstpluginlistmodelexample.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/vstpluginlistmodelexample.h
     ${CMAKE_CURRENT_LIST_DIR}/view/vstplugineditorview.cpp
