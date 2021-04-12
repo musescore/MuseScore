@@ -36,45 +36,11 @@ DockPage {
 
             color: ui.theme.backgroundPrimaryColor
 
-            Rectangle {
-                anchors.fill: parent
-                color: ui.theme.backgroundPrimaryColor
+             HomeMenu {
+                currentPageName: homeCentral.currentCompName
 
-                ColumnLayout {
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-
-                    spacing: 0
-
-                    AccountInfoButton {
-                        Layout.preferredHeight: 60
-                        Layout.fillWidth: true
-
-                        ButtonGroup.group: homeMenuButtons.radioButtonGroup
-
-                        checked: homeCentral.currentCompName == "account"
-
-                        onToggled: {
-                            homeCentral.load("account")
-                        }
-
-                        onUserAuthorizedChanged: {
-                            homeCentral.load("scores")
-                        }
-                    }
-
-                    HomeMenu {
-                        id: homeMenuButtons
-                        Layout.topMargin: 20
-                        Layout.fillWidth: true
-
-                        currentPageName: homeCentral.currentCompName
-
-                        onSelected: {
-                            homeCentral.load(name)
-                        }
-                    }
+                onSelected: {
+                    homeCentral.load(name)
                 }
             }
         }
