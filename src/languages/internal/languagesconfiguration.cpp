@@ -38,11 +38,22 @@ static const std::string module_name("languages");
 static const Settings::Key LANGUAGES_JSON(module_name, "languages/languagesJson");
 static const Settings::Key LANGUAGE("ui", "ui/application/language");
 
+QString correctLanguageCode(const QString& languageCode)
+{
+    QString result = languageCode;
+
+    if (result == SYSTEM_LANGUAGE_CODE) {
+        result = QLocale::system().name();
+    }
+
+    return result;
+}
+
 void LanguagesConfiguration::init()
 {
     settings()->setDefaultValue(LANGUAGE, Val(SYSTEM_LANGUAGE_CODE.toStdString()));
     settings()->valueChanged(LANGUAGE).onReceive(nullptr, [this](const Val& val) {
-        m_currentLanguageCodeChanged.send(val.toQString());
+        m_currentLanguageCodeChanged.send(correctLanguageCode(val.toQString()));
     });
 
     settings()->valueChanged(LANGUAGES_JSON).onReceive(nullptr, [this](const Val& val) {
@@ -53,15 +64,9 @@ void LanguagesConfiguration::init()
 
 ValCh<QString> LanguagesConfiguration::currentLanguageCode() const
 {
-    QString languageCode = settings()->value(LANGUAGE).toQString();
-
-    if (languageCode == SYSTEM_LANGUAGE_CODE) {
-        languageCode = QLocale::system().name();
-    }
-
     ValCh<QString> result;
     result.ch = m_currentLanguageCodeChanged;
-    result.val = languageCode;
+    result.val = correctLanguageCode(settings()->value(LANGUAGE).toQString());
 
     return result;
 }
