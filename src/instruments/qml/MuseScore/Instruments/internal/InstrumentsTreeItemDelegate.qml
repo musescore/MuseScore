@@ -217,7 +217,13 @@ Item {
                     return
                 }
 
-                model.itemRole.isVisible = !model.itemRole.isVisible
+                if (!root.isSelected) {
+                    model.itemRole.isVisible = !model.itemRole.isVisible
+                }
+                else {
+                    instrumentTreeModel.setIsVisibleSelectedRows(!model.itemRole.isVisible)
+                }
+
             }
         }
 
