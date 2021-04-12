@@ -65,6 +65,8 @@ private:
     void padNote(const Pad& pad);
     void putNote(const actions::ActionData& data);
 
+    void toggleVisible();
+
     void toggleAccidental(AccidentalType type);
     void addArticulation(SymbolId articulationSymbolId);
 

@@ -111,6 +111,8 @@ void NotationActionController::init()
 
     dispatcher()->reg(this, "put-note", this, &NotationActionController::putNote);
 
+    dispatcher()->reg(this, "toggle-visible", this, &NotationActionController::toggleVisible);
+
     dispatcher()->reg(this, "next-element", [this](const ActionCode& actionCode) { moveAction(actionCode); });
     dispatcher()->reg(this, "prev-element", [this](const ActionCode& actionCode) { moveAction(actionCode); });
     dispatcher()->reg(this, "next-chord", [this](const ActionCode& actionCode) { moveAction(actionCode); });
@@ -473,6 +475,16 @@ void NotationActionController::putNote(const actions::ActionData& data)
     bool insert = data.arg<bool>(2);
 
     noteInput->putNote(pos, replace, insert);
+}
+
+void NotationActionController::toggleVisible()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->toggleVisible();
 }
 
 void NotationActionController::toggleAccidental(AccidentalType type)
