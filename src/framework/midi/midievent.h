@@ -372,7 +372,7 @@ struct Event {
     }
 
     //!return velocity in range [0.f, 1.f] independent from message type
-    float velocityFraction()
+    float velocityFraction() const
     {
         return velocity() / static_cast<float>(maxVelocity());
     }
@@ -982,12 +982,12 @@ private:
     void assertMessageType(const std::set<MessageType>& supportedTypes) const
     {
         UNUSED(supportedTypes);
-        assert(isMessageTypeIn(supportedTypes));
+        //assert(isMessageTypeIn(supportedTypes));
     }
 
-    void assertChannelVoice() const { assert(isChannelVoice()); }
+    void assertChannelVoice() const { /*assert(isChannelVoice());*/ }
 
-    void assertOpcode(const std::set<Opcode>& supportedOpcodes) const { UNUSED(supportedOpcodes); assert(isOpcodeIn(supportedOpcodes)); }
+    void assertOpcode(const std::set<Opcode>& supportedOpcodes) const { UNUSED(supportedOpcodes); /*assert(isOpcodeIn(supportedOpcodes));*/ }
 
     static uint32_t scaleUp(uint32_t srcVal, size_t srcBits, size_t dstBits)
     {
