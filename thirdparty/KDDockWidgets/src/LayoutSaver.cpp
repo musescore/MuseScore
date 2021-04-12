@@ -37,6 +37,26 @@
 
 #include <memory>
 
+/**
+ * Some implementation details:
+ *
+ * Restoring is done in two fases. From the JSON, we construct an intermediate representation,
+ * which doesn't have any GUI types. Finally we then construct the GUI from the intermediate
+ * representation.
+ *
+ *     JSON <-> Intermediate rep (bunch non-gui structs) <-> GUI classes
+ *
+ * This is in contrast to many other dock widget frameworks which just do:
+ *     serialized <-> GUI
+ *
+ * The advantage of having the intermediate structs is that we can do validations on them and if
+ * we find some corruption we don't even start messing with the GUI.
+ *
+ * See the LayoutSaver::* structs in LayoutSaver_p.h, those are the intermediate structs.
+ * They have methods to convert to/from JSON.
+ * All other gui classes have methods to convert to/from these structs. For example
+ * FloatingWindow::serialize()/deserialize()
+ */
 using namespace KDDockWidgets;
 
 QHash<QString, LayoutSaver::DockWidget::Ptr> LayoutSaver::DockWidget::s_dockWidgets;
