@@ -33,20 +33,31 @@ Rectangle {
     }
 
     Column {
+        anchors {
+            top: parent.top
+            topMargin: 24
+            left: parent.left
+            leftMargin: 24
+        }
 
-        ValueList {
+        ListView {
+
             width: 560
             height: 226
 
-            keyRoleName: "idRole"
-            keyTitle: "id"
-            valueRoleName: "nameRole"
-            valueTitle: "Name"
-
             model: pluginListModel
 
-            onClicked: {
-                pluginListModel.selectedItemIndex = index
+            spacing: 12
+
+            delegate: RoundedRadioButton {
+                width: parent.width
+
+                checked: pluginListModel.selectedItemIndex === model.index
+                text: nameRole
+
+                onClicked: {
+                    pluginListModel.selectedItemIndex = index
+                }
             }
         }
 
