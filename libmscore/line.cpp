@@ -686,9 +686,7 @@ void LineSegment::editDrag(EditData& ed)
 void LineSegment::spatiumChanged(qreal ov, qreal nv)
       {
       Element::spatiumChanged(ov, nv);
-      qreal scale = nv / ov;
-      line()->setLineWidth(line()->lineWidth() * scale);
-      _offset2 *= scale;
+      _offset2 *= nv / ov;
       }
 
 //---------------------------------------------------------
