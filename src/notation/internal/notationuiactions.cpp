@@ -143,6 +143,11 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Swap with Clipboard"),
              QT_TRANSLATE_NOOP("action", "Swap with clipboard")
              ),
+    UiAction("toggle-visible",
+             mu::context::UiCtxNotationHasSelection,
+             QT_TRANSLATE_NOOP("action", "Toggle visibility of elements"),
+             QT_TRANSLATE_NOOP("action", "Toggle visibility of elements")
+             ),
     UiAction("select-all",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Select All"),

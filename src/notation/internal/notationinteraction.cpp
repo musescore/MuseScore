@@ -230,6 +230,22 @@ void NotationInteraction::hideShadowNote()
     m_shadowNote->setVisible(false);
 }
 
+void NotationInteraction::toggleVisible()
+{
+    startEdit();
+
+    for (Element* el : selection()->elements()) {
+        if (el->isBracket()) {
+            continue;
+        }
+        el->undoChangeProperty(Ms::Pid::VISIBLE, !el->visible());
+    }
+
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 Element* NotationInteraction::hitElement(const QPointF& pos, float width) const
 {
     QList<Ms::Element*> elements = hitElements(pos, width);
