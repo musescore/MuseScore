@@ -41,7 +41,7 @@ public:
     ~KeyNavigationSection() override;
 
     QString name() const override;
-    int order() const override;
+    const Index& index() const override;
     bool enabled() const override;
     bool active() const override;
     void setActive(bool arg) override;

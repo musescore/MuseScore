@@ -95,6 +95,7 @@ void InstrumentPanelTreeModel::deleteItems()
 
 void InstrumentPanelTreeModel::load()
 {
+    TRACEFUNC;
     beginResetModel();
 
     m_rootItem = new RootTreeItem(m_masterNotationParts);

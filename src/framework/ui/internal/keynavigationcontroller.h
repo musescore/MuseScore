@@ -34,6 +34,13 @@ class KeyNavigationController : public IKeyNavigationController, public actions:
 public:
     KeyNavigationController() = default;
 
+    enum MoveDirection {
+        Right = 0,
+        Left,
+        Up,
+        Down
+    };
+
     void reg(IKeyNavigationSection* s) override;
     void unreg(IKeyNavigationSection* s) override;
 
@@ -44,8 +51,13 @@ private:
     void goToPrevSection();
     void goToNextSubSection();
     void goToPrevSubSection();
-    void goToNextControl();
-    void goToPrevControl();
+
+    void goToControl(MoveDirection direction, IKeyNavigationSubSection* activeSubSec);
+
+    void onLeft();
+    void onRight();
+    void onUp();
+    void onDown();
 
     void doTriggerControl();
     void onForceActiveRequested(IKeyNavigationSection* sec, IKeyNavigationSubSection* sub, IKeyNavigationControl* ctrl);
@@ -54,9 +66,15 @@ private:
     void doDeactivateSection(IKeyNavigationSection* s);
     void doActivateSubSection(IKeyNavigationSubSection* s);
     void doDeactivateSubSection(IKeyNavigationSubSection* s);
+    void doActivateControl(IKeyNavigationControl* c);
+    void doDeactivateControl(IKeyNavigationControl* c);
 
-    const QSet<IKeyNavigationSubSection*>& subsectionsOfActiveSection(bool doActiveIfNoAnyActive = true);
-    const QSet<IKeyNavigationControl*>& controlsOfActiveSubSection(bool doActiveIfNoAnyActive = false);
+    void doActivateFirst();
+    void doActivateLast();
+
+    IKeyNavigationSection* activeSection() const;
+    IKeyNavigationSubSection* activeSubSection() const;
+    IKeyNavigationControl* activeControl() const;
 
     QSet<IKeyNavigationSection*> m_sections;
 };

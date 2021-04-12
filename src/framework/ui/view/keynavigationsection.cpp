@@ -39,13 +39,13 @@ KeyNavigationSection::~KeyNavigationSection()
 void KeyNavigationSection::componentComplete()
 {
     //! NOTE Reg after set properties.
-    LOGD() << "Completed: " << m_name << ", order: " << m_order;
+    LOGD() << "Completed: " << m_name << ", order: " << order();
 
     IF_ASSERT_FAILED(!m_name.isEmpty()) {
         return;
     }
 
-    IF_ASSERT_FAILED(m_order > -1) {
+    IF_ASSERT_FAILED(order() > -1) {
         return;
     }
 
@@ -57,9 +57,9 @@ QString KeyNavigationSection::name() const
     return AbstractKeyNavigation::name();
 }
 
-int KeyNavigationSection::order() const
+const IKeyNavigation::Index& KeyNavigationSection::index() const
 {
-    return AbstractKeyNavigation::order();
+    return AbstractKeyNavigation::index();
 }
 
 bool KeyNavigationSection::enabled() const
