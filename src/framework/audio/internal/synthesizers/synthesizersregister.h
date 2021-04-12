@@ -21,16 +21,18 @@
 
 #include <map>
 #include <mutex>
+#include "async/asyncable.h"
 #include "isynthesizersregister.h"
 
 namespace mu::audio::synth {
-class SynthesizersRegister : public ISynthesizersRegister
+class SynthesizersRegister : public ISynthesizersRegister, public async::Asyncable
 {
 public:
 
     void registerSynthesizer(const SynthName& name, ISynthesizerPtr s) override;
     std::shared_ptr<ISynthesizer> synthesizer(const SynthName& name) const override;
     std::vector<std::shared_ptr<ISynthesizer> > synthesizers() const override;
+    async::Channel<ISynthesizerPtr> synthesizerAddedNotify() const override;
 
     void setDefaultSynthesizer(const SynthName& name) override;
     std::shared_ptr<ISynthesizer> defaultSynthesizer() const override;
@@ -39,6 +41,7 @@ private:
 
     mutable std::mutex m_mutex;
     std::map<std::string, std::shared_ptr<ISynthesizer> > m_synths;
+    async::Channel<ISynthesizerPtr> m_synthNotificationChannel;
     SynthName m_defaultName;
 };
 }

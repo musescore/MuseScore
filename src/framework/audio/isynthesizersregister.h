@@ -22,6 +22,7 @@
 #include <string>
 #include <memory>
 
+#include "async/channel.h"
 #include "modularity/imoduleexport.h"
 #include "isynthesizer.h"
 
@@ -35,6 +36,7 @@ public:
     virtual void registerSynthesizer(const SynthName& name, ISynthesizerPtr synthesizer) = 0;
     virtual ISynthesizerPtr synthesizer(const SynthName& name) const = 0;
     virtual std::vector<ISynthesizerPtr> synthesizers() const = 0;
+    virtual async::Channel<ISynthesizerPtr> synthesizerAddedNotify() const = 0;
 
     virtual void setDefaultSynthesizer(const SynthName& name) = 0;
     virtual ISynthesizerPtr defaultSynthesizer() const = 0;

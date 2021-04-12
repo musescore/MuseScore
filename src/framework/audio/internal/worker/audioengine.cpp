@@ -99,11 +99,14 @@ void AudioEngine::onDriverOpened(unsigned int sampleRate, uint16_t readBufferSiz
     setSampleRate(sampleRate);
     setReadBufferSize(readBufferSize);
 
-    //! TODO Add a subscription to add or remove synthesizers
     std::vector<ISynthesizerPtr> synths = synthesizersRegister()->synthesizers();
     for (const ISynthesizerPtr& synth : synths) {
         m_mixer->addChannel(synth);
     }
+
+    synthesizersRegister()->synthesizerAddedNotify().onReceive(this, [this](const ISynthesizerPtr& synth) {
+       m_mixer->addChannel(synth);
+    });
 }
 
 void AudioEngine::setSampleRate(unsigned int sampleRate)
