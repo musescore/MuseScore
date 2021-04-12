@@ -207,6 +207,20 @@ void InstrumentPanelTreeModel::removeSelectedRows()
     }
 }
 
+void InstrumentPanelTreeModel::setIsVisibleSelectedRows(bool isVisible)
+{
+    if (!m_selectionModel || !m_selectionModel->hasSelection()) {
+        return;
+    }
+
+    QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
+
+    for (const QModelIndex& selectedIndex : selectedIndexList) {
+        AbstractInstrumentPanelTreeItem* item = modelIndexToItem(selectedIndex);
+        item->setIsVisible(isVisible);
+    }
+}
+
 bool InstrumentPanelTreeModel::removeRows(int row, int count, const QModelIndex& parent)
 {
     AbstractInstrumentPanelTreeItem* parentItem = modelIndexToItem(parent);
