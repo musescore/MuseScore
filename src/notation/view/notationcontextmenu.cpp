@@ -55,7 +55,6 @@ MenuItemList NotationContextMenu::measureItems() const
 MenuItemList NotationContextMenu::pageItems() const
 {
     MenuItemList items {
-
         makeItem(actionsRegister()->action("edit-style")),
         makeItem(actionsRegister()->action("page-settings")),
         makeItem(actionsRegister()->action("load-style"))
