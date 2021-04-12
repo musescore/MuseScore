@@ -23,9 +23,13 @@
 #include "public.sdk/source/vst/hosting/module.h"
 #include "public.sdk/source/vst/hosting/plugprovider.h"
 #include "public.sdk/source/vst/hosting/hostclasses.h"
+#include "public.sdk/source/vst/hosting/eventlist.h"
+#include "public.sdk/source/vst/hosting/processdata.h"
 #include "pluginterfaces/gui/iplugview.h"
 #include "pluginterfaces/vst/ivstaudioprocessor.h"
 #include "pluginterfaces/vst/ivsteditcontroller.h"
+
+#include "framework/midi/miditypes.h"
 
 namespace mu::vst {
 class VstPlugin;
@@ -40,10 +44,11 @@ using PluginContextFactory = Steinberg::Vst::PluginContextFactory;
 using PluginContext = Steinberg::Vst::HostApplication;
 using PluginProviderPtr = Steinberg::IPtr<Steinberg::Vst::PlugProvider>;
 using PluginProvider = Steinberg::Vst::PlugProvider;
-using PluginController = Steinberg::IPtr<Steinberg::Vst::IEditController>;
-using PluginView = Steinberg::IPtr<Steinberg::IPlugView>;
+using PluginControllerPtr = Steinberg::IPtr<Steinberg::Vst::IEditController>;
+using PluginComponentPtr = Steinberg::IPtr<Steinberg::Vst::IComponent>;
+using PluginViewPtr = Steinberg::IPtr<Steinberg::IPlugView>;
+using IAudioProcessorPtr = Steinberg::FUnknownPtr<Steinberg::Vst::IAudioProcessor>;
 using FIDString = Steinberg::FIDString;
-namespace PluginEditorViewType = Steinberg::Vst::ViewType;
 
 struct VstPluginMeta {
     PluginId id;
@@ -52,5 +57,13 @@ struct VstPluginMeta {
 };
 
 using VstPluginMetaList = std::vector<VstPluginMeta>;
+
+using VstEventList = Steinberg::Vst::EventList;
+using VstEvent = Steinberg::Vst::Event;
+using VstProcessData = Steinberg::Vst::HostProcessData;
+using VstProcessContext = Steinberg::Vst::ProcessContext;
+using VstProcessSetup = Steinberg::Vst::ProcessSetup;
+
+namespace PluginEditorViewType = Steinberg::Vst::ViewType;
 }
 #endif // MU_VST_VSTTYPES_H
