@@ -39,6 +39,7 @@ class VstPluginEditorView : public QDialog, public Steinberg::IPlugFrame
 public:
     VstPluginEditorView(QWidget* parent = nullptr);
     VstPluginEditorView(const VstPluginEditorView& copy);
+    ~VstPluginEditorView();
 
     Steinberg::tresult resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize) override;
 
@@ -55,7 +56,7 @@ private:
 
     FIDString currentPlatformUiType() const;
 
-    PluginView m_view = nullptr;
+    PluginViewPtr m_view = nullptr;
     QString m_pluginId;
 };
 }

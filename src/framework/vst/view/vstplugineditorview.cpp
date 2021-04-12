@@ -41,6 +41,13 @@ VstPluginEditorView::VstPluginEditorView(const VstPluginEditorView& copy)
 {
 }
 
+VstPluginEditorView::~VstPluginEditorView()
+{
+    if (m_view) {
+        m_view->removed();
+    }
+}
+
 tresult VstPluginEditorView::resizeView(IPlugView* view, ViewRect* newSize)
 {
     setGeometry(QRect(geometry().x(), geometry().y(), newSize->getWidth(), newSize->getHeight()));
