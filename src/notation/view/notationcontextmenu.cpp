@@ -55,6 +55,7 @@ MenuItemList NotationContextMenu::measureItems() const
 MenuItemList NotationContextMenu::pageItems() const
 {
     MenuItemList items {
+
         makeItem(actionsRegister()->action("edit-style")),
         makeItem(actionsRegister()->action("page-settings")),
         makeItem(actionsRegister()->action("load-style"))
@@ -69,6 +70,7 @@ MenuItemList NotationContextMenu::elementItems() const
     items << makeItem(actionsRegister()->action("select-similar"))
           << makeItem(actionsRegister()->action("select-similar-staff"))
           << makeItem(actionsRegister()->action("select-similar-range"))
+          << makeItem(actionsRegister()->action("inspector"))
           << makeItem(actionsRegister()->action("select-dialog"));
 
     return items;
