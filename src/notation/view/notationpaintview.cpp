@@ -334,6 +334,11 @@ void NotationPaintView::showContextMenu(const ElementType& elementType, const QP
     emit openContextMenuRequested(menuItems, pos);
 }
 
+void NotationPaintView::handleAction(const QString& actionCode)
+{
+    dispatcher()->dispatch(actionCode.toStdString());
+}
+
 void NotationPaintView::paint(QPainter* qp)
 {
     TRACEFUNC;

@@ -180,6 +180,9 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
+          <Rest>
+            <durationType>half</durationType>
+            </Rest>
           </voice>
         </Measure>
       <Measure>

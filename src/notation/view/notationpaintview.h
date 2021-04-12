@@ -83,6 +83,7 @@ public:
     void showShadowNote(const QPointF& pos) override;
 
     void showContextMenu(const ElementType& elementType, const QPoint& pos) override;
+    Q_INVOKABLE void handleAction(const QString& actionCode);
 
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;

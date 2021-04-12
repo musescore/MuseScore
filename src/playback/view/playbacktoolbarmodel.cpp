@@ -41,8 +41,8 @@ static MusicalSymbolCodes::Code tempoDurationToNoteIcon(DurationType durationTyp
         { DurationType::V_WHOLE, MusicalSymbolCodes::Code::SEMIBREVE },
         { DurationType::V_HALF, MusicalSymbolCodes::Code::MINIM },
         { DurationType::V_QUARTER, MusicalSymbolCodes::Code::CROTCHET },
-        { DurationType::V_EIGHTH, MusicalSymbolCodes::Code::SEMIQUAVER },
-        { DurationType::V_16TH, MusicalSymbolCodes::Code::DEMISEMIQUAVER }
+        { DurationType::V_EIGHTH, MusicalSymbolCodes::Code::QUAVER },
+        { DurationType::V_16TH, MusicalSymbolCodes::Code::SEMIQUAVER }
     };
 
     return durationToNoteIcon[durationType];

@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/Main.qml</file>
-        <file>qml/Main.KDAB.qml</file>
         <file>qml/Main.wasm.qml</file>
         <file>qml/MainToolBar.qml</file>
         <file>qml/SequencerPage.qml</file>
@@ -10,7 +9,6 @@
         <file>qml/HomePage/HomeMenu.qml</file>
         <file>qml/NotationPage/NotationPage.qml</file>
         <file>qml/Window.qml</file>
-        <file>qml/Window.KDAB.qml</file>
         <file>qml/DevTools/Interactive/SampleDialog.qml</file>
         <file>qml/DevTools/Interactive/InteractiveTests.qml</file>
         <file>qml/DevTools/DevToolsPage.qml</file>
@@ -68,5 +66,12 @@
         <file>qml/DevTools/KeyNav/KeyNavExample.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSection.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSubSection.qml</file>
+        <file>qml/kdab/Window.qml</file>
+        <file>qml/kdab/docksystem/DockPage.qml</file>
+        <file>qml/kdab/docksystem/DockPanel.qml</file>
+        <file>qml/kdab/HomePage/HomePage.qml</file>
+        <file>qml/kdab/NotationPage/NotationPage.qml</file>
+        <file>qml/kdab/PublishPage/PublishPage.qml</file>
+        <file>qml/kdab/DevTools/DevToolsPage.qml</file>
     </qresource>
 </RCC>
