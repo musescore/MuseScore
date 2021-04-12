@@ -35,7 +35,7 @@ class AudioBuffer : public IAudioBuffer
     const static unsigned int FILL_OVER    = 1024;
 
 public:
-    AudioBuffer(unsigned int streamsPerSample = 2, unsigned int size = DEFAULT_SIZE);
+    AudioBuffer(unsigned int size = DEFAULT_SIZE);
 
     void setSource(std::shared_ptr<IAudioSource> source) override;
     void forward() override;
@@ -50,7 +50,6 @@ private:
     void fillup();
 
     std::recursive_mutex m_mutex; //! TODO get rid *recursive*
-    unsigned int m_streamsPerSample = 0;
     unsigned int m_minSampleLag = FILL_SAMPLES;
     unsigned int m_writeIndex = 0;
     unsigned int m_readIndex = 0;

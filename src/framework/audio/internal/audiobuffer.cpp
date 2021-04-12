@@ -22,13 +22,13 @@
 #include "audiobuffer.h"
 #include <cstring>
 #include "log.h"
+#include "synthtypes.h"
 
 using namespace mu::audio;
 
-AudioBuffer::AudioBuffer(unsigned int streamsPerSample, unsigned int size)
-    : m_streamsPerSample(streamsPerSample)
+AudioBuffer::AudioBuffer(unsigned int size)
 {
-    m_data.resize(size * m_streamsPerSample, 0.f);
+    m_data.resize(size * synth::AUDIO_CHANNELS, 0.f);
 }
 
 void AudioBuffer::setSource(std::shared_ptr<IAudioSource> source)
@@ -49,7 +49,7 @@ void AudioBuffer::push(const float* source, int sampleCount)
 
     unsigned int from = m_writeIndex;
     auto memStep = sizeof(float);
-    auto to = m_writeIndex + sampleCount * m_streamsPerSample;
+    auto to = m_writeIndex + sampleCount * synth::AUDIO_CHANNELS;
     if (to > m_data.size()) {
         to = m_data.size() - 1;
     }
@@ -57,7 +57,7 @@ void AudioBuffer::push(const float* source, int sampleCount)
     std::memcpy(m_data.data() + m_writeIndex, source, count * memStep);
     m_writeIndex += count;
 
-    int left = sampleCount * m_streamsPerSample - count;
+    int left = sampleCount * synth::AUDIO_CHANNELS - count;
     if (left > 0) {
         std::memcpy(m_data.data(), source + count, left * memStep);
         m_writeIndex = left;
@@ -81,7 +81,7 @@ void AudioBuffer::pop(float* dest, unsigned int sampleCount)
 
     unsigned int from = m_readIndex;
     auto memStep = sizeof(float);
-    auto to = m_readIndex + sampleCount * m_streamsPerSample;
+    auto to = m_readIndex + sampleCount * synth::AUDIO_CHANNELS;
     if (to > m_data.size()) {
         to = m_data.size();
     }
@@ -89,7 +89,7 @@ void AudioBuffer::pop(float* dest, unsigned int sampleCount)
     std::memcpy(dest, m_data.data() + from, count * memStep);
     m_readIndex += count;
 
-    int left = sampleCount * m_streamsPerSample - count;
+    int left = sampleCount * synth::AUDIO_CHANNELS - count;
     if (left > 0) {
         std::memcpy(dest + count, m_data.data(), left * memStep);
         m_readIndex = left;
@@ -108,8 +108,8 @@ void AudioBuffer::setMinSampleLag(unsigned int lag)
         lag = m_data.size();
     }
     m_minSampleLag = lag;
-    if (m_data.size() < 2 * m_minSampleLag * m_streamsPerSample) {
-        m_data.resize(2 * m_minSampleLag * m_streamsPerSample, 0.f);
+    if (m_data.size() < 2 * m_minSampleLag * synth::AUDIO_CHANNELS) {
+        m_data.resize(2 * m_minSampleLag * synth::AUDIO_CHANNELS, 0.f);
     }
 }
 
@@ -119,10 +119,11 @@ void AudioBuffer::fillup()
         return;
     }
 
+    static float buffer[FILL_SAMPLES * 2] = {};
+
     while (sampleLag() < m_minSampleLag + FILL_OVER) {
-        m_source->setBufferSize(FILL_SAMPLES);
-        m_source->forward(FILL_SAMPLES);
-        push(m_source->data(), FILL_SAMPLES);
+        m_source->forward(buffer, FILL_SAMPLES);
+        push(buffer, FILL_SAMPLES);
     }
 }
 
@@ -135,5 +136,5 @@ unsigned int AudioBuffer::sampleLag() const
         lag = m_writeIndex + m_data.size() - m_readIndex;
     }
 
-    return lag / m_streamsPerSample;
+    return lag / synth::AUDIO_CHANNELS;
 }

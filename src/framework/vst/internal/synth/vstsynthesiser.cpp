@@ -158,27 +158,13 @@ async::Channel<unsigned int> VstSynthesiser::streamsCountChanged() const
     return m_streamsCountChanged;
 }
 
-void VstSynthesiser::forward(unsigned int sampleCount)
+void VstSynthesiser::forward(float* buffer, unsigned int sampleCount)
 {
-    writeBuf(m_buffer.data(), sampleCount);
-}
-
-const float* VstSynthesiser::data() const
-{
-    return m_buffer.data();
-}
-
-void VstSynthesiser::setBufferSize(unsigned int samples)
-{
-    LOGI() << "SET BUFFER SIZE = " << samples;
-
-    unsigned int newSize = samples * streamCount();
-
-    if (newSize == 0 || m_buffer.size() == newSize) {
+    if (!buffer) {
         return;
     }
 
-    m_buffer.resize(newSize);
+    m_vstAudioClient->setBlockSize(sampleCount);
 
-    m_vstAudioClient->setBlockSize(samples);
+    writeBuf(buffer, sampleCount);
 }

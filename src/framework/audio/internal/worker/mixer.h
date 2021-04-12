@@ -60,9 +60,7 @@ public:
 
     unsigned int streamCount() const override;
 
-    void forward(unsigned int sampleCount) override;
-
-    void setBufferSize(unsigned int samples) override;
+    void forward(float* buffer, unsigned int sampleCount) override;
 
     // Self
 
@@ -70,8 +68,8 @@ public:
 
 private:
     //! mix the channel in to the buffer
-    void mixinChannel(std::shared_ptr<MixerChannel> channel, unsigned int samplesCount);
-    void mixinChannelStream(std::shared_ptr<MixerChannel> channel, unsigned int streamId, unsigned int samplesCount);
+    void mixinChannel(float *buffer, std::shared_ptr<MixerChannel> channel, unsigned int samplesCount);
+    void mixinChannelStream(float *buffer, std::shared_ptr<MixerChannel> channel, unsigned int streamId, unsigned int samplesCount);
 
     Mode m_mode = STEREO;
     float m_masterLevel = 1.f;
