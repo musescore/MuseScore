@@ -39,5 +39,138 @@
         "group": "build"
       }
     ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "gdb-kddockwidgets_example",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/./build-dev-qtwidgets6/bin/kddockwidgets_example",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "MIMode": "gdb",
+        "stopAtEntry": false,
+        "externalConsole": false
+      },
+      {
+        "name": "gdb-kddockwidgets_minimal_example",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/./build-dev-qtwidgets6/bin/kddockwidgets_minimal_example",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "MIMode": "gdb",
+        "stopAtEntry": false,
+        "externalConsole": false
+      },
+      {
+        "name": "gdb-kddockwidgets_minimal_mdi_example",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/./build-dev-qtwidgets6/bin/kddockwidgets_minimal_mdi_example",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "MIMode": "gdb",
+        "stopAtEntry": false,
+        "externalConsole": false
+      },
+      {
+        "name": "gdb-tst_docks",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/./build-dev-qtwidgets6/bin/tst_docks",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "MIMode": "gdb",
+        "stopAtEntry": false,
+        "externalConsole": false
+      },
+      {
+        "name": "lldb-kddockwidgets_example",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/./build-dev-qtwidgets6/bin/kddockwidgets_example",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "MIMode": "lldb",
+        "stopAtEntry": false,
+        "externalConsole": false
+      },
+      {
+        "name": "lldb-kddockwidgets_minimal_example",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/./build-dev-qtwidgets6/bin/kddockwidgets_minimal_example",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "MIMode": "lldb",
+        "stopAtEntry": false,
+        "externalConsole": false
+      },
+      {
+        "name": "lldb-kddockwidgets_minimal_mdi_example",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/./build-dev-qtwidgets6/bin/kddockwidgets_minimal_mdi_example",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "MIMode": "lldb",
+        "stopAtEntry": false,
+        "externalConsole": false
+      },
+      {
+        "name": "lldb-tst_docks",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/./build-dev-qtwidgets6/bin/tst_docks",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "MIMode": "lldb",
+        "stopAtEntry": false,
+        "externalConsole": false
+      },
+      {
+        "name": "msvc-kddockwidgets_example",
+        "type": "cppvsdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/./build-dev-qtwidgets6/bin/kddockwidgets_example",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "stopAtEntry": false,
+        "externalConsole": false
+      },
+      {
+        "name": "msvc-kddockwidgets_minimal_example",
+        "type": "cppvsdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/./build-dev-qtwidgets6/bin/kddockwidgets_minimal_example",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "stopAtEntry": false,
+        "externalConsole": false
+      },
+      {
+        "name": "msvc-kddockwidgets_minimal_mdi_example",
+        "type": "cppvsdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/./build-dev-qtwidgets6/bin/kddockwidgets_minimal_mdi_example",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "stopAtEntry": false,
+        "externalConsole": false
+      },
+      {
+        "name": "msvc-tst_docks",
+        "type": "cppvsdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/./build-dev-qtwidgets6/bin/tst_docks",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "stopAtEntry": false,
+        "externalConsole": false
+      }
+    ]
   }
 }

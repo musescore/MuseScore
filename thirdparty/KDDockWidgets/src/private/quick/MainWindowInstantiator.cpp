@@ -59,24 +59,24 @@ bool MainWindowInstantiator::isMDI() const
     return m_mainWindow && m_mainWindow->isMDI();
 }
 
-void MainWindowInstantiator::addDockWidget(DockWidgetBase *dockWidget,
-                                           Location location,
-                                           DockWidgetBase *relativeTo,
-                                           QSize initialSize)
+void MainWindowInstantiator::addDockWidget(DockWidgetBase *dockWidget, Location location,
+                                           DockWidgetBase *relativeTo, QSize initialSize,
+                                           InitialVisibilityOption option)
 {
     if (!m_mainWindow) {
         qWarning() << Q_FUNC_INFO << "No MainWindow created yet";
         return;
     }
 
-    m_mainWindow->addDockWidget(dockWidget, location, relativeTo, initialSize);
+    m_mainWindow->addDockWidget(dockWidget, location, relativeTo, { option, initialSize });
 }
 
 void MainWindowInstantiator::addDockWidget(DockWidgetInstantiator *dockWidget, Location location,
-                                           DockWidgetInstantiator *relativeTo, QSize initialSize)
+                                           DockWidgetInstantiator *relativeTo, QSize initialSize,
+                                           InitialVisibilityOption option)
 {
     addDockWidget(dockWidget ? dockWidget->dockWidget() : nullptr, location,
-                  relativeTo ? relativeTo->dockWidget() : nullptr, initialSize);
+                  relativeTo ? relativeTo->dockWidget() : nullptr, initialSize, option);
 }
 
 void MainWindowInstantiator::layoutEqually()

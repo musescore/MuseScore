@@ -78,7 +78,7 @@ public:
     QQuickItem *frameVisualItem() const;
 
     ///@internal
-    Frame *frame() const;
+    Q_INVOKABLE Frame *frame() const;
 
     /// @brief Called by QtQuick when min-size changes
     Q_INVOKABLE void onGeometryUpdated();

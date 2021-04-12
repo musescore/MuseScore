@@ -19,6 +19,7 @@
 #ifndef KD_KDDOCKWIDGETS_H
 #define KD_KDDOCKWIDGETS_H
 
+#include "docks_export.h"
 #include "Qt5Qt6Compat_p.h"
 
 #include <QObject>
@@ -36,6 +37,7 @@ class ItemBoxContainer;
 
 namespace KDDockWidgets
 {
+DOCKS_EXPORT
 Q_NAMESPACE
     class MultiSplitter;
     class DropArea;
