@@ -56,7 +56,7 @@ void VstPluginListModelExample::showPluginEditor()
 
     VstPluginMeta meta = m_pluginMetaList.at(m_selectedItemIndex);
 
-    interactive()->open("musescore://vst/editor?pluginId=" + meta.id);
+    interactive()->open("musescore://vst/editor?sync=false&pluginId=" + meta.id);
 }
 
 int VstPluginListModelExample::rowCount(const QModelIndex&) const
