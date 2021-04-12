@@ -17,7 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "exportscoreservice.h"
+#include "exportscorescenario.h"
 
 #include "translation.h"
 
@@ -25,7 +25,7 @@ using namespace mu::userscores;
 using namespace mu::notation;
 using namespace mu::framework;
 
-std::vector<ExportUnitType> ExportScoreService::supportedUnitTypes(const std::string& suffix) const
+std::vector<ExportUnitType> ExportScoreScenario::supportedUnitTypes(const std::string& suffix) const
 {
     auto writer = writers()->writer(suffix);
     if (!writer) {
@@ -35,7 +35,87 @@ std::vector<ExportUnitType> ExportScoreService::supportedUnitTypes(const std::st
     return writer->supportedUnitTypes();
 }
 
-bool ExportScoreService::willCreateOnlyOneFile(INotationWriter::UnitType unitType, INotationPtrList& notations) const
+bool ExportScoreScenario::exportScores(INotationPtrList& notations, const std::string& suffix, ExportUnitType unitType)
+{
+    /// If only one file will be created, the filename will be exactly what the user
+    /// types in the save dialog and therefore we can put the file dialog in charge of
+    /// asking the user whether an existing file should be overridden. Otherwise, we
+    /// will take care of that ourselves.
+    bool isCreatingOnlyOneFile = this->isCreatingOnlyOneFile(notations, unitType);
+    bool isExportingOnlyOneScore = notations.size() == 1;
+
+    IMasterNotationPtr currentMasterNotation = context()->currentMasterNotation();
+
+    io::path suggestedPath = configuration()->scoresPath().val;
+    io::path masterNotationDirPath = io::dirpath(currentMasterNotation->path());
+    if (masterNotationDirPath != "") {
+        suggestedPath = masterNotationDirPath;
+    }
+
+    suggestedPath += "/" + currentMasterNotation->metaInfo().title;
+
+    if (unitType == ExportUnitType::MULTI_PART && !isExportingOnlyOneScore) {
+        bool containsMaster = false;
+        for (auto notation : notations) {
+            if (isMainNotation(notation)) {
+                containsMaster = true;
+                break;
+            }
+        }
+
+        if (containsMaster) {
+            suggestedPath += "-" + qtrc("userscores", "Score_and_Parts", "Used in export filename suggestion");
+        } else {
+            suggestedPath += "-" + qtrc("userscores", "Parts", "Used in export filename suggestion");
+        }
+    } else if (isExportingOnlyOneScore) {
+        if (!isMainNotation(notations.front())) {
+            suggestedPath += "-" + io::escapeFileName(notations.front()->metaInfo().title);
+        }
+
+        if (isCreatingOnlyOneFile && unitType == ExportUnitType::PER_PAGE) {
+            // So there is only one page
+            suggestedPath += "-1";
+        }
+    }
+
+    suggestedPath += "." + suffix;
+
+    io::path exportPath = interactive()->selectSavingFile(qtrc("userscores", "Export"),
+                                                          suggestedPath, fileFilter(suffix), isCreatingOnlyOneFile);
+    if (exportPath.empty()) {
+        return false;
+    }
+
+    auto writer = writers()->writer(io::syffix(exportPath));
+    if (!writer) {
+        return false;
+    }
+
+    m_fileConflictPolicy = isCreatingOnlyOneFile ? FileConflictPolicy::ReplaceAll : FileConflictPolicy::Undefined;
+
+    switch (unitType) {
+    case ExportUnitType::PER_PAGE:
+        for (INotationPtr currentNotation : notations) {
+            for (int page = 0; page < currentNotation->elements()->msScore()->pages().size(); page++) {
+                exportSingleScore(writer, exportPath, isCreatingOnlyOneFile, currentNotation, page);
+            }
+        }
+        break;
+    case ExportUnitType::PER_PART:
+        for (INotationPtr currentNotation : notations) {
+            exportSingleScore(writer, exportPath, isCreatingOnlyOneFile, currentNotation);
+        }
+        break;
+    case ExportUnitType::MULTI_PART:
+        exportScoreList(writer, exportPath, notations);
+        break;
+    }
+
+    return true;
+}
+
+bool ExportScoreScenario::isCreatingOnlyOneFile(INotationPtrList& notations, INotationWriter::UnitType unitType) const
 {
     switch (unitType) {
     case ExportUnitType::PER_PAGE:
@@ -47,38 +127,36 @@ bool ExportScoreService::willCreateOnlyOneFile(INotationWriter::UnitType unitTyp
     }
 }
 
-void ExportScoreService::exportScores(INotationPtrList& notations, io::path& exportPath, ExportUnitType unitType)
+QString ExportScoreScenario::fileFilter(const std::string& suffix)
 {
-    std::string suffix = io::syffix(exportPath);
+    QString filter;
 
-    auto writer = writers()->writer(suffix);
-    if (!writer) {
-        return;
+    if (suffix == "pdf") {
+        filter = qtrc("userscores", "PDF Files") + " (*.pdf)";
+    } else if (suffix == "png") {
+        filter = qtrc("userscores", "PNG Images") + " (*.png)";
+    } else if (suffix == "svg") {
+        filter = qtrc("userscores", "SVG Images") + " (*.svg)";
+    } else if (suffix == "mp3") {
+        filter = qtrc("userscores", "MP3 Audio Files") + " (*.mp3)";
+    } else if (suffix == "wav") {
+        filter = qtrc("userscores", "WAV Audio Files") + " (*.wav)";
+    } else if (suffix == "ogg") {
+        filter = qtrc("userscores", "OGG Audio Files") + " (*.ogg)";
+    } else if (suffix == "flac") {
+        filter = qtrc("userscores", "FLAC Audio Files") + " (*.flac)";
+    } else if (suffix == "mid" || suffix == "midi" || suffix == "kar") {
+        filter = qtrc("userscores", "MIDI Files") + " (*.mid *.midi *.kar)";
+    } else if (suffix == "mxl") {
+        filter = qtrc("userscores", "Compressed MusicXML Files") + " (*.mxl)";
+    } else if (suffix == "musicxml" || suffix == "xml") {
+        filter = qtrc("userscores", "Uncompressed MusicXML Files") + " (*.musicxml *.xml)";
     }
 
-    bool oneFile = willCreateOnlyOneFile(unitType, notations);
-    m_fileConflictPolicy = oneFile ? FileConflictPolicy::ReplaceAll : FileConflictPolicy::Undefined;
-
-    switch (unitType) {
-    case ExportUnitType::PER_PAGE:
-        for (INotationPtr currentNotation : notations) {
-            for (int page = 0; page < currentNotation->elements()->msScore()->pages().size(); page++) {
-                exportSingleScore(writer, exportPath, oneFile, currentNotation, page);
-            }
-        }
-        break;
-    case ExportUnitType::PER_PART:
-        for (INotationPtr currentNotation : notations) {
-            exportSingleScore(writer, exportPath, oneFile, currentNotation);
-        }
-        break;
-    case ExportUnitType::MULTI_PART:
-        exportScoreList(writer, exportPath, notations);
-        break;
-    }
+    return filter;
 }
 
-bool ExportScoreService::askForRetry(QString filename) const
+bool ExportScoreScenario::askForRetry(QString filename) const
 {
     int btn = interactive()->question(
         trc("userscores", "Error"),
@@ -91,7 +169,7 @@ bool ExportScoreService::askForRetry(QString filename) const
     return btn == static_cast<int>(IInteractive::Button::Retry);
 }
 
-bool ExportScoreService::shouldReplaceFile(QString filename)
+bool ExportScoreScenario::shouldReplaceFile(QString filename)
 {
     switch (m_fileConflictPolicy) {
     case FileConflictPolicy::ReplaceAll:
@@ -129,8 +207,8 @@ bool ExportScoreService::shouldReplaceFile(QString filename)
     }
 }
 
-bool ExportScoreService::exportSingleScore(INotationWriterPtr writer, io::path exportPath, bool pathIsDefinitive, INotationPtr notation,
-                                           int page)
+bool ExportScoreScenario::exportSingleScore(INotationWriterPtr writer, io::path exportPath, bool pathIsDefinitive, INotationPtr notation,
+                                            int page)
 {
     io::path outPath;
     if (pathIsDefinitive) {
@@ -177,7 +255,7 @@ bool ExportScoreService::exportSingleScore(INotationWriterPtr writer, io::path e
     return true;
 }
 
-bool ExportScoreService::exportScoreList(INotationWriterPtr writer, io::path exportPath, INotationPtrList notations)
+bool ExportScoreScenario::exportScoreList(INotationWriterPtr writer, io::path exportPath, INotationPtrList notations)
 {
     QString completeFileName = io::filename(exportPath).toQString();
 
@@ -211,13 +289,13 @@ bool ExportScoreService::exportScoreList(INotationWriterPtr writer, io::path exp
     return true;
 }
 
-bool ExportScoreService::shouldExportIndividualPage(std::string suffix) const
+bool ExportScoreScenario::shouldExportIndividualPage(std::string suffix) const
 {
     static const std::vector<INotationWriter::UnitType> perPageOnly = { INotationWriter::UnitType::PER_PAGE };
     return supportedUnitTypes(suffix) == perPageOnly;
 }
 
-bool ExportScoreService::isMainNotation(INotationPtr notation) const
+bool ExportScoreScenario::isMainNotation(INotationPtr notation) const
 {
     return context()->currentMasterNotation()->notation() == notation;
 }

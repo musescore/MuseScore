@@ -18,21 +18,29 @@
 //=============================================================================
 
 #include "exportdialogmodel.h"
-
 #include "translation.h"
-#include "uicomponents/view/itemmultiselectionmodel.h"
+
+#include <QItemSelectionModel>
 
 using namespace mu::userscores;
 using namespace mu::notation;
-using namespace mu::uicomponents;
 using namespace mu::iex::musicxml;
 
 static const QString DEFAULT_EXPORT_SUFFIX = "pdf";
+static const ExportUnitType DEFAULT_EXPORT_UNITTYPE = ExportUnitType::PER_PART;
 
 ExportDialogModel::ExportDialogModel(QObject* parent)
-    : QAbstractListModel(parent), m_selectionModel(new ItemMultiSelectionModel(this)), m_selectedExportSuffix(DEFAULT_EXPORT_SUFFIX)
+    : QAbstractListModel(parent)
+    , m_selectionModel(new QItemSelectionModel(this))
+    , m_selectedExportSuffix(DEFAULT_EXPORT_SUFFIX)
+    , m_selectedUnitType(DEFAULT_EXPORT_UNITTYPE)
 {
-    connect(m_selectionModel, &ItemMultiSelectionModel::selectionChanged, this, &ExportDialogModel::selectionChanged);
+    connect(m_selectionModel, &QItemSelectionModel::selectionChanged, this, &ExportDialogModel::selectionChanged);
+}
+
+ExportDialogModel::~ExportDialogModel()
+{
+    m_selectionModel->deleteLater();
 }
 
 void ExportDialogModel::load()
@@ -49,6 +57,8 @@ void ExportDialogModel::load()
     for (IExcerptNotationPtr excerpt : masterNotation->excerpts().val) {
         m_notations << excerpt->notation();
     }
+
+    selectCurrentNotation();
 
     endResetModel();
 }
@@ -91,46 +101,38 @@ QHash<int, QByteArray> ExportDialogModel::roleNames() const
 
 void ExportDialogModel::setSelected(int scoreIndex, bool selected)
 {
-    if (!isNotationIndexValid(scoreIndex)) {
+    if (!isIndexValid(scoreIndex)) {
         return;
     }
 
     QModelIndex modelIndex = index(scoreIndex);
-    m_selectionModel->QItemSelectionModel::select(modelIndex, selected ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
+    m_selectionModel->select(modelIndex, selected ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
 
-    emit dataChanged(modelIndex, modelIndex);
+    emit dataChanged(modelIndex, modelIndex, { RoleIsSelected });
 }
 
 void ExportDialogModel::toggleSelected(int scoreIndex)
 {
-    if (!isNotationIndexValid(scoreIndex)) {
+    if (!isIndexValid(scoreIndex)) {
         return;
     }
 
     QModelIndex modelIndex = index(scoreIndex);
-    m_selectionModel->QItemSelectionModel::select(modelIndex, QItemSelectionModel::Toggle);
+    m_selectionModel->select(modelIndex, QItemSelectionModel::Toggle);
 
-    emit dataChanged(modelIndex, modelIndex);
+    emit dataChanged(modelIndex, modelIndex, { RoleIsSelected });
 }
 
 void ExportDialogModel::setAllSelected(bool selected)
 {
-    QModelIndexList previousSelectedIndexes = m_selectionModel->selectedIndexes();
-    m_selectionModel->QItemSelectionModel::select(QItemSelection(index(0), index(m_notations.size() - 1)),
-                                                  selected ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
-    QModelIndexList newSelectedIndexes = m_selectionModel->selectedIndexes();
-
-    QSet<QModelIndex> indexesToUpdate(previousSelectedIndexes.begin(), previousSelectedIndexes.end());
-    indexesToUpdate = indexesToUpdate.unite(QSet<QModelIndex>(newSelectedIndexes.begin(), newSelectedIndexes.end()));
-
-    for (const QModelIndex& indexToUpdate : indexesToUpdate) {
-        emit dataChanged(indexToUpdate, indexToUpdate);
+    for (int i = 0; i < rowCount(); i++) {
+        setSelected(i, selected);
     }
 }
 
 void ExportDialogModel::selectCurrentNotation()
 {
-    for (int i = 0; i < m_notations.size(); i++) {
+    for (int i = 0; i < rowCount(); i++) {
         setSelected(i, m_notations[i] == context()->currentNotation());
     }
 }
@@ -142,10 +144,10 @@ IMasterNotationPtr ExportDialogModel::masterNotation() const
 
 bool ExportDialogModel::isMainNotation(INotationPtr notation) const
 {
-    return notation == masterNotation()->notation();
+    return masterNotation() && masterNotation()->notation() == notation;
 }
 
-bool ExportDialogModel::isNotationIndexValid(int index) const
+bool ExportDialogModel::isIndexValid(int index) const
 {
     return index >= 0 && index < m_notations.size();
 }
@@ -169,15 +171,31 @@ void ExportDialogModel::setExportSuffix(QString suffix)
     m_selectedExportSuffix = suffix;
     emit selectedExportSuffixChanged(suffix);
 
-    setUnitType(static_cast<int>(exportScoreService()->supportedUnitTypes(suffix.toStdString())[0]));
+    auto unitTypes = exportScoreScenario()->supportedUnitTypes(suffix.toStdString());
+    IF_ASSERT_FAILED(!unitTypes.empty()) {
+        return;
+    }
+
+    setUnitType(unitTypes.front());
 }
 
-QList<int> ExportDialogModel::availableUnitTypes() const
+QList<QVariantMap> ExportDialogModel::availableUnitTypes() const
 {
-    QList<int> result;
-    for (notation::INotationWriter::UnitType t : exportScoreService()->supportedUnitTypes(m_selectedExportSuffix.toStdString())) {
-        result << static_cast<int>(t);
+    QMap<ExportUnitType, QString> unitTypeNames {
+        { ExportUnitType::PER_PAGE, qtrc("userscores", "Each page to a separate file") },
+        { ExportUnitType::PER_PART, qtrc("userscores", "Each part to a separate file") },
+        { ExportUnitType::MULTI_PART, qtrc("userscores", "All parts combined in one file") },
+    };
+
+    QList<QVariantMap> result;
+
+    for (ExportUnitType type : exportScoreScenario()->supportedUnitTypes(m_selectedExportSuffix.toStdString())) {
+        QVariantMap obj;
+        obj["text"] = unitTypeNames[type];
+        obj["value"] = static_cast<int>(type);
+        result << obj;
     }
+
     return result;
 }
 
@@ -209,61 +227,11 @@ bool ExportDialogModel::exportScores()
         notations.push_back(m_notations[index.row()]);
     }
 
-    IF_ASSERT_FAILED(!notations.empty()) {
+    if (notations.empty()) {
         return false;
     }
 
-    /// If only one file will be created, the filename will be exactly what the user
-    /// types in the save dialog and therefore we can put the file dialog in charge of
-    /// asking the user whether an existing file should be overridden. Otherwise, we
-    /// will take care of that ourselves.
-    bool willCreateOneFile = exportScoreService()->willCreateOnlyOneFile(
-        static_cast<notation::INotationWriter::UnitType>(m_selectedUnitType), notations);
-    bool willExportOnlyOneScore = notations.size() == 1;
-
-    io::path suggestedPath = configuration()->scoresPath().val;
-    io::path masterNotationDirPath = io::dirpath(masterNotation()->path());
-    if (masterNotationDirPath != "") {
-        suggestedPath = masterNotationDirPath;
-    }
-
-    suggestedPath += "/" + masterNotation()->metaInfo().title;
-
-    if (m_selectedUnitType == ExportUnitType::MULTI_PART && !willExportOnlyOneScore) {
-        bool containsMaster = false;
-        for (auto notation : notations) {
-            if (isMainNotation(notation)) {
-                containsMaster = true;
-                break;
-            }
-        }
-
-        if (containsMaster) {
-            suggestedPath += "-" + qtrc("userscores", "Score_and_Parts", "Used in export filename suggestion");
-        } else {
-            suggestedPath += "-" + qtrc("userscores", "Parts", "Used in export filename suggestion");
-        }
-    } else if (willExportOnlyOneScore) {
-        if (!isMainNotation(notations.front())) {
-            suggestedPath += "-" + io::escapeFileName(notations.front()->metaInfo().title);
-        }
-
-        if (willCreateOneFile && m_selectedUnitType == ExportUnitType::PER_PAGE) {
-            // So there is only one page
-            suggestedPath += "-1";
-        }
-    }
-
-    suggestedPath += "." + m_selectedExportSuffix;
-
-    io::path exportPath = interactive()->selectSavingFile(qtrc("userscores", "Export"),
-                                                          suggestedPath, exportFilter(), willCreateOneFile);
-    if (exportPath.empty()) {
-        return false;
-    }
-
-    exportScoreService()->exportScores(notations, exportPath, m_selectedUnitType);
-    return true; // TODO: return false on error/cancel
+    return exportScoreScenario()->exportScores(notations, m_selectedExportSuffix.toStdString(), m_selectedUnitType);
 }
 
 int ExportDialogModel::pdfResolution() const
@@ -403,6 +371,27 @@ void ExportDialogModel::setMidiExportRpns(bool exportRpns)
     emit midiExportRpnsChanged(exportRpns);
 }
 
+QList<QVariantMap> ExportDialogModel::musicXmlLayoutTypes() const
+{
+    QMap<MusicXmlLayoutType, QString> musicXmlLayoutTypeNames {
+        { MusicXmlLayoutType::AllLayout, qtrc("userscores", "All layout") },
+        { MusicXmlLayoutType::AllBreaks, qtrc("userscores", "System and page breaks") },
+        { MusicXmlLayoutType::ManualBreaks, qtrc("userscores", "Manually added system and page breaks only") },
+        { MusicXmlLayoutType::None, qtrc("userscores", "No system or page breaks") },
+    };
+
+    QList<QVariantMap> result;
+
+    for (MusicXmlLayoutType type : musicXmlLayoutTypeNames.keys()) {
+        QVariantMap obj;
+        obj["text"] = musicXmlLayoutTypeNames[type];
+        obj["value"] = static_cast<int>(type);
+        result << obj;
+    }
+
+    return result;
+}
+
 ExportDialogModel::MusicXmlLayoutType ExportDialogModel::musicXmlLayoutType() const
 {
     if (musicXmlConfiguration()->musicxmlExportLayout()) {
@@ -441,33 +430,4 @@ void ExportDialogModel::setMusicXmlLayoutType(MusicXmlLayoutType layoutType)
         break;
     }
     emit musicXmlLayoutTypeChanged(layoutType);
-}
-
-QString ExportDialogModel::exportFilter() const
-{
-    QString filter;
-
-    if (m_selectedExportSuffix == "pdf") {
-        filter = qtrc("userscores", "PDF Files") + " (*.pdf)";
-    } else if (m_selectedExportSuffix == "png") {
-        filter = qtrc("userscores", "PNG Images") + " (*.png)";
-    } else if (m_selectedExportSuffix == "svg") {
-        filter = qtrc("userscores", "SVG Images") + " (*.svg)";
-    } else if (m_selectedExportSuffix == "mp3") {
-        filter = qtrc("userscores", "MP3 Audio Files") + " (*.mp3)";
-    } else if (m_selectedExportSuffix == "wav") {
-        filter = qtrc("userscores", "WAV Audio Files") + " (*.wav)";
-    } else if (m_selectedExportSuffix == "ogg") {
-        filter = qtrc("userscores", "OGG Audio Files") + " (*.ogg)";
-    } else if (m_selectedExportSuffix == "flac") {
-        filter = qtrc("userscores", "FLAC Audio Files") + " (*.flac)";
-    } else if (m_selectedExportSuffix == "mid" || m_selectedExportSuffix == "midi" || m_selectedExportSuffix == "kar") {
-        filter = qtrc("userscores", "MIDI Files") + " (*.mid *.midi *.kar)";
-    } else if (m_selectedExportSuffix == "mxl") {
-        filter = qtrc("userscores", "Compressed MusicXML Files") + " (*.mxl)";
-    } else if (m_selectedExportSuffix == "musicxml" || m_selectedExportSuffix == "xml") {
-        filter = qtrc("userscores", "Uncompressed MusicXML Files") + " (*.musicxml *.xml)";
-    }
-
-    return filter;
 }

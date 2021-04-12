@@ -37,7 +37,6 @@ QmlDialog {
 
         Component.onCompleted: {
             exportModel.load();
-            exportModel.selectCurrentNotation()
         }
 
         RowLayout {

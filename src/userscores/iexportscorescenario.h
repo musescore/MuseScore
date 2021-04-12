@@ -2,7 +2,7 @@
 //  MuseScore
 //  Music Composition & Notation
 //
-//  Copyright (C) 2020 MuseScore BVBA and others
+//  Copyright (C) 2021 MuseScore BVBA and others
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License version 2.
@@ -22,19 +22,16 @@
 
 #include "modularity/imoduleexport.h"
 #include "notation/inotation.h"
-#include "notation/inotationwriter.h"
 
 namespace mu::userscores {
-class IExportScoreService : MODULE_EXPORT_INTERFACE
+class IExportScoreScenario : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IExportScoreService)
+    INTERFACE_ID(IExportScoreScenario)
 
 public:
     virtual std::vector<ExportUnitType> supportedUnitTypes(const std::string& suffix) const = 0;
 
-    virtual bool willCreateOnlyOneFile(ExportUnitType unitType, notation::INotationPtrList& notations) const = 0;
-
-    virtual void exportScores(notation::INotationPtrList& notations, io::path& basePath, ExportUnitType unitType) = 0;
+    virtual bool exportScores(notation::INotationPtrList& notations, const std::string& suffix, ExportUnitType unitType) = 0;
 };
 }
 

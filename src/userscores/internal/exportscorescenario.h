@@ -22,17 +22,16 @@
 
 #include "modularity/ioc.h"
 
-#include "iexportscoreservice.h"
+#include "iexportscorescenario.h"
 #include "iuserscoresconfiguration.h"
 #include "iinteractive.h"
 #include "notation/inotationwritersregister.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "context/iglobalcontext.h"
-#include "notation/inotation.h"
 #include "system/ifilesystem.h"
 
 namespace mu::userscores {
-class ExportScoreService : public IExportScoreService
+class ExportScoreScenario : public IExportScoreScenario
 {
     INJECT(userscores, IUserScoresConfiguration, configuration);
     INJECT(userscores, framework::IInteractive, interactive);
@@ -44,9 +43,7 @@ class ExportScoreService : public IExportScoreService
 public:
     std::vector<ExportUnitType> supportedUnitTypes(const std::string& suffix) const override;
 
-    bool willCreateOnlyOneFile(ExportUnitType unitType, notation::INotationPtrList& notations) const override;
-
-    void exportScores(notation::INotationPtrList& notations, io::path& exportPath, ExportUnitType unitType) override;
+    bool exportScores(notation::INotationPtrList& notations, const std::string& suffix, ExportUnitType unitType) override;
 
 private:
     enum class FileConflictPolicy {
@@ -55,7 +52,11 @@ private:
         ReplaceAll
     };
 
+    bool isCreatingOnlyOneFile(notation::INotationPtrList& notations, ExportUnitType unitType) const;
+
     bool isMainNotation(notation::INotationPtr notation) const;
+
+    QString fileFilter(const std::string& suffix);
 
     bool shouldReplaceFile(QString filename);
     bool askForRetry(QString filename) const;
