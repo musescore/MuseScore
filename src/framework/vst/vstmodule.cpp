@@ -21,6 +21,7 @@
 #include <QQmlEngine>
 
 #include "ui/iinteractiveuriregister.h"
+#include "audio/isynthesizersregister.h"
 #include "ui/iuiengine.h"
 #include "log.h"
 #include "settings.h"
@@ -28,6 +29,7 @@
 
 #include "internal/vstconfiguration.h"
 #include "internal/vstpluginrepository.h"
+#include "internal/synth/vstsynthesiser.h"
 
 #include "devtools/vstpluginlistmodelexample.h"
 #include "view/vstplugineditorview.h"
@@ -83,4 +85,11 @@ void VSTModule::onInit(const IApplication::RunMode& mode)
     }
 
     s_pluginRepo->loadAvailablePlugins();
+
+    //!Note Please, don't remove this code, needed for tests of VST implementation
+    /*auto sreg = ioc()->resolve<audio::synth::ISynthesizersRegister>(moduleName());
+
+    if (sreg) {
+        sreg->registerSynthesizer("Vst", std::make_shared<VstSynthesiser>(s_pluginRepo->pluginsMetaList().val.at(0)));
+    }*/
 }
