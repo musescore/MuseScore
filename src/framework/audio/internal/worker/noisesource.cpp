@@ -37,7 +37,7 @@ unsigned int NoiseSource::streamCount() const
     return 1;
 }
 
-void NoiseSource::forward(unsigned int sampleCount)
+void NoiseSource::forward(float* buffer, unsigned int sampleCount)
 {
     auto streams = streamCount();
     std::uniform_real_distribution<float> distribution{ -1.f, 1.f };
@@ -52,7 +52,7 @@ void NoiseSource::forward(unsigned int sampleCount)
         default: break;
         }
         for (unsigned int s = 0; s < streams; ++s) {
-            m_buffer[streams * i + s] = sample;
+            buffer[streams * i + s] = sample;
         }
     }
 }

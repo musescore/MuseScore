@@ -33,12 +33,9 @@ public:
     virtual void setSampleRate(unsigned int sampleRate) override;
 
     mu::async::Channel<unsigned int> streamsCountChanged() const override;
-    const float* data() const override;
-    virtual void setBufferSize(unsigned int samples) override;
 
 protected:
     unsigned int m_sampleRate = 1;
-    std::vector<float> m_buffer = {};
     async::Channel<unsigned int> m_streamsCountChanged;
 };
 }

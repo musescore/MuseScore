@@ -125,20 +125,19 @@ unsigned int AudioPlayer::streamCount() const
     return 0;
 }
 
-void AudioPlayer::forward(unsigned int sampleCount)
+void AudioPlayer::forward(float* buffer, unsigned int sampleCount)
 {
     //copy shared_ptr in case it can be changed during forward
     auto stream = m_stream;
     if (!stream) {
         return;
     }
-    std::fill(m_buffer.begin() + 0, m_buffer.end(), 0.f);
 
     if (status() != Running) {
         return;
     }
 
-    auto displacement = stream->copySamplesToBuffer(m_buffer.data(), m_position, sampleCount, m_sampleRate);
+    auto displacement = stream->copySamplesToBuffer(buffer, m_position, sampleCount, m_sampleRate);
     m_position += displacement;
 
     if (!displacement) {

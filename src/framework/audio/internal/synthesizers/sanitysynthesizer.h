@@ -57,9 +57,7 @@ public:
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int streamCount() const override;
     async::Channel<unsigned int> streamsCountChanged() const override;
-    void forward(unsigned int sampleCount) override;
-    const float* data() const override;
-    void setBufferSize(unsigned int samples) override;
+    void forward(float* buffer, unsigned int sampleCount) override;
 
 private:
 

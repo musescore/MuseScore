@@ -33,7 +33,7 @@ unsigned int SineSource::streamCount() const
     return 1;
 }
 
-void SineSource::forward(unsigned int sampleCount)
+void SineSource::forward(float* buffer, unsigned int sampleCount)
 {
     auto streams = streamCount();
     for (unsigned int i = 0; i < sampleCount; ++i) {
@@ -43,7 +43,7 @@ void SineSource::forward(unsigned int sampleCount)
         }
 
         for (unsigned int s = 0; s < streams; ++s) {
-            m_buffer[streams * i + s] = 0.1 * std::sin(m_phase + s * 2 * M_PI / streams);
+            buffer[streams * i + s] = 0.1 * std::sin(m_phase + s * 2 * M_PI / streams);
         }
     }
 }

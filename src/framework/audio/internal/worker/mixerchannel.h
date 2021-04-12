@@ -39,8 +39,7 @@ public:
 
     unsigned int streamCount() const override;
     void checkStreams();
-    void forward(unsigned int sampleCount) override;
-    void setBufferSize(unsigned int samples) override;
+    void forward(float* buffer, unsigned int sampleCount) override;
     void setSampleRate(unsigned int sampleRate) override;
 
     void setSource(std::shared_ptr<IAudioSource> source) override;

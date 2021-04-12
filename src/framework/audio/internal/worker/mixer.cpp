@@ -116,7 +116,6 @@ IMixer::ChannelID Mixer::addChannel(std::shared_ptr<IAudioSource> source)
 
     auto channel = std::make_shared<MixerChannel>();
     channel->setSource(source);
-    channel->setBufferSize(m_buffer.size());
     channel->setSampleRate(m_sampleRate);
 
     m_inputList[newId] = channel;
@@ -156,39 +155,30 @@ std::shared_ptr<IMixerChannel> Mixer::channel(unsigned int number) const
     return m_inputList.at(number);
 }
 
-void Mixer::setBufferSize(unsigned int samples)
+void Mixer::forward(float* buffer, unsigned int sampleCount)
 {
     ONLY_AUDIO_WORKER_THREAD;
-    AbstractAudioSource::setBufferSize(samples);
-    for (auto& input : m_inputList) {
-        input.second->setBufferSize(samples);
-    }
-}
-
-void Mixer::forward(unsigned int sampleCount)
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    std::fill(m_buffer.begin(), m_buffer.end(), 0.f);
 
     if (m_clock) {
         m_clock->forward(sampleCount);
     }
 
     for (auto& input : m_inputList) {
-        input.second->forward(sampleCount);
-        mixinChannel(input.second, sampleCount);
+        input.second->forward(buffer, sampleCount);
+        mixinChannel(buffer, input.second, sampleCount);
     }
 
     for (auto& insert : m_insertList) {
         if (insert.second->active()) {
-            insert.second->process(m_buffer.data(), m_buffer.data(), sampleCount);
+            insert.second->process(buffer, buffer, sampleCount);
         }
     }
-    std::transform(m_buffer.begin(), m_buffer.end(), m_buffer.begin(),
-                   [this](float sample) -> float { return sample * m_masterLevel; });
+    //!Note Temporarily disabled until the end of investigation (v.pereverzev@wsmgroup.ru)
+    /*std::transform(m_buffer.begin(), m_buffer.end(), m_buffer.begin(),
+                   [this](float sample) -> float { return sample * m_masterLevel; });*/
 }
 
-void Mixer::mixinChannel(std::shared_ptr<MixerChannel> channel, unsigned int samplesCount)
+void Mixer::mixinChannel(float* buffer, std::shared_ptr<MixerChannel> channel, unsigned int samplesCount)
 {
     if (!channel->active()) {
         return;
@@ -198,14 +188,18 @@ void Mixer::mixinChannel(std::shared_ptr<MixerChannel> channel, unsigned int sam
     case MONO:
     case STEREO:
         for (unsigned int i = 0; i < channel->streamCount(); ++i) {
-            mixinChannelStream(channel, i, samplesCount);
+            mixinChannelStream(buffer, channel, i, samplesCount);
         }
         break;
     }
 }
 
-void Mixer::mixinChannelStream(std::shared_ptr<MixerChannel> channel, unsigned int streamId, unsigned int samplesCount)
+void Mixer::mixinChannelStream(float* buffer, std::shared_ptr<MixerChannel> channel, unsigned int streamId, unsigned int samplesCount)
 {
+    if (!buffer) {
+        return;
+    }
+
     auto balance = channel->balance(streamId).real();
     auto level = channel->level(streamId);
     for (unsigned int i = 0; i < samplesCount; ++i) {
@@ -219,10 +213,7 @@ void Mixer::mixinChannelStream(std::shared_ptr<MixerChannel> channel, unsigned i
                 gain = 1;
             }
 
-            auto channelBuffer = channel->data();
-            if (channelBuffer) {
-                m_buffer[i * streamCount() + j] += gain * level * channelBuffer[i * channel->streamCount() + streamId];
-            }
+            buffer[i * streamCount() + j] += gain * level * buffer[i * streamCount() + j];
         }
     }
 }

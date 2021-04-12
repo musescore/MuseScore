@@ -32,17 +32,3 @@ mu::async::Channel<unsigned int> AbstractAudioSource::streamsCountChanged() cons
 {
     return m_streamsCountChanged;
 }
-
-const float* AbstractAudioSource::data() const
-{
-    return m_buffer.data();
-}
-
-void AbstractAudioSource::setBufferSize(unsigned int samples)
-{
-    auto sc = streamCount();
-    auto targetSize = samples * sc;
-    if (targetSize > 0 && m_buffer.size() < targetSize) {
-        m_buffer.resize(samples * streamCount());
-    }
-}

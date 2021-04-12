@@ -52,7 +52,7 @@ public:
 
     // IAudioSource (AbstractAudioSource)
     unsigned int streamCount() const override;
-    void forward(unsigned int sampleCount) override;
+    void forward(float* buffer, unsigned int sampleCount) override;
 
 private:
     void setStatus(const Status& status);
