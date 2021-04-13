@@ -21,6 +21,7 @@
 #define MU_UI_UITHEME_H
 
 #include <QObject>
+#include <QFont>
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
