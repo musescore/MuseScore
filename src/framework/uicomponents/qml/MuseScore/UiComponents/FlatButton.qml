@@ -33,17 +33,8 @@ FocusableControl {
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
-    onInternalClicked: {
-        root.clicked()
-    }
-
-    onInternalPressAndHold: {
-        root.pressAndHold()
-    }
-
-    onInternalTriggered: {
-        root.clicked()
-    }
+    mouseArea.onClicked: root.clicked()
+    mouseArea.onPressAndHold: root.pressAndHold()
 
     mouseArea.hoverEnabled: true
     mouseArea.onContainsMouseChanged: {
@@ -57,6 +48,8 @@ FocusableControl {
             ui.tooltip.hide(this)
         }
     }
+
+    keynav.onTriggered: root.clicked()
 
     background.color: normalStateColor
     background.opacity: ui.theme.buttonOpacityNormal

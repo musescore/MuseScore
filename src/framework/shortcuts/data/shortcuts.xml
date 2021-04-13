@@ -42,13 +42,30 @@
         <seq>Down</seq>
     </SC>
     <SC>
-      <key>nav-trigger</key>
+      <key>nav-trigger-control</key>
       <seq>Return</seq>
     </SC>
     <SC>
-      <key>nav-trigger</key>
+      <key>nav-trigger-control</key>
       <seq>Space</seq>
     </SC>
+    <SC>
+      <key>nav-first-control</key>
+      <seq>Home</seq>
+    </SC>
+    <SC>
+      <key>nav-last-control</key>
+      <seq>End</seq>
+    </SC>
+    <SC>
+      <key>nav-nextrow-control</key>
+      <seq>PgDown</seq>
+    </SC>
+    <SC>
+      <key>nav-prevrow-control</key>
+      <seq>PgUp</seq>
+    </SC>
+
 <!-- end Keyboard navigation -->
 
   <SC>

@@ -37,7 +37,15 @@ DockPanel::DockPanel(QQuickItem* parent)
     connect(this, &DockPanel::visibleEdited, this, [this](bool visible) {
         if (m_dock.panel->isVisible() != visible) {
             m_dock.panel->setVisible(visible);
+            if (!visible) {
+                m_isShown = false;
+            }
         }
+    });
+
+    connect(m_dock.panel, &QDockWidget::visibilityChanged, this, [this](bool vsbl) {
+        m_isShown = vsbl;
+        emit isShownChanged(vsbl);
     });
 
     m_eventsWatcher = new EventsWatcher(this);
@@ -58,6 +66,7 @@ void DockPanel::onComponentCompleted()
     updateStyle();
 
     m_preferedWidth = width();
+    m_isShown = panel()->isVisible();
 
     if (minimumWidth() == 0) {
         panel()->setMinimumWidth(width());
@@ -159,6 +168,11 @@ void DockPanel::setFloatable(bool floatable)
 bool DockPanel::closable() const
 {
     return featureEnabled(QDockWidget::DockWidgetClosable);
+}
+
+bool DockPanel::isShown() const
+{
+    return m_isShown;
 }
 
 bool DockPanel::visible() const

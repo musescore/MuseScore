@@ -9,6 +9,7 @@ Rectangle {
     property alias keynavSection: keynavsec
     property alias sectionName: keynavsec.name
     property alias sectionOrder: keynavsec.order
+    property alias active: keynavsec.active
 
     default property alias content: contentItem.data
 
@@ -20,14 +21,8 @@ Rectangle {
         onActiveChanged: {
             console.debug("KeyNavSection.qml active: " + keynavsec.active)
             if (keynavsec.active) {
+                root.forceActiveFocus()
 
-                var p = root.parent
-                while (p) {
-                    p.focus = true
-                    p = p.parent
-                }
-
-                root.focus = true
             }
         }
     }
