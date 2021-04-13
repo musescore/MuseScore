@@ -219,6 +219,10 @@ Item {
                                     treeItemDelegateLoader.updateIsSelected()
                                 }
 
+                                onVisibilityChangeRequested: {
+                                    instrumentTreeModel.setIsVisibleSelectedRows(isVisible)
+                                }
+
                                 property var contentYBackup: 0
 
                                 onPopupOpened: {

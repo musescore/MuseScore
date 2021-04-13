@@ -27,6 +27,8 @@ Item {
     signal popupOpened(var popupX, var popupY, var popupHeight)
     signal popupClosed()
 
+    signal visibilityChangeRequested(bool isVisible)
+
     QtObject {
         id: privateProperties
 
@@ -245,11 +247,10 @@ Item {
                     return
                 }
 
-                if (!root.isSelected) {
-                    model.itemRole.isVisible = !model.itemRole.isVisible
-                }
-                else {
-                    instrumentTreeModel.setIsVisibleSelectedRows(!model.itemRole.isVisible)
+                model.itemRole.isVisible = !model.itemRole.isVisible
+                
+                if (root.isSelected) {
+                    root.visibilityChangeRequested(model.itemRole.isVisible)
                 }
             }
         }
