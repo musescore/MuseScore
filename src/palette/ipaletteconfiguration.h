@@ -47,9 +47,6 @@ public:
     virtual QColor accentColor() const = 0;
     virtual async::Notification colorsChanged() const = 0;
 
-    virtual bool useNotationForegroundColor() const = 0;
-    virtual void setUseNotationForegroundColor(bool value) = 0;
-
     virtual io::path keySignaturesDirPath() const = 0;
     virtual io::path timeSignaturesDirPath() const = 0;
 

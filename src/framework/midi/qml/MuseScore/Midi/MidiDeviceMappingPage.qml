@@ -24,7 +24,7 @@ Item {
         }
     }
 
-    MidiDeviceMappingsModel {
+    MidiDeviceMappingModel {
         id: mappingsModel
 
         selection: view.selection

@@ -117,15 +117,5 @@ PreferencesPage {
                 appearanceModel.foregroundWallpaperPath = newWallpaperPath
             }
         }
-
-        CheckBox {
-            text: qsTrc("appshell", "Use the same colour in palettes")
-
-            checked: appearanceModel.useSameColorInPalettes
-
-            onClicked: {
-                appearanceModel.useSameColorInPalettes = !checked
-            }
-        }
     }
 }
