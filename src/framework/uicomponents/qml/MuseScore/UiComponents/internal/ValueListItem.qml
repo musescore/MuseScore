@@ -62,7 +62,7 @@ ListItemBlank {
             Layout.fillWidth: true
             Layout.leftMargin: root.sideMargin
 
-            spacing: 8
+            spacing: 18
 
             StyledIconLabel {
                 iconCode: Boolean(root.item[iconRoleName]) ? root.item[iconRoleName] : IconCode.NONE
