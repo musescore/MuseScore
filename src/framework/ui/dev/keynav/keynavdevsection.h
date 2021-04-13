@@ -16,25 +16,32 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_UI_IKEYNAVIGATIONCONTROLLER_H
-#define MU_UI_IKEYNAVIGATIONCONTROLLER_H
+#ifndef MU_UI_KEYNAVDEVSECTION_H
+#define MU_UI_KEYNAVDEVSECTION_H
 
-#include "modularity/imoduleexport.h"
-#include "ikeynavigation.h"
+#include "abstractkeynavdevitem.h"
 
 namespace mu::ui {
-class IKeyNavigationController : MODULE_EXPORT_INTERFACE
+class KeyNavDevSection : public AbstractKeyNavDevItem
 {
-    INTERFACE_ID(IKeyNavigationController)
+    Q_OBJECT
+    Q_PROPERTY(QVariantList subsections READ subsections NOTIFY subsectionsChanged)
 
 public:
-    virtual ~IKeyNavigationController() = default;
+    explicit KeyNavDevSection(IKeyNavigationSection* section);
 
-    virtual void reg(IKeyNavigationSection* s) = 0;
-    virtual void unreg(IKeyNavigationSection* s) = 0;
+    QVariantList subsections() const;
 
-    virtual const std::set<IKeyNavigationSection*>& sections() const = 0;
+public slots:
+    void setSubsections(const QVariantList& subsections);
+
+signals:
+    void subsectionsChanged();
+
+private:
+    IKeyNavigationSection* m_section = nullptr;
+    QVariantList m_subsections;
 };
 }
 
-#endif // MU_UI_IKEYNAVIGATIONCONTROLLER_H
+#endif // MU_UI_KEYNAVDEVSECTION_H

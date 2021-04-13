@@ -39,11 +39,17 @@ public:
     KeyNavigationSubSection* subsection() const;
 
     QString name() const override;
+
     const Index& index() const override;
+    async::Channel<Index> indexChanged() const override;
+
     bool enabled() const override;
+    async::Channel<bool> enabledChanged() const override;
+
     bool active() const override;
     void setActive(bool arg) override;
     async::Channel<bool> activeChanged() const override;
+
     void trigger() override;
     async::Channel<IKeyNavigationControl*> forceActiveRequested() const override;
 

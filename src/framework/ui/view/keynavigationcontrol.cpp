@@ -42,9 +42,19 @@ const IKeyNavigation::Index& KeyNavigationControl::index() const
     return AbstractKeyNavigation::index();
 }
 
+mu::async::Channel<IKeyNavigation::Index> KeyNavigationControl::indexChanged() const
+{
+    return AbstractKeyNavigation::indexChanged();
+}
+
 bool KeyNavigationControl::enabled() const
 {
     return AbstractKeyNavigation::enabled();
+}
+
+mu::async::Channel<bool> KeyNavigationControl::enabledChanged() const
+{
+    return AbstractKeyNavigation::enabledChanged();
 }
 
 bool KeyNavigationControl::active() const

@@ -16,25 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_UI_IKEYNAVIGATIONCONTROLLER_H
-#define MU_UI_IKEYNAVIGATIONCONTROLLER_H
+#include "keynavdevsubsection.h"
 
-#include "modularity/imoduleexport.h"
-#include "ikeynavigation.h"
+using namespace mu::ui;
 
-namespace mu::ui {
-class IKeyNavigationController : MODULE_EXPORT_INTERFACE
+KeyNavDevSubSection::KeyNavDevSubSection(IKeyNavigationSubSection* subsection)
+    : AbstractKeyNavDevItem(subsection), m_subsection(subsection)
 {
-    INTERFACE_ID(IKeyNavigationController)
-
-public:
-    virtual ~IKeyNavigationController() = default;
-
-    virtual void reg(IKeyNavigationSection* s) = 0;
-    virtual void unreg(IKeyNavigationSection* s) = 0;
-
-    virtual const std::set<IKeyNavigationSection*>& sections() const = 0;
-};
 }
 
-#endif // MU_UI_IKEYNAVIGATIONCONTROLLER_H
+QString KeyNavDevSubSection::direction() const
+{
+    using Direction = IKeyNavigationSubSection::Direction;
+    switch (m_subsection->direction()) {
+    case Direction::Horizontal: return QString("Horizontal");
+    case Direction::Vertical: return QString("Vertical");
+    case Direction::Both: return QString("Both");
+    }
+    return QString();
+}
+
+QVariantList KeyNavDevSubSection::controls() const
+{
+    return m_controls;
+}
+
+void KeyNavDevSubSection::setControls(const QVariantList& controls)
+{
+    m_controls = controls;
+    emit controlsChanged();
+}
