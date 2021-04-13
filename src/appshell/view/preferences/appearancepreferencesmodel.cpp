@@ -145,11 +145,6 @@ QString AppearancePreferencesModel::foregroundWallpaperPath() const
     return notationConfiguration()->foregroundWallpaperPath().toQString();
 }
 
-bool AppearancePreferencesModel::useSameColorInPalettes() const
-{
-    return paletteConfiguration()->useNotationForegroundColor();
-}
-
 void AppearancePreferencesModel::setCurrentThemeIndex(int index)
 {
     ThemeList themes = allThemes();
@@ -261,14 +256,4 @@ void AppearancePreferencesModel::setForegroundWallpaperPath(const QString& path)
 
     notationConfiguration()->setForegroundWallpaperPath(path);
     emit foregroundWallpaperPathChanged(path);
-}
-
-void AppearancePreferencesModel::setUseSameColorInPalettes(bool value)
-{
-    if (value == useSameColorInPalettes()) {
-        return;
-    }
-
-    paletteConfiguration()->setUseNotationForegroundColor(value);
-    emit useSameColorInPalettesChanged(value);
 }

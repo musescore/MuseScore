@@ -140,13 +140,8 @@ Item {
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: StyledScrollBar {
-            parent: view.parent
-
-            Layout.alignment: Qt.AlignTop | Qt.AlignBottom | Qt.AlignRight
-            Layout.rightMargin: 16
-
-            visible: view.contentHeight > view.height
-            z: 1
+            anchors.right: parent.right
+            anchors.rightMargin: 8
         }
 
         delegate: ValueListItem {

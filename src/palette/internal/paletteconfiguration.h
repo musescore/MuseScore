@@ -24,15 +24,12 @@
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 #include "ui/iuiconfiguration.h"
-#include "notation/inotationconfiguration.h"
-#include "async/asyncable.h"
 
 namespace mu::palette {
-class PaletteConfiguration : public IPaletteConfiguration, public async::Asyncable
+class PaletteConfiguration : public IPaletteConfiguration
 {
     INJECT(palette, ui::IUiConfiguration, uiConfiguration)
     INJECT(palette, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(palette, notation::INotationConfiguration, notationConfiguration)
 
 public:
     void init();
@@ -48,9 +45,6 @@ public:
     QColor gridColor() const override;
     QColor accentColor() const override;
     async::Notification colorsChanged() const override;
-
-    bool useNotationForegroundColor() const override;
-    void setUseNotationForegroundColor(bool value) override;
 
     io::path keySignaturesDirPath() const override;
     io::path timeSignaturesDirPath() const override;
@@ -69,7 +63,6 @@ private:
 
     mutable QHash<QString, ValCh<PaletteConfig> > m_paletteConfigs;
     mutable QHash<QString, ValCh<PaletteCellConfig> > m_paletteCellsConfigs;
-    async::Notification m_colorsChanged;
 };
 }
 

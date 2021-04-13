@@ -24,7 +24,6 @@
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
-#include "palette/ipaletteconfiguration.h"
 #include "async/asyncable.h"
 
 namespace mu::appshell {
@@ -34,7 +33,6 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
 
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
-    INJECT(appshell, palette::IPaletteConfiguration, paletteConfiguration)
 
     Q_PROPERTY(QVariantList themes READ themes NOTIFY themesChanged)
     Q_PROPERTY(QStringList accentColors READ accentColors NOTIFY themesChanged)
@@ -54,8 +52,6 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
     Q_PROPERTY(QColor foregroundColor READ foregroundColor WRITE setForegroundColor NOTIFY foregroundColorChanged)
     Q_PROPERTY(
         QString foregroundWallpaperPath READ foregroundWallpaperPath WRITE setForegroundWallpaperPath NOTIFY foregroundWallpaperPathChanged)
-
-    Q_PROPERTY(bool useSameColorInPalettes READ useSameColorInPalettes WRITE setUseSameColorInPalettes NOTIFY useSameColorInPalettesChanged)
 
 public:
     explicit AppearancePreferencesModel(QObject* parent = nullptr);
@@ -77,8 +73,6 @@ public:
     QColor foregroundColor() const;
     QString foregroundWallpaperPath() const;
 
-    bool useSameColorInPalettes() const;
-
     Q_INVOKABLE QStringList allFonts() const;
     Q_INVOKABLE QString wallpaperPathFilter() const;
     Q_INVOKABLE QString wallpapersDir() const;
@@ -94,7 +88,6 @@ public slots:
     void setForegroundUseColor(bool value);
     void setForegroundColor(const QColor& color);
     void setForegroundWallpaperPath(const QString& path);
-    void setUseSameColorInPalettes(bool value);
 
 signals:
     void themesChanged();
@@ -106,7 +99,6 @@ signals:
     void foregroundUseColorChanged(bool value);
     void foregroundColorChanged(const QColor& color);
     void foregroundWallpaperPathChanged(const QString& path);
-    void useSameColorInPalettesChanged(bool value);
 
 private:
     ui::ThemeInfo currentTheme() const;

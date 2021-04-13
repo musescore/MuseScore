@@ -32,7 +32,7 @@ PreferencesModel::PreferencesModel(QObject* parent)
 
 PreferencesModel::~PreferencesModel()
 {
-    apply();
+    cancel();
 
     delete m_rootItem;
     m_rootItem = nullptr;

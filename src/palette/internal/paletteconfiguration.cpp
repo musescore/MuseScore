@@ -30,29 +30,13 @@ using namespace mu::ui;
 static const std::string MODULE_NAME("palette");
 static const Settings::Key PALETTE_SCALE(MODULE_NAME, "application/paletteScale");
 static const Settings::Key PALETTE_USE_SINGLE(MODULE_NAME, "application/useSinglePalette");
-static const Settings::Key USE_NOTATION_FOREGROUND_COLOR(MODULE_NAME, "ui/canvas/foreground/useColorInPalettes");
 
 void PaletteConfiguration::init()
 {
     settings()->setDefaultValue(PALETTE_SCALE, Val(1.0));
     settings()->setCanBeMannualyEdited(PALETTE_SCALE, true);
-
     settings()->setDefaultValue(PALETTE_USE_SINGLE, Val(false));
     settings()->setCanBeMannualyEdited(PALETTE_USE_SINGLE, true);
-
-    settings()->valueChanged(USE_NOTATION_FOREGROUND_COLOR).onReceive(this, [this](const Val&) {
-        m_colorsChanged.notify();
-    });
-
-    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
-        m_colorsChanged.notify();
-    });
-
-    notationConfiguration()->foregroundChanged().onNotify(this, [this]() {
-        if (useNotationForegroundColor()) {
-            m_colorsChanged.notify();
-        }
-    });
 }
 
 double PaletteConfiguration::paletteScaling() const
@@ -77,10 +61,6 @@ void PaletteConfiguration::setIsSinglePalette(bool isSingle)
 
 QColor PaletteConfiguration::elementsBackgroundColor() const
 {
-    if (useNotationForegroundColor()) {
-        return notationConfiguration()->foregroundColor();
-    }
-
     return themeColor(BACKGROUND_PRIMARY_COLOR);
 }
 
@@ -106,17 +86,7 @@ QColor PaletteConfiguration::themeColor(ThemeStyleKey key) const
 
 mu::async::Notification PaletteConfiguration::colorsChanged() const
 {
-    return m_colorsChanged;
-}
-
-bool PaletteConfiguration::useNotationForegroundColor() const
-{
-    return settings()->value(USE_NOTATION_FOREGROUND_COLOR).toBool();
-}
-
-void PaletteConfiguration::setUseNotationForegroundColor(bool value)
-{
-    settings()->setValue(USE_NOTATION_FOREGROUND_COLOR, Val(value));
+    return uiConfiguration()->currentThemeChanged();
 }
 
 mu::io::path PaletteConfiguration::keySignaturesDirPath() const

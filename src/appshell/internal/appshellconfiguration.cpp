@@ -37,7 +37,6 @@ static const std::string MUSICXML_LICENSE_URL("https://www.w3.org/community/abou
 static const std::string MUSICXML_LICENSE_DEED_URL("https://www.w3.org/community/about/agreements/cla-deed/");
 
 static const std::string UTM_MEDIUM_MENU("menu");
-static const std::string SYSTEM_LANGUAGE("system");
 
 static const Settings::Key NOTATION_NAVIGATOR_VISIBLE_KEY(module_name, "ui/application/startup/showNavigator");
 static const Settings::Key NOTATION_STATUSBAR_VISIBLE_KEY(module_name, "ui/application/showStatusBar");
@@ -262,12 +261,8 @@ std::string AppShellConfiguration::sha() const
 
 std::string AppShellConfiguration::currentLanguageCode() const
 {
-    std::string languageCode = languagesConfiguration()->currentLanguageCode().val.toStdString();
-    if (languageCode == SYSTEM_LANGUAGE) {
-        languageCode = QLocale::system().name().toStdString();
-    }
-
-    QLocale locale(QString::fromStdString(languageCode));
+    QString languageCode = languagesConfiguration()->currentLanguageCode().val;
+    QLocale locale(languageCode);
 
     return locale.bcp47Name().toStdString();
 }
