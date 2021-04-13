@@ -36,6 +36,8 @@ class DockPanel : public DockView
     Q_PROPERTY(bool floatable READ floatable WRITE setFloatable NOTIFY floatableChanged)
     Q_PROPERTY(bool closable READ closable WRITE setClosable NOTIFY closableChanged)
 
+    Q_PROPERTY(bool isShown READ isShown NOTIFY isShownChanged)
+
 public:
     explicit DockPanel(QQuickItem* parent = nullptr);
     ~DockPanel() override;
@@ -49,6 +51,7 @@ public:
 
     bool floatable() const;
     bool closable() const;
+    bool isShown() const;
     bool visible() const override;
 
     struct Widget {
@@ -78,6 +81,7 @@ signals:
     void floatableChanged(bool floatable);
     void closableChanged(bool closable);
     void closed();
+    void isShownChanged(bool isShown);
 
 protected:
     void onComponentCompleted() override;
@@ -94,6 +98,7 @@ private:
     EventsWatcher* m_eventsWatcher = nullptr;
 
     int m_preferedWidth = 0;
+    bool m_isShown = false;
 };
 }
 

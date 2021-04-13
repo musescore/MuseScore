@@ -133,12 +133,20 @@ DockPage {
             }
 
             property KeyNavigationControl keynavTab: KeyNavigationControl {
-                name: "PanelTab"
+                name: "PaletteTab"
                 order: 1 //! TODO Needs order from DockPanel
                 subsection: notationPage.keynavPanelTabSubSec(palettePanel.area)
+                onActiveChanged: {
+                    if (active) {
+                        palettePanel.forceActiveFocus()
+                    }
+                }
             }
 
-            PalettesWidget {}
+            PalettesWidget {
+                anchors.fill: parent
+                keynavSection: notationPage.keynavPanelSec(palettePanel.area)
+            }
         },
 
         DockPanel {
@@ -167,11 +175,17 @@ DockPage {
                 name: "InstrumentsTab"
                 order: 2 //! TODO Needs order from DockPanel
                 subsection: notationPage.keynavPanelTabSubSec(instrumentsPanel.area)
+                onActiveChanged: {
+                    if (active) {
+                        instrumentsPanel.forceActiveFocus()
+                    }
+                }
             }
 
             InstrumentsPanel {
                 anchors.fill: parent
                 keynavSection: notationPage.keynavPanelSec(instrumentsPanel.area)
+                visible: instrumentsPanel.isShown
             }
         },
 
@@ -180,7 +194,7 @@ DockPage {
             objectName: "inspectorPanel"
 
             property string _title: qsTrc("appshell", "Properties")
-            title: instrumentsPanel.keynavTab.active ? ("[" + _title + "]") : _title //! NOTE just for test
+            title: inspectorPanel.keynavTab.active ? ("[" + _title + "]") : _title //! NOTE just for test
 
             width: defaultPanelWidth
             minimumWidth: minimumPanelWidth
@@ -201,6 +215,11 @@ DockPage {
                 name: "InspectorTab"
                 order: 3 //! TODO Needs order from DockPanel
                 subsection: notationPage.keynavPanelTabSubSec(inspectorPanel.area)
+                onActiveChanged: {
+                    if (active) {
+                        inspectorPanel.forceActiveFocus()
+                    }
+                }
             }
 
             InspectorForm {

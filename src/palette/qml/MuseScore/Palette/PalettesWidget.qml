@@ -17,23 +17,22 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-import QtQuick 2.8
+import QtQuick 2.15
 import QtQuick.Controls 2.1
 import QtQuick.Window 2.2
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Palette 1.0
-
-// TODO: make some properties 'property alias`?
-// and `readonly property`?
 
 import "internal"
 
 Rectangle {
+
     id: palettesWidget
 
-    readonly property PaletteWorkspace paletteWorkspace: paletteRootModel.paletteWorkspace
+    property KeyNavigationSection keynavSection: null
 
-    readonly property bool hasFocus: Window.activeFocusItem
+    readonly property PaletteWorkspace paletteWorkspace: paletteRootModel.paletteWorkspace
 
     implicitHeight: 4 * palettesWidgetHeader.implicitHeight
     implicitWidth: paletteTree.implicitWidth
@@ -45,14 +44,6 @@ Rectangle {
     }
 
     color: ui.theme.backgroundPrimaryColor
-
-    FocusableItem {
-        id: focusBreaker
-
-        onActiveFocusChanged: {
-            parent.focus = false
-        }
-    }
 
     PaletteRootModel {
         id: paletteRootModel
@@ -77,6 +68,9 @@ Rectangle {
             rightMargin: 12
         }
 
+        keynav.section: palettesWidget.keynavSection
+        keynav.order: 2
+
         onAddCustomPaletteRequested: paletteTree.insertCustomPalette(0, paletteName);
     }
 
@@ -96,6 +90,11 @@ Rectangle {
         id: paletteTree
         clip: true
         paletteWorkspace: palettesWidget.paletteWorkspace
+        backgroundColor: palettesWidget.color
+
+        keynav.section: palettesWidget.keynavSection
+        keynav.order: 3
+        keynav.enabled: paletteTree.visible
 
         filter: palettesWidgetHeader.searchText
         enableAnimations: !palettesWidgetHeader.searching

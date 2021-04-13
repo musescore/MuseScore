@@ -158,7 +158,11 @@ DockPage {
 
     Component {
         id: keynavComp
-        KeyNavExample{}
+        KeyNavExample {
+            onActiveFocusRequested: {
+                devtoolsCentral.forceActiveFocus()
+            }
+        }
     }
 
 }
