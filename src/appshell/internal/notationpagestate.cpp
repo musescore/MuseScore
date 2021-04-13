@@ -46,7 +46,13 @@ bool NotationPageState::isPanelVisible(PanelType type) const
         return configuration()->isNotationNavigatorVisible().val;
     case PanelType::NotationStatusBar:
         return configuration()->isNotationStatusBarVisible().val;
-    default:
+    case PanelType::Mixer:
+    case PanelType::TimeLine:
+    case PanelType::Synthesizer:
+    case PanelType::SelectionFilter:
+    case PanelType::Piano:
+    case PanelType::ComparisonTool:
+    case PanelType::Undefined:
         return false;
     }
 
