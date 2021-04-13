@@ -48,15 +48,23 @@ public:
     Q_ENUM(QmlDirection)
 
     QString name() const override;
+
     const Index& index() const override;
+    async::Channel<Index> indexChanged() const override;
+
     bool enabled() const override;
+    async::Channel<bool> enabledChanged() const override;
+
     bool active() const override;
     void setActive(bool arg) override;
     async::Channel<bool> activeChanged() const override;
 
     QmlDirection direction_property() const;
     Direction direction() const override;
-    const QSet<IKeyNavigationControl*>& controls() const override;
+
+    const std::set<IKeyNavigationControl*>& controls() const override;
+    async::Notification controlsListChanged() const override;
+
     async::Channel<SubSectionControl> forceActiveRequested() const override;
 
     KeyNavigationSection* section() const;
@@ -79,7 +87,8 @@ private slots:
 
 private:
     KeyNavigationSection* m_section = nullptr;
-    QSet<IKeyNavigationControl*> m_controls;
+    std::set<IKeyNavigationControl*> m_controls;
+    async::Notification m_controlsListChanged;
     async::Channel<SubSectionControl> m_forceActiveRequested;
     QmlDirection m_direction = QmlDirection::Horizontal;
 };

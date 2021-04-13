@@ -16,25 +16,39 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_UI_IKEYNAVIGATIONCONTROLLER_H
-#define MU_UI_IKEYNAVIGATIONCONTROLLER_H
+#ifndef MU_UI_ABSTRACTKEYNAVDEVITEM_H
+#define MU_UI_ABSTRACTKEYNAVDEVITEM_H
 
-#include "modularity/imoduleexport.h"
-#include "ikeynavigation.h"
+#include <QObject>
+#include "ui/ikeynavigation.h"
+#include "async/asyncable.h"
 
 namespace mu::ui {
-class IKeyNavigationController : MODULE_EXPORT_INTERFACE
+class AbstractKeyNavDevItem : public QObject, public async::Asyncable
 {
-    INTERFACE_ID(IKeyNavigationController)
+    Q_OBJECT
+    Q_PROPERTY(QString name READ name CONSTANT)
+    Q_PROPERTY(QVariant index READ index NOTIFY indexChanged)
+    Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
+    Q_PROPERTY(bool active READ active NOTIFY activeChanged)
 
 public:
-    virtual ~IKeyNavigationController() = default;
+    explicit AbstractKeyNavDevItem(IKeyNavigation* keynav);
 
-    virtual void reg(IKeyNavigationSection* s) = 0;
-    virtual void unreg(IKeyNavigationSection* s) = 0;
+    QString name() const;
+    QVariant index() const;
+    bool enabled() const;
+    bool active() const;
 
-    virtual const std::set<IKeyNavigationSection*>& sections() const = 0;
+signals:
+    void indexChanged();
+    void enabledChanged();
+    void activeChanged();
+
+private:
+
+    IKeyNavigation* m_keynav = nullptr;
 };
 }
 
-#endif // MU_UI_IKEYNAVIGATIONCONTROLLER_H
+#endif // MU_UI_ABSTRACTKEYNAVDEVITEM_H

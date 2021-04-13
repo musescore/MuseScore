@@ -41,12 +41,20 @@ public:
     ~KeyNavigationSection() override;
 
     QString name() const override;
+
     const Index& index() const override;
+    async::Channel<Index> indexChanged() const override;
+
     bool enabled() const override;
+    async::Channel<bool> enabledChanged() const override;
+
     bool active() const override;
     void setActive(bool arg) override;
     async::Channel<bool> activeChanged() const override;
-    const QSet<IKeyNavigationSubSection*>& subsections() const override;
+
+    const std::set<IKeyNavigationSubSection*>& subsections() const override;
+    async::Notification subsectionsListChanged() const override;
+
     async::Channel<SectionSubSectionControl> forceActiveRequested() const override;
 
     void componentComplete() override;
@@ -56,7 +64,8 @@ public:
 
 private:
 
-    QSet<IKeyNavigationSubSection*> m_subsections;
+    std::set<IKeyNavigationSubSection*> m_subsections;
+    async::Notification m_subsectionsListChanged;
     async::Channel<SectionSubSectionControl> m_forceActiveRequested;
 };
 }

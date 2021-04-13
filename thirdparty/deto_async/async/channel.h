@@ -56,7 +56,7 @@ public:
 
     bool isConnected() const
     {
-        return ptr()->isConnected();
+        return m_ptr && ptr()->isConnected();
     }
 
 private:

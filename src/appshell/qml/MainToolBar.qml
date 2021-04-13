@@ -56,6 +56,8 @@ Rectangle {
 
             spacing: 0
             leftPadding: 12
+
+            keynav.name: modelData["title"]
             keynav.subsection: keynavSub
             keynav.order: model.index
 
