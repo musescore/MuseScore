@@ -94,29 +94,9 @@ Rectangle {
                                 Qt.callLater(playbackModel.handleAction, modelData.code)
                             }
 
-                            Loader {
+                            StyledMenuLoader {
                                 id: menuLoader
-                                anchors.fill: parent
-
-                                property alias menu: menuLoader.item
-
-                                function isMenuOpened() {
-                                    return menuLoader.menu && menuLoader.menu.isOpened
-                                }
-
-                                function toggleOpened(items) {
-                                    if (!menuLoader.sourceComponent) {
-                                        menuLoader.sourceComponent = itemMenuComp
-                                    }
-
-                                    if (menuLoader.menu.isOpened) {
-                                        menuLoader.menu.close()
-                                        return
-                                    }
-
-                                    menuLoader.menu.model = items
-                                    menuLoader.menu.open()
-                                }
+                                onHandleAction: playbackModel.handleAction(actionCode)
                             }
                         }
                     }
@@ -126,21 +106,7 @@ Rectangle {
 
                         SeparatorLine {
                             property var modelData
-
                             orientation: Qt.Vertical
-                        }
-                    }
-                }
-
-                Component {
-                    id: itemMenuComp
-
-                    StyledMenu {
-                        id: itemMenu
-
-                        onHandleAction: {
-                            Qt.callLater(playbackModel.handleAction, actionCode)
-                            itemMenu.close()
                         }
                     }
                 }
