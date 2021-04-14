@@ -57,69 +57,94 @@ StyledPopupView {
         property bool hasItemsWithShortcut: false
     }
 
-    ListView {
-        id: view
-
-        implicitHeight: contentHeight
+    Item {
+        implicitHeight: view.contentHeight
         implicitWidth: root.itemWidth
 
-        spacing: 2
-        interactive: false
+        ListView {
+            id: view
 
-        delegate: Loader {
-            id: loader
+            anchors.fill: parent
 
-            sourceComponent: Boolean(modelData.title) ? menuItemComp : separatorComp
+            spacing: 2
+            interactive: false
 
-            onLoaded: {
-                loader.item.modelData = modelData
-                loader.item.width = root.itemWidth
-            }
+            delegate: Loader {
+                id: loader
 
-            Component {
-                id: menuItemComp
+                sourceComponent: Boolean(modelData.title) ? menuItemComp : separatorComp
 
-                StyledMenuItem {
-                    id: item
+                onLoaded: {
+                    loader.item.modelData = modelData
+                    loader.item.width = root.itemWidth
+                }
 
-                    iconAndCheckMarkMode: {
-                        if (privateProperties.hasItemsWithIconAndCheckable) {
-                            return StyledMenuItem.ShowBoth
-                        } else if (privateProperties.hasItemsWithIconOrCheckable) {
-                            return StyledMenuItem.ShowOne
+                Component {
+                    id: menuItemComp
+
+                    StyledMenuItem {
+                        id: item
+
+                        iconAndCheckMarkMode: {
+                            if (privateProperties.hasItemsWithIconAndCheckable) {
+                                return StyledMenuItem.ShowBoth
+                            } else if (privateProperties.hasItemsWithIconOrCheckable) {
+                                return StyledMenuItem.ShowOne
+                            }
+                            return StyledMenuItem.None
                         }
-                        return StyledMenuItem.None
+
+                        reserveSpaceForShortcutOrSubmenuIndicator:
+                            privateProperties.hasItemsWithSubmenu || privateProperties.hasItemsWithShortcut
+
+                        onSubMenuShowed: {
+                            root.closePolicy = PopupView.NoAutoClose
+                        }
+
+                        onSubMenuClosed: {
+                            root.closePolicy = PopupView.CloseOnPressOutsideParent
+                        }
+
+                        onHandleAction: {
+                            // NOTE: reset view state
+                            view.update()
+
+                            root.handleAction(actionCode, actionIndex)
+                        }
                     }
+                }
 
-                    reserveSpaceForShortcutOrSubmenuIndicator:
-                        privateProperties.hasItemsWithSubmenu || privateProperties.hasItemsWithShortcut
+                Component {
+                    id: separatorComp
 
-                    onSubMenuShowed: {
-                        root.closePolicy = PopupView.NoAutoClose
-                    }
+                    Rectangle {
+                        height: 1
+                        color: ui.theme.strokeColor
 
-                    onSubMenuClosed: {
-                        root.closePolicy = PopupView.CloseOnPressOutsideParent
-                    }
-
-                    onHandleAction: {
-                        // NOTE: reset view state
-                        view.update()
-
-                        root.handleAction(actionCode, actionIndex)
+                        property var modelData
                     }
                 }
             }
+        }
 
-            Component {
-                id: separatorComp
+        Canvas {
+            visible: item.showSubitemsByPressAndHoldRole
 
-                Rectangle {
-                    height: 1
-                    color: ui.theme.strokeColor
+            width: 4
+            height: 4
 
-                    property var modelData
-                }
+            anchors.margins: 2
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+
+            onPaint: {
+                const ctx = getContext("2d");
+                ctx.fillStyle = ui.theme.fontPrimaryColor;
+                ctx.moveTo(width, 0);
+                ctx.lineTo(width, height);
+                ctx.lineTo(0, height);
+                ctx.closePath();
+                ctx.fill();
             }
         }
     }

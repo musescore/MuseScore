@@ -39,5 +39,6 @@ TimeInputField 1.0 TimeInputField.qml
 StyledPopupView 1.0 StyledPopupView.qml
 StyledMenu 1.0 StyledMenu.qml
 StyledMenuItem 1.0 StyledMenuItem.qml
+StyledMenuLoader 1.0 StyledMenuLoader.qml
 FilePicker 1.0 FilePicker.qml
 ValueList 1.0 ValueList.qml

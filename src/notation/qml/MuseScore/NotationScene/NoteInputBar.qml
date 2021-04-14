@@ -87,31 +87,6 @@ Rectangle {
                 menuLoader.toggleOpened(item.subitemsRole)
             }
 
-            Loader {
-                id: menuLoader
-                anchors.fill: parent
-
-                property var menu: menuLoader.item
-
-                function isMenuOpened() {
-                    return menuLoader.menu && menuLoader.menu.isOpened
-                }
-
-                function toggleOpened(items) {
-                    if (!menuLoader.sourceComponent) {
-                        menuLoader.sourceComponent = itemMenuComp
-                    }
-
-                    if (menuLoader.menu.isOpened) {
-                        menuLoader.menu.close()
-                        return
-                    }
-
-                    menuLoader.menu.model = items
-                    menuLoader.menu.open()
-                }
-            }
-
             Canvas {
                 visible: item.showSubitemsByPressAndHoldRole
 
@@ -132,18 +107,10 @@ Rectangle {
                     ctx.fill();
                 }
             }
-        }
-    }
 
-    Component {
-        id: itemMenuComp
-
-        StyledMenu {
-            id: itemMenu
-
-            onHandleAction: {
-                Qt.callLater(noteInputModel.handleAction, actionCode, actionIndex)
-                itemMenu.close()
+            StyledMenuLoader {
+                id: menuLoader
+                onHandleAction: noteInputModel.handleAction(actionCode, actionIndex)
             }
         }
     }
