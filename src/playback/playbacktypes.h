@@ -35,7 +35,7 @@ inline uint64_t secondsToMilliseconds(float seconds)
     return seconds * 1000;
 }
 
-inline QTime timeFromMillisecons(uint64_t millisecons)
+inline QTime timeFromMilliseconds(uint64_t millisecons)
 {
     return ZERO_TIME.addMSecs(millisecons);
 }
@@ -43,7 +43,7 @@ inline QTime timeFromMillisecons(uint64_t millisecons)
 inline QTime timeFromSeconds(float seconds)
 {
     uint64_t milliseconds = secondsToMilliseconds(seconds);
-    return timeFromMillisecons(milliseconds);
+    return timeFromMilliseconds(milliseconds);
 }
 
 inline uint64_t timeToMilliseconds(const QTime& time)

@@ -39,8 +39,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbacktoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/playbacktoolbarmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/playbacksettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/playbacksettingsmodel.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

@@ -3,6 +3,8 @@ import QtQuick 2.12
 Text {
     id: root
 
+    readonly property bool isEmpty: text.length === 0
+
     color: ui.theme.fontPrimaryColor
     linkColor: ui.theme.linkColor
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled

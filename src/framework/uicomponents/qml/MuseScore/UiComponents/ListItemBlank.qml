@@ -24,7 +24,9 @@ FocusableControl {
     Accessible.selectable: true
     Accessible.selected: isSelected
 
-    mouseArea.hoverEnabled: Boolean(root.hint) && root.visible
+    background.color: normalStateColor
+
+    mouseArea.hoverEnabled: root.visible
     mouseArea.onHoveredChanged: root.hovered(mouseArea.containsMouse, mouseArea.mouseX, mouseArea.mouseY)
 
     mouseArea.onClicked: root.clicked()

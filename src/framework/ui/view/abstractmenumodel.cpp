@@ -44,6 +44,11 @@ void AbstractMenuModel::appendItem(const MenuItem& item)
     m_items << item;
 }
 
+void AbstractMenuModel::appendItems(const MenuItemList& items)
+{
+    m_items << items;
+}
+
 void AbstractMenuModel::listenActionsStateChanges()
 {
     uiactionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {

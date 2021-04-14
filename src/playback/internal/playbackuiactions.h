@@ -23,14 +23,17 @@
 #include "playbackcontroller.h"
 #include "modularity/ioc.h"
 #include "context/iuicontextresolver.h"
+#include "async/asyncable.h"
 
 namespace mu::playback {
-class PlaybackUiActions : public ui::IUiActionsModule
+class PlaybackUiActions : public ui::IUiActionsModule, public async::Asyncable
 {
     INJECT(playback, context::IUiContextResolver, uicontextResolver)
-public:
 
+public:
     PlaybackUiActions(std::shared_ptr<PlaybackController> controller);
+
+    void init();
 
     const ui::UiActionList& actionsList() const override;
 

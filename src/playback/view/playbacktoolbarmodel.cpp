@@ -33,7 +33,7 @@ using namespace mu::ui;
 using namespace mu::notation;
 
 static const std::string PLAYBACK_TOOLBAR_KEY("playbackControl");
-static const std::string PLAYBACK_SETTINGS_KEY("playback-settings");
+static const ActionCode PLAY_ACTION_CODE("play");
 
 static MusicalSymbolCodes::Code tempoDurationToNoteIcon(DurationType durationType)
 {
@@ -59,15 +59,14 @@ QVariant PlaybackToolBarModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    const MenuItem& item = m_items.at(index.row());
+    const QVariantMap& item = items().at(index.row()).toMap();
 
     switch (role) {
-    case HintRole: return item.description;
-    case IconRole: return static_cast<int>(item.iconCode);
-    case CodeRole: return QString::fromStdString(item.code);
-    case CheckedRole: return item.state.checked;
-    case IsAdditionalRole: return isAdditionalAction(item.code);
-    case IsPlaybackSettingsRole: return item.code == PLAYBACK_SETTINGS_KEY;
+    case CodeRole: return item["code"];
+    case HintRole: return item["description"];
+    case IconRole: return item["icon"];
+    case CheckedRole: return item["checked"];
+    case SubitemsRole: return item["subitems"];
     }
 
     return QVariant();
@@ -75,18 +74,17 @@ QVariant PlaybackToolBarModel::data(const QModelIndex& index, int role) const
 
 int PlaybackToolBarModel::rowCount(const QModelIndex&) const
 {
-    return m_items.count();
+    return items().count();
 }
 
-QHash<int,QByteArray> PlaybackToolBarModel::roleNames() const
+QHash<int, QByteArray> PlaybackToolBarModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
         { CodeRole, "code" },
         { HintRole, "hint" },
         { IconRole, "icon" },
         { CheckedRole, "checked" },
-        { IsAdditionalRole, "isAdditional" },
-        { IsPlaybackSettingsRole, "isPlaybackSettings" }
+        { SubitemsRole, "subitems" },
     };
 
     return roles;
@@ -94,42 +92,23 @@ QHash<int,QByteArray> PlaybackToolBarModel::roleNames() const
 
 void PlaybackToolBarModel::load()
 {
-    beginResetModel();
-    m_items.clear();
-
-    UiActionList additionalActions;
-
-    for (const UiAction& action : currentWorkspaceActions()) {
-        if (isAdditionalAction(action.code)) {
-            additionalActions.push_back(action);
-            continue;
-        }
-
-        m_items << action;
-    }
-
-    m_items << settingsItem();
-
-    for (const UiAction& action : additionalActions) {
-        m_items << action;
-    }
-
-    endResetModel();
-
-    updateState();
+    updateActions();
+    listenActionsStateChanges();
     setupConnections();
 }
 
 void PlaybackToolBarModel::setupConnections()
 {
+    connect(this, &PlaybackToolBarModel::isToolbarFloatingChanged, this, &PlaybackToolBarModel::updateActions);
+
     playbackController()->isPlayAllowedChanged().onNotify(this, [this]() {
-        updateState();
+        emit maxPlayTimeChanged();
         updatePlayTime();
         emit isPlayAllowedChanged();
     });
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
-        updateState();
+        onActionsStateChanges({ PLAY_ACTION_CODE });
     });
 
     playbackController()->playbackPositionChanged().onNotify(this, [this]() {
@@ -137,39 +116,111 @@ void PlaybackToolBarModel::setupConnections()
     });
 
     workspaceManager()->currentWorkspace().ch.onReceive(this, [this](IWorkspacePtr) {
-        load();
-    });
-
-    playbackController()->actionEnabledChanged().onReceive(this, [this](const ActionCode&) {
-        updateState();
+        updateActions();
     });
 }
 
-UiActionList PlaybackToolBarModel::currentWorkspaceActions() const
+void PlaybackToolBarModel::updateActions()
+{
+    beginResetModel();
+    clear();
+
+    MenuItemList settingsItems;
+    MenuItemList additionalItems;
+
+    for (const ActionCode& code : currentWorkspaceActionCodes()) {
+        if (isAdditionalAction(code)) {
+            //! NOTE: In this case, we want to see the actions' description instead of the title
+            additionalItems << makeActionWithDescriptionAsTitle(code);
+        } else {
+            appendItem(makeAction(code));
+        }
+    }
+
+    for (const UiAction& action : PlaybackUiActions::settingsActions()) {
+        settingsItems << makeActionWithDescriptionAsTitle(action.code);
+    }
+
+    if (!m_isToolbarFloating) {
+        settingsItems << makeSeparator();
+        settingsItems << additionalItems;
+    }
+
+    MenuItem settingsItem = makeMenu(qtrc("action", "Playback settings"), settingsItems);
+    settingsItem.iconCode = IconCode::Code::SETTINGS_COG;
+    appendItem(settingsItem);
+
+    if (m_isToolbarFloating) {
+        appendItems(additionalItems);
+    }
+
+    endResetModel();
+}
+
+void PlaybackToolBarModel::onActionsStateChanges(const actions::ActionCodeList& codes)
+{
+    AbstractMenuModel::onActionsStateChanges(codes);
+
+    if (isPlayAllowed() && containsAction(codes, PLAY_ACTION_CODE)) {
+        bool isPlaying = playbackController()->isPlaying();
+        findItem(PLAY_ACTION_CODE).iconCode = isPlaying ? IconCode::Code::PAUSE : IconCode::Code::PLAY;
+    }
+
+    emit dataChanged(index(0), index(rowCount() - 1));
+}
+
+ActionCodeList PlaybackToolBarModel::currentWorkspaceActionCodes() const
 {
     RetValCh<IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
     if (!workspace.ret || !workspace.val) {
         LOGE() << workspace.ret.toString();
-        return UiActionList();
+        return {};
     }
 
     AbstractDataPtr abstractData = workspace.val->data(WorkspaceTag::Toolbar, PLAYBACK_TOOLBAR_KEY);
     ToolbarDataPtr toolbar = std::dynamic_pointer_cast<ToolbarData>(abstractData);
     if (!toolbar) {
-        return UiActionList();
+        return {};
     }
 
-    UiActionList actions;
-    for (const ActionCode& actionCode : toolbar->actions) {
-        actions.push_back(uiactionsRegister()->action(actionCode));
-    }
+    return toolbar->actions;
+}
 
-    return actions;
+bool PlaybackToolBarModel::isAdditionalAction(const actions::ActionCode& actionCode) const
+{
+    return PlaybackUiActions::loopBoundaryActions().contains(actionCode);
+}
+
+MenuItem PlaybackToolBarModel::makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode) const
+{
+    MenuItem item = makeAction(actionCode);
+    item.title = item.description;
+    return item;
+}
+
+void PlaybackToolBarModel::handleAction(const QString& actionCode)
+{
+    dispatcher()->dispatch(actions::codeFromQString(actionCode));
 }
 
 bool PlaybackToolBarModel::isPlayAllowed() const
 {
     return playbackController()->isPlayAllowed();
+}
+
+bool PlaybackToolBarModel::isToolbarFloating() const
+{
+    return m_isToolbarFloating;
+}
+
+void PlaybackToolBarModel::setIsToolbarFloating(bool floating)
+{
+    if (floating == m_isToolbarFloating) {
+        return;
+    }
+
+    m_isToolbarFloating = floating;
+    emit isToolbarFloatingChanged(floating);
 }
 
 QDateTime PlaybackToolBarModel::maxPlayTime() const
@@ -209,7 +260,7 @@ void PlaybackToolBarModel::setPlayPosition(qreal position)
     uint64_t allMsecs = totalPlayTimeMilliseconds();
     uint64_t playPositionMsecs = allMsecs * position;
 
-    QTime time = timeFromMillisecons(playPositionMsecs);
+    QTime time = timeFromMilliseconds(playPositionMsecs);
     setPlayTime(QDateTime(QDate::currentDate(), time));
 }
 
@@ -313,54 +364,4 @@ QVariant PlaybackToolBarModel::tempo() const
     obj["value"] = tempo.valueBpm;
 
     return obj;
-}
-
-void PlaybackToolBarModel::handleAction(const QString& actionCode)
-{
-    dispatcher()->dispatch(actions::codeFromQString(actionCode));
-}
-
-void PlaybackToolBarModel::updateState()
-{
-    bool playAllowed = isPlayAllowed();
-
-    for (MenuItem& item : m_items) {
-        item.state.checked = playAllowed && playbackController()->isActionEnabled(item.code);
-    }
-
-    if (playAllowed) {
-        bool isPlaying = playbackController()->isPlaying();
-        item("play").iconCode = isPlaying ? IconCode::Code::PAUSE : IconCode::Code::PLAY;
-    }
-
-    emit dataChanged(index(0), index(rowCount() - 1));
-    emit maxPlayTimeChanged();
-}
-
-MenuItem& PlaybackToolBarModel::item(const ActionCode& actionCode)
-{
-    for (MenuItem& item : m_items) {
-        if (item.code == actionCode) {
-            return item;
-        }
-    }
-
-    LOGE() << "item not found: " << actionCode;
-    static MenuItem null;
-    return null;
-}
-
-MenuItem PlaybackToolBarModel::settingsItem() const
-{
-    return UiAction(PLAYBACK_SETTINGS_KEY,
-                    UiCtxAny,
-                    QT_TRANSLATE_NOOP("action", "Playback settings"),
-                    QT_TRANSLATE_NOOP("action", "Open playback settings"),
-                    IconCode::Code::SETTINGS_COG
-                    );
-}
-
-bool PlaybackToolBarModel::isAdditionalAction(const actions::ActionCode& actionCode) const
-{
-    return PlaybackUiActions::loopBoundaryActions().contains(actionCode);
 }
