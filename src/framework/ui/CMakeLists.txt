@@ -112,6 +112,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/abstractkeynavdevitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/abstractkeynavdevitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevcontrol.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevcontrol.h
+    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevsubsection.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevsubsection.h
+    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevsection.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevsection.h
     )
 
 set(MODULE_UI

@@ -25,11 +25,13 @@
 
 using namespace mu::ui;
 
+static const mu::UriQuery DEV_SHOW_CONTROLS_URI("musescore://devtools/keynav/controls?sync=false&modal=false");
+
 using MoveDirection = KeyNavigationController::MoveDirection;
 
 // algorithms
 template<class T>
-static T* findNearestEnabled(const QSet<T*>& set, const IKeyNavigation::Index& currentIndex, MoveDirection direction)
+static T* findNearestEnabled(const std::set<T*>& set, const IKeyNavigation::Index& currentIndex, MoveDirection direction)
 {
     T* ret = nullptr;
     for (T* v : set) {
@@ -135,7 +137,7 @@ static T* findNearestEnabled(const QSet<T*>& set, const IKeyNavigation::Index& c
 }
 
 template<class T>
-static T* firstEnabled(const QSet<T*>& set, const IKeyNavigation::Index& currentIndex, MoveDirection direction)
+static T* firstEnabled(const std::set<T*>& set, const IKeyNavigation::Index& currentIndex, MoveDirection direction)
 {
     if (set.empty()) {
         return nullptr;
@@ -149,7 +151,7 @@ static T* firstEnabled(const QSet<T*>& set, const IKeyNavigation::Index& current
 }
 
 template<class T>
-static T* firstEnabled(const QSet<T*>& set)
+static T* firstEnabled(const std::set<T*>& set)
 {
     if (set.empty()) {
         return nullptr;
@@ -159,7 +161,7 @@ static T* firstEnabled(const QSet<T*>& set)
 }
 
 template<class T>
-static T* lastEnabled(const QSet<T*>& set, const IKeyNavigation::Index& currentIndex, MoveDirection direction)
+static T* lastEnabled(const std::set<T*>& set, const IKeyNavigation::Index& currentIndex, MoveDirection direction)
 {
     if (set.empty()) {
         return nullptr;
@@ -173,7 +175,7 @@ static T* lastEnabled(const QSet<T*>& set, const IKeyNavigation::Index& currentI
 }
 
 template<class T>
-static T* lastEnabled(const QSet<T*>& set)
+static T* lastEnabled(const std::set<T*>& set)
 {
     if (set.empty()) {
         return nullptr;
@@ -183,7 +185,8 @@ static T* lastEnabled(const QSet<T*>& set)
 }
 
 template<class T>
-static T* nextEnabled(const QSet<T*>& set, const IKeyNavigation::Index& currentIndex, MoveDirection direction = MoveDirection::Right)
+static T* nextEnabled(const std::set<T*>& set, const IKeyNavigation::Index& currentIndex,
+                      MoveDirection direction = MoveDirection::Right)
 {
     if (set.empty()) {
         return nullptr;
@@ -197,7 +200,7 @@ static T* nextEnabled(const QSet<T*>& set, const IKeyNavigation::Index& currentI
 }
 
 template<class T>
-static T* prevEnabled(const QSet<T*>& set, const IKeyNavigation::Index& currentIndex, MoveDirection direction = MoveDirection::Left)
+static T* prevEnabled(const std::set<T*>& set, const IKeyNavigation::Index& currentIndex, MoveDirection direction = MoveDirection::Left)
 {
     if (set.empty()) {
         return nullptr;
@@ -211,7 +214,7 @@ static T* prevEnabled(const QSet<T*>& set, const IKeyNavigation::Index& currentI
 }
 
 template<class T>
-static T* findActive(const QSet<T*>& set)
+static T* findActive(const std::set<T*>& set)
 {
     auto it = std::find_if(set.cbegin(), set.cend(), [](const T* s) {
         return s->active();
@@ -226,6 +229,8 @@ static T* findActive(const QSet<T*>& set)
 
 void KeyNavigationController::init()
 {
+    dispatcher()->reg(this, "nav-dev-show-controls", this, &KeyNavigationController::devShowControls);
+
     dispatcher()->reg(this, "nav-next-section", this, &KeyNavigationController::goToNextSection);
     dispatcher()->reg(this, "nav-prev-section", this, &KeyNavigationController::goToPrevSection);
     dispatcher()->reg(this, "nav-next-subsection", this, &KeyNavigationController::goToNextSubSection);
@@ -240,8 +245,8 @@ void KeyNavigationController::init()
 
     dispatcher()->reg(this, "nav-first-control", this, &KeyNavigationController::goToFirstControl);     // typically Home key
     dispatcher()->reg(this, "nav-last-control", this, &KeyNavigationController::goToLastControl);       // typically End key
-    dispatcher()->reg(this, "nav-nextrow-control", this, &KeyNavigationController::goToNextRowControl); // typically PageDown key
-    dispatcher()->reg(this, "nav-prevrow-control", this, &KeyNavigationController::goToPrevRowControl); // typically PageUp key
+    dispatcher()->reg(this, "nav-nextrow-control", this, &KeyNavigationController::goToNextRowControl);     // typically PageDown key
+    dispatcher()->reg(this, "nav-prevrow-control", this, &KeyNavigationController::goToPrevRowControl);     // typically PageUp key
 }
 
 void KeyNavigationController::reg(IKeyNavigationSection* s)
@@ -257,8 +262,20 @@ void KeyNavigationController::reg(IKeyNavigationSection* s)
 
 void KeyNavigationController::unreg(IKeyNavigationSection* s)
 {
-    m_sections.remove(s);
+    m_sections.erase(s);
     s->forceActiveRequested().resetOnReceive(this);
+}
+
+const std::set<IKeyNavigationSection*>& KeyNavigationController::sections() const
+{
+    return m_sections;
+}
+
+void KeyNavigationController::devShowControls()
+{
+    if (!interactive()->isOpened(DEV_SHOW_CONTROLS_URI.uri()).val) {
+        interactive()->open(DEV_SHOW_CONTROLS_URI);
+    }
 }
 
 void KeyNavigationController::doActivateSection(IKeyNavigationSection* s)

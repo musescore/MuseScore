@@ -24,6 +24,9 @@ using namespace mu::ui;
 using namespace mu::actions;
 
 const UiActionList KeyNavigationUiActions::m_actions = {
+    UiAction("nav-dev-show-controls",
+             mu::context::UiCtxAny
+             ),
     UiAction("nav-next-section",
              mu::context::UiCtxAny
              ),

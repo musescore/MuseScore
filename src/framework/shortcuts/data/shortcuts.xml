@@ -2,6 +2,10 @@
 <Shortcuts>
 <!-- Keyboard navigation -->
     <SC>
+        <key>nav-dev-show-controls</key>
+        <seq>Ctrl+F1</seq>
+    </SC>
+    <SC>
         <key>nav-next-section</key>
         <seq>F6</seq>
     </SC>

@@ -20,7 +20,7 @@ Rectangle {
 
     KeyNavigationSubSection {
         id: keynavSub
-        name: "NotationToolBar"
+        name: "NoteInputBar"
     }
 
     NoteInputBarModel {
@@ -59,6 +59,7 @@ Rectangle {
             iconFont: ui.theme.toolbarIconsFont
 
             keynav.subsection: keynavSub
+            keynav.name: hint
             keynav.order: Boolean(item) ? item.orderRole : 0
 
             pressAndHoldInterval: 200

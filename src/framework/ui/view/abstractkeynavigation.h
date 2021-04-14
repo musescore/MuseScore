@@ -25,7 +25,7 @@
 #include "../ikeynavigation.h"
 
 namespace mu::ui {
-class AbstractKeyNavigation : public QObject, public IKeyNavigation, public QQmlParserStatus
+class AbstractKeyNavigation : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -47,11 +47,16 @@ public:
     int column() const;
     int row() const;
 
-    QString name() const override;
-    const Index& index() const override;
-    bool enabled() const override;
-    bool active() const override;
-    async::Channel<bool> activeChanged() const override;
+    QString name() const;
+
+    const IKeyNavigation::Index& index() const;
+    async::Channel<IKeyNavigation::Index> indexChanged() const;
+
+    bool enabled() const;
+    async::Channel<bool> enabledChanged() const;
+
+    bool active() const;
+    async::Channel<bool> activeChanged() const;
 
     // QQmlParserStatus
     void classBegin() override;
@@ -63,7 +68,7 @@ public slots:
     void setColumn(int column);
     void setRow(int row);
     void setEnabled(bool enabled);
-    void setActive(bool active) override;
+    void setActive(bool active);
 
 signals:
     void nameChanged(QString name);
@@ -76,8 +81,12 @@ signals:
 protected:
 
     QString m_name;
-    Index m_index;
+    IKeyNavigation::Index m_index;
+    async::Channel<IKeyNavigation::Index> m_indexChanged;
+
     bool m_enabled = true;
+    async::Channel<bool> m_enabledChanged;
+
     bool m_active = false;
     async::Channel<bool> m_activeChanged;
 };
