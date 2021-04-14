@@ -26,11 +26,14 @@
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "async/asyncable.h"
+#include "global/iinteractive.h"
 
 namespace mu::ui {
 class KeyNavigationController : public IKeyNavigationController, public actions::Actionable, public async::Asyncable
 {
     INJECT(ui, actions::IActionsDispatcher, dispatcher)
+    INJECT(ui, framework::IInteractive, interactive)
+
 public:
     KeyNavigationController() = default;
 
@@ -46,9 +49,14 @@ public:
     void reg(IKeyNavigationSection* s) override;
     void unreg(IKeyNavigationSection* s) override;
 
+    const std::set<IKeyNavigationSection*>& sections() const override;
+
     void init();
 
 private:
+
+    void devShowControls();
+
     void goToNextSection();
     void goToPrevSection();
     void goToNextSubSection();
@@ -83,7 +91,7 @@ private:
     IKeyNavigationSubSection* activeSubSection() const;
     IKeyNavigationControl* activeControl() const;
 
-    QSet<IKeyNavigationSection*> m_sections;
+    std::set<IKeyNavigationSection*> m_sections;
 };
 }
 

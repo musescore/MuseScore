@@ -81,6 +81,7 @@ Rectangle {
                     iconFont: ui.theme.toolbarIconsFont
 
                     keynav.subsection: keynavSub
+                    keynav.name: model.hint
                     keynav.order: model.index
                     keynav.enabled: playbackModel.isPlayAllowed
 
