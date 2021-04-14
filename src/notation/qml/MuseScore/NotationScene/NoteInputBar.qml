@@ -88,6 +88,7 @@ Rectangle {
             }
 
             Canvas {
+
                 visible: item.showSubitemsByPressAndHoldRole
 
                 width: 4
