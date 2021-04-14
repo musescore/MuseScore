@@ -5,7 +5,7 @@ StyledTextLabel {
     id: root
 
     property int iconCode: IconCode.NONE
-    property bool isEmpty: iconCode === IconCode.NONE
+    readonly property bool isEmpty: iconCode === IconCode.NONE
 
     height: isEmpty ? 0 : implicitHeight
     width: isEmpty ? 0 : implicitWidth

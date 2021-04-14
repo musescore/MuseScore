@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>qml/MuseScore/Playback/qmldir</file>
         <file>qml/MuseScore/Playback/PlaybackToolBar.qml</file>
-        <file>qml/MuseScore/Playback/internal/PlaybackSettingsPopup.qml</file>
         <file>qml/MuseScore/Playback/internal/MeasureAndBeatFields.qml</file>
     </qresource>
 </RCC>

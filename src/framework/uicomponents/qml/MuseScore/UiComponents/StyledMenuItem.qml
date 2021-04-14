@@ -15,7 +15,15 @@ ListItemBlank {
     isSelected: Boolean(privateProperties.showedSubMenu) || (privateProperties.hasIcon && privateProperties.isSelectable && privateProperties.isSelected)
 
     property var modelData
-    property bool reserveSpaceForInvisibleItems: true
+
+    enum IconAndCheckMarkMode {
+        None,
+        ShowOne,
+        ShowBoth
+    }
+
+    property int iconAndCheckMarkMode: StyledMenuItem.ShowOne
+    property bool reserveSpaceForShortcutOrSubmenuIndicator: privateProperties.hasShortcut || privateProperties.hasSubMenu
 
     signal subMenuShowed()
     signal subMenuClosed()
@@ -24,6 +32,8 @@ ListItemBlank {
 
     QtObject {
         id: privateProperties
+
+        property bool hasShortcut: Boolean(modelData) && Boolean(modelData.shortcut)
 
         property bool hasSubMenu: Boolean(modelData) && Boolean(modelData.subitems) && modelData.subitems.length > 0
         property var showedSubMenu: undefined
@@ -48,7 +58,7 @@ ListItemBlank {
 
             menu.model = modelData.subitems
 
-            menu.handleAction.connect(function(actionCode, actionIndex){
+            menu.handleAction.connect(function(actionCode, actionIndex) {
                 Qt.callLater(root.handleAction, actionCode, actionIndex)
                 menu.close()
             })
@@ -69,9 +79,9 @@ ListItemBlank {
     RowLayout {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
-        anchors.leftMargin: 12
+        anchors.leftMargin: root.iconAndCheckMarkMode === StyledMenuItem.None ? 24 : 12
         anchors.right: parent.right
-        anchors.rightMargin: 12
+        anchors.rightMargin: 18
 
         spacing: 12
 
@@ -79,42 +89,46 @@ ListItemBlank {
             Layout.alignment: Qt.AlignLeft
             width: 16
             iconCode: {
-                if (privateProperties.isCheckable) {
-                    return privateProperties.isChecked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
-                } else if (privateProperties.hasIcon) {
+                if (root.iconAndCheckMarkMode !== StyledMenuItem.ShowBoth && privateProperties.hasIcon) {
                     return privateProperties.hasIcon ? modelData.icon : IconCode.NONE
-                } else if (privateProperties.isSelectable) {
+                } else if (privateProperties.isCheckable) {
+                    return privateProperties.isChecked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
+                } else  if (privateProperties.isSelectable) {
                     return privateProperties.isSelected ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
                 }
 
                 return IconCode.NONE
             }
+            visible: !isEmpty || root.iconAndCheckMarkMode !== StyledMenuItem.None
+        }
 
-            visible: !isEmpty || reserveSpaceForInvisibleItems
+        StyledIconLabel {
+            Layout.alignment: Qt.AlignLeft
+            width: 16
+            iconCode: privateProperties.hasIcon ? modelData.icon : IconCode.NONE
+            visible: root.iconAndCheckMarkMode === StyledMenuItem.ShowBoth
         }
 
         StyledTextLabel {
             Layout.fillWidth: true
             text: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
             horizontalAlignment: Text.AlignLeft
-
-            visible: Boolean(text) || reserveSpaceForInvisibleItems
         }
 
         StyledTextLabel {
+            id: shortcutLabel
             Layout.alignment: Qt.AlignRight
-            text: Boolean(modelData) && Boolean(modelData.shortcut) ? modelData.shortcut : ""
+            text: privateProperties.hasShortcut ? modelData.shortcut : ""
             horizontalAlignment: Text.AlignRight
-
-            visible: Boolean(text) || reserveSpaceForInvisibleItems
+            visible: !isEmpty || (root.reserveSpaceForShortcutOrSubmenuIndicator)
         }
 
         StyledIconLabel {
+            id: submenuIndicator
             Layout.alignment: Qt.AlignRight
             width: 16
             iconCode: privateProperties.hasSubMenu ? IconCode.SMALL_ARROW_RIGHT : IconCode.NONE
-
-            visible: !isEmpty || reserveSpaceForInvisibleItems
+            visible: !isEmpty || (root.reserveSpaceForShortcutOrSubmenuIndicator && !shortcutLabel.visible)
         }
     }
 
