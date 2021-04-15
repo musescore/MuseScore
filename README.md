@@ -1,7 +1,7 @@
 ![MuseScore](assets/musescore_logo_full.png)
 Music notation and composition software
 
-[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 MuseScore is an open source and free music notation software. For support, contribution, and bug reports visit MuseScore.org. Fork and make pull requests!
 
@@ -24,7 +24,7 @@ MuseScore is an open source and free music notation software. For support, contr
 - [How to compile MuseScore?](https://musescore.org/en/developers-handbook/compilation)
 
 ## License
-MuseScore is licensed under GPL version 2.0. See [LICENSE.GPL](https://github.com/musescore/MuseScore/blob/master/LICENSE.GPL) in the same directory.
+MuseScore is licensed under GPL version 3.0. See [LICENSE.GPL](https://github.com/musescore/MuseScore/blob/master/LICENSE.GPL) in the same directory.
 
 ## Packages
 See [Code Structure on Wiki](https://github.com/musescore/MuseScore/wiki/CodeStructure)
