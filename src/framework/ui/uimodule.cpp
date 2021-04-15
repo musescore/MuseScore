@@ -25,7 +25,9 @@
 #include "view/qmldialog.h"
 #include "view/keynavigationsection.h"
 #include "view/keynavigationsubsection.h"
+#include "view/keynavigationpopuppanel.h"
 #include "view/keynavigationcontrol.h"
+#include "view/keynavigationevent.h"
 
 #include "dev/interactivetestsmodel.h"
 #include "dev/testdialog.h"
@@ -106,8 +108,10 @@ void UiModule::registerUiTypes()
     qmlRegisterType<QmlDialog>("MuseScore.Ui", 1, 0, "QmlDialog");
 
     qmlRegisterUncreatableType<AbstractKeyNavigation>("MuseScore.Ui", 1, 0, "AbstractKeyNavigation", "Cannot create a AbstractType");
+    qmlRegisterUncreatableType<KeyNavigationEvent>("MuseScore.Ui", 1, 0, "KeyNavigationEvent", "Cannot create a KeyNavigationEvent");
     qmlRegisterType<KeyNavigationSection>("MuseScore.Ui", 1, 0, "KeyNavigationSection");
     qmlRegisterType<KeyNavigationSubSection>("MuseScore.Ui", 1, 0, "KeyNavigationSubSection");
+    qmlRegisterType<KeyNavigationPopupPanel>("MuseScore.Ui", 1, 0, "KeyNavigationPopupPanel");
     qmlRegisterType<KeyNavigationControl>("MuseScore.Ui", 1, 0, "KeyNavigationControl");
 
     qmlRegisterType<InteractiveTestsModel>("MuseScore.Ui", 1, 0, "InteractiveTestsModel");

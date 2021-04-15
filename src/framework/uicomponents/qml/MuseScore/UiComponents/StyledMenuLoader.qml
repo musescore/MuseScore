@@ -12,7 +12,7 @@ Loader {
         return loader.menu && loader.menu.isOpened
     }
 
-    function toggleOpened(model) {
+    function toggleOpened(model, keynavParentControl) {
         if (!loader.sourceComponent) {
             loader.sourceComponent = itemMenuComp
         }
@@ -24,8 +24,16 @@ Loader {
         }
 
         menu.parent = loader.parent
+        if (keynavParentControl) {
+            menu.keynav.parentControl = keynavParentControl
+            menu.keynav.name = keynavParentControl.name+"PopupMenu"
+        }
         menu.model = model
         menu.open()
+
+        if (!menu.focusOnSelected()) {
+            menu.focusOnFirstItem()
+        }
     }
 
     Component {

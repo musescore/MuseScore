@@ -92,6 +92,11 @@ mu::async::Channel<bool> KeyNavigationSection::activeChanged() const
     return AbstractKeyNavigation::activeChanged();
 }
 
+void KeyNavigationSection::onEvent(EventPtr e)
+{
+    AbstractKeyNavigation::onEvent(e);
+}
+
 void KeyNavigationSection::addSubSection(KeyNavigationSubSection* sub)
 {
     IF_ASSERT_FAILED(sub) {

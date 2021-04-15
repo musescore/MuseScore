@@ -51,6 +51,7 @@ Rectangle {
         }
 
         itemDelegate: FlatButton {
+            id: btn
             property var item: Boolean(itemModel) ? itemModel : null
             property var hasSubitems: Boolean(item) && item.subitemsRole.length !== 0
 
@@ -64,6 +65,14 @@ Rectangle {
             keynav.subsection: keynavSub
             keynav.name: hint
             keynav.order: Boolean(item) ? item.orderRole : 0
+            isClickOnKeyNavTriggered: false
+            keynav.onTriggered: {
+                if (hasSubitems && item.showSubitemsByPressAndHoldRole) {
+                    btn.pressAndHold()
+                } else {
+                    btn.clicked()
+                }
+            }
 
             pressAndHoldInterval: 200
 
@@ -72,7 +81,7 @@ Rectangle {
 
             onClicked: {
                 if (menuLoader.isMenuOpened() || (hasSubitems && !item.showSubitemsByPressAndHoldRole)) {
-                    menuLoader.toggleOpened(item.subitemsRole)
+                    menuLoader.toggleOpened(item.subitemsRole, btn.keynav)
                     return
                 }
 
@@ -84,7 +93,7 @@ Rectangle {
                     return
                 }
 
-                menuLoader.toggleOpened(item.subitemsRole)
+                menuLoader.toggleOpened(item.subitemsRole, btn.keynav)
             }
 
             Canvas {

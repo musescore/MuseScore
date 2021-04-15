@@ -73,6 +73,7 @@ private:
     void onRight();
     void onUp();
     void onDown();
+    void onEscape();
 
     void doTriggerControl();
     void onForceActiveRequested(IKeyNavigationSection* sec, IKeyNavigationSubSection* sub, IKeyNavigationControl* ctrl);

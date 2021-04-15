@@ -16,46 +16,33 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
-#ifndef MU_UI_KEYNAVDEVMODEL_H
-#define MU_UI_KEYNAVDEVMODEL_H
+#ifndef MU_UI_KEYNAVIGATIONPOPUPPANEL_H
+#define MU_UI_KEYNAVIGATIONPOPUPPANEL_H
 
 #include <QObject>
-#include <QTimer>
-#include "modularity/ioc.h"
-#include "ui/ikeynavigationcontroller.h"
-#include "async/asyncable.h"
+#include "keynavigationsubsection.h"
+#include "keynavigationcontrol.h"
 
 namespace mu::ui {
-class AbstractKeyNavDevItem;
-class KeyNavDevModel : public QObject, public async::Asyncable
+class KeyNavigationPopupPanel : public KeyNavigationSubSection
 {
     Q_OBJECT
 
-    Q_PROPERTY(QVariantList sections READ sections NOTIFY sectionsChanged)
+    Q_PROPERTY(KeyNavigationControl * parentControl READ parentControl WRITE setParentControl NOTIFY parentControlChanged)
 
-    INJECT(ui, IKeyNavigationController, keynavController)
 public:
-    explicit KeyNavDevModel(QObject* parent = nullptr);
+    explicit KeyNavigationPopupPanel(QObject* parent = nullptr);
 
-    QVariantList sections() const;
+    KeyNavigationControl* parentControl() const;
 
-    Q_INVOKABLE void reload();
+public slots:
+    void setParentControl(KeyNavigationControl* parentControl);
 
 signals:
-    void beforeReload();
-    void afterReload();
-    void sectionsChanged();
+    void parentControlChanged(KeyNavigationControl* parentControl);
 
 private:
-
-    QVariant toWrap(IKeyNavigationSection* s);
-    QVariant toWrap(IKeyNavigationSubSection* sub);
-    QVariant toWrap(IKeyNavigationControl* ctrl);
-
-    QVariantList m_sections;
-    mutable QList<AbstractKeyNavDevItem*> m_memstore;
-    QTimer m_reloadDelayer;
+    KeyNavigationControl* m_parentControl = nullptr;
 };
 }
-
-#endif // MU_UI_KEYNAVDEVMODEL_H
+#endif // MU_UI_KEYNAVIGATIONPOPUPPANEL_H

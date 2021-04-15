@@ -46,14 +46,6 @@
         <seq>Down</seq>
     </SC>
     <SC>
-      <key>nav-trigger-control</key>
-      <seq>Return</seq>
-    </SC>
-    <SC>
-      <key>nav-trigger-control</key>
-      <seq>Space</seq>
-    </SC>
-    <SC>
       <key>nav-first-control</key>
       <seq>Home</seq>
     </SC>
@@ -68,6 +60,18 @@
     <SC>
       <key>nav-prevrow-control</key>
       <seq>PgUp</seq>
+    </SC>
+    <SC>
+      <key>nav-trigger-control</key>
+      <seq>Return</seq>
+    </SC>
+    <SC>
+      <key>nav-trigger-control</key>
+      <seq>Space</seq>
+    </SC>
+    <SC>
+      <key>nav-escape</key>
+      <seq>Esc</seq>
     </SC>
 <!-- end Keyboard navigation -->
 

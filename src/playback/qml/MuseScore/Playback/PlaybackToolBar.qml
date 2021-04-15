@@ -69,6 +69,7 @@ Rectangle {
                         id: menuItemComp
 
                         FlatButton {
+                            id: btn
                             property var modelData
                             property var hasSubitems: modelData.subitems.length !== 0
 
@@ -87,7 +88,7 @@ Rectangle {
 
                             onClicked: {
                                 if (menuLoader.isMenuOpened() || hasSubitems) {
-                                    menuLoader.toggleOpened(modelData.subitems)
+                                    menuLoader.toggleOpened(modelData.subitems, btn.keynav)
                                     return
                                 }
 
