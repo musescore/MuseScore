@@ -425,6 +425,8 @@ void NotationActionController::addNote(NoteName note, NoteAddingMode addingMode)
     }
 
     noteInput->addNote(note, addingMode);
+
+    playSelectedElement();
 }
 
 void NotationActionController::addText(TextType type)
@@ -475,6 +477,8 @@ void NotationActionController::putNote(const actions::ActionData& data)
     bool insert = data.arg<bool>(2);
 
     noteInput->putNote(pos, replace, insert);
+
+    playSelectedElement();
 }
 
 void NotationActionController::toggleVisible()
@@ -624,6 +628,8 @@ void NotationActionController::moveAction(const actions::ActionCode& actionCode)
         } else {
             NOT_SUPPORTED << actionCode;
         }
+
+        playSelectedElement();
     }
 }
 
@@ -1384,6 +1390,25 @@ void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
     }
 
     interaction->setScoreConfig(config);
+}
+
+void NotationActionController::playSelectedElement()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    Element* element = interaction->selection()->element();
+    if (!element || !element->isNote()) {
+        return;
+    }
+
+    if (playbackConfiguration()->playChordWhenEditing()) {
+        element = element->elementBase();
+    }
+
+    playbackController()->playElement(element);
 }
 
 void NotationActionController::startNoteInputIfNeed()
