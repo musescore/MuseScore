@@ -7567,10 +7567,10 @@
                   <Articulation name="marcato">
                         <velocity>500</velocity>
                   </Articulation>
-                  <channel>
+                  <Channel>
                         <controller ctrl="0" value="1"/>
                         <program value="56"/> <!--Marching Snare-->
-                  </channel>
+                  </Channel>
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="marching-tenor-drums">
@@ -7775,10 +7775,10 @@
                   <Articulation name="marcato">
                         <velocity>500</velocity>
                   </Articulation>
-                  <channel>
+                  <Channel>
                         <controller ctrl="0" value="1"/>
                         <program value="96"/> <!--Marching Tenor-->
-                  </channel>
+                  </Channel>
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="marching-bass-drums">
@@ -7885,10 +7885,10 @@
                   <Articulation name="marcato">
                         <velocity>500</velocity>
                   </Articulation>
-                  <channel>
+                  <Channel>
                         <controller ctrl="0" value="1"/>
                         <program value="59"/> <!--Marching Bass-->
-                  </channel>
+                  </Channel>
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="marching-cymbals">
@@ -7996,10 +7996,10 @@
                   <Articulation name="marcato">
                         <velocity>500</velocity>
                   </Articulation>
-                  <channel>
+                  <Channel>
                         <controller ctrl="0" value="1"/>
                         <program value="58"/> <!--Marching Cymbals-->
-                  </channel>
+                  </Channel>
                   <genre>marching</genre>
             </Instrument>
       </InstrumentGroup>
@@ -10385,7 +10385,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>classroom</genre>
             </Instrument>
             <Instrument id="guitar-steel-treble-clef">
-                  <family>guitar</family>
+                  <family>guitars</family>
                   <trackName>Acoustic Guitar (Treble Clef)</trackName>
                   <longName>Guitar</longName>
                   <shortName>Guit.</shortName>
