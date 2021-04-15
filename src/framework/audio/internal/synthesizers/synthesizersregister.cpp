@@ -29,7 +29,7 @@ void SynthesizersRegister::registerSynthesizer(const SynthName& name, ISynthesiz
     std::lock_guard<std::mutex> lock(m_mutex);
     m_synths[name] = std::make_shared<SanitySynthesizer>(s);
 
-    m_synthNotificationChannel.send(m_synths[name]);
+    m_synthAdded.send(m_synths[name]);
 }
 
 std::shared_ptr<ISynthesizer> SynthesizersRegister::synthesizer(const SynthName& name) const
@@ -54,9 +54,9 @@ std::vector<std::shared_ptr<ISynthesizer> > SynthesizersRegister::synthesizers()
     return synths;
 }
 
-async::Channel<ISynthesizerPtr> SynthesizersRegister::synthesizerAddedNotify() const
+async::Channel<ISynthesizerPtr> SynthesizersRegister::synthesizerAdded() const
 {
-    return m_synthNotificationChannel;
+    return m_synthAdded;
 }
 
 void SynthesizersRegister::setDefaultSynthesizer(const SynthName& name)

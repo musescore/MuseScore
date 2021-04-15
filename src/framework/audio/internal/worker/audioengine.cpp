@@ -104,8 +104,8 @@ void AudioEngine::onDriverOpened(unsigned int sampleRate, uint16_t readBufferSiz
         m_mixer->addChannel(synth);
     }
 
-    synthesizersRegister()->synthesizerAddedNotify().onReceive(this, [this](const ISynthesizerPtr& synth) {
-       m_mixer->addChannel(synth);
+    synthesizersRegister()->synthesizerAdded().onReceive(this, [this](const ISynthesizerPtr& synth) {
+        m_mixer->addChannel(synth);
     });
 }
 

@@ -101,7 +101,7 @@ VstPluginMeta VstPlugin::meta() const
     return result;
 }
 
-PluginViewPtr VstPlugin::view()
+PluginViewPtr VstPlugin::view() const
 {
     if (m_pluginView) {
         return m_pluginView;
@@ -112,7 +112,7 @@ PluginViewPtr VstPlugin::view()
     return m_pluginView;
 }
 
-PluginComponentPtr VstPlugin::component()
+PluginComponentPtr VstPlugin::component() const
 {
     if (m_pluginComponent) {
         return m_pluginComponent;

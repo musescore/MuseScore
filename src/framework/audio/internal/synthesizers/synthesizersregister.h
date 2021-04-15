@@ -32,7 +32,7 @@ public:
     void registerSynthesizer(const SynthName& name, ISynthesizerPtr s) override;
     std::shared_ptr<ISynthesizer> synthesizer(const SynthName& name) const override;
     std::vector<std::shared_ptr<ISynthesizer> > synthesizers() const override;
-    async::Channel<ISynthesizerPtr> synthesizerAddedNotify() const override;
+    async::Channel<ISynthesizerPtr> synthesizerAdded() const override;
 
     void setDefaultSynthesizer(const SynthName& name) override;
     std::shared_ptr<ISynthesizer> defaultSynthesizer() const override;
@@ -41,7 +41,7 @@ private:
 
     mutable std::mutex m_mutex;
     std::map<std::string, std::shared_ptr<ISynthesizer> > m_synths;
-    async::Channel<ISynthesizerPtr> m_synthNotificationChannel;
+    async::Channel<ISynthesizerPtr> m_synthAdded;
     SynthName m_defaultName;
 };
 }

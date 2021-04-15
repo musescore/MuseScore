@@ -24,16 +24,18 @@ private:
         unsigned int sampleRate = 0;
         unsigned int samplesPerBlock = 0;
 
-        bool isValid() {
+        bool isValid()
+        {
             return sampleRate > 0 && samplesPerBlock > 0;
         }
     };
 
+    IAudioProcessorPtr pluginProcessor() const;
     void setUpProcessData();
     void updateProcessSetup();
     void fillOutputBuffer(unsigned int samples, float* output);
 
-    VstEvent vstFromMidi(const mu::midi::Event& event);
+    bool convertMidiToVst(const mu::midi::Event& in, VstEvent& out) const;
 
     PluginComponentPtr m_pluginComponent = nullptr;
 
