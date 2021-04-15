@@ -52,6 +52,8 @@ public:
     void setActive(bool arg) override;
     async::Channel<bool> activeChanged() const override;
 
+    void onEvent(EventPtr e) override;
+
     const std::set<IKeyNavigationSubSection*>& subsections() const override;
     async::Notification subsectionsListChanged() const override;
 

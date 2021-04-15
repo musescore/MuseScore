@@ -25,6 +25,7 @@ FocusableControl {
     Accessible.selected: isSelected
 
     background.color: normalStateColor
+    background.opacity: root.enabled ? 1 : ui.theme.itemOpacityDisabled
 
     mouseArea.hoverEnabled: root.visible
     mouseArea.onHoveredChanged: root.hovered(mouseArea.containsMouse, mouseArea.mouseX, mouseArea.mouseY)
@@ -49,8 +50,6 @@ FocusableControl {
 
         property color defaultColor: ui.theme.buttonColor
     }
-
-    background.opacity: root.enabled ? 1 : ui.theme.itemOpacityDisabled
 
     states: [
         State {

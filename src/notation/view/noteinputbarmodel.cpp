@@ -210,11 +210,16 @@ void NoteInputBarModel::toggleNoteInputMethod(const ActionCode& actionCode)
         return;
     }
 
-    if (!isNoteInputMode()) {
-        noteInput()->startNoteInput();
+    NoteInputMethod currentMethod = noteInputState().method;
+    NoteInputMethod actionMethod = noteInputModeActions[actionCode];
+    if (currentMethod == actionMethod) {
+        toggleNoteInput();
+    } else {
+        if (!isNoteInputMode()) {
+            noteInput()->startNoteInput();
+        }
+        noteInput()->toggleNoteInputMethod(actionMethod);
     }
-
-    noteInput()->toggleNoteInputMethod(noteInputModeActions[actionCode]);
 }
 
 void NoteInputBarModel::updateState()
@@ -612,10 +617,11 @@ MenuItemList NoteInputBarModel::noteInputMethodItems() const
 {
     MenuItemList items;
 
+    actions::ActionCode currentInputMethod = currentNoteInputModeAction().code;
     for (const ActionCode& actionCode : noteInputModeActions.keys()) {
         MenuItem item = makeAction(actionCode);
         item.selectable = true;
-        if (actionCode == currentNoteInputModeAction().code) {
+        if (actionCode == currentInputMethod) {
             item.selected = true;
         }
         items.push_back(item);

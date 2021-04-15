@@ -72,6 +72,11 @@ mu::async::Channel<bool> KeyNavigationControl::activeChanged() const
     return AbstractKeyNavigation::activeChanged();
 }
 
+void KeyNavigationControl::onEvent(EventPtr e)
+{
+    AbstractKeyNavigation::onEvent(e);
+}
+
 void KeyNavigationControl::trigger()
 {
     emit triggered();

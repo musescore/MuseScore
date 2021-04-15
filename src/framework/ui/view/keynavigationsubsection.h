@@ -59,6 +59,8 @@ public:
     void setActive(bool arg) override;
     async::Channel<bool> activeChanged() const override;
 
+    void onEvent(EventPtr e) override;
+
     QmlDirection direction_property() const;
     Direction direction() const override;
 

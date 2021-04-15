@@ -51,6 +51,9 @@ const UiActionList KeyNavigationUiActions::m_actions = {
     UiAction("nav-down",
              mu::context::UiCtxAny
              ),
+    UiAction("nav-escape",
+             mu::context::UiCtxAny
+             ),
     UiAction("nav-trigger-control",
              mu::context::UiCtxAny
              ),

@@ -18,6 +18,8 @@
 //=============================================================================
 #include "abstractkeynavigation.h"
 
+#include "log.h"
+
 using namespace mu::ui;
 
 AbstractKeyNavigation::AbstractKeyNavigation(QObject* parent)
@@ -153,6 +155,12 @@ bool AbstractKeyNavigation::active() const
 mu::async::Channel<bool> AbstractKeyNavigation::activeChanged() const
 {
     return m_activeChanged;
+}
+
+void AbstractKeyNavigation::onEvent(IKeyNavigation::EventPtr e)
+{
+    KeyNavigationEvent ev(e);
+    emit keyNavEvent(QVariant::fromValue(ev));
 }
 
 void AbstractKeyNavigation::classBegin()

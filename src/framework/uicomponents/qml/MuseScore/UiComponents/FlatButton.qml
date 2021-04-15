@@ -18,6 +18,8 @@ FocusableControl {
 
     property int orientation: Qt.Vertical
 
+    property bool isClickOnKeyNavTriggered: true
+
     signal clicked()
     signal pressAndHold()
 
@@ -49,7 +51,11 @@ FocusableControl {
         }
     }
 
-    keynav.onTriggered: root.clicked()
+    keynav.onTriggered: {
+        if (root.isClickOnKeyNavTriggered) {
+            root.clicked()
+        }
+    }
 
     background.color: normalStateColor
     background.opacity: ui.theme.buttonOpacityNormal

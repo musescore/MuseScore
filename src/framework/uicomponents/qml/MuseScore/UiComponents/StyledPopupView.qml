@@ -38,6 +38,9 @@ PopupView {
 
     property bool animationEnabled: true
 
+    property alias keynav: keynavPanel
+    property bool isDoActiveParentOnClose: true
+
     closePolicy: PopupView.CloseOnPressOutsideParent
 
     onAboutToShow: {
@@ -52,6 +55,30 @@ PopupView {
 
     padding: 24
     property int margins: 12
+
+    property KeyNavigationPopupPanel keynavPanel: KeyNavigationPopupPanel {
+        id: keynavPanel
+        enabled: root.isOpened
+        order: 0
+
+        onActiveChanged: {
+            if (keynavPanel.active) {
+                root.forceActiveFocus()
+            }
+        }
+
+        onKeyNavEvent: {
+            if (event.type === KeyNavigationEvent.Escape) {
+                root.close()
+            }
+        }
+    }
+
+    onClosed: {
+        if (root.isDoActiveParentOnClose && keynavPanel.parentControl) {
+            keynavPanel.parentControl.forceActive()
+        }
+    }
 
     backgroundItem: Item {
         anchors.fill: parent
