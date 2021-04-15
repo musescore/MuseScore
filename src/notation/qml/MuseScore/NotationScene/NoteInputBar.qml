@@ -37,13 +37,16 @@ Rectangle {
 
         sectionRole: "sectionRole"
 
+        rowSpacing: 6
+        columnSpacing: 6
+
         cellWidth: 36
         cellHeight: cellWidth
 
         model: noteInputModel
 
         sectionDelegate: SeparatorLine {
-            orientation: gridView.orientation === Qt.Vertical ? Qt.Horizontal : Qt.Vertical
+            orientation: gridView.isHorizontal ? Qt.Vertical : Qt.Horizontal
             visible: itemIndex !== 0
         }
 
@@ -108,6 +111,27 @@ Rectangle {
                     menuLoader.menu.open()
                 }
             }
+
+            Canvas {
+                visible: item.showSubitemsByPressAndHoldRole
+
+                width: 4
+                height: 4
+
+                anchors.margins: 2
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+
+                onPaint: {
+                    const ctx = getContext("2d");
+                    ctx.fillStyle = ui.theme.fontPrimaryColor;
+                    ctx.moveTo(width, 0);
+                    ctx.lineTo(width, height);
+                    ctx.lineTo(0, height);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+            }
         }
     }
 
@@ -129,7 +153,11 @@ Rectangle {
 
         anchors.margins: 8
 
+        width: gridView.cellWidth
+        height: gridView.cellHeight
+
         icon: IconCode.CONFIGURE
+        iconFont: ui.theme.toolbarIconsFont
         normalStateColor: "transparent"
         keynav.subsection: keynavSub
         keynav.order: 100
