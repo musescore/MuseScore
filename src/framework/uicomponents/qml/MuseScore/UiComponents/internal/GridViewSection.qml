@@ -1,20 +1,20 @@
-import QtQuick 2.12
+import QtQuick 2.15
 
 Item {
-    property Component sectionDelegate: Item {}
+    id: root
+    property alias sectionDelegate: loader.sourceComponent
 
     Loader {
+        id: loader
         anchors.fill: parent
 
         property var itemModel: null
         property int itemIndex: 0
-        sourceComponent: sectionDelegate
 
-        onStatusChanged: {
-            if (status === Loader.Ready) {
-                itemModel = Qt.binding( function() { return Boolean(modelData) ? modelData : null });
-                itemIndex = index
-            }
+        onLoaded: {
+            itemModel = Qt.binding( function() { return Boolean(modelData) ? modelData : null });
+            itemIndex = index
+            root.visible = Qt.binding( function() { return Boolean(item) ? item.visible : false })
         }
     }
 }
