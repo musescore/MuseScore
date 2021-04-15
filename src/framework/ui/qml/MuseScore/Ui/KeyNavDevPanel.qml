@@ -14,6 +14,14 @@ Rectangle {
 
     KeyNavDevModel {
         id: keynavModel
+
+        onBeforeReload: {
+            view.model = 0
+        }
+
+        onAfterReload: {
+            view.model = keynavModel.sections
+        }
     }
 
     Row {
@@ -37,6 +45,7 @@ Rectangle {
     }
 
     ListView {
+        id: view
         anchors.top: tools.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
@@ -44,7 +53,7 @@ Rectangle {
         clip: true
         spacing: 8
 
-        model: keynavModel.sections
+        //model: keynavModel.sections
         delegate: Item {
 
             id: item

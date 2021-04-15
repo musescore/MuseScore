@@ -20,6 +20,7 @@
 #define MU_UI_IKEYNAVIGATION_H
 
 #include <tuple>
+#include <memory>
 #include <QString>
 #include <QList>
 #include "async/channel.h"
@@ -37,6 +38,28 @@ class IKeyNavigation
 {
 public:
     virtual ~IKeyNavigation() = default;
+
+    struct Event
+    {
+        //! NOTE Please sync with view/KeyNavigationEvent::Type
+        enum Type {
+            Undefined = 0,
+            Left,
+            Right,
+            Up,
+            Down,
+            Escape
+        };
+
+        Type type = Undefined;
+        bool accepted = false;
+
+        Event(Type t)
+            : type(t) {}
+
+        static std::shared_ptr<Event> make(Type t) { return std::make_shared<Event>(t); }
+    };
+    using EventPtr = std::shared_ptr<Event>;
 
     struct Index
     {
@@ -58,6 +81,8 @@ public:
     virtual bool active() const = 0;
     virtual void setActive(bool arg) = 0;
     virtual async::Channel<bool> activeChanged() const = 0;
+
+    virtual void onEvent(EventPtr e) = 0;
 };
 
 class IKeyNavigationControl : public IKeyNavigation

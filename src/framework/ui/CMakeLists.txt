@@ -105,8 +105,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationsection.h
     ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationsubsection.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationsubsection.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationpopuppanel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationpopuppanel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationcontrol.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationcontrol.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationevent.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationevent.h
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.h

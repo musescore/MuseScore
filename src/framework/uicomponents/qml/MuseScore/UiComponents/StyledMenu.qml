@@ -8,6 +8,11 @@ import MuseScore.Ui 1.0
 StyledPopupView {
     id: root
 
+    property alias model: view.model
+    property int itemWidth: 300
+
+    signal handleAction(string actionCode, int actionIndex)
+
     arrowVisible: false
     positionDisplacementX: 0
     positionDisplacementY: opensUpward ? -view.implicitHeight : parent.height
@@ -18,133 +23,129 @@ StyledPopupView {
     height: view.implicitHeight
     width: itemWidth
 
-    property alias model: view.model
-    property int itemWidth: 300
-
-    signal handleAction(string actionCode, int actionIndex)
+    keynav.name: "StyledMenu"
+    keynav.direction: KeyNavigationSubSection.Vertical
 
     onModelChanged: {
-        privateProperties.hasItemsWithIconAndCheckable = false
-        privateProperties.hasItemsWithIconOrCheckable = false
-        privateProperties.hasItemsWithSubmenu = false
-        privateProperties.hasItemsWithShortcut = false
+        prv.hasItemsWithIconAndCheckable = false
+        prv.hasItemsWithIconOrCheckable = false
+        prv.hasItemsWithSubmenu = false
+        prv.hasItemsWithShortcut = false
 
         for (let i = 0; i < model.length; i++) {
             let modelData = model[i]
             let hasIcon = (Boolean(modelData.icon) && modelData.icon !== IconCode.NONE)
 
             if (modelData.checkable && hasIcon) {
-                privateProperties.hasItemsWithIconAndCheckable = true
-                privateProperties.hasItemsWithIconOrCheckable = true
+                prv.hasItemsWithIconAndCheckable = true
+                prv.hasItemsWithIconOrCheckable = true
             } else if (modelData.checkable || hasIcon) {
-                privateProperties.hasItemsWithIconOrCheckable = true
+                prv.hasItemsWithIconOrCheckable = true
             }
 
             if (Boolean(modelData.subitems) && modelData.subitems.length > 0) {
-                privateProperties.hasItemsWithSubmenu = true
+                prv.hasItemsWithSubmenu = true
             }
 
             if (Boolean(modelData.shortcut)) {
-                privateProperties.hasItemsWithShortcut = true
+                prv.hasItemsWithShortcut = true
             }
         }
     }
 
-    property QtObject privateProperties: QtObject {
+    property QtObject prv_prop: QtObject {
+        id: prv
         property bool hasItemsWithIconAndCheckable: false
         property bool hasItemsWithIconOrCheckable: false
         property bool hasItemsWithSubmenu: false
         property bool hasItemsWithShortcut: false
     }
 
-    Item {
-        implicitHeight: view.contentHeight
+    function focusOnFirstItem() {
+        var loader = view.itemAtIndex(0)
+        if (loader && loader.item) {
+            loader.item.keynav.forceActive()
+        }
+    }
+
+    function focusOnSelected() {
+        for (var i = 0; i < view.count; ++i) {
+            var loader = view.itemAtIndex(i)
+            if (loader && loader.item && loader.item.isSelected) {
+                loader.item.keynav.forceActive()
+                return true
+            }
+        }
+        return false
+    }
+
+    ListView {
+        id: view
+
+        implicitHeight: contentHeight
         implicitWidth: root.itemWidth
 
-        ListView {
-            id: view
+        spacing: 2
+        interactive: false
 
-            anchors.fill: parent
+        delegate: Loader {
+            id: loader
 
-            spacing: 2
-            interactive: false
+            sourceComponent: Boolean(modelData.title) ? menuItemComp : separatorComp
 
-            delegate: Loader {
-                id: loader
+            onLoaded: {
+                loader.item.modelData = modelData
+                loader.item.width = root.itemWidth
+            }
 
-                sourceComponent: Boolean(modelData.title) ? menuItemComp : separatorComp
+            Component {
+                id: menuItemComp
 
-                onLoaded: {
-                    loader.item.modelData = modelData
-                    loader.item.width = root.itemWidth
-                }
+                StyledMenuItem {
+                    id: item
 
-                Component {
-                    id: menuItemComp
+                    keynav.subsection: root.keynav
+                    keynav.column: 0
+                    keynav.row: model.index
 
-                    StyledMenuItem {
-                        id: item
-
-                        iconAndCheckMarkMode: {
-                            if (privateProperties.hasItemsWithIconAndCheckable) {
-                                return StyledMenuItem.ShowBoth
-                            } else if (privateProperties.hasItemsWithIconOrCheckable) {
-                                return StyledMenuItem.ShowOne
-                            }
-                            return StyledMenuItem.None
+                    iconAndCheckMarkMode: {
+                        if (prv.hasItemsWithIconAndCheckable) {
+                            return StyledMenuItem.ShowBoth
+                        } else if (prv.hasItemsWithIconOrCheckable) {
+                            return StyledMenuItem.ShowOne
                         }
-
-                        reserveSpaceForShortcutOrSubmenuIndicator:
-                            privateProperties.hasItemsWithSubmenu || privateProperties.hasItemsWithShortcut
-
-                        onSubMenuShowed: {
-                            root.closePolicy = PopupView.NoAutoClose
-                        }
-
-                        onSubMenuClosed: {
-                            root.closePolicy = PopupView.CloseOnPressOutsideParent
-                        }
-
-                        onHandleAction: {
-                            // NOTE: reset view state
-                            view.update()
-
-                            root.handleAction(actionCode, actionIndex)
-                        }
+                        return StyledMenuItem.None
                     }
-                }
 
-                Component {
-                    id: separatorComp
+                    reserveSpaceForShortcutOrSubmenuIndicator:
+                        prv.hasItemsWithSubmenu || prv.hasItemsWithShortcut
 
-                    Rectangle {
-                        height: 1
-                        color: ui.theme.strokeColor
+                    onSubMenuShowed: {
+                        root.closePolicy = PopupView.NoAutoClose
+                    }
 
-                        property var modelData
+                    onSubMenuClosed: {
+                        root.closePolicy = PopupView.CloseOnPressOutsideParent
+                    }
+
+                    onHandleAction: {
+                        // NOTE: reset view state
+                        view.update()
+
+                        root.handleAction(actionCode, actionIndex)
                     }
                 }
             }
-        }
 
-        Canvas {
-            visible: item.showSubitemsByPressAndHoldRole
+            Component {
+                id: separatorComp
 
-            width: 4
-            height: 4
+                Rectangle {
+                    height: 1
+                    color: ui.theme.strokeColor
 
-            anchors.margins: 2
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-
-            onPaint: {
-                const ctx = getContext("2d");
-                ctx.fillStyle = ui.theme.fontPrimaryColor;
-                ctx.moveTo(width, 0);
-                ctx.lineTo(width, height);
-                ctx.lineTo(0, height);
-                ctx.closePath();
-                ctx.fill();
+                    property var modelData
+                }
             }
         }
     }

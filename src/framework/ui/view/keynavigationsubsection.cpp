@@ -78,6 +78,11 @@ mu::async::Channel<bool> KeyNavigationSubSection::activeChanged() const
     return AbstractKeyNavigation::activeChanged();
 }
 
+void KeyNavigationSubSection::onEvent(EventPtr e)
+{
+    AbstractKeyNavigation::onEvent(e);
+}
+
 void KeyNavigationSubSection::setDirection(QmlDirection direction)
 {
     if (m_direction == direction) {
@@ -132,6 +137,7 @@ void KeyNavigationSubSection::setSection(KeyNavigationSection* section)
     m_section = section;
 
     if (m_section) {
+        m_section->addSubSection(this);
         connect(m_section, &KeyNavigationSection::destroyed, this, &KeyNavigationSubSection::onSectionDestroyed);
     }
 
@@ -145,18 +151,12 @@ void KeyNavigationSubSection::onSectionDestroyed()
 
 void KeyNavigationSubSection::componentComplete()
 {
-    LOGD() << "Completed: " << m_name << ", order: " << order();
-
     IF_ASSERT_FAILED(!m_name.isEmpty()) {
         return;
     }
 
     IF_ASSERT_FAILED(order() > -1) {
         return;
-    }
-
-    if (m_section) {
-        m_section->addSubSection(this);
     }
 }
 

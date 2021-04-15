@@ -28,6 +28,7 @@ using namespace mu::ui;
 static const mu::UriQuery DEV_SHOW_CONTROLS_URI("musescore://devtools/keynav/controls?sync=false&modal=false");
 
 using MoveDirection = KeyNavigationController::MoveDirection;
+using Event = IKeyNavigation::Event;
 
 // algorithms
 template<class T>
@@ -242,9 +243,10 @@ void KeyNavigationController::init()
     dispatcher()->reg(this, "nav-left", this, &KeyNavigationController::onLeft);
     dispatcher()->reg(this, "nav-up", this, &KeyNavigationController::onUp);
     dispatcher()->reg(this, "nav-down", this, &KeyNavigationController::onDown);
+    dispatcher()->reg(this, "nav-escape", this, &KeyNavigationController::onEscape);
 
-    dispatcher()->reg(this, "nav-first-control", this, &KeyNavigationController::goToFirstControl);     // typically Home key
-    dispatcher()->reg(this, "nav-last-control", this, &KeyNavigationController::goToLastControl);       // typically End key
+    dispatcher()->reg(this, "nav-first-control", this, &KeyNavigationController::goToFirstControl);         // typically Home key
+    dispatcher()->reg(this, "nav-last-control", this, &KeyNavigationController::goToLastControl);           // typically End key
     dispatcher()->reg(this, "nav-nextrow-control", this, &KeyNavigationController::goToNextRowControl);     // typically PageDown key
     dispatcher()->reg(this, "nav-prevrow-control", this, &KeyNavigationController::goToPrevRowControl);     // typically PageUp key
 }
@@ -521,13 +523,27 @@ void KeyNavigationController::onRight()
         return;
     }
 
+    IKeyNavigation::EventPtr e = Event::make(Event::Right);
+    activeSubSec->onEvent(e);
+    if (e->accepted) {
+        return;
+    }
+
+    IKeyNavigationControl* activeCtrl = findActive(activeSubSec->controls());
+    if (activeCtrl) {
+        activeCtrl->onEvent(e);
+        if (e->accepted) {
+            return;
+        }
+    }
+
     IKeyNavigationSubSection::Direction direction = activeSubSec->direction();
     switch (direction) {
     case IKeyNavigationSubSection::Direction::Horizontal: {
         goToControl(MoveDirection::Right, activeSubSec);
     } break;
     case IKeyNavigationSubSection::Direction::Vertical: {
-        NOT_IMPLEMENTED;
+        // noop
     } break;
     case IKeyNavigationSubSection::Direction::Both: {
         goToControl(MoveDirection::Right, activeSubSec);
@@ -542,13 +558,27 @@ void KeyNavigationController::onLeft()
         return;
     }
 
+    IKeyNavigation::EventPtr e = Event::make(Event::Left);
+    activeSubSec->onEvent(e);
+    if (e->accepted) {
+        return;
+    }
+
+    IKeyNavigationControl* activeCtrl = findActive(activeSubSec->controls());
+    if (activeCtrl) {
+        activeCtrl->onEvent(e);
+        if (e->accepted) {
+            return;
+        }
+    }
+
     IKeyNavigationSubSection::Direction direction = activeSubSec->direction();
     switch (direction) {
     case IKeyNavigationSubSection::Direction::Horizontal: {
         goToControl(MoveDirection::Left, activeSubSec);
     } break;
     case IKeyNavigationSubSection::Direction::Vertical: {
-        NOT_IMPLEMENTED;
+        // noop
     } break;
     case IKeyNavigationSubSection::Direction::Both: {
         goToControl(MoveDirection::Left, activeSubSec);
@@ -563,10 +593,24 @@ void KeyNavigationController::onDown()
         return;
     }
 
+    IKeyNavigation::EventPtr e = Event::make(Event::Down);
+    activeSubSec->onEvent(e);
+    if (e->accepted) {
+        return;
+    }
+
+    IKeyNavigationControl* activeCtrl = findActive(activeSubSec->controls());
+    if (activeCtrl) {
+        activeCtrl->onEvent(e);
+        if (e->accepted) {
+            return;
+        }
+    }
+
     IKeyNavigationSubSection::Direction direction = activeSubSec->direction();
     switch (direction) {
     case IKeyNavigationSubSection::Direction::Horizontal: {
-        NOT_IMPLEMENTED;
+        // noop
     } break;
     case IKeyNavigationSubSection::Direction::Vertical: {
         goToControl(MoveDirection::Down, activeSubSec);
@@ -584,10 +628,24 @@ void KeyNavigationController::onUp()
         return;
     }
 
+    IKeyNavigation::EventPtr e = Event::make(Event::Up);
+    activeSubSec->onEvent(e);
+    if (e->accepted) {
+        return;
+    }
+
+    IKeyNavigationControl* activeCtrl = findActive(activeSubSec->controls());
+    if (activeCtrl) {
+        activeCtrl->onEvent(e);
+        if (e->accepted) {
+            return;
+        }
+    }
+
     IKeyNavigationSubSection::Direction direction = activeSubSec->direction();
     switch (direction) {
     case IKeyNavigationSubSection::Direction::Horizontal: {
-        NOT_IMPLEMENTED;
+        // noop
     } break;
     case IKeyNavigationSubSection::Direction::Vertical: {
         goToControl(MoveDirection::Up, activeSubSec);
@@ -595,6 +653,25 @@ void KeyNavigationController::onUp()
     case IKeyNavigationSubSection::Direction::Both: {
         goToControl(MoveDirection::Up, activeSubSec);
     } break;
+    }
+}
+
+void KeyNavigationController::onEscape()
+{
+    IKeyNavigationSubSection* activeSubSec = activeSubSection();
+    if (!activeSubSec) {
+        return;
+    }
+
+    IKeyNavigation::EventPtr e = Event::make(Event::Escape);
+    activeSubSec->onEvent(e);
+    if (e->accepted) {
+        return;
+    }
+
+    IKeyNavigationControl* activeCtrl = findActive(activeSubSec->controls());
+    if (activeCtrl) {
+        activeCtrl->onEvent(e);
     }
 }
 

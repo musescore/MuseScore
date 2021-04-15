@@ -50,6 +50,8 @@ public:
     void setActive(bool arg) override;
     async::Channel<bool> activeChanged() const override;
 
+    void onEvent(EventPtr e) override;
+
     void trigger() override;
     async::Channel<IKeyNavigationControl*> forceActiveRequested() const override;
 

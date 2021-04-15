@@ -23,6 +23,7 @@
 #include <QQmlParserStatus>
 
 #include "../ikeynavigation.h"
+#include "keynavigationevent.h"
 
 namespace mu::ui {
 class AbstractKeyNavigation : public QObject, public QQmlParserStatus
@@ -58,6 +59,8 @@ public:
     bool active() const;
     async::Channel<bool> activeChanged() const;
 
+    void onEvent(IKeyNavigation::EventPtr e);
+
     // QQmlParserStatus
     void classBegin() override;
     void componentComplete() override;
@@ -78,6 +81,8 @@ signals:
     void enabledChanged(bool enabled);
     void activeChanged(bool active);
 
+    void keyNavEvent(QVariant event);
+
 protected:
 
     QString m_name;
@@ -89,6 +94,8 @@ protected:
 
     bool m_active = false;
     async::Channel<bool> m_activeChanged;
+
+    KeyNavigationEvent* m_event = nullptr;
 };
 }
 

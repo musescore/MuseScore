@@ -58,6 +58,7 @@ KeyNavDevModel::KeyNavDevModel(QObject* parent)
 
 void KeyNavDevModel::reload()
 {
+    emit beforeReload();
     m_sections.clear();
     qDeleteAll(m_memstore);
     m_memstore.clear();
@@ -71,6 +72,7 @@ void KeyNavDevModel::reload()
     }
 
     emit sectionsChanged();
+    emit afterReload();
 }
 
 QVariant KeyNavDevModel::toWrap(IKeyNavigationSection* s)
