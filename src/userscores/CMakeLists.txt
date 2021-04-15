@@ -57,6 +57,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/templatesrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresuiactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/exporttype.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/exporttype.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/exportscorescenario.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/exportscorescenario.h
     )

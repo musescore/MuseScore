@@ -58,9 +58,7 @@ public:
     void setScoresPath(const io::path& path) override;
 
     io::path defaultSavingFilePath(const io::path& fileName) const override;
-    io::path defaultExportPath(const std::string& fileName) const override;
-    io::path completeExportPath(io::path basePath, notation::INotationPtr notation, bool isMain, bool singlePage,
-                                int pageNumber) const override;
+    io::path completeExportPath(const io::path& basePath, notation::INotationPtr notation, bool isMain, int pageIndex = -1) const override;
 
     QColor templatePreviewBackgroundColor() const override;
     async::Notification templatePreviewBackgroundChanged() const override;

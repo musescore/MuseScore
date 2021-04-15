@@ -36,15 +36,21 @@
 #include "libmscore/draw/qpainterprovider.h"
 
 using namespace mu::iex::imagesexport;
+using namespace mu::notation;
 using namespace mu::system;
 
-std::vector<INotationWriter::UnitType> SvgWriter::supportedUnitTypes() const
+std::vector<WriterUnitType> SvgWriter::supportedUnitTypes() const
 {
-    return { UnitType::PER_PAGE };
+    return { WriterUnitType::PER_PAGE };
 }
 
-mu::Ret SvgWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
+mu::Ret SvgWriter::write(const INotationPtrList& notations, IODevice& destinationDevice, const Options& options)
 {
+    IF_ASSERT_FAILED(!notations.empty()) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    INotationPtr notation = notations.front();
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
     }

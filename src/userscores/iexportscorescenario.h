@@ -22,6 +22,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "notation/inotation.h"
+#include "internal/exporttype.h"
 
 namespace mu::userscores {
 class IExportScoreScenario : MODULE_EXPORT_INTERFACE
@@ -29,9 +30,10 @@ class IExportScoreScenario : MODULE_EXPORT_INTERFACE
     INTERFACE_ID(IExportScoreScenario)
 
 public:
-    virtual std::vector<ExportUnitType> supportedUnitTypes(const std::string& suffix) const = 0;
+    virtual std::vector<notation::WriterUnitType> supportedUnitTypes(const ExportType& exportType) const = 0;
 
-    virtual bool exportScores(notation::INotationPtrList& notations, const std::string& suffix, ExportUnitType unitType) = 0;
+    virtual bool exportScores(const notation::INotationPtrList& notations, const ExportType& exportType,
+                              notation::WriterUnitType unitType) const = 0;
 };
 }
 

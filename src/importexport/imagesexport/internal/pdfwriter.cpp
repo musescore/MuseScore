@@ -30,64 +30,16 @@
 #include <QPdfWriter>
 
 using namespace mu::iex::imagesexport;
+using namespace mu::notation;
 using namespace mu::system;
 using namespace Ms;
 
-std::vector<INotationWriter::UnitType> PdfWriter::supportedUnitTypes() const
+std::vector<WriterUnitType> PdfWriter::supportedUnitTypes() const
 {
-    return { UnitType::PER_PART, UnitType::MULTI_PART };
+    return { WriterUnitType::PER_PART, WriterUnitType::MULTI_PART };
 }
 
-mu::Ret PdfWriter::write(const notation::INotationPtr notation, IODevice& destinationDevice, const Options&)
-{
-    IF_ASSERT_FAILED(notation) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-    Ms::Score* score = notation->elements()->msScore();
-    IF_ASSERT_FAILED(score) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-
-    score->setPrinting(true);
-    MScore::pdfPrinting = true;
-
-    QPdfWriter pdfWriter(&destinationDevice);
-    pdfWriter.setResolution(configuration()->exportPdfDpiResolution());
-    pdfWriter.setCreator("MuseScore Version: " VERSION);
-    pdfWriter.setTitle(documentTitle(*score));
-    pdfWriter.setPageMargins(QMarginsF());
-
-    mu::draw::Painter painter(&pdfWriter, "pdfwriter");
-    if (!painter.isActive()) {
-        return false;
-    }
-
-    QSizeF size(score->styleD(Sid::pageWidth), score->styleD(Sid::pageHeight));
-    painter.setAntialiasing(true);
-    painter.setViewport(QRect(0.0, 0.0, size.width() * pdfWriter.logicalDpiX(),
-                              size.height() * pdfWriter.logicalDpiY()));
-    painter.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));
-
-    double pixelRationBackup = MScore::pixelRatio;
-    MScore::pixelRatio = DPI / pdfWriter.logicalDpiX();
-
-    for (int pageNumber = 0; pageNumber < score->npages(); ++pageNumber) {
-        if (pageNumber > 0) {
-            pdfWriter.newPage();
-        }
-
-        score->print(&painter, pageNumber);
-    }
-
-    painter.endDraw();
-    score->setPrinting(false);
-    MScore::pixelRatio = pixelRationBackup;
-    MScore::pdfPrinting = false;
-
-    return true;
-}
-
-mu::Ret PdfWriter::writeList(const notation::INotationPtrList& notations, system::IODevice& destinationDevice, const Options&)
+mu::Ret PdfWriter::write(const INotationPtrList& notations, system::IODevice& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(!notations.empty()) {
         return make_ret(Ret::Code::UnknownError);
@@ -113,7 +65,13 @@ mu::Ret PdfWriter::writeList(const notation::INotationPtrList& notations, system
         return false;
     }
 
-    for (auto notation : notations) {
+    WriterUnitType unitType = unitTypeFromOptions(options);
+    INotationPtrList notationsCorrected = notations;
+    if (unitType == WriterUnitType::PER_PART && notations.size() > 1) {
+        notationsCorrected = { notations.front() };
+    }
+
+    for (auto notation : notationsCorrected) {
         IF_ASSERT_FAILED(notation) {
             return make_ret(Ret::Code::UnknownError);
         }
