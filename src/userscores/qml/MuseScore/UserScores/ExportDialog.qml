@@ -6,7 +6,7 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.UserScores 1.0
 
-import "internal"
+import "internal/Export"
 
 QmlDialog {
     id: root

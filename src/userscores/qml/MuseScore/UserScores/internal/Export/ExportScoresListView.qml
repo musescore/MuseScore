@@ -7,6 +7,7 @@ import MuseScore.UserScores 1.0
 
 Rectangle {
     id: background
+
     property alias scoresModel: listView.model
 
     color: ui.theme.textFieldColor
@@ -41,8 +42,9 @@ Rectangle {
                 font: model.isMain ? ui.theme.bodyBoldFont : ui.theme.bodyFont
 
                 checked: model.isSelected
+
                 onClicked: {
-                    scoresModel.toggleSelected(model.index)
+                    scoresModel.setSelected(model.index, !model.isSelected)
                 }
             }
         }

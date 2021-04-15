@@ -22,8 +22,15 @@
         <file>qml/MuseScore/UserScores/internal/ChooseInstrumentsAndTemplatesPage.qml</file>
         <file>qml/MuseScore/UserScores/internal/ChooseTemplatePage.qml</file>
         <file>qml/MuseScore/UserScores/internal/ScoreInfoPage.qml</file>
-        <file>qml/MuseScore/UserScores/internal/ExportScoresListView.qml</file>
-        <file>qml/MuseScore/UserScores/internal/ExportOptionsView.qml</file>
-        <file>qml/MuseScore/UserScores/internal/ExportOptionItem.qml</file>
+        <file>qml/MuseScore/UserScores/internal/Export/ExportScoresListView.qml</file>
+        <file>qml/MuseScore/UserScores/internal/Export/ExportOptionsView.qml</file>
+        <file>qml/MuseScore/UserScores/internal/Export/ExportOptionItem.qml</file>
+        <file>qml/MuseScore/UserScores/internal/Export/PdfSettingsPage.qml</file>
+        <file>qml/MuseScore/UserScores/internal/Export/PngSettingsPage.qml</file>
+        <file>qml/MuseScore/UserScores/internal/Export/SvgSettingsPage.qml</file>
+        <file>qml/MuseScore/UserScores/internal/Export/Mp3SettingsPage.qml</file>
+        <file>qml/MuseScore/UserScores/internal/Export/AudioSettingsPage.qml</file>
+        <file>qml/MuseScore/UserScores/internal/Export/MidiSettingsPage.qml</file>
+        <file>qml/MuseScore/UserScores/internal/Export/MusicXmlSettingsPage.qml</file>
     </qresource>
 </RCC>

@@ -27,20 +27,20 @@
 using namespace mu::notation;
 using namespace mu::framework;
 
-std::vector<INotationWriter::UnitType> AbstractNotationWriter::supportedUnitTypes() const
+std::vector<WriterUnitType> AbstractNotationWriter::supportedUnitTypes() const
 {
-    return { UnitType::PER_PART };
+    return { WriterUnitType::PER_PART };
 }
 
-bool AbstractNotationWriter::supportsUnitType(UnitType unitType) const
+bool AbstractNotationWriter::supportsUnitType(WriterUnitType unitType) const
 {
-    std::vector<UnitType> unitTypes = supportedUnitTypes();
+    std::vector<WriterUnitType> unitTypes = supportedUnitTypes();
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret AbstractNotationWriter::writeList(const INotationPtrList&, system::IODevice&, const Options& options)
+mu::Ret AbstractNotationWriter::write(const INotationPtrList&, system::IODevice&, const Options& options)
 {
-    if (supportsUnitType(static_cast<UnitType>(options.value(OptionKey::UNIT_TYPE, Val(0)).toInt()))) {
+    if (supportsUnitType(static_cast<WriterUnitType>(options.value(OptionKey::UNIT_TYPE, Val(0)).toInt()))) {
         NOT_IMPLEMENTED;
         return Ret(Ret::Code::NotImplemented);
     }
@@ -57,4 +57,21 @@ void AbstractNotationWriter::abort()
 ProgressChannel AbstractNotationWriter::progress() const
 {
     return m_progress;
+}
+
+WriterUnitType AbstractNotationWriter::unitTypeFromOptions(const Options& options) const
+{
+    std::vector<WriterUnitType> supported = supportedUnitTypes();
+    IF_ASSERT_FAILED(!supported.empty()) {
+        return WriterUnitType::PER_PART;
+    }
+
+    WriterUnitType defaultUnitType = supported.front();
+    WriterUnitType unitType = static_cast<WriterUnitType>(options.value(OptionKey::UNIT_TYPE, Val(
+                                                                            static_cast<int>(defaultUnitType))).toInt());
+    if (!supportsUnitType(unitType)) {
+        return defaultUnitType;
+    }
+
+    return unitType;
 }

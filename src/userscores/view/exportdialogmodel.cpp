@@ -26,16 +26,68 @@ using namespace mu::userscores;
 using namespace mu::notation;
 using namespace mu::iex::musicxml;
 
-static const QString DEFAULT_EXPORT_SUFFIX = "pdf";
-static const ExportUnitType DEFAULT_EXPORT_UNITTYPE = ExportUnitType::PER_PART;
+static const WriterUnitType DEFAULT_EXPORT_UNITTYPE = WriterUnitType::PER_PART;
 
 ExportDialogModel::ExportDialogModel(QObject* parent)
     : QAbstractListModel(parent)
     , m_selectionModel(new QItemSelectionModel(this))
-    , m_selectedExportSuffix(DEFAULT_EXPORT_SUFFIX)
     , m_selectedUnitType(DEFAULT_EXPORT_UNITTYPE)
 {
     connect(m_selectionModel, &QItemSelectionModel::selectionChanged, this, &ExportDialogModel::selectionChanged);
+
+    ExportTypeList musicXmlTypes {
+        ExportType::makeWithSuffixes({ "mxl" },
+                                     qtrc("userscores", "Compressed") + " (*.mxl)",
+                                     qtrc("userscores", "Compressed MusicXML Files"),
+                                     "MusicXmlSettingsPage.qml"),
+        ExportType::makeWithSuffixes({ "musicxml" },
+                                     qtrc("userscores", "Uncompressed") + " (*.musicxml)",
+                                     qtrc("userscores", "Uncompressed MusicXML Files"),
+                                     "MusicXmlSettingsPage.qml"),
+        ExportType::makeWithSuffixes({ "xml" },
+                                     qtrc("userscores", "Uncompressed (outdated)") + " (*.xml)",
+                                     qtrc("userscores", "Uncompressed MusicXML Files"),
+                                     "MusicXmlSettingsPage.qml"),
+    };
+
+    m_exportTypeList = {
+        ExportType::makeWithSuffixes({ "pdf" },
+                                     qtrc("userscores", "PDF File"),
+                                     qtrc("userscores", "PDF Files"),
+                                     "PdfSettingsPage.qml"),
+        ExportType::makeWithSuffixes({ "png" },
+                                     qtrc("userscores", "PNG Images"),
+                                     qtrc("userscores", "PNG Images"),
+                                     "PngSettingsPage.qml"),
+        ExportType::makeWithSuffixes({ "svg" },
+                                     qtrc("userscores", "SVG Images"),
+                                     qtrc("userscores", "SVG Images"),
+                                     "SvgSettingsPage.qml"),
+        ExportType::makeWithSuffixes({ "mp3" },
+                                     qtrc("userscores", "MP3 Audio"),
+                                     qtrc("userscores", "MP3 Audio Files"),
+                                     "Mp3SettingsPage.qml"),
+        ExportType::makeWithSuffixes({ "wav" },
+                                     qtrc("userscores", "WAV Audio"),
+                                     qtrc("userscores", "WAV Audio Files"),
+                                     "AudioSettingsPage.qml"),
+        ExportType::makeWithSuffixes({ "ogg" },
+                                     qtrc("userscores", "OGG Audio"),
+                                     qtrc("userscores", "OGG Audio Files"),
+                                     "AudioSettingsPage.qml"),
+        ExportType::makeWithSuffixes({ "flac" },
+                                     qtrc("userscores", "FLAC Audio"),
+                                     qtrc("userscores", "FLAC Audio Files"),
+                                     "AudioSettingsPage.qml"),
+        ExportType::makeWithSuffixes({ "mid", "midi", "kar" },
+                                     qtrc("userscores", "MIDI File"),
+                                     qtrc("userscores", "MIDI Files"),
+                                     "MidiSettingsPage.qml"),
+        ExportType::makeWithSubtypes(musicXmlTypes,
+                                     qtrc("userscores", "MusicXML"))
+    };
+
+    m_selectedExportType = m_exportTypeList.front();
 }
 
 ExportDialogModel::~ExportDialogModel()
@@ -58,9 +110,9 @@ void ExportDialogModel::load()
         m_notations << excerpt->notation();
     }
 
-    selectCurrentNotation();
-
     endResetModel();
+
+    selectCurrentNotation();
 }
 
 QVariant ExportDialogModel::data(const QModelIndex& index, int role) const
@@ -111,18 +163,6 @@ void ExportDialogModel::setSelected(int scoreIndex, bool selected)
     emit dataChanged(modelIndex, modelIndex, { RoleIsSelected });
 }
 
-void ExportDialogModel::toggleSelected(int scoreIndex)
-{
-    if (!isIndexValid(scoreIndex)) {
-        return;
-    }
-
-    QModelIndex modelIndex = index(scoreIndex);
-    m_selectionModel->select(modelIndex, QItemSelectionModel::Toggle);
-
-    emit dataChanged(modelIndex, modelIndex, { RoleIsSelected });
-}
-
 void ExportDialogModel::setAllSelected(bool selected)
 {
     for (int i = 0; i < rowCount(); i++) {
@@ -157,39 +197,70 @@ int ExportDialogModel::selectionLength() const
     return m_selectionModel->selectedIndexes().size();
 }
 
-QString ExportDialogModel::selectedExportSuffix()
+QVariantList ExportDialogModel::exportTypeList() const
 {
-    return m_selectedExportSuffix;
+    return m_exportTypeList.toVariantList();
 }
 
-void ExportDialogModel::setExportSuffix(QString suffix)
+QVariantMap ExportDialogModel::selectedExportType() const
 {
-    if (m_selectedExportSuffix == suffix) {
+    return m_selectedExportType.toMap();
+}
+
+void ExportDialogModel::setExportType(const ExportType& type)
+{
+    if (m_selectedExportType == type) {
         return;
     }
 
-    m_selectedExportSuffix = suffix;
-    emit selectedExportSuffixChanged(suffix);
+    m_selectedExportType = type;
+    emit selectedExportTypeChanged(type.toMap());
 
-    auto unitTypes = exportScoreScenario()->supportedUnitTypes(suffix.toStdString());
+    std::vector<WriterUnitType> unitTypes = exportScoreScenario()->supportedUnitTypes(type);
+
     IF_ASSERT_FAILED(!unitTypes.empty()) {
         return;
     }
 
+    if (std::find(unitTypes.cbegin(), unitTypes.cend(), m_selectedUnitType) != unitTypes.cend()) {
+        return;
+    }
+
+    //! NOTE if the writer for the newly selected type doesn't support the currently
+    //! selected unit type, select the first supported unit type
     setUnitType(unitTypes.front());
 }
 
-QList<QVariantMap> ExportDialogModel::availableUnitTypes() const
+void ExportDialogModel::selectExportTypeById(const QString& id)
 {
-    QMap<ExportUnitType, QString> unitTypeNames {
-        { ExportUnitType::PER_PAGE, qtrc("userscores", "Each page to a separate file") },
-        { ExportUnitType::PER_PART, qtrc("userscores", "Each part to a separate file") },
-        { ExportUnitType::MULTI_PART, qtrc("userscores", "All parts combined in one file") },
+    for (const ExportType& type : m_exportTypeList) {
+        // First, check if it's a subtype
+        if (type.subtypes.contains(id)) {
+            setExportType(type.subtypes.getById(id));
+            return;
+        }
+
+        if (type.id == id) {
+            setExportType(type);
+            return;
+        }
+    }
+
+    LOGW() << "Export type id not found: " << id;
+    setExportType(m_exportTypeList.front());
+}
+
+QVariantList ExportDialogModel::availableUnitTypes() const
+{
+    QMap<WriterUnitType, QString> unitTypeNames {
+        { WriterUnitType::PER_PAGE, qtrc("userscores", "Each page to a separate file") },
+        { WriterUnitType::PER_PART, qtrc("userscores", "Each part to a separate file") },
+        { WriterUnitType::MULTI_PART, qtrc("userscores", "All parts combined in one file") },
     };
 
-    QList<QVariantMap> result;
+    QVariantList result;
 
-    for (ExportUnitType type : exportScoreScenario()->supportedUnitTypes(m_selectedExportSuffix.toStdString())) {
+    for (WriterUnitType type : exportScoreScenario()->supportedUnitTypes(m_selectedExportType)) {
         QVariantMap obj;
         obj["text"] = unitTypeNames[type];
         obj["value"] = static_cast<int>(type);
@@ -206,10 +277,10 @@ int ExportDialogModel::selectedUnitType() const
 
 void ExportDialogModel::setUnitType(int unitType)
 {
-    setUnitType(static_cast<ExportUnitType>(unitType));
+    setUnitType(static_cast<WriterUnitType>(unitType));
 }
 
-void ExportDialogModel::setUnitType(ExportUnitType unitType)
+void ExportDialogModel::setUnitType(WriterUnitType unitType)
 {
     if (m_selectedUnitType == unitType) {
         return;
@@ -223,7 +294,7 @@ bool ExportDialogModel::exportScores()
 {
     INotationPtrList notations;
 
-    for (const QModelIndex& index: m_selectionModel->selectedIndexes()) {
+    for (const QModelIndex& index : m_selectionModel->selectedIndexes()) {
         notations.push_back(m_notations[index.row()]);
     }
 
@@ -231,7 +302,7 @@ bool ExportDialogModel::exportScores()
         return false;
     }
 
-    return exportScoreScenario()->exportScores(notations, m_selectedExportSuffix.toStdString(), m_selectedUnitType);
+    return exportScoreScenario()->exportScores(notations, m_selectedExportType, m_selectedUnitType);
 }
 
 int ExportDialogModel::pdfResolution() const
@@ -371,7 +442,7 @@ void ExportDialogModel::setMidiExportRpns(bool exportRpns)
     emit midiExportRpnsChanged(exportRpns);
 }
 
-QList<QVariantMap> ExportDialogModel::musicXmlLayoutTypes() const
+QVariantList ExportDialogModel::musicXmlLayoutTypes() const
 {
     QMap<MusicXmlLayoutType, QString> musicXmlLayoutTypeNames {
         { MusicXmlLayoutType::AllLayout, qtrc("userscores", "All layout") },
@@ -380,7 +451,7 @@ QList<QVariantMap> ExportDialogModel::musicXmlLayoutTypes() const
         { MusicXmlLayoutType::None, qtrc("userscores", "No system or page breaks") },
     };
 
-    QList<QVariantMap> result;
+    QVariantList result;
 
     for (MusicXmlLayoutType type : musicXmlLayoutTypeNames.keys()) {
         QVariantMap obj;
@@ -395,16 +466,18 @@ QList<QVariantMap> ExportDialogModel::musicXmlLayoutTypes() const
 ExportDialogModel::MusicXmlLayoutType ExportDialogModel::musicXmlLayoutType() const
 {
     if (musicXmlConfiguration()->musicxmlExportLayout()) {
-        return AllLayout;
+        return MusicXmlLayoutType::AllLayout;
     }
     switch (musicXmlConfiguration()->musicxmlExportBreaksType()) {
     case IMusicXmlConfiguration::MusicxmlExportBreaksType::All:
-        return AllBreaks;
+        return MusicXmlLayoutType::AllBreaks;
     case IMusicXmlConfiguration::MusicxmlExportBreaksType::Manual:
-        return ManualBreaks;
+        return MusicXmlLayoutType::ManualBreaks;
     case IMusicXmlConfiguration::MusicxmlExportBreaksType::No:
-        return None;
+        return MusicXmlLayoutType::None;
     }
+
+    return MusicXmlLayoutType::AllLayout;
 }
 
 void ExportDialogModel::setMusicXmlLayoutType(MusicXmlLayoutType layoutType)
@@ -413,18 +486,18 @@ void ExportDialogModel::setMusicXmlLayoutType(MusicXmlLayoutType layoutType)
         return;
     }
     switch (layoutType) {
-    case AllLayout:
+    case MusicXmlLayoutType::AllLayout:
         musicXmlConfiguration()->setMusicxmlExportLayout(true);
         break;
-    case AllBreaks:
+    case MusicXmlLayoutType::AllBreaks:
         musicXmlConfiguration()->setMusicxmlExportLayout(false);
         musicXmlConfiguration()->setMusicxmlExportBreaksType(IMusicXmlConfiguration::MusicxmlExportBreaksType::All);
         break;
-    case ManualBreaks:
+    case MusicXmlLayoutType::ManualBreaks:
         musicXmlConfiguration()->setMusicxmlExportLayout(false);
         musicXmlConfiguration()->setMusicxmlExportBreaksType(IMusicXmlConfiguration::MusicxmlExportBreaksType::Manual);
         break;
-    case None:
+    case MusicXmlLayoutType::None:
         musicXmlConfiguration()->setMusicxmlExportLayout(false);
         musicXmlConfiguration()->setMusicxmlExportBreaksType(IMusicXmlConfiguration::MusicxmlExportBreaksType::No);
         break;

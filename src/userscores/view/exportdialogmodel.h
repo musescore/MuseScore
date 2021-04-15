@@ -23,6 +23,7 @@
 #include "userscorestypes.h"
 #include "modularity/ioc.h"
 
+#include "iinteractive.h"
 #include "context/iglobalcontext.h"
 #include "iuserscoresconfiguration.h"
 #include "notation/inotationwritersregister.h"
@@ -37,6 +38,7 @@ class ExportDialogModel : public QAbstractListModel
 {
     Q_OBJECT
 
+    INJECT(userscores, framework::IInteractive, interactive);
     INJECT(userscores, context::IGlobalContext, context)
     INJECT(userscores, IUserScoresConfiguration, configuration)
     INJECT(userscores, notation::INotationWritersRegister, writers)
@@ -46,9 +48,9 @@ class ExportDialogModel : public QAbstractListModel
 
     Q_PROPERTY(int selectionLength READ selectionLength NOTIFY selectionChanged)
 
-    Q_PROPERTY(QString selectedExportSuffix READ selectedExportSuffix WRITE setExportSuffix NOTIFY selectedExportSuffixChanged)
+    Q_PROPERTY(QVariantMap selectedExportType READ selectedExportType NOTIFY selectedExportTypeChanged)
 
-    Q_PROPERTY(QList<QVariantMap> availableUnitTypes READ availableUnitTypes NOTIFY selectedExportSuffixChanged)
+    Q_PROPERTY(QVariantList availableUnitTypes READ availableUnitTypes NOTIFY selectedExportTypeChanged)
     Q_PROPERTY(int selectedUnitType READ selectedUnitType WRITE setUnitType NOTIFY selectedUnitTypeChanged)
 
     Q_PROPERTY(int pdfResolution READ pdfResolution WRITE setPdfResolution NOTIFY pdfResolutionChanged)
@@ -76,18 +78,19 @@ public:
     Q_INVOKABLE void load();
 
     Q_INVOKABLE void setSelected(int scoreIndex, bool selected = true);
-    Q_INVOKABLE void toggleSelected(int scoreIndex);
     Q_INVOKABLE void setAllSelected(bool selected);
     Q_INVOKABLE void selectCurrentNotation();
     int selectionLength() const;
 
-    QString selectedExportSuffix();
-    void setExportSuffix(QString suffix);
+    Q_INVOKABLE QVariantList exportTypeList() const;
+    QVariantMap selectedExportType() const;
+    void setExportType(const ExportType& type);
+    Q_INVOKABLE void selectExportTypeById(const QString& id);
 
-    QList<QVariantMap> availableUnitTypes() const;
+    QVariantList availableUnitTypes() const;
     int selectedUnitType() const;
     void setUnitType(int unitType);
-    void setUnitType(ExportUnitType unitType);
+    void setUnitType(notation::WriterUnitType unitType);
 
     Q_INVOKABLE bool exportScores();
 
@@ -117,7 +120,7 @@ public:
     bool midiExportRpns() const;
     void setMidiExportRpns(bool exportRpns);
 
-    enum MusicXmlLayoutType {
+    enum class MusicXmlLayoutType {
         AllLayout,
         AllBreaks,
         ManualBreaks,
@@ -125,14 +128,15 @@ public:
     };
     Q_ENUM(MusicXmlLayoutType)
 
-    Q_INVOKABLE QList<QVariantMap> musicXmlLayoutTypes() const;
+    Q_INVOKABLE QVariantList musicXmlLayoutTypes() const;
     MusicXmlLayoutType musicXmlLayoutType() const;
     void setMusicXmlLayoutType(MusicXmlLayoutType layoutType);
 
 signals:
     void selectionChanged();
-    void selectedExportSuffixChanged(QString newSuffix);
-    void selectedUnitTypeChanged(ExportUnitType newUnitType);
+
+    void selectedExportTypeChanged(QVariantMap newExportType);
+    void selectedUnitTypeChanged(notation::WriterUnitType newUnitType);
 
     void pdfResolutionChanged(int resolution);
     void pngResolutionChanged(int resolution);
@@ -164,8 +168,9 @@ private:
     QList<notation::INotationPtr> m_notations;
     QItemSelectionModel* m_selectionModel;
 
-    QString m_selectedExportSuffix;
-    ExportUnitType m_selectedUnitType;
+    ExportTypeList m_exportTypeList;
+    ExportType m_selectedExportType;
+    notation::WriterUnitType m_selectedUnitType;
 };
 }
 

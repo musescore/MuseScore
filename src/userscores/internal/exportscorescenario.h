@@ -41,9 +41,10 @@ class ExportScoreScenario : public IExportScoreScenario
     INJECT(userscores, system::IFileSystem, fileSystem)
 
 public:
-    std::vector<ExportUnitType> supportedUnitTypes(const std::string& suffix) const override;
+    std::vector<notation::WriterUnitType> supportedUnitTypes(const ExportType& exportType) const override;
 
-    bool exportScores(notation::INotationPtrList& notations, const std::string& suffix, ExportUnitType unitType) override;
+    bool exportScores(const notation::INotationPtrList& notations, const ExportType& exportType,
+                      notation::WriterUnitType unitType) const override;
 
 private:
     enum class FileConflictPolicy {
@@ -52,21 +53,17 @@ private:
         ReplaceAll
     };
 
-    bool isCreatingOnlyOneFile(notation::INotationPtrList& notations, ExportUnitType unitType) const;
+    bool isCreatingOnlyOneFile(const notation::INotationPtrList& notations, notation::WriterUnitType unitType) const;
 
     bool isMainNotation(notation::INotationPtr notation) const;
 
-    QString fileFilter(const std::string& suffix);
+    bool shouldReplaceFile(const QString& filename) const;
+    bool askForRetry(const QString& filename) const;
 
-    bool shouldReplaceFile(QString filename);
-    bool askForRetry(QString filename) const;
+    bool doExport(notation::INotationWriterPtr writer, const notation::INotationPtrList& notations, const io::path& path,
+                  const notation::INotationWriter::Options& options) const;
 
-    bool exportSingleScore(notation::INotationWriterPtr writer, io::path exportPath, bool pathIsDefinitive, notation::INotationPtr score,
-                           int page = 0);
-    bool exportScoreList(notation::INotationWriterPtr writer, io::path exportPath, notation::INotationPtrList notations);
-    bool shouldExportIndividualPage(std::string suffix) const;
-
-    FileConflictPolicy m_fileConflictPolicy;
+    mutable FileConflictPolicy m_fileConflictPolicy;
 };
 }
 

@@ -37,7 +37,6 @@ static const Settings::Key USER_SCORES_PATH(module_name, "application/paths/mySc
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "userscores/preferedScoreCreationMode");
 
 const QString UserScoresConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
-const QString UserScoresConfiguration::DEFAULT_EXPORT_SUFFIX(".pdf");
 
 static const std::string TEMPLATES_PATH("/templates");
 
@@ -194,24 +193,21 @@ io::path UserScoresConfiguration::defaultSavingFilePath(const io::path& fileName
     return scoresPath().val + "/" + fileName + DEFAULT_FILE_SUFFIX;
 }
 
-io::path UserScoresConfiguration::defaultExportPath(const std::string& fileName) const
+io::path UserScoresConfiguration::completeExportPath(const io::path& basePath, INotationPtr notation, bool isMain, int pageIndex) const
 {
-    return scoresPath().val + "/" + fileName + DEFAULT_EXPORT_SUFFIX;
-}
+    io::path result = io::dirpath(basePath) + "/" + io::basename(basePath);
 
-io::path UserScoresConfiguration::completeExportPath(io::path basePath, INotationPtr notation, bool isMain, bool singlePage,
-                                                     int pageNumber) const
-{
-    io::path suffix = io::syffix(basePath);
-    io::path exportDirectory = io::dirpath(basePath);
-    io::path baseFilename = io::basename(basePath);
+    if (!isMain) {
+        result += "-" + io::escapeFileName(notation->metaInfo().title).toStdString();
+    }
 
-    std::string notationNameExtension
-        = (isMain ? "" : "-" + io::escapeFileName(notation->metaInfo().title).toStdString());
-    std::string pageNameExtension = (singlePage ? "-" + std::to_string(pageNumber + 1) : "");
-    std::string completeFileName = baseFilename.toStdString() + notationNameExtension + pageNameExtension + "." + suffix.toStdString();
+    if (pageIndex > -1) {
+        result += "-" + std::to_string(pageIndex + 1);
+    }
 
-    return exportDirectory + "/" + completeFileName;
+    result += "." + io::syffix(basePath);
+
+    return result;
 }
 
 QColor UserScoresConfiguration::templatePreviewBackgroundColor() const
