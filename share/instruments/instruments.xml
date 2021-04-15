@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <museScore>
       <Genre id="common">
             <name>Common</name>
@@ -446,7 +446,7 @@
                   </Articulation>
                   <genre>earlymusic</genre>
             </Instrument>
-             <Instrument id="danso">
+            <Instrument id="danso">
                   <family>flutes</family>
                   <longName>Danso</longName>
                   <shortName>Da.</shortName>
@@ -1235,7 +1235,7 @@
                   <aPitchRange>45-75</aPitchRange>
                   <pPitchRange>45-78</pPitchRange>
                   <transposeDiatonic>-7</transposeDiatonic>
-                  <transposeChromatic>-12</transposeChromatic>         
+                  <transposeChromatic>-12</transposeChromatic>
                   <Channel>
                         <program value="68"/> <!--Oboe-->
                   </Channel>
@@ -1773,7 +1773,7 @@
                   <aPitchRange>62-84</aPitchRange>
                   <pPitchRange>62-84</pPitchRange>
                   <Channel>
-                        <program value="111"/> <!--Shanei-->
+                        <program value="111"/> <!--Shanai-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
@@ -4239,10 +4239,10 @@
                   <musicXMLid>brass.bugle.euphonium-bugle</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <transposeDiatonic>-7</transposeDiatonic>
-                  <transposeChromatic>-12</transposeChromatic>
                   <aPitchRange>50-62</aPitchRange>
                   <pPitchRange>43-67</pPitchRange>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
                   <Channel>
                         <program value="58"/> <!--Tuba-->
                   </Channel>
@@ -5049,9 +5049,9 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>79-108</aPitchRange>
                   <pPitchRange>76-108</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>14</transposeDiatonic>
                   <transposeChromatic>24</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="9"/> <!--Glockenspiel-->
                   </Channel>
@@ -5105,9 +5105,9 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>84-108</aPitchRange>
                   <pPitchRange>84-108</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>14</transposeDiatonic>
                   <transposeChromatic>24</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="10"/> <!--Music Box-->
                   </Channel>
@@ -5371,7 +5371,6 @@
                   <bracketSpan>2</bracketSpan>
                   <barlineSpan>2</barlineSpan>
                   <clef staff="2">F</clef>
-                  <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-97</aPitchRange>
                   <pPitchRange>36-97</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
@@ -5464,9 +5463,9 @@
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>65-96</aPitchRange>
                   <pPitchRange>60-108</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>7</transposeDiatonic>
                   <transposeChromatic>12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="13"/> <!--Xylophone-->
                   </Channel>
@@ -5548,10 +5547,10 @@
             </Instrument>
             <Instrument id="marimba">
                   <family>keyboard-percussion</family>
+                  <trackName>Marimba (Grand Staff)</trackName>
                   <longName>Marimba</longName>
                   <shortName>Mrm.</shortName>
                   <description>Marimba (grand staff)</description>
-                  <trackName>Marimba (Grand Staff)</trackName>
                   <musicXMLid>pitched-percussion.marimba</musicXMLid>
                   <staves>2</staves>
                   <clef>G</clef>
@@ -5573,10 +5572,10 @@
             </Instrument>
             <Instrument id="marimba-single">
                   <family>keyboard-percussion</family>
+                  <trackName>Marimba (Single Staff)</trackName>
                   <longName>Marimba</longName>
                   <shortName>Mrm.</shortName>
                   <description>Single-staff marimba</description>
-                  <trackName>Marimba (Single Staff)</trackName>
                   <musicXMLid>pitched-percussion.marimba</musicXMLid>
                   <staves>1</staves>
                   <clef>G</clef>
@@ -5736,7 +5735,7 @@
                   <pPitchRange>48-96</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
-                        <program value="14"/> <!-- Tubular Bells -->
+                        <program value="14"/> <!--Tubular Bells -->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
@@ -5770,8 +5769,8 @@
                   <longName>Concert Snare Drum</longName>
                   <shortName>Con. Sn.</shortName>
                   <description>Snare Drum</description>
-                  <clef>PERC</clef>
                   <musicXMLid>drum.snare-drum</musicXMLid>
+                  <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
@@ -5805,10 +5804,10 @@
             <Instrument id="bass-drum">
                   <family>drums</family>
                   <longName>Concert Bass Drum</longName>
-                  <shortName>Con. BD </shortName>
+                  <shortName>Con. BD</shortName>
                   <description>Bass Drum</description>
-                  <clef>PERC</clef>
                   <musicXMLid>drum.bass-drum</musicXMLid>
+                  <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
@@ -5835,8 +5834,8 @@
                   <longName>Piccolo Snare</longName>
                   <shortName>Picc. Sn.</shortName>
                   <description>Piccolo Snare Drum</description>
-                  <clef>PERC</clef>
                   <musicXMLid>drum.snare-drum</musicXMLid>
+                  <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
@@ -6415,7 +6414,7 @@
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
-                        <program value="0"/>
+                        <program value="0"/> <!--Standard Kit-->
                   </Channel>
             </Instrument>
             <Instrument id="metal-castanets">
@@ -6671,7 +6670,6 @@
                   <Channel>
                         <controller ctrl="0" value="1"/>
                         <program value="48"/> <!--Orchestra Kit-->
-                        <controller ctrl="10" value="60"/>
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
@@ -7482,8 +7480,8 @@
                   <shortName>S.D.</shortName>
                   <description>Marching Snare Drum</description>
                   <musicXMLid>drum.snare-drum</musicXMLid>
-                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <drumset>1</drumset>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="48">
@@ -7560,8 +7558,8 @@
                         <name>Closed Hi-Hat</name>
                   </Drum>
                   <Articulation>
-                        <gateTime>100</gateTime>
                         <velocity>100</velocity>
+                        <gateTime>100</gateTime>
                   </Articulation>
                   <Articulation name="sforzato">
                         <velocity>130</velocity>
@@ -7581,8 +7579,8 @@
                   <shortName>T.D.</shortName>
                   <description>Marching Tenor Drums</description>
                   <musicXMLid>drum.tenor-drum</musicXMLid>
-                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <drumset>1</drumset>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="36">
@@ -7590,16 +7588,16 @@
                         <line>7</line>
                         <voice>0</voice>
                         <name>Drum4</name>
-                        <shortcut>A</shortcut>
                         <stem>1</stem>
+                        <shortcut>A</shortcut>
                   </Drum>
                   <Drum pitch="37">
                         <head>cross</head>
                         <line>7</line>
                         <voice>0</voice>
                         <name>Drum4 Rim</name>
-                        <shortcut>B</shortcut>
                         <stem>1</stem>
+                        <shortcut>B</shortcut>
                   </Drum>
                   <Drum pitch="38">
                         <head>diamond</head>
@@ -7634,16 +7632,16 @@
                         <line>5</line>
                         <voice>0</voice>
                         <name>Drum3</name>
-                        <shortcut>C</shortcut>
                         <stem>1</stem>
+                        <shortcut>C</shortcut>
                   </Drum>
                   <Drum pitch="49">
                         <head>cross</head>
                         <line>5</line>
                         <voice>0</voice>
                         <name>Drum3 Rim</name>
-                        <shortcut>D</shortcut>
                         <stem>1</stem>
+                        <shortcut>D</shortcut>
                   </Drum>
                   <Drum pitch="50">
                         <head>diamond</head>
@@ -7671,16 +7669,16 @@
                         <line>3</line>
                         <voice>0</voice>
                         <name>Drum2</name>
-                        <shortcut>E</shortcut>
                         <stem>1</stem>
+                        <shortcut>E</shortcut>
                   </Drum>
                   <Drum pitch="61">
                         <head>cross</head>
                         <line>3</line>
                         <voice>0</voice>
                         <name>Drum2 Rim</name>
-                        <shortcut>F</shortcut>
                         <stem>1</stem>
+                        <shortcut>F</shortcut>
                   </Drum>
                   <Drum pitch="62">
                         <head>diamond</head>
@@ -7701,8 +7699,8 @@
                         <line>1</line>
                         <voice>0</voice>
                         <name>Drum1</name>
-                        <shortcut>G</shortcut>
                         <stem>1</stem>
+                        <shortcut>G</shortcut>
                   </Drum>
                   <Drum pitch="73">
                         <head>cross</head>
@@ -7768,8 +7766,8 @@
                         <stem>1</stem>
                   </Drum>
                   <Articulation>
-                        <gateTime>100</gateTime>
                         <velocity>100</velocity>
+                        <gateTime>100</gateTime>
                   </Articulation>
                   <Articulation name="sforzato">
                         <velocity>130</velocity>
@@ -7789,8 +7787,8 @@
                   <shortName>B.D.</shortName>
                   <description>Marching Bass Drums</description>
                   <musicXMLid>drum.bass-drum</musicXMLid>
-                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <drumset>1</drumset>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="37">
@@ -7798,56 +7796,56 @@
                         <line>7</line>
                         <voice>0</voice>
                         <name>Bass Drum 1</name>
-                        <shortcut>A</shortcut>
                         <stem>1</stem>
+                        <shortcut>A</shortcut>
                   </Drum>
                   <Drum pitch="39">
                         <head>cross</head>
                         <line>7</line>
                         <voice>0</voice>
                         <name>Bass Drum 1 Rim Knock</name>
-                        <shortcut>B</shortcut>
                         <stem>1</stem>
+                        <shortcut>B</shortcut>
                   </Drum>
                   <Drum pitch="49">
                         <head>normal</head>
                         <line>5</line>
                         <voice>0</voice>
                         <name>Bass Drum 2</name>
-                        <shortcut>C</shortcut>
                         <stem>1</stem>
+                        <shortcut>C</shortcut>
                   </Drum>
                   <Drum pitch="51">
                         <head>cross</head>
                         <line>5</line>
                         <voice>0</voice>
                         <name>Bass Drum 2 Rim Knock</name>
-                        <shortcut>D</shortcut>
                         <stem>1</stem>
+                        <shortcut>D</shortcut>
                   </Drum>
                   <Drum pitch="61">
                         <head>normal</head>
                         <line>3</line>
                         <voice>0</voice>
                         <name>Bass Drum 3</name>
-                        <shortcut>E</shortcut>
                         <stem>1</stem>
+                        <shortcut>E</shortcut>
                   </Drum>
                   <Drum pitch="63">
                         <head>cross</head>
                         <line>3</line>
                         <voice>0</voice>
                         <name>Bass Drum 3 Rim Knock</name>
-                        <shortcut>F</shortcut>
                         <stem>1</stem>
+                        <shortcut>F</shortcut>
                   </Drum>
                   <Drum pitch="73">
                         <head>normal</head>
                         <line>1</line>
                         <voice>0</voice>
                         <name>Bass Drum 4</name>
-                        <shortcut>G</shortcut>
                         <stem>1</stem>
+                        <shortcut>G</shortcut>
                   </Drum>
                   <Drum pitch="75">
                         <head>cross</head>
@@ -7878,8 +7876,8 @@
                         <stem>1</stem>
                   </Drum>
                   <Articulation>
-                        <gateTime>100</gateTime>
                         <velocity>100</velocity>
+                        <gateTime>100</gateTime>
                   </Articulation>
                   <Articulation name="sforzato">
                         <velocity>130</velocity>
@@ -7899,8 +7897,8 @@
                   <shortName>Cym.</shortName>
                   <description>Marching Cymbals</description>
                   <musicXMLid>metal.cymbal.crash</musicXMLid>
-                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <drumset>1</drumset>
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="72">
@@ -7989,8 +7987,8 @@
                         <name>Roll</name>
                   </Drum>
                   <Articulation>
-                        <gateTime>100</gateTime>
                         <velocity>100</velocity>
+                        <gateTime>100</gateTime>
                   </Articulation>
                   <Articulation name="sforzato">
                         <velocity>130</velocity>
@@ -8120,8 +8118,7 @@
             <name>Vocals</name>
             <Instrument id="voice">
                   <family>voices</family>
-                  <!-- don't remove this 'instrument', it is used in ...mscore/noteGroups.cpp,
-                 to generate the time sig dialog of the master palette -->
+                  <!-- don't remove this 'instrument', it is used in ...mscore/noteGroups.cpp, to generate the time sig dialog of the master palette -->
                   <longName>Voice</longName>
                   <shortName>Vo.</shortName>
                   <description>Voice</description>
@@ -8131,7 +8128,7 @@
                   <aPitchRange>41-79</aPitchRange>
                   <pPitchRange>38-84</pPitchRange>
                   <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
@@ -8148,7 +8145,7 @@
                   <aPitchRange>60-81</aPitchRange>
                   <pPitchRange>60-84</pPitchRange>
                   <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>orchestra</genre>
                   <genre>choral</genre>
@@ -8164,7 +8161,7 @@
                   <aPitchRange>60-79</aPitchRange>
                   <pPitchRange>60-84</pPitchRange>
                   <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
@@ -8183,7 +8180,7 @@
                   <aPitchRange>60-79</aPitchRange>
                   <pPitchRange>60-84</pPitchRange>
                   <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -8198,7 +8195,7 @@
                   <aPitchRange>57-77</aPitchRange>
                   <pPitchRange>57-81</pPitchRange>
                   <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
@@ -8216,7 +8213,7 @@
                   <aPitchRange>57-77</aPitchRange>
                   <pPitchRange>57-81</pPitchRange>
                   <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -8231,7 +8228,7 @@
                   <aPitchRange>55-74</aPitchRange>
                   <pPitchRange>52-77</pPitchRange>
                   <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
@@ -8250,7 +8247,7 @@
                   <aPitchRange>55-74</aPitchRange>
                   <pPitchRange>52-77</pPitchRange>
                   <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -8265,7 +8262,7 @@
                   <aPitchRange>55-74</aPitchRange>
                   <pPitchRange>52-77</pPitchRange>
                   <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>orchestra</genre>
                   <genre>choral</genre>
@@ -8281,7 +8278,7 @@
                   <aPitchRange>55-76</aPitchRange>
                   <pPitchRange>55-79</pPitchRange>
                   <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>choral</genre>
             </Instrument>
@@ -8296,7 +8293,7 @@
                   <aPitchRange>48-69</aPitchRange>
                   <pPitchRange>48-72</pPitchRange>
                   <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
@@ -8315,7 +8312,7 @@
                   <aPitchRange>48-69</aPitchRange>
                   <pPitchRange>48-72</pPitchRange>
                   <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -8330,7 +8327,7 @@
                   <aPitchRange>43-64</aPitchRange>
                   <pPitchRange>41-65</pPitchRange>
                   <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
@@ -8349,7 +8346,7 @@
                   <aPitchRange>43-64</aPitchRange>
                   <pPitchRange>41-65</pPitchRange>
                   <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -8364,7 +8361,7 @@
                   <aPitchRange>41-60</aPitchRange>
                   <pPitchRange>38-62</pPitchRange>
                   <Channel>
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
@@ -8382,10 +8379,10 @@
                   <aPitchRange>55-81</aPitchRange>
                   <pPitchRange>55-84</pPitchRange>
                   <Channel name="Soprano">
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <Channel name="Alto">
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
@@ -8403,10 +8400,10 @@
                   <aPitchRange>41-67</aPitchRange>
                   <pPitchRange>38-69</pPitchRange>
                   <Channel name="Tenor">
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <Channel name="Bass">
-                        <program value="52"/> <!--Voice Aahs-->
+                        <program value="52"/> <!--Choir Aahs-->
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
@@ -8635,9 +8632,9 @@
                   <concertClef staff="2">F8va</concertClef>
                   <aPitchRange>48-113</aPitchRange>
                   <pPitchRange>48-113</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>7</transposeDiatonic>
                   <transposeChromatic>12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="8"/> <!--Celesta-->
                   </Channel>
@@ -8765,9 +8762,9 @@
             </Instrument>
             <Instrument id="pipe-organ">
                   <family>organs</family>
+                  <trackName>Pipe Organ</trackName>
                   <longName>Pipe Organ</longName>
                   <shortName>Org.</shortName>
-                  <trackName>Pipe Organ</trackName>
                   <description>GM Pipe Organ</description>
                   <musicXMLid>keyboard.organ.pipe</musicXMLid>
                   <staves>3</staves>
@@ -8807,7 +8804,7 @@
                         <program value="0"/>
                         <MidiAction name="Reset">
                               <descr>Reset all stops</descr>
-                        <controller ctrl="98" value="66"/>
+                              <controller ctrl="98" value="66"/>
                         </MidiAction>
                         <MidiAction name="prin8">
                               <descr>set stop Principal 8</descr>
@@ -9201,7 +9198,7 @@ Aeolus organ synthesizer, currently disabled -->
                         <program value="102"/> <!--FX 7 (echoes)-->
                   </Channel>
                   <Channel name="scifi">
-                        <program value="103"/> <!--FFX 8 (sci-fi)-->
+                        <program value="103"/> <!--FX 8 (sci-fi)-->
                   </Channel>
                   <genre>popular</genre>
                   <genre>marching</genre>
@@ -9799,7 +9796,7 @@ Aeolus organ synthesizer, currently disabled -->
                   </Drum>
                   <Channel>
                         <controller ctrl="0" value="1"/>
-                        <program value="0"/> <!--Standard Set-->
+                        <program value="0"/> <!--Standard Kit-->
                   </Channel>
                   <genre>popular</genre>
                   <genre>marching</genre>
@@ -9841,7 +9838,6 @@ Aeolus organ synthesizer, currently disabled -->
                   <description>Banjo (Tablature)</description>
                   <musicXMLid>pluck.banjo</musicXMLid>
                   <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
                   <genre>jazz</genre>
             </Instrument>
@@ -9873,7 +9869,6 @@ Aeolus organ synthesizer, currently disabled -->
                   <shortName>ITB</shortName>
                   <description>4 string Irish Tenor Banjo</description>
                   <musicXMLid>pluck.banjo.tenor</musicXMLid>
-                  <genre>world</genre>
                   <StringData>
                         <frets>19</frets>
                         <string>43</string>
@@ -9889,6 +9884,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <Channel>
                         <program value="105"/> <!--Banjo-->
                   </Channel>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="irish-tenor-banjo-tablature">
                   <family>plucked-strings</family>
@@ -9897,14 +9893,13 @@ Aeolus organ synthesizer, currently disabled -->
                   <description>Irish Tenor Banjo (Tablature)</description>
                   <musicXMLid>pluck.banjo.tenor</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="balalaika">
                   <family>plucked-strings</family>
+                  <trackName>Balalaika</trackName>
                   <longName>Balalaika</longName>
                   <shortName>Bal.</shortName>
-                  <trackName>Balalaika</trackName>
                   <description>Balalaika in fact the prima but a generic for simplicity</description>
                   <musicXMLid>pluck.balalaika</musicXMLid>
                   <StringData>
@@ -9925,9 +9920,9 @@ Aeolus organ synthesizer, currently disabled -->
             </Instrument>
             <Instrument id="balalaika-piccolo">
                   <family>plucked-strings</family>
+                  <trackName>Piccolo Balalaika</trackName>
                   <longName>Piccolo Balalaika</longName>
                   <shortName>Pic. Bal.</shortName>
-                  <trackName>Piccolo Balalaika</trackName>
                   <description>Piccolo Balalaika (the smallest and rarest of the family)</description>
                   <musicXMLid>pluck.balalaika.piccolo</musicXMLid>
                   <StringData>
@@ -9947,9 +9942,9 @@ Aeolus organ synthesizer, currently disabled -->
             </Instrument>
             <Instrument id="balalaika-prima">
                   <family>plucked-strings</family>
+                  <trackName>Prima Balalaika</trackName>
                   <longName>Prima Balalaika</longName>
                   <shortName>Pr. Bal.</shortName>
-                  <trackName>Prima Balalaika</trackName>
                   <description>Prima Balalaika (the most commonly played of the family)</description>
                   <musicXMLid>pluck.balalaika.prima</musicXMLid>
                   <StringData>
@@ -9969,9 +9964,9 @@ Aeolus organ synthesizer, currently disabled -->
             </Instrument>
             <Instrument id="balalaika-secunda">
                   <family>plucked-strings</family>
+                  <trackName>Secunda Balalaika</trackName>
                   <longName>Secunda Balalaika</longName>
                   <shortName>Sec. Bal.</shortName>
-                  <trackName>Secunda Balalaika</trackName>
                   <description>Secunda Balalaika</description>
                   <musicXMLid>pluck.balalaika.secunda</musicXMLid>
                   <StringData>
@@ -9991,10 +9986,10 @@ Aeolus organ synthesizer, currently disabled -->
             </Instrument>
             <Instrument id="balalaika-alto">
                   <family>plucked-strings</family>
+                  <trackName>Alto Balalaika</trackName>
                   <longName>Alto Balalaika</longName>
                   <shortName>Al. Bal.</shortName>
-                  <trackName>Alto Balalaika</trackName>
-                  <description>Alto Balalaika </description>
+                  <description>Alto Balalaika</description>
                   <musicXMLid>pluck.balalaika.alto</musicXMLid>
                   <StringData>
                         <frets>17</frets>
@@ -10013,10 +10008,10 @@ Aeolus organ synthesizer, currently disabled -->
             </Instrument>
             <Instrument id="balalaika-bass">
                   <family>plucked-strings</family>
+                  <trackName>Bass Balalaika</trackName>
                   <longName>Bass Balalaika</longName>
                   <shortName>B. Bal.</shortName>
-                  <trackName>Bass Balalaika</trackName>
-                  <description>Bass Balalaika </description>
+                  <description>Bass Balalaika</description>
                   <musicXMLid>pluck.balalaika.bass</musicXMLid>
                   <StringData>
                         <frets>17</frets>
@@ -10035,10 +10030,10 @@ Aeolus organ synthesizer, currently disabled -->
             </Instrument>
             <Instrument id="balalaika-contrabass">
                   <family>plucked-strings</family>
+                  <trackName>Contrabass Balalaika</trackName>
                   <longName>Contrabass Balalaika</longName>
                   <shortName>Cb. Bal.</shortName>
-                  <trackName>Contrabass Balalaika</trackName>
-                  <description>Contrabass Balalaika </description>
+                  <description>Contrabass Balalaika</description>
                   <musicXMLid>pluck.balalaika.contrabass</musicXMLid>
                   <StringData>
                         <frets>17</frets>
@@ -10057,9 +10052,9 @@ Aeolus organ synthesizer, currently disabled -->
             </Instrument>
             <Instrument id="bouzouki-3-course">
                   <family>plucked-strings</family>
+                  <trackName>Bouzouki (3-course)</trackName>
                   <longName>Bouzouki</longName>
                   <shortName>Bou.</shortName>
-                  <trackName>Bouzouki (3-course)</trackName>
                   <description>Bouzouki (3-course)</description>
                   <musicXMLid>pluck.bouzouki</musicXMLid>
                   <StringData>
@@ -10081,9 +10076,9 @@ Aeolus organ synthesizer, currently disabled -->
             </Instrument>
             <Instrument id="bouzouki-4-course">
                   <family>plucked-strings</family>
+                  <trackName>Bouzouki (4-course)</trackName>
                   <longName>Bouzouki</longName>
                   <shortName>Bou.</shortName>
-                  <trackName>Bouzouki (4-course)</trackName>
                   <description>Bouzouki (4-course)</description>
                   <musicXMLid>pluck.bouzouki</musicXMLid>
                   <StringData>
@@ -10208,9 +10203,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-83</aPitchRange>
                   <pPitchRange>40-83</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel name="open">
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -10225,7 +10220,6 @@ Aeolus organ synthesizer, currently disabled -->
                   <description>Acoustic Nylon Strung Guitar (Tablature)</description>
                   <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
             </Instrument>
             <Instrument id="7-string-guitar">
@@ -10261,7 +10255,6 @@ Aeolus organ synthesizer, currently disabled -->
                   <description>7-string Guitar (Tablature)</description>
                   <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
                   <stafftype staffTypePreset="tab7StrCommon">tablature</stafftype>
-                  <!-- <clef>TAB</clef> -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="cavaquinho">
@@ -10294,7 +10287,6 @@ Aeolus organ synthesizer, currently disabled -->
                   <description>Cavaquinho (4-string Guitar) (Tablature)</description>
                   <musicXMLid>pluck.guitar</musicXMLid>
                   <stafftype staffTypePreset="tab4StrSimple">tablature</stafftype>
-                  <!-- <clef>TAB</clef> -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="baritone-guitar">
@@ -10413,9 +10405,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-83</aPitchRange>
                   <pPitchRange>40-84</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
                   </Channel>
@@ -10427,7 +10419,6 @@ Aeolus organ synthesizer, currently disabled -->
                   <description>Acoustic Steel Strung Guitar (Tablature)</description>
                   <musicXMLid>pluck.guitar.acoustic</musicXMLid>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
                   <genre>classroom</genre>
             </Instrument>
@@ -10437,7 +10428,6 @@ Aeolus organ synthesizer, currently disabled -->
                   <shortName>11-str. A. Guit.</shortName>
                   <description>11-string Alto Guitar</description>
                   <musicXMLid>pluck.guitar</musicXMLid>
-                  <staves>2</staves>
                   <StringData>
                         <frets>19</frets>
                         <string>35</string>
@@ -10452,6 +10442,7 @@ Aeolus organ synthesizer, currently disabled -->
                         <string>62</string>
                         <string>67</string>
                   </StringData>
+                  <staves>2</staves>
                   <clef>G</clef>
                   <bracket>1</bracket>
                   <bracketSpan>2</bracketSpan>
@@ -10521,8 +10512,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="electric-guitar">
-                  <!-- don't remove this instrument, it is used in ...mtest/libmscore/links/tst_links.cpp
-                 and ...mtest/libmscore/midi/tst_midi.cpp for testing purposes -->
+                  <!-- don't remove this instrument, it is used in ...mtest/libmscore/links/tst_links.cpp and ...mtest/libmscore/midi/tst_midi.cpp for testing purposes -->
                   <family>guitars</family>
                   <longName>Electric Guitar</longName>
                   <shortName>El. Guit.</shortName>
@@ -10586,9 +10576,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>40-86</aPitchRange>
                   <pPitchRange>40-88</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="27"/> <!--Electric Guitar (clean)-->
                   </Channel>
@@ -10598,7 +10588,6 @@ Aeolus organ synthesizer, currently disabled -->
                   <init>electric-guitar</init>
                   <description>Electric Guitar (Tablature)</description>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
                   <genre>popular</genre>
             </Instrument>
@@ -10620,7 +10609,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <Channel>
                         <program value="46"/> <!--Orchestral Harp-->
                   </Channel>
-                  <Channel name ="staccato">
+                  <Channel name="staccato">
                         <program value="45"/> <!--Pizzicato Strings-->
                   </Channel>
                   <Channel name="flageoletti">
@@ -10665,17 +10654,14 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
-
             <Instrument id="mtn-dulcimer-std-chrom-tab">
                   <trackName>Mtn. Dulcimer (Tablature)</trackName>
                   <init>mtn-dulcimer-std</init>
                   <description>Mtn. Dulcimer (3-str. chromatic TAB)</description>
                   <stafftype staffTypePreset="tabDulcimer">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>world</genre>
             </Instrument>
-
-                <Instrument id="mtn-dulcimer-baritone">
+            <Instrument id="mtn-dulcimer-baritone">
                   <longName>Mtn. Dulcimer - Baritone</longName>
                   <shortName>Bar. M.D.</shortName>
                   <description>Baritone Mountain Dulcimer</description>
@@ -10696,17 +10682,14 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
-
             <Instrument id="mtn-dulcimer-bartn-chrom-tab">
                   <trackName>Mtn. Dulcimer - Baritone (Tablature)</trackName>
                   <init>mtn-dulcimer-baritone</init>
                   <description>Baritone Mtn. Dulcimer (3-str. chromatic TAB)</description>
                   <stafftype staffTypePreset="tabDulcimer">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>world</genre>
             </Instrument>
-
-                <Instrument id="mtn-dulcimer-bass">
+            <Instrument id="mtn-dulcimer-bass">
                   <longName>Mtn. Dulcimer - Bass</longName>
                   <shortName>Bs. M.D.</shortName>
                   <description>Bass Mountain Dulcimer</description>
@@ -10727,13 +10710,11 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
-
             <Instrument id="mtn-dulcimer-bass-chrom-tab">
                   <trackName>Mtn. Dulcimer - Bass (Tablature)</trackName>
                   <init>mtn-dulcimer-bass</init>
                   <description>Bass Mtn. Dulcimer (3-str. chromatic TAB)</description>
                   <stafftype staffTypePreset="tabDulcimer">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>world</genre>
             </Instrument>
             <Instrument id="oud">
@@ -10755,9 +10736,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-75</aPitchRange>
                   <pPitchRange>36-75</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <controller ctrl="32" value="8"/> <!--12-String Guitar-->
                         <program value="25"/> <!--Acoustic Guitar (steel)-->
@@ -10796,13 +10777,12 @@ Aeolus organ synthesizer, currently disabled -->
                   <description>Lute (Tablature)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="ren.-tenor-lute-5-course">
+                  <trackName>Lute 5-course</trackName>
                   <longName>Lute</longName>
                   <shortName>Lt.</shortName>
-                  <trackName>Lute 5-course</trackName>
                   <description>Ren. Tenor Lute (5-course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
@@ -10825,9 +10805,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="ren.-tenor-lute-6-course">
+                  <trackName>Lute 6-course</trackName>
                   <longName>Lute</longName>
                   <shortName>Lt.</shortName>
-                  <trackName>Lute 6-course</trackName>
                   <description>Ren. Tenor Lute (6-course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
@@ -10851,9 +10831,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="ren.-tenor-lute-7-course">
+                  <trackName>Lute 7-course</trackName>
                   <longName>Lute</longName>
                   <shortName>Lt.</shortName>
-                  <trackName>Lute 7-course</trackName>
                   <description>Ren. Tenor Lute (7-course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
@@ -10878,9 +10858,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="ren.-tenor-lute-8-course">
+                  <trackName>Lute 8-course</trackName>
                   <longName>Lute</longName>
                   <shortName>Lt.</shortName>
-                  <trackName>Lute 8-course</trackName>
                   <description>Ren. Tenor Lute (8-course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
@@ -10906,9 +10886,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="ren.-tenor-lute-9-course">
+                  <trackName>Lute 9-course</trackName>
                   <longName>Lute</longName>
                   <shortName>Lt.</shortName>
-                  <trackName>Lute 9-course</trackName>
                   <description>Ren. Tenor Lute (9-course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
@@ -10935,9 +10915,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="ren.-tenor-lute-10-course">
+                  <trackName>Lute 10-course</trackName>
                   <longName>Lute</longName>
                   <shortName>Lt.</shortName>
-                  <trackName>Lute 10-course</trackName>
                   <description>Ren. Tenor Lute (10-course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
@@ -10965,9 +10945,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="baroque-lute-13-course">
+                  <trackName>Lute 13-course</trackName>
                   <longName>Lute</longName>
                   <shortName>Lt.</shortName>
-                  <trackName>Lute 13-course</trackName>
                   <description>Baroque Lute (13-course)</description>
                   <musicXMLid>pluck.lute</musicXMLid>
                   <StringData>
@@ -11094,7 +11074,6 @@ Aeolus organ synthesizer, currently disabled -->
                   <description>Mandolin (Tablature)</description>
                   <musicXMLid>pluck.mandolin</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="mandola">
@@ -11271,7 +11250,6 @@ Aeolus organ synthesizer, currently disabled -->
                   <description>Ukulele (4-str. TAB)</description>
                   <musicXMLid>pluck.ukulele</musicXMLid>
                   <stafftype staffTypePreset="tabUkulele">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
                   <genre>popular</genre>
                   <genre>classroom</genre>
@@ -11363,9 +11341,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-65</aPitchRange>
                   <pPitchRange>28-67</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="34"/> <!--Electric Bass (pick)-->
                   </Channel>
@@ -11392,8 +11370,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="acoustic-bass">
-                  <!-- Same instrument as the orchestral contrabass, but used by default plucked, rather than bowed
-                  can't init from it, as it has not been read yet. -->
+                  <!-- Same instrument as the orchestral contrabass, but used by default plucked, rather than bowed can't init from it, as it has not been read yet. -->
                   <family>bass-guitars</family>
                   <longName>Acoustic Bass</longName>
                   <shortName>Bass</shortName>
@@ -11411,9 +11388,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-62</aPitchRange>
                   <pPitchRange>28-67</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel name="pizzicato">
                         <program value="32"/> <!--Acoustic Bass-->
                   </Channel>
@@ -11450,9 +11427,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-65</aPitchRange>
                   <pPitchRange>28-67</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="33"/> <!--Electric Bass (finger)-->
                   </Channel>
@@ -11473,7 +11450,6 @@ Aeolus organ synthesizer, currently disabled -->
                   <description>Electric Bass (Tablature)</description>
                   <musicXMLid>pluck.bass.electric</musicXMLid>
                   <stafftype staffTypePreset="tab4StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
                   <genre>popular</genre>
             </Instrument>
@@ -11495,9 +11471,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-65</aPitchRange>
                   <pPitchRange>28-67</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="35"/> <!--Fretless Bass-->
                   </Channel>
@@ -11529,9 +11505,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>23-65</aPitchRange>
                   <pPitchRange>23-67</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="33"/> <!--Electric Bass (finger)-->
                   </Channel>
@@ -11551,15 +11527,14 @@ Aeolus organ synthesizer, currently disabled -->
                   <init>5-string-electric-bass</init>
                   <description>5-string Electric Bass (Tablature)</description>
                   <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>common</genre>
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="5-string-electric-bass-high-c">
                   <family>bass-guitars</family>
+                  <trackName>5-str. Electric Bass (High C/Tenor)</trackName>
                   <longName>5-str. Electric Bass</longName>
                   <shortName>El. B.</shortName>
-                  <trackName>5-str. Electric Bass (High C/Tenor)</trackName>
                   <description>5-string Electric Bass (High C/Tenor)</description>
                   <musicXMLid>pluck.bass.electric</musicXMLid>
                   <StringData>
@@ -11575,9 +11550,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>23-65</aPitchRange>
                   <pPitchRange>23-67</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="33"/> <!--Electric Bass (finger)-->
                   </Channel>
@@ -11595,7 +11570,6 @@ Aeolus organ synthesizer, currently disabled -->
                   <init>5-string-electric-bass-high-c</init>
                   <description>5-string Electric Bass (High C/Tenor) (Tablature)</description>
                   <stafftype staffTypePreset="tab5StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="6-string-electric-bass">
@@ -11618,9 +11592,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>23-70</aPitchRange>
                   <pPitchRange>23-72</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="33"/> <!--Electric Bass (finger)-->
                   </Channel>
@@ -11638,7 +11612,6 @@ Aeolus organ synthesizer, currently disabled -->
                   <init>6-string-electric-bass</init>
                   <description>6-string Electric Bass (Tablature)</description>
                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>jazz</genre>
             </Instrument>
             <Instrument id="prim">
@@ -11657,9 +11630,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>64-91</aPitchRange>
                   <pPitchRange>64-91</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>7</transposeDiatonic>
                   <transposeChromatic>12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -11703,9 +11676,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>3-60</aPitchRange>
                   <pPitchRange>3-60</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-14</transposeDiatonic>
                   <transposeChromatic>-24</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -11727,9 +11700,9 @@ Aeolus organ synthesizer, currently disabled -->
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>43-66</aPitchRange>
                   <pPitchRange>43-66</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
                   </Channel>
@@ -11751,80 +11724,78 @@ Aeolus organ synthesizer, currently disabled -->
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>28-66</aPitchRange>
                   <pPitchRange>28-66</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
-                  <singleNoteDynamics>0</singleNoteDynamics>
                   <Channel>
                         <program value="32"/> <!--Acoustic Bass-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
             <Instrument id="bandurria">
-                   <longName>Bandurria</longName>
-                   <shortName>Band.</shortName>
-                   <description>Spanish Bandurria</description>
-                   <musicXMLid>pluck.bandurria</musicXMLid>
-                   <StringData>
-                         <frets>17</frets>
-                         <string>56</string>
-                         <string>61</string>
-                         <string>66</string>
-                         <string>71</string>
-                         <string>76</string>
-                         <string>81</string>
-                   </StringData>
-                   <clef>G</clef>
-                   <barlineSpan>1</barlineSpan>
-                   <aPitchRange>56-98</aPitchRange>
-                   <pPitchRange>56-98</pPitchRange>
-                   <singleNoteDynamics>0</singleNoteDynamics>
-                   <Channel>
-                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
-                   </Channel>
-                   <genre>popular</genre>
-             </Instrument>
-             <Instrument id="bandurria-tablature">
-                   <trackName>Bandurria (Tablature)</trackName>
-                   <init>bandurria</init>
-                   <description>Bandurria (Tablature)</description>
-                   <musicXMLid>pluck.bandurria</musicXMLid>
-                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
-                   <!--                  <clef>TAB</clef> -->
-                   <genre>popular</genre>
-             </Instrument>
-             <Instrument id="laud">
-                   <longName>Laúd</longName>
-                   <shortName>Laúd</shortName>
-                   <description>Spanish Laúd</description>
-                   <musicXMLid>pluck.laud</musicXMLid>
-                   <StringData>
-                         <frets>22</frets>
-                         <string>44</string>
-                         <string>49</string>
-                         <string>54</string>
-                         <string>59</string>
-                         <string>64</string>
-                         <string>69</string>
-                   </StringData>
-                   <clef>G8vb</clef>
-                   <barlineSpan>1</barlineSpan>
-                   <aPitchRange>44-91</aPitchRange>
-                   <pPitchRange>44-91</pPitchRange>
-                   <singleNoteDynamics>0</singleNoteDynamics>
-                   <Channel>
-                         <program value="24"/> <!--Acoustic Guitar (nylon)-->
-                   </Channel>
-                   <genre>popular</genre>
-             </Instrument>
-             <Instrument id="laud-tablature">
-                   <trackName>Laúd (Tablature)</trackName>
-                   <init>laud</init>
-                   <description>Spanish Laúd (Tablature)</description>
-                   <musicXMLid>pluck.laud</musicXMLid>
-                   <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
-                   <!--                  <clef>TAB</clef> -->
-                   <genre>popular</genre>
-             </Instrument>
+                  <longName>Bandurria</longName>
+                  <shortName>Band.</shortName>
+                  <description>Spanish Bandurria</description>
+                  <musicXMLid>pluck.bandurria</musicXMLid>
+                  <StringData>
+                        <frets>17</frets>
+                        <string>56</string>
+                        <string>61</string>
+                        <string>66</string>
+                        <string>71</string>
+                        <string>76</string>
+                        <string>81</string>
+                  </StringData>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>56-98</aPitchRange>
+                  <pPitchRange>56-98</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel>
+                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                  </Channel>
+                  <genre>popular</genre>
+            </Instrument>
+            <Instrument id="bandurria-tablature">
+                  <trackName>Bandurria (Tablature)</trackName>
+                  <init>bandurria</init>
+                  <description>Bandurria (Tablature)</description>
+                  <musicXMLid>pluck.bandurria</musicXMLid>
+                  <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
+                  <genre>popular</genre>
+            </Instrument>
+            <Instrument id="laud">
+                  <longName>Laúd</longName>
+                  <shortName>Laúd</shortName>
+                  <description>Spanish Laúd</description>
+                  <musicXMLid>pluck.laud</musicXMLid>
+                  <StringData>
+                        <frets>22</frets>
+                        <string>44</string>
+                        <string>49</string>
+                        <string>54</string>
+                        <string>59</string>
+                        <string>64</string>
+                        <string>69</string>
+                  </StringData>
+                  <clef>G8vb</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>44-91</aPitchRange>
+                  <pPitchRange>44-91</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel>
+                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                  </Channel>
+                  <genre>popular</genre>
+            </Instrument>
+            <Instrument id="laud-tablature">
+                  <trackName>Laúd (Tablature)</trackName>
+                  <init>laud</init>
+                  <description>Spanish Laúd (Tablature)</description>
+                  <musicXMLid>pluck.laud</musicXMLid>
+                  <stafftype staffTypePreset="tab6StrCommon">tablature</stafftype>
+                  <genre>popular</genre>
+            </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="strings">
             <name>Strings - Bowed</name>
@@ -12054,7 +12025,7 @@ Aeolus organ synthesizer, currently disabled -->
                         <program value="43"/> <!--Contrabass-->
                   </Channel>
                   <Channel name="pizzicato">
-                        <program value="32"/> <!--Accoustic Bass-->
+                        <program value="32"/> <!--Acoustic Bass-->
                   </Channel>
                   <Channel name="tremolo">
                         <program value="44"/> <!--Tremolo Strings-->
@@ -12093,9 +12064,9 @@ Aeolus organ synthesizer, currently disabled -->
             </Instrument>
             <Instrument id="double-bass">
                   <family>orchestral-strings</family>
-                  <init>contrabass</init>
                   <longName>Double Bass</longName>
                   <shortName>Db.</shortName>
+                  <init>contrabass</init>
             </Instrument>
             <Instrument id="octobass">
                   <longName>Octobass</longName>
@@ -12113,7 +12084,7 @@ Aeolus organ synthesizer, currently disabled -->
                         <program value="43"/> <!--Contrabass-->
                   </Channel>
                   <Channel name="pizzicato">
-                        <program value="32"/> <!--Accoustic Bass-->
+                        <program value="32"/> <!--Acoustic Bass-->
                   </Channel>
                   <Channel name="tremolo">
                         <program value="44"/> <!--Tremolo Strings-->
@@ -12262,13 +12233,12 @@ Aeolus organ synthesizer, currently disabled -->
             </Instrument>
             <Instrument id="viola-da-gamba-tablature">
                   <family>viols</family>
+                  <trackName>Viola da gamba (Tablature)</trackName>
                   <longName>Viola da gamba (Tab)</longName>
                   <shortName>Vla. d. g.</shortName>
-                  <trackName>Viola da gamba (Tablature)</trackName>
                   <init>viola-da-gamba</init>
                   <description>Viola da gamba (Tablature)</description>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
-                  <!--                  <clef>TAB</clef> -->
                   <genre>earlymusic</genre>
             </Instrument>
             <!-- Viola da Gamba (6 string) removed as a duplication -->
