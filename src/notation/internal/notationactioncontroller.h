@@ -27,6 +27,8 @@
 #include "inotation.h"
 #include "iinteractive.h"
 #include "audio/isequencer.h"
+#include "playback/iplaybackcontroller.h"
+#include "playback/iplaybackconfiguration.h"
 #include "inotationconfiguration.h"
 
 namespace mu::notation {
@@ -36,6 +38,8 @@ class NotationActionController : public actions::Actionable, public async::Async
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, framework::IInteractive, interactive)
     INJECT(notation, audio::ISequencer, sequencer)
+    INJECT(notation, playback::IPlaybackController, playbackController)
+    INJECT(notation, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(notation, INotationConfiguration, configuration)
 
 public:
@@ -148,6 +152,8 @@ private:
     void toggleScoreConfig(ScoreConfigType configType);
     void toggleNavigator();
     void toggleMixer();
+
+    void playSelectedElement();
 
     bool isTextEditting() const;
 

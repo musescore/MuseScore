@@ -332,7 +332,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     }
 
     if (m_interactData.hitElement) {
-        playbackController()->playElementOnClick(m_interactData.hitElement);
+        playbackController()->playElement(m_interactData.hitElement);
     } else {
         m_view->notationInteraction()->endEditGrip();
     }

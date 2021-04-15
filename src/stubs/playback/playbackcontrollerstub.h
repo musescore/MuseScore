@@ -34,7 +34,7 @@ public:
     float playbackPosition() const override;
     async::Channel<uint32_t> midiTickPlayed() const override;
 
-    void playElementOnClick(const notation::Element* e) override;
+    void playElement(const notation::Element* e) override;
 };
 }
 

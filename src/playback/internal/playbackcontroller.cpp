@@ -137,7 +137,7 @@ float PlaybackController::playbackPositionInSeconds() const
     return sequencer()->playbackPositionInSeconds();
 }
 
-void PlaybackController::playElementOnClick(const notation::Element* element)
+void PlaybackController::playElement(const notation::Element* element)
 {
     if (!configuration()->playNotesWhenEditing()) {
         return;
