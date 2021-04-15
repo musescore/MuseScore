@@ -44,7 +44,7 @@ public:
     virtual async::Channel<uint32_t> midiTickPlayed() const = 0;
     virtual float playbackPositionInSeconds() const = 0;
 
-    virtual void playElementOnClick(const notation::Element* element) = 0;
+    virtual void playElement(const notation::Element* element) = 0;
 
     virtual bool actionChecked(const actions::ActionCode& actionCode) const = 0;
     virtual async::Channel<actions::ActionCode> actionCheckedChanged() const = 0;

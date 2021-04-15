@@ -503,21 +503,24 @@ MidiData NotationPlayback::playNoteMidiData(const Ms::Note* note) const
 
 MidiData NotationPlayback::playChordMidiData(const Ms::Chord* chord) const
 {
-    Ms::Part* part = chord->staff()->part();
+    Ms::Part* part = chord->part();
     Ms::Fraction tick = chord->segment() ? chord->segment()->tick() : Ms::Fraction(0,1);
     Ms::Instrument* instr = part->instrument(tick);
+    channel_t channel = instr->channel(chord->notes()[0]->subchannel())->channel();
 
     MidiData midiData;
     midiData.division = Ms::MScore::division;
     makeInitEvents(midiData.initEvents, chord->score());
 
+    Track t;
+    t.num = 0;
+    t.channels.push_back(channel);
+    midiData.tracks.push_back(t);
+
     Chunk chunk;
     chunk.beginTick = 0;
     chunk.endTick = Ms::MScore::defaultPlayDuration * 2;
     for (Ms::Note* n : chord->notes()) {
-        const Ms::Channel* msCh = instr->channel(n->subchannel());
-
-        channel_t channel = msCh->channel();
         int pitch = n->ppitch();
 
         auto event = midi::Event(midi::Event::Opcode::NoteOn);

@@ -52,7 +52,7 @@ public:
     async::Channel<uint32_t> midiTickPlayed() const override;
     float playbackPositionInSeconds() const override;
 
-    void playElementOnClick(const notation::Element* element) override;
+    void playElement(const notation::Element* element) override;
 
     bool actionChecked(const actions::ActionCode& actionCode) const override;
     async::Channel<actions::ActionCode> actionCheckedChanged() const override;
