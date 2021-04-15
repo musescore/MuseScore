@@ -54,7 +54,7 @@ std::string VstSynthesiser::name() const
 audio::synth::SoundFontFormats VstSynthesiser::soundFontFormats() const
 {
     NOT_SUPPORTED;
-    return { audio::synth::SoundFontFormat::Undefined };
+    return { audio::synth::SoundFontFormat::Embedded };
 }
 
 Ret VstSynthesiser::addSoundFonts(const std::vector<io::path>& /*sfonts*/)

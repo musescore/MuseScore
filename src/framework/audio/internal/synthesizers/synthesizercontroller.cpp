@@ -39,7 +39,7 @@ void SynthesizerController::init()
         return;
     }
 
-    m_synthRegister->synthesizerAddedNotify().onReceive(this, [this](const ISynthesizerPtr& synth) {
+    m_synthRegister->synthesizerAdded().onReceive(this, [](const ISynthesizerPtr& synth) {
         synth->init();
     });
 

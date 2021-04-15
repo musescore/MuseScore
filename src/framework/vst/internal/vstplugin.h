@@ -35,8 +35,8 @@ public:
 
     PluginId id() const;
     VstPluginMeta meta() const;
-    PluginViewPtr view();
-    PluginComponentPtr component();
+    PluginViewPtr view() const;
+    PluginComponentPtr component() const;
 
     bool isValid() const;
 
@@ -46,8 +46,8 @@ private:
     PluginFactory m_factory;
     PluginProviderPtr m_pluginProvider = nullptr;
     PluginControllerPtr m_pluginController = nullptr;
-    PluginComponentPtr m_pluginComponent = nullptr;
-    PluginViewPtr m_pluginView = nullptr;
+    mutable PluginComponentPtr m_pluginComponent = nullptr;
+    mutable PluginViewPtr m_pluginView = nullptr;
 
     PluginContext m_pluginContext;
 };
