@@ -35,6 +35,7 @@ enum class SoundFontFormat {
     SF2,
     SF3,
     SFZ,
+    Embedded
 };
 using SoundFontFormats = std::set<SoundFontFormat>;
 

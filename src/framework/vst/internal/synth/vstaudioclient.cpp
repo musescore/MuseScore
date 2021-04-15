@@ -1,5 +1,6 @@
 #include "vstaudioclient.h"
 
+#include "log.h"
 #include "audio/synthtypes.h"
 
 using namespace mu;
@@ -7,18 +8,18 @@ using namespace mu::vst;
 
 VstAudioClient::~VstAudioClient()
 {
-    IAudioProcessorPtr processor = m_pluginComponent;
+    m_pluginComponent->setActive(false);
+
+    IAudioProcessorPtr processor = pluginProcessor();
     if (!processor) {
         return;
     }
-
     processor->setProcessing(false);
-    m_pluginComponent->setActive(false);
 }
 
 void VstAudioClient::init(PluginComponentPtr component)
 {
-    if (!component) {
+    IF_ASSERT_FAILED(!component) {
         return;
     }
 
@@ -27,7 +28,13 @@ void VstAudioClient::init(PluginComponentPtr component)
 
 bool VstAudioClient::handleEvent(const mu::midi::Event& e)
 {
-    if (m_eventList.addEvent(vstFromMidi(e)) == Steinberg::kResultTrue) {
+    VstEvent ev;
+
+    if (!convertMidiToVst(e, ev)) {
+        return false;
+    }
+
+    if (m_eventList.addEvent(ev) == Steinberg::kResultTrue) {
         return true;
     }
 
@@ -36,7 +43,7 @@ bool VstAudioClient::handleEvent(const mu::midi::Event& e)
 
 void VstAudioClient::process(float* output, unsigned int samples)
 {
-    IAudioProcessorPtr processor = m_pluginComponent;
+    IAudioProcessorPtr processor = pluginProcessor();
     if (!processor || !output) {
         return;
     }
@@ -66,6 +73,11 @@ void VstAudioClient::setSampleRate(unsigned int sampleRate)
     updateProcessSetup();
 }
 
+IAudioProcessorPtr VstAudioClient::pluginProcessor() const
+{
+    return static_cast<IAudioProcessorPtr>(m_pluginComponent);
+}
+
 void VstAudioClient::setUpProcessData()
 {
     m_processContext.sampleRate = m_samplesInfo.sampleRate;
@@ -82,7 +94,7 @@ void VstAudioClient::updateProcessSetup()
         return;
     }
 
-    IAudioProcessorPtr processor = m_pluginComponent;
+    IAudioProcessorPtr processor = pluginProcessor();
     if (!processor) {
         return;
     }
@@ -113,41 +125,39 @@ void VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
     }
 }
 
-VstEvent VstAudioClient::vstFromMidi(const mu::midi::Event& event)
+bool VstAudioClient::convertMidiToVst(const mu::midi::Event& in, VstEvent& out) const
 {
-    VstEvent result;
-
-    if (!event.isValid()) {
-        return result;
+    if (!in.isValid()) {
+        return false;
     }
 
-    result.busIndex = event.group();
-    result.sampleOffset = 0;
-    result.ppqPosition = 0;
-    result.flags = VstEvent::kIsLive;
+    out.busIndex = in.group();
+    out.sampleOffset = 0;
+    out.ppqPosition = 0;
+    out.flags = VstEvent::kIsLive;
 
-    switch (event.opcode()) {
+    switch (in.opcode()) {
     case midi::Event::Opcode::NoteOn:
-        result.type = VstEvent::kNoteOnEvent;
-        result.noteOn.noteId = event.note();
-        result.noteOn.channel = event.channel();
-        result.noteOn.pitch = event.pitchNote();
-        result.noteOn.tuning = event.pitchTuningCents();
-        result.noteOn.velocity = event.velocityFraction();
+        out.type = VstEvent::kNoteOnEvent;
+        out.noteOn.noteId = in.note();
+        out.noteOn.channel = in.channel();
+        out.noteOn.pitch = in.pitchNote();
+        out.noteOn.tuning = in.pitchTuningCents();
+        out.noteOn.velocity = in.velocityFraction();
         break;
 
     case midi::Event::Opcode::NoteOff:
-        result.type = VstEvent::kNoteOffEvent;
-        result.noteOff.noteId = event.note();
-        result.noteOff.channel = event.channel();
-        result.noteOff.pitch = event.pitchNote();
-        result.noteOff.tuning = event.pitchTuningCents();
-        result.noteOff.velocity = event.velocityFraction();
+        out.type = VstEvent::kNoteOffEvent;
+        out.noteOff.noteId = in.note();
+        out.noteOff.channel = in.channel();
+        out.noteOff.pitch = in.pitchNote();
+        out.noteOff.tuning = in.pitchTuningCents();
+        out.noteOff.velocity = in.velocityFraction();
         break;
 
     default:
         break;
     }
 
-    return result;
+    return true;
 }
