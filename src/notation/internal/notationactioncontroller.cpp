@@ -582,11 +582,12 @@ void NotationActionController::moveAction(const actions::ActionCode& actionCode)
         return;
     }
 
-    Element* element = interaction->selection()->element();
-    if (!element) {
+    std::vector<Element*> selectionElements = interaction->selection()->elements();
+    if (selectionElements.empty()) {
         LOGW() << "no selection element";
         return;
     }
+    Element* element = selectionElements.back();
 
     if (element->isLyrics()) {
         NOT_IMPLEMENTED;
