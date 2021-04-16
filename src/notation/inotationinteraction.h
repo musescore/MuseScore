@@ -52,6 +52,7 @@ public:
     virtual Element* hitElement(const QPointF& pos, float width) const = 0;
     virtual int hitStaffIndex(const QPointF& pos) const = 0;
     virtual void addChordToSelection(MoveDirection d) = 0;
+    virtual void moveChordNoteSelection(MoveDirection d) = 0;
     virtual void select(const std::vector<Element*>& elements, SelectType type, int staffIndex = 0) = 0;
     virtual void selectAll() = 0;
     virtual void selectSection() = 0;

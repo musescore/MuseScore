@@ -74,6 +74,16 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Previous Measure"),
              QT_TRANSLATE_NOOP("action", "Go to previous measure or move text left")
              ),
+    UiAction("up-chord",
+             mu::context::UiCtxNotationHasSelection,
+             QT_TRANSLATE_NOOP("action", "Up Note in Chord"),
+             QT_TRANSLATE_NOOP("action", "Go to higher pitched note in chord")
+             ),
+    UiAction("down-chord",
+             mu::context::UiCtxNotationHasSelection,
+             QT_TRANSLATE_NOOP("action", "Down Note in Chord"),
+             QT_TRANSLATE_NOOP("action", "Go to lower pitched note in chord")
+             ),
     UiAction("next-track",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Next staff or voice"),

@@ -84,6 +84,7 @@ private:
     void addBracketsToSelection(BracketsType type);
 
     void moveAction(const actions::ActionCode& actionCode);
+    void moveChord(MoveDirection direction);
     void moveText(INotationInteractionPtr interaction, const actions::ActionCode& actionCode);
 
     void swapVoices(int voiceIndex1, int voiceIndex2);
@@ -159,7 +160,7 @@ private:
     void toggleNavigator();
     void toggleMixer();
 
-    void playSelectedElement();
+    void playSelectedElement(bool playChord = true);
 
     bool isTextEditting() const;
 
