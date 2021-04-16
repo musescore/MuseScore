@@ -712,6 +712,11 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Note Anchored Line"),
              QT_TRANSLATE_NOOP("action", "Note anchored line")
              ),
+    UiAction("chord-tie",
+             mu::context::UiCtxNotationHasSelection,
+             QT_TRANSLATE_NOOP("action", "Add Tied Note to Chord"),
+             QT_TRANSLATE_NOOP("action", "Add Tied Note to Chord")
+             ),
     UiAction("title-text",
              mu::context::UiCtxNotationHasSelection,
              QT_TRANSLATE_NOOP("action", "Title"),

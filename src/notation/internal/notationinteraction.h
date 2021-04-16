@@ -127,6 +127,7 @@ public:
     void deleteSelection() override;
     void flipSelection() override;
     void addTieToSelection() override;
+    void addTiedNoteToChord() override;
     void addSlurToSelection() override;
     void addOttavaToSelection(OttavaType type) override;
     void addHairpinToSelection(HairpinType type) override;

@@ -2165,6 +2165,15 @@ void NotationInteraction::addTieToSelection()
     notifyAboutSelectionChanged();
 }
 
+void NotationInteraction::addTiedNoteToChord()
+{
+    startEdit();
+    score()->cmdAddTie(true);
+    apply();
+
+    notifyAboutSelectionChanged();
+}
+
 void NotationInteraction::addSlurToSelection()
 {
     if (selection()->isNone()) {
