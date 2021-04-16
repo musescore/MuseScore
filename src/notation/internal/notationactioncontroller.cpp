@@ -94,6 +94,12 @@ void NotationActionController::init()
     dispatcher()->reg(this, "sharp", [this]() { toggleAccidental(AccidentalType::SHARP); });
     dispatcher()->reg(this, "sharp2", [this]() { toggleAccidental(AccidentalType::SHARP2); });
 
+    dispatcher()->reg(this, "rest", this, &NotationActionController::putRestToSelection);
+    dispatcher()->reg(this, "rest-1", [this]() { putRest(DurationType::V_WHOLE); });
+    dispatcher()->reg(this, "rest-2", [this]() { putRest(DurationType::V_HALF); });
+    dispatcher()->reg(this, "rest-4", [this]() { putRest(DurationType::V_QUARTER); });
+    dispatcher()->reg(this, "rest-8", [this]() { putRest(DurationType::V_EIGHTH); });
+
     dispatcher()->reg(this, "add-marcato", [this]() { addArticulation(SymbolId::articMarcatoAbove); });
     dispatcher()->reg(this, "add-sforzato", [this]() { addArticulation(SymbolId::articAccentAbove); });
     dispatcher()->reg(this, "add-tenuto", [this]() { addArticulation(SymbolId::articTenutoAbove); });
@@ -511,6 +517,26 @@ void NotationActionController::toggleAccidental(AccidentalType type)
     } else {
         interaction->addAccidentalToSelection(type);
     }
+}
+
+void NotationActionController::putRestToSelection()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->putRestToSelection();
+}
+
+void NotationActionController::putRest(DurationType duration)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->putRest(duration);
 }
 
 void NotationActionController::addArticulation(SymbolId articulationSymbolId)

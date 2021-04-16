@@ -72,6 +72,8 @@ private:
     void toggleVisible();
 
     void toggleAccidental(AccidentalType type);
+    void putRestToSelection();
+    void putRest(DurationType duration);
     void addArticulation(SymbolId articulationSymbolId);
 
     void putTuplet(int tupletCount);
