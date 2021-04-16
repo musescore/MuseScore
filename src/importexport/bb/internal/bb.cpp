@@ -479,7 +479,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
     MeasureBase* measureB = score->first();
     if (measureB->type() != ElementType::VBOX) {
         measureB = new VBox(score);
-        measureB->setTick(Fraction(0,1));
+        measureB->setTick(Fraction(0, 1));
         measureB->setNext(score->first());
         score->measures()->add(measureB);
     }
@@ -545,7 +545,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
     }
 
     foreach (Staff* staff, score->staves()) {
-        Fraction tick = Fraction(0,1);
+        Fraction tick = Fraction(0, 1);
         KeySigEvent ke;
         ke.setKey(Key(bb.key()));
         staff->setKey(tick, ke);
@@ -683,7 +683,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
         int tr = staffIdx * VOICES + voice;
         QList<MNote*> notes;
 
-        Fraction ctick = Fraction(0,1);
+        Fraction ctick = Fraction(0, 1);
         ciEvent i = collectNotes(ctick, voice, el.begin(), &el, &notes);
 
         for (; i != el.end();) {
@@ -698,7 +698,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
             Fraction restLen = Fraction::fromTicks(e.ontime()) - ctick;
 // qDebug("ctick %d  rest %d ontick %d size %d", ctick, restLen, e.ontime(), notes.size());
 
-            if (restLen <= Fraction(0,1)) {
+            if (restLen <= Fraction(0, 1)) {
                 qFatal("bad restlen ontime %d - ctick %d", e.ontime(), ctick.ticks());
             }
 
@@ -707,7 +707,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
                 if (len.isZero()) {
                     qDebug("processPendingNotes returns zero, restlen %d, track %d", restLen.ticks(), tr);
                     ctick += restLen;
-                    restLen = Fraction(0,1);
+                    restLen = Fraction(0, 1);
                     break;
                 }
                 ctick += len;
@@ -718,7 +718,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
             // check for gap and fill with rest
             //
             if (voice == 0) {
-                while (restLen > Fraction(0,1)) {
+                while (restLen > Fraction(0, 1)) {
                     Fraction len = restLen;
                     Measure* measure = score->tick2measure(ctick);
                     if (measure == 0 || (ctick >= measure->endTick())) {                 // at end?
@@ -729,7 +729,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
                     // split rest on measure boundary
                     if ((ctick + len) > measure->endTick()) {
                         len = measure->endTick() - ctick;
-                        if (len <= Fraction(0,1)) {
+                        if (len <= Fraction(0, 1)) {
                             qDebug("bad len %d", len.ticks());
                             break;
                         }
@@ -761,7 +761,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
         // process pending notes
         //
         while (!notes.isEmpty()) {
-            Fraction len = processPendingNotes(score, &notes, Fraction(0x7fffffff,1), tr);
+            Fraction len = processPendingNotes(score, &notes, Fraction(0x7fffffff, 1), tr);
             ctick += len;
         }
         if (voice == 0) {

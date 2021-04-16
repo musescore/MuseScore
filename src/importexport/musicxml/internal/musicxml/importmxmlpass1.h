@@ -43,7 +43,7 @@ struct PageFormat {
 };
 
 typedef QMap<QString, Part*> PartMap;
-typedef std::map<int,MusicXmlPartGroup*> MusicXmlPartGroupMap;
+typedef std::map<int, MusicXmlPartGroup*> MusicXmlPartGroupMap;
 
 //---------------------------------------------------------
 //   MxmlOctaveShiftDesc
@@ -83,8 +83,8 @@ typedef QFlags<MxmlTupletFlag> MxmlTupletFlags;
 
 struct MxmlTupletState {
     void addDurationToTuplet(const Fraction duration, const Fraction timeMod);
-    MxmlTupletFlags determineTupletAction(const Fraction noteDuration,const Fraction timeMod,const MxmlStartStop tupletStartStop,
-                                          const TDuration normalType,Fraction& missingPreviousDuration,Fraction& missingCurrentDuration);
+    MxmlTupletFlags determineTupletAction(const Fraction noteDuration, const Fraction timeMod, const MxmlStartStop tupletStartStop,
+                                          const TDuration normalType, Fraction& missingPreviousDuration, Fraction& missingCurrentDuration);
     bool m_inTuplet { false };
     bool m_implicit { false };
     int m_actualNotes { 1 };
@@ -151,7 +151,8 @@ public:
     void skipLogCurrElem();
     bool determineMeasureLength(QVector<Fraction>& ml) const;
     VoiceList getVoiceList(const QString id) const;
-    bool determineStaffMoveVoice(const QString& id, const int mxStaff, const QString& mxVoice,int& msMove, int& msTrack,int& msVoice) const;
+    bool determineStaffMoveVoice(const QString& id, const int mxStaff, const QString& mxVoice, int& msMove, int& msTrack,
+                                 int& msVoice) const;
     int trackForPart(const QString& id) const;
     bool hasPart(const QString& id) const;
     Part* getPart(const QString& id) const { return _partMap.value(id); }

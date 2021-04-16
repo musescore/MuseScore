@@ -956,7 +956,7 @@ void TextBase::drawTextWorkaround(mu::draw::Painter* p, QFont& f, const QPointF 
             } else {
                 glyphrun2.setRawFont(fRaw);
             }
-            p->drawGlyphRun(QPointF(pos.x() / factor, pos.y() / factor - offset),glyphrun2);
+            p->drawGlyphRun(QPointF(pos.x() / factor, pos.y() / factor - offset), glyphrun2);
             positions2.clear();
         }
         // Restore the QPainter to its former state

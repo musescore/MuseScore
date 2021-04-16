@@ -400,7 +400,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
         }
 
         bool firstpart = true;
-        while (duration > Fraction(0,1)) {
+        while (duration > Fraction(0, 1)) {
             if (rest.isZero()) {
                 if (measure->nextMeasure()) {
                     measure = measure->nextMeasure();
@@ -498,7 +498,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                 }
             }
             bool firstpart = true;
-            while (duration > Fraction(0,1)) {
+            while (duration > Fraction(0, 1)) {
                 if ((e->isRest() || e->isMeasureRepeat()) && (duration >= remains || e == back()) && (remains == m->ticks())) {
                     //
                     // handle full measure rest
@@ -544,9 +544,9 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                         if (cr->isChord()) {
                             if (!firstpart && toChord(cr)->tremolo() && toChord(cr)->tremolo()->twoNotes()) {               // remove partial two-note tremolo
                                 if (toChord(e)->tremolo()->chord1() == toChord(e)) {
-                                    toChord(cr)->tremolo()->setChords(toChord(cr),nullptr);
+                                    toChord(cr)->tremolo()->setChords(toChord(cr), nullptr);
                                 } else {
-                                    toChord(cr)->tremolo()->setChords(nullptr,toChord(cr));
+                                    toChord(cr)->tremolo()->setChords(nullptr, toChord(cr));
                                 }
                                 Tremolo* tremoloPointer = toChord(cr)->tremolo();
                                 toChord(cr)->setTremolo(nullptr);
@@ -566,7 +566,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                     duration = Fraction();
                 }
                 firstpart = false;
-                if (duration > Fraction(0,1)) {
+                if (duration > Fraction(0, 1)) {
                     if (!checkRest(remains, m, duration)) {     // go to next measure, if necessary
                         MScore::setError(MsError::CORRUPTED_MEASURE);
                         return false;
@@ -582,13 +582,13 @@ bool TrackList::write(Score* score, const Fraction& tick) const
 //                        }
         } else if (e->isClef()) {
             Segment* seg;
-            if (remains == m->ticks() && m->tick() > Fraction(0,1)) {
+            if (remains == m->ticks() && m->tick() > Fraction(0, 1)) {
                 Measure* pm = m->prevMeasure();
                 seg = pm->getSegmentR(SegmentType::Clef, pm->ticks());
             } else if (remains != m->ticks()) {
                 seg = m->getSegmentR(SegmentType::Clef, m->ticks() - remains);
             } else {
-                seg = m->getSegmentR(SegmentType::HeaderClef, Fraction(0,1));
+                seg = m->getSegmentR(SegmentType::HeaderClef, Fraction(0, 1));
             }
             Element* ne = e->clone();
             ne->setScore(score);

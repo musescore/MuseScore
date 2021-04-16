@@ -113,8 +113,8 @@ void HChord::rotate(int semiTones)
 
 QString HChord::name(int tpc) const
 {
-    static const HChord C0(0,3,6,9);
-    static const HChord C1(0,3);
+    static const HChord C0(0, 3, 6, 9);
+    static const HChord C1(0, 3);
 
     QString buf = tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, false);
     HChord c(*this);
@@ -491,7 +491,7 @@ void ParsedChord::correctXmlText(const QString& s)
         if (pos == -1) {
             pos = _xmlText.size();
         }
-        _xmlText.insert(pos,s);
+        _xmlText.insert(pos, s);
     }
 }
 
@@ -533,7 +533,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
     // eat leading parens
     firstLeadingToken = _tokenList.size();
     while (i < len && leading.contains(s[i])) {
-        addToken(QString(s[i++]),ChordTokenClass::QUALITY);
+        addToken(QString(s[i++]), ChordTokenClass::QUALITY);
     }
 #endif
     lastLeadingToken = _tokenList.size();
@@ -623,7 +623,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
         tok1L = "";
     }
     if (tok1 != "") {
-        addToken(tok1,ChordTokenClass::QUALITY);
+        addToken(tok1, ChordTokenClass::QUALITY);
     }
 #if 0
 // enable this code to allow quality to be parenthesized
@@ -648,7 +648,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
     }
     // eat trailing parens and commas
     while (i < len && trailing.contains(s[i])) {
-        addToken(QString(s[i++]),ChordTokenClass::QUALITY);
+        addToken(QString(s[i++]), ChordTokenClass::QUALITY);
     }
 
 #if 0
@@ -657,7 +657,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
     // eat leading parens
     firstLeadingToken = _tokenList.size();
     while (i < len && leading.contains(s[i])) {
-        addToken(QString(s[i++]),ChordTokenClass::EXTENSION);
+        addToken(QString(s[i++]), ChordTokenClass::EXTENSION);
     }
 #endif
     lastLeadingToken = _tokenList.size();
@@ -692,7 +692,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
         }
     }
     if (tok1 != "") {
-        addToken(tok1,ChordTokenClass::EXTENSION);
+        addToken(tok1, ChordTokenClass::EXTENSION);
     }
 #if 0
 // enable this code to allow extensions to be parenthesized
@@ -823,7 +823,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
     }
     // eat trailing parens and commas
     while (i < len && trailing.contains(s[i])) {
-        addToken(QString(s[i++]),ChordTokenClass::EXTENSION);
+        addToken(QString(s[i++]), ChordTokenClass::EXTENSION);
     }
 
     // get modifiers
@@ -832,7 +832,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
     while (i < len) {
         // eat leading parens
         while (i < len && leading.contains(s[i])) {
-            addToken(QString(s[i++]),ChordTokenClass::MODIFIER);
+            addToken(QString(s[i++]), ChordTokenClass::MODIFIER);
             _xmlParens = "yes";
         }
         // get first token - up to first digit, paren, or comma
@@ -862,7 +862,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
         // this allows the argument to itself be a two-part string
         // thus allowing addb9 -> add;b,9
         if (tok1L == "add") {
-            addToken(tok1,ChordTokenClass::MODIFIER);
+            addToken(tok1, ChordTokenClass::MODIFIER);
             addPending = true;
             continue;
         }
@@ -957,10 +957,10 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
             _modifierList += m;
         }
         if (tok1 != "") {
-            addToken(tok1,ChordTokenClass::MODIFIER);
+            addToken(tok1, ChordTokenClass::MODIFIER);
         }
         if (tok2 != "") {
-            addToken(tok2,ChordTokenClass::MODIFIER);
+            addToken(tok2, ChordTokenClass::MODIFIER);
         }
         if (!syntaxOnly) {
             int d;
@@ -1177,7 +1177,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
         }
         // eat trailing parens and commas
         while (i < len && trailing.contains(s[i])) {
-            addToken(QString(s[i++]),ChordTokenClass::MODIFIER);
+            addToken(QString(s[i++]), ChordTokenClass::MODIFIER);
         }
         addPending = false;
     }
@@ -1188,10 +1188,10 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
         QStringList altList = _xmlDegrees.filter("alt");
         for (const QString& d : qAsConst(altList)) {
             QString unalt(d);
-            unalt.replace(QRegExp("alt[b#]"),"add");
+            unalt.replace(QRegExp("alt[b#]"), "add");
             if (_xmlDegrees.removeAll(unalt) > 0) {
                 QString alt(d);
-                alt.replace("alt","add");
+                alt.replace("alt", "add");
                 int i1 = _xmlDegrees.indexOf(d);
                 _xmlDegrees.replace(i1, alt);
             }
@@ -1368,7 +1368,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
         }
         if (addn != -1) {
             QString& s = _modifierList[addn];
-            s.replace("add","sus");
+            s.replace("add", "sus");
             _modifierList.removeAt(no3);
         }
     }
@@ -1431,7 +1431,7 @@ QString ParsedChord::fromXml(const QString& rawKind, const QString& rawKindText,
         _name += "(";
     }
     for (QString mod : qAsConst(_modifierList)) {
-        mod.replace("major","maj");
+        mod.replace("major", "maj");
         if (kindText != "" && kind.contains("suspended") && mod.startsWith("sus")) {
             continue;
         } else if (kindText != "" && kind == "major-minor" && mod.startsWith("maj")) {
@@ -1657,7 +1657,7 @@ void ChordDescription::read(XmlReader& e)
         if (tag == "name") {
             QString n = e.readElementText();
             // stack names for this file on top of the list
-            names.insert(ni++,n);
+            names.insert(ni++, n);
         } else if (tag == "xml") {
             xmlKind = e.readElementText();
         } else if (tag == "degree") {
@@ -1823,7 +1823,7 @@ void ChordList::read(XmlReader& e)
             // throw away previously parsed chords
             cd.parsedChords.clear();
             // generate any missing info (including new parsed chords)
-            cd.complete(0,this);
+            cd.complete(0, this);
             // add to list
             insert(id, cd);
         } else if (tag == "renderRoot") {

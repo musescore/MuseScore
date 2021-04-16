@@ -497,7 +497,7 @@ void TestMeasure::undoDelInitialVBox_269919()
     // 2. change duration of first chordrest
     score->startCmd();
     Measure* m = score->firstMeasure();
-    ChordRest* cr = m->findChordRest(Fraction(0,1), 0);
+    ChordRest* cr = m->findChordRest(Fraction(0, 1), 0);
     Fraction quarter(4, 1);
     score->changeCRlen(cr, quarter);
     score->endCmd();

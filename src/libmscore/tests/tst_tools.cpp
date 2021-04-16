@@ -165,7 +165,7 @@ void TestTools::undoSlashFill()
     MasterScore* score = readScore(readFile);
 
     // select
-    Segment* s = score->firstMeasure()->findSegment(SegmentType::ChordRest, Fraction(2,4));
+    Segment* s = score->firstMeasure()->findSegment(SegmentType::ChordRest, Fraction(2, 4));
     score->selection().setRange(s, score->lastSegment(), 0, 2);
 
     // do

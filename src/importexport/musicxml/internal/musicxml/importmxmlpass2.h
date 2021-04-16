@@ -125,7 +125,7 @@ private:
 class MusicXMLParserLyric
 {
 public:
-    MusicXMLParserLyric(const LyricNumberHandler lyricNumberHandler,QXmlStreamReader& e, Score* score, MxmlLogger* logger);
+    MusicXMLParserLyric(const LyricNumberHandler lyricNumberHandler, QXmlStreamReader& e, Score* score, MxmlLogger* logger);
     QSet<Lyrics*> extendedLyrics() const { return _extendedLyrics; }
     QMap<int, Lyrics*> numberedLyrics() const { return _numberedLyrics; }
     void parse();
@@ -160,7 +160,7 @@ public:
     QString print() const;
     void setText(const QString& text) { _text = text; }
     QString text() const { return _text; }
-    static Notation notationWithAttributes(const QString& name, const QXmlStreamAttributes attributes,const QString& parent = "",
+    static Notation notationWithAttributes(const QString& name, const QXmlStreamAttributes attributes, const QString& parent = "",
                                            const SymId& symId = SymId::noSym);
 private:
     QString _name;
@@ -199,8 +199,8 @@ class MusicXMLParserNotations
 public:
     MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger);
     void parse();
-    void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,Glissando* glissandi[MAX_NUMBER_LEVEL][2],
-                    MusicXmlSpannerMap& spanners, TrillStack& trills,Tie*& tie);
+    void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs, Glissando* glissandi[MAX_NUMBER_LEVEL][2],
+                    MusicXmlSpannerMap& spanners, TrillStack& trills, Tie*& tie);
     MusicXmlTupletDesc tupletDesc() const { return _tupletDesc; }
     QString tremoloType() const { return _tremoloType; }
     int tremoloNr() const { return _tremoloNr; }
@@ -272,9 +272,9 @@ private:
     void time(const QString& partId, Measure* measure, const Fraction& tick);
     void divisions();
     void transpose(const QString& partId, const Fraction& tick);
-    Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime,Fraction& missingPrev, Fraction& dura,
-               Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl, int& gac,Beam*& beam, FiguredBassList& fbl, int& alt,
-               MxmlTupletStates& tupletStates, Tuplets& tuplets);
+    Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime, Fraction& missingPrev,
+               Fraction& dura, Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl, int& gac, Beam*& beam,
+               FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
     void notePrintSpacingNo(Fraction& dura);
     FiguredBassItem* figure(const int idx, const bool paren);
     FiguredBass* figuredBass();

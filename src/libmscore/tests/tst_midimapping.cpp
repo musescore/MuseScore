@@ -55,17 +55,17 @@ private slots:
     void midiMapping9() { testReadChangeOrderWrite("test1withDrums", "test9-ref.mscx", 1, 3); }   // No channels => Mapping
 
     // MusicXML
-    void midiMapping10() { testReadWriteMusicXML("test10","test10-ref"); }   // No channels => Mapping
-    void midiMapping11() { testReadWriteMusicXML("test11","test11"); }       // Mapping => mapping
-    void midiMapping12() { testReadWriteMusicXML("test12","test12-ref"); }   // Partial channels(>16 drum tracks) => Partial mapping
-    void midiMapping13() { testReadWriteMusicXML("test13","test13-ref"); }   // Partial channels (port and channel are absent) => mapping
+    void midiMapping10() { testReadWriteMusicXML("test10", "test10-ref"); }   // No channels => Mapping
+    void midiMapping11() { testReadWriteMusicXML("test11", "test11"); }       // Mapping => mapping
+    void midiMapping12() { testReadWriteMusicXML("test12", "test12-ref"); }   // Partial channels(>16 drum tracks) => Partial mapping
+    void midiMapping13() { testReadWriteMusicXML("test13", "test13-ref"); }   // Partial channels (port and channel are absent) => mapping
     // Guitar pro
-    void midiMapping14() { testReadWriteOther("test14.gp3","test14-ref.mscx"); }   // Mapping => Mapping
-    void midiMapping15() { testReadWriteOther("test15.gp4","test15-ref.mscx"); }   // Mapping => Mapping
-    void midiMapping16() { testReadWriteOther("test16.gp5","test16-ref.mscx"); }   // Mapping => Mapping
-    void midiMapping17() { testReadWriteOther("test17.gpx","test17-ref.mscx"); }   // Mapping => Mapping
+    void midiMapping14() { testReadWriteOther("test14.gp3", "test14-ref.mscx"); }   // Mapping => Mapping
+    void midiMapping15() { testReadWriteOther("test15.gp4", "test15-ref.mscx"); }   // Mapping => Mapping
+    void midiMapping16() { testReadWriteOther("test16.gp5", "test16-ref.mscx"); }   // Mapping => Mapping
+    void midiMapping17() { testReadWriteOther("test17.gpx", "test17-ref.mscx"); }   // Mapping => Mapping
     // MIDI
-    void midiMapping18() { testReadWriteOther("test18.mid","test18-ref.mscx"); }   // Mapping => Mapping
+    void midiMapping18() { testReadWriteOther("test18.mid", "test18-ref.mscx"); }   // Mapping => Mapping
 };
 
 //---------------------------------------------------------

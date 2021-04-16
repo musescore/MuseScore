@@ -1147,7 +1147,7 @@ void Slur::layout()
 
     qreal _spatium = spatium();
 
-    if (score() == gscore || tick() == Fraction(-1,1)) {
+    if (score() == gscore || tick() == Fraction(-1, 1)) {
         //
         // when used in a palette, slur has no parent and
         // tick and tick2 has no meaning so no layout is

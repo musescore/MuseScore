@@ -187,7 +187,7 @@ Key TransposeDialog::firstPitchedStaffKey() const
 {
     int startStaffIdx = 0;
     int endStaffIdx   = 0;
-    Fraction startTick = Fraction(0,1);
+    Fraction startTick = Fraction(0, 1);
     INotationSelectionRangePtr range = selection()->range();
 
     if (selection()->isRange()) {

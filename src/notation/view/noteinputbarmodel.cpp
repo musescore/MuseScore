@@ -74,7 +74,7 @@ int NoteInputBarModel::rowCount(const QModelIndex&) const
     return m_items.count();
 }
 
-QHash<int,QByteArray> NoteInputBarModel::roleNames() const
+QHash<int, QByteArray> NoteInputBarModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
         { IconRole, "iconRole" },
@@ -848,7 +848,7 @@ QVariantMap NoteInputBarModel::get(int index)
 {
     QVariantMap result;
 
-    QHash<int,QByteArray> names = roleNames();
+    QHash<int, QByteArray> names = roleNames();
     QHashIterator<int, QByteArray> i(names);
     while (i.hasNext()) {
         i.next();

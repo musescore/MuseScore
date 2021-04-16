@@ -77,7 +77,7 @@ static Fraction calculateFraction(const QString& type, const int dots, const Fra
         // dot(s)
         Fraction ff = f;
         for (int i = 0; i < dots; ++i) {
-            ff = ff * Fraction(1,2);
+            ff = ff * Fraction(1, 2);
             f += ff;
         }
         // tuplet

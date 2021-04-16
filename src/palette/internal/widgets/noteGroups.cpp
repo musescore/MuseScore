@@ -35,7 +35,7 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
     c.setTimeSig(_sig);
     c.createScore("");
     c.addPart("voice");
-    c.move(0, Fraction(0,1));
+    c.move(0, Fraction(0, 1));
     c.addKeySig(Key::C);
 
     TimeSig* nts = c.addTimeSig(_sig);
@@ -62,7 +62,7 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
     c.score()->style().set(Sid::pageOddTopMargin, 10.0 / INCH);
     c.score()->style().set(Sid::startBarlineSingle, true);
 
-    StaffType* st = c.score()->staff(0)->staffType(Fraction(0,1));
+    StaffType* st = c.score()->staff(0)->staffType(Fraction(0, 1));
     st->setLines(1);            // single line only
     st->setGenClef(false);      // no clef
 //      st->setGenTimesig(false); // don't display time sig since ExampleView is unable to reflect custom time sig text/symbols

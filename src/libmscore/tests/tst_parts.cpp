@@ -452,7 +452,7 @@ MasterScore* TestParts::doAddBreath()
     MasterScore* score = readScore(PARTS_DATA_DIR + "part-empty-parts.mscx");
 
     Measure* m   = score->firstMeasure();
-    Segment* s   = m->tick2segment(Fraction(1,4));
+    Segment* s   = m->tick2segment(Fraction(1, 4));
     Ms::Chord* chord = toChord(s->element(0));
     Note* note   = chord->upNote();
     EditData dd(0);
@@ -573,7 +573,7 @@ MasterScore* TestParts::doAddFingering()
     MasterScore* score = readScore(PARTS_DATA_DIR + "part-empty-parts.mscx");
 
     Measure* m   = score->firstMeasure();
-    Segment* s   = m->tick2segment(Fraction(1,4));
+    Segment* s   = m->tick2segment(Fraction(1, 4));
     Ms::Chord* chord = toChord(s->element(0));
     Note* note   = chord->upNote();
     EditData dd(0);
@@ -696,7 +696,7 @@ MasterScore* TestParts::doAddSymbol()
     MasterScore* score = readScore(PARTS_DATA_DIR + "part-empty-parts.mscx");
 
     Measure* m   = score->firstMeasure();
-    Segment* s   = m->tick2segment(Fraction(1,4));
+    Segment* s   = m->tick2segment(Fraction(1, 4));
     Ms::Chord* chord = toChord(s->element(0));
     Note* note   = chord->upNote();
     EditData dd(0);
@@ -819,7 +819,7 @@ MasterScore* TestParts::doAddChordline()
     MasterScore* score = readScore(PARTS_DATA_DIR + "part-empty-parts.mscx");
 
     Measure* m   = score->firstMeasure();
-    Segment* s   = m->tick2segment(Fraction(1,4));
+    Segment* s   = m->tick2segment(Fraction(1, 4));
     Ms::Chord* chord = toChord(s->element(0));
     Note* note   = chord->upNote();
     EditData dd(0);

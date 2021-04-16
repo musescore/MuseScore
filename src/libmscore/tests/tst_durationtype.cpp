@@ -66,13 +66,13 @@ void TestDurationType::halfDuration()
 {
     MasterScore* score = readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
     score->inputState().setTrack(0);
-    score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
+    score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_WHOLE);
     score->inputState().setNoteEntryMode(true);
 
     score->startCmd();
     score->cmdAddPitch(42, false, false);
-    Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0,1), 0);
+    Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     QVERIFY(c->ticks() == Fraction(1, 1));
     score->endCmd();
 
@@ -81,7 +81,7 @@ void TestDurationType::halfDuration()
         score->startCmd();
         score->cmdHalfDuration();
         score->endCmd();
-        Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0,1), 0);
+        Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
         QVERIFY(c->ticks() == Fraction(i / 2, 128));
     }
 }
@@ -96,18 +96,18 @@ void TestDurationType::doubleDuration()
 {
     MasterScore* score = readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
     score->inputState().setTrack(0);
-    score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
+    score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_128TH);
     score->inputState().setNoteEntryMode(true);
 
     score->startCmd();
     score->cmdAddPitch(42, false, false);
-    QVERIFY(score->firstMeasure()->findChord(Fraction(0,1), 0)->ticks() == Fraction(1, 128));
+    QVERIFY(score->firstMeasure()->findChord(Fraction(0, 1), 0)->ticks() == Fraction(1, 128));
 
     // repeatedly double-duration from V_128 to V_WHOLE
     for (int i = 1; i < 128; i *= 2) {
         score->cmdDoubleDuration();
-        Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0,1), 0);
+        Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
         QVERIFY(c->ticks() == Fraction(2 * i, 128));
     }
     score->endCmd();
@@ -123,23 +123,23 @@ void TestDurationType::decDurationDotted()
 {
     MasterScore* score = readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
     score->inputState().setTrack(0);
-    score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
+    score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_WHOLE);
     score->inputState().setNoteEntryMode(true);
 
     score->startCmd();
     score->cmdAddPitch(42, false, false);
-    Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0,1), 0);
+    Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     QVERIFY(c->ticks() == Fraction(1, 1));
 
     // repeatedly dec-duration-dotted from V_WHOLE to V_128
     for (int i = 128; i > 1; i /= 2) {
         score->cmdDecDurationDotted();
-        Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0,1), 0);
+        Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
         QVERIFY(c->ticks() == Fraction(i + i / 2, 256));
 
         score->cmdDecDurationDotted();
-        c = score->firstMeasure()->findChord(Fraction(0,1), 0);
+        c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
         QVERIFY(c->ticks() == Fraction(i / 2, 128));
     }
     score->endCmd();
@@ -155,21 +155,21 @@ void TestDurationType::incDurationDotted()
 {
     MasterScore* score = readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
     score->inputState().setTrack(0);
-    score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
+    score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_128TH);
     score->inputState().setNoteEntryMode(true);
 
     score->startCmd();
     score->cmdAddPitch(42, false, false);
-    QVERIFY(score->firstMeasure()->findChord(Fraction(0,1), 0)->ticks() == Fraction(1, 128));
+    QVERIFY(score->firstMeasure()->findChord(Fraction(0, 1), 0)->ticks() == Fraction(1, 128));
 
     // repeatedly inc-duration-dotted from V_128 to V_WHOLE
     for (int i = 1; i < 128; i *= 2) {
         score->cmdIncDurationDotted();
-        QVERIFY(score->firstMeasure()->findChord(Fraction(0,1), 0)->ticks() == Fraction(3 * i, 256));
+        QVERIFY(score->firstMeasure()->findChord(Fraction(0, 1), 0)->ticks() == Fraction(3 * i, 256));
 
         score->cmdIncDurationDotted();
-        QVERIFY(score->firstMeasure()->findChord(Fraction(0,1), 0)->ticks() == Fraction(i, 64));
+        QVERIFY(score->firstMeasure()->findChord(Fraction(0, 1), 0)->ticks() == Fraction(i, 64));
     }
     score->endCmd();
 }

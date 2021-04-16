@@ -101,7 +101,7 @@ void InteractiveTestsModel::question()
 void InteractiveTestsModel::customQuestion()
 {
     int maybeBtn = int(IInteractive::Button::CustomButton) + 1;
-    int btn = interactive()->question("Test", "It works?",{
+    int btn = interactive()->question("Test", "It works?", {
         IInteractive::ButtonData(maybeBtn, "Maybe"),
         interactive()->buttonData(IInteractive::Button::No)
     });

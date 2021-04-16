@@ -490,7 +490,7 @@ class ExchangeVoice : public UndoCommand
     int staff;
 
 public:
-    ExchangeVoice(Measure*,int val1, int val2, int staff);
+    ExchangeVoice(Measure*, int val1, int val2, int staff);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("ExchangeVoice")
@@ -680,7 +680,7 @@ class ChangeStaff : public UndoCommand
 public:
     ChangeStaff(Staff*);
 
-    ChangeStaff(Staff*, bool invisible, ClefTypeList _clefType, qreal userDist, Staff::HideMode _hideMode,bool _showIfEmpty, bool _cutaway,
+    ChangeStaff(Staff*, bool invisible, ClefTypeList _clefType, qreal userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
                 bool hide, bool mergeRests);
     UNDO_NAME("ChangeStaff")
 };
@@ -1433,12 +1433,12 @@ public:
 class ChangeMetaTags : public UndoCommand
 {
     Score* score;
-    QMap<QString,QString> metaTags;
+    QMap<QString, QString> metaTags;
 
     void flip(EditData*) override;
 
 public:
-    ChangeMetaTags(Score* s, const QMap<QString,QString>& m)
+    ChangeMetaTags(Score* s, const QMap<QString, QString>& m)
         : score(s), metaTags(m) {}
     UNDO_NAME("ChangeMetaTags")
 };

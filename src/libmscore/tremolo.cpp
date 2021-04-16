@@ -658,13 +658,13 @@ Fraction Tremolo::tremoloLen() const
 {
     Fraction f;
     switch (lines()) {
-    case 1: f.set(1,8);
+    case 1: f.set(1, 8);
         break;
-    case 2: f.set(1,16);
+    case 2: f.set(1, 16);
         break;
-    case 3: f.set(1,32);
+    case 3: f.set(1, 32);
         break;
-    case 4: f.set(1,64);
+    case 4: f.set(1, 64);
         break;
     }
     return f;

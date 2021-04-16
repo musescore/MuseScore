@@ -102,7 +102,7 @@ void MasterPalette::addPalette(Palette* sp)
     psa->setRestrictHeight(false);
     QTreeWidgetItem* item = new QTreeWidgetItem(QStringList(sp->name()));
     item->setData(0, Qt::UserRole, stack->count());
-    item->setText(0, mu::qtrc("palette", sp->name().toUtf8().data()).replace("&&","&"));
+    item->setText(0, mu::qtrc("palette", sp->name().toUtf8().data()).replace("&&", "&"));
     stack->addWidget(psa);
     treeWidget->addTopLevelItem(item);
 }

@@ -85,8 +85,8 @@ void CmdState::reset()
 {
     layoutFlags         = LayoutFlag::NO_FLAGS;
     _updateMode         = UpdateMode::DoNothing;
-    _startTick          = Fraction(-1,1);
-    _endTick            = Fraction(-1,1);
+    _startTick          = Fraction(-1, 1);
+    _endTick            = Fraction(-1, 1);
 
     _startStaff = -1;
     _endStaff = -1;
@@ -107,10 +107,10 @@ void CmdState::setTick(const Fraction& t)
         return;
     }
 
-    if (_startTick == Fraction(-1,1) || t < _startTick) {
+    if (_startTick == Fraction(-1, 1) || t < _startTick) {
         _startTick = t;
     }
-    if (_endTick == Fraction(-1,1) || t > _endTick) {
+    if (_endTick == Fraction(-1, 1) || t > _endTick) {
         _endTick = t;
     }
     setUpdateMode(UpdateMode::Layout);
@@ -1127,7 +1127,7 @@ bool Score::makeGap1(const Fraction& baseTick, int staffIdx, const Fraction& len
         Fraction newLen = len - Fraction::fromTicks(voiceOffset[track - strack]);
         Q_ASSERT(newLen.numerator() != 0);
 
-        if (newLen > Fraction(0,1)) {
+        if (newLen > Fraction(0, 1)) {
             const Fraction endTick = tick + newLen;
             typedef SelectionFilterType Sel;
             // chord symbols can exist without chord/rest so they should not be removed
@@ -1159,7 +1159,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, const Fraction& 
                 }
                 // this happens only for voices other than voice 1
                 expandVoice(seg, track);
-                return makeGapVoice(seg,track,len,tick);
+                return makeGapVoice(seg, track, len, tick);
             }
             if (seg1->element(track)) {
                 break;
@@ -1278,7 +1278,7 @@ QList<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction gap)
     }
 
     Segment* s = cr->segment();
-    while (gap > Fraction(0,1)) {
+    while (gap > Fraction(0, 1)) {
         Measure* m    = s->measure();
         Fraction timeStretch = cr->staff()->timeStretch(s->tick());
         Fraction rest = (m->ticks() - s->rtick()) * timeStretch;

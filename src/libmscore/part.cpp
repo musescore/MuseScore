@@ -539,7 +539,7 @@ void Part::insertTime(const Fraction& tick, const Fraction& len)
 
     // move all instruments
 
-    if (len < Fraction(0,1)) {
+    if (len < Fraction(0, 1)) {
         // remove instruments between tickpos >= tick and tickpos < (tick+len)
         // ownership goes back to class InstrumentChange()
 
@@ -696,7 +696,7 @@ bool Part::hasPitchedStaff() const
         return false;
     }
     for (Staff* s : *staves()) {
-        if (s && s->isPitchedStaff(Fraction(0,1))) {
+        if (s && s->isPitchedStaff(Fraction(0, 1))) {
             return true;
         }
     }
@@ -713,7 +713,7 @@ bool Part::hasTabStaff() const
         return false;
     }
     for (Staff* s : *staves()) {
-        if (s && s->isTabStaff(Fraction(0,1))) {
+        if (s && s->isTabStaff(Fraction(0, 1))) {
             return true;
         }
     }
@@ -730,7 +730,7 @@ bool Part::hasDrumStaff() const
         return false;
     }
     for (Staff* s : *staves()) {
-        if (s && s->isDrumStaff(Fraction(0,1))) {
+        if (s && s->isDrumStaff(Fraction(0, 1))) {
             return true;
         }
     }

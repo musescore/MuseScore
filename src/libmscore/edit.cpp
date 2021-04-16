@@ -869,7 +869,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
         // check for local time signatures
         for (Measure* m = fm; m; m = m->nextMeasure()) {
             for (int si = 0; si < nstaves(); ++si) {
-                if (staff(si)->timeStretch(m->tick()) != Fraction(1,1)) {
+                if (staff(si)->timeStretch(m->tick()) != Fraction(1, 1)) {
                     // we cannot change a staff with a local time signature
                     return false;
                 }
@@ -889,7 +889,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
     Fraction k = range.ticks() / ns;
     int nm     = (k.numerator() + k.denominator() - 1) / k.denominator();
 
-    Fraction nd = ns * Fraction(nm,1);
+    Fraction nd = ns * Fraction(nm, 1);
 
     // evtl. we have to fill the last measure
     Fraction fill = nd - range.ticks();
@@ -1144,8 +1144,8 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
         stretch = lts->stretch();
         lsig    = lts->sig();
     } else {
-        stretch.set(1,1);
-        lsig.set(4,4);              // set to default
+        stretch.set(1, 1);
+        lsig.set(4, 4);              // set to default
     }
 
     int track    = staffIdx * VOICES;
@@ -1337,7 +1337,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
     }
 
     Measure* pm = m->prevMeasure();
-    Fraction ns(pm ? pm->timesig() : Fraction(4,4));
+    Fraction ns(pm ? pm->timesig() : Fraction(4, 4));
 
     if (!rScore->rewriteMeasures(rm, ns, -1)) {
         undoStack()->current()->unwind();
@@ -2170,9 +2170,9 @@ void Score::deleteItem(Element* el)
         Part* part = el->part();
         InstrumentName* in = toInstrumentName(el);
         if (in->instrumentNameType() == InstrumentNameType::LONG) {
-            undo(new ChangeInstrumentLong(Fraction(0,1), part, QList<StaffName>()));
+            undo(new ChangeInstrumentLong(Fraction(0, 1), part, QList<StaffName>()));
         } else if (in->instrumentNameType() == InstrumentNameType::SHORT) {
-            undo(new ChangeInstrumentShort(Fraction(0,1), part, QList<StaffName>()));
+            undo(new ChangeInstrumentShort(Fraction(0, 1), part, QList<StaffName>()));
         }
     }
     break;
@@ -2787,7 +2787,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                 for (int staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
                     KeySigEvent nkse = lastDeletedKeySigEvent;
                     if (transposeKeySigEvent) {
-                        Interval v = score->staff(staffIdx)->part()->instrument(Fraction(0,1))->transpose();
+                        Interval v = score->staff(staffIdx)->part()->instrument(Fraction(0, 1))->transpose();
                         v.flip();
                         nkse.setKey(transposeKey(nkse.key(), v, lastDeletedKeySig->part()->preferSharpFlat()));
                     }
@@ -3109,7 +3109,7 @@ void Score::cmdDeleteSelection()
             }
 
             // find element to select
-            if (!cr && tick >= Fraction(0,1) && track >= 0) {
+            if (!cr && tick >= Fraction(0, 1) && track >= 0) {
                 cr = findCR(tick, track);
             }
 
@@ -3596,7 +3596,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
         }
         tick = measure->tick();
     } else {
-        tick = last() ? last()->endTick() : Fraction(0,1);
+        tick = last() ? last()->endTick() : Fraction(0, 1);
     }
 
     Fraction f       = sigmap()->timesig(tick.ticks()).nominal();   // use nominal time signature of current measure
@@ -3722,19 +3722,19 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
             //
             for (TimeSig* ts : tsl) {
                 TimeSig* nts = new TimeSig(*ts);
-                Segment* s   = m->undoGetSegmentR(SegmentType::TimeSig, Fraction(0,1));
+                Segment* s   = m->undoGetSegmentR(SegmentType::TimeSig, Fraction(0, 1));
                 nts->setParent(s);
                 undoAddElement(nts);
             }
             for (KeySig* ks : ksl) {
                 KeySig* nks = new KeySig(*ks);
-                Segment* s  = m->undoGetSegmentR(SegmentType::KeySig, Fraction(0,1));
+                Segment* s  = m->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
                 nks->setParent(s);
                 undoAddElement(nks);
             }
             for (Clef* clef : cl) {
                 Clef* nClef = new Clef(*clef);
-                Segment* s  = m->undoGetSegmentR(SegmentType::HeaderClef, Fraction(0,1));
+                Segment* s  = m->undoGetSegmentR(SegmentType::HeaderClef, Fraction(0, 1));
                 nClef->setParent(s);
                 undoAddElement(nClef);
             }
@@ -5987,8 +5987,8 @@ void Score::undoInsertTime(const Fraction& tick, const Fraction& len)
                 //  +----remove---+ +---spanner---+
                 //
                 Fraction t = s->tick() + len;
-                if (t < Fraction(0,1)) {
-                    t = Fraction(0,1);
+                if (t < Fraction(0, 1)) {
+                    t = Fraction(0, 1);
                 }
                 Element* startElement = s->startElement();
                 Element* endElement = s->endElement();

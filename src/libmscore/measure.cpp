@@ -168,9 +168,9 @@ void MStaff::setTrack(int track)
 //---------------------------------------------------------
 
 Measure::Measure(Score* s)
-    : MeasureBase(s), m_timesig(4,4)
+    : MeasureBase(s), m_timesig(4, 4)
 {
-    setTicks(Fraction(4,4));
+    setTicks(Fraction(4, 4));
     m_repeatCount = 2;
 
     int n = score()->nstaves();
@@ -498,8 +498,8 @@ qreal Measure::tick2pos(Fraction tck) const
     Segment* s;
     qreal x1  = 0;
     qreal x2  = 0;
-    Fraction tick1 = Fraction(0,1);
-    Fraction tick2 = Fraction(0,1);
+    Fraction tick1 = Fraction(0, 1);
+    Fraction tick2 = Fraction(0, 1);
     for (s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
         x2    = s->x();
         tick2 = s->rtick();
@@ -811,7 +811,7 @@ Segment* Measure::tick2segment(const Fraction& _t, SegmentType st)
 Segment* Measure::findSegmentR(SegmentType st, const Fraction& t) const
 {
     Segment* s;
-    if (t > (ticks() * Fraction(1,2))) {
+    if (t > (ticks() * Fraction(1, 2))) {
         // search backwards
         for (s = last(); s && s->rtick() > t; s = s->prev()) {
         }
@@ -1834,7 +1834,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
     Fraction diff = nl - ol;
 
     Fraction startTick = endTick();
-    if (diff < Fraction(0,1)) {
+    if (diff < Fraction(0, 1)) {
         startTick += diff;
     }
 
@@ -1919,7 +1919,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
         for (int trk = strack; trk < etrack; ++trk) {
             Fraction n = diff;
             bool rFlag = false;
-            if (n < Fraction(0,1)) {
+            if (n < Fraction(0, 1)) {
                 for (Segment* segment = m->last(); segment;) {
                     Segment* pseg = segment->prev();
                     if (segment->segmentType() == SegmentType::ChordRest) {
@@ -1939,7 +1939,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                                 n += cr->actualTicks();
                             }
                             s->undoRemoveElement(e);
-                            if (n >= Fraction(0,1)) {
+                            if (n >= Fraction(0, 1)) {
                                 break;
                             }
                         }
@@ -1954,7 +1954,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                 rFlag = true;
             }
             int voice = trk % VOICES;
-            if (appendRestsIfNecessary && (n > Fraction(0,1)) && (rFlag || voice == 0)) {
+            if (appendRestsIfNecessary && (n > Fraction(0, 1)) && (rFlag || voice == 0)) {
                 // add rest to measure
                 Fraction rtick = tick() + nl - n;
                 int track = staffIdx * VOICES + voice;
@@ -1962,7 +1962,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
             }
         }
     }
-    if (diff < Fraction(0,1)) {
+    if (diff < Fraction(0, 1)) {
         //
         //  CHECK: do not remove all slurs
         //
@@ -3814,10 +3814,10 @@ void Measure::stretchMeasure(qreal targetWidth)
 Fraction Measure::computeTicks()
 {
     Fraction minTick = ticks();
-    if (minTick <= Fraction(0,1)) {
+    if (minTick <= Fraction(0, 1)) {
         qDebug("=====minTick %d measure %p", minTick.ticks(), this);
     }
-    Q_ASSERT(minTick > Fraction(0,1));
+    Q_ASSERT(minTick > Fraction(0, 1));
 
     Segment* ns = first();
     while (ns && !ns->enabled()) {
@@ -4109,7 +4109,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
         } else if (visibleInt == 1) {  // all (courtesy) clefs in the clef segment are not visible
             clefSeg->setVisible(false);
         } else { // should never happen
-            qDebug("Clef Segment without Clef elements at tick %d/%d",clefSeg->tick().numerator(),clefSeg->tick().denominator());
+            qDebug("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
         }
         if ((wasVisible != clefSeg->visible()) && system()) {   // recompute the width only if necessary
             computeMinWidth();
@@ -4212,8 +4212,8 @@ int Measure::layoutWeight(int maxMMRestLength) const
 void Measure::addSystemHeader(bool isFirstSystem)
 {
     int staffIdx = 0;
-    Segment* kSegment = findFirstR(SegmentType::KeySig, Fraction(0,1));
-    Segment* cSegment = findFirstR(SegmentType::HeaderClef, Fraction(0,1));
+    Segment* kSegment = findFirstR(SegmentType::KeySig, Fraction(0, 1));
+    Segment* cSegment = findFirstR(SegmentType::HeaderClef, Fraction(0, 1));
 
     for (const Staff* staff : score()->staves()) {
         const int track = staffIdx * VOICES;
@@ -4227,7 +4227,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                 s = prevMeasure()->findSegment(SegmentType::Clef, tick());
             } else if (isMMRest()) {
                 // look for a header clef at the beginning of the first underlying measure
-                s = mmRestFirst()->findFirstR(SegmentType::HeaderClef, Fraction(0,1));
+                s = mmRestFirst()->findFirstR(SegmentType::HeaderClef, Fraction(0, 1));
             }
             if (s) {
                 Clef* c = toClef(s->element(track));
@@ -4237,7 +4237,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
             }
             Clef* clef;
             if (!cSegment) {
-                cSegment = new Segment(this, SegmentType::HeaderClef, Fraction(0,1));
+                cSegment = new Segment(this, SegmentType::HeaderClef, Fraction(0, 1));
                 cSegment->setHeader(true);
                 add(cSegment);
                 clef = 0;
@@ -4303,7 +4303,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
         if (needKeysig) {
             KeySig* keysig;
             if (!kSegment) {
-                kSegment = new Segment(this, SegmentType::KeySig, Fraction(0,1));
+                kSegment = new Segment(this, SegmentType::KeySig, Fraction(0, 1));
                 kSegment->setHeader(true);
                 add(kSegment);
                 keysig = 0;
@@ -4370,7 +4370,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
     int n       = score()->nstaves();
     if ((n > 1 && score()->styleB(Sid::startBarlineMultiple)) || (n == 1 && score()->styleB(Sid::startBarlineSingle))) {
         if (!s) {
-            s = new Segment(this, SegmentType::BeginBarLine, Fraction(0,1));
+            s = new Segment(this, SegmentType::BeginBarLine, Fraction(0, 1));
             add(s);
         }
         for (int track = 0; track < score()->ntracks(); track += VOICES) {
@@ -4411,7 +4411,7 @@ void Measure::addSystemTrailer(Measure* nm)
     bool showCourtesySig = false;
     Segment* s = findSegmentR(SegmentType::TimeSigAnnounce, _rtick);
     if (nm && score()->genCourtesyTimesig() && !isFinalMeasure && !score()->floatMode()) {
-        Segment* tss = nm->findSegmentR(SegmentType::TimeSig, Fraction(0,1));
+        Segment* tss = nm->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
         if (tss) {
             int nstaves = score()->nstaves();
             for (int track = 0; track < nstaves * VOICES; track += VOICES) {
@@ -4649,7 +4649,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
 
     if (isMMRest()) {
         // Reset MM rest to initial size and position
-        Segment* seg = findSegmentR(SegmentType::ChordRest, Fraction(0,1));
+        Segment* seg = findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
         const int nstaves = score()->nstaves();
         for (int st = 0; st < nstaves; ++st) {
             MMRest* mmRest = toMMRest(seg->element(staff2track(st)));

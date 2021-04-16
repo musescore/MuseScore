@@ -64,7 +64,7 @@ int AdvancedPreferencesModel::rowCount(const QModelIndex&) const
     return m_items.count();
 }
 
-QHash<int,QByteArray> AdvancedPreferencesModel::roleNames() const
+QHash<int, QByteArray> AdvancedPreferencesModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
         { KeyRole, "keyRole" },

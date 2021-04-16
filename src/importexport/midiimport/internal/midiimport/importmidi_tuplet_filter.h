@@ -9,7 +9,7 @@ class ReducedFraction;
 namespace MidiTuplet {
 struct TupletInfo;
 
-void filterTuplets(std::vector<TupletInfo>& tuplets,const ReducedFraction& basicQuant);
+void filterTuplets(std::vector<TupletInfo>& tuplets, const ReducedFraction& basicQuant);
 } // namespace MidiTuplet
 } // namespace Ms
 

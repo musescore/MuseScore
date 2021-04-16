@@ -91,7 +91,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
     Tuplet* tuplet = nullptr;
     Fraction dstTick = dst->tick();
     bool pasted = false;
-    Fraction tickLen = Fraction(0,1);
+    Fraction tickLen = Fraction(0, 1);
     int staves  = 0;
     bool done   = false;
     bool doScale = (scale != Fraction(1, 1));
@@ -123,7 +123,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
         bool spannerFound = false;
 
         e.setTickOffset(dstTick - tickStart);
-        e.setTick(Fraction(0,1));
+        e.setTick(Fraction(0, 1));
 
         while (e.readNextStartElement()) {
             if (done) {
@@ -756,7 +756,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
 {
     e.setPasteMode(true);   // ensure the reader is in paste mode
     Segment* currSegm = dst->segment();
-    Fraction destTick = Fraction(0,1);                // the tick and track to place the pasted element at
+    Fraction destTick = Fraction(0, 1);                // the tick and track to place the pasted element at
     int destTrack   = 0;
     bool done        = false;
     int segDelta    = 0;
@@ -944,10 +944,10 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                             }
                             // by default, split on-note duration in half: half on-note and half off-note
                             Fraction totTicks  = currSegm->tick() - prevSegm->tick();
-                            Fraction destTick1 = prevSegm->tick() + (totTicks * Fraction(1,2));
+                            Fraction destTick1 = prevSegm->tick() + (totTicks * Fraction(1, 2));
                             ticks         = totTicks * Fraction(1, 2);
                             if (onNoteFB) {
-                                onNoteFB->setTicks(totTicks * Fraction(1,2));
+                                onNoteFB->setTicks(totTicks * Fraction(1, 2));
                             }
                             // look for a segment at this tick; if none, create one
                             Segment* nextSegm = prevSegm;

@@ -270,7 +270,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     // handle transposing instruments
     if (oscore->styleB(Sid::concertPitch) != score->styleB(Sid::concertPitch)) {
         for (const Staff* staff : score->staves()) {
-            if (staff->staffType(Fraction(0,1))->group() == StaffGroup::PERCUSSION) {
+            if (staff->staffType(Fraction(0, 1))->group() == StaffGroup::PERCUSSION) {
                 continue;
             }
 
@@ -289,11 +289,11 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             int startTrack = staffIdx * VOICES;
             int endTrack   = startTrack + VOICES;
 
-            Fraction endTick = Fraction(0,1);
+            Fraction endTick = Fraction(0, 1);
             if (score->lastSegment()) {
                 endTick = score->lastSegment()->tick();
             }
-            score->transposeKeys(staffIdx, staffIdx + 1, Fraction(0,1), endTick, interval, true, flip);
+            score->transposeKeys(staffIdx, staffIdx + 1, Fraction(0, 1), endTick, interval, true, flip);
 
             for (auto segment = score->firstSegmentMM(SegmentType::ChordRest); segment;
                  segment = segment->next1MM(SegmentType::ChordRest)) {
@@ -968,7 +968,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                     // only clone clef if it matches staff group and does not exists yet
                     Clef* clef = toClef(oe);
                     Fraction tick = seg->tick();
-                    if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->constStaffType(Fraction(0,1))->group()
+                    if (ClefInfo::staffGroup(clef->concertClef()) == dstStaff->constStaffType(Fraction(0, 1))->group()
                         && dstStaff->clefType(tick) != clef->clefTypeList()) {
                         ne = oe->clone();
                     }

@@ -877,7 +877,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
                         }
                     }
                 }
-            } else if (isLyricsLine() && toLyrics(parent())->ticks() > Fraction(0,1)) {
+            } else if (isLyricsLine() && toLyrics(parent())->ticks() > Fraction(0, 1)) {
                 // melisma line
                 // it is possible CR won't be in correct track
                 // prefer element in current track if available
@@ -1141,7 +1141,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
 
 void SLine::layout()
 {
-    if (score() == gscore || (tick() == Fraction(-1,1)) || (tick2() == Fraction::fromTicks(1))) {
+    if (score() == gscore || (tick() == Fraction(-1, 1)) || (tick2() == Fraction::fromTicks(1))) {
         //
         // when used in a palette or while dragging from palette,
         // SLine has no parent and
@@ -1323,7 +1323,7 @@ bool SLine::readProperties(XmlReader& e)
     const QStringRef& tag(e.name());
 
     if (tag == "tick2") {                  // obsolete
-        if (tick() == Fraction(-1,1)) {   // not necessarily set (for first note of score?) #30151
+        if (tick() == Fraction(-1, 1)) {   // not necessarily set (for first note of score?) #30151
             setTick(e.tick());
         }
         setTick2(Fraction::fromTicks(e.readInt()));

@@ -92,7 +92,7 @@ void LyricsLine::layout()
         setLineWidth(score()->styleP(Sid::lyricsLineThickness));
         // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
         if (tempMelismaTicks) {
-            lyrics()->setTicks(Fraction(0,1));
+            lyrics()->setTicks(Fraction(0, 1));
         }
 
         // Lyrics::_ticks points to the beginning of the last spanned segment,
@@ -112,7 +112,7 @@ void LyricsLine::layout()
             // user probably deleted measures at end of score, leaving this melisma too long
             // set s to last segment and reset lyricsEndTick to trigger FIXUP code below
             s = score()->lastSegment();
-            lyricsEndTick = Fraction(-1,1);
+            lyricsEndTick = Fraction(-1, 1);
         }
         Element* se = s->element(lyricsTrack);
         // everything is OK if we have reached a chord at right tick on right track
@@ -149,7 +149,7 @@ void LyricsLine::layout()
                     // nothing to do but set ticks to 0
                     // this will result in melisma being deleted later
                     lyrics()->undoChangeProperty(Pid::LYRIC_TICKS, 0);
-                    setTicks(Fraction(0,1));
+                    setTicks(Fraction(0, 1));
                     return;
                 }
             }
@@ -344,7 +344,7 @@ void LyricsLineSegment::layout()
     qreal sp                = spatium();
     System* sys;
 
-    if (lyricsLine()->ticks() <= Fraction(0,1)) {     // if no span,
+    if (lyricsLine()->ticks() <= Fraction(0, 1)) {     // if no span,
         _numOfDashes = 0;                 // nothing to draw
         return;                           // and do nothing
     }

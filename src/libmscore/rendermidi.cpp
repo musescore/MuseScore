@@ -120,10 +120,10 @@ void Score::updateSwing()
             sp.swingUnit = st->swingParameters()->swingUnit;
             if (st->systemFlag()) {
                 for (Staff* sta : qAsConst(_staves)) {
-                    sta->insertIntoSwingList(s->tick(),sp);
+                    sta->insertIntoSwingList(s->tick(), sp);
                 }
             } else {
-                staff->insertIntoSwingList(s->tick(),sp);
+                staff->insertIntoSwingList(s->tick(), sp);
             }
         }
     }
@@ -158,7 +158,7 @@ void Score::updateCapo()
             if (st->capo() == 0) {
                 continue;
             }
-            staff->insertIntoCapoList(s->tick(),st->capo());
+            staff->insertIntoCapoList(s->tick(), st->capo());
         }
     }
 }
@@ -568,10 +568,10 @@ static void aeolusSetStop(int tick, int channel, int i, int k, bool val, EventMa
     }
 
     event.setChannel(channel);
-    events->insert(std::pair<int,NPlayEvent>(tick, event));
+    events->insert(std::pair<int, NPlayEvent>(tick, event));
 
     event.setValue(k);
-    events->insert(std::pair<int,NPlayEvent>(tick, event));
+    events->insert(std::pair<int, NPlayEvent>(tick, event));
 //      event.setValue(0x40 + i);
 //      events->insert(std::pair<int,NPlayEvent>(tick, event));
 }
@@ -1258,7 +1258,7 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
                 event = NPlayEvent(ME_CONTROLLER, channel, CTRL_SUSTAIN, 0);
             }
             event.setOriginatingStaff(pe.second.second);
-            events->insert(std::pair<int,NPlayEvent>(pe.first, event));
+            events->insert(std::pair<int, NPlayEvent>(pe.first, event));
         }
     }
 }
@@ -1278,7 +1278,7 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
         || pt == ElementType::VBOX || pt == ElementType::HBOX
         || pt == ElementType::FBOX || pt == ElementType::TBOX) {
         Fraction offset = cm->timesig() - cm->ticks();
-        if (offset > Fraction(0,1)) {
+        if (offset > Fraction(0, 1)) {
             tick += offset;
         }
     }
@@ -1291,12 +1291,12 @@ void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swin
 
     //Check the position of the chord to apply changes accordingly
     if (tick.ticks() % swingBeat == swingUnit) {
-        if (!isSubdivided(chord,swingUnit)) {
+        if (!isSubdivided(chord, swingUnit)) {
             ontime = ontime + swingActualAdjust;
         }
     }
     int endTick = tick.ticks() + ticksDuration;
-    if ((endTick % swingBeat == swingUnit) && (!isSubdivided(ncr,swingUnit))) {
+    if ((endTick % swingBeat == swingUnit) && (!isSubdivided(ncr, swingUnit))) {
         gateTime = gateTime + (swingActualAdjust / 10);
     }
 }
@@ -1728,8 +1728,8 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     //   append a NoteEvent either by calculating an articulationExcursion or by
     //   the given chromatic relative pitch.
     //   RETURNS the new ontime value.  The caller is expected to assign this value.
-    auto makeEvent = [note,chord,chromatic,events](int pitch, int ontime, int duration) {
-        events->append(NoteEvent(chromatic ? pitch : articulationExcursion(note,note,pitch),
+    auto makeEvent = [note, chord, chromatic, events](int pitch, int ontime, int duration) {
+        events->append(NoteEvent(chromatic ? pitch : articulationExcursion(note, note, pitch),
                                  ontime / chord->actualTicks().ticks(),
                                  duration / chord->actualTicks().ticks()));
         return ontime + duration;
@@ -1743,7 +1743,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     //    notes will still play.  This means graceExtend simply omits the call to append( NoteEvent(...))
     //    but still updates ontime +=millespernote.
     //    RETURNS the new value of ontime, so caller must make an assignment to the return value.
-    auto graceExtend = [millespernote,chord,events](int notePitch, QVector<Chord*> graceNotes, int ontime) {
+    auto graceExtend = [millespernote, chord, events](int notePitch, QVector<Chord*> graceNotes, int ontime) {
         for (Chord* c : graceNotes) {
             for (Note* n : c->notes()) {
                 // NoteEvent takes relative pitch as first argument.
@@ -1768,11 +1768,11 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
         sustain   = space - millespernote * (gnb + p + numrepeat * b + s + gna);
     }
     // render the graceNotesBefore
-    ontime = graceExtend(note->pitch(),note->chord()->graceNotesBefore(), ontime);
+    ontime = graceExtend(note->pitch(), note->chord()->graceNotesBefore(), ontime);
 
     // render the prefix
     for (int j=0; j < p; j++) {
-        ontime = makeEvent(prefix[j], ontime, tieForward(j,prefix));
+        ontime = makeEvent(prefix[j], ontime, tieForward(j, prefix));
     }
 
     if (b > 0) {
@@ -1812,7 +1812,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     }
     // render the suffix
     for (int j = 0; j < s; j++) {
-        ontime = makeEvent(suffix[j], ontime, tieForward(j,suffix));
+        ontime = makeEvent(suffix[j], ontime, tieForward(j, suffix));
     }
     // render graceNotesAfter
     graceExtend(note->pitch(), note->chord()->graceNotesAfter(), ontime);
@@ -1866,24 +1866,24 @@ int _32nd = _16th / 2;
 std::vector<OrnamentExcursion> excursions = {
     //  articulation type            set of  duration       body         repeatp      suffix
     //                               styles          prefix                    sustainp
-    { SymId::ornamentTurn,                any, _32nd, {},    { 1,0,-1,0 },   false, true, {} },
-    { SymId::ornamentTurnInverted,        any, _32nd, {},    { -1,0,1,0 },   false, true, {} },
-    { SymId::ornamentTurnSlash,           any, _32nd, {},    { -1,0,1,0 },   false, true, {} },
-    { SymId::ornamentTrill,           baroque, _32nd, { 1,0 }, { 1,0 },        true,  true, {} },
-    { SymId::ornamentTrill,          defstyle, _32nd, { 0,1 }, { 0,1 },        true,  true, {} },
-    { SymId::brassMuteClosed,         baroque, _32nd, { 0,-1 },{ 0, -1 },      true,  true, {} },
-    { SymId::ornamentMordent,             any, _32nd, {},    { 0,-1,0 },     false, true, {} },
-    { SymId::ornamentShortTrill,     defstyle, _32nd, {},    { 0,1,0 },      false, true, {} },// inverted mordent
-    { SymId::ornamentShortTrill,      baroque, _32nd, { 1,0,1 },{ 0 },         false, true, {} },// short trill
-    { SymId::ornamentTremblement,         any, _32nd, { 1,0 }, { 1,0 },        false, true, {} },
-    { SymId::ornamentPrallMordent,        any, _32nd, {},    { 1,0,-1,0 },   false, true, {} },
-    { SymId::ornamentLinePrall,           any, _32nd, { 2,2,2 },{ 1,0 },       true,  true, {} },
-    { SymId::ornamentUpPrall,             any, _16th, { -1,0 },{ 1,0 },        true,  true, { 1,0 } },// p 144 Ex 152 [1]
-    { SymId::ornamentUpMordent,           any, _16th, { -1,0 },{ 1,0 },        true,  true, { -1,0 } },// p 144 Ex 152 [1]
-    { SymId::ornamentPrecompMordentUpperPrefix, any, _16th, { 1,1,1,0 }, { 1,0 },    true,  true, {} },// p136 Cadence Appuyee [1] [2]
-    { SymId::ornamentDownMordent,         any, _16th, { 1,1,1,0 }, { 1,0 },    true,  true, { -1, 0 } },// p136 Cadence Appuyee + mordent [1] [2]
-    { SymId::ornamentPrallUp,             any, _16th, { 1,0 }, { 1,0 },        true,  true, { -1,0 } },// p136 Double Cadence [1]
-    { SymId::ornamentPrallDown,           any, _16th, { 1,0 }, { 1,0 },        true,  true, { -1,0,0,0 } },// p144 ex 153 [1]
+    { SymId::ornamentTurn,                any, _32nd, {},    { 1, 0, -1, 0 },   false, true, {} },
+    { SymId::ornamentTurnInverted,        any, _32nd, {},    { -1, 0, 1, 0 },   false, true, {} },
+    { SymId::ornamentTurnSlash,           any, _32nd, {},    { -1, 0, 1, 0 },   false, true, {} },
+    { SymId::ornamentTrill,           baroque, _32nd, { 1, 0 }, { 1, 0 },        true,  true, {} },
+    { SymId::ornamentTrill,          defstyle, _32nd, { 0, 1 }, { 0, 1 },        true,  true, {} },
+    { SymId::brassMuteClosed,         baroque, _32nd, { 0, -1 }, { 0, -1 },      true,  true, {} },
+    { SymId::ornamentMordent,             any, _32nd, {},    { 0, -1, 0 },     false, true, {} },
+    { SymId::ornamentShortTrill,     defstyle, _32nd, {},    { 0, 1, 0 },      false, true, {} },// inverted mordent
+    { SymId::ornamentShortTrill,      baroque, _32nd, { 1, 0, 1 }, { 0 },         false, true, {} },// short trill
+    { SymId::ornamentTremblement,         any, _32nd, { 1, 0 }, { 1, 0 },        false, true, {} },
+    { SymId::ornamentPrallMordent,        any, _32nd, {},    { 1, 0, -1, 0 },   false, true, {} },
+    { SymId::ornamentLinePrall,           any, _32nd, { 2, 2, 2 }, { 1, 0 },       true,  true, {} },
+    { SymId::ornamentUpPrall,             any, _16th, { -1, 0 }, { 1, 0 },        true,  true, { 1, 0 } },// p 144 Ex 152 [1]
+    { SymId::ornamentUpMordent,           any, _16th, { -1, 0 }, { 1, 0 },        true,  true, { -1, 0 } },// p 144 Ex 152 [1]
+    { SymId::ornamentPrecompMordentUpperPrefix, any, _16th, { 1, 1, 1, 0 }, { 1, 0 },    true,  true, {} },// p136 Cadence Appuyee [1] [2]
+    { SymId::ornamentDownMordent,         any, _16th, { 1, 1, 1, 0 }, { 1, 0 },    true,  true, { -1, 0 } },// p136 Cadence Appuyee + mordent [1] [2]
+    { SymId::ornamentPrallUp,             any, _16th, { 1, 0 }, { 1, 0 },        true,  true, { -1, 0 } },// p136 Double Cadence [1]
+    { SymId::ornamentPrallDown,           any, _16th, { 1, 0 }, { 1, 0 },        true,  true, { -1, 0, 0, 0 } },// p144 ex 153 [1]
     { SymId::ornamentPrecompSlide,        any, _32nd, {},    { 0 },          false, true, {} }
 
     // [1] Some of the articulations/ornaments in the excursions table above come from
@@ -1921,7 +1921,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, S
 
 bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, Trill::Type trillType, MScore::OrnamentStyle ornamentStyle)
 {
-    std::map<Trill::Type,SymId> articulationMap = {
+    std::map<Trill::Type, SymId> articulationMap = {
         { Trill::Type::TRILL_LINE,      SymId::ornamentTrill },
         { Trill::Type::UPPRALL_LINE,    SymId::ornamentUpPrall },
         { Trill::Type::DOWNPRALL_LINE,  SymId::ornamentPrecompMordentUpperPrefix },
@@ -2428,7 +2428,7 @@ void MidiRenderer::renderMetronome(EventMap* events, Measure const* m, const Fra
     }
 
     for (int tick = msrTick; tick < endTick; tick += clickTicks, rtick += clickTicks) {
-        events->insert(std::pair<int,NPlayEvent>(tick + tickOffset.ticks(), NPlayEvent(timeSig.rtick2beatType(rtick))));
+        events->insert(std::pair<int, NPlayEvent>(tick + tickOffset.ticks(), NPlayEvent(timeSig.rtick2beatType(rtick))));
     }
 }
 

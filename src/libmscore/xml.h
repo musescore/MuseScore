@@ -86,7 +86,7 @@ class XmlReader : public QXmlStreamReader
     QHash<int, Tuplet*> _tuplets;
 
     QList<SpannerValues> _spannerValues;
-    QList<std::pair<int,Spanner*> > _spanner;
+    QList<std::pair<int, Spanner*> > _spanner;
     QList<StaffType> _staffTypes;
     QList<std::pair<Element*, QPointF> > _fixOffsets;
 

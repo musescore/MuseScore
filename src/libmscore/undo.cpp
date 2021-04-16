@@ -1364,7 +1364,7 @@ void ChangeKeySig::flip(EditData*)
     // is probably generated. Otherwise it is probably added manually.
     // Set segment flags according to this, layout will change it if needed.
     segment->setEnabled(evtInStaff);
-    segment->setHeader(!evtInStaff && segment->rtick() == Fraction(0,1));
+    segment->setHeader(!evtInStaff && segment->rtick() == Fraction(0, 1));
 
     showCourtesy = curShowCourtesy;
     ks           = curKey;
@@ -1595,7 +1595,7 @@ void SetUserBankController::flip(EditData*)
 ChangeStaff::ChangeStaff(Staff* _staff)
     : staff(_staff)
 {
-    invisible = staff->invisible(Fraction(0,1));
+    invisible = staff->invisible(Fraction(0, 1));
     clefType = staff->defaultClefType();
     userDist = staff->userDist();
     hideMode = staff->hideWhenEmpty();
@@ -1626,9 +1626,9 @@ ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible, ClefTypeList _clefType
 
 void ChangeStaff::flip(EditData*)
 {
-    bool invisibleChanged = staff->invisible(Fraction(0,1)) != invisible;
+    bool invisibleChanged = staff->invisible(Fraction(0, 1)) != invisible;
     ClefTypeList oldClefType = staff->defaultClefType();
-    bool oldInvisible   = staff->invisible(Fraction(0,1));
+    bool oldInvisible   = staff->invisible(Fraction(0, 1));
     qreal oldUserDist   = staff->userDist();
     Staff::HideMode oldHideMode    = staff->hideWhenEmpty();
     bool oldShowIfEmpty = staff->showIfEmpty();
@@ -1636,7 +1636,7 @@ void ChangeStaff::flip(EditData*)
     bool oldHideSystemBarLine  = staff->hideSystemBarLine();
     bool oldMergeMatchingRests = staff->mergeMatchingRests();
 
-    staff->setInvisible(Fraction(0,1),invisible);
+    staff->setInvisible(Fraction(0, 1), invisible);
     staff->setDefaultClefType(clefType);
     staff->setUserDist(userDist);
     staff->setHideWhenEmpty(hideMode);
@@ -1658,7 +1658,7 @@ void ChangeStaff::flip(EditData*)
     if (invisibleChanged) {
         int staffIdx = staff->idx();
         for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-            m->staffLines(staffIdx)->setVisible(!staff->invisible(Fraction(0,1)));
+            m->staffLines(staffIdx)->setVisible(!staff->invisible(Fraction(0, 1)));
         }
     }
     staff->triggerLayout();
@@ -1672,9 +1672,9 @@ void ChangeStaff::flip(EditData*)
 
 void ChangeStaffType::flip(EditData*)
 {
-    StaffType st = *staff->staffType(Fraction(0,1));        // TODO
+    StaffType st = *staff->staffType(Fraction(0, 1));        // TODO
 
-    staff->setStaffType(Fraction(0,1), staffType);
+    staff->setStaffType(Fraction(0, 1), staffType);
 
     staffType = st;
 
@@ -2636,7 +2636,7 @@ void ChangeStartEndSpanner::flip(EditData*)
 
 void ChangeMetaTags::flip(EditData*)
 {
-    QMap<QString,QString> t = score->metaTags();
+    QMap<QString, QString> t = score->metaTags();
     score->setMetaTags(metaTags);
     metaTags = t;
 }
@@ -2753,16 +2753,16 @@ void MoveTremolo::redo(EditData*)
     // Delete old tremolo on c1 and c2, if present
     if (c1->tremolo() && (c1->tremolo() != trem)) {
         if (c2->tremolo() == c1->tremolo()) {
-            c2->tremolo()->setChords(c1,c2);
+            c2->tremolo()->setChords(c1, c2);
         } else {
-            c1->tremolo()->setChords(c1,nullptr);
+            c1->tremolo()->setChords(c1, nullptr);
         }
         Tremolo* oldTremolo  = c1->tremolo();
         c1->setTremolo(nullptr);
         delete oldTremolo;
     }
     if (c2->tremolo() && (c2->tremolo() != trem)) {
-        c2->tremolo()->setChords(nullptr,c2);
+        c2->tremolo()->setChords(nullptr, c2);
         Tremolo* oldTremolo  = c2->tremolo();
         c2->setTremolo(nullptr);
         delete oldTremolo;

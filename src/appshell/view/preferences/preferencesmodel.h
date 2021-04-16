@@ -74,7 +74,7 @@ private:
     };
 
     PreferencePageItem* makeItem(const QString& id, const QString& title, ui::IconCode::Code icon = mu::ui::IconCode::Code::NONE,
-                                 const QString& path = "",const QList<PreferencePageItem*>& children = {}) const;
+                                 const QString& path = "", const QList<PreferencePageItem*>& children = {}) const;
 
     PreferencePageItem* modelIndexToItem(const QModelIndex& index) const;
 

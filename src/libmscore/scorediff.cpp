@@ -1345,7 +1345,7 @@ Fraction BaseDiff::afrac(int score) const
         }
         return f;
     }
-    return Fraction(0,1);
+    return Fraction(0, 1);
 }
 
 //---------------------------------------------------------

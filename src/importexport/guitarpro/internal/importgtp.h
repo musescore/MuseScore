@@ -213,7 +213,7 @@ protected:
     std::vector<QString> ottavaValue;
     std::map<int, std::pair<int, bool> > tempoMap;
     int tempo;
-    QMap<int,int> slides;
+    QMap<int, int> slides;
 
     GPLyrics gpLyrics;
     int slide;

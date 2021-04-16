@@ -35,7 +35,7 @@ ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction frac)
     if (track >= 0) {
         _currentLoc.setTrack(track);
     }
-    if (frac >= Fraction(0,1)) {
+    if (frac >= Fraction(0, 1)) {
         _currentLoc.setFrac(frac);
     }
 }

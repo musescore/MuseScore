@@ -362,11 +362,11 @@ void Beam::layout1()
     Chord* c2 = 0;
 
     // TAB's with stem beside staves have special layout
-    if (staff()->isTabStaff(Fraction(0,1)) && !staff()->staffType(Fraction(0,1))->stemThrough()) {
+    if (staff()->isTabStaff(Fraction(0, 1)) && !staff()->staffType(Fraction(0, 1))->stemThrough()) {
         //TABULATURES: all beams (and related chords) are:
         //    UP or DOWN according to TAB duration position
         //    slope 0
-        _up   = !staff()->staffType(Fraction(0,1))->stemsDown();
+        _up   = !staff()->staffType(Fraction(0, 1))->stemsDown();
         slope   = 0.0;
         _cross  = false;
         minMove = maxMove = 0;                  // no cross-beaming in TAB's!
@@ -382,7 +382,7 @@ void Beam::layout1()
                 }
             }
         }
-    } else if (staff()->isDrumStaff(Fraction(0,1))) {
+    } else if (staff()->isDrumStaff(Fraction(0, 1))) {
         if (_direction != Direction::AUTO) {
             _up = _direction == Direction::UP;
         } else {
@@ -407,7 +407,7 @@ void Beam::layout1()
 
         int mUp     = 0;
         int mDown   = 0;
-        int upDnLimit = staff()->lines(Fraction(0,1)) - 1;               // was '4' hard-coded in following code
+        int upDnLimit = staff()->lines(Fraction(0, 1)) - 1;               // was '4' hard-coded in following code
 
         int staffIdx = -1;
         for (ChordRest* cr : qAsConst(_elements)) {
@@ -533,11 +533,11 @@ void Beam::layoutGraceNotes()
     //
     // determine beam stem direction
     //
-    if (staff()->isTabStaff(Fraction(0,1))) {
+    if (staff()->isTabStaff(Fraction(0, 1))) {
         //TABULATURES: all beams (and related chords) are:
         //    UP or DOWN according to TAB duration position
         //    slope 0
-        _up   = !staff()->staffType(Fraction(0,1))->stemsDown();
+        _up   = !staff()->staffType(Fraction(0, 1))->stemsDown();
     } else {
         if (_direction != Direction::AUTO) {
             _up = _direction == Direction::UP;
@@ -758,7 +758,7 @@ static QHash<int, Bm> bMetrics;
 //   initBeamMetrics
 //---------------------------------------------------------
 
-#define B(a,b,c,d,e) bMetrics[Bm::key(a, b, c)] = Bm(d, e);
+#define B(a, b, c, d, e) bMetrics[Bm::key(a, b, c)] = Bm(d, e);
 
 static void initBeamMetrics()
 {
@@ -841,10 +841,10 @@ static void initBeamMetrics()
     B(1,  2, 8,   -12, 5);
     B(1,  2, 9,   -12, 8);
 
-    B(0, -5,-4,   16, 2);
-    B(0, -5,-3,   16, 2);
-    B(0, -5,-2,   17, 2);
-    B(0, -5,-1,   17, 2);
+    B(0, -5, -4,   16, 2);
+    B(0, -5, -3,   16, 2);
+    B(0, -5, -2,   17, 2);
+    B(0, -5, -1,   17, 2);
     B(0, -5, 0,   18, 4);
     B(0, -5, 1,   18, 5);
     B(0, -5, 2,   21, 5);
@@ -921,7 +921,7 @@ static void initBeamMetrics()
     B(0, 8, 1, 12, -8);
 
     // =================================== F
-    B(1, 7, 7,-13, 0);        //F
+    B(1, 7, 7, -13, 0);        //F
     B(0, 0, 0, 12, 0);
     B(0, 7, 7, 12, 0);
 
@@ -1185,7 +1185,7 @@ static int adjust(qreal _spatium4, int slant, const std::vector<ChordRest*>& cl)
     // on tab staff, reduce a bit the stems (value 4 is experimental)
     // TODO : proper fix should adapt all the numeric vaues used in Beam::computeStemLen() below
     // to variable line distance
-    if (c1->staff() && c1->staff()->isTabStaff(Fraction(0,1))) {
+    if (c1->staff() && c1->staff()->isTabStaff(Fraction(0, 1))) {
         ml = (ml != 0) ? ml - 4 : 0;
         return ml;
     }
@@ -1269,7 +1269,7 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
     qreal _spatium      = spatium();
     qreal _spatium4     = _spatium * .25;
     // TAB: scale to staff line distance for vert. pos. within a staff
-    qreal _spStaff4     = staff()->isTabStaff(Fraction(0,1)) ? _spatium4 * staff()->lineDistance(Fraction(0,1)) : _spatium4;
+    qreal _spStaff4     = staff()->isTabStaff(Fraction(0, 1)) ? _spatium4 * staff()->lineDistance(Fraction(0, 1)) : _spatium4;
     const ChordRest* c1 = cl.front();
     const ChordRest* c2 = cl.back();
     qreal dx            = c2->pagePos().x() - c1->pagePos().x();
@@ -1602,7 +1602,7 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
     }
 
     py1 += (dy + bm.l) * _spStaff4;
-    if (small && !staff()->isTabStaff(Fraction(0,1))) {
+    if (small && !staff()->isTabStaff(Fraction(0, 1))) {
         const qreal offset = (beamLevels == 4) ? _beamDist / 2.0 : 0.0;
 
         if (bm.l > 0) {
@@ -1653,8 +1653,8 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
     size_t n = crl.size();
 
     const StaffType* tab = 0;
-    if (staff()->isTabStaff(Fraction(0,1))) {
-        tab = staff()->staffType(Fraction(0,1));
+    if (staff()->isTabStaff(Fraction(0, 1))) {
+        tab = staff()->staffType(Fraction(0, 1));
     }
     if (tab && !tab->stemThrough()) {
         //

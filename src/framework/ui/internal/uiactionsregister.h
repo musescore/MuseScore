@@ -64,7 +64,7 @@ private:
 
     void updateEnabled(const actions::ActionCodeList& codes);
     void updateEnabledAll();
-    void doUpdateEnabled(Info& inf,const IUiContextResolverPtr& ctxResolver,const UiContext& currentCtx,
+    void doUpdateEnabled(Info& inf, const IUiContextResolverPtr& ctxResolver, const UiContext& currentCtx,
                          actions::ActionCodeList& changedList);
 
     void updateCheckedAll();

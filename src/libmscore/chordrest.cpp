@@ -1456,7 +1456,7 @@ void ChordRest::undoAddAnnotation(Element* a)
     Segment* seg = segment();
     Measure* m = measure();
     if (m && m->isMMRest()) {
-        seg = m->mmRestFirst()->findSegmentR(SegmentType::ChordRest, Fraction(0,1));
+        seg = m->mmRestFirst()->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
     }
 
     a->setTrack(a->systemFlag() ? 0 : track());

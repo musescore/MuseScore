@@ -439,7 +439,7 @@ void NotationParts::doSetStaffVisible(Staff* staff, bool visible)
         return;
     }
 
-    staff->setInvisible(Fraction(0,1), !visible);
+    staff->setInvisible(Fraction(0, 1), !visible);
     score()->undo(new Ms::ChangeStaff(staff));
 }
 
@@ -505,7 +505,7 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
 
     staff->setVisible(config.visible);
     staff->undoChangeProperty(Ms::Pid::COLOR, config.linesColor);
-    staff->setInvisible(Fraction(0,1), config.visibleLines);
+    staff->setInvisible(Fraction(0, 1), config.visibleLines);
     staff->setUserDist(config.userDistance);
     staff->undoChangeProperty(Ms::Pid::MAG, config.scale);
     staff->setShowIfEmpty(config.showIfEmpty);
