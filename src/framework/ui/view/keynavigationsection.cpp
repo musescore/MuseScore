@@ -39,8 +39,6 @@ KeyNavigationSection::~KeyNavigationSection()
 void KeyNavigationSection::componentComplete()
 {
     //! NOTE Reg after set properties.
-    LOGD() << "Completed: " << m_name << ", order: " << order();
-
     IF_ASSERT_FAILED(!m_name.isEmpty()) {
         return;
     }

@@ -4,13 +4,11 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Instruments 1.0
 
-StyledPopup {
+StyledPopupView {
     id: root
 
-    height: Math.max(contentColumn.implicitHeight + topPadding + bottomPadding, implicitHeight)
-    width: parent.width
-
-    implicitHeight: 290
+    contentHeight: contentColumn.childrenRect.height
+    contentWidth: parent.width
 
     function load(instrument) {
         settingsModel.load(instrument)
@@ -23,8 +21,7 @@ StyledPopup {
     Column {
         id: contentColumn
 
-        width: parent.width
-
+        anchors.fill: parent
         spacing: 12
 
         StyledTextLabel {
@@ -70,6 +67,7 @@ StyledPopup {
 
         FlatButton {
             width: parent.width
+            keynav.subsection: root.keynav
             text: qsTrc("instruments", "Replace instrument")
 
             onClicked: {

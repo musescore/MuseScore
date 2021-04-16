@@ -2,8 +2,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
-import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
 StyledPopupView {
     id: root
@@ -13,18 +13,35 @@ StyledPopupView {
 
     signal handleAction(string actionCode, int actionIndex)
 
-    arrowVisible: false
-    positionDisplacementX: 0
-    positionDisplacementY: opensUpward ? -view.implicitHeight : parent.height
+    contentWidth: root.itemWidth
+    contentHeight: view.childrenRect.height
     padding: 0
     margins: 0
-    animationEnabled: false
+    x: 0
+    y: opensUpward ? -root.height : parent.height
 
-    height: view.implicitHeight
-    width: itemWidth
+    animationEnabled: false //! NOTE disabled - because trouble with simultaneous opening of submenu
 
     keynav.name: "StyledMenu"
     keynav.direction: KeyNavigationSubSection.Vertical
+
+    function focusOnFirstItem() {
+        var loader = view.itemAtIndex(0)
+        if (loader && loader.item) {
+            loader.item.keynav.forceActive()
+        }
+    }
+
+    function focusOnSelected() {
+        for (var i = 0; i < view.count; ++i) {
+            var loader = view.itemAtIndex(i)
+            if (loader && loader.item && loader.item.isSelected) {
+                loader.item.keynav.forceActive()
+                return true
+            }
+        }
+        return false
+    }
 
     onModelChanged: {
         prv.hasItemsWithIconAndCheckable = false
@@ -53,7 +70,7 @@ StyledPopupView {
         }
     }
 
-    property QtObject prv_prop: QtObject {
+    QtObject {
         id: prv
         property bool hasItemsWithIconAndCheckable: false
         property bool hasItemsWithIconOrCheckable: false
@@ -61,30 +78,9 @@ StyledPopupView {
         property bool hasItemsWithShortcut: false
     }
 
-    function focusOnFirstItem() {
-        var loader = view.itemAtIndex(0)
-        if (loader && loader.item) {
-            loader.item.keynav.forceActive()
-        }
-    }
-
-    function focusOnSelected() {
-        for (var i = 0; i < view.count; ++i) {
-            var loader = view.itemAtIndex(i)
-            if (loader && loader.item && loader.item.isSelected) {
-                loader.item.keynav.forceActive()
-                return true
-            }
-        }
-        return false
-    }
-
     ListView {
         id: view
-
-        implicitHeight: contentHeight
-        implicitWidth: root.itemWidth
-
+        anchors.fill: parent
         spacing: 2
         interactive: false
 

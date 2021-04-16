@@ -151,13 +151,6 @@ void KeyNavigationSubSection::onSectionDestroyed()
 
 void KeyNavigationSubSection::componentComplete()
 {
-    IF_ASSERT_FAILED(!m_name.isEmpty()) {
-        return;
-    }
-
-    IF_ASSERT_FAILED(order() > -1) {
-        return;
-    }
 }
 
 void KeyNavigationSubSection::addControl(KeyNavigationControl* control)

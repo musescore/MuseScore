@@ -43,6 +43,7 @@ FocusScope {
 
     Item {
         id: contentItem
+        objectName: "FocusableControlContent"
         anchors.fill: focusRectItem
         anchors.margins: 2 //! NOTE margin needed to show focus border
     }
