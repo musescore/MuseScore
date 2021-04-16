@@ -139,6 +139,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "delete", this, &NotationActionController::deleteSelection);
     dispatcher()->reg(this, "flip", this, &NotationActionController::flipSelection);
     dispatcher()->reg(this, "tie", this, &NotationActionController::addTie);
+    dispatcher()->reg(this, "chord-tie", this, &NotationActionController::chordTie);
     dispatcher()->reg(this, "add-slur", this, &NotationActionController::addSlur);
 
     dispatcher()->reg(this, UNDO_ACTION_CODE, this, &NotationActionController::undo);
@@ -797,6 +798,25 @@ void NotationActionController::addTie()
         noteInput->addTie();
     } else {
         interaction->addTieToSelection();
+    }
+}
+
+void NotationActionController::chordTie()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto noteInput = interaction->noteInput();
+    if (!noteInput) {
+        return;
+    }
+
+    if (noteInput->isNoteInputMode()) {
+        noteInput->addTie();
+    } else {
+        interaction->addTiedNoteToChord();
     }
 }
 

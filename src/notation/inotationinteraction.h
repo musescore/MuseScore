@@ -110,6 +110,7 @@ public:
     virtual void deleteSelection() = 0;
     virtual void flipSelection() = 0;
     virtual void addTieToSelection() = 0;
+    virtual void addTiedNoteToChord() = 0;
     virtual void addSlurToSelection() = 0;
     virtual void addOttavaToSelection(OttavaType type) = 0;
     virtual void addHairpinToSelection(HairpinType type) = 0;
