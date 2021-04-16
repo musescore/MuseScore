@@ -2229,6 +2229,27 @@ void NotationInteraction::addAccidentalToSelection(AccidentalType type)
     notifyAboutSelectionChanged();
 }
 
+void NotationInteraction::putRestToSelection()
+{
+    Ms::InputState& is = score()->inputState();
+    if (!is.duration().isValid() || is.duration().isZero() || is.duration().isMeasure())
+        is.setDuration(DurationType::V_QUARTER);
+    putRest(is.duration().type());
+}
+
+void NotationInteraction::putRest(DurationType duration)
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdEnterRest(Duration(duration));
+    apply();
+
+    notifyAboutSelectionChanged();
+}
+
 void NotationInteraction::addBracketsToSelection(BracketsType type)
 {
     if (selection()->isNone()) {
