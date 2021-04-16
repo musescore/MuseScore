@@ -50,7 +50,7 @@ int SettingListModel::rowCount(const QModelIndex&) const
     return m_items.count();
 }
 
-QHash<int,QByteArray> SettingListModel::roleNames() const
+QHash<int, QByteArray> SettingListModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
         { SectionRole, "sectionRole" },

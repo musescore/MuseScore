@@ -227,7 +227,7 @@ const QTransform& Painter::worldTransform() const
 void Painter::scale(qreal sx, qreal sy)
 {
     State& st = editableState();
-    st.worldTransform.scale(sx,sy);
+    st.worldTransform.scale(sx, sy);
     st.isWxF = true;
     updateMatrix();
 }

@@ -123,8 +123,8 @@ mu::io::path mu::io::escapeFileName(const mu::io::path& fn_)
     fn = fn.replace(QChar(0xc4), "Ae");   // &Auml;
     fn = fn.replace(QChar(0xd6), "Oe");   // &Ouml;
     fn = fn.replace(QChar(0xdc), "Ue");   // &Uuml;
-    fn = fn.replace(QChar(0x266d),"b");   // musical flat sign, happen in instrument names, so can happen in part (file) names
-    fn = fn.replace(QChar(0x266f),"#");   // musical sharp sign, can happen in titles, so can happen in score (file) names
+    fn = fn.replace(QChar(0x266d), "b");   // musical flat sign, happen in instrument names, so can happen in part (file) names
+    fn = fn.replace(QChar(0x266f), "#");   // musical sharp sign, can happen in titles, so can happen in score (file) names
     fn = fn.replace(QRegExp("[" + QRegExp::escape("\\/:*?\"<>|") + "]"), "_");         //FAT/NTFS special chars
     return fn;
 }

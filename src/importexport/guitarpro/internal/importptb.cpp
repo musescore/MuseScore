@@ -609,10 +609,10 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
         int dots = beat->dotted ? (beat->doubleDotted ? 2 : 1) : (beat->doubleDotted ? 2 : 0);
         switch (dots) {
         case 1:
-            l = l + (l * Fraction(1,2));
+            l = l + (l * Fraction(1, 2));
             break;
         case 2:
-            l = l + (l * Fraction(3,4));
+            l = l + (l * Fraction(3, 4));
             break;
         }
 
@@ -620,7 +620,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
         d.setDots(dots);
 
         if (beat->tuplet || tupleBeatCounter) {
-            Fraction nt = (l * Fraction(1,3) * Fraction(2,1));
+            Fraction nt = (l * Fraction(1, 3) * Fraction(2, 1));
             tick += nt;
         } else {
             tick += l;
@@ -755,7 +755,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
 void PowerTab::addToScore(ptSection& sec)
 {
     cur_section = &sec;
-    Fraction tick = score->lastMeasure() ? score->lastMeasure()->endTick() : Fraction(0,1);
+    Fraction tick = score->lastMeasure() ? score->lastMeasure()->endTick() : Fraction(0, 1);
 
     Fraction lastTS(-1, -1);
     bool firstMeasure = true;
@@ -850,7 +850,7 @@ void PowerTab::addToScore(ptSection& sec)
             auto clef = new Clef(score);
             clef->setTrack(staffIdx * VOICES);
             clef->setClefType(clefId);
-            s = measure->getSegment(SegmentType::HeaderClef, Fraction(0,1));
+            s = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
             s->add(clef);
         }
     }
@@ -876,7 +876,7 @@ void PowerTab::addToScore(ptSection& sec)
             lastTS = measure->timesig();
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                 Staff* staff = score->staff(staffIdx);
-                auto staffType = staff->staffType(Fraction(0,1));
+                auto staffType = staff->staffType(Fraction(0, 1));
                 if (staffType->genTimesig()) {
                     auto t = new TimeSig(score);
                     t->setTrack(staffIdx * VOICES);
@@ -1245,13 +1245,13 @@ Score::FileError PowerTab::read()
     MeasureBase* m;
     if (!score->measures()->first()) {
         m = new VBox(score);
-        m->setTick(Fraction(0,1));
+        m->setTick(Fraction(0, 1));
         score->addMeasure(m, 0);
     } else {
         m = score->measures()->first();
         if (!m->isVBox()) {
             MeasureBase* mb = new VBox(score);
-            mb->setTick(Fraction(0,1));
+            mb->setTick(Fraction(0, 1));
             score->addMeasure(mb, m);
             m = mb;
         }
@@ -1289,8 +1289,8 @@ Score::FileError PowerTab::read()
 
         Staff* s = new Staff(pscore);
         s->setPart(p);
-        const StaffType* st = staff->staffType(Fraction(0,1));
-        s->setStaffType(Fraction(0,1), *st);
+        const StaffType* st = staff->staffType(Fraction(0, 1));
+        s->setStaffType(Fraction(0, 1), *st);
 
         s->linkTo(staff);
         p->staves()->append(s);
@@ -1312,7 +1312,7 @@ Score::FileError PowerTab::read()
         Excerpt::cloneStaves(score, pscore, stavesMap, tracks);
 
         if (staff->part()->instrument()->stringData()->strings() > 0
-            && part->staves()->front()->staffType(Fraction(0,1))->group() == StaffGroup::STANDARD) {
+            && part->staves()->front()->staffType(Fraction(0, 1))->group() == StaffGroup::STANDARD) {
             p->setStaves(2);
             Staff* s1 = p->staff(1);
 
@@ -1322,8 +1322,8 @@ Score::FileError PowerTab::read()
                 sts = StaffTypes::TAB_4COMMON;
             }
             StaffType st1 = *StaffType::preset(sts);
-            s1->setStaffType(Fraction(0,1), st1);
-            s1->setLines(Fraction(0,1), lines);
+            s1->setStaffType(Fraction(0, 1), st1);
+            s1->setLines(Fraction(0, 1), lines);
             Excerpt::cloneStaff(s, s1);
             BracketItem* bi = new BracketItem(pscore, BracketType::NORMAL, 2);
             p->staves()->front()->addBracket(bi);
@@ -1336,7 +1336,7 @@ Score::FileError PowerTab::read()
         MeasureBase* measure = pscore->first();
         if (!measure || (measure->type() != ElementType::VBOX)) {
             MeasureBase* mb = new VBox(pscore);
-            mb->setTick(Fraction(0,1));
+            mb->setTick(Fraction(0, 1));
             pscore->addMeasure(mb, measure);
             measure = mb;
         }

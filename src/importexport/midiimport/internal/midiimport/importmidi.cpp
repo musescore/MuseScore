@@ -343,7 +343,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
         MeasureBase* measure = cs->first();
         if (!measure->isVBox()) {
             measure = new VBox(cs);
-            measure->setTick(Fraction(0,1));
+            measure->setTick(Fraction(0, 1));
             measure->setNext(cs->first());
             cs->measures()->add(measure);
         }

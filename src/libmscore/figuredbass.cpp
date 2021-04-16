@@ -243,7 +243,7 @@ int FiguredBassItem::parsePrefixSuffix(QString& str, bool bPrefix)
         if (done) {
             break;
         }
-        str.remove(0,1);                             // 'eat' the char and continue
+        str.remove(0, 1);                             // 'eat' the char and continue
     }
 
     return size - str.size();                        // return how many chars we had read into prefix/suffix
@@ -1066,7 +1066,7 @@ FiguredBass::FiguredBass(Score* s)
     st.setSizeIsSpatiumDependent(true);
     setElementStyle(st);
 #endif
-    setTicks(Fraction(0,1));
+    setTicks(Fraction(0, 1));
     qDeleteAll(items);
     items.clear();
 }
@@ -1225,7 +1225,7 @@ void FiguredBass::layout()
 
 void FiguredBass::layoutLines()
 {
-    if (_ticks <= Fraction(0,1) || !segment()) {
+    if (_ticks <= Fraction(0, 1) || !segment()) {
         _lineLengths.resize(1);                             // be sure to always have
         _lineLengths[0] = 0;                                // at least 1 item in array
         return;
@@ -1295,7 +1295,7 @@ void FiguredBass::layoutLines()
         // probably be implemented.
     }
 
-    int i, len,segIdx;
+    int i, len, segIdx;
     for (i = sysIdx1, segIdx = 0; i <= sysIdx2; ++i, ++segIdx) {
         len = 0;
         if (sysIdx1 == sysIdx2 || i == sysIdx1) {
@@ -1457,7 +1457,7 @@ void FiguredBass::setVisible(bool flag)
 
 FiguredBass* FiguredBass::nextFiguredBass() const
 {
-    if (_ticks <= Fraction(0,1)) {                                      // if _ticks unset, no clear idea of when 'this' ends
+    if (_ticks <= Fraction(0, 1)) {                                      // if _ticks unset, no clear idea of when 'this' ends
         return 0;
     }
     Segment* nextSegm;                                   // the Segment beyond this' segment
@@ -1580,7 +1580,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, int track, const
         fb->setParent(seg);
 
         // locate next SegChordRest in the same staff to estimate presumed duration of element
-        endTick = Fraction(INT_MAX,1);
+        endTick = Fraction(INT_MAX, 1);
         Segment* nextSegm;
         for (int iVoice = 0; iVoice < VOICES; iVoice++) {
             nextSegm = seg->nextCR(track + iVoice);
@@ -1588,7 +1588,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, int track, const
                 endTick = nextSegm->tick();
             }
         }
-        if (endTick == Fraction(INT_MAX,1)) {               // no next segment: set up to score end
+        if (endTick == Fraction(INT_MAX, 1)) {               // no next segment: set up to score end
             Measure* meas = seg->score()->lastMeasure();
             endTick = meas->tick() + meas->ticks();
         }
@@ -1606,7 +1606,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, int track, const
     }
 
     // if we are extending a previous FB
-    if (extTicks > Fraction(0,1)) {
+    if (extTicks > Fraction(0, 1)) {
         // locate previous FB for same staff
         Segment* prevSegm;
         FiguredBass* prevFB = 0;
@@ -1882,7 +1882,7 @@ FiguredBass* Score::addFiguredBass()
     bool bNew;
     if (el->isNote()) {
         ChordRest* cr = toNote(el)->chord();
-        fb = FiguredBass::addFiguredBassToSegment(cr->segment(), cr->staffIdx() * VOICES, Fraction(0,1), &bNew);
+        fb = FiguredBass::addFiguredBassToSegment(cr->segment(), cr->staffIdx() * VOICES, Fraction(0, 1), &bNew);
     } else if (el->isRest()) {
         ChordRest* cr = toRest(el);
         fb = FiguredBass::addFiguredBassToSegment(cr->segment(), cr->staffIdx() * VOICES, Fraction(0, 1), &bNew);

@@ -44,7 +44,7 @@ Lyrics::Lyrics(Score* s)
     _even       = false;
     initElementStyle(&lyricsElementStyle);
     _no         = 0;
-    _ticks      = Fraction(0,1);
+    _ticks      = Fraction(0, 1);
     _syllabic   = Syllabic::SINGLE;
     _separator  = 0;
 }
@@ -203,7 +203,7 @@ void Lyrics::remove(Element* el)
 bool Lyrics::isMelisma() const
 {
     // entered as melisma using underscore?
-    if (_ticks > Fraction(0,1)) {
+    if (_ticks > Fraction(0, 1)) {
         return true;
     }
 
@@ -337,7 +337,7 @@ void Lyrics::layout()
 
     rxpos() = x;
 
-    if (_ticks > Fraction(0,1) || _syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
+    if (_ticks > Fraction(0, 1) || _syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
         if (!_separator) {
             _separator = new LyricsLine(score());
             _separator->setTick(cr->tick());
@@ -606,7 +606,7 @@ QVariant Lyrics::propertyDefault(Pid id) const
     case Pid::SYLLABIC:
         return int(Syllabic::SINGLE);
     case Pid::LYRIC_TICKS:
-        return Fraction(0,1);
+        return Fraction(0, 1);
     case Pid::VERSE:
         return 0;
     case Pid::ALIGN:
@@ -676,14 +676,14 @@ void Lyrics::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
     if (id == Pid::PLACEMENT) {
         if (Placement(v.toInt()) == Placement::ABOVE) {
             // change placment of all verse for the same voice upto this one to ABOVE
-            score()->forAllLyrics([this,id,v,ps](Lyrics* l) {
+            score()->forAllLyrics([this, id, v, ps](Lyrics* l) {
                 if (l->no() <= no() && l->voice() == voice()) {
                     l->TextBase::undoChangeProperty(id, v, ps);
                 }
             });
         } else {
             // change placment of all verse for the same voce starting from this one to BELOW
-            score()->forAllLyrics([this,id,v,ps](Lyrics* l) {
+            score()->forAllLyrics([this, id, v, ps](Lyrics* l) {
                 if (l->no() >= no() && l->voice() == voice()) {
                     l->TextBase::undoChangeProperty(id, v, ps);
                 }

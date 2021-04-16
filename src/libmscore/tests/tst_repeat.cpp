@@ -158,7 +158,7 @@ void TestRepeat::repeat(const char* f1, const QString& ref)
     }
     QString s = sl.join(";");
     QString ref1 = ref;
-    ref1.replace(" ","");
+    ref1.replace(" ", "");
     qDebug("File <%s> sequence %s", f1, qPrintable(s));
     QCOMPARE(s, ref1);
     delete score;

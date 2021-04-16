@@ -168,10 +168,10 @@ public:
     QMimeData* mimeData(const QModelIndexList& indexes) const override;
     QStringList mimeTypes() const override;
 
-    bool canDropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column,const QModelIndex& parent) const override;
+    bool canDropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent) const override;
     bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent) override;
 
-    QModelIndexList match(const QModelIndex& start, int role, const QVariant& value, int hits,Qt::MatchFlags flags) const override;
+    QModelIndexList match(const QModelIndex& start, int role, const QVariant& value, int hits, Qt::MatchFlags flags) const override;
     QModelIndex findPaletteCell(const PaletteCell& cell, const QModelIndex& parent) const;
     PaletteCellFilter* getFilter(const QModelIndex&) const;
 

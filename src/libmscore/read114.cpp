@@ -66,11 +66,11 @@
 #include "pedal.h"
 
 namespace Ms {
-static int g_guitarStrings[] = { 40,45,50,55,59,64 };
-static int g_bassStrings[]   = { 28,33,38,43 };
-static int g_violinStrings[] = { 55,62,69,76 };
-static int g_violaStrings[]  = { 48,55,62,69 };
-static int g_celloStrings[]  = { 36,43,50,57 };
+static int g_guitarStrings[] = { 40, 45, 50, 55, 59, 64 };
+static int g_bassStrings[]   = { 28, 33, 38, 43 };
+static int g_violinStrings[] = { 55, 62, 69, 76 };
+static int g_violaStrings[]  = { 48, 55, 62, 69 };
+static int g_celloStrings[]  = { 36, 43, 50, 57 };
 
 #define MM(x) ((x) / INCH)
 
@@ -828,7 +828,7 @@ static void readNote(Note* note, XmlReader& e)
         }
     }
     if (!(tpcIsValid(note->tpc1()) && tpcIsValid(note->tpc2()))) {
-        Fraction tick = note->chord() ? note->chord()->tick() : Fraction(-1,1);
+        Fraction tick = note->chord() ? note->chord()->tick() : Fraction(-1, 1);
         Interval v = note->staff() ? note->part()->instrument(tick)->transpose() : Interval();
         if (tpcIsValid(note->tpc1())) {
             v.flip();
@@ -976,7 +976,7 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
             e.unknown();
         }
     }
-    Fraction r = (tuplet->ratio() == Fraction(1,1)) ? tuplet->ratio() : tuplet->ratio().reduced();
+    Fraction r = (tuplet->ratio() == Fraction(1, 1)) ? tuplet->ratio() : tuplet->ratio().reduced();
     // this may be wrong, but at this stage it is kept for compatibility. It will be corrected afterwards
     // during "sanitize" step
     Fraction f(r.denominator(), tuplet->baseLen().fraction().denominator());
@@ -1641,12 +1641,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                             chord->setTremolo(0);
                             // force duration to half
                             Fraction pts(timeStretch * pch->globalTicks());
-                            pch->setTicks(pts * Fraction(1,2));
-                            chord->setTicks(crticks * Fraction(1,2));
+                            pch->setTicks(pts * Fraction(1, 2));
+                            chord->setTicks(crticks * Fraction(1, 2));
                         } else {
                             qDebug("tremolo: first note not found");
                         }
-                        crticks = crticks * Fraction(1,2);
+                        crticks = crticks * Fraction(1, 2);
                     } else {
                         tremolo->setParent(chord);
                     }
@@ -1796,7 +1796,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 || (clef->clefType() != ClefType::PERC && isDrumStaff)) {
                 clef->setClefType(ClefType::G);
                 staff->clefList().erase(e.tick().ticks());
-                staff->clefList().insert(std::pair<int,ClefType>(e.tick().ticks(), ClefType::G));
+                staff->clefList().insert(std::pair<int, ClefType>(e.tick().ticks(), ClefType::G));
             }
 
             // there may be more than one clef segment for same tick position
@@ -2141,7 +2141,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                     }
                 }
                 if (!found) {
-                    qDebug("Adding tuplet %p as nested tuplet to tuplet %p",tuplet2,tuplet);
+                    qDebug("Adding tuplet %p as nested tuplet to tuplet %p", tuplet2, tuplet);
                     tuplet2->setTuplet(tuplet);
                     tuplet->add(tuplet2);
                 }
@@ -2262,7 +2262,7 @@ static void readBox(XmlReader& e, Box* b)
 static void readStaffContent(Score* score, XmlReader& e)
 {
     int staff = e.intAttribute("id", 1) - 1;
-    e.setTick(Fraction(0,1));
+    e.setTick(Fraction(0, 1));
     e.setTrack(staff * VOICES);
 
     Measure* measure = score->firstMeasure();
@@ -2341,15 +2341,15 @@ static void readStaff(Staff* staff, XmlReader& e)
         const QStringRef& tag(e.name());
         if (tag == "lines") {
             int lines = e.readInt();
-            staff->setLines(Fraction(0,1), lines);
+            staff->setLines(Fraction(0, 1), lines);
             if (lines != 5) {
                 staff->setBarLineFrom(lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : 0);
                 staff->setBarLineTo(lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (lines - 1) * 2);
             }
         } else if (tag == "small") {
-            staff->staffType(Fraction(0,1))->setSmall(e.readInt());
+            staff->staffType(Fraction(0, 1))->setSmall(e.readInt());
         } else if (tag == "invisible") {
-            staff->setInvisible(Fraction(0,1),e.readInt());
+            staff->setInvisible(Fraction(0, 1), e.readInt());
         } else if (tag == "slashStyle") {
             e.skipCurrentElement();
         } else if (tag == "cleflist") {
@@ -2359,14 +2359,14 @@ static void readStaff(Staff* staff, XmlReader& e)
                 if (e.name() == "clef") {
                     int tick    = e.intAttribute("tick", 0);
                     ClefType ct = readClefType(e.attribute("idx", "0"));
-                    staff->clefList().insert(std::pair<int,ClefType>(_score->fileDivision(tick), ct));
+                    staff->clefList().insert(std::pair<int, ClefType>(_score->fileDivision(tick), ct));
                     e.readNext();
                 } else {
                     e.unknown();
                 }
             }
             if (staff->clefList().empty()) {
-                staff->clefList().insert(std::pair<int,ClefType>(0, ClefType::G));
+                staff->clefList().insert(std::pair<int, ClefType>(0, ClefType::G));
             }
         } else if (tag == "keylist") {
             staff->keyList()->read(e, _score);
@@ -2500,7 +2500,7 @@ static void readPart(Part* part, XmlReader& e)
         if (tag == "Staff") {
             Staff* staff = new Staff(_score);
             staff->setPart(part);
-            staff->setStaffType(Fraction(0,1), StaffType());       // will reset later if needed
+            staff->setStaffType(Fraction(0, 1), StaffType());       // will reset later if needed
             _score->staves().push_back(staff);
             part->staves()->push_back(staff);
             readStaff(staff, e);
@@ -2526,9 +2526,9 @@ static void readPart(Part* part, XmlReader& e)
             }
             Drumset* d = i->drumset();
             Staff* st = part->staff(0);
-            if (d && st && st->lines(Fraction(0,1)) != 5) {
+            if (d && st && st->lines(Fraction(0, 1)) != 5) {
                 int n = 0;
-                if (st->lines(Fraction(0,1)) == 1) {
+                if (st->lines(Fraction(0, 1)) == 1) {
                     n = 4;
                 }
                 for (int j = 0; j < DRUM_INSTRUMENTS; ++j) {
@@ -2559,18 +2559,18 @@ static void readPart(Part* part, XmlReader& e)
 
     if (part->instrument()->useDrumset()) {
         for (Staff* staff : *part->staves()) {
-            int lines = staff->lines(Fraction(0,1));
+            int lines = staff->lines(Fraction(0, 1));
             int bf    = staff->barLineFrom();
             int bt    = staff->barLineTo();
-            staff->setStaffType(Fraction(0,1), *StaffType::getDefaultPreset(StaffGroup::PERCUSSION));
+            staff->setStaffType(Fraction(0, 1), *StaffType::getDefaultPreset(StaffGroup::PERCUSSION));
 
             // this allows 2/3-line percussion staves to keep the double spacing they had in 1.3
 
             if (lines == 2 || lines == 3) {
-                ((StaffType*)(staff->staffType(Fraction(0,1))))->setLineDistance(Spatium(2.0));
+                ((StaffType*)(staff->staffType(Fraction(0, 1))))->setLineDistance(Spatium(2.0));
             }
 
-            staff->setLines(Fraction(0,1), lines);             // this also sets stepOffset
+            staff->setLines(Fraction(0, 1), lines);             // this also sets stepOffset
             staff->setBarLineFrom(bf);
             staff->setBarLineTo(bt);
         }
@@ -2600,7 +2600,7 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
         if (tag == "landscape") {
             landscape = e.readInt();
         } else if (tag == "page-margins") {
-            type = e.attribute("type","both");
+            type = e.attribute("type", "both");
             qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
             while (e.readNextStartElement()) {
                 const QStringRef& t(e.name());
@@ -2856,7 +2856,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
             e.skipCurrentElement();             // obsolete
         } else if (tag == "tempolist") {
             // store the tempo list to create invisible tempo text later
-            qreal tempo = e.attribute("fix","2.0").toDouble();
+            qreal tempo = e.attribute("fix", "2.0").toDouble();
             tm.setRelTempo(tempo);
             while (e.readNextStartElement()) {
                 if (e.name() == "tempo") {
@@ -2983,7 +2983,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
             } else {
                 e.setTrack(s->track());               // update current track
             }
-            if (s->tick() == Fraction(-1,1)) {
+            if (s->tick() == Fraction(-1, 1)) {
                 s->setTick(e.tick());
             } else {
                 e.setTick(s->tick());              // update current tick
@@ -3067,7 +3067,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
         KeyList* km = s->keyList();
         for (auto i = km->begin(); i != km->end(); ++i) {
             Fraction tick = Fraction::fromTicks(i->first);
-            if (tick < Fraction(0,1)) {
+            if (tick < Fraction(0, 1)) {
                 qDebug("read114: Key tick %d", tick.ticks());
                 continue;
             }
@@ -3093,7 +3093,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
         }
     }
 
-    for (std::pair<int,Spanner*> p : spanner()) {
+    for (std::pair<int, Spanner*> p : spanner()) {
         Spanner* s = p.second;
         if (!s->isSlur()) {
             if (s->isVolta()) {

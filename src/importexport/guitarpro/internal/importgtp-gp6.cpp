@@ -494,7 +494,7 @@ void GuitarPro6::readTracks(QDomNode* track)
                     auto prog = currentNode.firstChildElement("Program");
                     if (!prog.isNull()) {
                         auto p = prog.text().toInt();
-                        part->instrument(Fraction(0,1))->channel(0)->setProgram(p);
+                        part->instrument(Fraction(0, 1))->channel(0)->setProgram(p);
                     }
                     int midiChannel = currentNode.firstChildElement("PrimaryChannel").text().toInt();
                     //if (!prog.isNull() && midiChannel != GP_DEFAULT_PERCUSSION_CHANNEL)
@@ -502,7 +502,7 @@ void GuitarPro6::readTracks(QDomNode* track)
                     part->setMidiChannel(midiChannel);
                     if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
                         part->instrument()->setDrumset(gpDrumset);
-                        s->setStaffType(Fraction(0,1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
+                        s->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
                     }
                 }
             } else if (nodeName == "PlaybackState") {
@@ -715,15 +715,15 @@ Fraction GuitarPro6::rhythmToDuration(QString value)
     } else if (value.compare("Quarter") == 0) {
         l.set(1, 4);
     } else if (value.compare("Eighth") == 0) {
-        l.set(1,8);
+        l.set(1, 8);
     } else if (value.compare("16th") == 0) {
-        l.set(1,16);
+        l.set(1, 16);
     } else if (value.compare("32nd") == 0) {
-        l.set(1,32);
+        l.set(1, 32);
     } else if (value.compare("64th") == 0) {
-        l.set(1,64);
+        l.set(1, 64);
     } else if (value.compare("128th") == 0) {
-        l.set(1,128);
+        l.set(1, 128);
     } else {
         qFatal("Error - unknown note length: %s", qPrintable(value));
     }
@@ -840,10 +840,10 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
 {
     bool wrong_pause = false;
     Lyrics* lyric    = nullptr;
-    Fraction beatsTick    = { 0,1 };
+    Fraction beatsTick    = { 0, 1 };
 
     // we must count from the start of the bar, so declare a fraction to track this
-    Fraction fermataIndex(0,1);
+    Fraction fermataIndex(0, 1);
     int track            = staffIdx * VOICES + voiceNum;
     auto currentBeatList = beats.split(" ");
     bool startSlur = false;
@@ -1214,7 +1214,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                         //harmonicNote->setFret(harmonicFret);
                                         harmonicNote->setPitch(staff->part()->instrument()->stringData()->getPitch(musescoreString,
                                                                                                                    harmonicFret, nullptr,
-                                                                                                                   Fraction(0,1)));
+                                                                                                                   Fraction(0, 1)));
                                         harmonicNote->setTpcFromPitch();
                                         if (harmonicText.length() && harmonicText.compare("Natural")) {
                                             harmonicNote->setFret(fretNum.toInt());
@@ -1237,7 +1237,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                 int fretNumber      = fretNum.toInt();
                                 int musescoreString = staff->part()->instrument()->stringData()->strings() - 1 - stringNum.toInt();
                                 auto pitch          = staff->part()->instrument()->stringData()->getPitch(musescoreString, fretNumber,
-                                                                                                          nullptr, Fraction(0,1));
+                                                                                                          nullptr, Fraction(0, 1));
                                 note->setFret(fretNumber);
                                 // we need to turn this string number for GP to the correct string number for musescore
                                 note->setString(musescoreString);
@@ -1682,7 +1682,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                         dotted = currentNode1.attributes().namedItem("count").toAttr().value().toInt();
                         Fraction tmp = l;
                         for (int count = 1; count <= dotted; count++) {
-                            l = l + (tmp / Fraction(pow(2, count),1));
+                            l = l + (tmp / Fraction(pow(2, count), 1));
                         }
                     } else if (currentNode1.nodeName() == "PrimaryTuplet") {
                         tupletSet = true;
@@ -1854,7 +1854,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
 
     if (wrong_pause) {
         _lastTick = beatsTick;
-        return Fraction(-1,1);
+        return Fraction(-1, 1);
     }
     return beatsTick;
 }
@@ -1937,7 +1937,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                         delete newClef;
                     }
                 } else {
-                    Segment* segment = measure->getSegment(SegmentType::HeaderClef, Fraction(0,1));
+                    Segment* segment = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
                     segment->add(newClef);
                     oldClefId[staffIdx] = clefId;
                 }
@@ -2011,7 +2011,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                         = readBeats(
                               voice.firstChild().toElement().text(), partInfo, measure, tick, staffIdx, voiceNum, &tuplets[0],
                               measureCounter);
-                    if (ticks > Fraction(0,1)) {
+                    if (ticks > Fraction(0, 1)) {
                         contentAdded = true;
                     }
                     // deal with possible anacrusis
@@ -2690,7 +2690,7 @@ void GuitarPro6::readGPX(QByteArray* buffer)
         int sectorSize = 0x1000;
         int offset     = 0;
         while ((offset = (offset + sectorSize)) + 3 < buffer->length()) {
-            int newInt = readInteger(buffer,offset);
+            int newInt = readInteger(buffer, offset);
             if (newInt == 2) {
                 int indexFileName = (offset + 4);
                 int indexFileSize = (offset + 0x8C);

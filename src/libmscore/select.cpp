@@ -88,13 +88,13 @@ Fraction Selection::tickStart() const
 {
     switch (_state) {
     case SelState::RANGE:
-        return _startSegment ? _startSegment->tick() : Fraction(-1,1);
+        return _startSegment ? _startSegment->tick() : Fraction(-1, 1);
     case SelState::LIST: {
         ChordRest* cr = firstChordRest();
-        return (cr) ? cr->tick() : Fraction(-1,1);
+        return (cr) ? cr->tick() : Fraction(-1, 1);
     }
     default:
-        return Fraction(-1,1);
+        return Fraction(-1, 1);
     }
 }
 
@@ -116,11 +116,11 @@ Fraction Selection::tickEnd() const
     }
     case SelState::LIST: {
         ChordRest* cr = lastChordRest();
-        return (cr) ? cr->segment()->tick() : Fraction(-1,1);
+        return (cr) ? cr->segment()->tick() : Fraction(-1, 1);
         break;
     }
     default:
-        return Fraction(-1,1);
+        return Fraction(-1, 1);
     }
 }
 
@@ -578,7 +578,7 @@ void Selection::updateSelectedElements()
         update();
         return;
     }
-    if (_state == SelState::RANGE && _plannedTick1 != Fraction(-1,1) && _plannedTick2 != Fraction(-1,1)) {
+    if (_state == SelState::RANGE && _plannedTick1 != Fraction(-1, 1) && _plannedTick2 != Fraction(-1, 1)) {
         const int staffStart = _staffStart;
         const int staffEnd = _staffEnd;
         deselectAll();
@@ -599,8 +599,8 @@ void Selection::updateSelectedElements()
             s2 = s2->prev1();         // we want the last segment of the previous measure
         }
         setRange(s1, s2, staffStart, staffEnd);
-        _plannedTick1 = Fraction(-1,1);
-        _plannedTick2 = Fraction(-1,1);
+        _plannedTick1 = Fraction(-1, 1);
+        _plannedTick2 = Fraction(-1, 1);
     }
 
     for (Element* e : qAsConst(_el)) {
@@ -880,7 +880,7 @@ static Fraction firstElementInTrack(Segment* startSeg, Segment* endSeg, int trac
             return seg->tick();
         }
     }
-    return Fraction(-1,1);
+    return Fraction(-1, 1);
 }
 
 //---------------------------------------------------------
@@ -965,7 +965,7 @@ QByteArray Selection::symbolListMimeData() const
     int topTrack    = 1000000;
     int bottomTrack = 0;
     Segment* firstSeg    = 0;
-    Fraction firstTick   = Fraction(0x7FFFFFFF,1);
+    Fraction firstTick   = Fraction(0x7FFFFFFF, 1);
     MapData mapData;
     Segment* seg         = 0;
     std::multimap<qint64, MapData> map;
@@ -1118,7 +1118,7 @@ QByteArray Selection::symbolListMimeData() const
         }
         mapData.e = e;
         mapData.s = seg;
-        map.insert(std::pair<qint64,MapData>(((qint64)track << 32) + seg->tick().ticks(), mapData));
+        map.insert(std::pair<qint64, MapData>(((qint64)track << 32) + seg->tick().ticks(), mapData));
     }
 
     xml.stag(QString("SymbolList version=\"" MSC_VERSION "\" fromtrack=\"%1\" totrack=\"%2\"")

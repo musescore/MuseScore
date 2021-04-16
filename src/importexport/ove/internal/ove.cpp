@@ -7595,7 +7595,7 @@ QString binaryToHarmonyType(int bin)
         break;
     }
     default: {
-        qDebug("Unrecognized harmony type: %04X",bin);
+        qDebug("Unrecognized harmony type: %04X", bin);
         type = "";
         break;
     }

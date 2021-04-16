@@ -666,7 +666,7 @@ public:
     bool transpose(Note* n, Interval, bool useSharpsFlats);
     void transposeKeys(int staffStart, int staffEnd, const Fraction& tickStart, const Fraction& tickEnd, const Interval&,
                        bool useInstrument = false, bool flip = false);
-    bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval,bool trKeys, bool transposeChordNames,
+    bool transpose(TransposeMode mode, TransposeDirection, Key transposeKey, int transposeInterval, bool trKeys, bool transposeChordNames,
                    bool useDoubleSharpsFlats);
 
     bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
@@ -930,12 +930,12 @@ public:
     bool saveStyle(const QString&);
 
     QVariant styleV(Sid idx) const { return style().value(idx); }
-    Spatium  styleS(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx),"Ms::Spatium")); return style().value(idx).value<Spatium>(); }
-    qreal    styleP(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx),"Ms::Spatium")); return style().pvalue(idx); }
-    QString  styleSt(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx),"QString")); return style().value(idx).toString(); }
-    bool     styleB(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx),"bool")); return style().value(idx).toBool(); }
-    qreal    styleD(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx),"double")); return style().value(idx).toDouble(); }
-    int      styleI(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx),"int")); return style().value(idx).toInt(); }
+    Spatium  styleS(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "Ms::Spatium")); return style().value(idx).value<Spatium>(); }
+    qreal    styleP(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "Ms::Spatium")); return style().pvalue(idx); }
+    QString  styleSt(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "QString")); return style().value(idx).toString(); }
+    bool     styleB(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "bool")); return style().value(idx).toBool(); }
+    qreal    styleD(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "double")); return style().value(idx).toDouble(); }
+    int      styleI(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "int")); return style().value(idx).toInt(); }
 
     void setStyleValue(Sid sid, QVariant value) { style().set(sid, value); }
     QString getTextStyleUserName(Tid tid);
@@ -1120,7 +1120,7 @@ public:
 
     const QMap<QString, QString>& metaTags() const { return _metaTags; }
     QMap<QString, QString>& metaTags() { return _metaTags; }
-    void setMetaTags(const QMap<QString,QString>& t) { _metaTags = t; }
+    void setMetaTags(const QMap<QString, QString>& t) { _metaTags = t; }
 
     //@ returns as a string the metatag named 'tag'
     QString metaTag(const QString& tag) const;

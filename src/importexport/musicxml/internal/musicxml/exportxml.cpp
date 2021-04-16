@@ -368,8 +368,8 @@ class ExportMusicXml
     void calcDivMoveToTick(const Fraction& t);
     void calcDivisions();
     void keysigTimesig(const Measure* m, const Part* p);
-    void chordAttributes(Chord* chord, Notations& notations, Technical& technical,TrillHash& trillStart, TrillHash& trillStop);
-    void wavyLineStartStop(const ChordRest* const cr, Notations& notations, Ornaments& ornaments,TrillHash& trillStart,
+    void chordAttributes(Chord* chord, Notations& notations, Technical& technical, TrillHash& trillStart, TrillHash& trillStop);
+    void wavyLineStartStop(const ChordRest* const cr, Notations& notations, Ornaments& ornaments, TrillHash& trillStart,
                            TrillHash& trillStop);
     void print(const Measure* const m, const int partNr, const int firstStaffOfPart, const int nrStavesInPart,
                const MeasurePrintContext& mpc);
@@ -395,7 +395,7 @@ public:
         : _xml(s)
     {
         _score = s;
-        _tick = { 0,1 };
+        _tick = { 0, 1 };
         div = 1;
         tenths = 40;
         millimeters = _score->spatium() * tenths / (10 * DPMM);
@@ -1152,7 +1152,7 @@ void ExportMusicXml::calcDivisions()
 
     for (int idx = 0; idx < il.size(); ++idx) {
         Part* part = il.at(idx);
-        _tick = { 0,1 };
+        _tick = { 0, 1 };
 
         int staves = part->nstaves();
         int strack = _score->staffIdx(part) * VOICES;
@@ -1192,7 +1192,7 @@ void ExportMusicXml::calcDivisions()
                         Fraction l = toChordRest(el)->actualTicks();
                         if (el->isChord()) {
                             if (isTwoNoteTremolo(toChord(el))) {
-                                l = l * Fraction(1,2);
+                                l = l * Fraction(1, 2);
                             }
                         }
 #ifdef DEBUG_TICK
@@ -1588,10 +1588,10 @@ static void unpitch2xml(const Note* note, QString& s, int& octave)
     // 3 line staff: 2, 4, 6       -> correction 2
     // 5 line staff: 0, 2, 4, 6, 8 -> correction 0
     // TODO handle other # staff lines ?
-    if (st->lines(Fraction(0,1)) == 1) {
+    if (st->lines(Fraction(0, 1)) == 1) {
         line5g += 8;
     }
-    if (st->lines(Fraction(0,1)) == 3) {
+    if (st->lines(Fraction(0, 1)) == 3) {
         line5g += 2;
     }
     // index in table1 to get step
@@ -1614,7 +1614,7 @@ static QString tick2xml(const Fraction& ticks, int* dots)
 {
     TDuration t(ticks);
     *dots = t.dots();
-    if (ticks == Fraction(0,1)) {
+    if (ticks == Fraction(0, 1)) {
         t.setType("measure");
         *dots = 0;
     }
@@ -1800,10 +1800,10 @@ QString ExportMusicXml::fermataPosition(const Fermata* const fermata)
         const auto relY = -1 * SPATIUM2TENTHS * fermata->offset().y() / spatium;
 
         if (qAbs(defY) >= EPSILON) {
-            res += QString(" default-y=\"%1\"").arg(QString::number(defY,'f',2));
+            res += QString(" default-y=\"%1\"").arg(QString::number(defY, 'f', 2));
         }
         if (qAbs(relY) >= EPSILON) {
-            res += QString(" relative-y=\"%1\"").arg(QString::number(relY,'f',2));
+            res += QString(" relative-y=\"%1\"").arg(QString::number(relY, 'f', 2));
         }
     }
 
@@ -3382,7 +3382,7 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
     int alter = 0;
     int octave = 0;
     const auto chord = note->chord();
-    if (chord->staff() && chord->staff()->isTabStaff(Fraction(0,1))) {
+    if (chord->staff() && chord->staff()->isTabStaff(Fraction(0, 1))) {
         tabpitch2xml(note->pitch(), note->tpc(), step, alter, octave);
     } else {
         if (!useDrumset) {
@@ -3438,8 +3438,8 @@ QString ExportMusicXml::notePosition(const ExportMusicXml* const expMxml, const 
         double noteX = expMxml->getTenthsFromDots(note->pagePos().x());
         double noteY = pageHeight - expMxml->getTenthsFromDots(note->pagePos().y());
 
-        res += QString(" default-x=\"%1\"").arg(QString::number(noteX - measureX,'f',2));
-        res += QString(" default-y=\"%1\"").arg(QString::number(noteY - measureY,'f',2));
+        res += QString(" default-x=\"%1\"").arg(QString::number(noteX - measureX, 'f', 2));
+        res += QString(" default-y=\"%1\"").arg(QString::number(noteY - measureY, 'f', 2));
     }
 
     return res;
@@ -3491,7 +3491,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
         //TODO support for OFFSET_VAL
         if (note->veloType() == Note::ValueType::USER_VAL) {
             int velo = note->veloOffset();
-            noteTag += QString(" dynamics=\"%1\"").arg(QString::number(velo * 100.0 / 90.0,'f',2));
+            noteTag += QString(" dynamics=\"%1\"").arg(QString::number(velo * 100.0 / 90.0, 'f', 2));
         }
         _xml.stag(noteTag);
 
@@ -3596,7 +3596,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
         writeFingering(_xml, notations, technical, note);
 
         // write tablature string / fret
-        if (chord->staff() && chord->staff()->isTabStaff(Fraction(0,1))) {
+        if (chord->staff() && chord->staff()->isTabStaff(Fraction(0, 1))) {
             if (note->fret() >= 0 && note->string() >= 0) {
                 notations.tag(_xml);
                 technical.tag(_xml);
@@ -5499,22 +5499,22 @@ static void spannerStop(ExportMusicXml* exp, int strack, int etrack, const Fract
             stopped.insert(e);
             switch (e->type()) {
             case ElementType::HAIRPIN:
-                exp->hairpin(toHairpin(e), sstaff, Fraction(-1,1));
+                exp->hairpin(toHairpin(e), sstaff, Fraction(-1, 1));
                 break;
             case ElementType::OTTAVA:
-                exp->ottava(toOttava(e), sstaff, Fraction(-1,1));
+                exp->ottava(toOttava(e), sstaff, Fraction(-1, 1));
                 break;
             case ElementType::PEDAL:
-                exp->pedal(toPedal(e), sstaff, Fraction(-1,1));
+                exp->pedal(toPedal(e), sstaff, Fraction(-1, 1));
                 break;
             case ElementType::TEXTLINE:
-                exp->textLine(toTextLineBase(e), sstaff, Fraction(-1,1));
+                exp->textLine(toTextLineBase(e), sstaff, Fraction(-1, 1));
                 break;
             case ElementType::LET_RING:
-                exp->textLine(toLetRing(e), sstaff, Fraction(-1,1));
+                exp->textLine(toLetRing(e), sstaff, Fraction(-1, 1));
                 break;
             case ElementType::PALM_MUTE:
-                exp->textLine(toPalmMute(e), sstaff, Fraction(-1,1));
+                exp->textLine(toPalmMute(e), sstaff, Fraction(-1, 1));
                 break;
             case ElementType::TRILL:
                 // ignore (written as <note><notations><ornaments><wavy-line>
@@ -5884,8 +5884,8 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
 
                 _xml.stag("system-layout");
                 _xml.stag("system-margins");
-                _xml.tag("left-margin", QString("%1").arg(QString::number(systemLM,'f',2)));
-                _xml.tag("right-margin", QString("%1").arg(QString::number(systemRM,'f',2)));
+                _xml.tag("left-margin", QString("%1").arg(QString::number(systemLM, 'f', 2)));
+                _xml.tag("right-margin", QString("%1").arg(QString::number(systemRM, 'f', 2)));
                 _xml.etag();
 
                 if (mpc.systemStart && !mpc.pageStart) {
@@ -5895,12 +5895,12 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                                                              - mpc.prevMeasure->bbox().height()
                                                              + 2 * score()->spatium()
                                                              );
-                    _xml.tag("system-distance", QString("%1").arg(QString::number(sysDist,'f',2)));
+                    _xml.tag("system-distance", QString("%1").arg(QString::number(sysDist, 'f', 2)));
                 }
 
                 if (mpc.pageStart || mpc.scoreStart) {
                     const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
-                    _xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist,'f',2)));
+                    _xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist, 'f', 2)));
                 }
 
                 _xml.etag();
@@ -5914,7 +5914,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                 const auto staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
 
                 _xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
-                _xml.tag("staff-distance", QString("%1").arg(QString::number(getTenthsFromDots(staffDist),'f',2)));
+                _xml.tag("staff-distance", QString("%1").arg(QString::number(getTenthsFromDots(staffDist), 'f', 2)));
                 _xml.etag();
             }
 
@@ -5938,8 +5938,8 @@ void ExportMusicXml::exportDefaultClef(const Part* const part, const Measure* co
 {
     const auto staves = part->nstaves();
 
-    if (m->tick() == Fraction(0,1)) {
-        const auto clefSeg = m->findSegment(SegmentType::HeaderClef, Fraction(0,1));
+    if (m->tick() == Fraction(0, 1)) {
+        const auto clefSeg = m->findSegment(SegmentType::HeaderClef, Fraction(0, 1));
 
         if (clefSeg) {
             for (int i = 0; i < staves; ++i) {
@@ -5954,7 +5954,7 @@ void ExportMusicXml::exportDefaultClef(const Part* const part, const Measure* co
                 if (clefSeg->element(track) == nullptr) {
                     ClefType ct { ClefType::G };
                     QString stafftype;
-                    switch (part->staff(i)->staffType(Fraction(0,1))->group()) {
+                    switch (part->staff(i)->staffType(Fraction(0, 1))->group()) {
                     case StaffGroup::TAB:
                         ct = ClefType::TAB;
                         stafftype = "tab";
@@ -6325,14 +6325,14 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
     //       currently exported as a two staff part ...
     for (int i = 0; i < staves; i++) {
         Staff* st = part->staff(i);
-        if (st->lines(Fraction(0,1)) != 5 || st->isTabStaff(Fraction(0,1))) {
+        if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1))) {
             if (staves > 1) {
                 xml.stag(QString("staff-details number=\"%1\"").arg(i + 1));
             } else {
                 xml.stag("staff-details");
             }
-            xml.tag("staff-lines", st->lines(Fraction(0,1)));
-            if (st->isTabStaff(Fraction(0,1)) && instrument->stringData()) {
+            xml.tag("staff-lines", st->lines(Fraction(0, 1)));
+            if (st->isTabStaff(Fraction(0, 1)) && instrument->stringData()) {
                 QList<instrString> l = instrument->stringData()->stringList();
                 for (int ii = 0; ii < l.size(); ii++) {
                     char step  = ' ';
@@ -6748,7 +6748,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     const bool isFirstActualMeasure = mnsh.isFirstActualMeasure();
 
     if (configuration()->musicxmlExportLayout()) {
-        measureTag += QString(" width=\"%1\"").arg(QString::number(m->bbox().width() / DPMM / millimeters * tenths,'f',2));
+        measureTag += QString(" width=\"%1\"").arg(QString::number(m->bbox().width() / DPMM / millimeters * tenths, 'f', 2));
     }
 
     _xml.stag(measureTag);
@@ -6849,7 +6849,7 @@ void ExportMusicXml::writeParts()
 
     for (int partIndex = 0; partIndex < parts.size(); ++partIndex) {
         const auto part = parts.at(partIndex);
-        _tick = { 0,1 };
+        _tick = { 0, 1 };
         _xml.stag(QString("part id=\"P%1\"").arg(partIndex + 1));
 
         _trillStart.clear();

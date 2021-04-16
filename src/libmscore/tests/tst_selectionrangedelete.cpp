@@ -36,8 +36,8 @@ private slots:
     void initTestCase();
     void deleteSegmentWithSlur();
     void deleteSegmentWithSpanner();
-    void deleteVoice1() { deleteVoice(0,"03"); }
-    void deleteVoice2() { deleteVoice(1,"04"); }
+    void deleteVoice1() { deleteVoice(0, "03"); }
+    void deleteVoice2() { deleteVoice(1, "04"); }
     void deleteSkipAnnotations();
 };
 
@@ -86,10 +86,10 @@ void TestSelectionRangeDelete::verifyNoDelete(MasterScore* score, size_t spanner
 
 Element* chordRestAtBeat(Score* score, int beat, int half = 0)
 {
-    qDebug("Chordrest at beat %i,%i",beat,half);
+    qDebug("Chordrest at beat %i,%i", beat, half);
     int division = MScore::division;
     int tick = beat * division + half * division / 2;
-    return score->tick2segment(Fraction::fromTicks(tick), false, SegmentType::ChordRest,false)->element(0);
+    return score->tick2segment(Fraction::fromTicks(tick), false, SegmentType::ChordRest, false)->element(0);
 }
 
 //---------------------------------------------------------
@@ -111,24 +111,24 @@ void TestSelectionRangeDelete::deleteSegmentWithSlur()
     QVERIFY(score);
     size_t spanners = score->spanner().size();
 
-    score->select(chordRestAtBeat(score, 0),SelectType::RANGE);
-    verifyDelete(score,spanners);
+    score->select(chordRestAtBeat(score, 0), SelectType::RANGE);
+    verifyDelete(score, spanners);
     score->deselectAll();
 
-    score->select(chordRestAtBeat(score, 1),SelectType::RANGE);
-    verifyDelete(score,spanners);
+    score->select(chordRestAtBeat(score, 1), SelectType::RANGE);
+    verifyDelete(score, spanners);
     score->deselectAll();
 
-    score->select(chordRestAtBeat(score, 2),SelectType::RANGE);
-    verifyDelete(score,spanners);
+    score->select(chordRestAtBeat(score, 2), SelectType::RANGE);
+    verifyDelete(score, spanners);
     score->deselectAll();
 
-    score->select(chordRestAtBeat(score, 3),SelectType::RANGE);
-    verifyNoDelete(score,spanners);
+    score->select(chordRestAtBeat(score, 3), SelectType::RANGE);
+    verifyNoDelete(score, spanners);
     score->deselectAll();
 
-    score->select(chordRestAtBeat(score, 3,1),SelectType::RANGE);
-    verifyDelete(score,spanners);
+    score->select(chordRestAtBeat(score, 3, 1), SelectType::RANGE);
+    verifyDelete(score, spanners);
     score->deselectAll();
 
     delete score;
@@ -153,22 +153,22 @@ void TestSelectionRangeDelete::deleteSegmentWithSpanner()
     QVERIFY(score);
     size_t spanners = score->spanner().size();
 
-    score->select(chordRestAtBeat(score, 0),SelectType::RANGE);
-    verifyNoDelete(score,spanners);
+    score->select(chordRestAtBeat(score, 0), SelectType::RANGE);
+    verifyNoDelete(score, spanners);
 //      verifyDelete(score,spanners);
     score->deselectAll();
 
-    score->select(chordRestAtBeat(score, 1),SelectType::RANGE);
-    verifyNoDelete(score,spanners);
+    score->select(chordRestAtBeat(score, 1), SelectType::RANGE);
+    verifyNoDelete(score, spanners);
     score->deselectAll();
 
-    score->select(chordRestAtBeat(score, 2),SelectType::RANGE);
-    verifyNoDelete(score,spanners);
+    score->select(chordRestAtBeat(score, 2), SelectType::RANGE);
+    verifyNoDelete(score, spanners);
     score->deselectAll();
 
-    score->select(chordRestAtBeat(score, 0),SelectType::RANGE);
-    score->select(chordRestAtBeat(score, 2),SelectType::RANGE);
-    verifyDelete(score,spanners);
+    score->select(chordRestAtBeat(score, 0), SelectType::RANGE);
+    score->select(chordRestAtBeat(score, 2), SelectType::RANGE);
+    verifyDelete(score, spanners);
     score->deselectAll();
 
     delete score;
@@ -186,8 +186,8 @@ void TestSelectionRangeDelete::deleteVoice(int voice, QString idx)
     QVERIFY(m1);
 
     SelectionFilterType voiceFilterType = SelectionFilterType((int)SelectionFilterType::FIRST_VOICE + voice);
-    score->selectionFilter().setFiltered(voiceFilterType,false);
-    score->select(m1,SelectType::RANGE);
+    score->selectionFilter().setFiltered(voiceFilterType, false);
+    score->select(m1, SelectType::RANGE);
 
     score->startCmd();
     score->cmdDeleteSelection();

@@ -162,7 +162,7 @@ MasterScore* MasterScore::unrollRepeats()
     // remove excerpts for now (they are re-created after unrolling master score)
     QList<Excerpt*> excerpts;
     for (Excerpt* e : score->excerpts()) {
-        excerpts.append(new Excerpt(*e,false));
+        excerpts.append(new Excerpt(*e, false));
         score->masterScore()->deleteExcerpt(e);
     }
 

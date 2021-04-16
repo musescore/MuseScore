@@ -266,13 +266,14 @@ public:
     StaffType();
 
     StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist, bool genClef,
-              bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLiness, bool invisible,const QColor& color);
+              bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLiness, bool invisible,
+              const QColor& color);
 
     StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist, bool genClef,
               bool showBarLines, bool stemless, bool genTimesig, bool invisible, const QColor& color, const QString& durFontName,
-              qreal durFontSize, qreal durFontUserY,qreal genDur, const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY,
-              TablatureSymbolRepeat symRepeat,bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
-              bool stemsDown, bool stemThrough,bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
+              qreal durFontSize, qreal durFontUserY, qreal genDur, const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY,
+              TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
+              bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
 
     virtual ~StaffType() {}
     bool operator==(const StaffType&) const;

@@ -254,7 +254,7 @@ void Harmony::write(XmlWriter& xml) const
         if (staff()) {
             // parent can be a fret diagram
             Segment* segment = getParentSeg();
-            Fraction tick = segment ? segment->tick() : Fraction(-1,1);
+            Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
             const Interval& interval = part()->instrument(tick)->transpose();
             if (xml.clipboardmode() && !score()->styleB(Sid::concertPitch) && interval.chromatic) {
                 rRootTpc = transposeTpc(_rootTpc, interval, true);
@@ -699,10 +699,10 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
     // pre-process for parentheses
     QString s = ss.simplified();
     if ((_leftParen = s.startsWith('('))) {
-        s.remove(0,1);
+        s.remove(0, 1);
     }
     if ((_rightParen = (s.endsWith(')') && s.count('(') < s.count(')')))) {
-        s.remove(s.size() - 1,1);
+        s.remove(s.size() - 1, 1);
     }
     if (_leftParen || _rightParen) {
         s = s.simplified();         // in case of spaces inside parentheses
@@ -912,7 +912,7 @@ void Harmony::endEdit(EditData& ed)
             if (score()->styleB(Sid::concertPitch) != h->score()->styleB(Sid::concertPitch)) {
                 Part* partDest = h->part();
                 Segment* segment = getParentSeg();
-                Fraction tick = segment ? segment->tick() : Fraction(-1,1);
+                Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
                 Interval interval = partDest->instrument(tick)->transpose();
                 if (!interval.isZero()) {
                     if (!h->score()->styleB(Sid::concertPitch)) {
@@ -1213,7 +1213,7 @@ const ChordDescription* Harmony::fromXml(const QString& kind, const QString& kin
     ParsedChord* pc = new ParsedChord;
     _textName = pc->fromXml(kind, kindText, symbols, parens, dl, score()->style().chordList());
     _parsedForm = pc;
-    const ChordDescription* cd = getDescription(_textName,pc);
+    const ChordDescription* cd = getDescription(_textName, pc);
     return cd;
 }
 
@@ -1695,7 +1695,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
             x += a.movex * mag * _spatium * .2;
             y += a.movey * mag * _spatium * .2;
         } else if (a.type == RenderAction::RenderActionType::PUSH) {
-            stack.push(QPointF(x,y));
+            stack.push(QPointF(x, y));
         } else if (a.type == RenderAction::RenderActionType::POP) {
             if (!stack.empty()) {
                 QPointF pt = stack.pop();

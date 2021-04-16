@@ -74,7 +74,7 @@ private:
     ClefTypeList _defaultClefType;
 
     KeyList _keys;
-    std::map<int,TimeSig*> timesigs;
+    std::map<int, TimeSig*> timesigs;
 
     QList <BracketItem*> _brackets;
     int _barLineSpan        { false };       ///< true - span barline to next staff
@@ -93,9 +93,9 @@ private:
 
     StaffTypeList _staffTypeList;
 
-    QMap<int,int> _channelList[VOICES];
-    QMap<int,SwingParameters> _swingList;
-    QMap<int,int> _capoList;
+    QMap<int, int> _channelList[VOICES];
+    QMap<int, SwingParameters> _swingList;
+    QMap<int, int> _capoList;
     bool _playbackVoice[VOICES] { true, true, true, true };
     std::array<bool, VOICES> _visibilityVoices { true, true, true, true };
 

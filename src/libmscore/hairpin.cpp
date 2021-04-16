@@ -490,7 +490,7 @@ void HairpinSegment::draw(mu::draw::Painter* painter) const
 
     if (drawCircledTip) {
         painter->setBrush(Qt::NoBrush);
-        painter->drawEllipse(circledTip,circledTipRadius,circledTipRadius);
+        painter->drawEllipse(circledTip, circledTipRadius, circledTipRadius);
     }
 }
 

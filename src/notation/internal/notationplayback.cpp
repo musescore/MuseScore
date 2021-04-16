@@ -473,8 +473,8 @@ MidiData NotationPlayback::playNoteMidiData(const Ms::Note* note) const
     makeInitEvents(midiData.initEvents, masterNote->score());
 
     Ms::Fraction tick = masterNote->chord()->tick();
-    if (tick < Ms::Fraction(0,1)) {
-        tick = Ms::Fraction(0,1);
+    if (tick < Ms::Fraction(0, 1)) {
+        tick = Ms::Fraction(0, 1);
     }
     Ms::Instrument* instr = masterNote->part()->instrument(tick);
     channel_t channel = instr->channel(masterNote->subchannel())->channel();
@@ -504,7 +504,7 @@ MidiData NotationPlayback::playNoteMidiData(const Ms::Note* note) const
 MidiData NotationPlayback::playChordMidiData(const Ms::Chord* chord) const
 {
     Ms::Part* part = chord->part();
-    Ms::Fraction tick = chord->segment() ? chord->segment()->tick() : Ms::Fraction(0,1);
+    Ms::Fraction tick = chord->segment() ? chord->segment()->tick() : Ms::Fraction(0, 1);
     Ms::Instrument* instr = part->instrument(tick);
     channel_t channel = instr->channel(chord->notes()[0]->subchannel())->channel();
 

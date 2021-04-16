@@ -441,7 +441,7 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
 
         if (part->nstaves() == 1) {
             if (track.mtrack->drumTrack()) {
-                part->staff(0)->setStaffType(Fraction(0,1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
+                part->staff(0)->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
                 if (!instr) {
                     part->instrument()->setDrumset(smDrumset);
                 }
@@ -461,7 +461,7 @@ void createInstruments(Score* score, QList<MTrack>& tracks)
             for (int i = 0; i != part->nstaves(); ++i) {
                 if (instr->staffTypePreset) {
                     part->staff(i)->init(instr, nullptr, i);
-                    part->staff(i)->setStaffType(Fraction(0,1), *(instr->staffTypePreset));
+                    part->staff(i)->setStaffType(Fraction(0, 1), *(instr->staffTypePreset));
                 }
 //                        part->staff(i)->setLines(0, instr->staffLines[i]);
 //                        part->staff(i)->setSmall(0, instr->smallStaff[i]);

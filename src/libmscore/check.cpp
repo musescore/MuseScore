@@ -103,7 +103,7 @@ void Score::checkScore()
     ChordRest* lcr = 0;
     for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
         int track = staffIdx * VOICES;
-        Fraction tick  = Fraction(0,1);
+        Fraction tick  = Fraction(0, 1);
         Staff* st = staff(staffIdx);
         for (Segment* s = firstMeasure()->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
             ChordRest* cr = toChordRest(s->element(track));
@@ -222,7 +222,7 @@ bool Score::sanityCheck(const QString& name)
                     // fmrest0->setDuration(mLen * fmrest0->staff()->timeStretch(fmrest0->tick()));
                     fmrest0->setTicks(mLen);
                     if (fmrest0->actualTicks() != mLen) {
-                        fprintf(stderr,"whoo???\n");
+                        fprintf(stderr, "whoo???\n");
                     }
                 }
             }
@@ -272,7 +272,7 @@ bool Score::checkKeys()
 {
     bool rc = true;
     for (int i = 0; i < nstaves(); ++i) {
-        Key k = staff(i)->key(Fraction(0,1));
+        Key k = staff(i)->key(Fraction(0, 1));
         for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             Segment* s = m->findSegment(SegmentType::KeySig, m->tick());
             if (s) {
@@ -373,8 +373,8 @@ void Measure::checkMeasure(int staffIdx, bool useGapRests)
     Fraction f       = ticks() * stretch;
 
     for (int track = strack; track < dtrack; track++) {
-        Fraction expectedPos = Fraction(0,1);
-        Fraction currentPos  = Fraction(0,1);
+        Fraction expectedPos = Fraction(0, 1);
+        Fraction currentPos  = Fraction(0, 1);
 
         for (Segment* seg = first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
             Element* e = seg->element(track);

@@ -461,7 +461,7 @@ void Score::addMeasure(MeasureBase* m, MeasureBase* pos)
 
 void Score::fixTicks()
 {
-    Fraction tick = Fraction(0,1);
+    Fraction tick = Fraction(0, 1);
     Measure* fm = firstMeasure();
     if (fm == 0) {
         return;
@@ -1357,7 +1357,7 @@ Measure* Score::getCreateMeasure(const Fraction& tick)
 {
     Measure* last = lastMeasure();
     if (last == 0 || ((last->tick() + last->ticks()) <= tick)) {
-        Fraction lastTick  = last ? (last->tick() + last->ticks()) : Fraction(0,1);
+        Fraction lastTick  = last ? (last->tick() + last->ticks()) : Fraction(0, 1);
         while (tick >= lastTick) {
             Measure* m = new Measure(this);
             Fraction ts = sigmap()->timesig(lastTick).timesig();
@@ -1800,7 +1800,7 @@ Measure* Score::lastMeasureMM() const
 Fraction Score::endTick() const
 {
     Measure* m = lastMeasure();
-    return m ? m->endTick() : Fraction(0,1);
+    return m ? m->endTick() : Fraction(0, 1);
 }
 
 //---------------------------------------------------------
@@ -2857,7 +2857,7 @@ void Score::cmdConcertPitchChanged(bool flag)
     undoChangeStyleVal(Sid::concertPitch, flag);         // change style flag
 
     for (Staff* staff : qAsConst(_staves)) {
-        if (staff->staffType(Fraction(0,1))->group() == StaffGroup::PERCUSSION) {         // TODO
+        if (staff->staffType(Fraction(0, 1))->group() == StaffGroup::PERCUSSION) {         // TODO
             continue;
         }
         // if this staff has no transposition, and no instrument changes, we can skip it
@@ -2873,7 +2873,7 @@ void Score::cmdConcertPitchChanged(bool flag)
         int startTrack = staffIdx * VOICES;
         int endTrack   = startTrack + VOICES;
 
-        transposeKeys(staffIdx, staffIdx + 1, Fraction(0,1), lastSegment()->tick(), interval, true, !flag);
+        transposeKeys(staffIdx, staffIdx + 1, Fraction(0, 1), lastSegment()->tick(), interval, true, !flag);
 
         for (Segment* segment = firstSegment(SegmentType::ChordRest); segment; segment = segment->next1(SegmentType::ChordRest)) {
             interval = staff->part()->instrument(segment->tick())->transpose();
@@ -3506,7 +3506,7 @@ void Score::collectMatch(void* data, Element* e)
         } while (ee);
     }
 
-    if (e->isRest() && p->durationTicks != Fraction(-1,1)) {
+    if (e->isRest() && p->durationTicks != Fraction(-1, 1)) {
         const Rest* r = toRest(e);
         if (p->durationTicks != r->actualTicks()) {
             return;
@@ -3553,7 +3553,7 @@ void Score::collectNoteMatch(void* data, Element* e)
     if (p->durationType.type() != TDuration::DurationType::V_INVALID && p->durationType != n->chord()->actualDurationType()) {
         return;
     }
-    if (p->durationTicks != Fraction(-1,1) && p->durationTicks != n->chord()->actualTicks()) {
+    if (p->durationTicks != Fraction(-1, 1) && p->durationTicks != n->chord()->actualTicks()) {
         return;
     }
     if ((p->staffStart != -1)
@@ -3599,7 +3599,7 @@ void Score::selectSimilar(Element* e, bool sameStaff)
     pattern.staffEnd = sameStaff ? e->staffIdx() + 1 : -1;
     pattern.voice   = -1;
     pattern.system  = 0;
-    pattern.durationTicks = Fraction(-1,1);
+    pattern.durationTicks = Fraction(-1, 1);
 
     score->scanElements(&pattern, collectMatch);
 
@@ -3634,7 +3634,7 @@ void Score::selectSimilarInRange(Element* e)
     pattern.staffEnd = selection().staffEnd();
     pattern.voice   = -1;
     pattern.system  = 0;
-    pattern.durationTicks = Fraction(-1,1);
+    pattern.durationTicks = Fraction(-1, 1);
 
     score->scanElementsInRange(&pattern, collectMatch);
 
@@ -3830,7 +3830,7 @@ void Score::removeTempo(const Fraction& tick)
 
 void Score::resetTempo()
 {
-    resetTempoRange(Fraction(0,1), Fraction(std::numeric_limits<int>::max(), 1));
+    resetTempoRange(Fraction(0, 1), Fraction(std::numeric_limits<int>::max(), 1));
 }
 
 //---------------------------------------------------------
@@ -3841,7 +3841,7 @@ void Score::resetTempo()
 
 void Score::resetTempoRange(const Fraction& tick1, const Fraction& tick2)
 {
-    const bool zeroInRange = (tick1 <= Fraction(0,1) && tick2 > Fraction(0,1));
+    const bool zeroInRange = (tick1 <= Fraction(0, 1) && tick2 > Fraction(0, 1));
     tempomap()->clearRange(tick1.ticks(), tick2.ticks());
     if (zeroInRange) {
         tempomap()->setTempo(0, _defaultTempo);
@@ -4025,7 +4025,7 @@ void Score::appendPart(const InstrumentTemplate* t)
     for (int i = 0; i < t->nstaves(); ++i) {
         Staff* staff = new Staff(this);
         staff->setPart(part);
-        StaffType* stt = staff->staffType(Fraction(0,1));
+        StaffType* stt = staff->staffType(Fraction(0, 1));
         stt->setLines(t->staffLines[i]);
         stt->setSmall(t->smallStaff[i]);
         if (i == 0) {
@@ -4122,8 +4122,8 @@ void Score::removeUnmanagedSpanner(Spanner* s)
 
 void MasterScore::setPos(POS pos, Fraction tick)
 {
-    if (tick < Fraction(0,1)) {
-        tick = Fraction(0,1);
+    if (tick < Fraction(0, 1)) {
+        tick = Fraction(0, 1);
     }
     if (tick > lastMeasure()->endTick()) {
         // End Reverb may last longer than written notation, but cursor position should not
@@ -4231,7 +4231,7 @@ ChordRest* Score::findCRinStaff(const Fraction& tick, int staffIdx) const
     int etrack      = strack + VOICES;
     int actualTrack = strack;
 
-    Fraction lastTick = Fraction(-1,1);
+    Fraction lastTick = Fraction(-1, 1);
     for (Segment* ns = s;; ns = ns->next(SegmentType::ChordRest)) {
         if (ns == 0 || ns->tick() > ptick) {
             break;
@@ -4723,7 +4723,7 @@ int Score::keysig()
     Key result = Key::C;
     for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
         Staff* st = staff(staffIdx);
-        constexpr Fraction t(0,1);
+        constexpr Fraction t(0, 1);
         Key key = st->key(t);
         if (st->staffType(t)->group() == StaffGroup::PERCUSSION || st->keySigEvent(t).custom() || st->keySigEvent(t).isAtonal()) {         // ignore percussion and custom / atonal key
             continue;
@@ -5141,9 +5141,9 @@ MasterScore::MasterScore()
     _revisions   = new Revisions;
     setMasterScore(this);
 
-    _pos[int(POS::CURRENT)] = Fraction(0,1);
-    _pos[int(POS::LEFT)]    = Fraction(0,1);
-    _pos[int(POS::RIGHT)]   = Fraction(0,1);
+    _pos[int(POS::CURRENT)] = Fraction(0, 1);
+    _pos[int(POS::LEFT)]    = Fraction(0, 1);
+    _pos[int(POS::RIGHT)]   = Fraction(0, 1);
 
 #if defined(Q_OS_WIN)
     metaTags().insert("platform", "Microsoft Windows");
@@ -5310,8 +5310,8 @@ void MasterScore::setUpdateAll()
 
 void MasterScore::setLayoutAll(int staff, const Element* e)
 {
-    _cmdState.setTick(Fraction(0,1));
-    _cmdState.setTick(measures()->last() ? measures()->last()->endTick() : Fraction(0,1));
+    _cmdState.setTick(Fraction(0, 1));
+    _cmdState.setTick(measures()->last() ? measures()->last()->endTick() : Fraction(0, 1));
 
     if (e && e->score() == this) {
         // TODO: map staff number properly
@@ -5330,7 +5330,7 @@ void MasterScore::setLayoutAll(int staff, const Element* e)
 
 void MasterScore::setLayout(const Fraction& t, int staff, const Element* e)
 {
-    if (t >= Fraction(0,1)) {
+    if (t >= Fraction(0, 1)) {
         _cmdState.setTick(t);
     }
 
@@ -5343,10 +5343,10 @@ void MasterScore::setLayout(const Fraction& t, int staff, const Element* e)
 
 void MasterScore::setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const Element* e)
 {
-    if (tick1 >= Fraction(0,1)) {
+    if (tick1 >= Fraction(0, 1)) {
         _cmdState.setTick(tick1);
     }
-    if (tick2 >= Fraction(0,1)) {
+    if (tick2 >= Fraction(0, 1)) {
         _cmdState.setTick(tick2);
     }
 

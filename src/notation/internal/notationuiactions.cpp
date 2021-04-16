@@ -196,8 +196,8 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("load-style",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action","Load Style..."),
-             QT_TRANSLATE_NOOP("action","Load style")
+             QT_TRANSLATE_NOOP("action", "Load Style..."),
+             QT_TRANSLATE_NOOP("action", "Load style")
              ),
     UiAction("transpose",
              mu::context::UiCtxNotationOpened,
@@ -706,8 +706,8 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("add-noteline",
              mu::context::UiCtxNotationHasSelection,
-             QT_TRANSLATE_NOOP("action","Note Anchored Line"),
-             QT_TRANSLATE_NOOP("action","Note anchored line")
+             QT_TRANSLATE_NOOP("action", "Note Anchored Line"),
+             QT_TRANSLATE_NOOP("action", "Note anchored line")
              ),
     UiAction("title-text",
              mu::context::UiCtxNotationHasSelection,

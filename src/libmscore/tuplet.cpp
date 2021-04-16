@@ -916,7 +916,7 @@ void Tuplet::add(Element* e)
         bool found = false;
         DurationElement* de = toDurationElement(e);
         Fraction tick = de->rtick();
-        if (tick != Fraction(-1,1)) {
+        if (tick != Fraction(-1, 1)) {
             for (unsigned int i = 0; i < _elements.size(); ++i) {
                 if (_elements[i]->rtick() > tick) {
                     _elements.insert(_elements.begin() + i, de);
@@ -1245,7 +1245,7 @@ void Tuplet::sanitizeTuplet()
     if (ratio().numerator() == ratio().reduced().numerator()) { // return if the ratio is an irreducible fraction
         return;
     }
-    Fraction baseLenDuration = (Fraction(ratio().denominator(),1) * baseLen().fraction()).reduced();
+    Fraction baseLenDuration = (Fraction(ratio().denominator(), 1) * baseLen().fraction()).reduced();
 
     // Due to a bug present in 2.1 (and before), a tuplet with non-reduced ratio could be
     // in a corrupted state (mismatch between duration and base length).
@@ -1254,12 +1254,12 @@ void Tuplet::sanitizeTuplet()
     // not-completely filled tuplets, such as tuplets in voices > 0 with
     // gaps (for example, a tuplet in second voice with a deleted chordrest element)
 
-    Fraction testDuration(0,1);
+    Fraction testDuration(0, 1);
     for (DurationElement* de : elements()) {
         if (de == 0) {
             continue;
         }
-        Fraction elementDuration(0,1);
+        Fraction elementDuration(0, 1);
         if (de->isTuplet()) {
             Tuplet* t = toTuplet(de);
             t->sanitizeTuplet();
@@ -1281,7 +1281,7 @@ void Tuplet::sanitizeTuplet()
         if (TDuration::isValid(fbl)) {
             setTicks(testDuration);
             setBaseLen(fbl);
-            qDebug("Tuplet %p sanitized duration %d/%d   baseLen %d/%d",this,
+            qDebug("Tuplet %p sanitized duration %d/%d   baseLen %d/%d", this,
                    testDuration.numerator(), testDuration.denominator(),
                    1, fbl.denominator());
         } else {

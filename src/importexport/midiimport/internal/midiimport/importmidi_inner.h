@@ -48,7 +48,7 @@ struct DivisionInfo
 enum class DurationType : char;
 
 ReducedFraction userTimeSigToFraction(
-    MidiOperations::TimeSigNumerator timeSigNumerator,MidiOperations::TimeSigDenominator timeSigDenominator);
+    MidiOperations::TimeSigNumerator timeSigNumerator, MidiOperations::TimeSigDenominator timeSigDenominator);
 MidiOperations::TimeSigNumerator fractionNumeratorToUserValue(int n);
 MidiOperations::TimeSigDenominator fractionDenominatorToUserValue(int z);
 } // namespace Meter
@@ -85,12 +85,12 @@ public:                 // chords store tuplet iterators, so we need to copy cla
     std::multimap<ReducedFraction, MidiTuplet::TupletData> tuplets;     // <tupletOnTime, ...>
 
     void createNotes(const ReducedFraction& lastTick);
-    void processPendingNotes(QList<MidiChord>& midiChords,int voice,const ReducedFraction& startChordTickFrac,
+    void processPendingNotes(QList<MidiChord>& midiChords, int voice, const ReducedFraction& startChordTickFrac,
                              const ReducedFraction& nextChordTick);
     void processMeta(int tick, const MidiEvent& mm);
-    void fillGapWithRests(Score* score, int voice, const ReducedFraction& startChordTickFrac,const ReducedFraction& restLength, int track);
+    void fillGapWithRests(Score* score, int voice, const ReducedFraction& startChordTickFrac, const ReducedFraction& restLength, int track);
     QList<std::pair<ReducedFraction, TDuration> >
-    toDurationList(const Measure* measure, int voice, const ReducedFraction& startTick,const ReducedFraction& len,
+    toDurationList(const Measure* measure, int voice, const ReducedFraction& startTick, const ReducedFraction& len,
                    Meter::DurationType durationType);
     void createKeys(Key defaultKey, const Ms::KeyList& allKeyList);
     void updateTupletsFromChords();
@@ -115,12 +115,11 @@ struct TupletInfo
     std::map<ReducedFraction, int> staccatoChords;        // <onTime, note index>
 };
 
-bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction>& interval1,const std::pair<ReducedFraction,
-                                                                                                   ReducedFraction>& interval2,
+bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction>& interval1, const std::pair<ReducedFraction,
+                                                                                                    ReducedFraction>& interval2,
                       bool strictComparison = true);
-bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction>& interval,const std::vector<std::pair<ReducedFraction,
-                                                                                                              ReducedFraction> >& intervals,
-                      bool strictComparison = true);
+bool haveIntersection(const std::pair<ReducedFraction, ReducedFraction>& interval, const std::vector<std::pair<ReducedFraction,
+                                                                                                               ReducedFraction> >& intervals, bool strictComparison = true);
 } // namespace MidiTuplet
 
 namespace MidiCharset {

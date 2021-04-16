@@ -64,7 +64,7 @@ void TestExchangevoices::slurs()
 
     // do
     score->startCmd();
-    score->cmdExchangeVoice(0,1);
+    score->cmdExchangeVoice(0, 1);
     score->endCmd();
 
     // compare
@@ -89,7 +89,7 @@ void TestExchangevoices::glissandi()
 
     // do
     score->startCmd();
-    score->cmdExchangeVoice(0,1);
+    score->cmdExchangeVoice(0, 1);
     score->endCmd();
 
     // compare

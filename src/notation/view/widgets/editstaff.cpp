@@ -113,21 +113,21 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     m_orgInstrument = m_instrument;
     Ms::Score* score      = part->score();
     m_staff             = new Ms::Staff(score);
-    Ms::StaffType* stt = m_staff->setStaffType(Fraction(0,1), *m_orgStaff->staffType(Fraction(0,1)));
-    stt->setInvisible(m_orgStaff->staffType(Fraction(0,1))->invisible());
+    Ms::StaffType* stt = m_staff->setStaffType(Fraction(0, 1), *m_orgStaff->staffType(Fraction(0, 1)));
+    stt->setInvisible(m_orgStaff->staffType(Fraction(0, 1))->invisible());
     m_staff->setUserDist(m_orgStaff->userDist());
-    stt->setColor(m_orgStaff->staffType(Fraction(0,1))->color());
+    stt->setColor(m_orgStaff->staffType(Fraction(0, 1))->color());
     m_staff->setPart(part);
     m_staff->setHideWhenEmpty(m_orgStaff->hideWhenEmpty());
     m_staff->setShowIfEmpty(m_orgStaff->showIfEmpty());
-    stt->setUserMag(m_orgStaff->staffType(Fraction(0,1))->userMag());
+    stt->setUserMag(m_orgStaff->staffType(Fraction(0, 1))->userMag());
     m_staff->setHideSystemBarLine(m_orgStaff->hideSystemBarLine());
     m_staff->setMergeMatchingRests(m_orgStaff->mergeMatchingRests());
 
     // get tick range for instrument
     auto i = part->instruments()->upper_bound(tick.ticks());
     if (i == part->instruments()->end()) {
-        m_tickEnd = Fraction(-1,1);
+        m_tickEnd = Fraction(-1, 1);
     } else {
         m_tickEnd = Fraction::fromTicks(i->first);
     }
@@ -140,7 +140,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
 
     // set dlg controls
     spinExtraDistance->setValue(s->userDist() / score->spatium());
-    invisible->setChecked(m_staff->invisible(Fraction(0,1)));
+    invisible->setChecked(m_staff->invisible(Fraction(0, 1)));
     color->setColor(stt->color());
     partName->setText(part->partName());
     hideMode->setCurrentIndex(int(m_staff->hideWhenEmpty()));
@@ -384,32 +384,32 @@ void EditStaff::maxPitchPClicked()
 
 void EditStaff::lineDistanceChanged()
 {
-    m_staff->staffType(Fraction(0,1))->setLineDistance(Ms::Spatium(lineDistance->value()));
+    m_staff->staffType(Fraction(0, 1))->setLineDistance(Ms::Spatium(lineDistance->value()));
 }
 
 void EditStaff::numOfLinesChanged()
 {
-    m_staff->staffType(Fraction(0,1))->setLines(lines->value());
+    m_staff->staffType(Fraction(0, 1))->setLines(lines->value());
 }
 
 void EditStaff::showClefChanged()
 {
-    m_staff->staffType(Fraction(0,1))->setGenClef(showClef->checkState() == Qt::Checked);
+    m_staff->staffType(Fraction(0, 1))->setGenClef(showClef->checkState() == Qt::Checked);
 }
 
 void EditStaff::showTimeSigChanged()
 {
-    m_staff->staffType(Fraction(0,1))->setGenTimesig(showTimesig->checkState() == Qt::Checked);
+    m_staff->staffType(Fraction(0, 1))->setGenTimesig(showTimesig->checkState() == Qt::Checked);
 }
 
 void EditStaff::showBarlinesChanged()
 {
-    m_staff->staffType(Fraction(0,1))->setShowBarlines(showBarlines->checkState() == Qt::Checked);
+    m_staff->staffType(Fraction(0, 1))->setShowBarlines(showBarlines->checkState() == Qt::Checked);
 }
 
 void EditStaff::invisibleChanged()
 {
-    m_staff->staffType(Fraction(0,1))->setInvisible(invisible->checkState() == Qt::Checked);
+    m_staff->staffType(Fraction(0, 1))->setInvisible(invisible->checkState() == Qt::Checked);
 }
 
 void EditStaff::transpositionChanged()
@@ -716,7 +716,7 @@ void EditStaff::showStaffTypeDialog()
     editStaffTypeDialog->setInstrument(m_instrument);
 
     if (editStaffTypeDialog->exec()) {
-        m_staff->setStaffType(Fraction(0,1), editStaffTypeDialog->getStaffType());
+        m_staff->setStaffType(Fraction(0, 1), editStaffTypeDialog->getStaffType());
         updateStaffType(editStaffTypeDialog->getStaffType());
     }
 }

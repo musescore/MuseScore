@@ -50,7 +50,7 @@ struct BEDrawingDataY;
 class BagpipeEmbellishment final : public Element
 {
     int _embelType;
-    void drawGraceNote(mu::draw::Painter*, const BEDrawingDataX&, const BEDrawingDataY&,SymId, const qreal x,const bool drawFlag) const;
+    void drawGraceNote(mu::draw::Painter*, const BEDrawingDataX&, const BEDrawingDataY&, SymId, const qreal x, const bool drawFlag) const;
 
 public:
     BagpipeEmbellishment(Score* s)

@@ -92,7 +92,7 @@ void TestCopyPasteSymbolList::copypastecommon(MasterScore* score, const char* na
         qDebug("wrong type mime data");
         return;
     }
-    score->cmdPaste(ms,0);
+    score->cmdPaste(ms, 0);
     score->endCmd();
     score->doLayout();
 
@@ -131,13 +131,13 @@ void TestCopyPasteSymbolList::copypastepart(const char* name, ElementType type)
 
     //select all
     score->select(score->firstMeasure());
-    score->select(score->firstMeasure()->nextMeasure(),SelectType::RANGE);
+    score->select(score->firstMeasure()->nextMeasure(), SelectType::RANGE);
 
-    Element* el = Element::create(type,score);
+    Element* el = Element::create(type, score);
     score->selectSimilarInRange(el);
     delete el;
 
-    copypastecommon(score,name);
+    copypastecommon(score, name);
 }
 
 //---------------------------------------------------------
@@ -153,13 +153,13 @@ void TestCopyPasteSymbolList::copypastedifferentvoice(const char* name, ElementT
 
     //select all
     score->select(score->firstMeasure());
-    score->select(score->firstMeasure()->nextMeasure(),SelectType::RANGE, 1);
+    score->select(score->firstMeasure()->nextMeasure(), SelectType::RANGE, 1);
 
-    Element* el = Element::create(type,score);
+    Element* el = Element::create(type, score);
     score->selectSimilarInRange(el);
     delete el;
 
-    copypastecommon(score,name);
+    copypastecommon(score, name);
 }
 
 QTEST_MAIN(TestCopyPasteSymbolList)

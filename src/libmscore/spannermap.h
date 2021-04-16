@@ -34,10 +34,10 @@ public:
     const std::vector<interval_tree::Interval<Spanner*> >& findContained(int start, int stop);
     const std::vector<interval_tree::Interval<Spanner*> >& findOverlapping(int start, int stop);
     const std::multimap<int, Spanner*>& map() const { return *this; }
-    std::multimap<int,Spanner*>::const_reverse_iterator crbegin() const { return std::multimap<int, Spanner*>::crbegin(); }
-    std::multimap<int,Spanner*>::const_reverse_iterator crend() const { return std::multimap<int, Spanner*>::crend(); }
-    std::multimap<int,Spanner*>::const_iterator cbegin() const { return std::multimap<int, Spanner*>::cbegin(); }
-    std::multimap<int,Spanner*>::const_iterator cend() const { return std::multimap<int, Spanner*>::cend(); }
+    std::multimap<int, Spanner*>::const_reverse_iterator crbegin() const { return std::multimap<int, Spanner*>::crbegin(); }
+    std::multimap<int, Spanner*>::const_reverse_iterator crend() const { return std::multimap<int, Spanner*>::crend(); }
+    std::multimap<int, Spanner*>::const_iterator cbegin() const { return std::multimap<int, Spanner*>::cbegin(); }
+    std::multimap<int, Spanner*>::const_iterator cend() const { return std::multimap<int, Spanner*>::cend(); }
     void addSpanner(Spanner* s);
     bool removeSpanner(Spanner* s);
     void clear() { std::multimap<int, Spanner*>::clear(); dirty = true; }

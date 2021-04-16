@@ -88,10 +88,10 @@ void NotationNoteInput::startNoteInput()
         // if no note/rest is selected, start with voice 0
         int track = is.track() == -1 ? 0 : (is.track() / VOICES) * VOICES;
         // try to find an appropriate measure to start in
-        Fraction tick = el ? el->tick() : Fraction(0,1);
+        Fraction tick = el ? el->tick() : Fraction(0, 1);
         el = score()->searchNote(tick, track);
         if (!el) {
-            el = score()->searchNote(Fraction(0,1), track);
+            el = score()->searchNote(Fraction(0, 1), track);
         }
     }
 

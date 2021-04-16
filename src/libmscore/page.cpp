@@ -659,6 +659,6 @@ QRectF Page::tbbox()
 
 Fraction Page::endTick() const
 {
-    return _systems.empty() ? Fraction(-1,1) : _systems.back()->measures().back()->endTick();
+    return _systems.empty() ? Fraction(-1, 1) : _systems.back()->measures().back()->endTick();
 }
 }

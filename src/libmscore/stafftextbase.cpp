@@ -141,7 +141,7 @@ bool StaffTextBase::readProperties(XmlReader& e)
         }
         _setAeolusStops = true;
     } else if (tag == "swing") {
-        QString swingUnit = e.attribute("unit","");
+        QString swingUnit = e.attribute("unit", "");
         int unit = 0;
         if (swingUnit == TDuration(TDuration::DurationType::V_EIGHTH).name()) {
             unit = MScore::division / 2;

@@ -393,7 +393,7 @@ ClefType Staff::clef(const Fraction& tick) const
 Fraction Staff::nextClefTick(const Fraction& tick) const
 {
     Fraction t = Fraction::fromTicks(clefs.nextClefTick(tick.ticks()));
-    return t != Fraction(-1,1) ? t : score()->endTick();
+    return t != Fraction(-1, 1) ? t : score()->endTick();
 }
 
 //---------------------------------------------------------
@@ -513,7 +513,7 @@ void Staff::removeClef(const Clef* clef)
 Fraction Staff::timeStretch(const Fraction& tick) const
 {
     TimeSig* timesig = timeSig(tick);
-    return timesig ? timesig->stretch() : Fraction(1,1);
+    return timesig ? timesig->stretch() : Fraction(1, 1);
 }
 
 //---------------------------------------------------------
@@ -580,7 +580,7 @@ const Groups& Staff::group(const Fraction& tick) const
         return Groups::endings(ts->sig());
     }
     Measure* m = score()->tick2measure(tick);
-    return Groups::endings(m ? m->timesig() : Fraction(4,4));
+    return Groups::endings(m ? m->timesig() : Fraction(4, 4));
 }
 
 //---------------------------------------------------------
@@ -664,7 +664,7 @@ KeySigEvent Staff::prevKey(const Fraction& tick) const
 Fraction Staff::nextKeyTick(const Fraction& tick) const
 {
     Fraction t = Fraction::fromTicks(_keys.nextKeyTick(tick.ticks()));
-    return t != Fraction(-1,1) ? t : score()->endTick();
+    return t != Fraction(-1, 1) ? t : score()->endTick();
 }
 
 //---------------------------------------------------------
@@ -709,7 +709,7 @@ void Staff::write(XmlWriter& xml) const
         }
     }
 
-    staffType(Fraction(0,1))->write(xml);
+    staffType(Fraction(0, 1))->write(xml);
     ClefTypeList ct = _defaultClefType;
     if (ct._concertClef == ct._transposingClef) {
         if (ct._concertClef != ClefType::G) {
@@ -720,8 +720,8 @@ void Staff::write(XmlWriter& xml) const
         xml.tag("defaultTransposingClef", ClefInfo::tag(ct._transposingClef));
     }
 
-    if (invisible(Fraction(0,1))) {
-        xml.tag("invisible", invisible(Fraction(0,1)));
+    if (invisible(Fraction(0, 1))) {
+        xml.tag("invisible", invisible(Fraction(0, 1)));
     }
     if (hideWhenEmpty() != HideMode::AUTO) {
         xml.tag("hideWhenEmpty", int(hideWhenEmpty()));
@@ -783,7 +783,7 @@ bool Staff::readProperties(XmlReader& e)
     if (tag == "StaffType") {
         StaffType st;
         st.read(e);
-        setStaffType(Fraction(0,1), st);
+        setStaffType(Fraction(0, 1), st);
     } else if (tag == "defaultClef") {           // sets both default transposing and concert clef
         QString val(e.readElementText());
         ClefType ct = Clef::clefType(val);
@@ -795,9 +795,9 @@ bool Staff::readProperties(XmlReader& e)
         QString val(e.readElementText());
         setDefaultClefType(ClefTypeList(defaultClefType()._concertClef, Clef::clefType(val)));
     } else if (tag == "small") {                // obsolete
-        staffType(Fraction(0,1))->setSmall(e.readInt());
+        staffType(Fraction(0, 1))->setSmall(e.readInt());
     } else if (tag == "invisible") {
-        staffType(Fraction(0,1))->setInvisible(e.readInt());              // same as: setInvisible(Fraction(0,1)), e.readInt())
+        staffType(Fraction(0, 1))->setInvisible(e.readInt());              // same as: setInvisible(Fraction(0,1)), e.readInt())
     } else if (tag == "hideWhenEmpty") {
         setHideWhenEmpty(HideMode(e.readInt()));
     } else if (tag == "cutaway") {
@@ -850,7 +850,7 @@ bool Staff::readProperties(XmlReader& e)
             qDebug("staff %d not found in parent", v);
         }
     } else if (tag == "color") {
-        staffType(Fraction(0,1))->setColor(e.readColor());
+        staffType(Fraction(0, 1))->setColor(e.readColor());
     } else if (tag == "transposeDiatonic") {
         e.setTransposeDiatonic(e.readInt());
     } else if (tag == "transposeChromatic") {
@@ -875,7 +875,7 @@ bool Staff::readProperties(XmlReader& e)
 
 qreal Staff::height() const
 {
-    Fraction tick = Fraction(0,1);       // TODO
+    Fraction tick = Fraction(0, 1);       // TODO
 //      return (lines(tick) == 1 ? 2 : lines(tick)-1) * spatium(tick) * staffType(tick)->lineDistance().val();
     return (lines(tick) - 1) * spatium(tick) * staffType(tick)->lineDistance().val();
 }
@@ -1086,7 +1086,7 @@ bool Staff::primaryStaff() const
         Staff* staff = toStaff(e);
         if (staff->score() == score()) {
             s.append(staff);
-            if (!staff->isTabStaff(Fraction(0,1))) {
+            if (!staff->isTabStaff(Fraction(0, 1))) {
                 ss.append(staff);
             }
         }
@@ -1136,7 +1136,7 @@ void Staff::staffTypeListChanged(const Fraction& tick)
     std::pair<int, int> range = _staffTypeList.staffTypeRange(tick);
 
     if (range.first < 0) {
-        triggerLayout(Fraction(0,1));
+        triggerLayout(Fraction(0, 1));
     } else {
         triggerLayout(Fraction::fromTicks(range.first));
     }
@@ -1188,7 +1188,7 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
         pst = StaffType::getDefaultPreset(t->staffGroup);
     }
 
-    StaffType* stt = setStaffType(Fraction(0,1), *pst);
+    StaffType* stt = setStaffType(Fraction(0, 1), *pst);
     if (cidx >= MAX_STAVES) {
         stt->setSmall(false);
     } else {
@@ -1248,7 +1248,7 @@ void Staff::initFromStaffType(const StaffType* staffType)
     }
 
     // use selected staff type
-    setStaffType(Fraction(0,1), *staffType);
+    setStaffType(Fraction(0, 1), *staffType);
 }
 
 //---------------------------------------------------------
@@ -1275,10 +1275,10 @@ bool Staff::show() const
 
 bool Staff::genKeySig()
 {
-    if (constStaffType(Fraction(0,1))->group() == StaffGroup::TAB) {
+    if (constStaffType(Fraction(0, 1))->group() == StaffGroup::TAB) {
         return false;
     } else {
-        return constStaffType(Fraction(0,1))->genKeysig();
+        return constStaffType(Fraction(0, 1))->genKeysig();
     }
 }
 
@@ -1348,7 +1348,7 @@ void Staff::insertTime(const Fraction& tick, const Fraction& len)
 
     // move all keys and clefs >= tick
 
-    if (len < Fraction(0,1)) {
+    if (len < Fraction(0, 1)) {
         // remove entries between tickpos >= tick and tickpos < (tick+len)
         _keys.erase(_keys.lower_bound(tick.ticks()), _keys.lower_bound((tick - len).ticks()));
         clefs.erase(clefs.lower_bound(tick.ticks()), clefs.lower_bound((tick - len).ticks()));
@@ -1449,13 +1449,13 @@ QVariant Staff::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::SMALL:
-        return staffType(Fraction(0,1))->small();
+        return staffType(Fraction(0, 1))->small();
     case Pid::MAG:
-        return staffType(Fraction(0,1))->userMag();
+        return staffType(Fraction(0, 1))->userMag();
     case Pid::STAFF_INVISIBLE:
-        return staffType(Fraction(0,1))->invisible();
+        return staffType(Fraction(0, 1))->invisible();
     case Pid::STAFF_COLOR:
-        return staffType(Fraction(0,1))->color();
+        return staffType(Fraction(0, 1))->color();
     case Pid::PLAYBACK_VOICE1:
         return playbackVoice(0);
     case Pid::PLAYBACK_VOICE2:
@@ -1488,19 +1488,19 @@ bool Staff::setProperty(Pid id, const QVariant& v)
 {
     switch (id) {
     case Pid::SMALL: {
-        qreal _spatium = spatium(Fraction(0,1));
-        staffType(Fraction(0,1))->setSmall(v.toBool());
-        setLocalSpatium(_spatium, spatium(Fraction(0,1)), Fraction(0, 1));
+        qreal _spatium = spatium(Fraction(0, 1));
+        staffType(Fraction(0, 1))->setSmall(v.toBool());
+        setLocalSpatium(_spatium, spatium(Fraction(0, 1)), Fraction(0, 1));
         break;
     }
     case Pid::MAG: {
-        qreal _spatium = spatium(Fraction(0,1));
-        staffType(Fraction(0,1))->setUserMag(v.toReal());
-        setLocalSpatium(_spatium, spatium(Fraction(0,1)), Fraction(0, 1));
+        qreal _spatium = spatium(Fraction(0, 1));
+        staffType(Fraction(0, 1))->setUserMag(v.toReal());
+        setLocalSpatium(_spatium, spatium(Fraction(0, 1)), Fraction(0, 1));
     }
     break;
     case Pid::STAFF_COLOR:
-        setColor(Fraction(0,1),v.value<QColor>());
+        setColor(Fraction(0, 1), v.value<QColor>());
         break;
     case Pid::PLAYBACK_VOICE1:
         setPlaybackVoice(0, v.toBool());

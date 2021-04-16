@@ -336,13 +336,13 @@ void System::layoutSystem(qreal xo1, const bool isFirstSystem, bool firstSystemI
             continue;
         }
         ++nVisible;
-        qreal staffMag = staff->staffMag(Fraction(0,1));         // ??? TODO
-        int staffLines = staff->lines(Fraction(0,1));
+        qreal staffMag = staff->staffMag(Fraction(0, 1));         // ??? TODO
+        int staffLines = staff->lines(Fraction(0, 1));
         if (staffLines <= 1) {
-            qreal h = staff->lineDistance(Fraction(0,1)) * staffMag * spatium();
+            qreal h = staff->lineDistance(Fraction(0, 1)) * staffMag * spatium();
             s->bbox().setRect(_leftMargin + xo1, -h, 0.0, 2 * h);
         } else {
-            qreal h = (staffLines - 1) * staff->lineDistance(Fraction(0,1));
+            qreal h = (staffLines - 1) * staff->lineDistance(Fraction(0, 1));
             h = h * staffMag * spatium();
             s->bbox().setRect(_leftMargin + xo1, 0.0, 0.0, h);
         }
@@ -690,13 +690,13 @@ void System::layout2()
     }
 
     setPos(0.0, 0.0);
-    QList<std::pair<int,SysStaff*> > visibleStaves;
+    QList<std::pair<int, SysStaff*> > visibleStaves;
 
     for (int i = 0; i < _staves.size(); ++i) {
         Staff* s  = score()->staff(i);
         SysStaff* ss = _staves[i];
         if (s->show() && ss->show()) {
-            visibleStaves.append(std::pair<int,SysStaff*>(i, ss));
+            visibleStaves.append(std::pair<int, SysStaff*>(i, ss));
         } else {
             ss->setbbox(QRectF());        // already done in layout() ?
         }

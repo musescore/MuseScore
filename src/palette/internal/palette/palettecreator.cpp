@@ -1089,7 +1089,7 @@ PalettePanel* PaletteCreator::newBracketsPalettePanel()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    std::array<std::pair<BracketType,const char*>, 4> types {
+    std::array<std::pair<BracketType, const char*>, 4> types {
         { { BracketType::NORMAL, QT_TRANSLATE_NOOP("palette", "Bracket") },
             { BracketType::BRACE,  QT_TRANSLATE_NOOP("palette", "Brace") },
             { BracketType::SQUARE, QT_TRANSLATE_NOOP("palette", "Square") },

@@ -831,7 +831,7 @@ int Note::tpc2default(int p) const
 void Note::setTpcFromPitch()
 {
     // works best if note is already added to score, otherwise we can't determine transposition or key
-    Fraction tick = chord() ? chord()->tick() : Fraction(-1,1);
+    Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
     Interval v = staff() ? part()->instrument(tick)->transpose() : Interval();
     Key key = (staff() && chord()) ? staff()->key(chord()->tick()) : Key::C;
     // convert key to concert pitch
@@ -947,7 +947,7 @@ QString Note::tpcUserName(const bool explicitAccidental) const
 
 int Note::transposeTpc(int tpc)
 {
-    Fraction tick = chord() ? chord()->tick() : Fraction(-1,1);
+    Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
     Interval v = part()->instrument(tick)->transpose();
     if (v.isZero()) {
         return tpc;
@@ -1003,7 +1003,7 @@ SymId Note::noteHead() const
     NoteHead::Scheme scheme = _headScheme;
     if (st) {
         Fraction tick = chord()->tick();
-        if (tick >= Fraction(0,1)) {
+        if (tick >= Fraction(0, 1)) {
             key    = st->key(tick);
             if (scheme == NoteHead::Scheme::HEAD_AUTO) {
                 scheme = st->staffTypeForElement(chord())->noteHeadScheme();
@@ -1496,7 +1496,7 @@ void Note::read(XmlReader& e)
         }
     }
     if (!(tpcIsValid(_tpc[0]) && tpcIsValid(_tpc[1]))) {
-        Fraction tick = chord() ? chord()->tick() : Fraction(-1,1);
+        Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
         Interval v = staff() ? part()->instrument(tick)->transpose() : Interval();
         if (tpcIsValid(_tpc[0])) {
             v.flip();
@@ -1721,7 +1721,7 @@ void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 
 int Note::transposition() const
 {
-    Fraction tick = chord() ? chord()->tick() : Fraction(-1,1);
+    Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
     return staff() ? part()->instrument(tick)->transpose().chromatic : 0;
 }
 
@@ -2885,7 +2885,7 @@ void Note::setNval(const NoteVal& nval, Fraction tick)
     _tpc[0] = nval.tpc1;
     _tpc[1] = nval.tpc2;
 
-    if (tick == Fraction(-1,1) && chord()) {
+    if (tick == Fraction(-1, 1) && chord()) {
         tick = chord()->tick();
     }
     Interval v = part()->instrument(tick)->transpose();

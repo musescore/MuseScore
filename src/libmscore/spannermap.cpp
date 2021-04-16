@@ -83,7 +83,7 @@ void SpannerMap::addSpanner(Spanner* s)
     }
 #endif
 #endif
-    insert(std::pair<int,Spanner*>(s->tick().ticks(), s));
+    insert(std::pair<int, Spanner*>(s->tick().ticks(), s));
     dirty = true;
 }
 

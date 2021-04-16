@@ -34,7 +34,7 @@ extern MScore* mscore;
 MCursor::MCursor(MasterScore* s)
 {
     _score = s;
-    move(0, Fraction(0,1));
+    move(0, Fraction(0, 1));
 }
 
 //---------------------------------------------------------
@@ -45,7 +45,7 @@ void MCursor::createMeasures()
 {
     Measure* measure;
     for (;;) {
-        Fraction tick = Fraction(0,1);
+        Fraction tick = Fraction(0, 1);
         measure = _score->lastMeasure();
         if (measure) {
             tick = measure->tick() + measure->ticks();
@@ -133,7 +133,7 @@ void MCursor::createScore(const QString& name)
     delete _score;
     _score = new MasterScore(mscore->baseStyle());
     _score->setName(name);
-    move(0, Fraction(0,1));
+    move(0, Fraction(0, 1));
 }
 
 //---------------------------------------------------------
