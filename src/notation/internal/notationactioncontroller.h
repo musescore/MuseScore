@@ -90,6 +90,7 @@ private:
     void swapSelection();
     void flipSelection();
     void addTie();
+    void chordTie();
     void addSlur();
     void addInterval(int interval);
 
