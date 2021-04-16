@@ -67,6 +67,7 @@ public:
     Element* hitElement(const QPointF& pos, float width) const override;
     int hitStaffIndex(const QPointF& pos) const override;
     void addChordToSelection(MoveDirection d) override;
+    void moveChordNoteSelection(MoveDirection d) override;
     void select(const std::vector<Element*>& elements, SelectType type, int staffIndex = 0) override;
     void selectAll() override;
     void selectSection() override;

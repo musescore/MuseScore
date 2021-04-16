@@ -441,6 +441,33 @@ void NotationInteraction::addChordToSelection(MoveDirection d)
     notifyAboutSelectionChanged();
 }
 
+void NotationInteraction::moveChordNoteSelection(MoveDirection d)
+{
+    IF_ASSERT_FAILED(MoveDirection::Up == d || MoveDirection::Down == d) {
+        return;
+    }
+
+    Element* current = selection()->element();
+    if (!current || !(current->isNote() || current->isRest())) {
+        return;
+    }
+
+    Element* chordElem;
+    if (d == MoveDirection::Up) {
+        chordElem = score()->upAlt(current);
+    } else {
+        chordElem = score()->downAlt(current);
+    }
+
+    if (chordElem == current) {
+        return;
+    }
+
+    score()->select(chordElem, SelectType::SINGLE, chordElem->staffIdx());
+
+    notifyAboutSelectionChanged();
+}
+
 void NotationInteraction::select(const std::vector<Element*>& elements, SelectType type, int staffIndex)
 {
     if (needEndTextEditing(elements)) {
