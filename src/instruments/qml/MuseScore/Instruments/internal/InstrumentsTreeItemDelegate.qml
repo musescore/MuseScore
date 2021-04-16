@@ -84,7 +84,7 @@ Item {
 
     KeyNavigationControl {
         id: keynavItem
-        name: "InstrumentsTreeItemDelegate"
+        name: "ItemInstrumentsTree"
         subsection: root.keynavSubSection
         row: root.keynavRow
         column: 0
@@ -203,8 +203,8 @@ Item {
     InstrumentSettingsPopup {
         id: instrumentSettings
 
-        y: settingsButton.y + settingsButton.height + 2
-        arrowX: width - settingsButton.width / 2 - root.sideMargin
+        keynav.name: "InstrumentSettingsPopup"
+        keynav.parentControl: keynavItem
 
         onClosed: privateProperties.resetOpenedPopup()
     }
@@ -212,8 +212,8 @@ Item {
     StaffSettingsPopup {
         id: staffSettings
 
-        y: settingsButton.y + settingsButton.height + 2
-        arrowX: width - settingsButton.width / 2 - root.sideMargin
+        keynav.name: "StaffSettingsPopup"
+        keynav.parentControl: keynavItem
 
         onClosed: privateProperties.resetOpenedPopup()
     }
@@ -229,7 +229,7 @@ Item {
             Layout.alignment: Qt.AlignLeft
             Layout.preferredWidth: width
 
-            objectName: "instrumentVisibleBtn"
+            objectName: "VisibleBtnInstrument"
             keynav.subsection: root.keynavSubSection
             keynav.row: root.keynavRow
             keynav.column: 1
@@ -259,7 +259,7 @@ Item {
 
                 anchors.left: parent.left
 
-                objectName: "instrumentExpandBtn"
+                objectName: "ExpandBtnInstrument"
                 enabled: expandButton.visible
                 keynav.subsection: root.keynavSubSection
                 keynav.row: root.keynavRow
@@ -310,7 +310,7 @@ Item {
             Layout.alignment: Qt.AlignRight
             Layout.preferredWidth: width
 
-            objectName: "instrumentSettingsBtn"
+            objectName: "SettingsBtnInstrument"
             enabled: root.visible
             keynav.subsection: root.keynavSubSection
             keynav.row: root.keynavRow

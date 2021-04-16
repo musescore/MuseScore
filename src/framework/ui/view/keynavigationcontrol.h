@@ -69,8 +69,6 @@ private slots:
 
 private:
 
-    void componentComplete() override;
-
     KeyNavigationSubSection* m_subsection = nullptr;
     async::Channel<IKeyNavigationControl*> m_forceActiveRequested;
 };

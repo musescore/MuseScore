@@ -25,79 +25,100 @@
 #include <QApplication>
 #include <QMainWindow>
 
+#include "log.h"
+
 using namespace mu::uicomponents;
 
 PopupView::PopupView(QQuickItem* parent)
-    : QQuickItem(parent)
+    : QObject(parent)
 {
-    setFlag(QQuickItem::ItemHasContents, true);
-
     qApp->installEventFilter(this);
 
     connect(qApp, &QApplication::applicationStateChanged, this, &PopupView::onApplicationStateChanged);
 }
 
-void PopupView::open()
+QQuickItem* PopupView::parentItem() const
 {
-    if (!m_containerView || m_isOpened) {
+    return qobject_cast<QQuickItem*>(parent());
+}
+
+void PopupView::setParentItem(QQuickItem* parent)
+{
+    if (parentItem() == parent) {
         return;
     }
 
-    emit aboutToShow();
+    QObject::setParent(parent);
+    emit parentItemChanged();
+}
 
-    m_containerView->show();
+void PopupView::forceActiveFocus()
+{
+    IF_ASSERT_FAILED(m_view) {
+        return;
+    }
+    m_view->requestActivate();
+}
 
-    setIsOpened(true);
+void PopupView::open()
+{
+    if (isOpened()) {
+        return;
+    }
 
+    IF_ASSERT_FAILED(m_view) {
+        return;
+    }
+
+    QQuickItem* prn = parentItem();
+    IF_ASSERT_FAILED(prn) {
+        return;
+    }
+
+    QPointF pos = prn->position();
+    pos.setY(pos.y() + m_localPos.y());
+    pos.setX(pos.x() + m_localPos.x());
+
+    QPointF global = prn->mapToGlobal(pos);
+
+    m_view->setPosition(global.toPoint());
+    m_view->show();
+    m_view->requestActivate();
+    m_view->setKeyboardGrabEnabled(true);
+
+    emit isOpenedChanged();
     emit opened();
 }
 
 void PopupView::close()
 {
-    if (!m_containerView || !m_isOpened) {
+    if (!isOpened()) {
         return;
     }
 
-    emit aboutToHide();
+    IF_ASSERT_FAILED(m_view) {
+        return;
+    }
 
-    m_containerView->hide();
-    setIsOpened(false);
+    m_view->hide();
+    m_view->setKeyboardGrabEnabled(false);
 
+    emit isOpenedChanged();
     emit closed();
 }
 
 void PopupView::toggleOpened()
 {
-    if (m_isOpened) {
+    if (isOpened()) {
         close();
     } else {
         open();
     }
 }
 
-QQuickItem* PopupView::backgroundItem() const
+bool PopupView::isOpened() const
 {
-    return m_backgroundItem;
-}
-
-QQuickItem* PopupView::contentItem() const
-{
-    return m_contentItem;
-}
-
-qreal PopupView::positionDisplacementX() const
-{
-    return m_positionDisplacementX;
-}
-
-qreal PopupView::positionDisplacementY() const
-{
-    return m_positionDisplacementY;
-}
-
-QPointF PopupView::globalPos() const
-{
-    return m_globalPos;
+    return m_view ? m_view->isVisible() : false;
 }
 
 PopupView::ClosePolicy PopupView::closePolicy() const
@@ -105,112 +126,77 @@ PopupView::ClosePolicy PopupView::closePolicy() const
     return m_closePolicy;
 }
 
-bool PopupView::isOpened() const
+void PopupView::setContentItem(QQuickItem* content)
 {
-    return m_isOpened;
-}
-
-qreal PopupView::padding() const
-{
-    return m_padding;
-}
-
-void PopupView::setBackgroundItem(QQuickItem* backgroundItem)
-{
-    if (m_backgroundItem == backgroundItem) {
+    if (m_contentItem == content) {
         return;
     }
 
-    m_backgroundItem = backgroundItem;
-    emit backgroundItemChanged(m_backgroundItem);
+    m_contentItem = content;
+    emit contentItemChanged();
 }
 
-void PopupView::setContentItem(QQuickItem* contentItem)
+QQuickItem* PopupView::contentItem() const
 {
-    if (m_contentItem == contentItem) {
+    return m_contentItem;
+}
+
+qreal PopupView::x() const
+{
+    return m_localPos.x();
+}
+
+qreal PopupView::y() const
+{
+    return m_localPos.y();
+}
+
+void PopupView::setX(qreal x)
+{
+    if (qFuzzyCompare(m_localPos.x(), x)) {
         return;
     }
 
-    m_contentItem = contentItem;
-    emit contentItemChanged(m_contentItem);
+    m_localPos.setX(x);
+    emit xChanged(x);
 }
 
-void PopupView::setClosePolicy(PopupView::ClosePolicy closePolicy)
+void PopupView::setY(qreal y)
+{
+    if (qFuzzyCompare(m_localPos.y(), y)) {
+        return;
+    }
+
+    m_localPos.setY(y);
+    emit yChanged(y);
+}
+
+void PopupView::setClosePolicy(ClosePolicy closePolicy)
 {
     if (m_closePolicy == closePolicy) {
         return;
     }
 
     m_closePolicy = closePolicy;
-    emit closePolicyChanged(m_closePolicy);
+    emit closePolicyChanged(closePolicy);
 }
 
-void PopupView::setIsOpened(bool isOpened)
+void PopupView::classBegin()
 {
-    if (m_isOpened == isOpened) {
-        return;
-    }
-
-    m_isOpened = isOpened;
-    emit isOpenedChanged(m_isOpened);
-}
-
-void PopupView::setPadding(qreal padding)
-{
-    if (qFuzzyCompare(m_padding, padding)) {
-        return;
-    }
-
-    m_padding = padding;
-    emit paddingChanged(m_padding);
-}
-
-void PopupView::setPositionDisplacementX(qreal positionDisplacementX)
-{
-    if (qFuzzyCompare(m_positionDisplacementX, positionDisplacementX)) {
-        return;
-    }
-
-    m_positionDisplacementX = positionDisplacementX;
-    setX(positionDisplacementX);
-    emit positionDisplacementXChanged(m_positionDisplacementX);
-}
-
-void PopupView::setPositionDisplacementY(qreal positionDisplacementY)
-{
-    if (qFuzzyCompare(m_positionDisplacementY, positionDisplacementY)) {
-        return;
-    }
-
-    m_positionDisplacementY = positionDisplacementY;
-    setY(positionDisplacementY);
-    emit positionDisplacementYChanged(m_positionDisplacementY);
-}
-
-void PopupView::setGlobalPos(QPointF globalPos)
-{
-    if (m_globalPos == globalPos) {
-        return;
-    }
-
-    m_globalPos = globalPos;
-    m_containerView->setPosition(globalPos.toPoint());
-    emit globalPosChanged(m_globalPos);
 }
 
 void PopupView::componentComplete()
 {
-    QQuickItem::componentComplete();
-
     QQmlEngine* engine = qmlEngine(this);
-    QQmlContext* ctx = qmlContext(this);
+    IF_ASSERT_FAILED(engine) {
+        return;
+    }
 
-    setupContentComponent(engine);
-    setupContainerView(engine);
-    QQuickItem* obj = loadContentItem(ctx);
-
-    m_containerView->setContent(QUrl(), m_contentComponent, obj);
-    setSize(obj->size());
+    m_view = new QQuickView(engine, nullptr);
+    m_view->setFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+    m_view->setResizeMode(QQuickView::SizeViewToRootObject);
+    m_view->setColor(QColor(0, 0, 0, 0)); // transparent
+    m_view->setContent(QUrl(), nullptr, m_contentItem);
 }
 
 bool PopupView::eventFilter(QObject* watched, QEvent* event)
@@ -235,7 +221,7 @@ void PopupView::onApplicationStateChanged(Qt::ApplicationState state)
 
 void PopupView::mousePressEvent(QMouseEvent* event)
 {
-    if (!m_isOpened) {
+    if (!isOpened()) {
         return;
     }
 
@@ -248,7 +234,7 @@ void PopupView::mousePressEvent(QMouseEvent* event)
 
 void PopupView::mouseReleaseEvent(QMouseEvent* event)
 {
-    if (!m_isOpened) {
+    if (!isOpened()) {
         return;
     }
 
@@ -261,52 +247,6 @@ void PopupView::mouseReleaseEvent(QMouseEvent* event)
 
 bool PopupView::isMouseWithinBoundaries(const QPoint& mousePos) const
 {
-    if (!parentItem()) {
-        return false;
-    }
-
-    QRectF parentRect = QRectF(parentItem()->x(),
-                               parentItem()->y(),
-                               parentItem()->width(),
-                               parentItem()->height());
-
-    QRectF boundRect = QRectF(x(), y(), width(), height());
-    QRectF contentRect = boundRect.united(parentRect);
-
-    QPointF parentGlobalPos = parentItem()->mapToGlobal(parentItem()->position());
-
-    QRectF globalContentRect = QRectF(qMin(globalPos().x(), parentGlobalPos.x()),
-                                      qMin(globalPos().y(), parentGlobalPos.y()),
-                                      contentRect.width(),
-                                      contentRect.height());
-
-    return globalContentRect.contains(mousePos);
-}
-
-void PopupView::setupContentComponent(QQmlEngine* engine)
-{
-    m_contentComponent = new QQmlComponent(engine, this);
-
-    QString dataStr;
-    dataStr.append("import QtQuick 2.15\n");
-    dataStr.append("import QtQuick.Controls 2.15\n");
-    dataStr.append("Control { }");
-    m_contentComponent->setData(dataStr.toUtf8(), QUrl());
-}
-
-void PopupView::setupContainerView(QQmlEngine* engine)
-{
-    m_containerView = new QQuickView(engine, nullptr);
-    m_containerView->setFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
-    m_containerView->setResizeMode(QQuickView::SizeViewToRootObject);
-    m_containerView->setColor("#00000000");
-}
-
-QQuickItem* PopupView::loadContentItem(QQmlContext* ctx)
-{
-    QVariantMap initialProperties;
-    initialProperties.insert("background", QVariant::fromValue(m_backgroundItem));
-    initialProperties.insert("contentItem", QVariant::fromValue(m_contentItem));
-    initialProperties.insert("padding", m_padding);
-    return qobject_cast<QQuickItem*>(m_contentComponent->createWithInitialProperties(initialProperties, ctx));
+    QRect viewRect = m_view->geometry();
+    return viewRect.contains(mousePos);
 }

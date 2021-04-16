@@ -89,8 +89,8 @@ ListItemBlank {
 
             var menuComponent = Qt.createComponent("StyledMenu.qml");
             var menu = menuComponent.createObject(root)
-            menu.positionDisplacementX = root.width
-            menu.positionDisplacementY = 0
+            menu.x = root.width
+            menu.y = 0
 
             menu.keynav.parentControl = root.keynav
             menu.keynav.name = root.keynav.name+"SubMenu"
@@ -190,7 +190,7 @@ ListItemBlank {
         if (isHovered) {
             prv.showSubMenu()
         } else {
-            var mouseOnShowedSubMenu = mapToItem(prv.showedSubMenu, mouseX, mouseY)
+            var mouseOnShowedSubMenu = mapToItem(prv.showedSubMenu.contentItem, mouseX, mouseY)
             var eps = 8
             var subMenuWidth = prv.showedSubMenu.x + prv.showedSubMenu.width
             var subMenuHeight = prv.showedSubMenu.y + prv.showedSubMenu.height

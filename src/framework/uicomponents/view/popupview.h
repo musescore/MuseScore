@@ -1,4 +1,4 @@
-//=============================================================================
+﻿//=============================================================================
 //  MuseScore
 //  Music Composition & Notation
 //
@@ -22,115 +22,91 @@
 
 #include <QQuickItem>
 #include <QQuickView>
+#include <QQmlParserStatus>
 
-#include "ui/imainwindow.h"
 #include "modularity/ioc.h"
+#include "ui/imainwindow.h"
 
 namespace mu::uicomponents {
-class PopupView : public QQuickItem
+class PopupView : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
-
-    Q_PROPERTY(QQuickItem * backgroundItem READ backgroundItem WRITE setBackgroundItem NOTIFY backgroundItemChanged)
+    Q_PROPERTY(QQuickItem * parent READ parentItem WRITE setParentItem NOTIFY parentItemChanged)
     Q_PROPERTY(QQuickItem * contentItem READ contentItem WRITE setContentItem NOTIFY contentItemChanged)
+
+    //! NOTE Local, related parent
+    Q_PROPERTY(qreal x READ x WRITE setX NOTIFY xChanged)
+    Q_PROPERTY(qreal y READ y WRITE setY NOTIFY yChanged)
+
+    Q_PROPERTY(bool isOpened READ isOpened NOTIFY isOpenedChanged)
     Q_PROPERTY(ClosePolicy closePolicy READ closePolicy WRITE setClosePolicy NOTIFY closePolicyChanged)
-
-    Q_PROPERTY(QPointF globalPos READ globalPos WRITE setGlobalPos NOTIFY globalPosChanged)
-    Q_PROPERTY(qreal positionDisplacementX READ positionDisplacementX WRITE setPositionDisplacementX NOTIFY positionDisplacementXChanged)
-    Q_PROPERTY(qreal positionDisplacementY READ positionDisplacementY WRITE setPositionDisplacementY NOTIFY positionDisplacementYChanged)
-
-    Q_PROPERTY(bool isOpened READ isOpened WRITE setIsOpened NOTIFY isOpenedChanged)
-
-    Q_PROPERTY(qreal padding READ padding WRITE setPadding NOTIFY paddingChanged)
-
-    Q_CLASSINFO("DefaultProperty", "contentItem")
 
     Q_ENUMS(ClosePolicy)
 
     INJECT(uicomponents, ui::IMainWindow, mainWindow)
 
 public:
+
+    explicit PopupView(QQuickItem* parent = nullptr);
+
     enum ClosePolicy {
         NoAutoClose = 0,
         CloseOnPressOutsideParent,
         CloseOnReleaseOutsideParent
     };
 
-    explicit PopupView(QQuickItem* parent = nullptr);
+    QQuickItem* parentItem() const;
+    QQuickItem* contentItem() const;
+
+    qreal x() const;
+    qreal y() const;
+
+    Q_INVOKABLE void forceActiveFocus();
 
     Q_INVOKABLE void open();
     Q_INVOKABLE void close();
     Q_INVOKABLE void toggleOpened();
 
-    QQuickItem* backgroundItem() const;
-    QQuickItem* contentItem() const;
     ClosePolicy closePolicy() const;
 
     bool isOpened() const;
 
-    qreal padding() const;
-
-    QPointF globalPos() const;
-    qreal positionDisplacementX() const;
-    qreal positionDisplacementY() const;
-
 public slots:
-    void setBackgroundItem(QQuickItem* backgroundItem);
-    void setContentItem(QQuickItem* contentItem);
+    void setParentItem(QQuickItem* parent);
+    void setContentItem(QQuickItem* content);
+    void setX(qreal x);
+    void setY(qreal y);
     void setClosePolicy(ClosePolicy closePolicy);
 
-    void setIsOpened(bool isOpened);
-    void setPadding(qreal padding);
-
-    void setGlobalPos(QPointF globalPos);
-    void setPositionDisplacementX(qreal positionDisplacementX);
-    void setPositionDisplacementY(qreal positionDisplacementY);
-
 signals:
-    void backgroundItemChanged(QQuickItem* backgroundItem);
-    void contentItemChanged(QQuickItem* contentItem);
+    void parentItemChanged();
+    void contentItemChanged();
+    void xChanged(qreal x);
+    void yChanged(qreal y);
     void closePolicyChanged(ClosePolicy closePolicy);
 
-    void isOpenedChanged(bool isOpened);
+    void isOpenedChanged();
 
-    void aboutToShow();
-    void aboutToHide();
     void opened();
     void closed();
-
-    void paddingChanged(qreal padding);
-
-    void globalPosChanged(QPointF globalPos);
-    void positionDisplacementXChanged(qreal positionDisplacementX);
-    void positionDisplacementYChanged(qreal positionDisplacementY);
 
 private slots:
     void onApplicationStateChanged(Qt::ApplicationState state);
 
 private:
+    void classBegin() override;
     void componentComplete() override;
     bool eventFilter(QObject* watched, QEvent* event) override;
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override;
+    void mousePressEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent* event);
 
     bool isMouseWithinBoundaries(const QPoint& mousePos) const;
 
-    void setupContentComponent(QQmlEngine* engine);
-    void setupContainerView(QQmlEngine* engine);
-    QQuickItem* loadContentItem(QQmlContext* ctx);
-
-    QQmlComponent* m_contentComponent = nullptr;
-    QQuickView* m_containerView = nullptr;
-
-    QQuickItem* m_backgroundItem = nullptr;
+    QQuickView* m_view = nullptr;
     QQuickItem* m_contentItem = nullptr;
 
+    QPointF m_localPos;
     ClosePolicy m_closePolicy = ClosePolicy::CloseOnPressOutsideParent;
-    bool m_isOpened = false;
-    qreal m_padding = 0.0;
-    QPointF m_globalPos;
-    qreal m_positionDisplacementX = 0.0;
-    qreal m_positionDisplacementY = 0.0;
 };
 }
 

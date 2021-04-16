@@ -302,7 +302,7 @@ ListView {
                 visible: !control.Drag.active
                 isSelected: control.selected
 
-                keynav.name: "PaletteTreeItemDelegate"
+                keynav.name: "PaletteTreeItem"
                 keynav.subsection: keynavTree
                 keynav.row: control.keynavRow
                 keynav.column: 0
