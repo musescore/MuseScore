@@ -107,6 +107,8 @@ private:
     void openSelectionMoreOptions();
     void selectAll();
     void selectSection();
+    void firstElement();
+    void lastElement();
 
     void splitMeasure();
     void joinSelectedMeasures();

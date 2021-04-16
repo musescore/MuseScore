@@ -81,6 +81,16 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Down Note in Chord"),
              QT_TRANSLATE_NOOP("action", "Go to lower pitched note in chord")
              ),
+    UiAction("first-element",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "First element"),
+             QT_TRANSLATE_NOOP("action", "Go to first element in score")
+             ),
+    UiAction("last-element",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Last element"),
+             QT_TRANSLATE_NOOP("action", "Go to last element in score")
+             ),
     UiAction("next-track",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Next staff or voice"),

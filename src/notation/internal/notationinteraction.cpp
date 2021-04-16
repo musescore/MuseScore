@@ -497,6 +497,22 @@ void NotationInteraction::selectSection()
     notifyAboutSelectionChanged();
 }
 
+void NotationInteraction::selectFirstElement()
+{
+    Element* element = score()->firstElement();
+    score()->select(element, SelectType::SINGLE, element->staffIdx());
+
+    notifyAboutSelectionChanged();
+}
+
+void NotationInteraction::selectLastElement()
+{
+    Element* element = score()->lastElement();
+    score()->select(element, SelectType::SINGLE, element->staffIdx());
+
+    notifyAboutSelectionChanged();
+}
+
 INotationSelectionPtr NotationInteraction::selection() const
 {
     return m_selection;
@@ -2256,8 +2272,9 @@ void NotationInteraction::addAccidentalToSelection(AccidentalType type)
 void NotationInteraction::putRestToSelection()
 {
     Ms::InputState& is = score()->inputState();
-    if (!is.duration().isValid() || is.duration().isZero() || is.duration().isMeasure())
+    if (!is.duration().isValid() || is.duration().isZero() || is.duration().isMeasure()) {
         is.setDuration(DurationType::V_QUARTER);
+    }
     putRest(is.duration().type());
 }
 
