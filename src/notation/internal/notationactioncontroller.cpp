@@ -161,6 +161,8 @@ void NotationActionController::init()
     dispatcher()->reg(this, "select-dialog", this, &NotationActionController::openSelectionMoreOptions);
     dispatcher()->reg(this, "select-all", this, &NotationActionController::selectAll);
     dispatcher()->reg(this, "select-section", this, &NotationActionController::selectSection);
+    dispatcher()->reg(this, "first-element", this, &NotationActionController::firstElement);
+    dispatcher()->reg(this, "last-element", this, &NotationActionController::lastElement);
 
     dispatcher()->reg(this, "split-measure", this, &NotationActionController::splitMeasure);
     dispatcher()->reg(this, "join-measures", this, &NotationActionController::joinSelectedMeasures);
@@ -988,6 +990,26 @@ void NotationActionController::selectSection()
     }
 
     interaction->selectSection();
+}
+
+void NotationActionController::firstElement()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->selectFirstElement();
+}
+
+void NotationActionController::lastElement()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->selectLastElement();
 }
 
 void NotationActionController::openSelectionMoreOptions()
