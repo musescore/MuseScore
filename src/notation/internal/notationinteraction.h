@@ -132,6 +132,8 @@ public:
     void addOttavaToSelection(OttavaType type) override;
     void addHairpinToSelection(HairpinType type) override;
     void addAccidentalToSelection(AccidentalType type) override;
+    void putRestToSelection() override;
+    void putRest(DurationType duration) override;
     void addBracketsToSelection(BracketsType type) override;
     void changeSelectedNotesArticulation(SymbolId articulationSymbolId) override;
     void addGraceNotesToSelectedNotes(GraceNoteType type) override;

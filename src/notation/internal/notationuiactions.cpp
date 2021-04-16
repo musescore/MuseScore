@@ -687,6 +687,31 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Insert B"),
              QT_TRANSLATE_NOOP("action", "Insert note B")
              ),
+    UiAction("rest",
+             mu::context::UiCtxNotationHasSelection,
+             QT_TRANSLATE_NOOP("action", "Rest"),
+             QT_TRANSLATE_NOOP("action", "Enter rest")
+             ),
+    UiAction("rest-1",
+             mu::context::UiCtxNotationHasSelection,
+             QT_TRANSLATE_NOOP("action", "Whole Rest"),
+             QT_TRANSLATE_NOOP("action", "Note input: Whole rest")
+             ),
+    UiAction("rest-2",
+             mu::context::UiCtxNotationHasSelection,
+             QT_TRANSLATE_NOOP("action", "Half Rest"),
+             QT_TRANSLATE_NOOP("action", "Note input: Half rest")
+             ),
+    UiAction("rest-4",
+             mu::context::UiCtxNotationHasSelection,
+             QT_TRANSLATE_NOOP("action", "Quarter Rest"),
+             QT_TRANSLATE_NOOP("action", "Note input: Quarter rest")
+             ),
+    UiAction("rest-8",
+             mu::context::UiCtxNotationHasSelection,
+             QT_TRANSLATE_NOOP("action", "Eighth Rest"),
+             QT_TRANSLATE_NOOP("action", "Note input: Eighth rest")
+             ),
     UiAction("add-8va",
              mu::context::UiCtxNotationHasSelection,
              QT_TRANSLATE_NOOP("action", "Ottava 8va alta"),
