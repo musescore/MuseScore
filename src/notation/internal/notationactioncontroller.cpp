@@ -134,6 +134,8 @@ void NotationActionController::init()
     dispatcher()->reg(this, "pitch-down", [this](const ActionCode& actionCode) { moveAction(actionCode); });
     dispatcher()->reg(this, "pitch-up-octave", [this](const ActionCode& actionCode) { moveAction(actionCode); });
     dispatcher()->reg(this, "pitch-down-octave", [this](const ActionCode& actionCode) { moveAction(actionCode); });
+    dispatcher()->reg(this, "up-chord", [this]() { moveChord(MoveDirection::Up); });
+    dispatcher()->reg(this, "down-chord", [this]() { moveChord(MoveDirection::Down); });
 
     dispatcher()->reg(this, "cut", this, &NotationActionController::cutSelection);
     dispatcher()->reg(this, "copy", this, &NotationActionController::copySelection);
@@ -662,6 +664,18 @@ void NotationActionController::moveAction(const actions::ActionCode& actionCode)
 
         playSelectedElement();
     }
+}
+
+void NotationActionController::moveChord(MoveDirection direction)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->moveChordNoteSelection(direction);
+
+    playSelectedElement(false);
 }
 
 void NotationActionController::moveText(INotationInteractionPtr interaction, const actions::ActionCode& actionCode)
@@ -1442,7 +1456,7 @@ void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
     interaction->setScoreConfig(config);
 }
 
-void NotationActionController::playSelectedElement()
+void NotationActionController::playSelectedElement(bool playChord)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
@@ -1454,7 +1468,7 @@ void NotationActionController::playSelectedElement()
         return;
     }
 
-    if (playbackConfiguration()->playChordWhenEditing()) {
+    if (playChord && playbackConfiguration()->playChordWhenEditing()) {
         element = element->elementBase();
     }
 
