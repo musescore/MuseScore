@@ -80,7 +80,7 @@ void MuseData::musicalAttribute(QString s, Part* part)
             int staffIdx = 1;
 //                  int col = 2;
             if (item[1].isDigit()) {
-                staffIdx = item.midRef(1,1).toInt();
+                staffIdx = item.midRef(1, 1).toInt();
 //                        col = 3;
             }
             staffIdx -= 1;
@@ -123,14 +123,14 @@ void MuseData::readChord(Part*, const QString& s)
         } else if (s[i] == 'f') {
             alter -= 1;
         } else if (s[i].isDigit()) {
-            octave = s.midRef(i,1).toInt();
+            octave = s.midRef(i, 1).toInt();
             break;
         }
     }
     int staffIdx = 0;
     if (s.size() >= 24) {
         if (s[23].isDigit()) {
-            staffIdx = s.midRef(23,1).toInt() - 1;
+            staffIdx = s.midRef(23, 1).toInt() - 1;
         }
     }
     int pitch = table[step] + alter + (octave + 1) * 12;
@@ -200,7 +200,7 @@ void MuseData::readNote(Part* part, const QString& s)
         } else if (s[i] == 'f') {
             alter -= 1;
         } else if (s[i].isDigit()) {
-            octave = s.midRef(i,1).toInt();
+            octave = s.midRef(i, 1).toInt();
             break;
         }
     }
@@ -216,7 +216,7 @@ void MuseData::readNote(Part* part, const QString& s)
     int staffIdx = 0;
     if (s.size() >= 24) {
         if (s[23].isDigit()) {
-            staffIdx = s.midRef(23,1).toInt() - 1;
+            staffIdx = s.midRef(23, 1).toInt() - 1;
         }
     }
     Staff* staff = part->staff(staffIdx);
@@ -438,7 +438,7 @@ void MuseData::readRest(Part* part, const QString& s)
     int staffIdx = 0;
     if (s.size() >= 24) {
         if (s[23].isDigit()) {
-            staffIdx = s.midRef(23,1).toInt() - 1;
+            staffIdx = s.midRef(23, 1).toInt() - 1;
         }
     }
     Staff* staff = part->staff(staffIdx);
@@ -546,7 +546,7 @@ void MuseData::readPart(QStringList sl, Part* part)
         qDebug(" $ not found in part");
         return;
     }
-    curTick = Fraction(0,1);
+    curTick = Fraction(0, 1);
     slur[0] = 0;
     slur[1] = 0;
     slur[2] = 0;
@@ -623,7 +623,7 @@ int MuseData::countStaves(const QStringList& sl)
             int staffIdx = 1;
             if (s.size() >= 24) {
                 if (s[23].isDigit()) {
-                    staffIdx = s.midRef(23,1).toInt();
+                    staffIdx = s.midRef(23, 1).toInt();
                 }
             }
             if (staffIdx > staves) {

@@ -58,7 +58,7 @@ private slots:
     void copyPaste2Voice();                         // voices-partial
     void copyPaste2Voice2() { copypastevoice("14", 0); }
     void copyPaste2Voice3() { copypastevoice("15", 1); }
-    void copyPaste2Voice4() { copypastevoice("16",1); }   // shorten last cr
+    void copyPaste2Voice4() { copypastevoice("16", 1); }   // shorten last cr
     void copyPaste2Voice5();                              // cut and move
     void copypaste2Voice6();
     void copyPasteOnlySecondVoice();
@@ -122,7 +122,7 @@ void TestCopyPaste::copypaste(const char* idx)
     score->select(m4->first()->element(0));
 
     score->startCmd();
-    score->cmdPaste(mimeData,0);
+    score->cmdPaste(mimeData, 0);
     score->endCmd();
 
     QVERIFY(saveCompareScore(score, QString("copypaste%1.mscx").arg(idx),
@@ -157,7 +157,7 @@ void TestCopyPaste::copypastestaff(const char* idx)
     score->select(m2, SelectType::RANGE, 1);
 
     score->startCmd();
-    score->cmdPaste(mimeData,0);
+    score->cmdPaste(mimeData, 0);
     score->endCmd();
 
     QVERIFY(saveCompareScore(score, QString("copypaste%1.mscx").arg(idx),
@@ -187,7 +187,7 @@ void TestCopyPaste::copyPastePartial()
     score->select(m1->first(SegmentType::ChordRest)->element(0));
 
     score->startCmd();
-    score->cmdPaste(mimeData,0);
+    score->cmdPaste(mimeData, 0);
     score->endCmd();
 
     QVERIFY(saveCompareScore(score, QString("copypaste_partial_01.mscx"),
@@ -222,7 +222,7 @@ void TestCopyPaste::copyPaste2Voice()
     score->select(secondCRSeg->element(0));
 
     score->startCmd();
-    score->cmdPaste(mimeData,0);
+    score->cmdPaste(mimeData, 0);
     score->endCmd();
 
     QVERIFY(saveCompareScore(score, QString("copypaste13.mscx"),
@@ -262,7 +262,7 @@ void TestCopyPaste::copypastevoice(const char* idx, int voice)
     score->select(m2->first()->element(0));
 
     score->startCmd();
-    score->cmdPaste(mimeData,0);
+    score->cmdPaste(mimeData, 0);
     score->endCmd();
 
     QVERIFY(saveCompareScore(score, QString("copypaste%1.mscx").arg(idx),
@@ -300,7 +300,7 @@ void TestCopyPaste::copyPaste2Voice5()
     score->select(dest);
 
     score->startCmd();
-    score->cmdPaste(mimeData,0);
+    score->cmdPaste(mimeData, 0);
     score->endCmd();
 
     QVERIFY(saveCompareScore(score, QString("copypaste17.mscx"),
@@ -319,7 +319,7 @@ void TestCopyPaste::copyPasteOnlySecondVoice()
 
     score->select(m1, SelectType::RANGE, 0);
 
-    score->selectionFilter().setFiltered(SelectionFilterType::FIRST_VOICE,false);
+    score->selectionFilter().setFiltered(SelectionFilterType::FIRST_VOICE, false);
 
     QVERIFY(score->selection().canCopy());
     QString mimeType = score->selection().mimeType();
@@ -330,11 +330,11 @@ void TestCopyPaste::copyPasteOnlySecondVoice()
 
     //paste to second measure
     score->deselectAll();
-    score->selectionFilter().setFiltered(SelectionFilterType::FIRST_VOICE,true);
-    score->select(m2,SelectType::RANGE);
+    score->selectionFilter().setFiltered(SelectionFilterType::FIRST_VOICE, true);
+    score->select(m2, SelectType::RANGE);
 
     score->startCmd();
-    score->cmdPaste(mimeData,0);
+    score->cmdPaste(mimeData, 0);
     score->endCmd();
 
     QVERIFY(saveCompareScore(score, QString("copypaste18.mscx"),
@@ -373,7 +373,7 @@ void TestCopyPaste::copypaste2Voice6()
     score->select(dest);
 
     score->startCmd();
-    score->cmdPaste(mimeData,0);
+    score->cmdPaste(mimeData, 0);
     score->endCmd();
 
     QVERIFY(saveCompareScore(score, QString("copypaste20.mscx"),
@@ -407,7 +407,7 @@ void TestCopyPaste::copypastetuplet(const char* idx)
     Element* dest = m2->first(SegmentType::ChordRest)->element(0);
     score->select(dest);
     score->startCmd();
-    score->cmdPaste(mimeData,0);
+    score->cmdPaste(mimeData, 0);
     score->endCmd();
 
     QVERIFY(saveCompareScore(score, QString("copypaste_tuplet_%1.mscx").arg(idx),
@@ -449,7 +449,7 @@ void TestCopyPaste::copypastetremolo()
     score->select(m2->first()->element(0));
 
     score->startCmd();
-    score->cmdPaste(mimeData,0);
+    score->cmdPaste(mimeData, 0);
     score->endCmd();
 
     // create a range selection on 2nd to 4th beat (voice 0) of first measure
@@ -468,7 +468,7 @@ void TestCopyPaste::copypastetremolo()
     score->select(m3->first()->element(0));
 
     score->startCmd();
-    score->cmdPaste(mimeData,0);
+    score->cmdPaste(mimeData, 0);
     score->endCmd();
 
     QVERIFY(saveCompareScore(score, QString("copypaste_tremolo.mscx"),

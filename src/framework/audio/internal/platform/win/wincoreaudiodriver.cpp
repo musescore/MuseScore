@@ -71,7 +71,7 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     const IID MU_IID_IAudioRenderClient = __uuidof(IAudioRenderClient);
 
     IMMDeviceEnumerator* pEnumerator = nullptr;
-    hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL,CLSCTX_ALL, MU_IID_IMMDeviceEnumerator, (void**)&pEnumerator);
+    hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_ALL, MU_IID_IMMDeviceEnumerator, (void**)&pEnumerator);
     CHECK_HRESULT(hr);
 
     IMMDevice* pDdevice = nullptr;
@@ -79,7 +79,7 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     pEnumerator->Release();
     CHECK_HRESULT(hr);
 
-    hr = pDdevice->Activate(MU_IID_IAudioClient, CLSCTX_ALL,NULL, (void**)&s_data->audioClient);
+    hr = pDdevice->Activate(MU_IID_IAudioClient, CLSCTX_ALL, NULL, (void**)&s_data->audioClient);
     pDdevice->Release();
     CHECK_HRESULT(hr);
 

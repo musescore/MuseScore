@@ -39,7 +39,7 @@ public:
     CrashHandler() = default;
     ~CrashHandler();
 
-    bool start(const io::path& handlerFilePath,const io::path& dumpsDir,const std::string& serverUrl);
+    bool start(const io::path& handlerFilePath, const io::path& dumpsDir, const std::string& serverUrl);
 
 private:
     void removePendingLockFiles(const io::path& dumpsDir);

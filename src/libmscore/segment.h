@@ -164,7 +164,7 @@ public:
     void setStretch(qreal v) { _stretch = v; }
 
     Fraction rtick() const override { return _tick; }
-    void setRtick(const Fraction& v) { Q_ASSERT(v >= Fraction(0,1)); _tick = v; }
+    void setRtick(const Fraction& v) { Q_ASSERT(v >= Fraction(0, 1)); _tick = v; }
     Fraction tick() const override;
 
     Fraction ticks() const { return _ticks; }

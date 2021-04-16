@@ -243,7 +243,7 @@ public:
     static Fraction fromTicks(int ticks)
     {
         if (ticks == -1) {
-            return Fraction(-1,1);        // HACK
+            return Fraction(-1, 1);        // HACK
         }
         return Fraction(ticks, MScore::division* 4).reduced();
     }

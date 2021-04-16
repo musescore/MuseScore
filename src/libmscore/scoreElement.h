@@ -298,7 +298,7 @@ public:
     //    bool             isChordRest()
     //---------------------------------------------------
 
-#define CONVERT(a,b) \
+#define CONVERT(a, b) \
     bool is##a() const { return type() == ElementType::b; \
     }
 
@@ -348,7 +348,7 @@ public:
     CONVERT(InstrumentChange, INSTRUMENT_CHANGE)
     CONVERT(StaffTypeChange, STAFFTYPE_CHANGE)
     CONVERT(Hairpin,       HAIRPIN)
-    CONVERT(HairpinSegment,HAIRPIN_SEGMENT)
+    CONVERT(HairpinSegment, HAIRPIN_SEGMENT)
     CONVERT(Bend,          BEND)
     CONVERT(TremoloBar,    TREMOLOBAR)
     CONVERT(MeasureRepeat, MEASURE_REPEAT)

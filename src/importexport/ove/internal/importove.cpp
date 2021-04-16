@@ -399,7 +399,7 @@ void OveToMScore::convertHeader()
     }
 
     if (vbox) {
-        vbox->setTick(Fraction(0,1));
+        vbox->setTick(Fraction(0, 1));
         m_score->measures()->add(vbox);
     }
 }
@@ -863,7 +863,7 @@ void OveToMScore::convertSignatures()
                     keysig->setTrack((staffCount + j) * VOICES);
                     keysig->setKeySigEvent(KeySigEvent());
 
-                    Segment* s = measure->getSegment(SegmentType::KeySig, Fraction(0,1));
+                    Segment* s = measure->getSegment(SegmentType::KeySig, Fraction(0, 1));
                     s->add(keysig);
                 }
             }
@@ -881,7 +881,7 @@ void OveToMScore::convertSignatures()
             if (staff) {
                 ovebase::Track* track = m_ove->getTrack(i, j);
                 ClefType clefType = OveClefToClef(track->getStartClef());
-                Measure* measure = m_score->tick2measure(Fraction(0,1));
+                Measure* measure = m_score->tick2measure(Fraction(0, 1));
                 // staff->setClef(0, clefType);
 
                 // note: also generate symbol for tick 0
@@ -890,7 +890,7 @@ void OveToMScore::convertSignatures()
                 clef->setClefType(clefType);
                 clef->setTrack((staffCount + j) * VOICES);
 
-                Segment* s = measure->getSegment(SegmentType::HeaderClef, Fraction(0,1));
+                Segment* s = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
                 s->add(clef);
             }
 

@@ -65,7 +65,7 @@ int AbFilesModel::rowCount(const QModelIndex&) const
     return m_files.val.size();
 }
 
-QHash<int,QByteArray> AbFilesModel::roleNames() const
+QHash<int, QByteArray> AbFilesModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
         { FileTitle, "fileTitle" },

@@ -834,7 +834,7 @@ void Capella::readCapxStaff(XmlReader& e, CapSystem* system)
     QString time = e.attribute("defaultTime");
     qstring2timesig(time, staff->numerator, staff->log2Denom, staff->allaBreve);
 
-    staff->iLayout   = findStaffIndex(layout,staffLayouts());
+    staff->iLayout   = findStaffIndex(layout, staffLayouts());
     staff->topDistX  = 0;
     staff->btmDistX  = 0;
     staff->color     = Qt::black;

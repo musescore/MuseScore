@@ -109,7 +109,7 @@ public:
 
     int midiChannel() const;
     int midiPort() const;
-    void setMidiChannel(int ch, int port = -1, const Fraction& tick = { -1,1 });  // tick != -1 for InstrumentChange
+    void setMidiChannel(int ch, int port = -1, const Fraction& tick = { -1, 1 });  // tick != -1 for InstrumentChange
 
     void insertStaff(Staff*, int idx);
     void removeStaff(Staff*);

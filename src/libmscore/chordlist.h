@@ -57,7 +57,7 @@ protected:
 public:
     HChord() { keys = 0; }
     HChord(int k) { keys = k; }
-    HChord(int a, int b, int c=-1, int d=-1, int e=-1, int f=-1, int g=-1,int h=-1, int i=-1, int k=-1, int l=-1);
+    HChord(int a, int b, int c=-1, int d=-1, int e=-1, int f=-1, int g=-1, int h=-1, int i=-1, int k=-1, int l=-1);
     HChord(const QString&);
 
     void rotate(int semiTones);
@@ -136,7 +136,7 @@ class ParsedChord
 {
 public:
     bool parse(const QString&, const ChordList*, bool syntaxOnly = false, bool preferMinor = false);
-    QString fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&,const ChordList*);
+    QString fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&, const ChordList*);
     const QList<RenderAction>& renderList(const ChordList*);
     bool parseable() const { return _parseable; }
     bool understandable() const { return _understandable; }

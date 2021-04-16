@@ -138,7 +138,7 @@ void TempoMap::dump() const
 
 void TempoMap::clear()
 {
-    std::map<int,TEvent>::clear();
+    std::map<int, TEvent>::clear();
     ++_tempoSN;
 }
 

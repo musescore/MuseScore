@@ -124,7 +124,7 @@ void Score::collectLinearSystem(LayoutContext& lc)
             if (firstMeasure) {
                 system->layoutSystem(pos.rx());
                 if (m->repeatStart()) {
-                    Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));
+                    Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
                         s->setEnabled(true);
                     }

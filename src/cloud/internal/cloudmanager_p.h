@@ -71,7 +71,7 @@ public:
     static constexpr const char* LOGIN_PAGE = "https://musescore.com/user/auth/webview";
     static constexpr const char* LOGIN_SUCCESS_PAGE = "https://musescore.com/user/auth/webview/success";
 
-    static QUrl getUpdateScoreInfoUrl(const QString& scoreId, const QString& accessToken, bool newScore,const QString& customPath);
+    static QUrl getUpdateScoreInfoUrl(const QString& scoreId, const QString& accessToken, bool newScore, const QString& customPath);
 
     static const QUrl REGISTER_URL;
     static const QUrl LOGIN_URL;

@@ -202,12 +202,12 @@ void Ambitus::write(XmlWriter& xml) const
     xml.stag(this);
     xml.tag(Pid::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
     xml.tag(Pid::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
-    xml.tag(Pid::MIRROR_HEAD,int(_dir),           int(DIR_DEFAULT));
+    xml.tag(Pid::MIRROR_HEAD, int(_dir),           int(DIR_DEFAULT));
     xml.tag("hasLine",    _hasLine, true);
     xml.tag(Pid::LINE_WIDTH_SPATIUM, _lineWidth, LINEWIDTH_DEFAULT);
     xml.tag("topPitch",   _topPitch);
     xml.tag("topTpc",     _topTpc);
-    xml.tag("bottomPitch",_bottomPitch);
+    xml.tag("bottomPitch", _bottomPitch);
     xml.tag("bottomTpc",  _bottomTpc);
     if (_topAccid.accidentalType() != AccidentalType::NONE) {
         xml.stag("topAccidental");

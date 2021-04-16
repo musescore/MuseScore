@@ -70,7 +70,7 @@ void TestSfzInputControls::testInputKeys()
 
     QCOMPARE(false, (*zoneIterator)->match(channel, 19, 127, Trigger::ATTACK, 0.0f, 0, 0));
     for (int i = 20; i <= 30; i++) {
-        QCOMPARE(true, (*zoneIterator)->match(channel,i, 127, Trigger::ATTACK, 0.0f, 0, 0));
+        QCOMPARE(true, (*zoneIterator)->match(channel, i, 127, Trigger::ATTACK, 0.0f, 0, 0));
     }
     QCOMPARE(false, (*zoneIterator)->match(channel, 31, 127, Trigger::ATTACK, 0.0f, 0, 0));
     zoneIterator++;
@@ -80,7 +80,7 @@ void TestSfzInputControls::testInputVolume()
 {
     QCOMPARE(false, (*zoneIterator)->match(channel, 40, 29, Trigger::ATTACK, 0.0f, 0, 0));
     for (int i = 30; i <= 40; i++) {
-        QCOMPARE(true, (*zoneIterator)->match(channel,40, i, Trigger::ATTACK, 0.0f, 0, 0));
+        QCOMPARE(true, (*zoneIterator)->match(channel, 40, i, Trigger::ATTACK, 0.0f, 0, 0));
     }
     QCOMPARE(false, (*zoneIterator)->match(channel, 40, 41, Trigger::ATTACK, 0.0f, 0, 0));
     zoneIterator++;

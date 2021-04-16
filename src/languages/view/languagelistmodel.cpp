@@ -217,7 +217,7 @@ QVariantMap LanguageListModel::language(QString code)
 
     QVariantMap result;
 
-    QHash<int,QByteArray> names = roleNames();
+    QHash<int, QByteArray> names = roleNames();
     QHashIterator<int, QByteArray> i(names);
     while (i.hasNext()) {
         i.next();

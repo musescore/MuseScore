@@ -35,14 +35,14 @@ class XmlReader;
 //          void setColor(const QColor& val) { _color = val; }
 //---------------------------------------------------------
 
-#define M_PROPERTY(a,b,c)                                      \
+#define M_PROPERTY(a, b, c)                                      \
     a _##b;                                                \
 public:                                                     \
     const a& b() const { return _##b; }                  \
     void c(const a& val) { _##b = val; }                  \
 private:
 
-#define M_PROPERTY2(a,b,c,d)                                   \
+#define M_PROPERTY2(a, b, c, d)                                   \
     a _##b { d };                                          \
 public:                                                     \
     const a& b() const { return _##b; }                  \

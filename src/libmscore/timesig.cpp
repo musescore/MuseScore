@@ -132,7 +132,7 @@ void TimeSig::write(XmlWriter& xml) const
 
     xml.tag("sigN",  _sig.numerator());
     xml.tag("sigD",  _sig.denominator());
-    if (stretch() != Fraction(1,1)) {
+    if (stretch() != Fraction(1, 1)) {
         xml.tag("stretchN", stretch().numerator());
         xml.tag("stretchD", stretch().denominator());
     }
@@ -523,9 +523,9 @@ QVariant TimeSig::propertyDefault(Pid id) const
     case Pid::DENOMINATOR_STRING:
         return QString();
     case Pid::TIMESIG:
-        return QVariant::fromValue(Fraction(4,4));
+        return QVariant::fromValue(Fraction(4, 4));
     case Pid::TIMESIG_GLOBAL:
-        return QVariant::fromValue(Fraction(1,1));
+        return QVariant::fromValue(Fraction(1, 1));
     case Pid::TIMESIG_TYPE:
         return int(TimeSigType::NORMAL);
     case Pid::SCALE:

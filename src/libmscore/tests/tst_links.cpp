@@ -74,13 +74,13 @@ static void addTitleText(Score* score, const QString& title)
 void TestLinks::test3LinkedSameScore_99796()
 {
     MCursor c;
-    c.setTimeSig(Fraction(4,4));
+    c.setTimeSig(Fraction(4, 4));
     c.createScore("test");
     c.addPart("voice");
-    c.move(0, Fraction(0,1));       // move to track 0 tick 0
+    c.move(0, Fraction(0, 1));       // move to track 0 tick 0
 
     c.addKeySig(Key(1));
-    c.addTimeSig(Fraction(4,4));
+    c.addTimeSig(Fraction(4, 4));
     c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
     MasterScore* score = c.score();
@@ -177,13 +177,13 @@ void TestLinks::test3LinkedSameScore_99796()
 void TestLinks::test3LinkedParts_99796()
 {
     MCursor c;
-    c.setTimeSig(Fraction(4,4));
+    c.setTimeSig(Fraction(4, 4));
     c.createScore("test");
     c.addPart("voice");
-    c.move(0, Fraction(0,1));       // move to track 0 tick 0
+    c.move(0, Fraction(0, 1));       // move to track 0 tick 0
 
     c.addKeySig(Key(1));
-    c.addTimeSig(Fraction(4,4));
+    c.addTimeSig(Fraction(4, 4));
     c.addChord(60, TDuration(TDuration::DurationType::V_WHOLE));
 
     MasterScore* score = c.score();
@@ -258,10 +258,10 @@ void TestLinks::test3LinkedParts_99796()
 void TestLinks::test4LinkedParts_94911()
 {
     MCursor c;
-    c.setTimeSig(Fraction(4,4));
+    c.setTimeSig(Fraction(4, 4));
     c.createScore("test");
     c.addPart("electric-guitar");
-    c.move(0, Fraction(0,1));       // move to track 0 tick 0
+    c.move(0, Fraction(0, 1));       // move to track 0 tick 0
 
 //      c.addKeySig(Key(1));
 //      c.addTimeSig(Fraction(4,4));
@@ -381,10 +381,10 @@ void TestLinks::test4LinkedParts_94911()
 void TestLinks::test5LinkedParts_94911()
 {
     MCursor c;
-    c.setTimeSig(Fraction(4,4));
+    c.setTimeSig(Fraction(4, 4));
     c.createScore("test");
     c.addPart("electric-guitar");
-    c.move(0, Fraction(0,1));       // move to track 0 tick 0
+    c.move(0, Fraction(0, 1));       // move to track 0 tick 0
 
 //      c.addKeySig(Key(1));
 //      c.addTimeSig(Fraction(4,4));

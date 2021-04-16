@@ -76,7 +76,7 @@ void SwingDetector::add(ChordRest* cr)
 void SwingDetector::reset()
 {
     elements.clear();
-    sumLen = ReducedFraction(Fraction(0,1));
+    sumLen = ReducedFraction(Fraction(0, 1));
 }
 
 void SwingDetector::append(ChordRest* cr)

@@ -386,7 +386,7 @@ Fraction MxmlSupport::calculateFraction(QString type, int dots, int normalNotes,
         // tuplet
         if (actualNotes > 0 && normalNotes > 0) {
             f *= normalNotes;
-            f /= Fraction(actualNotes,1);
+            f /= Fraction(actualNotes, 1);
         }
         // clean up (just in case)
         f.reduce();

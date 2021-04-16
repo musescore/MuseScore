@@ -530,7 +530,7 @@ void SfzRegion::readOp(const QString& b, const QString& data, SfzControl& c)
     } else if (opcode == "volume") {
         readDouble(opcode_data, &volume);
     } else if (opcode == "pitch_keycenter") {
-        pitch_keycenter = readKey(opcode_data,c);
+        pitch_keycenter = readKey(opcode_data, c);
     } else if (opcode == "lokey") {
         lokey = readKey(opcode_data, c);
     } else if (opcode == "hikey") {

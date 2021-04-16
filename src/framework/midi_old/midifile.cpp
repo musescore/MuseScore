@@ -851,7 +851,7 @@ void MidiTrack::mergeNoteOnOffAndFindMidiType(MidiType* mt)
                     }
                 }
             }
-            el.insert(std::pair<int,MidiEvent>(i->first, ev));
+            el.insert(std::pair<int, MidiEvent>(i->first, ev));
             ev.setType(ME_INVALID);
             continue;
         }
@@ -885,7 +885,7 @@ void MidiTrack::mergeNoteOnOffAndFindMidiType(MidiType* mt)
             qDebug("-no note-off for note at %d", tick);
             note.setLen(1);
         }
-        el.insert(std::pair<int,MidiEvent>(tick, note));
+        el.insert(std::pair<int, MidiEvent>(tick, note));
         ev.setType(ME_INVALID);
     }
     _events = el;

@@ -130,14 +130,14 @@ Fraction TDuration::ticks() const
         break;
     case DurationType::V_ZERO:
     case DurationType::V_MEASURE:
-        return Fraction(0,1);
+        return Fraction(0, 1);
     default:
     case DurationType::V_INVALID:
-        return Fraction(-1,1);
+        return Fraction(-1, 1);
     }
     Fraction tmp = t;
     for (int i = 0; i < _dots; ++i) {
-        tmp *= Fraction(1,2);
+        tmp *= Fraction(1, 2);
         t += tmp;
     }
     return t;

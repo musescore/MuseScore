@@ -74,7 +74,7 @@ class RepeatList : public QList<RepeatSegment*>
         QString label, QList<QList<RepeatListElement*>*>::const_iterator referenceSectionIt,
         QList<RepeatListElement*>::const_iterator referenceRepeatListElementIt) const;
     void performJump(QList<QList<RepeatListElement*>*>::const_iterator sectionIt,
-                     QList<RepeatListElement*>::const_iterator repeatListElementTargetIt,bool withRepeats, int* const playbackCount,
+                     QList<RepeatListElement*>::const_iterator repeatListElementTargetIt, bool withRepeats, int* const playbackCount,
                      Volta const** const activeVolta, RepeatListElement const** const startRepeatReference) const;
     void unwind();
     void flatten();

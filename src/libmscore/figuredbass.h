@@ -253,7 +253,7 @@ public:
     // static functions for font config files
     static bool       readConfigFile(const QString& fileName);
     static QList<QString> fontNames();
-    static bool       fontData(int nIdx, QString* pFamily, QString* pDisplayName,qreal* pSize, qreal* pLineHeight);
+    static bool       fontData(int nIdx, QString* pFamily, QString* pDisplayName, qreal* pSize, qreal* pLineHeight);
 
     // standard re-implemented virtual functions
     FiguredBass* clone() const override { return new FiguredBass(*this); }
@@ -268,7 +268,7 @@ public:
     void      write(XmlWriter& xml) const override;
 
     // read / write MusicXML
-    void writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick,bool writeDuration, int divisions) const;
+    void writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;
 
 //DEBUG
 //Q_INVOKABLE Ms::FiguredBassItem* addItem();

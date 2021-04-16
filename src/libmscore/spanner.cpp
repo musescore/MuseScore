@@ -452,7 +452,7 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
     Fraction newTick2 = tick2();
 
     // check spanner start and end point
-    if (len > Fraction(0,1)) {            // adding time
+    if (len > Fraction(0, 1)) {            // adding time
         if (tick() > fromTick) {          // start after insertion point: shift start to right
             newTick1 += len;
         }
@@ -460,7 +460,7 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
             newTick2 += len;
         }
     }
-    if (len < Fraction(0,1)) {            // removing time
+    if (len < Fraction(0, 1)) {            // removing time
         Fraction toTick = fromTick - len;
         if (tick() > fromTick) {          // start after beginning of removed time
             if (tick() < toTick) {        // start within removed time: bring start at removing point

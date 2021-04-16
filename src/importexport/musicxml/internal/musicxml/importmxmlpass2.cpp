@@ -149,7 +149,7 @@ static Fraction lastChordTicks(const Segment* s, const int track, const Fraction
         }
         s = s->nextCR(track, true);
     }
-    return Fraction(0,1);
+    return Fraction(0, 1);
 }
 
 //---------------------------------------------------------
@@ -169,7 +169,7 @@ void MusicXmlLyricsExtend::setExtend(const int no, const int track, const Fracti
             ChordRest* const par = static_cast<ChordRest*>(el);
             if (par->track() == track && (no == -1 || l->no() == no)) {
                 Fraction lct = lastChordTicks(l->segment(), track, tick);
-                if (lct > Fraction(0,1)) {
+                if (lct > Fraction(0, 1)) {
                     // set lyric tick to the total length from the lyric note
                     // plus all notes covered by the melisma minus the last note length
                     l->setTicks(tick - par->tick() - lct);
@@ -265,7 +265,7 @@ static void fillGap(Measure* measure, int track, const Fraction& tstart, const F
     //        measure, track, tstart, tend, restLen);
     // note: as MScore::division (#ticks in a quarter note) equals 480
     // MScore::division / 64 (#ticks in a 256th note) uequals 7.5 but is rounded down to 7
-    while (restLen > Fraction(1,256)) {
+    while (restLen > Fraction(1, 256)) {
         Fraction len = restLen;
         TDuration d(TDuration::DurationType::V_INVALID);
         if (measure->ticks() == restLen) {
@@ -428,8 +428,8 @@ static void initDrumset(Drumset* drumset, const MusicXMLInstruments& instruments
 static void setStaffTypePercussion(Part* part, Drumset* drumset)
 {
     for (int j = 0; j < part->nstaves(); ++j) {
-        if (part->staff(j)->lines(Fraction(0,1)) == 5 && !part->staff(j)->isDrumStaff(Fraction(0,1))) {
-            part->staff(j)->setStaffType(Fraction(0,1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
+        if (part->staff(j)->lines(Fraction(0, 1)) == 5 && !part->staff(j)->isDrumStaff(Fraction(0, 1))) {
+            part->staff(j)->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
         }
     }
     // set drumset for instrument
@@ -715,7 +715,7 @@ static QString decodeEntities(const QString& src)
 
     int pos = 0;
     while ((pos = re.indexIn(src, pos)) != -1) {
-        ret = ret.replace(re.cap(0), QChar(re.cap(1).toInt(0,10)));
+        ret = ret.replace(re.cap(0), QChar(re.cap(1).toInt(0, 10)));
         pos += re.matchedLength();
     }
     return ret;
@@ -2293,7 +2293,7 @@ void MusicXMLParserPass2::attributes(const QString& partId, Measure* measure, co
 
 static void setStaffLines(Score* score, int staffIdx, int stafflines)
 {
-    score->staff(staffIdx)->setLines(Fraction(0,1), stafflines);
+    score->staff(staffIdx)->setLines(Fraction(0, 1), stafflines);
     score->staff(staffIdx)->setBarLineTo(0);          // default
 }
 
@@ -2328,7 +2328,7 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
     int staffIdx = _score->staffIdx(part) + n;
 
     StringData* t = nullptr;
-    if (_score->staff(staffIdx)->isTabStaff(Fraction(0,1))) {
+    if (_score->staff(staffIdx)->isTabStaff(Fraction(0, 1))) {
         t = new StringData;
         t->setFrets(25);      // sensible default
     }
@@ -3937,7 +3937,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
     // set the correct staff type
     // note that clef handling should probably done in pass1
     int staffIdx = _score->staffIdx(part) + clefno;
-    int lines = _score->staff(staffIdx)->lines(Fraction(0,1));
+    int lines = _score->staff(staffIdx)->lines(Fraction(0, 1));
     if (tick.isZero()) {   // changing staff type not supported (yet ?)
         _score->staff(staffIdx)->setStaffType(tick, *StaffType::preset(st));
         _score->staff(staffIdx)->setLines(tick, lines);     // preserve previously set staff lines
@@ -4368,7 +4368,7 @@ static void addTremolo(ChordRest* cr,
                     }
                     tremolo->setChords(tremStart, static_cast<Chord*>(cr));
                     // fixup chord duration and type
-                    const Fraction tremDur = cr->ticks() * Fraction(1,2);
+                    const Fraction tremDur = cr->ticks() * Fraction(1, 2);
                     tremolo->chord1()->setDurationType(tremDur);
                     tremolo->chord1()->setTicks(tremDur);
                     tremolo->chord2()->setDurationType(tremDur);
@@ -4439,7 +4439,7 @@ static void setDrumset(Chord* c, MusicXMLParserPass1& pass1, const QString& part
     // correct for number of staff lines
     // see ExportMusicXml::unpitch2xml for explanation
     // TODO handle other # staff lines ?
-    int staffLines = c->staff()->lines(Fraction(0,1));
+    int staffLines = c->staff()->lines(Fraction(0, 1));
     if (staffLines == 1) {
         line -= 8;
     }
@@ -5903,7 +5903,7 @@ void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
     } else if (notation.name() == "fret") {
         auto fret = notation.text().toInt();
         if (note) {
-            if (note->staff()->isTabStaff(Fraction(0,1))) {
+            if (note->staff()->isTabStaff(Fraction(0, 1))) {
                 note->setFret(fret);
             }
         } else {
@@ -5914,7 +5914,7 @@ void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
                       Tid::RH_GUITAR_FINGERING, _score, note);
     } else if (notation.name() == "string") {
         if (note) {
-            if (note->staff()->isTabStaff(Fraction(0,1))) {
+            if (note->staff()->isTabStaff(Fraction(0, 1))) {
                 note->setString(notation.text().toInt() - 1);
             } else {
                 addTextToNote(_e.lineNumber(), _e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,

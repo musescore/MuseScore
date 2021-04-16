@@ -73,8 +73,8 @@ bool TestTuplet::createTuplet(int n, ChordRest* cr)
     Fraction ratio(n, f.numerator());
     Fraction fr(1, f.denominator());
     while (ratio.numerator() >= ratio.denominator() * 2) {
-        ratio *= Fraction(1,2);
-        fr    *= Fraction(1,2);
+        ratio *= Fraction(1, 2);
+        fr    *= Fraction(1, 2);
     }
 
     Tuplet* tuplet = new Tuplet(cr->score());
@@ -172,10 +172,10 @@ void TestTuplet::addStaff()
     Staff* oldStaff   = score->staff(0);
     Staff* newStaff   = new Staff(score);
     newStaff->setPart(oldStaff->part());
-    newStaff->initFromStaffType(oldStaff->staffType(Fraction(0,1)));
+    newStaff->initFromStaffType(oldStaff->staffType(Fraction(0, 1)));
     newStaff->setDefaultClefType(ClefTypeList(ClefType::F));
-    KeySigEvent ke = oldStaff->keySigEvent(Fraction(0,1));
-    newStaff->setKey(Fraction(0,1), ke);
+    KeySigEvent ke = oldStaff->keySigEvent(Fraction(0, 1));
+    newStaff->setKey(Fraction(0, 1), ke);
     score->undoInsertStaff(newStaff, 0, true);
 
     QVERIFY(saveCompareScore(score, "nestedTuplets_addStaff.mscx", TUPLET_DATA_DIR + "nestedTuplets_addStaff-ref.mscx"));

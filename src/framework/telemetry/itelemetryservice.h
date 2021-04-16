@@ -34,7 +34,8 @@ class ITelemetryService : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ITelemetryService() = default;
 
-    virtual void sendEvent(const QString& category, const QString& action, const QString& label = QString(),
+    virtual void sendEvent(const QString& category, const QString& action,
+                           const QString& label = QString(),
                            const QVariant& value = QVariant(), const QVariantMap& customValues = QVariantMap()) = 0;
 
     virtual void sendException(const QString& exceptionDescription, bool exceptionFatal = true,

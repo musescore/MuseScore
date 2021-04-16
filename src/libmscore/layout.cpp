@@ -2288,7 +2288,7 @@ void Score::createMMRest(Measure* firstMeasure, Measure* lastMeasure, const Frac
     for (Element* e : oldList) {
         delete e;
     }
-    Segment* s = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0,1));
+    Segment* s = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0, 1));
     for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
         int track = staffIdx * VOICES;
         if (s->element(track) == 0) {
@@ -2331,11 +2331,11 @@ void Score::createMMRest(Measure* firstMeasure, Measure* lastMeasure, const Frac
     //
     // check for time signature
     //
-    underlyingSeg = firstMeasure->findSegmentR(SegmentType::TimeSig, Fraction(0,1));
+    underlyingSeg = firstMeasure->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
     mmrSeg = mmrMeasure->findSegment(SegmentType::TimeSig, firstMeasure->tick());
     if (underlyingSeg) {
         if (mmrSeg == 0) {
-            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::TimeSig, Fraction(0,1));
+            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::TimeSig, Fraction(0, 1));
         }
         mmrSeg->setEnabled(underlyingSeg->enabled());
         mmrSeg->setHeader(underlyingSeg->header());
@@ -2363,11 +2363,11 @@ void Score::createMMRest(Measure* firstMeasure, Measure* lastMeasure, const Frac
     //
     // check for ambitus
     //
-    underlyingSeg = firstMeasure->findSegmentR(SegmentType::Ambitus, Fraction(0,1));
+    underlyingSeg = firstMeasure->findSegmentR(SegmentType::Ambitus, Fraction(0, 1));
     mmrSeg = mmrMeasure->findSegment(SegmentType::Ambitus, firstMeasure->tick());
     if (underlyingSeg) {
         if (mmrSeg == 0) {
-            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::Ambitus, Fraction(0,1));
+            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::Ambitus, Fraction(0, 1));
         }
         for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
             int track = staffIdx * VOICES;
@@ -2392,11 +2392,11 @@ void Score::createMMRest(Measure* firstMeasure, Measure* lastMeasure, const Frac
     //
     // check for key signature
     //
-    underlyingSeg = firstMeasure->findSegmentR(SegmentType::KeySig, Fraction(0,1));
-    mmrSeg = mmrMeasure->findSegmentR(SegmentType::KeySig, Fraction(0,1));
+    underlyingSeg = firstMeasure->findSegmentR(SegmentType::KeySig, Fraction(0, 1));
+    mmrSeg = mmrMeasure->findSegmentR(SegmentType::KeySig, Fraction(0, 1));
     if (underlyingSeg) {
         if (mmrSeg == 0) {
-            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::KeySig, Fraction(0,1));
+            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
         }
         mmrSeg->setEnabled(underlyingSeg->enabled());
         mmrSeg->setHeader(underlyingSeg->header());
@@ -2434,7 +2434,7 @@ void Score::createMMRest(Measure* firstMeasure, Measure* lastMeasure, const Frac
     //
     // check for rehearsal mark etc.
     //
-    underlyingSeg = firstMeasure->findSegmentR(SegmentType::ChordRest, Fraction(0,1));
+    underlyingSeg = firstMeasure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
     if (underlyingSeg) {
         // clone elements from underlying measure to mmr
         for (Element* e : underlyingSeg->annotations()) {
@@ -2696,7 +2696,7 @@ void Score::createBeams(LayoutContext& lc, Measure* measure)
         Beam::Mode bm    = Beam::Mode::AUTO;
         ChordRest* prev  = 0;
         bool checkBeats  = false;
-        Fraction stretch = Fraction(1,1);
+        Fraction stretch = Fraction(1, 1);
         QHash<int, TDuration> beatSubdivision;
 
         // if this measure is simple meter (actually X/4),
@@ -2705,7 +2705,7 @@ void Score::createBeams(LayoutContext& lc, Measure* measure)
         beatSubdivision.clear();
         TimeSig* ts = stf->timeSig(measure->tick());
         checkBeats  = false;
-        stretch     = ts ? ts->stretch() : Fraction(1,1);
+        stretch     = ts ? ts->stretch() : Fraction(1, 1);
 
         const SegmentType st = SegmentType::ChordRest;
         if (ts && ts->denominator() == 4) {
@@ -3245,10 +3245,10 @@ void Score::getNextMeasure(LayoutContext& lc)
 
     rebuildTempoAndTimeSigMaps(measure);
 
-    Segment* seg = measure->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));
+    Segment* seg = measure->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
     if (measure->repeatStart()) {
         if (!seg) {
-            seg = measure->getSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));
+            seg = measure->getSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
         }
         measure->barLinesSetSpan(seg);          // this also creates necessary barlines
         for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
@@ -4025,7 +4025,7 @@ System* Score::collectSystem(LayoutContext& lc)
                 system->layoutSystem(minWidth, lc.firstSystem, lc.firstSystemIndent);
                 minWidth += system->leftMargin();
                 if (m->repeatStart()) {
-                    Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));
+                    Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
                         s->setEnabled(true);
                     }
@@ -4110,7 +4110,7 @@ System* Score::collectSystem(LayoutContext& lc)
             if (lc.curMeasure->isMeasure()) {
                 Measure* m1 = toMeasure(lc.curMeasure);
                 if (m1->repeatStart()) {
-                    Segment* s = m1->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));
+                    Segment* s = m1->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
                         s->setEnabled(true);
                         m1->computeMinWidth();
@@ -4185,7 +4185,7 @@ System* Score::collectSystem(LayoutContext& lc)
                 // so now we must restore to original state
                 Measure* m = toMeasure(lc.curMeasure);
                 if (m->repeatStart()) {
-                    Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0,1));
+                    Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
                         s->setEnabled(true);
                     }
@@ -5045,7 +5045,7 @@ void LayoutContext::collectPage()
                         measureNo          = 0;
                         startWithLongNames = true;
                         firstSystem        = true;
-                        tick               = Fraction(0,1);
+                        tick               = Fraction(0, 1);
                         prevMeasure        = 0;
                         curMeasure         = 0;
                         nextMeasure        = ms->measures()->first();
@@ -5091,7 +5091,7 @@ void LayoutContext::collectPage()
         }
     }
 
-    Fraction stick = Fraction(-1,1);
+    Fraction stick = Fraction(-1, 1);
     for (System* s : page->systems()) {
         Score* currentScore = s->score();
         for (MeasureBase* mb : s->measures()) {
@@ -5099,7 +5099,7 @@ void LayoutContext::collectPage()
                 continue;
             }
             Measure* m = toMeasure(mb);
-            if (stick == Fraction(-1,1)) {
+            if (stick == Fraction(-1, 1)) {
                 stick = m->tick();
             }
 
@@ -5176,7 +5176,7 @@ void LayoutContext::collectPage()
 
 void Score::doLayout()
 {
-    doLayoutRange(Fraction(0,1), Fraction(-1,1));
+    doLayoutRange(Fraction(0, 1), Fraction(-1, 1));
 }
 
 //---------------------------------------------------------
@@ -5203,7 +5203,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 
     Fraction stick(st);
     Fraction etick(et);
-    Q_ASSERT(!(stick == Fraction(-1,1) && etick == Fraction(-1,1)));
+    Q_ASSERT(!(stick == Fraction(-1, 1) && etick == Fraction(-1, 1)));
 
     if (!last() || (lineMode() && !firstMeasure())) {
         qDebug("empty score");
@@ -5216,11 +5216,11 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     }
 //      if (!_systems.isEmpty())
 //            return;
-    bool layoutAll = stick <= Fraction(0,1) && (etick < Fraction(0,1) || etick >= masterScore()->last()->endTick());
-    if (stick < Fraction(0,1)) {
-        stick = Fraction(0,1);
+    bool layoutAll = stick <= Fraction(0, 1) && (etick < Fraction(0, 1) || etick >= masterScore()->last()->endTick());
+    if (stick < Fraction(0, 1)) {
+        stick = Fraction(0, 1);
     }
-    if (etick < Fraction(0,1)) {
+    if (etick < Fraction(0, 1)) {
         etick = last()->endTick();
     }
 
@@ -5299,7 +5299,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
         _systems.erase(_systems.begin() + systemIndex, _systems.end());
         if (!lc.nextMeasure->prevMeasure()) {
             lc.measureNo = 0;
-            lc.tick      = Fraction(0,1);
+            lc.tick      = Fraction(0, 1);
         } else {
             const MeasureBase* mb = lc.nextMeasure->prev();
             if (mb) {

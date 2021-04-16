@@ -323,7 +323,7 @@ void TestNote::grace()
 {
     MasterScore* score = readScore(NOTE_DATA_DIR + "grace.mscx");
     score->doLayout();
-    Ms::Chord* chord = score->firstMeasure()->findChord(Fraction(0,1), 0);
+    Ms::Chord* chord = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     Note* note = chord->upNote();
 
     // create
@@ -377,7 +377,7 @@ void TestNote::tpc()
     MasterScore* score = readScore(NOTE_DATA_DIR + "tpc.mscx");
 
     score->inputState().setTrack(0);
-    score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
+    score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
     score->inputState().setNoteEntryMode(true);
     int octave = 5 * 7;
@@ -433,7 +433,7 @@ void TestNote::tpcTranspose2()
     MasterScore* score = readScore(NOTE_DATA_DIR + "tpc-transpose2.mscx");
 
     score->inputState().setTrack(0);
-    score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
+    score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
     score->inputState().setNoteEntryMode(true);
     int octave = 5 * 7;
@@ -457,7 +457,7 @@ void TestNote::noteLimits()
     MasterScore* score = readScore(NOTE_DATA_DIR + "empty.mscx");
 
     score->inputState().setTrack(0);
-    score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
+    score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
     score->inputState().setNoteEntryMode(true);
 
@@ -518,7 +518,7 @@ void TestNote::LongNoteAfterShort_183746()
     score->doLayout();
 
     score->inputState().setTrack(0);
-    score->inputState().setSegment(score->tick2segment(Fraction(0,1), false, SegmentType::ChordRest));
+    score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_128TH);
     score->inputState().setNoteEntryMode(true);
 
@@ -529,14 +529,14 @@ void TestNote::LongNoteAfterShort_183746()
 
     Segment* s = score->tick2segment(TDuration(TDuration::DurationType::V_128TH).ticks());
     QVERIFY(s && s->segmentType() == SegmentType::ChordRest);
-    QVERIFY(s->tick() == Fraction(1,128));
+    QVERIFY(s->tick() == Fraction(1, 128));
 
     Element* e = s->firstElement(0);
     QVERIFY(e && e->isNote());
 
     std::vector<Note*> nl = toNote(e)->tiedNotes();
     QVERIFY(nl.size() >= 3);   // the breve must be divided across at least 3 measures
-    Fraction totalTicks = Fraction(0,1);
+    Fraction totalTicks = Fraction(0, 1);
     for (Note* n : nl) {
         totalTicks += n->chord()->durationTypeTicks();
     }

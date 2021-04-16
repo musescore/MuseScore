@@ -144,7 +144,7 @@ static const TempoPattern tp[] = {
     TempoPattern("\uECAF",                     1.0 / 1920.0, TDuration::DurationType::V_128TH),      // 1/128
     TempoPattern("\uECB1",                     1.0 / 3840.0, TDuration::DurationType::V_256TH),      // 1/256
     TempoPattern("\uECB3",                     1.0 / 7680.0, TDuration::DurationType::V_512TH),      // 1/512
-    TempoPattern("\uECB5",                     1.0 / 15360.0,TDuration::DurationType::V_1024TH),     // 1/1024
+    TempoPattern("\uECB5",                     1.0 / 15360.0, TDuration::DurationType::V_1024TH),     // 1/1024
 };
 
 //---------------------------------------------------------
@@ -204,10 +204,10 @@ static const TempoPattern tpSym[] = {
     TempoPattern("<sym>metNoteDoubleWholeSquare</sym>",                                   1.0 / 7.5,   TDuration::DurationType::V_BREVE),    // longa
     TempoPattern("<sym>metNoteDoubleWhole</sym>",                                         1.0 / 7.5,   TDuration::DurationType::V_BREVE),    // double whole
     TempoPattern("<sym>metNote64thUp</sym>",                                              1.0 / 960.0, TDuration::DurationType::V_64TH),     // 1/64
-    TempoPattern("<sym>metNote128thUp</sym>",                                             1.0 / 1920.0,TDuration::DurationType::V_128TH),    // 1/128
-    TempoPattern("<sym>metNote256thUp</sym>",                                             1.0 / 3840.0,TDuration::DurationType::V_256TH),    // 1/256
-    TempoPattern("<sym>metNote512thUp</sym>",                                             1.0 / 7680.0,TDuration::DurationType::V_512TH),    // 1/512
-    TempoPattern("<sym>metNote1024thUp</sym>",                                            1.0 / 15360.0,TDuration::DurationType::V_1024TH),  // 1/1024
+    TempoPattern("<sym>metNote128thUp</sym>",                                             1.0 / 1920.0, TDuration::DurationType::V_128TH),    // 1/128
+    TempoPattern("<sym>metNote256thUp</sym>",                                             1.0 / 3840.0, TDuration::DurationType::V_256TH),    // 1/256
+    TempoPattern("<sym>metNote512thUp</sym>",                                             1.0 / 7680.0, TDuration::DurationType::V_512TH),    // 1/512
+    TempoPattern("<sym>metNote1024thUp</sym>",                                            1.0 / 15360.0, TDuration::DurationType::V_1024TH),  // 1/1024
 };
 
 //---------------------------------------------------------
@@ -302,7 +302,7 @@ void TempoText::updateTempo()
     static QHash<QString, QRegExp> regexps2;
     QString s = plainText();
     s.replace(",", ".");
-    s.replace("<sym>space</sym>"," ");
+    s.replace("<sym>space</sym>", " ");
     for (const TempoPattern& pa : tp) {
         QRegExp re;
         if (!regexps.contains(pa.pattern)) {

@@ -85,7 +85,7 @@ void TestLayoutBenchmark::benchmark4()
 {
     QBENCHMARK {
         score->startCmd();
-        score->setLayout(Fraction(1,4), -1);
+        score->setLayout(Fraction(1, 4), -1);
         score->endCmd();
     }
 }

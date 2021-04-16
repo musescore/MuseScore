@@ -102,7 +102,7 @@ public:
 
     Q_INVOKABLE virtual bool move(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent,
                                   int destinationChild) = 0;
-    Q_INVOKABLE virtual bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData,Qt::DropAction action) = 0;
+    Q_INVOKABLE virtual bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData, Qt::DropAction action) = 0;
     Q_INVOKABLE virtual bool insertNewItem(const QModelIndex& parent, int row, const QString& name) = 0;
     Q_INVOKABLE virtual void remove(const QModelIndex&) = 0;
     Q_INVOKABLE virtual void removeSelection(const QModelIndexList&, const QModelIndex& parent) = 0;
@@ -172,7 +172,7 @@ public:
     Qt::DropAction dropAction(const QVariantMap& mimeData, Qt::DropAction proposedAction, const QModelIndex& parent,
                               bool internal) const override;
 
-    bool move(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent,int destinationChild) override;
+    bool move(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent, int destinationChild) override;
     bool insert(const QModelIndex& parent, int row, const QVariantMap& mimeData, Qt::DropAction action) override;
     bool insertNewItem(const QModelIndex& parent, int row, const QString& name) override;
     void remove(const QModelIndex& index) override;
@@ -248,7 +248,7 @@ public:
     Q_INVOKABLE QModelIndex customElementsPaletteIndex(const QModelIndex& index);
 
     Q_INVOKABLE Ms::FilterPaletteTreeModel* poolPaletteModel(const QModelIndex& index);
-    Q_INVOKABLE Ms::AbstractPaletteController* poolPaletteController(Ms::FilterPaletteTreeModel*,const QModelIndex& rootIndex);
+    Q_INVOKABLE Ms::AbstractPaletteController* poolPaletteController(Ms::FilterPaletteTreeModel*, const QModelIndex& rootIndex);
 
     PaletteTreeModel* userPaletteModel() { return userPalette; }
 

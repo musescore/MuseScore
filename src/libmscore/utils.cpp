@@ -48,10 +48,10 @@ QRectF handleRect(const QPointF& pos)
 
 Measure* Score::tick2measure(const Fraction& tick) const
 {
-    if (tick == Fraction(-1,1)) {   // special number
+    if (tick == Fraction(-1, 1)) {   // special number
         return lastMeasure();
     }
-    if (tick <= Fraction(0,1)) {
+    if (tick <= Fraction(0, 1)) {
         return firstMeasure();
     }
 
@@ -78,11 +78,11 @@ Measure* Score::tick2measure(const Fraction& tick) const
 Measure* Score::tick2measureMM(const Fraction& t) const
 {
     Fraction tick(t);
-    if (tick == Fraction(-1,1)) {
+    if (tick == Fraction(-1, 1)) {
         return lastMeasureMM();
     }
-    if (tick < Fraction(0,1)) {
-        tick = Fraction(0,1);
+    if (tick < Fraction(0, 1)) {
+        tick = Fraction(0, 1);
     }
 
     Measure* lm = 0;
@@ -125,7 +125,7 @@ MeasureBase* Score::tick2measureBase(const Fraction& tick) const
 
 Segment* Score::tick2segmentMM(const Fraction& tick, bool first, SegmentType st) const
 {
-    return tick2segment(tick,first,st,true);
+    return tick2segment(tick, first, st, true);
 }
 
 Segment* Score::tick2segmentMM(const Fraction& tick) const
@@ -284,7 +284,7 @@ Fraction Score::nextSeg(const Fraction& tick, int track)
             break;
         }
     }
-    return seg ? seg->tick() : Fraction(-1,1);
+    return seg ? seg->tick() : Fraction(-1, 1);
 }
 
 //---------------------------------------------------------
@@ -687,7 +687,7 @@ bool compareVersion(QString v1, QString v2)
 {
     auto v1l = v1.split(".");
     auto v2l = v2.split(".");
-    int ma = qPow(100,qMax(v1l.size(), v2l.size()));
+    int ma = qPow(100, qMax(v1l.size(), v2l.size()));
     int m = ma;
     int vv1 = 0;
     for (int i = 0; i < v1l.size(); i++) {

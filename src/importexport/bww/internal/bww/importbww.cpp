@@ -122,7 +122,7 @@ static void setTempo(Ms::Score* score, int tempo)
     tempoText += QString(" = %1").arg(tempo);
     tt->setPlainText(tempoText);
     Ms::Measure* measure = score->firstMeasure();
-    Ms::Segment* segment = measure->getSegment(Ms::SegmentType::ChordRest, Ms::Fraction(0,1));
+    Ms::Segment* segment = measure->getSegment(Ms::SegmentType::ChordRest, Ms::Fraction(0, 1));
     segment->add(tt);
 }
 
@@ -132,9 +132,9 @@ public:
     MsScWriter();
     void beginMeasure(const Bww::MeasureBeginFlags mbf);
     void endMeasure(const Bww::MeasureEndFlags mef);
-    void header(const QString title, const QString type,const QString composer, const QString footer,const unsigned int temp);
-    void note(const QString pitch, const QVector<Bww::BeamType> beamList,const QString type, const int dots,bool tieStart = false,
-              bool tieStop = false,StartStop triplet = StartStop::ST_NONE,bool grace = false);
+    void header(const QString title, const QString type, const QString composer, const QString footer, const unsigned int temp);
+    void note(const QString pitch, const QVector<Bww::BeamType> beamList, const QString type, const int dots, bool tieStart = false,
+              bool tieStop = false, StartStop triplet = StartStop::ST_NONE, bool grace = false);
     void setScore(Ms::Score* s) { score = s; }
     void tsig(const int beats, const int beat);
     void trailer();
@@ -172,7 +172,7 @@ MsScWriter::MsScWriter()
     beats(4),
     beat(4),
     measureNumber(0),
-    tick(Ms::Fraction(0,1)),
+    tick(Ms::Fraction(0, 1)),
     currentMeasure(0),
     tuplet(0),
     lastVolta(0),
@@ -445,7 +445,7 @@ void MsScWriter::header(const QString title, const QString type,
     // addText(vbox, score, strPoet, Ms::Tid::POET);
     // addText(vbox, score, strTranslator, Ms::Tid::TRANSLATOR);
     if (vbox) {
-        vbox->setTick(Ms::Fraction(0,1));
+        vbox->setTick(Ms::Fraction(0, 1));
         score->measures()->add(vbox);
     }
     if (!footer.isEmpty()) {

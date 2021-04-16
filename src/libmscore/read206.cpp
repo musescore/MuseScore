@@ -813,7 +813,7 @@ void readPart206(Part* part, XmlReader& e)
             readInstrument(i, part, e);
             Drumset* ds = i->drumset();
             Staff* s = part->staff(0);
-            int lld = s ? qRound(s->lineDistance(Fraction(0,1))) : 1;
+            int lld = s ? qRound(s->lineDistance(Fraction(0, 1))) : 1;
             if (ds && s && lld > 1) {
                 for (int j = 0; j < DRUM_INSTRUMENTS; ++j) {
                     ds->drum(j).line /= lld;
@@ -893,7 +893,7 @@ static void readNote(Note* note, XmlReader& e)
         }
     }
     if (!(tpcIsValid(note->tpc1()) && tpcIsValid(note->tpc2()))) {
-        Fraction tick = note->chord() ? note->chord()->tick() : Fraction(-1,1);
+        Fraction tick = note->chord() ? note->chord()->tick() : Fraction(-1, 1);
         Interval v = note->staff() ? note->part()->instrument(tick)->transpose() : Interval();
         if (tpcIsValid(note->tpc1())) {
             v.flip();
@@ -1183,7 +1183,7 @@ bool readNoteProperties206(Note* note, XmlReader& e)
                 placeholder->setAnchor(Spanner::Anchor::NOTE);
                 placeholder->setEndElement(note);
                 placeholder->setTrack2(note->track());
-                placeholder->setTick(Fraction(0,1));
+                placeholder->setTick(Fraction(0, 1));
                 placeholder->setTick2(e.tick());
                 e.addSpanner(id1, placeholder);
             }
@@ -1563,7 +1563,7 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
             e.unknown();
         }
     }
-    Fraction r = (tuplet->ratio() == Fraction(1,1)) ? tuplet->ratio() : tuplet->ratio().reduced();
+    Fraction r = (tuplet->ratio() == Fraction(1, 1)) ? tuplet->ratio() : tuplet->ratio().reduced();
     Fraction f(r.denominator(), tuplet->baseLen().fraction().denominator());
     tuplet->setTicks(f.reduced());
 }
@@ -1801,7 +1801,7 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
             }
         } else {
             if (atype == "start") {
-                if (spanner->ticks() > Fraction(0,1) && spanner->tick() == Fraction(-1,1)) {       // stop has been read first
+                if (spanner->ticks() > Fraction(0, 1) && spanner->tick() == Fraction(-1, 1)) {       // stop has been read first
                     spanner->setTicks(spanner->ticks() - e.tick() - Fraction::fromTicks(1));
                 }
                 spanner->setTick(e.tick());
@@ -2218,7 +2218,7 @@ static void readOttava(XmlReader& e, Ottava* ottava)
             if (!ok) {
                 idx = 0;            // OttavaType::OTTAVA_8VA;
                 int i = 0;
-                for (auto p :  { "8va","8vb","15ma","15mb","22ma","22mb" }) {
+                for (auto p :  { "8va", "8vb", "15ma", "15mb", "22ma", "22mb" }) {
                     if (p == s) {
                         idx = i;
                         break;
@@ -2837,7 +2837,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             clef->read(e);
             clef->setGenerated(false);
             if (e.tick().isZero()) {
-                if (score->staff(staffIdx)->clef(Fraction(0,1)) != clef->clefType()) {
+                if (score->staff(staffIdx)->clef(Fraction(0, 1)) != clef->clefType()) {
                     score->staff(staffIdx)->setDefaultClefType(clef->clefType());
                 }
                 if (clef->links() && clef->links()->size() == 1) {
@@ -3244,7 +3244,7 @@ static void readBox(Box* b, XmlReader& e)
 static void readStaffContent(Score* score, XmlReader& e)
 {
     int staff = e.intAttribute("id", 1) - 1;
-    e.setTick(Fraction(0,1));
+    e.setTick(Fraction(0, 1));
     e.setTrack(staff * VOICES);
     Box* lastReadBox = nullptr;
     bool readMeasureLast = false;
@@ -3267,7 +3267,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                 // inherit timesig from previous measure
                 //
                 Measure* m = e.lastMeasure();         // measure->prevMeasure();
-                Fraction f(m ? m->timesig() : Fraction(4,4));
+                Fraction f(m ? m->timesig() : Fraction(4, 4));
                 measure->setTicks(f);
                 measure->setTimesig(f);
 
@@ -3718,7 +3718,7 @@ void PageFormat::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "page-margins") {
-            type = e.attribute("type","both");
+            type = e.attribute("type", "both");
             qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
             while (e.readNextStartElement()) {
                 const QStringRef& t(e.name());

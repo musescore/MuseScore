@@ -122,7 +122,7 @@ public:
     Fraction globalSig() const { return (_sig * _stretch).reduced(); }
     void setGlobalSig(const Fraction& f) { _stretch = (_sig / f).reduced(); }
 
-    bool isLocal() const { return _stretch != Fraction(1,1); }
+    bool isLocal() const { return _stretch != Fraction(1, 1); }
 
     Element* nextSegmentElement() override;
     Element* prevSegmentElement() override;

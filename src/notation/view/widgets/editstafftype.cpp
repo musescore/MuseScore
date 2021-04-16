@@ -604,7 +604,7 @@ void EditStaffType::updatePreview()
         preview = standardPreview;
     }
     if (preview) {
-        preview->score()->staff(0)->setStaffType(Ms::Fraction(0,1), staffType);
+        preview->score()->staff(0)->setStaffType(Ms::Fraction(0, 1), staffType);
         preview->score()->doLayout();
         preview->updateAll();
         preview->update();

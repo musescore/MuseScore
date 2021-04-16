@@ -134,9 +134,9 @@ TextLine::TextLine(Score* s, bool system)
     setBeginText("");
     setContinueText("");
     setEndText("");
-    setBeginTextOffset(QPointF(0,0));
-    setContinueTextOffset(QPointF(0,0));
-    setEndTextOffset(QPointF(0,0));
+    setBeginTextOffset(QPointF(0, 0));
+    setContinueTextOffset(QPointF(0, 0));
+    setEndTextOffset(QPointF(0, 0));
     setLineVisible(true);
 
     setBeginHookType(HookType::NONE);
@@ -296,7 +296,7 @@ QVariant TextLine::propertyDefault(Pid propertyId) const
     case Pid::BEGIN_TEXT_OFFSET:
     case Pid::CONTINUE_TEXT_OFFSET:
     case Pid::END_TEXT_OFFSET:
-        return QPointF(0,0);
+        return QPointF(0, 0);
     case Pid::BEGIN_HOOK_TYPE:
     case Pid::END_HOOK_TYPE:
         return int(HookType::NONE);

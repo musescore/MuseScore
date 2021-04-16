@@ -69,7 +69,7 @@ TimeDialog::TimeDialog(QWidget* parent)
     _dirty = false;
 
     if (configuration()->useFactorySettings() || !sp->read(configuration()->timeSignaturesDirPath().toQString())) {
-        Fraction sig(4,4);
+        Fraction sig(4, 4);
         groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
     }
     for (int i = 0; i < sp->size(); ++i) {      // cells can be changed

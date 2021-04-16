@@ -235,7 +235,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::ArpeggioNoteDistance,    false, arpeggioNoteDistance,    0 },
         { StyleId::ArpeggioLineWidth,       false, arpeggioLineWidth,       0 },
         { StyleId::ArpeggioHookLen,         false, arpeggioHookLen,         0 },
-        { StyleId::ArpeggioHiddenInStdIfTab,false, arpeggioHiddenInStdIfTab,0 },
+        { StyleId::ArpeggioHiddenInStdIfTab, false, arpeggioHiddenInStdIfTab, 0 },
         { StyleId::SlurEndWidth,            false, slurEndLineWidth,        resetSlurEndLineWidth },
         { StyleId::SlurMidWidth,            false, slurMidLineWidth,        resetSlurMidLineWidth },
         { StyleId::SlurDottedWidth,         false, slurDottedLineWidth,     resetSlurDottedLineWidth },

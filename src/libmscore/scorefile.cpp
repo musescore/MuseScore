@@ -298,7 +298,7 @@ void Score::readStaff(XmlReader& e)
     int staff = e.intAttribute("id", 1) - 1;
     int measureIdx = 0;
     e.setCurrentMeasureIndex(0);
-    e.setTick(Fraction(0,1));
+    e.setTick(Fraction(0, 1));
     e.setTrack(staff * VOICES);
 
     if (staff == 0) {
@@ -314,7 +314,7 @@ void Score::readStaff(XmlReader& e)
                 // inherit timesig from previous measure
                 //
                 Measure* m = e.lastMeasure();         // measure->prevMeasure();
-                Fraction f(m ? m->timesig() : Fraction(4,4));
+                Fraction f(m ? m->timesig() : Fraction(4, 4));
                 measure->setTicks(f);
                 measure->setTimesig(f);
 

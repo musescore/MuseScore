@@ -51,7 +51,7 @@ public:
 
     static constexpr Location absolute()
     {
-        return Location(INT_MIN, INT_MIN, INT_MIN, Fraction(INT_MIN,1), INT_MIN, INT_MIN, false);
+        return Location(INT_MIN, INT_MIN, INT_MIN, Fraction(INT_MIN, 1), INT_MIN, INT_MIN, false);
     }
 
     static constexpr Location relative() { return Location(0, 0, 0, Fraction(0, 1), INT_MIN, 0, true); }
