@@ -18,23 +18,29 @@
 //=============================================================================
 
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.0
 
-import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
 PopupView {
     id: root
 
+    default property alias contentData: contentBody.data
+
+    property alias background: contentBackground
+
+    property alias width: rootContainer.width
+    property alias height: rootContainer.height
+
+    property int padding: 16
+    property int margins: 16
+
+    property alias contentWidth: contentBody.width
+    property alias contentHeight: contentBody.height
+
     property bool opensUpward: false
     property var arrowX: width / 2
-    property alias arrowHeight: arrow.height
-    property alias arrowVisible: arrow.visible
-
-    property color borderColor: ui.theme.strokeColor
-    property color fillColor: ui.theme.backgroundPrimaryColor
-    readonly property int borderWidth: 1
 
     property bool animationEnabled: true
 
@@ -43,27 +49,36 @@ PopupView {
 
     closePolicy: PopupView.CloseOnPressOutsideParent
 
-    onAboutToShow: {
-        //!Note For some reason the call of mapToGlobal in the QML scope and in C++ on the same object produces different results
-        //      The only reliable option is QML version, that's why we have to do get globalPos from QML for now.
-        //      Makes sense to check it again on next QT update
-        globalPos = mapToGlobal(parent.x + positionDisplacementX, parent.y + positionDisplacementY)
-    }
-
-    positionDisplacementX: parent.width / 2 - width / 2
-    positionDisplacementY: opensUpward ? -height : parent.height
-
-    padding: 24
-    property int margins: 12
+    x: parent.width / 2
+    y: opensUpward ? (-height) : (parent.height - root.padding)
 
     property KeyNavigationPopupPanel keynavPanel: KeyNavigationPopupPanel {
         id: keynavPanel
         enabled: root.isOpened
-        order: 0
+        order: {
+            var pctrl = keynavPanel.parentControl;
+            if (pctrl) {
+                if (pctrl.subsection) {
+                    return pctrl.subsection.order + 1
+                }
+            }
+            return -1
+        }
+
+        section: {
+            var pctrl = keynavPanel.parentControl;
+            if (pctrl) {
+                if (pctrl.subsection) {
+                    return pctrl.subsection.section
+                }
+            }
+            return null
+        }
 
         onActiveChanged: {
             if (keynavPanel.active) {
                 root.forceActiveFocus()
+                rootContainer.focus = true
             }
         }
 
@@ -75,113 +90,57 @@ PopupView {
     }
 
     onClosed: {
+        rootContainer.focus = false
         if (root.isDoActiveParentOnClose && keynavPanel.parentControl) {
             keynavPanel.parentControl.forceActive()
         }
     }
 
-    backgroundItem: Item {
-        anchors.fill: parent
-        anchors.topMargin: opensUpward ? margins : 0
-        anchors.leftMargin: margins
-        anchors.rightMargin: margins
-        anchors.bottomMargin: opensUpward ? 0 : margins
+    contentItem: FocusScope {
+        id: rootContainer
+        width: contentContainer.width + root.padding * 2
+        height: contentContainer.height + root.padding * 2
 
         Item {
-            id: mainBackground
-            anchors.fill: parent
-
-            Canvas {
-                id: arrow
-                anchors.top: opensUpward ? undefined : parent.top
-                anchors.bottom: opensUpward ? parent.bottom : undefined
-                z: 1
-                height: 12
-                width: 22
-                x: Math.floor(root.arrowX - 12 - (width / 2))
-
-                onPaint: {
-                    var ctx = getContext("2d");
-                    ctx.lineWidth = 2;
-                    ctx.fillStyle = fillColor;
-                    ctx.strokeStyle = borderColor;
-                    ctx.beginPath();
-
-                    if (opensUpward) {
-                        ctx.moveTo(0, 0);
-                        ctx.lineTo(width / 2, height - 1);
-                        ctx.lineTo(width, 0);
-                    } else {
-                        ctx.moveTo(0, height);
-                        ctx.lineTo(width / 2, 1);
-                        ctx.lineTo(width, height);
-                    }
-
-                    ctx.stroke();
-                    ctx.fill();
-                }
-            }
+            id: contentContainer
+            x: root.padding
+            y: root.padding
+            width: contentBody.width + root.margins * 2
+            height: contentBody.height + root.margins * 2
 
             Rectangle {
-                color: fillColor
-                border { width: root.borderWidth; color: root.borderColor }
-                radius: 3
+                id: contentBackground
+                anchors.fill: parent
+                color: ui.theme.backgroundPrimaryColor
+                border.width: 1
+                border.color: ui.theme.strokeColor
+            }
 
-                anchors {
-                    top: opensUpward ? parent.top : (arrow.visible ? arrow.bottom : parent.top)
-                    bottom: opensUpward ? (arrow.visible ? arrow.top : parent.bottom) : parent.bottom
-                    left: parent.left
-                    right: parent.right
-                }
+            Item {
+                id: contentBody
+                x: root.margins
+                y: root.margins
+                width: childrenRect.width
+                height: childrenRect.height
             }
         }
 
-        DropShadow {
-            anchors.fill: parent
-            source: mainBackground
-            color: "#75000000"
-            verticalOffset: 4
-            samples: 30
+        states: [
+            State {
+                name: "OPENED"
+                when: root.isOpened
+                PropertyChanges { target: contentContainer; scale: 1.0; opacity: 1.0 }
+            },
+
+            State {
+                name: "CLOSED"
+                when: !root.isOpened
+                PropertyChanges { target: contentContainer; scale: 0.8; opacity: 0.5 }
+            }
+        ]
+
+        transitions: Transition {
+            NumberAnimation { properties: "scale, opacity"; easing.type: Easing.OutQuint; duration: root.animationEnabled ? 140 : 0 }
         }
-    }
-
-    states: [
-        State {
-            name: "OPENED"
-            when: root.isOpened
-
-            PropertyChanges {
-                target: root.backgroundItem
-                scale: 1.0
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: root.contentItem
-                scale: 1.0
-                opacity: 1.0
-            }
-        },
-
-        State {
-            name: "CLOSED"
-            when: !root.isOpened
-
-            PropertyChanges {
-                target: root.backgroundItem
-                scale: 0.0
-                opacity: 0.0
-            }
-
-            PropertyChanges {
-                target: root.contentItem
-                scale: 0.0
-                opacity: 0.0
-            }
-        }
-    ]
-
-    transitions: Transition {
-        NumberAnimation { properties: "scale, opacity"; easing.type: Easing.OutQuint; duration: animationEnabled ? 140 : 0 }
     }
 }

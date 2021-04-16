@@ -106,6 +106,7 @@ void KeyNavigationControl::setSubSection(KeyNavigationSubSection* subsection)
     m_subsection = subsection;
 
     if (m_subsection) {
+        m_subsection->addControl(this);
         connect(m_subsection, &KeyNavigationSubSection::destroyed, this, &KeyNavigationControl::onSubSectionDestroyed);
     }
 
@@ -120,11 +121,4 @@ void KeyNavigationControl::onSubSectionDestroyed()
 KeyNavigationSubSection* KeyNavigationControl::subsection() const
 {
     return m_subsection;
-}
-
-void KeyNavigationControl::componentComplete()
-{
-    if (m_subsection) {
-        m_subsection->addControl(this);
-    }
 }

@@ -4,13 +4,11 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Instruments 1.0
 
-StyledPopup {
+StyledPopupView {
     id: root
 
-    height: Math.max(contentColumn.implicitHeight + topPadding + bottomPadding, implicitHeight)
-    width: parent.width
-
-    implicitHeight: 340
+    contentHeight: contentColumn.childrenRect.height
+    contentWidth: parent.width
 
     function load(staff) {
         settingsModel.load(staff)
@@ -22,7 +20,7 @@ StyledPopup {
 
     Column {
         id: contentColumn
-
+        anchors.fill: parent
         width: parent.width
 
         spacing: 12
@@ -118,6 +116,8 @@ StyledPopup {
 
         FlatButton {
             width: parent.width
+
+            keynav.subsection: root.keynav
 
             text: qsTrc("instruments", "Create a linked staff")
 

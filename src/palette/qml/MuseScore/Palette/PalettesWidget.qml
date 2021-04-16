@@ -93,7 +93,7 @@ Rectangle {
         backgroundColor: palettesWidget.color
 
         keynav.section: palettesWidget.keynavSection
-        keynav.order: 3
+        keynav.order: 5
         keynav.enabled: paletteTree.visible
 
         filter: palettesWidgetHeader.searchText

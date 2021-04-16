@@ -195,8 +195,13 @@ Rectangle {
                 StyledPopupView {
                     id: popupViewDown
 
+                    contentWidth: layout.childrenRect.width
+                    contentHeight: layout.childrenRect.height
+
                     Column {
+                        id: layout
                         spacing: 12
+                        anchors.fill: parent
 
                         CheckBox {
                             text: "Some checkbox"
@@ -232,6 +237,9 @@ Rectangle {
 
                     Column {
                         spacing: 12
+
+                        width: childrenRect.width
+                        height: childrenRect.height
 
                         CheckBox {
                             text: "Some checkbox"

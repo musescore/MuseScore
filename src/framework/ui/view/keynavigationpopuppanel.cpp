@@ -39,7 +39,7 @@ void KeyNavigationPopupPanel::setParentControl(KeyNavigationControl* parentContr
     m_parentControl = parentControl;
     emit parentControlChanged(m_parentControl);
 
-    if (m_parentControl) {
+    if (m_parentControl && m_parentControl->subsection()) {
         setSection(m_parentControl->subsection()->section());
     } else {
         setSection(nullptr);
