@@ -147,14 +147,14 @@ AboutBoxDialog::AboutBoxDialog()
 
       QString visitAndDonateString;
 #if !defined(FOR_WINSTORE)
-      visitAndDonateString = tr("Visit %1www.musescore.org%2 for new versions and more information.\nSupport MuseScore with your %3donation%4.")
-                                     .arg("<a href=\"https://www.musescore.org/\">")
-                                     .arg("</a>")
-                                     .arg("<a href=\"https://www.musescore.org/donate\">")
-                                     .arg("</a>");
+      visitAndDonateString = tr("Visit %1 for new versions and more information.\nGet %2help%3 with the program or %4contribute%5 to its development.")
+                  .arg("<a href=\"https://www.musescore.org/\">www.musescore.org</a>",
+                       "<a href=\"https://www.musescore.org/forum\">", "</a>",
+                       "<a href=\"https://www.musescore.org/contribute\">", "</a>");
       visitAndDonateString += "\n\n";
 #endif
-      QString finalString = visitAndDonateString + tr("Copyright &copy; 1999-2021 MuseScore BVBA and others.\nPublished under the GNU General Public License.");
+      QString finalString = visitAndDonateString + tr("Copyright &copy; 1999-2021 MuseScore BVBA and others.\nPublished under the %1GNU General Public License version 2%2.")
+                  .arg("<a href=\"https://www.gnu.org/licenses/old-licenses/gpl-2.0.html\">", "</a>");
       finalString.replace("\n", "<br/>");
       copyrightLabel->setText(QString("<span style=\"font-size:10pt;\">%1</span>").arg(finalString));
       connect(copyRevisionButton, SIGNAL(clicked()), this, SLOT(copyRevisionToClipboard()));
