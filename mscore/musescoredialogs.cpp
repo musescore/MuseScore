@@ -197,11 +197,10 @@ AboutMusicXMLBoxDialog::AboutMusicXMLBoxDialog()
                                 "supported by many applications.\n"
                                 "Copyright © 2004-2017 the Contributors to the MusicXML\n"
                                 "Specification, published by the W3C Music Notation Community\n"
-                                "Group under the W3C Community Contributor License Agreement\n"
-                                "(CLA):\n%1\n"
+                                "Group under the W3C Community Final Specification Agreement:\n%1\n"
                                 "A human-readable summary is available:\n%2")
-                          .arg( "\n&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"https://www.w3.org/community/about/agreements/cla/\">https://www.w3.org/community/about/agreements/cla/</a>\n",
-                                "\n&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"https://www.w3.org/community/about/agreements/cla-deed/\">https://www.w3.org/community/about/agreements/cla-deed/</a>\n")
+                          .arg( "\n&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"https://www.w3.org/community/about/process/final/\">https://www.w3.org/community/about/process/final/</a>\n",
+                                "\n&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"https://www.w3.org/community/about/process/fsa-deed/\">https://www.w3.org/community/about/process/fsa-deed/</a>\n")
                           .replace("\n","<br/>")));
       }
 
