@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/clef_courtesy/clef_courtesy01.mscx clef_courtesy01-ref.mscx
+cp ../../../build.debug/mtest/libmscore/clef_courtesy/clef_courtesy02.mscx clef_courtesy02-ref.mscx
+cp ../../../build.debug/mtest/libmscore/clef_courtesy/clef_courtesy03.mscx clef_courtesy03-ref.mscx
+
+

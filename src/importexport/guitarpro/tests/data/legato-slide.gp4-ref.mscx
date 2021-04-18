@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.00">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          </StaffType>
+        </Staff>
+      <trackName>Track 1</trackName>
+      <Instrument>
+        <longName>Track 1</longName>
+        <trackName></trackName>
+        <StringData>
+          <frets>32</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
+          </StringData>
+        <Channel>
+          <program value="25"/>
+          <controller ctrl="7" value="127"/>
+          <controller ctrl="10" value="63"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <lid>0</lid>
+        </VBox>
+      <Measure number="1">
+        <Clef>
+          <concertClefType>G8vb</concertClefType>
+          <transposingClefType>G8vb</transposingClefType>
+          <lid>1</lid>
+          </Clef>
+        <KeySig>
+          <lid>2</lid>
+          <accidental>0</accidental>
+          </KeySig>
+        <TimeSig>
+          <lid>3</lid>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          </TimeSig>
+        <Tempo>
+          <tempo>2</tempo>
+          <lid>4</lid>
+          <text><sym>metNoteQuarterUp</sym> = 120</text>
+          </Tempo>
+        <Rest>
+          <lid>5</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        <Dynamic>
+          <subtype>mf</subtype>
+          <velocity>80</velocity>
+          <lid>6</lid>
+          </Dynamic>
+        <Slur id="2">
+          <lid>15</lid>
+          <track>0</track>
+          </Slur>
+        <Chord>
+          <lid>7</lid>
+          <durationType>quarter</durationType>
+          <Slur type="start" id="2"/>
+          <Note>
+            <lid>8</lid>
+            <pitch>57</pitch>
+            <tpc>17</tpc>
+            <fret>7</fret>
+            <string>3</string>
+            <Glissando id="3">
+              <subtype>0</subtype>
+              <lid>12</lid>
+              <diagonal>1</diagonal>
+              <anchor>3</anchor>
+              </Glissando>
+            </Note>
+          </Chord>
+        <Dynamic>
+          <subtype>mp</subtype>
+          <velocity>64</velocity>
+          <lid>9</lid>
+          </Dynamic>
+        <Chord>
+          <lid>10</lid>
+          <durationType>quarter</durationType>
+          <Slur type="stop" id="2"/>
+          <Note>
+            <lid>11</lid>
+            <pitch>59</pitch>
+            <tpc>19</tpc>
+            <fret>9</fret>
+            <string>3</string>
+            <endSpanner id="3"/>
+            </Note>
+          </Chord>
+        <Rest>
+          <lid>13</lid>
+          <durationType>quarter</durationType>
+          </Rest>
+        </Measure>
+      </Staff>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Division>480</Division>
+      <Style>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <Part>
+        <Staff id="1">
+          <linkedTo>1</linkedTo>
+          <StaffType group="pitched">
+            </StaffType>
+          <bracket type="0" span="2" col="0"/>
+          </Staff>
+        <Staff id="2">
+          <linkedTo>1</linkedTo>
+          <StaffType group="tablature">
+            <name>tab6StrCommon</name>
+            <lines>6</lines>
+            <lineDistance>1.5</lineDistance>
+            <timesig>0</timesig>
+            <durations>0</durations>
+            <durationFontName>MuseScore Tab Modern</durationFontName>
+            <durationFontSize>15</durationFontSize>
+            <durationFontY>0</durationFontY>
+            <fretFontName>MuseScore Tab Serif</fretFontName>
+            <fretFontSize>9</fretFontSize>
+            <fretFontY>0</fretFontY>
+            <linesThrough>0</linesThrough>
+            <minimStyle>1</minimStyle>
+            <onLines>1</onLines>
+            <showRests>0</showRests>
+            <stemsDown>1</stemsDown>
+            <stemsThrough>0</stemsThrough>
+            <upsideDown>0</upsideDown>
+            <useNumbers>1</useNumbers>
+            </StaffType>
+          </Staff>
+        <trackName></trackName>
+        <Instrument>
+          <longName>Track 1</longName>
+          <trackName></trackName>
+          <StringData>
+            <frets>32</frets>
+            <string>40</string>
+            <string>45</string>
+            <string>50</string>
+            <string>55</string>
+            <string>59</string>
+            <string>64</string>
+            </StringData>
+          <Channel>
+            <program value="25"/>
+            <controller ctrl="7" value="127"/>
+            <controller ctrl="10" value="63"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <lid>0</lid>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Track 1</text>
+            </Text>
+          </VBox>
+        <Measure number="1">
+          <Clef>
+            <concertClefType>G8vb</concertClefType>
+            <transposingClefType>G8vb</transposingClefType>
+            <lid>1</lid>
+            </Clef>
+          <KeySig>
+            <lid>2</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <TimeSig>
+            <lid>3</lid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Tempo>
+            <tempo>2</tempo>
+            <lid>4</lid>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
+            </Tempo>
+          <Rest>
+            <lid>5</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            <lid>6</lid>
+            </Dynamic>
+          <Slur id="4">
+            <lid>15</lid>
+            <track>0</track>
+            </Slur>
+          <Chord>
+            <lid>7</lid>
+            <durationType>quarter</durationType>
+            <Slur type="start" id="4"/>
+            <Note>
+              <lid>8</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>7</fret>
+              <string>3</string>
+              <Glissando id="5">
+                <subtype>0</subtype>
+                <lid>12</lid>
+                <diagonal>1</diagonal>
+                <anchor>3</anchor>
+                </Glissando>
+              </Note>
+            </Chord>
+          <Dynamic>
+            <subtype>mp</subtype>
+            <velocity>64</velocity>
+            <lid>9</lid>
+            </Dynamic>
+          <Chord>
+            <lid>10</lid>
+            <durationType>quarter</durationType>
+            <Slur type="stop" id="4"/>
+            <Note>
+              <lid>11</lid>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              <fret>9</fret>
+              <string>3</string>
+              <endSpanner id="5"/>
+              </Note>
+            </Chord>
+          <Rest>
+            <lid>13</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          </Measure>
+        </Staff>
+      <Staff id="2">
+        <Measure number="1">
+          <KeySig>
+            <lid>2</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <Rest>
+            <lid>5</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Slur id="6">
+            <lid>15</lid>
+            <track>4</track>
+            </Slur>
+          <Chord>
+            <lid>7</lid>
+            <durationType>quarter</durationType>
+            <Slur type="start" id="6"/>
+            <Note>
+              <lid>8</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>7</fret>
+              <string>3</string>
+              <Glissando id="7">
+                <subtype>0</subtype>
+                <lid>12</lid>
+                <diagonal>1</diagonal>
+                <anchor>3</anchor>
+                </Glissando>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>10</lid>
+            <durationType>quarter</durationType>
+            <Slur type="stop" id="6"/>
+            <Note>
+              <lid>11</lid>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              <fret>9</fret>
+              <string>3</string>
+              <endSpanner id="7"/>
+              </Note>
+            </Chord>
+          <Rest>
+            <lid>13</lid>
+            <durationType>quarter</durationType>
+            </Rest>
+          </Measure>
+        </Staff>
+      <name>Track 1</name>
+      </Score>
+    </Score>
+  </museScore>

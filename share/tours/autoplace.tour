@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tour name="autoplace-tour">
+  <Event objectName="autoplace">MouseButtonRelease</Event>
+  <Message>
+    <Text>Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.
+    You can also manually adjust the position of autoplaced elements, or disable autoplace for selected elements.
+    Click "Next" to learn more.</Text>
+    </Message>
+  <Message>
+    <Text>Autoplace positions most elements according to standard music engraving practice,
+    such as by moving tempo markings above other text or by shortening hairpins to avoid dynamics.
+    In many cases, this means that no further adjustments will be required at all.</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  <Message>
+    <Text>If necessary, you can fine-tune the position of elements by dragging, by using the cursor keys while in Edit mode (double-click),
+    or by using the "Offset" fields in the Inspector.
+    This allows you to make adjustments while leaving autoplace enabled to continue avoiding collisions.</Text>
+    <Widget>scoreview</Widget>
+    <Widget>offsetLabel</Widget>
+    <Widget>offset</Widget>
+    <Widget>resetOffset</Widget>
+    </Message>
+  <Message>
+    <Text>For larger adjustments, it may be more convenient to disable autoplace for selected elements using the Inspector.
+    This will remove them from collision detection and allow you to place them more freely.</Text>
+    <Widget>autoplace</Widget>
+    <Widget>resetAutoplace</Widget>
+    </Message>
+  </Tour>

@@ -1,0 +1,28 @@
+init init/Treble.mscx
+cmd note-input
+cmd escape
+cmd next-measure
+cmd next-measure
+cmd next-measure
+palette LayoutBreak subtype line
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+palette LayoutBreak subtype page
+cmd prev-measure
+cmd prev-measure
+palette LayoutBreak subtype line
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+palette LayoutBreak subtype section
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+palette LayoutBreak subtype page
+test score palette_breaks_1.mscx

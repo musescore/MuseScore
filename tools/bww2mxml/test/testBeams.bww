@@ -1,0 +1,14 @@
+"Beams",(T,L,0,0,Times New Roman,16,700,0,0,18,0,0,0)
+
+"Testfile",(Y,C,0,0,Times New Roman,14,400,0,0,18,0,0,0)
+
+"Leon Vinken",(M,R,0,0,Times New Roman,14,400,0,0,18,0,0,0)
+
+"Part of bbw2mxml",(F,R,0,0,Times New Roman,10,400,0,0,18,0,0,0)
+
+TuneTempo,90
+
+
+& sharpf sharpc 6_4
+LGr_8 LAl_8 Br_8 Cl_8 LGr_8 LAr_16 Bl_16 LGr_8 'lg LAl_16 LGr_16 LAl_8 'la LGr_32 LAl_32 Bl_16 Cl_8
+!I

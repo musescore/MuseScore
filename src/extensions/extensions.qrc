@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Extensions/ExtensionsPage.qml</file>
+        <file>qml/MuseScore/Extensions/qmldir</file>
+        <file>qml/MuseScore/Extensions/internal/ExtensionItem.qml</file>
+        <file>qml/MuseScore/Extensions/internal/ExtensionsListView.qml</file>
+    </qresource>
+</RCC>

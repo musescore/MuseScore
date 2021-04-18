@@ -1,0 +1,10 @@
+#!/bin/bash
+
+MSCORE=http://www.musescore.org/sites/musescore.org/files
+cd mscore/manual
+wget $MSCORE/pdfbooks/MuseScore-ru.pdf
+wget $MSCORE/pdfbooks/MuseScore-en.pdf
+wget $MSCORE/pdfbooks/MuseScore-de.pdf
+wget $MSCORE/pdfbooks/MuseScore-es.pdf
+wget $MSCORE/pdfbooks/MuseScore-fr.pdf
+

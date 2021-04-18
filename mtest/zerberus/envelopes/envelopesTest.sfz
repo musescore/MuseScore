@@ -1,0 +1,8 @@
+<global>
+sample=../Ones.wav// a file containing 200 Samples with Value 1.0
+volume=0
+<group>
+loop_mode=loop_continuous
+loop_start=50
+loop_end=150
+<region> ampeg_delay=0.01 ampeg_start=20 ampeg_attack=0.01 ampeg_hold=0.01 ampeg_decay=0.01 ampeg_sustain=50 ampeg_release=0.01

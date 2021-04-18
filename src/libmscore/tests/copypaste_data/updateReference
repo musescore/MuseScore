@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/copypaste/Debug
+else
+   S=../../../build.debug/mtest/libmscore/copypaste
+fi
+
+for a in 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 50; do
+      echo cp $S/copypaste${a}.mscx copypaste${a}-ref.mscx
+      cp $S/copypaste${a}.mscx copypaste${a}-ref.mscx
+      done
+cp $S/copypaste_partial_01.mscx copypaste_partial_01-ref.mscx
+
+cp $S/copypaste_tuplet_01.mscx copypaste_tuplet_01-ref.mscx
+cp $S/copypaste_tuplet_02.mscx copypaste_tuplet_02-ref.mscx
+
+
+

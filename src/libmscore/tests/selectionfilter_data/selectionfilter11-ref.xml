@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaffList version="2.00" tick="0" len="1920" staff="0" staves="1">
+  <Staff id="0">
+    <voiceOffset>
+      <voice id="0">0</voice>
+      </voiceOffset>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>47</pitch>
+        <tpc>19</tpc>
+        </Note>
+      <Note>
+        <pitch>52</pitch>
+        <tpc>18</tpc>
+        </Note>
+      <Note>
+        <pitch>59</pitch>
+        <tpc>19</tpc>
+        </Note>
+      </Chord>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>62</pitch>
+        <tpc>16</tpc>
+        </Note>
+      </Chord>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>47</pitch>
+        <tpc>19</tpc>
+        </Note>
+      <Note>
+        <pitch>52</pitch>
+        <tpc>18</tpc>
+        </Note>
+      <Note>
+        <pitch>59</pitch>
+        <tpc>19</tpc>
+        </Note>
+      <Note>
+        <pitch>64</pitch>
+        <tpc>18</tpc>
+        </Note>
+      </Chord>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>65</pitch>
+        <tpc>13</tpc>
+        </Note>
+      </Chord>
+    </Staff>
+  </StaffList>

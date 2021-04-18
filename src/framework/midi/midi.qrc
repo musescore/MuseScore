@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Midi/qmldir</file>
+        <file>qml/MuseScore/Midi/MidiDeviceMappingPage.qml</file>
+        <file>qml/MuseScore/Midi/EditMidiMappingDialog.qml</file>
+    </qresource>
+</RCC>

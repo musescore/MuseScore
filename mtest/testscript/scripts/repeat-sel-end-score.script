@@ -1,0 +1,12 @@
+init init/Treble.mscx
+cmd last-element
+cmd prev-element
+cmd note-input
+cmd note-a
+cmd note-a
+cmd note-a
+cmd escape
+cmd select-prev-chord
+cmd repeat-sel
+cmd escape
+test score repeat-sel-end-score.mscx

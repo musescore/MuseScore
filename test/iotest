@@ -1,0 +1,192 @@
+#!/bin/bash
+
+# Linux
+MSCORE=../../build/mscore/mscore
+# OS X terminal build
+#MSCORE=../applebuild/mscore.app/Contents/MacOS/mscore
+# OS X Xcode build
+#MSCORE=../build.xcode/mscore/Debug/mscore.app/Contents/MacOS/mscore
+
+echo "------------------------------"
+echo "Regression Tests for MuseScore"
+echo "------------------------------"
+echo
+$MSCORE -v
+echo
+
+testcount=0
+failures=0
+
+rwtest() {
+      echo -n "testing load/save $1";
+      $MSCORE $1 -o mops.mscx &> /dev/null
+      if diff -q $1 mops.mscx &> /dev/null; then
+            echo -e "\r\t\t\t\t\t\t...OK";
+      else
+            echo -e "\r\t\t\t\t\t\t...FAILED";
+            failures=$(($failures+1));
+            echo "+++++++++DIFF++++++++++++++"
+            diff $1 mops.mscx
+            echo "+++++++++++++++++++++++++++"
+      fi
+      rm mops.mscx
+      testcount=$(($testcount+1))
+      }
+
+rwtestBww() {
+      echo -n "testing load/save $1";
+      REF=bwwrefs/`basename $1 .bww`.xml
+      $MSCORE ../bww2mxml/test/$1 -d -o mops.xml &> /dev/null
+      if diff -q $REF mops.xml &> /dev/null; then
+            echo -e "\r\t\t\t\t\t\t...OK";
+      else
+            echo -e "\r\t\t\t\t\t\t...FAILED";
+            failures=$(($failures+1));
+            echo "+++++++++DIFF++++++++++++++"
+            diff $REF mops.xml
+            echo "+++++++++++++++++++++++++++"
+      fi
+      rm mops.xml
+      testcount=$(($testcount+1))
+      }
+
+rwtestXml() {
+      echo -n "testing load/save $1";
+      $MSCORE $1 -d -o mops.xml &> /dev/null
+      if diff -q $1 mops.xml &> /dev/null; then
+            echo -e "\r\t\t\t\t\t\t...OK";
+      else
+            echo -e "\r\t\t\t\t\t\t...FAILED";
+            failures=$(($failures+1));
+            echo "+++++++++DIFF++++++++++++++"
+            diff $1 mops.xml
+            echo "+++++++++++++++++++++++++++"
+      fi
+      rm mops.xml
+      testcount=$(($testcount+1))
+      }
+
+rwtestXmlRef() {
+      echo -n "testing load/save $1";
+      REF=musicxml/`basename $1 .xml`_ref.xml
+      $MSCORE $1 -d -o mops.xml &> /dev/null
+      if diff -q $REF mops.xml &> /dev/null; then
+            echo -e "\r\t\t\t\t\t\t...OK";
+      else
+            echo -e "\r\t\t\t\t\t\t...FAILED";
+            failures=$(($failures+1));
+            echo "+++++++++DIFF++++++++++++++"
+            diff $REF mops.xml
+            echo "+++++++++++++++++++++++++++"
+      fi
+      rm mops.xml
+      testcount=$(($testcount+1))
+      }
+
+rwtestAllBww() {
+      rwtestBww testBeams.bww
+      rwtestBww testDoublings.bww
+      rwtestBww testDuration.bww
+      rwtestBww testGraces.bww
+      rwtestBww testHello.bww
+      rwtestBww testMidMeasureRepeat.bww
+      rwtestBww testNotes.bww
+      rwtestBww testNoTimeSig1.bww
+      rwtestBww testNoTimeSig2.bww
+      rwtestBww testRepeats.bww
+      rwtestBww testTempo60.bww
+      rwtestBww testTempo120.bww
+      rwtestBww testTieTriplet.bww
+      rwtestBww testTriplets.bww
+      }
+
+rwtestAllDemos() {
+      rwtest ../demos/promenade.mscx
+      rwtest ../demos/adeste.mscx
+      rwtest ../demos/inv10.mscx
+      rwtest ../demos/inv13.mscx
+      rwtest ../demos/inv1.mscx
+      rwtest ../demos/inv6.mscx
+      rwtest ../demos/praeludium1.mscx
+      rwtest ../demos/prelude.mscx
+      rwtest ../demos/scales.mscx
+      rwtest ../demos/sonata16.mscx
+      rwtest ../demos/bach-bc2.mscx
+      }
+
+rwtestAllMsc() {
+      rwtest msc/accidental1.msc
+      rwtest msc/accidental2.msc
+      rwtest msc/chromatic.msc
+      rwtest msc/coda.msc
+      rwtest msc/crossbeams.msc
+      rwtest msc/RepeatTest6.msc
+      rwtest msc/RepeatTest7.msc
+      rwtest msc/scales1.msc
+      rwtest msc/slur2.msc
+      rwtest msc/test1.msc
+      rwtest msc/test2.msc
+      rwtest msc/test7.msc
+      rwtest msc/testKeysig2.msc
+      rwtest msc/testsmall.msc
+      rwtest msc/testTimesig2.msc
+      rwtest msc/tuplets.msc
+      }
+
+rwtestAllXml() {
+      # The set of MusicXML files to test are available in files testfiles_MusicXML_regular
+      # (these should be unchanged after a roundtrip through MuseScore) and
+      # testfiles_MusicXML_with_ref (expected to be changed, to be tested against
+      # a reference file).
+      # This also enable easy regeneration of testfiles in case MuseScores output changes.
+      for f in `cat musicxml/testfiles_MusicXML_regular musicxml/testfiles_MusicXML_with_ref | sort`; do
+            if [ -f musicxml/`basename $f .xml`_ref.xml ]; then
+                  # reference file exists, test against it
+                  rwtestXmlRef musicxml/$f
+            else
+                  # reference file does not exist: use regular test
+                  rwtestXml musicxml/$f
+            fi
+      done
+      }
+
+usage() {
+      echo "usage: $0 [bww | demos | msc | xml]"
+      echo "or: $0 [bww | msc | xml] <file>"
+      echo
+      exit 1
+      }
+
+if [ $# -eq 0 ]; then
+      rwtestAllBww
+      rwtestAllDemos
+      rwtestAllMsc
+      rwtestAllXml
+elif [ $# -eq 1 ]; then
+      if [ "$1" == "bww" ]; then
+            rwtestAllBww
+      elif [ "$1" == "demos" ]; then
+            rwtestAllDemos
+      elif [ "$1" == "msc" ]; then
+            rwtestAllMsc
+      elif [ "$1" == "xml" ]; then
+            rwtestAllXml
+      else
+            usage
+      fi
+elif [ $# -eq 2 ]; then
+      if [ "$1" == "bww" ]; then
+            rwtest $2
+      elif [ "$1" == "msc" ]; then
+            rwtest $2
+      elif [ "$1" == "xml" ]; then
+            rwtestXml $2
+      else
+            usage
+      fi
+elif [ $# -ge 3 ]; then
+      usage
+fi
+
+echo
+echo "$testcount test(s), $failures failure(s)"

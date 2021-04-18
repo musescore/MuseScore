@@ -1,0 +1,75 @@
+*:disabled {
+ color: gray;
+}
+
+QMenu::disabled {
+ background-color: palette(base);
+}
+
+QGroupBox {
+  font-weight: bold;
+}
+
+QGroupBox::title {
+ subcontrol-origin: margin; subcontrol-position: top left; padding: 5px 5px;
+}
+
+QDockWidget {
+ border: 1px solid lightgray;
+ titlebar-close-icon: url(:/data/icons/png/window-close.png);
+ titlebar-normal-icon: url(:/data/icons/png/window-float.png);
+}
+
+QTabBar::close-button {
+ image: url(:/data/icons/png/window-close.png);
+}
+
+QTabBar::close-button:hover {
+ image: url(:/data/icons/png/window-close-hover.png);
+}
+
+/* Inspector buttons */
+QPushButton:flat:hover {
+ border: 1px solid darkgray;
+ border-radius: 3px;
+}
+QPushButton:flat:hover:checked {
+ background: darkgray;
+}
+
+QToolButton#palette {
+ border: none;
+}
+
+QToolButton#title {
+ border: none;
+}
+
+/* staff text properties */
+QToolButton[voice1="true"]:checked, QToolButton[voice1="true"]:pressed { color: white; background: $voice1-bgcolor; }
+QToolButton[voice2="true"]:checked, QToolButton[voice2="true"]:pressed { color: white; background: $voice2-bgcolor; }
+QToolButton[voice3="true"]:checked, QToolButton[voice3="true"]:pressed { color: white; background: $voice3-bgcolor; }
+QToolButton[voice4="true"]:checked, QToolButton[voice4="true"]:pressed { color: white; background: $voice4-bgcolor; }
+
+/* Toolbar voice selector */
+QToolButton#voice:checked, QToolButton#voice:pressed { color: white; }
+
+/* ToolbarButton text to match ToolbarButton icons */
+QToolButton[iconic-text="true"] { color: $buttonHighlightEnabledOff; }
+QToolButton[iconic-text="true"]:enabled:checked { color: $buttonHighlightEnabledOn; }
+QToolButton[iconic-text="true"]:disabled { color: $buttonHighlightDisabledOff; }
+QToolButton[iconic-text="true"]:disabled:checked { color: $buttonHighlightDisabledOn; }
+
+/* Mainly in midi import */
+QTableView { border: none; }
+
+/* dock and main area separator */
+QMainWindow::separator {
+    background: #C8C8C8;
+    width: 1px; /* when vertical */
+    height: 1px; /* when horizontal */
+}
+
+QMainWindow::separator:hover {
+    background: gray;
+}

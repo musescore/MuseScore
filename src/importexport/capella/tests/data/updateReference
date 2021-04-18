@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# note that the debug build must be used with the -t option to get the beams right in the .mscx files
+
+MSCORE=../../../build.debug/mscore/mscore
+capfiles=`cat tst_capella_io.cpp | grep "{ capReadTest" | awk -F\" '{print $2}' | sort`
+capxfiles=`cat tst_capella_io.cpp | grep "{ capxReadTest" | awk -F\" '{print $2}' | sort`
+
+echo "updating Capella files ..."
+for f in $capfiles; do
+      echo "${f}.cap.mscx -> ${f}.cap-ref.mscx"
+      $MSCORE -t ${f}.cap.mscx -o ${f}.cap-ref.mscx &> /dev/null
+      cp ../../../build.debug/mtest/capella/io/${f}.cap.mscx ${f}.cap-ref.mscx
+done
+
+echo "updating CapellaXML files ..."
+for f in $capxfiles; do
+      echo "${f}.capx -> ${f}.capx-ref.mscx"
+#      $MSCORE -t ${f}.capx -o ${f}.capx-ref.mscx &> /dev/null
+      cp ../../../build.debug/mtest/capella/io/${f}.capx.mscx ${f}.capx-ref.mscx
+done

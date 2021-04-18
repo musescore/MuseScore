@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaffList version="2.00" tick="0" len="1920" staff="0" staves="1">
+  <Staff id="0">
+    <voiceOffset>
+      <voice id="0">0</voice>
+      </voiceOffset>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Articulation>
+        <subtype>fermataAbove</subtype>
+        </Articulation>
+      <Note>
+        <pitch>72</pitch>
+        <tpc>14</tpc>
+        </Note>
+      </Chord>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Articulation>
+        <subtype>articStaccatissimoAbove</subtype>
+        </Articulation>
+      <Note>
+        <pitch>74</pitch>
+        <tpc>16</tpc>
+        </Note>
+      </Chord>
+    <Spanner type="Trill">
+      <Trill>
+        <subtype>trill</subtype>
+        <ticks_f>1/4</ticks_f>
+        </Trill>
+      <next>
+        <location>
+          <fractions>1/4</fractions>
+          </location>
+        </next>
+      </Spanner>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>76</pitch>
+        <tpc>18</tpc>
+        </Note>
+      </Chord>
+    <Spanner type="Trill">
+      <prev>
+        <location>
+          <fractions>-1/4</fractions>
+          </location>
+        </prev>
+      </Spanner>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>77</pitch>
+        <tpc>13</tpc>
+        </Note>
+      </Chord>
+    </Staff>
+  </StaffList>

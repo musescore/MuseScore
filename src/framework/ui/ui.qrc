@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Ui/qmldir</file>
+        <file>qml/MuseScore/Ui/InteractiveProvider.qml</file>
+        <file>qml/MuseScore/Ui/KeyNavDevPanel.qml</file>
+        <file>qml/MuseScore/Ui/KeyNavDevDialog.qml</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,102 @@
+init init/Voice-Piano-3-4.mscx
+cmd note-input
+cmd pad-note-16
+cmd pad-note-8
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd note-a
+cmd escape
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+cmd prev-chord
+palette Articulation symbol articTenutoAccentAbove
+cmd next-chord
+cmd next-chord
+palette Articulation symbol articUnstressAbove
+cmd next-chord
+cmd next-chord
+palette Articulation symbol articSoftAccentAbove
+cmd next-chord
+cmd next-chord
+palette Articulation symbol articSoftAccentStaccatoAbove
+cmd next-chord
+cmd next-chord
+palette Articulation symbol articSoftAccentTenutoAbove
+cmd next-chord
+cmd next-chord
+palette Articulation symbol articSoftAccentTenutoStaccatoAbove
+cmd prev-measure
+cmd prev-measure
+palette Articulation symbol guitarFadeIn
+cmd next-chord
+cmd next-chord
+palette Articulation symbol guitarFadeOut
+cmd next-chord
+cmd next-chord
+palette Articulation symbol guitarVolumeSwell
+cmd next-chord
+cmd next-chord
+palette Articulation symbol wiggleSawtooth
+cmd next-chord
+cmd next-chord
+palette Articulation symbol wiggleSawtoothWide
+cmd next-chord
+cmd next-chord
+palette Articulation symbol wiggleVibratoLargeFaster
+cmd prev-measure
+cmd prev-measure
+palette Articulation symbol wiggleVibratoLargeSlowest
+cmd next-chord
+cmd next-chord
+palette Articulation symbol brassMuteOpen
+cmd next-chord
+cmd next-chord
+palette Articulation symbol brassMuteClosed
+cmd next-chord
+cmd next-chord
+palette Articulation symbol stringsHarmonic
+cmd next-chord
+cmd next-chord
+palette Articulation symbol stringsUpBow
+cmd next-chord
+cmd next-chord
+palette Articulation symbol stringsDownBow
+cmd next-chord
+cmd next-chord
+palette Articulation symbol pluckedSnapPizzicatoAbove
+cmd next-chord
+cmd next-chord
+palette Bend
+cmd next-chord
+cmd next-chord
+palette TremoloBar
+test score palette_articulations_2.mscx

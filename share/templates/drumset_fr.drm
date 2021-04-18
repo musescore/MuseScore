@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.01">
+  <Drum pitch="36">
+    <head>0</head>
+    <line>9</line>
+    <voice>1</voice>
+    <name>Grosse Caisse</name>
+    <stem>2</stem>
+    <shortcut>G</shortcut>
+    </Drum>
+  <Drum pitch="37">
+    <head>1</head>
+    <line>4</line>
+    <voice>0</voice>
+    <name>Coup de baguette sur côté caisse claire</name>
+    <stem>2</stem>
+    </Drum>
+  <Drum pitch="38">
+    <head>0</head>
+    <line>4</line>
+    <voice>1</voice>
+    <name>Caisse Claire Acoustique</name>
+    <stem>2</stem>
+    <shortcut>C</shortcut>
+    </Drum>
+  <Drum pitch="40">
+    <head>1</head>
+    <line>2</line>
+    <voice>0</voice>
+    <name>Clap</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="41">
+    <head>0</head>
+    <line>2</line>
+    <voice>1</voice>
+    <name>Tom 5</name>
+    <stem>2</stem>
+    </Drum>
+  <Drum pitch="42">
+    <head>1</head>
+    <line>-1</line>
+    <voice>0</voice>
+    <name>Charleston Fermé</name>
+    <stem>1</stem>
+    <shortcut>D</shortcut>
+    </Drum>
+  <Drum pitch="43">
+    <head>0</head>
+    <line>5</line>
+    <voice>1</voice>
+    <name>Gros Tom 2</name>
+    <stem>2</stem>
+    </Drum>
+  <Drum pitch="44">
+    <head>1</head>
+    <line>9</line>
+    <voice>1</voice>
+    <name>Pédale du Charleston</name>
+    <stem>2</stem>
+    </Drum>
+  <Drum pitch="45">
+    <head>0</head>
+    <line>7</line>
+    <voice>1</voice>
+    <name>Gros Tom</name>
+    <stem>2</stem>
+    <shortcut>F</shortcut>
+    </Drum>
+  <Drum pitch="46">
+    <head>6</head>
+    <line>-1</line>
+    <voice>0</voice>
+    <name>Charleston Ouvert</name>
+    <stem>1</stem>
+    <shortcut>E</shortcut>
+    </Drum>
+  <Drum pitch="47">
+    <head>0</head>
+    <line>3</line>
+    <voice>1</voice>
+    <name>Tom Medium</name>
+    <stem>2</stem>
+    <shortcut>B</shortcut>
+    </Drum>
+  <Drum pitch="48">
+    <head>0</head>
+    <line>1</line>
+    <voice>1</voice>
+    <name>Petit Tom</name>
+    <stem>2</stem>
+    <shortcut>A</shortcut>
+    </Drum>
+  <Drum pitch="49">
+    <head>6</head>
+    <line>-2</line>
+    <voice>0</voice>
+    <name>Crash 1</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="50">
+    <head>0</head>
+    <line>0</line>
+    <voice>0</voice>
+    <name>Tom</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="51">
+    <head>1</head>
+    <line>-2</line>
+    <voice>0</voice>
+    <name>Ride</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="52">
+    <head>3</head>
+    <line>-3</line>
+    <voice>0</voice>
+    <name>China</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="53">
+    <head>7</head>
+    <line>-2</line>
+    <voice>0</voice>
+    <name>Ride (Cloche)</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="54">
+    <head>1</head>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Tambourin</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="55">
+    <head>6</head>
+    <line>-3</line>
+    <voice>0</voice>
+    <name>Splash</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="56">
+    <head>3</head>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Cowbell</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="57">
+    <head>6</head>
+    <line>-5</line>
+    <voice>0</voice>
+    <name>Crash 2</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="59">
+    <head>1</head>
+    <line>-4</line>
+    <voice>0</voice>
+    <name>Ride 2</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="60">
+    <head>5</head>
+    <line>-1</line>
+    <voice>3</voice>
+    <name>Répétition</name>
+    <stem>-1</stem>
+    </Drum>
+  <Drum pitch="63">
+    <head>1</head>
+    <line>4</line>
+    <voice>0</voice>
+    <name>open high conga</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="64">
+    <head>1</head>
+    <line>6</line>
+    <voice>0</voice>
+    <name>low conga</name>
+    <stem>1</stem>
+    </Drum>
+  </museScore>

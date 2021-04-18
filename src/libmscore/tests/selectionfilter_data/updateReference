@@ -1,0 +1,7 @@
+#!/bin/sh
+
+for f in ../../../build.debug/mtest/libmscore/selectionfilter/selectionfilter*.xml
+do
+      cp "$f" $(basename "$f" .xml)-ref.xml
+done
+

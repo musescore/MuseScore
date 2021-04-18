@@ -1,0 +1,41 @@
+=================================================================
+      BWW2MXML
+=================================================================
+
+BWW2MXML is a simple, command line only, BWW to MusicXML converter.
+
+BWW is a common format for bagpipe music on the Internet. It is produced
+by the commercial program Bagpipe Music Writer.
+
+MusicXML is an open format for musical scores supported by many applications.
+See: http://www.musicxml.org/xml.html.
+
+Licence:
+      BWW2MXML is part of MuseScore.
+      MuseScore is distributed under the GNU General Public License (GPL).
+      Please read the file COPYING in this directory for more
+      details.
+
+Requirements:
+      - qt4 gui lib version (built/tested using qt4.6.x)
+
+        Note that many linux distributions split packages into a user
+        and developer package and that you need to install both.
+
+Build (using Qt only, no MuseScore dependencies):
+      - qmake
+      - make
+
+Usage:
+      bww2mxml file.bww file.xml
+
+Status:
+      This is a very preliminary version. It basically extracts only the notes
+      and the measure structure.
+      Supported:
+        TuneTempo, title, type, composer, footer, line breaks
+        clef, key, time signature, (dotted) notes, ties, triplets,
+        (some) strikes, doublings, slurs, throws, birls, grips and taorluaths
+      Not supported:
+        MIDINoteMappings, FrequencyMappings, InstrumentMappings,
+        GracenoteDurations, FontSizes, TuneFormat, parts

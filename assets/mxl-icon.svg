@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52 (66869) - http://www.bohemiancoding.com/sketch -->
+    <title>mxl-icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-9.5%" y="-7.0%" width="121.1%" height="114.0%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="3" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="7" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.547044837 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <linearGradient x1="100%" y1="-22.0930648%" x2="38.9779202%" y2="60.2529194%" id="linearGradient-2">
+            <stop stop-color="#BBBBBB" offset="0%"></stop>
+            <stop stop-color="#D9D9D9" offset="29.2980029%"></stop>
+            <stop stop-color="#F5F5F5" offset="63.7161705%"></stop>
+            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        </linearGradient>
+        <path d="M2.84217094e-14,476.818182 L2.84217094e-14,0.818181818 C90,-1.18181818 152.666667,0.484848485 188,5.81818182 C220.666667,16.4848485 235.333333,54.8181818 232,120.818182 C276.42356,117.72677 308.42356,123.393437 328,137.818182 C340.666667,147.151515 348.333333,163.484848 351,186.818182 L351,476.818182 L2.84217094e-14,476.818182 Z" id="path-3"></path>
+        <filter x="-10.5%" y="-7.8%" width="121.1%" height="115.5%" filterUnits="objectBoundingBox" id="filter-4">
+            <feGaussianBlur stdDeviation="29" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="0" dy="16" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.0463088768 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <linearGradient x1="39.2870272%" y1="37.2580144%" x2="18.3693136%" y2="67.3067132%" id="linearGradient-5">
+            <stop stop-color="#DEDEDE" offset="0%"></stop>
+            <stop stop-color="#EEEEEE" offset="44.5532052%"></stop>
+            <stop stop-color="#F8F8F8" offset="100%"></stop>
+        </linearGradient>
+        <path d="M0.868976709,0.462572502 L118.2,115 C118.140784,115.048766 118.08159,115.097496 118.022417,115.146191 C116.44613,113.566529 114.771991,112.123859 113,110.818182 C93.4235604,96.3934369 61.4235604,90.7267702 17,93.8181818 C19.156452,51.1204326 13.779442,20.0018934 0.868970145,0.46256421 Z" id="path-6"></path>
+        <filter x="-36.2%" y="-25.7%" width="172.4%" height="174.0%" filterUnits="objectBoundingBox" id="filter-7">
+            <feOffset dx="0" dy="13" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="12" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.33740942 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="mxl-icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-9" filter="url(#filter-1)" transform="translate(81.000000, 18.000000)">
+            <g id="Group-8-Copy-2">
+                <g id="Path-3">
+                    <use fill="url(#linearGradient-2)" fill-rule="evenodd" xlink:href="#path-3"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                </g>
+            </g>
+            <g id="Group-8-Copy" transform="translate(215.000000, 28.000000)">
+                <g id="Combined-Shape">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-7)" xlink:href="#path-6"></use>
+                    <use fill="url(#linearGradient-5)" fill-rule="evenodd" xlink:href="#path-6"></use>
+                </g>
+            </g>
+        </g>
+        <text id="MXL" font-family="HelveticaNeue-Medium, Helvetica Neue" font-size="83" font-weight="400" fill="#424242">
+            <tspan x="166.8935" y="456">MXL</tspan>
+        </text>
+        <g id="treble-clef-(1)" transform="translate(195.000000, 89.000000)" fill="#000000">
+            <path d="M68.716,62.478 C64.605,68.754 59.835,73.989 54.504,78.087 L45.776,85.049 C32.437,96.904 22.839,106.482 17.234,113.513 C7.025,126.301 1.428,139.292 0.584,152.124 C-0.358,166.597 3.771,180.334 12.859,192.964 C22.495,206.422 34.659,213.718 49.023,214.654 C52.314,214.872 55.92,214.836 58.919,214.639 L57.798,204.535 C55.708,204.727 53.492,204.758 51.17,204.603 C41.733,203.986 33.306,200.092 26.106,193.03 C18.582,185.697 15.211,177.615 15.819,168.33 C16.968,150.74 28.381,133.326 49.744,116.538 L59.287,108.939 C67.681,101.765 74.479,92.748 79.503,82.114 C84.474,71.558 87.389,60.131 88.176,48.154 C88.642,41.117 87.663,32.379 85.302,22.189 C82.061,8.35 77.448,1.424 71.166,1.01 C68.934,0.872 66.49,1.996 63.508,4.627 C56.256,11.175 50.985,19.108 47.825,28.169 C45.387,35.095 43.768,44.358 43.02,55.698 C42.707,60.418 43.333,69.136 44.825,79.66 L53.669,71.468 C53.641,70.285 53.674,69.055 53.765,67.765 C54.231,60.544 56.054,52.703 59.159,44.472 C63.115,34.176 66.848,31.063 69.292,30.268 C69.96,30.05 70.612,29.97 71.307,30.014 C74.492,30.226 77.665,31.573 77.122,39.993 C76.664,47.132 73.831,54.693 68.716,62.478 Z" id="Path"></path>
+            <path d="M76.55,210.161 C82.278,207.593 87.171,203.683 91.126,198.51 C96.181,191.949 99.023,184.194 99.593,175.463 C100.313,164.744 97.739,155.025 91.976,146.568 C85.654,137.304 76.996,132.251 66.231,131.542 C64.999,131.461 63.688,131.467 62.336,131.567 L60.032,114.376 L50.364,121.488 L51.847,133.682 C46.058,136.075 41.02,139.852 36.83,144.937 C32.007,150.861 29.322,157.38 28.866,164.319 C28.4,171.527 30.008,178.129 33.648,183.902 C35.543,186.983 38.155,189.722 41.146,191.96 C46.052,195.61 51.709,195.336 52.605,193.353 C53.511,191.37 50.15,188.258 47.515,184.105 C46.013,181.754 45.273,178.932 45.273,175.608 C45.273,168.555 49.529,162.492 55.59,159.809 L61.263,204.02 L62.588,214.278 C63.452,219.151 64.307,224.003 65.125,228.798 C66.125,235.286 66.477,240.91 66.166,245.513 C65.747,251.888 63.758,257.097 60.247,261.006 C58.013,263.491 55.403,265.061 52.452,265.931 C56.413,261.969 58.866,256.501 58.866,250.453 C58.866,238.378 49.074,228.581 36.996,228.581 C33.643,228.581 30.505,229.393 27.667,230.74 C27.307,230.895 26.968,231.128 26.613,231.314 C25.834,231.739 25.054,232.164 24.327,232.676 C24.078,232.863 23.84,233.079 23.595,233.281 C18.707,237.097 15.504,242.897 15.22,249.51 C15.22,249.52 15.209,249.531 15.209,249.541 C15.209,249.546 15.209,249.551 15.209,249.557 C15.196,249.868 15.119,250.147 15.119,250.453 C15.119,250.712 15.186,250.945 15.197,251.193 C15.186,258.277 18.13,264.372 24.036,269.311 C29.62,273.977 36.313,276.591 43.928,277.088 C48.255,277.368 52.433,276.871 56.335,275.603 C59.524,274.562 62.61,272.983 65.484,270.916 C72.444,265.894 76.234,259.332 76.756,251.384 C77.155,245.321 76.85,238.149 75.819,229.973 L72.981,211.544 L65.825,158.645 C73.809,160.177 79.852,167.188 79.852,175.613 C79.852,181.599 77.915,191.044 74.301,195.989 L76.55,210.161 Z" id="Path"></path>
+        </g>
+    </g>
+</svg>

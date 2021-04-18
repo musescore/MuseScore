@@ -1,0 +1,14 @@
+<global>
+sample=../sample.wav
+<region> lokey=60 hikey=70 pitch_keycenter=40 lovel=20 hivel=40 locc34=40 hicc34=50 lorand=0.5 hirand=0.75 seq_length=3 seq_position=3 group=23 off_by=42 off_mode=fast on_locc35=40 on_hicc35=50 loop_start=50 loop_end=100 loop_mode=loop_sustain transpose=5 tune=8 pitch_keytrack=50 volume=-6 amp_veltrack=50 rt_decay=10 ampeg_delay=1 ampeg_start=20 ampeg_attack=1.5 ampeg_hold=2.0 ampeg_decay=2.5 ampeg_sustain=50 ampeg_release=3 ampeg_vel2delay=23 ampeg_vel2attack=24 ampeg_vel2hold=25 ampeg_vel2decay=26 ampeg_vel2sustain=27 ampeg_vel2release=28
+<region> key=40 off_mode=normal loop_mode=no_loop
+<region> trigger=release loop_mode=one_shot
+<region> trigger=attack loop_mode=loop_continuous
+<region> trigger=first
+<region> trigger=legato
+<region> fil_type=lpf_1p cutoff=200 fil_veltrack=4000
+<region> fil_type=hpf_1p fil_keycenter=60 fil_keytrack=400
+<region> fil_type=hpf_2p pan=100 offset=16178
+<region> fil_type=lpf_2p delay=2
+<region> fil_type=bpf_2p
+<region> fil_type=brf_2p

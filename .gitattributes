@@ -1,0 +1,14 @@
+build/PortableApps/**/*.ini eol=crlf
+build/PortableApps/**/*.txt eol=crlf
+build/PortableApps/**/*.ini.in eol=crlf
+build/PortableApps/**/*.html eol=crlf
+
+# Shell scripts with shebang lines must have LF line endings
+*.sh            text            eol=lf
+*.py            text            eol=lf
+*.ps1           text            eol=lf
+build.cmake     text            eol=lf
+
+# Batch files need CRLF line endings
+*.bat           text            eol=crlf
+*.cmd           text            eol=crlf

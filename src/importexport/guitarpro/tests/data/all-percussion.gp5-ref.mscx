@@ -1,0 +1,2533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.00">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="percussion">
+          <name>perc5Line</name>
+          <keysig>0</keysig>
+          </StaffType>
+        </Staff>
+      <trackName>Percussions</trackName>
+      <Instrument>
+        <longName>Percussions</longName>
+        <trackName></trackName>
+        <useDrumset>1</useDrumset>
+        <Drum pitch="27">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>High Q</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="28">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Slap</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="29">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Scratch Push</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="30">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Scratch Pull</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="31">
+          <head>cross</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Sticks</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="32">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Square Click</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="33">
+          <head>cross</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Metronome Click</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="34">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Metronome Bell</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="35">
+          <head>normal</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Acoustic Bass Drum</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="36">
+          <head>normal</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Bass Drum 1</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="37">
+          <head>cross</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Side Stick</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="38">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Acoustic Snare</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="39">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Hand Clap</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="40">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Electric Snare</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="41">
+          <head>normal</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>Low Floor Tom</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="42">
+          <head>cross</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Closed Hi-Hat</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="43">
+          <head>normal</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>High Floor Tom</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="44">
+          <head>cross</head>
+          <line>7</line>
+          <voice>0</voice>
+          <name>Pedal Hi-Hat</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="45">
+          <head>normal</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Low Tom</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="46">
+          <head>cross</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Open Hi-Hat</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="47">
+          <head>normal</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Low-Mid Tom</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="48">
+          <head>normal</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Hi-Mid Tom</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="49">
+          <head>diamond</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Crash Cymbal 1</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="50">
+          <head>normal</head>
+          <line>0</line>
+          <voice>0</voice>
+          <name>High Tom</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="51">
+          <head>diamond</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Ride Cymbal 1</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="52">
+          <head>cross</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Chinese Cymbal</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="53">
+          <head>diamond</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Ride Bell</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="54">
+          <head>cross</head>
+          <line>2</line>
+          <voice>0</voice>
+          <name>Tambourine</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="55">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Splash Cymbal</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="56">
+          <head>normal</head>
+          <line>1</line>
+          <voice>0</voice>
+          <name>Cowbell</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="57">
+          <head>diamond</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Crash Cymbal 2</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="58">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Vibraslap</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="59">
+          <head>diamond</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Ride Cymbal 2</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="60">
+          <head>normal</head>
+          <line>8</line>
+          <voice>0</voice>
+          <name>Hi Bongo</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="61">
+          <head>normal</head>
+          <line>9</line>
+          <voice>0</voice>
+          <name>Low Bongo</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="62">
+          <head>cross</head>
+          <line>5</line>
+          <voice>0</voice>
+          <name>Mute Hi Conga</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="63">
+          <head>cross</head>
+          <line>4</line>
+          <voice>0</voice>
+          <name>Open Hi Conga</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="64">
+          <head>cross</head>
+          <line>6</line>
+          <voice>0</voice>
+          <name>Low Conga</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="65">
+          <head>cross</head>
+          <line>8</line>
+          <voice>0</voice>
+          <name>High Timbale</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="66">
+          <head>cross</head>
+          <line>9</line>
+          <voice>0</voice>
+          <name>Low Timbale</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="67">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>High Agogo</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="68">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Low Agogo</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="69">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Cabasa</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="70">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Maracas</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="71">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Short Whistle</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="72">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Long Whistle</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="73">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Short Güiro</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="74">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Long Güiro</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="75">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Claves</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="76">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Hi Wood Block</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="77">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Low Wood Block</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="78">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Mute Cuica</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="79">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Open Cuica</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="80">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Mute Triangle</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="81">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Open Triangle</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="82">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Shaker</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="83">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Sleigh Bell</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="84">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Bell Tree</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="85">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Castanets</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="86">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Mute Surdo</name>
+          <stem>1</stem>
+          </Drum>
+        <Drum pitch="87">
+          <head>normal</head>
+          <line>3</line>
+          <voice>0</voice>
+          <name>Open Surdo</name>
+          <stem>1</stem>
+          </Drum>
+        <StringData>
+          <frets>24</frets>
+          <string>0</string>
+          <string>0</string>
+          <string>0</string>
+          <string>0</string>
+          <string>0</string>
+          <string>0</string>
+          </StringData>
+        <Channel>
+          <controller ctrl="0" value="1"/>
+          <program value="0"/>
+          <controller ctrl="7" value="71"/>
+          <controller ctrl="10" value="63"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <lid>0</lid>
+        </VBox>
+      <Measure number="1">
+        <Clef>
+          <concertClefType>PERC</concertClefType>
+          <transposingClefType>PERC</transposingClefType>
+          <lid>1</lid>
+          </Clef>
+        <KeySig>
+          <lid>2</lid>
+          <accidental>0</accidental>
+          </KeySig>
+        <TimeSig>
+          <lid>3</lid>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          </TimeSig>
+        <RehearsalMark>
+          <lid>4</lid>
+          <text>tempo 144</text>
+          </RehearsalMark>
+        <Tempo>
+          <tempo>2.4</tempo>
+          <lid>5</lid>
+          <text><sym>metNoteQuarterUp</sym> = 144</text>
+          </Tempo>
+        <Beam id="1">
+          <l1>17</l1>
+          <l2>17</l2>
+          </Beam>
+        <Chord>
+          <lid>6</lid>
+          <durationType>eighth</durationType>
+          <Beam>1</Beam>
+          <Note>
+            <lid>7</lid>
+            <pitch>27</pitch>
+            <tpc>11</tpc>
+            <fret>27</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>8</lid>
+          <durationType>eighth</durationType>
+          <Beam>1</Beam>
+          <Note>
+            <lid>9</lid>
+            <pitch>28</pitch>
+            <tpc>18</tpc>
+            <fret>28</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>10</lid>
+          <durationType>quarter</durationType>
+          <Note>
+            <lid>11</lid>
+            <pitch>29</pitch>
+            <tpc>13</tpc>
+            <fret>29</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>12</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>13</lid>
+            <pitch>30</pitch>
+            <tpc>20</tpc>
+            <fret>30</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="2">
+        <Chord>
+          <lid>15</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>16</lid>
+            <pitch>31</pitch>
+            <tpc>15</tpc>
+            <head>cross</head>
+            <fret>31</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>17</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>18</lid>
+            <pitch>32</pitch>
+            <tpc>22</tpc>
+            <fret>32</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="3">
+        <Chord>
+          <lid>20</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>21</lid>
+            <pitch>33</pitch>
+            <tpc>17</tpc>
+            <head>cross</head>
+            <fret>33</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>22</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>23</lid>
+            <pitch>34</pitch>
+            <tpc>12</tpc>
+            <fret>34</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="4">
+        <Chord>
+          <lid>25</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>26</lid>
+            <pitch>35</pitch>
+            <tpc>19</tpc>
+            <fret>35</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>27</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>28</lid>
+            <pitch>36</pitch>
+            <tpc>14</tpc>
+            <fret>36</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="5">
+        <Chord>
+          <lid>30</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>31</lid>
+            <pitch>37</pitch>
+            <tpc>21</tpc>
+            <head>cross</head>
+            <fret>37</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>32</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>33</lid>
+            <pitch>38</pitch>
+            <tpc>16</tpc>
+            <fret>38</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="6">
+        <Chord>
+          <lid>35</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>36</lid>
+            <pitch>39</pitch>
+            <tpc>11</tpc>
+            <fret>39</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>37</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>38</lid>
+            <pitch>40</pitch>
+            <tpc>18</tpc>
+            <fret>40</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="7">
+        <Chord>
+          <lid>40</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>41</lid>
+            <pitch>41</pitch>
+            <tpc>13</tpc>
+            <fret>41</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>42</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>43</lid>
+            <pitch>42</pitch>
+            <tpc>20</tpc>
+            <head>cross</head>
+            <fret>42</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="8">
+        <Chord>
+          <lid>45</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>46</lid>
+            <pitch>43</pitch>
+            <tpc>15</tpc>
+            <fret>43</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>47</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>48</lid>
+            <pitch>44</pitch>
+            <tpc>22</tpc>
+            <head>cross</head>
+            <fret>44</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="9">
+        <Chord>
+          <lid>50</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>51</lid>
+            <pitch>45</pitch>
+            <tpc>17</tpc>
+            <fret>45</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>52</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>53</lid>
+            <pitch>46</pitch>
+            <tpc>12</tpc>
+            <head>cross</head>
+            <fret>46</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="10">
+        <Chord>
+          <lid>55</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>56</lid>
+            <pitch>47</pitch>
+            <tpc>19</tpc>
+            <fret>47</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>57</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>58</lid>
+            <pitch>48</pitch>
+            <tpc>14</tpc>
+            <fret>48</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="11">
+        <Chord>
+          <lid>60</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>61</lid>
+            <pitch>49</pitch>
+            <tpc>21</tpc>
+            <head>diamond</head>
+            <fret>49</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>62</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>63</lid>
+            <pitch>50</pitch>
+            <tpc>16</tpc>
+            <fret>50</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="12">
+        <Chord>
+          <lid>65</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>66</lid>
+            <pitch>51</pitch>
+            <tpc>11</tpc>
+            <head>diamond</head>
+            <fret>51</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>67</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>68</lid>
+            <pitch>52</pitch>
+            <tpc>18</tpc>
+            <head>cross</head>
+            <fret>52</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="13">
+        <Chord>
+          <lid>70</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>71</lid>
+            <pitch>53</pitch>
+            <tpc>13</tpc>
+            <head>diamond</head>
+            <fret>53</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>72</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>73</lid>
+            <pitch>54</pitch>
+            <tpc>20</tpc>
+            <head>cross</head>
+            <fret>54</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="14">
+        <Chord>
+          <lid>75</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>76</lid>
+            <pitch>55</pitch>
+            <tpc>15</tpc>
+            <fret>55</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>77</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>78</lid>
+            <pitch>56</pitch>
+            <tpc>22</tpc>
+            <fret>56</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="15">
+        <Chord>
+          <lid>80</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>81</lid>
+            <pitch>57</pitch>
+            <tpc>17</tpc>
+            <head>diamond</head>
+            <fret>57</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>82</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>83</lid>
+            <pitch>58</pitch>
+            <tpc>12</tpc>
+            <fret>58</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="16">
+        <Chord>
+          <lid>85</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>86</lid>
+            <pitch>59</pitch>
+            <tpc>19</tpc>
+            <head>diamond</head>
+            <fret>59</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>87</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>88</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            <fret>60</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="17">
+        <Chord>
+          <lid>90</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>91</lid>
+            <pitch>61</pitch>
+            <tpc>21</tpc>
+            <fret>61</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>92</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>93</lid>
+            <pitch>62</pitch>
+            <tpc>16</tpc>
+            <head>cross</head>
+            <fret>62</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="18">
+        <Chord>
+          <lid>95</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>96</lid>
+            <pitch>63</pitch>
+            <tpc>11</tpc>
+            <head>cross</head>
+            <fret>63</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>97</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>98</lid>
+            <pitch>64</pitch>
+            <tpc>18</tpc>
+            <head>cross</head>
+            <fret>64</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="19">
+        <Chord>
+          <lid>100</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>101</lid>
+            <pitch>65</pitch>
+            <tpc>13</tpc>
+            <head>cross</head>
+            <fret>65</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>102</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>103</lid>
+            <pitch>66</pitch>
+            <tpc>20</tpc>
+            <head>cross</head>
+            <fret>66</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="20">
+        <Chord>
+          <lid>105</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>106</lid>
+            <pitch>67</pitch>
+            <tpc>15</tpc>
+            <fret>67</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>107</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>108</lid>
+            <pitch>68</pitch>
+            <tpc>22</tpc>
+            <fret>68</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="21">
+        <Chord>
+          <lid>110</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>111</lid>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
+            <fret>69</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>112</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>113</lid>
+            <pitch>70</pitch>
+            <tpc>12</tpc>
+            <fret>70</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="22">
+        <Chord>
+          <lid>115</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>116</lid>
+            <pitch>71</pitch>
+            <tpc>19</tpc>
+            <fret>71</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>117</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>118</lid>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <fret>72</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="23">
+        <Chord>
+          <lid>120</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>121</lid>
+            <pitch>73</pitch>
+            <tpc>21</tpc>
+            <fret>73</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>122</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>123</lid>
+            <pitch>74</pitch>
+            <tpc>16</tpc>
+            <fret>74</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="24">
+        <Chord>
+          <lid>125</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>126</lid>
+            <pitch>75</pitch>
+            <tpc>11</tpc>
+            <fret>75</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>127</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>128</lid>
+            <pitch>76</pitch>
+            <tpc>18</tpc>
+            <fret>76</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="25">
+        <Chord>
+          <lid>130</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>131</lid>
+            <pitch>77</pitch>
+            <tpc>13</tpc>
+            <fret>77</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>132</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>133</lid>
+            <pitch>78</pitch>
+            <tpc>20</tpc>
+            <fret>78</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="26">
+        <Chord>
+          <lid>135</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>136</lid>
+            <pitch>79</pitch>
+            <tpc>15</tpc>
+            <fret>79</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>137</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>138</lid>
+            <pitch>80</pitch>
+            <tpc>22</tpc>
+            <fret>80</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="27">
+        <Chord>
+          <lid>140</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>141</lid>
+            <pitch>81</pitch>
+            <tpc>17</tpc>
+            <fret>81</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>142</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>143</lid>
+            <pitch>82</pitch>
+            <tpc>12</tpc>
+            <fret>82</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="28">
+        <Chord>
+          <lid>145</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>146</lid>
+            <pitch>83</pitch>
+            <tpc>19</tpc>
+            <fret>83</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>147</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>148</lid>
+            <pitch>84</pitch>
+            <tpc>14</tpc>
+            <fret>84</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="29">
+        <Chord>
+          <lid>150</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>151</lid>
+            <pitch>85</pitch>
+            <tpc>21</tpc>
+            <fret>85</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Chord>
+          <lid>152</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>153</lid>
+            <pitch>86</pitch>
+            <tpc>16</tpc>
+            <fret>86</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="30">
+        <Chord>
+          <lid>155</lid>
+          <durationType>half</durationType>
+          <Note>
+            <lid>156</lid>
+            <pitch>87</pitch>
+            <tpc>11</tpc>
+            <fret>87</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        <Rest>
+          <lid>157</lid>
+          <durationType>half</durationType>
+          </Rest>
+        </Measure>
+      </Staff>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Division>480</Division>
+      <Style>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <Part>
+        <Staff id="1">
+          <linkedTo>1</linkedTo>
+          <StaffType group="percussion">
+            <name>perc5Line</name>
+            <keysig>0</keysig>
+            </StaffType>
+          </Staff>
+        <trackName></trackName>
+        <Instrument>
+          <longName>Percussions</longName>
+          <trackName></trackName>
+          <useDrumset>1</useDrumset>
+          <Drum pitch="27">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>High Q</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="28">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Slap</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="29">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Scratch Push</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="30">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Scratch Pull</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="31">
+            <head>cross</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Sticks</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="32">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Square Click</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="33">
+            <head>cross</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Metronome Click</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="34">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Metronome Bell</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="35">
+            <head>normal</head>
+            <line>7</line>
+            <voice>0</voice>
+            <name>Acoustic Bass Drum</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="36">
+            <head>normal</head>
+            <line>7</line>
+            <voice>0</voice>
+            <name>Bass Drum 1</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="37">
+            <head>cross</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Side Stick</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="38">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Acoustic Snare</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="39">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Hand Clap</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="40">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Electric Snare</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="41">
+            <head>normal</head>
+            <line>6</line>
+            <voice>0</voice>
+            <name>Low Floor Tom</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="42">
+            <head>cross</head>
+            <line>-1</line>
+            <voice>0</voice>
+            <name>Closed Hi-Hat</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="43">
+            <head>normal</head>
+            <line>5</line>
+            <voice>0</voice>
+            <name>High Floor Tom</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="44">
+            <head>cross</head>
+            <line>7</line>
+            <voice>0</voice>
+            <name>Pedal Hi-Hat</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="45">
+            <head>normal</head>
+            <line>4</line>
+            <voice>0</voice>
+            <name>Low Tom</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="46">
+            <head>cross</head>
+            <line>-1</line>
+            <voice>0</voice>
+            <name>Open Hi-Hat</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="47">
+            <head>normal</head>
+            <line>2</line>
+            <voice>0</voice>
+            <name>Low-Mid Tom</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="48">
+            <head>normal</head>
+            <line>1</line>
+            <voice>0</voice>
+            <name>Hi-Mid Tom</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="49">
+            <head>diamond</head>
+            <line>-1</line>
+            <voice>0</voice>
+            <name>Crash Cymbal 1</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="50">
+            <head>normal</head>
+            <line>0</line>
+            <voice>0</voice>
+            <name>High Tom</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="51">
+            <head>diamond</head>
+            <line>-1</line>
+            <voice>0</voice>
+            <name>Ride Cymbal 1</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="52">
+            <head>cross</head>
+            <line>-1</line>
+            <voice>0</voice>
+            <name>Chinese Cymbal</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="53">
+            <head>diamond</head>
+            <line>-1</line>
+            <voice>0</voice>
+            <name>Ride Bell</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="54">
+            <head>cross</head>
+            <line>2</line>
+            <voice>0</voice>
+            <name>Tambourine</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="55">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Splash Cymbal</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="56">
+            <head>normal</head>
+            <line>1</line>
+            <voice>0</voice>
+            <name>Cowbell</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="57">
+            <head>diamond</head>
+            <line>-1</line>
+            <voice>0</voice>
+            <name>Crash Cymbal 2</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="58">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Vibraslap</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="59">
+            <head>diamond</head>
+            <line>-1</line>
+            <voice>0</voice>
+            <name>Ride Cymbal 2</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="60">
+            <head>normal</head>
+            <line>8</line>
+            <voice>0</voice>
+            <name>Hi Bongo</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="61">
+            <head>normal</head>
+            <line>9</line>
+            <voice>0</voice>
+            <name>Low Bongo</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="62">
+            <head>cross</head>
+            <line>5</line>
+            <voice>0</voice>
+            <name>Mute Hi Conga</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="63">
+            <head>cross</head>
+            <line>4</line>
+            <voice>0</voice>
+            <name>Open Hi Conga</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="64">
+            <head>cross</head>
+            <line>6</line>
+            <voice>0</voice>
+            <name>Low Conga</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="65">
+            <head>cross</head>
+            <line>8</line>
+            <voice>0</voice>
+            <name>High Timbale</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="66">
+            <head>cross</head>
+            <line>9</line>
+            <voice>0</voice>
+            <name>Low Timbale</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="67">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>High Agogo</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="68">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Low Agogo</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="69">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Cabasa</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="70">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Maracas</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="71">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Short Whistle</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="72">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Long Whistle</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="73">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Short Güiro</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="74">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Long Güiro</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="75">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Claves</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="76">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Hi Wood Block</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="77">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Low Wood Block</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="78">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Mute Cuica</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="79">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Open Cuica</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="80">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Mute Triangle</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="81">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Open Triangle</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="82">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Shaker</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="83">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Sleigh Bell</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="84">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Bell Tree</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="85">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Castanets</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="86">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Mute Surdo</name>
+            <stem>1</stem>
+            </Drum>
+          <Drum pitch="87">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Open Surdo</name>
+            <stem>1</stem>
+            </Drum>
+          <StringData>
+            <frets>24</frets>
+            <string>0</string>
+            <string>0</string>
+            <string>0</string>
+            <string>0</string>
+            <string>0</string>
+            <string>0</string>
+            </StringData>
+          <Channel>
+            <controller ctrl="0" value="1"/>
+            <program value="0"/>
+            <controller ctrl="7" value="71"/>
+            <controller ctrl="10" value="63"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <lid>0</lid>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Percussions</text>
+            </Text>
+          </VBox>
+        <Measure number="1">
+          <Clef>
+            <concertClefType>PERC</concertClefType>
+            <transposingClefType>PERC</transposingClefType>
+            <lid>1</lid>
+            </Clef>
+          <KeySig>
+            <lid>2</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <TimeSig>
+            <lid>3</lid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <RehearsalMark>
+            <lid>4</lid>
+            <text>tempo 144</text>
+            </RehearsalMark>
+          <Tempo>
+            <tempo>2.4</tempo>
+            <lid>5</lid>
+            <text><sym>metNoteQuarterUp</sym> = 144</text>
+            </Tempo>
+          <Beam id="2">
+            <l1>17</l1>
+            <l2>17</l2>
+            </Beam>
+          <Chord>
+            <lid>6</lid>
+            <durationType>eighth</durationType>
+            <Beam>2</Beam>
+            <Note>
+              <lid>7</lid>
+              <pitch>27</pitch>
+              <tpc>11</tpc>
+              <fret>27</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>8</lid>
+            <durationType>eighth</durationType>
+            <Beam>2</Beam>
+            <Note>
+              <lid>9</lid>
+              <pitch>28</pitch>
+              <tpc>18</tpc>
+              <fret>28</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>10</lid>
+            <durationType>quarter</durationType>
+            <Note>
+              <lid>11</lid>
+              <pitch>29</pitch>
+              <tpc>13</tpc>
+              <fret>29</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>12</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>13</lid>
+              <pitch>30</pitch>
+              <tpc>20</tpc>
+              <fret>30</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="2">
+          <Chord>
+            <lid>15</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>16</lid>
+              <pitch>31</pitch>
+              <tpc>15</tpc>
+              <head>cross</head>
+              <fret>31</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>17</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>18</lid>
+              <pitch>32</pitch>
+              <tpc>22</tpc>
+              <fret>32</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="3">
+          <Chord>
+            <lid>20</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>21</lid>
+              <pitch>33</pitch>
+              <tpc>17</tpc>
+              <head>cross</head>
+              <fret>33</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>22</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>23</lid>
+              <pitch>34</pitch>
+              <tpc>12</tpc>
+              <fret>34</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="4">
+          <Chord>
+            <lid>25</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>26</lid>
+              <pitch>35</pitch>
+              <tpc>19</tpc>
+              <fret>35</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>27</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>28</lid>
+              <pitch>36</pitch>
+              <tpc>14</tpc>
+              <fret>36</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="5">
+          <Chord>
+            <lid>30</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>31</lid>
+              <pitch>37</pitch>
+              <tpc>21</tpc>
+              <head>cross</head>
+              <fret>37</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>32</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>33</lid>
+              <pitch>38</pitch>
+              <tpc>16</tpc>
+              <fret>38</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="6">
+          <Chord>
+            <lid>35</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>36</lid>
+              <pitch>39</pitch>
+              <tpc>11</tpc>
+              <fret>39</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>37</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>38</lid>
+              <pitch>40</pitch>
+              <tpc>18</tpc>
+              <fret>40</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="7">
+          <Chord>
+            <lid>40</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>41</lid>
+              <pitch>41</pitch>
+              <tpc>13</tpc>
+              <fret>41</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>42</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>43</lid>
+              <pitch>42</pitch>
+              <tpc>20</tpc>
+              <head>cross</head>
+              <fret>42</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="8">
+          <Chord>
+            <lid>45</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>46</lid>
+              <pitch>43</pitch>
+              <tpc>15</tpc>
+              <fret>43</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>47</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>48</lid>
+              <pitch>44</pitch>
+              <tpc>22</tpc>
+              <head>cross</head>
+              <fret>44</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="9">
+          <Chord>
+            <lid>50</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>51</lid>
+              <pitch>45</pitch>
+              <tpc>17</tpc>
+              <fret>45</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>52</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>53</lid>
+              <pitch>46</pitch>
+              <tpc>12</tpc>
+              <head>cross</head>
+              <fret>46</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="10">
+          <Chord>
+            <lid>55</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>56</lid>
+              <pitch>47</pitch>
+              <tpc>19</tpc>
+              <fret>47</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>57</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>58</lid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              <fret>48</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="11">
+          <Chord>
+            <lid>60</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>61</lid>
+              <pitch>49</pitch>
+              <tpc>21</tpc>
+              <head>diamond</head>
+              <fret>49</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>62</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>63</lid>
+              <pitch>50</pitch>
+              <tpc>16</tpc>
+              <fret>50</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="12">
+          <Chord>
+            <lid>65</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>66</lid>
+              <pitch>51</pitch>
+              <tpc>11</tpc>
+              <head>diamond</head>
+              <fret>51</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>67</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>68</lid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              <head>cross</head>
+              <fret>52</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="13">
+          <Chord>
+            <lid>70</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>71</lid>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
+              <head>diamond</head>
+              <fret>53</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>72</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>73</lid>
+              <pitch>54</pitch>
+              <tpc>20</tpc>
+              <head>cross</head>
+              <fret>54</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="14">
+          <Chord>
+            <lid>75</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>76</lid>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              <fret>55</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>77</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>78</lid>
+              <pitch>56</pitch>
+              <tpc>22</tpc>
+              <fret>56</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="15">
+          <Chord>
+            <lid>80</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>81</lid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <head>diamond</head>
+              <fret>57</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>82</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>83</lid>
+              <pitch>58</pitch>
+              <tpc>12</tpc>
+              <fret>58</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="16">
+          <Chord>
+            <lid>85</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>86</lid>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              <head>diamond</head>
+              <fret>59</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>87</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>88</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>60</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="17">
+          <Chord>
+            <lid>90</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>91</lid>
+              <pitch>61</pitch>
+              <tpc>21</tpc>
+              <fret>61</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>92</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>93</lid>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              <head>cross</head>
+              <fret>62</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="18">
+          <Chord>
+            <lid>95</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>96</lid>
+              <pitch>63</pitch>
+              <tpc>11</tpc>
+              <head>cross</head>
+              <fret>63</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>97</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>98</lid>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <head>cross</head>
+              <fret>64</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="19">
+          <Chord>
+            <lid>100</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>101</lid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <head>cross</head>
+              <fret>65</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>102</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>103</lid>
+              <pitch>66</pitch>
+              <tpc>20</tpc>
+              <head>cross</head>
+              <fret>66</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="20">
+          <Chord>
+            <lid>105</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>106</lid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              <fret>67</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>107</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>108</lid>
+              <pitch>68</pitch>
+              <tpc>22</tpc>
+              <fret>68</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="21">
+          <Chord>
+            <lid>110</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>111</lid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              <fret>69</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>112</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>113</lid>
+              <pitch>70</pitch>
+              <tpc>12</tpc>
+              <fret>70</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="22">
+          <Chord>
+            <lid>115</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>116</lid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              <fret>71</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>117</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>118</lid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <fret>72</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="23">
+          <Chord>
+            <lid>120</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>121</lid>
+              <pitch>73</pitch>
+              <tpc>21</tpc>
+              <fret>73</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>122</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>123</lid>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              <fret>74</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="24">
+          <Chord>
+            <lid>125</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>126</lid>
+              <pitch>75</pitch>
+              <tpc>11</tpc>
+              <fret>75</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>127</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>128</lid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              <fret>76</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="25">
+          <Chord>
+            <lid>130</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>131</lid>
+              <pitch>77</pitch>
+              <tpc>13</tpc>
+              <fret>77</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>132</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>133</lid>
+              <pitch>78</pitch>
+              <tpc>20</tpc>
+              <fret>78</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="26">
+          <Chord>
+            <lid>135</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>136</lid>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              <fret>79</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>137</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>138</lid>
+              <pitch>80</pitch>
+              <tpc>22</tpc>
+              <fret>80</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="27">
+          <Chord>
+            <lid>140</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>141</lid>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              <fret>81</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>142</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>143</lid>
+              <pitch>82</pitch>
+              <tpc>12</tpc>
+              <fret>82</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="28">
+          <Chord>
+            <lid>145</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>146</lid>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              <fret>83</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>147</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>148</lid>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              <fret>84</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="29">
+          <Chord>
+            <lid>150</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>151</lid>
+              <pitch>85</pitch>
+              <tpc>21</tpc>
+              <fret>85</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <lid>152</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>153</lid>
+              <pitch>86</pitch>
+              <tpc>16</tpc>
+              <fret>86</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="30">
+          <Chord>
+            <lid>155</lid>
+            <durationType>half</durationType>
+            <Note>
+              <lid>156</lid>
+              <pitch>87</pitch>
+              <tpc>11</tpc>
+              <fret>87</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Rest>
+            <lid>157</lid>
+            <durationType>half</durationType>
+            </Rest>
+          </Measure>
+        </Staff>
+      <name>Percussions</name>
+      </Score>
+    </Score>
+  </museScore>

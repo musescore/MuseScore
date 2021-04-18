@@ -1,0 +1,13 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/timesig/timesig01.mscx timesig01-ref.mscx
+#cp ../../../build.debug/mtest/libmscore/timesig/timesig-02a.mscx timesig-02-ref.mscx
+cp ../../../build.debug/mtest/libmscore/timesig/timesig-02.mscx timesig-02-ref.mscx
+cp ../../../build.debug/mtest/libmscore/timesig/timesig-03.mscx timesig-03-ref.mscx
+cp ../../../build.debug/mtest/libmscore/timesig/timesig-04.mscx timesig-04-ref.mscx
+cp ../../../build.debug/mtest/libmscore/timesig/timesig-05.mscx timesig-05-ref.mscx
+cp ../../../build.debug/mtest/libmscore/timesig/timesig-06.mscx timesig-06-ref.mscx
+cp ../../../build.debug/mtest/libmscore/timesig/timesig-07.mscx timesig-07-ref.mscx
+cp ../../../build.debug/mtest/libmscore/timesig/timesig-08.mscx timesig-08-ref.mscx
+cp ../../../build.debug/mtest/libmscore/timesig/timesig-09.mscx timesig-09-ref.mscx
+cp ../../../build.debug/mtest/libmscore/timesig/timesig-10.mscx timesig-10-ref.mscx

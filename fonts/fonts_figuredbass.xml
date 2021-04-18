@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<museScore version="1.0">
+
+   <font>
+      <family>MScoreBC</family>
+      <displayName>MuseScore Figured Bass</displayName>
+      <defaultPitch>8</defaultPitch>
+      <defaultLineHeight>1.0</defaultLineHeight>
+      <parenthesisRoundOpen>(</parenthesisRoundOpen>
+      <parenthesisRoundClosed>)</parenthesisRoundClosed>
+      <parenthesisSquareOpen>[</parenthesisSquareOpen>
+      <parenthesisSquareClosed>]</parenthesisSquareClosed>
+      <doubleflat></doubleflat>
+      <flat></flat>
+      <natural></natural>
+      <sharp></sharp>
+      <doublesharp></doublesharp>
+      <cross>+</cross>
+      <backslash>\</backslash>
+      <slash>/</slash>
+      <digit value="0">
+         <simple>0</simple>
+         <crossed></crossed>
+         <backslashed></backslashed>
+         <slashed>?</slashed>
+         <simpleHistoric>0</simpleHistoric>
+         <crossedHistoric></crossedHistoric>
+         <backslashedHistoric></backslashedHistoric>
+         <slashedHistoric>?</slashedHistoric>
+      </digit>
+      <digit value="1">
+         <simple>1</simple>
+         <crossed></crossed>
+         <backslashed></backslashed>
+         <slashed>?</slashed>
+         <simpleHistoric>1</simpleHistoric>
+         <crossedHistoric></crossedHistoric>
+         <backslashedHistoric></backslashedHistoric>
+         <slashedHistoric>?</slashedHistoric>
+      </digit>
+      <digit value="2">
+         <simple>2</simple>
+         <crossed></crossed>
+         <backslashed></backslashed>
+         <slashed>?</slashed>
+         <simpleHistoric>2</simpleHistoric>
+         <crossedHistoric></crossedHistoric>
+         <backslashedHistoric></backslashedHistoric>
+         <slashedHistoric>?</slashedHistoric>
+      </digit>
+      <digit value="3">
+         <simple>3</simple>
+         <crossed></crossed>
+         <backslashed></backslashed>
+         <slashed>?</slashed>
+         <simpleHistoric>3</simpleHistoric>
+         <crossedHistoric></crossedHistoric>
+         <backslashedHistoric></backslashedHistoric>
+         <slashedHistoric>?</slashedHistoric>
+      </digit>
+      <digit value="4">
+         <simple>4</simple>
+         <crossed></crossed>
+         <backslashed></backslashed>
+         <slashed>?</slashed>
+         <simpleHistoric>4</simpleHistoric>
+         <crossedHistoric></crossedHistoric>
+         <backslashedHistoric></backslashedHistoric>
+         <slashedHistoric>?</slashedHistoric>
+      </digit>
+      <digit value="5">
+         <simple>5</simple>
+         <crossed></crossed>
+         <backslashed></backslashed>
+         <slashed></slashed>
+         <simpleHistoric>5</simpleHistoric>
+         <crossedHistoric></crossedHistoric>
+         <backslashedHistoric></backslashedHistoric>
+         <slashedHistoric></slashedHistoric>
+      </digit>
+      <digit value="6">
+         <simple>6</simple>
+         <crossed></crossed>
+         <backslashed></backslashed>
+         <slashed>?</slashed>
+         <simpleHistoric>6</simpleHistoric>
+         <crossedHistoric></crossedHistoric>
+         <backslashedHistoric></backslashedHistoric>
+         <slashedHistoric>?</slashedHistoric>
+      </digit>
+      <digit value="7">
+         <simple>7</simple>
+         <crossed></crossed>
+         <backslashed></backslashed>
+         <slashed>?</slashed>
+         <simpleHistoric>7</simpleHistoric>
+         <crossedHistoric></crossedHistoric>
+         <backslashedHistoric></backslashedHistoric>
+         <slashedHistoric>?</slashedHistoric>
+      </digit>
+      <digit value="8">
+         <simple>8</simple>
+         <crossed></crossed>
+         <backslashed></backslashed>
+         <slashed>?</slashed>
+         <simpleHistoric>8</simpleHistoric>
+         <crossedHistoric></crossedHistoric>
+         <backslashedHistoric></backslashedHistoric>
+         <slashedHistoric>?</slashedHistoric>
+      </digit>
+      <digit value="9">
+         <simple>9</simple>
+         <crossed></crossed>
+         <backslashed></backslashed>
+         <slashed>?</slashed>
+         <simpleHistoric>9</simpleHistoric>
+         <crossedHistoric></crossedHistoric>
+         <backslashedHistoric></backslashedHistoric>
+         <slashedHistoric>?</slashedHistoric>
+      </digit>
+   </font>
+
+</museScore>

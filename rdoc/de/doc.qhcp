@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<QHelpCollectionProject version="1.0">
+    <docFiles>
+        <generate>
+            <file>
+                  <input>doc.qhp</input>
+                  <output>doc.qch</output>
+            </file>
+        </generate>
+        <register>
+            <file>doc.qch</file>
+        </register>
+    </docFiles>
+</QHelpCollectionProject>
+

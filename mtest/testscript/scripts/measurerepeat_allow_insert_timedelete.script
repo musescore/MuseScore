@@ -1,0 +1,14 @@
+init init/MeasureRepeats.mscx
+cmd rewind
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd next-measure
+cmd insert-measure
+cmd select-next-chord
+cmd time-delete
+test score measurerepeat_allow_insert_timedelete.mscx

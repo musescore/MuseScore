@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="2.07">
+  <programVersion>2.1.0</programVersion>
+  <programRevision>3543170</programRevision>
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Synthesizer>
+      </Synthesizer>
+    <Division>480</Division>
+    <Style>
+      <measureSpacing>1</measureSpacing>
+      <showMeasureNumber>0</showMeasureNumber>
+      <showFooter>0</showFooter>
+      <evenFooterL>&lt;font size=&quot;13&quot;/&gt;&lt;font face=&quot;Sans&quot;/&gt;&amp;lt;font size=&amp;quot;13&amp;quot;/&amp;gt;&amp;lt;font face=&amp;quot;Sans&amp;quot;/&amp;gt;&amp;amp;lt;font size=&amp;amp;quot;13&amp;amp;quot;/&amp;amp;gt;&amp;amp;lt;font face=&amp;amp;quot;.Helvetica Neue DeskInterface&amp;amp;quot;/&amp;amp;gt;$p</evenFooterL>
+      <evenFooterC>&lt;font size=&quot;13&quot;/&gt;&lt;font face=&quot;Sans&quot;/&gt;&amp;lt;font size=&amp;quot;13&amp;quot;/&amp;gt;&amp;lt;font face=&amp;quot;Sans&amp;quot;/&amp;gt;&amp;amp;lt;font size=&amp;amp;quot;13&amp;amp;quot;/&amp;amp;gt;&amp;amp;lt;font face=&amp;amp;quot;.Helvetica Neue DeskInterface&amp;amp;quot;/&amp;amp;gt;$:copyright:</evenFooterC>
+      <oddFooterC>&lt;font size=&quot;13&quot;/&gt;&lt;font face=&quot;Sans&quot;/&gt;&amp;lt;font size=&amp;quot;13&amp;quot;/&amp;gt;&amp;lt;font face=&amp;quot;Sans&amp;quot;/&amp;gt;&amp;amp;lt;font size=&amp;amp;quot;13&amp;amp;quot;/&amp;amp;gt;&amp;amp;lt;font face=&amp;amp;quot;.Helvetica Neue DeskInterface&amp;amp;quot;/&amp;amp;gt;$:copyright:</oddFooterC>
+      <oddFooterR>&lt;font size=&quot;13&quot;/&gt;&lt;font face=&quot;Sans&quot;/&gt;&amp;lt;font size=&amp;quot;13&amp;quot;/&amp;gt;&amp;lt;font face=&amp;quot;Sans&amp;quot;/&amp;gt;&amp;amp;lt;font size=&amp;amp;quot;13&amp;amp;quot;/&amp;amp;gt;&amp;amp;lt;font face=&amp;amp;quot;.Helvetica Neue DeskInterface&amp;amp;quot;/&amp;amp;gt;$p</oddFooterR>
+      <page-layout>
+        <page-height>340.157</page-height>
+        <page-width>566.929</page-width>
+        <page-margins type="both">
+          <left-margin>11.3386</left-margin>
+          <right-margin>11.3386</right-margin>
+          <top-margin>0</top-margin>
+          <bottom-margin>0</bottom-margin>
+          </page-margins>
+        </page-layout>
+      <Spatium>1.764</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2016-04-25</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Linux</metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <PageList>
+      <Page>
+        <System>
+          </System>
+        <System>
+          </System>
+        </Page>
+      </PageList>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>Standard</name>
+          </StaffType>
+        <bracket type="-1" span="0"/>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>70</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>40</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          </Clef>
+        <TimeSig>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          <showCourtesySig>1</showCourtesySig>
+          </TimeSig>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>4</fixedLine>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>half</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>4</fixedLine>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <Note>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>4</fixedLine>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="2">
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <Chord>
+          <durationType>whole</durationType>
+          <Note>
+            <pitch>79</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <tick>1920</tick>
+        <Chord>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          <Note>
+            <track>1</track>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>4</fixedLine>
+            </Note>
+          </Chord>
+        <Chord>
+          <track>1</track>
+          <durationType>half</durationType>
+          <Note>
+            <track>1</track>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>4</fixedLine>
+            </Note>
+          </Chord>
+        <Chord>
+          <track>1</track>
+          <durationType>quarter</durationType>
+          <Note>
+            <track>1</track>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>4</fixedLine>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="3">
+        <Chord>
+          <durationType>whole</durationType>
+          <Note>
+            <pitch>62</pitch>
+            <tpc>16</tpc>
+            </Note>
+          </Chord>
+        <tick>3840</tick>
+        <Chord>
+          <offset x="0" y="-0.5"/>
+          <track>2</track>
+          <small>1</small>
+          <durationType>quarter</durationType>
+          <Note>
+            <track>2</track>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>-1</fixedLine>
+            </Note>
+          </Chord>
+        <Chord>
+          <offset x="0" y="-0.5"/>
+          <track>2</track>
+          <small>1</small>
+          <durationType>half</durationType>
+          <Note>
+            <track>2</track>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>-1</fixedLine>
+            </Note>
+          </Chord>
+        <Chord>
+          <offset x="0" y="-0.5"/>
+          <track>2</track>
+          <small>1</small>
+          <durationType>quarter</durationType>
+          <Note>
+            <track>2</track>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>-1</fixedLine>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="4">
+        <Chord>
+          <durationType>whole</durationType>
+          <Note>
+            <pitch>79</pitch>
+            <tpc>15</tpc>
+            </Note>
+          </Chord>
+        <tick>5760</tick>
+        <Chord>
+          <offset x="0" y="0.5"/>
+          <track>3</track>
+          <small>1</small>
+          <durationType>quarter</durationType>
+          <Note>
+            <track>3</track>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>9</fixedLine>
+            </Note>
+          </Chord>
+        <Chord>
+          <offset x="0" y="0.5"/>
+          <track>3</track>
+          <small>1</small>
+          <durationType>half</durationType>
+          <Note>
+            <track>3</track>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>9</fixedLine>
+            </Note>
+          </Chord>
+        <Chord>
+          <offset x="0" y="0.5"/>
+          <track>3</track>
+          <small>1</small>
+          <durationType>quarter</durationType>
+          <Note>
+            <track>3</track>
+            <pitch>72</pitch>
+            <tpc>14</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>9</fixedLine>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="5">
+        <Chord>
+          <durationType>quarter</durationType>
+          <noStem>1</noStem>
+          <Note>
+            <pitch>71</pitch>
+            <tpc>19</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>4</fixedLine>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <noStem>1</noStem>
+          <Note>
+            <pitch>71</pitch>
+            <tpc>19</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>4</fixedLine>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <noStem>1</noStem>
+          <Note>
+            <pitch>71</pitch>
+            <tpc>19</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>4</fixedLine>
+            </Note>
+          </Chord>
+        <Chord>
+          <durationType>quarter</durationType>
+          <noStem>1</noStem>
+          <Note>
+            <pitch>71</pitch>
+            <tpc>19</tpc>
+            <head>5</head>
+            <play>0</play>
+            <fixed>1</fixed>
+            <fixedLine>4</fixedLine>
+            </Note>
+          </Chord>
+        <BarLine>
+          <subtype>end</subtype>
+          <span>1</span>
+          </BarLine>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

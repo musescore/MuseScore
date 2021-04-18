@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Inspector/InspectorForm.qml</file>
+        <file>qml/MuseScore/Inspector/qmldir</file>
+    </qresource>
+</RCC>

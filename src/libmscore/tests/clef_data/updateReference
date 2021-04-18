@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/clef/clef-1.mscx clef-1-ref.mscx
+cp ../../../build.debug/mtest/libmscore/clef/clef-2.mscx clef-2-ref.mscx
+

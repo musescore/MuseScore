@@ -1,0 +1,1148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<museScore version="1.0">
+
+   <fretFont>
+      <family>FreeSans</family>
+      <displayName>MuseScore Tab Sans</displayName>
+      <defaultPitch>9</defaultPitch>
+      <defaultYOffset>0.0</defaultYOffset>
+      <fret value="0"  letter="0">0</fret>
+      <fret value="1"  letter="0">1</fret>
+      <fret value="2"  letter="0">2</fret>
+      <fret value="3"  letter="0">3</fret>
+      <fret value="4"  letter="0">4</fret>
+      <fret value="5"  letter="0">5</fret>
+      <fret value="6"  letter="0">6</fret>
+      <fret value="7"  letter="0">7</fret>
+      <fret value="8"  letter="0">8</fret>
+      <fret value="9"  letter="0">9</fret>
+      <fret value="10" letter="0">10</fret>
+      <fret value="11" letter="0">11</fret>
+      <fret value="12" letter="0">12</fret>
+      <fret value="13" letter="0">13</fret>
+      <fret value="14" letter="0">14</fret>
+      <fret value="15" letter="0">15</fret>
+      <fret value="16" letter="0">16</fret>
+      <fret value="17" letter="0">17</fret>
+      <fret value="18" letter="0">18</fret>
+      <fret value="19" letter="0">19</fret>
+      <fret value="20" letter="0">20</fret>
+      <fret value="21" letter="0">21</fret>
+      <fret value="22" letter="0">22</fret>
+      <fret value="23" letter="0">23</fret>
+      <fret value="24" letter="0">24</fret>
+      <fret value="25" letter="0">25</fret>
+      <fret value="26" letter="0">26</fret>
+      <fret value="27" letter="0">27</fret>
+      <fret value="28" letter="0">28</fret>
+      <fret value="29" letter="0">29</fret>
+      <fret value="30" letter="0">30</fret>
+      <fret value="31" letter="0">31</fret>
+      <fret value="32" letter="0">32</fret>
+      <fret value="33" letter="0">33</fret>
+      <fret value="34" letter="0">34</fret>
+      <fret value="35" letter="0">35</fret>
+      <fret value="36" letter="0">36</fret>
+      <fret value="37" letter="0">37</fret>
+      <fret value="38" letter="0">38</fret>
+      <fret value="39" letter="0">39</fret>
+      <fret value="40" letter="0">40</fret>
+      <fret value="41" letter="0">41</fret>
+      <fret value="42" letter="0">42</fret>
+      <fret value="43" letter="0">43</fret>
+      <fret value="44" letter="0">44</fret>
+      <fret value="45" letter="0">45</fret>
+      <fret value="46" letter="0">46</fret>
+      <fret value="47" letter="0">47</fret>
+      <fret value="48" letter="0">48</fret>
+      <fret value="49" letter="0">49</fret>
+      <fret value="50" letter="0">50</fret>
+      <fret value="51" letter="0">51</fret>
+      <fret value="52" letter="0">52</fret>
+      <fret value="53" letter="0">53</fret>
+      <fret value="54" letter="0">54</fret>
+      <fret value="55" letter="0">55</fret>
+      <fret value="56" letter="0">56</fret>
+      <fret value="57" letter="0">57</fret>
+      <fret value="58" letter="0">58</fret>
+      <fret value="59" letter="0">59</fret>
+      <fret value="60" letter="0">60</fret>
+      <fret value="61" letter="0">61</fret>
+      <fret value="62" letter="0">62</fret>
+      <fret value="63" letter="0">63</fret>
+      <fret value="64" letter="0">64</fret>
+      <fret value="65" letter="0">65</fret>
+      <fret value="66" letter="0">66</fret>
+      <fret value="67" letter="0">67</fret>
+      <fret value="68" letter="0">68</fret>
+      <fret value="69" letter="0">69</fret>
+      <fret value="70" letter="0">70</fret>
+      <fret value="71" letter="0">71</fret>
+      <fret value="72" letter="0">72</fret>
+      <fret value="73" letter="0">73</fret>
+      <fret value="74" letter="0">74</fret>
+      <fret value="75" letter="0">75</fret>
+      <fret value="76" letter="0">76</fret>
+      <fret value="77" letter="0">77</fret>
+      <fret value="78" letter="0">78</fret>
+      <fret value="79" letter="0">79</fret>
+      <fret value="80" letter="0">80</fret>
+      <fret value="81" letter="0">81</fret>
+      <fret value="82" letter="0">82</fret>
+      <fret value="83" letter="0">83</fret>
+      <fret value="84" letter="0">84</fret>
+      <fret value="85" letter="0">85</fret>
+      <fret value="86" letter="0">86</fret>
+      <fret value="87" letter="0">87</fret>
+      <fret value="88" letter="0">88</fret>
+      <fret value="89" letter="0">89</fret>
+      <fret value="90" letter="0">90</fret>
+      <fret value="91" letter="0">91</fret>
+      <fret value="92" letter="0">92</fret>
+      <fret value="93" letter="0">93</fret>
+      <fret value="94" letter="0">94</fret>
+      <fret value="95" letter="0">95</fret>
+      <fret value="96" letter="0">96</fret>
+      <fret value="97" letter="0">97</fret>
+      <fret value="98" letter="0">98</fret>
+      <fret value="99" letter="0">99</fret>
+      <fret value="0"  letter="1">a</fret>
+      <fret value="1"  letter="1">b</fret>
+      <fret value="2"  letter="1">c</fret>
+      <fret value="3"  letter="1">d</fret>
+      <fret value="4"  letter="1">e</fret>
+      <fret value="5"  letter="1">f</fret>
+      <fret value="6"  letter="1">g</fret>
+      <fret value="7"  letter="1">h</fret>
+      <fret value="8"  letter="1">i</fret>
+      <fret value="9"  letter="1">k</fret>
+      <fret value="10" letter="1">l</fret>
+      <fret value="11" letter="1">m</fret>
+      <fret value="12" letter="1">n</fret>
+      <fret value="13" letter="1">o</fret>
+      <fret value="14" letter="1">p</fret>
+      <fret value="15" letter="1">q</fret>
+      <fret value="16" letter="1">r</fret>
+      <mark value="x">X</mark>
+      <mark value="ghost">×</mark>
+      <mark value="slash" number="1">/</mark>
+      <mark value="slash" number="2">//</mark>
+      <mark value="slash" number="3">///</mark>
+      <mark value="slash" number="4">////</mark>
+      <mark value="slash" number="5">/////</mark>
+   </fretFont>
+   <fretFont>
+      <family>FreeSerif</family>
+      <displayName>MuseScore Tab Serif</displayName>
+      <defaultPitch>9</defaultPitch>
+      <defaultYOffset>0.0</defaultYOffset>
+      <fret value="0"  letter="0">0</fret>
+      <fret value="1"  letter="0">1</fret>
+      <fret value="2"  letter="0">2</fret>
+      <fret value="3"  letter="0">3</fret>
+      <fret value="4"  letter="0">4</fret>
+      <fret value="5"  letter="0">5</fret>
+      <fret value="6"  letter="0">6</fret>
+      <fret value="7"  letter="0">7</fret>
+      <fret value="8"  letter="0">8</fret>
+      <fret value="9"  letter="0">9</fret>
+      <fret value="10" letter="0">10</fret>
+      <fret value="11" letter="0">11</fret>
+      <fret value="12" letter="0">12</fret>
+      <fret value="13" letter="0">13</fret>
+      <fret value="14" letter="0">14</fret>
+      <fret value="15" letter="0">15</fret>
+      <fret value="16" letter="0">16</fret>
+      <fret value="17" letter="0">17</fret>
+      <fret value="18" letter="0">18</fret>
+      <fret value="19" letter="0">19</fret>
+      <fret value="20" letter="0">20</fret>
+      <fret value="21" letter="0">21</fret>
+      <fret value="22" letter="0">22</fret>
+      <fret value="23" letter="0">23</fret>
+      <fret value="24" letter="0">24</fret>
+      <fret value="25" letter="0">25</fret>
+      <fret value="26" letter="0">26</fret>
+      <fret value="27" letter="0">27</fret>
+      <fret value="28" letter="0">28</fret>
+      <fret value="29" letter="0">29</fret>
+      <fret value="30" letter="0">30</fret>
+      <fret value="31" letter="0">31</fret>
+      <fret value="32" letter="0">32</fret>
+      <fret value="33" letter="0">33</fret>
+      <fret value="34" letter="0">34</fret>
+      <fret value="35" letter="0">35</fret>
+      <fret value="36" letter="0">36</fret>
+      <fret value="37" letter="0">37</fret>
+      <fret value="38" letter="0">38</fret>
+      <fret value="39" letter="0">39</fret>
+      <fret value="40" letter="0">40</fret>
+      <fret value="41" letter="0">41</fret>
+      <fret value="42" letter="0">42</fret>
+      <fret value="43" letter="0">43</fret>
+      <fret value="44" letter="0">44</fret>
+      <fret value="45" letter="0">45</fret>
+      <fret value="46" letter="0">46</fret>
+      <fret value="47" letter="0">47</fret>
+      <fret value="48" letter="0">48</fret>
+      <fret value="49" letter="0">49</fret>
+      <fret value="50" letter="0">50</fret>
+      <fret value="51" letter="0">51</fret>
+      <fret value="52" letter="0">52</fret>
+      <fret value="53" letter="0">53</fret>
+      <fret value="54" letter="0">54</fret>
+      <fret value="55" letter="0">55</fret>
+      <fret value="56" letter="0">56</fret>
+      <fret value="57" letter="0">57</fret>
+      <fret value="58" letter="0">58</fret>
+      <fret value="59" letter="0">59</fret>
+      <fret value="60" letter="0">60</fret>
+      <fret value="61" letter="0">61</fret>
+      <fret value="62" letter="0">62</fret>
+      <fret value="63" letter="0">63</fret>
+      <fret value="64" letter="0">64</fret>
+      <fret value="65" letter="0">65</fret>
+      <fret value="66" letter="0">66</fret>
+      <fret value="67" letter="0">67</fret>
+      <fret value="68" letter="0">68</fret>
+      <fret value="69" letter="0">69</fret>
+      <fret value="70" letter="0">70</fret>
+      <fret value="71" letter="0">71</fret>
+      <fret value="72" letter="0">72</fret>
+      <fret value="73" letter="0">73</fret>
+      <fret value="74" letter="0">74</fret>
+      <fret value="75" letter="0">75</fret>
+      <fret value="76" letter="0">76</fret>
+      <fret value="77" letter="0">77</fret>
+      <fret value="78" letter="0">78</fret>
+      <fret value="79" letter="0">79</fret>
+      <fret value="80" letter="0">80</fret>
+      <fret value="81" letter="0">81</fret>
+      <fret value="82" letter="0">82</fret>
+      <fret value="83" letter="0">83</fret>
+      <fret value="84" letter="0">84</fret>
+      <fret value="85" letter="0">85</fret>
+      <fret value="86" letter="0">86</fret>
+      <fret value="87" letter="0">87</fret>
+      <fret value="88" letter="0">88</fret>
+      <fret value="89" letter="0">89</fret>
+      <fret value="90" letter="0">90</fret>
+      <fret value="91" letter="0">91</fret>
+      <fret value="92" letter="0">92</fret>
+      <fret value="93" letter="0">93</fret>
+      <fret value="94" letter="0">94</fret>
+      <fret value="95" letter="0">95</fret>
+      <fret value="96" letter="0">96</fret>
+      <fret value="97" letter="0">97</fret>
+      <fret value="98" letter="0">98</fret>
+      <fret value="99" letter="0">99</fret>
+      <fret value="0"  letter="1">a</fret>
+      <fret value="1"  letter="1">b</fret>
+      <fret value="2"  letter="1">c</fret>
+      <fret value="3"  letter="1">d</fret>
+      <fret value="4"  letter="1">e</fret>
+      <fret value="5"  letter="1">f</fret>
+      <fret value="6"  letter="1">g</fret>
+      <fret value="7"  letter="1">h</fret>
+      <fret value="8"  letter="1">i</fret>
+      <fret value="9"  letter="1">k</fret>
+      <fret value="10" letter="1">l</fret>
+      <fret value="11" letter="1">m</fret>
+      <fret value="12" letter="1">n</fret>
+      <fret value="13" letter="1">o</fret>
+      <fret value="14" letter="1">p</fret>
+      <fret value="15" letter="1">q</fret>
+      <fret value="16" letter="1">r</fret>
+      <mark value="x">X</mark>
+      <mark value="ghost">×</mark>
+      <mark value="slash" number="1">/</mark>
+      <mark value="slash" number="2">//</mark>
+      <mark value="slash" number="3">///</mark>
+      <mark value="slash" number="4">////</mark>
+      <mark value="slash" number="5">/////</mark>
+   </fretFont>
+   <fretFont>
+      <family>MScoreTabulature</family>
+      <displayName>MuseScore Tab Renaiss</displayName>
+      <defaultPitch>10</defaultPitch>
+      <defaultYOffset>0</defaultYOffset>
+      <fret value="0"  letter="0">0</fret>
+      <fret value="1"  letter="0">1</fret>
+      <fret value="2"  letter="0">2</fret>
+      <fret value="3"  letter="0">3</fret>
+      <fret value="4"  letter="0">4</fret>
+      <fret value="5"  letter="0">5</fret>
+      <fret value="6"  letter="0">6</fret>
+      <fret value="7"  letter="0">7</fret>
+      <fret value="8"  letter="0">8</fret>
+      <fret value="9"  letter="0">9</fret>
+      <fret value="10" letter="0">:</fret>
+      <fret value="11" letter="0">11</fret>
+      <fret value="12" letter="0">12</fret>
+      <fret value="13" letter="0">13</fret>
+      <fret value="14" letter="0">14</fret>
+      <fret value="15" letter="0">15</fret>
+      <fret value="16" letter="0">16</fret>
+      <fret value="17" letter="0">17</fret>
+      <fret value="18" letter="0">18</fret>
+      <fret value="19" letter="0">19</fret>
+      <fret value="20" letter="0">20</fret>
+      <fret value="21" letter="0">21</fret>
+      <fret value="22" letter="0">22</fret>
+      <fret value="23" letter="0">23</fret>
+      <fret value="24" letter="0">24</fret>
+      <fret value="25" letter="0">25</fret>
+      <fret value="26" letter="0">26</fret>
+      <fret value="27" letter="0">27</fret>
+      <fret value="28" letter="0">28</fret>
+      <fret value="29" letter="0">29</fret>
+      <fret value="30" letter="0">30</fret>
+      <fret value="31" letter="0">31</fret>
+      <fret value="32" letter="0">32</fret>
+      <fret value="33" letter="0">33</fret>
+      <fret value="34" letter="0">34</fret>
+      <fret value="35" letter="0">35</fret>
+      <fret value="36" letter="0">36</fret>
+      <fret value="37" letter="0">37</fret>
+      <fret value="38" letter="0">38</fret>
+      <fret value="39" letter="0">39</fret>
+      <fret value="40" letter="0">40</fret>
+      <fret value="41" letter="0">41</fret>
+      <fret value="42" letter="0">42</fret>
+      <fret value="43" letter="0">43</fret>
+      <fret value="44" letter="0">44</fret>
+      <fret value="45" letter="0">45</fret>
+      <fret value="46" letter="0">46</fret>
+      <fret value="47" letter="0">47</fret>
+      <fret value="48" letter="0">48</fret>
+      <fret value="49" letter="0">49</fret>
+      <fret value="50" letter="0">50</fret>
+      <fret value="51" letter="0">51</fret>
+      <fret value="52" letter="0">52</fret>
+      <fret value="53" letter="0">53</fret>
+      <fret value="54" letter="0">54</fret>
+      <fret value="55" letter="0">55</fret>
+      <fret value="56" letter="0">56</fret>
+      <fret value="57" letter="0">57</fret>
+      <fret value="58" letter="0">58</fret>
+      <fret value="59" letter="0">59</fret>
+      <fret value="60" letter="0">60</fret>
+      <fret value="61" letter="0">61</fret>
+      <fret value="62" letter="0">62</fret>
+      <fret value="63" letter="0">63</fret>
+      <fret value="64" letter="0">64</fret>
+      <fret value="65" letter="0">65</fret>
+      <fret value="66" letter="0">66</fret>
+      <fret value="67" letter="0">67</fret>
+      <fret value="68" letter="0">68</fret>
+      <fret value="69" letter="0">69</fret>
+      <fret value="70" letter="0">70</fret>
+      <fret value="71" letter="0">71</fret>
+      <fret value="72" letter="0">72</fret>
+      <fret value="73" letter="0">73</fret>
+      <fret value="74" letter="0">74</fret>
+      <fret value="75" letter="0">75</fret>
+      <fret value="76" letter="0">76</fret>
+      <fret value="77" letter="0">77</fret>
+      <fret value="78" letter="0">78</fret>
+      <fret value="79" letter="0">79</fret>
+      <fret value="80" letter="0">80</fret>
+      <fret value="81" letter="0">81</fret>
+      <fret value="82" letter="0">82</fret>
+      <fret value="83" letter="0">83</fret>
+      <fret value="84" letter="0">84</fret>
+      <fret value="85" letter="0">85</fret>
+      <fret value="86" letter="0">86</fret>
+      <fret value="87" letter="0">87</fret>
+      <fret value="88" letter="0">88</fret>
+      <fret value="89" letter="0">89</fret>
+      <fret value="90" letter="0">90</fret>
+      <fret value="91" letter="0">91</fret>
+      <fret value="92" letter="0">92</fret>
+      <fret value="93" letter="0">93</fret>
+      <fret value="94" letter="0">94</fret>
+      <fret value="95" letter="0">95</fret>
+      <fret value="96" letter="0">96</fret>
+      <fret value="97" letter="0">97</fret>
+      <fret value="98" letter="0">98</fret>
+      <fret value="99" letter="0">99</fret>
+      <fret value="0"  letter="1">A</fret>
+      <fret value="1"  letter="1">B</fret>
+      <fret value="2"  letter="1">C</fret>
+      <fret value="3"  letter="1">D</fret>
+      <fret value="4"  letter="1">E</fret>
+      <fret value="5"  letter="1">F</fret>
+      <fret value="6"  letter="1">G</fret>
+      <fret value="7"  letter="1">H</fret>
+      <fret value="8"  letter="1">I</fret>
+      <fret value="9"  letter="1">K</fret>
+      <fret value="10" letter="1">L</fret>
+      <fret value="11" letter="1">M</fret>
+      <fret value="12" letter="1">N</fret>
+      <fret value="13" letter="1">O</fret>
+      <fret value="14" letter="1">P</fret>
+      <fret value="15" letter="1">Q</fret>
+      <fret value="16" letter="1">R</fret>
+      <mark value="x">:</mark>
+      <mark value="ghost">@</mark>
+      <mark value="slash" number="1">V</mark>
+      <mark value="slash" number="2">W</mark>
+      <mark value="slash" number="3">X</mark>
+      <mark value="slash" number="4">Y</mark>
+      <mark value="slash" number="5">Z</mark>
+   </fretFont>
+   <fretFont>
+      <family>MScoreTabulature</family>
+      <displayName>MuseScore Phalèse</displayName>
+      <defaultPitch>10</defaultPitch>
+      <defaultYOffset>0</defaultYOffset>
+      <fret value="0"  letter="0">0</fret>
+      <fret value="1"  letter="0">1</fret>
+      <fret value="2"  letter="0">2</fret>
+      <fret value="3"  letter="0">3</fret>
+      <fret value="4"  letter="0">4</fret>
+      <fret value="5"  letter="0">5</fret>
+      <fret value="6"  letter="0">6</fret>
+      <fret value="7"  letter="0">7</fret>
+      <fret value="8"  letter="0">8</fret>
+      <fret value="9"  letter="0">9</fret>
+      <fret value="10" letter="0">:</fret>
+      <fret value="11" letter="0">11</fret>
+      <fret value="12" letter="0">12</fret>
+      <fret value="13" letter="0">13</fret>
+      <fret value="14" letter="0">14</fret>
+      <fret value="15" letter="0">15</fret>
+      <fret value="16" letter="0">16</fret>
+      <fret value="17" letter="0">17</fret>
+      <fret value="18" letter="0">18</fret>
+      <fret value="19" letter="0">19</fret>
+      <fret value="20" letter="0">20</fret>
+      <fret value="21" letter="0">21</fret>
+      <fret value="22" letter="0">22</fret>
+      <fret value="23" letter="0">23</fret>
+      <fret value="24" letter="0">24</fret>
+      <fret value="25" letter="0">25</fret>
+      <fret value="26" letter="0">26</fret>
+      <fret value="27" letter="0">27</fret>
+      <fret value="28" letter="0">28</fret>
+      <fret value="29" letter="0">29</fret>
+      <fret value="30" letter="0">30</fret>
+      <fret value="31" letter="0">31</fret>
+      <fret value="32" letter="0">32</fret>
+      <fret value="33" letter="0">33</fret>
+      <fret value="34" letter="0">34</fret>
+      <fret value="35" letter="0">35</fret>
+      <fret value="36" letter="0">36</fret>
+      <fret value="37" letter="0">37</fret>
+      <fret value="38" letter="0">38</fret>
+      <fret value="39" letter="0">39</fret>
+      <fret value="40" letter="0">40</fret>
+      <fret value="41" letter="0">41</fret>
+      <fret value="42" letter="0">42</fret>
+      <fret value="43" letter="0">43</fret>
+      <fret value="44" letter="0">44</fret>
+      <fret value="45" letter="0">45</fret>
+      <fret value="46" letter="0">46</fret>
+      <fret value="47" letter="0">47</fret>
+      <fret value="48" letter="0">48</fret>
+      <fret value="49" letter="0">49</fret>
+      <fret value="50" letter="0">50</fret>
+      <fret value="51" letter="0">51</fret>
+      <fret value="52" letter="0">52</fret>
+      <fret value="53" letter="0">53</fret>
+      <fret value="54" letter="0">54</fret>
+      <fret value="55" letter="0">55</fret>
+      <fret value="56" letter="0">56</fret>
+      <fret value="57" letter="0">57</fret>
+      <fret value="58" letter="0">58</fret>
+      <fret value="59" letter="0">59</fret>
+      <fret value="60" letter="0">60</fret>
+      <fret value="61" letter="0">61</fret>
+      <fret value="62" letter="0">62</fret>
+      <fret value="63" letter="0">63</fret>
+      <fret value="64" letter="0">64</fret>
+      <fret value="65" letter="0">65</fret>
+      <fret value="66" letter="0">66</fret>
+      <fret value="67" letter="0">67</fret>
+      <fret value="68" letter="0">68</fret>
+      <fret value="69" letter="0">69</fret>
+      <fret value="70" letter="0">70</fret>
+      <fret value="71" letter="0">71</fret>
+      <fret value="72" letter="0">72</fret>
+      <fret value="73" letter="0">73</fret>
+      <fret value="74" letter="0">74</fret>
+      <fret value="75" letter="0">75</fret>
+      <fret value="76" letter="0">76</fret>
+      <fret value="77" letter="0">77</fret>
+      <fret value="78" letter="0">78</fret>
+      <fret value="79" letter="0">79</fret>
+      <fret value="80" letter="0">80</fret>
+      <fret value="81" letter="0">81</fret>
+      <fret value="82" letter="0">82</fret>
+      <fret value="83" letter="0">83</fret>
+      <fret value="84" letter="0">84</fret>
+      <fret value="85" letter="0">85</fret>
+      <fret value="86" letter="0">86</fret>
+      <fret value="87" letter="0">87</fret>
+      <fret value="88" letter="0">88</fret>
+      <fret value="89" letter="0">89</fret>
+      <fret value="90" letter="0">90</fret>
+      <fret value="91" letter="0">91</fret>
+      <fret value="92" letter="0">92</fret>
+      <fret value="93" letter="0">93</fret>
+      <fret value="94" letter="0">94</fret>
+      <fret value="95" letter="0">95</fret>
+      <fret value="96" letter="0">96</fret>
+      <fret value="97" letter="0">97</fret>
+      <fret value="98" letter="0">98</fret>
+      <fret value="99" letter="0">99</fret>
+      <fret value="0"  letter="1">a</fret>
+      <fret value="1"  letter="1">b</fret>
+      <fret value="2"  letter="1">c</fret>
+      <fret value="3"  letter="1">d</fret>
+      <fret value="4"  letter="1">e</fret>
+      <fret value="5"  letter="1">f</fret>
+      <fret value="6"  letter="1">g</fret>
+      <fret value="7"  letter="1">h</fret>
+      <fret value="8"  letter="1">i</fret>
+      <fret value="9"  letter="1">k</fret>
+      <fret value="10" letter="1">l</fret>
+      <fret value="11" letter="1">m</fret>
+      <fret value="12" letter="1">n</fret>
+      <fret value="13" letter="1">o</fret>
+      <fret value="14" letter="1">p</fret>
+      <fret value="15" letter="1">q</fret>
+      <fret value="16" letter="1">r</fret>
+      <mark value="x">:</mark>
+      <mark value="ghost">`</mark>
+      <mark value="slash" number="1">V</mark>
+      <mark value="slash" number="2">W</mark>
+      <mark value="slash" number="3">X</mark>
+      <mark value="slash" number="4">Y</mark>
+      <mark value="slash" number="5">Z</mark>
+   </fretFont>
+   <fretFont>
+      <family>MScoreTabulature</family>
+      <displayName>MuseScore Bonneuil-de Visée</displayName>
+      <defaultPitch>10</defaultPitch>
+      <defaultYOffset>0</defaultYOffset>
+      <fret value="0"  letter="0">0</fret>
+      <fret value="1"  letter="0">1</fret>
+      <fret value="2"  letter="0">2</fret>
+      <fret value="3"  letter="0">3</fret>
+      <fret value="4"  letter="0">4</fret>
+      <fret value="5"  letter="0">5</fret>
+      <fret value="6"  letter="0">6</fret>
+      <fret value="7"  letter="0">7</fret>
+      <fret value="8"  letter="0">8</fret>
+      <fret value="9"  letter="0">9</fret>
+      <fret value="10" letter="0">:</fret>
+      <fret value="11" letter="0">11</fret>
+      <fret value="12" letter="0">12</fret>
+      <fret value="13" letter="0">13</fret>
+      <fret value="14" letter="0">14</fret>
+      <fret value="15" letter="0">15</fret>
+      <fret value="16" letter="0">16</fret>
+      <fret value="17" letter="0">17</fret>
+      <fret value="18" letter="0">18</fret>
+      <fret value="19" letter="0">19</fret>
+      <fret value="20" letter="0">20</fret>
+      <fret value="21" letter="0">21</fret>
+      <fret value="22" letter="0">22</fret>
+      <fret value="23" letter="0">23</fret>
+      <fret value="24" letter="0">24</fret>
+      <fret value="25" letter="0">25</fret>
+      <fret value="26" letter="0">26</fret>
+      <fret value="27" letter="0">27</fret>
+      <fret value="28" letter="0">28</fret>
+      <fret value="29" letter="0">29</fret>
+      <fret value="30" letter="0">30</fret>
+      <fret value="31" letter="0">31</fret>
+      <fret value="32" letter="0">32</fret>
+      <fret value="33" letter="0">33</fret>
+      <fret value="34" letter="0">34</fret>
+      <fret value="35" letter="0">35</fret>
+      <fret value="36" letter="0">36</fret>
+      <fret value="37" letter="0">37</fret>
+      <fret value="38" letter="0">38</fret>
+      <fret value="39" letter="0">39</fret>
+      <fret value="40" letter="0">40</fret>
+      <fret value="41" letter="0">41</fret>
+      <fret value="42" letter="0">42</fret>
+      <fret value="43" letter="0">43</fret>
+      <fret value="44" letter="0">44</fret>
+      <fret value="45" letter="0">45</fret>
+      <fret value="46" letter="0">46</fret>
+      <fret value="47" letter="0">47</fret>
+      <fret value="48" letter="0">48</fret>
+      <fret value="49" letter="0">49</fret>
+      <fret value="50" letter="0">50</fret>
+      <fret value="51" letter="0">51</fret>
+      <fret value="52" letter="0">52</fret>
+      <fret value="53" letter="0">53</fret>
+      <fret value="54" letter="0">54</fret>
+      <fret value="55" letter="0">55</fret>
+      <fret value="56" letter="0">56</fret>
+      <fret value="57" letter="0">57</fret>
+      <fret value="58" letter="0">58</fret>
+      <fret value="59" letter="0">59</fret>
+      <fret value="60" letter="0">60</fret>
+      <fret value="61" letter="0">61</fret>
+      <fret value="62" letter="0">62</fret>
+      <fret value="63" letter="0">63</fret>
+      <fret value="64" letter="0">64</fret>
+      <fret value="65" letter="0">65</fret>
+      <fret value="66" letter="0">66</fret>
+      <fret value="67" letter="0">67</fret>
+      <fret value="68" letter="0">68</fret>
+      <fret value="69" letter="0">69</fret>
+      <fret value="70" letter="0">70</fret>
+      <fret value="71" letter="0">71</fret>
+      <fret value="72" letter="0">72</fret>
+      <fret value="73" letter="0">73</fret>
+      <fret value="74" letter="0">74</fret>
+      <fret value="75" letter="0">75</fret>
+      <fret value="76" letter="0">76</fret>
+      <fret value="77" letter="0">77</fret>
+      <fret value="78" letter="0">78</fret>
+      <fret value="79" letter="0">79</fret>
+      <fret value="80" letter="0">80</fret>
+      <fret value="81" letter="0">81</fret>
+      <fret value="82" letter="0">82</fret>
+      <fret value="83" letter="0">83</fret>
+      <fret value="84" letter="0">84</fret>
+      <fret value="85" letter="0">85</fret>
+      <fret value="86" letter="0">86</fret>
+      <fret value="87" letter="0">87</fret>
+      <fret value="88" letter="0">88</fret>
+      <fret value="89" letter="0">89</fret>
+      <fret value="90" letter="0">90</fret>
+      <fret value="91" letter="0">91</fret>
+      <fret value="92" letter="0">92</fret>
+      <fret value="93" letter="0">93</fret>
+      <fret value="94" letter="0">94</fret>
+      <fret value="95" letter="0">95</fret>
+      <fret value="96" letter="0">96</fret>
+      <fret value="97" letter="0">97</fret>
+      <fret value="98" letter="0">98</fret>
+      <fret value="99" letter="0">99</fret>
+      <fret value="0"  letter="1">Ł</fret>
+      <fret value="1"  letter="1">ł</fret>
+      <fret value="2"  letter="1">Ń</fret>
+      <fret value="3"  letter="1">ń</fret>
+      <fret value="4"  letter="1">Ņ</fret>
+      <fret value="5"  letter="1">ņ</fret>
+      <fret value="6"  letter="1">Ň</fret>
+      <fret value="7"  letter="1">ň</fret>
+      <fret value="8"  letter="1">ŉ</fret>
+      <fret value="9"  letter="1">ŋ</fret>
+      <fret value="10" letter="1">Ō</fret>
+      <fret value="11" letter="1">ō</fret>
+      <fret value="12" letter="1">Ŏ</fret>
+      <fret value="13" letter="1">ŏ</fret>
+      <fret value="14" letter="1">Ő</fret>
+      <fret value="15" letter="1">ő</fret>
+      <fret value="16" letter="1">Œ</fret>
+      <mark value="x">:</mark>
+      <mark value="ghost">`</mark>
+      <mark value="slash" number="1">V</mark>
+      <mark value="slash" number="2">W</mark>
+      <mark value="slash" number="3">X</mark>
+      <mark value="slash" number="4">Y</mark>
+      <mark value="slash" number="5">Z</mark>
+   </fretFont>
+   <fretFont>
+      <family>MScoreTabulature</family>
+      <displayName>MuseScore Bonneuil-Gaultier</displayName>
+      <defaultPitch>10</defaultPitch>
+      <defaultYOffset>0</defaultYOffset>
+      <fret value="0"  letter="0">0</fret>
+      <fret value="1"  letter="0">1</fret>
+      <fret value="2"  letter="0">2</fret>
+      <fret value="3"  letter="0">3</fret>
+      <fret value="4"  letter="0">4</fret>
+      <fret value="5"  letter="0">5</fret>
+      <fret value="6"  letter="0">6</fret>
+      <fret value="7"  letter="0">7</fret>
+      <fret value="8"  letter="0">8</fret>
+      <fret value="9"  letter="0">9</fret>
+      <fret value="10" letter="0">:</fret>
+      <fret value="11" letter="0">11</fret>
+      <fret value="12" letter="0">12</fret>
+      <fret value="13" letter="0">13</fret>
+      <fret value="14" letter="0">14</fret>
+      <fret value="15" letter="0">15</fret>
+      <fret value="16" letter="0">16</fret>
+      <fret value="17" letter="0">17</fret>
+      <fret value="18" letter="0">18</fret>
+      <fret value="19" letter="0">19</fret>
+      <fret value="20" letter="0">20</fret>
+      <fret value="21" letter="0">21</fret>
+      <fret value="22" letter="0">22</fret>
+      <fret value="23" letter="0">23</fret>
+      <fret value="24" letter="0">24</fret>
+      <fret value="25" letter="0">25</fret>
+      <fret value="26" letter="0">26</fret>
+      <fret value="27" letter="0">27</fret>
+      <fret value="28" letter="0">28</fret>
+      <fret value="29" letter="0">29</fret>
+      <fret value="30" letter="0">30</fret>
+      <fret value="31" letter="0">31</fret>
+      <fret value="32" letter="0">32</fret>
+      <fret value="33" letter="0">33</fret>
+      <fret value="34" letter="0">34</fret>
+      <fret value="35" letter="0">35</fret>
+      <fret value="36" letter="0">36</fret>
+      <fret value="37" letter="0">37</fret>
+      <fret value="38" letter="0">38</fret>
+      <fret value="39" letter="0">39</fret>
+      <fret value="40" letter="0">40</fret>
+      <fret value="41" letter="0">41</fret>
+      <fret value="42" letter="0">42</fret>
+      <fret value="43" letter="0">43</fret>
+      <fret value="44" letter="0">44</fret>
+      <fret value="45" letter="0">45</fret>
+      <fret value="46" letter="0">46</fret>
+      <fret value="47" letter="0">47</fret>
+      <fret value="48" letter="0">48</fret>
+      <fret value="49" letter="0">49</fret>
+      <fret value="50" letter="0">50</fret>
+      <fret value="51" letter="0">51</fret>
+      <fret value="52" letter="0">52</fret>
+      <fret value="53" letter="0">53</fret>
+      <fret value="54" letter="0">54</fret>
+      <fret value="55" letter="0">55</fret>
+      <fret value="56" letter="0">56</fret>
+      <fret value="57" letter="0">57</fret>
+      <fret value="58" letter="0">58</fret>
+      <fret value="59" letter="0">59</fret>
+      <fret value="60" letter="0">60</fret>
+      <fret value="61" letter="0">61</fret>
+      <fret value="62" letter="0">62</fret>
+      <fret value="63" letter="0">63</fret>
+      <fret value="64" letter="0">64</fret>
+      <fret value="65" letter="0">65</fret>
+      <fret value="66" letter="0">66</fret>
+      <fret value="67" letter="0">67</fret>
+      <fret value="68" letter="0">68</fret>
+      <fret value="69" letter="0">69</fret>
+      <fret value="70" letter="0">70</fret>
+      <fret value="71" letter="0">71</fret>
+      <fret value="72" letter="0">72</fret>
+      <fret value="73" letter="0">73</fret>
+      <fret value="74" letter="0">74</fret>
+      <fret value="75" letter="0">75</fret>
+      <fret value="76" letter="0">76</fret>
+      <fret value="77" letter="0">77</fret>
+      <fret value="78" letter="0">78</fret>
+      <fret value="79" letter="0">79</fret>
+      <fret value="80" letter="0">80</fret>
+      <fret value="81" letter="0">81</fret>
+      <fret value="82" letter="0">82</fret>
+      <fret value="83" letter="0">83</fret>
+      <fret value="84" letter="0">84</fret>
+      <fret value="85" letter="0">85</fret>
+      <fret value="86" letter="0">86</fret>
+      <fret value="87" letter="0">87</fret>
+      <fret value="88" letter="0">88</fret>
+      <fret value="89" letter="0">89</fret>
+      <fret value="90" letter="0">90</fret>
+      <fret value="91" letter="0">91</fret>
+      <fret value="92" letter="0">92</fret>
+      <fret value="93" letter="0">93</fret>
+      <fret value="94" letter="0">94</fret>
+      <fret value="95" letter="0">95</fret>
+      <fret value="96" letter="0">96</fret>
+      <fret value="97" letter="0">97</fret>
+      <fret value="98" letter="0">98</fret>
+      <fret value="99" letter="0">99</fret>
+      <fret value="0"  letter="1">ā</fret>
+      <fret value="1"  letter="1">Ă</fret>
+      <fret value="2"  letter="1">ă</fret>
+      <fret value="3"  letter="1">Ą</fret>
+      <fret value="4"  letter="1">ą</fret>
+      <fret value="5"  letter="1">Ć</fret>
+      <fret value="6"  letter="1">ć</fret>
+      <fret value="7"  letter="1">Ĉ</fret>
+      <fret value="8"  letter="1">ĉ</fret>
+      <fret value="9"  letter="1">ċ</fret>
+      <fret value="10" letter="1">Č</fret>
+      <fret value="11" letter="1">č</fret>
+      <fret value="12" letter="1">Ď</fret>
+      <fret value="13" letter="1">ď</fret>
+      <fret value="14" letter="1">Đ</fret>
+      <fret value="15" letter="1">đ</fret>
+      <fret value="16" letter="1">Ē</fret>
+      <mark value="x">:</mark>
+      <mark value="ghost">Ā</mark>
+      <mark value="slash" number="1">Ė</mark>
+      <mark value="slash" number="2">ė</mark>
+      <mark value="slash" number="3">Ę</mark>
+      <mark value="slash" number="4">ę</mark>
+      <mark value="slash" number="5">Ě</mark>
+   </fretFont>
+   <fretFont>
+      <family>MScoreTabulature</family>
+      <displayName>MuseScore Dowland</displayName>
+      <defaultPitch>10</defaultPitch>
+      <defaultYOffset>0</defaultYOffset>
+      <fret value="0"  letter="0">0</fret>
+      <fret value="1"  letter="0">1</fret>
+      <fret value="2"  letter="0">2</fret>
+      <fret value="3"  letter="0">3</fret>
+      <fret value="4"  letter="0">4</fret>
+      <fret value="5"  letter="0">5</fret>
+      <fret value="6"  letter="0">6</fret>
+      <fret value="7"  letter="0">7</fret>
+      <fret value="8"  letter="0">8</fret>
+      <fret value="9"  letter="0">9</fret>
+      <fret value="10" letter="0">:</fret>
+      <fret value="11" letter="0">11</fret>
+      <fret value="12" letter="0">12</fret>
+      <fret value="13" letter="0">13</fret>
+      <fret value="14" letter="0">14</fret>
+      <fret value="15" letter="0">15</fret>
+      <fret value="16" letter="0">16</fret>
+      <fret value="17" letter="0">17</fret>
+      <fret value="18" letter="0">18</fret>
+      <fret value="19" letter="0">19</fret>
+      <fret value="20" letter="0">20</fret>
+      <fret value="21" letter="0">21</fret>
+      <fret value="22" letter="0">22</fret>
+      <fret value="23" letter="0">23</fret>
+      <fret value="24" letter="0">24</fret>
+      <fret value="25" letter="0">25</fret>
+      <fret value="26" letter="0">26</fret>
+      <fret value="27" letter="0">27</fret>
+      <fret value="28" letter="0">28</fret>
+      <fret value="29" letter="0">29</fret>
+      <fret value="30" letter="0">30</fret>
+      <fret value="31" letter="0">31</fret>
+      <fret value="32" letter="0">32</fret>
+      <fret value="33" letter="0">33</fret>
+      <fret value="34" letter="0">34</fret>
+      <fret value="35" letter="0">35</fret>
+      <fret value="36" letter="0">36</fret>
+      <fret value="37" letter="0">37</fret>
+      <fret value="38" letter="0">38</fret>
+      <fret value="39" letter="0">39</fret>
+      <fret value="40" letter="0">40</fret>
+      <fret value="41" letter="0">41</fret>
+      <fret value="42" letter="0">42</fret>
+      <fret value="43" letter="0">43</fret>
+      <fret value="44" letter="0">44</fret>
+      <fret value="45" letter="0">45</fret>
+      <fret value="46" letter="0">46</fret>
+      <fret value="47" letter="0">47</fret>
+      <fret value="48" letter="0">48</fret>
+      <fret value="49" letter="0">49</fret>
+      <fret value="50" letter="0">50</fret>
+      <fret value="51" letter="0">51</fret>
+      <fret value="52" letter="0">52</fret>
+      <fret value="53" letter="0">53</fret>
+      <fret value="54" letter="0">54</fret>
+      <fret value="55" letter="0">55</fret>
+      <fret value="56" letter="0">56</fret>
+      <fret value="57" letter="0">57</fret>
+      <fret value="58" letter="0">58</fret>
+      <fret value="59" letter="0">59</fret>
+      <fret value="60" letter="0">60</fret>
+      <fret value="61" letter="0">61</fret>
+      <fret value="62" letter="0">62</fret>
+      <fret value="63" letter="0">63</fret>
+      <fret value="64" letter="0">64</fret>
+      <fret value="65" letter="0">65</fret>
+      <fret value="66" letter="0">66</fret>
+      <fret value="67" letter="0">67</fret>
+      <fret value="68" letter="0">68</fret>
+      <fret value="69" letter="0">69</fret>
+      <fret value="70" letter="0">70</fret>
+      <fret value="71" letter="0">71</fret>
+      <fret value="72" letter="0">72</fret>
+      <fret value="73" letter="0">73</fret>
+      <fret value="74" letter="0">74</fret>
+      <fret value="75" letter="0">75</fret>
+      <fret value="76" letter="0">76</fret>
+      <fret value="77" letter="0">77</fret>
+      <fret value="78" letter="0">78</fret>
+      <fret value="79" letter="0">79</fret>
+      <fret value="80" letter="0">80</fret>
+      <fret value="81" letter="0">81</fret>
+      <fret value="82" letter="0">82</fret>
+      <fret value="83" letter="0">83</fret>
+      <fret value="84" letter="0">84</fret>
+      <fret value="85" letter="0">85</fret>
+      <fret value="86" letter="0">86</fret>
+      <fret value="87" letter="0">87</fret>
+      <fret value="88" letter="0">88</fret>
+      <fret value="89" letter="0">89</fret>
+      <fret value="90" letter="0">90</fret>
+      <fret value="91" letter="0">91</fret>
+      <fret value="92" letter="0">92</fret>
+      <fret value="93" letter="0">93</fret>
+      <fret value="94" letter="0">94</fret>
+      <fret value="95" letter="0">95</fret>
+      <fret value="96" letter="0">96</fret>
+      <fret value="97" letter="0">97</fret>
+      <fret value="98" letter="0">98</fret>
+      <fret value="99" letter="0">99</fret>
+      <fret value="0"  letter="1">š</fret>
+      <fret value="1"  letter="1">Ţ</fret>
+      <fret value="2"  letter="1">ţ</fret>
+      <fret value="3"  letter="1">Ť</fret>
+      <fret value="4"  letter="1">ť</fret>
+      <fret value="5"  letter="1">Ŧ</fret>
+      <fret value="6"  letter="1">ŧ</fret>
+      <fret value="7"  letter="1">Ũ</fret>
+      <fret value="8"  letter="1">ũ</fret>
+      <fret value="9"  letter="1">Ū</fret>
+      <fret value="10" letter="1">ū</fret>
+      <fret value="11" letter="1">č</fret>
+      <fret value="12" letter="1">Ď</fret>
+      <fret value="13" letter="1">ď</fret>
+      <fret value="14" letter="1">Đ</fret>
+      <fret value="15" letter="1">đ</fret>
+      <fret value="16" letter="1">Ē</fret>
+      <mark value="x">:</mark>
+      <mark value="ghost">Ā</mark>
+      <mark value="slash" number="1">Ė</mark>
+      <mark value="slash" number="2">ė</mark>
+      <mark value="slash" number="3">Ę</mark>
+      <mark value="slash" number="4">ę</mark>
+      <mark value="slash" number="5">Ě</mark>
+   </fretFont>
+   <fretFont>
+      <family>MScoreTabulature</family>
+      <displayName>MuseScore Lute Didactic</displayName>
+      <defaultPitch>10</defaultPitch>
+      <defaultYOffset>0</defaultYOffset>
+      <fret value="0"  letter="0">0</fret>
+      <fret value="1"  letter="0">1</fret>
+      <fret value="2"  letter="0">2</fret>
+      <fret value="3"  letter="0">3</fret>
+      <fret value="4"  letter="0">4</fret>
+      <fret value="5"  letter="0">5</fret>
+      <fret value="6"  letter="0">6</fret>
+      <fret value="7"  letter="0">7</fret>
+      <fret value="8"  letter="0">8</fret>
+      <fret value="9"  letter="0">9</fret>
+      <fret value="10" letter="0">:</fret>
+      <fret value="11" letter="0">11</fret>
+      <fret value="12" letter="0">12</fret>
+      <fret value="13" letter="0">13</fret>
+      <fret value="14" letter="0">14</fret>
+      <fret value="15" letter="0">15</fret>
+      <fret value="16" letter="0">16</fret>
+      <fret value="17" letter="0">17</fret>
+      <fret value="18" letter="0">18</fret>
+      <fret value="19" letter="0">19</fret>
+      <fret value="20" letter="0">20</fret>
+      <fret value="21" letter="0">21</fret>
+      <fret value="22" letter="0">22</fret>
+      <fret value="23" letter="0">23</fret>
+      <fret value="24" letter="0">24</fret>
+      <fret value="25" letter="0">25</fret>
+      <fret value="26" letter="0">26</fret>
+      <fret value="27" letter="0">27</fret>
+      <fret value="28" letter="0">28</fret>
+      <fret value="29" letter="0">29</fret>
+      <fret value="30" letter="0">30</fret>
+      <fret value="31" letter="0">31</fret>
+      <fret value="32" letter="0">32</fret>
+      <fret value="33" letter="0">33</fret>
+      <fret value="34" letter="0">34</fret>
+      <fret value="35" letter="0">35</fret>
+      <fret value="36" letter="0">36</fret>
+      <fret value="37" letter="0">37</fret>
+      <fret value="38" letter="0">38</fret>
+      <fret value="39" letter="0">39</fret>
+      <fret value="40" letter="0">40</fret>
+      <fret value="41" letter="0">41</fret>
+      <fret value="42" letter="0">42</fret>
+      <fret value="43" letter="0">43</fret>
+      <fret value="44" letter="0">44</fret>
+      <fret value="45" letter="0">45</fret>
+      <fret value="46" letter="0">46</fret>
+      <fret value="47" letter="0">47</fret>
+      <fret value="48" letter="0">48</fret>
+      <fret value="49" letter="0">49</fret>
+      <fret value="50" letter="0">50</fret>
+      <fret value="51" letter="0">51</fret>
+      <fret value="52" letter="0">52</fret>
+      <fret value="53" letter="0">53</fret>
+      <fret value="54" letter="0">54</fret>
+      <fret value="55" letter="0">55</fret>
+      <fret value="56" letter="0">56</fret>
+      <fret value="57" letter="0">57</fret>
+      <fret value="58" letter="0">58</fret>
+      <fret value="59" letter="0">59</fret>
+      <fret value="60" letter="0">60</fret>
+      <fret value="61" letter="0">61</fret>
+      <fret value="62" letter="0">62</fret>
+      <fret value="63" letter="0">63</fret>
+      <fret value="64" letter="0">64</fret>
+      <fret value="65" letter="0">65</fret>
+      <fret value="66" letter="0">66</fret>
+      <fret value="67" letter="0">67</fret>
+      <fret value="68" letter="0">68</fret>
+      <fret value="69" letter="0">69</fret>
+      <fret value="70" letter="0">70</fret>
+      <fret value="71" letter="0">71</fret>
+      <fret value="72" letter="0">72</fret>
+      <fret value="73" letter="0">73</fret>
+      <fret value="74" letter="0">74</fret>
+      <fret value="75" letter="0">75</fret>
+      <fret value="76" letter="0">76</fret>
+      <fret value="77" letter="0">77</fret>
+      <fret value="78" letter="0">78</fret>
+      <fret value="79" letter="0">79</fret>
+      <fret value="80" letter="0">80</fret>
+      <fret value="81" letter="0">81</fret>
+      <fret value="82" letter="0">82</fret>
+      <fret value="83" letter="0">83</fret>
+      <fret value="84" letter="0">84</fret>
+      <fret value="85" letter="0">85</fret>
+      <fret value="86" letter="0">86</fret>
+      <fret value="87" letter="0">87</fret>
+      <fret value="88" letter="0">88</fret>
+      <fret value="89" letter="0">89</fret>
+      <fret value="90" letter="0">90</fret>
+      <fret value="91" letter="0">91</fret>
+      <fret value="92" letter="0">92</fret>
+      <fret value="93" letter="0">93</fret>
+      <fret value="94" letter="0">94</fret>
+      <fret value="95" letter="0">95</fret>
+      <fret value="96" letter="0">96</fret>
+      <fret value="97" letter="0">97</fret>
+      <fret value="98" letter="0">98</fret>
+      <fret value="99" letter="0">99</fret>
+      <fret value="0"  letter="1">ġ</fret>
+      <fret value="1"  letter="1">Ģ</fret>
+      <fret value="2"  letter="1">ģ</fret>
+      <fret value="3"  letter="1">Ĥ</fret>
+      <fret value="4"  letter="1">ĥ</fret>
+      <fret value="5"  letter="1">Ħ</fret>
+      <fret value="6"  letter="1">ħ</fret>
+      <fret value="7"  letter="1">Ĩ</fret>
+      <fret value="8"  letter="1">ĩ</fret>
+      <fret value="9"  letter="1">ī</fret>
+      <fret value="10" letter="1">Ĭ</fret>
+      <fret value="11" letter="1">ĭ</fret>
+      <fret value="12" letter="1">Į</fret>
+      <fret value="13" letter="1">į</fret>
+      <fret value="14" letter="1">İ</fret>
+      <fret value="15" letter="1">ı</fret>
+      <fret value="16" letter="1">Ĳ</fret>
+      <mark value="x">:</mark>
+      <mark value="ghost">Ā</mark>
+      <mark value="slash" number="1">Ķ</mark>
+      <mark value="slash" number="2">ķ</mark>
+      <mark value="slash" number="3">ĸ</mark>
+      <mark value="slash" number="4">Ĺ</mark>
+      <mark value="slash" number="5">ĺ</mark>
+   </fretFont>
+
+   <durationFont>
+      <family>MScoreTabulature</family>
+      <displayName>MuseScore Tab Modern</displayName>
+      <defaultPitch>15</defaultPitch>
+      <defaultYOffset>0</defaultYOffset>
+      <beamWidth>0.5</beamWidth>
+      <stemHeight>3</stemHeight>
+      <stemWidth>0.1</stemWidth>
+      <zeroBeamValue>semiminima</zeroBeamValue>
+      <duration value="longa">Ƞ</duration>
+      <duration value="brevis">ȡ</duration>
+      <duration value="semibrevis">Ȣ</duration>
+      <duration value="minima">ȣ</duration>
+      <duration value="semiminima">Ȥ</duration>
+      <duration value="fusa">ȥ</duration>
+      <duration value="semifusa">Ȧ</duration>
+      <duration value="32">ȧ</duration>
+      <duration value="64">Ȩ</duration>
+      <duration value="128">ȩ</duration>
+      <duration value="256">Ȫ</duration>
+      <duration value="dot">Ȭ</duration>
+   </durationFont>
+   <durationFont>
+      <family>MScoreTabulature</family>
+      <displayName>MuseScore Tab Italian</displayName>
+      <defaultPitch>15</defaultPitch>
+      <defaultYOffset>0</defaultYOffset>
+      <beamWidth>0.15</beamWidth>
+      <stemHeight>1.75</stemHeight>
+      <stemWidth>0.15</stemWidth>
+      <zeroBeamValue>semibrevis</zeroBeamValue>
+      <duration value="longa">Ȁ</duration>
+      <duration value="brevis">ȁ</duration>
+      <duration value="semibrevis">Ȃ</duration>
+      <duration value="minima">ȃ</duration>
+      <duration value="semiminima">Ȅ</duration>
+      <duration value="fusa">ȅ</duration>
+      <duration value="semifusa">Ȇ</duration>
+      <duration value="32">ȇ</duration>
+      <duration value="64">Ȉ</duration>
+      <duration value="128">ȉ</duration>
+      <duration value="256">Ȋ</duration>
+      <duration value="dot">Ȍ</duration>
+   </durationFont>
+   <durationFont>
+      <family>MScoreTabulature</family>
+      <displayName>MuseScore Tab French</displayName>
+      <defaultPitch>15</defaultPitch>
+      <defaultYOffset>0</defaultYOffset>
+      <beamWidth>0.30</beamWidth>
+      <stemHeight>3.125</stemHeight>
+      <stemWidth>0.21</stemWidth>
+      <zeroBeamValue>semiminima</zeroBeamValue>
+      <duration value="longa">Ȑ</duration>
+      <duration value="brevis">ȑ</duration>
+      <duration value="semibrevis">Ȓ</duration>
+      <duration value="minima">ȓ</duration>
+      <duration value="semiminima">Ȕ</duration>
+      <duration value="fusa">ȕ</duration>
+      <duration value="semifusa">Ȗ</duration>
+      <duration value="32">ȗ</duration>
+      <duration value="64">Ș</duration>
+      <duration value="128">ș</duration>
+      <duration value="256">Ț</duration>
+      <duration value="dot">Ȝ</duration>
+   </durationFont>
+   <durationFont>
+      <family>MScoreTabulature</family>
+      <displayName>MuseScore French Baroque (headless)</displayName>
+      <defaultPitch>15</defaultPitch>
+      <defaultYOffset>0</defaultYOffset>
+      <duration value="longa">Ȱ</duration>
+      <duration value="brevis">ȱ</duration>
+      <duration value="semibrevis">Ȳ</duration>
+      <duration value="minima">ȳ</duration>
+      <duration value="semiminima">ȴ</duration>
+      <duration value="fusa">ȵ</duration>
+      <duration value="semifusa">ȶ</duration>
+      <duration value="32">ȷ</duration>
+      <duration value="64">ȸ</duration>
+      <duration value="128">ȹ</duration>
+      <duration value="256">Ⱥ</duration>
+      <duration value="dot">ȼ</duration>
+   </durationFont>
+   <durationFont>
+      <family>MScoreTabulature</family>
+      <displayName>MuseScore French Baroque</displayName>
+      <defaultPitch>15</defaultPitch>
+      <defaultYOffset>0</defaultYOffset>
+      <duration value="longa">ɀ</duration>
+      <duration value="brevis">Ɂ</duration>
+      <duration value="semibrevis">ɂ</duration>
+      <duration value="minima">Ƀ</duration>
+      <duration value="semiminima">Ʉ</duration>
+      <duration value="fusa">Ʌ</duration>
+      <duration value="semifusa">Ɇ</duration>
+      <duration value="32">ɇ</duration>
+      <duration value="64">Ɉ</duration>
+      <duration value="128">ɉ</duration>
+      <duration value="256">Ɋ</duration>
+      <duration value="dot">Ɍ</duration>
+   </durationFont>
+
+</museScore>

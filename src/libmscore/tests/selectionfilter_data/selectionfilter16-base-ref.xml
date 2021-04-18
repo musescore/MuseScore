@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaffList version="2.00" tick="0" len="1920" staff="0" staves="1">
+  <Staff id="0">
+    <voiceOffset>
+      <voice id="0">0</voice>
+      </voiceOffset>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>72</pitch>
+        <tpc>14</tpc>
+        </Note>
+      <Tremolo>
+        <subtype>r8</subtype>
+        </Tremolo>
+      </Chord>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>74</pitch>
+        <tpc>16</tpc>
+        </Note>
+      <Tremolo>
+        <subtype>r16</subtype>
+        </Tremolo>
+      </Chord>
+    <Chord>
+      <durationType>half</durationType>
+      <duration>1/4</duration>
+      <Note>
+        <pitch>76</pitch>
+        <tpc>18</tpc>
+        </Note>
+      <Tremolo>
+        <subtype>c8</subtype>
+        </Tremolo>
+      </Chord>
+    <Chord>
+      <durationType>half</durationType>
+      <duration>1/4</duration>
+      <Note>
+        <pitch>77</pitch>
+        <tpc>13</tpc>
+        </Note>
+      </Chord>
+    </Staff>
+  </StaffList>

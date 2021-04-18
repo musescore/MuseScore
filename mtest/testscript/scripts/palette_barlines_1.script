@@ -1,0 +1,32 @@
+init init/Treble.mscx
+cmd note-input
+cmd escape
+palette BarLine subtype double
+cmd next-chord
+cmd next-chord
+palette BarLine subtype start-repeat
+palette BarLine subtype end-repeat
+cmd next-chord
+cmd next-chord
+cmd next-chord
+palette BarLine subtype end-repeat
+cmd next-chord
+palette BarLine subtype start-repeat
+cmd next-chord
+cmd next-chord
+palette BarLine subtype end
+cmd next-chord
+cmd next-chord
+palette BarLine subtype dotted
+cmd next-chord
+palette BarLine subtype normal spanFromOffset -1
+cmd next-chord
+cmd next-chord
+palette BarLine subtype normal
+cmd next-chord
+cmd select-next-chord
+cmd select-next-chord
+palette BarLine subtype start-repeat
+cmd next-chord
+palette BarLine subtype end-repeat
+test score palette_barlines_1.mscx

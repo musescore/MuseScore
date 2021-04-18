@@ -1,0 +1,14 @@
+Tick  =      0   Type  =     3   Pitch  =     0   Velocity  =   127   Channel  =     0    
+Tick  =    480   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
+Tick  =    960   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
+Tick  =   1440   Type  =     3   Pitch  =     0   Velocity  =   127   Channel  =     0    
+Tick  =   1920   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
+Tick  =   2400   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
+Tick  =   2880   Type  =     3   Pitch  =     0   Velocity  =   127   Channel  =     0    
+Tick  =   3360   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
+Tick  =   3840   Type  =     4   Pitch  =     0   Velocity  =   127   Channel  =     0    
+Tick  =   4320   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
+Tick  =   4800   Type  =     3   Pitch  =     0   Velocity  =   127   Channel  =     0    
+Tick  =   5280   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    
+Tick  =   5760   Type  =     4   Pitch  =     0   Velocity  =   127   Channel  =     0    
+Tick  =   6240   Type  =     4   Pitch  =     0   Velocity  =    80   Channel  =     0    

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+S=../../../build.debug/mtest/libmscore/implode_explode
+
+# cp $S/explode1-test.mscx                 explode1-ref.mscx
+cp $S/implode1-test1.mscx                 implode1-ref.mscx
+cp $S/implode1-test2.mscx                 implode1.mscx
+cp $S/undoExplode01-test.mscx            undoExplode01-ref.mscx
+cp $S/undoExplode02-test.mscx            undoExplode02-ref.mscx
+cp $S/undoImplode01-test.mscx            undoImplode01-ref.mscx
+cp $S/undoImplode02-test.mscx            undoImplode02-ref.mscx
+cp $S/undoImplodeVoice01-test.mscx       undoImplodeVoice01-ref.mscx
+cp $S/undoImplodeVoice02-test.mscx       undoImplodeVoice02-ref.mscx

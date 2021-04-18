@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/note/grace-test.mscx   grace-ref.mscx
+cp ../../../build.debug/mtest/libmscore/note/tpc-test.mscx   tpc-ref.mscx
+cp ../../../build.debug/mtest/libmscore/note/tpc-transpose-test.mscx   tpc-transpose-ref.mscx
+cp ../../../build.debug/mtest/libmscore/note/tpc-transpose2-test.mscx   tpc-transpose2-ref.mscx
+cp ../../../build.debug/mtest/libmscore/note/notelimits-test.mscx   notelimits-ref.mscx
+

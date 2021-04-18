@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaffList version="2.00" tick="0" len="1920" staff="0" staves="1">
+  <Staff id="0">
+    <voiceOffset>
+      <voice id="0">0</voice>
+      </voiceOffset>
+    <FretDiagram>
+      <fretDiagram>
+        <string no="0">
+          <marker>cross</marker>
+          </string>
+        <string no="1">
+          <dot fret="3">normal</dot>
+          </string>
+        <string no="2">
+          <dot fret="2">normal</dot>
+          </string>
+        <string no="3">
+          <marker>circle</marker>
+          </string>
+        <string no="4">
+          <marker>circle</marker>
+          </string>
+        <string no="5">
+          <dot fret="1">normal</dot>
+          </string>
+        </fretDiagram>
+      <string no="0">
+        <marker>88</marker>
+        </string>
+      <string no="1">
+        <dot>3</dot>
+        </string>
+      <string no="2">
+        <dot>2</dot>
+        </string>
+      <string no="3">
+        <marker>79</marker>
+        </string>
+      <string no="4">
+        <marker>79</marker>
+        </string>
+      <string no="5">
+        <dot>1</dot>
+        </string>
+      </FretDiagram>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>47</pitch>
+        <tpc>19</tpc>
+        </Note>
+      <Note>
+        <pitch>52</pitch>
+        <tpc>18</tpc>
+        </Note>
+      <Note>
+        <pitch>59</pitch>
+        <tpc>19</tpc>
+        </Note>
+      </Chord>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>62</pitch>
+        <tpc>16</tpc>
+        </Note>
+      </Chord>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>47</pitch>
+        <tpc>19</tpc>
+        </Note>
+      <Note>
+        <pitch>52</pitch>
+        <tpc>18</tpc>
+        </Note>
+      <Note>
+        <pitch>59</pitch>
+        <tpc>19</tpc>
+        </Note>
+      <Note>
+        <pitch>64</pitch>
+        <tpc>18</tpc>
+        </Note>
+      </Chord>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>65</pitch>
+        <tpc>13</tpc>
+        </Note>
+      </Chord>
+    </Staff>
+  </StaffList>

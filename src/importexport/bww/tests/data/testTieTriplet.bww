@@ -1,0 +1,16 @@
+"Tie and Triplet",(T,L,0,0,Times New Roman,16,700,0,0,18,0,0,0)
+
+"Type",(Y,C,0,0,Times New Roman,14,400,0,0,18,0,0,0)
+
+"Composer",(M,R,0,0,Times New Roman,14,400,0,0,18,0,0,0)
+
+"Footer",(F,R,0,0,Times New Roman,10,400,0,0,18,0,0,0)
+
+
+& sharpf sharpc 4_4
+cg ^ts B_2	B_8 ^te	C_4	D_8	!
+LA_4	cg ^ts B_4	B_16 ^te	^ts C_4	C_16 ^te	D_8	!
+B_4	C_4	D_4	^ts E_4	!
+E_1 ^te	!
+ag ^3s LGr_8	LAl_8	Bl_8 ^3e	^3s Cr_8	dg Cr_8	eg Cl_8 ^3e	D_2	!t
+!I

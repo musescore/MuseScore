@@ -1,0 +1,263 @@
+References
+
+* Cakewalk® Synthesizers: From Presets to Power User, Second Edition
+  Simon Cann - Course Technology - 2009
+
+
+Zerberus Supported and Unsupported SFZ Opcodes
+==
+
+Supported
+--
+
+Instrument definition
+      group
+      region
+Sample Definition
+      sample
+Input controls
+      loccN
+      hiccN
+      lochan
+      hichan
+      key
+      lokey
+      hikey
+      lovel
+      hivel
+      loccN
+      hiccN
+      hirand
+      lorand
+      seq_length
+      seq_position
+      trigger
+           attack
+           release
+           first
+           legato
+      off_by
+      off_mode
+           fast
+           normal
+      on_loccN
+      on_hiccN
+Sample Player
+      delay
+      offset
+      loop_mode
+           no_loop
+           one_shot
+           loop_continuous
+           loop_sustain
+      loop_start
+      loop_end
+Performance Parameters
+Pitch
+      transpose
+      tune
+      pitch_keycenter
+      pitch_keytrack
+Pitch EG
+Pitch LFO
+Filter
+      fil_type
+      cutoff
+      fil_veltrack
+Filter EG
+Filter LFO
+Amplifier
+      pan
+      volume
+      amp_veltrack
+      rt_decay
+Amplifier EG
+      ampeg_delay
+      ampeg_start
+      ampeg_attack
+      ampeg_hold
+      ampeg_decay
+      ampeg_sustain
+      ampeg_vel2delay
+      ampeg_vel2attack
+      ampeg_vel2hold
+      ampeg_vel2decay
+      ampeg_vel2sustain
+      ampeg_vel2release
+      ampeg_release
+Amplifier LFO
+Equalizer
+Effects
+
+Not in SFZ 1.0
+      note_offset
+      octave_offset
+
+Unsupported
+--
+
+Input Controls
+      lobend
+      hibend
+      lochanaft
+      hichanaft
+      lopolyaft
+      hipolyaft
+      lopbm
+      hipbm
+      sw_lokey
+      sw_hikey
+      sw_last
+      sw_down
+      sw_up
+      sw_previous
+      sw_vel
+Performance Parameters
+Sample Player
+      delay_random
+      delay_ccN
+      offset_random
+      offset_ccN
+      end
+      count
+      sync_beats
+      sync_offset
+Pitch
+      pitch_veltrack
+      pitch_random
+      bend_up
+      bend_down
+      bend_step
+Pitch EG
+      pitcheg_delay
+      pitcheg_start
+      pitcheg_attack
+      pitcheg_hold
+      pitcheg_decay
+      pitcheg_sustain
+      pitcheg_release
+      pitcheg_depth
+      pitcheg_vel2delay
+      pitcheg_vel2attack
+      pitcheg_vel2hold
+      pitcheg_vel2decay
+      pitcheg_vel2sustain
+      pitcheg_vel2release
+      pitcheg_vel2depth
+Pitch LFO
+      pitchlfo_delay
+      pitchlfo_fade
+      pitchlfo_freq
+      pitchlfo_depth
+      pitchlfo_depthccN
+      pitchlfo_depthchanaft
+      pitchlfo_depthpolyaft
+      pitchlfo_freqccN
+      pitchlfo_freqpolyaft
+Filter
+      cutoff_ccN
+      cutoff_chanaft
+      cutoff_polyaft
+      resonance
+      fil_keytrack
+      fil_keycenter
+      fil_random
+Filter EG
+      fileg_delay
+      fileg_start
+      fileg_attack
+      fileg_hold
+      fileg_decay
+      fileg_sustain
+      fileg_release
+      fileg_depth
+      fileg_vel2delay
+      fileg_vel2attack
+      fileg_vel2hold
+      fileg_vel2decay
+      fileg_vel2sustain
+      fileg_vel2release
+      fileg_vel2depth
+Filter LFO
+      fillfo_delay
+      fillfo_fade
+      fillfo_freq
+      fillfo_depth
+      fillfo_depthccN
+      fillfo_depthchanaft
+      fillfo_depthpolyaft
+      fillfo_freqccN
+      fillfo_freqchanaft
+      fillfo_freqpolyaft
+Amplifier
+      width
+      position
+      amp_keytrack
+      amp_keycenter
+      amp_velcurve_1
+      amo_velcurve_127
+      amp_random
+      output
+      gain_ccN
+      xfin_lokey
+      xfin_hikey
+      xfout_lokey
+      xfout_hikey
+      xf_keycurve
+      xfin_lovel
+      xfin_hivel
+      xfout_lovel
+      xfout_hivel
+      xf_velcurve
+      xfin_loccN
+      xfin_hiccN
+      xfout_loccN
+      xfout_hiccN
+      xf)cccurve
+Amplifier EG
+      ampeg_delayccN
+      ampeg_startccN
+      ampeg_attackccN
+      ampeg_holdccN
+      ampeg_decayccN
+      ampeg_sustainccN
+      ampeg_releaseccN
+Amplifier LFO
+      amplfo_delay
+      amplfo_fade
+      amplfo_freq
+      amplfo_depth
+      amplfo_depthccN
+      amplfo_depthchanaft
+      amplfo_depthpolyaft
+      amplfo_freqccN
+      amplfo_freqchanaft
+      amplfo_freqpolyaft
+Equalizer
+      eq1_freq
+      eq2_freq
+      eq3_freq
+      eq1_freqccN
+      eq2_freqccN
+      eq3_freqccN
+      eq1_vel2freq
+      eq2_vel2freq
+      eq3_vel2freq
+      eq1_bw
+      eq2_bw
+      eq3_bw
+      eq1_bwccN
+      eq2_bwccN
+      eq3_bwccN
+      eq1_gain
+      eq2_gain
+      eq3_gain
+      eq1_gainccN
+      eq2_gainccN
+      eq3_gainccN
+      eq1_vel2gain
+      eq2_vel2gain
+      eq3_vel2gain
+Effects
+      effect1
+      effect2

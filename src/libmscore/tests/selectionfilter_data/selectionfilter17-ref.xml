@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaffList version="2.00" tick="0" len="1920" staff="0" staves="1">
+  <Staff id="0">
+    <voiceOffset>
+      <voice id="1">0</voice>
+      </voiceOffset>
+    <location>
+      <voices>1</voices>
+      </location>
+    <Chord>
+      <durationType>half</durationType>
+      <Note>
+        <pitch>64</pitch>
+        <tpc>18</tpc>
+        </Note>
+      </Chord>
+    <Chord>
+      <durationType>half</durationType>
+      <Note>
+        <pitch>64</pitch>
+        <tpc>18</tpc>
+        </Note>
+      </Chord>
+    </Staff>
+  </StaffList>

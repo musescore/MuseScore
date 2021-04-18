@@ -1,0 +1,473 @@
+FONTLOG for the Bravura font
+============================
+
+This file provides detailed information on the Bravura Font Software. This information should be distributed along with the Bravura fonts and any derivative works.
+
+The Bravura Font Software is a family consisting of two fonts, Bravura and Bravura Text.
+
+
+Basic font information
+----------------------
+Bravura is a Unicode typeface designed by Steinberg for its in-development music notation and scoring application.
+
+It is compliant with version 1.2 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
+
+More information about Steinberg's scoring application can be found at:
+
+http://www.steinberg.net/
+
+The latest version of the SMuFL specification can be found at:
+
+https://w3c.github.io/smufl/gitbook/
+
+
+Note for developers
+-------------------
+If you are intending to use Bravura as part of your own software application, please refer to the SMuFL specification for useful information about Bravura's metrics and how glyphs are registered:
+
+https://w3c.github.io/smufl/gitbook/specification/index.html
+
+
+Changelog
+---------
+
+22 May 2013 (Daniel Spreadbury) Bravura version 0.1
+- Initial pre-release to coincide with 2013 Music Encoding Conference
+
+5 July 2013 (Daniel Spreadbury) Bravura version 0.2
+- Bravura 0.2 is designed to be compatible with SMuFL 0.5
+- Thanks to Mark Johnson and Emil Wojtacki for contributing a number of glyphs to the font
+- Many existing code points have been changed, as a result of hundreds of new glyphs being added, plus a number of new ranges.
+- Added long (U+E008) and very long (U+E009) system dividers for very large scores.
+- Added heavy (U+E034), double heavy (U+E035) and dotted (U+E037) barlines.
+- Added square coda (U+E047) and small repeat signs for repeats within bars (U+E04A, U+E04B).
+- Added recommended stylistic alternates for segno (U+E045) and coda (U+E046) for the appearance preferred by Japanese publishers.
+- Added quindicesima bassa G clef (U+E061) and F clef (U+E070), G clef combined with C clef (U+E066), G clefs designed to be ligated with numbers below and above to show the transposition of an instrument (U+E067, U+E068), plus recommended ligatures for G and F clefs with numbers above and below; also added G, C and F clefs with arrows up and down, which may be used either as alternatives for octave clefs or to represent the extremes of register on an instrument (U+E069, U+E06A, U+E06C, U+E06D, U+E074, U+E075), and semi-pitched percussion clefs (U+E078, U+E079), plus a bridge clef (U+E085).
+- Removed “tall” versions of 6- and 4-string tab clefs, and instead made them recommended stylistic alternates, together with versions that use letterforms with serifs.
+- Added +, -, X (multiply), comma, parentheses glyphs for time signatures (U+E09C–U+E0A6), plus basic fractions (U+E0A7–U+E0AB), and Penderecki-style open time signature (U+E0AD).
+- Added specific noteheads for double whole note (U+E100) and whole note (U+E101) to the noteheads range rather than relying on the glyphs in the pre-composed notes range.
+- Added shaped noteheads for specific note values (double whole note, whole note, half note, and quarter note and shorter); also added large up- and down-pointing triangles for highest/lowest notes played by an instrument (U+E102–U+E109).
+- Added large slashed circular noteheads (U+E136–U+E139) as used by Stockhausen for notating gong/tam-tam hits.
+- Added combining glyphs for note clusters of specific note values (U+E154–U+E171).
+- Added noteheads with solfège and chromatic note names embedded within them, as seen in “EZ-Play” educational scores (U+E180–U+E1D9).
+- Added specific range of noteheads for sacred harp shape note singing (U+E1E0–U+E1EF).
+- Added pre-composed 1024th notes (U+E214–U+E215), tails (U+E28E–U+E28F) and rest (U+E52C).
+- Added range for typing simple beamed groups of notes in text-based applications, (U+E220–U+E233). Designed to be used in conjunction with pre-composed notes (U+E200–U+E216), and allowing beamed groups with rhythmic values between 8th notes and 64th notes, plus ties and triplets.
+- Added combining stems for multiphonics, damp, sussurando, Saunders vibrato pulse accent (U+E248–U+E24D).
+- Added four- and five-stroke tremolos (U+E263–U+E264, U+E268–U+E269) plus Wieniawski-style unmeasured tremolo glyphs (U+E26C–U+26D).
+- Added stylistic alternates for flags (U+E280–U+E28F): straight flags; and shorter stem-up flags to avoid collisions with augmentation dots.
+- Separated accidentals into several discrete ranges based around the various accidental systems, including 12-edo, 24-edo, the system of up- and down-pointing arrows favoured by Gould, Stein-Zimmermann (also known as Tartini-Couper), Maneri-Sims, Ben Johnston, Marc Sabat and Wolfgang von Schweinitz’s Extended Helmholtz-Ellis Just Intonation Pitch Notation. A range has also been reserved for George Secor and Dave Keenan’s Sagittal system of accidentals (U+E360–U+E47F).
+- Added accidentals used in Turkish folk music (U+E4C8–U+E4CF).
+- Added Persian accidentals (U+E4D0–U+E4D1).
+- Added staccatissimo wedge (U+E4E5–U+E4E6) and stroke (U+E4E7–U+E4E8) glyphs.
+- Added very short (U+E502–U+E503) and very long (U+E508–U+E509) fermatas, plus short caesura (U+E50D).
+- Added left and right halves of multirest H-bars (U+E52E–U+E52F) and old-style quarter rest as seen in e.g. Novello editions (U+E530).
+- Added ventiduesima (three octaves, “22”) glyphs to octaves range (U+E557–U+E559).
+- Added precomposed glyphs for common dynamics (U+E567–U+E57B) and niente circle for hairpins (U+E57E).
+- Added schleifer (long mordent, U+E5AA) and Haydn ornament (U+E5D1).
+- Added additional brass techniques, including short, medium and long versions of lift, doit, lip fall, smooth fall, rough fall, plus jazz turn (U+E5E0–U+E5FB).
+- Added range of glyphs for embouchure tightness (U+E61B–U+E623), reed position (U+E624–U+E626), multiphonics (U+E627–U+E629), and stylistic alternates for double- and triple-tonguing with no slurs.
+- Added further overpressure glyphs (U+E64B–U+E64D), plus jété, fouetté, Rebecca Saunders’s “vibrato pulse” accent and thumb position (U+E64E–U+E652) to string techniques range.
+- Added plectrum pictogram (U+E669) and combining damp glyph for note stems (U+E66A) to plucked techniques range.
+- Added arrows for breathing and intonation, plus combining sussurando glyph for note stems (U+E687–U+E68B), to vocal techniques range.
+- Added pedal pictograms, sostenuto pedal symbols, and half-pedal marks (U+E6A5–U+E6AC) to keyboard techniques range.
+- Added pictograms for metal rod (U+E6CF) and tuning key (U+E6D0) to harp techniques range.
+- Added Smith Brindle’s pictograms for tuned percussion instruments (U+E6E5–U+E6E8).
+- Added pictogram for Indian table (U+E720), plus stylistic alternate for tambourine (U+E718) as used by Stockhausen.
+- Added pictogram for football rattle (U+E735), plus Smith Brindle’s pictogram for castanets (U+E738) as a stylistic alternate.
+- Added pictogram for handbell (U+E765), plus stylistic alternates for cow bell (from Berio) and sleigh bell (from Smith Brindle).
+- Added pictogram for Chinese cymbal (U+E776).
+- Added pictogram for tam-tam with beater from Smith Brindle (U+E791).
+- Added pictogram for maracas (U+E7A2), rainstick (U+E7A7), plus stylistic alternate for maraca from Smith Brindle (U+E7A1).
+- Added pictogram for megaphone (U+E7B9).
+- Added soft and hard glockenspiel beaters (U+E7F0–U+E7F7), superball beaters (U+E81C–U+E81F), wound beaters with hard and soft cores (U+E821–U+E828), plus soft, medium and hard gum beaters (U+E829–U+E834).
+- Added pluck lift (U+E887) to handbells range.
+- Added “Theme” indicators to analytics range (U+E8E4–U+E8E9).
+- Added minor (minus sign) glyph (U+E904) to chord symbols range.
+- Added mensural proportion glyphs (U+E9DB–U+E9DF).
+- Added combining raise and lower glyphs (U+EA2C–U+EA2D) to figured bass range.
+- Added repetition, angle brackets, and prefix + and ring glyphs to function symbols range (U+EA63–U+EA68).
+- Added new range for multi-segment lines, including moving all of the various “wiggle” glyphs (for trill, glissando, arpeggiando, vibrato, etc.) plus the 11 ornament strokes from the Unicode Musical Symbols range into this range, and adding further glyphs for variable speed trills, alternate arpeggiato ending glyphs, wavy lines, squaretooth and sawtooth lines, group glissando, circular motion, and variable speed and intensity of vibrato (U+EA80–U+EAD0).
+- Added new range of pictograms for electronic music, including microphone, loudspeaker, transport controls, volume level and MIDI controller level (U+EAE0–U+EAF5).
+- Added new “do not copy” glyphs (U+EB02–U+EB03), eyeglasses (U+EB04) and choral divide arrows (U+EB05–U+EB07) glyphs to the miscellaneous symbols range.
+
+29 July 2013 (Daniel Spreadbury) Bravura version 0.3
+- Bravura 0.3 is designed to be compatible with SMuFL 0.6
+- Bravura now incorporates glyphs from the Sagittal font by George Secor and Dave Keenan (U+E360–U+E47F). For more information about the Sagittal system of accidentals and to download the stand-alone Sagittal font, see http://sagittal.org.
+- Changed registration of many glyphs in the font to match the interim guidelines for font metrics and glyph registration in SMuFL 0.6.
+- Added complete set of dynamics to liga table, and duplicated these entries in the ccmp table.
+- Added opening parenthesis and closing parenthesis for noteheads (U+E10A–U+E10B), circled slash notehead, heavy X and heavy X with hat noteheads, as used in Dante Agostini's drum method (U+E10C–U+E10E).
+- Added muted slash noteheads (U+E125–U+E127).
+- Added "si" note name noteheads for French solfège (U+E187, U+E18F, U+E197), and H sharp note name noteheads for German (U+E1AE, U+E1C5, U+E1DC).
+- Fixed the vertical position of U+E227 and U+E228 (continuing beams for 8th notes with short and long stems), and made the stem thickness of beamed groups of notes consistent with those of individual notes.
+- Added combining rim shot stem (U+E24E).
+- Added "sharp sharp" accidental for compatibility with MusicXML (U+E2A9).
+- Added extended Stein-Zimmermann accidentals with arrows (U+E2F8–U+E304).
+- Adjusted size and registration of Sims microtonal accidentals (U+E308–U+E30D).
+- Added one-third-tone sharp and two-third-tones sharp accidentals as used by Xenakis (U+E4B0–U+E4B1).
+- Significant revision to the ornaments range, including splitting into separate ranges (common ornaments, other baroque ornaments, combining strokes for trills/mordents, precomposed trills/mordents). A small number of glyphs from previous versions of SMuFL have been removed to make way for symbols drawn from Frederick Neumann’s authoritative book on baroque ornamentation.
+- The turn symbol and its derivates (U+E594 et al) have been redrawn to have a more open appearance, for better reproduction at small staff sizes or when read at a distance.
+- Added thumb pizzicato (U+E654).
+- Added recommended stylistic alternates for Bartok pizzicato above/below (U+E660–U+E661).
+- Added recommended stylistic alternates for 'Ped.' (U+E6A0) and 'Sost.' (U+E6A5) that do not include terminal dots.
+- Added choke cymbal glyph (U+E875) from Weinberg.
+- Added open, half-open and closed wah/volume pedals, left- and right-hand tapping glyphs for guitar (U+E8AD–U+E8B1).
+- Added new range for arrows and arrowheads (U+EB00–U+EB1F), including moving the up/down/right/left arrows from the vocal techniques range (previously U+E687–U+E68A) into this new range.
+- Redesigned 'do not copy' glyph (U+E833) to be a bit more aggressive.
+
+27 November 2013 (Daniel Spreadbury) Bravura version 0.7
+- Bravura 0.7 is designed to be compliant with SMuFL 0.7; its version number has been bumped such that it matches the version number of SMuFL it implements
+- Bravura now defines three stylistic sets: ss01 is for glyphs for use on small staves (i.e. different optical size); ss02 is for short up-stem flags to avoid augmentation dots; ss03 is for straight flags
+- The Bravura distribution now includes a JSON metadata file describing various recommended metrics and engraving defaults for applications that wish to use Bravura; the specification for this metadata file is documented in the main SMuFL specification
+- Significantly expanded the repertoire of glyphs for Medieval and Renaissance notation, with new ranges for clefs, accidentals and ligatures, plus considerable reworking of the notes and prolations ranges.
+- Significantly expanded the repertoire of glyphs for plainchant notation, with new ranges for staves, divisions, clefs and articulations, and a wider range of neumes.
+- Added range for Daseian notation, as found in the ninth century treatises Musica enchiriadis and Scolica enchiriadis.
+- Added new range of control characters for adjusting the staff position of staff-relative glyphs; no ligatures using these control characters are yet defined in Bravura, however.
+- Added control characters for time signature digits to allow digits to be stacked vertically, and ligatures for numerator and denominator digits.
+- Added narrow and wide staff line glyphs, intended for fonts designed for text-based applications.
+- Added C clef ottava bassa, and recommended stylistic alternate for G clef ottava bassa with parentheses around the 8.
+- Added square double whole note (breve) notehead.
+- Added new combining harp string noise for stem glyph, and corresponding precomposed stem glyph.
+- Added four further quarter-tone accidental symbols to "other microtonal accidentals" group.
+- Added some percussion playing technique symbols from Dante Agostini’s method books.
+- Added a golpe (tap the pick guard) glyph from Claude Worm’s flamenco guitar method book.
+- Added short and long fermata glyphs as used by Henze.
+- Added combining glyphs for accordion couplers, allowing the creation of any coupler diagram not explicitly encoded.
+- Added 'pf' dynamic.
+
+3 February 2014 (Daniel Spreadbury) Bravura version 0.80
+- Many minor changes to glyph outlines following corrections suggested by the Adobe FDK checkOutlines tool
+- Corrected JSON metadata for stem connection points on flag glyphs (e.g. flag8thDown, flag16thUp, etc.)
+- Changed glyph registration of left and right parentheses for noteheads (noteheadParenthesisLeft, noteheadParenthesisRight)
+- Changed font name settings in accordance with FontLab's OpenType PS font name guidelines (http://forum.fontlab.com/index.php?topic=313.0).
+- Added Ivan Wyschnegradsky’s system of 72-EDO accidentals.
+- Added Bosanquet’s comma up/down.
+- Added left/right parentheses for accidentals.
+- Added new ranges for Renaissance lute tablature, covering French/English, Italian/Spanish and German conventions.
+- Added Britten’s curlew sign for a pause of an indeterminate length.
+- Added push/pull signs for accordion.
+- Added slashed sharp/flat accidentals used by John Tavener in his Byzantine-inspired choral works.
+- Added separate noteheads for white mensural notation.
+- Added inverted signum congruentiae.
+- Added combined tenuto-accent articulation.
+- Added quasi-random wiggly lines (wiggleRandom1, wiggleRandom2, wiggleRandom3, wiggleRandom4) to multi-segment lines range.
+- Added flipped and large versions of constant circular motion (wiggleCircularConstantFlipped, wiggleCircularConstantLarge, wiggleCircularConstantFlippedLarge) to multi-segment lines range.
+- Added combining top/middle/bottom segments for black and white rectangular note clusters.
+- Added 2, 3, 4 and 6-dot divisi indicators for measured tremolos (tremoloDivisiDots2, tremoloDivisiDots3, etc.) to tremolos range.
+- Added clavichord bebung glyphs for 2, 3, and 4 finger movements (keyboardBebung2DotsAbove, keyboardBebung3DotsBelow, etc.) to the keyboard techniques range.
+- Added double-height parentheses and brackets (csymParensLeftTall, csymParensRightTall, csymBracketLeftTall, csymBracketRightTall) to the chord symbols range.
+- Added stylistic alternates for time signature digits 0–9 suitable for use as large time signatures shown above/between staves (timeSig0Large through timeSig9Large).
+– Added 'sfzp' (sforzato-piano) dynamic and ligature.
+– Added Penderecki's quarter-flat and Busotti's three-quarter sharp accidentals.
+– Added six further accordion coupler diagrams for right-hand 3 rank accordions, and accordion ricochet glyphs.
+
+9 March 2014 (Daniel Spreadbury) Bravura version 0.85
+– Updated glyph registration for articulations, such that articulations above the note are positioned sitting on the baseline, and articulations below the note are positioned hanging from the baseline.
+– Added whole and half rests with leger lines, i.e. as if displayed outside the staff.
+– Added clef for diatonic accordion.
+– Added recommended stylistic alternates for C and F clef forms used in 18th century French music, and for an F clef form used in 19th century music across Europe.
+– Added half-brackets for keyboard notation to show notes that should be played by the other hand.
+– Many code point changes, including moving the staff divide arrows, percussion swish arrow, and quite a few of the microtonal accidentals; refer to the SMuFL documentation for further details.
+– Further revisions to the plainchant ranges, including adding reversed virga, smaller version of punctum inclinatum, moving the punctum mora to the plainchant articulations range, and eliminating the precomposed podatus and clivis glyphs in favour of individual components that provide the means to construct these easily for any interval.
+– Added new range for Kievian square notation, as used for liturgical chant in the Russian Orthodox Church.
+– Added new glyphs for tabling one handbell and tabling a pair of handbells.
+– Added alternative pedal heel glyph and pedal heel or toe glyph.
+– Added recommended stylistic alternates for braces designed for use across different sizes of gaps, designed to be scaled uniformly rather than simply stretched vertically.
+– Added many new electronic music pictograms, including speaker configurations, more transport controls, additional hardware devices, and so on.
+– Added guitar fade in, fade out and swell glyphs.
+– Added the glyphs used by the Corpus Monodicum project for modern transcription of plainchant.
+
+17 April 2014 (Daniel Spreadbury) Bravura version 0.9
+– Distribution now includes Bravura Text font, intended for use in text-based applications.
+– Added new range for Kodály solfège hand signs.
+– Added new range for Peter Hayes George’s Simplified Music Notation.
+– Added narrow and wide versions of the sine wave, square wave and sawtooth wavy lines.
+– Added wide versions of the black and white diamond noteheads, as used in some handbells music.
+– Added turned (i.e. inverted) versions of up bow and down bow marks.
+– Added oriscus liquescens and strophicus liquescens (for intervals of a second up to a fifth).
+– Added oblique ligature forms for mensural notes describing intervals of a second up to a fifth for black, void, black and void, and white noteheads.
+– Added single glyph for right and left repeat barlines, and a stylistic alternate using thick-thick rather than thin-thick-thin barlines.
+– Added reversed versions of brackets to denote play with right/left hand, to allow the demarcation of the end of a passage to be played with the other hand.
+– Extended stylistic set 01 (ss01) with new glyphs redesigned for display on smaller staff sizes: time signature digits; G, C and F clef; black, half, whole and double whole noteheads; standard articulations; dynamics letter forms; flags.
+– Added recommended ligatures for standard noteheads and accidentals in parentheses.
+– Improved registration of ornamentMiddleVerticalStroke.
+– Added open arrowheads and arrows.
+– Added Kievan half note on space, and Kievan beam.
+– Added new percussion pictograms from the books by Sevsay and Peinkofer/Tannigel, plus new combining glyphs for stems showing the "crush" rudiment, "dead" notes, and to instruct the performer to turn the instrument.
+– Added five further mensural proportion signs, from Apel's book.
+– Added 12 new precomposed trills and mordents, based on Bach's ornamentation chart and ornaments found in Emmentaler.
+– Added restHBarMiddle glyph, for text-based applications to construct H-bar multirests of variable width.
+– Added noteheadWholeFilled and noteheadHalfFilled, for modern transcriptions of coloration in Medieval and Renaissance music.
+– Consolidated breath marks into a single range, and added a new upbow-like breath mark (as used in music from Russia).
+– Added range of glyphs for lyrics, including three lengths of elision undertie, and baseline hyphen (as used in music from Russia).
+– Added a wider slash notehead, for whole note (semibreve) duration.
+– Added more shape note noteheads to support the 7-shape conventions of Joseph Funk and William Walker.
+– Added maxima rest, and double whole (breve) rest with leger lines above and below.
+– Added curved caesura.
+– Added separate glyphs for the 'e', 'd' and dot in keyboard Ped. marks, plus a curved hyphen to be used along with the 'P' to show start/end pedal in some editions.
+– Added new mensural C clef, plus variations of the Petrucci C clef for different staff positions.
+– Added different custos for different staff positions.
+– Added stylistic alternates for the Medieval and Renaissance "soft b" flat accidental.
+– Added dedicated glyphs for C, G, and F clef changes, plus new combining clef change character to produce other clef change glyphs by way of glyph substitution (other clef change glyphs not currently implemented in Bravura).
+– Added one- and two-third tones sharp and flat accidentals as used by Brian Ferneyhough.
+– Added "just air" open diamond notehead as used by Brian Ferneyhough.
+– Added white and wide white diamond noteheads.
+– Added a range of glyphs for denoting accel./rit. beam lines above the staff.
+– Added normal, wide and narrow leger line glyphs.
+
+2 June 2014 (Daniel Spreadbury) Bravura version 0.99
+– Added '8' and '15' digits scaled correctly for positioning on G and F clefs
+– Added stylistic alternates for common time, cut time and + intended for use as large time signatures printed above the staff; and added an additional stylistic set (ss04) for time signature digits intended for use outside the staff
+– Added a set of noteheads enclosed in large circles, used by some drummers
+– Added an ornate X notehead contained within an ellipse
+– Added Couperin's pincé and tremblement appuyé ornaments
+– Redesigned the thumb position string technique glyph to more closely resemble a zero digit, and added a turned version
+– Added a zero-width rectangle intended to enclose single percussion beaters inside a box
+– Added strum direction arrows for guitar, and a stylistic alternate for the golpe glyph as used by Antonis Vounelakos
+– Added an additional raised 7 digit for figured bass
+– Added left- and right-pointing arrows for use in metric modulations
+– Reduced the width of stems throughout Bravura (from 0.16 spaces to 0.12 spaces); this is also reflected in the 'stemThickness' value in the 'engravingDefaults' structure in the JSON metadata
+– Redesigned the half note noteheads containing note names to improve stem connections
+– Added hundreds of new kerning pairs for beamed notes in text, percussion beaters (for overlapping tilted beaters, and overprinting of parentheses, dashed circle and rectangular outline for up/down beaters), ligated time signature digits (for positioning as numerator and denominator)
+– Fixed registration for stem decorations (e.g. tremolos, buzz roll, etc.) such that these glyphs are correctly visually centered around x = 0 and y = 0
+– Fixed registration of stylistic alternates for tablature clefs
+– Added ligatures for Johnston accidentals in various combinations
+– Removed 407 wind fingering chart glyphs; these glyphs are no longer part of the SMuFL standard, and will be released as a separate font in due course
+
+16 June 2014 (Daniel Spreadbury) Bravura 1.0
+– Redesigned the bracket top and bottom glyphs to better abut with the vertical line of the bracket
+– Added punctum deminutum (chantPunctumDeminutum)
+
+17 June 2014 (Daniel Spreadbury) Bravura 1.01
+– Corrected the duration of stem-up notes in the 'Individual notes' range (64th note was missing, and 1024th note was duplicated)
+
+23 June 2014 (Daniel Spreadbury) Bravura 1.02
+– Corrected the accidentalSims12Down glyph, which had inadvertently been replaced with the accidentalSims6Down glyph
+
+22 July 2014 (Daniel Spreadbury) Bravura 1.03
+– Reduced the size of the augmentationDot glyph (now 2/5 spaces in diameter rather than 1/2 space), and likewise reduced the size of the staccato articulations (now 1/3 space in diameter rather than 1/2 space)
+
+25 July 2014 (Daniel Spreadbury) Bravura 1.05
+– Corrected the side-bearings of the timeSigParensLeft, timeSigParensRight, timeSigParensLeftSmall and timeSigParensRightSmall glyphs; also made the curvature of the small parentheses less extreme
+– Added new timeSigBracketLeft, timeSigBracketRight, timeSigBracketLeftSmall, timeSigBracketRightSmall and timeSigSlash glyphs, in a new range at U+EC80 (the first new range of recommended glyphs to be added after SMuFL version 1.0)
+
+26 August 2014 (Daniel Spreadbury) Bravura 1.06
+– Corrected the registration of flag64thDownStraight.
+– Corrected the appearance of U+1D1A9 in the Unicode Musical Symbols Range: it should have been equivalent to csymHalfDiminished, but it was incorrectly mapped to csymDiminished.
+
+16 October 2014 (Daniel Spreadbury) Bravura 1.07
+– Corrected the appearance of articMarcatoBelow, which was incorrectly flipped horizontally.
+– Updated flag8thUp, flag8thDown, flag16thUp, and flag16thDown to be 3¼ spaces in length (previously 2¾ spaces), in keeping with the recommendations for flag length in Gould and Ross.
+– Updated the glyphs in the 'Individual notes' (U+E1D0–U+E1EF) and 'Beamed groups of notes' (U+E1F0–U+E20F) such that notes have stem lengths of 2¾ spaces in length (previously 3½ for 'Individual notes', and inconsistently around 2¾ spaces in length for 'Beamed groups of notes'). These glyphs are intended to be used in close proximity to text set in other fonts, and the shorter stems provide a more harmonious appearance with typical text fonts.
+
+5 November 2014 (Daniel Spreadbury) Bravura 1.08
+– Improved versions of G, F, and C clefs, and all their variants, including the forms with ligated numbers; thanks to Tucker Meyers.
+– Improved versions of the octave markers (8, 8va, 8vb, et al); thanks to Tucker Meyers.
+– Improved versions of the tuplet digits (0–9, plus colon); thanks to Tucker Meyers.
+
+11 December 2014 (Daniel Spreadbury) Bravura 1.10
+– Reworked the octave markers, so that the glyphs for raising and lowering by one, two, and three octaves use the correct abbreviations with appropriate placement (superscript for pitches to be raised, at the baseline for pitches to be lowered); added new '8vb', '15mb' and '22mb' glyphs, even though these abbreviations for lowering by one, two, and three octaves are incorrect; added 'loco' and 'basso' glyphs.
+
+7 January 2015 (Daniel Spreadbury) Bravura 1.12
+– Added Hauptrhythmus (RH) and Choralmelodie (CH) glyphs, plus stylistic alternate for Hauptrhythmus(R), as used by Alban Berg.
+– Added short, medium, and long smooth brass lifts.
+– Added Salzedo's symbols for ascending and descending Aeolian chords.
+– Added right-pointing black and white triangles for down-stem sharp notes in Simplified Music Notation.
+– Added 'cut 2' time signature, used by Bach as alternative to cut C.
+– Added new ligatures for common time signatures (2/4, 2/2, 3/2, 3/4, 3/8, 4/4, 5/4, 5/8, 6/4, 6/8, 7/8, 9/8, 12/8) for Bravura Text. To produce e.g. the 3/4 ligature, the string "timeSigCombNumerator timeSig3 timeSigCombDenominator timeSig4" should be used. These ligatures provide correct alignment of the numerator and denominator digits relative to each other.
+– Improved metadata for flat-like accidentals, adding 'cutOutSE' points for more of them.
+– Added new 'noteheadOrigin' point to metadata to assist in the alignment of noteheads of different rhythmic values, e.g. the double whole note (breve) with two vertical lines to either side of the oval notehead.
+– Added new 'opticalCenter' point to metadata for dynamics glyphs, to assist in their correct alignment with noteheads and stems.
+
+26 February 2015 (Daniel Spreadbury) Bravura 1.15
+– Improved U+EB2A (elecPowerOnOff) so that it more closely matches the standard appearance of the IEEE 5009 symbol.
+– Improved consistency of registration of U+EB2E–U+EB33 (elecVolumeLevel...) glyphs.
+– Corrected typo in metadata for dynamicSforzadoFF glyph.
+– Improved U+E26A (accidentalParensLeft) and U+E26B (accidentalParensRight).
+– Fixed contour direction for many glyphs; this may have resulted in incorrect appearance of some glyphs in some display contexts, and when printed on some printers.
+– Resized all notehead glyphs, except for those in the 'Note name noteheads' (U+E150–U+E1AF), 'Individual notes' (U+E1D0–U+E1EF), and 'Beamed groups of notes' (U+E1F0–U+E20F) ranges, such that they are exactly 0.25 em (equivalent to one staff space) in height; previously, many of the notehead glyphs had been optically sized and were taller.
+– Added a new stylistic set (ss05) containing optically-sized versions of the most common noteheads (double whole, square double whole, whole, half, and black). These glyphs are oversized, and are designed to be the largest possible noteheads that will work with staff lines of the thickness recommended in the Bravura font-specific metadata.
+– Many glyphs have small improvements to outline quality (via 'checkOutlines -i -e' from the Adobe FDK).
+
+14 April 2015 (Daniel Spreadbury) Bravura 1.16
+– Improved versions of bold dynamics characters; thanks to Tucker Meyers.
+– Improved versions of keyboard pedalling characters; thanks to Tucker Meyers.
+– Improved versions of trill, turn etc. characters; thanks to Tucker Meyers.
+– Improved symmetry of the whole note name noteheads; removed counters from noteWholeEmpty and noteHalfEmpty, since these are designed to be printed in white underneath note name noteheads, so that stave lines and ledger lines are blanked out, making the note names in the counters of the note name noteheads clearer to read.
+– Corrected side-bearings on Sagittal accidentals.
+– Corrected registration of glyphs designed to be combined with stems (descriptions ending '...for stem'), now consistently visually centered around both x=0 and y=0.
+– Corrected vertical registration of precomposed square (U+E120, U+E121), round (U+E122, U+E123), and diamond (U+E138–U+E13B) cluster noteheads, so they are consistent with the cluster notehead components in the same range.
+
+29 April 2015 (Daniel Spreadbury) Bravura 1.17
+– Added new 'Metronome marks' for notes with 2.75sp stems to balance with text.
+– Reverted notes in 'Individual notes' range to have 3.5sp stems.
+– Added separate glyphs for v, b, a, m, both superscript and on the baseline, to 'Octaves supplement' range.
+– Added marcato-tenuto above and below to 'Articulations' range.
+– Added 6 with slashed stem (figbass6Raised2) to 'Figured bass' range.
+
+18 May 2015 (Daniel Spreadbury) Bravura 1.18
+– Added side-bearings to figured bass digits, function symbols, and tuplet digits.
+– Corrected triangular clefs at U+E06F–U+E072 to match the actual usage by the Polish composer Schäffer.
+– Added z-style quarter (crotchet) rest.
+
+25 April 2016 (Daniel Spreadbury) Bravura 1.20
+– Added double whole note slash notehead (U+E10A)
+– Added double-slashed black and white round noteheads, often used to denote striking piano strings (U+E11C, U+E11D)
+– Added irregular tremolo mark, used by Stockhausen (U+E232)
+– Added square brackets for editorial accidentals (U+E26C, U+E26D)
+– Added equal-tempered quarter-tone flat and quarter-tone sharp, combining glyphs to raise and lower by a 53-limit comma, and tilde and equals characters to indicate enharmonic equivalence, to the 'Extended Helmholtz-Ellis (Just Intonation) accidentals' range (U+E2F5-U+E2FB)
+– Added quarter-tone sharp and flat accidentals, used by Ferneyhough (U+E48E, U+E48F)
+– Added parentheses and brackets for hairpins (U+E542–U+E545)
+– Added hyphen, colon, and space separators for use in combined dynamics, e.g. p-mp (U+E546–U+E548)
+– Added brass valve trill to 'Brass techniques' range (U+E5EF)
+– Added wind mouthpiece pop and rim only to 'Wind techniques' range (U+E60A, U+E60B)
+– Added bow behind bridge on one, two, three, or four strings to 'String techniques' range (U+E627–U+E62A)
+– Added nasal voice, tongue click, finger click, and tongue and finger click (as used by Stockhausen) to 'Voical techniques' range (U+E648–U+E64A)
+– Added L and reversed-L hooks used instead of Ped. to start and stop sustain pedal indications to 'Keyboard techniques' range (U+E672, U+E673)
+– Added pedal-to-heel and heel-to-pedal transitions to 'Keyboard techniques' range (U+E674, U+E675)
+– Added damp low strings, damp with both hands, damp below, damp above, metallic sounds on a single string, isolated sounds, and snare drum techniques as used by Salzedo to 'Harp techniques' range (U+E697–U+E69D)
+– Added clockwise variant of scrape around rim to 'Percussion playing technique pictograms' range (U+E80E)
+- Added full barré and half-barré to 'Guitar' range (U+E848, U+E849), plus recommended stylistic alternate with horizontal fraction slash for half-barré
+– Added unconducted/free passages to 'Conductor symbols' range (U+E89A)
+– Added upper case F, I, K, L, and lower case i, k, l, glyphs to existing 'Function theory symbols' range (U+EA99–U+EA9F), plus a new 'Function theory symbols supplement' range including upper case M and N, and lower case m and r (U+ED00–U+ED03)
+– Added "cut 3" to 'Time signature supplement' range (U+EC86)
+– Added diminished 7 to new 'Figured bass supplement' range (U+ECC0)
+– Added new 'Shape note noteheads supplement' range containing double whole note versions of all of the different notehead shapes in the existing 'Shape note noteheads' range (U+ECD0–U+ECDD)
+– Added turned time signature digits, common time and cut common time (U+ECE0–U+ECEB)
+– Added reversed time signature digits, common time and cut common time (U+ECF0–U+ECFB)
+– Added new 'Fingering' range, containing digits bold 0–5 suitable for keyboard fingering, and a variety of symbols used in guitar fingering (U+ED10–U+ED23)
+– Added new 'Arabic accidentals' range (U+ED30–U+ED38)
+– Added new 'Articulation supplement' range containing so-called "soft accent", plus combinations with staccato and tenuto (U+ED40–U+ED47)
+– Added new 'Stockhausen accidentals (24-EDO)' range (U+ED50–U+ED5E)
+– Added stylistic alternates for cClef and cClefChange in the style of 20th century French publishers
+– Added stylistic alternates for 15/22 octave markings using 16/24, as used by some 20th century French publishers
+– Added stylistic alternates for wiggleArpeggiatoUpSwash and wiggleArpeggiatoDownSwash based on Couperin's 'L'Art de Toucher Le Clavecin'
+– Changed the appearance of clefBridge (U+E078) to match the design used by Lachenmann in "...zwei Gefühle..." and added a stylistic alternate with the previous design
+– Fixed the appearance of figBassRaised5 to have a forward slash rather than a backward slash, the correct appearance for a diminished fifth (U+EA5A)
+
+27 January 2017 (Daniel Spreadbury) Bravura 1.211
+– Added dynamicCombinedSeparatorSlash (U+E549)
+– Added stylistic alternates for tuplet digits in lighter weight
+– Improved the tessellation of multi-segment lines, particularly the various wiggles for trills at different speeds.
+– Fixed timesig9denominator and timesig9numerator ligatures
+
+11 February 2017 (Daniel Spreadbury) Bravura 1.212
+– Added keyboardPedalParensLeft (U+E676) and keyboardPedalParensRight (U+E677)
+– Added vulgar fractions for 1/8 (U+215B), 1/4 (U+00BC), 1/2 (U+00BD), 3/4 (U+00BE)
+
+18 February 2017 (Daniel Spreadbury) Bravura 1.213
+– Decreased the width of the space character (U+0020) to 100du
+
+27 May 2017 (Daniel Spreadbury) Bravura 1.214
+– Improved the appearance of the glyphs in the 'Chord symbols' range (U+E870–U+E87F)
+– Added new 'Chord symbol accidentals' range (U+ED60-U+ED66)
+– BEWARE: Renumbered the optional glyphs from U+F400 upwards; many optional glyphs have moved
+
+31 May 2017 (Daniel Spreadbury) Bravura 1.215
+– Added optical variants for some chord symbols glyphs, e.g. +/- for augmented/diminished chord quality
+
+3 June 2017 (Daniel Spreadbury) Bravura 1.216
+– Added optical variants for chord symbol accidentals shown at smaller sizes
+
+18 July 2017 (Daniel Spreadbury) Bravura 1.217
+– Improved the shape and stem connection data of glyphs in the 'Shape note noteheads' range (U+E1B0–U+E1CF)
+
+9 August 2017 (Daniel Spreadbury) Bravura 1.218
+– Added new glyphs to the 'Fingering' range, with digits between 6 and 9, parentheses, brackets, and middle dot separator
+
+10 August 2017 (Daniel Spreadbury) Bravura 1.219
+– Improved the shape and stem connection data of glyphs in the 'Shape note noteheads' range (U+E1B0–U+E1CF)
+
+16 August 2017 (Daniel Spreadbury) Bravura 1.220
+– Increased the size of black and half noteheads in 'Shape note noteheads' range (U+E1B0–U+E1CF)
+
+25 October 2017 (Daniel Spreadbury) Bravura 1.250
+– Added new 'Kahnotation' range, with thanks to Matthew Dougherty, Sam Katz and Sam Weber (U+EDA0–U+EDF1)
+– Added new 'German organ tablature' range, with thanks to John McKean (U+EE00–U+EE3F)
+– Added new 'Clefs supplement' range, including new universal Indian drum notation clef (U+ED70)
+– Added new 'Fingering supplement' range, with italic fingering digits, parentheses and brackets (U+ED80-U+ED8D)
+– Added more separators for brass fingering (U+ED2D–U+ED2E) to 'Fingering' range
+– Added pictBeaterMalletDown (U+E7EC), pictBeaterBrassMalletsRight (U+E7ED), pictBeaterBrassMalletsLeft (U+E7EE), pictTriangleBeaterPlain (U+E7EF) to 'Beaters pictograms' range
+– Added vocalHalbGesungen (semi-sprechgesang) to 'Vocal techniques' range (U+E64B)
+– Added separate glyphs for upper dot, lower dot and central slash (U+E503–U+E505) to 'Bar repeats' range, to allow construction of bar repeats for arbitrary number of bars
+– Added lyricsTextRepeat glyph (U+E555) to 'Lyrics' range
+– Added one-handed roll (U+E233) and double lateral roll (U+E234) for mallet percussion, popularised by Leigh Howard Stevens, to 'Tremolos' range
+
+7 November 2017 (Daniel Spreadbury) Bravura 1.251
+– Resized csymAugmented and csymMinor
+– Adjusted the side bearings of noteheads whose stem attachment points should be offset from the edge of the glyph's bounding box
+
+14 November 2017 (Daniel Spreadbury) Bravura Text 1.252
+– Corrected scaling for chord symbols glyphs in Bravura Text
+
+11 December 2017 (Daniel Spreadbury) Bravura 1.260
+– Added new stylistic set (ss08) for oversized versions of the 'Slash notehead' range
+
+16 December 2017 (Daniel Spreadbury) Bravura Text 1.261
+– Corrected scaling for chord symbols standard accidentals glyphs in Bravura Text
+
+23 February 2018 (Daniel Spreadbury) Bravura 1.270
+– Expanded 'Large, narrow sans serif time signatures' stylistic set (ss04) to complete 'Time signatures' and 'Time signatures supplement' ranges
+– Added new 'Large, narrow bold serif time signatures' stylistic set (ss09)
+
+26 February 2018 (Daniel Spreadbury) Bravura 1.271
+– Resized 'Large, narrow sans serif time signatures' stylistic set (ss04) glyphs to give them the same scale factor as the other time signatures glyphs
+
+29 April 2018 (Daniel Spreadbury) Bravura 1.272
+– Improved 'Large, narrow sans serif time signatures' stylistic set (ss04) glyphs to make the forms more condensed
+
+29 January 2019 (Daniel Spreadbury) Bravura 1.276 / Bravura Text 1.277
+– Fixed the scale factor for optical variants for chord symbol accidentals
+
+31 August 2019 (Daniel Spreadbury) Bravura 1.31 / Bravura Text 1.31
+– New fingeringQLower (U+ED8E) and fingeringSLower (U+ED8F) glyphs in the 'Fingering supplement' range
+
+6 December 2019 (Daniel Spreadbury) Bravura 1.32
+– Reduced height of accidentalBracketLeft (U+E26C) and accidentalBracketRight (U+E26D)
+– Corrected registration of a number of glyphs in the 'Extended Helmholtz-Ellis Just Intonation accidentals' range (U+E2DF, U+E2E6, U+E2E7, U+E2E8, U+E2E9, U+E2F7, U+E2F8, U+E2EB).
+
+18 March 2020 (Daniel Spreadbury) Bravura 1.34
+– Swapped direction of wiggleArpeggiatoDownArrow (U+EAAE) and wiggleArpeggiatoDownSwash (U+EAAC)
+
+27 March 2020 (Daniel Spreadbury) Bravura 1.35
+– Added figbassTripleFlat (U+ECC1) and figbassTripleSharp (U+ECC2)
+
+1 April 2020 (Daniel Spreadbury) Bravura 1.36
+– Reduced size of accidentals in 'Figured bass' and 'Figured bass supplement' range to match published editions more closely
+
+3 May 2020 (Daniel Spreadbury) Bravura 1.37
+– Improved shape of accidentals in 'Figured bass' and 'Figured bass supplement' range, reducing the length of ascenders and descenders and increasing the size of the counters
+– Improved the design of figBass4Raised (U+EA56) to make the vertical stroke more prominent, aiding legibility at small sizes
+
+25 June 2020 (Daniel Spreadbury) Bravura 1.38
+– Added new stylistic set (ss10) for accidentals for figured bass with longer ascenders and descenders
+– Improved the shape of the tips of each of the up- and down-stem flags in the 'Flags' range (U+E240–U+E251)
+– Improved the shape of ornamentTrill (U+E566) and ornamentShortTrill (U+E56C)
+
+30 June 2020 (Daniel Spreadbury) Bravura 1.39
+– Reduced size of accidentals in stylistic set ss10 to match published editions more closely
+
+29 January 2021 (Daniel Spreadbury) Bravura 1.392
+– Added headless notes (U+E204–U+E20A) to 'Beamed groups of notes' range
+– Added glyphs to new 'Scale degrees' range (U+EF00–U+EF07)
+– Added glyphs in new 'Note name noteheads supplement' range (U+EEE0–U+EEFF)
+– Added mensuralWhiteSemibrevis (U+E962) to 'Medieval and Renaissance individual notes' range
+– Added guitar10, guitar11, guitar12, guitar13 (U+E84A–U+E84D) to 'Guitar' range
+– Added glyphs in 'Medieval and Renaissance prolations supplement' (U+EE90–U+EE94)
+– Added Cowell's noteheads for irrational durations (U+EEA1–U+EEB5) to 'Noteheads supplement' range
+– Added noteheadNancarrowSine (U+EEA0) in 'Noteheads supplement' range
+– Added arpeggiato (U+E63C) to 'Plucked techniques' range
+– Add caesuraSingleStroke (U+E4D7) to the 'Holds and pauses' range
+– Added Alois Hába's set of accidentals for 24-EDO quarter-tones (U+EE63–U+EE69) to the 'Other accidentals supplement' range
+– Added 'Chop (percussive bowing) notation' range (U+EE80–U+EE8F)
+– Added swissRudimentsNoteheadBlackFlam (U+EE70), swissRudimentsNoteheadHalfFlam (U+EE71), swissRudimentsNoteheadBlackDouble (U+EE72), swissRudimentsNoteheadHalfDouble (U+EE73) to the new 'Techniques noteheads' range
+– Changed registration of fretboardFilledCircle (U+E858), fretboardX (U+E859) and fretboardO (U+E85A) so that they are centred vertically and horizontally around the origin
+– Added ups and downs accidentals (U+EE60–U+EE63) to new 'Other accidentals supplement' range
+– Added stylistic alternates for U+E4A0 and U+E4A1, Rossini accent above and below
+– Added 'Extended Helmholtz-Ellis accidentals (just intonation) supplement' range (U+EE50–U+EE5F); revised appearance of accidentalCombiningLower31Schisma (U+E2EC) and accidentalCombiningRaise31Schisma (U+E2ED)
+– Replaced Sagittal outlines with those optimized by Douglas Blumeyer for design space of 1000 fu per em. Changed side bearings of accSagittalShaftUp (U+E3F0) and accSagittalShaftDown (U+E3F1)
+– Add kerning pairs for new Sagittal glyphs (U+E3F4–U+E40B)
+– Added glyphs to the 'Olympian Sagittal extension (extreme precision) accidental diacritics' (U+E3F4–U+E3F7) and 'Magrathean Sagittal extension (insane precision) accidental diacritics' (U+E3F8–U+E41F) ranges of Sagittal accidentals.
+
+9 February 2021 (Daniel Spreadbury) Bravura Text 1.393
+– Corrected style name of Bravura Text to 'Regular' from incorrect 'Normal'

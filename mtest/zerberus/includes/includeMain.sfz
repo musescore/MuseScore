@@ -1,0 +1,4 @@
+<global>
+sample=../sample.wav
+pitch_keycenter=40
+#include "firstInclude.sfz"

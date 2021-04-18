@@ -1,0 +1,24 @@
+[main]
+host = https://www.transifex.com
+
+[musescore.musescore]
+file_filter = share/locale/mscore_<lang>.ts
+source_file = share/locale/mscore_en.ts
+source_lang = en
+type = QT
+
+
+[musescore.instruments]
+file_filter = share/locale/instruments_<lang>.ts
+source_file = share/locale/instruments_en_US.ts
+source_lang = en_US
+type = QT
+
+[musescore.tours]
+file_filter = share/locale/tours_<lang>.ts
+source_file = share/locale/tours_en_US.ts
+source_lang = en_US
+type = QT
+
+
+

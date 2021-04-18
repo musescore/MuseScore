@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaffList version="2.00" tick="0" len="1920" staff="0" staves="1">
+  <Staff id="0">
+    <voiceOffset>
+      <voice id="0">0</voice>
+      </voiceOffset>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>72</pitch>
+        <tpc>14</tpc>
+        </Note>
+      </Chord>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>60</pitch>
+        <tpc>14</tpc>
+        </Note>
+      </Chord>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>67</pitch>
+        <tpc>15</tpc>
+        </Note>
+      </Chord>
+    <Chord>
+      <durationType>quarter</durationType>
+      <Note>
+        <pitch>79</pitch>
+        <tpc>15</tpc>
+        </Note>
+      </Chord>
+    </Staff>
+  </StaffList>

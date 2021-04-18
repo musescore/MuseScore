@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.11">
+  <Mag>5.86439</Mag>
+  <xoff>-167.615</xoff>
+  <yoff>-305.189</yoff>
+  <Spatium>1.76389</Spatium>
+  <Division>480</Division>
+  <showInvisible>1</showInvisible>
+  <showFrames>1</showFrames>
+  <page-layout>
+    <pageFormat>A4</pageFormat>
+    <page-margins type="both">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    </page-layout>
+  <siglist>
+    <sig tick="0">
+      <nom>4</nom>
+      <denom>4</denom>
+      </sig>
+    </siglist>
+  <tempolist fix="2">
+    <tempo tick="0">2</tempo>
+    <tempo tick="9600">2</tempo>
+    </tempolist>
+  <Part>
+    <Staff>
+      <small>1</small>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        <clef tick="9600" idx="4"/>
+        <clef tick="11520" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="5"/>
+        <key tick="13440" idx="2"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <trackName>Violin</trackName>
+    <shortName>
+      <subtype>InstrumentShort</subtype>
+      <style>10</style>
+      <text>V1n.</text>
+      </shortName>
+    <Instrument>
+      <Channel name="normal">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="0"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="60"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        <clef tick="9600" idx="4"/>
+        <clef tick="11520" idx="0"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="5"/>
+        <key tick="13440" idx="2"/>
+        </keylist>
+      <bracket type="1" span="2"/>
+      <barLineSpan>2</barLineSpan>
+      </Staff>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="4"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="5"/>
+        </keylist>
+      <barLineSpan>0</barLineSpan>
+      </Staff>
+    <trackName>Piano</trackName>
+    <shortName>
+      <subtype>InstrumentShort</subtype>
+      <style>10</style>
+      <text>Pno.</text>
+      </shortName>
+    <Instrument>
+      <Channel name="normal">
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="0"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="60"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Volta>
+    <subtype>1</subtype>
+    <track>0</track>
+    <tick>5760</tick>
+    <anchor>1</anchor>
+    <tick2>7680</tick2>
+    <Segment>
+      <off1 x="0.154002" y="-0.381118"/>
+      <off2 x="-0.959999" y="0"/>
+      <offset x="0.154002" y="-0.381118"/>
+      </Segment>
+    <beginText>
+      <subtype>TextLine</subtype>
+      <style>27</style>
+      <text>1.</text>
+      </beginText>
+    <endings>1</endings>
+    </Volta>
+  <Volta>
+    <subtype>1</subtype>
+    <track>0</track>
+    <tick>7680</tick>
+    <anchor>1</anchor>
+    <tick2>9600</tick2>
+    <Segment>
+      <off1 x="0.139092" y="-0.295854"/>
+      <off2 x="0" y="0"/>
+      <offset x="0.139092" y="-0.295854"/>
+      </Segment>
+    <beginText>
+      <subtype>TextLine</subtype>
+      <style>27</style>
+      <text>2.</text>
+      </beginText>
+    <endings>2</endings>
+    </Volta>
+  <Staff id="1">
+    <VBox>
+      <height>10</height>
+      <leftMargin>5</leftMargin>
+      <rightMargin>5</rightMargin>
+      <topMargin>5</topMargin>
+      <bottomMargin>5</bottomMargin>
+      <Text>
+        <subtype>Title</subtype>
+        <style>2</style>
+        <text>Test: small elements</text>
+        </Text>
+      <Text>
+        <subtype>Composer</subtype>
+        <style>4</style>
+        <text>Werner Schweer</text>
+        </Text>
+      </VBox>
+    <Measure number="1">
+      <Tempo>
+        <tempo>2</tempo>
+        <subtype>Tempo</subtype>
+        <systemFlag>1</systemFlag>
+        <style>14</style>
+        <text>Allegro</text>
+        </Tempo>
+      <KeySig>
+        <subtype>5</subtype>
+        </KeySig>
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="60" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="62" tpc="16"/>
+        </Chord>
+      <Beam id="1">
+        </Beam>
+      <Chord>
+        <ticklen>240</ticklen>
+        <Beam>1</Beam>
+        <appoggiatura/>
+        <StemDirection>up</StemDirection>
+        <Note pitch="68" tpc="10"/>
+        </Chord>
+      <Chord>
+        <tick>960</tick>
+        <ticklen>240</ticklen>
+        <Beam>1</Beam>
+        <appoggiatura/>
+        <StemDirection>up</StemDirection>
+        <Note pitch="66" tpc="20"/>
+        </Chord>
+      <Chord>
+        <tick>960</tick>
+        <ticklen>480</ticklen>
+        <Note pitch="60" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="65" tpc="13"/>
+        </Chord>
+      </Measure>
+    <Measure number="2">
+      <startRepeat/>
+      <Chord>
+        <ticklen>240</ticklen>
+        <Note pitch="61" tpc="21"/>
+        </Chord>
+      <Rest>
+        <ticklen>240</ticklen>
+        </Rest>
+      <Chord>
+        <ticklen>240</ticklen>
+        <small>1</small>
+        <Note pitch="59" tpc="19"/>
+        <Note pitch="64" tpc="18"/>
+        <Note pitch="69" tpc="17"/>
+        </Chord>
+      <Rest>
+        <ticklen>240</ticklen>
+        <small>1</small>
+        </Rest>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="64" tpc="18"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="65" tpc="13"/>
+        </Chord>
+      <BarLine>
+        </BarLine>
+      </Measure>
+    <Measure number="3">
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="4">
+      <endRepeat>2</endRepeat>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="60" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="62" tpc="16"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="64" tpc="18"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="65" tpc="13"/>
+        </Chord>
+      </Measure>
+    <Measure number="5">
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="60" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="62" tpc="16"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="64" tpc="18"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="65" tpc="13"/>
+        </Chord>
+      <Clef>
+        <subtype>4</subtype>
+        <offset x="0" y="0.7"/>
+        </Clef>
+      <BarLine>
+        </BarLine>
+      </Measure>
+    <Measure number="6">
+      <Text>
+        <subtype>MeasureNumber</subtype>
+        <style>17</style>
+        </Text>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="60" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="62" tpc="16"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="64" tpc="18"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="65" tpc="13"/>
+        </Chord>
+      <Clef>
+        <offset x="0" y="2.1"/>
+        </Clef>
+      </Measure>
+    <Measure number="7">
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="60" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="62" tpc="16"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="64" tpc="18"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="65" tpc="13"/>
+        </Chord>
+      </Measure>
+    <Measure number="8">
+      <KeySig>
+        <subtype>1282</subtype>
+        </KeySig>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="60" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="62" tpc="16"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="64" tpc="18"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="65" tpc="13"/>
+        </Chord>
+      <BarLine>
+        <subtype>5</subtype>
+        </BarLine>
+      </Measure>
+    </Staff>
+  <Staff id="2">
+    <Measure number="1">
+      <KeySig>
+        <subtype>5</subtype>
+        </KeySig>
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="60" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="62" tpc="16"/>
+        </Chord>
+      <Beam id="2">
+        </Beam>
+      <Chord>
+        <ticklen>240</ticklen>
+        <Beam>2</Beam>
+        <appoggiatura/>
+        <StemDirection>up</StemDirection>
+        <Note pitch="68" tpc="10"/>
+        </Chord>
+      <Chord>
+        <tick>960</tick>
+        <ticklen>240</ticklen>
+        <Beam>2</Beam>
+        <appoggiatura/>
+        <StemDirection>up</StemDirection>
+        <Note pitch="66" tpc="20"/>
+        </Chord>
+      <Chord>
+        <tick>960</tick>
+        <ticklen>480</ticklen>
+        <Note pitch="60" tpc="14"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="65" tpc="13"/>
+        </Chord>
+      </Measure>
+    <Measure number="2">
+      <Chord>
+        <ticklen>240</ticklen>
+        <Note pitch="61" tpc="21"/>
+        </Chord>
+      <Rest>
+        <ticklen>240</ticklen>
+        </Rest>
+      <Chord>
+        <ticklen>240</ticklen>
+        <small>1</small>
+        <Note pitch="59" tpc="19"/>
+        <Note pitch="64" tpc="18"/>
+        <Note pitch="69" tpc="17"/>
+        </Chord>
+      <Rest>
+        <ticklen>240</ticklen>
+        <small>1</small>
+        </Rest>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="64" tpc="18"/>
+        </Chord>
+      <Chord>
+        <ticklen>480</ticklen>
+        <Note pitch="65" tpc="13"/>
+        </Chord>
+      <BarLine>
+        </BarLine>
+      </Measure>
+    <Measure number="3">
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="4">
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="5">
+      <Rest>
+        </Rest>
+      <Clef>
+        <subtype>4</subtype>
+        <offset x="0" y="1"/>
+        <tick>9600</tick>
+        </Clef>
+      <BarLine>
+        </BarLine>
+      </Measure>
+    <Measure number="6">
+      <Rest>
+        </Rest>
+      <Clef>
+        <offset x="0" y="3"/>
+        <tick>11520</tick>
+        </Clef>
+      </Measure>
+    <Measure number="7">
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="8">
+      <KeySig>
+        <subtype>1282</subtype>
+        </KeySig>
+      <Rest>
+        </Rest>
+      <BarLine>
+        <subtype>5</subtype>
+        <tick>15360</tick>
+        </BarLine>
+      </Measure>
+    </Staff>
+  <Staff id="3">
+    <Measure number="1">
+      <KeySig>
+        <subtype>5</subtype>
+        </KeySig>
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="2">
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="3">
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="4">
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="5">
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="6">
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="7">
+      <Rest>
+        </Rest>
+      </Measure>
+    <Measure number="8">
+      <Rest>
+        </Rest>
+      </Measure>
+    </Staff>
+  <cursorTrack>4</cursorTrack>
+  </museScore>

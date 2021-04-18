@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tour name="mmrest">
+  <Shortcut>toggle-mmrest</Shortcut>
+  <Message>
+    <Text>You have toggled multimeasure rests in this score.
+    This combines multiple measures of rests into a single multimeasure rest.
+    To toggle this setting again, press the shortcut "M".</Text>
+    <Widget>scoreview</Widget>
+    </Message>
+  </Tour>

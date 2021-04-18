@@ -1,0 +1,13 @@
+<group>
+sample=../sample.wav
+pitch_keycenter=40
+// <region> line comment
+    //<region> line comment with spaces at the beginning
+<region> lokey=60 hikey=70 // <region> line comment with opcodes at the beginning
+<region> lokey=23 /* lokey=45 */ hikey=42 /* hikey=58*/ // block in line
+/* block multiline
+<region>
+<region>
+    */ <region> lokey=42 /* new block after block */ hikey=23 /*
+<region>   some more 
+    */

@@ -1,0 +1,115 @@
+name: CI_vtests
+
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  run_vtests:
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.5.0
+      with:
+        access_token: ${{ github.token }}
+    - name: Clone repository
+      uses: actions/checkout@v2
+    - name: Сcache cache files
+      uses: actions/cache@v2
+      with:
+        path: ~/.ccache
+        key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
+        restore-keys: ${{github.workflow}}-ccache-  # restore ccache from either previous build on this branch or on master  
+    - name: Setup ccache
+      run: |
+        bash ./build/ci/tools/setup_ccache.sh  
+    - name: Get base commit for PR
+      if: github.event_name == 'pull_request'
+      run: |
+        HEAD_REF=${{ github.event.pull_request.head.sha }}
+        BASE_REF=${{ github.event.pull_request.base.sha }}
+        if [ -z "$BASE_REF" ]; then DO_RUN='false'; else DO_RUN='true'; fi
+        echo "HEAD_REF=$HEAD_REF" >> $GITHUB_ENV
+        echo "BASE_REF=$BASE_REF" >> $GITHUB_ENV
+        echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
+    - name: Get base commit for push commit
+      if: github.event_name == 'push'
+      run: |
+        HEAD_REF=${{ github.sha }}
+        BASE_REF=$( git show -s --pretty=%P ${{ github.sha }} | head -c 10 )
+        if [ -z "$BASE_REF" ]; then DO_RUN='false'; else DO_RUN='true'; fi
+        echo "BASE_REF=$BASE_REF" >> $GITHUB_ENV
+        echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV  
+    - name: Setup the environment
+      if: env.DO_RUN == 'true'
+      run: |
+        sudo bash ./build/ci/linux/setup.sh
+    - name: Build current branch
+      if: env.DO_RUN == 'true'
+      run: |
+        source ./../musescore_environment.sh
+        mkdir -p "$HOME/musescore_current"  
+        bash ninja_build.sh -t clean
+        MUSESCORE_INSTALL_DIR="$HOME/musescore_current" bash ninja_build.sh -t installdebug
+    - name: Checkout on ref branch
+      if: env.DO_RUN == 'true'
+      uses: actions/checkout@v2    
+      with:
+        ref: ${{ env.BASE_REF }}
+    - name: Build ref branch
+      if: env.DO_RUN == 'true'
+      run: |
+        source ./../musescore_environment.sh
+        mkdir -p "$HOME/musescore_ref"
+        bash ninja_build.sh -t clean
+        MUSESCORE_INSTALL_DIR="$HOME/musescore_ref" bash ninja_build.sh -t installdebug
+    - name: Checkout on current branch
+      if: env.DO_RUN == 'true'
+      uses: actions/checkout@v2    
+      with:
+        ref: ${{ env.HEAD_REF }}
+    - name: Generate ref png
+      if: env.DO_RUN == 'true'
+      run: |
+        xvfb-run ./vtest/vtest.sh -c gen_ref -m $HOME/musescore_ref/bin/mscore
+    - name: Generate current png
+      if: env.DO_RUN == 'true'
+      run: |
+        xvfb-run ./vtest/vtest.sh -c gen_cur -m $HOME/musescore_current/bin/mscore
+    - name: Compare png
+      if: env.DO_RUN == 'true'
+      run: |
+        ./vtest/vtest.sh -c compare
+        echo "VTEST_DIFF_FOUND=$VTEST_DIFF_FOUND" >> $GITHUB_ENV
+    - name: Upload artifact
+      if: env.DO_RUN == 'true'
+      uses: actions/upload-artifact@v1
+      with:
+        name: VTest.Artifacts
+        path: ./vtest.artifacts
+    - name: Skip failure signal if PR is labeled 'vtests'
+      if: github.event_name == 'pull_request' && contains( env.DO_RUN, 'true') && contains( env.VTEST_DIFF_FOUND, 'true') && contains(github.event.pull_request.labels.*.name, 'vtests')
+      run: |
+        echo "This PR appears to change some of the visual tests."
+        echo "Please carefully review the new visual test results in the uploaded artifact that can be found here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        echo "Failure signal skipped because 'vtests' label is applied to the PR"
+        export VTEST_DIFF_FOUND=false
+        echo "VTEST_DIFF_FOUND=$VTEST_DIFF_FOUND" >> $GITHUB_ENV
+    - name: Emit failure signal for PR if differences are found
+      if: github.event_name == 'pull_request' && contains( env.DO_RUN, 'true') && contains( env.VTEST_DIFF_FOUND, 'true')
+      run: |
+        echo "This PR appears to change some of the visual tests."
+        echo "Please carefully review the new visual test results in the uploaded artifact that can be found here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        exit 1
+    - name: Comment push commit
+      if: github.event_name == 'push' && contains( env.DO_RUN, 'true') && contains( env.VTEST_DIFF_FOUND, 'true')
+      uses: peter-evans/commit-comment@v1.1.0
+      with:
+        body: |
+          This is an automatic message. This commit appears to change some of the visual tests.
+          Please carefully review the new visual test results in the uploaded artifact that can be found
+          [here][1]
+          
+          [1]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        token: ${{ secrets.GITHUB_TOKEN }}

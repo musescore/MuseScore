@@ -1,0 +1,16 @@
+init init/Voice-Piano-3-4.mscx
+cmd note-input
+cmd escape
+cmd pad-note-2
+cmd time-delete
+cmd note-input
+cmd escape
+cmd pad-note-8
+cmd del-empty-measures
+test score #280574-ctrl-del-corruption.mscx
+
+cmd undo
+cmd undo
+cmd undo
+cmd undo
+test score init/Voice-Piano-3-4.mscx

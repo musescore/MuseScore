@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 2.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise>
+  <work>
+    <work-title>Chord List</work-title>
+    </work>
+  <identification>
+    <encoding>
+      <software>MuseScore 0.9.3</software>
+      <encoding-date>2008-05-02</encoding-date>
+      </encoding>
+    </identification>
+  <part-list>
+    <score-part id="P1">
+      <part-name></part-name>
+      <score-instrument id="P1-I3">
+        <instrument-name></instrument-name>
+        </score-instrument>
+      <midi-instrument id="P1-I3">
+        <midi-channel>1</midi-channel>
+        <midi-program>41</midi-program>
+        </midi-instrument>
+      </score-part>
+    </part-list>
+  <part id="P1">
+    <measure number="1">
+      <attributes>
+        <divisions>480</divisions>
+        <key>
+          <fifths>0</fifths>
+          <mode>major</mode>
+          </key>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
+        </attributes>
+      <harmony print-frame="no">
+        <root>
+          <root-step>A</root-step>
+          <root-alter>-1</root-alter>
+          </root>
+          <kind>dominant-13th</kind>
+          <degree>
+             <degree-value>9</degree-value>
+             <degree-alter>-1</degree-alter>
+             <degree-type>alter</degree-type>
+             </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="2">
+      <harmony print-frame="no">
+        <root>
+          <root-step>F</root-step>
+          <root-alter>1</root-alter>
+          </root>
+          <kind>minor-seventh</kind>
+          <degree>
+             <degree-value>11</degree-value>
+             <degree-alter>0</degree-alter>
+             <degree-type>add</degree-type>
+             </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    <measure number="3">
+      <harmony print-frame="no">
+        <root>
+          <root-step>B</root-step>
+          </root>
+          <kind>dominant-13th</kind>
+          <degree>
+             <degree-value>9</degree-value>
+             <degree-alter>-1</degree-alter>
+             <degree-type>alter</degree-type>
+             </degree>
+        </harmony>
+      <note>
+        <rest/>
+        <duration>0</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        </note>
+      <forward>
+        <duration>1920</duration>
+        </forward>
+      </measure>
+    </part>
+  </score-partwise>

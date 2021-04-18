@@ -1,0 +1,83 @@
+//=============================================================================
+//  MusE
+//  Linux Music Editor
+//
+//  Copyright (C) 2002-2010 by Werner Schweer and others
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License version 2.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+//=============================================================================
+
+#ifndef MUSESCORE_CONFIG_H
+#define MUSESCORE_CONFIG_H
+
+#cmakedefine USE_WEBENGINE
+
+#cmakedefine FOR_WINSTORE
+
+#cmakedefine MSCORE_UNSTABLE
+
+#cmakedefine HAS_MIDI
+#cmakedefine SCRIPT_INTERFACE
+#cmakedefine HAS_AUDIOFILE
+
+#define CRASH_REPORT_URL        "${CRASH_REPORT_URL}"
+#define MUSESCORE_NAME_VERSION  "${MUSESCORE_NAME_VERSION}"
+#define MUSESCORE_REVISION      "${MUSESCORE_REVISION}"
+#define INSTALL_NAME            "${Mscore_INSTALL_NAME}"
+#define INSTPREFIX              "${CMAKE_INSTALL_PREFIX}"
+#define VERSION                 "${MUSESCORE_VERSION_FULL}"
+#define VERSION_LABEL           "${MUSESCORE_VERSION_LABEL}"
+#define BUILD_NUMBER            "${CMAKE_BUILD_NUMBER}"
+#define WIN_SPARKLE_APPCAST_URL "${WIN_SPARKLE_APPCAST_URL}"
+
+#cmakedefine BUILD_TELEMETRY_MODULE
+#define TELEMETRY_TRACK_ID "${TELEMETRY_TRACK_ID}"
+
+#cmakedefine BUILD_SHORTCUTS_MODULE
+#cmakedefine BUILD_SYSTEM_MODULE
+#cmakedefine BUILD_NETWORK_MODULE
+#cmakedefine BUILD_AUDIO_MODULE
+#cmakedefine BUILD_USERSCORES_MODULE
+#cmakedefine BUILD_WORKSPACE_MODULE
+#cmakedefine BUILD_CLOUD_MODULE
+#cmakedefine BUILD_EXTENSIONS_MODULE
+#cmakedefine BUILD_LANGUAGES_MODULE
+#cmakedefine BUILD_PLUGINS_MODULE
+#cmakedefine BUILD_PLAYBACK_MODULE
+#cmakedefine BUILD_PALETTE_MODULE
+#cmakedefine BUILD_INSTRUMENTS_MODULE
+#cmakedefine BUILD_INSPECTOR_MODULE
+#cmakedefine BUILD_AUTOBOT_MODULE
+#cmakedefine BUILD_VST
+
+#cmakedefine WIN_SPARKLE_ENABLED
+#cmakedefine MAC_SPARKLE_ENABLED
+#cmakedefine OPENGL
+#cmakedefine SOUNDFONT3
+#cmakedefine WIN_PORTABLE
+
+#cmakedefine QML_LOAD_FROM_SOURCE
+#cmakedefine TRACE_DRAW_OBJ_ENABLED
+
+#cmakedefine Q_WS_UIKIT
+
+#cmakedefine APP_UPDATABLE
+
+#cmakedefine KDAB_DOCKWIDGETS
+
+#define USE_BSP     true
+
+// does not work on windows/mac:
+//#define USE_GLYPHS  true
+
+#endif /* MUSESCORE_CONFIG_H */

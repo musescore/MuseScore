@@ -1,0 +1,52 @@
+init init/Treble.mscx
+cmd note-input
+cmd escape
+cmd select-staff-above
+palette Clef concertClefType C1
+cmd next-chord
+palette Clef concertClefType C2
+cmd next-chord
+cmd select-staff-above
+palette Clef concertClefType C2
+cmd next-chord
+cmd next-chord
+palette Clef concertClefType C3
+cmd next-chord
+cmd select-staff-above
+palette Clef concertClefType C3
+cmd next-chord
+cmd prev-chord
+palette Clef concertClefType C3
+cmd next-chord
+cmd select-staff-below
+palette Clef concertClefType C4
+cmd next-chord
+palette Clef concertClefType C5
+cmd next-chord
+cmd next-chord
+cmd select-staff-above
+palette Clef concertClefType C5
+cmd next-chord
+cmd next-chord
+palette Clef concertClefType F
+cmd select-staff-above
+palette Clef concertClefType F
+cmd next-chord
+palette Clef concertClefType F8va
+cmd next-chord
+palette Clef concertClefType F15ma
+cmd next-chord
+palette Clef concertClefType F8vb
+cmd next-chord
+palette Clef concertClefType F15mb
+cmd next-chord
+cmd select-staff-above
+palette Clef concertClefType F3
+cmd next-chord
+palette Clef concertClefType F3
+cmd next-chord
+cmd next-chord
+cmd select-staff-above
+palette Clef concertClefType F5
+cmd next-chord
+test score palette_clefs_2.mscx

@@ -1,0 +1,11 @@
+init init/TrebleWithPart.mscx
+cmd note-input
+cmd note-a
+cmd escape
+excerpt 1
+cmd note-input
+cmd escape
+inspector Note color #ff0000
+cmd del-empty-measures
+excerpt 0
+test score excerptchange.mscx

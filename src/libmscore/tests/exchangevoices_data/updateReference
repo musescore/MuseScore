@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/exchangevoices/Debug
+else
+   S=../../../build.debug/mtest/libmscore/exchangevoices
+fi
+
+cp $S/exchangevoices-slurs.mscx exchangevoices-slurs-ref.mscx
+cp $S/exchangevoices-gliss.mscx exchangevoices-gliss-ref.mscx
+cp $S/undoChangeVoice01-test.mscx undoChangeVoice01-ref.mscx
+cp $S/undoChangeVoice02-test.mscx undoChangeVoice02-ref.mscx
+
+
+

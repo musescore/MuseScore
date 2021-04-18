@@ -1,0 +1,3 @@
+module MuseScore.Shortcuts
+ShortcutsPage 1.0 ShortcutsPage.qml
+EditShortcutDialog 1.0 EditShortcutDialog.qml

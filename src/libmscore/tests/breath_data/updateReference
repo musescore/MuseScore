@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cp ../../../build.debug/mtest/libmscore/breath/breath01-test.mscx   breath01-ref.mscx
+cp ../../../build.debug/mtest/libmscore/breath/breath02-test.mscx   breath02-ref.mscx
+

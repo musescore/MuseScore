@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.14">
+  <programVersion>1.3</programVersion>
+  <programRevision>5702
+</programRevision>
+  <Spatium>1.764</Spatium>
+  <Division>480</Division>
+  <Style>
+    <systemDistance>9.2</systemDistance>
+    <bracketDistance>0.2</bracketDistance>
+    <pageFillLimit>0.7</pageFillLimit>
+    <lastSystemFillLimit>0</lastSystemFillLimit>
+    <smallNoteMag>0.7</smallNoteMag>
+    <graceNoteMag>0.7</graceNoteMag>
+    <smallStaffMag>0.7</smallStaffMag>
+    </Style>
+  <showInvisible>1</showInvisible>
+  <showFrames>1</showFrames>
+  <page-layout>
+    <pageFormat>A4</pageFormat>
+    <page-margins type="even">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    <page-margins type="odd">
+      <left-margin>56.6929</left-margin>
+      <right-margin>56.6929</right-margin>
+      <top-margin>56.6929</top-margin>
+      <bottom-margin>113.386</bottom-margin>
+      </page-margins>
+    <page-offset>0</page-offset>
+    </page-layout>
+  <siglist>
+    <sig tick="0">
+      <nom>4</nom>
+      <denom>4</denom>
+      </sig>
+    </siglist>
+  <tempolist fix="2">
+    </tempolist>
+  <Part>
+    <Staff>
+      <cleflist>
+        <clef tick="0" idx="0"/>
+        <clef tick="1920" idx="1"/>
+        <clef tick="3840" idx="2"/>
+        <clef tick="5760" idx="3"/>
+        <clef tick="7680" idx="16"/>
+        <clef tick="9600" idx="9"/>
+        <clef tick="11520" idx="10"/>
+        <clef tick="13440" idx="11"/>
+        <clef tick="15360" idx="12"/>
+        <clef tick="17280" idx="15"/>
+        <clef tick="19200" idx="4"/>
+        <clef tick="21120" idx="17"/>
+        <clef tick="23040" idx="18"/>
+        <clef tick="24960" idx="5"/>
+        <clef tick="26880" idx="6"/>
+        <clef tick="28800" idx="7"/>
+        <clef tick="30720" idx="8"/>
+        <clef tick="32640" idx="14"/>
+        <clef tick="34560" idx="13"/>
+        </cleflist>
+      <keylist>
+        <key tick="0" idx="0"/>
+        </keylist>
+      <bracket type="-1" span="1"/>
+      </Staff>
+    <Instrument>
+      <minPitchP>59</minPitchP>
+      <maxPitchP>98</maxPitchP>
+      <minPitchA>60</minPitchA>
+      <maxPitchA>93</maxPitchA>
+      <trackName>Flute</trackName>
+      <Channel>
+        <controller ctrl="0" value="0"/>
+        <controller ctrl="32" value="0"/>
+        <program value="73"/>
+        <controller ctrl="7" value="100"/>
+        <controller ctrl="10" value="64"/>
+        <controller ctrl="93" value="30"/>
+        <controller ctrl="91" value="30"/>
+        </Channel>
+      </Instrument>
+    </Part>
+  <Staff id="1">
+    <VBox>
+      <height>10</height>
+      <leftMargin>5</leftMargin>
+      <rightMargin>5</rightMargin>
+      <topMargin>5</topMargin>
+      <bottomMargin>5</bottomMargin>
+      <Text>
+        <style>2</style>
+        <subtype>Title</subtype>
+        <frame>0</frame>
+        <html-data>
+<html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'Times New Roman'; font-size:24pt; font-weight:400; font-style:normal;">
+<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Clefs</p></body></html>
+          </html-data>
+        </Text>
+      </VBox>
+    <Measure number="1">
+      <TimeSig>
+        <subtype>260</subtype>
+        <den>4</den>
+        <nom1>4</nom1>
+        </TimeSig>
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>1</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="2">
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>2</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="3">
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>3</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="4">
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>16</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="5">
+      <Text>
+        <style>17</style>
+        <subtype>MeasureNumber</subtype>
+        </Text>
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>9</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="6">
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>10</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="7">
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>11</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="8">
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>12</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="9">
+      <Text>
+        <style>17</style>
+        <subtype>MeasureNumber</subtype>
+        </Text>
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>15</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="10">
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>4</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="11">
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>17</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="12">
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>18</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="13">
+      <Text>
+        <style>17</style>
+        <subtype>MeasureNumber</subtype>
+        </Text>
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>5</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="14">
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>6</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="15">
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>7</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="16">
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>8</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="17">
+      <Text>
+        <style>17</style>
+        <subtype>MeasureNumber</subtype>
+        </Text>
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>14</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="18">
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <Clef>
+        <subtype>13</subtype>
+        </Clef>
+      </Measure>
+    <Measure number="19">
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      </Measure>
+    <Measure number="20">
+      <LayoutBreak>
+        <subtype>line</subtype>
+        </LayoutBreak>
+      <Chord>
+        <durationType>whole</durationType>
+        <Note>
+          <pitch>60</pitch>
+          <tpc>14</tpc>
+          </Note>
+        </Chord>
+      <BarLine>
+        <subtype>5</subtype>
+        </BarLine>
+      </Measure>
+    </Staff>
+  <cursorTrack>0</cursorTrack>
+  </museScore>

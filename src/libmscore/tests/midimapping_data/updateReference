@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if [ "`uname`" = 'Darwin' ]; then
+   S=../../../build.xcode/mtest/libmscore/midimapping/Debug
+else
+   S=../../../build.debug/mtest/libmscore/midimapping
+fi
+
+cp $S/test2.mscx                    test2.mscx
+cp $S/test3withMapping.mscx         test3withMapping.mscx
+cp $S/test3withoutMapping.mscx      test3withoutMapping.mscx
+cp $S/test1withDrums_changed.mscx   test6-ref.mscx
+cp $S/test3withMapping_changed.mscx test7-ref.mscx
+cp $S/test2_changed3.mscx           test8-ref.mscx
+cp $S/test1withDrums_changed3.mscx  test9-ref.mscx
+cp $S/test10.xml                    test10-ref.xml
+cp $S/test12.xml                    test12-ref.xml
+cp $S/test13.xml                    test13-ref.xml
+cp $S/test14.mscx                   test14-ref.mscx
+cp $S/test15.mscx                   test15-ref.mscx
+cp $S/test16.mscx                   test16-ref.mscx
+cp $S/test17.mscx                   test17-ref.mscx
+cp $S/test18.mscx                   test18-ref.mscx
+cp $S/test1withoutDrums.mscx        test1withoutDrums.mscx
+cp $S/test1withDrums.mscx           test1withDrums.mscx
+

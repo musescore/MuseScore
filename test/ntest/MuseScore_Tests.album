@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="1.23">
+  <Album>
+    <name>MuseScore Tests</name>
+    <Score>
+      <name>stem-1</name>
+      <path>/home/ws/mscore/mscore/trunk/mscore/test/ntest/stem-1.mscx</path>
+      </Score>
+    <Score>
+      <name>tie</name>
+      <path>/home/ws/mscore/mscore/trunk/mscore/test/ntest/tie.mscx</path>
+      </Score>
+    <Score>
+      <name>slur</name>
+      <path>/home/ws/mscore/mscore/trunk/mscore/test/ntest/slur.mscx</path>
+      </Score>
+    </Album>
+  </museScore>

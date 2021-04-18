@@ -1,0 +1,65 @@
+# When copy-pasting a score range, slurs in the target range should be
+# overwritten, see issue #45361
+# This script tests this for copying content to a different staff.
+init init/Voice-Piano-3-4.mscx
+cmd note-input
+cmd pad-note-8
+cmd note-a
+cmd note-b
+cmd note-a
+cmd note-b
+cmd note-a
+cmd note-b
+cmd note-f
+cmd escape
+cmd prev-measure
+cmd select-next-chord
+cmd select-next-chord
+cmd add-slur
+cmd prev-measure
+cmd next-chord
+cmd next-chord
+cmd next-chord
+cmd select-next-chord
+cmd select-next-chord
+cmd add-slur
+cmd escape
+cmd del-empty-measures
+cmd note-input
+cmd escape
+cmd down-chord
+cmd note-input
+cmd pad-note-8
+cmd note-c
+cmd note-d
+cmd note-c
+cmd note-d
+cmd note-c
+cmd note-d
+cmd prev-measure
+cmd escape
+cmd add-slur
+cmd escape
+cmd next-chord
+cmd next-chord
+cmd add-slur
+cmd escape
+cmd next-chord
+cmd next-chord
+cmd add-slur
+cmd escape
+cmd up-chord
+cmd prev-measure
+cmd select-next-chord
+cmd select-next-measure
+cmd copy
+cmd down-chord
+cmd prev-chord
+cmd down-chord
+cmd prev-measure
+cmd select-next-measure
+test score ux_replace_slurs_on_copy_diffstaves~undo.mscx
+cmd paste
+test score ux_replace_slurs_on_copy_diffstaves.mscx
+cmd undo
+test score ux_replace_slurs_on_copy_diffstaves~undo.mscx
