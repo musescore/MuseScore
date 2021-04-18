@@ -71,7 +71,7 @@ QmlDialog {
                     StyledTextLabel {
                         width: parent.width
 
-                        text: qsTrc("appshell", "Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published by the W3C Music Notation Community Group under the W3C Community Contributor License Agreement (CLA):")
+                        text: qsTrc("appshell", "Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published by the W3C Music Notation Community Group under the W3C Community Final Specification Agreement:")
                         wrapMode: Text.WordWrap
                         maximumLineCount: 3
                     }
