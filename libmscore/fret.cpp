@@ -1266,6 +1266,9 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
       xml.stag("frame");
       xml.tag("frame-strings", _strings);
       xml.tag("frame-frets", frets());
+      if (fretOffset() > 0)
+            xml.tag("first-fret", fretOffset() + 1);
+
 
       for (int i = 0; i < _strings; ++i) {
             int mxmlString = _strings - i;
@@ -1290,25 +1293,26 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
                   xml.tag("fret", "0");
                   xml.etag();
                   }
+            else {
+                  // Write dots
+                  for (auto const& d : dot(i)) {
+                        if (!d.exists())
+                              continue;
+                        xml.stag("frame-note");
+                        xml.tag("string", mxmlString);
+                        xml.tag("fret", d.fret + fretOffset());
+                        // TODO: write fingerings
 
-            // Markers may exists alongside with dots
-            // Write dots
-            for (auto const& d : dot(i)) {
-                  if (!d.exists())
-                        continue;
-                  xml.stag("frame-note");
-                  xml.tag("string", mxmlString);
-                  xml.tag("fret", d.fret);
-                  // TODO: write fingerings
-
-                  // Also write barre if it starts at this dot
-                  if (std::find(bStarts.begin(), bStarts.end(), d.fret) != bStarts.end()) {
-                        xml.tagE("barre type=\"start\"");
-                        bStarts.erase(std::remove(bStarts.begin(), bStarts.end(), d.fret), bStarts.end());
-                        }
-                  if (std::find(bEnds.begin(), bEnds.end(), d.fret) != bEnds.end()) {
-                        xml.tagE("barre type=\"stop\"");
-                        bEnds.erase(std::remove(bEnds.begin(), bEnds.end(), d.fret), bEnds.end());
+                        // Also write barre if it starts at this dot
+                        if (std::find(bStarts.begin(), bStarts.end(), d.fret) != bStarts.end()) {
+                              xml.tagE("barre type=\"start\"");
+                              bStarts.erase(std::remove(bStarts.begin(), bStarts.end(), d.fret), bStarts.end());
+                              }
+                        if (std::find(bEnds.begin(), bEnds.end(), d.fret) != bEnds.end()) {
+                              xml.tagE("barre type=\"stop\"");
+                              bEnds.erase(std::remove(bEnds.begin(), bEnds.end(), d.fret), bEnds.end());
+                              }
+                        xml.etag();
                         }
                   xml.etag();
                   }
