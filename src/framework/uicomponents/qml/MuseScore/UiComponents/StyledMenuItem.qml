@@ -184,9 +184,9 @@ ListItemBlank {
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
-        anchors.leftMargin: root.iconAndCheckMarkMode === StyledMenuItem.None ? 24 : 12
+        anchors.leftMargin: 12
         anchors.right: parent.right
-        anchors.rightMargin: 18
+        anchors.rightMargin: submenuIndicator.visible ? 6 : 12
 
         spacing: 12
 
