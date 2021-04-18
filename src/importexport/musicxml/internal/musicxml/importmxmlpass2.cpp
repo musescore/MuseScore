@@ -5001,7 +5001,7 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
 /**
  Parse the /score-partwise/part/measure/harmony/frame node.
  Return the result as a FretDiagram.
-  Notes:
+ Notes:
  - MusicXML's first-fret is a positive integer equivalent to MuseScore's FretDiagram::_fretOffset
  - it is one-based in MusicXML and zero-based in MuseScore
  - in MusicXML fret numbers are absolute, in MuseScore they are relative to the fretOffset,
@@ -5086,7 +5086,7 @@ FretDiagram* MusicXMLParserPass2::frame()
                 if (mxmlFret == 0) {
                     fd->setMarker(msString, FretMarkerType::CIRCLE);
                 } else if (msFret > 0 && !barre) {
-                    fd->setDot(msString, msFret, true);
+                    fd->setDot(msString, msFret - fd->fretOffset(), true);
                     fd->setMarker(msString, FretMarkerType::NONE);
                 }
             } else {
@@ -5108,7 +5108,7 @@ FretDiagram* MusicXMLParserPass2::frame()
         }
 
         int endString = bEnds[fret];
-        fd->setBarre(startString, endString, fret);
+        fd->setBarre(startString, endString, fret - fd->fretOffset());
 
         // Reset fret marker of all strings covered by barre
         for (int string = startString; string <= endString; ++string) {
@@ -5816,7 +5816,8 @@ void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
             if (note->staff()->isTabStaff(Fraction(0, 1))) {
                 note->setString(notation.text().toInt() - 1);
             } else {
-                addTextToNote(_e.lineNumber(), _e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
+                addTextToNote(_e.lineNumber(), _e.columnNumber(),
+                              notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
                               Tid::STRING_NUMBER, _score, note);
             }
         } else {
