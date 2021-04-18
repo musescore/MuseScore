@@ -98,7 +98,7 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: privateProperties.sideMargin
 
-        height: 48
+        height: 40
 
         StyledTextLabel {
             width: header.itemWidth
@@ -124,7 +124,7 @@ Item {
         anchors.right: parent.right
         anchors.top: view.top
 
-        height: 8
+        height: 56
         z: 1
 
         gradient: Gradient {
@@ -146,6 +146,14 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: panel.visible ? panel.top : parent.bottom
+
+        header: Rectangle {
+            height: 24
+        }
+
+        footer: Rectangle {
+            height: 32
+        }
 
         model: filterModel
 
@@ -191,7 +199,7 @@ Item {
         anchors.right: parent.right
         anchors.bottom: view.bottom
 
-        height: 8
+        height: 56
         z: 1
 
         gradient: Gradient {
