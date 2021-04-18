@@ -69,7 +69,6 @@ Item {
             id: menu
 
             opensUpward: true
-            itemWidth: 220
 
             model: model.items
 
