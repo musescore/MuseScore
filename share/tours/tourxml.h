@@ -1,3 +1,24 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 QT_TRANSLATE_NOOP3("TourXML", "Autoplace is a new feature that automatically detects and avoids many types of collisions between elements.\n    You can also manually adjust the position of autoplaced elements, or disable autoplace for selected elements.\n    Click \"Next\" to learn more.", "autoplace-tour"),
 QT_TRANSLATE_NOOP3("TourXML", "Autoplace positions most elements according to standard music engraving practice,\n    such as by moving tempo markings above other text or by shortening hairpins to avoid dynamics.\n    In many cases, this means that no further adjustments will be required at all.", "autoplace-tour"),
 QT_TRANSLATE_NOOP3("TourXML", "If necessary, you can fine-tune the position of elements by dragging, by using the cursor keys while in Edit mode (double-click),\n    or by using the \"Offset\" fields in the Inspector.\n    This allows you to make adjustments while leaving autoplace enabled to continue avoiding collisions.", "autoplace-tour"),
