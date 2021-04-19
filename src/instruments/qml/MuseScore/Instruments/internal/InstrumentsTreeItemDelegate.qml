@@ -45,9 +45,6 @@ Item {
     signal clicked(var mouse)
     signal focusActived()
 
-    signal popupOpened(var popupX, var popupY, var popupHeight)
-    signal popupClosed()
-
     QtObject {
         id: prv
 
