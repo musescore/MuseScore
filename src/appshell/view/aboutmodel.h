@@ -40,6 +40,7 @@ public:
     Q_INVOKABLE QString museScoreVersion() const;
     Q_INVOKABLE QString museScoreRevision() const;
     Q_INVOKABLE QVariantMap museScoreUrl() const;
+    Q_INVOKABLE QVariantMap museScoreForumUrl() const;
     Q_INVOKABLE QVariantMap museScoreContributionUrl() const;
 
     Q_INVOKABLE QVariantMap musicXMLLicenseUrl() const;

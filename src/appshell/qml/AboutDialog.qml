@@ -97,14 +97,15 @@ QmlDialog {
                 StyledTextLabel {
                     Layout.fillWidth: true
                     text: {
-                        var message = qsTrc("appshell", "Visit <a href='%1'>%2</a> for new versions and more information.<br>Support MuseScore with your <a href='%3'>%4</a>.")
+                        var message = qsTrc("appshell", "Visit %1 for new versions and more information.\nGet %2 with the program or %3 to its development.")
                         var museScoreUrl = aboutModel.museScoreUrl()
+                        var museScoreForumUrl = aboutModel.museScoreForumUrl()
                         var museScoreContributionUrl = aboutModel.museScoreContributionUrl()
                         return message
-                        .arg(museScoreUrl.url)
-                        .arg(museScoreUrl.displayName)
-                        .arg(museScoreContributionUrl.url)
-                        .arg(museScoreContributionUrl.displayName)
+                        .arg("<a href='" + museScoreUrl.url + "'>" + museScoreUrl.displayName + "</a>")
+                        .arg("<a href='" + museScoreForumUrl.url + "'>" + museScoreForumUrl.displayName + "</a>")
+                        .arg("<a href='" + museScoreContributionUrl.url + "'>" + museScoreContributionUrl.displayName + "</a>")
+                        .replace("\n", "<br>")
                     }
                     wrapMode: Text.WordWrap
                     maximumLineCount: 3
@@ -112,7 +113,7 @@ QmlDialog {
 
                 StyledTextLabel {
                     Layout.fillWidth: true
-                    text: qsTrc("appshell", "Copyright © 1999-2021 MuseScore BVBA and others.\nPublished under the GNU General Public License.")
+                    text: qsTrc("appshell", "Copyright © 1999-2021 MuseScore BVBA and others.\nPublished under the GNU General Public License version 3.")
                     enabled: false
                     wrapMode: Text.WordWrap
                     maximumLineCount: 3

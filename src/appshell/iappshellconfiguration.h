@@ -52,6 +52,7 @@ public:
     virtual std::string bugReportUrl() const = 0;
     virtual std::string leaveFeedbackUrl() const = 0;
     virtual std::string museScoreUrl() const = 0;
+    virtual std::string museScoreForumUrl() const = 0;
     virtual std::string museScoreContributionUrl() const = 0;
     virtual std::string musicXMLLicenseUrl() const = 0;
     virtual std::string musicXMLLicenseDeedUrl() const = 0;
