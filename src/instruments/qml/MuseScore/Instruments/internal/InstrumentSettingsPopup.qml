@@ -29,7 +29,7 @@ StyledPopupView {
     id: root
 
     contentHeight: contentColumn.childrenRect.height
-    contentWidth: parent.width
+    contentWidth: 240
 
     function load(instrument) {
         settingsModel.load(instrument)
