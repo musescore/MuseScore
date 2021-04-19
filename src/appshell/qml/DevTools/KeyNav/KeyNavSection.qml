@@ -37,7 +37,7 @@ Rectangle {
     border.color: "#75507b"
     border.width: keynavsec.active ? 4 : 0
 
-    KeyNavigationSection {
+    NavigationSection {
         id: keynavsec
         onActiveChanged: {
             console.debug("KeyNavSection.qml active: " + keynavsec.active)

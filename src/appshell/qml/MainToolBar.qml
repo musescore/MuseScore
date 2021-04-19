@@ -30,7 +30,7 @@ Rectangle {
     width: radioButtonList.contentWidth
     height: radioButtonList.contentHeight
 
-    property alias keynav: keynavSub
+    property alias navigation: keynavSub
 
     property var currentUri: "musescore://home"
     property var items: [
@@ -58,7 +58,7 @@ Rectangle {
         root.selected(uri)
     }
 
-    KeyNavigationSubSection {
+    NavigationPanel {
         id: keynavSub
         name: "MainToolBar"
     }
@@ -78,9 +78,9 @@ Rectangle {
             spacing: 0
             leftPadding: 12
 
-            keynav.name: modelData["title"]
-            keynav.subsection: keynavSub
-            keynav.order: model.index
+            navigation.name: modelData["title"]
+            navigation.panel: keynavSub
+            navigation.order: model.index
 
             checked: modelData["uri"] === root.currentUri
             title: modelData["title"]

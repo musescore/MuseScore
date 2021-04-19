@@ -19,27 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_KEYNAVIGATIONCONTROL_H
-#define MU_UI_KEYNAVIGATIONCONTROL_H
+#ifndef MU_UI_NAVIGATIONCONTROL_H
+#define MU_UI_NAVIGATIONCONTROL_H
 
 #include <QObject>
 
-#include "abstractkeynavigation.h"
-#include "../ikeynavigation.h"
-#include "keynavigationsubsection.h"
+#include "abstractnavigation.h"
 #include "async/asyncable.h"
 
 namespace mu::ui {
-class KeyNavigationControl : public AbstractKeyNavigation, public IKeyNavigationControl, public async::Asyncable
+class NavigationPanel;
+class NavigationControl : public AbstractNavigation, public INavigationControl, public async::Asyncable
 {
     Q_OBJECT
-    Q_PROPERTY(KeyNavigationSubSection * subsection READ subsection WRITE setSubSection NOTIFY subsectionChanged)
+    Q_PROPERTY(mu::ui::NavigationPanel* panel READ panel WRITE setPanel NOTIFY panelChanged)
 
 public:
-    explicit KeyNavigationControl(QObject* parent = nullptr);
-    ~KeyNavigationControl() override;
+    explicit NavigationControl(QObject* parent = nullptr);
+    ~NavigationControl() override;
 
-    KeyNavigationSubSection* subsection() const;
+    NavigationPanel* panel() const;
 
     QString name() const override;
 
@@ -56,25 +55,25 @@ public:
     void onEvent(EventPtr e) override;
 
     void trigger() override;
-    async::Channel<IKeyNavigationControl*> forceActiveRequested() const override;
+    async::Channel<INavigationControl*> forceActiveRequested() const override;
 
     Q_INVOKABLE void forceActive();
 
 public slots:
-    void setSubSection(KeyNavigationSubSection* subsection);
+    void setPanel(NavigationPanel* panel);
 
 signals:
-    void subsectionChanged(KeyNavigationSubSection* subsection);
+    void panelChanged(NavigationPanel* panel);
     void triggered();
 
 private slots:
-    void onSubSectionDestroyed();
+    void onPanelDestroyed();
 
 private:
 
-    KeyNavigationSubSection* m_subsection = nullptr;
-    async::Channel<IKeyNavigationControl*> m_forceActiveRequested;
+    NavigationPanel* m_panel = nullptr;
+    async::Channel<INavigationControl*> m_forceActiveRequested;
 };
 }
 
-#endif // MU_UI_KEYNAVIGATIONCONTROL_H
+#endif // MU_UI_NAVIGATIONCONTROL_H

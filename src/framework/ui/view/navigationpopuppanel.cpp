@@ -19,27 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_KEYNAVIGATIONUIACTIONS_H
-#define MU_UI_KEYNAVIGATIONUIACTIONS_H
+#include "navigationpopuppanel.h"
 
-#include "../iuiactionsmodule.h"
+using namespace mu::ui;
 
-namespace mu::ui {
-class KeyNavigationUiActions : public IUiActionsModule
+NavigationPopupPanel::NavigationPopupPanel(QObject* parent)
+    : NavigationPanel(parent)
 {
-public:
-    KeyNavigationUiActions() = default;
-
-    const UiActionList& actionsList() const override;
-    bool actionEnabled(const UiAction& act) const override;
-    async::Channel<actions::ActionCodeList> actionEnabledChanged() const override;
-
-    bool actionChecked(const UiAction& act) const override;
-    async::Channel<actions::ActionCodeList> actionCheckedChanged() const override;
-
-private:
-    static const UiActionList m_actions;
-};
 }
 
-#endif // MU_UI_KEYNAVIGATIONUIACTIONS_H
+NavigationControl* NavigationPopupPanel::parentControl() const
+{
+    return m_parentControl;
+}
+
+void NavigationPopupPanel::setParentControl(NavigationControl* parentControl)
+{
+    if (m_parentControl == parentControl) {
+        return;
+    }
+
+    m_parentControl = parentControl;
+    emit parentControlChanged(m_parentControl);
+
+    if (m_parentControl && m_parentControl->panel()) {
+        setSection(m_parentControl->panel()->section());
+    } else {
+        setSection(nullptr);
+    }
+}

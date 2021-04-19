@@ -19,23 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "keynavigationevent.h"
+#include "navigationevent.h"
 
 #include "log.h"
 
 using namespace mu::ui;
 
-KeyNavigationEvent::KeyNavigationEvent(IKeyNavigation::EventPtr event)
+NavigationEvent::NavigationEvent(INavigation::EventPtr event)
     : m_event(event)
 {
 }
 
-void KeyNavigationEvent::setEvent(IKeyNavigation::EventPtr event)
+void NavigationEvent::setEvent(INavigation::EventPtr event)
 {
     m_event = event;
 }
 
-KeyNavigationEvent::Type KeyNavigationEvent::type() const
+NavigationEvent::Type NavigationEvent::type() const
 {
     IF_ASSERT_FAILED(m_event) {
         return Undefined;
@@ -43,7 +43,7 @@ KeyNavigationEvent::Type KeyNavigationEvent::type() const
     return static_cast<Type>(m_event->type);
 }
 
-void KeyNavigationEvent::setAccepted(bool accepted)
+void NavigationEvent::setAccepted(bool accepted)
 {
     IF_ASSERT_FAILED(m_event) {
         return;
@@ -51,7 +51,7 @@ void KeyNavigationEvent::setAccepted(bool accepted)
     m_event->accepted = accepted;
 }
 
-bool KeyNavigationEvent::accepted() const
+bool NavigationEvent::accepted() const
 {
     IF_ASSERT_FAILED(m_event) {
         return false;

@@ -23,14 +23,14 @@
 
 using namespace mu::ui;
 
-KeyNavDevSubSection::KeyNavDevSubSection(IKeyNavigationSubSection* subsection)
+KeyNavDevSubSection::KeyNavDevSubSection(INavigationPanel* subsection)
     : AbstractKeyNavDevItem(subsection), m_subsection(subsection)
 {
 }
 
 QString KeyNavDevSubSection::direction() const
 {
-    using Direction = IKeyNavigationSubSection::Direction;
+    using Direction = INavigationPanel::Direction;
     switch (m_subsection->direction()) {
     case Direction::Horizontal: return QString("Horizontal");
     case Direction::Vertical: return QString("Vertical");

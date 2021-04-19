@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QTimer>
 #include "modularity/ioc.h"
-#include "ui/ikeynavigationcontroller.h"
+#include "ui/inavigationcontroller.h"
 #include "async/asyncable.h"
 
 namespace mu::ui {
@@ -36,7 +36,7 @@ class KeyNavDevModel : public QObject, public async::Asyncable
 
     Q_PROPERTY(QVariantList sections READ sections NOTIFY sectionsChanged)
 
-    INJECT(ui, IKeyNavigationController, keynavController)
+    INJECT(ui, INavigationController, navigationController)
 public:
     explicit KeyNavDevModel(QObject* parent = nullptr);
 
@@ -51,9 +51,9 @@ signals:
 
 private:
 
-    QVariant toWrap(IKeyNavigationSection* s);
-    QVariant toWrap(IKeyNavigationSubSection* sub);
-    QVariant toWrap(IKeyNavigationControl* ctrl);
+    QVariant toWrap(INavigationSection* s);
+    QVariant toWrap(INavigationPanel* sub);
+    QVariant toWrap(INavigationControl* ctrl);
 
     QVariantList m_sections;
     mutable QList<AbstractKeyNavDevItem*> m_memstore;

@@ -19,32 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "keynavigationpopuppanel.h"
+#ifndef MU_UI_NAVIGATIONPOPUPPANEL_H
+#define MU_UI_NAVIGATIONPOPUPPANEL_H
 
-using namespace mu::ui;
+#include <QObject>
+#include "navigationpanel.h"
 
-KeyNavigationPopupPanel::KeyNavigationPopupPanel(QObject* parent)
-    : KeyNavigationSubSection(parent)
+namespace mu::ui {
+class NavigationPopupPanel : public NavigationPanel
 {
+    Q_OBJECT
+
+    Q_PROPERTY(NavigationControl * parentControl READ parentControl WRITE setParentControl NOTIFY parentControlChanged)
+
+public:
+    explicit NavigationPopupPanel(QObject* parent = nullptr);
+
+    NavigationControl* parentControl() const;
+
+public slots:
+    void setParentControl(NavigationControl* parentControl);
+
+signals:
+    void parentControlChanged(NavigationControl* parentControl);
+
+private:
+    NavigationControl* m_parentControl = nullptr;
+};
 }
-
-KeyNavigationControl* KeyNavigationPopupPanel::parentControl() const
-{
-    return m_parentControl;
-}
-
-void KeyNavigationPopupPanel::setParentControl(KeyNavigationControl* parentControl)
-{
-    if (m_parentControl == parentControl) {
-        return;
-    }
-
-    m_parentControl = parentControl;
-    emit parentControlChanged(m_parentControl);
-
-    if (m_parentControl && m_parentControl->subsection()) {
-        setSection(m_parentControl->subsection()->section());
-    } else {
-        setSection(nullptr);
-    }
-}
+#endif // MU_UI_NAVIGATIONPOPUPPANEL_H

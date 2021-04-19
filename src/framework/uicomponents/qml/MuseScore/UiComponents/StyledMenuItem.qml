@@ -53,13 +53,13 @@ ListItemBlank {
         ShowBoth
     }
 
-    keynav.onActiveChanged: {
+    navigation.onActiveChanged: {
         if (prv.hasSubMenu) {
-            if (keynav.active) {
+            if (navigation.active) {
                 prv.showSubMenu()
             } else {
                 Qt.callLater(function() {
-                    if (prv.showedSubMenu && !prv.showedSubMenu.keynav.active) {
+                    if (prv.showedSubMenu && !prv.showedSubMenu.navigation.active) {
                         prv.closeSubMenu()
                     }
                 })
@@ -67,7 +67,7 @@ ListItemBlank {
         }
     }
 
-    keynav.onKeyNavEvent: {
+    navigation.onKeyNavEvent: {
         switch (event.type) {
         case KeyNavigationEvent.Right:
             //! NOTE Go to submenu if shown
@@ -78,14 +78,14 @@ ListItemBlank {
             break;
         case KeyNavigationEvent.Left:
             //! NOTE Go to parent item if present
-            if (keynav.subsection.parentControl) {
+            if (navigation.panel.parentControl) {
                 event.accepted = true
-                root.keynav.subsection.parentControl.forceActive()
+                root.navigation.panel.parentControl.forceActive()
             }
         }
     }
 
-    keynav.onTriggered: root.clicked()
+    navigation.onTriggered: root.clicked()
 
     QtObject {
         id: prv
@@ -113,8 +113,8 @@ ListItemBlank {
             menu.x = root.width
             menu.y = 0
 
-            menu.keynav.parentControl = root.keynav
-            menu.keynav.name = root.keynav.name+"SubMenu"
+            menu.navigation.parentControl = root.navigation
+            menu.navigation.name = root.navigation.name+"SubMenu"
 
             menu.model = modelData.subitems
 
@@ -200,8 +200,8 @@ ListItemBlank {
     }
 
     onHovered: {
-        if (isHovered && !root.keynav.active) {
-            root.keynav.forceActive()
+        if (isHovered && !root.navigation.active) {
+            root.navigation.forceActive()
         }
 
         if (!prv.hasSubMenu) {

@@ -27,7 +27,7 @@ import MuseScore.UiComponents 1.0
 Rectangle {
     id: root
 
-    property alias keynav: keynavSub
+    property alias navigation: keynavSub
 
     signal activeFocusRequested()
 
@@ -35,7 +35,7 @@ Rectangle {
         toolbarModel.load()
     }
 
-    KeyNavigationSubSection {
+    NavigationPanel {
         id: keynavSub
         name: "NotationToolBar"
         onActiveChanged: {
@@ -73,10 +73,10 @@ Rectangle {
             enabled: model.enabled
             textFont: ui.theme.tabFont
 
-            keynav.subsection: keynavSub
-            keynav.name: model.title
-            keynav.order: model.index
-            keynav.enabled: model.enabled
+            navigation.panel: keynavSub
+            navigation.name: model.title
+            navigation.order: model.index
+            navigation.enabled: model.enabled
 
             normalStateColor: "transparent"
             orientation: Qt.Horizontal

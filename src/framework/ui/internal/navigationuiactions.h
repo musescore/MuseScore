@@ -19,33 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_KEYNAVIGATIONPOPUPPANEL_H
-#define MU_UI_KEYNAVIGATIONPOPUPPANEL_H
+#ifndef MU_UI_NAVIGATIONUIACTIONS_H
+#define MU_UI_NAVIGATIONUIACTIONS_H
 
-#include <QObject>
-#include "keynavigationsubsection.h"
-#include "keynavigationcontrol.h"
+#include "../iuiactionsmodule.h"
 
 namespace mu::ui {
-class KeyNavigationPopupPanel : public KeyNavigationSubSection
+class NavigationUiActions : public IUiActionsModule
 {
-    Q_OBJECT
-
-    Q_PROPERTY(KeyNavigationControl * parentControl READ parentControl WRITE setParentControl NOTIFY parentControlChanged)
-
 public:
-    explicit KeyNavigationPopupPanel(QObject* parent = nullptr);
+    NavigationUiActions() = default;
 
-    KeyNavigationControl* parentControl() const;
+    const UiActionList& actionsList() const override;
+    bool actionEnabled(const UiAction& act) const override;
+    async::Channel<actions::ActionCodeList> actionEnabledChanged() const override;
 
-public slots:
-    void setParentControl(KeyNavigationControl* parentControl);
-
-signals:
-    void parentControlChanged(KeyNavigationControl* parentControl);
+    bool actionChecked(const UiAction& act) const override;
+    async::Channel<actions::ActionCodeList> actionCheckedChanged() const override;
 
 private:
-    KeyNavigationControl* m_parentControl = nullptr;
+    static const UiActionList m_actions;
 };
 }
-#endif // MU_UI_KEYNAVIGATIONPOPUPPANEL_H
+
+#endif // MU_UI_NAVIGATIONUIACTIONS_H

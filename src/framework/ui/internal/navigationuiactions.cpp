@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "keynavigationuiactions.h"
+#include "navigationuiactions.h"
 
 #include "context/uicontext.h"
 
 using namespace mu::ui;
 using namespace mu::actions;
 
-const UiActionList KeyNavigationUiActions::m_actions = {
+const UiActionList NavigationUiActions::m_actions = {
     UiAction("nav-dev-show-controls",
              mu::context::UiCtxAny
              ),
@@ -36,10 +36,10 @@ const UiActionList KeyNavigationUiActions::m_actions = {
     UiAction("nav-prev-section",
              mu::context::UiCtxAny
              ),
-    UiAction("nav-next-subsection",
+    UiAction("nav-next-panel",
              mu::context::UiCtxAny
              ),
-    UiAction("nav-prev-subsection",
+    UiAction("nav-prev-panel",
              mu::context::UiCtxAny
              ),
     UiAction("nav-right",
@@ -74,28 +74,28 @@ const UiActionList KeyNavigationUiActions::m_actions = {
              )
 };
 
-const UiActionList& KeyNavigationUiActions::actionsList() const
+const UiActionList& NavigationUiActions::actionsList() const
 {
     return m_actions;
 }
 
-bool KeyNavigationUiActions::actionEnabled(const UiAction&) const
+bool NavigationUiActions::actionEnabled(const UiAction&) const
 {
     return true;
 }
 
-mu::async::Channel<ActionCodeList> KeyNavigationUiActions::actionEnabledChanged() const
+mu::async::Channel<ActionCodeList> NavigationUiActions::actionEnabledChanged() const
 {
     static async::Channel<ActionCodeList> ch;
     return ch;
 }
 
-bool KeyNavigationUiActions::actionChecked(const UiAction&) const
+bool NavigationUiActions::actionChecked(const UiAction&) const
 {
     return false;
 }
 
-mu::async::Channel<ActionCodeList> KeyNavigationUiActions::actionCheckedChanged() const
+mu::async::Channel<ActionCodeList> NavigationUiActions::actionCheckedChanged() const
 {
     static async::Channel<ActionCodeList> ch;
     return ch;

@@ -33,7 +33,7 @@ RowLayout {
     property bool isRemovingAvailable: false
     property bool isAddingAvailable: value
 
-    property alias keynav: keynavSub
+    property alias navigation: keynavSub
 
     signal addRequested()
     signal moveUpRequested()
@@ -50,7 +50,7 @@ RowLayout {
         }
     }
 
-    KeyNavigationSubSection {
+    NavigationPanel {
         id: keynavSub
         name: "InstrumentsHeader"
     }
@@ -58,8 +58,8 @@ RowLayout {
     FlatButton {
         Layout.fillWidth: true
 
-        keynav.subsection: keynavSub
-        keynav.order: 1
+        navigation.panel: keynavSub
+        navigation.order: 1
 
         text: qsTrc("instruments", "Add")
 
@@ -73,8 +73,8 @@ RowLayout {
     FlatButton {
         Layout.preferredWidth: width
 
-        keynav.subsection: keynavSub
-        keynav.order: 2
+        navigation.panel: keynavSub
+        navigation.order: 2
 
         enabled: root.isMovingUpAvailable
 
@@ -88,8 +88,8 @@ RowLayout {
     FlatButton {
         Layout.preferredWidth: width
 
-        keynav.subsection: keynavSub
-        keynav.order: 3
+        navigation.panel: keynavSub
+        navigation.order: 3
 
         enabled: root.isMovingDownAvailable
 
@@ -103,8 +103,8 @@ RowLayout {
     FlatButton {
         Layout.preferredWidth: width
 
-        keynav.subsection: keynavSub
-        keynav.order: 4
+        navigation.panel: keynavSub
+        navigation.order: 4
 
         enabled: root.isRemovingAvailable
 

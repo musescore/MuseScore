@@ -115,7 +115,7 @@ Rectangle {
 
                     id: subitem
 
-                    property var subsection: modelData
+                    property var panel: modelData
 
                     anchors.left: parent.left
                     anchors.right: parent.right
@@ -123,8 +123,8 @@ Rectangle {
 
                     Rectangle {
                         anchors.fill: parent
-                        color: subitem.subsection.enabled ? "#729fcf" : "#eeeeec"
-                        border.width: subitem.subsection.active ? 2 : 0
+                        color: subitem.panel.enabled ? "#729fcf" : "#eeeeec"
+                        border.width: subitem.panel.active ? 2 : 0
                         border.color: ui.theme.focusColor
                     }
 
@@ -133,9 +133,9 @@ Rectangle {
                         anchors.top: parent.top
                         anchors.left: parent.left
                         anchors.margins: 8
-                        text: "subsection: " + subitem.subsection.name
-                              + ", " + root.formatIndex(subitem.subsection.index)
-                              + ", enabled: " + subitem.subsection.enabled
+                        text: "panel: " + subitem.panel.name
+                              + ", " + root.formatIndex(subitem.panel.index)
+                              + ", enabled: " + subitem.panel.enabled
                     }
 
                     GridView {
@@ -151,7 +151,7 @@ Rectangle {
                         cellHeight: 32
                         cellWidth: 68
 
-                        model: subitem.subsection.controls
+                        model: subitem.panel.controls
                         delegate: Rectangle {
 
                             property var control: modelData

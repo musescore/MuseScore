@@ -36,7 +36,7 @@ Item {
 
     id: root
 
-    property KeyNavigationSection keynavSection: null
+    property NavigationSection keynavSection: null
 
     Rectangle {
         id: background
@@ -54,11 +54,11 @@ Item {
         }
     }
 
-    KeyNavigationSubSection {
+    NavigationPanel {
         id: keynavTreeSub
         name: "InstrumentsTree"
         section: root.keynavSection
-        direction: KeyNavigationSubSection.Both
+        direction: NavigationPanel.Both
         enabled: root.visible
         order: 3
     }
@@ -79,9 +79,9 @@ Item {
             Layout.leftMargin: contentColumn.sideMargin
             Layout.rightMargin: contentColumn.sideMargin
 
-            keynav.section: root.keynavSection
-            keynav.enabled: root.visible
-            keynav.order: 2
+            navigation.section: root.keynavSection
+            navigation.enabled: root.visible
+            navigation.order: 2
 
             isMovingUpAvailable: instrumentTreeModel.isMovingUpAvailable
             isMovingDownAvailable: instrumentTreeModel.isMovingDownAvailable

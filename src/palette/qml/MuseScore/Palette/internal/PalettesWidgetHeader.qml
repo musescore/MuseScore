@@ -39,7 +39,7 @@ Item {
 
     property alias popupMaxHeight: palettePopup.maxHeight
 
-    property alias keynav: keynavSub
+    property alias navigation: keynavSub
 
     signal addCustomPaletteRequested(var paletteName)
 
@@ -60,7 +60,7 @@ Item {
         }
     }
 
-    KeyNavigationSubSection {
+    NavigationPanel {
         id: keynavSub
         name: "PalettesHeader"
         onActiveChanged: {
@@ -76,8 +76,8 @@ Item {
         anchors.right: searchTextButton.left
         anchors.rightMargin: 8
         objectName: "AddPalettesBtn"
-        keynav.subsection: keynavSub
-        keynav.order: 1
+        navigation.panel: keynavSub
+        navigation.order: 1
         enabled: !searchTextInput.visible
         text: qsTrc("palette", "Add Palettes")
         onClicked: {
@@ -89,8 +89,8 @@ Item {
         id: searchTextButton
         anchors.right: parent.right
         objectName: "SearchPalettesBtn"
-        keynav.subsection: keynavSub
-        keynav.order: 2
+        navigation.panel: keynavSub
+        navigation.order: 2
         enabled: !searchTextInput.visible
         icon: IconCode.SEARCH
         onClicked: {
@@ -103,10 +103,10 @@ Item {
         width: parent.width
 
         //! TODO Move to SearchField inside
-        KeyNavigationControl {
+        NavigationControl {
             id: keynavSearchField
             name: "SearchPalettesField"
-            subsection: keynavSub
+            panel: keynavSub
             order: 3
             enabled: searchTextInput.visible
             onActiveChanged: {
@@ -116,10 +116,10 @@ Item {
             }
         }
 
-        KeyNavigationControl {
+        NavigationControl {
             id: keynavSearchFieldClose
             name: "SearchPalettesFieldClose"
-            subsection: keynavSub
+            panel: keynavSub
             order: 4
             enabled: searchTextInput.visible && searchTextInput.clearTextButtonVisible
             onTriggered: toggleSearch()
@@ -127,7 +127,7 @@ Item {
 
         onVisibleChanged: {
             if (!searchTextInput.visible) {
-                morePalettesButton.keynav.forceActive()
+                morePalettesButton.navigation.forceActive()
             }
         }
 

@@ -22,11 +22,11 @@
         <seq>Shift+`</seq>
     </SC>
     <SC>
-        <key>nav-next-subsection</key>
+        <key>nav-next-panel</key>
         <seq>Tab</seq>
     </SC>
     <SC>
-        <key>nav-prev-subsection</key>
+        <key>nav-prev-panel</key>
         <seq>Shift+Tab</seq>
     </SC>
     <SC>

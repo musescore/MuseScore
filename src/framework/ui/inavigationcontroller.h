@@ -19,25 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_IKEYNAVIGATIONCONTROLLER_H
-#define MU_UI_IKEYNAVIGATIONCONTROLLER_H
+#ifndef MU_UI_INAVIGATIONCONTROLLER_H
+#define MU_UI_INAVIGATIONCONTROLLER_H
 
 #include "modularity/imoduleexport.h"
-#include "ikeynavigation.h"
+#include "inavigation.h"
 
 namespace mu::ui {
-class IKeyNavigationController : MODULE_EXPORT_INTERFACE
+class INavigationController : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IKeyNavigationController)
+    INTERFACE_ID(INavigationController)
 
 public:
-    virtual ~IKeyNavigationController() = default;
+    virtual ~INavigationController() = default;
 
-    virtual void reg(IKeyNavigationSection* s) = 0;
-    virtual void unreg(IKeyNavigationSection* s) = 0;
+    virtual void reg(INavigationSection* section) = 0;
+    virtual void unreg(INavigationSection* section) = 0;
 
-    virtual const std::set<IKeyNavigationSection*>& sections() const = 0;
+    virtual const std::set<INavigationSection*>& sections() const = 0;
 };
 }
 
-#endif // MU_UI_IKEYNAVIGATIONCONTROLLER_H
+#endif // MU_UI_INAVIGATIONCONTROLLER_H

@@ -43,13 +43,13 @@ StyledPopupView {
 
     animationEnabled: false //! NOTE disabled - because trouble with simultaneous opening of submenu
 
-    keynav.name: "StyledMenu"
-    keynav.direction: KeyNavigationSubSection.Vertical
+    navigation.name: "StyledMenu"
+    navigation.direction: NavigationPanel.Vertical
 
     function focusOnFirstItem() {
         var loader = view.itemAtIndex(0)
         if (loader && loader.item) {
-            loader.item.keynav.forceActive()
+            loader.item.navigation.forceActive()
         }
     }
 
@@ -57,7 +57,7 @@ StyledPopupView {
         for (var i = 0; i < view.count; ++i) {
             var loader = view.itemAtIndex(i)
             if (loader && loader.item && loader.item.isSelected) {
-                loader.item.keynav.forceActive()
+                loader.item.navigation.forceActive()
                 return true
             }
         }
@@ -121,9 +121,9 @@ StyledPopupView {
                 StyledMenuItem {
                     id: item
 
-                    keynav.subsection: root.keynav
-                    keynav.column: 0
-                    keynav.row: model.index
+                    navigation.panel: root.navigation
+                    navigation.column: 0
+                    navigation.row: model.index
 
                     iconAndCheckMarkMode: {
                         if (prv.hasItemsWithIconAndCheckable) {

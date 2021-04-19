@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_IKEYNAVIGATION_H
-#define MU_UI_IKEYNAVIGATION_H
+#ifndef MU_UI_INAVIGATION_H
+#define MU_UI_INAVIGATION_H
 
 #include <tuple>
 #include <memory>
@@ -30,21 +30,21 @@
 #include "async/notification.h"
 
 namespace mu::ui {
-class IKeyNavigationSection;
-class IKeyNavigationSubSection;
-class IKeyNavigationControl;
+class INavigationSection;
+class INavigationPanel;
+class INavigationControl;
 
-using SubSectionControl = std::tuple<IKeyNavigationSubSection*, IKeyNavigationControl*>;
-using SectionSubSectionControl = std::tuple<IKeyNavigationSection*, IKeyNavigationSubSection*, IKeyNavigationControl*>;
+using PanelControl = std::tuple<INavigationPanel*, INavigationControl*>;
+using SectionPanelControl = std::tuple<INavigationSection*, INavigationPanel*, INavigationControl*>;
 
-class IKeyNavigation
+class INavigation
 {
 public:
-    virtual ~IKeyNavigation() = default;
+    virtual ~INavigation() = default;
 
     struct Event
     {
-        //! NOTE Please sync with view/KeyNavigationEvent::Type
+        //! NOTE Please sync with view/NavigationEvent::Type
         enum Type {
             Undefined = 0,
             Left,
@@ -88,21 +88,21 @@ public:
     virtual void onEvent(EventPtr e) = 0;
 };
 
-class IKeyNavigationControl : public IKeyNavigation
+class INavigationControl : public INavigation
 {
 public:
-    virtual ~IKeyNavigationControl() = default;
+    virtual ~INavigationControl() = default;
 
     virtual void trigger() = 0;
-    virtual async::Channel<IKeyNavigationControl*> forceActiveRequested() const = 0;
+    virtual async::Channel<INavigationControl*> forceActiveRequested() const = 0;
 };
 
-class IKeyNavigationSubSection : public IKeyNavigation
+class INavigationPanel : public INavigation
 {
 public:
-    virtual ~IKeyNavigationSubSection() = default;
+    virtual ~INavigationPanel() = default;
 
-    //! NOTE Please sync with view/KeyNavigationSubSection::Direction
+    //! NOTE Please sync with view/NavigationPanel::Direction
     enum class Direction {
         Horizontal = 0,
         Vertical,
@@ -110,20 +110,20 @@ public:
     };
 
     virtual Direction direction() const = 0;
-    virtual const std::set<IKeyNavigationControl*>& controls() const = 0;
+    virtual const std::set<INavigationControl*>& controls() const = 0;
     virtual async::Notification controlsListChanged() const = 0;
-    virtual async::Channel<SubSectionControl> forceActiveRequested() const = 0;
+    virtual async::Channel<PanelControl> forceActiveRequested() const = 0;
 };
 
-class IKeyNavigationSection : public IKeyNavigation
+class INavigationSection : public INavigation
 {
 public:
-    virtual ~IKeyNavigationSection() = default;
+    virtual ~INavigationSection() = default;
 
-    virtual const std::set<IKeyNavigationSubSection*>& subsections() const = 0;
-    virtual async::Notification subsectionsListChanged() const = 0;
-    virtual async::Channel<SectionSubSectionControl> forceActiveRequested() const = 0;
+    virtual const std::set<INavigationPanel*>& panels() const = 0;
+    virtual async::Notification panelsListChanged() const = 0;
+    virtual async::Channel<SectionPanelControl> forceActiveRequested() const = 0;
 };
 }
 
-#endif // MU_UI_IKEYNAVIGATION_H
+#endif // MU_UI_INAVIGATION_H

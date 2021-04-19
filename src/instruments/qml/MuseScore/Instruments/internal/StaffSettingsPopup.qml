@@ -138,7 +138,7 @@ StyledPopupView {
         FlatButton {
             width: parent.width
 
-            keynav.subsection: root.keynav
+            navigation.panel: root.navigation
 
             text: qsTrc("instruments", "Create a linked staff")
 

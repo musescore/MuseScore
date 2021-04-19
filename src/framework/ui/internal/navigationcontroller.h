@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_KEYNAVIGATIONCONTROLLER_H
-#define MU_UI_KEYNAVIGATIONCONTROLLER_H
+#ifndef MU_UI_NAVIGATIONCONTROLLER_H
+#define MU_UI_NAVIGATIONCONTROLLER_H
 
 #include <QList>
 
-#include "../ikeynavigationcontroller.h"
+#include "../inavigationcontroller.h"
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
@@ -32,13 +32,13 @@
 #include "global/iinteractive.h"
 
 namespace mu::ui {
-class KeyNavigationController : public IKeyNavigationController, public actions::Actionable, public async::Asyncable
+class NavigationController : public INavigationController, public actions::Actionable, public async::Asyncable
 {
     INJECT(ui, actions::IActionsDispatcher, dispatcher)
     INJECT(ui, framework::IInteractive, interactive)
 
 public:
-    KeyNavigationController() = default;
+    NavigationController() = default;
 
     enum MoveDirection {
         First = 0,
@@ -49,10 +49,10 @@ public:
         Down
     };
 
-    void reg(IKeyNavigationSection* s) override;
-    void unreg(IKeyNavigationSection* s) override;
+    void reg(INavigationSection* section) override;
+    void unreg(INavigationSection* section) override;
 
-    const std::set<IKeyNavigationSection*>& sections() const override;
+    const std::set<INavigationSection*>& sections() const override;
 
     void init();
 
@@ -62,15 +62,15 @@ private:
 
     void goToNextSection();
     void goToPrevSection();
-    void goToNextSubSection();
-    void goToPrevSubSection();
+    void goToNextPanel();
+    void goToPrevPanel();
 
     void goToFirstControl();
     void goToLastControl();
     void goToNextRowControl();
     void goToPrevRowControl();
 
-    void goToControl(MoveDirection direction, IKeyNavigationSubSection* activeSubSec = nullptr);
+    void goToControl(MoveDirection direction, INavigationPanel* activeSubSec = nullptr);
 
     void onLeft();
     void onRight();
@@ -79,24 +79,24 @@ private:
     void onEscape();
 
     void doTriggerControl();
-    void onForceActiveRequested(IKeyNavigationSection* sec, IKeyNavigationSubSection* sub, IKeyNavigationControl* ctrl);
+    void onForceActiveRequested(INavigationSection* sec, INavigationPanel* sub, INavigationControl* ctrl);
 
-    void doActivateSection(IKeyNavigationSection* s);
-    void doDeactivateSection(IKeyNavigationSection* s);
-    void doActivateSubSection(IKeyNavigationSubSection* s);
-    void doDeactivateSubSection(IKeyNavigationSubSection* s);
-    void doActivateControl(IKeyNavigationControl* c);
-    void doDeactivateControl(IKeyNavigationControl* c);
+    void doActivateSection(INavigationSection* s);
+    void doDeactivateSection(INavigationSection* s);
+    void doActivatePanel(INavigationPanel* s);
+    void doDeactivatePanel(INavigationPanel* s);
+    void doActivateControl(INavigationControl* c);
+    void doDeactivateControl(INavigationControl* c);
 
     void doActivateFirst();
     void doActivateLast();
 
-    IKeyNavigationSection* activeSection() const;
-    IKeyNavigationSubSection* activeSubSection() const;
-    IKeyNavigationControl* activeControl() const;
+    INavigationSection* activeSection() const;
+    INavigationPanel* activePanel() const;
+    INavigationControl* activeControl() const;
 
-    std::set<IKeyNavigationSection*> m_sections;
+    std::set<INavigationSection*> m_sections;
 };
 }
 
-#endif // MU_UI_KEYNAVIGATIONCONTROLLER_H
+#endif // MU_UI_NAVIGATIONCONTROLLER_H

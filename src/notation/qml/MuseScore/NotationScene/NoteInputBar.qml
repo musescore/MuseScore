@@ -31,7 +31,7 @@ Rectangle {
 
     property alias orientation: gridView.orientation
 
-    property alias keynav: keynavSub
+    property alias navigation: keynavSub
 
     QtObject {
         id: privatesProperties
@@ -39,7 +39,7 @@ Rectangle {
         property bool isHorizontal: orientation === Qt.Horizontal
     }
 
-    KeyNavigationSubSection {
+    NavigationPanel {
         id: keynavSub
         name: "NoteInputBar"
     }
@@ -83,11 +83,11 @@ Rectangle {
 
             iconFont: ui.theme.toolbarIconsFont
 
-            keynav.subsection: keynavSub
-            keynav.name: hint
-            keynav.order: Boolean(item) ? item.orderRole : 0
+            navigation.panel: keynavSub
+            navigation.name: hint
+            navigation.order: Boolean(item) ? item.orderRole : 0
             isClickOnKeyNavTriggered: false
-            keynav.onTriggered: {
+            navigation.onTriggered: {
                 if (hasSubitems && item.showSubitemsByPressAndHoldRole) {
                     btn.pressAndHold()
                 } else {
@@ -102,7 +102,7 @@ Rectangle {
 
             onClicked: {
                 if (menuLoader.isMenuOpened() || (hasSubitems && !item.showSubitemsByPressAndHoldRole)) {
-                    menuLoader.toggleOpened(item.subitemsRole, btn.keynav)
+                    menuLoader.toggleOpened(item.subitemsRole, btn.navigation)
                     return
                 }
 
@@ -114,7 +114,7 @@ Rectangle {
                     return
                 }
 
-                menuLoader.toggleOpened(item.subitemsRole, btn.keynav)
+                menuLoader.toggleOpened(item.subitemsRole, btn.navigation)
             }
 
             Canvas {
@@ -157,8 +157,8 @@ Rectangle {
         icon: IconCode.CONFIGURE
         iconFont: ui.theme.toolbarIconsFont
         normalStateColor: "transparent"
-        keynav.subsection: keynavSub
-        keynav.order: 100
+        navigation.panel: keynavSub
+        navigation.order: 100
 
         onClicked: {
             api.launcher.open("musescore://notation/noteinputbar/customise")
