@@ -667,8 +667,6 @@ MenuItemList NoteInputBarModel::addItems() const
 MenuItemList NoteInputBarModel::notesItems() const
 {
     MenuItemList items {
-        makeAction("note-input"),
-        makeSeparator(),
         makeAction("note-c"),
         makeAction("note-d"),
         makeAction("note-e"),
