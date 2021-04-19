@@ -49,7 +49,7 @@ Item {
     signal popupClosed()
 
     QtObject {
-        id: privateProperties
+        id: prv
 
         property bool dragged: mouseArea.drag.active && mouseArea.pressed
 
@@ -65,11 +65,9 @@ Item {
         function openPopup(popup, item) {
             if (Boolean(popup)) {
                 openedPopup = popup
-
-                popup.open()
                 popup.load(item)
-
                 root.popupOpened(popup.x, popup.y, popup.height)
+                popup.open()
             }
         }
 
@@ -81,8 +79,8 @@ Item {
         }
 
         function resetOpenedPopup() {
-            openedPopup = null
             root.popupClosed()
+            openedPopup = null
         }
     }
 
@@ -98,7 +96,7 @@ Item {
     implicitWidth: 248
 
     Drag.keys: [ root.filterKey ]
-    Drag.active: privateProperties.dragged && isDragAvailable
+    Drag.active: prv.dragged && isDragAvailable
     Drag.source: root
     Drag.hotSpot.x: width / 2
     Drag.hotSpot.y: height / 2
@@ -132,7 +130,7 @@ Item {
         states: [
             State {
                 name: "HOVERED"
-                when: mouseArea.containsMouse && !mouseArea.containsPress && !root.isSelected && !privateProperties.dragged
+                when: mouseArea.containsMouse && !mouseArea.containsPress && !root.isSelected && !prv.dragged
 
                 PropertyChanges {
                     target: background
@@ -143,7 +141,7 @@ Item {
 
             State {
                 name: "PRESSED"
-                when: mouseArea.containsPress && !root.isSelected && !privateProperties.dragged
+                when: mouseArea.containsPress && !root.isSelected && !prv.dragged
 
                 PropertyChanges {
                     target: background
@@ -217,26 +215,40 @@ Item {
         onClicked: {
             keynavItem.forceActive()
             root.clicked(mouse)
-            privateProperties.closeOpenedPopup()
         }
     }
 
-    InstrumentSettingsPopup {
-        id: instrumentSettings
-
-        keynav.name: "InstrumentSettingsPopup"
-        keynav.parentControl: keynavItem
-
-        onClosed: privateProperties.resetOpenedPopup()
+    Loader {
+        id: popupLoader
+        function createPopup(comp) {
+            popupLoader.sourceComponent = comp
+            popupLoader.item.parent = popupLoader.parent
+            return popupLoader.item
+        }
     }
 
-    StaffSettingsPopup {
-        id: staffSettings
+    Component {
+        id: instrumentSettingsComp
+        InstrumentSettingsPopup {
+            keynav.name: "InstrumentSettingsPopup"
+            keynav.parentControl: keynavItem
+            onClosed: {
+                prv.resetOpenedPopup()
+                popupLoader.sourceComponent = null
+            }
+        }
+    }
 
-        keynav.name: "StaffSettingsPopup"
-        keynav.parentControl: keynavItem
-
-        onClosed: privateProperties.resetOpenedPopup()
+    Component {
+        id: staffSettingsComp
+        StaffSettingsPopup {
+            keynav.name: "StaffSettingsPopup"
+            keynav.parentControl: keynavItem
+            onClosed: {
+                prv.resetOpenedPopup()
+                popupLoader.sourceComponent = null
+            }
+        }
     }
 
     RowLayout {
@@ -345,8 +357,8 @@ Item {
             icon: IconCode.SETTINGS_COG
 
             onClicked: {
-                if (privateProperties.isPopupOpened) {
-                    privateProperties.closeOpenedPopup()
+                if (prv.isPopupOpened) {
+                    prv.closeOpenedPopup()
                     return
                 }
 
@@ -354,15 +366,18 @@ Item {
                 var item = {}
 
                 if (root.type === InstrumentTreeItemType.PART) {
-                    popup = instrumentSettings
+
+                    popup = popupLoader.createPopup(instrumentSettingsComp)
 
                     item["partId"] = model.itemRole.id()
                     item["partName"] = model.itemRole.title
                     item["instrumentId"] = model.itemRole.instrumentId()
                     item["instrumentName"] = model.itemRole.instrumentName()
                     item["abbreviature"] = model.itemRole.instrumentAbbreviature()
+
                 } else if (root.type === InstrumentTreeItemType.STAFF) {
-                    popup = staffSettings
+
+                    popup = popupLoader.createPopup(staffSettingsComp)
 
                     item["staffId"] = model.itemRole.id()
                     item["isSmall"] = model.itemRole.isSmall()
@@ -371,7 +386,7 @@ Item {
                     item["voicesVisibility"] = model.itemRole.voicesVisibility()
                 }
 
-                privateProperties.openPopup(popup, item)
+                prv.openPopup(popup, item)
             }
 
             Behavior on opacity {
@@ -395,7 +410,7 @@ Item {
 
     states: [
         State {
-            when: privateProperties.dragged
+            when: prv.dragged
 
             ParentChange {
                 target: root
