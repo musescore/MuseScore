@@ -22,6 +22,7 @@
 #include "aboutmodel.h"
 
 #include "translation.h"
+#include "version.h"
 
 #include <QClipboard>
 #include <QUrl>
@@ -36,7 +37,9 @@ AboutModel::AboutModel(QObject* parent)
 
 QString AboutModel::museScoreVersion() const
 {
-    return QString::fromStdString(configuration()->museScoreVersion());
+    return (mu::framework::Version::unstable() ? qtrc("appshell",
+                                                      "Unstable Prerelease for %1") : "%1").arg(QString::fromStdString(configuration()->
+                                                                                                                       museScoreVersion()));
 }
 
 QString AboutModel::museScoreRevision() const
@@ -50,10 +53,16 @@ QVariantMap AboutModel::museScoreUrl() const
     return makeUrl(museScoreUrl.toString(), museScoreUrl.host());
 }
 
+QVariantMap AboutModel::museScoreForumUrl() const
+{
+    QUrl museScoreUrl(QString::fromStdString(configuration()->museScoreForumUrl()));
+    return makeUrl(museScoreUrl.toString(), qtrc("appshell", "help"));
+}
+
 QVariantMap AboutModel::museScoreContributionUrl() const
 {
     QUrl museScoreUrl(QString::fromStdString(configuration()->museScoreContributionUrl()));
-    return makeUrl(museScoreUrl.toString(), qtrc("appshell", "contribution"));
+    return makeUrl(museScoreUrl.toString(), qtrc("appshell", "contribute"));
 }
 
 QVariantMap AboutModel::musicXMLLicenseUrl() const

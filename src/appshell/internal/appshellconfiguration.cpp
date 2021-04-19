@@ -35,7 +35,7 @@ static const std::string ONLINE_HANDBOOK_URL("https://musescore.org/redirect/hel
 static const std::string ASK_FOR_HELP_URL("https://musescore.org/redirect/post/question?locale=");
 static const std::string BUG_REPORT_URL("https://musescore.org/redirect/post/bug-report?locale=");
 static const std::string LEAVE_FEEDBACK_URL("https://musescore.com/content/editor-feedback?");
-static const std::string MUSESCORE_URL("http://www.musescore.org/");
+static const std::string MUSESCORE_URL("https://www.musescore.org/");
 static const std::string MUSICXML_LICENSE_URL("https://www.w3.org/community/about/process/final/");
 static const std::string MUSICXML_LICENSE_DEED_URL("https://www.w3.org/community/about/process/fsa-deed/");
 
@@ -147,9 +147,14 @@ std::string AppShellConfiguration::museScoreUrl() const
     return MUSESCORE_URL + languageCode;
 }
 
+std::string AppShellConfiguration::museScoreForumUrl() const
+{
+    return MUSESCORE_URL + "forum";
+}
+
 std::string AppShellConfiguration::museScoreContributionUrl() const
 {
-    return museScoreUrl() + "/donate";
+    return MUSESCORE_URL + "contribute";
 }
 
 std::string AppShellConfiguration::musicXMLLicenseUrl() const
