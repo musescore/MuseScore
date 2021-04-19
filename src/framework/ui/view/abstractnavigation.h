@@ -19,24 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_ABSTRACTKEYNAVIGATION_H
-#define MU_UI_ABSTRACTKEYNAVIGATION_H
+#ifndef MU_UI_ABSTRACTNAVIGATION_H
+#define MU_UI_ABSTRACTNAVIGATION_H
 
 #include <QObject>
 #include <QQmlParserStatus>
 
-#include "../ikeynavigation.h"
-#include "keynavigationevent.h"
+#include "../inavigation.h"
+#include "navigationevent.h"
 
 namespace mu::ui {
-class AbstractKeyNavigation : public QObject, public QQmlParserStatus
+class AbstractNavigation : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
 
-    // see IKeyNavigation::Index
+    // see INavigation::Index
     Q_PROPERTY(int order READ order WRITE setOrder NOTIFY orderChanged)
     Q_PROPERTY(int column READ column WRITE setColumn NOTIFY columnChanged)
     Q_PROPERTY(int row READ row WRITE setRow NOTIFY rowChanged)
@@ -45,7 +45,7 @@ class AbstractKeyNavigation : public QObject, public QQmlParserStatus
     Q_PROPERTY(bool active READ active NOTIFY activeChanged)
 
 public:
-    explicit AbstractKeyNavigation(QObject* parent = nullptr);
+    explicit AbstractNavigation(QObject* parent = nullptr);
 
     int order() const;
     int column() const;
@@ -53,8 +53,8 @@ public:
 
     QString name() const;
 
-    const IKeyNavigation::Index& index() const;
-    async::Channel<IKeyNavigation::Index> indexChanged() const;
+    const INavigation::Index& index() const;
+    async::Channel<INavigation::Index> indexChanged() const;
 
     bool enabled() const;
     async::Channel<bool> enabledChanged() const;
@@ -62,7 +62,7 @@ public:
     bool active() const;
     async::Channel<bool> activeChanged() const;
 
-    void onEvent(IKeyNavigation::EventPtr e);
+    void onEvent(INavigation::EventPtr e);
 
     // QQmlParserStatus
     void classBegin() override;
@@ -89,8 +89,8 @@ signals:
 protected:
 
     QString m_name;
-    IKeyNavigation::Index m_index;
-    async::Channel<IKeyNavigation::Index> m_indexChanged;
+    INavigation::Index m_index;
+    async::Channel<INavigation::Index> m_indexChanged;
 
     bool m_enabled = true;
     async::Channel<bool> m_enabledChanged;
@@ -98,8 +98,8 @@ protected:
     bool m_active = false;
     async::Channel<bool> m_activeChanged;
 
-    KeyNavigationEvent* m_event = nullptr;
+    NavigationEvent* m_event = nullptr;
 };
 }
 
-#endif // MU_UI_ABSTRACTKEYNAVIGATION_H
+#endif // MU_UI_ABSTRACTNAVIGATION_H

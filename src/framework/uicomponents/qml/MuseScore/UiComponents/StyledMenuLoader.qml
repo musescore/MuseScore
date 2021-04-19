@@ -46,8 +46,8 @@ Loader {
 
         menu.parent = loader.parent
         if (keynavParentControl) {
-            menu.keynav.parentControl = keynavParentControl
-            menu.keynav.name = keynavParentControl.name+"PopupMenu"
+            menu.navigation.parentControl = keynavParentControl
+            menu.navigation.name = keynavParentControl.name+"PopupMenu"
         }
         menu.model = model
         menu.open()

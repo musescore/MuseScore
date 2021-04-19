@@ -84,8 +84,7 @@ DockWindow {
     property AppMenuModel appMenuModel: AppMenuModel {}
     property StartupModel startupModel: StartupModel {}
 
-    property KeyNavigationSection topToolKeyNavSec: KeyNavigationSection {
-        id: keynavSec
+    property NavigationSection topToolNavSec: NavigationSection {
         name: "TopTool"
         order: 1
     }
@@ -114,12 +113,12 @@ DockWindow {
 
             content: MainToolBar {
                 color: dockWindow.color
-                keynav.section: topToolKeyNavSec
-                keynav.order: 1
+                navigation.section: topToolNavSec
+                navigation.order: 1
                 currentUri: dockWindow.currentPageUri
 
-                keynav.onActiveChanged: {
-                    if (keynav.active) {
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
                         mainToolBar.forceActiveFocus()
                     }
                 }
@@ -145,11 +144,11 @@ DockWindow {
                 id: notationToolBarContent
                 color: dockWindow.color
 
-                keynav.section: topToolKeyNavSec
-                keynav.order: 2
-                keynav.enabled: notationToolBar.visible
+                navigation.section: topToolNavSec
+                navigation.order: 2
+                navigation.enabled: notationToolBar.visible
                 onActiveFocusRequested: {
-                    if (keynav.active) {
+                    if (navigation.active) {
                         notationToolBar.forceActiveFocus()
                     }
                 }
@@ -181,9 +180,9 @@ DockWindow {
                 id: playbackToolBarContent
                 color: dockWindow.color
 
-                keynav.section: topToolKeyNavSec
-                keynav.order: 3
-                keynav.enabled: dockWindow.isNotationPage
+                navigation.section: topToolNavSec
+                navigation.order: 3
+                navigation.enabled: dockWindow.isNotationPage
 
                 floating: playbackToolBar.floating
 

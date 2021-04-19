@@ -53,7 +53,7 @@ GridView {
 
     property bool enableAnimations: true
 
-    property KeyNavigationSubSection keynavSubSection: null
+    property NavigationPanel keynavSubSection: null
     property int keynavRow: 0
     property int keynavCol: 1
 
@@ -173,11 +173,11 @@ GridView {
 
             anchors.fill: parent
 
-            keynav.subsection: paletteView.keynavSubSection
+            navigation.panel: paletteView.keynavSubSection
             //! NOTE Just Up/Down navigation now
-            keynav.row: paletteView.ncells + paletteView.keynavRow
-            keynav.column: 1
-            keynav.enabled: paletteView.visible
+            navigation.row: paletteView.ncells + paletteView.keynavRow
+            navigation.column: 1
+            navigation.enabled: paletteView.visible
 
             onActiveFocusChanged: {
                 if (activeFocus) {
@@ -504,17 +504,17 @@ GridView {
             width: paletteView.cellWidth
             height: paletteView.cellHeight
 
-            keynav.subsection: paletteView.keynavSubSection
+            navigation.panel: paletteView.keynavSubSection
 
             //! NOTE Please, don't remove (igor.korsukov@gmail.com)
-            //keynav.row: paletteCell.cellRow + paletteView.keynavRow
-            //keynav.column: paletteCell.cellCol + paletteView.keynavCol
+            //navigation.row: paletteCell.cellRow + paletteView.keynavRow
+            //navigation.column: paletteCell.cellCol + paletteView.keynavCol
 
             //! NOTE Just Up/Down navigation now
-            keynav.row: model.index + paletteView.keynavRow
-            keynav.column: 1
-            keynav.enabled: paletteView.visible
-            keynav.onTriggered: paletteCell.doClicked()
+            navigation.row: model.index + paletteView.keynavRow
+            navigation.column: 1
+            navigation.enabled: paletteView.visible
+            navigation.onTriggered: paletteCell.doClicked()
 
             IconView {
                 anchors.fill: parent

@@ -47,7 +47,7 @@ PopupView {
 
     property bool animationEnabled: true
 
-    property alias keynav: keynavPanel
+    property alias navigation: keynavPanel
     property bool isDoActiveParentOnClose: true
 
     closePolicy: PopupView.CloseOnPressOutsideParent
@@ -55,14 +55,14 @@ PopupView {
     x: parent.width / 2
     y: opensUpward ? (-height) : (parent.height - root.padding)
 
-    property KeyNavigationPopupPanel keynavPanel: KeyNavigationPopupPanel {
+    property NavigationPopupPanel keynavPanel: NavigationPopupPanel {
         id: keynavPanel
         enabled: root.isOpened
         order: {
             var pctrl = keynavPanel.parentControl;
             if (pctrl) {
-                if (pctrl.subsection) {
-                    return pctrl.subsection.order + 1
+                if (pctrl.panel) {
+                    return pctrl.panel.order + 1
                 }
             }
             return -1
@@ -71,8 +71,8 @@ PopupView {
         section: {
             var pctrl = keynavPanel.parentControl;
             if (pctrl) {
-                if (pctrl.subsection) {
-                    return pctrl.subsection.section
+                if (pctrl.panel) {
+                    return pctrl.panel.section
                 }
             }
             return null

@@ -38,7 +38,7 @@ Item {
     property var type: InstrumentTreeItemType.UNDEFINED
 
     property int keynavRow: 0
-    property KeyNavigationSubSection keynavSubSection: null
+    property NavigationPanel keynavSubSection: null
 
     property int sideMargin: 0
 
@@ -98,10 +98,10 @@ Item {
     Drag.hotSpot.x: width / 2
     Drag.hotSpot.y: height / 2
 
-    KeyNavigationControl {
+    NavigationControl {
         id: keynavItem
         name: "ItemInstrumentsTree"
-        subsection: root.keynavSubSection
+        panel: root.keynavSubSection
         row: root.keynavRow
         column: 0
         enabled: visible
@@ -227,8 +227,8 @@ Item {
     Component {
         id: instrumentSettingsComp
         InstrumentSettingsPopup {
-            keynav.name: "InstrumentSettingsPopup"
-            keynav.parentControl: keynavItem
+            navigation.name: "InstrumentSettingsPopup"
+            navigation.parentControl: keynavItem
             onClosed: {
                 prv.resetOpenedPopup()
                 popupLoader.sourceComponent = null
@@ -239,8 +239,8 @@ Item {
     Component {
         id: staffSettingsComp
         StaffSettingsPopup {
-            keynav.name: "StaffSettingsPopup"
-            keynav.parentControl: keynavItem
+            navigation.name: "StaffSettingsPopup"
+            navigation.parentControl: keynavItem
             onClosed: {
                 prv.resetOpenedPopup()
                 popupLoader.sourceComponent = null
@@ -260,9 +260,9 @@ Item {
             Layout.preferredWidth: width
 
             objectName: "VisibleBtnInstrument"
-            keynav.subsection: root.keynavSubSection
-            keynav.row: root.keynavRow
-            keynav.column: 1
+            navigation.panel: root.keynavSubSection
+            navigation.row: root.keynavRow
+            navigation.column: 1
 
             normalStateColor: "transparent"
             pressedStateColor: ui.theme.accentColor
@@ -291,9 +291,9 @@ Item {
 
                 objectName: "ExpandBtnInstrument"
                 enabled: expandButton.visible
-                keynav.subsection: root.keynavSubSection
-                keynav.row: root.keynavRow
-                keynav.column: 2
+                navigation.panel: root.keynavSubSection
+                navigation.row: root.keynavRow
+                navigation.column: 2
 
                 normalStateColor: "transparent"
                 pressedStateColor: ui.theme.accentColor
@@ -342,9 +342,9 @@ Item {
 
             objectName: "SettingsBtnInstrument"
             enabled: root.visible
-            keynav.subsection: root.keynavSubSection
-            keynav.row: root.keynavRow
-            keynav.column: 3
+            navigation.panel: root.keynavSubSection
+            navigation.row: root.keynavRow
+            navigation.column: 3
 
             pressedStateColor: ui.theme.accentColor
 

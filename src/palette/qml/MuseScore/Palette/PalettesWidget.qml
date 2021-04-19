@@ -33,7 +33,7 @@ Rectangle {
 
     id: palettesWidget
 
-    property KeyNavigationSection keynavSection: null
+    property NavigationSection keynavSection: null
 
     readonly property PaletteWorkspace paletteWorkspace: paletteRootModel.paletteWorkspace
 
@@ -71,8 +71,8 @@ Rectangle {
             rightMargin: 12
         }
 
-        keynav.section: palettesWidget.keynavSection
-        keynav.order: 2
+        navigation.section: palettesWidget.keynavSection
+        navigation.order: 2
 
         onAddCustomPaletteRequested: paletteTree.insertCustomPalette(0, paletteName);
     }
@@ -95,9 +95,9 @@ Rectangle {
         paletteWorkspace: palettesWidget.paletteWorkspace
         backgroundColor: palettesWidget.color
 
-        keynav.section: palettesWidget.keynavSection
-        keynav.order: 5
-        keynav.enabled: paletteTree.visible
+        navigation.section: palettesWidget.keynavSection
+        navigation.order: 5
+        navigation.enabled: paletteTree.visible
 
         filter: palettesWidgetHeader.searchText
         enableAnimations: !palettesWidgetHeader.searching

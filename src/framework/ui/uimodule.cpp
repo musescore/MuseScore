@@ -29,8 +29,8 @@
 #include "internal/uiconfiguration.h"
 #include "internal/interactiveuriregister.h"
 #include "internal/uiactionsregister.h"
-#include "internal/keynavigationcontroller.h"
-#include "internal/keynavigationuiactions.h"
+#include "internal/navigationcontroller.h"
+#include "internal/navigationuiactions.h"
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosplatformtheme.h"
@@ -44,11 +44,11 @@
 #include "view/iconcodes.h"
 #include "view/musicalsymbolcodes.h"
 #include "view/qmldialog.h"
-#include "view/keynavigationsection.h"
-#include "view/keynavigationsubsection.h"
-#include "view/keynavigationpopuppanel.h"
-#include "view/keynavigationcontrol.h"
-#include "view/keynavigationevent.h"
+#include "view/navigationsection.h"
+#include "view/navigationpanel.h"
+#include "view/navigationpopuppanel.h"
+#include "view/navigationcontrol.h"
+#include "view/navigationevent.h"
 
 #include "dev/interactivetestsmodel.h"
 #include "dev/testdialog.h"
@@ -63,8 +63,8 @@ using namespace mu::framework;
 
 static std::shared_ptr<UiConfiguration> s_configuration = std::make_shared<UiConfiguration>();
 static std::shared_ptr<UiActionsRegister> s_uiactionsRegister = std::make_shared<UiActionsRegister>();
-static std::shared_ptr<KeyNavigationController> s_keyNavigationController = std::make_shared<KeyNavigationController>();
-static std::shared_ptr<KeyNavigationUiActions> s_keyNavigationUiActions = std::make_shared<KeyNavigationUiActions>();
+static std::shared_ptr<NavigationController> s_keyNavigationController = std::make_shared<NavigationController>();
+static std::shared_ptr<NavigationUiActions> s_keyNavigationUiActions = std::make_shared<NavigationUiActions>();
 
 #ifdef Q_OS_MAC
 static std::shared_ptr<MacOSPlatformTheme> s_platformTheme = std::make_shared<MacOSPlatformTheme>();
@@ -92,7 +92,7 @@ void UiModule::registerExports()
     ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
     ioc()->registerExport<IPlatformTheme>(moduleName(), s_platformTheme);
     ioc()->registerExport<IUiActionsRegister>(moduleName(), s_uiactionsRegister);
-    ioc()->registerExport<IKeyNavigationController>(moduleName(), s_keyNavigationController);
+    ioc()->registerExport<INavigationController>(moduleName(), s_keyNavigationController);
 }
 
 void UiModule::resolveImports()
@@ -128,12 +128,12 @@ void UiModule::registerUiTypes()
 
     qmlRegisterType<QmlDialog>("MuseScore.Ui", 1, 0, "QmlDialog");
 
-    qmlRegisterUncreatableType<AbstractKeyNavigation>("MuseScore.Ui", 1, 0, "AbstractKeyNavigation", "Cannot create a AbstractType");
-    qmlRegisterUncreatableType<KeyNavigationEvent>("MuseScore.Ui", 1, 0, "KeyNavigationEvent", "Cannot create a KeyNavigationEvent");
-    qmlRegisterType<KeyNavigationSection>("MuseScore.Ui", 1, 0, "KeyNavigationSection");
-    qmlRegisterType<KeyNavigationSubSection>("MuseScore.Ui", 1, 0, "KeyNavigationSubSection");
-    qmlRegisterType<KeyNavigationPopupPanel>("MuseScore.Ui", 1, 0, "KeyNavigationPopupPanel");
-    qmlRegisterType<KeyNavigationControl>("MuseScore.Ui", 1, 0, "KeyNavigationControl");
+    qmlRegisterUncreatableType<AbstractNavigation>("MuseScore.Ui", 1, 0, "AbstractNavigation", "Cannot create a AbstractType");
+    qmlRegisterUncreatableType<NavigationEvent>("MuseScore.Ui", 1, 0, "NavigationEvent", "Cannot create a KeyNavigationEvent");
+    qmlRegisterType<NavigationSection>("MuseScore.Ui", 1, 0, "NavigationSection");
+    qmlRegisterType<NavigationPanel>("MuseScore.Ui", 1, 0, "NavigationPanel");
+    qmlRegisterType<NavigationPopupPanel>("MuseScore.Ui", 1, 0, "NavigationPopupPanel");
+    qmlRegisterType<NavigationControl>("MuseScore.Ui", 1, 0, "NavigationControl");
 
     qmlRegisterType<InteractiveTestsModel>("MuseScore.Ui", 1, 0, "InteractiveTestsModel");
     qRegisterMetaType<TestDialog>("TestDialog");

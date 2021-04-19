@@ -40,7 +40,7 @@ Item {
     property PaletteWorkspace paletteWorkspace
     property var modelIndex: null
 
-    property KeyNavigationSubSection keynavSubsection: null
+    property NavigationPanel keynavSubsection: null
     property int keynavRow: 0
 
     signal toggleExpandRequested()
@@ -73,9 +73,9 @@ Item {
         normalStateColor: "transparent"
 
         enabled: paletteExpandArrow.visible
-        keynav.subsection: paletteHeader.keynavSubsection
-        keynav.row: paletteHeader.keynavRow
-        keynav.column: 1
+        navigation.panel: paletteHeader.keynavSubsection
+        navigation.row: paletteHeader.keynavRow
+        navigation.column: 1
 
         onClicked: paletteHeader.toggleExpandRequested()
     }
@@ -111,9 +111,9 @@ Item {
         normalStateColor: "transparent"
 
         enabled: deleteButton.visible
-        keynav.subsection: paletteHeader.keynavSubsection
-        keynav.row: paletteHeader.keynavRow
-        keynav.column: 2
+        navigation.panel: paletteHeader.keynavSubsection
+        navigation.row: paletteHeader.keynavRow
+        navigation.column: 2
 
         onClicked: {
             hideSelectedElementsRequested()
@@ -129,9 +129,9 @@ Item {
         visible: paletteHeader.expanded || paletteHeader.hovered || paletteHeaderMenu.visible
 
         enabled: paletteHeaderMenuButton.visible
-        keynav.subsection: paletteHeader.keynavSubsection
-        keynav.row: paletteHeader.keynavRow
-        keynav.column: 3
+        navigation.panel: paletteHeader.keynavSubsection
+        navigation.row: paletteHeader.keynavRow
+        navigation.column: 3
 
         icon: IconCode.MENU_THREE_DOTS
         normalStateColor: "transparent"

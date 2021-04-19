@@ -19,23 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_KEYNAVIGATIONEVENT_H
-#define MU_UI_KEYNAVIGATIONEVENT_H
+#ifndef MU_UI_NAVIGATIONEVENT_H
+#define MU_UI_NAVIGATIONEVENT_H
 
 #include <QObject>
-#include "ui/ikeynavigation.h"
+#include "ui/inavigation.h"
 
 namespace mu::ui {
-class KeyNavigationEvent
+class NavigationEvent
 {
     Q_GADGET
     Q_PROPERTY(Type type READ type CONSTANT)
     Q_PROPERTY(bool accepted READ accepted WRITE setAccepted)
 
 public:
-    KeyNavigationEvent(IKeyNavigation::EventPtr event = nullptr);
+    NavigationEvent(INavigation::EventPtr event = nullptr);
 
-    //! NOTE Please sync with IKeyNavigation::Event::Type
+    //! NOTE Please sync with INavigation::Event::Type
     enum Type {
         Undefined = 0,
         Left,
@@ -46,16 +46,16 @@ public:
     };
     Q_ENUM(Type)
 
-    void setEvent(IKeyNavigation::EventPtr event);
+    void setEvent(INavigation::EventPtr event);
 
     Type type() const;
     bool accepted() const;
     void setAccepted(bool accepted);
 
 private:
-    IKeyNavigation::EventPtr m_event;
+    INavigation::EventPtr m_event;
 };
 }
-Q_DECLARE_METATYPE(mu::ui::KeyNavigationEvent)
+Q_DECLARE_METATYPE(mu::ui::NavigationEvent)
 
-#endif // MU_UI_KEYNAVIGATIONEVENT_H
+#endif // MU_UI_NAVIGATIONEVENT_H

@@ -38,7 +38,7 @@ RadioDelegate {
     property var normalStateFont: ui.theme.tabFont
     property var selectedStateFont: ui.theme.tabBoldFont
 
-    property alias keynav: keynavCtrl
+    property alias navigation: keynavCtrl
 
     height: 48
 
@@ -52,7 +52,7 @@ RadioDelegate {
         }
     }
 
-    KeyNavigationControl {
+    NavigationControl {
         id: keynavCtrl
         name: root.objectName
 

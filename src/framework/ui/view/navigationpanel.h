@@ -19,28 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_KEYNAVIGATIONSUBSECTION_H
-#define MU_UI_KEYNAVIGATIONSUBSECTION_H
+#ifndef MU_UI_NAVIGATIONPANEL_H
+#define MU_UI_NAVIGATIONPANEL_H
 
 #include <QObject>
 #include <QList>
 
-#include "abstractkeynavigation.h"
-#include "../ikeynavigation.h"
-#include "keynavigationsection.h"
+#include "abstractnavigation.h"
+#include "navigationcontrol.h"
 #include "async/asyncable.h"
 
 namespace mu::ui {
-class KeyNavigationControl;
-class KeyNavigationSubSection : public AbstractKeyNavigation, public IKeyNavigationSubSection, public async::Asyncable
+class NavigationSection;
+class NavigationPanel : public AbstractNavigation, public INavigationPanel, public async::Asyncable
 {
     Q_OBJECT
-    Q_PROPERTY(KeyNavigationSection * section READ section WRITE setSection NOTIFY sectionChanged)
+    Q_PROPERTY(mu::ui::NavigationSection* section READ section WRITE setSection NOTIFY sectionChanged)
     Q_PROPERTY(QmlDirection direction READ direction_property WRITE setDirection NOTIFY directionChanged)
 
 public:
-    explicit KeyNavigationSubSection(QObject* parent = nullptr);
-    ~KeyNavigationSubSection() override;
+    explicit NavigationPanel(QObject* parent = nullptr);
+    ~NavigationPanel() override;
 
     //! NOTE Please sync with IKeyNavigationSubSection::Direction
     enum QmlDirection {
@@ -67,36 +66,36 @@ public:
     QmlDirection direction_property() const;
     Direction direction() const override;
 
-    const std::set<IKeyNavigationControl*>& controls() const override;
+    const std::set<INavigationControl*>& controls() const override;
     async::Notification controlsListChanged() const override;
 
-    async::Channel<SubSectionControl> forceActiveRequested() const override;
+    async::Channel<PanelControl> forceActiveRequested() const override;
 
-    KeyNavigationSection* section() const;
+    NavigationSection* section() const;
 
     void componentComplete() override;
 
-    void addControl(KeyNavigationControl* control);
-    void removeControl(KeyNavigationControl* control);
+    void addControl(NavigationControl* control);
+    void removeControl(NavigationControl* control);
 
 public slots:
-    void setSection(KeyNavigationSection* section);
+    void setSection(NavigationSection* section);
     void setDirection(QmlDirection direction);
 
 signals:
-    void sectionChanged(KeyNavigationSection* section);
+    void sectionChanged(NavigationSection* section);
     void directionChanged(QmlDirection direction);
 
 private slots:
     void onSectionDestroyed();
 
 private:
-    KeyNavigationSection* m_section = nullptr;
-    std::set<IKeyNavigationControl*> m_controls;
+    NavigationSection* m_section = nullptr;
+    std::set<INavigationControl*> m_controls;
     async::Notification m_controlsListChanged;
-    async::Channel<SubSectionControl> m_forceActiveRequested;
+    async::Channel<PanelControl> m_forceActiveRequested;
     QmlDirection m_direction = QmlDirection::Horizontal;
 };
 }
 
-#endif // MU_UI_KEYNAVIGATIONSUBSECTION_H
+#endif // MU_UI_NAVIGATIONPANEL_H

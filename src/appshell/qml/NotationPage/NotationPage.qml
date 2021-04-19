@@ -44,28 +44,28 @@ DockPage {
 
     property NotationPageModel pageModel: NotationPageModel {}
 
-    property KeyNavigationSection keynavNoteInputSec: KeyNavigationSection {
+    property NavigationSection keynavNoteInputSec: NavigationSection {
         name: "NoteInputSection"
         order: 2
     }
 
-    property KeyNavigationSection keynavLeftPanelSec: KeyNavigationSection {
+    property NavigationSection keynavLeftPanelSec: NavigationSection {
         name: "LeftPanel"
         order: 3
     }
 
-    property KeyNavigationSection keynavRightPanelSec: KeyNavigationSection {
+    property NavigationSection keynavRightPanelSec: NavigationSection {
         name: "RightPanel"
         order: 4
     }
 
-    property KeyNavigationSubSection keynavLeftPanelTabsSubSec: KeyNavigationSubSection {
+    property NavigationPanel keynavLeftPanelTabsSubSec: NavigationPanel {
         name: "LeftPanelTabs"
         section: keynavLeftPanelSec
         order: 1
     }
 
-    property KeyNavigationSubSection keynavRightPanelTabsSubSec: KeyNavigationSubSection {
+    property NavigationPanel keynavRightPanelTabsSubSec: NavigationPanel {
         name: "RightPanelTabs"
         section: keynavRightPanelSec
         order: 1
@@ -124,8 +124,8 @@ DockPage {
         content: NoteInputBar {
             color: notationNoteInputBar.color
             orientation: notationNoteInputBar.orientation
-            keynav.section: keynavNoteInputSec
-            keynav.order: 1
+            navigation.section: keynavNoteInputSec
+            navigation.order: 1
         }
     }
 
@@ -153,10 +153,10 @@ DockPage {
                 notationPage.pageModel.isPalettePanelVisible = false
             }
 
-            property KeyNavigationControl keynavTab: KeyNavigationControl {
+            property NavigationControl keynavTab: NavigationControl {
                 name: "PaletteTab"
                 order: 1 //! TODO Needs order from DockPanel
-                subsection: notationPage.keynavPanelTabSubSec(palettePanel.area)
+                panel: notationPage.keynavPanelTabSubSec(palettePanel.area)
                 onActiveChanged: {
                     if (active) {
                         palettePanel.forceActiveFocus()
@@ -192,10 +192,10 @@ DockPage {
                 notationPage.pageModel.isInstrumentsPanelVisible = false
             }
 
-            property KeyNavigationControl keynavTab: KeyNavigationControl {
+            property NavigationControl keynavTab: NavigationControl {
                 name: "InstrumentsTab"
                 order: 2 //! TODO Needs order from DockPanel
-                subsection: notationPage.keynavPanelTabSubSec(instrumentsPanel.area)
+                panel: notationPage.keynavPanelTabSubSec(instrumentsPanel.area)
                 onActiveChanged: {
                     if (active) {
                         instrumentsPanel.forceActiveFocus()
@@ -232,10 +232,10 @@ DockPage {
                 notationPage.pageModel.isInspectorPanelVisible = false
             }
 
-            property KeyNavigationControl keynavTab: KeyNavigationControl {
+            property NavigationControl keynavTab: NavigationControl {
                 name: "InspectorTab"
                 order: 3 //! TODO Needs order from DockPanel
-                subsection: notationPage.keynavPanelTabSubSec(inspectorPanel.area)
+                panel: notationPage.keynavPanelTabSubSec(inspectorPanel.area)
                 onActiveChanged: {
                     if (active) {
                         inspectorPanel.forceActiveFocus()

@@ -37,7 +37,7 @@ ListView {
     property var paletteModel: Boolean(paletteWorkspace) ? paletteWorkspace.mainPaletteModel : null
     property PaletteController paletteController: paletteWorkspace ? paletteWorkspace.mainPaletteController : null
 
-    property alias keynav: keynavTree
+    property alias navigation: keynavTree
 
     // Scroll palettes list when dragging a palette close to the list's border
     property bool itemDragged: false
@@ -59,10 +59,10 @@ ListView {
     Accessible.name: qsTrc("palette", "Palettes Tree, contains %n palette(s)", "", count)
 
 
-    KeyNavigationSubSection {
+    NavigationPanel {
         id: keynavTree
         name: "PalettesTree"
-        direction: KeyNavigationSubSection.Both
+        direction: NavigationPanel.Both
         onActiveChanged: {
             if (active) {
                 paletteTree.forceActiveFocus()
@@ -305,13 +305,13 @@ ListView {
                 visible: !control.Drag.active
                 isSelected: control.selected
 
-                keynav.name: "PaletteTreeItem"
-                keynav.subsection: keynavTree
-                keynav.row: control.keynavRow
-                keynav.column: 0
+                navigation.name: "PaletteTreeItem"
+                navigation.panel: keynavTree
+                navigation.row: control.keynavRow
+                navigation.column: 0
                 enabled: control.visible
-                keynav.onActiveChanged: {
-                    if (keynav.active && !control.selected) {
+                navigation.onActiveChanged: {
+                    if (navigation.active && !control.selected) {
                         control.doItemClicked()
                     }
                     paletteTree.positionViewAtIndex(control.rowIndex, ListView.Contain);

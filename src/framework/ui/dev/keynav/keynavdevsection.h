@@ -31,7 +31,7 @@ class KeyNavDevSection : public AbstractKeyNavDevItem
     Q_PROPERTY(QVariantList subsections READ subsections NOTIFY subsectionsChanged)
 
 public:
-    explicit KeyNavDevSection(IKeyNavigationSection* section);
+    explicit KeyNavDevSection(INavigationSection* section);
 
     QVariantList subsections() const;
 
@@ -42,7 +42,7 @@ signals:
     void subsectionsChanged();
 
 private:
-    IKeyNavigationSection* m_section = nullptr;
+    INavigationSection* m_section = nullptr;
     QVariantList m_subsections;
 };
 }
