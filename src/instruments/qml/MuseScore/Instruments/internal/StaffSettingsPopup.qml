@@ -8,7 +8,7 @@ StyledPopupView {
     id: root
 
     contentHeight: contentColumn.childrenRect.height
-    contentWidth: parent.width
+    contentWidth: 240
 
     function load(staff) {
         settingsModel.load(staff)

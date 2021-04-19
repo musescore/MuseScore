@@ -135,12 +135,12 @@ PopupView {
             State {
                 name: "CLOSED"
                 when: !root.isOpened
-                PropertyChanges { target: contentContainer; scale: 0.8; opacity: 0.5 }
+                PropertyChanges { target: contentContainer; scale: 0.7; opacity: 0.5 }
             }
         ]
 
         transitions: Transition {
-            NumberAnimation { properties: "scale, opacity"; easing.type: Easing.OutQuint; duration: root.animationEnabled ? 140 : 0 }
+            NumberAnimation { properties: "scale, opacity"; easing.type: Easing.OutQuint; duration: root.animationEnabled ? 300 : 0 }
         }
     }
 }
