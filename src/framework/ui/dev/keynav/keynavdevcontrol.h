@@ -31,7 +31,7 @@ class KeyNavDevControl : public AbstractKeyNavDevItem
     Q_OBJECT
 
 public:
-    KeyNavDevControl(IKeyNavigationControl* control);
+    KeyNavDevControl(INavigationControl* control);
 
     Q_INVOKABLE void forceActive();
     Q_INVOKABLE void trigger();
@@ -39,7 +39,7 @@ public:
 signals:
 
 private:
-    IKeyNavigationControl* m_control = nullptr;
+    INavigationControl* m_control = nullptr;
 };
 }
 

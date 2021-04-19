@@ -23,7 +23,7 @@
 #define MU_UI_ABSTRACTKEYNAVDEVITEM_H
 
 #include <QObject>
-#include "ui/ikeynavigation.h"
+#include "ui/inavigation.h"
 #include "async/asyncable.h"
 
 namespace mu::ui {
@@ -36,7 +36,7 @@ class AbstractKeyNavDevItem : public QObject, public async::Asyncable
     Q_PROPERTY(bool active READ active NOTIFY activeChanged)
 
 public:
-    explicit AbstractKeyNavDevItem(IKeyNavigation* keynav);
+    explicit AbstractKeyNavDevItem(INavigation* keynav);
 
     QString name() const;
     QVariant index() const;
@@ -50,7 +50,7 @@ signals:
 
 private:
 
-    IKeyNavigation* m_keynav = nullptr;
+    INavigation* m_keynav = nullptr;
 };
 }
 

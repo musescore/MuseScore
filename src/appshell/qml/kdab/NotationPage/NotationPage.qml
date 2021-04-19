@@ -47,7 +47,7 @@ DockPage {
 
     property NotationPageModel pageModel: NotationPageModel {}
 
-    property KeyNavigationSection noteInputKeyNavSec: KeyNavigationSection {
+    property NavigationSection noteInputKeyNavSec: NavigationSection {
         id: keynavSec
         name: "NoteInputSection"
         order: 2

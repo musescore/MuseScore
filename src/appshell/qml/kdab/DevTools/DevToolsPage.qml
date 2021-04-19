@@ -55,7 +55,7 @@ DockPage {
         case "vst": root.central = vstComponent; break
         case "plugins": root.central = pluginsComp; break
         case "autobot": root.central = autobotComp; break
-        case "keynav": root.central = keynavComp; break
+        case "navigation": root.central = keynavComp; break
         }
     }
 
@@ -89,7 +89,7 @@ DockPage {
                         { "name": "vst", "title": "VST" },
                         { "name": "plugins", "title": "Plugins" },
                         { "name": "autobot", "title": "Autobot" },
-                        { "name": "keynav", "title": "KeyNav" }
+                        { "name": "navigation", "title": "KeyNav" }
                     ]
 
                     onSelected: {

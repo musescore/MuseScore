@@ -19,18 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "abstractkeynavigation.h"
+#include "abstractnavigation.h"
 
 #include "log.h"
 
 using namespace mu::ui;
 
-AbstractKeyNavigation::AbstractKeyNavigation(QObject* parent)
+AbstractNavigation::AbstractNavigation(QObject* parent)
     : QObject(parent)
 {
 }
 
-void AbstractKeyNavigation::setName(QString name)
+void AbstractNavigation::setName(QString name)
 {
     if (m_name == name) {
         return;
@@ -40,22 +40,22 @@ void AbstractKeyNavigation::setName(QString name)
     emit nameChanged(m_name);
 }
 
-QString AbstractKeyNavigation::name() const
+QString AbstractNavigation::name() const
 {
     return m_name;
 }
 
-const IKeyNavigation::Index& AbstractKeyNavigation::index() const
+const INavigation::Index& AbstractNavigation::index() const
 {
     return m_index;
 }
 
-mu::async::Channel<IKeyNavigation::Index> AbstractKeyNavigation::indexChanged() const
+mu::async::Channel<INavigation::Index> AbstractNavigation::indexChanged() const
 {
     return m_indexChanged;
 }
 
-void AbstractKeyNavigation::setOrder(int order)
+void AbstractNavigation::setOrder(int order)
 {
     if (m_index.order() == order) {
         return;
@@ -69,12 +69,12 @@ void AbstractKeyNavigation::setOrder(int order)
     }
 }
 
-int AbstractKeyNavigation::order() const
+int AbstractNavigation::order() const
 {
     return m_index.order();
 }
 
-void AbstractKeyNavigation::setColumn(int column)
+void AbstractNavigation::setColumn(int column)
 {
     if (m_index.column == column) {
         return;
@@ -88,12 +88,12 @@ void AbstractKeyNavigation::setColumn(int column)
     }
 }
 
-int AbstractKeyNavigation::column() const
+int AbstractNavigation::column() const
 {
     return m_index.column;
 }
 
-void AbstractKeyNavigation::setRow(int row)
+void AbstractNavigation::setRow(int row)
 {
     if (m_index.row == row) {
         return;
@@ -107,12 +107,12 @@ void AbstractKeyNavigation::setRow(int row)
     }
 }
 
-int AbstractKeyNavigation::row() const
+int AbstractNavigation::row() const
 {
     return m_index.row;
 }
 
-void AbstractKeyNavigation::setEnabled(bool enabled)
+void AbstractNavigation::setEnabled(bool enabled)
 {
     if (m_enabled == enabled) {
         return;
@@ -126,17 +126,17 @@ void AbstractKeyNavigation::setEnabled(bool enabled)
     }
 }
 
-bool AbstractKeyNavigation::enabled() const
+bool AbstractNavigation::enabled() const
 {
     return m_enabled;
 }
 
-mu::async::Channel<bool> AbstractKeyNavigation::enabledChanged() const
+mu::async::Channel<bool> AbstractNavigation::enabledChanged() const
 {
     return m_enabledChanged;
 }
 
-void AbstractKeyNavigation::setActive(bool active)
+void AbstractNavigation::setActive(bool active)
 {
     if (m_active == active) {
         return;
@@ -150,26 +150,26 @@ void AbstractKeyNavigation::setActive(bool active)
     }
 }
 
-bool AbstractKeyNavigation::active() const
+bool AbstractNavigation::active() const
 {
     return m_active;
 }
 
-mu::async::Channel<bool> AbstractKeyNavigation::activeChanged() const
+mu::async::Channel<bool> AbstractNavigation::activeChanged() const
 {
     return m_activeChanged;
 }
 
-void AbstractKeyNavigation::onEvent(IKeyNavigation::EventPtr e)
+void AbstractNavigation::onEvent(INavigation::EventPtr e)
 {
-    KeyNavigationEvent ev(e);
+    NavigationEvent ev(e);
     emit keyNavEvent(QVariant::fromValue(ev));
 }
 
-void AbstractKeyNavigation::classBegin()
+void AbstractNavigation::classBegin()
 {
 }
 
-void AbstractKeyNavigation::componentComplete()
+void AbstractNavigation::componentComplete()
 {
 }

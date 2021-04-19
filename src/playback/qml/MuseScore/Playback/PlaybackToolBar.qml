@@ -33,10 +33,10 @@ import "internal"
 Rectangle {
     id: root
 
-    property alias keynav: keynavSub
+    property alias navigation: keynavSub
     property bool floating: false
 
-    KeyNavigationSubSection {
+    NavigationPanel {
         id: keynavSub
         name: "PlaybackToolBar"
     }
@@ -102,14 +102,14 @@ Rectangle {
                                               ? ui.theme.accentColor : "transparent"
                             accentButton: modelData.checked || menuLoader.isMenuOpened()
 
-                            keynav.subsection: keynavSub
-                            keynav.name: modelData.hint
-                            keynav.order: modelData.index
-                            keynav.enabled: playbackModel.isPlayAllowed
+                            navigation.panel: keynavSub
+                            navigation.name: modelData.hint
+                            navigation.order: modelData.index
+                            navigation.enabled: playbackModel.isPlayAllowed
 
                             onClicked: {
                                 if (menuLoader.isMenuOpened() || hasSubitems) {
-                                    menuLoader.toggleOpened(modelData.subitems, btn.keynav)
+                                    menuLoader.toggleOpened(modelData.subitems, btn.navigation)
                                     return
                                 }
 

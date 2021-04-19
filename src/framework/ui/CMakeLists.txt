@@ -60,8 +60,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iuiactionsregister.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiactionsmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iuicontextresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/ikeynavigation.h
-    ${CMAKE_CURRENT_LIST_DIR}/ikeynavigationcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/inavigation.h
+    ${CMAKE_CURRENT_LIST_DIR}/inavigationcontroller.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.h
@@ -74,10 +74,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/iplatformtheme.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiactionsregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiactionsregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/keynavigationcontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/keynavigationcontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/keynavigationuiactions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/keynavigationuiactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/navigationcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/navigationcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/navigationuiactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/navigationuiactions.h
     ${PLATFORM_THEME_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.cpp
@@ -100,18 +100,18 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetdialog.h
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractkeynavigation.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractkeynavigation.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationsection.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationsection.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationsubsection.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationsubsection.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationpopuppanel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationpopuppanel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationcontrol.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationcontrol.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationevent.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/keynavigationevent.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractnavigation.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractnavigation.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/navigationsection.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/navigationsection.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/navigationpanel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/navigationpanel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/navigationpopuppanel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/navigationpopuppanel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/navigationcontrol.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/navigationcontrol.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/navigationevent.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/navigationevent.h
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.h

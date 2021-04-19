@@ -23,10 +23,10 @@
 
 using namespace mu::ui;
 
-AbstractKeyNavDevItem::AbstractKeyNavDevItem(IKeyNavigation* keynav)
+AbstractKeyNavDevItem::AbstractKeyNavDevItem(INavigation* keynav)
     : m_keynav(keynav)
 {
-    m_keynav->indexChanged().onReceive(this, [this](const IKeyNavigation::Index&) {
+    m_keynav->indexChanged().onReceive(this, [this](const INavigation::Index&) {
         emit indexChanged();
     });
 

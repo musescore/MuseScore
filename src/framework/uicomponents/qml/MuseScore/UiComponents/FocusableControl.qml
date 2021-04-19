@@ -31,7 +31,7 @@ FocusScope {
     property alias mouseArea: mouseAreaItem
     property alias pressAndHoldInterval: mouseAreaItem.pressAndHoldInterval
 
-    property alias keynav: keynavItem
+    property alias navigation: keynavItem
 
     function insureActiveFocus() {
         if (!root.activeFocus) {
@@ -43,7 +43,7 @@ FocusScope {
         }
     }
 
-    KeyNavigationControl {
+    NavigationControl {
         id: keynavItem
         name: root.objectName
         enabled: root.enabled

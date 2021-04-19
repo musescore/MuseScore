@@ -66,11 +66,11 @@ void KeyNavDevModel::reload()
     qDeleteAll(m_memstore);
     m_memstore.clear();
 
-    const std::set<IKeyNavigationSection*>& sectionsSet = keynavController()->sections();
-    QList<IKeyNavigationSection*> sectionsList = toQList(sectionsSet);
+    const std::set<INavigationSection*>& sectionsSet = navigationController()->sections();
+    QList<INavigationSection*> sectionsList = toQList(sectionsSet);
     sortByIndex(sectionsList);
 
-    for (IKeyNavigationSection* s : sectionsList) {
+    for (INavigationSection* s : sectionsList) {
         m_sections << toWrap(s);
     }
 
@@ -78,38 +78,38 @@ void KeyNavDevModel::reload()
     emit afterReload();
 }
 
-QVariant KeyNavDevModel::toWrap(IKeyNavigationSection* s)
+QVariant KeyNavDevModel::toWrap(INavigationSection* s)
 {
     KeyNavDevSection* qs = new KeyNavDevSection(s);
     m_memstore.append(qs);
 
     QVariantList subVarList;
-    const std::set<IKeyNavigationSubSection*>& subsectionsSet = s->subsections();
-    QList<IKeyNavigationSubSection*> subsectionsList = toQList(subsectionsSet);
+    const std::set<INavigationPanel*>& subsectionsSet = s->panels();
+    QList<INavigationPanel*> subsectionsList = toQList(subsectionsSet);
     sortByIndex(subsectionsList);
-    for (IKeyNavigationSubSection* sub : subsectionsList) {
+    for (INavigationPanel* sub : subsectionsList) {
         subVarList << toWrap(sub);
     }
 
     qs->setSubsections(subVarList);
 
-    s->subsectionsListChanged().onNotify(this, [this]() {
+    s->panelsListChanged().onNotify(this, [this]() {
         m_reloadDelayer.start();
     });
 
     return QVariant::fromValue(qs);
 }
 
-QVariant KeyNavDevModel::toWrap(IKeyNavigationSubSection* sub)
+QVariant KeyNavDevModel::toWrap(INavigationPanel* sub)
 {
     KeyNavDevSubSection* qsub = new KeyNavDevSubSection(sub);
     m_memstore.append(qsub);
 
     QVariantList conVarList;
-    const std::set<IKeyNavigationControl*>& controlsSet = sub->controls();
-    QList<IKeyNavigationControl*> controlsList = toQList(controlsSet);
+    const std::set<INavigationControl*>& controlsSet = sub->controls();
+    QList<INavigationControl*> controlsList = toQList(controlsSet);
     sortByIndex(controlsList);
-    for (IKeyNavigationControl* ctrl : controlsList) {
+    for (INavigationControl* ctrl : controlsList) {
         conVarList << toWrap(ctrl);
     }
 
@@ -122,7 +122,7 @@ QVariant KeyNavDevModel::toWrap(IKeyNavigationSubSection* sub)
     return QVariant::fromValue(qsub);
 }
 
-QVariant KeyNavDevModel::toWrap(IKeyNavigationControl* ctrl)
+QVariant KeyNavDevModel::toWrap(INavigationControl* ctrl)
 {
     KeyNavDevControl* qc = new KeyNavDevControl(ctrl);
     m_memstore.append(qc);

@@ -23,7 +23,7 @@
 
 using namespace mu::ui;
 
-KeyNavDevControl::KeyNavDevControl(IKeyNavigationControl* control)
+KeyNavDevControl::KeyNavDevControl(INavigationControl* control)
     : AbstractKeyNavDevItem(control), m_control(control)
 {
 }

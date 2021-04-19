@@ -23,7 +23,7 @@
 
 using namespace mu::ui;
 
-KeyNavDevSection::KeyNavDevSection(IKeyNavigationSection* section)
+KeyNavDevSection::KeyNavDevSection(INavigationSection* section)
     : AbstractKeyNavDevItem(section), m_section(section)
 {
 }

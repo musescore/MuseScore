@@ -71,7 +71,7 @@ DockPage {
                         { "name": "vst", "title": "VST" },
                         { "name": "plugins", "title": "Plugins" },
                         { "name": "autobot", "title": "Autobot" },
-                        { "name": "keynav", "title": "KeyNav" }
+                        { "name": "navigation", "title": "KeyNav" }
                     ]
 
                     onSelected: {
@@ -102,7 +102,7 @@ DockPage {
             case "vst": currentComp = vstComponent; break
             case "plugins": currentComp = pluginsComp; break
             case "autobot": currentComp = autobotComp; break
-            case "keynav": currentComp = keynavComp; break
+            case "navigation": currentComp = keynavComp; break
             }
         }
 

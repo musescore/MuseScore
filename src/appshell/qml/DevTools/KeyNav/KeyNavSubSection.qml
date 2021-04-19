@@ -45,7 +45,7 @@ Rectangle {
         root.clicked(info)
     }
 
-    KeyNavigationSubSection {
+    NavigationPanel {
         id: keynavsec
 
         onActiveChanged: {
@@ -62,8 +62,8 @@ Rectangle {
 
         FlatButton {
             id: btn1
-            keynav.subsection: keynavsec
-            keynav.order: 1
+            navigation.panel: keynavsec
+            navigation.order: 1
             anchors.verticalCenter: parent.verticalCenter
             height: 24
             width: 24
@@ -73,8 +73,8 @@ Rectangle {
 
         FlatButton {
             id: btn2
-            keynav.subsection: keynavsec
-            keynav.order: 2
+            navigation.panel: keynavsec
+            navigation.order: 2
             anchors.verticalCenter: parent.verticalCenter
             height: 24
             width: 24
@@ -84,8 +84,8 @@ Rectangle {
 
         FlatButton {
             id: btn3
-            keynav.subsection: keynavsec
-            keynav.order: 3
+            navigation.panel: keynavsec
+            navigation.order: 3
             anchors.verticalCenter: parent.verticalCenter
             height: 24
             width: 24

@@ -19,29 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_KEYNAVIGATIONSECTION_H
-#define MU_UI_KEYNAVIGATIONSECTION_H
+#ifndef MU_UI_NAVIGATIONSECTION_H
+#define MU_UI_NAVIGATIONSECTION_H
 
 #include <QObject>
 #include <QList>
 
-#include "abstractkeynavigation.h"
-#include "../ikeynavigation.h"
+#include "abstractnavigation.h"
+#include "navigationpanel.h"
 
 #include "modularity/ioc.h"
-#include "../ikeynavigationcontroller.h"
+#include "../inavigationcontroller.h"
 #include "async/asyncable.h"
 
 namespace mu::ui {
-class KeyNavigationSubSection;
-class KeyNavigationSection : public AbstractKeyNavigation, public IKeyNavigationSection, public async::Asyncable
+class NavigationSection : public AbstractNavigation, public INavigationSection, public async::Asyncable
 {
     Q_OBJECT
-    INJECT(ui, IKeyNavigationController, keyNavigationController)
+    INJECT(ui, INavigationController, navigationController)
 
 public:
-    explicit KeyNavigationSection(QObject* parent = nullptr);
-    ~KeyNavigationSection() override;
+    explicit NavigationSection(QObject* parent = nullptr);
+    ~NavigationSection() override;
 
     QString name() const override;
 
@@ -57,22 +56,22 @@ public:
 
     void onEvent(EventPtr e) override;
 
-    const std::set<IKeyNavigationSubSection*>& subsections() const override;
-    async::Notification subsectionsListChanged() const override;
+    const std::set<INavigationPanel*>& panels() const override;
+    async::Notification panelsListChanged() const override;
 
-    async::Channel<SectionSubSectionControl> forceActiveRequested() const override;
+    async::Channel<SectionPanelControl> forceActiveRequested() const override;
 
     void componentComplete() override;
 
-    void addSubSection(KeyNavigationSubSection* s);
-    void removeSubSection(KeyNavigationSubSection* s);
+    void addPanel(NavigationPanel* panel);
+    void removePanel(NavigationPanel* panel);
 
 private:
 
-    std::set<IKeyNavigationSubSection*> m_subsections;
-    async::Notification m_subsectionsListChanged;
-    async::Channel<SectionSubSectionControl> m_forceActiveRequested;
+    std::set<INavigationPanel*> m_panels;
+    async::Notification m_panelsListChanged;
+    async::Channel<SectionPanelControl> m_forceActiveRequested;
 };
 }
 
-#endif // MU_UI_KEYNAVIGATIONSECTION_H
+#endif // MU_UI_NAVIGATIONSECTION_H

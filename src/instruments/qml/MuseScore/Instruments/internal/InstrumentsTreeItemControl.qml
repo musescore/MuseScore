@@ -31,7 +31,7 @@ Item {
     property bool isHighlighted: false
 
     property int keynavRow: 0
-    property KeyNavigationSubSection keynavSubSection: null
+    property NavigationPanel keynavSubSection: null
 
     Rectangle {
         anchors.fill: parent
@@ -45,10 +45,10 @@ Item {
 
     signal clicked()
 
-    KeyNavigationControl {
+    NavigationControl {
         id: keynavItem
         name: "InstrumentsTreeItemControl"
-        subsection: root.keynavSubSection
+        panel: root.keynavSubSection
         row: root.keynavRow
         column: 0
         enabled: visible
@@ -85,9 +85,9 @@ Item {
                 height: width
 
                 objectName: "InstrumentsAddStaffBtn"
-                keynav.subsection: root.keynavSubSection
-                keynav.row: root.keynavRow
-                keynav.column: 1
+                navigation.panel: root.keynavSubSection
+                navigation.row: root.keynavRow
+                navigation.column: 1
 
                 icon: IconCode.PLUS
             }

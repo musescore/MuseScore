@@ -72,7 +72,7 @@ FocusableControl {
         }
     }
 
-    keynav.onTriggered: {
+    navigation.onTriggered: {
         if (root.isClickOnKeyNavTriggered) {
             root.clicked()
         }
