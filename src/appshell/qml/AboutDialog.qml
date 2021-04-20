@@ -113,8 +113,13 @@ QmlDialog {
 
                 StyledTextLabel {
                     Layout.fillWidth: true
-                    text: qsTrc("appshell", "Copyright © 1999-2021 MuseScore BVBA and others.\nPublished under the GNU General Public License version 3.")
-                    enabled: false
+                    text: {
+                        var message = qsTrc("appshell", "Copyright © 1999-2021 MuseScore BVBA and others.\nPublished under the %1GNU General Public License version 3%2.")
+                        return message
+                        .arg("<a href='https://www.gnu.org/licenses/gpl-3.0.html'>")
+                        .arg("</a>")
+                        .replace("\n", "<br>")
+                    }
                     wrapMode: Text.WordWrap
                     maximumLineCount: 3
                 }
