@@ -84,7 +84,7 @@ signals:
     void enabledChanged(bool enabled);
     void activeChanged(bool active);
 
-    void keyNavEvent(QVariant event);
+    void navigationEvent(QVariant event);
 
 protected:
 

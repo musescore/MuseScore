@@ -75,26 +75,12 @@ void QmlToolTip::doShowToolTip()
         return;
     }
 
-    QQuickWindow* window = m_item->window();
-    IF_ASSERT_FAILED(window) {
-        return;
-    }
-
-    IF_ASSERT_FAILED(window->parent()) {
-        return;
-    }
-
-    QWidget* widget = QWidget::find(window->parent()->winId());
-    IF_ASSERT_FAILED(widget) {
-        return;
-    }
-
     const QPointF topLeft = m_item->mapToGlobal(QPointF(0, 0));
     const QRect rect(topLeft.x(), topLeft.y(), m_item->width(), m_item->height());
     const QPoint pos(QCursor::pos());
 
     if (rect.contains(pos)) {
-        QToolTip::showText(pos, m_text, widget, rect); // TODO: it doesn't look like setting rect has an effect here...
+        QToolTip::showText(pos, m_text);
     }
 }
 

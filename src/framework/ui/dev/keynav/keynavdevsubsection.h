@@ -30,18 +30,21 @@ class KeyNavDevSubSection : public AbstractKeyNavDevItem
     Q_OBJECT
     Q_PROPERTY(QString direction READ direction CONSTANT)
     Q_PROPERTY(QVariantList controls READ controls NOTIFY controlsChanged)
+    Q_PROPERTY(int controlsCount READ controlsCount NOTIFY controlsCountChanged)
 
 public:
     explicit KeyNavDevSubSection(INavigationPanel* subsection);
 
     QString direction() const;
     QVariantList controls() const;
+    int controlsCount() const;
 
 public slots:
     void setControls(const QVariantList& controls);
 
 signals:
     void controlsChanged();
+    void controlsCountChanged();
 
 private:
     INavigationPanel* m_subsection = nullptr;

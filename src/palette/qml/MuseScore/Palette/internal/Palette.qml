@@ -53,9 +53,9 @@ GridView {
 
     property bool enableAnimations: true
 
-    property NavigationPanel keynavSubSection: null
-    property int keynavRow: 0
-    property int keynavCol: 1
+    property NavigationPanel navigationPanel: null
+    property int navigationRow: 0
+    property int navigationCol: 1
 
     states: [
         State {
@@ -108,7 +108,7 @@ GridView {
     readonly property int ncolumns: Math.max(0, Math.floor(width / cellWidth))
     readonly property real lastColumnCellWidth : cellWidth + (width % cellWidth) // width of last cell in a row: might be stretched to avoid a gap at row end
 
-    signal moreButtonClicked()
+    signal moreButtonClicked(var navigationControl)
 
     MouseArea {
         // Dummy MouseArea to prevent propagation of clicks on empty place to palette's parent
@@ -173,9 +173,9 @@ GridView {
 
             anchors.fill: parent
 
-            navigation.panel: paletteView.keynavSubSection
+            navigation.panel: paletteView.navigationPanel
             //! NOTE Just Up/Down navigation now
-            navigation.row: paletteView.ncells + paletteView.keynavRow
+            navigation.row: paletteView.ncells + paletteView.navigationRow
             navigation.column: 1
             navigation.enabled: paletteView.visible
 
@@ -195,7 +195,7 @@ GridView {
             hoveredStateColor: ui.theme.accentColor
             pressedStateColor: ui.theme.accentColor
 
-            onClicked: paletteView.moreButtonClicked()
+            onClicked: paletteView.moreButtonClicked(moreButton.navigation)
         }
     }
 
@@ -388,9 +388,11 @@ GridView {
     function focusFirstItem() {
         if (count == 0 && moreButton.visible) {
             moreButton.forceActiveFocus();
+            moreButton.navigation.forceActive()
         } else {
             currentIndex = 0;
             currentItem.forceActiveFocus();
+            currentItem.navigation.forceActive()
         }
     }
 
@@ -504,17 +506,25 @@ GridView {
             width: paletteView.cellWidth
             height: paletteView.cellHeight
 
-            navigation.panel: paletteView.keynavSubSection
+            navigation.panel: paletteView.navigationPanel
+            navigation.name: model.accessibleText
 
             //! NOTE Please, don't remove (igor.korsukov@gmail.com)
-            //navigation.row: paletteCell.cellRow + paletteView.keynavRow
-            //navigation.column: paletteCell.cellCol + paletteView.keynavCol
+            //navigation.row: paletteCell.cellRow + paletteView.navigationRow
+            //navigation.column: paletteCell.cellCol + paletteView.navigationCol
 
             //! NOTE Just Up/Down navigation now
-            navigation.row: model.index + paletteView.keynavRow
+            navigation.row: model.index + paletteView.navigationRow
             navigation.column: 1
+
             navigation.enabled: paletteView.visible
-            navigation.onTriggered: paletteCell.doClicked()
+            navigation.onActiveChanged: {
+                if (navigation.active) {
+                    paletteView.currentIndex = paletteCell.rowIndex;
+                    paletteView.updateSelection(true);
+                }
+            }
+            navigation.onTriggered: paletteCell.clicked()
 
             IconView {
                 anchors.fill: parent
@@ -530,23 +540,21 @@ GridView {
             mouseArea.drag.target: this
             mouseArea.onPressed: {
                 paletteView.currentIndex = paletteCell.rowIndex;
-                paletteCell.forceActiveFocus();
                 paletteView.updateSelection(true);
+                paletteCell.forceActiveFocus();
                 paletteCell.beginDrag();
             }
 
-            function doClicked() {
+            onClicked: {
                 if (paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, ui.keyboardModifiers())) {
                     paletteView.selectionModel.setCurrentIndex(paletteCell.modelIndex, ItemSelectionModel.Current);
                 }
             }
 
-            onClicked: paletteCell.doClicked()
-
             onDoubleClicked: {
                 const index = paletteCell.modelIndex;
                 paletteView.selectionModel.setCurrentIndex(index, ItemSelectionModel.Current);
-                paletteView.paletteController.applyPaletteElement(index, mouseArea.mouse.modifiers);
+                paletteView.paletteController.applyPaletteElement(index, ui.keyboardModifiers());
             }
 
             MouseArea {

@@ -37,4 +37,20 @@ void KeyNavDevSection::setSubsections(const QVariantList& subsections)
 {
     m_subsections = subsections;
     emit subsectionsChanged();
+    emit panelsCountChanged();
+    emit controlsCountChanged();
+}
+
+int KeyNavDevSection::panelsCount() const
+{
+    return int(m_section->panels().size());
+}
+
+int KeyNavDevSection::controlsCount() const
+{
+    size_t count = 0;
+    for (const INavigationPanel* p : m_section->panels()) {
+        count += p->controls().size();
+    }
+    return int(count);
 }

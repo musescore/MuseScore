@@ -85,8 +85,8 @@ PopupView {
             }
         }
 
-        onKeyNavEvent: {
-            if (event.type === KeyNavigationEvent.Escape) {
+        onNavigationEvent: {
+            if (event.type === NavigationEvent.Escape) {
                 root.close()
             }
         }

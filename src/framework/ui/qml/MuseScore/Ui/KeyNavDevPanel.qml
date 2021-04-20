@@ -96,7 +96,11 @@ Rectangle {
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.margins: 8
-                text: "section: " + item.section.name + ", " + root.formatIndex(item.section.index) + ", enabled: " + item.section.enabled
+                text: "section: " + item.section.name + ", "
+                      + root.formatIndex(item.section.index)
+                      + ", enabled: " + item.section.enabled
+                      + ", panels: " + item.section.panelsCount
+                      + ", controls: " + item.section.controlsCount
             }
 
             ListView {
@@ -136,6 +140,7 @@ Rectangle {
                         text: "panel: " + subitem.panel.name
                               + ", " + root.formatIndex(subitem.panel.index)
                               + ", enabled: " + subitem.panel.enabled
+                              + ", controls: " + subitem.panel.controlsCount
                     }
 
                     GridView {
@@ -188,10 +193,10 @@ Rectangle {
                                     }
                                 }
 
-                                 onClicked: {
-                                     control.forceActive()
-                                     control.trigger()
-                                 }
+                                onClicked: {
+                                    control.forceActive()
+                                    control.trigger()
+                                }
                             }
                         }
                     }

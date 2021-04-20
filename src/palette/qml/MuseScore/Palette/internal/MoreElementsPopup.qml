@@ -31,7 +31,7 @@ import MuseScore.Ui 1.0
 
 import "utils.js" as Utils
 
-StyledPopup {
+StyledPopupView {
     id: moreElementsPopup
 
     property var poolPalette : null
@@ -53,12 +53,20 @@ StyledPopup {
     property bool drawGrid
 
     property int maxHeight: 400
-    implicitHeight: column.implicitHeight + topPadding + bottomPadding
-    width: parent.width
+    contentHeight: column.implicitHeight
+    contentWidth: 300
 
     property bool enablePaletteAnimations: false // disabled by default to avoid unnecessary "add" animations on opening this popup at first time
 
     signal addElementsRequested(var mimeDataList)
+
+
+    navigation.name: "MoreElementsPopup"
+    navigation.direction: NavigationPanel.Both
+
+    onOpened: {
+        masterPalette.focusFirstItem()
+    }
 
     Column {
         id: column
@@ -71,6 +79,11 @@ StyledPopup {
 
             text: qsTrc("palette", "Add to %1").arg(paletteName)
             enabled: moreElementsPopup.paletteEditingEnabled && (masterPaletteSelectionModel.hasSelection || customPaletteSelectionModel.hasSelection)
+
+            navigation.panel: moreElementsPopup.navigation
+            navigation.name: "addToPaletteButton"
+            navigation.column: 1
+            navigation.row: 1
 
             onClicked: {
                 function collectMimeData(palette, selection) {
@@ -108,6 +121,11 @@ StyledPopup {
                 icon: IconCode.ARROW_LEFT
                 normalStateColor: "transparent"
                 enabled: prevIndex && prevIndex.valid
+
+                navigation.panel: moreElementsPopup.navigation
+                navigation.name: "prevButton"
+                navigation.column: 1
+                navigation.row: 2
 
                 Layout.alignment: Qt.AlignLeft
 
@@ -152,6 +170,11 @@ StyledPopup {
 
                 enabled: nextIndex && nextIndex.valid
 
+                navigation.panel: moreElementsPopup.navigation
+                navigation.name: "nextButton"
+                navigation.column: 1
+                navigation.row: 3
+
                 onClicked: poolPaletteRootIndex = nextIndex
             }
         }
@@ -193,6 +216,10 @@ StyledPopup {
                     cellSize: moreElementsPopup.cellSize
                     drawGrid: moreElementsPopup.drawGrid
 
+                    navigationPanel: moreElementsPopup.navigation
+                    navigationCol: 1
+                    navigationRow: 4
+
                     paletteModel: moreElementsPopup.poolPalette
                     paletteRootIndex: moreElementsPopup.poolPaletteRootIndex
                     paletteController: moreElementsPopup.poolPaletteController
@@ -223,6 +250,11 @@ StyledPopup {
                         normalStateColor: "transparent"
                         hint: text
 
+                        navigation.panel: moreElementsPopup.navigation
+                        navigation.name: "deleteButton"
+                        navigation.column: 1
+                        navigation.row: 100 // Should be more than palette cells
+
                         onClicked: {
                             Utils.removeSelectedItems(moreElementsPopup.customPaletteController, customPaletteSelectionModel, moreElementsPopup.customPaletteRootIndex)
                         }
@@ -241,6 +273,10 @@ StyledPopup {
 
                     cellSize: control.cellSize
                     drawGrid: control.drawGrid
+
+                    navigationPanel: moreElementsPopup.navigation
+                    navigationCol: 1
+                    navigationRow: 4
 
                     paletteModel: moreElementsPopup.customPalette
                     paletteRootIndex: moreElementsPopup.customPaletteRootIndex
@@ -265,6 +301,10 @@ StyledPopup {
             enabled: moreElementsPopup.paletteEditingEnabled
             width: parent.width
             text: moreElementsPopup.elementEditor ? moreElementsPopup.elementEditor.actionName : ""
+            navigation.panel: moreElementsPopup.navigation
+            navigation.name: "elementEditorButton"
+            navigation.column: 1
+            navigation.row: 101 // after deleteButton
             onClicked: moreElementsPopup.elementEditor.open()
         }
     }

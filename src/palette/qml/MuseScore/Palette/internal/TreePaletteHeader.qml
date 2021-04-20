@@ -27,7 +27,7 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
 Item {
-    id: paletteHeader
+    id: root
 
     property bool expanded: false
     property bool hovered: false
@@ -40,8 +40,8 @@ Item {
     property PaletteWorkspace paletteWorkspace
     property var modelIndex: null
 
-    property NavigationPanel keynavSubsection: null
-    property int keynavRow: 0
+    property NavigationPanel navigationPanel: null
+    property int navigationRow: 0
 
     signal toggleExpandRequested()
     signal enableEditingToggled(bool val)
@@ -51,33 +51,23 @@ Item {
     signal editPalettePropertiesRequested()
 
     implicitHeight: paletteExpandArrow.height
-    implicitWidth: paletteExpandArrow.implicitWidth + textItem.implicitWidth + paletteHeaderMenuButton.implicitWidth + 8 // 8 for margins
-
-
-    function toggleContextMenu() {
-        if (paletteHeaderMenu.opened) {
-            paletteHeaderMenu.close()
-            return
-        }
-
-        paletteHeaderMenu.open()
-    }
+    implicitWidth: paletteExpandArrow.implicitWidth + textItem.implicitWidth + rootMenuButton.implicitWidth + 8 // 8 for margins
 
     FlatButton {
         id: paletteExpandArrow
         z: 1000
         width: height
-        visible: !paletteHeader.unresolved // TODO: make a separate palette placeholder component
+        visible: !root.unresolved // TODO: make a separate palette placeholder component
         activeFocusOnTab: false // same focus object as parent palette
-        icon: paletteHeader.expanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
+        icon: root.expanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
         normalStateColor: "transparent"
 
         enabled: paletteExpandArrow.visible
-        navigation.panel: paletteHeader.keynavSubsection
-        navigation.row: paletteHeader.keynavRow
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRow
         navigation.column: 1
 
-        onClicked: paletteHeader.toggleExpandRequested()
+        onClicked: root.toggleExpandRequested()
     }
 
     StyledTextLabel {
@@ -86,17 +76,17 @@ Item {
         horizontalAlignment: Text.AlignHLeft
         anchors {
             left: paletteExpandArrow.right; leftMargin: 4;
-            right: deleteButton.visible ? deleteButton.left : (paletteHeaderMenuButton.visible ? paletteHeaderMenuButton.left : parent.right)
+            right: deleteButton.visible ? deleteButton.left : (rootMenuButton.visible ? rootMenuButton.left : parent.right)
         }
 
-        text: paletteHeader.text
+        text: root.text
         font: ui.theme.bodyBoldFont
     }
 
     FlatButton {
         id: deleteButton
 
-        anchors.right: paletteHeaderMenuButton.left
+        anchors.right: rootMenuButton.left
         anchors.rightMargin: 6
 
         height: parent.height
@@ -106,13 +96,13 @@ Item {
 
         icon: IconCode.DELETE_TANK
         hint: deleteButton.text
-        visible: paletteHeader.hidePaletteElementVisible && paletteHeader.editingEnabled
+        visible: root.hidePaletteElementVisible && root.editingEnabled
         activeFocusOnTab: mainPalette.currentItem === paletteTree.currentTreeItem
         normalStateColor: "transparent"
 
         enabled: deleteButton.visible
-        navigation.panel: paletteHeader.keynavSubsection
-        navigation.row: paletteHeader.keynavRow
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRow
         navigation.column: 2
 
         onClicked: {
@@ -121,23 +111,23 @@ Item {
     }
 
     FlatButton {
-        id: paletteHeaderMenuButton
+        id: rootMenuButton
         z: 1000
         height: parent.height
         anchors.right: parent.right
 
-        visible: paletteHeader.expanded || paletteHeader.hovered || paletteHeaderMenu.visible
+        visible: root.expanded || root.hovered || menuLoader.isMenuOpened() || rootMenuButton.navigation.active
 
-        enabled: paletteHeaderMenuButton.visible
-        navigation.panel: paletteHeader.keynavSubsection
-        navigation.row: paletteHeader.keynavRow
+        enabled: rootMenuButton.visible
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRow
         navigation.column: 3
 
         icon: IconCode.MENU_THREE_DOTS
         normalStateColor: "transparent"
 
         onClicked: {
-            toggleContextMenu()
+            menuLoader.toggleContextMenu(rootMenuButton.navigation)
         }
     }
 
@@ -147,78 +137,39 @@ Item {
         acceptedButtons: Qt.RightButton
 
         onClicked: {
-            toggleContextMenu()
+            menuLoader.toggleContextMenu(null)
         }
     }
 
-    ContextMenu {
-        id: paletteHeaderMenu
+    StyledMenuLoader {
+        id: menuLoader
 
-        x: paletteHeaderMenuButton.x + paletteHeaderMenuButton.width
-        y: paletteHeaderMenuButton.y + paletteHeaderMenuButton.height
+        function toggleContextMenu(navigationParentControl) {
+            var items = [
+                        {code: "hide", title: root.custom ? qsTrc("palette", "Hide/Delete Palette") : qsTrc("palette", "Hide Palette") },
+                        {code: "new", title: qsTrc("palette", "Insert New Palette") },
+                        {code: "", title: "" }, // separator
+                        {code: "edit", title: qsTrc("palette", "Enable Editing"), checkable: true, checked: root.editingEnabled },
+                        {code: "", title: "" }, // separator
+                        {code: "reset", title: qsTrc("palette", "Reset Palette") },
+                        {code: "save", title: qsTrc("palette", "Save Palette…") },
+                        {code: "load", title: qsTrc("palette", "Load Palette…") },
+                        {code: "", title: "" }, // separator
+                        {code: "properties", title: qsTrc("palette", "Palette Properties…") },
+                    ]
 
-        StyledContextMenuItem {
-            text: custom ? qsTrc("palette", "Hide/Delete Palette") : qsTrc("palette", "Hide Palette")
-
-            onTriggered: {
-                paletteHeader.hidePaletteRequested()
-            }
+            toggleOpened(items, navigationParentControl)
         }
 
-        StyledContextMenuItem {
-            text: qsTrc("palette", "Insert New Palette")
-
-            onTriggered: {
-                paletteHeader.insertNewPaletteRequested()
-            }
-        }
-
-        SeparatorLine {}
-
-        StyledContextMenuItem {
-            text: qsTrc("palette", "Enable Editing")
-            checkable: true
-            checked: paletteHeader.editingEnabled
-
-            onTriggered: {
-                paletteHeader.enableEditingToggled(checked)
-            }
-        }
-
-        SeparatorLine {}
-
-        StyledContextMenuItem {
-            text: qsTrc("palette", "Reset Palette")
-
-            onTriggered: {
-                paletteHeader.paletteWorkspace.resetPalette(paletteHeader.modelIndex)
-            }
-        }
-
-        StyledContextMenuItem {
-            text: qsTrc("palette", "Save Palette…")
-
-            onTriggered: {
-                paletteHeader.paletteWorkspace.savePalette(paletteHeader.modelIndex)
-            }
-        }
-
-        StyledContextMenuItem {
-            text: qsTrc("palette", "Load Palette…")
-
-            onTriggered: {
-                paletteHeader.paletteWorkspace.loadPalette(paletteHeader.modelIndex)
-            }
-        }
-
-        SeparatorLine {}
-
-        StyledContextMenuItem {
-            text: qsTrc("palette", "Palette Properties…")
-            enabled: paletteHeader.editingEnabled
-
-            onTriggered: {
-                Qt.callLater(paletteHeader.editPalettePropertiesRequested)
+        onHandleAction: {
+            switch(actionCode) {
+            case "hide": root.hidePaletteRequested(); break
+            case "new": root.insertNewPaletteRequested(); break
+            case "edit": root.enableEditingToggled(!root.editingEnabled); break
+            case "reset": root.paletteWorkspace.resetPalette(root.modelIndex); break
+            case "save": root.paletteWorkspace.savePalette(root.modelIndex); break
+            case "load": root.paletteWorkspace.loadPalette(root.modelIndex); break
+            case "properties": Qt.callLater(root.editPalettePropertiesRequested); break
             }
         }
     }

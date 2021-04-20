@@ -242,6 +242,24 @@ Item {
                                 onVisibleChanged: {
                                     treeItemDelegateLoader.updateIsSelected()
                                 }
+
+                                property var contentYBackup: 0
+
+                                onPopupOpened: {
+                                    contentYBackup = flickable.contentY
+                                    var mappedPopupY = mapToItem(flickable, popupX, popupY).y
+
+                                    if (mappedPopupY + popupHeight < flickable.height - contentColumn.sideMargin) {
+                                        return
+                                    }
+
+                                    var hiddenPopupPartHeight = Math.abs(flickable.height - (mappedPopupY + popupHeight))
+                                    flickable.contentY += hiddenPopupPartHeight + contentColumn.sideMargin
+                                }
+
+                                onPopupClosed: {
+                                    flickable.contentY = contentYBackup
+                                }
                             }
                         }
 

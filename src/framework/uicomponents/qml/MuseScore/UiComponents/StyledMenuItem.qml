@@ -42,7 +42,7 @@ ListItemBlank {
 
     hoveredStateColor: ui.theme.accentColor
     pressedStateColor: ui.theme.accentColor
-    enabled: Boolean(modelData) && Boolean(modelData.enabled)
+    enabled: (Boolean(modelData) && modelData.enabled !== undefined ) ? Boolean(modelData.enabled) : true // default true
 
     isSelected: Boolean(prv.showedSubMenu) || (prv.hasIcon && prv.isSelectable && prv.isSelected)
 
@@ -67,16 +67,16 @@ ListItemBlank {
         }
     }
 
-    navigation.onKeyNavEvent: {
+    navigation.onNavigationEvent: {
         switch (event.type) {
-        case KeyNavigationEvent.Right:
+        case NavigationEvent.Right:
             //! NOTE Go to submenu if shown
             if (prv.showedSubMenu) {
                 event.accepted = true
                 prv.showedSubMenu.focusOnFirstItem()
             }
             break;
-        case KeyNavigationEvent.Left:
+        case NavigationEvent.Left:
             //! NOTE Go to parent item if present
             if (navigation.panel.parentControl) {
                 event.accepted = true
