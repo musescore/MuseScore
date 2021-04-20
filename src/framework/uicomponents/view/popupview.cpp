@@ -60,7 +60,8 @@ void PopupView::forceActiveFocus()
     IF_ASSERT_FAILED(m_view) {
         return;
     }
-    m_view->requestActivate();
+    //! TODO Not working yet
+    //m_view->requestActivate();
 }
 
 void PopupView::open()
@@ -86,8 +87,9 @@ void PopupView::open()
 
     m_view->setPosition(global.toPoint());
     m_view->show();
-    m_view->requestActivate();
-    m_view->setKeyboardGrabEnabled(true);
+    //! TODO Not working yet
+    //m_view->requestActivate();
+    //m_view->setKeyboardGrabEnabled(true);
 
     emit isOpenedChanged();
     emit opened();

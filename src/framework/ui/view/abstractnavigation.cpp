@@ -163,7 +163,7 @@ mu::async::Channel<bool> AbstractNavigation::activeChanged() const
 void AbstractNavigation::onEvent(INavigation::EventPtr e)
 {
     NavigationEvent ev(e);
-    emit keyNavEvent(QVariant::fromValue(ev));
+    emit navigationEvent(QVariant::fromValue(ev));
 }
 
 void AbstractNavigation::classBegin()

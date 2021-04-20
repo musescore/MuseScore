@@ -33,7 +33,7 @@ Loader {
         return loader.menu && loader.menu.isOpened
     }
 
-    function toggleOpened(model, keynavParentControl) {
+    function toggleOpened(model, navigationParentControl) {
         if (!loader.sourceComponent) {
             loader.sourceComponent = itemMenuComp
         }
@@ -45,9 +45,9 @@ Loader {
         }
 
         menu.parent = loader.parent
-        if (keynavParentControl) {
-            menu.navigation.parentControl = keynavParentControl
-            menu.navigation.name = keynavParentControl.name+"PopupMenu"
+        if (navigationParentControl) {
+            menu.navigation.parentControl = navigationParentControl
+            menu.navigation.name = navigationParentControl.name+"PopupMenu"
         }
         menu.model = model
         menu.open()
