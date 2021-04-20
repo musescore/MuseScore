@@ -48,4 +48,10 @@ void KeyNavDevSubSection::setControls(const QVariantList& controls)
 {
     m_controls = controls;
     emit controlsChanged();
+    emit controlsCountChanged();
+}
+
+int KeyNavDevSubSection::controlsCount() const
+{
+    return m_controls.count();
 }

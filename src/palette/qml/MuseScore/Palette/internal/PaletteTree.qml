@@ -245,7 +245,7 @@ ListView {
             topPadding: 0
             bottomPadding: expanded ? 4 : 0
             property int rowIndex: index
-            property int keynavRow: (index + 1) * 10000 // to make unique
+            property int navigationRow: (index + 1) * 10000 // to make unique
             property var modelIndex: paletteTree.model.modelIndex(index, 0)
 
             onActiveFocusChanged: {
@@ -307,7 +307,7 @@ ListView {
 
                 navigation.name: "PaletteTreeItem"
                 navigation.panel: keynavTree
-                navigation.row: control.keynavRow
+                navigation.row: control.navigationRow
                 navigation.column: 0
                 enabled: control.visible
                 navigation.onActiveChanged: {
@@ -322,9 +322,12 @@ ListView {
 
             property bool popupExpanded: paletteTree.expandedPopupIndex === modelIndex
 
-            function togglePopup() {
+            function togglePopup(navigationControl) {
                 const expand = !popupExpanded;
                 paletteTree.expandedPopupIndex = expand ? modelIndex : null;
+                palettePopup.navigation.parentControl = navigationControl
+                palettePopup.toggleOpened()
+
             }
 
             property size cellSize: model.gridSize
@@ -445,8 +448,8 @@ ListView {
                     hovered: control.hovered
                     text: model.display
 
-                    keynavSubsection: keynavTree
-                    keynavRow: control.keynavRow
+                    navigationPanel: keynavTree
+                    navigationRow: control.navigationRow
 
                     hidePaletteElementVisible: {
                         return !control.selected && control.expanded
@@ -507,8 +510,8 @@ ListView {
                         id: mainPalette
                         anchors { fill: parent; margins: parent.padding }
 
-                        keynavSubSection: keynavTree
-                        keynavRow: control.keynavRow + 1
+                        navigationPanel: keynavTree
+                        navigationRow: control.navigationRow + 1
 
                         cellSize: control.cellSize
                         drawGrid: control.drawGrid
@@ -519,7 +522,7 @@ ListView {
                         selectionModel: paletteSelectionModel
 
                         showMoreButton: !filter.length
-                        onMoreButtonClicked: control.togglePopup();
+                        onMoreButtonClicked: control.togglePopup(navigationControl);
 
                         onVisibleChanged: {
                             if (!visible && control.popupExpanded) {
@@ -534,15 +537,11 @@ ListView {
 
                 MoreElementsPopup {
                     id: palettePopup
-                    visible: control.popupExpanded
+
                     maxHeight: Math.min(0.75 * paletteTree.height, 500)
 
                     y: mainPaletteContainer.y + mainPaletteContainer.height + Utils.style.popupMargin
                     arrowX: parent.width - cellSize.width / 2
-
-                    modal: false
-                    focus: true
-                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside | Popup.CloseOnPressOutsideParent
 
                     // TODO: change settings to "hidden" model?
                     cellSize: control.cellSize
@@ -552,7 +551,7 @@ ListView {
                     paletteIsCustom: model.custom
                     paletteEditingEnabled: model.editable
 
-                    onVisibleChanged: {
+                    onIsOpenedChanged: {
                         // build pool model on first popup appearance
                         if (visible && !poolPalette) {
                             poolPalette = paletteTree.paletteWorkspace.poolPaletteModel(control.modelIndex);
@@ -564,19 +563,11 @@ ListView {
                             customPaletteController = paletteTree.paletteWorkspace.customElementsPaletteController
                         }
                         // if closing by other reasons than pressing "More" button again (e.g. via Esc key), synchronize "expanded" status
-                        if (control.popupExpanded != visible)
+                        if (control.popupExpanded != palettePopup.isOpened)
                             control.togglePopup();
                     }
 
                     property bool needScrollToBottom: false
-
-                    onAboutToShow: {
-                        needScrollToBottom = true;
-
-                        if (implicitHeight) {
-                            scrollToPopupBottom();
-                        }
-                    }
 
                     onOpened: {
                         scrollToPopupBottom();
@@ -591,7 +582,7 @@ ListView {
                         paletteTree.ensureYVisible(popupBottom);
                     }
 
-                    onImplicitHeightChanged: {
+                    onContentHeightChanged: {
                         if (visible && (needScrollToBottom || atYEnd))
                             scrollToPopupBottom();
                     }
