@@ -23,6 +23,7 @@
 
 #include "translation.h"
 #include "version.h"
+#include "config.h"
 
 #include <QClipboard>
 #include <QUrl>
@@ -79,7 +80,10 @@ QVariantMap AboutModel::musicXMLLicenseDeedUrl() const
 
 void AboutModel::copyRevisionToClipboard() const
 {
-    QApplication::clipboard()->setText(museScoreRevision());
+    QApplication::clipboard()->setText(QString(
+                                           "OS: %1, Arch.: %2, MuseScore version (%3-bit): %4-%5, revision: github-musescore-musescore-%6")
+                                       .arg(QSysInfo::prettyProductName()).arg(QSysInfo::currentCpuArchitecture()).arg(QSysInfo::WordSize)
+                                       .arg(VERSION).arg(BUILD_NUMBER).arg(MUSESCORE_REVISION));
 }
 
 QVariantMap AboutModel::makeUrl(const QString& url, const QString& displayName) const
