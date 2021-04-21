@@ -19,11 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import MuseScore.Ui 1.0
 
-FocusableItem {
+FocusScope {
     id: root
 
     property bool checked: false
@@ -33,12 +33,36 @@ FocusableItem {
     property alias font: label.font
     property alias wrapMode: label.wrapMode
 
+    property alias navigation: navCtrl
+
     signal clicked
 
     implicitHeight: contentRow.height
     implicitWidth: contentRow.width
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
+
+    function ensureActiveFocus() {
+        if (!root.activeFocus) {
+            root.forceActiveFocus()
+        }
+
+        if (!navCtrl.active) {
+            navCtrl.forceActive()
+        }
+    }
+
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName != "" ? root.objectName : "CheckBox"
+        enabled: root.enabled
+        onActiveChanged: {
+            if (!root.activeFocus) {
+                root.forceActiveFocus()
+            }
+        }
+        onTriggered: root.clicked()
+    }
 
     RowLayout {
         id: contentRow
@@ -55,15 +79,13 @@ FocusableItem {
 
             border.width: 1
             border.color: "#00000000"
+            color: ui.theme.buttonColor
 
             radius: 2
-            color: ui.theme.buttonColor
-            opacity: ui.theme.buttonOpacityNormal
 
             StyledIconLabel {
                 anchors.fill: parent
                 iconCode: root.isIndeterminate ? IconCode.MINUS : IconCode.TICK_RIGHT_ANGLE
-
                 visible: root.checked || root.isIndeterminate
             }
         }
@@ -90,20 +112,32 @@ FocusableItem {
 
         hoverEnabled: true
 
-        onClicked: { root.clicked() }
+        onClicked: {
+            root.ensureActiveFocus()
+            root.clicked()
+        }
     }
 
     states: [
+        State {
+            name: "FOCUSED"
+            when: navCtrl.active
+
+            PropertyChanges {
+                target: box
+                border.color: ui.theme.focusColor
+                border.width: 2
+            }
+        },
+
         State {
             name: "HOVERED"
             when: clickableArea.containsMouse && !clickableArea.pressed
 
             PropertyChanges {
                 target: box
-                color: ui.theme.buttonColor
                 opacity: ui.theme.buttonOpacityHover
-                border.color: ui.theme.strokeColor
-                border.width: 1
+                border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
             }
         },
 
@@ -113,9 +147,8 @@ FocusableItem {
 
             PropertyChanges {
                 target: box
-                color: ui.theme.buttonColor
                 opacity: ui.theme.buttonOpacityHit
-                border.color: ui.theme.strokeColor
+                border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
             }
         }
     ]

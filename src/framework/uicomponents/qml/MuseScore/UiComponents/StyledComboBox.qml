@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 import MuseScore.Ui 1.0
@@ -35,7 +35,32 @@ ComboBox {
     property var value
     property var maxVisibleItemCount: 6
 
+    property alias navigation: navCtrl
+
     opacity: root.enabled ? 1 : ui.theme.itemOpacityDisabled
+
+    Keys.onReleased: {
+        //! TODO Conflicted with navigation, needs research
+        if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
+            event.accepted = true
+        }
+    }
+
+    onPressedChanged: {
+        if (root.pressed) {
+            root.ensureActiveFocus()
+        }
+    }
+
+    function ensureActiveFocus() {
+        if (!root.activeFocus) {
+            root.forceActiveFocus()
+        }
+
+        if (!navCtrl.active) {
+            navCtrl.forceActive()
+        }
+    }
 
     function valueFromModel(index, roleName) {
 
@@ -80,6 +105,24 @@ ComboBox {
     implicitHeight: 30
 
     padding: 0
+
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName != "" ? root.objectName : "StyledComboBox"
+        enabled: root.enabled
+        onActiveChanged: {
+            if (!root.activeFocus) {
+                root.forceActiveFocus()
+            }
+        }
+        onTriggered: {
+            if (root.popup.opened) {
+                root.popup.close()
+            } else {
+                root.popup.open()
+            }
+        }
+    }
 
     QtObject {
         id: privateProperties
@@ -126,30 +169,39 @@ ComboBox {
                     name: "TOP_CORNERS_ROUNDED"
                     when: index === 0
 
-                    PropertyChanges { target: delegateBackgroundRect; topLeftRadius: 4
-                                                                      topRightRadius: 4
-                                                                      bottomLeftRadius: 0
-                                                                      bottomRightRadius: 0 }
+                    PropertyChanges {
+                        target: delegateBackgroundRect;
+                        topLeftRadius: 4
+                        topRightRadius: 4
+                        bottomLeftRadius: 0
+                        bottomRightRadius: 0
+                    }
                 },
 
                 State {
                     name: "NO_ROUNDED_CORNERS"
                     when: index !== 0 && index !== count - 1
 
-                    PropertyChanges { target: delegateBackgroundRect; topLeftRadius: 0
-                                                                      topRightRadius: 0
-                                                                      bottomLeftRadius: 0
-                                                                      bottomRightRadius: 0 }
+                    PropertyChanges {
+                        target: delegateBackgroundRect;
+                        topLeftRadius: 0
+                        topRightRadius: 0
+                        bottomLeftRadius: 0
+                        bottomRightRadius: 0
+                    }
                 },
 
                 State {
                     name: "BOTTOM_CORNERS_ROUNDED"
                     when: index === count - 1
 
-                    PropertyChanges { target: delegateBackgroundRect; topLeftRadius: 0
-                                                                      topRightRadius: 0
-                                                                      bottomLeftRadius: 4
-                                                                      bottomRightRadius: 4 }
+                    PropertyChanges {
+                        target: delegateBackgroundRect;
+                        topLeftRadius: 0
+                        topRightRadius: 0
+                        bottomLeftRadius: 4
+                        bottomRightRadius: 4
+                    }
                 }
             ]
         }
@@ -167,31 +219,23 @@ ComboBox {
         horizontalAlignment: Qt.AlignLeft
     }
 
-    background: RoundedRectangle {
-        height: root.implicitHeight
-        width: contentItem.width
-
+    background: Rectangle {
+        height: root.height
+        width: root.width
         color: ui.theme.buttonColor
         opacity: ui.theme.buttonOpacityNormal
 
-        topLeftRadius: 4
-        topRightRadius: 0
-        bottomLeftRadius: 4
-        bottomRightRadius: 0
+        radius: 4
+
+        border.width: navCtrl.active ? 2 : 0
+        border.color: ui.theme.focusColor
     }
 
-    indicator: RoundedRectangle {
+    indicator: Item {
         id: indicatorCanvas
 
         height: root.implicitHeight
         width: height
-
-        topLeftRadius: 0
-        bottomLeftRadius: 0
-        topRightRadius: 4
-        bottomRightRadius: 4
-
-        color: ui.theme.buttonColor
 
         x: root.width - width
         y: root.topPadding + (root.availableHeight - height) / 2

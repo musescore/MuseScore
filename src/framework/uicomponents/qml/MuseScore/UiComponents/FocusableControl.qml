@@ -33,7 +33,7 @@ FocusScope {
 
     property alias navigation: keynavItem
 
-    function insureActiveFocus() {
+    function ensureActiveFocus() {
         if (!root.activeFocus) {
             root.forceActiveFocus()
         }
@@ -50,7 +50,7 @@ FocusScope {
 
         onActiveChanged: {
             if (keynavItem.active) {
-                root.insureActiveFocus()
+                root.ensureActiveFocus()
             }
         }
     }
@@ -62,19 +62,19 @@ FocusScope {
         border.width: keynavItem.active ? 2 : 0
     }
 
-    Item {
-        id: contentItem
-        objectName: "FocusableControlContent"
-        anchors.fill: focusRectItem
-        anchors.margins: 2 //! NOTE margin needed to show focus border
-    }
-
     MouseArea {
         id: mouseAreaItem
         anchors.fill: parent
 
         onClicked: {
-            root.insureActiveFocus()
+            root.ensureActiveFocus()
         }
+    }
+
+    Item {
+        id: contentItem
+        objectName: "FocusableControlContent"
+        anchors.fill: focusRectItem
+        anchors.margins: 2 //! NOTE margin needed to show focus border
     }
 }

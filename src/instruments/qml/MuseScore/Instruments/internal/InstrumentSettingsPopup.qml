@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -30,6 +30,13 @@ StyledPopupView {
 
     contentHeight: contentColumn.childrenRect.height
     contentWidth: 240
+
+    navigation.name: "InstrumentSettingsPopup"
+    navigation.direction: NavigationPanel.Vertical
+
+    onOpened: {
+        instrNameField.ensureActiveFocus()
+    }
 
     function load(instrument) {
         settingsModel.load(instrument)
@@ -50,8 +57,11 @@ StyledPopupView {
         }
 
         TextInputField {
+            id: instrNameField
+            objectName: "InstrNameField"
+            navigation.panel: root.navigation
+            navigation.row: 1
             currentText: settingsModel.instrumentName
-
             onCurrentTextEdited: {
                 settingsModel.instrumentName = newTextValue
             }
@@ -62,8 +72,10 @@ StyledPopupView {
         }
 
         TextInputField {
+            objectName: "AbbreviatureField"
+            navigation.panel: root.navigation
+            navigation.row: 2
             currentText: settingsModel.abbreviature
-
             onCurrentTextEdited: {
                 settingsModel.abbreviature = newTextValue
             }
@@ -74,8 +86,10 @@ StyledPopupView {
         }
 
         TextInputField {
+            objectName: "PartNameField"
+            navigation.panel: root.navigation
+            navigation.row: 3
             currentText: settingsModel.partName
-
             onCurrentTextEdited: {
                 settingsModel.partName = newTextValue
             }
@@ -89,6 +103,7 @@ StyledPopupView {
         FlatButton {
             width: parent.width
             navigation.panel: root.navigation
+            navigation.row: 4
             text: qsTrc("instruments", "Replace instrument")
 
             onClicked: {

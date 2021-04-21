@@ -36,8 +36,8 @@ FlatButton {
     accentButton: popup.visible
 
     StyledTextLabel {
-        anchors.horizontalCenter: root.horizontalCenter
-        anchors.verticalCenter: root.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
 
         property string pickupMessage: {
             if (withPickupMeasure.checked) {

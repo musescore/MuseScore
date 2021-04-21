@@ -130,8 +130,8 @@ Item {
         ValueAdjustControl {
             id: valueAdjustControl
 
-            anchors.verticalCenter: textInputField.verticalCenter
-            anchors.right: textInputField.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
 
             icon: IconCode.SMALL_ARROW_DOWN
 

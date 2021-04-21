@@ -27,6 +27,14 @@
 
 #include "log.h"
 
+//#define NAVIGATION_LOGGING_ENABLED
+
+#ifdef NAVIGATION_LOGGING_ENABLED
+#define MYLOG() LOGI()
+#else
+#define MYLOG() LOGN()
+#endif
+
 using namespace mu::ui;
 
 static const mu::UriQuery DEV_SHOW_CONTROLS_URI("musescore://devtools/keynav/controls?sync=false&modal=false");
@@ -295,7 +303,7 @@ void NavigationController::doActivateSection(INavigationSection* s, bool isActiv
     }
 
     s->setActive(true);
-    LOGD() << "activated section: " << s->name() << ", order: " << s->index().order();
+    MYLOG() << "activated section: " << s->name() << ", order: " << s->index().order();
 
     INavigationPanel* toActivatePanel = nullptr;
     if (isActivateLastPanel) {
@@ -333,7 +341,7 @@ void NavigationController::doActivatePanel(INavigationPanel* sub)
     }
 
     sub->setActive(true);
-    LOGD() << "activated subsection: " << sub->name() << ", order: " << sub->index().order();
+    MYLOG() << "activated subsection: " << sub->name() << ", order: " << sub->index().order();
 
     INavigationControl* firstCtr = firstEnabled(sub->controls());
     if (firstCtr) {
@@ -361,7 +369,7 @@ void NavigationController::doActivateControl(INavigationControl* c)
     }
 
     c->setActive(true);
-    LOGD() << "activated control: " << c->name() << ", row: " << c->index().row << ", column: " << c->index().column;
+    MYLOG() << "activated control: " << c->name() << ", row: " << c->index().row << ", column: " << c->index().column;
 }
 
 void NavigationController::doDeactivateControl(INavigationControl* c)
@@ -425,7 +433,7 @@ INavigationControl* NavigationController::activeControl() const
 
 void NavigationController::goToNextSection()
 {
-    LOGI() << "====";
+    MYLOG() << "====";
     if (m_sections.empty()) {
         return;
     }
@@ -448,7 +456,7 @@ void NavigationController::goToNextSection()
 
 void NavigationController::goToPrevSection(bool isActivateLastPanel)
 {
-    LOGI() << "====";
+    MYLOG() << "====";
     if (m_sections.empty()) {
         return;
     }
@@ -471,8 +479,7 @@ void NavigationController::goToPrevSection(bool isActivateLastPanel)
 
 void NavigationController::goToNextPanel()
 {
-    LOGI() << "====";
-
+    MYLOG() << "====";
     INavigationSection* activeSec = activeSection();
     if (!activeSec) {
         doActivateFirst();
@@ -502,7 +509,7 @@ void NavigationController::goToNextPanel()
 
 void NavigationController::goToPrevPanel()
 {
-    LOGI() << "====";
+    MYLOG() << "====";
     INavigationSection* activeSec = activeSection();
     if (!activeSec) {
         doActivateLast();
@@ -672,6 +679,7 @@ void NavigationController::onUp()
 
 void NavigationController::onEscape()
 {
+    MYLOG() << "====";
     INavigationPanel* activeSubSec = activePanel();
     if (!activeSubSec) {
         return;
@@ -691,20 +699,19 @@ void NavigationController::onEscape()
 
 void NavigationController::goToFirstControl()
 {
-    LOGI() << "====";
+    MYLOG() << "====";
     goToControl(MoveDirection::First);
 }
 
 void NavigationController::goToLastControl()
 {
-    LOGI() << "====";
+    MYLOG() << "====";
     goToControl(MoveDirection::Last);
 }
 
 void NavigationController::goToNextRowControl()
 {
-    LOGI() << "====";
-
+    MYLOG() << "====";
     INavigationPanel* activeSubSec = activePanel();
     if (!activeSubSec) {
         return;
@@ -734,8 +741,7 @@ void NavigationController::goToNextRowControl()
 
 void NavigationController::goToPrevRowControl()
 {
-    LOGI() << "====";
-
+    MYLOG() << "====";
     INavigationPanel* activeSubSec = activePanel();
     if (!activeSubSec) {
         return;
@@ -765,8 +771,7 @@ void NavigationController::goToPrevRowControl()
 
 void NavigationController::goToControl(MoveDirection direction, INavigationPanel* activeSubSec)
 {
-    LOGI() << "direction: " << direction;
-
+    MYLOG() << "direction: " << direction;
     if (!activeSubSec) {
         activeSubSec = activePanel();
     }
@@ -777,6 +782,10 @@ void NavigationController::goToControl(MoveDirection direction, INavigationPanel
 
     INavigationControl* activeControl = findActive(activeSubSec->controls());
     if (activeControl) {
+        MYLOG() << "current activated control: " << activeControl->name()
+                << ", row: " << activeControl->index().row
+                << ", column: " << activeControl->index().column;
+
         doDeactivateControl(activeControl);
     }
 
@@ -846,13 +855,13 @@ void NavigationController::goToControl(MoveDirection direction, INavigationPanel
 
 void NavigationController::doTriggerControl()
 {
-    LOGI() << "====";
+    MYLOG() << "====";
     INavigationControl* activeCtrl= activeControl();
     if (!activeCtrl) {
         return;
     }
 
-    LOGD() << "triggered control: " << activeCtrl->name();
+    MYLOG() << "triggered control: " << activeCtrl->name();
     activeCtrl->trigger();
 }
 
@@ -868,7 +877,7 @@ void NavigationController::onForceActiveRequested(INavigationSection* sec, INavi
     }
 
     sec->setActive(true);
-    LOGD() << "activated section: " << sec->name() << ", order: " << sec->index().order();
+    MYLOG() << "activated section: " << sec->name() << ", order: " << sec->index().order();
 
     INavigationPanel* activeSub = findActive(sec->panels());
     if (activeSub && activeSub != sub) {
@@ -876,7 +885,7 @@ void NavigationController::onForceActiveRequested(INavigationSection* sec, INavi
     }
 
     sub->setActive(true);
-    LOGD() << "activated subsection: " << sub->name() << ", order: " << sub->index().order();
+    MYLOG() << "activated subsection: " << sub->name() << ", order: " << sub->index().order();
 
     INavigationControl* activeCtrl = findActive(sub->controls());
     if (activeCtrl && activeCtrl != ctrl) {
@@ -884,5 +893,5 @@ void NavigationController::onForceActiveRequested(INavigationSection* sec, INavi
     }
 
     ctrl->setActive(true);
-    LOGD() << "activated control: " << ctrl->name() << ", row: " << ctrl->index().row << ", column: " << ctrl->index().column;
+    MYLOG() << "activated control: " << ctrl->name() << ", row: " << ctrl->index().row << ", column: " << ctrl->index().column;
 }
