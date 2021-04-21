@@ -33,7 +33,7 @@ public:
 
     unsigned int streamCount() const override;
 
-    void forward(float* buffer, unsigned int sampleCount) override;
+    void process(float* buffer, unsigned int sampleCount) override;
 
 private:
     float m_frequency = 1'000.f;

@@ -155,7 +155,7 @@ std::shared_ptr<IMixerChannel> Mixer::channel(unsigned int number) const
     return m_inputList.at(number);
 }
 
-void Mixer::forward(float* buffer, unsigned int sampleCount)
+void Mixer::process(float* buffer, unsigned int sampleCount)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
