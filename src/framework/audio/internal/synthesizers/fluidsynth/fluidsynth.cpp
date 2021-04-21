@@ -202,7 +202,7 @@ Ret FluidSynth::removeSoundFonts()
     return ok ? make_ret(Err::NoError) : make_ret(Err::SoundFontFailedUnload);
 }
 
-Ret FluidSynth::setupChannels(const std::vector<Event>& events)
+Ret FluidSynth::setupMidiChannels(const std::vector<Event>& events)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return make_ret(Err::SynthNotInited);
@@ -302,7 +302,7 @@ void FluidSynth::flushSound()
     fluid_synth_write_float(m_fluid->synth, size, &m_preallocated[0], 0, 1, &m_preallocated[0], size, 1);
 }
 
-void FluidSynth::channelSoundsOff(channel_t chan)
+void FluidSynth::midiChannelSoundsOff(channel_t chan)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return;
@@ -311,7 +311,7 @@ void FluidSynth::channelSoundsOff(channel_t chan)
     fluid_synth_all_sounds_off(m_fluid->synth, chan);
 }
 
-bool FluidSynth::channelVolume(channel_t chan, float volume)
+bool FluidSynth::midiChannelVolume(channel_t chan, float volume)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return false;
@@ -324,7 +324,7 @@ bool FluidSynth::channelVolume(channel_t chan, float volume)
     return ret == FLUID_OK;
 }
 
-bool FluidSynth::channelBalance(channel_t chan, float balance)
+bool FluidSynth::midiChannelBalance(channel_t chan, float balance)
 {
     IF_ASSERT_FAILED(m_fluid->synth) {
         return false;
@@ -339,7 +339,7 @@ bool FluidSynth::channelBalance(channel_t chan, float balance)
     return ret == FLUID_OK;
 }
 
-bool FluidSynth::channelPitch(channel_t chan, int16_t pitch)
+bool FluidSynth::midiChannelPitch(channel_t chan, int16_t pitch)
 {
     // 0-16383 with 8192 being center
 
@@ -378,7 +378,7 @@ void FluidSynth::writeBuf(float* stream, unsigned int samples)
                             stream, 1, AUDIO_CHANNELS);
 }
 
-unsigned int FluidSynth::streamCount() const
+unsigned int FluidSynth::audioChannelsCount() const
 {
     return synth::AUDIO_CHANNELS;
 }
@@ -388,7 +388,7 @@ void FluidSynth::process(float* buffer, unsigned int sampleCount)
     writeBuf(buffer, sampleCount);
 }
 
-async::Channel<unsigned int> FluidSynth::streamsCountChanged() const
+async::Channel<unsigned int> FluidSynth::audioChannelsCountChanged() const
 {
     return m_streamsCountChanged;
 }

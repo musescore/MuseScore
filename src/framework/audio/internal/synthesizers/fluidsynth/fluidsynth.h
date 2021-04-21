@@ -50,21 +50,21 @@ public:
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
-    Ret setupChannels(const std::vector<midi::Event>& events) override;
+    Ret setupMidiChannels(const std::vector<midi::Event>& events) override;
     bool handleEvent(const midi::Event& e) override;
     void writeBuf(float* stream, unsigned int samples) override;
 
     void allSoundsOff() override; // all channels
     void flushSound() override;
 
-    void channelSoundsOff(midi::channel_t chan) override;
-    bool channelVolume(midi::channel_t chan, float val) override;  // 0. - 1.
-    bool channelBalance(midi::channel_t chan, float val) override; // -1. - 1.
-    bool channelPitch(midi::channel_t chan, int16_t pitch) override; // -12 - 12
+    void midiChannelSoundsOff(midi::channel_t chan) override;
+    bool midiChannelVolume(midi::channel_t chan, float val) override;  // 0. - 1.
+    bool midiChannelBalance(midi::channel_t chan, float val) override; // -1. - 1.
+    bool midiChannelPitch(midi::channel_t chan, int16_t pitch) override; // -12 - 12
 
-    unsigned int streamCount() const override;
+    unsigned int audioChannelsCount() const override;
     void process(float* buffer, unsigned int sampleCount) override;
-    async::Channel<unsigned int> streamsCountChanged() const override;
+    async::Channel<unsigned int> audioChannelsCountChanged() const override;
 
 private:
 

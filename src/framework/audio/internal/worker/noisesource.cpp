@@ -32,14 +32,14 @@ void NoiseSource::setType(NoiseSource::Type type)
     m_type = type;
 }
 
-unsigned int NoiseSource::streamCount() const
+unsigned int NoiseSource::audioChannelsCount() const
 {
     return 1;
 }
 
 void NoiseSource::process(float* buffer, unsigned int sampleCount)
 {
-    auto streams = streamCount();
+    auto streams = audioChannelsCount();
     std::uniform_real_distribution<float> distribution{ -1.f, 1.f };
     std::random_device randomDevice{};
     std::mt19937 gen{ randomDevice() };

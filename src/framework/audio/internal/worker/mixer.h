@@ -58,7 +58,7 @@ public:
     // IAudioSource (AbstractAudioSource)
     void setSampleRate(unsigned int sampleRate) override;
 
-    unsigned int streamCount() const override;
+    unsigned int audioChannelsCount() const override;
 
     void process(float* buffer, unsigned int sampleCount) override;
 
