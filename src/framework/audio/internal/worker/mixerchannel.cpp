@@ -45,12 +45,12 @@ void MixerChannel::checkStreams()
     }
 }
 
-void MixerChannel::forward(float* buffer, unsigned int sampleCount)
+void MixerChannel::process(float* buffer, unsigned int sampleCount)
 {
     IF_ASSERT_FAILED(m_source) {
         return;
     }
-    m_source->forward(buffer, sampleCount);
+    m_source->process(buffer, sampleCount);
 
     for (std::pair<const unsigned int, IAudioProcessorPtr>& p : m_processorList) {
         if (p.second->active()) {

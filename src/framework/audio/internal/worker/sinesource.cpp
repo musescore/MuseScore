@@ -33,7 +33,7 @@ unsigned int SineSource::streamCount() const
     return 1;
 }
 
-void SineSource::forward(float* buffer, unsigned int sampleCount)
+void SineSource::process(float* buffer, unsigned int sampleCount)
 {
     auto streams = streamCount();
     for (unsigned int i = 0; i < sampleCount; ++i) {

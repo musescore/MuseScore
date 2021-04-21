@@ -38,7 +38,7 @@ public:
     void setType(Type type);
     unsigned int streamCount() const override;
 
-    void forward(float* buffer, unsigned int sampleCount) override;
+    void process(float* buffer, unsigned int sampleCount) override;
 
 private:
     float pinkFilter(float white);

@@ -125,7 +125,7 @@ unsigned int AudioPlayer::streamCount() const
     return 0;
 }
 
-void AudioPlayer::forward(float* buffer, unsigned int sampleCount)
+void AudioPlayer::process(float* buffer, unsigned int sampleCount)
 {
     //copy shared_ptr in case it can be changed during forward
     auto stream = m_stream;

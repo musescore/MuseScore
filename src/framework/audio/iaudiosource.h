@@ -42,7 +42,7 @@ public:
     virtual async::Channel<unsigned int> streamsCountChanged() const = 0;
 
     //! move buffer forward for sampleCount samples
-    virtual void forward(float* buffer, unsigned int sampleCount) = 0;
+    virtual void process(float* buffer, unsigned int sampleCount) = 0;
 };
 
 using IAudioSourcePtr = std::shared_ptr<IAudioSource>;
