@@ -22,6 +22,7 @@
 
 #include "popupview.h"
 
+#include <QQuickView>
 #include <QQmlEngine>
 #include <QUrl>
 #include <QQmlContext>
@@ -30,13 +31,161 @@
 
 #include "log.h"
 
+namespace mu::uicomponents {
+// the private part of PopupView implementation
+class PopupWindow : public QObject
+{
+public:
+    PopupWindow(QQmlEngine* engine);
+    ~PopupWindow();
+
+    void setContent(QQuickItem* item);
+
+    void show(QPoint p);
+    void hide();
+    bool isVisible() const;
+    const QRect& geometry() const;
+
+    void forceActiveFocus();
+
+private:
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
+    QQuickView* m_view = nullptr;
+    QWidget* m_widget = nullptr;
+};
+
+PopupWindow::PopupWindow(QQmlEngine* engine)
+    : QObject()
+{
+    setObjectName("PopupWindow");
+
+    m_view = new QQuickView(engine, nullptr);
+    m_widget->setObjectName("PopupQuickWindow");
+    m_view->setFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+    m_view->setResizeMode(QQuickView::SizeViewToRootObject);
+    m_view->setColor(QColor(0, 0, 0, 0)); // transparent
+
+    m_view->installEventFilter(this);
+
+    //! HACK The shortcut system expects
+    //! the active window should be a QWidget window or QWidget Popup,
+    //! else shortcut not working, even with Application Shortcut context.
+    //! So, added QWidget Window for shortcuts to work
+    /* From Qt source
+     * https://code.woboq.org/qt5/qtbase/src/widgets/kernel/qshortcut.cpp.html#_Z29qWidgetShortcutContextMatcherP7QObjectN2Qt15ShortcutContextE
+    bool qWidgetShortcutContextMatcher(QObject *object, Qt::ShortcutContext context)
+    {
+        QWidget *active_window = QApplication::activeWindow();
+
+        // popups do not become the active window,
+        // so we fake it here to get the correct context
+        // for the shortcut system.
+        if (QApplication::activePopupWidget())
+            active_window = QApplication::activePopupWidget();
+
+        if (!active_window) {
+            QWindow *qwindow = QGuiApplication::focusWindow();
+            if (qwindow && qwindow->isActive()) {
+                while (qwindow) {
+                    if (auto widgetWindow = qobject_cast<QWidgetWindow *>(qwindow)) {
+                        active_window = widgetWindow->widget();
+                        break;
+                    }
+                    qwindow = qwindow->parent();
+                }
+            }
+        }
+
+        if (!active_window)
+            return false;
+        ...
+    }
+    */
+
+    m_widget = QWidget::createWindowContainer(m_view, nullptr, Qt::Window | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+    m_widget->setObjectName("PopupWidgetWindow");
+    m_widget->setAutoFillBackground(false);
+    m_widget->setAttribute(Qt::WA_TranslucentBackground);
+
+    m_widget->installEventFilter(this);
+
+    connect(m_view, &QQuickView::widthChanged, [this](int arg) {
+        m_widget->resize(arg, m_widget->height());
+    });
+
+    connect(m_view, &QQuickView::heightChanged, [this](int arg) {
+        m_widget->resize(m_widget->width(), arg);
+    });
+}
+
+PopupWindow::~PopupWindow()
+{
+    delete m_widget;
+}
+
+void PopupWindow::setContent(QQuickItem* item)
+{
+    m_view->setContent(QUrl(), nullptr, item);
+}
+
+void PopupWindow::forceActiveFocus()
+{
+    if (!m_view->contentItem()->hasActiveFocus()) {
+        m_widget->setFocus();
+    }
+}
+
+void PopupWindow::show(QPoint p)
+{
+    m_widget->move(p);
+    m_widget->show();
+    m_widget->setFocus();
+}
+
+void PopupWindow::hide()
+{
+    m_widget->hide();
+}
+
+bool PopupWindow::isVisible() const
+{
+    return m_widget->isVisible();
+}
+
+const QRect& PopupWindow::geometry() const
+{
+    return m_widget->geometry();
+}
+
+bool PopupWindow::eventFilter(QObject* watched, QEvent* event)
+{
+    // Please, don't remove
+    //    static QMetaEnum typeEnum = QMetaEnum::fromType<QEvent::Type>();
+    //    LOGI() << watched->objectName() << " event: " << typeEnum.key(event->type());
+
+    // QQuickView events
+    if (watched == m_view) {
+        if (event->type() == QEvent::FocusIn) {
+            m_view->contentItem()->forceActiveFocus();
+        }
+
+        if (event->type() == QEvent::MouseButtonPress) {
+            forceActiveFocus();
+        }
+    }
+
+    return QObject::eventFilter(watched, event);
+}
+}
+
 using namespace mu::uicomponents;
 
 PopupView::PopupView(QQuickItem* parent)
     : QObject(parent)
 {
+    setObjectName("PopupView");
     qApp->installEventFilter(this);
-
     connect(qApp, &QApplication::applicationStateChanged, this, &PopupView::onApplicationStateChanged);
 }
 
@@ -57,11 +206,10 @@ void PopupView::setParentItem(QQuickItem* parent)
 
 void PopupView::forceActiveFocus()
 {
-    IF_ASSERT_FAILED(m_view) {
+    IF_ASSERT_FAILED(m_window) {
         return;
     }
-    //! TODO Not working yet
-    //m_view->requestActivate();
+    m_window->forceActiveFocus();
 }
 
 void PopupView::open()
@@ -70,7 +218,7 @@ void PopupView::open()
         return;
     }
 
-    IF_ASSERT_FAILED(m_view) {
+    IF_ASSERT_FAILED(m_window) {
         return;
     }
 
@@ -84,12 +232,7 @@ void PopupView::open()
     pos.setX(pos.x() + m_localPos.x());
 
     QPointF global = prn->mapToGlobal(pos);
-
-    m_view->setPosition(global.toPoint());
-    m_view->show();
-    //! TODO Not working yet
-    //m_view->requestActivate();
-    //m_view->setKeyboardGrabEnabled(true);
+    m_window->show(global.toPoint());
 
     emit isOpenedChanged();
     emit opened();
@@ -101,12 +244,11 @@ void PopupView::close()
         return;
     }
 
-    IF_ASSERT_FAILED(m_view) {
+    IF_ASSERT_FAILED(m_window) {
         return;
     }
 
-    m_view->hide();
-    m_view->setKeyboardGrabEnabled(false);
+    m_window->hide();
 
     emit isOpenedChanged();
     emit closed();
@@ -123,7 +265,7 @@ void PopupView::toggleOpened()
 
 bool PopupView::isOpened() const
 {
-    return m_view ? m_view->isVisible() : false;
+    return m_window ? m_window->isVisible() : false;
 }
 
 PopupView::ClosePolicy PopupView::closePolicy() const
@@ -197,11 +339,8 @@ void PopupView::componentComplete()
         return;
     }
 
-    m_view = new QQuickView(engine, nullptr);
-    m_view->setFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
-    m_view->setResizeMode(QQuickView::SizeViewToRootObject);
-    m_view->setColor(QColor(0, 0, 0, 0)); // transparent
-    m_view->setContent(QUrl(), nullptr, m_contentItem);
+    m_window = new PopupWindow(engine);
+    m_window->setContent(m_contentItem);
 }
 
 bool PopupView::eventFilter(QObject* watched, QEvent* event)
@@ -252,6 +391,6 @@ void PopupView::mouseReleaseEvent(QMouseEvent* event)
 
 bool PopupView::isMouseWithinBoundaries(const QPoint& mousePos) const
 {
-    QRect viewRect = m_view->geometry();
+    QRect viewRect = m_window->geometry();
     return viewRect.contains(mousePos);
 }

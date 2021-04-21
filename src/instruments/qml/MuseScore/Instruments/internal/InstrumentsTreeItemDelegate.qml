@@ -38,7 +38,7 @@ Item {
     property var type: InstrumentTreeItemType.UNDEFINED
 
     property int keynavRow: 0
-    property NavigationPanel keynavSubSection: null
+    property NavigationPanel navigationPanel: null
 
     property int sideMargin: 0
 
@@ -104,7 +104,7 @@ Item {
     NavigationControl {
         id: keynavItem
         name: "ItemInstrumentsTree"
-        panel: root.keynavSubSection
+        panel: root.navigationPanel
         row: root.keynavRow
         column: 0
         enabled: visible
@@ -230,8 +230,7 @@ Item {
     Component {
         id: instrumentSettingsComp
         InstrumentSettingsPopup {
-            navigation.name: "InstrumentSettingsPopup"
-            navigation.parentControl: keynavItem
+            navigation.parentControl: settingsButton.navigation
             onClosed: {
                 prv.resetOpenedPopup()
                 popupLoader.sourceComponent = null
@@ -242,8 +241,7 @@ Item {
     Component {
         id: staffSettingsComp
         StaffSettingsPopup {
-            navigation.name: "StaffSettingsPopup"
-            navigation.parentControl: keynavItem
+            navigation.parentControl: settingsButton.navigation
             onClosed: {
                 prv.resetOpenedPopup()
                 popupLoader.sourceComponent = null
@@ -263,7 +261,7 @@ Item {
             Layout.preferredWidth: width
 
             objectName: "VisibleBtnInstrument"
-            navigation.panel: root.keynavSubSection
+            navigation.panel: root.navigationPanel
             navigation.row: root.keynavRow
             navigation.column: 1
 
@@ -294,7 +292,7 @@ Item {
 
                 objectName: "ExpandBtnInstrument"
                 enabled: expandButton.visible
-                navigation.panel: root.keynavSubSection
+                navigation.panel: root.navigationPanel
                 navigation.row: root.keynavRow
                 navigation.column: 2
 
@@ -345,7 +343,7 @@ Item {
 
             objectName: "SettingsBtnInstrument"
             enabled: root.visible
-            navigation.panel: root.keynavSubSection
+            navigation.panel: root.navigationPanel
             navigation.row: root.keynavRow
             navigation.column: 3
 

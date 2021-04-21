@@ -38,8 +38,8 @@ FlatButton {
     TimeSignatureView {
         id: timeSignatureView
 
-        anchors.horizontalCenter: root.horizontalCenter
-        anchors.verticalCenter: root.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
 
         numerator: root.model.musicSymbolCodes(root.model.timeSignature.numerator)
         denominator: root.model.musicSymbolCodes(root.model.timeSignature.denominator)
