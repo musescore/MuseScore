@@ -26,21 +26,27 @@
 #include <memory>
 #include <atomic>
 #include "iaudiobuffer.h"
+#include "iaudioconfiguration.h"
+#include "modularity/ioc.h"
 
 namespace mu::audio {
 class AudioBuffer : public IAudioBuffer
 {
-    const static unsigned int DEFAULT_SIZE = 16384;
-    const static unsigned int FILL_SAMPLES = 1024;
-    const static unsigned int FILL_OVER    = 1024;
+    static const int DEFAULT_SIZE = 16384;
+    static const unsigned int FILL_SAMPLES = 1024;
+    static const unsigned int FILL_OVER    = 1024;
+
+    INJECT(audio, IAudioConfiguration, config)
 
 public:
-    AudioBuffer(unsigned int size = DEFAULT_SIZE);
+    AudioBuffer() = default;
+
+    void init(int samplesPerChannel = DEFAULT_SIZE);
 
     void setSource(std::shared_ptr<IAudioSource> source) override;
     void forward() override;
 
-    void push(const float* source, int sampleCount) override;
+    void push(const float* source, int samplesPerChannel) override;
     void pop(float* dest, unsigned int sampleCount) override;
     void setMinSampleLag(unsigned int lag) override;
 
@@ -53,6 +59,8 @@ private:
     unsigned int m_minSampleLag = FILL_SAMPLES;
     unsigned int m_writeIndex = 0;
     unsigned int m_readIndex = 0;
+
+    std::vector<float> m_writeCache;
     std::vector<float> m_data = {};
     std::shared_ptr<IAudioSource> m_source = nullptr;
 };

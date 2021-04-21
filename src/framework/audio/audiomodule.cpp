@@ -163,6 +163,8 @@ void AudioModule::onInit(const framework::IApplication::RunMode&)
     // Init configuration
     s_audioConfiguration->init();
 
+    s_audioBuffer->init();
+
     // Setup rpc system and worker
     s_rpcSequencer->setup();
     s_audioWorker->channel()->setupMainThread();
@@ -187,8 +189,8 @@ void AudioModule::onInit(const framework::IApplication::RunMode&)
     requiredSpec.channels = 2; // stereo
     requiredSpec.samples = s_audioConfiguration->driverBufferSize();
     requiredSpec.callback = [](void* /*userdata*/, uint8_t* stream, int byteCount) {
-        auto samples = byteCount / (2 * sizeof(float));
-        s_audioBuffer->pop(reinterpret_cast<float*>(stream), samples);
+        auto samplesPerChannel = byteCount / (2 * sizeof(float));
+        s_audioBuffer->pop(reinterpret_cast<float*>(stream), samplesPerChannel);
     };
 
     IAudioDriver::Spec activeSpec;
