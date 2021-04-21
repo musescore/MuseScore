@@ -74,8 +74,8 @@ static ThemeStyleKey themeStyleKeyFromString(const QString& str)
         }
     }
 
-    IF_ASSERT_FAILED_X(false, QString("not found enum key for string key: %1").arg(str)) {
-    }
+    /*IF_ASSERT_FAILED_X(false, QString("not found enum key for string key: %1").arg(str)) {
+    }*/
 
     return ThemeStyleKey::UNKNOWN;
 }

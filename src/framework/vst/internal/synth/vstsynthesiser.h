@@ -24,6 +24,7 @@
 #define MU_VST_VSTSYNTHESISER_H
 
 #include "audio/isynthesizer.h"
+#include "audio/iaudioconfiguration.h"
 #include "modularity/ioc.h"
 
 #include "vsttypes.h"
@@ -34,6 +35,7 @@ namespace mu::vst {
 class VstSynthesiser : public audio::synth::ISynthesizer
 {
     INJECT(vst, IVstPluginRepository, repository)
+    INJECT(vst, audio::IAudioConfiguration, config)
 
 public:
     explicit VstSynthesiser(const VstPluginMeta& meta);
@@ -55,17 +57,17 @@ public:
     void allSoundsOff() override;
     void flushSound() override;
 
-    Ret setupChannels(const std::vector<midi::Event>& events) override;
-    void channelSoundsOff(midi::channel_t chan) override;
-    bool channelVolume(midi::channel_t chan, float val) override;
-    bool channelBalance(midi::channel_t chan, float val) override;
-    bool channelPitch(midi::channel_t chan, int16_t val) override;
+    Ret setupMidiChannels(const std::vector<midi::Event>& events) override;
+    void midiChannelSoundsOff(midi::channel_t chan) override;
+    bool midiChannelVolume(midi::channel_t chan, float val) override;
+    bool midiChannelBalance(midi::channel_t chan, float val) override;
+    bool midiChannelPitch(midi::channel_t chan, int16_t val) override;
 
     // IAudioSource
     void setSampleRate(unsigned int sampleRate) override;
-    unsigned int streamCount() const override;
-    async::Channel<unsigned int> streamsCountChanged() const override;
-    void forward(float* buffer, unsigned int sampleCount) override;
+    unsigned int audioChannelsCount() const override;
+    async::Channel<unsigned int> audioChannelsCountChanged() const override;
+    void process(float* buffer, unsigned int sampleCount) override;
 
 private:
 
