@@ -22,6 +22,10 @@
 #ifndef MU_AUDIO_ZERBERUSSYNTH_H
 #define MU_AUDIO_ZERBERUSSYNTH_H
 
+
+#include "modularity/ioc.h"
+#include "iaudioconfiguration.h"
+
 #include "isynthesizer.h"
 
 namespace mu::zerberus {
@@ -31,6 +35,8 @@ class Zerberus;
 namespace mu::audio::synth {
 class ZerberusSynth : public ISynthesizer
 {
+    INJECT(audio, IAudioConfiguration, config)
+
 public:
 
     ZerberusSynth();
