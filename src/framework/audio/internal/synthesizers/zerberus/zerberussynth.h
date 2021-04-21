@@ -22,7 +22,6 @@
 #ifndef MU_AUDIO_ZERBERUSSYNTH_H
 #define MU_AUDIO_ZERBERUSSYNTH_H
 
-
 #include "modularity/ioc.h"
 #include "iaudioconfiguration.h"
 

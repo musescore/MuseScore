@@ -28,7 +28,6 @@
 #include "midi/miditypes.h"
 
 namespace mu::audio::synth {
-
 using SynthName = midi::SynthName;
 using SynthMap = midi::SynthMap;
 

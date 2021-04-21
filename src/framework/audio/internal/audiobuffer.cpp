@@ -26,9 +26,10 @@
 
 using namespace mu::audio;
 
-AudioBuffer::AudioBuffer(unsigned int size)
+void AudioBuffer::init(int samplesPerChannel)
 {
-    m_data.resize(size * synth::AUDIO_CHANNELS, 0.f);
+    m_writeCache.resize(config()->driverBufferSize() * config()->requiredAudioChannelsCount(), 0.f);
+    m_data.resize(samplesPerChannel * config()->requiredAudioChannelsCount(), 0.f);
 }
 
 void AudioBuffer::setSource(std::shared_ptr<IAudioSource> source)
@@ -43,25 +44,19 @@ void AudioBuffer::forward()
     fillup();
 }
 
-void AudioBuffer::push(const float* source, int sampleCount)
+void AudioBuffer::push(const float* source, int samplesPerChannel)
 {
     std::lock_guard<std::recursive_mutex> lock(m_mutex);
 
     unsigned int from = m_writeIndex;
     auto memStep = sizeof(float);
-    auto to = m_writeIndex + sampleCount * synth::AUDIO_CHANNELS;
+    auto to = m_writeIndex + samplesPerChannel * config()->requiredAudioChannelsCount();
     if (to > m_data.size()) {
         to = m_data.size() - 1;
     }
     auto count = to - from;
     std::memcpy(m_data.data() + m_writeIndex, source, count * memStep);
     m_writeIndex += count;
-
-    int left = sampleCount * synth::AUDIO_CHANNELS - count;
-    if (left > 0) {
-        std::memcpy(m_data.data(), source + count, left * memStep);
-        m_writeIndex = left;
-    }
 
     if (m_writeIndex >= m_data.size()) {
         m_writeIndex -= m_data.size();
@@ -81,7 +76,7 @@ void AudioBuffer::pop(float* dest, unsigned int sampleCount)
 
     unsigned int from = m_readIndex;
     auto memStep = sizeof(float);
-    auto to = m_readIndex + sampleCount * synth::AUDIO_CHANNELS;
+    auto to = m_readIndex + sampleCount * config()->requiredAudioChannelsCount();
     if (to > m_data.size()) {
         to = m_data.size();
     }
@@ -89,7 +84,7 @@ void AudioBuffer::pop(float* dest, unsigned int sampleCount)
     std::memcpy(dest, m_data.data() + from, count * memStep);
     m_readIndex += count;
 
-    int left = sampleCount * synth::AUDIO_CHANNELS - count;
+    int left = sampleCount * config()->requiredAudioChannelsCount() - count;
     if (left > 0) {
         std::memcpy(dest + count, m_data.data(), left * memStep);
         m_readIndex = left;
@@ -108,8 +103,8 @@ void AudioBuffer::setMinSampleLag(unsigned int lag)
         lag = m_data.size();
     }
     m_minSampleLag = lag;
-    if (m_data.size() < 2 * m_minSampleLag * synth::AUDIO_CHANNELS) {
-        m_data.resize(2 * m_minSampleLag * synth::AUDIO_CHANNELS, 0.f);
+    if (m_data.size() < 2 * m_minSampleLag * config()->requiredAudioChannelsCount()) {
+        m_data.resize(2 * m_minSampleLag * config()->requiredAudioChannelsCount(), 0.f);
     }
 }
 
@@ -119,11 +114,9 @@ void AudioBuffer::fillup()
         return;
     }
 
-    static float buffer[FILL_SAMPLES * 2] = {};
-
     while (sampleLag() < m_minSampleLag + FILL_OVER) {
-        m_source->process(buffer, FILL_SAMPLES);
-        push(buffer, FILL_SAMPLES);
+        m_source->process(m_writeCache.data(), FILL_SAMPLES);
+        push(m_writeCache.data(), FILL_SAMPLES);
     }
 }
 
@@ -136,5 +129,5 @@ unsigned int AudioBuffer::sampleLag() const
         lag = m_writeIndex + m_data.size() - m_readIndex;
     }
 
-    return lag / synth::AUDIO_CHANNELS;
+    return lag / config()->requiredAudioChannelsCount();
 }
