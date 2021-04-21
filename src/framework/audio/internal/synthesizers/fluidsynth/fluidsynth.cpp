@@ -383,7 +383,7 @@ unsigned int FluidSynth::streamCount() const
     return synth::AUDIO_CHANNELS;
 }
 
-void FluidSynth::forward(float* buffer, unsigned int sampleCount)
+void FluidSynth::process(float* buffer, unsigned int sampleCount)
 {
     writeBuf(buffer, sampleCount);
 }

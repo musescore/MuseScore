@@ -62,7 +62,7 @@ public:
     bool channelPitch(midi::channel_t chan, int16_t pitch) override; // -12 - 12
 
     unsigned int streamCount() const override;
-    void forward(float* buffer, unsigned int sampleCount) override;
+    void process(float* buffer, unsigned int sampleCount) override;
     async::Channel<unsigned int> streamsCountChanged() const override;
 
 private:

@@ -272,7 +272,7 @@ unsigned int ZerberusSynth::streamCount() const
     return synth::AUDIO_CHANNELS;
 }
 
-void ZerberusSynth::forward(float* buffer, unsigned int sampleCount)
+void ZerberusSynth::process(float* buffer, unsigned int sampleCount)
 {
     writeBuf(buffer, sampleCount);
 }

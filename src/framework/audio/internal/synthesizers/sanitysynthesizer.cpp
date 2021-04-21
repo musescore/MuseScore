@@ -151,7 +151,7 @@ async::Channel<unsigned int> SanitySynthesizer::streamsCountChanged() const
     return m_synth->streamsCountChanged();
 }
 
-void SanitySynthesizer::forward(float* buffer, unsigned int sampleCount)
+void SanitySynthesizer::process(float* buffer, unsigned int sampleCount)
 {
     ONLY_AUDIO_WORKER_THREAD;
     m_synth->forward(buffer, sampleCount);
