@@ -37,9 +37,9 @@ public:
     virtual void setSampleRate(unsigned int sampleRate) = 0;
 
     //! return substream count for this source: 1 for mono, 2 for stereo, 6 for surround
-    virtual unsigned int streamCount() const = 0;
+    virtual unsigned int audioChannelsCount() const = 0;
 
-    virtual async::Channel<unsigned int> streamsCountChanged() const = 0;
+    virtual async::Channel<unsigned int> audioChannelsCountChanged() const = 0;
 
     //! move buffer forward for sampleCount samples
     virtual void process(float* buffer, unsigned int sampleCount) = 0;

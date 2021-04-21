@@ -36,7 +36,7 @@ public:
     NoiseSource();
 
     void setType(Type type);
-    unsigned int streamCount() const override;
+    unsigned int audioChannelsCount() const override;
 
     void process(float* buffer, unsigned int sampleCount) override;
 

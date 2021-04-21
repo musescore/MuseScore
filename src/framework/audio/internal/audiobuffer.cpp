@@ -122,7 +122,7 @@ void AudioBuffer::fillup()
     static float buffer[FILL_SAMPLES * 2] = {};
 
     while (sampleLag() < m_minSampleLag + FILL_OVER) {
-        m_source->forward(buffer, FILL_SAMPLES);
+        m_source->process(buffer, FILL_SAMPLES);
         push(buffer, FILL_SAMPLES);
     }
 }

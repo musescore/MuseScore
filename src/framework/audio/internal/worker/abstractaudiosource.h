@@ -32,7 +32,7 @@ public:
 
     virtual void setSampleRate(unsigned int sampleRate) override;
 
-    mu::async::Channel<unsigned int> streamsCountChanged() const override;
+    mu::async::Channel<unsigned int> audioChannelsCountChanged() const override;
 
 protected:
     unsigned int m_sampleRate = 1;

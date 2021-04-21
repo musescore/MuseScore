@@ -71,7 +71,7 @@ void Mixer::setSampleRate(unsigned int sampleRate)
     }
 }
 
-unsigned int Mixer::streamCount() const
+unsigned int Mixer::audioChannelsCount() const
 {
     ONLY_AUDIO_WORKER_THREAD;
     switch (m_mode) {
@@ -101,7 +101,7 @@ std::shared_ptr<IAudioProcessor> Mixer::processor(unsigned int number) const
 void Mixer::setProcessor(unsigned int number, std::shared_ptr<IAudioProcessor> insert)
 {
     ONLY_AUDIO_WORKER_THREAD;
-    IF_ASSERT_FAILED(insert->streamCount() == streamCount()) {
+    IF_ASSERT_FAILED(insert->streamCount() == audioChannelsCount()) {
         LOGE() << "Insert's stream count not equal to the channel";
         return;
     }
@@ -164,7 +164,7 @@ void Mixer::process(float* buffer, unsigned int sampleCount)
     }
 
     for (auto& input : m_inputList) {
-        input.second->forward(buffer, sampleCount);
+        input.second->process(buffer, sampleCount);
         mixinChannel(buffer, input.second, sampleCount);
     }
 
@@ -187,7 +187,7 @@ void Mixer::mixinChannel(float* buffer, std::shared_ptr<MixerChannel> channel, u
     switch (m_mode) {
     case MONO:
     case STEREO:
-        for (unsigned int i = 0; i < channel->streamCount(); ++i) {
+        for (unsigned int i = 0; i < channel->audioChannelsCount(); ++i) {
             mixinChannelStream(buffer, channel, i, samplesCount);
         }
         break;
@@ -203,7 +203,7 @@ void Mixer::mixinChannelStream(float* buffer, std::shared_ptr<MixerChannel> chan
     auto balance = channel->balance(streamId).real();
     auto level = channel->level(streamId);
     for (unsigned int i = 0; i < samplesCount; ++i) {
-        for (unsigned int j = 0; j < streamCount(); ++j) {
+        for (unsigned int j = 0; j < audioChannelsCount(); ++j) {
             //linear cross
             float gain = 0.5f * balance * ((j * 2.f) - 1) + 0.5f;
             if (gain < 0) {
@@ -213,7 +213,7 @@ void Mixer::mixinChannelStream(float* buffer, std::shared_ptr<MixerChannel> chan
                 gain = 1;
             }
 
-            buffer[i * streamCount() + j] += gain * level * buffer[i * streamCount() + j];
+            buffer[i * audioChannelsCount() + j] += gain * level * buffer[i * audioChannelsCount() + j];
         }
     }
 }
