@@ -63,7 +63,7 @@ mu::Ret AudioPlayer::load(const std::shared_ptr<IAudioStream>& stream)
     setStatus(Stoped);
     m_position = 0;
     m_stream = stream;
-    m_streamsCountChanged.send(streamCount());
+    m_streamsCountChanged.send(audioChannelsCount());
 
     return Ret(Ret::Code::Ok);
 }
@@ -117,7 +117,7 @@ void AudioPlayer::forwardTime(unsigned long milliseconds)
     //here can be placed methods for preparing automatization
 }
 
-unsigned int AudioPlayer::streamCount() const
+unsigned int AudioPlayer::audioChannelsCount() const
 {
     if (m_stream) {
         return m_stream->channelsCount();

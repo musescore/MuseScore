@@ -30,17 +30,17 @@ MixerChannel::MixerChannel()
 {
 }
 
-unsigned int MixerChannel::streamCount() const
+unsigned int MixerChannel::audioChannelsCount() const
 {
     IF_ASSERT_FAILED(m_source) {
         return 0;
     }
-    return m_source->streamCount();
+    return m_source->audioChannelsCount();
 }
 
 void MixerChannel::checkStreams()
 {
-    if (streamCount() != m_level.size()) {
+    if (audioChannelsCount() != m_level.size()) {
         updateBalanceLevelMaps();
     }
 }
@@ -75,7 +75,7 @@ void MixerChannel::setSource(std::shared_ptr<IAudioSource> source)
 {
     m_source = source;
     updateBalanceLevelMaps();
-    m_source->streamsCountChanged().onReceive(this, [this](unsigned int) {
+    m_source->audioChannelsCountChanged().onReceive(this, [this](unsigned int) {
         updateBalanceLevelMaps();
     });
     setActive(true);
@@ -141,7 +141,7 @@ IAudioProcessorPtr MixerChannel::processor(unsigned int number) const
 
 void MixerChannel::setProcessor(unsigned int number, IAudioProcessorPtr proc)
 {
-    IF_ASSERT_FAILED(proc->streamCount() == streamCount()) {
+    IF_ASSERT_FAILED(proc->streamCount() == audioChannelsCount()) {
         LOGE() << "Processor's stream count not equal to the channel";
         return;
     }
@@ -151,11 +151,11 @@ void MixerChannel::setProcessor(unsigned int number, IAudioProcessorPtr proc)
 
 void MixerChannel::updateBalanceLevelMaps()
 {
-    for (unsigned int c = 0; c < m_source->streamCount(); ++c) {
+    for (unsigned int c = 0; c < m_source->audioChannelsCount(); ++c) {
         m_level[c] = 1.f;
 
-        if (m_source->streamCount() > 1) {
-            m_balance[c] = 2.f * c / (m_source->streamCount() - 1) - 1.f;
+        if (m_source->audioChannelsCount() > 1) {
+            m_balance[c] = 2.f * c / (m_source->audioChannelsCount() - 1) - 1.f;
         } else {
             m_balance[c] = 0.f;
         }

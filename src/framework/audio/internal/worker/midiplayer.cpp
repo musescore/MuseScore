@@ -123,7 +123,7 @@ void MIDIPlayer::setupChannels()
     }
 
     for (const SynthState& st : m_synthStates) {
-        st.synth->setupChannels(m_midiData.initEventsForChannels(st.channels));
+        st.synth->setupMidiChannels(m_midiData.initEventsForChannels(st.channels));
     }
 }
 
@@ -500,7 +500,7 @@ void MIDIPlayer::setIsTrackMuted(track_t trackIndex, bool mute)
     auto setMuted = [this, mute](channel_t ch) {
         ChanState& state = m_chanStates[ch];
         state.muted = mute;
-        synth(ch)->channelSoundsOff(ch);
+        synth(ch)->midiChannelSoundsOff(ch);
     };
 
     const Track& track = m_midiData.tracks[trackIndex];
@@ -518,7 +518,7 @@ void MIDIPlayer::setTrackVolume(track_t trackIndex, float volume)
 
     const Track& track = m_midiData.tracks[trackIndex];
     for (channel_t ch : track.channels) {
-        synth(ch)->channelVolume(ch, volume);
+        synth(ch)->midiChannelVolume(ch, volume);
     }
 }
 
@@ -531,6 +531,6 @@ void MIDIPlayer::setTrackBalance(track_t trackIndex, float balance)
 
     const Track& track = m_midiData.tracks[trackIndex];
     for (channel_t ch : track.channels) {
-        synth(ch)->channelBalance(ch, balance);
+        synth(ch)->midiChannelBalance(ch, balance);
     }
 }

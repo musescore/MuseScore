@@ -119,7 +119,7 @@ Ret ZerberusSynth::removeSoundFonts()
     return ok ? make_ret(Err::NoError) : make_ret(Err::SoundFontFailedUnload);
 }
 
-Ret ZerberusSynth::setupChannels(const std::vector<Event>& events)
+Ret ZerberusSynth::setupMidiChannels(const std::vector<Event>& events)
 {
     IF_ASSERT_FAILED(m_zerb) {
         return make_ret(Err::SynthNotInited);
@@ -206,7 +206,7 @@ void ZerberusSynth::flushSound()
     m_zerb->process(samples, m_preallocated.data(), nullptr, nullptr);
 }
 
-void ZerberusSynth::channelSoundsOff(channel_t chan)
+void ZerberusSynth::midiChannelSoundsOff(channel_t chan)
 {
     IF_ASSERT_FAILED(m_zerb) {
         return;
@@ -215,7 +215,7 @@ void ZerberusSynth::channelSoundsOff(channel_t chan)
     m_zerb->allSoundsOff(chan);
 }
 
-bool ZerberusSynth::channelVolume(channel_t chan, float volume)
+bool ZerberusSynth::midiChannelVolume(channel_t chan, float volume)
 {
     int val = static_cast<int>(volume * 100.f);
     val = std::clamp(val, 0, 127);
@@ -224,7 +224,7 @@ bool ZerberusSynth::channelVolume(channel_t chan, float volume)
     return false;
 }
 
-bool ZerberusSynth::channelBalance(channel_t chan, float val)
+bool ZerberusSynth::midiChannelBalance(channel_t chan, float val)
 {
     UNUSED(chan);
     UNUSED(val);
@@ -232,7 +232,7 @@ bool ZerberusSynth::channelBalance(channel_t chan, float val)
     return false;
 }
 
-bool ZerberusSynth::channelPitch(channel_t chan, int16_t pitch)
+bool ZerberusSynth::midiChannelPitch(channel_t chan, int16_t pitch)
 {
     UNUSED(chan);
     UNUSED(pitch);
@@ -267,7 +267,7 @@ void ZerberusSynth::writeBuf(float* stream, unsigned int samples)
     m_zerb->process(samples, stream, nullptr, nullptr);
 }
 
-unsigned int ZerberusSynth::streamCount() const
+unsigned int ZerberusSynth::audioChannelsCount() const
 {
     return synth::AUDIO_CHANNELS;
 }
@@ -277,7 +277,7 @@ void ZerberusSynth::process(float* buffer, unsigned int sampleCount)
     writeBuf(buffer, sampleCount);
 }
 
-async::Channel<unsigned int> ZerberusSynth::streamsCountChanged() const
+async::Channel<unsigned int> ZerberusSynth::audioChannelsCountChanged() const
 {
     return m_streamsCountChanged;
 }

@@ -28,14 +28,14 @@ SineSource::SineSource()
 {
 }
 
-unsigned int SineSource::streamCount() const
+unsigned int SineSource::audioChannelsCount() const
 {
     return 1;
 }
 
 void SineSource::process(float* buffer, unsigned int sampleCount)
 {
-    auto streams = streamCount();
+    auto streams = audioChannelsCount();
     for (unsigned int i = 0; i < sampleCount; ++i) {
         m_phase += m_frequency / m_sampleRate * 2 * M_PI;
         if (m_phase > 2 * M_PI) {

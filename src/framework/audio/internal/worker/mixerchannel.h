@@ -37,7 +37,7 @@ class MixerChannel : public IMixerChannel, public AbstractAudioSource, public as
 public:
     MixerChannel();
 
-    unsigned int streamCount() const override;
+    unsigned int audioChannelsCount() const override;
     void checkStreams();
     void process(float* buffer, unsigned int sampleCount) override;
     void setSampleRate(unsigned int sampleRate) override;
