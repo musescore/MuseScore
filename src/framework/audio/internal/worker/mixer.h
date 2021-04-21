@@ -68,8 +68,8 @@ public:
 
 private:
     //! mix the channel in to the buffer
-    void mixinChannel(float *buffer, std::shared_ptr<MixerChannel> channel, unsigned int samplesCount);
-    void mixinChannelStream(float *buffer, std::shared_ptr<MixerChannel> channel, unsigned int streamId, unsigned int samplesCount);
+    void mixinChannel(float* buffer, std::shared_ptr<MixerChannel> channel, unsigned int samplesCount);
+    void mixinChannelStream(float* buffer, std::shared_ptr<MixerChannel> channel, unsigned int streamId, unsigned int samplesCount);
 
     Mode m_mode = STEREO;
     float m_masterLevel = 1.f;
