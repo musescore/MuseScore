@@ -31,8 +31,15 @@ StyledPopupView {
     contentHeight: contentColumn.childrenRect.height
     contentWidth: 240
 
+    navigation.name: "StaffSettingsPopup"
+    navigation.direction: NavigationPanel.Vertical
+
     function load(staff) {
         settingsModel.load(staff)
+    }
+
+    onOpened: {
+        staffTypesComboBox.ensureActiveFocus()
     }
 
     StaffSettingsModel {
@@ -51,7 +58,11 @@ StyledPopupView {
         }
 
         StyledComboBox {
+            id: staffTypesComboBox
             width: parent.width
+
+            navigation.panel: root.navigation
+            navigation.row: 1
 
             textRoleName: "text"
             valueRoleName: "value"
@@ -81,21 +92,24 @@ StyledPopupView {
             text: qsTrc("instruments", "Voices visible in the score")
         }
 
-        ListView {
-            height: contentItem.childrenRect.height
+        Row {
+            height: 40
             width: parent.width
-
             spacing: 26
-            orientation: ListView.Horizontal
+            Repeater {
+                model: settingsModel.voices
+                delegate: CheckBox {
+                    id: item
+                    objectName: "Voice"+modelData.title+"CheckBox"
+                    navigation.panel: root.navigation
+                    navigation.row: model.index + 2 //! NOTE after staffTypesComboBox
+                    text: modelData.title
+                    checked: modelData.visible
 
-            model: settingsModel.voices
-
-            delegate: CheckBox {
-                text: modelData.title
-                checked: modelData.visible
-
-                onClicked: {
-                    settingsModel.setVoiceVisible(model.index, !checked)
+                    onClicked: {
+                        item.checked = !item.checked
+                        settingsModel.setVoiceVisible(model.index, !checked)
+                    }
                 }
             }
         }
@@ -106,10 +120,10 @@ StyledPopupView {
         }
 
         CheckBox {
+            navigation.panel: root.navigation
+            navigation.row: 20 // Should be more than a voices checkbox
             text: qsTrc("instruments", "Small staff")
-
             checked: settingsModel.isSmallStaff
-
             onClicked: {
                 settingsModel.setIsSmallStaff(!checked)
             }
@@ -119,6 +133,9 @@ StyledPopupView {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.rightMargin: 20
+
+            navigation.panel: root.navigation
+            navigation.row: 21 // after small staff CheckBox
 
             text: qsTrc("instruments", "Hide all measures that do not contain notation (cutaway)")
             wrapMode: Text.WordWrap
@@ -139,6 +156,7 @@ StyledPopupView {
             width: parent.width
 
             navigation.panel: root.navigation
+            navigation.row: 22 // after cutaway CheckBox
 
             text: qsTrc("instruments", "Create a linked staff")
 

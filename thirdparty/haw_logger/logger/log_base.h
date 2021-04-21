@@ -31,6 +31,7 @@
 #define LOGW()      IF_LOGLEVEL(haw::logger::Normal) LOG(haw::logger::Logger::WARN, LOG_TAG)
 #define LOGI()      IF_LOGLEVEL(haw::logger::Normal) LOG(haw::logger::Logger::INFO, LOG_TAG)
 #define LOGD()      IF_LOGLEVEL(haw::logger::Debug) LOG(haw::logger::Logger::DEBG, LOG_TAG)
+#define LOGN()      if (0) LOG(haw::logger::Logger::DEBG, LOG_TAG) // compiling, but no output
 
 //! Helps
 #define DEPRECATED LOGD() << "This function deprecated!!"

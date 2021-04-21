@@ -24,13 +24,13 @@
 #define MU_UICOMPONENTS_POPUPVIEW_H
 
 #include <QQuickItem>
-#include <QQuickView>
 #include <QQmlParserStatus>
 
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
 
 namespace mu::uicomponents {
+class PopupWindow;
 class PopupView : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
@@ -91,7 +91,6 @@ signals:
     void closePolicyChanged(ClosePolicy closePolicy);
 
     void isOpenedChanged();
-
     void opened();
     void closed();
 
@@ -107,7 +106,7 @@ private:
 
     bool isMouseWithinBoundaries(const QPoint& mousePos) const;
 
-    QQuickView* m_view = nullptr;
+    PopupWindow* m_window = nullptr;
     QQuickItem* m_contentItem = nullptr;
 
     QPointF m_localPos;

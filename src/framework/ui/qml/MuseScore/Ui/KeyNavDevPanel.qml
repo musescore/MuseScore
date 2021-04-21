@@ -80,6 +80,12 @@ Rectangle {
             id: item
 
             property var section: modelData
+            property bool active: section.active
+            onActiveChanged: {
+                if (active) {
+                    view.positionViewAtIndex(model.index, ListView.Beginning)
+                }
+            }
 
             width: parent ? parent.width : 0
             height: 48 + subView.height

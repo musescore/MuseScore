@@ -55,7 +55,7 @@ Item {
     }
 
     NavigationPanel {
-        id: keynavTreeSub
+        id: navigationTreePanel
         name: "InstrumentsTree"
         section: root.keynavSection
         direction: NavigationPanel.Both
@@ -225,7 +225,7 @@ Item {
                                 isSelected: treeItemDelegateLoader.isSelected
 
                                 keynavRow: model ? model.index : 0
-                                keynavSubSection: keynavTreeSub
+                                navigationPanel: navigationTreePanel
 
                                 isDragAvailable: dropArea.isSelectable
                                 type: treeItemDelegateLoader.delegateType
@@ -270,7 +270,7 @@ Item {
                                 isHighlighted: treeItemDelegateLoader.isSelected
 
                                 keynavRow: model ? model.index : 0
-                                keynavSubSection: keynavTreeSub
+                                navigationPanel: navigationTreePanel
 
                                 onClicked: {
                                     styleData.value.appendNewItem()

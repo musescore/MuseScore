@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.1
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import MuseScore.Ui 1.0
 
-Rectangle {
+FocusableControl {
     id: root
 
     property bool isIndeterminate: false
@@ -45,7 +45,6 @@ Rectangle {
 
     function selectAll() {
         valueInput.selectAll()
-        forceActiveFocus()
     }
 
     function clear() {
@@ -54,20 +53,21 @@ Rectangle {
         textCleared()
     }
 
-    function forceActiveFocus() {
-        valueInput.forceActiveFocus()
+    onActiveFocusChanged: {
+        if (activeFocus) {
+            valueInput.forceActiveFocus()
+        }
     }
 
     implicitHeight: 30
     implicitWidth: parent.width
 
-    color: ui.theme.textFieldColor
-    border.color: ui.theme.strokeColor
-    border.width: 1
+    background.color: ui.theme.textFieldColor
+    background.border.color: navigation.active ? ui.theme.focusColor : ui.theme.strokeColor
+    background.border.width: navigation.active ? 2 : 1
+    background.radius: 4
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
-
-    radius: 4
 
     RowLayout {
         anchors.fill: parent
@@ -87,6 +87,8 @@ Rectangle {
 
         TextField {
             id: valueInput
+
+            objectName: "TextField"
 
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: !measureUnitsLabel.visible
@@ -151,7 +153,7 @@ Rectangle {
             icon: IconCode.CLOSE_X_ROUNDED
             visible: root.clearTextButtonVisible
 
-            normalStateColor: root.color
+            normalStateColor: root.background.color
             hoveredStateColor: ui.theme.accentColor
             pressedStateColor: ui.theme.accentColor
 
@@ -168,8 +170,8 @@ Rectangle {
     StyledTextLabel {
         id: undefinedValueLabel
 
-        anchors.verticalCenter: root.verticalCenter
-        anchors.left: root.left
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
         anchors.leftMargin: 12
 
         text: root.indeterminateText
@@ -183,9 +185,7 @@ Rectangle {
             when: clickableArea.containsMouse && !valueInput.activeFocus
 
             PropertyChanges {
-                target: root
-                border.color: ui.theme.strokeColor
-                border.width: 1
+                target: root.background
                 opacity: 0.6
             }
         },
@@ -195,7 +195,7 @@ Rectangle {
             when: valueInput.activeFocus
 
             PropertyChanges {
-                target: root
+                target: root.background
                 border.color: ui.theme.accentColor
                 border.width: 1
                 opacity: 1
@@ -216,10 +216,8 @@ Rectangle {
         hoverEnabled: true
 
         onPressed: {
-            if (!valueInput.activeFocus) {
-                valueInput.forceActiveFocus()
-            }
-
+            root.ensureActiveFocus()
+            valueInput.forceActiveFocus()
             mouse.accepted = false
         }
     }
