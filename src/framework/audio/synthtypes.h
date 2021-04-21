@@ -28,7 +28,6 @@
 #include "midi/miditypes.h"
 
 namespace mu::audio::synth {
-static const unsigned int AUDIO_CHANNELS = 2;
 
 using SynthName = midi::SynthName;
 using SynthMap = midi::SynthMap;
