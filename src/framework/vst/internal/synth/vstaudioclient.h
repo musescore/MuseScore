@@ -22,11 +22,16 @@
 #ifndef VSTAUDIOCLIENT_H
 #define VSTAUDIOCLIENT_H
 
+#include "modularity/ioc.h"
+#include "audio/iaudioconfiguration.h"
+
 #include "vsttypes.h"
 
 namespace mu::vst {
 class VstAudioClient
 {
+    INJECT(vst, audio::IAudioConfiguration, config)
+
 public:
     VstAudioClient() = default;
     ~VstAudioClient();
