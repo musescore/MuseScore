@@ -36,6 +36,8 @@ using namespace mu::framework;
 using namespace mu::audio;
 using namespace mu::audio::synth;
 
+static const int AUDIO_CHANNELS = 2;
+
 //TODO: add other setting: audio device etc
 static const Settings::Key AUDIO_API_KEY("audio", "io/audioApi");
 static const Settings::Key AUDIO_BUFFER_SIZE("audio", "driver_buffer");
@@ -82,6 +84,11 @@ std::string AudioConfiguration::currentAudioApi() const
 void AudioConfiguration::setCurrentAudioApi(const std::string& name)
 {
     settings()->setValue(AUDIO_API_KEY, Val(name));
+}
+
+int AudioConfiguration::requiredAudioChannelsCount() const
+{
+    return AUDIO_CHANNELS;
 }
 
 unsigned int AudioConfiguration::driverBufferSize() const
