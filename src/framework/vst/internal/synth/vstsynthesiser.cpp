@@ -150,7 +150,7 @@ void VstSynthesiser::setSampleRate(unsigned int sampleRate)
 
 unsigned int VstSynthesiser::audioChannelsCount() const
 {
-    return config()->requiredAudioChannelsCount();
+    return config()->audioChannelsCount();
 }
 
 async::Channel<unsigned int> VstSynthesiser::audioChannelsCountChanged() const
