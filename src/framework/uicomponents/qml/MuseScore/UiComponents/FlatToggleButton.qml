@@ -19,11 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.8
+import QtQuick 2.15
+
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-FocusableItem {
+FocusScope {
     id: root
+
+    property alias navigation: navCtrl
 
     property alias icon: buttonIcon.iconCode
     property bool checked: false
@@ -36,14 +40,34 @@ FocusableItem {
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
+    function ensureActiveFocus() {
+        if (!root.activeFocus) {
+            root.forceActiveFocus()
+        }
+
+        if (!navCtrl.active) {
+            navCtrl.forceActive()
+        }
+    }
+
+    onToggled: root.ensureActiveFocus()
+
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName != "" ? root.objectName : "FlatToggleButton"
+        onTriggered: root.toggled()
+    }
+
     Rectangle {
         id: backgroundRect
 
         anchors.fill: parent
 
+        border.width: navCtrl.active ? 2 : 0
+        border.color: ui.theme.focusColor
+
         color: ui.theme.buttonColor
         opacity: ui.theme.buttonOpacityNormal
-        border.width: 0
 
         radius: 2
     }

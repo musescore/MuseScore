@@ -19,14 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-FocusableItem {
+FocusScope {
     id: root
 
     property QtObject model: undefined
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
 
     property var contentHeight: implicitHeight
     signal contentExtended()
@@ -34,6 +37,10 @@ FocusableItem {
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.rightMargin: 48
+
+    function navigationRow(row) {
+        return root.navigationRowOffset + row
+    }
 
     onContentHeightChanged: {
         if (contentHeight > implicitHeight) {

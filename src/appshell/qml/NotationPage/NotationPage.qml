@@ -78,7 +78,7 @@ DockPage {
         return keynavRightPanelTabsSubSec
     }
 
-    function keynavPanelSec(area) {
+    function navigationPanelSec(area) {
         if (area === Qt.LeftDockWidgetArea) {
             return keynavLeftPanelSec
         }
@@ -166,7 +166,8 @@ DockPage {
 
             PalettesWidget {
                 anchors.fill: parent
-                keynavSection: notationPage.keynavPanelSec(palettePanel.area)
+                navigationSection: notationPage.navigationPanelSec(palettePanel.area)
+                visible: palettePanel.isShown
             }
         },
 
@@ -205,7 +206,7 @@ DockPage {
 
             InstrumentsPanel {
                 anchors.fill: parent
-                keynavSection: notationPage.keynavPanelSec(instrumentsPanel.area)
+                navigationSection: notationPage.navigationPanelSec(instrumentsPanel.area)
                 visible: instrumentsPanel.isShown
             }
         },
@@ -245,6 +246,8 @@ DockPage {
 
             InspectorForm {
                 anchors.fill: parent
+                navigationSection: notationPage.navigationPanelSec(inspectorPanel.area)
+                visible: inspectorPanel.isShown
             }
         }
     ]

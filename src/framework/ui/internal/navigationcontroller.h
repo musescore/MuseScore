@@ -54,6 +54,12 @@ public:
 
     const std::set<INavigationSection*>& sections() const override;
 
+    INavigationSection* activeSection() const override;
+    INavigationPanel* activePanel() const override;
+    INavigationControl* activeControl() const override;
+
+    async::Notification navigationChanged() const override;
+
     void init();
 
 private:
@@ -91,11 +97,8 @@ private:
     void doActivateFirst();
     void doActivateLast();
 
-    INavigationSection* activeSection() const;
-    INavigationPanel* activePanel() const;
-    INavigationControl* activeControl() const;
-
     std::set<INavigationSection*> m_sections;
+    async::Notification m_navigationChanged;
 };
 }
 

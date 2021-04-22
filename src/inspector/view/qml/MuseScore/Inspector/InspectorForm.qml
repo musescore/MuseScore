@@ -19,11 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQml.Models 2.3
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 
 import "common"
 import "general"
@@ -31,17 +32,22 @@ import "notation"
 import "text"
 import "score"
 
-FocusableItem {
+Rectangle {
     id: root
 
     property alias model: inspectorRepeater.model
 
-    Rectangle {
-        id: backgroundRect
+    property NavigationSection navigationSection: null
 
-        anchors.fill: parent
+    color: ui.theme.backgroundPrimaryColor
 
-        color: ui.theme.backgroundPrimaryColor
+
+    NavigationPanel {
+        id: navPanel
+        name: "Inspector"
+        section: root.navigationSection
+        direction: NavigationPanel.Vertical
+        order: 2
     }
 
     InspectorListModel {
@@ -51,7 +57,7 @@ FocusableItem {
     Flickable {
         id: flickableArea
 
-        anchors.top: tabTitleColumn.bottom
+        anchors.top: parent.top
         anchors.topMargin: 12
         anchors.left: parent.left
         anchors.leftMargin: 24
@@ -102,6 +108,9 @@ FocusableItem {
 
                     property var contentHeight: implicitHeight
 
+                    navigation.panel: navPanel
+                    navigation.row: (model.index + 1) * 1000 // make unique
+
                     function viewBySectionType() {
                         flickableArea.contentY = 0
 
@@ -130,6 +139,8 @@ FocusableItem {
                         id: generalInspector
                         GeneralInspectorView {
                             model: inspectorData
+                            navigationPanel: navPanel
+                            navigationRowOffset: expandableDelegate.navigation.row + 1
                             onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
@@ -137,6 +148,8 @@ FocusableItem {
                         id: textInspector
                         TextInspectorView {
                             model: inspectorData
+                            navigationPanel: navPanel
+                            navigationRowOffset: expandableDelegate.navigation.row + 1
                             onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
@@ -144,6 +157,8 @@ FocusableItem {
                         id: notationInspector
                         NotationInspectorView {
                             model: inspectorData
+                            navigationPanel: navPanel
+                            navigationRowOffset: expandableDelegate.navigation.row + 1
                             onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
@@ -152,6 +167,8 @@ FocusableItem {
 
                         ScoreDisplayInspectorView {
                             model: inspectorData
+                            navigationPanel: navPanel
+                            navigationRowOffset: expandableDelegate.navigation.row + 1
                             onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
@@ -160,56 +177,13 @@ FocusableItem {
 
                         ScoreAppearanceInspectorView {
                             model: inspectorData
+                            navigationPanel: navPanel
+                            navigationRowOffset: expandableDelegate.navigation.row + 1
                             onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
                 }
             }
-        }
-    }
-
-    Rectangle {
-        id: tabTitleBackgroundRect
-
-        height: tabTitleColumn.height + 12
-        width: parent.width
-
-        color: ui.theme.backgroundPrimaryColor
-    }
-
-    Column {
-        id: tabTitleColumn
-
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.leftMargin: 24
-
-        spacing: 4
-
-        StyledTextLabel {
-            id: inspectorTitle
-
-            text: qsTrc("inspector", "Inspector")
-            font: ui.theme.largeBodyBoldFont
-        }
-
-        Rectangle {
-            id: titleHighlighting
-
-            height: 3
-            width: inspectorTitle.width
-
-            color: ui.theme.accentColor
-
-            radius: 2
-        }
-    }
-
-    FocusableItem {
-        id: focusChainBreak
-
-        onActiveFocusChanged: {
-            parent.focus = false
         }
     }
 }

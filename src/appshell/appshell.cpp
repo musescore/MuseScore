@@ -197,6 +197,8 @@ int AppShell::run(int argc, char** argv)
     // Quit
     // ====================================================
 
+    PROFILER_PRINT;
+
     // Wait Thread Poll
 #ifndef Q_OS_WASM
     QThreadPool* globalThreadPool = QThreadPool::globalInstance();
@@ -212,8 +214,6 @@ int AppShell::run(int argc, char** argv)
     for (mu::framework::IModuleSetup* m : m_modules) {
         m->onDeinit();
     }
-
-    PROFILER_PRINT;
 
     globalModule.onDeinit();
 

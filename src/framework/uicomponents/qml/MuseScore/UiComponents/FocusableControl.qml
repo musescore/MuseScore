@@ -46,7 +46,7 @@ FocusScope {
     NavigationControl {
         id: keynavItem
         name: root.objectName
-        enabled: root.enabled
+        enabled: root.enabled && root.visible
 
         onActiveChanged: {
             if (keynavItem.active) {

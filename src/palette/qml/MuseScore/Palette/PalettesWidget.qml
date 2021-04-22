@@ -31,9 +31,9 @@ import "internal"
 
 Rectangle {
 
-    id: palettesWidget
+    id: root
 
-    property NavigationSection keynavSection: null
+    property NavigationSection navigationSection: null
 
     readonly property PaletteWorkspace paletteWorkspace: paletteRootModel.paletteWorkspace
 
@@ -59,9 +59,9 @@ Rectangle {
     PalettesWidgetHeader {
         id: palettesWidgetHeader
 
-        paletteWorkspace: palettesWidget.paletteWorkspace
+        paletteWorkspace: root.paletteWorkspace
 
-        popupMaxHeight: palettesWidget.height * 0.8
+        popupMaxHeight: root.height * 0.8
 
         anchors {
             top: parent.top
@@ -71,7 +71,8 @@ Rectangle {
             rightMargin: 12
         }
 
-        navigation.section: palettesWidget.keynavSection
+        navigation.section: root.navigationSection
+        navigation.enabled: root.visible
         navigation.order: 2
 
         onAddCustomPaletteRequested: paletteTree.insertCustomPalette(0, paletteName);
@@ -92,12 +93,12 @@ Rectangle {
     PaletteTree {
         id: paletteTree
         clip: true
-        paletteWorkspace: palettesWidget.paletteWorkspace
-        backgroundColor: palettesWidget.color
+        paletteWorkspace: root.paletteWorkspace
+        backgroundColor: root.color
 
-        navigation.section: palettesWidget.keynavSection
+        navigation.section: root.navigationSection
+        navigation.enabled: root.visible
         navigation.order: 5
-        navigation.enabled: paletteTree.visible
 
         filter: palettesWidgetHeader.searchText
         enableAnimations: !palettesWidgetHeader.searching
