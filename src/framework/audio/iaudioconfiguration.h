@@ -40,7 +40,7 @@ public:
     virtual std::string currentAudioApi() const = 0;
     virtual void setCurrentAudioApi(const std::string& name) = 0;
 
-    virtual int requiredAudioChannelsCount() const = 0;
+    virtual int audioChannelsCount() const = 0;
     virtual unsigned int driverBufferSize() const = 0; // samples
 
     virtual bool isShowControlsInMixer() const = 0;

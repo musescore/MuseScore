@@ -74,7 +74,7 @@ void ZerberusSynth::setSampleRate(unsigned int sampleRate)
     m_sampleRate = sampleRate;
     if (m_zerb) {
         m_zerb->setSampleRate(sampleRate);
-        m_preallocated.resize(int(sampleRate) * config()->requiredAudioChannelsCount(), 0);
+        m_preallocated.resize(int(sampleRate) * config()->audioChannelsCount(), 0);
     }
 }
 
@@ -269,7 +269,7 @@ void ZerberusSynth::writeBuf(float* stream, unsigned int samples)
 
 unsigned int ZerberusSynth::audioChannelsCount() const
 {
-    return config()->requiredAudioChannelsCount();
+    return config()->audioChannelsCount();
 }
 
 void ZerberusSynth::process(float* buffer, unsigned int sampleCount)

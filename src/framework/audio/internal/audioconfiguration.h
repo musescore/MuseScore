@@ -40,7 +40,7 @@ public:
     std::string currentAudioApi() const override;
     void setCurrentAudioApi(const std::string& name) override;
 
-    int requiredAudioChannelsCount() const override;
+    int audioChannelsCount() const override;
     unsigned int driverBufferSize() const override;
 
     std::vector<io::path> soundFontPaths() const override;

@@ -142,7 +142,7 @@ void VstAudioClient::updateProcessSetup()
 
 void VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
 {
-    int audioChannels = config()->requiredAudioChannelsCount();
+    int audioChannels = config()->audioChannelsCount();
 
     for (unsigned int i = 0; i < samples; ++i) {
         for (unsigned int s = 0; s < audioChannels; ++s) {
