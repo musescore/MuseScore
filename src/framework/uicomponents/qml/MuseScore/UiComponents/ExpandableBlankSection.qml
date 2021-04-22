@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtGraphicalEffects 1.0
-import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
-FocusableItem {
+FocusScope {
     id: root
 
     property alias title: titleLabel.text
@@ -33,11 +33,28 @@ FocusableItem {
 
     property bool isExpanded: true
 
+    property alias navigation: navCtrl
+
     anchors.left: parent.left
     anchors.leftMargin: -expandButtonIcon.width / 2
     anchors.right: parent.right
 
     implicitHeight: expandSectionRow.height
+
+    NavigationControl {
+        id: navCtrl
+        name: root.title
+        onTriggered: {
+            root.isExpanded = !root.isExpanded
+        }
+    }
+
+    Rectangle {
+        anchors.fill: parent
+        border.width: navCtrl.active ? 2 : 0
+        border.color: ui.theme.focusColor
+        color: "transparent"
+    }
 
     Row {
         id: expandSectionRow
@@ -85,6 +102,7 @@ FocusableItem {
         hoverEnabled: true
 
         onClicked: {
+            navCtrl.forceActive()
             root.isExpanded = !root.isExpanded
         }
     }
@@ -92,8 +110,8 @@ FocusableItem {
     Loader {
         id: menuLoader
 
-        property bool isMenuButtonVisible: root.isExpanded
-                                           || mouseArea.containsMouse
+        property bool isMenuButtonVisible: root.isExpanded || mouseArea.containsMouse
+
         anchors {
             right: root.right
             rightMargin: 48
@@ -109,8 +127,7 @@ FocusableItem {
             name: "DISABLED"
             when: !root.enabled
 
-            PropertyChanges { target: root; isExpanded: false
-                                            opacity: ui.theme.itemOpacityDisabled }
+            PropertyChanges { target: root; isExpanded: false; opacity: ui.theme.itemOpacityDisabled }
         }
     ]
 }

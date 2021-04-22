@@ -19,11 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtGraphicalEffects 1.0
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-FocusableItem {
+FocusScope {
     id: root
 
     property alias contentItemComponent: contentLoader.sourceComponent
@@ -32,6 +33,8 @@ FocusableItem {
     property alias title: expandableSection.title
 
     property alias isExpanded: expandableSection.isExpanded
+
+    property alias navigation: expandableSection.navigation
 
     implicitHeight: contentColumn.height
     implicitWidth: parent.width
@@ -91,16 +94,14 @@ FocusableItem {
             name: "EXPANDED"
             when: root.isExpanded
 
-            PropertyChanges { target: contentLoader; opacity: 1.0
-                                                     yScale: 1 }
+            PropertyChanges { target: contentLoader; opacity: 1.0; yScale: 1 }
         },
 
         State {
             name: "COLLAPSED"
             when: !root.isExpanded
 
-            PropertyChanges { target: contentLoader; opacity: 0.0
-                                                     yScale: 0 }
+            PropertyChanges { target: contentLoader; opacity: 0.0; yScale: 0 }
         }
     ]
 

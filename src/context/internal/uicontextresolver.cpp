@@ -21,39 +21,54 @@
  */
 #include "uicontextresolver.h"
 
+#include "log.h"
+
 using namespace mu::context;
 using namespace mu::ui;
 
 static const mu::Uri HOME_PAGE_URI("musescore://home");
 static const mu::Uri NOTATION_PAGE_URI("musescore://notation");
 
+static const QString NOTATION_NAVIGATION_SECTION("NotationView");
+
 void UiContextResolver::init()
 {
     interactive()->currentUri().ch.onReceive(this, [this](const Uri&) {
-        m_currentUiContextChanged.notify();
+        notifyAboutContextChanged();
     });
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
-        m_currentUiContextChanged.notify();
+        notifyAboutContextChanged();
     });
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         auto notation = globalContext()->currentNotation();
         if (notation) {
             notation->interaction()->selectionChanged().onNotify(this, [this]() {
-                m_currentUiContextChanged.notify();
+                notifyAboutContextChanged();
             });
 
             notation->interaction()->textEditingStarted().onNotify(this, [this]() {
-                m_currentUiContextChanged.notify();
+                notifyAboutContextChanged();
             });
         }
-        m_currentUiContextChanged.notify();
+        notifyAboutContextChanged();
     });
+
+    navigationController()->navigationChanged().onNotify(this, [this]() {
+        notifyAboutContextChanged();
+    });
+}
+
+void UiContextResolver::notifyAboutContextChanged()
+{
+    TRACEFUNC;
+    m_currentUiContextChanged.notify();
 }
 
 UiContext UiContextResolver::currentUiContext() const
 {
+    TRACEFUNC;
     ValCh<Uri> currentUri = interactive()->currentUri();
     if (currentUri.val == HOME_PAGE_URI) {
         if (playbackController()->isPlaying()) {
@@ -77,6 +92,12 @@ UiContext UiContextResolver::currentUiContext() const
 
         if (playbackController()->isPlaying()) {
             return context::UiCtxPlaying;
+        }
+
+        ui::INavigationSection* activeSection = navigationController()->activeSection();
+        if (activeSection && activeSection->name() != NOTATION_NAVIGATION_SECTION) {
+            //! TODO Needs add other ui contexts
+            return context::UiCtxUnknown;
         }
 
         if (!notation->interaction()->selection()->isNone()) {

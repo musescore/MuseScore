@@ -175,12 +175,26 @@ Rectangle {
                             border.width: control.active ? 2 : 1
                             border.color: control.active ? ui.theme.focusColor : "#2e3436"
 
-                            StyledTextLabel {
-                                anchors.top: parent.top
-                                anchors.left: parent.left
-                                anchors.right: parent.right
-                                anchors.margins: 8
-                                text: control.name
+                            Column {
+                                anchors.fill: parent
+                                anchors.margins: 2
+
+                                StyledTextLabel {
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    horizontalAlignment: Text.AlignLeft
+                                    verticalAlignment: Text.AlignTop
+                                    font.pixelSize: nameLabel.font.pixelSize / 1.5
+                                    text: "[" + control.index.row + "," + control.index.column + "]"
+                                }
+
+                                StyledTextLabel {
+                                    id: nameLabel
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    anchors.margins: 8
+                                    text: control.name
+                                }
                             }
 
                             MouseArea {
