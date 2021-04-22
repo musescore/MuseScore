@@ -60,7 +60,7 @@ public:
 
     unsigned int audioChannelsCount() const override;
 
-    void process(float* buffer, unsigned int sampleCount) override;
+    void process(float* outBuffer, unsigned int samplesPerChannel) override;
 
     // Self
 
@@ -68,11 +68,13 @@ public:
 
 private:
     //! mix the channel in to the buffer
-    void mixinChannel(float* buffer, std::shared_ptr<MixerChannel> channel, unsigned int samplesCount);
-    void mixinChannelStream(float* buffer, std::shared_ptr<MixerChannel> channel, unsigned int streamId, unsigned int samplesCount);
+    void mixinChannel(float* outBuffer, float* inBuffer, std::shared_ptr<MixerChannel> channel, unsigned int samplesCount);
+    void mixinChannelStream(float* outBuffer, float* inBuffer, std::shared_ptr<MixerChannel> channel, unsigned int streamId,
+                            unsigned int samplesCount);
 
     Mode m_mode = STEREO;
     float m_masterLevel = 1.f;
+    std::vector<float> m_writeCacheBuff;
     std::map<ChannelID, std::shared_ptr<MixerChannel> > m_inputList = {};
     std::map<unsigned int, std::shared_ptr<IAudioProcessor> > m_insertList = {};
     std::shared_ptr<Clock> m_clock;

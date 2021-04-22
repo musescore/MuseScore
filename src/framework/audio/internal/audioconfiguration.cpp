@@ -86,7 +86,7 @@ void AudioConfiguration::setCurrentAudioApi(const std::string& name)
     settings()->setValue(AUDIO_API_KEY, Val(name));
 }
 
-int AudioConfiguration::requiredAudioChannelsCount() const
+int AudioConfiguration::audioChannelsCount() const
 {
     return AUDIO_CHANNELS;
 }

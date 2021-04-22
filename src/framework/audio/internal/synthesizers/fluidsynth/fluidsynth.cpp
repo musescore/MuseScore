@@ -374,13 +374,13 @@ void FluidSynth::writeBuf(float* stream, unsigned int samples)
     }
 
     fluid_synth_write_float(m_fluid->synth, static_cast<int>(samples),
-                            stream, 0, config()->requiredAudioChannelsCount(),
-                            stream, 1, config()->requiredAudioChannelsCount());
+                            stream, 0, config()->audioChannelsCount(),
+                            stream, 1, config()->audioChannelsCount());
 }
 
 unsigned int FluidSynth::audioChannelsCount() const
 {
-    return config()->requiredAudioChannelsCount();
+    return config()->audioChannelsCount();
 }
 
 void FluidSynth::process(float* buffer, unsigned int sampleCount)

@@ -34,7 +34,6 @@ public:
     virtual void setSource(std::shared_ptr<IAudioSource> source) = 0;
     virtual void forward() = 0;
 
-    virtual void push(const float* source, int sampleCount) = 0;
     virtual void pop(float* dest, unsigned int sampleCount) = 0;
     virtual void setMinSampleLag(unsigned int lag) = 0;
 };
