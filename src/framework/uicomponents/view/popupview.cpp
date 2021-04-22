@@ -61,7 +61,7 @@ PopupWindow::PopupWindow(QQmlEngine* engine)
     setObjectName("PopupWindow");
 
     m_view = new QQuickView(engine, nullptr);
-    m_widget->setObjectName("PopupQuickWindow");
+    m_view->setObjectName("PopupQuickWindow");
     m_view->setFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
     m_view->setResizeMode(QQuickView::SizeViewToRootObject);
     m_view->setColor(QColor(0, 0, 0, 0)); // transparent
