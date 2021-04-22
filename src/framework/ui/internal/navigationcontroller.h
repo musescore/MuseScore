@@ -61,7 +61,7 @@ private:
     void devShowControls();
 
     void goToNextSection();
-    void goToPrevSection();
+    void goToPrevSection(bool isActivateLastPanel = false);
     void goToNextPanel();
     void goToPrevPanel();
 
@@ -81,7 +81,7 @@ private:
     void doTriggerControl();
     void onForceActiveRequested(INavigationSection* sec, INavigationPanel* sub, INavigationControl* ctrl);
 
-    void doActivateSection(INavigationSection* s);
+    void doActivateSection(INavigationSection* s, bool isActivateLastPanel = false);
     void doDeactivateSection(INavigationSection* s);
     void doActivatePanel(INavigationPanel* s);
     void doDeactivatePanel(INavigationPanel* s);
