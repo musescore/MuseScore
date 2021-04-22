@@ -22,6 +22,8 @@
 #include "navigationcontrol.h"
 #include "navigationpanel.h"
 
+#include "log.h"
+
 using namespace mu::ui;
 
 NavigationControl::NavigationControl(QObject* parent)
@@ -98,6 +100,7 @@ void NavigationControl::forceActive()
 
 void NavigationControl::setPanel(NavigationPanel* panel)
 {
+    TRACEFUNC;
     if (m_panel == panel) {
         return;
     }

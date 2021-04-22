@@ -36,7 +36,7 @@ Item {
 
     id: root
 
-    property NavigationSection keynavSection: null
+    property NavigationSection navigationSection: null
 
     Rectangle {
         id: background
@@ -57,7 +57,7 @@ Item {
     NavigationPanel {
         id: navigationTreePanel
         name: "InstrumentsTree"
-        section: root.keynavSection
+        section: root.navigationSection
         direction: NavigationPanel.Both
         enabled: root.visible
         order: 3
@@ -79,7 +79,7 @@ Item {
             Layout.leftMargin: contentColumn.sideMargin
             Layout.rightMargin: contentColumn.sideMargin
 
-            navigation.section: root.keynavSection
+            navigation.section: root.navigationSection
             navigation.enabled: root.visible
             navigation.order: 2
 

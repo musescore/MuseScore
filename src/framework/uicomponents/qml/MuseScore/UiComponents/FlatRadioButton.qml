@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
+import QtQuick 2.15
 import QtQuick.Controls 2.0
+import MuseScore.Ui 1.0
 
 RadioDelegate {
     id: root
@@ -34,15 +35,38 @@ RadioDelegate {
     property color pressedStateColor: ui.theme.buttonColor
     property color selectedStateColor: ui.theme.accentColor
 
+    property alias navigation: navCtrl
+
     implicitHeight: 30
     implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
                                  : 30
     hoverEnabled: true
 
+    function ensureActiveFocus() {
+        if (!root.activeFocus) {
+            root.forceActiveFocus()
+        }
+
+        if (!navCtrl.active) {
+            navCtrl.forceActive()
+        }
+    }
+
+    onClicked: root.ensureActiveFocus()
+
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName != "" ? root.objectName : "FlatRadioButton"
+        onTriggered: root.checked = !root.checked
+    }
+
     background: Rectangle {
         id: backgroundRect
 
         anchors.fill: parent
+
+        border.width: navCtrl.active ? 2 : 0
+        border.color: ui.theme.focusColor
 
         color: normalStateColor
         opacity: ui.theme.buttonOpacityNormal

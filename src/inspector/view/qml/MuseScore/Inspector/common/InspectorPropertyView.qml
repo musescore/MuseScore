@@ -32,6 +32,8 @@ Column {
 
     property QtObject propertyItem: null
 
+    property alias navigation: menuButton.navigation
+
     property alias titleText: titleLabel.text
     property bool isStyled: propertyItem ? propertyItem.isStyled : false
     property bool isModified: propertyItem ? propertyItem.isModified : false

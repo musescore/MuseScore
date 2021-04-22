@@ -28,6 +28,7 @@
 #include "playback/iplaybackcontroller.h"
 #include "iinteractive.h"
 #include "../iglobalcontext.h"
+#include "ui/inavigationcontroller.h"
 
 namespace mu::context {
 class UiContextResolver : public IUiContextResolver, public async::Asyncable
@@ -35,6 +36,7 @@ class UiContextResolver : public IUiContextResolver, public async::Asyncable
     INJECT(context, framework::IInteractive, interactive)
     INJECT(context, playback::IPlaybackController, playbackController)
     INJECT(context, IGlobalContext, globalContext)
+    INJECT(context, ui::INavigationController, navigationController)
 
 public:
     UiContextResolver() = default;
@@ -48,6 +50,9 @@ public:
     bool matchWithCurrent(const ui::UiContext& ctx) const override;
 
 private:
+
+    void notifyAboutContextChanged();
+
     async::Notification m_currentUiContextChanged;
 };
 }

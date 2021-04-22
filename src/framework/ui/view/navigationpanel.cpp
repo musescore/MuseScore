@@ -127,6 +127,7 @@ NavigationSection* NavigationPanel::section() const
 
 void NavigationPanel::setSection(NavigationSection* section)
 {
+    TRACEFUNC;
     if (m_section == section) {
         return;
     }
@@ -157,6 +158,7 @@ void NavigationPanel::componentComplete()
 
 void NavigationPanel::addControl(NavigationControl* control)
 {
+    TRACEFUNC;
     IF_ASSERT_FAILED(control) {
         return;
     }
@@ -174,6 +176,7 @@ void NavigationPanel::addControl(NavigationControl* control)
 
 void NavigationPanel::removeControl(NavigationControl* control)
 {
+    TRACEFUNC;
     IF_ASSERT_FAILED(control) {
         return;
     }

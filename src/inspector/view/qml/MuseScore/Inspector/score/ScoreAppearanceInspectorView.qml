@@ -63,6 +63,10 @@ InspectorSectionView {
                 StyledComboBox {
                     width: parent.width
 
+                    navigation.panel: root.navigationPanel
+                    navigation.name: "Page size"
+                    navigation.row: root.navigationRow(1)
+
                     textRoleName: "nameRole"
                     valueRoleName: "idRole"
 
@@ -101,9 +105,11 @@ InspectorSectionView {
 
                         ButtonGroup.group: orientationType.radioButtonGroup
 
-                        checked: root.model ? root.model.orientationType === modelData["typeRole"]
-                                            : false
+                        navigation.panel: root.navigationPanel
+                        navigation.name: "Orientation"+model.index
+                        navigation.row: root.navigationRow(model.index + 2)
 
+                        checked: root.model ? root.model.orientationType === modelData["typeRole"] : false
                         onToggled: {
                             root.model.orientationType = modelData["typeRole"]
                         }
@@ -127,6 +133,10 @@ InspectorSectionView {
 
                 IncrementalPropertyControl {
                     iconMode: iconModeEnum.hidden
+
+                    navigation.panel: root.navigationPanel
+                    navigation.name: "Staff spacing"
+                    navigation.row: root.navigationRow(4)
 
                     currentValue: root.model ? root.model.staffSpacing : 0
                     measureUnitsSymbol: qsTrc("inspector", "mm")
@@ -153,6 +163,10 @@ InspectorSectionView {
                 IncrementalPropertyControl {
                     iconMode: iconModeEnum.hidden
 
+                    navigation.panel: root.navigationPanel
+                    navigation.name: "Staff distance"
+                    navigation.row: root.navigationRow(5)
+
                     currentValue: root.model ? root.model.staffDistance : 0
 
                     step: 0.1
@@ -172,6 +186,10 @@ InspectorSectionView {
             FlatButton {
                 width: parent.width
 
+                navigation.panel: root.navigationPanel
+                navigation.name: "More page settings"
+                navigation.row: root.navigationRow(6)
+
                 text: qsTrc("inspector", "More page settings")
 
                 onClicked: {
@@ -183,6 +201,10 @@ InspectorSectionView {
 
             FlatButton {
                 width: parent.width
+
+                navigation.panel: root.navigationPanel
+                navigation.name: "Style settings"
+                navigation.row: root.navigationRow(7)
 
                 text: qsTrc("inspector", "Style settings")
 

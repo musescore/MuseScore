@@ -98,6 +98,7 @@ void NavigationSection::onEvent(EventPtr e)
 
 void NavigationSection::addPanel(NavigationPanel* panel)
 {
+    TRACEFUNC;
     IF_ASSERT_FAILED(panel) {
         return;
     }
@@ -120,6 +121,7 @@ mu::async::Channel<SectionPanelControl> NavigationSection::forceActiveRequested(
 
 void NavigationSection::removePanel(NavigationPanel* panel)
 {
+    TRACEFUNC;
     IF_ASSERT_FAILED(panel) {
         return;
     }
