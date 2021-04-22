@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <limits>
+#include <utility>
 
 #include "log.h"
 
@@ -236,7 +237,7 @@ void NavigationController::init()
     dispatcher()->reg(this, "nav-dev-show-controls", this, &NavigationController::devShowControls);
 
     dispatcher()->reg(this, "nav-next-section", this, &NavigationController::goToNextSection);
-    dispatcher()->reg(this, "nav-prev-section", this, &NavigationController::goToPrevSection);
+    dispatcher()->reg(this, "nav-prev-section", [this]() { goToPrevSection(false); });
     dispatcher()->reg(this, "nav-next-panel", this, &NavigationController::goToNextPanel);
     dispatcher()->reg(this, "nav-prev-panel", this, &NavigationController::goToPrevPanel);
 
@@ -283,7 +284,7 @@ void NavigationController::devShowControls()
     }
 }
 
-void NavigationController::doActivateSection(INavigationSection* s)
+void NavigationController::doActivateSection(INavigationSection* s, bool isActivateLastPanel)
 {
     IF_ASSERT_FAILED(s) {
         return;
@@ -296,9 +297,15 @@ void NavigationController::doActivateSection(INavigationSection* s)
     s->setActive(true);
     LOGD() << "activated section: " << s->name() << ", order: " << s->index().order();
 
-    INavigationPanel* firstSub = firstEnabled(s->panels());
-    if (firstSub) {
-        doActivatePanel(firstSub);
+    INavigationPanel* toActivatePanel = nullptr;
+    if (isActivateLastPanel) {
+        toActivatePanel = lastEnabled(s->panels());
+    } else {
+        toActivatePanel = firstEnabled(s->panels());
+    }
+
+    if (toActivatePanel) {
+        doActivatePanel(toActivatePanel);
     }
 }
 
@@ -439,7 +446,7 @@ void NavigationController::goToNextSection()
     doActivateSection(nextSec);
 }
 
-void NavigationController::goToPrevSection()
+void NavigationController::goToPrevSection(bool isActivateLastPanel)
 {
     LOGI() << "====";
     if (m_sections.empty()) {
@@ -459,7 +466,7 @@ void NavigationController::goToPrevSection()
         prevSec = lastEnabled(m_sections); // the last to be the prev
     }
 
-    doActivateSection(prevSec);
+    doActivateSection(prevSec, isActivateLastPanel);
 }
 
 void NavigationController::goToNextPanel()
@@ -472,8 +479,8 @@ void NavigationController::goToNextPanel()
         return;
     }
 
-    INavigationPanel* activeSubSec = findActive(activeSec->panels());
-    if (!activeSubSec) { // no any active
+    INavigationPanel* activePanel = findActive(activeSec->panels());
+    if (!activePanel) { // no any active
         INavigationPanel* first = firstEnabled(activeSec->panels());
         if (first) {
             doActivatePanel(first);
@@ -481,14 +488,16 @@ void NavigationController::goToNextPanel()
         return;
     }
 
-    doDeactivatePanel(activeSubSec);
+    doDeactivatePanel(activePanel);
 
-    INavigationPanel* nextSubSec = nextEnabled(activeSec->panels(), activeSubSec->index());
-    if (!nextSubSec) { // active is last
-        nextSubSec = firstEnabled(activeSec->panels()); // the first to be the next
+    INavigationPanel* nextPanel = nextEnabled(activeSec->panels(), activePanel->index());
+    if (nextPanel) {
+        doActivatePanel(nextPanel);
+        return;
     }
 
-    doActivatePanel(nextSubSec);
+    // active is last panel, go to first panel in next section
+    goToNextSection();
 }
 
 void NavigationController::goToPrevPanel()
@@ -512,11 +521,13 @@ void NavigationController::goToPrevPanel()
     doDeactivatePanel(activeSubSec);
 
     INavigationPanel* prevSubSec = prevEnabled(activeSec->panels(), activeSubSec->index());
-    if (!prevSubSec) { // active is first
-        prevSubSec = lastEnabled(activeSec->panels()); // the last to be the prev
+    if (prevSubSec) {
+        doActivatePanel(prevSubSec);
+        return;
     }
 
-    doActivatePanel(prevSubSec);
+    // active is first, go to last panel in prev section
+    goToPrevSection(true);
 }
 
 void NavigationController::onRight()
