@@ -35,6 +35,7 @@ public:
     virtual ~IMainWindow() = default;
 
     virtual QMainWindow* qMainWindow() = 0;
+    virtual QWindow* qWindow() = 0;
     virtual void stackUnder(QWidget*) = 0;
 };
 }

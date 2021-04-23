@@ -35,6 +35,7 @@ namespace mu::uicomponents {
 // the private part of PopupView implementation
 class PopupWindow : public QObject
 {
+    INJECT(uicomponents, ui::IMainWindow, mainWindow)
 public:
     PopupWindow(QQmlEngine* engine);
     ~PopupWindow();
@@ -60,9 +61,10 @@ PopupWindow::PopupWindow(QQmlEngine* engine)
 {
     setObjectName("PopupWindow");
 
-    m_view = new QQuickView(engine, nullptr);
+    Qt::WindowFlags windowFlags = Qt::Dialog | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint;
+    m_view = new QQuickView(engine, mainWindow()->qWindow());
     m_view->setObjectName("PopupQuickWindow");
-    m_view->setFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+    m_view->setFlags(windowFlags);
     m_view->setResizeMode(QQuickView::SizeViewToRootObject);
     m_view->setColor(QColor(0, 0, 0, 0)); // transparent
 
@@ -103,7 +105,7 @@ PopupWindow::PopupWindow(QQmlEngine* engine)
     }
     */
 
-    m_widget = QWidget::createWindowContainer(m_view, nullptr, Qt::Window | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+    m_widget = QWidget::createWindowContainer(m_view, nullptr, windowFlags);
     m_widget->setObjectName("PopupWidgetWindow");
     m_widget->setAutoFillBackground(false);
     m_widget->setAttribute(Qt::WA_TranslucentBackground);
@@ -162,10 +164,11 @@ bool PopupWindow::eventFilter(QObject* watched, QEvent* event)
 {
     // Please, don't remove
     //    static QMetaEnum typeEnum = QMetaEnum::fromType<QEvent::Type>();
-    //    LOGI() << watched->objectName() << " event: " << typeEnum.key(event->type());
+    //    const char* typeStr = typeEnum.key(event->type());
+    //    LOGI() << (watched ? watched->objectName() : "null") << " event: " << (typeStr ? typeStr : "unknown");
 
     // QQuickView events
-    if (watched == m_view) {
+    if (m_view && watched == m_view) {
         if (event->type() == QEvent::FocusIn) {
             m_view->contentItem()->forceActiveFocus();
         }

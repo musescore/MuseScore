@@ -71,6 +71,7 @@ public:
     QString currentPageUri() const;
 
     QMainWindow* qMainWindow() override;
+    QWindow* qWindow() override;
     QMenuBar* qMenuBar();
     void stackUnder(QWidget* w) override;
 
