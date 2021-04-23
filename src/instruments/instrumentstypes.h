@@ -122,6 +122,7 @@ struct Instrument
     StaffNameList longNames;
     StaffNameList shortNames;
     QString name;
+    QString musicXMLid;
     QString description;
 
     bool extended = false;

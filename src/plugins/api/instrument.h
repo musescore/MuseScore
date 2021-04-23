@@ -250,7 +250,7 @@ public:
 
     Ms::Part* part() { return _part; }
 
-    QString instrumentId() const { return instrument()->instrumentId(); }
+    QString instrumentId() const { return instrument()->getId(); }
     QString longName() const;
     QString shortName() const;
 
