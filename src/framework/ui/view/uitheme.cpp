@@ -357,6 +357,9 @@ void UiTheme::setupWidgetTheme()
     QColor fontPrimaryColorDisabled = fontPrimaryColor();
     fontPrimaryColorDisabled.setAlphaF(itemOpacityDisabled());
 
+    QColor linkColorDisabled = linkColor();
+    linkColorDisabled.setAlphaF(itemOpacityDisabled());
+
     QColor backgroundPrimaryColorDisabled = backgroundPrimaryColor();
     backgroundPrimaryColorDisabled.setAlphaF(itemOpacityDisabled());
 
@@ -376,6 +379,9 @@ void UiTheme::setupWidgetTheme()
 
     palette.setColor(QPalette::Text, fontPrimaryColor());
     palette.setColor(QPalette::Disabled, QPalette::Text, fontPrimaryColorDisabled);
+
+    palette.setColor(QPalette::Link, linkColor());
+    palette.setColor(QPalette::Disabled, QPalette::Link, linkColorDisabled);
 
     palette.setColor(QPalette::Button, backgroundSecondaryColor());
     palette.setColor(QPalette::Disabled, QPalette::Button, backgroundSecondaryColorDisabled);
