@@ -23,6 +23,8 @@
 #ifndef MU_IMPORTEXPORT_EXPORTXML_H
 #define MU_IMPORTEXPORT_EXPORTXML_H
 
+#include <QString>
+
 class QIODevice;
 
 namespace Ms {

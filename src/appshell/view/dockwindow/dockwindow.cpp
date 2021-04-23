@@ -431,6 +431,11 @@ QMainWindow* DockWindow::qMainWindow()
     return m_window;
 }
 
+QWindow* DockWindow::qWindow()
+{
+    return m_window->windowHandle();
+}
+
 QMenuBar* DockWindow::qMenuBar()
 {
 #ifdef Q_OS_MAC
