@@ -306,7 +306,7 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
         }
     }
 
-    fillByDeffault(instrument);
+    fillByDefault(instrument);
 
     return instrumentTemplate;
 }
@@ -385,7 +385,7 @@ StringData InstrumentsReader::readStringData(Ms::XmlReader& reader) const
     return StringData(frets, strings);
 }
 
-void InstrumentsReader::fillByDeffault(Instrument& instrument) const
+void InstrumentsReader::fillByDefault(Instrument& instrument) const
 {
     if (instrument.channels.empty()) {
         Channel a;

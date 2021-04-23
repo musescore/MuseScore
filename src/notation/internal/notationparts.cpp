@@ -1256,17 +1256,17 @@ void NotationParts::appendNewInstruments(const InstrumentList& instruments)
     }
 
     IDList existedInstrumentIds = allInstrumentsIds();
-    IDList newInstruentIds = instrumentIds;
+    IDList newInstrumentIds = instrumentIds;
     for (const ID& instrumentId: existedInstrumentIds) {
-        newInstruentIds.removeOne(instrumentId);
+        newInstrumentIds.removeOne(instrumentId);
     }
 
     for (const mu::instruments::Instrument& instrument: instruments) {
-        if (!newInstruentIds.contains(instrument.id)) {
+        if (!newInstrumentIds.contains(instrument.id)) {
             continue;
         }
 
-        newInstruentIds.removeOne(instrument.id);
+        newInstrumentIds.removeOne(instrument.id);
 
         Part* part = new Part(score());
 
