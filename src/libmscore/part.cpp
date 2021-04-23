@@ -400,7 +400,7 @@ const InstrumentList* Part::instruments() const
 
 bool Part::isDoublingInstrument(const QString& instrumentId) const
 {
-    return instrument()->instrumentId() != instrumentId;
+    return instrument()->getId() != instrumentId;
 }
 
 //---------------------------------------------------------
@@ -409,7 +409,7 @@ bool Part::isDoublingInstrument(const QString& instrumentId) const
 
 QString Part::instrumentId(const Fraction& tick) const
 {
-    return instrument(tick)->instrumentId();
+    return instrument(tick)->getId();
 }
 
 //---------------------------------------------------------
