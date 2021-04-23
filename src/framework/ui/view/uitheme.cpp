@@ -394,9 +394,9 @@ void UiTheme::setupWidgetTheme()
     QApplication::setStyle(this);
     QApplication::setPalette(palette);
 
-    QFont widgetsFont = bodyFont();
-    widgetsFont.setPointSize(configuration()->fontSize(FontSizeType::BODY));
-    QApplication::setFont(widgetsFont);
+    QString styleSheet = QString("* { font: %1px \"%2\" } ")
+                         .arg(QString::number(bodyFont().pixelSize()), bodyFont().family());
+    qApp->setStyleSheet(styleSheet);
 }
 
 void UiTheme::notifyAboutThemeChanged()
