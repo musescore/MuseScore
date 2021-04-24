@@ -80,6 +80,7 @@ Item {
         navigation.order: 1
         enabled: !searchTextInput.visible
         text: qsTrc("palette", "Add Palettes")
+        height: 30
         onClicked: {
             palettePopup.visible = !palettePopup.visible
         }
@@ -93,6 +94,7 @@ Item {
         navigation.order: 2
         enabled: !searchTextInput.visible
         icon: IconCode.SEARCH
+        height: 30
         onClicked: {
             toggleSearch()
         }
