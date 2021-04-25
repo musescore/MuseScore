@@ -133,7 +133,7 @@ case $TARGET in
 
     appimage)
         MUSESCORE_INSTALL_DIR=MuseScore 
-        MUSESCORE_INSTALL_SUFFIX=-portable 
+        MUSESCORE_INSTALL_SUFFIX="-portable${MUSESCORE_INSTALL_SUFFIX}" # e.g. "-portable" or "-portable-nightly"
         MUSESCORE_LABEL="Portable AppImage" 
         MUSESCORE_NO_RPATH=ON 
 
@@ -146,7 +146,8 @@ case $TARGET in
         install_dir="$(cat $build_dir/PREFIX.txt)" 
         cd $install_dir
 
-        [ -L usr ] || ln -s . usr && mscore="mscore-portable" 
+        ln -sf . usr # we installed into the root of our AppImage but some tools expect a "usr" subdirectory
+        mscore="mscore${MUSESCORE_INSTALL_SUFFIX}"
         dsktp="${mscore}.desktop" 
         icon="${mscore}.svg" 
         mani="install_manifest.txt" 
