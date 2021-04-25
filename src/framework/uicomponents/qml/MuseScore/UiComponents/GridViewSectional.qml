@@ -68,6 +68,100 @@ Item {
         }
     }
 
+    property int idealWidth: {
+        if (!isHorizontal) {
+            // TODO: This calculation is incorrect, because `columns` does not represent
+            // the actual number of columns, calculated in GridViewDelegate.qml.
+            return Math.max(cellWidth * columns + columnSpacing * (columns - 1), sectionWidth)
+        }
+
+        let result = 0
+        let lastSection = ""
+        let currentRow = 0
+
+        for (let i = 0; i < root.model.count; i++) {
+            let element = root.model.get(i)
+
+            let section = element[sectionRole]
+            let justAddedSection = false
+
+            if (lastSection !== section) {
+                lastSection = section
+                justAddedSection = true
+                currentRow = 0
+
+                if (i !== 0) {
+                    result += privateProperties.spacingBeforeSection
+                }
+
+                result += sectionWidth
+                result += privateProperties.spacingAfterSection
+            }
+
+            if (currentRow === 0) {
+                if (!justAddedSection) {
+                    result += columnSpacing
+                }
+
+                result += cellWidth
+            }
+
+            currentRow++;
+            if (currentRow === root.rows) {
+                currentRow = 0;
+            }
+        }
+
+        return result
+    }
+
+    property int idealHeight: {
+        if (isHorizontal) {
+            // TODO: This calculation is incorrect, because `rows` does not represent
+            // the actual number of rows, calculated in GridViewDelegate.qml.
+            return Math.max(cellHeight * rows + rowSpacing * (rows - 1), sectionHeight)
+        }
+
+        let result = 0
+        let lastSection = ""
+        let currentColumn = 0
+
+        for (let i = 0; i < root.model.count; i++) {
+            let element = root.model.get(i)
+
+            let section = element[sectionRole]
+            let justAddedSection = false
+
+            if (lastSection !== section) {
+                lastSection = section
+                justAddedSection = true
+                currentColumn = 0
+
+                if (i !== 0) {
+                    result += privateProperties.spacingBeforeSection
+                }
+
+                result += sectionHeight
+                result += privateProperties.spacingAfterSection
+            }
+
+            if (currentColumn === 0) {
+                if (!justAddedSection) {
+                    result += rowSpacing
+                }
+
+                result += cellHeight
+            }
+
+            currentColumn++;
+            if (currentColumn === root.columns) {
+                currentColumn = 0;
+            }
+        }
+
+        return result
+    }
+
     Loader {
         anchors.fill: parent
         sourceComponent: isHorizontal ? horizontalView : verticalView

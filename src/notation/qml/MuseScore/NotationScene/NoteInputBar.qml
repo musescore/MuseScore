@@ -31,10 +31,26 @@ Rectangle {
 
     property alias orientation: gridView.orientation
 
+    property int idealWidth: {
+        if (!privateProperties.isHorizontal) {
+            return gridView.idealWidth
+        }
+
+        return gridView.idealWidth + 2 * customizeButton.anchors.margins + customizeButton.width
+    }
+
+    property int idealHeight: {
+        if (privateProperties.isHorizontal) {
+            return gridView.idealHeight
+        }
+
+        return gridView.idealHeight + 2 * customizeButton.anchors.margins + customizeButton.height
+    }
+
     property alias navigation: keynavSub
 
     QtObject {
-        id: privatesProperties
+        id: privateProperties
 
         property bool isHorizontal: orientation === Qt.Horizontal
     }
@@ -118,8 +134,7 @@ Rectangle {
             }
 
             Canvas {
-
-                visible: item.showSubitemsByPressAndHoldRole
+                visible: btn.item ? btn.item.showSubitemsByPressAndHoldRole : false
 
                 width: 4
                 height: 4
@@ -149,7 +164,7 @@ Rectangle {
     FlatButton {
         id: customizeButton
 
-        anchors.margins: 8
+        anchors.margins: 6
 
         width: gridView.cellWidth
         height: gridView.cellHeight
@@ -167,7 +182,7 @@ Rectangle {
 
     states: [
         State {
-            when: privatesProperties.isHorizontal
+            when: privateProperties.isHorizontal
             PropertyChanges {
                 target: gridView
                 sectionWidth: 1
@@ -183,7 +198,7 @@ Rectangle {
             }
         },
         State {
-            when: !privatesProperties.isHorizontal
+            when: !privateProperties.isHorizontal
             PropertyChanges {
                 target: gridView
                 sectionWidth: root.width

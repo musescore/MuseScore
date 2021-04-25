@@ -114,18 +114,27 @@ DockPage {
         id: notationNoteInputBar
         objectName: "notationNoteInputBar"
 
-        minimumWidth: orientation == Qt.Horizontal ? 900 : 96
-        minimumHeight: orientation == Qt.Horizontal ? 48 : 0
+        property int idealWidth: 0
+        property int idealHeight: 0
+
+        minimumWidth: orientation == Qt.Horizontal ? idealWidth : 90
+        minimumHeight: orientation == Qt.Horizontal ? 48 : idealHeight
 
         color: notationPage.color
 
         title: qsTrc("appshell", "Note Input")
 
         content: NoteInputBar {
+            id: notationNoteInputBarContent
             color: notationNoteInputBar.color
             orientation: notationNoteInputBar.orientation
             navigation.section: keynavNoteInputSec
             navigation.order: 1
+
+            Component.onCompleted: {
+                notationNoteInputBar.idealWidth = Qt.binding(() => (notationNoteInputBarContent.idealWidth))
+                notationNoteInputBar.idealHeight = Qt.binding(() => (notationNoteInputBarContent.idealHeight))
+            }
         }
     }
 
