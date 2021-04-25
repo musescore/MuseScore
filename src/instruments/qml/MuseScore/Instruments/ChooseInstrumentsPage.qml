@@ -44,10 +44,10 @@ Rectangle {
 
         for (var i = 0; i < instruments.length; ++i) {
             var obj = {}
-            obj["part"] = instruments[i].part
+            obj["isExistingPart"] = instruments[i].isExistingPart
             obj["id"] = instruments[i].id
             obj["name"] = instruments[i].name
-            obj["soloist"] = instruments[i].soloist
+            obj["isSoloist"] = instruments[i].isSoloist
             obj["instrument"] = instruments[i].config
 
             result.push(obj)
@@ -219,6 +219,10 @@ Rectangle {
 
             onOrderChanged: {
                 instrumentsModel.selectOrderType(id)
+            }
+
+            onSoloistChanged: {
+                instrumentsModel.toggleSoloist(id)
             }
         }
 

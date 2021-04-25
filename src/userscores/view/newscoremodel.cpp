@@ -108,12 +108,12 @@ ScoreCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
     QVariantMap partMap = info["parts"].toMap();
     for (const QVariant& obj: partMap["instruments"].toList()) {
         QVariantMap objMap = obj.toMap();
-        Q_ASSERT(!objMap["part"].toBool());
+        Q_ASSERT(!objMap["isExistingPart"].toBool());
 
         PartInstrument pi;
 
-        pi.part = false;
-        pi.soloist = false;
+        pi.isExistingPart = false;
+        pi.isSoloist = false;
         pi.partId = QString();
         pi.instrument = objMap["instrument"].value<Instrument>();
 

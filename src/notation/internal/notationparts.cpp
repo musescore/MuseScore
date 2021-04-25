@@ -133,6 +133,7 @@ void NotationParts::setParts(const mu::instruments::PartInstrumentList& parts)
 {
     removeMissingParts(parts);
     appendNewParts(parts);
+    updateSoloist(parts);
 
     sortParts(parts);
 
@@ -715,12 +716,6 @@ void NotationParts::doRemoveParts(const IDList& partsIds)
     for (const ID& partId: partsIds) {
         score()->cmdRemovePart(part(partId));
     }
-
-    for (Ms::Excerpt* excerpt : masterScore()->excerpts()) {
-        if (excerpt->partScore()->staves().size() == 0) {
-            masterScore()->undo(new Ms::RemoveExcerpt(excerpt));
-        }
-    }
 }
 
 void NotationParts::removeInstruments(const IDList& instrumentIds, const ID& fromPartId)
@@ -1226,17 +1221,16 @@ void NotationParts::removeMissingParts(const PartInstrumentList& parts)
 
     IDList partIds;
     for (const PartInstrument& pi: parts) {
-        if (pi.part) {
+        if (pi.isExistingPart) {
             partIds << pi.partId;
         }
     }
 
     for (const Part* part: partList()) {
         if (partIds.contains(part->id())) {
-                continue;
+            continue;
         }
         partsToRemove << part->id();
-
     }
 
     doRemoveParts(partsToRemove);
@@ -1245,17 +1239,27 @@ void NotationParts::removeMissingParts(const PartInstrumentList& parts)
 void NotationParts::appendNewParts(const PartInstrumentList& parts)
 {
     for (const PartInstrument& pi: parts) {
-        if (pi.part) {
+        if (pi.isExistingPart) {
             continue;
         }
 
         Part* part = new Part(score());
 
         part->setPartName(pi.instrument.name);
+        part->setSoloist(pi.isSoloist);
         part->setInstrument(InstrumentsConverter::convertInstrument(pi.instrument));
 
         score()->undo(new Ms::InsertPart(part, lastStaffIndex()));
         appendStaves(part, pi.instrument);
+    }
+}
+
+void NotationParts::updateSoloist(const PartInstrumentList& parts)
+{
+    for (const PartInstrument& pi: parts) {
+        if (pi.isExistingPart && (pi.isSoloist != part(pi.partId)->soloist())) {
+            score()->undo(new Ms::SetSoloist(part(pi.partId), pi.isSoloist));
+        }
     }
 }
 
