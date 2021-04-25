@@ -163,8 +163,8 @@ struct Instrument
 };
 
 struct PartInstrument {
-    bool part;
-    bool soloist;
+    bool isExistingPart;
+    bool isSoloist;
     QString partId;
     Instrument instrument;
 };

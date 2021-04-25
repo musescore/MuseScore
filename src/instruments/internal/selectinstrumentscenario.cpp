@@ -77,8 +77,8 @@ mu::RetVal<PartInstrumentList> SelectInstrumentsScenario::selectInstruments(cons
         QVariantMap map = obj.toMap();
         PartInstrument pi;
 
-        pi.part = map["part"].toBool();
-        pi.soloist = map["soloist"].toBool();
+        pi.isExistingPart = map["isExistingPart"].toBool();
+        pi.isSoloist = map["isSoloist"].toBool();
         pi.partId = map["id"].toString();
         pi.instrument = map["instrument"].value<Instrument>();
 

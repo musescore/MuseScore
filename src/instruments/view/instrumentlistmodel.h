@@ -60,7 +60,7 @@ public:
     Q_INVOKABLE void selectInstrument(const QString& instrumentId, const QString& transpositionId = QString());
     Q_INVOKABLE void unselectInstrument(const QString& instrumentId);
     Q_INVOKABLE void swapSelectedInstruments(int firstIndex, int secondIndex);
-    Q_INVOKABLE void makeSoloist(const QString& instrumentId);
+    Q_INVOKABLE void toggleSoloist(const QString& instrumentId);
 
     Q_INVOKABLE void setSearchText(const QString& text);
 
@@ -83,6 +83,8 @@ private:
     notation::INotationPartsPtr notationParts() const;
 
     void sortInstruments(QVariantList& instruments) const;
+
+    int findInstrumentIndex(const QString& instrumentId) const;
 
     bool isSearching() const;
 
@@ -110,8 +112,9 @@ private:
     struct SelectedInstrumentInfo
     {
         QString id;
-        QString partId;
-        QString partName;
+        QString name;
+        bool isSoloist;
+        bool isExistingPart;
         Transposition transposition;
         Instrument config;
 

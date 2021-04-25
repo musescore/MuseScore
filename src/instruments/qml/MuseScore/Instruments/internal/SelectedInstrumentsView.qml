@@ -43,9 +43,22 @@ Item {
 
     signal unselectInstrumentRequested(string id)
     signal orderChanged(string id)
+    signal soloistChanged(string id)
 
     function scrollViewToEnd() {
         instrumentsView.positionViewAtEnd()
+    }
+
+    function soloistsButtonText(soloist) {
+        return soloist ? qsTrc("instruments", "Undo soloist") : qsTrc("instruments", "Make soloist")
+    }
+
+    function instrumentName(data) {
+        var name = data.name
+        if (data.isSoloist) {
+            name = qsTrc("instruments", "Soloist: ") + name
+        }
+        return name
     }
 
     NavigationPanel {
@@ -102,17 +115,6 @@ Item {
         FlatButton {
             Layout.preferredWidth: width
 
-            navigation.name: "Make soloist"
-            navigation.panel: navPanel
-            navigation.row: 2
-
-            enabled: root.isInstrumentSelected
-            text: qsTrc("instruments", "Make soloist")
-        }
-
-        FlatButton {
-            Layout.preferredWidth: width
-
             navigation.name: "Delete"
             navigation.panel: navPanel
             navigation.row: 3
@@ -163,8 +165,23 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
 
                 horizontalAlignment: Text.AlignLeft
-                text: modelData.name
+                text: instrumentName(modelData)
                 font: ui.theme.bodyBoldFont
+            }
+
+            FlatButton {
+                anchors.right: parent.right
+                anchors.leftMargin: 4
+                anchors.rightMargin: 4
+                anchors.verticalCenter: parent.verticalCenter
+
+                visible: root.currentInstrumentIndex === index
+
+                text: soloistsButtonText(modelData.isSoloist)
+
+                onClicked: {
+                    soloistChanged(modelData.id)
+                }
             }
 
             onClicked: {

@@ -257,6 +257,22 @@ public:
 };
 
 //---------------------------------------------------------
+//   SetSoloist
+//---------------------------------------------------------
+
+class SetSoloist : public UndoCommand
+{
+    Part* part = nullptr;
+    bool soloist = false;
+
+public:
+    SetSoloist(Part* p, bool b);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+    UNDO_NAME("SetSoloist")
+};
+
+//---------------------------------------------------------
 //   InsertStaff
 //---------------------------------------------------------
 
