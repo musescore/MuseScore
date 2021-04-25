@@ -56,10 +56,6 @@ case "${BUILD_MODE}" in
 "mtests")        MUSESCORE_BUILD_CONFIG=dev; BUILDTYPE=installdebug; OPTIONS="USE_SYSTEM_FREETYPE=ON UPDATE_CACHE=FALSE PREFIX=$ARTIFACTS_DIR/software";;
 esac
 
-if [ "${BUILDTYPE}" == "portable" ]; then
-  SUFFIX="-portable${SUFFIX}" # special value needed for CMakeLists.txt
-fi
-
 echo "MUSESCORE_BUILD_CONFIG: $MUSESCORE_BUILD_CONFIG"
 echo "BUILD_NUMBER: $BUILD_NUMBER"
 echo "TELEMETRY_TRACK_ID: $TELEMETRY_TRACK_ID"
