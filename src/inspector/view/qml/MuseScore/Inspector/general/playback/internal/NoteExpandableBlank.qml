@@ -19,9 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import MuseScore.Inspector 1.0
+import QtQuick 2.15
 import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 import "../../../common"
 
 ExpandableBlank {
@@ -33,6 +33,7 @@ ExpandableBlank {
 
     title: model ? model.title : ""
 
+    height: implicitHeight
     width: parent.width
 
     contentItemComponent: Column {
@@ -50,12 +51,22 @@ ExpandableBlank {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
+                navigation.name: "VelocityMenu"
+                navigation.panel: root.navigation.panel
+                navigation.column: root.navigation.column
+                navigation.row: root.navigation.row + 1
+
                 titleText: qsTrc("inspector", "Velocity")
                 propertyItem: model ? model.velocity : null
 
                 IncrementalPropertyControl {
                     id: velocityControl
                     iconMode: iconModeEnum.hidden
+
+                    navigation.name: "VelocityValue"
+                    navigation.panel: root.navigation.panel
+                    navigation.column: root.navigation.column
+                    navigation.row: root.navigation.row + 2
 
                     step: 1
                     decimals: 0
@@ -78,11 +89,21 @@ ExpandableBlank {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
+                navigation.name: "TuningsMenu"
+                navigation.panel: root.navigation.panel
+                navigation.column: root.navigation.column
+                navigation.row: root.navigation.row + 3
+
                 titleText: qsTrc("inspector", "Tunings (cents)")
                 propertyItem: model ? model.tuning : null
 
                 IncrementalPropertyControl {
                     iconMode: iconModeEnum.hidden
+
+                    navigation.name: "TuningsValue"
+                    navigation.panel: root.navigation.panel
+                    navigation.column: root.navigation.column
+                    navigation.row: root.navigation.row + 4
 
                     isIndeterminate: model ? model.tuning.isUndefined : false
                     currentValue: model ? model.tuning.value : 0
@@ -93,6 +114,12 @@ ExpandableBlank {
         }
 
         CheckBox {
+
+            navigation.name: "Override dynamics"
+            navigation.panel: root.navigation.panel
+            navigation.column: root.navigation.column
+            navigation.row: root.navigation.row + 5
+
             text: qsTrc("inspector", "Override dynamics")
 
             isIndeterminate: model ? model.overrideDynamics.isUndefined : false

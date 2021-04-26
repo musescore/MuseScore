@@ -39,8 +39,8 @@ PopupView {
     property int padding: 16
     property int margins: 16
 
-    property alias contentWidth: contentBody.width
-    property alias contentHeight: contentBody.height
+    property int contentWidth: contentBody.childrenRect.width
+    property int contentHeight: contentBody.childrenRect.height
 
     property bool opensUpward: false
     property var arrowX: width / 2
@@ -104,12 +104,20 @@ PopupView {
         width: contentContainer.width + root.padding * 2
         height: contentContainer.height + root.padding * 2
 
+        implicitWidth: contentContainer.implicitWidth + root.padding * 2
+        implicitHeight: contentContainer.implicitHeight + root.padding * 2
+
         Item {
             id: contentContainer
             x: root.padding
             y: root.padding
             width: contentBody.width + root.margins * 2
             height: contentBody.height + root.margins * 2
+
+            implicitWidth: contentBody.implicitWidth + root.margins * 2
+            implicitHeight: contentBody.implicitHeight + root.margins * 2
+
+            transformOrigin: Item.Center
 
             Rectangle {
                 id: contentBackground
@@ -123,8 +131,11 @@ PopupView {
                 id: contentBody
                 x: root.margins
                 y: root.margins
-                width: childrenRect.width
-                height: childrenRect.height
+                width: root.contentWidth
+                height: root.contentHeight
+
+                implicitWidth: root.contentWidth
+                implicitHeight: root.contentHeight
             }
         }
 

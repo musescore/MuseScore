@@ -42,6 +42,13 @@ Rectangle {
     color: ui.theme.backgroundPrimaryColor
 
 
+    function focusFirstItem() {
+        var item = inspectorRepeater.itemAt(0)
+        if (item) {
+            item.navigation.forceActive()
+        }
+    }
+
     NavigationPanel {
         id: navPanel
         name: "Inspector"
@@ -52,6 +59,12 @@ Rectangle {
 
     InspectorListModel {
         id: inspectorListModel
+
+        onModelChanged: {
+            if (navPanel.active) {
+                root.focusFirstItem()
+            }
+        }
     }
 
     Flickable {

@@ -143,14 +143,9 @@ InspectorSectionView {
 
                 PlaybackPopup {
                     id: playbackPopup
-
+                    navigation.parentControl: playbackButton.navigation
                     proxyModel: model ? model.playbackProxyModel : null
-
-                    width: popupButtonsRow.width
-
                     arrowX: (width - playbackButton.width - popupButtonsRow.spacing) / 2
-                    x: popupButtonsRow.x
-                    y: playbackButton.y + playbackButton.height
                 }
             }
 

@@ -94,14 +94,13 @@ UiContext UiContextResolver::currentUiContext() const
             return context::UiCtxPlaying;
         }
 
-        ui::INavigationSection* activeSection = navigationController()->activeSection();
-        if (activeSection && activeSection->name() != NOTATION_NAVIGATION_SECTION) {
-            //! TODO Needs add other ui contexts
-            return context::UiCtxUnknown;
-        }
-
         if (!notation->interaction()->selection()->isNone()) {
             return context::UiCtxNotationHasSelection;
+        }
+
+        ui::INavigationSection* activeSection = navigationController()->activeSection();
+        if (activeSection && activeSection->name() == NOTATION_NAVIGATION_SECTION) {
+            return context::UiCtxNotationFocused;
         }
 
         return context::UiCtxNotationOpened;
