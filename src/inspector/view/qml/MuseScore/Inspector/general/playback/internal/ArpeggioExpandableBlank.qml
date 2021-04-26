@@ -39,11 +39,21 @@ ExpandableBlank {
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
 
+        navigation.name: "Spread delay Menu"
+        navigation.panel: root.navigation.panel
+        navigation.column: root.navigation.column
+        navigation.row: root.navigation.row + 1
+
         titleText: qsTrc("inspector", "Spread delay")
         propertyItem: model ? model.stretch : null
 
         IncrementalPropertyControl {
             iconMode: iconModeEnum.hidden
+
+            navigation.name: "Stretch Value"
+            navigation.panel: root.navigation.panel
+            navigation.column: root.navigation.column
+            navigation.row: root.navigation.row + 2
 
             isIndeterminate: model ? model.stretch.isUndefined : false
             currentValue: model ? model.stretch.value : 0

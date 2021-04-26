@@ -19,30 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.2
-import MuseScore.Ui 1.0
-import MuseScore.UiComponents 1.0
-import "../../common"
 
-StyledPopupView {
+import QtQuick 2.15
+import QtQuick.Controls 1.5
+import MuseScore.Ui 1.0
+
+Tab {
     id: root
 
-    property alias proxyModel: playbackTabPanel.proxyModel
+    property alias navigation: navCtrl
 
-    contentHeight: playbackTabPanel.implicitHeight
-    contentWidth: 240
-
-    navigation.name: "PlaybackPopup"
-    navigation.direction: NavigationPanel.Both
-
-    onOpened: {
-        playbackTabPanel.focusOnFirstTab()
+    property NavigationControl _nav: NavigationControl {
+        id: navCtrl
+        name: root.objectName != "" ? root.objectName : "TabItem"
     }
 
-    PlaybackTabPanel {
-        id: playbackTabPanel
-        anchors.fill: parent
-        navigationPanel: root.navigation
-    }
 }

@@ -39,11 +39,21 @@ ExpandableBlank {
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
 
+        navigation.name: "Pause time Menu"
+        navigation.panel: root.navigation.panel
+        navigation.column: root.navigation.column
+        navigation.row: root.navigation.row + 1
+
         titleText: qsTrc("inspector", "Pause time")
         propertyItem: model ? model.pauseTime : null
 
         IncrementalPropertyControl {
             iconMode: iconModeEnum.hidden
+
+            navigation.name: "Pause time Value"
+            navigation.panel: root.navigation.panel
+            navigation.column: root.navigation.column
+            navigation.row: root.navigation.row + 2
 
             measureUnitsSymbol: "s"
             isIndeterminate: model ? model.pauseTime.isUndefined : false

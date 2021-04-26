@@ -19,9 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Controls 1.5
 import QtQuick.Layouts 1.3
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import "../../common"
 
@@ -30,20 +31,31 @@ TabPanel {
 
     property QtObject proxyModel: null
 
+    property NavigationPanel navigationPanel: null
+
     implicitHeight: Math.max(generalTab.visible ? generalTab.implicitHeight : 0,
                              dynamicsTab.visible ? dynamicsTab.implicitHeight : 0) + tabBarHeight + 24
     width: parent.width
 
-    Tab {
+    TabItem {
         id: generalTab
 
         height: implicitHeight
         width: root.width
 
+        navigation.name: "GeneralSettingsTab"
+        navigation.panel: root.navigationPanel
+        navigation.column: 1
+        navigation.row: 1
+
         title: qsTrc("inspector", "General")
 
         GeneralSettingsTab {
             id: generalSettings
+
+            navigationPanel: root.navigationPanel
+            navigationColumn: 0
+            navigationRowOffset: 2
 
             proxyModel: root.proxyModel
 
@@ -54,16 +66,25 @@ TabPanel {
         }
     }
 
-    Tab {
+    TabItem {
         id: dynamicsTab
 
         height: implicitHeight
         width: root.width
 
+        navigation.name: "DynamicsSettingsTab"
+        navigation.panel: root.navigationPanel
+        navigation.column: 2
+        navigation.row: 1
+
         title: qsTrc("inspector", "Dynamics")
 
         DynamicsSettingsTab {
             id: dynamicsSettings
+
+            navigationPanel: root.navigationPanel
+            navigationColumn: 2
+            navigationRowOffset: 2
 
             proxyModel: root.proxyModel
 

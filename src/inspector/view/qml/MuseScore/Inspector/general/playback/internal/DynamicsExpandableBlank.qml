@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
 import QtQuick.Controls 2.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 import "../../../common"
 
 ExpandableBlank {
@@ -48,8 +48,18 @@ ExpandableBlank {
             titleText: qsTrc("inspector", "Applies to")
             propertyItem: root.model ? root.model.scopeType : null
 
+            navigation.name: "Dynamic Applies Menu"
+            navigation.panel: root.navigation.panel
+            navigation.column: root.navigation.column
+            navigation.row: root.navigation.row + 1
+
             StyledComboBox {
                 width: parent.width
+
+                navigation.name: "Dynamic Applies Value"
+                navigation.panel: root.navigation.panel
+                navigation.column: root.navigation.column
+                navigation.row: root.navigation.row + 2
 
                 textRoleName: "text"
                 valueRoleName: "value"
@@ -77,12 +87,22 @@ ExpandableBlank {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
+                navigation.name: "Velocity Menu"
+                navigation.panel: root.navigation.panel
+                navigation.column: root.navigation.column
+                navigation.row: root.navigation.row + 3
+
                 titleText: qsTrc("inspector", "Velocity")
                 propertyItem: model ? model.velocity : null
 
                 IncrementalPropertyControl {
                     id: velocityControl
                     iconMode: iconModeEnum.hidden
+
+                    navigation.name: "Velocity Value"
+                    navigation.panel: root.navigation.panel
+                    navigation.column: root.navigation.column
+                    navigation.row: root.navigation.row + 4
 
                     step: 1
                     decimals: 0
@@ -105,12 +125,22 @@ ExpandableBlank {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
+                navigation.name: "Velocity change Menu"
+                navigation.panel: root.navigation.panel
+                navigation.column: root.navigation.column
+                navigation.row: root.navigation.row + 5
+
                 titleText: qsTrc("inspector", "Velocity change")
                 propertyItem: model ? model.velocityChange : null
 
                 IncrementalPropertyControl {
                     id: velocityChangeControl
                     iconMode: iconModeEnum.hidden
+
+                    navigation.name: "Velocity change Value"
+                    navigation.panel: root.navigation.panel
+                    navigation.column: root.navigation.column
+                    navigation.row: root.navigation.row + 6
 
                     enabled: model ? model.velocityChange.isEnabled : false
 
@@ -133,6 +163,12 @@ ExpandableBlank {
 
         InspectorPropertyView {
             titleText: qsTrc("inspector", "Change speed")
+
+            navigation.name: "Change speed Menu"
+            navigation.panel: root.navigation.panel
+            navigation.column: root.navigation.column
+            navigation.row: root.navigation.row + 7
+
             propertyItem: root.model ? root.model.velocityChangeSpeed : null
 
             RadioButtonGroup {
@@ -149,6 +185,11 @@ ExpandableBlank {
 
                 delegate: FlatRadioButton {
                     id: radioButtonDelegate
+
+                    navigation.name: "Change speed Value " + model.index
+                    navigation.panel: root.navigation.panel
+                    navigation.column: root.navigation.column
+                    navigation.row: root.navigation.row + 8 + model.index
 
                     ButtonGroup.group: radioButtonList.radioButtonGroup
 

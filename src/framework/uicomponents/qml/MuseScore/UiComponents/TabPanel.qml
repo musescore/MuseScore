@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.4
 import MuseScore.Ui 1.0
@@ -27,13 +27,28 @@ import MuseScore.Ui 1.0
 TabView {
     id: root
 
-    readonly property int tabBarHeight: 24
+    readonly property int tabBarHeight: 32
 
     width: parent.width
+
+    function focusOnFirstTab() {
+        var tabItem = root.getTab(0);
+        if (tabItem && tabItem.navigation) {
+            tabItem.navigation.forceActive()
+        }
+    }
+
+    onCurrentIndexChanged: {
+        var tabItem = root.getTab(root.currentIndex)
+        if (tabItem.navigation) {
+            tabItem.navigation.forceActive()
+        }
+    }
 
     Rectangle {
         id: selectionHighlighting
 
+        y: 4
         x: {
             if (root.currentIndex < 0) {
                 return
@@ -43,11 +58,9 @@ TabView {
         }
 
         height: 3
-        width: parent.width / count
-
-        color: ui.theme.accentColor
-
+        width: root.width / count
         radius: 2
+        color: ui.theme.accentColor
 
         Behavior on x {
             NumberAnimation {
@@ -57,29 +70,44 @@ TabView {
     }
 
     style: TabViewStyle {
+
+        id: style
+
         frameOverlap: 1
 
-        tab: Column {
+        tab: Rectangle {
 
-            height: tabBarHeight
-            width: styleData.availableWidth / count
+            property var tabItem: root.getTab(styleData.index)
+
+            implicitWidth: styleData.availableWidth / count
+            implicitHeight: tabBarHeight
+
+            color:  ui.theme.backgroundPrimaryColor
+            radius: 4
+            border.width: (tabItem.navigation && tabItem.navigation.active) ? 2 : 0
+            border.color: ui.theme.focusColor
+            opacity: styleData.selected ? ui.theme.buttonOpacityHit : ui.theme.buttonOpacityNormal
+
+            Connections {
+                target: (tabItem && tabItem.navigation ) ? tabItem.navigation : null
+                function onActiveChanged() {
+                    if (tabItem.navigation.active) {
+                        root.currentIndex = styleData.index
+                    }
+                }
+            }
 
             StyledTextLabel {
                 id: titleLabel
-
-                width: parent.width
-
+                anchors.fill: parent
                 text: styleData.title
                 font: ui.theme.bodyBoldFont
-                opacity: styleData.selected ? ui.theme.buttonOpacityHit : ui.theme.buttonOpacityNormal
             }
         }
 
         frame: Rectangle {
             id: backgroundRect
-
             anchors.fill: parent
-
             color: ui.theme.backgroundPrimaryColor
         }
     }

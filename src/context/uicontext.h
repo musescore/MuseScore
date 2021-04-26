@@ -39,6 +39,7 @@ static constexpr ui::UiContext UiCtxHomeOpened = "UiCtxHomeOpened";
 static constexpr ui::UiContext UiCtxPlaying= "UiCtxPlaying";
 
 // notation detail
+static constexpr ui::UiContext UiCtxNotationFocused = "UiCtxNotationFocused";
 static constexpr ui::UiContext UiCtxNotationHasSelection = "UiCtxNotationHasSelection";
 static constexpr ui::UiContext UiCtxNotationTextEditing = "UiCtxNotationTextEditing";
 }

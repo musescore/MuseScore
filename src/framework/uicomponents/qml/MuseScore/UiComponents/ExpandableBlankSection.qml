@@ -44,6 +44,7 @@ FocusScope {
     NavigationControl {
         id: navCtrl
         name: root.title
+        enabled: root.enabled
         onTriggered: {
             root.isExpanded = !root.isExpanded
         }
