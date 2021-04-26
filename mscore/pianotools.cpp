@@ -267,9 +267,11 @@ PianoKeyItem::PianoKeyItem(HPiano* _piano, int p)
       _highlighted = false;
       type = -1;
 
-      const char* pitchNames[] = {"C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"}; // keep in sync with `valu` in limbscore/utils.cpp
-      QString text = qApp->translate("utils", pitchNames[_pitch % 12]) + QString::number((_pitch / 12) - 1);
-      setToolTip(text);
+      if (preferences.getBool(PREF_UI_PIANO_SHOWPITCHHELP)) { // changes to that setting take effect only after restarting MuseScore though
+            const char* pitchNames[] = {"C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"}; // keep in sync with `valu` in limbscore/utils.cpp
+            QString text = qApp->translate("utils", pitchNames[_pitch % 12]) + QString::number((_pitch / 12) - 1);
+            setToolTip(text);
+            }
       }
 
 //---------------------------------------------------------
