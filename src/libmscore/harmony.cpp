@@ -744,6 +744,170 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
                 return 0;
             }
         }
+
+        static const QSet<const QString> qualities = {
+            "dim", "o",
+            "0", "\u00F8" /*half-diminished symbol*/,
+            "m", "mi", "min", "-",
+            "M", "Ma", "ma", "Maj", "maj", "\u0394" /*upper-case delta*/,
+            "aug", "+",
+            "dom"
+        };
+        // Length of longest element in `qualities`
+        // Unicode symbols are 1 character long each
+        const int lengthLongestQuality = 3;
+
+        // Parse chord quality if it exists
+        QStringRef remainderOfChord = s.midRef(idx);
+        if (remainderOfChord != nullptr) {
+            int i = remainderOfChord.size() < lengthLongestQuality
+                    ? remainderOfChord.size() : lengthLongestQuality;
+            // Search for longer strings in `qualities` first to avoid problems
+            // with identical left substrings (ex. "ma" and "maj")
+            for (; i > 0; --i) {
+                const QString quality = remainderOfChord.mid(0, i).toString();
+                auto it = qualities.constFind(quality);
+                if (it != qualities.constEnd()) {
+                    remainderOfChord = remainderOfChord.mid(it->size());
+                    break;
+                }
+            }
+        }
+
+        // Captures whole number at beginning of string
+        static const QRegularExpression pattern("(^[1-9][0-9]*)");
+        // Extracting whole number with RegEX is frequently done in this
+        // function, so created a lambda to avoid repeated code
+        static auto regexLambda = [](QStringRef& remainderOfChord) {
+            QRegularExpressionMatch match = pattern.match(remainderOfChord);
+            if (match.hasMatch()) {
+                remainderOfChord = remainderOfChord.mid(match.captured(1).size());
+                return true;
+            }
+            return false;
+        };
+
+        // Parse extension to chord if it exists (ex. 7, 13, etc.)
+        if (remainderOfChord != nullptr) {
+            regexLambda(remainderOfChord);
+        }
+
+        // These alterations must be succeeded by a whole number
+        static const QSet<const QString> alterations_succeeded = {
+            "bb", "\u1D12B" /*double-flat symbol*/,
+            "b", "\u266D" /*flat symbol*/,
+            "natural", "nat", "\u266E" /*natural symbol*/,
+            "#", "\u266F" /*sharp symbol*/,
+            "x", "##", "\u1D12A" /*double-sharp symbol*/,
+            "dim", "o",
+            "m", "mi", "min", "-",
+            "M", "Ma", "ma", "Maj", "maj", "\u0394" /*upper-case delta*/,
+            "aug", "+",
+            "add",
+            "no"
+        };
+        // Length of longest element in `alterations_succeeded` excluding
+        // "natural"
+        const int lengthLongestAlteration = 3;
+        // These elements may or may not be succeeded by a whole number
+        // Ex. Csus and Csus4 are both valid
+        static const std::vector<const QString> alterations_optionallySucceeded = {
+            "sus", "alt"
+        };
+
+        // Parse any alterations, returning 0 if any are invalid
+        QStack<char> parentheses;
+        bool existsInParentheses = false;
+        while (remainderOfChord != nullptr) {
+            // First, check for alterations that are succeeded by a whole number
+            bool isSucceededAlteration = false;
+            // Check if alteration is "natural".
+            // This is done outside of for loop below because the word is long
+            if (remainderOfChord.startsWith("natural")) {
+                remainderOfChord = remainderOfChord.mid(7);
+                isSucceededAlteration = true;
+            } else {
+                // Search for elements of `alterations_succeededByNum`
+                int i = remainderOfChord.size() < lengthLongestAlteration
+                        ? remainderOfChord.size() : lengthLongestAlteration;
+                // Search longer alterations first to avoid problems with
+                // identical left substrings (ex. "b" and "bb")
+                for (; i > 0; --i) {
+                    const QString alteration = remainderOfChord.mid(0, i).toString();
+                    auto it = alterations_succeeded.constFind(alteration);
+                    if (it != alterations_succeeded.constEnd()) {
+                        remainderOfChord = remainderOfChord.mid(it->size());
+                        isSucceededAlteration = true;
+                        break;
+                    }
+                }
+            }
+            // Check for number that must succeed alteration
+            if (isSucceededAlteration) {
+                if (remainderOfChord == nullptr || !regexLambda(remainderOfChord)) {
+                    return 0;
+                }
+                existsInParentheses = true;
+                continue;
+            }
+
+            // Next, check for elements of `alterations_optionallySucceeded`
+            bool isOptionallySucceeded = false;
+            for (size_t i = 0; i < alterations_optionallySucceeded.size(); ++i) {
+                const QString& alteration = alterations_optionallySucceeded[i];
+                if (remainderOfChord.startsWith(alteration)) {
+                    remainderOfChord = remainderOfChord.mid(alteration.size());
+                    regexLambda(remainderOfChord);
+                    existsInParentheses = true;
+                    isOptionallySucceeded = true;
+                    break;
+                }
+            }
+            if (isOptionallySucceeded) {
+                continue;
+            }
+
+            // Then, check for parentheses
+            if (remainderOfChord.startsWith('(')) {
+                parentheses.push('(');
+                remainderOfChord = remainderOfChord.mid(1);
+                existsInParentheses = false;
+                continue;
+            } else if (remainderOfChord.startsWith(')')) {
+                // Right parenthesis must be matched by left parenthesis
+                // Also, something valid must be in between the parentheses
+                // Ex. Db13() is not a valid chord, but Db13(#11) is
+                if (parentheses.isEmpty() || (!existsInParentheses)) {
+                    return 0;
+                }
+                parentheses.pop();
+                remainderOfChord = remainderOfChord.mid(1);
+                continue;
+            }
+
+            // Standalone numbers are valid inside parentheses
+            // Ex. C9(11) is valid
+            if (!parentheses.isEmpty() && !existsInParentheses) {
+                if (regexLambda(remainderOfChord)) {
+                    existsInParentheses = true;
+                    continue;
+                }
+            }
+
+            // Lastly, check for the slash of a slash chord
+            if (remainderOfChord.startsWith('/')) {
+                break;
+            }
+
+            // Otherwise, this alteration is invalid
+            return 0;
+        }
+        // Left parentheses must be matched by right parentheses
+        if (!parentheses.isEmpty()) {
+            return 0;
+        }
+
+        // Parse base of slash chord
         *root = r;
         *base = Tpc::TPC_INVALID;
         int slash = s.lastIndexOf('/');
