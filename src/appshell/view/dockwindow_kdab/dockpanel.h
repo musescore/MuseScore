@@ -19,26 +19,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_IMAINWINDOW_H
-#define MU_UI_IMAINWINDOW_H
 
-#include "modularity/imoduleexport.h"
+#ifndef MU_DOCK_DOCKPANEL_H
+#define MU_DOCK_DOCKPANEL_H
 
-class QMainWindow;
-class QWidget;
-class QWindow;
+#include "internal/dockbase.h"
 
-namespace mu::ui {
-class IMainWindow : MODULE_EXPORT_INTERFACE
+#include "framework/uicomponents/view/qmllistproperty.h"
+
+namespace mu::dock {
+class DockPanel : public DockBase
 {
-    INTERFACE_ID(IMainWindow)
-public:
-    virtual ~IMainWindow() = default;
+    Q_OBJECT
 
-    virtual QMainWindow* qMainWindow() = 0;
-    virtual QWindow* qWindow() = 0;
-    virtual void stackUnder(QWidget*) = 0;
+    Q_PROPERTY(DockPanel * tabifyPanel READ tabifyPanel WRITE setTabifyPanel NOTIFY tabifyPanelChanged)
+
+public:
+    explicit DockPanel(QQuickItem* parent = nullptr);
+
+    DockPanel* tabifyPanel() const;
+
+public slots:
+    void setTabifyPanel(DockPanel* panel);
+
+signals:
+    void tabifyPanelChanged(DockPanel* panel);
+
+private:
+    DockType type() const override;
+
+    DockPanel* m_tabifyPanel = nullptr;
 };
 }
 
-#endif // MU_UI_IMAINWINDOW_H
+#endif // MU_DOCK_DOCKPANEL_H

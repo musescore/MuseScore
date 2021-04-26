@@ -19,26 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_IMAINWINDOW_H
-#define MU_UI_IMAINWINDOW_H
+#ifndef MU_DOCK_DOCKCENTRAL_H
+#define MU_DOCK_DOCKCENTRAL_H
 
-#include "modularity/imoduleexport.h"
+#include "internal/dockbase.h"
 
-class QMainWindow;
-class QWidget;
-class QWindow;
-
-namespace mu::ui {
-class IMainWindow : MODULE_EXPORT_INTERFACE
+namespace mu::dock {
+class DockCentral : public DockBase
 {
-    INTERFACE_ID(IMainWindow)
-public:
-    virtual ~IMainWindow() = default;
+    Q_OBJECT
 
-    virtual QMainWindow* qMainWindow() = 0;
-    virtual QWindow* qWindow() = 0;
-    virtual void stackUnder(QWidget*) = 0;
+public:
+    explicit DockCentral(QQuickItem* parent = nullptr);
+
+private:
+    DockType type() const override;
 };
 }
 
-#endif // MU_UI_IMAINWINDOW_H
+#endif // MU_DOCK_DOCKCENTRAL_H
