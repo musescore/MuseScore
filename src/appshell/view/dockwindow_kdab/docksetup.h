@@ -19,26 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_IMAINWINDOW_H
-#define MU_UI_IMAINWINDOW_H
 
-#include "modularity/imoduleexport.h"
+#ifndef MU_DOCK_DOCKSETUP_H
+#define MU_DOCK_DOCKSETUP_H
 
-class QMainWindow;
-class QWidget;
-class QWindow;
+class QQmlEngine;
 
-namespace mu::ui {
-class IMainWindow : MODULE_EXPORT_INTERFACE
+namespace mu::dock {
+class DockSetup
 {
-    INTERFACE_ID(IMainWindow)
 public:
-    virtual ~IMainWindow() = default;
-
-    virtual QMainWindow* qMainWindow() = 0;
-    virtual QWindow* qWindow() = 0;
-    virtual void stackUnder(QWidget*) = 0;
+    static void registerQmlTypes();
+    static void registerExports();
+    static void setup(QQmlEngine* engine);
 };
 }
 
-#endif // MU_UI_IMAINWINDOW_H
+#endif // MU_DOCK_DOCKSETUP_H
