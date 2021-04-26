@@ -152,8 +152,7 @@ additional_qt_components=(
 # linuxdeploy may have missed some libraries that we need
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
 additional_libraries=(
-  libssl.so.1.0.0    # OpenSSL (for Save Online)
-  libcrypto.so.1.0.0 # OpenSSL (for Save Online)
+  # none
 )
 
 # FALLBACK LIBRARIES
