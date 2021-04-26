@@ -86,6 +86,8 @@ void InspectorListModel::setElementList(const QList<Ms::Element*>& selectedEleme
     }
 
     m_repository->updateElementList(selectedElementList);
+
+    emit modelChanged();
 }
 
 int InspectorListModel::rowCount(const QModelIndex&) const

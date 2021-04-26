@@ -40,6 +40,11 @@ ExpandableBlank {
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
 
+        navigation.name: "Time stretch Menu"
+        navigation.panel: root.navigation.panel
+        navigation.column: root.navigation.column
+        navigation.row: root.navigation.row + 1
+
         titleText: qsTrc("inspector", "Time stretch")
         propertyItem: model ? model.timeStretch : null
 
@@ -47,6 +52,11 @@ ExpandableBlank {
             id: timeStretchControl
 
             iconMode: iconModeEnum.hidden
+
+            navigation.name: "Time stretch Value"
+            navigation.panel: root.navigation.panel
+            navigation.column: root.navigation.column
+            navigation.row: root.navigation.row + 2
 
             measureUnitsSymbol: "%"
             isIndeterminate: model ? model.timeStretch.isUndefined : false

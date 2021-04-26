@@ -28,6 +28,7 @@
 #include <QQmlContext>
 #include <QApplication>
 #include <QMainWindow>
+#include <QTimer>
 
 #include "log.h"
 
@@ -52,8 +53,11 @@ public:
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
+    void syncSizes();
+
     QQuickView* m_view = nullptr;
     QWidget* m_widget = nullptr;
+    QTimer m_sizesSynchronizer;
 };
 
 PopupWindow::PopupWindow(QQmlEngine* engine)
@@ -61,11 +65,15 @@ PopupWindow::PopupWindow(QQmlEngine* engine)
 {
     setObjectName("PopupWindow");
 
-    Qt::WindowFlags windowFlags = Qt::Dialog | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint;
+    Qt::WindowFlags windowFlags = Qt::Dialog // The most appropriate behavior for us on all platforms
+                                  | Qt::FramelessWindowHint // Without border
+                                  | Qt::NoDropShadowWindowHint  // Without system shadow
+                                  | Qt::BypassWindowManagerHint; // Otherwise, it does not work correctly on Gnome (Linux) when resizing
+
     m_view = new QQuickView(engine, mainWindow()->qWindow());
     m_view->setObjectName("PopupQuickWindow");
     m_view->setFlags(windowFlags);
-    m_view->setResizeMode(QQuickView::SizeViewToRootObject);
+    m_view->setResizeMode(QQuickView::SizeRootObjectToView);
     m_view->setColor(QColor(0, 0, 0, 0)); // transparent
 
     m_view->installEventFilter(this);
@@ -74,36 +82,7 @@ PopupWindow::PopupWindow(QQmlEngine* engine)
     //! the active window should be a QWidget window or QWidget Popup,
     //! else shortcut not working, even with Application Shortcut context.
     //! So, added QWidget Window for shortcuts to work
-    /* From Qt source
-     * https://code.woboq.org/qt5/qtbase/src/widgets/kernel/qshortcut.cpp.html#_Z29qWidgetShortcutContextMatcherP7QObjectN2Qt15ShortcutContextE
-    bool qWidgetShortcutContextMatcher(QObject *object, Qt::ShortcutContext context)
-    {
-        QWidget *active_window = QApplication::activeWindow();
-
-        // popups do not become the active window,
-        // so we fake it here to get the correct context
-        // for the shortcut system.
-        if (QApplication::activePopupWidget())
-            active_window = QApplication::activePopupWidget();
-
-        if (!active_window) {
-            QWindow *qwindow = QGuiApplication::focusWindow();
-            if (qwindow && qwindow->isActive()) {
-                while (qwindow) {
-                    if (auto widgetWindow = qobject_cast<QWidgetWindow *>(qwindow)) {
-                        active_window = widgetWindow->widget();
-                        break;
-                    }
-                    qwindow = qwindow->parent();
-                }
-            }
-        }
-
-        if (!active_window)
-            return false;
-        ...
-    }
-    */
+    //! see https://code.woboq.org/qt5/qtbase/src/widgets/kernel/qshortcut.cpp.html#_Z29qWidgetShortcutContextMatcherP7QObjectN2Qt15ShortcutContextE
 
     m_widget = QWidget::createWindowContainer(m_view, nullptr, windowFlags);
     m_widget->setObjectName("PopupWidgetWindow");
@@ -112,12 +91,16 @@ PopupWindow::PopupWindow(QQmlEngine* engine)
 
     m_widget->installEventFilter(this);
 
-    connect(m_view, &QQuickView::widthChanged, [this](int arg) {
-        m_widget->resize(arg, m_widget->height());
-    });
-
-    connect(m_view, &QQuickView::heightChanged, [this](int arg) {
-        m_widget->resize(m_widget->width(), arg);
+    //! HACK Resizing the window is overhead and a slow operation,
+    //! if it is doing for each cycle of animation of changing the size of the content (usually the height),
+    //! then graphic artifacts may appear and it looks awful.
+    //! So, when changing the size of the content,
+    //! we resize the window itself twice as large, and as soon as the changes are over,
+    //! we will synchronize the sizes.
+    m_sizesSynchronizer.setSingleShot(true);
+    m_sizesSynchronizer.setInterval(1000);
+    connect(&m_sizesSynchronizer, &QTimer::timeout, [this]() {
+        syncSizes();
     });
 }
 
@@ -126,9 +109,33 @@ PopupWindow::~PopupWindow()
     delete m_widget;
 }
 
+void PopupWindow::syncSizes()
+{
+    QQuickItem* item = m_view->rootObject();
+    if (item) {
+        m_widget->resize(item->implicitWidth(), item->implicitHeight());
+    }
+}
+
 void PopupWindow::setContent(QQuickItem* item)
 {
     m_view->setContent(QUrl(), nullptr, item);
+
+    m_widget->resize(item->width(), item->height());
+
+    connect(item, &QQuickItem::widthChanged, [this, item]() {
+        if (item->width() > m_widget->width()) {
+            m_widget->resize(m_widget->width() * 2, m_widget->height());
+        }
+        m_sizesSynchronizer.start();
+    });
+
+    connect(item, &QQuickItem::heightChanged, [this, item]() {
+        if (item->height() > m_widget->height()) {
+            m_widget->resize(m_widget->width(), m_widget->height() * 2);
+        }
+        m_sizesSynchronizer.start();
+    });
 }
 
 void PopupWindow::forceActiveFocus()
@@ -142,6 +149,7 @@ void PopupWindow::show(QPoint p)
 {
     m_widget->move(p);
     m_widget->show();
+    syncSizes();
     m_widget->setFocus();
 }
 
@@ -395,5 +403,15 @@ void PopupView::mouseReleaseEvent(QMouseEvent* event)
 bool PopupView::isMouseWithinBoundaries(const QPoint& mousePos) const
 {
     QRect viewRect = m_window->geometry();
-    return viewRect.contains(mousePos);
+    bool contains = viewRect.contains(mousePos);
+    if (!contains) {
+        //! NOTE We also check the parent because often clicking on the parent should toggle the popup,
+        //! but if we don't check a parent here, the popup will be closed and reopened.
+        QQuickItem* prn = parentItem();
+        QPointF localPos = prn->mapFromGlobal(mousePos);
+        QRectF parentRect = QRectF(prn->x(), prn->y(), prn->width(), prn->height());
+        contains = parentRect.contains(localPos);
+    }
+
+    return contains;
 }

@@ -18,6 +18,7 @@ StyledComboBox 1.0 StyledComboBox.qml
 Icon 1.0 Icon.qml
 StyledPopup 1.0 StyledPopup.qml
 TabPanel 1.0 TabPanel.qml
+TabItem 1.0 TabItem.qml
 TextInputField 1.0 TextInputField.qml
 ValueAdjustControl 1.0 ValueAdjustControl.qml
 ContextMenu 1.0 ContextMenu.qml

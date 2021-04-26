@@ -48,5 +48,6 @@
         <file>qml/MuseScore/UiComponents/internal/ValueListItem.qml</file>
         <file>qml/MuseScore/UiComponents/FocusableControl.qml</file>
         <file>qml/MuseScore/UiComponents/StyledMenuLoader.qml</file>
+        <file>qml/MuseScore/UiComponents/TabItem.qml</file>
     </qresource>
 </RCC>

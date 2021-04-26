@@ -38,11 +38,21 @@ ExpandableBlank {
     contentItemComponent: InspectorPropertyView {
         width: root.width
 
+        navigation.name: "Glissando Style Menu"
+        navigation.panel: root.navigation.panel
+        navigation.column: root.navigation.column
+        navigation.row: root.navigation.row + 1
+
         titleText: qsTrc("inspector", "Style")
         propertyItem: root.model ? root.model.styleType : null
 
         StyledComboBox {
             width: parent.width
+
+            navigation.name: "Glissando Style Value"
+            navigation.panel: root.navigation.panel
+            navigation.column: root.navigation.column
+            navigation.row: root.navigation.row + 2
 
             textRoleName: "text"
             valueRoleName: "value"
