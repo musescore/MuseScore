@@ -19,26 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_IMAINWINDOW_H
-#define MU_UI_IMAINWINDOW_H
 
-#include "modularity/imoduleexport.h"
+#include "dockstatusbar.h"
 
-class QMainWindow;
-class QWidget;
-class QWindow;
+using namespace mu::dock;
 
-namespace mu::ui {
-class IMainWindow : MODULE_EXPORT_INTERFACE
+DockStatusBar::DockStatusBar(QQuickItem* parent)
+    : DockBase(parent)
 {
-    INTERFACE_ID(IMainWindow)
-public:
-    virtual ~IMainWindow() = default;
-
-    virtual QMainWindow* qMainWindow() = 0;
-    virtual QWindow* qWindow() = 0;
-    virtual void stackUnder(QWidget*) = 0;
-};
+    setAllowedAreas(Qt::BottomDockWidgetArea);
 }
 
-#endif // MU_UI_IMAINWINDOW_H
+DockType DockStatusBar::type() const
+{
+    return DockType::StatusBar;
+}
