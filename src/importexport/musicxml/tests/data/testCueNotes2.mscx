@@ -191,12 +191,37 @@
         <voice>
           <Chord>
             <small>1</small>
-            <durationType>quarter</durationType>
+            <durationType>eighth</durationType>
             <Lyrics>
-              <text>cue</text>
+              <text>tiedcue</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
             <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/8</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <play>0</play>
+              </Note>
+            </Chord>
+          <Chord>
+            <small>1</small>
+            <durationType>eighth</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/8</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <play>0</play>
@@ -204,6 +229,9 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
+            <Lyrics>
+              <text>cue</text>
+              </Lyrics>
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>74</pitch>
@@ -242,12 +270,39 @@
       <!-- Measure 3 -->
       <Measure>
         <voice>
+          <Beam>
+            <StemDirection>up</StemDirection>
+            </Beam>
           <Chord>
-            <durationType>quarter</durationType>
+            <durationType>eighth</durationType>
             <Lyrics>
-              <text>small</text>
+              <text>tiedsmall</text>
               </Lyrics>
             <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/8</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <small>1</small>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/8</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <small>1</small>
@@ -256,6 +311,9 @@
           <Chord>
             <small>1</small>
             <durationType>quarter</durationType>
+            <Lyrics>
+              <text>small</text>
+              </Lyrics>
             <Note>
               <pitch>67</pitch>
               <tpc>15</tpc>
