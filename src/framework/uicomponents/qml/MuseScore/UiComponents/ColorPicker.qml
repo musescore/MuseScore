@@ -47,7 +47,7 @@ Rectangle {
     NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "ColorPicker"
-        enabled: root.enabled
+        enabled: root.enabled && root.visible
         onTriggered: colorDialog.open()
     }
 

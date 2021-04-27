@@ -24,13 +24,12 @@ import QtQuick.Controls 2.2
 import MuseScore.UiComponents 1.0
 import "../../common"
 
-StyledPopup {
+StyledPopupView {
     id: root
 
     property alias model: noteSettingsTabPanel.proxyModel
 
-    height: noteSettingsTabPanel.implicitHeight + topPadding + bottomPadding
-    width: parent.width
+    contentHeight: noteSettingsTabPanel.implicitHeight
 
     NoteSettingsTabPanel {
         id: noteSettingsTabPanel

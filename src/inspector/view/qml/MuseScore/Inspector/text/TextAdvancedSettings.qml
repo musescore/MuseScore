@@ -36,10 +36,7 @@ PopupViewButton {
 
     TextPopup {
         id: textPopup
-
-        x: popupPositionX
-        y: popupPositionY
+        navigation.parentControl: root.navigation
         arrowX: parent.x + parent.width / 2
-        width: popupAvailableWidth
     }
 }
