@@ -60,6 +60,7 @@
 #include "staff.h"
 #include "stafftext.h"
 #include "stafftype.h"
+#include "stem.h"
 #include "stringdata.h"
 #include "style.h"
 #include "sym.h"
@@ -2794,12 +2795,20 @@ bool Measure::hasVoices(int staffIdx, Fraction stick, Fraction len) const
                               continue;
                         bool v = false;
                         if (cr->isChord()) {
-                              // consider chord visible if any note is visible
                               Chord* c = toChord(cr);
-                              for (Note* n : c->notes()) {
-                                    if (n->visible()) {
-                                          v = true;
-                                          break;
+                              // consider a chord visible if stem, hook(s) or beam(s) are visible
+                              if ((c->stem() && c->stem()->visible()) ||
+                                  (c->hook() && c->hook()->visible()) ||
+                                  (c->beam() && c->beam()->visible())) {
+                                    v = true;
+                                    }
+                              else {
+                                    // or any of its notes
+                                    for (Note* n : c->notes()) {
+                                          if (n->visible()) {
+                                                v = true;
+                                                break;
+                                                }
                                           }
                                     }
                               }
