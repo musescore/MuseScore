@@ -2981,10 +2981,10 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
                   }
             }
 
-      System* previouslyDrawnSystemStaves = nullptr;
-      System* currentSystem = nullptr;
-      Measure* firstMeasureOfSystem = nullptr;
-      const Measure* currentMeasure = nullptr;
+      System* currentSystem               { nullptr };
+      Measure* firstMeasureOfSystem       { nullptr };
+      const Measure* currentMeasure       { nullptr };
+      std::vector<System*> printedSystems;
       for (const Element* e : pel) {
             // Always exclude invisible elements
             if (!e->visible())
@@ -2992,8 +2992,9 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
             if (e->type() == ElementType::STAFF_LINES) {
                   currentMeasure = e->findMeasure();
                   currentSystem = currentMeasure->system();
-                  if (previouslyDrawnSystemStaves == currentSystem)
-                        continue; // skip staff lines that have been drawn
+
+                  if (std::find(printedSystems.begin(), printedSystems.end(), currentSystem) != printedSystems.end())
+                        continue; // Skip lines if current system has been drawn already
 
                   firstMeasureOfSystem = currentSystem->firstMeasure();
                   if (!firstMeasureOfSystem) // only boxes, hence no staff lines
@@ -3034,7 +3035,6 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
                                           paintElement(p, sl);
                                           }
                                     }
-                              previouslyDrawnSystemStaves = currentSystem;
                               }
                         else { // Draw staff lines once per system
                               StaffLines* firstSL = firstMeasureOfSystem->staffLines(i)->clone();
@@ -3049,12 +3049,11 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
 
                               printer.setElement(firstSL);
                               paintElement(p, firstSL);
-                              previouslyDrawnSystemStaves = currentSystem;
                               }
                         }
-                  continue; // drawing of staff-lines for measure/system complete - skip to next element
+                  printedSystems.push_back(currentSystem);
+                  continue; // Drawing of staff-line element complete
                   }
-
             // Set the Element pointer inside SvgGenerator/SvgPaintEngine
             printer.setElement(e);
 
@@ -3073,7 +3072,7 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
                   delete note;
                   }
             else paintElement(p, e);
-            }
+            } // End of element loop
 
       p.end(); // Writes MuseScore SVG file to disk, finally
 
