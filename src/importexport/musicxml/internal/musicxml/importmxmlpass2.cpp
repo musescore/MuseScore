@@ -5124,6 +5124,9 @@ FretDiagram* MusicXMLParserPass2::frame()
                 if (fret == 0) {
                     fd->setMarker(actualString, FretMarkerType::CIRCLE);
                 } else if (fret > 0) {
+                    if (fd->marker(actualString).mtype == FretMarkerType::CROSS) {
+                        fd->setMarker(actualString, FretMarkerType::NONE);
+                    }
                     fd->setDot(actualString, fret, true);
                 }
             } else {
