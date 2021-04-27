@@ -29,6 +29,8 @@ Rectangle {
 
     property bool isIndeterminate: false
 
+    property alias navigation: navCtrl
+
     signal newColorSelected(var newColor)
 
     height: 30
@@ -39,13 +41,19 @@ Rectangle {
     radius: 3
     color: "#000000"
 
-    border.width: 1
+    border.width: navCtrl.active ? 2 : 1
+    border.color: navCtrl.active ? ui.theme.focusColor : "#000000"
+
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName != "" ? root.objectName : "ColorPicker"
+        enabled: root.enabled
+        onTriggered: colorDialog.open()
+    }
 
     StyledIconLabel {
         anchors.fill: parent
-
         iconCode: IconCode.QUESTION_MARK
-
         visible: isIndeterminate
     }
 
@@ -53,10 +61,9 @@ Rectangle {
         id: clickableArea
 
         anchors.fill: parent
-
         hoverEnabled: true
-
         onClicked: {
+            navCtrl.forceActive()
             colorDialog.open()
         }
     }

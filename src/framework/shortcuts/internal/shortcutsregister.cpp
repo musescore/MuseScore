@@ -63,16 +63,35 @@ void ShortcutsRegister::load()
 
     if (ok) {
         ok = readFromFile(m_shortcuts, userPath.val);
-
         if (!ok) {
             m_shortcuts = m_defaultShortcuts;
-            ok = true;
+        } else {
+            mergeSortcuts(m_shortcuts, m_defaultShortcuts);
         }
+        ok = true;
     }
 
     if (ok) {
         expandStandardKeys(m_shortcuts);
         m_shortcutsChanged.notify();
+    }
+}
+
+void ShortcutsRegister::mergeSortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const
+{
+    ShortcutList needadd;
+    for (const Shortcut& sh : defaultShortcuts) {
+        auto it = std::find_if(shortcuts.begin(), shortcuts.end(), [sh](const Shortcut& i) {
+            return i.action == sh.action;
+        });
+
+        if (it == shortcuts.end()) {
+            needadd.push_back(sh);
+        }
+    }
+
+    if (!needadd.empty()) {
+        shortcuts.splice(shortcuts.end(), needadd);
     }
 }
 
@@ -186,6 +205,7 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
 
     if (ok) {
         m_shortcuts = shortcuts;
+        mergeSortcuts(m_shortcuts, m_defaultShortcuts);
         m_shortcutsChanged.notify();
     }
 
