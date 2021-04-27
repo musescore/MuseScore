@@ -29,7 +29,8 @@ namespace mu::iex::musicxml {
 class MusicXmlWriter : public notation::AbstractNotationWriter
 {
 public:
-    Ret write(const notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
+    Ret write(const notation::INotationPtrList& notations, system::IODevice& destinationDevice,
+              const Options& options = Options()) override;
 };
 }
 

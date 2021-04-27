@@ -19,30 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import QtQuick 2
+import QtQuick.Layouts 1
 
-#include "mxlwriter.h"
+import MuseScore.UiComponents 1
+import MuseScore.UserScores 1
 
-#include "log.h"
+ColumnLayout {
+    id: root
 
-#include "musicxml/exportxml.h"
+    property ExportDialogModel model
+    property int firstColumnWidth
 
-using namespace mu::iex::musicxml;
-using namespace mu::system;
+    ExportOptionItem {
+        text: qsTrc("userscores", "Resolution:")
+        firstColumnWidth: root.firstColumnWidth
 
-mu::Ret MxlWriter::write(const notation::INotationPtrList& notations, IODevice& destinationDevice, const Options&)
-{
-    IF_ASSERT_FAILED(!notations.empty()) {
-        return make_ret(Ret::Code::UnknownError);
+        IncrementalPropertyControl {
+            Layout.preferredWidth: 80
+
+            currentValue: root.model.pdfResolution
+
+            minValue: 72
+            maxValue: 2400
+            step: 1
+            decimals: 0
+            measureUnitsSymbol: qsTrc("userscores", "dpi")
+
+            onValueEdited: {
+                root.model.pdfResolution = newValue
+            }
+        }
     }
-
-    INotationPtr notation = notations.front();
-    IF_ASSERT_FAILED(notation) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-    Ms::Score* score = notation->elements()->msScore();
-    IF_ASSERT_FAILED(score) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-
-    return Ms::saveMxl(score, &destinationDevice);
 }

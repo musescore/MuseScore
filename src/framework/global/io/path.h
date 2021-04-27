@@ -43,9 +43,13 @@ struct path {
     inline bool operator==(const path& other) const { return m_path == other.m_path; }
     inline bool operator!=(const path& other) const { return !(m_path == other.m_path); }
 
-    inline path operator+(const path& other) const { path p = *this; p.m_path += other.m_path; return p; }
-    inline path operator+(const QString& other) const { path p = *this; p.m_path += other.toUtf8(); return p; }
-    inline path operator+(const char* other) const { path p = *this; p.m_path += other; return p; }
+    inline path operator+(const path& other) const { path p = *this; p += other; return p; }
+    inline path operator+(const QString& other) const { path p = *this; p += other; return p; }
+    inline path operator+(const char* other) const { path p = *this; p += other; return p; }
+
+    inline path& operator+=(const path& other) { m_path += other.m_path; return *this; }
+    inline path& operator+=(const QString& other) { m_path += other.toUtf8(); return *this; }
+    inline path& operator+=(const char* other) { m_path += other; return *this; }
 
     QString toQString() const;
     std::string toStdString() const;
@@ -57,6 +61,9 @@ struct path {
 private:
     QByteArray m_path;
 };
+
+inline path operator+(const char* one, const path& other) { return path(one) + other; }
+inline path operator+(const QString& one, const path& other) { return path(one) + other; }
 
 inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::io::path& p)
 {

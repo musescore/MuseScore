@@ -30,18 +30,23 @@ using namespace mu::iex::imagesexport;
 
 static const Settings::Key EXPORT_PDF_DPI_RESOLUTION_KEY("iex_imagesexport", "export/pdf/dpi");
 static const Settings::Key EXPORT_PNG_DPI_RESOLUTION_KEY("iex_imagesexport", "export/png/resolution");
-static const Settings::Key EXPORT_PNG_USE_TRASNPARENCY_KEY("iex_imagesexport", "export/png/useTransparency");
+static const Settings::Key EXPORT_PNG_USE_TRANSPARENCY_KEY("iex_imagesexport", "export/png/useTransparency");
 
 void ImagesExportConfiguration::init()
 {
     settings()->setDefaultValue(EXPORT_PNG_DPI_RESOLUTION_KEY, Val(Ms::DPI));
-    settings()->setDefaultValue(EXPORT_PNG_USE_TRASNPARENCY_KEY, Val(true));
+    settings()->setDefaultValue(EXPORT_PNG_USE_TRANSPARENCY_KEY, Val(true));
     settings()->setDefaultValue(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(Ms::DPI));
 }
 
 int ImagesExportConfiguration::exportPdfDpiResolution() const
 {
     return settings()->value(EXPORT_PDF_DPI_RESOLUTION_KEY).toInt();
+}
+
+void ImagesExportConfiguration::setExportPdfDpiResolution(int dpi)
+{
+    settings()->setValue(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(dpi));
 }
 
 void ImagesExportConfiguration::setExportPngDpiResolution(std::optional<float> dpi)
@@ -60,5 +65,10 @@ float ImagesExportConfiguration::exportPngDpiResolution() const
 
 bool ImagesExportConfiguration::exportPngWithTransparentBackground() const
 {
-    return settings()->value(EXPORT_PNG_USE_TRASNPARENCY_KEY).toBool();
+    return settings()->value(EXPORT_PNG_USE_TRANSPARENCY_KEY).toBool();
+}
+
+void ImagesExportConfiguration::setExportPngWithTransparentBackground(bool transparent)
+{
+    settings()->setValue(EXPORT_PNG_USE_TRANSPARENCY_KEY, Val(transparent));
 }
