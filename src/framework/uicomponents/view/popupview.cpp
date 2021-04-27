@@ -67,7 +67,7 @@ PopupWindow::PopupWindow(QQmlEngine* engine)
 
     Qt::WindowFlags windowFlags = Qt::Dialog // The most appropriate behavior for us on all platforms
                                   | Qt::FramelessWindowHint // Without border
-                                  | Qt::NoDropShadowWindowHint  // Without system shadow
+                                  | Qt::NoDropShadowWindowHint // Without system shadow
                                   | Qt::BypassWindowManagerHint; // Otherwise, it does not work correctly on Gnome (Linux) when resizing
 
     m_view = new QQuickView(engine, mainWindow()->qWindow());
@@ -150,6 +150,7 @@ void PopupWindow::show(QPoint p)
     m_widget->move(p);
     m_widget->show();
     syncSizes();
+    m_widget->activateWindow();
     m_widget->setFocus();
 }
 
@@ -170,13 +171,28 @@ const QRect& PopupWindow::geometry() const
 
 bool PopupWindow::eventFilter(QObject* watched, QEvent* event)
 {
-    // Please, don't remove
-    //    static QMetaEnum typeEnum = QMetaEnum::fromType<QEvent::Type>();
-    //    const char* typeStr = typeEnum.key(event->type());
-    //    LOGI() << (watched ? watched->objectName() : "null") << " event: " << (typeStr ? typeStr : "unknown");
+// Please, don't remove
+//#define POPUPWINDOW_DEBUG_EVENTS_ENABLED
+#ifdef POPUPWINDOW_DEBUG_EVENTS_ENABLED
+    static QMetaEnum typeEnum = QMetaEnum::fromType<QEvent::Type>();
+    static QList<QEvent::Type> excludeLoggingTypes = { QEvent::MouseMove };
+    const char* typeStr = typeEnum.key(event->type());
+    if (!excludeLoggingTypes.contains(event->type())) {
+        LOGI() << (watched ? watched->objectName() : "null") << " event: " << (typeStr ? typeStr : "unknown");
+    }
+
+    static QList<QEvent::Type> trackEvents = { QEvent::WindowDeactivate, QEvent::ActivationChange, QEvent::FocusAboutToChange };
+    if (trackEvents.contains(event->type())) {
+        int k = 1;
+    }
+
+    if (QString(typeStr) == "WindowDeactivate") {
+        int k = 1;
+    }
+#endif
 
     // QQuickView events
-    if (m_view && watched == m_view) {
+    if (watched == m_view) {
         if (event->type() == QEvent::FocusIn) {
             m_view->contentItem()->forceActiveFocus();
         }

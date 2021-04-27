@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Dialogs 1.2
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 InspectorPropertyView {
@@ -28,14 +29,24 @@ InspectorPropertyView {
 
     property QtObject color: undefined
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 0
+
     height: implicitHeight
     width: parent.width
 
     titleText: qsTrc("inspector", "Color")
     propertyItem: root.color
 
+    navigation.name: "Color Menu"
+    navigation.panel: root.navigationPanel
+    navigation.row: root.navigationRowOffset + 1
+
     ColorPicker {
         id: colorPicker
+
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowOffset + 2
 
         enabled: root.color ? root.color.isEnabled : false
         isIndeterminate: root.color && enabled ? root.color.isUndefined : false

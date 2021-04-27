@@ -39,7 +39,7 @@ PopupView {
     property int padding: 16
     property int margins: 16
 
-    property int contentWidth: contentBody.childrenRect.width
+    property int contentWidth: 240
     property int contentHeight: contentBody.childrenRect.height
 
     property bool opensUpward: false

@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 import "../../../common"
 
 Item {
@@ -30,6 +30,17 @@ Item {
 
     property QtObject leadingSpace: undefined
     property QtObject barWidth: undefined
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 0
+
+    function navigationRow(r) {
+        return root.navigationRowOffset + r
+    }
+
+    function focusOnFirst() {
+        leadingValue.navigation.forceActive()
+    }
 
     height: childrenRect.height
     width: parent.width
@@ -39,11 +50,20 @@ Item {
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
 
+        navigation.name: "LeadingMenu"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRow(1)
+
         titleText: qsTrc("inspector", "Leading")
         propertyItem: leadingSpace
 
         IncrementalPropertyControl {
+            id: leadingValue
             icon: IconCode.HORIZONTAL
+
+            navigation.name: "LeadingValue"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRow(2)
 
             enabled: leadingSpace ? leadingSpace.isEnabled : false
             isIndeterminate: leadingSpace && enabled ? leadingSpace.isUndefined : false
@@ -58,11 +78,19 @@ Item {
         anchors.leftMargin: 4
         anchors.right: parent.right
 
+        navigation.name: "Bar width Menu"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRow(3)
+
         titleText: qsTrc("inspector", "Bar width")
         propertyItem: barWidth
 
         IncrementalPropertyControl {
             icon: IconCode.HORIZONTAL
+
+            navigation.name: "Bar width Value"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRow(4)
 
             enabled: barWidth ? barWidth.isEnabled : false
             isIndeterminate: barWidth && enabled ? barWidth.isUndefined : false

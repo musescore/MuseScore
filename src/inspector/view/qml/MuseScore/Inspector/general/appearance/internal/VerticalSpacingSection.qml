@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 import "../../../common"
 
 InspectorPropertyView {
@@ -30,15 +30,26 @@ InspectorPropertyView {
 
     property QtObject minimumDistance: undefined
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 0
+
     anchors.left: parent.left
     anchors.right: parent.horizontalCenter
     anchors.rightMargin: 2
+
+    navigation.name: "Minimum distance Menu"
+    navigation.panel: root.navigationPanel
+    navigation.row: root.navigationRowOffset + 1
 
     titleText: qsTrc("inspector", "Minimum distance")
     propertyItem: minimumDistance
 
     IncrementalPropertyControl {
         icon: IconCode.VERTICAL
+
+        navigation.name: "Minimum distance Value"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowOffset + 2
 
         isIndeterminate: minimumDistance ? minimumDistance.isUndefined : false
         currentValue: minimumDistance ? minimumDistance.value : 0
