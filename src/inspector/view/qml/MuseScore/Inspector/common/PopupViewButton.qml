@@ -19,21 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import MuseScore.UiComponents 1.0
 
 FlatButton {
     id: root
 
-    default property StyledPopup popup
+    default property StyledPopupView popup
+
     property var popupPositionX
     property var popupPositionY: height
     property var popupAvailableWidth
-    readonly property int popupContentHeight: popup.isOpened ? popup.implicitHeight + popup.arrowHeight : 0
+    readonly property int popupContentHeight: popup.isOpened ? popup.contentHeight + popup.arrowHeight : 0
 
     Layout.fillWidth: true
     Layout.minimumWidth: (popupAvailableWidth - 4) / 2
+
 
     onVisibleChanged: {
         if (!visible) {
@@ -43,6 +45,7 @@ FlatButton {
 
     onClicked: {
         if (!popup.isOpened) {
+            popup.parent = root.contentItem
             popup.open()
         } else {
             popup.close()

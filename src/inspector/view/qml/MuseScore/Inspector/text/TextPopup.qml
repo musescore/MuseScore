@@ -19,22 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
-import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 import "../common"
 
-StyledPopup {
+StyledPopupView {
     id: root
 
     property QtObject model: null
 
-    width: parent.width
+    contentHeight: contentColumn.childrenRect.height
 
-    contentItem: Column {
+    navigation.name: "TextPopup"
+    navigation.direction: NavigationPanel.Vertical
+
+    onOpened: {
+        matchStaffSize.navigation.forceActive()
+    }
+
+    Column {
         id: contentColumn
 
         width: parent.width
@@ -46,10 +53,15 @@ StyledPopup {
             width: parent.width
 
             CheckBox {
+                id: matchStaffSize
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
                 anchors.verticalCenter: subscriptOptionsButtonList.verticalCenter
+
+                navigation.name: "Match staff size"
+                navigation.panel: root.navigation
+                navigation.row: 1
 
                 isIndeterminate: model ? model.isSizeSpatiumDependent.isUndefined : false
                 checked: model && !isIndeterminate ? model.isSizeSpatiumDependent.value : false
@@ -61,22 +73,21 @@ StyledPopup {
             RadioButtonGroup {
                 id: subscriptOptionsButtonList
 
-                anchors.left: parent.horizontalCenter
-                anchors.leftMargin: 2
                 anchors.right: parent.right
-
                 height: 30
 
-                layoutDirection: Qt.RightToLeft
-
                 model: [
-                    { iconRole: IconCode.TEXT_SUPERSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_TOP },
-                    { iconRole: IconCode.TEXT_SUBSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_BOTTOM }
+                    { iconRole: IconCode.TEXT_SUBSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_BOTTOM },
+                    { iconRole: IconCode.TEXT_SUPERSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_TOP }
                 ]
 
                 delegate: FlatRadioButton {
 
                     width: 30
+
+                    navigation.name: "ScriptOptions" + model.index
+                    navigation.panel: root.navigation
+                    navigation.row: 2 + model.index
 
                     normalStateColor: "#00000000"
 
@@ -104,6 +115,10 @@ StyledPopup {
             titleText: qsTrc("inspector", "Frame")
             propertyItem: root.model ? root.model.frameType : null
 
+            navigation.name: "FrameMenu"
+            navigation.panel: root.navigation
+            navigation.row: 4
+
             RadioButtonGroup {
                 id: frameType
 
@@ -119,6 +134,10 @@ StyledPopup {
                 delegate: FlatRadioButton {
 
                     ButtonGroup.group: frameType.radioButtonGroup
+
+                    navigation.name: "FrameType" + model.index
+                    navigation.panel: root.navigation
+                    navigation.row: 5 + model.index
 
                     checked: root.model && !root.model.frameType.isUndefined ? root.model.frameType.value === modelData["typeRole"]
                                                                              : false
@@ -141,6 +160,10 @@ StyledPopup {
             InspectorPropertyView {
                 id: frameBorderColorColumn
 
+                navigation.name: "BorderColorMenu"
+                navigation.panel: root.navigation
+                navigation.row: 9
+
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -152,6 +175,10 @@ StyledPopup {
                 propertyItem: root.model ? root.model.frameBorderColor : null
 
                 ColorPicker {
+                    navigation.name: "BorderColorValue"
+                    navigation.panel: root.navigation
+                    navigation.row: 10
+
                     isIndeterminate: root.model  ? root.model.frameBorderColor.isUndefined : false
                     color: root.model && !root.model.frameBorderColor.isUndefined ? root.model.frameBorderColor.value : ui.theme.backgroundPrimaryColor
 
@@ -170,6 +197,10 @@ StyledPopup {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
+                navigation.name: "HighlightColorMenu"
+                navigation.panel: root.navigation
+                navigation.row: 11
+
                 visible: root.model ? root.model.frameHighlightColor.isEnabled : false
                 height: visible ? implicitHeight : 0
 
@@ -177,6 +208,10 @@ StyledPopup {
                 propertyItem: root.model ? root.model.frameHighlightColor : null
 
                 ColorPicker {
+                    navigation.name: "HighlightColorValue"
+                    navigation.panel: root.navigation
+                    navigation.row: 12
+
                     isIndeterminate: root.model ? root.model.frameHighlightColor.isUndefined : false
                     color: root.model && !root.model.frameHighlightColor.isUndefined ? root.model.frameHighlightColor.value : ui.theme.backgroundPrimaryColor
 
@@ -200,6 +235,10 @@ StyledPopup {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
+                navigation.name: "ThicknessMenu"
+                navigation.panel: root.navigation
+                navigation.row: 13
+
                 visible: root.model ? root.model.frameThickness.isEnabled : false
                 height: visible ? implicitHeight : 0
 
@@ -208,6 +247,10 @@ StyledPopup {
 
                 IncrementalPropertyControl {
                     iconMode: iconModeEnum.hidden
+
+                    navigation.name: "ThicknessValue"
+                    navigation.panel: root.navigation
+                    navigation.row: 14
 
                     isIndeterminate: root.model ? root.model.frameThickness.isUndefined : false
                     currentValue: root.model ? root.model.frameThickness.value : 0
@@ -227,6 +270,10 @@ StyledPopup {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
+                navigation.name: "MarginMenu"
+                navigation.panel: root.navigation
+                navigation.row: 15
+
                 visible: root.model ? root.model.frameMargin.isEnabled : false
                 height: visible ? implicitHeight : 0
 
@@ -235,6 +282,10 @@ StyledPopup {
 
                 IncrementalPropertyControl {
                     iconMode: iconModeEnum.hidden
+
+                    navigation.name: "MarginValue"
+                    navigation.panel: root.navigation
+                    navigation.row: 16
 
                     isIndeterminate: root.model ? root.model.frameMargin.isUndefined : false
                     currentValue: root.model ? root.model.frameMargin.value : 0
@@ -253,6 +304,10 @@ StyledPopup {
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
+            navigation.name: "Corner radius Menu"
+            navigation.panel: root.navigation
+            navigation.row: 17
+
             visible: root.model ? root.model.frameCornerRadius.isEnabled : false
             height: visible ? implicitHeight : 0
 
@@ -261,6 +316,10 @@ StyledPopup {
 
             IncrementalPropertyControl {
                 iconMode: iconModeEnum.hidden
+
+                navigation.name: "Corner radius Value"
+                navigation.panel: root.navigation
+                navigation.row: 18
 
                 isIndeterminate: root.model ? root.model.frameCornerRadius.isUndefined : false
                 currentValue: root.model ? root.model.frameCornerRadius.value : 0
@@ -279,8 +338,16 @@ StyledPopup {
             titleText: qsTrc("inspector", "Text style")
             propertyItem: root.model ? root.model.textType : null
 
+            navigation.name: "Text style Menu"
+            navigation.panel: root.navigation
+            navigation.row: 19
+
             StyledComboBox {
                 width: parent.width
+
+                navigation.name: "Text style Value"
+                navigation.panel: root.navigation
+                navigation.row: 20
 
                 textRoleName: "text"
                 valueRoleName: "value"
@@ -336,6 +403,10 @@ StyledPopup {
 
             delegate: FlatRadioButton {
 
+                navigation.name: "Position" + model.index
+                navigation.panel: root.navigation
+                navigation.row: 21 + model.index
+
                 ButtonGroup.group: textPositionButtonList.radioButtonGroup
 
                 checked: root.model && !root.model.textPlacement.isUndefined ? root.model.textPlacement.value === modelData["valueRole"]
@@ -356,6 +427,10 @@ StyledPopup {
 
         FlatButton {
             width: parent.width
+
+            navigation.name: "Staff text properties"
+            navigation.panel: root.navigation
+            navigation.row: 24
 
             text: qsTrc("inspector", "Staff text properties")
 

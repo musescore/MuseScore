@@ -26,12 +26,13 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 import MuseScore.Inspector 1.0
 import "../common"
+import "../general/playback"
 
 InspectorSectionView {
     id: root
 
     implicitHeight: contentColumn.height
-    contentHeight: implicitHeight + textAdvancedSettingsButton.popupContentHeight
+    contentHeight: implicitHeight
 
     Column {
         id: contentColumn
@@ -281,6 +282,7 @@ InspectorSectionView {
             visible: root.model ? root.model.isSpecialCharactersInsertionAvailable : false
 
             onClicked: {
+                console.log("charachters y: " + y)
                 if (root.model) {
                     root.model.insertSpecialCharacters()
                 }
@@ -295,9 +297,6 @@ InspectorSectionView {
             navigation.row: root.navigationRow(19)
 
             width: contentColumn.width
-            popupAvailableWidth: contentColumn.width
-            popupPositionX: mapToGlobal(contentColumn.x, contentColumn.y).x - mapToGlobal(x, y).x
-
             model: root.model
         }
     }

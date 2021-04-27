@@ -27,13 +27,12 @@ import MuseScore.Ui 1.0
 import "../../common"
 import "../notes/internal"
 
-StyledPopup {
+StyledPopupView {
     id: root
 
     property QtObject model: null
 
-    implicitHeight: contentColumn.implicitHeight + topPadding + bottomPadding
-    width: parent.width
+    contentHeight: contentColumn.implicitHeight
 
     function tpcListModel() {
         return [

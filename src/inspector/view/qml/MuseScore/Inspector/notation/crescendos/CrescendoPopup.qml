@@ -26,13 +26,12 @@ import MuseScore.UiComponents 1.0
 import "../../common"
 import "internal"
 
-StyledPopup {
+StyledPopupView {
     id: root
 
     property alias model: crescendoTabPanel.model
 
-    height: crescendoTabPanel.implicitHeight + topPadding + bottomPadding
-    width: parent.width
+    contentHeight: crescendoTabPanel.implicitHeight
 
     CrescendoTabPanel {
         id: crescendoTabPanel
