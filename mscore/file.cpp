@@ -70,6 +70,7 @@
 #include "scoretab.h"
 #include "libmscore/beam.h"
 #include "libmscore/stafftype.h"
+#include "libmscore/stafftypechange.h"
 #include "seq.h"
 #include "libmscore/revisions.h"
 #include "libmscore/lyrics.h"
@@ -2968,109 +2969,112 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
       if (drawPageBackground)
             p.fillRect(r, Qt::white);
 
-      // 1st pass: StaffLines
-      for  (System* s : page->systems()) {
-            for (int i = 0, n = s->staves()->size(); i < n; i++) {
-                  if (score->staff(i)->invisible(Fraction(0,1)) || !score->staff(i)->show()) 
-                        continue;  // ignore invisible staves
-                  if (s->staves()->isEmpty() || !s->staff(i)->show())
-                        continue;
-                  Measure* fm = s->firstMeasure();
-                  if (!fm) // only boxes, hence no staff lines
-                        continue;
-
-                  // The goal here is to draw SVG staff lines more efficiently.
-                  // MuseScore draws staff lines by measure, but for SVG they can
-                  // generally be drawn once for each system. This makes a big
-                  // difference for scores that scroll horizontally on a single
-                  // page. But there are exceptions to this rule:
-                  //
-                  //   ~ One (or more) invisible measure(s) in a system/staff ~
-                  //   ~ One (or more) elements of type HBOX or VBOX          ~
-                  //
-                  // In these cases the SVG staff lines for the system/staff
-                  // are drawn by measure.
-                  //
-                  bool byMeasure = false;
-                  for (MeasureBase* mb = fm; mb; mb = s->nextMeasure(mb)) {
-                        if (!mb->isMeasure() || !toMeasure(mb)->visible(i)) {
-                              byMeasure = true;
-                              break;
-                              }
-                        }
-                  if (byMeasure) { // Draw visible staff lines by measure
-                        for (MeasureBase* mb = fm; mb; mb = s->nextMeasure(mb)) {
-                              if (mb->isMeasure() && toMeasure(mb)->visible(i)) {
-                                    StaffLines* sl = toMeasure(mb)->staffLines(i);
-                                    printer.setElement(sl);
-                                    paintElement(p, sl);
-                                    }
-                              }
-                        }
-                  else { // Draw staff lines once per system
-                        StaffLines* firstSL = s->firstMeasure()->staffLines(i)->clone();
-                        StaffLines*  lastSL =  s->lastMeasure()->staffLines(i);
-
-                        qreal lastX =  lastSL->bbox().right()
-                                    +  lastSL->pagePos().x()
-                                    - firstSL->pagePos().x();
-                        QVector<QLineF>& lines = firstSL->getLines();
-                        for (int l = 0, c = lines.size(); l < c; l++)
-                              lines[l].setP2(QPointF(lastX, lines[l].p2().y()));
-
-                        printer.setElement(firstSL);
-                        paintElement(p, firstSL);
-                        }
-                  }
-            }
-      // 2nd pass: the rest of the elements
       QList<Element*> pel = page->elements();
       std::stable_sort(pel.begin(), pel.end(), elementLessThan);
-      ElementType eType;
 
       int lastNoteIndex = -1;
       for (int i = 0; i < pageNumber; ++i) {
-          for (const Element* element: score->pages()[i]->elements()) {
-              if (element->type() == ElementType::NOTE) {
-                  lastNoteIndex++;
-              }
-          }
-      }
+            for (const Element* element: score->pages()[i]->elements()) {
+                  if (element->type() == ElementType::NOTE) {
+                        lastNoteIndex++;
+                        }
+                  }
+            }
 
+      System* previouslyDrawnSystemStaves = nullptr;
+      System* currentSystem = nullptr;
+      Measure* firstMeasureOfSystem = nullptr;
+      const Measure* currentMeasure = nullptr;
       for (const Element* e : pel) {
             // Always exclude invisible elements
             if (!e->visible())
                   continue;
+            if (e->type() == ElementType::STAFF_LINES) {
+                  currentMeasure = e->findMeasure();
+                  currentSystem = currentMeasure->system();
+                  if (previouslyDrawnSystemStaves == currentSystem)
+                        continue; // skip staff lines that have been drawn
 
-            eType = e->type();
-            switch (eType) { // In future sub-type code, this switch() grows, and eType gets used
-            case ElementType::STAFF_LINES : // Handled in the 1st pass above
-                  continue; // Exclude from 2nd pass
-                  break;
-            default:
-                  break;
-            } // switch(eType)
+                  firstMeasureOfSystem = currentSystem->firstMeasure();
+                  if (!firstMeasureOfSystem) // only boxes, hence no staff lines
+                        continue;
+                  for (int i = 0, n = currentSystem->staves()->size(); i < n; i++) {
+                        if (score->staff(i)->invisible(Fraction(0,1)) || !score->staff(i)->show())
+                              continue;  // ignore invisible staves
+                        if (currentSystem->staves()->isEmpty() || !currentSystem->staff(i)->show())
+                              continue;
+                        // Draw SVG lines per entire system for efficiency
+                        // Exceptions (draw SVG staff lines by measure instead):
+                        //
+                        //   One (or more) invisible measure(s) in a system/staff
+                        //   One (or more) elements of type HBOX or VBOX
+                        //   One (or more) Staff Type Change(s) within a system
+                        //
+                        bool byMeasure = false;
+                        for (MeasureBase* mb = firstMeasureOfSystem;
+                             mb && !byMeasure;
+                             mb = currentSystem->nextMeasure(mb)) {
+                              if (!mb->isMeasure() || !toMeasure(mb)->visible(i)) {
+                                    byMeasure = true;
+                                    break;
+                                    }
+                              for (Element* element : toMeasure(mb)->el()) {
+                                    if (element->isStaffTypeChange()) {
+                                          byMeasure = true;
+                                          break;
+                                          }
+                                    }
+                              }
+                        if (byMeasure) {
+                              // Draw visible staff lines by measure (all of current system)
+                              for (MeasureBase* mb = firstMeasureOfSystem; mb; mb = currentSystem->nextMeasure(mb)) {
+                                    if (mb->isMeasure() && toMeasure(mb)->visible(i)) {
+                                          StaffLines* sl = toMeasure(mb)->staffLines(i);
+                                          printer.setElement(sl);
+                                          paintElement(p, sl);
+                                          }
+                                    }
+                              previouslyDrawnSystemStaves = currentSystem;
+                              }
+                        else { // Draw staff lines once per system
+                              StaffLines* firstSL = firstMeasureOfSystem->staffLines(i)->clone();
+                              StaffLines*  lastSL = currentSystem->lastMeasure()->staffLines(i);
+
+                              qreal lastX = lastSL->bbox().right()
+                                            + lastSL->pagePos().x()
+                                            - firstSL->pagePos().x();
+                              QVector<QLineF>& lines = firstSL->getLines();
+                              for (int l = 0, c = lines.size(); l < c; l++)
+                                    lines[l].setP2(QPointF(lastX, lines[l].p2().y()));
+
+                              printer.setElement(firstSL);
+                              paintElement(p, firstSL);
+                              previouslyDrawnSystemStaves = currentSystem;
+                              }
+                        }
+                  continue; // drawing of staff-lines for measure/system complete - skip to next element
+                  }
 
             // Set the Element pointer inside SvgGenerator/SvgPaintEngine
             printer.setElement(e);
 
             // Paint it
             if (e->type() == ElementType::NOTE && !notesColors.isEmpty()) {
-                QColor color = e->color();
-                int currentNoteIndex = (++lastNoteIndex);
+                  QColor color = e->color();
+                  int currentNoteIndex = (++lastNoteIndex);
 
-                if (notesColors.contains(currentNoteIndex)) {
-                    color = notesColors[currentNoteIndex];
-                }
+                  if (notesColors.contains(currentNoteIndex)) {
+                        color = notesColors[currentNoteIndex];
+                        }
 
-                Element *note = dynamic_cast<const Note*>(e)->clone();
-                note->setColor(color);
-                paintElement(p, note);
-                delete note;
-            } else {
-                paintElement(p, e);
+                  Element *note = dynamic_cast<const Note*>(e)->clone();
+                  note->setColor(color);
+                  paintElement(p, note);
+                  delete note;
+                  }
+            else paintElement(p, e);
             }
-            }
+
       p.end(); // Writes MuseScore SVG file to disk, finally
 
       // Clean up and return
