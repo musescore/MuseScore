@@ -145,7 +145,6 @@ InspectorSectionView {
                     id: playbackPopup
                     navigation.parentControl: playbackButton.navigation
                     proxyModel: model ? model.playbackProxyModel : null
-                    arrowX: (width - playbackButton.width - popupButtonsRow.spacing) / 2
                 }
             }
 
@@ -173,7 +172,6 @@ InspectorSectionView {
                     id: appearancePopup
                     navigation.parentControl: appearanceButton.navigation
                     model: root.model ? root.model.appearanceSettingsModel : null
-                    arrowX: (width + appearanceButton.width + popupButtonsRow.spacing) / 2
                 }
             }
         }

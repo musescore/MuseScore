@@ -29,7 +29,6 @@ StyledPopupView {
     id: root
 
     contentHeight: contentColumn.childrenRect.height
-    contentWidth: 240
 
     navigation.name: "InstrumentSettingsPopup"
     navigation.direction: NavigationPanel.Vertical

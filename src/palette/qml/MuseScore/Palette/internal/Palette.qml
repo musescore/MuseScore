@@ -108,7 +108,7 @@ GridView {
     readonly property int ncolumns: Math.max(0, Math.floor(width / cellWidth))
     readonly property real lastColumnCellWidth : cellWidth + (width % cellWidth) // width of last cell in a row: might be stretched to avoid a gap at row end
 
-    signal moreButtonClicked(var navigationControl)
+    signal moreButtonClicked(var btn)
 
     MouseArea {
         // Dummy MouseArea to prevent propagation of clicks on empty place to palette's parent
@@ -195,7 +195,7 @@ GridView {
             hoveredStateColor: ui.theme.accentColor
             pressedStateColor: ui.theme.accentColor
 
-            onClicked: paletteView.moreButtonClicked(moreButton.navigation)
+            onClicked: paletteView.moreButtonClicked(moreButton)
         }
     }
 

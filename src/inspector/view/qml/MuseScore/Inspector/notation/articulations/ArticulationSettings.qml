@@ -38,9 +38,5 @@ PopupViewButton {
 
     ArticulationPopup {
         id: articulationPopup
-
-        x: popupPositionX
-        y: popupPositionY
-        arrowX: parent.x + parent.width / 2
     }
 }

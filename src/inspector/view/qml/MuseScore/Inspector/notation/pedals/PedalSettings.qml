@@ -38,9 +38,5 @@ PopupViewButton {
 
     PedalPopup {
         id: pedalPopup
-
-        x: popupPositionX
-        y: popupPositionY
-        arrowX: parent.x + parent.width / 2
     }
 }

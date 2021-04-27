@@ -36,14 +36,14 @@ PopupView {
     property alias width: rootContainer.width
     property alias height: rootContainer.height
 
-    property int padding: 16
+    property int padding: 12
     property int margins: 16
 
     property int contentWidth: 240
     property int contentHeight: contentBody.childrenRect.height
 
     property bool opensUpward: false
-    property var arrowX: width / 2
+    property var arrowX: root.width / 2
 
     property bool animationEnabled: true
 
@@ -52,8 +52,8 @@ PopupView {
 
     closePolicy: PopupView.CloseOnPressOutsideParent
 
-    x: parent.width / 2
-    y: opensUpward ? (-height) : (parent.height - root.padding)
+    x: (root.parent.width / 2) - (root.width / 2)
+    y: root.opensUpward ? -root.height : root.parent.height
 
     property NavigationPopupPanel keynavPanel: NavigationPopupPanel {
         id: keynavPanel
@@ -117,6 +117,8 @@ PopupView {
             implicitWidth: contentBody.implicitWidth + root.margins * 2
             implicitHeight: contentBody.implicitHeight + root.margins * 2
 
+            scale: 0.7
+            opacity: 0.5
             transformOrigin: Item.Center
 
             Rectangle {
@@ -125,6 +127,47 @@ PopupView {
                 color: ui.theme.backgroundPrimaryColor
                 border.width: 1
                 border.color: ui.theme.strokeColor
+            }
+
+            DropShadow {
+                anchors.fill: parent
+                source: contentBackground
+                color: "#75000000"
+                verticalOffset: 4
+                samples: 30
+            }
+
+            Canvas {
+                id: arrow
+                anchors.top: root.opensUpward ? undefined : parent.top
+                anchors.topMargin: root.opensUpward ? 0 : (-arrow.height + contentBackground.border.width)
+                anchors.bottom: root.opensUpward ? parent.bottom : undefined
+                anchors.bottomMargin: root.opensUpward ? (-arrow.height + contentBackground.border.width) : 0
+                height: root.padding
+                width: root.padding * 2
+                visible: arrow.height > 0
+                x: root.arrowX - arrow.width / 2 - root.padding
+
+                onPaint: {
+                    var ctx = getContext("2d");
+                    ctx.lineWidth = 2;
+                    ctx.fillStyle = contentBackground.color
+                    ctx.strokeStyle = contentBackground.border.color
+                    ctx.beginPath();
+
+                    if (opensUpward) {
+                        ctx.moveTo(0, 0);
+                        ctx.lineTo(width / 2, height - 1);
+                        ctx.lineTo(width, 0);
+                    } else {
+                        ctx.moveTo(0, height);
+                        ctx.lineTo(width / 2, 1);
+                        ctx.lineTo(width, height);
+                    }
+
+                    ctx.stroke();
+                    ctx.fill();
+                }
             }
 
             Item {
