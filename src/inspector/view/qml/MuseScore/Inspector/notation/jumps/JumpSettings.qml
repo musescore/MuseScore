@@ -38,9 +38,5 @@ PopupViewButton {
 
     JumpPopup {
         id: jumpPopup
-
-        x: popupPositionX
-        y: popupPositionY
-        arrowX: parent.x + parent.width / 2
     }
 }

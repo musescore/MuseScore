@@ -254,11 +254,7 @@ void PopupView::open()
         return;
     }
 
-    QPointF pos = prn->position();
-    pos.setY(pos.y() + m_localPos.y());
-    pos.setX(pos.x() + m_localPos.x());
-
-    QPointF global = prn->mapToGlobal(pos);
+    QPointF global = prn->mapToGlobal(m_localPos);
     m_window->show(global.toPoint());
 
     emit isOpenedChanged();

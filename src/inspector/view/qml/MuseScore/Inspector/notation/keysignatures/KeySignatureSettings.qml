@@ -38,9 +38,5 @@ PopupViewButton {
 
     KeySignaturePopup {
         id: keySignaturePopup
-
-        x: popupPositionX
-        y: popupPositionY
-        arrowX: parent.x + parent.width / 2
     }
 }
