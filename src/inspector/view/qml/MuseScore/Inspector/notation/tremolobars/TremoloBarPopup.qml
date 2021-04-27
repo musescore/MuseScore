@@ -25,13 +25,12 @@ import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
 import "../../common"
 
-StyledPopup {
+StyledPopupView {
     id: root
 
     property QtObject model: null
 
-    implicitHeight: contentColumn.height + topPadding + bottomPadding
-    width: parent.width
+    contentHeight: contentColumn.height
 
     Column {
         id: contentColumn
