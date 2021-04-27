@@ -2855,12 +2855,17 @@ bool Measure::hasVoices(int staffIdx, Fraction stick, Fraction len) const
                 }
                 bool v = false;
                 if (cr->isChord()) {
-                    // consider chord visible if any note is visible
                     Chord* c = toChord(cr);
-                    for (Note* n : c->notes()) {
-                        if (n->visible()) {
-                            v = true;
-                            break;
+                    // consider a chord visible if stem or hook(s) are visible
+                    if ((c->stem() || c->hook()) && c->visible()) {
+                        v = true;
+                    } else {
+                        // or any of its notes
+                        for (Note* n : c->notes()) {
+                            if (n->visible()) {
+                                v = true;
+                                break;
+                            }
                         }
                     }
                 } else if (cr->isRest()) {
