@@ -19,13 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.15
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import "../../../common"
 
 Column {
     id: root
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 0
 
     signal pushBackRequested()
     signal pushFrontRequested()
@@ -53,6 +56,10 @@ Column {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 4
 
+                navigation.name: "Backwards"
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationRowOffset + 1
+
                 text: qsTrc("inspector", "Backwards")
 
                 onClicked: {
@@ -64,6 +71,10 @@ Column {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 4
                 anchors.right: parent.right
+
+                navigation.name: "Forwards"
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationRowOffset + 2
 
                 text: qsTrc("inspector", "Forwards")
 

@@ -40,7 +40,7 @@ Item {
     property alias validator: textInputField.validator
     property alias measureUnitsSymbol: textInputField.measureUnitsSymbol
 
-    property alias navigation: navCtrl
+    property alias navigation: textInputField.navigation
 
     readonly property int spacing: 8
 
@@ -48,6 +48,8 @@ Item {
 
     implicitHeight: 30
     implicitWidth: parent.width
+
+    navigation.name: root.objectName != "" ? root.objectName : "IncrementalControl"
 
     function increment() {
         var value = root.isIndeterminate ? 0.0 : currentValue
@@ -80,11 +82,6 @@ Item {
         }
     }
 
-    NavigationControl {
-        id: navCtrl
-        name: root.objectName != "" ? root.objectName : "IncrementalControl"
-    }
-
     QtObject {
         id: _iconModeEnum
 
@@ -100,9 +97,6 @@ Item {
 
         height: root.iconBackgroundSize
         width: root.iconBackgroundSize
-
-        border.width: navCtrl.active ? 2 : 0
-        border.color: ui.theme.focusColor
 
         color: ui.theme.buttonColor
         opacity: root.enabled ? ui.theme.buttonOpacityNormal : ui.theme.itemOpacityDisabled

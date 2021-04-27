@@ -171,14 +171,9 @@ InspectorSectionView {
 
                 AppearancePopup {
                     id: appearancePopup
-
+                    navigation.parentControl: appearanceButton.navigation
                     model: root.model ? root.model.appearanceSettingsModel : null
-
-                    width: popupButtonsRow.width
-
                     arrowX: (width + appearanceButton.width + popupButtonsRow.spacing) / 2
-                    x: appearanceButton.x - popupButtonsRow.width - popupButtonsRow.spacing
-                    y: appearanceButton.y + appearanceButton.height
                 }
             }
         }
