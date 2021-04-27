@@ -38,9 +38,5 @@ PopupViewButton {
 
     MeasureRepeatPopup {
         id: measureRepeatPopup
-
-        x: popupPositionX
-        y: popupPositionY
-        arrowX: parent.x + parent.width / 2
     }
 }

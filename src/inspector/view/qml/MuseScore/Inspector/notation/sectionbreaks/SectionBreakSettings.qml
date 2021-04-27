@@ -38,9 +38,5 @@ PopupViewButton {
 
     SectionBreakPopup {
         id: sectionBreakPopup
-
-        x: popupPositionX
-        y: popupPositionY
-        arrowX: parent.x + parent.width / 2
     }
 }

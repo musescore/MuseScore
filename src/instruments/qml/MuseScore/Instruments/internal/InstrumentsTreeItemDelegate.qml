@@ -220,9 +220,9 @@ Item {
 
     Loader {
         id: popupLoader
-        function createPopup(comp) {
+        function createPopup(comp, btn) {
             popupLoader.sourceComponent = comp
-            popupLoader.item.parent = popupLoader.parent
+            popupLoader.item.parent = btn
             return popupLoader.item
         }
     }
@@ -365,7 +365,7 @@ Item {
 
                 if (root.type === InstrumentTreeItemType.PART) {
 
-                    popup = popupLoader.createPopup(instrumentSettingsComp)
+                    popup = popupLoader.createPopup(instrumentSettingsComp, this)
 
                     item["partId"] = model.itemRole.id()
                     item["partName"] = model.itemRole.title
@@ -375,7 +375,7 @@ Item {
 
                 } else if (root.type === InstrumentTreeItemType.STAFF) {
 
-                    popup = popupLoader.createPopup(staffSettingsComp)
+                    popup = popupLoader.createPopup(staffSettingsComp, this)
 
                     item["staffId"] = model.itemRole.id()
                     item["isSmall"] = model.itemRole.isSmall()

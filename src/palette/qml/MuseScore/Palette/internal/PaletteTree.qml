@@ -320,14 +320,16 @@ ListView {
 
             highlighted: (activeFocus && !selected) || DelegateModel.isUnresolved
 
-            property bool popupExpanded: paletteTree.expandedPopupIndex === modelIndex
+            property bool popupExpanded: palettePopup.isOpened
 
-            function togglePopup(navigationControl) {
+            function togglePopup(btn) {
                 const expand = !popupExpanded;
                 paletteTree.expandedPopupIndex = expand ? modelIndex : null;
-                palettePopup.navigation.parentControl = navigationControl
+                if (btn) {
+                    palettePopup.parent = btn
+                    palettePopup.navigation.parentControl = btn.navigation
+                }
                 palettePopup.toggleOpened()
-
             }
 
             property size cellSize: model.gridSize
@@ -522,7 +524,7 @@ ListView {
                         selectionModel: paletteSelectionModel
 
                         showMoreButton: !filter.length
-                        onMoreButtonClicked: control.togglePopup(navigationControl);
+                        onMoreButtonClicked: control.togglePopup(btn);
 
                         onVisibleChanged: {
                             if (!visible && control.popupExpanded) {
@@ -539,9 +541,6 @@ ListView {
                     id: palettePopup
 
                     maxHeight: Math.min(0.75 * paletteTree.height, 500)
-
-                    y: mainPaletteContainer.y + mainPaletteContainer.height + Utils.style.popupMargin
-                    arrowX: parent.width - cellSize.width / 2
 
                     // TODO: change settings to "hidden" model?
                     cellSize: control.cellSize
@@ -562,9 +561,6 @@ ListView {
                             customPaletteRootIndex = paletteTree.paletteWorkspace.customElementsPaletteIndex(control.modelIndex) // TODO: make a property binding? (but that works incorrectly)
                             customPaletteController = paletteTree.paletteWorkspace.customElementsPaletteController
                         }
-                        // if closing by other reasons than pressing "More" button again (e.g. via Esc key), synchronize "expanded" status
-                        if (control.popupExpanded != palettePopup.isOpened)
-                            control.togglePopup();
                     }
 
                     property bool needScrollToBottom: false
@@ -578,8 +574,9 @@ ListView {
                     onClosed: enablePaletteAnimations = false
 
                     function scrollToPopupBottom() {
-                        const popupBottom = implicitHeight + y + control.y + 14; // 14 for DropShadow in StyledPopup: depends on blur radius and vertical offset
-                        paletteTree.ensureYVisible(popupBottom);
+                        //! FIXME Not worked as should
+//                        const popupBottom = implicitHeight + y + control.y + 14; // 14 for DropShadow in StyledPopup: depends on blur radius and vertical offset
+//                        paletteTree.ensureYVisible(popupBottom);
                     }
 
                     onContentHeightChanged: {

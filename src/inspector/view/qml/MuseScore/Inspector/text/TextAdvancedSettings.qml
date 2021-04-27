@@ -19,10 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
 import "../common"
 
 PopupViewButton {
@@ -37,6 +34,5 @@ PopupViewButton {
     TextPopup {
         id: textPopup
         navigation.parentControl: root.navigation
-        arrowX: parent.x + parent.width / 2
     }
 }
