@@ -3327,10 +3327,12 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
             if (!grace)
                   _xml.tag("duration", stretchCorrActFraction(note).ticks() / div);
 
-            if (note->tieBack())
-                  _xml.tagE("tie type=\"stop\"");
-            if (note->tieFor())
-                  _xml.tagE("tie type=\"start\"");
+            if (!isCueNote(note)) {
+                  if (note->tieBack())
+                        _xml.tagE("tie type=\"stop\"");
+                  if (note->tieFor())
+                        _xml.tagE("tie type=\"start\"");
+                  }
 
             // instrument for multi-instrument or unpitched parts
             if (!useDrumset) {
