@@ -193,6 +193,23 @@ io::path UserScoresConfiguration::defaultSavingFilePath(const io::path& fileName
     return scoresPath().val + "/" + fileName + DEFAULT_FILE_SUFFIX;
 }
 
+io::path UserScoresConfiguration::completeExportPath(const io::path& basePath, INotationPtr notation, bool isMain, int pageIndex) const
+{
+    io::path result = io::dirpath(basePath) + "/" + io::basename(basePath);
+
+    if (!isMain) {
+        result += "-" + io::escapeFileName(notation->metaInfo().title).toStdString();
+    }
+
+    if (pageIndex > -1) {
+        result += "-" + std::to_string(pageIndex + 1);
+    }
+
+    result += "." + io::syffix(basePath);
+
+    return result;
+}
+
 QColor UserScoresConfiguration::templatePreviewBackgroundColor() const
 {
     return notationConfiguration()->backgroundColor();

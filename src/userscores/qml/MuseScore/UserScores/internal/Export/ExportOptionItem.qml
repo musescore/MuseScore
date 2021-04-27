@@ -19,30 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import QtQuick 2
+import QtQuick.Layouts 1
 
-#include "mxlwriter.h"
+import MuseScore.UiComponents 1
 
-#include "log.h"
+RowLayout {
+    id: root
 
-#include "musicxml/exportxml.h"
+    property alias text: label.text
+    property int firstColumnWidth
 
-using namespace mu::iex::musicxml;
-using namespace mu::system;
+    spacing: 12
 
-mu::Ret MxlWriter::write(const notation::INotationPtrList& notations, IODevice& destinationDevice, const Options&)
-{
-    IF_ASSERT_FAILED(!notations.empty()) {
-        return make_ret(Ret::Code::UnknownError);
+    StyledTextLabel {
+        id: label
+        Layout.preferredWidth: root.firstColumnWidth
+        horizontalAlignment: Text.AlignLeft
     }
-
-    INotationPtr notation = notations.front();
-    IF_ASSERT_FAILED(notation) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-    Ms::Score* score = notation->elements()->msScore();
-    IF_ASSERT_FAILED(score) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-
-    return Ms::saveMxl(score, &destinationDevice);
 }

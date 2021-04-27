@@ -19,30 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import QtQuick 2
+import QtQuick.Layouts 1
 
-#include "mxlwriter.h"
+import MuseScore.UiComponents 1
+import MuseScore.UserScores 1
 
-#include "log.h"
+ColumnLayout {
+    id: root
+    spacing: 12
 
-#include "musicxml/exportxml.h"
+    property ExportDialogModel model
+    property int firstColumnWidth
 
-using namespace mu::iex::musicxml;
-using namespace mu::system;
+    RadioButtonGroup {
+        spacing: 12
+        orientation: Qt.Vertical
+        Layout.fillWidth: true
+        model: root.model.musicXmlLayoutTypes()
 
-mu::Ret MxlWriter::write(const notation::INotationPtrList& notations, IODevice& destinationDevice, const Options&)
-{
-    IF_ASSERT_FAILED(!notations.empty()) {
-        return make_ret(Ret::Code::UnknownError);
+        delegate: RoundedRadioButton {
+            text: modelData["text"]
+            width: parent.width
+            checked: root.model.musicXmlLayoutType === modelData["value"]
+            onToggled: {
+                root.model.musicXmlLayoutType = modelData["value"]
+            }
+        }
     }
-
-    INotationPtr notation = notations.front();
-    IF_ASSERT_FAILED(notation) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-    Ms::Score* score = notation->elements()->msScore();
-    IF_ASSERT_FAILED(score) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-
-    return Ms::saveMxl(score, &destinationDevice);
 }

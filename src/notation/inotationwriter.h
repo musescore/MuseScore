@@ -35,7 +35,11 @@ namespace mu::notation {
 class INotationWriter
 {
 public:
+    virtual std::vector<WriterUnitType> supportedUnitTypes() const = 0;
+    virtual bool supportsUnitType(WriterUnitType unitType) const = 0;
+
     enum class OptionKey {
+        UNIT_TYPE,
         PAGE_NUMBER,
         TRANSPARENT_BACKGROUND,
         TRIM_MARGINS_SIZE,
@@ -46,7 +50,7 @@ public:
 
     virtual ~INotationWriter() = default;
 
-    virtual Ret write(const INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) = 0;
+    virtual Ret write(const INotationPtrList& notations, system::IODevice& destinationDevice, const Options& options = Options()) = 0;
     virtual void abort() = 0;
     virtual framework::ProgressChannel progress() const = 0;
 };

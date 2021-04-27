@@ -157,9 +157,11 @@ mu::io::path Interactive::selectOpeningFile(const QString& title, const io::path
     return path;
 }
 
-io::path Interactive::selectSavingFile(const QString& title, const io::path& dir, const QString& filter)
+io::path Interactive::selectSavingFile(const QString& title, const io::path& dir, const QString& filter, bool confirmOverwrite)
 {
-    QString path = QFileDialog::getSaveFileName(mainWindow()->qMainWindow(), title, dir.toQString(), filter);
+    QFileDialog::Options options;
+    options.setFlag(QFileDialog::DontConfirmOverwrite, !confirmOverwrite);
+    QString path = QFileDialog::getSaveFileName(mainWindow()->qMainWindow(), title, dir.toQString(), filter, nullptr, options);
     return path;
 }
 

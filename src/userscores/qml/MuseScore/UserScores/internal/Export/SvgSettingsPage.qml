@@ -19,30 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import QtQuick 2
+import QtQuick.Layouts 1
 
-#include "mxlwriter.h"
+import MuseScore.UiComponents 1
+import MuseScore.UserScores 1
 
-#include "log.h"
+StyledTextLabel {
+    property ExportDialogModel model
+    property int firstColumnWidth
 
-#include "musicxml/exportxml.h"
-
-using namespace mu::iex::musicxml;
-using namespace mu::system;
-
-mu::Ret MxlWriter::write(const notation::INotationPtrList& notations, IODevice& destinationDevice, const Options&)
-{
-    IF_ASSERT_FAILED(!notations.empty()) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-
-    INotationPtr notation = notations.front();
-    IF_ASSERT_FAILED(notation) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-    Ms::Score* score = notation->elements()->msScore();
-    IF_ASSERT_FAILED(score) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-
-    return Ms::saveMxl(score, &destinationDevice);
+    text: qsTrc("userscores", "Each page of the selected parts will be exported as a separate SVG file.")
+    horizontalAlignment: Text.AlignLeft
+    wrapMode: Text.WordWrap
 }
