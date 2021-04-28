@@ -109,6 +109,8 @@ signals:
     void backgroundColorChanged(QColor color);
     void viewportChanged(QRect viewport);
 
+    void mousePressed();
+
 protected:
     void setNotation(INotationPtr notation);
     void setReadonly(bool readonly);

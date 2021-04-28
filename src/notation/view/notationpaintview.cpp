@@ -647,6 +647,8 @@ void NotationPaintView::wheelEvent(QWheelEvent* event)
 
 void NotationPaintView::mousePressEvent(QMouseEvent* event)
 {
+    emit mousePressed();
+
     setFocus(true);
 
     if (isInited()) {

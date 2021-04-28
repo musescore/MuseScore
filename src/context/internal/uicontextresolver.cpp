@@ -71,10 +71,6 @@ UiContext UiContextResolver::currentUiContext() const
     TRACEFUNC;
     ValCh<Uri> currentUri = interactive()->currentUri();
     if (currentUri.val == HOME_PAGE_URI) {
-        if (playbackController()->isPlaying()) {
-            return context::UiCtxPlaying;
-        }
-
         return context::UiCtxHomeOpened;
     }
 
@@ -88,14 +84,6 @@ UiContext UiContextResolver::currentUiContext() const
 
         if (notation->interaction()->isTextEditingStarted()) {
             return context::UiCtxNotationTextEditing;
-        }
-
-        if (playbackController()->isPlaying()) {
-            return context::UiCtxPlaying;
-        }
-
-        if (!notation->interaction()->selection()->isNone()) {
-            return context::UiCtxNotationHasSelection;
         }
 
         ui::INavigationSection* activeSection = navigationController()->activeSection();
@@ -121,12 +109,12 @@ bool UiContextResolver::match(const ui::UiContext& currentCtx, const ui::UiConte
         return true;
     }
 
-    //! NOTE If the current context is `UiCtxNotationHasSelection`, then we allow `UiCtxNotationOpened` too
-    if (currentCtx == context::UiCtxNotationHasSelection) {
+    //! NOTE If the current context is `UiCtxNotationFocused`, then we allow `UiCtxNotationOpened` too
+    if (currentCtx == context::UiCtxNotationFocused) {
         if (actCtx == context::UiCtxNotationOpened) {
             return true;
         }
-        return actCtx == context::UiCtxNotationHasSelection;
+        return actCtx == context::UiCtxNotationFocused;
     }
 
     return currentCtx == actCtx;
@@ -139,7 +127,7 @@ bool UiContextResolver::matchWithCurrent(const UiContext& ctx) const
     }
 
     UiContext currentCtx = currentUiContext();
-    return currentCtx == ctx;
+    return match(currentCtx, ctx);
 }
 
 mu::async::Notification UiContextResolver::currentUiContextChanged() const

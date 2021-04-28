@@ -64,6 +64,7 @@ RadioDelegate {
         id: backgroundRect
 
         anchors.fill: parent
+        anchors.margins: navCtrl.active ? 1 : 0
 
         border.width: navCtrl.active ? 2 : 0
         border.color: ui.theme.focusColor
