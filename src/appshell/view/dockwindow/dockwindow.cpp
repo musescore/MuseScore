@@ -217,6 +217,8 @@ void DockWindow::hidePage(DockPage* page)
         w->setParent(sDummy);
     }
 
+    page->setVisible(false);
+
     m_window->update();
     m_window->repaint();
 }
@@ -286,6 +288,8 @@ void DockWindow::showPage(DockPage* page)
     }
 
     restoreState(page->objectName());
+
+    page->setVisible(true);
 }
 
 void DockWindow::updateStyle()
