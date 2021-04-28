@@ -30,6 +30,14 @@
         <seq>Shift+Tab</seq>
     </SC>
     <SC>
+        <key>nav-next-tab</key>
+        <seq>Ctrl+Tab</seq>
+    </SC>
+    <SC>
+        <key>nav-prev-tab</key>
+        <seq>Ctrl+Shift+Tab</seq>
+    </SC>
+    <SC>
         <key>nav-right</key>
         <seq>Right</seq>
     </SC>

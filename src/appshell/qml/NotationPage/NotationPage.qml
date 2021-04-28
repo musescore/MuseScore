@@ -56,7 +56,7 @@ DockPage {
 
     property NavigationSection keynavRightPanelSec: NavigationSection {
         name: "RightPanel"
-        order: 4
+        order: 5
     }
 
     property NavigationPanel keynavLeftPanelTabsSubSec: NavigationPanel {

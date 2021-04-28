@@ -51,6 +51,7 @@ public:
             Right,
             Up,
             Down,
+            Trigger,
             Escape
         };
 

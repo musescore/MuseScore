@@ -141,6 +141,8 @@ struct UiContext
         return std::strcmp(const_data, ctx.const_data) == 0;
     }
 
+    std::string toString() const { return std::string(const_data); }
+
 private:
     const char* const_data = nullptr;
 };

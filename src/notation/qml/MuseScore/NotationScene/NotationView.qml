@@ -23,8 +23,9 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 
-import MuseScore.NotationScene 1.0
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.NotationScene 1.0
 
 import "internal"
 
@@ -35,17 +36,26 @@ FocusScope {
 
     signal textEdittingStarted()
 
+    NavigationSection {
+        id: navSec
+        name: "NotationView"
+        order: 4
+    }
+
     ColumnLayout {
         anchors.fill: parent
 
         spacing: 0
 
         NotationSwitchPanel {
+            id: tabPanel
             Layout.fillWidth: true
 
             //! NOTE: need to hide left and right borders of the panel
             Layout.leftMargin: -1
             Layout.rightMargin: -1
+
+            navigationSection: navSec
         }
 
         SplitView {
@@ -65,6 +75,10 @@ FocusScope {
 
                 SplitView.fillWidth: true
                 SplitView.fillHeight: true
+
+                onMousePressed: {
+                    tabPanel.forceActive()
+                }
 
                 onTextEdittingStarted: {
                     root.textEdittingStarted()
