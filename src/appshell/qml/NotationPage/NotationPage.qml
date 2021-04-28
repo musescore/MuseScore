@@ -57,7 +57,7 @@ DockPage {
     }
 
     property NavigationSection keynavRightPanelSec: NavigationSection {
-        name: "RightPanel"
+        name: "RightPanel "
         enabled: notationPage.visible
         order: 5
     }
