@@ -30,7 +30,7 @@ class DockFrameModel : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QQuickItem* frame READ frame WRITE setFrame NOTIFY frameChanged)
+    Q_PROPERTY(QQuickItem * frame READ frame WRITE setFrame NOTIFY frameChanged)
     Q_PROPERTY(bool titleBarVisible READ titleBarVisible NOTIFY titleBarVisibleChanged)
 
 public:
