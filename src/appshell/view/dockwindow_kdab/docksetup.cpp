@@ -22,6 +22,10 @@
 
 #include "docksetup.h"
 
+#include "internal/dropindicators.h"
+#include "internal/dockseparator.h"
+#include "internal/dockframemodel.h"
+
 #include "dockwindow.h"
 #include "dockpanel.h"
 #include "dockstatusbar.h"
@@ -37,6 +41,37 @@
 
 #include <QQmlEngine>
 
+namespace mu::dock {
+class DockWidgetFactory : public KDDockWidgets::DefaultWidgetFactory
+{
+public:
+    KDDockWidgets::DropIndicatorOverlayInterface* createDropIndicatorOverlay(KDDockWidgets::DropArea* dropArea) const override
+    {
+        return new DropIndicators(dropArea);
+    }
+
+    Layouting::Separator* createSeparator(Layouting::Widget* parent = nullptr) const override
+    {
+        return new DockSeparator(parent);
+    }
+
+    QUrl titleBarFilename() const override
+    {
+        return QUrl("qrc:/qml/kdab/docksystem/DockTitleBar.qml");
+    }
+
+    QUrl frameFilename() const override
+    {
+        return QUrl("qrc:/qml/kdab/docksystem/DockFrame.qml");
+    }
+
+    QUrl floatingWindowFilename() const override
+    {
+        return QUrl("qrc:/qml/kdab/docksystem/DockFloatingWindow.qml");
+    }
+};
+}
+
 using namespace mu::dock;
 
 void DockSetup::registerQmlTypes()
@@ -47,6 +82,9 @@ void DockSetup::registerQmlTypes()
     qmlRegisterType<DockToolBar>("MuseScore.Dock", 1, 0, "DockToolBar");
     qmlRegisterType<DockCentral>("MuseScore.Dock", 1, 0, "DockCentral");
     qmlRegisterType<DockPage>("MuseScore.Dock", 1, 0, "DockPage");
+    qmlRegisterType<DockFrameModel>("MuseScore.Dock", 1, 0, "DockFrameModel");
+
+    qRegisterMetaType<DropIndicators*>();
 }
 
 void DockSetup::registerExports()
@@ -55,6 +93,7 @@ void DockSetup::registerExports()
 
 void DockSetup::setup(QQmlEngine* engine)
 {
+    KDDockWidgets::Config::self().setFrameworkWidgetFactory(new DockWidgetFactory());
     KDDockWidgets::Config::self().setQmlEngine(engine);
 
     auto flags = KDDockWidgets::Config::self().flags()
