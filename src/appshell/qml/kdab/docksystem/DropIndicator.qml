@@ -26,9 +26,9 @@ Image {
     id: root
 
     property int indicatorType: 0
-    readonly property bool isHovered: _window.dropIndicators.currentDropLocation === indicatorType
+    readonly property bool isHovered: dockDropIndicatorsWindow.dropIndicators.currentDropLocation === indicatorType
 
-    source: "qrc:/img/classic_indicators/" + _window.iconName(indicatorType, isHovered) + ".png";
+    source: "qrc:/img/classic_indicators/" + dockDropIndicatorsWindow.iconName(indicatorType, isHovered) + ".png";
     width: 64
     height: 64
 }

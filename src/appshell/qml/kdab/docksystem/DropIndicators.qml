@@ -41,7 +41,7 @@ Item {
         }
 
         indicatorType: DropIndicatorOverlayInterface.DropLocation_OutterLeft
-        visible: _window.dropIndicators.outterLeftIndicatorVisible
+        visible: dockDropIndicatorsWindow.dropIndicators.outterLeftIndicatorVisible
     }
 
     DropIndicator {
@@ -52,7 +52,7 @@ Item {
         }
 
         indicatorType: DropIndicatorOverlayInterface.DropLocation_OutterRight
-        visible: _window.dropIndicators.outterRightIndicatorVisible
+        visible: dockDropIndicatorsWindow.dropIndicators.outterRightIndicatorVisible
     }
 
     DropIndicator {
@@ -63,7 +63,7 @@ Item {
         }
 
         indicatorType: DropIndicatorOverlayInterface.DropLocation_OutterTop
-        visible: _window.dropIndicators.outterTopIndicatorVisible
+        visible: dockDropIndicatorsWindow.dropIndicators.outterTopIndicatorVisible
     }
 
     DropIndicator {
@@ -74,7 +74,7 @@ Item {
         }
 
         indicatorType: DropIndicatorOverlayInterface.DropLocation_OutterBottom
-        visible: _window.dropIndicators.outterBottomIndicatorVisible
+        visible: dockDropIndicatorsWindow.dropIndicators.outterBottomIndicatorVisible
     }
 
     Item {
@@ -82,8 +82,8 @@ Item {
 
         objectName: "innerIndicators"
 
-        x: _window.dropIndicators.hoveredFrameRect.x + (_window.dropIndicators.hoveredFrameRect.width / 2)
-        y: _window.dropIndicators.hoveredFrameRect.y + (_window.dropIndicators.hoveredFrameRect.height / 2)
+        x: dockDropIndicatorsWindow.dropIndicators.hoveredFrameRect.x + (dockDropIndicatorsWindow.dropIndicators.hoveredFrameRect.width / 2)
+        y: dockDropIndicatorsWindow.dropIndicators.hoveredFrameRect.y + (dockDropIndicatorsWindow.dropIndicators.hoveredFrameRect.height / 2)
 
         width: (centerIndicator * 3) + (2 * innerMargin)
         height: width
@@ -94,7 +94,7 @@ Item {
             anchors.centerIn: parent
 
             indicatorType: DropIndicatorOverlayInterface.DropLocation_Center
-            visible: _window.dropIndicators.centralIndicatorVisible
+            visible: dockDropIndicatorsWindow.dropIndicators.centralIndicatorVisible
         }
 
         DropIndicator {
@@ -105,7 +105,7 @@ Item {
             }
 
             indicatorType: DropIndicatorOverlayInterface.DropLocation_Left
-            visible: _window.dropIndicators.innerLeftIndicatorVisible
+            visible: dockDropIndicatorsWindow.dropIndicators.innerLeftIndicatorVisible
         }
 
         DropIndicator {
@@ -116,7 +116,7 @@ Item {
             }
 
             indicatorType: DropIndicatorOverlayInterface.DropLocation_Right
-            visible: _window.dropIndicators.innerRightIndicatorVisible
+            visible: dockDropIndicatorsWindow.dropIndicators.innerRightIndicatorVisible
         }
 
         DropIndicator {
@@ -127,7 +127,7 @@ Item {
             }
 
             indicatorType: DropIndicatorOverlayInterface.DropLocation_Top
-            visible: _window.dropIndicators.innerTopIndicatorVisible
+            visible: dockDropIndicatorsWindow.dropIndicators.innerTopIndicatorVisible
         }
 
         DropIndicator {
@@ -138,7 +138,7 @@ Item {
             }
 
             indicatorType: DropIndicatorOverlayInterface.DropLocation_Bottom
-            visible: _window.dropIndicators.innerBottomIndicatorVisible
+            visible: dockDropIndicatorsWindow.dropIndicators.innerBottomIndicatorVisible
         }
     }
 }
