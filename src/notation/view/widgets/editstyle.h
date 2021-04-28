@@ -91,6 +91,10 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
 
     static EditStylePage pageForElement(Element*);
 
+private:
+    int numberOfPage;
+    int pageListMap[50];
+
 private slots:
     void selectChordDescriptionFile();
     void setChordStyle(bool);
@@ -117,6 +121,12 @@ private slots:
     void editUserStyleName();
     void endEditUserStyleName();
     void resetUserStyleName();
+    void pageListRowChanged(int);
+    void pageListResetOrder();
+    void pageListMoved(QModelIndex, int, int, QModelIndex, int);
+    void stringToArray(std::string, int*);
+    std::string arrayToString(int*);
+    std::string ConsecutiveStr(int);
 
 public:
     EditStyle(QWidget* = nullptr);

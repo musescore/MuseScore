@@ -32,6 +32,15 @@
         <height>0</height>
        </size>
       </property>
+      <property name="dragEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="dragDropMode">
+       <enum>QAbstractItemView::DragDrop</enum>
+      </property>
+      <property name="defaultDropAction">
+       <enum>Qt::MoveAction</enum>
+      </property>
       <property name="alternatingRowColors">
        <bool>true</bool>
       </property>
@@ -13350,22 +13359,4 @@ By default, they will be placed such as that their right end are at the same lev
  <resources>
   <include location="../../notationscene.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>pageList</sender>
-   <signal>currentRowChanged(int)</signal>
-   <receiver>pageStack</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>42</x>
-     <y>22</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>395</x>
-     <y>16</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
 </ui>
