@@ -21,9 +21,11 @@
  */
 
 #include "editstyle.h"
+#include "settings.h"
 
 #include <QButtonGroup>
 #include <QSignalMapper>
+#include <sstream>
 
 #include "alignSelect.h"
 #include "colorlabel.h"
@@ -39,11 +41,14 @@
 
 using namespace mu::notation;
 using namespace mu::ui;
+using namespace mu::framework;
 
 static const QChar GO_NEXT_ICON = iconCodeToChar(IconCode::Code::ARROW_RIGHT);
 static const QChar GO_PREV_ICON = iconCodeToChar(IconCode::Code::ARROW_LEFT);
 static const QChar OPEN_FILE_ICON = iconCodeToChar(IconCode::Code::OPEN_FILE);
 static const QChar RESET_ICON = iconCodeToChar(IconCode::Code::REDO);
+
+static const Settings::Key STYLE_MENU_ORDER("notation", "ui/styleMenuOrder");
 
 static const char* lineStyles[] = {
     QT_TRANSLATE_NOOP("notation", "Continuous"),
@@ -486,6 +491,13 @@ EditStyle::EditStyle(QWidget* parent)
     tupletBracketType->addItem(tr("None", "no tuplet bracket type"), int(TupletBracketType::SHOW_NO_BRACKET));
 
     pageList->setCurrentRow(0);
+
+    numberOfPage = pageList->count();
+    settings()->setDefaultValue(STYLE_MENU_ORDER, Val(ConsecutiveStr(numberOfPage)));
+    stringToArray(settings()->value(STYLE_MENU_ORDER).toString(), pageListMap);
+    pageListResetOrder();
+    pageStack->setCurrentIndex(pageListMap[0]);
+
     accidentalsGroup->setVisible(false);   // disable, not yet implemented
 
     musicalSymbolFont->clear();
@@ -737,6 +749,10 @@ EditStyle::EditStyle(QWidget* parent)
 
     connect(textStyles, SIGNAL(currentRowChanged(int)), SLOT(textStyleChanged(int)));
     textStyles->setCurrentRow(0);
+
+    connect(pageList->model(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
+            this, SLOT(pageListMoved(QModelIndex,int,int,QModelIndex,int)));
+    connect(pageList, SIGNAL(currentRowChanged(int)), this, SLOT(pageListRowChanged(int)));
 
     adjustPagesStackSize(0);
 
@@ -1053,6 +1069,51 @@ EditStylePage EditStyle::pageForElement(Element* e)
     }
 }
 
+//--------------------------------------------------------
+//   arrayToString
+//--------------------------------------------------------
+
+std::string EditStyle::arrayToString(int* arr)
+{
+    std::string s;
+    for (int i = 0; i < numberOfPage; i++) {
+        s = s.append(std::to_string(arr[i]).append(","));
+    }
+    return s;
+}
+
+//--------------------------------------------------------
+//   stringToArray
+//--------------------------------------------------------
+
+void EditStyle::stringToArray(std::string s, int* arr)
+{
+    size_t j = 0;
+    std::string n = "";
+    for (size_t i = 0; i < s.length(); i++) {
+        if (s[i] == ',') {
+            arr[j] = stoi(n);
+            j++;
+            n = "";
+        } else {
+            n = n + s[i];
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   consecutiveStr
+//---------------------------------------------------------
+
+std::string EditStyle::ConsecutiveStr(int D)
+{
+    std::string s;
+    for (int i = 0; i < D; i++) {
+        s = s.append(std::to_string(i).append(","));
+    }
+    return s;
+}
+
 //---------------------------------------------------------
 //   elementHasPage
 ///   check if the element `e` has a style page related to it
@@ -1089,6 +1150,51 @@ void EditStyle::setPage(int idx)
 }
 
 //---------------------------------------------------------
+//   pageListRowChanged
+//---------------------------------------------------------
+
+void EditStyle::pageListRowChanged(int row)
+{
+    pageStack->setCurrentIndex(pageListMap[row]);
+}
+
+//---------------------------------------------------------
+//   pageListMoved
+//---------------------------------------------------------
+
+void EditStyle::pageListMoved(QModelIndex, int Start, int, QModelIndex, int End)
+{
+    if (End > Start) {
+        int startPageIndex = pageListMap[Start];
+        for (int i = Start; i < (End - 1); i++) {
+            pageListMap[i] = pageListMap[i + 1];
+        }
+        pageListMap[End - 1] = startPageIndex;
+    } else {
+        int startPageIndex = pageListMap[Start];
+        for (int i = Start; i > End; i--) {
+            pageListMap[i] = pageListMap[i - 1];
+        }
+        pageListMap[End] = startPageIndex;
+    }
+}
+
+//---------------------------------------------------------
+//   pageListResetOrder
+//---------------------------------------------------------
+
+void EditStyle::pageListResetOrder()
+{
+    QList<QString> originalOrder;
+    for (int i = 0; i < numberOfPage; i++) {
+        originalOrder.append(pageList->item(i)->text());
+    }
+    for (int i = 0; i < numberOfPage; i++) {
+        pageList->item(i)->setText(originalOrder[pageListMap[i]]);
+    }
+}
+
+//---------------------------------------------------------
 //   buttonClicked
 //---------------------------------------------------------
 
@@ -1097,6 +1203,7 @@ void EditStyle::buttonClicked(QAbstractButton* b)
     switch (buttonBox->standardButton(b)) {
     case QDialogButtonBox::Ok:
         accept();
+        settings()->setValue(STYLE_MENU_ORDER, Val(arrayToString(pageListMap)));
         break;
     case QDialogButtonBox::Cancel:
         reject();
