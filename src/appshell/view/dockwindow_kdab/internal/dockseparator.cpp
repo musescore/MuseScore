@@ -31,9 +31,9 @@
 using namespace mu::dock;
 
 DockSeparator::DockSeparator(Layouting::Widget* parent)
-    : QQuickItem(qobject_cast<QQuickItem*>(parent->asQObject()))
-    , Layouting::Separator(parent)
-    , Layouting::Widget_quick(this)
+    : QQuickItem(qobject_cast<QQuickItem*>(parent->asQObject())),
+    Layouting::Separator(parent),
+    Layouting::Widget_quick(this)
 {
     createQQuickItem("qrc:/qml/kdab/docksystem/DockSeparator.qml", this);
 
@@ -46,7 +46,7 @@ bool DockSeparator::isVertical() const
     return Layouting::Separator::isVertical();
 }
 
-Layouting::Widget *DockSeparator::createRubberBand(Layouting::Widget* parent)
+Layouting::Widget* DockSeparator::createRubberBand(Layouting::Widget* parent)
 {
     if (!parent) {
         LOGE() << "Parent is required";
@@ -56,7 +56,7 @@ Layouting::Widget *DockSeparator::createRubberBand(Layouting::Widget* parent)
     return new Layouting::Widget_quick(new Layouting::RubberBand(parent));
 }
 
-Layouting::Widget *DockSeparator::asWidget()
+Layouting::Widget* DockSeparator::asWidget()
 {
     return this;
 }

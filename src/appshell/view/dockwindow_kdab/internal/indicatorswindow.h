@@ -27,8 +27,7 @@
 
 #include "thirdparty/KDDockWidgets/src/private/DropIndicatorOverlayInterface_p.h"
 
-namespace mu::dock
-{
+namespace mu::dock {
 class DropIndicators;
 class IndicatorsWindow : public QQuickView
 {
