@@ -28,26 +28,26 @@ using namespace mu::ui;
 
 const UiActionList PlaybackUiActions::m_mainActions = {
     UiAction("play",
-             mu::context::UiCtxAny,
+             mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Play"),
              QT_TRANSLATE_NOOP("action", "Start or stop playback"),
              IconCode::Code::PLAY
              ),
     UiAction("rewind",
-             mu::context::UiCtxAny,
+             mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Rewind"),
              QT_TRANSLATE_NOOP("action", "Rewind to start position"),
              IconCode::Code::REWIND
              ),
     UiAction("loop",
-             mu::context::UiCtxAny,
+             mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Loop Playback"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Loop Playback'"),
              IconCode::Code::LOOP,
              Checkable::Yes
              ),
     UiAction("metronome",
-             mu::context::UiCtxAny,
+             mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Metronome"),
              QT_TRANSLATE_NOOP("action", "Play metronome during playback"),
              IconCode::Code::METRONOME,

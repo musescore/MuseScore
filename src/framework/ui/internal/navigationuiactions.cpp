@@ -42,6 +42,12 @@ const UiActionList NavigationUiActions::m_actions = {
     UiAction("nav-prev-panel",
              mu::context::UiCtxAny
              ),
+    UiAction("nav-next-tab",
+             mu::context::UiCtxAny
+             ),
+    UiAction("nav-prev-tab",
+             mu::context::UiCtxAny
+             ),
     UiAction("nav-right",
              mu::context::UiCtxAny
              ),

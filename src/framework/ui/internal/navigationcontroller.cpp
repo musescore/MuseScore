@@ -249,6 +249,9 @@ void NavigationController::init()
     dispatcher()->reg(this, "nav-prev-section", [this]() { goToPrevSection(false); });
     dispatcher()->reg(this, "nav-next-panel", this, &NavigationController::goToNextPanel);
     dispatcher()->reg(this, "nav-prev-panel", this, &NavigationController::goToPrevPanel);
+    //! NOTE Same as panel at the moment
+    dispatcher()->reg(this, "nav-next-tab", this, &NavigationController::goToNextPanel);
+    dispatcher()->reg(this, "nav-prev-tab", this, &NavigationController::goToPrevPanel);
 
     dispatcher()->reg(this, "nav-trigger-control", this, &NavigationController::doTriggerControl);
 
@@ -604,18 +607,18 @@ void NavigationController::onRight()
 void NavigationController::onLeft()
 {
     TRACEFUNC;
-    INavigationPanel* activeSubSec = activePanel();
-    if (!activeSubSec) {
+    INavigationPanel* activePanel = this->activePanel();
+    if (!activePanel) {
         return;
     }
 
     INavigation::EventPtr e = Event::make(Event::Left);
-    activeSubSec->onEvent(e);
+    activePanel->onEvent(e);
     if (e->accepted) {
         return;
     }
 
-    INavigationControl* activeCtrl = findActive(activeSubSec->controls());
+    INavigationControl* activeCtrl = findActive(activePanel->controls());
     if (activeCtrl) {
         activeCtrl->onEvent(e);
         if (e->accepted) {
@@ -623,16 +626,16 @@ void NavigationController::onLeft()
         }
     }
 
-    INavigationPanel::Direction direction = activeSubSec->direction();
+    INavigationPanel::Direction direction = activePanel->direction();
     switch (direction) {
     case INavigationPanel::Direction::Horizontal: {
-        goToControl(MoveDirection::Left, activeSubSec);
+        goToControl(MoveDirection::Left, activePanel);
     } break;
     case INavigationPanel::Direction::Vertical: {
         // noop
     } break;
     case INavigationPanel::Direction::Both: {
-        goToControl(MoveDirection::Left, activeSubSec);
+        goToControl(MoveDirection::Left, activePanel);
     } break;
     }
 }
@@ -899,12 +902,28 @@ void NavigationController::doTriggerControl()
 {
     TRACEFUNC;
     MYLOG() << "====";
-    INavigationControl* activeCtrl= activeControl();
+    INavigationPanel* activeSubSec = activePanel();
+    if (!activeSubSec) {
+        return;
+    }
+
+    INavigation::EventPtr e = Event::make(Event::Trigger);
+    activeSubSec->onEvent(e);
+    if (e->accepted) {
+        return;
+    }
+
+    INavigationControl* activeCtrl = findActive(activeSubSec->controls());
     if (!activeCtrl) {
         return;
     }
 
     MYLOG() << "triggered control: " << activeCtrl->name();
+    activeCtrl->onEvent(e);
+    if (e->accepted) {
+        return;
+    }
+
     activeCtrl->trigger();
 }
 

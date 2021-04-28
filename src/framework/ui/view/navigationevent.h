@@ -42,6 +42,7 @@ public:
         Right,
         Up,
         Down,
+        Trigger,
         Escape
     };
     Q_ENUM(Type)

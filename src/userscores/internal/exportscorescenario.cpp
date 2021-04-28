@@ -206,6 +206,8 @@ bool ExportScoreScenario::shouldReplaceFile(const QString& filename) const
         }
     } break;
     }
+
+    return false;
 }
 
 bool ExportScoreScenario::askForRetry(const QString& filename) const

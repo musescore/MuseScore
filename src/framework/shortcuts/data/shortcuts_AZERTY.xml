@@ -1,5 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Shortcuts>
+<!-- Keyboard navigation -->
+    <SC>
+        <key>nav-dev-show-controls</key>
+        <seq>Ctrl+F1</seq>
+    </SC>
+    <SC>
+        <key>nav-next-section</key>
+        <seq>F6</seq>
+    </SC>
+    <SC>
+        <key>nav-prev-section</key>
+        <seq>Shift+F6</seq>
+    </SC>
+    <SC>
+        <key>nav-next-section</key>
+        <seq>`</seq>
+    </SC>
+    <SC>
+        <key>nav-prev-section</key>
+        <seq>Shift+`</seq>
+    </SC>
+    <SC>
+        <key>nav-next-panel</key>
+        <seq>Tab</seq>
+    </SC>
+    <SC>
+        <key>nav-prev-panel</key>
+        <seq>Shift+Tab</seq>
+    </SC>
+    <SC>
+        <key>nav-next-tab</key>
+        <seq>Ctrl+Tab</seq>
+    </SC>
+    <SC>
+        <key>nav-prev-tab</key>
+        <seq>Ctrl+Shift+Tab</seq>
+    </SC>
+    <SC>
+        <key>nav-right</key>
+        <seq>Right</seq>
+    </SC>
+    <SC>
+        <key>nav-left</key>
+        <seq>Left</seq>
+    </SC>
+    <SC>
+        <key>nav-up</key>
+        <seq>Up</seq>
+    </SC>
+    <SC>
+        <key>nav-down</key>
+        <seq>Down</seq>
+    </SC>
+    <SC>
+      <key>nav-first-control</key>
+      <seq>Home</seq>
+    </SC>
+    <SC>
+      <key>nav-last-control</key>
+      <seq>End</seq>
+    </SC>
+    <SC>
+      <key>nav-nextrow-control</key>
+      <seq>PgDown</seq>
+    </SC>
+    <SC>
+      <key>nav-prevrow-control</key>
+      <seq>PgUp</seq>
+    </SC>
+    <SC>
+      <key>nav-trigger-control</key>
+      <seq>Return</seq>
+    </SC>
+    <SC>
+      <key>nav-trigger-control</key>
+      <seq>Space</seq>
+    </SC>
+    <SC>
+      <key>nav-escape</key>
+      <seq>Esc</seq>
+    </SC>
+<!-- end Keyboard navigation -->
   <SC>
     <key>plugin-creator</key>
     <seq>Ctrl+Shift+P</seq>
