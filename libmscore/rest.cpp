@@ -532,8 +532,9 @@ int Rest::computeLineOffset(int lines)
                   }
             }
 
-      if (offsetVoices) {
-            // if the staff contains slash notation then don't offset voices
+      if (offsetVoices && voice() < 2) {
+            // in slash notation voices 1 and 2 are not offset outside the staff
+            // if the staff contains slash notation then only offset rests in voices 3 and 4
             int baseTrack = staffIdx() * VOICES;
             for (int v = 0; v < VOICES; ++v) {
                   Element* e = s->element(baseTrack + v);
