@@ -67,8 +67,8 @@ using namespace mu::dock;
 
 DropIndicators::DropIndicators(KDDockWidgets::DropArea* dropArea)
     : KDDockWidgets::DropIndicatorOverlayInterface(dropArea),
-      m_rubberBand(KDDockWidgets::Config::self().frameworkWidgetFactory()->createRubberBand(dropArea)),
-      m_indicatorsWindow(createIndicatorWindow(this))
+    m_rubberBand(KDDockWidgets::Config::self().frameworkWidgetFactory()->createRubberBand(dropArea)),
+    m_indicatorsWindow(createIndicatorWindow(this))
 {
 }
 
@@ -182,8 +182,8 @@ bool DropIndicators::isToolBar() const
 
 bool DropIndicators::onResize(QSize)
 {
-     m_indicatorsWindow->resize(window()->size());
-     return false;
+    m_indicatorsWindow->resize(window()->size());
+    return false;
 }
 
 void DropIndicators::updateVisibility()
@@ -226,7 +226,7 @@ void DropIndicators::setDropLocation(DropLocation location)
     }
 
     KDDockWidgets::Location multisplitterLocation = locationToMultisplitterLocation(location);
-    KDDockWidgets::Frame *relativeToFrame = nullptr;
+    KDDockWidgets::Frame* relativeToFrame = nullptr;
 
     switch (location) {
     case DropLocation_Left:

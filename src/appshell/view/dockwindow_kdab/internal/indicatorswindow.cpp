@@ -31,8 +31,8 @@
 using namespace mu::dock;
 
 IndicatorsWindow::IndicatorsWindow(DropIndicators* dropIndicators)
-    : QQuickView()
-    , m_dropIndicators(dropIndicators)
+    : QQuickView(),
+    m_dropIndicators(dropIndicators)
 {
     setFlags(flags() | Qt::FramelessWindowHint | Qt::BypassWindowManagerHint | Qt::Tool);
     setColor(Qt::transparent);
@@ -62,10 +62,10 @@ KDDockWidgets::DropIndicatorOverlayInterface::DropLocation IndicatorsWindow::hov
 
 QQuickItem* IndicatorsWindow::indicatorForPos(QPoint pos) const
 {
-    const QVector<QQuickItem *> indicators = indicatorItems();
+    const QVector<QQuickItem*> indicators = indicatorItems();
     Q_ASSERT(indicators.size() == 9);
 
-    for (QQuickItem *item : indicators) {
+    for (QQuickItem* item : indicators) {
         if (item->isVisible()) {
             QRect rect(0, 0, int(item->width()), int(item->height()));
             rect.moveTopLeft(item->mapToGlobal(QPointF(0, 0)).toPoint());
@@ -78,7 +78,6 @@ QQuickItem* IndicatorsWindow::indicatorForPos(QPoint pos) const
     return nullptr;
 }
 
-
 QPoint IndicatorsWindow::posForIndicator(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation loc) const
 {
     QQuickItem* indicator = IndicatorsWindow::indicatorForLocation(loc);
@@ -88,7 +87,7 @@ QPoint IndicatorsWindow::posForIndicator(KDDockWidgets::DropIndicatorOverlayInte
 QString IndicatorsWindow::iconName(int loc, bool active) const
 {
     QString suffix = active ? QStringLiteral("_active")
-                            : QString();
+                     : QString();
 
     QString name;
     switch (loc) {
@@ -133,12 +132,13 @@ DropIndicators* IndicatorsWindow::dropIndicators() const
 
 QQuickItem* IndicatorsWindow::indicatorForLocation(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation loc) const
 {
-    const QVector<QQuickItem *> indicators = indicatorItems();
+    const QVector<QQuickItem*> indicators = indicatorItems();
     Q_ASSERT(indicators.size() == 9);
 
-    for (QQuickItem *item : indicators) {
-        if (locationForIndicator(item) == loc)
+    for (QQuickItem* item : indicators) {
+        if (locationForIndicator(item) == loc) {
             return item;
+        }
     }
 
     qWarning() << Q_FUNC_INFO << "Couldn't find indicator for location" << loc;
@@ -150,19 +150,19 @@ KDDockWidgets::DropIndicatorOverlayInterface::DropLocation IndicatorsWindow::loc
     return KDDockWidgets::DropIndicatorOverlayInterface::DropLocation(indicator->property("indicatorType").toInt());
 }
 
-QVector<QQuickItem *> IndicatorsWindow::indicatorItems() const
+QVector<QQuickItem*> IndicatorsWindow::indicatorItems() const
 {
-    QVector<QQuickItem *> indicators;
+    QVector<QQuickItem*> indicators;
     indicators.reserve(9);
 
-    QQuickItem *root = rootObject();
+    QQuickItem* root = rootObject();
     const QList<QQuickItem*> items = root->childItems();
-    for (QQuickItem *item : items) {
+    for (QQuickItem* item : items) {
         if (QString::fromLatin1(item->metaObject()->className()).startsWith(QLatin1String("DropIndicator_QMLTYPE"))) {
             indicators.push_back(item);
         } else if (item->objectName() == QLatin1String("innerIndicators")) {
             const QList<QQuickItem*> innerIndicators = item->childItems();
-            for (QQuickItem *innerItem : innerIndicators) {
+            for (QQuickItem* innerItem : innerIndicators) {
                 if (QString::fromLatin1(innerItem->metaObject()->className()).startsWith(QLatin1String("DropIndicator_QMLTYPE"))) {
                     indicators.push_back(innerItem);
                 }
