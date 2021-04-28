@@ -46,16 +46,19 @@ DockPage {
 
     property NavigationSection keynavNoteInputSec: NavigationSection {
         name: "NoteInputSection"
+        enabled: notationPage.visible
         order: 2
     }
 
     property NavigationSection keynavLeftPanelSec: NavigationSection {
         name: "LeftPanel"
+        enabled: notationPage.visible
         order: 3
     }
 
     property NavigationSection keynavRightPanelSec: NavigationSection {
         name: "RightPanel"
+        enabled: notationPage.visible
         order: 5
     }
 

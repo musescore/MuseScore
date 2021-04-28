@@ -19,19 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
+import QtQuick 2.15
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
-
+import MuseScore.UiComponents 1.0
 import MuseScore.Cloud 1.0
 
 Rectangle {
     id: root
 
     property string currentPageName: ""
+
+    property NavigationSection navigationSection: null
 
     signal selected(string name)
 
@@ -45,6 +46,9 @@ Rectangle {
         AccountInfoButton {
             Layout.fillWidth: true
             Layout.preferredHeight: 60
+
+            navirationPanel.section: root.navigationSection
+            navirationPanel.order: 1
 
             checked: root.currentPageName === "account"
 
@@ -66,6 +70,13 @@ Rectangle {
             orientation: ListView.Vertical
             spacing: 0
 
+            property NavigationPanel navigationPanel: NavigationPanel {
+                name: "MenuPanel"
+                section: root.navigationSection
+                order: 2
+                direction: NavigationPanel.Vertical
+            }
+
             model: [
                 { "name": "scores", "title": qsTrc("appshell", "Scores"), "icon": IconCode.MUSIC_NOTES },
                 { "name": "add-ons", "title": qsTrc("appshell", "Add-ons"), "icon":  IconCode.PLUS },
@@ -81,6 +92,10 @@ Rectangle {
                 id: radioButtonDelegate
 
                 width: parent.width
+
+                navigation.name: title
+                navigation.panel: radioButtonList.navigationPanel
+                navigation.row: 1 + model.index
 
                 spacing: 30
                 leftPadding: spacing

@@ -46,7 +46,7 @@ RadioDelegate {
     leftPadding: 0
     rightPadding: 0
 
-    onToggled: {
+    onPressed: {
         if (!keynavCtrl.active) {
             keynavCtrl.forceActive()
         }
@@ -59,6 +59,7 @@ RadioDelegate {
         onActiveChanged: {
             if (keynavCtrl.active) {
                 root.forceActiveFocus()
+                root.toggled()
             }
         }
 
