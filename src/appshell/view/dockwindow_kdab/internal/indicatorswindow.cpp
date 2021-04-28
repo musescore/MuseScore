@@ -37,7 +37,7 @@ IndicatorsWindow::IndicatorsWindow(DropIndicators* dropIndicators)
     setFlags(flags() | Qt::FramelessWindowHint | Qt::BypassWindowManagerHint | Qt::Tool);
     setColor(Qt::transparent);
 
-    rootContext()->setContextProperty(QStringLiteral("_window"), QVariant::fromValue<QObject*>(this));
+    rootContext()->setContextProperty(QStringLiteral("dockDropIndicatorsWindow"), QVariant::fromValue<QObject*>(this));
     setSource(QUrl(QStringLiteral("qrc:/qml/kdab/docksystem/DropIndicators.qml")));
 
     {
