@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
+import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 
@@ -36,6 +36,11 @@ DockPage {
 
     property string item: ""
     property string subItem: ""
+
+    property NavigationSection menuNavigationSectionSec: NavigationSection {
+        name: "HomeMenu"
+        order: 2
+    }
 
     onItemChanged: {
         if (!Boolean(item)) {
@@ -57,7 +62,8 @@ DockPage {
 
             color: ui.theme.backgroundPrimaryColor
 
-             HomeMenu {
+            HomeMenu {
+                navigationSection: homePage.menuNavigationSectionSec
                 currentPageName: homeCentral.currentCompName
 
                 onSelected: {
