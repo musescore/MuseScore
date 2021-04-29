@@ -85,6 +85,14 @@ public:
      * If true, means the drag will simply move the existing window, and no undocking/untabbing is involved.
      */
     virtual bool isWindow() const = 0;
+
+    /**
+     * @brief Maps the given point in draggable mouse area`s coordinate system to
+     * the equivalent point in window's coordinate system,
+     * and returns the mapped coordinate.
+     */
+    virtual QPoint mapToWindow(const QPoint& pos) const { return pos; }
+
 private:
     class Private;
     Private *const d;

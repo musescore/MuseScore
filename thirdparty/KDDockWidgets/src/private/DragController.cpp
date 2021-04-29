@@ -188,7 +188,7 @@ bool StateNone::handleMouseButtonPress(Draggable *draggable, QPoint globalPos, Q
     q->m_draggable = draggable;
     q->m_draggableGuard = draggable->asWidget();
     q->m_pressPos = globalPos;
-    q->m_offset = pos;
+    q->m_offset = draggable->mapToWindow(pos);
     Q_EMIT q->mousePressed();
     return false;
 }
