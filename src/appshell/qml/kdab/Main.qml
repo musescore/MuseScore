@@ -40,6 +40,24 @@ AppWindow {
         }
     }
 
+    MouseArea {
+        anchors.fill: parent
+
+        acceptedButtons: Qt.NoButton
+        hoverEnabled: true
+
+        cursorShape: {
+            const mouse = Qt.point(mouseX, mouseY)
+            const borderOffset = sideMargin + 10
+            if (mouse.x < borderOffset && mouse.y < borderOffset) return Qt.SizeFDiagCursor
+            if (mouse.x >= width - borderOffset && mouse.y >= height - borderOffset) return Qt.SizeFDiagCursor
+            if (mouse.x >= width - borderOffset && mouse.y < borderOffset) return Qt.SizeBDiagCursor
+            if (mouse.x < borderOffset && mouse.y >= height - borderOffset) return Qt.SizeBDiagCursor
+            if (mouse.x < borderOffset || mouse.x >= width - borderOffset) return Qt.SizeHorCursor
+            if (mouse.y < borderOffset || mouse.y >= height - borderOffset) return Qt.SizeVerCursor
+        }
+    }
+
     DragHandler {
         id: resizeHandler
 
@@ -52,7 +70,7 @@ AppWindow {
             }
 
             const p = resizeHandler.centroid.position
-            let e = 0
+            var e = 0
             if (p.x / width < 0.10) { e |= Qt.LeftEdge }
             if (p.x / width > 0.90) { e |= Qt.RightEdge }
             if (p.y / height < 0.10) { e |= Qt.TopEdge }
