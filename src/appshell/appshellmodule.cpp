@@ -35,7 +35,6 @@
 #include "internal/notationpagestate.h"
 
 #include "view/devtools/settingslistmodel.h"
-#include "view/dockwindow/docksetup.h"
 #include "view/appmenumodel.h"
 #include "view/notationpagemodel.h"
 #include "view/aboutmodel.h"
@@ -53,6 +52,12 @@
 #include "view/preferences/importpreferencesmodel.h"
 #include "view/preferences/iopreferencesmodel.h"
 #include "view/preferences/commonaudioapiconfigurationmodel.h"
+
+#ifdef KDAB_DOCKWIDGETS
+#include "view/dockwindow_kdab/docksetup.h"
+#else
+#include "view/dockwindow/docksetup.h"
+#endif
 
 using namespace mu::appshell;
 using namespace mu::framework;

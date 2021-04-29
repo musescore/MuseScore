@@ -24,6 +24,7 @@ import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Dock 1.0
 
 import MuseScore.UserScores 1.0
 import MuseScore.Cloud 1.0
@@ -37,7 +38,8 @@ DockPage {
     property string item: "scores"
     property string subItem: ""
 
-    uniqueName: "Home"
+    objectName: "Home"
+    uri: "musescore://home"
 
     onItemChanged: {
         Qt.callLater(root.setCurrentCentral, item)
@@ -63,10 +65,12 @@ DockPage {
 
     panels: [
         DockPanel {
-            uniqueName: "homeMenu"
+            objectName: "homeMenu"
 
-            width: 292
             minimumWidth: 76
+            maximumWidth: 292
+
+            allowedAreas: Qt.NoDockWidgetArea
 
             HomeMenu {
                 currentPageName: root.item

@@ -197,7 +197,7 @@ DockWindow {
             }
         },
 
-        DockToolBar	{
+        DockToolBar {
             id: undoRedoToolBar
             objectName: "undoRedoToolBar"
 
