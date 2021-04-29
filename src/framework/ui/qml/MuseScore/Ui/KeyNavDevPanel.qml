@@ -83,7 +83,7 @@ Rectangle {
             property bool active: section.active
             onActiveChanged: {
                 if (active) {
-                    view.positionViewAtIndex(model.index, ListView.Beginning)
+                    //view.positionViewAtIndex(model.index, ListView.Beginning)
                 }
             }
 

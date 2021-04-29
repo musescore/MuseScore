@@ -118,6 +118,10 @@ DockPage {
         id: addonsComp
         AddonsContent {
             item: homePage.subItem
+            visible: homePage.visible
+            onRequestActiveFocus: {
+                homeCentral.forceActiveFocus()
+            }
         }
     }
 

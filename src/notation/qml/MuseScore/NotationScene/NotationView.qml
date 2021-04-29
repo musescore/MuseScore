@@ -40,6 +40,7 @@ FocusScope {
         id: navSec
         name: "NotationView"
         order: 4
+        enabled: root.visible
     }
 
     ColumnLayout {

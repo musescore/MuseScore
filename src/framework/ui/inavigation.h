@@ -52,11 +52,15 @@ public:
             Up,
             Down,
             Trigger,
-            Escape
+            Escape,
+
+            // Internal events
+            AboutActive // sending before activation
         };
 
         Type type = Undefined;
         bool accepted = false;
+        QVariantMap data; // additional data
 
         Event(Type t)
             : type(t) {}
@@ -72,6 +76,8 @@ public:
 
         void setOrder(int n) { column = n; }
         int order() const { return column; }
+
+        inline bool operator ==(const Index& idx) const { return column == idx.column && row == idx.row; }
     };
 
     virtual QString name() const = 0;

@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -34,11 +34,32 @@ Rectangle {
     property real headerWidth: width / 2
     property real sideMargin: 0.0
 
+    property alias navigation: navCtrl
+
     signal clicked()
 
     height: 48
 
     color: ui.theme.backgroundPrimaryColor
+
+    border.width: navCtrl.active ? 2 : 0
+    border.color: ui.theme.focusColor
+
+    function ensureActiveFocus() {
+        if (!root.activeFocus) {
+            root.forceActiveFocus()
+        }
+
+        if (!navCtrl.active) {
+            navCtrl.forceActive()
+        }
+    }
+
+    NavigationControl {
+        id: navCtrl
+        name: root.title
+        onTriggered: root.clicked()
+    }
 
     Row {
         anchors.left: parent.left
@@ -77,6 +98,7 @@ Rectangle {
         anchors.fill: parent
 
         onClicked: {
+            root.ensureActiveFocus()
             root.clicked()
         }
     }

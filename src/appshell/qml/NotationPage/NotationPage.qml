@@ -262,6 +262,7 @@ DockPage {
         NotationView {
             id: notationView
 
+            visible: notationPage.visible
             isNavigatorVisible: notationPage.pageModel.isNotationNavigatorVisible
 
             onTextEdittingStarted: {

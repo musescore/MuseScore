@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtGraphicalEffects 1.0
 
 import MuseScore.Ui 1.0
@@ -31,6 +31,9 @@ Rectangle {
     property alias background: effectSource.sourceItem
     property alias canClose: closeButton.visible
 
+    property alias navigation: navPanel
+
+    signal opened()
     signal closed()
 
     color: ui.theme.popupBackgroundColor
@@ -46,18 +49,62 @@ Rectangle {
         }
     }
 
-    function open() {
-        visible = true
+    function open(navigationCtrl) {
+        navPanel.parentControl = navigationCtrl
+        root.visible = true
+        root.opened()
     }
 
     function close() {
-        if (!canClose) {
+        if (!root.canClose) {
             return
         }
 
-        visible = false
+        root.visible = false
 
-        closed()
+        if (navPanel.parentControl) {
+            navPanel.parentControl.forceActive()
+        }
+
+        root.closed()
+    }
+
+    NavigationPopupPanel {
+        id: navPanel
+        name: root.objectName != "" ? root.objectName : "PopupPanel"
+
+        enabled: root.visible
+        order: {
+            var pctrl = navPanel.parentControl;
+            if (pctrl) {
+                if (pctrl.panel) {
+                    return pctrl.panel.order + 1
+                }
+            }
+            return -1
+        }
+
+        section: {
+            var pctrl = navPanel.parentControl;
+            if (pctrl) {
+                if (pctrl.panel) {
+                    return pctrl.panel.section
+                }
+            }
+            return null
+        }
+
+        onActiveChanged: {
+            if (navPanel.active) {
+                root.forceActiveFocus()
+            }
+        }
+
+        onNavigationEvent: {
+            if (event.type === NavigationEvent.Escape) {
+                root.close()
+            }
+        }
     }
 
     Loader {
