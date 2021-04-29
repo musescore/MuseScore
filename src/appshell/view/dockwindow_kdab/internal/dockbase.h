@@ -44,6 +44,8 @@ class DockBase : public QQuickItem
 
     Q_PROPERTY(Qt::DockWidgetAreas allowedAreas READ allowedAreas WRITE setAllowedAreas NOTIFY allowedAreasChanged)
 
+    Q_PROPERTY(bool floating READ floating NOTIFY floatingChanged)
+
 public:
     explicit DockBase(QQuickItem* parent = nullptr);
 
@@ -62,6 +64,8 @@ public:
 
     void close();
 
+    bool floating() const;
+
 public slots:
     void setTitle(const QString& title);
 
@@ -72,6 +76,8 @@ public slots:
 
     void setAllowedAreas(Qt::DockWidgetAreas areas);
 
+    void setFloating(bool floating);
+
 signals:
     void titleChanged();
     void minimumSizeChanged();
@@ -79,6 +85,8 @@ signals:
     void allowedAreasChanged();
 
     void closed();
+
+    void floatingChanged();
 
 protected:
     friend class DockWindow;
@@ -94,6 +102,7 @@ private slots:
 
 private:
     void applySizeConstraints();
+    void listenFloatingChanges();
 
     int m_minimumWidth = 0;
     int m_minimumHeight = 0;
@@ -103,6 +112,7 @@ private:
     QString m_title;
     Qt::DockWidgetAreas m_allowedAreas = Qt::NoDockWidgetArea;
     KDDockWidgets::DockWidgetQuick* m_dockWidget = nullptr;
+    bool m_floating = false;
 };
 }
 
