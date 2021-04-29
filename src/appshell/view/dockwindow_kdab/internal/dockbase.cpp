@@ -70,6 +70,11 @@ Qt::DockWidgetAreas DockBase::allowedAreas() const
     return m_allowedAreas;
 }
 
+bool DockBase::floating() const
+{
+    return m_floating;
+}
+
 KDDockWidgets::DockWidgetQuick* DockBase::dockWidget() const
 {
     return m_dockWidget;
@@ -135,6 +140,16 @@ void DockBase::setAllowedAreas(Qt::DockWidgetAreas areas)
     emit allowedAreasChanged();
 }
 
+void DockBase::setFloating(bool floating)
+{
+    if (m_floating == floating) {
+        return;
+    }
+
+    m_floating = floating;
+    emit floatingChanged();
+}
+
 void DockBase::resize()
 {
     applySizeConstraints();
@@ -176,6 +191,8 @@ void DockBase::componentComplete()
     properties.allowedAreas = allowedAreas();
 
     writePropertiesToObject(properties, *m_dockWidget);
+
+    listenFloatingChanges();
 }
 
 void DockBase::applySizeConstraints()
@@ -199,4 +216,22 @@ void DockBase::applySizeConstraints()
         frame->setMinimumSize(minimumSize);
         frame->setMaximumSize(maximumSize);
     }
+}
+
+void DockBase::listenFloatingChanges()
+{
+    connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::parentChanged, [this]() {
+        if (!m_dockWidget) {
+            return;
+        }
+
+        KDDockWidgets::Frame* frame = m_dockWidget->frame();
+        if (!frame) {
+            return;
+        }
+
+        connect(frame, &KDDockWidgets::Frame::isInMainWindowChanged, this, [=]() {
+            setFloating(!frame->isInMainWindow());
+        }, Qt::UniqueConnection);
+    });
 }
