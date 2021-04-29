@@ -241,6 +241,34 @@ static T* findActive(const std::set<T*>& set)
     return nullptr;
 }
 
+template<class T>
+static T* findByName(const std::set<T*>& set, const QString& name)
+{
+    auto it = std::find_if(set.cbegin(), set.cend(), [name](const T* s) {
+        return s->name() == name;
+    });
+
+    if (it != set.cend()) {
+        return *it;
+    }
+
+    return nullptr;
+}
+
+template<class T>
+static T* findByIndex(const std::set<T*>& set, const INavigation::Index& idx)
+{
+    auto it = std::find_if(set.cbegin(), set.cend(), [idx](const T* s) {
+        return s->index() == idx;
+    });
+
+    if (it != set.cend()) {
+        return *it;
+    }
+
+    return nullptr;
+}
+
 void NavigationController::init()
 {
     dispatcher()->reg(this, "nav-dev-show-controls", this, &NavigationController::devShowControls);
@@ -348,12 +376,38 @@ void NavigationController::doActivatePanel(INavigationPanel* sub)
         doDeactivateControl(ctr);
     }
 
+    INavigation::EventPtr event = INavigation::Event::make(INavigation::Event::AboutActive);
+    sub->onEvent(event);
+
     sub->setActive(true);
     MYLOG() << "activated subsection: " << sub->name() << ", order: " << sub->index().order();
 
-    INavigationControl* firstCtr = firstEnabled(sub->controls());
-    if (firstCtr) {
-        doActivateControl(firstCtr);
+    INavigationControl* control = nullptr;
+    QString ctrlName = event->data.value("controlName").toString();
+    if (!ctrlName.isEmpty()) {
+        control = findByName(sub->controls(), ctrlName);
+        IF_ASSERT_FAILED(control) {
+        }
+    }
+
+    if (!control) {
+        QVariantList idxVal = event->data.value("controlIndex").toList();
+        if (idxVal.count() == 2) {
+            INavigation::Index ctrlIndex;
+            ctrlIndex.row = idxVal.at(0).toInt();
+            ctrlIndex.column = idxVal.at(1).toInt();
+            control = findByIndex(sub->controls(), ctrlIndex);
+            IF_ASSERT_FAILED(control) {
+            }
+        }
+    }
+
+    if (!control) {
+        control = firstEnabled(sub->controls());
+    }
+
+    if (control) {
+        doActivateControl(control);
     }
 }
 

@@ -22,6 +22,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Languages 1.0
 
@@ -33,8 +34,16 @@ Item {
     property string search: ""
     property string backgroundColor: ui.theme.backgroundPrimaryColor
 
+    property alias navigation: navPanel
+
+    NavigationPanel {
+        id: navPanel
+        name: "AddonsLanguages"
+        direction: NavigationPanel.Vertical
+    }
+
     QtObject {
-        id: privateProperties
+        id: prv
 
         property var selectedLanguage: undefined
         property int sideMargin: 133
@@ -56,18 +65,18 @@ Item {
         id: languageListModel
 
         onProgress: {
-            if (privateProperties.selectedLanguage.code !== languageCode) {
+            if (prv.selectedLanguage.code !== languageCode) {
                 return
             }
 
             panel.setProgress(status, indeterminate, current, total)
         }
         onFinish: {
-            if (privateProperties.selectedLanguage.code !== item.code) {
+            if (prv.selectedLanguage.code !== item.code) {
                 return
             }
 
-            privateProperties.selectedLanguage = item
+            prv.selectedLanguage = item
             panel.resetProgress()
         }
     }
@@ -94,9 +103,9 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 16
         anchors.left: parent.left
-        anchors.leftMargin: privateProperties.sideMargin
+        anchors.leftMargin: prv.sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: privateProperties.sideMargin
+        anchors.rightMargin: prv.sideMargin
 
         height: 40
 
@@ -174,7 +183,12 @@ Item {
         }
 
         delegate: LanguageItem {
+            id: item
+
             width: view.width
+
+            navigation.panel: navPanel
+            navigation.row: 1 + model.index
 
             title: model.name
             statusTitle: model.statusTitle
@@ -186,10 +200,8 @@ Item {
             sideMargin: 133
 
             onClicked: {
-                forceActiveFocus()
-
-                privateProperties.selectedLanguage = languageListModel.language(model.code)
-                panel.open()
+                prv.selectedLanguage = languageListModel.language(model.code)
+                panel.open(item.navigation)
             }
         }
     }
@@ -217,9 +229,11 @@ Item {
     InstallationPanel {
         id: panel
 
-        property alias selectedLanguage: privateProperties.selectedLanguage
+        property alias selectedLanguage: prv.selectedLanguage
 
         height: 206
+
+        navigation.name: "LanguagesInstallationPanel"
 
         title: Boolean(selectedLanguage) ? selectedLanguage.name : ""
         installed: Boolean(selectedLanguage) ? (selectedLanguage.status === LanguageStatus.Installed) : false
@@ -252,7 +266,7 @@ Item {
         }
 
         onClosed: {
-            privateProperties.resetSelectedLanguage()
+            prv.resetSelectedLanguage()
         }
     }
 }

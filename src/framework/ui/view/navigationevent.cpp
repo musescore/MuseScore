@@ -58,3 +58,19 @@ bool NavigationEvent::accepted() const
     }
     return m_event->accepted;
 }
+
+QVariant NavigationEvent::data(const QString& key) const
+{
+    IF_ASSERT_FAILED(m_event) {
+        return false;
+    }
+    return m_event->data.value(key);
+}
+
+void NavigationEvent::setData(const QString& key, const QVariant& val)
+{
+    IF_ASSERT_FAILED(m_event) {
+        return;
+    }
+    m_event->data[key] = val;
+}
