@@ -37,21 +37,17 @@ using namespace mu::iex::imagesexport;
 using namespace mu::notation;
 using namespace mu::system;
 
-std::vector<WriterUnitType> PngWriter::supportedUnitTypes() const
+std::vector<INotationWriter::UnitType> PngWriter::supportedUnitTypes() const
 {
-    return { WriterUnitType::PER_PAGE };
+    return { UnitType::PER_PAGE };
 }
 
-mu::Ret PngWriter::write(const INotationPtrList& notations, IODevice& destinationDevice, const Options& options)
+mu::Ret PngWriter::write(INotationPtr notation, IODevice& destinationDevice, const Options& options)
 {
-    IF_ASSERT_FAILED(!notations.empty()) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-
-    INotationPtr notation = notations.front();
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
     }
+
     Ms::Score* score = notation->elements()->msScore();
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);

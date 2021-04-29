@@ -92,7 +92,7 @@ public:
     QVariantList availableUnitTypes() const;
     int selectedUnitType() const;
     void setUnitType(int unitType);
-    void setUnitType(notation::WriterUnitType unitType);
+    void setUnitType(notation::INotationWriter::UnitType unitType);
 
     Q_INVOKABLE bool exportScores();
 
@@ -138,7 +138,7 @@ signals:
     void selectionChanged();
 
     void selectedExportTypeChanged(QVariantMap newExportType);
-    void selectedUnitTypeChanged(notation::WriterUnitType newUnitType);
+    void selectedUnitTypeChanged(notation::INotationWriter::UnitType newUnitType);
 
     void pdfResolutionChanged(int resolution);
     void pngResolutionChanged(int resolution);
@@ -167,12 +167,12 @@ private:
     bool isMainNotation(notation::INotationPtr notation) const;
     notation::IMasterNotationPtr masterNotation() const;
 
-    QList<notation::INotationPtr> m_notations;
-    QItemSelectionModel* m_selectionModel;
+    QList<notation::INotationPtr> m_notations {};
+    QItemSelectionModel* m_selectionModel = nullptr;
 
-    ExportTypeList m_exportTypeList;
-    ExportType m_selectedExportType;
-    notation::WriterUnitType m_selectedUnitType;
+    ExportTypeList m_exportTypeList {};
+    ExportType m_selectedExportType = ExportType();
+    notation::INotationWriter::UnitType m_selectedUnitType = notation::INotationWriter::UnitType::PER_PART;
 };
 }
 

@@ -28,7 +28,9 @@ using namespace mu::userscores;
 using namespace mu::notation;
 using namespace mu::iex::musicxml;
 
-static const WriterUnitType DEFAULT_EXPORT_UNITTYPE = WriterUnitType::PER_PART;
+using UnitType = INotationWriter::UnitType;
+
+static const UnitType DEFAULT_EXPORT_UNITTYPE = UnitType::PER_PART;
 
 ExportDialogModel::ExportDialogModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -218,7 +220,7 @@ void ExportDialogModel::setExportType(const ExportType& type)
     m_selectedExportType = type;
     emit selectedExportTypeChanged(type.toMap());
 
-    std::vector<WriterUnitType> unitTypes = exportScoreScenario()->supportedUnitTypes(type);
+    std::vector<UnitType> unitTypes = exportScoreScenario()->supportedUnitTypes(type);
 
     IF_ASSERT_FAILED(!unitTypes.empty()) {
         return;
@@ -254,15 +256,15 @@ void ExportDialogModel::selectExportTypeById(const QString& id)
 
 QVariantList ExportDialogModel::availableUnitTypes() const
 {
-    QMap<WriterUnitType, QString> unitTypeNames {
-        { WriterUnitType::PER_PAGE, qtrc("userscores", "Each page to a separate file") },
-        { WriterUnitType::PER_PART, qtrc("userscores", "Each part to a separate file") },
-        { WriterUnitType::MULTI_PART, qtrc("userscores", "All parts combined in one file") },
+    QMap<UnitType, QString> unitTypeNames {
+        { UnitType::PER_PAGE, qtrc("userscores", "Each page to a separate file") },
+        { UnitType::PER_PART, qtrc("userscores", "Each part to a separate file") },
+        { UnitType::MULTI_PART, qtrc("userscores", "All parts combined in one file") },
     };
 
     QVariantList result;
 
-    for (WriterUnitType type : exportScoreScenario()->supportedUnitTypes(m_selectedExportType)) {
+    for (UnitType type : exportScoreScenario()->supportedUnitTypes(m_selectedExportType)) {
         QVariantMap obj;
         obj["text"] = unitTypeNames[type];
         obj["value"] = static_cast<int>(type);
@@ -279,10 +281,10 @@ int ExportDialogModel::selectedUnitType() const
 
 void ExportDialogModel::setUnitType(int unitType)
 {
-    setUnitType(static_cast<WriterUnitType>(unitType));
+    setUnitType(static_cast<UnitType>(unitType));
 }
 
-void ExportDialogModel::setUnitType(WriterUnitType unitType)
+void ExportDialogModel::setUnitType(UnitType unitType)
 {
     if (m_selectedUnitType == unitType) {
         return;
