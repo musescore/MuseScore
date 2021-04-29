@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.3
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.UserScores 1.0
@@ -93,8 +93,8 @@ FocusScope {
         }
     }
 
-    RowLayout {
-        id: topLayout
+    Item {
+        id: headerItem
 
         anchors.top: parent.top
         anchors.topMargin: 66
@@ -103,7 +103,7 @@ FocusScope {
         anchors.right: parent.right
         anchors.rightMargin: prv.sideMargin
 
-        spacing: 12
+        height: childrenRect.height
 
         NavigationPanel {
             id: navSearchPanel
@@ -115,23 +115,23 @@ FocusScope {
         StyledTextLabel {
             id: pageTitle
 
+            anchors.left: parent.left
+            anchors.right: searchField.left
+            anchors.rightMargin: 12
+
             text: qsTrc("userscores", "Scores")
             font: ui.theme.titleBoldFont
+            horizontalAlignment: Text.AlignLeft
         }
 
         SearchField {
             id: searchField
 
-            Layout.maximumWidth: width
-            Layout.alignment: Qt.AlignHCenter
+            anchors.centerIn: parent
 
             navigation.name: "Scores Search"
             navigation.panel: navSearchPanel
             navigation.order: 1
-        }
-
-        Item {
-            Layout.preferredWidth: pageTitle.width
         }
     }
 
@@ -158,7 +158,7 @@ FocusScope {
     RecentScoresView {
         id: view
 
-        anchors.top: topLayout.bottom
+        anchors.top: headerItem.bottom
         anchors.topMargin: 74
         anchors.left: parent.left
         anchors.leftMargin: prv.sideMargin - view.sideMargin
