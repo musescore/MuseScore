@@ -19,30 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_IMAINWINDOW_H
-#define MU_UI_IMAINWINDOW_H
 
-#include "modularity/imoduleexport.h"
+#ifndef MU_DOCK_MAINWINDOWPROVIDER_H
+#define MU_DOCK_MAINWINDOWPROVIDER_H
 
-class QMainWindow;
-class QWindow;
-class QScreen;
+#include "framework/ui/imainwindow.h"
 
-namespace mu::ui {
-class IMainWindow : MODULE_EXPORT_INTERFACE
+namespace mu::dock {
+class MainWindowProvider : public ui::IMainWindow
 {
-    INTERFACE_ID(IMainWindow)
-
 public:
-    virtual ~IMainWindow() = default;
+    QMainWindow* qMainWindow() const override;
+    QWindow* qWindow() const override;
 
-    virtual QMainWindow* qMainWindow() const = 0;
-    virtual QWindow* qWindow() const = 0;
-
-    virtual bool isFullScreen() const = 0;
-    virtual void toggleFullScreen() = 0;
-    virtual const QScreen* screen() const = 0;
+    bool isFullScreen() const override;
+    void toggleFullScreen() override;
+    const QScreen* screen() const override;
 };
 }
 
-#endif // MU_UI_IMAINWINDOW_H
+#endif // MU_DOCK_MAINWINDOWPROVIDER_H
