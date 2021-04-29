@@ -36,7 +36,6 @@ FocusScope {
 
     anchors.left: parent.left
     anchors.right: parent.right
-    anchors.rightMargin: 48
 
     function navigationRow(row) {
         return root.navigationRowOffset + row

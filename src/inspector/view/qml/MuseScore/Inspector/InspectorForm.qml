@@ -70,16 +70,8 @@ Rectangle {
     Flickable {
         id: flickableArea
 
-        anchors.top: parent.top
-        anchors.topMargin: 12
-        anchors.left: parent.left
-        anchors.leftMargin: 24
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 24
-
-        width: parent.width
-
-        contentWidth: contentItem.childrenRect.width
+        anchors.fill: parent
+        anchors.margins: 12
 
         function updateContentHeight() {
             var resultContentHeight = 0
@@ -107,7 +99,8 @@ Rectangle {
         }
 
         Column {
-            width: root.width
+            anchors.left: parent.left
+            anchors.right: parent.right
 
             spacing: 6
 
