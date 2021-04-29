@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.12
+import QtQuick 2.15
 import QtGraphicalEffects 1.0
 
 import MuseScore.Ui 1.0
@@ -34,7 +34,16 @@ Item {
     property alias thumbnail: loader.thumbnail
     property bool isAdd: false
 
+    property alias navigation: navCtrl
+
     signal clicked()
+
+    NavigationControl {
+        id: navCtrl
+        name: root.title
+
+        onTriggered: root.clicked()
+    }
 
     Column {
         anchors.fill: parent
@@ -86,8 +95,8 @@ Item {
                 color: "transparent"
                 radius: parent.radius
 
-                border.color: ui.theme.strokeColor
-                border.width: parent.borderWidth
+                border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
+                border.width: navCtrl.active ? 2 : parent.borderWidth
             }
 
             states: [

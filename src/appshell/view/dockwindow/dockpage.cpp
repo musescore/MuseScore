@@ -30,6 +30,7 @@ DockPage::DockPage(QQuickItem* parent)
     : QQuickItem(parent), m_panels(this)
 {
     setFlag(QQuickItem::ItemHasContents, true);
+    setVisible(false);
 }
 
 void DockPage::componentComplete()

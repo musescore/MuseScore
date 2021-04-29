@@ -32,11 +32,16 @@ Rectangle {
 
     property string currentPageName: ""
 
-    property NavigationSection navigationSection: null
-
     signal selected(string name)
 
     color: ui.theme.backgroundPrimaryColor
+
+    NavigationSection {
+        id: navSec
+        name: "HomeMenu"
+        enabled: root.visible
+        order: 2
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -47,7 +52,7 @@ Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 60
 
-            navirationPanel.section: root.navigationSection
+            navirationPanel.section: navSec
             navirationPanel.order: 1
 
             checked: root.currentPageName === "account"
@@ -72,7 +77,7 @@ Rectangle {
 
             property NavigationPanel navigationPanel: NavigationPanel {
                 name: "MenuPanel"
-                section: root.navigationSection
+                section: navSec
                 order: 2
                 direction: NavigationPanel.Vertical
             }

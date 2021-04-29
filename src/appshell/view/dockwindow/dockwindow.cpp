@@ -187,6 +187,7 @@ void DockWindow::hidePage(DockPage* page)
     if (central) {
         DockCentral::Widget cw = central->widget();
         m_central->removeWidget(cw.widget);
+        central->setVisible(false);
         widgetsToHide << cw.widget;
     }
 
@@ -194,6 +195,7 @@ void DockWindow::hidePage(DockPage* page)
     for (DockPanel* panel : panels) {
         DockPanel::Widget dw = panel->widget();
         m_window->removeDockWidget(dw.panel);
+        panel->setVisible(false);
         widgetsToHide << dw.panel;
     }
 
@@ -202,6 +204,7 @@ void DockWindow::hidePage(DockPage* page)
         DockToolBar::Widget tw = tool->widget();
         m_window->removeToolBarBreak(tw.bar);
         m_window->removeToolBar(tw.bar);
+        tool->setVisible(false);
         widgetsToHide << tw.bar;
     }
 
@@ -229,6 +232,7 @@ void DockWindow::showPage(DockPage* page)
     DockToolBar* tool = page->toolbar();
     if (tool) {
         DockToolBar::Widget tw = tool->widget();
+        tool->setVisible(true);
         if (tw.breakArea != Qt::NoToolBarArea) {
             m_window->addToolBarBreak(tw.breakArea);
         }
@@ -255,6 +259,7 @@ void DockWindow::showPage(DockPage* page)
     // Panels
     QList<DockPanel*> panels = page->panels();
     for (DockPanel* panel : panels) {
+        panel->setVisible(true);
         DockPanel::Widget dw = panel->widget();
         m_window->addDockWidget(dw.area, dw.panel);
     }
@@ -283,6 +288,7 @@ void DockWindow::showPage(DockPage* page)
     // Central
     DockCentral* central = page->central();
     if (central) {
+        central->setVisible(true);
         DockCentral::Widget cw = central->widget();
         m_central->addWidget(cw.widget);
     }
