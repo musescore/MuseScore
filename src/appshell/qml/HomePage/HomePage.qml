@@ -37,11 +37,6 @@ DockPage {
     property string item: ""
     property string subItem: ""
 
-    property NavigationSection menuNavigationSectionSec: NavigationSection {
-        name: "HomeMenu"
-        order: 2
-    }
-
     onItemChanged: {
         if (!Boolean(item)) {
             return
@@ -63,9 +58,8 @@ DockPage {
             color: ui.theme.backgroundPrimaryColor
 
             HomeMenu {
-                navigationSection: homePage.menuNavigationSectionSec
+                visible: homePage.visible
                 currentPageName: homeCentral.currentCompName
-
                 onSelected: {
                     homeCentral.load(name)
                 }
@@ -112,7 +106,12 @@ DockPage {
 
     Component {
         id: scoresComp
-        ScoresPage {}
+        ScoresPage {
+            visible: homePage.visible
+            onRequestActiveFocus: {
+                homeCentral.forceActiveFocus()
+            }
+        }
     }
 
     Component {
