@@ -36,6 +36,8 @@ Rectangle {
     property alias navigation: keynavSub
     property bool floating: false
 
+    color: ui.theme.backgroundPrimaryColor
+
     NavigationPanel {
         id: keynavSub
         name: "PlaybackToolBar"

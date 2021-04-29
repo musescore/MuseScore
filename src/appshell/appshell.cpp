@@ -29,8 +29,9 @@
 #include <QThreadPool>
 #endif
 #ifdef KDAB_DOCKWIDGETS
-#include "kddockwidgets/Config.h"
+#include "view/dockwindow_kdab/docksetup.h"
 #endif
+
 #include "log.h"
 #include "modularity/ioc.h"
 #include "ui/internal/uiengine.h"
@@ -146,7 +147,7 @@ int AppShell::run(int argc, char** argv)
         QQmlApplicationEngine* engine = new QQmlApplicationEngine();
 
 #ifdef KDAB_DOCKWIDGETS
-        KDDockWidgets::Config::self().setQmlEngine(engine);
+        dock::DockSetup::setup(engine);
         const QString mainQmlFile = "/kdab/Window.qml";
 #elif Q_OS_WASM
         const QString mainQmlFile = "/Main.wasm.qml";

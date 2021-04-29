@@ -27,6 +27,8 @@ import MuseScore.NotationScene 1.0
 Rectangle {
     id: root
 
+    color: ui.theme.backgroundPrimaryColor
+
     Component.onCompleted: {
         model.load()
     }

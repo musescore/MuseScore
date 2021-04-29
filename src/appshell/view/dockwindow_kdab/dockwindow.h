@@ -62,6 +62,8 @@ signals:
 private:
     DockPage* pageByUri(const QString& uri) const;
 
+    void componentComplete() override;
+
     void loadPageContent(const DockPage* page);
     void unitePanelsToTabs(const DockPage* page);
 

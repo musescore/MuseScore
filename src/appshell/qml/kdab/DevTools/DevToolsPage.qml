@@ -23,6 +23,8 @@ import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Dock 1.0
+
 import MuseScore.Plugins 1.0
 import MuseScore.Audio 1.0
 
@@ -40,7 +42,8 @@ import "../docksystem"
 DockPage {
     id: root
 
-    uniqueName: "DevTools"
+    objectName: "DevTools"
+    uri: "musescore://devtools"
 
     function setCurrentCentral(name) {
         switch (name) {
@@ -63,19 +66,19 @@ DockPage {
         DockPanel {
             id: devtoolsPanel
 
-            uniqueName: "devtoolsPanel"
+            objectName: "devtoolsPanel"
 
-            width: 292
             minimumWidth: 200
+            maximumWidth: 292
+
+            allowedAreas: Qt.NoDockWidgetArea
 
             Rectangle {
                 anchors.fill: parent
                 color: ui.theme.backgroundPrimaryColor
 
                 DevToolsMenu {
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.right: parent.right
+                    anchors.fill: parent
 
                     model: [
                         { "name": "settings", "title": "Settings" },
