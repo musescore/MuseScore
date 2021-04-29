@@ -21,10 +21,9 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.AppShell 1.0
-import MuseScore.Shortcuts 1.0
+import MuseScore.Dock 1.0
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
@@ -32,6 +31,9 @@ import "./HomePage"
 import "./NotationPage"
 import "./PublishPage"
 import "./DevTools"
+import "docksystem"
+
+import "../../qml" as DOCKWINDOW
 
 ApplicationWindow {
     id: root
@@ -47,73 +49,71 @@ ApplicationWindow {
         topParent: root
 
         onRequestedDockPage: {
-            pagesStack.currentPageUri = uri
+            window.loadPage(uri)
         }
     }
 
-    ListView {
-        id: mainToolbar
+    property NavigationSection topToolKeyNavSec: NavigationSection {
+        id: keynavSec
+        name: "TopTool"
+        order: 1
+    }
 
-        anchors.top: parent.top
+    DockWindow {
+        id: window
 
-        width: parent.width
-        height: 30
+        anchors.fill: parent
 
-        spacing: 8
-        orientation: Qt.Horizontal
+        Component.onCompleted: {
+            api.launcher.open(homePage.uri)
+        }
 
-        model: pagesStack.allPagesUri
+        toolBars: [
+            DockToolBar {
+                id: mainToolBar
 
-        delegate: FlatButton {
-            text: modelData
+                objectName: "mainToolBar"
+                title: qsTrc("appshell", "Main Toolbar")
 
-            onClicked: {
-                api.launcher.open(modelData)
+                width: root.width / 2
+                height: 48
+                minimumWidth: 304
+                minimumHeight: height
+                maximumHeight: height
+
+                movable: false
+
+                contentComponent: DOCKWINDOW.MainToolBar {
+                    navigation.section: topToolKeyNavSec
+                    navigation.order: 1
+
+                    currentUri: window.currentPageUri
+
+                    navigation.onActiveChanged: {
+                        if (navigation.active) {
+                            mainToolBar.forceActiveFocus()
+                        }
+                    }
+
+                    onSelected: {
+                        api.launcher.open(uri)
+                    }
+                }
             }
-        }
-    }
-
-    StackLayout {
-        id: pagesStack
-
-        anchors.top: mainToolbar.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        property string currentPageUri: homePage.uri
-
-        currentIndex: allPagesUri.indexOf(currentPageUri)
-
-        property var allPagesUri: [
-            homePage.uri,
-            notationPage.uri,
-            publishPage.uri,
-            devtoolsPage.uri
         ]
 
-        HomePage {
-            id: homePage
+        pages: [
+            HomePage {
+                id: homePage
+            },
 
-            uri: "musescore://home"
-        }
+            NotationPage {
+                topToolKeyNavSec: root.topToolKeyNavSec
+            },
 
-        NotationPage {
-            id: notationPage
+            PublishPage {},
 
-            uri: "musescore://notation"
-        }
-
-        PublishPage {
-            id: publishPage
-
-            uri: "musescore://publish"
-        }
-
-        DevToolsPage {
-            id: devtoolsPage
-
-            uri: "musescore://devtools"
-        }
+            DevToolsPage {}
+        ]
     }
 }

@@ -20,73 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
-import MuseScore.Ui 1.0
-import MuseScore.UiComponents 1.0
+import MuseScore.Dock 1.0 as Dock
 
-import com.kdab.dockwidgets 1.0 as KDDW
-
-import "../HomePage"
-
-Page {
+Dock.DockPage {
     id: root
 
-    property string uri: ""
-    property alias uniqueName: layout.uniqueName
-
-    property list<DockPanel> panels
-
-    property alias statusBar: root.footer
     property alias central: central.sourceComponent
 
-    padding: 0
+    centralDock: Dock.DockCentral {
+        objectName: root.objectName + "_central"
 
-    background: Rectangle {
-        color: ui.theme.backgroundPrimaryColor
-    }
+        Loader {
+            id: central
 
-    contentItem: KDDW.MainWindowLayout {
-        id: layout
-
-        anchors.fill: parent
-
-        Repeater {
-            model: root.panels
-
-            delegate: KDDW.DockWidget {
-                id: panel
-
-                uniqueName: modelData.uniqueName
-
-                Loader {
-                    sourceComponent: modelData.content
-                }
-
-                Component.onCompleted: {
-                    Qt.callLater(init)
-                }
-
-                function init() {
-                    layout.addDockWidget(panel, KDDW.KDDockWidgets.Location_OnLeft)
-                }
-            }
-        }
-
-        KDDW.DockWidget {
-            id: centralDock
-
-            uniqueName: root.uniqueName + "_central"
-
-            Loader {
-                id: central
-
-                anchors.fill: parent
-            }
-        }
-
-        Component.onCompleted: {
-            addDockWidget(centralDock, KDDW.KDDockWidgets.Location_OnRight)
+            anchors.fill: parent
         }
     }
 }

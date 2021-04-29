@@ -28,39 +28,26 @@
 
 #include "log.h"
 
-#include "thirdparty/KDDockWidgets/src/MainWindowBase.h"
+#include "thirdparty/KDDockWidgets/src/private/quick/MainWindowQuick_p.h"
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
-
-namespace mu::dock {
-class MainWindow : public KDDockWidgets::MainWindowBase
-{
-public:
-    MainWindow(QQuickItem* parent)
-        : KDDockWidgets::MainWindowBase("mainWindow", KDDockWidgets::MainWindowOption_None, parent)
-    {
-    }
-
-private:
-    KDDockWidgets::SideBar* sideBar(KDDockWidgets::SideBarLocation) const override
-    {
-        return nullptr;
-    }
-
-    QMargins centerWidgetMargins() const override
-    {
-        return {};
-    }
-};
-}
 
 using namespace mu::dock;
 
 DockWindow::DockWindow(QQuickItem* parent)
     : QQuickItem(parent),
-    m_mainWindow(new MainWindow(this)),
     m_toolBars(this),
     m_pages(this)
 {
+
+}
+
+void DockWindow::componentComplete()
+{
+    QQuickItem::componentComplete();
+
+    m_mainWindow = new KDDockWidgets::MainWindowQuick("mainWindow",
+                                                      KDDockWidgets::MainWindowOption_None,
+                                                      this);
 }
 
 QString DockWindow::currentPageUri() const

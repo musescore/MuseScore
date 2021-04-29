@@ -23,11 +23,14 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
+import MuseScore.Dock 1.0
 import MuseScore.AppShell 1.0
+
 import MuseScore.NotationScene 1.0
 import MuseScore.Palette 1.0
 import MuseScore.Inspector 1.0
 import MuseScore.Instruments 1.0
+import MuseScore.Playback 1.0
 
 import "../docksystem"
 import "../../NotationPage"
@@ -35,7 +38,8 @@ import "../../NotationPage"
 DockPage {
     id: root
 
-    uniqueName: "Notation"
+    objectName: "Notation"
+    uri: "musescore://notation"
 
     property var color: ui.theme.backgroundPrimaryColor
     property var borderColor: ui.theme.strokeColor
@@ -44,6 +48,8 @@ DockPage {
     property bool isPlaybackToolBarVisible: false
     property bool isUndoRedoToolBarVisible: false
     property bool isNotationNavigatorVisible: false
+
+    property var topToolKeyNavSec
 
     property NotationPageModel pageModel: NotationPageModel {}
 
@@ -76,22 +82,110 @@ DockPage {
         pageModel.init()
     }
 
-    readonly property int defaultPanelWidth: 272
-    readonly property int minimumPanelWidth: 200
+    readonly property int defaultPanelWidth: 160
+    readonly property int minimumPanelWidth: 50
+    readonly property int maximumPanelWidth: 260
+    readonly property int toolBarHeight: 48
+
+    mainToolBars: [
+        DockToolBar {
+            id: notationToolBar
+
+            objectName: "notationToolBar"
+            title: qsTrc("appshell", "Notation Toolbar")
+
+            width: 198
+            height: root.toolBarHeight
+            minimumWidth: 198
+            minimumHeight: height
+            maximumHeight: height
+
+            contentComponent: NotationToolBar {
+                navigation.section: root.topToolKeyNavSec
+                navigation.order: 2
+
+                onActiveFocusRequested: {
+                    if (navigation.active) {
+                        notationToolBar.forceActiveFocus()
+                    }
+                }
+            }
+        },
+
+        DockToolBar {
+            id: playbackToolBar
+
+            objectName: "playbackToolBar"
+            title: qsTrc("appshell", "Playback Controls")
+
+            width: root.width / 3
+            height: root.toolbarHeight
+            minimumWidth: floating ? 526 : 476
+            minimumHeight: floating ? 76 : root.toolBarHeight
+            maximumHeight: height
+
+            contentComponent: PlaybackToolBar {
+                navigation.section: root.topToolKeyNavSec
+                navigation.order: 3
+
+                floating: playbackToolBar.floating
+            }
+        },
+
+        DockToolBar {
+            id: undoRedoToolBar
+
+            objectName: "undoRedoToolBar"
+            title: qsTrc("appshell", "Undo/Redo Toolbar")
+
+            width: 74
+            height: root.toolBarHeight
+            minimumWidth: width
+            minimumHeight: height
+            maximumHeight: height
+
+            movable: false
+
+            contentComponent: UndoRedoToolBar {}
+        }
+    ]
+
+    toolBars: [
+        DockToolBar {
+            id: notationNoteInputBar
+
+            objectName: "notationNoteInputBar"
+            title: qsTrc("appshell", "Note Input")
+
+            width: root.width
+            height: root.toolBarHeight
+
+            minimumWidth: orientation == Qt.Horizontal ? 900 : root.toolBarHeight
+            maximumWidth: orientation == Qt.Horizontal ? root.width : 96
+            minimumHeight: orientation == Qt.Horizontal ? root.toolBarHeight : 900
+            maximumHeight: orientation == Qt.Horizontal ? root.toolBarHeight : root.height
+
+            allowedAreas: { Qt.AllDockWidgetAreas }
+
+            contentComponent: NoteInputBar {
+                orientation: notationNoteInputBar.orientation
+
+                navigation.section: noteInputKeyNavSec
+                navigation.order: 1
+            }
+        }
+    ]
 
     panels: [
         DockPanel {
             id: palettePanel
 
-            uniqueName: "palettePanel"
-
+            objectName: "palettePanel"
             title: qsTrc("appshell", "Palette")
 
-            width: defaultPanelWidth
-            minimumWidth: minimumPanelWidth
-
-            floatable: true
-            closable: true
+            width: root.defaultPanelWidth
+            minimumWidth: root.minimumPanelWidth
+            maximumWidth: root.maximumPanelWidth
 
             onClosed: {
                 root.pageModel.isPalettePanelVisible = false
@@ -103,17 +197,14 @@ DockPage {
         DockPanel {
             id: instrumentsPanel
 
-            uniqueName: "instrumentsPanel"
-
+            objectName: "instrumentsPanel"
             title: qsTrc("appshell", "Instruments")
 
-            width: defaultPanelWidth
-            minimumWidth: minimumPanelWidth
+            width: root.defaultPanelWidth
+            minimumWidth: root.minimumPanelWidth
+            maximumWidth: root.maximumPanelWidth
 
-            tabifyPanelName: "palettePanel"
-
-            floatable: true
-            closable: true
+            tabifyPanel: palettePanel
 
             onClosed: {
                 root.pageModel.isInstrumentsPanelVisible = false
@@ -125,17 +216,14 @@ DockPage {
         DockPanel {
             id: inspectorPanel
 
-            uniqueName: "inspectorPanel"
-
+            objectName: "inspectorPanel"
             title: qsTrc("appshell", "Inspector")
 
-            width: defaultPanelWidth
-            minimumWidth: minimumPanelWidth
+            width: root.defaultPanelWidth
+            minimumWidth: root.minimumPanelWidth
+            maximumWidth: root.maximumPanelWidth
 
-            tabifyPanelName: "instrumentsPanel"
-
-            floatable: true
-            closable: true
+            tabifyPanel: instrumentsPanel
 
             onClosed: {
                 root.pageModel.isInspectorPanelVisible = false
@@ -155,8 +243,20 @@ DockPage {
         }
     }
 
-    statusBar: NotationStatusBar {
-        color: root.color
-        visible: root.pageModel.isStatusBarVisible
-    }
+    statusBars: [
+        DockStatusBar {
+            id: notationStatusBar
+
+            objectName: "notationStatusBar"
+
+            height: root.toolBarHeight
+            minimumHeight: root.toolBarHeight
+            maximumHeight: root.toolBarHeight
+
+            NotationStatusBar {
+                color: root.color
+                visible: root.pageModel.isStatusBarVisible
+            }
+        }
+    ]
 }
