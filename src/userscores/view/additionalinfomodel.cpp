@@ -37,36 +37,36 @@ static const mu::notation::Fraction DEFAULT_PICKUP_TIME_SIGNATURE(1, 4);
 static const QString VALUE_KEY("value");
 static const QString NOTE_ICON_KEY("noteIcon");
 static const QString NOTE_SYMBOL_KEY("noteSymbol");
-static const QString TITLE_KEY("title");
+static const QString TITLE_MAJOR_KEY("titleMajor");
+static const QString TITLE_MINOR_KEY("titleMinor");
 static const QString ICON_KEY("icon");
 static const QString SIGNATURE_KEY("key");
-static const QString MODE_KEY("mode");
 static const QString WITH_DOT_KEY("withDot");
 static const QString MIN_KEY("min");
 static const QString MAX_KEY("max");
 
 using MusicalSymbolCode = MusicalSymbolCodes::Code;
 
-AdditionalInfoModel::KeySignature::KeySignature(const QString& title, IconCode::Code icon, Key key, KeyMode mode)
-    : title(title), icon(icon), key(key), mode(mode)
+AdditionalInfoModel::KeySignature::KeySignature(const QString& titleMajor, const QString& titleMinor, IconCode::Code icon, Key key)
+    : titleMajor(titleMajor), titleMinor(titleMinor), icon(icon), key(key)
 {
 }
 
 AdditionalInfoModel::KeySignature::KeySignature(const QVariantMap& map)
 {
-    title = map[TITLE_KEY].toString();
+    titleMajor = map[TITLE_MAJOR_KEY].toString();
+    titleMinor = map[TITLE_MINOR_KEY].toString();
     icon = static_cast<IconCode::Code>(map[ICON_KEY].toInt());
     key = static_cast<Key>(map[SIGNATURE_KEY].toInt());
-    mode = static_cast<KeyMode>(map[MODE_KEY].toInt());
 }
 
 QVariantMap AdditionalInfoModel::KeySignature::toMap() const
 {
     return {
-        { TITLE_KEY, title },
+        { TITLE_MAJOR_KEY, titleMajor },
+        { TITLE_MINOR_KEY, titleMinor },
         { ICON_KEY, static_cast<int>(icon) },
-        { SIGNATURE_KEY, static_cast<int>(key) },
-        { MODE_KEY, static_cast<int>(mode) }
+        { SIGNATURE_KEY, static_cast<int>(key) }
     };
 }
 
@@ -94,7 +94,7 @@ AdditionalInfoModel::AdditionalInfoModel(QObject* parent)
 
 void AdditionalInfoModel::init()
 {
-    setKeySignature(KeySignature(qtrc("userscore", "None"), IconCode::Code::KEY_SIGNATURE_NONE, Key::C, KeyMode::MAJOR).toMap());
+    setKeySignature(KeySignature(qtrc("userscore", "None"), qtrc("userscore", "None"), IconCode::Code::KEY_SIGNATURE_NONE, Key::C).toMap());
 
     setTimeSignatureType(static_cast<int>(TimeSignatureType::Fraction));
     setTimeSignature(FOUR_FOUR_TIME_SIGNATURE);
@@ -111,50 +111,29 @@ void AdditionalInfoModel::init()
     setPickupTimeSignature(DEFAULT_PICKUP_TIME_SIGNATURE);
 }
 
-QVariantList AdditionalInfoModel::keySignatureMajorList() const
+QVariantList AdditionalInfoModel::keySignatureList() const
 {
-    QVariantList majorList;
-    majorList << KeySignature(qtrc("userscore", "C major"), IconCode::Code::KEY_SIGNATURE_NONE, Key::C, KeyMode::MAJOR).toMap()
-              << KeySignature(qtrc("userscore", "F major"), IconCode::Code::KEY_SIGNATURE_1_FLAT, Key::F, KeyMode::MAJOR).toMap()
-              << KeySignature(qtrc("userscore", "Bb major"), IconCode::Code::KEY_SIGNATURE_2_FLAT, Key::B_B, KeyMode::MAJOR).toMap()
-              << KeySignature(qtrc("userscore", "Eb major"), IconCode::Code::KEY_SIGNATURE_3_FLAT, Key::E_B, KeyMode::MAJOR).toMap()
-              << KeySignature(qtrc("userscore", "Ab major"), IconCode::Code::KEY_SIGNATURE_4_FLAT, Key::A_B, KeyMode::MAJOR).toMap()
-              << KeySignature(qtrc("userscore", "Db major"), IconCode::Code::KEY_SIGNATURE_5_FLAT, Key::D_B, KeyMode::MAJOR).toMap()
-              << KeySignature(qtrc("userscore", "Gb major"), IconCode::Code::KEY_SIGNATURE_6_FLAT, Key::G_B, KeyMode::MAJOR).toMap()
-              << KeySignature(qtrc("userscore", "Cb major"), IconCode::Code::KEY_SIGNATURE_7_FLAT, Key::C_B, KeyMode::MAJOR).toMap()
-              << KeySignature(qtrc("userscore", "None"), IconCode::Code::KEY_SIGNATURE_NONE, Key::C, KeyMode::MAJOR).toMap()
-              << KeySignature(qtrc("userscore", "G major"), IconCode::Code::KEY_SIGNATURE_1_SHARP, Key::G, KeyMode::MAJOR).toMap()
-              << KeySignature(qtrc("userscore", "D major"), IconCode::Code::KEY_SIGNATURE_2_SHARPS, Key::D, KeyMode::MAJOR).toMap()
-              << KeySignature(qtrc("userscore", "A major"), IconCode::Code::KEY_SIGNATURE_3_SHARPS, Key::A, KeyMode::MAJOR).toMap()
-              << KeySignature(qtrc("userscore", "E major"), IconCode::Code::KEY_SIGNATURE_4_SHARPS, Key::E, KeyMode::MAJOR).toMap()
-              << KeySignature(qtrc("userscore", "B major"), IconCode::Code::KEY_SIGNATURE_5_SHARPS, Key::B, KeyMode::MAJOR).toMap()
-              << KeySignature(qtrc("userscore", "F# major"), IconCode::Code::KEY_SIGNATURE_6_SHARPS, Key::F_S, KeyMode::MAJOR).toMap()
-              << KeySignature(qtrc("userscore", "C# major"), IconCode::Code::KEY_SIGNATURE_7_SHARPS, Key::C_S, KeyMode::MAJOR).toMap();
+    QVariantList list = {
+        KeySignature(qtrc("userscore", "C major"), qtrc("userscore", "A minor"), IconCode::Code::KEY_SIGNATURE_NONE, Key::C).toMap(),
+        KeySignature(qtrc("userscore", "F major"), qtrc("userscore", "D minor"), IconCode::Code::KEY_SIGNATURE_1_FLAT, Key::F).toMap(),
+        KeySignature(qtrc("userscore", "Bb major"), qtrc("userscore", "G minor"), IconCode::Code::KEY_SIGNATURE_2_FLAT, Key::B_B).toMap(),
+        KeySignature(qtrc("userscore", "Eb major"), qtrc("userscore", "C minor"), IconCode::Code::KEY_SIGNATURE_3_FLAT, Key::E_B).toMap(),
+        KeySignature(qtrc("userscore", "Ab major"), qtrc("userscore", "F minor"), IconCode::Code::KEY_SIGNATURE_4_FLAT, Key::A_B).toMap(),
+        KeySignature(qtrc("userscore", "Db major"), qtrc("userscore", "Bb minor"), IconCode::Code::KEY_SIGNATURE_5_FLAT, Key::D_B).toMap(),
+        KeySignature(qtrc("userscore", "Gb major"), qtrc("userscore", "Eb minor"), IconCode::Code::KEY_SIGNATURE_6_FLAT, Key::G_B).toMap(),
+        KeySignature(qtrc("userscore", "Cb major"), qtrc("userscore", "Ab minor"), IconCode::Code::KEY_SIGNATURE_7_FLAT, Key::C_B).toMap(),
+        KeySignature(qtrc("userscore", "None"), qtrc("userscore", "None"), IconCode::Code::KEY_SIGNATURE_NONE, Key::C).toMap(),
+        KeySignature(qtrc("userscore", "G major"), qtrc("userscore", "E minor"), IconCode::Code::KEY_SIGNATURE_1_SHARP, Key::G).toMap(),
+        KeySignature(qtrc("userscore", "D major"), qtrc("userscore", "B minor"), IconCode::Code::KEY_SIGNATURE_2_SHARPS, Key::D).toMap(),
+        KeySignature(qtrc("userscore", "A major"), qtrc("userscore", "F# minor"), IconCode::Code::KEY_SIGNATURE_3_SHARPS, Key::A).toMap(),
+        KeySignature(qtrc("userscore", "E major"), qtrc("userscore", "C# minor"), IconCode::Code::KEY_SIGNATURE_4_SHARPS, Key::E).toMap(),
+        KeySignature(qtrc("userscore", "B major"), qtrc("userscore", "G# minor"), IconCode::Code::KEY_SIGNATURE_5_SHARPS, Key::B).toMap(),
+        KeySignature(qtrc("userscore", "F# major"), qtrc("userscore", "D# minor"), IconCode::Code::KEY_SIGNATURE_6_SHARPS,
+                     Key::F_S).toMap(),
+        KeySignature(qtrc("userscore", "C# major"), qtrc("userscore", "A# minor"), IconCode::Code::KEY_SIGNATURE_7_SHARPS, Key::C_S).toMap()
+    };
 
-    return majorList;
-}
-
-QVariantList AdditionalInfoModel::keySignatureMinorList() const
-{
-    QVariantList minorList;
-    minorList << KeySignature(qtrc("userscore", "A minor"), IconCode::Code::KEY_SIGNATURE_NONE, Key::C, KeyMode::MINOR).toMap()
-              << KeySignature(qtrc("userscore", "D minor"), IconCode::Code::KEY_SIGNATURE_1_FLAT, Key::F, KeyMode::MINOR).toMap()
-              << KeySignature(qtrc("userscore", "G minor"), IconCode::Code::KEY_SIGNATURE_2_FLAT, Key::B_B, KeyMode::MINOR).toMap()
-              << KeySignature(qtrc("userscore", "C minor"), IconCode::Code::KEY_SIGNATURE_3_FLAT, Key::E_B, KeyMode::MINOR).toMap()
-              << KeySignature(qtrc("userscore", "F minor"), IconCode::Code::KEY_SIGNATURE_4_FLAT, Key::A_B, KeyMode::MINOR).toMap()
-              << KeySignature(qtrc("userscore", "Bb minor"), IconCode::Code::KEY_SIGNATURE_5_FLAT, Key::D_B, KeyMode::MINOR).toMap()
-              << KeySignature(qtrc("userscore", "Eb minor"), IconCode::Code::KEY_SIGNATURE_6_FLAT, Key::G_B, KeyMode::MINOR).toMap()
-              << KeySignature(qtrc("userscore", "Ab minor"), IconCode::Code::KEY_SIGNATURE_7_FLAT, Key::C_B, KeyMode::MINOR).toMap()
-              << KeySignature(qtrc("userscore", "None"), IconCode::Code::KEY_SIGNATURE_NONE, Key::C, KeyMode::MINOR).toMap()
-              << KeySignature(qtrc("userscore", "E minor"), IconCode::Code::KEY_SIGNATURE_1_SHARP, Key::G, KeyMode::MINOR).toMap()
-              << KeySignature(qtrc("userscore", "B minor"), IconCode::Code::KEY_SIGNATURE_2_SHARPS, Key::D, KeyMode::MINOR).toMap()
-              << KeySignature(qtrc("userscore", "F# minor"), IconCode::Code::KEY_SIGNATURE_3_SHARPS, Key::A, KeyMode::MINOR).toMap()
-              << KeySignature(qtrc("userscore", "C# minor"), IconCode::Code::KEY_SIGNATURE_4_SHARPS, Key::E, KeyMode::MINOR).toMap()
-              << KeySignature(qtrc("userscore", "G# minor"), IconCode::Code::KEY_SIGNATURE_5_SHARPS, Key::B, KeyMode::MINOR).toMap()
-              << KeySignature(qtrc("userscore", "D# minor"), IconCode::Code::KEY_SIGNATURE_6_SHARPS, Key::F_S, KeyMode::MINOR).toMap()
-              << KeySignature(qtrc("userscore", "A# minor"), IconCode::Code::KEY_SIGNATURE_7_SHARPS, Key::C_S, KeyMode::MINOR).toMap();
-
-    return minorList;
+    return list;
 }
 
 QVariantMap AdditionalInfoModel::keySignature() const
