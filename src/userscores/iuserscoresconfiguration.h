@@ -53,8 +53,6 @@ public:
     virtual void setScoresPath(const io::path& path) = 0;
 
     virtual io::path defaultSavingFilePath(const io::path& fileName) const = 0;
-    virtual io::path completeExportPath(const io::path& basePath, notation::INotationPtr notation, bool isMain,
-                                        int pageIndex = -1) const = 0;
 
     virtual QColor templatePreviewBackgroundColor() const = 0;
     virtual async::Notification templatePreviewBackgroundChanged() const = 0;

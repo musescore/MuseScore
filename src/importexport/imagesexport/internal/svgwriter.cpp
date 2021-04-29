@@ -39,21 +39,17 @@ using namespace mu::iex::imagesexport;
 using namespace mu::notation;
 using namespace mu::system;
 
-std::vector<WriterUnitType> SvgWriter::supportedUnitTypes() const
+std::vector<INotationWriter::UnitType> SvgWriter::supportedUnitTypes() const
 {
-    return { WriterUnitType::PER_PAGE };
+    return { UnitType::PER_PAGE };
 }
 
-mu::Ret SvgWriter::write(const INotationPtrList& notations, IODevice& destinationDevice, const Options& options)
+mu::Ret SvgWriter::write(INotationPtr notation, IODevice& destinationDevice, const Options& options)
 {
-    IF_ASSERT_FAILED(!notations.empty()) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-
-    INotationPtr notation = notations.front();
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
     }
+
     Ms::Score* score = notation->elements()->msScore();
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);

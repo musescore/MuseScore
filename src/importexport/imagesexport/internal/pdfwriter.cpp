@@ -34,47 +34,75 @@ using namespace mu::notation;
 using namespace mu::system;
 using namespace Ms;
 
-std::vector<WriterUnitType> PdfWriter::supportedUnitTypes() const
+std::vector<INotationWriter::UnitType> PdfWriter::supportedUnitTypes() const
 {
-    return { WriterUnitType::PER_PART, WriterUnitType::MULTI_PART };
+    return { UnitType::PER_PART, UnitType::MULTI_PART };
 }
 
-mu::Ret PdfWriter::write(const INotationPtrList& notations, system::IODevice& destinationDevice, const Options& options)
+mu::Ret PdfWriter::write(INotationPtr notation, system::IODevice& destinationDevice, const Options& options)
 {
-    IF_ASSERT_FAILED(!notations.empty()) {
-        return make_ret(Ret::Code::UnknownError);
+    UnitType unitType = unitTypeFromOptions(options);
+    IF_ASSERT_FAILED(unitType == UnitType::PER_PART) {
+        return Ret(Ret::Code::NotSupported);
     }
 
-    auto firstNotation = notations.front();
-    IF_ASSERT_FAILED(firstNotation) {
+    IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
     }
-    Ms::Score* firstScore = firstNotation->elements()->msScore();
-    IF_ASSERT_FAILED(firstScore) {
+    Ms::Score* score = notation->elements()->msScore();
+    IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
     }
 
     QPdfWriter pdfWriter(&destinationDevice);
-    pdfWriter.setResolution(configuration()->exportPdfDpiResolution());
-    pdfWriter.setCreator("MuseScore Version: " VERSION);
-    pdfWriter.setTitle(documentTitle(*(firstScore->masterScore())));
-    pdfWriter.setPageMargins(QMarginsF());
+    preparePdfWriter(pdfWriter, documentTitle(*score));
 
     mu::draw::Painter painter(&pdfWriter, "pdfwriter");
     if (!painter.isActive()) {
         return false;
     }
 
-    WriterUnitType unitType = unitTypeFromOptions(options);
-    INotationPtrList notationsCorrected = notations;
-    if (unitType == WriterUnitType::PER_PART && notations.size() > 1) {
-        notationsCorrected = { notations.front() };
+    doWrite(pdfWriter, painter, score);
+
+    painter.endDraw();
+
+    return true;
+}
+
+mu::Ret PdfWriter::writeList(const INotationPtrList& notations, system::IODevice& destinationDevice, const Options& options)
+{
+    IF_ASSERT_FAILED(!notations.empty()) {
+        return make_ret(Ret::Code::UnknownError);
     }
 
-    for (auto notation : notationsCorrected) {
+    UnitType unitType = unitTypeFromOptions(options);
+    IF_ASSERT_FAILED(unitType == UnitType::MULTI_PART) {
+        return Ret(Ret::Code::NotSupported);
+    }
+
+    INotationPtr firstNotation = notations.front();
+    IF_ASSERT_FAILED(firstNotation) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    Ms::Score* firstScore = firstNotation->elements()->msScore();
+    IF_ASSERT_FAILED(firstScore) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    QPdfWriter pdfWriter(&destinationDevice);
+    preparePdfWriter(pdfWriter, documentTitle(*(firstScore->masterScore())));
+
+    mu::draw::Painter painter(&pdfWriter, "pdfwriter");
+    if (!painter.isActive()) {
+        return false;
+    }
+
+    for (auto notation : notations) {
         IF_ASSERT_FAILED(notation) {
             return make_ret(Ret::Code::UnknownError);
         }
+
         Ms::Score* score = notation->elements()->msScore();
         IF_ASSERT_FAILED(score) {
             return make_ret(Ret::Code::UnknownError);
@@ -84,29 +112,7 @@ mu::Ret PdfWriter::write(const INotationPtrList& notations, system::IODevice& de
             pdfWriter.newPage();
         }
 
-        score->setPrinting(true);
-        MScore::pdfPrinting = true;
-
-        QSizeF size(score->styleD(Sid::pageWidth), score->styleD(Sid::pageHeight));
-        painter.setAntialiasing(true);
-        painter.setViewport(QRect(0.0, 0.0, size.width() * pdfWriter.logicalDpiX(),
-                                  size.height() * pdfWriter.logicalDpiY()));
-        painter.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));
-
-        double pixelRationBackup = MScore::pixelRatio;
-        MScore::pixelRatio = DPI / pdfWriter.logicalDpiX();
-
-        for (int pageNumber = 0; pageNumber < score->npages(); ++pageNumber) {
-            if (pageNumber > 0) {
-                pdfWriter.newPage();
-            }
-
-            score->print(&painter, pageNumber);
-        }
-
-        score->setPrinting(false);
-        MScore::pixelRatio = pixelRationBackup;
-        MScore::pdfPrinting = false;
+        doWrite(pdfWriter, painter, score);
     }
 
     painter.endDraw();
@@ -131,4 +137,43 @@ QString PdfWriter::documentTitle(const Score& score) const
     }
 
     return title;
+}
+
+void PdfWriter::preparePdfWriter(QPdfWriter& pdfWriter, const QString& title) const
+{
+    pdfWriter.setResolution(configuration()->exportPdfDpiResolution());
+    pdfWriter.setCreator("MuseScore Version: " VERSION);
+    pdfWriter.setTitle(title);
+    pdfWriter.setPageMargins(QMarginsF());
+}
+
+void PdfWriter::doWrite(QPdfWriter& pdfWriter, mu::draw::Painter& painter, Score* score) const
+{
+    IF_ASSERT_FAILED(score) {
+        return;
+    }
+
+    score->setPrinting(true);
+    MScore::pdfPrinting = true;
+
+    QSizeF size(score->styleD(Sid::pageWidth), score->styleD(Sid::pageHeight));
+    painter.setAntialiasing(true);
+    painter.setViewport(QRect(0.0, 0.0, size.width() * pdfWriter.logicalDpiX(),
+                              size.height() * pdfWriter.logicalDpiY()));
+    painter.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));
+
+    double pixelRationBackup = MScore::pixelRatio;
+    MScore::pixelRatio = DPI / pdfWriter.logicalDpiX();
+
+    for (int pageNumber = 0; pageNumber < score->npages(); ++pageNumber) {
+        if (pageNumber > 0) {
+            pdfWriter.newPage();
+        }
+
+        score->print(&painter, pageNumber);
+    }
+
+    score->setPrinting(false);
+    MScore::pixelRatio = pixelRationBackup;
+    MScore::pdfPrinting = false;
 }

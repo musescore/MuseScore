@@ -27,9 +27,9 @@
 using namespace mu::iex::audioexport;
 using namespace mu::framework;
 
-mu::Ret Mp3Writer::write(const notation::INotationPtrList& notations, system::IODevice& destinationDevice, const Options& options)
+mu::Ret Mp3Writer::write(notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options)
 {
-    UNUSED(notations)
+    UNUSED(notation)
     UNUSED(destinationDevice)
     UNUSED(options)
 
