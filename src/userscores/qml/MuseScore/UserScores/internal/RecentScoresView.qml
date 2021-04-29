@@ -19,9 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
+import QtQuick 2.15
 import QtQuick.Controls 2.2
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.UserScores 1.0
 
@@ -30,17 +31,27 @@ GridView {
 
     property string backgroundColor: ui.theme.backgroundPrimaryColor
 
+    property alias navigation: navPanel
+
     signal openScoreRequested(var scorePath)
     signal addNewScoreRequested()
 
     readonly property int sideMargin: 30
 
     clip: true
+    boundsBehavior: Flickable.StopAtBounds
 
     cellHeight: 334
     cellWidth: sideMargin + 172 + sideMargin
 
-    boundsBehavior: Flickable.StopAtBounds
+    property int rows: Math.max(0, Math.floor(root.height / root.cellHeight))
+    property int columns: Math.max(0, Math.floor(root.width / root.cellWidth))
+
+    NavigationPanel {
+        id: navPanel
+        name: "RecentScores"
+        direction: NavigationPanel.Both
+    }
 
     header: Item {
         height: headerTitle.height
@@ -78,10 +89,15 @@ GridView {
         width: root.cellWidth
 
         ScoreItem {
+
             anchors.centerIn: parent
 
             height: 272
             width: 172
+
+            navigation.panel: navPanel
+            navigation.row: root.columns === 0 ? 0 : Math.floor(model.index / root.columns)
+            navigation.column: model.index - (navigation.row * root.columns)
 
             title: score.title
             thumbnail: score.thumbnail

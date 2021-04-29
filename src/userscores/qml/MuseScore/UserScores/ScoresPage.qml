@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
+import QtQuick 2.15
 import QtQuick.Layouts 1.3
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.UserScores 1.0
 
@@ -29,11 +30,49 @@ import "internal"
 FocusScope {
     id: root
 
+    signal requestActiveFocus()
+
     QtObject {
-        id: privateProperties
+        id: prv
 
         readonly property int sideMargin: 133
         readonly property int buttonWidth: 134
+    }
+
+    NavigationSection {
+        id: navSearchSec
+        name: "HomeScoresSearch"
+        enabled: root.visible
+        order: 3
+        onActiveChanged: {
+            if (active) {
+                root.requestActiveFocus()
+            }
+        }
+    }
+
+    NavigationSection {
+        id: navScoresSec
+        name: "RecentScores"
+        enabled: root.visible
+        order: 4
+        onActiveChanged: {
+            if (active) {
+                root.requestActiveFocus()
+            }
+        }
+    }
+
+    NavigationSection {
+        id: navBottomSec
+        name: "ScoresBottom"
+        enabled: root.visible
+        order: 5
+        onActiveChanged: {
+            if (active) {
+                root.requestActiveFocus()
+            }
+        }
     }
 
     RecentScoresModel {
@@ -60,11 +99,18 @@ FocusScope {
         anchors.top: parent.top
         anchors.topMargin: 66
         anchors.left: parent.left
-        anchors.leftMargin: privateProperties.sideMargin
+        anchors.leftMargin: prv.sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: privateProperties.sideMargin
+        anchors.rightMargin: prv.sideMargin
 
         spacing: 12
+
+        NavigationPanel {
+            id: navSearchPanel
+            name: "HomeScoresSearch"
+            section: navSearchSec
+            order: 1
+        }
 
         StyledTextLabel {
             id: pageTitle
@@ -78,6 +124,10 @@ FocusScope {
 
             Layout.maximumWidth: width
             Layout.alignment: Qt.AlignHCenter
+
+            navigation.name: "Scores Search"
+            navigation.panel: navSearchPanel
+            navigation.order: 1
         }
 
         Item {
@@ -111,10 +161,13 @@ FocusScope {
         anchors.top: topLayout.bottom
         anchors.topMargin: 74
         anchors.left: parent.left
-        anchors.leftMargin: privateProperties.sideMargin - view.sideMargin
+        anchors.leftMargin: prv.sideMargin - view.sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: privateProperties.sideMargin - view.sideMargin
+        anchors.rightMargin: prv.sideMargin - view.sideMargin
         anchors.bottom: buttonsPanel.top
+
+        navigation.section: navScoresSec
+        navigation.order: 1
 
         backgroundColor: background.color
 
@@ -153,15 +206,28 @@ FocusScope {
 
         color: ui.theme.popupBackgroundColor
 
+        NavigationPanel {
+            id: navBottomPanel
+            name: "HomeScoresSearch"
+            section: navBottomSec
+            direction: NavigationPanel.Horizontal
+            order: 1
+        }
+
         Row {
             anchors.right : parent.right
-            anchors.rightMargin: privateProperties.sideMargin
+            anchors.rightMargin: prv.sideMargin
             anchors.verticalCenter: parent.verticalCenter
 
             spacing: 22
 
             FlatButton {
-                width: privateProperties.buttonWidth
+
+                navigation.name: "NewScore"
+                navigation.panel: navBottomPanel
+                navigation.column: 1
+
+                width: prv.buttonWidth
                 text: qsTrc("userscores", "New")
 
                 onClicked: {
@@ -170,7 +236,11 @@ FocusScope {
             }
 
             FlatButton {
-                width: privateProperties.buttonWidth
+                navigation.name: "Open other Score"
+                navigation.panel: navBottomPanel
+                navigation.column: 2
+
+                width: prv.buttonWidth
                 text: qsTrc("userscores", "Open other...")
 
                 onClicked: {
