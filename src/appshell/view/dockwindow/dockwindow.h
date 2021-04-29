@@ -64,16 +64,19 @@ public:
     QColor color() const;
     QColor borderColor() const;
 
-    DockMenuBar* menuBar() const;
     QQmlListProperty<DockToolBar> toolbars();
     QQmlListProperty<DockPage> pages();
 
+    DockMenuBar* menuBar() const;
+
     QString currentPageUri() const;
 
-    QMainWindow* qMainWindow() override;
-    QWindow* qWindow() override;
-    QMenuBar* qMenuBar();
-    void stackUnder(QWidget* w) override;
+    // IMainWindow
+    QMainWindow* qMainWindow() const override;
+    QWindow* qWindow() const override;
+    bool isFullScreen() const override;
+    void toggleFullScreen() override;
+    const QScreen* screen() const override;
 
 public slots:
     void setTitle(QString title);
@@ -98,6 +101,7 @@ private slots:
 private:
     void componentComplete() override;
 
+    QMenuBar* qMenuBar();
     DockPage* page(const QString& uri) const;
     DockPage* currentPage() const;
 

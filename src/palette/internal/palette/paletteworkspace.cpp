@@ -112,14 +112,14 @@ void PaletteElementEditor::open()
     using Type = PalettePanel::Type;
     switch (_type) {
     case Type::KeySig: {
-        KeyEditor* keyEditor = new KeyEditor(mainWindow()->qMainWindow());
+        KeyEditor* keyEditor = new KeyEditor();
         keyEditor->showKeyPalette(false);
         connect(keyEditor, &KeyEditor::keySigAdded, this, &PaletteElementEditor::onElementAdded);
         editor = keyEditor;
     }
     break;
     case Type::TimeSig: {
-        TimeDialog* timeEditor = new TimeDialog(mainWindow()->qMainWindow());
+        TimeDialog* timeEditor = new TimeDialog();
         timeEditor->showTimePalette(false);
         connect(timeEditor, &TimeDialog::timeSigAdded, this, &PaletteElementEditor::onElementAdded);
         editor = timeEditor;
@@ -133,9 +133,7 @@ void PaletteElementEditor::open()
         return;
     }
 
-    mainWindow()->stackUnder(editor);
     editor->setAttribute(Qt::WA_DeleteOnClose);
-
     editor->show();
 }
 

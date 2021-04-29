@@ -62,6 +62,7 @@
 using namespace mu::appshell;
 using namespace mu::framework;
 using namespace mu::ui;
+using namespace mu::dock;
 
 static std::shared_ptr<ApplicationActionController> s_applicationActionController = std::make_shared<ApplicationActionController>();
 static std::shared_ptr<ApplicationUiActions> s_applicationUiActions = std::make_shared<ApplicationUiActions>(s_applicationActionController);
@@ -84,6 +85,8 @@ std::string AppShellModule::moduleName() const
 
 void AppShellModule::registerExports()
 {
+    DockSetup::registerExports();
+
     ioc()->registerExport<IAppShellConfiguration>(moduleName(), s_appShellConfiguration);
     ioc()->registerExport<INotationPageState>(moduleName(), s_notationPageState);
 }
@@ -115,7 +118,7 @@ void AppShellModule::registerResources()
 
 void AppShellModule::registerUiTypes()
 {
-    dock::DockSetup::registerQmlTypes();
+    DockSetup::registerQmlTypes();
 
     qmlRegisterType<SettingListModel>("MuseScore.Preferences", 1, 0, "SettingListModel");
     qmlRegisterType<PreferencesModel>("MuseScore.Preferences", 1, 0, "PreferencesModel");

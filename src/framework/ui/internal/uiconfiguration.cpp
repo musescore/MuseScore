@@ -26,7 +26,6 @@
 #include "translation.h"
 #include "themeconverter.h"
 
-#include <QMainWindow>
 #include <QScreen>
 #include <QFontDatabase>
 #include <QJsonDocument>
@@ -462,10 +461,8 @@ Notification UiConfiguration::musicalFontChanged() const
 
 float UiConfiguration::guiScaling() const
 {
-    if (mainWindow()) {
-        return mainWindow()->qMainWindow()->screen()->devicePixelRatio();
-    }
-    return 1;
+    const QScreen* screen = mainWindow()->screen();
+    return screen ? screen->devicePixelRatio() : 1;
 }
 
 void UiConfiguration::setPhysicalDotsPerInch(std::optional<float> dpi)
@@ -479,10 +476,8 @@ float UiConfiguration::physicalDotsPerInch() const
         return m_customDPI.value();
     }
 
-    if (mainWindow()) {
-        return mainWindow()->qMainWindow()->screen()->physicalDotsPerInch();
-    }
-    return 100;
+    const QScreen* screen = mainWindow()->screen();
+    return screen ? screen->physicalDotsPerInch() : 100;
 }
 
 QByteArray UiConfiguration::pageState(const std::string& pageName) const

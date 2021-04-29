@@ -33,6 +33,8 @@
 #include "dockcentral.h"
 #include "dockpage.h"
 
+#include "mainwindowprovider.h"
+
 #include "modularity/ioc.h"
 
 #include "thirdparty/KDDockWidgets/src/Config.h"
@@ -89,6 +91,7 @@ void DockSetup::registerQmlTypes()
 
 void DockSetup::registerExports()
 {
+    framework::ioc()->registerExport<ui::IMainWindow>("dock", new MainWindowProvider());
 }
 
 void DockSetup::setup(QQmlEngine* engine)
