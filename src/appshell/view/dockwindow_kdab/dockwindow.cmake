@@ -28,6 +28,8 @@ set (DOCKWINDOW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/docktypes.h
     ${CMAKE_CURRENT_LIST_DIR}/dockwindow.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dockwindow.h
+    ${CMAKE_CURRENT_LIST_DIR}/mainwindowprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/mainwindowprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/dockpage.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dockpage.h
     ${CMAKE_CURRENT_LIST_DIR}/dockpanel.cpp

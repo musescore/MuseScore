@@ -70,7 +70,7 @@ PopupWindow::PopupWindow(QQmlEngine* engine)
                                   | Qt::NoDropShadowWindowHint // Without system shadow
                                   | Qt::BypassWindowManagerHint; // Otherwise, it does not work correctly on Gnome (Linux) when resizing
 
-    m_view = new QQuickView(engine, nullptr);
+    m_view = new QQuickView(engine, mainWindow()->qWindow());
     m_view->setObjectName("PopupQuickWindow");
     m_view->setFlags(windowFlags);
     m_view->setResizeMode(QQuickView::SizeRootObjectToView);
@@ -372,7 +372,7 @@ bool PopupView::eventFilter(QObject* watched, QEvent* event)
         mousePressEvent(static_cast<QMouseEvent*>(event));
     } else if (QEvent::MouseButtonRelease == event->type()) {
         mouseReleaseEvent(static_cast<QMouseEvent*>(event));
-    } else if (QEvent::Close == event->type() && watched == mainWindow()->qMainWindow()) {
+    } else if (QEvent::Close == event->type() && watched == mainWindow()->qWindow()) {
         close();
     }
 

@@ -436,14 +436,33 @@ void DockWindow::setMenuBar(DockMenuBar* menuBar)
     emit menuBarChanged(m_menuBar);
 }
 
-QMainWindow* DockWindow::qMainWindow()
+QMainWindow* DockWindow::qMainWindow() const
 {
     return m_window;
 }
 
-QWindow* DockWindow::qWindow()
+QWindow* DockWindow::qWindow() const
 {
     return m_window->windowHandle();
+}
+
+bool DockWindow::isFullScreen() const
+{
+    return m_window->isFullScreen();
+}
+
+void DockWindow::toggleFullScreen()
+{
+    if (isFullScreen()) {
+        m_window->showNormal();
+    } else {
+        m_window->showFullScreen();
+    }
+}
+
+const QScreen* DockWindow::screen() const
+{
+    return m_window->screen();
 }
 
 QMenuBar* DockWindow::qMenuBar()
@@ -454,9 +473,4 @@ QMenuBar* DockWindow::qMenuBar()
 #else
     return m_window->menuBar();
 #endif
-}
-
-void DockWindow::stackUnder(QWidget* w)
-{
-    m_window->stackUnder(w);
 }

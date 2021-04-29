@@ -22,7 +22,6 @@
 #include "applicationactioncontroller.h"
 
 #include <QCoreApplication>
-#include <QMainWindow>
 
 #include "translation.h"
 
@@ -52,8 +51,8 @@ mu::ValCh<bool> ApplicationActionController::isFullScreen() const
 {
     ValCh<bool> result;
     result.ch = m_fullScreenChannel;
-    // todo
-//    result.val = mainWindow()->qMainWindow() ? mainWindow()->qMainWindow()->isFullScreen() : false;
+    result.val = mainWindow()->isFullScreen();
+
     return result;
 }
 
@@ -64,18 +63,9 @@ void ApplicationActionController::quit()
 
 void ApplicationActionController::toggleFullScreen()
 {
-    QMainWindow* qMainWindow = mainWindow()->qMainWindow();
-    if (!qMainWindow) {
-        return;
-    }
-
-    if (!qMainWindow->isFullScreen()) {
-        qMainWindow->showFullScreen();
-    } else {
-        qMainWindow->showNormal();
-    }
-
-    m_fullScreenChannel.send(qMainWindow->isFullScreen());
+    mainWindow()->toggleFullScreen();
+    bool isFullScreen = mainWindow()->isFullScreen();
+    m_fullScreenChannel.send(isFullScreen);
 }
 
 void ApplicationActionController::openAboutDialog()
