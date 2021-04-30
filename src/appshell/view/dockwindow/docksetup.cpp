@@ -52,3 +52,7 @@ void DockSetup::registerQmlTypes()
 void DockSetup::registerExports()
 {
 }
+
+void DockSetup::setup(QQmlEngine*)
+{
+}
