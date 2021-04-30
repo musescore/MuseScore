@@ -4906,8 +4906,10 @@ FretDiagram* MusicXMLParserPass2::frame()
       while (_e.readNextStartElement()) {
             if (_e.name() == "frame-frets") {
                   int val = _e.readElementText().toInt();
-                  if (val > 0)
-                        fd->setFrets(val);
+                  if (val > 0) {
+                        fd->setProperty(Pid::FRET_FRETS, val);
+                        fd->setPropertyFlags(Pid::FRET_FRETS, PropertyFlags::UNSTYLED);
+                        }
                   else
                         _logger->logError(QString("FretDiagram::readMusicXML: illegal frame-fret %1").arg(val), &_e);
                   }
