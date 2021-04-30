@@ -23,6 +23,8 @@
 #ifndef MU_DOCK_DOCKSETUP_H
 #define MU_DOCK_DOCKSETUP_H
 
+class QQmlEngine;
+
 namespace mu::dock {
 class DockSetup
 {
@@ -31,6 +33,7 @@ public:
 
     static void registerQmlTypes();
     static void registerExports();
+    static void setup(QQmlEngine* engine);
 };
 }
 
