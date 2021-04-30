@@ -28,10 +28,14 @@
 #include <QJSValue>
 
 #include "ret.h"
+#include "navigationsection.h"
+#include "navigationcontrol.h"
 
-class QDialog;
+#include "modularity/ioc.h"
+#include "ui/inavigationcontroller.h"
 
 namespace mu::ui {
+class QDialogWrap;
 class QmlDialog : public QQuickItem
 {
     Q_OBJECT
@@ -44,7 +48,12 @@ class QmlDialog : public QQuickItem
 
     Q_PROPERTY(QVariantMap ret READ ret WRITE setRet NOTIFY retChanged)
 
+    Q_PROPERTY(mu::ui::NavigationSection* navigation READ navigation NOTIFY navigationChanged)
+    Q_PROPERTY(mu::ui::NavigationControl* parentControl READ parentControl WRITE setParentControl NOTIFY parentControlChanged)
+
     Q_CLASSINFO("DefaultProperty", "content")
+
+    INJECT(ui, INavigationController, navigationController)
 
 public:
     QmlDialog(QQuickItem* parent = nullptr);
@@ -55,6 +64,8 @@ public:
     bool modal() const;
     QSize fixedSize() const;
     QVariantMap ret() const;
+    NavigationSection* navigation() const;
+    NavigationControl* parentControl() const;
 
     Q_INVOKABLE void exec();
     Q_INVOKABLE void show();
@@ -68,6 +79,7 @@ public slots:
     void setModal(bool modal);
     void setFixedSize(QSize size);
     void setRet(QVariantMap ret);
+    void setParentControl(NavigationControl* parentControl);
 
 signals:
     void contentChanged();
@@ -76,20 +88,30 @@ signals:
     void modalChanged(bool modal);
     void fixedSizeChanged(QSize size);
     void retChanged(QVariantMap ret);
+    void navigationChanged();
+    void parentControlChanged();
 
+    void opened();
     void closed();
 
 private:
     void setErrCode(Ret::Code code);
 
     void componentComplete() override;
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
+    void onShow();
+    void onClose();
 
     QQuickView* m_view = nullptr;
+    QWidget* m_widgetContainer = nullptr;
     QQmlComponent* m_content = nullptr;
-    QDialog* m_dialog = nullptr;
+    QDialogWrap* m_dialog = nullptr;
     QString m_objectID;
     QVariantMap m_ret;
     QSize m_fixedSize;
+    NavigationSection* m_navigation = nullptr;
+    NavigationControl* m_parentControl = nullptr;
 };
 }
 

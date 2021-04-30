@@ -47,6 +47,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/qmllistproperty.h
     ${CMAKE_CURRENT_LIST_DIR}/view/popupview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/popupview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/dialogview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/dialogview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/filepickermodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/filepickermodel.h
     )

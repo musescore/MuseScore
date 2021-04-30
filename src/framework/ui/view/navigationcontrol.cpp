@@ -125,7 +125,12 @@ void NavigationControl::onPanelDestroyed()
     m_panel = nullptr;
 }
 
-NavigationPanel* NavigationControl::panel() const
+NavigationPanel* NavigationControl::panel_property() const
+{
+    return m_panel;
+}
+
+INavigationPanel* NavigationControl::panel() const
 {
     return m_panel;
 }

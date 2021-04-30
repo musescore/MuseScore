@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Layouts 1.3
 
 import MuseScore.Ui 1.0
@@ -28,13 +28,14 @@ import MuseScore.UserScores 1.0
 
 import "internal"
 
-QmlDialog {
+StyledDialogView {
     id: root
 
-    height: 600
-    width: 1024
-
     title: qsTrc("userscores", "New Score")
+
+    contentHeight: 600
+    contentWidth: 1024
+    resizable: true
 
     Rectangle {
 
@@ -55,6 +56,16 @@ QmlDialog {
 
             ChooseInstrumentsAndTemplatesPage {
                 id: chooseInstrumentsAndTemplatePage
+
+                property bool isOpened: root.isOpened
+                onIsOpenedChanged: {
+                    console.log("onOpenedChanged isOpened: " + isOpened)
+                    if (isOpened) {
+                        chooseInstrumentsAndTemplatePage.focusOnFirst()
+                    }
+                }
+
+                navigationSection: root.navigation
 
                 Component.onCompleted: {
                     preferredScoreCreationMode = newScoreModel.preferredScoreCreationMode()
@@ -138,7 +149,7 @@ QmlDialog {
                     }
 
                     if (newScoreModel.createScore(result)) {
-                        root.hide()
+                        root.accept()
                     }
                 }
             }

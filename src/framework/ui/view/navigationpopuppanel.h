@@ -30,21 +30,23 @@ class NavigationPopupPanel : public NavigationPanel
 {
     Q_OBJECT
 
-    Q_PROPERTY(NavigationControl * parentControl READ parentControl WRITE setParentControl NOTIFY parentControlChanged)
+    Q_PROPERTY(NavigationControl * parentControl READ parentControl_property WRITE setParentControl NOTIFY parentControlChanged)
 
 public:
     explicit NavigationPopupPanel(QObject* parent = nullptr);
 
-    NavigationControl* parentControl() const;
+    INavigationControl* parentControl() const;
+    NavigationControl* parentControl_property() const;
 
 public slots:
     void setParentControl(NavigationControl* parentControl);
+    void setParentControl(INavigationControl* parentControl);
 
 signals:
-    void parentControlChanged(NavigationControl* parentControl);
+    void parentControlChanged();
 
 private:
-    NavigationControl* m_parentControl = nullptr;
+    INavigationControl* m_parentControl = nullptr;
 };
 }
 #endif // MU_UI_NAVIGATIONPOPUPPANEL_H

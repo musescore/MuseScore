@@ -28,6 +28,7 @@
 #include "view/iconview.h"
 #include "view/sortfilterproxymodel.h"
 #include "view/popupview.h"
+#include "view/dialogview.h"
 #include "view/filepickermodel.h"
 #include "view/itemmultiselectionmodel.h"
 
@@ -74,6 +75,7 @@ void UiComponentsModule::registerUiTypes()
     qmlRegisterUncreatableType<CompareType>("MuseScore.UiComponents", 1, 0, "CompareType", "Cannot create a CompareType");
 
     qmlRegisterType<PopupView>("MuseScore.UiComponents", 1, 0, "PopupView");
+    qmlRegisterType<DialogView>("MuseScore.UiComponents", 1, 0, "DialogView");
     qmlRegisterType<FilePickerModel>("MuseScore.UiComponents", 1, 0, "FilePickerModel");
     qmlRegisterType<ItemMultiSelectionModel>("MuseScore.UiComponents", 1, 0, "ItemMultiSelectionModel");
 
