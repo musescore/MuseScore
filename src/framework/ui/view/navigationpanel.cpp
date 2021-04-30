@@ -120,12 +120,22 @@ mu::async::Channel<PanelControl> NavigationPanel::forceActiveRequested() const
     return m_forceActiveRequested;
 }
 
-NavigationSection* NavigationPanel::section() const
+INavigationSection* NavigationPanel::section() const
 {
     return m_section;
 }
 
-void NavigationPanel::setSection(NavigationSection* section)
+NavigationSection* NavigationPanel::section_property() const
+{
+    return m_section;
+}
+
+void NavigationPanel::setSection(INavigationSection* section)
+{
+    setSection_property(dynamic_cast<NavigationSection*>(section));
+}
+
+void NavigationPanel::setSection_property(NavigationSection* section)
 {
     TRACEFUNC;
     if (m_section == section) {

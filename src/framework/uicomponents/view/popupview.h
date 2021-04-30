@@ -26,8 +26,12 @@
 #include <QQuickItem>
 #include <QQmlParserStatus>
 
+#include "ret.h"
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
+#include "ui/iuiconfiguration.h"
+#include "ui/inavigationcontroller.h"
+#include "ui/view/navigationcontrol.h"
 
 namespace mu::uicomponents {
 class PopupWindow;
@@ -40,19 +44,35 @@ class PopupView : public QObject, public QQmlParserStatus
     Q_PROPERTY(QQuickItem * contentItem READ contentItem WRITE setContentItem NOTIFY contentItemChanged)
 
     //! NOTE Local, related parent
-    Q_PROPERTY(qreal x READ x WRITE setX NOTIFY xChanged)
-    Q_PROPERTY(qreal y READ y WRITE setY NOTIFY yChanged)
+    Q_PROPERTY(qreal x READ localX WRITE setLocalX NOTIFY xChanged)
+    Q_PROPERTY(qreal y READ localY WRITE setLocalY NOTIFY yChanged)
 
     Q_PROPERTY(bool isOpened READ isOpened NOTIFY isOpenedChanged)
     Q_PROPERTY(ClosePolicy closePolicy READ closePolicy WRITE setClosePolicy NOTIFY closePolicyChanged)
 
+    Q_PROPERTY(mu::ui::NavigationControl* navigationParentControl
+               READ navigationParentControl
+               WRITE setNavigationParentControl
+               NOTIFY navigationParentControlChanged
+               )
+
+    //! NOTE Used for dialogs, but be here so that dialogs and just popups have one api
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+    Q_PROPERTY(QString objectID READ objectID WRITE setObjectID NOTIFY objectIDChanged)
+    Q_PROPERTY(bool modal READ modal WRITE setModal NOTIFY modalChanged)
+    Q_PROPERTY(bool resizable READ resizable WRITE setResizable NOTIFY resizableChanged)
+    Q_PROPERTY(QVariantMap ret READ ret WRITE setRet NOTIFY retChanged)
+
     Q_ENUMS(ClosePolicy)
 
     INJECT(uicomponents, ui::IMainWindow, mainWindow)
+    INJECT(uicomponents, ui::IUiConfiguration, uiConfiguration)
+    INJECT(uicomponents, ui::INavigationController, navigationController)
 
 public:
 
     explicit PopupView(QQuickItem* parent = nullptr);
+    ~PopupView() override = default;
 
     enum ClosePolicy {
         NoAutoClose = 0,
@@ -63,8 +83,9 @@ public:
     QQuickItem* parentItem() const;
     QQuickItem* contentItem() const;
 
-    qreal x() const;
-    qreal y() const;
+    qreal localX() const;
+    qreal localY() const;
+    const QRect& geometry() const;
 
     Q_INVOKABLE void forceActiveFocus();
 
@@ -73,15 +94,28 @@ public:
     Q_INVOKABLE void toggleOpened();
 
     ClosePolicy closePolicy() const;
+    mu::ui::NavigationControl* navigationParentControl() const;
 
     bool isOpened() const;
+
+    QString objectID() const;
+    QString title() const;
+    bool modal() const;
+    bool resizable() const;
+    QVariantMap ret() const;
 
 public slots:
     void setParentItem(QQuickItem* parent);
     void setContentItem(QQuickItem* content);
-    void setX(qreal x);
-    void setY(qreal y);
+    void setLocalX(qreal x);
+    void setLocalY(qreal y);
     void setClosePolicy(ClosePolicy closePolicy);
+    void setNavigationParentControl(mu::ui::NavigationControl* parentNavigationControl);
+    void setObjectID(QString objectID);
+    void setTitle(QString title);
+    void setModal(bool modal);
+    void setResizable(bool resizable);
+    void setRet(QVariantMap ret);
 
 signals:
     void parentItemChanged();
@@ -89,6 +123,12 @@ signals:
     void xChanged(qreal x);
     void yChanged(qreal y);
     void closePolicyChanged(ClosePolicy closePolicy);
+    void navigationParentControlChanged(mu::ui::NavigationControl* navigationParentControl);
+    void objectIDChanged(QString objectID);
+    void titleChanged(QString title);
+    void modalChanged(bool modal);
+    void resizableChanged(bool resizable);
+    void retChanged(QVariantMap ret);
 
     void isOpenedChanged();
     void opened();
@@ -97,7 +137,8 @@ signals:
 private slots:
     void onApplicationStateChanged(Qt::ApplicationState state);
 
-private:
+protected:
+    virtual bool isDialog() const;
     void classBegin() override;
     void componentComplete() override;
     bool eventFilter(QObject* watched, QEvent* event) override;
@@ -106,11 +147,24 @@ private:
 
     bool isMouseWithinBoundaries(const QPoint& mousePos) const;
 
+    QWindow* qWindow() const;
+    virtual void beforeShow();
+    virtual void onHidden();
+
+    void setErrCode(Ret::Code code);
+
     PopupWindow* m_window = nullptr;
     QQuickItem* m_contentItem = nullptr;
 
     QPointF m_localPos;
+    QPointF m_globalPos;
     ClosePolicy m_closePolicy = ClosePolicy::CloseOnPressOutsideParent;
+    mu::ui::NavigationControl* m_navigationParentControl = nullptr;
+    QString m_objectID;
+    QString m_title;
+    bool m_modal = false;
+    bool m_resizable = false;
+    QVariantMap m_ret;
 };
 }
 

@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
@@ -32,6 +32,8 @@ Item {
     id: root
 
     property string preferredScoreCreationMode: ""
+
+    property NavigationSection navigationSection: null
 
     property bool hasSelection: {
         if (pagesStack.currentIndex === 0) {
@@ -55,6 +57,10 @@ Item {
         return result
     }
 
+    function focusOnFirst() {
+        chooseInstrumentsBtn.navigation.forceActive()
+    }
+
     TabBar {
         id: bar
 
@@ -64,16 +70,32 @@ Item {
         contentHeight: 28
         spacing: 0
 
+        NavigationPanel {
+            id: topNavPanel
+            name: "ChooseTabPanel"
+            section: root.navigationSection
+            order: 1
+        }
+
         StyledTabButton {
+            id: chooseInstrumentsBtn
             text: qsTrc("userscores", "Choose instruments")
             sideMargin: 22
             isCurrent: bar.currentIndex === 0
+
+            navigation.name: "Choose instruments"
+            navigation.panel: topNavPanel
+            navigation.column: 1
         }
 
         StyledTabButton {
             text: qsTrc("userscores", "Choose from template")
             sideMargin: 22
             isCurrent: bar.currentIndex === 1
+
+            navigation.name: "Choose instruments"
+            navigation.panel: topNavPanel
+            navigation.column: 2
         }
 
         Component.onCompleted: {

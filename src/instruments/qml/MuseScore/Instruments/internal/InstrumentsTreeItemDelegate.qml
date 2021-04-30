@@ -226,7 +226,7 @@ Item {
     Component {
         id: instrumentSettingsComp
         InstrumentSettingsPopup {
-            navigation.parentControl: settingsButton.navigation
+            navigationParentControl: settingsButton.navigation
             onClosed: {
                 prv.resetOpenedPopup()
                 popupLoader.sourceComponent = null
@@ -237,7 +237,7 @@ Item {
     Component {
         id: staffSettingsComp
         StaffSettingsPopup {
-            navigation.parentControl: settingsButton.navigation
+            navigationParentControl: settingsButton.navigation
             onClosed: {
                 prv.resetOpenedPopup()
                 popupLoader.sourceComponent = null

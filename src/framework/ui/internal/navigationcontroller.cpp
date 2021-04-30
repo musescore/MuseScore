@@ -770,18 +770,28 @@ void NavigationController::onEscape()
 {
     TRACEFUNC;
     MYLOG() << "====";
-    INavigationPanel* activeSubSec = activePanel();
-    if (!activeSubSec) {
+    INavigationSection* activeSec = activeSection();
+    if (!activeSec) {
         return;
     }
 
     INavigation::EventPtr e = Event::make(Event::Escape);
-    activeSubSec->onEvent(e);
+    activeSec->onEvent(e);
     if (e->accepted) {
         return;
     }
 
-    INavigationControl* activeCtrl = findActive(activeSubSec->controls());
+    INavigationPanel* activePanel = findActive(activeSec->panels());
+    if (!activePanel) {
+        return;
+    }
+
+    activePanel->onEvent(e);
+    if (e->accepted) {
+        return;
+    }
+
+    INavigationControl* activeCtrl = findActive(activePanel->controls());
     if (activeCtrl) {
         activeCtrl->onEvent(e);
     }

@@ -54,11 +54,11 @@ PopupView {
     x: (root.parent.width / 2) - (root.width / 2)
     y: root.opensUpward ? -root.height : root.parent.height
 
-    property NavigationPopupPanel keynavPanel: NavigationPopupPanel {
+    property NavigationPanel keynavPanel: NavigationPanel {
         id: keynavPanel
         enabled: root.isOpened
         order: {
-            var pctrl = keynavPanel.parentControl;
+            var pctrl = root.navigationParentControl;
             if (pctrl) {
                 if (pctrl.panel) {
                     return pctrl.panel.order + 1
@@ -68,7 +68,7 @@ PopupView {
         }
 
         section: {
-            var pctrl = keynavPanel.parentControl;
+            var pctrl = root.navigationParentControl;
             if (pctrl) {
                 if (pctrl.panel) {
                     return pctrl.panel.section

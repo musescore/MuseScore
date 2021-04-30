@@ -40,6 +40,8 @@ ListItemBlank {
     signal subMenuShowed()
     signal subMenuClosed()
 
+    signal requestParentItemActive()
+
     hoveredStateColor: ui.theme.accentColor
     pressedStateColor: ui.theme.accentColor
     enabled: (Boolean(modelData) && modelData.enabled !== undefined ) ? Boolean(modelData.enabled) : true // default true
@@ -77,11 +79,12 @@ ListItemBlank {
             }
             break;
         case NavigationEvent.Left:
-            //! NOTE Go to parent item if present
-            if (navigation.panel.parentControl) {
-                event.accepted = true
-                root.navigation.panel.parentControl.forceActive()
-            }
+            //! NOTE Go to parent item
+            root.requestParentItemActive()
+//            if (navigation.panel.parentControl) {
+//                event.accepted = true
+//                root.navigation.panel.parentControl.forceActive()
+//            }
         }
     }
 
@@ -113,7 +116,7 @@ ListItemBlank {
             menu.x = root.width
             menu.y = 0
 
-            menu.navigation.parentControl = root.navigation
+            menu.navigationParentControl = root.navigation
             menu.navigation.name = root.navigation.name+"SubMenu"
 
             menu.model = modelData.subitems

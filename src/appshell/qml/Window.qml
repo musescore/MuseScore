@@ -46,6 +46,8 @@ DockWindow {
         startupModel.load()
     }
 
+    property var shortcuts: Shortcuts{}
+
     property var provider: InteractiveProvider {
         topParent: dockWindow
         onRequestedDockPage: {
