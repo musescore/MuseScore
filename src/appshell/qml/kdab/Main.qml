@@ -21,7 +21,8 @@
  */
 import QtQuick 2.15
 import QtQuick.Window 2.15
-import QtGraphicalEffects 1.0
+
+import MuseScore.UiComponents 1.0
 
 AppWindow {
     id: root
@@ -29,7 +30,7 @@ AppWindow {
     flags: Qt.FramelessWindowHint | Qt.Window
     color: "transparent"
 
-    property int sideMargin: root.visibility === Window.Windowed ? 5 : 0
+    property int sideMargin: root.visibility === Window.Windowed ? 8 : 0
 
     function toggleMaximized() {
         if (root.visibility === Window.Maximized) {
@@ -103,20 +104,9 @@ AppWindow {
         }
     }
 
-    DropShadow {
+    StyledDropShadow {
         anchors.fill: content
-
-        horizontalOffset: 1
-        verticalOffset: 1
-
-        radius: 8
-        samples: 10
-
         source: content
-        color: "black"
-
-        Behavior on radius {
-            PropertyAnimation { duration: 100 }
-        }
+        samples: 20
     }
 }

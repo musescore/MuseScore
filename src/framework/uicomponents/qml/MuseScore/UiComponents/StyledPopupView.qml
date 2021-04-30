@@ -21,7 +21,6 @@
  */
 
 import QtQuick 2.15
-import QtGraphicalEffects 1.0
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -129,12 +128,9 @@ PopupView {
                 border.color: ui.theme.strokeColor
             }
 
-            DropShadow {
+            StyledDropShadow {
                 anchors.fill: parent
                 source: contentBackground
-                color: "#75000000"
-                verticalOffset: 4
-                samples: 30
             }
 
             Canvas {
