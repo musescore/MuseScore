@@ -55,7 +55,7 @@ signals:
     void orientationChanged(Qt::Orientation orientation);
 
 private slots:
-     void updateOrientation();
+    void updateOrientation();
 
 private:
     void componentComplete() override;
