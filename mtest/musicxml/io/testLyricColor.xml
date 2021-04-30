@@ -185,6 +185,10 @@
           <syllabic>single</syllabic>
           <text>blue.</text>
           </lyric>
+        <lyric number="2" color="#9541E8">
+          <syllabic>single</syllabic>
+          <text>purple.</text>
+          </lyric>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
