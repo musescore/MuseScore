@@ -66,7 +66,6 @@
         <file>qml/DevTools/KeyNav/KeyNavExample.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSection.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSubSection.qml</file>
-        <file>qml/kdab/Window.qml</file>
         <file>qml/kdab/docksystem/DockPage.qml</file>
         <file>qml/kdab/docksystem/DropIndicators.qml</file>
         <file>qml/kdab/docksystem/DropIndicator.qml</file>
@@ -79,5 +78,9 @@
         <file>qml/kdab/docksystem/DockFrame.qml</file>
         <file>qml/kdab/docksystem/DockSeparator.qml</file>
         <file>qml/kdab/docksystem/DockFloatingWindow.qml</file>
+        <file>qml/kdab/AppTitleBar.qml</file>
+        <file>qml/kdab/AppWindow.qml</file>
+        <file>qml/kdab/Main.qml</file>
+        <file>qml/kdab/WindowContent.qml</file>
     </qresource>
 </RCC>
