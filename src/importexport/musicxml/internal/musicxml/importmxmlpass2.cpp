@@ -5533,7 +5533,8 @@ void MusicXMLParserLyric::parse()
     //qDebug("formatted lyric '%s'", qPrintable(formattedText));
     lyric->setXmlText(formattedText);
     if (lyricColor != QColor::Invalid) {
-        lyric->setColor(lyricColor);
+        lyric->setProperty(Pid::COLOR, lyricColor);
+        lyric->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
     }
 
     const auto l = lyric.release();
