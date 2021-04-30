@@ -136,10 +136,39 @@ const UiActionList ApplicationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Toggle Playback Controls toolbar"),
              Checkable::Yes
              ),
+    UiAction("toggle-timeline",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Timeline"),
+             QT_TRANSLATE_NOOP("action", "Toggle timeline"),
+             Checkable::Yes
+             ),
+    UiAction("synth-control",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Synthesizer"),
+             QT_TRANSLATE_NOOP("action", "Toggle synthesizer"),
+             Checkable::Yes
+             ),
+    UiAction("toggle-piano",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Piano"),
+             QT_TRANSLATE_NOOP("action", "Toggle piano"),
+             Checkable::Yes
+             ),
+    UiAction("toggle-scorecmp-tool",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Score Comparison Tool"),
+             QT_TRANSLATE_NOOP("action", "Toggle score comparison tool"),
+             Checkable::Yes
+             ),
     UiAction("preference-dialog",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Preferences"),
              QT_TRANSLATE_NOOP("action", "Open preferences dialog")
+             ),
+    UiAction("check-update",
+             mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "Check for Updates"),
+             QT_TRANSLATE_NOOP("action", "Check for updates")
              )
 };
 

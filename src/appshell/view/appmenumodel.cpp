@@ -167,7 +167,7 @@ MenuItem AppMenuModel::viewItem() const
         makeAction("show-unprintable"),
         makeAction("show-frames"),
         makeAction("show-pageborders"),
-        makeAction("show-irregular"),
+        makeAction("mark-irregular"),
         makeSeparator(),
         makeAction("fullscreen")
     };

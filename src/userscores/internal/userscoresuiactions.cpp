@@ -72,6 +72,11 @@ const UiActionList UserScoresUiActions::m_actions = {
              ),
     UiAction("file-import",
              mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "Import..."),
+             QT_TRANSLATE_NOOP("action", "Import score from file")
+             ),
+    UiAction("file-import-pdf",
+             mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Import PDF..."),
              QT_TRANSLATE_NOOP("action", "Import a PDF file with an experimental service on musescore.com")
              ),

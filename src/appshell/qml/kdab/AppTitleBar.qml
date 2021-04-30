@@ -66,14 +66,13 @@ Rectangle {
         anchors.fill: parent
         anchors.margins: 8
 
-        RadioButtonGroup {
-            id: radioButtonList
-
+        ListView {
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
 
             height: 30
-            width: contentItem.childrenRect.width
+            width: contentWidth
+            orientation: Qt.Horizontal
 
             model: appMenuModel.items
 
@@ -81,8 +80,6 @@ Rectangle {
                 id: radioButtonDelegate
 
                 width: 60
-
-                ButtonGroup.group: radioButtonList.radioButtonGroup
 
                 normalStateColor: !_menu.isOpened ? "transparent" : ui.theme.accentColor
                 text: modelData["title"]
@@ -139,6 +136,8 @@ Rectangle {
             FlatButton {
                 icon: IconCode.CLOSE_X_ROUNDED
                 normalStateColor: "transparent"
+                pressedStateColor: "red"
+                hoveredStateColor: "red"
 
                 onClicked: {
                     closeWindowRequested()
