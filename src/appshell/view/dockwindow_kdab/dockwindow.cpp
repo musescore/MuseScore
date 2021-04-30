@@ -38,7 +38,6 @@ DockWindow::DockWindow(QQuickItem* parent)
     m_toolBars(this),
     m_pages(this)
 {
-
 }
 
 void DockWindow::componentComplete()

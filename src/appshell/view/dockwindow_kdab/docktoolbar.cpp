@@ -35,14 +35,12 @@ static const qreal TOOLBAR_GRIP_MARGIN(4);
 static const qreal TOOLBAR_GRIP_WIDTH(28);
 static const qreal TOOLBAR_GRIP_HEIGHT(36);
 
-class DockToolBar::DraggableArea : public KDDockWidgets::QWidgetAdapter,
-                                   public KDDockWidgets::Draggable
+class DockToolBar::DraggableArea : public KDDockWidgets::QWidgetAdapter, public KDDockWidgets::Draggable
 {
-
 public:
     DraggableArea()
         : KDDockWidgets::QWidgetAdapter(),
-          KDDockWidgets::Draggable(this)
+        KDDockWidgets::Draggable(this)
     {
     }
 
@@ -79,7 +77,7 @@ public:
         return false;
     }
 
-    QPoint mapToWindow(const QPoint &pos) const override
+    QPoint mapToWindow(const QPoint& pos) const override
     {
         if (!m_mouseArea) {
             return pos;
@@ -108,7 +106,7 @@ private:
 
 DockToolBar::DockToolBar(QQuickItem* parent)
     : DockBase(parent),
-      m_draggableArea(new DraggableArea())
+    m_draggableArea(new DraggableArea())
 {
     setAllowedAreas(Qt::TopDockWidgetArea);
 }
