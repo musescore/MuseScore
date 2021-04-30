@@ -81,6 +81,7 @@
         <file>qml/kdab/AppTitleBar.qml</file>
         <file>qml/kdab/AppWindow.qml</file>
         <file>qml/kdab/Main.qml</file>
+        <file>qml/kdab/MainMacOS.qml</file>
         <file>qml/kdab/WindowContent.qml</file>
         <file>qml/kdab/AppMenuBar.qml</file>
     </qresource>
