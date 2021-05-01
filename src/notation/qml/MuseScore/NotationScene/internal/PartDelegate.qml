@@ -171,7 +171,7 @@ ListItemBlank {
         StyledContextMenuItem {
             id: deleteItem
 
-            text: qsTrc("notation", "Delete score")
+            text: qsTrc("notation", "Delete part")
 
             onTriggered: {
                 root.removePartRequested()
