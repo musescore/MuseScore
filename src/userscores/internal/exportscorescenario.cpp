@@ -27,7 +27,9 @@ using namespace mu::userscores;
 using namespace mu::notation;
 using namespace mu::framework;
 
-std::vector<WriterUnitType> ExportScoreScenario::supportedUnitTypes(const ExportType& exportType) const
+using UnitType = INotationWriter::UnitType;
+
+std::vector<UnitType> ExportScoreScenario::supportedUnitTypes(const ExportType& exportType) const
 {
     IF_ASSERT_FAILED(!exportType.suffixes.isEmpty()) {
         return {};
@@ -41,19 +43,113 @@ std::vector<WriterUnitType> ExportScoreScenario::supportedUnitTypes(const Export
     return writer->supportedUnitTypes();
 }
 
-bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const ExportType& exportType, WriterUnitType unitType) const
+bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const ExportType& exportType, UnitType unitType) const
 {
     IF_ASSERT_FAILED(!exportType.suffixes.isEmpty()) {
         return false;
     }
 
-    /// If only one file will be created, the filename will be exactly what the user
-    /// types in the save dialog and therefore we can put the file dialog in charge of
-    /// asking the user whether an existing file should be overridden. Otherwise, we
-    /// will take care of that ourselves.
-    bool isCreatingOnlyOneFile = this->isCreatingOnlyOneFile(notations, unitType);
-    bool isExportingOnlyOneScore = notations.size() == 1;
+    io::path chosenPath = askExportPath(notations, exportType, unitType);
+    if (chosenPath.empty()) {
+        return false;
+    }
 
+    auto writer = writers()->writer(io::syffix(chosenPath));
+    if (!writer) {
+        return false;
+    }
+
+    IF_ASSERT_FAILED(writer->supportsUnitType(unitType)) {
+        return false;
+    }
+
+    bool isCreatingOnlyOneFile = this->isCreatingOnlyOneFile(notations, unitType);
+
+    // If isCreatingOnlyOneFile, the save dialog has already asked whether to replace
+    // any existing files. If the user cancels, the filepath will be empty, so we would
+    // not reach this point. But if we do, existing files should be overridden.
+    m_fileConflictPolicy = isCreatingOnlyOneFile ? FileConflictPolicy::ReplaceAll : FileConflictPolicy::Undefined;
+
+    switch (unitType) {
+    case UnitType::PER_PAGE: {
+        for (INotationPtr notation : notations) {
+            for (int page = 0; page < notation->elements()->msScore()->pages().size(); page++) {
+                INotationWriter::Options options {
+                    { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(unitType)) },
+                    { INotationWriter::OptionKey::PAGE_NUMBER, Val(page) },
+                    { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND,
+                      Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
+                };
+
+                io::path definitivePath = isCreatingOnlyOneFile
+                                          ? chosenPath
+                                          : completeExportPath(chosenPath, notation, isMainNotation(notation), page);
+
+                auto exportFunction = [writer, notation, options](system::IODevice& destinationDevice) {
+                        return writer->write(notation, destinationDevice, options);
+                    };
+
+                doExportLoop(definitivePath, exportFunction);
+            }
+        }
+    } break;
+    case UnitType::PER_PART: {
+        for (INotationPtr notation : notations) {
+            INotationWriter::Options options {
+                { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(unitType)) },
+                { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND,
+                  Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
+            };
+
+            io::path definitivePath = isCreatingOnlyOneFile
+                                      ? chosenPath
+                                      : completeExportPath(chosenPath, notation, isMainNotation(notation));
+
+            auto exportFunction = [writer, notation, options](system::IODevice& destinationDevice) {
+                    return writer->write(notation, destinationDevice, options);
+                };
+
+            doExportLoop(definitivePath, exportFunction);
+        }
+    } break;
+    case UnitType::MULTI_PART: {
+        INotationWriter::Options options {
+            { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(unitType)) },
+            { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
+        };
+
+        auto exportFunction = [writer, notations, options](system::IODevice& destinationDevice) {
+                return writer->writeList(notations, destinationDevice, options);
+            };
+
+        doExportLoop(chosenPath, exportFunction);
+    } break;
+    }
+
+    return true;
+}
+
+bool ExportScoreScenario::isCreatingOnlyOneFile(const INotationPtrList& notations, UnitType unitType) const
+{
+    switch (unitType) {
+    case UnitType::PER_PAGE:
+        return notations.size() == 1 && notations.front()->elements()->pages().size() == 1;
+    case UnitType::PER_PART:
+        return notations.size() == 1;
+    case UnitType::MULTI_PART:
+        return true;
+    }
+
+    return false;
+}
+
+bool ExportScoreScenario::isMainNotation(INotationPtr notation) const
+{
+    return context()->currentMasterNotation()->notation() == notation;
+}
+
+io::path ExportScoreScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType, UnitType unitType) const
+{
     IMasterNotationPtr currentMasterNotation = context()->currentMasterNotation();
 
     io::path suggestedPath = configuration()->scoresPath().val;
@@ -64,7 +160,14 @@ bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const 
 
     suggestedPath += "/" + currentMasterNotation->metaInfo().title;
 
-    if (unitType == WriterUnitType::MULTI_PART && !isExportingOnlyOneScore) {
+    // If only one file will be created, the filename will be exactly what the user
+    // types in the save dialog and therefore we can put the file dialog in charge of
+    // asking the user whether an existing file should be overridden. Otherwise, we
+    // will take care of that ourselves.
+    bool isCreatingOnlyOneFile = this->isCreatingOnlyOneFile(notations, unitType);
+    bool isExportingOnlyOneScore = notations.size() == 1;
+
+    if (unitType == UnitType::MULTI_PART && !isExportingOnlyOneScore) {
         bool containsMaster = std::find_if(notations.cbegin(), notations.cend(), [this](INotationPtr notation) {
             return isMainNotation(notation);
         }) != notations.cend();
@@ -79,7 +182,7 @@ bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const 
             suggestedPath += "-" + io::escapeFileName(notations.front()->metaInfo().title);
         }
 
-        if (isCreatingOnlyOneFile && unitType == WriterUnitType::PER_PAGE) {
+        if (unitType == UnitType::PER_PAGE && isCreatingOnlyOneFile) {
             // So there is only one page
             suggestedPath += "-1";
         }
@@ -87,87 +190,25 @@ bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const 
 
     suggestedPath += "." + exportType.suffixes.front();
 
-    io::path chosenPath = interactive()->selectSavingFile(qtrc("userscores", "Export"), suggestedPath,
-                                                          exportType.filter(), isCreatingOnlyOneFile);
-    if (chosenPath.empty()) {
-        return false;
-    }
-
-    auto writer = writers()->writer(io::syffix(chosenPath));
-    if (!writer) {
-        return false;
-    }
-
-    IF_ASSERT_FAILED(writer->supportsUnitType(unitType)) {
-        return false;
-    }
-
-    m_fileConflictPolicy = isCreatingOnlyOneFile ? FileConflictPolicy::ReplaceAll : FileConflictPolicy::Undefined;
-
-    switch (unitType) {
-    case WriterUnitType::PER_PAGE: {
-        for (INotationPtr notation : notations) {
-            for (int page = 0; page < notation->elements()->msScore()->pages().size(); page++) {
-                INotationWriter::Options options {
-                    { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(unitType)) },
-                    { INotationWriter::OptionKey::PAGE_NUMBER, Val(page) },
-                    { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(
-                          imagesExportConfiguration()->exportPngWithTransparentBackground()) }
-                };
-
-                io::path definitivePath = isCreatingOnlyOneFile
-                                          ? chosenPath
-                                          : configuration()->completeExportPath(chosenPath, notation, isMainNotation(notation), page);
-
-                doExport(writer, { notation }, definitivePath, options);
-            }
-        }
-    } break;
-    case WriterUnitType::PER_PART: {
-        for (INotationPtr notation : notations) {
-            INotationWriter::Options options {
-                { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(unitType)) },
-                { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND,
-                  Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
-            };
-
-            io::path definitivePath = isCreatingOnlyOneFile
-                                      ? chosenPath
-                                      : configuration()->completeExportPath(chosenPath, notation, isMainNotation(notation));
-
-            doExport(writer, { notation }, definitivePath, options);
-        }
-    } break;
-    case WriterUnitType::MULTI_PART: {
-        INotationWriter::Options options {
-            { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(unitType)) },
-            { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
-        };
-
-        doExport(writer, notations, chosenPath, options);
-    } break;
-    }
-
-    return true;
+    return interactive()->selectSavingFile(qtrc("userscores", "Export"), suggestedPath,
+                                           exportType.filter(), isCreatingOnlyOneFile);
 }
 
-bool ExportScoreScenario::isCreatingOnlyOneFile(const INotationPtrList& notations, WriterUnitType unitType) const
+io::path ExportScoreScenario::completeExportPath(const io::path& basePath, INotationPtr notation, bool isMain, int pageIndex) const
 {
-    switch (unitType) {
-    case WriterUnitType::PER_PAGE:
-        return notations.size() == 1 && notations.front()->elements()->pages().size() == 1;
-    case WriterUnitType::PER_PART:
-        return notations.size() == 1;
-    case WriterUnitType::MULTI_PART:
-        return true;
+    io::path result = io::dirpath(basePath) + "/" + io::basename(basePath);
+
+    if (!isMain) {
+        result += "-" + io::escapeFileName(notation->metaInfo().title).toStdString();
     }
 
-    return false;
-}
+    if (pageIndex > -1) {
+        result += "-" + std::to_string(pageIndex + 1);
+    }
 
-bool ExportScoreScenario::isMainNotation(INotationPtr notation) const
-{
-    return context()->currentMasterNotation()->notation() == notation;
+    result += "." + io::syffix(basePath);
+
+    return result;
 }
 
 bool ExportScoreScenario::shouldReplaceFile(const QString& filename) const
@@ -223,9 +264,12 @@ bool ExportScoreScenario::askForRetry(const QString& filename) const
     return btn == static_cast<int>(IInteractive::Button::Retry);
 }
 
-bool ExportScoreScenario::doExport(INotationWriterPtr writer, const INotationPtrList& notations, const io::path& path,
-                                   const INotationWriter::Options& options) const
+bool ExportScoreScenario::doExportLoop(const io::path& path, std::function<bool(system::IODevice&)> exportFunction) const
 {
+    IF_ASSERT_FAILED(exportFunction) {
+        return false;
+    }
+
     QString filename = io::filename(path).toQString();
     if (fileSystem()->exists(path) && !shouldReplaceFile(filename)) {
         return false;
@@ -241,7 +285,7 @@ bool ExportScoreScenario::doExport(INotationWriterPtr writer, const INotationPtr
             }
         }
 
-        if (!writer->write(notations, outputFile, options)) {
+        if (!exportFunction(outputFile)) {
             outputFile.close();
             if (askForRetry(filename)) {
                 continue;

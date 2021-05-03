@@ -29,8 +29,7 @@ namespace mu::iex::audioexport {
 class FlacWriter : public notation::AbstractNotationWriter
 {
 public:
-    Ret write(const notation::INotationPtrList& notations, system::IODevice& destinationDevice,
-              const Options& options = Options()) override;
+    Ret write(notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
 };
 }
 

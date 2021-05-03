@@ -43,10 +43,10 @@ class ExportScoreScenario : public IExportScoreScenario
     INJECT(userscores, system::IFileSystem, fileSystem)
 
 public:
-    std::vector<notation::WriterUnitType> supportedUnitTypes(const ExportType& exportType) const override;
+    std::vector<notation::INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;
 
     bool exportScores(const notation::INotationPtrList& notations, const ExportType& exportType,
-                      notation::WriterUnitType unitType) const override;
+                      notation::INotationWriter::UnitType unitType) const override;
 
 private:
     enum class FileConflictPolicy {
@@ -55,15 +55,18 @@ private:
         ReplaceAll
     };
 
-    bool isCreatingOnlyOneFile(const notation::INotationPtrList& notations, notation::WriterUnitType unitType) const;
+    bool isCreatingOnlyOneFile(const notation::INotationPtrList& notations, notation::INotationWriter::UnitType unitType) const;
 
     bool isMainNotation(notation::INotationPtr notation) const;
+
+    io::path askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
+                           notation::INotationWriter::UnitType unitType) const;
+    io::path completeExportPath(const io::path& basePath, notation::INotationPtr notation, bool isMain, int pageIndex = -1) const;
 
     bool shouldReplaceFile(const QString& filename) const;
     bool askForRetry(const QString& filename) const;
 
-    bool doExport(notation::INotationWriterPtr writer, const notation::INotationPtrList& notations, const io::path& path,
-                  const notation::INotationWriter::Options& options) const;
+    bool doExportLoop(const io::path& path, std::function<bool(system::IODevice&)> exportFunction) const;
 
     mutable FileConflictPolicy m_fileConflictPolicy;
 };

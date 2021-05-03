@@ -27,9 +27,9 @@
 using namespace mu::iex::midiimport;
 using namespace mu::system;
 
-mu::Ret NotationMidiWriter::write(const notation::INotationPtrList& notations, IODevice& destinationDevice, const Options& options)
+mu::Ret NotationMidiWriter::write(notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
 {
-    UNUSED(notations)
+    UNUSED(notation)
     UNUSED(destinationDevice)
     UNUSED(options)
 
