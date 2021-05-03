@@ -1476,6 +1476,7 @@ void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
     }
 
     interaction->setScoreConfig(config);
+    interaction->scoreConfigChanged().send(configType);
 }
 
 void NotationActionController::playSelectedElement(bool playChord)
