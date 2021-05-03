@@ -26,6 +26,7 @@
 
 #include "types/scoreappearancetypes.h"
 #include "dataformatter.h"
+#include "log.h"
 
 using namespace mu::inspector;
 
@@ -82,12 +83,12 @@ PageTypeListModel* ScoreAppearanceSettingsModel::pageTypeListModel() const
 
 void ScoreAppearanceSettingsModel::showPageSettings()
 {
-    adapter()->showPageSettingsDialog();
+    dispatcher()->dispatch("page-settings");
 }
 
 void ScoreAppearanceSettingsModel::showStyleSettings()
 {
-    adapter()->showStyleSettingsDialog();
+    dispatcher()->dispatch("edit-style");
 }
 
 int ScoreAppearanceSettingsModel::orientationType() const

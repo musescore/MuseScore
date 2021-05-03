@@ -54,9 +54,6 @@
 #include "types/tremolobartypes.h"
 #include "types/tremolotypes.h"
 
-#include "iinspectoradapter.h"
-#include "internal/compatibility/mu4inspectoradapter.h"
-
 using namespace mu::inspector;
 
 static void inspector_init_qrc()
@@ -67,13 +64,6 @@ static void inspector_init_qrc()
 std::string InspectorModule::moduleName() const
 {
     return "inspector";
-}
-
-void InspectorModule::registerExports()
-{
-    static std::shared_ptr<MU4InspectorAdapter> adapter = std::make_shared<MU4InspectorAdapter>();
-
-    mu::framework::ioc()->registerExport<mu::inspector::IInspectorAdapter>(moduleName(), adapter);
 }
 
 void InspectorModule::registerResources()

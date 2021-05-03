@@ -26,7 +26,6 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/view/qml)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inspectormodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/inspectormodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/iinspectoradapter.h
     ${CMAKE_CURRENT_LIST_DIR}/types/accidentaltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/ambitustypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/articulationtypes.h
@@ -177,8 +176,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/services/elementrepositoryservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/services/elementrepositoryservice.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/interfaces/ielementrepositoryservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/compatibility/mu4inspectoradapter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/compatibility/mu4inspectoradapter.h
     )
 
 set(MODULE_UI ${inspector_UI} )
