@@ -95,6 +95,9 @@ public:
     virtual async::Notification textEditingStarted() const = 0;
     virtual async::Notification textEditingChanged() const = 0;
 
+    // Display
+    virtual async::Channel<ScoreConfigType> scoreConfigChanged() const = 0;
+
     // Grip edit
     virtual bool isGripEditStarted() const = 0;
     virtual bool isHitGrip(const QPointF& pos) const = 0;

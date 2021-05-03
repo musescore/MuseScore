@@ -1955,6 +1955,11 @@ mu::async::Notification NotationInteraction::textEditingChanged() const
     return m_textEditingChanged;
 }
 
+mu::async::Channel<ScoreConfigType> NotationInteraction::scoreConfigChanged() const
+{
+    return m_scoreConfigChanged;
+}
+
 bool NotationInteraction::isGripEditStarted() const
 {
     return m_gripEditData.element && m_gripEditData.curGrip != Ms::Grip::NO_GRIP;

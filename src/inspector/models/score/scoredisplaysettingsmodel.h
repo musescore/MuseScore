@@ -23,9 +23,11 @@
 #define MU_INSPECTOR_SCORESETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
+#include "async/asyncable.h"
+#include "notation/notationtypes.h"
 
 namespace mu::inspector {
-class ScoreSettingsModel : public AbstractInspectorModel
+class ScoreSettingsModel : public AbstractInspectorModel, public mu::async::Asyncable
 {
     Q_OBJECT
 
@@ -61,9 +63,18 @@ signals:
     void shouldShowPageMarginsChanged(bool shouldShowPageMargins);
 
 private:
-    bool m_shouldShowInvisible = true;
-    bool m_shouldShowUnprintable = true;
-    bool m_shouldShowFrames = true;
+    void updateShouldShowInvisible(bool isVisible);
+    void updateShouldShowUnprintable(bool isVisible);
+    void updateShouldShowFrames(bool isVisible);
+    void updateShouldShowPageMargins(bool isVisible);
+
+    void updateFromConfig(mu::notation::ScoreConfigType configType);
+    void updateAll();
+    void setupConnections();
+
+    bool m_shouldShowInvisible = false;
+    bool m_shouldShowUnprintable = false;
+    bool m_shouldShowFrames = false;
     bool m_shouldShowPageMargins = false;
 };
 }

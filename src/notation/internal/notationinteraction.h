@@ -174,6 +174,7 @@ public:
 
     ScoreConfig scoreConfig() const override;
     void setScoreConfig(ScoreConfig config) override;
+    async::Channel<ScoreConfigType> scoreConfigChanged() const override;
 
 private:
     Ms::Score* score() const;
@@ -274,6 +275,8 @@ private:
 
     DropData m_dropData;
     async::Notification m_dropChanged;
+
+    async::Channel<ScoreConfigType> m_scoreConfigChanged;
 };
 }
 
