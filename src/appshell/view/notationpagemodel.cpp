@@ -42,6 +42,7 @@ void NotationPageModel::init()
     dispatcher()->reg(this, "toggle-mixer", [this]() { togglePanel(PanelType::Mixer); });
     dispatcher()->reg(this, "toggle-palette", [this]() { togglePanel(PanelType::Palette); });
     dispatcher()->reg(this, "toggle-instruments", [this]() { togglePanel(PanelType::Instruments); });
+    dispatcher()->reg(this, "toggle-lyrics", [this]() { togglePanel(PanelType::Lyrics); });
     dispatcher()->reg(this, "inspector", [this]() { togglePanel(PanelType::Inspector); });
     dispatcher()->reg(this, "toggle-statusbar", [this]() { togglePanel(PanelType::NotationStatusBar); });
     dispatcher()->reg(this, "toggle-noteinput", [this]() { togglePanel(PanelType::NoteInputBar); });
@@ -72,6 +73,11 @@ bool NotationPageModel::isPalettePanelVisible() const
 bool NotationPageModel::isInstrumentsPanelVisible() const
 {
     return pageState()->isPanelVisible(PanelType::Instruments);
+}
+
+bool NotationPageModel::isLyricsPanelVisible() const
+{
+    return pageState()->isPanelVisible(PanelType::Lyrics);
 }
 
 bool NotationPageModel::isInspectorPanelVisible() const
@@ -127,6 +133,16 @@ void NotationPageModel::setIsInstrumentsPanelVisible(bool visible)
 
     pageState()->setIsPanelsVisible({ { PanelType::Instruments, visible } });
     emit isInstrumentsPanelVisibleChanged();
+}
+
+void NotationPageModel::setIsLyricsPanelVisible(bool visible)
+{
+    if (isLyricsPanelVisible() == visible) {
+        return;
+    }
+
+    pageState()->setIsPanelsVisible({ { PanelType::Lyrics, visible } });
+    emit isLyricsPanelVisibleChanged();
 }
 
 void NotationPageModel::setIsInspectorPanelVisible(bool visible)
@@ -208,6 +224,9 @@ void NotationPageModel::notifyAboutPanelChanged(PanelType type)
     case PanelType::Instruments:
         emit isInstrumentsPanelVisibleChanged();
         break;
+    case PanelType::Lyrics:
+        emit isLyricsPanelVisibleChanged();
+        break;
     case PanelType::Inspector:
         emit isInspectorPanelVisibleChanged();
         break;
@@ -246,6 +265,7 @@ PanelType NotationPageModel::panelTypeFromString(const QString& string) const
     std::map<QString, PanelType> types = {
         { "Palette", PanelType::Palette },
         { "Instruments", PanelType::Instruments },
+        { "Lyrics", PanelType::Lyrics },
         { "Inspector", PanelType::Inspector },
         { "StatusBar", PanelType::NotationStatusBar },
         { "NoteInputBar", PanelType::NoteInputBar },

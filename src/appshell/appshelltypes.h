@@ -29,6 +29,7 @@ enum class PanelType
     Undefined = 0,
     Palette,
     Instruments,
+    Lyrics,
     Inspector,
     NotationToolBar,
     NoteInputBar,

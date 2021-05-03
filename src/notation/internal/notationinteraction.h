@@ -124,7 +124,7 @@ public:
     void addBoxes(BoxType boxType, int count, int beforeBoxIndex = -1) override;
 
     void copySelection() override;
-    void copyLyrics() override;
+    void copyLyrics(bool plaintext = true, bool expandRepeats = false) override;
     void pasteSelection(const Fraction& scale = Fraction(1, 1)) override;
     void swapSelection() override;
     void deleteSelection() override;

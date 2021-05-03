@@ -144,6 +144,7 @@ MenuItem AppMenuModel::viewItem() const
     MenuItemList viewItems {
         makeAction("toggle-palette"),
         makeAction("toggle-instruments"),
+        makeAction("toggle-lyrics"),
         makeAction("masterpalette"),
         makeAction("inspector"),
         makeAction("toggle-navigator"),
