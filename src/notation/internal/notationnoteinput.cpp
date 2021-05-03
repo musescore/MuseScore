@@ -112,13 +112,13 @@ void NotationNoteInput::startNoteInput()
     }
     //! ---
 
+    m_interaction->select({ el }, SelectType::SINGLE, 0);
+
     Duration d(is.duration());
     if (!d.isValid() || d.isZero() || d.type() == Duration::DurationType::V_MEASURE) {
         is.setDuration(Duration(Duration::DurationType::V_QUARTER));
     }
     is.setAccidentalType(Ms::AccidentalType::NONE);
-
-    m_interaction->select({ el }, SelectType::SINGLE, 0);
 
     is.setRest(false);
     is.setNoteEntryMode(true);
