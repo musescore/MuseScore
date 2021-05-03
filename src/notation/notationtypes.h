@@ -166,12 +166,6 @@ enum class SaveMode
     SaveOnline
 };
 
-enum class WriterUnitType {
-    PER_PAGE,
-    PER_PART,
-    MULTI_PART
-};
-
 enum class ResettableValueType
 {
     Stretch,

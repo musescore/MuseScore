@@ -27,20 +27,39 @@
 using namespace mu::notation;
 using namespace mu::framework;
 
-std::vector<WriterUnitType> AbstractNotationWriter::supportedUnitTypes() const
+std::vector<INotationWriter::UnitType> AbstractNotationWriter::supportedUnitTypes() const
 {
-    return { WriterUnitType::PER_PART };
+    return { UnitType::PER_PART };
 }
 
-bool AbstractNotationWriter::supportsUnitType(WriterUnitType unitType) const
+bool AbstractNotationWriter::supportsUnitType(UnitType unitType) const
 {
-    std::vector<WriterUnitType> unitTypes = supportedUnitTypes();
+    std::vector<UnitType> unitTypes = supportedUnitTypes();
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret AbstractNotationWriter::write(const INotationPtrList&, system::IODevice&, const Options& options)
+mu::Ret AbstractNotationWriter::write(INotationPtr, system::IODevice&, const Options& options)
 {
-    if (supportsUnitType(static_cast<WriterUnitType>(options.value(OptionKey::UNIT_TYPE, Val(0)).toInt()))) {
+    IF_ASSERT_FAILED(unitTypeFromOptions(options) != UnitType::MULTI_PART) {
+        return Ret(Ret::Code::NotSupported);
+    }
+
+    if (supportsUnitType(static_cast<UnitType>(options.value(OptionKey::UNIT_TYPE, Val(0)).toInt()))) {
+        NOT_IMPLEMENTED;
+        return Ret(Ret::Code::NotImplemented);
+    }
+
+    NOT_SUPPORTED;
+    return Ret(Ret::Code::NotSupported);
+}
+
+mu::Ret AbstractNotationWriter::writeList(const INotationPtrList&, system::IODevice&, const Options& options)
+{
+    IF_ASSERT_FAILED(unitTypeFromOptions(options) == UnitType::MULTI_PART) {
+        return Ret(Ret::Code::NotSupported);
+    }
+
+    if (supportsUnitType(static_cast<UnitType>(options.value(OptionKey::UNIT_TYPE, Val(0)).toInt()))) {
         NOT_IMPLEMENTED;
         return Ret(Ret::Code::NotImplemented);
     }
@@ -59,16 +78,15 @@ ProgressChannel AbstractNotationWriter::progress() const
     return m_progress;
 }
 
-WriterUnitType AbstractNotationWriter::unitTypeFromOptions(const Options& options) const
+INotationWriter::UnitType AbstractNotationWriter::unitTypeFromOptions(const Options& options) const
 {
-    std::vector<WriterUnitType> supported = supportedUnitTypes();
+    std::vector<UnitType> supported = supportedUnitTypes();
     IF_ASSERT_FAILED(!supported.empty()) {
-        return WriterUnitType::PER_PART;
+        return UnitType::PER_PART;
     }
 
-    WriterUnitType defaultUnitType = supported.front();
-    WriterUnitType unitType = static_cast<WriterUnitType>(options.value(OptionKey::UNIT_TYPE, Val(
-                                                                            static_cast<int>(defaultUnitType))).toInt());
+    UnitType defaultUnitType = supported.front();
+    UnitType unitType = static_cast<UnitType>(options.value(OptionKey::UNIT_TYPE, Val(static_cast<int>(defaultUnitType))).toInt());
     if (!supportsUnitType(unitType)) {
         return defaultUnitType;
     }

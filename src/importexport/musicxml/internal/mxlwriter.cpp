@@ -29,17 +29,13 @@
 using namespace mu::iex::musicxml;
 using namespace mu::system;
 
-mu::Ret MxlWriter::write(const notation::INotationPtrList& notations, IODevice& destinationDevice, const Options&)
+mu::Ret MxlWriter::write(notation::INotationPtr notation, system::IODevice& destinationDevice, const Options&)
 {
-    IF_ASSERT_FAILED(!notations.empty()) {
-        return make_ret(Ret::Code::UnknownError);
-    }
-
-    INotationPtr notation = notations.front();
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
     }
     Ms::Score* score = notation->elements()->msScore();
+
     IF_ASSERT_FAILED(score) {
         return make_ret(Ret::Code::UnknownError);
     }

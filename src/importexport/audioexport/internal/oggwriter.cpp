@@ -27,9 +27,9 @@
 using namespace mu::iex::audioexport;
 using namespace mu::system;
 
-mu::Ret OggWriter::write(const notation::INotationPtrList& notations, IODevice& destinationDevice, const Options& options)
+mu::Ret OggWriter::write(notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
 {
-    UNUSED(notations)
+    UNUSED(notation)
     UNUSED(destinationDevice)
     UNUSED(options)
 
