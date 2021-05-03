@@ -94,6 +94,9 @@ signals:
     void isSpecialCharactersInsertionAvailableChanged(bool isSpecialCharactersInsertionAvailable);
 
 private:
+    bool isTextEditingStarted() const;
+    async::Notification isTextEditingChanged() const;
+
     void updateFramePropertiesAvailability();
     void updateStaffPropertiesAvailability();
 
