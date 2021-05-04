@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -35,14 +34,6 @@ Rectangle {
     signal toggleWindowMaximizedRequested()
     signal closeWindowRequested()
     signal startSystemMoveRequested()
-
-    AppMenuModel {
-        id: appMenuModel
-    }
-
-    Component.onCompleted: {
-        appMenuModel.load()
-    }
 
     TapHandler {
         gesturePolicy: TapHandler.DragThreshold
@@ -66,40 +57,9 @@ Rectangle {
         anchors.fill: parent
         anchors.margins: 8
 
-        ListView {
+        AppMenuBar {
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-
-            height: 30
-            width: contentWidth
-            orientation: Qt.Horizontal
-
-            model: appMenuModel.items
-
-            delegate: FlatButton {
-                id: radioButtonDelegate
-
-                width: 60
-
-                normalStateColor: !_menu.isOpened ? "transparent" : ui.theme.accentColor
-                text: modelData["title"]
-
-                onClicked: {
-                    _menu.toggleOpened()
-                }
-
-                StyledMenu {
-                    id: _menu
-
-                    model: modelData["subitems"]
-
-                    onHandleAction: {
-                        Qt.callLater(appMenuModel.handleAction, actionCode, actionIndex)
-                        _menu.close()
-                        console.log("selected " + actionCode)
-                    }
-                }
-            }
         }
 
         StyledTextLabel {
