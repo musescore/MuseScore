@@ -29,9 +29,8 @@ using namespace mu::actions;
 void UiActionsRegister::init()
 {
     // init state
-    //! NOTE updateEnabledAll is not needed because the UI context will change and then call updateEnabledAll
-
     updateCheckedAll();
+    updateEnabledAll();
 
     updateShortcuts();
 
