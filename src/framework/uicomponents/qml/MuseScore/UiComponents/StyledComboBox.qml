@@ -279,13 +279,10 @@ ComboBox {
             }
         }
 
-        background: DropShadow {
+        background: StyledDropShadow {
             anchors.fill: parent
-            verticalOffset: 4
-            radius: 12.0
-            samples: 30
-            color: "#75000000"
             source: popup.contentItem
+            radius: 12.0
         }
 
         Behavior on implicitHeight {

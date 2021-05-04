@@ -44,23 +44,30 @@ Item {
         }
     }
 
-    DockTitleBar {
-        id: titleBar
+    Rectangle {
+        id: content
 
-        anchors.top: parent.top
+        anchors.fill: parent
+        anchors.margins: 8
 
-        titleBarCpp: root.titleBarCpp
-    }
+        DockTitleBar {
+            id: titleBar
 
-    KDDW.DropArea {
-        id: dropArea
+            anchors.top: parent.top
 
-        anchors.top: titleBar.bottom
-        anchors.bottom: parent.bottom
+            titleBarCpp: root.titleBarCpp
+        }
 
-        width: parent.width
+        KDDW.DropArea {
+            id: dropArea
 
-        dropAreaCpp: root.dropAreaCpp
+            anchors.top: titleBar.bottom
+            anchors.bottom: parent.bottom
+
+            width: parent.width
+
+            dropAreaCpp: root.dropAreaCpp
+        }
     }
 
     onDropAreaCppChanged: {
@@ -68,5 +75,11 @@ Item {
             dropAreaCpp.parent = dropArea
             dropAreaCpp.anchors.fill = dropArea
         }
+    }
+
+    StyledDropShadow {
+        anchors.fill: content
+        source: content
+        samples: 20
     }
 }
