@@ -65,7 +65,7 @@ DialogView {
 
     onClosed: {
         if (root.isDoActiveParentOnClose && root.navigationParentControl) {
-            root.navigationParentControl.forceActive()
+            Qt.callLater(root.navigationParentControl.forceActive)
         }
     }
 

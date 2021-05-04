@@ -81,10 +81,6 @@ ListItemBlank {
         case NavigationEvent.Left:
             //! NOTE Go to parent item
             root.requestParentItemActive()
-//            if (navigation.panel.parentControl) {
-//                event.accepted = true
-//                root.navigation.panel.parentControl.forceActive()
-//            }
         }
     }
 

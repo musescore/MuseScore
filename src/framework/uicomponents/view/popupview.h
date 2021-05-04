@@ -50,7 +50,10 @@ class PopupView : public QObject, public QQmlParserStatus
     Q_PROPERTY(bool isOpened READ isOpened NOTIFY isOpenedChanged)
     Q_PROPERTY(ClosePolicy closePolicy READ closePolicy WRITE setClosePolicy NOTIFY closePolicyChanged)
 
-    Q_PROPERTY(mu::ui::NavigationControl* navigationParentControl
+    //! NOTE We use QObject (instead ui::NavigationControl) for avoid add  UI module dependency at link time.
+    //! Itself not bad for uicomponents, but we have dependency uicomponents - instruments - libmscore - imports - tests
+    //! So, add ui dependency is bad and problems with compilation
+    Q_PROPERTY(QObject * navigationParentControl
                READ navigationParentControl
                WRITE setNavigationParentControl
                NOTIFY navigationParentControlChanged
@@ -94,7 +97,7 @@ public:
     Q_INVOKABLE void toggleOpened();
 
     ClosePolicy closePolicy() const;
-    mu::ui::NavigationControl* navigationParentControl() const;
+    QObject* navigationParentControl() const;
 
     bool isOpened() const;
 
@@ -110,7 +113,7 @@ public slots:
     void setLocalX(qreal x);
     void setLocalY(qreal y);
     void setClosePolicy(ClosePolicy closePolicy);
-    void setNavigationParentControl(mu::ui::NavigationControl* parentNavigationControl);
+    void setNavigationParentControl(QObject* parentNavigationControl);
     void setObjectID(QString objectID);
     void setTitle(QString title);
     void setModal(bool modal);
@@ -123,7 +126,7 @@ signals:
     void xChanged(qreal x);
     void yChanged(qreal y);
     void closePolicyChanged(ClosePolicy closePolicy);
-    void navigationParentControlChanged(mu::ui::NavigationControl* navigationParentControl);
+    void navigationParentControlChanged(QObject* navigationParentControl);
     void objectIDChanged(QString objectID);
     void titleChanged(QString title);
     void modalChanged(bool modal);
@@ -159,7 +162,7 @@ protected:
     QPointF m_localPos;
     QPointF m_globalPos;
     ClosePolicy m_closePolicy = ClosePolicy::CloseOnPressOutsideParent;
-    mu::ui::NavigationControl* m_navigationParentControl = nullptr;
+    QObject* m_navigationParentControl = nullptr;
     QString m_objectID;
     QString m_title;
     bool m_modal = false;

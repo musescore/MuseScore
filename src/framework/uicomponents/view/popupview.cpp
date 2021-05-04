@@ -38,8 +38,8 @@ namespace mu::uicomponents {
 class PopupWindow : public QObject
 {
     INJECT(uicomponents, ui::IMainWindow, mainWindow)
-    public:
-        PopupWindow(QQmlEngine* engine, std::shared_ptr<ui::IUiConfiguration> uiConfiguration, bool isDialogMode);
+public:
+    PopupWindow(QQmlEngine* engine, std::shared_ptr<ui::IUiConfiguration> uiConfiguration, bool isDialogMode);
     ~PopupWindow();
 
     void setContent(QQuickItem* item);
@@ -84,14 +84,13 @@ PopupWindow::PopupWindow(QQmlEngine* engine, std::shared_ptr<ui::IUiConfiguratio
 
         QString bgColorStr = uiConfiguration->currentTheme().values.value(ui::BACKGROUND_PRIMARY_COLOR).toString();
         bgColor = QColor(bgColorStr);
-
     }
     // popup
     else {
         windowFlags = Qt::Dialog                // The most appropriate behavior for us on all platforms
-                | Qt::FramelessWindowHint       // Without border
-                | Qt::NoDropShadowWindowHint    // Without system shadow
-                | Qt::BypassWindowManagerHint;  // Otherwise, it does not work correctly on Gnome (Linux) when resizing
+                      | Qt::FramelessWindowHint // Without border
+                      | Qt::NoDropShadowWindowHint // Without system shadow
+                      | Qt::BypassWindowManagerHint; // Otherwise, it does not work correctly on Gnome (Linux) when resizing
 
         bgColor = QColor(0, 0, 0, 0); // transparent
     }
@@ -375,7 +374,7 @@ void PopupView::open()
     if (!m_navigationParentControl) {
         ui::INavigationControl* ctrl = navigationController()->activeControl();
         //! NOTE At the moment we have only qml navigation controls
-        ui::NavigationControl* qmlCtrl = dynamic_cast<ui::NavigationControl*>(ctrl);
+        QObject* qmlCtrl = dynamic_cast<QObject*>(ctrl);
         setNavigationParentControl(qmlCtrl);
     }
 
@@ -421,12 +420,12 @@ PopupView::ClosePolicy PopupView::closePolicy() const
     return m_closePolicy;
 }
 
-mu::ui::NavigationControl* PopupView::navigationParentControl() const
+QObject* PopupView::navigationParentControl() const
 {
     return m_navigationParentControl;
 }
 
-void PopupView::setNavigationParentControl(mu::ui::NavigationControl* navigationParentControl)
+void PopupView::setNavigationParentControl(QObject* navigationParentControl)
 {
     if (m_navigationParentControl == navigationParentControl) {
         return;
