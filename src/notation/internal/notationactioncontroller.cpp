@@ -177,7 +177,8 @@ void NotationActionController::init()
     dispatcher()->reg(this, "append-vbox", [this]() { appendBox(BoxType::Vertical); });
     dispatcher()->reg(this, "append-textframe", [this]() { appendBox(BoxType::Text); });
 
-    dispatcher()->reg(this, "edit-style", this, &NotationActionController::openPageStyle);
+    dispatcher()->reg(this, "edit-style", this, &NotationActionController::openEditStyleDialog);
+    dispatcher()->reg(this, "page-settings", this, &NotationActionController::openPageSettingsDialog);
     dispatcher()->reg(this, "staff-properties", this, &NotationActionController::openStaffProperties);
     dispatcher()->reg(this, "add-remove-breaks", this, &NotationActionController::openBreaksDialog);
     dispatcher()->reg(this, "edit-info", this, &NotationActionController::openScoreProperties);
@@ -1380,9 +1381,14 @@ void NotationActionController::selectMeasuresCountAndAppend()
     }
 }
 
-void NotationActionController::openPageStyle()
+void NotationActionController::openEditStyleDialog()
 {
     interactive()->open("musescore://notation/style");
+}
+
+void NotationActionController::openPageSettingsDialog()
+{
+    interactive()->open("musescore://notation/pagesettings");
 }
 
 void NotationActionController::openStaffProperties()
