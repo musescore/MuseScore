@@ -21,7 +21,6 @@
  */
 import QtQuick 2.15
 import Qt.labs.platform 1.1 as PLATFORM
-import QtQml 2.2
 
 import MuseScore.Ui 1.0
 import MuseScore.AppShell 1.0
