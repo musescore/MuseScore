@@ -75,7 +75,7 @@ DockWindow {
                 navigation.section: topToolKeyNavSec
                 navigation.order: 1
 
-                currentUri: window.currentPageUri
+                currentUri: root.currentPageUri
 
                 navigation.onActiveChanged: {
                     if (navigation.active) {
