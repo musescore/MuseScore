@@ -37,6 +37,7 @@ public:
     QVariant styleValue(const StyleId& styleId) const override;
     QVariant defaultStyleValue(const StyleId& styleId) const override;
     void setStyleValue(const StyleId& styleId, const QVariant& newValue) override;
+    void resetStyleValue(const StyleId& styleId) override;
 
     bool canApplyToAllParts() const override;
     void applyToAllParts() override;
