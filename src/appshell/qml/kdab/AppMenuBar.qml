@@ -26,7 +26,7 @@ import MuseScore.AppShell 1.0
 
 ListView {
 
-    height: 30
+    height: contentItem.childrenRect.height
     width: contentWidth
     orientation: Qt.Horizontal
 
@@ -41,7 +41,7 @@ ListView {
     }
 
     QtObject {
-        id: prvProperties
+        id: prv
 
         property var showedMenu: null
     }
@@ -56,8 +56,8 @@ ListView {
         text: modelData["title"]
 
         mouseArea.onContainsMouseChanged: {
-            if (!mouseArea.containsMouse || !prvProperties.showedMenu ||
-                prvProperties.showedMenu === menu) {
+            if (!mouseArea.containsMouse || !prv.showedMenu ||
+                prv.showedMenu === menu) {
                 return
             }
 
@@ -69,8 +69,8 @@ ListView {
         }
 
         function toggleMenuOpened() {
-            if (prvProperties.showedMenu && prvProperties.showedMenu !== menu) {
-                prvProperties.showedMenu.close()
+            if (prv.showedMenu && prv.showedMenu !== menu) {
+                prv.showedMenu.close()
             }
 
             menu.toggleOpened()
@@ -82,11 +82,11 @@ ListView {
             model: modelData["subitems"]
 
             onOpened: {
-                prvProperties.showedMenu = menu
+                prv.showedMenu = menu
             }
 
             onClosed: {
-                prvProperties.showedMenu = null
+                prv.showedMenu = null
             }
 
             onHandleAction: {

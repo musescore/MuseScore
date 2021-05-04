@@ -36,9 +36,10 @@ Rectangle {
     signal startSystemMoveRequested()
 
     TapHandler {
+        readonly property int maximizeTapCount: 2
         gesturePolicy: TapHandler.DragThreshold
         onTapped: {
-            if (tapCount === 2) {
+            if (tapCount === maximizeTapCount) {
                 toggleWindowMaximizedRequested()
             }
         }

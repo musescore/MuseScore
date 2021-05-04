@@ -55,6 +55,8 @@ AppWindow {
             if (mouse.x < borderOffset && mouse.y >= height - borderOffset) return Qt.SizeBDiagCursor
             if (mouse.x < borderOffset || mouse.x >= width - borderOffset) return Qt.SizeHorCursor
             if (mouse.y < borderOffset || mouse.y >= height - borderOffset) return Qt.SizeVerCursor
+
+            return Qt.ArrowCursor
         }
     }
 
@@ -79,7 +81,7 @@ AppWindow {
         }
     }
 
-    Rectangle {
+    Item {
         id: content
 
         anchors.fill: parent
