@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Extensions 1.0
 import MuseScore.Languages 1.0
@@ -33,6 +34,20 @@ FocusScope {
 
     property var color: ui.theme.backgroundSecondaryColor
     property string item: ""
+
+    signal requestActiveFocus()
+
+    NavigationSection {
+        id: navSec
+        name: "Addons"
+        enabled: root.visible
+        order: 3
+        onActiveChanged: {
+            if (active) {
+                root.requestActiveFocus()
+            }
+        }
+    }
 
     onItemChanged: {
         if (!Boolean(root.item)) {
@@ -45,13 +60,6 @@ FocusScope {
     Rectangle {
         anchors.fill: parent
         color: root.color
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                forceActiveFocus()
-            }
-        }
     }
 
     RowLayout {
@@ -62,6 +70,13 @@ FocusScope {
         anchors.right: parent.right
 
         spacing: 12
+
+        NavigationPanel {
+            id: navSearchPanel
+            name: "AddonsSearch"
+            section: navSec
+            order: 1
+        }
 
         StyledTextLabel {
             id: addonsLabel
@@ -82,6 +97,10 @@ FocusScope {
             SearchField {
                 id: searchField
 
+                navigation.name: "AddonsSearch"
+                navigation.panel: navSearchPanel
+                navigation.order: 1
+
                 onSearchTextChanged: {
                     categoryComboBox.selectedCategory = ""
                 }
@@ -91,6 +110,10 @@ FocusScope {
                 id: categoryComboBox
 
                 width: searchField.width
+
+                navigation.name: "CategoryComboBox"
+                navigation.panel: navSearchPanel
+                navigation.order: 2
 
                 textRoleName: "text"
                 valueRoleName: "value"
@@ -134,7 +157,7 @@ FocusScope {
         anchors.topMargin: 54
         anchors.horizontalCenter: parent.horizontalCenter
 
-        contentHeight: 28
+        contentHeight: 32
         spacing: 0
 
         property bool canFilterByCategories: bar.currentIndex === 0 || bar.currentIndex === 1
@@ -163,23 +186,51 @@ FocusScope {
             currentIndex = pageIndex(pageName)
         }
 
+        NavigationPanel {
+            id: navTabPanel
+            name: "AddonsTabs"
+            section: navSec
+            order: 2
+
+            onNavigationEvent: {
+                if (event.type === NavigationEvent.AboutActive) {
+                    event.setData("controlName", bar.currentItem.navigation.name)
+                }
+            }
+        }
+
         StyledTabButton {
             text: qsTrc("appshell", "Plugins")
             sideMargin: 22
             isCurrent: bar.currentIndex === 0
             backgroundColor: root.color
+
+            navigation.name: "Plugins"
+            navigation.panel: navTabPanel
+            navigation.order: 1
+            onNavigationTriggered: bar.currentIndex = 0
         }
         StyledTabButton {
             text: qsTrc("appshell", "Extensions")
             sideMargin: 22
             isCurrent: bar.currentIndex === 1
             backgroundColor: root.color
+
+            navigation.name: "Extensions"
+            navigation.panel: navTabPanel
+            navigation.order: 2
+            onNavigationTriggered: bar.currentIndex = 1
         }
         StyledTabButton {
             text: qsTrc("appshell", "Languages")
             sideMargin: 22
             isCurrent: bar.currentIndex === 2
             backgroundColor: root.color
+
+            navigation.name: "Languages"
+            navigation.panel: navTabPanel
+            navigation.order: 3
+            onNavigationTriggered: bar.currentIndex = 2
         }
     }
 
@@ -209,7 +260,8 @@ FocusScope {
 
         LanguagesPage {
             id: languagesComp
-
+            navigation.section: navSec
+            navigation.order: 3
             search: searchField.searchText
             backgroundColor: root.color
         }

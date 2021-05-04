@@ -19,9 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Controls 2.2
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 TabButton {
@@ -31,7 +32,44 @@ TabButton {
     property bool isCurrent: false
     property string backgroundColor: ui.theme.backgroundPrimaryColor
 
+    property alias navigation: navCtrl
+
+    signal navigationTriggered()
+
     width: implicitWidth + sideMargin * 2 - 8
+
+    onIsCurrentChanged: {
+        if (root.isCurrent) {
+            root.ensureActiveFocus()
+        }
+    }
+
+    onPressed: {
+        root.ensureActiveFocus()
+    }
+
+    function ensureActiveFocus() {
+        if (!root.activeFocus) {
+            root.forceActiveFocus()
+        }
+
+        if (!navCtrl.active) {
+            navCtrl.forceActive()
+        }
+    }
+
+
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName != "" ? root.objectName : "TabButton"
+        onActiveChanged: {
+            if (active) {
+                root.ensureActiveFocus()
+                root.navigationTriggered()
+            }
+        }
+        onTriggered: root.navigationTriggered()
+    }
 
     contentItem: StyledTextLabel {
         id: textLabel
@@ -41,9 +79,12 @@ TabButton {
     }
 
     background: Rectangle {
-        implicitHeight: 28
+        implicitHeight: 32
 
         color: root.backgroundColor
+
+        border.width: navCtrl.active ? 2 : 0
+        border.color: ui.theme.focusColor
 
         Rectangle {
             id: selectedRect
@@ -53,6 +94,7 @@ TabButton {
             anchors.right: parent.right
             anchors.rightMargin: sideMargin
             anchors.bottom: parent.bottom
+            anchors.bottomMargin: 4
 
             height: 2
 

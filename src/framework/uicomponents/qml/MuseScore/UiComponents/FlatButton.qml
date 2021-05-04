@@ -32,9 +32,9 @@ FocusableControl {
     property alias iconFont: buttonIcon.font
     property alias textFont: textLabel.font
 
-    property color normalStateColor: privateProperties.defaultColor
-    property color hoveredStateColor: privateProperties.defaultColor
-    property color pressedStateColor: privateProperties.defaultColor
+    property color normalStateColor: prv.defaultColor
+    property color hoveredStateColor: prv.defaultColor
+    property color pressedStateColor: prv.defaultColor
     property bool accentButton: false
 
     property int orientation: Qt.Vertical
@@ -45,14 +45,14 @@ FocusableControl {
     signal pressAndHold()
 
     QtObject {
-        id: privateProperties
+        id: prv
 
         property color defaultColor: accentButton ? ui.theme.accentColor : ui.theme.buttonColor
         property bool isVertical: orientation === Qt.Vertical
     }
 
     height: contentWrapper.height + 14
-    width: (Boolean(text) ? Math.max(contentWrapper.width + 32, privateProperties.isVertical ? 132 : 0) : contentWrapper.width + 16)
+    width: (Boolean(text) ? Math.max(contentWrapper.width + 32, prv.isVertical ? 132 : 0) : contentWrapper.width + 16)
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
@@ -90,8 +90,8 @@ FocusableControl {
         anchors.verticalCenter: parent ? parent.verticalCenter : undefined
         anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
 
-        height: !privateProperties.isVertical ? Math.max(buttonIcon.height, textLabel.height) : buttonIcon.height + textLabel.height + spacing
-        width: privateProperties.isVertical ? Math.max(textLabel.width, buttonIcon.width) : buttonIcon.width + textLabel.width + spacing
+        height: !prv.isVertical ? Math.max(buttonIcon.height, textLabel.height) : buttonIcon.height + textLabel.height + spacing
+        width: prv.isVertical ? Math.max(textLabel.width, buttonIcon.width) : buttonIcon.width + textLabel.width + spacing
 
         StyledIconLabel {
             id: buttonIcon
@@ -108,7 +108,7 @@ FocusableControl {
 
         states: [
             State {
-                when: !privateProperties.isVertical
+                when: !prv.isVertical
                 AnchorChanges {
                     target: buttonIcon
                     anchors.left: parent.left
@@ -125,7 +125,7 @@ FocusableControl {
                 }
             },
             State {
-                when: privateProperties.isVertical
+                when: prv.isVertical
                 AnchorChanges {
                     target: buttonIcon
                     anchors.top: parent.top

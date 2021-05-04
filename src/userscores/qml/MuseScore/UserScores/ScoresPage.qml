@@ -40,34 +40,10 @@ FocusScope {
     }
 
     NavigationSection {
-        id: navSearchSec
-        name: "HomeScoresSearch"
-        enabled: root.visible
-        order: 3
-        onActiveChanged: {
-            if (active) {
-                root.requestActiveFocus()
-            }
-        }
-    }
-
-    NavigationSection {
-        id: navScoresSec
+        id: navSec
         name: "RecentScores"
         enabled: root.visible
-        order: 4
-        onActiveChanged: {
-            if (active) {
-                root.requestActiveFocus()
-            }
-        }
-    }
-
-    NavigationSection {
-        id: navBottomSec
-        name: "ScoresBottom"
-        enabled: root.visible
-        order: 5
+        order: 3
         onActiveChanged: {
             if (active) {
                 root.requestActiveFocus()
@@ -108,7 +84,7 @@ FocusScope {
         NavigationPanel {
             id: navSearchPanel
             name: "HomeScoresSearch"
-            section: navSearchSec
+            section: navSec
             order: 1
         }
 
@@ -166,8 +142,8 @@ FocusScope {
         anchors.rightMargin: prv.sideMargin - view.sideMargin
         anchors.bottom: buttonsPanel.top
 
-        navigation.section: navScoresSec
-        navigation.order: 1
+        navigation.section: navSec
+        navigation.order: 2
 
         backgroundColor: background.color
 
@@ -184,14 +160,10 @@ FocusScope {
         }
 
         onAddNewScoreRequested: {
-            forceActiveFocus()
-
             recentScoresModel.addNewScore()
         }
 
         onOpenScoreRequested: {
-            forceActiveFocus()
-
             recentScoresModel.openRecentScore(scorePath)
         }
     }
@@ -209,9 +181,9 @@ FocusScope {
         NavigationPanel {
             id: navBottomPanel
             name: "HomeScoresSearch"
-            section: navBottomSec
+            section: navSec
             direction: NavigationPanel.Horizontal
-            order: 1
+            order: 3
         }
 
         Row {
