@@ -25,11 +25,11 @@ import QtQuick.Layouts 1.12
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-QmlDialog {
+StyledDialogView {
     id: root
 
-    width: 534
-    height: 146
+    contentWidth: 534
+    contentHeight: 146
 
     modal: true
 

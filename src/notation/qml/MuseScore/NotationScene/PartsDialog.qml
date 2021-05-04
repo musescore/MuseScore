@@ -28,15 +28,15 @@ import MuseScore.NotationScene 1.0
 
 import "internal"
 
-QmlDialog {
+StyledDialogView {
     id: root
 
-    width: 664
-    height: 558
+    title: qsTrc("notation", "Parts")
+
+    contentWidth: 664
+    contentHeight: 558
 
     modal: true
-
-    title: qsTrc("notation", "Parts")
 
     Rectangle {
         id: content

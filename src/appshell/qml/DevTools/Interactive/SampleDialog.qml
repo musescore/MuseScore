@@ -23,15 +23,15 @@ import QtQuick 2.7
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-QmlDialog {
+StyledDialogView {
 
     id: root
 
     property var color: "#444444"
     property bool isApplyColor: false
 
-    width: 400
-    height: 400
+    contentWidth: 400
+    contentHeight: 400
 
     title: "Sample dialog"
 
