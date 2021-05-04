@@ -26,11 +26,11 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Workspace 1.0
 
-QmlDialog {
+StyledDialogView {
     id: root
 
-    width: 552
-    height: 360
+    contentWidth: 552
+    contentHeight: 360
 
     Rectangle {
         anchors.fill: parent

@@ -29,15 +29,15 @@ import MuseScore.UserScores 1.0
 
 import "internal/Export"
 
-QmlDialog {
+StyledDialogView {
     id: root
 
-    width: 756
-    height: 386
+    title: qsTrc("userscores", "Export")
+
+    contentWidth: 756
+    contentHeight: 386
 
     modal: true
-
-    title: qsTrc("userscores", "Export")
 
     Rectangle {
         id: content

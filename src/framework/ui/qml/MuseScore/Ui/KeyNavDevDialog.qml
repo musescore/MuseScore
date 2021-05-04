@@ -21,13 +21,15 @@
  */
 import QtQuick 2.15
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
-QmlDialog {
+StyledDialogView {
     id: root
 
     title: "KeyNavDev"
-    height: 900
-    width: 600
+
+    contentHeight: 900
+    contentWidth: 600
 
     KeyNavDevPanel {
         anchors.fill: parent

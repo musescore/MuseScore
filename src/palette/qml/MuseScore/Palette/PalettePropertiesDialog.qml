@@ -25,13 +25,13 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Palette 1.0
 
-QmlDialog {
+StyledDialogView {
     id: root
 
-    width: 280
-    height: 370
-
     title: qsTrc("palette", "Palette Properties")
+
+    contentWidth: 280
+    contentHeight: 370
 
     property var properties
 

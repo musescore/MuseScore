@@ -28,11 +28,11 @@ import MuseScore.Workspace 1.0
 
 import "internal"
 
-QmlDialog {
+StyledDialogView {
     id: root
 
-    width: 552
-    height: 286
+    contentWidth: 552
+    contentHeight: 286
 
     Rectangle {
         id: content
