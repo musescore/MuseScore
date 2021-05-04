@@ -126,7 +126,9 @@ DockWindow {
                 }
 
                 onSelected: {
-                    api.launcher.open(uri)
+                    if (uri !== dockWindow.currentPageUri) {
+                        api.launcher.open(uri)
+                    }
                 }
             }
         },
