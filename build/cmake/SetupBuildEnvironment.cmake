@@ -101,7 +101,6 @@ else() #Release
 
     add_definitions(-DNDEBUG)
     add_definitions(-DQT_NO_DEBUG)
-    add_definitions(-DQT_NO_DEBUG_OUTPUT)
 
 endif()
 

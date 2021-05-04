@@ -227,11 +227,11 @@ add_subdirectory(src)
 
 if (KDAB_DOCKWIDGETS)
     if (NOT BUILD_SHARED_LIBS)
-        set(KDDockWidgets_STATIC ON)
+        set(KDDockWidgets_STATIC ON CACHE BOOL "Build static versions of the libraries" FORCE)
     endif(NOT BUILD_SHARED_LIBS)
 
-    set(KDDockWidgets_QTQUICK ON)
-    set(KDDockWidgets_EXAMPLES OFF)
+    set(KDDockWidgets_QTQUICK ON CACHE BOOL "Build for QtQuick instead of QtWidgets" FORCE)
+    set(KDDockWidgets_EXAMPLES OFF CACHE BOOL "Build the examples" FORCE)
     add_subdirectory(thirdparty/KDDockWidgets)
 endif(KDAB_DOCKWIDGETS)
 
