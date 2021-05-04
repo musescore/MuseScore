@@ -45,8 +45,8 @@ inline void writePropertiesToObject(const DockProperties& properties, QObject& o
 {
     QObject* propertiesObj = new QObject(&obj);
     propertiesObj->setObjectName("properties");
-    propertiesObj->setProperty("dockType", static_cast<int>(properties.type));
-    propertiesObj->setProperty("allowedAreas", static_cast<int>(properties.allowedAreas));
+    propertiesObj->setProperty("dockType", QVariant::fromValue(static_cast<int>(properties.type)));
+    propertiesObj->setProperty("allowedAreas", QVariant::fromValue(static_cast<int>(properties.allowedAreas)));
 }
 
 inline DockProperties readPropertiesFromObject(QObject* obj)
