@@ -24,6 +24,10 @@
 #include "config.h"
 #include "settings.h"
 
+using namespace mu::appshell;
+using namespace mu::notation;
+using namespace mu::framework;
+
 static const std::string module_name("appshell");
 
 static const Settings::Key STARTUP_SESSION_TYPE(module_name, "application/startup/sessionStart");
@@ -45,10 +49,6 @@ static const Settings::Key NOTATION_NAVIGATOR_VISIBLE_KEY(module_name, "ui/appli
 static const Settings::Key NOTATION_STATUSBAR_VISIBLE_KEY(module_name, "ui/application/showStatusBar");
 static const Settings::Key SPLASH_SCREEN_VISIBLE_KEY(module_name, "ui/application/startup/showSplashScreen");
 static const Settings::Key TOURS_VISIBLE_KEY(module_name, "ui/application/startup/showTours");
-
-using namespace mu::appshell;
-using namespace mu::notation;
-using namespace mu::framework;
 
 void AppShellConfiguration::init()
 {

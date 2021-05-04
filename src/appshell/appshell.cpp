@@ -22,6 +22,8 @@
 
 #include "appshell.h"
 
+#include "config.h"
+
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
@@ -36,7 +38,6 @@
 #include "modularity/ioc.h"
 #include "ui/internal/uiengine.h"
 #include "version.h"
-#include "config.h"
 
 #include "commandlinecontroller.h"
 
