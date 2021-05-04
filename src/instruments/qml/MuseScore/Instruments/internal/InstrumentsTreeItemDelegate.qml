@@ -21,7 +21,6 @@
  */
 import QtQuick 2.9
 import QtQuick.Layouts 1.3
-import QtGraphicalEffects 1.0
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -188,14 +187,11 @@ Item {
         ]
     }
 
-    DropShadow {
+    StyledDropShadow {
         id: shadow
 
         anchors.fill: parent
         source: background
-        color: "#75000000"
-        verticalOffset: 4
-        samples: 30
         visible: false
     }
 

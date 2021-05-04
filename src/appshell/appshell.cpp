@@ -149,7 +149,7 @@ int AppShell::run(int argc, char** argv)
 
 #ifdef KDAB_DOCKWIDGETS
         dock::DockSetup::setup(engine);
-        const QString mainQmlFile = "/kdab/Window.qml";
+        const QString mainQmlFile = "/kdab/Main.qml";
 #elif Q_OS_WASM
         const QString mainQmlFile = "/Main.wasm.qml";
 #else

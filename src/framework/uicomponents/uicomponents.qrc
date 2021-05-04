@@ -49,5 +49,6 @@
         <file>qml/MuseScore/UiComponents/FocusableControl.qml</file>
         <file>qml/MuseScore/UiComponents/StyledMenuLoader.qml</file>
         <file>qml/MuseScore/UiComponents/TabItem.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledDropShadow.qml</file>
     </qresource>
 </RCC>

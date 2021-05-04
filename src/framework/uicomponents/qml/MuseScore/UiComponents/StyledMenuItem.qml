@@ -211,12 +211,15 @@ ListItemBlank {
         if (isHovered) {
             prv.showSubMenu()
         } else {
-            var mouseOnShowedSubMenu = mapToItem(prv.showedSubMenu.contentItem, mouseX, mouseY)
+            var mouseGlogalPos = mapToGlobal(Qt.point(mouseX, mouseY))
+            var showedSubMenuGlobalPos = prv.showedSubMenu.contentItem.mapToGlobal(0, 0)
+
             var eps = 8
-            var subMenuWidth = prv.showedSubMenu.x + prv.showedSubMenu.width
-            var subMenuHeight = prv.showedSubMenu.y + prv.showedSubMenu.height
-            var isHoveredOnShowedSubMenu = (0 < mouseOnShowedSubMenu.x + eps && mouseOnShowedSubMenu.x - eps < subMenuWidth)
-                    && (0 < mouseOnShowedSubMenu.y + eps && mouseOnShowedSubMenu.y - eps < subMenuHeight)
+            var subMenuWidth = prv.showedSubMenu.width
+            var subMenuHeight = prv.showedSubMenu.height
+
+            var isHoveredOnShowedSubMenu = (showedSubMenuGlobalPos.x < mouseGlogalPos.x + eps && mouseGlogalPos.x - eps < showedSubMenuGlobalPos.x + subMenuWidth)
+                    && (showedSubMenuGlobalPos.y < mouseGlogalPos.y + eps && mouseGlogalPos.y - eps < showedSubMenuGlobalPos.y + subMenuHeight)
 
             if (isHoveredOnShowedSubMenu) {
                 return
