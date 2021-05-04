@@ -41,7 +41,7 @@ class AbstractInspectorModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(inspector, mu::context::IGlobalContext, context)
+    INJECT(inspector, context::IGlobalContext, context)
     INJECT(inspector, actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(QString title READ title CONSTANT)

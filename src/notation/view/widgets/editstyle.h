@@ -29,32 +29,6 @@
 #include "iinteractive.h"
 
 namespace mu::notation {
-class Score;
-class EditStyle;
-
-//---------------------------------------------------------
-//   StyleWidget
-//---------------------------------------------------------
-
-struct StyleWidget {
-    StyleId idx;
-    bool showPercent;
-    QObject* widget;
-    QToolButton* reset;
-};
-
-//---------------------------------------------------------
-//   EditStylePage
-///   This is a type for a pointer to any QWidget that is a member of EditStyle.
-///   It's used to create static references to the pointers to pages.
-//---------------------------------------------------------
-
-typedef QWidget* EditStyle::* EditStylePage;
-
-//---------------------------------------------------------
-//   EditStyle
-//---------------------------------------------------------
-
 class EditStyle : public QDialog, private Ui::EditStyleBase
 {
     Q_OBJECT
@@ -63,6 +37,19 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
     INJECT(notation, mu::notation::INotationConfiguration, configuration)
     INJECT(notation, mu::framework::IInteractive, interactive)
 
+public:
+    EditStyle(QWidget* = nullptr);
+    EditStyle(const EditStyle&);
+
+    void setPage(int idx);
+    void gotoElement(Element* e);
+    static bool elementHasPage(Element* e);
+
+public slots:
+    void accept();
+    void reject();
+
+private:
     void showEvent(QShowEvent*);
     void hideEvent(QHideEvent*);
     void changeEvent(QEvent*);
@@ -70,6 +57,19 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
     void retranslate();
     void setHeaderFooterToolTip();
     void adjustPagesStackSize(int currentPageIndex);
+
+    /// EditStylePage
+    /// This is a type for a pointer to any QWidget that is a member of EditStyle.
+    /// It's used to create static references to the pointers to pages.
+    typedef QWidget* EditStyle::* EditStylePage;
+    static EditStylePage pageForElement(Element*);
+
+    struct StyleWidget {
+        StyleId idx;
+        bool showPercent;
+        QObject* widget;
+        QToolButton* reset;
+    };
 
     QVector<StyleWidget> styleWidgets;
     const StyleWidget& styleWidget(StyleId id) const;
@@ -89,9 +89,6 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
     bool hasDefaultStyleValue(StyleId id) const;
     void setStyleValue(StyleId id, const QVariant& value);
 
-    static EditStylePage pageForElement(Element*);
-
-private:
     int numberOfPage;
     int pageListMap[50];
 
@@ -127,18 +124,6 @@ private slots:
     void stringToArray(std::string, int*);
     std::string arrayToString(int*);
     std::string ConsecutiveStr(int);
-
-public:
-    EditStyle(QWidget* = nullptr);
-    EditStyle(const EditStyle&);
-
-    void setPage(int idx);
-    void gotoElement(Element* e);
-    static bool elementHasPage(Element* e);
-
-public slots:
-    void accept();
-    void reject();
 };
 }
 

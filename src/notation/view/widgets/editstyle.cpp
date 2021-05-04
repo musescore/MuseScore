@@ -969,7 +969,7 @@ void EditStyle::adjustPagesStackSize(int currentPageIndex)
 ///   menu for every possible element on the score.
 //---------------------------------------------------------
 
-EditStylePage EditStyle::pageForElement(Element* e)
+EditStyle::EditStylePage EditStyle::pageForElement(Element* e)
 {
     switch (e->type()) {
     case ElementType::SCORE:
@@ -1770,7 +1770,7 @@ void EditStyle::systemMinDistanceValueChanged(double val)
 //   styleWidget
 //---------------------------------------------------------
 
-const StyleWidget& EditStyle::styleWidget(StyleId idx) const
+const EditStyle::StyleWidget& EditStyle::styleWidget(StyleId idx) const
 {
     for (const StyleWidget& sw : styleWidgets) {
         if (sw.idx == idx) {
