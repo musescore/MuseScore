@@ -50,6 +50,7 @@ endif (BUILD_TELEMETRY_MODULE)
 if (BUILD_UNIT_TESTS)
     add_subdirectory(global/tests)
     add_subdirectory(system/tests)
+    add_subdirectory(ui/tests)
 endif(BUILD_UNIT_TESTS)
 
 if (BUILD_VST)
