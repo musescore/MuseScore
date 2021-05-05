@@ -41,7 +41,7 @@ public:
     explicit NavigationPanel(QObject* parent = nullptr);
     ~NavigationPanel() override;
 
-    //! NOTE Please sync with IKeyNavigationSubSection::Direction
+    //! NOTE Please sync with INavigationPanel::Direction
     enum QmlDirection {
         Horizontal = 0,
         Vertical,

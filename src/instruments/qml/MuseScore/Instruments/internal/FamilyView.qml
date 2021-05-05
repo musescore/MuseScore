@@ -33,17 +33,19 @@ Item {
     property alias families: familiesBox.model
     property var groups: null
 
+    property alias navigation: navPanel
+
     signal familySelected(string familyId)
     signal groupSelected(string groupId)
 
     QtObject {
-        id: privateProperties
+        id: prv
 
         property int currentGroupIndex: -1
     }
 
     function clearSelection() {
-        privateProperties.currentGroupIndex = -1
+        prv.currentGroupIndex = -1
     }
 
     function setFamily(familyId) {
@@ -53,11 +55,18 @@ Item {
     function focusGroup(groupId) {
         for (var i in root.groups) {
             if (root.groups[i].id === groupId) {
-                privateProperties.currentGroupIndex = i
+                prv.currentGroupIndex = i
                 groupsView.positionViewAtIndex(groupsView.currentGroupIndex, ListView.Beginning)
                 return
             }
         }
+    }
+
+    NavigationPanel {
+        id: navPanel
+        name: "FamilyView"
+        direction: NavigationPanel.Vertical
+        enabled: root.visible
     }
 
     StyledTextLabel {
@@ -77,6 +86,10 @@ Item {
         anchors.topMargin: 16
         anchors.left: parent.left
         anchors.right: parent.right
+
+        navigation.name: "familiesBox"
+        navigation.panel: navPanel
+        navigation.row: 1
 
         textRoleName: "name"
         valueRoleName: "id"
@@ -107,7 +120,15 @@ Item {
         }
 
         delegate: ListItemBlank {
-            isSelected: privateProperties.currentGroupIndex === index
+            id: item
+
+            isSelected: prv.currentGroupIndex === index
+
+            navigation.name: modelData.name
+            navigation.panel: navPanel
+            navigation.row: 2 + model.index
+
+            onNavigationActived: item.clicked()
 
             StyledTextLabel {
                 anchors.fill: parent
@@ -119,7 +140,7 @@ Item {
             }
 
             onClicked: {
-                privateProperties.currentGroupIndex = index
+                prv.currentGroupIndex = index
                 root.groupSelected(modelData.id)
             }
         }

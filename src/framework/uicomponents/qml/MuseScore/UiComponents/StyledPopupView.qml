@@ -93,8 +93,8 @@ PopupView {
 
     onClosed: {
         rootContainer.focus = false
-        if (root.isDoActiveParentOnClose && keynavPanel.parentControl) {
-            keynavPanel.parentControl.forceActive()
+        if (root.isDoActiveParentOnClose && root.navigationParentControl) {
+            root.navigationParentControl.forceActive()
         }
     }
 

@@ -39,11 +39,20 @@ Item {
     property bool isInstrumentSelected: currentInstrumentIndex != -1
     property int currentInstrumentIndex: -1
 
+    property alias navigation: navPanel
+
     signal unselectInstrumentRequested(string id)
     signal orderChanged(string id)
 
     function scrollViewToEnd() {
         instrumentsView.positionViewAtEnd()
+    }
+
+    NavigationPanel {
+        id: navPanel
+        name: "SelectedInstrumentsView"
+        direction: NavigationPanel.Vertical
+        enabled: root.visible
     }
 
     StyledTextLabel {
@@ -67,6 +76,10 @@ Item {
         StyledComboBox {
             Layout.fillWidth: true
 
+            navigation.name: "Orders"
+            navigation.panel: navPanel
+            navigation.row: 1
+
             textRoleName: "text"
             valueRoleName: "value"
 
@@ -89,12 +102,20 @@ Item {
         FlatButton {
             Layout.preferredWidth: width
 
+            navigation.name: "Make soloist"
+            navigation.panel: navPanel
+            navigation.row: 2
+
             enabled: isInstrumentSelected
             text: qsTrc("instruments", "Make soloist")
         }
 
         FlatButton {
             Layout.preferredWidth: width
+
+            navigation.name: "Delete"
+            navigation.panel: navPanel
+            navigation.row: 3
 
             enabled: isInstrumentSelected
             icon: IconCode.DELETE_TANK
@@ -127,7 +148,14 @@ Item {
         }
 
         delegate: ListItemBlank {
+            id: item
+
             isSelected: root.currentInstrumentIndex === index
+
+            navigation.name: modelData.name
+            navigation.panel: navPanel
+            navigation.row: 4 + model.index
+            onNavigationActived: item.clicked()
 
             StyledTextLabel {
                 anchors.left: parent.left

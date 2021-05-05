@@ -134,6 +134,26 @@ void NavigationSection::removePanel(NavigationPanel* panel)
     }
 }
 
+INavigationSection::Type NavigationSection::type() const
+{
+    return static_cast<INavigationSection::Type>(m_type);
+}
+
+NavigationSection::QmlType NavigationSection::type_property() const
+{
+    return m_type;
+}
+
+void NavigationSection::setType(QmlType type)
+{
+    if (m_type == type) {
+        return;
+    }
+
+    m_type = type;
+    emit typeChanged(m_type);
+}
+
 const std::set<INavigationPanel*>& NavigationSection::panels() const
 {
     return m_panels;
