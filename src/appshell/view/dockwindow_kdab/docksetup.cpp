@@ -40,6 +40,7 @@
 #include "thirdparty/KDDockWidgets/src/Config.h"
 #include "thirdparty/KDDockWidgets/src/DockWidgetBase.h"
 #include "thirdparty/KDDockWidgets/src/FrameworkWidgetFactory.h"
+#include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
 
 #include <QQmlEngine>
 
@@ -103,6 +104,10 @@ void DockSetup::setup(QQmlEngine* engine)
                  | KDDockWidgets::Config::Flag_HideTitleBarWhenTabsVisible;
 
     KDDockWidgets::Config::self().setFlags(flags);
+
+    KDDockWidgets::FloatingWindow::s_windowFlagsOverride = Qt::Tool
+            | Qt::NoDropShadowWindowHint
+            | Qt::FramelessWindowHint;
 
     QSize minDockSize = KDDockWidgets::Config::self().absoluteWidgetMinSize();
     minDockSize.setHeight(30);
