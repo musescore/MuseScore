@@ -31,7 +31,7 @@ import "internal"
 Rectangle {
     id: root
 
-    property string initiallySelectedInstrumentIds: ""
+    property string initiallySelectedPartIds: ""
     property bool hasSelectedInstruments: instrumentsModel.selectedInstruments.length > 0
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
@@ -56,7 +56,7 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        instrumentsModel.load(canSelectMultipleInstruments, currentInstrumentId, initiallySelectedInstrumentIds)
+        instrumentsModel.load(canSelectMultipleInstruments, currentInstrumentId, initiallySelectedPartIds)
 
         var groupId = instrumentsModel.selectedGroupId()
         familyView.focusGroup(groupId)

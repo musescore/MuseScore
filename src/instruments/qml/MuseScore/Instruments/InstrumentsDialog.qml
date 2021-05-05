@@ -31,7 +31,7 @@ StyledDialogView {
 
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
-    property string initiallySelectedInstrumentIds: ""
+    property string initiallySelectedPartIds: ""
 
     contentHeight: 500
     contentWidth: root.canSelectMultipleInstruments ? 900 : 600
@@ -48,7 +48,7 @@ StyledDialogView {
 
             Layout.fillWidth: true
             Layout.fillHeight: true
-            initiallySelectedInstrumentIds: root.initiallySelectedInstrumentIds
+            initiallySelectedPartIds: root.initiallySelectedPartIds
             canSelectMultipleInstruments: root.canSelectMultipleInstruments
             currentInstrumentId: root.currentInstrumentId
         }

@@ -35,7 +35,7 @@ class InstrumentListModel : public QObject, public async::Asyncable
     Q_OBJECT
 
     INJECT(instruments, IInstrumentsRepository, repository)
-    INJECT(instruments, context::IGlobalContext, context)
+    INJECT(instruments, context::IGlobalContext, globalContext)
 
     Q_PROPERTY(QVariantList families READ families NOTIFY dataChanged)
     Q_PROPERTY(QVariantList groups READ groups NOTIFY dataChanged)
@@ -45,7 +45,7 @@ class InstrumentListModel : public QObject, public async::Asyncable
 public:
     InstrumentListModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void load(bool canSelectMultipleInstruments, const QString& currentInstrumentId, const QString& selectedInstrumentIds);
+    Q_INVOKABLE void load(bool canSelectMultipleInstruments, const QString& currentInstrumentId, const QString& selectedPartIds);
 
     QVariantList families() const;
     QVariantList groups() const;
@@ -79,7 +79,8 @@ signals:
     void selectedInstrumentsChanged();
 
 private:
-    void initSelectedInstruments(const notation::IDList& selectedInstrumentIds);
+    void initSelectedInstruments(const notation::IDList& selectedPartIds);
+    notation::INotationPartsPtr notationParts() const;
 
     void sortInstruments(QVariantList& instruments) const;
 
@@ -109,6 +110,8 @@ private:
     struct SelectedInstrumentInfo
     {
         QString id;
+        QString partId;
+        QString partName;
         Transposition transposition;
         Instrument config;
 
