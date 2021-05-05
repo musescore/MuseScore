@@ -41,7 +41,7 @@ private:
     RetVal<InstrumentList> selectInstruments(const QStringList& params) const;
 
     notation::INotationPartsPtr notationParts() const;
-    notation::IDList partsInstrumentIds() const;
+    notation::IDList partsIds() const;
 };
 }
 

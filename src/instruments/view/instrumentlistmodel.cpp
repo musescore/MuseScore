@@ -43,7 +43,7 @@ InstrumentListModel::InstrumentListModel(QObject* parent)
 }
 
 void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString& currentInstrumentId,
-                               const QString& selectedInstrumentIds)
+                               const QString& selectedPartIds)
 {
     RetValCh<InstrumentsMeta> instrumentsMeta = repository()->instrumentsMeta();
     if (!instrumentsMeta.ret) {
@@ -59,7 +59,7 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     m_canSelectMultipleInstruments = canSelectMultipleInstruments;
     setInstrumentsMeta(instrumentsMeta.val);
 
-    initSelectedInstruments(selectedInstrumentIds.split(','));
+    initSelectedInstruments(selectedPartIds.split(','));
 
     if (!currentInstrumentId.isEmpty()) {
         InstrumentTemplate instrumentTemplate = this->instrumentTemplate(currentInstrumentId);
@@ -67,22 +67,50 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     }
 }
 
-void InstrumentListModel::initSelectedInstruments(const IDList& selectedInstrumentIds)
+void InstrumentListModel::initSelectedInstruments(const IDList& selectedPartIds)
 {
-    for (const ID& instrumentId: selectedInstrumentIds) {
-        if (instrumentId.isEmpty()) {
+    auto _notationParts = notationParts();
+    if (!_notationParts) {
+        return;
+    }
+
+    QMap<QString, const Part*> partMap;
+    for (const Part* part: _notationParts->partList()) {
+        if (selectedPartIds.contains(part->id())) {
+            partMap.insert(part->id(), part);
+        }
+    }
+
+    for (const ID& partId: selectedPartIds) {
+        if (!partMap.contains(partId)) {
             continue;
         }
+        for (auto instrument: _notationParts->instrumentList(partId)) {
+            if (partMap[partId]->isDoublingInstrument(instrument.id)) {
+                continue;
+            }
+            InstrumentTemplate templ = instrumentTemplate(instrument.id);
 
-        InstrumentTemplate templ = instrumentTemplate(instrumentId);
-
-        SelectedInstrumentInfo info;
-        info.id = templ.id;
-        info.config = templ.instrument;
-        m_selectedInstruments << info;
+            SelectedInstrumentInfo info;
+            info.id = templ.id;
+            info.partId = partId;
+            info.partName = partMap[partId]->partName();
+            info.config = templ.instrument;
+            m_selectedInstruments << info;
+        }
     }
 
     emit selectedInstrumentsChanged();
+}
+
+INotationPartsPtr InstrumentListModel::notationParts() const
+{
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return nullptr;
+    }
+
+    return notation->parts();
 }
 
 QVariantList InstrumentListModel::families() const
@@ -248,6 +276,8 @@ void InstrumentListModel::selectInstrument(const QString& instrumentId, const QS
 
     SelectedInstrumentInfo info;
     info.id = codeKey;
+    info.partId = QString();
+    info.partName = QString();
     info.transposition = templ.transposition;
     info.config = templ.instrument;
 
@@ -318,14 +348,17 @@ QVariantList InstrumentListModel::selectedInstruments() const
 
     for (const SelectedInstrumentInfo& instrument: m_selectedInstruments) {
         QString instrumentId = instrument.id;
-        QString instrumentName = instrument.config.name;
+        QString instrumentName = instrument.partName;
 
-        Transposition _transposition = instrument.transposition;
-        if (_transposition.isValid()) {
-            instrumentName = instrumentName.replace(_transposition.name + " ", "")
-                             .replace(" in " + _transposition.name, "");
+        if (instrumentName.isEmpty()) {
+            instrumentName = instrument.config.name;
+            Transposition _transposition = instrument.transposition;
+            if (_transposition.isValid()) {
+                instrumentName = instrumentName.replace(_transposition.name + " ", "")
+                                 .replace(" in " + _transposition.name, "");
 
-            instrumentName = QString("%1 (%2)").arg(instrumentName, _transposition.name);
+                instrumentName = QString("%1 (%2)").arg(instrumentName, _transposition.name);
+            }
         }
 
         QVariantMap obj;

@@ -28,7 +28,7 @@ mu::RetVal<InstrumentList> SelectInstrumentsScenario::selectInstruments(SelectIn
 {
     QStringList params;
     if (mode == SelectInstrumentsMode::ShowCurrentInstruments) {
-        params << "initiallySelectedInstrumentIds=" + partsInstrumentIds().join(",");
+        params << "initiallySelectedPartIds=" + partsIds().join(",");
     }
 
     return selectInstruments(params);
@@ -90,7 +90,7 @@ INotationPartsPtr SelectInstrumentsScenario::notationParts() const
     return notation->parts();
 }
 
-IDList SelectInstrumentsScenario::partsInstrumentIds() const
+IDList SelectInstrumentsScenario::partsIds() const
 {
     auto _notationParts = notationParts();
     if (!_notationParts) {
@@ -101,15 +101,7 @@ IDList SelectInstrumentsScenario::partsInstrumentIds() const
 
     IDList result;
     for (const Part* part: parts) {
-        async::NotifyList<Instrument> selectedInstruments = _notationParts->instrumentList(part->id());
-
-        for (const Instrument& instrument: selectedInstruments) {
-            if (part->isDoublingInstrument(instrument.id)) {
-                continue;
-            }
-
-            result << instrument.id;
-        }
+        result << part->id();
     }
 
     return result;
