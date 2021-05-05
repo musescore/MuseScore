@@ -292,11 +292,6 @@ bool NotationActionController::canReceiveAction(const actions::ActionCode& code)
         return false;
     }
 
-    //! NOTE At the moment, if we are in the text editing mode, we can only process the escape
-    if (isTextEditting()) {
-        return code == ESCAPE_ACTION_CODE;
-    }
-
     if (code == UNDO_ACTION_CODE) {
         return canUndo();
     }
@@ -405,6 +400,7 @@ void NotationActionController::resetState()
 
     if (interaction->isTextEditingStarted()) {
         interaction->endEditText();
+        interaction->clearSelection();
         return;
     }
 

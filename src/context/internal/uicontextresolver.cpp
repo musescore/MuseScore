@@ -99,8 +99,12 @@ UiContext UiContextResolver::currentUiContext() const
 
 bool UiContextResolver::match(const ui::UiContext& currentCtx, const ui::UiContext& actCtx) const
 {
-    //! NOTE If now editing the notation text, then we allow actions only with the context `UiCtxNotationTextEditing`,
-    //! all others, even `UiCtxAny`, are forbidden
+    //! NOTE For actions that need to run when editing text and everywhere else
+    if (actCtx == context::UiCtxAnyOrTextEditing) {
+        return true;
+    }
+
+    //! NOTE For actions that need to run ONLY when text editing
     if (currentCtx == context::UiCtxNotationTextEditing) {
         return actCtx == context::UiCtxNotationTextEditing;
     }

@@ -1906,9 +1906,25 @@ void NotationInteraction::editText(QKeyEvent* event)
         return;
     }
 
+    QString inputText = event->text();
+
+    // When user copies, pastes or cuts, one of these characters are
+    // created. This code stops the characters from beeing created
+    std::list<char> invalidChars = {
+        '\u0003', // Copy
+        '\u0016', // Paste
+        '\u0018'  // Cut
+    };
+
+    for (char c : invalidChars) {
+        if (inputText[0] == c) {
+            return;
+        }
+    }
+
     m_textEditData.key = event->key();
     m_textEditData.modifiers = event->modifiers();
-    m_textEditData.s = event->text();
+    m_textEditData.s = inputText;
     m_textEditData.element->edit(m_textEditData);
 
     score()->update();
@@ -2105,6 +2121,18 @@ void NotationInteraction::copySelection()
         return;
     }
 
+    if (isTextEditingStarted()) {
+        Element* element = selection()->element();
+        if (!element || !element->isTextBase()) {
+            return;
+        }
+
+        QString selectedText = toTextBase(element)->cursor()->selectedText();
+
+        QApplication::clipboard()->setText(selectedText);
+        return;
+    }
+
     QMimeData* mimeData = selection()->mimeData();
     if (!mimeData) {
         return;
@@ -2121,6 +2149,16 @@ void NotationInteraction::copyLyrics()
 
 void NotationInteraction::pasteSelection(const Fraction& scale)
 {
+    if (isTextEditingStarted()) {
+        Element* element = selection()->element();
+        if (!element || !element->isTextBase()) {
+            return;
+        }
+
+        toTextBase(element)->paste(m_textEditData);
+        return;
+    }
+
     startEdit();
 
     const QMimeData* mimeData = QApplication::clipboard()->mimeData();
@@ -2181,6 +2219,16 @@ void NotationInteraction::swapSelection()
 void NotationInteraction::deleteSelection()
 {
     if (selection()->isNone()) {
+        return;
+    }
+
+    if (isTextEditingStarted()) {
+        Element* element = selection()->element();
+        if (!element) {
+            return;
+        }
+
+        toTextBase(element)->deleteSelectedText(m_textEditData);
         return;
     }
 

@@ -37,7 +37,7 @@ static const ActionCode SHOW_IRREGULAR_CODE("mark-irregular");
 
 const UiActionList NotationUiActions::m_actions = {
     UiAction("escape",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxAnyOrTextEditing,
              QT_TRANSLATE_NOOP("action", "Esc")
              ),
     UiAction("put-note", // args: QPoint pos, bool replace, bool insert
@@ -135,15 +135,15 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Pitch up by an octave or move text or articulation up")
              ),
     UiAction("cut",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxAnyOrTextEditing,
              QT_TRANSLATE_NOOP("action", "Cut")
              ),
     UiAction("copy",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxAnyOrTextEditing,
              QT_TRANSLATE_NOOP("action", "Copy")
              ),
     UiAction("paste",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxAnyOrTextEditing,
              QT_TRANSLATE_NOOP("action", "Paste")
              ),
     UiAction("paste-half",
