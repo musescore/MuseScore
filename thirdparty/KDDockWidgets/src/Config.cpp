@@ -28,6 +28,7 @@
 #include <QOperatingSystemVersion>
 
 #ifdef KDDOCKWIDGETS_QTQUICK
+# include "quick/Helpers_p.h"
 # include <QQmlEngine>
 # include <QQmlContext>
 #endif
@@ -60,6 +61,9 @@ public:
     CustomizableWidgets m_disabledPaintEvents = CustomizableWidget_None;
     qreal m_draggedWindowOpacity = Q_QNAN;
     int m_mdiPopupThreshold = 250;
+#ifdef KDDOCKWIDGETS_QTQUICK
+    QtQuickHelpers m_qquickHelpers;
+#endif
 };
 
 Config::Config()
@@ -230,12 +234,13 @@ void Config::setQmlEngine(QQmlEngine *qmlEngine)
     }
 
     auto dr = DockRegistry::self(); // make sure our QML types are registered
-    qmlEngine->rootContext()->setContextProperty(QStringLiteral("_kddwDockRegistry"), dr);
-    qmlEngine->rootContext()->setContextProperty(QStringLiteral("_kddwDragController"), DragController::instance());
-    d->m_qmlEngine = qmlEngine;
-
     QQmlContext *context = qmlEngine->rootContext();
+    context->setContextProperty(QStringLiteral("_kddwHelpers"), &d->m_qquickHelpers);
+    context->setContextProperty(QStringLiteral("_kddwDockRegistry"), dr);
+    context->setContextProperty(QStringLiteral("_kddwDragController"), DragController::instance());
     context->setContextProperty(QStringLiteral("_kddw_widgetFactory"), d->m_frameworkWidgetFactory);
+
+    d->m_qmlEngine = qmlEngine;
 }
 
 QQmlEngine *Config::qmlEngine() const
