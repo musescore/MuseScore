@@ -12,18 +12,18 @@
 #ifndef KD_LAYOUTSAVER_P_H
 #define KD_LAYOUTSAVER_P_H
 
-#include "LayoutSaver.h"
-#include "KDDockWidgets.h"
+#include "kddockwidgets/KDDockWidgets.h"
+#include "kddockwidgets/LayoutSaver.h"
+#include "kddockwidgets/QWidgetAdapter.h"
 
-#include <QRect>
 #include <QDebug>
-#include <QScreen>
 #include <QGuiApplication>
 #include <QJsonDocument>
+#include <QRect>
+#include <QScreen>
+#include <QSettings>
 
 #include <memory>
-
-#define MULTISPLITTER_LAYOUT_MAGIC_MARKER "bac9948e-5f1b-4271-acc5-07f1708e2611"
 
 /**
   * Bump whenever the format changes, so we can still load old layouts.
@@ -37,6 +37,21 @@
 namespace KDDockWidgets {
 
 class FloatingWindow;
+class DockRegistry;
+
+/// @brief A more granular version of KDDockWidgets::RestoreOption
+/// There's some granularity that we don't want to expose to all users but want to allow some users
+/// to use. We might make more options public once they've proven themselves, so for now they are
+/// internal
+enum class InternalRestoreOption
+{
+    None = 0,
+    SkipMainWindowGeometry = 1, ///< Don't reposition the main window's geometry when restoring.
+    RelativeFloatingWindowGeometry =
+        2 ///< FloatingWindow's are repositioned relatively to the new MainWindow's size
+};
+Q_DECLARE_FLAGS(InternalRestoreOptions, InternalRestoreOption)
+
 
 template <typename T>
 typename T::List fromVariantList(const QVariantList &listV)
@@ -314,7 +329,7 @@ public:
     void fromVariantMap(const QVariantMap &map);
 
     /// Iterates through the layout and patches all absolute sizes. See RestoreOption_RelativeToMainWindow.
-    void scaleSizes();
+    void scaleSizes(KDDockWidgets::InternalRestoreOptions);
 
     static LayoutSaver::Layout* s_currentLayoutBeingRestored;
 
@@ -335,6 +350,33 @@ private:
     Q_DISABLE_COPY(Layout)
 };
 
+class LayoutSaver::Private
+{
+public:
+    struct RAIIIsRestoring
+    {
+        RAIIIsRestoring();
+        ~RAIIIsRestoring();
+        Q_DISABLE_COPY(RAIIIsRestoring)
+    };
+
+    explicit Private(RestoreOptions options);
+
+    bool matchesAffinity(const QStringList &affinities) const;
+    void floatWidgetsWhichSkipRestore(const QStringList &mainWindowNames);
+
+    template<typename T>
+    void deserializeWindowGeometry(const T &saved, QWidgetOrQuick *topLevel);
+    void deleteEmptyFrames();
+    void clearRestoredProperty();
+
+    std::unique_ptr<QSettings> settings() const;
+    DockRegistry *const m_dockRegistry;
+    InternalRestoreOptions m_restoreOptions = {};
+    QStringList m_affinityNames;
+
+    static bool s_restoreInProgress;
+};
 }
 
 #endif

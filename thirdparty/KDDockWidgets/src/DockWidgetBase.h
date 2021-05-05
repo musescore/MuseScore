@@ -121,7 +121,8 @@ public:
      * shown.
      * @sa MainWindow::addDockWidget(), DockWidget::addDockWidgetToContainingWindow()
      */
-    Q_INVOKABLE void addDockWidgetAsTab(DockWidgetBase *other, InitialOption initialOption = {});
+    Q_INVOKABLE void addDockWidgetAsTab(KDDockWidgets::DockWidgetBase *other,
+                                        KDDockWidgets::InitialOption initialOption = {});
 
     /**
      * @brief docks @p other widget into the window that contains this one.
@@ -135,9 +136,11 @@ public:
      * @param initialOption Allows to specify some extra options that are used while docking.
      * @sa MainWindow::addDockWidget(), DockWidget::addDockWidgetAsTab()
      */
-    Q_INVOKABLE void addDockWidgetToContainingWindow(DockWidgetBase *other, KDDockWidgets::Location location,
-                                                     DockWidgetBase *relativeTo = nullptr,
-                                                     InitialOption initialOption = {});
+    Q_INVOKABLE void
+    addDockWidgetToContainingWindow(KDDockWidgets::DockWidgetBase *other,
+                                    KDDockWidgets::Location location,
+                                    KDDockWidgets::DockWidgetBase *relativeTo = nullptr,
+                                    KDDockWidgets::InitialOption initialOption = {});
 
     /**
      * @brief sets the widget which this dock widget hosts.
@@ -496,6 +499,9 @@ Q_SIGNALS:
 
     ///@brief Emitted when the title bar that serves this dock widget changes
     void actualTitleBarChanged();
+
+    /// @brief Emitted when this dock widget is about to be deleted due to Option_DeleteOnClose
+    void aboutToDeleteOnClose();
 
 protected:
     void onParentChanged();

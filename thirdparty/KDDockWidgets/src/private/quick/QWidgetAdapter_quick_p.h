@@ -206,10 +206,11 @@ private:
     bool m_windowIsBeingDestroyed = false;
     bool m_mouseTrackingEnabled = false;
     bool m_isWrapper = false;
+    bool m_inSetParent = false;
     MouseEventRedirector *m_mouseEventRedirector = nullptr;
 };
 
-inline qreal logicalDpiFactor(QQuickItem *item)
+inline qreal logicalDpiFactor(const QQuickItem *item)
 {
 #ifndef Q_OS_MACOS
     if (QQuickWindow *window = item->window()) {

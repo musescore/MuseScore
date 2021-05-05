@@ -123,6 +123,14 @@ void DockWidgetInstantiator::forceClose()
         m_dockWidget->forceClose();
 }
 
+Q_INVOKABLE bool DockWidgetInstantiator::close()
+{
+    if (m_dockWidget)
+        return m_dockWidget->close();
+
+    return false;
+}
+
 void DockWidgetInstantiator::show()
 {
     if (m_dockWidget)
