@@ -132,6 +132,15 @@ class INavigationSection : public INavigation
 public:
     virtual ~INavigationSection() = default;
 
+    //! NOTE Please sync with view/NavigationSection::Type
+    enum class Type {
+        Regular = 0,
+        //! NOTE If activated exclusive section, we shouldn't navigate to another section.
+        //! Typically exclusive section - this is dialog
+        Exclusive
+    };
+
+    virtual Type type() const = 0;
     virtual const std::set<INavigationPanel*>& panels() const = 0;
     virtual async::Notification panelsListChanged() const = 0;
     virtual async::Channel<SectionPanelControl> forceActiveRequested() const = 0;

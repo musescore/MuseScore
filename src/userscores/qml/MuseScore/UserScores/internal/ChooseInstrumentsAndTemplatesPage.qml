@@ -86,6 +86,7 @@ Item {
             navigation.name: "Choose instruments"
             navigation.panel: topNavPanel
             navigation.column: 1
+            onNavigationTriggered: bar.currentIndex = 0
         }
 
         StyledTabButton {
@@ -96,6 +97,7 @@ Item {
             navigation.name: "Choose instruments"
             navigation.panel: topNavPanel
             navigation.column: 2
+            onNavigationTriggered: bar.currentIndex = 1
         }
 
         Component.onCompleted: {
@@ -120,10 +122,12 @@ Item {
 
         ChooseInstrumentsPage {
             id: instrumentsPage
+            navigationSection: root.navigationSection
         }
 
         ChooseTemplatePage {
             id: templatePage
+            navigationSection: root.navigationSection
         }
     }
 }

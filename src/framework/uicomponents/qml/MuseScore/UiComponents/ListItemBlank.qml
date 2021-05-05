@@ -32,8 +32,8 @@ FocusableControl {
     property alias radius: root.background.radius
 
     property color normalStateColor: "transparent"
-    property color hoveredStateColor: privateProperties.defaultColor
-    property color pressedStateColor: privateProperties.defaultColor
+    property color hoveredStateColor: prv.defaultColor
+    property color pressedStateColor: prv.defaultColor
 
     signal clicked()
     signal doubleClicked()
@@ -66,8 +66,10 @@ FocusableControl {
         }
     }
 
+    onNavigationTriggered: root.clicked()
+
     QtObject {
-        id: privateProperties
+        id: prv
 
         property color defaultColor: ui.theme.buttonColor
     }
@@ -80,7 +82,7 @@ FocusableControl {
             PropertyChanges {
                 target: root.background
                 opacity: ui.theme.buttonOpacityHover
-                color: hoveredStateColor
+                color: root.hoveredStateColor
             }
         },
 
@@ -91,7 +93,7 @@ FocusableControl {
             PropertyChanges {
                 target: root.background
                 opacity: ui.theme.buttonOpacityHit
-                color: pressedStateColor
+                color: root.pressedStateColor
             }
         },
 
