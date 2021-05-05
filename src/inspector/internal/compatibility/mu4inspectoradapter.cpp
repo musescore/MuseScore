@@ -49,6 +49,24 @@ mu::async::Notification MU4InspectorAdapter::isTextEditingChanged() const
     return context()->currentNotation()->interaction()->textEditingChanged();
 }
 
+mu::notation::ScoreConfig MU4InspectorAdapter::scoreConfig() const
+{
+    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
+        return mu::notation::ScoreConfig();
+    }
+
+    return context()->currentNotation()->interaction()->scoreConfig();
+}
+
+mu::async::Channel<mu::notation::ScoreConfigType> MU4InspectorAdapter::scoreConfigChanged() const
+{
+    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
+        return mu::async::Channel<ScoreConfigType>();
+    }
+
+    return context()->currentNotation()->interaction()->scoreConfigChanged();
+}
+
 void MU4InspectorAdapter::beginCommand()
 {
     if (undoStack()) {
@@ -110,16 +128,6 @@ void MU4InspectorAdapter::showGridConfigurationDialog()
     NOT_IMPLEMENTED;
 }
 
-void MU4InspectorAdapter::updatePageMarginsVisibility(const bool /*isVisible*/)
-{
-    NOT_IMPLEMENTED;
-}
-
-void MU4InspectorAdapter::updateFramesVisibility(const bool /*isVisible*/)
-{
-    NOT_IMPLEMENTED;
-}
-
 void MU4InspectorAdapter::updateHorizontalGridSnapping(const bool /*isSnapped*/)
 {
     NOT_IMPLEMENTED;
@@ -130,14 +138,24 @@ void MU4InspectorAdapter::updateVerticalGridSnapping(const bool /*isSnapped*/)
     NOT_IMPLEMENTED;
 }
 
-void MU4InspectorAdapter::updateUnprintableElementsVisibility(const bool /*isVisible*/)
+void MU4InspectorAdapter::toggleInvisibleElementsDisplaying()
 {
-    NOT_IMPLEMENTED;
+    dispatcher()->dispatch("show-invisible");
 }
 
-void MU4InspectorAdapter::updateInvisibleElementsDisplaying(const bool /*isVisible*/)
+void MU4InspectorAdapter::toggleUnprintableElementsVisibility()
 {
-    NOT_IMPLEMENTED;
+    dispatcher()->dispatch("show-unprintable");
+}
+
+void MU4InspectorAdapter::toggleFramesVisibility()
+{
+    dispatcher()->dispatch("show-frames");
+}
+
+void MU4InspectorAdapter::togglePageMarginsVisibility()
+{
+    dispatcher()->dispatch("show-pageborders");
 }
 
 void MU4InspectorAdapter::updateNotation()
@@ -147,6 +165,15 @@ void MU4InspectorAdapter::updateNotation()
     }
 
     return context()->currentNotation()->notationChanged().notify();
+}
+
+mu::async::Notification MU4InspectorAdapter::currentNotationChanged() const
+{
+    IF_ASSERT_FAILED(context()) {
+        return mu::async::Notification();
+    }
+
+    return context()->currentNotationChanged();
 }
 
 INotationUndoStackPtr MU4InspectorAdapter::undoStack() const
