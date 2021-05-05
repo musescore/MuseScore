@@ -76,7 +76,7 @@ private:
     void goToNextRowControl();
     void goToPrevRowControl();
 
-    void goToControl(MoveDirection direction, INavigationPanel* activeSubSec = nullptr);
+    void goToControl(MoveDirection direction, INavigationPanel* activePanel = nullptr);
 
     void onLeft();
     void onRight();
@@ -85,14 +85,14 @@ private:
     void onEscape();
 
     void doTriggerControl();
-    void onForceActiveRequested(INavigationSection* sec, INavigationPanel* sub, INavigationControl* ctrl);
+    void onForceActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl);
 
-    void doActivateSection(INavigationSection* s, bool isActivateLastPanel = false);
-    void doDeactivateSection(INavigationSection* s);
-    void doActivatePanel(INavigationPanel* s);
-    void doDeactivatePanel(INavigationPanel* s);
-    void doActivateControl(INavigationControl* c);
-    void doDeactivateControl(INavigationControl* c);
+    void doActivateSection(INavigationSection* sect, bool isActivateLastPanel = false);
+    void doDeactivateSection(INavigationSection* sect);
+    void doActivatePanel(INavigationPanel* panel);
+    void doDeactivatePanel(INavigationPanel* panel);
+    void doActivateControl(INavigationControl* ctrl);
+    void doDeactivateControl(INavigationControl* ctrl);
 
     void doActivateFirst();
     void doActivateLast();
