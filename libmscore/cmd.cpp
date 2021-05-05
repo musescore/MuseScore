@@ -3200,14 +3200,16 @@ void Score::cmdSlashFill()
                   // insert & turn into slash
                   s = setNoteRest(s, track + voice, nv, f);
                   Chord* c = toChord(s->element(track + voice));
-                  if (c->links()) {
-                        for (ScoreElement* e : *c->links()) {
-                              Chord* lc = toChord(e);
-                              lc->setSlash(true, true);
+                  if (c) {
+                        if (c->links()) {
+                              for (ScoreElement* e : *c->links()) {
+                                    Chord* lc = toChord(e);
+                                    lc->setSlash(true, true);
+                                    }
                               }
+                        else
+                              c->setSlash(true, true);
                         }
-                  else
-                        c->setSlash(true, true);
                   lastSlash = c;
                   if (!firstSlash)
                         firstSlash = c;
