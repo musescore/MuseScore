@@ -143,7 +143,7 @@ InspectorSectionView {
 
                 PlaybackPopup {
                     id: playbackPopup
-                    navigation.parentControl: playbackButton.navigation
+                    navigationParentControl: playbackButton.navigation
                     proxyModel: model ? model.playbackProxyModel : null
                 }
             }
@@ -170,7 +170,7 @@ InspectorSectionView {
 
                 AppearancePopup {
                     id: appearancePopup
-                    navigation.parentControl: appearanceButton.navigation
+                    navigationParentControl: appearanceButton.navigation
                     model: root.model ? root.model.appearanceSettingsModel : null
                 }
             }

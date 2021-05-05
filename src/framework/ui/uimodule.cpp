@@ -43,7 +43,6 @@
 #include "view/qmltooltip.h"
 #include "view/iconcodes.h"
 #include "view/musicalsymbolcodes.h"
-#include "view/qmldialog.h"
 #include "view/navigationsection.h"
 #include "view/navigationpanel.h"
 #include "view/navigationpopuppanel.h"
@@ -125,8 +124,6 @@ void UiModule::registerUiTypes()
                                                    "Cannot create an MusicalSymbolCodes");
     qmlRegisterUncreatableType<InteractiveProvider>("MuseScore.Ui", 1, 0, "QmlInteractiveProvider", "Cannot create");
     qmlRegisterUncreatableType<ContainerType>("MuseScore.Ui", 1, 0, "ContainerType", "Cannot create a ContainerType");
-
-    qmlRegisterType<QmlDialog>("MuseScore.Ui", 1, 0, "QmlDialog");
 
     qmlRegisterUncreatableType<AbstractNavigation>("MuseScore.Ui", 1, 0, "AbstractNavigation", "Cannot create a AbstractType");
     qmlRegisterUncreatableType<NavigationEvent>("MuseScore.Ui", 1, 0, "NavigationEvent", "Cannot create a KeyNavigationEvent");

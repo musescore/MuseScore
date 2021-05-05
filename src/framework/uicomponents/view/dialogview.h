@@ -19,20 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import "../common"
 
-PopupViewButton {
-    id: root
+#ifndef MU_UICOMPONENTS_DIALOGVIEW_H
+#define MU_UICOMPONENTS_DIALOGVIEW_H
 
-    property alias model: textPopup.model
+#include <QEventLoop>
 
-    text: qsTrc("inspector", "More...")
+#include "popupview.h"
 
-    visible: root.model ? !root.model.isEmpty : false
+namespace mu::uicomponents {
+class DialogView : public PopupView
+{
+    Q_OBJECT
 
-    TextPopup {
-        id: textPopup
-        navigationParentControl: root.navigation
-    }
+public:
+    explicit DialogView(QQuickItem* parent = nullptr);
+    ~DialogView() override = default;
+
+    Q_INVOKABLE void exec();
+    Q_INVOKABLE void show();
+    Q_INVOKABLE void hide();
+    Q_INVOKABLE void accept();
+    Q_INVOKABLE void reject(int code = -1);
+
+private:
+    bool isDialog() const override;
+    void beforeShow() override;
+    void onHidden() override;
+
+    QEventLoop m_loop;
+};
 }
+
+#endif // MU_UICOMPONENTS_DIALOGVIEW_H

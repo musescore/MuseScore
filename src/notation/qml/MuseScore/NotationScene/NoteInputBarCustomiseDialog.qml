@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
@@ -29,11 +29,11 @@ import MuseScore.NotationScene 1.0
 
 import "internal"
 
-QmlDialog {
+StyledDialogView {
     id: root
 
-    width: 280
-    height: 600
+    contentWidth: 280
+    contentHeight: 600
 
     modal: true
 

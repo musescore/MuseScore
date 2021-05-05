@@ -22,6 +22,7 @@
 
 #include "popupview.h"
 
+#include <functional>
 #include <QQuickView>
 #include <QQmlEngine>
 #include <QUrl>
@@ -38,17 +39,21 @@ class PopupWindow : public QObject
 {
     INJECT(uicomponents, ui::IMainWindow, mainWindow)
 public:
-    PopupWindow(QQmlEngine* engine);
+    PopupWindow(QQmlEngine* engine, std::shared_ptr<ui::IUiConfiguration> uiConfiguration, bool isDialogMode);
     ~PopupWindow();
 
     void setContent(QQuickItem* item);
 
     void show(QPoint p);
     void hide();
+
+    QWindow* qWindow() const;
     bool isVisible() const;
     const QRect& geometry() const;
 
     void forceActiveFocus();
+
+    std::function<void()> onHidden;
 
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
@@ -60,22 +65,38 @@ private:
     QTimer m_sizesSynchronizer;
 };
 
-PopupWindow::PopupWindow(QQmlEngine* engine)
+PopupWindow::PopupWindow(QQmlEngine* engine, std::shared_ptr<ui::IUiConfiguration> uiConfiguration, bool isDialogMode)
     : QObject()
 {
     setObjectName("PopupWindow");
 
-    Qt::WindowFlags windowFlags = Qt::Dialog // The most appropriate behavior for us on all platforms
-                                  | Qt::FramelessWindowHint // Without border
-                                  | Qt::NoDropShadowWindowHint // Without system shadow
-                                  | Qt::BypassWindowManagerHint; // Otherwise, it does not work correctly on Gnome (Linux) when resizing
-
     m_view = new QQuickView(engine, mainWindow()->qWindow());
     m_view->setObjectName("PopupQuickWindow");
-    m_view->setFlags(windowFlags);
-    m_view->setResizeMode(QQuickView::SizeRootObjectToView);
-    m_view->setColor(QColor(0, 0, 0, 0)); // transparent
 
+    m_view->setResizeMode(QQuickView::SizeRootObjectToView);
+
+    Qt::WindowFlags windowFlags;
+    QColor bgColor;
+
+    // dialog
+    if (isDialogMode) {
+        windowFlags = Qt::Dialog;
+
+        QString bgColorStr = uiConfiguration->currentTheme().values.value(ui::BACKGROUND_PRIMARY_COLOR).toString();
+        bgColor = QColor(bgColorStr);
+    }
+    // popup
+    else {
+        windowFlags = Qt::Dialog                // The most appropriate behavior for us on all platforms
+                      | Qt::FramelessWindowHint // Without border
+                      | Qt::NoDropShadowWindowHint // Without system shadow
+                      | Qt::BypassWindowManagerHint; // Otherwise, it does not work correctly on Gnome (Linux) when resizing
+
+        bgColor = QColor(0, 0, 0, 0); // transparent
+    }
+
+    m_view->setFlags(windowFlags);
+    m_view->setColor(bgColor);
     m_view->installEventFilter(this);
 
     //! HACK The shortcut system expects
@@ -86,22 +107,37 @@ PopupWindow::PopupWindow(QQmlEngine* engine)
 
     m_widget = QWidget::createWindowContainer(m_view, nullptr, windowFlags);
     m_widget->setObjectName("PopupWidgetWindow");
-    m_widget->setAutoFillBackground(false);
-    m_widget->setAttribute(Qt::WA_TranslucentBackground);
+
+    // dialog
+    if (isDialogMode) {
+        m_widget->setAutoFillBackground(true);
+
+        QPalette pal = m_widget->palette();
+        pal.setColor(QPalette::Window, bgColor);
+        m_widget->setPalette(pal);
+    }
+    // popup
+    else {
+        m_widget->setAutoFillBackground(false);
+        m_widget->setAttribute(Qt::WA_TranslucentBackground);
+    }
 
     m_widget->installEventFilter(this);
 
-    //! HACK Resizing the window is overhead and a slow operation,
+    //! HACK Resizing the popup window is overhead and a slow operation,
     //! if it is doing for each cycle of animation of changing the size of the content (usually the height),
     //! then graphic artifacts may appear and it looks awful.
     //! So, when changing the size of the content,
     //! we resize the window itself twice as large, and as soon as the changes are over,
     //! we will synchronize the sizes.
-    m_sizesSynchronizer.setSingleShot(true);
-    m_sizesSynchronizer.setInterval(1000);
-    connect(&m_sizesSynchronizer, &QTimer::timeout, [this]() {
-        syncSizes();
-    });
+
+    if (!isDialogMode) {
+        m_sizesSynchronizer.setSingleShot(true);
+        m_sizesSynchronizer.setInterval(1000);
+        connect(&m_sizesSynchronizer, &QTimer::timeout, [this]() {
+            syncSizes();
+        });
+    }
 }
 
 PopupWindow::~PopupWindow()
@@ -149,6 +185,7 @@ void PopupWindow::show(QPoint p)
 {
     m_widget->move(p);
     m_widget->show();
+
     syncSizes();
     m_widget->activateWindow();
     m_widget->setFocus();
@@ -157,6 +194,11 @@ void PopupWindow::show(QPoint p)
 void PopupWindow::hide()
 {
     m_widget->hide();
+}
+
+QWindow* PopupWindow::qWindow() const
+{
+    return m_widget->windowHandle();
 }
 
 bool PopupWindow::isVisible() const
@@ -171,8 +213,8 @@ const QRect& PopupWindow::geometry() const
 
 bool PopupWindow::eventFilter(QObject* watched, QEvent* event)
 {
-// Please, don't remove
-//#define POPUPWINDOW_DEBUG_EVENTS_ENABLED
+    // Please, don't remove
+    //#define POPUPWINDOW_DEBUG_EVENTS_ENABLED
 #ifdef POPUPWINDOW_DEBUG_EVENTS_ENABLED
     static QMetaEnum typeEnum = QMetaEnum::fromType<QEvent::Type>();
     static QList<QEvent::Type> excludeLoggingTypes = { QEvent::MouseMove };
@@ -181,7 +223,7 @@ bool PopupWindow::eventFilter(QObject* watched, QEvent* event)
         LOGI() << (watched ? watched->objectName() : "null") << " event: " << (typeStr ? typeStr : "unknown");
     }
 
-    static QList<QEvent::Type> trackEvents = { QEvent::WindowDeactivate, QEvent::ActivationChange, QEvent::FocusAboutToChange };
+    static QList<QEvent::Type> trackEvents = { QEvent::Hide, QEvent::Show };
     if (trackEvents.contains(event->type())) {
         int k = 1;
     }
@@ -202,6 +244,15 @@ bool PopupWindow::eventFilter(QObject* watched, QEvent* event)
         }
     }
 
+    // QWidgetContainer events
+    if (watched == m_widget) {
+        if (event->type() == QEvent::Hide) {
+            if (onHidden) {
+                onHidden();
+            }
+        }
+    }
+
     return QObject::eventFilter(watched, event);
 }
 }
@@ -212,6 +263,8 @@ PopupView::PopupView(QQuickItem* parent)
     : QObject(parent)
 {
     setObjectName("PopupView");
+    setErrCode(Ret::Code::Ok);
+
     qApp->installEventFilter(this);
     connect(qApp, &QApplication::applicationStateChanged, this, &PopupView::onApplicationStateChanged);
 }
@@ -239,6 +292,49 @@ void PopupView::forceActiveFocus()
     m_window->forceActiveFocus();
 }
 
+bool PopupView::isDialog() const
+{
+    return false;
+}
+
+void PopupView::classBegin()
+{
+}
+
+void PopupView::componentComplete()
+{
+    QQmlEngine* engine = qmlEngine(this);
+    IF_ASSERT_FAILED(engine) {
+        return;
+    }
+
+    m_window = new PopupWindow(engine, uiConfiguration(), isDialog());
+    m_window->onHidden = [this]() { onHidden(); };
+    m_window->setContent(m_contentItem);
+}
+
+bool PopupView::eventFilter(QObject* watched, QEvent* event)
+{
+    if (QEvent::MouseButtonPress == event->type()) {
+        mousePressEvent(static_cast<QMouseEvent*>(event));
+    } else if (QEvent::MouseButtonRelease == event->type()) {
+        mouseReleaseEvent(static_cast<QMouseEvent*>(event));
+    } else if (QEvent::Close == event->type() && watched == mainWindow()->qMainWindow()) {
+        close();
+    }
+
+    return QObject::eventFilter(watched, event);
+}
+
+QWindow* PopupView::qWindow() const
+{
+    return m_window ? m_window->qWindow() : nullptr;
+}
+
+void PopupView::beforeShow()
+{
+}
+
 void PopupView::open()
 {
     if (isOpened()) {
@@ -249,16 +345,47 @@ void PopupView::open()
         return;
     }
 
-    QQuickItem* prn = parentItem();
-    IF_ASSERT_FAILED(prn) {
-        return;
+    beforeShow();
+
+    if (m_globalPos.isNull()) {
+        QQuickItem* prn = parentItem();
+        IF_ASSERT_FAILED(prn) {
+            return;
+        }
+
+        m_globalPos = prn->mapToGlobal(m_localPos);
     }
 
-    QPointF global = prn->mapToGlobal(m_localPos);
-    m_window->show(global.toPoint());
+    m_window->show(m_globalPos.toPoint());
+
+    QWindow* qWindow = m_window->qWindow();
+    IF_ASSERT_FAILED(qWindow) {
+        return;
+    }
+    qWindow->setTitle(m_title);
+    qWindow->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
+
+    const QRect& winRect = m_window->geometry();
+    qWindow->setMinimumSize(winRect.size());
+    if (!m_resizable) {
+        qWindow->setMaximumSize(winRect.size());
+    }
+
+    if (!m_navigationParentControl) {
+        ui::INavigationControl* ctrl = navigationController()->activeControl();
+        //! NOTE At the moment we have only qml navigation controls
+        QObject* qmlCtrl = dynamic_cast<QObject*>(ctrl);
+        setNavigationParentControl(qmlCtrl);
+    }
 
     emit isOpenedChanged();
     emit opened();
+}
+
+void PopupView::onHidden()
+{
+    emit isOpenedChanged();
+    emit closed();
 }
 
 void PopupView::close()
@@ -272,9 +399,6 @@ void PopupView::close()
     }
 
     m_window->hide();
-
-    emit isOpenedChanged();
-    emit closed();
 }
 
 void PopupView::toggleOpened()
@@ -296,6 +420,21 @@ PopupView::ClosePolicy PopupView::closePolicy() const
     return m_closePolicy;
 }
 
+QObject* PopupView::navigationParentControl() const
+{
+    return m_navigationParentControl;
+}
+
+void PopupView::setNavigationParentControl(QObject* navigationParentControl)
+{
+    if (m_navigationParentControl == navigationParentControl) {
+        return;
+    }
+
+    m_navigationParentControl = navigationParentControl;
+    emit navigationParentControlChanged(m_navigationParentControl);
+}
+
 void PopupView::setContentItem(QQuickItem* content)
 {
     if (m_contentItem == content) {
@@ -311,17 +450,22 @@ QQuickItem* PopupView::contentItem() const
     return m_contentItem;
 }
 
-qreal PopupView::x() const
+qreal PopupView::localX() const
 {
     return m_localPos.x();
 }
 
-qreal PopupView::y() const
+qreal PopupView::localY() const
 {
     return m_localPos.y();
 }
 
-void PopupView::setX(qreal x)
+const QRect& PopupView::geometry() const
+{
+    return m_window->geometry();
+}
+
+void PopupView::setLocalX(qreal x)
 {
     if (qFuzzyCompare(m_localPos.x(), x)) {
         return;
@@ -331,7 +475,7 @@ void PopupView::setX(qreal x)
     emit xChanged(x);
 }
 
-void PopupView::setY(qreal y)
+void PopupView::setLocalY(qreal y)
 {
     if (qFuzzyCompare(m_localPos.y(), y)) {
         return;
@@ -351,36 +495,12 @@ void PopupView::setClosePolicy(ClosePolicy closePolicy)
     emit closePolicyChanged(closePolicy);
 }
 
-void PopupView::classBegin()
+void PopupView::onApplicationStateChanged(Qt::ApplicationState state)
 {
-}
-
-void PopupView::componentComplete()
-{
-    QQmlEngine* engine = qmlEngine(this);
-    IF_ASSERT_FAILED(engine) {
+    if (m_closePolicy == NoAutoClose) {
         return;
     }
 
-    m_window = new PopupWindow(engine);
-    m_window->setContent(m_contentItem);
-}
-
-bool PopupView::eventFilter(QObject* watched, QEvent* event)
-{
-    if (QEvent::MouseButtonPress == event->type()) {
-        mousePressEvent(static_cast<QMouseEvent*>(event));
-    } else if (QEvent::MouseButtonRelease == event->type()) {
-        mouseReleaseEvent(static_cast<QMouseEvent*>(event));
-    } else if (QEvent::Close == event->type() && watched == mainWindow()->qWindow()) {
-        close();
-    }
-
-    return QObject::eventFilter(watched, event);
-}
-
-void PopupView::onApplicationStateChanged(Qt::ApplicationState state)
-{
     if (state != Qt::ApplicationActive) {
         close();
     }
@@ -426,4 +546,95 @@ bool PopupView::isMouseWithinBoundaries(const QPoint& mousePos) const
     }
 
     return contains;
+}
+
+void PopupView::setObjectID(QString objectID)
+{
+    if (m_objectID == objectID) {
+        return;
+    }
+
+    m_objectID = objectID;
+    emit objectIDChanged(m_objectID);
+}
+
+QString PopupView::objectID() const
+{
+    return m_objectID;
+}
+
+QString PopupView::title() const
+{
+    return m_title;
+}
+
+void PopupView::setTitle(QString title)
+{
+    if (m_title == title) {
+        return;
+    }
+
+    m_title = title;
+    if (qWindow()) {
+        qWindow()->setTitle(title);
+    }
+
+    emit titleChanged(m_title);
+}
+
+bool PopupView::modal() const
+{
+    return m_modal;
+}
+
+void PopupView::setModal(bool modal)
+{
+    if (m_modal == modal) {
+        return;
+    }
+
+    m_modal = modal;
+
+    if (qWindow()) {
+        qWindow()->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
+    }
+
+    emit modalChanged(m_modal);
+}
+
+void PopupView::setResizable(bool resizable)
+{
+    if (m_resizable == resizable) {
+        return;
+    }
+
+    m_resizable = resizable;
+    emit resizableChanged(m_resizable);
+}
+
+bool PopupView::resizable() const
+{
+    return m_resizable;
+}
+
+void PopupView::setRet(QVariantMap ret)
+{
+    if (m_ret == ret) {
+        return;
+    }
+
+    m_ret = ret;
+    emit retChanged(m_ret);
+}
+
+QVariantMap PopupView::ret() const
+{
+    return m_ret;
+}
+
+void PopupView::setErrCode(Ret::Code code)
+{
+    QVariantMap ret;
+    ret["errcode"] = static_cast<int>(code);
+    setRet(ret);
 }

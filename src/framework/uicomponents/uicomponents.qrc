@@ -39,6 +39,7 @@
         <file>qml/MuseScore/UiComponents/internal/GridViewDelegate.qml</file>
         <file>qml/MuseScore/UiComponents/internal/GridViewSection.qml</file>
         <file>qml/MuseScore/UiComponents/StyledPopupView.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledDialogView.qml</file>
         <file>qml/MuseScore/UiComponents/Border.qml</file>
         <file>qml/MuseScore/UiComponents/StyledMenu.qml</file>
         <file>qml/MuseScore/UiComponents/StyledMenuItem.qml</file>

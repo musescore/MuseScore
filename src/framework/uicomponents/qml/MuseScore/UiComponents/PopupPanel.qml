@@ -32,6 +32,7 @@ Rectangle {
     property alias canClose: closeButton.visible
 
     property alias navigation: navPanel
+    property NavigationControl navigationParentControl: null
 
     signal opened()
     signal closed()
@@ -50,7 +51,7 @@ Rectangle {
     }
 
     function open(navigationCtrl) {
-        navPanel.parentControl = navigationCtrl
+        root.navigationParentControl = navigationCtrl
         root.visible = true
         root.opened()
     }
@@ -62,20 +63,20 @@ Rectangle {
 
         root.visible = false
 
-        if (navPanel.parentControl) {
-            navPanel.parentControl.forceActive()
+        if (root.navigationParentControl) {
+            root.navigationParentControl.forceActive()
         }
 
         root.closed()
     }
 
-    NavigationPopupPanel {
+    NavigationPanel {
         id: navPanel
         name: root.objectName != "" ? root.objectName : "PopupPanel"
 
         enabled: root.visible
         order: {
-            var pctrl = navPanel.parentControl;
+            var pctrl = root.navigationParentControl;
             if (pctrl) {
                 if (pctrl.panel) {
                     return pctrl.panel.order + 1
@@ -85,7 +86,7 @@ Rectangle {
         }
 
         section: {
-            var pctrl = navPanel.parentControl;
+            var pctrl = root.navigationParentControl;
             if (pctrl) {
                 if (pctrl.panel) {
                     return pctrl.panel.section

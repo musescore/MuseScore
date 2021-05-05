@@ -95,15 +95,19 @@ public:
     virtual void onEvent(EventPtr e) = 0;
 };
 
+class INavigationPanel;
 class INavigationControl : public INavigation
 {
 public:
     virtual ~INavigationControl() = default;
 
+    virtual INavigationPanel* panel() const = 0;
+
     virtual void trigger() = 0;
     virtual async::Channel<INavigationControl*> forceActiveRequested() const = 0;
 };
 
+class INavigationSection;
 class INavigationPanel : public INavigation
 {
 public:
@@ -116,6 +120,7 @@ public:
         Both
     };
 
+    virtual INavigationSection* section() const = 0;
     virtual Direction direction() const = 0;
     virtual const std::set<INavigationControl*>& controls() const = 0;
     virtual async::Notification controlsListChanged() const = 0;

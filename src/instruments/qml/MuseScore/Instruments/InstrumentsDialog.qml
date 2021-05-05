@@ -19,21 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Instruments 1.0
 
-QmlDialog {
+StyledDialogView {
     id: root
 
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
     property string initiallySelectedInstrumentIds: ""
 
-    height: 500
-    width: root.canSelectMultipleInstruments ? 900 : 600
+    contentHeight: 500
+    contentWidth: root.canSelectMultipleInstruments ? 900 : 600
 
     title: canSelectMultipleInstruments ? qsTrc("instruments", "Instruments") :
                                           qsTrc("instruments", "Select instrument")
