@@ -28,6 +28,8 @@
 #include "modularity/imoduleexport.h"
 
 #include "libmscore/style.h"
+#include "notation/notationtypes.h"
+#include "async/channel.h"
 #include "async/notification.h"
 
 namespace mu::inspector {
@@ -41,6 +43,8 @@ public:
     virtual bool isNotationExisting() const = 0;
     virtual bool isTextEditingStarted() const = 0;
     virtual async::Notification isTextEditingChanged() const = 0;
+    virtual notation::ScoreConfig scoreConfig() const = 0;
+    virtual async::Channel<notation::ScoreConfigType> scoreConfigChanged() const = 0;
 
     // notation commands
     virtual void beginCommand() = 0;
@@ -60,15 +64,16 @@ public:
     virtual void showGridConfigurationDialog() = 0;
 
     // actions
-    virtual void updatePageMarginsVisibility(const bool isVisible) = 0;
-    virtual void updateFramesVisibility(const bool isVisible) = 0;
     virtual void updateHorizontalGridSnapping(const bool isSnapped) = 0;
     virtual void updateVerticalGridSnapping(const bool isSnapped) = 0;
-    virtual void updateUnprintableElementsVisibility(const bool isVisible) = 0;
-    virtual void updateInvisibleElementsDisplaying(const bool isVisible) = 0; //!Note Invisible elements can be displayed as a semi-transparent elements
+    virtual void toggleInvisibleElementsDisplaying() = 0; //!Note Invisible elements can be displayed as a semi-transparent elements
+    virtual void toggleUnprintableElementsVisibility() = 0;
+    virtual void toggleFramesVisibility() = 0;
+    virtual void togglePageMarginsVisibility() = 0;
 
     // notation layout
     virtual void updateNotation() = 0;
+    virtual async::Notification currentNotationChanged() const = 0;
 };
 }
 

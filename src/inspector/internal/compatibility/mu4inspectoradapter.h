@@ -27,13 +27,16 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "notation/inotation.h"
+#include "notation/notationtypes.h"
 #include "iinteractive.h"
+#include "actions/iactionsdispatcher.h"
 
 namespace mu::inspector {
 class MU4InspectorAdapter : public IInspectorAdapter
 {
     INJECT(inspector, mu::context::IGlobalContext, context)
     INJECT(inspector, mu::framework::IInteractive, interactive)
+    INJECT(inspector, mu::actions::IActionsDispatcher, dispatcher)
 
 public:
     MU4InspectorAdapter() = default;
@@ -41,6 +44,8 @@ public:
     bool isNotationExisting() const override;
     bool isTextEditingStarted() const override;
     async::Notification isTextEditingChanged() const override;
+    notation::ScoreConfig scoreConfig() const override;
+    async::Channel<notation::ScoreConfigType> scoreConfigChanged() const override;
 
     // notation commands
     void beginCommand() override;
@@ -60,15 +65,16 @@ public:
     void showGridConfigurationDialog() override;
 
     // actions
-    void updatePageMarginsVisibility(const bool isVisible) override;
-    void updateFramesVisibility(const bool isVisible) override;
     void updateHorizontalGridSnapping(const bool isSnapped) override;
     void updateVerticalGridSnapping(const bool isSnapped) override;
-    void updateUnprintableElementsVisibility(const bool isVisible) override;
-    void updateInvisibleElementsDisplaying(const bool isVisible) override;
+    void toggleInvisibleElementsDisplaying() override;
+    void toggleUnprintableElementsVisibility() override;
+    void toggleFramesVisibility() override;
+    void togglePageMarginsVisibility() override;
 
     // notation layout
     void updateNotation() override;
+    async::Notification currentNotationChanged() const override;
 
 private:
     mu::notation::INotationUndoStackPtr undoStack() const;
