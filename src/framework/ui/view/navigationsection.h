@@ -36,12 +36,23 @@ namespace mu::ui {
 class NavigationSection : public AbstractNavigation, public INavigationSection, public async::Asyncable
 {
     Q_OBJECT
+    Q_PROPERTY(QmlType type READ type_property WRITE setType NOTIFY typeChanged)
+
     INJECT(ui, INavigationController, navigationController)
 
 public:
     explicit NavigationSection(QObject* parent = nullptr);
     ~NavigationSection() override;
 
+    //! NOTE Please sync with INavigationSection::Type
+    enum QmlType {
+        Regular = 0,
+        Exclusive
+    };
+    Q_ENUM(QmlType)
+
+    QmlType type_property() const;
+    INavigationSection::Type type() const override;
     QString name() const override;
 
     const Index& index() const override;
@@ -66,11 +77,18 @@ public:
     void addPanel(NavigationPanel* panel);
     void removePanel(NavigationPanel* panel);
 
+public slots:
+    void setType(QmlType type);
+
+signals:
+    void typeChanged(QmlType type);
+
 private:
 
     std::set<INavigationPanel*> m_panels;
     async::Notification m_panelsListChanged;
     async::Channel<SectionPanelControl> m_forceActiveRequested;
+    QmlType m_type = Regular;
 };
 }
 

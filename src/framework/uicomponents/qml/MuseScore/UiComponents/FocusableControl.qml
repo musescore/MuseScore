@@ -34,6 +34,9 @@ FocusScope {
 
     property alias navigation: keynavItem
 
+    signal navigationActived()
+    signal navigationTriggered()
+
     function ensureActiveFocus() {
         if (!root.activeFocus) {
             root.forceActiveFocus()
@@ -52,7 +55,12 @@ FocusScope {
         onActiveChanged: {
             if (keynavItem.active) {
                 root.ensureActiveFocus()
+                root.navigationActived()
             }
+        }
+
+        onTriggered: {
+            root.navigationTriggered()
         }
     }
 

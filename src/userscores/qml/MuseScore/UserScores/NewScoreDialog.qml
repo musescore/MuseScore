@@ -59,7 +59,6 @@ StyledDialogView {
 
                 property bool isOpened: root.isOpened
                 onIsOpenedChanged: {
-                    console.log("onOpenedChanged isOpened: " + isOpened)
                     if (isOpened) {
                         chooseInstrumentsAndTemplatePage.focusOnFirst()
                     }
@@ -89,9 +88,22 @@ StyledDialogView {
             readonly property int buttonHeight: 30
             readonly property int buttonWidth: 132
 
+            NavigationPanel {
+                id: navBottomPanel
+
+                name: "BottomPanel"
+                section: root.navigationSection
+                order: 100
+                direction: NavigationPanel.Horizontal
+            }
+
             FlatButton {
                 height: buttons.buttonHeight
                 width: buttons.buttonWidth
+
+                navigation.name: "Cancel"
+                navigation.panel: navBottomPanel
+                navigation.column: 1
 
                 text: qsTrc("global", "Cancel")
 
@@ -103,6 +115,10 @@ StyledDialogView {
             FlatButton {
                 height: buttons.buttonHeight
                 width: buttons.buttonWidth
+
+                navigation.name: "Back"
+                navigation.panel: navBottomPanel
+                navigation.column: 2
 
                 visible: pagesStack.currentIndex > 0
 
@@ -117,6 +133,10 @@ StyledDialogView {
                 height: buttons.buttonHeight
                 width: buttons.buttonWidth
 
+                navigation.name: "Next"
+                navigation.panel: navBottomPanel
+                navigation.column: 3
+
                 visible: pagesStack.currentIndex < pagesStack.count - 1
                 enabled: chooseInstrumentsAndTemplatePage.hasSelection
 
@@ -130,6 +150,10 @@ StyledDialogView {
             FlatButton {
                 height: buttons.buttonHeight
                 width: buttons.buttonWidth
+
+                navigation.name: "Done"
+                navigation.panel: navBottomPanel
+                navigation.column: 4
 
                 enabled: chooseInstrumentsAndTemplatePage.hasSelection
 

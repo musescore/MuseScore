@@ -563,6 +563,7 @@ void NavigationController::goToNextPanel()
     INavigationSection* activeSec = activeSection();
     if (!activeSec) {
         doActivateFirst();
+        m_navigationChanged.notify();
         return;
     }
 
@@ -571,6 +572,7 @@ void NavigationController::goToNextPanel()
         INavigationPanel* first = firstEnabled(activeSec->panels());
         if (first) {
             doActivatePanel(first);
+            m_navigationChanged.notify();
         }
         return;
     }
@@ -580,13 +582,21 @@ void NavigationController::goToNextPanel()
     INavigationPanel* nextPanel = nextEnabled(activeSec->panels(), activePanel->index());
     if (nextPanel) {
         doActivatePanel(nextPanel);
+        m_navigationChanged.notify();
+        return;
+    }
+
+    if (activeSec->type() == INavigationSection::Type::Exclusive) {
+        INavigationPanel* first = firstEnabled(activeSec->panels());
+        if (first) {
+            doActivatePanel(first);
+            m_navigationChanged.notify();
+        }
         return;
     }
 
     // active is last panel, go to first panel in next section
     goToNextSection();
-
-    m_navigationChanged.notify();
 }
 
 void NavigationController::goToPrevPanel()
@@ -596,6 +606,7 @@ void NavigationController::goToPrevPanel()
     INavigationSection* activeSec = activeSection();
     if (!activeSec) {
         doActivateLast();
+        m_navigationChanged.notify();
         return;
     }
 
@@ -604,6 +615,7 @@ void NavigationController::goToPrevPanel()
         INavigationPanel* lastSub = lastEnabled(activeSec->panels());
         if (lastSub) {
             doActivatePanel(lastSub);
+            m_navigationChanged.notify();
         }
         return;
     }
@@ -613,13 +625,21 @@ void NavigationController::goToPrevPanel()
     INavigationPanel* prevSubSec = prevEnabled(activeSec->panels(), activeSubSec->index());
     if (prevSubSec) {
         doActivatePanel(prevSubSec);
+        m_navigationChanged.notify();
+        return;
+    }
+
+    if (activeSec->type() == INavigationSection::Type::Exclusive) {
+        INavigationPanel* lastPanel = lastEnabled(activeSec->panels());
+        if (lastPanel) {
+            doActivatePanel(lastPanel);
+            m_navigationChanged.notify();
+        }
         return;
     }
 
     // active is first, go to last panel in prev section
     goToPrevSection(true);
-
-    m_navigationChanged.notify();
 }
 
 void NavigationController::onRight()
