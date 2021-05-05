@@ -106,8 +106,8 @@ void DockSetup::setup(QQmlEngine* engine)
     KDDockWidgets::Config::self().setFlags(flags);
 
     KDDockWidgets::FloatingWindow::s_windowFlagsOverride = Qt::Tool
-            | Qt::NoDropShadowWindowHint
-            | Qt::FramelessWindowHint;
+                                                           | Qt::NoDropShadowWindowHint
+                                                           | Qt::FramelessWindowHint;
 
     QSize minDockSize = KDDockWidgets::Config::self().absoluteWidgetMinSize();
     minDockSize.setHeight(30);
