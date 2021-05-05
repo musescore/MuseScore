@@ -28,13 +28,14 @@ import MuseScore.Preferences 1.0
 
 import "internal"
 
-QmlDialog {
+StyledDialogView {
     id: root
 
-    width: 880
-    height: 600
-
     title: qsTrc("appshell", "Preferences")
+
+    contentWidth: 880
+    contentHeight: 600
+    resizable: true
 
     property string currentPageId: ""
 

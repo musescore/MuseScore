@@ -34,7 +34,7 @@ class NavigationSection;
 class NavigationPanel : public AbstractNavigation, public INavigationPanel, public async::Asyncable
 {
     Q_OBJECT
-    Q_PROPERTY(mu::ui::NavigationSection* section READ section WRITE setSection NOTIFY sectionChanged)
+    Q_PROPERTY(mu::ui::NavigationSection* section READ section_property WRITE setSection_property NOTIFY sectionChanged)
     Q_PROPERTY(QmlDirection direction READ direction_property WRITE setDirection NOTIFY directionChanged)
 
 public:
@@ -71,7 +71,8 @@ public:
 
     async::Channel<PanelControl> forceActiveRequested() const override;
 
-    NavigationSection* section() const;
+    INavigationSection* section() const override;
+    NavigationSection* section_property() const;
 
     void componentComplete() override;
 
@@ -79,7 +80,8 @@ public:
     void removeControl(NavigationControl* control);
 
 public slots:
-    void setSection(NavigationSection* section);
+    void setSection_property(NavigationSection* section);
+    void setSection(INavigationSection* section);
     void setDirection(QmlDirection direction);
 
 signals:

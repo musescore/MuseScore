@@ -327,7 +327,7 @@ ListView {
                 paletteTree.expandedPopupIndex = expand ? modelIndex : null;
                 if (btn) {
                     palettePopup.parent = btn
-                    palettePopup.navigation.parentControl = btn.navigation
+                    palettePopup.navigationParentControl = btn.navigation
                 }
                 palettePopup.toggleOpened()
             }

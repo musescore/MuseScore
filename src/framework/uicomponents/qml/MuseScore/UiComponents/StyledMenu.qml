@@ -151,6 +151,10 @@ StyledPopupView {
 
                         root.handleAction(actionCode, actionIndex)
                     }
+
+                    onRequestParentItemActive: {
+                        root.navigationParentControl.forceActive()
+                    }
                 }
             }
 

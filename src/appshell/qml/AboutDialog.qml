@@ -26,12 +26,13 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.AppShell 1.0
 
-QmlDialog {
+StyledDialogView {
     id: root
 
-    fixedSize: Qt.size(480, 424)
-
     title: qsTrc("appshell", "About MuseScore")
+
+    contentHeight: 424
+    contentWidth: 480
 
     Rectangle {
         anchors.fill: parent

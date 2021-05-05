@@ -46,7 +46,7 @@ Loader {
 
         menu.parent = loader.parent
         if (navigationParentControl) {
-            menu.navigation.parentControl = navigationParentControl
+            menu.navigationParentControl = navigationParentControl
             menu.navigation.name = navigationParentControl.name+"PopupMenu"
         }
         menu.model = model

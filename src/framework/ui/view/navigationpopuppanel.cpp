@@ -28,19 +28,29 @@ NavigationPopupPanel::NavigationPopupPanel(QObject* parent)
 {
 }
 
-NavigationControl* NavigationPopupPanel::parentControl() const
+INavigationControl* NavigationPopupPanel::parentControl() const
 {
     return m_parentControl;
 }
 
+NavigationControl* NavigationPopupPanel::parentControl_property() const
+{
+    return dynamic_cast<NavigationControl*>(m_parentControl);
+}
+
 void NavigationPopupPanel::setParentControl(NavigationControl* parentControl)
+{
+    setParentControl(static_cast<INavigationControl*>(parentControl));
+}
+
+void NavigationPopupPanel::setParentControl(INavigationControl* parentControl)
 {
     if (m_parentControl == parentControl) {
         return;
     }
 
     m_parentControl = parentControl;
-    emit parentControlChanged(m_parentControl);
+    emit parentControlChanged();
 
     if (m_parentControl && m_parentControl->panel()) {
         setSection(m_parentControl->panel()->section());

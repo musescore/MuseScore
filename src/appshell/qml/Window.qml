@@ -46,6 +46,8 @@ DockWindow {
         startupModel.load()
     }
 
+    property var shortcuts: Shortcuts{}
+
     property var provider: InteractiveProvider {
         topParent: dockWindow
         onRequestedDockPage: {
@@ -124,7 +126,9 @@ DockWindow {
                 }
 
                 onSelected: {
-                    api.launcher.open(uri)
+                    if (uri !== dockWindow.currentPageUri) {
+                        api.launcher.open(uri)
+                    }
                 }
             }
         },
