@@ -33,13 +33,22 @@ Item {
     property var instruments: null
     property alias search: searchField.searchText
 
-    property bool isInstrumentSelected: privateProperties.currentInstrumentIndex != -1
+    property bool isInstrumentSelected: prv.currentInstrumentIndex != -1
+
+    property alias navigation: navPanel
 
     signal selectInstrumentRequested(var instrumentId, var transposition)
     signal instrumentClicked()
 
+    NavigationPanel {
+        id: navPanel
+        name: "InstrumentsView"
+        direction: NavigationPanel.Vertical
+        enabled: root.visible
+    }
+
     QtObject {
-        id: privateProperties
+        id: prv
 
         property int currentInstrumentIndex: -1
         property var currentInstrument: null
@@ -54,18 +63,18 @@ Item {
             return null
         }
 
-        return privateProperties.currentInstrument
+        return prv.currentInstrument
     }
 
     function resetSelectedInstrument() {
-        privateProperties.currentInstrumentIndex = -1
+        prv.currentInstrumentIndex = -1
     }
 
     function focusInstrument(instrumentId) {
         for (var i in root.instruments) {
             if (root.instruments[i].id === instrumentId) {
-                privateProperties.currentInstrumentIndex = i
-                instrumentsView.positionViewAtIndex(privateProperties.currentInstrumentIndex, ListView.Beginning)
+                prv.currentInstrumentIndex = i
+                instrumentsView.positionViewAtIndex(prv.currentInstrumentIndex, ListView.Beginning)
                 return
             }
         }
@@ -88,6 +97,10 @@ Item {
         anchors.topMargin: 16
         anchors.left: parent.left
         anchors.right: parent.right
+
+        navigation.name: "SearchInstruments"
+        navigation.panel: navPanel
+        navigation.row: 1
 
         onTextCleared: {
             root.resetSelectedInstrument()
@@ -117,7 +130,12 @@ Item {
         delegate: ListItemBlank {
             id: item
 
-            isSelected: privateProperties.currentInstrumentIndex === index
+            navigation.name: modelData.name
+            navigation.panel: navPanel
+            navigation.row: 2 + model.index
+            onNavigationActived: item.clicked()
+
+            isSelected: prv.currentInstrumentIndex === index
 
             StyledTextLabel {
                 anchors.left: parent.left
@@ -132,7 +150,7 @@ Item {
             }
 
             onClicked: {
-                privateProperties.currentInstrumentIndex = index
+                prv.currentInstrumentIndex = index
                 root.instrumentClicked()
             }
 
@@ -158,7 +176,7 @@ Item {
 
                 onFocusChanged: {
                     if (focus) {
-                        privateProperties.currentInstrumentIndex = index
+                        prv.currentInstrumentIndex = index
                     }
                 }
 
@@ -179,14 +197,14 @@ Item {
                 }
 
                 onValueChanged: {
-                    if (privateProperties.currentInstrumentIndex == index) {
+                    if (prv.currentInstrumentIndex == index) {
                         item.resetCurrentInstrument()
                     }
                 }
             }
 
             function resetCurrentInstrument() {
-                privateProperties.currentInstrument = {
+                prv.currentInstrument = {
                     "instrument": modelData,
                     "transposition": transpositionsBox.value
                 }
@@ -195,9 +213,9 @@ Item {
             }
 
             Connections {
-                target: privateProperties
+                target: prv
                 function onCurrentInstrumentIndexChanged() {
-                    if (privateProperties.currentInstrumentIndex == index) {
+                    if (prv.currentInstrumentIndex == index) {
                         item.resetCurrentInstrument()
                     }
                 }
