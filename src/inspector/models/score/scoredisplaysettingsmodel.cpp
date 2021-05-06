@@ -75,7 +75,11 @@ void ScoreSettingsModel::resetProperties()
 
 ScoreConfig ScoreSettingsModel::scoreConfig() const
 {
-    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
+    IF_ASSERT_FAILED(context()) {
+        return ScoreConfig();
+    }
+
+    if (!context()->currentNotation()) {
         return ScoreConfig();
     }
 
@@ -84,7 +88,11 @@ ScoreConfig ScoreSettingsModel::scoreConfig() const
 
 mu::async::Channel<ScoreConfigType> ScoreSettingsModel::scoreConfigChanged() const
 {
-    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
+    IF_ASSERT_FAILED(context()) {
+        return mu::async::Channel<ScoreConfigType>();
+    }
+
+    if (!context()->currentNotation()) {
         return mu::async::Channel<ScoreConfigType>();
     }
 

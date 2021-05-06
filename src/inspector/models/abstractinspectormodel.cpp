@@ -504,7 +504,11 @@ mu::async::Notification AbstractInspectorModel::currentNotationChanged() const
 
 void AbstractInspectorModel::updateNotation()
 {
-    IF_ASSERT_FAILED(context() && context()->currentNotation()) {
+    IF_ASSERT_FAILED(context()) {
+        return;
+    }
+
+    if (!context()->currentNotation()) {
         return;
     }
 
