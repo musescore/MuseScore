@@ -55,6 +55,20 @@ KDDockWidgets::Location locationToMultisplitterLocation(DropIndicators::DropLoca
     }
 }
 
+Qt::DockWidgetArea locationToDockArea(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation location)
+{
+    using DropLocation = KDDockWidgets::DropIndicatorOverlayInterface;
+
+    switch (location) {
+    case DropLocation::DropLocation_Left: return Qt::LeftDockWidgetArea;
+    case DropLocation::DropLocation_Right: return Qt::RightDockWidgetArea;
+    case DropLocation::DropLocation_Top: return Qt::TopDockWidgetArea;
+    case DropLocation::DropLocation_Bottom: return Qt::BottomDockWidgetArea;
+    case DropLocation::DropLocation_None:
+    default: return Qt::NoDockWidgetArea;
+    }
+}
+
 static IndicatorsWindow* createIndicatorWindow(DropIndicators* dropIndicators)
 {
     auto window = new IndicatorsWindow(dropIndicators);
@@ -79,6 +93,8 @@ DropIndicators::~DropIndicators()
 
 KDDockWidgets::DropIndicatorOverlayInterface::DropLocation DropIndicators::hover_impl(QPoint globalPos)
 {
+    showDropAreaIfNeed(globalPos);
+
     return m_indicatorsWindow->hover(globalPos);
 }
 
@@ -99,67 +115,93 @@ bool DropIndicators::outterRightIndicatorVisible() const
 
 bool DropIndicators::outterTopIndicatorVisible() const
 {
-    return isIndicatorVisible(IndicatorType::Outter, Qt::TopDockWidgetArea);
+    return false;
 }
 
 bool DropIndicators::outterBottomIndicatorVisible() const
 {
-    return isIndicatorVisible(IndicatorType::Outter, Qt::BottomDockWidgetArea);
+    return false;
 }
 
 bool DropIndicators::centralIndicatorVisible() const
 {
-    return isIndicatorVisible(IndicatorType::Central);
+    return isIndicatorVisible(DropLocation::DropLocation_Center);
 }
 
 bool DropIndicators::innerLeftIndicatorVisible() const
 {
-    return isIndicatorVisible(IndicatorType::Inner, Qt::LeftDockWidgetArea);
+    return isIndicatorVisible(DropLocation::DropLocation_Left);
 }
 
 bool DropIndicators::innerRightIndicatorVisible() const
 {
-    return isIndicatorVisible(IndicatorType::Inner, Qt::RightDockWidgetArea);
+    return isIndicatorVisible(DropLocation::DropLocation_Right);
 }
 
 bool DropIndicators::innerTopIndicatorVisible() const
 {
-    return isIndicatorVisible(IndicatorType::Inner, Qt::TopDockWidgetArea);
+    return isIndicatorVisible(DropLocation::DropLocation_Top);
 }
 
 bool DropIndicators::innerBottomIndicatorVisible() const
 {
-    return isIndicatorVisible(IndicatorType::Inner, Qt::BottomDockWidgetArea);
+    return isIndicatorVisible(DropLocation::DropLocation_Bottom);
 }
 
-bool DropIndicators::isIndicatorVisible(IndicatorType type, Qt::DockWidgetArea area) const
+bool DropIndicators::isIndicatorVisible(DropLocation location) const
 {
     if (isToolBar()) {
         return false;
     }
 
-    switch (type) {
-    case IndicatorType::Outter:
-        return isAreaAllowed(area);
-    case IndicatorType::Central:
-        return !hoveringOverDock(DockType::Central);
-    case IndicatorType::Inner: {
-        if (hoveringOverDock(DockType::Central)) {
-            return isAreaAllowed(area);
-        }
+    return isDropAllowed(location);
+}
 
-        return true;
+bool DropIndicators::isDropAllowed(DropLocation location) const
+{
+    if (location == DropLocation_None) {
+        return false;
     }
+
+    DockProperties hoveredDockProperties = readPropertiesFromObject(hoveredDock());
+    DockProperties draggedDockProperties = readPropertiesFromObject(draggedDock());
+
+    DockType hoveredDockType = hoveredDockProperties.type;
+    DockType draggedDockType = draggedDockProperties.type;
+
+    auto isDragged = [draggedDockType](DockType type) {
+        return draggedDockType == type;
+    };
+
+    auto isHovered = [hoveredDockType](DockType type) {
+        return hoveredDockType == type;
+    };
+
+    static const QSet<DropLocation> sideLocations {
+        DropLocation::DropLocation_Left,
+        DropLocation::DropLocation_Right
+    };
+
+    if (hoveredDockType == draggedDockType) {
+        return sideLocations.contains(location) || isDragged(DockType::Panel);
+    }
+
+    if (isHovered(DockType::Central)) {
+        Qt::DockWidgetArea area = locationToDockArea(location);
+        return draggedDockProperties.allowedAreas.testFlag(area);
     }
 
     return false;
 }
 
-bool DropIndicators::hoveringOverDock(DockType type) const
+const KDDockWidgets::DockWidgetBase* DropIndicators::draggedDock() const
 {
-    const KDDockWidgets::DockWidgetBase* dock = hoveredDock();
-    DockProperties properties = readPropertiesFromObject(dock);
-    return properties.type == type;
+    auto windowBeingDragged = KDDockWidgets::DragController::instance()->windowBeingDragged();
+    if (!windowBeingDragged || windowBeingDragged->dockWidgets().isEmpty()) {
+        return nullptr;
+    }
+
+    return windowBeingDragged->dockWidgets().first();
 }
 
 const KDDockWidgets::DockWidgetBase* DropIndicators::hoveredDock() const
@@ -175,11 +217,6 @@ const KDDockWidgets::DockWidgetBase* DropIndicators::hoveredDock() const
     }
 
     return docks.first();
-}
-
-bool DropIndicators::isAreaAllowed(Qt::DockWidgetArea area) const
-{
-    return m_draggedDockProperties.allowedAreas.testFlag(area);
 }
 
 bool DropIndicators::isToolBar() const
@@ -212,33 +249,58 @@ void DropIndicators::updateVisibility()
     } else {
         m_rubberBand->setVisible(false);
         m_indicatorsWindow->setVisible(false);
-    }
+    }        
 
-    m_draggedDockProperties = DockProperties();
-
-    auto windowBeingDragged = KDDockWidgets::DragController::instance()->windowBeingDragged();
-    if (!windowBeingDragged || windowBeingDragged->dockWidgets().isEmpty()) {
-        return;
-    }
-
-    auto dock = windowBeingDragged->dockWidgets().first();
-    m_draggedDockProperties = readPropertiesFromObject(dock); 
-
-    if (hoveredDock()) {
-        LOGI() << "$$$ hovering over: " << hoveredDock()->uniqueName();
-    }
+    m_draggedDockProperties = readPropertiesFromObject(draggedDock());
 
     emit indicatorsVisibilityChanged();
 }
 
-void DropIndicators::setDropLocation(DropLocation location)
+void DropIndicators::showDropAreaIfNeed(const QPoint& hoveredGlobalPos)
 {
-    setCurrentDropLocation(location);
-
-    if (location == DropLocation_None) {
-        m_rubberBand->setVisible(false);
+    if (!isToolBar()) {
         return;
     }
+
+    const KDDockWidgets::DockWidgetBase* draggedDock = this->draggedDock();
+    const KDDockWidgets::DockWidgetBase* hoveredDock = this->hoveredDock();
+
+    if (!draggedDock || !hoveredDock) {
+        return;
+    }
+
+    DockType hoveredDockType = readPropertiesFromObject(hoveredDock).type;
+    if (hoveredDockType != DockType::ToolBar) {
+        return;
+    }
+
+    QRect dropAreaRect = hoveredDock->geometry();
+
+    int distanceToLeftCorner = std::abs(dropAreaRect.x() - hoveredGlobalPos.x());
+    int distanceToRightCorner = std::abs(dropAreaRect.x() + dropAreaRect.width() - hoveredGlobalPos.x());
+
+    DropLocation dropLocation = DropLocation_Left;
+
+    if (distanceToRightCorner < distanceToLeftCorner) {
+        dropAreaRect.setX(dropAreaRect.x() + dropAreaRect.width() - draggedDock->width());
+        dropLocation = DropLocation_Right;
+    }
+
+    dropAreaRect.setWidth(draggedDock->width());
+
+    m_rubberBand->setGeometry(dropAreaRect);
+    m_rubberBand->setVisible(true);
+
+    setDropLocation(dropLocation);
+}
+
+void DropIndicators::setDropLocation(DropLocation location)
+{
+    if (!isDropAllowed(location)) {
+        return;
+    }
+
+    setCurrentDropLocation(location);
 
     if (location == DropLocation_Center) {
         m_rubberBand->setGeometry(m_hoveredFrame ? m_hoveredFrame->QWidgetAdapter::geometry() : rect());
@@ -255,10 +317,6 @@ void DropIndicators::setDropLocation(DropLocation location)
     case DropLocation_Right:
     case DropLocation_Bottom:
         if (!m_hoveredFrame) {
-            qWarning() << "DropIndicators::setCurrentDropLocation: frame is null. location=" << location
-                       << "; isHovered=" << isHovered()
-                       << "; dropArea->widgets=" << m_dropArea->items();
-            Q_ASSERT(false);
             return;
         }
         relativeToFrame = m_hoveredFrame;
