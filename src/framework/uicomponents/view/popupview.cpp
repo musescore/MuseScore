@@ -87,7 +87,7 @@ void PopupView::componentComplete()
         return;
     }
 
-    m_window = new PopupWindow_QQuickView();  //new PopupWindow(engine, uiConfiguration(), isDialog());
+    m_window = new PopupWindow_QQuickView();
     m_window->init(engine, uiConfiguration(), isDialog());
     m_window->setOnHidden([this]() { onHidden(); });
     m_window->setContent(m_contentItem);
@@ -132,11 +132,12 @@ void PopupView::open()
         IF_ASSERT_FAILED(prn) {
             return;
         }
-
         m_globalPos = prn->mapToGlobal(m_localPos);
     }
 
     m_window->show(m_globalPos.toPoint());
+
+    m_globalPos = QPointF(); // invalidate
 
     if (isDialog()) {
         QWindow* qWindow = m_window->qWindow();
@@ -146,7 +147,7 @@ void PopupView::open()
         qWindow->setTitle(m_title);
         qWindow->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
 
-        const QRect& winRect = m_window->geometry();
+        QRect winRect = m_window->geometry();
         qWindow->setMinimumSize(winRect.size());
         if (!m_resizable) {
             qWindow->setMaximumSize(winRect.size());
