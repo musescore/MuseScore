@@ -40,6 +40,7 @@ StyledPopupView {
     margins: 0
     x: 0
     y: opensUpward ? -root.height : parent.height
+    showArrow: false
 
     animationEnabled: false //! NOTE disabled - because trouble with simultaneous opening of submenu
 
