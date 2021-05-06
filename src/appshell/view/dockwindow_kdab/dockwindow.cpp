@@ -30,6 +30,7 @@
 
 #include "thirdparty/KDDockWidgets/src/private/quick/MainWindowQuick_p.h"
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
+#include "thirdparty/KDDockWidgets/src/LayoutSaver.h"
 
 using namespace mu::dock;
 
@@ -40,6 +41,11 @@ DockWindow::DockWindow(QQuickItem* parent)
 {
 }
 
+DockWindow::~DockWindow()
+{
+    delete m_layoutSaver;
+}
+
 void DockWindow::componentComplete()
 {
     QQuickItem::componentComplete();
@@ -47,6 +53,8 @@ void DockWindow::componentComplete()
     m_mainWindow = new KDDockWidgets::MainWindowQuick("mainWindow",
                                                       KDDockWidgets::MainWindowOption_None,
                                                       this);
+
+    m_layoutSaver = new KDDockWidgets::LayoutSaver();
 }
 
 QString DockWindow::currentPageUri() const
@@ -79,10 +87,14 @@ void DockWindow::loadPage(const QString& uri)
 
     DockPage* currentPage = pageByUri(m_currentPageUri);
     if (currentPage) {
+        saveState(currentPage->objectName());
         currentPage->close();
     }
 
     loadPageContent(newPage);
+    restoreState(newPage->objectName());
+
+    initDocks(newPage);
 
     m_currentPageUri = uri;
     emit currentPageUriChanged(uri);
@@ -154,7 +166,6 @@ void DockWindow::addDock(DockBase* dock, KDDockWidgets::Location location, const
 
     KDDockWidgets::DockWidgetBase* relativeDock = relativeTo ? relativeTo->dockWidget() : nullptr;
     m_mainWindow->addDockWidget(dock->dockWidget(), location, relativeDock, dock->preferredSize());
-    dock->init();
 }
 
 DockPage* DockWindow::pageByUri(const QString& uri) const
@@ -166,4 +177,28 @@ DockPage* DockWindow::pageByUri(const QString& uri) const
     }
 
     return nullptr;
+}
+
+void DockWindow::saveState(const QString& pageName)
+{
+    configuration()->setPageState(pageName.toStdString(), m_layoutSaver->serializeLayout());
+}
+
+void DockWindow::restoreState(const QString& pageName)
+{
+    QByteArray state = configuration()->pageState(pageName.toStdString());
+    if (!state.isEmpty()) {
+        m_layoutSaver->restoreLayout(state);
+    }
+}
+
+void DockWindow::initDocks(DockPage* page)
+{
+    for (DockToolBar* toolbar : m_toolBars.list()) {
+        toolbar->init();
+    }
+
+    if (page) {
+        page->init();
+    }
 }

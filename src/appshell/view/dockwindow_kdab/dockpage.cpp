@@ -40,6 +40,13 @@ DockPage::DockPage(QQuickItem* parent)
 {
 }
 
+void DockPage::init()
+{
+    for (DockBase* dock : allDocks()) {
+        dock->init();
+    }
+}
+
 QString DockPage::uri() const
 {
     return m_uri;
@@ -114,19 +121,7 @@ void DockPage::close()
 {
     TRACEFUNC;
 
-    auto mainToolBars = this->mainToolBars();
-    auto toolbars = this->toolBars();
-    auto panels = this->panels();
-    auto statusBars = this->statusBars();
-
-    QList<DockBase*> allDocks;
-    allDocks << QList<DockBase*>(mainToolBars.begin(), mainToolBars.end());
-    allDocks << QList<DockBase*>(toolbars.begin(), toolbars.end());
-    allDocks << m_central;
-    allDocks << QList<DockBase*>(panels.begin(), panels.end());
-    allDocks << QList<DockBase*>(statusBars.begin(), statusBars.end());
-
-    for (DockBase* dock : allDocks) {
+    for (DockBase* dock : allDocks()) {
         dock->close();
     }
 }
@@ -136,4 +131,21 @@ void DockPage::componentComplete()
     QQuickItem::componentComplete();
 
     Q_ASSERT(!m_uri.isEmpty());
+}
+
+QList<DockBase*> DockPage::allDocks() const
+{
+    auto mainToolBars = this->mainToolBars();
+    auto toolbars = this->toolBars();
+    auto panels = this->panels();
+    auto statusBars = this->statusBars();
+
+    QList<DockBase*> docks;
+    docks << QList<DockBase*>(mainToolBars.begin(), mainToolBars.end());
+    docks << QList<DockBase*>(toolbars.begin(), toolbars.end());
+    docks << m_central;
+    docks << QList<DockBase*>(panels.begin(), panels.end());
+    docks << QList<DockBase*>(statusBars.begin(), statusBars.end());
+
+    return docks;
 }
