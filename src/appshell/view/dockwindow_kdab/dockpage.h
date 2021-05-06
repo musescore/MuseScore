@@ -32,6 +32,7 @@ class DockToolBar;
 class DockPanel;
 class DockCentral;
 class DockStatusBar;
+class DockBase;
 class DockPage : public QQuickItem
 {
     Q_OBJECT
@@ -45,6 +46,8 @@ class DockPage : public QQuickItem
 
 public:
     explicit DockPage(QQuickItem* parent = nullptr);
+
+    void init();
 
     QString uri() const;
 
@@ -71,6 +74,8 @@ signals:
 
 private:
     void componentComplete() override;
+
+    QList<DockBase*> allDocks() const;
 
     QString m_uri;
     uicomponents::QmlListProperty<DockToolBar> m_mainToolBars;
