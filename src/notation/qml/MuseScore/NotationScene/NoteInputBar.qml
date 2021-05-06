@@ -121,7 +121,7 @@ Rectangle {
 
             Canvas {
 
-                visible: item.showSubitemsByPressAndHoldRole
+                visible: Boolean(item) && item.showSubitemsByPressAndHoldRole
 
                 width: 4
                 height: 4

@@ -29,8 +29,12 @@
 
 #include "thirdparty/KDDockWidgets/src/KDDockWidgets.h"
 
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
+
 namespace KDDockWidgets {
 class MainWindowBase;
+class LayoutSaver;
 }
 
 namespace mu::dock {
@@ -46,8 +50,11 @@ class DockWindow : public QQuickItem
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolBars READ toolBarsProperty)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockPage> pages READ pagesProperty)
 
+    INJECT(dock, ui::IUiConfiguration, configuration)
+
 public:
     explicit DockWindow(QQuickItem* parent = nullptr);
+    ~DockWindow();
 
     QString currentPageUri() const;
 
@@ -69,10 +76,17 @@ private:
 
     void addDock(DockBase* dock, KDDockWidgets::Location location, const DockBase* relativeTo = nullptr);
 
+    void saveState(const QString& pageName);
+    void restoreState(const QString& pageName);
+
+    void initDocks(DockPage* page);
+
     KDDockWidgets::MainWindowBase* m_mainWindow = nullptr;
     QString m_currentPageUri;
     uicomponents::QmlListProperty<DockToolBar> m_toolBars;
     uicomponents::QmlListProperty<DockPage> m_pages;
+
+    KDDockWidgets::LayoutSaver* m_layoutSaver = nullptr;
 };
 }
 
