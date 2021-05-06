@@ -57,6 +57,10 @@ Loader {
         }
     }
 
+    function unloadMenu() {
+        loader.sourceComponent = null
+    }
+
     Component {
         id: itemMenuComp
         StyledMenu {
@@ -64,6 +68,10 @@ Loader {
             onHandleAction: {
                 Qt.callLater(loader.handleAction, actionCode, actionIndex)
                 itemMenu.close()
+            }
+
+            onClosed: {
+                Qt.callLater(loader.unloadMenu)
             }
         }
     }

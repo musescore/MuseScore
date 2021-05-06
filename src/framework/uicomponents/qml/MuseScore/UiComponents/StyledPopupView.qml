@@ -42,9 +42,10 @@ PopupView {
     property int contentHeight: contentBody.childrenRect.height
 
     property bool opensUpward: false
-    property var arrowX: root.width / 2
+    property int arrowX: root.width / 2
+    property bool showArrow: true
 
-    property bool animationEnabled: true
+    property bool animationEnabled: false
 
     property alias navigation: keynavPanel
     property bool isDoActiveParentOnClose: true
@@ -106,6 +107,8 @@ PopupView {
         implicitWidth: contentContainer.implicitWidth + root.padding * 2
         implicitHeight: contentContainer.implicitHeight + root.padding * 2
 
+        focus: true
+
         Item {
             id: contentContainer
             x: root.padding
@@ -116,8 +119,8 @@ PopupView {
             implicitWidth: contentBody.implicitWidth + root.margins * 2
             implicitHeight: contentBody.implicitHeight + root.margins * 2
 
-            scale: 0.7
-            opacity: 0.5
+            scale: root.animationEnabled ? 0.7 : 1.0
+            opacity: root.animationEnabled ? 0.5 : 1.0
             transformOrigin: Item.Center
 
             Rectangle {
@@ -141,7 +144,8 @@ PopupView {
                 anchors.bottomMargin: root.opensUpward ? (-arrow.height + contentBackground.border.width) : 0
                 height: root.padding
                 width: root.padding * 2
-                visible: arrow.height > 0
+                visible: root.showArrow && arrow.height > 0
+                enabled: root.showArrow
                 x: root.arrowX - arrow.width / 2 - root.padding
 
                 onPaint: {
@@ -188,7 +192,7 @@ PopupView {
             State {
                 name: "CLOSED"
                 when: !root.isOpened
-                PropertyChanges { target: contentContainer; scale: 0.7; opacity: 0.5 }
+                PropertyChanges { target: contentContainer; scale: root.animationEnabled ? 0.7 : 1.0; opacity: root.animationEnabled ? 0.5 : 1.0 }
             }
         ]
 
