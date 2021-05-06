@@ -26,6 +26,7 @@
 #include <memory>
 #include <QString>
 #include <QList>
+#include <QVariantMap>
 #include "async/channel.h"
 #include "async/notification.h"
 
@@ -78,6 +79,8 @@ public:
         int order() const { return column; }
 
         inline bool operator ==(const Index& idx) const { return column == idx.column && row == idx.row; }
+
+        std::string to_string() const { return std::string("[") + std::to_string(row) + "," + std::to_string(column) + "]"; }
     };
 
     virtual QString name() const = 0;
