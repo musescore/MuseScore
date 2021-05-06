@@ -27,6 +27,9 @@
 #include "audioclient.h"
 #include "log.h"
 
+#define REFTIMES_PER_SEC  10000000
+#define REFTIMES_PER_MILLISEC  10000
+
 #define CHECK_HRESULT(hr); if (hr != S_OK) { \
         logError(hr); \
         return false; \
@@ -123,8 +126,11 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     CHECK_HRESULT(hr);
     hr = s_data->audioClient->SetEventHandle(s_data->hEvent);
 
+    REFERENCE_TIME hnsActualDuration = (double)REFTIMES_PER_SEC
+                                       * bufferFrameCount / s_data->pFormat.nSamplesPerSec;
+
     m_active = true;
-    m_thread = std::thread([this]() {
+    m_thread = std::thread([this, hnsActualDuration]() {
         BYTE* pData;
         HRESULT hr = S_OK;
         do {
@@ -151,6 +157,8 @@ bool CoreAudioDriver::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
                 LOGE() << "audio driver wait for signal failed: " << waitResult;
                 break;
             }
+
+            Sleep((DWORD)(hnsActualDuration / REFTIMES_PER_MILLISEC / 2));
         } while (m_active);
     });
 
