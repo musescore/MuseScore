@@ -22,7 +22,6 @@
 import QtQuick 2.15
 import Qt.labs.platform 1.1 as PLATFORM
 
-import MuseScore.Ui 1.0
 import MuseScore.AppShell 1.0
 
 AppWindow {
@@ -88,8 +87,6 @@ AppWindow {
         PLATFORM.Menu {
             property var subitems: []
 
-            font: ui.theme.bodyFont
-
             onAboutToShow: {
                 clear()
 
@@ -118,8 +115,6 @@ AppWindow {
         PLATFORM.MenuItem {
             property string actionCode: ""
             property int actionIndex: -1
-
-            font: ui.theme.bodyFont
 
             onTriggered: {
                 Qt.callLater(menuModel.handleAction, actionCode, actionIndex)

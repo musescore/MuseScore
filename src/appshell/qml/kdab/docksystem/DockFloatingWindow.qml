@@ -25,8 +25,6 @@ import QtQuick 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-import "qrc:/kddockwidgets/private/quick/qml/" as KDDW
-
 Item {
     id: root
 
@@ -35,8 +33,10 @@ Item {
     readonly property QtObject titleBarCpp: Boolean(floatingWindowCpp) ? floatingWindowCpp.titleBar : null
     readonly property QtObject dropAreaCpp: Boolean(floatingWindowCpp) ? floatingWindowCpp.dropArea : null
     readonly property int titleBarHeight: titleBar.heightWhenVisible
+    readonly property int margins: 8 // needed for the shadow
 
     anchors.fill: parent
+    anchors.margins: margins
 
     onTitleBarHeightChanged: {
         if (Boolean(floatingWindowCpp)) {
@@ -44,36 +44,33 @@ Item {
         }
     }
 
-    Rectangle {
-        id: content
-
-        anchors.fill: parent
-        anchors.margins: 8
-
-        DockTitleBar {
-            id: titleBar
-
-            anchors.top: parent.top
-
-            titleBarCpp: root.titleBarCpp
-        }
-
-        KDDW.DropArea {
-            id: dropArea
-
-            anchors.top: titleBar.bottom
-            anchors.bottom: parent.bottom
-
-            width: parent.width
-
-            dropAreaCpp: root.dropAreaCpp
-        }
-    }
-
     onDropAreaCppChanged: {
         if (Boolean(dropAreaCpp)) {
             dropAreaCpp.parent = dropArea
             dropAreaCpp.anchors.fill = dropArea
+        }
+    }
+
+    Item {
+        id: content
+
+        anchors.fill: parent
+
+        DockTitleBar {
+            id: titleBar
+
+            anchors.top: parent ? parent.top : undefined
+
+            titleBarCpp: root.titleBarCpp
+        }
+
+        Item {
+            id: dropArea
+
+            anchors.top: titleBar.bottom
+            anchors.bottom: parent ? parent.bottom : undefined
+
+            width: parent ? parent.width : 0
         }
     }
 
