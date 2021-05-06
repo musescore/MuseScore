@@ -99,71 +99,87 @@ bool DropIndicators::outterRightIndicatorVisible() const
 
 bool DropIndicators::outterTopIndicatorVisible() const
 {
-    return isAreaAllowed(Qt::TopDockWidgetArea);
+    return isIndicatorVisible(IndicatorType::Outter, Qt::TopDockWidgetArea);
 }
 
 bool DropIndicators::outterBottomIndicatorVisible() const
 {
-    return isAreaAllowed(Qt::BottomDockWidgetArea);
+    return isIndicatorVisible(IndicatorType::Outter, Qt::BottomDockWidgetArea);
 }
 
 bool DropIndicators::centralIndicatorVisible() const
+{
+    return isIndicatorVisible(IndicatorType::Central);
+}
+
+bool DropIndicators::innerLeftIndicatorVisible() const
+{
+    return isIndicatorVisible(IndicatorType::Inner, Qt::LeftDockWidgetArea);
+}
+
+bool DropIndicators::innerRightIndicatorVisible() const
+{
+    return isIndicatorVisible(IndicatorType::Inner, Qt::RightDockWidgetArea);
+}
+
+bool DropIndicators::innerTopIndicatorVisible() const
+{
+    return isIndicatorVisible(IndicatorType::Inner, Qt::TopDockWidgetArea);
+}
+
+bool DropIndicators::innerBottomIndicatorVisible() const
+{
+    return isIndicatorVisible(IndicatorType::Inner, Qt::BottomDockWidgetArea);
+}
+
+bool DropIndicators::isIndicatorVisible(IndicatorType type, Qt::DockWidgetArea area) const
 {
     if (isToolBar()) {
         return false;
     }
 
-    return !hoveringOverDock(DockType::Central);
-}
-
-bool DropIndicators::innerLeftIndicatorVisible() const
-{
-    return isInnerIndicatorVisible(Qt::LeftDockWidgetArea);
-}
-
-bool DropIndicators::innerRightIndicatorVisible() const
-{
-    return isInnerIndicatorVisible(Qt::RightDockWidgetArea);
-}
-
-bool DropIndicators::innerTopIndicatorVisible() const
-{
-    return isInnerIndicatorVisible(Qt::TopDockWidgetArea);
-}
-
-bool DropIndicators::innerBottomIndicatorVisible() const
-{
-    return isInnerIndicatorVisible(Qt::BottomDockWidgetArea);
-}
-
-bool DropIndicators::hoveringOverDock(DockType type) const
-{
-    if (!m_hoveredFrame) {
-        return false;
-    }
-
-    for (auto dock : m_hoveredFrame->dockWidgets()) {
-        DockProperties properties = readPropertiesFromObject(dock);
-        if (properties.type == type) {
-            return true;
+    switch (type) {
+    case IndicatorType::Outter:
+        return isAreaAllowed(area);
+    case IndicatorType::Central:
+        return !hoveringOverDock(DockType::Central);
+    case IndicatorType::Inner: {
+        if (hoveringOverDock(DockType::Central)) {
+            return isAreaAllowed(area);
         }
+
+        return true;
+    }
     }
 
     return false;
 }
 
+bool DropIndicators::hoveringOverDock(DockType type) const
+{
+    const KDDockWidgets::DockWidgetBase* dock = hoveredDock();
+    DockProperties properties = readPropertiesFromObject(dock);
+    return properties.type == type;
+}
+
+const KDDockWidgets::DockWidgetBase* DropIndicators::hoveredDock() const
+{
+    if (!m_hoveredFrame) {
+        return nullptr;
+    }
+
+    auto docks = m_hoveredFrame->dockWidgets();
+
+    if (docks.isEmpty()) {
+        return nullptr;
+    }
+
+    return docks.first();
+}
+
 bool DropIndicators::isAreaAllowed(Qt::DockWidgetArea area) const
 {
     return m_draggedDockProperties.allowedAreas.testFlag(area);
-}
-
-bool DropIndicators::isInnerIndicatorVisible(Qt::DockWidgetArea area) const
-{
-    if (hoveringOverDock(DockType::Central)) {
-        return isAreaAllowed(area);
-    }
-
-    return true;
 }
 
 bool DropIndicators::isToolBar() const
@@ -198,7 +214,7 @@ void DropIndicators::updateVisibility()
         m_indicatorsWindow->setVisible(false);
     }
 
-    m_draggedDockProperties.allowedAreas = Qt::AllDockWidgetAreas;
+    m_draggedDockProperties = DockProperties();
 
     auto windowBeingDragged = KDDockWidgets::DragController::instance()->windowBeingDragged();
     if (!windowBeingDragged || windowBeingDragged->dockWidgets().isEmpty()) {
@@ -206,7 +222,11 @@ void DropIndicators::updateVisibility()
     }
 
     auto dock = windowBeingDragged->dockWidgets().first();
-    m_draggedDockProperties = readPropertiesFromObject(dock);
+    m_draggedDockProperties = readPropertiesFromObject(dock); 
+
+    if (hoveredDock()) {
+        LOGI() << "$$$ hovering over: " << hoveredDock()->uniqueName();
+    }
 
     emit indicatorsVisibilityChanged();
 }
