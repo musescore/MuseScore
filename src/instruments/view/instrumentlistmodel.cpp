@@ -74,30 +74,27 @@ void InstrumentListModel::initSelectedInstruments(const IDList& selectedPartIds)
         return;
     }
 
-    QMap<QString, const Part*> partMap;
-    for (const Part* part: _notationParts->partList()) {
-        if (selectedPartIds.contains(part->id())) {
-            partMap.insert(part->id(), part);
-        }
-    }
 
+    auto parts = _notationParts->partList();
     for (const ID& partId: selectedPartIds) {
-        if (!partMap.contains(partId)) {
+        auto compareId = [partId](auto p) {
+            return p->id() == partId;
+        };
+        const Part* part = *find_if(begin(parts), end(parts), compareId);
+
+        if (!part) {
             continue;
         }
-        for (auto instrument: _notationParts->instrumentList(partId)) {
-            if (partMap[partId]->isDoublingInstrument(instrument.id)) {
-                continue;
-            }
-            InstrumentTemplate templ = instrumentTemplate(instrument.id);
 
-            SelectedInstrumentInfo info;
-            info.id = templ.id;
-            info.partId = partId;
-            info.partName = partMap[partId]->partName();
-            info.config = templ.instrument;
-            m_selectedInstruments << info;
-        }
+        SelectedInstrumentInfo info;
+
+        info.partId = partId;
+        info.partName = part->partName();
+
+        info.id = QString();
+        info.config = Instrument();
+
+        m_selectedInstruments << info;
     }
 
     emit selectedInstrumentsChanged();
