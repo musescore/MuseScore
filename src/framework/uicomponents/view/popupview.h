@@ -32,9 +32,9 @@
 #include "ui/iuiconfiguration.h"
 #include "ui/inavigationcontroller.h"
 #include "ui/view/navigationcontrol.h"
+#include "popupwindow/ipopupwindow.h"
 
 namespace mu::uicomponents {
-class PopupWindow;
 class PopupView : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
@@ -88,7 +88,7 @@ public:
 
     qreal localX() const;
     qreal localY() const;
-    const QRect& geometry() const;
+    QRect geometry() const;
 
     Q_INVOKABLE void forceActiveFocus();
 
@@ -156,7 +156,7 @@ protected:
 
     void setErrCode(Ret::Code code);
 
-    PopupWindow* m_window = nullptr;
+    IPopupWindow* m_window = nullptr;
     QQuickItem* m_contentItem = nullptr;
 
     QPointF m_localPos;
