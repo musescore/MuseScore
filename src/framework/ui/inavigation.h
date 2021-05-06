@@ -27,6 +27,7 @@
 #include <QString>
 #include <QList>
 #include <QVariantMap>
+
 #include "async/channel.h"
 #include "async/notification.h"
 
