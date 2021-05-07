@@ -74,7 +74,7 @@ public:
     void setPageState(const std::string& pageName, const QByteArray& state) override;
     async::Notification pageStateChanged() const override;
 
-    void applyPlatformStyle(QWidget* window) override;
+    void applyPlatformStyle(QWindow* window) override;
 
 private:
     bool needFollowSystemTheme() const;

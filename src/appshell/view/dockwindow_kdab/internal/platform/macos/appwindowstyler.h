@@ -19,33 +19,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_APPSHELL_APPWINDOWSTYLER_H
+#define MU_APPSHELL_APPWINDOWSTYLER_H
 
-#ifndef MU_UI_MACOSPLATFORMTHEME_H
-#define MU_UI_MACOSPLATFORMTHEME_H
+#include "async/asyncable.h"
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
 
-#include "internal/iplatformtheme.h"
+#include <QObject>
 
-namespace mu::ui {
-class MacOSPlatformTheme : public IPlatformTheme
+class QWindow;
+
+namespace mu::appshell {
+class AppWindowStyler : public QObject, public async::Asyncable
 {
+    Q_OBJECT
+
+    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
+
+    Q_PROPERTY(QWindow * targetWindow READ targetWindow WRITE setTargetWindow NOTIFY targetWindowChanged)
+
 public:
-    void startListening() override;
-    void stopListening() override;
+    explicit AppWindowStyler(QObject* parent = nullptr);
 
-    bool isFollowSystemThemeAvailable() const override;
+    Q_INVOKABLE void init();
 
-    ThemeCode themeCode() const override;
-    async::Channel<ThemeCode> themeCodeChanged() const override;
+    QWindow* targetWindow() const;
+    void setTargetWindow(QWindow* window);
 
-    void applyPlatformStyleOnAppForTheme(ThemeCode themeCode) override;
-    void applyPlatformStyleOnWindowForTheme(QWindow* window, ThemeCode themeCode) override;
+signals:
+    void targetWindowChanged();
 
 private:
-    bool isSystemDarkMode() const;
-    bool isSystemHighContrast() const;
-
-    async::Channel<ThemeCode> m_channel;
+    QWindow* m_targetWindow;
 };
 }
 
-#endif // MU_UI_MACOSPLATFORMTHEME_H
+#endif // MU_APPSHELL_APPWINDOWSTYLER_H

@@ -21,7 +21,9 @@
 #include "log.h"
 
 #include <Cocoa/Cocoa.h>
-#include <QWidget>
+#include <QApplication>
+#include <QPalette>
+#include <QWindow>
 
 using namespace mu::ui;
 using namespace mu::async;
@@ -112,10 +114,14 @@ void MacOSPlatformTheme::applyPlatformStyleOnAppForTheme(ThemeCode themeCode)
     }
 }
 
-void MacOSPlatformTheme::applyPlatformStyleOnWindowForTheme(QWidget* widget, ThemeCode)
+void MacOSPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow* window, ThemeCode)
 {
-    QColor backgroundColor = widget->palette().window().color();
-    NSView* nsView = (__bridge NSView*)reinterpret_cast<void*>(widget->winId());
+    if (!window) {
+        return;
+    }
+
+    QColor backgroundColor = QApplication::palette().window().color();
+    NSView* nsView = (__bridge NSView*)reinterpret_cast<void*>(window->winId());
     NSWindow* nsWindow = [nsView window];
     if (nsWindow) {
         [nsWindow setTitlebarAppearsTransparent:YES];

@@ -31,6 +31,7 @@
 #include "uitypes.h"
 
 class QByteArray;
+class QWindow;
 
 namespace mu::ui {
 class IUiConfiguration : MODULE_EXPORT_INTERFACE
@@ -73,7 +74,7 @@ public:
     virtual void setPageState(const std::string& pageName, const QByteArray& state) = 0;
     virtual async::Notification pageStateChanged() const = 0;
 
-    virtual void applyPlatformStyle(QWidget* window) = 0;
+    virtual void applyPlatformStyle(QWindow* window) = 0;
 };
 }
 
