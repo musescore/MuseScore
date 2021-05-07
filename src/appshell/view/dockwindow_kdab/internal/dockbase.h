@@ -55,16 +55,16 @@ public:
     int minimumHeight() const;
     int maximumWidth() const;
     int maximumHeight() const;
-
     QSize preferredSize() const;
 
     Qt::DockWidgetAreas allowedAreas() const;
 
+    bool floating() const;
+
     virtual void init();
 
-    void close();
-
-    bool floating() const;
+    void show();
+    void hide();
 
 public slots:
     void setTitle(const QString& title);

@@ -37,4 +37,11 @@ Dock.DockPage {
             anchors.fill: parent
         }
     }
+
+    toolBarsDockingHelper: Dock.DockToolBar {
+        objectName: root.objectName + "_toolbarsDockingHelper"
+        visible: false
+
+        Rectangle { color: ui.theme.backgroundPrimaryColor }
+    }
 }

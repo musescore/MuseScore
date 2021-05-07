@@ -40,6 +40,7 @@ class DockPage : public QQuickItem
     Q_PROPERTY(QString uri READ uri WRITE setUri NOTIFY uriChanged)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> mainToolBars READ mainToolBarsProperty)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolBars READ toolBarsProperty)
+    Q_PROPERTY(mu::dock::DockToolBar* toolBarsDockingHelper READ toolBarsDockingHelper WRITE setToolBarsDockingHelper NOTIFY toolBarsDockingHelperChanged)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockPanel> panels READ panelsProperty)
     Q_PROPERTY(mu::dock::DockCentral* centralDock READ centralDock WRITE setCentralDock NOTIFY centralDockChanged)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockStatusBar> statusBars READ statusBarsProperty)
@@ -48,6 +49,7 @@ public:
     explicit DockPage(QQuickItem* parent = nullptr);
 
     void init();
+    void close();
 
     QString uri() const;
 
@@ -58,29 +60,32 @@ public:
 
     QList<DockToolBar*> mainToolBars() const;
     QList<DockToolBar*> toolBars() const;
+    DockToolBar* toolBarsDockingHelper() const;
     DockCentral* centralDock() const;
     QList<DockPanel*> panels() const;
     QList<DockStatusBar*> statusBars() const;
+    QList<DockBase*> allDocks() const;
     DockBase* dockByName(const QString& dockName) const;
 
     void close();
 
 public slots:
     void setUri(const QString& uri);
+    void setToolBarsDockingHelper(DockToolBar* helper);
     void setCentralDock(DockCentral* central);
 
 signals:
     void uriChanged(const QString& uri);
+    void toolBarsDockingHelperChanged(DockToolBar* helper);
     void centralDockChanged(DockCentral* central);
 
 private:
     void componentComplete() override;
 
-    QList<DockBase*> allDocks() const;
-
     QString m_uri;
     uicomponents::QmlListProperty<DockToolBar> m_mainToolBars;
     uicomponents::QmlListProperty<DockToolBar> m_toolBars;
+    DockToolBar* m_toolBarsDockingHelper = nullptr;
     uicomponents::QmlListProperty<DockPanel> m_panels;
     DockCentral* m_central = nullptr;
     uicomponents::QmlListProperty<DockStatusBar> m_statusBars;

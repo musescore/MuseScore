@@ -48,6 +48,9 @@ public:
 
     virtual void requestChangeToolBarOrientation(const QString& toolBarName, framework::Orientation orientation) = 0;
     virtual async::Channel<std::pair<QString, framework::Orientation> > toolBarOrientationChangeRequested() const = 0;
+
+    virtual void setDockingHelperVisible(bool visible) = 0;
+    virtual async::Channel<bool> dockingHelperVisibleChanged() const = 0;
 };
 }
 

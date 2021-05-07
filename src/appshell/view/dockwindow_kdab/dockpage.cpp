@@ -79,7 +79,18 @@ QList<DockToolBar*> DockPage::mainToolBars() const
 
 QList<DockToolBar*> DockPage::toolBars() const
 {
-    return m_toolBars.list();
+    auto list = m_toolBars.list();
+
+    if (m_toolBarsDockingHelper) {
+        list << m_toolBarsDockingHelper;
+    }
+
+    return list;
+}
+
+DockToolBar* DockPage::toolBarsDockingHelper() const
+{
+    return m_toolBarsDockingHelper;
 }
 
 DockCentral* DockPage::centralDock() const
@@ -118,6 +129,16 @@ void DockPage::setUri(const QString& uri)
     emit uriChanged(uri);
 }
 
+void DockPage::setToolBarsDockingHelper(DockToolBar* helper)
+{
+    if (helper == m_toolBarsDockingHelper) {
+        return;
+    }
+
+    m_toolBarsDockingHelper = helper;
+    emit toolBarsDockingHelperChanged(helper);
+}
+
 void DockPage::setCentralDock(DockCentral* central)
 {
     if (central == m_central) {
@@ -133,7 +154,7 @@ void DockPage::close()
     TRACEFUNC;
 
     for (DockBase* dock : allDocks()) {
-        dock->close();
+        dock->hide();
     }
 }
 
