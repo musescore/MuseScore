@@ -20,6 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "interactivetestsmodel.h"
+
+#include <QTimer>
+
 #include "log.h"
 
 #include "async/async.h"
