@@ -19,12 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ASYNC_ASYNC_H
-#define MU_ASYNC_ASYNC_H
+#ifndef MU_ASYNC_PROMISE_H
+#define MU_ASYNC_PROMISE_H
 
-#include "thirdparty/deto_async/async/async.h"
+#include "thirdparty/deto_async/async/promise.h"
 namespace mu::async {
-using Async = deto::async::Async;
+template<typename T>
+using Promise = deto::async::Promise<T>;
 }
 
-#endif // MU_ASYNC_ASYNC_H
+#endif // MU_ASYNC_PROMISE_H
