@@ -52,7 +52,7 @@ void AbstractInvoker::processEvents()
     QueuedInvoker::instance()->processEvents();
 }
 
-void AbstractInvoker::onMainThreadInvoke(const std::function<void(const std::function<void()>&)>& f)
+void AbstractInvoker::onMainThreadInvoke(const std::function<void(const std::function<void()>&, bool)>& f)
 {
     QueuedInvoker::instance()->onMainThreadInvoke(f);
 }

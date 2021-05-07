@@ -34,13 +34,13 @@ void Invoker::setup()
     m_mainThreadId = std::this_thread::get_id();
 }
 
-void Invoker::invoke(const Call& func)
+void Invoker::invoke(const Call& func, bool isAlwaysQueued)
 {
     IF_ASSERT_FAILED(func) {
         return;
     }
 
-    if (std::this_thread::get_id() == m_mainThreadId) {
+    if (!isAlwaysQueued && std::this_thread::get_id() == m_mainThreadId) {
         func();
     } else {
         static const char* name = "doInvoke";

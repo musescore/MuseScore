@@ -63,7 +63,7 @@ public:
     bool isConnected() const;
 
     static void processEvents();
-    static void onMainThreadInvoke(const std::function<void(const std::function<void()>&)>& f);
+    static void onMainThreadInvoke(const std::function<void(const std::function<void()>&, bool)>& f);
 
 protected:
     explicit AbstractInvoker();
@@ -103,7 +103,7 @@ inline void processEvents()
     AbstractInvoker::processEvents();
 }
 
-inline void onMainThreadInvoke(const std::function<void(const std::function<void()>&)>& f)
+inline void onMainThreadInvoke(const std::function<void(const std::function<void()>&, bool)>& f)
 {
     AbstractInvoker::onMainThreadInvoke(f);
 }
