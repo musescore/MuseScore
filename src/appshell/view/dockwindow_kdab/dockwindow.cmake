@@ -22,6 +22,15 @@ set (DOCK_LIBS
     kddockwidgets
 )
 
+if (OS_IS_MAC)
+    set (DOCKWINDOW_PLATFORM_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/appwindowstyler.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/appwindowstyler.h
+        )
+else()
+    set (DOCKWINDOW_PLATFORM_SRC )
+endif()
+
 set (DOCKWINDOW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/docksetup.cpp
     ${CMAKE_CURRENT_LIST_DIR}/docksetup.h
@@ -50,5 +59,6 @@ set (DOCKWINDOW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockseparator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockframemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockframemodel.h
+    ${DOCKWINDOW_PLATFORM_SRC}
 )
 

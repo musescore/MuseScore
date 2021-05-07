@@ -27,7 +27,7 @@
 #include "async/channel.h"
 #include "uitypes.h"
 
-class QWidget;
+class QWindow;
 
 namespace mu::ui {
 class IPlatformTheme : MODULE_EXPORT_INTERFACE
@@ -46,7 +46,7 @@ public:
     virtual async::Channel<ThemeCode> themeCodeChanged() const = 0;
 
     virtual void applyPlatformStyleOnAppForTheme(ThemeCode themeCode) = 0;
-    virtual void applyPlatformStyleOnWindowForTheme(QWidget* window, ThemeCode themeCode) = 0;
+    virtual void applyPlatformStyleOnWindowForTheme(QWindow* window, ThemeCode themeCode) = 0;
 };
 }
 

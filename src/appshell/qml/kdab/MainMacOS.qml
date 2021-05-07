@@ -23,9 +23,15 @@ import QtQuick 2.15
 import Qt.labs.platform 1.1 as PLATFORM
 
 import MuseScore.AppShell 1.0
+import MuseScore.Dock 1.0
 
 AppWindow {
     id: root
+
+    AppWindowStyler {
+        id: appWindowStyler
+        targetWindow: root
+    }
 
     PLATFORM.MenuBar {
         id: menuBar
@@ -36,6 +42,7 @@ AppWindow {
     }
 
     Component.onCompleted: {
+        appWindowStyler.init()
         menuModel.load()
 
         for (var i in menuModel.items) {
