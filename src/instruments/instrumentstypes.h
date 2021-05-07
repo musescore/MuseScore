@@ -162,7 +162,14 @@ struct Instrument
     QString abbreviature() const { return !shortNames.isEmpty() ? shortNames.first().name() : QString(); }
 };
 
-using InstrumentList = QList<Instrument>;
+struct PartInstrument {
+    bool part;
+    bool soloist;
+    QString partId;
+    Instrument instrument;
+};
+
+using PartInstrumentList = QList<PartInstrument>;
 
 struct InstrumentTemplate
 {

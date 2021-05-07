@@ -24,7 +24,7 @@
 using namespace mu::instruments;
 using namespace mu::notation;
 
-mu::RetVal<InstrumentList> SelectInstrumentsScenario::selectInstruments(SelectInstrumentsMode mode) const
+mu::RetVal<PartInstrumentList> SelectInstrumentsScenario::selectInstruments(SelectInstrumentsMode mode) const
 {
     QStringList params;
     if (mode == SelectInstrumentsMode::ShowCurrentInstruments) {
@@ -43,7 +43,7 @@ mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const std::st
         "currentInstrumentId=" + QString::fromStdString(currentInstrumentId)
     };
 
-    RetVal<InstrumentList> selectedInstruments = selectInstruments(params);
+    RetVal<PartInstrumentList> selectedInstruments = selectInstruments(params);
     if (!selectedInstruments.ret) {
         result.ret = selectedInstruments.ret;
         return result;
@@ -55,13 +55,13 @@ mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const std::st
         return result;
     }
 
-    result.val = selectedInstruments.val.first();
+    result.val = selectedInstruments.val.first().instrument;
     return result;
 }
 
-mu::RetVal<InstrumentList> SelectInstrumentsScenario::selectInstruments(const QStringList& params) const
+mu::RetVal<PartInstrumentList> SelectInstrumentsScenario::selectInstruments(const QStringList& params) const
 {
-    RetVal<InstrumentList> result;
+    RetVal<PartInstrumentList> result;
 
     QString uri = QString("musescore://instruments/select?%1").arg(params.join('&'));
     RetVal<Val> instruments = interactive()->open(uri.toStdString());
@@ -74,7 +74,15 @@ mu::RetVal<InstrumentList> SelectInstrumentsScenario::selectInstruments(const QS
 
     QVariantList objList = instruments.val.toQVariant().toList();
     for (const QVariant& obj: objList) {
-        result.val << obj.value<Instrument>();
+        QVariantMap map = obj.toMap();
+        PartInstrument pi;
+
+        pi.part = map["part"].toBool();
+        pi.soloist = map["soloist"].toBool();
+        pi.partId = map["id"].toString();
+        pi.instrument = map["instrument"].value<Instrument>();
+
+        result.val << pi;
     }
 
     return result;

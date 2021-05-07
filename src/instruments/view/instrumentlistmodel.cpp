@@ -80,11 +80,13 @@ void InstrumentListModel::initSelectedInstruments(const IDList& selectedPartIds)
         auto compareId = [partId](auto p) {
             return p->id() == partId;
         };
-        const Part* part = *find_if(begin(parts), end(parts), compareId);
 
-        if (!part) {
+        auto pi = find_if(begin(parts), end(parts), compareId);
+        if ((pi == end(parts)) || !(*pi)) {
             continue;
         }
+
+        const Part* part = *pi;
 
         SelectedInstrumentInfo info;
 
@@ -272,6 +274,7 @@ void InstrumentListModel::selectInstrument(const QString& instrumentId, const QS
     }
 
     SelectedInstrumentInfo info;
+    info.part = false;
     info.id = codeKey;
     info.partId = QString();
     info.partName = QString();

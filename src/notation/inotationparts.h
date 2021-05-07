@@ -45,7 +45,7 @@ public:
     virtual ValCh<bool> canChangeInstrumentVisibility(const ID& instrumentId, const ID& fromPartId) const = 0;
     virtual bool voiceVisible(int voiceIndex) const = 0;
 
-    virtual void setInstruments(const instruments::InstrumentList& instruments) = 0;
+    virtual void setParts(const instruments::PartInstrumentList& instruments) = 0;
     virtual void setPartVisible(const ID& partId, bool visible) = 0;
     virtual void setInstrumentVisible(const ID& instrumentId, const ID& fromPartId, bool visible) = 0;
     virtual void setStaffVisible(const ID& staffId, bool visible) = 0;
