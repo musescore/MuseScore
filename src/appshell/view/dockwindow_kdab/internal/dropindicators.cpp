@@ -197,7 +197,12 @@ bool DropIndicators::isDropAllowed(DropLocation location) const
         return false;
     }
 
-    DockProperties hoveredDockProperties = readPropertiesFromObject(hoveredDock());
+    const KDDockWidgets::DockWidgetBase* hoveredDock = this->hoveredDock();
+    if (!hoveredDock || hoveredDock->isFloating()) {
+        return false;
+    }
+
+    DockProperties hoveredDockProperties = readPropertiesFromObject(hoveredDock);
     DockProperties draggedDockProperties = readPropertiesFromObject(draggedDock());
 
     DockType hoveredDockType = hoveredDockProperties.type;
