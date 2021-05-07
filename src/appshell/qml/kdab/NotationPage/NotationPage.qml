@@ -82,9 +82,7 @@ DockPage {
         pageModel.init()
     }
 
-    readonly property int defaultPanelWidth: 160
-    readonly property int minimumPanelWidth: 50
-    readonly property int maximumPanelWidth: 260
+    readonly property int defaultPanelWidth: 260
     readonly property int toolBarHeight: 48
 
     mainToolBars: [
@@ -97,8 +95,8 @@ DockPage {
             width: 198
             height: root.toolBarHeight
             minimumWidth: 198
-            minimumHeight: height
-            maximumHeight: height
+            minimumHeight: root.toolBarHeight
+            maximumHeight: root.toolBarHeight
 
             contentComponent: NotationToolBar {
                 navigation.section: root.topToolKeyNavSec
@@ -122,7 +120,7 @@ DockPage {
             height: root.toolbarHeight
             minimumWidth: floating ? 526 : 476
             minimumHeight: floating ? 76 : root.toolBarHeight
-            maximumHeight: height
+            maximumHeight: root.toolBarHeight
 
             contentComponent: PlaybackToolBar {
                 navigation.section: root.topToolKeyNavSec
@@ -140,9 +138,9 @@ DockPage {
 
             width: 74
             height: root.toolBarHeight
-            minimumWidth: width
-            minimumHeight: height
-            maximumHeight: height
+            minimumWidth: 74
+            minimumHeight: root.toolBarHeight
+            maximumHeight: root.toolBarHeight
 
             movable: false
 
@@ -160,10 +158,10 @@ DockPage {
             width: root.width
             height: root.toolBarHeight
 
-            minimumWidth: orientation == Qt.Horizontal ? 900 : root.toolBarHeight
-            maximumWidth: orientation == Qt.Horizontal ? root.width : 96
-            minimumHeight: orientation == Qt.Horizontal ? root.toolBarHeight : 900
-            maximumHeight: orientation == Qt.Horizontal ? root.toolBarHeight : root.height
+            minimumWidth: orientation == Qt.Horizontal ? 720 : root.toolBarHeight
+            maximumWidth: orientation == Qt.Horizontal ? 100500 : 96
+            minimumHeight: orientation == Qt.Horizontal ? root.toolBarHeight : 400
+            maximumHeight: orientation == Qt.Horizontal ? root.toolBarHeight : 100500
 
             allowedAreas: { Qt.AllDockWidgetAreas }
 
@@ -184,8 +182,8 @@ DockPage {
             title: qsTrc("appshell", "Palette")
 
             width: root.defaultPanelWidth
-            minimumWidth: root.minimumPanelWidth
-            maximumWidth: root.maximumPanelWidth
+            minimumWidth: root.defaultPanelWidth
+            maximumWidth: root.defaultPanelWidth
 
             tabifyPanel: instrumentsPanel
 
@@ -203,8 +201,8 @@ DockPage {
             title: qsTrc("appshell", "Instruments")
 
             width: root.defaultPanelWidth
-            minimumWidth: root.minimumPanelWidth
-            maximumWidth: root.maximumPanelWidth
+            minimumWidth: root.defaultPanelWidth
+            maximumWidth: root.defaultPanelWidth
 
             tabifyPanel: inspectorPanel
 
@@ -222,8 +220,8 @@ DockPage {
             title: qsTrc("appshell", "Inspector")
 
             width: root.defaultPanelWidth
-            minimumWidth: root.minimumPanelWidth
-            maximumWidth: root.maximumPanelWidth
+            minimumWidth: root.defaultPanelWidth
+            maximumWidth: root.defaultPanelWidth
 
             onClosed: {
                 root.pageModel.isInspectorPanelVisible = false

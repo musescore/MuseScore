@@ -27,10 +27,10 @@ import MuseScore.Shortcuts 1.0
 ApplicationWindow {
     id: root
 
-    width: 1024
+    width: 1150
     height: 800
 
-    minimumWidth: 1024
+    minimumWidth: 1150
     minimumHeight: 600
 
     visible: true
