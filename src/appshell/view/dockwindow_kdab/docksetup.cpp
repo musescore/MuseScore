@@ -117,6 +117,11 @@ void DockSetup::setup(QQmlEngine* engine)
                                                            | Qt::NoDropShadowWindowHint
                                                            | Qt::FramelessWindowHint;
 
+    auto internalFlags = KDDockWidgets::Config::self().internalFlags()
+                         | KDDockWidgets::Config::InternalFlag_UseTransparentFloatingWindow;
+
+    KDDockWidgets::Config::self().setInternalFlags(internalFlags);
+
     QSize minDockSize = KDDockWidgets::Config::self().absoluteWidgetMinSize();
     minDockSize.setHeight(30);
     KDDockWidgets::Config::self().setAbsoluteWidgetMinSize(minDockSize);
