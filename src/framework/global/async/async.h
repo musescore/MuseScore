@@ -19,41 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_INVOKER_H
-#define MU_FRAMEWORK_INVOKER_H
+#ifndef MU_ASYNC_ASYNC_H
+#define MU_ASYNC_ASYNC_H
 
-#include <QObject>
-#include <thread>
-#include <functional>
-
+#include "thirdparty/deto_async/async/async.h"
 namespace mu {
-namespace framework {
-class Invoker : public QObject
-{
-    Q_OBJECT
-public:
-    Invoker() = default;
-
-    using Call = std::function<void ()>;
-
-    static void setup();
-
-    void invoke(const Call& func = nullptr, bool isAlwaysQueued = false);
-
-public slots:
-    void doInvoke(void* ptr);
-
-private:
-
-    struct Functor {
-        Call call;
-        Functor(const Call& c)
-            : call(c) {}
-    };
-
-    static std::thread::id m_mainThreadId;
-};
+namespace async {
+using Async = deto::async::Async;
 }
 }
 
-#endif // MU_FRAMEWORK_INVOKER_H
+#endif // MU_ASYNC_ASYNC_H

@@ -30,7 +30,7 @@ inline void processEvents()
     deto::async::processEvents();
 }
 
-inline void onMainThreadInvoke(const std::function<void(const std::function<void()>&)>& f)
+inline void onMainThreadInvoke(const std::function<void(const std::function<void()>&, bool)>& f)
 {
     deto::async::onMainThreadInvoke(f);
 }

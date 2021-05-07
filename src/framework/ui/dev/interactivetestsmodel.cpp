@@ -22,6 +22,8 @@
 #include "interactivetestsmodel.h"
 #include "log.h"
 
+#include "async/async.h"
+
 using namespace mu::ui;
 using namespace mu::framework;
 
