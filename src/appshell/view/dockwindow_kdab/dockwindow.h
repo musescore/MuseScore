@@ -33,6 +33,7 @@
 #include "async/asyncable.h"
 #include "ui/iuiconfiguration.h"
 #include "ui/imainwindow.h"
+#include "async/asyncable.h"
 
 namespace KDDockWidgets {
 class MainWindowBase;
