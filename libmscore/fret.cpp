@@ -1266,6 +1266,9 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
       xml.stag("frame");
       xml.tag("frame-strings", _strings);
       xml.tag("frame-frets", frets());
+      if (fretOffset() > 0)
+            xml.tag("first-fret", fretOffset() + 1);
+
 
       for (int i = 0; i < _strings; ++i) {
             int mxmlString = _strings - i;
@@ -1298,7 +1301,7 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
                         continue;
                   xml.stag("frame-note");
                   xml.tag("string", mxmlString);
-                  xml.tag("fret", d.fret);
+                  xml.tag("fret", d.fret + fretOffset());
                   // TODO: write fingerings
 
                   // Also write barre if it starts at this dot

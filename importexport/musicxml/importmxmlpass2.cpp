@@ -4891,6 +4891,11 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
 /**
  Parse the /score-partwise/part/measure/harmony/frame node.
  Return the result as a FretDiagram.
+ Notes:
+ - MusicXML's first-fret is a positive integer equivalent to MuseScore's FretDiagram::_fretOffset
+ - it is one-based in MusicXML and zero-based in MuseScore
+ - in MusicXML fret numbers are absolute, in MuseScore they are relative to the fretOffset,
+   which affects both single strings and barres
  */
 
 FretDiagram* MusicXMLParserPass2::frame()
@@ -4904,7 +4909,15 @@ FretDiagram* MusicXMLParserPass2::frame()
       std::map<int, int> bEnds;
 
       while (_e.readNextStartElement()) {
-            if (_e.name() == "frame-frets") {
+            if (_e.name() == "first-fret") {
+                  bool ok {};
+                  int val = _e.readElementText().toInt(&ok);
+                  if (ok && val > 0)
+                        fd->setFretOffset(val - 1);
+                  else
+                        _logger->logError(QString("FretDiagram::readMusicXML: illegal first-fret %1").arg(val), &_e);
+                  }
+            else if (_e.name() == "frame-frets") {
                   int val = _e.readElementText().toInt();
                   if (val > 0) {
                         fd->setProperty(Pid::FRET_FRETS, val);
@@ -4946,7 +4959,7 @@ FretDiagram* MusicXMLParserPass2::frame()
                         else if (fret > 0) {
                               if (fd->marker(actualString).mtype == FretMarkerType::CROSS)
                                     fd->setMarker(actualString, FretMarkerType::NONE);
-                              fd->setDot(actualString, fret, true);
+                              fd->setDot(actualString, fret - fd->fretOffset(), true);
                               }
                         }
                   else
@@ -4978,7 +4991,7 @@ FretDiagram* MusicXMLParserPass2::frame()
                   continue;
 
             int endString = bEnds[fret];
-            fd->setBarre(startString, endString, fret);
+            fd->setBarre(startString, endString, fret - fd->fretOffset());
             }
 
       return fd;
