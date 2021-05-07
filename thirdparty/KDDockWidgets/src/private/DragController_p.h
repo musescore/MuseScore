@@ -19,6 +19,7 @@
 
 #include <QPoint>
 #include <QMimeData>
+#include <QTimer>
 
 #include <memory>
 
@@ -43,6 +44,7 @@ public:
     bool isCurrentState() const;
 
     virtual void onEntry() = 0;
+    virtual void onExit() {};
 private:
     MinimalStateMachine *const m_machine;
 };
@@ -187,9 +189,12 @@ public:
     explicit StateDragging(DragController *parent);
     ~StateDragging() override;
     void onEntry() override;
+    void onExit() override;
     bool handleMouseButtonRelease(QPoint globalPos) override;
     bool handleMouseMove(QPoint globalPos) override;
     bool handleMouseDoubleClick() override;
+private:
+    QTimer m_maybeCancelDrag;
 };
 
 

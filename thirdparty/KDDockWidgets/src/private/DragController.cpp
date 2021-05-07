@@ -134,7 +134,11 @@ State *MinimalStateMachine::currentState() const
 void MinimalStateMachine::setCurrentState(State *state)
 {
     if (state != m_currentState) {
+        if (m_currentState)
+            m_currentState->onExit();
+
         m_currentState = state;
+
         if (state)
             state->onEntry();
     }
@@ -245,12 +249,28 @@ bool StatePreDrag::handleMouseDoubleClick()
 StateDragging::StateDragging(DragController *parent)
     : StateBase(parent)
 {
+#if defined(Q_OS_WIN)
+    m_maybeCancelDrag.setInterval(100);
+    QObject::connect(&m_maybeCancelDrag, &QTimer::timeout, this, [this] {
+        // Workaround bug #166 , where Qt doesn't agree with Window's mouse button state.
+        // Looking in the Qt bug tracker there's many hits, so do a quick workaround here:
+
+        const bool mouseButtonIsReallyDown = (GetKeyState(VK_LBUTTON) & 0x8000);
+        if (!mouseButtonIsReallyDown && isLeftButtonPressed()) {
+            qCDebug(state) << "Canceling drag, Qt thinks mouse button is pressed"
+                << "but Windows knows it's not";
+           Q_EMIT q->dragCanceled();
+        }
+    });
+#endif
 }
 
 StateDragging::~StateDragging() = default;
 
 void StateDragging::onEntry()
 {
+    m_maybeCancelDrag.start();
+
     if (DockWidgetBase *dw = q->m_draggable->singleDockWidget()) {
         // When we start to drag a floating window which has a single dock widget, we save the position
         if (dw->isFloating())
@@ -305,6 +325,11 @@ void StateDragging::onEntry()
     Q_EMIT q->isDraggingChanged();
 }
 
+void StateDragging::onExit()
+{
+    m_maybeCancelDrag.stop();
+}
+
 bool StateDragging::handleMouseButtonRelease(QPoint globalPos)
 {
     qCDebug(state) << "StateDragging: handleMouseButtonRelease";
@@ -353,7 +378,6 @@ bool StateDragging::handleMouseMove(QPoint globalPos)
 
     if (!q->m_nonClientDrag)
         fw->windowHandle()->setPosition(globalPos - q->m_offset);
-
 
     if (fw->anyNonDockable()) {
         qCDebug(state) << "StateDragging: Ignoring non dockable floating window";

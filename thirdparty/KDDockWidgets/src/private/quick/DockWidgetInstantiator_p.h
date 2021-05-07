@@ -77,6 +77,7 @@ public:
 
     Q_INVOKABLE void setAsCurrentTab();
     Q_INVOKABLE void forceClose();
+    Q_INVOKABLE bool close();
     Q_INVOKABLE void show();
     Q_INVOKABLE void raise();
     Q_INVOKABLE void moveToSideBar();

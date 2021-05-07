@@ -77,7 +77,7 @@ public:
         return false;
     }
 
-    QPoint mapToWindow(const QPoint& pos) const override
+    QPoint mapToWindow(QPoint pos) const override
     {
         if (!m_mouseArea) {
             return pos;

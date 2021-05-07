@@ -87,11 +87,15 @@ public:
     virtual bool isWindow() const = 0;
 
     /**
-     * @brief Maps the given point in draggable mouse area`s coordinate system to
+     * @brief Maps the given point in draggable mouse area's coordinate system to
      * the equivalent point in window's coordinate system,
      * and returns the mapped coordinate.
+     *
+     * TODO: Probably a good idea to to override this for TitleBar too. Since titlebar's 0,0
+     * is approx equal to the floating window's 0,0 the discrepancy isn't noticeable, but it can
+     * be if there's more window margins
      */
-    virtual QPoint mapToWindow(const QPoint& pos) const { return pos; }
+    virtual QPoint mapToWindow(QPoint pos) const { return pos; }
 
 private:
     class Private;

@@ -25,6 +25,7 @@
 #include "log.h"
 
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
+#include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
 
 using namespace mu::dock;
 
