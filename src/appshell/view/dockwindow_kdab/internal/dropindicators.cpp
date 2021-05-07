@@ -93,14 +93,25 @@ DropIndicators::~DropIndicators()
 
 KDDockWidgets::DropIndicatorOverlayInterface::DropLocation DropIndicators::hover_impl(QPoint globalPos)
 {
-    showDropAreaIfNeed(globalPos);
+    DropLocation dropLocation = DropLocation_None;
+    QRect dropRect = QRect();
 
-    return m_indicatorsWindow->hover(globalPos);
+    if (isToolBar()) {
+        dropLocation = dropLocationForToolBar(globalPos);
+        dropRect = dropAreaRectForToolBar(dropLocation);
+    } else {
+        dropLocation = m_indicatorsWindow->dropLocationForPosition(globalPos);
+        dropRect = dropAreaRectForPanel(dropLocation);
+    }
+
+    showDropAreaIfNeed(dropRect, dropLocation);
+
+    return dropLocation;
 }
 
 QPoint DropIndicators::posForIndicator(DropLocation loc) const
 {
-    return m_indicatorsWindow->posForIndicator(loc);
+    return m_indicatorsWindow->positionForIndicator(loc);
 }
 
 bool DropIndicators::outterLeftIndicatorVisible() const
@@ -157,6 +168,29 @@ bool DropIndicators::isIndicatorVisible(DropLocation location) const
     return isDropAllowed(location);
 }
 
+bool DropIndicators::onResize(QSize)
+{
+    m_indicatorsWindow->resize(window()->size());
+    return false;
+}
+
+void DropIndicators::updateVisibility()
+{
+    if (isHovered()) {
+        m_indicatorsWindow->setVisible(true);
+        updateWindowPosition();
+        m_indicatorsWindow->raise();
+    } else {
+        m_rubberBand->setVisible(false);
+        m_indicatorsWindow->setVisible(false);
+        mainWindow()->setDockingHelperVisible(false);
+    }
+
+    m_draggedDockProperties = readPropertiesFromObject(draggedDock());
+
+    emit indicatorsVisibilityChanged();
+}
+
 bool DropIndicators::isDropAllowed(DropLocation location) const
 {
     if (location == DropLocation_None) {
@@ -194,6 +228,11 @@ bool DropIndicators::isDropAllowed(DropLocation location) const
     return false;
 }
 
+bool DropIndicators::isToolBar() const
+{
+    return m_draggedDockProperties.type == DockType::ToolBar;
+}
+
 const KDDockWidgets::DockWidgetBase* DropIndicators::draggedDock() const
 {
     auto windowBeingDragged = KDDockWidgets::DragController::instance()->windowBeingDragged();
@@ -219,60 +258,11 @@ const KDDockWidgets::DockWidgetBase* DropIndicators::hoveredDock() const
     return docks.first();
 }
 
-bool DropIndicators::isToolBar() const
+DropIndicators::DropLocation DropIndicators::dropLocationForToolBar(const QPoint& hoveredGlobalPos) const
 {
-    return m_draggedDockProperties.type == DockType::ToolBar;
-}
-
-const KDDockWidgets::DockWidgetBase* DropIndicators::draggedDock() const
-{
-    auto windowBeingDragged = KDDockWidgets::DragController::instance()->windowBeingDragged();
-    if (!windowBeingDragged || windowBeingDragged->dockWidgets().isEmpty()) {
-        return nullptr;
-    }
-
-    return windowBeingDragged->dockWidgets().first();
-}
-
-bool DropIndicators::onResize(QSize)
-{
-    m_indicatorsWindow->resize(window()->size());
-    return false;
-}
-
-void DropIndicators::updateVisibility()
-{
-    if (isHovered() && m_hoveredFrame) {
-        m_indicatorsWindow->setVisible(true);
-        updateWindowPosition();
-        m_indicatorsWindow->raise();
-    } else {
-        m_rubberBand->setVisible(false);
-        m_indicatorsWindow->setVisible(false);
-        mainWindow()->setDockingHelperVisible(false);
-    }
-
-    m_draggedDockProperties = readPropertiesFromObject(draggedDock());
-
-    emit indicatorsVisibilityChanged();
-}
-
-void DropIndicators::showDropAreaIfNeed(const QPoint& hoveredGlobalPos)
-{
-    if (!isToolBar()) {
-        return;
-    }
-
-    const KDDockWidgets::DockWidgetBase* draggedDock = this->draggedDock();
-    const KDDockWidgets::DockWidgetBase* hoveredDock = this->hoveredDock();
-
-    if (!draggedDock || !hoveredDock) {
-        return;
-    }
-
-    DockType hoveredDockType = readPropertiesFromObject(hoveredDock).type;
+    DockType hoveredDockType = readPropertiesFromObject(hoveredDock()).type;
     if (hoveredDockType != DockType::ToolBar) {
-        return;
+        return DropLocation_None;
     }
 
     QRect dropAreaRect = hoveredFrameRect();
@@ -280,41 +270,48 @@ void DropIndicators::showDropAreaIfNeed(const QPoint& hoveredGlobalPos)
     int distanceToLeftCorner = std::abs(dropAreaRect.x() - hoveredGlobalPos.x());
     int distanceToRightCorner = std::abs(dropAreaRect.x() + dropAreaRect.width() - hoveredGlobalPos.x());
 
-    DropLocation dropLocation = DropLocation_Left;
-
     if (distanceToRightCorner < distanceToLeftCorner) {
+        return DropLocation_Right;
+    }
+
+    return DropLocation_Left;
+}
+
+QRect DropIndicators::dropAreaRectForToolBar(DropLocation location) const
+{
+    const KDDockWidgets::DockWidgetBase* draggedDock = this->draggedDock();
+    const KDDockWidgets::DockWidgetBase* hoveredDock = this->hoveredDock();
+
+    if (!draggedDock || !hoveredDock) {
+        return QRect();
+    }
+
+    DockType hoveredDockType = readPropertiesFromObject(hoveredDock).type;
+    if (hoveredDockType != DockType::ToolBar) {
+        return QRect();
+    }
+
+    QRect dropAreaRect = hoveredFrameRect();
+
+    if (location == DropLocation_Right) {
         dropAreaRect.setX(dropAreaRect.x() + dropAreaRect.width() - draggedDock->width());
-        dropLocation = DropLocation_Right;
     }
 
     if (draggedDock->width() <= hoveredDock->width() / 2) {
         dropAreaRect.setWidth(draggedDock->width());
     }
 
-    mainWindow()->setDockingHelperVisible(true);
-
-    m_rubberBand->setGeometry(dropAreaRect);
-    m_rubberBand->setVisible(true);
-
-    setCurrentDropLocation(dropLocation);
+    return dropAreaRect;
 }
 
-void DropIndicators::setDropLocation(DropLocation location)
+QRect DropIndicators::dropAreaRectForPanel(DropLocation location) const
 {
-    if (!isDropAllowed(location)) {
-        return;
-    }
-
-    setCurrentDropLocation(location);
-
     if (location == DropLocation_Center) {
-        m_rubberBand->setGeometry(m_hoveredFrame ? m_hoveredFrame->QWidgetAdapter::geometry() : rect());
-        m_rubberBand->setVisible(true);
-        return;
+        return m_hoveredFrame ? m_hoveredFrame->QWidgetAdapter::geometry() : rect();
     }
 
     KDDockWidgets::Location multisplitterLocation = locationToMultisplitterLocation(location);
-    KDDockWidgets::Frame* relativeToFrame = nullptr;
+    const KDDockWidgets::Frame* relativeToFrame = nullptr;
 
     switch (location) {
     case DropLocation_Left:
@@ -322,7 +319,7 @@ void DropIndicators::setDropLocation(DropLocation location)
     case DropLocation_Right:
     case DropLocation_Bottom:
         if (!m_hoveredFrame) {
-            return;
+            return QRect();
         }
         relativeToFrame = m_hoveredFrame;
         break;
@@ -336,10 +333,6 @@ void DropIndicators::setDropLocation(DropLocation location)
     }
 
     auto windowBeingDragged = KDDockWidgets::DragController::instance()->windowBeingDragged();
-
-    QRect rect = m_dropArea->rectForDrop(windowBeingDragged, multisplitterLocation,
-                                         m_dropArea->itemForFrame(relativeToFrame));
-
     auto draggedDock = this->draggedDock();
 
     if (m_hoveredFrame && isToolBar() && draggedDock) {
@@ -351,6 +344,26 @@ void DropIndicators::setDropLocation(DropLocation location)
             mainWindow()->requestChangeToolBarOrientation(draggedDockName, framework::Orientation::Vertical);
         }
     }
+
+    return m_dropArea->rectForDrop(windowBeingDragged, multisplitterLocation,
+                                   m_dropArea->itemForFrame(relativeToFrame));
+}
+
+void DropIndicators::showDropAreaIfNeed(const QRect& rect, DropLocation location)
+{
+    if (rect.isNull()) {
+        return;
+    }
+
+    if (!isDropAllowed(location)) {
+        return;
+    }
+
+    if (isToolBar()) {
+        mainWindow()->setDockingHelperVisible(true);
+    }
+
+    setCurrentDropLocation(location);
 
     m_rubberBand->setGeometry(rect);
     m_rubberBand->setVisible(true);
