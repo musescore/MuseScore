@@ -27,6 +27,7 @@
 #include "thirdparty/KDDockWidgets/src/private/DockRegistry_p.h"
 
 using namespace mu::dock;
+using namespace mu::async;
 
 inline QWindow* mainWindow()
 {
@@ -85,4 +86,14 @@ void MainWindowProvider::requestChangeToolBarOrientation(const QString& toolBarN
 mu::async::Channel<std::pair<QString, mu::framework::Orientation> > MainWindowProvider::toolBarOrientationChangeRequested() const
 {
     return m_dockOrientationChanged;
+}
+
+void MainWindowProvider::setDockingHelperVisible(bool visible)
+{
+    m_dockingHelperVisibleChanged.send(visible);
+}
+
+Channel<bool> MainWindowProvider::dockingHelperVisibleChanged() const
+{
+    return m_dockingHelperVisibleChanged;
 }

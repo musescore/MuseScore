@@ -39,8 +39,12 @@ public:
     void requestChangeToolBarOrientation(const QString& toolBarName, framework::Orientation orientation) override;
     async::Channel<std::pair<QString, framework::Orientation> > toolBarOrientationChangeRequested() const override;
 
+    void setDockingHelperVisible(bool visible) override;
+    async::Channel<bool> dockingHelperVisibleChanged() const override;
+
 private:
     async::Channel<std::pair<QString, framework::Orientation> > m_dockOrientationChanged;
+    async::Channel<bool> m_dockingHelperVisibleChanged;
 };
 }
 

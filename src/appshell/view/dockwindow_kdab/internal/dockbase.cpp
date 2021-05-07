@@ -180,7 +180,16 @@ void DockBase::init()
     applySizeConstraints();
 }
 
-void DockBase::close()
+void DockBase::show()
+{
+    IF_ASSERT_FAILED(m_dockWidget) {
+        return;
+    }
+
+    m_dockWidget->show();
+}
+
+void DockBase::hide()
 {
     IF_ASSERT_FAILED(m_dockWidget) {
         return;
