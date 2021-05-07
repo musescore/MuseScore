@@ -75,11 +75,11 @@ signals:
     void indicatorsVisibilityChanged();
 
 private:
-    friend class IndicatorsWindow;
+    bool onResize(QSize newSize) override;
+    void updateVisibility() override;
 
     bool isIndicatorVisible(DropLocation location) const;
     bool isDropAllowed(DropLocation location) const;
-
     bool isToolBar() const;
 
     bool hoveringOverDock(DockType type) const;
@@ -87,13 +87,13 @@ private:
     const KDDockWidgets::DockWidgetBase* hoveredDock() const;
     const KDDockWidgets::DockWidgetBase* draggedDock() const;
 
-    void setDropLocation(DropLocation);
+    DropLocation dropLocationForToolBar(const QPoint& hoveredGlobalPos) const;
+    QRect dropAreaRectForToolBar(DropLocation location) const;
+    QRect dropAreaRectForPanel(DropLocation location) const;
+
+    void showDropAreaIfNeed(const QRect& rect, DropLocation location);
+
     void updateWindowPosition();
-
-    bool onResize(QSize newSize) override;
-    void updateVisibility() override;
-
-    void showDropAreaIfNeed(const QPoint& hoveredGlobalPos);
 
     KDDockWidgets::QWidgetOrQuick* m_rubberBand = nullptr;
     IndicatorsWindow* m_indicatorsWindow = nullptr;
