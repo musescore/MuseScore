@@ -39,9 +39,6 @@ TitleBar::TitleBar(Frame *parent)
 
     if (Config::self().flags() & Config::Flag_TitleBarIsFocusable)
         setFocusPolicy(Qt::StrongFocus);
-
-    QTimer::singleShot(0, this, &TitleBar::updateAutoHideButton); // have to wait after the frame is constructed
-    updateAutoHideButton();
 }
 
 TitleBar::TitleBar(FloatingWindow *parent)
@@ -55,7 +52,6 @@ TitleBar::TitleBar(FloatingWindow *parent)
     connect(m_floatingWindow, &FloatingWindow::windowStateChanged, this, &TitleBar::updateMaximizeButton);
     connect(m_floatingWindow, &FloatingWindow::activatedChanged , this, &TitleBar::isFocusedChanged);
     init();
-    updateAutoHideButton(); // always hidden when we're in a FloatingWindow.
 }
 
 void TitleBar::init()
@@ -68,6 +64,8 @@ void TitleBar::init()
     });
 
     updateButtons();
+    QTimer::singleShot(0, this, &TitleBar::updateAutoHideButton); // have to wait after the frame is
+                                                                  // constructed
 }
 
 TitleBar::~TitleBar()

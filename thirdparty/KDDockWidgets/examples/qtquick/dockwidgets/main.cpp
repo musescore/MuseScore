@@ -24,6 +24,10 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_WIN
     QGuiApplication::setAttribute(Qt::AA_UseOpenGLES);
 #endif
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
     QGuiApplication app(argc, argv);
     QCommandLineParser parser;
     parser.setApplicationDescription("KDDockWidgets example application");

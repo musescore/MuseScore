@@ -20,7 +20,6 @@
 #define KD_DOCKWIDGET_QUICK_H
 
 #include "DockWidgetBase.h"
-#include "private/TitleBar_p.h"
 
 QT_BEGIN_NAMESPACE
 class QCloseEvent;
@@ -29,6 +28,7 @@ QT_END_NAMESPACE
 namespace KDDockWidgets {
 
 class Frame;
+class TitleBar;
 
 /**
  * @brief Represents a dock widget.
@@ -38,7 +38,7 @@ class Frame;
 class DOCKS_EXPORT DockWidgetQuick : public DockWidgetBase
 {
     Q_OBJECT
-    Q_PROPERTY(KDDockWidgets::TitleBar* actualTitleBar READ actualTitleBar NOTIFY actualTitleBarChanged)
+    Q_PROPERTY(QObject* actualTitleBar READ actualTitleBarObj NOTIFY actualTitleBarChanged)
 public:
     /**
      * @brief constructs a new DockWidget
@@ -72,6 +72,11 @@ public:
 
     /// @brief Returns the title bar
     TitleBar *actualTitleBar() const;
+
+    /// @brief Returns the title bar
+    /// Qt6 requires us to include TitleBar_p.h, so instead the Q_PROPERTY uses
+    /// QObject so we don't include private headers in public headers
+    QObject *actualTitleBarObj() const;
 
     /// @brief Returns the visual item which represents Frame in the screen
     /// Equivalent to Frame::visualItem().

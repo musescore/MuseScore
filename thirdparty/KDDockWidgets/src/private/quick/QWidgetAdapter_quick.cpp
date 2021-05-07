@@ -30,6 +30,7 @@
 #include <QQuickItem>
 #include <QQmlEngine>
 #include <QQuickView>
+#include <QScopedValueRollback>
 
 using namespace KDDockWidgets;
 
@@ -173,6 +174,12 @@ void QWidgetAdapter::itemChange(QQuickItem::ItemChange change, const QQuickItem:
         break;
     }
     case QQuickItem::ItemVisibleHasChanged: {
+        if (m_inSetParent) {
+            // Setting parent to nullptr will emit visible true in QtQuick
+            // which we don't want, as we're going to hide it (as we do with QtWidgets)
+            break;
+        }
+
         QEvent ev(isVisible() ? QEvent::Show : QEvent::Hide);
         event(&ev);
         break;
@@ -549,8 +556,16 @@ void QWidgetAdapter::setSize(QSize size)
 
 void QWidgetAdapter::setParent(QQuickItem *p)
 {
-    QQuickItem::setParent(p);
-    QQuickItem::setParentItem(p);
+    {
+        QScopedValueRollback<bool> guard(m_inSetParent, true);
+
+        QQuickItem::setParent(p);
+        QQuickItem::setParentItem(p);
+    }
+
+    // Mimic QWidget::setParent(), hide widget when setting parent
+    if (!p)
+        setVisible(false);
 }
 
 void QWidgetAdapter::activateWindow()

@@ -154,7 +154,6 @@ void DockWidgetBase::setWidget(QWidgetOrQuick *w)
         setSizePolicy(w->sizePolicy());
 
     Q_EMIT widgetChanged(w);
-    setWindowTitle(uniqueName());
 }
 
 QWidgetOrQuick *DockWidgetBase::widget() const
@@ -559,7 +558,6 @@ void DockWidgetBase::Private::updateTitle()
     if (q->isFloating())
         q->window()->setWindowTitle(title);
 
-
     toggleAction->setText(title);
 }
 
@@ -622,8 +620,18 @@ void DockWidgetBase::Private::close()
         return;
     }
 
-    if (!m_isForceClosing && q->isFloating() && q->isVisible()) { // only user-closing is interesting to save the geometry
-        // We check for isVisible so we don't save geometry if you call close() on an already closed dock widget
+    // If it's overlayed and we're closing, we need to close the overlay
+    if (SideBar *sb = DockRegistry::self()->sideBarForDockWidget(q)) {
+        auto mainWindow = sb->mainWindow();
+        if (mainWindow->overlayedDockWidget() == q) {
+            mainWindow->clearSideBarOverlay(/* deleteFrame=*/false);
+        }
+    }
+
+    if (!m_isForceClosing && q->isFloating()
+        && q->isVisible()) { // only user-closing is interesting to save the geometry
+        // We check for isVisible so we don't save geometry if you call close() on an already closed
+        // dock widget
         m_lastPositions.setLastFloatingGeometry(q->window()->geometry());
     }
 
@@ -632,8 +640,6 @@ void DockWidgetBase::Private::close()
     // Do some cleaning. Widget is hidden, but we must hide the tab containing it.
     if (Frame *frame = this->frame()) {
         frame->removeWidget(q);
-
-        q->setVisible(false);
         q->setParent(nullptr);
 
         if (SideBar *sb = DockRegistry::self()->sideBarForDockWidget(q)) {
@@ -641,8 +647,10 @@ void DockWidgetBase::Private::close()
         }
     }
 
-    if (!m_isMovingToSideBar && (options & DockWidgetBase::Option_DeleteOnClose))
+    if (!m_isMovingToSideBar && (options & DockWidgetBase::Option_DeleteOnClose)) {
+        Q_EMIT q->aboutToDeleteOnClose();
         q->deleteLater();
+    }
 }
 
 bool DockWidgetBase::Private::restoreToPreviousPosition()
@@ -768,7 +776,7 @@ void DockWidgetBase::onCloseEvent(QCloseEvent *e)
 {
     e->accept(); // By default we accept, means DockWidget closes
     if (d->widget)
-        qApp->sendEvent(d->widget, e); // Give a chancefor the widget to ignore
+        qApp->sendEvent(d->widget, e); // Give a chance for the widget to ignore
 
     if (e->isAccepted())
         d->close();
@@ -776,14 +784,8 @@ void DockWidgetBase::onCloseEvent(QCloseEvent *e)
 
 DockWidgetBase *DockWidgetBase::deserialize(const LayoutSaver::DockWidget::Ptr &saved)
 {
-    DockWidgetBase *dw = DockRegistry::self()->dockByName(saved->uniqueName);
-    if (!dw) {
-        if (auto factoryFunc = Config::self().dockWidgetFactoryFunc()) {
-            // DockWidget doesn't exist, ask to create it
-            dw = factoryFunc(saved->uniqueName);
-        }
-    }
-
+    auto dr = DockRegistry::self();
+    DockWidgetBase *dw = dr->dockByName(saved->uniqueName, DockRegistry::DockByNameFlag::CreateIfNotFound);
     if (dw) {
         if (QWidgetOrQuick *w = dw->widget())
             w->setVisible(true);

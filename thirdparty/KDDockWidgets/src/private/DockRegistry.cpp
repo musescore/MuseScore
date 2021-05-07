@@ -84,12 +84,23 @@ void DockRegistry::maybeDelete()
 
 void DockRegistry::onFocusObjectChanged(QObject *obj)
 {
-    // In this function we reset the focused dock widget.
-
     auto p = qobject_cast<WidgetType*>(obj);
     while (p) {
-        if (qobject_cast<DockWidgetBase*>(p) || qobject_cast<Frame*>(p))
+        if (auto frame = qobject_cast<Frame *>(p)) {
+            // Special case: The focused widget is inside the frame but not inside the dockwidget.
+            // For example, it's a line edit in the QTabBar. We still need to send the signal for
+            // the current dw in the tab group
+            if (auto dw = frame->currentDockWidget()) {
+                setFocusedDockWidget(dw);
+            }
+
             return;
+        }
+
+        if (auto dw = qobject_cast<DockWidgetBase *>(p)) {
+            DockRegistry::self()->setFocusedDockWidget(dw);
+            return;
+        }
         p = KDDockWidgets::Private::parentWidget(p);
     }
 
@@ -372,11 +383,32 @@ bool DockRegistry::containsMainWindow(const QString &uniqueName) const
     return mainWindowByName(uniqueName) != nullptr;
 }
 
-DockWidgetBase *DockRegistry::dockByName(const QString &name) const
+DockWidgetBase *DockRegistry::dockByName(const QString &name, DockByNameFlags flags) const
 {
     for (auto dock : qAsConst(m_dockWidgets)) {
         if (dock->uniqueName() == name)
             return dock;
+    }
+
+    if (flags.testFlag(DockByNameFlag::ConsultRemapping)) {
+        // Name doesn't exist, let's check if it was remapped during a layout restore.
+        const QString newName = m_dockWidgetIdRemapping.value(name);
+        if (!newName.isEmpty())
+            return dockByName(newName);
+    }
+
+    if (flags.testFlag(DockByNameFlag::CreateIfNotFound)) {
+        // DockWidget doesn't exist, ask to create it
+        if (auto factoryFunc = Config::self().dockWidgetFactoryFunc()) {
+            auto dw = factoryFunc(name);
+            if (dw && dw->uniqueName() != name) {
+                // Very special case
+                // The user's factory function returned a dock widget with a different ID.
+                // We support it. Save the mapping though.
+                m_dockWidgetIdRemapping.insert(name, dw->uniqueName());
+            }
+            return dw;
+        }
     }
 
     return nullptr;

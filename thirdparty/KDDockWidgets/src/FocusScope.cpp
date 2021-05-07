@@ -43,12 +43,27 @@ public:
         m_inCtor = false;
     }
 
+    /// @brief Returns whether the last focused widget is the tab widget itself
+    bool lastFocusedIsTabWidget() const
+    {
+        if (!m_lastFocusedInScope)
+            return false;
+
+        if (auto metaObj = m_lastFocusedInScope->metaObject()) {
+            const auto className = QLatin1String(metaObj->className());
+
+            return className == QLatin1String("KDDockWidgets::TabBarWidget")
+                || className == QLatin1String("KDDockWidgets::TabBarQuick");
+        }
+
+        return false;
+    }
+
     ~Private() override;
 
     void setIsFocused(bool);
     void onFocusObjectChanged(QObject *);
     bool isInFocusScope(WidgetType *) const;
-    void emitDockWidgetFocusChanged();
 
     FocusScope *const q;
     QWidgetAdapter *const m_thisWidget;
@@ -83,7 +98,10 @@ WidgetType *FocusScope::focusedWidget() const
 
 void FocusScope::focus(Qt::FocusReason reason)
 {
-    if (d->m_lastFocusedInScope) {
+    if (d->m_lastFocusedInScope && !d->lastFocusedIsTabWidget()) {
+        // When we focus the FocusScope, we give focus to the last focused widget, but let's
+        // do better than focusing a tab widget. The tab widget itself being focused isn't
+        // very useful.
         d->m_lastFocusedInScope->setFocus(reason);
     } else {
         if (auto frame = qobject_cast<Frame*>(d->m_thisWidget)) {
@@ -104,9 +122,6 @@ void FocusScope::Private::setIsFocused(bool is)
 {
     if (is != m_isFocused) {
         m_isFocused = is;
-
-        if (is)
-            emitDockWidgetFocusChanged();
 
         if (!m_inCtor) // Hack so we don't call pure-virtual
             /* Q_EMIT */ q->isFocusedChangedCallback();
@@ -142,34 +157,4 @@ bool FocusScope::Private::isInFocusScope(WidgetType *widget) const
     }
 
     return false;
-}
-
-void FocusScope::Private::emitDockWidgetFocusChanged()
-{
-    auto p = qobject_cast<WidgetType*>(qApp->focusObject());
-    if (!p) return;
-
-    // Find the nearest DockWidget and send the focusChangedSignal
-    while (p) {
-        if (auto frame = qobject_cast<Frame*>(p)) {
-            // Special case: The focused widget is inside the frame but not inside the dockwidget.
-            // For example, it's a line edit in the QTabBar. We still need to send the signal for
-            // the current dw in the tab group
-            if (auto dw = frame->currentDockWidget()) {
-                DockRegistry::self()->setFocusedDockWidget(dw);
-            }
-
-            break;
-        }
-
-        if (p == m_thisWidget)
-            break;
-
-        if (auto dw = qobject_cast<DockWidgetBase*>(p)) {
-            DockRegistry::self()->setFocusedDockWidget(dw);
-            break;
-        }
-
-        p = KDDockWidgets::Private::parentWidget(p);
-    }
 }
