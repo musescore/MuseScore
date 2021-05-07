@@ -21,7 +21,7 @@
  */
 
 #include "dropindicators.h"
-#include "indicatorswindow.h"
+#include "dropindicatorswindow.h"
 
 #include "thirdparty/KDDockWidgets/src/Config.h"
 #include "thirdparty/KDDockWidgets/src/private/DragController_p.h"
@@ -69,9 +69,9 @@ Qt::DockWidgetArea locationToDockArea(KDDockWidgets::DropIndicatorOverlayInterfa
     }
 }
 
-static IndicatorsWindow* createIndicatorWindow(DropIndicators* dropIndicators)
+static DropIndicatorsWindow* createIndicatorWindow(DropIndicators* dropIndicators)
 {
-    auto window = new IndicatorsWindow(dropIndicators);
+    auto window = new DropIndicatorsWindow(dropIndicators);
     window->setObjectName(QStringLiteral("_docks_IndicatorWindow_Overlay"));
     return window;
 }

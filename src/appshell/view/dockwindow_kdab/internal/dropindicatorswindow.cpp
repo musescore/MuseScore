@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "indicatorswindow.h"
+#include "dropindicatorswindow.h"
 
 #include "dropindicators.h"
 
@@ -32,7 +32,7 @@ using namespace mu::dock;
 
 static constexpr int INDICATORS_COUNT = 9;
 
-IndicatorsWindow::IndicatorsWindow(QQuickItem* dropIndicators)
+DropIndicatorsWindow::DropIndicatorsWindow(QObject* dropIndicators)
     : QQuickView(),
     m_dropIndicators(dropIndicators)
 {
@@ -54,12 +54,12 @@ IndicatorsWindow::IndicatorsWindow(QQuickItem* dropIndicators)
     }
 }
 
-QQuickItem* IndicatorsWindow::dropIndicators() const
+QObject* DropIndicatorsWindow::dropIndicators() const
 {
     return m_dropIndicators;
 }
 
-QString IndicatorsWindow::iconName(int dropLocation, bool active) const
+QString DropIndicatorsWindow::iconName(int dropLocation, bool active) const
 {
     QString suffix = active ? "_active" : QString();
     QString name;
@@ -99,13 +99,13 @@ QString IndicatorsWindow::iconName(int dropLocation, bool active) const
     return name + suffix;
 }
 
-KDDockWidgets::DropIndicatorOverlayInterface::DropLocation IndicatorsWindow::dropLocationForPosition(const QPoint& pos) const
+KDDockWidgets::DropIndicatorOverlayInterface::DropLocation DropIndicatorsWindow::dropLocationForPosition(const QPoint& pos) const
 {
     const QQuickItem* item = indicatorForPos(pos);
     return item ? locationForIndicator(item) : KDDockWidgets::DropIndicatorOverlayInterface::DropLocation_None;
 }
 
-const QQuickItem* IndicatorsWindow::indicatorForPos(QPoint pos) const
+const QQuickItem* DropIndicatorsWindow::indicatorForPos(QPoint pos) const
 {
     for (const QQuickItem* item : indicatorItems()) {
         if (!item->isVisible()) {
@@ -123,18 +123,18 @@ const QQuickItem* IndicatorsWindow::indicatorForPos(QPoint pos) const
     return nullptr;
 }
 
-QPoint IndicatorsWindow::positionForIndicator(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation dropLocation) const
+QPoint DropIndicatorsWindow::positionForIndicator(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation dropLocation) const
 {
-    const QQuickItem* indicator = IndicatorsWindow::indicatorForLocation(dropLocation);
+    const QQuickItem* indicator = DropIndicatorsWindow::indicatorForLocation(dropLocation);
     return indicator->mapToGlobal(indicator->boundingRect().center()).toPoint();
 }
 
-KDDockWidgets::DropIndicatorOverlayInterface::DropLocation IndicatorsWindow::locationForIndicator(const QQuickItem* indicator) const
+KDDockWidgets::DropIndicatorOverlayInterface::DropLocation DropIndicatorsWindow::locationForIndicator(const QQuickItem* indicator) const
 {
     return KDDockWidgets::DropIndicatorOverlayInterface::DropLocation(indicator->property("indicatorType").toInt());
 }
 
-const QQuickItem* IndicatorsWindow::indicatorForLocation(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation dropLocation) const
+const QQuickItem* DropIndicatorsWindow::indicatorForLocation(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation dropLocation) const
 {
     for (const QQuickItem* item : indicatorItems()) {
         if (locationForIndicator(item) == dropLocation) {
@@ -145,7 +145,7 @@ const QQuickItem* IndicatorsWindow::indicatorForLocation(KDDockWidgets::DropIndi
     return nullptr;
 }
 
-QList<const QQuickItem*> IndicatorsWindow::indicatorItems() const
+QList<const QQuickItem*> DropIndicatorsWindow::indicatorItems() const
 {
     QList<const QQuickItem*> indicators;
     indicators.reserve(INDICATORS_COUNT);

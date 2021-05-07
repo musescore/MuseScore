@@ -53,8 +53,8 @@ set (DOCKWINDOW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockbase.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dropindicators.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dropindicators.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/indicatorswindow.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/indicatorswindow.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dropindicatorswindow.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dropindicatorswindow.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockseparator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockseparator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockframemodel.cpp

@@ -20,24 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_INDICATORSWINDOW_H
-#define MU_DOCK_INDICATORSWINDOW_H
+#ifndef MU_DOCK_DROPINDICATORSWINDOW_H
+#define MU_DOCK_DROPINDICATORSWINDOW_H
 
 #include <QQuickView>
 
 #include "thirdparty/KDDockWidgets/src/private/DropIndicatorOverlayInterface_p.h"
 
 namespace mu::dock {
-class IndicatorsWindow : public QQuickView
+class DropIndicatorsWindow : public QQuickView
 {
     Q_OBJECT
 
-    Q_PROPERTY(QQuickItem* dropIndicators READ dropIndicators CONSTANT)
+    Q_PROPERTY(QObject* dropIndicators READ dropIndicators CONSTANT)
 
 public:
-    explicit IndicatorsWindow(QQuickItem* dropIndicators);
+    explicit DropIndicatorsWindow(QObject* dropIndicators);
 
-    QQuickItem* dropIndicators() const;
+    QObject* dropIndicators() const;
     Q_INVOKABLE QString iconName(int dropLocation, bool active) const;
 
     KDDockWidgets::DropIndicatorOverlayInterface::DropLocation dropLocationForPosition(const QPoint& pos) const;
@@ -50,8 +50,8 @@ private:
     const QQuickItem* indicatorForPos(QPoint) const;
     QList<const QQuickItem *> indicatorItems() const;
 
-    QQuickItem* m_dropIndicators = nullptr;
+    QObject* m_dropIndicators = nullptr;
 };
 }
 
-#endif // MU_DOCK_INDICATORSWINDOW_H
+#endif // MU_DOCK_DROPINDICATORSWINDOW_H
