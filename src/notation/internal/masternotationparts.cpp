@@ -45,10 +45,10 @@ void MasterNotationParts::apply()
     partsChanged().notify();
 }
 
-void MasterNotationParts::setInstruments(const instruments::InstrumentList& instruments)
+void MasterNotationParts::setParts(const instruments::PartInstrumentList& instruments)
 {
     startEdit();
-    NotationParts::setInstruments(instruments);
+    NotationParts::setParts(instruments);
     apply();
 }
 

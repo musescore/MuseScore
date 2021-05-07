@@ -34,11 +34,11 @@ class SelectInstrumentsScenario : public ISelectInstrumentsScenario
     INJECT(instruments, framework::IInteractive, interactive)
 
 public:
-    RetVal<InstrumentList> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const override;
+    RetVal<PartInstrumentList> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const override;
     RetVal<Instrument> selectInstrument(const std::string& currentInstrumentId = "") const override;
 
 private:
-    RetVal<InstrumentList> selectInstruments(const QStringList& params) const;
+    RetVal<PartInstrumentList> selectInstruments(const QStringList& params) const;
 
     notation::INotationPartsPtr notationParts() const;
     notation::IDList partsIds() const;

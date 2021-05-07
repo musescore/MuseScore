@@ -254,7 +254,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
     setScore(score);
 
     if (templatePath.empty()) {
-        parts()->setInstruments(scoreOptions.instruments);
+        parts()->setParts(scoreOptions.parts);
     }
 
     score->style().checkChordList();

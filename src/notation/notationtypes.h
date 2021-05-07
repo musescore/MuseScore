@@ -300,7 +300,8 @@ struct ScoreCreateOptions
     int measureTimesigDenominator = 0;
 
     io::path templatePath;
-    instruments::InstrumentList instruments;
+
+    instruments::PartInstrumentList parts;
 };
 
 struct SearchCommand

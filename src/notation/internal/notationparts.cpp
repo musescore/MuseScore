@@ -129,17 +129,12 @@ NotifyList<const Staff*> NotationParts::staffList(const ID& partId, const ID& in
     return result;
 }
 
-void NotationParts::setInstruments(const mu::instruments::InstrumentList& instruments)
+void NotationParts::setParts(const mu::instruments::PartInstrumentList& parts)
 {
-    IDList instrumentIds;
-    for (const mu::instruments::Instrument& instrument : instruments) {
-        instrumentIds << instrument.id;
-    }
+    removeMissingParts(parts);
+    appendNewParts(parts);
 
-    removeMissingInstruments(instruments);
-    appendNewInstruments(instruments);
-
-    sortParts(instruments);
+    sortParts(parts);
 
     updateScore();
 
@@ -720,6 +715,12 @@ void NotationParts::doRemoveParts(const IDList& partsIds)
     for (const ID& partId: partsIds) {
         score()->cmdRemovePart(part(partId));
     }
+
+    for (Ms::Excerpt* excerpt : masterScore()->excerpts()) {
+        if (excerpt->partScore()->staves().size() == 0) {
+            masterScore()->undo(new Ms::RemoveExcerpt(excerpt));
+        }
+    }
 }
 
 void NotationParts::removeInstruments(const IDList& instrumentIds, const ID& fromPartId)
@@ -1219,84 +1220,60 @@ void NotationParts::appendStaves(Part* part, const mu::instruments::Instrument& 
     }
 }
 
-void NotationParts::removeMissingInstruments(const InstrumentList& instruments)
+void NotationParts::removeMissingParts(const PartInstrumentList& parts)
 {
     IDList partsToRemove;
-    IDList instrumentIds;
-    for (const mu::instruments::Instrument& instrument : instruments) {
-        instrumentIds << instrument.id;
+
+    IDList partIds;
+    for (const PartInstrument& pi: parts) {
+        if (pi.part) {
+            partIds << pi.partId;
+        }
     }
 
     for (const Part* part: partList()) {
-        auto partInstruments = this->instruments(part);
-        IDList instrumentsToRemove;
-
-        for (const Ms::Instrument* instrument: partInstruments.values()) {
-            if (!instrumentIds.contains(instrument->getId())) {
-                instrumentsToRemove << instrument->getId();
-            }
+        if (partIds.contains(part->id())) {
+                continue;
         }
+        partsToRemove << part->id();
 
-        bool removeAllInstruments = instrumentsToRemove.size() == partInstruments.size();
-        if (removeAllInstruments) {
-            partsToRemove << part->id();
-        } else {
-            doRemoveInstruments(instrumentsToRemove, this->part(part->id()));
-        }
     }
 
     doRemoveParts(partsToRemove);
 }
 
-void NotationParts::appendNewInstruments(const InstrumentList& instruments)
+void NotationParts::appendNewParts(const PartInstrumentList& parts)
 {
-    IDList instrumentIds;
-    for (const mu::instruments::Instrument& instrument : instruments) {
-        instrumentIds << instrument.id;
-    }
-
-    IDList existedInstrumentIds = allInstrumentsIds();
-    IDList newInstrumentIds = instrumentIds;
-    for (const ID& instrumentId: existedInstrumentIds) {
-        newInstrumentIds.removeOne(instrumentId);
-    }
-
-    for (const mu::instruments::Instrument& instrument: instruments) {
-        if (!newInstrumentIds.contains(instrument.id)) {
+    for (const PartInstrument& pi: parts) {
+        if (pi.part) {
             continue;
         }
 
-        newInstrumentIds.removeOne(instrument.id);
-
         Part* part = new Part(score());
 
-        part->setPartName(instrument.name);
-        part->setInstrument(InstrumentsConverter::convertInstrument(instrument));
+        part->setPartName(pi.instrument.name);
+        part->setInstrument(InstrumentsConverter::convertInstrument(pi.instrument));
 
         score()->undo(new Ms::InsertPart(part, lastStaffIndex()));
-        appendStaves(part, instrument);
+        appendStaves(part, pi.instrument);
     }
 }
 
-void NotationParts::sortParts(const InstrumentList& instruments)
+void NotationParts::sortParts(const PartInstrumentList& parts)
 {
-    Q_ASSERT(score()->parts().size() == static_cast<int>(instruments.size()));
+    Q_ASSERT(score()->parts().size() == static_cast<int>(parts.size()));
 
-    auto mainInstrumentId = [](const Part* part) {
-        return part->instrument()->getId();
-    };
-
-    for (int i = 0; i < instruments.size(); ++i) {
+    for (int i = 0; i < parts.size(); ++i) {
         const Part* currentPart = score()->parts().at(i);
 
-        if (mainInstrumentId(currentPart) == instruments.at(i).id) {
+        if (currentPart->id() == parts.at(i).partId) {
             continue;
         }
 
         for (int j = i; j < score()->parts().size(); ++j) {
             const Part* part = score()->parts().at(j);
 
-            if (mainInstrumentId(part) == instruments.at(i).id) {
+            if (part->id() == parts.at(i).partId) {
                 doMovePart(part->id(), currentPart->id());
                 break;
             }

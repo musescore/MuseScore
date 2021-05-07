@@ -43,7 +43,14 @@ Rectangle {
         var result = []
 
         for (var i = 0; i < instruments.length; ++i) {
-            result.push(instruments[i].config)
+            var obj = {}
+            obj["part"] = instruments[i].part
+            obj["id"] = instruments[i].id
+            obj["name"] = instruments[i].name
+            obj["soloist"] = instruments[i].soloist
+            obj["instrument"] = instruments[i].config
+
+            result.push(obj)
         }
 
         return result

@@ -42,7 +42,7 @@ public:
     ValCh<bool> canChangeInstrumentVisibility(const ID& instrumentId, const ID& fromPartId) const override;
     bool voiceVisible(int voiceIndex) const override;
 
-    void setInstruments(const instruments::InstrumentList& instruments) override;
+    void setParts(const instruments::PartInstrumentList& parts) override;
     void setPartVisible(const ID& partId, bool visible) override;
     void setInstrumentVisible(const ID& instrumentId, const ID& fromPartId, bool visible) override;
     void setStaffVisible(const ID& staffId, bool visible) override;
@@ -149,9 +149,9 @@ private:
 
     void appendStaves(Part* part, const instruments::Instrument& instrument);
 
-    void removeMissingInstruments(const instruments::InstrumentList& instruments);
-    void appendNewInstruments(const instruments::InstrumentList& instruments);
-    void sortParts(const instruments::InstrumentList& instruments);
+    void removeMissingParts(const instruments::PartInstrumentList& parts);
+    void appendNewParts(const instruments::PartInstrumentList& parts);
+    void sortParts(const instruments::PartInstrumentList& parts);
 
     IDList allInstrumentsIds() const;
     int lastStaffIndex() const;
