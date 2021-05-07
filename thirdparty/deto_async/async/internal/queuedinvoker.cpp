@@ -8,11 +8,11 @@ QueuedInvoker* QueuedInvoker::instance()
     return &i;
 }
 
-void QueuedInvoker::invoke(const std::thread::id& th, const Functor& f)
+void QueuedInvoker::invoke(const std::thread::id& th, const Functor& f, bool isAlwaysQueued)
 {
     if (m_onMainThreadInvoke) {
         if (th == m_mainThreadID) {
-            m_onMainThreadInvoke(f);
+            m_onMainThreadInvoke(f, isAlwaysQueued);
         }
     }
 
@@ -31,7 +31,7 @@ void QueuedInvoker::processEvents()
     }
 }
 
-void QueuedInvoker::onMainThreadInvoke(const std::function<void(const std::function<void()>&)>& f)
+void QueuedInvoker::onMainThreadInvoke(const std::function<void(const std::function<void()>&, bool)>& f)
 {
     m_onMainThreadInvoke = f;
     m_mainThreadID = std::this_thread::get_id();
