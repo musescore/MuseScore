@@ -30,7 +30,9 @@
 
 using namespace mu::dock;
 
-IndicatorsWindow::IndicatorsWindow(DropIndicators* dropIndicators)
+static constexpr int INDICATORS_COUNT = 9;
+
+IndicatorsWindow::IndicatorsWindow(QQuickItem* dropIndicators)
     : QQuickView(),
     m_dropIndicators(dropIndicators)
 {
@@ -52,71 +54,43 @@ IndicatorsWindow::IndicatorsWindow(DropIndicators* dropIndicators)
     }
 }
 
-KDDockWidgets::DropIndicatorOverlayInterface::DropLocation IndicatorsWindow::hover(QPoint pos)
+QQuickItem* IndicatorsWindow::dropIndicators() const
 {
-    QQuickItem* item = indicatorForPos(pos);
-    auto location = item ? locationForIndicator(item) : KDDockWidgets::DropIndicatorOverlayInterface::DropLocation_None;
-    dropIndicators()->setDropLocation(location);
-    return location;
+    return m_dropIndicators;
 }
 
-QQuickItem* IndicatorsWindow::indicatorForPos(QPoint pos) const
+QString IndicatorsWindow::iconName(int dropLocation, bool active) const
 {
-    const QVector<QQuickItem*> indicators = indicatorItems();
-    Q_ASSERT(indicators.size() == 9);
-
-    for (QQuickItem* item : indicators) {
-        if (item->isVisible()) {
-            QRect rect(0, 0, int(item->width()), int(item->height()));
-            rect.moveTopLeft(item->mapToGlobal(QPointF(0, 0)).toPoint());
-            if (rect.contains(pos)) {
-                return item;
-            }
-        }
-    }
-
-    return nullptr;
-}
-
-QPoint IndicatorsWindow::posForIndicator(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation loc) const
-{
-    QQuickItem* indicator = IndicatorsWindow::indicatorForLocation(loc);
-    return indicator->mapToGlobal(indicator->boundingRect().center()).toPoint();
-}
-
-QString IndicatorsWindow::iconName(int loc, bool active) const
-{
-    QString suffix = active ? QStringLiteral("_active")
-                     : QString();
-
+    QString suffix = active ? "_active" : QString();
     QString name;
-    switch (loc) {
+
+    switch (dropLocation) {
     case KDDockWidgets::DropIndicatorOverlayInterface::DropLocation_Center:
-        name = QStringLiteral("center");
+        name = "center";
         break;
     case KDDockWidgets::DropIndicatorOverlayInterface::DropLocation_Left:
-        name = QStringLiteral("inner_left");
+        name = "inner_left";
         break;
     case KDDockWidgets::DropIndicatorOverlayInterface::DropLocation_Right:
-        name = QStringLiteral("inner_right");
+        name = "inner_right";
         break;
     case KDDockWidgets::DropIndicatorOverlayInterface::DropLocation_Bottom:
-        name = QStringLiteral("inner_bottom");
+        name = "inner_bottom";
         break;
     case KDDockWidgets::DropIndicatorOverlayInterface::DropLocation_Top:
-        name = QStringLiteral("inner_top");
+        name = "inner_top";
         break;
     case KDDockWidgets::DropIndicatorOverlayInterface::DropLocation_OutterLeft:
-        name = QStringLiteral("outter_left");
+        name = "outter_left";
         break;
     case KDDockWidgets::DropIndicatorOverlayInterface::DropLocation_OutterBottom:
-        name = QStringLiteral("outter_bottom");
+        name = "outter_bottom";
         break;
     case KDDockWidgets::DropIndicatorOverlayInterface::DropLocation_OutterRight:
-        name = QStringLiteral("outter_right");
+        name = "outter_right";
         break;
     case KDDockWidgets::DropIndicatorOverlayInterface::DropLocation_OutterTop:
-        name = QStringLiteral("outter_top");
+        name = "outter_top";
         break;
     case KDDockWidgets::DropIndicatorOverlayInterface::DropLocation_None:
         return QString();
@@ -125,24 +99,34 @@ QString IndicatorsWindow::iconName(int loc, bool active) const
     return name + suffix;
 }
 
-DropIndicators* IndicatorsWindow::dropIndicators() const
+KDDockWidgets::DropIndicatorOverlayInterface::DropLocation IndicatorsWindow::dropLocationForPosition(const QPoint& pos) const
 {
-    return m_dropIndicators;
+    const QQuickItem* item = indicatorForPos(pos);
+    return item ? locationForIndicator(item) : KDDockWidgets::DropIndicatorOverlayInterface::DropLocation_None;
 }
 
-QQuickItem* IndicatorsWindow::indicatorForLocation(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation loc) const
+const QQuickItem* IndicatorsWindow::indicatorForPos(QPoint pos) const
 {
-    const QVector<QQuickItem*> indicators = indicatorItems();
-    Q_ASSERT(indicators.size() == 9);
+    for (const QQuickItem* item : indicatorItems()) {
+        if (!item->isVisible()) {
+            continue;
+        }
 
-    for (QQuickItem* item : indicators) {
-        if (locationForIndicator(item) == loc) {
+        QRect rect(0, 0, int(item->width()), int(item->height()));
+        rect.moveTopLeft(item->mapToGlobal(QPointF(0, 0)).toPoint());
+
+        if (rect.contains(pos)) {
             return item;
         }
     }
 
-    qWarning() << Q_FUNC_INFO << "Couldn't find indicator for location" << loc;
     return nullptr;
+}
+
+QPoint IndicatorsWindow::positionForIndicator(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation dropLocation) const
+{
+    const QQuickItem* indicator = IndicatorsWindow::indicatorForLocation(dropLocation);
+    return indicator->mapToGlobal(indicator->boundingRect().center()).toPoint();
 }
 
 KDDockWidgets::DropIndicatorOverlayInterface::DropLocation IndicatorsWindow::locationForIndicator(const QQuickItem* indicator) const
@@ -150,18 +134,30 @@ KDDockWidgets::DropIndicatorOverlayInterface::DropLocation IndicatorsWindow::loc
     return KDDockWidgets::DropIndicatorOverlayInterface::DropLocation(indicator->property("indicatorType").toInt());
 }
 
-QVector<QQuickItem*> IndicatorsWindow::indicatorItems() const
+const QQuickItem* IndicatorsWindow::indicatorForLocation(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation dropLocation) const
 {
-    QVector<QQuickItem*> indicators;
-    indicators.reserve(9);
+    for (const QQuickItem* item : indicatorItems()) {
+        if (locationForIndicator(item) == dropLocation) {
+            return item;
+        }
+    }
 
-    QQuickItem* root = rootObject();
-    const QList<QQuickItem*> items = root->childItems();
-    for (QQuickItem* item : items) {
+    return nullptr;
+}
+
+QList<const QQuickItem*> IndicatorsWindow::indicatorItems() const
+{
+    QList<const QQuickItem*> indicators;
+    indicators.reserve(INDICATORS_COUNT);
+
+    QList<QQuickItem*> items = rootObject()->childItems();
+
+    for (const QQuickItem* item : items) {
         if (QString::fromLatin1(item->metaObject()->className()).startsWith(QLatin1String("DropIndicator_QMLTYPE"))) {
             indicators.push_back(item);
-        } else if (item->objectName() == QLatin1String("innerIndicators")) {
+        } else if (item->objectName() == "innerIndicators") {
             const QList<QQuickItem*> innerIndicators = item->childItems();
+
             for (QQuickItem* innerItem : innerIndicators) {
                 if (QString::fromLatin1(innerItem->metaObject()->className()).startsWith(QLatin1String("DropIndicator_QMLTYPE"))) {
                     indicators.push_back(innerItem);
@@ -169,6 +165,8 @@ QVector<QQuickItem*> IndicatorsWindow::indicatorItems() const
             }
         }
     }
+
+    Q_ASSERT(indicators.size() == INDICATORS_COUNT);
 
     return indicators;
 }

@@ -28,31 +28,29 @@
 #include "thirdparty/KDDockWidgets/src/private/DropIndicatorOverlayInterface_p.h"
 
 namespace mu::dock {
-class DropIndicators;
 class IndicatorsWindow : public QQuickView
 {
     Q_OBJECT
 
-    Q_PROPERTY(mu::dock::DropIndicators* dropIndicators READ dropIndicators CONSTANT)
+    Q_PROPERTY(QQuickItem* dropIndicators READ dropIndicators CONSTANT)
 
 public:
-    explicit IndicatorsWindow(DropIndicators* dropIndicators);
+    explicit IndicatorsWindow(QQuickItem* dropIndicators);
 
-    DropIndicators* dropIndicators() const;
+    QQuickItem* dropIndicators() const;
+    Q_INVOKABLE QString iconName(int dropLocation, bool active) const;
 
-    KDDockWidgets::DropIndicatorOverlayInterface::DropLocation hover(QPoint pos);
-    QPoint posForIndicator(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation loc) const;
-    QQuickItem* indicatorForLocation(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation loc) const;
-
-    Q_INVOKABLE QString iconName(int loc, bool active) const;
+    KDDockWidgets::DropIndicatorOverlayInterface::DropLocation dropLocationForPosition(const QPoint& pos) const;
+    QPoint positionForIndicator(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation dropLocation) const;
 
 private:
     KDDockWidgets::DropIndicatorOverlayInterface::DropLocation locationForIndicator(const QQuickItem* indicator) const;
+    const QQuickItem* indicatorForLocation(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation dropLocation) const;
 
-    QQuickItem* indicatorForPos(QPoint) const;
-    QVector<QQuickItem*> indicatorItems() const;
+    const QQuickItem* indicatorForPos(QPoint) const;
+    QList<const QQuickItem *> indicatorItems() const;
 
-    DropIndicators* m_dropIndicators = nullptr;
+    QQuickItem* m_dropIndicators = nullptr;
 };
 }
 
