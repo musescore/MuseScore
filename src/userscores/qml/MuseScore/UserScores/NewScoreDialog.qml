@@ -173,6 +173,7 @@ StyledDialogView {
                     }
 
                     if (newScoreModel.createScore(result)) {
+                        root.isDoActiveParentOnClose = false
                         root.accept()
                     }
                 }
