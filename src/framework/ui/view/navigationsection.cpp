@@ -68,7 +68,18 @@ mu::async::Channel<INavigation::Index> NavigationSection::indexChanged() const
 
 bool NavigationSection::enabled() const
 {
-    return AbstractNavigation::enabled();
+    if (!AbstractNavigation::enabled()) {
+        return false;
+    }
+
+    bool enbl = false;
+    for (INavigationPanel* p : m_panels) {
+        if (p->enabled()) {
+            enbl = true;
+            break;
+        }
+    }
+    return enbl;
 }
 
 mu::async::Channel<bool> NavigationSection::enabledChanged() const
