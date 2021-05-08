@@ -518,7 +518,7 @@ Notification UiConfiguration::pageStateChanged() const
     return m_pageStateChanged;
 }
 
-void UiConfiguration::applyPlatformStyle(QWidget* window)
+void UiConfiguration::applyPlatformStyle(QWindow* window)
 {
     platformTheme()->applyPlatformStyleOnWindowForTheme(window, currentThemeCodeKey());
 }

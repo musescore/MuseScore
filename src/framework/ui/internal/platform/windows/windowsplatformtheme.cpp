@@ -159,6 +159,6 @@ void WindowsPlatformTheme::applyPlatformStyleOnAppForTheme(ThemeCode)
 {
 }
 
-void WindowsPlatformTheme::applyPlatformStyleOnWindowForTheme(QWidget*, ThemeCode)
+void WindowsPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow*, ThemeCode)
 {
 }

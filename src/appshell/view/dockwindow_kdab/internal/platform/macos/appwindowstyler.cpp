@@ -19,33 +19,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "appwindowstyler.h"
 
-#ifndef MU_UI_MACOSPLATFORMTHEME_H
-#define MU_UI_MACOSPLATFORMTHEME_H
+#include <QObject>
+#include <QWindow>
 
-#include "internal/iplatformtheme.h"
+using namespace mu::appshell;
 
-namespace mu::ui {
-class MacOSPlatformTheme : public IPlatformTheme
+AppWindowStyler::AppWindowStyler(QObject* parent)
+    : QObject(parent), m_targetWindow(nullptr)
 {
-public:
-    void startListening() override;
-    void stopListening() override;
-
-    bool isFollowSystemThemeAvailable() const override;
-
-    ThemeCode themeCode() const override;
-    async::Channel<ThemeCode> themeCodeChanged() const override;
-
-    void applyPlatformStyleOnAppForTheme(ThemeCode themeCode) override;
-    void applyPlatformStyleOnWindowForTheme(QWindow* window, ThemeCode themeCode) override;
-
-private:
-    bool isSystemDarkMode() const;
-    bool isSystemHighContrast() const;
-
-    async::Channel<ThemeCode> m_channel;
-};
 }
 
-#endif // MU_UI_MACOSPLATFORMTHEME_H
+void AppWindowStyler::init()
+{
+    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
+        uiConfiguration()->applyPlatformStyle(m_targetWindow);
+    });
+}
+
+QWindow* AppWindowStyler::targetWindow() const
+{
+    return m_targetWindow;
+}
+
+void AppWindowStyler::setTargetWindow(QWindow* window)
+{
+    if (m_targetWindow == window) {
+        return;
+    }
+
+    m_targetWindow = window;
+    emit targetWindowChanged();
+
+    uiConfiguration()->applyPlatformStyle(m_targetWindow);
+}
