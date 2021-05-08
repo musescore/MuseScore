@@ -94,7 +94,7 @@ MenuItem AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& i
     return item;
 }
 
-MenuItem AbstractMenuModel::makeAction(const ActionCode& actionCode) const
+MenuItem AbstractMenuModel::makeAction(const ActionCode& actionCode, MenuRole role) const
 {
     const UiAction& action = uiactionsRegister()->action(actionCode);
 //    IF_ASSERT_FAILED(action.isValid()) {
@@ -107,6 +107,7 @@ MenuItem AbstractMenuModel::makeAction(const ActionCode& actionCode) const
 
     MenuItem item = action;
     item.state = uiactionsRegister()->actionState(actionCode);
+    item.role = role;
 
     return item;
 }
