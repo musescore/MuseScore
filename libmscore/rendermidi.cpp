@@ -269,7 +269,7 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
                   Glissando *glissando = toGlissando(spanner);
                   if (glissando->glissandoStyle() == GlissandoStyle::PORTAMENTO) {
                         Note* nextNote = toNote(spanner->endElement());
-                        double pitchDelta = (static_cast<double>(nextNote->pitch()) - pitch) * 50.0;
+                        double pitchDelta = (static_cast<double>(nextNote->ppitch()) - pitch) * 50.0;
                         double timeDelta = static_cast<double>(offTime - onTime);
                         if (pitchDelta != 0.0 && timeDelta != 0.0) {
                               double timeStep = std::abs(timeDelta / pitchDelta * 20.0);
