@@ -40,7 +40,7 @@ public:
     async::Channel<ThemeCode> themeCodeChanged() const override;
 
     void applyPlatformStyleOnAppForTheme(ThemeCode themeCode) override;
-    void applyPlatformStyleOnWindowForTheme(QWidget* window, ThemeCode themeCode) override;
+    void applyPlatformStyleOnWindowForTheme(QWindow* window, ThemeCode themeCode) override;
 
 private:
     int m_buildNumber = 0;
