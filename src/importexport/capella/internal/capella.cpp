@@ -828,6 +828,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
 
                 chord->add(note);
                 note->setPitch(pitch);
+                note->setHeadGroup(NoteHead::Group(n.headGroup));
                 // TODO: compute tpc from pitch & line
                 note->setTpcFromPitch();
                 if (o->rightTie) {
@@ -2053,13 +2054,19 @@ void ChordObj::read()
         }
         unsigned char b = cap->readByte();
         n.headType      = b & 7;
+        if (n.headType == 6) {
+            n.headType = 0;
+            n.headGroup = int(NoteHead::Group::HEAD_CROSS);
+        } else {
+            n.headGroup = int(NoteHead::Group::HEAD_NORMAL);
+        }
         n.alteration    = ((b >> 3) & 7) - 2;      // -2 -- +2
         if (b & 0x40) {
             n.explAlteration = 1;
         }
         n.silent = b & 0x80;
-        qDebug("ChordObj::read() note pitch %d explAlt %d head %d alt %d silent %d",
-               n.pitch, n.explAlteration, n.headType, n.alteration, n.silent);
+        qDebug("ChordObj::read() note pitch %d explAlt %d head group %d %d alt %d silent %d",
+               n.pitch, n.explAlteration, n.headType, n.headGroup, n.alteration, n.silent);
         notes.append(n);
     }
 }
