@@ -84,6 +84,7 @@ Rectangle {
             navigation.name: modelData["title"]
             navigation.panel: keynavSub
             navigation.order: model.index
+            isDoToggleOnNavigationActive: false
 
             checked: modelData["uri"] === root.currentUri
             title: modelData["title"]
