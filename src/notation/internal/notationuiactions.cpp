@@ -853,47 +853,47 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Add tempo marking")
              ),
     UiAction("duplet",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Duplet"),
              QT_TRANSLATE_NOOP("action", "Add duplet")
              ),
     UiAction("triplet",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Triplet"),
              QT_TRANSLATE_NOOP("action", "Add triplet")
              ),
     UiAction("quadruplet",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Quadruplet"),
              QT_TRANSLATE_NOOP("action", "Add quadruplet")
              ),
     UiAction("quintuplet",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Quintuplet"),
              QT_TRANSLATE_NOOP("action", "Add quintuplet")
              ),
     UiAction("sextuplet",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Sextuplet"),
              QT_TRANSLATE_NOOP("action", "Add sextuplet")
              ),
     UiAction("septuplet",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Septuplet"),
              QT_TRANSLATE_NOOP("action", "Add septuplet")
              ),
     UiAction("octuplet",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Octuplet"),
              QT_TRANSLATE_NOOP("action", "Add octuplet")
              ),
     UiAction("nonuplet",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Nontuplet"),
              QT_TRANSLATE_NOOP("action", "Add nontuplet")
              ),
     UiAction("tuplet-dialog",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Other…"),
              QT_TRANSLATE_NOOP("action", "Other tuplets")
              ),
