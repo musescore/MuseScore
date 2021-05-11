@@ -21,10 +21,12 @@
  */
 #include "navigationcontroller.h"
 
+#include <QCoreApplication>
 #include <algorithm>
 #include <limits>
 #include <utility>
 
+#include "async/async.h"
 #include "log.h"
 
 //#define NAVIGATION_LOGGING_ENABLED
@@ -293,6 +295,8 @@ void NavigationController::init()
     dispatcher()->reg(this, "nav-last-control", this, &NavigationController::goToLastControl);           // typically End key
     dispatcher()->reg(this, "nav-nextrow-control", this, &NavigationController::goToNextRowControl);     // typically PageDown key
     dispatcher()->reg(this, "nav-prevrow-control", this, &NavigationController::goToPrevRowControl);     // typically PageUp key
+
+    qApp->installEventFilter(this);
 }
 
 void NavigationController::reg(INavigationSection* section)
@@ -318,11 +322,73 @@ const std::set<INavigationSection*>& NavigationController::sections() const
     return m_sections;
 }
 
+bool NavigationController::eventFilter(QObject* watched, QEvent* event)
+{
+    //! NOTE We need to reset focus if we clicked on an "empty" place.
+    //! We have two cases:
+    //! Case 1 - request activation on mouse press
+    //! - eventFilter: MouseButtonPress
+    //! - Object->event
+    //!     onPress
+    //!         onForceActiveRequested  -> flag = ActiveRequested
+    //! - eventFilter: MouseButtonRelease
+    //! - async::Async::call
+    //! === Next Event Loop ===
+    //! check the flag, if not `ActiveRequested` then we should reset focus (clicked on an "empty" place)
+    //!
+    //! Case 2 - request activation on mouse clicked
+    //! - eventFilter: MouseButtonPress
+    //! - eventFilter: MouseButtonRelease
+    //! - Object->event
+    //!     onClicked
+    //!         onForceActiveRequested  -> flag = ActiveRequested
+    //! - async::Async::call
+    //! === Next Event Loop ===
+    //! check the flag, if not `ActiveRequested` then we should reset focus (clicked on an "empty" place)
+
+    if (event->type() == QEvent::MouseButtonPress) {
+        m_requestActivationState = RequestActivationState::MousePress;
+    } else if (event->type() == QEvent::MouseButtonRelease) {
+        if (m_requestActivationState != RequestActivationState::ActiveRequested) {
+            m_requestActivationState = RequestActivationState::MouseRelease;
+        }
+
+        async::Async::call(this, [this]() {
+            if (m_requestActivationState != RequestActivationState::ActiveRequested) {
+                resetActive();
+            }
+        });
+    }
+
+    return QObject::eventFilter(watched, event);
+}
+
 void NavigationController::devShowControls()
 {
     if (!interactive()->isOpened(DEV_SHOW_CONTROLS_URI.uri()).val) {
         interactive()->open(DEV_SHOW_CONTROLS_URI);
     }
+}
+
+void NavigationController::resetActive()
+{
+    MYLOG() << "===";
+    INavigationSection* activeSec = this->activeSection();
+    if (!activeSec) {
+        return;
+    }
+
+    INavigationPanel* activePnl = findActive(activeSec->panels());
+    if (activePnl) {
+        INavigationControl* activeCtrl = findActive(activePnl->controls());
+        if (activeCtrl) {
+            activeCtrl->setActive(false);
+        }
+
+        activePnl->setActive(false);
+    }
+
+    activeSec->setActive(false);
 }
 
 void NavigationController::doActivateSection(INavigationSection* sect, bool isActivateLastPanel)
@@ -1018,6 +1084,9 @@ void NavigationController::doTriggerControl()
 void NavigationController::onForceActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl)
 {
     TRACEFUNC;
+
+    m_requestActivationState = RequestActivationState::ActiveRequested;
+
     if (m_sections.empty()) {
         return;
     }
