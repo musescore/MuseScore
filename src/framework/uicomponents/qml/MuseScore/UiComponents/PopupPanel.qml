@@ -64,7 +64,7 @@ Rectangle {
         root.visible = false
 
         if (root.navigationParentControl) {
-            root.navigationParentControl.forceActive()
+            root.navigationParentControl.ensureActive()
         }
 
         root.closed()

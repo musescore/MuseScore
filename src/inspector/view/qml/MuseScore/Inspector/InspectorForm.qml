@@ -45,7 +45,7 @@ Rectangle {
     function focusFirstItem() {
         var item = inspectorRepeater.itemAt(0)
         if (item) {
-            item.navigation.forceActive()
+            item.navigation.ensureActive()
         }
     }
 

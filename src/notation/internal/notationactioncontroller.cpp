@@ -617,6 +617,16 @@ void NotationActionController::moveAction(const actions::ActionCode& actionCode)
         return;
     }
 
+    //! NOTE Should work for any elements
+    if ("next-element" == actionCode) {
+        interaction->moveSelection(MoveDirection::Right, MoveSelectionType::Element);
+        return;
+    } else if ("prev-element" == actionCode) {
+        interaction->moveSelection(MoveDirection::Left, MoveSelectionType::Element);
+        return;
+    }
+    //! -----
+
     std::vector<Element*> selectionElements = interaction->selection()->elements();
     if (selectionElements.empty()) {
         LOGW() << "no selection element";
@@ -645,10 +655,6 @@ void NotationActionController::moveAction(const actions::ActionCode& actionCode)
             interaction->movePitch(MoveDirection::Up, PitchMode::OCTAVE);
         } else if ("pitch-down-octave" == actionCode) {
             interaction->movePitch(MoveDirection::Down, PitchMode::OCTAVE);
-        } else if ("next-element" == actionCode) {
-            interaction->moveSelection(MoveDirection::Right, MoveSelectionType::Element);
-        } else if ("prev-element" == actionCode) {
-            interaction->moveSelection(MoveDirection::Left, MoveSelectionType::Element);
         } else if ("next-chord" == actionCode) {
             interaction->moveSelection(MoveDirection::Right, MoveSelectionType::Chord);
         } else if ("prev-chord" == actionCode) {

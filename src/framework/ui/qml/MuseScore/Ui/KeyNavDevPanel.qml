@@ -214,7 +214,7 @@ Rectangle {
                                 }
 
                                 onClicked: {
-                                    control.forceActive()
+                                    control.ensureActive()
                                     control.trigger()
                                 }
                             }

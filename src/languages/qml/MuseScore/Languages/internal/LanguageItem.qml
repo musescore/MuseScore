@@ -50,9 +50,7 @@ Rectangle {
             root.forceActiveFocus()
         }
 
-        if (!navCtrl.active) {
-            navCtrl.forceActive()
-        }
+        navCtrl.ensureActive()
     }
 
     NavigationControl {

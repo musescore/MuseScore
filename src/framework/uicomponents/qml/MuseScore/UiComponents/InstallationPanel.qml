@@ -89,9 +89,9 @@ PopupPanel {
 
         function focusOnOpened() {
             if (updateButton.visible) {
-                updateButton.navigation.forceActive()
+                updateButton.navigation.ensureActive()
             } else {
-                installButton.navigation.forceActive()
+                installButton.navigation.ensureActive()
             }
         }
 
