@@ -38,7 +38,6 @@ RadioDelegate {
     property var normalStateFont: ui.theme.tabFont
     property var selectedStateFont: ui.theme.tabBoldFont
 
-    property bool isDoToggleOnNavigationActive: true
     property alias navigation: keynavCtrl
 
     height: 48
@@ -60,9 +59,6 @@ RadioDelegate {
         onActiveChanged: {
             if (keynavCtrl.active) {
                 root.forceActiveFocus()
-                if (root.isDoToggleOnNavigationActive) {
-                    root.toggled()
-                }
             }
         }
 

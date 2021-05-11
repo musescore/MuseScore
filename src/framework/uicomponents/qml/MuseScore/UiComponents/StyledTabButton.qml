@@ -65,7 +65,6 @@ TabButton {
         onActiveChanged: {
             if (active) {
                 root.ensureActiveFocus()
-                root.navigationTriggered()
             }
         }
         onTriggered: root.navigationTriggered()
