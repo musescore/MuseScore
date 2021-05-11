@@ -42,6 +42,7 @@ Item {
     property int sideMargin: 0
 
     signal clicked(var mouse)
+    signal doubleClicked(var mouse)
     signal focusActived()
 
     signal popupOpened(var popupX, var popupY, var popupHeight)
@@ -209,6 +210,10 @@ Item {
         onClicked: {
             keynavItem.forceActive()
             root.clicked(mouse)
+        }
+
+        onDoubleClicked: {
+            root.doubleClicked(mouse)
         }
     }
 
