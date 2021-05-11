@@ -38,11 +38,9 @@ Rectangle {
     border.width: 1
     border.color: ui.theme.strokeColor
 
-    function forceActive() {
+    function ensureActive() {
         var item = notationsView.itemAtIndex(notationsView.currentIndex)
-        if (!item.navigation.active) {
-            item.navigation.forceActive()
-        }
+        item.navigation.ensureActive()
     }
 
     NotationSwitchListModel {

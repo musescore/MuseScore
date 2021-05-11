@@ -127,7 +127,7 @@ Item {
 
         onVisibleChanged: {
             if (!searchTextInput.visible) {
-                morePalettesButton.navigation.forceActive()
+                morePalettesButton.navigation.ensureActive()
             }
         }
 
@@ -141,7 +141,7 @@ Item {
             Accessible.name = qsTrc("palette", "Palette Search")
 
             if (searchTextInput.activeFocus) {
-                keynavSearchField.forceActive()
+                keynavSearchField.ensureActive()
             }
         }
 
