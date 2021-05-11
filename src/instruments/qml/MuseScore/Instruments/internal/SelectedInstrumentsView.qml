@@ -30,7 +30,7 @@ import MuseScore.Instruments 1.0
 Item {
     id: root
 
-    property var instruments: null
+    property alias instruments: instrumentsView.model
     property var instrumentOrderTypes: null
 
     property bool canLiftInstrument: currentInstrumentIndex > 0
@@ -85,7 +85,7 @@ Item {
 
             model: {
                 var resultList = []
-                var orders = instrumentOrderTypes
+                var orders = root.instrumentOrderTypes
 
                 for (var i = 0; i < orders.length; ++i) {
                     resultList.push({"text" : qsTrc("instruments", "Order: ") + orders[i].name, "value" : orders[i].id})
@@ -95,7 +95,7 @@ Item {
             }
 
             onValueChanged: {
-                orderChanged(value)
+                root.orderChanged(value)
             }
         }
 
@@ -106,7 +106,7 @@ Item {
             navigation.panel: navPanel
             navigation.row: 2
 
-            enabled: isInstrumentSelected
+            enabled: root.isInstrumentSelected
             text: qsTrc("instruments", "Make soloist")
         }
 
@@ -117,12 +117,12 @@ Item {
             navigation.panel: navPanel
             navigation.row: 3
 
-            enabled: isInstrumentSelected
+            enabled: root.isInstrumentSelected
             icon: IconCode.DELETE_TANK
 
             onClicked: {
-                unselectInstrumentRequested(instruments[currentInstrumentIndex].id)
-                currentInstrumentIndex--
+                root.unselectInstrumentRequested(instruments[root.currentInstrumentIndex].id)
+                root.currentInstrumentIndex--
             }
         }
     }
@@ -136,8 +136,6 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        model: instruments
-
         boundsBehavior: ListView.StopAtBounds
         clip: true
 
@@ -150,7 +148,7 @@ Item {
         delegate: ListItemBlank {
             id: item
 
-            isSelected: root.currentInstrumentIndex === index
+            isSelected: root.currentInstrumentIndex === model.index
 
             navigation.name: modelData.name
             navigation.panel: navPanel
@@ -170,7 +168,7 @@ Item {
             }
 
             onClicked: {
-                root.currentInstrumentIndex = index
+                root.currentInstrumentIndex = model.index
             }
 
             onDoubleClicked: {
