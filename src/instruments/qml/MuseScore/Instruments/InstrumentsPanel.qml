@@ -156,6 +156,7 @@ Item {
 
                 alternatingRowColors: false
                 headerVisible: false
+                frameVisible: false
 
                 TableViewColumn {
                     role: "itemRole"
