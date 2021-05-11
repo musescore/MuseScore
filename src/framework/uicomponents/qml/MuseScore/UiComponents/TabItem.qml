@@ -29,9 +29,12 @@ Tab {
 
     property alias navigation: navCtrl
 
+    signal navigationTriggered()
+
     property NavigationControl _nav: NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "TabItem"
+        onTriggered: root.navigationTriggered()
     }
 
 }
