@@ -1081,6 +1081,30 @@ void NavigationController::doTriggerControl()
     activeCtrl->trigger();
 }
 
+bool NavigationController::activateByName(const std::string& sectName, const std::string& panelName, const std::string& controlName)
+{
+    INavigationSection* section = findByName(m_sections, QString::fromStdString(sectName));
+    if (section) {
+        LOGE() << "not found section with name: " << sectName;
+        return false;
+    }
+
+    INavigationPanel* panel = findByName(section->panels(), QString::fromStdString(panelName));
+    if (!panel) {
+        LOGE() << "not found panel with name: " << panelName << ", section: " << sectName;
+        return false;
+    }
+
+    INavigationControl* control = findByName(panel->controls(), QString::fromStdString(controlName));
+    if (!panel) {
+        LOGE() << "not found control with name: " << controlName << ", panel: " << panelName << ", section: " << sectName;
+        return false;
+    }
+
+    onForceActiveRequested(section, panel, control);
+    return true;
+}
+
 void NavigationController::onForceActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl)
 {
     TRACEFUNC;

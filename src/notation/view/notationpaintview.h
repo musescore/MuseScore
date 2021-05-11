@@ -109,7 +109,7 @@ signals:
     void backgroundColorChanged(QColor color);
     void viewportChanged(QRect viewport);
 
-    void mousePressed();
+    void activeFocusRequested();
 
 protected:
     void setNotation(INotationPtr notation);
