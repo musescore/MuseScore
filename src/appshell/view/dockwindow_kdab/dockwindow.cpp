@@ -31,6 +31,7 @@
 #include "thirdparty/KDDockWidgets/src/private/quick/MainWindowQuick_p.h"
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
 #include "thirdparty/KDDockWidgets/src/LayoutSaver.h"
+#include "thirdparty/KDDockWidgets/src/KDDockWidgets.h"
 
 using namespace mu::dock;
 
@@ -43,7 +44,10 @@ DockWindow::DockWindow(QQuickItem* parent)
 
 DockWindow::~DockWindow()
 {
-    delete m_layoutSaver;
+    DockPage* currentPage = pageByUri(m_currentPageUri);
+    if (currentPage) {
+        saveState(currentPage->objectName());
+    }
 }
 
 void DockWindow::componentComplete()
@@ -53,8 +57,6 @@ void DockWindow::componentComplete()
     m_mainWindow = new KDDockWidgets::MainWindowQuick("mainWindow",
                                                       KDDockWidgets::MainWindowOption_None,
                                                       this);
-
-    m_layoutSaver = new KDDockWidgets::LayoutSaver();
 }
 
 QString DockWindow::currentPageUri() const
@@ -92,7 +94,8 @@ void DockWindow::loadPage(const QString& uri)
     }
 
     loadPageContent(newPage);
-    restoreState(newPage->objectName());
+    bool isFirstOpening = m_currentPageUri.isEmpty();
+    restoreState(newPage->objectName(), isFirstOpening);
 
     initDocks(newPage);
 
@@ -181,15 +184,24 @@ DockPage* DockWindow::pageByUri(const QString& uri) const
 
 void DockWindow::saveState(const QString& pageName)
 {
-    configuration()->setPageState(pageName.toStdString(), m_layoutSaver->serializeLayout());
+    KDDockWidgets::LayoutSaver layoutSaver;
+    configuration()->setPageState(pageName.toStdString(), layoutSaver.serializeLayout());
 }
 
-void DockWindow::restoreState(const QString& pageName)
+void DockWindow::restoreState(const QString& pageName, bool restoreGeometry)
 {
     QByteArray state = configuration()->pageState(pageName.toStdString());
-    if (!state.isEmpty()) {
-        m_layoutSaver->restoreLayout(state);
+    if (state.isEmpty()) {
+        return;
     }
+
+    KDDockWidgets::RestoreOption option = KDDockWidgets::RestoreOption::RestoreOption_RelativeToMainWindow;
+    if (restoreGeometry) {
+        option = KDDockWidgets::RestoreOption::RestoreOption_None;
+    }
+
+    KDDockWidgets::LayoutSaver layoutSaver(option);
+    layoutSaver.restoreLayout(state);
 }
 
 void DockWindow::initDocks(DockPage* page)
