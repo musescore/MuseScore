@@ -235,6 +235,18 @@ Item {
                                     instrumentsTreeModel.selectRow(styleData.index)
                                 }
 
+                                onDoubleClicked: {
+                                    if (styleData.hasChildren
+                                            && (root.type === InstrumentsTreeItemType.INSTRUMENT
+                                                    ? styleData.index.row === 0 : true)) {
+                                        if (!styleData.isExpanded) {
+                                            instrumentsTreeView.expand(styleData.index)
+                                        } else {
+                                            instrumentsTreeView.collapse(styleData.index)
+                                        }
+                                    }
+                                }
+
                                 onFocusActived: {
                                     instrumentsTreeModel.selectRow(styleData.index)
                                 }

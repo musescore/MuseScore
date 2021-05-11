@@ -42,6 +42,7 @@ Item {
     property int sideMargin: 0
 
     signal clicked(var mouse)
+    signal doubleClicked(var mouse)
     signal focusActived()
 
     signal popupOpened(var popupX, var popupY, var popupHeight)
@@ -208,6 +209,10 @@ Item {
 
         onClicked: {
             root.clicked(mouse)
+        }
+
+        onDoubleClicked: {
+            root.doubleClicked(mouse)
         }
     }
 
