@@ -244,7 +244,7 @@ Item {
                                     treeItemDelegateLoader.updateIsSelected()
                                 }
 
-                                property var contentYBackup: 0
+                                property real contentYBackup: 0
 
                                 onPopupOpened: {
                                     contentYBackup = flickable.contentY
