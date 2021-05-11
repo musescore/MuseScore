@@ -19,9 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.12
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -31,7 +31,7 @@ Item {
     id: root
 
     property alias families: familiesBox.model
-    property var groups: null
+    property alias groups: groupsView.model
 
     property alias navigation: navPanel
 
@@ -107,8 +107,6 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-
-        model: groups
 
         boundsBehavior: ListView.StopAtBounds
         clip: true
