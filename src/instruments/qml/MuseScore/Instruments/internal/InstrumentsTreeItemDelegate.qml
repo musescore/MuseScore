@@ -34,7 +34,7 @@ Item {
     property string filterKey
     property bool isSelected: false
     property bool isDragAvailable: false
-    property var type: InstrumentTreeItemType.UNDEFINED
+    property int type: InstrumentTreeItemType.UNDEFINED
 
     property int keynavRow: 0
     property NavigationPanel navigationPanel: null
