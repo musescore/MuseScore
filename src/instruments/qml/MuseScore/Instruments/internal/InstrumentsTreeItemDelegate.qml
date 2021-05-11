@@ -34,7 +34,7 @@ Item {
     property string filterKey
     property bool isSelected: false
     property bool isDragAvailable: false
-    property int type: InstrumentTreeItemType.UNDEFINED
+    property int type: InstrumentsTreeItemType.UNDEFINED
 
     property int keynavRow: 0
     property NavigationPanel navigationPanel: null
@@ -161,7 +161,7 @@ Item {
             State {
                 name: "PART_EXPANDED"
                 when: styleData.isExpanded && !root.isSelected &&
-                      root.type === InstrumentTreeItemType.PART
+                      root.type === InstrumentsTreeItemType.PART
 
                 PropertyChanges {
                     target: background
@@ -173,8 +173,8 @@ Item {
             State {
                 name: "PARENT_EXPANDED"
                 when: root.visible && !root.isSelected &&
-                      (root.type === InstrumentTreeItemType.INSTRUMENT ||
-                       root.type === InstrumentTreeItemType.STAFF)
+                      (root.type === InstrumentsTreeItemType.INSTRUMENT ||
+                       root.type === InstrumentsTreeItemType.STAFF)
 
                 PropertyChanges {
                     target: background
@@ -294,7 +294,7 @@ Item {
 
                 icon: styleData.isExpanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
 
-                visible: styleData.hasChildren && (root.type === InstrumentTreeItemType.INSTRUMENT ? styleData.index.row === 0 : true)
+                visible: styleData.hasChildren && (root.type === InstrumentsTreeItemType.INSTRUMENT ? styleData.index.row === 0 : true)
 
                 onClicked: {
                     if (!styleData.isExpanded) {
@@ -317,7 +317,7 @@ Item {
                 opacity: model && model.itemRole.isVisible ? 1 : 0.75
 
                 font: {
-                    if (Boolean(model) && root.type === InstrumentTreeItemType.PART && model.itemRole.isVisible) {
+                    if (Boolean(model) && root.type === InstrumentsTreeItemType.PART && model.itemRole.isVisible) {
                         return ui.theme.bodyBoldFont
                     }
 
@@ -340,8 +340,8 @@ Item {
 
             pressedStateColor: ui.theme.accentColor
 
-            visible: model ? root.type === InstrumentTreeItemType.PART ||
-                             root.type === InstrumentTreeItemType.STAFF : false
+            visible: model ? root.type === InstrumentsTreeItemType.PART ||
+                             root.type === InstrumentsTreeItemType.STAFF : false
 
             icon: IconCode.SETTINGS_COG
 
@@ -354,7 +354,7 @@ Item {
                 var popup = null
                 var item = {}
 
-                if (root.type === InstrumentTreeItemType.PART) {
+                if (root.type === InstrumentsTreeItemType.PART) {
 
                     popup = popupLoader.createPopup(instrumentSettingsComp, this)
 
@@ -364,7 +364,7 @@ Item {
                     item["instrumentName"] = model.itemRole.instrumentName()
                     item["abbreviature"] = model.itemRole.instrumentAbbreviature()
 
-                } else if (root.type === InstrumentTreeItemType.STAFF) {
+                } else if (root.type === InstrumentsTreeItemType.STAFF) {
 
                     popup = popupLoader.createPopup(staffSettingsComp, this)
 

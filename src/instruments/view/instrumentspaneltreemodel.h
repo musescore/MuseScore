@@ -25,7 +25,7 @@
 #include <QAbstractItemModel>
 #include <QVariant>
 
-#include "abstractinstrumentpaneltreeitem.h"
+#include "abstractinstrumentspaneltreeitem.h"
 #include "modularity/ioc.h"
 #include "notation/inotationparts.h"
 #include "context/iglobalcontext.h"
@@ -44,7 +44,7 @@ class QItemSelectionModel;
 namespace mu::instruments {
 class PartTreeItem;
 class StaffTreeItem;
-class InstrumentPanelTreeModel : public QAbstractItemModel, public async::Asyncable, public actions::Actionable
+class InstrumentsPanelTreeModel : public QAbstractItemModel, public async::Asyncable, public actions::Actionable
 {
     Q_OBJECT
 
@@ -60,8 +60,8 @@ class InstrumentPanelTreeModel : public QAbstractItemModel, public async::Asynca
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
 
 public:
-    explicit InstrumentPanelTreeModel(QObject* parent = nullptr);
-    ~InstrumentPanelTreeModel() override;
+    explicit InstrumentsPanelTreeModel(QObject* parent = nullptr);
+    ~InstrumentsPanelTreeModel() override;
 
     QModelIndex index(int row, int column, const QModelIndex& parent) const override;
     QModelIndex parent(const QModelIndex& child) const override;
@@ -120,18 +120,18 @@ private:
 
     notation::IDList currentNotationPartIdList() const;
 
-    AbstractInstrumentPanelTreeItem* loadPart(const notation::Part* part);
+    AbstractInstrumentsPanelTreeItem* loadPart(const notation::Part* part);
 
-    AbstractInstrumentPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
+    AbstractInstrumentsPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
 
     void updatePartItem(PartTreeItem* item, const notation::Part* part);
     void updateStaffItem(StaffTreeItem* item, const mu::notation::Staff* staff);
 
-    AbstractInstrumentPanelTreeItem* buildPartItem(const mu::notation::Part* part);
-    AbstractInstrumentPanelTreeItem* buildStaffItem(const mu::notation::Staff* staff);
-    AbstractInstrumentPanelTreeItem* buildAddStaffControlItem(const QString& partId);
+    AbstractInstrumentsPanelTreeItem* buildPartItem(const mu::notation::Part* part);
+    AbstractInstrumentsPanelTreeItem* buildStaffItem(const mu::notation::Staff* staff);
+    AbstractInstrumentsPanelTreeItem* buildAddStaffControlItem(const QString& partId);
 
-    AbstractInstrumentPanelTreeItem* m_rootItem = nullptr;
+    AbstractInstrumentsPanelTreeItem* m_rootItem = nullptr;
     uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
 
     mu::notation::INotationPartsPtr m_masterNotationParts = nullptr;

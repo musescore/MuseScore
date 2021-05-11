@@ -23,10 +23,10 @@
 
 using namespace mu::instruments;
 using namespace mu::notation;
-using ItemType = InstrumentTreeItemType::ItemType;
+using ItemType = InstrumentsTreeItemType::ItemType;
 
 PartTreeItem::PartTreeItem(INotationPartsPtr notationParts, QObject* parent)
-    : AbstractInstrumentPanelTreeItem(ItemType::PART, notationParts, parent)
+    : AbstractInstrumentsPanelTreeItem(ItemType::PART, notationParts, parent)
 {
 }
 
@@ -60,7 +60,7 @@ void PartTreeItem::setInstrumentAbbreviature(const QString& abbreviature)
     m_instrumentAbbreviature = abbreviature;
 }
 
-void PartTreeItem::moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
+void PartTreeItem::moveChildren(const int sourceRow, const int count, AbstractInstrumentsPanelTreeItem* destinationParent,
                                 const int destinationRow)
 {
     IDList stavesIds;
@@ -78,10 +78,10 @@ void PartTreeItem::moveChildren(const int sourceRow, const int count, AbstractIn
         moveMode = INotationParts::InsertMode::After;
     }
 
-    AbstractInstrumentPanelTreeItem* destinationStaffItem = destinationParent->childAtRow(destinationRowLast);
+    AbstractInstrumentsPanelTreeItem* destinationStaffItem = destinationParent->childAtRow(destinationRowLast);
     notationParts()->moveStaves(stavesIds, destinationStaffItem->id(), moveMode);
 
-    AbstractInstrumentPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow);
+    AbstractInstrumentsPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow);
 }
 
 void PartTreeItem::removeChildren(const int row, const int count, const bool deleteChild)
@@ -96,5 +96,5 @@ void PartTreeItem::removeChildren(const int row, const int count, const bool del
         notationParts()->removeStaves(stavesIds);
     }
 
-    AbstractInstrumentPanelTreeItem::removeChildren(row, count, deleteChild);
+    AbstractInstrumentsPanelTreeItem::removeChildren(row, count, deleteChild);
 }

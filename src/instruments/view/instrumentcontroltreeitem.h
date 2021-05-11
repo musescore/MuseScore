@@ -22,14 +22,14 @@
 #ifndef MU_INSTRUMENTS_INSTRUMENTCONTROLTREEITEM_H
 #define MU_INSTRUMENTS_INSTRUMENTCONTROLTREEITEM_H
 
-#include "abstractinstrumentpaneltreeitem.h"
+#include "abstractinstrumentspaneltreeitem.h"
 
 #include "modularity/ioc.h"
 #include "notation/inotationparts.h"
 #include "iselectinstrumentscenario.h"
 
 namespace mu::instruments {
-class InstrumentControlTreeItem : public AbstractInstrumentPanelTreeItem
+class InstrumentControlTreeItem : public AbstractInstrumentsPanelTreeItem
 {
     Q_OBJECT
 
