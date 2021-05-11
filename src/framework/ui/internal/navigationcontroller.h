@@ -22,6 +22,7 @@
 #ifndef MU_UI_NAVIGATIONCONTROLLER_H
 #define MU_UI_NAVIGATIONCONTROLLER_H
 
+#include <QObject>
 #include <QList>
 
 #include "../inavigationcontroller.h"
@@ -32,7 +33,7 @@
 #include "global/iinteractive.h"
 
 namespace mu::ui {
-class NavigationController : public INavigationController, public actions::Actionable, public async::Asyncable
+class NavigationController : public QObject, public INavigationController, public actions::Actionable, public async::Asyncable
 {
     INJECT(ui, actions::IActionsDispatcher, dispatcher)
     INJECT(ui, framework::IInteractive, interactive)
@@ -63,6 +64,8 @@ public:
     void init();
 
 private:
+
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
     void devShowControls();
 
@@ -97,8 +100,18 @@ private:
     void doActivateFirst();
     void doActivateLast();
 
+    void resetActive();
+
+    enum class RequestActivationState {
+        Undefined = 0,
+        MousePress,
+        MouseRelease,
+        ActiveRequested
+    };
+
     std::set<INavigationSection*> m_sections;
     async::Notification m_navigationChanged;
+    RequestActivationState m_requestActivationState = RequestActivationState::Undefined;
 };
 }
 
