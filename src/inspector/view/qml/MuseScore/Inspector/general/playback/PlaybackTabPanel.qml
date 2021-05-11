@@ -47,6 +47,7 @@ TabPanel {
         navigation.panel: root.navigationPanel
         navigation.column: 1
         navigation.row: 1
+        onNavigationTriggered: root.currentIndex = 0
 
         title: qsTrc("inspector", "General")
 
@@ -76,6 +77,7 @@ TabPanel {
         navigation.panel: root.navigationPanel
         navigation.column: 2
         navigation.row: 1
+        onNavigationTriggered: root.currentIndex = 1
 
         title: qsTrc("inspector", "Dynamics")
 

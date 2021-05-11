@@ -81,7 +81,9 @@ PopupView {
         onActiveChanged: {
             if (keynavPanel.active) {
                 root.forceActiveFocus()
-                rootContainer.focus = true
+                rootContainer.forceActiveFocus()
+            } else {
+                root.close()
             }
         }
 
