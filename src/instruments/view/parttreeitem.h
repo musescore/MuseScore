@@ -22,12 +22,12 @@
 #ifndef MU_INSTRUMENTS_PARTTREEITEM_H
 #define MU_INSTRUMENTS_PARTTREEITEM_H
 
-#include "abstractinstrumentpaneltreeitem.h"
+#include "abstractinstrumentspaneltreeitem.h"
 
 #include "notation/inotationparts.h"
 
 namespace mu::instruments {
-class PartTreeItem : public AbstractInstrumentPanelTreeItem
+class PartTreeItem : public AbstractInstrumentsPanelTreeItem
 {
     Q_OBJECT
 
@@ -42,7 +42,7 @@ public:
     void setInstrumentName(const QString& name);
     void setInstrumentAbbreviature(const QString& abbreviature);
 
-    void moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
+    void moveChildren(const int sourceRow, const int count, AbstractInstrumentsPanelTreeItem* destinationParent,
                       const int destinationRow) override;
     void removeChildren(const int row, const int count, const bool deleteChild) override;
 

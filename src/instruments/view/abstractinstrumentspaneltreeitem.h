@@ -30,7 +30,7 @@
 #include "notation/inotationparts.h"
 
 namespace mu::instruments {
-class AbstractInstrumentPanelTreeItem : public QObject
+class AbstractInstrumentsPanelTreeItem : public QObject
 {
     Q_OBJECT
 
@@ -41,9 +41,9 @@ class AbstractInstrumentPanelTreeItem : public QObject
     Q_PROPERTY(bool isSelectable READ isSelectable NOTIFY isSelectableChanged)
 
 public:
-    explicit AbstractInstrumentPanelTreeItem(const InstrumentTreeItemType::ItemType& type, notation::INotationPartsPtr notationParts,
-                                             QObject* parent = nullptr);
-    virtual ~AbstractInstrumentPanelTreeItem();
+    explicit AbstractInstrumentsPanelTreeItem(const InstrumentsTreeItemType::ItemType& type, notation::INotationPartsPtr notationParts,
+                                              QObject* parent = nullptr);
+    virtual ~AbstractInstrumentsPanelTreeItem();
 
     Q_INVOKABLE virtual bool canAcceptDrop(const int type) const;
     Q_INVOKABLE virtual void appendNewItem();
@@ -58,20 +58,20 @@ public:
     bool canChangeVisibility() const;
     void setCanChangeVisibility(bool value);
 
-    AbstractInstrumentPanelTreeItem* parentItem() const;
-    void setParentItem(AbstractInstrumentPanelTreeItem* parent);
+    AbstractInstrumentsPanelTreeItem* parentItem() const;
+    void setParentItem(AbstractInstrumentsPanelTreeItem* parent);
 
-    QList<AbstractInstrumentPanelTreeItem*> childrenItems() const;
+    QList<AbstractInstrumentsPanelTreeItem*> childrenItems() const;
     bool isEmpty() const;
 
-    AbstractInstrumentPanelTreeItem* childAtId(const QString& id) const;
-    AbstractInstrumentPanelTreeItem* childAtRow(const int row) const;
+    AbstractInstrumentsPanelTreeItem* childAtId(const QString& id) const;
+    AbstractInstrumentsPanelTreeItem* childAtRow(const int row) const;
 
-    void appendChild(AbstractInstrumentPanelTreeItem* child);
-    void insertChild(AbstractInstrumentPanelTreeItem* child, const int beforeRow);
-    void replaceChild(AbstractInstrumentPanelTreeItem* child, const int row);
+    void appendChild(AbstractInstrumentsPanelTreeItem* child);
+    void insertChild(AbstractInstrumentsPanelTreeItem* child, const int beforeRow);
+    void replaceChild(AbstractInstrumentsPanelTreeItem* child, const int row);
 
-    virtual void moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
+    virtual void moveChildren(const int sourceRow, const int count, AbstractInstrumentsPanelTreeItem* destinationParent,
                               const int destinationRow);
     virtual void removeChildren(const int row, const int count = 1, const bool deleteChild = false);
 
@@ -79,13 +79,13 @@ public:
     int row() const;
 
 public slots:
-    void setType(InstrumentTreeItemType::ItemType type);
+    void setType(InstrumentsTreeItemType::ItemType type);
     void setTitle(QString title);
     void setIsVisible(bool isVisible);
     void setId(const QString& id);
 
 signals:
-    void typeChanged(InstrumentTreeItemType::ItemType type);
+    void typeChanged(InstrumentsTreeItemType::ItemType type);
     void titleChanged(QString title);
     void canChangeVisibilityChanged(bool canChange);
     void isVisibleChanged(bool isVisible);
@@ -95,12 +95,12 @@ protected:
     notation::INotationPartsPtr notationParts() const;
 
 private:
-    QList<AbstractInstrumentPanelTreeItem*> m_children;
-    AbstractInstrumentPanelTreeItem* m_parent = nullptr;
+    QList<AbstractInstrumentsPanelTreeItem*> m_children;
+    AbstractInstrumentsPanelTreeItem* m_parent = nullptr;
 
     QString m_id;
     QString m_title;
-    InstrumentTreeItemType::ItemType m_type = InstrumentTreeItemType::ItemType::UNDEFINED;
+    InstrumentsTreeItemType::ItemType m_type = InstrumentsTreeItemType::ItemType::UNDEFINED;
     bool m_isVisible = false;
     bool m_canChangeVisibility = false;
 
