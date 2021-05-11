@@ -183,7 +183,7 @@ struct InstrumentsMeta
     MidiArticulationMap articulations;
 };
 
-class InstrumentTreeItemType
+class InstrumentsTreeItemType
 {
     Q_GADGET
 

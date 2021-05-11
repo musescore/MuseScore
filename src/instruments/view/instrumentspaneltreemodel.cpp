@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "instrumentpaneltreemodel.h"
+#include "instrumentspaneltreemodel.h"
 
 #include <algorithm>
 
@@ -35,9 +35,9 @@
 using namespace mu::instruments;
 using namespace mu::notation;
 using namespace mu::uicomponents;
-using ItemType = InstrumentTreeItemType::ItemType;
+using ItemType = InstrumentsTreeItemType::ItemType;
 
-InstrumentPanelTreeModel::InstrumentPanelTreeModel(QObject* parent)
+InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
     context()->currentMasterNotationChanged().onNotify(this, [this]() {
@@ -66,20 +66,20 @@ InstrumentPanelTreeModel::InstrumentPanelTreeModel(QObject* parent)
         emit selectionChanged();
     });
 
-    dispatcher()->reg(this, "instruments", this, &InstrumentPanelTreeModel::addInstruments);
+    dispatcher()->reg(this, "instruments", this, &InstrumentsPanelTreeModel::addInstruments);
 }
 
-InstrumentPanelTreeModel::~InstrumentPanelTreeModel()
+InstrumentsPanelTreeModel::~InstrumentsPanelTreeModel()
 {
     deleteItems();
 }
 
-bool InstrumentPanelTreeModel::canReceiveAction(const actions::ActionCode&) const
+bool InstrumentsPanelTreeModel::canReceiveAction(const actions::ActionCode&) const
 {
     return m_masterNotationParts != nullptr;
 }
 
-void InstrumentPanelTreeModel::clear()
+void InstrumentsPanelTreeModel::clear()
 {
     beginResetModel();
     m_selectionModel->clear();
@@ -90,13 +90,13 @@ void InstrumentPanelTreeModel::clear()
     emit isAddingAvailableChanged(false);
 }
 
-void InstrumentPanelTreeModel::deleteItems()
+void InstrumentsPanelTreeModel::deleteItems()
 {
     delete m_rootItem;
     m_rootItem = nullptr;
 }
 
-void InstrumentPanelTreeModel::load()
+void InstrumentsPanelTreeModel::load()
 {
     TRACEFUNC;
     beginResetModel();
@@ -107,7 +107,7 @@ void InstrumentPanelTreeModel::load()
     IDList notationPartIdList = currentNotationPartIdList();
 
     for (const Part* part : allParts) {
-        AbstractInstrumentPanelTreeItem* partItem = loadPart(part);
+        AbstractInstrumentsPanelTreeItem* partItem = loadPart(part);
         bool visible = part->show() && notationPartIdList.contains(part->id());
         partItem->setIsVisible(visible);
         m_rootItem->appendChild(partItem);
@@ -132,7 +132,7 @@ void InstrumentPanelTreeModel::load()
     emit isAddingAvailableChanged(true);
 }
 
-IDList InstrumentPanelTreeModel::currentNotationPartIdList() const
+IDList InstrumentsPanelTreeModel::currentNotationPartIdList() const
 {
     IDList result;
 
@@ -143,12 +143,12 @@ IDList InstrumentPanelTreeModel::currentNotationPartIdList() const
     return result;
 }
 
-void InstrumentPanelTreeModel::selectRow(const QModelIndex& rowIndex)
+void InstrumentsPanelTreeModel::selectRow(const QModelIndex& rowIndex)
 {
     m_selectionModel->select(rowIndex);
 }
 
-void InstrumentPanelTreeModel::addInstruments()
+void InstrumentsPanelTreeModel::addInstruments()
 {
     auto mode = ISelectInstrumentsScenario::SelectInstrumentsMode::ShowCurrentInstruments;
     RetVal<InstrumentList> selectedInstruments = selectInstrumentsScenario()->selectInstruments(mode);
@@ -162,7 +162,7 @@ void InstrumentPanelTreeModel::addInstruments()
     emit isEmptyChanged();
 }
 
-void InstrumentPanelTreeModel::moveSelectedRowsUp()
+void InstrumentsPanelTreeModel::moveSelectedRowsUp()
 {
     QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
 
@@ -179,7 +179,7 @@ void InstrumentPanelTreeModel::moveSelectedRowsUp()
     moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(), sourceRowFirst.row() - 1);
 }
 
-void InstrumentPanelTreeModel::moveSelectedRowsDown()
+void InstrumentsPanelTreeModel::moveSelectedRowsDown()
 {
     QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
 
@@ -197,7 +197,7 @@ void InstrumentPanelTreeModel::moveSelectedRowsDown()
     moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(), sourceRowLast.row() + 1);
 }
 
-void InstrumentPanelTreeModel::removeSelectedRows()
+void InstrumentsPanelTreeModel::removeSelectedRows()
 {
     if (!m_selectionModel || !m_selectionModel->hasSelection()) {
         return;
@@ -206,14 +206,14 @@ void InstrumentPanelTreeModel::removeSelectedRows()
     QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
 
     for (const QModelIndex& selectedIndex : selectedIndexList) {
-        AbstractInstrumentPanelTreeItem* item = modelIndexToItem(selectedIndex);
+        AbstractInstrumentsPanelTreeItem* item = modelIndexToItem(selectedIndex);
         removeRows(item->row(), 1, selectedIndex.parent());
     }
 }
 
-bool InstrumentPanelTreeModel::removeRows(int row, int count, const QModelIndex& parent)
+bool InstrumentsPanelTreeModel::removeRows(int row, int count, const QModelIndex& parent)
 {
-    AbstractInstrumentPanelTreeItem* parentItem = modelIndexToItem(parent);
+    AbstractInstrumentsPanelTreeItem* parentItem = modelIndexToItem(parent);
 
     if (!parentItem) {
         parentItem = m_rootItem;
@@ -230,16 +230,16 @@ bool InstrumentPanelTreeModel::removeRows(int row, int count, const QModelIndex&
     return true;
 }
 
-AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::modelIndexToItem(const QModelIndex& index) const
+AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::modelIndexToItem(const QModelIndex& index) const
 {
-    return static_cast<AbstractInstrumentPanelTreeItem*>(index.internalPointer());
+    return static_cast<AbstractInstrumentsPanelTreeItem*>(index.internalPointer());
 }
 
-bool InstrumentPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
-                                        int destinationChild)
+bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
+                                         int destinationChild)
 {
-    AbstractInstrumentPanelTreeItem* sourceParentItem = modelIndexToItem(sourceParent);
-    AbstractInstrumentPanelTreeItem* destinationParentItem = modelIndexToItem(destinationParent);
+    AbstractInstrumentsPanelTreeItem* sourceParentItem = modelIndexToItem(sourceParent);
+    AbstractInstrumentsPanelTreeItem* destinationParentItem = modelIndexToItem(destinationParent);
 
     if (!sourceParentItem) {
         sourceParentItem = m_rootItem;
@@ -263,7 +263,7 @@ bool InstrumentPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sou
     return true;
 }
 
-bool InstrumentPanelTreeModel::isSelected(const QModelIndex& rowIndex) const
+bool InstrumentsPanelTreeModel::isSelected(const QModelIndex& rowIndex) const
 {
     if (m_selectionModel->selectedIndexes().isEmpty()) {
         return false;
@@ -281,13 +281,13 @@ bool InstrumentPanelTreeModel::isSelected(const QModelIndex& rowIndex) const
     return false;
 }
 
-QModelIndex InstrumentPanelTreeModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex InstrumentsPanelTreeModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!hasIndex(row, column, parent)) {
         return QModelIndex();
     }
 
-    AbstractInstrumentPanelTreeItem* parentItem = nullptr;
+    AbstractInstrumentsPanelTreeItem* parentItem = nullptr;
 
     if (!parent.isValid()) {
         parentItem = m_rootItem;
@@ -299,7 +299,7 @@ QModelIndex InstrumentPanelTreeModel::index(int row, int column, const QModelInd
         return QModelIndex();
     }
 
-    AbstractInstrumentPanelTreeItem* childItem = parentItem->childAtRow(row);
+    AbstractInstrumentsPanelTreeItem* childItem = parentItem->childAtRow(row);
 
     if (childItem) {
         return createIndex(row, column, childItem);
@@ -308,14 +308,14 @@ QModelIndex InstrumentPanelTreeModel::index(int row, int column, const QModelInd
     return QModelIndex();
 }
 
-QModelIndex InstrumentPanelTreeModel::parent(const QModelIndex& child) const
+QModelIndex InstrumentsPanelTreeModel::parent(const QModelIndex& child) const
 {
     if (!child.isValid()) {
         return QModelIndex();
     }
 
-    AbstractInstrumentPanelTreeItem* childItem = modelIndexToItem(child);
-    AbstractInstrumentPanelTreeItem* parentItem = qobject_cast<AbstractInstrumentPanelTreeItem*>(childItem->parentItem());
+    AbstractInstrumentsPanelTreeItem* childItem = modelIndexToItem(child);
+    AbstractInstrumentsPanelTreeItem* parentItem = qobject_cast<AbstractInstrumentsPanelTreeItem*>(childItem->parentItem());
 
     if (parentItem == m_rootItem) {
         return QModelIndex();
@@ -324,9 +324,9 @@ QModelIndex InstrumentPanelTreeModel::parent(const QModelIndex& child) const
     return createIndex(parentItem->row(), 0, parentItem);
 }
 
-int InstrumentPanelTreeModel::rowCount(const QModelIndex& parent) const
+int InstrumentsPanelTreeModel::rowCount(const QModelIndex& parent) const
 {
-    AbstractInstrumentPanelTreeItem* parentItem;
+    AbstractInstrumentsPanelTreeItem* parentItem;
 
     if (!parent.isValid()) {
         parentItem = m_rootItem;
@@ -341,18 +341,18 @@ int InstrumentPanelTreeModel::rowCount(const QModelIndex& parent) const
     return parentItem->childCount();
 }
 
-int InstrumentPanelTreeModel::columnCount(const QModelIndex&) const
+int InstrumentsPanelTreeModel::columnCount(const QModelIndex&) const
 {
     return 1;
 }
 
-QVariant InstrumentPanelTreeModel::data(const QModelIndex& index, int role) const
+QVariant InstrumentsPanelTreeModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid() && role != ItemRole) {
         return QVariant();
     }
 
-    AbstractInstrumentPanelTreeItem* item = modelIndexToItem(index);
+    AbstractInstrumentsPanelTreeItem* item = modelIndexToItem(index);
 
     if (!item) {
         return QVariant();
@@ -361,17 +361,17 @@ QVariant InstrumentPanelTreeModel::data(const QModelIndex& index, int role) cons
     return QVariant::fromValue(qobject_cast<QObject*>(item));
 }
 
-QHash<int, QByteArray> InstrumentPanelTreeModel::roleNames() const
+QHash<int, QByteArray> InstrumentsPanelTreeModel::roleNames() const
 {
     return { { ItemRole, "itemRole" } };
 }
 
-QItemSelectionModel* InstrumentPanelTreeModel::selectionModel() const
+QItemSelectionModel* InstrumentsPanelTreeModel::selectionModel() const
 {
     return m_selectionModel;
 }
 
-void InstrumentPanelTreeModel::setIsMovingUpAvailable(bool isMovingUpAvailable)
+void InstrumentsPanelTreeModel::setIsMovingUpAvailable(bool isMovingUpAvailable)
 {
     if (m_isMovingUpAvailable == isMovingUpAvailable) {
         return;
@@ -381,7 +381,7 @@ void InstrumentPanelTreeModel::setIsMovingUpAvailable(bool isMovingUpAvailable)
     emit isMovingUpAvailableChanged(m_isMovingUpAvailable);
 }
 
-void InstrumentPanelTreeModel::setIsMovingDownAvailable(bool isMoveingDownAvailable)
+void InstrumentsPanelTreeModel::setIsMovingDownAvailable(bool isMoveingDownAvailable)
 {
     if (m_isMovingDownAvailable == isMoveingDownAvailable) {
         return;
@@ -391,32 +391,32 @@ void InstrumentPanelTreeModel::setIsMovingDownAvailable(bool isMoveingDownAvaila
     emit isMovingDownAvailableChanged(m_isMovingDownAvailable);
 }
 
-bool InstrumentPanelTreeModel::isMovingUpAvailable() const
+bool InstrumentsPanelTreeModel::isMovingUpAvailable() const
 {
     return m_isMovingUpAvailable;
 }
 
-bool InstrumentPanelTreeModel::isMovingDownAvailable() const
+bool InstrumentsPanelTreeModel::isMovingDownAvailable() const
 {
     return m_isMovingDownAvailable;
 }
 
-bool InstrumentPanelTreeModel::isRemovingAvailable() const
+bool InstrumentsPanelTreeModel::isRemovingAvailable() const
 {
     return m_isRemovingAvailable;
 }
 
-bool InstrumentPanelTreeModel::isAddingAvailable() const
+bool InstrumentsPanelTreeModel::isAddingAvailable() const
 {
     return m_notationParts != nullptr;
 }
 
-bool InstrumentPanelTreeModel::isEmpty() const
+bool InstrumentsPanelTreeModel::isEmpty() const
 {
     return m_rootItem ? m_rootItem->isEmpty() : true;
 }
 
-void InstrumentPanelTreeModel::setIsRemovingAvailable(bool isRemovingAvailable)
+void InstrumentsPanelTreeModel::setIsRemovingAvailable(bool isRemovingAvailable)
 {
     if (m_isRemovingAvailable == isRemovingAvailable) {
         return;
@@ -426,7 +426,7 @@ void InstrumentPanelTreeModel::setIsRemovingAvailable(bool isRemovingAvailable)
     emit isRemovingAvailableChanged(m_isRemovingAvailable);
 }
 
-void InstrumentPanelTreeModel::updateRearrangementAvailability()
+void InstrumentsPanelTreeModel::updateRearrangementAvailability()
 {
     QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
 
@@ -461,16 +461,16 @@ void InstrumentPanelTreeModel::updateRearrangementAvailability()
     updateMovingDownAvailability(isRearrangementAvailable, selectedIndexList.last());
 }
 
-void InstrumentPanelTreeModel::updateMovingUpAvailability(const bool isSelectionMovable, const QModelIndex& firstSelectedRowIndex)
+void InstrumentsPanelTreeModel::updateMovingUpAvailability(const bool isSelectionMovable, const QModelIndex& firstSelectedRowIndex)
 {
     bool isRowInBoundaries = firstSelectedRowIndex.isValid() ? firstSelectedRowIndex.row() > 0 : false;
 
     setIsMovingUpAvailable(isSelectionMovable && isRowInBoundaries);
 }
 
-void InstrumentPanelTreeModel::updateMovingDownAvailability(const bool isSelectionMovable, const QModelIndex& lastSelectedRowIndex)
+void InstrumentsPanelTreeModel::updateMovingDownAvailability(const bool isSelectionMovable, const QModelIndex& lastSelectedRowIndex)
 {
-    AbstractInstrumentPanelTreeItem* parentItem = modelIndexToItem(lastSelectedRowIndex.parent());
+    AbstractInstrumentsPanelTreeItem* parentItem = modelIndexToItem(lastSelectedRowIndex.parent());
     if (!parentItem) {
         parentItem = m_rootItem;
     }
@@ -484,12 +484,12 @@ void InstrumentPanelTreeModel::updateMovingDownAvailability(const bool isSelecti
     setIsMovingDownAvailable(isSelectionMovable && isRowInBoundaries);
 }
 
-void InstrumentPanelTreeModel::updateRemovingAvailability()
+void InstrumentsPanelTreeModel::updateRemovingAvailability()
 {
     setIsRemovingAvailable(m_selectionModel->hasSelection());
 }
 
-AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::loadPart(const Part* part)
+AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::loadPart(const Part* part)
 {
     auto partItem = buildPartItem(part);
     QString partId = part->id();
@@ -536,7 +536,7 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::loadPart(const Part* 
     return partItem;
 }
 
-void InstrumentPanelTreeModel::updateStaffItem(StaffTreeItem* item, const Staff* staff)
+void InstrumentsPanelTreeModel::updateStaffItem(StaffTreeItem* item, const Staff* staff)
 {
     QString staffName = staff->staffName();
     QString title = staff->isLinked() ? qtrc("instruments", "[LINK] %1").arg(staffName) : staffName;
@@ -556,12 +556,12 @@ void InstrumentPanelTreeModel::updateStaffItem(StaffTreeItem* item, const Staff*
     item->setVoicesVisibility(visibility);
 }
 
-AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildPartItem(const Part* part)
+AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildPartItem(const Part* part)
 {
     auto result = new PartTreeItem(m_masterNotationParts, this);
     updatePartItem(result, part);
 
-    connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, this, [this, part](const bool isVisible) {
+    connect(result, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, this, [this, part](const bool isVisible) {
         //! NOTE: need to change a visibility only in a current notation
         m_notationParts->setPartVisible(part->id(), isVisible);
     });
@@ -569,7 +569,7 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildPartItem(const P
     return result;
 }
 
-void InstrumentPanelTreeModel::updatePartItem(PartTreeItem* item, const Part* part)
+void InstrumentsPanelTreeModel::updatePartItem(PartTreeItem* item, const Part* part)
 {
     item->setId(part->id());
     item->setTitle(part->partName().isEmpty() ? part->instrument()->name() : part->partName());
@@ -579,12 +579,12 @@ void InstrumentPanelTreeModel::updatePartItem(PartTreeItem* item, const Part* pa
     item->setInstrumentAbbreviature(part->instrument()->abbreviature());
 }
 
-AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildStaffItem(const Staff* staff)
+AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildStaffItem(const Staff* staff)
 {
     auto result = new StaffTreeItem(m_masterNotationParts, this);
     updateStaffItem(result, staff);
 
-    connect(result, &AbstractInstrumentPanelTreeItem::isVisibleChanged, [this, staff](const bool isVisible) {
+    connect(result, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, [this, staff](const bool isVisible) {
         //! NOTE: need to change a visibility only in a current notation
         m_notationParts->setStaffVisible(staff->id(), isVisible);
     });
@@ -592,7 +592,7 @@ AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildStaffItem(const 
     return result;
 }
 
-AbstractInstrumentPanelTreeItem* InstrumentPanelTreeModel::buildAddStaffControlItem(const QString& partId)
+AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildAddStaffControlItem(const QString& partId)
 {
     auto result = new StaffControlTreeItem(m_masterNotationParts, this);
     result->setTitle(qtrc("instruments", "Add staff"));

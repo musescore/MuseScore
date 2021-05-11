@@ -48,7 +48,7 @@ Item {
             anchors.fill: parent
 
             onClicked: {
-                instrumentTreeModel.selectionModel.clear()
+                instrumentsTreeModel.selectionModel.clear()
             }
         }
     }
@@ -82,25 +82,25 @@ Item {
             navigation.enabled: root.visible
             navigation.order: 2
 
-            isMovingUpAvailable: instrumentTreeModel.isMovingUpAvailable
-            isMovingDownAvailable: instrumentTreeModel.isMovingDownAvailable
-            isAddingAvailable: instrumentTreeModel.isAddingAvailable
-            isRemovingAvailable: instrumentTreeModel.isRemovingAvailable
+            isMovingUpAvailable: instrumentsTreeModel.isMovingUpAvailable
+            isMovingDownAvailable: instrumentsTreeModel.isMovingDownAvailable
+            isAddingAvailable: instrumentsTreeModel.isAddingAvailable
+            isRemovingAvailable: instrumentsTreeModel.isRemovingAvailable
 
             onAddRequested: {
-                instrumentTreeModel.addInstruments()
+                instrumentsTreeModel.addInstruments()
             }
 
             onMoveUpRequested: {
-                instrumentTreeModel.moveSelectedRowsUp()
+                instrumentsTreeModel.moveSelectedRowsUp()
             }
 
             onMoveDownRequested: {
-                instrumentTreeModel.moveSelectedRowsDown()
+                instrumentsTreeModel.moveSelectedRowsDown()
             }
 
             onRemovingRequested: {
-                instrumentTreeModel.removeSelectedRows()
+                instrumentsTreeModel.removeSelectedRows()
             }
         }
 
@@ -112,7 +112,7 @@ Item {
             Layout.rightMargin: 20
 
             text: qsTrc("instruments", "There are no instruments in your score. To choose some, press <b>Add</b>, or use the shortcut <b>‘i’</b>")
-            visible: instrumentTreeModel.isEmpty && instrumentTreeModel.isAddingAvailable
+            visible: instrumentsTreeModel.isEmpty && instrumentsTreeModel.isAddingAvailable
 
             verticalAlignment: Qt.AlignTop
             wrapMode: Text.WordWrap
@@ -145,13 +145,13 @@ Item {
                 anchors.right: parent.right
                 height: flickableItem.contentHeight + 2 //! HACK +2 needs for correct show focus border
 
-                visible: !instrumentTreeModel.isEmpty
+                visible: !instrumentsTreeModel.isEmpty
 
-                model: InstrumentPanelTreeModel {
-                    id: instrumentTreeModel
+                model: InstrumentsPanelTreeModel {
+                    id: instrumentsTreeModel
                 }
 
-                selection: instrumentTreeModel ? instrumentTreeModel.selectionModel : null
+                selection: instrumentsTreeModel ? instrumentsTreeModel.selectionModel : null
 
                 alternatingRowColors: false
                 headerVisible: false
@@ -162,8 +162,8 @@ Item {
                 }
 
                 function isControl(itemType) {
-                    return itemType === InstrumentTreeItemType.CONTROL_ADD_STAFF ||
-                            itemType === InstrumentTreeItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
+                    return itemType === InstrumentsTreeItemType.CONTROL_ADD_STAFF ||
+                            itemType === InstrumentsTreeItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
                 }
 
                 style: TreeViewStyle {
@@ -195,7 +195,7 @@ Item {
                     Loader {
                         id: treeItemDelegateLoader
 
-                        property var delegateType: model ? model.itemRole.type : InstrumentTreeItemType.UNDEFINED
+                        property var delegateType: model ? model.itemRole.type : InstrumentsTreeItemType.UNDEFINED
 
                         height: parent.height
                         width: parent.width
@@ -206,11 +206,11 @@ Item {
                         property bool isSelected: false
 
                         function updateIsSelected() {
-                            treeItemDelegateLoader.isSelected = instrumentTreeModel.isSelected(styleData.index)
+                            treeItemDelegateLoader.isSelected = instrumentsTreeModel.isSelected(styleData.index)
                         }
 
                         Connections {
-                            target: instrumentTreeModel
+                            target: instrumentsTreeModel
 
                             function onSelectionChanged() {
                                 treeItemDelegateLoader.updateIsSelected()
@@ -232,11 +232,11 @@ Item {
                                 sideMargin: contentColumn.sideMargin
 
                                 onClicked: {
-                                    instrumentTreeModel.selectRow(styleData.index)
+                                    instrumentsTreeModel.selectRow(styleData.index)
                                 }
 
                                 onFocusActived: {
-                                    instrumentTreeModel.selectRow(styleData.index)
+                                    instrumentsTreeModel.selectRow(styleData.index)
                                 }
 
                                 onVisibleChanged: {
@@ -288,7 +288,7 @@ Item {
                             return
                         }
 
-                        instrumentTreeModel.moveRows(drag.source.index.parent,
+                        instrumentsTreeModel.moveRows(drag.source.index.parent,
                                                      drag.source.index.row,
                                                      1,
                                                      styleData.index.parent,
