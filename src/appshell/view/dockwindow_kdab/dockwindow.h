@@ -77,7 +77,7 @@ private:
     void addDock(DockBase* dock, KDDockWidgets::Location location, const DockBase* relativeTo = nullptr);
 
     void saveState(const QString& pageName);
-    void restoreState(const QString& pageName);
+    void restoreState(const QString& pageName, bool restoreGeometry);
 
     void initDocks(DockPage* page);
 
@@ -85,8 +85,6 @@ private:
     QString m_currentPageUri;
     uicomponents::QmlListProperty<DockToolBar> m_toolBars;
     uicomponents::QmlListProperty<DockPage> m_pages;
-
-    KDDockWidgets::LayoutSaver* m_layoutSaver = nullptr;
 };
 }
 
