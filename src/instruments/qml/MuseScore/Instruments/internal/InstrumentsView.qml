@@ -19,9 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.12
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -30,7 +30,7 @@ import MuseScore.Instruments 1.0
 Item {
     id: root
 
-    property var instruments: null
+    property alias instruments: instrumentsView.model
     property alias search: searchField.searchText
 
     property bool isInstrumentSelected: prv.currentInstrumentIndex != -1
@@ -116,8 +116,6 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        model: instruments
-
         boundsBehavior: ListView.StopAtBounds
         clip: true
 
@@ -135,7 +133,7 @@ Item {
             navigation.row: 2 + model.index
             onNavigationActived: item.clicked()
 
-            isSelected: prv.currentInstrumentIndex === index
+            isSelected: prv.currentInstrumentIndex === model.index
 
             StyledTextLabel {
                 anchors.left: parent.left
@@ -150,7 +148,7 @@ Item {
             }
 
             onClicked: {
-                prv.currentInstrumentIndex = index
+                prv.currentInstrumentIndex = model.index
                 root.instrumentClicked()
             }
 
@@ -197,7 +195,7 @@ Item {
                 }
 
                 onValueChanged: {
-                    if (prv.currentInstrumentIndex == index) {
+                    if (prv.currentInstrumentIndex === index) {
                         item.resetCurrentInstrument()
                     }
                 }
@@ -215,7 +213,7 @@ Item {
             Connections {
                 target: prv
                 function onCurrentInstrumentIndexChanged() {
-                    if (prv.currentInstrumentIndex == index) {
+                    if (prv.currentInstrumentIndex === model.index) {
                         item.resetCurrentInstrument()
                     }
                 }
