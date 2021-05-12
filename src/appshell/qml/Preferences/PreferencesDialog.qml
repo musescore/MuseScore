@@ -85,8 +85,6 @@ StyledDialogView {
             id: preferencesModel
         }
 
-        SeparatorLine { id: topSeparator; anchors.top: parent.top }
-
         ColumnLayout {
             anchors.fill: parent
 
