@@ -40,7 +40,7 @@ Rectangle {
 
     function ensureActive() {
         var item = notationsView.itemAtIndex(notationsView.currentIndex)
-        item.navigation.ensureActive()
+        item.navigation.requestActive()
     }
 
     NotationSwitchListModel {

@@ -56,8 +56,6 @@ ComboBox {
         if (!root.activeFocus) {
             root.forceActiveFocus()
         }
-
-        navCtrl.ensureActive()
     }
 
     function valueFromModel(index, roleName) {

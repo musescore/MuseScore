@@ -46,7 +46,7 @@ Rectangle {
     function focusFirstItem() {
         var item = inspectorRepeater.itemAt(0)
         if (item) {
-            item.navigation.ensureActive()
+            item.navigation.requestActive()
         }
     }
 
@@ -55,6 +55,7 @@ Rectangle {
         name: "Inspector"
         section: root.navigationSection
         direction: NavigationPanel.Vertical
+        enabled: root.visible
         order: 2
     }
 

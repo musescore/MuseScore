@@ -50,7 +50,7 @@ StyledPopupView {
     function focusOnFirstItem() {
         var loader = view.itemAtIndex(0)
         if (loader && loader.item) {
-            loader.item.navigation.ensureActive()
+            loader.item.navigation.requestActive()
         }
     }
 
@@ -58,7 +58,7 @@ StyledPopupView {
         for (var i = 0; i < view.count; ++i) {
             var loader = view.itemAtIndex(i)
             if (loader && loader.item && loader.item.isSelected) {
-                loader.item.navigation.ensureActive()
+                loader.item.navigation.requestActive()
                 return true
             }
         }
@@ -154,7 +154,7 @@ StyledPopupView {
                     }
 
                     onRequestParentItemActive: {
-                        root.navigationParentControl.ensureActive()
+                        root.navigationParentControl.requestActive()
                     }
                 }
             }

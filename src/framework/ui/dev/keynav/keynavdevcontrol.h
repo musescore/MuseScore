@@ -33,7 +33,7 @@ class KeyNavDevControl : public AbstractKeyNavDevItem
 public:
     KeyNavDevControl(INavigationControl* control);
 
-    Q_INVOKABLE void forceActive();
+    Q_INVOKABLE void requestActive();
     Q_INVOKABLE void trigger();
 
 signals:

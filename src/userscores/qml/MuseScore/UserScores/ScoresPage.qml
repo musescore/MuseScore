@@ -45,8 +45,9 @@ FocusScope {
         enabled: root.visible
         order: 3
         onActiveChanged: {
-            if (active) {
+            if (navSec.active) {
                 root.requestActiveFocus()
+                root.forceActiveFocus()
             }
         }
     }
