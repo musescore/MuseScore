@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -37,145 +37,139 @@ StyledDialogView {
     contentWidth: 1024
     resizable: true
 
-    Rectangle {
+    NewScoreModel {
+        id: newScoreModel
+    }
 
-        NewScoreModel {
-            id: newScoreModel
-        }
+    StackLayout {
+        id: pagesStack
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: buttons.top
+        anchors.margins: 20
 
-        anchors.fill: parent
-        color: ui.theme.backgroundPrimaryColor
+        ChooseInstrumentsAndTemplatesPage {
+            id: chooseInstrumentsAndTemplatePage
 
-        StackLayout {
-            id: pagesStack
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: buttons.top
-            anchors.margins: 20
-
-            ChooseInstrumentsAndTemplatesPage {
-                id: chooseInstrumentsAndTemplatePage
-
-                property bool isOpened: root.isOpened
-                onIsOpenedChanged: {
-                    if (isOpened) {
-                        chooseInstrumentsAndTemplatePage.focusOnFirst()
-                    }
-                }
-
-                navigationSection: root.navigation
-
-                Component.onCompleted: {
-                    preferredScoreCreationMode = newScoreModel.preferredScoreCreationMode()
+            property bool isOpened: root.isOpened
+            onIsOpenedChanged: {
+                if (isOpened) {
+                    chooseInstrumentsAndTemplatePage.focusOnFirst()
                 }
             }
 
-            ScoreInfoPage {
-                id: scoreInfoPage
+            navigationSection: root.navigation
+
+            Component.onCompleted: {
+                preferredScoreCreationMode = newScoreModel.preferredScoreCreationMode()
             }
         }
 
-        Row {
-            id: buttons
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 16
-            anchors.right: parent.right
-            anchors.rightMargin: 16
+        ScoreInfoPage {
+            id: scoreInfoPage
+        }
+    }
 
-            spacing: 12
+    Row {
+        id: buttons
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 16
+        anchors.right: parent.right
+        anchors.rightMargin: 16
 
-            readonly property int buttonHeight: 30
-            readonly property int buttonWidth: 132
+        spacing: 12
 
-            NavigationPanel {
-                id: navBottomPanel
+        readonly property int buttonHeight: 30
+        readonly property int buttonWidth: 132
 
-                name: "BottomPanel"
-                section: root.navigationSection
-                order: 100
-                direction: NavigationPanel.Horizontal
+        NavigationPanel {
+            id: navBottomPanel
+
+            name: "BottomPanel"
+            section: root.navigationSection
+            order: 100
+            direction: NavigationPanel.Horizontal
+        }
+
+        FlatButton {
+            height: buttons.buttonHeight
+            width: buttons.buttonWidth
+
+            navigation.name: "Cancel"
+            navigation.panel: navBottomPanel
+            navigation.column: 1
+
+            text: qsTrc("global", "Cancel")
+
+            onClicked: {
+                root.reject()
             }
+        }
 
-            FlatButton {
-                height: buttons.buttonHeight
-                width: buttons.buttonWidth
+        FlatButton {
+            height: buttons.buttonHeight
+            width: buttons.buttonWidth
 
-                navigation.name: "Cancel"
-                navigation.panel: navBottomPanel
-                navigation.column: 1
+            navigation.name: "Back"
+            navigation.panel: navBottomPanel
+            navigation.column: 2
 
-                text: qsTrc("global", "Cancel")
+            visible: pagesStack.currentIndex > 0
 
-                onClicked: {
-                    root.reject()
+            text: qsTrc("userscores", "Back")
+
+            onClicked: {
+                pagesStack.currentIndex--
+            }
+        }
+
+        FlatButton {
+            height: buttons.buttonHeight
+            width: buttons.buttonWidth
+
+            navigation.name: "Next"
+            navigation.panel: navBottomPanel
+            navigation.column: 3
+
+            visible: pagesStack.currentIndex < pagesStack.count - 1
+            enabled: chooseInstrumentsAndTemplatePage.hasSelection
+
+            text: qsTrc("userscores", "Next")
+
+            onClicked: {
+                pagesStack.currentIndex++
+            }
+        }
+
+        FlatButton {
+            height: buttons.buttonHeight
+            width: buttons.buttonWidth
+
+            navigation.name: "Done"
+            navigation.panel: navBottomPanel
+            navigation.column: 4
+
+            enabled: chooseInstrumentsAndTemplatePage.hasSelection
+
+            text: qsTrc("userscores", "Done")
+
+            onClicked: {
+                var result = {}
+
+                var instrumentsAndTemplatePageResult = chooseInstrumentsAndTemplatePage.result()
+                for (var key in instrumentsAndTemplatePageResult) {
+                    result[key] = instrumentsAndTemplatePageResult[key]
                 }
-            }
 
-            FlatButton {
-                height: buttons.buttonHeight
-                width: buttons.buttonWidth
-
-                navigation.name: "Back"
-                navigation.panel: navBottomPanel
-                navigation.column: 2
-
-                visible: pagesStack.currentIndex > 0
-
-                text: qsTrc("userscores", "Back")
-
-                onClicked: {
-                    pagesStack.currentIndex--
+                var scoreInfoPageResult = scoreInfoPage.result()
+                for (key in scoreInfoPageResult) {
+                    result[key] = scoreInfoPageResult[key]
                 }
-            }
 
-            FlatButton {
-                height: buttons.buttonHeight
-                width: buttons.buttonWidth
-
-                navigation.name: "Next"
-                navigation.panel: navBottomPanel
-                navigation.column: 3
-
-                visible: pagesStack.currentIndex < pagesStack.count - 1
-                enabled: chooseInstrumentsAndTemplatePage.hasSelection
-
-                text: qsTrc("userscores", "Next")
-
-                onClicked: {
-                    pagesStack.currentIndex++
-                }
-            }
-
-            FlatButton {
-                height: buttons.buttonHeight
-                width: buttons.buttonWidth
-
-                navigation.name: "Done"
-                navigation.panel: navBottomPanel
-                navigation.column: 4
-
-                enabled: chooseInstrumentsAndTemplatePage.hasSelection
-
-                text: qsTrc("userscores", "Done")
-
-                onClicked: {
-                    var result = {}
-
-                    var instrumentsAndTemplatePageResult = chooseInstrumentsAndTemplatePage.result()
-                    for (var key in instrumentsAndTemplatePageResult) {
-                        result[key] = instrumentsAndTemplatePageResult[key]
-                    }
-
-                    var scoreInfoPageResult = scoreInfoPage.result()
-                    for (key in scoreInfoPageResult) {
-                        result[key] = scoreInfoPageResult[key]
-                    }
-
-                    if (newScoreModel.createScore(result)) {
-                        root.isDoActiveParentOnClose = false
-                        root.accept()
-                    }
+                if (newScoreModel.createScore(result)) {
+                    root.isDoActiveParentOnClose = false
+                    root.accept()
                 }
             }
         }
