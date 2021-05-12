@@ -38,7 +38,7 @@ StyledPopupView {
     navigation.direction: NavigationPanel.Vertical
 
     onOpened: {
-        matchStaffSize.navigation.ensureActive()
+        matchStaffSize.navigation.requestActive()
     }
 
     Column {

@@ -46,8 +46,6 @@ RadioDelegate {
     leftPadding: 0
     rightPadding: 0
 
-    onPressed: keynavCtrl.ensureActive()
-
     NavigationControl {
         id: keynavCtrl
         name: root.objectName

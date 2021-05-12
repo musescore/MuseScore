@@ -46,8 +46,6 @@ FocusScope {
         if (!root.activeFocus) {
             root.forceActiveFocus()
         }
-
-        navCtrl.ensureActive()
     }
 
     NavigationControl {
@@ -111,7 +109,6 @@ FocusScope {
         hoverEnabled: true
 
         onClicked: {
-            root.ensureActiveFocus()
             root.clicked()
         }
     }

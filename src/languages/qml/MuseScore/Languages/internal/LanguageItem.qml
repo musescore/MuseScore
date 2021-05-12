@@ -49,8 +49,6 @@ Rectangle {
         if (!root.activeFocus) {
             root.forceActiveFocus()
         }
-
-        navCtrl.ensureActive()
     }
 
     NavigationControl {

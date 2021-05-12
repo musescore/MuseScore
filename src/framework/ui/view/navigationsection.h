@@ -70,7 +70,7 @@ public:
     const std::set<INavigationPanel*>& panels() const override;
     async::Notification panelsListChanged() const override;
 
-    async::Channel<SectionPanelControl> forceActiveRequested() const override;
+    async::Channel<SectionPanelControl> activeRequested() const override;
 
     void componentComplete() override;
 

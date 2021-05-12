@@ -65,8 +65,6 @@ FocusScope {
         if (!root.activeFocus) {
             root.forceActiveFocus()
         }
-
-        navCtrl.ensureActive()
     }
 
     NavigationControl {

@@ -88,12 +88,12 @@ void NavigationControl::trigger()
     emit triggered();
 }
 
-mu::async::Channel<INavigationControl*> NavigationControl::forceActiveRequested() const
+mu::async::Channel<INavigationControl*> NavigationControl::activeRequested() const
 {
     return m_forceActiveRequested;
 }
 
-void NavigationControl::ensureActive()
+void NavigationControl::requestActive()
 {
     m_forceActiveRequested.send(this);
 }

@@ -41,8 +41,6 @@ FocusScope {
         if (!root.activeFocus) {
             root.forceActiveFocus()
         }
-
-        keynavItem.ensureActive()
     }
 
     NavigationControl {

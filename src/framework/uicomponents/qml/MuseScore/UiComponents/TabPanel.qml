@@ -34,14 +34,7 @@ TabView {
     function focusOnFirstTab() {
         var tabItem = root.getTab(0);
         if (tabItem && tabItem.navigation) {
-            tabItem.navigation.ensureActive()
-        }
-    }
-
-    onCurrentIndexChanged: {
-        var tabItem = root.getTab(root.currentIndex)
-        if (tabItem.navigation) {
-            tabItem.navigation.ensureActive()
+            tabItem.navigation.requestActive()
         }
     }
 
