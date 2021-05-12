@@ -1,10 +1,10 @@
 # Leland music fonts
 
-This repository contains the **Leland music fonts, Version 0.52**.
+This repository contains the **Leland music fonts, Version 0.61**.
 
 ## About the fonts
 
-The Leland music fonts (Leland & Leland Text), Version 0.52 are available in Type 1, OpenType-CFF format. They are distributed under the [SIL Open Font License (OFL), Version 1.1](./LICENSE.txt).
+The Leland music fonts (Leland & Leland Text), Version 0.61 are available in Type 1, OpenType-CFF format. They are distributed under the [SIL Open Font License (OFL), Version 1.1](./LICENSE.txt).
 
 The fonts have been initially developed for MuseScore (https://www.musescore.org) music composition software.
 
@@ -18,10 +18,10 @@ Leland is included with MuseScore 3.6 and later, so no further installation is r
 
 To use the font with other applications, install the .otf font files in your OS in the usual way. Note that this font does **not** yet work in Sibelius or Finale as they do not have support for SMuFL fonts. (A Sibelius-specific version is in development.)
 
-To use the font in Dorico (1.0.20 and later), the `metadata.json` file needs to be copied to the following location:
+To use the font in Dorico (1.0.20 and later), the `leland_metadata.json` file needs to be copied to the following location:
 
 __Windows__: `C:\Program Files\Common Files\SMuFL\Fonts\Leland\Leland.json`  
 __Mac__: `/Library/Application Support/SMuFL/Fonts/Leland/Leland.json`  
 __Linux__: `/usr/share/SMuFL/Fonts/Leland/Leland.json`
 
-Note that you will need to create a Leland folder inside the `SMuFL/Fonts` folder manually, as well as renaming the `metadata.json` file to `Leland.json`.
+Note that you will need to create a Leland folder inside the `SMuFL/Fonts` folder manually, as well as renaming the `leland_metadata.json` file to `Leland.json`.
