@@ -55,6 +55,8 @@ public:
 
     const std::set<INavigationSection*>& sections() const override;
 
+    bool activateByName(const std::string& section, const std::string& panel, const std::string& control) override;
+
     INavigationSection* activeSection() const override;
     INavigationPanel* activePanel() const override;
     INavigationControl* activeControl() const override;

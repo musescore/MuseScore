@@ -297,6 +297,7 @@ void NotationPaintView::onNoteInputChanged()
         setAcceptHoverEvents(true);
         QRectF cursorRect = notationNoteInput()->cursorRect();
         adjustCanvasPosition(cursorRect);
+        emit activeFocusRequested();
     } else {
         setAcceptHoverEvents(false);
     }
@@ -647,9 +648,8 @@ void NotationPaintView::wheelEvent(QWheelEvent* event)
 
 void NotationPaintView::mousePressEvent(QMouseEvent* event)
 {
-    emit mousePressed();
-
     setFocus(true);
+    emit activeFocusRequested();
 
     if (isInited()) {
         m_inputController->mousePressEvent(event);
