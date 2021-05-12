@@ -77,7 +77,7 @@ FocusScope {
                 SplitView.fillWidth: true
                 SplitView.fillHeight: true
 
-                onMousePressed: {
+                onActiveFocusRequested: {
                     tabPanel.ensureActive()
                 }
 
