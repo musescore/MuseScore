@@ -202,7 +202,7 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Select all similar elements with more options")
              ),
     UiAction("delete",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Delete"),
              QT_TRANSLATE_NOOP("action", "Delete the selected element(s)"),
              IconCode::Code::DELETE_TANK
