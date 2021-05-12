@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.12
-import QtQuick.Layouts 1.12
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -32,134 +32,128 @@ StyledDialogView {
     contentWidth: 552
     contentHeight: 360
 
-    Rectangle {
+    margins: 24
+
+    NewWorkspaceModel {
+        id: workspaceModel
+    }
+
+    Component.onCompleted: {
+        workspaceModel.load()
+    }
+
+    ColumnLayout {
         anchors.fill: parent
+        spacing: 0
 
-        color: ui.theme.popupBackgroundColor
-
-        NewWorkspaceModel {
-            id: workspaceModel
+        StyledTextLabel {
+            text: qsTrc("workspace", "Create new workspace")
+            font: ui.theme.headerBoldFont
         }
 
-        Component.onCompleted: {
-            workspaceModel.load()
+        StyledTextLabel {
+            Layout.topMargin: 24
+
+            text: qsTrc("workspace", "Workspace name:")
         }
 
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: 24
+        TextInputField {
+            Layout.topMargin: 12
+            Layout.fillWidth: true
 
-            spacing: 0
+            currentText: workspaceModel.workspaceName
 
-            StyledTextLabel {
-                text: qsTrc("workspace", "Create new workspace")
-                font: ui.theme.headerBoldFont
+            onCurrentTextEdited: {
+                workspaceModel.workspaceName = newTextValue
             }
 
-            StyledTextLabel {
-                Layout.topMargin: 24
-
-                text: qsTrc("workspace", "Workspace name:")
+            Component.onCompleted: {
+                selectAll()
             }
+        }
 
-            TextInputField {
-                Layout.topMargin: 12
-                Layout.fillWidth: true
+        StyledTextLabel {
+            Layout.topMargin: 24
+            Layout.fillWidth: true
 
-                currentText: workspaceModel.workspaceName
+            text: qsTrc("workspace", "Select the options you want remembered in your new Workspace")
 
-                onCurrentTextEdited: {
-                    workspaceModel.workspaceName = newTextValue
-                }
+            horizontalAlignment: Qt.AlignLeft
+        }
 
-                Component.onCompleted: {
-                    selectAll()
-                }
-            }
+        Grid {
+            Layout.topMargin: 20
+            Layout.preferredHeight: childrenRect.height
+            Layout.fillWidth: true
 
-            StyledTextLabel {
-                Layout.topMargin: 24
-                Layout.fillWidth: true
+            columns: 2
+            rowSpacing: 20
+            columnSpacing: rowSpacing * 4
 
-                text: qsTrc("workspace", "Select the options you want remembered in your new Workspace")
+            CheckBox {
+                checked: workspaceModel.useUiPreferences
 
-                horizontalAlignment: Qt.AlignLeft
-            }
+                text: qsTrc("workspace", "UI preferences (colours, canvas style, etc.)")
 
-            Grid {
-                Layout.topMargin: 20
-                Layout.preferredHeight: childrenRect.height
-                Layout.fillWidth: true
-
-                columns: 2
-                rowSpacing: 20
-                columnSpacing: rowSpacing * 4
-
-                CheckBox {
-                    checked: workspaceModel.useUiPreferences
-
-                    text: qsTrc("workspace", "UI preferences (colours, canvas style, etc.)")
-
-                    onClicked: {
-                        workspaceModel.useUiPreferences = !checked
-                    }
-                }
-
-                CheckBox {
-                    checked: workspaceModel.useUiArrangement
-
-                    text: qsTrc("workspace", "UI arrangement")
-
-                    onClicked: {
-                        workspaceModel.useUiArrangement = !checked
-                    }
-                }
-
-                CheckBox {
-                    checked: workspaceModel.usePalettes
-
-                    text: qsTrc("workspace", "Palettes")
-
-                    onClicked: {
-                        workspaceModel.usePalettes = !checked
-                    }
-                }
-
-                CheckBox {
-                    checked: workspaceModel.useToolbarCustomization
-
-                    text: qsTrc("workspace", "Toolbar customisations")
-
-                    onClicked: {
-                        workspaceModel.useToolbarCustomization = !checked
-                    }
+                onClicked: {
+                    workspaceModel.useUiPreferences = !checked
                 }
             }
 
-            Row {
-                Layout.topMargin: 42
-                Layout.preferredHeight: childrenRect.height
-                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+            CheckBox {
+                checked: workspaceModel.useUiArrangement
 
-                spacing: 12
+                text: qsTrc("workspace", "UI arrangement")
 
-                FlatButton {
-                    text: qsTrc("global", "Cancel")
-
-                    onClicked: {
-                        root.reject()
-                    }
+                onClicked: {
+                    workspaceModel.useUiArrangement = !checked
                 }
+            }
 
-                FlatButton {
-                    text: qsTrc("global", "Select")
+            CheckBox {
+                checked: workspaceModel.usePalettes
 
-                    enabled: workspaceModel.canCreateWorkspace
+                text: qsTrc("workspace", "Palettes")
 
-                    onClicked: {
-                        root.ret = { errcode: 0, value: workspaceModel.createWorkspace() }
-                        root.hide()
-                    }
+                onClicked: {
+                    workspaceModel.usePalettes = !checked
+                }
+            }
+
+            CheckBox {
+                checked: workspaceModel.useToolbarCustomization
+
+                text: qsTrc("workspace", "Toolbar customisations")
+
+                onClicked: {
+                    workspaceModel.useToolbarCustomization = !checked
+                }
+            }
+        }
+
+        Row {
+            Layout.topMargin: 42
+            Layout.preferredHeight: childrenRect.height
+            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+
+            spacing: 12
+
+            FlatButton {
+                text: qsTrc("global", "Cancel")
+
+                onClicked: {
+                    root.reject()
+                }
+            }
+
+            FlatButton {
+                text: qsTrc("global", "Select")
+
+                enabled: workspaceModel.canCreateWorkspace
+
+                onClicked: {
+                    root.ret = { errcode: 0, value: workspaceModel.createWorkspace() }
+                    root.hide()
                 }
             }
         }

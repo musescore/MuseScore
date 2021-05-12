@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.12
-import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -34,159 +34,151 @@ StyledDialogView {
 
     contentWidth: 280
     contentHeight: 600
+    margins: 12
 
     modal: true
 
-    Rectangle {
-        id: contentRect
+    NoteInputBarCustomiseModel {
+        id: customiseModel
+    }
 
+    Component.onCompleted: {
+        customiseModel.load()
+    }
+
+    ColumnLayout {
         anchors.fill: parent
 
-        color: ui.theme.popupBackgroundColor
+        spacing: 0
 
-        NoteInputBarCustomiseModel {
-            id: customiseModel
+        StyledTextLabel {
+            Layout.alignment: Qt.AlignTop
+            Layout.fillWidth: true
+            Layout.topMargin: 8
+
+            text: qsTrc("notation", "Customise toolbar")
+            horizontalAlignment: Text.AlignLeft
+            font: ui.theme.largeBodyBoldFont
         }
 
-        Component.onCompleted: {
-            customiseModel.load()
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignTop
+            Layout.topMargin: 20
+
+            height: childrenRect.height
+
+            FlatButton {
+                Layout.fillWidth: true
+
+                text: qsTrc("notation", "Add separator line")
+
+                enabled: customiseModel.isAddSeparatorAvailable
+
+                onClicked: {
+                    customiseModel.addSeparatorLine()
+                }
+            }
+
+            FlatButton {
+                Layout.alignment: Qt.AlignRight
+                Layout.preferredWidth: 30
+
+                icon: IconCode.DELETE_TANK
+                enabled: customiseModel.isRemovingAvailable
+
+                onClicked: {
+                    customiseModel.removeSelectedRows()
+                }
+            }
+
+            FlatButton {
+                Layout.alignment: Qt.AlignRight
+                Layout.preferredWidth: 30
+
+                icon: IconCode.ARROW_UP
+                enabled: customiseModel.isMovingUpAvailable
+
+                onClicked: {
+                    customiseModel.moveSelectedRowsUp()
+                    Qt.callLater(view.positionViewAtSelectedItems)
+                }
+            }
+
+            FlatButton {
+                Layout.alignment: Qt.AlignRight
+                Layout.preferredWidth: 30
+
+                icon: IconCode.ARROW_DOWN
+                enabled: customiseModel.isMovingDownAvailable
+
+                onClicked: {
+                    customiseModel.moveSelectedRowsDown()
+                    Qt.callLater(view.positionViewAtSelectedItems)
+                }
+            }
         }
 
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: 12
+        ListView {
+            id: view
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.topMargin: 12
 
             spacing: 0
 
-            StyledTextLabel {
-                Layout.alignment: Qt.AlignTop
-                Layout.fillWidth: true
-                Layout.topMargin: 8
+            model: customiseModel
 
-                text: qsTrc("notation", "Customise toolbar")
-                horizontalAlignment: Text.AlignLeft
-                font: ui.theme.largeBodyBoldFont
-            }
+            boundsBehavior: Flickable.StopAtBounds
+            clip: true
 
-            RowLayout {
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignTop
-                Layout.topMargin: 20
-
-                height: childrenRect.height
-
-                FlatButton {
-                    Layout.fillWidth: true
-
-                    text: qsTrc("notation", "Add separator line")
-
-                    enabled: customiseModel.isAddSeparatorAvailable
-
-                    onClicked: {
-                        customiseModel.addSeparatorLine()
-                    }
-                }
-
-                FlatButton {
-                    Layout.alignment: Qt.AlignRight
-                    Layout.preferredWidth: 30
-
-                    icon: IconCode.DELETE_TANK
-                    enabled: customiseModel.isRemovingAvailable
-
-                    onClicked: {
-                        customiseModel.removeSelectedRows()
-                    }
-                }
-
-                FlatButton {
-                    Layout.alignment: Qt.AlignRight
-                    Layout.preferredWidth: 30
-
-                    icon: IconCode.ARROW_UP
-                    enabled: customiseModel.isMovingUpAvailable
-
-                    onClicked: {
-                        customiseModel.moveSelectedRowsUp()
-                        Qt.callLater(view.positionViewAtSelectedItems)
-                    }
-                }
-
-                FlatButton {
-                    Layout.alignment: Qt.AlignRight
-                    Layout.preferredWidth: 30
-
-                    icon: IconCode.ARROW_DOWN
-                    enabled: customiseModel.isMovingDownAvailable
-
-                    onClicked: {
-                        customiseModel.moveSelectedRowsDown()
-                        Qt.callLater(view.positionViewAtSelectedItems)
-                    }
+            function positionViewAtSelectedItems() {
+                var selectedIndexes = customiseModel.selectionModel.selectedIndexes
+                for (var _index in selectedIndexes) {
+                    positionViewAtIndex(selectedIndexes[_index].row, ListView.Contain)
                 }
             }
 
-            ListView {
-                id: view
+            ScrollBar.vertical: StyledScrollBar {
 
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.topMargin: 12
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
 
-                spacing: 0
+                visible: view.contentHeight > view.height
+                z: 1
+            }
 
-                model: customiseModel
+            delegate: ListItemBlank {
+                height: 38
 
-                boundsBehavior: Flickable.StopAtBounds
-                clip: true
+                isSelected: selectedRole
 
-                function positionViewAtSelectedItems() {
-                    var selectedIndexes = customiseModel.selectionModel.selectedIndexes
-                    for (var _index in selectedIndexes) {
-                        positionViewAtIndex(selectedIndexes[_index].row, ListView.Contain)
-                    }
+                onClicked: {
+                    customiseModel.selectRow(index)
                 }
 
-                ScrollBar.vertical: StyledScrollBar {
+                Loader {
+                    property var delegateType: Boolean(itemRole) ? itemRole.type : NoteInputBarItem.UNDEFINED
 
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    anchors.right: parent.right
+                    height: parent.height
+                    width: parent.width
 
-                    visible: view.contentHeight > view.height
-                    z: 1
-                }
+                    sourceComponent: delegateType === NoteInputBarItem.ACTION ? actionComponent : separatorLineComponent
 
-                delegate: ListItemBlank {
-                    height: 38
+                    Component {
+                        id: actionComponent
 
-                    isSelected: selectedRole
-
-                    onClicked: {
-                        customiseModel.selectRow(index)
+                        NoteInputBarActionDelegate {}
                     }
 
-                    Loader {
-                        property var delegateType: Boolean(itemRole) ? itemRole.type : NoteInputBarItem.UNDEFINED
+                    Component {
+                        id: separatorLineComponent
 
-                        height: parent.height
-                        width: parent.width
-
-                        sourceComponent: delegateType === NoteInputBarItem.ACTION ? actionComponent : separatorLineComponent
-
-                        Component {
-                            id: actionComponent
-
-                            NoteInputBarActionDelegate {}
-                        }
-
-                        Component {
-                            id: separatorLineComponent
-
-                            StyledTextLabel {
-                                anchors.centerIn: parent
-                                text: Boolean(itemRole) ? itemRole.title : ""
-                            }
+                        StyledTextLabel {
+                            anchors.centerIn: parent
+                            text: Boolean(itemRole) ? itemRole.title : ""
                         }
                     }
                 }

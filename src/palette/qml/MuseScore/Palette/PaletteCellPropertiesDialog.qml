@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -32,132 +32,125 @@ StyledDialogView {
 
     contentWidth: 280
     contentHeight: 370
+    margins: 12
 
     property var properties
 
-    Rectangle {
-        color: ui.theme.backgroundPrimaryColor
+    PaletteCellPropertiesModel {
+        id: propertiesModel
+    }
 
-        PaletteCellPropertiesModel {
-            id: propertiesModel
+    Component.onCompleted: {
+        propertiesModel.load(root.properties)
+    }
+
+    Column {
+        anchors.fill: parent
+        spacing: 12
+
+        StyledTextLabel {
+            text: qsTrc("palette", "Name")
+            font: ui.theme.bodyBoldFont
         }
 
-        Component.onCompleted: {
-            propertiesModel.load(root.properties)
-        }
+        TextInputField {
+            currentText: propertiesModel.name
 
-        Column {
-            anchors.fill: parent
-
-            readonly property int margins: 12
-            anchors.margins: margins
-
-            spacing: 12
-
-            StyledTextLabel {
-                text: qsTrc("palette", "Name")
-                font: ui.theme.bodyBoldFont
+            onCurrentTextEdited: {
+                propertiesModel.name = newTextValue
             }
+        }
 
-            TextInputField {
-                currentText: propertiesModel.name
+        SeparatorLine { anchors.margins: -parent.margins }
 
-                onCurrentTextEdited: {
-                    propertiesModel.name = newTextValue
+        StyledTextLabel {
+            text: qsTrc("palette", "Content offset")
+            font: ui.theme.bodyBoldFont
+        }
+
+        Grid {
+            width: parent.width
+
+            columns: 2
+            spacing: 16
+
+            Repeater {
+                id: repeater
+
+                model: [
+                    { title: qsTrc("palette", "X"), value: propertiesModel.xOffset, incrementStep: 1, measureUnit: qsTrc("palette", "sp") },
+                    { title: qsTrc("palette", "Y"), value: propertiesModel.yOffset, incrementStep: 1, measureUnit: qsTrc("palette", "sp") },
+                    { title: qsTrc("palette", "Content scale"), value: propertiesModel.scaleFactor, incrementStep: 0.1 }
+                ]
+
+                function setValue(index, value) {
+                    if (index === 0) {
+                        propertiesModel.xOffset = value
+                    } else if (index === 1) {
+                        propertiesModel.yOffset = value
+                    } else if (index === 2) {
+                        propertiesModel.scaleFactor = value
+                    }
                 }
-            }
 
-            SeparatorLine { anchors.margins: -parent.margins }
+                Column {
+                    width: parent.width / 2 - 8
 
-            StyledTextLabel {
-                text: qsTrc("palette", "Content offset")
-                font: ui.theme.bodyBoldFont
-            }
+                    spacing: 8
 
-            Grid {
-                width: parent.width
-
-                columns: 2
-                spacing: 16
-
-                Repeater {
-                    id: repeater
-
-                    model: [
-                        { title: qsTrc("palette", "X"), value: propertiesModel.xOffset, incrementStep: 1, measureUnit: qsTrc("palette", "sp") },
-                        { title: qsTrc("palette", "Y"), value: propertiesModel.yOffset, incrementStep: 1, measureUnit: qsTrc("palette", "sp") },
-                        { title: qsTrc("palette", "Content scale"), value: propertiesModel.scaleFactor, incrementStep: 0.1 }
-                    ]
-
-                    function setValue(index, value) {
-                        if (index === 0) {
-                            propertiesModel.xOffset = value
-                        } else if (index === 1) {
-                            propertiesModel.yOffset = value
-                        } else if (index === 2) {
-                            propertiesModel.scaleFactor = value
-                        }
+                    StyledTextLabel {
+                        text: modelData["title"]
                     }
 
-                    Column {
-                        width: parent.width / 2 - 8
+                    IncrementalPropertyControl {
+                        currentValue: modelData["value"]
+                        measureUnitsSymbol: Boolean(modelData["measureUnit"]) ? modelData["measureUnit"] : ""
+                        step: modelData["incrementStep"]
 
-                        spacing: 8
-
-                        StyledTextLabel {
-                            text: modelData["title"]
-                        }
-
-                        IncrementalPropertyControl {
-                            currentValue: modelData["value"]
-                            measureUnitsSymbol: Boolean(modelData["measureUnit"]) ? modelData["measureUnit"] : ""
-                            step: modelData["incrementStep"]
-
-                            onValueEdited: {
-                                repeater.setValue(model.index, newValue)
-                            }
+                        onValueEdited: {
+                            repeater.setValue(model.index, newValue)
                         }
                     }
                 }
             }
+        }
 
-            CheckBox {
-                text: qsTrc("palette", "Draw staff")
+        CheckBox {
+            text: qsTrc("palette", "Draw staff")
 
-                checked: propertiesModel.drawStaff
+            checked: propertiesModel.drawStaff
+
+            onClicked: {
+                propertiesModel.drawStaff = !checked
+            }
+        }
+
+        Item { height: 1; width: parent.width }
+
+        Row {
+            width: parent.width
+            height: childrenRect.height + 20
+
+            spacing: 4
+
+            FlatButton {
+                text: qsTrc("global", "Cancel")
+
+                width: parent.width / 2
 
                 onClicked: {
-                    propertiesModel.drawStaff = !checked
+                    propertiesModel.reject()
+                    root.hide()
                 }
             }
 
-            Item { height: 1; width: parent.width }
+            FlatButton {
+                text: qsTrc("global", "OK")
 
-            Row {
-                width: parent.width
-                height: childrenRect.height + 20
+                width: parent.width / 2
 
-                spacing: 4
-
-                FlatButton {
-                    text: qsTrc("global", "Cancel")
-
-                    width: parent.width / 2
-
-                    onClicked: {
-                        propertiesModel.reject()
-                        root.hide()
-                    }
-                }
-
-                FlatButton {
-                    text: qsTrc("global", "OK")
-
-                    width: parent.width / 2
-
-                    onClicked: {
-                        root.hide()
-                    }
+                onClicked: {
+                    root.hide()
                 }
             }
         }
