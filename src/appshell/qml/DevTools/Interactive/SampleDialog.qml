@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
+import QtQuick 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
@@ -27,7 +27,7 @@ StyledDialogView {
 
     id: root
 
-    property var color: "#444444"
+    property color color: "#444444"
     property bool isApplyColor: false
 
     contentWidth: 400
@@ -36,7 +36,6 @@ StyledDialogView {
     title: "Sample dialog"
 
     Rectangle {
-
         anchors.fill: parent
         color: root.isApplyColor ? root.color : "#666666"
 
@@ -49,7 +48,7 @@ StyledDialogView {
                 id: input
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                property var value: ""
+                property string value: ""
                 width: 150
                 onCurrentTextEdited: input.value = newTextValue
             }

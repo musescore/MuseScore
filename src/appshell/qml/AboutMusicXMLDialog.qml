@@ -34,100 +34,95 @@ StyledDialogView {
     contentHeight: 312
     contentWidth: 456
 
-    Rectangle {
-        anchors.fill: parent
-        color: ui.theme.backgroundPrimaryColor
+    AboutModel {
+        id: aboutModel
+    }
 
-        AboutModel {
-            id: aboutModel
-        }
+    ColumnLayout {
+        anchors.fill: parent
+        spacing: 30
 
         ColumnLayout {
-            anchors.fill: parent
-            spacing: 30
+            id: content
 
-            ColumnLayout {
-                id: content
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.topMargin: 36
+            Layout.leftMargin: 40
+            Layout.rightMargin: 40
 
+            spacing: 24
+
+            StyledTextLabel {
                 Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.topMargin: 36
-                Layout.leftMargin: 40
-                Layout.rightMargin: 40
 
-                spacing: 24
+                text: qsTrc("appshell", "MusicXML is an open file format for exchanging digital sheet music, supported by many applications.")
+                font: ui.theme.bodyBoldFont
+                wrapMode: Text.WordWrap
+            }
+
+            Column {
+                Layout.fillWidth: true
+                spacing: 12
 
                 StyledTextLabel {
-                    Layout.fillWidth: true
+                    width: parent.width
 
-                    text: qsTrc("appshell", "MusicXML is an open file format for exchanging digital sheet music, supported by many applications.")
-                    font: ui.theme.bodyBoldFont
+                    text: qsTrc("appshell", "Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published by the W3C Music Notation Community Group under the W3C Community Final Specification Agreement:")
                     wrapMode: Text.WordWrap
+                    maximumLineCount: 3
                 }
 
-                Column {
-                    Layout.fillWidth: true
-                    spacing: 12
+                StyledTextLabel {
+                    width: parent.width
 
-                    StyledTextLabel {
-                        width: parent.width
-
-                        text: qsTrc("appshell", "Copyright 2004 - 2017 the Contributors to the MusicXML Specification, published by the W3C Music Notation Community Group under the W3C Community Final Specification Agreement:")
-                        wrapMode: Text.WordWrap
-                        maximumLineCount: 3
+                    text: {
+                        var license = "<a href='%1'>%2</a>"
+                        var musicXMLLicenseUrl = aboutModel.musicXMLLicenseUrl()
+                        return license.arg(musicXMLLicenseUrl.url).arg(musicXMLLicenseUrl.displayName)
                     }
-
-                    StyledTextLabel {
-                        width: parent.width
-
-                        text: {
-                            var license = "<a href='%1'>%2</a>"
-                            var musicXMLLicenseUrl = aboutModel.musicXMLLicenseUrl()
-                            return license.arg(musicXMLLicenseUrl.url).arg(musicXMLLicenseUrl.displayName)
-                        }
-                        wrapMode: Text.WordWrap
-                        maximumLineCount: 3
-                    }
-                }
-
-                Column {
-                    Layout.fillWidth: true
-                    spacing: 12
-
-                    StyledTextLabel {
-                        width: parent.width
-                        text: qsTrc("appshell", "A human-readable summary is available:")
-                        wrapMode: Text.WordWrap
-                        maximumLineCount: 3
-                    }
-
-                    StyledTextLabel {
-                        width: parent.width
-
-                        text: {
-                            var license = "<a href='%1'>%2</a>"
-                            var musicXMLLicenseDeedUrl = aboutModel.musicXMLLicenseDeedUrl()
-                            return license.arg(musicXMLLicenseDeedUrl.url).arg(musicXMLLicenseDeedUrl.displayName)
-                        }
-                        wrapMode: Text.WordWrap
-                        maximumLineCount: 3
-                    }
+                    wrapMode: Text.WordWrap
+                    maximumLineCount: 3
                 }
             }
 
-            RowLayout {
-                Layout.alignment: Qt.AlignRight
-                Layout.rightMargin: 16
-                Layout.bottomMargin: 16
-
+            Column {
+                Layout.fillWidth: true
                 spacing: 12
 
-                FlatButton {
-                    text: qsTrc("global", "OK")
+                StyledTextLabel {
+                    width: parent.width
+                    text: qsTrc("appshell", "A human-readable summary is available:")
+                    wrapMode: Text.WordWrap
+                    maximumLineCount: 3
+                }
 
-                    onClicked: {
-                        root.hide()
+                StyledTextLabel {
+                    width: parent.width
+
+                    text: {
+                        var license = "<a href='%1'>%2</a>"
+                        var musicXMLLicenseDeedUrl = aboutModel.musicXMLLicenseDeedUrl()
+                        return license.arg(musicXMLLicenseDeedUrl.url).arg(musicXMLLicenseDeedUrl.displayName)
                     }
+                    wrapMode: Text.WordWrap
+                    maximumLineCount: 3
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.alignment: Qt.AlignRight
+            Layout.rightMargin: 16
+            Layout.bottomMargin: 16
+
+            spacing: 12
+
+            FlatButton {
+                text: qsTrc("global", "OK")
+
+                onClicked: {
+                    root.hide()
                 }
             }
         }
