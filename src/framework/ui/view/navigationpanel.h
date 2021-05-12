@@ -69,7 +69,7 @@ public:
     const std::set<INavigationControl*>& controls() const override;
     async::Notification controlsListChanged() const override;
 
-    async::Channel<PanelControl> forceActiveRequested() const override;
+    async::Channel<PanelControl> activeRequested() const override;
 
     INavigationSection* section() const override;
     NavigationSection* section_property() const;

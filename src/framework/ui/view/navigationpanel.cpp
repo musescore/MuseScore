@@ -126,7 +126,7 @@ mu::async::Notification NavigationPanel::controlsListChanged() const
     return m_controlsListChanged;
 }
 
-mu::async::Channel<PanelControl> NavigationPanel::forceActiveRequested() const
+mu::async::Channel<PanelControl> NavigationPanel::activeRequested() const
 {
     return m_forceActiveRequested;
 }
@@ -186,7 +186,7 @@ void NavigationPanel::addControl(NavigationControl* control)
 
     m_controls.insert(control);
 
-    control->forceActiveRequested().onReceive(this, [this](INavigationControl* c) {
+    control->activeRequested().onReceive(this, [this](INavigationControl* c) {
         m_forceActiveRequested.send(std::make_tuple(this, c));
     });
 
@@ -203,7 +203,7 @@ void NavigationPanel::removeControl(NavigationControl* control)
     }
 
     m_controls.erase(control);
-    control->forceActiveRequested().resetOnReceive(this);
+    control->activeRequested().resetOnReceive(this);
 
     if (m_controlsListChanged.isConnected()) {
         m_controlsListChanged.notify();

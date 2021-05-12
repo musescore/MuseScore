@@ -305,8 +305,8 @@ void NavigationController::reg(INavigationSection* section)
     TRACEFUNC;
     m_sections.insert(section);
 
-    section->forceActiveRequested().onReceive(this, [this](const SectionPanelControl& ssc) {
-        onForceActiveRequested(std::get<0>(ssc), std::get<1>(ssc), std::get<2>(ssc));
+    section->activeRequested().onReceive(this, [this](const SectionPanelControl& ssc) {
+        onActiveRequested(std::get<0>(ssc), std::get<1>(ssc), std::get<2>(ssc));
     });
 }
 
@@ -314,7 +314,7 @@ void NavigationController::unreg(INavigationSection* section)
 {
     TRACEFUNC;
     m_sections.erase(section);
-    section->forceActiveRequested().resetOnReceive(this);
+    section->activeRequested().resetOnReceive(this);
 }
 
 const std::set<INavigationSection*>& NavigationController::sections() const
@@ -324,40 +324,8 @@ const std::set<INavigationSection*>& NavigationController::sections() const
 
 bool NavigationController::eventFilter(QObject* watched, QEvent* event)
 {
-    //! NOTE We need to reset focus if we clicked on an "empty" place.
-    //! We have two cases:
-    //! Case 1 - request activation on mouse press
-    //! - eventFilter: MouseButtonPress
-    //! - Object->event
-    //!     onPress
-    //!         onForceActiveRequested  -> flag = ActiveRequested
-    //! - eventFilter: MouseButtonRelease
-    //! - async::Async::call
-    //! === Next Event Loop ===
-    //! check the flag, if not `ActiveRequested` then we should reset focus (clicked on an "empty" place)
-    //!
-    //! Case 2 - request activation on mouse clicked
-    //! - eventFilter: MouseButtonPress
-    //! - eventFilter: MouseButtonRelease
-    //! - Object->event
-    //!     onClicked
-    //!         onForceActiveRequested  -> flag = ActiveRequested
-    //! - async::Async::call
-    //! === Next Event Loop ===
-    //! check the flag, if not `ActiveRequested` then we should reset focus (clicked on an "empty" place)
-
     if (event->type() == QEvent::MouseButtonPress) {
-        m_requestActivationState = RequestActivationState::MousePress;
-    } else if (event->type() == QEvent::MouseButtonRelease) {
-        if (m_requestActivationState != RequestActivationState::ActiveRequested) {
-            m_requestActivationState = RequestActivationState::MouseRelease;
-        }
-
-        async::Async::call(this, [this]() {
-            if (m_requestActivationState != RequestActivationState::ActiveRequested) {
-                resetActive();
-            }
-        });
+        resetActive();
     }
 
     return QObject::eventFilter(watched, event);
@@ -1081,7 +1049,7 @@ void NavigationController::doTriggerControl()
     activeCtrl->trigger();
 }
 
-bool NavigationController::activateByName(const std::string& sectName, const std::string& panelName, const std::string& controlName)
+bool NavigationController::requestActivateByName(const std::string& sectName, const std::string& panelName, const std::string& controlName)
 {
     INavigationSection* section = findByName(m_sections, QString::fromStdString(sectName));
     if (section) {
@@ -1101,23 +1069,29 @@ bool NavigationController::activateByName(const std::string& sectName, const std
         return false;
     }
 
-    onForceActiveRequested(section, panel, control);
+    onActiveRequested(section, panel, control);
     return true;
 }
 
-void NavigationController::onForceActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl)
+void NavigationController::onActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl)
 {
     TRACEFUNC;
-
-    m_requestActivationState = RequestActivationState::ActiveRequested;
-    bool isChanged = false;
 
     if (m_sections.empty()) {
         return;
     }
 
     INavigationSection* activeSec = findActive(m_sections);
-    if (activeSec && activeSec != sect) {
+
+    //! NOTE If there is no active section,
+    //! we may not be using keyboard navigation, so ignore the request.
+    if (!activeSec) {
+        return;
+    }
+
+    bool isChanged = false;
+
+    if (activeSec != sect) {
         doDeactivateSection(activeSec);
     }
 

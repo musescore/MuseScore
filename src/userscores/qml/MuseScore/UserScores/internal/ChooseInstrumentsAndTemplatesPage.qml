@@ -58,7 +58,7 @@ Item {
     }
 
     function focusOnFirst() {
-        chooseInstrumentsBtn.navigation.ensureActive()
+        chooseInstrumentsBtn.navigation.requestActive()
     }
 
     TabBar {

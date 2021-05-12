@@ -77,10 +77,6 @@ FocusScope {
                 SplitView.fillWidth: true
                 SplitView.fillHeight: true
 
-                onActiveFocusRequested: {
-                    tabPanel.ensureActive()
-                }
-
                 onTextEdittingStarted: {
                     root.textEdittingStarted()
                 }
