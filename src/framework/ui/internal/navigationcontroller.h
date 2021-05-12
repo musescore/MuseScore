@@ -55,7 +55,7 @@ public:
 
     const std::set<INavigationSection*>& sections() const override;
 
-    bool activateByName(const std::string& section, const std::string& panel, const std::string& control) override;
+    bool requestActivateByName(const std::string& section, const std::string& panel, const std::string& control) override;
 
     INavigationSection* activeSection() const override;
     INavigationPanel* activePanel() const override;
@@ -90,7 +90,7 @@ private:
     void onEscape();
 
     void doTriggerControl();
-    void onForceActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl);
+    void onActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl);
 
     void doActivateSection(INavigationSection* sect, bool isActivateLastPanel = false);
     void doDeactivateSection(INavigationSection* sect);
@@ -104,16 +104,8 @@ private:
 
     void resetActive();
 
-    enum class RequestActivationState {
-        Undefined = 0,
-        MousePress,
-        MouseRelease,
-        ActiveRequested
-    };
-
     std::set<INavigationSection*> m_sections;
     async::Notification m_navigationChanged;
-    RequestActivationState m_requestActivationState = RequestActivationState::Undefined;
 };
 }
 

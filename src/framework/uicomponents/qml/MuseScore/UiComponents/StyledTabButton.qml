@@ -52,10 +52,7 @@ TabButton {
         if (!root.activeFocus) {
             root.forceActiveFocus()
         }
-
-        navCtrl.ensureActive()
     }
-
 
     NavigationControl {
         id: navCtrl

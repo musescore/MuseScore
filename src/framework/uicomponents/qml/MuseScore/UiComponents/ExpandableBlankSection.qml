@@ -103,7 +103,6 @@ FocusScope {
         hoverEnabled: true
 
         onClicked: {
-            navCtrl.ensureActive()
             root.isExpanded = !root.isExpanded
         }
     }

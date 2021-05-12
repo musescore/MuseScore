@@ -48,7 +48,7 @@ public:
 
     MOCK_METHOD(const std::set<INavigationPanel*>&, panels, (), (const, override));
     MOCK_METHOD(async::Notification, panelsListChanged, (), (const, override));
-    MOCK_METHOD(async::Channel<SectionPanelControl>, forceActiveRequested, (), (const, override));
+    MOCK_METHOD(async::Channel<SectionPanelControl>, activeRequested, (), (const, override));
 };
 
 class NavigationPanelMock : public INavigationPanel
@@ -73,7 +73,7 @@ public:
     MOCK_METHOD(Direction, direction, (), (const, override));
     MOCK_METHOD(const std::set<INavigationControl*>&, controls, (), (const, override));
     MOCK_METHOD(async::Notification, controlsListChanged, (), (const, override));
-    MOCK_METHOD(async::Channel<PanelControl>, forceActiveRequested, (), (const, override));
+    MOCK_METHOD(async::Channel<PanelControl>, activeRequested, (), (const, override));
 };
 
 class NavigationControlMock : public INavigationControl
@@ -97,7 +97,7 @@ public:
     MOCK_METHOD(INavigationPanel*, panel, (), (const, override));
 
     MOCK_METHOD(void, trigger, (), (override));
-    MOCK_METHOD(async::Channel<INavigationControl*>, forceActiveRequested, (), (const, override));
+    MOCK_METHOD(async::Channel<INavigationControl*>, activeRequested, (), (const, override));
 };
 }
 

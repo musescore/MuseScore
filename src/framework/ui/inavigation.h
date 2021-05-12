@@ -108,7 +108,7 @@ public:
     virtual INavigationPanel* panel() const = 0;
 
     virtual void trigger() = 0;
-    virtual async::Channel<INavigationControl*> forceActiveRequested() const = 0;
+    virtual async::Channel<INavigationControl*> activeRequested() const = 0;
 };
 
 class INavigationSection;
@@ -128,7 +128,7 @@ public:
     virtual Direction direction() const = 0;
     virtual const std::set<INavigationControl*>& controls() const = 0;
     virtual async::Notification controlsListChanged() const = 0;
-    virtual async::Channel<PanelControl> forceActiveRequested() const = 0;
+    virtual async::Channel<PanelControl> activeRequested() const = 0;
 };
 
 class INavigationSection : public INavigation
@@ -147,7 +147,7 @@ public:
     virtual Type type() const = 0;
     virtual const std::set<INavigationPanel*>& panels() const = 0;
     virtual async::Notification panelsListChanged() const = 0;
-    virtual async::Channel<SectionPanelControl> forceActiveRequested() const = 0;
+    virtual async::Channel<SectionPanelControl> activeRequested() const = 0;
 };
 }
 

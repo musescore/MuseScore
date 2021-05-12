@@ -209,7 +209,6 @@ Item {
         drag.axis: Drag.YAxis
 
         onClicked: {
-            keynavItem.ensureActive()
             root.clicked(mouse)
         }
     }
