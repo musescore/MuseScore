@@ -47,9 +47,7 @@ RadioDelegate {
             root.forceActiveFocus()
         }
 
-        if (!navCtrl.active) {
-            navCtrl.forceActive()
-        }
+        navCtrl.ensureActive()
     }
 
     onClicked: root.ensureActiveFocus()

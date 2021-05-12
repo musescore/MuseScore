@@ -78,7 +78,7 @@ FocusScope {
                 SplitView.fillHeight: true
 
                 onMousePressed: {
-                    tabPanel.forceActive()
+                    tabPanel.ensureActive()
                 }
 
                 onTextEdittingStarted: {

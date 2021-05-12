@@ -1086,6 +1086,7 @@ void NavigationController::onForceActiveRequested(INavigationSection* sect, INav
     TRACEFUNC;
 
     m_requestActivationState = RequestActivationState::ActiveRequested;
+    bool isChanged = false;
 
     if (m_sections.empty()) {
         return;
@@ -1096,24 +1097,35 @@ void NavigationController::onForceActiveRequested(INavigationSection* sect, INav
         doDeactivateSection(activeSec);
     }
 
-    sect->setActive(true);
-    MYLOG() << "activated section: " << sect->name() << ", order: " << sect->index().order();
+    if (!sect->active()) {
+        sect->setActive(true);
+        isChanged = true;
+        MYLOG() << "activated section: " << sect->name() << ", order: " << sect->index().order();
+    }
 
     INavigationPanel* activePanel = findActive(sect->panels());
     if (activePanel && activePanel != panel) {
         doDeactivatePanel(activePanel);
     }
 
-    panel->setActive(true);
-    MYLOG() << "activated panel: " << panel->name() << ", order: " << panel->index().order();
+    if (!panel->active()) {
+        panel->setActive(true);
+        isChanged = true;
+        MYLOG() << "activated panel: " << panel->name() << ", order: " << panel->index().order();
+    }
 
     INavigationControl* activeCtrl = findActive(panel->controls());
     if (activeCtrl && activeCtrl != ctrl) {
         activeCtrl->setActive(false);
     }
 
-    ctrl->setActive(true);
-    MYLOG() << "activated control: " << ctrl->name() << ", row: " << ctrl->index().row << ", column: " << ctrl->index().column;
+    if (!ctrl->active()) {
+        ctrl->setActive(true);
+        isChanged = true;
+        MYLOG() << "activated control: " << ctrl->name() << ", row: " << ctrl->index().row << ", column: " << ctrl->index().column;
+    }
 
-    m_navigationChanged.notify();
+    if (isChanged) {
+        m_navigationChanged.notify();
+    }
 }
