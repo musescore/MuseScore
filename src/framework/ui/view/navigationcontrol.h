@@ -58,7 +58,7 @@ public:
     void trigger() override;
     async::Channel<INavigationControl*> forceActiveRequested() const override;
 
-    Q_INVOKABLE void forceActive();
+    Q_INVOKABLE void ensureActive();
 
 public slots:
     void setPanel(NavigationPanel* panel);

@@ -93,7 +93,7 @@ mu::async::Channel<INavigationControl*> NavigationControl::forceActiveRequested(
     return m_forceActiveRequested;
 }
 
-void NavigationControl::forceActive()
+void NavigationControl::ensureActive()
 {
     m_forceActiveRequested.send(this);
 }

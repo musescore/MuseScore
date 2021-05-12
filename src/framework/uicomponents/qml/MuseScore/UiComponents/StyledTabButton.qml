@@ -53,9 +53,7 @@ TabButton {
             root.forceActiveFocus()
         }
 
-        if (!navCtrl.active) {
-            navCtrl.forceActive()
-        }
+        navCtrl.ensureActive()
     }
 
 

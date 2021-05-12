@@ -199,8 +199,8 @@ ListItemBlank {
     }
 
     onHovered: {
-        if (isHovered && !root.navigation.active) {
-            root.navigation.forceActive()
+        if (isHovered) {
+            root.navigation.ensureActive()
         }
 
         if (!prv.hasSubMenu) {
