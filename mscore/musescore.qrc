@@ -3,6 +3,7 @@
         <file>data/icons/edit.svg</file>
         <file alias="styles/Leland.mss">../share/styles/Leland.mss</file>
         <file alias="styles/Edwin.mss">../share/styles/Edwin.mss</file>
+        <file alias="styles/PVGMusicXML.mss">../share/styles/PVGMusicXML.mss</file>
         <file alias="styles/legacy-style-defaults-v3.mss">../share/styles/legacy-style-defaults-v3.mss</file>
         <file alias="styles/legacy-style-defaults-v2.mss">../share/styles/legacy-style-defaults-v2.mss</file>
         <file alias="styles/legacy-style-defaults-v1.mss">../share/styles/legacy-style-defaults-v1.mss</file>

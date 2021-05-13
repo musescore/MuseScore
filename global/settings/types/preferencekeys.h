@@ -69,6 +69,7 @@
 #define PREF_IMPORT_GUITARPRO_CHARSET                       "import/guitarpro/charset"
 #define PREF_IMPORT_MUSICXML_IMPORTBREAKS                   "import/musicXML/importBreaks"
 #define PREF_IMPORT_MUSICXML_IMPORTLAYOUT                   "import/musicXML/importLayout"
+#define PREF_IMPORT_MUSICXML_REMOVEINSTRUMENTNAMES          "import/musicXML/removeInstrumentNames"
 #define PREF_IMPORT_OVERTURE_CHARSET                        "import/overture/charset"
 #define PREF_IMPORT_STYLE_STYLEFILE                         "import/style/styleFile"
 #define PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN                  "import/compatibility/do_not_ask_me_again"
