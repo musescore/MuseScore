@@ -32,7 +32,7 @@ class DropIndicatorsWindow : public QQuickView
 {
     Q_OBJECT
 
-    Q_PROPERTY(QObject* dropIndicators READ dropIndicators CONSTANT)
+    Q_PROPERTY(QObject * dropIndicators READ dropIndicators CONSTANT)
 
 public:
     explicit DropIndicatorsWindow(QObject* dropIndicators);
@@ -48,7 +48,7 @@ private:
     const QQuickItem* indicatorForLocation(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation dropLocation) const;
 
     const QQuickItem* indicatorForPos(QPoint) const;
-    QList<const QQuickItem *> indicatorItems() const;
+    QList<const QQuickItem*> indicatorItems() const;
 
     QObject* m_dropIndicators = nullptr;
 };

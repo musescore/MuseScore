@@ -113,6 +113,8 @@ DockToolBar::DockToolBar(QQuickItem* parent)
     m_draggableArea(new DraggableArea())
 {
     setAllowedAreas(Qt::TopDockWidgetArea);
+
+    setLocation(DockLocation::Top);
 }
 
 bool DockToolBar::movable() const
@@ -143,6 +145,11 @@ QSize DockToolBar::horizontalPreferredSize() const
 QSize DockToolBar::verticalPreferredSize() const
 {
     return m_verticalPreferredSize;
+}
+
+DockToolBar* DockToolBar::tabifyToolBar() const
+{
+    return m_tabifyToolBar;
 }
 
 void DockToolBar::setMinimumWidth(int width)
@@ -225,6 +232,16 @@ void DockToolBar::setVerticalPreferredSize(QSize verticalPreferredSize)
 
     m_verticalPreferredSize = verticalPreferredSize;
     emit verticalPreferredSizeChanged(m_verticalPreferredSize);
+}
+
+void DockToolBar::setTabifyToolBar(DockToolBar* tabifyToolBar)
+{
+    if (m_tabifyToolBar == tabifyToolBar) {
+        return;
+    }
+
+    m_tabifyToolBar = tabifyToolBar;
+    emit tabifyToolBarChanged(m_tabifyToolBar);
 }
 
 void DockToolBar::componentComplete()

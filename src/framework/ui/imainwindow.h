@@ -30,6 +30,7 @@ class QMainWindow;
 class QWindow;
 class QScreen;
 class QString;
+class QPoint;
 
 namespace mu::ui {
 class IMainWindow : MODULE_EXPORT_INTERFACE
@@ -49,8 +50,8 @@ public:
     virtual void requestChangeToolBarOrientation(const QString& toolBarName, framework::Orientation orientation) = 0;
     virtual async::Channel<std::pair<QString, framework::Orientation> > toolBarOrientationChangeRequested() const = 0;
 
-    virtual void setDockingHelperVisible(bool visible) = 0;
-    virtual async::Channel<bool> dockingHelperVisibleChanged() const = 0;
+    virtual void updateToolBarsDockingHelpers(const QPoint& mouseGlobalPos = QPoint()) = 0;
+    virtual async::Channel<QPoint> toolbarsDockingHelpersUpdateRequested() const = 0;
 };
 }
 

@@ -46,8 +46,20 @@ class DockBase : public QQuickItem
 
     Q_PROPERTY(bool floating READ floating NOTIFY floatingChanged)
 
+    Q_PROPERTY(DockLocation location READ location WRITE setLocation NOTIFY locationChanged)
+
 public:
     explicit DockBase(QQuickItem* parent = nullptr);
+
+    enum class DockLocation {
+        Undefined = -1,
+        Left,
+        Right,
+        Center,
+        Top,
+        Bottom
+    };
+    Q_ENUM(DockLocation)
 
     QString title() const;
 
@@ -66,6 +78,8 @@ public:
     void show();
     void hide();
 
+    DockLocation location() const;
+
 public slots:
     void setTitle(const QString& title);
 
@@ -78,6 +92,8 @@ public slots:
 
     void setFloating(bool floating);
 
+    void setLocation(DockLocation location);
+
 signals:
     void titleChanged();
     void minimumSizeChanged();
@@ -88,10 +104,12 @@ signals:
 
     void floatingChanged();
 
+    void locationChanged(DockLocation location);
+
 protected:
     friend class DockWindow;
 
-    virtual DockType type() const = 0;
+    virtual DockType type() const;
 
     void componentComplete() override;
 
@@ -115,6 +133,7 @@ private:
     Qt::DockWidgetAreas m_allowedAreas = Qt::NoDockWidgetArea;
     KDDockWidgets::DockWidgetQuick* m_dockWidget = nullptr;
     bool m_floating = false;
+    DockLocation m_location = DockLocation::Undefined;
 };
 }
 

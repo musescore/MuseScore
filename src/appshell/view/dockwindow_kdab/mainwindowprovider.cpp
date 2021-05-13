@@ -88,12 +88,12 @@ mu::async::Channel<std::pair<QString, mu::framework::Orientation> > MainWindowPr
     return m_dockOrientationChanged;
 }
 
-void MainWindowProvider::setDockingHelperVisible(bool visible)
+void MainWindowProvider::updateToolBarsDockingHelpers(const QPoint& mouseGlobalPos)
 {
-    m_dockingHelperVisibleChanged.send(visible);
+    m_dockingHelperVisibleChanged.send(mouseGlobalPos);
 }
 
-Channel<bool> MainWindowProvider::dockingHelperVisibleChanged() const
+mu::async::Channel<QPoint> MainWindowProvider::toolbarsDockingHelpersUpdateRequested() const
 {
     return m_dockingHelperVisibleChanged;
 }

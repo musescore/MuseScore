@@ -27,6 +27,8 @@
 
 #include <QQuickItem>
 
+#include "docktypes.h"
+
 namespace mu::dock {
 class DockToolBar;
 class DockPanel;
@@ -40,7 +42,7 @@ class DockPage : public QQuickItem
     Q_PROPERTY(QString uri READ uri WRITE setUri NOTIFY uriChanged)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> mainToolBars READ mainToolBarsProperty)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolBars READ toolBarsProperty)
-    Q_PROPERTY(mu::dock::DockToolBar* toolBarsDockingHelper READ toolBarsDockingHelper WRITE setToolBarsDockingHelper NOTIFY toolBarsDockingHelperChanged)
+    Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolBarsDockingHelpers READ toolBarsDockingHelpersProperty)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockPanel> panels READ panelsProperty)
     Q_PROPERTY(mu::dock::DockCentral* centralDock READ centralDock WRITE setCentralDock NOTIFY centralDockChanged)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockStatusBar> statusBars READ statusBarsProperty)
@@ -57,10 +59,11 @@ public:
     QQmlListProperty<DockToolBar> toolBarsProperty();
     QQmlListProperty<DockPanel> panelsProperty();
     QQmlListProperty<DockStatusBar> statusBarsProperty();
+    QQmlListProperty<DockToolBar> toolBarsDockingHelpersProperty();
 
     QList<DockToolBar*> mainToolBars() const;
     QList<DockToolBar*> toolBars() const;
-    DockToolBar* toolBarsDockingHelper() const;
+    QList<DockToolBar*> toolBarsHelpers() const;
     DockCentral* centralDock() const;
     QList<DockPanel*> panels() const;
     QList<DockStatusBar*> statusBars() const;
@@ -71,12 +74,10 @@ public:
 
 public slots:
     void setUri(const QString& uri);
-    void setToolBarsDockingHelper(DockToolBar* helper);
     void setCentralDock(DockCentral* central);
 
 signals:
     void uriChanged(const QString& uri);
-    void toolBarsDockingHelperChanged(DockToolBar* helper);
     void centralDockChanged(DockCentral* central);
 
 private:
@@ -85,7 +86,7 @@ private:
     QString m_uri;
     uicomponents::QmlListProperty<DockToolBar> m_mainToolBars;
     uicomponents::QmlListProperty<DockToolBar> m_toolBars;
-    DockToolBar* m_toolBarsDockingHelper = nullptr;
+    uicomponents::QmlListProperty<DockToolBar> m_toolBarsDockingHelpers;
     uicomponents::QmlListProperty<DockPanel> m_panels;
     DockCentral* m_central = nullptr;
     uicomponents::QmlListProperty<DockStatusBar> m_statusBars;
