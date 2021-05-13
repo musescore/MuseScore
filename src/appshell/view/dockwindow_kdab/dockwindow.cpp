@@ -22,18 +22,21 @@
 
 #include "dockwindow.h"
 
-#include "dockpage.h"
-#include "docktoolbar.h"
-#include "dockpanel.h"
-
-#include "log.h"
-
 #include "thirdparty/KDDockWidgets/src/private/quick/MainWindowQuick_p.h"
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
 #include "thirdparty/KDDockWidgets/src/LayoutSaver.h"
 #include "thirdparty/KDDockWidgets/src/KDDockWidgets.h"
+#include "thirdparty/KDDockWidgets/src/private/DockRegistry_p.h"
+
+#include "log.h"
+
+#include "dockpage.h"
+#include "docktoolbar.h"
+#include "dockpanel.h"
 
 using namespace mu::dock;
+
+static const double MAX_DISTANCE_TO_HELPER = 25;
 
 DockWindow::DockWindow(QQuickItem* parent)
     : QQuickItem(parent),
@@ -67,19 +70,33 @@ void DockWindow::componentComplete()
         }
     });
 
-    mainWindow()->dockingHelperVisibleChanged().onReceive(this, [this](bool visible) {
-        DockPage* page = pageByUri(m_currentPageUri);
-        DockBase* helper = page ? page->toolBarsDockingHelper() : nullptr;
-
-        if (!helper) {
+    mainWindow()->toolbarsDockingHelpersUpdateRequested().onReceive(this, [this](const QPoint& mouseGlobalPos) {
+        if (mouseGlobalPos.isNull()) {
+            hideCurrentToolBarDockingHelper();
             return;
         }
 
-        if (visible) {
-            helper->show();
-        } else {
-            helper->hide();
+        QPoint localPos = m_mainWindow->mapFromGlobal(mouseGlobalPos);
+        QRect mainFrameGeometry = m_mainWindow->rect();
+
+        if (!mainFrameGeometry.contains(localPos)) {
+            return;
         }
+
+        if (isMouseOverCurrentToolBarDockingHelper(localPos)) {
+            return;
+        }
+
+        DockToolBar* helper = resolveToolbarDockingHelper(localPos);
+
+        if (helper != m_currentToolBarDockingHelper) {
+            hideCurrentToolBarDockingHelper();
+            if (helper) {
+                helper->show();
+            }
+        }
+
+        m_currentToolBarDockingHelper = helper;
     });
 }
 
@@ -124,11 +141,31 @@ void DockWindow::loadPage(const QString& uri)
 
     loadPageContent(newPage);
     restoreState(newPage->objectName());
-
     initDocks(newPage);
+
+    for (DockBase* dock : newPage->allDocks()) {
+        if (!dock->isVisible()) {
+            dock->hide();
+        }
+    }
 
     m_currentPageUri = uri;
     emit currentPageUriChanged(uri);
+}
+
+DockToolBar* DockWindow::mainToolBarDockingHelper() const
+{
+    return m_mainToolBarDockingHelper;
+}
+
+void DockWindow::setMainToolBarDockingHelper(DockToolBar* mainToolBarDockingHelper)
+{
+    if (m_mainToolBarDockingHelper == mainToolBarDockingHelper) {
+        return;
+    }
+
+    m_mainToolBarDockingHelper = mainToolBarDockingHelper;
+    emit mainToolBarDockingHelperChanged(m_mainToolBarDockingHelper);
 }
 
 void DockWindow::loadPageContent(const DockPage* page)
@@ -142,15 +179,7 @@ void DockWindow::loadPageContent(const DockPage* page)
         addDock(panel, KDDockWidgets::Location_OnLeft);
     }
 
-    const DockToolBar* prevToolBar = nullptr;
-    for (DockToolBar* toolBar : page->toolBars()) {
-        //! NOTE: need to add dock to its default position
-        //! the following dock will be added on the right side
-        //! if there is a dock at the default position
-        auto location = prevToolBar ? KDDockWidgets::Location_OnRight : KDDockWidgets::Location_OnTop;
-        addDock(toolBar, location, prevToolBar);
-        prevToolBar = toolBar;
-    }
+    loadPageToolbars(page);
 
     const DockStatusBar* prevStatusBar = nullptr;
     for (DockStatusBar* statusBar : page->statusBars()) {
@@ -162,7 +191,7 @@ void DockWindow::loadPageContent(const DockPage* page)
     QList<DockToolBar*> allToolBars = m_toolBars.list();
     allToolBars << page->mainToolBars();
 
-    prevToolBar = nullptr;
+    DockToolBar* prevToolBar = nullptr;
 
     for (DockToolBar* toolBar : allToolBars) {
         auto location = prevToolBar ? KDDockWidgets::Location_OnRight : KDDockWidgets::Location_OnTop;
@@ -170,13 +199,10 @@ void DockWindow::loadPageContent(const DockPage* page)
         prevToolBar = toolBar;
     }
 
-    unitePanelsToTabs(page);
+    addDock(m_mainToolBarDockingHelper, KDDockWidgets::Location_OnTop);
+    m_mainToolBarDockingHelper->hide();
 
-    for (DockBase* dock : page->allDocks()) {
-        if (!dock->isVisible()) {
-            dock->hide();
-        }
-    }
+    unitePanelsToTabs(page);
 }
 
 void DockWindow::unitePanelsToTabs(const DockPage* page)
@@ -193,6 +219,57 @@ void DockWindow::unitePanelsToTabs(const DockPage* page)
         if (frame) {
             frame->setCurrentTabIndex(0);
         }
+    }
+}
+
+void DockWindow::loadPageToolbars(const DockPage* page)
+{
+    QList<DockToolBar*> leftSideToolbars;
+    QList<DockToolBar*> rightSideToolbars;
+    QList<DockToolBar*> topSideToolbars;
+    QList<DockToolBar*> bottomSideToolbars;
+
+    QList<DockToolBar*> pageToolBars = page->toolBars();
+    for (DockToolBar* toolBar : pageToolBars) {
+        switch (toolBar->location()) {
+        case DockBase::DockLocation::Left:
+            leftSideToolbars << toolBar;
+            break;
+        case DockBase::DockLocation::Right:
+            rightSideToolbars << toolBar;
+            break;
+        case DockBase::DockLocation::Top:
+            topSideToolbars << toolBar;
+            break;
+        case DockBase::DockLocation::Bottom:
+            bottomSideToolbars << toolBar;
+            break;
+        case DockBase::DockLocation::Center:
+            LOGW() << "Error location for toolbar";
+            break;
+        }
+    }
+
+    for (int i = leftSideToolbars.size() - 1; i >= 0; --i) {
+        addDock(leftSideToolbars[i], KDDockWidgets::Location_OnLeft);
+    }
+
+    for (int i = 0; i < rightSideToolbars.size(); ++i) {
+        addDock(rightSideToolbars[i], KDDockWidgets::Location_OnRight);
+    }
+
+    for (int i = 0; i < bottomSideToolbars.size(); ++i) {
+        DockToolBar* toolBar = bottomSideToolbars[i];
+        const DockToolBar* tabifyToolBar = toolBar->tabifyToolBar();
+        auto location = tabifyToolBar ? KDDockWidgets::Location_OnRight : KDDockWidgets::Location_OnBottom;
+        addDock(toolBar, location, tabifyToolBar);
+    }
+
+    for (int i = topSideToolbars.size() - 1; i >= 0; --i) {
+        DockToolBar* toolBar = topSideToolbars[i];
+        const DockToolBar* tabifyToolBar = toolBar->tabifyToolBar();
+        auto location = tabifyToolBar ? KDDockWidgets::Location_OnLeft : KDDockWidgets::Location_OnTop;
+        addDock(toolBar, location, tabifyToolBar);
     }
 }
 
@@ -281,7 +358,80 @@ void DockWindow::initDocks(DockPage* page)
         toolbar->init();
     }
 
+    m_mainToolBarDockingHelper->init();
+
     if (page) {
         page->init();
     }
+}
+
+DockToolBar* DockWindow::resolveToolbarDockingHelper(const QPoint& localPos) const
+{
+    DockPage* page = pageByUri(m_currentPageUri);
+    if (!page) {
+        return nullptr;
+    }
+
+    QList<DockToolBar*> helpers = page->toolBarsHelpers();
+
+    KDDockWidgets::DockWidgetBase* centralDock = KDDockWidgets::DockRegistry::self()->dockByName(page->centralDock()->objectName());
+    QRect centralFrameGeometry = centralDock->frameGeometry();
+    centralFrameGeometry.setTopLeft(m_mainWindow->mapFromGlobal(centralDock->mapToGlobal({ centralDock->x(), centralDock->y() })));
+
+    QRect mainFrameGeometry = m_mainWindow->rect();
+
+    auto helper = [=](DockBase::DockLocation location) -> DockToolBar* {
+        for (DockToolBar* helper : helpers) {
+            if (helper->location() == location) {
+                return helper;
+            }
+        }
+
+        return nullptr;
+    };
+
+    mu::dock::DockToolBar* newHelper = nullptr;
+
+    if (localPos.y() < MAX_DISTANCE_TO_HELPER) { // main toolbar helper
+        newHelper = m_mainToolBarDockingHelper;
+    } else if (localPos.y() > centralFrameGeometry.top()
+               && localPos.y() < centralFrameGeometry.top() + MAX_DISTANCE_TO_HELPER) { // page top toolbar helper
+        newHelper = helper(DockBase::DockLocation::Top);
+    } else if (localPos.y() < centralFrameGeometry.bottom()) { // page left toolbar helper
+        if (localPos.x() < MAX_DISTANCE_TO_HELPER) {
+            newHelper = helper(DockBase::DockLocation::Left);
+        } else if (localPos.x() > mainFrameGeometry.right() - MAX_DISTANCE_TO_HELPER) { // page right toolbar helper
+            newHelper = helper(DockBase::DockLocation::Right);
+        }
+    } else if (localPos.y() < mainFrameGeometry.bottom()) { // page bottom toolbar helper
+        newHelper = helper(DockBase::DockLocation::Bottom);
+    }
+
+    return newHelper;
+}
+
+void DockWindow::hideCurrentToolBarDockingHelper()
+{
+    if (!m_currentToolBarDockingHelper) {
+        return;
+    }
+
+    m_currentToolBarDockingHelper->hide();
+    m_currentToolBarDockingHelper = nullptr;
+}
+
+bool DockWindow::isMouseOverCurrentToolBarDockingHelper(const QPoint& mouseLocalPos) const
+{
+    if (!m_currentToolBarDockingHelper || !m_mainWindow) {
+        return false;
+    }
+    KDDockWidgets::DockWidgetBase* helperDock
+        = KDDockWidgets::DockRegistry::self()->dockByName(m_currentToolBarDockingHelper->objectName());
+    if (!helperDock) {
+        return false;
+    }
+
+    QRect helperFrameGeometry = helperDock->frameGeometry();
+    helperFrameGeometry.setTopLeft(m_mainWindow->mapFromGlobal(helperDock->mapToGlobal({ helperDock->x(), helperDock->y() })));
+    return helperFrameGeometry.contains(mouseLocalPos);
 }

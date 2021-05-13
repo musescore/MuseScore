@@ -37,6 +37,8 @@ class DockToolBar : public DockBase
         QSize horizontalPreferredSize READ horizontalPreferredSize WRITE setHorizontalPreferredSize NOTIFY horizontalPreferredSizeChanged)
     Q_PROPERTY(QSize verticalPreferredSize READ verticalPreferredSize WRITE setVerticalPreferredSize NOTIFY verticalPreferredSizeChanged)
 
+    Q_PROPERTY(DockToolBar * tabifyToolBar READ tabifyToolBar WRITE setTabifyToolBar NOTIFY tabifyToolBarChanged)
+
 public:
     explicit DockToolBar(QQuickItem* parent = nullptr);
 
@@ -47,6 +49,7 @@ public:
 
     QSize horizontalPreferredSize() const;
     QSize verticalPreferredSize() const;
+    DockToolBar* tabifyToolBar() const;
 
 public slots:
     void setMinimumWidth(int width) override;
@@ -56,16 +59,19 @@ public slots:
 
     void setMovable(bool movable);
     void setOrientation(Qt::Orientation orientation);
-
     void setHorizontalPreferredSize(QSize horizontalPreferredSize);
     void setVerticalPreferredSize(QSize verticalPreferredSize);
+    void setTabifyToolBar(DockToolBar* tabifyToolBar);
 
 signals:
     void movableChanged(bool movable);
     void orientationChanged(Qt::Orientation orientation);
-
     void horizontalPreferredSizeChanged(QSize horizontalPreferredSize);
     void verticalPreferredSizeChanged(QSize verticalPreferredSize);
+    void tabifyToolBarChanged(DockToolBar* tabifyToolBar);
+
+private slots:
+    void updateOrientation();
 
 private:
     void componentComplete() override;
@@ -81,6 +87,7 @@ private:
     Qt::Orientation m_orientation = Qt::Horizontal;
     QSize m_horizontalPreferredSize;
     QSize m_verticalPreferredSize;
+    DockToolBar* m_tabifyToolBar = nullptr;
 };
 }
 

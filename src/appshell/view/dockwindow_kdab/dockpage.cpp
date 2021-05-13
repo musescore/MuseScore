@@ -35,6 +35,7 @@ DockPage::DockPage(QQuickItem* parent)
     : QQuickItem(parent),
     m_mainToolBars(this),
     m_toolBars(this),
+    m_toolBarsDockingHelpers(this),
     m_panels(this),
     m_statusBars(this)
 {
@@ -72,6 +73,11 @@ QQmlListProperty<DockStatusBar> DockPage::statusBarsProperty()
     return m_statusBars.property();
 }
 
+QQmlListProperty<DockToolBar> DockPage::toolBarsDockingHelpersProperty()
+{
+    return m_toolBarsDockingHelpers.property();
+}
+
 QList<DockToolBar*> DockPage::mainToolBars() const
 {
     return m_mainToolBars.list();
@@ -79,18 +85,45 @@ QList<DockToolBar*> DockPage::mainToolBars() const
 
 QList<DockToolBar*> DockPage::toolBars() const
 {
+    auto helper = [=](DockBase::DockLocation location) -> DockToolBar* {
+        for (DockToolBar* helper : m_toolBarsDockingHelpers.list()) {
+            if (helper->location() == location) {
+                return helper;
+            }
+        }
+
+        return nullptr;
+    };
+
+    //! NOTE: Order is important for correct drawing
     auto list = m_toolBars.list();
 
-    if (m_toolBarsDockingHelper) {
-        list << m_toolBarsDockingHelper;
+    DockToolBar* leftHelper = helper(DockBase::DockLocation::Left);
+    if (leftHelper) {
+        list.prepend(leftHelper);
+    }
+
+    DockToolBar* rightHelper = helper(DockBase::DockLocation::Right);
+    if (rightHelper) {
+        list.append(rightHelper);
+    }
+
+    DockToolBar* bottomHelper = helper(DockBase::DockLocation::Bottom);
+    if (bottomHelper) {
+        list.prepend(bottomHelper);
+    }
+
+    DockToolBar* topHelper = helper(DockBase::DockLocation::Top);
+    if (topHelper) {
+        list.append(topHelper);
     }
 
     return list;
 }
 
-DockToolBar* DockPage::toolBarsDockingHelper() const
+QList<DockToolBar*> DockPage::toolBarsHelpers() const
 {
-    return m_toolBarsDockingHelper;
+    return m_toolBarsDockingHelpers.list();
 }
 
 DockCentral* DockPage::centralDock() const
@@ -127,16 +160,6 @@ void DockPage::setUri(const QString& uri)
 
     m_uri = uri;
     emit uriChanged(uri);
-}
-
-void DockPage::setToolBarsDockingHelper(DockToolBar* helper)
-{
-    if (helper == m_toolBarsDockingHelper) {
-        return;
-    }
-
-    m_toolBarsDockingHelper = helper;
-    emit toolBarsDockingHelperChanged(helper);
 }
 
 void DockPage::setCentralDock(DockCentral* central)
