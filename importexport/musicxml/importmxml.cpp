@@ -22,6 +22,7 @@
 #include "libmscore/page.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
+#include "libmscore/style.h"
 #include "libmscore/sym.h"
 #include "libmscore/symbol.h"
 
@@ -33,6 +34,43 @@
 #include "mscore/preferences.h"
 
 namespace Ms {
+
+Score::FileError removeInstrumentNames(Score* score, MxmlLogger* logger)
+      {
+      for (Part* part : score->parts()) {
+            logger->logDebugInfo(QString("Removing instrument names from '%1')")
+                                    .arg(part->instrumentName()));
+            part->setPlainLongName(QString(""));
+            part->setPlainShortName(QString(""));
+      }
+
+      return Score::FileError::FILE_NO_ERROR;
+      }
+
+Score::FileError applyMusicXMLStyles(Score* score, MxmlLogger* logger)
+      {
+            
+      // Reset styles to default
+      auto ignoreStyles = pageStyles();
+      ignoreStyles.insert(Sid::concertPitch);
+      ignoreStyles.insert(Sid::createMultiMeasureRests);
+      score->style().resetAllStyles(score, ignoreStyles);
+      score->update();
+
+      // Apply PVG MusicXML Style Sheet
+      bool styleLoadResult = score->loadStyle(":/styles/PVGMusicXML.mss", /*ign*/false, /*overlap*/true);
+      if (!styleLoadResult) {
+            logger->logError(QString("importMusicXMLfromBuffer could not load :/styles/PVGMusicXML.mss"));
+            return Score::FileError::FILE_NOT_FOUND;
+      }
+
+      // Remove instrument names
+      if (preferences.getBool(PREF_IMPORT_MUSICXML_REMOVEINSTRUMENTNAMES))
+            removeInstrumentNames(score, logger);
+
+      return Score::FileError::FILE_NO_ERROR;
+      }
+
 
 Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* dev)
       {
@@ -54,7 +92,14 @@ Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/,
       // pass 2
       dev->seek(0);
       MusicXMLParserPass2 pass2(score, pass1, &logger);
-      return pass2.parse(dev);
+      Score::FileError res2 = pass2.parse(dev);
+
+      // Apply Styles (possibly unique to Faber/Hal Leonard Conversion Job)
+      Score::FileError styleRes = applyMusicXMLStyles(score, &logger);      
+      if (styleRes != Score::FileError::FILE_NO_ERROR)
+            return styleRes;
+
+      return res2;
       }
 
 } // namespace Ms
