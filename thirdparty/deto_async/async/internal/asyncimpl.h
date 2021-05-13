@@ -3,6 +3,7 @@
 
 #include <mutex>
 #include <map>
+#include <thread>
 #include "../asyncable.h"
 
 namespace deto {
@@ -35,7 +36,7 @@ public:
         void call() { functor(arg1); }
     };
 
-    void call(Asyncable* caller, IFunction* f);
+    void call(Asyncable* caller, IFunction* f, const std::thread::id& th = std::this_thread::get_id());
     void disconnectAsync(Asyncable* caller);
 
 private:

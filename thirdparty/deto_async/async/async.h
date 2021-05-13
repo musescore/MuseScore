@@ -11,15 +11,15 @@ class Async
 public:
 
     template<typename F>
-    static void call(const Asyncable* caller, F f)
+    static void call(const Asyncable* caller, F f, const std::thread::id& th = std::this_thread::get_id())
     {
-        AsyncImpl::instance()->call(const_cast<Asyncable*>(caller), new AsyncImpl::Functor<F>(f));
+        AsyncImpl::instance()->call(const_cast<Asyncable*>(caller), new AsyncImpl::Functor<F>(f), th);
     }
 
     template<typename F, typename Arg1>
-    static void call(const Asyncable* caller, F f, Arg1 a1)
+    static void call(const Asyncable* caller, F f, Arg1 a1, const std::thread::id& th = std::this_thread::get_id())
     {
-        AsyncImpl::instance()->call(const_cast<Asyncable*>(caller), new AsyncImpl::FunctorArg1<F, Arg1>(f, a1));
+        AsyncImpl::instance()->call(const_cast<Asyncable*>(caller), new AsyncImpl::FunctorArg1<F, Arg1>(f, a1), th);
     }
 
     static void disconnectAsync(Asyncable* a)

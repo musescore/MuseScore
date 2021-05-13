@@ -27,7 +27,7 @@ void AsyncImpl::disconnectAsync(Asyncable* caller)
     }
 }
 
-void AsyncImpl::call(Asyncable* caller, IFunction* f)
+void AsyncImpl::call(Asyncable* caller, IFunction* f, const std::thread::id& th)
 {
     if (caller) {
         caller->connectAsync(this);
@@ -40,7 +40,7 @@ void AsyncImpl::call(Asyncable* caller, IFunction* f)
     }
 
     auto functor = [this, key]() { onCall(key); };
-    QueuedInvoker::instance()->invoke(std::this_thread::get_id(), functor, true);
+    QueuedInvoker::instance()->invoke(th, functor, true);
 }
 
 void AsyncImpl::onCall(uint64_t key)
