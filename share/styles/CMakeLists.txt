@@ -20,6 +20,7 @@
 install(FILES
       Leland.mss
       MuseJazz.mss
+      PVGMusicXML.mss
       legacy-style-defaults-v3.mss
       legacy-style-defaults-v2.mss
       legacy-style-defaults-v1.mss
