@@ -523,6 +523,7 @@
   <SC>
     <key>delete</key>
     <seq>Del</seq>
+    <seq>Backspace</seq>
     </SC>
   <SC>
     <key>time-delete</key>
