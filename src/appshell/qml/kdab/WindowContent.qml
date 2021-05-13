@@ -23,7 +23,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import MuseScore.AppShell 1.0
-import MuseScore.Dock 1.0
+import MuseScore.Dock 1.0 as Dock
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
@@ -35,7 +35,7 @@ import "docksystem"
 
 import "../../qml" as DOCKWINDOW
 
-DockWindow {
+Dock.DockWindow {
     id: root
 
     property var provider: InteractiveProvider {
@@ -89,6 +89,24 @@ DockWindow {
             }
         }
     ]
+
+    mainToolBarDockingHelper: Dock.DockToolBar {
+        objectName: root.objectName + "_mainToolBarDockingHelperTop"
+        visible: false
+
+        width: root.width
+        height: 48
+
+        minimumWidth: 48
+        minimumHeight: 200
+
+        maximumWidth: 96
+        maximumHeight: 100500
+
+        location: Dock.DockBase.Top
+
+        Rectangle { color: ui.theme.backgroundPrimaryColor }
+    }
 
     pages: [
         HomePage {

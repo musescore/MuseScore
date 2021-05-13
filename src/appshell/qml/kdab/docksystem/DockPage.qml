@@ -38,10 +38,74 @@ Dock.DockPage {
         }
     }
 
-    toolBarsDockingHelper: Dock.DockToolBar {
-        objectName: root.objectName + "_toolbarsDockingHelper"
-        visible: false
+    toolBarsDockingHelpers: [
+        Dock.DockToolBar {
+            objectName: root.objectName + "_toolBarsDockingHelperLeft"
+            visible: false
 
-        Rectangle { color: ui.theme.backgroundPrimaryColor }
-    }
+            width: 48
+            height: root.height
+
+            minimumWidth: 48
+            minimumHeight: 200
+
+            maximumWidth: 96
+            maximumHeight: 100500
+
+            location: Dock.DockBase.Left
+
+            Rectangle { color: ui.theme.backgroundPrimaryColor }
+        },
+        Dock.DockToolBar {
+            objectName: root.objectName + "_toolBarsDockingHelperRight"
+            visible: false
+
+            width: 48
+            height: root.height
+
+            minimumWidth: 48
+            minimumHeight: 200
+
+            maximumWidth: 96
+            maximumHeight: 100500
+
+            location: Dock.DockBase.Right
+
+            Rectangle { color: ui.theme.backgroundPrimaryColor }
+        },
+        Dock.DockToolBar {
+            objectName: root.objectName + "_toolBarsDockingHelperTop"
+            visible: false
+
+            width: root.width
+            height: 48
+
+            minimumWidth: 100
+            minimumHeight: 48
+
+            maximumWidth: 100500
+            maximumHeight: 48
+
+            location: Dock.DockBase.Top
+
+            Rectangle { color: ui.theme.backgroundPrimaryColor }
+        },
+        Dock.DockToolBar {
+            objectName: root.objectName + "_toolBarsDockingHelperBottom"
+            visible: false
+
+            width: root.width
+            height: 48
+
+            minimumWidth: 100
+            minimumHeight: 48
+
+            maximumWidth: 100500
+            maximumHeight: 48
+
+            location: Dock.DockBase.Bottom
+
+            Rectangle { color: ui.theme.backgroundPrimaryColor }
+        }
+    ]
 }

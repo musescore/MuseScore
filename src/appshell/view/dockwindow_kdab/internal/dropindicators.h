@@ -82,7 +82,7 @@ private:
     bool isDropAllowed(DropLocation location) const;
     bool isToolBar() const;
 
-    bool hoveringOverDock(DockType type) const;
+    DockType hoveredDockType() const;
 
     const KDDockWidgets::DockWidgetBase* hoveredDock() const;
     const KDDockWidgets::DockWidgetBase* draggedDock() const;
@@ -91,7 +91,7 @@ private:
     QRect dropAreaRectForToolBar(DropLocation location) const;
     QRect dropAreaRectForPanel(DropLocation location) const;
 
-    void showDropAreaIfNeed(const QRect& rect, DropLocation location);
+    void showDropAreaIfNeed(const QRect& rect, DropLocation location, const QPoint& globalPos);
 
     void updateWindowPosition();
 

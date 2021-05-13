@@ -51,6 +51,9 @@ class DockWindow : public QQuickItem, public async::Asyncable
     Q_PROPERTY(QString currentPageUri READ currentPageUri NOTIFY currentPageUriChanged)
 
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolBars READ toolBarsProperty)
+    Q_PROPERTY(
+        mu::dock::DockToolBar
+        * mainToolBarDockingHelper READ mainToolBarDockingHelper WRITE setMainToolBarDockingHelper NOTIFY mainToolBarDockingHelperChanged)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockPage> pages READ pagesProperty)
 
     INJECT(dock, ui::IUiConfiguration, configuration)
@@ -66,8 +69,15 @@ public:
 
     Q_INVOKABLE void loadPage(const QString& uri);
 
+    mu::dock::DockToolBar* mainToolBarDockingHelper() const;
+
+public slots:
+    void setMainToolBarDockingHelper(mu::dock::DockToolBar* mainToolBarDockingHelper);
+
 signals:
     void currentPageUriChanged(const QString& uri);
+
+    void mainToolBarDockingHelperChanged(mu::dock::DockToolBar* mainToolBarDockingHelper);
 
 private:
     DockPage* pageByUri(const QString& uri) const;
@@ -76,6 +86,7 @@ private:
 
     void loadPageContent(const DockPage* page);
     void unitePanelsToTabs(const DockPage* page);
+    void loadPageToolbars(const DockPage* page);
 
     void addDock(DockBase* dock, KDDockWidgets::Location location, const DockBase* relativeTo = nullptr);
 
@@ -89,10 +100,18 @@ private:
 
     void initDocks(DockPage* page);
 
+    DockToolBar* resolveToolbarDockingHelper(const QPoint& localPos) const;
+
+    void hideCurrentToolBarDockingHelper();
+    bool isMouseOverCurrentToolBarDockingHelper(const QPoint& mouseLocalPos) const;
+
     KDDockWidgets::MainWindowBase* m_mainWindow = nullptr;
     QString m_currentPageUri;
     uicomponents::QmlListProperty<DockToolBar> m_toolBars;
+    mu::dock::DockToolBar* m_mainToolBarDockingHelper = nullptr;
     uicomponents::QmlListProperty<DockPage> m_pages;
+
+    mu::dock::DockToolBar* m_currentToolBarDockingHelper = nullptr;
 };
 }
 

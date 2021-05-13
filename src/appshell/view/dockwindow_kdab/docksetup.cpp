@@ -40,6 +40,7 @@
 #endif
 
 #include "modularity/ioc.h"
+#include "docktypes.h"
 
 #include "thirdparty/KDDockWidgets/src/Config.h"
 #include "thirdparty/KDDockWidgets/src/DockWidgetBase.h"
@@ -90,6 +91,7 @@ void DockSetup::registerQmlTypes()
     qmlRegisterType<DockCentral>("MuseScore.Dock", 1, 0, "DockCentral");
     qmlRegisterType<DockPage>("MuseScore.Dock", 1, 0, "DockPage");
     qmlRegisterType<DockFrameModel>("MuseScore.Dock", 1, 0, "DockFrameModel");
+    qmlRegisterType<DockBase>("MuseScore.Dock", 1, 0, "DockBase");
 
 #ifdef Q_OS_MAC
     qmlRegisterType<AppWindowStyler>("MuseScore.Dock", 1, 0, "AppWindowStyler");
