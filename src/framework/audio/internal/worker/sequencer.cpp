@@ -27,6 +27,9 @@
 #include "midiplayer.h"
 #include "audioplayer.h"
 
+#include "async/async.h"
+#include "internal/audiothread.h"
+
 using namespace mu::audio;
 
 Sequencer::Sequencer()
@@ -61,8 +64,10 @@ mu::async::Channel<ISequencer::Status> Sequencer::statusChanged() const
 
 void Sequencer::play()
 {
-    ONLY_AUDIO_WORKER_THREAD;
-    m_nextStatus = PLAYING;
+    async::Async::call(this, [this]() {
+        ONLY_AUDIO_WORKER_THREAD;
+        m_nextStatus = PLAYING;
+    }, AudioThread::ID);
 }
 
 void Sequencer::pause()
