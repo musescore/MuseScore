@@ -20,23 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
-#define MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
+#ifndef MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
+#define MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
 
-#include "framework/global/modularity/imodulesetup.h"
+#include "modularity/imoduleexport.h"
+#include "iaccessibility.h"
 
 namespace mu::accessibility {
-class AccessibilityModule : public framework::IModuleSetup
+class IAccessibilityController : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IAccessibilityController)
 public:
-    std::string moduleName() const override;
+    virtual ~IAccessibilityController() = default;
 
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+    virtual void created(IAccessibility* parent, IAccessibility* item) = 0;
+    virtual void destroyed(IAccessibility* item) = 0;
+    virtual void actived(IAccessibility* item, bool isActive) = 0;
+    virtual void focused(IAccessibility* item) = 0;
 };
 }
 
-#endif // MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
+#endif // MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H

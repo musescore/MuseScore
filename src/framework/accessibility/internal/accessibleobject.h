@@ -19,24 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_ACCESSIBILITY_ACCESSIBLEOBJECT_H
+#define MU_ACCESSIBILITY_ACCESSIBLEOBJECT_H
 
-#ifndef MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
-#define MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
-
-#include "framework/global/modularity/imodulesetup.h"
+#include <QObject>
+#include "../iaccessibility.h"
 
 namespace mu::accessibility {
-class AccessibilityModule : public framework::IModuleSetup
+class AccessibilityController;
+class AccessibleObject : public QObject
 {
+    Q_OBJECT
 public:
-    std::string moduleName() const override;
+    explicit AccessibleObject(IAccessibility* item, QObject* parent);
 
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+    void setController(std::shared_ptr<AccessibilityController> controller);
+    const std::shared_ptr<AccessibilityController>& controller() const;
+
+    IAccessibility* item() const;
+
+private:
+    IAccessibility* m_item = nullptr;
+    std::shared_ptr<AccessibilityController> m_controller;
 };
 }
 
-#endif // MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
+#endif // MU_ACCESSIBILITY_ACCESSIBLEOBJECT_H
