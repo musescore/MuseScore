@@ -19,24 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_ACCESSIBILITY_IACCESSIBILITY_H
+#define MU_ACCESSIBILITY_IACCESSIBILITY_H
 
-#ifndef MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
-#define MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
-
-#include "framework/global/modularity/imodulesetup.h"
+#include <QString>
 
 namespace mu::accessibility {
-class AccessibilityModule : public framework::IModuleSetup
+class IAccessibility
 {
 public:
-    std::string moduleName() const override;
+    enum class Role {
+        NoRole = 0,
+        Panel,
+        Button
+    };
 
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+    enum class State {
+        Undefined = 0,
+        Disabled,
+        Active,
+        Focused
+    };
+
+    virtual Role accessibleRole() const = 0;
+    virtual QString accessibleName() const = 0;
+    virtual bool accessibleState(State st) const = 0;
 };
 }
 
-#endif // MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
+#endif // MU_ACCESSIBILITY_IACCESSIBILITY_H

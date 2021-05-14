@@ -27,15 +27,21 @@
 
 #include "abstractnavigation.h"
 #include "navigationcontrol.h"
+#include "accessibility/iaccessibility.h"
 #include "async/asyncable.h"
+
+#include "modularity/ioc.h"
+#include "accessibility/iaccessibilitycontroller.h"
 
 namespace mu::ui {
 class NavigationSection;
-class NavigationPanel : public AbstractNavigation, public INavigationPanel, public async::Asyncable
+class NavigationPanel : public AbstractNavigation, public INavigationPanel, public accessibility::IAccessibility, public async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(mu::ui::NavigationSection* section READ section_property WRITE setSection_property NOTIFY sectionChanged)
     Q_PROPERTY(QmlDirection direction READ direction_property WRITE setDirection NOTIFY directionChanged)
+
+    INJECT(ui, accessibility::IAccessibilityController, accessibilityController)
 
 public:
     explicit NavigationPanel(QObject* parent = nullptr);
@@ -78,6 +84,11 @@ public:
 
     void addControl(NavigationControl* control);
     void removeControl(NavigationControl* control);
+
+    // IAccessibility
+    Role accessibleRole() const override;
+    QString accessibleName() const override;
+    bool accessibleState(State st) const override;
 
 public slots:
     void setSection_property(NavigationSection* section);
