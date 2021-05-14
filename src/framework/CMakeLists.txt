@@ -23,6 +23,7 @@ add_subdirectory(ui)
 add_subdirectory(uicomponents)
 add_subdirectory(fonts)
 add_subdirectory(actions)
+add_subdirectory(accessibility)
 
 if (BUILD_SHORTCUTS_MODULE)
     add_subdirectory(shortcuts)
