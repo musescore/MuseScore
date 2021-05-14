@@ -27,6 +27,8 @@
 
 #include "async/async.h"
 
+#include <QAccessible>
+
 using namespace mu::ui;
 using namespace mu::framework;
 
@@ -42,6 +44,9 @@ InteractiveTestsModel::InteractiveTestsModel(QObject* parent)
 
 void InteractiveTestsModel::openSampleDialog()
 {
+    QAccessibleInterface* iface = QAccessible::queryAccessibleInterface(this);
+    int k = 1;
+
     LOGI() << "cpp: before open";
     RetVal<Val> rv = interactive()->open("musescore://devtools/interactive/sample?color=#474747");
     LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
