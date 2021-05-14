@@ -44,6 +44,12 @@ FocusableControl {
     signal clicked()
     signal pressAndHold()
 
+    Accessible.role: Accessible.Button
+    Accessible.name: root.text
+    Accessible.onPressAction: {
+        // do a button click
+    }
+
     QtObject {
         id: prv
 

@@ -34,6 +34,7 @@ import "./NotationDialogs"
 import "./Telemetry"
 import "./VST"
 import "./KeyNav"
+import "./Accessibility"
 
 DockPage {
     id: homePage
@@ -71,7 +72,8 @@ DockPage {
                         { "name": "vst", "title": "VST" },
                         { "name": "plugins", "title": "Plugins" },
                         { "name": "autobot", "title": "Autobot" },
-                        { "name": "navigation", "title": "KeyNav" }
+                        { "name": "navigation", "title": "KeyNav" },
+                        { "name": "accessibility", "title": "Accessibility" }
                     ]
 
                     onSelected: {
@@ -103,7 +105,10 @@ DockPage {
             case "plugins": currentComp = pluginsComp; break
             case "autobot": currentComp = autobotComp; break
             case "navigation": currentComp = keynavComp; break
+            case "accessibility": currentComp = accessibilityComp; break
             }
+
+            devtoolsCentral.forceActiveFocus()
         }
 
         Rectangle {
@@ -183,6 +188,14 @@ DockPage {
             onActiveFocusRequested: {
                 devtoolsCentral.forceActiveFocus()
             }
+        }
+    }
+
+    Component {
+        id: accessibilityComp
+
+        AccessibilityTest {
+
         }
     }
 
