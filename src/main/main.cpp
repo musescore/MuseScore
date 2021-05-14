@@ -33,6 +33,7 @@
 #include "framework/uicomponents/uicomponentsmodule.h"
 #include "framework/fonts/fontsmodule.h"
 #include "framework/actions/actionsmodule.h"
+#include "framework/accessibility/accessibilitymodule.h"
 #ifdef BUILD_SHORTCUTS_MODULE
 #include "framework/shortcuts/shortcutsmodule.h"
 #else
@@ -178,6 +179,7 @@ int main(int argc, char** argv)
 #endif
 
     app.addModule(new mu::actions::ActionsModule());
+    app.addModule(new mu::accessibility::AccessibilityModule());
     app.addModule(new mu::appshell::AppShellModule());
 
     app.addModule(new mu::context::ContextModule());
