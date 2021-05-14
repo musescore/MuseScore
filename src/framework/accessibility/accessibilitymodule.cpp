@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
@@ -22,34 +22,20 @@
 #include "accessibilitymodule.h"
 
 #include <QtQml>
-#include <QAccessible>
 
 #include "modularity/ioc.h"
 #include "log.h"
 
+#include "internal/accessibilitycontroller.h"
+
 using namespace mu::accessibility;
 using namespace mu::framework;
+
+static std::shared_ptr<AccessibilityController> s_accessibilityController = std::make_shared<AccessibilityController>();
 
 static void accessibility_init_qrc()
 {
     //Q_INIT_RESOURCE(accessibility);
-}
-
-static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObject* object)
-{
-    LOGI() << "classname: " << classname;
-//    if (classname == QLatin1String("QQuickWindow")) {
-//        return new QAccessibleQuickWindow(qobject_cast<QQuickWindow*>(object));
-//    } else if (classname == QLatin1String("QQuickItem")) {
-//        QQuickItem* item = qobject_cast<QQuickItem*>(object);
-//        Q_ASSERT(item);
-//        QQuickItemPrivate* itemPrivate = QQuickItemPrivate::get(item);
-//        if (!itemPrivate->isAccessible) {
-//            return nullptr;
-//        }
-//        return new QAccessibleQuickItem(item);
-//    }
-    return nullptr;
 }
 
 std::string AccessibilityModule::moduleName() const
@@ -59,6 +45,7 @@ std::string AccessibilityModule::moduleName() const
 
 void AccessibilityModule::registerExports()
 {
+    ioc()->registerExport<IAccessibilityController>(moduleName(), s_accessibilityController);
 }
 
 void AccessibilityModule::resolveImports()
@@ -74,11 +61,11 @@ void AccessibilityModule::registerUiTypes()
 {
 }
 
-void AccessibilityModule::onInit(const IApplication::RunMode&)
+void AccessibilityModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    QAccessible::installFactory(muAccessibleFactory);
-}
+    if (mode != framework::IApplication::RunMode::Editor) {
+        return;
+    }
 
-void AccessibilityModule::onDeinit()
-{
+    s_accessibilityController->init();
 }

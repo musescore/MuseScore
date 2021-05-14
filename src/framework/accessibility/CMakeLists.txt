@@ -25,6 +25,17 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/accessibilitymodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accessibilitymodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaccessibility.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaccessibilitycontroller.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilitycontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilitycontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleobject.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleobject.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/accessiblecontrollerinterface.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/accessiblecontrollerinterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleiteminterface.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleiteminterface.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

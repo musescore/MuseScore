@@ -25,6 +25,7 @@
 #include "log.h"
 
 using namespace mu::ui;
+using namespace mu::accessibility;
 
 NavigationControl::NavigationControl(QObject* parent)
     : AbstractNavigation(parent)
@@ -36,6 +37,13 @@ NavigationControl::~NavigationControl()
     if (m_panel) {
         m_panel->removeControl(this);
     }
+    accessibilityController()->destroyed(this);
+}
+
+void NavigationControl::componentComplete()
+{
+    AbstractNavigation::componentComplete();
+    accessibilityController()->created(m_panel, this);
 }
 
 QString NavigationControl::name() const
@@ -71,6 +79,9 @@ bool NavigationControl::active() const
 void NavigationControl::setActive(bool arg)
 {
     AbstractNavigation::setActive(arg);
+    if (arg) {
+        accessibilityController()->focused(this);
+    }
 }
 
 mu::async::Channel<bool> NavigationControl::activeChanged() const
@@ -133,4 +144,29 @@ NavigationPanel* NavigationControl::panel_property() const
 INavigationPanel* NavigationControl::panel() const
 {
     return m_panel;
+}
+
+IAccessibility::Role NavigationControl::accessibleRole() const
+{
+    return IAccessibility::Role::Button;
+}
+
+QString NavigationControl::accessibleName() const
+{
+    return name();
+}
+
+bool NavigationControl::accessibleState(State st) const
+{
+    switch (st) {
+    case State::Undefined: return false;
+    case State::Disabled: return !enabled();
+    case State::Active: return active();
+    case State::Focused: return active();
+    default: {
+        LOGW() << "not handled state: " << static_cast<int>(st);
+    }
+    }
+
+    return false;
 }
