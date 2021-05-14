@@ -2304,6 +2304,8 @@ void Chord::layoutTablature()
                 p.rx() -= _stem->width();
                 _hook->setPos(p);
             }
+            if (_stemSlash)
+                _stemSlash->layout();
         }
     }
     if (!tab->genDurations()                           // if tab is not set for duration symbols
