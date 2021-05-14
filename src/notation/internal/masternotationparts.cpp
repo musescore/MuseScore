@@ -214,10 +214,6 @@ void MasterNotationParts::moveParts(const IDList& sourcePartsIds, const ID& dest
 
     NotationParts::moveParts(sourcePartsIds, destinationPartId, mode);
 
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->moveParts(sourcePartsIds, destinationPartId, mode);
-    }
-
     apply();
 }
 
