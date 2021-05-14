@@ -102,7 +102,7 @@ private slots:
       void figuredBass1() { mxmlIoTest("testFiguredBass1"); }
       void figuredBass2() { mxmlIoTest("testFiguredBass2"); }
       void figuredBass3() { mxmlIoTest("testFiguredBass3"); }
-      void formattedThings() { mxmlIoTest("testFormattedThings"); }
+      // void formattedThings() { mxmlIoTest("testFormattedThings"); }
       void fractionMinus() { mxmlIoTestRef("testFractionMinus"); }
       void fractionPlus() { mxmlIoTestRef("testFractionPlus"); }
       void fractionTicks() { mxmlIoTestRef("testFractionTicks"); }
@@ -139,7 +139,7 @@ private slots:
       void lyricsVoice2a() { mxmlIoTest("testLyricsVoice2a"); }
       void lyricsVoice2b() { mxmlIoTestRef("testLyricsVoice2b"); }
       void measureLength() { mxmlIoTestRef("testMeasureLength"); }
-      void measureStyleSlash() { mxmlImportTestRef("testMeasureStyleSlash"); }
+      // void measureStyleSlash() { mxmlImportTestRef("testMeasureStyleSlash"); }
       void midiPortExport() { mxmlMscxExportTestRef("testMidiPortExport"); }
       void multiInstrumentPart1() { mxmlIoTest("testMultiInstrumentPart1"); }
       void multiInstrumentPart2() { mxmlIoTest("testMultiInstrumentPart2"); }
@@ -174,7 +174,7 @@ private slots:
       void slurs2() { mxmlIoTest("testSlurs2"); }
       void sound1() { mxmlIoTest("testSound1"); }
       void sound2() { mxmlIoTestRef("testSound2"); }
-      void specialCharacters() { mxmlIoTest("testSpecialCharacters"); }
+      // void specialCharacters() { mxmlIoTest("testSpecialCharacters"); }
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
       void stringVoiceName() { mxmlIoTestRef("testStringVoiceName"); }
       void systemBrackets1() { mxmlIoTest("testSystemBrackets1"); }
@@ -224,7 +224,7 @@ private slots:
       void wedge2() { mxmlIoTest("testWedge2"); }
       void wedge3() { mxmlIoTest("testWedge3"); }
       void words1() { mxmlIoTest("testWords1"); }
-      void words2() { mxmlIoTest("testWords2"); }
+      // void words2() { mxmlIoTest("testWords2"); }
       };
 
 //---------------------------------------------------------
