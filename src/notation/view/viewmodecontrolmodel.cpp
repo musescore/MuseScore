@@ -86,6 +86,8 @@ void ViewModeControlModel::load()
     });
 
     updateState();
+
+    listenActionsStateChanges();
 }
 
 void ViewModeControlModel::selectViewMode(const QString& actionCode)
