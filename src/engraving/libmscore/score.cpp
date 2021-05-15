@@ -4436,7 +4436,9 @@ Measure* Score::firstTrailingMeasure(ChordRest** cr)
 
     if (!cr) {
         // No active selection: prepare first empty trailing measure of entire score
-        for (; m && m->isFullMeasureRest(); firstMeasure = m, m = m->prevMeasure()) {
+        while (m && m->isEmpty(-1)) {
+            firstMeasure = m;
+            m = m->prevMeasure();
         }
     } else {
         // Active selection: select full measure rest of active staff's empty trailing measure
