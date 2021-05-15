@@ -115,6 +115,10 @@ void ScoreAppearanceSettingsModel::setPageTypeListModel(PageTypeListModel* pageT
 
         updateStyleValue(Ms::Sid::pageWidth, pageSize.width());
         updateStyleValue(Ms::Sid::pageHeight, pageSize.height());
+
+        double oddLeftMargin = styleValue(Ms::Sid::pageOddLeftMargin).toDouble();
+        double evenLeftMargin = styleValue(Ms::Sid::pageEvenLeftMargin).toDouble();
+        updateStyleValue(Ms::Sid::pagePrintableWidth, pageSize.width() - (oddLeftMargin + evenLeftMargin));
     });
 }
 
@@ -130,6 +134,11 @@ void ScoreAppearanceSettingsModel::setOrientationType(int orientationType)
 
     updateStyleValue(Ms::Sid::pageWidth, pageSize.height());
     updateStyleValue(Ms::Sid::pageHeight, pageSize.width());
+
+    double oddLeftMargin = styleValue(Ms::Sid::pageOddLeftMargin).toDouble();
+    double evenLeftMargin = styleValue(Ms::Sid::pageEvenLeftMargin).toDouble();
+    updateStyleValue(Ms::Sid::pagePrintableWidth, pageSize.height() - (oddLeftMargin + evenLeftMargin));
+
     emit orientationTypeChanged(m_orientationType);
 }
 
