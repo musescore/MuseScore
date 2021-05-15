@@ -40,6 +40,7 @@ using FiguredBassList = QVector<FiguredBass*>;
 //      typedef QList<Chord*> GraceChordList;
 //      typedef QVector<FiguredBass*> FiguredBassList;
 using Tuplets = std::map<QString, Tuplet*>;
+using Beams = QMap<QString, Beam*>;
 
 //---------------------------------------------------------
 //   MxmlStartStop
@@ -269,7 +270,7 @@ private:
       void transpose(const QString& partId, const Fraction& tick);
       Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime,
                  Fraction& missingPrev, Fraction& dura, Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl, int& gac,
-                 Beam*& beam, FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
+                 Beams& beams, FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
       void notePrintSpacingNo(Fraction& dura);
       FiguredBassItem* figure(const int idx, const bool paren);
       FiguredBass* figuredBass();
