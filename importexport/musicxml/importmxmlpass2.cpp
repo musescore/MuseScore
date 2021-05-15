@@ -1767,7 +1767,7 @@ static void removeBeam(Beam*& beam)
       for (int i = 0; i < beam->elements().size(); ++i)
             beam->elements().at(i)->setBeamMode(Beam::Mode::NONE);
       delete beam;
-      beam = 0;
+      beam = nullptr;
       }
 
 //---------------------------------------------------------
@@ -1791,9 +1791,10 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direc
             }
       // add ChordRest to beam
       if (beam) {
-            // verify still in the same track (switching voices in the middle of a beam is not supported)
+            // verify still in the same track (if still in the same voice)
             // and in a beam ...
             // (note no check is done on correct order of beam begin/continue/end)
+            // TODO: Some BEGINs are being skipped
             if (cr->track() != beam->track()) {
                   qDebug("handleBeamAndStemDir() from track %d to track %d -> abort beam",
                          beam->track(), cr->track());
@@ -1829,7 +1830,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direc
             }
       // terminate the current beam and add to the score
       if (beam && bm == Beam::Mode::END)
-            beam = 0;
+            beam = nullptr;
       }
 
 
@@ -1995,7 +1996,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
       Fraction mDura; // current total measure duration
       GraceChordList gcl; // grace chords collected sofar
       int gac = 0;       // grace after count in the grace chord list
-      Beam* beam = 0;       // current beam
+      Beams beams;       // Current beam for each voice in the current part
       QString cv = "1";       // current voice for chords, default is 1
       FiguredBassList fbl;               // List of figured bass elements under a single note
       MxmlTupletStates tupletStates;       // Tuplet state for each voice in the current part
@@ -2025,7 +2026,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                   int alt = -10;                    // any number outside range of xml-tag "alter"
                   // note: chord and grace note handling done in note()
                   // dura > 0 iff valid rest or first note of chord found
-                  Note* n = note(partId, measure, time + mTime, time + prevTime, missingPrev, dura, missingCurr, cv, gcl, gac, beam, fbl, alt, tupletStates, tuplets);
+                  Note* n = note(partId, measure, time + mTime, time + prevTime, missingPrev, dura, missingCurr, cv, gcl, gac, beams, fbl, alt, tupletStates, tuplets);
                   if (n && !n->chord()->isGrace())
                         prevChord = n->chord();  // remember last non-grace chord
                   if (n && n->accidental() && n->accidental()->accidentalType() != AccidentalType::NONE)
@@ -2126,9 +2127,11 @@ void MusicXMLParserPass2::measure(const QString& partId,
       Part* part = _pass1.getPart(partId); // should not fail, we only get here if the part exists
       fillGapsInFirstVoices(measure, part);
 
-      // can't have beams extending into the next measure
-      if (beam)
-            removeBeam(beam);
+      // Prevent any beams from extending into the next measure
+      for (Beam* beam : beams.values()) {
+            if (beam)
+                  removeBeam(beam);
+      }
 
       // TODO:
       // - how to handle _timeSigDura.isZero (shouldn't happen ?)
@@ -4298,7 +4301,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                                 QString& currentVoice,
                                 GraceChordList& gcl,
                                 int& gac,
-                                Beam*& currBeam,
+                                Beams& currBeams,
                                 FiguredBassList& fbl,
                                 int& alt,
                                 MxmlTupletStates& tupletStates,
@@ -4423,6 +4426,11 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       // Assume voice 1 if voice is empty (legal in a single voice part)
       if (voice == "")
             voice = "1";
+
+      // Define currBeam based on currentVoice to handle multi-voice beaming (and instantiate if not already)
+      if (!currBeams.contains(currentVoice))
+            currBeams.insert(currentVoice, (Beam *)nullptr);
+      Beam* &currBeam = currBeams[currentVoice];
 
       // check for timing error(s) and set dura
       // keep in this order as checkTiming() might change dura
