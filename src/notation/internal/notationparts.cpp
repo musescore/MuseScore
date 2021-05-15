@@ -789,9 +789,28 @@ void NotationParts::insertStaff(Staff* staff, int destinationStaffIndex)
 
 void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode)
 {
-    for (const ID& sourcePartId: sourcePartsIds) {
-        doMovePart(sourcePartId, destinationPartId, mode);
+    IDList partIds;
+
+    for (Ms::Part* currentPart: masterScore()->parts()) {
+        partIds << currentPart->id();
     }
+
+    for (const ID& sourcePartId: sourcePartsIds) {
+        int srcIndex = partIds.indexOf(sourcePartId);
+        int dstIndex = partIds.indexOf(destinationPartId);
+        dstIndex += (mode == InsertMode::Before) && (srcIndex < dstIndex) ? -1 : 0;
+        partIds.move(srcIndex, dstIndex);
+    }
+
+    PartInstrumentList parts;
+    for (ID& partId: partIds) {
+        PartInstrument pi;
+        pi.isExistingPart = true;
+        pi.partId = partId;
+        parts << pi;
+    }
+
+    sortParts(parts);
 
     updateScore();
 }
@@ -1286,7 +1305,7 @@ void NotationParts::sortParts(const PartInstrumentList& parts)
 
             trackMapping.append(pi.isExistingPart ? actualStaffIndex : runningStaffIndex);
             staffMapping.append(actualStaffIndex);
-            sortingNeeded |= actualStaffIndex == runningStaffIndex;
+            sortingNeeded |= actualStaffIndex != runningStaffIndex;
             ++runningStaffIndex;
         }
         ++partIndex;
