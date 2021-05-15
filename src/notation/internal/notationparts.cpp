@@ -711,7 +711,21 @@ void NotationParts::removeParts(const IDList& partsIds)
         return;
     }
 
-    doRemoveParts(partsIds);
+    PartInstrumentList parts;
+    for (Ms::Part* currentPart: masterScore()->parts()) {
+        if (partsIds.contains(currentPart->id())) {
+            continue;
+        }
+        PartInstrument pi;
+        pi.part = true;
+        pi.partId = currentPart->id();
+        parts << pi;
+    }
+
+    removeMissingParts(parts);
+
+    sortParts(parts);
+
     updateScore();
 }
 
