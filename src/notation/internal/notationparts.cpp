@@ -1242,6 +1242,7 @@ void NotationParts::removeMissingParts(const PartInstrumentList& parts)
 
 void NotationParts::appendNewParts(const PartInstrumentList& parts)
 {
+    int staffCount = 0;
     for (const PartInstrument& pi: parts) {
         if (pi.isExistingPart) {
             continue;
@@ -1253,8 +1254,9 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
         part->setSoloist(pi.isSoloist);
         part->setInstrument(InstrumentsConverter::convertInstrument(pi.instrument));
 
-        score()->undo(new Ms::InsertPart(part, lastStaffIndex()));
+        score()->undo(new Ms::InsertPart(part, staffCount));
         appendStaves(part, pi.instrument);
+        staffCount += part->nstaves();
     }
 }
 
@@ -1271,22 +1273,29 @@ void NotationParts::sortParts(const PartInstrumentList& parts)
 {
     Q_ASSERT(score()->parts().size() == static_cast<int>(parts.size()));
 
-    for (int i = 0; i < parts.size(); ++i) {
-        const Part* currentPart = score()->parts().at(i);
+    QList<int> staffMapping;
+    QList<int> trackMapping;
+    int runningStaffIndex = 0;
+    bool sortingNeeded = false;
 
-        if (currentPart->id() == parts.at(i).partId) {
-            continue;
+    int partIndex = 0;
+    for (const PartInstrument& pi: parts) {
+        Ms::Part* currentPart = pi.isExistingPart ? part(pi.partId) : masterScore()->parts()[partIndex];
+        for (Ms::Staff* staff: *currentPart->staves()) {
+            int actualStaffIndex = masterScore()->staves().indexOf(staff);
+
+            trackMapping.append(pi.isExistingPart ? actualStaffIndex : runningStaffIndex);
+            staffMapping.append(actualStaffIndex);
+            sortingNeeded |= actualStaffIndex == runningStaffIndex;
+            ++runningStaffIndex;
         }
-
-        for (int j = i; j < score()->parts().size(); ++j) {
-            const Part* part = score()->parts().at(j);
-
-            if (part->id() == parts.at(i).partId) {
-                doMovePart(part->id(), currentPart->id());
-                break;
-            }
-        }
+        ++partIndex;
     }
+
+    if (sortingNeeded) {
+        masterScore()->undo(new Ms::SortStaves(masterScore(), staffMapping));
+    }
+    masterScore()->undo(new Ms::MapExcerptTracks(masterScore(), trackMapping));
 }
 
 IDList NotationParts::allInstrumentsIds() const
