@@ -789,9 +789,28 @@ void NotationParts::insertStaff(Staff* staff, int destinationStaffIndex)
 
 void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode)
 {
-    for (const ID& sourcePartId: sourcePartsIds) {
-        doMovePart(sourcePartId, destinationPartId, mode);
+    IDList partIds;
+
+    for (Ms::Part* currentPart: masterScore()->parts()) {
+        partIds << currentPart->id();
     }
+
+    for (const ID& sourcePartId: sourcePartsIds) {
+        int srcIndex = partIds.indexOf(sourcePartId);
+        int dstIndex = partIds.indexOf(destinationPartId);
+        dstIndex += (mode == InsertMode::Before) && (srcIndex < dstIndex) ? -1 : 0;
+        partIds.move(srcIndex, dstIndex);
+    }
+
+    PartInstrumentList parts;
+    for (ID& partId: partIds) {
+        PartInstrument pi;
+        pi.part = true;
+        pi.partId = partId;
+        parts << pi;
+    }
+
+    sortParts(parts);
 
     updateScore();
 }
@@ -984,6 +1003,17 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     if (!destinationStaff) {
         return;
     }
+
+    std::cout << "NotationParts::moveStaves: sourceStaves = ";
+    bool first = true;
+    for (const QString& id: sourceStavesIds) {
+        if (!first) {
+            std::cout << ", ";
+            first = false;
+        }
+        std::cout << id.toStdString();
+    }
+    std::cout << "  destinationStaffId = " << destinationStaffId.toStdString() << std::endl;
 
     std::vector<Staff*> staves = this->staves(sourceStavesIds);
     Part* destinationPart = destinationStaff->part();
@@ -1286,7 +1316,7 @@ void NotationParts::sortParts(const PartInstrumentList& parts)
 
             trackMapping.append(pi.part ? idx : idx2);
             staffMapping.append(idx);
-            sort |= idx == idx2;
+            sort |= idx != idx2;
             ++idx2;
         }
         ++partIndex;
