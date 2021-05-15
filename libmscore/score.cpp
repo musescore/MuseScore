@@ -4280,11 +4280,15 @@ Measure* Score::firstTrailingMeasure(ChordRest** cr)
       Measure* firstMeasure = nullptr;
       auto m = lastMeasure();
 
-      // No active selection: prepare first empty trailing measure of entire score
-      if (!cr)
-            for (; m && m->isFullMeasureRest(); firstMeasure = m, m = m->prevMeasure());
-      // Active selection: select full measure rest of active staff's empty trailing measure
+      if (!cr) {
+            // No active selection: prepare first empty trailing measure of entire score
+            while (m && m->isEmpty(-1)) {
+                  firstMeasure = m;
+                  m = m->prevMeasure();
+                  }
+            }
       else {
+            // Active selection: select full measure rest of active staff's empty trailing measure
             ChordRest* tempCR = *cr;
             while (m && (tempCR = m->first()->nextChordRest(trackZeroVoice((*cr)->track()), false))->isFullMeasureRest()) {
                   *cr = tempCR;
