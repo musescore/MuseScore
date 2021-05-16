@@ -92,7 +92,7 @@ MenuItem AppMenuModel::fileItem() const
     MenuItemList fileItems {
         makeAction("file-new"),
         makeAction("file-open"),
-        makeMenu(qtrc("appshell", "Open &Recent"), recentScoresList, !recentScoresList.empty(), "file-open"),
+        makeMenu(qtrc("appshell", "Open &Recent"), recentScoresList, !recentScoresList.empty(), "file-open-recent"),
         makeSeparator(),
         makeAction("file-close"),
         makeAction("file-save"),
@@ -295,7 +295,7 @@ MenuItemList AppMenuModel::recentScores() const
     MetaList recentScores = userScoresService()->recentScoreList().val;
 
     for (const Meta& meta : recentScores) {
-        MenuItem item = uiactionsRegister()->action("file-open");
+        MenuItem item = uiactionsRegister()->action("file-open-recent");
         item.title = !meta.title.isEmpty() ? meta.title : meta.fileName.toQString();
         item.args = ActionData::make_arg1<io::path>(meta.filePath);
         item.state.enabled = true;
