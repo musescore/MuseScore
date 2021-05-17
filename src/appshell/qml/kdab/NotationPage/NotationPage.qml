@@ -136,10 +136,10 @@ DockPage {
             objectName: "undoRedoToolBar"
             title: qsTrc("appshell", "Undo/Redo Toolbar")
 
-            width: 74
             height: root.toolBarHeight
             minimumWidth: 74
             minimumHeight: root.toolBarHeight
+            maximumWidth: 74
             maximumHeight: root.toolBarHeight
 
             movable: false
