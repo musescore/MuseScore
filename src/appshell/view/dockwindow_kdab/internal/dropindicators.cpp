@@ -217,17 +217,31 @@ bool DropIndicators::isDropAllowed(DropLocation location) const
         return draggedDockType == type;
     };
 
+    auto isHovered = [hoveredDockType](DockType type) {
+        return hoveredDockType == type;
+    };
+
     static const QSet<DropLocation> sideLocations {
         DropLocation::DropLocation_Left,
         DropLocation::DropLocation_Right
     };
 
+    Qt::DockWidgetArea area = locationToDockArea(location);
+    bool isAreaAllowed = draggedDockProperties.allowedAreas.testFlag(area);
+
     if (hoveredDockType == draggedDockType) {
         return sideLocations.contains(location) || isDragged(DockType::Panel);
     }
 
-    Qt::DockWidgetArea area = locationToDockArea(location);
-    return draggedDockProperties.allowedAreas.testFlag(area);
+    if (isDragged(DockType::Panel)) {
+        if (isHovered(DockType::Central)) {
+            return isAreaAllowed;
+        }
+
+        return false;
+    }
+
+    return isAreaAllowed;
 }
 
 bool DropIndicators::isToolBar() const
