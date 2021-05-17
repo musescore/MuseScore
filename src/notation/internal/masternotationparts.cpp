@@ -175,10 +175,6 @@ void MasterNotationParts::removeParts(const IDList& partsIds)
 
     NotationParts::removeParts(partsIds);
 
-//    for (INotationPartsPtr parts : excerptsParts()) {
-//        parts->removeParts(partsIds);
-//    }
-
     apply();
 }
 

@@ -918,10 +918,10 @@ public:
 class RemoveExcerpt : public UndoCommand
 {
     Excerpt* excerpt;
+    int index;
 
 public:
-    RemoveExcerpt(Excerpt* ex)
-        : excerpt(ex) {}
+    RemoveExcerpt(Excerpt* ex);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     UNDO_NAME("RemoveExcerpt")
