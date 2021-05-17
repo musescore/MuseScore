@@ -109,6 +109,22 @@ bool Excerpt::isEmpty() const
     return partScore() ? partScore()->parts().empty() : true;
 }
 
+void Excerpt::removePart(const QString& id)
+{
+    int index = 0;
+    for (Part* part: parts()) {
+        if (part->id() == id) {
+            break;
+        }
+        ++index;
+    }
+    if (index >= _parts.size()) {
+        return;
+    }
+
+    partScore()->undoRemovePart(partScore()->parts().at(index));
+}
+
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------
@@ -207,7 +223,6 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     // Set instruments and create linked staves
     for (const Part* part : parts) {
         Part* p = new Part(score);
-        p->setId(part->id());
         p->setInstrument(*part->instrument());
         p->setPartName(part->partName());
 
@@ -412,13 +427,17 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
     undo(new RemoveExcerpt(excerpt));
 }
 
-void MasterScore::initExcerpt(Excerpt* excerpt)
+void MasterScore::initExcerpt(Excerpt* excerpt, bool fakeUndo)
 {
     Score* score = new Score(masterScore());
     excerpt->setPartScore(score);
     score->style().set(Sid::createMultiMeasureRests, true);
-    auto excerptCmdFake = new AddExcerpt(excerpt);
-    excerptCmdFake->redo(nullptr);
+    auto excerptCmd = new AddExcerpt(excerpt);
+    if (fakeUndo) {
+        excerptCmd->redo(nullptr);
+    } else {
+        score->undo(excerptCmd);
+    }
     Excerpt::createExcerpt(excerpt);
 }
 
