@@ -104,7 +104,13 @@ KDDockWidgets::DropIndicatorOverlayInterface::DropLocation DropIndicators::hover
         dropRect = dropAreaRectForPanel(dropLocation);
     }
 
-    showDropAreaIfNeed(dropRect, dropLocation, globalPos);
+    bool dropAllowed = isDropAllowed(dropLocation) && dropRect.isValid();
+
+    if (dropAllowed) {
+        showDropAreaIfNeed(dropRect, dropLocation, globalPos);
+    } else {
+        hideDropArea();
+    }
 
     return dropLocation;
 }
@@ -176,14 +182,13 @@ bool DropIndicators::onResize(QSize)
 
 void DropIndicators::updateVisibility()
 {
+    m_indicatorsWindow->setVisible(isHovered());
+
     if (isHovered()) {
-        m_indicatorsWindow->setVisible(true);
         updateWindowPosition();
         m_indicatorsWindow->raise();
     } else {
-        m_rubberBand->setVisible(false);
-        m_indicatorsWindow->setVisible(false);
-        mainWindow()->updateToolBarsDockingHelpers();
+        hideDropArea();
     }
 
     m_draggedDockProperties = readPropertiesFromObject(draggedDock());
@@ -343,28 +348,31 @@ QRect DropIndicators::dropAreaRectForPanel(DropLocation location) const
                                    m_dropArea->itemForFrame(relativeToFrame));
 }
 
-void DropIndicators::showDropAreaIfNeed(const QRect& rect, DropLocation location, const QPoint& globalPos)
+void DropIndicators::showDropAreaIfNeed(const QRect& dropRect, DropLocation dropLocation, const QPoint& globalPos)
 {
-    if (rect.isNull()) {
-        return;
-    }
-
-    if (!isDropAllowed(location)) {
-        return;
-    }
-
-    if (isToolBar()) {
-        mainWindow()->updateToolBarsDockingHelpers(globalPos);
-    }
-
-    setCurrentDropLocation(location);
+    updateToolBarHelpers(globalPos);
+    setCurrentDropLocation(dropLocation);
 
     if (isToolBar() && hoveredDockType() != DockType::ToolBar) {
         return;
     }
 
-    m_rubberBand->setGeometry(rect);
+    m_rubberBand->setGeometry(dropRect);
     m_rubberBand->setVisible(true);
+}
+
+void DropIndicators::hideDropArea()
+{
+    updateToolBarHelpers();
+    setCurrentDropLocation(DropLocation_None);
+    m_rubberBand->setVisible(false);
+}
+
+void DropIndicators::updateToolBarHelpers(const QPoint& globalPos)
+{
+    if (isToolBar()) {
+        mainWindow()->updateToolBarsDockingHelpers(globalPos);
+    }
 }
 
 void DropIndicators::updateWindowPosition()
