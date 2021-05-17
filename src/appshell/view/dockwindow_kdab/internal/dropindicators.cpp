@@ -299,7 +299,7 @@ DropIndicators::DropLocation DropIndicators::dropLocationForToolBar(const QPoint
     return DropLocation_Left;
 }
 
-QRect DropIndicators::dropAreaRectForToolBar(DropLocation /*location*/) const
+QRect DropIndicators::dropAreaRectForToolBar(DropLocation location) const
 {
     const KDDockWidgets::DockWidgetBase* draggedDock = this->draggedDock();
     const KDDockWidgets::DockWidgetBase* hoveredDock = this->hoveredDock();
@@ -308,7 +308,19 @@ QRect DropIndicators::dropAreaRectForToolBar(DropLocation /*location*/) const
         return QRect();
     }
 
+    auto isVertical = [](const KDDockWidgets::DockWidgetBase* dock) {
+        return dock->width() < dock->height();
+    };
+
     QRect dropAreaRect = hoveredFrameRect();
+
+    if (isVertical(draggedDock)) {
+        return dropAreaRect;
+    }
+
+    if (location == DropLocation_Right && !isVertical(hoveredDock)) {
+        dropAreaRect.setX(dropAreaRect.x() + dropAreaRect.width() - draggedDock->width());
+    }
 
     if (draggedDock->width() <= hoveredDock->width() / 2) {
         dropAreaRect.setWidth(draggedDock->width());
