@@ -91,7 +91,9 @@ private:
     QRect dropAreaRectForToolBar(DropLocation location) const;
     QRect dropAreaRectForPanel(DropLocation location) const;
 
-    void showDropAreaIfNeed(const QRect& rect, DropLocation location, const QPoint& globalPos);
+    void showDropAreaIfNeed(const QRect& dropRect, DropLocation dropLocation, const QPoint& globalPos);
+    void hideDropArea();
+    void updateToolBarHelpers(const QPoint& globalPos = QPoint());
 
     void updateWindowPosition();
 
