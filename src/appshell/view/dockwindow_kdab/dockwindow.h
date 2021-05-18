@@ -30,6 +30,7 @@
 #include "thirdparty/KDDockWidgets/src/KDDockWidgets.h"
 
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 #include "ui/iuiconfiguration.h"
 
 namespace KDDockWidgets {
@@ -41,7 +42,7 @@ namespace mu::dock {
 class DockToolBar;
 class DockPage;
 class DockBase;
-class DockWindow : public QQuickItem
+class DockWindow : public QQuickItem, public async::Asyncable
 {
     Q_OBJECT
 
@@ -54,7 +55,6 @@ class DockWindow : public QQuickItem
 
 public:
     explicit DockWindow(QQuickItem* parent = nullptr);
-    ~DockWindow();
 
     QString currentPageUri() const;
 
@@ -76,8 +76,13 @@ private:
 
     void addDock(DockBase* dock, KDDockWidgets::Location location, const DockBase* relativeTo = nullptr);
 
+    void saveGeometry();
+    void restoreGeometry();
+
     void saveState(const QString& pageName);
-    void restoreState(const QString& pageName, bool restoreGeometry);
+    void restoreState(const QString& pageName);
+
+    void resetWindowState();
 
     void initDocks(DockPage* page);
 
