@@ -115,6 +115,7 @@ Rectangle {
         id: stackLayout
 
         anchors.top: tabs.visible ? tabs.bottom : (titleBar.visible ? titleBar.bottom : parent.top)
+        anchors.topMargin: tabs.visible ? 12 : 0
         anchors.bottom: parent.bottom
 
         width: parent.width
