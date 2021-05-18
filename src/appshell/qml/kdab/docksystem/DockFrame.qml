@@ -33,7 +33,7 @@ Rectangle {
 
     //! NOTE: please, don't rename those properties because they are used in c++
     property QtObject frameCpp
-    readonly property QtObject titleBarCpp: Boolean(frameCpp) ? frameCpp.titleBar : null
+    readonly property QtObject titleBarCpp: Boolean(frameCpp) ? frameCpp.actualTitleBar : null
     readonly property int nonContentsHeight: titleBar.visible ? titleBar.heightWhenVisible + tabs.height : 0
 
     anchors.fill: parent
@@ -75,7 +75,8 @@ Rectangle {
 
         z: tabs.z + 1
 
-        hoverEnabled: true
+        hoverEnabled: false
+        propagateComposedEvents: true
         enabled: tabs.visible
     }
 
@@ -83,9 +84,15 @@ Rectangle {
         id: tabs
 
         anchors.top: titleBar.visible ? titleBar.bottom : parent.top
+
         width: parent.width
 
+        readonly property int separatorHeight: 1
+        padding: 0
+        bottomPadding: separatorHeight
+
         visible: count > 1
+        clip: true
 
         readonly property QtObject tabBarCpp: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.tabBar : null
 
@@ -98,11 +105,19 @@ Rectangle {
             }
         }
 
+        background: Rectangle {
+            height: tabs.height + tabs.separatorHeight
+
+            color: ui.theme.backgroundSecondaryColor
+        }
+
         Repeater {
             model: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.dockWidgetModel : 0
 
-            TabButton {
+            DockPanelTab {
                 text: title
+
+                isCurrent: tabs.currentIndex === model.index
 
                 onClicked: {
                     root.frameCpp.tabWidget.setCurrentDockWidget(model.index)

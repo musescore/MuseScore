@@ -32,7 +32,7 @@ Item {
     readonly property QtObject floatingWindowCpp: parent
     readonly property QtObject titleBarCpp: Boolean(floatingWindowCpp) ? floatingWindowCpp.titleBar : null
     readonly property QtObject dropAreaCpp: Boolean(floatingWindowCpp) ? floatingWindowCpp.dropArea : null
-    readonly property int titleBarHeight: titleBar.heightWhenVisible
+    readonly property int titleBarHeight: 34
     readonly property int margins: 8 // needed for the shadow
 
     anchors.fill: parent
@@ -52,31 +52,14 @@ Item {
     }
 
     Item {
-        id: content
+        id: dropArea
 
         anchors.fill: parent
-
-        DockTitleBar {
-            id: titleBar
-
-            anchors.top: parent ? parent.top : undefined
-
-            titleBarCpp: root.titleBarCpp
-        }
-
-        Item {
-            id: dropArea
-
-            anchors.top: titleBar.bottom
-            anchors.bottom: parent ? parent.bottom : undefined
-
-            width: parent ? parent.width : 0
-        }
     }
 
     StyledDropShadow {
-        anchors.fill: content
-        source: content
+        anchors.fill: dropArea
+        source: dropArea
         samples: 20
     }
 }
