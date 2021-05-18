@@ -61,6 +61,16 @@ inline QWindow *windowForWidget(const QWidget *w)
 
 DOCKS_EXPORT QWidget *widgetForWindow(QWindow *window);
 
+/// @brief sets the geometry on the QWindow containing the specified item
+inline void setTopLevelGeometry(QRect geometry, const QWidget *widget)
+{
+    if (!widget)
+        return;
+
+    if (QWidget *topLevel = widget->window())
+        topLevel->setGeometry(geometry);
+}
+
 }
 
 class FloatingWindow;

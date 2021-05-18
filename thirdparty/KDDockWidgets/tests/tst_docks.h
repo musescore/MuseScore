@@ -28,6 +28,7 @@
 
 # include <QQmlEngine>
 # include <QQuickStyle>
+# include <QQmlApplicationEngine>
 #else
 # include "DockWidget.h"
 # include "MainWindow.h"
@@ -113,6 +114,7 @@ private Q_SLOTS:
     void tst_restoreSimple();
     void tst_restoreSimplest();
     void tst_restoreNonClosable();
+    void tst_restoreRestoresMainWindowPosition();
     void tst_invalidLayoutAfterRestore();
     void tst_dontCloseDockWidgetBeforeRestore();
     void tst_dontCloseDockWidgetBeforeRestore2();
