@@ -123,39 +123,7 @@ on where you installed KDDockWidgets.
 
 Python Bindings
 ================
-Make sure you have PySide2, shiboken2 and shiboken2-generator installed.
-As this time, you cannot get shiboken2-generator because the wheels are not on PyPi.
-To use the wheels do this:
-
-```
-% pip3 install \
-    --index-url=http://download.qt.io/official_releases/QtForPython/ \
-    --trusted-host download.qt.io \
-    shiboken2 pyside2 shiboken2_generator
-```
-
-For more info visit https://doc.qt.io/qtforpython/shiboken2/gettingstarted.html
-
-Once QtForPython is installed you are ready to generate the PySide2 bindings
-for KDDockWidgets.
-
-Next pass `-DKDDockWidgets_PYTHON_BINDINGS=ON` to CMake, followed by the
-make command.
-
-The bindings will be installed to the passed `-DCMAKE_INSTALL_PREFIX`, which
-might require setting the `PYTHONPATH` env variable to point to that path when
-running applications.  Alternatively, configure the bindings install location
-by passing `-DKDDockWidgets_PYTHON_BINDINGS_INSTALL_PREFIX=/usr/lib/python3.8/site-packages`
-to CMake (adjust to the python path on your system).
-
-To run the KDDW python example
-
-```
-$ export PYTHONPATH=/kddw/install/path # Only if needed
-$ cd python/examples/
-$ rcc -g python -o rc_assets.py ../../examples/dockwidgets/resources_example.qrc
-$ python3 main.py
-```
+Please refer to [README-bindings.md](README-bindings.md).
 
 Versioning
 ==========
@@ -184,7 +152,7 @@ fine. Note however that MSVC 2013 isn't supported anymore due to compiler crashe
 
 Licensing
 =========
-KDDockWidgets is (C) 2018-2021, Klarälvdalens Datakonsult AB, and is licensed according to
+KDDockWidgets is (C) 2019-2021, Klarälvdalens Datakonsult AB, and is licensed according to
 the terms of the [GPL 2.0](LICENSES/GPL-2.0-only.txt) or [GPL 3.0](LICENSES/GPL-3.0-only.txt).
 
 Contact KDAB at <info@kdab.com> to inquire about commercial licensing.

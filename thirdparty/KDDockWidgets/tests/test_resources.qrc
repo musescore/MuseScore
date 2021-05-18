@@ -6,5 +6,6 @@
         <file>layouts/stuck-separator.json</file>
         <file>layouts/layoutEquallyCrash.json</file>
         <file>main.qml</file>
+        <file>main2.qml</file>
     </qresource>
 </RCC>

@@ -223,8 +223,8 @@ private:
     friend class LayoutSaver;
     bool deserialize(const LayoutSaver::MainWindow &);
     LayoutSaver::MainWindow serialize() const;
+    QRect windowGeometry() const;
 };
-
 }
 
 #endif
