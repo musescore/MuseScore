@@ -86,7 +86,7 @@ DockWindow::DockWindow(QQuickItem* parent)
     connect(this, &DockWindow::colorChanged, this, &DockWindow::updateStyle);
     connect(this, &DockWindow::borderColorChanged, this, &DockWindow::updateStyle);
 
-    configuration()->pageStateChanged().onNotify(nullptr, [this]() {
+    configuration()->windowGeometryChanged().onNotify(nullptr, [this]() {
         togglePage(nullptr, currentPage());
     });
 
