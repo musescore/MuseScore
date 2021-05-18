@@ -21,6 +21,7 @@
  */
 
 import QtQuick 2.15
+import QtQuick.Layouts 1.12
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -44,15 +45,31 @@ Item {
 
         anchors.fill: parent
 
-        heightWhenVisible: 30
+        heightWhenVisible: 34
+        color: ui.theme.backgroundPrimaryColor
 
-        StyledTextLabel {
-            id: titleLabel
+        RowLayout {
+            anchors.fill: parent
 
-            anchors.centerIn: parent
+            StyledTextLabel {
+                id: titleLabel
 
-            font: ui.theme.bodyBoldFont
-            text: titleBar.title
+                Layout.fillWidth: true
+                Layout.leftMargin: 12
+
+                horizontalAlignment: Qt.AlignLeft
+
+                font: ui.theme.bodyBoldFont
+                text: titleBar.title
+            }
+
+            FlatButton {
+                Layout.margins: 2
+
+                icon: IconCode.MENU_THREE_DOTS
+
+                normalStateColor: "transparent"
+            }
         }
     }
 }
