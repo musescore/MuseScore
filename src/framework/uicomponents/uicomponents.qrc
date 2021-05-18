@@ -43,6 +43,7 @@
         <file>qml/MuseScore/UiComponents/Border.qml</file>
         <file>qml/MuseScore/UiComponents/StyledMenu.qml</file>
         <file>qml/MuseScore/UiComponents/StyledMenuItem.qml</file>
+        <file>qml/MuseScore/UiComponents/MenuButton.qml</file>
         <file>qml/MuseScore/UiComponents/FilePicker.qml</file>
         <file>qml/MuseScore/UiComponents/ValueList.qml</file>
         <file>qml/MuseScore/UiComponents/internal/ValueListHeaderItem.qml</file>

@@ -48,6 +48,8 @@ Item {
         heightWhenVisible: 34
         color: ui.theme.backgroundPrimaryColor
 
+        visible: parent.visible
+
         RowLayout {
             anchors.fill: parent
 
@@ -63,12 +65,16 @@ Item {
                 text: titleBar.title
             }
 
-            FlatButton {
+            MenuButton {
                 Layout.margins: 2
 
-                icon: IconCode.MENU_THREE_DOTS
-
-                normalStateColor: "transparent"
+                //! TODO: only for testing
+                // We should get data for this model from c++
+                menuModel: [
+                    { "code": "close", "title": "Close tab" },
+                    { "code": "undock", "title": "Undock" },
+                    { "code": "move", "title": "Move panel to right side" },
+                ]
             }
         }
     }
