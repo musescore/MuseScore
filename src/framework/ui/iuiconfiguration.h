@@ -72,7 +72,10 @@ public:
 
     virtual QByteArray pageState(const std::string& pageName) const = 0;
     virtual void setPageState(const std::string& pageName, const QByteArray& state) = 0;
-    virtual async::Notification pageStateChanged() const = 0;
+
+    virtual QByteArray windowGeometry() const = 0;
+    virtual void setWindowGeometry(const QByteArray& state) = 0;
+    virtual async::Notification windowGeometryChanged() const = 0;
 
     virtual void applyPlatformStyle(QWindow* window) = 0;
 };

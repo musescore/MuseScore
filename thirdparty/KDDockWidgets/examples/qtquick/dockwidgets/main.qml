@@ -70,7 +70,7 @@ ApplicationWindow {
         anchors.fill: parent
 
         // Each main layout needs a unique id
-        uniqueName: "MyWindowName-1"
+        uniqueName: "MainLayout-1"
 
         Repeater {
             model: 3

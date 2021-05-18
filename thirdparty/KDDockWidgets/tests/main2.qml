@@ -9,6 +9,9 @@
   Contact KDAB at <info@kdab.com> for commercial licensing options.
 */
 
+/// @brief A more involved QtQuick example for the tests
+/// Copied from examples, but fine for tests too
+
 import QtQuick 2.6
 import QtQuick.Controls 2.12
 import com.kdab.dockwidgets 1.0 as KDDW
@@ -19,9 +22,9 @@ ApplicationWindow {
     height: 800
 
     KDDW.MainWindowLayout {
-        id: dockWidgetArea
         anchors.fill: parent
 
-        uniqueName: "MyMainLayout"
+        // Each main layout needs a unique id
+        uniqueName: "MyWindowName-1"
     }
 }
