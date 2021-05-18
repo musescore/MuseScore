@@ -66,6 +66,8 @@ Rectangle {
         cellWidth: 36
         cellHeight: cellWidth
 
+        clip: true
+
         model: noteInputModel
 
         sectionDelegate: SeparatorLine {
