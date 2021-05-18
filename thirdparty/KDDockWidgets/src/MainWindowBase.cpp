@@ -690,7 +690,7 @@ LayoutSaver::MainWindow MainWindowBase::serialize() const
     LayoutSaver::MainWindow m;
 
     m.options = options();
-    m.geometry = window()->geometry(); // window() as the MainWindow can be embedded
+    m.geometry = windowGeometry();
     m.isVisible = isVisible();
     m.uniqueName = uniqueName();
     m.screenIndex = screenNumberForWidget(this);
@@ -709,4 +709,17 @@ LayoutSaver::MainWindow MainWindowBase::serialize() const
     }
 
     return m;
+}
+
+QRect MainWindowBase::windowGeometry() const
+{
+    // Returns the window geometry. This is usually the same as MainWindowBase::geometry()
+    // But fixes the following special cases:
+    // - QWidgets: Our MainWindow is embedded in another widget
+    // - QtQuick: Our MainWindow is QQuickItem
+    // Im both cases, what we want is the geometry of the QWindow, for save/restore purposes.
+    if (QWindow *window = windowHandle())
+        return window->geometry();
+
+    return window()->geometry();
 }

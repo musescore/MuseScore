@@ -333,7 +333,15 @@ void LayoutSaver::Private::clearRestoredProperty()
 template <typename T>
 void LayoutSaver::Private::deserializeWindowGeometry(const T &saved, QWidgetOrQuick *topLevel)
 {
-    topLevel->setGeometry(saved.geometry);
+    // Not simply calling QWidget::setGeometry() here.
+    // For QtQuick we need to modify the QWindow's geometry.
+
+    if (topLevel->isWindow()) {
+        topLevel->setGeometry(saved.geometry);
+    } else {
+        KDDockWidgets::Private::setTopLevelGeometry(saved.geometry, topLevel);
+    }
+
     topLevel->setVisible(saved.isVisible);
 }
 

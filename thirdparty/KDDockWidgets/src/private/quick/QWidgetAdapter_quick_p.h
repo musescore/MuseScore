@@ -77,6 +77,16 @@ inline QWindow *windowForWidget(const QQuickItem *item)
     return item ? item->window() : nullptr;
 }
 
+/// @brief sets the geometry on the QWindow containing the specified item
+inline void setTopLevelGeometry(QRect geometry, const QQuickItem *item)
+{
+    if (!item)
+        return;
+
+    if (QWindow *window = item->window())
+        window->setGeometry(geometry);
+}
+
 } // namespace Private
 
 class FloatingWindow;
