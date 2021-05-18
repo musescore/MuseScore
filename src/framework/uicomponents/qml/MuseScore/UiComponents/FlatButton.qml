@@ -86,11 +86,12 @@ FocusableControl {
         id: contentWrapper
 
         property int spacing: Boolean(!buttonIcon.isEmpty) && Boolean(textLabel.text) ? 4 : 0
+        property int extraSpacing: buttonIcon.isEmpty && textLabel.text ? 1 : 0 // Required because font is an even-pixel height (10px), #8098
 
         anchors.verticalCenter: parent ? parent.verticalCenter : undefined
         anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
 
-        height: !prv.isVertical ? Math.max(buttonIcon.height, textLabel.height) : buttonIcon.height + textLabel.height + spacing
+        height: !prv.isVertical ? Math.max(buttonIcon.height, textLabel.height) : buttonIcon.height + textLabel.height + spacing + extraSpacing
         width: prv.isVertical ? Math.max(textLabel.width, buttonIcon.width) : buttonIcon.width + textLabel.width + spacing
 
         StyledIconLabel {
