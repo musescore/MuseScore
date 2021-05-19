@@ -97,6 +97,17 @@ QList<DockStatusBar*> DockPage::statusBars() const
     return m_statusBars.list();
 }
 
+DockBase* DockPage::dockByName(const QString& dockName) const
+{
+    for (DockBase* dock : allDocks()) {
+        if (dock->objectName() == dockName) {
+            return dock;
+        }
+    }
+
+    return nullptr;
+}
+
 void DockPage::setUri(const QString& uri)
 {
     if (uri == m_uri) {

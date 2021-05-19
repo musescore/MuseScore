@@ -61,6 +61,7 @@ public:
     DockCentral* centralDock() const;
     QList<DockPanel*> panels() const;
     QList<DockStatusBar*> statusBars() const;
+    DockBase* dockByName(const QString& dockName) const;
 
     void close();
 

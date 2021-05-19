@@ -158,10 +158,8 @@ DockPage {
             width: root.width
             height: root.toolBarHeight
 
-            minimumWidth: orientation == Qt.Horizontal ? 720 : root.toolBarHeight
-            maximumWidth: orientation == Qt.Horizontal ? 100500 : 96
-            minimumHeight: orientation == Qt.Horizontal ? root.toolBarHeight : 400
-            maximumHeight: orientation == Qt.Horizontal ? root.toolBarHeight : 100500
+            horizontalPreferredSize: Qt.size(720, root.toolBarHeight)
+            verticalPreferredSize: Qt.size(root.toolBarHeight, 400)
 
             allowedAreas: { Qt.AllDockWidgetAreas }
 
