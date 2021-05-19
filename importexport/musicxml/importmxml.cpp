@@ -47,11 +47,12 @@ Score::FileError removeInstrumentNames(Score* score, MxmlLogger* logger)
       return Score::FileError::FILE_NO_ERROR;
       }
 
-Score::FileError applyMusicXMLStyles(Score* score, MxmlLogger* logger)
+Score::FileError applyMusicXMLPVGStyles(Score* score, MxmlLogger* logger)
       {
             
       // Reset styles to default
       auto ignoreStyles = pageStyles();
+      ignoreStyles.unite(fretStyles());
       ignoreStyles.insert(Sid::concertPitch);
       ignoreStyles.insert(Sid::createMultiMeasureRests);
       score->style().resetAllStyles(score, ignoreStyles);
@@ -82,24 +83,30 @@ Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/,
       //logger.setLoggingLevel(MxmlLogger::Level::MXML_INFO);
       //logger.setLoggingLevel(MxmlLogger::Level::MXML_TRACE); // also include tracing
 
+      // Reset and apply styles (possibly unique to Faber/Hal Leonard Conversion Job)
+      Score::FileError styleRes = applyMusicXMLPVGStyles(score, &logger);      
+      if (styleRes != Score::FileError::FILE_NO_ERROR)
+            logger.logError(QString("Error while applying MusicXML styles. Continuing."));
+
       // pass 1
       dev->seek(0);
       MusicXMLParserPass1 pass1(score, &logger);
       Score::FileError res = pass1.parse(dev);
-      if (res != Score::FileError::FILE_NO_ERROR)
+      if (res != Score::FileError::FILE_NO_ERROR) {
+            logger.logError(QString("Error during MusicXML import pass 1. Returning."));
             return res;
+            }
 
       // pass 2
       dev->seek(0);
       MusicXMLParserPass2 pass2(score, pass1, &logger);
       Score::FileError res2 = pass2.parse(dev);
-
-      // Apply Styles (possibly unique to Faber/Hal Leonard Conversion Job)
-      Score::FileError styleRes = applyMusicXMLStyles(score, &logger);      
-      if (styleRes != Score::FileError::FILE_NO_ERROR)
-            return styleRes;
-
-      return res2;
+      if (res2 != Score::FileError::FILE_NO_ERROR) {
+            logger.logError(QString("Error during MusicXML import pass 2. Returning."));
+            return res2;
+            }
+      
+      return Score::FileError::FILE_NO_ERROR;
       }
 
 } // namespace Ms
