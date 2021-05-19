@@ -62,6 +62,8 @@ Item {
                 return
             }
 
+            menu.model = 0
+            menu.model = model.items
             menu.toggleOpened()
         }
 
@@ -70,8 +72,6 @@ Item {
 
             opensUpward: true
             itemWidth: 220
-
-            model: model.items
 
             onHandleAction: {
                 Qt.callLater(model.selectViewMode, actionCode)
