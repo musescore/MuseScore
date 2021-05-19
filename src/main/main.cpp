@@ -303,6 +303,6 @@ int main(int argc, char** argv)
 #endif
 
     int code = app.run(argcFinal, argvFinal);
-    LOGI() << "Good buy!! code: " << code;
+    LOGI() << "Goodbye!! code: " << code;
     return code;
 }
