@@ -34,7 +34,7 @@ static const std::string module_name("userscores");
 static const Settings::Key RECENT_SCORE_PATHS(module_name, "userscores/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
 static const Settings::Key USER_SCORES_PATH(module_name, "application/paths/myScores");
-static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "userscores/preferedScoreCreationMode");
+static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "userscores/preferredScoreCreationMode");
 
 const QString UserScoresConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
 

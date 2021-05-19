@@ -97,6 +97,8 @@ protected:
 
     KDDockWidgets::DockWidgetQuick* dockWidget() const;
 
+    void setSizeConstraints(const QSize& minimumSize, const QSize& maximumSize);
+
 private slots:
     void resize();
 

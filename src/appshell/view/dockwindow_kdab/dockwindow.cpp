@@ -57,6 +57,15 @@ void DockWindow::componentComplete()
     configuration()->windowGeometryChanged().onNotify(this, [this]() {
         resetWindowState();
     });
+
+    mainWindow()->toolBarOrientationChangeRequested().onReceive(this, [this](std::pair<QString, mu::framework::Orientation> orientation) {
+        const DockPage* page = pageByUri(m_currentPageUri);
+        DockToolBar* toolBar = page ? dynamic_cast<DockToolBar*>(page->dockByName(orientation.first)) : nullptr;
+
+        if (toolBar) {
+            toolBar->setOrientation(static_cast<Qt::Orientation>(orientation.second));
+        }
+    });
 }
 
 QString DockWindow::currentPageUri() const

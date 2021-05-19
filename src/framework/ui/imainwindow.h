@@ -23,10 +23,13 @@
 #define MU_UI_IMAINWINDOW_H
 
 #include "modularity/imoduleexport.h"
+#include "async/channel.h"
+#include "globaltypes.h"
 
 class QMainWindow;
 class QWindow;
 class QScreen;
+class QString;
 
 namespace mu::ui {
 class IMainWindow : MODULE_EXPORT_INTERFACE
@@ -42,6 +45,9 @@ public:
     virtual bool isFullScreen() const = 0;
     virtual void toggleFullScreen() = 0;
     virtual const QScreen* screen() const = 0;
+
+    virtual void requestChangeToolBarOrientation(const QString& toolBarName, framework::Orientation orientation) = 0;
+    virtual async::Channel<std::pair<QString, framework::Orientation> > toolBarOrientationChangeRequested() const = 0;
 };
 }
 
