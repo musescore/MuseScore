@@ -4912,71 +4912,19 @@ FretDiagram* MusicXMLParserPass2::frame()
 
       FretDiagram* fd = new FretDiagram(_score);
 
+      int fretOffset = 0;
+
       // Format: fret: string
       std::map<int, int> bStarts;
       std::map<int, int> bEnds;
 
       while (_e.readNextStartElement()) {
-            if (_e.name() == "first-fret") {
-                  bool ok {};
-                  int val = _e.readElementText().toInt(&ok);
-                  if (ok && val > 0)
-                        fd->setFretOffset(val - 1);
-                  else
-                        _logger->logError(QString("FretDiagram::readMusicXML: illegal first-fret %1").arg(val), &_e);
-                  }
-            else if (_e.name() == "frame-frets") {
-                  int val = _e.readElementText().toInt();
-                  if (val > 0) {
-                        fd->setProperty(Pid::FRET_FRETS, val);
-                        fd->setPropertyFlags(Pid::FRET_FRETS, PropertyFlags::UNSTYLED);
-                        }
-                  else
-                        _logger->logError(QString("FretDiagram::readMusicXML: illegal frame-fret %1").arg(val), &_e);
-                  }
-            else if (_e.name() == "frame-note") {
-                  int fret   = -1;
-                  int string = -1;
-                  int actualString = -1;
-                  while (_e.readNextStartElement()) {
-                        if (_e.name() == "fret")
-                              fret = _e.readElementText().toInt();
-                        else if (_e.name() == "string") {
-                              string = _e.readElementText().toInt();
-                              actualString = fd->strings() - string;
-                              }
-                        else if (_e.name() == "barre") {
-                              // Keep barres to be added later
-                              QString t = _e.attributes().value("type").toString();
-                              if (t == "start")
-                                    bStarts[fret] = actualString;
-                              else if (t == "stop")
-                                    bEnds[fret] = actualString;
-                              else
-                                    _logger->logError(QString("FretDiagram::readMusicXML: illegal frame-note barre type %1").arg(t), &_e);
-                              skipLogCurrElem();
-                              }
-                        else
-                              skipLogCurrElem();
-                        }
-                  _logger->logDebugInfo(QString("FretDiagram::readMusicXML string %1 fret %2").arg(string).arg(fret), &_e);
-
-                  if (string > 0) {
-                        if (fret == 0)
-                              fd->setMarker(actualString, FretMarkerType::CIRCLE);
-                        else if (fret > 0) {
-                              if (fd->marker(actualString).mtype == FretMarkerType::CROSS)
-                                    fd->setMarker(actualString, FretMarkerType::NONE);
-                              fd->setDot(actualString, fret - fd->fretOffset(), true);
-                              }
-                        }
-                  else
-                        _logger->logError(QString("FretDiagram::readMusicXML: illegal frame-note string %1").arg(string), &_e);
-                  }
-            else if (_e.name() == "frame-strings") {
+            // xs:sequence (elements will appear in this order, as enforced by XML schema)
+            if (_e.name() == "frame-strings") {
                   int val = _e.readElementText().toInt();
                   if (val > 0) {
                         fd->setStrings(val);
+                        fd->setPropertyFlags(Pid::FRET_STRINGS, PropertyFlags::UNSTYLED); // Prevent style overwrite
                         for (int i = 0; i < val; ++i) {
                               // MXML Spec: any string without a dot or other marker has a closed string
                               // cross marker above it.
@@ -4986,20 +4934,89 @@ FretDiagram* MusicXMLParserPass2::frame()
                   else
                         _logger->logError(QString("FretDiagram::readMusicXML: illegal frame-strings %1").arg(val), &_e);
                   }
+            else if (_e.name() == "frame-frets") {
+                  int val = _e.readElementText().toInt();
+                  if (val > 0) {
+                        fd->setFrets(val);
+                        fd->setPropertyFlags(Pid::FRET_FRETS, PropertyFlags::UNSTYLED); // Prevent style overwrite
+                        }
+                  else
+                        _logger->logError(QString("FretDiagram::readMusicXML: illegal frame-fret %1").arg(val), &_e);
+                  }
+            else if (_e.name() == "first-fret") {
+                  int firstFret = _e.readElementText().toInt();   // MusicXML (1-indexed)
+                  fretOffset = firstFret - 1;                     // MuseScore (0-indexed)
+                  if (fretOffset >= 0)
+                        fd->setFretOffset(fretOffset);
+                  else
+                        _logger->logError(QString("FretDiagram::readMusicXML: illegal first-fret %1").arg(firstFret), &_e);
+
+                  }
+            else if (_e.name() == "frame-note") {
+                  // Handle differences in how MusicXML and MuseScore store fret and string information
+                  int mxmlString = -1;    // MusicXML (1 = rightmost)
+                  int msString = -1;      // MuseScore (0 = leftmost)
+                  int mxmlFret = -1;      // MusicXML (absolute)
+                  int msFret = -1;        // MuseScore (relative to offset)
+                  bool barre = false;     // Flag to prevent barres being duplicated as dots
+                  while (_e.readNextStartElement()) {
+                        // xs:sequence  (elements will appear in this order, as enforced by XML schema)
+                        if (_e.name() == "string") {
+                              mxmlString = _e.readElementText().toInt();
+                              msString = fd->strings() - mxmlString;
+                              }
+                        else if (_e.name() == "fret") {
+                              mxmlFret = _e.readElementText().toInt();
+                              msFret = mxmlFret - fretOffset;
+                              }
+                        else if (_e.name() == "barre") {
+                              // Keep barres to be added later
+                              barre = true;
+                              QString t = _e.attributes().value("type").toString();
+                              if (t == "start")
+                                    bStarts[msFret] = msString;
+                              else if (t == "stop")
+                                    bEnds[msFret] = msString;
+                              else
+                                    _logger->logError(QString("FretDiagram::readMusicXML: illegal frame-note barre type %1").arg(t), &_e);
+                              skipLogCurrElem();
+                              }
+                        else
+                              skipLogCurrElem();
+                        }
+                  _logger->logDebugInfo(QString("FretDiagram::readMusicXML string %1 fret %2").arg(mxmlString).arg(mxmlFret), &_e);
+
+                  if (mxmlString > 0) {
+                        if (mxmlFret == 0)
+                              fd->setMarker(msString, FretMarkerType::CIRCLE);
+                        else if (msFret > 0 && !barre) {
+                              fd->setDot(msString, msFret, true);
+                              fd->setMarker(msString, FretMarkerType::NONE);
+                              }
+                        }
+                  else
+                        _logger->logError(QString("FretDiagram::readMusicXML: illegal frame-note string %1").arg(mxmlString), &_e);
+                  }
             else
                   skipLogCurrElem();
             }
 
       // Finally add barres
       for (auto const& i : bStarts) {
-            int fret = i.first;
+            int fret = i.first;  // Already in MuseScore format
             int startString = i.second;
 
+            // If end is missing, skip this one
             if (bEnds.find(fret) == bEnds.end())
                   continue;
 
             int endString = bEnds[fret];
-            fd->setBarre(startString, endString, fret - fd->fretOffset());
+            fd->setBarre(startString, endString, fret);
+
+            // Reset fret marker of all strings covered by barre
+            for (int string = startString; string <= endString; ++string) {
+                  fd->setMarker(string, FretMarkerType::NONE);
+                  }
             }
 
       return fd;
@@ -5176,12 +5193,6 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                   skipLogCurrElem();
             }
 
-      if (fd) {
-            fd->setTrack(track);
-            Segment* s = measure->getSegment(SegmentType::ChordRest, sTime + offset);
-            s->add(fd);
-            }
-
       const ChordDescription* d = 0;
       if (ha->rootTpc() != Tpc::TPC_INVALID)
             d = ha->fromXml(kind, kindText, symbols, parens, degreeList);
@@ -5202,7 +5213,16 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       // harmony = ha;
       ha->setTrack(track);
       Segment* s = measure->getSegment(SegmentType::ChordRest, sTime + offset);
-      s->add(ha);
+
+      // Add harmony to FretDiagram if present, otherwise add directly to Segment
+      if (fd) {
+            fd->setTrack(track);
+            s->add(fd);
+            fd->add(ha);
+            }
+      else {
+            s->add(ha);
+            }
       }
 
 //---------------------------------------------------------

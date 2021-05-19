@@ -1269,7 +1269,6 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
       if (fretOffset() > 0)
             xml.tag("first-fret", fretOffset() + 1);
 
-
       for (int i = 0; i < _strings; ++i) {
             int mxmlString = _strings - i;
 
@@ -1278,13 +1277,14 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
             for (auto const& j : _barres) {
                   FretItem::Barre b = j.second;
                   int fret = j.first;
+                  int mxmlFret = fret + fretOffset();
                   if (!b.exists())
                         continue;
 
                   if (b.startString == i)
-                        bStarts.push_back(fret);
+                        bStarts.push_back(mxmlFret);
                   else if (b.endString == i || (b.endString == -1 && mxmlString == 1))
-                        bEnds.push_back(fret);
+                        bEnds.push_back(mxmlFret);
                   }
 
             if (marker(i).exists() && marker(i).mtype == FretMarkerType::CIRCLE) {
