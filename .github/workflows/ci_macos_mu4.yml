@@ -95,6 +95,9 @@ jobs:
           DO_UPLOAD_SYMBOLS='false'
           DO_PUBLISH='false'
         fi
+
+        # Temporary off, until the problem with the Apple account, is resolved
+        DO_NOTARIZE='false'
         
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
