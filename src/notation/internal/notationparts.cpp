@@ -50,6 +50,10 @@ NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr intera
     interaction->dropChanged().onNotify(this, [this]() {
         updatePartTitles();
     });
+
+    m_undoStack->stackChanged().onNotify(this, [this]() {
+        m_partsChanged.notify();
+    });
 }
 
 NotationParts::~NotationParts()
