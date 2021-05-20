@@ -2322,6 +2322,9 @@ void Chord::layoutTablature()
                 QPointF p(_stem->hookPos());
                 p.rx() -= _stem->width();
                 _hook->setPos(p);
+                if (_stemSlash) {
+                    _stemSlash->layout();
+                }
             }
         }
     }
