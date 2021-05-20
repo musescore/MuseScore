@@ -32,8 +32,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilitycontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleobject.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleobject.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/accessiblecontrollerinterface.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/accessiblecontrollerinterface.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleiteminterface.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleiteminterface.h
     )

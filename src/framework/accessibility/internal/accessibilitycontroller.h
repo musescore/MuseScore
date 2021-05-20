@@ -25,29 +25,48 @@
 #include <memory>
 #include <QObject>
 #include <QList>
+#include <QHash>
 
 #include "../iaccessibilitycontroller.h"
 #include "accessibleobject.h"
+#include "async/asyncable.h"
 
 class QAccessibleInterface;
 class QAccessibleEvent;
 
 namespace mu::accessibility {
-class AccessibilityController : public QObject, public IAccessibilityController,
+class AccessibilityController : public IAccessibilityController, public IAccessibility, public async::Asyncable,
     public std::enable_shared_from_this<AccessibilityController>
 {
-    Q_OBJECT
 public:
     AccessibilityController() = default;
     ~AccessibilityController();
 
     void init();
 
-    void created(IAccessibility* parent, IAccessibility* item) override;
-    void destroyed(IAccessibility* item) override;
+    // IAccessibilityController
+    const IAccessibility* rootItem() const override;
+
+    void reg(IAccessibility* item) override;
+    void unreg(IAccessibility* item) override;
+
     void actived(IAccessibility* item, bool isActive) override;
     void focused(IAccessibility* item) override;
+    // -----
 
+    // IAccessibility
+    IAccessibility* accessibleParent() const override;
+    async::Notification accessibleParentChanged() const override;
+
+    size_t accessibleChildCount() const override;
+    IAccessibility* accessibleChild(size_t i) const override;
+
+    Role accessibleRole() const override;
+    QString accessibleName() const override;
+    bool accessibleState(State st) const override;
+    // -----
+
+    QAccessibleInterface* parentIface(const IAccessibility* item) const;
     int childCount(const IAccessibility* item) const;
     QAccessibleInterface* child(const IAccessibility* item, int i) const;
     int indexOfChild(const IAccessibility* item, const QAccessibleInterface* iface) const;
@@ -56,7 +75,6 @@ private:
 
     struct Item
     {
-        IAccessibility* parent = nullptr;
         IAccessibility* item = nullptr;
         AccessibleObject* object = nullptr;
         QAccessibleInterface* iface = nullptr;
@@ -64,12 +82,13 @@ private:
         bool isValid() const { return item != nullptr; }
     };
 
-    const Item& findItem(IAccessibility* aitem) const;
-    int indexBy(IAccessibility* aitem) const;
+    const Item& findItem(const IAccessibility* aitem) const;
 
     void sendEvent(QAccessibleEvent* ev);
 
-    QList<Item> m_items;
+    QHash<const IAccessibility*, Item> m_allItems;
+
+    QList<IAccessibility*> m_children;
 };
 }
 

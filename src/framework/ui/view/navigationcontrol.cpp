@@ -34,16 +34,16 @@ NavigationControl::NavigationControl(QObject* parent)
 
 NavigationControl::~NavigationControl()
 {
+    accessibilityController()->unreg(this);
     if (m_panel) {
         m_panel->removeControl(this);
     }
-    accessibilityController()->destroyed(this);
 }
 
 void NavigationControl::componentComplete()
 {
     AbstractNavigation::componentComplete();
-    accessibilityController()->created(m_panel, this);
+    accessibilityController()->reg(this);
 }
 
 QString NavigationControl::name() const
@@ -129,6 +129,7 @@ void NavigationControl::setPanel(NavigationPanel* panel)
     }
 
     emit panelChanged(m_panel);
+    m_accessibleParentChanged.notify();
 }
 
 void NavigationControl::onPanelDestroyed()
@@ -144,6 +145,26 @@ NavigationPanel* NavigationControl::panel_property() const
 INavigationPanel* NavigationControl::panel() const
 {
     return m_panel;
+}
+
+const IAccessibility* NavigationControl::accessibleParent() const
+{
+    return m_panel;
+}
+
+mu::async::Notification NavigationControl::accessibleParentChanged() const
+{
+    return m_accessibleParentChanged;
+}
+
+size_t NavigationControl::accessibleChildCount() const
+{
+    return 0;
+}
+
+const IAccessibility* NavigationControl::accessibleChild(size_t) const
+{
+    return nullptr;
 }
 
 IAccessibility::Role NavigationControl::accessibleRole() const

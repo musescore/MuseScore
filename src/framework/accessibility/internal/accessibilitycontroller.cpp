@@ -25,26 +25,34 @@
 #include <QAccessible>
 
 #include "accessibleobject.h"
-#include "accessiblecontrollerinterface.h"
 #include "accessibleiteminterface.h"
 
 #include "async/async.h"
 #include "log.h"
 
+#define ACCESSIBILITY_LOGGING_ENABLED
+
+#ifdef ACCESSIBILITY_LOGGING_ENABLED
+#define MYLOG() LOGI()
+#else
+#define MYLOG() LOGN()
+#endif
+
 using namespace mu::accessibility;
 
 AccessibilityController::~AccessibilityController()
 {
+    unreg(this);
 }
 
 static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObject* object)
 {
     if (classname == QLatin1String("mu::accessibility::AccessibleObject")) {
-        return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(object));
-    }
-
-    if (classname == QLatin1String("mu::accessibility::AccessibilityController")) {
-        return static_cast<QAccessibleInterface*>(new AccessibleControllerInterface(object));
+        AccessibleObject* aobj = qobject_cast<AccessibleObject*>(object);
+        IF_ASSERT_FAILED(aobj) {
+            return nullptr;
+        }
+        return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(aobj));
     }
 
     return nullptr;
@@ -54,54 +62,75 @@ static void updateHandlerNoop(QAccessibleEvent*)
 {
 }
 
+static void rootObjectHandlerNoop(QObject*)
+{
+}
+
 void AccessibilityController::init()
 {
-    setObjectName("AccessibilityController");
-
     QAccessible::installFactory(muAccessibleFactory);
 
-    QAccessible::setRootObject(this);
-    QAccessible::installRootObjectHandler([](QObject*) {});
+    reg(this);
+    const Item& self = findItem(this);
+
+    QAccessible::installRootObjectHandler(nullptr);
+    QAccessible::setRootObject(self.object);
 
     //! NOTE Disabled any events from Qt
+    QAccessible::installRootObjectHandler(rootObjectHandlerNoop);
     QAccessible::installUpdateHandler(updateHandlerNoop);
 }
 
-void AccessibilityController::created(IAccessibility* parent, IAccessibility* item)
+const IAccessibility* AccessibilityController::rootItem() const
 {
-    //! TODO Not working yet
-    parent = nullptr;
+    return this;
+}
 
-    QObject* prnObj = nullptr;
-    if (parent) {
-        prnObj = findItem(parent).object;
-    } else {
-        prnObj = this;
+void AccessibilityController::reg(IAccessibility* item)
+{
+    if (findItem(item).isValid()) {
+        LOGW() << "Already registered";
+        return;
     }
 
+    MYLOG() << "item: " << item->accessibleName();
+
     Item it;
-    it.parent = parent;
     it.item = item;
-    it.object = new AccessibleObject(item, prnObj);
+    it.object = new AccessibleObject(item);
     it.object->setController(shared_from_this());
     it.iface = QAccessible::queryAccessibleInterface(it.object);
 
-    m_items.append(it);
+    m_allItems.insert(item, it);
 
-    LOGI() << "parent: " << (parent ? parent->accessibleName() : "") << ", item: " << item->accessibleName();
+    if (item->accessibleParent() == this) {
+        m_children.append(item);
+    }
+
+    item->accessibleParentChanged().onNotify(this, [this, item]() {
+        const Item& it = findItem(item);
+        if (!it.isValid()) {
+            return;
+        }
+
+        QAccessibleEvent ev(it.object, QAccessible::ParentChanged);
+        sendEvent(&ev);
+    });
 
     QAccessibleEvent ev(it.object, QAccessible::ObjectCreated);
     sendEvent(&ev);
 }
 
-void AccessibilityController::destroyed(IAccessibility* aitem)
+void AccessibilityController::unreg(IAccessibility* aitem)
 {
-    LOGI() << aitem->accessibleName();
-    int idx = indexBy(aitem);
-    IF_ASSERT_FAILED(idx >= 0) {
-        return;
+    MYLOG() << aitem->accessibleName();
+
+    Item item = m_allItems.take(aitem);
+
+    if (aitem->accessibleParent() == this) {
+        m_children.removeOne(aitem);
     }
-    Item item = m_items.takeAt(idx);
+
     QAccessibleEvent ev(item.object, QAccessible::ObjectDestroyed);
     sendEvent(&ev);
 
@@ -110,7 +139,7 @@ void AccessibilityController::destroyed(IAccessibility* aitem)
 
 void AccessibilityController::actived(IAccessibility* aitem, bool isActive)
 {
-    LOGI() << aitem->accessibleName() << " " << isActive;
+    MYLOG() << aitem->accessibleName() << " " << isActive;
     const Item& item = findItem(aitem);
     IF_ASSERT_FAILED(item.isValid()) {
         return;
@@ -124,7 +153,7 @@ void AccessibilityController::actived(IAccessibility* aitem, bool isActive)
 
 void AccessibilityController::focused(IAccessibility* aitem)
 {
-    LOGI() << aitem->accessibleName();
+    MYLOG() << aitem->accessibleName();
     const Item& item = findItem(aitem);
     IF_ASSERT_FAILED(item.isValid()) {
         return;
@@ -142,64 +171,127 @@ void AccessibilityController::sendEvent(QAccessibleEvent* ev)
     QAccessible::installUpdateHandler(updateHandlerNoop);
 }
 
-const AccessibilityController::Item& AccessibilityController::findItem(IAccessibility* aitem) const
+const AccessibilityController::Item& AccessibilityController::findItem(const IAccessibility* aitem) const
 {
-    for (int i = 0; i < m_items.count(); ++i) {
-        if (m_items.at(i).item == aitem) {
-            return m_items.at(i);
-        }
+    auto it = m_allItems.find(aitem);
+    if (it != m_allItems.end()) {
+        return it.value();
     }
 
     static AccessibilityController::Item null;
     return null;
 }
 
-int AccessibilityController::indexBy(IAccessibility* aitem) const
+QAccessibleInterface* AccessibilityController::parentIface(const IAccessibility* item) const
 {
-    for (int i = 0; i < m_items.count(); ++i) {
-        if (m_items.at(i).item == aitem) {
-            return i;
+    IF_ASSERT_FAILED(item) {
+        return nullptr;
+    }
+
+    const IAccessibility* parent = item->accessibleParent();
+    if (!parent) {
+        return nullptr;
+    }
+
+    const Item& it = findItem(parent);
+    if (!it.isValid()) {
+        return nullptr;
+    }
+    return it.iface;
+}
+
+int AccessibilityController::childCount(const IAccessibility* item) const
+{
+    IF_ASSERT_FAILED(item) {
+        return 0;
+    }
+
+    const Item& it = findItem(item);
+    IF_ASSERT_FAILED(it.isValid()) {
+        return 0;
+    }
+    return it.item->accessibleChildCount();
+}
+
+QAccessibleInterface* AccessibilityController::child(const IAccessibility* item, int i) const
+{
+    IF_ASSERT_FAILED(item) {
+        return nullptr;
+    }
+
+    const IAccessibility* chld = item->accessibleChild(static_cast<size_t>(i));
+    IF_ASSERT_FAILED(chld) {
+        return nullptr;
+    }
+
+    const Item& chldIt = findItem(chld);
+    IF_ASSERT_FAILED(chldIt.isValid()) {
+        return nullptr;
+    }
+
+    return chldIt.iface;
+}
+
+int AccessibilityController::indexOfChild(const IAccessibility* item, const QAccessibleInterface* iface) const
+{
+    TRACEFUNC;
+    size_t count = item->accessibleChildCount();
+    for (size_t i = 0; i < count; ++i) {
+        const IAccessibility* ch = item->accessibleChild(i);
+        const Item& chIt = findItem(ch);
+        IF_ASSERT_FAILED(chIt.isValid()) {
+            continue;
+        }
+
+        if (chIt.iface == iface) {
+            return static_cast<int>(i);
         }
     }
+
     return -1;
 }
 
-int AccessibilityController::childCount(const IAccessibility* aitem) const
+IAccessibility* AccessibilityController::accessibleParent() const
 {
-    int count = 0;
-    for (const Item& item: m_items) {
-        if (item.parent == aitem) {
-            ++count;
-        }
-    }
-    return count;
-}
-
-QAccessibleInterface* AccessibilityController::child(const IAccessibility* aitem, int i) const
-{
-    int idx = -1;
-    for (const Item& item: m_items) {
-        if (item.parent == aitem) {
-            ++idx;
-            if (idx == i) {
-                return item.iface;
-            }
-        }
-    }
     return nullptr;
 }
 
-int AccessibilityController::indexOfChild(const IAccessibility* aitem, const QAccessibleInterface* iface) const
+mu::async::Notification AccessibilityController::accessibleParentChanged() const
 {
-    int idx = -1;
-    for (const Item& item: m_items) {
-        if (item.parent == aitem) {
-            ++idx;
-            if (item.iface == iface) {
-                return idx;
-            }
-        }
+    static mu::async::Notification notification;
+    return notification;
+}
+
+size_t AccessibilityController::accessibleChildCount() const
+{
+    return static_cast<size_t>(m_children.size());
+}
+
+IAccessibility* AccessibilityController::accessibleChild(size_t i) const
+{
+    return m_children.at(static_cast<int>(i));
+}
+
+IAccessibility::Role AccessibilityController::accessibleRole() const
+{
+    return IAccessibility::Role::Application;
+}
+
+QString AccessibilityController::accessibleName() const
+{
+    return QString("AccessibilityController");
+}
+
+bool AccessibilityController::accessibleState(State st) const
+{
+    switch (st) {
+    case State::Undefined: return false;
+    case State::Disabled: return false;
+    case State::Active: return true;
+    default: {
+        LOGW() << "not handled state: " << static_cast<int>(st);
+    }
     }
 
-    return -1;
+    return false;
 }

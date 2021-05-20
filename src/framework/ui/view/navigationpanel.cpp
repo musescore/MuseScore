@@ -36,11 +36,10 @@ NavigationPanel::NavigationPanel(QObject* parent)
 
 NavigationPanel::~NavigationPanel()
 {
+    accessibilityController()->unreg(this);
     if (m_section) {
         m_section->removePanel(this);
     }
-
-    accessibilityController()->destroyed(this);
 }
 
 QString NavigationPanel::name() const
@@ -179,7 +178,7 @@ void NavigationPanel::onSectionDestroyed()
 
 void NavigationPanel::componentComplete()
 {
-    accessibilityController()->created(nullptr, this);
+    accessibilityController()->reg(this);
 }
 
 void NavigationPanel::addControl(NavigationControl* control)
@@ -198,6 +197,9 @@ void NavigationPanel::addControl(NavigationControl* control)
     if (m_controlsListChanged.isConnected()) {
         m_controlsListChanged.notify();
     }
+
+    //! TODO Maybe need sorting
+    m_accessibleControls.push_back(control);
 }
 
 void NavigationPanel::removeControl(NavigationControl* control)
@@ -213,6 +215,32 @@ void NavigationPanel::removeControl(NavigationControl* control)
     if (m_controlsListChanged.isConnected()) {
         m_controlsListChanged.notify();
     }
+
+    m_accessibleControls.erase(std::remove(m_accessibleControls.begin(), m_accessibleControls.end(), control), m_accessibleControls.end());
+}
+
+const IAccessibility* NavigationPanel::accessibleParent() const
+{
+    return accessibilityController()->rootItem();
+}
+
+mu::async::Notification NavigationPanel::accessibleParentChanged() const
+{
+    static async::Notification notification;
+    return notification;
+}
+
+size_t NavigationPanel::accessibleChildCount() const
+{
+    return m_accessibleControls.size();
+}
+
+const IAccessibility* NavigationPanel::accessibleChild(size_t i) const
+{
+    IF_ASSERT_FAILED(i < m_accessibleControls.size()) {
+        return nullptr;
+    }
+    return m_accessibleControls.at(i);
 }
 
 IAccessibility::Role NavigationPanel::accessibleRole() const
@@ -222,7 +250,17 @@ IAccessibility::Role NavigationPanel::accessibleRole() const
 
 QString NavigationPanel::accessibleName() const
 {
-    return name();
+    QString dirc;
+    switch (m_direction) {
+    case Horizontal: dirc = "Horizontal";
+        break;
+    case Vertical: dirc = "Vertical";
+        break;
+    case Both: dirc = "Both";
+        break;
+    }
+
+    return name() + " direction " + dirc;
 }
 
 bool NavigationPanel::accessibleState(State st) const

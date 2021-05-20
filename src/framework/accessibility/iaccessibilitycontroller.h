@@ -33,8 +33,11 @@ class IAccessibilityController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAccessibilityController() = default;
 
-    virtual void created(IAccessibility* parent, IAccessibility* item) = 0;
-    virtual void destroyed(IAccessibility* item) = 0;
+    virtual const IAccessibility* rootItem() const = 0;
+
+    virtual void reg(IAccessibility* item) = 0;
+    virtual void unreg(IAccessibility* item) = 0;
+
     virtual void actived(IAccessibility* item, bool isActive) = 0;
     virtual void focused(IAccessibility* item) = 0;
 };
