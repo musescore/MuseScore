@@ -70,8 +70,6 @@ public:
     QList<DockBase*> allDocks() const;
     DockBase* dockByName(const QString& dockName) const;
 
-    void close();
-
 public slots:
     void setUri(const QString& uri);
     void setCentralDock(DockCentral* central);
