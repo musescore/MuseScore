@@ -31,9 +31,12 @@
 
 using namespace mu::dock;
 
-static const qreal TOOLBAR_GRIP_MARGIN(4);
-static const qreal TOOLBAR_GRIP_WIDTH(28);
-static const qreal TOOLBAR_GRIP_HEIGHT(36);
+static const qreal TOOLBAR_GRIP_MARGIN = 4;
+static const qreal TOOLBAR_GRIP_WIDTH = 28;
+static const qreal TOOLBAR_GRIP_HEIGHT = 36;
+
+static constexpr int MIN_SIDE_SIZE = 48;
+static constexpr int MAX_SIDE_SIZE = std::numeric_limits<int>::max();
 
 class DockToolBar::DraggableArea : public KDDockWidgets::QWidgetAdapter, public KDDockWidgets::Draggable
 {
@@ -131,6 +134,16 @@ void DockToolBar::setDraggableMouseArea(QQuickItem* mouseArea)
     m_draggableArea->setMouseArea(mouseArea);
 }
 
+QSize DockToolBar::horizontalPreferredSize() const
+{
+    return m_horizontalPreferredSize;
+}
+
+QSize DockToolBar::verticalPreferredSize() const
+{
+    return m_verticalPreferredSize;
+}
+
 void DockToolBar::setMinimumWidth(int width)
 {
     if (movable() && orientation() == Qt::Horizontal) {
@@ -151,31 +164,25 @@ void DockToolBar::setMinimumHeight(int height)
 
 void DockToolBar::setMaximumWidth(int width)
 {
-    int preferedWidth = this->width();
+    int preferredWidth = this->width();
 
     if (movable() && orientation() == Qt::Horizontal) {
-        preferedWidth = TOOLBAR_GRIP_WIDTH + TOOLBAR_GRIP_MARGIN;
+        preferredWidth = TOOLBAR_GRIP_WIDTH + TOOLBAR_GRIP_MARGIN;
     }
 
-    if (preferedWidth > width) {
-        width = preferedWidth;
-    }
-
+    width = std::max(width, preferredWidth);
     DockBase::setMaximumWidth(width);
 }
 
 void DockToolBar::setMaximumHeight(int height)
 {
-    int preferedHeight = this->height();
+    int preferredHeight = this->height();
 
     if (movable() && orientation() == Qt::Horizontal) {
-        preferedHeight = TOOLBAR_GRIP_HEIGHT + TOOLBAR_GRIP_MARGIN;
+        preferredHeight = TOOLBAR_GRIP_HEIGHT + TOOLBAR_GRIP_MARGIN;
     }
 
-    if (preferedHeight > height) {
-        height = preferedHeight;
-    }
-
+    height = std::max(height, preferredHeight);
     DockBase::setMaximumHeight(height);
 }
 
@@ -199,61 +206,49 @@ void DockToolBar::setOrientation(Qt::Orientation orientation)
     emit orientationChanged(orientation);
 }
 
-void DockToolBar::updateOrientation()
+void DockToolBar::setHorizontalPreferredSize(QSize horizontalPreferredSize)
 {
-    if (dockWidget()->isFloating()) {
+    if (m_horizontalPreferredSize == horizontalPreferredSize) {
         return;
     }
 
-    Layouting::ItemBoxContainer* container = dockWidget()->frame()->layoutItem()->parentBoxContainer();
-    if (!container) {
+    m_horizontalPreferredSize = horizontalPreferredSize;
+    emit horizontalPreferredSizeChanged(m_horizontalPreferredSize);
+}
+
+void DockToolBar::setVerticalPreferredSize(QSize verticalPreferredSize)
+{
+    if (m_verticalPreferredSize == verticalPreferredSize) {
         return;
     }
 
-    if (container->isVertical()) {
-        setOrientation(Qt::Horizontal);
-        return;
-    }
-
-    Qt::Orientation newOrientation = Qt::Horizontal;
-
-    for (const Layouting::Item* containerItem: container->childItems()) {
-        auto frame = static_cast<KDDockWidgets::Frame*>(containerItem->guestAsQObject());
-        if (!frame || frame->dockWidgets().empty()) {
-            continue;
-        }
-
-        DockType type = readPropertiesFromObject(frame->dockWidgets().first()).type;
-
-        if (type == DockType::Central) {
-            newOrientation = Qt::Vertical;
-            break;
-        }
-    }
-
-    setOrientation(newOrientation);
+    m_verticalPreferredSize = verticalPreferredSize;
+    emit verticalPreferredSizeChanged(m_verticalPreferredSize);
 }
 
 void DockToolBar::componentComplete()
 {
     DockBase::componentComplete();
 
-    connect(dockWidget(), &KDDockWidgets::DockWidgetQuick::parentChanged, [this]() {
-        if (!dockWidget()) {
-            return;
-        }
+    connect(this, &DockToolBar::orientationChanged, [this](Qt::Orientation orientation) {
+        QSize preferredSize = this->preferredSize();
 
-        KDDockWidgets::Frame* frame = dockWidget()->frame();
-        if (!frame) {
-            return;
+        if (orientation == Qt::Horizontal) {
+            setSizeConstraints(QSize(preferredSize.width(), MIN_SIDE_SIZE), QSize(MAX_SIDE_SIZE, MIN_SIDE_SIZE));
+        } else {
+            setSizeConstraints(QSize(MIN_SIDE_SIZE, preferredSize.height()), QSize(MIN_SIDE_SIZE, MAX_SIDE_SIZE));
         }
-
-        connect(frame, &KDDockWidgets::Frame::isInMainWindowChanged, this, [this]() {
-            QTimer::singleShot(0, this, &DockToolBar::updateOrientation);
-        }, Qt::UniqueConnection);
     });
 
+    QSize preferredSize = this->preferredSize();
+    setSizeConstraints(QSize(preferredSize.width(), MIN_SIDE_SIZE), QSize(MAX_SIDE_SIZE, MIN_SIDE_SIZE));
+
     m_draggableArea->setDockWidget(dockWidget());
+}
+
+QSize DockToolBar::preferredSize() const
+{
+    return m_orientation == Qt::Horizontal ? horizontalPreferredSize() : verticalPreferredSize();
 }
 
 DockType DockToolBar::type() const

@@ -22,10 +22,13 @@
 
 #include "dockbase.h"
 
+#include <QRect>
+
 #include "log.h"
 
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
 #include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
+#include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
 
 using namespace mu::dock;
 
@@ -79,6 +82,22 @@ bool DockBase::floating() const
 KDDockWidgets::DockWidgetQuick* DockBase::dockWidget() const
 {
     return m_dockWidget;
+}
+
+void DockBase::setSizeConstraints(const QSize& minimumSize, const QSize& maximumSize)
+{
+    m_dockWidget->setMinimumSize(minimumSize);
+    m_dockWidget->setMaximumSize(maximumSize);
+
+    if (auto frame = m_dockWidget->frame()) {
+        frame->setMinimumSize(minimumSize);
+        frame->setMaximumSize(maximumSize);
+    }
+
+    if (auto floatingWindow = m_dockWidget->floatingWindow()) {
+        QRect rect(floatingWindow->dragRect().topLeft(), minimumSize);
+        floatingWindow->setGeometry(rect);
+    }
 }
 
 void DockBase::setTitle(const QString& title)
@@ -154,10 +173,6 @@ void DockBase::setFloating(bool floating)
 void DockBase::resize()
 {
     applySizeConstraints();
-
-    if (m_dockWidget) {
-        m_dockWidget->frame()->layoutItem()->parentBoxContainer()->layoutEqually();
-    }
 }
 
 void DockBase::init()
@@ -210,13 +225,7 @@ void DockBase::applySizeConstraints()
     QSize minimumSize(minWidth, minHeight);
     QSize maximumSize(maxWidth, maxHeight);
 
-    m_dockWidget->setMinimumSize(minimumSize);
-    m_dockWidget->setMaximumSize(maximumSize);
-
-    if (auto frame = m_dockWidget->frame()) {
-        frame->setMinimumSize(minimumSize);
-        frame->setMaximumSize(maximumSize);
-    }
+    setSizeConstraints(minimumSize, maximumSize);
 }
 
 void DockBase::listenFloatingChanges()
