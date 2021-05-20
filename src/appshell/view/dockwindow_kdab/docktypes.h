@@ -31,6 +31,7 @@ enum class DockType {
     Undefined = -1,
     Panel,
     ToolBar,
+    ToolBarDockingHelper,
     StatusBar,
     Central
 };

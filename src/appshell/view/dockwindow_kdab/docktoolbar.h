@@ -70,11 +70,18 @@ signals:
     void verticalPreferredSizeChanged(QSize verticalPreferredSize);
     void tabifyToolBarChanged(DockToolBar* tabifyToolBar);
 
-private:
+protected:
     void componentComplete() override;
 
     DockType type() const override;
 
+    static const int MIN_SIDE_SIZE;
+    static const int MAX_SIDE_SIZE;
+
+private:
+    void updateSizeConstraints();
+
+    bool isOrientationChangingAllowed() const;
     QSize preferredSize() const;
 
     class DraggableArea;
