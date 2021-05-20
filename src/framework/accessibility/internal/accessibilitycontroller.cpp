@@ -23,6 +23,7 @@
 
 #include <QGuiApplication>
 #include <QAccessible>
+#include <QWindow>
 
 #include "accessibleobject.h"
 #include "accessibleiteminterface.h"
@@ -30,7 +31,7 @@
 #include "async/async.h"
 #include "log.h"
 
-#define ACCESSIBILITY_LOGGING_ENABLED
+//#define ACCESSIBILITY_LOGGING_ENABLED
 
 #ifdef ACCESSIBILITY_LOGGING_ENABLED
 #define MYLOG() LOGI()
@@ -210,7 +211,7 @@ int AccessibilityController::childCount(const IAccessibility* item) const
     IF_ASSERT_FAILED(it.isValid()) {
         return 0;
     }
-    return it.item->accessibleChildCount();
+    return static_cast<int>(it.item->accessibleChildCount());
 }
 
 QAccessibleInterface* AccessibilityController::child(const IAccessibility* item, int i) const
@@ -294,4 +295,9 @@ bool AccessibilityController::accessibleState(State st) const
     }
 
     return false;
+}
+
+QRect AccessibilityController::accessibleRect() const
+{
+    return mainWindow()->qWindow()->geometry();
 }
