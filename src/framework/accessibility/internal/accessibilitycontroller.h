@@ -31,6 +31,9 @@
 #include "accessibleobject.h"
 #include "async/asyncable.h"
 
+#include "modularity/ioc.h"
+#include "ui/imainwindow.h"
+
 class QAccessibleInterface;
 class QAccessibleEvent;
 
@@ -38,6 +41,8 @@ namespace mu::accessibility {
 class AccessibilityController : public IAccessibilityController, public IAccessibility, public async::Asyncable,
     public std::enable_shared_from_this<AccessibilityController>
 {
+    INJECT(accessibility, ui::IMainWindow, mainWindow)
+
 public:
     AccessibilityController() = default;
     ~AccessibilityController();
@@ -64,6 +69,7 @@ public:
     Role accessibleRole() const override;
     QString accessibleName() const override;
     bool accessibleState(State st) const override;
+    QRect accessibleRect() const override;
     // -----
 
     QAccessibleInterface* parentIface(const IAccessibility* item) const;

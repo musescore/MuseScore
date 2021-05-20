@@ -49,6 +49,7 @@ RadioDelegate {
     NavigationControl {
         id: keynavCtrl
         name: root.objectName
+        accessibleItem: root
 
         onActiveChanged: {
             if (keynavCtrl.active) {

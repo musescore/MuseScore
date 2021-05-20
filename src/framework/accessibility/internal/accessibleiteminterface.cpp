@@ -27,6 +27,14 @@
 
 #include "log.h"
 
+//#define ACCESSIBILITY_LOGGING_ENABLED
+
+#ifdef ACCESSIBILITY_LOGGING_ENABLED
+#define MYLOG() LOGI()
+#else
+#define MYLOG() LOGN()
+#endif
+
 using namespace mu::accessibility;
 
 AccessibleItemInterface::AccessibleItemInterface(AccessibleObject* object)
@@ -52,35 +60,34 @@ QWindow* AccessibleItemInterface::window() const
 
 QRect AccessibleItemInterface::rect() const
 {
-    NOT_IMPLEMENTED;
-    return QRect();
+    return m_object->item()->accessibleRect();
 }
 
 QAccessibleInterface* AccessibleItemInterface::parent() const
 {
     QAccessibleInterface* iface = m_object->controller()->parentIface(m_object->item());
-    LOGI() << "item: " << m_object->item()->accessibleName() << ", parent: " << (iface ? iface->text(QAccessible::Name) : "null");
+    MYLOG() << "item: " << m_object->item()->accessibleName() << ", parent: " << (iface ? iface->text(QAccessible::Name) : "null");
     return iface;
 }
 
 int AccessibleItemInterface::childCount() const
 {
     int count = m_object->controller()->childCount(m_object->item());
-    LOGI() << "item: " << m_object->item()->accessibleName() << ", childCount: " << count;
+    MYLOG() << "item: " << m_object->item()->accessibleName() << ", childCount: " << count;
     return count;
 }
 
 QAccessibleInterface* AccessibleItemInterface::child(int index) const
 {
     QAccessibleInterface* iface = m_object->controller()->child(m_object->item(), index);
-    LOGI() << "item: " << m_object->item()->accessibleName() << ", child: " << index << " " << iface->text(QAccessible::Name);
+    MYLOG() << "item: " << m_object->item()->accessibleName() << ", child: " << index << " " << iface->text(QAccessible::Name);
     return iface;
 }
 
 int AccessibleItemInterface::indexOfChild(const QAccessibleInterface* iface) const
 {
     int idx = m_object->controller()->indexOfChild(m_object->item(), iface);
-    LOGI() << "item: " << m_object->item()->accessibleName() << ", indexOfChild: " << iface->text(QAccessible::Name) << " = " << idx;
+    MYLOG() << "item: " << m_object->item()->accessibleName() << ", indexOfChild: " << iface->text(QAccessible::Name) << " = " << idx;
     return idx;
 }
 
@@ -136,8 +143,6 @@ QAccessible::Role AccessibleItemInterface::role() const
 
 QString AccessibleItemInterface::text(QAccessible::Text textType) const
 {
-    return m_object->item()->accessibleName();
-
     switch (textType) {
     case QAccessible::Name: return m_object->item()->accessibleName();
     default: break;

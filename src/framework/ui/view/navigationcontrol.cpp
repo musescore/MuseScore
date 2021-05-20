@@ -20,6 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "navigationcontrol.h"
+
+#include <QQuickWindow>
+
 #include "navigationpanel.h"
 
 #include "log.h"
@@ -190,4 +193,29 @@ bool NavigationControl::accessibleState(State st) const
     }
 
     return false;
+}
+
+QRect NavigationControl::accessibleRect() const
+{
+    if (!m_accessibleItem || !m_accessibleItem->window()) {
+        return QRect();
+    }
+
+    QPointF scenePos = m_accessibleItem->mapToScene(QPointF(0, 0));
+    QPoint globalPos = m_accessibleItem->window()->mapToGlobal(scenePos.toPoint());
+    return QRect(globalPos.x(), globalPos.y(), m_accessibleItem->width(), m_accessibleItem->height());
+}
+
+void NavigationControl::setAccessibleItem(QQuickItem* item)
+{
+    if (m_accessibleItem == item)
+        return;
+
+    m_accessibleItem = item;
+    emit accessibleItemChanged();
+}
+
+QQuickItem* NavigationControl::accessibleItem() const
+{
+    return m_accessibleItem;
 }
