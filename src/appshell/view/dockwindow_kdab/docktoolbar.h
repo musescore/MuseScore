@@ -70,9 +70,6 @@ signals:
     void verticalPreferredSizeChanged(QSize verticalPreferredSize);
     void tabifyToolBarChanged(DockToolBar* tabifyToolBar);
 
-private slots:
-    void updateOrientation();
-
 private:
     void componentComplete() override;
 
