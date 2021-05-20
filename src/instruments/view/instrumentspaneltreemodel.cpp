@@ -42,7 +42,16 @@ InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
 {
     context()->currentMasterNotationChanged().onNotify(this, [this]() {
         IMasterNotationPtr masterNotation = context()->currentMasterNotation();
-        m_masterNotationParts = masterNotation ? masterNotation->parts() : nullptr;
+        if (masterNotation) {
+            m_masterNotationParts = masterNotation->parts();
+            m_masterNotationParts->partsChanged().onNotify(this, [this]() {
+                if (m_notationParts) {
+                    load();
+                }
+            });
+        } else {
+            m_masterNotationParts = nullptr;
+        }
     });
 
     context()->currentNotationChanged().onNotify(this, [this]() {
@@ -98,6 +107,10 @@ void InstrumentsPanelTreeModel::deleteItems()
 
 void InstrumentsPanelTreeModel::load()
 {
+    if (m_isLoadingBlocked) {
+        return;
+    }
+
     TRACEFUNC;
     beginResetModel();
 
@@ -219,11 +232,13 @@ bool InstrumentsPanelTreeModel::removeRows(int row, int count, const QModelIndex
         parentItem = m_rootItem;
     }
 
+    m_isLoadingBlocked = true;
     beginRemoveRows(parent, row, row + count - 1);
 
     parentItem->removeChildren(row, count, true);
 
     endRemoveRows();
+    m_isLoadingBlocked = false;
 
     emit isEmptyChanged();
 
@@ -238,6 +253,8 @@ AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::modelIndexToItem(co
 bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                                          int destinationChild)
 {
+    m_isLoadingBlocked = true;
+
     AbstractInstrumentsPanelTreeItem* sourceParentItem = modelIndexToItem(sourceParent);
     AbstractInstrumentsPanelTreeItem* destinationParentItem = modelIndexToItem(destinationParent);
 
@@ -259,6 +276,8 @@ bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int so
     endMoveRows();
 
     updateRearrangementAvailability();
+
+    m_isLoadingBlocked = false;
 
     return true;
 }
