@@ -61,7 +61,7 @@ void DockWindow::componentComplete()
         resetWindowState();
     });
 
-    mainWindow()->toolBarOrientationChangeRequested().onReceive(this, [this](std::pair<QString, mu::framework::Orientation> orientation) {
+    mainWindow()->changeToolBarOrientationRequested().onReceive(this, [this](std::pair<QString, mu::framework::Orientation> orientation) {
         const DockPage* page = pageByUri(m_currentPageUri);
         DockToolBar* toolBar = page ? dynamic_cast<DockToolBar*>(page->dockByName(orientation.first)) : nullptr;
 
@@ -70,12 +70,11 @@ void DockWindow::componentComplete()
         }
     });
 
-    mainWindow()->toolbarsDockingHelpersUpdateRequested().onReceive(this, [this](const QPoint& mouseGlobalPos) {
-        if (mouseGlobalPos.isNull()) {
-            hideCurrentToolBarDockingHelper();
-            return;
-        }
+    mainWindow()->hideAllDockingHelpersRequested().onNotify(this, [this]() {
+        hideCurrentToolBarDockingHelper();
+    });
 
+    mainWindow()->showToolBarDockingHelperRequested().onReceive(this, [this](const QPoint& mouseGlobalPos) {
         QPoint localPos = m_mainWindow->mapFromGlobal(mouseGlobalPos);
         QRect mainFrameGeometry = m_mainWindow->rect();
 
@@ -91,6 +90,7 @@ void DockWindow::componentComplete()
 
         if (helper != m_currentToolBarDockingHelper) {
             hideCurrentToolBarDockingHelper();
+
             if (helper) {
                 helper->show();
             }

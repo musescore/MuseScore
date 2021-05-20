@@ -105,7 +105,7 @@ KDDockWidgets::DropIndicatorOverlayInterface::DropLocation DropIndicators::hover
     }
 
     if (needShowToolBarHelpers()) {
-        updateToolBarHelpers(globalPos);
+        mainWindow()->requestShowToolBarDockingHelper(globalPos);
     }
 
     if (isDropAllowed(dropLocation)) {
@@ -193,7 +193,7 @@ void DropIndicators::updateVisibility()
         updateWindowPosition();
         m_indicatorsWindow->raise();
     } else {
-        updateToolBarHelpers();
+        mainWindow()->requestHideAllDockingHelpers();
         hideDropArea();
     }
 
@@ -393,15 +393,6 @@ void DropIndicators::hideDropArea()
 {
     setCurrentDropLocation(DropLocation_None);
     m_rubberBand->setVisible(false);
-}
-
-void DropIndicators::updateToolBarHelpers(const QPoint& globalPos)
-{
-    if (!globalPos.isNull()) {
-        mainWindow()->updateToolBarsDockingHelpers(globalPos);
-    } else {
-        mainWindow()->updateToolBarsDockingHelpers();
-    }
 }
 
 void DropIndicators::updateToolBarOrientation()
