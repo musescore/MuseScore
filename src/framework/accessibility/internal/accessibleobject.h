@@ -31,7 +31,7 @@ class AccessibleObject : public QObject
 {
     Q_OBJECT
 public:
-    explicit AccessibleObject(IAccessibility* item, QObject* parent);
+    explicit AccessibleObject(IAccessibility* item);
 
     void setController(std::shared_ptr<AccessibilityController> controller);
     const std::shared_ptr<AccessibilityController>& controller() const;

@@ -35,7 +35,7 @@ class AccessibleItemInterface : public QAccessibleInterface
     INJECT(accessibility, ui::IMainWindow, mainWindow)
 
 public:
-    AccessibleItemInterface(QObject* object);
+    AccessibleItemInterface(AccessibleObject* object);
 
     bool isValid() const override;
     QObject* object() const override;

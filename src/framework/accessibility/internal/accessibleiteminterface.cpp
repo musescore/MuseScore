@@ -29,9 +29,9 @@
 
 using namespace mu::accessibility;
 
-AccessibleItemInterface::AccessibleItemInterface(QObject* object)
+AccessibleItemInterface::AccessibleItemInterface(AccessibleObject* object)
 {
-    m_object = qobject_cast<AccessibleObject*>(object);
+    m_object = object;
 }
 
 bool AccessibleItemInterface::isValid() const
@@ -58,22 +58,30 @@ QRect AccessibleItemInterface::rect() const
 
 QAccessibleInterface* AccessibleItemInterface::parent() const
 {
-    return QAccessible::queryAccessibleInterface(m_object->parent());
+    QAccessibleInterface* iface = m_object->controller()->parentIface(m_object->item());
+    LOGI() << "item: " << m_object->item()->accessibleName() << ", parent: " << (iface ? iface->text(QAccessible::Name) : "null");
+    return iface;
 }
 
 int AccessibleItemInterface::childCount() const
 {
-    return m_object->controller()->childCount(m_object->item());
+    int count = m_object->controller()->childCount(m_object->item());
+    LOGI() << "item: " << m_object->item()->accessibleName() << ", childCount: " << count;
+    return count;
 }
 
 QAccessibleInterface* AccessibleItemInterface::child(int index) const
 {
-    return m_object->controller()->child(m_object->item(), index);
+    QAccessibleInterface* iface = m_object->controller()->child(m_object->item(), index);
+    LOGI() << "item: " << m_object->item()->accessibleName() << ", child: " << index << " " << iface->text(QAccessible::Name);
+    return iface;
 }
 
 int AccessibleItemInterface::indexOfChild(const QAccessibleInterface* iface) const
 {
-    return m_object->controller()->indexOfChild(m_object->item(), iface);
+    int idx = m_object->controller()->indexOfChild(m_object->item(), iface);
+    LOGI() << "item: " << m_object->item()->accessibleName() << ", indexOfChild: " << iface->text(QAccessible::Name) << " = " << idx;
+    return idx;
 }
 
 QAccessibleInterface* AccessibleItemInterface::childAt(int, int) const
@@ -99,6 +107,9 @@ QAccessible::State AccessibleItemInterface::state() const
     IAccessibility::Role r = m_object->item()->accessibleRole();
     switch (r) {
     case IAccessibility::Role::NoRole: break;
+    case IAccessibility::Role::Application: {
+        state.active = item->accessibleState(IAccessibility::State::Active);
+    } break;
     case IAccessibility::Role::Panel: {
         state.active = item->accessibleState(IAccessibility::State::Active);
     } break;
@@ -116,6 +127,7 @@ QAccessible::Role AccessibleItemInterface::role() const
     IAccessibility::Role r = m_object->item()->accessibleRole();
     switch (r) {
     case IAccessibility::Role::NoRole: return QAccessible::NoRole;
+    case IAccessibility::Role::Application: return QAccessible::Application;
     case IAccessibility::Role::Panel: return QAccessible::Pane;
     case IAccessibility::Role::Button: return QAccessible::Button;
     }
