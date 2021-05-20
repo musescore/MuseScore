@@ -117,7 +117,7 @@ Rectangle {
             DockPanelTab {
                 text: title
 
-                isCurrent: tabs.currentIndex === model.index
+                isCurrent: tabs && (tabs.currentIndex === model.index)
 
                 onClicked: {
                     root.frameCpp.tabWidget.setCurrentDockWidget(model.index)

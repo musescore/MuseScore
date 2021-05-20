@@ -469,7 +469,29 @@ void DockWindow::requestChangeToolBarOrientation(const QString&, framework::Orie
     NOT_IMPLEMENTED;
 }
 
-mu::async::Channel<std::pair<QString, mu::framework::Orientation> > DockWindow::toolBarOrientationChangeRequested() const
+mu::async::Channel<std::pair<QString, mu::framework::Orientation> > DockWindow::changeToolBarOrientationRequested() const
+{
+    NOT_IMPLEMENTED;
+    return {};
+}
+
+void DockWindow::requestShowToolBarDockingHelper(const QPoint&)
+{
+    NOT_IMPLEMENTED;
+}
+
+mu::async::Channel<QPoint> DockWindow::showToolBarDockingHelperRequested() const
+{
+    NOT_IMPLEMENTED;
+    return {};
+}
+
+void DockWindow::requestHideAllDockingHelpers()
+{
+    NOT_IMPLEMENTED;
+}
+
+mu::async::Notification DockWindow::hideAllDockingHelpersRequested() const
 {
     NOT_IMPLEMENTED;
     return {};
