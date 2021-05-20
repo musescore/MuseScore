@@ -23,6 +23,7 @@
 #define MU_ACCESSIBILITY_IACCESSIBILITY_H
 
 #include <QString>
+#include <QRect>
 #include "async/notification.h"
 
 namespace mu::accessibility {
@@ -51,6 +52,7 @@ public:
     virtual Role accessibleRole() const = 0;
     virtual QString accessibleName() const = 0;
     virtual bool accessibleState(State st) const = 0;
+    virtual QRect accessibleRect() const = 0;
 };
 }
 

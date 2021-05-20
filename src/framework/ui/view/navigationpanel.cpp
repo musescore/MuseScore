@@ -277,3 +277,8 @@ bool NavigationPanel::accessibleState(State st) const
 
     return false;
 }
+
+QRect NavigationPanel::accessibleRect() const
+{
+    return QRect();
+}
