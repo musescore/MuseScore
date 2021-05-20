@@ -104,13 +104,16 @@ KDDockWidgets::DropIndicatorOverlayInterface::DropLocation DropIndicators::hover
         dropRect = dropAreaRectForPanel(dropLocation);
     }
 
-    bool dropAllowed = isDropAllowed(dropLocation) && dropRect.isValid();
+    updateToolBarHelpers(globalPos);
 
-    if (dropAllowed) {
-        showDropAreaIfNeed(dropRect, dropLocation, globalPos);
+    if (isDropAllowed(dropLocation)) {
+        setCurrentDropLocation(dropLocation);
+        showDropAreaIfNeed(dropRect);
     } else {
         hideDropArea();
     }
+
+    updateToolBarOrientation();
 
     return dropLocation;
 }
@@ -188,6 +191,7 @@ void DropIndicators::updateVisibility()
         updateWindowPosition();
         m_indicatorsWindow->raise();
     } else {
+        updateToolBarHelpers();
         hideDropArea();
     }
 
@@ -285,8 +289,18 @@ const KDDockWidgets::DockWidgetBase* DropIndicators::hoveredDock() const
     return docks.first();
 }
 
+mu::framework::Orientation DropIndicators::dockOrientation(const KDDockWidgets::DockWidgetBase& dock) const
+{
+    return dock.width() < dock.height() ? framework::Orientation::Vertical : framework::Orientation::Horizontal;
+}
+
 DropIndicators::DropLocation DropIndicators::dropLocationForToolBar(const QPoint& hoveredGlobalPos) const
 {
+    DockType hoveredDockType = readPropertiesFromObject(hoveredDock()).type;
+    if (hoveredDockType != DockType::ToolBar) {
+        return DropLocation_None;
+    }
+
     QRect dropAreaRect = hoveredFrameRect();
 
     int distanceToLeftCorner = std::abs(dropAreaRect.x() - hoveredGlobalPos.x());
@@ -308,17 +322,13 @@ QRect DropIndicators::dropAreaRectForToolBar(DropLocation location) const
         return QRect();
     }
 
-    auto isVertical = [](const KDDockWidgets::DockWidgetBase* dock) {
-        return dock->width() < dock->height();
-    };
-
     QRect dropAreaRect = hoveredFrameRect();
 
-    if (isVertical(draggedDock)) {
+    if (dockOrientation(*draggedDock) == framework::Orientation::Vertical) {
         return dropAreaRect;
     }
 
-    if (location == DropLocation_Right && !isVertical(hoveredDock)) {
+    if (location == DropLocation_Right && dockOrientation(*hoveredDock) == framework::Orientation::Horizontal) {
         dropAreaRect.setX(dropAreaRect.x() + dropAreaRect.width() - draggedDock->width());
     }
 
@@ -358,26 +368,16 @@ QRect DropIndicators::dropAreaRectForPanel(DropLocation location) const
     }
 
     auto windowBeingDragged = KDDockWidgets::DragController::instance()->windowBeingDragged();
-    auto draggedDock = this->draggedDock();
-
-    if (m_hoveredFrame && isToolBar() && draggedDock) {
-        QString draggedDockName = draggedDock->uniqueName();
-
-        if (hoveringOverDock(DockType::ToolBar)) {
-            mainWindow()->requestChangeToolBarOrientation(draggedDockName, framework::Orientation::Horizontal);
-        } else {
-            mainWindow()->requestChangeToolBarOrientation(draggedDockName, framework::Orientation::Vertical);
-        }
-    }
 
     return m_dropArea->rectForDrop(windowBeingDragged, multisplitterLocation,
                                    m_dropArea->itemForFrame(relativeToFrame));
 }
 
-void DropIndicators::showDropAreaIfNeed(const QRect& dropRect, DropLocation dropLocation, const QPoint& globalPos)
+void DropIndicators::showDropAreaIfNeed(const QRect& dropRect)
 {
-    updateToolBarHelpers(globalPos);
-    setCurrentDropLocation(dropLocation);
+    if (dropRect.isNull()) {
+        return;
+    }
 
     if (isToolBar() && hoveredDockType() != DockType::ToolBar) {
         return;
@@ -389,7 +389,6 @@ void DropIndicators::showDropAreaIfNeed(const QRect& dropRect, DropLocation drop
 
 void DropIndicators::hideDropArea()
 {
-    updateToolBarHelpers();
     setCurrentDropLocation(DropLocation_None);
     m_rubberBand->setVisible(false);
 }
@@ -398,6 +397,30 @@ void DropIndicators::updateToolBarHelpers(const QPoint& globalPos)
 {
     if (isToolBar()) {
         mainWindow()->updateToolBarsDockingHelpers(globalPos);
+    }
+}
+
+void DropIndicators::updateToolBarOrientation()
+{
+    if (!isToolBar()) {
+        return;
+    }
+
+    auto draggedDock = this->draggedDock();
+    auto hoveredDock = this->hoveredDock();
+
+    if (!draggedDock || !hoveredDock) {
+        return;
+    }
+
+    DockType hoveredDockType = readPropertiesFromObject(hoveredDock).type;
+    QString draggedDockName = draggedDock->uniqueName();
+
+    if (hoveredDockType == DockType::ToolBar) {
+        framework::Orientation hoveredDockOrientation = dockOrientation(*hoveredDock);
+        mainWindow()->requestChangeToolBarOrientation(draggedDockName, hoveredDockOrientation);
+    } else {
+        mainWindow()->requestChangeToolBarOrientation(draggedDockName, framework::Orientation::Horizontal);
     }
 }
 

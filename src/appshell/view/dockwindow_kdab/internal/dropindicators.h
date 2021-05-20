@@ -87,13 +87,16 @@ private:
     const KDDockWidgets::DockWidgetBase* hoveredDock() const;
     const KDDockWidgets::DockWidgetBase* draggedDock() const;
 
+    framework::Orientation dockOrientation(const KDDockWidgets::DockWidgetBase& dock) const;
+
     DropLocation dropLocationForToolBar(const QPoint& hoveredGlobalPos) const;
     QRect dropAreaRectForToolBar(DropLocation location) const;
     QRect dropAreaRectForPanel(DropLocation location) const;
 
-    void showDropAreaIfNeed(const QRect& dropRect, DropLocation dropLocation, const QPoint& globalPos);
+    void showDropAreaIfNeed(const QRect& dropRect);
     void hideDropArea();
     void updateToolBarHelpers(const QPoint& globalPos = QPoint());
+    void updateToolBarOrientation();
 
     void updateWindowPosition();
 
