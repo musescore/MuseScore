@@ -464,6 +464,17 @@ const QScreen* DockWindow::screen() const
     return m_window->screen();
 }
 
+void DockWindow::requestChangeToolBarOrientation(const QString&, framework::Orientation)
+{
+    NOT_IMPLEMENTED;
+}
+
+mu::async::Channel<std::pair<QString, mu::framework::Orientation> > DockWindow::toolBarOrientationChangeRequested() const
+{
+    NOT_IMPLEMENTED;
+    return {};
+}
+
 QMenuBar* DockWindow::qMenuBar()
 {
 #ifdef Q_OS_MAC

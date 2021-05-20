@@ -23,7 +23,9 @@
 #ifndef MU_DOCK_DROPINDICATORS_H
 #define MU_DOCK_DROPINDICATORS_H
 
+#include "modularity/ioc.h"
 #include "../docktypes.h"
+#include "ui/imainwindow.h"
 
 #include "thirdparty/KDDockWidgets/src/private/DropIndicatorOverlayInterface_p.h"
 
@@ -44,6 +46,8 @@ class DropIndicators : public KDDockWidgets::DropIndicatorOverlayInterface
     Q_PROPERTY(bool innerRightIndicatorVisible READ innerRightIndicatorVisible NOTIFY indicatorsVisibilityChanged)
     Q_PROPERTY(bool innerTopIndicatorVisible READ innerTopIndicatorVisible NOTIFY indicatorsVisibilityChanged)
     Q_PROPERTY(bool innerBottomIndicatorVisible READ innerBottomIndicatorVisible NOTIFY indicatorsVisibilityChanged)
+
+    INJECT(dock, ui::IMainWindow, mainWindow)
 
 public:
     explicit DropIndicators(KDDockWidgets::DropArea* dropArea);
@@ -79,9 +83,11 @@ private:
     bool hoveringOverDock(DockType type) const;
 
     bool isAreaAllowed(Qt::DockWidgetArea area) const;
-    bool isInnerLeftIndicatorVisible(Qt::DockWidgetArea area) const;
+    bool isInnerIndicatorVisible(Qt::DockWidgetArea area) const;
 
     bool isToolBar() const;
+
+    const KDDockWidgets::DockWidgetBase* draggedDock() const;
 
     KDDockWidgets::QWidgetOrQuick* m_rubberBand = nullptr;
     IndicatorsWindow* m_indicatorsWindow = nullptr;
