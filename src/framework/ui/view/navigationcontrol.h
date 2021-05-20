@@ -69,9 +69,16 @@ public:
     void componentComplete() override;
 
     // IAccessibility
+    const IAccessibility* accessibleParent() const override;
+    async::Notification accessibleParentChanged() const override;
+
+    size_t accessibleChildCount() const override;
+    const IAccessibility* accessibleChild(size_t i) const override;
+
     IAccessibility::Role accessibleRole() const override;
     QString accessibleName() const override;
     bool accessibleState(State st) const override;
+    // -----
 
 public slots:
     void setPanel(NavigationPanel* panel);
@@ -87,6 +94,8 @@ private:
 
     NavigationPanel* m_panel = nullptr;
     async::Channel<INavigationControl*> m_forceActiveRequested;
+
+    async::Notification m_accessibleParentChanged;
 };
 }
 
