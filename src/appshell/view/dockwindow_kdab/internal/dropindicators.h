@@ -95,7 +95,6 @@ private:
 
     void showDropAreaIfNeed(const QRect& dropRect);
     void hideDropArea();
-    void updateToolBarHelpers(const QPoint& globalPos = QPoint());
     void updateToolBarOrientation();
 
     void updateWindowPosition();

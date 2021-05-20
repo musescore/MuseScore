@@ -275,8 +275,8 @@ DockType DockToolBar::type() const
 
 bool DockToolBar::isOrientationChangingAllowed() const
 {
-    return allowedAreas().testFlag(Qt::LeftDockWidgetArea) ||
-           allowedAreas().testFlag(Qt::RightDockWidgetArea);
+    return allowedAreas().testFlag(Qt::LeftDockWidgetArea)
+           || allowedAreas().testFlag(Qt::RightDockWidgetArea);
 }
 
 QSize DockToolBar::preferredSize() const
