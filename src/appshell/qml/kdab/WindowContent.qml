@@ -90,19 +90,8 @@ Dock.DockWindow {
         }
     ]
 
-    mainToolBarDockingHelper: Dock.DockToolBar {
+    mainToolBarDockingHelper: Dock.DockToolBarHelper {
         objectName: root.objectName + "_mainToolBarDockingHelperTop"
-        visible: false
-
-        width: root.width
-        height: 48
-
-        minimumWidth: 48
-        minimumHeight: 200
-
-        maximumWidth: 96
-        maximumHeight: 100500
-
         location: Dock.DockBase.Top
 
         Rectangle { color: ui.theme.backgroundPrimaryColor }

@@ -39,70 +39,26 @@ Dock.DockPage {
     }
 
     toolBarsDockingHelpers: [
-        Dock.DockToolBar {
+        Dock.DockToolBarHelper {
             objectName: root.objectName + "_toolBarsDockingHelperLeft"
-            visible: false
-
-            width: 48
-            height: root.height
-
-            minimumWidth: 48
-            minimumHeight: 200
-
-            maximumWidth: 96
-            maximumHeight: 100500
-
             location: Dock.DockBase.Left
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }
         },
-        Dock.DockToolBar {
+        Dock.DockToolBarHelper {
             objectName: root.objectName + "_toolBarsDockingHelperRight"
-            visible: false
-
-            width: 48
-            height: root.height
-
-            minimumWidth: 48
-            minimumHeight: 200
-
-            maximumWidth: 96
-            maximumHeight: 100500
-
             location: Dock.DockBase.Right
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }
         },
-        Dock.DockToolBar {
+        Dock.DockToolBarHelper {
             objectName: root.objectName + "_toolBarsDockingHelperTop"
-            visible: false
-
-            width: root.width
-            height: 48
-
-            minimumWidth: 100
-            minimumHeight: 48
-
-            maximumWidth: 100500
-            maximumHeight: 48
-
             location: Dock.DockBase.Top
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }
         },
-        Dock.DockToolBar {
+        Dock.DockToolBarHelper {
             objectName: root.objectName + "_toolBarsDockingHelperBottom"
-            visible: false
-
-            width: root.width
-            height: 48
-
-            minimumWidth: 100
-            minimumHeight: 48
-
-            maximumWidth: 100500
-            maximumHeight: 48
-
             location: Dock.DockBase.Bottom
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }

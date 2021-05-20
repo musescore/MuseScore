@@ -80,9 +80,9 @@ private:
 
     bool isIndicatorVisible(DropLocation location) const;
     bool isDropAllowed(DropLocation location) const;
-    bool isToolBar() const;
-
-    DockType hoveredDockType() const;
+    bool isHoveredDockAllowedForDrop() const;
+    bool isDraggedDockToolBar() const;
+    bool needShowToolBarHelpers() const;
 
     const KDDockWidgets::DockWidgetBase* hoveredDock() const;
     const KDDockWidgets::DockWidgetBase* draggedDock() const;
@@ -102,7 +102,6 @@ private:
 
     KDDockWidgets::QWidgetOrQuick* m_rubberBand = nullptr;
     DropIndicatorsWindow* m_indicatorsWindow = nullptr;
-    DockProperties m_draggedDockProperties;
 };
 }
 
