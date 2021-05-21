@@ -67,6 +67,48 @@ static void rootObjectHandlerNoop(QObject*)
 {
 }
 
+static void debug_dumpItem(QAccessibleInterface* item, QTextStream& stream, QString& level)
+{
+    QAccessibleInterface* prn = item->parent();
+    stream << level
+           << item->text(QAccessible::Name)
+           << " parent: " << (prn ? prn->text(QAccessible::Name) : QString("null"))
+           << " childCount: " << item->childCount()
+           << Qt::endl;
+
+    QAccessible::State st = item->state();
+    stream << level
+           << "state:"
+           << " invisible: " << st.invisible
+           << " invalid: " << st.invalid
+           << " disabled: " << st.disabled
+           << " active: " << st.active
+           << " focusable: " << st.focusable
+           << " focused: " << st.focused
+           << Qt::endl;
+
+    level += "  ";
+    int count = item->childCount();
+    for (int i = 0; i < count; ++i) {
+        QAccessibleInterface* ch = item->child(i);
+        debug_dumpItem(ch, stream, level);
+    }
+    level.chop(2);
+}
+
+static void debug_dumpTree(QAccessibleInterface* item)
+{
+    QString str;
+    QTextStream stream(&str);
+    QString level;
+
+    debug_dumpItem(item, stream, level);
+
+    stream.flush();
+    LOGI() << "================================================\n";
+    std::cout << str.toStdString() << '\n';
+}
+
 void AccessibilityController::init()
 {
     QAccessible::installFactory(muAccessibleFactory);
@@ -82,12 +124,12 @@ void AccessibilityController::init()
     QAccessible::installUpdateHandler(updateHandlerNoop);
 }
 
-const IAccessibility* AccessibilityController::rootItem() const
+const IAccessible* AccessibilityController::rootItem() const
 {
     return this;
 }
 
-void AccessibilityController::reg(IAccessibility* item)
+void AccessibilityController::reg(IAccessible* item)
 {
     if (findItem(item).isValid()) {
         LOGW() << "Already registered";
@@ -122,13 +164,13 @@ void AccessibilityController::reg(IAccessibility* item)
     sendEvent(&ev);
 }
 
-void AccessibilityController::unreg(IAccessibility* aitem)
+void AccessibilityController::unreg(IAccessible* aitem)
 {
     MYLOG() << aitem->accessibleName();
 
     Item item = m_allItems.take(aitem);
 
-    if (aitem->accessibleParent() == this) {
+    if (m_children.contains(aitem)) {
         m_children.removeOne(aitem);
     }
 
@@ -138,41 +180,64 @@ void AccessibilityController::unreg(IAccessibility* aitem)
     delete item.object;
 }
 
-void AccessibilityController::actived(IAccessibility* aitem, bool isActive)
+void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool arg)
 {
-    MYLOG() << aitem->accessibleName() << " " << isActive;
+    MYLOG() << aitem->accessibleName() << ", state: " << int(state) << ", arg: " << arg;
     const Item& item = findItem(aitem);
     IF_ASSERT_FAILED(item.isValid()) {
         return;
     }
 
-    QAccessible::State state;
-    state.active = isActive;
-    QAccessibleStateChangeEvent ev(item.object, state);
-    sendEvent(&ev);
-}
-
-void AccessibilityController::focused(IAccessibility* aitem)
-{
-    MYLOG() << aitem->accessibleName();
-    const Item& item = findItem(aitem);
-    IF_ASSERT_FAILED(item.isValid()) {
+    if (!item.item->accessibleParent()) {
+        LOGE() << "for item: " << aitem->accessibleName() << " parent is null";
         return;
     }
 
-    QAccessibleEvent ev(item.object, QAccessible::Focus);
+    QAccessible::State qstate;
+    switch (state) {
+    case State::Enabled: {
+        qstate.disabled = !arg;
+    } break;
+    case State::Active: {
+        qstate.active = arg;
+    } break;
+    case State::Focused: {
+        qstate.focused = arg;
+    } break;
+    case State::Selected: {
+        qstate.selected = arg;
+    } break;
+    default: {
+        LOGE() << "not handled state: " << int(state);
+        return;
+    }
+    }
+
+    QAccessibleStateChangeEvent ev(item.object, qstate);
     sendEvent(&ev);
+
+    if (state == State::Focused) {
+        if (arg) {
+            QAccessibleEvent ev(item.object, QAccessible::Focus);
+            sendEvent(&ev);
+        }
+    }
 }
 
 void AccessibilityController::sendEvent(QAccessibleEvent* ev)
 {
+#ifdef ACCESSIBILITY_LOGGING_ENABLED
+    AccessibleObject* obj = qobject_cast<AccessibleObject*>(ev->object());
+    MYLOG() << "object: " << obj->item()->accessibleName() << ", event: " << int(ev->type());
+#endif
+
     QAccessible::installUpdateHandler(0);
     QAccessible::updateAccessibility(ev);
     //! NOTE Disabled any events from Qt
     QAccessible::installUpdateHandler(updateHandlerNoop);
 }
 
-const AccessibilityController::Item& AccessibilityController::findItem(const IAccessibility* aitem) const
+const AccessibilityController::Item& AccessibilityController::findItem(const IAccessible* aitem) const
 {
     auto it = m_allItems.find(aitem);
     if (it != m_allItems.end()) {
@@ -183,13 +248,13 @@ const AccessibilityController::Item& AccessibilityController::findItem(const IAc
     return null;
 }
 
-QAccessibleInterface* AccessibilityController::parentIface(const IAccessibility* item) const
+QAccessibleInterface* AccessibilityController::parentIface(const IAccessible* item) const
 {
     IF_ASSERT_FAILED(item) {
         return nullptr;
     }
 
-    const IAccessibility* parent = item->accessibleParent();
+    const IAccessible* parent = item->accessibleParent();
     if (!parent) {
         return nullptr;
     }
@@ -201,7 +266,7 @@ QAccessibleInterface* AccessibilityController::parentIface(const IAccessibility*
     return it.iface;
 }
 
-int AccessibilityController::childCount(const IAccessibility* item) const
+int AccessibilityController::childCount(const IAccessible* item) const
 {
     IF_ASSERT_FAILED(item) {
         return 0;
@@ -214,13 +279,13 @@ int AccessibilityController::childCount(const IAccessibility* item) const
     return static_cast<int>(it.item->accessibleChildCount());
 }
 
-QAccessibleInterface* AccessibilityController::child(const IAccessibility* item, int i) const
+QAccessibleInterface* AccessibilityController::child(const IAccessible* item, int i) const
 {
     IF_ASSERT_FAILED(item) {
         return nullptr;
     }
 
-    const IAccessibility* chld = item->accessibleChild(static_cast<size_t>(i));
+    const IAccessible* chld = item->accessibleChild(static_cast<size_t>(i));
     IF_ASSERT_FAILED(chld) {
         return nullptr;
     }
@@ -233,12 +298,12 @@ QAccessibleInterface* AccessibilityController::child(const IAccessibility* item,
     return chldIt.iface;
 }
 
-int AccessibilityController::indexOfChild(const IAccessibility* item, const QAccessibleInterface* iface) const
+int AccessibilityController::indexOfChild(const IAccessible* item, const QAccessibleInterface* iface) const
 {
     TRACEFUNC;
     size_t count = item->accessibleChildCount();
     for (size_t i = 0; i < count; ++i) {
-        const IAccessibility* ch = item->accessibleChild(i);
+        const IAccessible* ch = item->accessibleChild(i);
         const Item& chIt = findItem(ch);
         IF_ASSERT_FAILED(chIt.isValid()) {
             continue;
@@ -252,7 +317,7 @@ int AccessibilityController::indexOfChild(const IAccessibility* item, const QAcc
     return -1;
 }
 
-IAccessibility* AccessibilityController::accessibleParent() const
+IAccessible* AccessibilityController::accessibleParent() const
 {
     return nullptr;
 }
@@ -268,14 +333,14 @@ size_t AccessibilityController::accessibleChildCount() const
     return static_cast<size_t>(m_children.size());
 }
 
-IAccessibility* AccessibilityController::accessibleChild(size_t i) const
+IAccessible* AccessibilityController::accessibleChild(size_t i) const
 {
     return m_children.at(static_cast<int>(i));
 }
 
-IAccessibility::Role AccessibilityController::accessibleRole() const
+IAccessible::Role AccessibilityController::accessibleRole() const
 {
-    return IAccessibility::Role::Application;
+    return IAccessible::Role::Application;
 }
 
 QString AccessibilityController::accessibleName() const
@@ -287,7 +352,7 @@ bool AccessibilityController::accessibleState(State st) const
 {
     switch (st) {
     case State::Undefined: return false;
-    case State::Disabled: return false;
+    case State::Enabled: return true;
     case State::Active: return true;
     default: {
         LOGW() << "not handled state: " << static_cast<int>(st);
@@ -300,4 +365,9 @@ bool AccessibilityController::accessibleState(State st) const
 QRect AccessibilityController::accessibleRect() const
 {
     return mainWindow()->qWindow()->geometry();
+}
+
+QWindow* AccessibilityController::accessibleWindow() const
+{
+    return mainWindow()->qWindow();
 }

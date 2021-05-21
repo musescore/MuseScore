@@ -26,13 +26,13 @@
 #include <QQmlParserStatus>
 
 #include "../inavigation.h"
+#include "qmlaccessible.h"
 #include "navigationevent.h"
 
 namespace mu::ui {
-class AbstractNavigation : public QObject, public QQmlParserStatus
+class AbstractNavigation : public AccessibleItem
 {
     Q_OBJECT
-    Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
 
@@ -64,8 +64,6 @@ public:
 
     void onEvent(INavigation::EventPtr e);
 
-    // QQmlParserStatus
-    void classBegin() override;
     void componentComplete() override;
 
 public slots:

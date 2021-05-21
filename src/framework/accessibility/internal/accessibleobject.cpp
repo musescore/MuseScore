@@ -25,7 +25,7 @@
 
 using namespace mu::accessibility;
 
-AccessibleObject::AccessibleObject(IAccessibility* item)
+AccessibleObject::AccessibleObject(IAccessible* item)
     : QObject()
 {
     setObjectName("AccessibleObject");
@@ -42,7 +42,7 @@ const std::shared_ptr<AccessibilityController>& AccessibleObject::controller() c
     return m_controller;
 }
 
-IAccessibility* AccessibleObject::item() const
+IAccessible* AccessibleObject::item() const
 {
     return m_item;
 }

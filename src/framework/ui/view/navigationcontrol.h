@@ -28,25 +28,17 @@
 #include "abstractnavigation.h"
 #include "async/asyncable.h"
 
-#include "modularity/ioc.h"
-#include "accessibility/iaccessibilitycontroller.h"
-
 namespace mu::ui {
 class NavigationPanel;
-class NavigationControl : public AbstractNavigation, public INavigationControl, public accessibility::IAccessibility,
-        public async::Asyncable
+class NavigationControl : public AbstractNavigation, public INavigationControl, public async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(mu::ui::NavigationPanel* panel READ panel_property WRITE setPanel NOTIFY panelChanged)
-    Q_PROPERTY(QQuickItem* accessibleItem READ accessibleItem WRITE setAccessibleItem NOTIFY accessibleItemChanged)
 
-    INJECT(ui, accessibility::IAccessibilityController, accessibilityController)
-
-    public:
-        explicit NavigationControl(QObject* parent = nullptr);
+public:
+    explicit NavigationControl(QObject* parent = nullptr);
     ~NavigationControl() override;
 
-    QQuickItem* accessibleItem() const;
     NavigationPanel* panel_property() const;
     INavigationPanel* panel() const override;
 
@@ -69,28 +61,11 @@ class NavigationControl : public AbstractNavigation, public INavigationControl, 
 
     Q_INVOKABLE void requestActive();
 
-    void componentComplete() override;
-
-    // IAccessibility
-    const IAccessibility* accessibleParent() const override;
-    async::Notification accessibleParentChanged() const override;
-
-    size_t accessibleChildCount() const override;
-    const IAccessibility* accessibleChild(size_t i) const override;
-
-    IAccessibility::Role accessibleRole() const override;
-    QString accessibleName() const override;
-    bool accessibleState(State st) const override;
-    QRect accessibleRect() const override;
-    // -----
-
 public slots:
     void setPanel(NavigationPanel* panel);
-    void setAccessibleItem(QQuickItem* item);
 
 signals:
     void panelChanged(NavigationPanel* panel);
-    void accessibleItemChanged();
     void triggered();
 
 private slots:
@@ -100,9 +75,6 @@ private:
 
     NavigationPanel* m_panel = nullptr;
     async::Channel<INavigationControl*> m_forceActiveRequested;
-
-    async::Notification m_accessibleParentChanged;
-    QQuickItem* m_accessibleItem = nullptr;
 };
 }
 

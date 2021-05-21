@@ -25,7 +25,7 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/accessibilitymodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accessibilitymodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaccessibility.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaccessible.h
     ${CMAKE_CURRENT_LIST_DIR}/iaccessibilitycontroller.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilitycontroller.cpp

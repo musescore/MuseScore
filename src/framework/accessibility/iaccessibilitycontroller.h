@@ -24,7 +24,7 @@
 #define MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
 
 #include "modularity/imoduleexport.h"
-#include "iaccessibility.h"
+#include "iaccessible.h"
 
 namespace mu::accessibility {
 class IAccessibilityController : MODULE_EXPORT_INTERFACE
@@ -33,13 +33,12 @@ class IAccessibilityController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAccessibilityController() = default;
 
-    virtual const IAccessibility* rootItem() const = 0;
+    virtual const IAccessible* rootItem() const = 0;
 
-    virtual void reg(IAccessibility* item) = 0;
-    virtual void unreg(IAccessibility* item) = 0;
+    virtual void reg(IAccessible* item) = 0;
+    virtual void unreg(IAccessible* item) = 0;
 
-    virtual void actived(IAccessibility* item, bool isActive) = 0;
-    virtual void focused(IAccessibility* item) = 0;
+    virtual void stateChanged(IAccessible* item, IAccessible::State state, bool arg) = 0;
 };
 }
 

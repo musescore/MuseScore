@@ -38,7 +38,7 @@ class QAccessibleInterface;
 class QAccessibleEvent;
 
 namespace mu::accessibility {
-class AccessibilityController : public IAccessibilityController, public IAccessibility, public async::Asyncable,
+class AccessibilityController : public IAccessibilityController, public IAccessible, public async::Asyncable,
     public std::enable_shared_from_this<AccessibilityController>
 {
     INJECT(accessibility, ui::IMainWindow, mainWindow)
@@ -50,51 +50,51 @@ public:
     void init();
 
     // IAccessibilityController
-    const IAccessibility* rootItem() const override;
+    const IAccessible* rootItem() const override;
 
-    void reg(IAccessibility* item) override;
-    void unreg(IAccessibility* item) override;
+    void reg(IAccessible* item) override;
+    void unreg(IAccessible* item) override;
 
-    void actived(IAccessibility* item, bool isActive) override;
-    void focused(IAccessibility* item) override;
+    void stateChanged(IAccessible* item, IAccessible::State state, bool arg) override;
     // -----
 
     // IAccessibility
-    IAccessibility* accessibleParent() const override;
+    IAccessible* accessibleParent() const override;
     async::Notification accessibleParentChanged() const override;
 
     size_t accessibleChildCount() const override;
-    IAccessibility* accessibleChild(size_t i) const override;
+    IAccessible* accessibleChild(size_t i) const override;
 
     Role accessibleRole() const override;
     QString accessibleName() const override;
     bool accessibleState(State st) const override;
     QRect accessibleRect() const override;
+    QWindow* accessibleWindow() const override;
     // -----
 
-    QAccessibleInterface* parentIface(const IAccessibility* item) const;
-    int childCount(const IAccessibility* item) const;
-    QAccessibleInterface* child(const IAccessibility* item, int i) const;
-    int indexOfChild(const IAccessibility* item, const QAccessibleInterface* iface) const;
+    QAccessibleInterface* parentIface(const IAccessible* item) const;
+    int childCount(const IAccessible* item) const;
+    QAccessibleInterface* child(const IAccessible* item, int i) const;
+    int indexOfChild(const IAccessible* item, const QAccessibleInterface* iface) const;
 
 private:
 
     struct Item
     {
-        IAccessibility* item = nullptr;
+        IAccessible* item = nullptr;
         AccessibleObject* object = nullptr;
         QAccessibleInterface* iface = nullptr;
 
         bool isValid() const { return item != nullptr; }
     };
 
-    const Item& findItem(const IAccessibility* aitem) const;
+    const Item& findItem(const IAccessible* aitem) const;
 
     void sendEvent(QAccessibleEvent* ev);
 
-    QHash<const IAccessibility*, Item> m_allItems;
+    QHash<const IAccessible*, Item> m_allItems;
 
-    QList<IAccessibility*> m_children;
+    QList<IAccessible*> m_children;
 };
 }
 

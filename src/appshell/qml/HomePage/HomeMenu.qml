@@ -49,8 +49,10 @@ Rectangle {
         section: navSec
         order: 1
         direction: NavigationPanel.Vertical
-    }
 
+        MUAccessible.role: MUAccessible.Panel
+        MUAccessible.name: qsTrc("appshell", "Home menu") + " " + navPanel.directionInfo
+    }
 
     ColumnLayout {
         anchors.fill: parent

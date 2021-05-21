@@ -21,13 +21,23 @@
  */
 #include "abstractnavigation.h"
 
+#include "qmlaccessible.h"
+
 #include "log.h"
 
 using namespace mu::ui;
+using namespace mu::accessibility;
 
 AbstractNavigation::AbstractNavigation(QObject* parent)
-    : QObject(parent)
+    : AccessibleItem(parent)
 {
+}
+
+void AbstractNavigation::componentComplete()
+{
+    setAccessibleState(IAccessible::State::Enabled, enabled());
+    setAccessibleState(IAccessible::State::Active, active());
+    AccessibleItem::componentComplete();
 }
 
 void AbstractNavigation::setName(QString name)
@@ -124,6 +134,8 @@ void AbstractNavigation::setEnabled(bool enabled)
     if (m_enabledChanged.isConnected()) {
         m_enabledChanged.send(m_enabled);
     }
+
+    setAccessibleState(IAccessible::State::Enabled, enabled);
 }
 
 bool AbstractNavigation::enabled() const
@@ -164,12 +176,4 @@ void AbstractNavigation::onEvent(INavigation::EventPtr e)
 {
     NavigationEvent ev(e);
     emit navigationEvent(QVariant::fromValue(ev));
-}
-
-void AbstractNavigation::classBegin()
-{
-}
-
-void AbstractNavigation::componentComplete()
-{
 }
