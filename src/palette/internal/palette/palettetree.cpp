@@ -531,7 +531,7 @@ void PalettePanel::showWritingPaletteError(const QString& path) const
 {
     std::string title = mu::trc("palette", "Writing Palette File");
     std::string message = mu::qtrc("palette", "Writing Palette File\n%1\nfailed: ").arg(path).toStdString();
-    interactive()->message(IInteractive::Type::Critical, title, message);
+    interactive()->error(title, message);
 }
 
 //---------------------------------------------------------

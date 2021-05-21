@@ -100,11 +100,11 @@ QString InteractiveTestsModel::currentUri() const
 
 void InteractiveTestsModel::question()
 {
-    IInteractive::Button btn = interactive()->question("Test", "It works?", {
+    IInteractive::Result result = interactive()->question("Test", "It works?", {
         IInteractive::Button::Yes,
         IInteractive::Button::No });
 
-    if (btn == IInteractive::Button::Yes) {
+    if (result.standartButton() == IInteractive::Button::Yes) {
         LOGI() << "Yes!!";
     } else {
         LOGI() << "No!!";
@@ -114,12 +114,12 @@ void InteractiveTestsModel::question()
 void InteractiveTestsModel::customQuestion()
 {
     int maybeBtn = int(IInteractive::Button::CustomButton) + 1;
-    int btn = interactive()->question("Test", "It works?", {
+    IInteractive::Result result = interactive()->question("Test", "It works?", {
         IInteractive::ButtonData(maybeBtn, "Maybe"),
         interactive()->buttonData(IInteractive::Button::No)
     });
 
-    if (btn == maybeBtn) {
+    if (result.button() == maybeBtn) {
         LOGI() << "Maybe!!";
     } else {
         LOGE() << "No!!";
@@ -128,17 +128,17 @@ void InteractiveTestsModel::customQuestion()
 
 void InteractiveTestsModel::information()
 {
-    interactive()->message(IInteractive::Type::Info, "Test", "This is info text");
+    interactive()->info("Test", "This is info text");
 }
 
 void InteractiveTestsModel::warning()
 {
-    interactive()->message(IInteractive::Type::Warning, "Test", "This is warning text");
+    interactive()->warning("Test", "This is warning text");
 }
 
 void InteractiveTestsModel::critical()
 {
-    interactive()->message(IInteractive::Type::Critical, "Test", "This is critical text");
+    interactive()->error("Test", "This is critical text");
 }
 
 void InteractiveTestsModel::require()
