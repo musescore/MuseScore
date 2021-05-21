@@ -28,24 +28,26 @@ DockToolBarHelper::DockToolBarHelper(QQuickItem* parent)
     : DockToolBar(parent)
 {
     setVisible(false);
+    setMovable(false);
 }
 
 void DockToolBarHelper::componentComplete()
 {
+    DockToolBar::componentComplete();
+
     switch (location()) {
     case DockLocation::Left:
     case DockLocation::Right:
+        setWidth(MIN_SIDE_SIZE);
         setMinimumWidth(MIN_SIDE_SIZE);
         setMaximumWidth(MIN_SIDE_SIZE * 2);
         break;
     case DockLocation::Top:
     case DockLocation::Bottom:
-        setMinimumHeight(MIN_SIDE_SIZE);
-        setMaximumHeight(MIN_SIDE_SIZE);
+    case DockLocation::Center:
+    case DockLocation::Undefined:
         break;
     }
-
-    DockToolBar::componentComplete();
 }
 
 DockType DockToolBarHelper::type() const

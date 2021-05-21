@@ -92,11 +92,7 @@ DockPage {
             objectName: "notationToolBar"
             title: qsTrc("appshell", "Notation Toolbar")
 
-            width: 198
-            height: root.toolBarHeight
             minimumWidth: 198
-            minimumHeight: root.toolBarHeight
-            maximumHeight: root.toolBarHeight
 
             contentComponent: NotationToolBar {
                 navigation.section: root.topToolKeyNavSec
@@ -117,10 +113,8 @@ DockPage {
             title: qsTrc("appshell", "Playback Controls")
 
             width: root.width / 3
-            height: root.toolbarHeight
             minimumWidth: floating ? 526 : 476
-            minimumHeight: floating ? 76 : root.toolBarHeight
-            maximumHeight: root.toolBarHeight
+            minimumHeight: floating ? 56 : root.toolBarHeight
 
             contentComponent: PlaybackToolBar {
                 navigation.section: root.topToolKeyNavSec
@@ -136,11 +130,8 @@ DockPage {
             objectName: "undoRedoToolBar"
             title: qsTrc("appshell", "Undo/Redo Toolbar")
 
-            height: root.toolBarHeight
             minimumWidth: 74
-            minimumHeight: root.toolBarHeight
             maximumWidth: 74
-            maximumHeight: root.toolBarHeight
 
             movable: false
 
@@ -150,13 +141,10 @@ DockPage {
 
     toolBars: [
         DockToolBar {
-            id: notationNoteInputBar
+            id: noteInputBar
 
-            objectName: "notationNoteInputBar"
+            objectName: "noteInputBar"
             title: qsTrc("appshell", "Note Input")
-
-            width: root.width
-            height: root.toolBarHeight
 
             horizontalPreferredSize: Qt.size(720, root.toolBarHeight)
             verticalPreferredSize: Qt.size(root.toolBarHeight, 400)
@@ -164,7 +152,7 @@ DockPage {
             allowedAreas: { Qt.AllDockWidgetAreas }
 
             contentComponent: NoteInputBar {
-                orientation: notationNoteInputBar.orientation
+                orientation: noteInputBar.orientation
 
                 navigation.section: noteInputKeyNavSec
                 navigation.order: 1
