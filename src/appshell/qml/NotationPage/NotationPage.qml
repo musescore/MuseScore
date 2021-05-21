@@ -93,7 +93,7 @@ DockPage {
                     {"Palette": palettePanel.visible},
                     {"Instruments": instrumentsPanel.visible},
                     {"Inspector": inspectorPanel.visible},
-                    {"NoteInputBar": notationNoteInputBar.visible},
+                    {"NoteInputBar": noteInputBar.visible},
                     {"NotationToolBar": isNotationToolBarVisible},
                     {"PlaybackToolBar": isPlaybackToolBarVisible},
                     {"UndoRedoToolBar": isUndoRedoToolBarVisible}
@@ -108,14 +108,14 @@ DockPage {
         palettePanel.visible = Qt.binding(function() { return pageModel.isPalettePanelVisible })
         instrumentsPanel.visible = Qt.binding(function() { return pageModel.isInstrumentsPanelVisible })
         inspectorPanel.visible = Qt.binding(function() { return pageModel.isInspectorPanelVisible })
-        notationNoteInputBar.visible = Qt.binding(function() { return pageModel.isNoteInputBarVisible })
+        noteInputBar.visible = Qt.binding(function() { return pageModel.isNoteInputBarVisible })
 
         pageModel.init()
     }
 
     toolbar: DockToolBar {
-        id: notationNoteInputBar
-        objectName: "notationNoteInputBar"
+        id: noteInputBar
+        objectName: "noteInputBar"
 
         minimumWidth: orientation == Qt.Horizontal ? 900 : 96
         minimumHeight: orientation == Qt.Horizontal ? 48 : 0
@@ -125,8 +125,8 @@ DockPage {
         title: qsTrc("appshell", "Note Input")
 
         content: NoteInputBar {
-            color: notationNoteInputBar.color
-            orientation: notationNoteInputBar.orientation
+            color: noteInputBar.color
+            orientation: noteInputBar.orientation
             navigation.section: keynavNoteInputSec
             navigation.order: 1
         }

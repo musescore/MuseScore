@@ -64,10 +64,7 @@ Dock.DockWindow {
             title: qsTrc("appshell", "Main Toolbar")
 
             width: root.width / 2
-            height: 48
             minimumWidth: 304
-            minimumHeight: height
-            maximumHeight: height
 
             movable: false
 

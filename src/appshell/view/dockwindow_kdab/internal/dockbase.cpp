@@ -84,22 +84,6 @@ KDDockWidgets::DockWidgetQuick* DockBase::dockWidget() const
     return m_dockWidget;
 }
 
-void DockBase::setSizeConstraints(const QSize& minimumSize, const QSize& maximumSize)
-{
-    m_dockWidget->setMinimumSize(minimumSize);
-    m_dockWidget->setMaximumSize(maximumSize);
-
-    if (auto frame = m_dockWidget->frame()) {
-        frame->setMinimumSize(minimumSize);
-        frame->setMaximumSize(maximumSize);
-    }
-
-    if (auto floatingWindow = m_dockWidget->floatingWindow()) {
-        QRect rect(floatingWindow->dragRect().topLeft(), minimumSize);
-        floatingWindow->setGeometry(rect);
-    }
-}
-
 void DockBase::setTitle(const QString& title)
 {
     if (title == m_title) {
@@ -162,7 +146,7 @@ void DockBase::setAllowedAreas(Qt::DockWidgetAreas areas)
 
 void DockBase::setFloating(bool floating)
 {
-    if (m_floating == floating) {
+    if (floating == m_floating) {
         return;
     }
 
@@ -172,7 +156,7 @@ void DockBase::setFloating(bool floating)
 
 void DockBase::setLocation(DockLocation location)
 {
-    if (m_location == location) {
+    if (location == m_location) {
         return;
     }
 
@@ -246,6 +230,8 @@ void DockBase::applySizeConstraints()
         return;
     }
 
+    TRACEFUNC;
+
     int minWidth = m_minimumWidth > 0 ? m_minimumWidth : m_dockWidget->minimumWidth();
     int minHeight = m_minimumHeight > 0 ? m_minimumHeight : m_dockWidget->minimumHeight();
     int maxWidth = m_maximumWidth > 0 ? m_maximumWidth : m_dockWidget->maximumWidth();
@@ -254,17 +240,32 @@ void DockBase::applySizeConstraints()
     QSize minimumSize(minWidth, minHeight);
     QSize maximumSize(maxWidth, maxHeight);
 
-    setSizeConstraints(minimumSize, maximumSize);
+    m_dockWidget->setMinimumSize(minimumSize);
+    m_dockWidget->setMaximumSize(maximumSize);
+
+    if (auto frame = m_dockWidget->frame()) {
+        frame->setMinimumSize(minimumSize);
+        frame->setMaximumSize(maximumSize);
+    }
+
+    if (auto floatingWindow = m_dockWidget->floatingWindow()) {
+        QRect rect(floatingWindow->dragRect().topLeft(), minimumSize);
+        floatingWindow->setGeometry(rect);
+    }
 }
 
 void DockBase::listenFloatingChanges()
 {
+    IF_ASSERT_FAILED(m_dockWidget) {
+        return;
+    }
+
     connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::parentChanged, [this]() {
-        if (!m_dockWidget || !m_dockWidget->parentItem()) {
+        if (!m_dockWidget->parentItem()) {
             return;
         }
 
-        KDDockWidgets::Frame* frame = m_dockWidget->frame();
+        const KDDockWidgets::Frame* frame = m_dockWidget->frame();
         if (!frame) {
             return;
         }
