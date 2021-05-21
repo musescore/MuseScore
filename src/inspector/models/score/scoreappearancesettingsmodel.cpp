@@ -24,9 +24,10 @@
 #include <QPageSize>
 #include <QSize>
 
-#include "types/scoreappearancetypes.h"
-#include "dataformatter.h"
 #include "log.h"
+#include "translation.h"
+#include "dataformatter.h"
+#include "types/scoreappearancetypes.h"
 
 using namespace mu::inspector;
 

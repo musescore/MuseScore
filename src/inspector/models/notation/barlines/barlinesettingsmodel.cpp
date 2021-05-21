@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "barlinesettingsmodel.h"
+
+#include "translation.h"
 #include "types/barlinetypes.h"
 #include "barline.h"
 

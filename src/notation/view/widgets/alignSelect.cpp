@@ -27,7 +27,7 @@
 #include "ui/view/iconcodes.h"
 
 using namespace mu::notation;
-using namespace mu::framework;
+using namespace mu::ui;
 
 AlignSelect::AlignSelect(QWidget* parent)
     : QWidget(parent)

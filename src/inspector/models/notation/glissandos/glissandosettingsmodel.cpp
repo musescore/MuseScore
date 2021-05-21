@@ -21,6 +21,8 @@
  */
 #include "glissandosettingsmodel.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 GlissandoSettingsModel::GlissandoSettingsModel(QObject* parent, IElementRepositoryService* repository)

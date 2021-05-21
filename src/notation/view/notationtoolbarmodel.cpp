@@ -92,7 +92,7 @@ void NotationToolBarModel::handleAction(const QString& actionCode)
     dispatcher()->dispatch(actions::codeFromQString(actionCode));
 }
 
-MenuItem NotationToolBarModel::makeItem(const ActionCode& actionCode) const
+MenuItem NotationToolBarModel::makeItem(const actions::ActionCode& actionCode) const
 {
     MenuItem item = actionsRegister()->action(actionCode);
     item.state.enabled = context()->currentNotation() != nullptr;

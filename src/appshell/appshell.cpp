@@ -32,6 +32,8 @@
 #endif
 #ifdef KDAB_DOCKWIDGETS
 #include "view/dockwindow_kdab/docksetup.h"
+#else
+#include "view/dockwindow/docksetup.h"
 #endif
 
 #include "log.h"
