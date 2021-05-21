@@ -146,7 +146,6 @@ public:
         Exclusive
     };
 
-    virtual QWindow* qWindow() const = 0;
     virtual Type type() const = 0;
     virtual const std::set<INavigationPanel*>& panels() const = 0;
     virtual async::Notification panelsListChanged() const = 0;

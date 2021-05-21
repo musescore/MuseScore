@@ -24,6 +24,7 @@
 #include <algorithm>
 
 #include "navigationsection.h"
+#include "translation.h"
 #include "log.h"
 
 using namespace mu::ui;
@@ -36,7 +37,6 @@ NavigationPanel::NavigationPanel(QObject* parent)
 
 NavigationPanel::~NavigationPanel()
 {
-    accessibilityController()->unreg(this);
     if (m_section) {
         m_section->removePanel(this);
     }
@@ -86,7 +86,7 @@ bool NavigationPanel::active() const
 void NavigationPanel::setActive(bool arg)
 {
     AbstractNavigation::setActive(arg);
-    accessibilityController()->actived(this, arg);
+    setAccessibleState(IAccessible::State::Active, arg);
 }
 
 mu::async::Channel<bool> NavigationPanel::activeChanged() const
@@ -106,12 +106,22 @@ void NavigationPanel::setDirection(QmlDirection direction)
     }
 
     m_direction = direction;
-    emit directionChanged(m_direction);
+    emit directionChanged();
 }
 
 NavigationPanel::QmlDirection NavigationPanel::direction_property() const
 {
     return m_direction;
+}
+
+QString NavigationPanel::directionInfo() const
+{
+    switch (m_direction) {
+    case Horizontal: return qtrc("ui", "direction is horizontal");
+    case Vertical: return qtrc("ui", "direction is vertical");
+    case Both: return qtrc("ui", "direction is both");
+    }
+    return QString();
 }
 
 INavigationPanel::Direction NavigationPanel::direction() const
@@ -176,11 +186,6 @@ void NavigationPanel::onSectionDestroyed()
     m_section = nullptr;
 }
 
-void NavigationPanel::componentComplete()
-{
-    accessibilityController()->reg(this);
-}
-
 void NavigationPanel::addControl(NavigationControl* control)
 {
     TRACEFUNC;
@@ -219,66 +224,15 @@ void NavigationPanel::removeControl(NavigationControl* control)
     m_accessibleControls.erase(std::remove(m_accessibleControls.begin(), m_accessibleControls.end(), control), m_accessibleControls.end());
 }
 
-const IAccessibility* NavigationPanel::accessibleParent() const
-{
-    return accessibilityController()->rootItem();
-}
-
-mu::async::Notification NavigationPanel::accessibleParentChanged() const
-{
-    static async::Notification notification;
-    return notification;
-}
-
 size_t NavigationPanel::accessibleChildCount() const
 {
     return m_accessibleControls.size();
 }
 
-const IAccessibility* NavigationPanel::accessibleChild(size_t i) const
+const IAccessible* NavigationPanel::accessibleChild(size_t i) const
 {
     IF_ASSERT_FAILED(i < m_accessibleControls.size()) {
         return nullptr;
     }
-    return m_accessibleControls.at(i);
-}
-
-IAccessibility::Role NavigationPanel::accessibleRole() const
-{
-    return IAccessibility::Role::Panel;
-}
-
-QString NavigationPanel::accessibleName() const
-{
-    QString dirc;
-    switch (m_direction) {
-    case Horizontal: dirc = "Horizontal";
-        break;
-    case Vertical: dirc = "Vertical";
-        break;
-    case Both: dirc = "Both";
-        break;
-    }
-
-    return name() + " direction " + dirc;
-}
-
-bool NavigationPanel::accessibleState(State st) const
-{
-    switch (st) {
-    case State::Undefined: return false;
-    case State::Disabled: return !enabled();
-    case State::Active: return active();
-    case State::Focused: return active();
-    default: {
-        LOGW() << "not handled state: " << static_cast<int>(st);
-    }
-    }
-
-    return false;
-}
-
-QRect NavigationPanel::accessibleRect() const
-{
-    return QRect();
+    return static_cast<const IAccessible*>(m_accessibleControls.at(i)->accessible());
 }

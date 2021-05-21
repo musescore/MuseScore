@@ -21,8 +21,6 @@
  */
 #include "navigationcontrol.h"
 
-#include <QQuickWindow>
-
 #include "navigationpanel.h"
 
 #include "log.h"
@@ -37,16 +35,10 @@ NavigationControl::NavigationControl(QObject* parent)
 
 NavigationControl::~NavigationControl()
 {
-    accessibilityController()->unreg(this);
     if (m_panel) {
         m_panel->removeControl(this);
+        setAccessibleParent(nullptr);
     }
-}
-
-void NavigationControl::componentComplete()
-{
-    AbstractNavigation::componentComplete();
-    accessibilityController()->reg(this);
 }
 
 QString NavigationControl::name() const
@@ -82,9 +74,7 @@ bool NavigationControl::active() const
 void NavigationControl::setActive(bool arg)
 {
     AbstractNavigation::setActive(arg);
-    if (arg) {
-        accessibilityController()->focused(this);
-    }
+    setAccessibleState(IAccessible::State::Focused, arg);
 }
 
 mu::async::Channel<bool> NavigationControl::activeChanged() const
@@ -132,12 +122,14 @@ void NavigationControl::setPanel(NavigationPanel* panel)
     }
 
     emit panelChanged(m_panel);
-    m_accessibleParentChanged.notify();
+
+    setAccessibleParent(m_panel);
 }
 
 void NavigationControl::onPanelDestroyed()
 {
     m_panel = nullptr;
+    setAccessibleParent(nullptr);
 }
 
 NavigationPanel* NavigationControl::panel_property() const
@@ -148,74 +140,4 @@ NavigationPanel* NavigationControl::panel_property() const
 INavigationPanel* NavigationControl::panel() const
 {
     return m_panel;
-}
-
-const IAccessibility* NavigationControl::accessibleParent() const
-{
-    return m_panel;
-}
-
-mu::async::Notification NavigationControl::accessibleParentChanged() const
-{
-    return m_accessibleParentChanged;
-}
-
-size_t NavigationControl::accessibleChildCount() const
-{
-    return 0;
-}
-
-const IAccessibility* NavigationControl::accessibleChild(size_t) const
-{
-    return nullptr;
-}
-
-IAccessibility::Role NavigationControl::accessibleRole() const
-{
-    return IAccessibility::Role::Button;
-}
-
-QString NavigationControl::accessibleName() const
-{
-    return name();
-}
-
-bool NavigationControl::accessibleState(State st) const
-{
-    switch (st) {
-    case State::Undefined: return false;
-    case State::Disabled: return !enabled();
-    case State::Active: return active();
-    case State::Focused: return active();
-    default: {
-        LOGW() << "not handled state: " << static_cast<int>(st);
-    }
-    }
-
-    return false;
-}
-
-QRect NavigationControl::accessibleRect() const
-{
-    if (!m_accessibleItem || !m_accessibleItem->window()) {
-        return QRect();
-    }
-
-    QPointF scenePos = m_accessibleItem->mapToScene(QPointF(0, 0));
-    QPoint globalPos = m_accessibleItem->window()->mapToGlobal(scenePos.toPoint());
-    return QRect(globalPos.x(), globalPos.y(), m_accessibleItem->width(), m_accessibleItem->height());
-}
-
-void NavigationControl::setAccessibleItem(QQuickItem* item)
-{
-    if (m_accessibleItem == item)
-        return;
-
-    m_accessibleItem = item;
-    emit accessibleItemChanged();
-}
-
-QQuickItem* NavigationControl::accessibleItem() const
-{
-    return m_accessibleItem;
 }

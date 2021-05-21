@@ -51,8 +51,6 @@ public:
     };
     Q_ENUM(QmlType)
 
-    QWindow* qWindow() const override;
-
     QmlType type_property() const;
     INavigationSection::Type type() const override;
     QString name() const override;

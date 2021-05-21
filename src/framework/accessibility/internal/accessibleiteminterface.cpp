@@ -29,6 +29,7 @@
 
 //#define ACCESSIBILITY_LOGGING_ENABLED
 
+#undef MYLOG
 #ifdef ACCESSIBILITY_LOGGING_ENABLED
 #define MYLOG() LOGI()
 #else
@@ -54,7 +55,11 @@ QObject* AccessibleItemInterface::object() const
 
 QWindow* AccessibleItemInterface::window() const
 {
-    //! TODO Need to add a current window
+    //! NOTE Not worked at the moment
+//    QWindow* w = m_object->item()->accessibleWindow();
+//    if (w) {
+//        return w;
+//    }
     return mainWindow()->qWindow();
 }
 
@@ -105,24 +110,36 @@ QAccessibleInterface* AccessibleItemInterface::focusChild() const
 
 QAccessible::State AccessibleItemInterface::state() const
 {
-    IAccessibility* item = m_object->item();
+    IAccessible* item = m_object->item();
     QAccessible::State state;
     state.invisible = false;
     state.invalid = false;
-    state.disabled = item->accessibleState(IAccessibility::State::Disabled);
+    state.disabled = !item->accessibleState(IAccessible::State::Enabled);
 
-    IAccessibility::Role r = m_object->item()->accessibleRole();
+    if (state.disabled) {
+        return state;
+    }
+
+    IAccessible::Role r = m_object->item()->accessibleRole();
     switch (r) {
-    case IAccessibility::Role::NoRole: break;
-    case IAccessibility::Role::Application: {
-        state.active = item->accessibleState(IAccessibility::State::Active);
+    case IAccessible::Role::NoRole: break;
+    case IAccessible::Role::Application: {
+        state.active = true;
     } break;
-    case IAccessibility::Role::Panel: {
-        state.active = item->accessibleState(IAccessibility::State::Active);
+    case IAccessible::Role::Panel: {
+        state.active = item->accessibleState(IAccessible::State::Active);
     } break;
-    case IAccessibility::Role::Button: {
+    case IAccessible::Role::Button: {
         state.focusable = true;
-        state.focused = item->accessibleState(IAccessibility::State::Focused);
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
+    case IAccessible::Role::RadioButton: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+
+        //! NOTE For Linux provided only `checked` state
+        state.checkable = true;
+        state.checked = item->accessibleState(IAccessible::State::Selected);
     } break;
     }
 
@@ -131,12 +148,13 @@ QAccessible::State AccessibleItemInterface::state() const
 
 QAccessible::Role AccessibleItemInterface::role() const
 {
-    IAccessibility::Role r = m_object->item()->accessibleRole();
+    IAccessible::Role r = m_object->item()->accessibleRole();
     switch (r) {
-    case IAccessibility::Role::NoRole: return QAccessible::NoRole;
-    case IAccessibility::Role::Application: return QAccessible::Application;
-    case IAccessibility::Role::Panel: return QAccessible::Pane;
-    case IAccessibility::Role::Button: return QAccessible::Button;
+    case IAccessible::Role::NoRole: return QAccessible::NoRole;
+    case IAccessible::Role::Application: return QAccessible::Application;
+    case IAccessible::Role::Panel: return QAccessible::Pane;
+    case IAccessible::Role::Button: return QAccessible::Button;
+    case IAccessible::Role::RadioButton: return QAccessible::RadioButton;
     }
     return QAccessible::NoRole;
 }

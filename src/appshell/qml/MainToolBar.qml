@@ -64,6 +64,8 @@ Rectangle {
     NavigationPanel {
         id: keynavSub
         name: "MainToolBar"
+        MUAccessible.role: MUAccessible.Panel
+        MUAccessible.name: qsTrc("appshell", "Main tool bar") + " " + keynavSub.directionInfo
     }
 
     RadioButtonGroup {
