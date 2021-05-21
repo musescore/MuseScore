@@ -30,6 +30,7 @@
 #include <QFontDatabase>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 
 using namespace mu::ui;
 using namespace mu::framework;

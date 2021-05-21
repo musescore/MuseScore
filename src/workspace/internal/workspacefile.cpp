@@ -34,6 +34,7 @@
 
 using namespace mu::workspace;
 using namespace mu::system;
+using namespace mu::framework;
 
 static const QString WS_CONTAINTER_XML_PATH("META-INF/container.xml");
 

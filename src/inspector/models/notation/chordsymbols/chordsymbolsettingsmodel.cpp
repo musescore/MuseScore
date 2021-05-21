@@ -21,6 +21,8 @@
  */
 #include "chordsymbolsettingsmodel.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 ChordSymbolSettingsModel::ChordSymbolSettingsModel(QObject* parent, IElementRepositoryService* repository)

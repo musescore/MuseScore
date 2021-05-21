@@ -21,6 +21,8 @@
  */
 #include "clefsettingsmodel.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 ClefSettingsModel::ClefSettingsModel(QObject* parent, IElementRepositoryService* repository)

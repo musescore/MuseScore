@@ -21,6 +21,8 @@
  */
 #include "jumpsettingsmodel.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 JumpSettingsModel::JumpSettingsModel(QObject* parent, IElementRepositoryService* repository)

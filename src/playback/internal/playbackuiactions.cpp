@@ -25,6 +25,7 @@
 
 using namespace mu::playback;
 using namespace mu::ui;
+using namespace mu::actions;
 
 const UiActionList PlaybackUiActions::m_mainActions = {
     UiAction("play",

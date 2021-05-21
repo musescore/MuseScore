@@ -25,6 +25,8 @@
 
 #include "dataformatter.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 ImageSettingsModel::ImageSettingsModel(QObject* parent, IElementRepositoryService* repository)

@@ -251,7 +251,7 @@ MsczMetaReader::RawMeta MsczMetaReader::doReadRawMeta(framework::XmlReader& xmlR
     return meta;
 }
 
-RetVal<Meta> MsczMetaReader::doReadMeta(framework::XmlReader& xmlReader) const
+mu::RetVal<Meta> MsczMetaReader::doReadMeta(framework::XmlReader& xmlReader) const
 {
     RawMeta rawMeta;
 
@@ -318,7 +318,7 @@ RetVal<Meta> MsczMetaReader::doReadMeta(framework::XmlReader& xmlReader) const
     return meta;
 }
 
-io::path MsczMetaReader::readRootFile(MQZipReader* zipReader) const
+mu::io::path MsczMetaReader::readRootFile(MQZipReader* zipReader) const
 {
     io::path rootFile;
 

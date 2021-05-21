@@ -23,9 +23,12 @@
 
 #include <QFont>
 
-#include "types/texttypes.h"
 #include "libmscore/textbase.h"
+
+#include "log.h"
+#include "translation.h"
 #include "dataformatter.h"
+#include "types/texttypes.h"
 
 using namespace mu::inspector;
 
