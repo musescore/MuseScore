@@ -32,7 +32,7 @@ import MuseScore.Inspector 1.0
 import MuseScore.Instruments 1.0
 import MuseScore.Playback 1.0
 
-import "../docksystem"
+import "../dockwindow"
 
 DockPage {
     id: root
