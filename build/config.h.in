@@ -73,8 +73,6 @@
 
 #cmakedefine APP_UPDATABLE
 
-#cmakedefine KDAB_DOCKWIDGETS
-
 #define USE_BSP     true
 
 // does not work on windows/mac:
