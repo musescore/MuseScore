@@ -52,6 +52,7 @@
 #include "view/preferences/importpreferencesmodel.h"
 #include "view/preferences/iopreferencesmodel.h"
 #include "view/preferences/commonaudioapiconfigurationmodel.h"
+#include "view/framelesswindow/framelesswindowmodel.h"
 
 #ifdef KDAB_DOCKWIDGETS
 #include "view/dockwindow_kdab/docksetup.h"
@@ -138,6 +139,7 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<NotationPageModel>("MuseScore.AppShell", 1, 0, "NotationPageModel");
     qmlRegisterType<AboutModel>("MuseScore.AppShell", 1, 0, "AboutModel");
     qmlRegisterType<StartupModel>("MuseScore.AppShell", 1, 0, "StartupModel");
+    qmlRegisterType<FramelessWindowModel>("MuseScore.AppShell", 1, 0, "FramelessWindowModel");
 }
 
 void AppShellModule::onInit(const IApplication::RunMode&)
