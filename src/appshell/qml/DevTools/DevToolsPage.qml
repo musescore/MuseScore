@@ -28,14 +28,13 @@ import MuseScore.Dock 1.0
 import MuseScore.Plugins 1.0
 import MuseScore.Audio 1.0
 
-import "../../DevTools"
-import "../../DevTools/Gallery"
-import "../../DevTools/Interactive"
-import "../../DevTools/NotationDialogs"
-import "../../DevTools/Telemetry"
-import "../../DevTools/VST"
-import "../../DevTools/KeyNav"
-import "../../DevTools/Preferences"
+import "./Gallery"
+import "./Interactive"
+import "./NotationDialogs"
+import "./Telemetry"
+import "./VST"
+import "./KeyNav"
+import "./Preferences"
 
 import "../docksystem"
 

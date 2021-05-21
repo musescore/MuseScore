@@ -148,11 +148,11 @@ int AppShell::run(int argc, char** argv)
         dock::DockSetup::setup(engine);
 
 #if defined(Q_OS_WIN)
-        const QString mainQmlFile = "/kdab/platform/win/Main.qml";
+        const QString mainQmlFile = "/platform/win/Main.qml";
 #elif defined(Q_OS_MACOS)
-        const QString mainQmlFile = "/kdab/platform/mac/Main.qml";
+        const QString mainQmlFile = "/platform/mac/Main.qml";
 #elif defined(Q_OS_LINUX)
-        const QString mainQmlFile = "/kdab/platform/linux/Main.qml";
+        const QString mainQmlFile = "/platform/linux/Main.qml";
 #elif defined(Q_OS_WASM)
         const QString mainQmlFile = "/Main.wasm.qml";
 #endif

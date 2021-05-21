@@ -40,7 +40,7 @@ DropIndicatorsWindow::DropIndicatorsWindow(QObject* dropIndicators)
     setColor(Qt::transparent);
 
     rootContext()->setContextProperty(QStringLiteral("dockDropIndicatorsWindow"), QVariant::fromValue<QObject*>(this));
-    setSource(QUrl(QStringLiteral("qrc:/qml/kdab/docksystem/DropIndicators.qml")));
+    setSource(QUrl(QStringLiteral("qrc:/qml/docksystem/DropIndicators.qml")));
 
     {
         // Small hack to avoid flickering when we drag over a window the first time
