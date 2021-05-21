@@ -22,12 +22,13 @@
 
 #include "docktoolbar.h"
 
-#include "log.h"
+#include <QTimer>
 
+#include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
 #include "thirdparty/KDDockWidgets/src/private/TitleBar_p.h"
 #include "thirdparty/KDDockWidgets/src/private/DragController_p.h"
 
-#include <QTimer>
+#include "log.h"
 
 using namespace mu::dock;
 
