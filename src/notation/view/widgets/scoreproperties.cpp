@@ -219,8 +219,7 @@ void ScorePropertiesDialog::openFileLocation()
     Ret ret = interactive()->openUrl(dirPath.toStdString());
 
     if (!ret) {
-        interactive()->message(IInteractive::Type::Warning,
-                               trc("notation", "Open Containing Folder Error"),
+        interactive()->warning(trc("notation", "Open Containing Folder Error"),
                                trc("notation", "Could not open containing folder"));
     }
 }
@@ -247,21 +246,21 @@ bool ScorePropertiesDialog::save()
 
             QString tagText = tag->text();
             if (tagText.isEmpty()) {
-                interactive()->message(IInteractive::Type::Warning, trc("notation", "MuseScore"),
+                interactive()->warning(trc("notation", "MuseScore"),
                                        trc("notation", "Tags can't have empty names."));
                 tag->setFocus();
                 return false;
             }
             if (map.contains(tagText)) {
                 if (isStandardTag(tagText)) {
-                    interactive()->message(IInteractive::Type::Warning, trc("notation", "MuseScore"),
+                    interactive()->warning(trc("notation", "MuseScore"),
                                            qtrc("notation",
                                                 "%1 is a reserved builtin tag.\n It can't be used.").arg(tagText).toStdString());
                     tag->setFocus();
                     return false;
                 }
 
-                interactive()->message(IInteractive::Type::Warning, trc("notation", "MuseScore"),
+                interactive()->warning(trc("notation", "MuseScore"),
                                        trc("notation", "You have multiple tags with the same name."));
                 tag->setFocus();
                 return false;
@@ -309,17 +308,17 @@ void ScorePropertiesDialog::closeEvent(QCloseEvent* event)
         return;
     }
 
-    IInteractive::Button button = interactive()->question(trc("notation", "MuseScore"), trc("notation",
+    IInteractive::Result result = interactive()->question(trc("notation", "MuseScore"), trc("notation",
                                                                                             "You have unsaved changes.\nSave?"), {
         IInteractive::Button::Save, IInteractive::Button::Discard, IInteractive::Button::Cancel
     }, IInteractive::Button::Save);
 
-    if (button == IInteractive::Button::Save) {
+    if (result.standartButton() == IInteractive::Button::Save) {
         if (!save()) {
             event->ignore();
             return;
         }
-    } else if (button == IInteractive::Button::Cancel) {
+    } else if (result.standartButton() == IInteractive::Button::Cancel) {
         event->ignore();
         return;
     }
