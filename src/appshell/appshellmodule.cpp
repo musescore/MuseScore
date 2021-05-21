@@ -54,7 +54,7 @@
 #include "view/preferences/commonaudioapiconfigurationmodel.h"
 #include "view/framelesswindow/framelesswindowmodel.h"
 
-#include "view/dockwindow_kdab/docksetup.h"
+#include "view/dockwindow/docksetup.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;

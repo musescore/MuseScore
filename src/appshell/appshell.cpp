@@ -30,7 +30,7 @@
 #ifndef Q_OS_WASM
 #include <QThreadPool>
 #endif
-#include "view/dockwindow_kdab/docksetup.h"
+#include "view/dockwindow/docksetup.h"
 
 #include "log.h"
 #include "modularity/ioc.h"
