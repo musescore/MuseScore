@@ -726,6 +726,7 @@ Note::Note(const Note& n, bool link)
     _accidental        = 0;
     _cachedNoteheadSym = n._cachedNoteheadSym;
     _cachedSymNull     = n._cachedSymNull;
+    _pitchAdjuster     = n._pitchAdjuster;
 
     if (n._accidental) {
         add(new Accidental(*(n._accidental)));
@@ -1467,6 +1468,7 @@ void Note::write(XmlWriter& xml) const
                     Pid::GHOST, Pid::HEAD_TYPE, Pid::VELO_TYPE, Pid::FIXED, Pid::FIXED_LINE }) {
         writeProperty(xml, id);
     }
+    _pitchAdjuster.write(xml);
 
     for (Spanner* e : _spannerFor) {
         e->writeSpannerStart(xml, this, track());
@@ -1643,6 +1645,8 @@ bool Note::readProperties(XmlReader& e)
         NoteDot* dot = new NoteDot(score());
         dot->read(e);
         add(dot);
+    } else if (tag == "pitchAdjust") {
+        _pitchAdjuster.read(e);
     } else if (tag == "Events") {
         _playEvents.clear();        // remove default event
         while (e.readNextStartElement()) {
@@ -2581,7 +2585,7 @@ int Note::ppitch() const
         }
     }
 
-    return _pitch + ottaveCapoFret();
+    return _pitch + ottaveCapoFret() + _pitchAdjuster.getAlter();
 }
 
 //---------------------------------------------------------

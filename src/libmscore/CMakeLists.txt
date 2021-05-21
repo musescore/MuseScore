@@ -207,6 +207,8 @@ set(MODULE_SRC
     pedal.h
     pitch.cpp
     pitch.h
+    pitchadjuster.cpp
+    pitchadjuster.h
     pitchspelling.cpp
     pitchspelling.h
     pitchvalue.h

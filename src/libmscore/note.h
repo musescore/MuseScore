@@ -37,6 +37,7 @@
 #include "shape.h"
 #include "key.h"
 #include "sym.h"
+#include "pitchadjuster.h"
 
 namespace Ms {
 class Tie;
@@ -309,6 +310,8 @@ private:
     SymId _cachedSymNull;   // additional symbol for some transparent notehead
 
     QString _fretString;
+
+    PitchAdjuster _pitchAdjuster;  // guitar harmonics
 
     void startDrag(EditData&) override;
     QRectF drag(EditData& ed) override;
