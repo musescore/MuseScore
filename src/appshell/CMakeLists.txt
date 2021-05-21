@@ -49,6 +49,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationpagestate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationpagestate.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/framelesswindowcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/framelesswindowcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/devtools/settingslistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/devtools/settingslistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.cpp
@@ -87,13 +89,25 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/iopreferencesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/commonaudioapiconfigurationmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/commonaudioapiconfigurationmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/framelesswindow/framelesswindowmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/framelesswindow/framelesswindowmodel.h
     ${DOCKWINDOW_SRC}
     )
+
 
 set(MODULE_LINK
     uicomponents
     ui
     ${DOCK_LIBS}
     )
+
+if (OS_IS_WIN)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winframelesswindowcontroller.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winframelesswindowcontroller.h
+    )
+
+    set(MODULE_LINK ${MODULE_LINK} dwmapi)
+endif(OS_IS_WIN)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
