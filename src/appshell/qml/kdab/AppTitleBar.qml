@@ -30,37 +30,30 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
+    property var titleMoveAreaRect: Qt.rect(titleMoveArea.x, titleMoveArea.y, titleMoveArea.width, titleMoveArea.height)
+
     signal showWindowMinimizedRequested()
     signal toggleWindowMaximizedRequested()
     signal closeWindowRequested()
-    signal startSystemMoveRequested()
-
-    TapHandler {
-        readonly property int maximizeTapCount: 2
-        gesturePolicy: TapHandler.DragThreshold
-        onTapped: {
-            if (tapCount === maximizeTapCount) {
-                toggleWindowMaximizedRequested()
-            }
-        }
-    }
-
-    DragHandler {
-        grabPermissions: TapHandler.CanTakeOverFromAnything
-        onActiveChanged: {
-            if (active) {
-                startSystemMoveRequested()
-            }
-        }
-    }
 
     Item {
         anchors.fill: parent
         anchors.margins: 8
 
         AppMenuBar {
+            id: menu
+
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Item {
+            id: titleMoveArea
+
+            anchors.top: parent.top
+            anchors.left: menu.right
+            anchors.right: systemButtons.left
+            anchors.bottom: parent.bottom
         }
 
         StyledTextLabel {
@@ -73,6 +66,8 @@ Rectangle {
         }
 
         Row {
+            id: systemButtons
+
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
 
