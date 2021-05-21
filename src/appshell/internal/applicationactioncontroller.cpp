@@ -119,12 +119,12 @@ void ApplicationActionController::revertToFactorySettings()
                                            "Reverting will not remove any scores from your computer.\n"
                                            "Are you sure you want to proceed?");
 
-    IInteractive::Button button = interactive()->question(std::string(), question, {
+    IInteractive::Result result = interactive()->question(std::string(), question, {
         IInteractive::Button::Yes,
         IInteractive::Button::No
     });
 
-    if (button == IInteractive::Button::Yes) {
+    if (result.standartButton() == IInteractive::Button::Yes) {
         configuration()->revertToFactorySettings();
     }
 }

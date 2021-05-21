@@ -333,12 +333,12 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
             std::string question
                 = mu::qtrc("palette", "Are you sure you want to delete palette cell \"%1\"?").arg(cell->name).toStdString();
 
-            IInteractive::Button button = interactive()->question(title, question, {
+            IInteractive::Result result = interactive()->question(title, question, {
                     IInteractive::Button::Yes,
                     IInteractive::Button::No
                 }, IInteractive::Button::Yes);
 
-            if (button != IInteractive::Button::Yes) {
+            if (result.standartButton() != IInteractive::Button::Yes) {
                 return;
             }
             if (cell->tag == "ShowMore") {
@@ -1402,7 +1402,7 @@ void Palette::showWritingFailedError(const QString& path) const
 {
     std::string title = mu::trc("palette", "Writing Palette File");
     std::string message = mu::qtrc("palette", "Writing Palette File\n%1\nfailed: ").arg(path).toStdString();
-    interactive()->message(IInteractive::Type::Critical, title, message);
+    interactive()->error(title, message);
 }
 
 //---------------------------------------------------------
