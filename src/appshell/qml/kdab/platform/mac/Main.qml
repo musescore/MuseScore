@@ -25,6 +25,8 @@ import Qt.labs.platform 1.1 as PLATFORM
 import MuseScore.AppShell 1.0
 import MuseScore.Dock 1.0
 
+import "../.."
+
 AppWindow {
     id: root
 
