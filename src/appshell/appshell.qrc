@@ -53,19 +53,20 @@
         <file>qml/DevTools/KeyNav/KeyNavExample.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSection.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSubSection.qml</file>
-        <file>qml/docksystem/DockPage.qml</file>
-        <file>qml/docksystem/DropIndicators.qml</file>
-        <file>qml/docksystem/DropIndicator.qml</file>
+        <file>qml/DevTools/Accessibility/AccessibilityTest.qml</file>
         <file>qml/HomePage/HomePage.qml</file>
         <file>qml/NotationPage/NotationPage.qml</file>
         <file>qml/PublishPage/PublishPage.qml</file>
         <file>qml/DevTools/DevToolsPage.qml</file>
-        <file>qml/docksystem/DockTitleBar.qml</file>
-        <file>qml/docksystem/DockToolBar.qml</file>
-        <file>qml/docksystem/DockFrame.qml</file>
-        <file>qml/docksystem/DockPanelTab.qml</file>
-        <file>qml/docksystem/DockSeparator.qml</file>
-        <file>qml/docksystem/DockFloatingWindow.qml</file>
+        <file>qml/dockwindow/DockTitleBar.qml</file>
+        <file>qml/dockwindow/DockToolBar.qml</file>
+        <file>qml/dockwindow/DockFrame.qml</file>
+        <file>qml/dockwindow/DockPanelTab.qml</file>
+        <file>qml/dockwindow/DockSeparator.qml</file>
+        <file>qml/dockwindow/DockFloatingWindow.qml</file>
+        <file>qml/dockwindow/DockPage.qml</file>
+        <file>qml/dockwindow/DropIndicators.qml</file>
+        <file>qml/dockwindow/DropIndicator.qml</file>
         <file>qml/AppTitleBar.qml</file>
         <file>qml/AppWindow.qml</file>
         <file>qml/WindowContent.qml</file>

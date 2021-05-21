@@ -36,7 +36,7 @@ import "./VST"
 import "./KeyNav"
 import "./Preferences"
 
-import "../docksystem"
+import "../dockwindow"
 
 DockPage {
     id: root

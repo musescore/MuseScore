@@ -29,7 +29,7 @@ import MuseScore.Dock 1.0
 import MuseScore.UserScores 1.0
 import MuseScore.Cloud 1.0
 
-import "../docksystem"
+import "../dockwindow"
 
 DockPage {
     id: root
