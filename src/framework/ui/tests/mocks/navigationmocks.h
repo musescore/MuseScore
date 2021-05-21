@@ -31,7 +31,6 @@ class NavigationSectionMock : public INavigationSection
 {
 public:
 
-    MOCK_METHOD(QWindow*, qWindow, (), (const, override));
     MOCK_METHOD(Type, type, (), (const, override));
     MOCK_METHOD(QString, name, (), (const, override));
 

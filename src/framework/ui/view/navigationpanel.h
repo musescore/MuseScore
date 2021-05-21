@@ -27,21 +27,16 @@
 
 #include "abstractnavigation.h"
 #include "navigationcontrol.h"
-#include "accessibility/iaccessibility.h"
 #include "async/asyncable.h"
-
-#include "modularity/ioc.h"
-#include "accessibility/iaccessibilitycontroller.h"
 
 namespace mu::ui {
 class NavigationSection;
-class NavigationPanel : public AbstractNavigation, public INavigationPanel, public accessibility::IAccessibility, public async::Asyncable
+class NavigationPanel : public AbstractNavigation, public INavigationPanel, public async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(mu::ui::NavigationSection* section READ section_property WRITE setSection_property NOTIFY sectionChanged)
     Q_PROPERTY(QmlDirection direction READ direction_property WRITE setDirection NOTIFY directionChanged)
-
-    INJECT(ui, accessibility::IAccessibilityController, accessibilityController)
+    Q_PROPERTY(QString directionInfo READ directionInfo NOTIFY directionChanged)
 
 public:
     explicit NavigationPanel(QObject* parent = nullptr);
@@ -70,6 +65,7 @@ public:
     void onEvent(EventPtr e) override;
 
     QmlDirection direction_property() const;
+    QString directionInfo() const;
     Direction direction() const override;
 
     const std::set<INavigationControl*>& controls() const override;
@@ -80,23 +76,12 @@ public:
     INavigationSection* section() const override;
     NavigationSection* section_property() const;
 
-    void componentComplete() override;
-
     void addControl(NavigationControl* control);
     void removeControl(NavigationControl* control);
 
-    // IAccessibility
-    const IAccessibility* accessibleParent() const override;
-    async::Notification accessibleParentChanged() const override;
-
+    // AccessibleItem
     size_t accessibleChildCount() const override;
-    const IAccessibility* accessibleChild(size_t i) const override;
-
-    Role accessibleRole() const override;
-    QString accessibleName() const override;
-    bool accessibleState(State st) const override;
-    QRect accessibleRect() const override;
-    // -----
+    const accessibility::IAccessible* accessibleChild(size_t i) const override;
 
 public slots:
     void setSection_property(NavigationSection* section);
@@ -105,7 +90,7 @@ public slots:
 
 signals:
     void sectionChanged(NavigationSection* section);
-    void directionChanged(QmlDirection direction);
+    void directionChanged();
 
 private slots:
     void onSectionDestroyed();

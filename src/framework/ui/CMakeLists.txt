@@ -110,6 +110,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/navigationcontrol.h
     ${CMAKE_CURRENT_LIST_DIR}/view/navigationevent.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/navigationevent.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/accessibleobject.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/qmlaccessible.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/qmlaccessible.h
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.h
@@ -129,6 +132,10 @@ set(MODULE_SRC
 
 set(MODULE_UI
     ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.ui
+    )
+
+set(MODULE_LINK
+    accessibility
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

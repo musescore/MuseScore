@@ -145,11 +145,6 @@ void NavigationSection::removePanel(NavigationPanel* panel)
     }
 }
 
-QWindow* NavigationSection::qWindow() const
-{
-    return nullptr;
-}
-
 INavigationSection::Type NavigationSection::type() const
 {
     return static_cast<INavigationSection::Type>(m_type);
