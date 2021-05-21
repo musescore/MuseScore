@@ -24,7 +24,7 @@ import QtQuick.Window 2.15
 
 import MuseScore.UiComponents 1.0
 
-import "../.."
+import "../../"
 
 AppWindow {
     id: root
