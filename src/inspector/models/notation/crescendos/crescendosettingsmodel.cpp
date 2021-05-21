@@ -21,7 +21,9 @@
  */
 #include "crescendosettingsmodel.h"
 
-#include "hairpin.h"
+#include "libmscore/hairpin.h"
+
+#include "translation.h"
 #include "types/crescendotypes.h"
 #include "dataformatter.h"
 

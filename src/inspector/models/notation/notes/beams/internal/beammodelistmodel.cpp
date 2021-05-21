@@ -21,6 +21,8 @@
  */
 #include "beammodelistmodel.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 BeamModeListModel::BeamModeListModel(QObject* parent)

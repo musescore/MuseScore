@@ -21,8 +21,10 @@
  */
 #include "bracesettingsmodel.h"
 
-#include "log.h"
 #include "libmscore/bracket.h"
+
+#include "log.h"
+#include "translation.h"
 
 using namespace mu::inspector;
 

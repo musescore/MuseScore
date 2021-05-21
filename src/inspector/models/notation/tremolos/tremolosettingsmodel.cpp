@@ -23,6 +23,8 @@
 
 #include <QList>
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 TremoloSettingsModel::TremoloSettingsModel(QObject* parent, IElementRepositoryService* repository)

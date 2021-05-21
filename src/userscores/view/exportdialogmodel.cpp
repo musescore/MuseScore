@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "exportdialogmodel.h"
+
+#include "log.h"
 #include "translation.h"
 
 #include <QItemSelectionModel>

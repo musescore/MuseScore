@@ -21,6 +21,9 @@
  */
 #include "scoredisplaysettingsmodel.h"
 
+#include "log.h"
+#include "translation.h"
+
 using namespace mu::inspector;
 using namespace mu::notation;
 

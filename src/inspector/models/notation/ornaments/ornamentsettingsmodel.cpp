@@ -21,8 +21,10 @@
  */
 #include "ornamentsettingsmodel.h"
 
-#include "articulation.h"
+#include "libmscore/articulation.h"
+
 #include "log.h"
+#include "translation.h"
 
 using namespace mu::inspector;
 
