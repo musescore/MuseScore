@@ -1,17 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/Main.qml</file>
         <file>qml/Main.wasm.qml</file>
         <file>qml/MainToolBar.qml</file>
-        <file>qml/SequencerPage.qml</file>
-        <file>qml/PublishPage.qml</file>
-        <file>qml/HomePage/HomePage.qml</file>
         <file>qml/HomePage/HomeMenu.qml</file>
-        <file>qml/NotationPage/NotationPage.qml</file>
-        <file>qml/Window.qml</file>
         <file>qml/DevTools/Interactive/SampleDialog.qml</file>
         <file>qml/DevTools/Interactive/InteractiveTests.qml</file>
-        <file>qml/DevTools/DevToolsPage.qml</file>
         <file>qml/DevTools/DevToolsMenu.qml</file>
         <file>qml/DevTools/NotationDialogs/MU3Dialogs.qml</file>
         <file>qml/DevTools/Preferences/SettingsPage.qml</file>
