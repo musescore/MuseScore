@@ -5410,7 +5410,10 @@ void MusicXMLParserLyric::parse()
       const auto l = lyric.release();
       _numberedLyrics[lyricNo] = l;
 
-      if (hasExtend && (extendType == "" || extendType == "start"))
+      if (hasExtend
+         && (extendType == "" || extendType == "start")
+         && (l->syllabic() == Lyrics::Syllabic::SINGLE || l->syllabic() == Lyrics::Syllabic::END)
+         )
             _extendedLyrics.insert(l);
 
       Q_ASSERT(_e.isEndElement() && _e.name() == "lyric");
