@@ -20,12 +20,6 @@
         <file>qml/DevTools/VST/VSTTests.qml</file>
         <file>qml/DevTools/Gallery/GeneralComponentsGallery.qml</file>
         <file>qml/DevTools/Telemetry/TelemetryInfo.qml</file>
-        <file>view/dockwindow/resources/toolbar_grip_light_horizontal.svg</file>
-        <file>view/dockwindow/resources/toolbar_grip_light_vertical.svg</file>
-        <file>view/dockwindow/resources/toolbar_grip_dark_horizontal.svg</file>
-        <file>view/dockwindow/resources/toolbar_grip_dark_vertical.svg</file>
-        <file>view/dockwindow/resources/toolbar_grip_high_contrast_horizontal.svg</file>
-        <file>view/dockwindow/resources/toolbar_grip_high_contrast_vertical.svg</file>
         <file>qml/AboutDialog.qml</file>
         <file>qml/AboutMusicXMLDialog.qml</file>
         <file>qml/resources/mu_logo.svg</file>
