@@ -33,7 +33,6 @@ import MuseScore.Instruments 1.0
 import MuseScore.Playback 1.0
 
 import "../docksystem"
-import "../../NotationPage"
 
 DockPage {
     id: root

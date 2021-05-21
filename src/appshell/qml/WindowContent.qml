@@ -33,8 +33,6 @@ import "./PublishPage"
 import "./DevTools"
 import "./docksystem"
 
-import "../../qml" as DOCKWINDOW
-
 DockWindow {
     id: root
 
@@ -68,7 +66,7 @@ DockWindow {
 
             movable: false
 
-            contentComponent: DOCKWINDOW.MainToolBar {
+            contentComponent: MainToolBar {
                 navigation.section: topToolKeyNavSec
                 navigation.order: 1
 

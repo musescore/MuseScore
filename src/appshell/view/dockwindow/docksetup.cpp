@@ -65,17 +65,17 @@ public:
 
     QUrl titleBarFilename() const override
     {
-        return QUrl("qrc:/qml/kdab/docksystem/DockTitleBar.qml");
+        return QUrl("qrc:/qml/docksystem/DockTitleBar.qml");
     }
 
     QUrl frameFilename() const override
     {
-        return QUrl("qrc:/qml/kdab/docksystem/DockFrame.qml");
+        return QUrl("qrc:/qml/docksystem/DockFrame.qml");
     }
 
     QUrl floatingWindowFilename() const override
     {
-        return QUrl("qrc:/qml/kdab/docksystem/DockFloatingWindow.qml");
+        return QUrl("qrc:/qml/docksystem/DockFloatingWindow.qml");
     }
 };
 }
