@@ -82,7 +82,6 @@ private:
     void updateSizeConstraints();
 
     bool isOrientationChangingAllowed() const;
-    QSize preferredSize() const;
 
     class DraggableArea;
     DraggableArea* m_draggableArea = nullptr;
