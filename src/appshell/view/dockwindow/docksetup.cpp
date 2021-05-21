@@ -36,7 +36,7 @@
 #include "mainwindowprovider.h"
 
 #ifdef Q_OS_MAC
-#include "view/dockwindow_kdab/internal/platform/macos/appwindowstyler.h"
+#include "view/dockwindow/internal/platform/macos/appwindowstyler.h"
 #endif
 
 #include "modularity/ioc.h"
