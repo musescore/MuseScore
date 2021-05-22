@@ -49,17 +49,13 @@ MuseScore {
 
       function applyToNotesInSelection(func) {
             var fullScore = !curScore.selection.elements.length
-            if (fullScore) {
+            if (fullScore)
                   cmd("select-all")
-                  curScore.startCmd()
-            }
             for (var i in curScore.selection.elements)
                   if (curScore.selection.elements[i].pitch)
                         func(curScore.selection.elements[i])
-            if (fullScore) {
-                  curScore.endCmd()
+            if (fullScore)
                   cmd("escape")
-            }
       }
 
       function colorNote(note) {
@@ -82,9 +78,9 @@ MuseScore {
                                     note.dots[i].color = colors[note.pitch % 12];
                               else
                                     note.dots[i].color = black;
+                              }
                         }
                   }
-            }
       }
 
       onRun: {
