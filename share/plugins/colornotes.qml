@@ -78,9 +78,9 @@ MuseScore {
                                     note.dots[i].color = colors[note.pitch % 12];
                               else
                                     note.dots[i].color = black;
-                              }
                         }
                   }
+            }
       }
 
       onRun: {
