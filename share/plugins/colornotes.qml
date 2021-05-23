@@ -24,7 +24,7 @@ import QtQuick 2.2
 import MuseScore 3.0
 
 MuseScore {
-      version:  "3.0"
+      version:  "3.5"
       description: qsTr("This plugin colors notes in the selection depending on their pitch as per the Boomwhackers convention")
       menuPath: "Plugins.Notes.Color Notes"
 
