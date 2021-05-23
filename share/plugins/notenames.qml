@@ -5,7 +5,7 @@
 //  Note Names Plugin
 //
 //  Copyright (C) 2012 Werner Schweer
-//  Copyright (C) 2013 - 2020 Joachim Schmitz
+//  Copyright (C) 2013 - 2021 Joachim Schmitz
 //  Copyright (C) 2014 Jörn Eichler
 //  Copyright (C) 2020 Johan Temmerman
 //
@@ -19,7 +19,7 @@ import QtQuick 2.2
 import MuseScore 3.0
 
 MuseScore {
-   version: "3.4.2.1"
+   version: "3.5"
    description: qsTr("This plugin names notes as per your language setting")
    menuPath: "Plugins.Notes." + qsTr("Note Names")
 
@@ -27,12 +27,14 @@ MuseScore {
    property var fontSizeMini: 0.7;
 
    function nameChord (notes, text, small) {
+      var sep = "\n";   // change to "," if you want them horizontally (anybody?)
       for (var i = 0; i < notes.length; i++) {
-         var sep = "\n";   // change to "," if you want them horizontally (anybody?)
-         if ( i > 0 )
-            text.text = sep + text.text; // any but top note
+         if (!notes[i].visible)
+            continue // skip invisible notes
+         if (text.text) // only if text isn't empty
+            text.text = sep + text.text;
          if (small)
-             text.fontSize *= fontSizeMini
+            text.fontSize *= fontSizeMini
          if (typeof notes[i].tpc === "undefined") // like for grace notes ?!?
             return
          switch (notes[i].tpc) {
@@ -130,7 +132,8 @@ MuseScore {
             var chord = list[chordNum];
             // Set note text, grace notes are shown a bit smaller
             nameChord(chord.notes, text, small)
-            cursor.add(text)
+            if (text.text)
+               cursor.add(text)
             // X position the note name over the grace chord
             text.offsetX = chord.posX
             switch (cursor.voice) {
@@ -138,7 +141,8 @@ MuseScore {
             }
 
             // If we consume a STAFF_TEXT we must manufacture a new one.
-            text = newElement(Element.STAFF_TEXT);    // Make another STAFF_TEXT
+            if (text.text)
+               text = newElement(Element.STAFF_TEXT);    // Make another STAFF_TEXT
          }
       }
       return text
@@ -207,13 +211,15 @@ MuseScore {
                   // Now handle the note names on the main chord...
                   var notes = cursor.element.notes;
                   nameChord(notes, text, false);
-                  cursor.add(text);
+                  if (text.text)
+                     cursor.add(text);
 
                   switch (cursor.voice) {
                      case 1: case 3: text.placement = Placement.BELOW; break;
                   }
 
-                  text = newElement(Element.STAFF_TEXT) // Make another STAFF_TEXT object
+                  if (text.text)
+                     text = newElement(Element.STAFF_TEXT) // Make another STAFF_TEXT object
 
                   // Finally process trailing grace notes if they exist...
                   text = renderGraceNoteNames(cursor, trailingFifo, text, true)

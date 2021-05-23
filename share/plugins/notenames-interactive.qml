@@ -5,7 +5,7 @@
 //  Note Names Plugin
 //
 //  Copyright (C) 2012 Werner Schweer
-//  Copyright (C) 2013 - 2019 Joachim Schmitz
+//  Copyright (C) 2013 - 2021 Joachim Schmitz
 //  Copyright (C) 2014 Jörn Eichler
 //  Copyright (C) 2020 MuseScore BVBA
 //
@@ -20,7 +20,7 @@ import QtQuick.Controls 2.0
 import MuseScore 3.0
 
 MuseScore {
-    version: "3.4"
+    version: "3.5"
     description: qsTr("This plugin names notes as per your language setting")
     menuPath: "Plugins.Notes." + qsTr("Note Names (Interactive)")
     pluginType: "dock"
@@ -59,10 +59,12 @@ MuseScore {
     function getChordName(chord) {
         var text = "";
         var notes = chord.notes;
+        var sep = "\n";   // change to "," if you want them horizontally (anybody?)
         for (var i = 0; i < notes.length; i++) {
-            var sep = "\n";   // change to "," if you want them horizontally (anybody?)
-            if ( i > 0 )
-                text = sep + text; // any but top note
+            if (!notes[i].visible)
+                continue // skip invisible notes
+            if (text) // only if text isn't empty
+                text = sep + text;
             if (typeof notes[i].tpc === "undefined") // like for grace notes ?!?
                 return;
             switch (notes[i].tpc) {
