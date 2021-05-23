@@ -24,8 +24,8 @@
 
 #include "ui/view/iconcodes.h"
 
-using namespace mu::framework;
 using namespace mu::notation;
+using namespace mu::ui;
 
 FontStyleSelect::FontStyleSelect(QWidget* parent)
     : QWidget(parent)

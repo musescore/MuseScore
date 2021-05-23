@@ -88,21 +88,45 @@ public:
             : text(t), format(f) {}
     };
 
-    virtual Button question(const std::string& title, const std::string& text, const Buttons& buttons,
-                            const Button& def = Button::NoButton) const = 0;
+    struct Result
+    {
+        Result() = default;
+        Result(const int& button)
+            : m_button(button) {}
+        Result(const int& button, bool showAgain)
+            : m_button(button), m_showAgain(showAgain) {}
 
-    virtual int /*button*/ question(const std::string& title, const Text& text, const ButtonDatas& buttons,
-                                    int defBtn = int(Button::NoButton)) const = 0;
+        Button standartButton() const { return static_cast<Button>(m_button); }
+        int button() const { return m_button; }
+
+        bool showAgain() const { return m_showAgain; }
+
+    private:
+        int m_button = int(Button::NoButton);
+        bool m_showAgain = true;
+    };
+
+    enum class Option {
+        WithIcon,
+        WithShowAgain
+    };
+
+    virtual Result question(const std::string& title, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,
+                            const QFlags<Option>& options = {}) const = 0;
+
+    virtual Result question(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
+                            const QFlags<Option>& options = {}) const = 0;
 
     virtual ButtonData buttonData(Button b) const = 0;
 
-    // message
-    enum class Type {
-        Info,
-        Warning,
-        Critical
-    };
-    virtual void message(Type type, const std::string& title, const std::string& text) const = 0;
+    // info
+    virtual Result info(const std::string& title, const std::string& text, const QFlags<Option>& options = {}) const = 0;
+
+    // warning
+    virtual Result warning(const std::string& title, const std::string& text, const QFlags<Option>& options = {}) const = 0;
+
+    // error
+    virtual Result error(const std::string& title, const std::string& text, const QFlags<Option>& options = {}) const = 0;
 
     // files
     virtual io::path selectOpeningFile(const QString& title, const io::path& dir, const QString& filter) = 0;

@@ -21,6 +21,8 @@
  */
 #include "keysignaturesettingsmodel.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 KeySignatureSettingsModel::KeySignatureSettingsModel(QObject* parent, IElementRepositoryService* repository)

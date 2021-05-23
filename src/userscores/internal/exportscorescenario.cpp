@@ -21,6 +21,7 @@
  */
 #include "exportscorescenario.h"
 
+#include "log.h"
 #include "translation.h"
 
 using namespace mu::userscores;
@@ -148,7 +149,7 @@ bool ExportScoreScenario::isMainNotation(INotationPtr notation) const
     return context()->currentMasterNotation()->notation() == notation;
 }
 
-io::path ExportScoreScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType, UnitType unitType) const
+mu::io::path ExportScoreScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType, UnitType unitType) const
 {
     IMasterNotationPtr currentMasterNotation = context()->currentMasterNotation();
 
@@ -194,7 +195,7 @@ io::path ExportScoreScenario::askExportPath(const INotationPtrList& notations, c
                                            exportType.filter(), isCreatingOnlyOneFile);
 }
 
-io::path ExportScoreScenario::completeExportPath(const io::path& basePath, INotationPtr notation, bool isMain, int pageIndex) const
+mu::io::path ExportScoreScenario::completeExportPath(const io::path& basePath, INotationPtr notation, bool isMain, int pageIndex) const
 {
     io::path result = io::dirpath(basePath) + "/" + io::basename(basePath);
 
@@ -224,7 +225,7 @@ bool ExportScoreScenario::shouldReplaceFile(const QString& filename) const
         static const int Skip = static_cast<int>(IInteractive::Button::CustomButton) + 3;
         static const int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
 
-        int btn = interactive()->question(
+        IInteractive::Result result = interactive()->question(
             trc("userscores", "File already exists"),
             qtrc("userscores", "A file already exists with the filename %1. Do you want to replace it?")
             .arg(filename).toStdString(), {
@@ -234,7 +235,7 @@ bool ExportScoreScenario::shouldReplaceFile(const QString& filename) const
                 IInteractive::ButtonData(SkipAll, trc("userscores", "Skip All"))
             });
 
-        switch (btn) {
+        switch (result.button()) {
         case ReplaceAll:
             m_fileConflictPolicy = FileConflictPolicy::ReplaceAll; // fallthrough
         case Replace:
@@ -253,30 +254,27 @@ bool ExportScoreScenario::shouldReplaceFile(const QString& filename) const
 
 bool ExportScoreScenario::askForRetry(const QString& filename) const
 {
-    int btn = interactive()->question(
+    IInteractive::Result result = interactive()->question(
         trc("userscores", "Error"),
         qtrc("userscores", "An error occured while writing the file %1. Do you want to retry?")
-        .arg(filename).toStdString(), {
-        interactive()->buttonData(IInteractive::Button::Retry),
-        interactive()->buttonData(IInteractive::Button::Abort)
-    });
+        .arg(filename).toStdString(), { IInteractive::Button::Retry, IInteractive::Button::Abort });
 
-    return btn == static_cast<int>(IInteractive::Button::Retry);
+    return result.standartButton() == IInteractive::Button::Retry;
 }
 
-bool ExportScoreScenario::doExportLoop(const io::path& path, std::function<bool(system::IODevice&)> exportFunction) const
+bool ExportScoreScenario::doExportLoop(const io::path& scorePath, std::function<bool(system::IODevice&)> exportFunction) const
 {
     IF_ASSERT_FAILED(exportFunction) {
         return false;
     }
 
-    QString filename = io::filename(path).toQString();
-    if (fileSystem()->exists(path) && !shouldReplaceFile(filename)) {
+    QString filename = io::filename(scorePath).toQString();
+    if (fileSystem()->exists(scorePath) && !shouldReplaceFile(filename)) {
         return false;
     }
 
     while (true) {
-        QFile outputFile(path.toQString());
+        QFile outputFile(scorePath.toQString());
         if (!outputFile.open(QFile::WriteOnly)) {
             if (askForRetry(filename)) {
                 continue;

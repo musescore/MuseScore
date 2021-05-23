@@ -21,6 +21,8 @@
  */
 #include "markersettingsmodel.h"
 
+#include "translation.h"
+
 using namespace mu::inspector;
 
 MarkerSettingsModel::MarkerSettingsModel(QObject* parent, IElementRepositoryService* repository)

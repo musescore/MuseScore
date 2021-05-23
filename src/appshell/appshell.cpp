@@ -32,6 +32,8 @@
 #endif
 #ifdef KDAB_DOCKWIDGETS
 #include "view/dockwindow_kdab/docksetup.h"
+#else
+#include "view/dockwindow/docksetup.h"
 #endif
 
 #include "log.h"
@@ -148,10 +150,12 @@ int AppShell::run(int argc, char** argv)
         QQmlApplicationEngine* engine = new QQmlApplicationEngine();
 
         dock::DockSetup::setup(engine);
-#if defined(KDAB_DOCKWIDGETS) && !defined(Q_OS_MACOS)
-        const QString mainQmlFile = "/kdab/Main.qml";
+#if defined(KDAB_DOCKWIDGETS) && defined(Q_OS_WIN)
+        const QString mainQmlFile = "/kdab/platform/win/Main.qml";
 #elif defined(KDAB_DOCKWIDGETS) && defined(Q_OS_MACOS)
-        const QString mainQmlFile = "/kdab/MainMacOS.qml";
+        const QString mainQmlFile = "/kdab/platform/mac/Main.qml";
+#elif defined(KDAB_DOCKWIDGETS) && defined(Q_OS_LINUX)
+        const QString mainQmlFile = "/kdab/platform/linux/Main.qml";
 #elif Q_OS_WASM
         const QString mainQmlFile = "/Main.wasm.qml";
 #else

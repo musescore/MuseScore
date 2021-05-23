@@ -23,6 +23,7 @@
 #define MU_ACCESSIBILITY_IACCESSIBILITY_H
 
 #include <QString>
+#include "async/notification.h"
 
 namespace mu::accessibility {
 class IAccessibility
@@ -30,6 +31,7 @@ class IAccessibility
 public:
     enum class Role {
         NoRole = 0,
+        Application,
         Panel,
         Button
     };
@@ -40,6 +42,11 @@ public:
         Active,
         Focused
     };
+
+    virtual const IAccessibility* accessibleParent() const = 0;
+    virtual async::Notification accessibleParentChanged() const = 0;
+    virtual size_t accessibleChildCount() const = 0;
+    virtual const IAccessibility* accessibleChild(size_t i) const = 0;
 
     virtual Role accessibleRole() const = 0;
     virtual QString accessibleName() const = 0;

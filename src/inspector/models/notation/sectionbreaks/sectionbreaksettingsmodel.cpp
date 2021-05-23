@@ -21,6 +21,7 @@
  */
 #include "sectionbreaksettingsmodel.h"
 
+#include "translation.h"
 #include "dataformatter.h"
 
 using namespace mu::inspector;

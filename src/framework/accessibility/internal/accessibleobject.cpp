@@ -25,8 +25,8 @@
 
 using namespace mu::accessibility;
 
-AccessibleObject::AccessibleObject(IAccessibility* item, QObject* parent)
-    : QObject(parent)
+AccessibleObject::AccessibleObject(IAccessibility* item)
+    : QObject()
 {
     setObjectName("AccessibleObject");
     m_item = item;

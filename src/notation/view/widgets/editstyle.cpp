@@ -34,6 +34,7 @@
 #include "libmscore/figuredbass.h"
 #include "libmscore/layout.h"
 #include "libmscore/sym.h"
+#include "libmscore/realizedharmony.h"
 #include "log.h"
 #include "offsetSelect.h"
 #include "translation.h"

@@ -80,10 +80,12 @@
         <file>qml/kdab/docksystem/DockFloatingWindow.qml</file>
         <file>qml/kdab/AppTitleBar.qml</file>
         <file>qml/kdab/AppWindow.qml</file>
-        <file>qml/kdab/Main.qml</file>
-        <file>qml/kdab/MainMacOS.qml</file>
         <file>qml/kdab/WindowContent.qml</file>
         <file>qml/kdab/AppMenuBar.qml</file>
         <file>qml/DevTools/Accessibility/AccessibilityTest.qml</file>
+        <file>qml/kdab/platform/linux/AppTitleBarLinux.qml</file>
+        <file>qml/kdab/platform/linux/Main.qml</file>
+        <file>qml/kdab/platform/mac/Main.qml</file>
+        <file>qml/kdab/platform/win/Main.qml</file>
     </qresource>
 </RCC>

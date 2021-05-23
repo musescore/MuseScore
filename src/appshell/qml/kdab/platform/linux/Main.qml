@@ -24,6 +24,8 @@ import QtQuick.Window 2.15
 
 import MuseScore.UiComponents 1.0
 
+import "../.."
+
 AppWindow {
     id: root
 
@@ -58,6 +60,12 @@ AppWindow {
 
             return Qt.ArrowCursor
         }
+
+        MouseArea {
+            anchors.fill: parent
+            anchors.margins: root.sideMargin
+            enabled: false
+        }
     }
 
     DragHandler {
@@ -88,7 +96,7 @@ AppWindow {
 
         anchors.margins: root.sideMargin
 
-        AppTitleBar {
+        AppTitleBarLinux {
             id: appTitleBar
 
             anchors.top: parent.top

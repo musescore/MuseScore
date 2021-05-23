@@ -38,9 +38,10 @@
 using namespace mu;
 using namespace mu::framework;
 
-IInteractive::Button Interactive::question(const std::string& title, const std::string& text,
+IInteractive::Result Interactive::question(const std::string& title, const std::string& text,
                                            const Buttons& buttons,
-                                           const Button& def) const
+                                           const Button& def,
+                                           const QFlags<Option>& options) const
 {
     ButtonDatas datas;
     datas.reserve(buttons.size());
@@ -48,11 +49,14 @@ IInteractive::Button Interactive::question(const std::string& title, const std::
         datas.push_back(buttonData(b));
     }
 
-    return static_cast<Button>(question(title, Text(text), datas, int(def)));
+    return question(title, Text(text), datas, int(def), options);
 }
 
-int Interactive::question(const std::string& title, const Text& text, const ButtonDatas& btns, int defBtn) const
+IInteractive::Result Interactive::question(const std::string& title, const Text& text, const ButtonDatas& btns, int defBtn,
+                                           const QFlags<Option>& options) const
 {
+    Q_UNUSED(options)
+
     //! NOTE Temporarily, need to replace the qml dialog
 
     auto format = [](IInteractive::TextFormat f) {
@@ -94,7 +98,7 @@ int Interactive::question(const std::string& title, const Text& text, const Butt
     QAbstractButton* clickedBtn = msgBox.clickedButton();
     int retBtn = btnsMap.value(clickedBtn);
 
-    return retBtn;
+    return Result(retBtn);
 }
 
 IInteractive::ButtonData Interactive::buttonData(Button b) const
@@ -125,30 +129,22 @@ IInteractive::ButtonData Interactive::buttonData(Button b) const
     return ButtonData(int(b), "");
 }
 
-void Interactive::message(Type type, const std::string& title, const std::string& text) const
+IInteractive::Result Interactive::info(const std::string& title, const std::string& text,
+                                       const QFlags<Option>& options) const
 {
-    //! NOTE Temporarily, need to replace the qml dialog
+    return message(MessageType::Info, title, text, options);
+}
 
-    auto icon = [](Type type) {
-        switch (type) {
-        case Type::Info:        return QMessageBox::Information;
-        case Type::Warning:     return QMessageBox::Warning;
-        case Type::Critical:    return QMessageBox::Critical;
-        }
-        return QMessageBox::NoIcon;
-    };
+IInteractive::Result Interactive::warning(const std::string& title, const std::string& text,
+                                          const QFlags<IInteractive::Option>& options) const
+{
+    return message(MessageType::Warning, title, text, options);
+}
 
-    QMessageBox msgBox;
-    msgBox.setWindowTitle(QString::fromStdString(title));
-    msgBox.setText(QString::fromStdString(text));
-    msgBox.setStandardButtons(QMessageBox::Ok);
-    msgBox.setIcon(icon(type));
-
-    QGridLayout* layout = (QGridLayout*)msgBox.layout();
-    QSpacerItem* hSpacer = new QSpacerItem(300, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    layout->addItem(hSpacer, layout->rowCount(), 0, 1, layout->columnCount());
-
-    msgBox.exec();
+IInteractive::Result Interactive::error(const std::string& title, const std::string& text,
+                                        const QFlags<Option>& options) const
+{
+    return message(MessageType::Error, title, text, options);
 }
 
 mu::io::path Interactive::selectOpeningFile(const QString& title, const io::path& dir, const QString& filter)
@@ -223,4 +219,35 @@ Ret Interactive::openUrl(const std::string& url) const
 {
     QUrl _url(QString::fromStdString(url));
     return QDesktopServices::openUrl(_url);
+}
+
+IInteractive::Result Interactive::message(MessageType type, const std::string& title, const std::string& text,
+                                          const QFlags<Option>& options) const
+{
+    Q_UNUSED(options)
+
+    //! NOTE Temporarily, need to replace the qml dialog
+
+    auto icon = [](MessageType type) {
+        switch (type) {
+        case MessageType::Info: return QMessageBox::Information;
+        case MessageType::Warning: return QMessageBox::Warning;
+        case MessageType::Error: return QMessageBox::Critical;
+        }
+        return QMessageBox::NoIcon;
+    };
+
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(QString::fromStdString(title));
+    msgBox.setText(QString::fromStdString(text));
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setIcon(icon(type));
+
+    QGridLayout* layout = (QGridLayout*)msgBox.layout();
+    QSpacerItem* hSpacer = new QSpacerItem(300, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    layout->addItem(hSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+
+    msgBox.exec();
+
+    return Result();
 }
