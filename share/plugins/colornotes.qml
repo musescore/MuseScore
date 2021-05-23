@@ -69,7 +69,7 @@ MuseScore {
                         note.accidental.color = colors[note.pitch % 12];
                   else
                         note.accidental.color = black;
-                  }
+            }
 
             if (note.dots) {
                   for (var i = 0; i < note.dots.length; i++) {
@@ -78,9 +78,9 @@ MuseScore {
                                     note.dots[i].color = colors[note.pitch % 12];
                               else
                                     note.dots[i].color = black;
-                              }
                         }
                   }
+            }
       }
 
       onRun: {
@@ -89,5 +89,5 @@ MuseScore {
             applyToNotesInSelection(colorNote)
 
             Qt.quit();
-         }
+      }
 }
