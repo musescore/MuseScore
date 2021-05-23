@@ -29,8 +29,8 @@ MuseScore {
    function nameChord (notes, text, small) {
       var sep = "\n";   // change to "," if you want them horizontally (anybody?)
       for (var i = 0; i < notes.length; i++) {
-         if (!notes[i].visible)
-            continue // skip invisible notes
+         if ((curScore.selection.elements.length && !notes[i].selected) || !notes[i].visible)
+            continue // skip notes that are not selected or invisible
          if (text.text) // only if text isn't empty
             text.text = sep + text.text;
          if (small)
