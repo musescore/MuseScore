@@ -35,7 +35,7 @@ DockPage::DockPage(QQuickItem* parent)
     : QQuickItem(parent),
     m_mainToolBars(this),
     m_toolBars(this),
-    m_toolBarsDockingHelpers(this),
+    m_toolBarsDockingHolders(this),
     m_panels(this),
     m_statusBars(this)
 {
@@ -73,9 +73,9 @@ QQmlListProperty<DockStatusBar> DockPage::statusBarsProperty()
     return m_statusBars.property();
 }
 
-QQmlListProperty<DockToolBar> DockPage::toolBarsDockingHelpersProperty()
+QQmlListProperty<DockToolBar> DockPage::toolBarsDockingHoldersProperty()
 {
-    return m_toolBarsDockingHelpers.property();
+    return m_toolBarsDockingHolders.property();
 }
 
 QList<DockToolBar*> DockPage::mainToolBars() const
@@ -85,10 +85,10 @@ QList<DockToolBar*> DockPage::mainToolBars() const
 
 QList<DockToolBar*> DockPage::toolBars() const
 {
-    auto helper = [=](DockBase::DockLocation location) -> DockToolBar* {
-        for (DockToolBar* helper : m_toolBarsDockingHelpers.list()) {
-            if (helper->location() == location) {
-                return helper;
+    auto holder = [=](DockBase::DockLocation location) -> DockToolBar* {
+        for (DockToolBar* holder : m_toolBarsDockingHolders.list()) {
+            if (holder->location() == location) {
+                return holder;
             }
         }
 
@@ -98,32 +98,32 @@ QList<DockToolBar*> DockPage::toolBars() const
     //! NOTE: Order is important for correct drawing
     auto list = m_toolBars.list();
 
-    DockToolBar* leftHelper = helper(DockBase::DockLocation::Left);
-    if (leftHelper) {
-        list.prepend(leftHelper);
+    DockToolBar* leftHolder = holder(DockBase::DockLocation::Left);
+    if (leftHolder) {
+        list.prepend(leftHolder);
     }
 
-    DockToolBar* rightHelper = helper(DockBase::DockLocation::Right);
-    if (rightHelper) {
-        list.append(rightHelper);
+    DockToolBar* rightHolder = holder(DockBase::DockLocation::Right);
+    if (rightHolder) {
+        list.append(rightHolder);
     }
 
-    DockToolBar* bottomHelper = helper(DockBase::DockLocation::Bottom);
-    if (bottomHelper) {
-        list.prepend(bottomHelper);
+    DockToolBar* bottomHolder = holder(DockBase::DockLocation::Bottom);
+    if (bottomHolder) {
+        list.prepend(bottomHolder);
     }
 
-    DockToolBar* topHelper = helper(DockBase::DockLocation::Top);
-    if (topHelper) {
-        list.append(topHelper);
+    DockToolBar* topHolder = holder(DockBase::DockLocation::Top);
+    if (topHolder) {
+        list.append(topHolder);
     }
 
     return list;
 }
 
-QList<DockToolBar*> DockPage::toolBarsHelpers() const
+QList<DockToolBar*> DockPage::toolBarsHolders() const
 {
-    return m_toolBarsDockingHelpers.list();
+    return m_toolBarsDockingHolders.list();
 }
 
 DockCentral* DockPage::centralDock() const

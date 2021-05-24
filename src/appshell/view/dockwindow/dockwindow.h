@@ -79,10 +79,10 @@ public:
     const QScreen* screen() const override;
     void requestChangeToolBarOrientation(const QString& toolBarName, framework::Orientation orientation) override;
     async::Channel<std::pair<QString, framework::Orientation> > changeToolBarOrientationRequested() const override;
-    void requestShowToolBarDockingHelper(const QPoint& globalPos) override;
-    async::Channel<QPoint> showToolBarDockingHelperRequested() const override;
-    void requestHideAllDockingHelpers() override;
-    async::Notification hideAllDockingHelpersRequested() const override;
+    void requestShowToolBarDockingHolder(const QPoint& globalPos) override;
+    async::Channel<QPoint> showToolBarDockingHolderRequested() const override;
+    void requestHideAllDockingHolders() override;
+    async::Notification hideAllDockingHoldersRequested() const override;
 
 public slots:
     void setTitle(QString title);

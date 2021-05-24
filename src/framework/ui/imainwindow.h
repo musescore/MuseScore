@@ -51,11 +51,11 @@ public:
     virtual void requestChangeToolBarOrientation(const QString& toolBarName, framework::Orientation orientation) = 0;
     virtual async::Channel<std::pair<QString, framework::Orientation> > changeToolBarOrientationRequested() const = 0;
 
-    virtual void requestShowToolBarDockingHelper(const QPoint& globalPos) = 0;
-    virtual async::Channel<QPoint> showToolBarDockingHelperRequested() const = 0;
+    virtual void requestShowToolBarDockingHolder(const QPoint& globalPos) = 0;
+    virtual async::Channel<QPoint> showToolBarDockingHolderRequested() const = 0;
 
-    virtual void requestHideAllDockingHelpers() = 0;
-    virtual async::Notification hideAllDockingHelpersRequested() const = 0;
+    virtual void requestHideAllDockingHolders() = 0;
+    virtual async::Notification hideAllDockingHoldersRequested() const = 0;
 };
 }
 

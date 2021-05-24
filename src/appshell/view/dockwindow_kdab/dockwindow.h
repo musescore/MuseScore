@@ -53,7 +53,7 @@ class DockWindow : public QQuickItem, public async::Asyncable
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolBars READ toolBarsProperty)
     Q_PROPERTY(
         mu::dock::DockToolBar
-        * mainToolBarDockingHelper READ mainToolBarDockingHelper WRITE setMainToolBarDockingHelper NOTIFY mainToolBarDockingHelperChanged)
+        * mainToolBarDockingHolder READ mainToolBarDockingHolder WRITE setMainToolBarDockingHolder NOTIFY mainToolBarDockingHolderChanged)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockPage> pages READ pagesProperty)
 
     INJECT(dock, ui::IUiConfiguration, configuration)
@@ -69,15 +69,15 @@ public:
 
     Q_INVOKABLE void loadPage(const QString& uri);
 
-    mu::dock::DockToolBar* mainToolBarDockingHelper() const;
+    mu::dock::DockToolBar* mainToolBarDockingHolder() const;
 
 public slots:
-    void setMainToolBarDockingHelper(mu::dock::DockToolBar* mainToolBarDockingHelper);
+    void setMainToolBarDockingHolder(mu::dock::DockToolBar* mainToolBarDockingHolder);
 
 signals:
     void currentPageUriChanged(const QString& uri);
 
-    void mainToolBarDockingHelperChanged(mu::dock::DockToolBar* mainToolBarDockingHelper);
+    void mainToolBarDockingHolderChanged(mu::dock::DockToolBar* mainToolBarDockingHolder);
 
 private:
     DockPage* pageByUri(const QString& uri) const;
@@ -100,18 +100,18 @@ private:
 
     void initDocks(DockPage* page);
 
-    DockToolBar* resolveToolbarDockingHelper(const QPoint& localPos) const;
+    DockToolBar* resolveToolbarDockingHolder(const QPoint& localPos) const;
 
-    void hideCurrentToolBarDockingHelper();
-    bool isMouseOverCurrentToolBarDockingHelper(const QPoint& mouseLocalPos) const;
+    void hideCurrentToolBarDockingHolder();
+    bool isMouseOverCurrentToolBarDockingHolder(const QPoint& mouseLocalPos) const;
 
     KDDockWidgets::MainWindowBase* m_mainWindow = nullptr;
     QString m_currentPageUri;
     uicomponents::QmlListProperty<DockToolBar> m_toolBars;
-    mu::dock::DockToolBar* m_mainToolBarDockingHelper = nullptr;
+    mu::dock::DockToolBar* m_mainToolBarDockingHolder = nullptr;
     uicomponents::QmlListProperty<DockPage> m_pages;
 
-    mu::dock::DockToolBar* m_currentToolBarDockingHelper = nullptr;
+    mu::dock::DockToolBar* m_currentToolBarDockingHolder = nullptr;
 };
 }
 

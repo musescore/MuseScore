@@ -104,8 +104,8 @@ KDDockWidgets::DropIndicatorOverlayInterface::DropLocation DropIndicators::hover
         dropRect = dropAreaRectForPanel(dropLocation);
     }
 
-    if (needShowToolBarHelpers()) {
-        mainWindow()->requestShowToolBarDockingHelper(globalPos);
+    if (needShowToolBarHolders()) {
+        mainWindow()->requestShowToolBarDockingHolder(globalPos);
     }
 
     if (isDropAllowed(dropLocation)) {
@@ -193,7 +193,7 @@ void DropIndicators::updateVisibility()
         updateWindowPosition();
         m_indicatorsWindow->raise();
     } else {
-        mainWindow()->requestHideAllDockingHelpers();
+        mainWindow()->requestHideAllDockingHolders();
         hideDropArea();
     }
 
@@ -256,7 +256,7 @@ bool DropIndicators::isHoveredDockAllowedForDrop() const
     DockType hoveredDockType = readPropertiesFromObject(hoveredDock()).type;
 
     if (isDraggedDockToolBar()) {
-        return hoveredDockType == DockType::ToolBar || hoveredDockType == DockType::ToolBarDockingHelper;
+        return hoveredDockType == DockType::ToolBar || hoveredDockType == DockType::ToolBarDockingHolder;
     }
 
     return true;
@@ -267,7 +267,7 @@ bool DropIndicators::isDraggedDockToolBar() const
     return readPropertiesFromObject(draggedDock()).type == DockType::ToolBar;
 }
 
-bool DropIndicators::needShowToolBarHelpers() const
+bool DropIndicators::needShowToolBarHolders() const
 {
     if (!isDraggedDockToolBar()) {
         return false;

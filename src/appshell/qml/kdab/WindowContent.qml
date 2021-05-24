@@ -87,8 +87,8 @@ Dock.DockWindow {
         }
     ]
 
-    mainToolBarDockingHelper: Dock.DockToolBarHelper {
-        objectName: root.objectName + "_mainToolBarDockingHelperTop"
+    mainToolBarDockingHolder: Dock.DockToolBarHolder {
+        objectName: root.objectName + "_mainToolBarDockingHolderTop"
         location: Dock.DockBase.Top
 
         Rectangle { color: ui.theme.backgroundPrimaryColor }
