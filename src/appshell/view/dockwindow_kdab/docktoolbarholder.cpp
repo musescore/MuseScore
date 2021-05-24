@@ -20,18 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "docktoolbarhelper.h"
+#include "docktoolbarholder.h"
 
 using namespace mu::dock;
 
-DockToolBarHelper::DockToolBarHelper(QQuickItem* parent)
+DockToolBarHolder::DockToolBarHolder(QQuickItem* parent)
     : DockToolBar(parent)
 {
     setVisible(false);
     setMovable(false);
 }
 
-void DockToolBarHelper::componentComplete()
+void DockToolBarHolder::componentComplete()
 {
     DockToolBar::componentComplete();
 
@@ -50,7 +50,7 @@ void DockToolBarHelper::componentComplete()
     }
 }
 
-DockType DockToolBarHelper::type() const
+DockType DockToolBarHolder::type() const
 {
-    return DockType::ToolBarDockingHelper;
+    return DockType::ToolBarDockingHolder;
 }

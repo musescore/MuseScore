@@ -475,23 +475,23 @@ mu::async::Channel<std::pair<QString, mu::framework::Orientation> > DockWindow::
     return {};
 }
 
-void DockWindow::requestShowToolBarDockingHelper(const QPoint&)
+void DockWindow::requestShowToolBarDockingHolder(const QPoint&)
 {
     NOT_IMPLEMENTED;
 }
 
-mu::async::Channel<QPoint> DockWindow::showToolBarDockingHelperRequested() const
+mu::async::Channel<QPoint> DockWindow::showToolBarDockingHolderRequested() const
 {
     NOT_IMPLEMENTED;
     return {};
 }
 
-void DockWindow::requestHideAllDockingHelpers()
+void DockWindow::requestHideAllDockingHolders()
 {
     NOT_IMPLEMENTED;
 }
 
-mu::async::Notification DockWindow::hideAllDockingHelpersRequested() const
+mu::async::Notification DockWindow::hideAllDockingHoldersRequested() const
 {
     NOT_IMPLEMENTED;
     return {};

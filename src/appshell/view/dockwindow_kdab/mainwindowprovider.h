@@ -39,16 +39,16 @@ public:
     void requestChangeToolBarOrientation(const QString& toolBarName, framework::Orientation orientation) override;
     async::Channel<std::pair<QString, framework::Orientation> > changeToolBarOrientationRequested() const override;
 
-    void requestShowToolBarDockingHelper(const QPoint& globalPos) override;
-    async::Channel<QPoint> showToolBarDockingHelperRequested() const override;
+    void requestShowToolBarDockingHolder(const QPoint& globalPos) override;
+    async::Channel<QPoint> showToolBarDockingHolderRequested() const override;
 
-    void requestHideAllDockingHelpers() override;
-    async::Notification hideAllDockingHelpersRequested() const override;
+    void requestHideAllDockingHolders() override;
+    async::Notification hideAllDockingHoldersRequested() const override;
 
 private:
     async::Channel<std::pair<QString, framework::Orientation> > m_dockOrientationChanged;
-    async::Channel<QPoint> m_showDockingHelperRequested;
-    async::Notification m_hideAllHelpersRequested;
+    async::Channel<QPoint> m_showDockingHolderRequested;
+    async::Notification m_hideAllHoldersRequested;
 };
 }
 

@@ -20,18 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKTOOLBARHELPER_H
-#define MU_DOCK_DOCKTOOLBARHELPER_H
+#ifndef MU_DOCK_DOCKTOOLBARHOLDER_H
+#define MU_DOCK_DOCKTOOLBARHOLDER_H
 
 #include "docktoolbar.h"
 
 namespace mu::dock {
-class DockToolBarHelper : public DockToolBar
+class DockToolBarHolder : public DockToolBar
 {
     Q_OBJECT
 
 public:
-    explicit DockToolBarHelper(QQuickItem* parent = nullptr);
+    explicit DockToolBarHolder(QQuickItem* parent = nullptr);
 
 private:
     void componentComplete() override;
@@ -40,4 +40,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_DOCKTOOLBARHELPER_H
+#endif // MU_DOCK_DOCKTOOLBARHOLDER_H

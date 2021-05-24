@@ -82,7 +82,7 @@ private:
     bool isDropAllowed(DropLocation location) const;
     bool isHoveredDockAllowedForDrop() const;
     bool isDraggedDockToolBar() const;
-    bool needShowToolBarHelpers() const;
+    bool needShowToolBarHolders() const;
 
     const KDDockWidgets::DockWidgetBase* hoveredDock() const;
     const KDDockWidgets::DockWidgetBase* draggedDock() const;
