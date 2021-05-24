@@ -30,6 +30,7 @@
 
 using namespace mu;
 using namespace mu::ui;
+using namespace mu::framework;
 
 static const QString PAGE_TYPE_DOCK("dock");
 static const QString PAGE_TYPE_POPUP("popup");
@@ -38,6 +39,34 @@ static const QString PAGE_TYPE_WIDGET("widget");
 InteractiveProvider::InteractiveProvider()
     : QObject()
 {
+}
+
+RetVal<Val> InteractiveProvider::question(const std::string& title, const framework::IInteractive::Text& text,
+                                          const framework::IInteractive::ButtonDatas& buttons, int defBtn,
+                                          const framework::IInteractive::Options& options)
+{
+    return openStandardDialog("QUESTION", QString::fromStdString(title), text, buttons, defBtn, options);
+}
+
+RetVal<Val> InteractiveProvider::info(const std::string& title, const std::string& text, const IInteractive::ButtonDatas& buttons,
+                                      int defBtn,
+                                      const framework::IInteractive::Options& options)
+{
+    return openStandardDialog("INFO", QString::fromStdString(title), text, buttons, defBtn, options);
+}
+
+RetVal<Val> InteractiveProvider::warning(const std::string& title, const std::string& text, const IInteractive::ButtonDatas& buttons,
+                                         int defBtn,
+                                         const framework::IInteractive::Options& options)
+{
+    return openStandardDialog("WARNING", QString::fromStdString(title), text, buttons, defBtn, options);
+}
+
+RetVal<Val> InteractiveProvider::error(const std::string& title, const std::string& text, const IInteractive::ButtonDatas& buttons,
+                                       int defBtn,
+                                       const framework::IInteractive::Options& options)
+{
+    return openStandardDialog("ERROR", QString::fromStdString(title), text, buttons, defBtn, options);
 }
 
 RetVal<Val> InteractiveProvider::open(const UriQuery& q)
@@ -143,6 +172,51 @@ void InteractiveProvider::fillData(QObject* object, const UriQuery& q) const
     }
 
     object->setParent(mainWindow()->qMainWindow());
+}
+
+void InteractiveProvider::fillStandatdDialogData(QmlLaunchData* data, const QString& type, const QString& title,
+                                                 const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons, int defBtn,
+                                                 const IInteractive::Options& options) const
+{
+    data->setValue("type", type);
+
+    auto format = [](IInteractive::TextFormat f) {
+        switch (f) {
+        case IInteractive::TextFormat::PlainText: return Qt::PlainText;
+        case IInteractive::TextFormat::RichText:  return Qt::RichText;
+        }
+        return Qt::PlainText;
+    };
+
+    QVariantMap params;
+    params["title"] = title;
+    params["text"] = QString::fromStdString(text.text);
+    params["textFormat"] = format(text.format);
+    params["defaultButtonId"] = defBtn;
+
+    QVariantList buttonList;
+    for (const IInteractive::ButtonData& buttonData: buttons) {
+        QVariantMap buttonObj;
+        buttonObj["buttonId"] = QVariant::fromValue(buttonData.btn);
+        buttonObj["title"] = QVariant::fromValue(QString::fromStdString(buttonData.text));
+        buttonObj["accent"] = QVariant::fromValue(buttonData.accent);
+
+        buttonList << buttonObj;
+    }
+
+    if (!buttonList.empty()) {
+        params["buttons"] = buttonList;
+    }
+
+    if (options.testFlag(framework::IInteractive::Option::WithIcon)) {
+        params["withIcon"] = true;
+    }
+
+    if (options.testFlag(framework::IInteractive::Option::WithShowAgain)) {
+        params["withShowAgain"] = true;
+    }
+
+    data->setValue("params", params);
 }
 
 ValCh<Uri> InteractiveProvider::currentUri() const
@@ -278,6 +352,36 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const UriQuer
     result.val.objectID = data->value("objectID").toString();
 
     delete data;
+
+    return result;
+}
+
+RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const QString& title, const framework::IInteractive::Text& text,
+                                                    const framework::IInteractive::ButtonDatas& buttons, int defBtn,
+                                                    const framework::IInteractive::Options& options)
+{
+    QmlLaunchData* data = new QmlLaunchData();
+    fillStandatdDialogData(data, type, title, text, buttons, defBtn, options);
+
+    emit fireOpenStandardDialog(data);
+
+    Ret ret = toRet(data->value("ret"));
+    QString objectID = data->value("objectID").toString();
+
+    delete data;
+
+    RetVal<Val> result;
+    if (!ret) {
+        result.ret = ret;
+        return result;
+    }
+
+    if (!objectID.isEmpty()) {
+        RetVal<Val> rv = m_retvals.take(objectID);
+        if (rv.ret.valid()) {
+            result = rv;
+        }
+    }
 
     return result;
 }
