@@ -3926,7 +3926,10 @@ void Measure::setEndBarLineType(BarLineType val, int track, bool visible, QColor
         // no suitable bar line: create a new one
         bl = new BarLine(score());
         bl->setParent(seg);
-        bl->setTrack(track);
+        bl->setTrack(track); 
+        Part* part = score()->staff(track / VOICES)->part();
+        if (part != NULL && part->nstaves() > 1)
+            bl->setSpanStaff(true);
         score()->addElement(bl);
     }
     bl->setGenerated(false);
