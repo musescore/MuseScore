@@ -290,6 +290,11 @@ public:
         LOOP_OUT = 0xF3C8,
         PAUSE = 0xF3C9,
 
+        WARNING = 0xF3CE,
+        INFO = 0xF3CF,
+        ERROR = 0xF3D0,
+        QUESTION = 0xF3D1,
+
         AUTO,
         NONE,
         CUSTOM

@@ -38,10 +38,21 @@
 using namespace mu;
 using namespace mu::framework;
 
+IInteractive::Result standardDialogResult(const RetVal<Val>& retVal)
+{
+    if (!retVal.ret) {
+        return IInteractive::Result();
+    }
+
+    int btn = retVal.val.toQVariant().toMap()["buttonId"].toInt();
+    bool showAgain = retVal.val.toQVariant().toMap()["showAgain"].toBool();
+    return IInteractive::Result(btn, showAgain);
+}
+
 IInteractive::Result Interactive::question(const std::string& title, const std::string& text,
                                            const Buttons& buttons,
                                            const Button& def,
-                                           const QFlags<Option>& options) const
+                                           const Options& options) const
 {
     ButtonDatas datas;
     datas.reserve(buttons.size());
@@ -53,52 +64,9 @@ IInteractive::Result Interactive::question(const std::string& title, const std::
 }
 
 IInteractive::Result Interactive::question(const std::string& title, const Text& text, const ButtonDatas& btns, int defBtn,
-                                           const QFlags<Option>& options) const
+                                           const Options& options) const
 {
-    Q_UNUSED(options)
-
-    //! NOTE Temporarily, need to replace the qml dialog
-
-    auto format = [](IInteractive::TextFormat f) {
-        switch (f) {
-        case IInteractive::TextFormat::PlainText: return Qt::PlainText;
-        case IInteractive::TextFormat::RichText:  return Qt::RichText;
-        }
-        return Qt::PlainText;
-    };
-
-    QMap<QAbstractButton*, int> btnsMap;
-    auto makeButton = [&btnsMap](const ButtonData& b, QWidget* parent) {
-        QPushButton* btn = new QPushButton(parent);
-        btn->setText(QString::fromStdString(b.text));
-        btnsMap[btn] = b.btn;
-        return btn;
-    };
-
-    QMessageBox msgBox;
-    msgBox.setWindowTitle(QString::fromStdString(title));
-    msgBox.setText(QString::fromStdString(text.text));
-    msgBox.setTextFormat(format(text.format));
-
-    for (const ButtonData& b : btns) {
-        QPushButton* btn = makeButton(b, &msgBox);
-        msgBox.addButton(btn, QMessageBox::ActionRole);
-
-        if (b.btn == defBtn) {
-            msgBox.setDefaultButton(btn);
-        }
-    }
-
-    QGridLayout* layout = (QGridLayout*)msgBox.layout();
-    QSpacerItem* hSpacer = new QSpacerItem(300, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    layout->addItem(hSpacer, layout->rowCount(), 0, 1, layout->columnCount());
-
-    msgBox.exec();
-
-    QAbstractButton* clickedBtn = msgBox.clickedButton();
-    int retBtn = btnsMap.value(clickedBtn);
-
-    return Result(retBtn);
+    return standardDialogResult(provider()->question(title, text, btns, defBtn, options));
 }
 
 IInteractive::ButtonData Interactive::buttonData(Button b) const
@@ -129,22 +97,25 @@ IInteractive::ButtonData Interactive::buttonData(Button b) const
     return ButtonData(int(b), "");
 }
 
-IInteractive::Result Interactive::info(const std::string& title, const std::string& text,
-                                       const QFlags<Option>& options) const
+IInteractive::Result Interactive::info(const std::string& title, const std::string& text, const ButtonDatas& buttons,
+                                       int defBtn,
+                                       const Options& options) const
 {
-    return message(MessageType::Info, title, text, options);
+    return standardDialogResult(provider()->info(title, text, buttons, defBtn, options));
 }
 
-IInteractive::Result Interactive::warning(const std::string& title, const std::string& text,
+IInteractive::Result Interactive::warning(const std::string& title, const std::string& text, const ButtonDatas& buttons,
+                                          int defBtn,
                                           const QFlags<IInteractive::Option>& options) const
 {
-    return message(MessageType::Warning, title, text, options);
+    return standardDialogResult(provider()->warning(title, text, buttons, defBtn, options));
 }
 
-IInteractive::Result Interactive::error(const std::string& title, const std::string& text,
-                                        const QFlags<Option>& options) const
+IInteractive::Result Interactive::error(const std::string& title, const std::string& text, const ButtonDatas& buttons,
+                                        int defBtn,
+                                        const Options& options) const
 {
-    return message(MessageType::Error, title, text, options);
+    return standardDialogResult(provider()->error(title, text, buttons, defBtn, options));
 }
 
 mu::io::path Interactive::selectOpeningFile(const QString& title, const io::path& dir, const QString& filter)
@@ -219,35 +190,4 @@ Ret Interactive::openUrl(const std::string& url) const
 {
     QUrl _url(QString::fromStdString(url));
     return QDesktopServices::openUrl(_url);
-}
-
-IInteractive::Result Interactive::message(MessageType type, const std::string& title, const std::string& text,
-                                          const QFlags<Option>& options) const
-{
-    Q_UNUSED(options)
-
-    //! NOTE Temporarily, need to replace the qml dialog
-
-    auto icon = [](MessageType type) {
-        switch (type) {
-        case MessageType::Info: return QMessageBox::Information;
-        case MessageType::Warning: return QMessageBox::Warning;
-        case MessageType::Error: return QMessageBox::Critical;
-        }
-        return QMessageBox::NoIcon;
-    };
-
-    QMessageBox msgBox;
-    msgBox.setWindowTitle(QString::fromStdString(title));
-    msgBox.setText(QString::fromStdString(text));
-    msgBox.setStandardButtons(QMessageBox::Ok);
-    msgBox.setIcon(icon(type));
-
-    QGridLayout* layout = (QGridLayout*)msgBox.layout();
-    QSpacerItem* hSpacer = new QSpacerItem(300, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    layout->addItem(hSpacer, layout->rowCount(), 0, 1, layout->columnCount());
-
-    msgBox.exec();
-
-    return Result();
 }
