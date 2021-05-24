@@ -34,7 +34,6 @@ import "./NotationDialogs"
 import "./Telemetry"
 import "./VST"
 import "./KeyNav"
-import "./Accessibility"
 
 DockPage {
     id: homePage
@@ -73,7 +72,6 @@ DockPage {
                         { "name": "plugins", "title": "Plugins" },
                         { "name": "autobot", "title": "Autobot" },
                         { "name": "navigation", "title": "KeyNav" },
-                        { "name": "accessibility", "title": "Accessibility" }
                     ]
 
                     onSelected: {
@@ -190,13 +188,4 @@ DockPage {
             }
         }
     }
-
-    Component {
-        id: accessibilityComp
-
-        AccessibilityTest {
-
-        }
-    }
-
 }

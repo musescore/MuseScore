@@ -27,6 +27,7 @@
 
 #include "accessibleobject.h"
 #include "accessibleiteminterface.h"
+#include "dev/accessibledevmodel.h"
 
 #include "async/async.h"
 #include "log.h"
@@ -40,6 +41,8 @@
 #endif
 
 using namespace mu::accessibility;
+
+static const mu::UriQuery DEV_SHOW_TREE_URI("musescore://devtools/accessible/tree?sync=false&modal=false");
 
 AccessibilityController::~AccessibilityController()
 {
@@ -118,10 +121,17 @@ void AccessibilityController::init()
 
     QAccessible::installRootObjectHandler(nullptr);
     QAccessible::setRootObject(self.object);
+    AccessibleDevModel::setRootObject(self.object);
 
     //! NOTE Disabled any events from Qt
     QAccessible::installRootObjectHandler(rootObjectHandlerNoop);
     QAccessible::installUpdateHandler(updateHandlerNoop);
+
+    dispatcher()->reg(this, "accessibility-dev-show-tree", [this]() {
+        if (!interactive()->isOpened(DEV_SHOW_TREE_URI.uri()).val) {
+            interactive()->open(DEV_SHOW_TREE_URI);
+        }
+    });
 }
 
 const IAccessible* AccessibilityController::rootItem() const
