@@ -66,7 +66,7 @@ MuseScore {
         var notes = chord.notes;
         var sep = "\n";   // change to "," if you want them horizontally (anybody?)
         for (var i = 0; i < notes.length; i++) {
-            if (!notes[i].visible)
+            if ((curScore.selection.elements.length && !notes[i].selected) || !notes[i].visible)
                 continue // skip notes a that are not selected or invisible
             if (text) // only if text isn't empty
                 text = sep + text; // any but top note
