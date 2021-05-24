@@ -27,6 +27,7 @@
 
 #include <QQuickItem>
 
+#include "internal/dockbase.h"
 #include "docktypes.h"
 
 namespace mu::dock {
@@ -34,7 +35,7 @@ class DockToolBar;
 class DockPanel;
 class DockCentral;
 class DockStatusBar;
-class DockBase;
+class DockToolBarHolder;
 class DockPage : public QQuickItem
 {
     Q_OBJECT
@@ -42,7 +43,7 @@ class DockPage : public QQuickItem
     Q_PROPERTY(QString uri READ uri WRITE setUri NOTIFY uriChanged)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> mainToolBars READ mainToolBarsProperty)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolBars READ toolBarsProperty)
-    Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolBarsDockingHolders READ toolBarsDockingHoldersProperty)
+    Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBarHolder> toolBarsDockingHolders READ toolBarsDockingHoldersProperty)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockPanel> panels READ panelsProperty)
     Q_PROPERTY(mu::dock::DockCentral* centralDock READ centralDock WRITE setCentralDock NOTIFY centralDockChanged)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockStatusBar> statusBars READ statusBarsProperty)
@@ -59,16 +60,18 @@ public:
     QQmlListProperty<DockToolBar> toolBarsProperty();
     QQmlListProperty<DockPanel> panelsProperty();
     QQmlListProperty<DockStatusBar> statusBarsProperty();
-    QQmlListProperty<DockToolBar> toolBarsDockingHoldersProperty();
+    QQmlListProperty<DockToolBarHolder> toolBarsDockingHoldersProperty();
 
     QList<DockToolBar*> mainToolBars() const;
     QList<DockToolBar*> toolBars() const;
-    QList<DockToolBar*> toolBarsHolders() const;
+    QList<DockToolBarHolder*> toolBarsHolders() const;
     DockCentral* centralDock() const;
     QList<DockPanel*> panels() const;
     QList<DockStatusBar*> statusBars() const;
     QList<DockBase*> allDocks() const;
+
     DockBase* dockByName(const QString& dockName) const;
+    DockToolBarHolder* holderByLocation(DockBase::DockLocation location) const;
 
 public slots:
     void setUri(const QString& uri);
@@ -84,7 +87,7 @@ private:
     QString m_uri;
     uicomponents::QmlListProperty<DockToolBar> m_mainToolBars;
     uicomponents::QmlListProperty<DockToolBar> m_toolBars;
-    uicomponents::QmlListProperty<DockToolBar> m_toolBarsDockingHolders;
+    uicomponents::QmlListProperty<DockToolBarHolder> m_toolBarsDockingHolders;
     uicomponents::QmlListProperty<DockPanel> m_panels;
     DockCentral* m_central = nullptr;
     uicomponents::QmlListProperty<DockStatusBar> m_statusBars;
