@@ -73,7 +73,7 @@ QQmlListProperty<DockStatusBar> DockPage::statusBarsProperty()
     return m_statusBars.property();
 }
 
-QQmlListProperty<DockToolBar> DockPage::toolBarsDockingHoldersProperty()
+QQmlListProperty<DockToolBarHolder> DockPage::toolBarsDockingHoldersProperty()
 {
     return m_toolBarsDockingHolders.property();
 }
@@ -85,35 +85,25 @@ QList<DockToolBar*> DockPage::mainToolBars() const
 
 QList<DockToolBar*> DockPage::toolBars() const
 {
-    auto holder = [=](DockBase::DockLocation location) -> DockToolBar* {
-        for (DockToolBar* holder : m_toolBarsDockingHolders.list()) {
-            if (holder->location() == location) {
-                return holder;
-            }
-        }
-
-        return nullptr;
-    };
-
     //! NOTE: Order is important for correct drawing
     auto list = m_toolBars.list();
 
-    DockToolBar* leftHolder = holder(DockBase::DockLocation::Left);
+    DockToolBarHolder* leftHolder = holderByLocation(DockBase::DockLocation::Left);
     if (leftHolder) {
         list.prepend(leftHolder);
     }
 
-    DockToolBar* rightHolder = holder(DockBase::DockLocation::Right);
+    DockToolBarHolder* rightHolder = holderByLocation(DockBase::DockLocation::Right);
     if (rightHolder) {
         list.append(rightHolder);
     }
 
-    DockToolBar* bottomHolder = holder(DockBase::DockLocation::Bottom);
+    DockToolBarHolder* bottomHolder = holderByLocation(DockBase::DockLocation::Bottom);
     if (bottomHolder) {
         list.prepend(bottomHolder);
     }
 
-    DockToolBar* topHolder = holder(DockBase::DockLocation::Top);
+    DockToolBarHolder* topHolder = holderByLocation(DockBase::DockLocation::Top);
     if (topHolder) {
         list.append(topHolder);
     }
@@ -121,7 +111,7 @@ QList<DockToolBar*> DockPage::toolBars() const
     return list;
 }
 
-QList<DockToolBar*> DockPage::toolBarsHolders() const
+QList<DockToolBarHolder*> DockPage::toolBarsHolders() const
 {
     return m_toolBarsDockingHolders.list();
 }
@@ -146,6 +136,17 @@ DockBase* DockPage::dockByName(const QString& dockName) const
     for (DockBase* dock : allDocks()) {
         if (dock->objectName() == dockName) {
             return dock;
+        }
+    }
+
+    return nullptr;
+}
+
+DockToolBarHolder* DockPage::holderByLocation(DockBase::DockLocation location) const
+{
+    for (DockToolBarHolder* holder : m_toolBarsDockingHolders.list()) {
+        if (holder->location() == location) {
+            return holder;
         }
     }
 

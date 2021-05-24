@@ -23,7 +23,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import MuseScore.AppShell 1.0
-import MuseScore.Dock 1.0 as Dock
+import MuseScore.Dock 1.0
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
@@ -31,11 +31,11 @@ import "./HomePage"
 import "./NotationPage"
 import "./PublishPage"
 import "./DevTools"
-import "docksystem"
+import "./docksystem"
 
 import "../../qml" as DOCKWINDOW
 
-Dock.DockWindow {
+DockWindow {
     id: root
 
     property var provider: InteractiveProvider {
@@ -87,9 +87,9 @@ Dock.DockWindow {
         }
     ]
 
-    mainToolBarDockingHolder: Dock.DockToolBarHolder {
+    mainToolBarDockingHolder: DockToolBarHolder {
         objectName: root.objectName + "_mainToolBarDockingHolderTop"
-        location: Dock.DockBase.Top
+        location: DockBase.Top
 
         Rectangle { color: ui.theme.backgroundPrimaryColor }
     }

@@ -155,11 +155,6 @@ QSize DockToolBar::verticalPreferredSize() const
     return m_verticalPreferredSize;
 }
 
-DockToolBar* DockToolBar::tabifyToolBar() const
-{
-    return m_tabifyToolBar;
-}
-
 void DockToolBar::setMinimumWidth(int width)
 {
     if (movable() && orientation() == Qt::Horizontal) {
@@ -244,16 +239,6 @@ void DockToolBar::setVerticalPreferredSize(QSize verticalPreferredSize)
 
     m_verticalPreferredSize = verticalPreferredSize;
     emit verticalPreferredSizeChanged(m_verticalPreferredSize);
-}
-
-void DockToolBar::setTabifyToolBar(DockToolBar* tabifyToolBar)
-{
-    if (m_tabifyToolBar == tabifyToolBar) {
-        return;
-    }
-
-    m_tabifyToolBar = tabifyToolBar;
-    emit tabifyToolBarChanged(m_tabifyToolBar);
 }
 
 void DockToolBar::componentComplete()
