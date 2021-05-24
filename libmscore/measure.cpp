@@ -3720,6 +3720,9 @@ void Measure::setEndBarLineType(BarLineType val, int track, bool visible, QColor
             bl = new BarLine(score());
             bl->setParent(seg);
             bl->setTrack(track);
+            Part* part = score()->staff(track / VOICES)->part();
+            if (part != NULL && part->nstaves() > 1)
+                  bl->setSpanStaff(true);
             score()->addElement(bl);
             }
       bl->setGenerated(false);
