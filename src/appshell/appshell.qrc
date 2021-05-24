@@ -82,7 +82,6 @@
         <file>qml/kdab/AppWindow.qml</file>
         <file>qml/kdab/WindowContent.qml</file>
         <file>qml/kdab/AppMenuBar.qml</file>
-        <file>qml/DevTools/Accessibility/AccessibilityTest.qml</file>
         <file>qml/kdab/platform/linux/AppTitleBarLinux.qml</file>
         <file>qml/kdab/platform/linux/Main.qml</file>
         <file>qml/kdab/platform/mac/Main.qml</file>

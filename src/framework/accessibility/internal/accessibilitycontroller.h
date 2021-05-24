@@ -33,15 +33,20 @@
 
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
+#include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
+#include "global/iinteractive.h"
 
 class QAccessibleInterface;
 class QAccessibleEvent;
 
 namespace mu::accessibility {
-class AccessibilityController : public IAccessibilityController, public IAccessible, public async::Asyncable,
+class AccessibilityController : public IAccessibilityController, public IAccessible, public async::Asyncable, public actions::Actionable,
     public std::enable_shared_from_this<AccessibilityController>
 {
     INJECT(accessibility, ui::IMainWindow, mainWindow)
+    INJECT(accessibility, actions::IActionsDispatcher, dispatcher)
+    INJECT(accessibility, framework::IInteractive, interactive)
 
 public:
     AccessibilityController() = default;
