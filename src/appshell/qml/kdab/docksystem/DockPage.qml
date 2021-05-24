@@ -38,27 +38,27 @@ Dock.DockPage {
         }
     }
 
-    toolBarsDockingHelpers: [
-        Dock.DockToolBarHelper {
-            objectName: root.objectName + "_toolBarsDockingHelperLeft"
+    toolBarsDockingHolders: [
+        Dock.DockToolBarHolder {
+            objectName: root.objectName + "_toolBarsDockingHolderLeft"
             location: Dock.DockBase.Left
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }
         },
-        Dock.DockToolBarHelper {
-            objectName: root.objectName + "_toolBarsDockingHelperRight"
+        Dock.DockToolBarHolder {
+            objectName: root.objectName + "_toolBarsDockingHolderRight"
             location: Dock.DockBase.Right
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }
         },
-        Dock.DockToolBarHelper {
-            objectName: root.objectName + "_toolBarsDockingHelperTop"
+        Dock.DockToolBarHolder {
+            objectName: root.objectName + "_toolBarsDockingHolderTop"
             location: Dock.DockBase.Top
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }
         },
-        Dock.DockToolBarHelper {
-            objectName: root.objectName + "_toolBarsDockingHelperBottom"
+        Dock.DockToolBarHolder {
+            objectName: root.objectName + "_toolBarsDockingHolderBottom"
             location: Dock.DockBase.Bottom
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }

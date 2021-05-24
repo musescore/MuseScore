@@ -88,22 +88,22 @@ mu::async::Channel<std::pair<QString, mu::framework::Orientation> > MainWindowPr
     return m_dockOrientationChanged;
 }
 
-void MainWindowProvider::requestShowToolBarDockingHelper(const QPoint& globalPos)
+void MainWindowProvider::requestShowToolBarDockingHolder(const QPoint& globalPos)
 {
-    m_showDockingHelperRequested.send(globalPos);
+    m_showDockingHolderRequested.send(globalPos);
 }
 
-mu::async::Channel<QPoint> MainWindowProvider::showToolBarDockingHelperRequested() const
+mu::async::Channel<QPoint> MainWindowProvider::showToolBarDockingHolderRequested() const
 {
-    return m_showDockingHelperRequested;
+    return m_showDockingHolderRequested;
 }
 
-void MainWindowProvider::requestHideAllDockingHelpers()
+void MainWindowProvider::requestHideAllDockingHolders()
 {
-    m_hideAllHelpersRequested.notify();
+    m_hideAllHoldersRequested.notify();
 }
 
-mu::async::Notification MainWindowProvider::hideAllDockingHelpersRequested() const
+mu::async::Notification MainWindowProvider::hideAllDockingHoldersRequested() const
 {
-    return m_hideAllHelpersRequested;
+    return m_hideAllHoldersRequested;
 }
