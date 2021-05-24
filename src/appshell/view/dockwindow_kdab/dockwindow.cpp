@@ -25,18 +25,18 @@
 #include "thirdparty/KDDockWidgets/src/private/quick/MainWindowQuick_p.h"
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
 #include "thirdparty/KDDockWidgets/src/LayoutSaver.h"
-#include "thirdparty/KDDockWidgets/src/KDDockWidgets.h"
-#include "thirdparty/KDDockWidgets/src/private/DockRegistry_p.h"
 
 #include "log.h"
 
 #include "dockpage.h"
 #include "docktoolbar.h"
+#include "docktoolbarholder.h"
+#include "dockcentral.h"
 #include "dockpanel.h"
 
 using namespace mu::dock;
 
-static const double MAX_DISTANCE_TO_HOLDER = 25;
+static constexpr double MAX_DISTANCE_TO_HOLDER = 25;
 
 DockWindow::DockWindow(QQuickItem* parent)
     : QQuickItem(parent),
@@ -86,7 +86,7 @@ void DockWindow::componentComplete()
             return;
         }
 
-        DockToolBar* holder = resolveToolbarDockingHolder(localPos);
+        DockToolBarHolder* holder = resolveToolbarDockingHolder(localPos);
 
         if (holder != m_currentToolBarDockingHolder) {
             hideCurrentToolBarDockingHolder();
@@ -153,12 +153,12 @@ void DockWindow::loadPage(const QString& uri)
     emit currentPageUriChanged(uri);
 }
 
-DockToolBar* DockWindow::mainToolBarDockingHolder() const
+DockToolBarHolder* DockWindow::mainToolBarDockingHolder() const
 {
     return m_mainToolBarDockingHolder;
 }
 
-void DockWindow::setMainToolBarDockingHolder(DockToolBar* mainToolBarDockingHolder)
+void DockWindow::setMainToolBarDockingHolder(DockToolBarHolder* mainToolBarDockingHolder)
 {
     if (m_mainToolBarDockingHolder == mainToolBarDockingHolder) {
         return;
@@ -260,17 +260,11 @@ void DockWindow::loadPageToolbars(const DockPage* page)
     }
 
     for (int i = 0; i < bottomSideToolbars.size(); ++i) {
-        DockToolBar* toolBar = bottomSideToolbars[i];
-        const DockToolBar* tabifyToolBar = toolBar->tabifyToolBar();
-        auto location = tabifyToolBar ? KDDockWidgets::Location_OnRight : KDDockWidgets::Location_OnBottom;
-        addDock(toolBar, location, tabifyToolBar);
+        addDock(bottomSideToolbars[i], KDDockWidgets::Location_OnBottom);
     }
 
     for (int i = topSideToolbars.size() - 1; i >= 0; --i) {
-        DockToolBar* toolBar = topSideToolbars[i];
-        const DockToolBar* tabifyToolBar = toolBar->tabifyToolBar();
-        auto location = tabifyToolBar ? KDDockWidgets::Location_OnLeft : KDDockWidgets::Location_OnTop;
-        addDock(toolBar, location, tabifyToolBar);
+        addDock(topSideToolbars[i], KDDockWidgets::Location_OnTop);
     }
 }
 
@@ -366,46 +360,37 @@ void DockWindow::initDocks(DockPage* page)
     }
 }
 
-DockToolBar* DockWindow::resolveToolbarDockingHolder(const QPoint& localPos) const
+DockToolBarHolder* DockWindow::resolveToolbarDockingHolder(const QPoint& localPos) const
 {
-    DockPage* page = pageByUri(m_currentPageUri);
+    const DockPage* page = pageByUri(m_currentPageUri);
     if (!page) {
         return nullptr;
     }
 
-    QList<DockToolBar*> Holders = page->toolBarsHolders();
+    const KDDockWidgets::DockWidgetBase* centralDock = page->centralDock()->dockWidget();
+    if (!centralDock) {
+        return nullptr;
+    }
 
-    KDDockWidgets::DockWidgetBase* centralDock = KDDockWidgets::DockRegistry::self()->dockByName(page->centralDock()->objectName());
     QRect centralFrameGeometry = centralDock->frameGeometry();
     centralFrameGeometry.setTopLeft(m_mainWindow->mapFromGlobal(centralDock->mapToGlobal({ centralDock->x(), centralDock->y() })));
 
     QRect mainFrameGeometry = m_mainWindow->rect();
-
-    auto holder = [=](DockBase::DockLocation location) -> DockToolBar* {
-        for (DockToolBar* holder : Holders) {
-            if (holder->location() == location) {
-                return holder;
-            }
-        }
-
-        return nullptr;
-    };
-
-    mu::dock::DockToolBar* newHolder = nullptr;
+    DockToolBarHolder* newHolder = nullptr;
 
     if (localPos.y() < MAX_DISTANCE_TO_HOLDER) { // main toolbar holder
         newHolder = m_mainToolBarDockingHolder;
     } else if (localPos.y() > centralFrameGeometry.top()
                && localPos.y() < centralFrameGeometry.top() + MAX_DISTANCE_TO_HOLDER) { // page top toolbar holder
-        newHolder = holder(DockBase::DockLocation::Top);
+        newHolder = page->holderByLocation(DockBase::DockLocation::Top);
     } else if (localPos.y() < centralFrameGeometry.bottom()) { // page left toolbar holder
         if (localPos.x() < MAX_DISTANCE_TO_HOLDER) {
-            newHolder = holder(DockBase::DockLocation::Left);
+            newHolder = page->holderByLocation(DockBase::DockLocation::Left);
         } else if (localPos.x() > mainFrameGeometry.right() - MAX_DISTANCE_TO_HOLDER) { // page right toolbar holder
-            newHolder = holder(DockBase::DockLocation::Right);
+            newHolder = page->holderByLocation(DockBase::DockLocation::Right);
         }
     } else if (localPos.y() < mainFrameGeometry.bottom()) { // page bottom toolbar holder
-        newHolder = holder(DockBase::DockLocation::Bottom);
+        newHolder = page->holderByLocation(DockBase::DockLocation::Bottom);
     }
 
     return newHolder;
@@ -426,8 +411,8 @@ bool DockWindow::isMouseOverCurrentToolBarDockingHolder(const QPoint& mouseLocal
     if (!m_currentToolBarDockingHolder || !m_mainWindow) {
         return false;
     }
-    KDDockWidgets::DockWidgetBase* holderDock
-        = KDDockWidgets::DockRegistry::self()->dockByName(m_currentToolBarDockingHolder->objectName());
+
+    const KDDockWidgets::DockWidgetBase* holderDock = m_currentToolBarDockingHolder->dockWidget();
     if (!holderDock) {
         return false;
     }
