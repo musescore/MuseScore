@@ -69,6 +69,8 @@ private slots:
       void beams1() { mxmlIoTest("testBeams1"); }
       void beams2() { mxmlIoTest("testBeams2"); }
       void beams3() { mxmlIoTestRef("testBeams3"); }
+      void barlinesGrandStaff1() { mxmlImportTestRef("testBarlinesGrandStaff"); }
+      void barlinesGrandStaff2() { mxmlIoTest("testBarlinesGrandStaff"); }
       void breaksImplExpl() { mxmlMscxExportTestRefBreaks("testBreaksImplExpl"); }
       void breaksMMRest() { mxmlMscxExportTestRefBreaks("testBreaksMMRest"); }
       void breaksManual() { mxmlIoTestRefBreaks("testBreaksManual"); }
