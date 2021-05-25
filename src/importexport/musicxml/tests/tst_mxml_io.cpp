@@ -93,6 +93,8 @@ private slots:
     void barStyles() { mxmlIoTest("testBarStyles"); }
     void barStyles2() { mxmlIoTest("testBarStyles2"); }
     void barStyles3() { mxmlIoTest("testBarStyles3"); }
+    void barlinesGrandStaff1() { mxmlImportTestRef("testBarlinesGrandStaff"); }
+    void barlinesGrandStaff2() { mxmlIoTest("testBarlinesGrandStaff"); }
     void breaksImplExpl() { mxmlMscxExportTestRefBreaks("testBreaksImplExpl"); }
     void breaksMMRest() { mxmlMscxExportTestRefBreaks("testBreaksMMRest"); }
     // void breaksManual() { mxmlIoTestRefBreaks("testBreaksManual"); } fail after sync with 3.x
