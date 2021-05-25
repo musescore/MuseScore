@@ -50,8 +50,8 @@ FocusScope {
 
     property bool isClickOnKeyNavTriggered: true
 
-    signal clicked()
-    signal pressAndHold()
+    signal clicked(var mouse)
+    signal pressAndHold(var mouse)
 
     objectName: root.text
 
@@ -62,8 +62,9 @@ FocusScope {
 
     QtObject {
         id: prv
-        property color defaultColor: accentButton ? ui.theme.accentColor : ui.theme.buttonColor
-        property bool isVertical: orientation === Qt.Vertical
+
+        property color defaultColor: root.accentButton ? ui.theme.accentColor : ui.theme.buttonColor
+        property bool isVertical: root.orientation === Qt.Vertical
     }
 
     NavigationControl {
@@ -184,8 +185,8 @@ FocusScope {
 
         hoverEnabled: true
 
-        onClicked: root.clicked()
-        onPressAndHold: root.pressAndHold()
+        onClicked: function (mouse) { root.clicked(mouse) }
+        onPressAndHold: function (mouse) { root.pressAndHold(mouse) }
 
         onContainsMouseChanged: {
             if (!Boolean(root.toolTipTitle)) {

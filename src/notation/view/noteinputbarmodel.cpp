@@ -68,7 +68,7 @@ QVariant NoteInputBarModel::data(const QModelIndex& index, int role) const
     case DescriptionRole: return item.description;
     case ShortcutRole: return QString::fromStdString(item.shortcut);
     case SubitemsRole: return subitems(item.code);
-    case ShowSubitemsByPressAndHoldRole: return isNeedShowSubitemsByPressAndHold(item.code);
+    case IsMenuSecondaryRole: return isMenuSecondary(item.code);
     case OrderRole: return index.row();
     }
     return QVariant();
@@ -90,7 +90,7 @@ QHash<int, QByteArray> NoteInputBarModel::roleNames() const
         { DescriptionRole, "descriptionRole" },
         { ShortcutRole, "shortcutRole" },
         { SubitemsRole, "subitemsRole" },
-        { ShowSubitemsByPressAndHoldRole, "showSubitemsByPressAndHoldRole" },
+        { IsMenuSecondaryRole, "isMenuSecondaryRole" },
         { OrderRole, "orderRole" },
     };
     return roles;
@@ -787,7 +787,7 @@ MenuItemList NoteInputBarModel::linesItems() const
     return items;
 }
 
-bool NoteInputBarModel::isNeedShowSubitemsByPressAndHold(const ActionCode& actionCode) const
+bool NoteInputBarModel::isMenuSecondary(const ActionCode& actionCode) const
 {
     if (isNoteInputModeAction(actionCode)) {
         return true;
