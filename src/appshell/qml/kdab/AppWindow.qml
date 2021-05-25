@@ -22,6 +22,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.Shortcuts 1.0
 
 ApplicationWindow {
@@ -36,6 +37,8 @@ ApplicationWindow {
     visible: true
 
     title: qsTrc("appshell", "MuseScore 4")
+
+    ToolTipProvider { }
 
     //! NOTE Need only create
     Shortcuts { }

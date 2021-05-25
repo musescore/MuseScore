@@ -36,27 +36,31 @@ QmlToolTip::QmlToolTip(QObject* parent)
     : QObject(parent)
 {
     m_timer.setSingleShot(true);
-    connect(&m_timer, &QTimer::timeout, this, &QmlToolTip::doShowToolTip);
+    connect(&m_timer, &QTimer::timeout, this, &QmlToolTip::doShow);
 }
 
-void QmlToolTip::show(QQuickItem* item, const QString& text)
+void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& description, const QString& shortcut)
 {
-    if (item != m_item) {
-        if (m_item) {
-            disconnect(m_item, &QObject::destroyed, this, &QmlToolTip::doHide);
-        }
+    if (item == m_item) {
+        return;
+    }
 
-        m_item = item;
-        m_text = text;
+    if (m_item) {
+        disconnect(m_item, &QObject::destroyed, this, &QmlToolTip::doHide);
+    }
 
-        if (m_item) {
-            connect(m_item, &QObject::destroyed, this, &QmlToolTip::doHide);
+    m_item = item;
+    m_title = title;
+    m_description = description;
+    m_shortcut = shortcut;
 
-            const int interval = item ? qApp->styleHints()->mousePressAndHoldInterval() : 100;
-            m_timer.start(interval);
-        } else {
-            doHide();
-        }
+    if (m_item) {
+        connect(m_item, &QObject::destroyed, this, &QmlToolTip::doHide);
+
+        const int interval = item ? qApp->styleHints()->mousePressAndHoldInterval() : 100;
+        m_timer.start(interval);
+    } else {
+        doHide();
     }
 }
 
@@ -69,7 +73,7 @@ void QmlToolTip::hide(QQuickItem* item)
     doHide();
 }
 
-void QmlToolTip::doShowToolTip()
+void QmlToolTip::doShow()
 {
     if (!m_item) {
         return;
@@ -77,11 +81,9 @@ void QmlToolTip::doShowToolTip()
 
     const QPointF topLeft = m_item->mapToGlobal(QPointF(0, 0));
     const QRect rect(topLeft.x(), topLeft.y(), m_item->width(), m_item->height());
-    const QPoint pos(QCursor::pos());
+    const QPoint pos(rect.bottomLeft().x() + m_item->width() / 2, rect.bottomLeft().y());
 
-    if (rect.contains(pos)) {
-        QToolTip::showText(pos, m_text);
-    }
+    emit showToolTip(pos, m_title, m_description, m_shortcut);
 }
 
 void QmlToolTip::doHide()
@@ -92,6 +94,9 @@ void QmlToolTip::doHide()
 
     m_timer.stop();
     m_item = nullptr;
-    m_text = QString();
-    QToolTip::hideText();
+    m_title = QString();
+    m_description = QString();
+    m_shortcut = QString();
+
+    emit hideToolTip();
 }

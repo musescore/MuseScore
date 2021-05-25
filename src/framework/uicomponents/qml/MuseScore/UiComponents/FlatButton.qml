@@ -27,7 +27,10 @@ FocusableControl {
 
     property alias icon: buttonIcon.iconCode
     property alias text: textLabel.text
-    property string hint
+
+    property string toolTipTitle: ""
+    property string toolTipDescription: ""
+    property string toolTipShortcut: ""
 
     property alias iconFont: buttonIcon.font
     property alias textFont: textLabel.font
@@ -67,12 +70,12 @@ FocusableControl {
 
     mouseArea.hoverEnabled: true
     mouseArea.onContainsMouseChanged: {
-        if (!Boolean(root.hint)) {
+        if (!Boolean(root.toolTipTitle)) {
             return
         }
 
         if (mouseArea.containsMouse) {
-            ui.tooltip.show(this, root.hint)
+            ui.tooltip.show(this, root.toolTipTitle, root.toolTipDescription, root.toolTipShortcut)
         } else {
             ui.tooltip.hide(this)
         }
