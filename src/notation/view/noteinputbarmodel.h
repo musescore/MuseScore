@@ -71,7 +71,7 @@ private:
         DescriptionRole,
         ShortcutRole,
         SubitemsRole,
-        ShowSubitemsByPressAndHoldRole,
+        IsMenuSecondaryRole,
         OrderRole
     };
 
@@ -117,7 +117,7 @@ private:
     ui::MenuItemList textItems() const;
     ui::MenuItemList linesItems() const;
 
-    bool isNeedShowSubitemsByPressAndHold(const actions::ActionCode& actionCode) const;
+    bool isMenuSecondary(const actions::ActionCode& actionCode) const;
 
     void notifyAboutTupletItemChanged();
     void notifyAboutAddItemChanged();
