@@ -49,6 +49,8 @@ PopupPanel {
 
     visible: false
 
+    accessible.name: root.title
+
     QtObject {
         id: prv
 

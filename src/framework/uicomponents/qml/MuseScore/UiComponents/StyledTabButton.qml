@@ -57,6 +57,11 @@ TabButton {
     NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "TabButton"
+
+        accessible.role: Accessible.RadioButton
+        accessible.name: root.text
+        accessible.selected: root.isCurrent
+
         onActiveChanged: {
             if (active) {
                 root.ensureActiveFocus()

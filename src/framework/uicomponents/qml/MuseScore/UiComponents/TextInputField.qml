@@ -42,7 +42,7 @@ FocusScope {
     property alias readOnly: valueInput.readOnly
 
     property alias navigation: navCtrl
-    property string accessibleName: root.hint
+    property alias accessible: navCtrl.accessible
 
     signal currentTextEdited(var newTextValue)
     signal textCleared()
@@ -81,7 +81,8 @@ FocusScope {
         enabled: root.enabled && root.visible
 
         accessible.role: Accessible.EditableText
-        accessible.name: root.accessibleName
+        accessible.name: valueInput.text
+        accessible.visualItem: root
 
         onActiveChanged: {
             if (navCtrl.active) {
