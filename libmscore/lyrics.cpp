@@ -188,7 +188,7 @@ void Lyrics::remove(Element* el)
                   if (!e)
                         e = score()->findCRinStaff(_separator->tick2(), track());
                   if (e && e->isChordRest())
-                        toChordRest(e)->setMelismaEnd(false);
+                        toChordRest(e)->removeMelismaEnd(this);
 #endif
                   // Lyrics::remove() and LyricsLine::removeUnmanaged() call each other;
                   // be sure each finds a clean context
@@ -368,7 +368,7 @@ void Lyrics::layout()
             // set melisma end
             ChordRest* ecr = score()->findCR(endTick(), track());
             if (ecr)
-                  ecr->setMelismaEnd(true);
+                  ecr->melismaEnds().insert(this);
             }
 
       }
@@ -525,7 +525,7 @@ void Lyrics::removeFromScore()
             // clear melismaEnd flag from end cr
             ChordRest* ecr = score()->findCR(endTick(), track());
             if (ecr)
-                  ecr->setMelismaEnd(false);
+                  ecr->removeMelismaEnd(this);
             }
       if (_separator) {
             _separator->removeUnmanaged();
@@ -567,16 +567,13 @@ bool Lyrics::setProperty(Pid propertyId, const QVariant& v)
                   break;
             case Pid::LYRIC_TICKS:
                   if (_ticks.isNotZero()) {
-                        // clear melismaEnd flag from previous end cr
-                        // this might be premature, as there may be other melismas ending there
-                        // but flag will be generated correctly on layout
                         // TODO: after inserting a measure,
                         // endTick info is wrong.
                         // Somehow we need to fix this.
                         // See https://musescore.org/en/node/285304 and https://musescore.org/en/node/311289
                         ChordRest* ecr = score()->findCR(endTick(), track());
                         if (ecr)
-                              ecr->setMelismaEnd(false);
+                              ecr->removeMelismaEnd(this);
                         }
                   _ticks = v.value<Fraction>();
                   break;
