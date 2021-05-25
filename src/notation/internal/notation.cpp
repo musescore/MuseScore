@@ -40,6 +40,8 @@
 #include "notationaccessibility.h"
 #include "notationmidiinput.h"
 #include "notationparts.h"
+#include "notationtypes.h"
+#include "scoreorderconverter.h"
 
 using namespace mu::notation;
 
@@ -223,6 +225,14 @@ void Notation::setMetaInfo(const Meta& meta)
     }
 
     score()->setMetaTags(tags);
+}
+
+mu::instruments::ScoreOrder Notation::scoreOrder() const
+{
+    if (!m_score) {
+        return mu::instruments::ScoreOrder();
+    }
+    return ScoreOrderConverter::convertScoreOrder(m_score->scoreOrder());
 }
 
 INotationPtr Notation::clone() const

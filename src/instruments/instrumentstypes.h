@@ -108,6 +108,13 @@ using InstrumentGenreMap = QMap<QString /*id*/, InstrumentGenre>;
 
 static const QString COMMON_GENRE_ID("common");
 
+struct InstrumentFamily
+{
+    QString id;
+    QString name;
+};
+using InstrumentFamilyMap = QMap<QString /*id*/, InstrumentFamily>;
+
 struct Transposition
 {
     QString id;
@@ -124,12 +131,14 @@ struct Instrument
     QString name;
     QString musicXMLid;
     QString description;
+    int sequenceOrder = 0;
 
     bool extended = false;
     int staves = 1;
 
     QString groupId;
     QStringList genreIds;
+    QString familyId;
 
     PitchRange amateurPitchRange;
     PitchRange professionalPitchRange;
@@ -171,6 +180,37 @@ struct PartInstrument {
 
 using PartInstrumentList = QList<PartInstrument>;
 
+struct ScoreOrderGroup {
+    int index;
+    QString family;
+    QString section { QString() };
+    QString unsorted { QString() };
+    bool bracket { false };
+    bool showSystemMarkings { false };
+    bool barLineSpan { false };
+    bool thinBracket { false };
+};
+
+struct InstrumentOverwrite {
+    QString id;
+    QString name;
+};
+
+struct ScoreOrder {
+    int index;
+    QString id;
+    QString name;
+    QMap<QString, InstrumentOverwrite> instrumentMap;
+    QList<ScoreOrderGroup> groups;
+
+    bool isValid() { return !groups.empty(); }
+};
+
+struct PartInstrumentListScoreOrder {
+    PartInstrumentList instruments;
+    ScoreOrder scoreOrder;
+};
+
 struct InstrumentTemplate
 {
     QString id;
@@ -182,13 +222,16 @@ struct InstrumentTemplate
 
 using InstrumentTemplateMap = QMap<QString /*id*/, InstrumentTemplate>;
 using InstrumentTemplateList = QList<InstrumentTemplate>;
+using ScoreOrderMap = QMap<QString /*id*/, ScoreOrder>;
 
 struct InstrumentsMeta
 {
     InstrumentTemplateMap instrumentTemplates;
     InstrumentGroupMap groups;
     InstrumentGenreMap genres;
+    InstrumentFamilyMap families;
     MidiArticulationMap articulations;
+    ScoreOrderMap scoreOrders;
 };
 
 class InstrumentsTreeItemType
@@ -211,5 +254,6 @@ public:
 }
 
 Q_DECLARE_METATYPE(mu::instruments::Instrument)
+Q_DECLARE_METATYPE(mu::instruments::ScoreOrder)
 
 #endif // MU_INSTRUMENTS_INSTRUMENTSTYPES_H

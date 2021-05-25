@@ -33,7 +33,7 @@
 #include "barline.h"
 #include "excerpt.h"
 #include "spanner.h"
-#include "scoreOrder.h"
+#include "scoreorder.h"
 #include "measurebase.h"
 
 namespace Ms {
@@ -56,7 +56,6 @@ bool Score::read(XmlReader& e)
         style().set(Sid::harmonyPlay, false);
     }
 
-    ScoreOrder* order { nullptr };
     while (e.readNextStartElement()) {
         e.setTrack(-1);
         const QStringRef& tag(e.name());
@@ -132,8 +131,11 @@ bool Score::read(XmlReader& e)
             QString name = e.attribute("name");
             setMetaTag(name, e.readElementText());
         } else if (tag == "Order") {
-            order = new ScoreOrder(e.attribute("id"));
-            order->read(e);
+            ScoreOrder order;
+            order.read(e);
+            if (order.isValid()) {
+                setScoreOrder(order);
+            }
         } else if (tag == "Part") {
             Part* part = new Part(this);
             part->read(e);
@@ -282,34 +284,6 @@ bool Score::read(XmlReader& e)
         const InstrumentList* il = part->instruments();
         for (auto it = il->begin(); it != il->end(); it++) {
             static_cast<Instrument*>(it->second)->updateInstrumentId();
-        }
-    }
-    if (order) {
-        ScoreOrder* defined = scoreOrders.findByName(order->getName());
-        if (defined) {
-            if (defined->isScoreOrder(this)) {
-                // The order in the score file matches a score order
-                // which is already defined so use that order.
-                setScoreOrder(defined);
-                delete order;
-            } else {
-                // The order in the score file is already defined in the score order
-                // but the order is of the instruments is not the same so use the
-                // order as a customized version of the already defined order.
-                scoreOrders.addScoreOrder(order);
-                setScoreOrder(order);
-            }
-        } else {
-            defined = scoreOrders.findById(order->getId());
-            if (defined) {
-                // The order in the score file is already available, resuse it.
-                setScoreOrder(defined);
-                delete order;
-            } else {
-                // The order in the score file is new, add it to the score orders.
-                scoreOrders.addScoreOrder(order);
-                setScoreOrder(order);
-            }
         }
     }
 

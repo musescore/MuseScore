@@ -22,6 +22,7 @@
 #include "masternotation.h"
 #include "excerptnotation.h"
 #include "masternotationparts.h"
+#include "scoreorderconverter.h"
 
 #include <QFileInfo>
 
@@ -197,6 +198,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
             return ret;
         }
         score->setStyle(tscore->style());
+        score->setScoreOrder(tscore->scoreOrder());
 
         // create instruments from template
         for (Ms::Part* tpart : tscore->parts()) {
@@ -247,6 +249,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
         delete tscore;
     } else {
         score = new Ms::MasterScore(scoreGlobal()->baseStyle());
+        score->setScoreOrder(ScoreOrderConverter::convertScoreOrder(scoreOptions.order));
     }
 
     score->setName(qtrc("notation", "Untitled"));

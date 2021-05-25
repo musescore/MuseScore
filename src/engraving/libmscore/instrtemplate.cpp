@@ -26,7 +26,6 @@
 #include "stafftype.h"
 #include "style.h"
 #include "stringdata.h"
-#include "scoreOrder.h"
 #include "utils.h"
 #include "xml.h"
 

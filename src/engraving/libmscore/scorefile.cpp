@@ -49,7 +49,7 @@
 #include "mscore.h"
 #include "stafftype.h"
 #include "sym.h"
-#include "scoreOrder.h"
+#include "scoreorder.h"
 
 #include "preferences.h"
 
@@ -187,11 +187,10 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
         }
     }
 
-    if (_scoreOrder && !_scoreOrder->isCustom()) {
-        ScoreOrder* order = _scoreOrder->clone();
-        order->updateInstruments(this);
-        order->write(xml);
-        delete order;
+    if (_scoreOrder.isValid()) {
+        ScoreOrder order = _scoreOrder;
+        order.updateInstruments(this);
+        order.write(xml);
     }
 
     xml.setCurTrack(0);

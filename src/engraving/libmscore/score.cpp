@@ -75,8 +75,8 @@
 #include "layoutbreak.h"
 #include "harmony.h"
 #include "mscore.h"
-#include "scoreOrder.h"
 #include "scorefont.h"
+#include "scoreorder.h"
 
 #include "bracket.h"
 #include "audio.h"
@@ -316,7 +316,6 @@ Score::Score()
     _style  = MScore::defaultStyle();
 //      accInfo = tr("No selection");     // ??
     accInfo = "No selection";
-    _scoreOrder = nullptr;
 
 #ifdef USE_SCORE_ACCESSIBLE_TREE
     m_accessible = new mu::score::AccessibleScore(this);

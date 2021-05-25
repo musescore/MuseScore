@@ -37,6 +37,7 @@
 #include "key.h"
 #include "select.h"
 #include "instrument.h"
+#include "scoreorder.h"
 #include "pitchvalue.h"
 #include "timesig.h"
 #include "noteevent.h"
@@ -88,7 +89,6 @@ class InstrumentChange;
 class Box;
 class Spanner;
 class BarLine;
-class ScoreOrder;
 enum class ClefType : signed char;
 enum class PlayEventType : char;
 class Excerpt;
@@ -1598,11 +1598,11 @@ public:
 class ChangeScoreOrder : public UndoCommand
 {
     Score* score;
-    ScoreOrder* order;
+    ScoreOrder order;
     void flip(EditData*) override;
 
 public:
-    ChangeScoreOrder(Score* sc, ScoreOrder* so)
+    ChangeScoreOrder(Score* sc, ScoreOrder so)
         : score(sc), order(so) {}
     UNDO_NAME("ChangeScoreOrder")
 };
