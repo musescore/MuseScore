@@ -248,6 +248,7 @@ private:
         Ms::EditData ed;
         std::vector<Element*> elements;
         std::vector<std::unique_ptr<Ms::ElementGroup> > dragGroups;
+        DragMode mode { DragMode::BothXY };
         void reset();
     };
 

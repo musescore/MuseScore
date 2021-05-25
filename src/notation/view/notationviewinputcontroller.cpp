@@ -399,11 +399,12 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 
         m_view->notationInteraction()->drag(m_interactData.beginPoint, logicPos, mode);
         return;
-    } else if (m_interactData.hitElement == nullptr && (event->modifiers() & Qt::ShiftModifier)) {
+    } else if (m_interactData.hitElement == nullptr && (keyState & (Qt::ShiftModifier | Qt::ControlModifier))) {
         if (!m_view->notationInteraction()->isDragStarted()) {
             m_view->notationInteraction()->startDrag(std::vector<Element*>(), QPoint(), [](const Element*) { return false; });
         }
-        m_view->notationInteraction()->drag(m_interactData.beginPoint, logicPos, DragMode::BothXY);
+        m_view->notationInteraction()->drag(m_interactData.beginPoint, logicPos,
+                                            keyState & Qt::ControlModifier ? DragMode::LassoList : DragMode::BothXY);
         return;
     }
 

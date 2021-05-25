@@ -1028,7 +1028,7 @@ public:
     void setScoreOrder(ScoreOrder* order) { _scoreOrder = order; }
 
     void lassoSelect(const QRectF&);
-    void lassoSelectEnd();
+    void lassoSelectEnd(bool);
 
     Page* searchPage(const QPointF&) const;
     QList<System*> searchSystem(const QPointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5,
