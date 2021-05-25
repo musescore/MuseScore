@@ -71,6 +71,14 @@ io::paths InstrumentsConfiguration::instrumentListPaths() const
         paths.push_back(secondInstrumentListPath);
     }
 
+    io::path firstScoreOrderListPath = this->firstScoreOrderListPath();
+    paths.push_back(firstScoreOrderListPath);
+
+    io::path secondScoreOrderListPath = this->secondScoreOrderListPath();
+    if (!secondScoreOrderListPath.empty()) {
+        paths.push_back(secondScoreOrderListPath);
+    }
+
     io::paths extensionsPath = this->extensionsPaths();
     paths.insert(paths.end(), extensionsPath.begin(), extensionsPath.end());
 

@@ -43,6 +43,7 @@ public:
     bool voiceVisible(int voiceIndex) const override;
 
     void setParts(const instruments::PartInstrumentList& parts) override;
+    void setScoreOrder(const instruments::ScoreOrder& order) override;
     void setPartVisible(const ID& partId, bool visible) override;
     void setInstrumentVisible(const ID& instrumentId, const ID& fromPartId, bool visible) override;
     void setStaffVisible(const ID& staffId, bool visible) override;

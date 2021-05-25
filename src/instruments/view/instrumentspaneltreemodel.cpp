@@ -165,13 +165,14 @@ void InstrumentsPanelTreeModel::selectRow(const QModelIndex& rowIndex)
 void InstrumentsPanelTreeModel::addInstruments()
 {
     auto mode = ISelectInstrumentsScenario::SelectInstrumentsMode::ShowCurrentInstruments;
-    RetVal<PartInstrumentList> selectedInstruments = selectInstrumentsScenario()->selectInstruments(mode);
+    RetVal<PartInstrumentListScoreOrder> selectedInstruments = selectInstrumentsScenario()->selectInstruments(mode);
     if (!selectedInstruments.ret) {
         LOGE() << selectedInstruments.ret.toString();
         return;
     }
 
-    m_masterNotationParts->setParts(selectedInstruments.val);
+    m_masterNotationParts->setScoreOrder(selectedInstruments.val.scoreOrder);
+    m_masterNotationParts->setParts(selectedInstruments.val.instruments);
 
     emit isEmptyChanged();
 }

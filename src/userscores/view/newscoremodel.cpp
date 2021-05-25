@@ -120,6 +120,8 @@ ScoreCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
         options.parts << pi;
     }
 
+    options.order = info["scoreOrder"].value<instruments::ScoreOrder>();
+
     return options;
 }
 
