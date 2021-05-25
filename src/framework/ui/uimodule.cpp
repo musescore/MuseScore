@@ -132,7 +132,7 @@ void UiModule::registerUiTypes()
     qmlRegisterType<NavigationPanel>("MuseScore.Ui", 1, 0, "NavigationPanel");
     qmlRegisterType<NavigationPopupPanel>("MuseScore.Ui", 1, 0, "NavigationPopupPanel");
     qmlRegisterType<NavigationControl>("MuseScore.Ui", 1, 0, "NavigationControl");
-    qmlRegisterUncreatableType<AccessibleAttached>("MuseScore.Ui", 1, 0, "MUAccessible", "Cannot create attached");
+    qmlRegisterType<AccessibleItem>("MuseScore.Ui", 1, 0, "AccessibleItem");
 
     qmlRegisterType<InteractiveTestsModel>("MuseScore.Ui", 1, 0, "InteractiveTestsModel");
     qRegisterMetaType<TestDialog>("TestDialog");

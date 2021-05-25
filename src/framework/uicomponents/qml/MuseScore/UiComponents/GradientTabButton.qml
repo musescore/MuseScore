@@ -53,10 +53,10 @@ RadioDelegate {
         id: keynavCtrl
         name: root.objectName
 
-        MUAccessible.role: MUAccessible.RadioButton
-        MUAccessible.name: root.title
-        MUAccessible.visualItem: root
-        MUAccessible.selected: root.checked
+        accessible.role: Accessible.RadioButton
+        accessible.name: root.title
+        accessible.visualItem: root
+        accessible.selected: root.checked
 
         onActiveChanged: {
             if (keynavCtrl.active) {
@@ -73,6 +73,7 @@ RadioDelegate {
         Rectangle {
             id: backgroundRect
             anchors.fill: parent
+            anchors.bottomMargin: 2
 
             color: ui.theme.backgroundPrimaryColor
             opacity: ui.theme.buttonOpacityNormal
@@ -156,8 +157,8 @@ RadioDelegate {
         Loader {
             anchors.verticalCenter: parent.verticalCenter
 
-            sourceComponent: iconComponent
-            visible: Boolean(iconComponent)
+            sourceComponent: root.iconComponent
+            visible: Boolean(root.iconComponent)
         }
 
         StyledTextLabel {
@@ -166,11 +167,11 @@ RadioDelegate {
             anchors.verticalCenter: parent.verticalCenter
             width: implicitWidth
 
-            visible: Boolean(title)
+            visible: Boolean(root.title)
 
             horizontalAlignment: Text.AlignLeft
-            font: normalStateFont
-            text: title
+            font: root.normalStateFont
+            text: root.title
         }
     }
 

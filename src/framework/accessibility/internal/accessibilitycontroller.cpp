@@ -132,6 +132,11 @@ void AccessibilityController::init()
             interactive()->open(DEV_SHOW_TREE_URI);
         }
     });
+
+    dispatcher()->reg(this, "accessibility-dev-dump-tree", [this]() {
+        const Item& self = findItem(this);
+        debug_dumpTree(self.iface);
+    });
 }
 
 const IAccessible* AccessibilityController::rootItem() const

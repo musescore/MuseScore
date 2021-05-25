@@ -29,15 +29,21 @@ using namespace mu::ui;
 using namespace mu::accessibility;
 
 AbstractNavigation::AbstractNavigation(QObject* parent)
-    : AccessibleItem(parent)
+    : QObject(parent)
+{
+}
+
+void AbstractNavigation::classBegin()
 {
 }
 
 void AbstractNavigation::componentComplete()
 {
-    setAccessibleState(IAccessible::State::Enabled, enabled());
-    setAccessibleState(IAccessible::State::Active, active());
-    AccessibleItem::componentComplete();
+    if (m_accessible) {
+        m_accessible->setState(IAccessible::State::Enabled, enabled());
+        m_accessible->setState(IAccessible::State::Active, active());
+        m_accessible->componentComplete();
+    }
 }
 
 void AbstractNavigation::setName(QString name)
@@ -135,7 +141,9 @@ void AbstractNavigation::setEnabled(bool enabled)
         m_enabledChanged.send(m_enabled);
     }
 
-    setAccessibleState(IAccessible::State::Enabled, enabled);
+    if (m_accessible) {
+        m_accessible->setState(IAccessible::State::Enabled, enabled);
+    }
 }
 
 bool AbstractNavigation::enabled() const
@@ -176,4 +184,41 @@ void AbstractNavigation::onEvent(INavigation::EventPtr e)
 {
     NavigationEvent ev(e);
     emit navigationEvent(QVariant::fromValue(ev));
+}
+
+AccessibleItem* AbstractNavigation::accessible() const
+{
+    if (!m_accessible) {
+        AbstractNavigation* self = const_cast<AbstractNavigation*>(this);
+        m_accessible = new AccessibleItem(self);
+    }
+    return m_accessible;
+}
+
+void AbstractNavigation::setAccessible(AccessibleItem* accessible)
+{
+    if (m_accessible == accessible) {
+        return;
+    }
+
+    if (m_accessible) {
+        delete m_accessible;
+    }
+
+    m_accessible = accessible;
+
+    if (m_accessible) {
+        m_accessible->setParent(this);
+        m_accessible->setState(IAccessible::State::Enabled, enabled());
+        m_accessible->setState(IAccessible::State::Active, active());
+    }
+
+    emit accessibleChanged();
+}
+
+void AbstractNavigation::setAccessibleParent(AccessibleItem* p)
+{
+    if (m_accessible) {
+        m_accessible->setAccessibleParent(p);
+    }
 }

@@ -65,7 +65,8 @@ FocusScope {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                forceActiveFocus()
+                root.requestActiveFocus()
+                root.forceActiveFocus()
             }
         }
     }
@@ -87,6 +88,7 @@ FocusScope {
             name: "HomeScoresSearch"
             section: navSec
             order: 1
+            accessible.name: qsTrc("appshell", "Recent scores")
         }
 
         StyledTextLabel {
@@ -109,6 +111,7 @@ FocusScope {
             navigation.name: "Scores Search"
             navigation.panel: navSearchPanel
             navigation.order: 1
+            accessibleName: qsTrc("appshell", "Recent scores")
         }
     }
 

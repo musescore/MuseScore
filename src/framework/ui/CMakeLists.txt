@@ -110,7 +110,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/navigationcontrol.h
     ${CMAKE_CURRENT_LIST_DIR}/view/navigationevent.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/navigationevent.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/accessibleobject.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlaccessible.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlaccessible.h
 

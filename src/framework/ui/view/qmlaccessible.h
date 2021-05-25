@@ -20,69 +20,34 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ACCESSIBILITY_QMLACCESSIBLE_H
-#define MU_ACCESSIBILITY_QMLACCESSIBLE_H
+#ifndef MU_UI_QMLACCESSIBLE_H
+#define MU_UI_QMLACCESSIBLE_H
 
 #include <QObject>
 #include <QQmlParserStatus>
 #include <QQuickItem>
 #include <QMap>
+#include <QAccessible>
 
 #include "accessibility/iaccessible.h"
 #include "modularity/ioc.h"
 #include "accessibility/iaccessibilitycontroller.h"
 
-namespace mu::ui {
-class AccessibleAttached;
-class AccessibleItem : public QObject, public QQmlParserStatus
-{
-    Q_OBJECT
-    Q_INTERFACES(QQmlParserStatus)
-
-public:
-    AccessibleItem(QObject* parent = nullptr);
-    virtual ~AccessibleItem() = default;
-
-    AccessibleAttached* accessible() const;
-    void setAccessibleParent(AccessibleItem* item);
-    void setAccessibleState(accessibility::IAccessible::State st, bool arg);
-
-    virtual size_t accessibleChildCount() const;
-    virtual const accessibility::IAccessible* accessibleChild(size_t i) const;
-
-    // QQmlParserStatus
-    void classBegin() override;
-    void componentComplete() override;
-
-    // QObject
-    bool event(QEvent* event) override;
-
-private:
-    mutable AccessibleAttached* m_attached = nullptr;
-};
-
 #define STATE_PROPERTY(P, S) \
     Q_PROPERTY(bool P READ P WRITE set_##P NOTIFY stateChanged FINAL) \
     bool P() const { return m_state.value(S, false); } \
-    void set_##P(bool arg) \
-    { \
-        if (m_state.value(S, false) == arg) \
-        return; \
-        m_state[S] = arg; \
-        emit stateChanged(); \
-        onStateChanged(S, arg); \
-    } \
+    void set_##P(bool arg) { setState(S, arg); } \
 
-
-class AccessibleAttached : public QObject, public accessibility::IAccessible
+namespace mu::ui {
+class AccessibleItem : public QObject, public QQmlParserStatus, public accessibility::IAccessible
 {
     Q_OBJECT
-    Q_PROPERTY(QmlRole role READ role WRITE setRole NOTIFY roleChanged)
+
+    Q_PROPERTY(QAccessible::Role role READ role WRITE setRole NOTIFY roleChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QQuickItem * visualItem READ visualItem WRITE setVisualItem NOTIFY visualItemChanged)
 
-    QML_ELEMENT
-    QML_ATTACHED(AccessibleAttached)
+    Q_INTERFACES(QQmlParserStatus)
 
     INJECT(ui, accessibility::IAccessibilityController, accessibilityController)
 
@@ -90,29 +55,19 @@ public:
 
     STATE_PROPERTY(selected, State::Selected)
 
-    AccessibleAttached(QObject* object = nullptr);
-    ~AccessibleAttached();
+    AccessibleItem(QObject* parent = nullptr);
+    ~AccessibleItem();
 
-    //! NOTE Please sync with accessibility::IAccessible::Role
-    enum QmlRole {
-        NoRole = 0,
-        Application,
-        Panel,
-        Button,
-        RadioButton
-    };
-    Q_ENUM(QmlRole)
-
-    static AccessibleAttached* qmlAttachedProperties(QObject*);
-
-    void init();
-    const accessibility::IAccessible* accessibleRoot() const;
-    void notifyAboutParentChanged();
-    void setAccessibleState(accessibility::IAccessible::State st, bool arg);
-
-    QmlRole role() const;
+    QAccessible::Role role() const;
     QString name() const;
     QQuickItem* visualItem() const;
+
+    const IAccessible* accessibleRoot() const;
+    void setState(accessibility::IAccessible::State st, bool arg);
+
+    void setAccessibleParent(AccessibleItem* p);
+    void addChild(AccessibleItem* item);
+    void removeChild(AccessibleItem* item);
 
     // IAccessible
     const IAccessible* accessibleParent() const override;
@@ -128,24 +83,30 @@ public:
     QWindow* accessibleWindow() const override;
     // -----
 
+    // QQmlParserStatus
+    void classBegin() override;
+    void componentComplete() override;
+
+    // QObject
+    bool event(QEvent* event) override;
+
 public slots:
-    void setRole(QmlRole role);
+    void setRole(QAccessible::Role role);
     void setName(QString name);
     void setVisualItem(QQuickItem* item);
 
 signals:
-    void roleChanged(QmlRole role);
+    void roleChanged(QAccessible::Role role);
     void nameChanged(QString name);
     void visualItemChanged(QQuickItem* item);
     void stateChanged();
 
 private:
 
-    void onStateChanged(State st, bool arg);
-
-    AccessibleItem* m_object = nullptr;
     bool m_registred = false;
-    QmlRole m_role = NoRole;
+    AccessibleItem* m_accessibleParent = nullptr;
+    QList<AccessibleItem*> m_children;
+    QAccessible::Role m_role = QAccessible::NoRole;
     QString m_name;
     QQuickItem* m_visualItem = nullptr;
     QMap<State, bool> m_state;
@@ -154,7 +115,4 @@ private:
 };
 }
 
-QML_DECLARE_TYPE(mu::ui::AccessibleAttached)
-QML_DECLARE_TYPEINFO(mu::ui::AccessibleAttached, QML_HAS_ATTACHED_PROPERTIES)
-
-#endif // MU_ACCESSIBILITY_QMLACCESSIBLE_H
+#endif // MU_UI_QMLACCESSIBLE_H
