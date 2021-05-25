@@ -40,16 +40,22 @@ class InstrumentListModel : public QObject, public async::Asyncable
     Q_PROPERTY(QVariantList families READ families NOTIFY dataChanged)
     Q_PROPERTY(QVariantList groups READ groups NOTIFY dataChanged)
     Q_PROPERTY(QVariantList instruments READ instruments NOTIFY dataChanged)
+    Q_PROPERTY(QVariantList scoreOrders READ scoreOrders NOTIFY scoreOrdersChanged)
+    Q_PROPERTY(QVariant selectedScoreOrderIndex READ selectedScoreOrderIndex WRITE setSelectedScoreOrderIndex NOTIFY scoreOrdersChanged)
     Q_PROPERTY(QVariantList selectedInstruments READ selectedInstruments NOTIFY selectedInstrumentsChanged)
 
 public:
     InstrumentListModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void load(bool canSelectMultipleInstruments, const QString& currentInstrumentId, const QString& selectedPartIds);
+    Q_INVOKABLE void load(bool canSelectMultipleInstruments, const QString& currentInstrumentId, const QString& currentScoreOrderId,
+                          const QString& selectedPartIds);
 
     QVariantList families() const;
     QVariantList groups() const;
     QVariantList instruments() const;
+    QVariantList scoreOrders() const;
+    QVariant selectedScoreOrderIndex() const;
+    void setSelectedScoreOrderIndex(const QVariant& index);
     QVariantList selectedInstruments() const;
 
     Q_INVOKABLE QString selectedGroupId() const;
@@ -64,8 +70,7 @@ public:
 
     Q_INVOKABLE void setSearchText(const QString& text);
 
-    Q_INVOKABLE QVariantList instrumentOrderTypes() const;
-    Q_INVOKABLE void selectOrderType(const QString& id);
+    Q_INVOKABLE void selectScoreOrder(const QString& orderId);
 
     Q_INVOKABLE QString findInstrument(const QString& instrumentId) const;
 
@@ -78,9 +83,36 @@ signals:
     void searchStringChanged(QString searchString);
     void selectedInstrumentsChanged();
 
+    void selectedOrderChanged(QString familyId);
+
+    void scoreOrdersChanged();
+
 private:
+    struct SelectedInstrumentInfo
+    {
+        QString id;
+        QString name;
+        QString familyId;
+        bool isSoloist = false;
+        bool isExistingPart = false;
+        Transposition transposition;
+        Instrument config;
+
+        bool operator==(const SelectedInstrumentInfo& info) const { return id == info.id; }
+    };
+
+    struct ScoreOrderInfo
+    {
+        QString id;
+        bool customized = false;
+        ScoreOrder info;
+
+        bool operator==(const ScoreOrderInfo& info) const { return id == info.id; }
+    };
+
     void initSelectedInstruments(const notation::IDList& selectedPartIds);
     notation::INotationPartsPtr notationParts() const;
+    void initScoreOrders(const QString& currentId);
 
     void sortInstruments(QVariantList& instruments) const;
 
@@ -100,28 +132,28 @@ private:
 
     InstrumentTemplate instrumentTemplate(const QString& instrumentId) const;
 
+    int indexOfScoreOrderId(const QString& id) const;
+    void sortSelectedInstruments();
+    int sortInstrumentsIndex(const SelectedInstrumentInfo& info) const;
+    int instrumentInsertIndex(const SelectedInstrumentInfo& info) const;
+    bool matchesScoreOrder() const;
+    void checkScoreOrderMatching(bool block);
+    void makeCustomizedScoreOrder(const ScoreOrderInfo& order);
+
     bool m_canSelectMultipleInstruments = false;
+
+    bool m_blockSortingInstruments = false;
 
     QString m_selectedFamilyId;
     QString m_selectedGroupId;
     QString m_savedFamilyId;
+    int m_selectedScoreOrderIndex = -1;
 
     InstrumentsMeta m_instrumentsMeta;
     QString m_searchText;
 
-    struct SelectedInstrumentInfo
-    {
-        QString id;
-        QString name;
-        bool isSoloist;
-        bool isExistingPart;
-        Transposition transposition;
-        Instrument config;
-
-        bool operator==(const SelectedInstrumentInfo& info) const { return id == info.id; }
-    };
-
     QList<SelectedInstrumentInfo> m_selectedInstruments;
+    QList<ScoreOrderInfo> m_scoreOrders;
 };
 }
 

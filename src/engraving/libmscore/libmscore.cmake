@@ -240,8 +240,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/scorefile.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scorefont.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scorefont.h
-    ${CMAKE_CURRENT_LIST_DIR}/scoreOrder.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/scoreOrder.h
+    ${CMAKE_CURRENT_LIST_DIR}/scoreorder.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/scoreorder.h
     ${CMAKE_CURRENT_LIST_DIR}/score.h
     ${CMAKE_CURRENT_LIST_DIR}/scoretree.cpp
     ${CMAKE_CURRENT_LIST_DIR}/segment.cpp

@@ -23,9 +23,10 @@
 
 using namespace mu::instruments;
 
-mu::RetVal<PartInstrumentList> SelectInstrumentsScenario::selectInstruments(ISelectInstrumentsScenario::SelectInstrumentsMode) const
+mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(ISelectInstrumentsScenario::SelectInstrumentsMode)
+const
 {
-    mu::RetVal<PartInstrumentList> result;
+    mu::RetVal<PartInstrumentListScoreOrder> result;
     result.ret = make_ret(Ret::Code::NotSupported);
     return result;
 }
