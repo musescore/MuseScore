@@ -13,6 +13,7 @@
 
 #include "Frame_p.h"
 #include "DropArea_p.h"
+#include "DockRegistry_p.h"
 
 using namespace KDDockWidgets;
 
@@ -22,6 +23,14 @@ DropIndicatorOverlayInterface::DropIndicatorOverlayInterface(DropArea *dropArea)
 {
     setVisible(false);
     setObjectName(QStringLiteral("DropIndicatorOverlayInterface"));
+
+    connect(DockRegistry::self(), &DockRegistry::dropIndicatorsInhibitedChanged, this,
+            [this](bool inhibited) {
+                if (inhibited)
+                    removeHover();
+
+                // if false then simply moving the mouse will make the drop indicators appear again
+            });
 }
 
 void DropIndicatorOverlayInterface::setWindowBeingDragged(bool is)
@@ -129,4 +138,10 @@ void DropIndicatorOverlayInterface::setHoveredFrameRect(QRect rect)
         m_hoveredFrameRect = rect;
         Q_EMIT hoveredFrameRectChanged();
     }
+}
+
+void DropIndicatorOverlayInterface::removeHover()
+{
+    setWindowBeingDragged(false);
+    setCurrentDropLocation(DropIndicatorOverlayInterface::DropLocation_None);
 }

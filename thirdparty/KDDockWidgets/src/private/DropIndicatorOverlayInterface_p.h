@@ -55,6 +55,9 @@ public:
 
     KDDockWidgets::DropIndicatorOverlayInterface::DropLocation hover(QPoint globalPos);
 
+    /// Clears and hides drop indicators
+    void removeHover();
+
     /// @brief returns the position of the specified drop location
     /// The return is in global coordinates
     virtual QPoint posForIndicator(DropLocation) const = 0;

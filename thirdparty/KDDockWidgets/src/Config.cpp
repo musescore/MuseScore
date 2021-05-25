@@ -61,6 +61,7 @@ public:
     CustomizableWidgets m_disabledPaintEvents = CustomizableWidget_None;
     qreal m_draggedWindowOpacity = Q_QNAN;
     int m_mdiPopupThreshold = 250;
+    bool m_dropIndicatorsInhibited = false;
 #ifdef KDDOCKWIDGETS_QTQUICK
     QtQuickHelpers m_qquickHelpers;
 #endif
@@ -325,4 +326,18 @@ int Config::mdiPopupThreshold() const
 {
     return d->m_mdiPopupThreshold;
 }
+
+void Config::setDropIndicatorsInhibited(bool inhibit) const
+{
+    if (d->m_dropIndicatorsInhibited != inhibit) {
+        d->m_dropIndicatorsInhibited = inhibit;
+        Q_EMIT DockRegistry::self()->dropIndicatorsInhibitedChanged(inhibit);
+    }
+}
+
+bool Config::dropIndicatorsInhibited() const
+{
+    return d->m_dropIndicatorsInhibited;
+}
+
 }

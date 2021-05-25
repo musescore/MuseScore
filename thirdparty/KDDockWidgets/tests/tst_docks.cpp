@@ -905,6 +905,36 @@ void TestDocks::tst_complex()
     qDeleteAll(docks);
     qDeleteAll(DockRegistry::self()->frames());
 }
+#else
+void TestDocks::tst_hoverShowsDropIndicators()
+{
+    // For QtQuick on Windows, there was a bug where drop indicators wouldn't be shown if MainWindowBase
+    // wan't the root item.
+
+    EnsureTopLevelsDeleted e;
+    QQmlApplicationEngine engine(":/main2.qml");
+
+    const MainWindowBase::List mainWindows = DockRegistry::self()->mainwindows();
+    QCOMPARE(mainWindows.size(), 1);
+    MainWindowBase *m = mainWindows.first();
+
+    m->window()->windowHandle()->setPosition(500, 800);
+
+    auto dock0 = createDockWidget("dock0", new MyWidget2(QSize(400, 400)));
+
+    auto floatingDockWidget = createDockWidget("floatingDockWidget", new MyWidget2(QSize(400, 400)));
+
+    m->addDockWidget(dock0, Location_OnLeft);
+
+    const QPoint mainWindowCenterPos = m->mapToGlobal(m->geometry().center());
+
+    QTest::qWait(100);
+
+    auto fw = floatingDockWidget->floatingWindow();
+    dragFloatingWindowTo(fw, mainWindowCenterPos);
+
+    QCOMPARE(dock0->dptr()->frame()->dockWidgetCount(), 2);
+}
 #endif
 
 void TestDocks::tst_28NestedWidgets_data()
@@ -2428,7 +2458,6 @@ void TestDocks::tst_setFloatingWhenWasTabbed()
     m->addDockWidgetAsTab(dock1);
     m->addDockWidgetAsTab(dock2);
 
-    qDebug() << "6.";
     dock2->setFloating(true);
     QVERIFY(dock1->isTabbed());
     QVERIFY(!dock2->isTabbed());
@@ -2537,6 +2566,8 @@ void TestDocks::tst_setFloatingWhenSideBySide()
 void TestDocks::tst_dockWindowWithTwoSideBySideFramesIntoCenter()
 {
     EnsureTopLevelsDeleted e;
+    KDDockWidgets::Config::self().setInternalFlags(KDDockWidgets::Config::InternalFlag_NoAeroSnap);
+    KDDockWidgets::Config::self().setFlags({});
 
     auto m = createMainWindow();
     auto fw = createFloatingWindow();
@@ -2548,7 +2579,13 @@ void TestDocks::tst_dockWindowWithTwoSideBySideFramesIntoCenter()
     auto fw2 = createFloatingWindow();
     fw2->move(fw->x() + fw->width() + 100, fw->y());
 
-    dragFloatingWindowTo(fw, fw2->geometry().center());
+    // QtQuick is a bit more async than QWidgets. Wait for the move.
+    Testing::waitForEvent(fw2->windowHandle(), QEvent::Move);
+
+    auto da2 = fw2->dropArea();
+    const QPoint dragDestPos = da2->mapToGlobal(da2->QWidgetAdapter::rect().center());
+
+    dragFloatingWindowTo(fw, dragDestPos);
     QVERIFY(fw2->dropArea()->checkSanity());
 
     QCOMPARE(fw2->frames().size(), 1);
@@ -4331,12 +4368,13 @@ void TestDocks::tst_positionWhenShown()
     auto window = createMainWindow();
     auto dock1 = new DockWidgetType("1");
     dock1->show();
-    dock1->window()->move(100, 100);
-    QCOMPARE(dock1->window()->windowHandle()->frameGeometry().topLeft(), QPoint(100, 100));
+    dock1->window()->windowHandle()->setPosition(100, 100);
+    QTest::qWait(1000);
+    QCOMPARE(dock1->window()->windowHandle()->geometry().topLeft(), QPoint(100, 100));
 
     dock1->close();
     dock1->show();
-    QCOMPARE(dock1->window()->windowHandle()->frameGeometry().topLeft(), QPoint(100, 100));
+    QCOMPARE(dock1->window()->windowHandle()->geometry().topLeft(), QPoint(100, 100));
 
     // Cleanup
     window->layoutWidget()->checkSanity();
@@ -4690,8 +4728,10 @@ void TestDocks::tst_lastFloatingPositionIsRestored()
     auto dock1 = createDockWidget("dock1");
     dock1->show();
     QPoint targetPos = QPoint(340, 340);
-    dock1->window()->move(targetPos);
+    dock1->window()->windowHandle()->setFramePosition(targetPos);
+    QCOMPARE(dock1->window()->windowHandle()->frameGeometry().topLeft(), targetPos);
     auto oldFw = dock1->window();
+    Testing::waitForEvent(dock1->window(), QEvent::Move);
 
     LayoutSaver saver;
     QByteArray saved = saver.serializeLayout();
@@ -4701,8 +4741,7 @@ void TestDocks::tst_lastFloatingPositionIsRestored()
     delete oldFw;
 
     saver.restoreLayout(saved);
-    QCOMPARE(dock1->window()->pos(), targetPos);
-    QCOMPARE(dock1->window()->frameGeometry().topLeft(), targetPos);
+    QCOMPARE(dock1->window()->windowHandle()->frameGeometry().topLeft(), targetPos);
 
     // Adjsut to what we got without the frame
     targetPos = dock1->window()->geometry().topLeft();

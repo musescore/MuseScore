@@ -12,6 +12,8 @@
     dock widget docked. Tabbed cases are more difficult since QStackedLayout doesn't
     propagate size constraints.
   - Added MainWindowBase::frameCountChanged()
+  - Introduced Config::setDropIndicatorsInhibited(), which allows you to disable support
+  for drop indicators while dragging.
 
 * v1.3.1 (unreleased)
   - Improve restoring layout when RestoreOption_RelativeToMainWindow is used (#171)
