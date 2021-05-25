@@ -26,6 +26,7 @@ static IndicatorWindow* createIndicatorWindow(ClassicIndicators *classicIndicato
 {
     auto window = new IndicatorWindow(classicIndicators);
     window->setObjectName(QStringLiteral("_docks_IndicatorWindow_Overlay"));
+
     return window;
 }
 

@@ -272,5 +272,7 @@ private Q_SLOTS:
     void tst_addToHiddenMainWindow();
     void tst_maximumSizePolicy();
     void tst_complex();
+#else
+    void tst_hoverShowsDropIndicators();
 #endif
 };

@@ -51,9 +51,9 @@ Rectangle {
 
     ResizeHandlerHelper {
         anchors {
-            left: parent.left
-            top: parent.top
-            bottom: parent.bottom
+            left: parent ? parent.left : undefined
+            top: parent ? parent.top : undefined
+            bottom: parent ? parent.bottom : undefined
         }
 
         width: resizeMargin
@@ -66,9 +66,9 @@ Rectangle {
 
     ResizeHandlerHelper {
         anchors {
-            right: parent.right
-            top: parent.top
-            bottom: parent.bottom
+            right: parent ? parent.right : undefined
+            top: parent ? parent.top : undefined
+            bottom: parent ? parent.bottom : undefined
         }
 
         width: resizeMargin
@@ -81,9 +81,9 @@ Rectangle {
 
     ResizeHandlerHelper {
         anchors {
-            right: parent.right
-            top: parent.top
-            left: parent.left
+            right: parent ? parent.right : undefined
+            top: parent ? parent.top : undefined
+            left: parent ? parent.left : undefined
         }
 
         height: resizeMargin
@@ -96,9 +96,9 @@ Rectangle {
 
     ResizeHandlerHelper {
         anchors {
-            right: parent.right
-            left: parent.left
-            bottom: parent.bottom
+            right: parent ? parent.right : undefined
+            left: parent ? parent.left : undefined
+            bottom: parent ?  parent.bottom : undefined
         }
 
         height: resizeMargin
@@ -111,8 +111,8 @@ Rectangle {
 
     ResizeHandlerHelper {
         anchors {
-            right: parent.right
-            bottom: parent.bottom
+            right: parent ? parent.right : undefined
+            bottom: parent ? parent.bottom : undefined
         }
 
         height: width
@@ -126,8 +126,8 @@ Rectangle {
 
     ResizeHandlerHelper {
         anchors {
-            left: parent.left
-            top: parent.top
+            left:  parent ? parent.left : undefined
+            top:  parent ? parent.top : undefined
         }
 
         height: width
@@ -141,8 +141,8 @@ Rectangle {
 
     ResizeHandlerHelper {
         anchors {
-            right: parent.right
-            top: parent.top
+            right: parent ? parent.right : undefined
+            top: parent ? parent.top : undefined
         }
 
         height: width
@@ -156,8 +156,8 @@ Rectangle {
 
     ResizeHandlerHelper {
         anchors {
-            left: parent.left
-            bottom: parent.bottom
+            left: parent ? parent.left : undefined
+            bottom: parent ? parent.bottom : undefined
         }
 
         height: width
@@ -172,7 +172,7 @@ Rectangle {
     Loader {
         id: titleBar
         readonly property QtObject titleBarCpp: root.titleBarCpp
-        source: frameCpp ? _kddw_widgetFactory.titleBarFilename(frameCpp.userType)
+        source: frameCpp ? _kddw_widgetFactory.titleBarFilename()
                          : ""
 
         anchors {
@@ -218,7 +218,7 @@ Rectangle {
             rightMargin: 1
         }
 
-        width: parent.width
+        width: parent ? parent.width : 0
 
         onCurrentIndexChanged: {
             if (root && root.frameCpp)

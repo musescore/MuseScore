@@ -235,6 +235,9 @@ Q_SIGNALS:
     /// @brief emitted when the MDI frame that's being resized changed
     void frameInMDIResizeChanged();
 
+    /// @brief emitted whenever Config::dropIndicatorsInhibited changes
+    void dropIndicatorsInhibitedChanged(bool inhibited);
+
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
 private:
