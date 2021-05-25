@@ -25,9 +25,14 @@
 
 #include "internal/framelesswindowcontroller.h"
 
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
+
 namespace mu::appshell {
 class WinFramelessWindowController : public FramelessWindowController
 {
+    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
+
 public:
     explicit WinFramelessWindowController();
 
