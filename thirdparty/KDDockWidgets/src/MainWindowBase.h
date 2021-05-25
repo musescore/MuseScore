@@ -200,6 +200,13 @@ public:
     /// if all dock widgets were closed (0 or more)
     Q_INVOKABLE bool closeDockWidgets(bool force = false);
 
+    /// @brief Returns the window geometry
+    /// This is usually the same as MainWindowBase::geometry()
+    /// But fixes the following special cases:
+    /// - QWidgets: Our MainWindow is embedded in another widget
+    /// - QtQuick: Our MainWindow is QQuickItem
+    QRect windowGeometry() const;
+
 protected:
     void setUniqueName(const QString &uniqueName);
     void onResized(QResizeEvent *); // Because QtQuick doesn't have resizeEvent()
@@ -223,7 +230,6 @@ private:
     friend class LayoutSaver;
     bool deserialize(const LayoutSaver::MainWindow &);
     LayoutSaver::MainWindow serialize() const;
-    QRect windowGeometry() const;
 };
 }
 
