@@ -49,6 +49,7 @@
 #include "libmscore/navigate.h"
 #include "libmscore/keysig.h"
 #include "libmscore/instrchange.h"
+#include "libmscore/lasso.h"
 
 #include "masternotation.h"
 #include "scorecallbacks.h"
@@ -60,7 +61,7 @@
 using namespace mu::notation;
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
-    : m_notation(notation), m_undoStack(undoStack)
+    : m_notation(notation), m_undoStack(undoStack), m_lasso(new Ms::Lasso(notation->score()))
 {
     m_noteInput = std::make_shared<NotationNoteInput>(notation, this, m_undoStack);
     m_selection = std::make_shared<NotationSelection>(notation);
@@ -140,6 +141,9 @@ void NotationInteraction::paint(mu::draw::Painter* painter)
     drawTextEditMode(painter);
     drawSelectionRange(painter);
     drawGripPoints(painter);
+    if (!m_lasso->bbox().isEmpty()) {
+        m_lasso->draw(painter);
+    }
 }
 
 INotationNoteInputPtr NotationInteraction::noteInput() const
@@ -539,7 +543,7 @@ mu::async::Notification NotationInteraction::selectionChanged() const
 
 bool NotationInteraction::isDragStarted() const
 {
-    return m_dragData.dragGroups.size() > 0;
+    return m_dragData.dragGroups.size() > 0 || !m_lasso->bbox().isEmpty();
 }
 
 void NotationInteraction::DragData::reset()
@@ -579,6 +583,25 @@ void NotationInteraction::startDrag(const std::vector<Element*>& elems,
     for (auto& group : m_dragData.dragGroups) {
         group->startDrag(m_dragData.ed);
     }
+}
+
+void NotationInteraction::doDragLasso(const QPointF& pt)
+{
+    score()->addRefresh(m_lasso->canvasBoundingRect());
+    QRectF r;
+    r.setCoords(m_dragData.beginMove.x(), m_dragData.beginMove.y(), pt.x(), pt.y());
+    m_lasso->setbbox(r.normalized());
+    score()->addRefresh(m_lasso->canvasBoundingRect());
+    score()->lassoSelect(m_lasso->bbox());
+    score()->update();
+}
+
+void NotationInteraction::endLasso()
+{
+    score()->addRefresh(m_lasso->canvasBoundingRect());
+    m_lasso->setbbox(QRectF());
+    score()->lassoSelectEnd();
+    score()->update();
 }
 
 void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, DragMode mode)
@@ -653,6 +676,10 @@ void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, Dra
 
     setAnchorLines(std::vector<QLineF>(anchorLines.begin(), anchorLines.end()));
 
+    if (m_dragData.elements.size() == 0) {
+        doDragLasso(toPos);
+    }
+
     notifyAboutDragChanged();
 
     //    Element* e = _score->getSelectedElement();
@@ -673,6 +700,9 @@ void NotationInteraction::endDrag()
     } else {
         for (auto& group : m_dragData.dragGroups) {
             group->endDrag(m_dragData.ed);
+        }
+        if (!m_lasso->bbox().isEmpty()) {
+            endLasso();
         }
     }
 

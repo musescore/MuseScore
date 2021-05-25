@@ -399,6 +399,12 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 
         m_view->notationInteraction()->drag(m_interactData.beginPoint, logicPos, mode);
         return;
+    } else if (m_interactData.hitElement == nullptr && (event->modifiers() & Qt::ShiftModifier)) {
+        if (!m_view->notationInteraction()->isDragStarted()) {
+            m_view->notationInteraction()->startDrag(std::vector<Element*>(), QPoint(), [](const Element*) { return false; });
+        }
+        m_view->notationInteraction()->drag(m_interactData.beginPoint, logicPos, DragMode::BothXY);
+        return;
     }
 
     // move canvas
@@ -431,7 +437,8 @@ void NotationViewInputController::startDragElements(ElementType elementsType, co
 
 void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
 {
-    if (!m_interactData.hitElement && !m_isCanvasDragged && !m_view->notationInteraction()->isGripEditStarted()) {
+    if (!m_interactData.hitElement && !m_isCanvasDragged && !m_view->notationInteraction()->isGripEditStarted()
+        && !m_view->notationInteraction()->isDragStarted()) {
         m_view->notationInteraction()->clearSelection();
     }
 
