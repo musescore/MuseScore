@@ -25,7 +25,7 @@
 
 using namespace mu;
 using namespace mu::workspace;
-using namespace mu::extensions;
+using namespace mu::framework;
 
 static bool containsWorkspace(const IWorkspacePtrList& list, const IWorkspacePtr& workspace)
 {
@@ -159,17 +159,12 @@ void WorkspaceManager::init()
         LOGE() << ret.toString();
     }
 
-    RetCh<Extension> extensionChanged = extensionsService()->extensionChanged();
-    if (extensionChanged.ret) {
-        extensionChanged.ch.onReceive(this, [this](const Extension& newExtension) {
-            if (newExtension.types.testFlag(Extension::Workspaces)) {
-                load();
-            }
-        });
-    }
-
     configuration()->currentWorkspaceName().ch.onReceive(this, [this](const std::string&) {
         setupCurrentWorkspace();
+    });
+
+    configuration()->workspacePathsChanged().onNotify(this, [this]() {
+        load();
     });
 
     load();

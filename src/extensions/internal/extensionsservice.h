@@ -27,8 +27,9 @@
 #include "iextensionsservice.h"
 #include "iextensionsconfiguration.h"
 #include "iextensionunpacker.h"
-#include "framework/system/ifilesystem.h"
-#include "framework/network/inetworkmanagercreator.h"
+#include "system/ifilesystem.h"
+#include "network/inetworkmanagercreator.h"
+#include "global/iextensionprovider.h"
 
 namespace mu::extensions {
 class ExtensionsService : public IExtensionsService, public async::Asyncable
@@ -37,6 +38,7 @@ class ExtensionsService : public IExtensionsService, public async::Asyncable
     INJECT(extensions, IExtensionUnpacker, extensionUnpacker)
     INJECT(extensions, system::IFileSystem, fileSystem)
     INJECT(extensions, network::INetworkManagerCreator, networkManagerCreator)
+    INJECT(extensions, framework::IExtensionContentProvider, extensionProvider)
 
 public:
     void init();
@@ -57,13 +59,18 @@ private:
     RetVal<QString> downloadExtension(const QString& extensionCode, async::Channel<ExtensionProgress>* progressChannel) const;
     Ret removeExtension(const QString& extensionCode) const;
 
-    Extension::ExtensionTypes extensionTypes(const QString& extensionCode) const;
+    QSet<framework::IExtensionContentProvider::ExtensionContentType> extensionContentTypes(const QString& extensionCode) const;
 
     void th_refreshExtensions();
     void th_install(const QString& extensionCode, async::Channel<ExtensionProgress>* progressChannel, async::Channel<Ret>* finishChannel);
     void th_update(const QString& extensionCode, async::Channel<ExtensionProgress>* progressChannel, async::Channel<Ret>* finishChannel);
 
     void closeOperation(const QString& extensionCode, async::Channel<ExtensionProgress>* progressChannel);
+
+    void markExtensionAsInstalled(const QString& extensionCode,
+                                  const QSet<framework::IExtensionContentProvider::ExtensionContentType>& oldExtensionContentTypes = {});
+    void notifyAboutExtensionPathsChanged(const QSet<framework::IExtensionContentProvider::ExtensionContentType>& extensionContentTypes)
+    const;
 
     enum OperationType
     {

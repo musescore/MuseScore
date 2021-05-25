@@ -37,6 +37,7 @@ public:
     virtual ~IWorkspaceConfiguration() = default;
 
     virtual io::paths workspacePaths() const = 0;
+    virtual async::Notification workspacePathsChanged() const = 0;
 
     virtual io::path userWorkspacesDirPath() const = 0;
     virtual io::path userWorkspacePath(const std::string& workspaceName) const = 0;

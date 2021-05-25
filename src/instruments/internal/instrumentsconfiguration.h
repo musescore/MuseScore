@@ -24,7 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
-#include "extensions/iextensionsconfiguration.h"
+#include "global/iextensionprovider.h"
 #include "system/ifilesystem.h"
 
 #include "iinstrumentsconfiguration.h"
@@ -33,7 +33,7 @@ namespace mu::instruments {
 class InstrumentsConfiguration : public IInstrumentsConfiguration
 {
     INJECT(instruments, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(instruments, extensions::IExtensionsConfiguration, extensionsConfigurator)
+    INJECT(instruments, framework::IExtensionContentProvider, extensionProvider)
     INJECT(instruments, system::IFileSystem, fileSystem)
 
 public:
@@ -68,6 +68,7 @@ private:
 
     async::Notification m_instrumentListPathsChanged;
     async::Notification m_scoreOrderListPathsChanged;
+    async::Notification m_workspacePathsChanged;
 };
 }
 
