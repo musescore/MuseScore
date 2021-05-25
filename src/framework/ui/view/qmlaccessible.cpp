@@ -116,14 +116,14 @@ size_t AccessibleItem::accessibleChildCount() const
 
 const IAccessible* AccessibleItem::accessibleChild(size_t i) const
 {
-    return static_cast<const IAccessible*>(m_children.value(i, nullptr));
+    return static_cast<const IAccessible*>(m_children.value(static_cast<int>(i), nullptr));
 }
 
 QQuickItem* AccessibleItem::resolveVisualItem() const
 {
-//    if (m_visualItem) {
-//        return m_visualItem;
-//    }
+    if (m_visualItem) {
+        return m_visualItem;
+    }
 
     QObject* prn = parent();
     while (prn) {

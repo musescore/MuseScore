@@ -30,6 +30,7 @@ StyledDialogView {
 
     contentHeight: 800
     contentWidth: 600
+    resizable: true
 
     AccessibleDevPanel {
         anchors.fill: parent

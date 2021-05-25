@@ -32,7 +32,7 @@ QObject* AccessibleDevModel::m_rootObject = nullptr;
 AccessibleDevModel::AccessibleDevModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    m_refresher.setInterval(500);
+    m_refresher.setInterval(1000);
     m_refresher.setSingleShot(false);
     connect(&m_refresher, &QTimer::timeout, [this]() {
         reload();
