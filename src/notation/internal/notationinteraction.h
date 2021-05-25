@@ -40,6 +40,7 @@
 
 namespace Ms {
 class ShadowNote;
+class Lasso;
 }
 
 namespace mu::notation {
@@ -188,6 +189,8 @@ private:
     void notifyAboutNotationChanged();
     void notifyAboutTextEditingStarted();
     void notifyAboutTextEditingChanged();
+    void doDragLasso(const QPointF& p);
+    void endLasso();
 
     Ms::Page* point2page(const QPointF& p) const;
     QList<Element*> hitElements(const QPointF& p_in, float w) const;
@@ -277,6 +280,8 @@ private:
     async::Notification m_dropChanged;
 
     async::Channel<ScoreConfigType> m_scoreConfigChanged;
+
+    Ms::Lasso* m_lasso;
 };
 }
 
