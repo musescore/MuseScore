@@ -100,11 +100,16 @@ bool WinFramelessWindowController::processMouseMove(MSG* message, long* result) 
     long x = GET_X_LPARAM(message->lParam);
     long y = GET_Y_LPARAM(message->lParam);
 
-    QRect titleBarMoveArea = windowTitleBarMoveArea();
+    double scaleFactor = uiConfiguration()->guiScaling();
+    QRect moveAreaRect = windowTitleBarMoveArea();
+    int moveAreaHeight = static_cast<int>(moveAreaRect.height() * scaleFactor);
+    int moveAreaWidth = static_cast<int>(moveAreaRect.width() * scaleFactor);
+    int moveAreaX = winrect.left + static_cast<int>(moveAreaRect.x() * scaleFactor);
+    int moveAreaY = winrect.top + borderWidth + static_cast<int>(moveAreaRect.y() * scaleFactor);
 
     /// NOTE: titlebar`s move area
-    if (x >= winrect.left + titleBarMoveArea.x() && x < winrect.left + titleBarMoveArea.x() + titleBarMoveArea.width()
-        && y > winrect.top + borderWidth + titleBarMoveArea.y() && y < winrect.top + titleBarMoveArea.y() + titleBarMoveArea.height()) {
+    if (x >= moveAreaX && x < moveAreaX + moveAreaWidth
+        && y > moveAreaY && y < moveAreaY + moveAreaHeight) {
         *result = HTCAPTION;
         return true;
     }
