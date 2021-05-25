@@ -88,7 +88,7 @@ FocusScope {
             name: "HomeScoresSearch"
             section: navSec
             order: 1
-            accessible.name: qsTrc("appshell", "Recent scores")
+            accessible.name: qsTrc("userscores", "Recent scores")
         }
 
         StyledTextLabel {
@@ -111,7 +111,7 @@ FocusScope {
             navigation.name: "Scores Search"
             navigation.panel: navSearchPanel
             navigation.order: 1
-            accessible.name: qsTrc("appshell", "Recent scores search")
+            accessible.name: qsTrc("userscores", "Recent scores search")
         }
     }
 
@@ -188,6 +188,7 @@ FocusScope {
             section: navSec
             direction: NavigationPanel.Horizontal
             order: 3
+            accessible.name: qsTrc("userscores", "Recent scores bottom")
         }
 
         Row {
