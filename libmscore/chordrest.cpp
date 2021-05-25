@@ -1243,19 +1243,9 @@ bool ChordRest::isMelismaEnd() const
 //    No-op and return false if Lyrics not present in _melismaEnds.
 //---------------------------------------------------------
 
-bool ChordRest::removeMelismaEnd(const Lyrics* l)
+void ChordRest::removeMelismaEnd(Lyrics* const l)
       {
-      bool found = false;
-      for (std::set<Lyrics*>::iterator it = _melismaEnds.begin(); it != _melismaEnds.end(); ) {
-            if (*it == l) {
-                  it = _melismaEnds.erase(it); // Returns next iterator
-                  found = true;
-                  }
-            else {
-                  ++it;
-                  }
-            }
-      return found;
+      _melismaEnds.erase(l);
       }
 
 //---------------------------------------------------------
