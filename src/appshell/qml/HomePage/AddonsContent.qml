@@ -193,8 +193,6 @@ FocusScope {
             name: "AddonsTabs"
             section: navSec
             order: 2
-
-            accessible.role: Accessible.Grouping
             accessible.name: qsTrc("appshell", "Addons tabs")
 
             onNavigationEvent: {
@@ -215,6 +213,7 @@ FocusScope {
             navigation.order: 1
             onNavigationTriggered: bar.currentIndex = 0
         }
+
         StyledTabButton {
             text: qsTrc("appshell", "Extensions")
             sideMargin: 22
@@ -226,6 +225,7 @@ FocusScope {
             navigation.order: 2
             onNavigationTriggered: bar.currentIndex = 1
         }
+
         StyledTabButton {
             text: qsTrc("appshell", "Languages")
             sideMargin: 22

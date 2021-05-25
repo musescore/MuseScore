@@ -79,7 +79,7 @@ Rectangle {
         spacing: 8
 
         model: accessibleModel
-        delegate: Item {
+        delegate: Rectangle {
             id: item
 
             width: parent ? parent.width : 0
@@ -94,6 +94,18 @@ Rectangle {
                 str += "\n" + JSON.stringify(data.state)
 
                 return str;
+            }
+
+            color: {
+                if (itemData.state.focused) {
+                    return "#75507b"
+                }
+
+                if (itemData.state.active) {
+                    return "#73d216"
+                }
+
+                return root.color
             }
 
             StyledTextLabel {

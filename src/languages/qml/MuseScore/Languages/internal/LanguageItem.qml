@@ -57,7 +57,7 @@ Rectangle {
         name: root.title
         accessible.role: Accessible.ListItem
         accessible.name: root.title + " " + root.statusTitle
-        accessible.visualItem: root
+
         onActiveChanged: {
             if (navCtrl.active) {
                 root.navigationActive()

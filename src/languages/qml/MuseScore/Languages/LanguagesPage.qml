@@ -40,7 +40,7 @@ Item {
         id: navPanel
         name: "AddonsLanguages"
         direction: NavigationPanel.Vertical
-        accessible.name: qsTrc("appshell", "Languages") + navPanel.directionInfo
+        accessible.name: qsTrc("languages", "Languages") + navPanel.directionInfo
     }
 
     QtObject {

@@ -141,8 +141,18 @@ QAccessible::State AccessibleItemInterface::state() const
         state.checkable = true;
         state.checked = item->accessibleState(IAccessible::State::Selected);
     } break;
-    default:
-        break;
+    case IAccessible::Role::EditableText: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
+    case IAccessible::Role::ListItem: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
+    default: {
+        static QMetaEnum roleEnum = QMetaEnum::fromType<QAccessible::Role>();
+        LOGW() << "not handled role: " << roleEnum.valueToKey(r);
+    } break;
     }
 
     return state;
