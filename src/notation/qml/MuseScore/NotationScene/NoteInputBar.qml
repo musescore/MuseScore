@@ -102,7 +102,7 @@ Rectangle {
                 }
             }
 
-            pressAndHoldInterval: 200
+            mouseArea.pressAndHoldInterval: 200
 
             width: gridView.cellWidth
             height: gridView.cellWidth

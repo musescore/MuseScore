@@ -86,7 +86,7 @@ Rectangle {
             height: 32
 
             function formatData(data) {
-                var str = data.name
+                var str = data.name + "[" + data.role + "]"
                 if (data.children > 0) {
                     str += ", children: " + data.children
                 }
@@ -99,7 +99,7 @@ Rectangle {
             StyledTextLabel {
                 id: secLabel
                 anchors.fill: parent
-                anchors.leftMargin: itemData.level * 8
+                anchors.leftMargin: itemData.level * 16
                 verticalAlignment: Text.AlignTop
                 horizontalAlignment: Text.AlignLeft
                 elide: Text.ElideNone

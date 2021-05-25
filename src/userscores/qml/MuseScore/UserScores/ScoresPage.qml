@@ -111,7 +111,7 @@ FocusScope {
             navigation.name: "Scores Search"
             navigation.panel: navSearchPanel
             navigation.order: 1
-            accessibleName: qsTrc("appshell", "Recent scores")
+            accessible.name: qsTrc("appshell", "Recent scores search")
         }
     }
 
@@ -184,7 +184,7 @@ FocusScope {
 
         NavigationPanel {
             id: navBottomPanel
-            name: "HomeScoresSearch"
+            name: "RecentScoresBottom"
             section: navSec
             direction: NavigationPanel.Horizontal
             order: 3

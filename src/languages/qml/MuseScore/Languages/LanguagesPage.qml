@@ -40,6 +40,7 @@ Item {
         id: navPanel
         name: "AddonsLanguages"
         direction: NavigationPanel.Vertical
+        accessible.name: qsTrc("appshell", "Languages") + navPanel.directionInfo
     }
 
     QtObject {
@@ -189,12 +190,12 @@ Item {
 
             navigation.panel: navPanel
             navigation.row: 1 + model.index
+            onNavigationActive: view.positionViewAtIndex(model.index, ListView.Contain)
 
             title: model.name
             statusTitle: model.statusTitle
 
-            color: (index % 2 == 0) ? ui.theme.popupBackgroundColor
-                                    : root.backgroundColor
+            color: (index % 2 == 0) ? ui.theme.popupBackgroundColor : root.backgroundColor
 
             headerWidth: header.itemWidth
             sideMargin: 133

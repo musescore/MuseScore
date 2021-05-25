@@ -42,6 +42,10 @@ FocusScope {
         id: navCtrl
         name: root.title
 
+        accessible.role: Accessible.Cell
+        accessible.name: root.title
+        accessible.visualItem: root
+
         onActiveChanged: {
             if (active) {
                 root.forceActiveFocus()
