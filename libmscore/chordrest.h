@@ -140,7 +140,7 @@ class ChordRest : public DurationElement {
       int lastVerse(Placement) const;
       const std::set<Lyrics*>& melismaEnds() const { return _melismaEnds; }
       std::set<Lyrics*>& melismaEnds()             { return _melismaEnds; }
-      bool removeMelismaEnd(const Lyrics* l);
+      void removeMelismaEnd(Lyrics* const l);
       bool isMelismaEnd() const;
 
       virtual void add(Element*);
