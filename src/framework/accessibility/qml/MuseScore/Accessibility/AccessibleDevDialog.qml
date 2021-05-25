@@ -28,7 +28,7 @@ StyledDialogView {
 
     title: "AccessibleDevDialog"
 
-    contentHeight: 300
+    contentHeight: 800
     contentWidth: 600
 
     AccessibleDevPanel {

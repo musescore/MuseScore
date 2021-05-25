@@ -22,9 +22,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+
 import MuseScore.Ui 1.0
 
-FocusableControl {
+FocusScope {
     id: root
 
     property bool isIndeterminate: false
@@ -40,6 +41,9 @@ FocusableControl {
     property bool hasText: valueInput.text.length > 0
     property alias readOnly: valueInput.readOnly
 
+    property alias navigation: navCtrl
+    property string accessibleName: root.hint
+
     signal currentTextEdited(var newTextValue)
     signal textCleared()
 
@@ -53,6 +57,12 @@ FocusableControl {
         textCleared()
     }
 
+    function ensureActiveFocus() {
+        if (!root.activeFocus) {
+            root.forceActiveFocus()
+        }
+    }
+
     onActiveFocusChanged: {
         if (activeFocus) {
             valueInput.forceActiveFocus()
@@ -62,12 +72,32 @@ FocusableControl {
     implicitHeight: 30
     implicitWidth: parent.width
 
-    background.color: ui.theme.textFieldColor
-    background.border.color: navigation.active ? ui.theme.focusColor : ui.theme.strokeColor
-    background.border.width: navigation.active ? 2 : 1
-    background.radius: 4
-
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
+
+
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName !== "" ? root.objectName : "TextInputField"
+        enabled: root.enabled && root.visible
+
+        accessible.role: Accessible.EditableText
+        accessible.name: root.accessibleName
+
+        onActiveChanged: {
+            if (navCtrl.active) {
+                root.ensureActiveFocus()
+            }
+        }
+    }
+
+    Rectangle {
+        id: background
+        anchors.fill: parent
+        color: ui.theme.textFieldColor
+        radius: 4
+        border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
+        border.width: navCtrl.active ? 2 : 1
+    }
 
     RowLayout {
         anchors.fill: parent
@@ -92,6 +122,9 @@ FocusableControl {
 
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: !measureUnitsLabel.visible
+
+            //! NOTE Disabled default Qt Accessible
+            Accessible.role: Accessible.NoRole
 
             color: ui.theme.fontPrimaryColor
             font: ui.theme.bodyFont
@@ -153,7 +186,7 @@ FocusableControl {
             icon: IconCode.CLOSE_X_ROUNDED
             visible: root.clearTextButtonVisible
 
-            normalStateColor: root.background.color
+            normalStateColor: background.color
             hoveredStateColor: ui.theme.accentColor
             pressedStateColor: ui.theme.accentColor
 
@@ -183,23 +216,13 @@ FocusableControl {
         State {
             name: "HOVERED"
             when: clickableArea.containsMouse && !valueInput.activeFocus
-
-            PropertyChanges {
-                target: root.background
-                opacity: 0.6
-            }
+            PropertyChanges { target: background; opacity: 0.6 }
         },
 
         State {
             name: "FOCUSED"
             when: valueInput.activeFocus
-
-            PropertyChanges {
-                target: root.background
-                border.color: ui.theme.accentColor
-                border.width: 1
-                opacity: 1
-            }
+            PropertyChanges { target: background; border.color: ui.theme.accentColor; border.width: 1; opacity: 1 }
         }
     ]
 
@@ -217,7 +240,6 @@ FocusableControl {
 
         onPressed: {
             root.ensureActiveFocus()
-            valueInput.forceActiveFocus()
             mouse.accepted = false
         }
     }

@@ -28,11 +28,12 @@
 #include "log.h"
 
 using namespace mu::ui;
-using namespace mu::accessibility;
 
 NavigationPanel::NavigationPanel(QObject* parent)
     : AbstractNavigation(parent)
 {
+    AccessibleItem* access = accessible();
+    access->setRole(QAccessible::Pane);
 }
 
 NavigationPanel::~NavigationPanel()
@@ -86,7 +87,9 @@ bool NavigationPanel::active() const
 void NavigationPanel::setActive(bool arg)
 {
     AbstractNavigation::setActive(arg);
-    setAccessibleState(IAccessible::State::Active, arg);
+    if (m_accessible) {
+        m_accessible->setState(IAccessible::State::Active, arg);
+    }
 }
 
 mu::async::Channel<bool> NavigationPanel::activeChanged() const
@@ -202,9 +205,6 @@ void NavigationPanel::addControl(NavigationControl* control)
     if (m_controlsListChanged.isConnected()) {
         m_controlsListChanged.notify();
     }
-
-    //! TODO Maybe need sorting
-    m_accessibleControls.push_back(control);
 }
 
 void NavigationPanel::removeControl(NavigationControl* control)
@@ -220,19 +220,4 @@ void NavigationPanel::removeControl(NavigationControl* control)
     if (m_controlsListChanged.isConnected()) {
         m_controlsListChanged.notify();
     }
-
-    m_accessibleControls.erase(std::remove(m_accessibleControls.begin(), m_accessibleControls.end(), control), m_accessibleControls.end());
-}
-
-size_t NavigationPanel::accessibleChildCount() const
-{
-    return m_accessibleControls.size();
-}
-
-const IAccessible* NavigationPanel::accessibleChild(size_t i) const
-{
-    IF_ASSERT_FAILED(i < m_accessibleControls.size()) {
-        return nullptr;
-    }
-    return static_cast<const IAccessible*>(m_accessibleControls.at(i)->accessible());
 }

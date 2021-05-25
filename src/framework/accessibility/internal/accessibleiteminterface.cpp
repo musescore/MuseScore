@@ -126,7 +126,7 @@ QAccessible::State AccessibleItemInterface::state() const
     case IAccessible::Role::Application: {
         state.active = true;
     } break;
-    case IAccessible::Role::Panel: {
+    case IAccessible::Role::Pane: {
         state.active = item->accessibleState(IAccessible::State::Active);
     } break;
     case IAccessible::Role::Button: {
@@ -141,6 +141,8 @@ QAccessible::State AccessibleItemInterface::state() const
         state.checkable = true;
         state.checked = item->accessibleState(IAccessible::State::Selected);
     } break;
+    default:
+        break;
     }
 
     return state;
@@ -149,14 +151,7 @@ QAccessible::State AccessibleItemInterface::state() const
 QAccessible::Role AccessibleItemInterface::role() const
 {
     IAccessible::Role r = m_object->item()->accessibleRole();
-    switch (r) {
-    case IAccessible::Role::NoRole: return QAccessible::NoRole;
-    case IAccessible::Role::Application: return QAccessible::Application;
-    case IAccessible::Role::Panel: return QAccessible::Pane;
-    case IAccessible::Role::Button: return QAccessible::Button;
-    case IAccessible::Role::RadioButton: return QAccessible::RadioButton;
-    }
-    return QAccessible::NoRole;
+    return static_cast<QAccessible::Role>(r);
 }
 
 QString AccessibleItemInterface::text(QAccessible::Text textType) const
