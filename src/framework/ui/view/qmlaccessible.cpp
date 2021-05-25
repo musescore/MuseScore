@@ -119,23 +119,43 @@ const IAccessible* AccessibleItem::accessibleChild(size_t i) const
     return static_cast<const IAccessible*>(m_children.value(i, nullptr));
 }
 
+QQuickItem* AccessibleItem::resolveVisualItem() const
+{
+//    if (m_visualItem) {
+//        return m_visualItem;
+//    }
+
+    QObject* prn = parent();
+    while (prn) {
+        QQuickItem* vitem = qobject_cast<QQuickItem*>(prn);
+        if (vitem) {
+            return vitem;
+        }
+        prn = prn->parent();
+    }
+
+    return nullptr;
+}
+
 QRect AccessibleItem::accessibleRect() const
 {
-    if (!m_visualItem || !m_visualItem->window()) {
+    QQuickItem* vitem = resolveVisualItem();
+    if (!vitem || !vitem->window()) {
         return QRect();
     }
 
-    QPointF scenePos = m_visualItem->mapToScene(QPointF(0, 0));
-    QPoint globalPos = m_visualItem->window()->mapToGlobal(scenePos.toPoint());
-    return QRect(globalPos.x(), globalPos.y(), m_visualItem->width(), m_visualItem->height());
+    QPointF scenePos = vitem->mapToScene(QPointF(0, 0));
+    QPoint globalPos = vitem->window()->mapToGlobal(scenePos.toPoint());
+    return QRect(globalPos.x(), globalPos.y(), vitem->width(), vitem->height());
 }
 
 QWindow* AccessibleItem::accessibleWindow() const
 {
-    if (!m_visualItem || !m_visualItem->window()) {
+    QQuickItem* vitem = resolveVisualItem();
+    if (!vitem || !vitem->window()) {
         return nullptr;
     }
-    return m_visualItem->window();
+    return vitem->window();
 }
 
 void AccessibleItem::setAccessibleParent(AccessibleItem* p)

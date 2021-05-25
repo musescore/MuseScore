@@ -55,7 +55,6 @@ RadioDelegate {
 
         accessible.role: Accessible.RadioButton
         accessible.name: root.title
-        accessible.visualItem: root
         accessible.selected: root.checked
 
         onActiveChanged: {

@@ -101,7 +101,10 @@ void AccessibleDevModel::load(QAccessibleInterface* iface, int& level)
     QAccessibleInterface* prn = iface->parent();
     int childCount = iface->childCount();
 
+    static QMetaEnum roleEnum = QMetaEnum::fromType<QAccessible::Role>();
+
     QVariantMap item;
+    item["role"] = QString(roleEnum.valueToKey(iface->role()));
     item["name"] = iface->text(QAccessible::Name);
     item["level"] = level;
     item["parent"] = prn ? prn->text(QAccessible::Name) : QString("null");

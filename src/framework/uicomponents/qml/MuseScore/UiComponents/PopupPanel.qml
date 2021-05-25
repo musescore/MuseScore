@@ -34,6 +34,8 @@ Rectangle {
     property alias navigation: navPanel
     property NavigationControl navigationParentControl: null
 
+    property alias accessible: navPanel.accessible
+
     signal opened()
     signal closed()
 

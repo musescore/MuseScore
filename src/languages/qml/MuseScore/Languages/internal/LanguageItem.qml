@@ -37,6 +37,7 @@ Rectangle {
     property alias navigation: navCtrl
 
     signal clicked()
+    signal navigationActive()
 
     height: 48
 
@@ -54,6 +55,15 @@ Rectangle {
     NavigationControl {
         id: navCtrl
         name: root.title
+        accessible.role: Accessible.ListItem
+        accessible.name: root.title + " " + root.statusTitle
+        accessible.visualItem: root
+        onActiveChanged: {
+            if (navCtrl.active) {
+                root.navigationActive()
+            }
+        }
+
         onTriggered: root.clicked()
     }
 

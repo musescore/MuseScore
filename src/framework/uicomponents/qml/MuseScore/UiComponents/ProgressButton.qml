@@ -71,6 +71,11 @@ FocusScope {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "ProgressButton"
         enabled: root.enabled && root.visible
+
+        accessible.role: Accessible.Button
+        accessible.name: root.text
+        accessible.visualItem: root
+
         onActiveChanged: {
             if (active) {
                 root.ensureActiveFocus()
