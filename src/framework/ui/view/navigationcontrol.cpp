@@ -74,7 +74,9 @@ bool NavigationControl::active() const
 void NavigationControl::setActive(bool arg)
 {
     AbstractNavigation::setActive(arg);
-    setAccessibleState(IAccessible::State::Focused, arg);
+    if (m_accessible) {
+        m_accessible->setState(IAccessible::State::Focused, arg);
+    }
 }
 
 mu::async::Channel<bool> NavigationControl::activeChanged() const
@@ -123,7 +125,7 @@ void NavigationControl::setPanel(NavigationPanel* panel)
 
     emit panelChanged(m_panel);
 
-    setAccessibleParent(m_panel);
+    setAccessibleParent(m_panel->accessible());
 }
 
 void NavigationControl::onPanelDestroyed()

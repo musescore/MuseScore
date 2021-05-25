@@ -79,10 +79,6 @@ public:
     void addControl(NavigationControl* control);
     void removeControl(NavigationControl* control);
 
-    // AccessibleItem
-    size_t accessibleChildCount() const override;
-    const accessibility::IAccessible* accessibleChild(size_t i) const override;
-
 public slots:
     void setSection_property(NavigationSection* section);
     void setSection(INavigationSection* section);
@@ -101,8 +97,6 @@ private:
     async::Notification m_controlsListChanged;
     async::Channel<PanelControl> m_forceActiveRequested;
     QmlDirection m_direction = QmlDirection::Horizontal;
-
-    std::vector<NavigationControl*> m_accessibleControls;
 };
 }
 
