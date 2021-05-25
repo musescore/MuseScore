@@ -54,11 +54,11 @@ private:
     void setDropLocation(DropLocation);
     void updateWindowPosition();
 
-    QWidgetOrQuick *const m_rubberBand;
-    IndicatorWindow *const m_indicatorWindow;
     bool m_innerIndicatorsVisible = false;
     bool m_outterIndicatorsVisible = false;
     bool m_tabIndicatorVisible = false;
+    QWidgetOrQuick *const m_rubberBand;
+    IndicatorWindow *const m_indicatorWindow;
 };
 
 }

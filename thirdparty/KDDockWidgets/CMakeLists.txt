@@ -121,10 +121,16 @@ option(${PROJECT_NAME}_EXAMPLES "Build the examples" ON)
 option(${PROJECT_NAME}_DOCS "Build the API documentation" OFF)
 option(${PROJECT_NAME}_WERROR "Use -Werror (will be true for developer-mode unconditionally)" OFF)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/ECM/modules")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/KDAB/modules")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/Python")
+
 #Always build the test harness in developer-mode
 if(${PROJECT_NAME}_DEVELOPER_MODE)
   set(${PROJECT_NAME}_TESTS ON)
   set(${PROJECT_NAME}_WERROR ON)
+  include(ECMEnableSanitizers)
 endif()
 
 option(${PROJECT_NAME}_QTQUICK "Build for QtQuick instead of QtWidgets" OFF)
@@ -143,11 +149,6 @@ endif()
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/ECM/modules")
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/KDAB/modules")
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/Python")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
@@ -240,7 +241,7 @@ if(${PROJECT_NAME}_EXAMPLES)
 endif()
 
 if(${PROJECT_NAME}_DEVELOPER_MODE)
-  include(ECMEnableSanitizers)
+
   if(${PROJECT_NAME}_TESTS)
     enable_testing()
     add_subdirectory(tests)

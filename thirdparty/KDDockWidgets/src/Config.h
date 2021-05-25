@@ -182,6 +182,15 @@ public:
     ///By default it's 1.0, fully opaque
     qreal draggedWindowOpacity() const;
 
+    /// @brief Allows to disable support for drop indicators while dragging
+    /// By default drop indicators will be shown when dragging dock widgets.
+    /// This functionality can be toggled whenever you need it (it's not a startup-only setting).
+    void setDropIndicatorsInhibited(bool inhibit) const;
+
+    /// @brief Returns whether drop indicators are inhibited.
+    /// by default this is false unless you call setDropIndicatorsInhibited(true)
+    bool dropIndicatorsInhibited() const;
+
     /**
      * @brief Allows the user to intercept a docking attempt to center (tabbed) and disallow it.
      *
