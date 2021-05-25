@@ -83,7 +83,7 @@ Score::FileError importMusicXMLfromBuffer(Score* score, const QString& /*name*/,
       //logger.setLoggingLevel(MxmlLogger::Level::MXML_INFO);
       //logger.setLoggingLevel(MxmlLogger::Level::MXML_TRACE); // also include tracing
 
-      // Reset and apply styles (possibly unique to Faber/Hal Leonard Conversion Job)
+      // Reset and apply styles (possibly unique to backend conversion job)
       Score::FileError styleRes = applyMusicXMLPVGStyles(score, &logger);      
       if (styleRes != Score::FileError::FILE_NO_ERROR)
             logger.logError(QString("Error while applying MusicXML styles. Continuing."));
