@@ -102,7 +102,8 @@ enum class DragMode
 {
     BothXY = 0,
     OnlyX,
-    OnlyY
+    OnlyY,
+    LassoList
 };
 
 enum class MoveDirection

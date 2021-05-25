@@ -3723,7 +3723,7 @@ void Score::lassoSelect(const QRectF& bbox)
 //   lassoSelectEnd
 //---------------------------------------------------------
 
-void Score::lassoSelectEnd()
+void Score::lassoSelectEnd(bool convertToRange)
 {
     int noteRestCount     = 0;
     Segment* startSegment = 0;
@@ -3738,6 +3738,11 @@ void Score::lassoSelectEnd()
         return;
     }
     _selection.setState(SelState::LIST);
+
+    if (!convertToRange) {
+        setUpdateAll();
+        return;
+    }
 
     foreach (const Element* e, _selection.elements()) {
         if (e->type() != ElementType::NOTE && e->type() != ElementType::REST) {

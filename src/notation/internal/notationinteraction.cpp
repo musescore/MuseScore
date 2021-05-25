@@ -600,7 +600,7 @@ void NotationInteraction::endLasso()
 {
     score()->addRefresh(m_lasso->canvasBoundingRect());
     m_lasso->setbbox(QRectF());
-    score()->lassoSelectEnd();
+    score()->lassoSelectEnd(m_dragData.mode != DragMode::LassoList);
     score()->update();
 }
 
@@ -610,6 +610,7 @@ void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, Dra
         m_dragData.beginMove = fromPos;
         m_dragData.ed.pos = fromPos;
     }
+    m_dragData.mode = mode;
 
     QPointF normalizedBegin = m_dragData.beginMove - m_dragData.elementOffset;
 
@@ -618,6 +619,7 @@ void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, Dra
 
     switch (mode) {
     case DragMode::BothXY:
+    case DragMode::LassoList:
         break;
     case DragMode::OnlyX:
         delta.setY(m_dragData.ed.delta.y());
