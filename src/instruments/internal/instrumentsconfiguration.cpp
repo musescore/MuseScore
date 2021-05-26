@@ -188,6 +188,10 @@ void InstrumentsConfiguration::setSecondScoreOrderListPath(const io::path& path)
 
 io::paths InstrumentsConfiguration::extensionsPaths() const
 {
+    if (!extensionsConfigurator()) {
+        return io::paths();
+    }
+
     io::paths extensionsInstrumentsPaths = extensionsConfigurator()->instrumentsPaths();
     io::paths paths;
 
