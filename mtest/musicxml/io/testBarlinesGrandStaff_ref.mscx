@@ -190,7 +190,7 @@
             </Rest>
           <BarLine>
             <subtype>dotted</subtype>
-            <span>0</span>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -218,7 +218,7 @@
             </Rest>
           <BarLine>
             <subtype>double</subtype>
-            <span>0</span>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -296,7 +296,7 @@
             </Rest>
           <BarLine>
             <subtype>double</subtype>
-            <span>0</span>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -474,6 +474,9 @@
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
+          <BarLine>
+            <subtype>dotted</subtype>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -498,6 +501,9 @@
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
+          <BarLine>
+            <subtype>double</subtype>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -572,6 +578,9 @@
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
+          <BarLine>
+            <subtype>double</subtype>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
