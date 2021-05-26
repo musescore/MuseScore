@@ -1135,6 +1135,7 @@ void System::add(Element* el)
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::SLURANDO_SEGMENT:
     case ElementType::LET_RING_SEGMENT:
     case ElementType::PALM_MUTE_SEGMENT:
     {
@@ -1202,6 +1203,7 @@ void System::remove(Element* el)
     case ElementType::VOLTA_SEGMENT:
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
+    case ElementType::SLURANDO_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:

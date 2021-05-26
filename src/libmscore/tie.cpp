@@ -28,6 +28,7 @@
 #include "undo.h"
 #include "chord.h"
 #include "tie.h"
+#include "slurando.h"
 
 namespace Ms {
 Note* Tie::editStartNote;
@@ -361,12 +362,19 @@ void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
     Staff* st          = staff();
     bool reverseAdjust = false;
 
-    if (slurTie()->isTie() && st && !st->isTabStaff(slurTie()->tick())) {
+    if ((slurTie()->isTie() || slurTie()->isSlurando()) && st && !st->isTabStaff(slurTie()->tick())) {
         // multinote chords with ties need special handling
         // otherwise, adjusted tie might crowd an unadjusted tie unnecessarily
-        Tie* t    = toTie(slurTie());
-        Note* sn  = t->startNote();
-        t->setTick(t->startNote()->tick());
+        Note* sn;
+        if (slurTie()->isTie()) {
+            Tie* t    = toTie(slurTie());
+            sn  = t->startNote();
+            t->setTick(sn->tick());
+        } else {
+            Slurando* t = toSlurando(slurTie());
+            sn = t->startNote();
+            t->setTick(sn->tick());
+        }
         Chord* sc = sn ? sn->chord() : 0;
 
         // normally, the adjustment moves ties according to their direction (eg, up if tie is up)

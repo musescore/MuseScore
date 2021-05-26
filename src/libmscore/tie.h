@@ -31,7 +31,7 @@ namespace Ms {
 ///    a single segment of slur; also used for Tie
 //---------------------------------------------------------
 
-class TieSegment final : public SlurTieSegment
+class TieSegment : public SlurTieSegment
 {
     QPointF autoAdjustOffset;
 

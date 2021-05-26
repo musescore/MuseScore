@@ -57,6 +57,7 @@ enum class ElementType {
     INSTRUMENT_NAME,
     SLUR_SEGMENT,
     TIE_SEGMENT,
+    SLURANDO_SEGMENT,
     BAR_LINE,
     STAFF_LINES,
     SYSTEM_DIVIDER,
@@ -135,6 +136,7 @@ enum class ElementType {
     NOTELINE,
     LYRICSLINE,
     GLISSANDO,
+    SLURANDO,
     BRACKET,
     SEGMENT,
     SYSTEM,
@@ -547,6 +549,7 @@ enum class Tid {
     VOLTA,
     OTTAVA,
     GLISSANDO,
+    SLURANDO,
     PEDAL,
     BEND,
     LET_RING,
@@ -656,6 +659,18 @@ enum class TupletNumberType : char {
 };
 enum class TupletBracketType : char {
     AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET
+};
+
+//---------------------------------------------------------
+//   Slurando
+//---------------------------------------------------------
+
+enum class SlurandoType : char {
+    SHIFT_SLIDE, LEGATO_SLIDE, HAMMER_ON, PULL_OFF, BEND, BEND_RELEASE, TUNER
+};
+
+enum class SlurandoTextPlacement : char {
+    NONE, ON_STEM, ON_SLUR, ABOVE_STAFF, BELOW_STAFF
 };
 
 #ifdef SCRIPT_INTERFACE

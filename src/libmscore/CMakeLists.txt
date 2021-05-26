@@ -261,6 +261,8 @@ set(MODULE_SRC
     skyline.h
     slur.cpp
     slur.h
+    slurando.cpp
+    slurando.h
     slurtie.cpp
     slurtie.h
     spacer.cpp

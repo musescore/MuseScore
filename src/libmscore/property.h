@@ -390,6 +390,10 @@ enum class Pid {
 
     PREFER_SHARP_FLAT,
 
+    SLURANDO_TYPE,
+    SLURANDO_PLACE,
+    SLURANDO_TEXT,
+
     END
 };
 
@@ -440,6 +444,9 @@ enum class P_TYPE : char {
 
     PATH,               // QPainterPath
     HEAD_SCHEME,        // enum class NoteHead::Scheme
+
+    SLURANDO_TYPE,      // enum class SlurandoType
+    SLURANDO_PLACE      // enum class SlurandoPlace
 };
 
 extern QVariant readProperty(Pid type, XmlReader& e);

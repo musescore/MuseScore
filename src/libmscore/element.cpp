@@ -113,6 +113,7 @@
 #include "palmmute.h"
 #include "fermata.h"
 #include "shape.h"
+#include "slurando.h"
 //#include "musescoreCore.h"
 
 #include "log.h"
@@ -1184,6 +1185,7 @@ Element* Element::create(ElementType type, Score* score)
     case ElementType::ARPEGGIO:          return new Arpeggio(score);
     case ElementType::BREATH:            return new Breath(score);
     case ElementType::GLISSANDO:         return new Glissando(score);
+    case ElementType::SLURANDO:          return new Slurando(score);
     case ElementType::BRACKET:           return new Bracket(score);
     case ElementType::ARTICULATION:      return new Articulation(score);
     case ElementType::FERMATA:           return new Fermata(score);

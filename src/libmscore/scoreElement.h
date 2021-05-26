@@ -55,6 +55,7 @@ class FBox;
 class ChordRest;
 class Slur;
 class Tie;
+class Slurando;
 class Glissando;
 class GlissandoSegment;
 class SystemDivider;
@@ -78,6 +79,7 @@ class LyricsLineSegment;
 class Stem;
 class SlurSegment;
 class TieSegment;
+class SlurandoSegment;
 class OttavaSegment;
 class Beam;
 class Hook;
@@ -332,6 +334,7 @@ public:
     CONVERT(FBox,          FBOX)
     CONVERT(Tie,           TIE)
     CONVERT(Slur,          SLUR)
+    CONVERT(Slurando,      SLURANDO)
     CONVERT(Glissando,     GLISSANDO)
     CONVERT(GlissandoSegment,     GLISSANDO_SEGMENT)
     CONVERT(SystemDivider, SYSTEM_DIVIDER)
@@ -351,6 +354,7 @@ public:
     CONVERT(StemSlash,     STEM_SLASH)
     CONVERT(SlurSegment,   SLUR_SEGMENT)
     CONVERT(TieSegment,    TIE_SEGMENT)
+    CONVERT(SlurandoSegment, SLURANDO_SEGMENT)
     CONVERT(Spacer,        SPACER)
     CONVERT(StaffLines,    STAFF_LINES)
     CONVERT(Ambitus,       AMBITUS)
@@ -415,7 +419,7 @@ public:
     bool isRestFamily() const { return isRest() || isMMRest() || isMeasureRepeat(); }
     bool isChordRest() const { return isRestFamily() || isChord(); }
     bool isDurationElement() const { return isChordRest() || isTuplet(); }
-    bool isSlurTieSegment() const { return isSlurSegment() || isTieSegment(); }
+    bool isSlurTieSegment() const { return isSlurSegment() || isTieSegment() || isSlurandoSegment(); }
     bool isSLineSegment() const;
     bool isBox() const { return isVBox() || isHBox() || isTBox() || isFBox(); }
     bool isVBoxBase() const { return isVBox() || isTBox() || isFBox(); }
@@ -445,7 +449,7 @@ public:
 
     bool isSpannerSegment() const
     {
-        return isLineSegment() || isTextLineBaseSegment() || isSlurSegment() || isTieSegment();
+        return isLineSegment() || isTextLineBaseSegment() || isSlurSegment() || isTieSegment() || isSlurandoSegment();
     }
 
     bool isBSymbol() const { return isImage() || isSymbol(); }
@@ -475,6 +479,7 @@ public:
                || isLyricsLine()
                || isTextLineBase()
                || isSLine()
+               || isSlurando()
         ;
     }
 
@@ -536,13 +541,17 @@ static inline const Rest* toRest(const ScoreElement* e)
 
 static inline SlurTieSegment* toSlurTieSegment(ScoreElement* e)
 {
-    Q_ASSERT(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
+    Q_ASSERT(
+        e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT
+        || e->type() == ElementType::SLURANDO_SEGMENT);
     return (SlurTieSegment*)e;
 }
 
 static inline const SlurTieSegment* toSlurTieSegment(const ScoreElement* e)
 {
-    Q_ASSERT(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
+    Q_ASSERT(
+        e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT
+        || e->type() == ElementType::SLURANDO_SEGMENT);
     return (const SlurTieSegment*)e;
 }
 
@@ -636,6 +645,7 @@ CONVERT(FBox)
 CONVERT(Spanner)
 CONVERT(Tie)
 CONVERT(Slur)
+CONVERT(Slurando)
 CONVERT(Glissando)
 CONVERT(GlissandoSegment)
 CONVERT(SystemDivider)
@@ -657,6 +667,7 @@ CONVERT(StemSlash)
 CONVERT(LineSegment)
 CONVERT(SlurSegment)
 CONVERT(TieSegment)
+CONVERT(SlurandoSegment)
 CONVERT(Spacer)
 CONVERT(StaffLines)
 CONVERT(Ambitus)

@@ -381,6 +381,10 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::PREFER_SHARP_FLAT,       true,  "preferSharpFlat",       P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "prefer sharps or flats") },
 
+    { Pid::SLURANDO_TYPE,           false, "subtype",               P_TYPE::SLURANDO_TYPE,  DUMMY_QT_TR_NOOP("propertyName", "slurando type") },
+    { Pid::SLURANDO_PLACE,          false, "place",                 P_TYPE::SLURANDO_PLACE, DUMMY_QT_TR_NOOP("propertyName", "slurando placement") },
+    { Pid::SLURANDO_TEXT,           false, 0,                       P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "text") },
+
     { Pid::END,                     false, "++end++",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };
 /* *INDENT-ON* */
@@ -645,6 +649,36 @@ QVariant propertyFromString(Pid id, QString value)
             return QVariant(int(Orientation::HORIZONTAL));
         }
         break;
+    case P_TYPE::SLURANDO_TYPE:
+        if (value == "legatoslide") {
+            return QVariant(int(SlurandoType::LEGATO_SLIDE));
+        } else if (value == "shiftslide") {
+            return QVariant(int(SlurandoType::SHIFT_SLIDE));
+        } else if (value == "hammeron") {
+            return QVariant(int(SlurandoType::HAMMER_ON));
+        } else if (value == "pulloff") {
+            return QVariant(int(SlurandoType::PULL_OFF));
+        } else if (value == "bend") {
+            return QVariant(int(SlurandoType::BEND));
+        } else if (value == "bendrelease") {
+            return QVariant(int(SlurandoType::BEND_RELEASE));
+        } else if (value == "tuner") {
+            return QVariant(int(SlurandoType::TUNER));
+        }
+        break;
+    case P_TYPE::SLURANDO_PLACE:
+        if (value == "none") {
+            return QVariant(int(SlurandoTextPlacement::NONE));
+        } else if (value == "onstem") {
+            return QVariant(int(SlurandoTextPlacement::ON_STEM));
+        } else if (value == "onslur") {
+            return QVariant(int(SlurandoTextPlacement::ON_SLUR));
+        } else if (value == "above") {
+            return QVariant(int(SlurandoTextPlacement::ABOVE_STAFF));
+        } else if (value == "below") {
+            return QVariant(int(SlurandoTextPlacement::BELOW_STAFF));
+        }
+        break;
     default:
         break;
     }
@@ -699,6 +733,8 @@ QVariant readProperty(Pid id, XmlReader& e)
     case P_TYPE::SUB_STYLE:
     case P_TYPE::ALIGN:
     case P_TYPE::ORIENTATION:
+    case P_TYPE::SLURANDO_TYPE:
+    case P_TYPE::SLURANDO_PLACE:
         return propertyFromString(id, e.readElementText());
 
     case P_TYPE::BEAM_MODE:                     // TODO
@@ -922,6 +958,38 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
         }
         break;
     }
+    case P_TYPE::SLURANDO_TYPE:
+        switch (SlurandoType(value.toInt())) {
+        case SlurandoType::SHIFT_SLIDE:
+            return "shiftslide";
+        case SlurandoType::LEGATO_SLIDE:
+            return "legatoslide";
+        case SlurandoType::HAMMER_ON:
+            return "hammeron";
+        case SlurandoType::PULL_OFF:
+            return "pulloff";
+        case SlurandoType::BEND:
+            return "bend";
+        case SlurandoType::BEND_RELEASE:
+            return "bendrelease";
+        case SlurandoType::TUNER:
+            return "tuner";
+        }
+        break;
+    case P_TYPE::SLURANDO_PLACE:
+        switch (SlurandoTextPlacement(value.toInt())) {
+        case SlurandoTextPlacement::NONE:
+            return "none";
+        case SlurandoTextPlacement::ON_STEM:
+            return "onstem";
+        case SlurandoTextPlacement::ON_SLUR:
+            return "onslur";
+        case SlurandoTextPlacement::ABOVE_STAFF:
+            return "above";
+        case SlurandoTextPlacement::BELOW_STAFF:
+            return "below";
+        }
+        break;
     case P_TYPE::POINT_MM:
         qFatal("unknown: POINT_MM");
     case P_TYPE::SIZE_MM:

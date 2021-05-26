@@ -1463,6 +1463,22 @@ static const StyleType styleTypes[] {
     { Sid::figuredBassMinDistance,        "figuredBassMinDistance",        Spatium(0.5) },
     { Sid::tupletMinDistance,             "tupletMinDistance",             Spatium(0.5) },
 
+    { Sid::slurandoFontFace,              "slurandoFontFace",              "Edwin" },
+    { Sid::slurandoFontSize,              "slurandoFontSize",              QVariant(6.0) },
+    { Sid::slurandoLineSpacing,           "slurandoLineSpacing",           1.0 },
+    { Sid::slurandoFontSpatiumDependent,  "slurandoFontSpatiumDependent",  true },
+    { Sid::slurandoFontStyle,             "slurandoFontStyle",             int(FontStyle::Normal) },
+    { Sid::slurandoColor,                 "slurandoColor",                 QColor(0, 0, 0, 255) },
+    { Sid::slurandoAlign,                 "slurandoAlign",                 QVariant::fromValue(Align::LEFT | Align::TOP) },
+    { Sid::slurandoOffset,                "slurandoOffset",                QPointF() },
+    { Sid::slurandoFrameType,             "slurandoFrameType",             int(FrameType::NO_FRAME) },
+    { Sid::slurandoFramePadding,          "slurandoFramePadding",          0. },
+    { Sid::slurandoFrameWidth,            "slurandoFrameWidth",            0. },
+    { Sid::slurandoFrameRound,            "slurandoFrameRound",            0 },
+    { Sid::slurandoFrameFgColor,          "slurandoFrameFgColor",          QColor(0, 0, 0, 255) },
+    { Sid::slurandoFrameBgColor,          "slurandoFrameBgColor",          QColor(255, 255, 255, 0) },
+    { Sid::slurandoLineWidth,             "slurandoLineWidth",             Spatium(0.15) },
+
     { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
     { Sid::usePre_3_6_defaults,           "usePre_3_6_defaults",           false },
     { Sid::defaultsVersion,               "defaultsVersion",               Ms::MSCVERSION }
@@ -2052,6 +2068,23 @@ const TextStyle glissandoTextStyle { {
     { Sid::glissandoFrameBgColor,              Pid::FRAME_BG_COLOR },
 } };
 
+const TextStyle slurandoTextStyle { {
+    { Sid::slurandoFontFace,                   Pid::FONT_FACE },
+    { Sid::slurandoFontSize,                   Pid::FONT_SIZE },
+    { Sid::slurandoLineSpacing,                Pid::TEXT_LINE_SPACING },
+    { Sid::slurandoFontSpatiumDependent,       Pid::SIZE_SPATIUM_DEPENDENT },
+    { Sid::slurandoFontStyle,                  Pid::FONT_STYLE },
+    { Sid::slurandoColor,                      Pid::COLOR },
+    { Sid::slurandoAlign,                      Pid::ALIGN },
+    { Sid::slurandoOffset,                     Pid::OFFSET },
+    { Sid::slurandoFrameType,                  Pid::FRAME_TYPE },
+    { Sid::slurandoFramePadding,               Pid::FRAME_PADDING },
+    { Sid::slurandoFrameWidth,                 Pid::FRAME_WIDTH },
+    { Sid::slurandoFrameRound,                 Pid::FRAME_ROUND },
+    { Sid::slurandoFrameFgColor,               Pid::FRAME_FG_COLOR },
+    { Sid::slurandoFrameBgColor,               Pid::FRAME_BG_COLOR },
+} };
+
 const TextStyle ottavaTextStyle { {
     { Sid::ottavaFontFace,                     Pid::BEGIN_FONT_FACE },
     { Sid::ottavaFontSize,                     Pid::BEGIN_FONT_SIZE },
@@ -2503,6 +2536,7 @@ static constexpr std::array<TextStyleName, int(Tid::TEXT_STYLES)> textStyles { {
     { QT_TRANSLATE_NOOP("TextStyle", "Volta"),                   &voltaTextStyle,             Tid::VOLTA },
     { QT_TRANSLATE_NOOP("TextStyle", "Ottava"),                  &ottavaTextStyle,            Tid::OTTAVA },
     { QT_TRANSLATE_NOOP("TextStyle", "Glissando"),               &glissandoTextStyle,         Tid::GLISSANDO },
+    { QT_TRANSLATE_NOOP("TextStyle", "Slurando"),                &slurandoTextStyle,          Tid::SLURANDO },
     { QT_TRANSLATE_NOOP("TextStyle", "Pedal"),                   &pedalTextStyle,             Tid::PEDAL },
     { QT_TRANSLATE_NOOP("TextStyle", "Bend"),                    &bendTextStyle,              Tid::BEND },
     { QT_TRANSLATE_NOOP("TextStyle", "Let Ring"),                &letRingTextStyle,           Tid::LET_RING },

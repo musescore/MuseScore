@@ -38,6 +38,7 @@
 #include "score.h"
 #include "tremolo.h"
 #include "glissando.h"
+#include "slurando.h"
 #include "staff.h"
 #include "part.h"
 #include "utils.h"
@@ -1986,6 +1987,15 @@ void Chord::layoutPitched()
             }
         }
 
+        // layout slurando
+        for (Spanner* sp : note->spannerBack()) {
+            if (sp->isSlurando()) {
+                qreal d = toSlurando(sp)->layoutWidth(note, this);
+                lll = qMax(lll, d);
+                break;
+            }
+        }
+
         // clear layout for note-based fingerings
         for (Element* e : note->el()) {
             if (e->isFingering()) {
@@ -2247,6 +2257,14 @@ void Chord::layoutTablature()
                 }
                 qreal d = qMax(minTieLength - overlap, 0.0);
                 lll = qMax(lll, d);
+            }
+        }
+        // layout Slurando
+        for (Spanner* sp : note->spannerBack()) {
+            if (sp->isSlurando()) {
+                qreal d = toSlurando(sp)->layoutWidthTab(note, this);
+                lll = qMax(lll, d);
+                break;
             }
         }
     }

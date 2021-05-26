@@ -64,6 +64,7 @@
 #include "notedot.h"
 #include "spanner.h"
 #include "glissando.h"
+#include "slurando.h"
 #include "bagpembell.h"
 #include "hairpin.h"
 #include "textline.h"
@@ -1270,6 +1271,7 @@ void Note::add(Element* e)
         break;
     case ElementType::TEXTLINE:
     case ElementType::GLISSANDO:
+    case ElementType::SLURANDO:
         addSpanner(toSpanner(e));
         break;
     default:
@@ -1314,6 +1316,7 @@ void Note::remove(Element* e)
 
     case ElementType::TEXTLINE:
     case ElementType::GLISSANDO:
+    case ElementType::SLURANDO:
         removeSpanner(toSpanner(e));
         break;
 
@@ -1679,6 +1682,7 @@ void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
     case ElementType::TIE:
     case ElementType::TEXTLINE:
     case ElementType::GLISSANDO:
+    case ElementType::SLURANDO:
     {
         Spanner* sp = toSpanner(info->connector());
         if (info->isStart()) {
