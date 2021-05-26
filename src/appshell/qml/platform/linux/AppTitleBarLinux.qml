@@ -19,26 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import QtQuick 2.15
 
-#ifndef MU_DOCK_EVENTSWATCHER_H
-#define MU_DOCK_EVENTSWATCHER_H
+import "../../"
 
-#include <QObject>
+AppTitleBar {
+    id: root
 
-namespace mu::dock {
-class EventsWatcher : public QObject
-{
-    Q_OBJECT
+    signal startSystemMoveRequested()
 
-public:
-    explicit EventsWatcher(QObject* parent = nullptr);
+    TapHandler {
+        readonly property int maximizeTapCount: 2
+        gesturePolicy: TapHandler.DragThreshold
+        onTapped: {
+            if (tapCount === maximizeTapCount) {
+                toggleWindowMaximizedRequested()
+            }
+        }
+    }
 
-signals:
-    void eventReceived(QEvent* ev);
-
-protected:
-    bool eventFilter(QObject* obj, QEvent* ev) override;
-};
+    DragHandler {
+        grabPermissions: TapHandler.CanTakeOverFromAnything
+        onActiveChanged: {
+            if (active) {
+                startSystemMoveRequested()
+            }
+        }
+    }
 }
-
-#endif // MU_DOCK_EVENTSWATCHER_H

@@ -35,7 +35,7 @@ DockSeparator::DockSeparator(Layouting::Widget* parent)
     Layouting::Separator(parent),
     Layouting::Widget_quick(this)
 {
-    createQQuickItem("qrc:/qml/kdab/docksystem/DockSeparator.qml", this);
+    createQQuickItem("qrc:/qml/dockwindow/DockSeparator.qml", this);
 
     // Only set on Separator::init(), so single-shot
     QTimer::singleShot(0, this, &DockSeparator::isVerticalChanged);

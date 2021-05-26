@@ -19,18 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import QtQuick 2.15
 
-#include "dockstatusbar.h"
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
-using namespace mu::dock;
+import "../dockwindow"
 
-DockStatusBar::DockStatusBar(QQuickItem* parent)
-    : DockBase(parent)
-{
-    setAllowedAreas(Qt::BottomDockWidgetArea);
-}
+DockPage {
+    id: publishPage
 
-DockType DockStatusBar::type() const
-{
-    return DockType::StatusBar;
+    objectName: "Publish"
+    uri: "musescore://publish"
+
+    central: Rectangle {
+        color: ui.theme.backgroundSecondaryColor
+
+        StyledTextLabel {
+            anchors.centerIn: parent
+            text: "Publish"
+        }
+    }
 }

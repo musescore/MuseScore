@@ -35,9 +35,6 @@ Rectangle {
     visible: notationsView.count > 0
     color: ui.theme.backgroundSecondaryColor
 
-    border.width: 1
-    border.color: ui.theme.strokeColor
-
     function ensureActive() {
         var item = notationsView.itemAtIndex(notationsView.currentIndex)
         item.navigation.requestActive()

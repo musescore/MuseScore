@@ -1,23 +1,66 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# MuseScore-CLA-applies
+#
+# MuseScore
+# Music Composition & Notation
+#
+# Copyright (C) 2021 MuseScore BVBA and others
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 3 as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+set (DOCK_LIBS
+    kddockwidgets
+)
+
+if (OS_IS_MAC)
+    set (DOCKWINDOW_PLATFORM_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/appwindowstyler.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/appwindowstyler.h
+        )
+else()
+    set (DOCKWINDOW_PLATFORM_SRC )
+endif()
 
 set (DOCKWINDOW_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/dockcentral.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dockcentral.h
+    ${CMAKE_CURRENT_LIST_DIR}/docksetup.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/docksetup.h
+    ${CMAKE_CURRENT_LIST_DIR}/docktypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/dockwindow.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dockwindow.h
+    ${CMAKE_CURRENT_LIST_DIR}/mainwindowprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/mainwindowprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/dockpage.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dockpage.h
     ${CMAKE_CURRENT_LIST_DIR}/dockpanel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dockpanel.h
-    ${CMAKE_CURRENT_LIST_DIR}/docksetup.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/docksetup.h
     ${CMAKE_CURRENT_LIST_DIR}/dockstatusbar.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dockstatusbar.h
-    ${CMAKE_CURRENT_LIST_DIR}/dockmenubar.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dockmenubar.h
     ${CMAKE_CURRENT_LIST_DIR}/docktoolbar.cpp
     ${CMAKE_CURRENT_LIST_DIR}/docktoolbar.h
-    ${CMAKE_CURRENT_LIST_DIR}/dockview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dockview.h
-    ${CMAKE_CURRENT_LIST_DIR}/dockwindow.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dockwindow.h
-    ${CMAKE_CURRENT_LIST_DIR}/eventswatcher.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/eventswatcher.h
+    ${CMAKE_CURRENT_LIST_DIR}/docktoolbarholder.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/docktoolbarholder.h
+    ${CMAKE_CURRENT_LIST_DIR}/dockcentral.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dockcentral.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dockbase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dockbase.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dropindicators.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dropindicators.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dropindicatorswindow.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dropindicatorswindow.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dockseparator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dockseparator.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dockframemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dockframemodel.h
+    ${DOCKWINDOW_PLATFORM_SRC}
 )
+
