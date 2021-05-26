@@ -83,7 +83,7 @@ void QmlToolTip::doShow()
     const QRect rect(topLeft.x(), topLeft.y(), m_item->width(), m_item->height());
     const QPoint pos(rect.bottomLeft().x() + m_item->width() / 2, rect.bottomLeft().y());
 
-    emit showToolTip(pos, m_title, m_description, m_shortcut);
+    emit showToolTip(m_item, pos, m_title, m_description, m_shortcut);
 }
 
 void QmlToolTip::doHide()
