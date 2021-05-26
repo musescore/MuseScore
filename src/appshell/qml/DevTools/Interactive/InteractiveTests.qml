@@ -36,6 +36,7 @@ Rectangle {
     NavigationPanel {
         id: navPanel
         name: "InteractiveTests"
+        section: navSec
         order: 1
         direction: NavigationPanel.Vertical
 
@@ -74,7 +75,7 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
-            navigation.row: 0
+            navigation.row: 1
             text: "[qml] Sample dialog"
             onClicked: {
                 console.log("qml: before open")
@@ -86,7 +87,7 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
-            navigation.row: 0
+            navigation.row: 2
             text: "[cpp] Sample dialog async"
             onClicked: testModel.openSampleDialogAsync()
         }
@@ -94,7 +95,7 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
-            navigation.row: 0
+            navigation.row: 3
             text: "[qml] Sample dialog sync"
             onClicked: {
                 console.log("qml: before open")
@@ -106,7 +107,7 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
-            navigation.row: 0
+            navigation.row: 4
             text: "[qml] Sample dialog modal"
             onClicked: {
                 console.log("qml: before open")
@@ -118,7 +119,7 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
-            navigation.row: 0
+            navigation.row: 5
             text: "[cpp] Sample dialog close"
             onClicked: testModel.closeSampleDialog()
         }
@@ -126,7 +127,7 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
-            navigation.row: 0
+            navigation.row: 6
             text: "Open musescore.com"
             onClicked: {
                 api.launcher.openUrl("https://musescore.com/")
@@ -136,7 +137,7 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
-            navigation.row: 0
+            navigation.row: 7
             text: "Question"
             onClicked: testModel.question()
         }
@@ -144,7 +145,7 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
-            navigation.row: 0
+            navigation.row: 8
             text: "Custom question"
             onClicked: testModel.customQuestion()
         }
@@ -152,7 +153,7 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
-            navigation.row: 0
+            navigation.row: 9
             text: "Information"
             onClicked: testModel.information()
         }
@@ -160,7 +161,7 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
-            navigation.row: 0
+            navigation.row: 10
             text: "Warning"
             onClicked: testModel.warning()
         }
@@ -168,7 +169,7 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
-            navigation.row: 0
+            navigation.row: 11
             text: "Critical"
             onClicked: testModel.critical()
         }
@@ -176,7 +177,7 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
-            navigation.row: 0
+            navigation.row: 12
             text: "Require"
             onClicked: testModel.require()
         }
@@ -184,7 +185,7 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
-            navigation.row: 0
+            navigation.row: 13
             text: "Widget dialog"
             onClicked: testModel.openWidgetDialog()
         }
@@ -192,7 +193,7 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
-            navigation.row: 0
+            navigation.row: 14
             text: "Widget dialog async"
             onClicked: testModel.openWidgetDialogAsync()
         }
@@ -200,7 +201,7 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
-            navigation.row: 0
+            navigation.row: 15
             text: "Widget dialog close"
             onClicked: testModel.closeWidgetDialog()
         }
