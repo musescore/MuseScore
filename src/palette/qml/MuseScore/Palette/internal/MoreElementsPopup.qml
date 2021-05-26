@@ -248,7 +248,8 @@ StyledPopupView {
                         icon: IconCode.DELETE_TANK
                         enabled: customPaletteSelectionModel.hasSelection
                         normalStateColor: "transparent"
-                        hint: text
+
+                        toolTipTitle: text
 
                         navigation.panel: moreElementsPopup.navigation
                         navigation.name: "deleteButton"

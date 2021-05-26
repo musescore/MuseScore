@@ -95,7 +95,7 @@ Item {
         z: 1000
 
         icon: IconCode.DELETE_TANK
-        hint: deleteButton.text
+        toolTipTitle: deleteButton.text
         visible: root.hidePaletteElementVisible && root.editingEnabled
         activeFocusOnTab: mainPalette.currentItem === paletteTree.currentTreeItem
         normalStateColor: "transparent"

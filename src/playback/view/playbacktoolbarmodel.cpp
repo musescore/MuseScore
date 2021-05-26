@@ -65,8 +65,10 @@ QVariant PlaybackToolBarModel::data(const QModelIndex& index, int role) const
     const QVariantMap& item = items().at(index.row()).toMap();
 
     switch (role) {
+    case TitleRole: return item["title"];
     case CodeRole: return item["code"];
-    case HintRole: return item["description"];
+    case DescriptionRole: return item["description"];
+    case ShortcutRole: return item["shortcut"];
     case IconRole: return item["icon"];
     case CheckedRole: return item["checked"];
     case SubitemsRole: return item["subitems"];
@@ -83,8 +85,10 @@ int PlaybackToolBarModel::rowCount(const QModelIndex&) const
 QHash<int, QByteArray> PlaybackToolBarModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
+        { TitleRole, "title" },
         { CodeRole, "code" },
-        { HintRole, "hint" },
+        { DescriptionRole, "description" },
+        { ShortcutRole, "shortcut" },
         { IconRole, "icon" },
         { CheckedRole, "checked" },
         { SubitemsRole, "subitems" },
