@@ -127,12 +127,8 @@ void PopupView::open()
 
     beforeShow();
 
-    if (m_globalPos.isNull()) {
-        QQuickItem* prn = parentItem();
-        IF_ASSERT_FAILED(prn) {
-            return;
-        }
-        m_globalPos = prn->mapToGlobal(m_localPos);
+    if (!isDialog()) {
+        correctPos();
     }
 
     if (isDialog()) {
@@ -405,9 +401,39 @@ void PopupView::setRet(QVariantMap ret)
     emit retChanged(m_ret);
 }
 
+void PopupView::setOpensUpward(bool opensUpward)
+{
+    if (m_opensUpward == opensUpward) {
+        return;
+    }
+
+    m_opensUpward = opensUpward;
+    emit opensUpwardChanged(m_opensUpward);
+}
+
+void PopupView::setArrowX(int arrowX)
+{
+    if (m_arrowX == arrowX) {
+        return;
+    }
+
+    m_arrowX = arrowX;
+    emit arrowXChanged(m_arrowX);
+}
+
 QVariantMap PopupView::ret() const
 {
     return m_ret;
+}
+
+bool PopupView::opensUpward() const
+{
+    return m_opensUpward;
+}
+
+int PopupView::arrowX() const
+{
+    return m_arrowX;
 }
 
 void PopupView::setErrCode(Ret::Code code)
@@ -415,4 +441,42 @@ void PopupView::setErrCode(Ret::Code code)
     QVariantMap ret;
     ret["errcode"] = static_cast<int>(code);
     setRet(ret);
+}
+
+void PopupView::correctPos()
+{
+    QQuickItem* parent = parentItem();
+    IF_ASSERT_FAILED(parent) {
+        return;
+    }
+
+    QPointF parentTopLeft = parent->mapToGlobal(QPoint(0, 0));
+
+    if (m_globalPos.isNull()) {
+        m_globalPos = parentTopLeft + m_localPos;
+    }
+
+    QWindow* window = mainWindow()->qWindow();
+    if (!window) {
+        return;
+    }
+
+    QRect windowRect = window->geometry();
+    QRect popupRect = m_window->geometry();
+    popupRect.moveTopLeft(m_globalPos.toPoint());
+
+    if (popupRect.left() < windowRect.left()) {
+        m_globalPos.setX(m_globalPos.x() + windowRect.left() - popupRect.left());
+    }
+
+    if (popupRect.bottom() > windowRect.bottom()) {
+        m_globalPos.setY(m_globalPos.y() - parent->height() - popupRect.height());
+        setOpensUpward(true);
+    }
+
+    if (popupRect.right() > windowRect.right()) {
+        m_globalPos.setX(m_globalPos.x() - (popupRect.right() - windowRect.right()));
+    }
+
+    setArrowX(parentTopLeft.x() + (parent->width() / 2) - m_globalPos.x());
 }

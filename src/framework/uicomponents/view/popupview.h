@@ -47,6 +47,9 @@ class PopupView : public QObject, public QQmlParserStatus
     Q_PROPERTY(qreal x READ localX WRITE setLocalX NOTIFY xChanged)
     Q_PROPERTY(qreal y READ localY WRITE setLocalY NOTIFY yChanged)
 
+    Q_PROPERTY(bool opensUpward READ opensUpward NOTIFY opensUpwardChanged)
+    Q_PROPERTY(int arrowX READ arrowX WRITE setArrowX NOTIFY arrowXChanged)
+
     Q_PROPERTY(bool isOpened READ isOpened NOTIFY isOpenedChanged)
     Q_PROPERTY(ClosePolicy closePolicy READ closePolicy WRITE setClosePolicy NOTIFY closePolicyChanged)
 
@@ -107,6 +110,9 @@ public:
     bool resizable() const;
     QVariantMap ret() const;
 
+    bool opensUpward() const;
+    int arrowX() const;
+
 public slots:
     void setParentItem(QQuickItem* parent);
     void setContentItem(QQuickItem* content);
@@ -119,6 +125,9 @@ public slots:
     void setModal(bool modal);
     void setResizable(bool resizable);
     void setRet(QVariantMap ret);
+
+    void setOpensUpward(bool opensUpward);
+    void setArrowX(int arrowX);
 
 signals:
     void parentItemChanged();
@@ -136,6 +145,9 @@ signals:
     void isOpenedChanged();
     void opened();
     void closed();
+
+    void opensUpwardChanged(bool opensUpward);
+    void arrowXChanged(int arrowX);
 
 private slots:
     void onApplicationStateChanged(Qt::ApplicationState state);
@@ -156,6 +168,8 @@ protected:
 
     void setErrCode(Ret::Code code);
 
+    void correctPos();
+
     IPopupWindow* m_window = nullptr;
     QQuickItem* m_contentItem = nullptr;
 
@@ -168,6 +182,8 @@ protected:
     bool m_modal = true;
     bool m_resizable = false;
     QVariantMap m_ret;
+    bool m_opensUpward = false;
+    int m_arrowX = 0;
 };
 }
 
