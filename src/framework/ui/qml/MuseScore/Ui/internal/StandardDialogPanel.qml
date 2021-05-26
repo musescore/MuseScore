@@ -47,6 +47,10 @@ Rectangle {
 
     signal clicked(int buttonId, bool showAgain)
 
+    NavigationPanel {
+        id: navPanel
+    }
+
     ColumnLayout {
         id: content
 
