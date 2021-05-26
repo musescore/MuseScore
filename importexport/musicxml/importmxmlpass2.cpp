@@ -3264,12 +3264,12 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
  * Create a barline of the specified type.
  */
 
-static std::unique_ptr<BarLine> createBarline(Score* score, const int track, const BarLineType type, const bool visible, const QString& barStyle)
+static std::unique_ptr<BarLine> createBarline(Score* score, const int track, const BarLineType type, const bool visible, const QString& barStyle, bool spanStaff)
       {
       std::unique_ptr<BarLine> barline(new BarLine(score));
       barline->setTrack(track);
       barline->setBarLineType(type);
-      barline->setSpanStaff(0);
+      barline->setSpanStaff(spanStaff);
       barline->setVisible(visible);
       if (barStyle == "tick") {
             barline->setSpanFrom(BARLINE_SPAN_TICK1_FROM);
@@ -3384,8 +3384,15 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
                       || barStyle == "dotted"
                       || barStyle == "light-light"
                       || barStyle == "regular") {
-                        auto b = createBarline(measure->score(), track, type, visible, barStyle);
-                        addBarlineToMeasure(measure, tick, std::move(b));
+                        // Add barline to the first voice of every staff in the part,
+                        // and span every barline except the last
+                        int nstaves = _pass1.getPart(partId)->nstaves();
+                        for (int i = 0; i < nstaves; ++i ) {
+                              bool spanStaff = i < nstaves - 1;
+                              int currentTrack = track + (i * VOICES);
+                              auto b = createBarline(measure->score(), currentTrack, type, visible, barStyle, spanStaff);
+                              addBarlineToMeasure(measure, tick, std::move(b));
+                              }
                         }
                   }
             }
