@@ -29,8 +29,6 @@ namespace mu::dock {
 class DockSetup
 {
 public:
-    DockSetup();
-
     static void registerQmlTypes();
     static void registerExports();
     static void setup(QQmlEngine* engine);

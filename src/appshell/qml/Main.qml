@@ -19,29 +19,63 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
+import QtQuick 2.15
+import QtQuick.Window 2.15
 
-Rectangle {
+import MuseScore.UiComponents 1.0
+import MuseScore.AppShell 1.0
 
+import "../.."
+
+AppWindow {
     id: root
 
-    color: "#0F9D58"
-
-    Loader {
-        id: windowLoader
-        anchors.fill: parent
-        onStatusChanged: {
-            if (item && item.anchors) item.anchors.fill = item ? item.parent : null
-            item.visible = true
+    function toggleMaximized() {
+        if (root.visibility === Window.Maximized) {
+            root.showNormal()
+        } else {
+            root.showMaximized()
         }
+    }
+
+    FramelessWindowModel {
+        id: framelessWindowModel
+
+        titleBarMoveArea: appTitleBar.titleMoveAreaRect
     }
 
     Component.onCompleted: {
-        var comp = Qt.createComponent("Window.qml");
-        if (comp.status !== Component.Ready) {
-            console.debug("qml: show window error: " + comp.errorString())
-        }
-        windowLoader.sourceComponent = comp
+        framelessWindowModel.init(this)
     }
 
+    AppTitleBar {
+        id: appTitleBar
+
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        height: 48
+
+        onShowWindowMinimizedRequested: {
+            root.showMinimized()
+        }
+
+        onToggleWindowMaximizedRequested: {
+            root.toggleMaximized()
+        }
+
+        onCloseWindowRequested: {
+            root.close()
+        }
+    }
+
+    WindowContent {
+        id: window
+
+        anchors.top: appTitleBar.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+    }
 }

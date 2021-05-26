@@ -23,85 +23,32 @@
 #ifndef MU_DOCK_DOCKPANEL_H
 #define MU_DOCK_DOCKPANEL_H
 
-#include "dockview.h"
+#include "internal/dockbase.h"
 
-#include <QDockWidget>
+#include "framework/uicomponents/view/qmllistproperty.h"
 
 namespace mu::dock {
-class DockPanel : public DockView
+class DockPanel : public DockBase
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
-    Q_PROPERTY(Qt::DockWidgetArea area READ area WRITE setArea NOTIFY areaChanged)
-    Q_PROPERTY(QString tabifyObjectName READ tabifyObjectName WRITE setTabifyObjectName NOTIFY tabifyObjectNameChanged)
-    Q_PROPERTY(int minimumWidth READ minimumWidth WRITE setMinimumWidth NOTIFY minimumWidthChanged)
-    Q_PROPERTY(bool floatable READ floatable WRITE setFloatable NOTIFY floatableChanged)
-    Q_PROPERTY(bool closable READ closable WRITE setClosable NOTIFY closableChanged)
-
-    Q_PROPERTY(bool isShown READ isShown NOTIFY isShownChanged)
+    Q_PROPERTY(DockPanel * tabifyPanel READ tabifyPanel WRITE setTabifyPanel NOTIFY tabifyPanelChanged)
 
 public:
     explicit DockPanel(QQuickItem* parent = nullptr);
-    ~DockPanel() override;
 
-    QString title() const;
-    Qt::DockWidgetArea area() const;
-    QString tabifyObjectName() const;
-
-    int minimumWidth() const;
-    int preferedWidth() const;
-
-    bool floatable() const;
-    bool closable() const;
-    bool isShown() const;
-    bool visible() const override;
-
-    struct Widget {
-        QDockWidget* panel = nullptr;
-        Qt::DockWidgetArea area{ Qt::LeftDockWidgetArea };
-        QString tabifyObjectName;
-    };
-
-    Widget widget() const;
+    DockPanel* tabifyPanel() const;
 
 public slots:
-    void setTitle(QString title);
-    void setArea(Qt::DockWidgetArea area);
-    void setTabifyObjectName(QString tabifyObjectName);
-    void setMinimumWidth(int width);
-    void setFloatable(bool floatable);
-    void setClosable(bool closable);
-
-private slots:
-    void onWidgetEvent(QEvent* event) override;
+    void setTabifyPanel(DockPanel* panel);
 
 signals:
-    void titleChanged(QString title);
-    void areaChanged(Qt::DockWidgetArea area);
-    void tabifyObjectNameChanged(QString tabifyObjectName);
-    void minimumWidthChanged(int width);
-    void floatableChanged(bool floatable);
-    void closableChanged(bool closable);
-    void closed();
-    void isShownChanged(bool isShown);
-
-protected:
-    void onComponentCompleted() override;
-    void updateStyle() override;
+    void tabifyPanelChanged(DockPanel* panel);
 
 private:
-    QDockWidget* panel() const;
+    DockType type() const override;
 
-    void setFeature(QDockWidget::DockWidgetFeature feature, bool value);
-    bool featureEnabled(QDockWidget::DockWidgetFeature feature) const;
-
-    Widget m_dock;
-    QString m_title;
-    EventsWatcher* m_eventsWatcher = nullptr;
-
-    int m_preferedWidth = 0;
-    bool m_isShown = false;
+    DockPanel* m_tabifyPanel = nullptr;
 };
 }
 
