@@ -52,5 +52,6 @@
         <file>qml/MuseScore/UiComponents/StyledMenuLoader.qml</file>
         <file>qml/MuseScore/UiComponents/TabItem.qml</file>
         <file>qml/MuseScore/UiComponents/StyledDropShadow.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledToolTip.qml</file>
     </qresource>
 </RCC>

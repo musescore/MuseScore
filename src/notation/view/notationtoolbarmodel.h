@@ -58,7 +58,8 @@ private:
         CodeRole,
         IconRole,
         EnabledRole,
-        HintRole
+        DescriptionRole,
+        ShortcutRole
     };
 
     ui::MenuItem makeItem(const actions::ActionCode& actionCode) const;

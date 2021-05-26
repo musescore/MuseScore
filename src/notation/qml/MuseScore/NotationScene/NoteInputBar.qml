@@ -83,12 +83,15 @@ Rectangle {
             normalStateColor: Boolean(item) && item.checkedRole ? ui.theme.accentColor : "transparent"
 
             icon: Boolean(item) ? item.iconRole : IconCode.NONE
-            hint: Boolean(item) ? item.hintRole : ""
+
+            toolTipTitle: Boolean(item) ? item.titleRole : ""
+            toolTipDescription: Boolean(item) ? item.descriptionRole : ""
+            toolTipShortcut: Boolean(item) ? item.shortcutRole : ""
 
             iconFont: ui.theme.toolbarIconsFont
 
             navigation.panel: keynavSub
-            navigation.name: hint
+            navigation.name: toolTipTitle
             navigation.order: Boolean(item) ? item.orderRole : 0
             isClickOnKeyNavTriggered: false
             navigation.onTriggered: {
