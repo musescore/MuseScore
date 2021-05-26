@@ -4098,7 +4098,7 @@ static TDuration determineDuration(const bool rest, const QString& type, const i
 static Chord* findOrCreateChord(Score*, Measure* m,
                                 const Fraction& tick, const int track, const int move,
                                 const TDuration duration, const Fraction dura,
-                                Beam::Mode bm)
+                                Beam::Mode bm, bool small)
 {
     //qDebug("findOrCreateChord tick %d track %d dur ticks %d ticks %s bm %hhd",
     //       tick, track, duration.ticks(), qPrintable(dura.print()), bm);
@@ -4113,6 +4113,9 @@ static Chord* findOrCreateChord(Score*, Measure* m,
             c->setBeamMode(bm);
         }
         c->setTrack(track);
+        // Chord is initialized with the smallness of its first note.
+        // If a non-small note is added later, this is handled in handleSmallness.
+        c->setSmall(small);
 
         setChordRestDuration(c, duration, dura);
         s->add(c);
@@ -4182,6 +4185,36 @@ static void handleDisplayStep(ChordRest* cr, int step, int octave, const Fractio
         int dp = 7 * (octave + 2) + step;
         //qDebug(" dp=%d po-dp=%d", dp, po-dp);
         cr->ryoffset() = (po - dp + 3) * spatium / 2;
+    }
+}
+
+//---------------------------------------------------------
+//   handleSmallness
+//---------------------------------------------------------
+
+/**
+ * Handle the distinction between small notes and a small
+ * chord, to ensure a chord with all small notes is small.
+ * This also handles the fact that a small note being added
+ * to a small chord should not itself be small.
+ * I.e. a chord is "small until proven otherwise".
+ */
+
+static void handleSmallness(bool cueOrSmall, Note* note, Chord* c)
+{
+    if (cueOrSmall) {
+        note->setSmall(!c->isSmall());     // Avoid redundant smallness
+    } else {
+        note->setSmall(false);
+        if (c->isSmall()) {
+            // What was a small chord becomes small notes in a non-small chord
+            c->setSmall(false);
+            for (Note* otherNote : c->notes()) {
+                if (note != otherNote) {
+                    otherNote->setSmall(true);
+                }
+            }
+        }
     }
 }
 
@@ -4603,7 +4636,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             c = findOrCreateChord(_score, measure,
                                   noteStartTime,
                                   msTrack + msVoice, msMove,
-                                  duration, dura, bm);
+                                  duration, dura, bm, isSmall || cue);
         } else {
             // grace note
             // TODO: check if explicit stem direction should also be set for grace notes
@@ -4675,8 +4708,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             addGraceChordsBefore(c, gcl);
         }
 
-        note->setSmall(cue || isSmall); // cue notes are always small, normal notes only if size=cue
-        note->setPlay(!cue); // cue notes don't play
+        handleSmallness(cue || isSmall, note, c);
+        note->setPlay(!cue);              // cue notes don't play
         note->setHeadGroup(headGroup);
         if (noteColor != QColor::Invalid) {
             note->setColor(noteColor);

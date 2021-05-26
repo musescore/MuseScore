@@ -104,6 +104,7 @@ private slots:
     void completeMeasureRests() { mxmlIoTest("testCompleteMeasureRests"); }
     void cueNotes() { mxmlIoTest("testCueNotes"); }
     void cueNotes2() { mxmlMscxExportTestRef("testCueNotes2"); }
+    void cueNotes3() { mxmlImportTestRef("testCueNotes3"); }
     void dalSegno() { mxmlIoTest("testDalSegno"); }
     void dcalCoda() { mxmlIoTest("testDCalCoda"); }
     void dcalFine() { mxmlIoTest("testDCalFine"); }
