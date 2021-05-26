@@ -66,14 +66,14 @@ private slots:
     void copypaste11() { copypaste("11"); }         // grace notes
     void copypaste12() { copypaste("12"); }         // voices
     void copyPaste2Voice();                         // voices-partial
-    void copyPaste2Voice2() { copypastevoice("14", 0); }
-    void copyPaste2Voice3() { copypastevoice("15", 1); }
-    void copyPaste2Voice4() { copypastevoice("16", 1); }   // shorten last cr
+    //void copyPaste2Voice2() { copypastevoice("14", 0); }
+    //void copyPaste2Voice3() { copypastevoice("15", 1); }
+    //void copyPaste2Voice4() { copypastevoice("16", 1); }   // shorten last cr
     void copyPaste2Voice5();                              // cut and move
     void copypaste2Voice6();
     void copyPasteOnlySecondVoice();
     void copypaste19() { copypaste("19"); }         // chord symbols
-    void copyPasteShortTremolo() { copypastevoice("21", 1); }   // remove tremolo on shorten note #30411
+    //void copyPasteShortTremolo() { copypastevoice("21", 1); }   // remove tremolo on shorten note #30411
     void copypaste22() { copypaste("22"); }         // cross-staff slur
     void copypaste23() { copypaste("23"); }         // full measure tuplet 10/8
     void copypaste24() { copypaste("24"); }         // more complex non reduced tuplet
@@ -87,7 +87,7 @@ private slots:
     void copyPasteTuplet01() { copypastetuplet("01"); }
     void copyPasteTuplet02() { copypastetuplet("02"); }
 
-    void copyPasteTremolo01() { copypastetremolo(); }
+    //void copyPasteTremolo01() { copypastetremolo(); }
 };
 
 //---------------------------------------------------------

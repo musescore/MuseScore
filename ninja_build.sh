@@ -91,8 +91,8 @@ case $TARGET in
         ;; 
 
     debug)
-        mkdir -p build.release
-        cd build.release
+        mkdir -p build.debug
+        cd build.debug
         do_build Debug
         ;;
 
