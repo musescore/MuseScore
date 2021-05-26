@@ -41,10 +41,16 @@ StyledDialogView {
 
     margins: 16
 
+    onOpened: {
+        content.onOpened()
+    }
+
     StandardDialogPanel {
         id: content
 
         anchors.fill: parent
+
+        navigation.section: root.navigation
 
         buttons: root.buttons
 

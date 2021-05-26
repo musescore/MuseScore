@@ -53,6 +53,7 @@ FocusScope {
     signal clicked()
     signal pressAndHold()
 
+    objectName: root.text
 
     height: contentWrapper.height + 14
     width: (Boolean(text) ? Math.max(contentWrapper.width + 32, prv.isVertical ? 132 : 0) : contentWrapper.width + 16)

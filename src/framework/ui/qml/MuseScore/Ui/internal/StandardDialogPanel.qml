@@ -45,10 +45,30 @@ Rectangle {
     property var contentWidth: Math.max(textContent.contentWidth, buttons.contentWidth)
     property var contentHeight: content.contentHeight
 
+    property alias navigation: navPanel
+
     signal clicked(int buttonId, bool showAgain)
+
+    function onOpened() {
+        var btn = null
+        for (var i = buttons.count; i > 0; --i) {
+            btn = buttons.itemAtIndex(i-1)
+            if (btn.accentButton) {
+                break;
+            }
+
+        }
+
+        console.log("onOpened btn: " + btn.text)
+        btn.navigation.requestActive()
+    }
 
     NavigationPanel {
         id: navPanel
+        name: "StandardDialog"
+        order: 1
+        direction: NavigationPanel.Horizontal
+        accessible.name: root.title
     }
 
     ColumnLayout {
@@ -148,6 +168,10 @@ Rectangle {
                 orientation: Qt.Horizontal
 
                 delegate: FlatButton {
+
+                    navigation.panel: navPanel
+                    navigation.column: model.index
+
                     text: modelData.title
                     accentButton: Boolean(modelData.accent)
 
