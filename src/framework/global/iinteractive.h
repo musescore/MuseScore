@@ -68,8 +68,11 @@ public:
     struct ButtonData {
         int btn = int(Button::CustomButton);
         std::string text;
-        ButtonData(int b, const std::string& t)
-            : btn(b), text(t) {}
+        bool accent = false;
+        ButtonData(int btn, const std::string& text)
+            : btn(btn), text(text) {}
+        ButtonData(int btn, const std::string& text, bool accent)
+            : btn(btn), text(text), accent(accent) {}
     };
     using ButtonDatas = std::vector<ButtonData>;
 
@@ -106,27 +109,32 @@ public:
         bool m_showAgain = true;
     };
 
-    enum class Option {
-        WithIcon,
-        WithShowAgain
+    enum Option {
+        NoOptions = 0x0,
+        WithIcon = 0x1,
+        WithShowAgain = 0x2
     };
+    Q_DECLARE_FLAGS(Options, Option)
 
     virtual Result question(const std::string& title, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,
-                            const QFlags<Option>& options = {}) const = 0;
+                            const Options& options = {}) const = 0;
 
     virtual Result question(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
-                            const QFlags<Option>& options = {}) const = 0;
+                            const Options& options = {}) const = 0;
 
     virtual ButtonData buttonData(Button b) const = 0;
 
     // info
-    virtual Result info(const std::string& title, const std::string& text, const QFlags<Option>& options = {}) const = 0;
+    virtual Result info(const std::string& title, const std::string& text, const ButtonDatas& buttons = {},
+                        int defBtn = int(Button::NoButton), const Options& options = {}) const = 0;
 
     // warning
-    virtual Result warning(const std::string& title, const std::string& text, const QFlags<Option>& options = {}) const = 0;
+    virtual Result warning(const std::string& title, const std::string& text, const ButtonDatas& buttons = {},
+                           int defBtn = int(Button::NoButton), const Options& options = {}) const = 0;
 
     // error
-    virtual Result error(const std::string& title, const std::string& text, const QFlags<Option>& options = {}) const = 0;
+    virtual Result error(const std::string& title, const std::string& text, const ButtonDatas& buttons = {},
+                         int defBtn = int(Button::NoButton), const Options& options = {}) const = 0;
 
     // files
     virtual io::path selectOpeningFile(const QString& title, const io::path& dir, const QString& filter) = 0;
@@ -148,6 +156,7 @@ public:
 
     virtual Ret openUrl(const std::string& url) const = 0;
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(IInteractive::Options)
 }
 }
 

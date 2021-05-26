@@ -26,6 +26,8 @@
 #include "uri.h"
 #include "retval.h"
 
+#include "iinteractive.h"
+
 namespace mu::ui {
 class IInteractiveProvider : MODULE_EXPORT_INTERFACE
 {
@@ -33,6 +35,23 @@ class IInteractiveProvider : MODULE_EXPORT_INTERFACE
 
 public:
     virtual ~IInteractiveProvider() = default;
+
+    virtual RetVal<Val> question(const std::string& title, const framework::IInteractive::Text& text,
+                                 const framework::IInteractive::ButtonDatas& buttons,
+                                 int defBtn = int(framework::IInteractive::Button::NoButton),
+                                 const framework::IInteractive::Options& options = {}) = 0;
+
+    virtual RetVal<Val> info(const std::string& title, const std::string& text, const framework::IInteractive::ButtonDatas& buttons,
+                             int defBtn = int(framework::IInteractive::Button::NoButton),
+                             const framework::IInteractive::Options& options = {}) = 0;
+
+    virtual RetVal<Val> warning(const std::string& title, const std::string& text, const framework::IInteractive::ButtonDatas& buttons,
+                                int defBtn = int(framework::IInteractive::Button::NoButton),
+                                const framework::IInteractive::Options& options = {}) = 0;
+
+    virtual RetVal<Val> error(const std::string& title, const std::string& text, const framework::IInteractive::ButtonDatas& buttons,
+                              int defBtn = int(framework::IInteractive::Button::NoButton),
+                              const framework::IInteractive::Options& options = {}) = 0;
 
     virtual RetVal<Val> open(const UriQuery& uri) = 0;
     virtual RetVal<bool> isOpened(const Uri& uri) const = 0;

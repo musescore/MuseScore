@@ -25,6 +25,19 @@
 
 #include <QObject>
 
+#ifdef WARNING
+#undef WARNING
+#endif
+#ifdef INFO
+#undef INFO
+#endif
+#ifdef ERROR
+#undef ERROR
+#endif
+#ifdef QUESTION
+#undef QUESTION
+#endif
+
 #ifdef FILE_OPEN
 #undef FILE_OPEN
 #endif
@@ -289,6 +302,11 @@ public:
         LOOP_IN = 0xF3C7,
         LOOP_OUT = 0xF3C8,
         PAUSE = 0xF3C9,
+
+        WARNING = 0xF3CE,
+        INFO = 0xF3CF,
+        ERROR = 0xF3D0,
+        QUESTION = 0xF3D1,
 
         AUTO,
         NONE,
