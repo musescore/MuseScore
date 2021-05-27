@@ -45,7 +45,10 @@ public:
         CheckBox,
         RadioButton,
         ComboBox,
-        ListItem
+        ListItem,
+
+        // Custom roles
+        Information // just text
     };
 
     enum class State {

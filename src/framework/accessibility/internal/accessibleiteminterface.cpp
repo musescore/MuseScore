@@ -178,6 +178,13 @@ QAccessible::Role AccessibleItemInterface::role() const
     case IAccessible::Role::RadioButton: return QAccessible::RadioButton;
     case IAccessible::Role::ComboBox: return QAccessible::ComboBox;
     case IAccessible::Role::ListItem: return QAccessible::ListItem;
+    case IAccessible::Role::Information: {
+#ifdef Q_OS_WIN
+        return QAccessible::StaticText;
+#else
+        return QAccessible::UserRole;
+#endif
+    } break;
     }
 
     LOGE() << "not handled role: " << static_cast<int>(r);
