@@ -27,7 +27,6 @@
 #include <QQmlParserStatus>
 #include <QQuickItem>
 #include <QMap>
-#include <QAccessible>
 
 #include "accessibility/iaccessible.h"
 #include "modularity/ioc.h"
@@ -39,12 +38,35 @@
     void set_##P(bool arg) { setState(S, arg); } \
 
 namespace mu::ui {
+class MUAccessible
+{
+    Q_GADGET
+public:
+    MUAccessible() = default;
+
+    //! NOTE Please sync with accessibility::IAccessible::Role (src/framework/accessibility/iaccessible.h)
+    enum Role {
+        NoRole = 0,
+        Application,
+        Dialog,
+        Panel,
+        StaticText,
+        EditableText,
+        Button,
+        CheckBox,
+        RadioButton,
+        ComboBox,
+        ListItem
+    };
+    Q_ENUM(Role)
+};
+
 class AccessibleItem : public QObject, public QQmlParserStatus, public accessibility::IAccessible
 {
     Q_OBJECT
 
     Q_PROPERTY(AccessibleItem * accessibleParent READ accessibleParent_property WRITE setAccessibleParent NOTIFY accessiblePrnChanged)
-    Q_PROPERTY(QAccessible::Role role READ role WRITE setRole NOTIFY roleChanged)
+    Q_PROPERTY(mu::ui::MUAccessible::Role role READ role WRITE setRole NOTIFY roleChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QQuickItem * visualItem READ visualItem WRITE setVisualItem NOTIFY visualItemChanged)
 
@@ -60,7 +82,7 @@ public:
     AccessibleItem(QObject* parent = nullptr);
     ~AccessibleItem();
 
-    QAccessible::Role role() const;
+    MUAccessible::Role role() const;
     QString name() const;
     QQuickItem* visualItem() const;
 
@@ -91,13 +113,13 @@ public:
     void componentComplete() override;
 
 public slots:
-    void setRole(QAccessible::Role role);
+    void setRole(MUAccessible::Role role);
     void setName(QString name);
     void setVisualItem(QQuickItem* item);
 
 signals:
     void accessiblePrnChanged();
-    void roleChanged(QAccessible::Role role);
+    void roleChanged(MUAccessible::Role role);
     void nameChanged(QString name);
     void visualItemChanged(QQuickItem* item);
     void stateChanged();
@@ -109,7 +131,7 @@ private:
     bool m_registred = false;
     AccessibleItem* m_accessibleParent = nullptr;
     QList<AccessibleItem*> m_children;
-    QAccessible::Role m_role = QAccessible::NoRole;
+    MUAccessible::Role m_role = MUAccessible::NoRole;
     QString m_name;
     QQuickItem* m_visualItem = nullptr;
     QMap<State, bool> m_state;

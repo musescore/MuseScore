@@ -42,7 +42,7 @@ FocusScope {
         id: navCtrl
         name: root.title
 
-        accessible.role: Accessible.Button
+        accessible.role: MUAccessible.Button
         accessible.name: root.title
 
         onActiveChanged: {

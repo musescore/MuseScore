@@ -178,8 +178,6 @@ void InteractiveProvider::fillStandatdDialogData(QmlLaunchData* data, const QStr
                                                  const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons, int defBtn,
                                                  const IInteractive::Options& options) const
 {
-    data->setValue("type", type);
-
     auto format = [](IInteractive::TextFormat f) {
         switch (f) {
         case IInteractive::TextFormat::PlainText: return Qt::PlainText;
@@ -189,6 +187,7 @@ void InteractiveProvider::fillStandatdDialogData(QmlLaunchData* data, const QStr
     };
 
     QVariantMap params;
+    params["type"] = type;
     params["title"] = title;
     params["text"] = QString::fromStdString(text.text);
     params["textFormat"] = format(text.format);

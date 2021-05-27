@@ -33,19 +33,19 @@ class IAccessible
 {
 public:
 
-    //! NOTE Must be sync with QAccessible::Role values
+    //! NOTE Please sync with ui::MUAccessible::Role (src/framework/ui/view/qmlaccessible.h)
     enum Role {
-        NoRole         = 0x00000000,
-        Application    = 0x0000000E,
-        Grouping       = 0x00000014,
-        Pane           = 0x00000010,
-        StaticText     = 0x00000029,
-        EditableText   = 0x0000002A,  // Editable, selectable, etc.
-        Button         = 0x0000002B,
-        CheckBox       = 0x0000002C,
-        RadioButton    = 0x0000002D,
-        ComboBox       = 0x0000002E,
-        ListItem       = 0x00000022,
+        NoRole = 0,
+        Application,
+        Dialog,
+        Panel,
+        StaticText,
+        EditableText,
+        Button,
+        CheckBox,
+        RadioButton,
+        ComboBox,
+        ListItem
     };
 
     enum class State {

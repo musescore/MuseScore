@@ -32,7 +32,7 @@ using namespace mu::ui;
 NavigationPanel::NavigationPanel(QObject* parent)
     : AbstractNavigation(parent)
 {
-    accessible()->setRole(QAccessible::Pane);
+    accessible()->setRole(MUAccessible::Panel);
 }
 
 NavigationPanel::~NavigationPanel()

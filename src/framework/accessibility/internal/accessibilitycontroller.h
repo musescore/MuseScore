@@ -36,6 +36,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "global/iinteractive.h"
+#include "accessibility/iaccessibilityconfiguration.h"
 
 class QAccessibleInterface;
 class QAccessibleEvent;
@@ -44,6 +45,7 @@ namespace mu::accessibility {
 class AccessibilityController : public IAccessibilityController, public IAccessible, public async::Asyncable, public actions::Actionable,
     public std::enable_shared_from_this<AccessibilityController>
 {
+    INJECT(accessibility, IAccessibilityConfiguration, configuration)
     INJECT(accessibility, ui::IMainWindow, mainWindow)
     INJECT(accessibility, actions::IActionsDispatcher, dispatcher)
     INJECT(accessibility, framework::IInteractive, interactive)
