@@ -52,6 +52,7 @@ void NotationStyle::setStyleValue(const StyleId& styleId, const QVariant& newVal
         m_getScore->score()->cmdConcertPitchChanged(newValue.toBool());
     } else {
         m_getScore->score()->undoChangeStyleVal(styleId, newValue);
+        m_getScore->score()->update();
     }
 
     m_styleChanged.notify();
