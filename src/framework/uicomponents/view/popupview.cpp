@@ -38,6 +38,8 @@
 
 using namespace mu::uicomponents;
 
+static const QString POPUP_VIEW_CONTENT_OBJECT_NAME("_PopupViewContent");
+
 PopupView::PopupView(QQuickItem* parent)
     : QObject(parent)
 {
@@ -91,6 +93,8 @@ void PopupView::componentComplete()
     m_window->init(engine, uiConfiguration(), isDialog());
     m_window->setOnHidden([this]() { onHidden(); });
     m_window->setContent(m_contentItem);
+
+    m_contentItem->setObjectName(POPUP_VIEW_CONTENT_OBJECT_NAME);
 }
 
 bool PopupView::eventFilter(QObject* watched, QEvent* event)
@@ -470,13 +474,34 @@ void PopupView::correctPos()
     }
 
     if (popupRect.bottom() > windowRect.bottom()) {
-        m_globalPos.setY(m_globalPos.y() - parent->height() - popupRect.height());
-        setOpensUpward(true);
+        qreal posY = m_globalPos.y() - parent->height() - popupRect.height();
+        if (windowRect.top() < posY) {
+            m_globalPos.setY(m_globalPos.y() - parent->height() - popupRect.height());
+            setOpensUpward(true);
+        }
     }
 
     if (popupRect.right() > windowRect.right()) {
-        m_globalPos.setX(m_globalPos.x() - (popupRect.right() - windowRect.right()));
+        if (isCascade()) {
+            m_globalPos.setX(parentTopLeft.x() - popupRect.width());
+        } else {
+            m_globalPos.setX(m_globalPos.x() - (popupRect.right() - windowRect.right()));
+        }
     }
 
     setArrowX(parentTopLeft.x() + (parent->width() / 2) - m_globalPos.x());
+}
+
+bool PopupView::isCascade() const
+{
+    QQuickItem* parent = parentItem();
+    while (parent) {
+        if (parent->objectName() == POPUP_VIEW_CONTENT_OBJECT_NAME) {
+            return true;
+        }
+
+        parent = parent->parentItem();
+    }
+
+    return false;
 }

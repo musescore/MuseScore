@@ -170,6 +170,8 @@ protected:
 
     void correctPos();
 
+    bool isCascade() const;
+
     IPopupWindow* m_window = nullptr;
     QQuickItem* m_contentItem = nullptr;
 
