@@ -6667,7 +6667,7 @@ static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const QString&
       xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
       xml.stag("container");
       xml.stag("rootfiles");
-      xml.stag(QString("rootfile full-path=\"%1\"").arg(filename));
+      xml.stag(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString(filename)));
       xml.etag();
       xml.etag();
       xml.etag();
