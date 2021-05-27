@@ -37,8 +37,6 @@ public:
 
     virtual void reg(IAccessible* item) = 0;
     virtual void unreg(IAccessible* item) = 0;
-
-    virtual void stateChanged(IAccessible* item, IAccessible::State state, bool arg) = 0;
 };
 }
 

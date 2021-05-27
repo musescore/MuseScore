@@ -75,11 +75,6 @@ const IAccessible* AccessibleItem::accessibleParent() const
     return accessibleRoot();
 }
 
-mu::async::Notification AccessibleItem::accessibleParentChanged() const
-{
-    return m_accessibleParentChanged;
-}
-
 IAccessible::Role AccessibleItem::accessibleRole() const
 {
     return static_cast<IAccessible::Role>(m_role);
@@ -145,13 +140,14 @@ QRect AccessibleItem::accessibleRect() const
     return QRect(globalPos.x(), globalPos.y(), vitem->width(), vitem->height());
 }
 
-QWindow* AccessibleItem::accessibleWindow() const
+mu::async::Channel<IAccessible::Property> AccessibleItem::accessiblePropertyChanged() const
 {
-    QQuickItem* vitem = resolveVisualItem();
-    if (!vitem || !vitem->window()) {
-        return nullptr;
-    }
-    return vitem->window();
+    return m_accessiblePropertyChanged;
+}
+
+mu::async::Channel<std::pair<IAccessible::State, bool> > AccessibleItem::accessibleStateChanged() const
+{
+    return m_accessibleStateChanged;
 }
 
 AccessibleItem* AccessibleItem::accessibleParent_property() const
@@ -176,9 +172,10 @@ void AccessibleItem::setAccessibleParent(AccessibleItem* p)
     }
 
     emit accessiblePrnChanged();
+    m_accessiblePropertyChanged.send(IAccessible::Property::Parent);
 }
 
-void AccessibleItem::setState(accessibility::IAccessible::State st, bool arg)
+void AccessibleItem::setState(IAccessible::State st, bool arg)
 {
     if (m_state.value(st, false) == arg) {
         return;
@@ -187,8 +184,8 @@ void AccessibleItem::setState(accessibility::IAccessible::State st, bool arg)
     m_state[st] = arg;
     emit stateChanged();
 
-    if (m_registred && !m_ignored) {
-        accessibilityController()->stateChanged(this, st, arg);
+    if (!m_ignored) {
+        m_accessibleStateChanged.send({ st, arg });
     }
 }
 
@@ -217,6 +214,7 @@ void AccessibleItem::setName(QString name)
 
     m_name = name;
     emit nameChanged(m_name);
+    m_accessiblePropertyChanged.send(IAccessible::Property::Name);
 }
 
 QString AccessibleItem::name() const
@@ -226,8 +224,9 @@ QString AccessibleItem::name() const
 
 void AccessibleItem::setIgnored(bool ignored)
 {
-    if (m_ignored == ignored)
+    if (m_ignored == ignored) {
         return;
+    }
 
     m_ignored = ignored;
     emit ignoredChanged(m_ignored);

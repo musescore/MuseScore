@@ -90,7 +90,7 @@ public:
     QQuickItem* visualItem() const;
 
     const IAccessible* accessibleRoot() const;
-    void setState(accessibility::IAccessible::State st, bool arg);
+    void setState(State st, bool arg);
 
     AccessibleItem* accessibleParent_property() const;
     void setAccessibleParent(AccessibleItem* p);
@@ -99,8 +99,6 @@ public:
 
     // IAccessible
     const IAccessible* accessibleParent() const override;
-    async::Notification accessibleParentChanged() const override;
-
     size_t accessibleChildCount() const override;
     const IAccessible* accessibleChild(size_t i) const override;
 
@@ -108,7 +106,9 @@ public:
     QString accessibleName() const override;
     bool accessibleState(State st) const override;
     QRect accessibleRect() const override;
-    QWindow* accessibleWindow() const override;
+
+    async::Channel<Property> accessiblePropertyChanged() const override;
+    async::Channel<std::pair<State, bool> > accessibleStateChanged() const override;
     // -----
 
     // QQmlParserStatus
@@ -141,8 +141,8 @@ private:
     bool m_ignored = false;
     QQuickItem* m_visualItem = nullptr;
     QMap<State, bool> m_state;
-
-    async::Notification m_accessibleParentChanged;
+    async::Channel<Property> m_accessiblePropertyChanged;
+    async::Channel<std::pair<State, bool> > m_accessibleStateChanged;
 };
 }
 
