@@ -145,6 +145,10 @@ QAccessible::State AccessibleItemInterface::state() const
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
     } break;
+    case IAccessible::Role::StaticText: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
     case IAccessible::Role::ListItem: {
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);

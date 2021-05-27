@@ -27,6 +27,8 @@ import MuseScore.UiComponents 1.0
 StyledDialogView {
     id: root
 
+    property alias type: content.type
+
     property alias title: content.title
     property alias text: content.text
     property alias textFormat: content.textFormat
