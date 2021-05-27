@@ -2864,6 +2864,10 @@ void Score::mapExcerptTracks(QList<int>& dst)
 
 void Score::cmdConcertPitchChanged(bool flag)
 {
+    if (flag == styleB(Ms::Sid::concertPitch)) {
+        return;
+    }
+
     undoChangeStyleVal(Sid::concertPitch, flag);         // change style flag
 
     for (Staff* staff : qAsConst(_staves)) {
