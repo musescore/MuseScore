@@ -1215,6 +1215,8 @@ void EditStyle::buttonClicked(QAbstractButton* b)
         }
         break;
     }
+
+    globalContext()->currentNotation()->style()->styleChanged().notify();
 }
 
 //---------------------------------------------------------
