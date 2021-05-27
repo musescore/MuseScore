@@ -165,14 +165,12 @@ void AccessibilityController::reg(IAccessible* item)
         m_children.append(item);
     }
 
-    item->accessibleParentChanged().onNotify(this, [this, item]() {
-        const Item& it = findItem(item);
-        if (!it.isValid()) {
-            return;
-        }
+    item->accessiblePropertyChanged().onReceive(this, [this, item](const IAccessible::Property& p) {
+        propertyChanged(item, p);
+    });
 
-        QAccessibleEvent ev(it.object, QAccessible::ParentChanged);
-        sendEvent(&ev);
+    item->accessibleStateChanged().onReceive(this, [this, item](const std::pair<State, bool>& st) {
+        stateChanged(item, st.first, st.second);
     });
 
     QAccessibleEvent ev(it.object, QAccessible::ObjectCreated);
@@ -193,6 +191,27 @@ void AccessibilityController::unreg(IAccessible* aitem)
     sendEvent(&ev);
 
     delete item.object;
+}
+
+void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Property p)
+{
+    const Item& it = findItem(item);
+    if (!it.isValid()) {
+        return;
+    }
+
+    QAccessible::Event etype = QAccessible::InvalidEvent;
+    switch (p) {
+    case IAccessible::Property::Undefined:
+        return;
+    case IAccessible::Property::Parent: etype = QAccessible::ParentChanged;
+        break;
+    case IAccessible::Property::Name: etype = QAccessible::NameChanged;
+        break;
+    }
+
+    QAccessibleEvent ev(it.object, etype);
+    sendEvent(&ev);
 }
 
 void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool arg)
@@ -341,12 +360,6 @@ IAccessible* AccessibilityController::accessibleParent() const
     return nullptr;
 }
 
-mu::async::Notification AccessibilityController::accessibleParentChanged() const
-{
-    static mu::async::Notification notification;
-    return notification;
-}
-
 size_t AccessibilityController::accessibleChildCount() const
 {
     return static_cast<size_t>(m_children.size());
@@ -386,7 +399,14 @@ QRect AccessibilityController::accessibleRect() const
     return mainWindow()->qWindow()->geometry();
 }
 
-QWindow* AccessibilityController::accessibleWindow() const
+mu::async::Channel<IAccessible::Property> AccessibilityController::accessiblePropertyChanged() const
 {
-    return mainWindow()->qWindow();
+    static async::Channel<IAccessible::Property> ch;
+    return ch;
+}
+
+mu::async::Channel<std::pair<IAccessible::State, bool> > AccessibilityController::accessibleStateChanged() const
+{
+    static async::Channel<std::pair<IAccessible::State, bool> > ch;
+    return ch;
 }

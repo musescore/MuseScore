@@ -61,13 +61,10 @@ public:
 
     void reg(IAccessible* item) override;
     void unreg(IAccessible* item) override;
-
-    void stateChanged(IAccessible* item, IAccessible::State state, bool arg) override;
     // -----
 
     // IAccessibility
     IAccessible* accessibleParent() const override;
-    async::Notification accessibleParentChanged() const override;
 
     size_t accessibleChildCount() const override;
     IAccessible* accessibleChild(size_t i) const override;
@@ -76,7 +73,9 @@ public:
     QString accessibleName() const override;
     bool accessibleState(State st) const override;
     QRect accessibleRect() const override;
-    QWindow* accessibleWindow() const override;
+
+    async::Channel<Property> accessiblePropertyChanged() const override;
+    async::Channel<std::pair<State, bool> > accessibleStateChanged() const override;
     // -----
 
     QAccessibleInterface* parentIface(const IAccessible* item) const;
@@ -96,6 +95,9 @@ private:
     };
 
     const Item& findItem(const IAccessible* aitem) const;
+
+    void propertyChanged(IAccessible* item, IAccessible::Property p);
+    void stateChanged(IAccessible* item, IAccessible::State state, bool arg);
 
     void sendEvent(QAccessibleEvent* ev);
 

@@ -22,9 +22,10 @@
 #ifndef MU_ACCESSIBILITY_IACCESSIBLE_H
 #define MU_ACCESSIBILITY_IACCESSIBLE_H
 
+#include <utility>
 #include <QString>
 #include <QRect>
-#include "async/notification.h"
+#include "async/channel.h"
 
 class QWindow;
 
@@ -59,8 +60,13 @@ public:
         Selected
     };
 
+    enum class Property {
+        Undefined = 0,
+        Parent,
+        Name
+    };
+
     virtual const IAccessible* accessibleParent() const = 0;
-    virtual async::Notification accessibleParentChanged() const = 0;
     virtual size_t accessibleChildCount() const = 0;
     virtual const IAccessible* accessibleChild(size_t i) const = 0;
 
@@ -68,7 +74,9 @@ public:
     virtual QString accessibleName() const = 0;
     virtual bool accessibleState(State st) const = 0;
     virtual QRect accessibleRect() const = 0;
-    virtual QWindow* accessibleWindow() const = 0;
+
+    virtual async::Channel<Property> accessiblePropertyChanged() const = 0;
+    virtual async::Channel<std::pair<State, bool> > accessibleStateChanged() const = 0;
 };
 }
 
