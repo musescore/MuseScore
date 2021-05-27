@@ -56,7 +56,8 @@ public:
         CheckBox,
         RadioButton,
         ComboBox,
-        ListItem
+        ListItem,
+        Information
     };
     Q_ENUM(Role)
 };
@@ -85,7 +86,7 @@ public:
 
     MUAccessible::Role role() const;
     QString name() const;
-     bool ignored() const;
+    bool ignored() const;
     QQuickItem* visualItem() const;
 
     const IAccessible* accessibleRoot() const;

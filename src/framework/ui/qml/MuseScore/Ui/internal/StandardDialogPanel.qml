@@ -100,12 +100,14 @@ Rectangle {
         accessible.name: root.standardName(root.type)
     }
 
-    //! NOTE
+    //! NOTE By default accessibility for buttons ignored.
+    // On dialog open, set focus on accissibleInfo item, so Screen Reader reads completed info for dialog.
+    // On button navigation active turned on accessibility for button.
     AccessibleItem {
         id: accessibleInfo
         accessibleParent: navPanel.accessible
         visualItem: root
-        role: MUAccessible.StaticText
+        role: MUAccessible.Information
         name: root.title + " " + root.text + "" + root.firstFocusBtn().text + " " + qsTrc("global", "Button")
     }
 
