@@ -168,6 +168,7 @@ protected:
 
     void setErrCode(Ret::Code code);
 
+    QRect currentScreenGeometry() const;
     void correctPos();
 
     bool isCascade() const;
