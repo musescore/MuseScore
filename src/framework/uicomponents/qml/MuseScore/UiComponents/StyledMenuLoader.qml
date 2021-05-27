@@ -29,9 +29,7 @@ Loader {
 
     property alias menu: loader.item
 
-    function isMenuOpened() {
-        return loader.menu && loader.menu.isOpened
-    }
+    property bool isMenuOpened: Boolean(loader.menu) && loader.menu.isOpened
 
     function toggleOpened(model, navigationParentControl) {
         if (!loader.sourceComponent) {

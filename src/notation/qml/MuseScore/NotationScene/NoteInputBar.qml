@@ -113,7 +113,7 @@ Rectangle {
                                        : Qt.LeftButton
 
             onClicked: function (mouse) {
-                if (menuLoader.isMenuOpened() // If already menu open, close it
+                if (menuLoader.isMenuOpened // If already menu open, close it
                         || (hasMenu // Or if can open menu
                             && (!item.isMenuSecondaryRole // And _should_ open menu
                                 || mouse.button === Qt.RightButton))) {
@@ -127,7 +127,7 @@ Rectangle {
             }
 
             onPressAndHold: {
-                if (menuLoader.isMenuOpened() || !hasMenu) {
+                if (menuLoader.isMenuOpened || !hasMenu) {
                     return
                 }
 
