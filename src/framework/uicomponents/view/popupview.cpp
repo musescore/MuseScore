@@ -31,6 +31,7 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <QTimer>
+#include <QScreen>
 
 #include "popupwindow/popupwindow_qquickview.h"
 
@@ -447,6 +448,16 @@ void PopupView::setErrCode(Ret::Code code)
     setRet(ret);
 }
 
+QRect PopupView::currentScreenGeometry() const
+{
+    QScreen* currentScreen = QGuiApplication::screenAt(m_globalPos.toPoint());
+    if (!currentScreen) {
+        return QRect();
+    }
+
+    return currentScreen->geometry();
+}
+
 void PopupView::correctPos()
 {
     QQuickItem* parent = parentItem();
@@ -465,27 +476,27 @@ void PopupView::correctPos()
         return;
     }
 
-    QRect windowRect = window->geometry();
+    QRect screenRect = currentScreenGeometry();
     QRect popupRect = m_window->geometry();
     popupRect.moveTopLeft(m_globalPos.toPoint());
 
-    if (popupRect.left() < windowRect.left()) {
-        m_globalPos.setX(m_globalPos.x() + windowRect.left() - popupRect.left());
+    if (popupRect.left() < screenRect.left()) {
+        m_globalPos.setX(m_globalPos.x() + screenRect.left() - popupRect.left());
     }
 
-    if (popupRect.bottom() > windowRect.bottom()) {
+    if (popupRect.bottom() > screenRect.bottom()) {
         qreal posY = m_globalPos.y() - parent->height() - popupRect.height();
-        if (windowRect.top() < posY) {
+        if (screenRect.top() < posY) {
             m_globalPos.setY(m_globalPos.y() - parent->height() - popupRect.height());
             setOpensUpward(true);
         }
     }
 
-    if (popupRect.right() > windowRect.right()) {
+    if (popupRect.right() > screenRect.right()) {
         if (isCascade()) {
             m_globalPos.setX(parentTopLeft.x() - popupRect.width());
         } else {
-            m_globalPos.setX(m_globalPos.x() - (popupRect.right() - windowRect.right()));
+            m_globalPos.setX(m_globalPos.x() - (popupRect.right() - screenRect.right()));
         }
     }
 
