@@ -80,7 +80,7 @@ FocusScope {
         name: root.objectName !== "" ? root.objectName : "TextInputField"
         enabled: root.enabled && root.visible
 
-        accessible.role: Accessible.EditableText
+        accessible.role: MUAccessible.EditableText
         accessible.name: valueInput.text
         accessible.visualItem: root
 

@@ -28,6 +28,7 @@
 
 #include "internal/accessibilitycontroller.h"
 #include "internal/accessibilityuiactions.h"
+#include "internal/accessibilityconfiguration.h"
 #include "dev/accessibledevmodel.h"
 
 #include "ui/iinteractiveuriregister.h"
@@ -50,6 +51,7 @@ std::string AccessibilityModule::moduleName() const
 
 void AccessibilityModule::registerExports()
 {
+    ioc()->registerExport<IAccessibilityConfiguration>(moduleName(), new AccessibilityConfiguration());
     ioc()->registerExport<IAccessibilityController>(moduleName(), s_accessibilityController);
 }
 

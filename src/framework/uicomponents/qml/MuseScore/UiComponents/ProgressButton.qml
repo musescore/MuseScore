@@ -72,7 +72,7 @@ FocusScope {
         name: root.objectName != "" ? root.objectName : "ProgressButton"
         enabled: root.enabled && root.visible
 
-        accessible.role: Accessible.Button
+        accessible.role: MUAccessible.Button
         accessible.name: root.text
         accessible.visualItem: root
 

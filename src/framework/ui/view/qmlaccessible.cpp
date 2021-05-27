@@ -192,7 +192,7 @@ void AccessibleItem::setState(accessibility::IAccessible::State st, bool arg)
     }
 }
 
-void AccessibleItem::setRole(QAccessible::Role role)
+void AccessibleItem::setRole(MUAccessible::Role role)
 {
     if (m_role == role) {
         return;
@@ -204,7 +204,7 @@ void AccessibleItem::setRole(QAccessible::Role role)
     m_state[State::Enabled] = true;
 }
 
-QAccessible::Role AccessibleItem::role() const
+MUAccessible::Role AccessibleItem::role() const
 {
     return m_role;
 }

@@ -28,6 +28,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/accessibilitymodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iaccessible.h
     ${CMAKE_CURRENT_LIST_DIR}/iaccessibilitycontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaccessibilityconfiguration.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilitycontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilitycontroller.h
@@ -37,6 +38,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleiteminterface.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilityuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilityuiactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilityconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilityconfiguration.h
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/accessibledevmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/accessibledevmodel.h

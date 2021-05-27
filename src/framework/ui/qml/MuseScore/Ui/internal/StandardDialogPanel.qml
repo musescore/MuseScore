@@ -28,8 +28,6 @@ import MuseScore.UiComponents 1.0
 Rectangle {
     id: root
 
-    color: ui.theme.backgroundPrimaryColor
-
     property string type: "INFO" // "QUESTION", "INFO", "WARNING", "ERROR"
 
     property alias title: titleLabel.text
@@ -51,6 +49,8 @@ Rectangle {
 
     signal clicked(int buttonId, bool showAgain)
 
+    color: ui.theme.backgroundPrimaryColor
+
     function onOpened() {
         var btn = null
         for (var i = buttons.count; i > 0; --i) {
@@ -62,7 +62,7 @@ Rectangle {
         }
 
         console.log("onOpened btn: " + btn.text)
-       // btn.navigation.requestActive()
+        // btn.navigation.requestActive()
 
         accessibleText.focused = true
         next.start()
@@ -95,7 +95,7 @@ Rectangle {
         name: "StandardDialog"
         order: 1
         direction: NavigationPanel.Horizontal
-        accessible.role: Accessible.Dialog
+        accessible.role: MUAccessible.Dialog
         accessible.name: root.standardName(root.type)
     }
 
@@ -206,11 +206,9 @@ Rectangle {
             }
         }
 
-        Rectangle {
+        Item {
             Layout.preferredHeight: 30
             Layout.fillWidth: true
-
-            color: "#ff0000"
 
             ListView {
                 id: buttons

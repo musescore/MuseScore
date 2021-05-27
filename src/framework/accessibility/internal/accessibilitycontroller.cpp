@@ -197,6 +197,10 @@ void AccessibilityController::unreg(IAccessible* aitem)
 
 void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool arg)
 {
+    if (!configuration()->enabled()) {
+        return;
+    }
+
     MYLOG() << aitem->accessibleName() << ", state: " << int(state) << ", arg: " << arg;
     const Item& item = findItem(aitem);
     IF_ASSERT_FAILED(item.isValid()) {
