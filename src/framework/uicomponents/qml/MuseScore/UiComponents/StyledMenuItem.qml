@@ -27,10 +27,15 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 ListItemBlank {
-
     id: root
 
     property var modelData
+
+    enum IconAndCheckMarkMode {
+        None,
+        ShowOne,
+        ShowBoth
+    }
 
     property int iconAndCheckMarkMode: StyledMenuItem.ShowOne
     property bool reserveSpaceForShortcutOrSubmenuIndicator: prv.hasShortcut || prv.hasSubMenu
@@ -47,13 +52,6 @@ ListItemBlank {
     enabled: (Boolean(modelData) && modelData.enabled !== undefined ) ? Boolean(modelData.enabled) : true // default true
 
     isSelected: Boolean(prv.showedSubMenu) || (prv.hasIcon && prv.isSelectable && prv.isSelected)
-
-
-    enum IconAndCheckMarkMode {
-        None,
-        ShowOne,
-        ShowBoth
-    }
 
     navigation.onActiveChanged: {
         if (prv.hasSubMenu) {
@@ -142,16 +140,57 @@ ListItemBlank {
         }
     }
 
+    function calculatedLeftPartWidth() {
+        let result = 0
+
+        result += rowLayout.anchors.leftMargin
+        if (primaryIconLabel.visible) {
+            result += Math.ceil(primaryIconLabel.width)
+            result += rowLayout.spacing
+        }
+
+        if (secondaryIconLabel.visible) {
+            result += Math.ceil(secondaryIconLabel.width)
+            result += rowLayout.spacing
+        }
+
+        result += Math.ceil(titleLabel.implicitWidth)
+        result += rowLayout.spacing // Should theoretically not be necessary, but in practice it is
+
+        return result
+    }
+
+    function calculatedRightPartWidth() {
+        let result = 0
+
+        if (shortcutLabel.visible) {
+            result += rowLayout.spacing
+            result += Math.ceil(shortcutLabel.width)
+        }
+
+        if (submenuIndicator.visible) {
+            result += rowLayout.spacing
+            result += Math.ceil(submenuIndicator.width)
+        }
+
+        result += rowLayout.anchors.rightMargin
+
+        return result
+    }
+
     RowLayout {
+        id: rowLayout
+
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
-        anchors.leftMargin: root.iconAndCheckMarkMode === StyledMenuItem.None ? 24 : 12
+        anchors.leftMargin: 12
         anchors.right: parent.right
-        anchors.rightMargin: 18
+        anchors.rightMargin: submenuIndicator.visible ? 6 : 12
 
         spacing: 12
 
         StyledIconLabel {
+            id: primaryIconLabel
             Layout.alignment: Qt.AlignLeft
             width: 16
             iconCode: {
@@ -169,6 +208,7 @@ ListItemBlank {
         }
 
         StyledIconLabel {
+            id: secondaryIconLabel
             Layout.alignment: Qt.AlignLeft
             width: 16
             iconCode: prv.hasIcon ? modelData.icon : IconCode.NONE
@@ -176,6 +216,7 @@ ListItemBlank {
         }
 
         StyledTextLabel {
+            id: titleLabel
             Layout.fillWidth: true
             text: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
             horizontalAlignment: Text.AlignLeft
