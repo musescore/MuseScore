@@ -30,6 +30,8 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
+    property string type: "INFO" // "QUESTION", "INFO", "WARNING", "ERROR"
+
     property alias title: titleLabel.text
     property alias text: textLabel.text
     property alias textFormat: textLabel.textFormat
@@ -60,7 +62,32 @@ Rectangle {
         }
 
         console.log("onOpened btn: " + btn.text)
-        btn.navigation.requestActive()
+       // btn.navigation.requestActive()
+
+        accessibleText.focused = true
+        next.start()
+    }
+
+    function standardIcon(type) {
+        switch (type) {
+        case "QUESTION": return IconCode.QUESTION
+        case "INFO": return IconCode.INFO
+        case "WARNING": return IconCode.WARNING
+        case "ERROR": return IconCode.ERROR
+        }
+
+        return IconCode.NONE
+    }
+
+    function standardName(type) {
+        switch (type) {
+        case "QUESTION": return qsTrc("global", "Question")
+        case "INFO": return qsTrc("global", "Information")
+        case "WARNING": return qsTrc("global", "Warning")
+        case "ERROR": return qsTrc("global", "Error")
+        }
+
+        return qsTrc("global", "Information")
     }
 
     NavigationPanel {
@@ -68,7 +95,33 @@ Rectangle {
         name: "StandardDialog"
         order: 1
         direction: NavigationPanel.Horizontal
-        accessible.name: root.title
+        accessible.role: Accessible.Dialog
+        accessible.name: root.standardName(root.type)
+    }
+
+    AccessibleItem {
+        id: accessibleText
+        accessibleParent: navPanel.accessible
+        role: Accessible.StaticText
+        name: root.title
+    }
+
+    Timer {
+        id: next
+        interval: 1000
+        onTriggered: {
+            var btn = null
+            for (var i = buttons.count; i > 0; --i) {
+                btn = buttons.itemAtIndex(i-1)
+                if (btn.accentButton) {
+                    break;
+                }
+
+            }
+
+            console.log("onOpened btn: " + btn.text)
+            btn.navigation.requestActive()
+        }
     }
 
     ColumnLayout {
@@ -98,6 +151,7 @@ Rectangle {
                 Layout.preferredHeight: 48
 
                 font.pixelSize: 48
+                iconCode: root.standardIcon(root.type)
 
                 visible: root.withIcon && !isEmpty
             }
@@ -152,9 +206,11 @@ Rectangle {
             }
         }
 
-        Item {
+        Rectangle {
             Layout.preferredHeight: 30
             Layout.fillWidth: true
+
+            color: "#ff0000"
 
             ListView {
                 id: buttons

@@ -43,6 +43,7 @@ class AccessibleItem : public QObject, public QQmlParserStatus, public accessibi
 {
     Q_OBJECT
 
+    Q_PROPERTY(AccessibleItem * accessibleParent READ accessibleParent_property WRITE setAccessibleParent NOTIFY accessiblePrnChanged)
     Q_PROPERTY(QAccessible::Role role READ role WRITE setRole NOTIFY roleChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QQuickItem * visualItem READ visualItem WRITE setVisualItem NOTIFY visualItemChanged)
@@ -54,6 +55,7 @@ class AccessibleItem : public QObject, public QQmlParserStatus, public accessibi
 public:
 
     STATE_PROPERTY(selected, State::Selected)
+    STATE_PROPERTY(focused, State::Focused)
 
     AccessibleItem(QObject* parent = nullptr);
     ~AccessibleItem();
@@ -65,6 +67,7 @@ public:
     const IAccessible* accessibleRoot() const;
     void setState(accessibility::IAccessible::State st, bool arg);
 
+    AccessibleItem* accessibleParent_property() const;
     void setAccessibleParent(AccessibleItem* p);
     void addChild(AccessibleItem* item);
     void removeChild(AccessibleItem* item);
@@ -87,15 +90,13 @@ public:
     void classBegin() override;
     void componentComplete() override;
 
-    // QObject
-    bool event(QEvent* event) override;
-
 public slots:
     void setRole(QAccessible::Role role);
     void setName(QString name);
     void setVisualItem(QQuickItem* item);
 
 signals:
+    void accessiblePrnChanged();
     void roleChanged(QAccessible::Role role);
     void nameChanged(QString name);
     void visualItemChanged(QQuickItem* item);

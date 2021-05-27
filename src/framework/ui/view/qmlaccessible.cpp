@@ -40,6 +40,11 @@ AccessibleItem::~AccessibleItem()
         m_accessibleParent->removeChild(this);
     }
 
+    QList<AccessibleItem*> children = m_children;
+    for (AccessibleItem* ch : children) {
+        ch->setAccessibleParent(nullptr);
+    }
+
     if (m_registred) {
         accessibilityController()->unreg(this);
         m_registred = false;
@@ -54,15 +59,6 @@ void AccessibleItem::componentComplete()
 {
     accessibilityController()->reg(this);
     m_registred = true;
-}
-
-bool AccessibleItem::event(QEvent* event)
-{
-    if (event->type() == QEvent::ParentChange) {
-        LOGI() << "parent: " << parent();
-    }
-
-    return QObject::event(event);
 }
 
 const IAccessible* AccessibleItem::accessibleRoot() const
@@ -158,8 +154,17 @@ QWindow* AccessibleItem::accessibleWindow() const
     return vitem->window();
 }
 
+AccessibleItem* AccessibleItem::accessibleParent_property() const
+{
+    return m_accessibleParent;
+}
+
 void AccessibleItem::setAccessibleParent(AccessibleItem* p)
 {
+    if (m_accessibleParent == p) {
+        return;
+    }
+
     if (m_accessibleParent) {
         m_accessibleParent->removeChild(this);
     }
@@ -169,6 +174,8 @@ void AccessibleItem::setAccessibleParent(AccessibleItem* p)
     if (m_accessibleParent) {
         m_accessibleParent->addChild(this);
     }
+
+    emit accessiblePrnChanged();
 }
 
 void AccessibleItem::setState(accessibility::IAccessible::State st, bool arg)
