@@ -52,20 +52,21 @@ Rectangle {
     color: ui.theme.backgroundPrimaryColor
 
     function onOpened() {
+        var btn = root.firstFocusBtn()
+        btn.navigation.requestActive()
+
+        accessibleInfo.focused = true
+    }
+
+    function firstFocusBtn() {
         var btn = null
         for (var i = buttons.count; i > 0; --i) {
             btn = buttons.itemAtIndex(i-1)
             if (btn.accentButton) {
                 break;
             }
-
         }
-
-        console.log("onOpened btn: " + btn.text)
-        // btn.navigation.requestActive()
-
-        accessibleText.focused = true
-        next.start()
+        return btn;
     }
 
     function standardIcon(type) {
@@ -99,29 +100,13 @@ Rectangle {
         accessible.name: root.standardName(root.type)
     }
 
+    //! NOTE
     AccessibleItem {
-        id: accessibleText
+        id: accessibleInfo
         accessibleParent: navPanel.accessible
-        role: Accessible.StaticText
-        name: root.title
-    }
-
-    Timer {
-        id: next
-        interval: 1000
-        onTriggered: {
-            var btn = null
-            for (var i = buttons.count; i > 0; --i) {
-                btn = buttons.itemAtIndex(i-1)
-                if (btn.accentButton) {
-                    break;
-                }
-
-            }
-
-            console.log("onOpened btn: " + btn.text)
-            btn.navigation.requestActive()
-        }
+        visualItem: root
+        role: MUAccessible.StaticText
+        name: root.title + " " + root.text + "" + root.firstFocusBtn().text + " " + qsTrc("global", "Button")
     }
 
     ColumnLayout {
@@ -225,6 +210,14 @@ Rectangle {
 
                     navigation.panel: navPanel
                     navigation.column: model.index
+
+                    //! NOTE See description about AccessibleItem { id: accessibleInfo }
+                    accessible.ignored: true
+                    navigation.onActiveChanged: {
+                        if (navigation.active) {
+                            accessible.ignored = false
+                        }
+                    }
 
                     text: modelData.title
                     accentButton: Boolean(modelData.accent)

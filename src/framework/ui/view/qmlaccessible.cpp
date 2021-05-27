@@ -187,7 +187,7 @@ void AccessibleItem::setState(accessibility::IAccessible::State st, bool arg)
     m_state[st] = arg;
     emit stateChanged();
 
-    if (m_registred) {
+    if (m_registred && !m_ignored) {
         accessibilityController()->stateChanged(this, st, arg);
     }
 }
@@ -222,6 +222,20 @@ void AccessibleItem::setName(QString name)
 QString AccessibleItem::name() const
 {
     return m_name;
+}
+
+void AccessibleItem::setIgnored(bool ignored)
+{
+    if (m_ignored == ignored)
+        return;
+
+    m_ignored = ignored;
+    emit ignoredChanged(m_ignored);
+}
+
+bool AccessibleItem::ignored() const
+{
+    return m_ignored;
 }
 
 void AccessibleItem::setVisualItem(QQuickItem* item)
