@@ -187,7 +187,7 @@ FocusScope {
         onPressAndHold: root.pressAndHold()
 
         onContainsMouseChanged: {
-            if (!Boolean(root.hint)) {
+            if (!Boolean(root.toolTipTitle)) {
                 return
             }
 
