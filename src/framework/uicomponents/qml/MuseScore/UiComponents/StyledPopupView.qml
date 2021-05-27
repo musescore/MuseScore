@@ -41,8 +41,6 @@ PopupView {
     property int contentWidth: 240
     property int contentHeight: contentBody.childrenRect.height
 
-    property bool opensUpward: false
-    property int arrowX: root.width / 2
     property bool showArrow: true
 
     property bool animationEnabled: false
@@ -53,7 +51,7 @@ PopupView {
     closePolicy: PopupView.CloseOnPressOutsideParent
 
     x: (root.parent.width / 2) - (root.width / 2)
-    y: root.opensUpward ? -root.height : root.parent.height
+    y: root.parent.height
 
     property NavigationPanel keynavPanel: NavigationPanel {
         id: keynavPanel
