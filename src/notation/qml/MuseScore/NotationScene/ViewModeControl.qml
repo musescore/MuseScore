@@ -71,7 +71,6 @@ Item {
             id: menu
 
             opensUpward: true
-            itemWidth: 220
 
             onHandleAction: {
                 Qt.callLater(model.selectViewMode, actionCode)
