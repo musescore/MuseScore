@@ -126,6 +126,9 @@ QAccessible::State AccessibleItemInterface::state() const
     case IAccessible::Role::Application: {
         state.active = true;
     } break;
+    case IAccessible::Role::Dialog: {
+        state.active = item->accessibleState(IAccessible::State::Active);
+    } break;
     case IAccessible::Role::Panel: {
         state.active = item->accessibleState(IAccessible::State::Active);
     } break;
@@ -153,8 +156,7 @@ QAccessible::State AccessibleItemInterface::state() const
         state.focused = item->accessibleState(IAccessible::State::Focused);
     } break;
     default: {
-        static QMetaEnum roleEnum = QMetaEnum::fromType<QAccessible::Role>();
-        LOGW() << "not handled role: " << roleEnum.valueToKey(r);
+        LOGW() << "not handled role: " << static_cast<int>(r);
     } break;
     }
 
