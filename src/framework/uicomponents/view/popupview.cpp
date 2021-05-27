@@ -320,7 +320,7 @@ bool PopupView::isMouseWithinBoundaries(const QPoint& mousePos) const
         //! but if we don't check a parent here, the popup will be closed and reopened.
         QQuickItem* prn = parentItem();
         QPointF localPos = prn->mapFromGlobal(mousePos);
-        QRectF parentRect = QRectF(prn->x(), prn->y(), prn->width(), prn->height());
+        QRectF parentRect = QRectF(0, 0, prn->width(), prn->height());
         contains = parentRect.contains(localPos);
     }
 
