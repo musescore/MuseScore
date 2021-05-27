@@ -165,7 +165,7 @@ protected:
     QObject* m_navigationParentControl = nullptr;
     QString m_objectID;
     QString m_title;
-    bool m_modal = false;
+    bool m_modal = true;
     bool m_resizable = false;
     QVariantMap m_ret;
 };
