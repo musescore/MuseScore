@@ -215,6 +215,7 @@ public:
     QString tremoloType() const { return _tremoloType; }
     int tremoloNr() const { return _tremoloNr; }
     bool mustStopGraceAFter() const { return _slurStop || _wavyLineStop; }
+    bool skipCombine(const Notation& n1, const Notation& n2);
 private:
     void addError(const QString& error);      ///< Add an error to be shown in the GUI
     void addNotation(const Notation& notation, ChordRest* const cr, Note* const note);

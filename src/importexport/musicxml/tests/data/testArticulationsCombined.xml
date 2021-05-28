@@ -341,7 +341,7 @@
         <notations>
           <articulations>
             <strong-accent type="up"/>
-            <staccato/>
+            <staccato placement="below"/>
             </articulations>
           </notations>
         <lyric number="1" default-x="6.50" default-y="-59.07" relative-y="-30.00">
