@@ -5513,6 +5513,9 @@ void MusicXMLParserNotations::slur()
       if (notation.attribute("type") == "stop") {
             _slurStop = true;
             }
+      if (notation.attribute("type") == "start") {
+            _slurStart = true;
+            }
 
       _e.readNext();
 
@@ -6191,12 +6194,50 @@ Notation Notation::notationWithAttributes(const QString& name, const QXmlStreamA
       }
 
 //---------------------------------------------------------
+//   mergeNotations
+//---------------------------------------------------------
+
+/**
+ Helper function to merge two Notations. Used to combine articulations in combineArticulations.
+ */
+
+Notation Notation::mergeNotations(const Notation& n1, const Notation& n2, const SymId& symId)
+      {
+      // Sort and combine the names
+      std::vector<QString> names{ n1.name(), n2.name() };
+      std::sort(names.begin(), names.end());
+      QString name = names[0] + " " + names[1];
+
+      // Parents should match (and will both be "articulation")
+      Q_ASSERT(n1.parent() == n2.parent());
+      QString parent = n1.parent();
+
+      Notation mergedNotation { name, parent, symId };
+      for (const std::pair<const QString, QString>& attr : n1.attributes()) {
+            mergedNotation.addAttribute(attr.first, attr.second);
+            }
+      for (const std::pair<const QString, QString>& attr : n2.attributes()) {
+            mergedNotation.addAttribute(attr.first, attr.second);
+            }
+      return mergedNotation;
+      }
+
+//---------------------------------------------------------
 //   addAttribute
 //---------------------------------------------------------
 
 void Notation::addAttribute(const QStringRef name, const QStringRef value)
       {
       _attributes.insert(std::pair<QString, QString>(name.toString(), value.toString()));
+      }
+
+//---------------------------------------------------------
+//   addAttribute
+//---------------------------------------------------------
+
+void Notation::addAttribute(const QString& name, const QString& value)
+      {
+      _attributes.insert(std::pair<QString, QString>(name, value));
       }
 
 //---------------------------------------------------------
@@ -6256,6 +6297,45 @@ void MusicXMLParserNotations::skipLogCurrElem()
       }
 
 //---------------------------------------------------------
+//   combineArticulations
+//---------------------------------------------------------
+
+/**
+ Combine any eligible articulations.
+ i.e. accent + staccato = staccato accent
+ */
+
+void MusicXMLParserNotations::combineArticulations()
+      {
+      QMap<std::set<SymId>, SymId> map;       // map set of symbols to combined symbol
+      map[{ SymId::articAccentAbove,      SymId::articStaccatoAbove }]  = SymId::articAccentStaccatoAbove;
+      map[{ SymId::articMarcatoAbove,     SymId::articStaccatoAbove }]  = SymId::articMarcatoStaccatoAbove;
+      map[{ SymId::articMarcatoAbove,     SymId::articTenutoAbove }]    = SymId::articMarcatoTenutoAbove;
+      map[{ SymId::articAccentAbove,      SymId::articTenutoAbove }]    = SymId::articTenutoAccentAbove;
+
+      // Iterate through each distinct pair (backwards, to allow for deletions)
+      for (std::vector<Notation>::reverse_iterator n1 = _notations.rbegin(), n1Next = n1; n1 != _notations.rend(); n1 = n1Next) {
+            n1Next = std::next(n1);
+            if (n1->parent() != "articulations")
+                  continue;
+            for (std::vector<Notation>::reverse_iterator n2 = n1 + 1, n2Next = n1; n2 != _notations.rend(); n2 = n2Next) {
+                  n2Next = std::next(n2);
+                  if (n2->parent() != "articulations")
+                        continue;
+                  // Combine and remove articulations if present in map
+                  std::set<SymId> currentPair = { n1->symId(), n2->symId() };
+                  if (map.contains(currentPair)) {
+                        Notation mergedNotation = Notation::mergeNotations(*n1, *n2, map.value(currentPair));
+                        n1Next = decltype(n1){ _notations.erase(std::next(n1).base()) };
+                        n2Next = decltype(n2){ _notations.erase(std::next(n2).base()) };
+                        _notations.push_back(mergedNotation);
+                        }
+                  }
+            }
+      }
+
+
+//---------------------------------------------------------
 //   parse
 //---------------------------------------------------------
 
@@ -6313,6 +6393,8 @@ void MusicXMLParserNotations::parse()
             qDebug("%s", qPrintable(notation.print()));
             }
        */
+      if (!_slurStart && !_slurStop)
+            combineArticulations();
 
       Q_ASSERT(_e.isEndElement() && _e.name() == "notations");
       }
@@ -6334,7 +6416,7 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
                   addFermataToChord(notation, cr);
                   }
             else {
-                  if (notation.name() == "strong-accent") {
+                  if (notation.name().contains("strong-accent")) {
                         if (notationType != "" && notationType != "up" && notationType != "down") {
                               notationType = (const char*) 0;
                               _logger->logError(QString("unknown %1 type %2").arg(notation.name(), notationType), &_e);
