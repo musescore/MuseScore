@@ -135,10 +135,6 @@ void PopupView::open()
         m_globalPos = prn->mapToGlobal(m_localPos);
     }
 
-    m_window->show(m_globalPos.toPoint());
-
-    m_globalPos = QPointF(); // invalidate
-
     if (isDialog()) {
         QWindow* qWindow = m_window->qWindow();
         IF_ASSERT_FAILED(qWindow) {
@@ -153,6 +149,10 @@ void PopupView::open()
             qWindow->setMaximumSize(winRect.size());
         }
     }
+
+    m_window->show(m_globalPos.toPoint());
+
+    m_globalPos = QPointF(); // invalidate
 
     if (!m_navigationParentControl) {
         ui::INavigationControl* ctrl = navigationController()->activeControl();
@@ -377,11 +377,6 @@ void PopupView::setModal(bool modal)
     }
 
     m_modal = modal;
-
-    if (qWindow()) {
-        qWindow()->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
-    }
-
     emit modalChanged(m_modal);
 }
 
