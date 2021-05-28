@@ -173,7 +173,7 @@ protected:
     void setErrCode(Ret::Code code);
 
     QRect currentScreenGeometry() const;
-    void correctPos();
+    void updatePosition();
 
     QQuickItem* parentPopupContentItem() const;
     Qt::AlignmentFlag parentCascadeAlign(const QQuickItem* parent) const;
