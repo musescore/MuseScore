@@ -102,6 +102,12 @@ Rectangle {
             }
         }
 
+        onCurrentIndexChanged: {
+            if (Boolean(root) && Boolean(root.frameCpp)) {
+                root.frameCpp.tabWidget.setCurrentDockWidget(currentIndex)
+            }
+        }
+
         ListView {
             id: tabsView
 
