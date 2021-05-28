@@ -53,6 +53,7 @@ FocusScope {
     signal clicked()
     signal pressAndHold()
 
+    objectName: root.text
 
     height: contentWrapper.height + 14
     width: (Boolean(text) ? Math.max(contentWrapper.width + 32, prv.isVertical ? 132 : 0) : contentWrapper.width + 16)
@@ -70,7 +71,7 @@ FocusScope {
         name: root.objectName !== "" ? root.objectName : "FlatButton"
         enabled: root.enabled && root.visible
 
-        accessible.role: Accessible.Button
+        accessible.role: MUAccessible.Button
         accessible.name: root.text
         accessible.visualItem: root
 

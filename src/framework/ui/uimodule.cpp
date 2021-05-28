@@ -133,6 +133,7 @@ void UiModule::registerUiTypes()
     qmlRegisterType<NavigationPopupPanel>("MuseScore.Ui", 1, 0, "NavigationPopupPanel");
     qmlRegisterType<NavigationControl>("MuseScore.Ui", 1, 0, "NavigationControl");
     qmlRegisterType<AccessibleItem>("MuseScore.Ui", 1, 0, "AccessibleItem");
+    qmlRegisterUncreatableType<MUAccessible>("MuseScore.Ui", 1, 0, "MUAccessible", "Cannot create a enum type");
 
     qmlRegisterType<InteractiveTestsModel>("MuseScore.Ui", 1, 0, "InteractiveTestsModel");
     qRegisterMetaType<TestDialog>("TestDialog");

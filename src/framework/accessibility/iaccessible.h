@@ -22,9 +22,10 @@
 #ifndef MU_ACCESSIBILITY_IACCESSIBLE_H
 #define MU_ACCESSIBILITY_IACCESSIBLE_H
 
+#include <utility>
 #include <QString>
 #include <QRect>
-#include "async/notification.h"
+#include "async/channel.h"
 
 class QWindow;
 
@@ -33,19 +34,22 @@ class IAccessible
 {
 public:
 
-    //! NOTE Must be sync with QAccessible::Role values
+    //! NOTE Please sync with ui::MUAccessible::Role (src/framework/ui/view/qmlaccessible.h)
     enum Role {
-        NoRole         = 0x00000000,
-        Application    = 0x0000000E,
-        Grouping       = 0x00000014,
-        Pane           = 0x00000010,
-        StaticText     = 0x00000029,
-        EditableText   = 0x0000002A,  // Editable, selectable, etc.
-        Button         = 0x0000002B,
-        CheckBox       = 0x0000002C,
-        RadioButton    = 0x0000002D,
-        ComboBox       = 0x0000002E,
-        ListItem       = 0x00000022,
+        NoRole = 0,
+        Application,
+        Dialog,
+        Panel,
+        StaticText,
+        EditableText,
+        Button,
+        CheckBox,
+        RadioButton,
+        ComboBox,
+        ListItem,
+
+        // Custom roles
+        Information // just text
     };
 
     enum class State {
@@ -56,8 +60,13 @@ public:
         Selected
     };
 
+    enum class Property {
+        Undefined = 0,
+        Parent,
+        Name
+    };
+
     virtual const IAccessible* accessibleParent() const = 0;
-    virtual async::Notification accessibleParentChanged() const = 0;
     virtual size_t accessibleChildCount() const = 0;
     virtual const IAccessible* accessibleChild(size_t i) const = 0;
 
@@ -65,7 +74,9 @@ public:
     virtual QString accessibleName() const = 0;
     virtual bool accessibleState(State st) const = 0;
     virtual QRect accessibleRect() const = 0;
-    virtual QWindow* accessibleWindow() const = 0;
+
+    virtual async::Channel<Property> accessiblePropertyChanged() const = 0;
+    virtual async::Channel<std::pair<State, bool> > accessibleStateChanged() const = 0;
 };
 }
 

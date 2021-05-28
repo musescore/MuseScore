@@ -29,6 +29,8 @@
 
 using namespace mu::appshell;
 
+static HWND s_hwnd = 0;
+
 WinFramelessWindowController::WinFramelessWindowController()
     : FramelessWindowController()
 {
@@ -41,17 +43,17 @@ void WinFramelessWindowController::init(QWindow* window)
         return;
     }
 
-    HWND hwnd = (HWND)window->winId();
+    s_hwnd = (HWND)window->winId();
 
-    SetWindowLongPtr(hwnd, GWL_STYLE,
+    SetWindowLongPtr(s_hwnd, GWL_STYLE,
                      static_cast<LONG>(WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME
                                        | WS_CLIPCHILDREN));
 
     const MARGINS shadow_on = { 1, 1, 1, 1 };
-    DwmExtendFrameIntoClientArea(hwnd, &shadow_on);
+    DwmExtendFrameIntoClientArea(s_hwnd, &shadow_on);
 
-    SetWindowPos(hwnd, Q_NULLPTR, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE);
-    ShowWindow(hwnd, SW_SHOW);
+    SetWindowPos(s_hwnd, Q_NULLPTR, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE);
+    ShowWindow(s_hwnd, SW_SHOW);
 }
 
 bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType, void* message, long* result)
@@ -62,6 +64,10 @@ bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType
 
     MSG* msg = static_cast<MSG*>(message);
     if (msg == nullptr) {
+        return false;
+    }
+
+    if (msg->hwnd != s_hwnd) {
         return false;
     }
 

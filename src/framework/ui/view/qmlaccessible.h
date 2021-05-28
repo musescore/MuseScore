@@ -27,7 +27,6 @@
 #include <QQmlParserStatus>
 #include <QQuickItem>
 #include <QMap>
-#include <QAccessible>
 
 #include "accessibility/iaccessible.h"
 #include "modularity/ioc.h"
@@ -39,12 +38,38 @@
     void set_##P(bool arg) { setState(S, arg); } \
 
 namespace mu::ui {
+class MUAccessible
+{
+    Q_GADGET
+public:
+    MUAccessible() = default;
+
+    //! NOTE Please sync with accessibility::IAccessible::Role (src/framework/accessibility/iaccessible.h)
+    enum Role {
+        NoRole = 0,
+        Application,
+        Dialog,
+        Panel,
+        StaticText,
+        EditableText,
+        Button,
+        CheckBox,
+        RadioButton,
+        ComboBox,
+        ListItem,
+        Information
+    };
+    Q_ENUM(Role)
+};
+
 class AccessibleItem : public QObject, public QQmlParserStatus, public accessibility::IAccessible
 {
     Q_OBJECT
 
-    Q_PROPERTY(QAccessible::Role role READ role WRITE setRole NOTIFY roleChanged)
+    Q_PROPERTY(AccessibleItem * accessibleParent READ accessibleParent_property WRITE setAccessibleParent NOTIFY accessiblePrnChanged)
+    Q_PROPERTY(mu::ui::MUAccessible::Role role READ role WRITE setRole NOTIFY roleChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    Q_PROPERTY(bool ignored READ ignored WRITE setIgnored NOTIFY ignoredChanged)
     Q_PROPERTY(QQuickItem * visualItem READ visualItem WRITE setVisualItem NOTIFY visualItemChanged)
 
     Q_INTERFACES(QQmlParserStatus)
@@ -54,25 +79,26 @@ class AccessibleItem : public QObject, public QQmlParserStatus, public accessibi
 public:
 
     STATE_PROPERTY(selected, State::Selected)
+    STATE_PROPERTY(focused, State::Focused)
 
     AccessibleItem(QObject* parent = nullptr);
     ~AccessibleItem();
 
-    QAccessible::Role role() const;
+    MUAccessible::Role role() const;
     QString name() const;
+    bool ignored() const;
     QQuickItem* visualItem() const;
 
     const IAccessible* accessibleRoot() const;
-    void setState(accessibility::IAccessible::State st, bool arg);
+    void setState(State st, bool arg);
 
+    AccessibleItem* accessibleParent_property() const;
     void setAccessibleParent(AccessibleItem* p);
     void addChild(AccessibleItem* item);
     void removeChild(AccessibleItem* item);
 
     // IAccessible
     const IAccessible* accessibleParent() const override;
-    async::Notification accessibleParentChanged() const override;
-
     size_t accessibleChildCount() const override;
     const IAccessible* accessibleChild(size_t i) const override;
 
@@ -80,24 +106,26 @@ public:
     QString accessibleName() const override;
     bool accessibleState(State st) const override;
     QRect accessibleRect() const override;
-    QWindow* accessibleWindow() const override;
+
+    async::Channel<Property> accessiblePropertyChanged() const override;
+    async::Channel<std::pair<State, bool> > accessibleStateChanged() const override;
     // -----
 
     // QQmlParserStatus
     void classBegin() override;
     void componentComplete() override;
 
-    // QObject
-    bool event(QEvent* event) override;
-
 public slots:
-    void setRole(QAccessible::Role role);
+    void setRole(MUAccessible::Role role);
     void setName(QString name);
+    void setIgnored(bool ignored);
     void setVisualItem(QQuickItem* item);
 
 signals:
-    void roleChanged(QAccessible::Role role);
+    void accessiblePrnChanged();
+    void roleChanged(MUAccessible::Role role);
     void nameChanged(QString name);
+    void ignoredChanged(bool ignored);
     void visualItemChanged(QQuickItem* item);
     void stateChanged();
 
@@ -108,12 +136,13 @@ private:
     bool m_registred = false;
     AccessibleItem* m_accessibleParent = nullptr;
     QList<AccessibleItem*> m_children;
-    QAccessible::Role m_role = QAccessible::NoRole;
+    MUAccessible::Role m_role = MUAccessible::NoRole;
     QString m_name;
+    bool m_ignored = false;
     QQuickItem* m_visualItem = nullptr;
     QMap<State, bool> m_state;
-
-    async::Notification m_accessibleParentChanged;
+    async::Channel<Property> m_accessiblePropertyChanged;
+    async::Channel<std::pair<State, bool> > m_accessibleStateChanged;
 };
 }
 

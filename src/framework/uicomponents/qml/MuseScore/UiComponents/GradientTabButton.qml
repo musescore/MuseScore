@@ -53,7 +53,7 @@ RadioDelegate {
         id: keynavCtrl
         name: root.objectName
 
-        accessible.role: Accessible.RadioButton
+        accessible.role: MUAccessible.RadioButton
         accessible.name: root.title
         accessible.selected: root.checked
 

@@ -126,7 +126,10 @@ QAccessible::State AccessibleItemInterface::state() const
     case IAccessible::Role::Application: {
         state.active = true;
     } break;
-    case IAccessible::Role::Pane: {
+    case IAccessible::Role::Dialog: {
+        state.active = item->accessibleState(IAccessible::State::Active);
+    } break;
+    case IAccessible::Role::Panel: {
         state.active = item->accessibleState(IAccessible::State::Active);
     } break;
     case IAccessible::Role::Button: {
@@ -137,11 +140,14 @@ QAccessible::State AccessibleItemInterface::state() const
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
 
-        //! NOTE For Linux provided only `checked` state
         state.checkable = true;
         state.checked = item->accessibleState(IAccessible::State::Selected);
     } break;
     case IAccessible::Role::EditableText: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
+    case IAccessible::Role::StaticText: {
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
     } break;
@@ -150,8 +156,7 @@ QAccessible::State AccessibleItemInterface::state() const
         state.focused = item->accessibleState(IAccessible::State::Focused);
     } break;
     default: {
-        static QMetaEnum roleEnum = QMetaEnum::fromType<QAccessible::Role>();
-        LOGW() << "not handled role: " << roleEnum.valueToKey(r);
+        LOGW() << "not handled role: " << static_cast<int>(r);
     } break;
     }
 
@@ -161,7 +166,29 @@ QAccessible::State AccessibleItemInterface::state() const
 QAccessible::Role AccessibleItemInterface::role() const
 {
     IAccessible::Role r = m_object->item()->accessibleRole();
-    return static_cast<QAccessible::Role>(r);
+    switch (r) {
+    case IAccessible::Role::NoRole: return QAccessible::NoRole;
+    case IAccessible::Role::Application: return QAccessible::Application;
+    case IAccessible::Role::Dialog: return QAccessible::Dialog;
+    case IAccessible::Role::Panel: return QAccessible::Pane;
+    case IAccessible::Role::StaticText: return QAccessible::StaticText;
+    case IAccessible::Role::EditableText: return QAccessible::EditableText;
+    case IAccessible::Role::Button: return QAccessible::Button;
+    case IAccessible::Role::CheckBox: return QAccessible::CheckBox;
+    case IAccessible::Role::RadioButton: return QAccessible::RadioButton;
+    case IAccessible::Role::ComboBox: return QAccessible::ComboBox;
+    case IAccessible::Role::ListItem: return QAccessible::ListItem;
+    case IAccessible::Role::Information: {
+#ifdef Q_OS_WIN
+        return QAccessible::StaticText;
+#else
+        return QAccessible::UserRole;
+#endif
+    } break;
+    }
+
+    LOGE() << "not handled role: " << static_cast<int>(r);
+    return QAccessible::NoRole;
 }
 
 QString AccessibleItemInterface::text(QAccessible::Text textType) const
