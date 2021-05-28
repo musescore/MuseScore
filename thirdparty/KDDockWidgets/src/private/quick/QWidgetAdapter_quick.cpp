@@ -54,7 +54,7 @@ public:
         // Each source can only have one MouseEventRedirector
         auto oldRedirector = s_mouseEventRedirectors.take(eventSource);
         if (oldRedirector) {
-            eventSource->removeEventFilter(this);
+            eventSource->removeEventFilter(oldRedirector);
             oldRedirector->deleteLater();
         }
 
