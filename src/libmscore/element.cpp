@@ -115,6 +115,10 @@
 #include "shape.h"
 //#include "musescoreCore.h"
 
+#ifdef MU_SCORE_ACCESSIBILITY
+#include "accessibility/accessibleelement.h"
+#endif
+
 #include "log.h"
 #define LOG_PROP() if (0) LOGD()
 
@@ -198,7 +202,7 @@ QString Element::subtypeName() const
 //   Element
 //---------------------------------------------------------
 
-Element::Element(Score* s, ElementFlags f)
+Element::Element(Score* s, ElementFlags f, mu::score::AccessibleElement* access)
     : ScoreElement(s)
 {
     _flags         = f;
@@ -209,6 +213,14 @@ Element::Element(Score* s, ElementFlags f)
     _z             = -1;
     _offsetChanged = OffsetChange::NONE;
     _minDistance   = Spatium(0.0);
+
+#ifdef MU_SCORE_ACCESSIBILITY
+    m_accessible = access;
+    if (!m_accessible) {
+        m_accessible = new mu::score::AccessibleElement();
+    }
+    m_accessible->setElement(this);
+#endif
 }
 
 Element::Element(const Element& e)
@@ -228,6 +240,10 @@ Element::Element(const Element& e)
     _offsetChanged = e._offsetChanged;
     _minDistance   = e._minDistance;
     itemDiscovered = false;
+
+#ifdef MU_SCORE_ACCESSIBILITY
+    m_accessible = e.m_accessible->clone(this);
+#endif
 }
 
 //---------------------------------------------------------
@@ -236,6 +252,9 @@ Element::Element(const Element& e)
 
 Element::~Element()
 {
+#ifdef MU_SCORE_ACCESSIBILITY
+    delete m_accessible;
+#endif
     Score::onElementDestruction(this);
 }
 
@@ -1971,6 +1990,11 @@ Element* Element::prevSegmentElement()
     return score()->firstElement();
 }
 
+mu::score::AccessibleElement* Element::accessible() const
+{
+    return m_accessible;
+}
+
 //---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
@@ -2767,5 +2791,20 @@ void Element::autoplaceMeasureElement(bool above, bool add)
         }
     }
     setOffsetChanged(false);
+}
+
+bool Element::selected() const
+{
+    return flag(ElementFlag::SELECTED);
+}
+
+void Element::setSelected(bool f)
+{
+    setFlag(ElementFlag::SELECTED, f);
+#ifdef MU_SCORE_ACCESSIBILITY
+    if (f) {
+        m_accessible->focused();
+    }
+#endif
 }
 }

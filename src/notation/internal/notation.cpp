@@ -29,6 +29,7 @@
 #include "libmscore/score.h"
 #include "libmscore/page.h"
 #include "libmscore/rendermidi.h"
+#include "libmscore/accessibility/accessibleelement.h"
 
 #include "notationinteraction.h"
 #include "notationplayback.h"

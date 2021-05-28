@@ -63,7 +63,7 @@ void AccessibleItem::componentComplete()
 
 const IAccessible* AccessibleItem::accessibleRoot() const
 {
-    return accessibilityController()->rootItem();
+    return accessibilityController()->accessibleRoot();
 }
 
 const IAccessible* AccessibleItem::accessibleParent() const

@@ -34,6 +34,8 @@ class IAccessible
 {
 public:
 
+    virtual ~IAccessible() = default;
+
     //! NOTE Please sync with ui::MUAccessible::Role (src/framework/ui/view/qmlaccessible.h)
     enum Role {
         NoRole = 0,
@@ -49,7 +51,10 @@ public:
         ListItem,
 
         // Custom roles
-        Information // just text
+        Information, // just text
+
+        // Score roles
+        ElementOnScore
     };
 
     enum class State {
@@ -70,13 +75,13 @@ public:
     virtual size_t accessibleChildCount() const = 0;
     virtual const IAccessible* accessibleChild(size_t i) const = 0;
 
-    virtual Role accessibleRole() const = 0;
+    virtual IAccessible::Role accessibleRole() const = 0;
     virtual QString accessibleName() const = 0;
     virtual bool accessibleState(State st) const = 0;
     virtual QRect accessibleRect() const = 0;
 
-    virtual async::Channel<Property> accessiblePropertyChanged() const = 0;
-    virtual async::Channel<std::pair<State, bool> > accessibleStateChanged() const = 0;
+    virtual async::Channel<IAccessible::Property> accessiblePropertyChanged() const = 0;
+    virtual async::Channel<std::pair<IAccessible::State, bool> > accessibleStateChanged() const = 0;
 };
 }
 

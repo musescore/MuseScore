@@ -44,11 +44,14 @@
 #include "property.h"
 #include "sym.h"
 
+namespace mu::score {
+class AccessibleScore;
+}
+
 namespace Ms {
 namespace Avs {
 class AvsOmr;
 }
-
 class Articulation;
 class Audio;
 class BarLine;
@@ -517,6 +520,8 @@ private:
     qreal _noteHeadWidth { 0.0 };         // cached value
     QString accInfo;                      ///< information about selected element(s) for use by screen-readers
     QString accMessage;                   ///< temporary status message for use by screen-readers
+
+    mu::score::AccessibleScore* m_accessible = nullptr;
 
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
@@ -1256,6 +1261,7 @@ public:
     Measure* firstTrailingMeasure(ChordRest** cr = nullptr);
     ChordRest* cmdTopStaff(ChordRest* cr = nullptr);
 
+    mu::score::AccessibleScore* accessible() const;
     void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
     QString accessibleInfo() const { return accInfo; }
 

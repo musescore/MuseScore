@@ -155,6 +155,17 @@ QAccessible::State AccessibleItemInterface::state() const
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
     } break;
+    case IAccessible::Role::Information: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
+    case IAccessible::Role::ElementOnScore: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+
+//        state.checkable = true;
+//        state.checked = item->accessibleState(IAccessible::State::Selected);
+    } break;
     default: {
         LOGW() << "not handled role: " << static_cast<int>(r);
     } break;
@@ -184,7 +195,14 @@ QAccessible::Role AccessibleItemInterface::role() const
 #else
         return QAccessible::UserRole;
 #endif
-    } break;
+    }
+    case IAccessible::Role::ElementOnScore: {
+#ifdef Q_OS_WIN
+        return QAccessible::StaticText;
+#else
+        return QAccessible::UserRole;
+#endif
+    }
     }
 
     LOGE() << "not handled role: " << static_cast<int>(r);

@@ -19,25 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_SCORE_ACCESSIBLENOTE_H
+#define MU_SCORE_ACCESSIBLENOTE_H
 
-#ifndef MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
-#define MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
+#include "accessibleelement.h"
+#include "../note.h"
 
-#include "modularity/imoduleexport.h"
-#include "iaccessible.h"
-
-namespace mu::accessibility {
-class IAccessibilityController : MODULE_EXPORT_INTERFACE
+//! NOTE Just for example
+namespace mu::score {
+class AccessibleNote : public AccessibleElement
 {
-    INTERFACE_ID(IAccessibilityController)
 public:
-    virtual ~IAccessibilityController() = default;
+    AccessibleNote(Ms::Element* n = nullptr);
+    ~AccessibleNote();
 
-    virtual const IAccessible* accessibleRoot() const = 0;
-
-    virtual void reg(IAccessible* item) = 0;
-    virtual void unreg(IAccessible* item) = 0;
+    AccessibleElement* clone(Ms::Element* e) const override;
 };
 }
 
-#endif // MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
+#endif // MU_SCORE_ACCESSIBLENOTE_H

@@ -33,6 +33,12 @@
 
 #include "draw/painter.h"
 
+namespace mu {
+namespace score {
+class AccessibleElement;
+}
+}
+
 namespace Ms {
 #ifdef Q_OS_MAC
 #define CONTROL_MODIFIER Qt::AltModifier
@@ -192,6 +198,8 @@ class Element : public ScoreElement
     ///< valid after call to layout()
     uint _tag;                    ///< tag bitmask
 
+    mu::score::AccessibleElement* m_accessible = nullptr;
+
 public:
     enum class EditBehavior {
         SelectOnly,
@@ -203,7 +211,7 @@ protected:
     QColor _color;                ///< element color attribute
 
 public:
-    Element(Score* = 0, ElementFlags = ElementFlag::NOTHING);
+    Element(Score* = 0, ElementFlags = ElementFlag::NOTHING, mu::score::AccessibleElement* access = nullptr);
     Element(const Element&);
     virtual ~Element();
 
@@ -255,8 +263,8 @@ public:
 
     inline bool flag(ElementFlag f) const { return _flags & f; }
 
-    bool selected() const { return flag(ElementFlag::SELECTED); }
-    virtual void setSelected(bool f) { setFlag(ElementFlag::SELECTED, f); }
+    bool selected() const;
+    virtual void setSelected(bool f);
 
     bool visible() const { return !flag(ElementFlag::INVISIBLE); }
     virtual void setVisible(bool f) { setFlag(ElementFlag::INVISIBLE, !f); }
@@ -543,6 +551,7 @@ public:
     virtual Element* nextSegmentElement();    //< Used for navigation
     virtual Element* prevSegmentElement();    //< next-element and prev-element command
 
+    mu::score::AccessibleElement* accessible() const;
     virtual QString accessibleInfo() const;           //< used to populate the status bar
     virtual QString screenReaderInfo() const          //< by default returns accessibleInfo, but can be overridden
     {
