@@ -86,6 +86,10 @@
 #include "instrchange.h"
 #include "synthesizerstate.h"
 
+#ifdef MU_SCORE_ACCESSIBILITY
+#include "accessibility/accessiblescore.h"
+#endif
+
 namespace Ms {
 MasterScore* gscore;                 ///< system score, used for palettes etc.
 std::set<Score*> Score::validScores;
@@ -310,6 +314,10 @@ Score::Score()
 //      accInfo = tr("No selection");     // ??
     accInfo = "No selection";
     _scoreOrder = nullptr;
+
+#ifdef MU_SCORE_ACCESSIBILITY
+    m_accessible = new mu::score::AccessibleScore(this);
+#endif
 }
 
 Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
@@ -395,6 +403,10 @@ Score::~Score()
     _masterScore = 0;
 
     imageStore.clearUnused();
+
+#ifdef MU_SCORE_ACCESSIBILITY
+    delete m_accessible;
+#endif
 }
 
 //---------------------------------------------------------
@@ -5272,7 +5284,7 @@ QString MasterScore::title() const
 
 QString Score::title() const
 {
-    return _excerpt->title();
+    return _excerpt ? _excerpt->title() : QString();
 }
 
 //---------------------------------------------------------
@@ -5492,6 +5504,11 @@ void MasterScore::rebuildAndUpdateExpressive(Synthesizer* synth)
 bool Score::isTopScore() const
 {
     return !(isMaster() && static_cast<const MasterScore*>(this)->prev());
+}
+
+mu::score::AccessibleScore* Score::accessible() const
+{
+    return m_accessible;
 }
 
 //---------------------------------------------------------

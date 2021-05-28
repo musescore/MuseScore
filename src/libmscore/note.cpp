@@ -71,6 +71,10 @@
 #include <QtMath>
 #include <QVector2D>
 
+#ifdef MU_SCORE_ACCESSIBILITY
+#include "accessibility/accessiblenote.h"
+#endif
+
 namespace Ms {
 //---------------------------------------------------------
 //   noteHeads
@@ -677,7 +681,12 @@ NoteHead::Group NoteHead::headGroup() const
 //---------------------------------------------------------
 
 Note::Note(Score* s)
-    : Element(s, ElementFlag::MOVABLE)
+    : Element(s, ElementFlag::MOVABLE
+#ifdef MU_SCORE_ACCESSIBILITY
+              , new mu::score::AccessibleNote())
+#else
+              )
+#endif
 {
     _playEvents.append(NoteEvent());      // add default play event
     _cachedNoteheadSym = SymId::noSym;

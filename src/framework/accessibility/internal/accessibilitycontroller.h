@@ -57,7 +57,7 @@ public:
     void init();
 
     // IAccessibilityController
-    const IAccessible* rootItem() const override;
+    const IAccessible* accessibleRoot() const override;
 
     void reg(IAccessible* item) override;
     void unreg(IAccessible* item) override;

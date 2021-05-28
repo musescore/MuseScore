@@ -21,6 +21,7 @@
  */
 #include "notationpaintview.h"
 
+#include <QQuickWindow>
 #include <QPainter>
 #include "libmscore/draw/qpainterprovider.h"
 
