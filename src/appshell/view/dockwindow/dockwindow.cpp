@@ -53,16 +53,14 @@ void DockWindow::componentComplete()
                                                       KDDockWidgets::MainWindowOption_None,
                                                       this);
 
-    connect(qApp, &QCoreApplication::aboutToQuit, this, [this]() {
-        saveGeometry();
-    });
+    connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
 
     configuration()->windowGeometryChanged().onNotify(this, [this]() {
         resetWindowState();
     });
 
     mainWindow()->changeToolBarOrientationRequested().onReceive(this, [this](std::pair<QString, mu::framework::Orientation> orientation) {
-        const DockPage* page = pageByUri(m_currentPageUri);
+        const DockPage* page = currentPage();
         DockToolBar* toolBar = page ? dynamic_cast<DockToolBar*>(page->dockByName(orientation.first)) : nullptr;
 
         if (toolBar) {
@@ -100,6 +98,20 @@ void DockWindow::componentComplete()
     });
 }
 
+void DockWindow::onQuit()
+{
+    TRACEFUNC;
+
+    saveGeometry();
+
+    const DockPage* currPage = currentPage();
+    IF_ASSERT_FAILED(currPage) {
+        return;
+    }
+
+    savePageState(currPage->objectName());
+}
+
 QString DockWindow::currentPageUri() const
 {
     return m_currentPageUri;
@@ -133,14 +145,14 @@ void DockWindow::loadPage(const QString& uri)
         return;
     }
 
-    DockPage* currentPage = pageByUri(m_currentPageUri);
+    DockPage* currentPage = this->currentPage();
     if (currentPage) {
-        saveState(currentPage->objectName());
+        savePageState(currentPage->objectName());
         currentPage->close();
     }
 
     loadPageContent(newPage);
-    restoreState(newPage->objectName());
+    restorePageState(newPage->objectName());
     initDocks(newPage);
 
     for (DockBase* dock : newPage->allDocks()) {
@@ -289,6 +301,11 @@ DockPage* DockWindow::pageByUri(const QString& uri) const
     return nullptr;
 }
 
+DockPage* DockWindow::currentPage() const
+{
+    return pageByUri(m_currentPageUri);
+}
+
 void DockWindow::saveGeometry()
 {
     TRACEFUNC;
@@ -298,8 +315,7 @@ void DockWindow::saveGeometry()
     /// and restore only the application geometry.
     /// Therefore, for correct operation after saving or restoring geometry,
     /// it is necessary to apply the appropriate method for the state.
-    KDDockWidgets::LayoutSaver layoutSaver;
-    configuration()->setWindowGeometry(layoutSaver.serializeLayout());
+    configuration()->setWindowGeometry(windowState());
 }
 
 void DockWindow::restoreGeometry()
@@ -307,19 +323,19 @@ void DockWindow::restoreGeometry()
     TRACEFUNC;
 
     QByteArray state = configuration()->windowGeometry();
+
     KDDockWidgets::LayoutSaver layoutSaver;
     layoutSaver.restoreLayout(state);
 }
 
-void DockWindow::saveState(const QString& pageName)
+void DockWindow::savePageState(const QString& pageName)
 {
     TRACEFUNC;
 
-    KDDockWidgets::LayoutSaver layoutSaver;
-    configuration()->setPageState(pageName.toStdString(), layoutSaver.serializeLayout());
+    configuration()->setPageState(pageName.toStdString(), windowState());
 }
 
-void DockWindow::restoreState(const QString& pageName)
+void DockWindow::restorePageState(const QString& pageName)
 {
     TRACEFUNC;
 
@@ -335,6 +351,14 @@ void DockWindow::restoreState(const QString& pageName)
     layoutSaver.restoreLayout(state);
 }
 
+QByteArray DockWindow::windowState() const
+{
+    TRACEFUNC;
+
+    KDDockWidgets::LayoutSaver layoutSaver;
+    return layoutSaver.serializeLayout();
+}
+
 void DockWindow::resetWindowState()
 {
     TRACEFUNC;
@@ -342,7 +366,7 @@ void DockWindow::resetWindowState()
     QString currentPageUriBackup = m_currentPageUri;
 
     /// NOTE: for reset geometry
-    m_currentPageUri = "";
+    m_currentPageUri.clear();
 
     loadPage(currentPageUriBackup);
 }
@@ -362,7 +386,7 @@ void DockWindow::initDocks(DockPage* page)
 
 DockToolBarHolder* DockWindow::resolveToolbarDockingHolder(const QPoint& localPos) const
 {
-    const DockPage* page = pageByUri(m_currentPageUri);
+    const DockPage* page = currentPage();
     if (!page) {
         return nullptr;
     }
