@@ -352,7 +352,10 @@
               <text>strea</text>
               </Lyrics>
             <Articulation>
-              <subtype>articMarcatoStaccatoAbove</subtype>
+              <subtype>articStaccatoAbove</subtype>
+              </Articulation>
+            <Articulation>
+              <subtype>articMarcatoAbove</subtype>
               </Articulation>
             <Note>
               <Accidental>

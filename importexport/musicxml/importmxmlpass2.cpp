@@ -5513,7 +5513,7 @@ void MusicXMLParserNotations::slur()
       if (notation.attribute("type") == "stop") {
             _slurStop = true;
             }
-      if (notation.attribute("type") == "start") {
+      else if (notation.attribute("type") == "start") {
             _slurStart = true;
             }
 
@@ -6213,10 +6213,10 @@ Notation Notation::mergeNotations(const Notation& n1, const Notation& n2, const 
       QString parent = n1.parent();
 
       Notation mergedNotation { name, parent, symId };
-      for (const std::pair<const QString, QString>& attr : n1.attributes()) {
+      for (const auto& attr : n1.attributes()) {
             mergedNotation.addAttribute(attr.first, attr.second);
             }
-      for (const std::pair<const QString, QString>& attr : n2.attributes()) {
+      for (const auto& attr : n2.attributes()) {
             mergedNotation.addAttribute(attr.first, attr.second);
             }
       return mergedNotation;
@@ -6228,7 +6228,7 @@ Notation Notation::mergeNotations(const Notation& n1, const Notation& n2, const 
 
 void Notation::addAttribute(const QStringRef name, const QStringRef value)
       {
-      _attributes.insert(std::pair<QString, QString>(name.toString(), value.toString()));
+      _attributes.emplace(name.toString(), value.toString());
       }
 
 //---------------------------------------------------------
@@ -6237,7 +6237,7 @@ void Notation::addAttribute(const QStringRef name, const QStringRef value)
 
 void Notation::addAttribute(const QString& name, const QString& value)
       {
-      _attributes.insert(std::pair<QString, QString>(name, value));
+      _attributes.emplace(name, value);
       }
 
 //---------------------------------------------------------
@@ -6297,6 +6297,31 @@ void MusicXMLParserNotations::skipLogCurrElem()
       }
 
 //---------------------------------------------------------
+//   skipCombine
+//---------------------------------------------------------
+
+/**
+ Helper function to hold conditions under which a potential combine should be skipped.
+ */
+
+bool MusicXMLParserNotations::skipCombine(const Notation& n1, const Notation& n2)
+      {
+      bool placementsSpecifiedAndDifferent = n1.attribute("placement") != "" &&
+                                             n2.attribute("placement") != "" &&
+                                             n1.attribute("placement") != n2.attribute("placement");
+      bool upMarcatoDownOther = (n1.name() == "strong-accent" && n1.attribute("type") == "up" &&
+                                n2.attribute("placement") == "below") || 
+                                (n2.name() == "strong-accent" && n2.attribute("type") == "up" &&
+                                n1.attribute("placement") == "below");
+      bool downMarcatoUpOther = (n1.name() == "strong-accent" && n1.attribute("type") == "down" &&
+                                n2.attribute("placement") == "above") || 
+                                (n2.name() == "strong-accent" && n2.attribute("type") == "down" &&
+                                n1.attribute("placement") == "above");
+      bool slurEndpoint = _slurStart || _slurStop;
+      return placementsSpecifiedAndDifferent || upMarcatoDownOther || downMarcatoUpOther || slurEndpoint;
+      }
+
+//---------------------------------------------------------
 //   combineArticulations
 //---------------------------------------------------------
 
@@ -6320,7 +6345,7 @@ void MusicXMLParserNotations::combineArticulations()
                   continue;
             for (std::vector<Notation>::reverse_iterator n2 = n1 + 1, n2Next = n1; n2 != _notations.rend(); n2 = n2Next) {
                   n2Next = std::next(n2);
-                  if (n2->parent() != "articulations")
+                  if (n2->parent() != "articulations" || skipCombine(*n1, *n2))
                         continue;
                   // Combine and remove articulations if present in map
                   std::set<SymId> currentPair = { n1->symId(), n2->symId() };
@@ -6393,8 +6418,7 @@ void MusicXMLParserNotations::parse()
             qDebug("%s", qPrintable(notation.print()));
             }
        */
-      if (!_slurStart && !_slurStop)
-            combineArticulations();
+      combineArticulations();
 
       Q_ASSERT(_e.isEndElement() && _e.name() == "notations");
       }
