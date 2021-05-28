@@ -79,8 +79,12 @@ signals:
 
     void mainToolBarDockingHolderChanged(DockToolBarHolder* mainToolBarDockingHolder);
 
+private slots:
+    void onQuit();
+
 private:
     DockPage* pageByUri(const QString& uri) const;
+    DockPage* currentPage() const;
 
     void componentComplete() override;
 
@@ -93,8 +97,10 @@ private:
     void saveGeometry();
     void restoreGeometry();
 
-    void saveState(const QString& pageName);
-    void restoreState(const QString& pageName);
+    QByteArray windowState() const;
+
+    void savePageState(const QString& pageName);
+    void restorePageState(const QString& pageName);
 
     void resetWindowState();
 
