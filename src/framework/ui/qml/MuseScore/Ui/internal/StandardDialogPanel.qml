@@ -28,7 +28,7 @@ import MuseScore.UiComponents 1.0
 Rectangle {
     id: root
 
-    color: ui.theme.backgroundPrimaryColor
+    property string type: "INFO" // "QUESTION", "INFO", "WARNING", "ERROR"
 
     property alias title: titleLabel.text
     property alias text: textLabel.text
@@ -45,7 +45,71 @@ Rectangle {
     property var contentWidth: Math.max(textContent.contentWidth, buttons.contentWidth)
     property var contentHeight: content.contentHeight
 
+    property alias navigation: navPanel
+
     signal clicked(int buttonId, bool showAgain)
+
+    color: ui.theme.backgroundPrimaryColor
+
+    function onOpened() {
+        var btn = root.firstFocusBtn()
+        btn.navigation.requestActive()
+
+        accessibleInfo.focused = true
+    }
+
+    function firstFocusBtn() {
+        var btn = null
+        for (var i = buttons.count; i > 0; --i) {
+            btn = buttons.itemAtIndex(i-1)
+            if (btn.accentButton) {
+                break;
+            }
+        }
+        return btn;
+    }
+
+    function standardIcon(type) {
+        switch (type) {
+        case "QUESTION": return IconCode.QUESTION
+        case "INFO": return IconCode.INFO
+        case "WARNING": return IconCode.WARNING
+        case "ERROR": return IconCode.ERROR
+        }
+
+        return IconCode.NONE
+    }
+
+    function standardName(type) {
+        switch (type) {
+        case "QUESTION": return qsTrc("global", "Question")
+        case "INFO": return qsTrc("global", "Information")
+        case "WARNING": return qsTrc("global", "Warning")
+        case "ERROR": return qsTrc("global", "Error")
+        }
+
+        return qsTrc("global", "Information")
+    }
+
+    NavigationPanel {
+        id: navPanel
+        name: "StandardDialog"
+        order: 1
+        direction: NavigationPanel.Horizontal
+        accessible.role: MUAccessible.Dialog
+        accessible.name: root.standardName(root.type)
+    }
+
+    //! NOTE By default accessibility for buttons ignored.
+    // On dialog open, set focus on accissibleInfo item, so Screen Reader reads completed info for dialog.
+    // On button navigation active turned on accessibility for button.
+    AccessibleItem {
+        id: accessibleInfo
+        accessibleParent: navPanel.accessible
+        visualItem: root
+        role: MUAccessible.Information
+        name: root.title + " " + root.text + "" + root.firstFocusBtn().text + " " + qsTrc("global", "Button")
+    }
 
     ColumnLayout {
         id: content
@@ -74,6 +138,7 @@ Rectangle {
                 Layout.preferredHeight: 48
 
                 font.pixelSize: 48
+                iconCode: root.standardIcon(root.type)
 
                 visible: root.withIcon && !isEmpty
             }
@@ -144,6 +209,18 @@ Rectangle {
                 orientation: Qt.Horizontal
 
                 delegate: FlatButton {
+
+                    navigation.panel: navPanel
+                    navigation.column: model.index
+
+                    //! NOTE See description about AccessibleItem { id: accessibleInfo }
+                    accessible.ignored: true
+                    navigation.onActiveChanged: {
+                        if (navigation.active) {
+                            accessible.ignored = false
+                        }
+                    }
+
                     text: modelData.title
                     accentButton: Boolean(modelData.accent)
 

@@ -19,25 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_ACCESSIBILITY_ACCESSIBILITYCONFIGURATION_H
+#define MU_ACCESSIBILITY_ACCESSIBILITYCONFIGURATION_H
 
-#ifndef MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
-#define MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
+#include "../iaccessibilityconfiguration.h"
 
-#include "modularity/imoduleexport.h"
-#include "iaccessible.h"
+#include "modularity/ioc.h"
+#include "ui/inavigationcontroller.h"
 
 namespace mu::accessibility {
-class IAccessibilityController : MODULE_EXPORT_INTERFACE
+class AccessibilityConfiguration : public IAccessibilityConfiguration
 {
-    INTERFACE_ID(IAccessibilityController)
+    INJECT(accessibility, ui::INavigationController, navigationController)
+
 public:
-    virtual ~IAccessibilityController() = default;
+    AccessibilityConfiguration() = default;
 
-    virtual const IAccessible* rootItem() const = 0;
-
-    virtual void reg(IAccessible* item) = 0;
-    virtual void unreg(IAccessible* item) = 0;
+    bool enabled() const override;
 };
 }
 
-#endif // MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
+#endif // MU_ACCESSIBILITY_ACCESSIBILITYCONFIGURATION_H

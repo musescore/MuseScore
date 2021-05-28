@@ -40,6 +40,11 @@ AccessibleItem::~AccessibleItem()
         m_accessibleParent->removeChild(this);
     }
 
+    QList<AccessibleItem*> children = m_children;
+    for (AccessibleItem* ch : children) {
+        ch->setAccessibleParent(nullptr);
+    }
+
     if (m_registred) {
         accessibilityController()->unreg(this);
         m_registred = false;
@@ -56,15 +61,6 @@ void AccessibleItem::componentComplete()
     m_registred = true;
 }
 
-bool AccessibleItem::event(QEvent* event)
-{
-    if (event->type() == QEvent::ParentChange) {
-        LOGI() << "parent: " << parent();
-    }
-
-    return QObject::event(event);
-}
-
 const IAccessible* AccessibleItem::accessibleRoot() const
 {
     return accessibilityController()->rootItem();
@@ -77,11 +73,6 @@ const IAccessible* AccessibleItem::accessibleParent() const
     }
 
     return accessibleRoot();
-}
-
-mu::async::Notification AccessibleItem::accessibleParentChanged() const
-{
-    return m_accessibleParentChanged;
 }
 
 IAccessible::Role AccessibleItem::accessibleRole() const
@@ -149,17 +140,27 @@ QRect AccessibleItem::accessibleRect() const
     return QRect(globalPos.x(), globalPos.y(), vitem->width(), vitem->height());
 }
 
-QWindow* AccessibleItem::accessibleWindow() const
+mu::async::Channel<IAccessible::Property> AccessibleItem::accessiblePropertyChanged() const
 {
-    QQuickItem* vitem = resolveVisualItem();
-    if (!vitem || !vitem->window()) {
-        return nullptr;
-    }
-    return vitem->window();
+    return m_accessiblePropertyChanged;
+}
+
+mu::async::Channel<std::pair<IAccessible::State, bool> > AccessibleItem::accessibleStateChanged() const
+{
+    return m_accessibleStateChanged;
+}
+
+AccessibleItem* AccessibleItem::accessibleParent_property() const
+{
+    return m_accessibleParent;
 }
 
 void AccessibleItem::setAccessibleParent(AccessibleItem* p)
 {
+    if (m_accessibleParent == p) {
+        return;
+    }
+
     if (m_accessibleParent) {
         m_accessibleParent->removeChild(this);
     }
@@ -169,9 +170,12 @@ void AccessibleItem::setAccessibleParent(AccessibleItem* p)
     if (m_accessibleParent) {
         m_accessibleParent->addChild(this);
     }
+
+    emit accessiblePrnChanged();
+    m_accessiblePropertyChanged.send(IAccessible::Property::Parent);
 }
 
-void AccessibleItem::setState(accessibility::IAccessible::State st, bool arg)
+void AccessibleItem::setState(IAccessible::State st, bool arg)
 {
     if (m_state.value(st, false) == arg) {
         return;
@@ -180,12 +184,12 @@ void AccessibleItem::setState(accessibility::IAccessible::State st, bool arg)
     m_state[st] = arg;
     emit stateChanged();
 
-    if (m_registred) {
-        accessibilityController()->stateChanged(this, st, arg);
+    if (!m_ignored) {
+        m_accessibleStateChanged.send({ st, arg });
     }
 }
 
-void AccessibleItem::setRole(QAccessible::Role role)
+void AccessibleItem::setRole(MUAccessible::Role role)
 {
     if (m_role == role) {
         return;
@@ -197,7 +201,7 @@ void AccessibleItem::setRole(QAccessible::Role role)
     m_state[State::Enabled] = true;
 }
 
-QAccessible::Role AccessibleItem::role() const
+MUAccessible::Role AccessibleItem::role() const
 {
     return m_role;
 }
@@ -210,11 +214,27 @@ void AccessibleItem::setName(QString name)
 
     m_name = name;
     emit nameChanged(m_name);
+    m_accessiblePropertyChanged.send(IAccessible::Property::Name);
 }
 
 QString AccessibleItem::name() const
 {
     return m_name;
+}
+
+void AccessibleItem::setIgnored(bool ignored)
+{
+    if (m_ignored == ignored) {
+        return;
+    }
+
+    m_ignored = ignored;
+    emit ignoredChanged(m_ignored);
+}
+
+bool AccessibleItem::ignored() const
+{
+    return m_ignored;
 }
 
 void AccessibleItem::setVisualItem(QQuickItem* item)

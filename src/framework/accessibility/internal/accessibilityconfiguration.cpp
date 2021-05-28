@@ -19,25 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "accessibilityconfiguration.h"
 
-#ifndef MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
-#define MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
+#include <QAccessible>
 
-#include "modularity/imoduleexport.h"
-#include "iaccessible.h"
+using namespace mu::accessibility;
 
-namespace mu::accessibility {
-class IAccessibilityController : MODULE_EXPORT_INTERFACE
+bool AccessibilityConfiguration::enabled() const
 {
-    INTERFACE_ID(IAccessibilityController)
-public:
-    virtual ~IAccessibilityController() = default;
+    if (!navigationController()) {
+        return false;
+    }
 
-    virtual const IAccessible* rootItem() const = 0;
+    if (!QAccessible::isActive()) {
+        return false;
+    }
 
-    virtual void reg(IAccessible* item) = 0;
-    virtual void unreg(IAccessible* item) = 0;
-};
+    //! NOTE Accessibility available if navigation is used
+    return navigationController()->activeSection() != nullptr;
 }
-
-#endif // MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H

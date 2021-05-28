@@ -79,8 +79,6 @@ Item {
 
         function onFireOpenStandardDialog(data) {
             var dialog = data.data()
-            var dialogIcon = standardDialogIcon(dialog.type)
-
             var dialogObj = createDialog("internal/StandardDialog.qml", dialog.params)
             data.setValue("ret", dialogObj.ret)
             data.setValue("objectID", dialogObj.object.objectID)
@@ -88,8 +86,6 @@ Item {
             if (dialogObj.ret.errcode > 0) {
                 return
             }
-
-            dialogObj.object.iconCode = dialogIcon
 
             dialogObj.object.exec()
         }
@@ -101,17 +97,6 @@ Item {
                 }
             }
         }
-    }
-
-    function standardDialogIcon(type) {
-        switch (type) {
-        case "QUESTION": return IconCode.QUESTION
-        case "INFO": return IconCode.INFO
-        case "WARNING": return IconCode.WARNING
-        case "ERROR": return IconCode.ERROR
-        }
-
-        return IconCode.NONE
     }
 
     function createDialog(path, params) {
