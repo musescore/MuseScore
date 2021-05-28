@@ -208,6 +208,7 @@ public:
       QString tremoloType() const { return _tremoloType; }
       int tremoloNr() const { return _tremoloNr; }
       bool mustStopGraceAFter() const { return _slurStop || _wavyLineStop; }
+      bool skipCombine(const Notation& n1, const Notation& n2);
 private:
       void addNotation(const Notation& notation, ChordRest* const cr, Note* const note);
       void addTechnical(const Notation& notation, Note* note);
