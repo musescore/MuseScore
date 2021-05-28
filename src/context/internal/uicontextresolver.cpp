@@ -87,7 +87,7 @@ UiContext UiContextResolver::currentUiContext() const
         }
 
         ui::INavigationSection* activeSection = navigationController()->activeSection();
-        if (activeSection && activeSection->name() == NOTATION_NAVIGATION_SECTION) {
+        if (!activeSection || activeSection->name() == NOTATION_NAVIGATION_SECTION) {
             return context::UiCtxNotationFocused;
         }
 

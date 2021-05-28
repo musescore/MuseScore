@@ -139,7 +139,7 @@ void AccessibilityController::init()
     });
 }
 
-const IAccessible* AccessibilityController::rootItem() const
+const IAccessible* AccessibilityController::accessibleRoot() const
 {
     return this;
 }

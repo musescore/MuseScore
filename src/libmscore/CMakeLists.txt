@@ -369,11 +369,21 @@ set(MODULE_SRC
     draw/drawjson.h
     draw/drawcomp.cpp
     draw/drawcomp.h
+
+    accessibility/accessiblescore.cpp
+    accessibility/accessiblescore.h
+    accessibility/accessibleelement.cpp
+    accessibility/accessibleelement.h
+    accessibility/accessiblenote.cpp
+    accessibility/accessiblenote.h
     )
 
 set(MODULE_INCLUDE
     ${PROJECT_SOURCE_DIR}/thirdparty/dtl
-    ${Qt5Gui_PRIVATE_INCLUDE_DIRS} # for drawbufferjson.cpp
+    )
+
+set(MODULE_DEF
+#    MU_SCORE_ACCESSIBILITY
     )
 
 set(FREETYPE_LIB )
