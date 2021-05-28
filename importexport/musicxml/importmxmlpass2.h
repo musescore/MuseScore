@@ -146,9 +146,11 @@ private:
 class Notation {
 public:
       Notation(const QString& name, const QString& parent = "",
-                        const SymId& symId = SymId::noSym) { _name = name; _parent = parent; _symId = symId; }
+                  const SymId& symId = SymId::noSym) { _name = name; _parent = parent; _symId = symId; }
+      void addAttribute(const QString& name, const QString& value);
       void addAttribute(const QStringRef name, const QStringRef value);
       QString attribute(const QString& name) const;
+      std::map<QString, QString> attributes() const { return _attributes; }
       QString name() const { return _name; }
       QString parent() const { return _parent; }
       void setSymId(const SymId& symId) { _symId = symId; }
@@ -160,6 +162,7 @@ public:
       QString text() const { return _text; }
       static Notation notationWithAttributes(const QString& name, const QXmlStreamAttributes attributes,
                                 const QString& parent = "", const SymId& symId = SymId::noSym);
+      static Notation mergeNotations(const Notation& n1, const Notation& n2, const SymId& symId = SymId::noSym);
 private:
       QString _name;
       QString _parent;
@@ -208,6 +211,7 @@ public:
 private:
       void addNotation(const Notation& notation, ChordRest* const cr, Note* const note);
       void addTechnical(const Notation& notation, Note* note);
+      void combineArticulations();
       void harmonic();
       void articulations();
       void dynamics();
@@ -234,6 +238,7 @@ private:
       int _wavyLineNo { 0 };
       QString _arpeggioType;
       bool _slurStop { false };
+      bool _slurStart { false };
       bool _wavyLineStop { false };
       };
 
