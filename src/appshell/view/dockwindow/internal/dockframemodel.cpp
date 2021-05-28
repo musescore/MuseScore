@@ -66,14 +66,19 @@ void DockFrameModel::listenChangesInFrame()
     }
 
     connect(frame, &KDDockWidgets::Frame::numDockWidgetsChanged, [this, frame]() {
-        auto docks = frame->dockWidgets();
+        auto currentDock = frame->currentDockWidget();
+        auto allDocks = frame->dockWidgets();
 
-        if (docks.size() != 1) {
+        if (!allDocks.contains(currentDock)) {
+            frame->setCurrentTabIndex(0);
+        }
+
+        if (allDocks.size() != 1) {
             setTitleBarVisible(false);
             return;
         }
 
-        DockProperties properties = readPropertiesFromObject(docks.first());
+        DockProperties properties = readPropertiesFromObject(allDocks.first());
         bool visible = (properties.type == DockType::Panel && properties.allowedAreas != Qt::NoDockWidgetArea);
         setTitleBarVisible(visible);
     });
