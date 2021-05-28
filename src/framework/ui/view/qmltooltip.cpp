@@ -79,11 +79,7 @@ void QmlToolTip::doShow()
         return;
     }
 
-    const QPointF topLeft = m_item->mapToGlobal(QPointF(0, 0));
-    const QRect rect(topLeft.x(), topLeft.y(), m_item->width(), m_item->height());
-    const QPoint pos(rect.bottomLeft().x() + m_item->width() / 2, rect.bottomLeft().y());
-
-    emit showToolTip(m_item, pos, m_title, m_description, m_shortcut);
+    emit showToolTip(m_item, m_title, m_description, m_shortcut);
 }
 
 void QmlToolTip::doHide()

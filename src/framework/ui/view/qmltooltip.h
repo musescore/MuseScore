@@ -41,7 +41,7 @@ private slots:
     void doHide();
 
 signals:
-    void showToolTip(QQuickItem* item, const QPoint& pos, const QString& title, const QString& description, const QString& shortcut);
+    void showToolTip(QQuickItem* item, const QString& title, const QString& description, const QString& shortcut);
     void hideToolTip();
 
 private:

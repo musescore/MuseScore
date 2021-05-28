@@ -41,7 +41,7 @@ Item {
     Connections {
         target: root.provider
 
-        function onShowToolTip(parent, pos, title, description, shortcut) {
+        function onShowToolTip(parent, title, description, shortcut) {
             var toolTipComponentPath = "../UiComponents/StyledToolTip.qml"
             var toolTipComponent = Qt.createComponent(toolTipComponentPath)
             if (toolTipComponent.status !== Component.Ready) {

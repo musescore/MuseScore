@@ -133,7 +133,7 @@ void PopupView::open()
     beforeShow();
 
     if (!isDialog()) {
-        correctPos();
+        updatePosition();
     }
 
     if (isDialog()) {
@@ -473,7 +473,7 @@ QRect PopupView::currentScreenGeometry() const
     return currentScreen->geometry();
 }
 
-void PopupView::correctPos()
+void PopupView::updatePosition()
 {
     QQuickItem* parent = parentItem();
     IF_ASSERT_FAILED(parent) {
