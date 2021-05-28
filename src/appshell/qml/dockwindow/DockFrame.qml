@@ -80,23 +80,20 @@ Rectangle {
         enabled: tabs.visible
     }
 
-    TabBar {
+    Rectangle {
         id: tabs
 
         anchors.top: titleBar.visible ? titleBar.bottom : parent.top
 
+        height: 36
         width: parent.width
 
-        readonly property int separatorHeight: 1
-        padding: 0
-        bottomPadding: separatorHeight
+        visible: tabsView.count > 1
 
-        visible: count > 1
-        clip: true
+        color: ui.theme.backgroundSecondaryColor
 
         readonly property QtObject tabBarCpp: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.tabBar : null
-
-        currentIndex: Boolean(frameCpp) ? frameCpp.currentIndex : 0
+        property int currentIndex: Boolean(root.frameCpp) ? root.frameCpp.currentIndex : 0
 
         onTabBarCppChanged: {
             if (Boolean(tabBarCpp)) {
@@ -105,23 +102,22 @@ Rectangle {
             }
         }
 
-        background: Rectangle {
-            height: tabs.height + tabs.separatorHeight
+        ListView {
+            id: tabsView
 
-            color: ui.theme.backgroundSecondaryColor
-        }
+            anchors.fill: parent
 
-        Repeater {
+            orientation: Qt.Horizontal
+            interactive: false
+            spacing: 0
+
+            currentIndex: tabs.currentIndex
             model: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.dockWidgetModel : 0
 
-            DockPanelTab {
+            delegate: DockPanelTab {
                 text: title
 
                 isCurrent: tabs && (tabs.currentIndex === model.index)
-
-                onClicked: {
-                    root.frameCpp.tabWidget.setCurrentDockWidget(model.index)
-                }
             }
         }
     }

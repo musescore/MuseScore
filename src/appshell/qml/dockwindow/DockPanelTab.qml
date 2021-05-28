@@ -29,12 +29,6 @@ import MuseScore.UiComponents 1.0
 StyledTabButton {
     id: root
 
-    height: 36
-    width: implicitWidth
-
-    leftPadding: 10
-    rightPadding: 10
-
     //! TODO: only for testing
     // We should get data for this model from c++
     property var menuModel: [
@@ -42,6 +36,12 @@ StyledTabButton {
         { "code": "undock", "title": "Undock" },
         { "code": "move", "title": "Move panel to right side" },
     ]
+
+    height: 36
+    width: implicitWidth
+
+    leftPadding: 10
+    rightPadding: 10
 
     contentItem: Row {
         spacing: 4
@@ -56,8 +56,6 @@ StyledTabButton {
         }
 
         MenuButton {
-            id: menuButton
-
             anchors.verticalCenter: parent.verticalCenter
 
             visible: root.isCurrent
@@ -73,20 +71,12 @@ StyledTabButton {
         opacity: 1
 
         SeparatorLine {
-            anchors.left: parent.left
-
-            orientation: Qt.Vertical
-        }
-
-        SeparatorLine {
             anchors.right: parent.right
 
             orientation: Qt.Vertical
         }
 
         SeparatorLine {
-            id: bottomLine
-
             anchors.bottom: parent.bottom
 
             visible: !root.isCurrent
