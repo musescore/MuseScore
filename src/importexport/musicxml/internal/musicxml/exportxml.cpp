@@ -2649,24 +2649,24 @@ static void fermatas(const QVector<EngravingItem*>& cra, XmlWriter& xml, Notatio
 }
 
 //---------------------------------------------------------
-//   symIdToArtic
+//   symIdToArtics
 //---------------------------------------------------------
+/*
+ * return the XML representation(s)
+ * of a given symId, separating combined symbols where applicable.
+ */
 
-static QString symIdToArtic(const SymId sid)
+static std::vector<QString> symIdToArtics(const SymId sid)
 {
     switch (sid) {
     case SymId::articAccentAbove:
     case SymId::articAccentBelow:
-        return "accent";
+        return { "accent" };
         break;
 
     case SymId::articStaccatoAbove:
     case SymId::articStaccatoBelow:
-    case SymId::articAccentStaccatoAbove:
-    case SymId::articAccentStaccatoBelow:
-    case SymId::articMarcatoStaccatoAbove:
-    case SymId::articMarcatoStaccatoBelow:
-        return "staccato";
+        return { "staccato" };
         break;
 
     case SymId::articStaccatissimoAbove:
@@ -2675,37 +2675,57 @@ static QString symIdToArtic(const SymId sid)
     case SymId::articStaccatissimoStrokeBelow:
     case SymId::articStaccatissimoWedgeAbove:
     case SymId::articStaccatissimoWedgeBelow:
-        return "staccatissimo";
+        return { "staccatissimo" };
         break;
 
     case SymId::articTenutoAbove:
     case SymId::articTenutoBelow:
-        return "tenuto";
+        return { "tenuto" };
         break;
 
     case SymId::articMarcatoAbove:
     case SymId::articMarcatoBelow:
-        return "strong-accent";
+        return { "strong-accent" };
         break;
 
     case SymId::articTenutoStaccatoAbove:
     case SymId::articTenutoStaccatoBelow:
-        return "detached-legato";
+        return { "detached-legato" };
         break;
 
     case SymId::articSoftAccentAbove:
     case SymId::articSoftAccentBelow:
-        return "soft-accent";
+        return { "soft-accent" };
         break;
 
     case SymId::articStressAbove:
     case SymId::articStressBelow:
-        return "stress";
+        return { "stress" };
         break;
 
     case SymId::articUnstressAbove:
     case SymId::articUnstressBelow:
-        return "unstress";
+        return { "unstress" };
+        break;
+
+    case SymId::articAccentStaccatoAbove:
+    case SymId::articAccentStaccatoBelow:
+        return { "accent", "staccato" };
+        break;
+
+    case SymId::articMarcatoStaccatoAbove:
+    case SymId::articMarcatoStaccatoBelow:
+        return { "strong-accent", "staccato" };
+        break;
+
+    case SymId::articMarcatoTenutoAbove:
+    case SymId::articMarcatoTenutoBelow:
+        return { "strong-accent", "tenuto" };
+        break;
+
+    case SymId::articTenutoAccentAbove:
+    case SymId::articTenutoAccentBelow:
+        return { "tenuto", "accent" };
         break;
 
     default:
@@ -2713,7 +2733,7 @@ static QString symIdToArtic(const SymId sid)
         break;
     }
 
-    return "";
+    return {};
 }
 
 //---------------------------------------------------------
@@ -2876,10 +2896,10 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         }
 
         auto sid = a->symId();
-        auto mxmlArtic = symIdToArtic(sid);
+        std::vector<QString> mxmlArtics = symIdToArtics(sid);
 
-        if (mxmlArtic != "") {
-            if (sid == SymId::articMarcatoAbove || sid == SymId::articMarcatoBelow) {
+        for (QString mxmlArtic : mxmlArtics) {
+            if (mxmlArtic == "strong-accent") {
                 if (a->up()) {
                     mxmlArtic += " type=\"up\"";
                 } else {
@@ -2976,7 +2996,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         }
 
         auto sid = a->symId();
-        if (symIdToArtic(sid) == ""
+        if (symIdToArtics(sid).empty()
             && symIdToOrnam(sid) == ""
             && symIdToTechn(sid) == ""
             && !isLaissezVibrer(sid)) {
