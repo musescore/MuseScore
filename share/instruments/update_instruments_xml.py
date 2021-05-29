@@ -274,17 +274,17 @@ for group in groups.values():
                 lsb = channel['LSB']
                 sound = channel["MS General sound"]
                 assert int(bank) == (int(msb) * 128) + int(lsb)
-                # ch_el.append(ET.Comment("MIDI: Bank {0}, Prog {1}; MS General: {2}".format(bank, prog, sound)))
+                ch_el.append(ET.Comment("MIDI: Bank {0}, Prog {1}; MS General: {2}".format(bank, prog, sound)))
                 if msb != "0":
                     con_el = ET.SubElement(ch_el, 'controller')
                     con_el.set('ctrl', "0")
                     con_el.set('value', msb)
-                    # ch_el.append(ET.Comment("Bank MSB"))
+                    ch_el.append(ET.Comment("Bank MSB"))
                 if lsb != "0":
                     con_el = ET.SubElement(ch_el, 'controller')
                     con_el.set('ctrl', "32")
                     con_el.set('value', lsb)
-                    # ch_el.append(ET.Comment("Bank LSB"))
+                    ch_el.append(ET.Comment("Bank LSB"))
                 ET.SubElement(ch_el, 'program').set('value', channel['Prog'])
                 if is_drumset:
                     try: to_comment(ch_el, gs_drumkits[channel['Prog']], 'name')
@@ -307,8 +307,8 @@ tree = ET.ElementTree(root)
 ET.indent(tree, space='      ')
 for pr_el in root.findall('.//Channel/program'):
     pr_el.tail = ' '
-# for pr_el in root.findall('.//Channel/controller'):
-#     pr_el.tail = ' '
+for pr_el in root.findall('.//Channel/controller'):
+    pr_el.tail = ' '
 for dr_el in root.findall('.//Instrument/Drum'):
     if dr_el.get('pitch') in gmgs_percussion:
         dr_el.text = ' '
