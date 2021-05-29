@@ -29,6 +29,7 @@ MuseScorePortable
 *.qm
 share/manual/en
 share/manual/de
+/share/instruments/tsv
 Doc
 DocLib
 build.qt5
