@@ -779,8 +779,8 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("poet-text",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Lirycist"),
-             QT_TRANSLATE_NOOP("action", "Add lirycist text")
+             QT_TRANSLATE_NOOP("action", "Lyricist"),
+             QT_TRANSLATE_NOOP("action", "Add lyricist text")
              ),
     UiAction("part-text",
              mu::context::UiCtxNotationOpened,
