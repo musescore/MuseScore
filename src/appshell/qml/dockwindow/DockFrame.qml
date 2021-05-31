@@ -34,7 +34,7 @@ Rectangle {
     //! NOTE: please, don't rename those properties because they are used in c++
     property QtObject frameCpp
     readonly property QtObject titleBarCpp: Boolean(frameCpp) ? frameCpp.actualTitleBar : null
-    readonly property int nonContentsHeight: titleBar.visible ? titleBar.heightWhenVisible + tabs.height : 0
+    readonly property int nonContentsHeight: titleBar.visible ? titleBar.heightWhenVisible + tabsPanel.height : 0
 
     anchors.fill: parent
 
@@ -71,29 +71,31 @@ Rectangle {
     MouseArea {
         id: dragMouseArea
 
-        anchors.fill: tabs
+        anchors.top: tabsPanel.top
+        width: tabs.contentWidth
+        height: tabsPanel.height - bottomSeparator.height
 
-        z: tabs.z + 1
+        z: tabsPanel.z + 1
 
         hoverEnabled: false
         propagateComposedEvents: true
-        enabled: tabs.visible
+        enabled: tabsPanel.visible
     }
 
     Rectangle {
-        id: tabs
+        id: tabsPanel
 
         anchors.top: titleBar.visible ? titleBar.bottom : parent.top
 
         height: 36
         width: parent.width
 
-        visible: tabsView.count > 1
+        visible: tabs.count > 1
 
         color: ui.theme.backgroundSecondaryColor
 
         readonly property QtObject tabBarCpp: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.tabBar : null
-        property int currentIndex: Boolean(root.frameCpp) ? root.frameCpp.currentIndex : 0
+        property int currentIndex: Boolean(root.frameCpp) && root.frameCpp.currentIndex >= 0 ? root.frameCpp.currentIndex : 0
 
         onTabBarCppChanged: {
             if (Boolean(tabBarCpp)) {
@@ -109,34 +111,49 @@ Rectangle {
         }
 
         ListView {
-            id: tabsView
+            id: tabs
 
-            anchors.fill: parent
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+
+            width: contentWidth
 
             orientation: Qt.Horizontal
             interactive: false
+            clip: true
             spacing: 0
 
-            currentIndex: tabs.currentIndex
+            currentIndex: tabsPanel.currentIndex
             model: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.dockWidgetModel : 0
 
             delegate: DockPanelTab {
                 text: title
 
-                isCurrent: tabs && (tabs.currentIndex === model.index)
+                isCurrent: tabsPanel && (tabsPanel.currentIndex === model.index)
             }
+        }
+
+        Item {
+            anchors.left: tabs.right
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+
+            height: bottomSeparator.height
+
+            SeparatorLine { id: bottomSeparator }
         }
     }
 
     StackLayout {
         id: stackLayout
 
-        anchors.top: tabs.visible ? tabs.bottom : (titleBar.visible ? titleBar.bottom : parent.top)
-        anchors.topMargin: tabs.visible ? 12 : 0
+        anchors.top: tabsPanel.visible ? tabsPanel.bottom : (titleBar.visible ? titleBar.bottom : parent.top)
+        anchors.topMargin: tabsPanel.visible ? 12 : 0
         anchors.bottom: parent.bottom
 
         width: parent.width
 
-        currentIndex: tabs.currentIndex
+        currentIndex: tabsPanel.currentIndex
     }
 }
