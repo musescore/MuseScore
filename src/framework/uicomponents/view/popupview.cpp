@@ -467,10 +467,10 @@ QRect PopupView::currentScreenGeometry() const
 {
     QScreen* currentScreen = QGuiApplication::screenAt(m_globalPos.toPoint());
     if (!currentScreen) {
-        return QRect();
+        currentScreen = QGuiApplication::primaryScreen();
     }
 
-    return currentScreen->geometry();
+    return currentScreen->availableGeometry();
 }
 
 void PopupView::updatePosition()
