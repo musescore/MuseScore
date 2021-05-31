@@ -53,8 +53,6 @@ public:
     virtual void setAntialiasing(bool arg) = 0;
     virtual void setCompositionMode(CompositionMode mode) = 0;
 
-    virtual void setFont(const QFont& font) = 0;
-    virtual const QFont& qFont() const = 0;
     virtual void setFont(const Font& font) = 0;
     virtual Font font() const = 0;
 

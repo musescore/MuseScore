@@ -145,19 +145,6 @@ void Painter::setCompositionMode(CompositionMode mode)
     }
 }
 
-void Painter::setFont(const QFont& font)
-{
-    m_provider->setFont(font);
-    if (extended) {
-        extended->setFont(font);
-    }
-}
-
-const QFont& Painter::qFont() const
-{
-    return m_provider->qFont();
-}
-
 void Painter::setFont(const Font& font)
 {
     m_provider->setFont(font);

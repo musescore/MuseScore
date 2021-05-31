@@ -147,24 +147,14 @@ void BufferedPaintProvider::setCompositionMode(CompositionMode mode)
     editableState().compositionMode = mode;
 }
 
-void BufferedPaintProvider::setFont(const QFont& f)
+void BufferedPaintProvider::setFont(const Font& f)
 {
     editableState().font = f;
 }
 
-const QFont& BufferedPaintProvider::qFont() const
-{
-    return currentState().font;
-}
-
-void BufferedPaintProvider::setFont(const Font& font)
-{
-    editableState().font = mu::draw::toQFont(font);
-}
-
 Font BufferedPaintProvider::font() const
 {
-    return mu::draw::fromQFont(currentState().font);
+    return currentState().font;
 }
 
 void BufferedPaintProvider::setPen(const QPen& pen)

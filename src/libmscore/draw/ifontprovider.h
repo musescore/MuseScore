@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_DRAWIFONTPROVIDER_H
-#define MU_ENGRAVING_DRAWIFONTPROVIDER_H
+#ifndef MU_DRAW_IFONTPROVIDER_H
+#define MU_DRAW_IFONTPROVIDER_H
 
 #include "modularity/imoduleexport.h"
 
@@ -51,4 +51,4 @@ public:
 };
 }
 
-#endif // MU_ENGRAVING_DRAWIFONTPROVIDER_H
+#endif // MU_DRAW_IFONTPROVIDER_H

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_DRAWQFONTPROVIDER_H
-#define MU_ENGRAVING_DRAWQFONTPROVIDER_H
+#ifndef MU_DRAW_QFONTPROVIDER_H
+#define MU_DRAW_QFONTPROVIDER_H
 
 #include "ifontprovider.h"
 
@@ -46,4 +46,4 @@ public:
 };
 }
 
-#endif // MU_ENGRAVING_DRAWQFONTPROVIDER_H
+#endif // MU_DRAW_QFONTPROVIDER_H
