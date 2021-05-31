@@ -36,6 +36,7 @@
 #define PREF_APP_PATHS_SCOREORDERLIST2                      "application/paths/scoreOrderList2"
 #define PREF_APP_PATHS_MYIMAGES                             "application/paths/myImages"
 #define PREF_APP_PATHS_MYPLUGINS                            "application/paths/myPlugins"
+#define PREF_APP_PATHS_MYSCOREFONTS                         "application/paths/myScoreFonts"
 #define PREF_APP_PATHS_MYSCORES                             "application/paths/myScores"
 #define PREF_APP_PATHS_MYSHORTCUTS                          "application/paths/myShortcuts"
 #define PREF_APP_PATHS_MYSOUNDFONTS                         "application/paths/mySoundfonts"

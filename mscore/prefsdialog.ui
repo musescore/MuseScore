@@ -124,33 +124,57 @@
           <property name="verticalSpacing">
            <number>0</number>
           </property>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="myScores">
+          <item row="1" column="2">
+           <widget class="QToolButton" name="myStylesButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="accessibleName">
-             <string>Score folder</string>
+             <string>Choose style folder</string>
             </property>
             <property name="accessibleDescription">
-             <string>Insert path to score folder.</string>
+             <string>Opens a dialog for selecting the style folder</string>
             </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_imagesFolder">
             <property name="text">
-             <string>Images:</string>
+             <string notr="true"/>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
             </property>
            </widget>
           </item>
           <item row="6" column="0">
-           <widget class="QLabel" name="label_extensionsFolder">
+           <widget class="QLabel" name="label_imagesFolder">
             <property name="text">
-             <string>Extensions:</string>
+             <string>Images:</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QToolButton" name="myTemplatesButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose template folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a dialog for selecting the template folder</string>
+            </property>
+            <property name="text">
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_soundFontsFolder">
+            <property name="text">
+             <string>SoundFonts:</string>
             </property>
            </widget>
           </item>
@@ -159,18 +183,35 @@
             <property name="text">
              <string>Scores:</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QLineEdit" name="myExtensions">
+            <property name="accessibleName">
+             <string>Extensions folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to extensions folder</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_stylesFolder">
-            <property name="text">
-             <string>Styles:</string>
+          <item row="5" column="2">
+           <widget class="QToolButton" name="mySoundfontsButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <property name="accessibleName">
+             <string>SoundFont folders</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a dialog for configuring the SoundFont folders</string>
+            </property>
+            <property name="text">
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/edit.svg</normaloff>:/data/icons/edit.svg</iconset>
             </property>
            </widget>
           </item>
@@ -184,13 +225,144 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_stylesFolder">
+            <property name="text">
+             <string>Styles:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
            <widget class="QLabel" name="label_templatesFolder">
             <property name="text">
              <string>Templates:</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="myScoreFonts"/>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="myScores">
+            <property name="accessibleName">
+             <string>Score folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to score folder.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2">
+           <widget class="QToolButton" name="myImagesButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Image folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a dialog for selecting the image folder</string>
+            </property>
+            <property name="text">
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="myTemplates">
+            <property name="accessibleName">
+             <string>Template folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to Template folder</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QLineEdit" name="myImages">
+            <property name="accessibleName">
+             <string>Image folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to image folder</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="mySoundfonts">
+            <property name="accessibleName">
+             <string>SoundFont folders</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to SoundFont folders</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QToolButton" name="myPluginsButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Choose plugin folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a dialog for selecting the plugin folder</string>
+            </property>
+            <property name="text">
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="myPlugins">
+            <property name="accessibleName">
+             <string>Plugin folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Insert path to plugin folder</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_extensionsFolder">
+            <property name="text">
+             <string>Extensions:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_pluginsFolder">
+            <property name="text">
+             <string>Plugins:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="2">
+           <widget class="QToolButton" name="myExtensionsButton">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="accessibleName">
+             <string>Extensions folder</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>Opens a dialog for selecting the extensions folder</string>
+            </property>
+            <property name="text">
+             <string notr="true"/>
+            </property>
+            <property name="icon">
+             <iconset resource="musescore.qrc">
+              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
             </property>
            </widget>
           </item>
@@ -214,126 +386,23 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
-           <widget class="QToolButton" name="myStylesButton">
-            <property name="focusPolicy">
-             <enum>Qt::StrongFocus</enum>
-            </property>
-            <property name="accessibleName">
-             <string>Choose style folder</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Opens a dialog for selecting the style folder</string>
-            </property>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_scoreFontsFolder">
             <property name="text">
-             <string notr="true"/>
-            </property>
-            <property name="icon">
-             <iconset resource="musescore.qrc">
-              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_pluginsFolder">
-            <property name="text">
-             <string>Plugins:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="myTemplates">
-            <property name="accessibleName">
-             <string>Template folder</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Insert path to Template folder</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="myPlugins">
-            <property name="accessibleName">
-             <string>Plugin folder</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Insert path to plugin folder</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QLineEdit" name="mySoundfonts">
-            <property name="accessibleName">
-             <string>SoundFont folders</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Insert path to SoundFont folders</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QToolButton" name="myPluginsButton">
-            <property name="focusPolicy">
-             <enum>Qt::StrongFocus</enum>
-            </property>
-            <property name="accessibleName">
-             <string>Choose plugin folder</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Opens a dialog for selecting the plugin folder</string>
-            </property>
-            <property name="text">
-             <string notr="true"/>
-            </property>
-            <property name="icon">
-             <iconset resource="musescore.qrc">
-              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_soundFontsFolder">
-            <property name="text">
-             <string>SoundFonts:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QLineEdit" name="myImages">
-            <property name="accessibleName">
-             <string>Image folder</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Insert path to image folder</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QLineEdit" name="myExtensions">
-            <property name="accessibleName">
-             <string>Extensions folder</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Insert path to extensions folder</string>
+             <string>Score Fonts:</string>
             </property>
            </widget>
           </item>
           <item row="2" column="2">
-           <widget class="QToolButton" name="myTemplatesButton">
+           <widget class="QToolButton" name="myScoreFontsButton">
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="accessibleName">
-             <string>Choose template folder</string>
+             <string>Choose score fonts folder</string>
             </property>
             <property name="accessibleDescription">
-             <string>Opens a dialog for selecting the template folder</string>
+             <string>Opens a dialog for selecting the score fonts folder</string>
             </property>
             <property name="text">
              <string notr="true"/>
@@ -341,66 +410,6 @@
             <property name="icon">
              <iconset resource="musescore.qrc">
               <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="2">
-           <widget class="QToolButton" name="myImagesButton">
-            <property name="focusPolicy">
-             <enum>Qt::StrongFocus</enum>
-            </property>
-            <property name="accessibleName">
-             <string>Image folder</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Opens a dialog for selecting the image folder</string>
-            </property>
-            <property name="text">
-             <string notr="true"/>
-            </property>
-            <property name="icon">
-             <iconset resource="musescore.qrc">
-              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="2">
-           <widget class="QToolButton" name="myExtensionsButton">
-            <property name="focusPolicy">
-             <enum>Qt::StrongFocus</enum>
-            </property>
-            <property name="accessibleName">
-             <string>Extensions folder</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Opens a dialog for selecting the extensions folder</string>
-            </property>
-            <property name="text">
-             <string notr="true"/>
-            </property>
-            <property name="icon">
-             <iconset resource="musescore.qrc">
-              <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="2">
-           <widget class="QToolButton" name="mySoundfontsButton">
-            <property name="focusPolicy">
-             <enum>Qt::StrongFocus</enum>
-            </property>
-            <property name="accessibleName">
-             <string>SoundFont folders</string>
-            </property>
-            <property name="accessibleDescription">
-             <string>Opens a dialog for configuring the SoundFont folders</string>
-            </property>
-            <property name="text">
-             <string notr="true"/>
-            </property>
-            <property name="icon">
-             <iconset resource="musescore.qrc">
-              <normaloff>:/data/icons/edit.svg</normaloff>:/data/icons/edit.svg</iconset>
             </property>
            </widget>
           </item>
@@ -1464,9 +1473,6 @@
             <property name="text">
              <string>Rewind</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="0" column="1">
@@ -1515,9 +1521,6 @@
            <widget class="QLabel" name="label_togglePlay">
             <property name="text">
              <string>Toggle play</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -1578,18 +1581,12 @@
             <property name="text">
              <string>Whole note</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="1" column="4">
            <widget class="QLabel" name="label_halfNote">
             <property name="text">
              <string>Half note</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -1682,9 +1679,6 @@
             <property name="text">
              <string>Quarter note</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="3" column="4">
@@ -1692,18 +1686,12 @@
             <property name="text">
              <string>Eighth note</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="3" column="8">
            <widget class="QLabel" name="label_rest">
             <property name="text">
              <string>Rest</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -1817,18 +1805,12 @@
             <property name="text">
              <string>Augmentation dot</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="1" column="12">
            <widget class="QLabel" name="label_doubleAugmentationDot">
             <property name="text">
              <string>Double augmentation dot</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -1837,18 +1819,12 @@
             <property name="text">
              <string>Tie</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="2" column="12">
            <widget class="QLabel" name="label_realTimeAdvance">
             <property name="text">
              <string>Real-time advance</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -2085,18 +2061,12 @@
             <property name="text">
              <string>Play</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="label_stop">
             <property name="text">
              <string>Stop</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -2189,9 +2159,6 @@
             <property name="text">
              <string>Note input</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="4" column="1">
@@ -2240,9 +2207,6 @@
            <widget class="QLabel" name="label_16thNote">
             <property name="text">
              <string>16th note</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -2335,18 +2299,12 @@
             <property name="text">
              <string>32nd note</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="1" column="8">
            <widget class="QLabel" name="label_64thNote">
             <property name="text">
              <string>64th note</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -2439,18 +2397,12 @@
             <property name="text">
              <string>Undo</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="3" column="12">
            <widget class="QLabel" name="label_advanceOnRelease">
             <property name="text">
              <string>Advance on release?</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -2569,9 +2521,6 @@
             <property name="text">
              <string>Style for part:</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="5" column="1">
@@ -2629,9 +2578,6 @@
             <property name="text">
              <string>Instrument list 2:</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="0" column="2">
@@ -2662,18 +2608,12 @@
             <property name="text">
              <string>Instrument list 1:</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_scoreOrderList1">
             <property name="text">
              <string>Score order list 1:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -2682,18 +2622,12 @@
             <property name="text">
              <string>Score order list 2:</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="4" column="0">
            <widget class="QLabel" name="label_style">
             <property name="text">
              <string>Style:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -2840,9 +2774,6 @@
             <property name="text">
              <string>API:</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="0" column="1">
@@ -2894,9 +2825,6 @@
            <widget class="QLabel" name="portAudioDeviceLabel">
             <property name="text">
              <string>Device:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -3039,18 +2967,12 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
             <property name="text">
              <string>Fragments:</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
            </widget>
           </item>
           <item row="1" column="6">
            <widget class="QLabel" name="alsaPeriodLabel">
             <property name="text">
              <string>Period size:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -3065,9 +2987,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
            <widget class="QLabel" name="alsaSampleRateLabel">
             <property name="text">
              <string>Sample rate:</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -4299,6 +4218,12 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>Ms::RadioButtonGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>radiobuttongroupbox.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>Ms::GreendotButton</class>
    <extends>QToolButton</extends>
    <header>greendotbutton.h</header>
@@ -4307,12 +4232,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
    <class>Ms::RecordButton</class>
    <extends>QToolButton</extends>
    <header>recordbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>Ms::RadioButtonGroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>radiobuttongroupbox.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -4491,7 +4410,6 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore's inter
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>
-  <include location="musescore.qrc"/>
   <include location="musescore.qrc"/>
  </resources>
  <connections>

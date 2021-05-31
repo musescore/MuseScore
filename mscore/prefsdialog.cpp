@@ -179,6 +179,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 
       connect(myScoresButton, &QToolButton::clicked, this, &PreferenceDialog::selectScoresDirectory);
       connect(myStylesButton, &QToolButton::clicked, this, &PreferenceDialog::selectStylesDirectory);
+      connect(myScoreFontsButton, &QToolButton::clicked, this, &PreferenceDialog::selectScoreFontsDirectory);
       connect(myTemplatesButton, &QToolButton::clicked, this, &PreferenceDialog::selectTemplatesDirectory);
       connect(myPluginsButton, &QToolButton::clicked, this, &PreferenceDialog::selectPluginsDirectory);
       connect(mySoundfontsButton, &QToolButton::clicked, this, &PreferenceDialog::changeSoundfontPaths);
@@ -187,6 +188,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
 
       myScoresButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       myStylesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
+      myScoreFontsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       myTemplatesButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       myPluginsButton->setIcon(*icons[int(Icons::fileOpen_ICON)]);
       mySoundfontsButton->setIcon(*icons[int(Icons::edit_ICON)]);
@@ -300,6 +302,7 @@ void PreferenceDialog::start()
                   new StringPreferenceItem(PREF_APP_PATHS_SCOREORDERLIST2, scoreOrderList2),
                   new StringPreferenceItem(PREF_APP_PATHS_MYIMAGES, myImages),
                   new StringPreferenceItem(PREF_APP_PATHS_MYPLUGINS, myPlugins),
+                  new StringPreferenceItem(PREF_APP_PATHS_MYSCOREFONTS, myScoreFonts),
                   new StringPreferenceItem(PREF_APP_PATHS_MYSCORES, myScores),
                   new StringPreferenceItem(PREF_APP_PATHS_MYSOUNDFONTS, mySoundfonts),
                   new StringPreferenceItem(PREF_APP_PATHS_MYSTYLES, myStyles),
@@ -1635,6 +1638,22 @@ void PreferenceDialog::selectStylesDirectory()
          );
       if (!s.isNull())
             myStyles->setText(s);
+      }
+
+//---------------------------------------------------------
+//   selectScoreFontsDirectory
+//---------------------------------------------------------
+
+void PreferenceDialog::selectScoreFontsDirectory()
+      {
+      QString s = QFileDialog::getExistingDirectory(
+         this,
+         tr("Choose Score Fonts Folder"),
+         myScoreFonts->text(),
+         QFileDialog::ShowDirsOnly | (preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS) ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog)
+         );
+      if (!s.isNull())
+            myScoreFonts->setText(s);
       }
 
 //---------------------------------------------------------

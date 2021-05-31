@@ -16,6 +16,9 @@
 #include "score.h"
 #include "xml.h"
 #include "mscore.h"
+#include "mscore/preferences.h"
+
+#include <QDirIterator>
 
 #include FT_GLYPH_H
 #include FT_IMAGE_H
@@ -33,7 +36,7 @@ namespace Ms {
 
 static const int FALLBACK_FONT = 1;       // Bravura
 
-QVector<ScoreFont> ScoreFont::_scoreFonts {
+QVector<ScoreFont> ScoreFont::_builtinScoreFonts {
       ScoreFont("Leland",     "Leland",      ":/fonts/leland/",    "Leland.otf"   ),
       ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",   "Bravura.otf"  ),
       ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",    "mscore.ttf"   ),
@@ -43,6 +46,8 @@ QVector<ScoreFont> ScoreFont::_scoreFonts {
       ScoreFont("Finale Maestro", "Finale Maestro", ":/fonts/finalemaestro/", "FinaleMaestro.otf"),
       ScoreFont("Finale Broadway", "Finale Broadway", ":/fonts/finalebroadway/", "FinaleBroadway.otf"),
       };
+QVector<ScoreFont> ScoreFont::_userScoreFonts {};
+QVector<ScoreFont> ScoreFont::_allScoreFonts {};
 
 std::array<uint, size_t(SymId::lastSym)+1> ScoreFont::_mainSymCodeTable { {0} };
 
@@ -6556,7 +6561,7 @@ const char* Sym::id2name(SymId id)
 //    load default score font
 //---------------------------------------------------------
 
-void initScoreFonts()
+void ScoreFont::initScoreFonts()
       {
       QJsonObject glyphNamesJson(ScoreFont::initGlyphNamesJson());
       if (glyphNamesJson.empty())
@@ -6586,6 +6591,68 @@ void initScoreFonts()
       QFont::insertSubstitution("Finale Broadway Text",  "MuseJazz Text");
       QFont::insertSubstitution("ScoreFont",      "Leland Text"); // alias for current Musical Text Font
       ScoreFont::fallbackFont();   // load fallback font
+
+      QString userFontsPath = preferences.getString(PREF_APP_PATHS_MYSCOREFONTS);
+      scanUserFonts(userFontsPath);
+      preferences.addOnSetListener([](const QString& key, const QVariant& value) {
+            if (key == PREF_APP_PATHS_MYSCOREFONTS)
+                  scanUserFonts(value.toString());
+            });
+      }
+
+void ScoreFont::scanUserFonts(const QString& path)
+      {
+      QVector<ScoreFont> userfonts;
+
+      QDirIterator iterator(path, QDir::Dirs | QDir::NoDotAndDotDot | QDir::Readable);
+
+      while (iterator.hasNext()) {
+            QString fontDir = iterator.next();
+            QString fontDirPath = iterator.filePath() + "/";
+            QString fontDirName = iterator.fileName();
+
+            QString fontName;
+            QString fontFilename;
+            QDirIterator innerIterator(fontDirPath, { "*.otf", "*.ttf" }, QDir::Files);
+
+            while (innerIterator.hasNext()) {
+                  QString potentialFontFile = innerIterator.next();
+                  QFileInfo fileinfo(potentialFontFile);
+
+                  if (fileinfo.completeBaseName().toLower() == fontDirName.toLower()) {
+                        fontName = fileinfo.completeBaseName();
+                        fontFilename = innerIterator.fileName();
+                        break;
+                        }
+                  }
+
+            bool hasMetadataFile = QFileInfo::exists(fontDirPath + "metadata.json");
+
+            if (hasMetadataFile && !fontFilename.isEmpty()) {
+                  QByteArray name = fontName.toLocal8Bit();
+                  QByteArray dp = fontDirPath.toLocal8Bit();
+                  QByteArray fn = fontFilename.toLocal8Bit();
+                  userfonts << Ms::ScoreFont(name.data(), name.data(), dp.data(), fn.data());
+                  }
+            }
+
+
+      qDebug() << "Found" << userfonts.count() << "user score fonts.";
+
+      // TODO: Check for fonts that duplicate built-in fonts
+      _userScoreFonts.clear();
+
+      // Make sure the fonts are loaded, to avoid the situation that MuseScore
+      // thinks a font exists but in practice it has disappeared.
+      for (const ScoreFont& f : userfonts) {
+            ScoreFont font = f;
+            if (!font.face)
+                  font.load();
+            _userScoreFonts << font;
+            }
+
+      _allScoreFonts = _builtinScoreFonts;
+      _allScoreFonts << _userScoreFonts;
       }
 
 //---------------------------------------------------------
@@ -6974,7 +7041,7 @@ void ScoreFont::load()
 ScoreFont* ScoreFont::fontFactory(QString s)
       {
       ScoreFont* f = 0;
-      for (ScoreFont& sf : _scoreFonts) {
+      for (ScoreFont& sf : _allScoreFonts) {
             if (sf.name().toLower() == s.toLower()) { // ignore letter case
                   f = &sf;
                   break;
@@ -6982,9 +7049,9 @@ ScoreFont* ScoreFont::fontFactory(QString s)
             }
       if (!f) {
             qDebug("ScoreFont <%s> not found in list", qPrintable(s));
-            for (ScoreFont& sf : _scoreFonts)
+            for (ScoreFont& sf : _allScoreFonts)
                   qDebug("   %s", qPrintable(sf.name()));
-            qDebug("Using fallback font <%s> instead", qPrintable(_scoreFonts[FALLBACK_FONT].name()));
+            qDebug("Using fallback font <%s> instead", qPrintable(_builtinScoreFonts[FALLBACK_FONT].name()));
             return fallbackFont();
             }
 
@@ -6999,7 +7066,7 @@ ScoreFont* ScoreFont::fontFactory(QString s)
 
 ScoreFont* ScoreFont::fallbackFont()
       {
-      ScoreFont* f = &_scoreFonts[FALLBACK_FONT];
+      ScoreFont* f = &_builtinScoreFonts[FALLBACK_FONT];
       if (!f->face)
             f->load();
       return f;

@@ -254,8 +254,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>597</width>
-                <height>552</height>
+                <width>564</width>
+                <height>582</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -267,7 +267,7 @@
                     <string>Musical text font:</string>
                    </property>
                    <property name="buddy">
-                    <cstring>musicalTextFont</cstring>
+                    <cstring>musicalTextFontComboBox</cstring>
                    </property>
                   </widget>
                  </item>
@@ -285,7 +285,7 @@
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QComboBox" name="musicalSymbolFont">
+                  <widget class="QComboBox" name="musicalSymbolFontComboBox">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -335,7 +335,7 @@
                   </widget>
                  </item>
                  <item row="1" column="1">
-                  <widget class="QComboBox" name="musicalTextFont">
+                  <widget class="QComboBox" name="musicalTextFontComboBox">
                    <item>
                     <property name="text">
                      <string notr="true">Leland Text</string>
@@ -374,7 +374,7 @@
                     <string>Musical symbols font:</string>
                    </property>
                    <property name="buddy">
-                    <cstring>musicalSymbolFont</cstring>
+                    <cstring>musicalSymbolFontComboBox</cstring>
                    </property>
                   </widget>
                  </item>
@@ -942,8 +942,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>503</width>
-                <height>534</height>
+                <width>356</width>
+                <height>551</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2344,8 +2344,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>703</width>
-             <height>320</height>
+             <width>696</width>
+             <height>322</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -4052,8 +4052,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>332</width>
-                <height>678</height>
+                <width>225</width>
+                <height>699</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -5762,8 +5762,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>434</width>
-                <height>420</height>
+                <width>346</width>
+                <height>431</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54">
@@ -9520,8 +9520,8 @@ By default, they will be placed such as that their right end are at the same lev
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>458</width>
-             <height>364</height>
+             <width>352</width>
+             <height>376</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_57">
@@ -10920,8 +10920,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>467</width>
-                <height>443</height>
+                <width>341</width>
+                <height>469</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55">
@@ -12483,9 +12483,9 @@ By default, they will be placed such as that their right end are at the same lev
  <tabstops>
   <tabstop>pageList</tabstop>
   <tabstop>scrollArea_score</tabstop>
-  <tabstop>musicalSymbolFont</tabstop>
+  <tabstop>musicalSymbolFontComboBox</tabstop>
   <tabstop>optimizeStyleCheckbox</tabstop>
-  <tabstop>musicalTextFont</tabstop>
+  <tabstop>musicalTextFontComboBox</tabstop>
   <tabstop>concertPitch</tabstop>
   <tabstop>multiMeasureRests</tabstop>
   <tabstop>minEmptyMeasures</tabstop>
@@ -12955,7 +12955,6 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>buttonTogglePagelist</tabstop>
  </tabstops>
  <resources>
-  <include location="musescore.qrc"/>
   <include location="musescore.qrc"/>
  </resources>
  <connections>

@@ -72,6 +72,8 @@ class EditStyle : public AbstractDialog, private Ui::EditStyleBase {
       QVariant getValue(Sid idx);
       void setValues();
 
+      void fillScoreFontsComboBoxes();
+
       void resetStyle(Score* score);
       void applyToAllParts();
       const StyleWidget& styleWidget(Sid) const;

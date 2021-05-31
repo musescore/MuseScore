@@ -133,6 +133,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_APP_PATHS_SCOREORDERLIST2,                       new StringPreference("", false)},
             {PREF_APP_PATHS_MYIMAGES,                              new StringPreference(QFileInfo(QString("%1/%2").arg(wd, QCoreApplication::translate("images_directory", "Images"))).absoluteFilePath(), false)},
             {PREF_APP_PATHS_MYPLUGINS,                             new StringPreference(QFileInfo(QString("%1/%2").arg(wd, QCoreApplication::translate("plugins_directory", "Plugins"))).absoluteFilePath(), false)},
+            {PREF_APP_PATHS_MYSCOREFONTS,                          new StringPreference(QFileInfo(QString("%1/%2").arg(wd, QCoreApplication::translate("scorefonts_directory", "Score Fonts"))).absoluteFilePath(), false)},
             {PREF_APP_PATHS_MYSCORES,                              new StringPreference(QFileInfo(QString("%1/%2").arg(wd, QCoreApplication::translate("scores_directory", "Scores"))).absoluteFilePath(), false)},
             {PREF_APP_PATHS_MYSOUNDFONTS,                          new StringPreference(QFileInfo(QString("%1/%2").arg(wd, QCoreApplication::translate("soundfonts_directory", "SoundFonts"))).absoluteFilePath(), false)},
             {PREF_APP_PATHS_MYSHORTCUTS,                           new StringPreference(QFileInfo(QString("%1/%2").arg(wd, QCoreApplication::translate("shortcuts_directory", "Shortcuts"))).absoluteFilePath(), false)},

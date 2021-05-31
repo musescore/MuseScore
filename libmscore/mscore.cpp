@@ -125,7 +125,6 @@ Sequencer* MScore::seq = 0;
 MuseScoreCore* MuseScoreCore::mscoreCore;
 
 extern void initDrumset();
-extern void initScoreFonts();
 extern QString mscoreGlobalShare;
 
 std::vector<MScoreError> MScore::errorList {
@@ -409,7 +408,7 @@ if (QOperatingSystemVersion::current().majorVersion() >= 10) {
             }
       }
 #endif
-      initScoreFonts();
+      ScoreFont::initScoreFonts();
       StaffType::initStaffTypes();
       initDrumset();
       FiguredBass::readConfigFile(0);

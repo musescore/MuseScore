@@ -91,6 +91,7 @@ class PreferenceDialog : public AbstractDialog, private Ui::PrefsDialogBase {
       void nonExclusiveJackDriver(bool on);
       void selectScoresDirectory();
       void selectStylesDirectory();
+      void selectScoreFontsDirectory();
       void selectTemplatesDirectory();
       void selectPluginsDirectory();
       void selectImagesDirectory();
