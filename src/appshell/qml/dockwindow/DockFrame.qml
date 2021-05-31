@@ -95,7 +95,7 @@ Rectangle {
         color: ui.theme.backgroundSecondaryColor
 
         readonly property QtObject tabBarCpp: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.tabBar : null
-        property int currentIndex: Boolean(root.frameCpp) ? root.frameCpp.currentIndex : 0
+        property int currentIndex: Boolean(root.frameCpp) && root.frameCpp.currentIndex >= 0 ? root.frameCpp.currentIndex : 0
 
         onTabBarCppChanged: {
             if (Boolean(tabBarCpp)) {
