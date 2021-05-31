@@ -26,7 +26,6 @@
 #include <QPainterPath>
 #include <QBrush>
 #include <QPen>
-#include <QGlyphRun>
 
 #include "drawtypes.h"
 
@@ -72,11 +71,6 @@ struct DrawRectText {
     QString text;
 };
 
-struct DrawGlyphRun {
-    QPointF pos;
-    QGlyphRun glyphRun;
-};
-
 struct DrawPixmap {
     QPointF pos;
     QPixmap pm;
@@ -106,7 +100,6 @@ struct DrawData
         std::vector<DrawPolygon> polygons;
         std::vector<DrawText> texts;
         std::vector<DrawRectText> rectTexts;
-        std::vector<DrawGlyphRun> glyphs;
         std::vector<DrawPixmap> pixmaps;
         std::vector<DrawTiledPixmap> tiledPixmap;
 
@@ -116,7 +109,6 @@ struct DrawData
                    && polygons.empty()
                    && texts.empty()
                    && rectTexts.empty()
-                   && glyphs.empty()
                    && pixmaps.empty()
                    && tiledPixmap.empty();
         }

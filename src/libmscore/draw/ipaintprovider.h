@@ -29,7 +29,6 @@
 #include <QPen>
 #include <QColor>
 #include <QFont>
-#include <QGlyphRun>
 
 #include "drawtypes.h"
 #include "font.h"
@@ -78,7 +77,7 @@ public:
 
     virtual void drawText(const QPointF& point, const QString& text) = 0;
     virtual void drawText(const QRectF& rect, int flags, const QString& text) = 0;
-    virtual void drawGlyphRun(const QPointF& point, const QGlyphRun& glyphRun) = 0;
+    virtual void drawTextWorkaround(mu::draw::Font& f, const QPointF& pos, const QString& text) = 0; // see Painter::drawTextWorkaround .h file
 
     virtual void drawPixmap(const QPointF& point, const QPixmap& pm) = 0;
     virtual void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF()) = 0;

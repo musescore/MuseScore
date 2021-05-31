@@ -247,9 +247,10 @@ void BufferedPaintProvider::drawText(const QRectF& rect, int flags, const QStrin
     editableData().rectTexts.push_back(DrawRectText { rect, flags, text });
 }
 
-void BufferedPaintProvider::drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun)
+void BufferedPaintProvider::drawTextWorkaround(mu::draw::Font& f, const QPointF& pos, const QString& text)
 {
-    editableData().glyphs.push_back(DrawGlyphRun { position, glyphRun });
+    setFont(f);
+    drawText(pos, text);
 }
 
 void BufferedPaintProvider::drawPixmap(const QPointF& p, const QPixmap& pm)

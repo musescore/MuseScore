@@ -301,7 +301,7 @@ public:
 
     virtual void draw(mu::draw::Painter*) const override;
     virtual void drawEditMode(mu::draw::Painter* p, EditData& ed) override;
-    static void drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const QPointF pos, const QString text);
+    static void drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const QPointF& pos, const QString& text);
 
     static QString plainToXmlText(const QString& s) { return s.toHtmlEscaped(); }
     void setPlainText(const QString& t) { setXmlText(plainToXmlText(t)); }
