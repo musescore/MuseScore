@@ -28,6 +28,7 @@
 #include <QPen>
 
 #include "drawtypes.h"
+#include "font.h"
 
 namespace mu::draw {
 enum class DrawMode {
@@ -87,7 +88,7 @@ struct DrawData
     struct State {
         QPen pen;
         QBrush brush;
-        QFont font;
+        Font font;
         QTransform transform;
         bool isAntialiasing = false;
         CompositionMode compositionMode = CompositionMode::SourceOver;

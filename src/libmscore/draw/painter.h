@@ -73,8 +73,6 @@ public:
     void setAntialiasing(bool arg);
     void setCompositionMode(CompositionMode mode);
 
-    void setFont(const QFont& font);
-    const QFont& qFont() const;
     void setFont(const Font& font);
     Font font() const;
 

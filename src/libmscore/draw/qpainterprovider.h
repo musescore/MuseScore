@@ -52,8 +52,6 @@ public:
     void setAntialiasing(bool arg) override;
     void setCompositionMode(CompositionMode mode) override;
 
-    void setFont(const QFont& font) override;
-    const QFont& qFont() const override;
     void setFont(const Font& font) override;
     Font font() const override;
 

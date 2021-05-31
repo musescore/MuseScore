@@ -117,16 +117,6 @@ void QPainterProvider::setCompositionMode(CompositionMode mode)
     m_painter->setCompositionMode(toQPainter(mode));
 }
 
-void QPainterProvider::setFont(const QFont& font)
-{
-    m_painter->setFont(font);
-}
-
-const QFont& QPainterProvider::qFont() const
-{
-    return m_painter->font();
-}
-
 void QPainterProvider::setFont(const Font& font)
 {
     m_painter->setFont(mu::draw::toQFont(font));
