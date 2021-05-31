@@ -76,8 +76,7 @@ public:
 
     void drawText(const QPointF& point, const QString& text) override;
     void drawText(const QRectF& rect, int flags, const QString& text) override;
-
-    void drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun) override;
+    void drawTextWorkaround(mu::draw::Font& f, const QPointF& pos, const QString& text) override;
 
     void drawPixmap(const QPointF& point, const QPixmap& pm) override;
     void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF()) override;

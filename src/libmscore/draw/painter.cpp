@@ -433,11 +433,11 @@ void Painter::drawText(const QRectF& rect, int flags, const QString& text)
     }
 }
 
-void Painter::drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun)
+void Painter::drawTextWorkaround(mu::draw::Font& f, const QPointF pos, const QString text)
 {
-    m_provider->drawGlyphRun(position, glyphRun);
+    m_provider->drawTextWorkaround(f, pos, text);
     if (extended) {
-        extended->drawGlyphRun(position, glyphRun);
+        extended->drawTextWorkaround(f, pos, text);
     }
 }
 
