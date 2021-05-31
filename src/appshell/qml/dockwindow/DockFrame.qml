@@ -73,7 +73,7 @@ Rectangle {
 
         anchors.top: tabsPanel.top
         width: tabs.contentWidth
-        height: tabsPanel.height
+        height: tabsPanel.height - bottomSeparator.height
 
         z: tabsPanel.z + 1
 
@@ -113,10 +113,15 @@ Rectangle {
         ListView {
             id: tabs
 
-            anchors.fill: parent
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+
+            width: contentWidth
 
             orientation: Qt.Horizontal
             interactive: false
+            clip: true
             spacing: 0
 
             currentIndex: tabsPanel.currentIndex
@@ -127,6 +132,16 @@ Rectangle {
 
                 isCurrent: tabsPanel && (tabsPanel.currentIndex === model.index)
             }
+        }
+
+        Item {
+            anchors.left: tabs.right
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+
+            height: bottomSeparator.height
+
+            SeparatorLine { id: bottomSeparator }
         }
     }
 
