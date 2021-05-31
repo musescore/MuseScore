@@ -40,25 +40,28 @@ Row {
         model.load()
     }
 
-    CheckBox {
-        anchors.verticalCenter: parent.verticalCenter
-
-        checked: model.concertPitchEnabled
-
-        onClicked: {
-            model.toggleConcertPitch()
-        }
-    }
-
     FlatButton {
         icon: IconCode.TUNING_FORK
         text: qsTrc("notation", "Concert pitch")
+
+        width: 150
 
         orientation: Qt.Horizontal
         normalStateColor: "transparent"
 
         onClicked: {
             model.toggleConcertPitch()
+        }
+
+        CheckBox {
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+
+            checked: model.concertPitchEnabled
+
+            onClicked: {
+                model.toggleConcertPitch()
+            }
         }
     }
 }
