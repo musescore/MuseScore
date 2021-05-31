@@ -34,7 +34,27 @@ class FontMetrics
 public:
     FontMetrics(const Font& font);
 
+    qreal lineSpacing() const;
+    qreal xHeight() const;
+    qreal height() const;
+    qreal ascent() const;
+    qreal descent() const;
+
+    qreal width(const QString& string) const;
+    qreal width(const QChar& ch) const;
+
     QRectF boundingRect(const QString& string) const;
+    QRectF boundingRect(const QChar& ch) const;
+    QRectF boundingRect(const QRectF& r, int flags, const QString& string) const;
+    QRectF tightBoundingRect(const QString& string) const;
+
+    bool inFont(QChar ch) const;
+    bool inFontUcs4(uint ucs4) const;
+
+    static qreal width(const Font& f, const QString& string);
+    static QRectF boundingRect(const Font& f, const QString& string);
+    static QRectF tightBoundingRect(const Font& f, const QString& string);
+    static qreal ascent(const Font& f);
 
 private:
     Font m_font;

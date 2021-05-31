@@ -28,9 +28,17 @@ namespace mu::draw {
 class Font
 {
 public:
-    Font(const QString& family);
+    Font(const QString& family = QString());
     Font(const Font& font);
 
+    enum class Style {
+        Undefined = 0,
+        Bold = 1 << 1,
+        Italic = 1 << 2,
+        Underline = 1 << 3
+    };
+
+    void setFamily(const QString& family);
     QString family() const;
 
     qreal pointSizeF() const;
@@ -38,12 +46,16 @@ public:
 
     bool bold() const;
     void setBold(bool arg);
+    bool italic() const;
+    void setItalic(bool arg);
+    bool underline() const;
+    void setUnderline(bool arg);
 
 private:
 
     QString m_family;
     qreal m_pointSizeF = 0;
-    bool m_bold = false;
+    QFlags<Style> m_style{ Style::Undefined };
 };
 }
 

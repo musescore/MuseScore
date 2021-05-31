@@ -30,7 +30,19 @@ class QFontProvider : public IFontProvider
 public:
     QFontProvider() = default;
 
+    qreal lineSpacing(const Font& f) const override;
+    qreal xHeight(const Font& f) const override;
+    qreal height(const Font& f) const override;
+    qreal ascent(const Font& f) const override;
+    qreal descent(const Font& f) const override;
+
     QRectF boundingRect(const Font& f, const QString& string) const override;
+    QRectF boundingRect(const Font& f, const QChar& ch) const override;
+    QRectF boundingRect(const Font& f, const QRectF& r, int flags, const QString& string) const override;
+    QRectF tightBoundingRect(const Font& f, const QString& string) const override;
+
+    bool inFont(const Font& f, QChar ch) const override;
+    bool inFontUcs4(const Font& f, uint ucs4) const override;
 };
 }
 

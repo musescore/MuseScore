@@ -28,6 +28,8 @@
 #include "note.h"
 #include "xml.h"
 
+#include "draw/fontmetrics.h"
+
 namespace Ms {
 //---------------------------------------------------------
 //   label
@@ -86,9 +88,9 @@ Bend::Bend(Score* s)
 //   font
 //---------------------------------------------------------
 
-QFont Bend::font(qreal sp) const
+mu::draw::Font Bend::font(qreal sp) const
 {
-    QFont f(_fontFace);
+    mu::draw::Font f(_fontFace);
     f.setBold(_fontStyle & FontStyle::Bold);
     f.setItalic(_fontStyle & FontStyle::Italic);
     f.setUnderline(_fontStyle & FontStyle::Underline);
@@ -171,7 +173,7 @@ void Bend::layout()
     }
     QRectF bb;
 
-    QFontMetricsF fm(font(_spatium), MScore::paintDevice());
+    mu::draw::FontMetrics fm(font(_spatium));
 
     int n   = m_points.size();
     qreal x = m_noteWidth;
@@ -262,7 +264,7 @@ void Bend::draw(mu::draw::Painter* painter) const
     painter->setPen(pen);
     painter->setBrush(QBrush(curColor()));
 
-    QFont f = font(_spatium * MScore::pixelRatio);
+    mu::draw::Font f = font(_spatium * MScore::pixelRatio);
     painter->setFont(f);
 
     qreal x  = m_noteWidth + _spatium * .2;
@@ -289,18 +291,7 @@ void Bend::draw(mu::draw::Painter* painter) const
             int idx = (pitch + 12) / 25;
             const char* l = label[idx];
             QString s(l);
-#if 1
             painter->drawText(QRectF(x2, y2, .0, .0), Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, s);
-#else
-            // this is the code used originally,
-            // and it worked in 2.3.2, but fails currently - textWidth & textHeight are too large
-            // presumably they would need to be scaled accoridng to pixelRatio, DPI, and/or SPATIUM20
-            // now that the font & fontmetrics are also scaled
-            QFontMetrics fm(f, MScore::paintDevice());
-            qreal textWidth = fm.width(s);
-            qreal textHeight = fm.height();
-            painter->drawText(QRectF(x2 - textWidth / 2, y2 - textHeight / 2, .0, .0), Qt::AlignVCenter | Qt::TextDontClip, s);
-#endif
 
             y = y2;
         }

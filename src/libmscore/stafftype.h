@@ -241,7 +241,7 @@ class StaffType
     qreal mutable _durationBoxY = 0.0;            // the height and the y rect.coord. (relative to staff top line)
     // of a box bounding all duration symbols (raster units) internally computed:
     // depends upon _onString and the metrics of the duration font
-    QFont _durationFont;                  // font used to draw dur. symbols; cached for efficiency
+    mu::draw::Font _durationFont;                  // font used to draw dur. symbols; cached for efficiency
     int _durationFontIdx = 0;             // the index of current dur. font in dur. font array
     mutable qreal _durationYOffset = 0.0;         // the vertical offset to draw duration symbols with respect to the
     // string lines (raster units); internally computed: depends upon _onString and duration font
@@ -252,7 +252,7 @@ class StaffType
     mutable qreal _fretBoxY = 0.0;                // the height and the y rect.coord. (relative to staff line)
     // of a box bounding all fret characters (raster units) internally computed:
     // depends upon _onString, _useNumbers and the metrics of the fret font
-    QFont _fretFont;                      // font used to draw fret marks; cached for efficiency
+    mu::draw::Font _fretFont;                      // font used to draw fret marks; cached for efficiency
     int _fretFontIdx = 0;                 // the index of current fret font in fret font array
     mutable qreal _fretYOffset = 0.0;             // the vertical offset to draw fret marks with respect to the string lines;
     // (raster units); internally computed: depends upon _onString, _useNumbers
@@ -350,14 +350,13 @@ public:
     int     visualStringToPhys(int line) const;                   // return the string in physical order from visual string
     qreal   physStringToYOffset(int strg) const;                  // return the string Y offset (in sp, chord-relative)
     QString tabBassStringPrefix(int strg, bool* hasFret) const;   // return a string with the prefix, if any, identifying a bass string
-    void    drawInputStringMarks(QPainter* p, int string, int voice, QRectF rect) const;
     int     numOfTabLedgerLines(int string) const;
 
     // properties getters (some getters require updated metrics)
     qreal durationBoxH() const;
     qreal durationBoxY() const;
 
-    const QFont& durationFont() const { return _durationFont; }
+    const mu::draw::Font& durationFont() const { return _durationFont; }
     const QString durationFontName() const { return _durationFonts[_durationFontIdx].displayName; }
     qreal durationFontSize() const { return _durationFontSize; }
     qreal durationFontUserY() const { return _durationFontUserY; }
@@ -370,7 +369,7 @@ public:
     qreal fretMaskH() const { return _lineDistance.val() * SPATIUM20; }
     qreal fretMaskY() const { return (_onLines ? -0.5 : -1.0) * _lineDistance.val() * SPATIUM20; }
 
-    const QFont& fretFont() const { return _fretFont; }
+    const mu::draw::Font& fretFont() const { return _fretFont; }
     const QString fretFontName() const { return _fretFonts[_fretFontIdx].displayName; }
     qreal fretFontSize() const { return _fretFontSize; }
     qreal fretFontUserY() const { return _fretFontUserY; }

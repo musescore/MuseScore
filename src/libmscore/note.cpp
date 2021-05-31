@@ -1131,10 +1131,9 @@ qreal Note::tabHeadWidth(const StaffType* tab) const
 {
     qreal val;
     if (tab && _fret != FRET_NONE && _string != STRING_NONE) {
-        QFont f    = tab->fretFont();
+        mu::draw::Font f    = tab->fretFont();
         f.setPointSizeF(tab->fretFontSize());
-        QFontMetricsF fm(f, MScore::paintDevice());
-        val  = fm.width(_fretString) * magS();
+        val  = mu::draw::FontMetrics::width(f, _fretString) * magS();
     } else {
         val = headWidth();
     }
@@ -1399,7 +1398,7 @@ void Note::draw(mu::draw::Painter* painter) const
                 painter->restore();
             }
         }
-        QFont f(tab->fretFont());
+        mu::draw::Font f(tab->fretFont());
         f.setPointSizeF(f.pointSizeF() * magS() * MScore::pixelRatio);
         painter->setFont(f);
         painter->setPen(c);
