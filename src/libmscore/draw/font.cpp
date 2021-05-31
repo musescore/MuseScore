@@ -19,20 +19,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_DRAWJSON_H
-#define MU_DRAW_DRAWJSON_H
+#include "font.h"
 
-#include <QByteArray>
-#include "drawtypes.h"
-#include "retval.h"
+using namespace mu::draw;
 
-namespace mu::draw {
-class DrawBufferJson
+Font::Font(const QString& family)
+    : m_family(family)
 {
-public:
-
-    static QByteArray toJson(const DrawData& buf);
-    static RetVal<DrawDataPtr> fromJson(const QByteArray& json);
-};
 }
-#endif // MU_DRAW_DRAWJSON_H
+
+Font::Font(const Font& f)
+    : m_family(f.m_family), m_pointSizeF(f.m_pointSizeF), m_bold(f.m_bold)
+{
+}
+
+QString Font::family() const
+{
+    return m_family;
+}
+
+qreal Font::pointSizeF() const
+{
+    return m_pointSizeF;
+}
+
+void Font::setPointSizeF(qreal s)
+{
+    m_pointSizeF = s;
+}
+
+bool Font::bold() const
+{
+    return m_bold;
+}
+
+void Font::setBold(bool arg)
+{
+    m_bold = arg;
+}

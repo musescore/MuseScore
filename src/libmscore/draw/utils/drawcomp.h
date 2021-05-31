@@ -24,7 +24,7 @@
 
 #include <functional>
 
-#include "drawtypes.h"
+#include "../buffereddrawtypes.h"
 
 namespace mu::draw {
 class DrawComp

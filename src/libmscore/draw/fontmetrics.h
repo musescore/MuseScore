@@ -19,21 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_DRAWTYPES_H
-#define MU_DRAW_DRAWTYPES_H
+#ifndef MU_DRAW_FONTMETRICS_H
+#define MU_DRAW_FONTMETRICS_H
+
+#include "font.h"
+
+#include "modularity/ioc.h"
+#include "ifontprovider.h"
 
 namespace mu::draw {
-enum class CompositionMode {
-    SourceOver,
-    HardLight
-};
+class FontMetrics
+{
+    INJECT(draw, IFontProvider, fontProvider)
+public:
+    FontMetrics(const Font& font);
 
-enum class PolygonMode {
-    OddEven,
-    Winding,
-    Convex,
-    Polyline
+    QRectF boundingRect(const QString& string) const;
+
+private:
+    Font m_font;
 };
 }
 
-#endif // MU_DRAW_DRAWTYPES_H
+#endif // MU_DRAW_FONTMETRICS_H

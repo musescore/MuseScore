@@ -23,20 +23,22 @@
 #define MU_DRAW_BUFFEREDPAINTPROVIDER_H
 
 #include <vector>
+#include <stack>
 
 #include <QPen>
 #include <QBrush>
 #include <QFont>
 
 #include "ipaintprovider.h"
-#include "drawtypes.h"
-#include "drawlogger.h"
+#include "buffereddrawtypes.h"
 
 namespace mu::draw {
+class DrawObjectsLogger;
 class BufferedPaintProvider : public IPaintProvider
 {
 public:
     BufferedPaintProvider();
+    ~BufferedPaintProvider();
 
     QPaintDevice* device() const override;
     QPainter* qpainter() const override;
@@ -53,7 +55,9 @@ public:
     void setCompositionMode(CompositionMode mode) override;
 
     void setFont(const QFont& font) override;
-    const QFont& font() const override;
+    const QFont& qFont() const override;
+    void setFont(const Font& font) override;
+    Font font() const override;
 
     void setPen(const QPen& pen) override;
     void setNoPen() override;
@@ -95,7 +99,7 @@ private:
     DrawData m_buf;
     std::stack<DrawData::Object> m_currentObjects;
     bool m_isActive = false;
-    DrawObjectsLogger m_drawObjectsLogger;
+    DrawObjectsLogger* m_drawObjectsLogger = nullptr;
 };
 }
 

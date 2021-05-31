@@ -22,6 +22,9 @@
 #include "qpainterprovider.h"
 
 #include <QPainter>
+
+#include "fontcompat.h"
+#include "utils/drawlogger.h"
 #include "log.h"
 
 using namespace mu::draw;
@@ -29,6 +32,7 @@ using namespace mu::draw;
 QPainterProvider::QPainterProvider(QPainter* painter, bool overship)
     : m_painter(painter), m_overship(overship)
 {
+    m_drawObjectsLogger = new DrawObjectsLogger();
 }
 
 QPainterProvider::~QPainterProvider()
@@ -36,6 +40,8 @@ QPainterProvider::~QPainterProvider()
     if (m_overship) {
         delete m_painter;
     }
+
+    delete m_drawObjectsLogger;
 }
 
 IPaintProviderPtr QPainterProvider::make(QPaintDevice* dp)
@@ -81,12 +87,12 @@ bool QPainterProvider::isActive() const
 
 void QPainterProvider::beginObject(const std::string& name, const QPointF& pagePos)
 {
-    m_drawObjectsLogger.beginObject(name, pagePos);
+    m_drawObjectsLogger->beginObject(name, pagePos);
 }
 
 void QPainterProvider::endObject()
 {
-    m_drawObjectsLogger.endObject();
+    m_drawObjectsLogger->endObject();
 }
 
 void QPainterProvider::setAntialiasing(bool arg)
@@ -112,9 +118,19 @@ void QPainterProvider::setFont(const QFont& font)
     m_painter->setFont(font);
 }
 
-const QFont& QPainterProvider::font() const
+const QFont& QPainterProvider::qFont() const
 {
     return m_painter->font();
+}
+
+void QPainterProvider::setFont(const Font& font)
+{
+    m_painter->setFont(mu::draw::toQFont(font));
+}
+
+Font QPainterProvider::font() const
+{
+    return mu::draw::fromQFont(m_painter->font());
 }
 
 void QPainterProvider::setPen(const QPen& pen)

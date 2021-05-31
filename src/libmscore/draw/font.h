@@ -19,21 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_DRAWTYPES_H
-#define MU_DRAW_DRAWTYPES_H
+#ifndef MU_DRAW_FONT_H
+#define MU_DRAW_FONT_H
+
+#include <QString>
 
 namespace mu::draw {
-enum class CompositionMode {
-    SourceOver,
-    HardLight
-};
+class Font
+{
+public:
+    Font(const QString& family);
+    Font(const Font& font);
 
-enum class PolygonMode {
-    OddEven,
-    Winding,
-    Convex,
-    Polyline
+    QString family() const;
+
+    qreal pointSizeF() const;
+    void setPointSizeF(qreal s);
+
+    bool bold() const;
+    void setBold(bool arg);
+
+private:
+
+    QString m_family;
+    qreal m_pointSizeF = 0;
+    bool m_bold = false;
 };
 }
 
-#endif // MU_DRAW_DRAWTYPES_H
+#endif // MU_DRAW_FONT_H
