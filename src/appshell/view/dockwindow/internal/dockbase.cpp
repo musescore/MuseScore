@@ -30,6 +30,28 @@
 #include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
 #include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
 
+namespace mu::dock {
+class DockWidgetImpl : public KDDockWidgets::DockWidgetQuick
+{
+public:
+    DockWidgetImpl(const QString& uniqueName)
+        : KDDockWidgets::DockWidgetQuick(uniqueName)
+    {
+        setObjectName(uniqueName);
+    }
+
+    QSize minimumSize() const override
+    {
+        return DockWidgetBase::minimumSize();
+    }
+
+    QSize maximumSize() const override
+    {
+        return DockWidgetBase::maximumSize();
+    }
+};
+}
+
 using namespace mu::dock;
 
 DockBase::DockBase(QQuickItem* parent)
@@ -207,12 +229,21 @@ void DockBase::componentComplete()
     QQuickItem::componentComplete();
 
     auto children = childItems();
-    IF_ASSERT_FAILED(!children.isEmpty()) {
+    IF_ASSERT_FAILED_X(children.size() == 1, "Dock must have only one child as its content!") {
         return;
     }
 
-    m_dockWidget = new KDDockWidgets::DockWidgetQuick(objectName());
-    m_dockWidget->setWidget(children.constFirst());
+    QQuickItem* content = childItems().first();
+    IF_ASSERT_FAILED(content) {
+        return;
+    }
+
+    if (content->objectName().isEmpty()) {
+        content->setObjectName(objectName() + "_content");
+    }
+
+    m_dockWidget = new DockWidgetImpl(objectName());
+    m_dockWidget->setWidget(content);
     m_dockWidget->setTitle(m_title);
 
     DockProperties properties;
@@ -240,13 +271,13 @@ void DockBase::applySizeConstraints()
     QSize minimumSize(minWidth, minHeight);
     QSize maximumSize(maxWidth, maxHeight);
 
-    m_dockWidget->setMinimumSize(minimumSize);
-    m_dockWidget->setMaximumSize(maximumSize);
-
     if (auto frame = m_dockWidget->frame()) {
         frame->setMinimumSize(minimumSize);
         frame->setMaximumSize(maximumSize);
     }
+
+    m_dockWidget->setMinimumSize(minimumSize);
+    m_dockWidget->setMaximumSize(maximumSize);
 
     if (auto floatingWindow = m_dockWidget->floatingWindow()) {
         QRect rect(floatingWindow->dragRect().topLeft(), minimumSize);
