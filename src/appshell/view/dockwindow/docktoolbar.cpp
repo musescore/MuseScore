@@ -32,9 +32,9 @@
 
 using namespace mu::dock;
 
-static const qreal TOOLBAR_GRIP_MARGIN = 4;
-static const qreal TOOLBAR_GRIP_WIDTH = 28;
-static const qreal TOOLBAR_GRIP_HEIGHT = 36;
+static constexpr qreal TOOLBAR_GRIP_MARGIN = 4;
+static constexpr qreal TOOLBAR_GRIP_WIDTH = 28;
+static constexpr qreal TOOLBAR_GRIP_HEIGHT = 36;
 
 const int DockToolBar::MIN_SIDE_SIZE = 48;
 const int DockToolBar::MAX_SIDE_SIZE = std::numeric_limits<int>::max();

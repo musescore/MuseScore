@@ -36,6 +36,8 @@ import "./dockwindow"
 DockWindow {
     id: root
 
+    objectName: "WindowContent"
+
     property var provider: InteractiveProvider {
         topParent: root
 
