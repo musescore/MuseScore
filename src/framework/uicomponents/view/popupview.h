@@ -47,6 +47,9 @@ class PopupView : public QObject, public QQmlParserStatus
     Q_PROPERTY(qreal x READ localX WRITE setLocalX NOTIFY xChanged)
     Q_PROPERTY(qreal y READ localY WRITE setLocalY NOTIFY yChanged)
 
+    Q_PROPERTY(bool showArrow READ showArrow WRITE setShowArrow NOTIFY showArrowChanged)
+    Q_PROPERTY(int padding READ padding WRITE setPadding NOTIFY paddingChanged)
+
     Q_PROPERTY(bool opensUpward READ opensUpward NOTIFY opensUpwardChanged)
     Q_PROPERTY(int arrowX READ arrowX WRITE setArrowX NOTIFY arrowXChanged)
     Q_PROPERTY(Qt::AlignmentFlag cascadeAlign READ cascadeAlign WRITE setCascadeAlign NOTIFY cascadeAlignChanged)
@@ -114,6 +117,8 @@ public:
     bool opensUpward() const;
     int arrowX() const;
     Qt::AlignmentFlag cascadeAlign() const;
+    int padding() const;
+    bool showArrow() const;
 
 public slots:
     void setParentItem(QQuickItem* parent);
@@ -131,6 +136,8 @@ public slots:
     void setOpensUpward(bool opensUpward);
     void setArrowX(int arrowX);
     void setCascadeAlign(Qt::AlignmentFlag cascadeAlign);
+    void setPadding(int padding);
+    void setShowArrow(bool showArrow);
 
 signals:
     void parentItemChanged();
@@ -152,6 +159,8 @@ signals:
     void opensUpwardChanged(bool opensUpward);
     void arrowXChanged(int arrowX);
     void cascadeAlignChanged(Qt::AlignmentFlag cascadeAlign);
+    void paddingChanged(int padding);
+    void showArrowChanged(bool showArrow);
 
 private slots:
     void onApplicationStateChanged(Qt::ApplicationState state);
@@ -193,6 +202,8 @@ protected:
     bool m_opensUpward = false;
     int m_arrowX = 0;
     Qt::AlignmentFlag m_cascadeAlign = Qt::AlignmentFlag::AlignRight;
+    int m_padding = 0;
+    bool m_showArrow = false;
 };
 }
 

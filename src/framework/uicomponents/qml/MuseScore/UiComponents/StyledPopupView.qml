@@ -35,13 +35,10 @@ PopupView {
     property alias width: rootContainer.width
     property alias height: rootContainer.height
 
-    property int padding: 12
     property int margins: 16
 
     property int contentWidth: 240
     property int contentHeight: contentBody.childrenRect.height
-
-    property bool showArrow: true
 
     property bool animationEnabled: false
 

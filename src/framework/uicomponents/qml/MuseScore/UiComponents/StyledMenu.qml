@@ -34,12 +34,14 @@ StyledPopupView {
 
     signal handleAction(string actionCode, int actionIndex)
 
-    contentWidth: prv.itemWidth
-    contentHeight: view.childrenRect.height
-    padding: 0
-    margins: 0
     x: 0
     y: parent.height
+
+    contentWidth: prv.itemWidth
+    contentHeight: view.childrenRect.height
+
+    padding: 8
+    margins: 0
     showArrow: false
 
     animationEnabled: false //! NOTE disabled - because trouble with simultaneous opening of submenu
@@ -164,6 +166,8 @@ StyledPopupView {
 
                     reserveSpaceForShortcutOrSubmenuIndicator:
                         prv.hasItemsWithShortcut || prv.hasItemsWithSubmenu
+
+                    padding: root.padding
 
                     onSubMenuShowed: {
                         root.closePolicy = PopupView.NoAutoClose
