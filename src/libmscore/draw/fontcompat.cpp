@@ -28,6 +28,10 @@ QFont mu::draw::toQFont(const Font& f)
     qf.setBold(f.bold());
     qf.setItalic(f.italic());
     qf.setUnderline(f.underline());
+    if (f.noFontMerging()) {
+        qf.setStyleStrategy(QFont::NoFontMerging);
+    }
+
     return qf;
 }
 
@@ -38,5 +42,8 @@ mu::draw::Font mu::draw::fromQFont(const QFont& qf)
     f.setBold(qf.bold());
     f.setItalic(qf.italic());
     f.setUnderline(qf.underline());
+    if (qf.styleStrategy() == QFont::NoFontMerging) {
+        f.setNoFontMerging(true);
+    }
     return f;
 }

@@ -26,6 +26,8 @@
 #include "bsymbol.h"
 #include "sym.h"
 
+#include "draw/font.h"
+
 namespace Ms {
 class Segment;
 class ScoreFont;
@@ -75,7 +77,7 @@ public:
 
 class FSymbol final : public BSymbol
 {
-    QFont _font;
+    mu::draw::Font _font;
     int _code;
 
 public:
@@ -92,9 +94,9 @@ public:
 
     qreal baseLine() const override { return 0.0; }
     Segment* segment() const { return (Segment*)parent(); }
-    QFont font() const { return _font; }
+    mu::draw::Font font() const { return _font; }
     int code() const { return _code; }
-    void setFont(const QFont& f);
+    void setFont(const mu::draw::Font& f);
     void setCode(int val) { _code = val; }
 };
 }     // namespace Ms

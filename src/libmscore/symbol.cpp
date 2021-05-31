@@ -30,6 +30,8 @@
 #include "score.h"
 #include "image.h"
 
+#include "draw/fontmetrics.h"
+
 namespace Ms {
 //---------------------------------------------------------
 //   Symbol
@@ -205,7 +207,7 @@ FSymbol::FSymbol(Score* s)
     : BSymbol(s)
 {
     _code = 0;
-    _font.setStyleStrategy(QFont::NoFontMerging);
+    _font.setNoFontMerging(true);
 }
 
 FSymbol::FSymbol(const FSymbol& s)
@@ -222,7 +224,7 @@ FSymbol::FSymbol(const FSymbol& s)
 void FSymbol::draw(mu::draw::Painter* painter) const
 {
     QString s;
-    QFont f(_font);
+    mu::draw::Font f(_font);
     f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
     painter->setFont(f);
     if (_code & 0xffff0000) {
@@ -283,17 +285,17 @@ void FSymbol::layout()
     } else {
         s = QChar(_code);
     }
-    QFontMetricsF fm(_font, MScore::paintDevice());
-    setbbox(fm.boundingRect(s));
+
+    setbbox(mu::draw::FontMetrics::boundingRect(_font, s));
 }
 
 //---------------------------------------------------------
 //   setFont
 //---------------------------------------------------------
 
-void FSymbol::setFont(const QFont& f)
+void FSymbol::setFont(const mu::draw::Font& f)
 {
     _font = f;
-    _font.setStyleStrategy(QFont::NoFontMerging);
+    _font.setNoFontMerging(true);
 }
 }

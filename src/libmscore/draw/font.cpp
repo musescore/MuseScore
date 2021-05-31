@@ -82,3 +82,13 @@ void Font::setUnderline(bool arg)
 {
     m_style.setFlag(Style::Undefined, arg);
 }
+
+void Font::setNoFontMerging(bool arg)
+{
+    m_noFontMerging = arg;
+}
+
+bool Font::noFontMerging() const
+{
+    return m_noFontMerging;
+}
