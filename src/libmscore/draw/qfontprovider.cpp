@@ -19,21 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_DRAWTYPES_H
-#define MU_DRAW_DRAWTYPES_H
+#include "qfontprovider.h"
 
-namespace mu::draw {
-enum class CompositionMode {
-    SourceOver,
-    HardLight
-};
+#include <QFontMetricsF>
 
-enum class PolygonMode {
-    OddEven,
-    Winding,
-    Convex,
-    Polyline
-};
+#include "libmscore/mscore.h"
+#include "fontcompat.h"
+
+using namespace mu::draw;
+
+QRectF QFontProvider::boundingRect(const Font& f, const QString& string) const
+{
+    return QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).boundingRect(string);
 }
-
-#endif // MU_DRAW_DRAWTYPES_H

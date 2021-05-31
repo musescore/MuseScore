@@ -19,21 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_DRAWTYPES_H
-#define MU_DRAW_DRAWTYPES_H
+#include "fontmetrics.h"
 
-namespace mu::draw {
-enum class CompositionMode {
-    SourceOver,
-    HardLight
-};
+using namespace mu::draw;
 
-enum class PolygonMode {
-    OddEven,
-    Winding,
-    Convex,
-    Polyline
-};
+FontMetrics::FontMetrics(const Font& font)
+    : m_font(font)
+{
 }
 
-#endif // MU_DRAW_DRAWTYPES_H
+QRectF FontMetrics::boundingRect(const QString& string) const
+{
+    return fontProvider()->boundingRect(m_font, string);
+}

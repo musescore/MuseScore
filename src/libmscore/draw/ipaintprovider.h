@@ -32,6 +32,7 @@
 #include <QGlyphRun>
 
 #include "drawtypes.h"
+#include "font.h"
 
 namespace mu::draw {
 class Painter;
@@ -54,7 +55,9 @@ public:
     virtual void setCompositionMode(CompositionMode mode) = 0;
 
     virtual void setFont(const QFont& font) = 0;
-    virtual const QFont& font() const = 0;
+    virtual const QFont& qFont() const = 0;
+    virtual void setFont(const Font& font) = 0;
+    virtual Font font() const = 0;
 
     virtual void setPen(const QPen& pen) = 0;
     virtual void setNoPen() = 0;

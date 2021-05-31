@@ -23,12 +23,12 @@
 #define MU_DRAW_QPAINTERPROVIDER_H
 
 #include "ipaintprovider.h"
-#include "drawlogger.h"
 
 class QPainter;
 class QImage;
 
 namespace mu::draw {
+class DrawObjectsLogger;
 class QPainterProvider : public IPaintProvider
 {
 public:
@@ -53,7 +53,9 @@ public:
     void setCompositionMode(CompositionMode mode) override;
 
     void setFont(const QFont& font) override;
-    const QFont& font() const override;
+    const QFont& qFont() const override;
+    void setFont(const Font& font) override;
+    Font font() const override;
 
     void setPen(const QPen& pen) override;
     void setNoPen() override;
@@ -83,7 +85,7 @@ public:
 private:
     QPainter* m_painter = nullptr;
     bool m_overship = false;
-    DrawObjectsLogger m_drawObjectsLogger;
+    DrawObjectsLogger* m_drawObjectsLogger = nullptr;
 
     QTransform m_transform;
 };

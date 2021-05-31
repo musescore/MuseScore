@@ -21,6 +21,8 @@
  */
 #include "painter.h"
 
+#include <QPainterPath>
+
 #include "log.h"
 
 #ifndef NO_QT_SUPPORT
@@ -151,7 +153,20 @@ void Painter::setFont(const QFont& font)
     }
 }
 
-const QFont& Painter::font() const
+const QFont& Painter::qFont() const
+{
+    return m_provider->qFont();
+}
+
+void Painter::setFont(const Font& font)
+{
+    m_provider->setFont(font);
+    if (extended) {
+        extended->setFont(font);
+    }
+}
+
+Font Painter::font() const
 {
     return m_provider->font();
 }

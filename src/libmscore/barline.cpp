@@ -39,6 +39,9 @@
 #include "symbol.h"
 #include "image.h"
 
+#include "draw/font.h"
+#include "draw/fontmetrics.h"
+
 namespace Ms {
 //---------------------------------------------------------
 //   undoChangeBarLineType
@@ -772,11 +775,11 @@ void BarLine::draw(mu::draw::Painter* painter) const
         Measure* m = s->measure();
         if (m->isIrregular() && score()->markIrregularMeasures() && !m->isMMRest()) {
             painter->setPen(MScore::layoutBreakColor);
-            QFont f("Edwin");
+            mu::draw::Font f("Edwin");
             f.setPointSizeF(12 * spatium() * MScore::pixelRatio / SPATIUM20);
             f.setBold(true);
             QString str = m->ticks() > m->timesig() ? "+" : "-";
-            QRectF r = QFontMetricsF(f, MScore::paintDevice()).boundingRect(str);
+            QRectF r = mu::draw::FontMetrics(f).boundingRect(str);
             painter->setFont(f);
             painter->drawText(-r.width(), 0.0, str);
         }

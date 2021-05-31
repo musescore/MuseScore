@@ -19,21 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_DRAWTYPES_H
-#define MU_DRAW_DRAWTYPES_H
+#ifndef MU_DRAW_FONTCOMPAT_H
+#define MU_DRAW_FONTCOMPAT_H
+
+#include <QFont>
+#include "font.h"
 
 namespace mu::draw {
-enum class CompositionMode {
-    SourceOver,
-    HardLight
-};
-
-enum class PolygonMode {
-    OddEven,
-    Winding,
-    Convex,
-    Polyline
-};
+QFont toQFont(const Font& f);
+Font fromQFont(const QFont& qf);
 }
 
-#endif // MU_DRAW_DRAWTYPES_H
+#endif // MU_DRAW_FONTCOMPAT_H

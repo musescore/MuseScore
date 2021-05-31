@@ -21,6 +21,8 @@
  */
 #include "bufferedpaintprovider.h"
 
+#include "utils/drawlogger.h"
+#include "fontcompat.h"
 #include "log.h"
 #include "config.h"
 
@@ -28,7 +30,13 @@ using namespace mu::draw;
 
 BufferedPaintProvider::BufferedPaintProvider()
 {
+    m_drawObjectsLogger = new DrawObjectsLogger();
     clear();
+}
+
+BufferedPaintProvider::~BufferedPaintProvider()
+{
+    delete m_drawObjectsLogger;
 }
 
 QPaintDevice* BufferedPaintProvider::device() const
@@ -144,9 +152,19 @@ void BufferedPaintProvider::setFont(const QFont& f)
     editableState().font = f;
 }
 
-const QFont& BufferedPaintProvider::font() const
+const QFont& BufferedPaintProvider::qFont() const
 {
     return currentState().font;
+}
+
+void BufferedPaintProvider::setFont(const Font& font)
+{
+    editableState().font = mu::draw::toQFont(font);
+}
+
+Font BufferedPaintProvider::font() const
+{
+    return mu::draw::fromQFont(currentState().font);
 }
 
 void BufferedPaintProvider::setPen(const QPen& pen)

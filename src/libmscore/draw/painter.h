@@ -33,8 +33,10 @@
 #include <QPainter>
 
 #include "config.h"
-#include "drawtypes.h"
 #include "ipaintprovider.h"
+
+#include "drawtypes.h"
+#include "font.h"
 
 class QPaintDevice;
 class QImage;
@@ -72,7 +74,9 @@ public:
     void setCompositionMode(CompositionMode mode);
 
     void setFont(const QFont& font);
-    const QFont& font() const;
+    const QFont& qFont() const;
+    void setFont(const Font& font);
+    Font font() const;
 
     void setPen(const QPen& pen);
     inline void setPen(const QColor& color);
