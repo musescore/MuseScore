@@ -51,11 +51,15 @@ public:
     bool underline() const;
     void setUnderline(bool arg);
 
+    void setNoFontMerging(bool arg);
+    bool noFontMerging() const;
+
 private:
 
     QString m_family;
     qreal m_pointSizeF = 0;
     QFlags<Style> m_style{ Style::Undefined };
+    bool m_noFontMerging = false;
 };
 }
 

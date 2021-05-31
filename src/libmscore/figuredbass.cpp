@@ -620,9 +620,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
     qreal _spatium = spatium();
     // set font from general style
     mu::draw::Font f(g_FBFonts.at(font).family);
-#ifdef USE_GLYPHS
-    f.setHintingPreference(QFont::PreferVerticalHinting);
-#endif
+
     // (use the same font selection as used in layout() above)
     qreal m = score()->styleD(Sid::figuredBassFontSize) * spatium() / SPATIUM20;
     f.setPointSizeF(m * MScore::pixelRatio);
