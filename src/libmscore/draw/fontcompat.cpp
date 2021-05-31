@@ -25,12 +25,14 @@ QFont mu::draw::toQFont(const Font& f)
 {
     QFont qf(f.family());
     qf.setPointSizeF(f.pointSizeF());
+    qf.setWeight(static_cast<QFont::Weight>(f.weight()));
     qf.setBold(f.bold());
     qf.setItalic(f.italic());
     qf.setUnderline(f.underline());
     if (f.noFontMerging()) {
         qf.setStyleStrategy(QFont::NoFontMerging);
     }
+    qf.setHintingPreference(static_cast<QFont::HintingPreference>(f.hinting()));
 
     return qf;
 }
@@ -39,11 +41,13 @@ mu::draw::Font mu::draw::fromQFont(const QFont& qf)
 {
     mu::draw::Font f(qf.family());
     f.setPointSizeF(qf.pointSizeF());
+    f.setWeight(static_cast<Font::Weight>(qf.weight()));
     f.setBold(qf.bold());
     f.setItalic(qf.italic());
     f.setUnderline(qf.underline());
     if (qf.styleStrategy() == QFont::NoFontMerging) {
         f.setNoFontMerging(true);
     }
+    f.setHinting(static_cast<Font::Hinting>(qf.hintingPreference()));
     return f;
 }

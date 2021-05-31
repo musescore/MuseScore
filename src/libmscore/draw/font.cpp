@@ -53,6 +53,16 @@ void Font::setPointSizeF(qreal s)
     m_pointSizeF = s;
 }
 
+Font::Weight Font::weight() const
+{
+    return m_weight;
+}
+
+void Font::setWeight(Weight w)
+{
+    m_weight = w;
+}
+
 bool Font::bold() const
 {
     return m_style.testFlag(Style::Bold);
@@ -91,4 +101,14 @@ void Font::setNoFontMerging(bool arg)
 bool Font::noFontMerging() const
 {
     return m_noFontMerging;
+}
+
+Font::Hinting Font::hinting() const
+{
+    return m_hinting;
+}
+
+void Font::setHinting(Hinting hinting)
+{
+    m_hinting = hinting;
 }

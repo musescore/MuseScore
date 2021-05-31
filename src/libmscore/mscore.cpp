@@ -21,8 +21,6 @@
  */
 
 #include <QDir>
-#include <QSettings>
-#include <QFontDatabase>
 
 #include "config.h"
 #include "musescoreCore.h"

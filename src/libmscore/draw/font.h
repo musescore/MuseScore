@@ -38,11 +38,33 @@ public:
         Underline = 1 << 3
     };
 
+    enum class Hinting {
+        PreferDefaultHinting = 0,
+        PreferNoHinting = 1,
+        PreferVerticalHinting = 2,
+        PreferFullHinting = 3
+    };
+
+    enum Weight {
+        Thin     = 0,    // 100
+        ExtraLight = 12, // 200
+        Light    = 25,   // 300
+        Normal   = 50,   // 400
+        Medium   = 57,   // 500
+        DemiBold = 63,   // 600
+        Bold     = 75,   // 700
+        ExtraBold = 81,  // 800
+        Black    = 87    // 900
+    };
+
     void setFamily(const QString& family);
     QString family() const;
 
     qreal pointSizeF() const;
     void setPointSizeF(qreal s);
+
+    Weight weight() const;
+    void setWeight(Weight w);
 
     bool bold() const;
     void setBold(bool arg);
@@ -54,12 +76,17 @@ public:
     void setNoFontMerging(bool arg);
     bool noFontMerging() const;
 
+    Hinting hinting() const;
+    void setHinting(Hinting hinting);
+
 private:
 
     QString m_family;
     qreal m_pointSizeF = 0;
+    Weight m_weight = Weight::Normal;
     QFlags<Style> m_style{ Style::Undefined };
     bool m_noFontMerging = false;
+    Hinting m_hinting = Hinting::PreferDefaultHinting;
 };
 }
 
