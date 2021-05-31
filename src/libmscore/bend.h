@@ -28,6 +28,8 @@
 #include "property.h"
 #include "style.h"
 
+#include "draw/font.h"
+
 namespace Ms {
 //---------------------------------------------------------
 //   @@ Bend
@@ -70,7 +72,7 @@ public:
     QVariant propertyDefault(Pid) const override;
 
 private:
-    QFont font(qreal) const;
+    mu::draw::Font font(qreal) const;
     BendType parseBendTypeFromCurve() const;
     void updatePointsByBendType(const BendType bendType);
 

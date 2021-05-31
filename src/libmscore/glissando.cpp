@@ -49,6 +49,8 @@ NICE-TO-HAVE TODO:
 #include "xml.h"
 #include "accidental.h"
 
+#include "draw/fontmetrics.h"
+
 namespace Ms {
 static const ElementStyle glissandoElementStyle {
     { Sid::glissandoFontFace,                  Pid::FONT_FACE },
@@ -126,12 +128,12 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
     }
 
     if (glissando()->showText()) {
-        QFont f(glissando()->fontFace());
+        mu::draw::Font f(glissando()->fontFace());
         f.setPointSizeF(glissando()->fontSize() * MScore::pixelRatio* _spatium / SPATIUM20);
         f.setBold(glissando()->fontStyle() & FontStyle::Bold);
         f.setItalic(glissando()->fontStyle() & FontStyle::Italic);
         f.setUnderline(glissando()->fontStyle() & FontStyle::Underline);
-        QFontMetricsF fm(f, painter->device());     // use the QPaintDevice, otherwise calculations will be done in screen metrics
+        mu::draw::FontMetrics fm(f);
         QRectF r = fm.boundingRect(glissando()->text());
 
         // if text longer than available space, skip it

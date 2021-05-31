@@ -46,6 +46,9 @@
 #include "undo.h"
 #include "mscore.h"
 
+#include "draw/fontmetrics.h"
+#include "draw/fontcompat.h"
+
 namespace Ms {
 #ifdef Q_OS_MAC
 #define CONTROL_MODIFIER Qt::AltModifier
@@ -268,8 +271,8 @@ QRectF TextCursor::cursorRect() const
     const TextBlock& tline       = curLine();
     const TextFragment* fragment = tline.fragment(column());
 
-    QFont _font  = fragment ? fragment->font(_text) : _text->font();
-    qreal ascent = QFontMetricsF(_font, MScore::paintDevice()).ascent();
+    mu::draw::Font _font  = fragment ? fragment->font(_text) : _text->font();
+    qreal ascent = mu::draw::FontMetrics::ascent(_font);
     qreal h = ascent;
     qreal x = tline.xpos(column(), _text);
     qreal y = tline.y() - ascent * .9;
@@ -890,7 +893,7 @@ bool TextFragment::operator ==(const TextFragment& f) const
 
 void TextFragment::draw(mu::draw::Painter* p, const TextBase* t) const
 {
-    QFont f(font(t));
+    mu::draw::Font f(font(t));
     f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 #ifndef Q_OS_MACOS
     TextBase::drawTextWorkaround(p, f, pos, text);
@@ -904,7 +907,7 @@ void TextFragment::draw(mu::draw::Painter* p, const TextBase* t) const
 //   drawTextWorkaround
 //---------------------------------------------------------
 
-void TextBase::drawTextWorkaround(mu::draw::Painter* p, QFont& f, const QPointF pos, const QString text)
+void TextBase::drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const QPointF pos, const QString text)
 {
     qreal mm = p->worldTransform().m11();
     if (!(MScore::pdfPrinting) && (mm < 1.0) && f.bold() && !(f.underline())) {
@@ -924,10 +927,10 @@ void TextBase::drawTextWorkaround(mu::draw::Painter* p, QFont& f, const QPointF 
 
         // correction factor for bold text drawing, due to the change of the diagonal elements
         qreal factor = 1.0 / mm;
-        QFont fnew(f, p->device());
+        QFont fnew(mu::draw::toQFont(f), p->device());
         fnew.setPointSizeF(f.pointSizeF() / factor);
         QRawFont fRaw = QRawFont::fromFont(fnew);
-        QTextLayout textLayout(text, f, p->device());
+        QTextLayout textLayout(text, mu::draw::toQFont(f), p->device());
         textLayout.beginLayout();
         while (true) {
             QTextLine line = textLayout.createLine();
@@ -982,9 +985,9 @@ void TextBase::drawTextWorkaround(mu::draw::Painter* p, QFont& f, const QPointF 
 //   font
 //---------------------------------------------------------
 
-QFont TextFragment::font(const TextBase* t) const
+mu::draw::Font TextFragment::font(const TextBase* t) const
 {
-    QFont font;
+    mu::draw::Font font;
 
     qreal m = format.fontSize();
 
@@ -1002,7 +1005,7 @@ QFont TextFragment::font(const TextBase* t) const
 
         // check if all symbols are available
         font.setFamily(family);
-        QFontMetricsF fm(font);
+        mu::draw::FontMetrics fm(font);
 
         bool fail = false;
         for (int i = 0; i < text.size(); ++i) {
@@ -1095,14 +1098,14 @@ void TextBlock::layout(TextBase* t)
     }
 
     if (_fragments.empty()) {
-        QFontMetricsF fm = t->fontMetrics();
+        mu::draw::FontMetrics fm = t->fontMetrics();
         _bbox.setRect(0.0, -fm.ascent(), 1.0, fm.descent());
         _lineSpacing = fm.lineSpacing();
     } else if (_fragments.size() == 1 && _fragments.at(0).text.isEmpty()) {
         auto fi = _fragments.begin();
         TextFragment& f = *fi;
         f.pos.setX(x);
-        QFontMetricsF fm(f.font(t), MScore::paintDevice());
+        mu::draw::FontMetrics fm(f.font(t));
         if (f.format.valign() != VerticalAlignment::AlignNormal) {
             qreal voffset = fm.xHeight() / subScriptSize;   // use original height
             if (f.format.valign() == VerticalAlignment::AlignSubScript) {
@@ -1124,7 +1127,7 @@ void TextBlock::layout(TextBase* t)
         for (auto fi = _fragments.begin(); fi != _fragments.end(); ++fi) {
             TextFragment& f = *fi;
             f.pos.setX(x);
-            QFontMetricsF fm(f.font(t), MScore::paintDevice());
+            mu::draw::FontMetrics fm(f.font(t));
             if (f.format.valign() != VerticalAlignment::AlignNormal) {
                 qreal voffset = fm.xHeight() / subScriptSize;           // use original height
                 if (f.format.valign() == VerticalAlignment::AlignSubScript) {
@@ -1196,7 +1199,7 @@ qreal TextBlock::xpos(int column, const TextBase* t) const
         if (column == col) {
             return f.pos.x();
         }
-        QFontMetricsF fm(f.font(t), MScore::paintDevice());
+        mu::draw::FontMetrics fm(f.font(t));
         int idx = 0;
         for (const QChar& c : qAsConst(f.text)) {
             ++idx;
@@ -1301,7 +1304,7 @@ int TextBlock::column(qreal x, TextBase* t) const
             if (c.isHighSurrogate()) {
                 continue;
             }
-            QFontMetricsF fm(f.font(t), MScore::paintDevice());
+            mu::draw::FontMetrics fm(f.font(t));
             qreal xo = fm.width(f.text.left(idx));
             if (x <= f.pos.x() + px + (xo - px) * .5) {
                 return col;
@@ -2081,7 +2084,7 @@ void TextBase::layoutFrame()
 //      if (empty()) {    // or bbox.width() <= 1.0
     if (bbox().width() <= 1.0 || bbox().height() < 1.0) {      // or bbox.width() <= 1.0
         // this does not work for Harmony:
-        QFontMetricsF fm = QFontMetricsF(font(), MScore::paintDevice());
+        mu::draw::FontMetrics fm(font());
         qreal ch = fm.ascent();
         qreal cw = fm.width('n');
         frame = QRectF(0.0, -ch, cw, ch);
@@ -3003,13 +3006,16 @@ bool TextBase::validateText(QString& s)
 //   font
 //---------------------------------------------------------
 
-QFont TextBase::font() const
+mu::draw::Font TextBase::font() const
 {
     qreal m = size();
     if (sizeIsSpatiumDependent()) {
         m *= spatium() / SPATIUM20;
     }
-    QFont f(family(), m, bold() ? QFont::Bold : QFont::Normal, italic());
+    mu::draw::Font f(family());
+    f.setPointSizeF(m);
+    f.setBold(bold());
+    f.setItalic(italic());
     if (underline()) {
         f.setUnderline(underline());
     }
@@ -3021,9 +3027,9 @@ QFont TextBase::font() const
 //   fontMetrics
 //---------------------------------------------------------
 
-QFontMetricsF TextBase::fontMetrics() const
+mu::draw::FontMetrics TextBase::fontMetrics() const
 {
-    return QFontMetricsF(font());
+    return mu::draw::FontMetrics(font());
 }
 
 //---------------------------------------------------------

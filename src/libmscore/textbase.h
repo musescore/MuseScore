@@ -29,6 +29,8 @@
 #include "property.h"
 #include "style.h"
 
+#include "draw/fontmetrics.h"
+
 namespace Ms {
 class MuseScoreView;
 struct SymCode;
@@ -187,7 +189,7 @@ public:
     TextFragment(TextCursor*, const QString&);
     TextFragment split(int column);
     void draw(mu::draw::Painter*, const TextBase*) const;
-    QFont font(const TextBase*) const;
+    mu::draw::Font font(const TextBase*) const;
     int columns() const;
     void changeFormat(FormatId id, QVariant data);
 };
@@ -299,7 +301,7 @@ public:
 
     virtual void draw(mu::draw::Painter*) const override;
     virtual void drawEditMode(mu::draw::Painter* p, EditData& ed) override;
-    static void drawTextWorkaround(mu::draw::Painter* p, QFont& f, const QPointF pos, const QString text);
+    static void drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const QPointF pos, const QString text);
 
     static QString plainToXmlText(const QString& s) { return s.toHtmlEscaped(); }
     void setPlainText(const QString& t) { setXmlText(plainToXmlText(t)); }
@@ -382,8 +384,8 @@ public:
     void endHexState(EditData&);
     void inputTransition(EditData&, QInputMethodEvent*);
 
-    QFont font() const;
-    QFontMetricsF fontMetrics() const;
+    mu::draw::Font font() const;
+    mu::draw::FontMetrics fontMetrics() const;
 
     virtual QVariant getProperty(Pid propertyId) const override;
     virtual bool setProperty(Pid propertyId, const QVariant& v) override;

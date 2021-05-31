@@ -26,6 +26,8 @@ QFont mu::draw::toQFont(const Font& f)
     QFont qf(f.family());
     qf.setPointSizeF(f.pointSizeF());
     qf.setBold(f.bold());
+    qf.setItalic(f.italic());
+    qf.setUnderline(f.underline());
     return qf;
 }
 
@@ -34,5 +36,7 @@ mu::draw::Font mu::draw::fromQFont(const QFont& qf)
     mu::draw::Font f(qf.family());
     f.setPointSizeF(qf.pointSizeF());
     f.setBold(qf.bold());
+    f.setItalic(qf.italic());
+    f.setUnderline(qf.underline());
     return f;
 }

@@ -29,8 +29,13 @@ Font::Font(const QString& family)
 }
 
 Font::Font(const Font& f)
-    : m_family(f.m_family), m_pointSizeF(f.m_pointSizeF), m_bold(f.m_bold)
+    : m_family(f.m_family), m_pointSizeF(f.m_pointSizeF), m_style(f.m_style)
 {
+}
+
+void Font::setFamily(const QString& family)
+{
+    m_family = family;
 }
 
 QString Font::family() const
@@ -50,10 +55,30 @@ void Font::setPointSizeF(qreal s)
 
 bool Font::bold() const
 {
-    return m_bold;
+    return m_style.testFlag(Style::Bold);
 }
 
 void Font::setBold(bool arg)
 {
-    m_bold = arg;
+    m_style.setFlag(Style::Bold, arg);
+}
+
+bool Font::italic() const
+{
+    return m_style.testFlag(Style::Italic);
+}
+
+void Font::setItalic(bool arg)
+{
+    m_style.setFlag(Style::Italic, arg);
+}
+
+bool Font::underline() const
+{
+    return m_style.testFlag(Style::Undefined);
+}
+
+void Font::setUnderline(bool arg)
+{
+    m_style.setFlag(Style::Undefined, arg);
 }

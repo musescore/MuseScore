@@ -35,7 +35,19 @@ class IFontProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IFontProvider() = default;
 
+    virtual qreal lineSpacing(const Font& f) const = 0;
+    virtual qreal xHeight(const Font& f) const = 0;
+    virtual qreal height(const Font& f) const = 0;
+    virtual qreal ascent(const Font& f) const = 0;
+    virtual qreal descent(const Font& f) const = 0;
+
     virtual QRectF boundingRect(const Font& f, const QString& string) const = 0;
+    virtual QRectF boundingRect(const Font& f, const QChar& ch) const = 0;
+    virtual QRectF boundingRect(const Font& f, const QRectF& r, int flags, const QString& string) const = 0;
+    virtual QRectF tightBoundingRect(const Font& f, const QString& string) const = 0;
+
+    virtual bool inFont(const Font& f, QChar ch) const = 0;
+    virtual bool inFontUcs4(const Font& f, uint ucs4) const = 0;
 };
 }
 
