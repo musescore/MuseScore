@@ -40,6 +40,8 @@ ListItemBlank {
     property int iconAndCheckMarkMode: StyledMenuItem.ShowOne
     property bool reserveSpaceForShortcutOrSubmenuIndicator: prv.hasShortcut || prv.hasSubMenu
 
+    property int padding: 0
+
     signal handleAction(string actionCode, int actionIndex)
 
     signal subMenuShowed()
