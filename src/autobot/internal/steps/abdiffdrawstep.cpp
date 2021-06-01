@@ -24,8 +24,8 @@
 #include "log.h"
 #include "../draw/abpaintprovider.h"
 
-#include "libmscore/draw/drawtypes.h"
-#include "libmscore/draw/drawcomp.h"
+#include "engraving/draw/drawtypes.h"
+#include "engraving/draw/utils/drawcomp.h"
 
 using namespace mu::autobot;
 

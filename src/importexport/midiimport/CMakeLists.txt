@@ -38,7 +38,7 @@ set(MODULE_SRC
 set(MODULE_LINK
     midi_old    # for midiimport
     beatroot    # for midiimport
-    libmscore
+    engraving
     qzip
     notation
     )

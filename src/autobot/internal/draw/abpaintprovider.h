@@ -23,8 +23,8 @@
 #define MU_AUTOBOT_ABPAINTPROVIDER_H
 
 #include <memory>
-#include "libmscore/draw/bufferedpaintprovider.h"
-#include "libmscore/draw/drawtypes.h"
+#include "engraving/draw/bufferedpaintprovider.h"
+#include "engraving/draw/drawtypes.h"
 
 namespace mu::autobot {
 class AbPaintProvider : public draw::BufferedPaintProvider

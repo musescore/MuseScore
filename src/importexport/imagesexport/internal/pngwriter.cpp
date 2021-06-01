@@ -29,7 +29,7 @@
 #include "libmscore/score.h"
 #include "libmscore/page.h"
 
-#include "libmscore/draw/qpainterprovider.h"
+#include "engraving/draw/qpainterprovider.h"
 
 #include <QImage>
 

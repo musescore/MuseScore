@@ -65,6 +65,8 @@
 #else
 #include "stubs/userscores/userscoresstubmodule.h"
 #endif
+
+#include "engraving/engravingmodule.h"
 #include "notation/notationmodule.h"
 
 #include "importexport/musicxml/musicxmlmodule.h"
@@ -202,6 +204,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::userscores::UserScoresStubModule());
 #endif
 
+    app.addModule(new mu::engraving::EngravingModule());
     app.addModule(new mu::notation::NotationModule());
     app.addModule(new mu::commonscene::CommonSceneModule());
 #ifdef BUILD_PLAYBACK_MODULE

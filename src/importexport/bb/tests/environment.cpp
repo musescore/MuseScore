@@ -24,10 +24,12 @@
 
 #include "log.h"
 #include "framework/fonts/fontsmodule.h"
+#include "engraving/engravingmodule.h"
 
 static mu::testing::SuiteEnvironment importexport_se(
 {
     new mu::fonts::FontsModule(), // needs for libmscore
+    new mu::engraving::EngravingModule()
 },
     []() {
     LOGI() << "bb tests suite post init";

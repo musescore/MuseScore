@@ -222,6 +222,8 @@ Element::Element(Score* s, ElementFlags f, mu::score::AccessibleElement* access)
         m_accessible = new mu::score::AccessibleElement();
     }
     m_accessible->setElement(this);
+#else
+    UNUSED(access);
 #endif
 }
 
