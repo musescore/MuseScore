@@ -37,6 +37,7 @@
 #include "view/devtools/settingslistmodel.h"
 #include "view/appmenumodel.h"
 #include "view/notationpagemodel.h"
+#include "view/notationstatusbarmodel.h"
 #include "view/aboutmodel.h"
 #include "view/startupmodel.h"
 #include "view/preferences/preferencesmodel.h"
@@ -133,6 +134,7 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<CommonAudioApiConfigurationModel>("MuseScore.Preferences", 1, 0, "CommonAudioApiConfigurationModel");
     qmlRegisterType<AppMenuModel>("MuseScore.AppShell", 1, 0, "AppMenuModel");
     qmlRegisterType<NotationPageModel>("MuseScore.AppShell", 1, 0, "NotationPageModel");
+    qmlRegisterType<NotationStatusBarModel>("MuseScore.AppShell", 1, 0, "NotationStatusBarModel");
     qmlRegisterType<AboutModel>("MuseScore.AppShell", 1, 0, "AboutModel");
     qmlRegisterType<StartupModel>("MuseScore.AppShell", 1, 0, "StartupModel");
     qmlRegisterType<FramelessWindowModel>("MuseScore.AppShell", 1, 0, "FramelessWindowModel");

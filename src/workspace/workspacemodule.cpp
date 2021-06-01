@@ -42,7 +42,6 @@
 #include "internal/workspacesettings.h"
 
 #include "view/workspacelistmodel.h"
-#include "view/currentworkspacemodel.h"
 #include "view/newworkspacemodel.h"
 
 using namespace mu::workspace;
@@ -103,7 +102,6 @@ void WorkspaceModule::registerResources()
 void WorkspaceModule::registerUiTypes()
 {
     qmlRegisterType<WorkspaceListModel>("MuseScore.Workspace", 1, 0, "WorkspaceListModel");
-    qmlRegisterType<CurrentWorkspaceModel>("MuseScore.Workspace", 1, 0, "CurrentWorkspaceModel");
     qmlRegisterType<NewWorkspaceModel>("MuseScore.Workspace", 1, 0, "NewWorkspaceModel");
 
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(workspace_QML_IMPORT);

@@ -19,50 +19,80 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
+import QtQuick 2.15
 
+import MuseScore.AppShell 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.NotationScene 1.0
-import MuseScore.Workspace 1.0
 
 Rectangle {
     id: root
 
-    width: parent.width
-    height: 36
+    NotationStatusBarModel {
+        id: model
+    }
 
-    NotationAccessibilityInfo {
+    Component.onCompleted: {
+        model.load()
+    }
+
+    StyledTextLabel {
         anchors.left: parent.left
-        anchors.leftMargin: 20
+        anchors.leftMargin: 12
         anchors.right: statusBarRow.left
         anchors.verticalCenter: parent.verticalCenter
 
         horizontalAlignment: Text.AlignLeft
+
+        text: model.accessibilityInfo
     }
 
     Row {
         id: statusBarRow
 
         anchors.right: parent.right
-        anchors.rightMargin: 20
+        anchors.rightMargin: 12
         anchors.verticalCenter: parent.verticalCenter
 
         spacing: 12
 
-        WorkspacesControl {
-            anchors.verticalCenter: parent.verticalCenter
+        FlatButton {
+            text: qsTrc("workspace", "Workspace: ") + model.currentWorkspaceName
+
+            normalStateColor: "transparent"
+
+            onClicked: {
+                Qt.callLater(model.selectWorkspace)
+            }
         }
 
         ConcertPitchControl {
-            anchors.verticalCenter: parent.verticalCenter
+            concertPitchEnabled: model.concertPitchEnabled
+
+            onToggleConcertPitchRequested: {
+                model.toggleConcertPitch()
+            }
         }
 
         ViewModeControl {
-            anchors.verticalCenter: parent.verticalCenter
+            currentViewMode: model.currentViewMode
+            availableViewModeList: model.availableViewModeList
+
+            onChangeCurrentViewModeRequested: {
+                model.setCurrentViewMode(newViewMode)
+            }
         }
 
         ZoomControl {
-            anchors.verticalCenter: parent.verticalCenter
+            currentZoom: model.currentZoom
+
+            onZoomInRequested: {
+                model.zoomIn()
+            }
+
+            onZoomOutRequested: {
+                model.zoomOut()
+            }
         }
     }
 }

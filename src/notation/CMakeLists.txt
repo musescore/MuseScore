@@ -114,14 +114,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/zoomcontrolmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/zoomcontrolmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/concertpitchcontrolmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/concertpitchcontrolmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/viewmodecontrolmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/viewmodecontrolmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationaccessibilitymodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationaccessibilitymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/playbackcursor.h
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputcursor.cpp
