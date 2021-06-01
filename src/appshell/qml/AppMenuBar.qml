@@ -49,15 +49,17 @@ ListView {
     delegate: FlatButton {
         id: radioButtonDelegate
 
+        property var item: Boolean(modelData) ? modelData : null
+
         width: 60
 
-        normalStateColor: !menu.isOpened ? "transparent" : ui.theme.accentColor
+        normalStateColor: !menuLoader.isMenuOpened ? "transparent" : ui.theme.accentColor
         hoveredStateColor: ui.theme.accentColor
-        text: modelData["title"]
+        text: Boolean(item) ? item.title : ""
 
         mouseArea.onContainsMouseChanged: {
             if (!mouseArea.containsMouse || !prv.showedMenu ||
-                prv.showedMenu === menu) {
+                    prv.showedMenu === menuLoader.menu) {
                 return
             }
 
@@ -69,30 +71,22 @@ ListView {
         }
 
         function toggleMenuOpened() {
-            if (prv.showedMenu && prv.showedMenu !== menu) {
+            if (prv.showedMenu && prv.showedMenu !== menuLoader.menu) {
                 prv.showedMenu.close()
             }
 
-            menu.toggleOpened()
-        }
+            menuLoader.toggleOpened(item.subitems)
 
-        StyledMenu {
-            id: menu
-
-            model: modelData["subitems"]
-
-            onOpened: {
-                prv.showedMenu = menu
-            }
-
-            onClosed: {
+            if (menuLoader.isMenuOpened) {
+                prv.showedMenu = menuLoader.menu
+            } else {
                 prv.showedMenu = null
             }
+        }
 
-            onHandleAction: {
-                Qt.callLater(appMenuModel.handleAction, actionCode, actionIndex)
-                menu.close()
-            }
+        StyledMenuLoader {
+            id: menuLoader
+            onHandleAction: Qt.callLater(appMenuModel.handleAction, actionCode, actionIndex)
         }
     }
 }

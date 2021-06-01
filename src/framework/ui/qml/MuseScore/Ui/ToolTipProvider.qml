@@ -41,7 +41,7 @@ Item {
     Connections {
         target: root.provider
 
-        function onShowToolTip(pos, title, description, shortcut) {
+        function onShowToolTip(parent, title, description, shortcut) {
             var toolTipComponentPath = "../UiComponents/StyledToolTip.qml"
             var toolTipComponent = Qt.createComponent(toolTipComponentPath)
             if (toolTipComponent.status !== Component.Ready) {
@@ -49,15 +49,10 @@ Item {
                 return
             }
 
-            var toolTip = toolTipComponent.createObject(root)
-            var _pos = root.mapFromGlobal(pos.x, pos.y)
-
+            var toolTip = toolTipComponent.createObject(parent)
             toolTip.title = title
             toolTip.description = description
             toolTip.shortcut = shortcut
-
-            toolTip.x = _pos.x - toolTip.width / 2
-            toolTip.y = _pos.y
 
             toolTip.closed.connect(function() {
                 prv.showedToolTip = null

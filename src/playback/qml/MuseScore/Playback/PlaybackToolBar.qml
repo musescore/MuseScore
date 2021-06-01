@@ -104,9 +104,9 @@ Rectangle {
 
                             iconFont: ui.theme.toolbarIconsFont
 
-                            normalStateColor: modelData.checked || menuLoader.isMenuOpened()
+                            normalStateColor: modelData.checked || menuLoader.isMenuOpened
                                               ? ui.theme.accentColor : "transparent"
-                            accentButton: modelData.checked || menuLoader.isMenuOpened()
+                            accentButton: modelData.checked || menuLoader.isMenuOpened
 
                             navigation.panel: keynavSub
                             navigation.name: modelData.title
@@ -114,7 +114,7 @@ Rectangle {
                             navigation.enabled: playbackModel.isPlayAllowed
 
                             onClicked: {
-                                if (menuLoader.isMenuOpened() || hasSubitems) {
+                                if (menuLoader.isMenuOpened || hasSubitems) {
                                     menuLoader.toggleOpened(modelData.subitems, btn.navigation)
                                     return
                                 }

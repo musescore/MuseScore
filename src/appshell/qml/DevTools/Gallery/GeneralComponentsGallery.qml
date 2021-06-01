@@ -207,14 +207,14 @@ Rectangle {
             spacing: 12
 
             FlatButton {
-                text: "Show PopupView downward"
+                text: "Show PopupView"
 
                 onClicked: {
-                    popupViewDown.toggleOpened()
+                    popupView.toggleOpened()
                 }
 
                 StyledPopupView {
-                    id: popupViewDown
+                    id: popupView
 
                     contentWidth: layout.childrenRect.width
                     contentHeight: layout.childrenRect.height
@@ -223,44 +223,6 @@ Rectangle {
                         id: layout
                         spacing: 12
                         anchors.fill: parent
-
-                        CheckBox {
-                            text: "Some checkbox"
-                        }
-
-                        FlatButton {
-                            text: "Some button"
-                        }
-
-                        FlatButton {
-                            text: "Accent button 1"
-                            accentButton: true
-                        }
-
-                        FlatButton {
-                            text: "Accent button 2"
-                            accentButton: true
-                        }
-                    }
-                }
-            }
-
-            FlatButton {
-                text: "Show PopupView upward"
-
-                onClicked: {
-                    popupViewUp.toggleOpened()
-                }
-
-                StyledPopupView {
-                    id: popupViewUp
-                    opensUpward: true
-
-                    Column {
-                        spacing: 12
-
-                        width: childrenRect.width
-                        height: childrenRect.height
 
                         CheckBox {
                             text: "Some checkbox"
@@ -295,39 +257,33 @@ Rectangle {
                 text: "Show Menu"
 
                 onClicked: {
-                    menu.toggleOpened()
+                    var _subitems = [
+                                {code: "2", icon: IconCode.PAGE, title: "first action", enabled: true},
+                                {code: "3", icon: IconCode.PAGE, title: "with subitems", enabled: true, subitems: [
+                                        {code: "4", title: "first action", enabled: true, selectable: true},
+                                        {code: "5", title: "second action", enabled: true, selectable: true, selected: true},
+                                        {code: "6", title: "third action", enabled: true, selectable: true},
+                                        {},
+                                        {code: "7", title: "clear"}
+                                    ]}
+                            ]
+
+                    var items = [
+                                {code: "0", icon: IconCode.PAGE, title: "enabled action", enabled: true},
+                                {code: "1", icon: IconCode.AMBITUS, title: "with subitems", enabled: true, shortcut: "Ctrl+A", subitems: _subitems },
+                                {},
+                                {code: "5", title: "with shortcut", enabled: true, shortcut: "Ctrl+Shift+G"},
+                                {code: "6", icon: IconCode.PAGE, title: "disabled action", enabled: false},
+                                {code: "7", icon: IconCode.CLEF_BASS, title: "checkable action", enabled: true, checkable: true, checked: true}
+                            ]
+
+                    menuLoader.toggleOpened(items)
                 }
 
-                StyledMenu {
-                    id: menu
-
-                    model: {
-                        var _subitems = [
-                                    {code: "2", icon: IconCode.PAGE, title: "first action", enabled: true},
-                                    {code: "3", icon: IconCode.PAGE, title: "with subitems", enabled: true, subitems: [
-                                            {code: "4", title: "first action", enabled: true, selectable: true},
-                                            {code: "5", title: "second action", enabled: true, selectable: true, selected: true},
-                                            {code: "6", title: "third action", enabled: true, selectable: true},
-                                            {},
-                                            {code: "7", title: "clear"}
-                                        ]}
-                                ]
-
-                        var items = [
-                                    {code: "0", icon: IconCode.PAGE, title: "enabled action", enabled: true},
-                                    {code: "1", icon: IconCode.AMBITUS, title: "with subitems", enabled: true, shortcut: "Ctrl+A", subitems: _subitems },
-                                    {},
-                                    {code: "5", title: "with shortcut", enabled: true, shortcut: "Ctrl+Shift+G"},
-                                    {code: "6", icon: IconCode.PAGE, title: "disabled action", enabled: false},
-                                    {code: "7", icon: IconCode.CLEF_BASS, title: "checkable action", enabled: true, checkable: true, checked: true}
-                                ]
-
-                        return items
-                    }
-
+                StyledMenuLoader {
+                    id: menuLoader
                     onHandleAction: {
                         console.log("selected " + actionCode + " index " + actionIndex)
-                        menu.close()
                     }
                 }
             }
