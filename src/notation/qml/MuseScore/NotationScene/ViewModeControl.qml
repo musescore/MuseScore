@@ -23,59 +23,50 @@ import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.NotationScene 1.0
 
-Item {
+FlatButton {
     id: root
 
-    width: childrenRect.width
-    height: childrenRect.height
+    property var currentViewMode
+    property var availableViewModeList: []
 
-    ViewModeControlModel {
-        id: model
+    signal changeCurrentViewModeRequested(var newViewMode)
+
+    normalStateColor: menu.isOpened ? ui.theme.accentColor : "transparent"
+
+    text: Boolean(root.currentViewMode) ? root.currentViewMode.title : ""
+    icon: Boolean(root.currentViewMode) ? root.currentViewMode.icon : IconCode.NONE
+
+    visible: Boolean(root.currentViewMode)
+
+    orientation: Qt.Horizontal
+
+    StyledIconLabel {
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+
+        iconCode: IconCode.SMALL_ARROW_DOWN
     }
 
-    Component.onCompleted: {
-        model.load()
-    }
-
-    FlatButton {
-        normalStateColor: menu.isOpened ? ui.theme.accentColor : "transparent"
-
-        text: Boolean(model.currentViewMode) ? model.currentViewMode.title : ""
-        icon: Boolean(model.currentViewMode) ? model.currentViewMode.icon : IconCode.NONE
-
-        visible: Boolean(model.currentViewMode)
-
-        orientation: Qt.Horizontal
-
-        StyledIconLabel {
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-
-            iconCode: IconCode.SMALL_ARROW_DOWN
-        }
-
-        onClicked: {
-            if (menu.isOpened) {
-                menu.toggleOpened()
-                return
-            }
-
-            menu.model = 0
-            menu.model = model.items
+    onClicked: {
+        if (menu.isOpened) {
             menu.toggleOpened()
+            return
         }
 
-        StyledMenu {
-            id: menu
+        menu.model = 0
+        menu.model = root.availableViewModeList
+        menu.toggleOpened()
+    }
 
-            opensUpward: true
+    StyledMenu {
+        id: menu
 
-            onHandleAction: {
-                Qt.callLater(model.selectViewMode, actionCode)
-                menu.close()
-            }
+        opensUpward: true
+
+        onHandleAction: {
+            Qt.callLater(root.changeCurrentViewModeRequested, actionCode)
+            menu.close()
         }
     }
 }
