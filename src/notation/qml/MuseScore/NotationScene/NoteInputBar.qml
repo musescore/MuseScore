@@ -80,7 +80,7 @@ Rectangle {
             property var item: Boolean(itemModel) ? itemModel : null
             property var hasMenu: Boolean(item) && item.subitemsRole.length !== 0
 
-            accentButton: Boolean(item) && item.checkedRole || menuLoader.isMenuOpened()
+            accentButton: (Boolean(item) && item.checkedRole) || menuLoader.isMenuOpened
             normalStateColor: accentButton ? ui.theme.accentColor : "transparent"
 
             icon: Boolean(item) ? item.iconRole : IconCode.NONE
