@@ -84,7 +84,18 @@ Rectangle {
         }
 
         ZoomControl {
-            currentZoom: model.currentZoom
+            currentZoomPercentage: model.currentZoomPercentage
+            minZoomPercentage: model.minZoomPercentage()
+            maxZoomPercentage: model.maxZoomPercentage()
+            availableZoomList: model.availableZoomList
+
+            onChangeZoomPercentageRequested: {
+                model.currentZoomPercentage = newZoomPercentage
+            }
+
+            onChangeZoomRequested: {
+                model.setCurrentZoomIndex(newZoomIndex)
+            }
 
             onZoomInRequested: {
                 model.zoomIn()
