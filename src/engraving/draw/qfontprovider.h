@@ -30,6 +30,8 @@ class QFontProvider : public IFontProvider
 public:
     QFontProvider() = default;
 
+    int addApplicationFont(const QString& path) override;
+
     qreal lineSpacing(const Font& f) const override;
     qreal xHeight(const Font& f) const override;
     qreal height(const Font& f) const override;

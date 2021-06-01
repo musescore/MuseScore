@@ -33,6 +33,9 @@
 #include "draw/painter.h"
 #include "draw/font.h"
 
+#include "modularity/ioc.h"
+#include "draw/ifontprovider.h"
+
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
@@ -154,6 +157,8 @@ inline uint qHash(const GlyphKey& k)
 
 class ScoreFont
 {
+    INJECT(score, mu::draw::IFontProvider, fontProvider)
+
     FT_Face face = 0;
     QVector<Sym> _symbols;
     QString _name;

@@ -35,6 +35,8 @@ class IFontProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IFontProvider() = default;
 
+    virtual int addApplicationFont(const QString& path) = 0;
+
     virtual qreal lineSpacing(const Font& f) const = 0;
     virtual qreal xHeight(const Font& f) const = 0;
     virtual qreal height(const Font& f) const = 0;
