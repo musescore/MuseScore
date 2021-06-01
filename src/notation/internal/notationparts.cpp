@@ -144,6 +144,8 @@ void NotationParts::setParts(const mu::instruments::PartInstrumentList& parts)
 
     sortParts(parts, masterScore(), originalStaves);
 
+    masterScore()->setBracketsAndBarlines();
+
     updateScore();
 
     m_partsNotifier->changed();
@@ -153,6 +155,7 @@ void NotationParts::setScoreOrder(const instruments::ScoreOrder& order)
 {
     Ms::ScoreOrder so = ScoreOrderConverter::convertScoreOrder(order);
     masterScore()->undo(new Ms::ChangeScoreOrder(masterScore(), so));
+    masterScore()->setBracketsAndBarlines();
 }
 
 void NotationParts::setPartVisible(const ID& partId, bool visible)
@@ -660,6 +663,9 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     staff->setPart(destinationPart);
 
     insertStaff(staff, staffIndex);
+
+    masterScore()->setBracketsAndBarlines();
+
     updateScore();
 
     Ms::Instrument* instrument = instrumentInfo.instrument;
@@ -737,6 +743,8 @@ void NotationParts::removeParts(const IDList& partsIds)
 
     sortParts(parts, masterScore(), originalStaves);
 
+    masterScore()->setBracketsAndBarlines();
+
     updateScore();
 }
 
@@ -799,6 +807,7 @@ void NotationParts::removeStaves(const IDList& stavesIds)
         score()->cmdRemoveStaff(staff->idx());
     }
 
+    masterScore()->setBracketsAndBarlines();
     updateScore();
 }
 
@@ -845,6 +854,8 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
     }
 
     sortParts(parts, masterScore(), masterScore()->staves());
+
+    masterScore()->setBracketsAndBarlines();
 
     updateScore();
 
@@ -1046,6 +1057,9 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     destinationStaffIndex -= score()->staffIdx(destinationPart); // NOTE: convert to local part's staff index
 
     doMoveStaves(staves, destinationStaffIndex, destinationPart);
+
+    masterScore()->setBracketsAndBarlines();
+
     updateScore();
 }
 
