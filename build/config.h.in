@@ -60,6 +60,8 @@
 #cmakedefine BUILD_AUTOBOT_MODULE
 #cmakedefine BUILD_VST
 
+#cmakedefine USE_SCORE_ACCESSIBLE_TREE
+
 #cmakedefine WIN_SPARKLE_ENABLED
 #cmakedefine MAC_SPARKLE_ENABLED
 #cmakedefine OPENGL

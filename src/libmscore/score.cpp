@@ -86,7 +86,9 @@
 #include "instrchange.h"
 #include "synthesizerstate.h"
 
-#ifdef MU_SCORE_ACCESSIBILITY
+#include "config.h"
+
+#ifdef USE_SCORE_ACCESSIBLE_TREE
 #include "accessibility/accessiblescore.h"
 #endif
 
@@ -315,7 +317,7 @@ Score::Score()
     accInfo = "No selection";
     _scoreOrder = nullptr;
 
-#ifdef MU_SCORE_ACCESSIBILITY
+#ifdef USE_SCORE_ACCESSIBLE_TREE
     m_accessible = new mu::score::AccessibleScore(this);
 #endif
 }
@@ -404,7 +406,7 @@ Score::~Score()
 
     imageStore.clearUnused();
 
-#ifdef MU_SCORE_ACCESSIBILITY
+#ifdef USE_SCORE_ACCESSIBLE_TREE
     delete m_accessible;
 #endif
 }

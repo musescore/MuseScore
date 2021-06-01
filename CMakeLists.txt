@@ -71,6 +71,8 @@ option(BUILD_INSTRUMENTS_MODULE "Build instruments module" ON)
 option(BUILD_INSPECTOR_MODULE "Build inspector module" ON)
 option(BUILD_AUTOBOT_MODULE "Build autobot module" OFF)
 
+option(USE_SCORE_ACCESSIBLE_TREE "Use score accessible tree" OFF)
+
 option(SOUNDFONT3    "Ogg Vorbis compressed fonts"        ON)  # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
 

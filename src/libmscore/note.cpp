@@ -27,8 +27,6 @@
 
 #include <assert.h>
 
-#include "log.h"
-
 #include "note.h"
 #include "score.h"
 #include "chord.h"
@@ -71,7 +69,10 @@
 #include <QtMath>
 #include <QVector2D>
 
-#ifdef MU_SCORE_ACCESSIBILITY
+#include "config.h"
+#include "log.h"
+
+#ifdef USE_SCORE_ACCESSIBLE_TREE
 #include "accessibility/accessiblenote.h"
 #endif
 
@@ -682,7 +683,7 @@ NoteHead::Group NoteHead::headGroup() const
 
 Note::Note(Score* s)
     : Element(s, ElementFlag::MOVABLE
-#ifdef MU_SCORE_ACCESSIBILITY
+#ifdef USE_SCORE_ACCESSIBLE_TREE
               , new mu::score::AccessibleNote())
 #else
               )
