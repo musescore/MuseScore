@@ -39,10 +39,6 @@
 #include "internal/msczmetareader.h"
 
 #include "view/notationpaintview.h"
-#include "view/notationaccessibilitymodel.h"
-#include "view/zoomcontrolmodel.h"
-#include "view/concertpitchcontrolmodel.h"
-#include "view/viewmodecontrolmodel.h"
 #include "view/notationswitchlistmodel.h"
 #include "view/partlistmodel.h"
 #include "view/searchpopupmodel.h"
@@ -160,10 +156,6 @@ void NotationModule::registerResources()
 void NotationModule::registerUiTypes()
 {
     qmlRegisterType<NotationPaintView>("MuseScore.NotationScene", 1, 0, "NotationPaintView");
-    qmlRegisterType<NotationAccessibilityModel>("MuseScore.NotationScene", 1, 0, "NotationAccessibilityModel");
-    qmlRegisterType<ZoomControlModel>("MuseScore.NotationScene", 1, 0, "ZoomControlModel");
-    qmlRegisterType<ConcertPitchControlModel>("MuseScore.NotationScene", 1, 0, "ConcertPitchControlModel");
-    qmlRegisterType<ViewModeControlModel>("MuseScore.NotationScene", 1, 0, "ViewModeControlModel");
     qmlRegisterType<NotationSwitchListModel>("MuseScore.NotationScene", 1, 0, "NotationSwitchListModel");
     qmlRegisterType<PartListModel>("MuseScore.NotationScene", 1, 0, "PartListModel");
     qmlRegisterType<SearchPopupModel>("MuseScore.NotationScene", 1, 0, "SearchPopupModel");

@@ -19,23 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
-import MuseScore.NotationScene 1.0
+import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
 Row {
     id: root
 
+    property int currentZoom: 0
+
+    signal zoomInRequested()
+    signal zoomOutRequested()
+
     spacing: 4
-
-    ZoomControlModel {
-        id: model
-    }
-
-    Component.onCompleted: {
-        model.load()
-    }
 
     FlatButton {
         icon: IconCode.ZOOM_IN
@@ -43,7 +40,7 @@ Row {
         normalStateColor: "transparent"
 
         onClicked: {
-            model.zoomIn()
+            root.zoomInRequested()
         }
     }
 
@@ -53,7 +50,7 @@ Row {
         normalStateColor: "transparent"
 
         onClicked: {
-            model.zoomOut()
+            root.zoomOutRequested()
         }
     }
 
@@ -62,6 +59,6 @@ Row {
 
         width: 60
 
-        text: model.currentZoom + " %"
+        text: root.currentZoom + " %"
     }
 }

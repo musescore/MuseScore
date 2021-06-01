@@ -226,20 +226,18 @@ DockPage {
         }
     }
 
-    statusBars: [
-        DockStatusBar {
-            id: notationStatusBar
+    statusBar: DockStatusBar {
+        id: notationStatusBar
 
-            objectName: "notationStatusBar"
+        objectName: "notationStatusBar"
 
-            height: root.toolBarHeight
-            minimumHeight: root.toolBarHeight
-            maximumHeight: root.toolBarHeight
+        height: root.toolBarHeight
+        minimumHeight: root.toolBarHeight
+        maximumHeight: root.toolBarHeight
 
-            NotationStatusBar {
-                color: root.color
-                visible: root.pageModel.isStatusBarVisible
-            }
+        NotationStatusBar {
+            color: root.color
+            visible: root.pageModel.isStatusBarVisible
         }
-    ]
+    }
 }
