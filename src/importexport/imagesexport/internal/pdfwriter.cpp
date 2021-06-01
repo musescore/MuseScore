@@ -25,7 +25,7 @@
 #include "log.h"
 
 #include "libmscore/score.h"
-#include "libmscore/draw/qpainterprovider.h"
+#include "engraving/draw/qpainterprovider.h"
 
 #include <QPdfWriter>
 

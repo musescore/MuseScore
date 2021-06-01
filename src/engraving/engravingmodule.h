@@ -19,22 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SCORE_ACCESSIBLENOTE_H
-#define MU_SCORE_ACCESSIBLENOTE_H
+#ifndef MU_ENGRAVING_ENGRAVINGMODULE_H
+#define MU_ENGRAVING_ENGRAVINGMODULE_H
 
-#include "accessibleelement.h"
-#include "../note.h"
+#include "modularity/imodulesetup.h"
 
-//! NOTE Just for example
-namespace mu::score {
-class AccessibleNote : public AccessibleElement
+namespace mu::engraving {
+class EngravingModule : public framework::IModuleSetup
 {
 public:
-    AccessibleNote(Ms::Element* n = nullptr);
-    ~AccessibleNote();
+    std::string moduleName() const override;
 
-    AccessibleElement* clone(Ms::Element* e) const override;
+    void registerExports() override;
+    void resolveImports() override;
+    void registerResources() override;
+    void registerUiTypes() override;
+    void onInit(const framework::IApplication::RunMode& mode) override;
 };
 }
 
-#endif // MU_SCORE_ACCESSIBLENOTE_H
+#endif // MU_ENGRAVING_ENGRAVINGMODULE_H

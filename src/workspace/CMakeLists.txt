@@ -67,7 +67,7 @@ endif (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_
 
 set(MODULE_LINK
     qzip
-    libmscore
+    engraving
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

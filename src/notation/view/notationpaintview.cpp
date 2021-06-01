@@ -23,7 +23,7 @@
 
 #include <QQuickWindow>
 #include <QPainter>
-#include "libmscore/draw/qpainterprovider.h"
+#include "engraving/draw/qpainterprovider.h"
 
 #include "log.h"
 #include "actions/actiontypes.h"

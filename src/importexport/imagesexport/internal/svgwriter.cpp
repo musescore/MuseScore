@@ -33,7 +33,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/stafflines.h"
 
-#include "libmscore/draw/qpainterprovider.h"
+#include "engraving/draw/qpainterprovider.h"
 
 using namespace mu::iex::imagesexport;
 using namespace mu::notation;

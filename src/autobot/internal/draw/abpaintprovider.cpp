@@ -22,7 +22,7 @@
 #include "abpaintprovider.h"
 
 #include "log.h"
-#include "libmscore/draw/painter.h"
+#include "engraving/draw/painter.h"
 
 static const QColor REMOVED_COLOR("#cc0000");
 static const QColor ADDED_COLOR("#009900");
@@ -104,10 +104,6 @@ void AbPaintProvider::paintData(draw::IPaintProviderPtr provider, const draw::Dr
 
             for (const DrawRectText& t : d.rectTexts) {
                 provider->drawText(t.rect, t.flags, t.text);
-            }
-
-            for (const DrawGlyphRun& g : d.glyphs) {
-                provider->drawGlyphRun(g.pos, g.glyphRun);
             }
 
             for (const DrawPixmap& px : d.pixmaps) {

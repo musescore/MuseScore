@@ -97,6 +97,7 @@ target_include_directories(${MODULE} PUBLIC
     ${PROJECT_SOURCE_DIR}/src/framework
     ${PROJECT_SOURCE_DIR}/src/framework/global
     ${PROJECT_SOURCE_DIR}/src
+    ${PROJECT_SOURCE_DIR}/src/engraving
     ${MODULE_INCLUDE}
 )
 

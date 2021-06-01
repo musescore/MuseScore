@@ -68,8 +68,6 @@
 #include "view/notationcontextmenu.h"
 #include "view/internal/undoredomodel.h"
 
-#include "libmscore/draw/qfontprovider.h"
-
 using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::ui;
@@ -102,8 +100,6 @@ void NotationModule::registerExports()
     readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());
     ioc()->registerExport<INotationReadersRegister>(moduleName(), readers);
     ioc()->registerExport<INotationWritersRegister>(moduleName(), std::make_shared<NotationWritersRegister>());
-
-    ioc()->registerExport<draw::IFontProvider>(moduleName(), new draw::QFontProvider());
 }
 
 void NotationModule::resolveImports()
@@ -187,8 +183,6 @@ void NotationModule::registerUiTypes()
     if (ui) {
         ui->addSourceImportPath(notation_QML_IMPORT);
     }
-
-    Ms::MScore::registerUiTypes();
 }
 
 void NotationModule::onInit(const IApplication::RunMode&)
