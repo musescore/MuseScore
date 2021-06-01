@@ -21,12 +21,18 @@
  */
 #include "qfontprovider.h"
 
+#include <QFontDatabase>
 #include <QFontMetricsF>
 
 #include "libmscore/mscore.h"
 #include "fontcompat.h"
 
 using namespace mu::draw;
+
+int QFontProvider::addApplicationFont(const QString& path)
+{
+    return QFontDatabase::addApplicationFont(path);
+}
 
 qreal QFontProvider::lineSpacing(const Font& f) const
 {
