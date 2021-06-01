@@ -62,8 +62,6 @@ FlatButton {
     StyledMenu {
         id: menu
 
-        opensUpward: true
-
         onHandleAction: {
             Qt.callLater(root.changeCurrentViewModeRequested, actionCode)
             menu.close()

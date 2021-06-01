@@ -185,8 +185,15 @@ FocusScope {
 
         hoverEnabled: true
 
-        onClicked: function (mouse) { root.clicked(mouse) }
-        onPressAndHold: function (mouse) { root.pressAndHold(mouse) }
+        onClicked: function (mouse) { 
+            ui.tooltip.hide(this)
+            root.clicked(mouse) 
+        }
+        
+        onPressAndHold: function (mouse) { 
+            ui.tooltip.hide(this)
+            root.pressAndHold(mouse) 
+        }
 
         onContainsMouseChanged: {
             if (!Boolean(root.toolTipTitle)) {

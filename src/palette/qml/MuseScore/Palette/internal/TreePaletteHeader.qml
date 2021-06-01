@@ -116,7 +116,7 @@ Item {
         height: parent.height
         anchors.right: parent.right
 
-        visible: root.expanded || root.hovered || menuLoader.isMenuOpened() || rootMenuButton.navigation.active
+        visible: root.expanded || root.hovered || menuLoader.isMenuOpened || rootMenuButton.navigation.active
 
         enabled: rootMenuButton.visible
         navigation.panel: root.navigationPanel

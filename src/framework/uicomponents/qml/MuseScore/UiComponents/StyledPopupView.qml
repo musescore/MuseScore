@@ -35,15 +35,10 @@ PopupView {
     property alias width: rootContainer.width
     property alias height: rootContainer.height
 
-    property int padding: 12
     property int margins: 16
 
     property int contentWidth: 240
     property int contentHeight: contentBody.childrenRect.height
-
-    property bool opensUpward: false
-    property int arrowX: root.width / 2
-    property bool showArrow: true
 
     property bool animationEnabled: false
 
@@ -53,7 +48,7 @@ PopupView {
     closePolicy: PopupView.CloseOnPressOutsideParent
 
     x: (root.parent.width / 2) - (root.width / 2)
-    y: root.opensUpward ? -root.height : root.parent.height
+    y: root.parent.height
 
     property NavigationPanel keynavPanel: NavigationPanel {
         id: keynavPanel
@@ -109,6 +104,8 @@ PopupView {
         implicitWidth: contentContainer.implicitWidth + root.padding * 2
         implicitHeight: contentContainer.implicitHeight + root.padding * 2
 
+        property alias cascadeAlign: root.cascadeAlign
+
         focus: true
 
         Item {
@@ -140,18 +137,21 @@ PopupView {
 
             Canvas {
                 id: arrow
-                anchors.top: root.opensUpward ? undefined : parent.top
-                anchors.topMargin: root.opensUpward ? 0 : (-arrow.height + contentBackground.border.width)
-                anchors.bottom: root.opensUpward ? parent.bottom : undefined
-                anchors.bottomMargin: root.opensUpward ? (-arrow.height + contentBackground.border.width) : 0
+
                 height: root.padding
                 width: root.padding * 2
+
                 visible: root.showArrow && arrow.height > 0
                 enabled: root.showArrow
+
                 x: root.arrowX - arrow.width / 2 - root.padding
+                y: root.opensUpward ? parent.y + parent.height - height - contentBackground.border.width
+                                    : -height + contentBackground.border.width
 
                 onPaint: {
                     var ctx = getContext("2d");
+                    ctx.clearRect(0, 0, width, height)
+
                     ctx.lineWidth = 2;
                     ctx.fillStyle = contentBackground.color
                     ctx.strokeStyle = contentBackground.border.color
@@ -169,6 +169,14 @@ PopupView {
 
                     ctx.stroke();
                     ctx.fill();
+                }
+
+                Connections {
+                    target: root
+
+                    function onOpensUpwardChanged() {
+                        arrow.requestPaint()
+                    }
                 }
             }
 

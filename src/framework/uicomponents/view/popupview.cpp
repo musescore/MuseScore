@@ -31,6 +31,7 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <QTimer>
+#include <QScreen>
 
 #include "popupwindow/popupwindow_qquickview.h"
 
@@ -38,11 +39,16 @@
 
 using namespace mu::uicomponents;
 
+static const QString POPUP_VIEW_CONTENT_OBJECT_NAME("_PopupViewContent");
+
 PopupView::PopupView(QQuickItem* parent)
     : QObject(parent)
 {
     setObjectName("PopupView");
     setErrCode(Ret::Code::Ok);
+
+    setPadding(12);
+    setShowArrow(true);
 
     qApp->installEventFilter(this);
     connect(qApp, &QApplication::applicationStateChanged, this, &PopupView::onApplicationStateChanged);
@@ -91,6 +97,8 @@ void PopupView::componentComplete()
     m_window->init(engine, uiConfiguration(), isDialog());
     m_window->setOnHidden([this]() { onHidden(); });
     m_window->setContent(m_contentItem);
+
+    m_contentItem->setObjectName(POPUP_VIEW_CONTENT_OBJECT_NAME);
 }
 
 bool PopupView::eventFilter(QObject* watched, QEvent* event)
@@ -127,12 +135,8 @@ void PopupView::open()
 
     beforeShow();
 
-    if (m_globalPos.isNull()) {
-        QQuickItem* prn = parentItem();
-        IF_ASSERT_FAILED(prn) {
-            return;
-        }
-        m_globalPos = prn->mapToGlobal(m_localPos);
+    if (!isDialog()) {
+        updatePosition();
     }
 
     if (isDialog()) {
@@ -324,7 +328,7 @@ bool PopupView::isMouseWithinBoundaries(const QPoint& mousePos) const
         //! but if we don't check a parent here, the popup will be closed and reopened.
         QQuickItem* prn = parentItem();
         QPointF localPos = prn->mapFromGlobal(mousePos);
-        QRectF parentRect = QRectF(prn->x(), prn->y(), prn->width(), prn->height());
+        QRectF parentRect = QRectF(0, 0, prn->width(), prn->height());
         contains = parentRect.contains(localPos);
     }
 
@@ -405,9 +409,84 @@ void PopupView::setRet(QVariantMap ret)
     emit retChanged(m_ret);
 }
 
+void PopupView::setOpensUpward(bool opensUpward)
+{
+    if (m_opensUpward == opensUpward) {
+        return;
+    }
+
+    m_opensUpward = opensUpward;
+    emit opensUpwardChanged(m_opensUpward);
+}
+
+void PopupView::setArrowX(int arrowX)
+{
+    if (m_arrowX == arrowX) {
+        return;
+    }
+
+    m_arrowX = arrowX;
+    emit arrowXChanged(m_arrowX);
+}
+
+void PopupView::setCascadeAlign(Qt::AlignmentFlag cascadeAlign)
+{
+    if (m_cascadeAlign == cascadeAlign) {
+        return;
+    }
+
+    m_cascadeAlign = cascadeAlign;
+    emit cascadeAlignChanged(m_cascadeAlign);
+}
+
+void PopupView::setPadding(int padding)
+{
+    if (m_padding == padding) {
+        return;
+    }
+
+    m_padding = padding;
+    emit paddingChanged(m_padding);
+}
+
+void PopupView::setShowArrow(bool showArrow)
+{
+    if (m_showArrow == showArrow) {
+        return;
+    }
+
+    m_showArrow = showArrow;
+    emit showArrowChanged(m_showArrow);
+}
+
 QVariantMap PopupView::ret() const
 {
     return m_ret;
+}
+
+bool PopupView::opensUpward() const
+{
+    return m_opensUpward;
+}
+
+int PopupView::arrowX() const
+{
+    return m_arrowX;
+}
+
+Qt::AlignmentFlag PopupView::cascadeAlign() const
+{
+    return m_cascadeAlign;
+}
+
+int PopupView::padding() const
+{
+    return m_padding;
+}
+
+bool PopupView::showArrow() const
+{
+    return m_showArrow;
 }
 
 void PopupView::setErrCode(Ret::Code code)
@@ -415,4 +494,105 @@ void PopupView::setErrCode(Ret::Code code)
     QVariantMap ret;
     ret["errcode"] = static_cast<int>(code);
     setRet(ret);
+}
+
+QRect PopupView::currentScreenGeometry() const
+{
+    QScreen* currentScreen = QGuiApplication::screenAt(m_globalPos.toPoint());
+    if (!currentScreen) {
+        currentScreen = QGuiApplication::primaryScreen();
+    }
+
+    return currentScreen->availableGeometry();
+}
+
+void PopupView::updatePosition()
+{
+    QQuickItem* parent = parentItem();
+    IF_ASSERT_FAILED(parent) {
+        return;
+    }
+
+    QPointF parentTopLeft = parent->mapToGlobal(QPoint(0, 0));
+
+    if (m_globalPos.isNull()) {
+        m_globalPos = parentTopLeft + m_localPos;
+    }
+
+    QWindow* window = mainWindow()->qWindow();
+    if (!window) {
+        return;
+    }
+
+    QRect screenRect = currentScreenGeometry();
+    QRect windowRect = window->geometry();
+    QRect popupRect(m_globalPos.x(), m_globalPos.y(), contentItem()->width(), contentItem()->height());
+
+    setOpensUpward(false);
+    setCascadeAlign(Qt::AlignmentFlag::AlignRight);
+
+    QQuickItem* parentPopupContentItem = this->parentPopupContentItem();
+    bool isCascade = parentPopupContentItem != nullptr;
+
+    if (popupRect.left() < screenRect.left()) {
+        m_globalPos.setX(m_globalPos.x() + screenRect.left() - popupRect.left());
+    }
+
+    if (popupRect.bottom() > windowRect.bottom()) {
+        qreal posY = m_globalPos.y() - parent->height() - popupRect.height();
+        if (screenRect.top() < posY && !isCascade) {
+            m_globalPos.setY(m_globalPos.y() - parent->height() - popupRect.height());
+            setOpensUpward(true);
+        }
+    }
+
+    if (popupRect.bottom() > screenRect.bottom()) {
+        m_globalPos.setY(m_globalPos.y() - parent->height() - popupRect.height());
+        setOpensUpward(true);
+    }
+
+    Qt::AlignmentFlag parentCascadeAlign = this->parentCascadeAlign(parentPopupContentItem);
+    if (popupRect.right() > screenRect.right() || parentCascadeAlign != Qt::AlignmentFlag::AlignRight) {
+        if (isCascade) {
+            m_globalPos.setX(parentTopLeft.x() - popupRect.width());
+            setCascadeAlign(Qt::AlignmentFlag::AlignLeft);
+        } else {
+            m_globalPos.setX(m_globalPos.x() - (popupRect.right() - screenRect.right()));
+        }
+    }
+
+    if (showArrow()) {
+        setArrowX(parentTopLeft.x() + (parent->width() / 2) - m_globalPos.x());
+    } else {
+        if (opensUpward()) {
+            contentItem()->setX(-padding());
+            contentItem()->setY(padding());
+        } else {
+            contentItem()->setX(-padding());
+            contentItem()->setY(-padding());
+        }
+    }
+}
+
+QQuickItem* PopupView::parentPopupContentItem() const
+{
+    QQuickItem* parent = parentItem();
+    while (parent) {
+        if (parent->objectName() == POPUP_VIEW_CONTENT_OBJECT_NAME) {
+            return parent;
+        }
+
+        parent = parent->parentItem();
+    }
+
+    return nullptr;
+}
+
+Qt::AlignmentFlag PopupView::parentCascadeAlign(const QQuickItem* parent) const
+{
+    if (!parent) {
+        return Qt::AlignmentFlag::AlignRight;
+    }
+
+    return static_cast<Qt::AlignmentFlag>(parent->property("cascadeAlign").toInt());
 }
