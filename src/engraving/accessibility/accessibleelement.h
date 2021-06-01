@@ -25,7 +25,7 @@
 #include "accessibility/iaccessible.h"
 #include "async/asyncable.h"
 
-#include "../element.h"
+#include "libmscore/element.h"
 
 //! NOTE At the moment this is just a concept, not a production-ready system, a lot of work yet.
 

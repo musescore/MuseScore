@@ -69,9 +69,6 @@
 #include "barline.h"
 #include "skyline.h"
 
-#include "modularity/ioc.h"
-#include "draw/qfontprovider.h"
-
 namespace Ms {
 bool MScore::debugMode = false;
 bool MScore::testMode = false;
@@ -325,12 +322,6 @@ void MScore::init()
 #ifdef DEBUG_SHAPES
     testShapes();
 #endif
-
-    //! NOTE Temporary solution
-    auto fp = mu::framework::ioc()->resolve<mu::draw::IFontProvider>("libmscore");
-    if (!fp) {
-        mu::framework::ioc()->registerExport<mu::draw::IFontProvider>("libmscore", new mu::draw::QFontProvider());
-    }
 
     initDone = true;
 }

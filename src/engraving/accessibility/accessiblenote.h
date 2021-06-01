@@ -19,19 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_SCORE_ACCESSIBLENOTE_H
+#define MU_SCORE_ACCESSIBLENOTE_H
 
-#include "testing/environment.h"
+#include "accessibleelement.h"
+#include "libmscore/note.h"
 
-#include "log.h"
-#include "framework/fonts/fontsmodule.h"
-#include "engraving/engravingmodule.h"
-
-static mu::testing::SuiteEnvironment importexport_se(
+//! NOTE Just for example
+namespace mu::score {
+class AccessibleNote : public AccessibleElement
 {
-    new mu::fonts::FontsModule(), // needs for libmscore
-    new mu::engraving::EngravingModule()
-},
-    []() {
-    LOGI() << "braille tests suite post init";
+public:
+    AccessibleNote(Ms::Element* n = nullptr);
+    ~AccessibleNote();
+
+    AccessibleElement* clone(Ms::Element* e) const override;
+};
 }
-    );
+
+#endif // MU_SCORE_ACCESSIBLENOTE_H

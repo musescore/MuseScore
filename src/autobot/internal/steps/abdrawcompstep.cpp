@@ -21,8 +21,8 @@
  */
 #include "abdrawcompstep.h"
 
-#include "libmscore/draw/drawtypes.h"
-#include "libmscore/draw/drawcomp.h"
+#include "engraving/draw/drawtypes.h"
+#include "engraving/draw/utils/drawcomp.h"
 
 #include "log.h"
 

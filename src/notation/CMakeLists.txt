@@ -178,7 +178,7 @@ set(MODULE_LINK
     ${FREETYPE_LIB}
     qzip
     ${Z_LIB}
-    libmscore
+    engraving
     commonscene
     uicomponents
     ui

@@ -28,7 +28,7 @@ set(MODULE_TEST_SRC
 )
 
 set(MODULE_TEST_LINK
-    libmscore
+    engraving
     fonts
     iex_bww
     )

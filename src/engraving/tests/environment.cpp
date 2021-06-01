@@ -22,11 +22,8 @@
 
 #include "testing/environment.h"
 
-#include "log.h"
+#include "engraving/engravingmodule.h"
 #include "framework/fonts/fontsmodule.h"
-//#include "notation/notationmodule.h"
-//#include "framework/ui/uimodule.h"
-//#include "framework/actions/actionsmodule.h"
 
 #include "instruments/instrumentsmodule.h"
 #include "framework/uicomponents/uicomponentsmodule.h"
@@ -34,21 +31,19 @@
 #include "libmscore/score.h"
 #include "libmscore/musescoreCore.h"
 
-static mu::testing::SuiteEnvironment libmscore_se(
+#include "log.h"
+
+static mu::testing::SuiteEnvironment engraving_se(
 {
     new mu::fonts::FontsModule(),
-//    new mu::ui::UiModule(),
-//    new mu::actions::ActionsModule(),
-//    new mu::notation::NotationModule()
-
+    new mu::engraving::EngravingModule(),
     new mu::instruments::InstrumentsModule(),
     new mu::uicomponents::UiComponentsModule()
 },
     []() {
-    LOGI() << "libmscore tests suite post init";
+    LOGI() << "engraving tests suite post init";
     Ms::MScore::noGui = true;
 
     new Ms::MuseScoreCore();
-    Ms::MScore::init(); // initialize libmscore
 }
     );

@@ -64,7 +64,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/fret.h"
 
-#include "libmscore/draw/qpainterprovider.h"
+#include "engraving/draw/qpainterprovider.h"
 
 #include "translation.h"
 

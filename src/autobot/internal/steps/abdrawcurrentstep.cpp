@@ -25,7 +25,7 @@
 
 #include "log.h"
 #include "../draw/abpaintprovider.h"
-#include "libmscore/draw/drawjson.h"
+#include "engraving/draw/utils/drawjson.h"
 
 using namespace mu::autobot;
 using namespace mu::draw;
