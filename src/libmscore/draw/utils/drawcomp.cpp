@@ -119,13 +119,13 @@ static bool isEqual(const QBrush& b1, const QBrush& b2)
     return true;
 }
 
-static bool isEqual(const QFont& f1, const QFont& f2)
+static bool isEqual(const Font& f1, const Font& f2)
 {
     if (f1.family() != f2.family()) {
         return false;
     }
 
-    if (f1.pointSize() != f2.pointSize()) {
+    if (!RealIsEqual(f1.pointSizeF(), f2.pointSizeF())) {
         return false;
     }
 

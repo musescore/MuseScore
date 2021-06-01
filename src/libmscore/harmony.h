@@ -23,6 +23,8 @@
 #ifndef __HARMONY_H__
 #define __HARMONY_H__
 
+#include "draw/font.h"
+
 #include "text.h"
 #include "pitchspelling.h"
 #include "realizedharmony.h"
@@ -36,7 +38,7 @@ class ParsedChord;
 //---------------------------------------------------------
 
 struct TextSegment {
-    QFont font;
+    mu::draw::Font m_font;
     QString text;
     qreal x, y;         // Position of segments relative to each other.
     QPointF offset;     // Offset for placing within the TextBase.
@@ -48,10 +50,10 @@ struct TextSegment {
     QPointF pos() const { return QPointF(x, y) + offset; }
 
     TextSegment() { select = false; x = y = 0.0; }
-    TextSegment(const QFont& f, qreal _x, qreal _y)
-        : font(f), x(_x), y(_y), select(false) {}
-    TextSegment(const QString&, const QFont&, qreal x, qreal y);
-    void set(const QString&, const QFont&, qreal x, qreal y, QPointF offset);
+    TextSegment(const mu::draw::Font& f, qreal _x, qreal _y)
+        : m_font(f), x(_x), y(_y), select(false) {}
+    TextSegment(const QString&, const mu::draw::Font&, qreal x, qreal y);
+    void set(const QString&, const mu::draw::Font&, qreal x, qreal y, QPointF offset);
     void setText(const QString& t) { text = t; }
 };
 
@@ -95,7 +97,7 @@ class Harmony final : public TextBase
     mutable RealizedHarmony _realizedHarmony;      //the realized harmony used for playback
 
     QList<HDegree> _degreeList;
-    QList<QFont> fontList;                // temp values used in render()
+    QList<mu::draw::Font> fontList;                // temp values used in render()
     QList<TextSegment*> textList;         // rendered chord
 
     bool _leftParen, _rightParen;         // include opening and/or closing parenthesis

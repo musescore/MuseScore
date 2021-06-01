@@ -26,6 +26,8 @@
 #include "element.h"
 #include "harmony.h"
 
+#include "draw/font.h"
+
 namespace Ms {
 class StringData;
 class Chord;
@@ -158,7 +160,7 @@ class FretDiagram final : public Element
     qreal nutLw;
     qreal stringDist;
     qreal fretDist;
-    QFont font;
+    mu::draw::Font font;
     qreal _userMag     { 1.0 };                 // allowed 0.1 - 10.0
     qreal markerSize;
     int _numPos;

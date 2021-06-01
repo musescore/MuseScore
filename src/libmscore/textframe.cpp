@@ -34,6 +34,8 @@
 #include "textframe.h"
 #include "xml.h"
 
+#include "draw/fontmetrics.h"
+
 namespace Ms {
 //---------------------------------------------------------
 //   TBox
@@ -73,8 +75,7 @@ void TBox::layout()
 
     qreal h = 0.;
     if (_text->empty()) {
-        QFontMetricsF fm = QFontMetricsF(_text->font(), MScore::paintDevice());
-        h = fm.ascent();
+        h = mu::draw::FontMetrics::ascent(_text->font());
     } else {
         h = _text->height();
     }

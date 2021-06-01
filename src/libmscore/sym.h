@@ -31,6 +31,7 @@
 #include "symid.h"
 
 #include "draw/painter.h"
+#include "draw/font.h"
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
@@ -163,7 +164,7 @@ class ScoreFont
     QCache<GlyphKey, GlyphPixmap>* cache { 0 };
     std::list<std::pair<Sid, QVariant> > _engravingDefaults;
     double _textEnclosureThickness = 0;
-    mutable QFont* font { 0 };
+    mutable mu::draw::Font* font { 0 };
 
     static QVector<ScoreFont> _scoreFonts;
     static std::array<uint, size_t(SymId::lastSym) + 1> _mainSymCodeTable;

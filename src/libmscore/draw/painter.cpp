@@ -21,6 +21,8 @@
  */
 #include "painter.h"
 
+#include <QPainterPath>
+
 #include "log.h"
 
 #ifndef NO_QT_SUPPORT
@@ -143,7 +145,7 @@ void Painter::setCompositionMode(CompositionMode mode)
     }
 }
 
-void Painter::setFont(const QFont& font)
+void Painter::setFont(const Font& font)
 {
     m_provider->setFont(font);
     if (extended) {
@@ -151,7 +153,7 @@ void Painter::setFont(const QFont& font)
     }
 }
 
-const QFont& Painter::font() const
+Font Painter::font() const
 {
     return m_provider->font();
 }
@@ -418,11 +420,11 @@ void Painter::drawText(const QRectF& rect, int flags, const QString& text)
     }
 }
 
-void Painter::drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun)
+void Painter::drawTextWorkaround(mu::draw::Font& f, const QPointF pos, const QString text)
 {
-    m_provider->drawGlyphRun(position, glyphRun);
+    m_provider->drawTextWorkaround(f, pos, text);
     if (extended) {
-        extended->drawGlyphRun(position, glyphRun);
+        extended->drawTextWorkaround(f, pos, text);
     }
 }
 

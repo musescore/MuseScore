@@ -39,6 +39,8 @@
 #include "utils.h"
 #include "xml.h"
 
+#include "draw/fontmetrics.h"
+
 namespace Ms {
 //---------------------------------------------------------
 //   harmonyName
@@ -225,7 +227,7 @@ Harmony::Harmony(const Harmony& h)
     _realizedHarmony.setHarmony(this);
     for (const TextSegment* s : h.textList) {
         TextSegment* ns = new TextSegment();
-        ns->set(s->text, s->font, s->x, s->y, s->offset);
+        ns->set(s->text, s->m_font, s->x, s->y, s->offset);
         textList.append(ns);
     }
 }
@@ -1556,7 +1558,7 @@ void Harmony::draw(mu::draw::Painter* painter) const
     QColor color = textColor();
     painter->setPen(color);
     for (const TextSegment* ts : textList) {
-        QFont f(ts->font);
+        mu::draw::Font f(ts->m_font);
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 #ifndef Q_OS_MACOS
         TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text);
@@ -1594,7 +1596,7 @@ void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed)
 //   TextSegment
 //---------------------------------------------------------
 
-TextSegment::TextSegment(const QString& s, const QFont& f, qreal x, qreal y)
+TextSegment::TextSegment(const QString& s, const mu::draw::Font& f, qreal x, qreal y)
 {
     set(s, f, x, y, QPointF());
     select = false;
@@ -1606,9 +1608,8 @@ TextSegment::TextSegment(const QString& s, const QFont& f, qreal x, qreal y)
 
 qreal TextSegment::width() const
 {
-    QFontMetricsF fm(font, MScore::paintDevice());
 #if 1
-    return fm.width(text);
+    return mu::draw::FontMetrics::width(m_font, text);
 #else
     qreal w = 0.0;
     foreach (QChar c, text) {
@@ -1628,8 +1629,7 @@ qreal TextSegment::width() const
 
 QRectF TextSegment::boundingRect() const
 {
-    QFontMetricsF fm(font, MScore::paintDevice());
-    return fm.boundingRect(text);
+    return mu::draw::FontMetrics::boundingRect(m_font, text);
 }
 
 //---------------------------------------------------------
@@ -1638,17 +1638,16 @@ QRectF TextSegment::boundingRect() const
 
 QRectF TextSegment::tightBoundingRect() const
 {
-    QFontMetricsF fm(font, MScore::paintDevice());
-    return fm.tightBoundingRect(text);
+    return mu::draw::FontMetrics::tightBoundingRect(m_font, text);
 }
 
 //---------------------------------------------------------
 //   set
 //---------------------------------------------------------
 
-void TextSegment::set(const QString& s, const QFont& f, qreal _x, qreal _y, QPointF _offset)
+void TextSegment::set(const QString& s, const mu::draw::Font& f, qreal _x, qreal _y, QPointF _offset)
 {
-    font   = f;
+    m_font   = f;
     x      = _x;
     y      = _y;
     offset = _offset;
@@ -1663,7 +1662,7 @@ void Harmony::render(const QString& s, qreal& x, qreal& y)
 {
     int fontIdx = 0;
     if (!s.isEmpty()) {
-        QFont f = _harmonyType != HarmonyType::ROMAN ? fontList[fontIdx] : font();
+        mu::draw::Font f = _harmonyType != HarmonyType::ROMAN ? fontList[fontIdx] : font();
         TextSegment* ts = new TextSegment(s, f, x, y);
         textList.append(ts);
         x += ts->width();
@@ -1690,14 +1689,14 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
             TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
             ChordSymbol cs = chordList->symbol(a.text);
             if (cs.isValid()) {
-                ts->font = fontList[cs.fontIdx];
+                ts->m_font = fontList[cs.fontIdx];
                 ts->setText(cs.value);
             } else {
                 ts->setText(a.text);
             }
             if (_harmonyType == HarmonyType::NASHVILLE) {
                 qreal nmag = chordList->nominalMag();
-                ts->font.setPointSizeF(ts->font.pointSizeF() * nmag);
+                ts->m_font.setPointSizeF(ts->m_font.pointSizeF() * nmag);
             }
             textList.append(ts);
             x += ts->width();
@@ -1729,7 +1728,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                 cs = chordList->symbol(c);
             }
             if (cs.isValid()) {
-                ts->font = fontList[cs.fontIdx];
+                ts->m_font = fontList[cs.fontIdx];
                 ts->setText(cs.value);
             } else {
                 ts->setText(c);
@@ -1758,7 +1757,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                     cs = chordList->symbol(acc);
                 }
                 if (cs.isValid()) {
-                    ts->font = fontList[cs.fontIdx];
+                    ts->m_font = fontList[cs.fontIdx];
                     ts->setText(cs.value);
                 } else {
                     ts->setText(acc);
@@ -1785,7 +1784,7 @@ void Harmony::render()
 
     fontList.clear();
     for (const ChordFont& cf : qAsConst(chordList->fonts)) {
-        QFont ff(font());
+        mu::draw::Font ff(font());
         ff.setPointSizeF(ff.pointSizeF() * cf.mag);
         if (!(cf.family.isEmpty() || cf.family == "default")) {
             ff.setFamily(cf.family);

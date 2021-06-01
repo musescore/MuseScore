@@ -30,6 +30,8 @@
 #include "xml.h"
 #include "score.h"
 
+#include "draw/fontmetrics.h"
+
 #define TAB_DEFAULT_LINE_SP   (1.5)
 #define TAB_RESTSYMBDISPL     2.0
 
@@ -435,12 +437,11 @@ void StaffType::setDurationMetrics() const
         return;
     }
 
-// QFontMetrics[F]() returns results unreliably rounded to integral pixels;
+// FontMetrics returns results unreliably rounded to integral pixels;
 // use a scaled up font and then scale computed values down
-//      QFontMetricsF fm(durationFont());
-    QFont font(durationFont());
+    mu::draw::Font font(durationFont());
     font.setPointSizeF(_durationFontSize);
-    QFontMetricsF fm(font, MScore::paintDevice());
+    mu::draw::FontMetrics fm(font);
     QString txt(_durationFonts[_durationFontIdx].displayValue, int(TabVal::NUM_OF));
     QRectF bb(fm.tightBoundingRect(txt));
     // raise symbols by a default margin and, if marks are above lines, by half the line distance
@@ -465,7 +466,7 @@ void StaffType::setFretMetrics() const
         return;
     }
 
-    QFontMetricsF fm(fretFont(), MScore::paintDevice());
+    mu::draw::FontMetrics fm(fretFont());
     QRectF bb;
     // compute vertical displacement
     if (_useNumbers) {
@@ -755,64 +756,6 @@ QString StaffType::tabBassStringPrefix(int strg, bool* hasFret) const
 }
 
 //---------------------------------------------------------
-//   drawInputStringMarks
-//
-//    in TAB's, draws the marks within the input 'blue cursor' required to identify the current target input string.
-//
-//    Implements the specific of historic TAB styles for instruments with more strings than TAB lines.
-//    For strings normally represented by TAB lines, no mark is required.
-//    For strings not represented by TAB lines (e.g. bass strings in lutes and similar),
-//    either a sequence of slashes OR some ledger line-like lines OR the ordinal of the string
-//    are used, according to the TAB style (French or Italian) and the string position.
-//
-//    Note: assumes the string parameter is within legal bounds, i.e.:
-//    0 <= string <= [instrument strings] - 1
-//
-//    p       the QPainter to draw into
-//    string  the instrument physical string for which to draw the mark (0 = top string)
-//    voice   the current input voice (affects mark colour)
-//    rect    the rect of the 'blue rectangle' showing the input position
-//---------------------------------------------------------
-
-static const qreal LEDGER_LINE_THICKNESS   = 0.15;          // in sp
-static const qreal LEDGER_LINE_LEFTX       = 0.25;          // in % of cursor rectangle width
-static const qreal LEDGER_LINE_RIGHTX      = 0.75;          // in % of cursor rectangle width
-
-void StaffType::drawInputStringMarks(QPainter* p, int string, int voice, QRectF rect) const
-{
-    if (_group != StaffGroup::TAB) {
-        return;
-    }
-    qreal spatium     = SPATIUM20;
-    qreal lineDist    = _lineDistance.val() * spatium;
-    bool hasFret;
-    QString text        = tabBassStringPrefix(string, &hasFret);
-//    qreal       lw          = point(score()->styleS(Sid::ledgerLineWidth));  // no access to score form here
-    qreal lw          = LEDGER_LINE_THICKNESS * spatium;                            // use a fixed width
-    QPen pen(MScore::selectColor[voice].lighter(SHADOW_NOTE_LIGHT), lw);
-    p->setPen(pen);
-    // draw conventional 'ledger lines', if required
-    int numOfLedgerLines  = numOfTabLedgerLines(string);
-    qreal x1                = rect.x() + rect.width() * LEDGER_LINE_LEFTX;
-    qreal x2                = rect.x() + rect.width() * LEDGER_LINE_RIGHTX;
-    // cursor rect is 1 line dist. high, and it is:
-    // centred on the line for "frets on strings"    => lower top ledger line 1/2 line dist.
-    // sitting on the line for "frets above strings" => lower top ledger line 1 full line dist
-    qreal y     = rect.top() + lineDist * (_onLines ? 0.5 : 1.0);
-    for (int i = 0; i < numOfLedgerLines; i++) {
-        p->drawLine(QLineF(x1, y, x2, y));
-        y += lineDist / numOfLedgerLines;     // insert other lines between top line and tab body
-    }
-    // draw the text, if any
-    if (!text.isEmpty()) {
-        QFont f = fretFont();
-        f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
-        p->setFont(f);
-        p->drawText(QPointF(rect.left(), rect.top() + lineDist), text);
-    }
-}
-
-//---------------------------------------------------------
 //   numOfLedgerLines
 //
 //    in TAB's, returns the number of ledgerlines needed by bass lines in some TAB styles.
@@ -943,7 +886,7 @@ void TabDurationSymbol::layout()
     if (!chord || !chord->isChord()
         || (chord->beamMode() != Beam::Mode::BEGIN && chord->beamMode() != Beam::Mode::MID
             && chord->beamMode() != Beam::Mode::END)) {
-        QFontMetricsF fm(_tab->durationFont(), MScore::paintDevice());
+        mu::draw::FontMetrics fm(_tab->durationFont());
         hbb   = _tab->durationBoxH();
         wbb   = fm.width(_text);
         xbb   = 0.0;
@@ -1042,7 +985,7 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
     painter->scale(mag, mag);
     if (_beamGrid == TabBeamGrid::NONE) {
         // if no beam grid, draw symbol
-        QFont f(_tab->durationFont());
+        mu::draw::Font f(_tab->durationFont());
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
         painter->setFont(f);
         painter->drawText(QPointF(0.0, 0.0), _text);
