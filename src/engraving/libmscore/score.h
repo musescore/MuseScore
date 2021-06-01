@@ -1030,6 +1030,7 @@ public:
 
     ScoreOrder scoreOrder() const;
     void setScoreOrder(ScoreOrder order);
+    void setBracketsAndBarlines();
 
     void lassoSelect(const mu::RectF&);
     void lassoSelectEnd(bool);

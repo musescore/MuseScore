@@ -3766,6 +3766,15 @@ void Score::setScoreOrder(ScoreOrder order)
 }
 
 //---------------------------------------------------------
+//   setBracketsAndBarlines
+//---------------------------------------------------------
+
+void Score::setBracketsAndBarlines()
+{
+    scoreOrder().setBracketsAndBarlines(this);
+}
+
+//---------------------------------------------------------
 //   lassoSelect
 //---------------------------------------------------------
 

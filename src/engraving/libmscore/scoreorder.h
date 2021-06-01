@@ -23,6 +23,7 @@
 #define __SCOREORDER_H__
 
 #include "libmscore/mscore.h"
+#include "instrtemplate.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -68,12 +69,14 @@ struct ScoreOrder
     bool readBoolAttribute(Ms::XmlReader& reader, const char* name, bool defValue);
     void readInstrument(Ms::XmlReader& reader);
     void readSoloists(Ms::XmlReader& reader, const QString section);
-    void readUnsorted(Ms::XmlReader& reader, const QString section, bool inSection);
-    void readFamily(Ms::XmlReader& reader, const QString section, bool inSection);
     void readSection(Ms::XmlReader& reader);
     bool hasGroup(const QString& id, const QString& group=QString()) const;
 
     bool isValid() const;
+    QString getFamilyName(const InstrumentTemplate* instrTemplate, bool soloist) const;
+    ScoreGroup getGroup(const QString family, const QString instrumentGroup) const;
+
+    void setBracketsAndBarlines(Score* score);
 
     void read(Ms::XmlReader& reader);
     void write(Ms::XmlWriter& xml) const;

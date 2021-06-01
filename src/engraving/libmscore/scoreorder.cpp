@@ -95,59 +95,43 @@ void ScoreOrder::readSoloists(Ms::XmlReader& reader, const QString section)
 }
 
 //---------------------------------------------------------
-//   readUnsorted
-//---------------------------------------------------------
-
-void ScoreOrder::readUnsorted(Ms::XmlReader& reader, const QString section, bool inSection)
-{
-    QString group { reader.attribute("group", QString("")) };
-    reader.skipCurrentElement();
-
-    if (hasGroup(UNSORTED_ID, group)) {
-        return;
-    }
-
-    ScoreGroup sg;
-    sg.family = QString(UNSORTED_ID);
-    sg.section = section;
-    sg.unsorted = group;
-    sg.bracket            = !inSection ? true : false;
-    sg.showSystemMarkings = !inSection ? false : readBoolAttribute(reader, "showSystemMarkings", false);
-    sg.barLineSpan        = !inSection ? false : readBoolAttribute(reader, "barLineSpan",        true);
-    sg.thinBracket        = !inSection ? false : readBoolAttribute(reader, "thinBrackets",       true);
-    groups << sg;
-}
-
-//---------------------------------------------------------
-//   readFamily
-//---------------------------------------------------------
-
-void ScoreOrder::readFamily(Ms::XmlReader& reader, const QString section, bool inSection)
-{
-    const QString id { reader.readElementText().toUtf8().data() };
-
-    ScoreGroup sg;
-    sg.family = id;
-    sg.section = section;
-    sg.bracket            = !inSection ? false : true;
-    sg.showSystemMarkings = !inSection ? false : readBoolAttribute(reader, "showSystemMarkings", false);
-    sg.barLineSpan        = !inSection ? false : readBoolAttribute(reader, "barLineSpan",        true);
-    sg.thinBracket        = !inSection ? false : readBoolAttribute(reader, "thinBrackets",       true);
-    groups << sg;
-}
-
-//---------------------------------------------------------
 //   readSection
 //---------------------------------------------------------
 
 void ScoreOrder::readSection(Ms::XmlReader& reader)
 {
-    QString id { reader.attribute("id") };
+    QString sectionId { reader.attribute("id") };
+    bool showSystemMarkings = readBoolAttribute(reader, "showSystemMarkings", false);
+    bool barLineSpan = readBoolAttribute(reader, "barLineSpan", true);
+    bool thinBrackets = readBoolAttribute(reader, "thinBrackets", true);
     while (reader.readNextStartElement()) {
         if (reader.name() == "family") {
-            readFamily(reader, id, true);
+            ScoreGroup sg;
+            sg.family = reader.readElementText().toUtf8().data();
+            sg.section = sectionId;
+            sg.bracket = true;
+            sg.showSystemMarkings = showSystemMarkings;
+            sg.barLineSpan = barLineSpan;
+            sg.thinBracket = thinBrackets;
+            groups << sg;
         } else if (reader.name() == "unsorted") {
-            readUnsorted(reader, id, true);
+            QString group { reader.attribute("group", QString("")) };
+
+            if (hasGroup(UNSORTED_ID, group)) {
+                reader.skipCurrentElement();
+                return;
+            }
+
+            ScoreGroup sg;
+            sg.family = QString(UNSORTED_ID);
+            sg.section = sectionId;
+            sg.unsorted = group;
+            sg.bracket = false;
+            sg.showSystemMarkings = readBoolAttribute(reader, "showSystemMarkings", false);
+            sg.barLineSpan = readBoolAttribute(reader, "barLineSpan", true);
+            sg.thinBracket = readBoolAttribute(reader, "thinBrackets", true);
+            groups << sg;
+            reader.skipCurrentElement();
         } else {
             reader.unknown();
         }
@@ -178,13 +162,162 @@ bool ScoreOrder::isValid() const
 }
 
 //---------------------------------------------------------
+//   getFamilyName
+//---------------------------------------------------------
+
+QString ScoreOrder::getFamilyName(const InstrumentTemplate* instrTemplate, bool soloist) const
+{
+    if (!instrTemplate) {
+        return QString("<unsorted>");
+    }
+
+    if (soloist) {
+        return QString("<soloists>");
+    } else if (instrumentMap.contains(instrTemplate->id)) {
+        return instrumentMap[instrTemplate->id].id;
+    } else if (instrTemplate->family) {
+        return instrTemplate->family->id;
+    }
+    return QString("<unsorted>");
+}
+
+//---------------------------------------------------------
+//   getGroup
+//---------------------------------------------------------
+
+ScoreGroup ScoreOrder::getGroup(const QString family, const QString instrumentGroup) const
+{
+    static const QString UNSORTED = QString("<unsorted>");
+
+    ScoreGroup unsortedScoreGroup;
+    for (const ScoreGroup& sg : groups) {
+        if ((sg.family == UNSORTED) && sg.unsorted.isEmpty()) {
+            unsortedScoreGroup = sg;
+            break;
+        }
+    }
+
+    if (family.isEmpty()) {
+        return unsortedScoreGroup;
+    }
+
+    for (const ScoreGroup& sg : groups) {
+        if (sg.family == family) {
+            return sg;
+        }
+        if ((sg.family == UNSORTED) && (sg.unsorted == instrumentGroup)) {
+            unsortedScoreGroup = sg;
+        }
+    }
+    return unsortedScoreGroup;
+}
+
+//---------------------------------------------------------
+//   setBracketsAndBarlines
+//---------------------------------------------------------
+
+void ScoreOrder::setBracketsAndBarlines(Score* score)
+{
+    if (groups.size() <= 0) {
+        return;
+    }
+
+    bool prvThnBracket { false };
+    bool prvBarLineSpan { false };
+    QString prvSection { "" };
+    int prvInstrument { 0 };
+    Staff* prvStaff { nullptr };
+
+    Staff* thkBracketStaff { nullptr };
+    Staff* thnBracketStaff { nullptr };
+    int thkBracketSpan { 0 };
+    int thnBracketSpan { 0 };
+
+    for (Part* part : score->parts()) {
+        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->getId());
+        if (!ii.instrTemplate) {
+            continue;
+        }
+
+        QString family { getFamilyName(ii.instrTemplate, part->soloist()) };
+        const ScoreGroup sg = getGroup(family, instrumentGroups[ii.groupIndex]->id);
+
+        int staffIdx { 0 };
+        bool blockThinBracket { false };
+        for (Staff* staff : *part->staves()) {
+            for (BracketItem* bi : staff->brackets()) {
+                score->undo(new RemoveBracket(staff, bi->column(), bi->bracketType(), bi->bracketSpan()));
+            }
+            staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, 0);
+
+            if (prvSection.isEmpty() || (sg.section != prvSection)) {
+                if (thkBracketStaff && (thkBracketSpan > 1)) {
+                    score->undoAddBracket(thkBracketStaff, 0, BracketType::NORMAL, thkBracketSpan);
+                }
+                if (sg.bracket && !staffIdx) {
+                    thkBracketStaff = sg.bracket ? staff : nullptr;
+                    thkBracketSpan  = 0;
+                }
+            }
+            if (sg.bracket && !staffIdx) {
+                thkBracketSpan += part->nstaves();
+            }
+
+            if (!staffIdx || (ii.instrIndex != prvInstrument)) {
+                if (thnBracketStaff && (thnBracketSpan > 1)) {
+                    score->undoAddBracket(thnBracketStaff, 1, BracketType::SQUARE, thnBracketSpan);
+                }
+                if (ii.instrIndex != prvInstrument) {
+                    thnBracketStaff = (sg.thinBracket && !blockThinBracket) ? staff : nullptr;
+                    thnBracketSpan  = 0;
+                }
+            }
+
+            if (ii.instrTemplate->nstaves() > 1) {
+                blockThinBracket = true;
+                if (ii.instrTemplate->bracket[staffIdx] != BracketType::NO_BRACKET) {
+                    score->undoAddBracket(staff, 2, ii.instrTemplate->bracket[staffIdx], ii.instrTemplate->bracketSpan[staffIdx]);
+                }
+                staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, ii.instrTemplate->barlineSpan[staffIdx]);
+                if (staffIdx < ii.instrTemplate->nstaves()) {
+                    ++staffIdx;
+                }
+                prvStaff = nullptr;
+            } else {
+                if (sg.thinBracket && !staffIdx) {
+                    thnBracketSpan += part->nstaves();
+                }
+                if (prvStaff) {
+                    prvStaff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN,
+                                                 (prvBarLineSpan && (!prvSection.isEmpty() && (sg.section == prvSection))));
+                }
+                prvStaff = staff;
+                ++staffIdx;
+            }
+            prvSection = sg.section;
+            prvBarLineSpan = sg.barLineSpan;
+            prvThnBracket = sg.thinBracket;
+        }
+
+        prvInstrument = ii.instrIndex;
+    }
+
+    if (thkBracketStaff && (thkBracketSpan > 1)) {
+        score->undoAddBracket(thkBracketStaff, 0, BracketType::NORMAL, thkBracketSpan);
+    }
+    if (thnBracketStaff && (thnBracketSpan > 1) && prvThnBracket) {
+        score->undoAddBracket(thnBracketStaff, 1, BracketType::SQUARE, thnBracketSpan);
+    }
+}
+
+//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
 void ScoreOrder::read(Ms::XmlReader& reader)
 {
     id = reader.attribute("id");
-    const QString id { "" };
+    const QString sectionId { "" };
     while (reader.readNextStartElement()) {
         if (reader.name() == "name") {
             name = qApp->translate("OrderXML", reader.readElementText().toUtf8().data());
@@ -193,11 +326,34 @@ void ScoreOrder::read(Ms::XmlReader& reader)
         } else if (reader.name() == "instrument") {
             readInstrument(reader);
         } else if (reader.name() == "family") {
-            readFamily(reader, id, false);
+            ScoreGroup sg;
+            sg.family = reader.readElementText().toUtf8().data();
+            sg.section = sectionId;
+            sg.bracket = false;
+            sg.showSystemMarkings = false;
+            sg.barLineSpan = false;
+            sg.thinBracket = false;
+            groups << sg;
         } else if (reader.name() == "soloists") {
-            readSoloists(reader, id);
+            readSoloists(reader, sectionId);
         } else if (reader.name() == "unsorted") {
-            readUnsorted(reader, id, false);
+            QString group { reader.attribute("group", QString("")) };
+
+            if (hasGroup(UNSORTED_ID, group)) {
+                reader.skipCurrentElement();
+                return;
+            }
+
+            ScoreGroup sg;
+            sg.family = QString(UNSORTED_ID);
+            sg.section = sectionId;
+            sg.unsorted = group;
+            sg.bracket = true;
+            sg.showSystemMarkings = false;
+            sg.barLineSpan = false;
+            sg.thinBracket = false;
+            groups << sg;
+            reader.skipCurrentElement();
         } else {
             reader.unknown();
         }
