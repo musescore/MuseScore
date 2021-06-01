@@ -355,6 +355,7 @@ set(MODULE_SRC
     xml.h
     xmlreader.cpp
     xmlwriter.cpp
+
     draw/painter.cpp
     draw/painter.h
     draw/ipaintprovider.h
@@ -380,10 +381,6 @@ set(MODULE_SRC
 
 set(MODULE_INCLUDE
     ${PROJECT_SOURCE_DIR}/thirdparty/dtl
-    )
-
-set(MODULE_DEF
-#    MU_SCORE_ACCESSIBILITY
     )
 
 set(FREETYPE_LIB )
