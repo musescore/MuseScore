@@ -36,8 +36,7 @@ DockPage::DockPage(QQuickItem* parent)
     m_mainToolBars(this),
     m_toolBars(this),
     m_toolBarsDockingHolders(this),
-    m_panels(this),
-    m_statusBars(this)
+    m_panels(this)
 {
 }
 
@@ -66,11 +65,6 @@ QQmlListProperty<DockToolBar> DockPage::toolBarsProperty()
 QQmlListProperty<DockPanel> DockPage::panelsProperty()
 {
     return m_panels.property();
-}
-
-QQmlListProperty<DockStatusBar> DockPage::statusBarsProperty()
-{
-    return m_statusBars.property();
 }
 
 QQmlListProperty<DockToolBarHolder> DockPage::toolBarsDockingHoldersProperty()
@@ -121,14 +115,14 @@ DockCentral* DockPage::centralDock() const
     return m_central;
 }
 
+DockStatusBar* DockPage::statusBar() const
+{
+    return m_statusBar;
+}
+
 QList<DockPanel*> DockPage::panels() const
 {
     return m_panels.list();
-}
-
-QList<DockStatusBar*> DockPage::statusBars() const
-{
-    return m_statusBars.list();
 }
 
 DockBase* DockPage::dockByName(const QString& dockName) const
@@ -173,6 +167,16 @@ void DockPage::setCentralDock(DockCentral* central)
     emit centralDockChanged(central);
 }
 
+void DockPage::setStatusBar(DockStatusBar* statusBar)
+{
+    if (statusBar == m_statusBar) {
+        return;
+    }
+
+    m_statusBar = statusBar;
+    emit statusBarChanged(statusBar);
+}
+
 void DockPage::close()
 {
     TRACEFUNC;
@@ -194,14 +198,17 @@ QList<DockBase*> DockPage::allDocks() const
     auto mainToolBars = this->mainToolBars();
     auto toolbars = this->toolBars();
     auto panels = this->panels();
-    auto statusBars = this->statusBars();
 
     QList<DockBase*> docks;
     docks << QList<DockBase*>(mainToolBars.begin(), mainToolBars.end());
     docks << QList<DockBase*>(toolbars.begin(), toolbars.end());
-    docks << m_central;
     docks << QList<DockBase*>(panels.begin(), panels.end());
-    docks << QList<DockBase*>(statusBars.begin(), statusBars.end());
+
+    docks << m_central;
+
+    if (m_statusBar) {
+        docks << m_statusBar;
+    }
 
     return docks;
 }

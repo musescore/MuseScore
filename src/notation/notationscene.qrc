@@ -4,7 +4,6 @@
         <file>qml/MuseScore/NotationScene/qmldir</file>
         <file>qml/MuseScore/NotationScene/ZoomControl.qml</file>
         <file>qml/MuseScore/NotationScene/ViewModeControl.qml</file>
-        <file>qml/MuseScore/NotationScene/NotationAccessibilityInfo.qml</file>
         <file>qml/MuseScore/NotationScene/PartsDialog.qml</file>
         <file>qml/MuseScore/NotationScene/NotationToolBar.qml</file>
         <file>qml/MuseScore/NotationScene/ConcertPitchControl.qml</file>
