@@ -115,7 +115,9 @@
 #include "shape.h"
 //#include "musescoreCore.h"
 
-#ifdef MU_SCORE_ACCESSIBILITY
+#include "config.h"
+
+#ifdef USE_SCORE_ACCESSIBLE_TREE
 #include "accessibility/accessibleelement.h"
 #endif
 
@@ -214,7 +216,7 @@ Element::Element(Score* s, ElementFlags f, mu::score::AccessibleElement* access)
     _offsetChanged = OffsetChange::NONE;
     _minDistance   = Spatium(0.0);
 
-#ifdef MU_SCORE_ACCESSIBILITY
+#ifdef USE_SCORE_ACCESSIBLE_TREE
     m_accessible = access;
     if (!m_accessible) {
         m_accessible = new mu::score::AccessibleElement();
@@ -241,7 +243,7 @@ Element::Element(const Element& e)
     _minDistance   = e._minDistance;
     itemDiscovered = false;
 
-#ifdef MU_SCORE_ACCESSIBILITY
+#ifdef USE_SCORE_ACCESSIBLE_TREE
     m_accessible = e.m_accessible->clone(this);
 #endif
 }
@@ -252,7 +254,7 @@ Element::Element(const Element& e)
 
 Element::~Element()
 {
-#ifdef MU_SCORE_ACCESSIBILITY
+#ifdef USE_SCORE_ACCESSIBLE_TREE
     delete m_accessible;
 #endif
     Score::onElementDestruction(this);
@@ -2801,7 +2803,7 @@ bool Element::selected() const
 void Element::setSelected(bool f)
 {
     setFlag(ElementFlag::SELECTED, f);
-#ifdef MU_SCORE_ACCESSIBILITY
+#ifdef USE_SCORE_ACCESSIBLE_TREE
     if (f) {
         m_accessible->focused();
     }
