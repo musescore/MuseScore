@@ -32,6 +32,8 @@
 #include "sym.h"
 #include "xml.h"
 
+#include "draw/fontmetrics.h"
+
 // trying to do without it
 //#include <QQmlEngine>
 
@@ -497,13 +499,13 @@ void FiguredBassItem::layout()
 
     // construct font metrics
     int fontIdx = 0;
-    QFont f(g_FBFonts.at(fontIdx).family);
+    mu::draw::Font f(g_FBFonts.at(fontIdx).family);
 
     // font size in pixels, scaled according to spatium()
     // (use the same font selection as used in draw() below)
     qreal m = score()->styleD(Sid::figuredBassFontSize) * spatium() / SPATIUM20;
     f.setPointSizeF(m);
-    QFontMetricsF fm(f, MScore::paintDevice());
+    mu::draw::FontMetrics fm(f);
 
     QString str;
     x  = symWidth(SymId::noteheadBlack) * .5;
@@ -597,7 +599,7 @@ void FiguredBassItem::layout()
     setPos(x, y);
     // determine bbox from text width
 //      w = fm.width(str);
-    w = fm.boundingRect(str).width();
+    w = fm.width(str);
     textWidth = w;
     // if there is a cont.line, extend width to cover the whole FB element duration line
     int lineLen;
@@ -617,10 +619,8 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
     int font = 0;
     qreal _spatium = spatium();
     // set font from general style
-    QFont f(g_FBFonts.at(font).family);
-#ifdef USE_GLYPHS
-    f.setHintingPreference(QFont::PreferVerticalHinting);
-#endif
+    mu::draw::Font f(g_FBFonts.at(font).family);
+
     // (use the same font selection as used in layout() above)
     qreal m = score()->styleD(Sid::figuredBassFontSize) * spatium() / SPATIUM20;
     f.setPointSizeF(m * MScore::pixelRatio);

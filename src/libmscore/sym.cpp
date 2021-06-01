@@ -195,15 +195,15 @@ void ScoreFont::draw(SymId id, mu::draw::Painter* painter, const QSizeF& mag, co
                 qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(s));
                 return;
             }
-            font = new QFont;
-            font->setWeight(QFont::Normal);
+            font = new mu::draw::Font();
+            font->setWeight(mu::draw::Font::Normal);
             font->setItalic(false);
             font->setFamily(_family);
-            font->setStyleStrategy(QFont::NoFontMerging);
-            font->setHintingPreference(QFont::PreferVerticalHinting);
+            font->setNoFontMerging(true);
+            font->setHinting(mu::draw::Font::Hinting::PreferVerticalHinting);
         }
         qreal size = 20.0 * MScore::pixelRatio;
-        font->setPointSize(size);
+        font->setPointSizeF(size);
         QSizeF imag = QSizeF(1.0 / mag.width(), 1.0 / mag.height());
         painter->scale(mag.width(), mag.height());
         painter->setFont(*font);

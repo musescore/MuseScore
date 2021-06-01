@@ -21,6 +21,8 @@
  */
 #include "bufferedpaintprovider.h"
 
+#include "utils/drawlogger.h"
+#include "fontcompat.h"
 #include "log.h"
 #include "config.h"
 
@@ -28,7 +30,13 @@ using namespace mu::draw;
 
 BufferedPaintProvider::BufferedPaintProvider()
 {
+    m_drawObjectsLogger = new DrawObjectsLogger();
     clear();
+}
+
+BufferedPaintProvider::~BufferedPaintProvider()
+{
+    delete m_drawObjectsLogger;
 }
 
 QPaintDevice* BufferedPaintProvider::device() const
@@ -139,12 +147,12 @@ void BufferedPaintProvider::setCompositionMode(CompositionMode mode)
     editableState().compositionMode = mode;
 }
 
-void BufferedPaintProvider::setFont(const QFont& f)
+void BufferedPaintProvider::setFont(const Font& f)
 {
     editableState().font = f;
 }
 
-const QFont& BufferedPaintProvider::font() const
+Font BufferedPaintProvider::font() const
 {
     return currentState().font;
 }
@@ -229,9 +237,10 @@ void BufferedPaintProvider::drawText(const QRectF& rect, int flags, const QStrin
     editableData().rectTexts.push_back(DrawRectText { rect, flags, text });
 }
 
-void BufferedPaintProvider::drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun)
+void BufferedPaintProvider::drawTextWorkaround(mu::draw::Font& f, const QPointF& pos, const QString& text)
 {
-    editableData().glyphs.push_back(DrawGlyphRun { position, glyphRun });
+    setFont(f);
+    drawText(pos, text);
 }
 
 void BufferedPaintProvider::drawPixmap(const QPointF& p, const QPixmap& pm)

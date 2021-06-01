@@ -33,6 +33,8 @@
 #include "staff.h"
 #include "undo.h"
 
+#include "draw/fontmetrics.h"
+
 namespace Ms {
 //    parent() is Segment or Box
 //
@@ -60,7 +62,7 @@ FretDiagram::FretDiagram(Score* score)
     : Element(score, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     font.setFamily("FreeSans");
-    font.setPointSize(4.0 * mag());
+    font.setPointSizeF(4.0 * mag());
     initElementStyle(&fretStyle);
 }
 
@@ -434,8 +436,8 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     // Draw fret offset number
     if (_fretOffset > 0) {
         qreal fretNumMag = score()->styleD(Sid::fretNumMag);
-        QFont scaledFont(font);
-        scaledFont.setPointSizeF(font.pointSize() * _userMag * (spatium() / SPATIUM20) * MScore::pixelRatio* fretNumMag);
+        mu::draw::Font scaledFont(font);
+        scaledFont.setPointSizeF(font.pointSizeF() * _userMag * (spatium() / SPATIUM20) * MScore::pixelRatio* fretNumMag);
         painter->setFont(scaledFont);
         QString text = QString("%1").arg(_fretOffset + 1);
 
@@ -491,14 +493,13 @@ void FretDiagram::layout()
 
     // Allocate space for fret offset number
     if (_fretOffset > 0) {
-        QFont scaledFont(font);
-        scaledFont.setPointSize(font.pointSize() * _userMag);
-        QFontMetricsF fm(scaledFont, MScore::paintDevice());
+        mu::draw::Font scaledFont(font);
+        scaledFont.setPointSizeF(font.pointSizeF() * _userMag);
 
         qreal fretNumMag = score()->styleD(Sid::fretNumMag);
         scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
-        QFontMetricsF fm2(scaledFont, MScore::paintDevice());
-        qreal numw = fm2.width(QString("%1").arg(_fretOffset + 1));
+        mu::draw::FontMetrics fm2(scaledFont);
+        qreal numw = fm2.width(QString::number(_fretOffset + 1));
         qreal xdiff = numw + stringDist * .4;
         w += xdiff;
         x += (_numPos == 0) == (_orientation == Orientation::VERTICAL) ? -xdiff : 0;

@@ -23,12 +23,12 @@
 #define MU_DRAW_QPAINTERPROVIDER_H
 
 #include "ipaintprovider.h"
-#include "drawlogger.h"
 
 class QPainter;
 class QImage;
 
 namespace mu::draw {
+class DrawObjectsLogger;
 class QPainterProvider : public IPaintProvider
 {
 public:
@@ -52,8 +52,8 @@ public:
     void setAntialiasing(bool arg) override;
     void setCompositionMode(CompositionMode mode) override;
 
-    void setFont(const QFont& font) override;
-    const QFont& font() const override;
+    void setFont(const Font& font) override;
+    Font font() const override;
 
     void setPen(const QPen& pen) override;
     void setNoPen() override;
@@ -74,8 +74,7 @@ public:
 
     void drawText(const QPointF& point, const QString& text) override;
     void drawText(const QRectF& rect, int flags, const QString& text) override;
-
-    void drawGlyphRun(const QPointF& position, const QGlyphRun& glyphRun) override;
+    void drawTextWorkaround(mu::draw::Font& f, const QPointF& pos, const QString& text) override;
 
     void drawPixmap(const QPointF& point, const QPixmap& pm) override;
     void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF()) override;
@@ -83,7 +82,7 @@ public:
 private:
     QPainter* m_painter = nullptr;
     bool m_overship = false;
-    DrawObjectsLogger m_drawObjectsLogger;
+    DrawObjectsLogger* m_drawObjectsLogger = nullptr;
 
     QTransform m_transform;
 };

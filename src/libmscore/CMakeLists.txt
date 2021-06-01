@@ -356,20 +356,30 @@ set(MODULE_SRC
     xmlreader.cpp
     xmlwriter.cpp
 
+    draw/drawtypes.h
     draw/painter.cpp
     draw/painter.h
     draw/ipaintprovider.h
-    draw/drawtypes.h
     draw/qpainterprovider.cpp
     draw/qpainterprovider.h
+    draw/buffereddrawtypes.h
     draw/bufferedpaintprovider.cpp
     draw/bufferedpaintprovider.h
-    draw/drawlogger.cpp
-    draw/drawlogger.h
-    draw/drawjson.cpp
-    draw/drawjson.h
-    draw/drawcomp.cpp
-    draw/drawcomp.h
+    draw/ifontprovider.h
+    draw/font.cpp
+    draw/font.h
+    draw/fontmetrics.cpp
+    draw/fontmetrics.h
+    draw/fontcompat.cpp
+    draw/fontcompat.h
+    draw/qfontprovider.cpp
+    draw/qfontprovider.h
+    draw/utils/drawlogger.cpp
+    draw/utils/drawlogger.h
+    draw/utils/drawjson.cpp
+    draw/utils/drawjson.h
+    draw/utils/drawcomp.cpp
+    draw/utils/drawcomp.h
 
     accessibility/accessiblescore.cpp
     accessibility/accessiblescore.h

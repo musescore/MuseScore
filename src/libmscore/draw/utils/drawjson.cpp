@@ -72,21 +72,21 @@ static void fromObj(const QJsonObject& obj, QBrush& brush)
     brush.setColor(QColor(obj["color"].toString()));
 }
 
-static QJsonObject toObj(const QFont& font)
+static QJsonObject toObj(const Font& font)
 {
     QJsonObject obj;
     obj["family"] = font.family();
-    obj["pointSize"] = font.pointSize();
+    obj["pointSize"] = font.pointSizeF();
     obj["weight"] = font.weight();
     obj["italic"] = font.italic();
     return obj;
 }
 
-static void fromObj(const QJsonObject& obj, QFont& font)
+static void fromObj(const QJsonObject& obj, Font& font)
 {
     font.setFamily(obj["family"].toString());
-    font.setPointSize(obj["pointSize"].toInt());
-    font.setWeight(obj["weight"].toInt());
+    font.setPointSizeF(obj["pointSize"].toDouble());
+    font.setWeight(static_cast<Font::Weight>(obj["weight"].toInt()));
     font.setItalic(obj["italic"].toBool());
 }
 

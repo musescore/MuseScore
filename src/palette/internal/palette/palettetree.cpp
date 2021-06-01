@@ -1177,8 +1177,8 @@ void PaletteCellIconEngine::paintTag(mu::draw::Painter& painter, const QRect& re
 
     painter.save();   // so we can restore it after we are done using it
     painter.setPen(configuration()->elementsColor());
-    QFont f(painter.font());
-    f.setPointSize(12);
+    mu::draw::Font f(painter.font());
+    f.setPointSizeF(12.0);
     painter.setFont(f);
 
     if (tag == "ShowMore") {

@@ -1070,8 +1070,8 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
         QString tag = currentCell->tag;
         if (!tag.isEmpty()) {
             painter.setPen(configuration()->gridColor());
-            QFont f(painter.font());
-            f.setPointSize(12);
+            mu::draw::Font f(painter.font());
+            f.setPointSizeF(12.0);
             painter.setFont(f);
             if (tag == "ShowMore") {
                 painter.drawText(idxRect(idx), Qt::AlignCenter, "???");
