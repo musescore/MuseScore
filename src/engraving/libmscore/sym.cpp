@@ -21,7 +21,6 @@
  */
 
 #include <cmath>
-#include <QFontDatabase>
 #include <QJsonParseError>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -191,7 +190,7 @@ void ScoreFont::draw(SymId id, mu::draw::Painter* painter, const QSizeF& mag, co
     if (MScore::pdfPrinting) {
         if (font == 0) {
             QString s(_fontPath + _filename);
-            if (-1 == QFontDatabase::addApplicationFont(s)) {
+            if (-1 == fontProvider()->addApplicationFont(s)) {
                 qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(s));
                 return;
             }
