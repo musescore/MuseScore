@@ -93,6 +93,8 @@ public:
     ValCh<int> currentZoom() const override;
     void setCurrentZoom(int zoomPercentage) override;
 
+    QList<int> possibleZoomPercentageList() const override;
+
     int mouseZoomPrecision() const override;
     void setMouseZoomPrecision(int precision) override;
 

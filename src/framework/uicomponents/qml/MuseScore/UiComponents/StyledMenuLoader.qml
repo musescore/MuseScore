@@ -63,6 +63,7 @@ Loader {
         id: itemMenuComp
         StyledMenu {
             id: itemMenu
+
             onHandleAction: {
                 Qt.callLater(loader.handleAction, actionCode, actionIndex)
                 itemMenu.close()
