@@ -204,6 +204,7 @@ private slots:
       void tempoOverlap() { mxmlIoTestRef("testTempoOverlap"); }
       void tempoPrecision() { mxmlMscxExportTestRef("testTempoPrecision"); }
       void textLines() { mxmlMscxExportTestRef("testTextLines"); }
+      void textOrder() { mxmlImportTestRef("testTextOrder"); }
       void timesig1() { mxmlIoTest("testTimesig1"); }
       void timesig3() { mxmlIoTest("testTimesig3"); }
       void trackHandling() { mxmlIoTest("testTrackHandling"); }
