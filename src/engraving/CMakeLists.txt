@@ -47,6 +47,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontcompat.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/qfontprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/qfontprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/fontengineft.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/draw/fontengineft.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/utils/drawlogger.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/utils/drawlogger.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/utils/drawjson.cpp
