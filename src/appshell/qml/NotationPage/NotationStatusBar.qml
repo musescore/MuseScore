@@ -36,6 +36,12 @@ Rectangle {
         model.load()
     }
 
+    MouseArea {
+        anchors.fill: parent
+
+        onClicked: root.forceActiveFocus()
+    }
+
     StyledTextLabel {
         anchors.left: parent.left
         anchors.leftMargin: 12
