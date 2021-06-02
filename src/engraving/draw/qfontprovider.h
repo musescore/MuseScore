@@ -22,15 +22,18 @@
 #ifndef MU_DRAW_QFONTPROVIDER_H
 #define MU_DRAW_QFONTPROVIDER_H
 
+#include <QHash>
 #include "ifontprovider.h"
 
 namespace mu::draw {
+class FontEngineFT;
 class QFontProvider : public IFontProvider
 {
 public:
     QFontProvider() = default;
 
-    int addApplicationFont(const QString& path) override;
+    int addApplicationFont(const QString& family, const QString& path) override;
+    void insertSubstitution(const QString& familyName, const QString& substituteName) override;
 
     qreal lineSpacing(const Font& f) const override;
     qreal xHeight(const Font& f) const override;
@@ -38,13 +41,28 @@ public:
     qreal ascent(const Font& f) const override;
     qreal descent(const Font& f) const override;
 
+    bool inFont(const Font& f, QChar ch) const override;
+    bool inFontUcs4(const Font& f, uint ucs4) const override;
+
+    // Text
+    qreal horizontalAdvance(const Font& f, const QString& string) const override;
+    qreal horizontalAdvance(const Font& f, const QChar& ch) const override;
+
     QRectF boundingRect(const Font& f, const QString& string) const override;
     QRectF boundingRect(const Font& f, const QChar& ch) const override;
     QRectF boundingRect(const Font& f, const QRectF& r, int flags, const QString& string) const override;
     QRectF tightBoundingRect(const Font& f, const QString& string) const override;
 
-    bool inFont(const Font& f, QChar ch) const override;
-    bool inFontUcs4(const Font& f, uint ucs4) const override;
+    // Score symbols
+    QRectF symBBox(const Font& f, uint ucs4, qreal DPI_F) const override;
+    qreal symAdvance(const Font& f, uint ucs4, qreal DPI_F) const override;
+
+private:
+
+    FontEngineFT* symEngine(const Font& f) const;
+
+    QHash<QString /*family*/, QString /*path*/> m_paths;
+    mutable QHash<QString /*path*/, FontEngineFT*> m_symEngines;
 };
 }
 

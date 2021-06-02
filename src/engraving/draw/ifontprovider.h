@@ -35,7 +35,8 @@ class IFontProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IFontProvider() = default;
 
-    virtual int addApplicationFont(const QString& path) = 0;
+    virtual int addApplicationFont(const QString& family, const QString& path) = 0;
+    virtual void insertSubstitution(const QString& familyName, const QString& substituteName) = 0;
 
     virtual qreal lineSpacing(const Font& f) const = 0;
     virtual qreal xHeight(const Font& f) const = 0;
@@ -43,13 +44,21 @@ public:
     virtual qreal ascent(const Font& f) const = 0;
     virtual qreal descent(const Font& f) const = 0;
 
+    virtual bool inFont(const Font& f, QChar ch) const = 0;
+    virtual bool inFontUcs4(const Font& f, uint ucs4) const = 0;
+
+    // Text
+    virtual qreal horizontalAdvance(const Font& f, const QString& string) const = 0;
+    virtual qreal horizontalAdvance(const Font& f, const QChar& ch) const = 0;
+
     virtual QRectF boundingRect(const Font& f, const QString& string) const = 0;
     virtual QRectF boundingRect(const Font& f, const QChar& ch) const = 0;
     virtual QRectF boundingRect(const Font& f, const QRectF& r, int flags, const QString& string) const = 0;
     virtual QRectF tightBoundingRect(const Font& f, const QString& string) const = 0;
 
-    virtual bool inFont(const Font& f, QChar ch) const = 0;
-    virtual bool inFontUcs4(const Font& f, uint ucs4) const = 0;
+    // Score symbols
+    virtual QRectF symBBox(const Font& f, uint ucs4, qreal DPI_F) const = 0;
+    virtual qreal symAdvance(const Font& f, uint ucs4, qreal DPI_F) const = 0;
 };
 }
 

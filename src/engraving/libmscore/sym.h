@@ -36,9 +36,6 @@
 #include "modularity/ioc.h"
 #include "draw/ifontprovider.h"
 
-#include "ft2build.h"
-#include FT_FREETYPE_H
-
 namespace Ms {
 //---------------------------------------------------------
 //   SmuflAnchorId
@@ -64,7 +61,6 @@ class Sym
 {
 protected:
     int _code = -1;
-    FT_UInt _index = 0;
     QRectF _bbox;
     qreal _advance = 0.0;
 
@@ -78,9 +74,6 @@ public:
 
     void setSymList(const std::vector<SymId>& sl) { _ids = sl; }
     const std::vector<SymId>& symList() const { return _ids; }
-
-    FT_UInt index() const { return _index; }
-    void setIndex(FT_UInt i) { _index = i; }
 
     int code() const { return _code; }
     void setCode(int val) { _code = val; }
@@ -117,40 +110,6 @@ public:
 };
 
 //---------------------------------------------------------
-//   GlyphKey
-///   \cond PLUGIN_API \private \endcond
-//---------------------------------------------------------
-
-struct GlyphKey {
-    FT_Face face;
-    SymId id;
-    qreal magX;
-    qreal magY;
-    qreal worldScale;
-    QColor color;
-
-public:
-    GlyphKey(FT_Face _f, SymId _id, float mx, float my, float s, QColor c)
-        : face(_f), id(_id), magX(mx), magY(my), worldScale(s), color(c) {}
-    bool operator==(const GlyphKey&) const;
-};
-
-//---------------------------------------------------------
-//   GlyphPixmap
-///   \cond PLUGIN_API \private \endcond
-//---------------------------------------------------------
-
-struct GlyphPixmap {
-    QPixmap pm;
-    QPointF offset;
-};
-
-inline uint qHash(const GlyphKey& k)
-{
-    return (int(k.id) << 16) + (int(k.magX * 100) << 8) + k.magY * 100;
-}
-
-//---------------------------------------------------------
 //   ScoreFont
 ///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
@@ -159,20 +118,18 @@ class ScoreFont
 {
     INJECT(score, mu::draw::IFontProvider, fontProvider)
 
-    FT_Face face = 0;
-    QVector<Sym> _symbols;
-    QString _name;
-    QString _family;
-    QString _fontPath;
-    QString _filename;
-    QByteArray fontImage;
-    QCache<GlyphKey, GlyphPixmap>* cache { 0 };
-    std::list<std::pair<Sid, QVariant> > _engravingDefaults;
-    double _textEnclosureThickness = 0;
-    mutable mu::draw::Font* font { 0 };
+    bool m_loaded = false;
+    QVector<Sym> m_symbols;
+    QString m_name;
+    QString m_family;
+    QString m_fontPath;
+    QString m_filename;
+    std::list<std::pair<Sid, QVariant> > m_engravingDefaults;
+    double m_textEnclosureThickness = 0;
+    mutable mu::draw::Font m_font;
 
-    static QVector<ScoreFont> _scoreFonts;
-    static std::array<uint, size_t(SymId::lastSym) + 1> _mainSymCodeTable;
+    static QVector<ScoreFont> s_scoreFonts;
+    static std::array<uint, size_t(SymId::lastSym) + 1> s_mainSymCodeTable;
     void load();
     void computeMetrics(Sym* sym, int code);
 
@@ -180,24 +137,24 @@ public:
     ScoreFont() {}
     ScoreFont(const ScoreFont&);
     ScoreFont(const char* n, const char* f, const char* p, const char* fn)
-        : _name(n), _family(f), _fontPath(p), _filename(fn)
+        : m_name(n), m_family(f), m_fontPath(p), m_filename(fn)
     {
-        _symbols = QVector<Sym>(int(SymId::lastSym) + 1);
+        m_symbols = QVector<Sym>(int(SymId::lastSym) + 1);
     }
 
-    ~ScoreFont();
+    ~ScoreFont() = default;
 
-    const QString& name() const { return _name; }
-    const QString& family() const { return _family; }
-    std::list<std::pair<Sid, QVariant> > engravingDefaults() { return _engravingDefaults; }
-    double textEnclosureThickness() { return _textEnclosureThickness; }
+    const QString& name() const { return m_name; }
+    const QString& family() const { return m_family; }
+    std::list<std::pair<Sid, QVariant> > engravingDefaults() { return m_engravingDefaults; }
+    double textEnclosureThickness() { return m_textEnclosureThickness; }
 
-    QString fontPath() const { return _fontPath; }
+    QString fontPath() const { return m_fontPath; }
 
     static ScoreFont* fontFactory(QString);
     static ScoreFont* fallbackFont();
     static const char* fallbackTextFont();
-    static const QVector<ScoreFont>& scoreFonts() { return _scoreFonts; }
+    static const QVector<ScoreFont>& scoreFonts() { return s_scoreFonts; }
     static QJsonObject initGlyphNamesJson();
 
     QString toString(SymId id) const;

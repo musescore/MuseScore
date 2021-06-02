@@ -55,12 +55,22 @@ qreal FontMetrics::descent() const
 
 qreal FontMetrics::width(const QString& string) const
 {
-    return boundingRect(string).width();
+    return horizontalAdvance(string);
 }
 
 qreal FontMetrics::width(const QChar& ch) const
 {
-    return boundingRect(ch).width();
+    return horizontalAdvance(ch);
+}
+
+qreal FontMetrics::horizontalAdvance(const QString& string) const
+{
+    return fontProvider()->horizontalAdvance(m_font, string);
+}
+
+qreal FontMetrics::horizontalAdvance(const QChar& ch) const
+{
+    return fontProvider()->horizontalAdvance(m_font, ch);
 }
 
 QRectF FontMetrics::boundingRect(const QString& string) const
