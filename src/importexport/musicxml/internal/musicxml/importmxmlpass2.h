@@ -185,7 +185,9 @@ class Glissando;
 class Pedal;
 class Trill;
 class MxmlLogger;
+class MusicXMLDelayedDirectionElement;
 
+using DelayedDirectionsList = QList<MusicXMLDelayedDirectionElement*>;
 using SlurStack = std::array<SlurDesc, MAX_NUMBER_LEVEL>;
 using TrillStack = std::array<Trill*, MAX_NUMBER_LEVEL>;
 using BracketsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
@@ -360,7 +362,9 @@ class MusicXMLParserDirection
 public:
     MusicXMLParserDirection(QXmlStreamReader& e, Score* score, const MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2,
                             MxmlLogger* logger);
-    void direction(const QString& partId, Measure* measure, const Fraction& tick, const int divisions, MusicXmlSpannerMap& spanners);
+    void direction(const QString& partId, Measure* measure, const Fraction& tick, const int divisions, MusicXmlSpannerMap& spanners,
+                   DelayedDirectionsList& delayedDirections);
+    qreal totalY() const { return _defaultY + _relativeY; }
 
 private:
     QXmlStreamReader& _e;
@@ -384,6 +388,9 @@ private:
     QString _sndFine;
     bool _hasDefaultY;
     qreal _defaultY;
+    bool _hasRelativeY;
+    qreal _relativeY;
+    bool hasTotalY() { return _hasRelativeY || _hasDefaultY; }
     bool _coda;
     bool _segno;
     double _tpoMetro;                   // tempo according to metronome
@@ -402,6 +409,33 @@ private:
     void dynamics();
     void handleRepeats(Measure* measure, const int track);
     void skipLogCurrElem();
+};
+
+//---------------------------------------------------------
+//   MusicXMLDelayedDirectionElement
+//---------------------------------------------------------
+/**
+ Helper class to allow Direction elements to be sorted by _totalY
+ before being added to the score.
+ */
+
+class MusicXMLDelayedDirectionElement
+{
+public:
+    MusicXMLDelayedDirectionElement(qreal totalY, EngravingItem* engravingItem, int track,
+                                    QString placement, Measure* measure, Fraction tick)
+        : _totalY(totalY),  _engravingItem(engravingItem), _track(track), _placement(placement),
+        _measure(measure), _tick(tick) {}
+    void addElem();
+    qreal totalY() const { return _totalY; }
+
+private:
+    qreal _totalY;
+    EngravingItem* _engravingItem;
+    int _track;
+    QString _placement;
+    Measure* _measure;
+    Fraction _tick;
 };
 } // namespace Ms
 #endif
