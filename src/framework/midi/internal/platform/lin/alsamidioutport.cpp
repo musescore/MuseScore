@@ -73,6 +73,10 @@ std::vector<MidiDevice> AlsaMidiOutPort::devices() const
 
     while (snd_seq_query_next_client(handle, cinfo) >= 0) {
         client = snd_seq_client_info_get_client(cinfo);
+        if (client == SND_SEQ_CLIENT_SYSTEM) {
+            continue;
+        }
+
         snd_seq_port_info_alloca(&pinfo);
         snd_seq_port_info_set_client(pinfo, client);
 
