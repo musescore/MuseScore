@@ -153,7 +153,7 @@ void Painter::setFont(const Font& font)
     }
 }
 
-Font Painter::font() const
+const Font& Painter::font() const
 {
     return m_provider->font();
 }
@@ -425,6 +425,14 @@ void Painter::drawTextWorkaround(mu::draw::Font& f, const QPointF pos, const QSt
     m_provider->drawTextWorkaround(f, pos, text);
     if (extended) {
         extended->drawTextWorkaround(f, pos, text);
+    }
+}
+
+void Painter::drawSymbol(const QPointF& point, uint ucs4Code)
+{
+    m_provider->drawSymbol(point, ucs4Code);
+    if (extended) {
+        extended->drawSymbol(point, ucs4Code);
     }
 }
 
