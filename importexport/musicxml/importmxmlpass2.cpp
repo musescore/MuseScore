@@ -1995,6 +1995,8 @@ void MusicXMLParserPass2::measure(const QString& partId,
       FiguredBassList fbl;               // List of figured bass elements under a single note
       MxmlTupletStates tupletStates;       // Tuplet state for each voice in the current part
       Tuplets tuplets;       // Current tuplet for each voice in the current part
+      DelayedDirectionsList delayedDirections; // Directions to be added to score *after* collecting all and sorting
+
 
       // collect candidates for courtesy accidentals to work out at measure end
       QMap<Note*, int> alterMap;
@@ -2004,7 +2006,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                   attributes(partId, measure, time + mTime);
             else if (_e.name() == "direction") {
                   MusicXMLParserDirection dir(_e, _score, _pass1, *this, _logger);
-                  dir.direction(partId, measure, time + mTime, _divs, _spanners);
+                  dir.direction(partId, measure, time + mTime, _divs, _spanners, delayedDirections);
                   }
             else if (_e.name() == "figured-bass") {
                   FiguredBass* fb = figuredBass();
@@ -2125,6 +2127,18 @@ void MusicXMLParserPass2::measure(const QString& partId,
       for (Beam* beam : beams.values()) {
             if (beam)
                   removeBeam(beam);
+      }
+
+      // Sort and add delayed directions
+      std::sort(delayedDirections.begin(), delayedDirections.end(),
+            // Lambda: sort by absolute value of totalY
+            [](const MusicXMLDelayedDirectionElement* a, const MusicXMLDelayedDirectionElement* b) -> bool {
+                  return std::abs(a->totalY()) < std::abs(b->totalY());
+                  }
+            );
+      for (auto direction : delayedDirections) {
+            direction->addElem();
+            delete direction;
       }
 
       // TODO:
@@ -2376,6 +2390,12 @@ static Fraction calcTicks(const QString& text, int divs, MxmlLogger* logger, con
       return dura;
       }
 
+
+void MusicXMLDelayedDirectionElement::addElem()
+      {
+      addElemOffset(_element, _track, _placement, _measure, _tick);
+      }
+
 //---------------------------------------------------------
 //   direction
 //---------------------------------------------------------
@@ -2388,7 +2408,8 @@ void MusicXMLParserDirection::direction(const QString& partId,
                                         Measure* measure,
                                         const Fraction& tick,
                                         const int divisions,
-                                        MusicXmlSpannerMap& spanners)
+                                        MusicXmlSpannerMap& spanners,
+                                        DelayedDirectionsList& delayedDirections)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "direction");
       //qDebug("direction tick %s", qPrintable(tick.print()));
@@ -2486,8 +2507,17 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         t->setFrameRound(0);
                         }
 
-//TODO:ws            if (_hasDefaultY) t->textStyle().setYoff(_defaultY);
-                  addElemOffset(t, track, placement, measure, tick + _offset);
+                  if (placement == "" && hasTotalY())
+                        placement = totalY() < 0 ? "above" : "below";
+                  if (hasTotalY()) {
+                        // Add element to score later, after collecting all the others and sorting by default-y
+                        // This allows default-y to be at least respected by the order of elements
+                        MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), t, track, placement, measure, tick + _offset);
+                        delayedDirections.push_back(delayedDirection);
+                        }
+                  else {
+                        addElemOffset(t, track, placement, measure, tick + _offset);
+                        }
                   }
             }
       else if (_tpoSound > 0) {
@@ -2504,7 +2534,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   t->setTempo(tpo);
                   t->setFollowText(true);
 
-                  // TBD may want ro use tick + _offset if sound is affected
+                  // TBD may want to use tick + _offset if sound is affected
                   _score->setTempo(tick, tpo);
 
                   addElemOffset(t, track, placement, measure, tick + _offset);
@@ -2598,6 +2628,7 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
 
       while (_e.readNextStartElement()) {
             _defaultY = _e.attributes().value("default-y").toDouble(&_hasDefaultY) * -0.1;
+            _relativeY = _e.attributes().value("relative-y").toDouble(&_hasRelativeY) * -0.1;
             QString number = _e.attributes().value("number").toString();
             int n = 0;
             if (number != "") {
@@ -6515,7 +6546,7 @@ MusicXMLParserDirection::MusicXMLParserDirection(QXmlStreamReader& e,
                                                  MusicXMLParserPass2& pass2,
                                                  MxmlLogger* logger)
       : _e(e), _score(score), _pass1(pass1), _pass2(pass2), _logger(logger),
-      _hasDefaultY(false), _defaultY(0.0), _coda(false), _segno(false),
+      _hasDefaultY(false), _defaultY(0.0), _hasRelativeY(false), _relativeY(0.0), _coda(false), _segno(false),
       _tpoMetro(0), _tpoSound(0), _offset(0, 1)
       {
       // nothing
