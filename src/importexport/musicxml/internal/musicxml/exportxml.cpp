@@ -6576,6 +6576,7 @@ static void annotationsWithoutNote(ExportMusicXml* exp, const int strack, const 
                     }
                     const auto wtrack = findTrackForAnnotations(element->track(), segment);           // track to write annotation
                     if (strack <= element->track() && element->track() < (strack + VOICES * staves) && wtrack < 0) {
+                        // TODO: the logic for staves here appears to be incorrect.
                         commonAnnotations(exp, element, staves > 1 ? 1 : 0);
                     }
                 }
