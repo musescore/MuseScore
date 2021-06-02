@@ -37,6 +37,7 @@ static const QString SELECTED_KEY("selected");
 static const QString TYPE_KEY("type");
 static const QString CODE_KEY("code");
 static const QString VALUE_KEY("value");
+static constexpr int MIN_DISPLAYED_ZOOM_PERCENTAGE = 25;
 
 static ActionCode zoomTypeToActionCode(ZoomType type)
 {
@@ -239,7 +240,9 @@ QVariantList NotationStatusBarModel::availableZoomList() const
         return obj;
     };
 
-    for (int zoom : possibleZoomPercentageList()) {
+    QList<int> possibleZoomList = possibleZoomPercentageList();
+
+    for (int zoom : possibleZoomList) {
         result << buildZoomObj(ZoomType::Percentage, zoomPercentageTitle(zoom), zoom);
     }
 
@@ -247,7 +250,7 @@ QVariantList NotationStatusBarModel::availableZoomList() const
     result << buildZoomObj(ZoomType::WholePage);
     result << buildZoomObj(ZoomType::TwoPages);
 
-    bool isCustomZoom = m_currentZoomType == ZoomType::Percentage && !possibleZoomPercentageList().contains(currZoomPercentage);
+    bool isCustomZoom = m_currentZoomType == ZoomType::Percentage && !possibleZoomList.contains(currZoomPercentage);
     if (isCustomZoom) {
         QVariantMap customZoom = buildZoomObj(ZoomType::Percentage, zoomPercentageTitle(currZoomPercentage), currZoomPercentage);
         customZoom[SELECTED_KEY] = true;
@@ -317,7 +320,15 @@ void NotationStatusBarModel::dispatch(const actions::ActionCode& code, const act
 
 QList<int> NotationStatusBarModel::possibleZoomPercentageList() const
 {
-    return notationConfiguration()->possibleZoomPercentageList();
+    QList<int> result;
+
+    for (int zoom : notationConfiguration()->possibleZoomPercentageList()) {
+        if (zoom >= MIN_DISPLAYED_ZOOM_PERCENTAGE) {
+            result << zoom;
+        }
+    }
+
+    return result;
 }
 
 void NotationStatusBarModel::setConcertPitchEnabled(bool enabled)

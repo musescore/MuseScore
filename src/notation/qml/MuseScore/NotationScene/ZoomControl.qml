@@ -83,6 +83,8 @@ Row {
     }
 
     FlatButton {
+        width: 20
+
         icon: IconCode.SMALL_ARROW_DOWN
 
         normalStateColor: menu.isMenuOpened ? ui.theme.accentColor : "transparent"
