@@ -74,7 +74,7 @@ public:
     void setCompositionMode(CompositionMode mode);
 
     void setFont(const Font& font);
-    Font font() const;
+    const Font& font() const;
 
     void setPen(const QPen& pen);
     inline void setPen(const QColor& color);
@@ -159,6 +159,8 @@ public:
     //! bold and underlined.
     //! (moved from TextBase::drawTextWorkaround)
     void drawTextWorkaround(mu::draw::Font& f, const QPointF pos, const QString text);
+
+    void drawSymbol(const QPointF& point, uint ucs4Code);
 
     void fillRect(const QRectF& rect, const QBrush& brush);
 

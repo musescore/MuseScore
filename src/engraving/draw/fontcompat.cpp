@@ -24,7 +24,10 @@
 QFont mu::draw::toQFont(const Font& f)
 {
     QFont qf(f.family());
-    qf.setPointSizeF(f.pointSizeF());
+
+    if (f.pointSizeF() > 0) {
+        qf.setPointSizeF(f.pointSizeF());
+    }
     qf.setWeight(static_cast<QFont::Weight>(f.weight()));
     qf.setBold(f.bold());
     qf.setItalic(f.italic());

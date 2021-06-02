@@ -152,7 +152,7 @@ void BufferedPaintProvider::setFont(const Font& f)
     editableState().font = f;
 }
 
-Font BufferedPaintProvider::font() const
+const Font& BufferedPaintProvider::font() const
 {
     return currentState().font;
 }
@@ -241,6 +241,11 @@ void BufferedPaintProvider::drawTextWorkaround(mu::draw::Font& f, const QPointF&
 {
     setFont(f);
     drawText(pos, text);
+}
+
+void BufferedPaintProvider::drawSymbol(const QPointF& point, uint ucs4Code)
+{
+    drawText(point, QString::fromUcs4(&ucs4Code, 1));
 }
 
 void BufferedPaintProvider::drawPixmap(const QPointF& p, const QPixmap& pm)

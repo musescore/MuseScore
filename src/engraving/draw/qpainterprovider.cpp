@@ -26,6 +26,7 @@
 #include <QTextLayout>
 #include <QTextLine>
 #include <QGlyphRun>
+#include <QStaticText>
 
 #include "fontcompat.h"
 #include "utils/drawlogger.h"
@@ -37,6 +38,7 @@ QPainterProvider::QPainterProvider(QPainter* painter, bool overship)
     : m_painter(painter), m_overship(overship)
 {
     m_drawObjectsLogger = new DrawObjectsLogger();
+    m_font = mu::draw::fromQFont(m_painter->font());
 }
 
 QPainterProvider::~QPainterProvider()
@@ -119,12 +121,15 @@ void QPainterProvider::setCompositionMode(CompositionMode mode)
 
 void QPainterProvider::setFont(const Font& font)
 {
-    m_painter->setFont(mu::draw::toQFont(font));
+    if (m_font != font) {
+        m_painter->setFont(mu::draw::toQFont(font));
+        m_font = font;
+    }
 }
 
-Font QPainterProvider::font() const
+const Font& QPainterProvider::font() const
 {
-    return mu::draw::fromQFont(m_painter->font());
+    return m_font;
 }
 
 void QPainterProvider::setPen(const QPen& pen)
@@ -160,6 +165,7 @@ void QPainterProvider::save()
 void QPainterProvider::restore()
 {
     m_painter->restore();
+    m_font = mu::draw::fromQFont(m_painter->font());
 }
 
 void QPainterProvider::setTransform(const QTransform& transform)
@@ -267,6 +273,16 @@ void QPainterProvider::drawTextWorkaround(mu::draw::Font& f, const QPointF& pos,
     // Restore the QPainter to its former state
     m_painter->setWorldTransform(QTransform(mm, 0.0, 0.0, mm, dx, dy));
     m_painter->restore();
+}
+
+void QPainterProvider::drawSymbol(const QPointF& point, uint ucs4Code)
+{
+    static QHash<uint, QString> cache;
+    if (!cache.contains(ucs4Code)) {
+        cache[ucs4Code] = QString::fromUcs4(&ucs4Code, 1);
+    }
+
+    m_painter->drawText(point, cache[ucs4Code]);
 }
 
 void QPainterProvider::drawPixmap(const QPointF& point, const QPixmap& pm)

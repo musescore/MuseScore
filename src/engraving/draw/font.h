@@ -29,13 +29,12 @@ class Font
 {
 public:
     Font(const QString& family = QString());
-    Font(const Font& font);
 
     enum class Style {
-        Undefined = 0,
-        Bold = 1 << 1,
-        Italic = 1 << 2,
-        Underline = 1 << 3
+        Undefined   = 0,
+        Bold        = 1 << 1,
+        Italic      = 1 << 2,
+        Underline   = 1 << 3
     };
 
     enum class Hinting {
@@ -79,10 +78,13 @@ public:
     Hinting hinting() const;
     void setHinting(Hinting hinting);
 
+    bool operator ==(const Font& other) const;
+    bool operator !=(const Font& other) const { return !this->operator ==(other); }
+
 private:
 
     QString m_family;
-    qreal m_pointSizeF = 0;
+    qreal m_pointSizeF = -1;
     Weight m_weight = Weight::Normal;
     QFlags<Style> m_style{ Style::Undefined };
     bool m_noFontMerging = false;

@@ -200,8 +200,8 @@ public:
     static const QVector<ScoreFont>& scoreFonts() { return _scoreFonts; }
     static QJsonObject initGlyphNamesJson();
 
-    QString toString(SymId) const;
-    QPixmap sym2pixmap(SymId, qreal) { return QPixmap(); }        // TODOxxxx
+    QString toString(SymId id) const;
+    uint symCode(SymId id) const;
 
     void draw(SymId id,                  mu::draw::Painter*, const QSizeF& mag, const QPointF& pos, qreal scale) const;
     void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const QPointF& pos, qreal scale) const;

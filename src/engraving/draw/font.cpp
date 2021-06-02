@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "font.h"
+#include "global/realfn.h"
 
 using namespace mu::draw;
 
@@ -28,9 +29,14 @@ Font::Font(const QString& family)
 {
 }
 
-Font::Font(const Font& f)
-    : m_family(f.m_family), m_pointSizeF(f.m_pointSizeF), m_style(f.m_style)
+bool Font::operator ==(const Font& other) const
 {
+    return m_family == other.m_family
+           && RealIsEqual(m_pointSizeF, other.m_pointSizeF)
+           && m_weight == other.m_weight
+           && m_style == other.m_style
+           && m_noFontMerging == other.m_noFontMerging
+           && m_hinting == other.m_hinting;
 }
 
 void Font::setFamily(const QString& family)
@@ -85,12 +91,12 @@ void Font::setItalic(bool arg)
 
 bool Font::underline() const
 {
-    return m_style.testFlag(Style::Undefined);
+    return m_style.testFlag(Style::Underline);
 }
 
 void Font::setUnderline(bool arg)
 {
-    m_style.setFlag(Style::Undefined, arg);
+    m_style.setFlag(Style::Underline, arg);
 }
 
 void Font::setNoFontMerging(bool arg)
