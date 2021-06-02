@@ -54,7 +54,7 @@ public:
     virtual void setCompositionMode(CompositionMode mode) = 0;
 
     virtual void setFont(const Font& font) = 0;
-    virtual Font font() const = 0;
+    virtual const Font& font() const = 0;
 
     virtual void setPen(const QPen& pen) = 0;
     virtual void setNoPen() = 0;
@@ -76,6 +76,8 @@ public:
     virtual void drawText(const QPointF& point, const QString& text) = 0;
     virtual void drawText(const QRectF& rect, int flags, const QString& text) = 0;
     virtual void drawTextWorkaround(mu::draw::Font& f, const QPointF& pos, const QString& text) = 0; // see Painter::drawTextWorkaround .h file
+
+    virtual void drawSymbol(const QPointF& point, uint ucs4Code) = 0;
 
     virtual void drawPixmap(const QPointF& point, const QPixmap& pm) = 0;
     virtual void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF()) = 0;

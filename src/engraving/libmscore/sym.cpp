@@ -34,6 +34,8 @@
 #include "xml.h"
 #include "mscore.h"
 
+#include "log.h"
+
 #include FT_GLYPH_H
 #include FT_IMAGE_H
 #include FT_BBOX_H
@@ -181,93 +183,27 @@ void ScoreFont::draw(SymId id, mu::draw::Painter* painter, const QSizeF& mag, co
         }
         return;
     }
-    int rv = FT_Load_Glyph(face, sym(id).index(), FT_LOAD_DEFAULT);
-    if (rv) {
-        qDebug("load glyph id %d, failed: 0x%x", int(id), rv);
-        return;
-    }
 
-    if (MScore::pdfPrinting) {
-        if (font == 0) {
-            QString s(_fontPath + _filename);
-            if (-1 == fontProvider()->addApplicationFont(s)) {
-                qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(s));
-                return;
-            }
-            font = new mu::draw::Font();
-            font->setWeight(mu::draw::Font::Normal);
-            font->setItalic(false);
-            font->setFamily(_family);
-            font->setNoFontMerging(true);
-            font->setHinting(mu::draw::Font::Hinting::PreferVerticalHinting);
-        }
-        qreal size = 20.0 * MScore::pixelRatio;
-        font->setPointSizeF(size);
-        QSizeF imag = QSizeF(1.0 / mag.width(), 1.0 / mag.height());
-        painter->scale(mag.width(), mag.height());
-        painter->setFont(*font);
-        painter->drawText(QPointF(pos.x() * imag.width(), pos.y() * imag.height()), toString(id));
-        painter->scale(imag.width(), imag.height());
-        return;
-    }
-
-    QColor color(painter->pen().color());
-
-    int pr           = painter->device()->devicePixelRatio();
-    qreal pixelRatio = qreal(pr > 0 ? pr : 1);
-    worldScale      *= pixelRatio;
-//      if (worldScale < 1.0)
-//            worldScale = 1.0;
-    int scale16X      = lrint(worldScale * 6553.6 * mag.width() * DPI_F);
-    int scale16Y      = lrint(worldScale * 6553.6 * mag.height() * DPI_F);
-
-    GlyphKey gk(face, id, mag.width(), mag.height(), worldScale, color);
-    GlyphPixmap* pm = cache->object(gk);
-
-    if (!pm) {
-        FT_Matrix matrix {
-            scale16X, 0,
-            0,       scale16Y
-        };
-
-        FT_Glyph glyph;
-        FT_Get_Glyph(face->glyph, &glyph);
-        FT_Glyph_Transform(glyph, &matrix, 0);
-        rv = FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, 1);
-        if (rv) {
-            qDebug("glyph to bitmap failed: 0x%x", rv);
+    if (font == 0) {
+        QString s(_fontPath + _filename);
+        if (-1 == fontProvider()->addApplicationFont(s)) {
+            qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(s));
             return;
         }
-
-        FT_BitmapGlyph gb = (FT_BitmapGlyph)glyph;
-        FT_Bitmap* bm     = &gb->bitmap;
-
-        if (bm->width == 0 || bm->rows == 0) {
-            qDebug("zero glyph, id %d", int(id));
-            return;
-        }
-        QImage img(QSize(bm->width, bm->rows), QImage::Format_ARGB32);
-        img.fill(Qt::transparent);
-
-        for (unsigned y = 0; y < bm->rows; ++y) {
-            unsigned* dst      = (unsigned*)img.scanLine(y);
-            unsigned char* src = (unsigned char*)(bm->buffer) + bm->pitch * y;
-            for (unsigned x = 0; x < bm->width; ++x) {
-                unsigned val = *src++;
-                color.setAlpha(std::min(int(val), painter->pen().color().alpha()));
-                *dst++ = color.rgba();
-            }
-        }
-        pm = new GlyphPixmap;
-        pm->pm = QPixmap::fromImage(img, Qt::NoFormatConversion);
-        pm->pm.setDevicePixelRatio(worldScale);
-        pm->offset = QPointF(qreal(gb->left), -qreal(gb->top)) / worldScale;
-        if (!cache->insert(gk, pm)) {
-            qDebug("cannot cache glyph");
-        }
-        FT_Done_Glyph(glyph);
+        font = new mu::draw::Font();
+        font->setWeight(mu::draw::Font::Normal);
+        font->setItalic(false);
+        font->setFamily(_family);
+        font->setNoFontMerging(true);
+        font->setHinting(mu::draw::Font::Hinting::PreferVerticalHinting);
     }
-    painter->drawPixmap(pos + pm->offset, pm->pm);
+    qreal size = 20.0 * MScore::pixelRatio;
+    font->setPointSizeF(size);
+    QSizeF imag = QSizeF(1.0 / mag.width(), 1.0 / mag.height());
+    painter->scale(mag.width(), mag.height());
+    painter->setFont(*font);
+    painter->drawSymbol(QPointF(pos.x() * imag.width(), pos.y() * imag.height()), symCode(id));
+    painter->scale(imag.width(), imag.height());
 }
 
 void ScoreFont::draw(SymId id, mu::draw::Painter* painter, qreal mag, const QPointF& pos, int n) const
@@ -381,6 +317,19 @@ QString ScoreFont::toString(SymId id) const
         code = _mainSymCodeTable[size_t(id)];
     }
     return codeToString(code);
+}
+
+uint ScoreFont::symCode(SymId id) const
+{
+    const Sym& s = sym(id);
+    uint code;
+    if (s.isValid()) {
+        code = s.code();
+    } else {
+        // fallback: search in the common SMuFL table
+        code = _mainSymCodeTable[size_t(id)];
+    }
+    return code;
 }
 
 //---------------------------------------------------------

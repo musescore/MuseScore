@@ -53,7 +53,7 @@ public:
     void setCompositionMode(CompositionMode mode) override;
 
     void setFont(const Font& font) override;
-    Font font() const override;
+    const Font& font() const override;
 
     void setPen(const QPen& pen) override;
     void setNoPen() override;
@@ -76,11 +76,14 @@ public:
     void drawText(const QRectF& rect, int flags, const QString& text) override;
     void drawTextWorkaround(mu::draw::Font& f, const QPointF& pos, const QString& text) override;
 
+    void drawSymbol(const QPointF& point, uint ucs4Code) override;
+
     void drawPixmap(const QPointF& point, const QPixmap& pm) override;
     void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF()) override;
 
 private:
     QPainter* m_painter = nullptr;
+    Font m_font;
     bool m_overship = false;
     DrawObjectsLogger* m_drawObjectsLogger = nullptr;
 
