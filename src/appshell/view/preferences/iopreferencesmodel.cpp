@@ -28,6 +28,8 @@ using namespace mu::appshell;
 using namespace mu::audio;
 using namespace mu::midi;
 
+static constexpr int INVALID_DEVICE_ID = -1;
+
 IOPreferencesModel::IOPreferencesModel(QObject* parent)
     : QObject(parent)
 {
@@ -56,6 +58,10 @@ void IOPreferencesModel::setCurrentAudioApiIndex(int index)
 
 int IOPreferencesModel::currentMidiInputDeviceIndex() const
 {
+    if (!midiInPort()->isConnected()) {
+        return INVALID_DEVICE_ID;
+    }
+
     QString currentMidiInputDeviceId = QString::fromStdString(midiConfiguration()->midiInputDeviceId());
     std::vector<MidiDevice> devices = midiInPort()->devices();
     for (size_t i = 0; i < devices.size(); ++i) {
@@ -64,7 +70,7 @@ int IOPreferencesModel::currentMidiInputDeviceIndex() const
         }
     }
 
-    return -1;
+    return INVALID_DEVICE_ID;
 }
 
 void IOPreferencesModel::setCurrentMidiInputDeviceIndex(int index)
@@ -78,12 +84,14 @@ void IOPreferencesModel::setCurrentMidiInputDeviceIndex(int index)
     Ret ret = midiInPort()->connect(deviceId);
     if (!ret) {
         // todo: display error
+        LOGE() << "failed connect to input device, deviceID: " << deviceId << ", err: " << ret.text();
         return;
     }
 
     ret = midiInPort()->run();
     if (!ret) {
         // todo: display error
+        LOGE() << "failed run input device, deviceID: " << deviceId << ", err: " << ret.text();
         return;
     }
 
@@ -94,6 +102,10 @@ void IOPreferencesModel::setCurrentMidiInputDeviceIndex(int index)
 
 int IOPreferencesModel::currentMidiOutputDeviceIndex() const
 {
+    if (!midiOutPort()->isConnected()) {
+        return INVALID_DEVICE_ID;
+    }
+
     QString currentMidiOutputDeviceId = QString::fromStdString(midiConfiguration()->midiOutputDeviceId());
     std::vector<MidiDevice> devices = midiOutPort()->devices();
     for (size_t i = 0; i < devices.size(); ++i) {
@@ -102,7 +114,7 @@ int IOPreferencesModel::currentMidiOutputDeviceIndex() const
         }
     }
 
-    return -1;
+    return INVALID_DEVICE_ID;
 }
 
 void IOPreferencesModel::init()
@@ -121,6 +133,7 @@ void IOPreferencesModel::setCurrentMidiOutputDeviceIndex(int index)
     Ret ret = midiOutPort()->connect(deviceId);
     if (!ret) {
         // todo: display error
+        LOGE() << "failed connect to output device, deviceID: " << deviceId << ", err: " << ret.text();
         return;
     }
 
