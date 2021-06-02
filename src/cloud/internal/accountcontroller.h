@@ -23,15 +23,11 @@
 #define MU_CLOUD_ACCOUNTCONTROLLER_H
 
 #include <QScopedPointer>
+#include <QOAuth2AuthorizationCodeFlow>
 
 #include "iaccountcontroller.h"
 
-namespace Ms {
-class CloudManager;
-}
-
-namespace mu {
-namespace cloud {
+namespace mu::cloud {
 class AccountController : public IAccountController
 {
 public:
@@ -49,12 +45,11 @@ public:
 private:
     void setAccountInfo(const AccountInfo& info);
 
-    QScopedPointer<Ms::CloudManager> m_cloudManager;
+    QScopedPointer<QOAuth2AuthorizationCodeFlow> m_oauth;
 
     ValCh<bool> m_userAuthorized;
     ValCh<AccountInfo> m_accountInfo;
 };
-}
 }
 
 #endif // MU_CLOUD_ACCOUNTCONTROLLER_H

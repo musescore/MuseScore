@@ -22,46 +22,33 @@
 
 #include "accountcontroller.h"
 
-#include "internal/cloudmanager.h"
 #include "log.h"
 
 using namespace mu::cloud;
 
 AccountController::AccountController()
-    : m_cloudManager(new Ms::CloudManager())
 {
     m_userAuthorized.val = false;
-
-    QObject::connect(m_cloudManager.data(), &Ms::CloudManager::getUserSuccess, [this]() {
-        AccountInfo newAccountInfo = m_cloudManager->accountInfo();
-        setAccountInfo(newAccountInfo);
-    });
 }
 
 void AccountController::init()
 {
-    if (!m_cloudManager->init()) {
-        LOGE() << "Error while init";
-        return;
-    }
-
-    m_cloudManager->getUser();
+    NOT_IMPLEMENTED;
 }
 
 void AccountController::createAccount()
 {
-    m_cloudManager->createAccount();
+    NOT_IMPLEMENTED;
 }
 
 void AccountController::signIn()
 {
-    m_cloudManager->tryLogin();
+    NOT_IMPLEMENTED;
 }
 
 void AccountController::signOut()
 {
-    m_cloudManager->logout();
-
+    NOT_IMPLEMENTED;
     setAccountInfo(AccountInfo());
 }
 

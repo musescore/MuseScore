@@ -12,6 +12,7 @@ set(_components
     Core
     Gui
     Network
+    NetworkAuth
     Qml
     Quick
     QuickControls2
