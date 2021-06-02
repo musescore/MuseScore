@@ -43,6 +43,9 @@ public:
     qreal width(const QString& string) const;
     qreal width(const QChar& ch) const;
 
+    qreal horizontalAdvance(const QString& string) const;
+    qreal horizontalAdvance(const QChar& ch) const;
+
     QRectF boundingRect(const QString& string) const;
     QRectF boundingRect(const QChar& ch) const;
     QRectF boundingRect(const QRectF& r, int flags, const QString& string) const;
