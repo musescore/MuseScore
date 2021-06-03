@@ -1417,7 +1417,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Violins 1</trackName>
-      <Instrument id="strings">
+      <Instrument id="violins">
         <longName>Violins 1</longName>
         <shortName>Vlns. 1</shortName>
         <trackName>Violins</trackName>
