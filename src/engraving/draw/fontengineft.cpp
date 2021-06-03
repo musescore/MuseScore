@@ -90,6 +90,7 @@ bool FontEngineFT::load(const QString& path)
         return false;
     }
 
+    //! NOTE Moved form sym.cpp ScoreFont::load as is
     qreal pixelSize = 200.0;
     FT_Set_Pixel_Sizes(m_data->face, 0, int(pixelSize + .5));
 
@@ -104,6 +105,7 @@ QRectF FontEngineFT::bbox(uint ucs4, qreal DPI_F) const
     }
 
     const FT_BBox& bb = gm->bb;
+    //! NOTE Moved form sym.cpp ScoreFont::computeMetrics as is
     double m = 640.0 / DPI_F;
     QRectF bbox;
     bbox.setCoords(bb.xMin / m, -bb.yMax / m, bb.xMax / m, -bb.yMin / m);
@@ -117,6 +119,7 @@ qreal FontEngineFT::advance(uint ucs4, qreal DPI_F) const
         return 0.0;
     }
 
+    //! NOTE Moved form sym.cpp ScoreFont::computeMetrics as is
     return gm->linearHoriAdvance * DPI_F / 655360.0;
 }
 

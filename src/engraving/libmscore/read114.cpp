@@ -149,75 +149,127 @@ static const PaperSize* getPaperSize114(const QString& name)
 //   convertFromHtml
 //---------------------------------------------------------
 
-QString convertFromHtml(TextBase* t, const QString& ss)
+static QString convertFromHtml(const QString& in_html)
 {
-    QTextDocument doc;
-    doc.setHtml(ss.trimmed());
-
-    QString s;
-    qreal size     = t->size();     // textStyle().size();
-    QString family = t->family();   // textStyle().family();
-
-    for (auto b = doc.firstBlock(); b.isValid(); b = b.next()) {
-        if (!s.isEmpty()) {
-            s += "\n";
-        }
-        for (auto it = b.begin(); !it.atEnd(); ++it) {
-            QTextFragment f = it.fragment();
-            if (f.isValid()) {
-                QTextCharFormat tf = f.charFormat();
-                QFont font = tf.font();
-                qreal htmlSize = font.pointSizeF();
-                // html font sizes may have spatium adjustments; need to undo this
-                if (t->sizeIsSpatiumDependent()) {
-                    htmlSize *= SPATIUM20 / t->spatium();
-                }
-                if (fabs(size - htmlSize) > 0.1) {
-                    size = htmlSize;
-                    s += QString("<font size=\"%1\"/>").arg(size);
-                }
-                if (family != font.family()) {
-                    family = font.family();
-                    s += QString("<font face=\"%1\"/>").arg(family);
-                }
-                if (font.bold()) {
-                    s += "<b>";
-                }
-                if (font.italic()) {
-                    s += "<i>";
-                }
-                if (font.underline()) {
-                    s += "<u>";
-                }
-                s += f.text().toHtmlEscaped();
-                if (font.underline()) {
-                    s += "</u>";
-                }
-                if (font.italic()) {
-                    s += "</i>";
-                }
-                if (font.bold()) {
-                    s += "</b>";
-                }
-            }
-        }
+    if (in_html.isEmpty()) {
+        return in_html;
     }
 
-    s.replace(QChar(0xe10e), QString("<sym>accidentalNatural</sym>"));    //natural
-    s.replace(QChar(0xe10c), QString("<sym>accidentalSharp</sym>"));      // sharp
-    s.replace(QChar(0xe10d), QString("<sym>accidentalFlat</sym>"));       // flat
-    s.replace(QChar(0xe104), QString("<sym>metNoteHalfUp</sym>")),        // note2_Sym
-    s.replace(QChar(0xe105), QString("<sym>metNoteQuarterUp</sym>"));     // note4_Sym
-    s.replace(QChar(0xe106), QString("<sym>metNote8thUp</sym>"));         // note8_Sym
-    s.replace(QChar(0xe107), QString("<sym>metNote16thUp</sym>"));        // note16_Sym
-    s.replace(QChar(0xe108), QString("<sym>metNote32ndUp</sym>"));        // note32_Sym
-    s.replace(QChar(0xe109), QString("<sym>metNote64thUp</sym>"));        // note64_Sym
-    s.replace(QChar(0xe10a), QString("<sym>metAugmentationDot</sym>"));   // dot
-    s.replace(QChar(0xe10b), QString("<sym>metAugmentationDot</sym><sym>space</sym><sym>metAugmentationDot</sym>"));      // dotdot
-    s.replace(QChar(0xe167), QString("<sym>segno</sym>"));                // segno
-    s.replace(QChar(0xe168), QString("<sym>coda</sym>"));                 // coda
-    s.replace(QChar(0xe169), QString("<sym>codaSquare</sym>"));           // varcoda
-    return s;
+    std::string html = in_html.toStdString();
+
+    //! NOTE Get body
+    auto body_b = html.find("<body");
+    auto body_e = html.find_last_of("</body>");
+    if (body_b == std::string::npos || body_e == std::string::npos) {
+        return in_html;
+    }
+    std::string body = html.substr(body_b, body_e - body_b);
+
+    std::vector<std::string> blocks;
+
+    //! NOTE Split blocks
+    std::string::size_type p_b = 0;
+    std::string::size_type p_e = 0;
+    while (true) {
+        p_b = body.find("<p", p_e);
+        p_e = body.find("/p>", p_b);
+        if (p_b == std::string::npos || p_e == std::string::npos) {
+            break;
+        }
+
+        std::string block = body.substr(p_b, p_e - p_b);
+        blocks.push_back(block);
+    }
+
+    if (blocks.empty()) {
+        blocks.push_back(body);
+    }
+
+    //! NOTE Format blocks
+    auto extractText = [](const std::string& block) {
+        std::string text;
+        bool isTag = false;
+        for (const char& c : block) {
+            if (c == '<') {
+                isTag = true;
+            } else if (c == '>') {
+                isTag = false;
+            } else if (!isTag) {
+                text += c;
+            }
+        }
+        return text;
+    };
+
+    auto extractFont = [](const std::string& block) {
+        auto fontsize_b = block.find("font-size");
+        if (fontsize_b != std::string::npos) {
+            std::string fontSize;
+            bool started = false;
+            for (auto i = fontsize_b; i < block.size(); ++i) {
+                const char& c = block.at(i);
+                if (strchr(".0123456789", c) != nullptr) {
+                    started = true;
+                    fontSize += c;
+                } else if (started) {
+                    break;
+                }
+            }
+
+            return std::string("<font size=\"") + fontSize + std::string("\"/>");
+        }
+        return std::string();
+    };
+
+    auto formatRichText = [extractText, extractFont](const std::string& block) {
+        std::string text = extractText(block);
+        std::string font = extractFont(block);
+        if (!font.empty()) {
+            text = font + text;
+        }
+        return text;
+    };
+
+    //! NOTE Format rich text from blocks
+    std::string text;
+    for (const std::string& block : blocks) {
+        if (!text.empty()) {
+            text += "\n";
+        }
+
+        text += formatRichText(block);
+    }
+
+    auto replaceSym = [](std::string& str, int cc, const char* sym) {
+        std::string code;
+        code.resize(3);
+        code[2] = static_cast<char>(cc);
+        code[1] = static_cast<char>(cc >> 8);
+        code[0] = static_cast<char>(cc >> 16);
+
+        auto pos = str.find(code);
+        if (pos != std::string::npos) {
+            str.replace(pos, 3, sym);
+        }
+    };
+
+    //! NOTE replace utf8 code /*utf16 code*/ on sym
+    replaceSym(text, 0xee848e /*0xe10e*/, "<sym>accidentalNatural</sym>");        //natural
+    replaceSym(text, 0xee848c /*0xe10c*/, "<sym>accidentalSharp</sym>");          // sharp
+    replaceSym(text, 0xee848d /*0xe10d*/, "<sym>accidentalFlat</sym>");           // flat
+    replaceSym(text, 0xee8484 /*0xe104*/, "<sym>metNoteHalfUp</sym>");            // note2_Sym
+    replaceSym(text, 0xee8485 /*0xe105*/, "<sym>metNoteQuarterUp</sym>");         // note4_Sym
+    replaceSym(text, 0xee8486 /*0xe106*/, "<sym>metNote8thUp</sym>");             // note8_Sym
+    replaceSym(text, 0xee8487 /*0xe107*/, "<sym>metNote16thUp</sym>");            // note16_Sym
+    replaceSym(text, 0xee8488 /*0xe108*/, "<sym>metNote32ndUp</sym>");            // note32_Sym
+    replaceSym(text, 0xee8489 /*0xe109*/, "<sym>metNote64thUp</sym>");            // note64_Sym
+    replaceSym(text, 0xee848a /*0xe10a*/, "<sym>metAugmentationDot</sym>");       // dot
+    replaceSym(text, 0xee848b /*0xe10b*/, "<sym>metAugmentationDot</sym><sym>space</sym><sym>metAugmentationDot</sym>");          // dotdot
+    replaceSym(text, 0xee85a7 /*0xe167*/, "<sym>segno</sym>");                    // segno
+    replaceSym(text, 0xee85a8 /*0xe168*/, "<sym>coda</sym>");                     // coda
+    replaceSym(text, 0xee85a9 /*0xe169*/, "<sym>codaSquare</sym>");               // varcoda
+
+    return QString::fromStdString(text);
 }
 
 //---------------------------------------------------------
@@ -314,7 +366,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element*)
         e.skipCurrentElement();
     } else if (tag == "html-data") {
         QString ss = e.readXml();
-        QString s  = convertFromHtml(t, ss);
+        QString s  = convertFromHtml(ss);
 // qDebug("html-data <%s>", qPrintable(s));
         t->setXmlText(s);
     } else if (tag == "foregroundColor") { // same as "color" ?
