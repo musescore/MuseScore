@@ -35,6 +35,10 @@ PreferencesPage {
         id: ioModel
     }
 
+    Component.onCompleted: {
+        ioModel.init()
+    }
+
     Column {
         id: content
 

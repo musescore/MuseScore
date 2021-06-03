@@ -43,6 +43,25 @@ CoreMidiOutPort::CoreMidiOutPort()
 {
     m_core = std::unique_ptr<Core>(new Core());
     initCore();
+
+    m_devicesListener.reg([this]() {
+        return devices();
+    });
+
+    m_devicesListener.devicesChanged().onNotify(this, [this]() {
+        bool connectedDeviceRemoved = true;
+        for (const MidiDevice& device: devices()) {
+            if (m_deviceID == device.id) {
+                connectedDeviceRemoved = false;
+            }
+        }
+
+        if (connectedDeviceRemoved) {
+            disconnect();
+        }
+
+        m_devicesChanged.notify();
+    });
 }
 
 CoreMidiOutPort::~CoreMidiOutPort()
@@ -76,9 +95,9 @@ void CoreMidiOutPort::initCore()
     }
 }
 
-std::vector<MidiDevice> CoreMidiOutPort::devices() const
+MidiDeviceList CoreMidiOutPort::devices() const
 {
-    std::vector<MidiDevice> ret;
+    MidiDeviceList ret;
 
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, false);
     int destinations = MIDIGetNumberOfDestinations();
@@ -106,7 +125,12 @@ std::vector<MidiDevice> CoreMidiOutPort::devices() const
     return ret;
 }
 
-mu::Ret CoreMidiOutPort::connect(const std::string& deviceID)
+mu::async::Notification CoreMidiOutPort::devicesChanged() const
+{
+    return m_devicesChanged;
+}
+
+mu::Ret CoreMidiOutPort::connect(const MidiDeviceID& deviceID)
 {
     if (isConnected()) {
         disconnect();
