@@ -362,6 +362,13 @@ void NotationConfiguration::setCurrentZoom(int zoomPercentage)
     settings()->setValue(CURRENT_ZOOM, Val(zoomPercentage));
 }
 
+QList<int> NotationConfiguration::possibleZoomPercentageList() const
+{
+    return {
+        5, 10, 15, 25, 50, 75, 100, 150, 200, 400, 800, 1600
+    };
+}
+
 int NotationConfiguration::mouseZoomPrecision() const
 {
     return settings()->value(MOUSE_ZOOM_PRECISION).toInt();

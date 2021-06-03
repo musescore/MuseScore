@@ -27,8 +27,13 @@ import MuseScore.Ui 1.0
 Row {
     id: root
 
-    property int currentZoom: 0
+    property alias currentZoomPercentage: zoomInputField.value
+    property alias minZoomPercentage: zoomInputField.minValue
+    property alias maxZoomPercentage: zoomInputField.maxValue
+    property var availableZoomList: []
 
+    signal changeZoomPercentageRequested(var newZoomPercentage)
+    signal changeZoomRequested(var newZoomIndex)
     signal zoomInRequested()
     signal zoomOutRequested()
 
@@ -54,11 +59,46 @@ Row {
         }
     }
 
-    StyledTextLabel {
+    Row {
         height: parent.height
 
-        width: 60
+        spacing: 1
 
-        text: root.currentZoom + " %"
+        NumberInputField {
+            id: zoomInputField
+
+            addLeadingZeros: false
+            font: ui.theme.bodyFont
+
+            onValueEdited: {
+                root.changeZoomPercentageRequested(newValue)
+            }
+        }
+
+        StyledTextLabel {
+            anchors.verticalCenter: parent.verticalCenter
+
+            text: "%"
+        }
+    }
+
+    FlatButton {
+        width: 20
+
+        icon: IconCode.SMALL_ARROW_DOWN
+
+        normalStateColor: menu.isMenuOpened ? ui.theme.accentColor : "transparent"
+
+        StyledMenuLoader {
+            id: menu
+
+            onHandleAction: {
+                root.changeZoomRequested(actionIndex)
+            }
+        }
+
+        onClicked: {
+            menu.toggleOpened(root.availableZoomList, parent.navigation)
+        }
     }
 }
