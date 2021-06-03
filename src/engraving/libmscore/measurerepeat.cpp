@@ -26,7 +26,7 @@
 #include "mscore.h"
 #include "score.h"
 #include "staff.h"
-#include "sym.h"
+#include "symid.h"
 #include "system.h"
 
 namespace Ms {

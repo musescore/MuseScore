@@ -25,7 +25,7 @@
 
 #include "mscore.h"
 #include "interval.h"
-#include "sym.h"
+#include "symid.h"
 
 namespace Ms {
 enum class Key;

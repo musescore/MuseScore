@@ -36,7 +36,6 @@
 #include "pitchspelling.h"
 #include "shape.h"
 #include "key.h"
-#include "sym.h"
 
 namespace Ms {
 class Tie;
@@ -44,7 +43,6 @@ class Chord;
 class NoteEvent;
 class Text;
 class Score;
-class Sym;
 class MuseScoreView;
 class Bend;
 class AccidentalState;
@@ -55,7 +53,7 @@ class StaffType;
 class NoteEditData;
 enum class AccidentalType;
 
-static const int MAX_DOTS = 4;
+static constexpr int MAX_DOTS = 4;
 
 //---------------------------------------------------------
 //   @@ NoteHead

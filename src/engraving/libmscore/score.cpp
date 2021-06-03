@@ -76,11 +76,12 @@
 #include "harmony.h"
 #include "mscore.h"
 #include "scoreOrder.h"
+#include "scorefont.h"
 
 #include "bracket.h"
 #include "audio.h"
 #include "instrtemplate.h"
-#include "sym.h"
+#include "symid.h"
 #include "rehearsalmark.h"
 #include "breath.h"
 #include "instrchange.h"
@@ -309,7 +310,7 @@ Score::Score()
     _layer.append(l);
     _layerTags[0]   = "default";
 
-    _scoreFont = ScoreFont::fontFactory("Leland");
+    _scoreFont = ScoreFont::fontByName("Leland");
 
     _fileDivision           = MScore::division;
     _style  = MScore::defaultStyle();

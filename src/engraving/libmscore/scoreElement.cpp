@@ -29,6 +29,7 @@
 #include "measure.h"
 #include "spanner.h"
 #include "musescoreCore.h"
+#include "sym.h"
 
 namespace Ms {
 ElementStyle const ScoreElement::emptyStyle;

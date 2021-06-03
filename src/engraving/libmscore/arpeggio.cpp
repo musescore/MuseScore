@@ -24,7 +24,7 @@
 
 #include <cmath>
 
-#include "sym.h"
+#include "scorefont.h"
 #include "chord.h"
 #include "note.h"
 #include "score.h"

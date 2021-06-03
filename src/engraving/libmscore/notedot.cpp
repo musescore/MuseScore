@@ -23,7 +23,6 @@
 #include "notedot.h"
 #include "score.h"
 #include "staff.h"
-#include "sym.h"
 #include "xml.h"
 #include "chord.h"
 #include "rest.h"

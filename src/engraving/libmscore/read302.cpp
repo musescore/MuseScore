@@ -27,7 +27,7 @@
 #include "part.h"
 #include "page.h"
 #include "style.h"
-#include "sym.h"
+#include "scorefont.h"
 #include "audio.h"
 #include "sig.h"
 #include "barline.h"
@@ -112,7 +112,7 @@ bool Score::read(XmlReader& e)
                 // float mode
                 style().set(Sid::spatium, sp);
             }
-            _scoreFont = ScoreFont::fontFactory(style().value(Sid::MusicalSymbolFont).toString());
+            _scoreFont = ScoreFont::fontByName(style().value(Sid::MusicalSymbolFont).toString());
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = new Text(this);
             text->read(e);

@@ -21,7 +21,6 @@
  */
 
 #include "hook.h"
-#include "sym.h"
 #include "chord.h"
 #include "stem.h"
 #include "score.h"

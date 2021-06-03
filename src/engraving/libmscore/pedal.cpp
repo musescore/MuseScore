@@ -21,7 +21,6 @@
  */
 
 #include "pedal.h"
-#include "sym.h"
 #include "xml.h"
 #include "system.h"
 #include "measure.h"

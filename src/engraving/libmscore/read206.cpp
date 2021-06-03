@@ -30,6 +30,7 @@
 #include "page.h"
 #include "style.h"
 #include "sym.h"
+#include "scorefont.h"
 #include "arpeggio.h"
 #include "audio.h"
 #include "sig.h"
@@ -3514,7 +3515,7 @@ static bool readScore(Score* score, XmlReader& e)
                 // float mode
                 score->style().set(Sid::spatium, sp);
             }
-            score->setScoreFont(ScoreFont::fontFactory(score->style().value(Sid::MusicalSymbolFont).toString()));
+            score->setScoreFont(ScoreFont::fontByName(score->style().value(Sid::MusicalSymbolFont).toString()));
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = new Text(score);
             readText206(e, text, text);

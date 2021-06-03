@@ -40,7 +40,7 @@
 #include "key.h"
 #include "sig.h"
 #include "tuplet.h"
-#include "sym.h"
+#include "symid.h"
 
 namespace Ms {
 //---------------------------------------------------------

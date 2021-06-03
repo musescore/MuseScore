@@ -29,7 +29,7 @@ using namespace Ms;
 //    symNames must be in sync with enum class SymId
 //---------------------------------------------------------
 
-QHash<QString, SymId> Sym::lnhash;
+QHash<QString, SymId> Sym::nameToSymIdHash;
 
 const std::array<const char*, int(SymId::lastSym) + 1> Sym::symNames = { {
     "noSym",
@@ -6001,8 +6001,8 @@ const std::array<const char*, int(SymId::lastSym) + 1> Sym::symUserNames = { {
 //    symNames must be in sync with enum class SymId
 //---------------------------------------------------------
 
-QHash<QString, SymId> Sym::lonhash;
-QVector<Sym::OldName> Sym::oldNames = {
+QHash<QString, SymId> Sym::oldNameToSymIdHash;
+std::vector<Sym::OldName> Sym::oldNames = {
 //      {"ornamentDownPrall",                     SymId::ornamentPrecompMordentUpperPrefix },
     { "clef eight",                            SymId::clef8 },
     //{"clef one"                             SymId::},

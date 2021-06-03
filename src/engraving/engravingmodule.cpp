@@ -27,6 +27,7 @@
 
 #include "engraving/libmscore/mscore.h"
 #include "engraving/libmscore/score.h"
+#include "engraving/libmscore/scorefont.h"
 
 #include "notation/inotationconfiguration.h"
 
@@ -70,7 +71,7 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
     Ms::gscore->setStyle(Ms::MScore::baseStyle());
 
     Ms::gscore->style().set(Ms::Sid::MusicalTextFont, QString("Leland Text"));
-    Ms::ScoreFont* scoreFont = Ms::ScoreFont::fontFactory("Leland");
+    Ms::ScoreFont* scoreFont = Ms::ScoreFont::fontByName("Leland");
     Ms::gscore->setScoreFont(scoreFont);
     Ms::gscore->setNoteHeadWidth(scoreFont->width(Ms::SymId::noteheadBlack, Ms::gscore->spatium()) / Ms::SPATIUM20);
 

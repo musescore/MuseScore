@@ -21,9 +21,11 @@
  */
 
 #include "drumset.h"
-#include "xml.h"
-#include "note.h"
+
 #include "articulation.h"
+#include "note.h"
+#include "sym.h"
+#include "xml.h"
 
 namespace Ms {
 Drumset* smDrumset;           // standard midi drumset

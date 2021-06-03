@@ -25,7 +25,6 @@
 #include "drumset.h"
 #include "stafftype.h"
 #include "style.h"
-#include "sym.h"
 #include "stringdata.h"
 #include "scoreOrder.h"
 #include "utils.h"

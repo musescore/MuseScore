@@ -24,6 +24,7 @@
 #include "systemdivider.h"
 #include "xml.h"
 #include "measure.h"
+#include "sym.h"
 #include "system.h"
 
 namespace Ms {

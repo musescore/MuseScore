@@ -28,7 +28,6 @@
 #include "segment.h"
 #include "staff.h"
 #include "stafftype.h"
-#include "sym.h"
 #include "system.h"
 #include "utils.h"
 #include "xml.h"

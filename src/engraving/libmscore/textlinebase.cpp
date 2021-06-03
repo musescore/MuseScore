@@ -30,7 +30,6 @@
 #include "xml.h"
 #include "utils.h"
 #include "score.h"
-#include "sym.h"
 #include "text.h"
 #include "mscore.h"
 #include "staff.h"

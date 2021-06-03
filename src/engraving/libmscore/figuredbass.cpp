@@ -29,7 +29,6 @@
 #include "chord.h"
 #include "rest.h"
 #include "score.h"
-#include "sym.h"
 #include "xml.h"
 
 #include "draw/fontmetrics.h"
