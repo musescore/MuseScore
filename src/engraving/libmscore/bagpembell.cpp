@@ -23,7 +23,7 @@
 #include "score.h"
 #include "xml.h"
 #include "bagpembell.h"
-#include "sym.h"
+#include "scorefont.h"
 
 namespace Ms {
 // Embellishment names and note sequences

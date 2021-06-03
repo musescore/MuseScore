@@ -32,7 +32,6 @@
 #include "mscore.h"
 #include "chord.h"
 #include "undo.h"
-#include "sym.h"
 #include "musescoreCore.h"
 
 namespace Ms {

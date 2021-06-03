@@ -29,7 +29,6 @@
 #include "system.h"
 #include "score.h"
 #include "system.h"
-#include "sym.h"
 #include "mscore.h"
 #include "bracketItem.h"
 

@@ -58,7 +58,7 @@
 #include "libmscore/arpeggio.h"
 #include "libmscore/breath.h"
 #include "libmscore/hairpin.h"
-#include "libmscore/sym.h"
+#include "libmscore/symid.h"
 #include "libmscore/articulation.h"
 #include "libmscore/harmony.h"
 

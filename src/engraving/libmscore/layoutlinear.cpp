@@ -34,7 +34,6 @@
 #include "staff.h"
 #include "box.h"
 #include "spacer.h"
-#include "sym.h"
 #include "systemdivider.h"
 #include "tuplet.h"
 #include "dynamic.h"

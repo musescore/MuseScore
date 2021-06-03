@@ -29,7 +29,7 @@
 #include "libmscore/accidental.h"
 #include "libmscore/articulation.h"
 #include "libmscore/chord.h"
-#include "libmscore/sym.h"
+#include "libmscore/symid.h"
 
 #include "musicxmlsupport.h"
 

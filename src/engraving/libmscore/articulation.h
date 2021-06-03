@@ -27,7 +27,7 @@
 
 #include "element.h"
 #include "mscore.h"
-#include "sym.h"
+#include "symid.h"
 
 namespace Ms {
 class ChordRest;

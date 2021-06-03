@@ -31,6 +31,7 @@
 #include "score.h"
 #include "chord.h"
 #include "sym.h"
+#include "scorefont.h"
 #include "xml.h"
 #include "slur.h"
 #include "tie.h"

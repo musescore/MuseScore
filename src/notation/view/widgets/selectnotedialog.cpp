@@ -31,7 +31,6 @@
 #include "libmscore/system.h"
 #include "libmscore/score.h"
 #include "libmscore/chord.h"
-#include "libmscore/sym.h"
 #include "libmscore/segment.h"
 #include "libmscore/note.h"
 

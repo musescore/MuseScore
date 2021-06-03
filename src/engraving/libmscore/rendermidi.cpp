@@ -61,7 +61,7 @@
 #include "segment.h"
 #include "undo.h"
 #include "utils.h"
-#include "sym.h"
+#include "symid.h"
 #include "synthesizerstate.h"
 #include "easeInOut.h"
 

@@ -75,7 +75,6 @@
 #include "stafftype.h"
 #include "stringdata.h"
 #include "style.h"
-#include "sym.h"
 #include "system.h"
 #include "tempotext.h"
 #include "measurenumber.h"

@@ -32,7 +32,6 @@
 #include "measure.h"
 #include "stringdata.h"
 #include "stafftype.h"
-#include "sym.h"
 #include "chordrest.h"
 #include "fret.h"
 

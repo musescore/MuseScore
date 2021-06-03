@@ -37,6 +37,7 @@
 #include "box.h"
 #include "page.h"
 #include "textframe.h"
+#include "scorefont.h"
 #include "sym.h"
 #include "xml.h"
 #include "undo.h"

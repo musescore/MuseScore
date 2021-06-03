@@ -64,7 +64,6 @@
 #include "lyrics.h"
 #include "segment.h"
 #include "tempotext.h"
-#include "sym.h"
 #include "image.h"
 #include "tiemap.h"
 #include "tie.h"

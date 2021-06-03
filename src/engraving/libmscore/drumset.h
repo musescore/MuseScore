@@ -26,7 +26,7 @@
 #include "mscore.h"
 #include "tremolo.h"
 #include "note.h"
-#include "sym.h"
+#include "symid.h"
 
 namespace Ms {
 class XmlWriter;

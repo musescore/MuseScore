@@ -38,7 +38,6 @@
 
 #include "libmscore/element.h"
 #include "libmscore/style.h"
-#include "libmscore/sym.h"
 #include "libmscore/symbol.h"
 #include "libmscore/score.h"
 #include "libmscore/image.h"

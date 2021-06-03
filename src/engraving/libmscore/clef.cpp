@@ -29,7 +29,6 @@
 #include "measure.h"
 #include "ambitus.h"
 #include "xml.h"
-#include "sym.h"
 #include "symbol.h"
 #include "system.h"
 #include "score.h"

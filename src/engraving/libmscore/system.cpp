@@ -48,7 +48,6 @@
 #include "chordrest.h"
 #include "iname.h"
 #include "spanner.h"
-#include "sym.h"
 #include "spacer.h"
 #include "systemdivider.h"
 #include "textframe.h"

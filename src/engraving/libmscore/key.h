@@ -26,7 +26,7 @@
 #include <QPointF>
 #include <QList>
 
-#include "sym.h"
+#include "symid.h"
 
 namespace Ms {
 class XmlWriter;

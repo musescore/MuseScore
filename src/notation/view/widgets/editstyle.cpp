@@ -33,6 +33,7 @@
 #include "framework/global/widgetstatestore.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/layout.h"
+#include "libmscore/scorefont.h"
 #include "libmscore/sym.h"
 #include "libmscore/realizedharmony.h"
 #include "log.h"
@@ -1798,7 +1799,7 @@ void EditStyle::valueChanged(int i)
     QVariant val  = getValue(idx);
     bool setValue = false;
     if (idx == StyleId::MusicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
-        Ms::ScoreFont* scoreFont = Ms::ScoreFont::fontFactory(val.toString());
+        Ms::ScoreFont* scoreFont = Ms::ScoreFont::fontByName(val.toString());
         if (scoreFont) {
             for (auto j : scoreFont->engravingDefaults()) {
                 setStyleValue(j.first, j.second);

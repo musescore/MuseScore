@@ -34,7 +34,7 @@
 
 #include "config.h"
 #include "element.h"
-#include "sym.h"
+#include "symid.h"
 
 namespace Ms {
 class Note;

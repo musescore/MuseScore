@@ -82,7 +82,7 @@
 #include "stafftext.h"
 #include "chordline.h"
 #include "tremolo.h"
-#include "sym.h"
+#include "scorefont.h"
 #include "utils.h"
 #include "glissando.h"
 #include "stafflines.h"
@@ -1750,7 +1750,7 @@ void ChangeStyle::flip(EditData*)
         score->cmdConcertPitchChanged(style.value(Sid::concertPitch).toBool());
     }
     if (score->styleV(Sid::MusicalSymbolFont) != style.value(Sid::MusicalSymbolFont)) {
-        score->setScoreFont(ScoreFont::fontFactory(style.value(Sid::MusicalSymbolFont).toString()));
+        score->setScoreFont(ScoreFont::fontByName(style.value(Sid::MusicalSymbolFont).toString()));
     }
 
     score->setStyle(style, overlap);

@@ -25,6 +25,7 @@
 #include "symbol.h"
 #include "sym.h"
 #include "score.h"
+#include "scorefont.h"
 #include "icon.h"
 #include "staff.h"
 #include "undo.h"

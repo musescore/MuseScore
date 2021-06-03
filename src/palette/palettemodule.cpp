@@ -46,9 +46,6 @@
 
 #include "internal/paletteworkspacesetup.h"
 
-#include "libmscore/score.h"
-#include "libmscore/sym.h"
-
 using namespace mu::palette;
 using namespace mu::framework;
 using namespace mu::ui;
