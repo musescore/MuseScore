@@ -68,6 +68,7 @@
 #include "spatium.h"
 #include "barline.h"
 #include "skyline.h"
+#include "scorefont.h"
 
 namespace Ms {
 bool MScore::debugMode = false;
@@ -135,7 +136,6 @@ Sequencer* MScore::seq = 0;
 MuseScoreCore* MuseScoreCore::mscoreCore;
 
 extern void initDrumset();
-extern void initScoreFonts();
 extern QString mscoreGlobalShare;
 
 std::vector<MScoreError> MScore::errorList {
@@ -314,7 +314,7 @@ void MScore::init()
     //
     _baseStyle.precomputeValues();
 
-    initScoreFonts();
+    ScoreFont::initScoreFonts();
     StaffType::initStaffTypes();
     initDrumset();
     FiguredBass::readConfigFile(0);

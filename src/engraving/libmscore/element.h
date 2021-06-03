@@ -29,7 +29,7 @@
 #include "scoreElement.h"
 #include "shape.h"
 #include "sig.h"
-#include "sym.h"
+#include "symid.h"
 
 #include "draw/painter.h"
 
@@ -53,10 +53,11 @@ namespace Ms {
 // Defined in Windows headers, conflicts with member functions named small().
 #undef small
 
+enum class Pid;
+enum class SmuflAnchorId;
+class StaffType;
 class XmlReader;
 class XmlWriter;
-enum class Pid;
-class StaffType;
 
 //---------------------------------------------------------
 //   Grip

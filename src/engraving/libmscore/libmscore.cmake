@@ -238,6 +238,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/scoreElement.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoreElement.h
     ${CMAKE_CURRENT_LIST_DIR}/scorefile.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/scorefont.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/scorefont.h
     ${CMAKE_CURRENT_LIST_DIR}/scoreOrder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoreOrder.h
     ${CMAKE_CURRENT_LIST_DIR}/score.h

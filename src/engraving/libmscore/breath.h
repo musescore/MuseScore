@@ -24,7 +24,7 @@
 #define __BREATH_H__
 
 #include "element.h"
-#include "sym.h"
+#include "symid.h"
 
 namespace Ms {
 //---------------------------------------------------------

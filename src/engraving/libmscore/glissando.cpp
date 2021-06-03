@@ -40,12 +40,12 @@ NICE-TO-HAVE TODO:
 #include "note.h"
 #include "notedot.h"
 #include "score.h"
+#include "scorefont.h"
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
 #include "measure.h"
 #include "style.h"
-#include "sym.h"
 #include "xml.h"
 #include "accidental.h"
 

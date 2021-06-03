@@ -23,22 +23,12 @@
 #ifndef __SYM_H__
 #define __SYM_H__
 
-#include <QApplication>
-
-#include "config.h"
-#include "style.h"
-#include "qtenum.h"
 #include "symid.h"
-
-#include "draw/painter.h"
-#include "draw/font.h"
-
-#include "modularity/ioc.h"
-#include "draw/ifontprovider.h"
 
 namespace Ms {
 //---------------------------------------------------------
 //   SmuflAnchorId
+///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
 enum class SmuflAnchorId {
@@ -59,138 +49,53 @@ enum class SmuflAnchorId {
 
 class Sym
 {
-protected:
-    int _code = -1;
-    QRectF _bbox;
-    qreal _advance = 0.0;
-
-    std::map<SmuflAnchorId, QPointF> smuflAnchors;
-    std::vector<SymId> _ids; // not empty if this is a compound symbol
-
 public:
-    Sym() { }
+    Sym() = default;
 
-    bool isValid() const { return _code != -1 && _bbox.isValid(); }
+    bool isValid() const;
 
-    void setSymList(const std::vector<SymId>& sl) { _ids = sl; }
-    const std::vector<SymId>& symList() const { return _ids; }
+    const std::vector<SymId>& subSymbols() const;
+    void setSubSymbols(const std::vector<SymId>& subSymbols);
 
-    int code() const { return _code; }
-    void setCode(int val) { _code = val; }
+    int code() const;
+    void setCode(int val);
 
-    QRectF bbox() const { return _bbox; }
-    void setBbox(QRectF val) { _bbox = val; }
+    QRectF bbox() const;
+    void setBbox(QRectF val);
 
-    qreal advance() const { return _advance; }
-    void setAdvance(qreal val) { _advance = val; }
+    qreal advance() const;
+    void setAdvance(qreal val);
 
-    QPointF smuflAnchor(SmuflAnchorId anchorId) { return smuflAnchors[anchorId]; }
-    void setSmuflAnchor(SmuflAnchorId anchorId, const QPointF& newValue) { smuflAnchors[anchorId] = newValue; }
+    QPointF smuflAnchor(SmuflAnchorId anchorId);
+    void setSmuflAnchor(SmuflAnchorId anchorId, const QPointF& newValue);
 
-    static SymId name2id(const QString& s) { return lnhash.value(s, SymId::noSym); }           // return noSym if not found
-    static SymId oldName2id(const QString s) { return lonhash.value(s, SymId::noSym); }
+    static SymId name2id(const QString& s); // return noSym if not found
+    static SymId oldName2id(const QString s);
     static const char* id2name(SymId id);
 
-    static QString id2userName(SymId id) { return qApp->translate("symUserNames", symUserNames[int(id)]); }
-    static SymId userName2id(const QString& s);
+    static QString id2userName(SymId id);
+    static SymId userName2id(const QString& userName);
 
     static const std::array<const char*, int(SymId::lastSym) + 1> symNames;
     static const std::array<const char*, int(SymId::lastSym) + 1> symUserNames;
-    static const QVector<SymId> commonScoreSymbols;
+    static const std::vector<SymId> commonScoreSymbols;
 
-    static QHash<QString, SymId> lnhash;
+    static QHash<QString, SymId> nameToSymIdHash;
 
     struct OldName {
         const char* name;
         SymId symId;
     };
-    static QHash<QString, SymId> lonhash;
-    static QVector<OldName> oldNames;
-    friend class ScoreFont;
+    static QHash<QString, SymId> oldNameToSymIdHash;
+    static std::vector<OldName> oldNames;
+
+private:
+    int m_code = -1;
+    QRectF m_bbox;
+    qreal m_advance = 0.0;
+
+    std::map<SmuflAnchorId, QPointF> m_smuflAnchors;
+    std::vector<SymId> m_subSymbolIds; // not empty if this is a compound symbol
 };
-
-//---------------------------------------------------------
-//   ScoreFont
-///   \cond PLUGIN_API \private \endcond
-//---------------------------------------------------------
-
-class ScoreFont
-{
-    INJECT(score, mu::draw::IFontProvider, fontProvider)
-
-    bool m_loaded = false;
-    QVector<Sym> m_symbols;
-    QString m_name;
-    QString m_family;
-    QString m_fontPath;
-    QString m_filename;
-    std::list<std::pair<Sid, QVariant> > m_engravingDefaults;
-    double m_textEnclosureThickness = 0;
-    mutable mu::draw::Font m_font;
-
-    static QVector<ScoreFont> s_scoreFonts;
-    static std::array<uint, size_t(SymId::lastSym) + 1> s_mainSymCodeTable;
-    void load();
-    void computeMetrics(Sym* sym, int code);
-
-public:
-    ScoreFont() {}
-    ScoreFont(const ScoreFont&);
-    ScoreFont(const char* n, const char* f, const char* p, const char* fn)
-        : m_name(n), m_family(f), m_fontPath(p), m_filename(fn)
-    {
-        m_symbols = QVector<Sym>(int(SymId::lastSym) + 1);
-    }
-
-    ~ScoreFont() = default;
-
-    const QString& name() const { return m_name; }
-    const QString& family() const { return m_family; }
-    std::list<std::pair<Sid, QVariant> > engravingDefaults() { return m_engravingDefaults; }
-    double textEnclosureThickness() { return m_textEnclosureThickness; }
-
-    QString fontPath() const { return m_fontPath; }
-
-    static ScoreFont* fontFactory(QString);
-    static ScoreFont* fallbackFont();
-    static const char* fallbackTextFont();
-    static const QVector<ScoreFont>& scoreFonts() { return s_scoreFonts; }
-    static QJsonObject initGlyphNamesJson();
-
-    QString toString(SymId id) const;
-    uint symCode(SymId id) const;
-
-    void draw(SymId id,                  mu::draw::Painter*, const QSizeF& mag, const QPointF& pos, qreal scale) const;
-    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const QPointF& pos, qreal scale) const;
-    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const QPointF& pos) const;
-    void draw(SymId id,                  mu::draw::Painter*, const QSizeF& mag, const QPointF& pos) const;
-    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const QPointF& pos, int n) const;
-    void draw(const std::vector<SymId>&, mu::draw::Painter*, qreal mag,         const QPointF& pos) const;
-    void draw(const std::vector<SymId>&, mu::draw::Painter*, const QSizeF& mag, const QPointF& pos) const;
-    void draw(const std::vector<SymId>&, mu::draw::Painter*, qreal mag,         const QPointF& pos, qreal scale) const;
-    void draw(const std::vector<SymId>&, mu::draw::Painter*, const QSizeF& mag, const QPointF& pos, qreal scale) const;
-
-    qreal height(SymId id, qreal mag) const { return bbox(id, mag).height(); }
-    qreal width(SymId id, qreal mag) const { return bbox(id, mag).width(); }
-    qreal advance(SymId id, qreal mag) const;
-    qreal width(const std::vector<SymId>&, qreal mag) const;
-
-    const QRectF bbox(SymId id, const QSizeF&) const;
-    const QRectF bbox(SymId id, qreal mag) const;
-    const QRectF bbox(const std::vector<SymId>& s, const QSizeF& mag) const;
-    const QRectF bbox(const std::vector<SymId>& s, qreal mag) const;
-
-    QPointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, qreal mag) const;
-
-    bool isValid(SymId id) const { return sym(id).isValid(); }
-    bool useFallbackFont(SymId id) const;
-
-    Sym sym(SymId id) const;
-
-    friend void initScoreFonts();
-};
-
-extern void initScoreFonts();
-}     // namespace Ms
-
+} // namespace Ms
 #endif

@@ -42,7 +42,6 @@
 #include "spannermap.h"
 #include "layoutbreak.h"
 #include "property.h"
-#include "sym.h"
 
 namespace mu::score {
 class AccessibleScore;

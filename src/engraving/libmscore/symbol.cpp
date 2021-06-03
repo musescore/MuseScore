@@ -22,6 +22,7 @@
 
 #include "symbol.h"
 #include "sym.h"
+#include "scorefont.h"
 #include "xml.h"
 #include "system.h"
 #include "staff.h"
@@ -146,7 +147,7 @@ void Symbol::read(XmlReader& e)
             }
             setSym(symId);
         } else if (tag == "font") {
-            _scoreFont = ScoreFont::fontFactory(e.readElementText());
+            _scoreFont = ScoreFont::fontByName(e.readElementText());
         } else if (tag == "Symbol") {
             Symbol* s = new Symbol(score());
             s->read(e);

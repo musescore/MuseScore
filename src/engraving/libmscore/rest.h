@@ -25,7 +25,7 @@
 
 #include "chordrest.h"
 #include "notedot.h"
-#include "sym.h"
+#include "symid.h"
 
 namespace Ms {
 class TDuration;

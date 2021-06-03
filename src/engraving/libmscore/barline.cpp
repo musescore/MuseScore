@@ -22,6 +22,7 @@
 
 #include "barline.h"
 #include "score.h"
+#include "scorefont.h"
 #include "sym.h"
 #include "staff.h"
 #include "part.h"

@@ -22,7 +22,6 @@
 
 #include "marker.h"
 #include "score.h"
-#include "sym.h"
 #include "xml.h"
 #include "measure.h"
 

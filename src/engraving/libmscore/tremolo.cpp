@@ -29,7 +29,7 @@
 #include "measure.h"
 #include "segment.h"
 #include "stem.h"
-#include "sym.h"
+#include "symid.h"
 #include "xml.h"
 
 namespace Ms {

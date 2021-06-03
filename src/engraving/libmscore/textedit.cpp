@@ -26,6 +26,8 @@
 #include "log.h"
 #include "textedit.h"
 #include "score.h"
+#include "scorefont.h"
+#include "sym.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -219,7 +221,6 @@ void TextBase::insertSym(EditData& ed, SymId id)
     deleteSelectedText(ed);
     QString s = score()->scoreFont()->toString(id);
     CharFormat fmt = *cursor->format();    // save format
-//      uint code = ScoreFont::fallbackFont()->sym(id).code();
     cursor->format()->setFontFamily("ScoreText");
     cursor->format()->setBold(false);
     cursor->format()->setItalic(false);

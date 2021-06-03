@@ -24,7 +24,6 @@
 
 #include "chord.h"
 #include "score.h"
-#include "sym.h"
 #include "system.h"
 #include "xml.h"
 #include "staff.h"

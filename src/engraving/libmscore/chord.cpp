@@ -56,7 +56,6 @@
 #include "ledgerline.h"
 #include "drumset.h"
 #include "key.h"
-#include "sym.h"
 #include "stringdata.h"
 #include "beam.h"
 #include "slur.h"

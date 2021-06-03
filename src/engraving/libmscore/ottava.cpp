@@ -30,7 +30,6 @@
 #include "text.h"
 #include "staff.h"
 #include "segment.h"
-#include "sym.h"
 #include "musescoreCore.h"
 
 namespace Ms {

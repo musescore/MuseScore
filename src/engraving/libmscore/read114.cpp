@@ -47,7 +47,7 @@
 #include "dynamic.h"
 #include "drumset.h"
 #include "style.h"
-#include "sym.h"
+#include "symid.h"
 #include "xml.h"
 #include "stringdata.h"
 #include "tempo.h"

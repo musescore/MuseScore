@@ -23,7 +23,7 @@
 #include "mmrest.h"
 #include "measure.h"
 #include "score.h"
-#include "sym.h"
+#include "symid.h"
 #include "undo.h"
 #include "utils.h"
 

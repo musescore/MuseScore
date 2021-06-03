@@ -32,7 +32,6 @@
 #include "staff.h"
 #include "tuplet.h"
 #include "score.h"
-#include "sym.h"
 #include "slur.h"
 #include "beam.h"
 #include "breath.h"

@@ -33,7 +33,7 @@
 #include "xml.h"
 
 // TEMPORARY HACK!!
-#include "sym.h"
+#include "symid.h"
 // END OF HACK
 
 namespace Ms {
