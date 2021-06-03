@@ -31,7 +31,7 @@ import "internal"
 Rectangle {
     id: root
 
-    property string initiallySelectedInstrumentIds: ""
+    property string initiallySelectedPartIds: ""
     property bool hasSelectedInstruments: instrumentsModel.selectedInstruments.length > 0
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
@@ -43,7 +43,14 @@ Rectangle {
         var result = []
 
         for (var i = 0; i < instruments.length; ++i) {
-            result.push(instruments[i].config)
+            var obj = {}
+            obj["isExistingPart"] = instruments[i].isExistingPart
+            obj["id"] = instruments[i].id
+            obj["name"] = instruments[i].name
+            obj["isSoloist"] = instruments[i].isSoloist
+            obj["instrument"] = instruments[i].config
+
+            result.push(obj)
         }
 
         return result
@@ -56,7 +63,7 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        instrumentsModel.load(canSelectMultipleInstruments, currentInstrumentId, initiallySelectedInstrumentIds)
+        instrumentsModel.load(canSelectMultipleInstruments, currentInstrumentId, initiallySelectedPartIds)
 
         var groupId = instrumentsModel.selectedGroupId()
         familyView.focusGroup(groupId)
@@ -212,6 +219,10 @@ Rectangle {
 
             onOrderChanged: {
                 instrumentsModel.selectOrderType(id)
+            }
+
+            onSoloistChanged: {
+                instrumentsModel.toggleSoloist(id)
             }
         }
 

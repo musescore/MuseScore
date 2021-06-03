@@ -324,6 +324,7 @@ public:
     bool isDifferentInstrument(const Instrument& i) const;
 
     QString getId() const { return _id; }
+    void setId(const QString& id) { _id = id; }
     void setMinPitchP(int v) { _minPitchP = v; }
     void setMaxPitchP(int v) { _maxPitchP = v; }
     void setMinPitchA(int v) { _minPitchA = v; }

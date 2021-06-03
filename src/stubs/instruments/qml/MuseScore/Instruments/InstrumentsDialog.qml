@@ -29,7 +29,7 @@ QmlDialog {
 
     property bool canSelectMultipleInstruments: false
     property string currentInstrumentId: ""
-    property string initiallySelectedInstrumentIds: ""
+    property string initiallySelectedPartIds: ""
 
     height: 500
     width: 900

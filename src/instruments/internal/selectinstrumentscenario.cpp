@@ -24,11 +24,11 @@
 using namespace mu::instruments;
 using namespace mu::notation;
 
-mu::RetVal<InstrumentList> SelectInstrumentsScenario::selectInstruments(SelectInstrumentsMode mode) const
+mu::RetVal<PartInstrumentList> SelectInstrumentsScenario::selectInstruments(SelectInstrumentsMode mode) const
 {
     QStringList params;
     if (mode == SelectInstrumentsMode::ShowCurrentInstruments) {
-        params << "initiallySelectedInstrumentIds=" + partsInstrumentIds().join(",");
+        params << "initiallySelectedPartIds=" + partsIds().join(",");
     }
 
     return selectInstruments(params);
@@ -43,7 +43,7 @@ mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const std::st
         "currentInstrumentId=" + QString::fromStdString(currentInstrumentId)
     };
 
-    RetVal<InstrumentList> selectedInstruments = selectInstruments(params);
+    RetVal<PartInstrumentList> selectedInstruments = selectInstruments(params);
     if (!selectedInstruments.ret) {
         result.ret = selectedInstruments.ret;
         return result;
@@ -55,13 +55,13 @@ mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const std::st
         return result;
     }
 
-    result.val = selectedInstruments.val.first();
+    result.val = selectedInstruments.val.first().instrument;
     return result;
 }
 
-mu::RetVal<InstrumentList> SelectInstrumentsScenario::selectInstruments(const QStringList& params) const
+mu::RetVal<PartInstrumentList> SelectInstrumentsScenario::selectInstruments(const QStringList& params) const
 {
-    RetVal<InstrumentList> result;
+    RetVal<PartInstrumentList> result;
 
     QString uri = QString("musescore://instruments/select?%1").arg(params.join('&'));
     RetVal<Val> instruments = interactive()->open(uri.toStdString());
@@ -74,7 +74,15 @@ mu::RetVal<InstrumentList> SelectInstrumentsScenario::selectInstruments(const QS
 
     QVariantList objList = instruments.val.toQVariant().toList();
     for (const QVariant& obj: objList) {
-        result.val << obj.value<Instrument>();
+        QVariantMap map = obj.toMap();
+        PartInstrument pi;
+
+        pi.isExistingPart = map["isExistingPart"].toBool();
+        pi.isSoloist = map["isSoloist"].toBool();
+        pi.partId = map["id"].toString();
+        pi.instrument = map["instrument"].value<Instrument>();
+
+        result.val << pi;
     }
 
     return result;
@@ -90,7 +98,7 @@ INotationPartsPtr SelectInstrumentsScenario::notationParts() const
     return notation->parts();
 }
 
-IDList SelectInstrumentsScenario::partsInstrumentIds() const
+IDList SelectInstrumentsScenario::partsIds() const
 {
     auto _notationParts = notationParts();
     if (!_notationParts) {
@@ -101,15 +109,7 @@ IDList SelectInstrumentsScenario::partsInstrumentIds() const
 
     IDList result;
     for (const Part* part: parts) {
-        async::NotifyList<Instrument> selectedInstruments = _notationParts->instrumentList(part->id());
-
-        for (const Instrument& instrument: selectedInstruments) {
-            if (part->isDoublingInstrument(instrument.id)) {
-                continue;
-            }
-
-            result << instrument.id;
-        }
+        result << part->id();
     }
 
     return result;
