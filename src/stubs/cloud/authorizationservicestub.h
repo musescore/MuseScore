@@ -19,37 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_ACCOUNTCONTROLLER_H
-#define MU_CLOUD_ACCOUNTCONTROLLER_H
+#ifndef MU_CLOUD_AUTHORIZATIONSERVICESTUB_H
+#define MU_CLOUD_AUTHORIZATIONSERVICESTUB_H
 
-#include <QScopedPointer>
-#include <QOAuth2AuthorizationCodeFlow>
-
-#include "iaccountcontroller.h"
+#include "cloud/iauthorizationservice.h"
 
 namespace mu::cloud {
-class AccountController : public IAccountController
+class AuthorizationServiceStub : public IAuthorizationService
 {
 public:
-    AccountController();
-
-    void init();
-
     void createAccount() override;
     void signIn() override;
     void signOut() override;
 
     ValCh<bool> userAuthorized() const override;
     ValCh<AccountInfo> accountInfo() const override;
-
-private:
-    void setAccountInfo(const AccountInfo& info);
-
-    QScopedPointer<QOAuth2AuthorizationCodeFlow> m_oauth;
-
-    ValCh<bool> m_userAuthorized;
-    ValCh<AccountInfo> m_accountInfo;
 };
 }
 
-#endif // MU_CLOUD_ACCOUNTCONTROLLER_H
+#endif // MU_CLOUD_AUTHORIZATIONSERVICESTUB_H

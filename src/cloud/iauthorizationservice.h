@@ -19,28 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "accountcontrollerstub.h"
+#ifndef MU_CLOUD_IAUTHORIZATIONSERVICE_H
+#define MU_CLOUD_IAUTHORIZATIONSERVICE_H
 
-using namespace mu::cloud;
+#include "modularity/imoduleexport.h"
+#include "cloudtypes.h"
 
-void AccountControllerStub::createAccount()
+#include "retval.h"
+
+namespace mu::cloud {
+class IAuthorizationService : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IAuthorizationService)
+
+public:
+    virtual ~IAuthorizationService() = default;
+
+    virtual void createAccount() = 0;
+    virtual void signIn() = 0;
+    virtual void signOut() = 0;
+
+    virtual ValCh<bool> userAuthorized() const = 0;
+    virtual ValCh<AccountInfo> accountInfo() const = 0;
+};
 }
 
-void AccountControllerStub::signIn()
-{
-}
-
-void AccountControllerStub::signOut()
-{
-}
-
-mu::ValCh<bool> AccountControllerStub::userAuthorized() const
-{
-    return mu::ValCh<bool>();
-}
-
-mu::ValCh<AccountInfo> AccountControllerStub::accountInfo() const
-{
-    return mu::ValCh<AccountInfo>();
-}
+#endif // MU_CLOUD_IAUTHORIZATIONSERVICE_H

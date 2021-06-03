@@ -19,55 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#include "accountcontroller.h"
-
-#include "log.h"
+#include "accountcontrollerstub.h"
 
 using namespace mu::cloud;
 
-AccountController::AccountController()
+void AuthorizationServiceStub::createAccount()
 {
-    m_userAuthorized.val = false;
 }
 
-void AccountController::init()
+void AuthorizationServiceStub::signIn()
 {
-    NOT_IMPLEMENTED;
 }
 
-void AccountController::createAccount()
+void AuthorizationServiceStub::signOut()
 {
-    NOT_IMPLEMENTED;
 }
 
-void AccountController::signIn()
+mu::ValCh<bool> AuthorizationServiceStub::userAuthorized() const
 {
-    NOT_IMPLEMENTED;
+    return mu::ValCh<bool>();
 }
 
-void AccountController::signOut()
+mu::ValCh<AccountInfo> AuthorizationServiceStub::accountInfo() const
 {
-    NOT_IMPLEMENTED;
-    setAccountInfo(AccountInfo());
-}
-
-mu::ValCh<bool> AccountController::userAuthorized() const
-{
-    return m_userAuthorized;
-}
-
-mu::ValCh<AccountInfo> AccountController::accountInfo() const
-{
-    return m_accountInfo;
-}
-
-void AccountController::setAccountInfo(const AccountInfo& info)
-{
-    if (m_accountInfo.val == info) {
-        return;
-    }
-
-    m_accountInfo.set(info);
-    m_userAuthorized.set(info.isValid());
+    return mu::ValCh<AccountInfo>();
 }

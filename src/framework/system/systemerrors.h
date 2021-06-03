@@ -34,6 +34,7 @@ enum class Err {
     FSNotExist,
     FSRemoveError,
     FSReadError,
+    FSWriteError,
     FSMakingError
 };
 
@@ -48,6 +49,7 @@ inline Ret make_ret(Err e)
     case Err::FSNotExist: return Ret(retCode, trc("system", "The file does not exist"));
     case Err::FSRemoveError: return Ret(retCode, trc("system", "The file could not be removed"));
     case Err::FSReadError: return Ret(retCode, trc("system", "An error occurred when reading from the file"));
+    case Err::FSWriteError: return Ret(retCode, trc("system", "An error occurred when writing to the file"));
     case Err::FSMakingError: return Ret(retCode, trc("system", "An error occurred when making a path"));
     }
 

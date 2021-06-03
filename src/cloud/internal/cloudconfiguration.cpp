@@ -19,22 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_ACCOUNTCONTROLLERSTUB_H
-#define MU_CLOUD_ACCOUNTCONTROLLERSTUB_H
+#include "cloudconfiguration.h"
 
-#include "cloud/iaccountcontroller.h"
+using namespace mu::cloud;
 
-namespace mu::cloud {
-class AccountControllerStub : public IAccountController
+void CloudConfiguration::init()
 {
-public:
-    void createAccount() override;
-    void signIn() override;
-    void signOut() override;
-
-    ValCh<bool> userAuthorized() const override;
-    ValCh<AccountInfo> accountInfo() const override;
-};
+    fileSystem()->makePath(tokensFilePath());
 }
 
-#endif // MU_CLOUD_ACCOUNTCONTROLLERSTUB_H
+QUrl CloudConfiguration::authorizationUrl() const
+{
+    return QUrl("https://musescore.com/user/auth/oauth2server");
+}
+
+QUrl CloudConfiguration::accessTokenUrl() const
+{
+    return QUrl("https://musescore.com/user/auth/oauth2server/token");
+}
+
+QUrl CloudConfiguration::userInfoApiUrl() const
+{
+    return apiUrl() + "/user/me";
+}
+
+mu::io::path CloudConfiguration::tokensFilePath() const
+{
+    return globalConfiguration()->dataPath() + "/cred.dat";
+}
+
+QString CloudConfiguration::apiUrl() const
+{
+    return "https://api.musescore.com/v2";
+}
