@@ -22,7 +22,7 @@
 
 #include "accountmodel.h"
 
-#include "iaccountcontroller.h"
+#include "iauthorizationservice.h"
 
 using namespace mu::cloud;
 
@@ -40,14 +40,14 @@ AccountModel::AccountModel(QObject* parent)
 
 void AccountModel::load()
 {
-    ValCh<AccountInfo> infoCh = accountController()->accountInfo();
+    ValCh<AccountInfo> infoCh = authorizationService()->accountInfo();
     setAccountInfo(infoCh.val);
 
     infoCh.ch.onReceive(this, [this](const AccountInfo& info) {
         setAccountInfo(info);
     });
 
-    ValCh<bool> userAuthorizedCh = accountController()->userAuthorized();
+    ValCh<bool> userAuthorizedCh = authorizationService()->userAuthorized();
     setUserAuthorized(userAuthorizedCh.val);
 
     userAuthorizedCh.ch.onReceive(this, [this](bool authorized) {
@@ -77,17 +77,17 @@ void AccountModel::setAccountInfo(const AccountInfo& info)
 
 void AccountModel::createAccount()
 {
-    accountController()->createAccount();
+    authorizationService()->createAccount();
 }
 
 void AccountModel::signIn()
 {
-    accountController()->signIn();
+    authorizationService()->signIn();
 }
 
 void AccountModel::signOut()
 {
-    accountController()->signOut();
+    authorizationService()->signOut();
 }
 
 bool AccountModel::userAuthorized() const

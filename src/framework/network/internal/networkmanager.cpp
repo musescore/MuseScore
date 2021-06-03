@@ -50,32 +50,32 @@ NetworkManager::~NetworkManager()
     }
 }
 
-Ret NetworkManager::get(const QUrl& url, IODevice* incommingData)
+Ret NetworkManager::get(const QUrl& url, IODevice* incommingData, const RequestHeaders& headers)
 {
-    return execRequest(GET_REQUEST, url, incommingData);
+    return execRequest(GET_REQUEST, url, incommingData, nullptr, headers);
 }
 
-Ret NetworkManager::head(const QUrl& url)
+Ret NetworkManager::head(const QUrl& url, const RequestHeaders& headers)
 {
-    return execRequest(HEAD_REQUEST, url);
+    return execRequest(HEAD_REQUEST, url, nullptr, nullptr, headers);
 }
 
-Ret NetworkManager::post(const QUrl& url, IODevice* outgoingData, IODevice* incommingData)
+Ret NetworkManager::post(const QUrl& url, IODevice* outgoingData, IODevice* incommingData, const RequestHeaders& headers)
 {
-    return execRequest(POST_REQUEST, url, incommingData, outgoingData);
+    return execRequest(POST_REQUEST, url, incommingData, outgoingData, headers);
 }
 
-Ret NetworkManager::put(const QUrl& url, IODevice* outgoingData, IODevice* incommingData)
+Ret NetworkManager::put(const QUrl& url, IODevice* outgoingData, IODevice* incommingData, const RequestHeaders& headers)
 {
-    return execRequest(PUT_REQUEST, url, incommingData, outgoingData);
+    return execRequest(PUT_REQUEST, url, incommingData, outgoingData, headers);
 }
 
-Ret NetworkManager::del(const QUrl& url, IODevice* incommingData)
+Ret NetworkManager::del(const QUrl& url, IODevice* incommingData, const RequestHeaders& headers)
 {
-    return execRequest(DELETE_REQUEST, url, incommingData);
+    return execRequest(DELETE_REQUEST, url, incommingData, nullptr, headers);
 }
 
-Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IODevice* incommingData, IODevice* outgoingData)
+Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IODevice* incommingData, IODevice* outgoingData, const RequestHeaders& headers)
 {
     if (outgoingData) {
         if (!openIoDevice(outgoingData, IODevice::ReadOnly)) {
@@ -91,7 +91,14 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IODevi
     }
 
     QNetworkRequest request(url);
-    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, true);
+
+    for (QNetworkRequest::KnownHeaders knownHeader: headers.knownHeaders.keys()) {
+        request.setHeader(knownHeader, headers.knownHeaders[knownHeader]);
+    }
+
+    for (const QByteArray& rawHeader: headers.rawHeaders.keys()) {
+        request.setRawHeader(rawHeader, headers.rawHeaders[rawHeader]);
+    }
 
     QNetworkReply* reply = receiveReply(requestType, request, outgoingData);
 

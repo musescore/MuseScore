@@ -25,12 +25,15 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
-#include "internal/accountcontroller.h"
+#include "internal/authorizationservice.h"
+#include "internal/cloudconfiguration.h"
 #include "view/accountmodel.h"
 
 using namespace mu::cloud;
+using namespace mu::framework;
 
-static AccountController* m_accountController = nullptr;
+static std::shared_ptr<CloudConfiguration> s_cloudConfiguration = std::make_shared<CloudConfiguration>();
+static std::shared_ptr<AuthorizationService> s_authorizationService = std::make_shared<AuthorizationService>();
 
 static void cloud_init_qrc()
 {
@@ -44,8 +47,8 @@ std::string CloudModule::moduleName() const
 
 void CloudModule::registerExports()
 {
-    m_accountController = new AccountController();
-    framework::ioc()->registerExport<IAccountController>(moduleName(), m_accountController);
+    ioc()->registerExport<ICloudConfiguration>(moduleName(), s_cloudConfiguration);
+    ioc()->registerExport<IAuthorizationService>(moduleName(), s_authorizationService);
 }
 
 void CloudModule::registerResources()
@@ -60,10 +63,12 @@ void CloudModule::registerUiTypes()
     framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(cloud_QML_IMPORT);
 }
 
-void CloudModule::onInit(const framework::IApplication::RunMode& mode)
+void CloudModule::onInit(const IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::Editor != mode) {
+    if (mode != IApplication::RunMode::Editor) {
         return;
     }
-    m_accountController->init();
+
+    s_cloudConfiguration->init();
+    s_authorizationService->init();
 }

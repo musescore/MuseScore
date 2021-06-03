@@ -28,15 +28,14 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "iaccountcontroller.h"
+#include "iauthorizationservice.h"
 
-namespace mu {
-namespace cloud {
+namespace mu::cloud {
 class AccountModel : public QObject, async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(account, IAccountController, accountController)
+    INJECT(cloud, IAuthorizationService, authorizationService)
 
     Q_PROPERTY(bool userAuthorized READ userAuthorized NOTIFY userAuthorizedChanged)
     Q_PROPERTY(QVariant accountInfo READ accountInfo NOTIFY accountInfoChanged)
@@ -63,7 +62,6 @@ private:
     bool m_userAuthorized = false;
     AccountInfo m_accountInfo;
 };
-}
 }
 
 #endif // MU_CLOUD_ACCOUNTMODEL_H
