@@ -28,6 +28,12 @@ DockStatusBar::DockStatusBar(QQuickItem* parent)
     : DockBase(parent)
 {
     setAllowedAreas(Qt::BottomDockWidgetArea);
+
+    constexpr int STATUS_BAR_HEIGHT = 36;
+
+    setMinimumHeight(STATUS_BAR_HEIGHT);
+    setMaximumHeight(STATUS_BAR_HEIGHT);
+    setHeight(STATUS_BAR_HEIGHT);
 }
 
 DockType DockStatusBar::type() const
