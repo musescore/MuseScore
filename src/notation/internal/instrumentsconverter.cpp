@@ -43,7 +43,8 @@ Ms::Instrument InstrumentsConverter::convertInstrument(const mu::instruments::In
 
     result.setTrackName(instrument.name);
     result.setTranspose(instrument.transpose);
-    result.setInstrumentId(instrument.id);
+    result.setId(instrument.id);
+    result.setInstrumentId(instrument.musicXMLid);
 
     if (instrument.useDrumset) {
         result.setDrumset(instrument.drumset ? instrument.drumset : Ms::smDrumset);
@@ -82,7 +83,8 @@ mu::instruments::Instrument InstrumentsConverter::convertInstrument(const Ms::In
 
     result.name = instrument.trackName();
     result.transpose = instrument.transpose();
-    result.id = instrument.instrumentId();
+    result.id = instrument.getId();
+    result.musicXMLid = instrument.instrumentId();
     result.useDrumset = instrument.useDrumset();
     result.drumset = instrument.drumset();
 

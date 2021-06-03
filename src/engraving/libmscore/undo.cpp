@@ -1030,6 +1030,26 @@ void RemovePart::redo(EditData*)
 }
 
 //---------------------------------------------------------
+//   SetSoloist
+//---------------------------------------------------------
+
+SetSoloist::SetSoloist(Part* p, bool b)
+{
+    part = p;
+    soloist  = b;
+}
+
+void SetSoloist::undo(EditData*)
+{
+    part->setSoloist(!soloist);
+}
+
+void SetSoloist::redo(EditData*)
+{
+    part->setSoloist(soloist);
+}
+
+//---------------------------------------------------------
 //   InsertStaff
 //---------------------------------------------------------
 
