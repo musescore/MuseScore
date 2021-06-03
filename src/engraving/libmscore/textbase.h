@@ -365,9 +365,7 @@ public:
 
     friend class TextBlock;
     friend class TextFragment;
-    QString convertFromHtml(const QString& ss) const;
-    static QString convertToHtml(const QString&, const TextStyle&);
-    static QString tagEscape(QString s);
+
     static QString unEscape(QString s);
     static QString escape(QString s);
 
