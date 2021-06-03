@@ -23,17 +23,20 @@
 #define MU_MIDI_ALSAMIDIOUTPORT_H
 
 #include <memory>
+
+#include "async/asyncable.h"
 #include "midi/imidioutport.h"
+#include "internal/midideviceslistener.h"
 
 namespace mu::midi {
-class AlsaMidiOutPort : public IMidiOutPort
+class AlsaMidiOutPort : public IMidiOutPort, public async::Asyncable
 {
 public:
-
     AlsaMidiOutPort();
     ~AlsaMidiOutPort() override;
 
-    std::vector<MidiDevice> devices() const override;
+    MidiDeviceList devices() const override;
+    async::Notification devicesChanged() const override;
 
     Ret connect(const MidiDeviceID& deviceID) override;
     void disconnect() override;
@@ -43,10 +46,14 @@ public:
     Ret sendEvent(const Event& e) override;
 
 private:
+    bool deviceExists(const MidiDeviceID& deviceId) const;
 
     struct Alsa;
     std::unique_ptr<Alsa> m_alsa;
     MidiDeviceID m_deviceID;
+
+    async::Notification m_devicesChanged;
+    MidiDevicesListener m_devicesListener;
 };
 }
 

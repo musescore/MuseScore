@@ -42,6 +42,25 @@ CoreMidiInPort::CoreMidiInPort()
 {
     m_core = std::unique_ptr<Core>(new Core());
     initCore();
+
+    m_devicesListener.reg([this]() {
+        return devices();
+    });
+
+    m_devicesListener.devicesChanged().onNotify(this, [this]() {
+        bool connectedDeviceRemoved = true;
+        for (const MidiDevice& device: devices()) {
+            if (m_deviceID == device.id) {
+                connectedDeviceRemoved = false;
+            }
+        }
+
+        if (connectedDeviceRemoved) {
+            disconnect();
+        }
+
+        m_devicesChanged.notify();
+    });
 }
 
 CoreMidiInPort::~CoreMidiInPort()
@@ -63,9 +82,9 @@ CoreMidiInPort::~CoreMidiInPort()
     }
 }
 
-std::vector<MidiDevice> CoreMidiInPort::devices() const
+MidiDeviceList CoreMidiInPort::devices() const
 {
-    std::vector<MidiDevice> ret;
+    MidiDeviceList ret;
 
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, false);
     int sources = MIDIGetNumberOfSources();
@@ -91,6 +110,11 @@ std::vector<MidiDevice> CoreMidiInPort::devices() const
     }
 
     return ret;
+}
+
+async::Notification CoreMidiInPort::devicesChanged() const
+{
+    return m_devicesChanged;
 }
 
 static void proccess(const MIDIPacketList* list, void* readProc, void* srcConn)

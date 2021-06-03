@@ -52,6 +52,25 @@ static std::string errorString(MMRESULT ret)
 WinMidiOutPort::WinMidiOutPort()
 {
     m_win = std::unique_ptr<Win>(new Win());
+
+    m_devicesListener.reg([this]() {
+        return devices();
+    });
+
+    m_devicesListener.devicesChanged().onNotify(this, [this]() {
+        bool connectedDeviceRemoved = true;
+        for (const MidiDevice& device: devices()) {
+            if (m_deviceID == device.id) {
+                connectedDeviceRemoved = false;
+            }
+        }
+
+        if (connectedDeviceRemoved) {
+            disconnect();
+        }
+
+        m_devicesChanged.notify();
+    });
 }
 
 WinMidiOutPort::~WinMidiOutPort()
@@ -61,9 +80,9 @@ WinMidiOutPort::~WinMidiOutPort()
     }
 }
 
-std::vector<MidiDevice> WinMidiOutPort::devices() const
+MidiDeviceList WinMidiOutPort::devices() const
 {
-    std::vector<MidiDevice> ret;
+    MidiDeviceList ret;
 
     int numDevs = midiOutGetNumDevs();
     if (numDevs == 0) {
@@ -87,7 +106,12 @@ std::vector<MidiDevice> WinMidiOutPort::devices() const
     return ret;
 }
 
-mu::Ret WinMidiOutPort::connect(const std::string& deviceID)
+mu::async::Notification WinMidiOutPort::devicesChanged() const
+{
+    return m_devicesChanged;
+}
+
+mu::Ret WinMidiOutPort::connect(const MidiDeviceID& deviceID)
 {
     if (isConnected()) {
         disconnect();
@@ -119,7 +143,7 @@ bool WinMidiOutPort::isConnected() const
     return !m_deviceID.empty();
 }
 
-std::string WinMidiOutPort::deviceID() const
+MidiDeviceID WinMidiOutPort::deviceID() const
 {
     return m_deviceID;
 }

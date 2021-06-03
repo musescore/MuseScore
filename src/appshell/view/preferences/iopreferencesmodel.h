@@ -25,13 +25,14 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 #include "audio/iaudioconfiguration.h"
 #include "midi/imidiconfiguration.h"
 #include "midi/imidioutport.h"
 #include "midi/imidiinport.h"
 
 namespace mu::appshell {
-class IOPreferencesModel : public QObject
+class IOPreferencesModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
@@ -73,8 +74,8 @@ public slots:
 
 signals:
     void currentAudioApiIndexChanged(int index);
-    void currentMidiInputDeviceIndexChanged(int index);
-    void currentMidiOutputDeviceIndexChanged(int index);
+    void currentMidiInputDeviceIndexChanged();
+    void currentMidiOutputDeviceIndexChanged();
 
     void midiInputDevicesChanged();
     void midiOutputDevicesChanged();
@@ -82,6 +83,8 @@ signals:
 private:
     midi::MidiDeviceID midiInputDeviceId(int index) const;
     midi::MidiDeviceID midiOutputDeviceId(int index) const;
+
+    void showMidiError(const midi::MidiDeviceID& deviceId, const std::string& text) const;
 };
 }
 

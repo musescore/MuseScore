@@ -83,21 +83,19 @@ void IOPreferencesModel::setCurrentMidiInputDeviceIndex(int index)
 
     Ret ret = midiInPort()->connect(deviceId);
     if (!ret) {
-        // todo: display error
-        LOGE() << "failed connect to input device, deviceID: " << deviceId << ", err: " << ret.text();
+        showMidiError(deviceId, ret.text());
         return;
     }
 
     ret = midiInPort()->run();
     if (!ret) {
-        // todo: display error
-        LOGE() << "failed run input device, deviceID: " << deviceId << ", err: " << ret.text();
+        showMidiError(deviceId, ret.text());
         return;
     }
 
     midiConfiguration()->setMidiInputDeviceId(deviceId);
 
-    emit currentMidiInputDeviceIndexChanged(index);
+    emit currentMidiInputDeviceIndexChanged();
 }
 
 int IOPreferencesModel::currentMidiOutputDeviceIndex() const
@@ -119,7 +117,15 @@ int IOPreferencesModel::currentMidiOutputDeviceIndex() const
 
 void IOPreferencesModel::init()
 {
-//    midiConfiguration()
+    midiInPort()->devicesChanged().onNotify(this, [this]() {
+        emit midiInputDevicesChanged();
+        emit currentMidiInputDeviceIndexChanged();
+    });
+
+    midiOutPort()->devicesChanged().onNotify(this, [this]() {
+        emit midiOutputDevicesChanged();
+        emit currentMidiOutputDeviceIndexChanged();
+    });
 }
 
 void IOPreferencesModel::setCurrentMidiOutputDeviceIndex(int index)
@@ -132,14 +138,13 @@ void IOPreferencesModel::setCurrentMidiOutputDeviceIndex(int index)
 
     Ret ret = midiOutPort()->connect(deviceId);
     if (!ret) {
-        // todo: display error
-        LOGE() << "failed connect to output device, deviceID: " << deviceId << ", err: " << ret.text();
+        showMidiError(deviceId, ret.text());
         return;
     }
 
     midiConfiguration()->setMidiOutputDeviceId(deviceId);
 
-    emit currentMidiOutputDeviceIndexChanged(index);
+    emit currentMidiOutputDeviceIndexChanged();
 }
 
 QStringList IOPreferencesModel::audioApiList() const
@@ -198,4 +203,10 @@ mu::midi::MidiDeviceID IOPreferencesModel::midiOutputDeviceId(int index) const
     }
 
     return devices[index].id;
+}
+
+void IOPreferencesModel::showMidiError(const MidiDeviceID& deviceId, const std::string& text) const
+{
+    // todo: display error
+    LOGE() << "failed connect to device, deviceID: " << deviceId << ", err: " << text;
 }

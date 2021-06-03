@@ -68,6 +68,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/dummymidiinport.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiportdatasender.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midideviceslistener.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midideviceslistener.h
     ${CMAKE_CURRENT_LIST_DIR}/view/mididevicemappingmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/mididevicemappingmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/editmidimappingmodel.cpp
