@@ -32,6 +32,12 @@ public:
 
     bool useRemoteControl() const override;
     void setUseRemoteControl(bool value) override;
+
+    MidiDeviceID midiInputDeviceId() const override;
+    void setMidiInputDeviceId(const MidiDeviceID& deviceId) override;
+
+    MidiDeviceID midiOutputDeviceId() const override;
+    void setMidiOutputDeviceId(const MidiDeviceID& deviceId) override;
 };
 }
 

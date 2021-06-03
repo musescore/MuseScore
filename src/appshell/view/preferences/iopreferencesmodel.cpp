@@ -26,6 +26,7 @@
 
 using namespace mu::appshell;
 using namespace mu::audio;
+using namespace mu::midi;
 
 IOPreferencesModel::IOPreferencesModel(QObject* parent)
     : QObject(parent)
@@ -55,35 +56,76 @@ void IOPreferencesModel::setCurrentAudioApiIndex(int index)
 
 int IOPreferencesModel::currentMidiInputDeviceIndex() const
 {
-    return m_currentMidiInputDeviceIndex;
+    QString currentMidiInputDeviceId = QString::fromStdString(midiConfiguration()->midiInputDeviceId());
+    std::vector<MidiDevice> devices = midiInPort()->devices();
+    for (size_t i = 0; i < devices.size(); ++i) {
+        if (devices[i].id == currentMidiInputDeviceId.toStdString()) {
+            return static_cast<int>(i);
+        }
+    }
+
+    return -1;
 }
 
 void IOPreferencesModel::setCurrentMidiInputDeviceIndex(int index)
 {
-    NOT_IMPLEMENTED;
-
     if (index == currentMidiInputDeviceIndex()) {
         return;
     }
 
-    m_currentMidiInputDeviceIndex = index;
+    MidiDeviceID deviceId = midiInputDeviceId(index);
+
+    Ret ret = midiInPort()->connect(deviceId);
+    if (!ret) {
+        // todo: display error
+        return;
+    }
+
+    ret = midiInPort()->run();
+    if (!ret) {
+        // todo: display error
+        return;
+    }
+
+    midiConfiguration()->setMidiInputDeviceId(deviceId);
+
     emit currentMidiInputDeviceIndexChanged(index);
 }
 
 int IOPreferencesModel::currentMidiOutputDeviceIndex() const
 {
-    return m_currentMidiOutputDeviceIndex;
+    QString currentMidiOutputDeviceId = QString::fromStdString(midiConfiguration()->midiOutputDeviceId());
+    std::vector<MidiDevice> devices = midiOutPort()->devices();
+    for (size_t i = 0; i < devices.size(); ++i) {
+        if (devices[i].id == currentMidiOutputDeviceId.toStdString()) {
+            return static_cast<int>(i);
+        }
+    }
+
+    return -1;
+}
+
+void IOPreferencesModel::init()
+{
+//    midiConfiguration()
 }
 
 void IOPreferencesModel::setCurrentMidiOutputDeviceIndex(int index)
 {
-    NOT_IMPLEMENTED;
-
     if (index == currentMidiOutputDeviceIndex()) {
         return;
     }
 
-    m_currentMidiOutputDeviceIndex = index;
+    MidiDeviceID deviceId = midiOutputDeviceId(index);
+
+    Ret ret = midiOutPort()->connect(deviceId);
+    if (!ret) {
+        // todo: display error
+        return;
+    }
+
+    midiConfiguration()->setMidiOutputDeviceId(deviceId);
+
     emit currentMidiOutputDeviceIndexChanged(index);
 }
 
@@ -98,25 +140,49 @@ QStringList IOPreferencesModel::audioApiList() const
     return result;
 }
 
-QStringList IOPreferencesModel::midiInputDeviceList() const
-{
-    return QStringList {
-        "Universal Audio Keyboard",
-        "Test device 1",
-        "Test device 2"
-    };
-}
-
-QStringList IOPreferencesModel::midiOutputDeviceList() const
-{
-    return QStringList {
-        "Universal Audio Keyboard",
-        "Test device 1",
-        "Test device 2"
-    };
-}
-
 void IOPreferencesModel::restartAudioAndMidiDevices()
 {
     NOT_IMPLEMENTED;
+}
+
+QStringList IOPreferencesModel::midiInputDevices() const
+{
+    QStringList list;
+    std::vector<MidiDevice> devices = midiInPort()->devices();
+    for (const MidiDevice& device : devices) {
+        list << QString::fromStdString(device.name);
+    }
+
+    return list;
+}
+
+QStringList IOPreferencesModel::midiOutputDevices() const
+{
+    QStringList list;
+    std::vector<MidiDevice> devices = midiOutPort()->devices();
+    for (const MidiDevice& device : devices) {
+        list << QString::fromStdString(device.name);
+    }
+
+    return list;
+}
+
+mu::midi::MidiDeviceID IOPreferencesModel::midiInputDeviceId(int index) const
+{
+    std::vector<MidiDevice> devices = midiInPort()->devices();
+    if (0 > index || index > static_cast<int>(devices.size())) {
+        return MidiDeviceID();
+    }
+
+    return devices[index].id;
+}
+
+mu::midi::MidiDeviceID IOPreferencesModel::midiOutputDeviceId(int index) const
+{
+    std::vector<MidiDevice> devices = midiOutPort()->devices();
+    if (0 > index || index > static_cast<int>(devices.size())) {
+        return MidiDeviceID();
+    }
+
+    return devices[index].id;
 }
