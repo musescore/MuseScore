@@ -58,11 +58,18 @@ Rectangle {
 
         anchors.right: parent.right
         anchors.rightMargin: 12
-        anchors.verticalCenter: parent.verticalCenter
+
+        height: parent.height
 
         spacing: 12
 
+        SeparatorLine { orientation: Qt.Vertical; visible: workspaceControl.visible }
+
         FlatButton {
+            anchors.verticalCenter: parent.verticalCenter
+
+            id: workspaceControl
+
             text: qsTrc("workspace", "Workspace: ") + model.currentWorkspaceName
 
             normalStateColor: "transparent"
@@ -72,7 +79,13 @@ Rectangle {
             }
         }
 
+        SeparatorLine { orientation: Qt.Vertical; visible: concertPitchControl.visible }
+
         ConcertPitchControl {
+            id: concertPitchControl
+
+            anchors.verticalCenter: parent.verticalCenter
+
             concertPitchEnabled: model.concertPitchEnabled
 
             onToggleConcertPitchRequested: {
@@ -80,7 +93,11 @@ Rectangle {
             }
         }
 
+        SeparatorLine { orientation: Qt.Vertical }
+
         ViewModeControl {
+            anchors.verticalCenter: parent.verticalCenter
+
             currentViewMode: model.currentViewMode
             availableViewModeList: model.availableViewModeList
 
@@ -90,6 +107,8 @@ Rectangle {
         }
 
         ZoomControl {
+            anchors.verticalCenter: parent.verticalCenter
+
             currentZoomPercentage: model.currentZoomPercentage
             minZoomPercentage: model.minZoomPercentage()
             maxZoomPercentage: model.maxZoomPercentage()
