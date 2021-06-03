@@ -29,10 +29,14 @@ using namespace mu::framework;
 static const std::string module_name("midi");
 
 static const Settings::Key USE_REMOTE_CONTROL_KEY(module_name, "io/midi/useRemoteControl");
+static const Settings::Key MIDI_INPUT_DEVICE_ID(module_name, "io/portMidi/inputDevice");
+static const Settings::Key MIDI_OUTPUT_DEVICE_ID(module_name, "io/portMidi/outputDevice");
 
 void MidiConfiguration::init()
 {
     settings()->setDefaultValue(USE_REMOTE_CONTROL_KEY, Val(true));
+    settings()->setDefaultValue(MIDI_INPUT_DEVICE_ID, Val(""));
+    settings()->setDefaultValue(MIDI_OUTPUT_DEVICE_ID, Val(""));
 }
 
 bool MidiConfiguration::useRemoteControl() const
@@ -42,5 +46,25 @@ bool MidiConfiguration::useRemoteControl() const
 
 void MidiConfiguration::setUseRemoteControl(bool value)
 {
-    return settings()->setValue(USE_REMOTE_CONTROL_KEY, Val(value));
+    settings()->setValue(USE_REMOTE_CONTROL_KEY, Val(value));
+}
+
+MidiDeviceID MidiConfiguration::midiInputDeviceId() const
+{
+    return settings()->value(MIDI_INPUT_DEVICE_ID).toString();
+}
+
+void MidiConfiguration::setMidiInputDeviceId(const MidiDeviceID& deviceId)
+{
+    settings()->setValue(MIDI_INPUT_DEVICE_ID, Val(deviceId));
+}
+
+MidiDeviceID MidiConfiguration::midiOutputDeviceId() const
+{
+    return settings()->value(MIDI_OUTPUT_DEVICE_ID).toString();
+}
+
+void MidiConfiguration::setMidiOutputDeviceId(const MidiDeviceID& deviceId)
+{
+    settings()->setValue(MIDI_OUTPUT_DEVICE_ID, Val(deviceId));
 }

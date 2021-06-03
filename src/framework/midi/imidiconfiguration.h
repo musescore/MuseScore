@@ -23,6 +23,7 @@
 #define MU_MIDI_IMIDICONFIGURATION_H
 
 #include "modularity/imoduleexport.h"
+#include "miditypes.h"
 
 //! NOTE There used to be synthesizer settings here, now nothing
 //! but we will keep the interface, maybe something will appear,
@@ -38,6 +39,12 @@ public:
 
     virtual bool useRemoteControl() const = 0;
     virtual void setUseRemoteControl(bool value) = 0;
+
+    virtual MidiDeviceID midiInputDeviceId() const = 0;
+    virtual void setMidiInputDeviceId(const MidiDeviceID& deviceId) = 0;
+
+    virtual MidiDeviceID midiOutputDeviceId() const = 0;
+    virtual void setMidiOutputDeviceId(const MidiDeviceID& deviceId) = 0;
 };
 }
 

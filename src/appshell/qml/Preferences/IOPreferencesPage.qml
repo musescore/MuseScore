@@ -58,8 +58,8 @@ PreferencesPage {
         MidiDevicesSection {
             currentInputDeviceIndex: ioModel.currentMidiInputDeviceIndex
             currentOutputDeviceIndex: ioModel.currentMidiOutputDeviceIndex
-            inputDevices: ioModel.midiInputDeviceList()
-            outputDevices: ioModel.midiOutputDeviceList()
+            inputDevices: ioModel.midiInputDevices
+            outputDevices: ioModel.midiOutputDevices
             firstColumnWidth: content.firstColumnWidth
 
             onCurrentInputDeviceIndexChangeRequested: {
