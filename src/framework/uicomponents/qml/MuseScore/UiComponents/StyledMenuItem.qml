@@ -51,9 +51,9 @@ ListItemBlank {
 
     hoveredStateColor: ui.theme.accentColor
     pressedStateColor: ui.theme.accentColor
-    enabled: (Boolean(modelData) && modelData.enabled !== undefined ) ? Boolean(modelData.enabled) : true // default true
+    enabled: (Boolean(modelData) && modelData.enabled !== undefined) ? Boolean(modelData.enabled) : true // default true
 
-    isSelected: Boolean(prv.showedSubMenu) || (prv.hasIcon && prv.isSelectable && prv.isSelected)
+    isSelected: Boolean(prv.showedSubMenu) || (prv.isSelectable && prv.isSelected)
 
     navigation.onActiveChanged: {
         if (prv.hasSubMenu) {

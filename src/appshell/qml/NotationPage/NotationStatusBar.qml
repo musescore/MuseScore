@@ -36,6 +36,12 @@ Rectangle {
         model.load()
     }
 
+    MouseArea {
+        anchors.fill: parent
+
+        onClicked: root.forceActiveFocus()
+    }
+
     StyledTextLabel {
         anchors.left: parent.left
         anchors.leftMargin: 12
@@ -84,7 +90,18 @@ Rectangle {
         }
 
         ZoomControl {
-            currentZoom: model.currentZoom
+            currentZoomPercentage: model.currentZoomPercentage
+            minZoomPercentage: model.minZoomPercentage()
+            maxZoomPercentage: model.maxZoomPercentage()
+            availableZoomList: model.availableZoomList
+
+            onChangeZoomPercentageRequested: {
+                model.currentZoomPercentage = newZoomPercentage
+            }
+
+            onChangeZoomRequested: {
+                model.setCurrentZoomIndex(newZoomIndex)
+            }
 
             onZoomInRequested: {
                 model.zoomIn()

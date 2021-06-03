@@ -35,6 +35,8 @@
 #include "notation/inotationconfiguration.h"
 #include "context/iglobalcontext.h"
 
+#include "notation/notationtypes.h"
+
 namespace mu::appshell {
 class NotationStatusBarModel : public QObject, public async::Asyncable, public actions::Actionable
 {
@@ -51,7 +53,8 @@ class NotationStatusBarModel : public QObject, public async::Asyncable, public a
     Q_PROPERTY(bool concertPitchEnabled READ concertPitchEnabled NOTIFY concertPitchEnabledChanged)
     Q_PROPERTY(QVariant currentViewMode READ currentViewMode NOTIFY currentViewModeChanged)
     Q_PROPERTY(QVariantList availableViewModeList READ availableViewModeList NOTIFY availableViewModeListChanged)
-    Q_PROPERTY(int currentZoom READ currentZoom NOTIFY currentZoomChanged)
+    Q_PROPERTY(QVariantList availableZoomList READ availableZoomList NOTIFY availableZoomListChanged)
+    Q_PROPERTY(int currentZoomPercentage READ currentZoomPercentage WRITE setCurrentZoomPercentage NOTIFY currentZoomPercentageChanged)
 
 public:
     explicit NotationStatusBarModel(QObject* parent = nullptr);
@@ -60,16 +63,24 @@ public:
     QString currentWorkspaceName() const;
     bool concertPitchEnabled() const;
     QVariant currentViewMode() const;
+    int currentZoomPercentage() const;
     QVariantList availableViewModeList() const;
-    int currentZoom() const;
+    QVariantList availableZoomList() const;
 
     Q_INVOKABLE void load();
 
     Q_INVOKABLE void selectWorkspace();
     Q_INVOKABLE void toggleConcertPitch();
     Q_INVOKABLE void setCurrentViewMode(const QString& modeCode);
+
+    Q_INVOKABLE int minZoomPercentage() const;
+    Q_INVOKABLE int maxZoomPercentage() const;
+    Q_INVOKABLE void setCurrentZoomIndex(int zoomIndex);
     Q_INVOKABLE void zoomIn();
     Q_INVOKABLE void zoomOut();
+
+public slots:
+    void setCurrentZoomPercentage(int zoomPercentage);
 
 signals:
     void accessibilityInfoChanged();
@@ -77,17 +88,24 @@ signals:
     void concertPitchEnabledChanged();
     void currentViewModeChanged();
     void availableViewModeListChanged();
-    void currentZoomChanged();
+    void availableZoomListChanged();
+    void currentZoomPercentageChanged();
 
 private:
     notation::INotationPtr notation() const;
     notation::INotationStylePtr style() const;
     notation::INotationAccessibilityPtr accessibility() const;
 
+    void dispatch(const actions::ActionCode& code, const actions::ActionData& args = actions::ActionData());
+
     void listenChangesInAccessibility();
     void listenChangesInStyle();
 
+    QList<int> possibleZoomPercentageList() const;
+
     void setConcertPitchEnabled(bool enabled);
+
+    notation::ZoomType m_currentZoomType = notation::ZoomType::Percentage;
 };
 }
 
