@@ -77,10 +77,10 @@ StyledPopupView {
             let item = model[i]
             let hasIcon = (Boolean(item.icon) && item.icon !== IconCode.NONE)
 
-            if (item.checkable && hasIcon) {
+            if ((item.checkable || item.selectable) && hasIcon) {
                 prv.hasItemsWithIconAndCheckable = true
                 prv.hasItemsWithIconOrCheckable = true
-            } else if (item.checkable || hasIcon) {
+            } else if (item.checkable || item.selectable || hasIcon) {
                 prv.hasItemsWithIconOrCheckable = true
             }
 
