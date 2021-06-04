@@ -20,10 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "authorizationservice.h"
+#include "cloudservice.h"
 
 #include "log.h"
-#include "config.h"
 
 #include <QOAuth2AuthorizationCodeFlow>
 #include <QOAuthHttpServerReplyHandler>
@@ -32,70 +31,23 @@
 #include <QJsonObject>
 #include <QUrlQuery>
 #include <QBuffer>
-#include <QRandomGenerator>
 
 using namespace mu::cloud;
 using namespace mu::network;
 
 static const QString ACCESS_TOKEN_KEY("token");
-static const QString REFRESH_TOKEN_KEY("refreshToken");
+static const QString REFRESH_TOKEN_KEY("refresh_token");
+static const QString DEVICE_ID_KEY("device_id");
 
-static QByteArray generateClientId()
-{
-    QByteArray qtGeneratedId(QSysInfo::machineUniqueId());
-    if (!qtGeneratedId.isEmpty()) {
-        return qtGeneratedId;
-    }
+constexpr int USER_UNAUTHORIZED_ERR_CODE = 401;
 
-    QRandomGenerator* generator = QRandomGenerator::global();
-
-    long long randId = generator->generate();
-    constexpr size_t randBytes = sizeof(decltype(generator->generate()));
-
-    for (size_t bytes = randBytes; bytes < sizeof(randId); bytes += randBytes) {
-        randId <<= 8 * randBytes;
-        randId += generator->generate();
-    }
-
-    return QString::number(randId, 16).toLatin1();
-}
-
-static QString userAgent()
-{
-    static const QStringList systemInfo {
-        QSysInfo::kernelType(),
-        QSysInfo::kernelVersion(),
-        QSysInfo::productType(),
-        QSysInfo::productVersion(),
-        QSysInfo::currentCpuArchitecture()
-    };
-
-    return QString("MS_EDITOR/%1.%2 (%3)")
-            .arg(VERSION)
-            .arg(BUILD_NUMBER)
-            .arg(systemInfo.join(' ')).toLatin1();
-}
-
-static RequestHeaders buildHeaders()
-{
-    static QByteArray clientId = generateClientId();
-
-    RequestHeaders header;
-    header.rawHeaders["Accept"] = "application/json";
-    header.rawHeaders["X-MS-API-KEY"] = "0b19809bab331d70fb9983a0b9866290";
-    header.rawHeaders["X-MS-CLIENT-ID"] = clientId;
-    header.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
-
-    return header;
-}
-
-AuthorizationService::AuthorizationService(QObject* parent)
+CloudService::CloudService(QObject* parent)
     : QObject(parent)
 {
-    m_userAuthorized.val = false; 
+    m_userAuthorized.val = false;
 }
 
-void AuthorizationService::init()
+void CloudService::init()
 {
     TRACEFUNC;
 
@@ -108,29 +60,38 @@ void AuthorizationService::init()
     m_oauth2->setReplyHandler(m_replyHandler);
 
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, &QDesktopServices::openUrl);
-    connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::granted, this, &AuthorizationService::onUserAuthorized);
+    connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::granted, this, &CloudService::onUserAuthorized);
 
-    connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::error, [](const QString& error, const QString& errorDescription, const QUrl& uri){
+    connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::error, [](const QString& error, const QString& errorDescription, const QUrl& uri) {
         LOGE() << "Error during authorization: " << error << "\n Description: " << errorDescription << "\n URI: " << uri.toString();
     });
 
-    readTokens();
-    downloadUserInfo();
+    if (!readTokens()) {
+        return;
+    }
+
+    if (downloadUserInfo() != RequestStatus::UserUnauthorized) {
+        return;
+    }
+
+    if (updateTokens()) {
+        downloadUserInfo();
+    }
 }
 
-void AuthorizationService::readTokens()
+bool CloudService::readTokens()
 {
     TRACEFUNC;
 
     io::path tokensPath = configuration()->tokensFilePath();
     if (!fileSystem()->exists(tokensPath)) {
-        return;
+        return false;
     }
 
     RetVal<QByteArray> tokensData = fileSystem()->readFile(tokensPath);
     if (!tokensData.ret) {
         LOGE() << tokensData.ret.toString();
-        return;
+        return false;
     }
 
     QJsonDocument tokensDoc = QJsonDocument::fromJson(tokensData.val);
@@ -138,14 +99,13 @@ void AuthorizationService::readTokens()
 
     m_accessToken = saveObject[ACCESS_TOKEN_KEY].toString();
     m_refreshToken = saveObject[REFRESH_TOKEN_KEY].toString();
+
+    return true;
 }
 
-void AuthorizationService::onUserAuthorized()
+bool CloudService::saveTokens()
 {
     TRACEFUNC;
-
-    m_accessToken = m_oauth2->token();
-    m_refreshToken = m_oauth2->refreshToken();
 
     QJsonObject tokensObject;
     tokensObject[ACCESS_TOKEN_KEY] = m_accessToken;
@@ -155,27 +115,90 @@ void AuthorizationService::onUserAuthorized()
     Ret ret = fileSystem()->writeToFile(configuration()->tokensFilePath(), tokensDoc.toJson());
     if (!ret) {
         LOGE() << ret.toString();
-        return;
     }
 
-    downloadUserInfo();
+    return ret;
 }
 
-void AuthorizationService::downloadUserInfo()
+bool CloudService::updateTokens()
 {
-    if (m_accessToken.isEmpty() || m_refreshToken.isEmpty()) {
-        return;
-    }
-
     TRACEFUNC;
 
-    QUrl userInfoUrl = prepareUrlForRequest(configuration()->userInfoApiUrl());
+    QUrlQuery query;
+    query.addQueryItem(REFRESH_TOKEN_KEY, m_refreshToken);
+    query.addQueryItem(DEVICE_ID_KEY, configuration()->clientId());
+
+    QUrl refreshApiUrl = configuration()->refreshApiUrl();
+    refreshApiUrl.setQuery(query);
+
     QBuffer receivedData;
-    Ret ret = m_networkManager->get(userInfoUrl, &receivedData, buildHeaders());
+    Ret ret = m_networkManager->post(refreshApiUrl, nullptr, &receivedData, configuration()->headers());
 
     if (!ret) {
         LOGE() << ret.toString();
-        return;
+        clearTokens();
+        return false;
+    }
+
+    QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
+    QJsonObject tokens = document.object();
+
+    m_accessToken = tokens.value(ACCESS_TOKEN_KEY).toString();
+    m_refreshToken = tokens.value(REFRESH_TOKEN_KEY).toString();
+
+    return saveTokens();
+}
+
+void CloudService::clearTokens()
+{
+    m_accessToken.clear();
+    m_refreshToken.clear();
+    setAccountInfo(AccountInfo());
+}
+
+void CloudService::onUserAuthorized()
+{
+    TRACEFUNC;
+
+    m_accessToken = m_oauth2->token();
+    m_refreshToken = m_oauth2->refreshToken();
+
+    saveTokens();
+    downloadUserInfo();
+}
+
+QUrl CloudService::prepareUrlForRequest(QUrl apiUrl) const
+{
+    if (m_accessToken.isEmpty()) {
+        return QUrl();
+    }
+
+    QUrlQuery query;
+    query.addQueryItem(ACCESS_TOKEN_KEY, m_accessToken);
+    apiUrl.setQuery(query);
+
+    return apiUrl;
+}
+
+CloudService::RequestStatus CloudService::downloadUserInfo()
+{
+    TRACEFUNC;
+
+    QUrl userInfoUrl = prepareUrlForRequest(configuration()->userInfoApiUrl());
+    if (userInfoUrl.isEmpty()) {
+        return RequestStatus::Error;
+    }
+
+    QBuffer receivedData;
+    Ret ret = m_networkManager->get(userInfoUrl, &receivedData, configuration()->headers());
+
+    if (ret.code() == USER_UNAUTHORIZED_ERR_CODE) {
+        return RequestStatus::UserUnauthorized;
+    }
+
+    if (!ret) {
+        LOGE() << ret.toString();
+        return RequestStatus::Error;
     }
 
     QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
@@ -190,9 +213,11 @@ void AuthorizationService::downloadUserInfo()
     info.sheetmusicUrl = QUrl(profileUrl + "/sheetmusic");
 
     setAccountInfo(info);
+
+    return RequestStatus::Ok;
 }
 
-void AuthorizationService::signIn()
+void CloudService::signIn()
 {
     if (m_userAuthorized.val) {
         return;
@@ -201,7 +226,7 @@ void AuthorizationService::signIn()
     m_oauth2->grant();
 }
 
-void AuthorizationService::signOut()
+void CloudService::signOut()
 {
     if (!m_userAuthorized.val) {
         return;
@@ -209,10 +234,10 @@ void AuthorizationService::signOut()
 
     TRACEFUNC;
 
-    QUrl signOutUrl = prepareUrlForRequest(configuration()->signOutApiUrl());
+    QUrl signOutUrl = prepareUrlForRequest(configuration()->loginApiUrl());
     if (!signOutUrl.isEmpty()) {
         QBuffer receivedData;
-        Ret ret = m_networkManager->del(signOutUrl, &receivedData, buildHeaders());
+        Ret ret = m_networkManager->del(signOutUrl, &receivedData, configuration()->headers());
 
         if (!ret) {
             LOGE() << ret.toString();
@@ -224,36 +249,20 @@ void AuthorizationService::signOut()
         LOGE() << ret.toString();
     }
 
-    m_accessToken.clear();
-    m_refreshToken.clear();
-
-    setAccountInfo(AccountInfo());
+    clearTokens();
 }
 
-QUrl AuthorizationService::prepareUrlForRequest(QUrl apiUrl) const
-{
-    if (m_accessToken.isEmpty()) {
-        return QUrl();
-    }
-
-    QUrlQuery query;
-    query.addQueryItem(ACCESS_TOKEN_KEY, m_accessToken);
-    apiUrl.setQuery(query);
-
-    return apiUrl;
-}
-
-mu::ValCh<bool> AuthorizationService::userAuthorized() const
+mu::ValCh<bool> CloudService::userAuthorized() const
 {
     return m_userAuthorized;
 }
 
-mu::ValCh<AccountInfo> AuthorizationService::accountInfo() const
+mu::ValCh<AccountInfo> CloudService::accountInfo() const
 {
     return m_accountInfo;
 }
 
-void AuthorizationService::setAccountInfo(const AccountInfo& info)
+void CloudService::setAccountInfo(const AccountInfo& info)
 {
     if (m_accountInfo.val == info) {
         return;

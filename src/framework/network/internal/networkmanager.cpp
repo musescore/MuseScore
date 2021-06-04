@@ -75,7 +75,8 @@ Ret NetworkManager::del(const QUrl& url, IODevice* incommingData, const RequestH
     return execRequest(DELETE_REQUEST, url, incommingData, nullptr, headers);
 }
 
-Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IODevice* incommingData, IODevice* outgoingData, const RequestHeaders& headers)
+Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IODevice* incommingData, IODevice* outgoingData,
+                                const RequestHeaders& headers)
 {
     if (outgoingData) {
         if (!openIoDevice(outgoingData, IODevice::ReadOnly)) {

@@ -25,7 +25,7 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
-#include "internal/authorizationservice.h"
+#include "internal/cloudservice.h"
 #include "internal/cloudconfiguration.h"
 #include "view/accountmodel.h"
 
@@ -33,7 +33,7 @@ using namespace mu::cloud;
 using namespace mu::framework;
 
 static std::shared_ptr<CloudConfiguration> s_cloudConfiguration = std::make_shared<CloudConfiguration>();
-static std::shared_ptr<AuthorizationService> s_authorizationService = std::make_shared<AuthorizationService>();
+static std::shared_ptr<CloudService> s_cloudService = std::make_shared<CloudService>();
 
 static void cloud_init_qrc()
 {
@@ -48,7 +48,7 @@ std::string CloudModule::moduleName() const
 void CloudModule::registerExports()
 {
     ioc()->registerExport<ICloudConfiguration>(moduleName(), s_cloudConfiguration);
-    ioc()->registerExport<IAuthorizationService>(moduleName(), s_authorizationService);
+    ioc()->registerExport<IAuthorizationService>(moduleName(), s_cloudService);
 }
 
 void CloudModule::registerResources()
@@ -70,5 +70,5 @@ void CloudModule::onInit(const IApplication::RunMode& mode)
     }
 
     s_cloudConfiguration->init();
-    s_authorizationService->init();
+    s_cloudService->init();
 }

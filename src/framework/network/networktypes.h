@@ -19,27 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_MP3EXPORTER_H
-#define MU_CLOUD_MP3EXPORTER_H
+#ifndef MU_NETWORK_NETWORKTYPES_H
+#define MU_NETWORK_NETWORKTYPES_H
 
-#include "modularity/imoduleexport.h"
+#include <QVariantMap>
+#include <QNetworkRequest>
 
-#include "ret.h"
-
-namespace mu {
-namespace cloud {
-// TODO: move to module audio
-
-class IMp3Exporter : MODULE_EXPORT_INTERFACE
+namespace mu::network {
+struct RequestHeaders
 {
-    INTERFACE_ID(IMp3Exporter)
-
-public:
-    virtual ~IMp3Exporter() = default;
-
-    virtual Ret saveCurrentScoreMp3(const QString& mp3Path, int mp3Bitrate) = 0;
+    QMap<QNetworkRequest::KnownHeaders, QVariant> knownHeaders;
+    QMap<QByteArray, QByteArray> rawHeaders;
 };
 }
-}
 
-#endif // MU_CLOUD_MP3EXPORTER_H
+#endif // MU_NETWORK_NETWORKTYPES_H

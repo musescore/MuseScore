@@ -28,7 +28,6 @@ namespace mu::cloud {
 class AuthorizationServiceStub : public IAuthorizationService
 {
 public:
-    void createAccount() override;
     void signIn() override;
     void signOut() override;
 
