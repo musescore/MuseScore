@@ -20,8 +20,6 @@
 #ifndef MUSESCORE_CONFIG_H
 #define MUSESCORE_CONFIG_H
 
-#cmakedefine USE_WEBENGINE
-
 #cmakedefine FOR_WINSTORE
 
 #cmakedefine MSCORE_UNSTABLE

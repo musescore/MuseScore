@@ -26,14 +26,6 @@ set(_components
     OpenGL
     LinguistTools
   )
-if (USE_WEBENGINE)
-  set(_components
-    ${_components}
-    WebEngine
-    WebEngineCore
-    WebEngineWidgets
-	)
-endif(USE_WEBENGINE)
 
 if (NOT OS_IS_WASM)
     set(_components

@@ -138,17 +138,6 @@ configure_file (
 # Setup external dependencies
 ###########################################
 
-# We need this early, before FindQt5
-if (BUILD_WEBENGINE)
-   if (CC_IS_MINGW)
-      set(USE_WEBENGINE 0)
-   else (CC_IS_MINGW)
-      set(USE_WEBENGINE 1)
-   endif(CC_IS_MINGW)
-else (BUILD_WEBENGINE)
-   set(USE_WEBENGINE 0)
-endif (BUILD_WEBENGINE)
-
 set(QT_MIN_VERSION    "5.15.0")
 include(FindQt5)
 

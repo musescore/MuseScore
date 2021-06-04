@@ -37,9 +37,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/authorizationservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/cloudconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/cloudconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/cloudmanager.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/cloudmanager.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/cloudmanager_p.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
