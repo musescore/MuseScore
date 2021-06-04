@@ -31,6 +31,8 @@
 #include "undo.h"
 #include "xml.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 //---------------------------------------------------------
 //   Acc
@@ -527,7 +529,7 @@ void Accidental::draw(mu::draw::Painter* painter) const
 
     painter->setPen(curColor());
     for (const SymElement& e : el) {
-        score()->scoreFont()->draw(e.sym, painter, magS(), QPointF(e.x, e.y));
+        score()->scoreFont()->draw(e.sym, painter, magS(), PointF(e.x, e.y));
     }
 }
 

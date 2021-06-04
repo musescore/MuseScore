@@ -28,6 +28,8 @@
 #include "score.h"
 #include "xml.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 //---------------------------------------------------------
 //   LedgerLine
@@ -101,9 +103,9 @@ void LedgerLine::draw(mu::draw::Painter* painter) const
     }
     painter->setPen(QPen(curColor(), _width, Qt::SolidLine, Qt::FlatCap));
     if (vertical) {
-        painter->drawLine(QLineF(0.0, 0.0, 0.0, _len));
+        painter->drawLine(LineF(0.0, 0.0, 0.0, _len));
     } else {
-        painter->drawLine(QLineF(0.0, 0.0, _len, 0.0));
+        painter->drawLine(LineF(0.0, 0.0, _len, 0.0));
     }
 }
 

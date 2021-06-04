@@ -562,11 +562,11 @@ static void drawBeams(mu::draw::Painter* painter, const qreal spatium,
                       const qreal x1, const qreal x2, qreal y)
 {
     // draw the beams
-    painter->drawLine(QLineF(x1, y, x2, y));
+    painter->drawLine(mu::draw::LineF(x1, y, x2, y));
     y += spatium / 1.5;
-    painter->drawLine(QLineF(x1, y, x2, y));
+    painter->drawLine(mu::draw::LineF(x1, y, x2, y));
     y += spatium / 1.5;
-    painter->drawLine(QLineF(x1, y, x2, y));
+    painter->drawLine(mu::draw::LineF(x1, y, x2, y));
 }
 
 //---------------------------------------------------------
@@ -582,13 +582,13 @@ void BagpipeEmbellishment::drawGraceNote(mu::draw::Painter* painter,
                                          SymId flagsym, const qreal x, const bool drawFlag) const
 {
     // draw head
-    drawSymbol(dx.headsym, painter, QPointF(x - dx.headw, dy.y2));
+    drawSymbol(dx.headsym, painter, mu::draw::PointF(x - dx.headw, dy.y2));
     // draw stem
     qreal y1 =  drawFlag ? dy.y1f : dy.y1b;            // top of stems actually used
-    painter->drawLine(QLineF(x - dx.lw * .5, y1, x - dx.lw * .5, dy.y2));
+    painter->drawLine(mu::draw::LineF(x - dx.lw * .5, y1, x - dx.lw * .5, dy.y2));
     if (drawFlag) {
         // draw flag
-        drawSymbol(flagsym, painter, QPointF(x - dx.lw * .5 + dx.xcorr, y1 + dy.ycorr));
+        drawSymbol(flagsym, painter, mu::draw::PointF(x - dx.lw * .5 + dx.xcorr, y1 + dy.ycorr));
     }
 }
 
@@ -623,8 +623,7 @@ void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
 
         // draw the ledger line for high A
         if (line == -2) {
-            painter->drawLine(QLineF(x - dx.headw * 1.5 - dx.lw * .5,
-                                     dy.y2, x + dx.headw * .5 - dx.lw * .5, dy.y2));
+            painter->drawLine(mu::draw::LineF(x - dx.headw * 1.5 - dx.lw * .5, dy.y2, x + dx.headw * .5 - dx.lw * .5, dy.y2));
         }
 
         // move x to next note x position

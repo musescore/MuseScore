@@ -44,11 +44,11 @@ class Ambitus final : public Element
     int _topTpc, _bottomTpc;
 
     // internally managed, to optimize layout / drawing
-    QPointF _topPos;                            // position of top note symbol
-    QPointF _bottomPos;                         // position of bottom note symbol
-    QLineF _line;                               // the drawn line
+    mu::draw::PointF _topPos;       // position of top note symbol
+    mu::draw::PointF _bottomPos;    // position of bottom note symbol
+    mu::draw::LineF _line;          // the drawn line
 
-    void  normalize();
+    void normalize();
 
 public:
     Ambitus(Score* s);

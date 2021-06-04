@@ -25,7 +25,7 @@
 #include <stack>
 #include <string>
 
-class QPointF;
+#include "../geometry.h"
 
 namespace mu::draw {
 class DrawObjectsLogger
@@ -33,7 +33,7 @@ class DrawObjectsLogger
 public:
     DrawObjectsLogger() = default;
 
-    void beginObject(const std::string& name, const QPointF& pagePos);
+    void beginObject(const std::string& name, const PointF& pagePos);
     void endObject();
 
 private:

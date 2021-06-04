@@ -73,6 +73,8 @@
 #include "config.h"
 #include "log.h"
 
+using namespace mu::draw;
+
 #ifdef USE_SCORE_ACCESSIBLE_TREE
 #include "accessibility/accessiblenote.h"
 #endif

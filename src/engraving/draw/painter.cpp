@@ -113,7 +113,7 @@ bool Painter::isActive() const
     return m_provider->isActive();
 }
 
-void Painter::beginObject(const std::string& name, const QPointF& pagePos)
+void Painter::beginObject(const std::string& name, const PointF& pagePos)
 {
     m_provider->beginObject(name, pagePos);
     if (extended) {
@@ -253,12 +253,12 @@ void Painter::translate(qreal dx, qreal dy)
     updateMatrix();
 }
 
-QRect Painter::window() const
+RectF Painter::window() const
 {
     return state().window;
 }
 
-void Painter::setWindow(const QRect& window)
+void Painter::setWindow(const RectF& window)
 {
     State& st = editableState();
     st.window = window;
@@ -266,12 +266,12 @@ void Painter::setWindow(const QRect& window)
     st.viewTransform = makeViewTransform();
 }
 
-QRect Painter::viewport() const
+RectF Painter::viewport() const
 {
     return state().viewport;
 }
 
-void Painter::setViewport(const QRect& viewport)
+void Painter::setViewport(const RectF& viewport)
 {
     State& st = editableState();
     st.viewport = viewport;
@@ -315,10 +315,10 @@ void Painter::drawPath(const QPainterPath& path)
     }
 }
 
-void Painter::drawLines(const QLineF* lines, int lineCount)
+void Painter::drawLines(const LineF* lines, int lineCount)
 {
     for (int i = 0; i < lineCount; ++i) {
-        QPointF pts[2] = { lines[i].p1(), lines[i].p2() };
+        PointF pts[2] = { lines[i].p1(), lines[i].p2() };
         IF_ASSERT_FAILED(pts[0] != pts[1]) {
             LOGE() << "draw point not implemented";
         }
@@ -326,18 +326,18 @@ void Painter::drawLines(const QLineF* lines, int lineCount)
     }
 }
 
-void Painter::drawLines(const QPointF* pointPairs, int lineCount)
+void Painter::drawLines(const PointF* pointPairs, int lineCount)
 {
-    Q_ASSERT(sizeof(QLineF) == 2 * sizeof(QPointF));
+    Q_ASSERT(sizeof(LineF) == 2 * sizeof(PointF));
 
-    drawLines((const QLineF*)pointPairs, lineCount);
+    drawLines((const LineF*)pointPairs, lineCount);
 }
 
-void Painter::drawRects(const QRectF* rects, int rectCount)
+void Painter::drawRects(const RectF* rects, int rectCount)
 {
     for (int i = 0; i < rectCount; ++i) {
         QPainterPath path;
-        path.addRect(rects[i]);
+        path.addRect(rects[i].toQRectF());
         if (path.isEmpty()) {
             continue;
         }
@@ -345,17 +345,17 @@ void Painter::drawRects(const QRectF* rects, int rectCount)
     }
 }
 
-void Painter::drawEllipse(const QRectF& rect)
+void Painter::drawEllipse(const RectF& rect)
 {
     QPainterPath path;
-    path.addEllipse(rect);
+    path.addEllipse(rect.toQRectF());
     m_provider->drawPath(path);
     if (extended) {
         extended->drawPath(path);
     }
 }
 
-void Painter::drawPolyline(const QPointF* points, int pointCount)
+void Painter::drawPolyline(const PointF* points, int pointCount)
 {
     m_provider->drawPolygon(points, pointCount, PolygonMode::Polyline);
     if (extended) {
@@ -363,7 +363,7 @@ void Painter::drawPolyline(const QPointF* points, int pointCount)
     }
 }
 
-void Painter::drawPolygon(const QPointF* points, int pointCount, Qt::FillRule fillRule)
+void Painter::drawPolygon(const PointF* points, int pointCount, Qt::FillRule fillRule)
 {
     PolygonMode mode = (fillRule == Qt::OddEvenFill) ? PolygonMode::OddEven : PolygonMode::Winding;
     m_provider->drawPolygon(points, pointCount, mode);
@@ -372,7 +372,7 @@ void Painter::drawPolygon(const QPointF* points, int pointCount, Qt::FillRule fi
     }
 }
 
-void Painter::drawConvexPolygon(const QPointF* points, int pointCount)
+void Painter::drawConvexPolygon(const PointF* points, int pointCount)
 {
     m_provider->drawPolygon(points, pointCount, PolygonMode::Convex);
     if (extended) {
@@ -380,11 +380,11 @@ void Painter::drawConvexPolygon(const QPointF* points, int pointCount)
     }
 }
 
-void Painter::drawArc(const QRectF& r, int a, int alen)
+void Painter::drawArc(const RectF& r, int a, int alen)
 {
     //! NOTE Copied from QPainter source code
 
-    QRectF rect = r.normalized();
+    QRectF rect = r.toQRectF().normalized();
 
     QPainterPath path;
     path.arcMoveTo(rect, a / 16.0);
@@ -392,7 +392,7 @@ void Painter::drawArc(const QRectF& r, int a, int alen)
     strokePath(path, pen());
 }
 
-void Painter::drawRoundedRect(const QRectF& rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode)
+void Painter::drawRoundedRect(const RectF& rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode)
 {
     if (xRadius <= 0 || yRadius <= 0) {             // draw normal rectangle
         drawRect(rect);
@@ -400,11 +400,11 @@ void Painter::drawRoundedRect(const QRectF& rect, qreal xRadius, qreal yRadius, 
     }
 
     QPainterPath path;
-    path.addRoundedRect(rect, xRadius, yRadius, mode);
+    path.addRoundedRect(rect.toQRectF(), xRadius, yRadius, mode);
     drawPath(path);
 }
 
-void Painter::drawText(const QPointF& point, const QString& text)
+void Painter::drawText(const PointF& point, const QString& text)
 {
     m_provider->drawText(point, text);
     if (extended) {
@@ -412,7 +412,7 @@ void Painter::drawText(const QPointF& point, const QString& text)
     }
 }
 
-void Painter::drawText(const QRectF& rect, int flags, const QString& text)
+void Painter::drawText(const RectF& rect, int flags, const QString& text)
 {
     m_provider->drawText(rect, flags, text);
     if (extended) {
@@ -420,7 +420,7 @@ void Painter::drawText(const QRectF& rect, int flags, const QString& text)
     }
 }
 
-void Painter::drawTextWorkaround(mu::draw::Font& f, const QPointF pos, const QString text)
+void Painter::drawTextWorkaround(Font& f, const PointF pos, const QString text)
 {
     m_provider->drawTextWorkaround(f, pos, text);
     if (extended) {
@@ -428,7 +428,7 @@ void Painter::drawTextWorkaround(mu::draw::Font& f, const QPointF pos, const QSt
     }
 }
 
-void Painter::drawSymbol(const QPointF& point, uint ucs4Code)
+void Painter::drawSymbol(const PointF& point, uint ucs4Code)
 {
     m_provider->drawSymbol(point, ucs4Code);
     if (extended) {
@@ -436,7 +436,7 @@ void Painter::drawSymbol(const QPointF& point, uint ucs4Code)
     }
 }
 
-void Painter::fillRect(const QRectF& rect, const QBrush& brush)
+void Painter::fillRect(const RectF& rect, const QBrush& brush)
 {
     QPen oldPen = this->pen();
     QBrush oldBrush = this->brush();
@@ -449,7 +449,7 @@ void Painter::fillRect(const QRectF& rect, const QBrush& brush)
     setPen(oldPen);
 }
 
-void Painter::drawPixmap(const QPointF& point, const QPixmap& pm)
+void Painter::drawPixmap(const PointF& point, const QPixmap& pm)
 {
     m_provider->drawPixmap(point, pm);
     if (extended) {
@@ -457,7 +457,7 @@ void Painter::drawPixmap(const QPointF& point, const QPixmap& pm)
     }
 }
 
-void Painter::drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset)
+void Painter::drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset)
 {
     m_provider->drawTiledPixmap(rect, pm, offset);
     if (extended) {

@@ -38,6 +38,8 @@
 #include "chord.h"
 #include "changeMap.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 //---------------------------------------------------------
 //   hairpinStyle

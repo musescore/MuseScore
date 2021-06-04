@@ -34,14 +34,14 @@ namespace Ms {
 
 class StemSlash final : public Element
 {
-    QLineF line;
+    mu::draw::LineF line;
 
 public:
     StemSlash(Score* s = 0)
         : Element(s) {}
 
     qreal mag() const override { return parent()->mag(); }
-    void setLine(const QLineF& l);
+    void setLine(const mu::draw::LineF& l);
 
     StemSlash* clone() const override { return new StemSlash(*this); }
     ElementType type() const override { return ElementType::STEM_SLASH; }

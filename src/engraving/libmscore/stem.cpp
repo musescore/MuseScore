@@ -140,7 +140,7 @@ void Stem::layout()
     line.setLine(0.0, y1, 0.0, l);
 
     // compute bounding rectangle
-    QRectF r(line.p1(), line.p2());
+    QRectF r(line.p1().toQPointF(), line.p2().toQPointF());
     setbbox(r.normalized().adjusted(-lw5, -lw5, lw5, lw5));
 }
 
@@ -287,7 +287,7 @@ bool Stem::readProperties(XmlReader& e)
 
 std::vector<QPointF> Stem::gripsPositions(const EditData&) const
 {
-    return { pagePos() + line.p2() };
+    return { pagePos() + line.p2().toQPointF() };
 }
 
 //---------------------------------------------------------
@@ -426,7 +426,7 @@ QVariant Stem::propertyDefault(Pid id) const
 
 QPointF Stem::hookPos() const
 {
-    QPointF p(pos() + line.p2());
+    QPointF p(pos() + line.p2().toQPointF());
 
     qreal xoff = 0.5 * lineWidthMag();
     p.rx() += xoff;

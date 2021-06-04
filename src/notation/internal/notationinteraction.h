@@ -198,7 +198,7 @@ private:
     Element* elementAt(const QPointF& p) const;
     static bool elementIsLess(const Ms::Element* e1, const Ms::Element* e2);
 
-    void setAnchorLines(const std::vector<QLineF>& anchorList);
+    void setAnchorLines(const std::vector<draw::LineF>& anchorList);
     void resetAnchorLines();
     void drawAnchorLines(draw::Painter* painter);
     void drawTextEditMode(mu::draw::Painter* painter);
@@ -269,7 +269,7 @@ private:
 
     DragData m_dragData;
     async::Notification m_dragChanged;
-    std::vector<QLineF> m_anchorLines;
+    std::vector<draw::LineF> m_anchorLines;
 
     Ms::EditData m_textEditData;
     async::Notification m_textEditingStarted;
