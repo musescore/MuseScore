@@ -347,26 +347,6 @@ if (OS_IS_WIN)
             REGEX ".*QtWebkit.*" EXCLUDE
             )
 
-    if (USE_WEBENGINE)
-        install(FILES
-                ${QT_INSTALL_BINS}/Qt5WebEngineWidgets.dll
-                ${QT_INSTALL_BINS}/Qt5WebEngineCore.dll
-                DESTINATION bin)
-
-        install(FILES
-               ${QT_INSTALL_LIBEXECS}/QtWebEngineProcess.exe
-               DESTINATION bin)
-
-        install(DIRECTORY
-               ${QT_INSTALL_DATA}/resources
-               DESTINATION bin/webengineresources)
-
-        install(DIRECTORY
-               ${QT_INSTALL_TRANSLATIONS}/qtwebengine_locales
-               DESTINATION bin/webengineresources/translations)
-
-    endif(USE_WEBENGINE)
-
     if (SNDFILE_LIB)
         install(FILES ${DEPENDENCIES_DIR}/libsndfile-1.dll DESTINATION bin)
     endif()
