@@ -32,6 +32,8 @@
 #include "mscore.h"
 #include "bracketItem.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 //---------------------------------------------------------
 //   Bracket
@@ -275,7 +277,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
         qreal bd       = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
         QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
         painter->setPen(pen);
-        painter->drawLine(QLineF(0.0, -bd - w * .5, 0.0, h + bd + w * .5));
+        painter->drawLine(LineF(0.0, -bd - w * .5, 0.0, h + bd + w * .5));
         qreal x    =  -w * .5;
         qreal y1   = -bd;
         qreal y2   = h + bd;
@@ -289,9 +291,9 @@ void Bracket::draw(mu::draw::Painter* painter) const
         qreal w = score()->styleP(Sid::staffLineWidth);
         QPen pen(curColor(), w, Qt::SolidLine, Qt::SquareCap);
         painter->setPen(pen);
-        painter->drawLine(QLineF(0.0, 0.0, 0.0, h));
-        painter->drawLine(QLineF(0.0, 0.0, w + .5 * _spatium, 0.0));
-        painter->drawLine(QLineF(0.0, h, w + .5 * _spatium, h));
+        painter->drawLine(LineF(0.0, 0.0, 0.0, h));
+        painter->drawLine(LineF(0.0, 0.0, w + .5 * _spatium, 0.0));
+        painter->drawLine(LineF(0.0, h, w + .5 * _spatium, h));
     }
     break;
     case BracketType::LINE: {
@@ -300,7 +302,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
         QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
         painter->setPen(pen);
         qreal bd = score()->styleP(Sid::staffLineWidth) * 0.5;
-        painter->drawLine(QLineF(0.0, -bd, 0.0, h + bd));
+        painter->drawLine(LineF(0.0, -bd, 0.0, h + bd));
     }
     break;
     case BracketType::NO_BRACKET:

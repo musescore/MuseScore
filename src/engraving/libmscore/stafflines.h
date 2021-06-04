@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <vector>
+
 #include "element.h"
 
 namespace Ms {
@@ -32,7 +34,7 @@ namespace Ms {
 class StaffLines final : public Element
 {
     qreal lw { 0.0 };
-    QVector<QLineF> lines;
+    std::vector<mu::draw::LineF> lines;
 
 public:
     StaffLines(Score*);
@@ -46,7 +48,7 @@ public:
 
     void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 
-    QVector<QLineF>& getLines() { return lines; }
+    std::vector<mu::draw::LineF>& getLines() { return lines; }
     Measure* measure() const { return (Measure*)parent(); }
     qreal y1() const;
     void layoutForWidth(qreal width);

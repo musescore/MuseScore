@@ -25,6 +25,7 @@
 #include "style.h"
 #include "symid.h"
 
+#include "draw/geometry.h"
 #include "modularity/ioc.h"
 #include "draw/ifontprovider.h"
 
@@ -81,15 +82,15 @@ public:
 
     QPointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, qreal mag) const;
 
-    void draw(SymId id,                  mu::draw::Painter*, const QSizeF& mag, const QPointF& pos, qreal scale) const;
-    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const QPointF& pos, qreal scale) const;
-    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const QPointF& pos) const;
-    void draw(SymId id,                  mu::draw::Painter*, const QSizeF& mag, const QPointF& pos) const;
-    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const QPointF& pos, int n) const;
-    void draw(const std::vector<SymId>&, mu::draw::Painter*, qreal mag,         const QPointF& pos) const;
-    void draw(const std::vector<SymId>&, mu::draw::Painter*, const QSizeF& mag, const QPointF& pos) const;
-    void draw(const std::vector<SymId>&, mu::draw::Painter*, qreal mag,         const QPointF& pos, qreal scale) const;
-    void draw(const std::vector<SymId>&, mu::draw::Painter*, const QSizeF& mag, const QPointF& pos, qreal scale) const;
+    void draw(SymId id,                  mu::draw::Painter*, const mu::draw::SizeF& mag, const mu::draw::PointF& pos, qreal scale) const;
+    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const mu::draw::PointF& pos, qreal scale) const;
+    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const mu::draw::PointF& pos) const;
+    void draw(SymId id,                  mu::draw::Painter*, const mu::draw::SizeF& mag, const mu::draw::PointF& pos) const;
+    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const mu::draw::PointF& pos, int n) const;
+    void draw(const std::vector<SymId>&, mu::draw::Painter*, qreal mag,         const mu::draw::PointF& pos) const;
+    void draw(const std::vector<SymId>&, mu::draw::Painter*, const mu::draw::SizeF& mag, const mu::draw::PointF& pos) const;
+    void draw(const std::vector<SymId>&, mu::draw::Painter*, qreal mag,         const mu::draw::PointF& pos, qreal scale) const;
+    void draw(const std::vector<SymId>&, mu::draw::Painter*, const mu::draw::SizeF& mag, const mu::draw::PointF& pos, qreal scale) const;
 
 private:
     static QJsonObject initGlyphNamesJson();

@@ -24,8 +24,8 @@
 
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
+#include "draw/geometry.h"
 
-class QRect;
 class QColor;
 
 namespace mu::notation {
@@ -38,8 +38,8 @@ public:
 
     void paint(draw::Painter* painter);
 
-    const QRect& rect() const;
-    void setRect(const QRect& rect);
+    const draw::RectF& rect() const;
+    void setRect(const draw::RectF& rect);
 
     void setVisible(bool arg);
 
@@ -47,7 +47,7 @@ private:
     QColor color();
 
     bool m_visible = false;
-    QRect m_rect;
+    draw::RectF m_rect;
 };
 }
 

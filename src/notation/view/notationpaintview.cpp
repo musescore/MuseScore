@@ -31,6 +31,7 @@
 
 using namespace mu::notation;
 using namespace mu::ui;
+using namespace mu::draw;
 
 static constexpr qreal MIN_SCROLL_SIZE = 0.2;
 static constexpr qreal MAX_SCROLL_SIZE = 1.0;
@@ -357,12 +358,12 @@ void NotationPaintView::paint(QPainter* qp)
     mu::draw::Painter mup(qp, "notationview");
     mu::draw::Painter* painter = &mup;
 
-    QRect rect(0, 0, width(), height());
+    draw::RectF rect(0.0, 0.0, width(), height());
     paintBackground(rect, painter);
 
     painter->setWorldTransform(m_matrix);
 
-    notation()->paint(painter, toLogical(rect));
+    notation()->paint(painter, toLogical(rect.toQRect()));
 
     m_playbackCursor->paint(painter);
     m_noteInputCursor->paint(painter);
@@ -370,7 +371,7 @@ void NotationPaintView::paint(QPainter* qp)
     m_loopOutMarker->paint(painter);
 }
 
-void NotationPaintView::paintBackground(const QRect& rect, mu::draw::Painter* painter)
+void NotationPaintView::paintBackground(const RectF& rect, Painter* painter)
 {
     QString wallpaperPath = configuration()->backgroundWallpaperPath().toQString();
 
@@ -378,7 +379,7 @@ void NotationPaintView::paintBackground(const QRect& rect, mu::draw::Painter* pa
         painter->fillRect(rect, configuration()->backgroundColor());
     } else {
         QPixmap pixmap(wallpaperPath);
-        painter->drawTiledPixmap(rect, pixmap, rect.topLeft() - QPoint(m_matrix.m31(), m_matrix.m32()));
+        painter->drawTiledPixmap(rect, pixmap, rect.topLeft() - PointF(m_matrix.m31(), m_matrix.m32()));
     }
 }
 

@@ -153,9 +153,9 @@ mu::Ret SvgWriter::write(INotationPtr notation, IODevice& destinationDevice, con
                 qreal lastX =  lastSL->bbox().right()
                               + lastSL->pagePos().x()
                               - firstSL->pagePos().x();
-                QVector<QLineF>& lines = firstSL->getLines();
-                for (int l = 0, c = lines.size(); l < c; l++) {
-                    lines[l].setP2(QPointF(lastX, lines[l].p2().y()));
+                std::vector<mu::draw::LineF>& lines = firstSL->getLines();
+                for (size_t l = 0, c = lines.size(); l < c; l++) {
+                    lines[l].setP2(mu::draw::PointF(lastX, lines[l].p2().y()));
                 }
 
                 printer.setElement(firstSL);

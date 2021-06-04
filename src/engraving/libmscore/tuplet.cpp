@@ -35,6 +35,8 @@
 #include "measure.h"
 #include "system.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 //---------------------------------------------------------
 //   tupletStyle
@@ -735,22 +737,15 @@ void Tuplet::draw(mu::draw::Painter* painter) const
 //    helper class
 //---------------------------------------------------------
 
-class Rect : public QRectF
+class TupletRect : public RectF
 {
 public:
-    Rect(const QPointF& p1, const QPointF& p2, qreal w);
+    TupletRect(const PointF& p1, const PointF& p2, qreal w)
+    {
+        qreal w2 = w * .5;
+        setCoords(qMin(p1.x(), p2.x()) - w2, qMin(p1.y(), p2.y()) - w2,  qMax(p1.x(), p2.x()) + w2, qMax(p1.y(), p2.y()) + w2);
+    }
 };
-
-//---------------------------------------------------------
-//   Rect
-//    construct a rectangle out of a line with width w
-//---------------------------------------------------------
-
-Rect::Rect(const QPointF& p1, const QPointF& p2, qreal w)
-{
-    qreal w2 = w * .5;
-    setCoords(qMin(p1.x(), p2.x()) - w2, qMin(p1.y(), p2.y()) - w2,  qMax(p1.x(), p2.x()) + w2, qMax(p1.y(), p2.y()) + w2);
-}
 
 //---------------------------------------------------------
 //   shape
@@ -761,13 +756,13 @@ Shape Tuplet::shape() const
     Shape s;
     if (_hasBracket) {
         qreal w = _bracketWidth.val();
-        s.add(Rect(bracketL[0], bracketL[1], w));
-        s.add(Rect(bracketL[1], bracketL[2], w));
+        s.add(TupletRect(bracketL[0], bracketL[1], w));
+        s.add(TupletRect(bracketL[1], bracketL[2], w));
         if (_number) {
-            s.add(Rect(bracketR[0], bracketR[1], w));
-            s.add(Rect(bracketR[1], bracketR[2], w));
+            s.add(TupletRect(bracketR[0], bracketR[1], w));
+            s.add(TupletRect(bracketR[1], bracketR[2], w));
         } else {
-            s.add(Rect(bracketL[2], bracketL[3], w));
+            s.add(TupletRect(bracketL[2], bracketL[3], w));
         }
     }
     if (_number) {

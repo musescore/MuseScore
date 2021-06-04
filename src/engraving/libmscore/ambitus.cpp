@@ -344,7 +344,7 @@ void Ambitus::layout()
 
     // top notehead
     if (_topPitch == INVALID_PITCH || _topTpc == Tpc::TPC_INVALID) {
-        _topPos.setY(0);                              // if uninitialized, set to top staff line
+        _topPos.setY(0.0);    // if uninitialized, set to top staff line
     } else {
         topLine  = absStep(_topTpc, _topPitch);
         topLine  = relStep(topLine, clf);
@@ -448,23 +448,23 @@ void Ambitus::layout()
     }
 
     // compute line from top note centre to bottom note centre
-    QLineF fullLine(_topPos.x() + headWdt * 0.5, _topPos.y(),
-                    _bottomPos.x() + headWdt * 0.5, _bottomPos.y());
+    mu::draw::LineF fullLine(_topPos.x() + headWdt * 0.5, _topPos.y(), _bottomPos.x() + headWdt * 0.5, _bottomPos.y());
     // shorten line on each side by offsets
     qreal yDelta = _bottomPos.y() - _topPos.y();
     if (yDelta != 0.0) {
         qreal off = _spatium * LINEOFFSET_DEFAULT;
-        QPointF p1 = fullLine.pointAt(off / yDelta);
-        QPointF p2 = fullLine.pointAt(1 - (off / yDelta));
-        _line = QLineF(p1, p2);
+        mu::draw::PointF p1 = fullLine.pointAt(off / yDelta);
+        mu::draw::PointF p2 = fullLine.pointAt(1 - (off / yDelta));
+        _line = mu::draw::LineF(p1, p2);
     } else {
         _line = fullLine;
     }
 
-    QRectF headRect = QRectF(0, -0.5 * _spatium, headWdt, 1 * _spatium);
+    mu::draw::RectF headRect(0, -0.5 * _spatium, headWdt, 1 * _spatium);
     setbbox(headRect.translated(_topPos).united(headRect.translated(_bottomPos))
             .united(_topAccid.bbox().translated(_topAccid.ipos()))
             .united(_bottomAccid.bbox().translated(_bottomAccid.ipos()))
+            .toQRectF()
             );
 }
 
@@ -500,7 +500,7 @@ void Ambitus::draw(mu::draw::Painter* painter) const
             qreal xMin = _topPos.x() - ledgerLineLength;
             qreal xMax = _topPos.x() + headWidth() + ledgerLineLength;
             for (qreal y = -step; y >= _topPos.y() - stepTolerance; y -= step) {
-                painter->drawLine(QPointF(xMin, y), QPointF(xMax, y));
+                painter->drawLine(mu::draw::PointF(xMin, y), mu::draw::PointF(xMax, y));
             }
         }
 
@@ -508,7 +508,7 @@ void Ambitus::draw(mu::draw::Painter* painter) const
             qreal xMin = _bottomPos.x() - ledgerLineLength;
             qreal xMax = _bottomPos.x() + headWidth() + ledgerLineLength;
             for (qreal y = numOfLines * step; y <= _bottomPos.y() + stepTolerance; y += step) {
-                painter->drawLine(QPointF(xMin, y), QPointF(xMax, y));
+                painter->drawLine(mu::draw::PointF(xMin, y), mu::draw::PointF(xMax, y));
             }
         }
     }

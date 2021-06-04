@@ -24,6 +24,8 @@
 #include "score.h"
 #include "chord.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 //---------------------------------------------------------
 //   draw
@@ -41,11 +43,11 @@ void StemSlash::draw(mu::draw::Painter* painter) const
 //   setLine
 //---------------------------------------------------------
 
-void StemSlash::setLine(const QLineF& l)
+void StemSlash::setLine(const LineF& l)
 {
     line = l;
     qreal w = score()->styleP(Sid::stemWidth) * .5;
-    setbbox(QRectF(line.p1(), line.p2()).normalized().adjusted(-w, -w, 2.0 * w, 2.0 * w));
+    setbbox(QRectF(line.p1().toQPointF(), line.p2().toQPointF()).normalized().adjusted(-w, -w, 2.0 * w, 2.0 * w));
 }
 
 //---------------------------------------------------------
@@ -58,7 +60,7 @@ void StemSlash::layout()
     qreal h2;
     qreal _spatium = spatium();
     qreal l = chord()->up() ? _spatium : -_spatium;
-    QPointF p(stem->hookPos());
+    PointF p(stem->hookPos());
     qreal x = p.x() + _spatium * .1;
     qreal y = p.y();
 
@@ -70,6 +72,6 @@ void StemSlash::layout()
         h2 = l * .4;
     }
     qreal w  = chord()->upNote()->bboxRightPos() * .7;
-    setLine(QLineF(QPointF(x + w, y - h2), QPointF(x - w, y + h2)));
+    setLine(LineF(PointF(x + w, y - h2), PointF(x - w, y + h2)));
 }
 }

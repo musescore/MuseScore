@@ -23,13 +23,11 @@
 
 #include "log.h"
 
-#include <QPointF>
-
 using namespace mu::draw;
 
 static const std::string DRAW_OBJ_TAG("DRAW_OBJ");
 
-void DrawObjectsLogger::beginObject(const std::string& name, const QPointF& pagePos)
+void DrawObjectsLogger::beginObject(const std::string& name, const PointF& pagePos)
 {
     m_objects.push(name);
     std::string gap;

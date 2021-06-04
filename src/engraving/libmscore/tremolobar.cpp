@@ -97,7 +97,7 @@ void TremoloBar::layout()
     }
 
     qreal w = m_lw.val();
-    setbbox(m_polygon.boundingRect().adjusted(-w, -w, w, w));
+    setbbox(m_polygon.boundingRect().adjusted(-w, -w, w, w).toQRectF());
 }
 
 //---------------------------------------------------------

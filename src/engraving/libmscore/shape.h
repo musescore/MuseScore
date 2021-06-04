@@ -25,6 +25,8 @@
 
 #include <QPainter>
 
+#include "draw/geometry.h"
+
 namespace Ms {
 #ifndef NDEBUG
 // #define DEBUG_SHAPES    // enable shape debugging
@@ -71,8 +73,10 @@ public:
     void add(const Shape& s) { insert(end(), s.begin(), s.end()); }
 #ifndef NDEBUG
     void add(const QRectF& r, const char* t = 0);
+    void add(const mu::draw::RectF& r, const char* t = 0);
 #else
     void add(const QRectF& r) { push_back(r); }
+    void add(const mu::draw::RectF& r) { push_back(r.toQRectF()); }
 #endif
     void remove(const QRectF&);
     void remove(const Shape&);

@@ -27,6 +27,8 @@
 #include "undo.h"
 #include "utils.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 static const ElementStyle mmRestStyle {
     { Sid::mmRestNumberPos, Pid::MMREST_NUMBER_POS },
@@ -107,10 +109,10 @@ void MMRest::draw(mu::draw::Painter* painter) const
                 && (y - (numberBox.height() * .5)) < halfHBarThickness) {
                 qreal gapDistance = (numberBox.width() + _spatium) * .5;
                 qreal midpoint = m_width * .5;
-                painter->drawLine(QLineF(0.0, 0.0, midpoint - gapDistance, 0.0));
-                painter->drawLine(QLineF(midpoint + gapDistance, 0.0, m_width, 0.0));
+                painter->drawLine(LineF(0.0, 0.0, midpoint - gapDistance, 0.0));
+                painter->drawLine(LineF(midpoint + gapDistance, 0.0, m_width, 0.0));
             } else {
-                painter->drawLine(QLineF(0.0, 0.0, m_width, 0.0));
+                painter->drawLine(LineF(0.0, 0.0, m_width, 0.0));
             }
         }
 
@@ -120,8 +122,8 @@ void MMRest::draw(mu::draw::Painter* painter) const
             pen.setWidthF(vStrokeThickness);
             painter->setPen(pen);
             qreal halfVStrokeHeight = score()->styleP(Sid::mmRestHBarVStrokeHeight) * .5;
-            painter->drawLine(QLineF(0.0, -halfVStrokeHeight, 0.0, halfVStrokeHeight));
-            painter->drawLine(QLineF(m_width, -halfVStrokeHeight, m_width, halfVStrokeHeight));
+            painter->drawLine(LineF(0.0, -halfVStrokeHeight, 0.0, halfVStrokeHeight));
+            painter->drawLine(LineF(m_width, -halfVStrokeHeight, m_width, halfVStrokeHeight));
         }
     }
 }

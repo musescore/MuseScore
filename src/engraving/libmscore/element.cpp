@@ -124,6 +124,8 @@
 #include "log.h"
 #define LOG_PROP() if (0) LOGD()
 
+using namespace mu::draw;
+
 namespace Ms {
 // extern bool showInvisible;
 
@@ -1737,6 +1739,16 @@ void Element::undoSetVisible(bool v)
 //   drawSymbol
 //---------------------------------------------------------
 
+void Element::drawSymbol(SymId id, mu::draw::Painter* p, const mu::draw::PointF& o, qreal scale) const
+{
+    score()->scoreFont()->draw(id, p, magS() * scale, o);
+}
+
+void Element::drawSymbol(SymId id, mu::draw::Painter* p, const mu::draw::PointF& o, int n) const
+{
+    score()->scoreFont()->draw(id, p, magS(), o, n);
+}
+
 void Element::drawSymbol(SymId id, mu::draw::Painter* p, const QPointF& o, qreal scale) const
 {
     score()->scoreFont()->draw(id, p, magS() * scale, o);
@@ -1754,7 +1766,7 @@ void Element::drawSymbols(const std::vector<SymId>& s, mu::draw::Painter* p, con
 
 void Element::drawSymbols(const std::vector<SymId>& s, mu::draw::Painter* p, const QPointF& o, const QSizeF& scale) const
 {
-    score()->scoreFont()->draw(s, p, magS() * scale, o);
+    score()->scoreFont()->draw(s, p, SizeF(magS() * scale), PointF(o));
 }
 
 //---------------------------------------------------------

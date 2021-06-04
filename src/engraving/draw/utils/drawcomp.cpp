@@ -42,7 +42,7 @@ static bool isEqual(const qreal& v1, const qreal& v2, double tolerance)
     return RealIsEqual(RealFloor(v1, DEFAULT_PREC), RealFloor(v2, DEFAULT_PREC));
 }
 
-static bool isEqual(const QPointF& p1, const QPointF& p2, double tolerance)
+static bool isEqual(const PointF& p1, const PointF& p2, double tolerance)
 {
     if (!isEqual(p1.x(), p2.x(), tolerance)) {
         return false;
@@ -55,7 +55,7 @@ static bool isEqual(const QPointF& p1, const QPointF& p2, double tolerance)
     return true;
 }
 
-static bool isEqual(const QRectF& r1, const QRectF& r2, double tolerance)
+static bool isEqual(const RectF& r1, const RectF& r2, double tolerance)
 {
     if (!isEqual(r1.x(), r2.x(), tolerance)) {
         return false;
@@ -257,15 +257,15 @@ static bool isEqual(const DrawPath& v1, const DrawPath& v2, DrawComp::Tolerance 
     return true;
 }
 
-static bool isEqual(const QPolygonF& v1, const QPolygonF& v2, double tolerance)
+static bool isEqual(const PolygonF& v1, const PolygonF& v2, double tolerance)
 {
     if (v1.size() != v2.size()) {
         return false;
     }
 
-    for (int i = 0; i < v1.size(); ++i) {
-        const QPointF& p1 = v1.at(i);
-        const QPointF& p2 = v2.at(i);
+    for (size_t i = 0; i < v1.size(); ++i) {
+        const PointF& p1 = v1.at(i);
+        const PointF& p2 = v2.at(i);
 
         if (!isEqual(p1, p2, tolerance)) {
             return false;

@@ -108,12 +108,12 @@ static void fromArr(const QJsonArray& arr, QTransform& t)
                 itor(arr.at(6).toInt()), itor(arr.at(7).toInt()), itor(arr.at(8).toInt()));
 }
 
-static QJsonArray toArr(const QPointF& p)
+static QJsonArray toArr(const PointF& p)
 {
     return QJsonArray({ rtoi(p.x()), rtoi(p.y()) });
 }
 
-static void fromArr(const QJsonArray& arr, QPointF& p)
+static void fromArr(const QJsonArray& arr, PointF& p)
 {
     IF_ASSERT_FAILED(arr.size() == 2) {
         return;
@@ -122,12 +122,12 @@ static void fromArr(const QJsonArray& arr, QPointF& p)
     p.setY(itor(arr.at(1).toInt()));
 }
 
-static QJsonArray toArr(const QRectF& r)
+static QJsonArray toArr(const RectF& r)
 {
     return QJsonArray({ rtoi(r.x()), rtoi(r.y()), rtoi(r.width()), rtoi(r.height()) });
 }
 
-static void fromArr(const QJsonArray& arr, QRectF& r)
+static void fromArr(const QJsonArray& arr, RectF& r)
 {
     IF_ASSERT_FAILED(arr.size() == 4) {
         return;
@@ -257,20 +257,20 @@ static void fromObj(const QJsonObject& obj, DrawPath& path)
     path.mode = static_cast<DrawMode>(obj["mode"].toInt());
 }
 
-static QJsonArray toArr(const QPolygonF& pol)
+static QJsonArray toArr(const PolygonF& pol)
 {
     QJsonArray a;
-    for (const QPointF& p : pol) {
+    for (const PointF& p : pol) {
         a.append(toArr(p));
     }
     return a;
 }
 
-static void fromArr(const QJsonArray& arr, QPolygonF& pol)
+static void fromArr(const QJsonArray& arr, PolygonF& pol)
 {
     pol.reserve(arr.size());
     for (const QJsonValue& val : arr) {
-        QPointF p;
+        PointF p;
         fromArr(val.toArray(), p);
         pol.push_back(std::move(p));
     }
