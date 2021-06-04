@@ -36,6 +36,7 @@ public:
     virtual QUrl authorizationUrl() const = 0;
     virtual QUrl accessTokenUrl() const = 0;
     virtual QUrl userInfoApiUrl() const = 0;
+    virtual QUrl signOutApiUrl() const = 0;
     virtual io::path tokensFilePath() const = 0;
 };
 }

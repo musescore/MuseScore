@@ -40,7 +40,12 @@ QUrl CloudConfiguration::accessTokenUrl() const
 
 QUrl CloudConfiguration::userInfoApiUrl() const
 {
-    return apiUrl() + "/user/me";
+    return apiRootUrl() + "/user/me";
+}
+
+QUrl CloudConfiguration::signOutApiUrl() const
+{
+    return apiRootUrl() + "/auth/login";
 }
 
 mu::io::path CloudConfiguration::tokensFilePath() const
@@ -48,7 +53,7 @@ mu::io::path CloudConfiguration::tokensFilePath() const
     return globalConfiguration()->dataPath() + "/cred.dat";
 }
 
-QString CloudConfiguration::apiUrl() const
+QString CloudConfiguration::apiRootUrl() const
 {
     return "https://api.musescore.com/v2";
 }

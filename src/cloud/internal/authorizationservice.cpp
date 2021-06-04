@@ -150,14 +150,7 @@ void AuthorizationService::downloadUserInfo()
         return;
     }
 
-    TRACEFUNC;
-
-    QUrlQuery query;
-    query.addQueryItem(ACCESS_TOKEN_KEY, m_accessToken);
-
-    QUrl userInfoUrl = configuration()->userInfoApiUrl();
-    userInfoUrl.setQuery(query);
-
+    QUrl userInfoUrl = prepareUrlForRequest(configuration()->userInfoApiUrl());
     QBuffer receivedData;
     Ret ret = m_networkManager->get(userInfoUrl, &receivedData, buildHeaders());
 
@@ -200,6 +193,16 @@ void AuthorizationService::signOut()
         return;
     }
 
+    QUrl signOutUrl = prepareUrlForRequest(configuration()->signOutApiUrl());
+    if (!signOutUrl.isEmpty()) {
+        QBuffer receivedData;
+        Ret ret = m_networkManager->del(signOutUrl, &receivedData, buildHeaders());
+
+        if (!ret) {
+            LOGE() << ret.toString();
+        }
+    }
+
     Ret ret = fileSystem()->remove(configuration()->tokensFilePath());
     if (!ret) {
         LOGE() << ret.toString();
@@ -209,6 +212,19 @@ void AuthorizationService::signOut()
     m_refreshToken.clear();
 
     setAccountInfo(AccountInfo());
+}
+
+QUrl AuthorizationService::prepareUrlForRequest(QUrl apiUrl) const
+{
+    if (m_accessToken.isEmpty()) {
+        return QUrl();
+    }
+
+    QUrlQuery query;
+    query.addQueryItem(ACCESS_TOKEN_KEY, m_accessToken);
+    apiUrl.setQuery(query);
+
+    return apiUrl;
 }
 
 mu::ValCh<bool> AuthorizationService::userAuthorized() const
