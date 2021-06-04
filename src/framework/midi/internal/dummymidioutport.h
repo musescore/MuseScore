@@ -28,19 +28,18 @@ namespace mu::midi {
 class DummyMidiOutPort : public IMidiOutPort
 {
 public:
+    MidiDeviceList devices() const override;
+    async::Notification devicesChanged() const override;
 
-    std::vector<MidiDevice> devices() const override;
-
-    Ret connect(const std::string& deviceID) override;
+    Ret connect(const MidiDeviceID& deviceID) override;
     void disconnect() override;
     bool isConnected() const override;
-    std::string deviceID() const override;
+    MidiDeviceID deviceID() const override;
 
     Ret sendEvent(const Event& e) override;
 
 private:
-
-    std::string m_connectedDeviceID;
+    MidiDeviceID m_connectedDeviceID;
 };
 }
 
