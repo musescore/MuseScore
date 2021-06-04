@@ -3199,7 +3199,7 @@ void MusicXMLParserPass1::note(const QString& partId,
     // check for timing error(s) and set dura
     // keep in this order as checkTiming() might change dura
     auto errorStr = mnd.checkTiming(type, bRest, grace);
-    dura = mnd.dura();
+    dura = mnd.duration();
     if (errorStr != "") {
         _logger->logError(errorStr, &_e);
     }
@@ -3216,7 +3216,7 @@ void MusicXMLParserPass1::note(const QString& partId,
         // do tuplet
         auto timeMod = mnd.timeMod();
         auto& tupletState = tupletStates[voice];
-        tupletState.determineTupletAction(mnd.dura(), timeMod, tupletStartStop, mnd.normalType(), missingPrev, missingCurr);
+        tupletState.determineTupletAction(mnd.duration(), timeMod, tupletStartStop, mnd.normalType(), missingPrev, missingCurr);
     }
 
     // store result
