@@ -39,8 +39,10 @@ public:
 
     Ret get(const QUrl& url, system::IODevice* incommingData, const RequestHeaders& headers = RequestHeaders()) override;
     Ret head(const QUrl& url, const RequestHeaders& headers = RequestHeaders()) override;
-    Ret post(const QUrl& url, system::IODevice* outgoingData, system::IODevice* incommingData, const RequestHeaders& headers = RequestHeaders()) override;
-    Ret put(const QUrl& url, system::IODevice* outgoingData, system::IODevice* incommingData, const RequestHeaders& headers = RequestHeaders()) override;
+    Ret post(const QUrl& url, system::IODevice* outgoingData, system::IODevice* incommingData,
+             const RequestHeaders& headers = RequestHeaders()) override;
+    Ret put(const QUrl& url, system::IODevice* outgoingData, system::IODevice* incommingData,
+            const RequestHeaders& headers = RequestHeaders()) override;
     Ret del(const QUrl& url, system::IODevice* incommingData, const RequestHeaders& headers = RequestHeaders()) override;
 
     framework::ProgressChannel progressChannel() const override;

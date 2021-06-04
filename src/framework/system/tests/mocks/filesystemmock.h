@@ -34,6 +34,7 @@ public:
     MOCK_METHOD(Ret, remove, (const io::path&), (const, override));
 
     MOCK_METHOD(RetVal<QByteArray>, readFile, (const io::path&), (const, override));
+    MOCK_METHOD(Ret, writeToFile, (const io::path&, const QByteArray&), (const, override));
 
     MOCK_METHOD(Ret, makePath, (const io::path&), (const, override));
 

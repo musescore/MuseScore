@@ -21,10 +21,75 @@
  */
 #include "cloudconfiguration.h"
 
+#include "config.h"
+#include "settings.h"
+
+#include <QRandomGenerator>
+
 using namespace mu::cloud;
+using namespace mu::network;
+using namespace mu::framework;
+
+static const std::string module_name("cloud");
+static const Settings::Key CLIENT_ID_KEY(module_name, "cloud/clientId");
+
+static QByteArray generateClientId()
+{
+    QByteArray qtGeneratedId(QSysInfo::machineUniqueId());
+    if (!qtGeneratedId.isEmpty()) {
+        return qtGeneratedId;
+    }
+
+    QRandomGenerator* generator = QRandomGenerator::global();
+
+    long long randId = generator->generate();
+    constexpr size_t randBytes = sizeof(decltype(generator->generate()));
+
+    for (size_t bytes = randBytes; bytes < sizeof(randId); bytes += randBytes) {
+        randId <<= 8 * randBytes;
+        randId += generator->generate();
+    }
+
+    return QString::number(randId, 16).toLatin1();
+}
+
+static QString userAgent()
+{
+    static const QStringList systemInfo {
+        QSysInfo::kernelType(),
+        QSysInfo::kernelVersion(),
+        QSysInfo::productType(),
+        QSysInfo::productVersion(),
+        QSysInfo::currentCpuArchitecture()
+    };
+
+    return QString("MS_EDITOR/%1.%2 (%3)")
+           .arg(VERSION)
+           .arg(BUILD_NUMBER)
+           .arg(systemInfo.join(' ')).toLatin1();
+}
 
 void CloudConfiguration::init()
 {
+    if (settings()->value(CLIENT_ID_KEY).isNull()) {
+        settings()->setValue(CLIENT_ID_KEY, Val(QVariant(generateClientId())));
+    }
+}
+
+RequestHeaders CloudConfiguration::headers() const
+{
+    RequestHeaders headers;
+    headers.rawHeaders["Accept"] = "application/json";
+    headers.rawHeaders["X-MS-API-KEY"] = "0b19809bab331d70fb9983a0b9866290";
+    headers.rawHeaders["X-MS-CLIENT-ID"] = clientId();
+    headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
+
+    return headers;
+}
+
+QByteArray CloudConfiguration::clientId() const
+{
+    return settings()->value(CLIENT_ID_KEY).toQVariant().toByteArray();
 }
 
 QUrl CloudConfiguration::authorizationUrl() const
@@ -37,12 +102,17 @@ QUrl CloudConfiguration::accessTokenUrl() const
     return QUrl("https://musescore.com/user/auth/oauth2server/token");
 }
 
+QUrl CloudConfiguration::refreshApiUrl() const
+{
+    return apiRootUrl() + "/auth/refresh";
+}
+
 QUrl CloudConfiguration::userInfoApiUrl() const
 {
     return apiRootUrl() + "/user/me";
 }
 
-QUrl CloudConfiguration::signOutApiUrl() const
+QUrl CloudConfiguration::loginApiUrl() const
 {
     return apiRootUrl() + "/auth/login";
 }

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_AUTHORIZATIONSERVICE_H
-#define MU_CLOUD_AUTHORIZATIONSERVICE_H
+#ifndef MU_CLOUD_CLOUDSERVICE_H
+#define MU_CLOUD_CLOUDSERVICE_H
 
 #include <QObject>
 
@@ -35,7 +35,7 @@ class QOAuthHttpServerReplyHandler;
 #include "network/inetworkmanagercreator.h"
 
 namespace mu::cloud {
-class AuthorizationService : public QObject, public IAuthorizationService
+class CloudService : public QObject, public IAuthorizationService
 {
     Q_OBJECT
 
@@ -44,7 +44,7 @@ class AuthorizationService : public QObject, public IAuthorizationService
     INJECT(cloud, network::INetworkManagerCreator, networkManagerCreator)
 
 public:
-    AuthorizationService(QObject* parent = nullptr);
+    CloudService(QObject* parent = nullptr);
 
     void init();
 
@@ -58,15 +58,25 @@ private slots:
     void onUserAuthorized();
 
 private:
-    void readTokens();
-    void downloadUserInfo();
-    void setAccountInfo(const AccountInfo& info);
+    bool readTokens();
+    bool saveTokens();
+    bool updateTokens();
+    void clearTokens();
+
+    enum class RequestStatus {
+        Ok,
+        UserUnauthorized,
+        Error
+    };
 
     QUrl prepareUrlForRequest(QUrl apiUrl) const;
 
+    RequestStatus downloadUserInfo();
+
+    void setAccountInfo(const AccountInfo& info);
+
     QOAuth2AuthorizationCodeFlow* m_oauth2 = nullptr;
     QOAuthHttpServerReplyHandler* m_replyHandler = nullptr;
-
     network::INetworkManagerPtr m_networkManager;
 
     ValCh<bool> m_userAuthorized;
@@ -77,4 +87,4 @@ private:
 };
 }
 
-#endif // MU_CLOUD_authorizationService_H
+#endif // MU_CLOUD_CLOUDSERVICE_H

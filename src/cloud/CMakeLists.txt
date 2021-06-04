@@ -29,12 +29,11 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/cloudmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iauthorizationservice.h
     ${CMAKE_CURRENT_LIST_DIR}/icloudconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/imp3exporter.h
     ${CMAKE_CURRENT_LIST_DIR}/cloudtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/view/accountmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/accountmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/authorizationservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/authorizationservice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/cloudservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/cloudservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/cloudconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/cloudconfiguration.cpp
     )

@@ -87,7 +87,6 @@ option(QML_LOAD_FROM_SOURCE "Load qml files from source (not resource)" OFF)
 option(TRACE_DRAW_OBJ_ENABLED "Trace draw objects" OFF)
 
 option(USE_SYSTEM_FREETYPE "Use system FreeType" OFF) # requires freetype >= 2.5.2, does not work on win
-option(BUILD_WEBENGINE "Built in webengine support" ON)
 set(SCRIPT_INTERFACE  TRUE)
 
 set(VST3_SDK_VERSION "3.7")

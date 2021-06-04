@@ -35,10 +35,14 @@ class CloudConfiguration : public ICloudConfiguration
 public:
     void init();
 
+    network::RequestHeaders headers() const override;
+    QByteArray clientId() const override;
+
     QUrl authorizationUrl() const override;
     QUrl accessTokenUrl() const override;
+    QUrl refreshApiUrl() const override;
     QUrl userInfoApiUrl() const override;
-    QUrl signOutApiUrl() const override;
+    QUrl loginApiUrl() const override;
     io::path tokensFilePath() const override;
 
 private:

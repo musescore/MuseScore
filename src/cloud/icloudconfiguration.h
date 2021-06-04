@@ -24,6 +24,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "io/path.h"
+#include "network/networktypes.h"
 
 namespace mu::cloud {
 class ICloudConfiguration : MODULE_EXPORT_INTERFACE
@@ -33,12 +34,16 @@ class ICloudConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ICloudConfiguration() = default;
 
+    virtual network::RequestHeaders headers() const = 0;
+    virtual QByteArray clientId() const = 0;
+
     virtual QUrl authorizationUrl() const = 0;
     virtual QUrl accessTokenUrl() const = 0;
+    virtual QUrl refreshApiUrl() const = 0;
     virtual QUrl userInfoApiUrl() const = 0;
-    virtual QUrl signOutApiUrl() const = 0;
+    virtual QUrl loginApiUrl() const = 0;
     virtual io::path tokensFilePath() const = 0;
 };
 }
 
-#endif // MU_CLOUD_IAUTHORIZATIONSERVICE_H
+#endif // MU_CLOUD_ICLOUDCONFIGURATION_H
