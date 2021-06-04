@@ -26,7 +26,7 @@ export LC_ALL
 cd "$(dirname "$0")"
 
 jq -f smufl2sym-cmd-debug.jq \
-    -r <../fonts/smufl/glyphnames.json \
+    -r <../../fonts/smufl/glyphnames.json \
     >smufl2sym-out-debug
 
 {
