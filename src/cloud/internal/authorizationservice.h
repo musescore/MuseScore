@@ -62,6 +62,8 @@ private:
     void downloadUserInfo();
     void setAccountInfo(const AccountInfo& info);
 
+    QUrl prepareUrlForRequest(QUrl apiUrl) const;
+
     QOAuth2AuthorizationCodeFlow* m_oauth2 = nullptr;
     QOAuthHttpServerReplyHandler* m_replyHandler = nullptr;
 

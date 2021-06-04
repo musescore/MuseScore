@@ -40,10 +40,11 @@ public:
     QUrl authorizationUrl() const override;
     QUrl accessTokenUrl() const override;
     QUrl userInfoApiUrl() const override;
+    QUrl signOutApiUrl() const override;
     io::path tokensFilePath() const override;
 
 private:
-    QString apiUrl() const;
+    QString apiRootUrl() const;
 };
 }
 
