@@ -76,10 +76,7 @@ RetVal<QByteArray> FileSystem::readFile(const io::path& filePath) const
 
 Ret FileSystem::writeToFile(const io::path& filePath, const QByteArray& data) const
 {
-    Ret ret = exists(filePath);
-    if (!ret) {
-        return ret;
-    }
+    Ret ret = make_ret(Err::NoError);
 
     QFile file(filePath.toQString());
     if (!file.open(QIODevice::WriteOnly)) {
