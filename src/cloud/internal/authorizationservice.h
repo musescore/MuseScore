@@ -48,7 +48,6 @@ public:
 
     void init();
 
-    void createAccount() override;
     void signIn() override;
     void signOut() override;
 

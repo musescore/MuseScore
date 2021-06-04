@@ -32,6 +32,7 @@
 #include <QJsonObject>
 #include <QUrlQuery>
 #include <QBuffer>
+#include <QRandomGenerator>
 
 using namespace mu::cloud;
 using namespace mu::network;
@@ -46,12 +47,14 @@ static QByteArray generateClientId()
         return qtGeneratedId;
     }
 
-    long long randId = qrand();
-    constexpr size_t randBytes = sizeof(decltype(qrand()));
+    QRandomGenerator* generator = QRandomGenerator::global();
+
+    long long randId = generator->generate();
+    constexpr size_t randBytes = sizeof(decltype(generator->generate()));
 
     for (size_t bytes = randBytes; bytes < sizeof(randId); bytes += randBytes) {
         randId <<= 8 * randBytes;
-        randId += qrand();
+        randId += generator->generate();
     }
 
     return QString::number(randId, 16).toLatin1();
@@ -59,10 +62,13 @@ static QByteArray generateClientId()
 
 static QString userAgent()
 {
-    QStringList systemInfo;
-    systemInfo << QSysInfo::kernelType() << QSysInfo::kernelVersion()
-         << QSysInfo::productType() << QSysInfo::productVersion()
-         << QSysInfo::currentCpuArchitecture();
+    static const QStringList systemInfo {
+        QSysInfo::kernelType(),
+        QSysInfo::kernelVersion(),
+        QSysInfo::productType(),
+        QSysInfo::productVersion(),
+        QSysInfo::currentCpuArchitecture()
+    };
 
     return QString("MS_EDITOR/%1.%2 (%3)")
             .arg(VERSION)
@@ -114,6 +120,8 @@ void AuthorizationService::init()
 
 void AuthorizationService::readTokens()
 {
+    TRACEFUNC;
+
     io::path tokensPath = configuration()->tokensFilePath();
     if (!fileSystem()->exists(tokensPath)) {
         return;
@@ -125,7 +133,7 @@ void AuthorizationService::readTokens()
         return;
     }
 
-    QJsonDocument tokensDoc = QJsonDocument::fromBinaryData(tokensData.val);
+    QJsonDocument tokensDoc = QJsonDocument::fromJson(tokensData.val);
     QJsonObject saveObject = tokensDoc.object();
 
     m_accessToken = saveObject[ACCESS_TOKEN_KEY].toString();
@@ -144,7 +152,7 @@ void AuthorizationService::onUserAuthorized()
     tokensObject[REFRESH_TOKEN_KEY] = m_refreshToken;
     QJsonDocument tokensDoc(tokensObject);
 
-    Ret ret = fileSystem()->writeToFile(configuration()->tokensFilePath(), tokensDoc.toBinaryData());
+    Ret ret = fileSystem()->writeToFile(configuration()->tokensFilePath(), tokensDoc.toJson());
     if (!ret) {
         LOGE() << ret.toString();
         return;
@@ -158,6 +166,8 @@ void AuthorizationService::downloadUserInfo()
     if (m_accessToken.isEmpty() || m_refreshToken.isEmpty()) {
         return;
     }
+
+    TRACEFUNC;
 
     QUrl userInfoUrl = prepareUrlForRequest(configuration()->userInfoApiUrl());
     QBuffer receivedData;
@@ -182,11 +192,6 @@ void AuthorizationService::downloadUserInfo()
     setAccountInfo(info);
 }
 
-void AuthorizationService::createAccount()
-{
-    NOT_IMPLEMENTED;
-}
-
 void AuthorizationService::signIn()
 {
     if (m_userAuthorized.val) {
@@ -201,6 +206,8 @@ void AuthorizationService::signOut()
     if (!m_userAuthorized.val) {
         return;
     }
+
+    TRACEFUNC;
 
     QUrl signOutUrl = prepareUrlForRequest(configuration()->signOutApiUrl());
     if (!signOutUrl.isEmpty()) {

@@ -24,6 +24,8 @@
 
 #include "iauthorizationservice.h"
 
+#include "log.h"
+
 using namespace mu::cloud;
 
 namespace {
@@ -77,7 +79,7 @@ void AccountModel::setAccountInfo(const AccountInfo& info)
 
 void AccountModel::createAccount()
 {
-    authorizationService()->createAccount();
+    NOT_IMPLEMENTED;
 }
 
 void AccountModel::signIn()
