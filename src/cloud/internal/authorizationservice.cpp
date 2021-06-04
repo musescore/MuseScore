@@ -108,7 +108,18 @@ void AuthorizationService::init()
         LOGE() << "Error during authorization: " << error << "\n Description: " << errorDescription << "\n URI: " << uri.toString();
     });
 
-    RetVal<QByteArray> tokensData = fileSystem()->readFile(configuration()->tokensFilePath());
+    readTokens();
+    downloadUserInfo();
+}
+
+void AuthorizationService::readTokens()
+{
+    io::path tokensPath = configuration()->tokensFilePath();
+    if (!fileSystem()->exists(tokensPath)) {
+        return;
+    }
+
+    RetVal<QByteArray> tokensData = fileSystem()->readFile(tokensPath);
     if (!tokensData.ret) {
         LOGE() << tokensData.ret.toString();
         return;
@@ -119,8 +130,6 @@ void AuthorizationService::init()
 
     m_accessToken = saveObject[ACCESS_TOKEN_KEY].toString();
     m_refreshToken = saveObject[REFRESH_TOKEN_KEY].toString();
-
-    downloadUserInfo();
 }
 
 void AuthorizationService::onUserAuthorized()
@@ -138,7 +147,7 @@ void AuthorizationService::onUserAuthorized()
     Ret ret = fileSystem()->writeToFile(configuration()->tokensFilePath(), tokensDoc.toBinaryData());
     if (!ret) {
         LOGE() << ret.toString();
-        //return;
+        return;
     }
 
     downloadUserInfo();

@@ -25,7 +25,6 @@ using namespace mu::cloud;
 
 void CloudConfiguration::init()
 {
-    fileSystem()->makePath(tokensFilePath());
 }
 
 QUrl CloudConfiguration::authorizationUrl() const

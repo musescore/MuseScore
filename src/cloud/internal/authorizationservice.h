@@ -59,6 +59,7 @@ private slots:
     void onUserAuthorized();
 
 private:
+    void readTokens();
     void downloadUserInfo();
     void setAccountInfo(const AccountInfo& info);
 

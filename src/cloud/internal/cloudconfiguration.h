@@ -26,13 +26,11 @@
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
-#include "system/ifilesystem.h"
 
 namespace mu::cloud {
 class CloudConfiguration : public ICloudConfiguration
 {
     INJECT(cloud, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(cloud, system::IFileSystem, fileSystem)
 
 public:
     void init();
