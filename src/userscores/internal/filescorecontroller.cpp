@@ -36,20 +36,20 @@ using namespace mu::actions;
 
 void FileScoreController::init()
 {
-    dispatcher()->reg(this, "file-open", this, &FileScoreController::openScore);
-    dispatcher()->reg(this, "file-import", this, &FileScoreController::importScore);
     dispatcher()->reg(this, "file-new", this, &FileScoreController::newScore);
+    dispatcher()->reg(this, "file-open", this, &FileScoreController::openScore);
+
+    dispatcher()->reg(this, "file-open-recent", this, &FileScoreController::openScore);
+    dispatcher()->reg(this, "clear-recent", this, &FileScoreController::clearRecentScores);
 
     dispatcher()->reg(this, "file-save", this, &FileScoreController::saveScore);
     dispatcher()->reg(this, "file-save-as", this, &FileScoreController::saveScoreAs);
     dispatcher()->reg(this, "file-save-a-copy", this, &FileScoreController::saveScoreCopy);
     dispatcher()->reg(this, "file-save-selection", this, &FileScoreController::saveSelection);
 
-    dispatcher()->reg(this, "file-export", this, &FileScoreController::exportScore);
-
+    dispatcher()->reg(this, "file-import", this, &FileScoreController::importScore);
     dispatcher()->reg(this, "file-import-pdf", this, &FileScoreController::importPdf);
-
-    dispatcher()->reg(this, "clear-recent", this, &FileScoreController::clearRecentScores);
+    dispatcher()->reg(this, "file-export", this, &FileScoreController::exportScore);
 
     dispatcher()->reg(this, "continue-last-session", this, &FileScoreController::continueLastSession);
 }

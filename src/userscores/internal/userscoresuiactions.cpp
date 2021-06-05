@@ -25,15 +25,20 @@ using namespace mu::userscores;
 using namespace mu::ui;
 
 const UiActionList UserScoresUiActions::m_actions = {
+    UiAction("file-new",
+             mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "New..."),
+             QT_TRANSLATE_NOOP("action", "Create new score")
+             ),
     UiAction("file-open",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Open..."),
              QT_TRANSLATE_NOOP("action", "Load score from file")
              ),
-    UiAction("file-new",
+    UiAction("file-open-recent",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "New..."),
-             QT_TRANSLATE_NOOP("action", "Create new score")
+             QT_TRANSLATE_NOOP("action", "Open Recent"),
+             QT_TRANSLATE_NOOP("action", "Open recent file")
              ),
     UiAction("file-close",
              mu::context::UiCtxNotationOpened,
