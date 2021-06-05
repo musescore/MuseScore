@@ -49,7 +49,7 @@ public:
     virtual const QScreen* screen() const = 0;
 
     virtual void requestChangeToolBarOrientation(const QString& toolBarName, framework::Orientation orientation) = 0;
-    virtual async::Channel<std::pair<QString, framework::Orientation> > changeToolBarOrientationRequested() const = 0;
+    virtual async::Channel<QString, framework::Orientation> changeToolBarOrientationRequested() const = 0;
 
     virtual void requestShowToolBarDockingHolder(const QPoint& globalPos) = 0;
     virtual async::Channel<QPoint> showToolBarDockingHolderRequested() const = 0;

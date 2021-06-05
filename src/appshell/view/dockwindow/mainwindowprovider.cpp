@@ -80,10 +80,10 @@ const QScreen* MainWindowProvider::screen() const
 
 void MainWindowProvider::requestChangeToolBarOrientation(const QString& toolBarName, mu::framework::Orientation orientation)
 {
-    m_dockOrientationChanged.send({ toolBarName, orientation });
+    m_dockOrientationChanged.send(toolBarName, orientation);
 }
 
-mu::async::Channel<std::pair<QString, mu::framework::Orientation> > MainWindowProvider::changeToolBarOrientationRequested() const
+Channel<QString, mu::framework::Orientation> MainWindowProvider::changeToolBarOrientationRequested() const
 {
     return m_dockOrientationChanged;
 }

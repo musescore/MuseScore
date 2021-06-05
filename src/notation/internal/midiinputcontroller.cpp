@@ -41,12 +41,12 @@ void MidiInputController::init()
         }
     });
 
-    midiInPort()->eventReceived().onReceive(this, [this](const std::pair<midi::tick_t, midi::Event>& ev) {
+    midiInPort()->eventReceived().onReceive(this, [this](midi::tick_t tick, const midi::Event& event) {
         if (!configuration()->isMidiInputEnabled()) {
             return;
         }
 
-        onMidiEventReceived(ev.first, ev.second);
+        onMidiEventReceived(tick, event);
     });
 }
 

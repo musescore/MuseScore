@@ -280,7 +280,7 @@ void AlsaMidiInPort::doProcess()
 
         e = e.toMIDI20();
         if (e) {
-            m_eventReceived.send({ static_cast<tick_t>(ev->time.tick), e });
+            m_eventReceived.send(static_cast<tick_t>(ev->time.tick), e);
         }
 
         snd_seq_free_event(ev);
@@ -307,7 +307,7 @@ bool AlsaMidiInPort::isRunning() const
     return false;
 }
 
-mu::async::Channel<std::pair<tick_t, Event> > AlsaMidiInPort::eventReceived() const
+mu::async::Channel<tick_t, Event> AlsaMidiInPort::eventReceived() const
 {
     return m_eventReceived;
 }

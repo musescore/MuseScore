@@ -81,7 +81,7 @@ public:
     virtual QRect accessibleRect() const = 0;
 
     virtual async::Channel<IAccessible::Property> accessiblePropertyChanged() const = 0;
-    virtual async::Channel<std::pair<IAccessible::State, bool> > accessibleStateChanged() const = 0;
+    virtual async::Channel<IAccessible::State, bool> accessibleStateChanged() const = 0;
 };
 }
 

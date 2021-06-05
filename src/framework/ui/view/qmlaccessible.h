@@ -108,7 +108,7 @@ public:
     QRect accessibleRect() const override;
 
     async::Channel<Property> accessiblePropertyChanged() const override;
-    async::Channel<std::pair<State, bool> > accessibleStateChanged() const override;
+    async::Channel<State, bool> accessibleStateChanged() const override;
     // -----
 
     // QQmlParserStatus
@@ -142,7 +142,7 @@ private:
     QQuickItem* m_visualItem = nullptr;
     QMap<State, bool> m_state;
     async::Channel<Property> m_accessiblePropertyChanged;
-    async::Channel<std::pair<State, bool> > m_accessibleStateChanged;
+    async::Channel<State, bool> m_accessibleStateChanged;
 };
 }
 
