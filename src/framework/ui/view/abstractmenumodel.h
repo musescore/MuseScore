@@ -22,6 +22,7 @@
 #ifndef MU_UI_ABSTRACTMENUMODEL_H
 #define MU_UI_ABSTRACTMENUMODEL_H
 
+#include <queue>
 #include <QObject>
 
 #include "modularity/ioc.h"

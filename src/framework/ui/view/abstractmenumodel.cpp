@@ -130,6 +130,39 @@ void AbstractMenuModel::onActionsStateChanges(const actions::ActionCodeList& cod
             actionItem.state = uiactionsRegister()->actionState(code);
         }
     }
+
+    // Disable menus with empty submenus
+    std::queue<std::reference_wrapper<MenuItem> > queue;
+
+    for (MenuItem& item : m_items) {
+        queue.push(item);
+    }
+
+    while (!queue.empty()) {
+        MenuItem& next = queue.front();
+        queue.pop();
+        for (MenuItem& menu : next.subitems) {
+            if (menu.subitems.empty()) {
+                continue;
+            }
+
+            queue.push(menu);
+
+            // Enable or disable menu
+            bool enableFlag = false;
+            for (const MenuItem& subitem : menu.subitems) {
+                if (subitem.state.enabled) {
+                    enableFlag = true;
+                    menu.state.enabled = enableFlag;
+                    break;
+                }
+            }
+
+            if (!enableFlag) {
+                menu.state.enabled = false;
+            }
+        }
+    }
 }
 
 MenuItem& AbstractMenuModel::item(MenuItemList& items, const ActionCode& actionCode)
