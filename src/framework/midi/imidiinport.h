@@ -48,7 +48,7 @@ public:
     virtual Ret run() = 0;
     virtual void stop() = 0;
     virtual bool isRunning() const = 0;
-    virtual async::Channel<std::pair<tick_t, Event> > eventReceived() const = 0;
+    virtual async::Channel<tick_t, Event> eventReceived() const = 0;
 };
 }
 

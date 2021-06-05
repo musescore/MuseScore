@@ -46,7 +46,7 @@ public:
     Ret run() override;
     void stop() override;
     bool isRunning() const override;
-    async::Channel<std::pair<tick_t, Event> > eventReceived() const override;
+    async::Channel<tick_t, Event> eventReceived() const override;
 
     //internal
     void doProcess(uint32_t message, tick_t timing);
@@ -58,7 +58,7 @@ private:
     std::unique_ptr<Core> m_core;
     MidiDeviceID m_deviceID;
     bool m_running = false;
-    async::Channel<std::pair<tick_t, Event> > m_eventReceived;
+    async::Channel<tick_t, Event> m_eventReceived;
 
     async::Notification m_devicesChanged;
     MidiDevicesListener m_devicesListener;

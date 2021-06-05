@@ -131,7 +131,7 @@ void WinMidiInPort::doProcess(uint32_t message, tick_t timing)
 {
     auto e = Event::fromMIDI10Package(message).toMIDI20();
     if (e) {
-        m_eventReceived.send({ timing, e });
+        m_eventReceived.send(timing, e);
     }
 }
 
@@ -216,7 +216,7 @@ bool WinMidiInPort::isRunning() const
     return m_running;
 }
 
-mu::async::Channel<std::pair<tick_t, Event> > WinMidiInPort::eventReceived() const
+mu::async::Channel<tick_t, Event> WinMidiInPort::eventReceived() const
 {
     return m_eventReceived;
 }

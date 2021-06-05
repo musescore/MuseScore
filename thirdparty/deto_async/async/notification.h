@@ -11,13 +11,13 @@ public:
 
     void notify()
     {
-        m_ch.send(0);
+        m_ch.send();
     }
 
     template<typename Func>
     void onNotify(const Asyncable* receiver, Func f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
     {
-        m_ch.onReceive(receiver, [f](int) { f(); }, mode);
+        m_ch.onReceive(receiver, f, mode);
     }
 
     void resetOnNotify(const Asyncable* receiver)
@@ -42,7 +42,7 @@ public:
     }
 
 private:
-    Channel<int> m_ch;
+    Channel<> m_ch;
 };
 }
 }
