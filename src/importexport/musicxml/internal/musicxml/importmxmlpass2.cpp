@@ -2021,7 +2021,7 @@ static bool hasTempoTextAtTick(const TempoMap* const tempoMap, const int tick)
 void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
 {
     Q_ASSERT(_e.isStartElement() && _e.name() == "measure");
-    QString number = _e.attributes().value("number").toString();
+    int number = _e.attributes().value("number").toInt();
     //qDebug("measure %s start", qPrintable(number));
 
     Measure* measure = findMeasure(_score, time);
@@ -2030,6 +2030,8 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
         skipLogCurrElem();
         return;
     }
+
+    measure->setNoOffset(measure->no() - number);
 
     // handle implicit measure
     if (_e.attributes().value("implicit") == "yes") {
