@@ -51,16 +51,15 @@ MasterScore* MTest::readScore(const QString& name)
 
 MasterScore* MTest::readCreatedScore(const QString& name)
 {
-    QString path = root + "/" + name;
     MasterScore* score = new MasterScore(mscore->baseStyle());
-    QFileInfo fi(path);
+    QFileInfo fi(name);
     score->setName(fi.completeBaseName());
     QString csl  = fi.suffix().toLower();
 
     ScoreLoad sl;
     Score::FileError rv;
     if (csl == "mscz" || csl == "mscx") {
-        rv = score->loadMsc(path, false);
+        rv = score->loadMsc(name, false);
     } else if (csl == "xml" || csl == "musicxml") {
         rv = importMusicXml(score, name);
     } else if (csl == "mxl") {
@@ -70,7 +69,7 @@ MasterScore* MTest::readCreatedScore(const QString& name)
     }
 
     if (rv != Score::FileError::FILE_NO_ERROR) {
-        QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(path).arg(csl)));
+        QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
         delete score;
         score = 0;
     } else {
