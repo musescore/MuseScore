@@ -80,13 +80,16 @@ private:
 
     bool isIndicatorVisible(DropLocation location) const;
     bool isDropAllowed(DropLocation location) const;
-    bool isHoveredDockAllowedForDrop() const;
+    bool isDropOnHoveredDockAllowed() const;
     bool isDraggedDockToolBar() const;
+    bool isDraggedDockPanel() const;
     bool needShowToolBarHolders() const;
+    bool needShowPanelHolders() const;
 
     const KDDockWidgets::DockWidgetBase* hoveredDock() const;
     const KDDockWidgets::DockWidgetBase* draggedDock() const;
 
+    DockType dockType(const KDDockWidgets::DockWidgetBase* dock) const;
     framework::Orientation dockOrientation(const KDDockWidgets::DockWidgetBase& dock) const;
 
     DropLocation dropLocationForToolBar(const QPoint& hoveredGlobalPos) const;

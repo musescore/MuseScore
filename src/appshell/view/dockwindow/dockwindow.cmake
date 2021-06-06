@@ -43,6 +43,8 @@ set (DOCKWINDOW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/dockpage.h
     ${CMAKE_CURRENT_LIST_DIR}/dockpanel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dockpanel.h
+    ${CMAKE_CURRENT_LIST_DIR}/dockpanelholder.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dockpanelholder.h
     ${CMAKE_CURRENT_LIST_DIR}/dockstatusbar.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dockstatusbar.h
     ${CMAKE_CURRENT_LIST_DIR}/docktoolbar.cpp
