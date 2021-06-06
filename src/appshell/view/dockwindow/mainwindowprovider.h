@@ -42,12 +42,16 @@ public:
     void requestShowToolBarDockingHolder(const QPoint& globalPos) override;
     async::Channel<QPoint> showToolBarDockingHolderRequested() const override;
 
+    void requestShowPanelDockingHolder(const QPoint& globalPos) override;
+    async::Channel<QPoint> showPanelDockingHolderRequested() const override;
+
     void requestHideAllDockingHolders() override;
     async::Notification hideAllDockingHoldersRequested() const override;
 
 private:
     async::Channel<QString, framework::Orientation> m_dockOrientationChanged;
-    async::Channel<QPoint> m_showDockingHolderRequested;
+    async::Channel<QPoint> m_showToolBarDockingHolderRequested;
+    async::Channel<QPoint> m_showPanelDockingHolderRequested;
     async::Notification m_hideAllHoldersRequested;
 };
 }

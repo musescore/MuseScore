@@ -25,6 +25,7 @@
 #include "docktoolbar.h"
 #include "dockcentral.h"
 #include "dockpanel.h"
+#include "dockpanelholder.h"
 #include "dockstatusbar.h"
 
 #include "log.h"
@@ -36,7 +37,8 @@ DockPage::DockPage(QQuickItem* parent)
     m_mainToolBars(this),
     m_toolBars(this),
     m_toolBarsDockingHolders(this),
-    m_panels(this)
+    m_panels(this),
+    m_panelsDockingHolders(this)
 {
 }
 
@@ -72,6 +74,11 @@ QQmlListProperty<DockToolBarHolder> DockPage::toolBarsDockingHoldersProperty()
     return m_toolBarsDockingHolders.property();
 }
 
+QQmlListProperty<DockPanelHolder> DockPage::panelsDockingHoldersProperty()
+{
+    return m_panelsDockingHolders.property();
+}
+
 QList<DockToolBar*> DockPage::mainToolBars() const
 {
     return m_mainToolBars.list();
@@ -82,22 +89,22 @@ QList<DockToolBar*> DockPage::toolBars() const
     //! NOTE: Order is important for correct drawing
     auto list = m_toolBars.list();
 
-    DockToolBarHolder* leftHolder = holderByLocation(DockBase::DockLocation::Left);
+    DockToolBarHolder* leftHolder = toolBarHolderByLocation(DockBase::DockLocation::Left);
     if (leftHolder) {
         list.prepend(leftHolder);
     }
 
-    DockToolBarHolder* rightHolder = holderByLocation(DockBase::DockLocation::Right);
+    DockToolBarHolder* rightHolder = toolBarHolderByLocation(DockBase::DockLocation::Right);
     if (rightHolder) {
         list.append(rightHolder);
     }
 
-    DockToolBarHolder* bottomHolder = holderByLocation(DockBase::DockLocation::Bottom);
+    DockToolBarHolder* bottomHolder = toolBarHolderByLocation(DockBase::DockLocation::Bottom);
     if (bottomHolder) {
         list.prepend(bottomHolder);
     }
 
-    DockToolBarHolder* topHolder = holderByLocation(DockBase::DockLocation::Top);
+    DockToolBarHolder* topHolder = toolBarHolderByLocation(DockBase::DockLocation::Top);
     if (topHolder) {
         list.append(topHolder);
     }
@@ -122,7 +129,35 @@ DockStatusBar* DockPage::statusBar() const
 
 QList<DockPanel*> DockPage::panels() const
 {
-    return m_panels.list();
+    //! NOTE: Order is important for correct drawing
+    auto list = m_panels.list();
+
+    DockPanelHolder* leftHolder = panelHolderByLocation(DockBase::DockLocation::Left);
+    if (leftHolder) {
+        list.prepend(leftHolder);
+    }
+
+    DockPanelHolder* rightHolder = panelHolderByLocation(DockBase::DockLocation::Right);
+    if (rightHolder) {
+        list.append(rightHolder);
+    }
+
+    DockPanelHolder* bottomHolder = panelHolderByLocation(DockBase::DockLocation::Bottom);
+    if (bottomHolder) {
+        list.prepend(bottomHolder);
+    }
+
+    DockPanelHolder* topHolder = panelHolderByLocation(DockBase::DockLocation::Top);
+    if (topHolder) {
+        list.append(topHolder);
+    }
+
+    return list;
+}
+
+QList<DockPanelHolder*> DockPage::panelsHolders() const
+{
+    return m_panelsDockingHolders.list();
 }
 
 DockBase* DockPage::dockByName(const QString& dockName) const
@@ -136,9 +171,20 @@ DockBase* DockPage::dockByName(const QString& dockName) const
     return nullptr;
 }
 
-DockToolBarHolder* DockPage::holderByLocation(DockBase::DockLocation location) const
+DockToolBarHolder* DockPage::toolBarHolderByLocation(DockBase::DockLocation location) const
 {
     for (DockToolBarHolder* holder : m_toolBarsDockingHolders.list()) {
+        if (holder->location() == location) {
+            return holder;
+        }
+    }
+
+    return nullptr;
+}
+
+DockPanelHolder* DockPage::panelHolderByLocation(DockBase::DockLocation location) const
+{
+    for (DockPanelHolder* holder : m_panelsDockingHolders.list()) {
         if (holder->location() == location) {
             return holder;
         }

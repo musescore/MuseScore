@@ -90,12 +90,22 @@ Channel<QString, mu::framework::Orientation> MainWindowProvider::changeToolBarOr
 
 void MainWindowProvider::requestShowToolBarDockingHolder(const QPoint& globalPos)
 {
-    m_showDockingHolderRequested.send(globalPos);
+    m_showToolBarDockingHolderRequested.send(globalPos);
 }
 
 mu::async::Channel<QPoint> MainWindowProvider::showToolBarDockingHolderRequested() const
 {
-    return m_showDockingHolderRequested;
+    return m_showToolBarDockingHolderRequested;
+}
+
+void MainWindowProvider::requestShowPanelDockingHolder(const QPoint& globalPos)
+{
+    m_showPanelDockingHolderRequested.send(globalPos);
+}
+
+mu::async::Channel<QPoint> MainWindowProvider::showPanelDockingHolderRequested() const
+{
+    return m_showPanelDockingHolderRequested;
 }
 
 void MainWindowProvider::requestHideAllDockingHolders()

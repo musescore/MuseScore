@@ -23,6 +23,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 import MuseScore.Dock 1.0
 import MuseScore.AppShell 1.0
 
@@ -213,6 +214,58 @@ DockPage {
             }
 
             InspectorForm {}
+        },
+
+        // =============================================
+        // Horizontal Panels
+        // =============================================
+
+        DockPanel {
+            id: mixerPanel
+
+            objectName: "mixerPanel"
+            title: qsTrc("appshell", "Mixer")
+
+            allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
+
+            height: root.defaultPanelWidth
+            minimumHeight: root.defaultPanelWidth
+            maximumHeight: root.defaultPanelWidth
+
+            tabifyPanel: pianoRollPanel
+
+            Rectangle {
+                anchors.fill: parent
+                color: ui.theme.backgroundPrimaryColor
+
+                StyledTextLabel {
+                    anchors.centerIn: parent
+                    text: mixerPanel.title
+                }
+            }
+        },
+
+        DockPanel {
+            id: pianoRollPanel
+
+            objectName: "pianoRollPanel"
+            title: qsTrc("appshell", "Piano Roll")
+
+            allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
+
+            height: root.defaultPanelWidth
+            minimumHeight: root.defaultPanelWidth
+            maximumHeight: root.defaultPanelWidth
+
+            Rectangle {
+                anchors.fill: parent
+                color: ui.theme.backgroundPrimaryColor
+
+                StyledTextLabel {
+                    anchors.centerIn: parent
+                    text: pianoRollPanel.title
+                }
+            }
         }
     ]
 

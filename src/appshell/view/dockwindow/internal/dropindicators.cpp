@@ -108,6 +108,10 @@ KDDockWidgets::DropIndicatorOverlayInterface::DropLocation DropIndicators::hover
         mainWindow()->requestShowToolBarDockingHolder(globalPos);
     }
 
+    if (needShowPanelHolders()) {
+        mainWindow()->requestShowPanelDockingHolder(globalPos);
+    }
+
     if (isDropAllowed(dropLocation)) {
         setCurrentDropLocation(dropLocation);
         showDropAreaIfNeed(dropRect);
@@ -251,12 +255,16 @@ bool DropIndicators::isDropAllowed(DropLocation location) const
     return isAreaAllowed;
 }
 
-bool DropIndicators::isHoveredDockAllowedForDrop() const
+bool DropIndicators::isDropOnHoveredDockAllowed() const
 {
-    DockType hoveredDockType = readPropertiesFromObject(hoveredDock()).type;
+    DockType hoveredDockType = dockType(hoveredDock());
 
     if (isDraggedDockToolBar()) {
         return hoveredDockType == DockType::ToolBar || hoveredDockType == DockType::ToolBarDockingHolder;
+    }
+
+    if (isDraggedDockPanel()) {
+        return hoveredDockType == DockType::Panel || hoveredDockType == DockType::PanelDockingHolder;
     }
 
     return true;
@@ -264,7 +272,12 @@ bool DropIndicators::isHoveredDockAllowedForDrop() const
 
 bool DropIndicators::isDraggedDockToolBar() const
 {
-    return readPropertiesFromObject(draggedDock()).type == DockType::ToolBar;
+    return dockType(draggedDock()) == DockType::ToolBar;
+}
+
+bool DropIndicators::isDraggedDockPanel() const
+{
+    return dockType(draggedDock()) == DockType::Panel;
 }
 
 bool DropIndicators::needShowToolBarHolders() const
@@ -275,6 +288,16 @@ bool DropIndicators::needShowToolBarHolders() const
 
     Qt::DockWidgetAreas areas = readPropertiesFromObject(draggedDock()).allowedAreas;
     return areas.testFlag(Qt::LeftDockWidgetArea) || areas.testFlag(Qt::RightDockWidgetArea);
+}
+
+bool DropIndicators::needShowPanelHolders() const
+{
+    if (!isDraggedDockPanel()) {
+        return false;
+    }
+
+    Qt::DockWidgetAreas areas = readPropertiesFromObject(draggedDock()).allowedAreas;
+    return areas.testFlag(Qt::TopDockWidgetArea) || areas.testFlag(Qt::BottomDockWidgetArea);
 }
 
 const KDDockWidgets::DockWidgetBase* DropIndicators::draggedDock() const
@@ -307,9 +330,14 @@ mu::framework::Orientation DropIndicators::dockOrientation(const KDDockWidgets::
     return dock.width() < dock.height() ? framework::Orientation::Vertical : framework::Orientation::Horizontal;
 }
 
+DockType DropIndicators::dockType(const KDDockWidgets::DockWidgetBase* dock) const
+{
+    return readPropertiesFromObject(dock).type;
+}
+
 DropIndicators::DropLocation DropIndicators::dropLocationForToolBar(const QPoint& hoveredGlobalPos) const
 {
-    if (!isHoveredDockAllowedForDrop()) {
+    if (!isDropOnHoveredDockAllowed()) {
         return DropLocation_None;
     }
 
@@ -383,7 +411,7 @@ QRect DropIndicators::dropAreaRectForPanel(DropLocation location) const
 
 void DropIndicators::showDropAreaIfNeed(const QRect& dropRect)
 {
-    if (dropRect.isValid() && isHoveredDockAllowedForDrop()) {
+    if (dropRect.isValid() && isDropOnHoveredDockAllowed()) {
         m_rubberBand->setGeometry(dropRect);
         m_rubberBand->setVisible(true);
     }
@@ -407,7 +435,7 @@ void DropIndicators::updateToolBarOrientation()
     framework::Orientation newOrientation = framework::Orientation::Horizontal;
     bool isHoveredDockVertical = dockOrientation(*hoveredDock) == framework::Orientation::Vertical;
 
-    if (isHoveredDockAllowedForDrop() && isHoveredDockVertical) {
+    if (isDropOnHoveredDockAllowed() && isHoveredDockVertical) {
         newOrientation = framework::Orientation::Vertical;
     }
 

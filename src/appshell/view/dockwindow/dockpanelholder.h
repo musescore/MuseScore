@@ -20,35 +20,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKPANEL_H
-#define MU_DOCK_DOCKPANEL_H
+#ifndef MU_DOCK_DOCKPANELHOLDER_H
+#define MU_DOCK_DOCKPANELHOLDER_H
 
-#include "internal/dockbase.h"
-
-#include "framework/uicomponents/view/qmllistproperty.h"
+#include "dockpanel.h"
 
 namespace mu::dock {
-class DockPanel : public DockBase
+class DockPanelHolder : public DockPanel
 {
     Q_OBJECT
 
-    Q_PROPERTY(DockPanel * tabifyPanel READ tabifyPanel WRITE setTabifyPanel NOTIFY tabifyPanelChanged)
-
 public:
-    explicit DockPanel(QQuickItem* parent = nullptr);
-
-    DockPanel* tabifyPanel() const;
-
-public slots:
-    void setTabifyPanel(DockPanel* panel);
-
-signals:
-    void tabifyPanelChanged(DockPanel* panel);
+    explicit DockPanelHolder(QQuickItem* parent = nullptr);
 
 private:
     DockType type() const override;
-    DockPanel* m_tabifyPanel = nullptr;
 };
 }
 
-#endif // MU_DOCK_DOCKPANEL_H
+#endif // MU_DOCK_DOCKPANELHOLDER_H
