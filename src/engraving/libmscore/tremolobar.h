@@ -86,7 +86,7 @@ private:
 
     QList<PitchValue> m_points;
 
-    QPolygonF m_polygon;                    // computed by layout
+    mu::draw::PolygonF m_polygon;                    // computed by layout
 };
 }     // namespace Ms
 #endif

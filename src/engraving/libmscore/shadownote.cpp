@@ -32,6 +32,8 @@
 #include "accidental.h"
 #include "articulation.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 //---------------------------------------------------------
 //   ShadowNote
@@ -199,7 +201,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
             drawSymbol(flag, painter, QPointF(x - (lw / 2), y2), 1);
             y2 += symSmuflAnchor(flag, up ? SmuflAnchorId::stemUpNW : SmuflAnchorId::stemDownSW).y();
         }
-        painter->drawLine(QLineF(x, y1, x, y2));
+        painter->drawLine(LineF(x, y1, x, y2));
     }
 
     // Draw ledger lines if needed
@@ -214,12 +216,12 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
 
         for (int i = -2; i >= m_lineIndex; i -= 2) {
             qreal y = sp2 * mag() * (i - m_lineIndex);
-            painter->drawLine(QLineF(x1, y, x2, y));
+            painter->drawLine(LineF(x1, y, x2, y));
         }
         int l = staff()->lines(tick()) * 2; // first ledger line below staff
         for (int i = l; i <= m_lineIndex; i += 2) {
             qreal y = sp2 * mag() * (i - m_lineIndex);
-            painter->drawLine(QLineF(x1, y, x2, y));
+            painter->drawLine(LineF(x1, y, x2, y));
         }
     }
 

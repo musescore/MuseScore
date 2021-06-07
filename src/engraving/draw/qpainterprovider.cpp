@@ -91,7 +91,7 @@ bool QPainterProvider::isActive() const
     return m_painter->isActive();
 }
 
-void QPainterProvider::beginObject(const std::string& name, const QPointF& pagePos)
+void QPainterProvider::beginObject(const std::string& name, const PointF& pagePos)
 {
     m_drawObjectsLogger->beginObject(name, pagePos);
 }
@@ -186,35 +186,39 @@ void QPainterProvider::drawPath(const QPainterPath& path)
     m_painter->drawPath(path);
 }
 
-void QPainterProvider::drawPolygon(const QPointF* points, int pointCount, PolygonMode mode)
+void QPainterProvider::drawPolygon(const PointF* points, int pointCount, PolygonMode mode)
 {
+    static_assert(sizeof(QPointF) == sizeof(PointF), "sizeof(QPointF) and sizeof(PointF) must be equal");
+
+    const QPointF* qpoints = reinterpret_cast<const QPointF*>(points);
+
     switch (mode) {
     case PolygonMode::OddEven: {
-        m_painter->drawPolygon(points, pointCount, Qt::OddEvenFill);
+        m_painter->drawPolygon(qpoints, pointCount, Qt::OddEvenFill);
     } break;
     case PolygonMode::Winding: {
-        m_painter->drawPolygon(points, pointCount, Qt::WindingFill);
+        m_painter->drawPolygon(qpoints, pointCount, Qt::WindingFill);
     } break;
     case PolygonMode::Convex: {
-        m_painter->drawConvexPolygon(points, pointCount);
+        m_painter->drawConvexPolygon(qpoints, pointCount);
     } break;
     case PolygonMode::Polyline: {
-        m_painter->drawPolyline(points, pointCount);
+        m_painter->drawPolyline(qpoints, pointCount);
     } break;
     }
 }
 
-void QPainterProvider::drawText(const QPointF& point, const QString& text)
+void QPainterProvider::drawText(const PointF& point, const QString& text)
 {
-    m_painter->drawText(point, text);
+    m_painter->drawText(point.toQPointF(), text);
 }
 
-void QPainterProvider::drawText(const QRectF& rect, int flags, const QString& text)
+void QPainterProvider::drawText(const RectF& rect, int flags, const QString& text)
 {
-    m_painter->drawText(rect, flags, text);
+    m_painter->drawText(rect.toQRectF(), flags, text);
 }
 
-void QPainterProvider::drawTextWorkaround(mu::draw::Font& f, const QPointF& pos, const QString& text)
+void QPainterProvider::drawTextWorkaround(const Font& f, const PointF& pos, const QString& text)
 {
     m_painter->save();
     qreal mm = m_painter->worldTransform().m11();
@@ -275,22 +279,22 @@ void QPainterProvider::drawTextWorkaround(mu::draw::Font& f, const QPointF& pos,
     m_painter->restore();
 }
 
-void QPainterProvider::drawSymbol(const QPointF& point, uint ucs4Code)
+void QPainterProvider::drawSymbol(const PointF& point, uint ucs4Code)
 {
     static QHash<uint, QString> cache;
     if (!cache.contains(ucs4Code)) {
         cache[ucs4Code] = QString::fromUcs4(&ucs4Code, 1);
     }
 
-    m_painter->drawText(point, cache[ucs4Code]);
+    m_painter->drawText(QPointF(point.x(), point.y()), cache[ucs4Code]);
 }
 
-void QPainterProvider::drawPixmap(const QPointF& point, const QPixmap& pm)
+void QPainterProvider::drawPixmap(const PointF& point, const QPixmap& pm)
 {
-    m_painter->drawPixmap(point, pm);
+    m_painter->drawPixmap(QPointF(point.x(), point.y()), pm);
 }
 
-void QPainterProvider::drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset)
+void QPainterProvider::drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset)
 {
-    m_painter->drawTiledPixmap(rect, pm, offset);
+    m_painter->drawTiledPixmap(rect.toQRectF(), pm, QPointF(offset.x(), offset.y()));
 }

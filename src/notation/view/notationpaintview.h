@@ -178,7 +178,7 @@ private:
     const Page* pointToPage(const QPointF& point) const;
     QPointF alignToCurrentPageBorder(const QRectF& showRect, const QPointF& pos) const;
 
-    void paintBackground(const QRect& rect, mu::draw::Painter* painter);
+    void paintBackground(const draw::RectF& rect, draw::Painter* painter);
 
     QPoint canvasCenter() const;
     std::pair<int, int> constraintCanvas(int dx, int dy) const;

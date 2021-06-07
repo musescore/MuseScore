@@ -35,6 +35,8 @@
 
 #include "draw/fontmetrics.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 //    parent() is Segment or Box
 //
@@ -328,7 +330,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     // Draw the nut
     pen.setWidthF(nutLw);
     painter->setPen(pen);
-    painter->drawLine(QLineF(-stringLw * .5, 0.0, x2 + stringLw * .5, 0.0));
+    painter->drawLine(LineF(-stringLw * .5, 0.0, x2 + stringLw * .5, 0.0));
 
     // Draw strings and frets
     pen.setWidthF(stringLw);
@@ -338,11 +340,11 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     qreal y2 = fretDist * (_frets + .5);
     for (int i = 0; i < _strings; ++i) {
         qreal x = stringDist * i;
-        painter->drawLine(QLineF(x, _fretOffset ? -_spatium * .2 : 0.0, x, y2));
+        painter->drawLine(LineF(x, _fretOffset ? -_spatium * .2 : 0.0, x, y2));
     }
     for (int i = 1; i <= _frets; ++i) {
         qreal y = fretDist * i;
-        painter->drawLine(QLineF(0.0, y, x2, y));
+        painter->drawLine(LineF(0.0, y, x2, y));
     }
 
     // dotd is the diameter of a dot
@@ -374,8 +376,8 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
                 // Give the cross a slightly larger width
                 symPen.setWidthF(symPenWidth * 1.5);
                 painter->setPen(symPen);
-                painter->drawLine(QLineF(x, y, x + dotd, y + dotd));
-                painter->drawLine(QLineF(x + dotd, y, x, y + dotd));
+                painter->drawLine(LineF(x, y, x + dotd, y + dotd));
+                painter->drawLine(LineF(x + dotd, y, x, y + dotd));
                 symPen.setWidthF(symPenWidth);
                 break;
             case FretDotType::SQUARE:
@@ -383,9 +385,9 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
                 painter->drawRect(QRectF(x, y, dotd, dotd));
                 break;
             case FretDotType::TRIANGLE:
-                painter->drawLine(QLineF(x, y + dotd, x + .5 * dotd, y));
-                painter->drawLine(QLineF(x + .5 * dotd, y, x + dotd, y + dotd));
-                painter->drawLine(QLineF(x + dotd, y + dotd, x, y + dotd));
+                painter->drawLine(LineF(x, y + dotd, x + .5 * dotd, y));
+                painter->drawLine(LineF(x + .5 * dotd, y, x + dotd, y + dotd));
+                painter->drawLine(LineF(x + dotd, y + dotd, x, y + dotd));
                 break;
             case FretDotType::NORMAL:
             default:
@@ -430,7 +432,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
         pen.setWidthF(dotd * score()->styleD(Sid::barreLineWidth));
         pen.setCapStyle(Qt::RoundCap);
         painter->setPen(pen);
-        painter->drawLine(QLineF(x1, y, newX2, y));
+        painter->drawLine(LineF(x1, y, newX2, y));
     }
 
     // Draw fret offset number

@@ -25,16 +25,14 @@
 #include <list>
 #include <stack>
 
-#include <QPoint>
-#include <QPointF>
 #include <QPen>
 #include <QColor>
-#include <QFont>
 #include <QPainter>
 
 #include "config.h"
 #include "ipaintprovider.h"
 
+#include "geometry.h"
 #include "drawtypes.h"
 #include "font.h"
 
@@ -66,7 +64,7 @@ public:
     bool endDraw();
 
     //! NOTE These are methods for debugging and automated testing.
-    void beginObject(const std::string& name, const QPointF& pagePos);
+    void beginObject(const std::string& name, const PointF& pagePos);
     void endObject();
 
     // state
@@ -89,12 +87,12 @@ public:
     void scale(qreal sx, qreal sy);
     void rotate(qreal angle);
     void translate(qreal dx, qreal dy);
-    inline void translate(const QPointF& offset);
+    inline void translate(const PointF& offset);
 
-    QRect window() const;
-    void setWindow(const QRect& window);
-    QRect viewport() const;
-    void setViewport(const QRect& viewport);
+    RectF window() const;
+    void setWindow(const RectF& window);
+    RectF viewport() const;
+    void setViewport(const RectF& viewport);
 
     void save();
     void restore();
@@ -104,45 +102,44 @@ public:
     void drawPath(const QPainterPath& path);
     void strokePath(const QPainterPath& path, const QPen& pen);
 
-    inline void drawLine(const QLineF& line);
-    inline void drawLine(const QPointF& p1, const QPointF& p2);
+    void drawLines(const LineF* lines, int lineCount);
+    void drawLines(const PointF* pointPairs, int lineCount);
+    inline void drawLine(const LineF& line);
+    inline void drawLine(const PointF& p1, const PointF& p2);
+    inline void drawLines(const std::vector<LineF>& lines);
 
     //! NOTE Potentially dangerous method.
     //! Most of them are cut with fractional values.
     //! Fractions are also passed to this method, and, accordingly, the fractional part is discarded.
     inline void drawLine(int x1, int y1, int x2, int y2);
 
-    void drawLines(const QLineF* lines, int lineCount);
-    inline void drawLines(const QVector<QLineF>& lines);
-    void drawLines(const QPointF* pointPairs, int lineCount);
-
-    inline void drawRect(const QRectF& rect);
+    inline void drawRect(const RectF& rect);
 
     //! NOTE Potentially dangerous method.
     //! Most of them are cut with fractional values.
     //! Fractions are also passed to this method, and, accordingly, the fractional part is discarded.
     inline void drawRect(int x1, int y1, int w, int h);
 
-    void drawRects(const QRectF* rects, int rectCount);
+    void drawRects(const RectF* rects, int rectCount);
 
-    void drawRoundedRect(const QRectF& rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = Qt::AbsoluteSize);
+    void drawRoundedRect(const RectF& rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = Qt::AbsoluteSize);
 
-    void drawEllipse(const QRectF& rect);
-    inline void drawEllipse(const QPointF& center, qreal rx, qreal ry);
+    void drawEllipse(const RectF& rect);
+    inline void drawEllipse(const PointF& center, qreal rx, qreal ry);
 
-    void drawPolyline(const QPointF* points, int pointCount);
-    inline void drawPolyline(const QPolygonF& polyline);
+    void drawPolyline(const PointF* points, int pointCount);
+    inline void drawPolyline(const PolygonF& polyline);
 
-    void drawPolygon(const QPointF* points, int pointCount, Qt::FillRule fillRule = Qt::OddEvenFill);
-    inline void drawPolygon(const QPolygonF& polygon, Qt::FillRule fillRule = Qt::OddEvenFill);
+    void drawPolygon(const PointF* points, int pointCount, Qt::FillRule fillRule = Qt::OddEvenFill);
+    inline void drawPolygon(const PolygonF& polygon, Qt::FillRule fillRule = Qt::OddEvenFill);
 
-    void drawConvexPolygon(const QPointF* points, int pointCount);
-    inline void drawConvexPolygon(const QPolygonF& polygon);
+    void drawConvexPolygon(const PointF* points, int pointCount);
+    inline void drawConvexPolygon(const PolygonF& polygon);
 
-    void drawArc(const QRectF& rect, int a, int alen);
+    void drawArc(const RectF& rect, int a, int alen);
 
-    void drawText(const QPointF& point, const QString& text);
-    void drawText(const QRectF& rect, int flags, const QString& text);
+    void drawText(const PointF& point, const QString& text);
+    void drawText(const RectF& rect, int flags, const QString& text);
 
     //! NOTE Potentially dangerous method.
     //! Most of them are cut with fractional values.
@@ -158,14 +155,14 @@ public:
     //! The workaround works badly if the text is at the same time
     //! bold and underlined.
     //! (moved from TextBase::drawTextWorkaround)
-    void drawTextWorkaround(mu::draw::Font& f, const QPointF pos, const QString text);
+    void drawTextWorkaround(Font& f, const PointF pos, const QString text);
 
-    void drawSymbol(const QPointF& point, uint ucs4Code);
+    void drawSymbol(const PointF& point, uint ucs4Code);
 
-    void fillRect(const QRectF& rect, const QBrush& brush);
+    void fillRect(const RectF& rect, const QBrush& brush);
 
-    void drawPixmap(const QPointF& point, const QPixmap& pm);
-    void drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset = QPointF());
+    void drawPixmap(const PointF& point, const QPixmap& pm);
+    void drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset = PointF());
 
     //! NOTE Provider for tests.
     //! We're not ready to use DI (ModuleIoC) here yet
@@ -174,8 +171,8 @@ public:
 private:
 
     struct State {
-        QRect window;
-        QRect viewport;
+        RectF window;
+        RectF viewport;
         bool isVxF = false;
         QTransform viewTransform;
         bool isWxF = false;
@@ -201,72 +198,72 @@ inline void Painter::setPen(const QColor& color)
     setPen(QPen(color.isValid() ? color : QColor(Qt::black)));
 }
 
-inline void Painter::translate(const QPointF& offset)
+inline void Painter::translate(const PointF& offset)
 {
     translate(offset.x(), offset.y());
 }
 
-inline void Painter::drawLine(const QLineF& l)
+inline void Painter::drawLine(const LineF& l)
 {
     drawLines(&l, 1);
 }
 
-inline void Painter::drawLine(const QPointF& p1, const QPointF& p2)
+inline void Painter::drawLine(const PointF& p1, const PointF& p2)
 {
-    drawLine(QLineF(p1, p2));
+    drawLine(LineF(p1, p2));
 }
 
 inline void Painter::drawLine(int x1, int y1, int x2, int y2)
 {
-    QLineF l(x1, y1, x2, y2);
+    LineF l(PointF(x1, y1), PointF(x2, y2));
     drawLines(&l, 1);
 }
 
-inline void Painter::drawLines(const QVector<QLineF>& lines)
+inline void Painter::drawLines(const std::vector<LineF>& lines)
 {
-    drawLines(lines.constData(), lines.size());
+    drawLines(lines.data(), lines.size());
 }
 
-inline void Painter::drawRect(const QRectF& rect)
+inline void Painter::drawRect(const RectF& rect)
 {
     drawRects(&rect, 1);
 }
 
 inline void Painter::drawRect(int x, int y, int w, int h)
 {
-    QRectF r(x, y, w, h);
+    RectF r(x, y, w, h);
     drawRects(&r, 1);
 }
 
-inline void Painter::drawEllipse(const QPointF& center, qreal rx, qreal ry)
+inline void Painter::drawEllipse(const PointF& center, qreal rx, qreal ry)
 {
-    drawEllipse(QRectF(center.x() - rx, center.y() - ry, 2 * rx, 2 * ry));
+    drawEllipse(RectF(center.x() - rx, center.y() - ry, 2 * rx, 2 * ry));
 }
 
-inline void Painter::drawPolyline(const QPolygonF& polyline)
+inline void Painter::drawPolyline(const PolygonF& polyline)
 {
-    drawPolyline(polyline.constData(), polyline.size());
+    drawPolyline(polyline.data(), polyline.size());
 }
 
-inline void Painter::drawPolygon(const QPolygonF& polygon, Qt::FillRule fillRule)
+inline void Painter::drawPolygon(const PolygonF& polygon, Qt::FillRule fillRule)
 {
-    drawPolygon(polygon.constData(), polygon.size(), fillRule);
+    drawPolygon(polygon.data(), polygon.size(), fillRule);
 }
 
-inline void Painter::drawConvexPolygon(const QPolygonF& poly)
+inline void Painter::drawConvexPolygon(const PolygonF& poly)
 {
-    drawConvexPolygon(poly.constData(), poly.size());
+    drawConvexPolygon(poly.data(), poly.size());
 }
 
 inline void Painter::drawText(int x, int y, const QString& text)
 {
-    drawText(QPointF(x, y), text);
+    drawText(PointF(x, y), text);
 }
 
 class PainterObjMarker
 {
 public:
-    PainterObjMarker(Painter* p, const std::string& name, const QPointF& objPagePos)
+    PainterObjMarker(Painter* p, const std::string& name, const PointF& objPagePos)
         : m_painter(p)
     {
         p->beginObject(name, objPagePos);
@@ -279,8 +276,6 @@ public:
 
 private:
     Painter* m_painter = nullptr;
-    std::string m_name;
-    QPointF m_objPagePos;
 };
 
 #ifdef TRACE_DRAW_OBJ_ENABLED

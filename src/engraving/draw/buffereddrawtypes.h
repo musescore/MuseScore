@@ -27,6 +27,7 @@
 #include <QBrush>
 #include <QPen>
 
+#include "geometry.h"
 #include "drawtypes.h"
 #include "font.h"
 
@@ -50,37 +51,37 @@ struct DrawPath {
 };
 
 struct DrawRect {
-    QRectF rect;
+    RectF rect;
     QPen pen;
     QBrush brush;
     DrawMode mode = DrawMode::StrokeAndFill;
 };
 
 struct DrawPolygon {
-    QPolygonF polygon;
+    PolygonF polygon;
     PolygonMode mode = PolygonMode::OddEven;
 };
 
 struct DrawText {
-    QPointF pos;
+    PointF pos;
     QString text;
 };
 
 struct DrawRectText {
-    QRectF rect;
+    RectF rect;
     int flags = 0;
     QString text;
 };
 
 struct DrawPixmap {
-    QPointF pos;
+    PointF pos;
     QPixmap pm;
 };
 
 struct DrawTiledPixmap {
-    QRectF rect;
+    RectF rect;
     QPixmap pm;
-    QPointF offset;
+    PointF offset;
 };
 
 struct DrawData
@@ -117,11 +118,11 @@ struct DrawData
 
     struct Object {
         std::string name;
-        QPointF pagePos;
+        PointF pagePos;
         std::vector<Data> datas;
 
         Object() = default;
-        Object(const std::string& n, const QPointF& p)
+        Object(const std::string& n, const PointF& p)
             : name(n), pagePos(p)
         {
             //! NOTE Make data with default state

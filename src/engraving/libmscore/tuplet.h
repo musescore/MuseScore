@@ -63,8 +63,8 @@ class Tuplet final : public DurationElement
     mutable int _id;          // used during read/write
 
     Text* _number;
-    QPointF bracketL[4];
-    QPointF bracketR[3];
+    mu::draw::PointF bracketL[4];
+    mu::draw::PointF bracketR[3];
 
     Fraction addMissingElement(const Fraction& startTick, const Fraction& endTick);
 

@@ -35,6 +35,8 @@
 #include "property.h"
 #include "xml.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 const std::array<const char*, 6> Arpeggio::arpeggioTypeNames = {
     QT_TRANSLATE_NOOP("Palette", "Arpeggio"),
@@ -249,7 +251,7 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
         QRectF r(symBbox(symbols));
         qreal scale = painter->worldTransform().m11();
         painter->rotate(-90.0);
-        score()->scoreFont()->draw(symbols, painter, magS(), QPointF(-r.right() - y1, -r.bottom() + r.height()), scale);
+        score()->scoreFont()->draw(symbols, painter, magS(), PointF(-r.right() - y1, -r.bottom() + r.height()), scale);
     }
     break;
 
@@ -258,7 +260,7 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
         QRectF r(symBbox(symbols));
         qreal scale = painter->worldTransform().m11();
         painter->rotate(90.0);
-        score()->scoreFont()->draw(symbols, painter, magS(), QPointF(-r.left() + y1, -r.top() - r.height()), scale);
+        score()->scoreFont()->draw(symbols, painter, magS(), PointF(-r.left() + y1, -r.top() - r.height()), scale);
     }
     break;
 
@@ -266,9 +268,9 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     {
         QRectF r(symBbox(SymId::arrowheadBlackUp));
         qreal x1 = _spatium * .5;
-        drawSymbol(SymId::arrowheadBlackUp, painter, QPointF(x1 - r.width() * .5, y1 - r.top()));
+        drawSymbol(SymId::arrowheadBlackUp, painter, PointF(x1 - r.width() * .5, y1 - r.top()));
         y1 -= r.top() * .5;
-        painter->drawLine(QLineF(x1, y1, x1, y2));
+        painter->drawLine(LineF(x1, y1, x1, y2));
     }
     break;
 
@@ -277,18 +279,18 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
         QRectF r(symBbox(SymId::arrowheadBlackDown));
         qreal x1 = _spatium * .5;
 
-        drawSymbol(SymId::arrowheadBlackDown, painter, QPointF(x1 - r.width() * .5, y2 - r.bottom()));
+        drawSymbol(SymId::arrowheadBlackDown, painter, PointF(x1 - r.width() * .5, y2 - r.bottom()));
         y2 += r.top() * .5;
-        painter->drawLine(QLineF(x1, y1, x1, y2));
+        painter->drawLine(LineF(x1, y1, x1, y2));
     }
     break;
 
     case ArpeggioType::BRACKET:
     {
         qreal w = score()->styleS(Sid::ArpeggioHookLen).val() * _spatium;
-        painter->drawLine(QLineF(0.0, y1, 0.0, y2));
-        painter->drawLine(QLineF(0.0, y1, w, y1));
-        painter->drawLine(QLineF(0.0, y2, w, y2));
+        painter->drawLine(LineF(0.0, y1, 0.0, y2));
+        painter->drawLine(LineF(0.0, y1, w, y1));
+        painter->drawLine(LineF(0.0, y2, w, y2));
     }
     break;
     }

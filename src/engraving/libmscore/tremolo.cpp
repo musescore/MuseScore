@@ -32,6 +32,8 @@
 #include "symid.h"
 #include "xml.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 //---------------------------------------------------------
 //   tremoloStyle
@@ -123,9 +125,9 @@ void Tremolo::draw(mu::draw::Painter* painter) const
         painter->setPen(pen);
         const qreal sp = spatium();
         if (isBuzzRoll()) {
-            painter->drawLine(QLineF(x, -sp, x, bbox().bottom() + sp));
+            painter->drawLine(LineF(x, -sp, x, bbox().bottom() + sp));
         } else {
-            painter->drawLine(QLineF(x, -sp * .5, x, path.boundingRect().height() + sp));
+            painter->drawLine(LineF(x, -sp * .5, x, path.boundingRect().height() + sp));
         }
     }
 }

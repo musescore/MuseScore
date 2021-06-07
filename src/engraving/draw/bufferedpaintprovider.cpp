@@ -76,7 +76,7 @@ bool BufferedPaintProvider::isActive() const
     return m_isActive;
 }
 
-void BufferedPaintProvider::beginObject(const std::string& name, const QPointF& pagePos)
+void BufferedPaintProvider::beginObject(const std::string& name, const PointF& pagePos)
 {
     // add new object
     m_currentObjects.push(DrawData::Object(name, pagePos));
@@ -218,42 +218,42 @@ void BufferedPaintProvider::drawPath(const QPainterPath& path)
     editableData().paths.push_back({ path, st.pen, st.brush, mode });
 }
 
-void BufferedPaintProvider::drawPolygon(const QPointF* points, int pointCount, PolygonMode mode)
+void BufferedPaintProvider::drawPolygon(const PointF* points, int pointCount, PolygonMode mode)
 {
-    QPolygonF pol(pointCount);
+    PolygonF pol(pointCount);
     for (int i = 0; i < pointCount; ++i) {
-        pol[i] = points[i];
+        pol[i] = PointF(points[i].x(), points[i].y());
     }
     editableData().polygons.push_back(DrawPolygon { pol, mode });
 }
 
-void BufferedPaintProvider::drawText(const QPointF& point, const QString& text)
+void BufferedPaintProvider::drawText(const PointF& point, const QString& text)
 {
     editableData().texts.push_back(DrawText { point, text });
 }
 
-void BufferedPaintProvider::drawText(const QRectF& rect, int flags, const QString& text)
+void BufferedPaintProvider::drawText(const RectF& rect, int flags, const QString& text)
 {
     editableData().rectTexts.push_back(DrawRectText { rect, flags, text });
 }
 
-void BufferedPaintProvider::drawTextWorkaround(mu::draw::Font& f, const QPointF& pos, const QString& text)
+void BufferedPaintProvider::drawTextWorkaround(const Font& f, const PointF& pos, const QString& text)
 {
     setFont(f);
     drawText(pos, text);
 }
 
-void BufferedPaintProvider::drawSymbol(const QPointF& point, uint ucs4Code)
+void BufferedPaintProvider::drawSymbol(const PointF& point, uint ucs4Code)
 {
     drawText(point, QString::fromUcs4(&ucs4Code, 1));
 }
 
-void BufferedPaintProvider::drawPixmap(const QPointF& p, const QPixmap& pm)
+void BufferedPaintProvider::drawPixmap(const PointF& p, const QPixmap& pm)
 {
     editableData().pixmaps.push_back(DrawPixmap { p, pm });
 }
 
-void BufferedPaintProvider::drawTiledPixmap(const QRectF& rect, const QPixmap& pm, const QPointF& offset)
+void BufferedPaintProvider::drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset)
 {
     editableData().tiledPixmap.push_back(DrawTiledPixmap { rect, pm, offset });
 }
