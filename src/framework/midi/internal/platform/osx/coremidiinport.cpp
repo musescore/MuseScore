@@ -129,8 +129,20 @@ void CoreMidiInPort::initCore()
         }
 
         switch (notification->messageID) {
-        case kMIDIMsgObjectAdded:
         case kMIDIMsgObjectRemoved:
+            if (self->isConnected()) {
+                if (notification->messageSize == sizeof(MIDIObjectAddRemoveNotification)) {
+                    auto addRemoveNotification = (const MIDIObjectAddRemoveNotification*)notification;
+                    MIDIObjectType removedObjectType = addRemoveNotification->childType;
+                    MIDIObjectRef removedObject = addRemoveNotification->child;
+                    if (removedObjectType == kMIDIObjectType_Source && removedObject == self->m_core->sourceId) {
+                        self->disconnect();
+                    }
+                } else {
+                    LOGW() << "Received corrupted MIDIObjectAddRemoveNotification";
+                }
+            }
+        case kMIDIMsgObjectAdded: // Fallthrough
             self->devicesChanged().notify();
             break;
 
