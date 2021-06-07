@@ -41,7 +41,7 @@ AlsaMidiInPort::AlsaMidiInPort()
 {
     m_alsa = std::unique_ptr<Alsa>(new Alsa());
 
-    m_devicesListener.reg([this]() {
+    m_devicesListener.startWithCallback([this]() {
         return devices();
     });
 
@@ -74,6 +74,8 @@ AlsaMidiInPort::~AlsaMidiInPort()
 
 MidiDeviceList AlsaMidiInPort::devices() const
 {
+    std::lock_guard lock(m_devicesMutex);
+
     int streams = SND_SEQ_OPEN_INPUT;
     unsigned int cap = SND_SEQ_PORT_CAP_SUBS_WRITE | SND_SEQ_PORT_CAP_WRITE;
 

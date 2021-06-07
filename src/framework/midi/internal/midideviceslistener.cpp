@@ -23,26 +23,36 @@
 
 #include <memory>
 
+#include "log.h"
+
 using namespace mu::midi;
 
-MidiDevicesListener::MidiDevicesListener()
+MidiDevicesListener::~MidiDevicesListener()
 {
-    m_devicesUpdateThread = std::make_shared<std::thread>(updateDevices, this);
+    stop();
 }
 
-MidiDevicesListener::~MidiDevicesListener()
+void MidiDevicesListener::startWithCallback(const ActualDevicesCallback& callback)
+{
+    IF_ASSERT_FAILED(!m_isRunning) {
+        LOGE() << "Cannot set callback while already running.";
+        return;
+    }
+
+    m_actualDevicesCallback = callback;
+    m_isRunning = true;
+    m_devicesUpdateThread = std::make_shared<std::thread>(&MidiDevicesListener::th_updateDevices, this);
+}
+
+void MidiDevicesListener::stop()
 {
     if (!m_devicesUpdateThread) {
         return;
     }
 
+    m_isRunning = false;
     m_devicesUpdateThread->join();
     m_devicesUpdateThread = nullptr;
-}
-
-void MidiDevicesListener::reg(const ActualDevicesCallback& callback)
-{
-    m_actualDevicesCallback = callback;
 }
 
 mu::async::Notification MidiDevicesListener::devicesChanged() const
@@ -50,23 +60,18 @@ mu::async::Notification MidiDevicesListener::devicesChanged() const
     return m_devicesChanged;
 }
 
-void MidiDevicesListener::updateDevices(MidiDevicesListener* self)
+void MidiDevicesListener::th_updateDevices()
 {
-    self->doUpdateDevices();
-}
-
-void MidiDevicesListener::doUpdateDevices()
-{
-    while (true) {
+    while (m_isRunning) {
         MidiDeviceList devices = m_actualDevicesCallback();
 
-        setDevices(devices);
+        th_setDevices(devices);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 }
 
-void MidiDevicesListener::setDevices(const MidiDeviceList& devices)
+void MidiDevicesListener::th_setDevices(const MidiDeviceList& devices)
 {
     if (devices == m_devices) {
         return;

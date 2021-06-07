@@ -44,7 +44,7 @@ CoreMidiOutPort::CoreMidiOutPort()
     m_core = std::unique_ptr<Core>(new Core());
     initCore();
 
-    m_devicesListener.reg([this]() {
+    m_devicesListener.startWithCallback([this]() {
         return devices();
     });
 
@@ -97,6 +97,7 @@ void CoreMidiOutPort::initCore()
 
 MidiDeviceList CoreMidiOutPort::devices() const
 {
+    std::lock_guard lock(m_devicesMutex);
     MidiDeviceList ret;
 
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, false);
