@@ -41,11 +41,20 @@ FlatButton {
 
     visible: Boolean(root.currentViewMode)
 
-    StyledIconLabel {
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
+    contentItem: Row {
+        spacing: 4
 
-        iconCode: IconCode.SMALL_ARROW_DOWN
+        StyledIconLabel {
+            iconCode: root.icon
+        }
+
+        StyledTextLabel {
+            text: root.text
+        }
+
+        StyledIconLabel {
+            iconCode: IconCode.SMALL_ARROW_DOWN
+        }
     }
 
     onClicked: {
