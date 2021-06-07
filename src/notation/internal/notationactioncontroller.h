@@ -57,8 +57,10 @@ public:
 
     INotationInteractionPtr currentNotationInteraction() const;
 
-private:
+    INotationStylePtr currentNotationStyle() const;
+    async::Notification currentNotationStyleChanged() const;
 
+private:
     INotationPtr currentNotation() const;
     INotationElementsPtr currentNotationElements() const;
     INotationSelectionPtr currentNotationSelection() const;
@@ -162,6 +164,7 @@ private:
     void toggleScoreConfig(ScoreConfigType configType);
     void toggleNavigator();
     void toggleMixer();
+    void toggleConcertPitch();
 
     void playSelectedElement(bool playChord = true);
 

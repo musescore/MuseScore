@@ -27,11 +27,13 @@ import MuseScore.Ui 1.0
 Row {
     id: root
 
-    spacing: 4
-
-    property alias concertPitchEnabled: concertPitchCheckBox.checked
+    property alias text: concertPitchButton.text
+    property alias icon: concertPitchButton.icon
+    property alias checked: concertPitchCheckBox.checked
 
     signal toggleConcertPitchRequested()
+
+    spacing: 4
 
     CheckBox {
         id: concertPitchCheckBox
@@ -44,8 +46,7 @@ Row {
     }
 
     FlatButton {
-        icon: IconCode.TUNING_FORK
-        text: qsTrc("notation", "Concert pitch")
+        id: concertPitchButton
 
         orientation: Qt.Horizontal
         normalStateColor: "transparent"

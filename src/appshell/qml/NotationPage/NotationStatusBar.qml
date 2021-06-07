@@ -57,21 +57,20 @@ Rectangle {
         id: statusBarRow
 
         anchors.right: parent.right
-        anchors.rightMargin: 12
+        anchors.rightMargin: hiddenControlsMenuButton.visible ? 4 : 12
 
         height: parent.height
 
-        spacing: 12
+        spacing: 10
 
         SeparatorLine { orientation: Qt.Vertical; visible: workspaceControl.visible }
 
         FlatButton {
-            anchors.verticalCenter: parent.verticalCenter
-
             id: workspaceControl
 
-            text: qsTrc("workspace", "Workspace: ") + model.currentWorkspaceName
+            anchors.verticalCenter: parent.verticalCenter
 
+            text: model.currentWorkspaceAction.title
             normalStateColor: "transparent"
 
             onClicked: {
@@ -86,7 +85,10 @@ Rectangle {
 
             anchors.verticalCenter: parent.verticalCenter
 
-            concertPitchEnabled: model.concertPitchEnabled
+            text: model.concertPitchAction.title
+            icon: model.concertPitchAction.icon
+            checked: model.concertPitchAction.checked
+            enabled: model.concertPitchAction.enabled
 
             onToggleConcertPitchRequested: {
                 model.toggleConcertPitch()
@@ -109,6 +111,7 @@ Rectangle {
         ZoomControl {
             anchors.verticalCenter: parent.verticalCenter
 
+            enabled: model.zoomEnabled
             currentZoomPercentage: model.currentZoomPercentage
             minZoomPercentage: model.minZoomPercentage()
             maxZoomPercentage: model.maxZoomPercentage()
@@ -128,6 +131,35 @@ Rectangle {
 
             onZoomOutRequested: {
                 model.zoomOut()
+            }
+        }
+
+        SeparatorLine { orientation: Qt.Vertical; visible: hiddenControlsMenuButton.visible }
+
+        MenuButton {
+            id: hiddenControlsMenuButton
+
+            anchors.verticalCenter: parent.verticalCenter
+
+            visible: !concertPitchControl.visible ||
+                     !workspaceControl.visible
+
+            menuModel: {
+                var result = []
+
+                if (!concertPitchControl.visible) {
+                    result.push(model.concertPitchAction)
+                }
+
+                if (!workspaceControl.visible) {
+                    result.push(model.currentWorkspaceAction)
+                }
+
+                return result
+            }
+
+            onHandleAction: {
+                model.handleAction(actionCode)
             }
         }
     }
