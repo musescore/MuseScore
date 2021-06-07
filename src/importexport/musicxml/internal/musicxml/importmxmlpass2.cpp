@@ -6083,7 +6083,7 @@ static void addArticLaissezVibrer(const Note* const note)
 {
     Q_ASSERT(note);
     auto chord = note->chord();
-    if (!hasLaissezVibrer(chord)) {
+    if (!findLaissezVibrer(chord)) {
         Articulation* na = new Articulation(SymId::articLaissezVibrerBelow, chord->score());
         chord->add(na);
     }
