@@ -65,7 +65,7 @@ void AccessibleScore::setActive(bool arg)
     }
 
     m_active = arg;
-    m_accessibleStateChanged.send({ State::Active, arg });
+    m_accessibleStateChanged.send(State::Active, arg);
 }
 
 void AccessibleScore::setFocusedElement(AccessibleElement* e)
@@ -134,7 +134,7 @@ mu::async::Channel<IAccessible::Property> AccessibleScore::accessiblePropertyCha
     return ch;
 }
 
-mu::async::Channel<std::pair<IAccessible::State, bool> > AccessibleScore::accessibleStateChanged() const
+mu::async::Channel<IAccessible::State, bool> AccessibleScore::accessibleStateChanged() const
 {
     return m_accessibleStateChanged;
 }

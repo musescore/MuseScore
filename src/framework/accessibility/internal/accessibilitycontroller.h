@@ -75,7 +75,7 @@ public:
     QRect accessibleRect() const override;
 
     async::Channel<Property> accessiblePropertyChanged() const override;
-    async::Channel<std::pair<State, bool> > accessibleStateChanged() const override;
+    async::Channel<State, bool> accessibleStateChanged() const override;
     // -----
 
     QAccessibleInterface* parentIface(const IAccessible* item) const;

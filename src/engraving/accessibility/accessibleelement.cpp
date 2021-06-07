@@ -127,7 +127,7 @@ void AccessibleElement::focused()
 
     ascore->setActive(true);
     ascore->setFocusedElement(this);
-    m_accessibleStateChanged.send({ IAccessible::State::Focused, true });
+    m_accessibleStateChanged.send(IAccessible::State::Focused, true);
 }
 
 const IAccessible* AccessibleElement::accessibleParent() const
@@ -215,7 +215,7 @@ mu::async::Channel<IAccessible::Property> AccessibleElement::accessiblePropertyC
     return ch;
 }
 
-mu::async::Channel<std::pair<IAccessible::State, bool> > AccessibleElement::accessibleStateChanged() const
+mu::async::Channel<IAccessible::State, bool> AccessibleElement::accessibleStateChanged() const
 {
     return m_accessibleStateChanged;
 }
