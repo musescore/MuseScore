@@ -25,18 +25,29 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 #include "audio/iaudioconfiguration.h"
+#include "midi/imidiconfiguration.h"
+#include "midi/imidioutport.h"
+#include "midi/imidiinport.h"
 
 namespace mu::appshell {
-class IOPreferencesModel : public QObject
+class IOPreferencesModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
+    INJECT(appshell, midi::IMidiConfiguration, midiConfiguration)
+    INJECT(appshell, midi::IMidiOutPort, midiOutPort)
+    INJECT(appshell, midi::IMidiInPort, midiInPort)
 
     Q_PROPERTY(int currentAudioApiIndex READ currentAudioApiIndex WRITE setCurrentAudioApiIndex NOTIFY currentAudioApiIndexChanged)
+
+    Q_PROPERTY(QStringList midiInputDevices READ midiInputDevices NOTIFY midiInputDevicesChanged)
     Q_PROPERTY(
         int currentMidiInputDeviceIndex READ currentMidiInputDeviceIndex WRITE setCurrentMidiInputDeviceIndex NOTIFY currentMidiInputDeviceIndexChanged)
+
+    Q_PROPERTY(QStringList midiOutputDevices READ midiOutputDevices NOTIFY midiOutputDevicesChanged)
     Q_PROPERTY(
         int currentMidiOutputDeviceIndex READ currentMidiOutputDeviceIndex WRITE setCurrentMidiOutputDeviceIndex NOTIFY currentMidiOutputDeviceIndexChanged)
 
@@ -47,11 +58,14 @@ public:
     int currentMidiInputDeviceIndex() const;
     int currentMidiOutputDeviceIndex() const;
 
+    Q_INVOKABLE void init();
+
     Q_INVOKABLE QStringList audioApiList() const;
-    Q_INVOKABLE QStringList midiInputDeviceList() const;
-    Q_INVOKABLE QStringList midiOutputDeviceList() const;
 
     Q_INVOKABLE void restartAudioAndMidiDevices();
+
+    QStringList midiInputDevices() const;
+    QStringList midiOutputDevices() const;
 
 public slots:
     void setCurrentAudioApiIndex(int index);
@@ -60,12 +74,17 @@ public slots:
 
 signals:
     void currentAudioApiIndexChanged(int index);
-    void currentMidiInputDeviceIndexChanged(int index);
-    void currentMidiOutputDeviceIndexChanged(int index);
+    void currentMidiInputDeviceIndexChanged();
+    void currentMidiOutputDeviceIndexChanged();
+
+    void midiInputDevicesChanged();
+    void midiOutputDevicesChanged();
 
 private:
-    int m_currentMidiInputDeviceIndex = 0;
-    int m_currentMidiOutputDeviceIndex = 0;
+    midi::MidiDeviceID midiInputDeviceId(int index) const;
+    midi::MidiDeviceID midiOutputDeviceId(int index) const;
+
+    void showMidiError(const midi::MidiDeviceID& deviceId, const std::string& text) const;
 };
 }
 

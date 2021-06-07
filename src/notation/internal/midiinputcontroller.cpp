@@ -26,6 +26,21 @@ using namespace mu::notation;
 
 void MidiInputController::init()
 {
+    connectCurrentInputDevice();
+    connectCurrentOutputDevice();
+
+    midiInPort()->devicesChanged().onNotify(this, [this]() {
+        if (!midiInPort()->isConnected()) {
+            connectCurrentInputDevice();
+        }
+    });
+
+    midiOutPort()->devicesChanged().onNotify(this, [this]() {
+        if (!midiOutPort()->isConnected()) {
+            connectCurrentOutputDevice();
+        }
+    });
+
     midiInPort()->eventReceived().onReceive(this, [this](const std::pair<midi::tick_t, midi::Event>& ev) {
         if (!configuration()->isMidiInputEnabled()) {
             return;
@@ -33,6 +48,34 @@ void MidiInputController::init()
 
         onMidiEventReceived(ev.first, ev.second);
     });
+}
+
+void MidiInputController::connectCurrentInputDevice()
+{
+    midi::MidiDeviceID deviceId = midiConfiguration()->midiInputDeviceId();
+    if (deviceId.empty()) {
+        return;
+    }
+
+    Ret ret = midiInPort()->connect(deviceId);
+    if (ret) {
+        ret = midiInPort()->run();
+    } else {
+        LOGW() << "failed connect to input device, deviceID: " << deviceId << ", err: " << ret.text();
+    }
+}
+
+void MidiInputController::connectCurrentOutputDevice()
+{
+    midi::MidiDeviceID deviceId = midiConfiguration()->midiOutputDeviceId();
+    if (deviceId.empty()) {
+        return;
+    }
+
+    Ret ret = midiOutPort()->connect(deviceId);
+    if (!ret) {
+        LOGW() << "failed connect to output device, deviceID: " << deviceId << ", err: " << ret.text();
+    }
 }
 
 void MidiInputController::onMidiEventReceived(midi::tick_t tick, const midi::Event& event)

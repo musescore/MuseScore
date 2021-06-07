@@ -22,12 +22,11 @@
 #ifndef MU_MIDI_IMIDIOUTPORT_H
 #define MU_MIDI_IMIDIOUTPORT_H
 
-#include <vector>
-#include <string>
-
 #include "modularity/imoduleexport.h"
-#include "miditypes.h"
+
 #include "ret.h"
+#include "async/notification.h"
+#include "miditypes.h"
 
 namespace mu::midi {
 class IMidiOutPort : MODULE_EXPORT_INTERFACE
@@ -37,7 +36,8 @@ class IMidiOutPort : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMidiOutPort() = default;
 
-    virtual std::vector<MidiDevice> devices() const = 0;
+    virtual MidiDeviceList devices() const = 0;
+    virtual async::Notification devicesChanged() const = 0;
 
     virtual Ret connect(const MidiDeviceID& deviceID) = 0;
     virtual void disconnect() = 0;

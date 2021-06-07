@@ -23,17 +23,20 @@
 #define MU_MIDI_COREMIDIINPORT_H
 
 #include <memory>
-#include "imidiinport.h"
 
-namespace mu {
-namespace midi {
-class CoreMidiInPort : public IMidiInPort
+#include "async/asyncable.h"
+#include "imidiinport.h"
+#include "internal/midideviceslistener.h"
+
+namespace mu::midi {
+class CoreMidiInPort : public IMidiInPort, public async::Asyncable
 {
 public:
     CoreMidiInPort();
     ~CoreMidiInPort() override;
 
-    std::vector<MidiDevice> devices() const override;
+    MidiDeviceList devices() const override;
+    async::Notification devicesChanged() const override;
 
     Ret connect(const MidiDeviceID& deviceID) override;
     void disconnect() override;
@@ -53,11 +56,13 @@ private:
 
     struct Core;
     std::unique_ptr<Core> m_core;
-    std::string m_deviceID;
+    MidiDeviceID m_deviceID;
     bool m_running = false;
     async::Channel<std::pair<tick_t, Event> > m_eventReceived;
+
+    async::Notification m_devicesChanged;
+    MidiDevicesListener m_devicesListener;
 };
-}
 }
 
 #endif // MU_MIDI_COREMIDIINPORT_H

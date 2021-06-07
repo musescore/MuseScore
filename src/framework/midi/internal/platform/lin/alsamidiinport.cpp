@@ -40,6 +40,25 @@ using namespace mu::midi;
 AlsaMidiInPort::AlsaMidiInPort()
 {
     m_alsa = std::unique_ptr<Alsa>(new Alsa());
+
+    m_devicesListener.reg([this]() {
+        return devices();
+    });
+
+    m_devicesListener.devicesChanged().onNotify(this, [this]() {
+        bool connectedDeviceRemoved = true;
+        for (const MidiDevice& device: devices()) {
+            if (m_deviceID == device.id) {
+                connectedDeviceRemoved = false;
+            }
+        }
+
+        if (connectedDeviceRemoved) {
+            disconnect();
+        }
+
+        m_devicesChanged.notify();
+    });
 }
 
 AlsaMidiInPort::~AlsaMidiInPort()
@@ -53,12 +72,12 @@ AlsaMidiInPort::~AlsaMidiInPort()
     }
 }
 
-std::vector<MidiDevice> AlsaMidiInPort::devices() const
+MidiDeviceList AlsaMidiInPort::devices() const
 {
     int streams = SND_SEQ_OPEN_INPUT;
     unsigned int cap = SND_SEQ_PORT_CAP_SUBS_WRITE | SND_SEQ_PORT_CAP_WRITE;
 
-    std::vector<MidiDevice> ret;
+    MidiDeviceList ret;
 
     snd_seq_client_info_t* cinfo;
     snd_seq_port_info_t* pinfo;
@@ -77,6 +96,10 @@ std::vector<MidiDevice> AlsaMidiInPort::devices() const
 
     while (snd_seq_query_next_client(handle, cinfo) >= 0) {
         client = snd_seq_client_info_get_client(cinfo);
+        if (client == SND_SEQ_CLIENT_SYSTEM) {
+            continue;
+        }
+
         snd_seq_port_info_alloca(&pinfo);
         snd_seq_port_info_set_client(pinfo, client);
 
@@ -98,8 +121,17 @@ std::vector<MidiDevice> AlsaMidiInPort::devices() const
     return ret;
 }
 
+mu::async::Notification AlsaMidiInPort::devicesChanged() const
+{
+    return m_devicesChanged;
+}
+
 mu::Ret AlsaMidiInPort::connect(const MidiDeviceID& deviceID)
 {
+    if (!deviceExists(deviceID)) {
+        return make_ret(Err::MidiFailedConnect, "not found device, id: " + deviceID);
+    }
+
     std::vector<std::string> cp;
     strings::split(deviceID, cp, ":");
     IF_ASSERT_FAILED(cp.size() == 2) {
@@ -278,4 +310,15 @@ bool AlsaMidiInPort::isRunning() const
 mu::async::Channel<std::pair<tick_t, Event> > AlsaMidiInPort::eventReceived() const
 {
     return m_eventReceived;
+}
+
+bool AlsaMidiInPort::deviceExists(const MidiDeviceID& deviceId) const
+{
+    for (const MidiDevice& device : devices()) {
+        if (device.id == deviceId) {
+            return true;
+        }
+    }
+
+    return false;
 }

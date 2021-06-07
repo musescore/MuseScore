@@ -143,7 +143,14 @@ using MidiDeviceID = std::string;
 struct MidiDevice {
     MidiDeviceID id;
     std::string name;
+
+    bool operator==(const MidiDevice& other) const
+    {
+        return id == other.id;
+    }
 };
+
+using MidiDeviceList = std::vector<MidiDevice>;
 }
 
 #endif // MU_MIDI_MIDITYPES_H

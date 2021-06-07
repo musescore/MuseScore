@@ -23,22 +23,25 @@
 #define MU_MIDI_WINMIDIOUTPORT_H
 
 #include <memory>
-#include "midi/imidioutport.h"
 
-namespace mu {
-namespace midi {
-class WinMidiOutPort : public IMidiOutPort
+#include "async/asyncable.h"
+#include "midi/imidioutport.h"
+#include "internal/midideviceslistener.h"
+
+namespace mu::midi {
+class WinMidiOutPort : public IMidiOutPort, public async::Asyncable
 {
 public:
     WinMidiOutPort();
     ~WinMidiOutPort() override;
 
-    std::vector<MidiDevice> devices() const override;
+    MidiDeviceList devices() const override;
+    async::Notification devicesChanged() const override;
 
-    Ret connect(const std::string& deviceID) override;
+    Ret connect(const MidiDeviceID& deviceID) override;
     void disconnect() override;
     bool isConnected() const override;
-    std::string deviceID() const override;
+    MidiDeviceID deviceID() const override;
 
     Ret sendEvent(const Event& e) override;
 
@@ -46,9 +49,11 @@ private:
 
     struct Win;
     std::unique_ptr<Win> m_win;
-    std::string m_deviceID;
+    MidiDeviceID m_deviceID;
+
+    async::Notification m_devicesChanged;
+    MidiDevicesListener m_devicesListener;
 };
-}
 }
 
 #endif // MU_MIDI_WINMIDIOUTPORT_H
