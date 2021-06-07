@@ -242,6 +242,6 @@ extern AccidentalType mxmlString2accidentalType(const QString mxmlName);
 extern SymId mxmlString2accSymId(const QString mxmlName);
 extern AccidentalType microtonalGuess(double val);
 extern bool isLaissezVibrer(const SymId id);
-extern bool hasLaissezVibrer(const Chord* const chord);
+extern const Articulation* findLaissezVibrer(const Chord* const chord);
 } // namespace Ms
 #endif
