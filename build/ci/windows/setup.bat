@@ -35,7 +35,7 @@ MKDIR %TEMP_DIR%
 ECHO "=== Install Qt ==="
 
 :: Default for x64
-SET "Qt_ARCHIVE=Qt5151_msvc2019_64.7z"
+SET "Qt_ARCHIVE=Qt5152_msvc2019_64.7z"
 
 IF %TARGET_PROCESSOR_BITS% == 32 (
     ::SET "Qt_ARCHIVE=qt599_msvc2015.7z"
