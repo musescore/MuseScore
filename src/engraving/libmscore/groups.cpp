@@ -27,6 +27,8 @@
 #include "tuplet.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   noteGroups

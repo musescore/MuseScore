@@ -34,6 +34,11 @@
 #include "navigate.h"
 #include "articulation.h"
 
+#include "draw/transform.h"
+
+using namespace mu;
+using namespace mu::draw;
+
 namespace Ms {
 //---------------------------------------------------------
 //   draw
@@ -118,7 +123,7 @@ bool SlurSegment::edit(EditData& ed)
         return true;
     }
     if (ed.key == Qt::Key_Home) {
-        ups(ed.curGrip).off = QPointF();              //TODO
+        ups(ed.curGrip).off = PointF();              //TODO
         sl->layout();
         return true;
     }
@@ -234,7 +239,7 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
     }
 
     const size_t segments  = spanner()->spannerSegments().size();
-    ups(ed.curGrip).off = QPointF();
+    ups(ed.curGrip).off = PointF();
     spanner()->layout();
     if (spanner()->spannerSegments().size() != segments) {
         const std::vector<SpannerSegment*>& ss = spanner()->spannerSegments();
@@ -249,7 +254,7 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
 //    compute help points of slur bezier segment
 //---------------------------------------------------------
 
-void SlurSegment::computeBezier(QPointF p6o)
+void SlurSegment::computeBezier(mu::PointF p6o)
 {
     qreal _spatium  = spatium();
     qreal shoulderW;                // height as fraction of slur-length
@@ -257,10 +262,10 @@ void SlurSegment::computeBezier(QPointF p6o)
     //
     // pp1 and pp2 are the end points of the slur
     //
-    QPointF pp1 = ups(Grip::START).p + ups(Grip::START).off;
-    QPointF pp2 = ups(Grip::END).p + ups(Grip::END).off;
+    PointF pp1 = ups(Grip::START).p + ups(Grip::START).off;
+    PointF pp2 = ups(Grip::END).p + ups(Grip::END).off;
 
-    QPointF p2 = pp2 - pp1;
+    PointF p2 = pp2 - pp1;
     if ((p2.x() == 0.0) && (p2.y() == 0.0)) {
         Measure* m1 = slur()->startCR()->segment()->measure();
         Measure* m2 = slur()->endCR()->segment()->measure();
@@ -271,7 +276,7 @@ void SlurSegment::computeBezier(QPointF p6o)
     }
 
     qreal sinb = atan(p2.y() / p2.x());
-    QTransform t;
+    Transform t;
     t.rotateRadians(-sinb);
     p2  = t.map(p2);
     p6o = t.map(p6o);
@@ -306,10 +311,10 @@ void SlurSegment::computeBezier(QPointF p6o)
     qreal c1   = (c - c * shoulderW) * .5 + p6o.x();
     qreal c2   = c1 + c * shoulderW + p6o.x();
 
-    QPointF p5 = QPointF(c * .5, 0.0);
+    PointF p5 = PointF(c * .5, 0.0);
 
-    QPointF p3(c1, -shoulderH);
-    QPointF p4(c2, -shoulderH);
+    PointF p3(c1, -shoulderH);
+    PointF p4(c2, -shoulderH);
 
     qreal w = score()->styleP(Sid::SlurMidWidth) - score()->styleP(Sid::SlurEndWidth);
     if (staff()) {
@@ -318,43 +323,43 @@ void SlurSegment::computeBezier(QPointF p6o)
     if ((c2 - c1) <= _spatium) {
         w *= .5;
     }
-    QPointF th(0.0, w);      // thickness of slur
+    PointF th(0.0, w);      // thickness of slur
 
-    QPointF p3o = p6o + t.map(ups(Grip::BEZIER1).off);
-    QPointF p4o = p6o + t.map(ups(Grip::BEZIER2).off);
+    PointF p3o = p6o + t.map(ups(Grip::BEZIER1).off);
+    PointF p4o = p6o + t.map(ups(Grip::BEZIER2).off);
 
     if (!p6o.isNull()) {
-        QPointF p6i = t.inverted().map(p6o);
+        PointF p6i = t.inverted().map(p6o);
         ups(Grip::BEZIER1).off += p6i;
         ups(Grip::BEZIER2).off += p6i;
     }
 
     //-----------------------------------calculate p6
-    QPointF pp3  = p3 + p3o;
-    QPointF pp4  = p4 + p4o;
-    QPointF ppp4 = pp4 - pp3;
+    PointF pp3  = p3 + p3o;
+    PointF pp4  = p4 + p4o;
+    PointF ppp4 = pp4 - pp3;
 
     qreal r2 = atan(ppp4.y() / ppp4.x());
     t.reset();
     t.rotateRadians(-r2);
-    QPointF p6  = QPointF(t.map(ppp4).x() * .5, 0.0);
+    PointF p6  = PointF(t.map(ppp4).x() * .5, 0.0);
 
     t.rotateRadians(2 * r2);
     p6 = t.map(p6) + pp3 - p6o;
     //-----------------------------------
 
-    path = QPainterPath();
-    path.moveTo(QPointF());
+    path = PainterPath();
+    path.moveTo(PointF());
     path.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
     if (slur()->lineType() == 0) {
-        path.cubicTo(p4 + p4o + th, p3 + p3o + th, QPointF());
+        path.cubicTo(p4 + p4o + th, p3 + p3o + th, PointF());
     }
 
-    th = QPointF(0.0, 3.0 * w);
-    shapePath = QPainterPath();
-    shapePath.moveTo(QPointF());
+    th = PointF(0.0, 3.0 * w);
+    shapePath = PainterPath();
+    shapePath.moveTo(PointF());
     shapePath.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
-    shapePath.cubicTo(p4 + p4o + th, p3 + p3o + th, QPointF());
+    shapePath.cubicTo(p4 + p4o + th, p3 + p3o + th, PointF());
 
     // translate back
     t.reset();
@@ -369,13 +374,13 @@ void SlurSegment::computeBezier(QPointF p6o)
     ups(Grip::SHOULDER).p = t.map(p6);
 
     _shape.clear();
-    QPointF start = pp1;
+    PointF start = pp1;
     int nbShapes  = 32;    // (pp2.x() - pp1.x()) / _spatium;
     qreal minH    = qAbs(3 * w);
     const CubicBezier b(pp1, ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
     for (int i = 1; i <= nbShapes; i++) {
-        const QPointF point = b.pointAtPercent(i / float(nbShapes));
-        QRectF re     = QRectF(start, point).normalized();
+        const PointF point = b.pointAtPercent(i / float(nbShapes));
+        RectF re     = RectF(start, point).normalized();
         if (re.height() < minH) {
             qreal d1 = (minH - re.height()) * .5;
             re.adjust(0.0, -d1, 0.0, d1);
@@ -389,9 +394,9 @@ void SlurSegment::computeBezier(QPointF p6o)
 //   layoutSegment
 //---------------------------------------------------------
 
-void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
+void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
 {
-    setPos(QPointF());
+    setPos(PointF());
     ups(Grip::START).p = p1;
     ups(Grip::END).p   = p2;
     _extraHeight = 0.0;
@@ -409,8 +414,8 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
         Segment* fs = system()->firstMeasure()->first();
         Segment* ss = slur()->startSegment();
         Segment* es = slur()->endSegment();
-        QPointF pp1 = ups(Grip::START).p;
-        QPointF pp2 = ups(Grip::END).p;
+        PointF pp1 = ups(Grip::START).p;
+        PointF pp2 = ups(Grip::END).p;
         qreal slurMaxMove = spatium();
         bool intersection = false;
         qreal gdist = 0.0;
@@ -443,13 +448,13 @@ void SlurSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
                     intersection = segShape.intersects(_shape);
                 }
                 if (up) {
-                    //QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).top() + s->y() + s->measure()->y());
+                    //PointF pt = PointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).top() + s->y() + s->measure()->y());
                     qreal dist = _shape.minVerticalDistance(segShape);
                     if (dist > 0.0) {
                         gdist = qMax(gdist, dist);
                     }
                 } else {
-                    //QPointF pt = QPointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).bottom() + s->y() + s->measure()->y());
+                    //PointF pt = PointF(s->x() + s->measure()->x(), s->staffShape(staffIdx()).bottom() + s->y() + s->measure()->y());
                     qreal dist = segShape.minVerticalDistance(_shape);
                     if (dist > 0.0) {
                         gdist = qMax(gdist, dist);
@@ -568,7 +573,7 @@ void Slur::slurPosChord(SlurPos* sp)
     }
     Q_ASSERT(sp->system1);
     sp->system2 = sp->system1;
-    QPointF pp(sp->system1->pagePos());
+    PointF pp(sp->system1->pagePos());
 
     qreal xo;
     qreal yo;
@@ -581,7 +586,7 @@ void Slur::slurPosChord(SlurPos* sp)
         xo = _startNote->x() + hw * 0.4;
         yo = _startNote->pos().y() + _spatium * .75 * __up;
     }
-    sp->p1 = stChord->pagePos() - pp + QPointF(xo, yo);
+    sp->p1 = stChord->pagePos() - pp + PointF(xo, yo);
 
     //------p2
     if ((enChord->notes().size() > 1) || (enChord->stem() && !enChord->up() && !_up)) {
@@ -591,7 +596,7 @@ void Slur::slurPosChord(SlurPos* sp)
         xo = _endNote->x() + hw * 0.15;
         yo = _endNote->pos().y() + _spatium * .75 * __up;
     }
-    sp->p2 = enChord->pagePos() - pp + QPointF(xo, yo);
+    sp->p2 = enChord->pagePos() - pp + PointF(xo, yo);
 }
 
 //---------------------------------------------------------
@@ -701,7 +706,7 @@ void Slur::slurPos(SlurPos* sp)
     qreal __up = _up ? -1.0 : 1.0;
     qreal hw1 = note1 ? note1->tabHeadWidth(stt) : scr->width();        // if stt == 0, tabHeadWidth()
     qreal hw2 = note2 ? note2->tabHeadWidth(stt) : ecr->width();        // defaults to headWidth()
-    QPointF pt;
+    PointF pt;
     switch (sa1) {
     case SlurAnchor::STEM:                //sc can't be null
     {
@@ -715,7 +720,7 @@ void Slur::slurPos(SlurPos* sp)
         // don't allow overlap with hook if not disabling the autoplace checks against start/end segments in SlurSegment::layoutSegment()
         qreal yadj = -0.25;               // sc->hook() ? 0.25 : -0.25;
         yadj *= _spatium * __up;
-        pt += QPointF(0.35 * _spatium, yadj);
+        pt += PointF(0.35 * _spatium, yadj);
         // account for articulations
         pt.ry() = fixArticulations(pt.y(), sc, __up, true);
         sp->p1 += pt;
@@ -734,7 +739,7 @@ void Slur::slurPos(SlurPos* sp)
         // don't allow overlap with beam
         qreal yadj = ec->beam() ? 0.75 : -0.25;
         yadj *= _spatium * __up;
-        pt += QPointF(-0.35 * _spatium, yadj);
+        pt += PointF(-0.35 * _spatium, yadj);
         // account for articulations
         pt.ry() = fixArticulations(pt.y(), ec, __up, true);
         sp->p2 += pt;
@@ -854,7 +859,7 @@ void Slur::slurPos(SlurPos* sp)
         }
 
         if (sa1 == SlurAnchor::NONE) {
-            sp->p1 += QPointF(xo, yo);
+            sp->p1 += PointF(xo, yo);
         }
 
         //------p2
@@ -955,7 +960,7 @@ void Slur::slurPos(SlurPos* sp)
                 yo = fixArticulations(yo, ec, __up, ec->up() == _up);
             }
 
-            sp->p2 += QPointF(xo, yo);
+            sp->p2 += PointF(xo, yo);
         }
     }
 }
@@ -1128,17 +1133,17 @@ SpannerSegment* Slur::layoutSystem(System* system)
         slurSegment->layoutSegment(sPos.p1, sPos.p2);
         break;
     case SpannerSegmentType::BEGIN:
-        slurSegment->layoutSegment(sPos.p1, QPointF(system->bbox().width(), sPos.p1.y()));
+        slurSegment->layoutSegment(sPos.p1, PointF(system->bbox().width(), sPos.p1.y()));
         break;
     case SpannerSegmentType::MIDDLE: {
         qreal x1 = system->firstNoteRestSegmentX(true);
         qreal x2 = system->bbox().width();
         qreal y  = staffIdx() > system->staves()->size() ? system->y() : system->staff(staffIdx())->y();
-        slurSegment->layoutSegment(QPointF(x1, y), QPointF(x2, y));
+        slurSegment->layoutSegment(PointF(x1, y), PointF(x2, y));
     }
     break;
     case SpannerSegmentType::END:
-        slurSegment->layoutSegment(QPointF(system->firstNoteRestSegmentX(true), sPos.p2.y()), sPos.p2);
+        slurSegment->layoutSegment(PointF(system->firstNoteRestSegmentX(true), sPos.p2.y()), sPos.p2);
         break;
     }
 
@@ -1172,7 +1177,7 @@ void Slur::layout()
             s = frontSegment();
         }
         s->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-        s->layoutSegment(QPointF(0, 0), QPointF(_spatium * 6, 0));
+        s->layoutSegment(PointF(0, 0), PointF(_spatium * 6, 0));
         setbbox(frontSegment()->bbox());
         return;
     }
@@ -1285,7 +1290,7 @@ void Slur::layout()
         else if (i == 0) {
             segment->setSpannerSegmentType(SpannerSegmentType::BEGIN);
             qreal x = system->bbox().width();
-            segment->layoutSegment(sPos.p1, QPointF(x, sPos.p1.y()));
+            segment->layoutSegment(sPos.p1, PointF(x, sPos.p1.y()));
         }
         // case 3: middle segment
         else if (i != 0 && system != sPos.system2) {
@@ -1293,19 +1298,19 @@ void Slur::layout()
             qreal x1 = system->firstNoteRestSegmentX(true);
             qreal x2 = system->bbox().width();
             qreal y  = staffIdx() > system->staves()->size() ? system->y() : system->staff(staffIdx())->y();
-            segment->layoutSegment(QPointF(x1, y), QPointF(x2, y));
+            segment->layoutSegment(PointF(x1, y), PointF(x2, y));
         }
         // case 4: end segment
         else {
             segment->setSpannerSegmentType(SpannerSegmentType::END);
             qreal x = system->firstNoteRestSegmentX(true);
-            segment->layoutSegment(QPointF(x, sPos.p2.y()), sPos.p2);
+            segment->layoutSegment(PointF(x, sPos.p2.y()), sPos.p2);
         }
         if (system == sPos.system2) {
             break;
         }
     }
-    setbbox(spannerSegments().empty() ? QRectF() : frontSegment()->bbox());
+    setbbox(spannerSegments().empty() ? RectF() : frontSegment()->bbox());
 }
 
 //---------------------------------------------------------

@@ -69,6 +69,8 @@
 
 #include "log.h"
 
+using namespace mu;
+
 namespace Ms {
 //int printNoteEventLists(NoteEventList el, int prefix, int j){
 //    int k=0;

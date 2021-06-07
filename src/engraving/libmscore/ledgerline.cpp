@@ -28,7 +28,7 @@
 #include "score.h"
 #include "xml.h"
 
-using namespace mu::draw;
+using namespace mu;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -48,11 +48,11 @@ LedgerLine::LedgerLine(Score* s)
 //   pagePos
 //---------------------------------------------------------
 
-QPointF LedgerLine::pagePos() const
+PointF LedgerLine::pagePos() const
 {
     System* system = chord()->measure()->system();
     qreal yp = y() + system->staff(staffIdx())->y() + system->y();
-    return QPointF(pageX(), yp);
+    return PointF(pageX(), yp);
 }
 
 //---------------------------------------------------------

@@ -38,7 +38,9 @@
 #include "chord.h"
 #include "changeMap.h"
 
-using namespace mu::draw;
+#include "draw/transform.h"
+
+using namespace mu;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -180,7 +182,7 @@ void HairpinSegment::layout()
             x1 = _text->width() + _spatium * .5;
         }
 
-        QTransform t;
+        Transform t;
         qreal h1 = hairpin()->hairpinHeight().val() * _spatium * .5;
         qreal h2 = hairpin()->hairpinContHeight().val() * _spatium * .5;
 
@@ -198,7 +200,7 @@ void HairpinSegment::layout()
         drawCircledTip   =  hairpin()->hairpinCircledTip();
         circledTipRadius = drawCircledTip ? 0.6 * _spatium * .5 : 0.0;
 
-        QLine l1, l2;
+        LineF l1, l2;
 
         switch (type) {
         case HairpinType::CRESC_HAIRPIN: {
@@ -255,24 +257,24 @@ void HairpinSegment::layout()
         points[3] = l2.p2();
         npoints   = 4;
 
-        QRectF r = QRectF(l1.p1(), l1.p2()).normalized() | QRectF(l2.p1(), l2.p2()).normalized();
+        RectF r = RectF(l1.p1(), l1.p2()).normalized().united(RectF(l2.p1(), l2.p2()).normalized());
         if (!_text->empty()) {
-            r |= _text->bbox();
+            r.unite(_text->bbox());
         }
         if (!_endText->empty()) {
-            r |= _endText->bbox().translated(x + _endText->bbox().width(), 0.0);
+            r.unite(_endText->bbox().translated(x + _endText->bbox().width(), 0.0));
         }
         qreal w  = point(score()->styleS(Sid::hairpinLineWidth));
         setbbox(r.adjusted(-w * .5, -w * .5, w, w));
     }
     if (!parent()) {
-        rpos() = QPointF();
-        roffset() = QPointF();
+        rpos() = PointF();
+        roffset() = PointF();
         return;
     }
 
     if (isStyled(Pid::OFFSET)) {
-        roffset() = hairpin()->propertyDefault(Pid::OFFSET).toPointF();
+        roffset() = hairpin()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
 
     // rebase vertical offset on drag
@@ -338,7 +340,7 @@ void HairpinSegment::layout()
                     if (sd->addToSkyline()) {
                         Segment* s = sd->segment();
                         Measure* m = s->measure();
-                        QRectF r = sd->bbox().translated(sd->pos());
+                        RectF r = sd->bbox().translated(sd->pos());
                         s->staffShape(sd->staffIdx()).add(r);
                         r = sd->bbox().translated(sd->pos() + s->pos() + m->pos());
                         m->system()->staff(sd->staffIdx())->skyline().add(r);
@@ -357,7 +359,7 @@ void HairpinSegment::layout()
                     if (ed->addToSkyline()) {
                         Segment* s = ed->segment();
                         Measure* m = s->measure();
-                        QRectF r = ed->bbox().translated(ed->pos());
+                        RectF r = ed->bbox().translated(ed->pos());
                         s->staffShape(ed->staffIdx()).add(r);
                         r = ed->bbox().translated(ed->pos() + s->pos() + m->pos());
                         m->system()->staff(ed->staffIdx())->skyline().add(r);
@@ -390,7 +392,7 @@ Shape HairpinSegment::shape() const
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<QPointF> HairpinSegment::gripsPositions(const EditData&) const
+std::vector<PointF> HairpinSegment::gripsPositions(const EditData&) const
 {
     qreal _spatium = spatium();
     qreal x = pos2().x();
@@ -398,11 +400,11 @@ std::vector<QPointF> HairpinSegment::gripsPositions(const EditData&) const
         x = _spatium;
     }
     qreal y = pos2().y();
-    QPointF p(x, y);
+    PointF p(x, y);
 
-    // Calc QPointF for Grip Aperture
-    QTransform doRotation;
-    QPointF gripLineAperturePoint;
+    // Calc PointF for Grip Aperture
+    Transform doRotation;
+    PointF gripLineAperturePoint;
     qreal h1 = hairpin()->hairpinHeight().val() * spatium() * .5;
     qreal len = sqrt(x * x + y * y);
     doRotation.rotateRadians(asin(y / len));
@@ -421,10 +423,10 @@ std::vector<QPointF> HairpinSegment::gripsPositions(const EditData&) const
     gripLineAperturePoint.setY(lineApertureH);
     gripLineAperturePoint = doRotation.map(gripLineAperturePoint);
 
-    std::vector<QPointF> grips(gripsCount());
+    std::vector<PointF> grips(gripsCount());
 
     // End calc position grip aperture
-    QPointF pp(pagePos());
+    PointF pp(pagePos());
     grips[int(Grip::START)] = pp;
     grips[int(Grip::END)] = p + pp;
     grips[int(Grip::MIDDLE)] = p * .5 + pp;
@@ -868,7 +870,7 @@ QVariant Hairpin::propertyDefault(Pid id) const
     case Pid::BEGIN_TEXT_OFFSET:
     case Pid::CONTINUE_TEXT_OFFSET:
     case Pid::END_TEXT_OFFSET:
-        return QPointF();
+        return QVariant::fromValue(PointF());
 
     case Pid::BEGIN_HOOK_TYPE:
     case Pid::END_HOOK_TYPE:

@@ -30,6 +30,8 @@
 #include <cmath>
 #include <QDebug>
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   interpolateVelocity

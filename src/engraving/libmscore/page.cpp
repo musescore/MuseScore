@@ -43,6 +43,8 @@
 #include "mscore.h"
 #include "segment.h"
 
+using namespace mu;
+
 namespace Ms {
 //! FIXME
 //extern QString revision;
@@ -66,7 +68,7 @@ Page::~Page()
 //   items
 //---------------------------------------------------------
 
-QList<Element*> Page::items(const QRectF& r)
+QList<Element*> Page::items(const RectF& r)
 {
 #ifdef USE_BSP
     if (!bspTreeValid) {
@@ -80,7 +82,7 @@ QList<Element*> Page::items(const QRectF& r)
 #endif
 }
 
-QList<Element*> Page::items(const QPointF& p)
+QList<Element*> Page::items(const mu::PointF& p)
 {
 #ifdef USE_BSP
     if (!bspTreeValid) {
@@ -105,7 +107,7 @@ void Page::appendSystem(System* s)
 
 //---------------------------------------------------------
 //   draw
-//    bounding rectangle fr is relative to page QPointF
+//    bounding rectangle fr is relative to page PointF
 //---------------------------------------------------------
 
 void Page::draw(mu::draw::Painter* painter) const
@@ -269,7 +271,7 @@ void Page::doRebuildBspTree()
     int n = 0;
     scanElements(&n, countElements, false);
 
-    QRectF r;
+    RectF r;
     if (score()->layoutMode() == LayoutMode::LINE) {
         qreal w = 0.0;
         qreal h = 0.0;
@@ -280,7 +282,7 @@ void Page::doRebuildBspTree()
                 w = mb->x() + mb->width();
             }
         }
-        r = QRectF(0.0, 0.0, w, h);
+        r = RectF(0.0, 0.0, w, h);
     } else {
         r = abbox();
     }
@@ -631,7 +633,7 @@ qreal Page::rm() const
 //    calculates and returns smallest rectangle containing all (visible) page elements
 //---------------------------------------------------------
 
-QRectF Page::tbbox()
+RectF Page::tbbox()
 {
     qreal x1 = width();
     qreal x2 = 0.0;
@@ -642,7 +644,7 @@ QRectF Page::tbbox()
         if (e == this || !e->isPrintable()) {
             continue;
         }
-        QRectF ebbox = e->pageBoundingRect();
+        RectF ebbox = e->pageBoundingRect();
         if (ebbox.left() < x1) {
             x1 = ebbox.left();
         }
@@ -657,7 +659,7 @@ QRectF Page::tbbox()
         }
     }
     if (x1 < x2 && y1 < y2) {
-        return QRectF(x1, y1, x2 - x1, y2 - y1);
+        return RectF(x1, y1, x2 - x1, y2 - y1);
     } else {
         return abbox();
     }

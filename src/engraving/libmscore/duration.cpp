@@ -29,6 +29,8 @@
 #include "xml.h"
 #include "property.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   DurationElement

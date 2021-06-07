@@ -29,7 +29,7 @@
 #include "symid.h"
 #include "system.h"
 
-using namespace mu::draw;
+using namespace mu;
 
 namespace Ms {
 static const ElementStyle measureRepeatStyle {
@@ -63,7 +63,7 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
     if (track() != -1) { // in score rather than palette
         qreal x = (symBbox(symId()).width() - symBbox(numberSym()).width()) * .5;
         qreal y = numberPos() * spatium() - staff()->height() * .5;
-        drawSymbols(numberSym(), painter, QPointF(x, y));
+        drawSymbols(numberSym(), painter, PointF(x, y));
         if (score()->styleB(Sid::fourMeasureRepeatShowExtenders) && numMeasures() == 4) {
             // TODO: add style settings specific to measure repeats
             // for now, using thickness and margin same as mmrests
@@ -149,15 +149,15 @@ void MeasureRepeat::layout()
 ///   returns the measure repeat number's bounding rectangle
 //---------------------------------------------------------
 
-QRectF MeasureRepeat::numberRect() const
+RectF MeasureRepeat::numberRect() const
 {
     if (track() == -1 || numberSym().empty()) { // don't display in palette
-        return QRectF();
+        return RectF();
     }
-    QRectF r = symBbox(numberSym());
+    RectF r = symBbox(numberSym());
     qreal x = (symBbox(symId()).width() - symBbox(numberSym()).width()) * .5;
     qreal y = numberPos() * spatium() - staff()->height() * .5;
-    r.translate(QPointF(x, y));
+    r.translate(PointF(x, y));
     return r;
 }
 

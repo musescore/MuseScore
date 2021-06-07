@@ -41,19 +41,19 @@ struct TextSegment {
     mu::draw::Font m_font;
     QString text;
     qreal x, y;         // Position of segments relative to each other.
-    QPointF offset;     // Offset for placing within the TextBase.
+    mu::PointF offset;     // Offset for placing within the TextBase.
     bool select;
 
     qreal width() const;
-    QRectF boundingRect() const;
-    QRectF tightBoundingRect() const;
-    QPointF pos() const { return QPointF(x, y) + offset; }
+    mu::RectF boundingRect() const;
+    mu::RectF tightBoundingRect() const;
+    mu::PointF pos() const { return mu::PointF(x, y) + offset; }
 
     TextSegment() { select = false; x = y = 0.0; }
     TextSegment(const mu::draw::Font& f, qreal _x, qreal _y)
         : m_font(f), x(_x), y(_y), select(false) {}
     TextSegment(const QString&, const mu::draw::Font&, qreal x, qreal y);
-    void set(const QString&, const mu::draw::Font&, qreal x, qreal y, QPointF offset);
+    void set(const QString&, const mu::draw::Font&, qreal x, qreal y, mu::PointF offset);
     void setText(const QString& t) { text = t; }
 };
 
@@ -103,7 +103,7 @@ class Harmony final : public TextBase
     bool _leftParen, _rightParen;         // include opening and/or closing parenthesis
     bool _play;                           // whether or not to play back the harmony
 
-    mutable QRectF _tbbox;
+    mutable mu::RectF _tbbox;
 
     NoteSpellingType _rootSpelling, _baseSpelling;
     NoteCaseType _rootCase, _baseCase;                // case as typed
@@ -216,7 +216,7 @@ public:
     void spatiumChanged(qreal oldValue, qreal newValue) override;
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
     void setHarmony(const QString& s);
-    QPoint calculateBoundingRect();
+    mu::PointF calculateBoundingRect();
     qreal xShapeOffset() const;
 
     QString userName() const override;

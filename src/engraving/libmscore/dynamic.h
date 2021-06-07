@@ -91,14 +91,14 @@ public:
 private:
     Type _dynamicType;
 
-    mutable QPointF dragOffset;
+    mutable mu::PointF dragOffset;
     int _velocity;       // associated midi velocity 0-127
     Range _dynRange;     // STAFF, PART, SYSTEM
 
     int _changeInVelocity         { 128 };
     Speed _velChangeSpeed         { Speed::NORMAL };
 
-    QRectF drag(EditData&) override;
+    mu::RectF drag(EditData&) override;
 
 public:
     Dynamic(Score*);

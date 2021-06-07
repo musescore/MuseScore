@@ -31,6 +31,8 @@
 #include "undo.h"
 #include "utils.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   cmdSplitMeasure

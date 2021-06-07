@@ -31,6 +31,8 @@
 #include "musescoreCore.h"
 #include "sym.h"
 
+using namespace mu;
+
 namespace Ms {
 ElementStyle const ScoreElement::emptyStyle;
 
@@ -356,7 +358,7 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
             } else {
                 sp = score()->spatium();
             }
-            ScoreElement::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).toPointF() * sp);
+            ScoreElement::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).value<PointF>() * sp);
             Element* e = toElement(this);
             e->setOffsetChanged(false);
         }
@@ -376,8 +378,8 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
         // TODO: do this in caller?
         if (isElement()) {
             Element* e = toElement(this);
-            if (e->offset() != v.toPointF()) {
-                e->setOffsetChanged(true, false, v.toPointF() - e->offset());
+            if (e->offset() != v.value<PointF>()) {
+                e->setOffsetChanged(true, false, v.value<PointF>() - e->offset());
             }
         }
     }
@@ -409,13 +411,13 @@ void ScoreElement::readProperty(XmlReader& e, Pid id)
         v = v.toReal() * score()->spatium();
         break;
     case P_TYPE::POINT_SP:
-        v = v.toPointF() * score()->spatium();
+        v = v.value<PointF>() * score()->spatium();
         break;
     case P_TYPE::POINT_SP_MM:
         if (offsetIsSpatiumDependent()) {
-            v = v.toPointF() * score()->spatium();
+            v = v.value<PointF>() * score()->spatium();
         } else {
-            v = v.toPointF() * DPMM;
+            v = v.value<PointF>() * DPMM;
         }
         break;
     default:
@@ -480,9 +482,9 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid pid) const
         p = QVariant(f1 / score()->spatium());
         d = QVariant();
     } else if (propertyType(pid) == P_TYPE::POINT_SP) {
-        QPointF p1 = p.toPointF();
+        PointF p1 = p.value<PointF>();
         if (d.isValid()) {
-            QPointF p2 = d.toPointF();
+            PointF p2 = d.value<PointF>();
             if ((qAbs(p1.x() - p2.x()) < 0.0001) && (qAbs(p1.y() - p2.y()) < 0.0001)) {
                 return;
             }
@@ -490,9 +492,9 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid pid) const
         p = QVariant(p1 / score()->spatium());
         d = QVariant();
     } else if (propertyType(pid) == P_TYPE::POINT_SP_MM) {
-        QPointF p1 = p.toPointF();
+        PointF p1 = p.value<PointF>();
         if (d.isValid()) {
-            QPointF p2 = d.toPointF();
+            PointF p2 = d.value<PointF>();
             if ((qAbs(p1.x() - p2.x()) < 0.0001) && (qAbs(p1.y() - p2.y()) < 0.0001)) {
                 return;
             }
@@ -523,7 +525,7 @@ QString ScoreElement::propertyUserValue(Pid id) const
     switch (propertyType(id)) {
     case P_TYPE::POINT_SP:
     {
-        QPointF p = val.toPointF();
+        PointF p = val.value<PointF>();
         return QString("(%1, %2)").arg(p.x()).arg(p.y());
     }
     case P_TYPE::DIRECTION:
@@ -949,7 +951,7 @@ QVariant ScoreElement::styleValue(Pid pid, Sid sid) const
     case P_TYPE::SP_REAL:
         return score()->styleP(sid);
     case P_TYPE::POINT_SP: {
-        QPointF val = score()->styleV(sid).toPointF() * score()->spatium();
+        PointF val = score()->styleV(sid).value<PointF>() * score()->spatium();
         if (isElement()) {
             const Element* e = toElement(this);
             if (e->staff() && !e->systemFlag()) {
@@ -959,7 +961,7 @@ QVariant ScoreElement::styleValue(Pid pid, Sid sid) const
         return val;
     }
     case P_TYPE::POINT_SP_MM: {
-        QPointF val = score()->styleV(sid).toPointF();
+        PointF val = score()->styleV(sid).value<PointF>();
         if (offsetIsSpatiumDependent()) {
             val *= score()->spatium();
             if (isElement()) {

@@ -55,8 +55,8 @@ void Element::setOffsetY(qreal offY)
 
 QRectF Element::bbox() const
 {
-    QRectF bbox       = element()->bbox();
-    qreal spatium    = element()->spatium();
+    mu::RectF bbox = element()->bbox();
+    qreal spatium = element()->spatium();
     return QRectF(bbox.x() / spatium, bbox.y() / spatium, bbox.width() / spatium, bbox.height() / spatium);
 }
 

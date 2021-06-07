@@ -47,7 +47,7 @@ class Beam final : public Element
 {
     Q_GADGET
     QVector<ChordRest*> _elements;          // must be sorted by tick
-    QVector<QLineF*> beamSegments;
+    QVector<mu::LineF*> beamSegments;
     Direction _direction;
 
     bool _up;
@@ -100,8 +100,8 @@ public:
 
     Beam* clone() const override { return new Beam(*this); }
     ElementType type() const override { return ElementType::BEAM; }
-    QPointF pagePos() const override;      ///< position in page coordinates
-    QPointF canvasPos() const override;    ///< position in page coordinates
+    mu::PointF pagePos() const override;      ///< position in page coordinates
+    mu::PointF canvasPos() const override;    ///< position in page coordinates
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override;
@@ -135,7 +135,7 @@ public:
     void add(Element*) override;
     void remove(Element*) override;
 
-    void move(const QPointF&) override;
+    void move(const mu::PointF&) override;
     void draw(mu::draw::Painter*) const override;
 
     bool up() const { return _up; }
@@ -164,8 +164,8 @@ public:
     bool userModified() const;
     void setUserModified(bool val);
 
-    QPointF beamPos() const;
-    void setBeamPos(const QPointF& bp);
+    mu::PointF beamPos() const;
+    void setBeamPos(const mu::PointF& bp);
 
     qreal beamDist() const { return _beamDist; }
 
@@ -184,11 +184,11 @@ public:
     int gripsCount() const override { return 3; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::MIDDLE; }
-    std::vector<QPointF> gripsPositions(const EditData&) const override;
+    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
     static IconType iconType(Mode);
 
-    QRectF drag(EditData&) override;
+    mu::RectF drag(EditData&) override;
     bool isMovable() const override;
     void startDrag(EditData&) override;
 

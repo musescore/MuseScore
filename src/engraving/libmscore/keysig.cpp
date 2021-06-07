@@ -31,6 +31,8 @@
 #include "undo.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 const char* keyNames[] = {
     QT_TRANSLATE_NOOP("MuseScore", "G major, E minor"),
@@ -88,7 +90,7 @@ void KeySig::addLayout(SymId sym, qreal x, int line)
     qreal stepDistance = staff() ? staff()->lineDistance(tick()) * 0.5 : 0.5;
     KeySym ks;
     ks.sym    = sym;
-    ks.spos   = QPointF(x, qreal(line) * stepDistance);
+    ks.spos   = PointF(x, qreal(line) * stepDistance);
     _sig.keySymbols().append(ks);
 }
 
@@ -99,7 +101,7 @@ void KeySig::addLayout(SymId sym, qreal x, int line)
 void KeySig::layout()
 {
     qreal _spatium = spatium();
-    setbbox(QRectF());
+    setbbox(RectF());
 
     if (isCustom() && !isAtonal()) {
         for (KeySym& ks: _sig.keySymbols()) {
@@ -324,12 +326,12 @@ void KeySig::draw(mu::draw::Painter* painter) const
     TRACE_OBJ_DRAW;
     painter->setPen(curColor());
     for (const KeySym& ks: _sig.keySymbols()) {
-        drawSymbol(ks.sym, painter, QPointF(ks.pos.x(), ks.pos.y()));
+        drawSymbol(ks.sym, painter, PointF(ks.pos.x(), ks.pos.y()));
     }
     if (!parent() && (isAtonal() || isCustom()) && _sig.keySymbols().empty()) {
         // empty custom or atonal key signature - draw something for palette
         painter->setPen(Qt::gray);
-        drawSymbol(SymId::timeSigX, painter, QPointF(symWidth(SymId::timeSigX) * -0.5, 2.0 * spatium()));
+        drawSymbol(SymId::timeSigX, painter, PointF(symWidth(SymId::timeSigX) * -0.5, 2.0 * spatium()));
     }
 }
 

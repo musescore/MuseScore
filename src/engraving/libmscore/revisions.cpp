@@ -23,6 +23,8 @@
 #include "revisions.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   Revision

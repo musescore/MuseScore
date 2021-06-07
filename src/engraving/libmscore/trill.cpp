@@ -35,6 +35,8 @@
 #include "segment.h"
 #include "staff.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   trillTable
@@ -118,7 +120,7 @@ void TrillSegment::symbolLine(SymId start, SymId fill)
     for (int i = 0; i < n; ++i) {
         _symbols.push_back(fill);
     }
-    QRectF r(f->bbox(_symbols, mag));
+    RectF r(f->bbox(_symbols, mag));
     setbbox(r);
 }
 
@@ -140,7 +142,7 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
         _symbols.push_back(fill);
     }
     _symbols.push_back(end);
-    QRectF r(f->bbox(_symbols, mag));
+    RectF r(f->bbox(_symbols, mag));
     setbbox(r);
 }
 
@@ -186,7 +188,7 @@ void TrillSegment::layout()
         symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
     }
     if (isStyled(Pid::OFFSET)) {
-        roffset() = trill()->propertyDefault(Pid::OFFSET).toPointF();
+        roffset() = trill()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
 
     autoplaceSpannerSegment();

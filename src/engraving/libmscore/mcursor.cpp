@@ -34,6 +34,8 @@
 #include "libmscore/keysig.h"
 #include "libmscore/timesig.h"
 
+using namespace mu;
+
 namespace Ms {
 extern MScore* mscore;
 

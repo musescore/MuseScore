@@ -23,8 +23,6 @@
 #ifndef __SLURTIE_H__
 #define __SLURTIE_H__
 
-#include <QPainterPath>
-
 #include "spanner.h"
 #include "mscore.h"
 
@@ -34,14 +32,14 @@ namespace Ms {
 //---------------------------------------------------------
 
 struct SlurPos {
-    QPointF p1;               // start point of slur
+    mu::PointF p1;               // start point of slur
     System* system1;          // start system of slur
-    QPointF p2;               // end point of slur
+    mu::PointF p2;               // end point of slur
     System* system2;          // end system of slur
 };
 
 struct SlurOffsets {
-    QPointF o[4];
+    mu::PointF o[4];
 };
 
 //---------------------------------------------------------
@@ -49,10 +47,10 @@ struct SlurOffsets {
 //---------------------------------------------------------
 
 struct UP {
-    QPointF p;              // layout position relative to pos()
-    QPointF off;            // user offset in point units
+    mu::PointF p;              // layout position relative to pos()
+    mu::PointF off;            // user offset in point units
 
-    QPointF pos() const { return p + off; }
+    mu::PointF pos() const { return p + off; }
     bool operator!=(const UP& up) const { return p != up.p || off != up.off; }
 };
 
@@ -64,21 +62,21 @@ struct UP {
 
 class CubicBezier
 {
-    QPointF p1;
-    QPointF p2;
-    QPointF p3;
-    QPointF p4;
+    mu::PointF p1;
+    mu::PointF p2;
+    mu::PointF p3;
+    mu::PointF p4;
 
 public:
-    CubicBezier(QPointF _p1, QPointF _p2, QPointF _p3, QPointF _p4)
+    CubicBezier(mu::PointF _p1, mu::PointF _p2, mu::PointF _p3, mu::PointF _p4)
         : p1(_p1), p2(_p2), p3(_p3), p4(_p4) {}
 
-    QPointF pointAtPercent(qreal t) const
+    mu::PointF pointAtPercent(qreal t) const
     {
         Q_ASSERT(t >= 0.0 && t <= 1.0);
         const qreal r = 1.0 - t;
-        const QPointF B123 = r * (r * p1 + t * p2) + t * (r * p2 + t * p3);
-        const QPointF B234 = r * (r * p2 + t * p3) + t * (r * p3 + t * p4);
+        const mu::PointF B123 = r * (r * p1 + t * p2) + t * (r * p2 + t * p3);
+        const mu::PointF B234 = r * (r * p2 + t * p3) + t * (r * p3 + t * p4);
         return r * B123 + t * B234;
     }
 };
@@ -94,12 +92,12 @@ class SlurTieSegment : public SpannerSegment
 protected:
     struct UP _ups[int(Grip::GRIPS)];
 
-    QPainterPath path;
-    QPainterPath shapePath;
+    mu::PainterPath path;
+    mu::PainterPath shapePath;
     Shape _shape;
 
     virtual void changeAnchor(EditData&, Element*) = 0;
-    QVector<QLineF> gripAnchorLines(Grip grip) const override;
+    QVector<mu::LineF> gripAnchorLines(Grip grip) const override;
 
 public:
     SlurTieSegment(Score*);
@@ -116,10 +114,10 @@ public:
     virtual QVariant propertyDefault(Pid id) const override;
     virtual void reset() override;
     virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
-    virtual void move(const QPointF& s) override;
+    void move(const mu::PointF& s) override;
     virtual bool isEditable() const override { return true; }
 
-    void setSlurOffset(Grip i, const QPointF& val) { _ups[int(i)].off = val; }
+    void setSlurOffset(Grip i, const mu::PointF& val) { _ups[int(i)].off = val; }
     const UP& ups(Grip i) const { return _ups[int(i)]; }
     UP& ups(Grip i) { return _ups[int(i)]; }
     virtual Shape shape() const override { return _shape; }
@@ -128,12 +126,12 @@ public:
     int gripsCount() const override { return int(Grip::GRIPS); }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::DRAG; }
-    std::vector<QPointF> gripsPositions(const EditData& = EditData()) const override;
+    std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
 
     void writeSlur(XmlWriter& xml, int no) const;
     void read(XmlReader&) override;
     virtual void drawEditMode(mu::draw::Painter*, EditData&) override;
-    virtual void computeBezier(QPointF so = QPointF()) = 0;
+    virtual void computeBezier(mu::PointF so = mu::PointF()) = 0;
 };
 
 //-------------------------------------------------------------------
@@ -165,8 +163,8 @@ public:
     void setSlurDirection(Direction d) { _slurDirection = d; }
     void undoSetSlurDirection(Direction d);
 
-    virtual void layout2(const QPointF, int, struct UP&) {}
-    virtual bool contains(const QPointF&) const { return false; }    // not selectable
+    virtual void layout2(const mu::PointF, int, struct UP&) {}
+    virtual bool contains(const mu::PointF&) const { return false; }    // not selectable
 
     virtual void read(XmlReader&) override;
 

@@ -55,7 +55,7 @@ class BarLine;
 
 class SysStaff
 {
-    QRectF _bbox;                   // Bbox of StaffLines.
+    mu::RectF _bbox;                   // Bbox of StaffLines.
     Skyline _skyline;
     qreal _yOff   { 0.0 };          // offset of top staff line within bbox
     qreal _yPos   { 0.0 };          // y position of bbox after System::layout2
@@ -67,9 +67,9 @@ public:
     //int idx     { 0    };
     QList<InstrumentName*> instrumentNames;
 
-    const QRectF& bbox() const { return _bbox; }
-    QRectF& bbox() { return _bbox; }
-    void setbbox(const QRectF& r) { _bbox = r; }
+    const mu::RectF& bbox() const { return _bbox; }
+    mu::RectF& bbox() { return _bbox; }
+    void setbbox(const mu::RectF& r) { _bbox = r; }
     qreal y() const { return _bbox.y() + _yOff; }
     void setYOff(qreal offset) { _yOff = offset; }
     qreal yOffset() const { return _yOff; }
@@ -157,7 +157,7 @@ public:
     void restoreLayout2();
     void clear();                         ///< Clear measure list.
 
-    QRectF bboxStaff(int staff) const { return _staves[staff]->bbox(); }
+    mu::RectF bboxStaff(int staff) const { return _staves[staff]->bbox(); }
     QList<SysStaff*>* staves() { return &_staves; }
     const QList<SysStaff*>* staves() const { return &_staves; }
     qreal staffYpage(int staffIdx) const;
@@ -173,8 +173,8 @@ public:
     int y2staff(qreal y) const;
     int searchStaff(qreal y, int preferredStaff = -1, qreal spacingFactor = 0.5) const;
     void setInstrumentNames(bool longName, Fraction tick = { 0, 1 });
-    Fraction snap(const Fraction& tick, const QPointF p) const;
-    Fraction snapNote(const Fraction& tick, const QPointF p, int staff) const;
+    Fraction snap(const Fraction& tick, const mu::PointF p) const;
+    Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
 
     const std::vector<MeasureBase*>& measures() const { return ml; }
 

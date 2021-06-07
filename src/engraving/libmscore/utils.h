@@ -27,6 +27,8 @@
 #include "interval.h"
 #include "symid.h"
 
+#include "draw/geometry.h"
+
 namespace Ms {
 enum class Key;
 
@@ -52,9 +54,9 @@ class Fraction;
 
 enum class ClefType : signed char;
 
-extern QRectF handleRect(const QPointF& pos);
+extern mu::RectF handleRect(const mu::PointF& pos);
 
-extern int getStaff(System* system, const QPointF& p);
+extern int getStaff(System* system, const mu::PointF& p);
 extern int pitchKeyAdjust(int note, Key);
 extern int line2pitch(int line, ClefType clef, Key);
 extern int y2pitch(qreal y, ClefType clef, qreal spatium);

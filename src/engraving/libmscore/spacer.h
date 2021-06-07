@@ -23,7 +23,6 @@
 #ifndef __SPACER_H__
 #define __SPACER_H__
 
-#include <QPainterPath>
 #include "element.h"
 
 namespace Ms {
@@ -45,7 +44,7 @@ class Spacer final : public Element
     SpacerType _spacerType;
     qreal _gap;
 
-    QPainterPath path;
+    mu::PainterPath path;
 
     void layout0();
 
@@ -79,7 +78,7 @@ public:
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<QPointF> gripsPositions(const EditData&) const override;
+    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;

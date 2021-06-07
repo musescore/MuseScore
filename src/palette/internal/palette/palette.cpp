@@ -72,6 +72,7 @@
 
 #include "../palette_config.h"
 
+using namespace mu;
 using namespace mu::framework;
 using namespace mu::palette;
 using namespace mu::actions;
@@ -558,7 +559,7 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
             QMimeData* mimeData = new QMimeData;
             const ElementPtr el   = cell->element;
 
-            mimeData->setData(mu::commonscene::MIME_SYMBOL_FORMAT, el->mimeData(QPointF()));
+            mimeData->setData(mu::commonscene::MIME_SYMBOL_FORMAT, el->mimeData(PointF()));
             drag->setMimeData(mimeData);
 
             drag->setPixmap(pixmap(m_currentIdx));
@@ -907,7 +908,7 @@ PaletteCellPtr Palette::add(int idx, ElementPtr element, const QString& name, QS
 {
     if (element) {
         element->setPos(0.0, 0.0);
-        element->setOffset(QPointF());
+        element->setOffset(PointF());
     }
 
     PaletteCellPtr cell = std::make_shared<PaletteCell>();
@@ -1008,7 +1009,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
     painter.setAntialiasing(true);
 
     painter.setPen(configuration()->gridColor());
-    painter.drawRoundedRect(QRectF(0, 0, width(), height()), 2, 2);
+    painter.drawRoundedRect(RectF(0, 0, width(), height()), 2, 2);
 
     //
     // draw grid
@@ -1044,8 +1045,8 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
 
     for (int idx = 0; idx < ccp().size(); ++idx) {
         int yoffset  = gscore->spatium() * m_yOffsetSpatium;
-        QRect r      = idxRect(idx);
-        QRect rShift = r.translated(0, yoffset);
+        RectF r      = RectF::fromQRectF(idxRect(idx));
+        RectF rShift = r.translated(0, yoffset);
         painter.setPen(pen);
         QColor c(configuration()->accentColor());
 
@@ -1073,7 +1074,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
             f.setPointSizeF(12.0);
             painter.setFont(f);
             if (tag == "ShowMore") {
-                painter.drawText(idxRect(idx), Qt::AlignCenter, "???");
+                painter.drawText(RectF::fromQRectF(idxRect(idx)), Qt::AlignCenter, "???");
             } else {
                 painter.drawText(rShift, Qt::AlignLeft | Qt::AlignTop, tag);
             }
@@ -1104,7 +1105,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
             for (int i = 0; i < 5; ++i) {
                 qreal yy = y + i * magS;
                 painter.setPen(configuration()->elementsColor());
-                painter.drawLine(QLineF(x, yy, x + w, yy));
+                painter.drawLine(LineF(x, yy, x + w, yy));
             }
         }
         painter.save();
@@ -1167,7 +1168,7 @@ QPixmap Palette::pixmap(int paletteIdx) const
     ElementPtr element = cell->element;
     element->layout();
 
-    QRectF r = element->bbox();
+    RectF r = element->bbox();
     int w = lrint(r.width() * cellMag);
     int h = lrint(r.height() * cellMag);
 
@@ -1188,7 +1189,7 @@ QPixmap Palette::pixmap(int paletteIdx) const
     painter.scale(cellMag, cellMag);
 
     painter.translate(-r.topLeft());
-    QPointF pos = element->ipos();
+    PointF pos = element->ipos();
     element->setPos(0, 0);
 
     QColor color;
@@ -1743,7 +1744,7 @@ void Palette::dropEvent(QDropEvent* event)
     } else if (datap->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
         QByteArray dta(event->mimeData()->data(mu::commonscene::MIME_SYMBOL_FORMAT));
         XmlReader xml(dta);
-        QPointF dragOffset;
+        PointF dragOffset;
         Fraction duration;
         ElementType type = Element::readType(xml, &dragOffset, &duration);
 

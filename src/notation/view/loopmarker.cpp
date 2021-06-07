@@ -23,7 +23,7 @@
 #include "loopmarker.h"
 
 using namespace mu::notation;
-using namespace mu::draw;
+using namespace mu;
 
 LoopMarker::LoopMarker(LoopBoundaryType type)
     : m_type(type)

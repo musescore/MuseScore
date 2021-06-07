@@ -59,6 +59,8 @@
 #include "trill.h"
 #include "tuplet.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   Score

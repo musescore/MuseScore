@@ -25,7 +25,6 @@
 
 #include <QVariant>
 #include <QString>
-#include <QPainterPath>
 
 namespace Ms {
 class XmlReader;
@@ -438,7 +437,7 @@ enum class P_TYPE : char {
     KEYMODE,            // enum class KeyMode
     ORIENTATION,        // enum class Orientation
 
-    PATH,               // QPainterPath
+    PATH,               // mu::PainterPath
     HEAD_SCHEME,        // enum class NoteHead::Scheme
 };
 
@@ -452,7 +451,5 @@ extern Pid propertyId(const QString& name);
 extern Pid propertyId(const QStringRef& name);
 extern QString propertyUserName(Pid);
 }     // namespace Ms
-
-Q_DECLARE_METATYPE(QPainterPath); // for properties with P_TYPE::PATH
 
 #endif

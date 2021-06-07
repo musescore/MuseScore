@@ -35,7 +35,7 @@
 #include "measure.h"
 #include "system.h"
 
-using namespace mu::draw;
+using namespace mu;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -456,7 +456,7 @@ void Tuplet::layout()
                     const Chord* chord = toChord(e);
                     const Stem* stem = chord->stem();
                     if (stem) {
-                        QRectF r(chord->up() ? stem->abbox() : chord->upNote()->abbox());
+                        RectF r(chord->up() ? stem->abbox() : chord->upNote()->abbox());
                         qreal y3 = r.top();
                         qreal x3 = r.x() + r.width() * .5;
                         qreal y0 = p1.y() + (x3 - p1.x()) * d;
@@ -567,7 +567,7 @@ void Tuplet::layout()
                     const Chord* chord = toChord(e);
                     const Stem* stem = chord->stem();
                     if (stem) {
-                        QRectF r(chord->up() ? chord->downNote()->abbox() : stem->abbox());
+                        RectF r(chord->up() ? chord->downNote()->abbox() : stem->abbox());
                         qreal y3 = r.bottom();
                         qreal x3 = r.x() + r.width() * .5;
                         qreal y0 = p1.y() + (x3 - p1.x()) * d;
@@ -583,7 +583,7 @@ void Tuplet::layout()
     }
 
     setPos(0.0, 0.0);
-    QPointF mp(parent()->pagePos());
+    PointF mp(parent()->pagePos());
     if (parent()->isMeasure()) {
         System* s = toMeasure(parent())->system();
         if (s) {
@@ -627,7 +627,7 @@ void Tuplet::layout()
             x3 = p1.x() + deltax * .5;
         }
 
-        _number->setPos(QPointF(x3, y3) - ipos());
+        _number->setPos(PointF(x3, y3) - ipos());
     }
 
     if (_hasBracket) {
@@ -635,61 +635,61 @@ void Tuplet::layout()
 
         if (_isUp) {
             if (_number) {
-                bracketL[0] = QPointF(p1.x(), p1.y());
-                bracketL[1] = QPointF(p1.x(), p1.y() - l1);
+                bracketL[0] = PointF(p1.x(), p1.y());
+                bracketL[1] = PointF(p1.x(), p1.y() - l1);
                 //set width of bracket hole
                 qreal x     = x3 - numberWidth * .5 - _spatium * .5;
 
                 qreal y     = p1.y() + (x - p1.x()) * slope;
-                bracketL[2] = QPointF(x,   y - l1);
+                bracketL[2] = PointF(x,   y - l1);
 
                 //set width of bracket hole
                 x           = x3 + numberWidth * .5 + _spatium * .5;
                 y           = p1.y() + (x - p1.x()) * slope;
-                bracketR[0] = QPointF(x,   y - l1);
-                bracketR[1] = QPointF(p2.x(), p2.y() - l1);
-                bracketR[2] = QPointF(p2.x(), p2.y());
+                bracketR[0] = PointF(x,   y - l1);
+                bracketR[1] = PointF(p2.x(), p2.y() - l1);
+                bracketR[2] = PointF(p2.x(), p2.y());
             } else {
-                bracketL[0] = QPointF(p1.x(), p1.y());
-                bracketL[1] = QPointF(p1.x(), p1.y() - l1);
-                bracketL[2] = QPointF(p2.x(), p2.y() - l1);
-                bracketL[3] = QPointF(p2.x(), p2.y());
+                bracketL[0] = PointF(p1.x(), p1.y());
+                bracketL[1] = PointF(p1.x(), p1.y() - l1);
+                bracketL[2] = PointF(p2.x(), p2.y() - l1);
+                bracketL[3] = PointF(p2.x(), p2.y());
             }
         } else {
             if (_number) {
-                bracketL[0] = QPointF(p1.x(), p1.y());
-                bracketL[1] = QPointF(p1.x(), p1.y() + l1);
+                bracketL[0] = PointF(p1.x(), p1.y());
+                bracketL[1] = PointF(p1.x(), p1.y() + l1);
                 //set width of bracket hole
                 qreal x     = x3 - numberWidth * .5 - _spatium * .5;
                 qreal y     = p1.y() + (x - p1.x()) * slope;
-                bracketL[2] = QPointF(x,   y + l1);
+                bracketL[2] = PointF(x,   y + l1);
 
                 //set width of bracket hole
                 x           = x3 + numberWidth * .5 + _spatium * .5;
                 y           = p1.y() + (x - p1.x()) * slope;
-                bracketR[0] = QPointF(x,   y + l1);
-                bracketR[1] = QPointF(p2.x(), p2.y() + l1);
-                bracketR[2] = QPointF(p2.x(), p2.y());
+                bracketR[0] = PointF(x,   y + l1);
+                bracketR[1] = PointF(p2.x(), p2.y() + l1);
+                bracketR[2] = PointF(p2.x(), p2.y());
             } else {
-                bracketL[0] = QPointF(p1.x(), p1.y());
-                bracketL[1] = QPointF(p1.x(), p1.y() + l1);
-                bracketL[2] = QPointF(p2.x(), p2.y() + l1);
-                bracketL[3] = QPointF(p2.x(), p2.y());
+                bracketL[0] = PointF(p1.x(), p1.y());
+                bracketL[1] = PointF(p1.x(), p1.y() + l1);
+                bracketL[2] = PointF(p2.x(), p2.y() + l1);
+                bracketL[3] = PointF(p2.x(), p2.y());
             }
         }
     }
 
     // collect bounding box
-    QRectF r;
+    RectF r;
     if (_number) {
         r |= _number->bbox().translated(_number->pos());
         if (_hasBracket) {
-            QRectF b;
+            RectF b;
             b.setCoords(bracketL[1].x(), bracketL[1].y(), bracketR[2].x(), bracketR[2].y());
             r |= b;
         }
     } else if (_hasBracket) {
-        QRectF b;
+        RectF b;
         b.setCoords(bracketL[1].x(), bracketL[1].y(), bracketL[3].x(), bracketL[3].y());
         r |= b;
     }
@@ -716,7 +716,7 @@ void Tuplet::draw(mu::draw::Painter* painter) const
     QColor color(curColor());
     if (_number) {
         painter->setPen(color);
-        QPointF pos(_number->pos());
+        PointF pos(_number->pos());
         painter->translate(pos);
         _number->draw(painter);
         painter->translate(-pos);
@@ -1015,9 +1015,9 @@ void Tuplet::editDrag(EditData& ed)
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<QPointF> Tuplet::gripsPositions(const EditData&) const
+std::vector<PointF> Tuplet::gripsPositions(const EditData&) const
 {
-    const QPointF pp(pagePos());
+    const PointF pp(pagePos());
     return { pp + p1, pp + p2 };
 }
 
@@ -1027,8 +1027,8 @@ std::vector<QPointF> Tuplet::gripsPositions(const EditData&) const
 
 void Tuplet::reset()
 {
-    undoChangeProperty(Pid::P1, QPointF());
-    undoChangeProperty(Pid::P2, QPointF());
+    undoChangeProperty(Pid::P1, PointF());
+    undoChangeProperty(Pid::P2, PointF());
     Element::reset();
 }
 
@@ -1173,10 +1173,10 @@ bool Tuplet::setProperty(Pid propertyId, const QVariant& v)
         _ratio.setNumerator(v.toInt());
         break;
     case Pid::P1:
-        _p1 = v.toPointF();
+        _p1 = v.value<PointF>();
         break;
     case Pid::P2:
-        _p2 = v.toPointF();
+        _p2 = v.value<PointF>();
         break;
     case Pid::FONT_SIZE:
     case Pid::FONT_FACE:
@@ -1215,7 +1215,7 @@ QVariant Tuplet::propertyDefault(Pid id) const
         return 0;
     case Pid::P1:
     case Pid::P2:
-        return QPointF();
+        return PointF();
     case Pid::ALIGN:
         return score()->styleV(Sid::tupletAlign);
     case Pid::FONT_FACE:

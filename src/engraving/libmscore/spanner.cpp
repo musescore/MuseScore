@@ -33,6 +33,8 @@
 #include "lyrics.h"
 #include "musescoreCore.h"
 
+using namespace mu;
+
 namespace Ms {
 //-----------------------------------------------------------------------------
 //   @@ SpannerWriter
@@ -127,7 +129,7 @@ void SpannerSegment::spatiumChanged(qreal ov, qreal nv)
 //   mimeData
 //---------------------------------------------------------
 
-QByteArray SpannerSegment::mimeData(const QPointF& dragOffset) const
+QByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
 {
     if (dragOffset.isNull()) { // where is dragOffset used?
         return spanner()->mimeData(dragOffset);
@@ -175,7 +177,7 @@ bool SpannerSegment::setProperty(Pid pid, const QVariant& v)
     }
     switch (pid) {
     case Pid::OFFSET2:
-        _offset2 = v.toPointF();
+        _offset2 = v.value<PointF>();
         triggerLayoutAll();
         break;
     default:
@@ -252,7 +254,7 @@ void SpannerSegment::styleChanged()
 
 void SpannerSegment::reset()
 {
-    undoChangeProperty(Pid::OFFSET2, QPointF());
+    undoChangeProperty(Pid::OFFSET2, PointF());
     Element::reset();
     spanner()->reset();
 }
@@ -1570,11 +1572,11 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
 void SpannerSegment::autoplaceSpannerSegment()
 {
     if (!parent()) {
-        setOffset(QPointF());
+        setOffset(PointF());
         return;
     }
     if (isStyled(Pid::OFFSET)) {
-        setOffset(spanner()->propertyDefault(Pid::OFFSET).toPointF());
+        setOffset(spanner()->propertyDefault(Pid::OFFSET).value<PointF>());
     }
 
     if (spanner()->anchor() == Spanner::Anchor::NOTE) {
@@ -1635,7 +1637,7 @@ void Spanner::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
 
         for (SpannerSegment* s : segments) {
             if (s->isStyled(Pid::OFFSET)) {
-                s->setOffset(s->propertyDefault(Pid::OFFSET).toPointF());
+                s->setOffset(s->propertyDefault(Pid::OFFSET).value<PointF>());
                 s->triggerLayout();
             }
         }

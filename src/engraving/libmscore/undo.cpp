@@ -94,6 +94,8 @@
 #include "log.h"
 #define LOG_UNDO() if (0) LOGD()
 
+using namespace mu;
+
 namespace Ms {
 extern Measure* tick2measure(int tick);
 

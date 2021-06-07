@@ -41,7 +41,7 @@ public:
     virtual int startMeasureIndex() const = 0;
     virtual int endMeasureIndex() const = 0;
 
-    virtual std::vector<QRectF> boundingArea() const = 0;
+    virtual std::vector<RectF> boundingArea() const = 0;
 };
 
 using INotationSelectionRangePtr = std::shared_ptr<INotationSelectionRange>;

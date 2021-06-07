@@ -42,7 +42,7 @@ class TextLineBaseSegment : public LineSegment
 protected:
     Text* _text;
     Text* _endText;
-    mu::draw::PointF points[6];
+    mu::PointF points[6];
     int npoints;
     qreal lineLength;
     bool twoLines { false };
@@ -97,7 +97,7 @@ class TextLineBase : public SLine
     M_PROPERTY(QString,   beginFontFamily,       setBeginFontFamily)
     M_PROPERTY(qreal,     beginFontSize,         setBeginFontSize)
     M_PROPERTY(FontStyle, beginFontStyle,        setBeginFontStyle)
-    M_PROPERTY(QPointF,   beginTextOffset,       setBeginTextOffset)
+    M_PROPERTY(mu::PointF,   beginTextOffset,       setBeginTextOffset)
 
     M_PROPERTY(PlaceText, continueTextPlace,     setContinueTextPlace)
     M_PROPERTY(QString,   continueText,          setContinueText)
@@ -105,7 +105,7 @@ class TextLineBase : public SLine
     M_PROPERTY(QString,   continueFontFamily,    setContinueFontFamily)
     M_PROPERTY(qreal,     continueFontSize,      setContinueFontSize)
     M_PROPERTY(FontStyle, continueFontStyle,     setContinueFontStyle)
-    M_PROPERTY(QPointF,   continueTextOffset,    setContinueTextOffset)
+    M_PROPERTY(mu::PointF,   continueTextOffset,    setContinueTextOffset)
 
     M_PROPERTY(PlaceText, endTextPlace,          setEndTextPlace)
     M_PROPERTY(QString,   endText,               setEndText)
@@ -113,7 +113,7 @@ class TextLineBase : public SLine
     M_PROPERTY(QString,   endFontFamily,         setEndFontFamily)
     M_PROPERTY(qreal,     endFontSize,           setEndFontSize)
     M_PROPERTY(FontStyle, endFontStyle,          setEndFontStyle)
-    M_PROPERTY(QPointF,   endTextOffset,         setEndTextOffset)
+    M_PROPERTY(mu::PointF,   endTextOffset,         setEndTextOffset)
 
 protected:
     friend class TextLineBaseSegment;

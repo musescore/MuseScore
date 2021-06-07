@@ -35,7 +35,7 @@ class Chord;
 
 class Stem final : public Element
 {
-    mu::draw::LineF line;   // p1 is attached to notehead
+    mu::LineF line;   // p1 is attached to notehead
     qreal _lineWidth;
     qreal _userLen;
     qreal _len       { 0.0 };       // always positive
@@ -80,15 +80,15 @@ public:
     void setLen(qreal l);
     qreal len() const { return _len; }
 
-    QPointF hookPos() const;
+    mu::PointF hookPos() const;
     qreal stemLen() const;
-    mu::draw::PointF p2() const { return line.p2(); }
+    mu::PointF p2() const { return line.p2(); }
 
     EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<QPointF> gripsPositions(const EditData&) const override;
+    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 };
 }     // namespace Ms
 #endif

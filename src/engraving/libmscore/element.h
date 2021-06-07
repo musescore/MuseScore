@@ -139,18 +139,18 @@ class EditData
 public:
     MuseScoreView* view              { 0 };
 
-    QVector<QRectF> grip;
+    QVector<mu::RectF> grip;
     int grips                        { 0 };                 // number of grips
     Grip curGrip                     { Grip(0) };
 
-    QPointF pos;
-    QPointF startMove;
-    QPointF normalizedStartMove;   ///< Introduced for transition of drag logic. Don't use in new code.
-    QPoint startMovePixel;
-    QPointF lastPos;
-    QPointF delta;   ///< This property is deprecated, use evtDelta or moveDelta instead. In normal drag equals to moveDelta, in edit drag - to evtDelta
-    QPointF evtDelta;   ///< Mouse offset for the last mouse move event
-    QPointF moveDelta;   ///< Mouse offset from the start of mouse move
+    mu::PointF pos;
+    mu::PointF startMove;
+    mu::PointF normalizedStartMove; ///< Introduced for transition of drag logic. Don't use in new code.
+    mu::Point startMovePixel;
+    mu::PointF lastPos;
+    mu::PointF delta;               ///< This property is deprecated, use evtDelta or moveDelta instead. In normal drag equals to moveDelta, in edit drag - to evtDelta
+    mu::PointF evtDelta;            ///< Mouse offset for the last mouse move event
+    mu::PointF moveDelta;           ///< Mouse offset from the start of mouse move
     bool hRaster                     { false };
     bool vRaster                     { false };
 
@@ -161,7 +161,7 @@ public:
     Qt::MouseButtons buttons         { Qt::NoButton };
 
     // drop data:
-    QPointF dragOffset;
+    mu::PointF dragOffset;
     Element* element                 { 0 };
     Element* dropElement             { 0 };
 
@@ -188,14 +188,14 @@ public:
 class Element : public ScoreElement
 {
     Element* _parent { 0 };
-    mutable QRectF _bbox;         ///< Bounding box relative to _pos + _offset
-    qreal _mag;                   ///< standard magnification (derived value)
-    QPointF _pos;                 ///< Reference position, relative to _parent, set by autoplace
-    QPointF _offset;              ///< offset from reference position, set by autoplace or user
+    mutable mu::RectF _bbox;  ///< Bounding box relative to _pos + _offset
+    qreal _mag;                     ///< standard magnification (derived value)
+    mu::PointF _pos;          ///< Reference position, relative to _parent, set by autoplace
+    mu::PointF _offset;       ///< offset from reference position, set by autoplace or user
     OffsetChange _offsetChanged;    ///< set by user actions that change offset, used by autoplace
-    QPointF _changedPos;          ///< position set when changing offset
-    Spatium _minDistance;         ///< autoplace min distance
-    int _track;                   ///< staffIdx * VOICES + voice
+    mu::PointF _changedPos;   ///< position set when changing offset
+    Spatium _minDistance;           ///< autoplace min distance
+    int _track;                     ///< staffIdx * VOICES + voice
     mutable ElementFlags _flags;
     ///< valid after call to layout()
     uint _tag;                    ///< tag bitmask
@@ -289,31 +289,31 @@ public:
     Spatium minDistance() const { return _minDistance; }
     void setMinDistance(Spatium v) { _minDistance = v; }
     OffsetChange offsetChanged() const { return _offsetChanged; }
-    void setOffsetChanged(bool v, bool absolute = true, const QPointF& diff = QPointF());
+    void setOffsetChanged(bool v, bool absolute = true, const mu::PointF& diff = mu::PointF());
 
-    const QPointF& ipos() const { return _pos; }
-    virtual const QPointF pos() const { return _pos + _offset; }
+    const mu::PointF& ipos() const { return _pos; }
+    virtual const mu::PointF pos() const { return _pos + _offset; }
     virtual qreal x() const { return _pos.x() + _offset.x(); }
     virtual qreal y() const { return _pos.y() + _offset.y(); }
-    void setPos(qreal x, qreal y) { _pos.rx() = x, _pos.ry() = y; }
-    void setPos(const QPointF& p) { _pos = p; }
-    QPointF& rpos() { return _pos; }
+    void setPos(qreal x, qreal y) { _pos.setX(x), _pos.setY(y); }
+    void setPos(const mu::PointF& p) { _pos = p; }
+    mu::PointF& rpos() { return _pos; }
     qreal& rxpos() { return _pos.rx(); }
     qreal& rypos() { return _pos.ry(); }
-    virtual void move(const QPointF& s) { _pos += s; }
+    virtual void move(const mu::PointF& s) { _pos += s; }
 
-    virtual QPointF pagePos() const;            ///< position in page coordinates
-    virtual QPointF canvasPos() const;          ///< position in canvas coordinates
+    virtual mu::PointF pagePos() const;            ///< position in page coordinates
+    virtual mu::PointF canvasPos() const;          ///< position in canvas coordinates
     qreal pageX() const;
     qreal canvasX() const;
 
-    QPointF mapFromCanvas(const QPointF& p) const { return p - canvasPos(); }
-    QPointF mapToCanvas(const QPointF& p) const { return p + canvasPos(); }
+    mu::PointF mapFromCanvas(const mu::PointF& p) const { return p - canvasPos(); }
+    mu::PointF mapToCanvas(const mu::PointF& p) const { return p + canvasPos(); }
 
-    const QPointF& offset() const { return _offset; }
-    virtual void setOffset(const QPointF& o) { _offset = o; }
-    void setOffset(qreal x, qreal y) { _offset.rx() = x, _offset.ry() = y; }
-    QPointF& roffset() { return _offset; }
+    const mu::PointF& offset() const { return _offset; }
+    virtual void setOffset(const mu::PointF& o) { _offset = o; }
+    void setOffset(qreal x, qreal y) { _offset.setX(x), _offset.setY(y); }
+    mu::PointF& roffset() { return _offset; }
     qreal& rxoffset() { return _offset.rx(); }
     qreal& ryoffset() { return _offset.ry(); }
 
@@ -325,19 +325,19 @@ public:
 
     bool isNudged() const { return !_offset.isNull(); }
 
-    virtual const QRectF& bbox() const { return _bbox; }
-    virtual QRectF& bbox() { return _bbox; }
+    virtual const mu::RectF& bbox() const { return _bbox; }
+    virtual mu::RectF& bbox() { return _bbox; }
     virtual qreal height() const { return bbox().height(); }
     virtual void setHeight(qreal v) { _bbox.setHeight(v); }
     virtual qreal width() const { return bbox().width(); }
     virtual void setWidth(qreal v) { _bbox.setWidth(v); }
-    QRectF abbox() const { return bbox().translated(pagePos()); }
-    QRectF pageBoundingRect() const { return bbox().translated(pagePos()); }
-    QRectF canvasBoundingRect() const { return bbox().translated(canvasPos()); }
-    virtual void setbbox(const QRectF& r) const { _bbox = r; }
-    virtual void addbbox(const QRectF& r) const { _bbox |= r; }
-    bool contains(const QPointF& p) const;
-    bool intersects(const QRectF& r) const;
+    mu::RectF abbox() const { return bbox().translated(pagePos()); }
+    mu::RectF pageBoundingRect() const { return bbox().translated(pagePos()); }
+    mu::RectF canvasBoundingRect() const { return bbox().translated(canvasPos()); }
+    virtual void setbbox(const mu::RectF& r) const { _bbox = r; }
+    virtual void addbbox(const mu::RectF& r) const { _bbox.unite(r); }
+    bool contains(const mu::PointF& p) const;
+    bool intersects(const mu::RectF& r) const;
 #ifndef NDEBUG
     virtual Shape shape() const { return Shape(bbox(), name()); }
 #else
@@ -348,7 +348,7 @@ public:
     virtual int subtype() const { return -1; }                    // for select gui
 
     virtual void draw(mu::draw::Painter*) const {}
-    void drawAt(mu::draw::Painter* p, const mu::draw::PointF& pt) const { p->translate(pt); draw(p); p->translate(-pt); }
+    void drawAt(mu::draw::Painter* p, const mu::PointF& pt) const { p->translate(pt); draw(p); p->translate(-pt); }
 
     virtual void writeProperties(XmlWriter& xml) const;
     virtual bool readProperties(XmlReader&);
@@ -364,10 +364,10 @@ public:
     }
 
     virtual void startDrag(EditData&);
-    virtual QRectF drag(EditData&);
+    virtual mu::RectF drag(EditData&);
     virtual void endDrag(EditData&);
     /** Returns anchor lines displayed while dragging element in canvas coordinates. */
-    virtual QVector<QLineF> dragAnchorLines() const { return QVector<QLineF>(); }
+    virtual QVector<mu::LineF> dragAnchorLines() const { return QVector<mu::LineF>(); }
     /**
      * A generic \ref dragAnchorLines() implementation which can be used in
      * dragAnchorLines() overrides in descendants. It is not made its default
@@ -377,7 +377,7 @@ public:
      * class of various annotation types and which would have this
      * dragAnchorLines() implementation by default.
      */
-    QVector<QLineF> genericDragAnchorLines() const;
+    QVector<mu::LineF> genericDragAnchorLines() const;
 
     virtual bool isEditable() const { return !flag(ElementFlag::GENERATED); }
 
@@ -395,14 +395,14 @@ public:
     virtual bool nextGrip(EditData&) const;
     virtual bool prevGrip(EditData&) const;
     /** Returns anchor lines displayed while dragging element's grip in canvas coordinates. */
-    virtual QVector<QLineF> gripAnchorLines(Grip) const { return QVector<QLineF>(); }
+    virtual QVector<mu::LineF> gripAnchorLines(Grip) const { return QVector<mu::LineF>(); }
 
     virtual EditBehavior normalModeEditBehavior() const { return EditBehavior::SelectOnly; }
     virtual int gripsCount() const { return 0; }
     virtual Grip initialEditModeGrip() const { return Grip::NO_GRIP; }
     virtual Grip defaultGrip() const { return Grip::NO_GRIP; }
     /** Returns grips positions in page coordinates. */
-    virtual std::vector<QPointF> gripsPositions(const EditData& = EditData()) const { return std::vector<QPointF>(); }
+    virtual std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const { return std::vector<mu::PointF>(); }
 
     int track() const;
     virtual void setTrack(int val);
@@ -444,10 +444,10 @@ public:
     void undoSetColor(const QColor& c);
     void undoSetVisible(bool v);
 
-    static ElementType readType(XmlReader& node, QPointF*, Fraction*);
-    static Element* readMimeData(Score* score, const QByteArray& data, QPointF*, Fraction*);
+    static ElementType readType(XmlReader& node, mu::PointF*, Fraction*);
+    static Element* readMimeData(Score* score, const QByteArray& data, mu::PointF*, Fraction*);
 
-    virtual QByteArray mimeData(const QPointF&) const;
+    virtual QByteArray mimeData(const mu::PointF&) const;
 /**
  Return true if this element accepts a drop at canvas relative \a pos
  of given element \a type and \a subtype.
@@ -532,19 +532,17 @@ public:
     bool custom(Pid) const;
     virtual bool isUserModified() const;
 
-    void drawSymbol(SymId id, mu::draw::Painter* p, const mu::draw::PointF& o = mu::draw::PointF(), qreal scale = 1.0) const;
-    void drawSymbol(SymId id, mu::draw::Painter* p, const mu::draw::PointF& o, int n) const;
-    void drawSymbol(SymId id, mu::draw::Painter* p, const QPointF& o, qreal scale = 1.0) const;
-    void drawSymbol(SymId id, mu::draw::Painter* p, const QPointF& o, int n) const;
-    void drawSymbols(const std::vector<SymId>&, mu::draw::Painter* p, const QPointF& o = QPointF(), qreal scale = 1.0) const;
-    void drawSymbols(const std::vector<SymId>&, mu::draw::Painter* p, const QPointF& o, const QSizeF& scale) const;
+    void drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o = mu::PointF(), qreal scale = 1.0) const;
+    void drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o, int n) const;
+    void drawSymbols(const std::vector<SymId>&, mu::draw::Painter* p, const mu::PointF& o = mu::PointF(), qreal scale = 1.0) const;
+    void drawSymbols(const std::vector<SymId>&, mu::draw::Painter* p, const mu::PointF& o, const mu::SizeF& scale) const;
     qreal symHeight(SymId id) const;
     qreal symWidth(SymId id) const;
     qreal symWidth(const std::vector<SymId>&) const;
-    QRectF symBbox(SymId id) const;
-    QRectF symBbox(const std::vector<SymId>&) const;
+    mu::RectF symBbox(SymId id) const;
+    mu::RectF symBbox(const std::vector<SymId>&) const;
 
-    QPointF symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const;
+    mu::PointF symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const;
 
     qreal symAdvance(SymId id) const;
     bool symIsValid(SymId id) const;
@@ -576,7 +574,7 @@ public:
     void autoplaceMeasureElement(bool above, bool add);
     void autoplaceSegmentElement(bool add = true) { autoplaceSegmentElement(placeAbove(), add); }
     void autoplaceMeasureElement(bool add = true) { autoplaceMeasureElement(placeAbove(), add); }
-    void autoplaceCalculateOffset(QRectF& r, qreal minDistance);
+    void autoplaceCalculateOffset(mu::RectF& r, qreal minDistance);
     qreal rebaseOffset(bool nox = true);
     bool rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool above, bool fix);
 
@@ -613,7 +611,7 @@ class ElementEditData
 public:
     Element* e;
     QList<PropertyData> propertyData;
-    QPointF initOffset;   ///< for dragging: difference between actual offset and editData.moveDelta
+    mu::PointF initOffset;   ///< for dragging: difference between actual offset and editData.moveDelta
 
     virtual ~ElementEditData() = default;
     void pushProperty(Pid pid)

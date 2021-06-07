@@ -23,10 +23,10 @@
 #ifndef __KEY__H__
 #define __KEY__H__
 
-#include <QPointF>
 #include <QList>
 
 #include "symid.h"
+#include "draw/geometry.h"
 
 namespace Ms {
 class XmlWriter;
@@ -96,8 +96,8 @@ static inline Key operator-=(Key& a, const Key& b) { return a = Key(static_cast<
 
 struct KeySym {
     SymId sym;
-    QPointF spos;       // position in spatium units
-    QPointF pos;        // actual pixel position on screen (set by layout)
+    mu::PointF spos;       // position in spatium units
+    mu::PointF pos;        // actual pixel position on screen (set by layout)
 };
 
 //---------------------------------------------------------

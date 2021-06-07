@@ -66,18 +66,17 @@
 #include "bagpembell.h"
 #include "hairpin.h"
 #include "textline.h"
-#include <QPointF>
 #include <QtMath>
 #include <QVector2D>
 
 #include "config.h"
 #include "log.h"
 
-using namespace mu::draw;
-
 #ifdef USE_SCORE_ACCESSIBLE_TREE
 #include "accessibility/accessiblenote.h"
 #endif
+
+using namespace mu;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -1171,7 +1170,7 @@ qreal Note::tabHeadHeight(const StaffType* tab) const
 //   stemDownNW
 //---------------------------------------------------------
 
-QPointF Note::stemDownNW() const
+PointF Note::stemDownNW() const
 {
     return symSmuflAnchor(noteHead(), SmuflAnchorId::stemDownNW);
 }
@@ -1180,7 +1179,7 @@ QPointF Note::stemDownNW() const
 //   stemUpSE
 //---------------------------------------------------------
 
-QPointF Note::stemUpSE() const
+PointF Note::stemUpSE() const
 {
     return symSmuflAnchor(noteHead(), SmuflAnchorId::stemUpSE);
 }
@@ -1382,7 +1381,7 @@ void Note::draw(mu::draw::Painter* painter) const
         // draw background, if required (to hide a segment of string line or to show a fretting conflict)
         if (!tab->linesThrough() || fretConflict()) {
             qreal d  = spatium() * .1;
-            QRectF bb = QRectF(bbox().x() - d, tab->fretMaskY() * magS(), bbox().width() + 2 * d, tab->fretMaskH() * magS());
+            RectF bb = RectF(bbox().x() - d, tab->fretMaskY() * magS(), bbox().width() + 2 * d, tab->fretMaskH() * magS());
             // we do not know which viewer did this draw() call
             // so update all:
             if (!score()->getViewer().empty()) {
@@ -1405,7 +1404,7 @@ void Note::draw(mu::draw::Painter* painter) const
         f.setPointSizeF(f.pointSizeF() * magS() * MScore::pixelRatio);
         painter->setFont(f);
         painter->setPen(c);
-        painter->drawText(QPointF(bbox().x(), tab->fretFontYOffset()), _fretString);
+        painter->drawText(PointF(bbox().x(), tab->fretFontYOffset()), _fretString);
     }
     // NOT tablature
     else {
@@ -1763,7 +1762,7 @@ public:
     int line = 0;
     int string = 0;
     EditMode mode = EditMode_Undefined;
-    QPointF delta;
+    PointF delta;
 
     virtual EditDataType type() override { return EditDataType::NoteEditData; }
 
@@ -2481,8 +2480,8 @@ void Note::setTrack(int val)
 
 void Note::reset()
 {
-    undoChangeProperty(Pid::OFFSET, QPointF());
-    chord()->undoChangeProperty(Pid::OFFSET, QPointF());
+    undoChangeProperty(Pid::OFFSET, PointF());
+    chord()->undoChangeProperty(Pid::OFFSET, QVariant::fromValue(PointF()));
     chord()->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
 }
 
@@ -2659,14 +2658,14 @@ void Note::startDrag(EditData& ed)
 //   drag
 //---------------------------------------------------------
 
-QRectF Note::drag(EditData& ed)
+RectF Note::drag(EditData& ed)
 {
     NoteEditData* noteEditData = static_cast<NoteEditData*>(ed.getData(this));
     IF_ASSERT_FAILED(noteEditData) {
-        return QRectF();
+        return RectF();
     }
 
-    QPointF delta = ed.evtDelta;
+    PointF delta = ed.evtDelta;
     noteEditData->delta = delta;
 
     if (noteEditData->mode == NoteEditData::EditMode_Undefined) {
@@ -2679,7 +2678,7 @@ QRectF Note::drag(EditData& ed)
         verticalDrag(ed);
     }
 
-    return QRectF();
+    return RectF();
 }
 
 //---------------------------------------------------------
@@ -2715,8 +2714,8 @@ void Note::editDrag(EditData& editData)
     } else if (ch->notes().size() == 1) {
         // if the chord contains only this note, then move the whole chord
         // including stem, flag etc.
-        ch->undoChangeProperty(Pid::OFFSET, ch->offset() + offset() + editData.evtDelta);
-        setOffset(QPointF());
+        ch->undoChangeProperty(Pid::OFFSET, QVariant::fromValue(ch->offset() + offset() + editData.evtDelta));
+        setOffset(PointF());
     } else {
         setOffset(offset() + editData.evtDelta);
     }
@@ -3713,7 +3712,7 @@ void Note::setAccidentalType(AccidentalType type)
 
 Shape Note::shape() const
 {
-    QRectF r(bbox());
+    RectF r(bbox());
 
 #ifndef NDEBUG
     Shape shape(r, name());

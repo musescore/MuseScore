@@ -25,6 +25,8 @@
 #include "bagpembell.h"
 #include "scorefont.h"
 
+using namespace mu;
+
 namespace Ms {
 // Embellishment names and note sequences
 
@@ -443,7 +445,7 @@ struct BEDrawingDataY {
 //---------------------------------------------------------
 
 /*
-static void printBBox(const char* name, const QRectF b)
+static void printBBox(const char* name, const RectF b)
       {
       qDebug("bbox%s left %f bot %f right %f top %f",
              name,
@@ -495,7 +497,7 @@ void BagpipeEmbellishment::layout()
     noteList nl = getNoteList();
     BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), nl.size());
 
-    setbbox(QRectF());
+    setbbox(RectF());
     /*
     if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
           symMetrics("headsym", headsym);
@@ -514,7 +516,7 @@ void BagpipeEmbellishment::layout()
         BEDrawingDataY dy(line, score()->spatium());
 
         // head
-        addbbox(score()->scoreFont()->bbox(headsym, dx.mags).translated(QPointF(x - dx.lw * .5 - dx.headw, dy.y2)));
+        addbbox(score()->scoreFont()->bbox(headsym, dx.mags).translated(PointF(x - dx.lw * .5 - dx.headw, dy.y2)));
         /*
         if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
               printBBox(" notehead", bbox());
@@ -523,7 +525,7 @@ void BagpipeEmbellishment::layout()
 
         // stem
         // highest top of stems actually used is y1b
-        addbbox(QRectF(x - dx.lw * .5 - dx.headw, dy.y1b, dx.lw, dy.y2 - dy.y1b));
+        addbbox(RectF(x - dx.lw * .5 - dx.headw, dy.y1b, dx.lw, dy.y2 - dy.y1b));
         /*
         if (_embelType == 0 || _embelType == 8 || _embelType == 9) {
               printBBox(" notehead + stem", bbox());
@@ -532,13 +534,13 @@ void BagpipeEmbellishment::layout()
 
         // flag
         if (drawFlag) {
-            addbbox(score()->scoreFont()->bbox(flagsym, dx.mags).translated(QPointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
+            addbbox(score()->scoreFont()->bbox(flagsym, dx.mags).translated(PointF(x - dx.lw * .5 + dx.xcorr, dy.y1f + dy.ycorr)));
             // printBBox(" notehead + stem + flag", bbox());
         }
 
         // draw the ledger line for high A
         if (line == -2) {
-            addbbox(QRectF(x - dx.headw * 1.5 - dx.lw * .5, dy.y2 - dx.lw * 2, dx.headw * 2, dx.lw));
+            addbbox(RectF(x - dx.headw * 1.5 - dx.lw * .5, dy.y2 - dx.lw * 2, dx.headw * 2, dx.lw));
             /*
             if (_embelType == 8) {
                   printBBox(" notehead + stem + ledger line", bbox());
@@ -562,11 +564,11 @@ static void drawBeams(mu::draw::Painter* painter, const qreal spatium,
                       const qreal x1, const qreal x2, qreal y)
 {
     // draw the beams
-    painter->drawLine(mu::draw::LineF(x1, y, x2, y));
+    painter->drawLine(mu::LineF(x1, y, x2, y));
     y += spatium / 1.5;
-    painter->drawLine(mu::draw::LineF(x1, y, x2, y));
+    painter->drawLine(mu::LineF(x1, y, x2, y));
     y += spatium / 1.5;
-    painter->drawLine(mu::draw::LineF(x1, y, x2, y));
+    painter->drawLine(mu::LineF(x1, y, x2, y));
 }
 
 //---------------------------------------------------------
@@ -582,13 +584,13 @@ void BagpipeEmbellishment::drawGraceNote(mu::draw::Painter* painter,
                                          SymId flagsym, const qreal x, const bool drawFlag) const
 {
     // draw head
-    drawSymbol(dx.headsym, painter, mu::draw::PointF(x - dx.headw, dy.y2));
+    drawSymbol(dx.headsym, painter, mu::PointF(x - dx.headw, dy.y2));
     // draw stem
     qreal y1 =  drawFlag ? dy.y1f : dy.y1b;            // top of stems actually used
-    painter->drawLine(mu::draw::LineF(x - dx.lw * .5, y1, x - dx.lw * .5, dy.y2));
+    painter->drawLine(mu::LineF(x - dx.lw * .5, y1, x - dx.lw * .5, dy.y2));
     if (drawFlag) {
         // draw flag
-        drawSymbol(flagsym, painter, mu::draw::PointF(x - dx.lw * .5 + dx.xcorr, y1 + dy.ycorr));
+        drawSymbol(flagsym, painter, mu::PointF(x - dx.lw * .5 + dx.xcorr, y1 + dy.ycorr));
     }
 }
 
@@ -623,7 +625,7 @@ void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
 
         // draw the ledger line for high A
         if (line == -2) {
-            painter->drawLine(mu::draw::LineF(x - dx.headw * 1.5 - dx.lw * .5, dy.y2, x + dx.headw * .5 - dx.lw * .5, dy.y2));
+            painter->drawLine(mu::LineF(x - dx.headw * 1.5 - dx.lw * .5, dy.y2, x + dx.headw * .5 - dx.lw * .5, dy.y2));
         }
 
         // move x to next note x position

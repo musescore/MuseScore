@@ -37,6 +37,8 @@
 
 #include "commonscenetypes.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   ExampleView
@@ -116,7 +118,7 @@ void ExampleView::layoutChanged()
 {
 }
 
-void ExampleView::dataChanged(const QRectF&)
+void ExampleView::dataChanged(const RectF&)
 {
 }
 
@@ -162,7 +164,7 @@ void ExampleView::setCursor(const QCursor&)
 {
 }
 
-void ExampleView::setDropRectangle(const QRectF&)
+void ExampleView::setDropRectangle(const RectF&)
 {
 }
 
@@ -170,18 +172,17 @@ void ExampleView::cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/)
 {
 }
 
-Element* ExampleView::elementNear(QPointF)
+Element* ExampleView::elementNear(PointF)
 {
     return 0;
 }
 
-void ExampleView::drawBackground(mu::draw::Painter* p, const QRectF& r) const
+void ExampleView::drawBackground(mu::draw::Painter* p, const RectF& r) const
 {
     if (_fgPixmap == 0 || _fgPixmap->isNull()) {
         p->fillRect(r, _fgColor);
     } else {
-        p->drawTiledPixmap(r, *_fgPixmap, r.topLeft()
-                           - QPoint(lrint(_matrix.dx()), lrint(_matrix.dy())));
+        p->drawTiledPixmap(r, *_fgPixmap, r.topLeft() - PointF(lrint(_matrix.dx()), lrint(_matrix.dy())));
     }
 }
 
@@ -193,7 +194,7 @@ void ExampleView::drawElements(mu::draw::Painter& painter, const QList<Element*>
 {
     for (Element* e : el) {
         e->itemDiscovered = 0;
-        QPointF pos(e->pagePos());
+        PointF pos(e->pagePos());
         painter.translate(pos);
         e->draw(&painter);
         painter.translate(-pos);
@@ -209,16 +210,16 @@ void ExampleView::paintEvent(QPaintEvent* ev)
     if (_score) {
         mu::draw::Painter p(this, "exampleview");
         p.setAntialiasing(true);
-        const QRect r(ev->rect());
+        const RectF r = RectF::fromQRectF(ev->rect());
 
         drawBackground(&p, r);
 
         p.setWorldTransform(_matrix);
-        QRectF fr = imatrix.mapRect(QRectF(r));
+        QRectF fr = imatrix.mapRect(r.toQRectF());
 
-        QRegion r1(r);
+        QRegion r1(r.toQRect());
         Page* page = _score->pages().front();
-        QList<Element*> ell = page->items(fr);
+        QList<Element*> ell = page->items(RectF::fromQRectF(fr));
         std::stable_sort(ell.begin(), ell.end(), elementLessThan);
         drawElements(p, ell);
     }
@@ -240,7 +241,7 @@ void ExampleView::dragEnterEvent(QDragEnterEvent* event)
 // qDebug("ExampleView::dragEnterEvent Symbol: <%s>", a.data());
 
         XmlReader e(a);
-        QPointF dragOffset;
+        PointF dragOffset;
         Fraction duration;      // dummy
         ElementType type = Element::readType(e, &dragOffset, &duration);
 
@@ -275,7 +276,7 @@ static void moveElement(void* data, Element* e)
 {
     QPointF* pos = (QPointF*)data;
     e->score()->addRefresh(e->canvasBoundingRect());
-    e->setPos(*pos);
+    e->setPos(mu::PointF::fromQPointF(*pos));
     e->score()->addRefresh(e->canvasBoundingRect());
 }
 
@@ -291,7 +292,7 @@ void ExampleView::dragMoveEvent(QDragMoveEvent* event)
         return;
     }
 
-    QPointF pos(imatrix.map(QPointF(event->pos())));
+    PointF pos = PointF::fromQPointF(imatrix.map(QPointF(event->pos())));
     QList<Element*> el = elementsAt(pos);
     bool found = false;
     foreach (const Element* e, el) {
@@ -343,7 +344,7 @@ void ExampleView::setDropTarget(const Element* el)
 
 void ExampleView::dropEvent(QDropEvent* event)
 {
-    QPointF pos(imatrix.map(QPointF(event->pos())));
+    PointF pos = PointF::fromQPointF(imatrix.map(QPointF(event->pos())));
 
     if (!dragElement) {
         return;
@@ -391,7 +392,7 @@ void ExampleView::dropEvent(QDropEvent* event)
 void ExampleView::mousePressEvent(QMouseEvent* event)
 {
     startMove  = imatrix.map(QPointF(event->pos()));
-    QPointF pos(imatrix.map(QPointF(event->pos())));
+    PointF pos = PointF::fromQPointF(imatrix.map(QPointF(event->pos())));
 
     foreach (Element* e, elementsAt(pos)) {
         if (e->type() == ElementType::NOTE) {

@@ -344,7 +344,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
             QPointF p(st->pos());
             p = p / 32.0 * score->spatium();
             // text->setUserOff(st->pos());
-            text->setOffset(p);
+            text->setOffset(mu::PointF::fromQPointF(p));
             // qDebug("setText %s (%f %f)(%f %f) <%s>",
             //            qPrintable(st->font().family()),
             //            st->pos().x(), st->pos().y(), p.x(), p.y(), qPrintable(st->text()));
@@ -362,7 +362,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                 break;
             }
             text->setAlign(textalign | Align::BASELINE);
-            text->setOffset(QPointF(0.0, 2.0));
+            text->setOffset(mu::PointF(0.0, 2.0));
             text->setTrack(track);
             s->add(text);
         }

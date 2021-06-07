@@ -408,10 +408,10 @@ public:
     void  setShowBackTied(bool val) { _showBackTied = val; }
 
     // utility functions for tab specially managed elements
-    QPointF chordStemPos(const Chord*) const;
+    mu::PointF chordStemPos(const Chord*) const;
     qreal   chordRestStemPosY(const ChordRest*) const;
     qreal   chordStemPosX(const Chord*) const { return STAFFTYPE_TAB_DEFAULTSTEMPOSX; }
-    QPointF chordStemPosBeam(const Chord*) const;
+    mu::PointF chordStemPosBeam(const Chord*) const;
     qreal   chordStemLength(const Chord*) const;
 
     bool isTabStaff() const { return _group == StaffGroup::TAB; }

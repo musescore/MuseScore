@@ -25,6 +25,8 @@
 #include "score.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   ClefTypeList::operator==

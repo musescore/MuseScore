@@ -735,7 +735,7 @@ void OveToMScore::convertTrackElements(int track)
                     }
 
                     if (y_off != 0) {
-                        ottava->setOffset(QPointF(0, y_off * m_score->spatium()));
+                        ottava->setOffset(mu::PointF(0, y_off * m_score->spatium()));
                     }
 
                     ottava->setTick(Fraction::fromTicks(absTick));

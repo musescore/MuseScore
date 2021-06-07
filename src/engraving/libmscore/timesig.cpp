@@ -31,6 +31,8 @@
 #include "segment.h"
 #include "utils.h"
 
+using namespace mu;
+
 namespace Ms {
 static const ElementStyle timesigStyle {
     { Sid::timesigScale,                       Pid::SCALE },
@@ -267,11 +269,11 @@ void TimeSig::layout()
     setPos(0.0, 0.0);
     qreal _spatium = spatium();
 
-    setbbox(QRectF());                    // prepare for an empty time signature
-    pointLargeLeftParen = QPointF();
-    pz = QPointF();
-    pn = QPointF();
-    pointLargeRightParen = QPointF();
+    setbbox(RectF());                    // prepare for an empty time signature
+    pointLargeLeftParen = PointF();
+    pz = PointF();
+    pn = PointF();
+    pointLargeRightParen = PointF();
 
     qreal lineDist;
     int numOfLines;
@@ -287,7 +289,7 @@ void TimeSig::layout()
             pn.rx() = 0.0;
             pz.rx() = 0.0;
             pointLargeRightParen.rx() = 0.0;
-            setbbox(QRectF());
+            setbbox(RectF());
             // leave everything else as it is:
             // draw() will anyway skip any drawing if staff type has no time sigs
             return;
@@ -308,25 +310,25 @@ void TimeSig::layout()
 
     // C and Ccut are placed at the middle of the staff: use yoff directly
     if (sigType == TimeSigType::FOUR_FOUR) {
-        pz = QPointF(0.0, yoff);
+        pz = PointF(0.0, yoff);
         setbbox(symBbox(SymId::timeSigCommon).translated(pz));
         ns.clear();
         ns.push_back(SymId::timeSigCommon);
         ds.clear();
     } else if (sigType == TimeSigType::ALLA_BREVE) {
-        pz = QPointF(0.0, yoff);
+        pz = PointF(0.0, yoff);
         setbbox(symBbox(SymId::timeSigCutCommon).translated(pz));
         ns.clear();
         ns.push_back(SymId::timeSigCutCommon);
         ds.clear();
     } else if (sigType == TimeSigType::CUT_BACH) {
-        pz = QPointF(0.0, yoff);
+        pz = PointF(0.0, yoff);
         setbbox(symBbox(SymId::timeSigCut2).translated(pz));
         ns.clear();
         ns.push_back(SymId::timeSigCut2);
         ds.clear();
     } else if (sigType == TimeSigType::CUT_TRIPLE) {
-        pz = QPointF(0.0, yoff);
+        pz = PointF(0.0, yoff);
         setbbox(symBbox(SymId::timeSigCut3).translated(pz));
         ns.clear();
         ns.push_back(SymId::timeSigCut3);
@@ -341,10 +343,10 @@ void TimeSig::layout()
         }
 
         ScoreFont* font = score()->scoreFont();
-        QSizeF mag(magS() * _scale);
+        SizeF mag(magS() * _scale);
 
-        QRectF numRect = font->bbox(ns, mag);
-        QRectF denRect = font->bbox(ds, mag);
+        RectF numRect = font->bbox(ns, mag);
+        RectF denRect = font->bbox(ds, mag);
 
         // position numerator and denominator; vertical displacement:
         // number of lines is odd: 0.0 (strings are directly above and below the middle line)
@@ -358,28 +360,28 @@ void TimeSig::layout()
 
         if (numRect.width() >= denRect.width()) {
             // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-            pz = QPointF(0.0, pzY);
+            pz = PointF(0.0, pzY);
             // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-            pn = QPointF((numRect.width() - denRect.width()) * .5, pnY);
+            pn = PointF((numRect.width() - denRect.width()) * .5, pnY);
         } else {
             // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-            pz = QPointF((denRect.width() - numRect.width()) * .5, pzY);
+            pz = PointF((denRect.width() - numRect.width()) * .5, pzY);
             // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-            pn = QPointF(0.0, pnY);
+            pn = PointF(0.0, pnY);
         }
 
         // centering of parenthesis so the middle of the parenthesis is at the divisor marking level
         int centerY = yoff / 2 + _spatium;
         int widestPortion = numRect.width() > denRect.width() ? numRect.width() : denRect.width();
-        pointLargeLeftParen = QPointF(-_spatium, centerY);
-        pointLargeRightParen = QPointF(widestPortion + _spatium, centerY);
+        pointLargeLeftParen = PointF(-_spatium, centerY);
+        pointLargeRightParen = PointF(widestPortion + _spatium, centerY);
 
         setbbox(numRect.translated(pz));       // translate bounding boxes to actual string positions
         addbbox(denRect.translated(pn));
         if (_largeParentheses) {
-            addbbox(QRect(pointLargeLeftParen.x(), pointLargeLeftParen.y() - denRect.height(), _spatium / 2,
+            addbbox(RectF(pointLargeLeftParen.x(), pointLargeLeftParen.y() - denRect.height(), _spatium / 2,
                           numRect.height() + denRect.height()));
-            addbbox(QRect(pointLargeRightParen.x(), pointLargeRightParen.y() - denRect.height(),  _spatium / 2,
+            addbbox(RectF(pointLargeRightParen.x(), pointLargeRightParen.y() - denRect.height(),  _spatium / 2,
                           numRect.height() + denRect.height()));
         }
     }
@@ -506,7 +508,7 @@ bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
         _timeSigType = (TimeSigType)(v.toInt());
         break;
     case Pid::SCALE:
-        _scale = v.toSizeF();
+        _scale = SizeF::fromVariant(v);
         break;
     default:
         if (!Element::setProperty(propertyId, v)) {

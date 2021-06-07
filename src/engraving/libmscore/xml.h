@@ -98,7 +98,7 @@ class XmlReader : public QXmlStreamReader
     QList<SpannerValues> _spannerValues;
     QList<std::pair<int, Spanner*> > _spanner;
     QList<StaffType> _staffTypes;
-    QList<std::pair<Element*, QPointF> > _fixOffsets;
+    QList<std::pair<Element*, mu::PointF> > _fixOffsets;
 
     std::vector<std::unique_ptr<ConnectorInfoReader> > _connectors;
     std::vector<std::unique_ptr<ConnectorInfoReader> > _pendingConnectors;  // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
@@ -151,9 +151,9 @@ public:
 
     double readDouble(double min, double max);
     bool readBool();
-    QPointF readPoint();
-    QSizeF readSize();
-    QRectF readRect();
+    mu::PointF readPoint();
+    mu::SizeF readSize();
+    mu::RectF readRect();
     QColor readColor();
     Fraction readFraction();
     QString readXml();
@@ -222,7 +222,7 @@ public:
     Tid lookupUserTextStyle(const QString& name) const;
     void clearUserTextStyles() { userTextStyles.clear(); }
 
-    QList<std::pair<Element*, QPointF> >& fixOffsets() { return _fixOffsets; }
+    QList<std::pair<Element*, mu::PointF> >& fixOffsets() { return _fixOffsets; }
 
     // for reading old files (< 3.01)
     QMap<int, QList<QPair<LinkedElements*, Location> > >& staffLinkedElements() { return _staffLinkedElements; }

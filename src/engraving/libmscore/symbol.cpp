@@ -33,6 +33,8 @@
 
 #include "draw/fontmetrics.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   Symbol
@@ -72,7 +74,7 @@ void Symbol::layout()
     //      e->layout();
     setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
     qreal w = width();
-    QPointF p;
+    PointF p;
     if (align() & Align::BOTTOM) {
         p.setY(-height());
     } else if (align() & Align::VCENTER) {
@@ -99,7 +101,7 @@ void Symbol::draw(mu::draw::Painter* painter) const
     if (!isNoteDot() || !staff()->isTabStaff(tick())) {
         painter->setPen(curColor());
         if (_scoreFont) {
-            _scoreFont->draw(_sym, painter, magS(), QPointF());
+            _scoreFont->draw(_sym, painter, magS(), PointF());
         } else {
             drawSymbol(_sym, painter);
         }
@@ -127,7 +129,7 @@ void Symbol::write(XmlWriter& xml) const
 
 void Symbol::read(XmlReader& e)
 {
-    QPointF pos;
+    PointF pos;
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "name") {
@@ -235,7 +237,7 @@ void FSymbol::draw(mu::draw::Painter* painter) const
         s = QChar(_code);
     }
     painter->setPen(curColor());
-    painter->drawText(QPointF(0, 0), s);
+    painter->drawText(PointF(0, 0), s);
 }
 
 //---------------------------------------------------------
@@ -270,7 +272,7 @@ void FSymbol::read(XmlReader& e)
             e.unknown();
         }
     }
-    setPos(QPointF());
+    setPos(PointF());
 }
 
 //---------------------------------------------------------

@@ -30,6 +30,8 @@
 #include "utils.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 QList<InstrumentGroup*> instrumentGroups;
 QList<MidiArticulation> articulation;                 // global articulations

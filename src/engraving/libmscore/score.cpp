@@ -93,6 +93,8 @@
 #include "accessibility/accessiblescore.h"
 #endif
 
+using namespace mu;
+
 namespace Ms {
 MasterScore* gscore;                 ///< system score, used for palettes etc.
 std::set<Score*> Score::validScores;
@@ -639,7 +641,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
 //     Return measure for canvas relative position \a p.
 //---------------------------------------------------------
 
-Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** seg, QPointF* offset) const
+Measure* Score::pos2measure(const PointF& p, int* rst, int* pitch, Segment** seg, PointF* offset) const
 {
     Measure* m = searchMeasure(p);
     if (m == 0) {
@@ -652,7 +654,7 @@ Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** se
     const int i = s->searchStaff(y);
 
     // search for segment + offset
-    QPointF pppp = p - m->canvasPos();
+    PointF pppp = p - m->canvasPos();
     int strack = i * VOICES;
     if (!staff(i)) {
         return 0;
@@ -672,7 +674,7 @@ Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** se
             *pitch = y2pitch(pppp.y() - sstaff->bbox().y(), clef, s1->spatium(tick));
         }
         if (offset) {
-            *offset = pppp - QPointF(segment->x(), sstaff->bbox().y());
+            *offset = pppp - PointF(segment->x(), sstaff->bbox().y());
         }
         if (seg) {
             *seg = segment;
@@ -692,7 +694,7 @@ Measure* Score::pos2measure(const QPointF& p, int* rst, int* pitch, Segment** se
 ///              \b output: new segment for drag position
 //---------------------------------------------------------
 
-void Score::dragPosition(const QPointF& p, int* rst, Segment** seg, qreal spacingFactor) const
+void Score::dragPosition(const PointF& p, int* rst, Segment** seg, qreal spacingFactor) const
 {
     const System* preferredSystem = (*seg) ? (*seg)->system() : nullptr;
     Measure* m = searchMeasure(p, preferredSystem, spacingFactor);
@@ -706,7 +708,7 @@ void Score::dragPosition(const QPointF& p, int* rst, Segment** seg, qreal spacin
     const int i = s->searchStaff(y, *rst, spacingFactor);
 
     // search for segment + offset
-    QPointF pppp = p - m->canvasPos();
+    PointF pppp = p - m->canvasPos();
     int strack = staff2track(i);
     if (!staff(i)) {
         return;
@@ -979,10 +981,10 @@ void Score::appendPart(Part* p)
 //    p is in canvas coordinates
 //---------------------------------------------------------
 
-Page* Score::searchPage(const QPointF& p) const
+Page* Score::searchPage(const PointF& p) const
 {
     for (Page* page : pages()) {
-        QRectF r = page->bbox().translated(page->pos());
+        RectF r = page->bbox().translated(page->pos());
         if (r.contains(p)) {
             return page;
         }
@@ -1001,7 +1003,7 @@ Page* Score::searchPage(const QPointF& p) const
 ///   \returns List of found systems.
 //---------------------------------------------------------
 
-QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSystem, qreal spacingFactor,
+QList<System*> Score::searchSystem(const PointF& pos, const System* preferredSystem, qreal spacingFactor,
                                    qreal preferredSpacingFactor) const
 {
     QList<System*> systems;
@@ -1058,7 +1060,7 @@ QList<System*> Score::searchSystem(const QPointF& pos, const System* preferredSy
 ///   space to measures in this system when searching.
 //---------------------------------------------------------
 
-Measure* Score::searchMeasure(const QPointF& p, const System* preferredSystem, qreal spacingFactor, qreal preferredSpacingFactor) const
+Measure* Score::searchMeasure(const PointF& p, const System* preferredSystem, qreal spacingFactor, qreal preferredSpacingFactor) const
 {
     QList<System*> systems = searchSystem(p, preferredSystem, spacingFactor, preferredSpacingFactor);
     for (System* system : qAsConst(systems)) {
@@ -1119,7 +1121,7 @@ static Segment* getNextValidInputSegment(Segment* segment, int track, int voice)
 //    return true if valid position found
 //---------------------------------------------------------
 
-bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
+bool Score::getPosition(Position* pos, const PointF& p, int voice) const
 {
     System* preferredSystem = nullptr;
     int preferredStaffIdx = -1;
@@ -1207,7 +1209,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
     //
     //    search segment
     //
-    QPointF pppp(p - measure->canvasPos());
+    PointF pppp(p - measure->canvasPos());
     qreal x         = pppp.x();
     Segment* segment = 0;
     pos->segment     = 0;
@@ -1279,7 +1281,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
     }
 
     y         = sstaff->y() + pos->line * lineDist;
-    pos->pos  = QPointF(x, y) + measure->canvasPos();
+    pos->pos  = PointF(x, y) + measure->canvasPos();
     return true;
 }
 
@@ -1582,13 +1584,13 @@ void Score::removeElement(Element* element)
             if (page->systems().isEmpty()) {
                 // Remove this page, since it is now empty.
                 // This involves renumbering and repositioning all subsequent pages.
-                QPointF pos = page->pos();
+                PointF pos = page->pos();
                 auto ii = std::find(pages().begin(), pages().end(), page);
                 pages().erase(ii);
                 while (ii != pages().end()) {
                     page = *ii;
                     page->setNo(page->no() - 1);
-                    QPointF p = page->pos();
+                    PointF p = page->pos();
                     page->setPos(pos);
                     pos = p;
                     ii++;
@@ -3708,13 +3710,13 @@ qreal Score::maxSystemDistance() const
 //   lassoSelect
 //---------------------------------------------------------
 
-void Score::lassoSelect(const QRectF& bbox)
+void Score::lassoSelect(const RectF& bbox)
 {
     select(0, SelectType::SINGLE, 0);
-    QRectF fr(bbox.normalized());
+    RectF fr(bbox.normalized());
     foreach (Page* page, pages()) {
-        QRectF pr(page->bbox());
-        QRectF frr(fr.translated(-page->pos()));
+        RectF pr(page->bbox());
+        RectF frr(fr.translated(-page->pos()));
         if (pr.right() < frr.left()) {
             continue;
         }
@@ -5067,10 +5069,10 @@ void Score::cropPage(qreal margins)
     if (npages() == 1) {
         Page* page = pages()[0];
         if (page) {
-            QRectF ttbox = page->tbbox();
+            RectF ttbox = page->tbbox();
 
             qreal margin = margins / INCH;
-            f.setSize(QSizeF((ttbox.width() / DPI) + 2 * margin, (ttbox.height() / DPI) + 2 * margin));
+            f.setSize(SizeF((ttbox.width() / DPI) + 2 * margin, (ttbox.height() / DPI) + 2 * margin));
 
             qreal offset = curFormat->oddLeftMargin() - ttbox.x() / DPI;
             if (offset < 0) {
@@ -5294,9 +5296,9 @@ QString Score::title() const
 //   addRefresh
 //---------------------------------------------------------
 
-void Score::addRefresh(const QRectF& r)
+void Score::addRefresh(const mu::RectF& r)
 {
-    _updateState.refresh |= r;
+    _updateState.refresh.unite(r);
     cmdState().setUpdateMode(UpdateMode::Update);
 }
 

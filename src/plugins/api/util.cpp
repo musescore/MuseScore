@@ -35,6 +35,8 @@
 
 #include "engraving/draw/qpainterprovider.h"
 
+using namespace mu;
+
 namespace Ms {
 namespace PluginAPI {
 //---------------------------------------------------------
@@ -157,7 +159,7 @@ void ScoreView::setScore(Ms::Score* s)
         score->doLayout();
 
         Ms::Page* page = score->pages()[_currentPage];
-        QRectF pr(page->abbox());
+        RectF pr(page->abbox());
         qreal m1 = width() / pr.width();
         qreal m2 = height() / pr.height();
         mag = qMax(m1, m2);
@@ -178,7 +180,7 @@ void ScoreView::paint(QPainter* qp)
 {
     mu::draw::Painter p(qp, "plugins_scoreview");
     p.setAntialiasing(true);
-    p.fillRect(mu::draw::RectF(0.0, 0.0, width(), height()), _color);
+    p.fillRect(mu::RectF(0.0, 0.0, width(), height()), _color);
     if (!score) {
         return;
     }
@@ -194,7 +196,7 @@ void ScoreView::paint(QPainter* qp)
     page->scanElements(&el, Ms::collectElements, false);
 
     foreach (const Ms::Element* e, el) {
-        QPointF pos(e->pagePos());
+        PointF pos(e->pagePos());
         p.translate(pos);
         e->draw(&p);
         p.translate(-pos);

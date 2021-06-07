@@ -35,7 +35,7 @@
 #include "property.h"
 #include "xml.h"
 
-using namespace mu::draw;
+using namespace mu;
 
 namespace Ms {
 const std::array<const char*, 6> Arpeggio::arpeggioTypeNames = {
@@ -161,7 +161,7 @@ void Arpeggio::layout()
             for (Staff* s : staff()->staffList()) {
                 if (s->score() == score() && s->isTabStaff(tick())) {
                     _hidden = true;
-                    setbbox(QRect());
+                    setbbox(RectF());
                     return;
                 }
             }
@@ -174,24 +174,24 @@ void Arpeggio::layout()
     case ArpeggioType::NORMAL: {
         symbolLine(SymId::wiggleArpeggiatoUp, SymId::wiggleArpeggiatoUp);
         // string is rotated -90 degrees
-        QRectF r(symBbox(symbols));
-        setbbox(QRectF(0.0, -r.x() + y1, r.height(), r.width()));
+        RectF r(symBbox(symbols));
+        setbbox(RectF(0.0, -r.x() + y1, r.height(), r.width()));
     }
     break;
 
     case ArpeggioType::UP: {
         symbolLine(SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
         // string is rotated -90 degrees
-        QRectF r(symBbox(symbols));
-        setbbox(QRectF(0.0, -r.x() + y1, r.height(), r.width()));
+        RectF r(symBbox(symbols));
+        setbbox(RectF(0.0, -r.x() + y1, r.height(), r.width()));
     }
     break;
 
     case ArpeggioType::DOWN: {
         symbolLine(SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
         // string is rotated +90 degrees (so that UpArrow turns into a DownArrow)
-        QRectF r(symBbox(symbols));
-        setbbox(QRectF(0.0, r.x() + y1, r.height(), r.width()));
+        RectF r(symBbox(symbols));
+        setbbox(RectF(0.0, r.x() + y1, r.height(), r.width()));
     }
     break;
 
@@ -200,7 +200,7 @@ void Arpeggio::layout()
         qreal x1 = _spatium * .5;
         qreal w  = symBbox(SymId::arrowheadBlackUp).width();
         qreal lw = score()->styleS(Sid::ArpeggioLineWidth).val() * _spatium;
-        setbbox(QRectF(x1 - w * .5, y1, w, y2 - y1 + lw * .5));
+        setbbox(RectF(x1 - w * .5, y1, w, y2 - y1 + lw * .5));
     }
     break;
 
@@ -209,7 +209,7 @@ void Arpeggio::layout()
         qreal x1 = _spatium * .5;
         qreal w  = symBbox(SymId::arrowheadBlackDown).width();
         qreal lw = score()->styleS(Sid::ArpeggioLineWidth).val() * _spatium;
-        setbbox(QRectF(x1 - w * .5, y1 - lw * .5, w, y2 - y1 + lw * .5));
+        setbbox(RectF(x1 - w * .5, y1 - lw * .5, w, y2 - y1 + lw * .5));
     }
     break;
 
@@ -217,7 +217,7 @@ void Arpeggio::layout()
         qreal _spatium = spatium();
         qreal lw = score()->styleS(Sid::ArpeggioLineWidth).val() * _spatium * .5;
         qreal w  = score()->styleS(Sid::ArpeggioHookLen).val() * _spatium;
-        setbbox(QRectF(0.0, y1, w, y2 - y1).adjusted(-lw, -lw, lw, lw));
+        setbbox(RectF(0.0, y1, w, y2 - y1).adjusted(-lw, -lw, lw, lw));
         break;
     }
     }
@@ -248,7 +248,7 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     case ArpeggioType::NORMAL:
     case ArpeggioType::UP:
     {
-        QRectF r(symBbox(symbols));
+        RectF r(symBbox(symbols));
         qreal scale = painter->worldTransform().m11();
         painter->rotate(-90.0);
         score()->scoreFont()->draw(symbols, painter, magS(), PointF(-r.right() - y1, -r.bottom() + r.height()), scale);
@@ -257,7 +257,7 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
 
     case ArpeggioType::DOWN:
     {
-        QRectF r(symBbox(symbols));
+        RectF r(symBbox(symbols));
         qreal scale = painter->worldTransform().m11();
         painter->rotate(90.0);
         score()->scoreFont()->draw(symbols, painter, magS(), PointF(-r.left() + y1, -r.top() - r.height()), scale);
@@ -266,7 +266,7 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
 
     case ArpeggioType::UP_STRAIGHT:
     {
-        QRectF r(symBbox(SymId::arrowheadBlackUp));
+        RectF r(symBbox(SymId::arrowheadBlackUp));
         qreal x1 = _spatium * .5;
         drawSymbol(SymId::arrowheadBlackUp, painter, PointF(x1 - r.width() * .5, y1 - r.top()));
         y1 -= r.top() * .5;
@@ -276,7 +276,7 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
 
     case ArpeggioType::DOWN_STRAIGHT:
     {
-        QRectF r(symBbox(SymId::arrowheadBlackDown));
+        RectF r(symBbox(SymId::arrowheadBlackDown));
         qreal x1 = _spatium * .5;
 
         drawSymbol(SymId::arrowheadBlackDown, painter, PointF(x1 - r.width() * .5, y2 - r.bottom()));
@@ -301,11 +301,11 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<QPointF> Arpeggio::gripsPositions(const EditData&) const
+std::vector<PointF> Arpeggio::gripsPositions(const EditData&) const
 {
-    const QPointF pp(pagePos());
-    QPointF p1(0.0, -_userLen1);
-    QPointF p2(0.0, _height + _userLen2);
+    const PointF pp(pagePos());
+    PointF p1(0.0, -_userLen1);
+    PointF p2(0.0, _height + _userLen2);
     return { p1 + pp, p2 + pp };
 }
 
@@ -328,24 +328,24 @@ void Arpeggio::editDrag(EditData& ed)
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<QLineF> Arpeggio::dragAnchorLines() const
+QVector<LineF> Arpeggio::dragAnchorLines() const
 {
-    QVector<QLineF> result;
+    QVector<LineF> result;
 
     Chord* c = chord();
     if (c) {
-        result << QLineF(canvasPos(), c->upNote()->canvasPos());
+        result << LineF(canvasPos(), c->upNote()->canvasPos());
     }
-    return QVector<QLineF>();
+    return QVector<LineF>();
 }
 
 //---------------------------------------------------------
 //   gripAnchorLines
 //---------------------------------------------------------
 
-QVector<QLineF> Arpeggio::gripAnchorLines(Grip grip) const
+QVector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
 {
-    QVector<QLineF> result;
+    QVector<LineF> result;
 
     Chord* _chord = chord();
     if (!_chord) {
@@ -353,12 +353,12 @@ QVector<QLineF> Arpeggio::gripAnchorLines(Grip grip) const
     }
 
     const Page* p = toPage(findAncestor(ElementType::PAGE));
-    const QPointF pageOffset = p ? p->pos() : QPointF();
+    const PointF pageOffset = p ? p->pos() : PointF();
 
-    const QPointF gripCanvasPos = gripsPositions()[static_cast<int>(grip)] + pageOffset;
+    const PointF gripCanvasPos = gripsPositions()[static_cast<int>(grip)] + pageOffset;
 
     if (grip == Grip::START) {
-        result << QLineF(_chord->upNote()->canvasPos(), gripCanvasPos);
+        result << LineF(_chord->upNote()->canvasPos(), gripCanvasPos);
     } else if (grip == Grip::END) {
         Note* downNote = _chord->downNote();
         int btrack  = track() + (_span - 1) * VOICES;
@@ -366,7 +366,7 @@ QVector<QLineF> Arpeggio::gripAnchorLines(Grip grip) const
         if (e && e->isChord()) {
             downNote = toChord(e)->downNote();
         }
-        result << QLineF(downNote->canvasPos(), gripCanvasPos);
+        result << LineF(downNote->canvasPos(), gripCanvasPos);
     }
     return result;
 }

@@ -22,6 +22,8 @@
 
 #include "systemtext.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   systemStyle

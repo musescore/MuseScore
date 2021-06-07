@@ -79,7 +79,7 @@ private:
     bool m_playBend = true;
     QList<PitchValue> m_points;
 
-    QPointF m_notePos;
+    mu::PointF m_notePos;
     qreal m_noteWidth;
 };
 }     // namespace Ms

@@ -41,6 +41,9 @@
 #include "measure.h"
 #include "undo.h"
 
+using namespace mu;
+using namespace mu::draw;
+
 namespace Ms {
 static const ElementStyle boxStyle {
     { Sid::systemFrameDistance,                Pid::TOP_GAP },
@@ -115,10 +118,10 @@ void Box::draw(mu::draw::Painter* painter) const
         dashes.append(1);
         dashes.append(3);
         stroker.setDashPattern(dashes);
-        QPainterPath path;
+        PainterPath path;
         w *= .5;
-        path.addRect(bbox().adjusted(w, w, -w, -w));
-        QPainterPath stroke = stroker.createStroke(path);
+        path.addRect(bbox().adjusted(w, w, -w, -w).toQRectF());
+        PainterPath stroke = stroker.createStroke(path);
         painter->setBrush(Qt::NoBrush);
         painter->fillPath(stroke, (selected() || editMode || dropTarget()) ? MScore::selectColor[0] : MScore::frameMarginColor);
     }
@@ -199,16 +202,16 @@ void Box::endEdit(EditData&)
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<QPointF> HBox::gripsPositions(const EditData&) const
+std::vector<mu::PointF> HBox::gripsPositions(const EditData&) const
 {
-    QRectF r(abbox());
-    return { QPointF(r.right(), r.top() + r.height() * .5) };
+    RectF r(abbox());
+    return { PointF(r.right(), r.top() + r.height() * .5) };
 }
 
-std::vector<QPointF> VBox::gripsPositions(const EditData&) const
+std::vector<PointF> VBox::gripsPositions(const EditData&) const
 {
-    QRectF r(abbox());
-    return { QPointF(r.x() + r.width() * .5, r.bottom()) };
+    RectF r(abbox());
+    return { PointF(r.x() + r.width() * .5, r.bottom()) };
 }
 
 //---------------------------------------------------------
@@ -349,9 +352,9 @@ void Box::add(Element* e)
     MeasureBase::add(e);
 }
 
-QRectF Box::contentRect() const
+RectF Box::contentRect() const
 {
-    QRectF result;
+    RectF result;
 
     for (const Element* element : el()) {
         result = result.united(element->bbox());
@@ -652,9 +655,9 @@ Element* Box::drop(EditData& data)
 //   drag
 //---------------------------------------------------------
 
-QRectF HBox::drag(EditData& data)
+RectF HBox::drag(EditData& data)
 {
-    QRectF r(canvasBoundingRect());
+    RectF r(canvasBoundingRect());
     qreal diff = data.evtDelta.x();
     qreal x1   = offset().x() + diff;
     if (parent()->type() == ElementType::VBOX) {
@@ -666,9 +669,9 @@ QRectF HBox::drag(EditData& data)
             x1 = x2;
         }
     }
-    setOffset(QPointF(x1, 0.0));
+    setOffset(PointF(x1, 0.0));
 //      setStartDragPosition(data.delta);
-    return canvasBoundingRect() | r;
+    return canvasBoundingRect().united(r);
 }
 
 //---------------------------------------------------------
@@ -798,7 +801,7 @@ QVariant VBox::getProperty(Pid propertyId) const
 
 void VBox::layout()
 {
-    setPos(QPointF());
+    setPos(PointF());
 
     if (system()) {
         bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
@@ -844,7 +847,7 @@ void VBox::startEditDrag(EditData& ed)
 
 void FBox::layout()
 {
-//      setPos(QPointF());      // !?
+//      setPos(PointF());      // !?
     bbox().setRect(0.0, 0.0, system()->width(), point(boxHeight()));
     Box::layout();
 }

@@ -33,6 +33,8 @@
 #include "sym.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   articulationStyle
@@ -236,7 +238,7 @@ void Articulation::draw(mu::draw::Painter* painter) const
 #endif
 
     painter->setPen(curColor());
-    drawSymbol(_symId, painter, QPointF(-0.5 * width(), 0.0));
+    drawSymbol(_symId, painter, PointF(-0.5 * width(), 0.0));
 }
 
 //---------------------------------------------------------
@@ -294,7 +296,7 @@ Page* Articulation::page() const
 
 void Articulation::layout()
 {
-    QRectF b(symBbox(_symId));
+    RectF b(symBbox(_symId));
     setbbox(b.translated(-0.5 * b.width(), 0.0));
 }
 
@@ -314,10 +316,10 @@ bool Articulation::layoutCloseToNote() const
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<QLineF> Articulation::dragAnchorLines() const
+QVector<mu::LineF> Articulation::dragAnchorLines() const
 {
-    QVector<QLineF> result;
-    result << QLineF(canvasPos(), parent()->canvasPos());
+    QVector<LineF> result;
+    result << LineF(canvasPos(), parent()->canvasPos());
     return result;
 }
 
@@ -706,7 +708,7 @@ void Articulation::doAutoplace()
         qreal md = minDistance().val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
-        QRectF r = bbox().translated(chordRest()->pos() + m->pos() + s->pos() + pos());
+        RectF r = bbox().translated(chordRest()->pos() + m->pos() + s->pos() + pos());
 
         qreal d;
         bool above = up();     // (anchor() == ArticulationAnchor::TOP_STAFF || anchor() == ArticulationAnchor::TOP_CHORD);
@@ -733,7 +735,7 @@ void Articulation::doAutoplace()
                 }
             }
             rypos() += yd;
-            r.translate(QPointF(0.0, yd));
+            r.translate(PointF(0.0, yd));
         }
     }
     setOffsetChanged(false);

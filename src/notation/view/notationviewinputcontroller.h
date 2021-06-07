@@ -52,10 +52,10 @@ public:
     virtual qreal currentScaling() const = 0;
     virtual void scale(qreal scaling, const QPoint& pos) = 0;
 
-    virtual QPoint toLogical(const QPoint& p) const = 0;
+    virtual PointF toLogical(const QPoint& p) const = 0;
 
     virtual bool isNoteEnterMode() const = 0;
-    virtual void showShadowNote(const QPointF& pos) = 0;
+    virtual void showShadowNote(const PointF& pos) = 0;
 
     virtual void showContextMenu(const ElementType& elementType, const QPoint& pos) = 0;
 
@@ -111,13 +111,13 @@ private:
     void setViewMode(const ViewMode& viewMode);
 
     struct InteractData {
-        QPoint beginPoint;
+        PointF beginPoint;
         Element* hitElement = nullptr;
         int hitStaffIndex = 0;
     };
 
     bool isDragAllowed() const;
-    void startDragElements(ElementType elementsType, const QPointF& elementsOffset);
+    void startDragElements(ElementType elementsType, const PointF& elementsOffset);
 
     float hitWidth() const;
 

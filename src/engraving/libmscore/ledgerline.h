@@ -50,7 +50,7 @@ public:
 
     LedgerLine* clone() const override { return new LedgerLine(*this); }
     ElementType type() const override { return ElementType::LEDGER_LINE; }
-    QPointF pagePos() const override;        ///< position in page coordinates
+    mu::PointF pagePos() const override;        ///< position in page coordinates
     Chord* chord() const { return toChord(parent()); }
 
     void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;

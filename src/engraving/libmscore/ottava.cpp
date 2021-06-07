@@ -32,6 +32,8 @@
 #include "segment.h"
 #include "musescoreCore.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   ottavaStyle
@@ -414,7 +416,7 @@ QVariant Ottava::propertyDefault(Pid pid) const
     case Pid::BEGIN_TEXT_OFFSET:
     case Pid::CONTINUE_TEXT_OFFSET:
     case Pid::END_TEXT_OFFSET:
-        return QPointF();
+        return QVariant::fromValue(PointF());
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
