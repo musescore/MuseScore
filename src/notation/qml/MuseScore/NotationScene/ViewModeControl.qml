@@ -34,12 +34,12 @@ FlatButton {
 
     normalStateColor: menu.isMenuOpened ? ui.theme.accentColor : "transparent"
 
+    visible: Boolean(root.currentViewMode)
+
     text: Boolean(root.currentViewMode) ? root.currentViewMode.title : ""
     icon: Boolean(root.currentViewMode) ? root.currentViewMode.icon : IconCode.NONE
 
     orientation: Qt.Horizontal
-
-    visible: Boolean(root.currentViewMode)
 
     contentItem: Row {
         spacing: 4

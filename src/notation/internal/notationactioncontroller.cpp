@@ -232,6 +232,8 @@ void NotationActionController::init()
     dispatcher()->reg(this, "show-pageborders", [this]() { toggleScoreConfig(ScoreConfigType::ShowPageMargins); });
     dispatcher()->reg(this, "show-irregular", [this]() { toggleScoreConfig(ScoreConfigType::MarkIrregularMeasures); });
 
+    dispatcher()->reg(this, "concert-pitch", this, &NotationActionController::toggleConcertPitch);
+
     dispatcher()->reg(this, "explode", this, &NotationActionController::explodeSelectedStaff);
     dispatcher()->reg(this, "implode", this, &NotationActionController::implodeSelectedStaff);
     dispatcher()->reg(this, "realize-chord-symbols", this, &NotationActionController::realizeSelectedChordSymbols);
@@ -358,6 +360,21 @@ INotationUndoStackPtr NotationActionController::currentNotationUndoStack() const
     }
 
     return notation->undoStack();
+}
+
+INotationStylePtr NotationActionController::currentNotationStyle() const
+{
+    auto notation = currentNotation();
+    if (!notation) {
+        return nullptr;
+    }
+
+    return notation->style();
+}
+
+mu::async::Notification NotationActionController::currentNotationStyleChanged() const
+{
+    return currentNotationStyle() ? currentNotationStyle()->styleChanged() : async::Notification();
 }
 
 void NotationActionController::resetState()
@@ -1493,6 +1510,19 @@ void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
 
     interaction->setScoreConfig(config);
     interaction->scoreConfigChanged().send(configType);
+}
+
+void NotationActionController::toggleConcertPitch()
+{
+    INotationStylePtr style = currentNotationStyle();
+    if (!style) {
+        return;
+    }
+
+    currentNotationUndoStack()->prepareChanges();
+    bool enabled = style->styleValue(StyleId::concertPitch).toBool();
+    style->setStyleValue(StyleId::concertPitch, !enabled);
+    currentNotationUndoStack()->commitChanges();
 }
 
 void NotationActionController::playSelectedElement(bool playChord)
