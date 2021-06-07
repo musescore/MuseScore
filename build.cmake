@@ -51,7 +51,7 @@ function(build_folder
     elseif(APPLE)
         set(PLATFORM "Mac")
     else()
-        set(PLATFORM "${CMAKE_SYSTEM_NAME}")
+        set(PLATFORM "${CMAKE_HOST_SYSTEM_NAME}")
     endif()
     set(GEN_SHORT "${GENERATOR}")
     string(REGEX REPLACE ".*Visual Studio ([0-9]+).*" "VS\\1" GEN_SHORT "${GEN_SHORT}")
@@ -221,7 +221,7 @@ if(ARG_CONFIGURE AND NOT EXISTS "${BUILD_PATH}/CMakeCache.txt")
     message("CONFIGURE_ARGS: ${ARGS_STR}")
     execute_process(
         # List of CMake arguments in CONFIGURE_ARGS variable. It must be unquoted here.
-        COMMAND "${CMAKE_WRAPPER}" ${CONFIGURE_ARGS} -- "${SOURCE_PATH}"
+        COMMAND "${CMAKE_WRAPPER}" -S "${SOURCE_PATH}" -B . ${CONFIGURE_ARGS}
         WORKING_DIRECTORY "${BUILD_PATH}"
         RESULT_VARIABLE EXIT_STATUS
     )
