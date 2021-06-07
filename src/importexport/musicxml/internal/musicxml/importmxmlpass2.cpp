@@ -1733,6 +1733,10 @@ void MusicXMLParserPass2::part()
         auto sp = i.key();
         Fraction tick1 = Fraction::fromTicks(i.value().first);
         Fraction tick2 = Fraction::fromTicks(i.value().second);
+        if (sp->isPedal() && toPedal(sp)->endHookType() == HookType::HOOK_45) {
+            // Handle pedal change end tick (slightly hacky)
+            tick2 += _score->findCR(tick2, sp->track())->ticks();
+        }
         //qDebug("spanner %p tp %d tick1 %s tick2 %s track1 %d track2 %d",
         //       sp, sp->type(), qPrintable(tick1.print()), qPrintable(tick2.print()), sp->track(), sp->track2());
         if (incompleteSpanners.find(sp) == incompleteSpanners.end()) {
@@ -3144,20 +3148,35 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
     }
     if (line == "yes") {
         const auto& spdesc = _pass2.getSpanner({ ElementType::PEDAL, number });
-        if (type == "start") {
+        if (type == "start" || type == "resume") {
             auto p = spdesc._isStopped ? toPedal(spdesc._sp) : new Pedal(_score->dummy());
             if (sign == "yes") {
                 p->setBeginText(Pedal::PEDAL_SYMBOL);
             } else {
-                p->setBeginHookType(HookType::HOOK_90);
+                p->setBeginHookType(type == "resume" ? HookType::NONE : HookType::HOOK_90);
             }
             p->setEndHookType(HookType::HOOK_90);
             // if (placement == "") placement = "below";  // TODO ? set default
             starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
-        } else if (type == "stop") {
+        } else if (type == "stop" || type == "discontinue") {
             auto p = spdesc._isStarted ? toPedal(spdesc._sp) : new Pedal(_score->dummy());
+            p->setEndHookType(type == "discontinue" ? HookType::NONE : HookType::HOOK_90);
             stops.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
         } else if (type == "change") {
+            // pedal change is implemented as two separate pedals
+            // first stop the first one
+            if (spdesc._isStarted && !spdesc._isStopped) {
+                auto p = toPedal(spdesc._sp);
+                p->setEndHookType(HookType::HOOK_45);
+                stops.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
+            } else {
+                _logger->logError(QString("\"change\" type pedal created without existing pedal"), &_e);
+            }
+            // then start a new one
+            auto p = new Pedal(_score->dummy());
+            p->setBeginHookType(HookType::HOOK_45);
+            p->setEndHookType(HookType::HOOK_90);
+            starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
         } else if (type == "continue") {
             // ignore
         } else {

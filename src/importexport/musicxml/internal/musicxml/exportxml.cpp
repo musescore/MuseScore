@@ -4662,14 +4662,36 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, const Fraction& t
 
 void ExportMusicXml::pedal(Pedal const* const pd, int staff, const Fraction& tick)
 {
+    // "change" type is handled only on the beginning of pedal lines
+    if (pd->tick() != tick && pd->endHookType() == HookType::HOOK_45) {
+        return;
+    }
     directionTag(_xml, _attr, pd);
     _xml.startObject("direction-type");
+    QString pedalType;
     QString pedalXml;
     if (pd->tick() == tick) {
-        pedalXml = "pedal type=\"start\" line=\"yes\"";
+        switch (pd->beginHookType()) {
+        case HookType::HOOK_45:
+            pedalType = "change";
+            break;
+        case HookType::NONE:
+            pedalType = "resume";
+            break;
+        default:
+            pedalType = "start";
+        }
     } else {
-        pedalXml = "pedal type=\"stop\" line=\"yes\"";
+        switch (pd->endHookType()) {
+        // "change" type is handled only on the beginning of pedal lines
+        case HookType::NONE:
+            pedalType = "discontinue";
+            break;
+        default:
+            pedalType = "stop";
+        }
     }
+    pedalXml = QString("pedal type=\"%1\" line=\"yes\"").arg(pedalType);
     pedalXml += positioningAttributes(pd, pd->tick() == tick);
     _xml.tagE(pedalXml);
     _xml.endObject();
