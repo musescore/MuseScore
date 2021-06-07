@@ -30,6 +30,8 @@
 
 #include "draw/fontmetrics.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 //---------------------------------------------------------
 //   label
@@ -272,10 +274,10 @@ void Bend::draw(mu::draw::Painter* painter) const
     qreal x2, y2;
 
     qreal aw = score()->styleP(Sid::bendArrowWidth);
-    QPolygonF arrowUp;
-    arrowUp << QPointF(0, 0) << QPointF(aw * .5, aw) << QPointF(-aw * .5, aw);
-    QPolygonF arrowDown;
-    arrowDown << QPointF(0, 0) << QPointF(aw * .5, -aw) << QPointF(-aw * .5, -aw);
+    PolygonF arrowUp;
+    arrowUp << PointF(0, 0) << PointF(aw * .5, aw) << PointF(-aw * .5, aw);
+    PolygonF arrowDown;
+    arrowDown << PointF(0, 0) << PointF(aw * .5, -aw) << PointF(-aw * .5, -aw);
 
     int n = m_points.size();
     for (int pt = 0; pt < n - 1; ++pt) {
@@ -283,7 +285,7 @@ void Bend::draw(mu::draw::Painter* painter) const
         if (pt == 0 && pitch) {
             y2 = -m_notePos.y() - _spatium * 2;
             x2 = x;
-            painter->drawLine(QLineF(x, y, x2, y2));
+            painter->drawLine(LineF(x, y, x2, y2));
 
             painter->setBrush(curColor());
             painter->drawPolygon(arrowUp.translated(x2, y2));
@@ -301,7 +303,7 @@ void Bend::draw(mu::draw::Painter* painter) const
             }
             x2 = x + _spatium;
             y2 = y;
-            painter->drawLine(QLineF(x, y, x2, y2));
+            painter->drawLine(LineF(x, y, x2, y2));
         } else if (pitch < m_points[pt + 1].pitch) {
             // up
             x2 = x + _spatium * .5;

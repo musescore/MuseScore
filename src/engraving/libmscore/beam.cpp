@@ -46,6 +46,8 @@
 #include "xml.h"
 #include "spanner.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 static const ElementStyle beamStyle {
     { Sid::beamNoSlope,                        Pid::BEAM_NO_SLOPE },
@@ -247,11 +249,11 @@ void Beam::draw(mu::draw::Painter* painter) const
 
     for (const QLineF* bs1 : beamSegments) {
         painter->drawPolygon(
-            QPolygonF({
-                QPointF(bs1->x1(), bs1->y1() - ww),
-                QPointF(bs1->x2(), bs1->y2() - ww),
-                QPointF(bs1->x2(), bs1->y2() + ww),
-                QPointF(bs1->x1(), bs1->y1() + ww),
+            PolygonF({
+                PointF(bs1->x1(), bs1->y1() - ww),
+                PointF(bs1->x2(), bs1->y2() - ww),
+                PointF(bs1->x2(), bs1->y2() + ww),
+                PointF(bs1->x1(), bs1->y1() + ww),
             }),
             Qt::OddEvenFill);
     }

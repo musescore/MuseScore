@@ -662,7 +662,7 @@ void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, Dra
 
     score()->update();
 
-    QVector<QLineF> anchorLines;
+    std::vector<draw::LineF> anchorLines;
     for (const Element* e : m_dragData.elements) {
         QVector<QLineF> elAnchorLines = e->dragAnchorLines();
         const Ms::Element* page = e->findAncestor(ElementType::PAGE);
@@ -671,12 +671,12 @@ void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, Dra
         if (!elAnchorLines.isEmpty()) {
             for (QLineF& l : elAnchorLines) {
                 l.translate(pageOffset);
+                anchorLines.push_back(l);
             }
-            anchorLines.append(elAnchorLines);
         }
     }
 
-    setAnchorLines(std::vector<QLineF>(anchorLines.begin(), anchorLines.end()));
+    setAnchorLines(anchorLines);
 
     if (m_dragData.elements.size() == 0) {
         doDragLasso(toPos);
@@ -1592,7 +1592,7 @@ bool NotationInteraction::dragMeasureAnchorElement(const QPointF& pos)
             m = m->nextMeasure();
         }
         QPointF anchor(m->canvasBoundingRect().x(), y);
-        setAnchorLines({ QLineF(pos, anchor) });
+        setAnchorLines({ draw::LineF(pos, anchor) });
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
         m_dropData.ed.dropElement->setTrack(track);
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
@@ -1617,7 +1617,7 @@ bool NotationInteraction::dragTimeAnchorElement(const QPointF& pos)
         Ms::System* s  = m->system();
         qreal y    = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
         QPointF anchor(seg->canvasBoundingRect().x(), y);
-        setAnchorLines({ QLineF(pos, anchor) });
+        setAnchorLines({ draw::LineF(pos, anchor) });
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
         m_dropData.ed.dropElement->setTrack(track);
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
@@ -1655,7 +1655,7 @@ void NotationInteraction::setDropTarget(Element* el)
     notifyAboutDragChanged();
 }
 
-void NotationInteraction::setAnchorLines(const std::vector<QLineF>& anchorList)
+void NotationInteraction::setAnchorLines(const std::vector<draw::LineF>& anchorList)
 {
     m_anchorLines = anchorList;
 }
@@ -1674,7 +1674,7 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
     const auto dropAnchorColor = configuration()->anchorLineColor();
     QPen pen(QBrush(dropAnchorColor), 2.0 / painter->worldTransform().m11(), Qt::DotLine);
 
-    for (const QLineF& anchor : m_anchorLines) {
+    for (const draw::LineF& anchor : m_anchorLines) {
         painter->setPen(pen);
         painter->drawLine(anchor);
 
@@ -1683,9 +1683,9 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
 
         painter->setBrush(QBrush(dropAnchorColor));
         painter->setNoPen();
-        rect.moveCenter(anchor.p1());
+        rect.moveCenter(anchor.p1().toQPointF());
         painter->drawEllipse(rect);
-        rect.moveCenter(anchor.p2());
+        rect.moveCenter(anchor.p2().toQPointF());
         painter->drawEllipse(rect);
     }
 }
@@ -2028,7 +2028,7 @@ void NotationInteraction::startEditGrip(const QPointF& pos)
 
         m_gripEditData.curGrip = Ms::Grip(i);
 
-        std::vector<QLineF> lines;
+        std::vector<draw::LineF> lines;
         QVector<QLineF> anchorLines = m_gripEditData.element->gripAnchorLines(m_gripEditData.curGrip);
 
         Element* page = m_gripEditData.element->findAncestor(ElementType::PAGE);
@@ -2036,7 +2036,7 @@ void NotationInteraction::startEditGrip(const QPointF& pos)
         if (!anchorLines.isEmpty()) {
             for (QLineF& line : anchorLines) {
                 line.translate(pageOffset);
-                lines.push_back(line);
+                lines.push_back(draw::LineF(line));
             }
         }
 

@@ -51,6 +51,8 @@ NICE-TO-HAVE TODO:
 
 #include "draw/fontmetrics.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 static const ElementStyle glissandoElementStyle {
     { Sid::glissandoFontFace,                  Pid::FONT_FACE },
@@ -110,7 +112,7 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
     painter->rotate(-wi);
 
     if (glissando()->glissandoType() == GlissandoType::STRAIGHT) {
-        painter->drawLine(QLineF(0.0, 0.0, l, 0.0));
+        painter->drawLine(LineF(0.0, 0.0, l, 0.0));
     } else if (glissando()->glissandoType() == GlissandoType::WAVY) {
         QRectF b = symBbox(SymId::wiggleTrill);
         qreal a  = symAdvance(SymId::wiggleTrill);

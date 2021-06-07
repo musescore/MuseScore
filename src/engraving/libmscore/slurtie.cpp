@@ -31,6 +31,8 @@
 #include "chord.h"
 #include "page.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 //---------------------------------------------------------
 //   SlurTieSegment
@@ -390,14 +392,14 @@ void SlurTieSegment::read(XmlReader& e)
 
 void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
-    QPolygonF polygon(7);
-    polygon[0] = QPointF(ed.grip[int(Grip::START)].center());
-    polygon[1] = QPointF(ed.grip[int(Grip::BEZIER1)].center());
-    polygon[2] = QPointF(ed.grip[int(Grip::SHOULDER)].center());
-    polygon[3] = QPointF(ed.grip[int(Grip::BEZIER2)].center());
-    polygon[4] = QPointF(ed.grip[int(Grip::END)].center());
-    polygon[5] = QPointF(ed.grip[int(Grip::DRAG)].center());
-    polygon[6] = QPointF(ed.grip[int(Grip::START)].center());
+    PolygonF polygon(7);
+    polygon[0] = PointF(ed.grip[int(Grip::START)].center());
+    polygon[1] = PointF(ed.grip[int(Grip::BEZIER1)].center());
+    polygon[2] = PointF(ed.grip[int(Grip::SHOULDER)].center());
+    polygon[3] = PointF(ed.grip[int(Grip::BEZIER2)].center());
+    polygon[4] = PointF(ed.grip[int(Grip::END)].center());
+    polygon[5] = PointF(ed.grip[int(Grip::DRAG)].center());
+    polygon[6] = PointF(ed.grip[int(Grip::START)].center());
     p->setPen(QPen(MScore::frameMarginColor, 0.0));
     p->drawPolyline(polygon);
 

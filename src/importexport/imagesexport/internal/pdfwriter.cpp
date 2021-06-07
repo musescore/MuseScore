@@ -158,9 +158,8 @@ void PdfWriter::doWrite(QPdfWriter& pdfWriter, mu::draw::Painter& painter, Score
 
     QSizeF size(score->styleD(Sid::pageWidth), score->styleD(Sid::pageHeight));
     painter.setAntialiasing(true);
-    painter.setViewport(QRect(0.0, 0.0, size.width() * pdfWriter.logicalDpiX(),
-                              size.height() * pdfWriter.logicalDpiY()));
-    painter.setWindow(QRect(0.0, 0.0, size.width() * DPI, size.height() * DPI));
+    painter.setViewport(draw::RectF(0.0, 0.0, size.width() * pdfWriter.logicalDpiX(), size.height() * pdfWriter.logicalDpiY()));
+    painter.setWindow(draw::RectF(0.0, 0.0, size.width() * DPI, size.height() * DPI));
 
     double pixelRationBackup = MScore::pixelRatio;
     MScore::pixelRatio = DPI / pdfWriter.logicalDpiX();

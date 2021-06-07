@@ -29,6 +29,8 @@
 #include "symid.h"
 #include "system.h"
 
+using namespace mu::draw;
+
 namespace Ms {
 static const ElementStyle measureRepeatStyle {
     { Sid::measureRepeatNumberPos, Pid::MEASURE_REPEAT_NUMBER_POS },
@@ -76,8 +78,8 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
                 qreal margin = score()->styleP(Sid::multiMeasureRestMargin);
                 qreal xOffset = symBbox(symId()).width() * .5;
                 qreal gapDistance = (symBbox(symId()).width() + spatium()) * .5;
-                painter->drawLine(QLineF(-twoMeasuresWidth + xOffset + margin, 0.0, xOffset - gapDistance, 0.0));
-                painter->drawLine(QLineF(xOffset + gapDistance, 0.0, twoMeasuresWidth + xOffset - margin, 0.0));
+                painter->drawLine(LineF(-twoMeasuresWidth + xOffset + margin, 0.0, xOffset - gapDistance, 0.0));
+                painter->drawLine(LineF(xOffset + gapDistance, 0.0, twoMeasuresWidth + xOffset - margin, 0.0));
             }
         }
     }

@@ -27,6 +27,8 @@
 #include "stafftype.h"
 #include "staff.h"
 
+using namespace mu::draw;
+
 // Anatomy of StaffLines:
 //
 //    step         - The possible vertical positions of a note are counted as steps.
@@ -129,7 +131,7 @@ void StaffLines::layoutForWidth(qreal w)
 
     lines.clear();
     for (int i = 0; i < _lines; ++i) {
-        lines.push_back(QLineF(x1, y, x2, y));
+        lines.push_back(LineF(x1, y, x2, y));
         y += dist;
     }
 }
@@ -173,9 +175,9 @@ void StaffLines::layoutPartialWidth(qreal w, qreal wPartial, bool alignRight)
     lines.clear();
     for (int i = 0; i < _lines; ++i) {
         if (alignRight) {
-            lines.push_back(QLineF(x2 - wPartial, y, x2, y));
+            lines.push_back(LineF(x2 - wPartial, y, x2, y));
         } else {
-            lines.push_back(QLineF(x1, y, x1 + wPartial, y));
+            lines.push_back(LineF(x1, y, x1 + wPartial, y));
         }
         y += dist;
     }

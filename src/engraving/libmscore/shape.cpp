@@ -343,6 +343,11 @@ void Shape::add(const QRectF& r, const char* t)
     push_back(ShapeElement(r, t));
 }
 
+void Shape::add(const mu::draw::RectF& r, const char* t)
+{
+    push_back(ShapeElement(r.toQRectF(), t));
+}
+
 #endif
 
 #ifdef DEBUG_SHAPES
