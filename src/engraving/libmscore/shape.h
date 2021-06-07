@@ -23,8 +23,6 @@
 #ifndef __SHAPE_H__
 #define __SHAPE_H__
 
-#include <QPainter>
-
 #include "draw/geometry.h"
 
 namespace Ms {
@@ -38,15 +36,15 @@ class Segment;
 //   ShapeElement
 //---------------------------------------------------------
 
-struct ShapeElement : public QRectF {
+struct ShapeElement : public mu::RectF {
 #ifndef NDEBUG
     const char* text;
     void dump() const;
-    ShapeElement(const QRectF& f, const char* t = 0)
-        : QRectF(f), text(t) {}
+    ShapeElement(const mu::RectF& f, const char* t = 0)
+        : mu::RectF(f), text(t) {}
 #else
-    ShapeElement(const QRectF& f)
-        : QRectF(f) {}
+    ShapeElement(const mu::RectF& f)
+        : mu::RectF(f) {}
 #endif
 };
 
@@ -66,32 +64,30 @@ public:
 
     Shape() {}
 #ifndef NDEBUG
-    Shape(const QRectF& r, const char* s = 0) { add(r, s); }
+    Shape(const mu::RectF& r, const char* s = 0) { add(r, s); }
 #else
-    Shape(const QRectF& r) { add(r); }
+    Shape(const mu::RectF& r) { add(r); }
 #endif
     void add(const Shape& s) { insert(end(), s.begin(), s.end()); }
 #ifndef NDEBUG
-    void add(const QRectF& r, const char* t = 0);
-    void add(const mu::draw::RectF& r, const char* t = 0);
+    void add(const mu::RectF& r, const char* t = 0);
 #else
-    void add(const QRectF& r) { push_back(r); }
-    void add(const mu::draw::RectF& r) { push_back(r.toQRectF()); }
+    void add(const mu::RectF& r) { push_back(r); }
 #endif
-    void remove(const QRectF&);
+    void remove(const mu::RectF&);
     void remove(const Shape&);
 
     void addHorizontalSpacing(HorizontalSpacingType type, qreal left, qreal right);
 
-    void translate(const QPointF&);
+    void translate(const mu::PointF&);
     void translateX(qreal);
     void translateY(qreal);
-    Shape translated(const QPointF&) const;
+    Shape translated(const mu::PointF&) const;
 
     qreal minHorizontalDistance(const Shape&) const;
     qreal minVerticalDistance(const Shape&) const;
-    qreal topDistance(const QPointF&) const;
-    qreal bottomDistance(const QPointF&) const;
+    qreal topDistance(const mu::PointF&) const;
+    qreal bottomDistance(const mu::PointF&) const;
     qreal left() const;
     qreal right() const;
     qreal top() const;
@@ -101,10 +97,9 @@ public:
     bool empty() const { return std::vector<ShapeElement>::empty(); }
     void clear() { std::vector<ShapeElement>::clear(); }
 
-    bool contains(const QPointF&) const;
-    bool intersects(const QRectF& rr) const;
+    bool contains(const mu::PointF&) const;
+    bool intersects(const mu::RectF& rr) const;
     bool intersects(const Shape&) const;
-    void paint(QPainter&) const;
 
 #ifndef NDEBUG
     void dump(const char*) const;

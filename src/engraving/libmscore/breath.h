@@ -66,7 +66,7 @@ public:
     void layout() override;
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
-    QPointF pagePos() const override;        ///< position in page coordinates
+    mu::PointF pagePos() const override;        ///< position in page coordinates
 
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;

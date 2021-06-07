@@ -26,6 +26,8 @@
 #include "range.h"
 #include "spanner.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   cmdJoinMeasure

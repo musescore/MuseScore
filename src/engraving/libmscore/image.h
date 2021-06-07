@@ -46,8 +46,8 @@ class Image final : public BSymbol
     };
     ImageType imageType;
 
-    QSizeF pixel2size(const QSizeF& s) const;
-    QSizeF size2pixel(const QSizeF& s) const;
+    mu::SizeF pixel2size(const mu::SizeF& s) const;
+    mu::SizeF size2pixel(const mu::SizeF& s) const;
 
 protected:
     ImageStoreItem* _storeItem;
@@ -55,7 +55,7 @@ protected:
     QString _linkPath;              // the path of an external linked img
     bool _linkIsValid;              // whether _linkPath file exists or not
     mutable QPixmap buffer;         ///< cached rendering
-    QSizeF _size;                   // in mm or spatium units
+    mu::SizeF _size;                   // in mm or spatium units
     bool _lockAspectRatio;
     bool _autoScale;                ///< fill parent frame
     bool _sizeIsSpatium;
@@ -64,7 +64,7 @@ protected:
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData& ed) override;
-    QVector<QLineF> gripAnchorLines(Grip) const override { return QVector<QLineF>(); }
+    QVector<mu::LineF> gripAnchorLines(Grip) const override { return QVector<mu::LineF>(); }
 
 public:
     Image(Score* = 0);
@@ -82,8 +82,8 @@ public:
 
     bool isImageFramed() const;
     qreal imageAspectRatio() const;
-    void setSize(const QSizeF& s) { _size = s; }
-    QSizeF size() const { return _size; }
+    void setSize(const mu::SizeF& s) { _size = s; }
+    mu::SizeF size() const { return _size; }
     void updateImageHeight(const qreal& height);
     void updateImageWidth(const qreal& width);
     qreal imageHeight() const;
@@ -100,7 +100,7 @@ public:
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid id) const override;
 
-    QSizeF imageSize() const;
+    mu::SizeF imageSize() const;
 
     void setImageType(ImageType);
     ImageType getImageType() const { return imageType; }
@@ -110,7 +110,7 @@ public:
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip(1); }
     Grip defaultGrip() const override { return Grip(1); }
-    std::vector<QPointF> gripsPositions(const EditData&) const override;
+    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 };
 }     // namespace Ms
 #endif

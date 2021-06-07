@@ -34,7 +34,7 @@
 #include "mscore.h"
 #include "staff.h"
 
-using namespace mu::draw;
+using namespace mu;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -225,14 +225,14 @@ Shape TextLineBaseSegment::shape() const
     qreal lw  = textLineBase()->lineWidth();
     qreal lw2 = lw * .5;
     if (twoLines) {     // hairpins
-        shape.add(QRectF(points[0].x(), points[0].y() - lw2,
-                         points[1].x() - points[0].x(), points[1].y() - points[0].y() + lw));
-        shape.add(QRectF(points[2].x(), points[2].y() - lw2,
-                         points[3].x() - points[2].x(), points[3].y() - points[2].y() + lw));
+        shape.add(RectF(points[0].x(), points[0].y() - lw2,
+                        points[1].x() - points[0].x(), points[1].y() - points[0].y() + lw));
+        shape.add(RectF(points[2].x(), points[2].y() - lw2,
+                        points[3].x() - points[2].x(), points[3].y() - points[2].y() + lw));
     } else if (textLineBase()->lineVisible()) {
         for (int i = 0; i < npoints; ++i) {
-            shape.add(QRectF(points[i].x() - lw2, points[i].y() - lw2,
-                             points[i + 1].x() - points[i].x() + lw, points[i + 1].y() - points[i].y() + lw));
+            shape.add(RectF(points[i].x() - lw2, points[i].y() - lw2,
+                            points[i + 1].x() - points[i].x() + lw, points[i + 1].y() - points[i].y() + lw));
         }
     }
     return shape;
@@ -323,8 +323,8 @@ void TextLineBaseSegment::layout()
         _endText->setXmlText("");
     }
 
-    QPointF pp1;
-    QPointF pp2(pos2());
+    PointF pp1;
+    PointF pp2(pos2());
 
     // diagonal line with no text or hooks - just use the basic rectangle for line
     if (_text->empty() && _endText->empty() && pp2.y() != 0
@@ -333,9 +333,9 @@ void TextLineBaseSegment::layout()
         npoints = 1;     // 2 points, but only one line must be drawn
         points[0] = pp1;
         points[1] = pp2;
-        lineLength = sqrt(QPointF::dotProduct(pp2 - pp1, pp2 - pp1));
+        lineLength = sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1));
 
-        setbbox(QRectF(pp1, pp2).normalized());
+        setbbox(RectF(pp1, pp2).normalized());
         return;
     }
 
@@ -399,7 +399,7 @@ void TextLineBaseSegment::layout()
     }
 
     if (tl->lineVisible() || !score()->printing()) {
-        pp1 = QPointF(l, 0.0);
+        pp1 = PointF(l, 0.0);
 
         qreal beginHookWidth;
         qreal endHookWidth;
@@ -424,9 +424,9 @@ void TextLineBaseSegment::layout()
         if ((tl->beginHookType() != HookType::NONE) && (isSingleType() || isBeginType())) {
             qreal hh = tl->beginHookHeight().val() * _spatium;
             if (tl->beginHookType() == HookType::HOOK_90T) {
-                points[npoints++] = QPointF(pp1.x() - beginHookWidth, pp1.y() - hh);
+                points[npoints++] = PointF(pp1.x() - beginHookWidth, pp1.y() - hh);
             }
-            points[npoints] = QPointF(pp1.x() - beginHookWidth, pp1.y() + hh);
+            points[npoints] = PointF(pp1.x() - beginHookWidth, pp1.y() + hh);
             ++npoints;
             points[npoints] = pp1;
         }
@@ -434,16 +434,16 @@ void TextLineBaseSegment::layout()
             points[npoints] = pp1;
             ++npoints;
             points[npoints] = pp2;
-            lineLength = sqrt(QPointF::dotProduct(pp2 - pp1, pp2 - pp1));
-            // painter->drawLine(QLineF(pp1.x(), pp1.y(), pp2.x(), pp2.y()));
+            lineLength = sqrt(PointF::dotProduct(pp2 - pp1, pp2 - pp1));
+            // painter->drawLine(LineF(pp1.x(), pp1.y(), pp2.x(), pp2.y()));
 
             if ((tl->endHookType() != HookType::NONE) && (isSingleType() || isEndType())) {
                 ++npoints;
                 qreal hh = tl->endHookHeight().val() * _spatium;
-                // painter->drawLine(QLineF(pp2.x(), pp2.y(), pp2.x() + endHookWidth, pp2.y() + hh));
-                points[npoints] = QPointF(pp2.x() + endHookWidth, pp2.y() + hh);
+                // painter->drawLine(LineF(pp2.x(), pp2.y(), pp2.x() + endHookWidth, pp2.y() + hh));
+                points[npoints] = PointF(pp2.x() + endHookWidth, pp2.y() + hh);
                 if (tl->endHookType() == HookType::HOOK_90T) {
-                    points[++npoints] = QPointF(pp2.x() + endHookWidth, pp2.y() - hh);
+                    points[++npoints] = PointF(pp2.x() + endHookWidth, pp2.y() - hh);
                 }
             }
         }
@@ -708,13 +708,13 @@ bool TextLineBase::setProperty(Pid id, const QVariant& v)
         setBeginText(v.toString());
         break;
     case Pid::BEGIN_TEXT_OFFSET:
-        setBeginTextOffset(v.toPointF());
+        setBeginTextOffset(v.value<PointF>());
         break;
     case Pid::CONTINUE_TEXT_OFFSET:
-        setContinueTextOffset(v.toPointF());
+        setContinueTextOffset(v.value<PointF>());
         break;
     case Pid::END_TEXT_OFFSET:
-        setEndTextOffset(v.toPointF());
+        setEndTextOffset(v.value<PointF>());
         break;
     case Pid::CONTINUE_TEXT:
         setContinueText(v.toString());

@@ -50,7 +50,7 @@ public:
     Type dividerType() const { return _dividerType; }
     void setDividerType(Type v);
 
-    QRectF drag(EditData&) override;
+    mu::RectF drag(EditData&) override;
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;

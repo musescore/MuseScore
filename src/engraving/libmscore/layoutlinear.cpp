@@ -48,6 +48,8 @@
 #include "fermata.h"
 #include "lyrics.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   resetSystems
@@ -108,7 +110,7 @@ void Score::collectLinearSystem(LayoutContext& lc)
     System* system = systems().front();
     system->setInstrumentNames(/* longNames */ true);
 
-    QPointF pos;
+    PointF pos;
     bool firstMeasure = true;       //lc.startTick.isZero();
 
     //set first measure to lc.nextMeasures for following
@@ -160,7 +162,7 @@ void Score::collectLinearSystem(LayoutContext& lc)
                     // fix beam positions
                     // other elements with system as parent are processed in layoutSystemElements()
                     // but full beam processing is expensive and not needed if we adjust position here
-                    QPointF p = pos - m->pos();
+                    PointF p = pos - m->pos();
                     for (const Segment& s : m->segments()) {
                         if (!s.isChordRestType()) {
                             continue;
@@ -180,7 +182,7 @@ void Score::collectLinearSystem(LayoutContext& lc)
             m->setPos(pos);
             m->layoutStaffLines();
         } else if (lc.curMeasure->isHBox()) {
-            lc.curMeasure->setPos(pos + QPointF(toHBox(lc.curMeasure)->topGap(), 0.0));
+            lc.curMeasure->setPos(pos + PointF(toHBox(lc.curMeasure)->topGap(), 0.0));
             lc.curMeasure->layout();
             ww = lc.curMeasure->width();
         }

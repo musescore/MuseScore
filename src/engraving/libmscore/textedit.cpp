@@ -29,6 +29,8 @@
 #include "scorefont.h"
 #include "sym.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   ~TextEditData

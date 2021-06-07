@@ -30,6 +30,7 @@
 
 #include "draw/fontmetrics.h"
 
+using namespace mu;
 using namespace mu::draw;
 
 namespace Ms {
@@ -159,7 +160,7 @@ void Bend::layout()
     if (staff() && !staff()->isTabStaff(tick())) {
         if (!parent()) {
             m_noteWidth = -_spatium * 2;
-            m_notePos   = QPointF(0.0, _spatium * 3);
+            m_notePos   = PointF(0.0, _spatium * 3);
         }
     }
 
@@ -167,13 +168,13 @@ void Bend::layout()
     Note* note = toNote(parent());
     if (note == 0) {
         m_noteWidth = 0.0;
-        m_notePos = QPointF();
+        m_notePos = PointF();
     } else {
         m_notePos   = note->pos();
         m_notePos.ry() = qMax(m_notePos.y(), 0.0);
         m_noteWidth = note->width();
     }
-    QRectF bb;
+    RectF bb;
 
     mu::draw::FontMetrics fm(font(_spatium));
 
@@ -183,10 +184,10 @@ void Bend::layout()
     qreal x2, y2;
 
     qreal aw = _spatium * .5;
-    QPolygonF arrowUp;
-    arrowUp << QPointF(0, 0) << QPointF(aw * .5, aw) << QPointF(-aw * .5, aw);
-    QPolygonF arrowDown;
-    arrowDown << QPointF(0, 0) << QPointF(aw * .5, -aw) << QPointF(-aw * .5, -aw);
+    PolygonF arrowUp;
+    arrowUp << PointF(0, 0) << PointF(aw * .5, aw) << PointF(-aw * .5, aw);
+    PolygonF arrowDown;
+    arrowDown << PointF(0, 0) << PointF(aw * .5, -aw) << PointF(-aw * .5, -aw);
 
     for (int pt = 0; pt < n; ++pt) {
         if (pt == (n - 1)) {
@@ -196,14 +197,14 @@ void Bend::layout()
         if (pt == 0 && pitch) {
             y2 = -m_notePos.y() - _spatium * 2;
             x2 = x;
-            bb |= QRectF(x, y, x2 - x, y2 - y);
+            bb.unite(RectF(x, y, x2 - x, y2 - y));
 
-            bb |= arrowUp.translated(x2, y2 + _spatium * .2).boundingRect();
+            bb.unite(arrowUp.translated(x2, y2 + _spatium * .2).boundingRect());
 
             int idx = (pitch + 12) / 25;
             const char* l = label[idx];
-            bb |= fm.boundingRect(QRectF(x2, y2, 0, 0),
-                                  Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QString(l));
+            bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
+                                     Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QString(l)));
             y = y2;
         }
         if (pitch == m_points[pt + 1].pitch) {
@@ -212,7 +213,7 @@ void Bend::layout()
             }
             x2 = x + _spatium;
             y2 = y;
-            bb |= QRectF(x, y, x2 - x, y2 - y);
+            bb.unite(RectF(x, y, x2 - x, y2 - y));
         } else if (pitch < m_points[pt + 1].pitch) {
             // up
             x2 = x + _spatium * .5;
@@ -220,16 +221,16 @@ void Bend::layout()
             qreal dx = x2 - x;
             qreal dy = y2 - y;
 
-            QPainterPath path;
+            PainterPath path;
             path.moveTo(x, y);
             path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
-            bb |= path.boundingRect();
-            bb |= arrowUp.translated(x2, y2 + _spatium * .2).boundingRect();
+            bb.unite(path.boundingRect());
+            bb.unite(arrowUp.translated(x2, y2 + _spatium * .2).boundingRect());
 
             int idx = (m_points[pt + 1].pitch + 12) / 25;
             const char* l = label[idx];
-            bb |= fm.boundingRect(QRectF(x2, y2, 0, 0),
-                                  Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QString(l));
+            bb.unite(fm.boundingRect(RectF(x2, y2, 0, 0),
+                                     Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QString(l)));
         } else {
             // down
             x2 = x + _spatium * .5;
@@ -237,12 +238,12 @@ void Bend::layout()
             qreal dx = x2 - x;
             qreal dy = y2 - y;
 
-            QPainterPath path;
+            PainterPath path;
             path.moveTo(x, y);
             path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
-            bb |= path.boundingRect();
+            bb.unite(path.boundingRect());
 
-            bb |= arrowDown.translated(x2, y2 - _spatium * .2).boundingRect();
+            bb.unite(arrowDown.translated(x2, y2 - _spatium * .2).boundingRect());
         }
         x = x2;
         y = y2;
@@ -293,7 +294,7 @@ void Bend::draw(mu::draw::Painter* painter) const
             int idx = (pitch + 12) / 25;
             const char* l = label[idx];
             QString s(l);
-            painter->drawText(QRectF(x2, y2, .0, .0), Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, s);
+            painter->drawText(RectF(x2, y2, .0, .0), Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, s);
 
             y = y2;
         }
@@ -311,7 +312,7 @@ void Bend::draw(mu::draw::Painter* painter) const
             qreal dx = x2 - x;
             qreal dy = y2 - y;
 
-            QPainterPath path;
+            PainterPath path;
             path.moveTo(x, y);
             path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
             painter->setBrush(Qt::NoBrush);
@@ -323,7 +324,7 @@ void Bend::draw(mu::draw::Painter* painter) const
             int idx = (m_points[pt + 1].pitch + 12) / 25;
             const char* l = label[idx];
             qreal ty = y2;       // - _spatium;
-            painter->drawText(QRectF(x2, ty, .0, .0),
+            painter->drawText(RectF(x2, ty, .0, .0),
                               Qt::AlignHCenter | Qt::AlignBottom | Qt::TextDontClip, QString(l));
         } else {
             // down
@@ -332,7 +333,7 @@ void Bend::draw(mu::draw::Painter* painter) const
             qreal dx = x2 - x;
             qreal dy = y2 - y;
 
-            QPainterPath path;
+            PainterPath path;
             path.moveTo(x, y);
             path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
             painter->setBrush(Qt::NoBrush);

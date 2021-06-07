@@ -37,6 +37,8 @@
 #include "stafftype.h"
 #include "part.h"
 
+using namespace mu;
+
 namespace Ms {
 // table must be in sync with enum ClefType
 const ClefInfo ClefInfo::clefTable[] = {
@@ -187,7 +189,7 @@ void Clef::layout()
 
         // if clef not to show or not compatible with staff group
         if (!show) {
-            setbbox(QRectF());
+            setbbox(RectF());
             symId = SymId::noSym;
             qDebug("Clef::layout(): invisible clef at tick %d(%d) staff %d",
                    segment()->tick().ticks(), segment()->tick().ticks() / 1920, staffIdx());
@@ -252,7 +254,7 @@ void Clef::layout()
     }
     // clefs on palette or at start of system/measure are left aligned
     // other clefs are right aligned
-    QRectF r(symBbox(symId));
+    RectF r(symBbox(symId));
     qreal x = segment() && segment()->rtick().isNotZero() ? -r.right() : 0.0;
     setPos(x, yoff * _spatium + (stepOffset * 0.5 * _spatium));
 
@@ -598,7 +600,7 @@ QString Clef::accessibleInfo() const
 
 void Clef::clear()
 {
-    setbbox(QRectF());
+    setbbox(RectF());
     symId = SymId::noSym;
 }
 }

@@ -25,7 +25,7 @@
 
 using namespace mu::notation;
 
-void ScoreCallbacks::dataChanged(const QRectF&)
+void ScoreCallbacks::dataChanged(const RectF&)
 {
     NOT_IMPLEMENTED;
 }
@@ -35,13 +35,13 @@ void ScoreCallbacks::updateAll()
     NOT_IMPLEMENTED;
 }
 
-void ScoreCallbacks::drawBackground(draw::Painter*, const QRectF&) const
+void ScoreCallbacks::drawBackground(draw::Painter*, const mu::RectF&) const
 {
     NOT_IMPLEMENTED;
 }
 
-const QRect ScoreCallbacks::geometry() const
+const mu::Rect ScoreCallbacks::geometry() const
 {
     NOT_IMPLEMENTED;
-    return QRect();
+    return mu::Rect();
 }

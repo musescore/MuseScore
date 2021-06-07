@@ -124,7 +124,7 @@
 #include "log.h"
 #define LOG_PROP() if (0) LOGD()
 
-using namespace mu::draw;
+using namespace mu;
 
 namespace Ms {
 // extern bool showInvisible;
@@ -554,9 +554,9 @@ QColor Element::curColor(bool isVisible, QColor normalColor) const
 //    return position in canvas coordinates
 //---------------------------------------------------------
 
-QPointF Element::pagePos() const
+PointF Element::pagePos() const
 {
-    QPointF p(pos());
+    PointF p(pos());
     if (parent() == 0) {
         return p;
     }
@@ -598,9 +598,9 @@ QPointF Element::pagePos() const
 //   canvasPos
 //---------------------------------------------------------
 
-QPointF Element::canvasPos() const
+PointF Element::canvasPos() const
 {
-    QPointF p(pos());
+    PointF p(pos());
     if (parent() == nullptr) {
         return p;
     }
@@ -619,7 +619,7 @@ QPointF Element::canvasPos() const
         } else if (parent()->isChord()) {       // grace chord
             measure = toSegment(parent()->parent())->measure();
         } else if (parent()->isFretDiagram()) {
-            return p + parent()->canvasPos() + QPointF(toFretDiagram(parent())->centerX(), 0.0);
+            return p + parent()->canvasPos() + PointF(toFretDiagram(parent())->centerX(), 0.0);
         } else {
             qFatal("this %s parent %s\n", name(), parent()->name());
         }
@@ -675,7 +675,7 @@ qreal Element::canvasX() const
 //    Note: p is in page coordinates
 //---------------------------------------------------------
 
-bool Element::contains(const QPointF& p) const
+bool Element::contains(const mu::PointF& p) const
 {
     return shape().contains(p - pagePos());
 }
@@ -686,7 +686,7 @@ bool Element::contains(const QPointF& p) const
 //    Note: \a rr is in page coordinates
 //---------------------------------------------------------
 
-bool Element::intersects(const QRectF& rr) const
+bool Element::intersects(const RectF& rr) const
 {
     return shape().intersects(rr.translated(-pagePos()));
 }
@@ -997,7 +997,7 @@ Compound::Compound(const Compound& c)
 void Compound::draw(mu::draw::Painter* painter) const
 {
     foreach (Element* e, elements) {
-        QPointF pt(e->pos());
+        PointF pt(e->pos());
         painter->translate(pt);
         e->draw(painter);
         painter->translate(-pt);
@@ -1025,7 +1025,7 @@ void Compound::addElement(Element* e, qreal x, qreal y)
 
 void Compound::layout()
 {
-    setbbox(QRectF());
+    setbbox(RectF());
     for (auto i = elements.begin(); i != elements.end(); ++i) {
         Element* e = *i;
         e->layout();
@@ -1092,7 +1092,7 @@ void Element::dump() const
 //   mimeData
 //---------------------------------------------------------
 
-QByteArray Element::mimeData(const QPointF& dragOffset) const
+QByteArray Element::mimeData(const PointF& dragOffset) const
 {
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
@@ -1116,7 +1116,7 @@ QByteArray Element::mimeData(const QPointF& dragOffset) const
 //    return new position of QDomElement in e
 //---------------------------------------------------------
 
-ElementType Element::readType(XmlReader& e, QPointF* dragOffset,
+ElementType Element::readType(XmlReader& e, PointF* dragOffset,
                               Fraction* duration)
 {
     while (e.readNextStartElement()) {
@@ -1146,7 +1146,7 @@ ElementType Element::readType(XmlReader& e, QPointF* dragOffset,
 //   readMimeData
 //---------------------------------------------------------
 
-Element* Element::readMimeData(Score* score, const QByteArray& data, QPointF* dragOffset, Fraction* duration)
+Element* Element::readMimeData(Score* score, const QByteArray& data, PointF* dragOffset, Fraction* duration)
 {
     XmlReader e(data);
     const ElementType type = Element::readType(e, dragOffset, duration);
@@ -1356,7 +1356,7 @@ void collectElements(void* data, Element* e)
 void paintElement(mu::draw::Painter& painter, const Element* element)
 {
     element->itemDiscovered = false;
-    QPointF elementPosition(element->pagePos());
+    PointF elementPosition(element->pagePos());
 
     painter.translate(elementPosition);
     element->draw(&painter);
@@ -1430,7 +1430,7 @@ QVariant Element::getProperty(Pid propertyId) const
     case Pid::SELECTED:
         return selected();
     case Pid::OFFSET:
-        return _offset;
+        return QVariant::fromValue(_offset);
     case Pid::MIN_DISTANCE:
         return _minDistance;
     case Pid::PLACEMENT:
@@ -1478,7 +1478,7 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
         setSelected(v.toBool());
         break;
     case Pid::OFFSET:
-        _offset = v.toPointF();
+        _offset = v.value<PointF>();
         break;
     case Pid::MIN_DISTANCE:
         setMinDistance(v.value<Spatium>());
@@ -1552,7 +1552,7 @@ QVariant Element::propertyDefault(Pid pid) const
         if (v.isValid()) {        // if it's a styled property
             return v;
         }
-        return QPointF();
+        return QVariant::fromValue(PointF());
     }
     case Pid::MIN_DISTANCE: {
         QVariant v = ScoreElement::propertyDefault(pid);
@@ -1739,32 +1739,22 @@ void Element::undoSetVisible(bool v)
 //   drawSymbol
 //---------------------------------------------------------
 
-void Element::drawSymbol(SymId id, mu::draw::Painter* p, const mu::draw::PointF& o, qreal scale) const
+void Element::drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o, qreal scale) const
 {
     score()->scoreFont()->draw(id, p, magS() * scale, o);
 }
 
-void Element::drawSymbol(SymId id, mu::draw::Painter* p, const mu::draw::PointF& o, int n) const
+void Element::drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o, int n) const
 {
     score()->scoreFont()->draw(id, p, magS(), o, n);
 }
 
-void Element::drawSymbol(SymId id, mu::draw::Painter* p, const QPointF& o, qreal scale) const
-{
-    score()->scoreFont()->draw(id, p, magS() * scale, o);
-}
-
-void Element::drawSymbol(SymId id, mu::draw::Painter* p, const QPointF& o, int n) const
-{
-    score()->scoreFont()->draw(id, p, magS(), o, n);
-}
-
-void Element::drawSymbols(const std::vector<SymId>& s, mu::draw::Painter* p, const QPointF& o, qreal scale) const
+void Element::drawSymbols(const std::vector<SymId>& s, mu::draw::Painter* p, const PointF& o, qreal scale) const
 {
     score()->scoreFont()->draw(s, p, magS() * scale, o);
 }
 
-void Element::drawSymbols(const std::vector<SymId>& s, mu::draw::Painter* p, const QPointF& o, const QSizeF& scale) const
+void Element::drawSymbols(const std::vector<SymId>& s, mu::draw::Painter* p, const PointF& o, const SizeF& scale) const
 {
     score()->scoreFont()->draw(s, p, SizeF(magS() * scale), PointF(o));
 }
@@ -1805,12 +1795,12 @@ qreal Element::symAdvance(SymId id) const
 //   symBbox
 //---------------------------------------------------------
 
-QRectF Element::symBbox(SymId id) const
+RectF Element::symBbox(SymId id) const
 {
     return score()->scoreFont()->bbox(id, magS());
 }
 
-QRectF Element::symBbox(const std::vector<SymId>& s) const
+RectF Element::symBbox(const std::vector<SymId>& s) const
 {
     return score()->scoreFont()->bbox(s, magS());
 }
@@ -1819,7 +1809,7 @@ QRectF Element::symBbox(const std::vector<SymId>& s) const
 //   symSmuflAnchor
 //---------------------------------------------------------
 
-QPointF Element::symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const
+PointF Element::symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const
 {
     return score()->scoreFont()->smuflAnchor(symId, anchorId, magS());
 }
@@ -2201,17 +2191,17 @@ void Element::startDrag(EditData& ed)
 ///   Return update Rect relative to canvas.
 //---------------------------------------------------------
 
-QRectF Element::drag(EditData& ed)
+RectF Element::drag(EditData& ed)
 {
     if (!isMovable()) {
-        return QRectF();
+        return RectF();
     }
 
-    const QRectF r0(canvasBoundingRect());
+    const RectF r0(canvasBoundingRect());
 
     const ElementEditData* eed = ed.getData(this);
 
-    const QPointF offset0 = ed.moveDelta + eed->initOffset;
+    const PointF offset0 = ed.moveDelta + eed->initOffset;
     qreal x = offset0.x();
     qreal y = offset0.y();
 
@@ -2227,7 +2217,7 @@ QRectF Element::drag(EditData& ed)
         y = vRaster * n;
     }
 
-    setOffset(QPointF(x, y));
+    setOffset(PointF(x, y));
     setOffsetChanged(true);
 //      setGenerated(false);
 
@@ -2235,7 +2225,7 @@ QRectF Element::drag(EditData& ed)
         //
         // restrict move to page boundaries
         //
-        const QRectF r(canvasBoundingRect());
+        const RectF r(canvasBoundingRect());
         Page* p = 0;
         Element* e = this;
         while (e) {
@@ -2247,7 +2237,7 @@ QRectF Element::drag(EditData& ed)
         }
         if (p) {
             bool move = false;
-            QRectF pr(p->canvasBoundingRect());
+            RectF pr(p->canvasBoundingRect());
             if (r.right() > pr.right()) {
                 x -= r.right() - pr.right();
                 move = true;
@@ -2263,11 +2253,11 @@ QRectF Element::drag(EditData& ed)
                 move = true;
             }
             if (move) {
-                setOffset(QPointF(x, y));
+                setOffset(PointF(x, y));
             }
         }
     }
-    return canvasBoundingRect() | r0;
+    return canvasBoundingRect().united(r0);
 }
 
 //---------------------------------------------------------
@@ -2298,7 +2288,7 @@ void Element::endDrag(EditData& ed)
 //   genericDragAnchorLines
 //---------------------------------------------------------
 
-QVector<QLineF> Element::genericDragAnchorLines() const
+QVector<LineF> Element::genericDragAnchorLines() const
 {
     qreal xp = 0.0;
     for (Element* e = parent(); e; e = e->parent()) {
@@ -2319,8 +2309,8 @@ QVector<QLineF> Element::genericDragAnchorLines() const
     } else {
         yp = parent()->canvasPos().y();
     }
-    QPointF p1(xp, yp);
-    QLineF anchorLine(p1, canvasPos());
+    PointF p1(xp, yp);
+    LineF anchorLine(p1, canvasPos());
     return { anchorLine };
 }
 
@@ -2356,7 +2346,7 @@ void Element::startEdit(EditData& ed)
 bool Element::edit(EditData& ed)
 {
     if (ed.key == Qt::Key_Home) {
-        setOffset(QPoint());
+        setOffset(PointF());
         return true;
     }
     return false;
@@ -2444,7 +2434,7 @@ qreal Element::styleP(Sid idx) const
 void Element::autoplaceSegmentElement(qreal minDistance)
 {
     if (visible() && autoplace() && parent()) {
-        setOffset(QPointF());
+        setOffset(PointF());
         Segment* s        = toSegment(parent());
         Measure* m        = s->measure();
         int si            = staffIdx();
@@ -2456,7 +2446,7 @@ void Element::autoplaceSegmentElement(qreal minDistance)
             qreal totalWidth = m->width();
             for (Measure* nm = m->nextMeasure(); nm; nm = nm->nextMeasure()) {
                 if (s2.right() > totalWidth) {
-                    s1.add(nm->staffShape(si).translated(QPointF(totalWidth, 0.0)));
+                    s1.add(nm->staffShape(si).translated(PointF(totalWidth, 0.0)));
                     totalWidth += nm->width();
                 } else {
                     break;
@@ -2467,7 +2457,7 @@ void Element::autoplaceSegmentElement(qreal minDistance)
             totalWidth = 0;
             for (Measure* pm = m->prevMeasure(); pm; pm = pm->prevMeasure()) {
                 if (s2.left() > totalWidth) {
-                    s1.add(pm->staffShape(si).translated(QPointF(-(totalWidth + pm->width()), 0.0)));
+                    s1.add(pm->staffShape(si).translated(PointF(-(totalWidth + pm->width()), 0.0)));
                     totalWidth += pm->width();
                 } else {
                     break;
@@ -2504,27 +2494,27 @@ void Element::autoplaceSegmentElement(qreal minDistance)
 
             m->staffShape(si).add(s2);
 
-            Shape s3 = s2.translated(QPointF());       // make a copy of s2
+            Shape s3 = s2.translated(PointF());       // make a copy of s2
             totalWidth = m->width();
             for (Measure* nm = m->nextMeasure(); nm; nm = nm->nextMeasure()) {
                 if (s2.right() > totalWidth) {
                     s3.translateX(-totalWidth);
                     nm->staffShape(staffIdx()).add(s3);
                     totalWidth += nm->width();
-                    s3 = s2.translated(QPointF());           // reset translation
+                    s3 = s2.translated(PointF());           // reset translation
                 } else {
                     break;
                 }
             }
 
-            s3 = s2.translated(QPointF());
+            s3 = s2.translated(PointF());
             totalWidth = 0;
             for (Measure* pm = m->prevMeasure(); pm; pm = pm->prevMeasure()) {
                 if (s2.left() > totalWidth) {
                     s3.translateX(totalWidth + pm->width());
                     pm->staffShape(staffIdx()).add(s3);
                     totalWidth += pm->width();
-                    s3 = s2.translated(QPointF());           // reset translation
+                    s3 = s2.translated(PointF());           // reset translation
                 } else {
                     break;
                 }
@@ -2535,7 +2525,7 @@ void Element::autoplaceSegmentElement(qreal minDistance)
             bool cnm = (s2.right() > m->width()) && m->nextMeasure() && m->nextMeasure()->system() == m->system();
             if (cnm) {
                 Measure* nm = m->nextMeasure();
-                s1.add(nm->staffShape(si).translated(QPointF(m->width(), 0.0)));
+                s1.add(nm->staffShape(si).translated(PointF(m->width(), 0.0)));
             }
             qreal d = placeAbove() ? s2.minVerticalDistance(s1) : s1.minVerticalDistance(s2);
             if (d > -minDistance) {
@@ -2562,7 +2552,7 @@ void Element::autoplaceSegmentElement(qreal minDistance)
 //   setOffsetChanged
 //---------------------------------------------------------
 
-void Element::setOffsetChanged(bool v, bool absolute, const QPointF& diff)
+void Element::setOffsetChanged(bool v, bool absolute, const PointF& diff)
 {
     if (v) {
         _offsetChanged = absolute ? OffsetChange::ABSOLUTE_OFFSET : OffsetChange::RELATIVE_OFFSET;
@@ -2581,8 +2571,8 @@ void Element::setOffsetChanged(bool v, bool absolute, const QPointF& diff)
 
 qreal Element::rebaseOffset(bool nox)
 {
-    QPointF off = offset();
-    QPointF p = _changedPos - pos();
+    PointF off = offset();
+    PointF p = _changedPos - pos();
     if (nox) {
         p.rx() = 0.0;
     }
@@ -2594,7 +2584,7 @@ qreal Element::rebaseOffset(bool nox)
         // TODO: elements that support PLACEMENT but not as a styled property (add supportsPlacement() method?)
         // TODO: refactor to take advantage of existing cmdFlip() algorithms
         // TODO: adjustPlacement() (from read206.cpp) on read for 3.0 as well
-        QRectF r = bbox().translated(_changedPos);
+        RectF r = bbox().translated(_changedPos);
         qreal staffHeight = staff()->height();
         Element* e = isSpannerSegment() ? toSpannerSegment(this)->spanner() : this;
         bool multi = e->isSpanner() && toSpanner(e)->spannerSegments().size() > 1;
@@ -2602,7 +2592,7 @@ qreal Element::rebaseOffset(bool nox)
         bool flipped = above ? r.top() > staffHeight : r.bottom() < 0.0;
         if (flipped && !multi) {
             off.ry() += above ? -staffHeight : staffHeight;
-            undoChangeProperty(Pid::OFFSET, off + p);
+            undoChangeProperty(Pid::OFFSET, QVariant::fromValue(off + p));
             _offsetChanged = OffsetChange::ABSOLUTE_OFFSET;             //saveChangedValue;
             rypos() += above ? staffHeight : -staffHeight;
             PropertyFlags pf = e->propertyFlags(Pid::PLACEMENT);
@@ -2619,7 +2609,7 @@ qreal Element::rebaseOffset(bool nox)
     }
 
     if (offsetChanged() == OffsetChange::ABSOLUTE_OFFSET) {
-        undoChangeProperty(Pid::OFFSET, off + p);
+        undoChangeProperty(Pid::OFFSET, QVariant::fromValue(off + p));
         _offsetChanged = OffsetChange::ABSOLUTE_OFFSET;                 //saveChangedValue;
         // allow autoplace to manage min distance even when not needed
         undoResetProperty(Pid::MIN_DISTANCE);
@@ -2663,7 +2653,7 @@ bool Element::rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bo
             // relative movement (cursor): fix only if moving vertically into direction of skyline
             if ((above && diff > 0.0) || (!above && diff < 0.0)) {
                 // rebase offset
-                QPointF p = offset();
+                PointF p = offset();
                 p.ry() += rebase;
                 undoChangeProperty(Pid::OFFSET, p);
                 md = (above ? md - diff : md + diff) / sp;
@@ -2713,7 +2703,7 @@ void Element::autoplaceSegmentElement(bool above, bool add)
         qreal minDistance = _minDistance.val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
-        QRectF r = bbox().translated(m->pos() + s->pos() + pos());
+        RectF r = bbox().translated(m->pos() + s->pos() + pos());
 
         // Adjust bbox Y pos for staffType offset
         if (staffType()) {
@@ -2745,7 +2735,7 @@ void Element::autoplaceSegmentElement(bool above, bool add)
                 }
             }
             rypos() += yd;
-            r.translate(QPointF(0.0, yd));
+            r.translate(PointF(0.0, yd));
         }
         if (add && addToSkyline()) {
             ss->skyline().add(r);

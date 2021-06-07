@@ -19,37 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "playbackcursor.h"
 
-using namespace mu::notation;
+#ifndef MU_TRANSFORM_H
+#define MU_TRANSFORM_H
 
-void PlaybackCursor::paint(mu::draw::Painter* painter)
+#include <QTransform>
+#include "geometry.h"
+
+namespace mu {
+//! NOTE Temporary implementation
+class Transform : public QTransform
 {
-    if (!m_visible) {
-        return;
-    }
+public:
+    Transform() = default;
+    Transform(const QTransform& t)
+        : QTransform(t) {}
 
-    painter->fillRect(m_rect, color());
+    PointF map(const PointF& p) const { return PointF::fromQPointF(QTransform::map(p.toQPointF())); }
+    LineF map(const LineF& p) const { return LineF::fromQLineF(QTransform::map(p.toQLineF())); }
+    PainterPath map(const PainterPath& p) const { return QTransform::map(p); }
+
+    Transform inverted(bool* invertible = nullptr) const { return Transform(QTransform::inverted(invertible)); }
+};
 }
 
-const mu::RectF& PlaybackCursor::rect() const
-{
-    return m_rect;
-}
-
-void PlaybackCursor::setRect(const RectF& rect)
-{
-    m_rect = rect;
-}
-
-void PlaybackCursor::setVisible(bool arg)
-{
-    m_visible = arg;
-}
-
-QColor PlaybackCursor::color()
-{
-    QColor color = configuration()->playbackCursorColor();
-    color.setAlpha(configuration()->cursorOpacity());
-    return color;
-}
+#endif // MU_TRANSFORM_H

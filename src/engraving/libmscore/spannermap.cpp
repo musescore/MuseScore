@@ -23,6 +23,8 @@
 #include "spannermap.h"
 #include "spanner.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   SpannerMap

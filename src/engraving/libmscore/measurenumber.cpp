@@ -24,6 +24,8 @@
 #include "measurenumber.h"
 #include "measure.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   measureNumberStyle

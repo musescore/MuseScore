@@ -27,6 +27,8 @@
 #include "sym.h"
 #include "system.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   SystemDivider
@@ -76,9 +78,9 @@ void SystemDivider::setDividerType(SystemDivider::Type v)
 {
     _dividerType = v;
     if (v == SystemDivider::Type::LEFT) {
-        setOffset(QPointF(score()->styleD(Sid::dividerLeftX), score()->styleD(Sid::dividerLeftY)));
+        setOffset(PointF(score()->styleD(Sid::dividerLeftX), score()->styleD(Sid::dividerLeftY)));
     } else {
-        setOffset(QPointF(score()->styleD(Sid::dividerRightX), score()->styleD(Sid::dividerRightY)));
+        setOffset(PointF(score()->styleD(Sid::dividerRightX), score()->styleD(Sid::dividerRightY)));
     }
 }
 
@@ -86,7 +88,7 @@ void SystemDivider::setDividerType(SystemDivider::Type v)
 //   drag
 //---------------------------------------------------------
 
-QRectF SystemDivider::drag(EditData& ed)
+mu::RectF SystemDivider::drag(EditData& ed)
 {
     setGenerated(false);
     return Symbol::drag(ed);
@@ -118,12 +120,12 @@ void SystemDivider::read(XmlReader& e)
         _dividerType = SystemDivider::Type::LEFT;
         SymId sym = Sym::name2id(score()->styleSt(Sid::dividerLeftSym));
         setSym(sym, sf);
-        setOffset(QPointF(score()->styleD(Sid::dividerLeftX), score()->styleD(Sid::dividerLeftY)));
+        setOffset(PointF(score()->styleD(Sid::dividerLeftX), score()->styleD(Sid::dividerLeftY)));
     } else {
         _dividerType = SystemDivider::Type::RIGHT;
         SymId sym = Sym::name2id(score()->styleSt(Sid::dividerRightSym));
         setSym(sym, sf);
-        setOffset(QPointF(score()->styleD(Sid::dividerRightX), score()->styleD(Sid::dividerRightY)));
+        setOffset(PointF(score()->styleD(Sid::dividerRightX), score()->styleD(Sid::dividerRightY)));
     }
     Symbol::read(e);
 }

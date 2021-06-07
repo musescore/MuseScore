@@ -23,8 +23,6 @@
 #ifndef __CHORDLINE_H__
 #define __CHORDLINE_H__
 
-#include <QPainterPath>
-
 #include "element.h"
 
 namespace Ms {
@@ -46,7 +44,7 @@ class ChordLine final : public Element
 {
     ChordLineType _chordLineType;
     bool _straight;
-    QPainterPath path;
+    mu::PainterPath path;
     bool modified;
     qreal _lengthX;
     qreal _lengthY;
@@ -86,7 +84,7 @@ public:
     int gripsCount() const override { return _straight ? 1 : path.elementCount(); }
     Grip initialEditModeGrip() const override { return Grip(gripsCount() - 1); }
     Grip defaultGrip() const override { return initialEditModeGrip(); }
-    std::vector<QPointF> gripsPositions(const EditData&) const override;
+    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 };
 
 extern const char* scorelineNames[];

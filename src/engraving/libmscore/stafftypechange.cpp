@@ -28,6 +28,8 @@
 #include "system.h"
 #include "staff.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   StaffTypeChange
@@ -94,7 +96,7 @@ void StaffTypeChange::spatiumChanged(qreal, qreal)
 void StaffTypeChange::layout()
 {
     qreal _spatium = score()->spatium();
-    setbbox(QRectF(-lw * .5, -lw * .5, _spatium * 2.5 + lw, _spatium * 2.5 + lw));
+    setbbox(RectF(-lw * .5, -lw * .5, _spatium * 2.5 + lw, _spatium * 2.5 + lw));
     if (measure()) {
         qreal y = -1.5 * _spatium - height() + measure()->system()->staff(staffIdx())->y();
         setPos(_spatium * .8, y);
@@ -127,7 +129,7 @@ void StaffTypeChange::draw(mu::draw::Painter* painter) const
     int lines = 5;
     if (staffType()) {
         if (staffType()->stemless()) {       // a single notehead represents a stemless staff
-            drawSymbol(SymId::noteheadBlack, painter, QPoint(w * 0.5 - 0.33 * _spatium, h * 0.5), 0.5);
+            drawSymbol(SymId::noteheadBlack, painter, PointF(w * 0.5 - 0.33 * _spatium, h * 0.5), 0.5);
         }
         if (staffType()->invisible()) {      // no lines needed. It's done.
             return;

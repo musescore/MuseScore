@@ -24,6 +24,7 @@
 #define __SYM_H__
 
 #include "symid.h"
+#include "draw/geometry.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -60,14 +61,14 @@ public:
     int code() const;
     void setCode(int val);
 
-    QRectF bbox() const;
-    void setBbox(QRectF val);
+    mu::RectF bbox() const;
+    void setBbox(mu::RectF val);
 
     qreal advance() const;
     void setAdvance(qreal val);
 
-    QPointF smuflAnchor(SmuflAnchorId anchorId);
-    void setSmuflAnchor(SmuflAnchorId anchorId, const QPointF& newValue);
+    mu::PointF smuflAnchor(SmuflAnchorId anchorId);
+    void setSmuflAnchor(SmuflAnchorId anchorId, const mu::PointF& newValue);
 
     static SymId name2id(const QString& s); // return noSym if not found
     static SymId oldName2id(const QString s);
@@ -91,10 +92,10 @@ public:
 
 private:
     int m_code = -1;
-    QRectF m_bbox;
+    mu::RectF m_bbox;
     qreal m_advance = 0.0;
 
-    std::map<SmuflAnchorId, QPointF> m_smuflAnchors;
+    std::map<SmuflAnchorId, mu::PointF> m_smuflAnchors;
     std::vector<SymId> m_subSymbolIds; // not empty if this is a compound symbol
 };
 } // namespace Ms

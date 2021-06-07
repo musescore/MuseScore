@@ -40,6 +40,8 @@
 #include "changeMap.h"
 #include "fret.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   PropertyMetaData
@@ -475,13 +477,13 @@ QVariant propertyFromString(Pid id, QString value)
     case P_TYPE::POINT_SP_MM: {
         // not used by MSCX
         const int i = value.indexOf(';');
-        return QPointF(value.leftRef(i).toDouble(), value.midRef(i + 1).toDouble());
+        return QVariant::fromValue(PointF(value.leftRef(i).toDouble(), value.midRef(i + 1).toDouble()));
     }
     case P_TYPE::SCALE:
     case P_TYPE::SIZE: {
         // not used by MSCX
         const int i = value.indexOf('x');
-        return QSizeF(value.leftRef(i).toDouble(), value.midRef(i + 1).toDouble());
+        return QVariant::fromValue(SizeF(value.leftRef(i).toDouble(), value.midRef(i + 1).toDouble()));
     }
     case P_TYPE::FONT:
     case P_TYPE::STRING:
@@ -675,10 +677,10 @@ QVariant readProperty(Pid id, XmlReader& e)
     case P_TYPE::POINT:
     case P_TYPE::POINT_SP:
     case P_TYPE::POINT_SP_MM:
-        return QVariant(e.readPoint());
+        return QVariant::fromValue(e.readPoint());
     case P_TYPE::SCALE:
     case P_TYPE::SIZE:
-        return QVariant(e.readSize());
+        return QVariant::fromValue(e.readSize());
     case P_TYPE::FONT:
     case P_TYPE::STRING:
         return QVariant(e.readElementText());
@@ -957,14 +959,14 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
         // to MSCX in other way (e.g. as XML tag properties).
         switch (value.type()) {
         case QVariant::PointF: {
-            const QPointF p(value.value<QPointF>());
+            const PointF p(value.value<PointF>());
             return QString("%1;%2").arg(QString::number(p.x()), QString::number(p.y()));
         }
         case QVariant::SizeF: {
-            const QSizeF s(value.value<QSizeF>());
+            const SizeF s(value.value<SizeF>());
             return QString("%1x%2").arg(QString::number(s.width()), QString::number(s.height()));
         }
-        // TODO: support QVariant::Rect and QVariant::QRectF?
+        // TODO: support QVariant::Rect and QVariant::RectF?
         default:
             break;
         }

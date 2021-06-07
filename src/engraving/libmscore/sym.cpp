@@ -23,6 +23,7 @@
 #include "sym.h"
 #include "translation.h"
 
+using namespace mu;
 using namespace Ms;
 
 //---------------------------------------------------------
@@ -109,12 +110,12 @@ void Sym::setCode(int val)
 // Metrics
 // =============================================
 
-QRectF Sym::bbox() const
+RectF Sym::bbox() const
 {
     return m_bbox;
 }
 
-void Sym::setBbox(QRectF val)
+void Sym::setBbox(RectF val)
 {
     m_bbox = val;
 }
@@ -129,12 +130,12 @@ void Sym::setAdvance(qreal val)
     m_advance = val;
 }
 
-QPointF Sym::smuflAnchor(SmuflAnchorId anchorId)
+PointF Sym::smuflAnchor(SmuflAnchorId anchorId)
 {
     return m_smuflAnchors[anchorId];
 }
 
-void Sym::setSmuflAnchor(SmuflAnchorId anchorId, const QPointF& newValue)
+void Sym::setSmuflAnchor(SmuflAnchorId anchorId, const PointF& newValue)
 {
     m_smuflAnchors[anchorId] = newValue;
 }

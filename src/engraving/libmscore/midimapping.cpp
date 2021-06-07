@@ -27,6 +27,8 @@
 #include "instrument.h"
 #include "part.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   rebuildMidiMapping

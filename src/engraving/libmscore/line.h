@@ -45,7 +45,7 @@ class LineSegment : public SpannerSegment
 protected:
     virtual void editDrag(EditData&) override;
     virtual bool edit(EditData&) override;
-    QVector<QLineF> gripAnchorLines(Grip) const override;
+    QVector<mu::LineF> gripAnchorLines(Grip) const override;
     virtual void startEditDrag(EditData&) override;
     void startDrag(EditData&) override;
 
@@ -69,17 +69,17 @@ public:
     int gripsCount() const override { return 3; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::MIDDLE; }
-    std::vector<QPointF> gripsPositions(const EditData& = EditData()) const override;
+    std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
 
-    virtual QVector<QLineF> dragAnchorLines() const override;
-    QRectF drag(EditData& ed) override;
+    QVector<mu::LineF> dragAnchorLines() const override;
+    mu::RectF drag(EditData& ed) override;
 private:
-    QPointF leftAnchorPosition(const qreal& systemPositionY) const;
-    QPointF rightAnchorPosition(const qreal& systemPositionY) const;
+    mu::PointF leftAnchorPosition(const qreal& systemPositionY) const;
+    mu::PointF rightAnchorPosition(const qreal& systemPositionY) const;
 
-    Segment* findSegmentForGrip(Grip grip, QPointF pos) const;
-    static QPointF deltaRebaseLeft(const Segment* oldSeg, const Segment* newSeg);
-    static QPointF deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg, int staffIdx);
+    Segment* findSegmentForGrip(Grip grip, mu::PointF pos) const;
+    static mu::PointF deltaRebaseLeft(const Segment* oldSeg, const Segment* newSeg);
+    static mu::PointF deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg, int staffIdx);
     static Fraction lastSegmentEndTick(const Segment* lastSeg, const Spanner* s);
     LineSegment* rebaseAnchor(Grip grip, Segment* newSeg);
     void rebaseAnchors(EditData&, Grip);
@@ -100,7 +100,7 @@ class SLine : public Spanner
     bool _diagonal          { false };
 
 protected:
-    virtual QPointF linePos(Grip, System** system) const;
+    virtual mu::PointF linePos(Grip, System** system) const;
 
 public:
     SLine(Score* s, ElementFlags = ElementFlag::NOTHING);
@@ -114,7 +114,7 @@ public:
     virtual LineSegment* createLineSegment() = 0;
     void setLen(qreal l);
     using Element::bbox;
-    virtual const QRectF& bbox() const override;
+    const mu::RectF& bbox() const override;
 
     virtual void write(XmlWriter&) const override;
     virtual void read(XmlReader&) override;

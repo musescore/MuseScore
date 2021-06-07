@@ -27,6 +27,8 @@
 #include "chord.h"
 #include "rest.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   NoteDot

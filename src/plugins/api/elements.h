@@ -404,7 +404,7 @@ class Element : public Ms::PluginAPI::ScoreElement
     qreal posX() const { return element()->pos().x() / element()->spatium(); }
     qreal posY() const { return element()->pos().y() / element()->spatium(); }
 
-    QPointF pagePos() const { return element()->pagePos() / element()->spatium(); }
+    QPointF pagePos() const { return mu::PointF(element()->pagePos() / element()->spatium()).toQPointF(); }
 
     Ms::PluginAPI::Element* parent() const { return wrap(element()->parent()); }
     Staff* staff() { return wrap<Staff>(element()->staff()); }

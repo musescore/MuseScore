@@ -33,6 +33,8 @@
 #include <algorithm>
 #include <utility>
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   MscxModeDiff

@@ -70,27 +70,27 @@ public:
     bool isValid(SymId id) const;
     bool useFallbackFont(SymId id) const;
 
-    const QRectF bbox(SymId id, qreal mag) const;
-    const QRectF bbox(SymId id, const QSizeF&) const;
-    const QRectF bbox(const std::vector<SymId>& s, qreal mag) const;
-    const QRectF bbox(const std::vector<SymId>& s, const QSizeF& mag) const;
+    const mu::RectF bbox(SymId id, qreal mag) const;
+    const mu::RectF bbox(SymId id, const mu::SizeF&) const;
+    const mu::RectF bbox(const std::vector<SymId>& s, qreal mag) const;
+    const mu::RectF bbox(const std::vector<SymId>& s, const mu::SizeF& mag) const;
 
     qreal width(SymId id, qreal mag) const;
     qreal height(SymId id, qreal mag) const;
     qreal advance(SymId id, qreal mag) const;
     qreal width(const std::vector<SymId>&, qreal mag) const;
 
-    QPointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, qreal mag) const;
+    mu::PointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, qreal mag) const;
 
-    void draw(SymId id,                  mu::draw::Painter*, const mu::draw::SizeF& mag, const mu::draw::PointF& pos, qreal scale) const;
-    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const mu::draw::PointF& pos, qreal scale) const;
-    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const mu::draw::PointF& pos) const;
-    void draw(SymId id,                  mu::draw::Painter*, const mu::draw::SizeF& mag, const mu::draw::PointF& pos) const;
-    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const mu::draw::PointF& pos, int n) const;
-    void draw(const std::vector<SymId>&, mu::draw::Painter*, qreal mag,         const mu::draw::PointF& pos) const;
-    void draw(const std::vector<SymId>&, mu::draw::Painter*, const mu::draw::SizeF& mag, const mu::draw::PointF& pos) const;
-    void draw(const std::vector<SymId>&, mu::draw::Painter*, qreal mag,         const mu::draw::PointF& pos, qreal scale) const;
-    void draw(const std::vector<SymId>&, mu::draw::Painter*, const mu::draw::SizeF& mag, const mu::draw::PointF& pos, qreal scale) const;
+    void draw(SymId id,                  mu::draw::Painter*, const mu::SizeF& mag, const mu::PointF& pos, qreal scale) const;
+    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const mu::PointF& pos, qreal scale) const;
+    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const mu::PointF& pos) const;
+    void draw(SymId id,                  mu::draw::Painter*, const mu::SizeF& mag, const mu::PointF& pos) const;
+    void draw(SymId id,                  mu::draw::Painter*, qreal mag,         const mu::PointF& pos, int n) const;
+    void draw(const std::vector<SymId>&, mu::draw::Painter*, qreal mag,         const mu::PointF& pos) const;
+    void draw(const std::vector<SymId>&, mu::draw::Painter*, const mu::SizeF& mag, const mu::PointF& pos) const;
+    void draw(const std::vector<SymId>&, mu::draw::Painter*, qreal mag,         const mu::PointF& pos, qreal scale) const;
+    void draw(const std::vector<SymId>&, mu::draw::Painter*, const mu::SizeF& mag, const mu::PointF& pos, qreal scale) const;
 
 private:
     static QJsonObject initGlyphNamesJson();

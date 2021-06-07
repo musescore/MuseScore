@@ -97,12 +97,12 @@ class PaletteCellIconEngine : public QIconEngine
     INJECT_STATIC(palette, mu::palette::IPaletteConfiguration, configuration)
 
 private:
-    void paintCell(mu::draw::Painter& painter, const QRect& rect, bool selected, bool current) const;
+    void paintCell(mu::draw::Painter& painter, const mu::RectF& rect, bool selected, bool current) const;
     void paintScoreElement(mu::draw::Painter& painter, Element* element, qreal spatium, bool alignToStaff) const;
 
-    static qreal paintStaff(mu::draw::Painter& painter, const mu::draw::RectF& rect, qreal spatium);
-    static void paintTag(mu::draw::Painter& painter, const mu::draw::RectF& rect, QString tag);
-    static void paintBackground(mu::draw::Painter& painter, const mu::draw::RectF& rect, bool selected, bool current);
+    static qreal paintStaff(mu::draw::Painter& painter, const mu::RectF& rect, qreal spatium);
+    static void paintTag(mu::draw::Painter& painter, const mu::RectF& rect, QString tag);
+    static void paintBackground(mu::draw::Painter& painter, const mu::RectF& rect, bool selected, bool current);
 
 public:
     PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag = 1.0)

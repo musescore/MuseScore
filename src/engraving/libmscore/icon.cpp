@@ -24,6 +24,8 @@
 #include "icon.h"
 #include "property.h"
 
+using namespace mu;
+
 namespace Ms {
 Icon::Icon(Score* score)
     : Element(score)
@@ -45,9 +47,9 @@ IconType Icon::iconType() const
     return _iconType;
 }
 
-QRectF Icon::boundingBox() const
+RectF Icon::boundingBox() const
 {
-    return QRectF(0, 0, _extent, _extent);
+    return RectF(0, 0, _extent, _extent);
 }
 
 void Icon::setAction(const std::string& actionCode, char16_t icon)

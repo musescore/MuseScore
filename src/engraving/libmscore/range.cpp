@@ -37,6 +37,8 @@
 #include "measurerepeat.h"
 #include "tremolo.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   cleanupTuplet

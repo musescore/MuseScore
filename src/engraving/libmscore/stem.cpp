@@ -36,6 +36,9 @@
 #include "symid.h"
 // END OF HACK
 
+using namespace mu;
+using namespace mu::draw;
+
 namespace Ms {
 static const ElementStyle stemStyle {
     { Sid::stemWidth,                          Pid::LINE_WIDTH },
@@ -140,7 +143,7 @@ void Stem::layout()
     line.setLine(0.0, y1, 0.0, l);
 
     // compute bounding rectangle
-    QRectF r(line.p1().toQPointF(), line.p2().toQPointF());
+    RectF r(line.p1(), line.p2());
     setbbox(r.normalized().adjusted(-lw5, -lw5, lw5, lw5));
 }
 
@@ -210,7 +213,7 @@ void Stem::draw(mu::draw::Painter* painter) const
         qreal sln   = sp * STAFFTYPE_TAB_SLASH_SLANTY;
         qreal thk   = sp * STAFFTYPE_TAB_SLASH_THICK;
         qreal displ = sp * STAFFTYPE_TAB_SLASH_DISPL;
-        QPainterPath path;
+        PainterPath path;
         for (int i = 0; i < 2; ++i) {
             path.moveTo(hlfWdt, y);                   // top-right corner
             path.lineTo(hlfWdt, y + thk);             // bottom-right corner
@@ -233,7 +236,7 @@ void Stem::draw(mu::draw::Painter* painter) const
         qreal y     = ((STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (isUp ? -1.0 : 1.0);
         qreal step  = score()->styleS(Sid::dotDotDistance).val() * sp;
         for (int dot = 0; dot < nDots; dot++, x += step) {
-            drawSymbol(SymId::augmentationDot, painter, QPointF(x, y));
+            drawSymbol(SymId::augmentationDot, painter, PointF(x, y));
         }
     }
 }
@@ -285,9 +288,9 @@ bool Stem::readProperties(XmlReader& e)
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<QPointF> Stem::gripsPositions(const EditData&) const
+std::vector<mu::PointF> Stem::gripsPositions(const EditData&) const
 {
-    return { pagePos() + line.p2().toQPointF() };
+    return { pagePos() + line.p2() };
 }
 
 //---------------------------------------------------------
@@ -312,7 +315,7 @@ void Stem::editDrag(EditData& ed)
     layout();
     Chord* c = chord();
     if (c->hook()) {
-        c->hook()->move(QPointF(0.0, ed.delta.y()));
+        c->hook()->move(PointF(0.0, ed.delta.y()));
     }
 }
 
@@ -424,9 +427,9 @@ QVariant Stem::propertyDefault(Pid id) const
 //    in chord coordinates
 //---------------------------------------------------------
 
-QPointF Stem::hookPos() const
+PointF Stem::hookPos() const
 {
-    QPointF p(pos() + line.p2().toQPointF());
+    PointF p(pos() + line.p2());
 
     qreal xoff = 0.5 * lineWidthMag();
     p.rx() += xoff;

@@ -30,6 +30,7 @@ set(MODULE_SRC
     ${LIBMSCORE_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/draw/geometry.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/transform.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/drawtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/painter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/painter.h

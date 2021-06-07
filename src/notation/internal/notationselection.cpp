@@ -103,7 +103,7 @@ QRectF NotationSelection::canvasBoundingRect() const
 
     Ms::Element* el = score()->selection().element();
     if (el) {
-        return el->canvasBoundingRect();
+        return el->canvasBoundingRect().toQRectF();
     }
 
     QList<Ms::Element*> els = score()->selection().elements();
@@ -112,7 +112,7 @@ QRectF NotationSelection::canvasBoundingRect() const
         return QRectF();
     }
 
-    QRectF rect;
+    RectF rect;
     for (const Ms::Element* elm: els) {
         if (rect.isNull()) {
             rect = elm->canvasBoundingRect();
@@ -121,7 +121,7 @@ QRectF NotationSelection::canvasBoundingRect() const
         }
     }
 
-    return rect;
+    return rect.toQRectF();
 }
 
 INotationSelectionRangePtr NotationSelection::range() const

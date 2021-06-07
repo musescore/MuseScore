@@ -146,7 +146,7 @@ public:
     qreal x() const override { return ipos().x(); }
     void setX(qreal v) { rxpos() = v; }
 
-    QRectF contentRect() const;
+    mu::RectF contentRect() const;
 
     void insertStaff(int staff);
     void removeStaff(int staff);

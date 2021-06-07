@@ -23,8 +23,6 @@
 #ifndef __STAFFSTATE_H__
 #define __STAFFSTATE_H__
 
-#include <QPainterPath>
-
 #include "element.h"
 #include "instrument.h"
 
@@ -44,7 +42,7 @@ class StaffState final : public Element
 {
     StaffStateType _staffStateType { StaffStateType::INVISIBLE };
     qreal lw { 0.0 };
-    QPainterPath path;
+    mu::PainterPath path;
 
     Instrument* _instrument { nullptr };
 

@@ -55,7 +55,7 @@ public:
 class LetRing final : public TextLineBase
 {
 protected:
-    QPointF linePos(Grip, System**) const override;
+    mu::PointF linePos(Grip, System**) const override;
 
 public:
     LetRing(Score* s);

@@ -68,7 +68,7 @@ public:
     void write(XmlWriter& xml) const override;
     bool readProperties(XmlReader&) override;
 
-    QVector<QLineF> dragAnchorLines() const override;
+    QVector<mu::LineF> dragAnchorLines() const override;
 
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;

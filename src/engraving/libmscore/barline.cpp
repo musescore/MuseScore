@@ -43,7 +43,7 @@
 #include "draw/font.h"
 #include "draw/fontmetrics.h"
 
-using namespace mu::draw;
+using namespace mu;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -361,9 +361,9 @@ BarLine::~BarLine()
 //   canvasPos
 //---------------------------------------------------------
 
-QPointF BarLine::canvasPos() const
+PointF BarLine::canvasPos() const
 {
-    QPointF pos = Element::canvasPos();
+    PointF pos = Element::canvasPos();
     if (parent()) {
         System* system = measure()->system();
         qreal yoff = system ? system->staff(staffIdx())->y() : 0.0;
@@ -376,7 +376,7 @@ QPointF BarLine::canvasPos() const
 //   pagePos
 //---------------------------------------------------------
 
-QPointF BarLine::pagePos() const
+PointF BarLine::pagePos() const
 {
     if (segment() == 0) {
         return pos();
@@ -403,7 +403,7 @@ QPointF BarLine::pagePos() const
         }
         yp += system->staffYpage(staffIdx1);
     }
-    return QPointF(pageX(), yp);
+    return PointF(pageX(), yp);
 }
 
 //---------------------------------------------------------
@@ -555,8 +555,8 @@ void BarLine::drawDots(mu::draw::Painter* painter, qreal x) const
         y1l             += stYOffset;
         y2l             += stYOffset;
     }
-    drawSymbol(SymId::repeatDot, painter, QPointF(x, y1l));
-    drawSymbol(SymId::repeatDot, painter, QPointF(x, y2l));
+    drawSymbol(SymId::repeatDot, painter, PointF(x, y1l));
+    drawSymbol(SymId::repeatDot, painter, PointF(x, y2l));
 }
 
 //---------------------------------------------------------
@@ -567,17 +567,17 @@ void BarLine::drawTips(mu::draw::Painter* painter, bool reversed, qreal x) const
 {
     if (reversed) {
         if (isTop()) {
-            drawSymbol(SymId::reversedBracketTop, painter, QPointF(x - symWidth(SymId::reversedBracketTop), y1));
+            drawSymbol(SymId::reversedBracketTop, painter, PointF(x - symWidth(SymId::reversedBracketTop), y1));
         }
         if (isBottom()) {
-            drawSymbol(SymId::reversedBracketBottom, painter, QPointF(x - symWidth(SymId::reversedBracketBottom), y2));
+            drawSymbol(SymId::reversedBracketBottom, painter, PointF(x - symWidth(SymId::reversedBracketBottom), y2));
         }
     } else {
         if (isTop()) {
-            drawSymbol(SymId::bracketTop, painter, QPointF(x, y1));
+            drawSymbol(SymId::bracketTop, painter, PointF(x, y1));
         }
         if (isBottom()) {
-            drawSymbol(SymId::bracketBottom, painter, QPointF(x, y2));
+            drawSymbol(SymId::bracketBottom, painter, PointF(x, y2));
         }
     }
 }
@@ -782,7 +782,7 @@ void BarLine::draw(mu::draw::Painter* painter) const
             f.setPointSizeF(12 * spatium() * MScore::pixelRatio / SPATIUM20);
             f.setBold(true);
             QString str = m->ticks() > m->timesig() ? "+" : "-";
-            QRectF r = mu::draw::FontMetrics(f).boundingRect(str);
+            RectF r = mu::draw::FontMetrics(f).boundingRect(str);
             painter->setFont(f);
             painter->drawText(-r.width(), 0.0, str);
         }
@@ -1021,18 +1021,18 @@ bool BarLine::showTips() const
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<QPointF> BarLine::gripsPositions(const EditData& ed) const
+std::vector<PointF> BarLine::gripsPositions(const EditData& ed) const
 {
     const BarLineEditData* bed = static_cast<const BarLineEditData*>(ed.getData(this));
 
     qreal lw = score()->styleP(Sid::barWidth) * staff()->staffMag(tick());
     getY();
 
-    const QPointF pp = pagePos();
+    const PointF pp = pagePos();
 
     return {
-        QPointF(lw * .5, y1 + bed->yoff1) + pp,
-        QPointF(lw * .5, y2 + bed->yoff2) + pp
+        PointF(lw * .5, y1 + bed->yoff1) + pp,
+        PointF(lw * .5, y2 + bed->yoff2) + pp
     };
 }
 
@@ -1387,9 +1387,9 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type)
 //   layoutRect
 //---------------------------------------------------------
 
-QRectF BarLine::layoutRect() const
+RectF BarLine::layoutRect() const
 {
-    QRectF bb = bbox();
+    RectF bb = bbox();
     if (staff()) {
         // actual height may include span to next staff
         // but this should not be included in shapes or skylines
@@ -1437,12 +1437,12 @@ QRectF BarLine::layoutRect() const
 
 void BarLine::layout()
 {
-    setPos(QPointF());
+    setPos(PointF());
     // barlines hidden on this staff
     if (staff() && segment()) {
         if ((!staff()->staffTypeForElement(this)->showBarlines() && segment()->segmentType() == SegmentType::EndBarLine)
             || (staff()->hideSystemBarLine() && segment()->segmentType() == SegmentType::BeginBarLine)) {
-            setbbox(QRectF());
+            setbbox(RectF());
             return;
         }
     }
@@ -1453,24 +1453,24 @@ void BarLine::layout()
     y2 = _spatium * .5 * (8.0 + _spanTo);
 
     qreal w = layoutWidth(score(), barLineType()) * mag();
-    QRectF r(0.0, y1, w, y2 - y1);
+    RectF r(0.0, y1, w, y2 - y1);
 
     if (score()->styleB(Sid::repeatBarTips)) {
         switch (barLineType()) {
         case BarLineType::START_REPEAT:
-            r |= symBbox(SymId::bracketTop).translated(0, y1);
+            r.unite(symBbox(SymId::bracketTop).translated(0, y1));
             // r |= symBbox(SymId::bracketBottom).translated(0, y2);
             break;
         case BarLineType::END_REPEAT: {
             qreal w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
-            r |= symBbox(SymId::reversedBracketTop).translated(-w1, y1);
+            r.unite(symBbox(SymId::reversedBracketTop).translated(-w1, y1));
             // r |= symBbox(SymId::reversedBracketBottom).translated(0, y2);
         }
         break;
         case BarLineType::END_START_REPEAT: {
             qreal w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
-            r |= symBbox(SymId::reversedBracketTop).translated(-w1, y1);
-            r |= symBbox(SymId::bracketTop).translated(0, y1);
+            r.unite(symBbox(SymId::reversedBracketTop).translated(-w1, y1));
+            r.unite(symBbox(SymId::bracketTop).translated(0, y1));
             // r |= symBbox(SymId::reversedBracketBottom).translated(0, y2);
         }
         break;
@@ -1489,10 +1489,10 @@ void BarLine::layout()
             qreal x          = width() * .5;
             if (dir == Direction::DOWN) {
                 qreal botY = y2 + distance;
-                a->setPos(QPointF(x, botY));
+                a->setPos(PointF(x, botY));
             } else {
                 qreal topY = y1 - distance;
-                a->setPos(QPointF(x, topY));
+                a->setPos(PointF(x, topY));
             }
         }
     }
@@ -1509,7 +1509,7 @@ void BarLine::layout2()
     if (staff() && segment()) {
         if ((!staff()->staffTypeForElement(this)->showBarlines() && segment()->segmentType() == SegmentType::EndBarLine)
             || (staff()->hideSystemBarLine() && segment()->segmentType() == SegmentType::BeginBarLine)) {
-            setbbox(QRectF());
+            setbbox(RectF());
             return;
         }
     }
@@ -1521,23 +1521,23 @@ void BarLine::layout2()
     if (score()->styleB(Sid::repeatBarTips)) {
         switch (barLineType()) {
         case BarLineType::START_REPEAT:
-            bbox() |= symBbox(SymId::bracketTop).translated(0, y1);
-            bbox() |= symBbox(SymId::bracketBottom).translated(0, y2);
+            bbox().unite(symBbox(SymId::bracketTop).translated(0, y1));
+            bbox().unite(symBbox(SymId::bracketBottom).translated(0, y2));
             break;
         case BarLineType::END_REPEAT:
         {
             qreal w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
-            bbox() |= symBbox(SymId::reversedBracketTop).translated(-w1, y1);
-            bbox() |= symBbox(SymId::reversedBracketBottom).translated(-w1, y2);
+            bbox().unite(symBbox(SymId::reversedBracketTop).translated(-w1, y1));
+            bbox().unite(symBbox(SymId::reversedBracketBottom).translated(-w1, y2));
             break;
         }
         case BarLineType::END_START_REPEAT:
         {
             qreal w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
-            bbox() |= symBbox(SymId::reversedBracketTop).translated(-w1, y1);
-            bbox() |= symBbox(SymId::reversedBracketBottom).translated(-w1, y2);
-            bbox() |= symBbox(SymId::bracketTop).translated(0, y1);
-            bbox() |= symBbox(SymId::bracketBottom).translated(0, y2);
+            bbox().unite(symBbox(SymId::reversedBracketTop).translated(-w1, y1));
+            bbox().unite(symBbox(SymId::reversedBracketBottom).translated(-w1, y2));
+            bbox().unite(symBbox(SymId::bracketTop).translated(0, y1));
+            bbox().unite(symBbox(SymId::bracketBottom).translated(0, y2));
             break;
         }
         default:

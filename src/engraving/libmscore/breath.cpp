@@ -29,6 +29,8 @@
 #include "xml.h"
 #include "staff.h"
 
+using namespace mu;
+
 namespace Ms {
 const std::vector<BreathType> Breath::breathList {
     { SymId::breathMarkComma,      false, 0.0 },
@@ -158,7 +160,7 @@ void Breath::draw(mu::draw::Painter* painter) const
 //   pagePos
 //---------------------------------------------------------
 
-QPointF Breath::pagePos() const
+mu::PointF Breath::pagePos() const
 {
     if (parent() == 0) {
         return pos();
@@ -168,7 +170,7 @@ QPointF Breath::pagePos() const
     if (system) {
         yp += system->staff(staffIdx())->y() + system->y();
     }
-    return QPointF(pageX(), yp);
+    return PointF(pageX(), yp);
 }
 
 //---------------------------------------------------------

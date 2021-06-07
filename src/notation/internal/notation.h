@@ -55,7 +55,7 @@ public:
     void setViewSize(const QSizeF& vs) override;
     void setViewMode(const ViewMode& viewMode) override;
     ViewMode viewMode() const override;
-    void paint(draw::Painter* painter, const QRectF& frameRect) override;
+    void paint(draw::Painter* painter, const RectF& frameRect) override;
 
     ValCh<bool> opened() const override;
     void setOpened(bool opened) override;
@@ -80,9 +80,9 @@ protected:
 private:
     friend class NotationInteraction;
 
-    void paintPages(mu::draw::Painter* painter, const QRectF& frameRect, const QList<Ms::Page*>& pages, bool paintBorders) const;
+    void paintPages(mu::draw::Painter* painter, const RectF& frameRect, const QList<Ms::Page*>& pages, bool paintBorders) const;
     void paintPageBorder(mu::draw::Painter* painter, const Ms::Page* page) const;
-    void paintForeground(mu::draw::Painter* painter, const QRectF& pageRect) const;
+    void paintForeground(mu::draw::Painter* painter, const RectF& pageRect) const;
 
     QSizeF viewSize() const;
 

@@ -40,6 +40,8 @@
 #include "accidental.h"
 #include "measurerepeat.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   noteValForPosition
@@ -324,7 +326,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
 //    mouse click in state NoteType::ENTRY
 //---------------------------------------------------------
 
-void Score::putNote(const QPointF& pos, bool replace, bool insert)
+void Score::putNote(const PointF& pos, bool replace, bool insert)
 {
     Position p;
     if (!getPosition(&p, pos, _is.voice())) {

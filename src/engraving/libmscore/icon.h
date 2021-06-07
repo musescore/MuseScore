@@ -56,7 +56,7 @@ public:
     bool setProperty(Pid, const QVariant&) override;
 
 private:
-    QRectF boundingBox() const;
+    mu::RectF boundingBox() const;
 
     IconType _iconType { IconType::NONE };
     std::string _actionCode;

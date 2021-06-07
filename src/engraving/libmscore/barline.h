@@ -99,8 +99,8 @@ public:
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
     void draw(mu::draw::Painter*) const override;
-    QPointF canvasPos() const override;      ///< position in canvas coordinates
-    QPointF pagePos() const override;        ///< position in page coordinates
+    mu::PointF canvasPos() const override;      ///< position in canvas coordinates
+    mu::PointF pagePos() const override;        ///< position in page coordinates
     void layout() override;
     void layout2();
     void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
@@ -154,7 +154,7 @@ public:
     using ScoreElement::undoChangeProperty;
 
     static qreal layoutWidth(Score*, BarLineType);
-    QRectF layoutRect() const;
+    mu::RectF layoutRect() const;
 
     Element* nextSegmentElement() override;
     Element* prevSegmentElement() override;
@@ -166,7 +166,7 @@ public:
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<QPointF> gripsPositions(const EditData&) const override;
+    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
     static const std::vector<BarLineTableItem> barLineTable;
 };

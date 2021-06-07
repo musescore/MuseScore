@@ -36,6 +36,8 @@
 #include "fret.h"
 #include "part.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   keydiff2Interval

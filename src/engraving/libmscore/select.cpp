@@ -71,6 +71,8 @@
 #include "stafftext.h"
 #include "sticking.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   Selection
@@ -345,11 +347,11 @@ void Selection::deselectAll()
 //   changeSelection
 //---------------------------------------------------------
 
-static QRectF changeSelection(Element* e, bool b)
+static RectF changeSelection(Element* e, bool b)
 {
-    QRectF r = e->canvasBoundingRect();
+    RectF r = e->canvasBoundingRect();
     e->setSelected(b);
-    r |= e->canvasBoundingRect();
+    r.unite(e->canvasBoundingRect());
     return r;
 }
 
@@ -845,7 +847,7 @@ QByteArray Selection::mimeData() const
     switch (_state) {
     case SelState::LIST:
         if (isSingle()) {
-            a = element()->mimeData(QPointF());
+            a = element()->mimeData(PointF());
         } else {
             a = symbolListMimeData();
         }

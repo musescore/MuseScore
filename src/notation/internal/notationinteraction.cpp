@@ -151,7 +151,7 @@ INotationNoteInputPtr NotationInteraction::noteInput() const
     return m_noteInput;
 }
 
-void NotationInteraction::showShadowNote(const QPointF& pos)
+void NotationInteraction::showShadowNote(const PointF& pos)
 {
     const Ms::InputState& inputState = score()->inputState();
     Ms::Position position;
@@ -253,7 +253,7 @@ void NotationInteraction::toggleVisible()
     notifyAboutNotationChanged();
 }
 
-Element* NotationInteraction::hitElement(const QPointF& pos, float width) const
+Element* NotationInteraction::hitElement(const PointF& pos, float width) const
 {
     QList<Ms::Element*> elements = hitElements(pos, width);
     if (elements.isEmpty()) {
@@ -263,12 +263,12 @@ Element* NotationInteraction::hitElement(const QPointF& pos, float width) const
     return elements.first();
 }
 
-int NotationInteraction::hitStaffIndex(const QPointF& pos) const
+int NotationInteraction::hitStaffIndex(const PointF& pos) const
 {
     return hitMeasure(pos).staffIndex;
 }
 
-Ms::Page* NotationInteraction::point2page(const QPointF& p) const
+Ms::Page* NotationInteraction::point2page(const PointF& p) const
 {
     if (score()->layoutMode() == Ms::LayoutMode::LINE) {
         return score()->pages().isEmpty() ? 0 : score()->pages().front();
@@ -281,7 +281,7 @@ Ms::Page* NotationInteraction::point2page(const QPointF& p) const
     return nullptr;
 }
 
-QList<Element*> NotationInteraction::elementsAt(const QPointF& p) const
+QList<Element*> NotationInteraction::elementsAt(const PointF& p) const
 {
     QList<Element*> el;
     Ms::Page* page = point2page(p);
@@ -292,7 +292,7 @@ QList<Element*> NotationInteraction::elementsAt(const QPointF& p) const
     return el;
 }
 
-Element* NotationInteraction::elementAt(const QPointF& p) const
+Element* NotationInteraction::elementAt(const PointF& p) const
 {
     QList<Element*> el = elementsAt(p);
     Element* e = el.value(0);
@@ -302,7 +302,7 @@ Element* NotationInteraction::elementAt(const QPointF& p) const
     return e;
 }
 
-QList<Ms::Element*> NotationInteraction::hitElements(const QPointF& p_in, float w) const
+QList<Ms::Element*> NotationInteraction::hitElements(const PointF& p_in, float w) const
 {
     Ms::Page* page = point2page(p_in);
     if (!page) {
@@ -311,9 +311,9 @@ QList<Ms::Element*> NotationInteraction::hitElements(const QPointF& p_in, float 
 
     QList<Ms::Element*> ll;
 
-    QPointF p = p_in - page->pos();
+    PointF p = p_in - page->pos();
 
-    QRectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
+    RectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
     QList<Ms::Element*> elements = page->items(r);
     //! TODO
@@ -372,11 +372,11 @@ QList<Ms::Element*> NotationInteraction::hitElements(const QPointF& p_in, float 
     return ll;
 }
 
-NotationInteraction::HitMeasureData NotationInteraction::hitMeasure(const QPointF& pos) const
+NotationInteraction::HitMeasureData NotationInteraction::hitMeasure(const PointF& pos) const
 {
     int staffIndex;
     Ms::Segment* segment;
-    QPointF offset;
+    PointF offset;
     Measure* measure = score()->pos2measure(pos, &staffIndex, 0, &segment, &offset);
 
     HitMeasureData result;
@@ -555,7 +555,7 @@ void NotationInteraction::DragData::reset()
 }
 
 void NotationInteraction::startDrag(const std::vector<Element*>& elems,
-                                    const QPointF& eoffset,
+                                    const PointF& eoffset,
                                     const IsDraggable& isDraggable)
 {
     m_dragData.reset();
@@ -585,10 +585,10 @@ void NotationInteraction::startDrag(const std::vector<Element*>& elems,
     }
 }
 
-void NotationInteraction::doDragLasso(const QPointF& pt)
+void NotationInteraction::doDragLasso(const PointF& pt)
 {
     score()->addRefresh(m_lasso->canvasBoundingRect());
-    QRectF r;
+    RectF r;
     r.setCoords(m_dragData.beginMove.x(), m_dragData.beginMove.y(), pt.x(), pt.y());
     m_lasso->setbbox(r.normalized());
     score()->addRefresh(m_lasso->canvasBoundingRect());
@@ -599,12 +599,12 @@ void NotationInteraction::doDragLasso(const QPointF& pt)
 void NotationInteraction::endLasso()
 {
     score()->addRefresh(m_lasso->canvasBoundingRect());
-    m_lasso->setbbox(QRectF());
+    m_lasso->setbbox(RectF());
     score()->lassoSelectEnd(m_dragData.mode != DragMode::LassoList);
     score()->update();
 }
 
-void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, DragMode mode)
+void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragMode mode)
 {
     if (m_dragData.beginMove.isNull()) {
         m_dragData.beginMove = fromPos;
@@ -612,10 +612,10 @@ void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, Dra
     }
     m_dragData.mode = mode;
 
-    QPointF normalizedBegin = m_dragData.beginMove - m_dragData.elementOffset;
+    PointF normalizedBegin = m_dragData.beginMove - m_dragData.elementOffset;
 
-    QPointF delta = toPos - normalizedBegin;
-    QPointF evtDelta = toPos - m_dragData.ed.pos;
+    PointF delta = toPos - normalizedBegin;
+    PointF evtDelta = toPos - m_dragData.ed.pos;
 
     switch (mode) {
     case DragMode::BothXY:
@@ -662,14 +662,14 @@ void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, Dra
 
     score()->update();
 
-    std::vector<draw::LineF> anchorLines;
+    std::vector<LineF> anchorLines;
     for (const Element* e : m_dragData.elements) {
-        QVector<QLineF> elAnchorLines = e->dragAnchorLines();
+        QVector<LineF> elAnchorLines = e->dragAnchorLines();
         const Ms::Element* page = e->findAncestor(ElementType::PAGE);
-        const QPointF pageOffset((page ? page : e)->pos());
+        const PointF pageOffset((page ? page : e)->pos());
 
         if (!elAnchorLines.isEmpty()) {
-            for (QLineF& l : elAnchorLines) {
+            for (LineF& l : elAnchorLines) {
                 l.translate(pageOffset);
                 anchorLines.push_back(l);
             }
@@ -751,7 +751,7 @@ void NotationInteraction::startDrop(const QByteArray& edata)
 }
 
 //! NOTE Copied from ScoreView::dragMoveEvent
-bool NotationInteraction::isDropAccepted(const QPointF& pos, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers)
 {
     if (!m_dropData.ed.dropElement) {
         return false;
@@ -835,7 +835,7 @@ bool NotationInteraction::isDropAccepted(const QPointF& pos, Qt::KeyboardModifie
 }
 
 //! NOTE Copied from ScoreView::dropEvent
-bool NotationInteraction::drop(const QPointF& pos, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifiers)
 {
     if (!m_dropData.ed.dropElement) {
         return false;
@@ -891,7 +891,7 @@ bool NotationInteraction::drop(const QPointF& pos, Qt::KeyboardModifiers modifie
         if (el == 0 || el->type() == ElementType::STAFF_LINES) {
             int staffIdx;
             Ms::Segment* seg;
-            QPointF offset;
+            PointF offset;
             el = score()->pos2measure(pos, &staffIdx, 0, &seg, &offset);
             if (el && el->isMeasure()) {
                 m_dropData.ed.dropElement->setTrack(staffIdx * VOICES);
@@ -1132,7 +1132,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                     e = toChord(e)->upNote();
                 }
 
-                applyDropPaletteElement(score, e, element, modifiers, QPointF(), true);
+                applyDropPaletteElement(score, e, element, modifiers, PointF(), true);
                 // note has already been played (and what would play otherwise may be *next* input position)
                 score->setPlayNote(false);
                 score->setPlayChord(false);
@@ -1155,11 +1155,11 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
             // TODO - handle cross-voice selections
             int idx = cr1->staffIdx();
 
-            QByteArray a = element->mimeData(QPointF());
+            QByteArray a = element->mimeData(PointF());
 //printf("<<%s>>\n", a.data());
             Ms::XmlReader e(a);
             Ms::Fraction duration;        // dummy
-            QPointF dragOffset;
+            PointF dragOffset;
             Ms::ElementType type = Ms::Element::readType(e, &dragOffset, &duration);
             Ms::Spanner* spanner = static_cast<Ms::Spanner*>(Ms::Element::create(type, score));
             spanner->read(e);
@@ -1189,8 +1189,8 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                     || toIcon(element)->iconType() == Ms::IconType::BRACKETS))) {
             Measure* last = sel.endSegment() ? sel.endSegment()->measure() : nullptr;
             for (Measure* m = sel.startSegment()->measure(); m; m = m->nextMeasureMM()) {
-                QRectF r = m->staffabbox(sel.staffStart());
-                QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
+                RectF r = m->staffabbox(sel.staffStart());
+                PointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                 pt += m->system()->page()->pos();
                 applyDropPaletteElement(score, m, element, modifiers, pt);
                 if (m == last) {
@@ -1276,8 +1276,8 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                         if (e2) {
                             applyDropPaletteElement(score, e2, oelement, modifiers);
                         } else {
-                            QRectF r = m2->staffabbox(i);
-                            QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
+                            RectF r = m2->staffabbox(i);
+                            PointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                             pt += m2->system()->page()->pos();
                             applyDropPaletteElement(score, m2, oelement, modifiers, pt);
                         }
@@ -1288,8 +1288,8 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                 if (e1) {
                     applyDropPaletteElement(score, e1, element, modifiers);
                 } else {
-                    QRectF r = m1->staffabbox(i);
-                    QPointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
+                    RectF r = m1->staffabbox(i);
+                    PointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                     pt += m1->system()->page()->pos();
                     applyDropPaletteElement(score, m1, element, modifiers, pt);
                 }
@@ -1355,7 +1355,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
 //! NOTE Copied from Palette applyDrop
 void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element* target, Ms::Element* e,
                                                   Qt::KeyboardModifiers modifiers,
-                                                  QPointF pt, bool pasteMode)
+                                                  PointF pt, bool pasteMode)
 {
     Ms::EditData dropData;
     dropData.view        = new ScoreCallbacks();
@@ -1367,12 +1367,12 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
     if (target->acceptDrop(dropData)) {
         // use same code path as drag&drop
 
-        QByteArray a = e->mimeData(QPointF());
+        QByteArray a = e->mimeData(PointF());
 
         Ms::XmlReader n(a);
         n.setPasteMode(pasteMode);
         Fraction duration;      // dummy
-        QPointF dragOffset;
+        PointF dragOffset;
         ElementType type = Element::readType(n, &dragOffset, &duration);
         dropData.dropElement = Element::create(type, score);
 
@@ -1572,7 +1572,7 @@ Element* NotationInteraction::dropTarget(Ms::EditData& ed) const
 }
 
 //! NOTE Copied from ScoreView::dragMeasureAnchorElement
-bool NotationInteraction::dragMeasureAnchorElement(const QPointF& pos)
+bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
 {
     int staffIdx;
     Ms::Segment* seg;
@@ -1586,13 +1586,13 @@ bool NotationInteraction::dragMeasureAnchorElement(const QPointF& pos)
         Ms::Measure* m = Ms::toMeasure(mb);
         Ms::System* s  = m->system();
         qreal y    = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
-        QRectF b(m->canvasBoundingRect());
+        RectF b(m->canvasBoundingRect());
         if (pos.x() >= (b.x() + b.width() * .5) && m != score()->lastMeasureMM()
             && m->nextMeasure()->system() == m->system()) {
             m = m->nextMeasure();
         }
-        QPointF anchor(m->canvasBoundingRect().x(), y);
-        setAnchorLines({ draw::LineF(pos, anchor) });
+        PointF anchor(m->canvasBoundingRect().x(), y);
+        setAnchorLines({ LineF(pos, anchor) });
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
         m_dropData.ed.dropElement->setTrack(track);
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
@@ -1605,7 +1605,7 @@ bool NotationInteraction::dragMeasureAnchorElement(const QPointF& pos)
 }
 
 //! NOTE Copied from ScoreView::dragTimeAnchorElement
-bool NotationInteraction::dragTimeAnchorElement(const QPointF& pos)
+bool NotationInteraction::dragTimeAnchorElement(const PointF& pos)
 {
     int staffIdx;
     Ms::Segment* seg;
@@ -1616,8 +1616,8 @@ bool NotationInteraction::dragTimeAnchorElement(const QPointF& pos)
         Ms::Measure* m = Ms::toMeasure(mb);
         Ms::System* s  = m->system();
         qreal y    = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
-        QPointF anchor(seg->canvasBoundingRect().x(), y);
-        setAnchorLines({ draw::LineF(pos, anchor) });
+        PointF anchor(seg->canvasBoundingRect().x(), y);
+        setAnchorLines({ LineF(pos, anchor) });
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
         m_dropData.ed.dropElement->setTrack(track);
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
@@ -1655,7 +1655,7 @@ void NotationInteraction::setDropTarget(Element* el)
     notifyAboutDragChanged();
 }
 
-void NotationInteraction::setAnchorLines(const std::vector<draw::LineF>& anchorList)
+void NotationInteraction::setAnchorLines(const std::vector<LineF>& anchorList)
 {
     m_anchorLines = anchorList;
 }
@@ -1674,18 +1674,18 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
     const auto dropAnchorColor = configuration()->anchorLineColor();
     QPen pen(QBrush(dropAnchorColor), 2.0 / painter->worldTransform().m11(), Qt::DotLine);
 
-    for (const draw::LineF& anchor : m_anchorLines) {
+    for (const LineF& anchor : m_anchorLines) {
         painter->setPen(pen);
         painter->drawLine(anchor);
 
         qreal d = 4.0 / painter->worldTransform().m11();
-        QRectF rect(-d, -d, 2 * d, 2 * d);
+        RectF rect(-d, -d, 2 * d, 2 * d);
 
         painter->setBrush(QBrush(dropAnchorColor));
         painter->setNoPen();
-        rect.moveCenter(anchor.p1().toQPointF());
+        rect.moveCenter(anchor.p1());
         painter->drawEllipse(rect);
-        rect.moveCenter(anchor.p2().toQPointF());
+        rect.moveCenter(anchor.p2());
         painter->drawEllipse(rect);
     }
 }
@@ -1716,10 +1716,10 @@ void NotationInteraction::drawSelectionRange(draw::Painter* painter)
     pen.setStyle(Qt::SolidLine);
     painter->setPen(pen);
 
-    std::vector<QRectF> rangeArea = m_selection->range()->boundingArea();
-    for (const QRectF& rect: rangeArea) {
+    std::vector<RectF> rangeArea = m_selection->range()->boundingArea();
+    for (const RectF& rect: rangeArea) {
         QPainterPath path;
-        path.addRoundedRect(rect, 6, 6);
+        path.addRoundedRect(rect.toQRectF(), 6, 6);
 
         QColor fillColor = selectionColor;
         fillColor.setAlpha(10);
@@ -1740,12 +1740,12 @@ void NotationInteraction::drawGripPoints(draw::Painter* painter)
 
     qreal gripWidth = DEFAULT_GRIP_SIZE / painter->worldTransform().m11();
     qreal gripHeight = DEFAULT_GRIP_SIZE / painter->worldTransform().m22();
-    QRectF newRect(-gripWidth / 2, -gripHeight / 2, gripWidth, gripHeight);
+    RectF newRect(-gripWidth / 2, -gripHeight / 2, gripWidth, gripHeight);
 
     Element* page = m_gripEditData.element->findAncestor(ElementType::PAGE);
-    QPointF pageOffset = page ? page->pos() : m_gripEditData.element->pos();
+    PointF pageOffset = page ? page->pos() : m_gripEditData.element->pos();
 
-    for (QRectF& gripRect: m_gripEditData.grip) {
+    for (RectF& gripRect: m_gripEditData.grip) {
         gripRect = newRect.translated(pageOffset);
     }
 
@@ -1878,16 +1878,16 @@ void NotationInteraction::moveText(MoveDirection d, bool quickly)
         }
         break;
     case MoveDirection::Left:
-        el->undoChangeProperty(Ms::Pid::OFFSET, el->offset() - QPointF(step, 0.0), Ms::PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Ms::Pid::OFFSET, el->offset() - PointF(step, 0.0), Ms::PropertyFlags::UNSTYLED);
         break;
     case MoveDirection::Right:
-        el->undoChangeProperty(Ms::Pid::OFFSET, el->offset() + QPointF(step, 0.0), Ms::PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Ms::Pid::OFFSET, el->offset() + PointF(step, 0.0), Ms::PropertyFlags::UNSTYLED);
         break;
     case MoveDirection::Up:
-        el->undoChangeProperty(Ms::Pid::OFFSET, el->offset() - QPointF(0.0, step), Ms::PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Ms::Pid::OFFSET, el->offset() - PointF(0.0, step), Ms::PropertyFlags::UNSTYLED);
         break;
     case MoveDirection::Down:
-        el->undoChangeProperty(Ms::Pid::OFFSET, el->offset() + QPointF(0.0, step), Ms::PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Ms::Pid::OFFSET, el->offset() + PointF(0.0, step), Ms::PropertyFlags::UNSTYLED);
         break;
     }
 
@@ -1901,7 +1901,7 @@ bool NotationInteraction::isTextEditingStarted() const
     return m_textEditData.element != nullptr;
 }
 
-void NotationInteraction::startEditText(Element* element, const QPointF& cursorPos)
+void NotationInteraction::startEditText(Element* element, const PointF& cursorPos)
 {
     if (!element || !element->isEditable() || !element->isTextBase()) {
         qDebug("The element cannot be edited");
@@ -1965,7 +1965,7 @@ void NotationInteraction::endEditText()
     notifyAboutTextEditingChanged();
 }
 
-void NotationInteraction::changeTextCursorPosition(const QPointF& newCursorPos)
+void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
 {
     IF_ASSERT_FAILED(isTextEditingStarted() && m_textEditData.element) {
         return;
@@ -1997,7 +1997,7 @@ bool NotationInteraction::isGripEditStarted() const
     return m_gripEditData.element && m_gripEditData.curGrip != Ms::Grip::NO_GRIP;
 }
 
-bool NotationInteraction::isHitGrip(const QPointF& pos) const
+bool NotationInteraction::isHitGrip(const PointF& pos) const
 {
     if (!selection()->element() || m_gripEditData.grip.empty()) {
         return false;
@@ -2014,7 +2014,7 @@ bool NotationInteraction::isHitGrip(const QPointF& pos) const
     return false;
 }
 
-void NotationInteraction::startEditGrip(const QPointF& pos)
+void NotationInteraction::startEditGrip(const PointF& pos)
 {
     if (m_gripEditData.grip.size() == 0) {
         return;
@@ -2028,15 +2028,15 @@ void NotationInteraction::startEditGrip(const QPointF& pos)
 
         m_gripEditData.curGrip = Ms::Grip(i);
 
-        std::vector<draw::LineF> lines;
-        QVector<QLineF> anchorLines = m_gripEditData.element->gripAnchorLines(m_gripEditData.curGrip);
+        std::vector<LineF> lines;
+        QVector<LineF> anchorLines = m_gripEditData.element->gripAnchorLines(m_gripEditData.curGrip);
 
         Element* page = m_gripEditData.element->findAncestor(ElementType::PAGE);
-        const QPointF pageOffset((page ? page : m_gripEditData.element)->pos());
+        const PointF pageOffset((page ? page : m_gripEditData.element)->pos());
         if (!anchorLines.isEmpty()) {
-            for (QLineF& line : anchorLines) {
+            for (LineF& line : anchorLines) {
                 line.translate(pageOffset);
-                lines.push_back(draw::LineF(line));
+                lines.push_back(line);
             }
         }
 
@@ -2573,7 +2573,7 @@ void NotationInteraction::addText(TextType type)
 
     if (textBox) {
         select({ textBox }, SelectType::SINGLE);
-        startEditText(textBox, QPointF());
+        startEditText(textBox, PointF());
     }
 
     notifyAboutSelectionChanged();
@@ -2584,7 +2584,7 @@ void NotationInteraction::addFiguredBass()
     Ms::FiguredBass* figuredBass = score()->addFiguredBass();
 
     if (figuredBass) {
-        startEditText(figuredBass, QPointF());
+        startEditText(figuredBass, PointF());
     }
 
     notifyAboutSelectionChanged();

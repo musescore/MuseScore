@@ -31,6 +31,8 @@
 #include "types.h"
 #include "qtenum.h"
 
+#include "draw/geometry.h"
+
 namespace Ms {
 enum class Pid : int;
 class XmlWriter;
@@ -1488,6 +1490,7 @@ public:
     const QVariant& value(Sid idx) const;
     qreal pvalue(Sid idx) const { return _precomputedValues[int(idx)]; }
     void set(Sid idx, const QVariant& v);
+    void set(Sid idx, const mu::PointF& v);
 
     bool isDefault(Sid idx) const;
     void setDefaultStyleVersion(const int defaultsVersion);

@@ -23,6 +23,8 @@
 #include "shape.h"
 #include "segment.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   addHorizontalSpacing
@@ -38,23 +40,23 @@ void Shape::addHorizontalSpacing(HorizontalSpacingType type, qreal leftEdge, qre
     if (leftEdge == rightEdge) { // HACK zero-width shapes collide with everything currently.
         rightEdge += eps;
     }
-    add(QRectF(leftEdge, y, rightEdge - leftEdge, 0));
+    add(RectF(leftEdge, y, rightEdge - leftEdge, 0));
 }
 
 //---------------------------------------------------------
 //   translate
 //---------------------------------------------------------
 
-void Shape::translate(const QPointF& pt)
+void Shape::translate(const PointF& pt)
 {
-    for (QRectF& r : *this) {
+    for (RectF& r : *this) {
         r.translate(pt);
     }
 }
 
 void Shape::translateX(qreal xo)
 {
-    for (QRectF& r : *this) {
+    for (RectF& r : *this) {
         r.setLeft(r.left() + xo);
         r.setRight(r.right() + xo);
     }
@@ -62,7 +64,7 @@ void Shape::translateX(qreal xo)
 
 void Shape::translateY(qreal yo)
 {
-    for (QRectF& r : *this) {
+    for (RectF& r : *this) {
         r.setTop(r.top() + yo);
         r.setBottom(r.bottom() + yo);
     }
@@ -72,7 +74,7 @@ void Shape::translateY(qreal yo)
 //   translated
 //---------------------------------------------------------
 
-Shape Shape::translated(const QPointF& pt) const
+Shape Shape::translated(const PointF& pt) const
 {
     Shape s;
     for (const ShapeElement& r : *this)
@@ -98,10 +100,10 @@ Shape Shape::translated(const QPointF& pt) const
 qreal Shape::minHorizontalDistance(const Shape& a) const
 {
     qreal dist = -1000000.0;        // min real
-    for (const QRectF& r2 : a) {
+    for (const RectF& r2 : a) {
         qreal by1 = r2.top();
         qreal by2 = r2.bottom();
-        for (const QRectF& r1 : *this) {
+        for (const RectF& r1 : *this) {
             qreal ay1 = r1.top();
             qreal ay2 = r1.bottom();
             if (Ms::intersects(ay1, ay2, by1, by2)
@@ -123,13 +125,13 @@ qreal Shape::minHorizontalDistance(const Shape& a) const
 qreal Shape::minVerticalDistance(const Shape& a) const
 {
     qreal dist = -1000000.0;        // min real
-    for (const QRectF& r2 : a) {
+    for (const RectF& r2 : a) {
         if (r2.height() <= 0.0) {
             continue;
         }
         qreal bx1 = r2.left();
         qreal bx2 = r2.right();
-        for (const QRectF& r1 : *this) {
+        for (const RectF& r1 : *this) {
             if (r1.height() <= 0.0) {
                 continue;
             }
@@ -151,7 +153,7 @@ qreal Shape::minVerticalDistance(const Shape& a) const
 qreal Shape::left() const
 {
     qreal dist = 0.0;
-    for (const QRectF& r : *this) {
+    for (const RectF& r : *this) {
         if (r.height() != 0.0 && r.left() < dist) {
             // if (r.left() < dist)
             dist = r.left();
@@ -168,7 +170,7 @@ qreal Shape::left() const
 qreal Shape::right() const
 {
     qreal dist = 0.0;
-    for (const QRectF& r : *this) {
+    for (const RectF& r : *this) {
         if (r.right() > dist) {
             dist = r.right();
         }
@@ -183,7 +185,7 @@ qreal Shape::right() const
 qreal Shape::top() const
 {
     qreal dist = 1000000.0;
-    for (const QRectF& r : *this) {
+    for (const RectF& r : *this) {
         if (r.top() < dist) {
             dist = r.top();
         }
@@ -198,7 +200,7 @@ qreal Shape::top() const
 qreal Shape::bottom() const
 {
     qreal dist = -1000000.0;
-    for (const QRectF& r : *this) {
+    for (const RectF& r : *this) {
         if (r.bottom() > dist) {
             dist = r.bottom();
         }
@@ -212,10 +214,10 @@ qreal Shape::bottom() const
 //    returns negative values if there is an overlap
 //---------------------------------------------------------
 
-qreal Shape::topDistance(const QPointF& p) const
+qreal Shape::topDistance(const PointF& p) const
 {
     qreal dist = 1000000.0;
-    for (const QRectF& r : *this) {
+    for (const RectF& r : *this) {
         if (p.x() >= r.left() && p.x() < r.right()) {
             dist = qMin(dist, r.top() - p.y());
         }
@@ -229,10 +231,10 @@ qreal Shape::topDistance(const QPointF& p) const
 //    returns negative values if there is an overlap
 //---------------------------------------------------------
 
-qreal Shape::bottomDistance(const QPointF& p) const
+qreal Shape::bottomDistance(const PointF& p) const
 {
     qreal dist = 1000000.0;
-    for (const QRectF& r : *this) {
+    for (const RectF& r : *this) {
         if (p.x() >= r.left() && p.x() < r.right()) {
             dist = qMin(dist, p.y() - r.bottom());
         }
@@ -244,7 +246,7 @@ qreal Shape::bottomDistance(const QPointF& p) const
 //   remove
 //---------------------------------------------------------
 
-void Shape::remove(const QRectF& r)
+void Shape::remove(const RectF& r)
 {
     for (auto i = begin(); i != end(); ++i) {
         if (*i == r) {
@@ -252,13 +254,13 @@ void Shape::remove(const QRectF& r)
             return;
         }
     }
-    // qWarning("Shape::remove: QRectF not found in Shape");
-    qFatal("Shape::remove: QRectF not found in Shape");
+    // qWarning("Shape::remove: RectF not found in Shape");
+    qFatal("Shape::remove: RectF not found in Shape");
 }
 
 void Shape::remove(const Shape& s)
 {
-    for (const QRectF& r : s) {
+    for (const RectF& r : s) {
         remove(r);
     }
 }
@@ -267,9 +269,9 @@ void Shape::remove(const Shape& s)
 //   contains
 //---------------------------------------------------------
 
-bool Shape::contains(const QPointF& p) const
+bool Shape::contains(const PointF& p) const
 {
-    for (const QRectF& r : *this) {
+    for (const RectF& r : *this) {
         if (r.contains(p)) {
             return true;
         }
@@ -281,9 +283,9 @@ bool Shape::contains(const QPointF& p) const
 //   intersects
 //---------------------------------------------------------
 
-bool Shape::intersects(const QRectF& rr) const
+bool Shape::intersects(const RectF& rr) const
 {
-    for (const QRectF& r : *this) {
+    for (const RectF& r : *this) {
         if (r.intersects(rr)) {
             return true;
         }
@@ -297,23 +299,12 @@ bool Shape::intersects(const QRectF& rr) const
 
 bool Shape::intersects(const Shape& other) const
 {
-    for (const QRectF& r : other) {
+    for (const RectF& r : other) {
         if (intersects(r)) {
             return true;
         }
     }
     return false;
-}
-
-//---------------------------------------------------------
-//   paint
-//---------------------------------------------------------
-
-void Shape::paint(QPainter& p) const
-{
-    for (const QRectF& r : *this) {
-        p.drawRect(r);
-    }
 }
 
 #ifndef NDEBUG
@@ -337,15 +328,9 @@ void ShapeElement::dump() const
 //---------------------------------------------------------
 //   add
 //---------------------------------------------------------
-
-void Shape::add(const QRectF& r, const char* t)
+void Shape::add(const RectF& r, const char* t)
 {
     push_back(ShapeElement(r, t));
-}
-
-void Shape::add(const mu::draw::RectF& r, const char* t)
-{
-    push_back(ShapeElement(r.toQRectF(), t));
 }
 
 #endif
@@ -365,7 +350,7 @@ void testShapes()
     Shape a;
     Shape b;
 
-    a.add(QRectF(-10, -10, 20, 20));
+    a.add(RectF(-10, -10, 20, 20));
     qreal d = a.minHorizontalDistance(b);             // b is empty
     printf("      minHDistance (0.0): %f", d);
     if (d != 0.0) {
@@ -373,7 +358,7 @@ void testShapes()
     }
     printf("\n");
 
-    b.add(QRectF(0, 0, 10, 10));
+    b.add(RectF(0, 0, 10, 10));
     d = a.minHorizontalDistance(b);
     printf("      minHDistance (10.0): %f", d);
     if (d != 10.0) {

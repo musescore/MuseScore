@@ -44,6 +44,8 @@
 
 #include "../palette_config.h"
 
+using namespace mu;
+
 namespace Ms {
 extern bool useFactorySettings;
 extern Palette* newAccidentalsPalette();
@@ -125,7 +127,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
 
     QRectF r = imatrix.mapRect(QRectF(x, y, w, wh));
 
-    QRectF background = imatrix.mapRect(QRectF(0, 0, ww, wh));
+    RectF background = RectF::fromQRectF(imatrix.mapRect(QRectF(0, 0, ww, wh)));
     painter.fillRect(background, Qt::white);
 
     QPen pen(Qt::black);
@@ -134,7 +136,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
 
     for (int i = 0; i < 5; ++i) {
         qreal yy = r.y() + i * gscore->spatium();
-        painter.drawLine(QLineF(r.x(), yy, r.x() + r.width(), yy));
+        painter.drawLine(LineF(r.x(), yy, r.x() + r.width(), yy));
     }
     if (dragElement) {
         painter.save();
@@ -163,7 +165,7 @@ void KeyCanvas::mousePressEvent(QMouseEvent* event)
     startMove = imatrix.map(QPointF(event->pos() - base));
     moveElement = 0;
     foreach (Accidental* a, accidentals) {
-        QRectF r = a->abbox();
+        QRectF r = a->abbox().toQRectF();
         if (r.contains(startMove)) {
             a->setSelected(true);
             moveElement = a;
@@ -185,7 +187,7 @@ void KeyCanvas::mouseMoveEvent(QMouseEvent* event)
     }
     QPointF p = imatrix.map(QPointF(event->pos()));
     QPointF delta = p - startMove;
-    moveElement->move(delta);
+    moveElement->move(PointF::fromQPointF(delta));
     startMove = p;
     update();
 }
@@ -215,7 +217,7 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
 
         XmlReader e(a);
 
-        QPointF dragOffset;
+        PointF dragOffset;
         Fraction duration;
         ElementType type = Element::readType(e, &dragOffset, &duration);
         if (type != ElementType::ACCIDENTAL) {
@@ -245,7 +247,7 @@ void KeyCanvas::dragMoveEvent(QDragMoveEvent* event)
 {
     if (dragElement) {
         event->acceptProposedAction();
-        QPointF pos(imatrix.map(QPointF(event->pos())));
+        PointF pos = PointF::fromQPointF(imatrix.map(QPointF(event->pos())));
         dragElement->setPos(pos);
         update();
     }
@@ -353,7 +355,7 @@ void KeyEditor::addClicked()
     double xoff = 10000000.0;
 
     for (Accidental* a : al) {
-        QPointF pos = a->ipos();
+        PointF pos = a->ipos();
         if (pos.x() < xoff) {
             xoff = pos.x();
         }
@@ -364,7 +366,7 @@ void KeyEditor::addClicked()
     for (Accidental* a : al) {
         KeySym s;
         s.sym       = a->symbol();
-        QPointF pos = a->ipos();
+        PointF pos = a->ipos();
         pos.rx()   -= xoff;
         s.spos      = pos / spatium;
         e.keySymbols().append(s);

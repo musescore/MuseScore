@@ -111,9 +111,9 @@ public:
     int line() const { return _up ? upLine() : downLine(); }
     virtual int upLine() const = 0;
     virtual int downLine() const = 0;
-    virtual QPointF stemPos() const = 0;
+    virtual mu::PointF stemPos() const = 0;
     virtual qreal stemPosX() const = 0;
-    virtual QPointF stemPosBeam() const = 0;
+    virtual mu::PointF stemPosBeam() const = 0;
     virtual qreal rightEdge() const = 0;
 
     bool up() const { return _up; }

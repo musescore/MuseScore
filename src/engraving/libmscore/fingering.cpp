@@ -32,6 +32,8 @@
 #include "skyline.h"
 #include "system.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   fingeringStyle
@@ -104,7 +106,7 @@ void Fingering::layout()
         Fraction tick = parent()->tick();
         const Staff* st = staff();
         if (st && st->isTabStaff(tick) && !st->staffType(tick)->showTabFingering()) {
-            setbbox(QRectF());
+            setbbox(RectF());
             return;
         }
     }
@@ -150,7 +152,7 @@ void Fingering::layout()
                     }
                     rypos() -= 1.5 * sp;
                 } else {
-                    QRectF r = bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + pos());
+                    RectF r = bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + pos());
                     SkylineLine sk(false);
                     sk.add(r.x(), r.bottom(), r.width());
                     qreal d = sk.minDistance(ss->skyline().north());
@@ -186,7 +188,7 @@ void Fingering::layout()
                     }
                     rypos() += 1.5 * sp;
                 } else {
-                    QRectF r = bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + pos());
+                    RectF r = bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + pos());
                     SkylineLine sk(true);
                     sk.add(r.x(), r.top(), r.width());
                     qreal d = ss->skyline().south().minDistance(sk);

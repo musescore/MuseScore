@@ -26,6 +26,7 @@
 #include "log.h"
 #include "config.h"
 
+using namespace mu;
 using namespace mu::draw;
 
 BufferedPaintProvider::BufferedPaintProvider()
@@ -53,7 +54,7 @@ void BufferedPaintProvider::beginTarget(const std::string& name)
 {
     clear();
     m_buf.name = name;
-    beginObject(name + "_default", QPointF());
+    beginObject(name + "_default", PointF());
     m_isActive = true;
 }
 

@@ -29,6 +29,8 @@
 #include "segment.h"
 #include "chordrest.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------
 //   setVoicing

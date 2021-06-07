@@ -27,7 +27,7 @@
 #include "stafftype.h"
 #include "staff.h"
 
-using namespace mu::draw;
+using namespace mu;
 
 // Anatomy of StaffLines:
 //
@@ -58,19 +58,19 @@ StaffLines::StaffLines(Score* s)
 //   pagePos
 //---------------------------------------------------------
 
-QPointF StaffLines::pagePos() const
+PointF StaffLines::pagePos() const
 {
     System* system = measure()->system();
-    return QPointF(measure()->x() + system->x(), system->staff(staffIdx())->y() + system->y());
+    return PointF(measure()->x() + system->x(), system->staff(staffIdx())->y() + system->y());
 }
 
 //---------------------------------------------------------
 //   canvasPos
 //---------------------------------------------------------
 
-QPointF StaffLines::canvasPos() const
+PointF StaffLines::canvasPos() const
 {
-    QPointF p(pagePos());
+    PointF p(pagePos());
     Element* e = parent();
     while (e) {
         if (e->type() == ElementType::PAGE) {
@@ -100,7 +100,7 @@ void StaffLines::layoutForWidth(qreal w)
     const Staff* s = staff();
     qreal _spatium = spatium();
     qreal dist     = _spatium;
-    setPos(QPointF(0.0, 0.0));
+    setPos(PointF(0.0, 0.0));
     int _lines;
     if (s) {
         setMag(s->staffMag(measure()->tick()));
@@ -148,7 +148,7 @@ void StaffLines::layoutPartialWidth(qreal w, qreal wPartial, bool alignRight)
     qreal _spatium = spatium();
     wPartial *= spatium();
     qreal dist     = _spatium;
-    setPos(QPointF(0.0, 0.0));
+    setPos(PointF(0.0, 0.0));
     int _lines;
     if (s) {
         setMag(s->staffMag(measure()->tick()));

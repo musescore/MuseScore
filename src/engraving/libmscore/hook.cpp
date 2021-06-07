@@ -25,6 +25,8 @@
 #include "stem.h"
 #include "score.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   Hook

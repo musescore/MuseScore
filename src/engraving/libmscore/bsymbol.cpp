@@ -31,6 +31,8 @@
 #include "system.h"
 #include "measure.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   BSymbol
@@ -144,7 +146,7 @@ Element* BSymbol::drop(EditData& data)
     Element* el = data.dropElement;
     if (el->isSymbol() || el->isImage()) {
         el->setParent(this);
-        QPointF p = data.pos - pagePos() - data.dragOffset;
+        PointF p = data.pos - pagePos() - data.dragOffset;
         el->setOffset(p);
         score()->undoAddElement(el);
         return el;
@@ -176,11 +178,11 @@ void BSymbol::layout()
 //   drag
 //---------------------------------------------------------
 
-QRectF BSymbol::drag(EditData& ed)
+mu::RectF BSymbol::drag(EditData& ed)
 {
-    QRectF r(canvasBoundingRect());
+    RectF r(canvasBoundingRect());
     foreach (const Element* e, _leafs) {
-        r |= e->canvasBoundingRect();
+        r.unite(e->canvasBoundingRect());
     }
 
     qreal x = ed.delta.x();
@@ -198,11 +200,11 @@ QRectF BSymbol::drag(EditData& ed)
         y = vRaster * n;
     }
 
-    setOffset(QPointF(x, y));
+    setOffset(PointF(x, y));
 
-    r |= canvasBoundingRect();
+    r.unite(canvasBoundingRect());
     foreach (const Element* e, _leafs) {
-        r |= e->canvasBoundingRect();
+        r.unite(e->canvasBoundingRect());
     }
     return r;
 }
@@ -211,7 +213,7 @@ QRectF BSymbol::drag(EditData& ed)
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<QLineF> BSymbol::dragAnchorLines() const
+QVector<mu::LineF> BSymbol::dragAnchorLines() const
 {
     return genericDragAnchorLines();
 }
@@ -220,10 +222,10 @@ QVector<QLineF> BSymbol::dragAnchorLines() const
 //   pagePos
 //---------------------------------------------------------
 
-QPointF BSymbol::pagePos() const
+mu::PointF BSymbol::pagePos() const
 {
     if (parent() && (parent()->type() == ElementType::SEGMENT)) {
-        QPointF p(pos());
+        mu::PointF p(pos());
         System* system = segment()->measure()->system();
         if (system) {
             p.ry() += system->staff(staffIdx())->y() + system->y();
@@ -239,10 +241,10 @@ QPointF BSymbol::pagePos() const
 //   canvasPos
 //---------------------------------------------------------
 
-QPointF BSymbol::canvasPos() const
+mu::PointF BSymbol::canvasPos() const
 {
     if (parent() && (parent()->type() == ElementType::SEGMENT)) {
-        QPointF p(pos());
+        mu::PointF p(pos());
         Segment* s = toSegment(parent());
 
         System* system = s->measure()->system();

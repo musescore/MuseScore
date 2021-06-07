@@ -31,6 +31,8 @@
 #include "undo.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 ScoreOrderList scoreOrders;
 
