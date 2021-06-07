@@ -423,6 +423,7 @@ public:
     double getTenthsFromDots(double) const;
     Fraction tick() const { return _tick; }
     void writeInstrumentDetails(const Instrument* instrument);
+    bool canWriteDirection(const Element* e) const;
 };
 
 //---------------------------------------------------------
@@ -5340,6 +5341,10 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
         // if (fd) qDebug("annotations seg %p found fretboard diagram %p", seg, fd);
 
         for (const Element* e : seg->annotations()) {
+            if (!exp->canWriteDirection(e)) {
+                continue;
+            }
+
             int wtrack = -1;       // track to write annotation
 
             if (strack <= e->track() && e->track() < etrack) {
@@ -5455,6 +5460,10 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
         for (auto it = exp->score()->spanner().lower_bound(stick.ticks()); it != exp->score()->spanner().upper_bound(stick.ticks()); ++it) {
             Spanner* e = it->second;
 
+            if (!exp->canWriteDirection(e)) {
+                continue;
+            }
+
             int wtrack = -1;       // track to write spanner
             if (strack <= e->track() && e->track() < etrack) {
                 wtrack = findTrackForAnnotations(e->track(), seg);
@@ -5509,6 +5518,10 @@ static void spannerStop(ExportMusicXml* exp, int strack, int etrack, const Fract
 {
     for (auto it : exp->score()->spanner()) {
         Spanner* e = it.second;
+
+        if (!exp->canWriteDirection(e)) {
+            continue;
+        }
 
         if (e->tick2() != tick2 || e->track() < strack || e->track() >= etrack) {
             continue;
@@ -6410,6 +6423,9 @@ static void annotationsWithoutNote(ExportMusicXml* exp, const int strack, const 
         if (segment->segmentType() == SegmentType::ChordRest) {
             for (const auto element : segment->annotations()) {
                 if (!element->isFiguredBass() && !element->isHarmony()) {               // handled elsewhere
+                    if (!exp->canWriteDirection(element)) {
+                        continue;
+                    }
                     const auto wtrack = findTrackForAnnotations(element->track(), segment);           // track to write annotation
                     if (strack <= element->track() && element->track() < (strack + VOICES * staves) && wtrack < 0) {
                         commonAnnotations(exp, element, staves > 1 ? 1 : 0);
@@ -7274,5 +7290,19 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         }
     }
 #endif
+}
+
+//---------------------------------------------------------
+//  canWriteDirection
+//---------------------------------------------------------
+
+/**
+ Whether \b <direction> tag corresponding to the given element \p e
+ should be included to the exported MusicXML file.
+ */
+
+bool ExportMusicXml::canWriteDirection(const Element* e) const
+{
+    return e->visible() || configuration()->musicxmlExportInvisibleElements();
 }
 }
