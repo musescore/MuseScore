@@ -69,7 +69,7 @@ bool DummyMidiInPort::isRunning() const
     return m_running;
 }
 
-async::Channel<std::pair<tick_t, Event> > DummyMidiInPort::eventReceived() const
+async::Channel<tick_t, Event> DummyMidiInPort::eventReceived() const
 {
     return m_eventReceived;
 }

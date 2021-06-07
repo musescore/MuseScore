@@ -54,7 +54,7 @@ public:
     QRect accessibleRect() const override;
 
     async::Channel<Property> accessiblePropertyChanged() const override;
-    async::Channel<std::pair<State, bool> > accessibleStateChanged() const override;
+    async::Channel<State, bool> accessibleStateChanged() const override;
     // ---
 
 private:
@@ -65,7 +65,7 @@ private:
     Ms::Element* m_element = nullptr;
     bool m_registred = false;
 
-    mu::async::Channel<std::pair<IAccessible::State, bool> > m_accessibleStateChanged;
+    mu::async::Channel<IAccessible::State, bool> m_accessibleStateChanged;
 };
 }
 

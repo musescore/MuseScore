@@ -38,13 +38,13 @@ public:
     Ret run() override;
     void stop() override;
     bool isRunning() const override;
-    async::Channel<std::pair<tick_t, Event> > eventReceived() const override;
+    async::Channel<tick_t, Event> eventReceived() const override;
 
 private:
 
     MidiDeviceID m_deviceID;
     bool m_running = false;
-    async::Channel<std::pair<tick_t, Event> > m_eventReceived;
+    async::Channel<tick_t, Event> m_eventReceived;
 };
 }
 

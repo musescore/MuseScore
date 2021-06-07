@@ -57,14 +57,14 @@ public:
     bool accessibleState(State st) const override;
     QRect accessibleRect() const override;
     mu::async::Channel<Property> accessiblePropertyChanged() const override;
-    mu::async::Channel<std::pair<State, bool> > accessibleStateChanged() const override;
+    mu::async::Channel<State, bool> accessibleStateChanged() const override;
 
 private:
 
     Ms::Score* m_score = nullptr;
     bool m_registred = false;
     bool m_active = false;
-    mu::async::Channel<std::pair<IAccessible::State, bool> > m_accessibleStateChanged;
+    mu::async::Channel<IAccessible::State, bool> m_accessibleStateChanged;
     QList<AccessibleElement*> m_children;
     AccessibleElement* m_focusedElement = nullptr;
 };

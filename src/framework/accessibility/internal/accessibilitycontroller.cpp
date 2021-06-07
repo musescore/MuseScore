@@ -169,8 +169,8 @@ void AccessibilityController::reg(IAccessible* item)
         propertyChanged(item, p);
     });
 
-    item->accessibleStateChanged().onReceive(this, [this, item](const std::pair<State, bool>& st) {
-        stateChanged(item, st.first, st.second);
+    item->accessibleStateChanged().onReceive(this, [this, item](const State& state, bool arg) {
+        stateChanged(item, state, arg);
     });
 
     QAccessibleEvent ev(it.object, QAccessible::ObjectCreated);
@@ -405,8 +405,8 @@ mu::async::Channel<IAccessible::Property> AccessibilityController::accessiblePro
     return ch;
 }
 
-mu::async::Channel<std::pair<IAccessible::State, bool> > AccessibilityController::accessibleStateChanged() const
+mu::async::Channel<IAccessible::State, bool> AccessibilityController::accessibleStateChanged() const
 {
-    static async::Channel<std::pair<IAccessible::State, bool> > ch;
+    static async::Channel<IAccessible::State, bool> ch;
     return ch;
 }

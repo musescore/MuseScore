@@ -145,7 +145,7 @@ mu::async::Channel<IAccessible::Property> AccessibleItem::accessiblePropertyChan
     return m_accessiblePropertyChanged;
 }
 
-mu::async::Channel<std::pair<IAccessible::State, bool> > AccessibleItem::accessibleStateChanged() const
+mu::async::Channel<IAccessible::State, bool> AccessibleItem::accessibleStateChanged() const
 {
     return m_accessibleStateChanged;
 }
@@ -185,7 +185,7 @@ void AccessibleItem::setState(IAccessible::State st, bool arg)
     emit stateChanged();
 
     if (!m_ignored) {
-        m_accessibleStateChanged.send({ st, arg });
+        m_accessibleStateChanged.send(st, arg);
     }
 }
 

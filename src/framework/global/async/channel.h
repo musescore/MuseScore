@@ -25,8 +25,8 @@
 #include "thirdparty/deto_async/async/channel.h"
 namespace mu {
 namespace async {
-template<typename T>
-using Channel = deto::async::Channel<T>;
+template<typename ... T>
+using Channel = deto::async::Channel<T...>;
 }
 }
 
