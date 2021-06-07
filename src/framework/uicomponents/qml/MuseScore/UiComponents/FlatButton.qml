@@ -41,6 +41,8 @@ FocusScope {
     property color pressedStateColor: prv.defaultColor
     property bool accentButton: false
 
+    property bool narrowMargins: false
+
     property int orientation: Qt.Vertical
 
     property alias navigation: navCtrl
@@ -56,7 +58,13 @@ FocusScope {
     objectName: root.text
 
     height: contentWrapper.height + 14
-    width: (Boolean(text) ? Math.max(contentWrapper.width + 32, prv.isVertical ? 132 : 0) : contentWrapper.width + 16)
+    width: {
+        if (narrowMargins) {
+            return(Boolean(text) ? Math.max(contentWrapper.width + 12, prv.isVertical ? 24 : 0) : contentWrapper.width + 16)
+        } else {
+            return (Boolean(text) ? Math.max(contentWrapper.width + 32, prv.isVertical ? 132 : 0) : contentWrapper.width + 16)
+        }
+    }
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
