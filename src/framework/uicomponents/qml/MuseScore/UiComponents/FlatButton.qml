@@ -26,15 +26,15 @@ import MuseScore.UiComponents 1.0
 FocusScope {
     id: root
 
-    property alias icon: buttonIcon.iconCode
-    property alias text: textLabel.text
+    property int icon: IconCode.NONE
+    property string text: ""
 
     property string toolTipTitle: ""
     property string toolTipDescription: ""
     property string toolTipShortcut: ""
 
-    property alias iconFont: buttonIcon.font
-    property alias textFont: textLabel.font
+    property font iconFont: ui.theme.iconsFont
+    property font textFont: ui.theme.bodyFont
 
     property color normalStateColor: prv.defaultColor
     property color hoveredStateColor: prv.defaultColor
@@ -50,13 +50,15 @@ FocusScope {
 
     property bool isClickOnKeyNavTriggered: true
 
+    property Component contentItem: defaultComponent
+
     signal clicked(var mouse)
     signal pressAndHold(var mouse)
 
     objectName: root.text
 
-    height: contentWrapper.height + 14
-    width: (Boolean(text) ? Math.max(contentWrapper.width + 32, prv.isVertical ? 132 : 0) : contentWrapper.width + 16)
+    height: contentLoader.item.height + 14
+    width: (Boolean(text) ? Math.max(contentLoader.item.width + 32, prv.isVertical ? 132 : 0) : contentLoader.item.width + 16)
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
@@ -93,66 +95,80 @@ FocusScope {
         border.color: ui.theme.focusColor
     }
 
-    Item {
-        id: contentWrapper
-
-        property int spacing: Boolean(!buttonIcon.isEmpty) && Boolean(textLabel.text) ? 4 : 0
+    Loader {
+        id: contentLoader
 
         anchors.verticalCenter: parent ? parent.verticalCenter : undefined
         anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
 
-        height: !prv.isVertical ? Math.max(buttonIcon.height, textLabel.height) : buttonIcon.height + textLabel.height + spacing
-        width: prv.isVertical ? Math.max(textLabel.width, buttonIcon.width) : buttonIcon.width + textLabel.width + spacing
+        sourceComponent: root.contentItem
+    }
 
-        StyledIconLabel {
-            id: buttonIcon
+    Component {
+        id: defaultComponent
 
-            font.pixelSize: isEmpty ? 0 : ui.theme.iconsFont.pixelSize
-        }
+        Item {
+            id: contentWrapper
 
-        StyledTextLabel {
-            id: textLabel
+            property int spacing: Boolean(!buttonIcon.isEmpty) && Boolean(textLabel.text) ? 4 : 0
 
-            height: text === "" ? 0 : implicitHeight
-            horizontalAlignment: Text.AlignHCenter
-        }
+            height: !prv.isVertical ? Math.max(buttonIcon.height, textLabel.height) : buttonIcon.height + textLabel.height + spacing
+            width: prv.isVertical ? Math.max(textLabel.width, buttonIcon.width) : buttonIcon.width + textLabel.width + spacing
 
-        states: [
-            State {
-                when: !prv.isVertical
-                AnchorChanges {
-                    target: buttonIcon
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                AnchorChanges {
-                    target: textLabel
-                    anchors.left: buttonIcon.right
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                PropertyChanges {
-                    target: textLabel
-                    anchors.leftMargin: contentWrapper.spacing
-                }
-            },
-            State {
-                when: prv.isVertical
-                AnchorChanges {
-                    target: buttonIcon
-                    anchors.top: parent.top
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-                AnchorChanges {
-                    target: textLabel
-                    anchors.top: buttonIcon.bottom
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-                PropertyChanges {
-                    target: textLabel
-                    anchors.leftMargin: contentWrapper.spacing
-                }
+            StyledIconLabel {
+                id: buttonIcon
+
+                iconCode: root.icon
+                font: root.iconFont
             }
-        ]
+
+            StyledTextLabel {
+                id: textLabel
+
+                text: root.text
+                font: root.textFont
+
+                height: text === "" ? 0 : implicitHeight
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            states: [
+                State {
+                    when: !prv.isVertical
+                    AnchorChanges {
+                        target: buttonIcon
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    AnchorChanges {
+                        target: textLabel
+                        anchors.left: buttonIcon.right
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    PropertyChanges {
+                        target: textLabel
+                        anchors.leftMargin: contentWrapper.spacing
+                    }
+                },
+                State {
+                    when: prv.isVertical
+                    AnchorChanges {
+                        target: buttonIcon
+                        anchors.top: parent.top
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+                    AnchorChanges {
+                        target: textLabel
+                        anchors.top: buttonIcon.bottom
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+                    PropertyChanges {
+                        target: textLabel
+                        anchors.leftMargin: contentWrapper.spacing
+                    }
+                }
+            ]
+        }
     }
 
     states: [
