@@ -175,6 +175,8 @@ Item {
                 anchors.rightMargin: 4
                 anchors.verticalCenter: parent.verticalCenter
 
+                narrowMargins: true
+
                 visible: root.currentInstrumentIndex === index
 
                 text: soloistsButtonText(modelData.isSoloist)
