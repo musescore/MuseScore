@@ -19,37 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_IMIDIINPORT_H
-#define MU_MIDI_IMIDIINPORT_H
+#ifndef MU_MIDI_MIDIDEVICESLISTENER_H
+#define MU_MIDI_MIDIDEVICESLISTENER_H
 
-#include "modularity/imoduleexport.h"
+#include <thread>
 
-#include "ret.h"
-#include "async/channel.h"
 #include "async/notification.h"
 #include "miditypes.h"
 
 namespace mu::midi {
-class IMidiInPort : MODULE_EXPORT_INTERFACE
+class MidiDevicesListener
 {
-    INTERFACE_ID(IMidiInPort)
-
 public:
-    virtual ~IMidiInPort() = default;
+    MidiDevicesListener();
+    ~MidiDevicesListener();
 
-    virtual MidiDeviceList devices() const = 0;
-    virtual async::Notification devicesChanged() const = 0;
+    using ActualDevicesCallback = std::function<MidiDeviceList()>;
 
-    virtual Ret connect(const MidiDeviceID& deviceID) = 0;
-    virtual void disconnect() = 0;
-    virtual bool isConnected() const = 0;
-    virtual MidiDeviceID deviceID() const = 0;
+    void reg(const ActualDevicesCallback& callback);
 
-    virtual Ret run() = 0;
-    virtual void stop() = 0;
-    virtual bool isRunning() const = 0;
-    virtual async::Channel<std::pair<tick_t, Event> > eventReceived() const = 0;
+    async::Notification devicesChanged() const;
+
+private:
+    static void updateDevices(MidiDevicesListener* self);
+    void doUpdateDevices();
+
+    void setDevices(const MidiDeviceList& devices);
+
+    std::shared_ptr<std::thread> m_devicesUpdateThread;
+    MidiDeviceList m_devices;
+    async::Notification m_devicesChanged;
+
+    ActualDevicesCallback m_actualDevicesCallback;
 };
 }
 
-#endif // MU_MIDI_IMIDIINPORT_H
+#endif // MU_MIDI_MIDIDEVICESLISTENER_H

@@ -58,6 +58,14 @@ static std::string errorString(MMRESULT ret)
 WinMidiInPort::WinMidiInPort()
 {
     m_win = std::unique_ptr<Win>(new Win());
+
+    m_devicesListener.reg([this]() {
+        return devices();
+    });
+
+    m_devicesListener.devicesChanged().onNotify(this, [this]() {
+        m_devicesChanged.notify();
+    });
 }
 
 WinMidiInPort::~WinMidiInPort()
@@ -71,9 +79,9 @@ WinMidiInPort::~WinMidiInPort()
     }
 }
 
-std::vector<MidiDevice> WinMidiInPort::devices() const
+MidiDeviceList WinMidiInPort::devices() const
 {
-    std::vector<MidiDevice> ret;
+    MidiDeviceList ret;
 
     unsigned int numDevs = midiInGetNumDevs();
     if (numDevs == 0) {
@@ -95,6 +103,11 @@ std::vector<MidiDevice> WinMidiInPort::devices() const
     }
 
     return ret;
+}
+
+mu::async::Notification WinMidiInPort::devicesChanged() const
+{
+    return m_devicesChanged;
 }
 
 static void CALLBACK proccess(HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2)

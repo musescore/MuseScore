@@ -23,17 +23,20 @@
 #define MU_MIDI_WINMIDIINPORT_H
 
 #include <memory>
-#include "imidiinport.h"
 
-namespace mu {
-namespace midi {
-class WinMidiInPort : public IMidiInPort
+#include "async/asyncable.h"
+#include "imidiinport.h"
+#include "internal/midideviceslistener.h"
+
+namespace mu::midi {
+class WinMidiInPort : public IMidiInPort, public async::Asyncable
 {
 public:
     WinMidiInPort();
     ~WinMidiInPort() override;
 
-    std::vector<MidiDevice> devices() const override;
+    MidiDeviceList devices() const override;
+    async::Notification devicesChanged() const override;
 
     Ret connect(const MidiDeviceID& deviceID) override;
     void disconnect() override;
@@ -49,14 +52,15 @@ public:
     void doProcess(uint32_t message, tick_t timing);
 
 private:
-
     struct Win;
     std::unique_ptr<Win> m_win;
     MidiDeviceID m_deviceID;
     bool m_running = false;
     async::Channel<std::pair<tick_t, Event> > m_eventReceived;
+
+    async::Notification m_devicesChanged;
+    MidiDevicesListener m_devicesListener;
 };
-}
 }
 
 #endif // MU_MIDI_WINMIDIINPORT_H

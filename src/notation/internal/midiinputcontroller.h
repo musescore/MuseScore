@@ -24,29 +24,32 @@
 
 #include "modularity/ioc.h"
 #include "midi/imidiinport.h"
+#include "midi/imidioutport.h"
+#include "midi/imidiconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "shortcuts/imidiremote.h"
 #include "inotationconfiguration.h"
 #include "async/asyncable.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class MidiInputController : public async::Asyncable
 {
     INJECT(notation, midi::IMidiInPort, midiInPort)
+    INJECT(notation, midi::IMidiOutPort, midiOutPort)
+    INJECT(notation, midi::IMidiConfiguration, midiConfiguration)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, INotationConfiguration, configuration)
     INJECT(notation, shortcuts::IMidiRemote, midiRemote)
 
 public:
-
     void init();
 
 private:
+    void connectCurrentInputDevice();
+    void connectCurrentOutputDevice();
 
     void onMidiEventReceived(midi::tick_t tick, const midi::Event& event);
 };
-}
 }
 
 #endif // MU_NOTATION_MIDIINPUTCONTROLLER_H
