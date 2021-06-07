@@ -22,13 +22,19 @@
 #ifndef MU_MIDI_MIDICONFIGURATION_H
 #define MU_MIDI_MIDICONFIGURATION_H
 
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
 #include "../imidiconfiguration.h"
 
 namespace mu::midi {
 class MidiConfiguration : public IMidiConfiguration
 {
+    INJECT(midi, framework::IGlobalConfiguration, globalConfiguration)
+
 public:
     void init();
+
+    io::path midiMappingsPath() const override;
 
     bool useRemoteControl() const override;
     void setUseRemoteControl(bool value) override;

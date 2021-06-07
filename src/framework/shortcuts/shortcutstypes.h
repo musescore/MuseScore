@@ -26,6 +26,8 @@
 #include <list>
 #include <QKeySequence>
 
+#include "midi/midievent.h"
+
 namespace mu::shortcuts {
 struct Shortcut
 {
@@ -45,6 +47,27 @@ struct Shortcut
 };
 
 using ShortcutList = std::list<Shortcut>;
+
+struct MidiMapping {
+    std::string action;
+    midi::Event event;
+
+    MidiMapping() = default;
+    MidiMapping(const std::string& action)
+        : action(action) {}
+
+    bool isValid() const
+    {
+        return !action.empty() && event;
+    }
+
+    bool operator ==(const MidiMapping& mm) const
+    {
+        return action == mm.action && mm.event == event;
+    }
+};
+
+using MidiMappingList = std::list<MidiMapping>;
 }
 
 #endif // MU_SHORTCUTS_SHORTCUTSTYPES_H

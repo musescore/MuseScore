@@ -25,15 +25,24 @@
 
 #include <QObject>
 
+#include "modularity/ioc.h"
+#include "async/asyncable.h"
+#include "shortcuts/imidiremote.h"
+#include "midi/imidiinport.h"
+
 namespace mu::midi {
-class EditMidiMappingModel : public QObject
+class EditMidiMappingModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QString mappingTitle READ mappingTitle NOTIFY mappingTitleChanged)
 
+    INJECT(midi, shortcuts::IMidiRemote, midiRemote)
+    INJECT(midi, IMidiInPort, midiInPort)
+
 public:
     explicit EditMidiMappingModel(QObject* parent = nullptr);
+    ~EditMidiMappingModel();
 
     QString mappingTitle() const;
 
@@ -44,8 +53,10 @@ signals:
     void mappingTitleChanged(const QString& title);
 
 private:
-    int m_originValue = -1;
-    int m_inputedValue = -1;
+    QString deviceName(const MidiDeviceID& deviceId) const;
+    QString valueName(int value) const;
+
+    int m_value = -1;
 };
 }
 
