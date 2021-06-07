@@ -24,6 +24,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "miditypes.h"
+#include "io/path.h"
 
 //! NOTE There used to be synthesizer settings here, now nothing
 //! but we will keep the interface, maybe something will appear,
@@ -36,6 +37,8 @@ class IMidiConfiguration : MODULE_EXPORT_INTERFACE
 
 public:
     virtual ~IMidiConfiguration() = default;
+
+    virtual io::path midiMappingsPath() const = 0;
 
     virtual bool useRemoteControl() const = 0;
     virtual void setUseRemoteControl(bool value) = 0;

@@ -82,11 +82,6 @@ void MidiInputController::onMidiEventReceived(midi::tick_t tick, const midi::Eve
 {
     UNUSED(tick);
 
-    if (midiRemote()->isSettingMode()) {
-        midiRemote()->setCurrentActionEvent(event);
-        return;
-    }
-
     Ret ret = midiRemote()->process(event);
     if (check_ret(ret, Ret::Code::Undefined)) {
         //! NOTE Event not command, pass further

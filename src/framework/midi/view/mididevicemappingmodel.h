@@ -29,6 +29,7 @@
 #include "modularity/ioc.h"
 #include "imidiconfiguration.h"
 #include "midi/miditypes.h"
+#include "shortcuts/imidiremote.h"
 
 #include "ui/iuiactionsregister.h"
 #include "ui/uitypes.h"
@@ -40,6 +41,7 @@ class MidiDeviceMappingModel : public QAbstractListModel
 
     INJECT(midi, IMidiConfiguration, configuration)
     INJECT(midi, ui::IUiActionsRegister, uiActionsRegister)
+    INJECT(midi, shortcuts::IMidiRemote, midiRemote)
 
     Q_PROPERTY(bool useRemoteControl READ useRemoteControl WRITE setUseRemoteControl NOTIFY useRemoteControlChanged)
 
@@ -83,9 +85,9 @@ private:
         RoleMappedValue
     };
 
-    QVariantMap actionToObject(const ui::UiAction& action) const;
+    QVariantMap midiMappingToObject(const shortcuts::MidiMapping& midiMapping) const;
 
-    ui::UiActionList m_actions;
+    QList<shortcuts::MidiMapping> m_midiMappings;
     QItemSelection m_selection;
 };
 }

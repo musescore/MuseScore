@@ -22,14 +22,30 @@
 #ifndef MU_SHORTCUTS_MIDIREMOTE_H
 #define MU_SHORTCUTS_MIDIREMOTE_H
 
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+#include "midi/imidiconfiguration.h"
+#include "shortcutstypes.h"
 #include "../imidiremote.h"
+
+namespace mu::framework {
+class XmlReader;
+class XmlWriter;
+}
 
 namespace mu::shortcuts {
 class MidiRemote : public IMidiRemote
 {
-public:
+    INJECT(shortcuts, midi::IMidiConfiguration, midiConfiguration)
+    INJECT(shortcuts, actions::IActionsDispatcher, dispatcher)
 
+public:
     MidiRemote() = default;
+
+    void load();
+
+    const MidiMappingList& midiMappings() const override;
+    Ret setMidiMappings(const MidiMappingList& midiMappings) override;
 
     // Setting
     void setIsSettingMode(bool arg) override;
@@ -41,8 +57,15 @@ public:
     Ret process(const midi::Event& ev) override;
 
 private:
+    void readMidiMappings();
+    MidiMapping readMidiMapping(framework::XmlReader& reader) const;
+
+    bool writeMidiMappings(const MidiMappingList& midiMappings) const;
+    void writeMidiMapping(framework::XmlWriter& writer, const MidiMapping& midiMapping) const;
 
     bool m_isSettingMode = false;
+
+    MidiMappingList m_midiMappings;
 };
 }
 

@@ -25,6 +25,7 @@
 #include "modularity/imoduleexport.h"
 #include "midi/miditypes.h"
 #include "ret.h"
+#include "shortcutstypes.h"
 
 namespace mu::shortcuts {
 class IMidiRemote : MODULE_EXPORT_INTERFACE
@@ -54,6 +55,9 @@ public:
         RMIDI_REALTIME_ADVANCE,
         MIDI_REMOTES
     };
+
+    virtual const MidiMappingList& midiMappings() const = 0;
+    virtual Ret setMidiMappings(const MidiMappingList& midiMappings) = 0;
 
     // Setting
     virtual void setIsSettingMode(bool arg) = 0;
