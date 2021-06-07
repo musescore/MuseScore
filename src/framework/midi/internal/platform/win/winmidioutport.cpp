@@ -53,7 +53,7 @@ WinMidiOutPort::WinMidiOutPort()
 {
     m_win = std::unique_ptr<Win>(new Win());
 
-    m_devicesListener.reg([this]() {
+    m_devicesListener.startWithCallback([this]() {
         return devices();
     });
 
@@ -82,6 +82,7 @@ WinMidiOutPort::~WinMidiOutPort()
 
 MidiDeviceList WinMidiOutPort::devices() const
 {
+    std::lock_guard lock(m_devicesMutex);
     MidiDeviceList ret;
 
     int numDevs = midiOutGetNumDevs();
