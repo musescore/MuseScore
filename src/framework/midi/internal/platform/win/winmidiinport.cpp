@@ -59,7 +59,7 @@ WinMidiInPort::WinMidiInPort()
 {
     m_win = std::unique_ptr<Win>(new Win());
 
-    m_devicesListener.reg([this]() {
+    m_devicesListener.startWithCallback([this]() {
         return devices();
     });
 
@@ -81,6 +81,7 @@ WinMidiInPort::~WinMidiInPort()
 
 MidiDeviceList WinMidiInPort::devices() const
 {
+    std::lock_guard lock(m_devicesMutex);
     MidiDeviceList ret;
 
     unsigned int numDevs = midiInGetNumDevs();

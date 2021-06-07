@@ -31,22 +31,22 @@ namespace mu::midi {
 class MidiDevicesListener
 {
 public:
-    MidiDevicesListener();
     ~MidiDevicesListener();
 
     using ActualDevicesCallback = std::function<MidiDeviceList()>;
 
-    void reg(const ActualDevicesCallback& callback);
+    void startWithCallback(const ActualDevicesCallback& callback);
 
     async::Notification devicesChanged() const;
 
 private:
-    static void updateDevices(MidiDevicesListener* self);
-    void doUpdateDevices();
-
-    void setDevices(const MidiDeviceList& devices);
+    void th_updateDevices();
+    void th_setDevices(const MidiDeviceList& devices);
+    void stop();
 
     std::shared_ptr<std::thread> m_devicesUpdateThread;
+    std::atomic<bool> m_isRunning = false;
+
     MidiDeviceList m_devices;
     async::Notification m_devicesChanged;
 

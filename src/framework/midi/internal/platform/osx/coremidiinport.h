@@ -62,6 +62,8 @@ private:
 
     async::Notification m_devicesChanged;
     MidiDevicesListener m_devicesListener;
+
+    mutable std::mutex m_devicesMutex;
 };
 }
 
