@@ -170,6 +170,7 @@ private slots:
       void notesRests2() { mxmlIoTest("testNotesRests2"); }
       void numberedLyrics() { mxmlIoTestRef("testNumberedLyrics"); }
       void overlappingSpanners() { mxmlIoTest("testOverlappingSpanners"); }
+      void pedalChanges() { mxmlImportTestRef("testPedalChanges"); }
       void printSpacingNo() { mxmlIoTestRef("testPrintSpacingNo"); }
       void repeatCounts() { mxmlIoTest("testRepeatCounts"); }
       void repeatSingleMeasure() { mxmlIoTest("testRepeatSingleMeasure"); }
