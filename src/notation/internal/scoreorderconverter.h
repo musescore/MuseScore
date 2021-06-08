@@ -23,11 +23,7 @@
 #define MU_NOTATION_SCOREORDERCONVERTER_H
 
 #include "instruments/instrumentstypes.h"
-
-namespace Ms {
-class ScoreOrder;
-struct NamedEventList;
-}
+#include "libmscore/scoreorder.h"
 
 namespace mu::notation {
 class ScoreOrderConverter
