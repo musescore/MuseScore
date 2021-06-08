@@ -3147,15 +3147,21 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
         sign = "no";                                       // MusicXML 2.0 compatibility
     }
     if (line == "yes") {
-        const auto& spdesc = _pass2.getSpanner({ ElementType::PEDAL, number });
+        auto& spdesc = _pass2.getSpanner({ ElementType::PEDAL, number });
         if (type == "start" || type == "resume") {
+            if (spdesc._isStarted && !spdesc._isStopped) {
+                // Previous pedal unterminated—likely an unrecorded "discontinue", so delete the line.
+                // TODO: if "change", create 0-length spanner rather than delete
+                _pass2.deleteHandledSpanner(spdesc._sp);
+                spdesc._isStarted = false;
+            }
             auto p = spdesc._isStopped ? toPedal(spdesc._sp) : new Pedal(_score->dummy());
             if (sign == "yes") {
                 p->setBeginText(Pedal::PEDAL_SYMBOL);
             } else {
                 p->setBeginHookType(type == "resume" ? HookType::NONE : HookType::HOOK_90);
             }
-            p->setEndHookType(HookType::HOOK_90);
+            p->setEndHookType(HookType::NONE);
             // if (placement == "") placement = "below";  // TODO ? set default
             starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
         } else if (type == "stop" || type == "discontinue") {
@@ -3283,6 +3289,20 @@ void MusicXMLParserPass2::clearSpanner(const MusicXmlSpannerDesc& d)
 {
     auto& spdesc = getSpanner(d);
     spdesc = {};
+}
+
+//---------------------------------------------------------
+//   deleteHandledSpanner
+//---------------------------------------------------------
+/**
+ Delete a spanner that's already been added to _spanners.
+ This is used to remove pedal markings that are never stopped
+ */
+
+void MusicXMLParserPass2::deleteHandledSpanner(SLine* const& spanner)
+{
+    _spanners.remove(spanner);
+    delete spanner;
 }
 
 //---------------------------------------------------------

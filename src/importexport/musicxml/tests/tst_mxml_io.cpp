@@ -197,6 +197,7 @@ private slots:
     void overlappingSpanners() { mxmlIoTest("testOverlappingSpanners"); }
     void partNames() { mxmlImportTestRef("testPartNames"); }
     void pedalChanges() { mxmlImportTestRef("testPedalChanges"); }
+    void pedalChangesBroken() { mxmlImportTestRef("testPedalChangesBroken"); }
     void printSpacingNo() { mxmlIoTestRef("testPrintSpacingNo"); }
     void repeatCounts() { mxmlIoTest("testRepeatCounts"); }
     void repeatSingleMeasure() { mxmlIoTest("testRepeatSingleMeasure"); }
