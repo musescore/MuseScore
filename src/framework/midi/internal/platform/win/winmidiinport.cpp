@@ -70,10 +70,6 @@ WinMidiInPort::WinMidiInPort()
 
 WinMidiInPort::~WinMidiInPort()
 {
-    if (isRunning()) {
-        stop();
-    }
-
     if (isConnected()) {
         disconnect();
     }
@@ -168,6 +164,8 @@ void WinMidiInPort::disconnect()
     m_win->deviceID = -1;
 
     m_deviceID.clear();
+
+    stop();
 }
 
 bool WinMidiInPort::isConnected() const
