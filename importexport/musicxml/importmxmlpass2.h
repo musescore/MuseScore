@@ -256,6 +256,7 @@ public:
       void addSpanner(const MusicXmlSpannerDesc& desc);
       MusicXmlExtendedSpannerDesc& getSpanner(const MusicXmlSpannerDesc& desc);
       void clearSpanner(const MusicXmlSpannerDesc& desc);
+      void deleteHandledSpanner(SLine* const& spanner);
 
 private:
       void initPartState(const QString& partId);
