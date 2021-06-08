@@ -147,7 +147,7 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
-              <beginHookType>1</beginHookType>
+              <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
               </Pedal>
             <next>
               <location>
@@ -217,7 +217,7 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
-              <beginHookType>1</beginHookType>
+              <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
               </Pedal>
             <next>
               <location>
@@ -293,7 +293,7 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>2</endHookType>
-              <beginHookType>1</beginHookType>
+              <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
               </Pedal>
             <next>
               <location>
@@ -439,7 +439,7 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
-              <beginHookType>1</beginHookType>
+              <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
               </Pedal>
             <next>
               <location>

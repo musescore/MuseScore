@@ -3019,8 +3019,13 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
       const int number { 0 };
       QStringRef line = _e.attributes().value("line");
       QString sign = _e.attributes().value("sign").toString();
-      if (line != "yes" && sign == "") sign = "yes";       // MusicXML 2.0 compatibility
-      if (line == "yes" && sign == "") sign = "no";        // MusicXML 2.0 compatibility
+      // We have found that many exporters omit "sign" even when one is originally present,
+      // therefore we will default to "yes", even though this is technically against the spec.
+      bool overrideDefaultSign = true; // TODO: set this flag based on the exporting software
+      if (sign == "") {
+            if (line != "yes" || overrideDefaultSign) sign = "yes";     // MusicXML 2.0 compatibility
+            else if (line == "yes") sign = "no";                        // MusicXML 2.0 compatibility
+            }
       if (line == "yes") {
             auto& spdesc = _pass2.getSpanner({ ElementType::PEDAL, number });
             if (type == "start" || type == "resume") {
@@ -3031,10 +3036,11 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
                         spdesc._isStarted = false;
                   }
                   auto p = spdesc._isStopped ? toPedal(spdesc._sp) : new Pedal(_score);
-                  if (sign == "yes")
-                        p->setBeginText("<sym>keyboardPedalPed</sym>");
+                  if (type == "resume")
+                        p->setBeginHookType(HookType::NONE);
                   else
-                        p->setBeginHookType(type == "resume" ? HookType::NONE : HookType::HOOK_90);
+                        if (sign == "yes") p->setBeginText("<sym>keyboardPedalPed</sym>");
+                        else p->setBeginHookType(HookType::HOOK_90);
                   p->setEndHookType(HookType::NONE);
                   // if (placement == "") placement = "below";  // TODO ? set default
                   starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
