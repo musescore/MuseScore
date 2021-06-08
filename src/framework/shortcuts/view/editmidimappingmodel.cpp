@@ -23,6 +23,7 @@
 #include "editmidimappingmodel.h"
 
 #include "log.h"
+#include "utils.h"
 #include "translation.h"
 
 using namespace mu::shortcuts;
@@ -90,10 +91,10 @@ QString EditMidiMappingModel::eventName(const RemoteEvent& event) const
     QString title;
 
     if (event.type == RemoteEventType::Note) {
-        return qtrc("shortcuts", "Note ") + QString::number(event.value);
+        return qtrc("shortcuts", "Note ") + QString::fromStdString(pitchToString(event.value));
     } else if (event.type == RemoteEventType::Controller) {
         return qtrc("shortcuts", "Controller ") + QString::number(event.value);
     }
 
-    return qtrc("shortcuts", "None"); // todo
+    return qtrc("shortcuts", "None");
 }
