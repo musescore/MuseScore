@@ -24,7 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
-#include "midi/imidiconfiguration.h"
+#include "ishortcutsconfiguration.h"
 #include "shortcutstypes.h"
 #include "../imidiremote.h"
 
@@ -36,7 +36,7 @@ class XmlWriter;
 namespace mu::shortcuts {
 class MidiRemote : public IMidiRemote
 {
-    INJECT(shortcuts, midi::IMidiConfiguration, midiConfiguration)
+    INJECT(shortcuts, IShortcutsConfiguration, configuration)
     INJECT(shortcuts, actions::IActionsDispatcher, dispatcher)
 
 public:

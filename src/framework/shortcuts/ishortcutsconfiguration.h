@@ -38,6 +38,8 @@ public:
     virtual void setShortcutsUserPath(const io::path& path) = 0;
 
     virtual io::path shortcutsDefaultPath() const = 0;
+
+    virtual io::path midiMappingsPath() const = 0;
 };
 }
 

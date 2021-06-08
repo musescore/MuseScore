@@ -28,10 +28,10 @@
 #include "log.h"
 #include "translation.h"
 
+using namespace mu::shortcuts;
 using namespace mu::midi;
 using namespace mu::ui;
 using namespace mu::actions;
-using namespace mu::shortcuts;
 
 static const QString TITLE_KEY("title");
 static const QString ICON_KEY("icon");
@@ -97,7 +97,7 @@ QVariantMap MidiDeviceMappingModel::midiMappingToObject(const MidiMapping& midiM
 
     obj[TITLE_KEY] = action.title;
     obj[ICON_KEY] = static_cast<int>(action.iconCode);
-    obj[STATUS_KEY] = midiMapping.isValid() ? "Active" : "Inactive";
+    obj[STATUS_KEY] = midiMapping.isValid() ? qtrc("shortcuts", "Active") : qtrc("shortcuts", "Inactive");
     obj[MAPPED_TYPE_KEY] = static_cast<int>(midiMapping.event.type);
     obj[MAPPED_VALUE_KEY] = midiMapping.event.value;
 
@@ -168,7 +168,7 @@ bool MidiDeviceMappingModel::apply()
 
 bool MidiDeviceMappingModel::useRemoteControl() const
 {
-    return configuration()->useRemoteControl();
+    return midiConfiguration()->useRemoteControl();
 }
 
 void MidiDeviceMappingModel::setUseRemoteControl(bool value)
@@ -177,7 +177,7 @@ void MidiDeviceMappingModel::setUseRemoteControl(bool value)
         return;
     }
 
-    configuration()->setUseRemoteControl(value);
+    midiConfiguration()->setUseRemoteControl(value);
     emit useRemoteControlChanged(value);
 }
 

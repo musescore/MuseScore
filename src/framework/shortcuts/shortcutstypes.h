@@ -93,6 +93,22 @@ struct MidiMapping {
 };
 
 using MidiMappingList = std::list<MidiMapping>;
+
+inline RemoteEvent remoteEventFromMidiEvent(const midi::Event& midiEvent)
+{
+    RemoteEvent event;
+    bool isNote = midiEvent.isOpcodeIn({ midi::Event::Opcode::NoteOff, midi::Event::Opcode::NoteOn });
+    bool isController = midiEvent.isOpcodeIn({ midi::Event::Opcode::ControlChange });
+    if (isNote) {
+        event.type = RemoteEventType::Note;
+        event.value = midiEvent.note();
+    } else if (isController) {
+        event.type = RemoteEventType::Controller;
+        event.value = midiEvent.index();
+    }
+
+    return event;
+}
 }
 
 #endif // MU_SHORTCUTS_SHORTCUTSTYPES_H

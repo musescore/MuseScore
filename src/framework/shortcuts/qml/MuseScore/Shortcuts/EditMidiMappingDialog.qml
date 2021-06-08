@@ -25,14 +25,14 @@ import QtQuick.Dialogs 1.3
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Midi 1.0
+import MuseScore.Shortcuts 1.0
 
 Dialog {
     id: root
 
     signal mapToEventRequested(var event)
 
-    title: qsTrc("midi", "MIDI Remote Control")
+    title: qsTrc("shortcuts", "MIDI Remote Control")
 
     height: 220
     width: 538
@@ -81,7 +81,7 @@ Dialog {
             StyledTextLabel {
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                text: qsTrc("midi", "Press a key or adjust a control on your MIDI device to\nassign it to this function.")
+                text: qsTrc("shortcuts", "Press a key or adjust a control on your MIDI device to\nassign it to this function.")
             }
 
             RowLayout {
@@ -90,7 +90,7 @@ Dialog {
                 spacing: 10
 
                 StyledTextLabel {
-                    text: qsTrc("midi", "MIDI Mapping:")
+                    text: qsTrc("shortcuts", "MIDI Mapping:")
                 }
 
                 TextInputField {
