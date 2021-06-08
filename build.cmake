@@ -5,6 +5,8 @@
 # of this file as like a shell script or batch file rather than as part of the CMake
 # project tree. As always, the project tree starts in the top-level CMakeLists.txt.
 
+string(TIMESTAMP SCRIPT_START_TIMESTAMP "%s" UTC)
+
 if(NOT DEFINED CMAKE_SCRIPT_MODE_FILE)
     file(RELATIVE_PATH SCRIPT_PATH "${CMAKE_BINARY_DIR}" "${CMAKE_CURRENT_LIST_FILE}")
     message(FATAL_ERROR
@@ -198,7 +200,7 @@ endif()
 # encounter errors during a build then you should try doing a clean build.
 
 if(ARG_CLEAN)
-    message("~~~~ Actualizing Clean step ~~~~")
+    message("\n~~~~ Actualizing Clean step ~~~~\n")
     message("Deleting ${BUILD_PATH}")
     file(REMOVE_RECURSE "${BUILD_PATH}")
 endif()
@@ -210,7 +212,7 @@ endif()
 # edited. You can force this to happen by deleting CMakeCache.txt.
 
 if(ARG_CONFIGURE AND NOT EXISTS "${BUILD_PATH}/CMakeCache.txt")
-    message("~~~~ Actualizing Configure step ~~~~")
+    message("\n~~~~ Actualizing Configure step ~~~~\n")
     file(MAKE_DIRECTORY "${BUILD_PATH}")
     if(QT_COMPILER MATCHES "msvc")
         set(CMAKE_WRAPPER "${SOURCE_PATH}/build/cmake_wrapper.bat")
@@ -237,7 +239,7 @@ endif()
 # only (re)compile source files that have been edited since the last build.
 
 if(ARG_BUILD)
-    message("~~~~ Actualizing Build step ~~~~")
+    message("\n~~~~ Actualizing Build step ~~~~\n")
     execute_process(
         COMMAND cmake --build . --config "${BUILD_TYPE}" --parallel "${CPUS}"
         WORKING_DIRECTORY "${BUILD_PATH}"
@@ -254,7 +256,7 @@ endif()
 # only install files that have changed since last time.
 
 if(ARG_INSTALL)
-    message("~~~~ Actualizing Install step ~~~~")
+    message("\n~~~~ Actualizing Install step ~~~~\n")
     execute_process(
         COMMAND cmake --install . --config "${BUILD_TYPE}"
         WORKING_DIRECTORY "${BUILD_PATH}"
@@ -274,7 +276,7 @@ endif()
 # way (e.g. --help, --version) because they cancel CMake script processing.
 
 if(ARG_RUN)
-    message("~~~~ Actualizing Run step ~~~~")
+    message("\n~~~~ Actualizing Run step ~~~~\n")
     if(WIN32)
         set(CMD "cmd.exe" "/c") # allow CMake to launch a GUI application
     else()
@@ -294,3 +296,10 @@ endif()
 
 # Package - create installer archive for distribution to end users.
 # TODO
+
+string(TIMESTAMP SCRIPT_END_TIMESTAMP "%s" UTC)
+math(EXPR SCRIPT_ELAPSED_TIME "${SCRIPT_END_TIMESTAMP} - ${SCRIPT_START_TIMESTAMP}")
+math(EXPR SCRIPT_ELAPSED_MINS "${SCRIPT_ELAPSED_TIME} / 60")
+math(EXPR SCRIPT_ELAPSED_SECS "${SCRIPT_ELAPSED_TIME} % 60")
+list(GET SCRIPT_ARGS "0" SCRIPT_NAME)
+message("\n${SCRIPT_NAME}: Complete after ${SCRIPT_ELAPSED_MINS} minutes and ${SCRIPT_ELAPSED_SECS} seconds")
