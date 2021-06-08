@@ -2498,7 +2498,14 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   else {
                         _tpoSound /= 60;
                         t = new TempoText(_score);
-                        t->setXmlText(_wordsText + _metroText);
+                        QString rawWordsText = _wordsText;
+                        rawWordsText.remove(QRegularExpression("(<.*?>)"));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+                        QString sep = _metroText != "" && _wordsText != "" && rawWordsText.back() != ' ' ? " " : "";
+#else
+                        QString sep = _metroText != "" && _wordsText != "" && rawWordsText.at(rawWordsText.size() - 1) != ' ' ? " " : "";
+#endif
+                        t->setXmlText(_wordsText + sep + _metroText);
                         ((TempoText*) t)->setTempo(_tpoSound);
                         ((TempoText*) t)->setFollowText(true);
                         _score->setTempo(tick, _tpoSound);
