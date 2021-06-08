@@ -24,8 +24,9 @@
 #include "../LayoutSaver_p.h"
 
 #include <QCloseEvent>
-#include <QWindow>
 #include <QScopedValueRollback>
+#include <QTimer>
+#include <QWindow>
 
 #if defined(Q_OS_WIN)
 # include <windows.h>
@@ -210,25 +211,47 @@ const Frame::List FloatingWindow::frames() const
     return m_dropArea->frames();
 }
 
-void FloatingWindow::setSuggestedGeometry(QRect suggestedRect, SuggestedGeometryHints hint)
+QSize FloatingWindow::maxSizeHint() const
 {
+    QSize result = Layouting::Item::hardcodedMaximumSize;
+
+    if (!m_dropArea) {
+        // Still early, no layout set
+        return result;
+    }
+
     const Frame::List frames = this->frames();
     if (frames.size() == 1) {
         // Let's honour max-size when we have a single-frame.
-        // multi-frame cases are more complicated and we're not sure if we want the window to bounce around.
-        // single-frame is the most common case, like floating a dock widget, so let's do that first, it's also
-        // easy.
+        // multi-frame cases are more complicated and we're not sure if we want the window to
+        // bounce around. single-frame is the most common case, like floating a dock widget, so
+        // let's do that first, it's also easy.
         Frame *frame = frames[0];
-        const QSize waste = (minimumSize() - frame->minSize()).expandedTo(QSize(0, 0));
-        const QSize size = (frame->maxSizeHint() + waste).boundedTo(suggestedRect.size());
+        if (frame->dockWidgetCount() == 1) { // We don't support if there's tabbing
+            const QSize waste = (minimumSize() - frame->minSize()).expandedTo(QSize(0, 0));
+            result = frame->maxSizeHint() + waste;
+        }
+    }
 
+    // Semantically the result is fine, but bound it so we don't get:
+    // QWidget::setMaximumSize: (/KDDockWidgets::FloatingWindowWidget) The largest allowed size is (16777215,16777215)
+    return result.boundedTo(Layouting::Item::hardcodedMaximumSize);
+}
+
+void FloatingWindow::setSuggestedGeometry(QRect suggestedRect, SuggestedGeometryHints hint)
+{
+    const QSize maxSize = maxSizeHint();
+    const bool hasMaxSize = maxSize != Layouting::Item::hardcodedMaximumSize;
+    if (hasMaxSize) {
         // Resize to new size but preserve center
         const QPoint originalCenter = suggestedRect.center();
-        suggestedRect.setSize(size);
+        suggestedRect.setSize(maxSize.boundedTo(suggestedRect.size()));
 
-        if ((hint & SuggestedGeometryHint_GeometryIsFromDocked) && (Config::self().flags() & Config::Flag_NativeTitleBar)) {
+        if ((hint & SuggestedGeometryHint_GeometryIsFromDocked)
+            && (Config::self().flags() & Config::Flag_NativeTitleBar)) {
             const QMargins margins = contentMargins();
-            suggestedRect.setHeight(suggestedRect.height() - m_titleBar->height() + margins.top() + margins.bottom());
+            suggestedRect.setHeight(suggestedRect.height() - m_titleBar->height() + margins.top()
+                                    + margins.bottom());
         }
 
         if (hint & SuggestedGeometryHint_PreserveCenter)
@@ -336,9 +359,11 @@ void FloatingWindow::onFrameCountChanged(int count)
 
 void FloatingWindow::onVisibleFrameCountChanged(int count)
 {
-    if (!m_disableSetVisible) {
-        setVisible(count > 0);
-    }
+    if (m_disableSetVisible)
+        return;
+
+    updateSizeConstraints();
+    setVisible(count > 0);
 }
 
 void FloatingWindow::updateTitleBarVisibility()
@@ -466,6 +491,8 @@ bool FloatingWindow::event(QEvent *ev)
     } else if (ev->type() == QEvent::StatusTip && parent()) {
         // show status tips in the main window
         return parent()->event(ev);
+    } else if (ev->type() == QEvent::LayoutRequest) {
+        updateSizeConstraints();
     }
 
     return QWidgetAdapter::event(ev);
@@ -534,4 +561,16 @@ int FloatingWindow::userType() const
     if (Frame *f = singleFrame())
         return f->userType();
     return 0;
+}
+
+void FloatingWindow::updateSizeConstraints()
+{
+    // Doing a delayed call to make sure the layout has completled any ongoing operation.
+    QTimer::singleShot(0, this, [this] {
+        // Not simply using layout's max-size support because
+        // 1) that's not portable to QtQuick
+        // 2) QStackedLayout (from tab-widget) doesn't propagate size constraints up
+        // Doing it manually instead.
+        setMaximumSize(maxSizeHint());
+    });
 }

@@ -39,6 +39,8 @@ public:
     AudioThread();
     ~AudioThread();
 
+    static std::thread::id ID;
+
     using OnStart = std::function<void ()>;
     using OnFinished = std::function<void ()>;
 
@@ -58,7 +60,6 @@ private:
     OnStart m_onStart;
     OnFinished m_onFinished;
     rpc::QueuedRpcChannelPtr m_channel;
-    std::shared_ptr<rpc::RpcControllers> m_controller;
     std::shared_ptr<IAudioBuffer> m_buffer = nullptr;
     std::shared_ptr<std::thread> m_thread = nullptr;
     std::atomic<bool> m_running = false;

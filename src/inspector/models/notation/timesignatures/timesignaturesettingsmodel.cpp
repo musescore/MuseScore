@@ -24,7 +24,7 @@
 #include <QSizeF>
 
 #include "dataformatter.h"
-
+#include "log.h"
 #include "translation.h"
 
 using namespace mu::inspector;
@@ -77,7 +77,7 @@ void TimeSignatureSettingsModel::resetProperties()
 
 void TimeSignatureSettingsModel::showTimeSignatureProperties()
 {
-    adapter()->showTimeSignaturePropertiesDialog();
+    NOT_IMPLEMENTED;
 }
 
 PropertyItem* TimeSignatureSettingsModel::horizontalScale() const

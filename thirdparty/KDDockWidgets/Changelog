@@ -8,6 +8,12 @@
   - Added MainWindow::closeDockWidgets()
   - Fixed crash in MainWindow::layoutEqually()
   - QtQuick: Added more declarative API
+  - FloatingWindow now honours the dockwidget's max-size, if there's a single
+    dock widget docked. Tabbed cases are more difficult since QStackedLayout doesn't
+    propagate size constraints.
+  - Added MainWindowBase::frameCountChanged()
+  - Introduced Config::setDropIndicatorsInhibited(), which allows you to disable support
+  for drop indicators while dragging.
 
 * v1.3.1 (unreleased)
   - Improve restoring layout when RestoreOption_RelativeToMainWindow is used (#171)
@@ -17,6 +23,7 @@
   - Size of FloatingWindow now accounts for the fact that it's using Flag_NativeTitleBar and
     resizes its content accordingly (#174)
   - Fixed popups on overlayed dock widgets not working
+  - Don't restore maximized state when using RestoreOption_RelativeToMainWindow (#184)
 
 * v1.3.0 (8 February 2021)
   - Experimental QtQuick support (#49)

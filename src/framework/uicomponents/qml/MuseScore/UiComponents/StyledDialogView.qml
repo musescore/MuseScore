@@ -36,7 +36,7 @@ DialogView {
     property alias width: rootContainer.width
     property alias height: rootContainer.height
 
-    property int margins: 16
+    property int margins: 0
 
     property int contentWidth: 240
     property int contentHeight: contentBody.childrenRect.height
@@ -66,7 +66,7 @@ DialogView {
 
     onClosed: {
         if (root.isDoActiveParentOnClose && root.navigationParentControl) {
-            Qt.callLater(root.navigationParentControl.forceActive)
+            Qt.callLater(root.navigationParentControl.requestActive)
         }
     }
 

@@ -37,17 +37,18 @@ static constexpr int PIXELSSTEPSFACTOR = 5;
 NotationViewInputController::NotationViewInputController(IControlledView* view)
     : m_view(view)
 {
-    m_possibleZoomsPercentage = {
-        5, 10, 15, 25, 50, 75, 100, 150, 200, 400, 800, 1600
-    };
 }
 
 void NotationViewInputController::init()
 {
+    m_possibleZoomsPercentage = configuration()->possibleZoomPercentageList();
+
     if (dispatcher() && !m_readonly) {
         dispatcher()->reg(this, "zoomin", this, &NotationViewInputController::zoomIn);
         dispatcher()->reg(this, "zoomout", this, &NotationViewInputController::zoomOut);
         dispatcher()->reg(this, "zoom-page-width", this, &NotationViewInputController::zoomToPageWidth);
+        dispatcher()->reg(this, "zoom-whole-page", this, &NotationViewInputController::zoomToWholePage);
+        dispatcher()->reg(this, "zoom-two-pages", this, &NotationViewInputController::zoomToTwoPages);
         dispatcher()->reg(this, "zoom100", [this]() { setZoom(100); });
         dispatcher()->reg(this, "zoom-x-percent", [this](const ActionData& args) { setZoom(args.arg<int>(0)); });
 
@@ -399,6 +400,13 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 
         m_view->notationInteraction()->drag(m_interactData.beginPoint, logicPos, mode);
         return;
+    } else if (m_interactData.hitElement == nullptr && (keyState & (Qt::ShiftModifier | Qt::ControlModifier))) {
+        if (!m_view->notationInteraction()->isDragStarted()) {
+            m_view->notationInteraction()->startDrag(std::vector<Element*>(), QPoint(), [](const Element*) { return false; });
+        }
+        m_view->notationInteraction()->drag(m_interactData.beginPoint, logicPos,
+                                            keyState & Qt::ControlModifier ? DragMode::LassoList : DragMode::BothXY);
+        return;
     }
 
     // move canvas
@@ -431,7 +439,8 @@ void NotationViewInputController::startDragElements(ElementType elementsType, co
 
 void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
 {
-    if (!m_interactData.hitElement && !m_isCanvasDragged && !m_view->notationInteraction()->isGripEditStarted()) {
+    if (!m_interactData.hitElement && !m_isCanvasDragged && !m_view->notationInteraction()->isGripEditStarted()
+        && !m_view->notationInteraction()->isDragStarted()) {
         m_view->notationInteraction()->clearSelection();
     }
 

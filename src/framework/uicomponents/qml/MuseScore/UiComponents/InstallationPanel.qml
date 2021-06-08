@@ -49,6 +49,8 @@ PopupPanel {
 
     visible: false
 
+    accessible.name: root.title
+
     QtObject {
         id: prv
 
@@ -89,9 +91,9 @@ PopupPanel {
 
         function focusOnOpened() {
             if (updateButton.visible) {
-                updateButton.navigation.forceActive()
+                updateButton.navigation.requestActive()
             } else {
-                installButton.navigation.forceActive()
+                installButton.navigation.requestActive()
             }
         }
 

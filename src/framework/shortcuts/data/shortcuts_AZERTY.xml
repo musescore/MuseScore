@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Shortcuts>
+    <SC>
+        <key>accessibility-dev-show-tree</key>
+        <seq>Ctrl+F2</seq>
+    </SC>
 <!-- Keyboard navigation -->
     <SC>
         <key>nav-dev-show-controls</key>
@@ -523,6 +527,7 @@
   <SC>
     <key>delete</key>
     <seq>Del</seq>
+    <seq>Backspace</seq>
     </SC>
   <SC>
     <key>time-delete</key>

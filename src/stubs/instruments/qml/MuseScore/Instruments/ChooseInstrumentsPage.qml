@@ -26,7 +26,7 @@ import MuseScore.UiComponents 1.0
 Rectangle {
     id: root
 
-    property string initiallySelectedInstrumentIds: ""
+    property string initiallySelectedPartIds: ""
     property bool hasSelectedInstruments: false
     property bool canSelectMultipleInstruments: false
     property string currentInstrumentId: ""

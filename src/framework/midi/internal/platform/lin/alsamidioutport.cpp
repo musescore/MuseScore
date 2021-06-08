@@ -40,6 +40,25 @@ using namespace mu::midi;
 AlsaMidiOutPort::AlsaMidiOutPort()
 {
     m_alsa = std::unique_ptr<Alsa>(new Alsa());
+
+    m_devicesListener.startWithCallback([this]() {
+        return devices();
+    });
+
+    m_devicesListener.devicesChanged().onNotify(this, [this]() {
+        bool connectedDeviceRemoved = true;
+        for (const MidiDevice& device: devices()) {
+            if (m_deviceID == device.id) {
+                connectedDeviceRemoved = false;
+            }
+        }
+
+        if (connectedDeviceRemoved) {
+            disconnect();
+        }
+
+        m_devicesChanged.notify();
+    });
 }
 
 AlsaMidiOutPort::~AlsaMidiOutPort()
@@ -51,6 +70,8 @@ AlsaMidiOutPort::~AlsaMidiOutPort()
 
 std::vector<MidiDevice> AlsaMidiOutPort::devices() const
 {
+    std::lock_guard lock(m_devicesMutex);
+
     int streams = SND_SEQ_OPEN_OUTPUT;
     unsigned int cap = SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_READ;
 
@@ -73,6 +94,10 @@ std::vector<MidiDevice> AlsaMidiOutPort::devices() const
 
     while (snd_seq_query_next_client(handle, cinfo) >= 0) {
         client = snd_seq_client_info_get_client(cinfo);
+        if (client == SND_SEQ_CLIENT_SYSTEM) {
+            continue;
+        }
+
         snd_seq_port_info_alloca(&pinfo);
         snd_seq_port_info_set_client(pinfo, client);
 
@@ -94,8 +119,17 @@ std::vector<MidiDevice> AlsaMidiOutPort::devices() const
     return ret;
 }
 
+mu::async::Notification AlsaMidiOutPort::devicesChanged() const
+{
+    return m_devicesChanged;
+}
+
 mu::Ret AlsaMidiOutPort::connect(const MidiDeviceID& deviceID)
 {
+    if (!deviceExists(deviceID)) {
+        return make_ret(Err::MidiFailedConnect, "not found device, id: " + deviceID);
+    }
+
     std::vector<std::string> cp;
     strings::split(deviceID, cp, ":");
     IF_ASSERT_FAILED(cp.size() == 2) {
@@ -203,4 +237,15 @@ mu::Ret AlsaMidiOutPort::sendEvent(const Event& e)
     snd_seq_event_output_direct(m_alsa->midiOut, &seqev);
 
     return Ret(true);
+}
+
+bool AlsaMidiOutPort::deviceExists(const MidiDeviceID& deviceId) const
+{
+    for (const MidiDevice& device : devices()) {
+        if (device.id == deviceId) {
+            return true;
+        }
+    }
+
+    return false;
 }

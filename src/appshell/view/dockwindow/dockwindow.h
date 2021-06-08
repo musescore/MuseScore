@@ -25,106 +25,98 @@
 
 #include <QQuickItem>
 
-#include "uicomponents/view/qmllistproperty.h"
-#include "dockpage.h"
-#include "dockmenubar.h"
+#include "framework/uicomponents/view/qmllistproperty.h"
 
+#include "thirdparty/KDDockWidgets/src/KDDockWidgets.h"
+
+#include "modularity/ioc.h"
+#include "async/asyncable.h"
+#include "ui/iuiconfiguration.h"
 #include "ui/imainwindow.h"
+#include "async/asyncable.h"
 
-class QMainWindow;
-class QStackedWidget;
-class QStatusBar;
-class QMenuBar;
+namespace KDDockWidgets {
+class MainWindowBase;
+class LayoutSaver;
+}
 
 namespace mu::dock {
-class EventsWatcher;
-class DockWindow : public QQuickItem, public ui::IMainWindow
+class DockToolBar;
+class DockToolBarHolder;
+class DockPage;
+class DockBase;
+class DockWindow : public QQuickItem, public async::Asyncable
 {
     Q_OBJECT
-    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
-    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
-    Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor NOTIFY borderColorChanged)
 
-    Q_PROPERTY(mu::dock::DockMenuBar* menuBar READ menuBar WRITE setMenuBar NOTIFY menuBarChanged)
+    Q_PROPERTY(QString currentPageUri READ currentPageUri NOTIFY currentPageUriChanged)
 
-    Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolbars READ toolbars)
-
-    Q_PROPERTY(QQmlListProperty<mu::dock::DockPage> pages READ pages)
-    Q_PROPERTY(QString currentPageUri READ currentPageUri WRITE setCurrentPageUri NOTIFY currentPageUriChanged)
-
-    Q_CLASSINFO("DefaultProperty", "pages")
-    Q_INTERFACES(QQmlParserStatus)
+    Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolBars READ toolBarsProperty)
+    Q_PROPERTY(
+        mu::dock::DockToolBarHolder
+        * mainToolBarDockingHolder READ mainToolBarDockingHolder WRITE setMainToolBarDockingHolder NOTIFY mainToolBarDockingHolderChanged)
+    Q_PROPERTY(QQmlListProperty<mu::dock::DockPage> pages READ pagesProperty)
 
     INJECT(dock, ui::IUiConfiguration, configuration)
+    INJECT(dock, ui::IMainWindow, mainWindow)
 
 public:
     explicit DockWindow(QQuickItem* parent = nullptr);
 
-    QString title() const;
-    QColor color() const;
-    QColor borderColor() const;
-
-    QQmlListProperty<DockToolBar> toolbars();
-    QQmlListProperty<DockPage> pages();
-
-    DockMenuBar* menuBar() const;
-
     QString currentPageUri() const;
 
-    // IMainWindow
-    QMainWindow* qMainWindow() const override;
-    QWindow* qWindow() const override;
-    bool isFullScreen() const override;
-    void toggleFullScreen() override;
-    const QScreen* screen() const override;
+    QQmlListProperty<mu::dock::DockToolBar> toolBarsProperty();
+    QQmlListProperty<mu::dock::DockPage> pagesProperty();
+    DockToolBarHolder* mainToolBarDockingHolder() const;
+
+    Q_INVOKABLE void loadPage(const QString& uri);
 
 public slots:
-    void setTitle(QString title);
-    void setColor(QColor color);
-    void setBorderColor(QColor color);
-    void setCurrentPageUri(QString uri);
-    void setMenuBar(DockMenuBar* menuBar);
+    void setMainToolBarDockingHolder(DockToolBarHolder* mainToolBarDockingHolder);
 
 signals:
-    void titleChanged(QString title);
-    void colorChanged(QColor color);
-    void borderColorChanged(QColor color);
-    void currentPageUriChanged(QString currentPageUri);
-    void menuBarChanged(DockMenuBar* menuBar);
+    void currentPageUriChanged(const QString& uri);
+
+    void mainToolBarDockingHolderChanged(DockToolBarHolder* mainToolBarDockingHolder);
 
 private slots:
-    void onMainWindowEvent(QEvent* event);
-    void onPageAppended(int index);
-    void updateStyle();
-    void onMenusChanged(const QList<QMenu*>& menus);
+    void onQuit();
 
 private:
-    void componentComplete() override;
-
-    QMenuBar* qMenuBar();
-    DockPage* page(const QString& uri) const;
+    DockPage* pageByUri(const QString& uri) const;
     DockPage* currentPage() const;
 
-    void togglePage(DockPage* old, DockPage* current);
-    void hidePage(DockPage* page);
-    void showPage(DockPage* page);
-    void adjustPanelsSize(DockPage* page);
+    void componentComplete() override;
 
-    void saveState(const QString& pageName);
-    void restoreState(const QString& pageName);
+    void loadPageContent(const DockPage* page);
+    void unitePanelsToTabs(const DockPage* page);
+    void loadPageToolbars(const DockPage* page);
 
-    QMainWindow* m_window = nullptr;
-    EventsWatcher* m_eventsWatcher = nullptr;
-    QString m_title;
-    DockMenuBar* m_menuBar = nullptr;
-    uicomponents::QmlListProperty<DockToolBar> m_toolbars;
-    QStackedWidget* m_central = nullptr;
-    QStatusBar* m_statusbar = nullptr;
-    uicomponents::QmlListProperty<DockPage> m_pages;
+    void addDock(DockBase* dock, KDDockWidgets::Location location, const DockBase* relativeTo = nullptr);
+
+    void saveGeometry();
+    void restoreGeometry();
+
+    QByteArray windowState() const;
+
+    void savePageState(const QString& pageName);
+    void restorePageState(const QString& pageName);
+
+    void resetWindowState();
+
+    void initDocks(DockPage* page);
+
+    DockToolBarHolder* resolveToolbarDockingHolder(const QPoint& localPos) const;
+
+    void hideCurrentToolBarDockingHolder();
+    bool isMouseOverCurrentToolBarDockingHolder(const QPoint& mouseLocalPos) const;
+
+    KDDockWidgets::MainWindowBase* m_mainWindow = nullptr;
     QString m_currentPageUri;
-    bool m_isComponentComplete = false;
-    QColor m_color;
-    QColor m_borderColor;
+    uicomponents::QmlListProperty<DockToolBar> m_toolBars;
+    DockToolBarHolder* m_mainToolBarDockingHolder = nullptr;
+    uicomponents::QmlListProperty<DockPage> m_pages;
+    DockToolBarHolder* m_currentToolBarDockingHolder = nullptr;
 };
 }
 

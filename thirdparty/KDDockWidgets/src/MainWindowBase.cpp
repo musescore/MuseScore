@@ -77,6 +77,9 @@ MainWindowBase::MainWindowBase(const QString &uniqueName, KDDockWidgets::MainWin
     , d(new Private(this, options))
 {
     setUniqueName(uniqueName);
+
+    connect(d->m_layoutWidget, &LayoutWidget::visibleWidgetCountChanged, this,
+            &MainWindowBase::frameCountChanged);
 }
 
 MainWindowBase::~MainWindowBase()
@@ -519,6 +522,11 @@ void MainWindowBase::clearSideBarOverlay(bool deleteFrame)
         return;
 
     Frame *frame = d->m_overlayedDockWidget->d->frame();
+    if (!frame) { // prophylactic check
+        d->m_overlayedDockWidget = nullptr;
+        return;
+    }
+
     const SideBarLocation loc = d->m_overlayedDockWidget->sideBarLocation();
     d->m_overlayedDockWidget->d->lastPositions().setLastOverlayedGeometry(
         loc, frame->QWidgetAdapter::geometry());
@@ -659,7 +667,7 @@ bool MainWindowBase::deserialize(const LayoutSaver::MainWindow &mw)
         const QStringList dockWidgets = mw.dockWidgetsPerSideBar.value(loc);
         for (const QString &uniqueName : dockWidgets) {
 
-            DockWidgetBase *dw = DockRegistry::self()->dockByName(uniqueName);
+            DockWidgetBase *dw = DockRegistry::self()->dockByName(uniqueName, DockRegistry::DockByNameFlag::CreateIfNotFound);
             if (!dw) {
                 qWarning() << Q_FUNC_INFO << "Could not find dock widget" << uniqueName
                            << ". Won't restore it to sidebar";
@@ -667,12 +675,6 @@ bool MainWindowBase::deserialize(const LayoutSaver::MainWindow &mw)
             }
 
             sb->addDockWidget(dw);
-        }
-    }
-
-    if (mw.windowState != Qt::WindowNoState) {
-        if (auto w = windowHandle()) {
-            w->setWindowState(mw.windowState);
         }
     }
 
@@ -688,7 +690,7 @@ LayoutSaver::MainWindow MainWindowBase::serialize() const
     LayoutSaver::MainWindow m;
 
     m.options = options();
-    m.geometry = window()->geometry(); // window() as the MainWindow can be embedded
+    m.geometry = windowGeometry();
     m.isVisible = isVisible();
     m.uniqueName = uniqueName();
     m.screenIndex = screenNumberForWidget(this);
@@ -707,4 +709,12 @@ LayoutSaver::MainWindow MainWindowBase::serialize() const
     }
 
     return m;
+}
+
+QRect MainWindowBase::windowGeometry() const
+{
+    if (QWindow *window = windowHandle())
+        return window->geometry();
+
+    return window()->geometry();
 }

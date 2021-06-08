@@ -21,13 +21,29 @@
  */
 #include "abstractnavigation.h"
 
+#include "qmlaccessible.h"
+
 #include "log.h"
 
 using namespace mu::ui;
+using namespace mu::accessibility;
 
 AbstractNavigation::AbstractNavigation(QObject* parent)
     : QObject(parent)
 {
+}
+
+void AbstractNavigation::classBegin()
+{
+}
+
+void AbstractNavigation::componentComplete()
+{
+    if (m_accessible) {
+        m_accessible->setState(IAccessible::State::Enabled, enabled());
+        m_accessible->setState(IAccessible::State::Active, active());
+        m_accessible->componentComplete();
+    }
 }
 
 void AbstractNavigation::setName(QString name)
@@ -124,6 +140,10 @@ void AbstractNavigation::setEnabled(bool enabled)
     if (m_enabledChanged.isConnected()) {
         m_enabledChanged.send(m_enabled);
     }
+
+    if (m_accessible) {
+        m_accessible->setState(IAccessible::State::Enabled, enabled);
+    }
 }
 
 bool AbstractNavigation::enabled() const
@@ -166,10 +186,39 @@ void AbstractNavigation::onEvent(INavigation::EventPtr e)
     emit navigationEvent(QVariant::fromValue(ev));
 }
 
-void AbstractNavigation::classBegin()
+AccessibleItem* AbstractNavigation::accessible() const
 {
+    if (!m_accessible) {
+        AbstractNavigation* self = const_cast<AbstractNavigation*>(this);
+        m_accessible = new AccessibleItem(self);
+    }
+    return m_accessible;
 }
 
-void AbstractNavigation::componentComplete()
+void AbstractNavigation::setAccessible(AccessibleItem* accessible)
 {
+    if (m_accessible == accessible) {
+        return;
+    }
+
+    if (m_accessible) {
+        delete m_accessible;
+    }
+
+    m_accessible = accessible;
+
+    if (m_accessible) {
+        m_accessible->setParent(this);
+        m_accessible->setState(IAccessible::State::Enabled, enabled());
+        m_accessible->setState(IAccessible::State::Active, active());
+    }
+
+    emit accessibleChanged();
+}
+
+void AbstractNavigation::setAccessibleParent(AccessibleItem* p)
+{
+    if (m_accessible) {
+        m_accessible->setAccessibleParent(p);
+    }
 }

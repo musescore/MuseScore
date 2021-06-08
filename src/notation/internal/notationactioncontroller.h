@@ -150,7 +150,8 @@ private:
     void resetBeamMode();
     void resetShapesAndPosition();
 
-    void openPageStyle();
+    void openEditStyleDialog();
+    void openPageSettingsDialog();
     void openStaffProperties();
     void openBreaksDialog();
     void openScoreProperties();

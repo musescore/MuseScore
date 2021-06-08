@@ -58,6 +58,14 @@ static std::string errorString(MMRESULT ret)
 WinMidiInPort::WinMidiInPort()
 {
     m_win = std::unique_ptr<Win>(new Win());
+
+    m_devicesListener.startWithCallback([this]() {
+        return devices();
+    });
+
+    m_devicesListener.devicesChanged().onNotify(this, [this]() {
+        m_devicesChanged.notify();
+    });
 }
 
 WinMidiInPort::~WinMidiInPort()
@@ -71,9 +79,10 @@ WinMidiInPort::~WinMidiInPort()
     }
 }
 
-std::vector<MidiDevice> WinMidiInPort::devices() const
+MidiDeviceList WinMidiInPort::devices() const
 {
-    std::vector<MidiDevice> ret;
+    std::lock_guard lock(m_devicesMutex);
+    MidiDeviceList ret;
 
     unsigned int numDevs = midiInGetNumDevs();
     if (numDevs == 0) {
@@ -97,6 +106,11 @@ std::vector<MidiDevice> WinMidiInPort::devices() const
     return ret;
 }
 
+mu::async::Notification WinMidiInPort::devicesChanged() const
+{
+    return m_devicesChanged;
+}
+
 static void CALLBACK proccess(HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2)
 {
     UNUSED(hMidiIn);
@@ -118,7 +132,7 @@ void WinMidiInPort::doProcess(uint32_t message, tick_t timing)
 {
     auto e = Event::fromMIDI10Package(message).toMIDI20();
     if (e) {
-        m_eventReceived.send({ timing, e });
+        m_eventReceived.send(timing, e);
     }
 }
 
@@ -203,7 +217,7 @@ bool WinMidiInPort::isRunning() const
     return m_running;
 }
 
-mu::async::Channel<std::pair<tick_t, Event> > WinMidiInPort::eventReceived() const
+mu::async::Channel<tick_t, Event> WinMidiInPort::eventReceived() const
 {
     return m_eventReceived;
 }

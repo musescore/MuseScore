@@ -222,7 +222,7 @@
         <Channel>
           <controller ctrl="0" value="0"/>
           <controller ctrl="32" value="17"/>
-          <program value="75"/>
+          <program value="19"/>
           </Channel>
         </Instrument>
       </Part>

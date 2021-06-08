@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.0
 import QtGraphicalEffects 1.0
@@ -46,20 +46,20 @@ RadioDelegate {
     leftPadding: 0
     rightPadding: 0
 
-    onPressed: {
-        if (!keynavCtrl.active) {
-            keynavCtrl.forceActive()
-        }
-    }
+    //! NONE Disabled default Qt Accessible
+    Accessible.role: Accessible.NoRole
 
     NavigationControl {
         id: keynavCtrl
         name: root.objectName
 
+        accessible.role: MUAccessible.RadioButton
+        accessible.name: root.title
+        accessible.selected: root.checked
+
         onActiveChanged: {
             if (keynavCtrl.active) {
                 root.forceActiveFocus()
-                root.toggled()
             }
         }
 
@@ -72,6 +72,7 @@ RadioDelegate {
         Rectangle {
             id: backgroundRect
             anchors.fill: parent
+            anchors.bottomMargin: 2
 
             color: ui.theme.backgroundPrimaryColor
             opacity: ui.theme.buttonOpacityNormal
@@ -155,8 +156,8 @@ RadioDelegate {
         Loader {
             anchors.verticalCenter: parent.verticalCenter
 
-            sourceComponent: iconComponent
-            visible: Boolean(iconComponent)
+            sourceComponent: root.iconComponent
+            visible: Boolean(root.iconComponent)
         }
 
         StyledTextLabel {
@@ -165,11 +166,11 @@ RadioDelegate {
             anchors.verticalCenter: parent.verticalCenter
             width: implicitWidth
 
-            visible: Boolean(title)
+            visible: Boolean(root.title)
 
             horizontalAlignment: Text.AlignLeft
-            font: normalStateFont
-            text: title
+            font: root.normalStateFont
+            text: root.title
         }
     }
 

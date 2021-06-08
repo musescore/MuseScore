@@ -20,7 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "interactivetestsmodel.h"
+
+#include <QTimer>
+
 #include "log.h"
+
+#include "async/async.h"
+
+#include <QAccessible>
 
 using namespace mu::ui;
 using namespace mu::framework;
@@ -90,11 +97,13 @@ QString InteractiveTestsModel::currentUri() const
 
 void InteractiveTestsModel::question()
 {
-    IInteractive::Button btn = interactive()->question("Test", "It works?", {
-        IInteractive::Button::Yes,
-        IInteractive::Button::No });
+    IInteractive::Result result = interactive()->question(
+        "Do you really want to delete the 'xxx' workspace?", "",
+        { interactive()->buttonData(IInteractive::Button::No),
+          interactive()->buttonData(IInteractive::Button::Yes) }, 0,
+        IInteractive::Option::WithIcon);
 
-    if (btn == IInteractive::Button::Yes) {
+    if (result.standartButton() == IInteractive::Button::Yes) {
         LOGI() << "Yes!!";
     } else {
         LOGI() << "No!!";
@@ -104,12 +113,12 @@ void InteractiveTestsModel::question()
 void InteractiveTestsModel::customQuestion()
 {
     int maybeBtn = int(IInteractive::Button::CustomButton) + 1;
-    int btn = interactive()->question("Test", "It works?", {
+    IInteractive::Result result = interactive()->question("Test", "It works?", {
         IInteractive::ButtonData(maybeBtn, "Maybe"),
         interactive()->buttonData(IInteractive::Button::No)
     });
 
-    if (btn == maybeBtn) {
+    if (result.button() == maybeBtn) {
         LOGI() << "Maybe!!";
     } else {
         LOGE() << "No!!";
@@ -118,17 +127,38 @@ void InteractiveTestsModel::customQuestion()
 
 void InteractiveTestsModel::information()
 {
-    interactive()->message(IInteractive::Type::Info, "Test", "This is info text");
+    IInteractive::Result result = interactive()->info("Tuplet cannot cross barlines", "", {}, 0,
+                                                      IInteractive::Option::WithIcon | IInteractive::Option::WithShowAgain);
+    LOGD() << interactive()->buttonData(result.standartButton()).text;
 }
 
 void InteractiveTestsModel::warning()
 {
-    interactive()->message(IInteractive::Type::Warning, "Test", "This is warning text");
+    int noSaveButton = int(IInteractive::Button::CustomButton) + 1;
+    int saveButton = noSaveButton + 1;
+
+    IInteractive::Result result = interactive()->warning("Do you want to save changes to the score “Untitled” before closing?",
+                                                         "Your changes will be lost if you don’t save them.",
+                                                         { IInteractive::ButtonData(noSaveButton, "Don’t save"),
+                                                           interactive()->buttonData(IInteractive::Button::Cancel),
+                                                           IInteractive::ButtonData(saveButton, "Save", true) }, saveButton,
+                                                         IInteractive::Option::WithIcon);
+
+    if (result.button() == noSaveButton) {
+        LOGI() << "Don’t save!!";
+    } else if (result.button() == saveButton) {
+        LOGE() << "Save!!";
+    } else {
+        LOGE() << "Cancel!!";
+    }
 }
 
 void InteractiveTestsModel::critical()
 {
-    interactive()->message(IInteractive::Type::Critical, "Test", "This is critical text");
+    IInteractive::Result result = interactive()->error("Cannot read file C:/Users/Username/Desktop/Composition.mscz",
+                                                       "An error has occured when trying to open this file",  {}, 0,
+                                                       IInteractive::Option::WithIcon);
+    LOGD() << interactive()->buttonData(result.standartButton()).text;
 }
 
 void InteractiveTestsModel::require()

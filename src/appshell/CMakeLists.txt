@@ -23,11 +23,7 @@ set(MODULE appshell)
 set(MODULE_QRC appshell.qrc)
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
-if (KDAB_DOCKWIDGETS)
-    include(${CMAKE_CURRENT_LIST_DIR}/view/dockwindow_kdab/dockwindow.cmake)
-else()
-    include(${CMAKE_CURRENT_LIST_DIR}/view/dockwindow/dockwindow.cmake)
-endif()
+include(${CMAKE_CURRENT_LIST_DIR}/view/dockwindow/dockwindow.cmake)
 
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.cpp
@@ -49,12 +45,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationpagestate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationpagestate.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/framelesswindowcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/framelesswindowcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/devtools/settingslistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/devtools/settingslistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpagemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationstatusbarmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationstatusbarmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/aboutmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/aboutmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/startupmodel.cpp
@@ -87,13 +87,25 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/iopreferencesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/commonaudioapiconfigurationmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/commonaudioapiconfigurationmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/framelesswindow/framelesswindowmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/framelesswindow/framelesswindowmodel.h
     ${DOCKWINDOW_SRC}
     )
+
 
 set(MODULE_LINK
     uicomponents
     ui
     ${DOCK_LIBS}
     )
+
+if (OS_IS_WIN)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winframelesswindowcontroller.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winframelesswindowcontroller.h
+    )
+
+    set(MODULE_LINK ${MODULE_LINK} dwmapi)
+endif(OS_IS_WIN)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

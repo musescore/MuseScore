@@ -68,7 +68,7 @@
 #include <libmscore/ottava.h>
 #include <libmscore/marker.h>
 #include <libmscore/notedot.h>
-#include "libmscore/sym.h"
+#include "libmscore/symid.h"
 #include "libmscore/bracketItem.h"
 #include "libmscore/textline.h"
 // #include <symtext.h>

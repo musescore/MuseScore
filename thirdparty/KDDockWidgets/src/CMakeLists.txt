@@ -37,7 +37,7 @@ set(DOCKSLIBS_SRCS
     MainWindowMDI.h
     LayoutSaver.cpp
     LayoutSaver.h
-    LayoutSaver_p.h
+    private/LayoutSaver_p.h
     private/LayoutWidget.cpp
     private/LayoutWidget_p.h
     private/MDILayoutWidget.cpp
@@ -105,6 +105,8 @@ set(DOCKS_INSTALLABLE_INCLUDES
     FocusScope.h
     QWidgetAdapter.h
     LayoutSaver.h
+    MainWindowMDI.h
+    MainWindowBase.h
 )
 
 set(DOCKS_INSTALLABLE_PRIVATE_INCLUDES
@@ -114,6 +116,7 @@ set(DOCKS_INSTALLABLE_PRIVATE_INCLUDES
     private/DropIndicatorOverlayInterface_p.h
     private/FloatingWindow_p.h
     private/Frame_p.h
+    private/LayoutSaver_p.h
     private/MultiSplitter_p.h
     private/LayoutWidget_p.h
     private/SideBar_p.h
@@ -152,6 +155,8 @@ if(${PROJECT_NAME}_QTQUICK)
       private/quick/TitleBarQuick_p.h
       private/quick/QmlTypes.cpp
       private/quick/QmlTypes.h
+      private/quick/Helpers.cpp
+      private/quick/Helpers_p.h
       private/quick/FrameQuick.cpp
       private/quick/FrameQuick_p.h
       private/quick/LayoutSaverInstantiator.cpp
@@ -169,6 +174,9 @@ if(${PROJECT_NAME}_QTQUICK)
       private/multisplitter/Rubberband_quick.cpp
       private/multisplitter/Rubberband_quick.h
       kddockwidgets_qtquick.qrc)
+
+  set(DOCKS_INSTALLABLE_INCLUDES ${DOCKS_INSTALLABLE_INCLUDES} DockWidgetQuick.h)
+
 else()
   set(DOCKSLIBS_SRCS ${DOCKSLIBS_SRCS}
       private/DebugWindow.cpp
@@ -200,13 +208,11 @@ else()
       private/indicators/SegmentedIndicators.cpp
       private/indicators/SegmentedIndicators_p.h
       # private/indicators/AnimatedIndicators.cpp
-      )
+  )
 
   set(DOCKS_INSTALLABLE_INCLUDES
       ${DOCKS_INSTALLABLE_INCLUDES}
       MainWindow.h
-      MainWindowMDI.h
-      MainWindowBase.h
       DockWidget.h
   )
 endif()
@@ -309,17 +315,23 @@ install(TARGETS kddockwidgets
 if(MSVC AND NOT ${PROJECT_NAME}_STATIC)
   install(FILES "$<TARGET_PDB_FILE_DIR:kddockwidgets>/$<TARGET_PDB_FILE_NAME:kddockwidgets>" DESTINATION ${INSTALL_LIBRARY_DIR} CONFIGURATIONS Debug RelWithDebInfo)
 endif()
+
 install(FILES ${DOCKS_INSTALLABLE_INCLUDES} DESTINATION include/kddockwidgets)
 install(FILES ${DOCKS_INSTALLABLE_PRIVATE_INCLUDES} DESTINATION include/kddockwidgets/private)
 install(FILES private/multisplitter/Item_p.h DESTINATION include/kddockwidgets/private/multisplitter)
 install(FILES private/multisplitter/Widget.h DESTINATION include/kddockwidgets/private/multisplitter)
-install(FILES private/multisplitter/Widget_qwidget.h DESTINATION include/kddockwidgets/private/multisplitter)
 install(FILES private/multisplitter/Separator_p.h DESTINATION include/kddockwidgets/private/multisplitter)
-install(FILES private/multisplitter/Separator_qwidget.h DESTINATION include/kddockwidgets/private/multisplitter)
-install(FILES ${DOCKS_INSTALLABLE_PRIVATE_WIDGET_INCLUDES} DESTINATION include/kddockwidgets/private/widgets)
-
 install(FILES private/indicators/ClassicIndicators_p.h DESTINATION include/kddockwidgets/private/indicators)
 install(FILES private/indicators/SegmentedIndicators_p.h DESTINATION include/kddockwidgets/private/indicators)
+
+if (KDDockWidgets_QTQUICK)
+  install(FILES private/multisplitter/Separator_quick.h DESTINATION include/kddockwidgets/private/multisplitter)
+  install(FILES private/multisplitter/Widget_quick.h DESTINATION include/kddockwidgets/private/multisplitter)
+else()
+  install(FILES ${DOCKS_INSTALLABLE_PRIVATE_WIDGET_INCLUDES} DESTINATION include/kddockwidgets/private/widgets)
+  install(FILES private/multisplitter/Separator_qwidget.h DESTINATION include/kddockwidgets/private/multisplitter)
+  install(FILES private/multisplitter/Widget_qwidget.h DESTINATION include/kddockwidgets/private/multisplitter)
+endif()
 
 # Generate library version files
 include(ECMSetupVersion)

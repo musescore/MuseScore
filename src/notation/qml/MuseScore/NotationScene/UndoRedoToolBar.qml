@@ -47,7 +47,10 @@ Rectangle {
             icon: model.undoItem.icon
             iconFont: ui.theme.toolbarIconsFont
 
-            hint: model.undoItem.description
+            toolTipTitle: model.undoItem.title
+            toolTipDescription: model.undoItem.description
+            toolTipShortcut: model.undoItem.shortcut
+
             enabled: model.undoItem.enabled
             normalStateColor: "transparent"
 
@@ -60,7 +63,10 @@ Rectangle {
             icon: model.redoItem.icon
             iconFont: ui.theme.toolbarIconsFont
 
-            hint: model.redoItem.description
+            toolTipTitle: model.redoItem.title
+            toolTipDescription: model.redoItem.description
+            toolTipShortcut: model.redoItem.shortcut
+
             enabled: model.redoItem.enabled
             normalStateColor: "transparent"
 

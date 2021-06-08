@@ -6,7 +6,7 @@
 
 namespace deto {
 namespace async {
-template<typename T>
+template<typename ... T>
 class Channel
 {
 public:
@@ -25,17 +25,17 @@ public:
         return *this;
     }
 
-    void send(const T& d)
+    void send(const T&... d)
     {
         NotifyData nd;
-        nd.setArg<T>(0, d);
+        nd.setArg<T...>(0, d ...);
         ptr()->invoke(Receive, nd);
     }
 
     template<typename Func>
     void onReceive(const Asyncable* receiver, Func f, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetOnce)
     {
-        ptr()->addCallBack(Receive, const_cast<Asyncable*>(receiver), new ReceiveCall<Func, T>(f), mode);
+        ptr()->addCallBack(Receive, const_cast<Asyncable*>(receiver), new ReceiveCall<Func, T...>(f), mode);
     }
 
     void resetOnReceive(const Asyncable* receiver)
@@ -72,12 +72,12 @@ private:
         virtual void received(const NotifyData& d) = 0;
     };
 
-    template<typename Call, typename Arg>
+    template<typename Call, typename ... Arg>
     struct ReceiveCall : public IReceive {
         Call f;
         ReceiveCall(Call _f)
             : f(_f) {}
-        void received(const NotifyData& d) { f(d.arg<Arg>()); }
+        void received(const NotifyData& d) { std::apply(f, d.arg<Arg...>()); }
     };
 
     struct IClose {

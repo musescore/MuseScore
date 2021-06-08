@@ -50,11 +50,8 @@ FocusScope {
 
         NotationSwitchPanel {
             id: tabPanel
-            Layout.fillWidth: true
 
-            //! NOTE: need to hide left and right borders of the panel
-            Layout.leftMargin: -1
-            Layout.rightMargin: -1
+            Layout.fillWidth: true
 
             navigationSection: navSec
         }
@@ -76,10 +73,6 @@ FocusScope {
 
                 SplitView.fillWidth: true
                 SplitView.fillHeight: true
-
-                onMousePressed: {
-                    tabPanel.forceActive()
-                }
 
                 onTextEdittingStarted: {
                     root.textEdittingStarted()

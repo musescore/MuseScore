@@ -12,6 +12,7 @@
 #include "MyMainWindow.h"
 #include "MyWidget.h"
 
+#include <kddockwidgets/Config.h>
 #include <kddockwidgets/LayoutSaver.h>
 
 #include <QMenu>
@@ -69,8 +70,11 @@ MyMainWindow::MyMainWindow(const QString &uniqueName, KDDockWidgets::MainWindowO
     auto menubar = menuBar();
     auto fileMenu = new QMenu(QStringLiteral("File"));
     m_toggleMenu = new QMenu(QStringLiteral("Toggle"));
+    auto miscMenu = new QMenu(QStringLiteral("Misc"));
+
     menubar->addMenu(fileMenu);
     menubar->addMenu(m_toggleMenu);
+    menubar->addMenu(miscMenu);
 
     QAction *newAction = fileMenu->addAction(QStringLiteral("New DockWidget"));
 
@@ -113,6 +117,13 @@ MyMainWindow::MyMainWindow(const QString &uniqueName, KDDockWidgets::MainWindowO
 
     auto quitAction = fileMenu->addAction(QStringLiteral("Quit"));
     connect(quitAction, &QAction::triggered, qApp, &QApplication::quit);
+
+    QAction *toggleDropIndicatorSupport = miscMenu->addAction(QStringLiteral("Toggle Drop Indicator Support"));
+    toggleDropIndicatorSupport->setCheckable(true);
+    toggleDropIndicatorSupport->setChecked(true);
+    connect(toggleDropIndicatorSupport, &QAction::toggled, this, [](bool checked) {
+        KDDockWidgets::Config::self().setDropIndicatorsInhibited(!checked);
+    });
 
     setAffinities({ affinityName });
     createDockWidgets();

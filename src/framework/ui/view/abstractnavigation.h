@@ -26,13 +26,13 @@
 #include <QQmlParserStatus>
 
 #include "../inavigation.h"
+#include "qmlaccessible.h"
 #include "navigationevent.h"
 
 namespace mu::ui {
 class AbstractNavigation : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
-    Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
 
@@ -43,6 +43,10 @@ class AbstractNavigation : public QObject, public QQmlParserStatus
 
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
     Q_PROPERTY(bool active READ active NOTIFY activeChanged)
+
+    Q_PROPERTY(AccessibleItem * accessible READ accessible WRITE setAccessible NOTIFY accessibleChanged)
+
+    Q_INTERFACES(QQmlParserStatus)
 
 public:
     explicit AbstractNavigation(QObject* parent = nullptr);
@@ -62,6 +66,9 @@ public:
     bool active() const;
     async::Channel<bool> activeChanged() const;
 
+    AccessibleItem* accessible() const;
+    void setAccessibleParent(AccessibleItem* p);
+
     void onEvent(INavigation::EventPtr e);
 
     // QQmlParserStatus
@@ -75,6 +82,7 @@ public slots:
     void setRow(int row);
     void setEnabled(bool enabled);
     void setActive(bool active);
+    void setAccessible(AccessibleItem* accessible);
 
 signals:
     void nameChanged(QString name);
@@ -83,6 +91,7 @@ signals:
     void rowChanged(int row);
     void enabledChanged(bool enabled);
     void activeChanged(bool active);
+    void accessibleChanged();
 
     void navigationEvent(QVariant event);
 
@@ -99,6 +108,8 @@ protected:
     async::Channel<bool> m_activeChanged;
 
     NavigationEvent* m_event = nullptr;
+
+    mutable AccessibleItem* m_accessible = nullptr;
 };
 }
 

@@ -12,43 +12,23 @@
 // We don't care about performance related checks in the tests
 // clazy:excludeall=ctor-missing-parent-argument,missing-qobject-macro,range-loop,missing-typeinfo,detaching-member,function-args-by-ref,non-pod-global-static,reserve-candidates,qstring-allocations
 
+#include "tst_docks.h"
 #include "Config.h"
 #include "DockWidgetBase.h"
 #include "DockWidgetBase_p.h"
 #include "DropAreaWithCentralFrame_p.h"
+#include "LayoutSaver_p.h"
 #include "MDILayoutWidget_p.h"
 #include "MainWindowMDI.h"
 #include "Position_p.h"
 #include "SideBar_p.h"
 #include "TabWidget_p.h"
-#include "Testing.h"
 #include "TitleBar_p.h"
 #include "WindowBeingDragged_p.h"
 #include "multisplitter/Separator_p.h"
 #include "private/MultiSplitter_p.h"
-#include "utils.h"
 
-#include <QtTest/QtTest>
-#include <QObject>
 #include <QAction>
-#include <QStyleFactory>
-
-#ifdef KDDOCKWIDGETS_QTQUICK
-# include "DockWidgetQuick.h"
-# include "quick/MainWindowQuick_p.h"
-
-# include <QQmlEngine>
-# include <QQuickStyle>
-# else
-# include "DockWidget.h"
-# include "MainWindow.h"
-
-# include <QPushButton>
-# include <QLineEdit>
-# include <QTextEdit>
-# include <QTabBar>
-# include <QMenuBar>
-#endif
 
 #ifdef Q_OS_WIN
 # include <windows.h>
@@ -66,232 +46,6 @@ static int osWindowMinWidth()
     return 140; // Some random value for our windows. It's only important on Windows
 #endif
 }
-
-class TestDocks : public QObject
-{
-    Q_OBJECT
-public Q_SLOTS:
-    void initTestCase()
-    {
-        qputenv("KDDOCKWIDGETS_SHOW_DEBUG_WINDOW", "");
-        qApp->setOrganizationName("KDAB");
-        qApp->setApplicationName("dockwidgets-unit-tests");
-
-        qApp->setStyle(QStyleFactory::create("fusion"));
-        Testing::installFatalMessageHandler();
-
-#ifdef KDDOCKWIDGETS_QTQUICK
-        QQuickStyle::setStyle("Material"); // so we don't load KDE plugins
-        KDDockWidgets::Config::self().setQmlEngine(new QQmlEngine(this));
-#endif
-    }
-
-    void cleanupTestCase()
-    {
-#ifdef KDDOCKWIDGETS_QTQUICK
-        delete KDDockWidgets::Config::Config::self().qmlEngine();
-#endif
-    }
-
-private Q_SLOTS:
-    void tst_simple1();
-    void tst_simple2();
-    void tst_doesntHaveNativeTitleBar();
-    void tst_resizeWindow2();
-    void tst_hasLastDockedLocation();
-    void tst_ghostSeparator();
-    void tst_detachFromMainWindow();
-    void tst_detachPos();
-    void tst_floatingWindowSize();
-    void tst_sizeAfterRedock();
-    void tst_tabbingWithAffinities();
-    void tst_honourUserGeometry();
-    void tst_floatingWindowTitleBug();
-    void tst_setFloatingSimple();
-    void tst_dragOverTitleBar();
-    void tst_setFloatingGeometry();
-
-    void tst_resizeWindow_data();
-    void tst_resizeWindow();
-    void tst_restoreEmpty();
-    void tst_restoreCentralFrame();
-    void tst_restoreMaximizedState();
-    void tst_shutdown();
-    void tst_closeDockWidgets();
-    void tst_layoutEqually();
-    void tst_doubleClose();
-    void tst_dockInternal();
-    void tst_maximizeAndRestore();
-    void tst_samePositionAfterHideRestore();
-    void tst_restoreTwice();
-    void tst_restoreAfterResize();
-    void tst_restoreWithNonClosableWidget();
-    void tst_restoreNestedAndTabbed();
-    void tst_restoreCrash();
-    void tst_restoreSideBySide();
-    void tst_restoreWithPlaceholder();
-    void tst_restoreWithAffinity();
-    void tst_marginsAfterRestore();
-    void tst_restoreWithNewDockWidgets();
-    void tst_restoreWithDockFactory();
-    void tst_lastFloatingPositionIsRestored();
-    void tst_restoreSimple();
-    void tst_restoreSimplest();
-    void tst_restoreNonClosable();
-    void tst_invalidLayoutAfterRestore();
-    void tst_dontCloseDockWidgetBeforeRestore();
-    void tst_dontCloseDockWidgetBeforeRestore2();
-    void tst_dontCloseDockWidgetBeforeRestore3();
-    void tst_restoreWithNativeTitleBar();
-
-    void tst_closeOnlyCurrentTab();
-    void tst_tabWidgetCurrentIndex();
-    void tst_doubleClickTabToDetach();
-    void tst_propagateResize2();
-    void tst_negativeAnchorPosition();
-    void tst_negativeAnchorPosition2();
-    void tst_negativeAnchorPosition3();
-    void tst_negativeAnchorPosition4();
-    void tst_negativeAnchorPosition5();
-    void tst_negativeAnchorPosition6();
-    void tst_negativeAnchorPosition7();
-    void tst_startHidden();
-    void tst_startHidden2();
-    void tst_startClosed();
-    void tst_closeReparentsToNull();
-    void tst_invalidAnchorGroup();
-    void tst_addAsPlaceholder();
-    void tst_removeItem();
-    void tst_clear();
-    void tst_dockDockWidgetNested();
-    void tst_dockFloatingWindowNested();
-    void tst_crash();
-    void tst_refUnrefItem();
-    void tst_placeholderCount();
-    void tst_availableLengthForOrientation();
-    void tst_closeShowWhenNoCentralFrame();
-    void tst_setAsCurrentTab();
-    void tst_placeholderDisappearsOnReadd();
-    void tst_placeholdersAreRemovedProperly();
-    void tst_floatMaintainsSize();
-    void tst_preferredInitialSize();
-
-    void tst_crash2_data();
-    void tst_crash2();
-    void tst_closeAllDockWidgets();
-    void tst_toggleMiddleDockCrash();
-    void tst_stealFrame();
-    void tst_setFloatingWhenWasTabbed();
-    void tst_setFloatingWhenSideBySide();
-    void tst_dockWindowWithTwoSideBySideFramesIntoCenter();
-    void tst_tabTitleChanges();
-    void tst_dockWidgetGetsFocusWhenDocked();
-    void tst_setWidget();
-    void tst_isFocused();
-    void tst_floatingLastPosAfterDoubleClose();
-    void tst_registry();
-    void tst_honourGeometryOfHiddenWindow();
-    void tst_0_data();
-    void tst_0();
-    void tst_dockWindowWithTwoSideBySideFramesIntoRight();
-    void tst_dockWindowWithTwoSideBySideFramesIntoLeft();
-    void tst_posAfterLeftDetach();
-    void tst_preventClose();
-    void tst_propagateMinSize();
-    void tst_createFloatingWindow();
-    void tst_addAndReadd();
-    void tst_fairResizeAfterRemoveWidget();
-    void tst_invalidJSON_data();
-    void tst_invalidJSON();
-
-    void tst_invalidPlaceholderPosition_data();
-    void tst_invalidPlaceholderPosition();
-    void tst_setVisibleFalseWhenSideBySide_data();
-    void tst_setVisibleFalseWhenSideBySide();
-    void tst_resizeViaAnchorsAfterPlaceholderCreation();
-    void tst_rectForDropCrash();
-    void tst_addDockWidgetToMainWindow();
-    void tst_addDockWidgetToContainingWindow();
-    void tst_notClosable();
-    void tst_setFloatingAfterDraggedFromTabToSideBySide();
-    void tst_setFloatingAFrameWithTabs();
-    void tst_toggleDockWidgetWithHiddenTitleBar();
-    void tst_tabBarWithHiddenTitleBar_data();
-    void tst_tabBarWithHiddenTitleBar();
-    void tst_availableSizeWithPlaceholders();
-    void tst_anchorFollowingItselfAssert();
-    void tst_moreTitleBarCornerCases();
-    void tst_isInMainWindow();
-    void tst_sizeConstraintWarning();
-    void tst_stuckSeparator();
-    void tst_dockNotFillingSpace();
-    void tst_titlebar_getter();
-    void tst_raise();
-    void tst_addingOptionHiddenTabbed();
-    void tst_maxSizedHonouredAfterRemoved();
-    void tst_addDockWidgetAsTabToDockWidget();
-    void tst_close();
-    void tst_propagateSizeHonoursMinSize();
-    void tst_nonDockable();
-    void tst_floatingAction();
-    void tst_flagDoubleClick();
-    void tst_constraintsPropagateUp();
-    void tst_constraintsAfterPlaceholder();
-    void tst_addToSmallMainWindow1();
-    void tst_addToSmallMainWindow2();
-    void tst_addToSmallMainWindow3();
-    void tst_addToSmallMainWindow4();
-    void tst_addToSmallMainWindow5();
-    void tst_positionWhenShown();
-    void tst_28NestedWidgets();
-    void tst_28NestedWidgets_data();
-    void tst_dragBySingleTab();
-    void tst_dragByTabBar();
-    void tst_dragByTabBar_data();
-    void tst_titleBarFocusedWhenTabsChange();
-    void tst_dock2FloatingWidgetsTabbed();
-    void tst_deleteOnClose();
-    void tst_toggleAction();
-    void tst_redocksToPreviousTabIndex();
-
-    void tst_addMDIDockWidget();
-    void tst_redockToMDIRestoresPosition();
-
-#ifdef KDDOCKWIDGETS_QTWIDGETS
-    // TODO: Port these to QtQuick
-
-    void tst_mainWindowAlwaysHasCentralWidget();
-    void tst_dockableMainWindows();
-
-    // But these are fine to be widget only:
-    void tst_tabsNotClickable();
-    void tst_embeddedMainWindow();
-    void tst_restoreEmbeddedMainWindow();
-    void tst_negativeAnchorPositionWhenEmbedded();
-    void tst_negativeAnchorPositionWhenEmbedded_data();
-    void tst_closeRemovesFromSideBar();
-    void tst_restoreSideBar();
-    void tst_toggleActionOnSideBar();
-    void tst_deleteOnCloseWhenOnSideBar();
-    void tst_sidebarOverlayGetsHiddenOnClick();
-    void tst_floatRemovesFromSideBar();
-    void tst_overlayedGeometryIsSaved();
-
-    // And fix these
-    void tst_floatingWindowDeleted();
-    void tst_addToSmallMainWindow6();
-    void tst_minSizeChanges();
-    void tst_maxSizePropagates();
-    void tst_maxSizePropagates2();
-    void tst_restoreResizesLayout();
-    void tst_maxSizeHonouredWhenDropped();
-    void tst_fixedSizePolicy();
-    void tst_maxSizeHonouredWhenAnotherDropped();
-    void tst_addToHiddenMainWindow();
-    void tst_maximumSizePolicy();
-    void tst_complex();
-#endif
-};
 
 static QPoint dragPointForWidget(Frame *frame, int index)
 {
@@ -1150,6 +904,36 @@ void TestDocks::tst_complex()
     // Cleanup
     qDeleteAll(docks);
     qDeleteAll(DockRegistry::self()->frames());
+}
+#else
+void TestDocks::tst_hoverShowsDropIndicators()
+{
+    // For QtQuick on Windows, there was a bug where drop indicators wouldn't be shown if MainWindowBase
+    // wan't the root item.
+
+    EnsureTopLevelsDeleted e;
+    QQmlApplicationEngine engine(":/main2.qml");
+
+    const MainWindowBase::List mainWindows = DockRegistry::self()->mainwindows();
+    QCOMPARE(mainWindows.size(), 1);
+    MainWindowBase *m = mainWindows.first();
+
+    m->window()->windowHandle()->setPosition(500, 800);
+
+    auto dock0 = createDockWidget("dock0", new MyWidget2(QSize(400, 400)));
+
+    auto floatingDockWidget = createDockWidget("floatingDockWidget", new MyWidget2(QSize(400, 400)));
+
+    m->addDockWidget(dock0, Location_OnLeft);
+
+    const QPoint mainWindowCenterPos = m->mapToGlobal(m->geometry().center());
+
+    QTest::qWait(100);
+
+    auto fw = floatingDockWidget->floatingWindow();
+    dragFloatingWindowTo(fw, mainWindowCenterPos);
+
+    QCOMPARE(dock0->dptr()->frame()->dockWidgetCount(), 2);
 }
 #endif
 
@@ -2674,7 +2458,6 @@ void TestDocks::tst_setFloatingWhenWasTabbed()
     m->addDockWidgetAsTab(dock1);
     m->addDockWidgetAsTab(dock2);
 
-    qDebug() << "6.";
     dock2->setFloating(true);
     QVERIFY(dock1->isTabbed());
     QVERIFY(!dock2->isTabbed());
@@ -2783,6 +2566,8 @@ void TestDocks::tst_setFloatingWhenSideBySide()
 void TestDocks::tst_dockWindowWithTwoSideBySideFramesIntoCenter()
 {
     EnsureTopLevelsDeleted e;
+    KDDockWidgets::Config::self().setInternalFlags(KDDockWidgets::Config::InternalFlag_NoAeroSnap);
+    KDDockWidgets::Config::self().setFlags({});
 
     auto m = createMainWindow();
     auto fw = createFloatingWindow();
@@ -2794,7 +2579,13 @@ void TestDocks::tst_dockWindowWithTwoSideBySideFramesIntoCenter()
     auto fw2 = createFloatingWindow();
     fw2->move(fw->x() + fw->width() + 100, fw->y());
 
-    dragFloatingWindowTo(fw, fw2->geometry().center());
+    // QtQuick is a bit more async than QWidgets. Wait for the move.
+    Testing::waitForEvent(fw2->windowHandle(), QEvent::Move);
+
+    auto da2 = fw2->dropArea();
+    const QPoint dragDestPos = da2->mapToGlobal(da2->QWidgetAdapter::rect().center());
+
+    dragFloatingWindowTo(fw, dragDestPos);
     QVERIFY(fw2->dropArea()->checkSanity());
 
     QCOMPARE(fw2->frames().size(), 1);
@@ -3602,6 +3393,52 @@ void TestDocks::tst_restoreNonClosable()
     }
 }
 
+void TestDocks::tst_restoreRestoresMainWindowPosition()
+{
+    // Tests that MainWindow position is restored by LayoutSaver
+    {
+        EnsureTopLevelsDeleted e;
+        auto m = createMainWindow(QSize(800, 500), MainWindowOption_None);
+        const QPoint originalPos = m->pos();
+
+        LayoutSaver saver;
+        const QByteArray saved = saver.serializeLayout();
+
+        m->move(originalPos + QPoint(100, 100));
+
+        saver.restoreLayout(saved);
+        QCOMPARE(originalPos, m->pos());
+    }
+#ifdef KDDOCKWIDGETS_QTQUICK
+// Tests the ApplicationWindow {} case
+    {
+        QQmlApplicationEngine engine(":/main2.qml");
+
+        const MainWindowBase::List mainWindows = DockRegistry::self()->mainwindows();
+        QCOMPARE(mainWindows.size(), 1);
+        MainWindowBase *mainWindow = mainWindows.first();
+        QVERIFY(mainWindow->isVisible());
+
+        QCOMPARE(mainWindow->pos(), QPoint(0, 0));
+
+        QWindow *window = mainWindow->windowHandle();
+
+        LayoutSaver saver;
+        const QByteArray saved = saver.serializeLayout();
+
+        const QPoint originalPos = window->position();
+        window->setPosition(originalPos + QPoint(200, 200));
+        QCOMPARE(window->position(), originalPos + QPoint(200, 200));
+
+        QVERIFY(saver.restoreLayout(saved));
+
+        QCOMPARE(window->position(), originalPos);
+
+        delete mainWindow;
+    }
+#endif
+}
+
 void TestDocks::tst_resizeViaAnchorsAfterPlaceholderCreation()
 {
     EnsureTopLevelsDeleted e;
@@ -4052,6 +3889,31 @@ void TestDocks::tst_restoreWithDockFactory()
     QCOMPARE(layout->count(), 1);
     QCOMPARE(layout->visibleCount(), 1);
     layout->checkSanity();
+}
+
+void TestDocks::tst_restoreWithDockFactory2()
+{
+    // Teste that the factory function can do id remapping.
+    // For example, if id "foo" is missing, the factory can return a
+    // dock widget with id "bar" if it feels like it
+
+    auto m = createMainWindow(QSize(501, 500), MainWindowOption_None);
+
+    auto dock1 = createDockWidget("dw1", new QPushButton("1"));
+    m->addDockWidget(dock1, Location_OnLeft);
+    dock1->setFloating(true);
+
+    LayoutSaver saver;
+    const QByteArray saved = saver.serializeLayout();
+    delete dock1;
+
+    DockWidgetFactoryFunc func = [] (const QString &) {
+        // A factory func which does id remapping
+        return createDockWidget("dw2", new QPushButton("w"), {}, {}, /*show=*/ false);
+    };
+
+    KDDockWidgets::Config::self().setDockWidgetFactoryFunc(func);
+    saver.restoreLayout(saved);
 }
 
 void TestDocks::tst_addDockWidgetToMainWindow()
@@ -4506,12 +4368,13 @@ void TestDocks::tst_positionWhenShown()
     auto window = createMainWindow();
     auto dock1 = new DockWidgetType("1");
     dock1->show();
-    dock1->window()->move(100, 100);
-    QCOMPARE(dock1->window()->windowHandle()->frameGeometry().topLeft(), QPoint(100, 100));
+    dock1->window()->windowHandle()->setPosition(100, 100);
+    QTest::qWait(1000);
+    QCOMPARE(dock1->window()->windowHandle()->geometry().topLeft(), QPoint(100, 100));
 
     dock1->close();
     dock1->show();
-    QCOMPARE(dock1->window()->windowHandle()->frameGeometry().topLeft(), QPoint(100, 100));
+    QCOMPARE(dock1->window()->windowHandle()->geometry().topLeft(), QPoint(100, 100));
 
     // Cleanup
     window->layoutWidget()->checkSanity();
@@ -4865,8 +4728,10 @@ void TestDocks::tst_lastFloatingPositionIsRestored()
     auto dock1 = createDockWidget("dock1");
     dock1->show();
     QPoint targetPos = QPoint(340, 340);
-    dock1->window()->move(targetPos);
+    dock1->window()->windowHandle()->setFramePosition(targetPos);
+    QCOMPARE(dock1->window()->windowHandle()->frameGeometry().topLeft(), targetPos);
     auto oldFw = dock1->window();
+    Testing::waitForEvent(dock1->window(), QEvent::Move);
 
     LayoutSaver saver;
     QByteArray saved = saver.serializeLayout();
@@ -4876,8 +4741,7 @@ void TestDocks::tst_lastFloatingPositionIsRestored()
     delete oldFw;
 
     saver.restoreLayout(saved);
-    QCOMPARE(dock1->window()->pos(), targetPos);
-    QCOMPARE(dock1->window()->frameGeometry().topLeft(), targetPos);
+    QCOMPARE(dock1->window()->windowHandle()->frameGeometry().topLeft(), targetPos);
 
     // Adjsut to what we got without the frame
     targetPos = dock1->window()->geometry().topLeft();
@@ -5413,6 +5277,29 @@ void TestDocks::tst_overlayedGeometryIsSaved()
     QCOMPARE(frame->height(), newHeight);
 }
 
+void TestDocks::tst_overlayCrash()
+{
+    EnsureTopLevelsDeleted e;
+    KDDockWidgets::Config::self().setFlags(KDDockWidgets::Config::Flag_AutoHideSupport);
+
+    auto m1 = createMainWindow(QSize(1000, 1000), MainWindowOption_None, "MW1");
+    auto dw1 = new DockWidgetType(QStringLiteral("1"));
+    m1->addDockWidget(dw1, Location_OnBottom);
+
+    auto dw2 = new DockWidgetType(QStringLiteral("2"));
+    m1->addDockWidget(dw2, Location_OnBottom);
+
+    m1->moveToSideBar(dw1);
+    m1->toggleOverlayOnSideBar(dw1);
+
+    dw1->close();
+
+    auto tb = dw2->titleBar();
+    QVERIFY(tb->isVisible());
+
+    pressOn(tb->mapToGlobal(QPoint(5, 5)), tb);
+}
+
 void TestDocks::tst_embeddedMainWindow()
 {
     EnsureTopLevelsDeleted e;
@@ -5526,6 +5413,29 @@ void TestDocks::tst_restoreResizesLayout()
 
     QCOMPARE(m->dropArea()->QWidgetAdapter::size(), layout->size());
     QVERIFY(layout->checkSanity());
+}
+
+void TestDocks::tst_restoreNonRelativeFloatingWindowGeometry()
+{
+    // Tests that disabling RelativeFloatingWindowGeometry works
+
+    EnsureTopLevelsDeleted e;
+    auto m = createMainWindow(QSize(500, 500), MainWindowOption_None);
+    auto dock1 = createDockWidget("1", new QPushButton("1"));
+    dock1->show();
+
+    LayoutSaver saver(RestoreOption_RelativeToMainWindow);
+    saver.dptr()->m_restoreOptions.setFlag(InternalRestoreOption::RelativeFloatingWindowGeometry,
+                                           false);
+
+    const QByteArray saved = saver.serializeLayout();
+
+    const QSize floatingWindowSize = dock1->window()->size();
+
+    m->resize(m->width() * 2, m->height());
+    saver.restoreLayout(saved);
+
+    QCOMPARE(dock1->window()->size(), floatingWindowSize);
 }
 
 void TestDocks::tst_maximumSizePolicy()
@@ -5647,6 +5557,54 @@ void TestDocks::tst_maxSizePropagates()
     QCOMPARE(frame->maximumSize().expandedTo(w->maximumSize()), frame->maximumSize());
 
     delete dock1->window();
+}
+
+void TestDocks::tst_maxSizedFloatingWindow()
+{
+    // Tests that FloatingWindows get a proper max-size, if its dock widget has one
+    EnsureTopLevelsDeleted e;
+    auto dock1 = new DockWidgetType("dock1");
+    auto dock2 = new DockWidgetType("dock2");
+    auto w = new MyWidget("foo");
+    w->setMinimumSize(120, 100);
+    w->setMaximumSize(300, 300);
+    dock1->setWidget(w);
+
+    dock1->show();
+    dock2->show();
+
+    auto window1 = dock1->window();
+    auto window2 = dock2->window();
+    Testing::waitForEvent(window1, QEvent::LayoutRequest);
+
+    QVERIFY(window1->maximumSize().width() < 500);
+    QVERIFY(window1->maximumSize().height() < 500);
+    QVERIFY(window2->maximumSize().width() > 500);
+    QVERIFY(window2->maximumSize().height() > 500);
+
+    auto hasMax = [window1] {
+        const QSize max = window1->maximumSize();
+        return max.width() < 500 && max.height() < 500;
+    };
+
+    // Adding side-by-side, we don't honour max size (yet)
+    dock1->addDockWidgetToContainingWindow(dock2, Location_OnBottom);
+    Testing::waitForEvent(window1, QEvent::LayoutRequest);
+    QVERIFY(window1->maximumSize().width() > 500);
+    QVERIFY(window1->maximumSize().height() > 500);
+
+    // Close dw2, we have a single dock widget again, we honour max-size
+    dock2->close();
+    Testing::waitForEvent(window1, QEvent::LayoutRequest);
+    QVERIFY(hasMax());
+
+    dock1->addDockWidgetAsTab(dock2);
+    Testing::waitForEvent(window1, QEvent::LayoutRequest);
+    QVERIFY(!hasMax());
+
+    dock2->close();
+    Testing::waitForEvent(window1, QEvent::LayoutRequest);
+    QVERIFY(hasMax());
 }
 
 void TestDocks::tst_maxSizeHonouredWhenAnotherDropped()
@@ -6225,6 +6183,41 @@ void TestDocks::tst_dontCloseDockWidgetBeforeRestore3()
     QVERIFY(dock2->isFloating());
 }
 
+void TestDocks::tst_dontCloseDockWidgetBeforeRestore4()
+{
+    // Tests a case where the dock widget would get an invalid size.
+    // Widgets which skip layout restore were be skipping LayoutSaver::onResize()
+
+    EnsureTopLevelsDeleted e;
+    auto m = createMainWindow({1000, 1000}, {});
+    auto dock1 = createDockWidget("dock1", new QPushButton("one"));
+    auto dock2 = createDockWidget("dock2", new QPushButton("two"), {},
+                                  DockWidgetBase::LayoutSaverOption::Skip);
+
+    m->addDockWidget(dock1, Location_OnBottom);
+    m->addDockWidget(dock2, Location_OnBottom);
+
+    QTest::qWait(100);
+    dock1->close();
+    dock2->close();
+
+    LayoutSaver saver;
+    const QByteArray saved = saver.serializeLayout();
+
+    QTest::qWait(100);
+    dock2->show();
+
+    QVERIFY(saver.restoreLayout(saved));
+    QVERIFY(dock2->isOpen());
+
+    QTest::qWait(100);
+    FloatingWindow *fw = dock2->floatingWindow();
+    DropArea *da = fw->dropArea();
+    QVERIFY(da->checkSanity());
+    QCOMPARE(da->size(), da->rootItem()->size());
+    QVERIFY(qAbs(fw->width() - da->width()) < 30);
+}
+
 void TestDocks::tst_closeOnlyCurrentTab()
 {
     {
@@ -6523,6 +6516,63 @@ void TestDocks::tst_addDockWidgetAsTabToDockWidget()
         QCOMPARE(dock2->window(), m.get());
         QCOMPARE(dock1->dptr()->frame(), dock2->dptr()->frame());
         QCOMPARE(dock1->dptr()->frame()->dockWidgetCount(), 2);
+    }
+}
+
+void TestDocks::tst_closeTabHidesDockWidget()
+{
+    // Tests that closing some tabbed dock widgets will hide them
+    // QtQuick had a bug where they would still be visible
+    {
+        EnsureTopLevelsDeleted e;
+        auto dock1 = createDockWidget("doc1", Qt::green);
+        auto dock2 = createDockWidget("doc2", Qt::green);
+        auto dock3 = createDockWidget("doc3", Qt::green);
+
+        dock1->addDockWidgetAsTab(dock2);
+        dock1->addDockWidgetAsTab(dock3);
+
+        dock1->forceClose();
+        QVERIFY(!dock1->isOpen());
+        QVERIFY(!dock1->isVisible());
+
+        dock2->forceClose();
+        QVERIFY(!dock2->isOpen());
+        QVERIFY(!dock2->isVisible());
+
+        dock3->forceClose();
+        QVERIFY(!dock3->isOpen());
+        QVERIFY(!dock3->isVisible());
+    }
+
+    {
+        EnsureTopLevelsDeleted e;
+        auto m = createMainWindow(QSize(800, 500), MainWindowOption_None);
+        auto dock1 = createDockWidget("doc1", Qt::green);
+        auto dock2 = createDockWidget("doc2", Qt::green);
+        auto dock3 = createDockWidget("doc3", Qt::green);
+        m->addDockWidget(dock1, KDDockWidgets::Location_OnLeft);
+        m->addDockWidget(dock2, KDDockWidgets::Location_OnLeft);
+        m->addDockWidget(dock3, KDDockWidgets::Location_OnLeft);
+
+        dock2->addDockWidgetAsTab(dock1);
+        dock2->addDockWidgetAsTab(dock3);
+
+        dock1->close();
+        QVERIFY(!dock1->isOpen());
+        QVERIFY(!dock1->isVisible());
+        QCOMPARE(dock1->parent(), nullptr);
+
+        dock2->close();
+        QVERIFY(!dock2->isOpen());
+        QCOMPARE(dock2->parent(), nullptr);
+        QVERIFY(!dock2->isVisible());
+
+        dock3->close();
+        QVERIFY(!dock3->isOpen());
+        QVERIFY(!dock3->isVisible());
+        QCOMPARE(dock3->parent(), nullptr);
+        QVERIFY(!dock2->isVisible());
     }
 }
 
@@ -7021,6 +7071,32 @@ void TestDocks::tst_deleteOnClose()
         QVERIFY(dock2.data());
         delete dock2;
     }
+#ifdef KDDOCKWIDGETS_QTWIDGETS // QtQuick doesn't support autohide/pin/sidebar yet
+    {
+        // Tests that restoring the side-bar-overlay will call the users dock widget factory in case
+        // the dock widget was deleted already
+        EnsureTopLevelsDeleted e;
+        KDDockWidgets::Config::self().setFlags(KDDockWidgets::Config::Flag_AutoHideSupport);
+        KDDockWidgets::Config::self().setDockWidgetFactoryFunc([](const QString &name) {
+            return createDockWidget(name, new MyWidget2(QSize(400, 400)), DockWidgetBase::Option_DeleteOnClose);
+        });
+
+        auto m = createMainWindow(QSize(800, 500), MainWindowOption_None);
+        QPointer<DockWidgetBase> dock1 = createDockWidget("1", new MyWidget2(QSize(400, 400)), DockWidgetBase::Option_DeleteOnClose);
+        m->addDockWidget(dock1, Location_OnLeft);
+        m->moveToSideBar(dock1);
+        m->overlayOnSideBar(dock1);
+        LayoutSaver saver;
+        const QByteArray saved = saver.serializeLayout();
+
+        QVERIFY(dock1->isVisible());
+        dock1->close();
+        QVERIFY(Testing::waitForDeleted(dock1));
+        QVERIFY(!dock1.data());
+
+        saver.restoreLayout(saved);
+    }
+#endif
 }
 
 void TestDocks::tst_toggleAction()
@@ -7144,7 +7220,6 @@ void TestDocks::tst_redockToMDIRestoresPosition()
     QCOMPARE(frame->QWidgetAdapter::size(), anotherSize);
     item = layoutWidget->itemForFrame(frame);
     QCOMPARE(item->geometry(), frame->QWidgetAdapter::geometry());
-
 }
 
 void TestDocks::tst_restoreWithNativeTitleBar()
@@ -7168,5 +7243,3 @@ void TestDocks::tst_restoreWithNativeTitleBar()
     QVERIFY(!dock0->d->frame()->titleBar()->isVisible());
 #endif
 }
-
-#include "tst_docks.moc"

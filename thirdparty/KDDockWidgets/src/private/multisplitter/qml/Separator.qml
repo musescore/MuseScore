@@ -30,7 +30,7 @@ Rectangle {
             kddwSeparator.onMouseReleased();
         }
 
-        onPositionChanged: {
+        onPositionChanged: (mouse) => {
             kddwSeparator.onMouseMoved(Qt.point(mouse.x, mouse.y));
         }
 

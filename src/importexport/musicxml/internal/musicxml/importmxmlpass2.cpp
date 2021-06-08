@@ -1625,8 +1625,9 @@ void MusicXMLParserPass2::scorePartwise()
     }
     // set last measure barline to normal or MuseScore will generate light-heavy EndBarline
     // TODO, handle other tracks?
-    if (_score->lastMeasure()->endBarLineType() == BarLineType::NORMAL) {
-        _score->lastMeasure()->setEndBarLineType(BarLineType::NORMAL, 0);
+    auto lm = _score->lastMeasure();
+    if (lm && lm->endBarLineType() == BarLineType::NORMAL) {
+        lm->setEndBarLineType(BarLineType::NORMAL, 0);
     }
 }
 
@@ -5073,6 +5074,11 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
 /**
  Parse the /score-partwise/part/measure/harmony/frame node.
  Return the result as a FretDiagram.
+  Notes:
+ - MusicXML's first-fret is a positive integer equivalent to MuseScore's FretDiagram::_fretOffset
+ - it is one-based in MusicXML and zero-based in MuseScore
+ - in MusicXML fret numbers are absolute, in MuseScore they are relative to the fretOffset,
+   which affects both single strings and barres
  */
 
 FretDiagram* MusicXMLParserPass2::frame()
@@ -5086,7 +5092,15 @@ FretDiagram* MusicXMLParserPass2::frame()
     std::map<int, int> bEnds;
 
     while (_e.readNextStartElement()) {
-        if (_e.name() == "frame-frets") {
+        if (_e.name() == "first-fret") {
+            bool ok{};
+            int val = _e.readElementText().toInt(&ok);
+            if (ok && val > 0) {
+                fd->setFretOffset(val - 1);
+            } else {
+                _logger->logError(QString("FretDiagram::readMusicXML: illegal first-fret %1").arg(val), &_e);
+            }
+        } else if (_e.name() == "frame-frets") {
             int val = _e.readElementText().toInt();
             if (val > 0) {
                 fd->setProperty(Pid::FRET_FRETS, val);
@@ -5128,7 +5142,7 @@ FretDiagram* MusicXMLParserPass2::frame()
                     if (fd->marker(actualString).mtype == FretMarkerType::CROSS) {
                         fd->setMarker(actualString, FretMarkerType::NONE);
                     }
-                    fd->setDot(actualString, fret, true);
+                    fd->setDot(actualString, fret - fd->fretOffset(), true);
                 }
             } else {
                 _logger->logError(QString("FretDiagram::readMusicXML: illegal frame-note string %1").arg(string), &_e);
@@ -5160,7 +5174,7 @@ FretDiagram* MusicXMLParserPass2::frame()
         }
 
         int endString = bEnds[fret];
-        fd->setBarre(startString, endString, fret);
+        fd->setBarre(startString, endString, fret - fd->fretOffset());
     }
 
     return fd;
@@ -5850,7 +5864,6 @@ void MusicXMLParserNotations::technical()
                                                                  _e.attributes(), "technical");
             notation.setText(_e.readElementText());
             _notations.push_back(notation);
-            _e.readNext();
         } else if (_e.name() == "harmonic") {
             harmonic();
             _e.readNext();

@@ -18,21 +18,21 @@ class NotifyData
 public:
     NotifyData() {}
 
-    template<typename T>
-    void setArg(int i, const T& val)
+    template<typename ... T>
+    void setArg(int i, const T&... val)
     {
-        IArg* p = new Arg<T>(val);
+        IArg* p = new Arg<T...>(val ...);
         m_args.insert(m_args.begin() + i, std::shared_ptr<IArg>(p));
     }
 
-    template<typename T>
-    T arg(int i = 0) const
+    template<typename ... T>
+    std::tuple<T...> arg(int i = 0) const
     {
         IArg* p = m_args.at(i).get();
         if (!p) {
-            return T();
+            return {};
         }
-        Arg<T>* d = reinterpret_cast<Arg<T>*>(p);
+        Arg<T...>* d = reinterpret_cast<Arg<T...>*>(p);
         return d->val;
     }
 
@@ -40,11 +40,11 @@ public:
         virtual ~IArg() = default;
     };
 
-    template<typename T>
+    template<typename ... T>
     struct Arg : public IArg {
-        T val;
-        Arg(const T& v)
-            : IArg(), val(v) {}
+        std::tuple<T...> val;
+        Arg(const T&... v)
+            : IArg(), val(v ...) {}
     };
 
 private:
@@ -63,7 +63,7 @@ public:
     bool isConnected() const;
 
     static void processEvents();
-    static void onMainThreadInvoke(const std::function<void(const std::function<void()>&)>& f);
+    static void onMainThreadInvoke(const std::function<void(const std::function<void()>&, bool)>& f);
 
 protected:
     explicit AbstractInvoker();
@@ -103,7 +103,7 @@ inline void processEvents()
     AbstractInvoker::processEvents();
 }
 
-inline void onMainThreadInvoke(const std::function<void(const std::function<void()>&)>& f)
+inline void onMainThreadInvoke(const std::function<void(const std::function<void()>&, bool)>& f)
 {
     AbstractInvoker::onMainThreadInvoke(f);
 }

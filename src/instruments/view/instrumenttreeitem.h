@@ -22,18 +22,18 @@
 #ifndef MU_INSTRUMENTS_INSTRUMENTTREEITEM_H
 #define MU_INSTRUMENTS_INSTRUMENTTREEITEM_H
 
-#include "abstractinstrumentpaneltreeitem.h"
+#include "abstractinstrumentspaneltreeitem.h"
 
 #include "notation/inotationparts.h"
 #include "async/asyncable.h"
 
 namespace mu::instruments {
-class InstrumentTreeItem : public AbstractInstrumentPanelTreeItem, public async::Asyncable
+class InstrumentsTreeItem : public AbstractInstrumentsPanelTreeItem, public async::Asyncable
 {
     Q_OBJECT
 
 public:
-    explicit InstrumentTreeItem(notation::INotationPartsPtr notationParts, QObject* parent = nullptr);
+    explicit InstrumentsTreeItem(notation::INotationPartsPtr notationParts, QObject* parent = nullptr);
 
     Q_INVOKABLE QString partId() const;
     Q_INVOKABLE QString partName() const;
@@ -43,7 +43,7 @@ public:
     void setPartName(const QString& partName);
     void setAbbreviature(const QString& abbreviature);
 
-    void moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
+    void moveChildren(const int sourceRow, const int count, AbstractInstrumentsPanelTreeItem* destinationParent,
                       const int destinationRow) override;
     void removeChildren(const int row, const int count, const bool deleteChild) override;
 

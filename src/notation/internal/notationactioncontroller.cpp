@@ -177,7 +177,8 @@ void NotationActionController::init()
     dispatcher()->reg(this, "append-vbox", [this]() { appendBox(BoxType::Vertical); });
     dispatcher()->reg(this, "append-textframe", [this]() { appendBox(BoxType::Text); });
 
-    dispatcher()->reg(this, "edit-style", this, &NotationActionController::openPageStyle);
+    dispatcher()->reg(this, "edit-style", this, &NotationActionController::openEditStyleDialog);
+    dispatcher()->reg(this, "page-settings", this, &NotationActionController::openPageSettingsDialog);
     dispatcher()->reg(this, "staff-properties", this, &NotationActionController::openStaffProperties);
     dispatcher()->reg(this, "add-remove-breaks", this, &NotationActionController::openBreaksDialog);
     dispatcher()->reg(this, "edit-info", this, &NotationActionController::openScoreProperties);
@@ -616,6 +617,16 @@ void NotationActionController::moveAction(const actions::ActionCode& actionCode)
         return;
     }
 
+    //! NOTE Should work for any elements
+    if ("next-element" == actionCode) {
+        interaction->moveSelection(MoveDirection::Right, MoveSelectionType::Element);
+        return;
+    } else if ("prev-element" == actionCode) {
+        interaction->moveSelection(MoveDirection::Left, MoveSelectionType::Element);
+        return;
+    }
+    //! -----
+
     std::vector<Element*> selectionElements = interaction->selection()->elements();
     if (selectionElements.empty()) {
         LOGW() << "no selection element";
@@ -644,10 +655,6 @@ void NotationActionController::moveAction(const actions::ActionCode& actionCode)
             interaction->movePitch(MoveDirection::Up, PitchMode::OCTAVE);
         } else if ("pitch-down-octave" == actionCode) {
             interaction->movePitch(MoveDirection::Down, PitchMode::OCTAVE);
-        } else if ("next-element" == actionCode) {
-            interaction->moveSelection(MoveDirection::Right, MoveSelectionType::Element);
-        } else if ("prev-element" == actionCode) {
-            interaction->moveSelection(MoveDirection::Left, MoveSelectionType::Element);
         } else if ("next-chord" == actionCode) {
             interaction->moveSelection(MoveDirection::Right, MoveSelectionType::Chord);
         } else if ("prev-chord" == actionCode) {
@@ -1380,9 +1387,14 @@ void NotationActionController::selectMeasuresCountAndAppend()
     }
 }
 
-void NotationActionController::openPageStyle()
+void NotationActionController::openEditStyleDialog()
 {
     interactive()->open("musescore://notation/style");
+}
+
+void NotationActionController::openPageSettingsDialog()
+{
+    interactive()->open("musescore://notation/pagesettings");
 }
 
 void NotationActionController::openStaffProperties()

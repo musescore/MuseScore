@@ -63,7 +63,6 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onClicked: {
-            navCtrl.forceActive()
             colorDialog.open()
         }
     }

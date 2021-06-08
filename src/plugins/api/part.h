@@ -111,7 +111,7 @@ public:
 
     int startTrack() const { return part()->startTrack(); }
     int endTrack()   const { return part()->endTrack(); }
-    QString instrumentId() const { return part()->instrument()->instrumentId(); }
+    QString instrumentId() const { return part()->instrument()->getId(); }
     int harmonyCount() const { return part()->harmonyCount(); }
     bool hasPitchedStaff() const { return part()->hasPitchedStaff(); }
     bool hasTabStaff() const { return part()->hasTabStaff(); }

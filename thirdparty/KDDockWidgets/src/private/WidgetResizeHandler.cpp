@@ -537,9 +537,15 @@ void WidgetResizeHandler::setupWindow(QWindow *window)
                          SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
         });
 
-        // Show drop-shadow:
-        MARGINS margins = { 0, 0, 0, 1 }; // arbitrary, just needs to be > 0 it seems
-        DwmExtendFrameIntoClientArea(wid, &margins);
+        const bool usesTransparentFloatingWindow =
+            Config::self().internalFlags() & Config::InternalFlag_UseTransparentFloatingWindow;
+        if (!usesTransparentFloatingWindow) {
+            // This enables the native drop shadow.
+            // Doesn't work well if the floating window has transparent round corners (shows weird white line).
+
+            MARGINS margins = { 0, 0, 0, 1 }; // arbitrary, just needs to be > 0 it seems
+            DwmExtendFrameIntoClientArea(wid, &margins);
+        }
     }
 #else
     Q_UNUSED(window);

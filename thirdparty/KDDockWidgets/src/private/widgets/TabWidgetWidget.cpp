@@ -52,6 +52,9 @@ TabWidgetWidget::TabWidgetWidget(Frame *parent)
         Q_EMIT currentTabChanged(index);
         Q_EMIT currentDockWidgetChanged(currentDockWidget());
     });
+
+    if (!QTabWidget::tabBar()->isVisible())
+        setFocusProxy(nullptr);
 }
 
 TabBar *TabWidgetWidget::tabBar() const

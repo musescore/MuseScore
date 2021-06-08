@@ -8,37 +8,8 @@
     "C_Cpp.default.compileCommands": "${workspaceFolder}/build-dev-qtwidgets/compile_commands.json",
     "C_Cpp.default.cStandard": "c17",
     "files.trimTrailingWhitespace": true,
-    "editor.formatOnType": true
-  },
-  "tasks": {
-    "version": "2.0.0",
-    "tasks": [
-      {
-        "type": "shell",
-        "label": "cmake",
-        "command": "cmake",
-        "args": [
-          "--preset=dev-qtwidgets"
-        ],
-        "options": {
-          "cwd": "${workspaceFolder}/"
-        },
-        "group": "build"
-      },
-      {
-        "type": "shell",
-        "label": "make",
-        "command": "cmake",
-        "args": [
-          "--build",
-          "${workspaceFolder}/build-dev-qtwidgets"
-        ],
-        "options": {
-          "cwd": "${workspaceFolder}/"
-        },
-        "group": "build"
-      }
-    ]
+    "editor.formatOnType": true,
+    "C_Cpp.autocompleteAddParentheses": true
   },
   "launch": {
     "version": "0.2.0",

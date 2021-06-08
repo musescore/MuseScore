@@ -22,6 +22,6 @@ ApplicationWindow {
         id: dockWidgetArea
         anchors.fill: parent
 
-        uniqueName: "MyWindowName-1"
+        uniqueName: "MyMainLayout"
     }
 }

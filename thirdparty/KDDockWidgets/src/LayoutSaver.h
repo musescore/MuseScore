@@ -104,7 +104,6 @@ public:
      */
     QVector<DockWidgetBase *> restoredDockWidgets() const;
 
-
     /**
      * @brief Sets the list of affinity names for which restore and save will be applied on.
      * Allows to save/restore only a subset of the windows.
@@ -112,6 +111,10 @@ public:
      * Any window with empty affinity will also be subject to save/restore, regardless of @p affinityNames.
      */
     void setAffinityNames(const QStringList &affinityNames);
+
+    /// @internal Returns the private-impl. Not intended for public use.
+    class Private;
+    Private *dptr() const;
 
     struct Layout;
     struct MainWindow;
@@ -127,7 +130,6 @@ private:
     Q_DISABLE_COPY(LayoutSaver)
     friend class ::TestDocks;
 
-    class Private;
     Private *const d;
 };
 }

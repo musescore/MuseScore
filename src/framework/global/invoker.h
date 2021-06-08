@@ -38,7 +38,7 @@ public:
 
     static void setup();
 
-    void invoke(const Call& func = nullptr);
+    void invoke(const Call& func = nullptr, bool isAlwaysQueued = false);
 
 public slots:
     void doInvoke(void* ptr);

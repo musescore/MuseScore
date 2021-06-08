@@ -30,9 +30,7 @@
 #ifndef Q_OS_WASM
 #include <QThreadPool>
 #endif
-#ifdef KDAB_DOCKWIDGETS
-#include "view/dockwindow_kdab/docksetup.h"
-#endif
+#include "view/dockwindow/docksetup.h"
 
 #include "log.h"
 #include "modularity/ioc.h"
@@ -148,14 +146,15 @@ int AppShell::run(int argc, char** argv)
         QQmlApplicationEngine* engine = new QQmlApplicationEngine();
 
         dock::DockSetup::setup(engine);
-#if defined(KDAB_DOCKWIDGETS) && !defined(Q_OS_MACOS)
-        const QString mainQmlFile = "/kdab/Main.qml";
-#elif defined(KDAB_DOCKWIDGETS) && defined(Q_OS_MACOS)
-        const QString mainQmlFile = "/kdab/MainMacOS.qml";
-#elif Q_OS_WASM
+
+#if defined(Q_OS_WIN)
+        const QString mainQmlFile = "/platform/win/Main.qml";
+#elif defined(Q_OS_MACOS)
+        const QString mainQmlFile = "/platform/mac/Main.qml";
+#elif defined(Q_OS_LINUX)
+        const QString mainQmlFile = "/platform/linux/Main.qml";
+#elif defined(Q_OS_WASM)
         const QString mainQmlFile = "/Main.wasm.qml";
-#else
-        const QString mainQmlFile = "/Main.qml";
 #endif
         //! NOTE Move ownership to UiEngine
         ui::UiEngine::instance()->moveQQmlEngine(engine);

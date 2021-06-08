@@ -66,6 +66,8 @@ Rectangle {
         cellWidth: 36
         cellHeight: cellWidth
 
+        clip: true
+
         model: noteInputModel
 
         sectionDelegate: SeparatorLine {
@@ -76,43 +78,56 @@ Rectangle {
         itemDelegate: FlatButton {
             id: btn
             property var item: Boolean(itemModel) ? itemModel : null
-            property var hasSubitems: Boolean(item) && item.subitemsRole.length !== 0
+            property var hasMenu: Boolean(item) && item.subitemsRole.length !== 0
 
-            normalStateColor: Boolean(item) && item.checkedRole ? ui.theme.accentColor : "transparent"
+            accentButton: (Boolean(item) && item.checkedRole) || menuLoader.isMenuOpened
+            normalStateColor: accentButton ? ui.theme.accentColor : "transparent"
 
             icon: Boolean(item) ? item.iconRole : IconCode.NONE
-            hint: Boolean(item) ? item.hintRole : ""
+
+            toolTipTitle: Boolean(item) ? item.titleRole : ""
+            toolTipDescription: Boolean(item) ? item.descriptionRole : ""
+            toolTipShortcut: Boolean(item) ? item.shortcutRole : ""
 
             iconFont: ui.theme.toolbarIconsFont
 
             navigation.panel: keynavSub
-            navigation.name: hint
+            navigation.name: toolTipTitle
             navigation.order: Boolean(item) ? item.orderRole : 0
             isClickOnKeyNavTriggered: false
             navigation.onTriggered: {
-                if (hasSubitems && item.showSubitemsByPressAndHoldRole) {
+                if (hasMenu && item.isMenuSecondaryRole) {
                     btn.pressAndHold()
                 } else {
                     btn.clicked()
                 }
             }
 
-            pressAndHoldInterval: 200
+            mouseArea.pressAndHoldInterval: 200
 
             width: gridView.cellWidth
             height: gridView.cellWidth
 
-            onClicked: {
-                if (menuLoader.isMenuOpened() || (hasSubitems && !item.showSubitemsByPressAndHoldRole)) {
+            mouseArea.acceptedButtons: hasMenu && item.isMenuSecondaryRole
+                                       ? Qt.LeftButton | Qt.RightButton
+                                       : Qt.LeftButton
+
+            onClicked: function (mouse) {
+                if (menuLoader.isMenuOpened // If already menu open, close it
+                        || (hasMenu // Or if can open menu
+                            && (!item.isMenuSecondaryRole // And _should_ open menu
+                                || mouse.button === Qt.RightButton))) {
                     menuLoader.toggleOpened(item.subitemsRole, btn.navigation)
                     return
                 }
 
-                Qt.callLater(noteInputModel.handleAction, item.codeRole)
+                if (mouse.button === Qt.LeftButton) {
+                    Qt.callLater(noteInputModel.handleAction, item.codeRole)
+                }
             }
 
             onPressAndHold: {
-                if (menuLoader.isMenuOpened() || !hasSubitems) {
+                if (menuLoader.isMenuOpened || !hasMenu) {
                     return
                 }
 
@@ -120,8 +135,7 @@ Rectangle {
             }
 
             Canvas {
-
-                visible: Boolean(item) && item.showSubitemsByPressAndHoldRole
+                visible: Boolean(btn.item) && btn.item.isMenuSecondaryRole
 
                 width: 4
                 height: 4

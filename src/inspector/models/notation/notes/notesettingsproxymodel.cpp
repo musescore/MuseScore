@@ -21,6 +21,8 @@
  */
 #include "notesettingsproxymodel.h"
 
+#include "translation.h"
+
 #include "stems/stemsettingsmodel.h"
 #include "noteheads/noteheadsettingsmodel.h"
 #include "beams/beamsettingsmodel.h"

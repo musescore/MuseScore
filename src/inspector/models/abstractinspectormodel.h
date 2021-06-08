@@ -30,8 +30,9 @@
 #include "libmscore/property.h"
 
 #include "internal/interfaces/ielementrepositoryservice.h"
-#include "iinspectoradapter.h"
 #include "notation/inotation.h"
+#include "context/iglobalcontext.h"
+#include "actions/iactionsdispatcher.h"
 #include "modularity/ioc.h"
 #include "models/propertyitem.h"
 
@@ -40,15 +41,13 @@ class AbstractInspectorModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(inspector, mu::inspector::IInspectorAdapter, adapter)
+    INJECT(inspector, context::IGlobalContext, context)
+    INJECT(inspector, actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(QString title READ title CONSTANT)
     Q_PROPERTY(InspectorSectionType sectionType READ sectionType CONSTANT)
     Q_PROPERTY(InspectorModelType modelType READ modelType CONSTANT)
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
-
-    Q_ENUMS(InspectorSectionType)
-    Q_ENUMS(InspectorModelType)
 
 public:
     enum class InspectorSectionType {
@@ -59,6 +58,7 @@ public:
         SECTION_SCORE_DISPLAY,
         SECTION_SCORE_APPEARANCE
     };
+    Q_ENUM(InspectorSectionType)
 
     enum class InspectorModelType {
         TYPE_UNDEFINED = -1,
@@ -101,6 +101,7 @@ public:
         TYPE_TREMOLO,
         TYPE_MEASURE_REPEAT
     };
+    Q_ENUM(InspectorModelType)
 
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);
 
@@ -146,8 +147,16 @@ protected:
     QVariant valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::Element* element) const;
     QVariant valueFromElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::Element* element) const;
 
+    notation::INotationStylePtr style() const;
     void updateStyleValue(const Ms::Sid& sid, const QVariant& newValue);
     QVariant styleValue(const Ms::Sid& sid) const;
+
+    notation::INotationUndoStackPtr undoStack() const;
+    void beginCommand();
+    void endCommand();
+
+    void updateNotation();
+    async::Notification currentNotationChanged() const;
 
     IElementRepositoryService* m_repository;
 

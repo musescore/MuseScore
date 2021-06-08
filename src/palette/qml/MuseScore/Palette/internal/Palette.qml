@@ -388,11 +388,9 @@ GridView {
     function focusFirstItem() {
         if (count == 0 && moreButton.visible) {
             moreButton.forceActiveFocus();
-            moreButton.navigation.forceActive()
         } else {
             currentIndex = 0;
             currentItem.forceActiveFocus();
-            currentItem.navigation.forceActive()
         }
     }
 

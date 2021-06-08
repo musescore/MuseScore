@@ -41,7 +41,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/timesig.h"
 #include "libmscore/segment.h"
-#include "libmscore/sym.h"
+#include "libmscore/symid.h"
 
 namespace Ms {
 //---------------------------------------------------------

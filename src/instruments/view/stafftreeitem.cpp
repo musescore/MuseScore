@@ -25,7 +25,7 @@ using namespace mu::instruments;
 using namespace mu::notation;
 
 StaffTreeItem::StaffTreeItem(INotationPartsPtr notationParts, QObject* parent)
-    : AbstractInstrumentPanelTreeItem(InstrumentTreeItemType::ItemType::STAFF, notationParts, parent)
+    : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::STAFF, notationParts, parent)
 {
 }
 

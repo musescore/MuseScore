@@ -22,6 +22,7 @@
 #ifndef MU_UI_NAVIGATIONCONTROLLER_H
 #define MU_UI_NAVIGATIONCONTROLLER_H
 
+#include <QObject>
 #include <QList>
 
 #include "../inavigationcontroller.h"
@@ -32,7 +33,7 @@
 #include "global/iinteractive.h"
 
 namespace mu::ui {
-class NavigationController : public INavigationController, public actions::Actionable, public async::Asyncable
+class NavigationController : public QObject, public INavigationController, public actions::Actionable, public async::Asyncable
 {
     INJECT(ui, actions::IActionsDispatcher, dispatcher)
     INJECT(ui, framework::IInteractive, interactive)
@@ -54,6 +55,8 @@ public:
 
     const std::set<INavigationSection*>& sections() const override;
 
+    bool requestActivateByName(const std::string& section, const std::string& panel, const std::string& control) override;
+
     INavigationSection* activeSection() const override;
     INavigationPanel* activePanel() const override;
     INavigationControl* activeControl() const override;
@@ -63,6 +66,8 @@ public:
     void init();
 
 private:
+
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
     void devShowControls();
 
@@ -85,7 +90,7 @@ private:
     void onEscape();
 
     void doTriggerControl();
-    void onForceActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl);
+    void onActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl);
 
     void doActivateSection(INavigationSection* sect, bool isActivateLastPanel = false);
     void doDeactivateSection(INavigationSection* sect);
@@ -96,6 +101,8 @@ private:
 
     void doActivateFirst();
     void doActivateLast();
+
+    void resetActive();
 
     std::set<INavigationSection*> m_sections;
     async::Notification m_navigationChanged;

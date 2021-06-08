@@ -275,15 +275,24 @@ IndicatorWindow::IndicatorWindow(KDDockWidgets::ClassicIndicators *classicIndica
     rootContext()->setContextProperty(QStringLiteral("_window"), QVariant::fromValue<QObject*>(this));
     setSource(QUrl(QStringLiteral("qrc:/kddockwidgets/private/quick/qml/ClassicIndicatorsOverlay.qml")));
 
-    {
+
+    // Two workarounds for two unrelated bugs:
+    if (KDDockWidgets::isOffscreen()) {
+        // 1. We need to create the window asap, otherwise, if a drag triggers the indicator window
+        // to show, that creates a QOffscreenWindow, which flushes events in the ctor, triggering
+        // more hover events which will trigger another QOffscreenWindow.
+        // We then end up with a QWindow with two QPlatformWindow, and only one is deleted in
+        // at shutdown, meaning some timers aren't unregistered, meaning we get a crash when
+        // the timer event is sent to the destroyed QWindow.
+        create();
+    } else {
+        // 2.
         // Small hack to avoid flickering when we drag over a window the first time
         // Not sure why a simply create() doesn't work instead
         // Not if offscreen though, as that QPA is flaky with window activation/focus
-        if (!KDDockWidgets::isOffscreen()) {
-            resize(QSize(1, 1));
-            show();
-            hide();
-        }
+        resize(QSize(1, 1));
+        show();
+        hide();
     }
 }
 

@@ -38,7 +38,6 @@
 
 #include "libmscore/element.h"
 #include "libmscore/style.h"
-#include "libmscore/sym.h"
 #include "libmscore/symbol.h"
 #include "libmscore/score.h"
 #include "libmscore/image.h"
@@ -64,7 +63,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/fret.h"
 
-#include "libmscore/draw/qpainterprovider.h"
+#include "engraving/draw/qpainterprovider.h"
 
 #include "translation.h"
 
@@ -333,12 +332,12 @@ void Palette::contextMenuEvent(QContextMenuEvent* event)
             std::string question
                 = mu::qtrc("palette", "Are you sure you want to delete palette cell \"%1\"?").arg(cell->name).toStdString();
 
-            IInteractive::Button button = interactive()->question(title, question, {
+            IInteractive::Result result = interactive()->question(title, question, {
                     IInteractive::Button::Yes,
                     IInteractive::Button::No
                 }, IInteractive::Button::Yes);
 
-            if (button != IInteractive::Button::Yes) {
+            if (result.standartButton() != IInteractive::Button::Yes) {
                 return;
             }
             if (cell->tag == "ShowMore") {
@@ -1070,8 +1069,8 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
         QString tag = currentCell->tag;
         if (!tag.isEmpty()) {
             painter.setPen(configuration()->gridColor());
-            QFont f(painter.font());
-            f.setPointSize(12);
+            mu::draw::Font f(painter.font());
+            f.setPointSizeF(12.0);
             painter.setFont(f);
             if (tag == "ShowMore") {
                 painter.drawText(idxRect(idx), Qt::AlignCenter, "???");
@@ -1402,7 +1401,7 @@ void Palette::showWritingFailedError(const QString& path) const
 {
     std::string title = mu::trc("palette", "Writing Palette File");
     std::string message = mu::qtrc("palette", "Writing Palette File\n%1\nfailed: ").arg(path).toStdString();
-    interactive()->message(IInteractive::Type::Critical, title, message);
+    interactive()->error(title, message);
 }
 
 //---------------------------------------------------------

@@ -21,8 +21,9 @@
  */
 #include "bendsettingsmodel.h"
 
-#include "types/bendtypes.h"
+#include "translation.h"
 #include "dataformatter.h"
+#include "types/bendtypes.h"
 
 using namespace mu::inspector;
 

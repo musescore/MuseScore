@@ -32,7 +32,7 @@ set(MODULE_SRC
 
 set(MODULE_LINK
     rtf2html    # for capella
-    libmscore
+    engraving
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

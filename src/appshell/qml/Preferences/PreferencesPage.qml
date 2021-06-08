@@ -25,6 +25,8 @@ import QtQuick.Controls 2.15
 import MuseScore.UiComponents 1.0
 
 Flickable {
+    id: root
+
     contentWidth: width
 
     clip: true
@@ -37,5 +39,13 @@ Flickable {
 
     function apply() {
         return true
+    }
+
+    MouseArea {
+        anchors.fill: parent
+
+        onClicked: {
+            root.forceActiveFocus()
+        }
     }
 }

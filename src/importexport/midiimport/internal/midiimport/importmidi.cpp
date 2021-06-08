@@ -48,7 +48,7 @@
 #include "libmscore/bracket.h"
 #include "libmscore/drumset.h"
 #include "libmscore/box.h"
-#include "libmscore/sym.h"
+#include "libmscore/symid.h"
 #include "libmscore/pitchspelling.h"
 #include "importmidi_meter.h"
 #include "importmidi_chord.h"

@@ -31,6 +31,8 @@
 
 using namespace mu::audio;
 
+std::thread::id AudioThread::ID;
+
 AudioThread::AudioThread()
 {
     m_channel = std::make_shared<rpc::QueuedRpcChannel>();
@@ -87,6 +89,8 @@ void AudioThread::main()
 {
     mu::runtime::setThreadName("audio_worker");
     m_channel->setupWorkerThread();
+
+    AudioThread::ID = std::this_thread::get_id();
 
     if (m_onStart) {
         m_onStart();

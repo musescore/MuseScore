@@ -35,7 +35,7 @@ class InstrumentListModel : public QObject, public async::Asyncable
     Q_OBJECT
 
     INJECT(instruments, IInstrumentsRepository, repository)
-    INJECT(instruments, context::IGlobalContext, context)
+    INJECT(instruments, context::IGlobalContext, globalContext)
 
     Q_PROPERTY(QVariantList families READ families NOTIFY dataChanged)
     Q_PROPERTY(QVariantList groups READ groups NOTIFY dataChanged)
@@ -45,7 +45,7 @@ class InstrumentListModel : public QObject, public async::Asyncable
 public:
     InstrumentListModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void load(bool canSelectMultipleInstruments, const QString& currentInstrumentId, const QString& selectedInstrumentIds);
+    Q_INVOKABLE void load(bool canSelectMultipleInstruments, const QString& currentInstrumentId, const QString& selectedPartIds);
 
     QVariantList families() const;
     QVariantList groups() const;
@@ -60,7 +60,7 @@ public:
     Q_INVOKABLE void selectInstrument(const QString& instrumentId, const QString& transpositionId = QString());
     Q_INVOKABLE void unselectInstrument(const QString& instrumentId);
     Q_INVOKABLE void swapSelectedInstruments(int firstIndex, int secondIndex);
-    Q_INVOKABLE void makeSoloist(const QString& instrumentId);
+    Q_INVOKABLE void toggleSoloist(const QString& instrumentId);
 
     Q_INVOKABLE void setSearchText(const QString& text);
 
@@ -79,9 +79,12 @@ signals:
     void selectedInstrumentsChanged();
 
 private:
-    void initSelectedInstruments(const notation::IDList& selectedInstrumentIds);
+    void initSelectedInstruments(const notation::IDList& selectedPartIds);
+    notation::INotationPartsPtr notationParts() const;
 
     void sortInstruments(QVariantList& instruments) const;
+
+    int findInstrumentIndex(const QString& instrumentId) const;
 
     bool isSearching() const;
 
@@ -109,6 +112,9 @@ private:
     struct SelectedInstrumentInfo
     {
         QString id;
+        QString name;
+        bool isSoloist;
+        bool isExistingPart;
         Transposition transposition;
         Instrument config;
 

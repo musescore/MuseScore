@@ -1,5 +1,5 @@
 {
-    "version": 1,
+    "version": 2,
     "configurePresets": [
         {
             "name": "dev-qtwidgets",
@@ -18,6 +18,22 @@
             }
         },
         {
+            "name": "dev-qtwidgets-gammaray",
+            "displayName": "dev-qtwidgets-gammaray",
+            "description": "A Gammaray friendly build. (No ASAN)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-dev-qtwidgets-gammaray",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "KDDockWidgets_DEVELOPER_MODE": "ON",
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON",
+                "KDDockWidgets_FUZZER" : "OFF"
+            },
+            "warnings" : {
+                "uninitialized" : true
+            }
+        },
+        {
             "name": "clazy-qtwidgets",
             "displayName": "clazy-qtwidgets",
             "generator": "Ninja",
@@ -27,7 +43,8 @@
                 "KDDockWidgets_WERROR": "ON"
             },
             "environment": {
-                "CXX": "clazy"
+                "CXX": "clazy",
+                "CCACHE_DISABLE" : "ON"
             }
         },
         {
@@ -107,7 +124,8 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
                 "KDDockWidgets_QT6": "ON",
-                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
+                "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON",
+                "CMAKE_PREFIX_PATH" : "$env{QT6_DIR}"
             },
             "environment": {
                 "PATH": "$env{QT6_DIR}/bin:$penv{PATH}"
@@ -124,7 +142,8 @@
                 "KDDockWidgets_DEVELOPER_MODE": "ON",
                 "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON",
                 "ECM_ENABLE_SANITIZERS" : "'address;undefined'",
-                "KDDockWidgets_FUZZER" : "OFF"
+                "KDDockWidgets_FUZZER" : "OFF",
+                "CMAKE_PREFIX_PATH" : "$env{QT6_DIR}"
             },
             "environment": {
                 "PATH": "$env{QT6_DIR}/bin:$penv{PATH}"
@@ -139,10 +158,39 @@
                 "CMAKE_BUILD_TYPE": "Release",
                 "KDDockWidgets_QTQUICK": "ON",
                  "KDDockWidgets_QT6": "ON",
-                 "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON"
+                 "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON",
+                 "CMAKE_PREFIX_PATH" : "$env{QT6_DIR}"
             },
             "environment": {
                 "PATH": "$env{QT6_DIR}/bin:$penv{PATH}"
+            }
+        },
+        {
+            "name": "dev-qtquick6",
+            "displayName": "dev-qtquick6",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-dev-qtquick6",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "KDDockWidgets_QTQUICK": "ON",
+                 "KDDockWidgets_QT6": "ON",
+                 "CMAKE_EXPORT_COMPILE_COMMANDS" : "ON",
+                 "KDDockWidgets_DEVELOPER_MODE": "ON",
+                 "ECM_ENABLE_SANITIZERS" : "'address;undefined'",
+                 "CMAKE_PREFIX_PATH" : "$env{QT6_DIR}"
+            },
+            "environment": {
+                "PATH": "$env{QT6_DIR}/bin:$penv{PATH}"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "clazy-qtwidgets",
+            "configurePreset": "clazy-qtwidgets",
+            "environment": {
+                "CLAZY_CHECKS" : "level2,detaching-member,heap-allocated-small-trivial-type,isempty-vs-count,qstring-varargs,qvariant-template-instantiation,raw-environment-function,reserve-candidates,signal-with-return-value,thread-with-slots,no-ctor-missing-parent-argument,no-missing-typeinfo",
+                "CCACHE_DISABLE" : "ON"
             }
         }
     ]

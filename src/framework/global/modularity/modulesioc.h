@@ -146,7 +146,12 @@ private:
     std::shared_ptr<IModuleExportInterface> doResolvePtrById(const std::string& resolveModule, const std::string& id)
     {
         (void)(resolveModule); //! TODO add statistics collection / monitoring, who resolves what
-        Service& inj = m_map[id];
+        auto it = m_map.find(id);
+        if (it == m_map.end()) {
+            return nullptr;
+        }
+
+        Service& inj = it->second;
         if (inj.p) {
             return inj.p;
         }

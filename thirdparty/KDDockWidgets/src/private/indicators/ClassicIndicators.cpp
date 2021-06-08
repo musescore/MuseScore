@@ -26,6 +26,7 @@ static IndicatorWindow* createIndicatorWindow(ClassicIndicators *classicIndicato
 {
     auto window = new IndicatorWindow(classicIndicators);
     window->setObjectName(QStringLiteral("_docks_IndicatorWindow_Overlay"));
+
     return window;
 }
 
@@ -113,6 +114,7 @@ void ClassicIndicators::updateIndicatorsVisibility(bool visible)
 
     Q_EMIT innerIndicatorsVisibleChanged();
     Q_EMIT outterIndicatorsVisibleChanged();
+    Q_EMIT tabIndicatorVisibleChanged();
 }
 
 void ClassicIndicators::raiseIndicators()

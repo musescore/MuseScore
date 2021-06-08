@@ -32,7 +32,7 @@
 #include "internal/selectinstrumentscenario.h"
 #include "internal/instrumentsuiactions.h"
 
-#include "view/instrumentpaneltreemodel.h"
+#include "view/instrumentspaneltreemodel.h"
 #include "view/instrumentlistmodel.h"
 #include "view/instrumentsettingsmodel.h"
 #include "view/staffsettingsmodel.h"
@@ -89,9 +89,9 @@ void InstrumentsModule::registerUiTypes()
     qmlRegisterType<InstrumentListModel>("MuseScore.Instruments", 1, 0, "InstrumentListModel");
     qmlRegisterType<InstrumentSettingsModel>("MuseScore.Instruments", 1, 0, "InstrumentSettingsModel");
     qmlRegisterType<StaffSettingsModel>("MuseScore.Instruments", 1, 0, "StaffSettingsModel");
-    qmlRegisterType<InstrumentPanelTreeModel>("MuseScore.Instruments", 1, 0, "InstrumentPanelTreeModel");
-    qmlRegisterUncreatableType<InstrumentTreeItemType>("MuseScore.Instruments", 1, 0, "InstrumentTreeItemType",
-                                                       "Cannot create a ContainerType");
+    qmlRegisterType<InstrumentsPanelTreeModel>("MuseScore.Instruments", 1, 0, "InstrumentsPanelTreeModel");
+    qmlRegisterUncreatableType<InstrumentsTreeItemType>("MuseScore.Instruments", 1, 0, "InstrumentsTreeItemType",
+                                                        "Cannot create a ContainerType");
 
     auto uiengine = framework::ioc()->resolve<ui::IUiEngine>(moduleName());
     if (uiengine) {

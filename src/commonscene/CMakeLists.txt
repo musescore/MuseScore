@@ -31,7 +31,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/commonscenetypes.h
     )
 
-set(MODULE_LINK libmscore)
+set(MODULE_LINK engraving)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 

@@ -22,7 +22,7 @@
 #include "appearancesettingsmodel.h"
 
 #include "dataformatter.h"
-
+#include "log.h"
 #include "translation.h"
 
 using namespace mu::inspector;
@@ -104,7 +104,7 @@ void AppearanceSettingsModel::pushFrontInOrder()
 
 void AppearanceSettingsModel::configureGrid()
 {
-    adapter()->showGridConfigurationDialog();
+    NOT_IMPLEMENTED;
 }
 
 PropertyItem* AppearanceSettingsModel::leadingSpace() const
@@ -156,8 +156,9 @@ void AppearanceSettingsModel::setIsSnappedToGrid(bool isSnapped)
     m_horizontallySnapToGrid = isSnapped;
     m_verticallySnapToGrid = isSnapped;
 
-    adapter()->updateHorizontalGridSnapping(isSnapped);
-    adapter()->updateVerticalGridSnapping(isSnapped);
+    NOT_IMPLEMENTED;
+    //updateHorizontalGridSnapping(isSnapped);
+    //updateVerticalGridSnapping(isSnapped);
 
     emit isSnappedToGridChanged(isSnappedToGrid());
 }

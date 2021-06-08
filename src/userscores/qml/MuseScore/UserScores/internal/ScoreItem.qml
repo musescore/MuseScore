@@ -26,7 +26,7 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.UserScores 1.0
 
-Item {
+FocusScope {
     id: root
 
     property string title: ""
@@ -41,6 +41,15 @@ Item {
     NavigationControl {
         id: navCtrl
         name: root.title
+
+        accessible.role: MUAccessible.Button
+        accessible.name: root.title
+
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
 
         onTriggered: root.clicked()
     }

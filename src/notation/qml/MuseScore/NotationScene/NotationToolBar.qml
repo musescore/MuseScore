@@ -71,7 +71,10 @@ Rectangle {
             icon: model.icon
             iconFont: ui.theme.toolbarIconsFont
 
-            hint: model.hint
+            toolTipTitle: model.title
+            toolTipDescription: model.description
+            toolTipShortcut: model.shortcut
+
             enabled: model.enabled
             textFont: ui.theme.tabFont
 

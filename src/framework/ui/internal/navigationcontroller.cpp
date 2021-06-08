@@ -21,10 +21,12 @@
  */
 #include "navigationcontroller.h"
 
+#include <QCoreApplication>
 #include <algorithm>
 #include <limits>
 #include <utility>
 
+#include "async/async.h"
 #include "log.h"
 
 //#define NAVIGATION_LOGGING_ENABLED
@@ -293,6 +295,8 @@ void NavigationController::init()
     dispatcher()->reg(this, "nav-last-control", this, &NavigationController::goToLastControl);           // typically End key
     dispatcher()->reg(this, "nav-nextrow-control", this, &NavigationController::goToNextRowControl);     // typically PageDown key
     dispatcher()->reg(this, "nav-prevrow-control", this, &NavigationController::goToPrevRowControl);     // typically PageUp key
+
+    qApp->installEventFilter(this);
 }
 
 void NavigationController::reg(INavigationSection* section)
@@ -301,8 +305,8 @@ void NavigationController::reg(INavigationSection* section)
     TRACEFUNC;
     m_sections.insert(section);
 
-    section->forceActiveRequested().onReceive(this, [this](const SectionPanelControl& ssc) {
-        onForceActiveRequested(std::get<0>(ssc), std::get<1>(ssc), std::get<2>(ssc));
+    section->activeRequested().onReceive(this, [this](const SectionPanelControl& ssc) {
+        onActiveRequested(std::get<0>(ssc), std::get<1>(ssc), std::get<2>(ssc));
     });
 }
 
@@ -310,7 +314,7 @@ void NavigationController::unreg(INavigationSection* section)
 {
     TRACEFUNC;
     m_sections.erase(section);
-    section->forceActiveRequested().resetOnReceive(this);
+    section->activeRequested().resetOnReceive(this);
 }
 
 const std::set<INavigationSection*>& NavigationController::sections() const
@@ -318,11 +322,41 @@ const std::set<INavigationSection*>& NavigationController::sections() const
     return m_sections;
 }
 
+bool NavigationController::eventFilter(QObject* watched, QEvent* event)
+{
+    if (event->type() == QEvent::MouseButtonPress) {
+        resetActive();
+    }
+
+    return QObject::eventFilter(watched, event);
+}
+
 void NavigationController::devShowControls()
 {
     if (!interactive()->isOpened(DEV_SHOW_CONTROLS_URI.uri()).val) {
         interactive()->open(DEV_SHOW_CONTROLS_URI);
     }
+}
+
+void NavigationController::resetActive()
+{
+    MYLOG() << "===";
+    INavigationSection* activeSec = this->activeSection();
+    if (!activeSec) {
+        return;
+    }
+
+    INavigationPanel* activePnl = findActive(activeSec->panels());
+    if (activePnl) {
+        INavigationControl* activeCtrl = findActive(activePnl->controls());
+        if (activeCtrl) {
+            activeCtrl->setActive(false);
+        }
+
+        activePnl->setActive(false);
+    }
+
+    activeSec->setActive(false);
 }
 
 void NavigationController::doActivateSection(INavigationSection* sect, bool isActivateLastPanel)
@@ -1015,36 +1049,81 @@ void NavigationController::doTriggerControl()
     activeCtrl->trigger();
 }
 
-void NavigationController::onForceActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl)
+bool NavigationController::requestActivateByName(const std::string& sectName, const std::string& panelName, const std::string& controlName)
+{
+    INavigationSection* section = findByName(m_sections, QString::fromStdString(sectName));
+    if (section) {
+        LOGE() << "not found section with name: " << sectName;
+        return false;
+    }
+
+    INavigationPanel* panel = findByName(section->panels(), QString::fromStdString(panelName));
+    if (!panel) {
+        LOGE() << "not found panel with name: " << panelName << ", section: " << sectName;
+        return false;
+    }
+
+    INavigationControl* control = findByName(panel->controls(), QString::fromStdString(controlName));
+    if (!panel) {
+        LOGE() << "not found control with name: " << controlName << ", panel: " << panelName << ", section: " << sectName;
+        return false;
+    }
+
+    onActiveRequested(section, panel, control);
+    return true;
+}
+
+void NavigationController::onActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl)
 {
     TRACEFUNC;
+
     if (m_sections.empty()) {
         return;
     }
 
     INavigationSection* activeSec = findActive(m_sections);
-    if (activeSec && activeSec != sect) {
+
+    //! NOTE If there is no active section,
+    //! we may not be using keyboard navigation, so ignore the request.
+    if (!activeSec) {
+        return;
+    }
+
+    bool isChanged = false;
+
+    if (activeSec != sect) {
         doDeactivateSection(activeSec);
     }
 
-    sect->setActive(true);
-    MYLOG() << "activated section: " << sect->name() << ", order: " << sect->index().order();
+    if (!sect->active()) {
+        sect->setActive(true);
+        isChanged = true;
+        MYLOG() << "activated section: " << sect->name() << ", order: " << sect->index().order();
+    }
 
     INavigationPanel* activePanel = findActive(sect->panels());
     if (activePanel && activePanel != panel) {
         doDeactivatePanel(activePanel);
     }
 
-    panel->setActive(true);
-    MYLOG() << "activated panel: " << panel->name() << ", order: " << panel->index().order();
+    if (!panel->active()) {
+        panel->setActive(true);
+        isChanged = true;
+        MYLOG() << "activated panel: " << panel->name() << ", order: " << panel->index().order();
+    }
 
     INavigationControl* activeCtrl = findActive(panel->controls());
     if (activeCtrl && activeCtrl != ctrl) {
         activeCtrl->setActive(false);
     }
 
-    ctrl->setActive(true);
-    MYLOG() << "activated control: " << ctrl->name() << ", row: " << ctrl->index().row << ", column: " << ctrl->index().column;
+    if (!ctrl->active()) {
+        ctrl->setActive(true);
+        isChanged = true;
+        MYLOG() << "activated control: " << ctrl->name() << ", row: " << ctrl->index().row << ", column: " << ctrl->index().column;
+    }
 
-    m_navigationChanged.notify();
+    if (isChanged) {
+        m_navigationChanged.notify();
+    }
 }

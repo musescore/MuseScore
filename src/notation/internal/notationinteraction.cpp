@@ -49,6 +49,7 @@
 #include "libmscore/navigate.h"
 #include "libmscore/keysig.h"
 #include "libmscore/instrchange.h"
+#include "libmscore/lasso.h"
 
 #include "masternotation.h"
 #include "scorecallbacks.h"
@@ -60,7 +61,7 @@
 using namespace mu::notation;
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
-    : m_notation(notation), m_undoStack(undoStack)
+    : m_notation(notation), m_undoStack(undoStack), m_lasso(new Ms::Lasso(notation->score()))
 {
     m_noteInput = std::make_shared<NotationNoteInput>(notation, this, m_undoStack);
     m_selection = std::make_shared<NotationSelection>(notation);
@@ -140,6 +141,9 @@ void NotationInteraction::paint(mu::draw::Painter* painter)
     drawTextEditMode(painter);
     drawSelectionRange(painter);
     drawGripPoints(painter);
+    if (!m_lasso->bbox().isEmpty()) {
+        m_lasso->draw(painter);
+    }
 }
 
 INotationNoteInputPtr NotationInteraction::noteInput() const
@@ -539,7 +543,7 @@ mu::async::Notification NotationInteraction::selectionChanged() const
 
 bool NotationInteraction::isDragStarted() const
 {
-    return m_dragData.dragGroups.size() > 0;
+    return m_dragData.dragGroups.size() > 0 || !m_lasso->bbox().isEmpty();
 }
 
 void NotationInteraction::DragData::reset()
@@ -581,12 +585,32 @@ void NotationInteraction::startDrag(const std::vector<Element*>& elems,
     }
 }
 
+void NotationInteraction::doDragLasso(const QPointF& pt)
+{
+    score()->addRefresh(m_lasso->canvasBoundingRect());
+    QRectF r;
+    r.setCoords(m_dragData.beginMove.x(), m_dragData.beginMove.y(), pt.x(), pt.y());
+    m_lasso->setbbox(r.normalized());
+    score()->addRefresh(m_lasso->canvasBoundingRect());
+    score()->lassoSelect(m_lasso->bbox());
+    score()->update();
+}
+
+void NotationInteraction::endLasso()
+{
+    score()->addRefresh(m_lasso->canvasBoundingRect());
+    m_lasso->setbbox(QRectF());
+    score()->lassoSelectEnd(m_dragData.mode != DragMode::LassoList);
+    score()->update();
+}
+
 void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, DragMode mode)
 {
     if (m_dragData.beginMove.isNull()) {
         m_dragData.beginMove = fromPos;
         m_dragData.ed.pos = fromPos;
     }
+    m_dragData.mode = mode;
 
     QPointF normalizedBegin = m_dragData.beginMove - m_dragData.elementOffset;
 
@@ -595,6 +619,7 @@ void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, Dra
 
     switch (mode) {
     case DragMode::BothXY:
+    case DragMode::LassoList:
         break;
     case DragMode::OnlyX:
         delta.setY(m_dragData.ed.delta.y());
@@ -637,7 +662,7 @@ void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, Dra
 
     score()->update();
 
-    QVector<QLineF> anchorLines;
+    std::vector<draw::LineF> anchorLines;
     for (const Element* e : m_dragData.elements) {
         QVector<QLineF> elAnchorLines = e->dragAnchorLines();
         const Ms::Element* page = e->findAncestor(ElementType::PAGE);
@@ -646,12 +671,16 @@ void NotationInteraction::drag(const QPointF& fromPos, const QPointF& toPos, Dra
         if (!elAnchorLines.isEmpty()) {
             for (QLineF& l : elAnchorLines) {
                 l.translate(pageOffset);
+                anchorLines.push_back(l);
             }
-            anchorLines.append(elAnchorLines);
         }
     }
 
-    setAnchorLines(std::vector<QLineF>(anchorLines.begin(), anchorLines.end()));
+    setAnchorLines(anchorLines);
+
+    if (m_dragData.elements.size() == 0) {
+        doDragLasso(toPos);
+    }
 
     notifyAboutDragChanged();
 
@@ -673,6 +702,9 @@ void NotationInteraction::endDrag()
     } else {
         for (auto& group : m_dragData.dragGroups) {
             group->endDrag(m_dragData.ed);
+        }
+        if (!m_lasso->bbox().isEmpty()) {
+            endLasso();
         }
     }
 
@@ -1560,7 +1592,7 @@ bool NotationInteraction::dragMeasureAnchorElement(const QPointF& pos)
             m = m->nextMeasure();
         }
         QPointF anchor(m->canvasBoundingRect().x(), y);
-        setAnchorLines({ QLineF(pos, anchor) });
+        setAnchorLines({ draw::LineF(pos, anchor) });
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
         m_dropData.ed.dropElement->setTrack(track);
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
@@ -1585,7 +1617,7 @@ bool NotationInteraction::dragTimeAnchorElement(const QPointF& pos)
         Ms::System* s  = m->system();
         qreal y    = s->staff(staffIdx)->y() + s->pos().y() + s->page()->pos().y();
         QPointF anchor(seg->canvasBoundingRect().x(), y);
-        setAnchorLines({ QLineF(pos, anchor) });
+        setAnchorLines({ draw::LineF(pos, anchor) });
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
         m_dropData.ed.dropElement->setTrack(track);
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
@@ -1623,7 +1655,7 @@ void NotationInteraction::setDropTarget(Element* el)
     notifyAboutDragChanged();
 }
 
-void NotationInteraction::setAnchorLines(const std::vector<QLineF>& anchorList)
+void NotationInteraction::setAnchorLines(const std::vector<draw::LineF>& anchorList)
 {
     m_anchorLines = anchorList;
 }
@@ -1642,7 +1674,7 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
     const auto dropAnchorColor = configuration()->anchorLineColor();
     QPen pen(QBrush(dropAnchorColor), 2.0 / painter->worldTransform().m11(), Qt::DotLine);
 
-    for (const QLineF& anchor : m_anchorLines) {
+    for (const draw::LineF& anchor : m_anchorLines) {
         painter->setPen(pen);
         painter->drawLine(anchor);
 
@@ -1651,9 +1683,9 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
 
         painter->setBrush(QBrush(dropAnchorColor));
         painter->setNoPen();
-        rect.moveCenter(anchor.p1());
+        rect.moveCenter(anchor.p1().toQPointF());
         painter->drawEllipse(rect);
-        rect.moveCenter(anchor.p2());
+        rect.moveCenter(anchor.p2().toQPointF());
         painter->drawEllipse(rect);
     }
 }
@@ -1996,7 +2028,7 @@ void NotationInteraction::startEditGrip(const QPointF& pos)
 
         m_gripEditData.curGrip = Ms::Grip(i);
 
-        std::vector<QLineF> lines;
+        std::vector<draw::LineF> lines;
         QVector<QLineF> anchorLines = m_gripEditData.element->gripAnchorLines(m_gripEditData.curGrip);
 
         Element* page = m_gripEditData.element->findAncestor(ElementType::PAGE);
@@ -2004,7 +2036,7 @@ void NotationInteraction::startEditGrip(const QPointF& pos)
         if (!anchorLines.isEmpty()) {
             for (QLineF& line : anchorLines) {
                 line.translate(pageOffset);
-                lines.push_back(line);
+                lines.push_back(draw::LineF(line));
             }
         }
 

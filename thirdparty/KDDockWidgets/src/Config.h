@@ -106,7 +106,8 @@ public:
         InternalFlag_NoAeroSnap = 1, ///< Only for development. Disables Aero-snap.
         InternalFlag_DontUseParentForFloatingWindows = 2,  ///< FloatingWindows won't have a parent top-level.
         InternalFlag_DontUseQtToolWindowsForFloatingWindows = 4, ///< FloatingWindows will use Qt::Window instead of Qt::Tool.
-        InternalFlag_DontShowWhenUnfloatingHiddenWindow = 8 ///< DockWidget::setFloating(false) won't do anything if the window is hidden.
+        InternalFlag_DontShowWhenUnfloatingHiddenWindow = 8, ///< DockWidget::setFloating(false) won't do anything if the window is hidden.
+        InternalFlag_UseTransparentFloatingWindow = 16 ///< For QtQuick only. Allows to have round-corners. It's flaky when used with native Windows drop-shadow.
     };
     Q_DECLARE_FLAGS(InternalFlags, InternalFlag)
 
@@ -180,6 +181,15 @@ public:
     ///@brief returns the opacity to use when dragging dock widgets
     ///By default it's 1.0, fully opaque
     qreal draggedWindowOpacity() const;
+
+    /// @brief Allows to disable support for drop indicators while dragging
+    /// By default drop indicators will be shown when dragging dock widgets.
+    /// This functionality can be toggled whenever you need it (it's not a startup-only setting).
+    void setDropIndicatorsInhibited(bool inhibit) const;
+
+    /// @brief Returns whether drop indicators are inhibited.
+    /// by default this is false unless you call setDropIndicatorsInhibited(true)
+    bool dropIndicatorsInhibited() const;
 
     /**
      * @brief Allows the user to intercept a docking attempt to center (tabbed) and disallow it.

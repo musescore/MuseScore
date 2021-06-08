@@ -605,6 +605,7 @@ struct CNote {
     signed char pitch;
     int explAlteration;       // 1 force, 2 suppress
     int headType;
+    int headGroup;
     int alteration;
     int silent;
 };

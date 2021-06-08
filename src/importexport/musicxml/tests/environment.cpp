@@ -24,11 +24,13 @@
 
 #include "log.h"
 #include "framework/fonts/fontsmodule.h"
+#include "engraving/engravingmodule.h"
 #include "importexport/musicxml/musicxmlmodule.h"
 
 static mu::testing::SuiteEnvironment musicxml_se(
 {
     new mu::fonts::FontsModule(), // needs for libmscore
+    new mu::engraving::EngravingModule(),
     new mu::iex::musicxml::MusicXmlModule() // needs for init resources
 },
     []() {

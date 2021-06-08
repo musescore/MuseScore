@@ -39,10 +39,6 @@
 #include "internal/msczmetareader.h"
 
 #include "view/notationpaintview.h"
-#include "view/notationaccessibilitymodel.h"
-#include "view/zoomcontrolmodel.h"
-#include "view/concertpitchcontrolmodel.h"
-#include "view/viewmodecontrolmodel.h"
 #include "view/notationswitchlistmodel.h"
 #include "view/partlistmodel.h"
 #include "view/searchpopupmodel.h"
@@ -59,6 +55,7 @@
 #include "view/widgets/measureproperties.h"
 #include "view/widgets/editstaff.h"
 #include "view/widgets/breaksdialog.h"
+#include "view/widgets/pagesettings.h"
 #include "view/widgets/scoreproperties.h"
 #include "view/widgets/transposedialog.h"
 #include "view/widgets/selectnotedialog.h"
@@ -113,6 +110,9 @@ void NotationModule::resolveImports()
         ir->registerUri(Uri("musescore://notation/style"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<EditStyle>("EditStyle")));
 
+        ir->registerUri(Uri("musescore://notation/pagesettings"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<PageSettings>("PageSettings")));
+
         ir->registerUri(Uri("musescore://notation/properties"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<ScorePropertiesDialog>("ScorePropertiesDialog")));
 
@@ -156,10 +156,6 @@ void NotationModule::registerResources()
 void NotationModule::registerUiTypes()
 {
     qmlRegisterType<NotationPaintView>("MuseScore.NotationScene", 1, 0, "NotationPaintView");
-    qmlRegisterType<NotationAccessibilityModel>("MuseScore.NotationScene", 1, 0, "NotationAccessibilityModel");
-    qmlRegisterType<ZoomControlModel>("MuseScore.NotationScene", 1, 0, "ZoomControlModel");
-    qmlRegisterType<ConcertPitchControlModel>("MuseScore.NotationScene", 1, 0, "ConcertPitchControlModel");
-    qmlRegisterType<ViewModeControlModel>("MuseScore.NotationScene", 1, 0, "ViewModeControlModel");
     qmlRegisterType<NotationSwitchListModel>("MuseScore.NotationScene", 1, 0, "NotationSwitchListModel");
     qmlRegisterType<PartListModel>("MuseScore.NotationScene", 1, 0, "PartListModel");
     qmlRegisterType<SearchPopupModel>("MuseScore.NotationScene", 1, 0, "SearchPopupModel");
@@ -179,8 +175,6 @@ void NotationModule::registerUiTypes()
     if (ui) {
         ui->addSourceImportPath(notation_QML_IMPORT);
     }
-
-    Ms::MScore::registerUiTypes();
 }
 
 void NotationModule::onInit(const IApplication::RunMode&)

@@ -36,6 +36,8 @@ static const QString NAME_KEY("name");
 static const QString TRANSPOSITIONS_KEY("transpositions");
 static const QString GROUP_ID("groupId");
 static const QString CONFIG_KEY("config");
+static const QString SOLOIST_KEY("isSoloist");
+static const QString PART_KEY("isExistingPart");
 
 InstrumentListModel::InstrumentListModel(QObject* parent)
     : QObject(parent)
@@ -43,7 +45,7 @@ InstrumentListModel::InstrumentListModel(QObject* parent)
 }
 
 void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString& currentInstrumentId,
-                               const QString& selectedInstrumentIds)
+                               const QString& selectedPartIds)
 {
     RetValCh<InstrumentsMeta> instrumentsMeta = repository()->instrumentsMeta();
     if (!instrumentsMeta.ret) {
@@ -59,7 +61,7 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     m_canSelectMultipleInstruments = canSelectMultipleInstruments;
     setInstrumentsMeta(instrumentsMeta.val);
 
-    initSelectedInstruments(selectedInstrumentIds.split(','));
+    initSelectedInstruments(selectedPartIds.split(','));
 
     if (!currentInstrumentId.isEmpty()) {
         InstrumentTemplate instrumentTemplate = this->instrumentTemplate(currentInstrumentId);
@@ -67,22 +69,48 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     }
 }
 
-void InstrumentListModel::initSelectedInstruments(const IDList& selectedInstrumentIds)
+void InstrumentListModel::initSelectedInstruments(const IDList& selectedPartIds)
 {
-    for (const ID& instrumentId: selectedInstrumentIds) {
-        if (instrumentId.isEmpty()) {
+    auto _notationParts = notationParts();
+    if (!_notationParts) {
+        return;
+    }
+
+    auto parts = _notationParts->partList();
+    for (const ID& partId: selectedPartIds) {
+        auto compareId = [partId](auto p) {
+            return p->id() == partId;
+        };
+
+        auto pi = find_if(begin(parts), end(parts), compareId);
+        if ((pi == end(parts)) || !(*pi)) {
             continue;
         }
 
-        InstrumentTemplate templ = instrumentTemplate(instrumentId);
+        const Part* part = *pi;
 
         SelectedInstrumentInfo info;
-        info.id = templ.id;
-        info.config = templ.instrument;
+
+        info.id = partId;
+        info.isExistingPart = true;
+        info.name = part->partName();
+        info.isSoloist = part->soloist();
+        info.config = Instrument();
+
         m_selectedInstruments << info;
     }
 
     emit selectedInstrumentsChanged();
+}
+
+INotationPartsPtr InstrumentListModel::notationParts() const
+{
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return nullptr;
+    }
+
+    return notation->parts();
 }
 
 QVariantList InstrumentListModel::families() const
@@ -247,7 +275,10 @@ void InstrumentListModel::selectInstrument(const QString& instrumentId, const QS
     }
 
     SelectedInstrumentInfo info;
+    info.isExistingPart = false;
+    info.isSoloist = false;
     info.id = codeKey;
+    info.name = QString();
     info.transposition = templ.transposition;
     info.config = templ.instrument;
 
@@ -259,19 +290,31 @@ void InstrumentListModel::selectInstrument(const QString& instrumentId, const QS
     emit selectedInstrumentsChanged();
 }
 
-void InstrumentListModel::makeSoloist(const QString&)
+int InstrumentListModel::findInstrumentIndex(const QString& instrumentId) const
 {
-    NOT_IMPLEMENTED;
+    for (int index = 0; index < m_selectedInstruments.count(); ++index) {
+        if (m_selectedInstruments[index].id == instrumentId) {
+            return index;
+        }
+    }
+    return -1;
+}
+
+void InstrumentListModel::toggleSoloist(const QString& instrumentId)
+{
+    int index = findInstrumentIndex(instrumentId);
+    if (index >= 0) {
+        m_selectedInstruments[index].isSoloist = !m_selectedInstruments[index].isSoloist;
+        emit selectedInstrumentsChanged();
+    }
 }
 
 void InstrumentListModel::unselectInstrument(const QString& instrumentId)
 {
-    for (int i = 0; i < m_selectedInstruments.count(); ++i) {
-        if (m_selectedInstruments[i].id == instrumentId) {
-            m_selectedInstruments.removeAt(i);
-            emit selectedInstrumentsChanged();
-            return;
-        }
+    int index = findInstrumentIndex(instrumentId);
+    if (index >= 0) {
+        m_selectedInstruments.removeAt(index);
+        emit selectedInstrumentsChanged();
     }
 }
 
@@ -317,20 +360,29 @@ QVariantList InstrumentListModel::selectedInstruments() const
     QVariantList result;
 
     for (const SelectedInstrumentInfo& instrument: m_selectedInstruments) {
-        QString instrumentId = instrument.id;
-        QString instrumentName = instrument.config.name;
+        QString id = instrument.id;
+        QString name = instrument.name;
+        bool soloist = instrument.isSoloist;
+        bool part = instrument.isExistingPart;
 
-        Transposition _transposition = instrument.transposition;
-        if (_transposition.isValid()) {
-            instrumentName = instrumentName.replace(_transposition.name + " ", "")
-                             .replace(" in " + _transposition.name, "");
+        if (!part) {
+            id = instrument.id;
+            name = instrument.config.name;
+            soloist = false;
+            Transposition _transposition = instrument.transposition;
+            if (_transposition.isValid()) {
+                name = name.replace(_transposition.name + " ", "")
+                       .replace(" in " + _transposition.name, "");
 
-            instrumentName = QString("%1 (%2)").arg(instrumentName, _transposition.name);
+                name = QString("%1 (%2)").arg(name, _transposition.name);
+            }
         }
 
         QVariantMap obj;
-        obj[ID_KEY] = instrumentId;
-        obj[NAME_KEY] = instrumentName;
+        obj[PART_KEY] = part;
+        obj[ID_KEY] = id;
+        obj[NAME_KEY] = name;
+        obj[SOLOIST_KEY] = soloist;
         obj[CONFIG_KEY] = QVariant::fromValue(instrument.config);
 
         result << obj;

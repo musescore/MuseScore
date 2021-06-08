@@ -72,9 +72,12 @@ public:
 
     QByteArray pageState(const std::string& pageName) const override;
     void setPageState(const std::string& pageName, const QByteArray& state) override;
-    async::Notification pageStateChanged() const override;
 
-    void applyPlatformStyle(QWidget* window) override;
+    QByteArray windowGeometry() const override;
+    void setWindowGeometry(const QByteArray& geometry) override;
+    async::Notification windowGeometryChanged() const override;
+
+    void applyPlatformStyle(QWindow* window) override;
 
 private:
     bool needFollowSystemTheme() const;
@@ -90,6 +93,9 @@ private:
     ThemeList readThemes() const;
     void writeThemes(const ThemeList& themes);
 
+    Val uiArrangmentValue(const std::string& key) const;
+    void setUiArrangmentValue(const std::string& key, const Val& value) const;
+
     QByteArray stringToByteArray(const std::string& string) const;
     std::string byteArrayToString(const QByteArray& byteArray) const;
 
@@ -97,7 +103,7 @@ private:
     async::Notification m_fontChanged;
     async::Notification m_musicalFontChanged;
     async::Notification m_iconsFontChanged;
-    async::Notification m_pageStateChanged;
+    async::Notification m_windowGeometryChanged;
 
     ThemeList m_themes;
     size_t m_currentThemeIndex = 0;

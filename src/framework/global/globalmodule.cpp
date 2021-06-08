@@ -110,7 +110,7 @@ void GlobalModule::onInit(const IApplication::RunMode&)
 
     Invoker::setup();
 
-    mu::async::onMainThreadInvoke([](const std::function<void()>& f) {
-        s_asyncInvoker.invoke(f);
+    mu::async::onMainThreadInvoke([](const std::function<void()>& f, bool isAlwaysQueued) {
+        s_asyncInvoker.invoke(f, isAlwaysQueued);
     });
 }

@@ -24,11 +24,11 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/testbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/testbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/tst_biab.cpp
+   # ${CMAKE_CURRENT_LIST_DIR}/tst_biab.cpp
 )
 
 set(MODULE_TEST_LINK
-    libmscore
+    engraving
     fonts
     iex_bb
     )

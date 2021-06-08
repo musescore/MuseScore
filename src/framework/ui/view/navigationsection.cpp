@@ -68,7 +68,18 @@ mu::async::Channel<INavigation::Index> NavigationSection::indexChanged() const
 
 bool NavigationSection::enabled() const
 {
-    return AbstractNavigation::enabled();
+    if (!AbstractNavigation::enabled()) {
+        return false;
+    }
+
+    bool enbl = false;
+    for (INavigationPanel* p : m_panels) {
+        if (p->enabled()) {
+            enbl = true;
+            break;
+        }
+    }
+    return enbl;
 }
 
 mu::async::Channel<bool> NavigationSection::enabledChanged() const
@@ -105,7 +116,7 @@ void NavigationSection::addPanel(NavigationPanel* panel)
 
     m_panels.insert(panel);
 
-    panel->forceActiveRequested().onReceive(this, [this](const PanelControl& subcon) {
+    panel->activeRequested().onReceive(this, [this](const PanelControl& subcon) {
         m_forceActiveRequested.send(std::make_tuple(this, std::get<0>(subcon), std::get<1>(subcon)));
     });
 
@@ -114,7 +125,7 @@ void NavigationSection::addPanel(NavigationPanel* panel)
     }
 }
 
-mu::async::Channel<SectionPanelControl> NavigationSection::forceActiveRequested() const
+mu::async::Channel<SectionPanelControl> NavigationSection::activeRequested() const
 {
     return m_forceActiveRequested;
 }
@@ -127,7 +138,7 @@ void NavigationSection::removePanel(NavigationPanel* panel)
     }
 
     m_panels.erase(panel);
-    panel->forceActiveRequested().resetOnReceive(this);
+    panel->activeRequested().resetOnReceive(this);
 
     if (m_panelsListChanged.isConnected()) {
         m_panelsListChanged.notify();

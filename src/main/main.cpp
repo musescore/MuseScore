@@ -33,6 +33,7 @@
 #include "framework/uicomponents/uicomponentsmodule.h"
 #include "framework/fonts/fontsmodule.h"
 #include "framework/actions/actionsmodule.h"
+#include "framework/accessibility/accessibilitymodule.h"
 #ifdef BUILD_SHORTCUTS_MODULE
 #include "framework/shortcuts/shortcutsmodule.h"
 #else
@@ -64,6 +65,8 @@
 #else
 #include "stubs/userscores/userscoresstubmodule.h"
 #endif
+
+#include "engraving/engravingmodule.h"
 #include "notation/notationmodule.h"
 
 #include "importexport/musicxml/musicxmlmodule.h"
@@ -178,6 +181,7 @@ int main(int argc, char** argv)
 #endif
 
     app.addModule(new mu::actions::ActionsModule());
+    app.addModule(new mu::accessibility::AccessibilityModule());
     app.addModule(new mu::appshell::AppShellModule());
 
     app.addModule(new mu::context::ContextModule());
@@ -200,6 +204,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::userscores::UserScoresStubModule());
 #endif
 
+    app.addModule(new mu::engraving::EngravingModule());
     app.addModule(new mu::notation::NotationModule());
     app.addModule(new mu::commonscene::CommonSceneModule());
 #ifdef BUILD_PLAYBACK_MODULE
@@ -303,6 +308,6 @@ int main(int argc, char** argv)
 #endif
 
     int code = app.run(argcFinal, argvFinal);
-    LOGI() << "Good buy!! code: " << code;
+    LOGI() << "Goodbye!! code: " << code;
     return code;
 }
