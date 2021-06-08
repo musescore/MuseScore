@@ -20,25 +20,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MIDI_EDITMIDIMAPPINGMODEL_H
-#define MU_MIDI_EDITMIDIMAPPINGMODEL_H
+#ifndef MU_SHORTCUTS_EDITMIDIMAPPINGMODEL_H
+#define MU_SHORTCUTS_EDITMIDIMAPPINGMODEL_H
 
 #include <QObject>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "shortcuts/imidiremote.h"
 #include "midi/imidiinport.h"
+#include "imidiremote.h"
 
-namespace mu::midi {
+namespace mu::shortcuts {
 class EditMidiMappingModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QString mappingTitle READ mappingTitle NOTIFY mappingTitleChanged)
 
-    INJECT(midi, shortcuts::IMidiRemote, midiRemote)
-    INJECT(midi, IMidiInPort, midiInPort)
+    INJECT(shortcuts, IMidiRemote, midiRemote)
+    INJECT(shortcuts, midi::IMidiInPort, midiInPort)
 
 public:
     explicit EditMidiMappingModel(QObject* parent = nullptr);
@@ -53,11 +53,11 @@ signals:
     void mappingTitleChanged(const QString& title);
 
 private:
-    QString deviceName(const MidiDeviceID& deviceId) const;
-    QString eventName(const shortcuts::RemoteEvent& event) const;
+    QString deviceName(const midi::MidiDeviceID& deviceId) const;
+    QString eventName(const RemoteEvent& event) const;
 
-    shortcuts::RemoteEvent m_event;
+    RemoteEvent m_event;
 };
 }
 
-#endif // MU_MIDI_EDITMIDIMAPPINGMODEL_H
+#endif // MU_SHORTCUTS_EDITMIDIMAPPINGMODEL_H

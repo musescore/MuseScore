@@ -29,6 +29,8 @@ using namespace mu::framework;
 static const std::string SHORTCUTS_FILE_NAME("shortcuts.xml");
 static const std::string SHORTCUTS_DEFAULT_FILE_PATH(":/data/" + SHORTCUTS_FILE_NAME);
 
+static const std::string MIDIMAPPINGS_FILE_NAME("midi_mappings.xml");
+
 static const Settings::Key USER_PATH_KEY("shortcuts", "application/paths/myShortcuts");
 
 void ShortcutsConfiguration::init()
@@ -58,4 +60,9 @@ void ShortcutsConfiguration::setShortcutsUserPath(const io::path& path)
 mu::io::path ShortcutsConfiguration::shortcutsDefaultPath() const
 {
     return SHORTCUTS_DEFAULT_FILE_PATH;
+}
+
+mu::io::path ShortcutsConfiguration::midiMappingsPath() const
+{
+    return globalConfiguration()->dataPath() + "/" + MIDIMAPPINGS_FILE_NAME;
 }

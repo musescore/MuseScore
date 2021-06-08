@@ -38,8 +38,6 @@ class IMidiConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMidiConfiguration() = default;
 
-    virtual io::path midiMappingsPath() const = 0;
-
     virtual bool useRemoteControl() const = 0;
     virtual void setUseRemoteControl(bool value) = 0;
 

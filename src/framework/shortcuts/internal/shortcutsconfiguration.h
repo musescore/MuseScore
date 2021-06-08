@@ -40,6 +40,8 @@ public:
 
     io::path shortcutsDefaultPath() const override;
 
+    io::path midiMappingsPath() const override;
+
 private:
     async::Channel<io::path> m_userPathChanged;
 };

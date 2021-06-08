@@ -29,12 +29,8 @@
 namespace mu::midi {
 class MidiConfiguration : public IMidiConfiguration
 {
-    INJECT(midi, framework::IGlobalConfiguration, globalConfiguration)
-
 public:
     void init();
-
-    io::path midiMappingsPath() const override;
 
     bool useRemoteControl() const override;
     void setUseRemoteControl(bool value) override;

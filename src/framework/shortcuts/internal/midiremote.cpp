@@ -83,22 +83,7 @@ mu::Ret MidiRemote::process(const Event& ev)
         return make_ret(Ret::Code::Ok); // todo
     }
 
-    auto remoteEvent = [](const Event& midiEvent) { // todo
-        RemoteEvent event;
-        bool isNote = midiEvent.isOpcodeIn({ Event::Opcode::NoteOff, Event::Opcode::NoteOn });
-        bool isController = midiEvent.isOpcodeIn({ Event::Opcode::ControlChange });
-        if (isNote) {
-            event.type = RemoteEventType::Note;
-            event.value = midiEvent.note();
-        } else if (isController) {
-            event.type = RemoteEventType::Controller;
-            event.value = midiEvent.index();
-        }
-
-        return event;
-    };
-
-    RemoteEvent event = remoteEvent(ev);
+    RemoteEvent event = remoteEventFromMidiEvent(ev);
 
     for (const MidiMapping& midiMapping : m_midiMappings) {
         if (midiMapping.event == event) {
@@ -112,7 +97,7 @@ mu::Ret MidiRemote::process(const Event& ev)
 
 void MidiRemote::readMidiMappings()
 {
-    io::path midiMappingsPath = midiConfiguration()->midiMappingsPath();
+    io::path midiMappingsPath = configuration()->midiMappingsPath();
     XmlReader reader(midiMappingsPath);
 
     reader.readNextStartElement();
@@ -162,7 +147,7 @@ bool MidiRemote::writeMidiMappings(const MidiMappingList& midiMappings) const
 {
     TRACEFUNC;
 
-    io::path midiMappingsPath = midiConfiguration()->midiMappingsPath();
+    io::path midiMappingsPath = configuration()->midiMappingsPath();
     XmlWriter writer(midiMappingsPath);
 
     writer.writeStartDocument();

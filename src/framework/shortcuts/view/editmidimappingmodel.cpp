@@ -25,10 +25,10 @@
 #include "log.h"
 #include "translation.h"
 
-using namespace mu::midi;
 using namespace mu::shortcuts;
+using namespace mu::midi;
 
-static const QString WAITING_STATE = qtrc("midi", "Waiting...");
+static const QString WAITING_STATE = mu::qtrc("shortcuts", "Waiting...");
 
 EditMidiMappingModel::EditMidiMappingModel(QObject* parent)
     : QObject(parent)
@@ -47,23 +47,7 @@ void EditMidiMappingModel::load(int originType, int originValue)
     midiInPort()->eventReceived().onReceive(this, [this](const std::pair<tick_t, Event>& event) {
         if (event.second.opcode() == Event::Opcode::NoteOn || event.second.opcode() == Event::Opcode::ControlChange) {
             LOGD() << "==== recive " << QString::fromStdString(event.second.to_string());
-
-            auto remoteEvent = [](const Event& midiEvent) { // todo
-                RemoteEvent event;
-                bool isNote = midiEvent.isOpcodeIn({ Event::Opcode::NoteOff, Event::Opcode::NoteOn });
-                bool isController = midiEvent.isOpcodeIn({ Event::Opcode::ControlChange });
-                if (isNote) {
-                    event.type = RemoteEventType::Note;
-                    event.value = midiEvent.note();
-                } else if (isController) {
-                    event.type = RemoteEventType::Controller;
-                    event.value = midiEvent.index();
-                }
-
-                return event;
-            };
-
-            m_event = remoteEvent(event.second);
+            m_event = remoteEventFromMidiEvent(event.second);
             emit mappingTitleChanged(mappingTitle());
         }
     });
@@ -106,10 +90,10 @@ QString EditMidiMappingModel::eventName(const RemoteEvent& event) const
     QString title;
 
     if (event.type == RemoteEventType::Note) {
-        return qtrc("midi", "Note ") + QString::number(event.value);
+        return qtrc("shortcuts", "Note ") + QString::number(event.value);
     } else if (event.type == RemoteEventType::Controller) {
-        return qtrc("midi", "Controller ") + QString::number(event.value);
+        return qtrc("shortcuts", "Controller ") + QString::number(event.value);
     }
 
-    return qtrc("midi", "None"); // todo
+    return qtrc("shortcuts", "None"); // todo
 }
