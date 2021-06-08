@@ -63,10 +63,6 @@ AlsaMidiInPort::AlsaMidiInPort()
 
 AlsaMidiInPort::~AlsaMidiInPort()
 {
-    if (isRunning()) {
-        stop();
-    }
-
     if (isConnected()) {
         disconnect();
     }
@@ -179,6 +175,8 @@ void AlsaMidiInPort::disconnect()
     m_alsa->port = -1;
     m_alsa->midiIn = nullptr;
     m_deviceID.clear();
+
+    stop();
 }
 
 bool AlsaMidiInPort::isConnected() const

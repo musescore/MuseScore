@@ -46,10 +46,6 @@ CoreMidiInPort::CoreMidiInPort()
 
 CoreMidiInPort::~CoreMidiInPort()
 {
-    if (isRunning()) {
-        stop();
-    }
-
     if (isConnected()) {
         disconnect();
     }
@@ -218,9 +214,11 @@ void CoreMidiInPort::disconnect()
     if (!isConnected()) {
         return;
     }
-    stop();
+
     m_core->sourceId = 0;
     m_deviceID.clear();
+
+    stop();
 }
 
 bool CoreMidiInPort::isConnected() const
