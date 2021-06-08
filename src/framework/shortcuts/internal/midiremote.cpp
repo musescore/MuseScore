@@ -36,6 +36,8 @@ constexpr std::string_view MAPPING_ACTION_CODE_TAG("key");
 constexpr std::string_view MAPPING_EVENT_TYPE_TAG("EventType");
 constexpr std::string_view MAPPING_EVENT_VALUE_TAG("EventValue");
 
+static const std::string REALTIME_ADVANCE_ACTION_NAME("realtime-advance");
+
 void MidiRemote::load()
 {
     readMidiMappings();
@@ -79,8 +81,8 @@ void MidiRemote::setCurrentActionEvent(const Event& ev)
 
 mu::Ret MidiRemote::process(const Event& ev)
 {
-    if (isSettingMode()) {
-        return make_ret(Ret::Code::Ok); // todo
+    if (needIgnoreEvent(ev)) {
+        return make_ret(Ret::Code::Ok);
     }
 
     RemoteEvent event = remoteEventFromMidiEvent(ev);
@@ -92,7 +94,7 @@ mu::Ret MidiRemote::process(const Event& ev)
         }
     }
 
-    return Ret(Ret::Code::Undefined); //
+    return Ret(Ret::Code::Undefined);
 }
 
 void MidiRemote::readMidiMappings()
@@ -170,4 +172,38 @@ void MidiRemote::writeMidiMapping(XmlWriter& writer, const MidiMapping& midiMapp
     writer.writeTextElement(MAPPING_EVENT_TYPE_TAG, std::to_string(midiMapping.event.type));
     writer.writeTextElement(MAPPING_EVENT_VALUE_TAG, std::to_string(midiMapping.event.value));
     writer.writeEndElement();
+}
+
+bool MidiRemote::needIgnoreEvent(const Event& event) const
+{
+    if (isSettingMode()) {
+        return true;
+    }
+
+    static const QList<Event::Opcode> releaseOps {
+        Event::Opcode::NoteOff
+    };
+
+    bool release = releaseOps.contains(event.opcode());
+    if (release) {
+        bool advanceToNextNoteOnKeyRelease = configuration()->advanceToNextNoteOnKeyRelease();
+        RemoteEvent remoteEvent = remoteEventFromMidiEvent(event);
+        bool isRealtimeAdvance = this->remoteEvent(REALTIME_ADVANCE_ACTION_NAME) == remoteEvent;
+        if (!advanceToNextNoteOnKeyRelease || !isRealtimeAdvance) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+RemoteEvent MidiRemote::remoteEvent(const std::string& action) const
+{
+    for (const MidiMapping& midiMapping : m_midiMappings) {
+        if (midiMapping.action == action) {
+            return midiMapping.event;
+        }
+    }
+
+    return RemoteEvent();
 }

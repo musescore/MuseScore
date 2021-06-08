@@ -26,12 +26,15 @@
 using namespace mu::shortcuts;
 using namespace mu::framework;
 
+static const std::string module_name("shortcuts");
+
 static const std::string SHORTCUTS_FILE_NAME("shortcuts.xml");
 static const std::string SHORTCUTS_DEFAULT_FILE_PATH(":/data/" + SHORTCUTS_FILE_NAME);
 
 static const std::string MIDIMAPPINGS_FILE_NAME("midi_mappings.xml");
 
-static const Settings::Key USER_PATH_KEY("shortcuts", "application/paths/myShortcuts");
+static const Settings::Key USER_PATH_KEY(module_name, "application/paths/myShortcuts");
+static const Settings::Key ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE(module_name, "io/midi/advanceOnRelease");
 
 void ShortcutsConfiguration::init()
 {
@@ -41,6 +44,8 @@ void ShortcutsConfiguration::init()
     settings()->valueChanged(USER_PATH_KEY).onReceive(this, [this](const Val& val) {
         m_userPathChanged.send(val.toString());
     });
+
+    settings()->setDefaultValue(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE, Val(true));
 }
 
 mu::ValCh<mu::io::path> ShortcutsConfiguration::shortcutsUserPath() const
@@ -65,4 +70,14 @@ mu::io::path ShortcutsConfiguration::shortcutsDefaultPath() const
 mu::io::path ShortcutsConfiguration::midiMappingsPath() const
 {
     return globalConfiguration()->dataPath() + "/" + MIDIMAPPINGS_FILE_NAME;
+}
+
+bool ShortcutsConfiguration::advanceToNextNoteOnKeyRelease() const
+{
+    return settings()->value(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE).toBool();
+}
+
+void ShortcutsConfiguration::setAdvanceToNextNoteOnKeyRelease(bool value)
+{
+    settings()->setValue(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE, Val(value));
 }

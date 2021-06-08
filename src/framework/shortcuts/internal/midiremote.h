@@ -63,6 +63,10 @@ private:
     bool writeMidiMappings(const MidiMappingList& midiMappings) const;
     void writeMidiMapping(framework::XmlWriter& writer, const MidiMapping& midiMapping) const;
 
+    bool needIgnoreEvent(const midi::Event& event) const;
+
+    RemoteEvent remoteEvent(const std::string& action) const;
+
     bool m_isSettingMode = false;
 
     MidiMappingList m_midiMappings;

@@ -60,7 +60,7 @@ inline std::vector<ActionCode> allMidiActions()
         "tie",
         "pad-dot",
         "pad-dotdot",
-        "note-input-realtime-auto"
+        "realtime-advance"
     };
 }
 

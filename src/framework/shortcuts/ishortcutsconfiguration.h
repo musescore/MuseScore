@@ -40,6 +40,9 @@ public:
     virtual io::path shortcutsDefaultPath() const = 0;
 
     virtual io::path midiMappingsPath() const = 0;
+
+    virtual bool advanceToNextNoteOnKeyRelease() const = 0;
+    virtual void setAdvanceToNextNoteOnKeyRelease(bool value) = 0;
 };
 }
 

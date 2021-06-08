@@ -44,10 +44,10 @@ void EditMidiMappingModel::load(int originType, int originValue)
 {
     midiRemote()->setIsSettingMode(true);
 
-    midiInPort()->eventReceived().onReceive(this, [this](const std::pair<tick_t, Event>& event) {
-        if (event.second.opcode() == Event::Opcode::NoteOn || event.second.opcode() == Event::Opcode::ControlChange) {
-            LOGD() << "==== recive " << QString::fromStdString(event.second.to_string());
-            m_event = remoteEventFromMidiEvent(event.second);
+    midiInPort()->eventReceived().onReceive(this, [this](tick_t, const Event& event) {
+        if (event.opcode() == Event::Opcode::NoteOn || event.opcode() == Event::Opcode::ControlChange) {
+            LOGD() << "==== recive " << QString::fromStdString(event.to_string());
+            m_event = remoteEventFromMidiEvent(event);
             emit mappingTitleChanged(mappingTitle());
         }
     });

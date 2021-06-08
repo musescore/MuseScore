@@ -140,9 +140,6 @@ public:
     bool isLimitCanvasScrollArea() const override;
     void setIsLimitCanvasScrollArea(bool limited) override;
 
-    bool advanceToNextNoteOnKeyRelease() const override;
-    void setAdvanceToNextNoteOnKeyRelease(bool value) override;
-
     bool colorNotesOusideOfUsablePitchRange() const override;
     void setColorNotesOusideOfUsablePitchRange(bool value) override;
 

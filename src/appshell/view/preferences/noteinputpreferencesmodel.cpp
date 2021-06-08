@@ -33,7 +33,7 @@ NoteInputPreferencesModel::NoteInputPreferencesModel(QObject* parent)
 
 bool NoteInputPreferencesModel::advanceToNextNoteOnKeyRelease() const
 {
-    return notationConfiguration()->advanceToNextNoteOnKeyRelease();
+    return shortcutsConfiguration()->advanceToNextNoteOnKeyRelease();
 }
 
 bool NoteInputPreferencesModel::colorNotesOusideOfUsablePitchRange() const
@@ -72,7 +72,7 @@ void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)
         return;
     }
 
-    notationConfiguration()->setAdvanceToNextNoteOnKeyRelease(value);
+    shortcutsConfiguration()->setAdvanceToNextNoteOnKeyRelease(value);
     emit advanceToNextNoteOnKeyReleaseChanged(value);
 }
 
