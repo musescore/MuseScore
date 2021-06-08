@@ -71,10 +71,14 @@ menu entry or via a shortcut). This is the entry point of your plugin.
 - [`Qt.quit()`](https://doc.qt.io/qt-5/qml-qtqml-qt.html#quit-method) statement
 requests termination of the plugin's execution.
 
-MuseScore is shipped with a set of simple plugins which can also be used as
-a reference while developing your own plugins.
+## Documentation from Earlier Versions
+Although it is not up to date, documentation for creating plugins for earlier versions is available, and may be useful.
+https://musescore.org/en/handbook/developers-handbook/plugin-development
+
 
 ## Plugins Installed By Default
+MuseScore is shipped with a set of simple plugins which can also be used as
+a reference while developing your own plugins.
 
 ### ABC Import
 This plugin imports ABC text from a file or the clipboard. Internet connection is required, because it uses an external web-service for the conversion, which uses abc2xml and gets send the ABC data, returns MusicXML and imports that into MuseScore.
@@ -125,4 +129,4 @@ MuseScore 3, please refer to the \ref plugin2to3 page.
 
 ## Internationalization
 For the questions related to making a plugin translatable to different languages
-please refer to \ref i18n page.
+please refer to https://github.com/musescore/MuseScore/blob/master/doc/i18n.md.
