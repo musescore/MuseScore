@@ -34,28 +34,6 @@ class IMidiRemote : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMidiRemote() = default;
 
-    enum class Action {
-        RMIDI_REWIND,
-        RMIDI_TOGGLE_PLAY,
-        RMIDI_PLAY,
-        RMIDI_STOP,
-        RMIDI_NOTE1,
-        RMIDI_NOTE2,
-        RMIDI_NOTE4,
-        RMIDI_NOTE8,
-        RMIDI_NOTE16,
-        RMIDI_NOTE32,
-        RMIDI_NOTE64,
-        RMIDI_REST,
-        RMIDI_DOT,
-        RMIDI_DOTDOT,
-        RMIDI_TIE,
-        RMIDI_UNDO,
-        RMIDI_NOTE_EDIT_MODE,
-        RMIDI_REALTIME_ADVANCE,
-        MIDI_REMOTES
-    };
-
     virtual const MidiMappingList& midiMappings() const = 0;
     virtual Ret setMidiMappings(const MidiMappingList& midiMappings) = 0;
 
