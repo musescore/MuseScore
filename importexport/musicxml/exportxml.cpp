@@ -4343,8 +4343,10 @@ void ExportMusicXml::pedal(Pedal const* const pd, int staff, const Fraction& tic
                         pedalType = "change";
                         break;
                   case HookType::NONE:
-                        pedalType = "resume";
-                        break;
+                        if (pd->beginText() == "") {
+                              pedalType = "resume";
+                              break;
+                              }
                   default:
                         pedalType = "start";
                   }
@@ -4360,6 +4362,7 @@ void ExportMusicXml::pedal(Pedal const* const pd, int staff, const Fraction& tic
                   }
             }
       pedalXml = QString("pedal type=\"%1\" line=\"yes\"").arg(pedalType);
+      pedalXml += pd->beginText() == "" ? " sign=\"no\"" : " sign=\"yes\"";
       pedalXml += positioningAttributes(pd, pd->tick() == tick);
       _xml.tagE(pedalXml);
       _xml.etag();
