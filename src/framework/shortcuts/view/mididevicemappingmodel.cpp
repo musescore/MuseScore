@@ -203,12 +203,21 @@ void MidiDeviceMappingModel::setSelection(const QItemSelection& selection)
 
 void MidiDeviceMappingModel::clearSelectedActions()
 {
-    NOT_IMPLEMENTED;
+    for (const QModelIndex& index : m_selection.indexes()) {
+        m_midiMappings[index.row()].event = RemoteEvent();
+        emit dataChanged(index, index);
+    }
 }
 
 void MidiDeviceMappingModel::clearAllActions()
 {
-    NOT_IMPLEMENTED;
+    beginResetModel();
+
+    for (MidiMapping& midiMapping: m_midiMappings) {
+        midiMapping.event = RemoteEvent();
+    }
+
+    endResetModel();
 }
 
 QVariant MidiDeviceMappingModel::currentAction() const

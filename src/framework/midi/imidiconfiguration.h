@@ -24,7 +24,6 @@
 
 #include "modularity/imoduleexport.h"
 #include "miditypes.h"
-#include "io/path.h"
 
 //! NOTE There used to be synthesizer settings here, now nothing
 //! but we will keep the interface, maybe something will appear,

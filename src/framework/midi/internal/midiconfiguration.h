@@ -22,8 +22,6 @@
 #ifndef MU_MIDI_MIDICONFIGURATION_H
 #define MU_MIDI_MIDICONFIGURATION_H
 
-#include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
 #include "../imidiconfiguration.h"
 
 namespace mu::midi {
