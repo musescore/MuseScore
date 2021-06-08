@@ -26,6 +26,7 @@
 #include <QRectF>
 #include <QPainter>
 #include <QClipboard>
+#include <QApplication>
 
 #include "ptrutils.h"
 
@@ -95,12 +96,16 @@ Ms::Score* NotationInteraction::score() const
 
 void NotationInteraction::startEdit()
 {
+    m_notifyAboutDropChanged = false;
     m_undoStack->prepareChanges();
 }
 
 void NotationInteraction::apply()
 {
     m_undoStack->commitChanges();
+    if (m_notifyAboutDropChanged) {
+        notifyAboutDropChanged();
+    }
 }
 
 void NotationInteraction::notifyAboutDragChanged()
@@ -1392,7 +1397,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
         }
         dropData.dropElement = 0;
 
-        notifyAboutDropChanged();
+        m_notifyAboutDropChanged = true;
     }
 }
 
@@ -1599,7 +1604,7 @@ bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
         m_dropData.ed.dropElement->setTrack(track);
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
-        notifyAboutDropChanged();
+        m_notifyAboutDropChanged = true;
         return true;
     }
     m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
