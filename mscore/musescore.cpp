@@ -2927,20 +2927,11 @@ void MuseScore::dropEvent(QDropEvent* event)
       {
       const QMimeData* dta = event->mimeData();
       if (dta->hasUrls()) {
-            int view = -1;
             foreach(const QUrl& u, event->mimeData()->urls()) {
                   if (u.scheme() == "file") {
                         QString file = u.toLocalFile();
-                        MasterScore* score = readScore(file);
-                        if (score) {
-                              view = appendScore(score);
-                              addRecentScore(score);
-                              }
+                        openScore(file);
                         }
-                  }
-            if (view != -1) {
-                  setCurrentScoreView(view);
-                  writeSessionFile(false);
                   }
             event->acceptProposedAction();
             }
