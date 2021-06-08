@@ -28,6 +28,8 @@
 #include "note.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   tremoloBarStyle
@@ -77,7 +79,7 @@ void TremoloBar::layout()
     if (parent()) {
         setPos(0.0, -_spatium * 3.0);
     } else {
-        setPos(QPointF());
+        setPos(PointF());
     }
 
     /* we place the tremolo bars starting slightly before the
@@ -93,11 +95,11 @@ void TremoloBar::layout()
 
     m_polygon.clear();
     for (auto v : qAsConst(m_points)) {
-        m_polygon << QPointF(v.time * timeFactor, v.pitch * pitchFactor);
+        m_polygon << PointF(v.time * timeFactor, v.pitch * pitchFactor);
     }
 
     qreal w = m_lw.val();
-    setbbox(m_polygon.boundingRect().adjusted(-w, -w, w, w).toQRectF());
+    setbbox(m_polygon.boundingRect().adjusted(-w, -w, w, w));
 }
 
 //---------------------------------------------------------

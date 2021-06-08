@@ -32,6 +32,7 @@
 #include "mscore.h"
 #include "bracketItem.h"
 
+using namespace mu;
 using namespace mu::draw;
 
 namespace Ms {
@@ -152,7 +153,7 @@ void Bracket::setStaffSpan(int a, int b)
 
 void Bracket::layout()
 {
-    path = QPainterPath();
+    path = PainterPath();
     if (h2 == 0.0) {
         return;
     }
@@ -207,9 +208,9 @@ void Bracket::layout()
         qreal x = -w;
 
         qreal bd   = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
-        _shape.add(QRectF(x, -bd, w * 2, 2 * (h2 + bd)));
-        _shape.add(symBbox(SymId::bracketTop).translated(QPointF(-w, -bd)));
-        _shape.add(symBbox(SymId::bracketBottom).translated(QPointF(-w, bd + 2 * h2)));
+        _shape.add(RectF(x, -bd, w * 2, 2 * (h2 + bd)));
+        _shape.add(symBbox(SymId::bracketTop).translated(PointF(-w, -bd)));
+        _shape.add(symBbox(SymId::bracketBottom).translated(PointF(-w, bd + 2 * h2)));
 
         w      += symWidth(SymId::bracketTop);
         qreal y = -symHeight(SymId::bracketTop) - bd;
@@ -265,7 +266,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
             painter->setPen(curColor());
             painter->save();
             painter->scale(_magx, mag);
-            drawSymbol(_braceSymbol, painter, QPointF(0, 100 * magS()));
+            drawSymbol(_braceSymbol, painter, PointF(0, 100 * magS()));
             painter->restore();
         }
     }
@@ -281,8 +282,8 @@ void Bracket::draw(mu::draw::Painter* painter) const
         qreal x    =  -w * .5;
         qreal y1   = -bd;
         qreal y2   = h + bd;
-        drawSymbol(SymId::bracketTop, painter, QPointF(x, y1));
-        drawSymbol(SymId::bracketBottom, painter, QPointF(x, y2));
+        drawSymbol(SymId::bracketTop, painter, PointF(x, y1));
+        drawSymbol(SymId::bracketBottom, painter, PointF(x, y2));
     }
     break;
     case BracketType::SQUARE: {
@@ -324,9 +325,9 @@ void Bracket::startEdit(EditData& ed)
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<QPointF> Bracket::gripsPositions(const EditData&) const
+std::vector<PointF> Bracket::gripsPositions(const EditData&) const
 {
-    return { QPointF(0.0, h2 * 2) + pagePos() };
+    return { PointF(0.0, h2 * 2) + pagePos() };
 }
 
 //---------------------------------------------------------

@@ -31,7 +31,7 @@
 #include "chord.h"
 #include "page.h"
 
-using namespace mu::draw;
+using namespace mu;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -49,7 +49,7 @@ SlurTieSegment::SlurTieSegment(const SlurTieSegment& b)
 {
     for (int i = 0; i < int(Grip::GRIPS); ++i) {
         _ups[i]   = b._ups[i];
-        _ups[i].p = QPointF();
+        _ups[i].p = PointF();
     }
     path = b.path;
 }
@@ -58,20 +58,20 @@ SlurTieSegment::SlurTieSegment(const SlurTieSegment& b)
 //   gripAnchorLines
 //---------------------------------------------------------
 
-QVector<QLineF> SlurTieSegment::gripAnchorLines(Grip grip) const
+QVector<LineF> SlurTieSegment::gripAnchorLines(Grip grip) const
 {
-    QVector<QLineF> result;
+    QVector<LineF> result;
 
     if (!system() || (grip != Grip::START && grip != Grip::END)) {
         return result;
     }
 
-    QPointF sp(system()->pagePos());
-    QPointF pp(pagePos());
-    QPointF p1(ups(Grip::START).p + pp);
-    QPointF p2(ups(Grip::END).p + pp);
+    PointF sp(system()->pagePos());
+    PointF pp(pagePos());
+    PointF p1(ups(Grip::START).p + pp);
+    PointF p2(ups(Grip::END).p + pp);
 
-    QPointF anchorPosition;
+    PointF anchorPosition;
     int gripIndex = static_cast<int>(grip);
 
     switch (spannerSegmentType()) {
@@ -93,8 +93,8 @@ QVector<QLineF> SlurTieSegment::gripAnchorLines(Grip grip) const
     }
 
     const Page* p = system()->page();
-    const QPointF pageOffset = p ? p->pos() : QPointF();
-    result << QLineF(anchorPosition, gripsPositions().at(gripIndex)).translated(pageOffset);
+    const PointF pageOffset = p ? p->pos() : PointF();
+    result << LineF(anchorPosition, gripsPositions().at(gripIndex)).translated(pageOffset);
 
     return result;
 }
@@ -103,7 +103,7 @@ QVector<QLineF> SlurTieSegment::gripAnchorLines(Grip grip) const
 //   move
 //---------------------------------------------------------
 
-void SlurTieSegment::move(const QPointF& s)
+void SlurTieSegment::move(const PointF& s)
 {
     Element::move(s);
     for (int k = 0; k < int(Grip::GRIPS); ++k) {
@@ -128,12 +128,12 @@ void SlurTieSegment::spatiumChanged(qreal oldValue, qreal newValue)
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<QPointF> SlurTieSegment::gripsPositions(const EditData&) const
+std::vector<PointF> SlurTieSegment::gripsPositions(const EditData&) const
 {
     const int ngrips = gripsCount();
-    std::vector<QPointF> grips(ngrips);
+    std::vector<PointF> grips(ngrips);
 
-    const QPointF p(pagePos());
+    const PointF p(pagePos());
     for (int i = 0; i < ngrips; ++i) {
         grips[i] = _ups[i].p + _ups[i].off + p;
     }
@@ -175,7 +175,7 @@ void SlurTieSegment::editDrag(EditData& ed)
     Grip g     = ed.curGrip;
     ups(g).off += ed.delta;
 
-    QPointF delta;
+    PointF delta;
 
     switch (g) {
     case Grip::START:
@@ -209,11 +209,11 @@ void SlurTieSegment::editDrag(EditData& ed)
     case Grip::BEZIER2:
         break;
     case Grip::SHOULDER:
-        ups(g).off = QPointF();
+        ups(g).off = PointF();
         delta = ed.delta;
         break;
     case Grip::DRAG:
-        ups(g).off = QPointF();
+        ups(g).off = PointF();
         setOffset(offset() + ed.delta);
         break;
     case Grip::NO_GRIP:
@@ -257,16 +257,16 @@ bool SlurTieSegment::setProperty(Pid propertyId, const QVariant& v)
     case Pid::SLUR_DIRECTION:
         return slurTie()->setProperty(propertyId, v);
     case Pid::SLUR_UOFF1:
-        ups(Grip::START).off = v.toPointF();
+        ups(Grip::START).off = v.value<PointF>();
         break;
     case Pid::SLUR_UOFF2:
-        ups(Grip::BEZIER1).off = v.toPointF();
+        ups(Grip::BEZIER1).off = v.value<PointF>();
         break;
     case Pid::SLUR_UOFF3:
-        ups(Grip::BEZIER2).off = v.toPointF();
+        ups(Grip::BEZIER2).off = v.value<PointF>();
         break;
     case Pid::SLUR_UOFF4:
-        ups(Grip::END).off = v.toPointF();
+        ups(Grip::END).off = v.value<PointF>();
         break;
     default:
         return SpannerSegment::setProperty(propertyId, v);
@@ -289,7 +289,7 @@ QVariant SlurTieSegment::propertyDefault(Pid id) const
     case Pid::SLUR_UOFF2:
     case Pid::SLUR_UOFF3:
     case Pid::SLUR_UOFF4:
-        return QPointF();
+        return PointF();
     default:
         return SpannerSegment::propertyDefault(id);
     }

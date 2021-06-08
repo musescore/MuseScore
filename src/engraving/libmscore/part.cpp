@@ -35,6 +35,8 @@
 #include "chordrest.h"
 #include "fret.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   Part

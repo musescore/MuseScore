@@ -32,6 +32,8 @@
 #include "textedit.h"
 #include "measure.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   searchNextLyrics
@@ -222,19 +224,19 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
     switch (sst) {
     case SpannerSegmentType::SINGLE: {
         System* s;
-        QPointF p1 = linePos(Grip::START, &s);
-        QPointF p2 = linePos(Grip::END,   &s);
+        PointF p1 = linePos(Grip::START, &s);
+        PointF p2 = linePos(Grip::END,   &s);
         qreal len = p2.x() - p1.x();
         lineSegm->setPos(p1);
-        lineSegm->setPos2(QPointF(len, p2.y() - p1.y()));
+        lineSegm->setPos2(PointF(len, p2.y() - p1.y()));
     }
     break;
     case SpannerSegmentType::BEGIN: {
         System* s;
-        QPointF p1 = linePos(Grip::START, &s);
+        PointF p1 = linePos(Grip::START, &s);
         lineSegm->setPos(p1);
         qreal x2 = system->bbox().right();
-        lineSegm->setPos2(QPointF(x2 - p1.x(), 0.0));
+        lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
     }
     break;
     case SpannerSegmentType::MIDDLE: {
@@ -242,19 +244,19 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
         qreal x1 = system->firstNoteRestSegmentX(leading);
         qreal x2 = system->bbox().right();
         System* s;
-        QPointF p1 = linePos(Grip::START, &s);
-        lineSegm->setPos(QPointF(x1, p1.y()));
-        lineSegm->setPos2(QPointF(x2 - x1, 0.0));
+        PointF p1 = linePos(Grip::START, &s);
+        lineSegm->setPos(PointF(x1, p1.y()));
+        lineSegm->setPos2(PointF(x2 - x1, 0.0));
     }
     break;
     case SpannerSegmentType::END: {
         System* s;
-        QPointF p2 = linePos(Grip::END, &s);
+        PointF p2 = linePos(Grip::END, &s);
         bool leading = (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE);
         qreal x1 = system->firstNoteRestSegmentX(leading);
         qreal len = p2.x() - x1;
-        lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
-        lineSegm->setPos2(QPointF(len, 0.0));
+        lineSegm->setPos(PointF(p2.x() - len, p2.y()));
+        lineSegm->setPos2(PointF(len, 0.0));
     }
     break;
     }
@@ -455,7 +457,7 @@ void LyricsLineSegment::layout()
     }
 
     // set bounding box
-    QRectF r = QRectF(0.0, 0.0, pos2().x(), pos2().y()).normalized();
+    RectF r = RectF(0.0, 0.0, pos2().x(), pos2().y()).normalized();
     qreal lw = lyricsLine()->lineWidth() * .5;
     setbbox(r.adjusted(-lw, -lw, lw, lw));
 }
@@ -476,12 +478,12 @@ void LyricsLineSegment::draw(mu::draw::Painter* painter) const
     pen.setCapStyle(Qt::FlatCap);
     painter->setPen(pen);
     if (lyricsLine()->isEndMelisma()) {               // melisma
-        painter->drawLine(QPointF(), pos2());
+        painter->drawLine(PointF(), pos2());
     } else {                                          // dash(es)
         qreal step  = pos2().x() / _numOfDashes;
         qreal x     = step * .5 - _dashLength * .5;
         for (int i = 0; i < _numOfDashes; i++, x += step) {
-            painter->drawLine(QPointF(x, 0.0), QPointF(x + _dashLength, 0.0));
+            painter->drawLine(PointF(x, 0.0), PointF(x + _dashLength, 0.0));
         }
     }
 }

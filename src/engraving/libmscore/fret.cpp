@@ -35,7 +35,7 @@
 
 #include "draw/fontmetrics.h"
 
-using namespace mu::draw;
+using namespace mu;
 
 namespace Ms {
 //    parent() is Segment or Box
@@ -170,7 +170,7 @@ std::shared_ptr<FretDiagram> FretDiagram::createFromString(Score* score, const Q
 //   pagePos
 //---------------------------------------------------------
 
-QPointF FretDiagram::pagePos() const
+PointF FretDiagram::pagePos() const
 {
     if (parent() == 0) {
         return pos();
@@ -182,7 +182,7 @@ QPointF FretDiagram::pagePos() const
         if (system) {
             yp += system->staffYpage(staffIdx());
         }
-        return QPointF(pageX(), yp);
+        return PointF(pageX(), yp);
     } else {
         return Element::pagePos();
     }
@@ -192,7 +192,7 @@ QPointF FretDiagram::pagePos() const
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<QLineF> FretDiagram::dragAnchorLines() const
+QVector<LineF> FretDiagram::dragAnchorLines() const
 {
     return genericDragAnchorLines();
 #if 0 // TODOxx
@@ -202,7 +202,7 @@ QVector<QLineF> FretDiagram::dragAnchorLines() const
         System* system = m->system();
         qreal yp      = system->staff(staffIdx())->y() + system->y();
         qreal xp      = m->tick2pos(s->tick()) + m->pagePos().x();
-        QPointF p1(xp, yp);
+        PointF p1(xp, yp);
 
         qreal x  = 0.0;
         qreal y  = 0.0;
@@ -220,9 +220,9 @@ QVector<QLineF> FretDiagram::dragAnchorLines() const
         } else if (_align & Align::HCENTER) {
             x = (tw * .5);
         }
-        return QLineF(p1, abbox().topLeft() + QPointF(x, y));
+        return LineF(p1, abbox().topLeft() + PointF(x, y));
     }
-    return QLineF(parent()->pagePos(), abbox().topLeft());
+    return LineF(parent()->pagePos(), abbox().topLeft());
 #endif
 }
 
@@ -311,7 +311,7 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
 void FretDiagram::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
-    QPointF translation = -QPointF(stringDist * (_strings - 1), 0);
+    PointF translation = -PointF(stringDist * (_strings - 1), 0);
     if (_orientation == Orientation::HORIZONTAL) {
         painter->save();
         painter->rotate(-90);
@@ -382,7 +382,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
                 break;
             case FretDotType::SQUARE:
                 painter->setBrush(Qt::NoBrush);
-                painter->drawRect(QRectF(x, y, dotd, dotd));
+                painter->drawRect(RectF(x, y, dotd, dotd));
                 break;
             case FretDotType::TRIANGLE:
                 painter->drawLine(LineF(x, y + dotd, x + .5 * dotd, y));
@@ -393,7 +393,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
             default:
                 painter->setBrush(symPen.color());
                 painter->setNoPen();
-                painter->drawEllipse(QRectF(x, y, dotd, dotd));
+                painter->drawEllipse(RectF(x, y, dotd, dotd));
                 break;
             }
         }
@@ -413,10 +413,10 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
         qreal x = stringDist * string - markerSize * .5;
         qreal y = -fretDist - markerSize * .5;
         if (marker.mtype == FretMarkerType::CIRCLE) {
-            painter->drawEllipse(QRectF(x, y, markerSize, markerSize));
+            painter->drawEllipse(RectF(x, y, markerSize, markerSize));
         } else if (marker.mtype == FretMarkerType::CROSS) {
-            painter->drawLine(QPointF(x, y), QPointF(x + markerSize, y + markerSize));
-            painter->drawLine(QPointF(x, y + markerSize), QPointF(x + markerSize, y));
+            painter->drawLine(PointF(x, y), PointF(x + markerSize, y + markerSize));
+            painter->drawLine(PointF(x, y + markerSize), PointF(x + markerSize, y));
         }
     }
 
@@ -445,10 +445,10 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
 
         if (_orientation == Orientation::VERTICAL) {
             if (_numPos == 0) {
-                painter->drawText(QRectF(-stringDist * .4, .0, .0, fretDist),
+                painter->drawText(RectF(-stringDist * .4, .0, .0, fretDist),
                                   Qt::AlignVCenter | Qt::AlignRight | Qt::TextDontClip, text);
             } else {
-                painter->drawText(QRectF(x2 + (stringDist * .4), .0, .0, fretDist),
+                painter->drawText(RectF(x2 + (stringDist * .4), .0, .0, fretDist),
                                   Qt::AlignVCenter | Qt::AlignLeft | Qt::TextDontClip,
                                   QString("%1").arg(_fretOffset + 1));
             }
@@ -457,10 +457,10 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
             painter->translate(-translation);
             painter->rotate(90);
             if (_numPos == 0) {
-                painter->drawText(QRectF(.0, stringDist * (_strings - 1), .0, .0),
+                painter->drawText(RectF(.0, stringDist * (_strings - 1), .0, .0),
                                   Qt::AlignLeft | Qt::TextDontClip, text);
             } else {
-                painter->drawText(QRectF(.0, .0, .0, .0),
+                painter->drawText(RectF(.0, .0, .0, .0),
                                   Qt::AlignBottom | Qt::AlignLeft | Qt::TextDontClip, text);
             }
             painter->restore();
@@ -519,7 +519,7 @@ void FretDiagram::layout()
     bbox().setRect(x, y, w, h);
 
     if (!parent() || !parent()->isSegment()) {
-        setPos(QPointF());
+        setPos(PointF());
         return;
     }
 
@@ -562,10 +562,10 @@ void FretDiagram::layout()
     if (_harmony && _harmony->autoplace() && _harmony->parent()) {
         Segment* s = toSegment(parent());
         Measure* m = s->measure();
-        int si     = staffIdx();
+        int si = staffIdx();
 
         SysStaff* ss = m->system()->staff(si);
-        QRectF r     = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos() + QPointF(_harmony->xShapeOffset(), 0.0));
+        RectF r = _harmony->bbox().translated(m->pos() + s->pos() + pos() + _harmony->pos() + PointF(_harmony->xShapeOffset(), 0.0));
 
         qreal minDistance = _harmony->minDistance().val() * spatium();
         SkylineLine sk(false);
@@ -575,7 +575,7 @@ void FretDiagram::layout()
             qreal yd = d + minDistance;
             yd *= -1.0;
             _harmony->rypos() += yd;
-            r.translate(QPointF(0.0, yd));
+            r.translate(PointF(0.0, yd));
         }
         if (_harmony->addToSkyline()) {
             ss->skyline().add(r);

@@ -27,6 +27,9 @@
 #include "xml.h"
 #include "measure.h"
 
+using namespace mu;
+using namespace mu::draw;
+
 namespace Ms {
 //---------------------------------------------------------
 //   LayoutBreak
@@ -72,7 +75,7 @@ void Spacer::layout0()
 {
     qreal _spatium = spatium();
 
-    path    = QPainterPath();
+    path    = PainterPath();
     qreal w = _spatium;
     qreal b = w * .5;
     qreal h = parent() ? _gap : qMin(_gap, spatium() * 4.0);      // limit length for palette
@@ -105,7 +108,7 @@ void Spacer::layout0()
         break;
     }
     qreal lw = _spatium * 0.4;
-    QRectF bb(0, 0, w, h);
+    RectF bb(0, 0, w, h);
     bb.adjust(-lw, -lw, lw, lw);
     setbbox(bb);
 }
@@ -168,17 +171,17 @@ void Spacer::editDrag(EditData& ed)
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<QPointF> Spacer::gripsPositions(const EditData&) const
+std::vector<mu::PointF> Spacer::gripsPositions(const EditData&) const
 {
     qreal _spatium = spatium();
-    QPointF p;
+    PointF p;
     switch (spacerType()) {
     case SpacerType::DOWN:
     case SpacerType::FIXED:
-        p = QPointF(_spatium * .5, _gap);
+        p = PointF(_spatium * .5, _gap);
         break;
     case SpacerType::UP:
-        p = QPointF(_spatium * .5, 0.0);
+        p = PointF(_spatium * .5, 0.0);
         break;
     }
     return { pagePos() + p };

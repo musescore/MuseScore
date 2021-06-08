@@ -35,6 +35,8 @@
 #include <list>
 #include <utility> // std::pair
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   RepeatSegment

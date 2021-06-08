@@ -23,7 +23,7 @@
 #ifndef __ELEMENTGROUP_H__
 #define __ELEMENTGROUP_H__
 
-#include <QRectF>
+#include "draw/geometry.h"
 
 namespace Ms {
 class Element;
@@ -41,7 +41,7 @@ public:
     virtual ~ElementGroup() {}
 
     virtual void startDrag(EditData&) = 0;
-    virtual QRectF drag(EditData&) = 0;
+    virtual mu::RectF drag(EditData&) = 0;
     virtual void endDrag(EditData&) = 0;
 
     virtual bool enabled() const { return true; }
@@ -57,7 +57,7 @@ public:
     bool enabled() const override { return false; }
 
     void startDrag(EditData&) override {}
-    QRectF drag(EditData&) override { return QRectF(); }
+    mu::RectF drag(EditData&) override { return mu::RectF(); }
     void endDrag(EditData&) override {}
 };
 
@@ -74,7 +74,7 @@ public:
         : e(el) {}
 
     void startDrag(EditData& ed) override;
-    QRectF drag(EditData& ed) override;
+    mu::RectF drag(EditData& ed) override;
     void endDrag(EditData& ed) override;
 };
 } // namespace Ms

@@ -25,6 +25,8 @@
 #include "property.h"
 #include "staff.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   getProperty

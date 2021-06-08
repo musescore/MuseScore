@@ -29,6 +29,8 @@
 #include "accidental.h"
 #include "part.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   enforceLimits - ensure _key

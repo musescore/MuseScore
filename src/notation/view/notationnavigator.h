@@ -82,7 +82,7 @@ private:
     PageList pages() const;
 
     QRect m_cursorRect;
-    QPoint m_startMove;
+    PointF m_startMove;
 };
 }
 

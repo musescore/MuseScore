@@ -24,8 +24,8 @@
 #define __SKYLINE_H__
 
 #include <vector>
-#include <QRectF>
-#include <QPainter>
+
+#include "draw/geometry.h"
 
 namespace Ms {
 #ifndef NDEBUG
@@ -68,10 +68,9 @@ public:
     SkylineLine(bool n)
         : north(n) {}
     void add(const Shape& s);
-    void add(const QRectF& r);
+    void add(const mu::RectF& r);
     void add(qreal x, qreal y, qreal w);
     void clear() { seg.clear(); }
-    void paint(QPainter&) const;
     void dump() const;
     qreal minDistance(const SkylineLine&) const;
     qreal max() const;
@@ -100,7 +99,7 @@ public:
 
     void clear();
     void add(const Shape& s);
-    void add(const QRectF& r);
+    void add(const mu::RectF& r);
 
     qreal minDistance(const Skyline&) const;
 
@@ -109,7 +108,6 @@ public:
     const SkylineLine& north() const { return _north; }
     const SkylineLine& south() const { return _south; }
 
-    void paint(QPainter&) const;
     void dump(const char*, bool north = false) const;
 };
 } // namespace Ms

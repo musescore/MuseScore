@@ -230,7 +230,7 @@ struct Position {
     int staffIdx     { -1 };
     int line         { 0 };
     int fret         { FRET_NONE };
-    QPointF pos;
+    mu::PointF pos;
 };
 
 //---------------------------------------------------------
@@ -273,7 +273,7 @@ struct Layer {
 
 enum class UpdateMode {
     DoNothing,
-    Update,             // do screen refresh of QRectF "refresh"
+    Update,             // do screen refresh of RectF "refresh"
     UpdateAll,          // do complete screen refresh
     Layout,             // do partial layout for tick range
 };
@@ -339,7 +339,7 @@ public:
 class UpdateState
 {
 public:
-    QRectF refresh;                 ///< area to update, canvas coordinates
+    mu::RectF refresh;                 ///< area to update, canvas coordinates
     bool _playNote   { false };     ///< play selected note after command
     bool _playChord  { false };     ///< play whole chord for the selected note
     bool _selectionChanged { false };
@@ -698,8 +698,8 @@ public:
     Staff* staff(int n) const { return ((n >= 0) && (n < _staves.size())) ? _staves.at(n) : nullptr; }
     Staff* staff(const QString& staffId) const;
 
-    Measure* pos2measure(const QPointF&, int* staffIdx, int* pitch, Segment**, QPointF* offset) const;
-    void dragPosition(const QPointF&, int* staffIdx, Segment**, qreal spacingFactor = 0.5) const;
+    Measure* pos2measure(const mu::PointF&, int* staffIdx, int* pitch, Segment**, mu::PointF* offset) const;
+    void dragPosition(const mu::PointF&, int* staffIdx, Segment**, qreal spacingFactor = 0.5) const;
 
     void undoAddElement(Element* element);
     void undoAddCR(ChordRest* element, Measure*, const Fraction& tick);
@@ -791,7 +791,7 @@ public:
     void cmdDeleteSelection();
     void cmdFullMeasureRest();
 
-    void putNote(const QPointF&, bool replace, bool insert);
+    void putNote(const mu::PointF&, bool replace, bool insert);
     void insertChord(const Position&);
     void localInsertChord(const Position&);
     void globalInsertChord(const Position&);
@@ -819,7 +819,7 @@ public:
     virtual inline const CmdState& cmdState() const;
     virtual inline void addLayoutFlags(LayoutFlags);
     virtual inline void setInstrumentsChanged(bool);
-    void addRefresh(const QRectF&);
+    void addRefresh(const mu::RectF&);
 
     void cmdRelayout();
     void cmdToggleAutoplace(bool all);
@@ -1031,16 +1031,16 @@ public:
     ScoreOrder* scoreOrder() const { return _scoreOrder; }
     void setScoreOrder(ScoreOrder* order) { _scoreOrder = order; }
 
-    void lassoSelect(const QRectF&);
+    void lassoSelect(const mu::RectF&);
     void lassoSelectEnd(bool);
 
-    Page* searchPage(const QPointF&) const;
-    QList<System*> searchSystem(const QPointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5,
+    Page* searchPage(const mu::PointF&) const;
+    QList<System*> searchSystem(const mu::PointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5,
                                 qreal preferredSpacingFactor = 1.0) const;
-    Measure* searchMeasure(const QPointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5,
+    Measure* searchMeasure(const mu::PointF& p, const System* preferredSystem = nullptr, qreal spacingFactor = 0.5,
                            qreal preferredSpacingFactor = 1.0) const;
 
-    bool getPosition(Position* pos, const QPointF&, int voice) const;
+    bool getPosition(Position* pos, const mu::PointF&, int voice) const;
 
     void cmdDeleteTuplet(Tuplet*, bool replaceWithRest);
 #if 0
@@ -1203,7 +1203,7 @@ public:
     bool isSpannerStartEnd(const Fraction& tick, int track) const;
     void removeSpanner(Spanner*);
     void addSpanner(Spanner*);
-    void cmdAddSpanner(Spanner* spanner, const QPointF& pos, bool firstStaffOnly = false);
+    void cmdAddSpanner(Spanner* spanner, const mu::PointF& pos, bool firstStaffOnly = false);
     void cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment, Segment* endSegment);
     void checkSpanner(const Fraction& startTick, const Fraction& lastTick);
     const std::set<Spanner*> unmanagedSpanners() { return _unmanagedSpanner; }

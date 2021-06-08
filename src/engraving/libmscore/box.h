@@ -78,7 +78,7 @@ public:
     virtual Element* drop(EditData&) override;
     virtual void add(Element* e) override;
 
-    QRectF contentRect() const;
+    mu::RectF contentRect() const;
     Spatium boxWidth() const { return _boxWidth; }
     void setBoxWidth(Spatium val) { _boxWidth = val; }
     Spatium boxHeight() const { return _boxHeight; }
@@ -109,7 +109,7 @@ public:
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<QPointF> gripsPositions(const EditData&) const override { return { QPointF() }; }   // overriden in descendants
+    std::vector<mu::PointF> gripsPositions(const EditData&) const override { return { mu::PointF() }; }   // overriden in descendants
 };
 
 //---------------------------------------------------------
@@ -132,7 +132,7 @@ public:
     void writeProperties(XmlWriter&) const override;
     bool readProperties(XmlReader&) override;
 
-    QRectF drag(EditData&) override;
+    mu::RectF drag(EditData&) override;
     void endEditDrag(EditData&) override;
     void layout2();
     bool isMovable() const override;
@@ -145,7 +145,7 @@ public:
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid) const override;
 
-    std::vector<QPointF> gripsPositions(const EditData&) const override;
+    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 };
 
 //---------------------------------------------------------
@@ -170,7 +170,7 @@ public:
 
     void startEditDrag(EditData&) override;
 
-    std::vector<QPointF> gripsPositions(const EditData&) const override;
+    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 };
 
 //---------------------------------------------------------

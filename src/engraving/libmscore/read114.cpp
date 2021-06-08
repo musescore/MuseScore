@@ -75,6 +75,8 @@
 #include "textline.h"
 #include "pedal.h"
 
+using namespace mu;
+
 namespace Ms {
 static int g_guitarStrings[] = { 40, 45, 50, 55, 59, 64 };
 static int g_bassStrings[]   = { 28, 33, 38, 43 };
@@ -413,7 +415,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element*)
     } else if (!t->readProperties(e)) {
         return false;
     }
-    t->setOffset(QPointF());       // ignore user offsets
+    t->setOffset(PointF());       // ignore user offsets
     t->setAutoplace(true);
     return true;
 }
@@ -1244,7 +1246,7 @@ static bool readTextLineProperties114(XmlReader& e, TextLineBase* tl)
         // That's why the visibility is set after adding the segment
         // to the corresponding spanner
         ls->setVisible(ls->visible());
-        ls->setOffset(QPointF());            // ignore offsets
+        ls->setOffset(PointF());            // ignore offsets
         ls->setAutoplace(true);
         tl->add(ls);
     } else if (tl->readProperties(e)) {
@@ -1278,7 +1280,7 @@ static void readVolta114(XmlReader& e, Volta* volta)
             e.unknown();
         }
     }
-    volta->setOffset(QPointF());          // ignore offsets
+    volta->setOffset(PointF());          // ignore offsets
     volta->setAutoplace(true);
 }
 
@@ -1848,7 +1850,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             clef->setTrack(e.track());
             readClef(clef, e);
             if (m->score()->mscVersion() < 113) {
-                clef->setOffset(QPointF());
+                clef->setOffset(PointF());
             }
             clef->setGenerated(false);
             // MS3 doesn't support wrong clef for staff type: Default to G
@@ -2693,12 +2695,12 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
                 pf->setEvenBottomMargin(bm);
             }
         } else if (tag == "page-height") {
-            pf->setSize(QSizeF(pf->size().width(), e.readDouble() * 0.5 / PPI));
+            pf->setSize(SizeF(pf->size().width(), e.readDouble() * 0.5 / PPI));
         } else if (tag == "page-width") {
-            pf->setSize(QSizeF(e.readDouble() * 0.5 / PPI, pf->size().height()));
+            pf->setSize(SizeF(e.readDouble() * 0.5 / PPI, pf->size().height()));
         } else if (tag == "pageFormat") {
             const PaperSize* s = getPaperSize114(e.readElementText());
-            pf->setSize(QSizeF(s->w, s->h));
+            pf->setSize(SizeF(s->w, s->h));
         } else if (tag == "page-offset") {
             e.readInt();
         } else {
@@ -2755,7 +2757,7 @@ static void readStyle(MStyle* style, XmlReader& e)
             e.skipCurrentElement();
         } else if (tag == "lyricsMinBottomDistance") {
             // no longer meaningful since it is now measured from skyline rather than staff
-            //style->set(Sid::lyricsMinBottomDistance, QPointF(0.0, y));
+            //style->set(Sid::lyricsMinBottomDistance, PointF(0.0, y));
             e.skipCurrentElement();
         } else if (tag == "Spatium") {
             style->set(Sid::spatium, e.readDouble() * DPMM);
@@ -3168,14 +3170,14 @@ Score::FileError MasterScore::read114(XmlReader& e)
             qreal yo = 0;
             if (s->isOttava()) {
                 // fix ottava position
-                yo = styleValue(Pid::OFFSET, Sid::ottavaPosAbove).toPointF().y();
+                yo = styleValue(Pid::OFFSET, Sid::ottavaPosAbove).value<PointF>().y();
                 if (s->placeBelow()) {
                     yo = -yo + s->staff()->height();
                 }
             } else if (s->isPedal()) {
-                yo = styleValue(Pid::OFFSET, Sid::pedalPosBelow).toPointF().y();
+                yo = styleValue(Pid::OFFSET, Sid::pedalPosBelow).value<PointF>().y();
             } else if (s->isTrill()) {
-                yo = styleValue(Pid::OFFSET, Sid::trillPosAbove).toPointF().y();
+                yo = styleValue(Pid::OFFSET, Sid::trillPosAbove).value<PointF>().y();
             } else if (s->isTextLine()) {
                 yo = -5.0 * spatium();
             }
@@ -3331,7 +3333,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
     // but we wait until now to do it so parts don't have this issue
 
     if (styleV(Sid::voltaPosAbove) == MScore::baseStyle().value(Sid::voltaPosAbove)) {
-        style().set(Sid::voltaPosAbove, QPointF(0.0, -2.0f));
+        style().set(Sid::voltaPosAbove, PointF(0.0, -2.0f));
     }
 
     fixTicks();

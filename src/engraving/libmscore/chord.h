@@ -180,8 +180,8 @@ public:
 
     int upLine() const override;
     int downLine() const override;
-    QPointF stemPos() const override;            ///< page coordinates
-    QPointF stemPosBeam() const override;        ///< page coordinates
+    mu::PointF stemPos() const override;            ///< page coordinates
+    mu::PointF stemPosBeam() const override;        ///< page coordinates
     qreal stemPosX() const override;
     qreal rightEdge() const override;
 
@@ -195,7 +195,7 @@ public:
 
     Note* selectedNote() const;
     void layout() override;
-    QPointF pagePos() const override;        ///< position in page coordinates
+    mu::PointF pagePos() const override;        ///< position in page coordinates
     void layout2();
     void cmdUpdateNotes(AccidentalState*);
 

@@ -24,6 +24,8 @@
 #include "property.h"
 #include "scoreElement.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   Xml
@@ -277,6 +279,18 @@ void XmlWriter::tag(const QString& name, QVariant data)
             *this << "<" << name << ">";
             *this << data.value<Spatium>().val();
             *this << "</" << ename << ">\n";
+        } else if (strcmp(type, "mu::PointF") == 0) {
+            PointF p = PointF::fromVariant(data);
+            *this << QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y());
+        } else if (strcmp(type, "mu::SizeF") == 0) {
+            SizeF s = SizeF::fromVariant(data);
+            *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(s.width()).arg(s.height());
+        } else if (strcmp(type, "mu::RectF") == 0) {
+            RectF r = RectF::fromVariant(data);
+            *this << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
+        } else if (strcmp(type, "mu::Rect") == 0) {
+            Rect r = data.value<mu::Rect>();
+            *this << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
         } else if (strcmp(type, "Ms::Fraction") == 0) {
             const Fraction& f = data.value<Fraction>();
             *this << QString("<%1>%2/%3</%1>\n").arg(name).arg(f.numerator()).arg(f.denominator());

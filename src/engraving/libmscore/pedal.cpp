@@ -29,6 +29,8 @@
 
 #include "score.h"
 
+using namespace mu;
+
 namespace Ms {
 static const ElementStyle pedalStyle {
     { Sid::pedalFontFace,                      Pid::BEGIN_FONT_FACE },
@@ -61,7 +63,7 @@ void PedalSegment::layout()
 {
     TextLineBaseSegment::layout();
     if (isStyled(Pid::OFFSET)) {
-        roffset() = pedal()->propertyDefault(Pid::OFFSET).toPointF();
+        roffset() = pedal()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
     autoplaceSpannerSegment();
 }
@@ -216,7 +218,7 @@ QVariant Pedal::propertyDefault(Pid propertyId) const
 //    return System() coordinates
 //---------------------------------------------------------
 
-QPointF Pedal::linePos(Grip grip, System** sys) const
+PointF Pedal::linePos(Grip grip, System** sys) const
 {
     qreal x = 0.0;
     qreal nhw = score()->noteHeadWidth();
@@ -299,6 +301,6 @@ QPointF Pedal::linePos(Grip grip, System** sys) const
     }
 
     *sys = s;
-    return QPointF(x, 0);
+    return PointF(x, 0);
 }
 }

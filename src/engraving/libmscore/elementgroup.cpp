@@ -29,7 +29,7 @@ void SingleElementGroup::startDrag(EditData& ed)
     e->startDrag(ed);
 }
 
-QRectF SingleElementGroup::drag(EditData& ed)
+mu::RectF SingleElementGroup::drag(EditData& ed)
 {
     return e->drag(ed);
 }

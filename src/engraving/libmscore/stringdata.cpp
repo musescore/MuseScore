@@ -29,6 +29,8 @@
 #include "undo.h"
 #include "segment.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   StringData

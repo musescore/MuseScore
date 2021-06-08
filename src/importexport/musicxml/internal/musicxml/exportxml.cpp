@@ -510,8 +510,8 @@ QString ExportMusicXml::positioningAttributes(Element const* const el, bool isSp
             //defaultY = pos.y() + pos2.y();
         }
     } else {
-        def = el->ipos();       // Note: for some elements, Finale Notepad seems to work slightly better w/o default-x
-        rel = el->offset();
+        def = el->ipos().toQPointF();       // Note: for some elements, Finale Notepad seems to work slightly better w/o default-x
+        rel = el->offset().toQPointF();
     }
 
     return positionToQString(def, rel, spatium);
@@ -4643,7 +4643,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fra
         hook       = tl->beginHookType() != HookType::NONE;
         hookHeight = tl->beginHookHeight().val();
         if (!tl->segmentsEmpty()) {
-            p = tl->frontSegment()->offset();
+            p = tl->frontSegment()->offset().toQPointF();
         }
         // offs = tl->mxmlOff();
         type = "start";
@@ -4651,7 +4651,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fra
         hook = tl->endHookType() != HookType::NONE;
         hookHeight = tl->endHookHeight().val();
         if (!tl->segmentsEmpty()) {
-            p = (toLineSegment(tl->backSegment()))->userOff2();
+            p = (toLineSegment(tl->backSegment()))->userOff2().toQPointF();
         }
         // offs = tl->mxmlOff2();
         type = "stop";
@@ -6623,7 +6623,7 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                     for (const auto tbox : tboxesAbove) {
                         // note: use mmRest1() to get at a possible multi-measure rest,
                         // as the covered measure would be positioned at 0,0.
-                        tboxTextAsWords(tbox->text(), 0, tbox->text()->canvasPos() - m->mmRest1()->canvasPos());
+                        tboxTextAsWords(tbox->text(), 0, mu::PointF(tbox->text()->canvasPos() - m->mmRest1()->canvasPos()).toQPointF());
                     }
                     _tboxesAboveWritten = true;
                 }
@@ -6636,7 +6636,7 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                             // convert to position relative to last staff of system
                             textPos.setY(textPos.y() - (sys->staffCanvasYpage(lastStaffNr) - sys->staffCanvasYpage(0)));
                         }
-                        tboxTextAsWords(tbox->text(), partRelStaffNo, textPos);
+                        tboxTextAsWords(tbox->text(), partRelStaffNo, textPos.toQPointF());
                     }
                     _tboxesBelowWritten = true;
                 }

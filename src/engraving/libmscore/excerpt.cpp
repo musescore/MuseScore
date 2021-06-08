@@ -54,6 +54,8 @@
 #include "undo.h"
 #include "bracketItem.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   Excerpt

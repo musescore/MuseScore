@@ -50,6 +50,8 @@
 #include "sig.h"
 #include "undo.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   transposeChord
@@ -1042,7 +1044,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
     if ((_selection.isSingle() || _selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
         QByteArray data(ms->data(mimeSymbolFormat));
 
-        QPointF dragOffset;
+        PointF dragOffset;
         Fraction duration(1, 4);
         std::unique_ptr<Element> el(Element::readMimeData(this, data, &dragOffset, &duration));
 

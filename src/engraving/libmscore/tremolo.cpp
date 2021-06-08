@@ -32,7 +32,9 @@
 #include "symid.h"
 #include "xml.h"
 
-using namespace mu::draw;
+#include "draw/transform.h"
+
+using namespace mu;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -195,10 +197,10 @@ void Tremolo::styleChanged()
 //   basePath
 //---------------------------------------------------------
 
-QPainterPath Tremolo::basePath() const
+PainterPath Tremolo::basePath() const
 {
     if (isBuzzRoll()) {
-        return QPainterPath();
+        return PainterPath();
     }
 
     const qreal sp = spatium() * chordMag();
@@ -209,7 +211,7 @@ QPainterPath Tremolo::basePath() const
     qreal lw  = sp * score()->styleS(Sid::tremoloStrokeWidth).val();
     qreal td  = sp * score()->styleS(Sid::tremoloDistance).val();
 
-    QPainterPath ppath;
+    PainterPath ppath;
 
     // first line
     if (parent() && twoNotes() && (_style == TremoloStyle::DEFAULT)) {
@@ -232,7 +234,7 @@ QPainterPath Tremolo::basePath() const
 
     if (!parent() || !twoNotes()) {
         // for the palette or for one-note tremolos
-        QTransform shearTransform;
+        Transform shearTransform;
         shearTransform.shear(0.0, -(lw / 2.0) / w2);
         ppath = shearTransform.map(ppath);
     }
@@ -412,7 +414,7 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
     //    to that of a two-note tremolo according to the distance between the two chords
     //---------------------------------------------------
 
-    QTransform xScaleTransform;
+    Transform xScaleTransform;
     const qreal H_MULTIPLIER = score()->styleD(Sid::tremoloStrokeLengthMultiplier);
     // TODO const qreal MAX_H_LENGTH = spatium * score()->styleS(Sid::tremoloBeamLengthMultiplier).val();
     const qreal MAX_H_LENGTH = spatium * 12.0;
@@ -447,7 +449,7 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
     //   Step 4: Tilt the tremolo strokes according to the stems of the chords
     //---------------------------------------------------
 
-    QTransform shearTransform;
+    Transform shearTransform;
     qreal dy = y2 - y1;
     qreal dx = x2 - x1;
     if (_chord1->beams() == 0 && _chord2->beams() == 0) {
@@ -485,7 +487,7 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
     //---------------------------------------------------
 
     if (isTraditionalAlternate && !_chord1->up() && !_chord2->up()) {
-        QTransform rotateTransform;
+        Transform rotateTransform;
         rotateTransform.translate(0.0, lw * .5);
         rotateTransform.rotate(180);
         rotateTransform.translate(0.0, -lw * .5);
@@ -508,8 +510,8 @@ void Tremolo::layout()
     if (!_chord1) {
         // palette
         if (!isBuzzRoll()) {
-            const QRectF box = path.boundingRect();
-            addbbox(QRectF(box.x(), box.bottom(), box.width(), spatium()));
+            const RectF box = path.boundingRect();
+            addbbox(RectF(box.x(), box.bottom(), box.width(), spatium()));
         }
         return;
     }

@@ -23,6 +23,8 @@
 #include "sig.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   ticks_beat

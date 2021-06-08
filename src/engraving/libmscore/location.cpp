@@ -28,6 +28,8 @@
 #include "mscore.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 static constexpr Location absDefaults = Location::absolute();
 static constexpr Location relDefaults = Location::relative();

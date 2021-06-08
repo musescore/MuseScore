@@ -86,6 +86,8 @@
 #include "rehearsalmark.h"
 #include "sym.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   reset
@@ -350,7 +352,7 @@ void Score::update(bool resetCmdState)
             for (MuseScoreView* v : qAsConst(viewer)) {
                 v->dataChanged(_updateState.refresh);
             }
-            _updateState.refresh = QRectF();
+            _updateState.refresh = RectF();
         }
         const InputState& is = inputState();
         if (is.noteEntryMode() && is.segment()) {
@@ -397,7 +399,7 @@ void Score::deletePostponed()
 //        HAIRPIN, LET_RING, VIBRATO and TEXTLINE
 //---------------------------------------------------------
 
-void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos, bool firstStaffOnly)
+void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool firstStaffOnly)
 {
     int staffIdx;
     Segment* segment;
@@ -425,7 +427,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const QPointF& pos, bool firstStaffO
         spanner->setTick2(tick2);
     } else {      // Anchor::MEASURE, Anchor::CHORD, Anchor::NOTE
         Measure* m = toMeasure(mb);
-        QRectF b(m->canvasBoundingRect());
+        RectF b(m->canvasBoundingRect());
 
         if (pos.x() >= (b.x() + b.width() * .5) && m != lastMeasureMM() && m->nextMeasure()->system() == m->system()) {
             m = m->nextMeasure();
@@ -2883,7 +2885,7 @@ void Score::cmdAddBraces()
 
 void Score::cmdMoveRest(Rest* rest, Direction dir)
 {
-    QPointF pos(rest->offset());
+    PointF pos(rest->offset());
     if (dir == Direction::UP) {
         pos.ry() -= spatium();
     } else if (dir == Direction::DOWN) {
@@ -3874,7 +3876,7 @@ void Score::cmdPitchUp()
     if (el && el->isLyrics()) {
         cmdMoveLyrics(toLyrics(el), Direction::UP);
     } else if (el && (el->isArticulation() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, -MScore::nudgeStep* el->spatium()), PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Pid::OFFSET, el->offset() + PointF(0.0, -MScore::nudgeStep* el->spatium()), PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
         cmdMoveRest(toRest(el), Direction::UP);
     } else {
@@ -3892,7 +3894,9 @@ void Score::cmdPitchDown()
     if (el && el->isLyrics()) {
         cmdMoveLyrics(toLyrics(el), Direction::DOWN);
     } else if (el && (el->isArticulation() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, MScore::nudgeStep* el->spatium()), PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Pid::OFFSET, QVariant::fromValue(el->offset() + PointF(0.0,
+                                                                                      MScore::nudgeStep* el->spatium())),
+                               PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
         cmdMoveRest(toRest(el), Direction::DOWN);
     } else {
@@ -3927,7 +3931,9 @@ void Score::cmdPitchUpOctave()
 {
     Element* el = selection().element();
     if (el && (el->isArticulation() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, -MScore::nudgeStep10* el->spatium()), PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Pid::OFFSET,
+                               QVariant::fromValue(el->offset() + PointF(0.0, -MScore::nudgeStep10* el->spatium())),
+                               PropertyFlags::UNSTYLED);
     } else {
         upDown(true, UpDownMode::OCTAVE);
     }
@@ -3941,7 +3947,7 @@ void Score::cmdPitchDownOctave()
 {
     Element* el = selection().element();
     if (el && (el->isArticulation() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, el->offset() + QPointF(0.0, MScore::nudgeStep10* el->spatium()), PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Pid::OFFSET, el->offset() + PointF(0.0, MScore::nudgeStep10* el->spatium()), PropertyFlags::UNSTYLED);
     } else {
         upDown(false, UpDownMode::OCTAVE);
     }

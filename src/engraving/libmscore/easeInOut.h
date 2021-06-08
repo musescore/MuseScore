@@ -24,7 +24,7 @@
 #define __EASEINOUT_H__
 
 #include <QtGlobal>
-#include <QPointF>
+#include "draw/geometry.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -56,7 +56,7 @@ public:
     }
 
     qreal EvalY(const qreal t) const { return -(t * t) * (2.0 * t - 3.0); }
-    QPointF Eval(const qreal t) const { return { EvalX(t), EvalY(t) }; }
+    mu::PointF Eval(const qreal t) const { return { EvalX(t), EvalY(t) }; }
     qreal tFromX(const qreal x) const;
     qreal tFromY(const qreal y) const;
     qreal YfromX(const qreal x) const { return EvalY(tFromX(x)); }

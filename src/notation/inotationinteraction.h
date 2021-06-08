@@ -22,7 +22,6 @@
 #ifndef MU_NOTATION_INOTATIONINTERACTION_H
 #define MU_NOTATION_INOTATIONINTERACTION_H
 
-#include <QPointF>
 #include <QKeyEvent>
 #include <functional>
 
@@ -42,15 +41,15 @@ public:
     virtual INotationNoteInputPtr noteInput() const = 0;
 
     // Shadow note
-    virtual void showShadowNote(const QPointF& pos) = 0;
+    virtual void showShadowNote(const PointF& pos) = 0;
     virtual void hideShadowNote() = 0;
 
     // Visibility
     virtual void toggleVisible() = 0;
 
     // Select
-    virtual Element* hitElement(const QPointF& pos, float width) const = 0;
-    virtual int hitStaffIndex(const QPointF& pos) const = 0;
+    virtual Element* hitElement(const PointF& pos, float width) const = 0;
+    virtual int hitStaffIndex(const PointF& pos) const = 0;
     virtual void addChordToSelection(MoveDirection d) = 0;
     virtual void moveChordNoteSelection(MoveDirection d) = 0;
     virtual void select(const std::vector<Element*>& elements, SelectType type, int staffIndex = 0) = 0;
@@ -65,16 +64,16 @@ public:
     // Drag
     using IsDraggable = std::function<bool (const Element*)>;
     virtual bool isDragStarted() const = 0;
-    virtual void startDrag(const std::vector<Element*>& elems, const QPointF& eoffset, const IsDraggable& isDrag) = 0;
-    virtual void drag(const QPointF& fromPos, const QPointF& toPos, DragMode mode) = 0;
+    virtual void startDrag(const std::vector<Element*>& elems, const PointF& eoffset, const IsDraggable& isDrag) = 0;
+    virtual void drag(const PointF& fromPos, const PointF& toPos, DragMode mode) = 0;
     virtual void endDrag() = 0;
     virtual async::Notification dragChanged() const = 0;
 
     // Drop
     //! TODO Change KeyboardModifiers to modes
     virtual void startDrop(const QByteArray& edata) = 0;
-    virtual bool isDropAccepted(const QPointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
-    virtual bool drop(const QPointF& pos, Qt::KeyboardModifiers modifiers) = 0;
+    virtual bool isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
+    virtual bool drop(const PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
     virtual void endDrop() = 0;
     virtual async::Notification dropChanged() const = 0;
 
@@ -88,10 +87,10 @@ public:
 
     // Text edit
     virtual bool isTextEditingStarted() const = 0;
-    virtual void startEditText(Element* element, const QPointF& elementPos) = 0;
+    virtual void startEditText(Element* element, const PointF& elementPos) = 0;
     virtual void editText(QKeyEvent* event) = 0;
     virtual void endEditText() = 0;
-    virtual void changeTextCursorPosition(const QPointF& newCursorPos) = 0;
+    virtual void changeTextCursorPosition(const PointF& newCursorPos) = 0;
     virtual async::Notification textEditingStarted() const = 0;
     virtual async::Notification textEditingChanged() const = 0;
 
@@ -100,8 +99,8 @@ public:
 
     // Grip edit
     virtual bool isGripEditStarted() const = 0;
-    virtual bool isHitGrip(const QPointF& pos) const = 0;
-    virtual void startEditGrip(const QPointF& pos) = 0;
+    virtual bool isHitGrip(const PointF& pos) const = 0;
+    virtual void startEditGrip(const PointF& pos) = 0;
     virtual void endEditGrip() = 0;
 
     virtual void splitSelectedMeasure() = 0;

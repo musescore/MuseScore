@@ -89,7 +89,7 @@ public:
     ~ExampleView();
     void resetMatrix();
     virtual void layoutChanged() override;
-    virtual void dataChanged(const QRectF&) override;
+    virtual void dataChanged(const mu::RectF&) override;
     virtual void updateAll() override;
     virtual void adjustCanvasPosition(const Element* el, bool playBack, int staff = -1) override;
     virtual void setScore(Score*) override;
@@ -98,12 +98,12 @@ public:
     virtual void changeEditElement(Element*) override;
     virtual QCursor cursor() const override;
     virtual void setCursor(const QCursor&) override;
-    virtual void setDropRectangle(const QRectF&) override;
+    virtual void setDropRectangle(const mu::RectF&) override;
     virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
-    virtual Element* elementNear(QPointF) override;
-    virtual void drawBackground(mu::draw::Painter*, const QRectF&) const override;
+    virtual Element* elementNear(mu::PointF) override;
+    virtual void drawBackground(mu::draw::Painter*, const mu::RectF&) const override;
     void dragExampleView(QMouseEvent* ev);
-    virtual const QRect geometry() const override { return QFrame::geometry(); }
+    const mu::Rect geometry() const override { return mu::Rect(QFrame::geometry()); }
 };
 
 //---------------------------------------------------------

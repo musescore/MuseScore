@@ -25,6 +25,8 @@
 #include "xml.h"
 #include "measure.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   markerStyle

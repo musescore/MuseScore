@@ -26,6 +26,8 @@
 #include "types.h"
 #include "style.h"
 
+#include "draw/geometry.h"
+
 namespace Ms {
 class ScoreElement;
 class MasterScore;

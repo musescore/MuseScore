@@ -33,6 +33,8 @@
 
 #include "draw/fontmetrics.h"
 
+using namespace mu;
+
 // trying to do without it
 //#include <QQmlEngine>
 
@@ -649,7 +651,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
             if ((nextFB=figuredBass()->nextFiguredBass()) != 0) {
                 // retrieve the X position (in page coords) of a possible cont. line of nextFB
                 // on the same line of 'this'
-                QPointF pgPos = pagePos();
+                PointF pgPos = pagePos();
                 qreal nextContPageX = nextFB->additionalContLineX(pgPos.y());
                 // if an additional cont. line has been found, extend up to its initial X coord
                 if (nextContPageX > 0) {
@@ -671,7 +673,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
     // closing cont.line parenthesis
     if (parenth[4] != Parenthesis::NONE) {
         int x = lineEndX > 0.0 ? lineEndX : textWidth;
-        painter->drawText(QRectF(x, 0, bbox().width(), bbox().height()), Qt::AlignLeft | Qt::AlignTop,
+        painter->drawText(RectF(x, 0, bbox().width(), bbox().height()), Qt::AlignLeft | Qt::AlignTop,
                           g_FBFonts.at(font).displayParenthesis[int(parenth[4])]);
     }
 }
@@ -1070,7 +1072,7 @@ FiguredBass::FiguredBass(Score* s)
         false,
         false,
         Align::LEFT | Align::TOP,
-        QPointF(0, score()->styleD(Sid::figuredBassYOffset)),
+        PointF(0, score()->styleD(Sid::figuredBassYOffset)),
         OffsetType::SPATIUM);
     st.setSizeIsSpatiumDependent(true);
     setElementStyle(st);
@@ -1198,7 +1200,7 @@ void FiguredBass::layout()
 #if 0
     if (textStyleType() == StyledPropertyListIdx::FIGURED_BASS) {
         TextStyle st(g_FBFonts[0].family, score()->styleD(Sid::figuredBassFontSize),
-                     false, false, false, Align::LEFT | Align::TOP, QPointF(0, yOff),
+                     false, false, false, Align::LEFT | Align::TOP, PointF(0, yOff),
                      OffsetType::SPATIUM);
         st.setSizeIsSpatiumDependent(true);
         setTextStyle(st);
@@ -1207,7 +1209,7 @@ void FiguredBass::layout()
 
     // VERTICAL POSITION:
     const qreal y = score()->styleD(Sid::figuredBassYOffset) * spatium();
-    setPos(QPointF(0.0, y));
+    setPos(PointF(0.0, y));
 
     // BOUNDING BOX and individual item layout (if required)
     TextBase::layout1();   // prepare structs and data expected by Text methods
@@ -1502,7 +1504,7 @@ FiguredBass* FiguredBass::nextFiguredBass() const
 
 qreal FiguredBass::additionalContLineX(qreal pagePosY) const
 {
-    QPointF pgPos = pagePos();
+    PointF pgPos = pagePos();
     for (FiguredBassItem* fbi : items) {
         // if item has cont.line but nothing before it
         // and item Y coord near enough to pagePosY

@@ -80,6 +80,8 @@
 #include "measurenumber.h"
 #include "marker.h"
 
+using namespace mu;
+
 namespace Ms {
 static void readText206(XmlReader& e, TextBase* t, Element* be);
 
@@ -118,7 +120,7 @@ void setPageFormat(MStyle* style, const PageFormat& pf)
 
 void initPageFormat(MStyle* style, PageFormat* pf)
 {
-    QSizeF sz;
+    SizeF sz;
     sz.setWidth(style->value(Sid::pageWidth).toReal());
     sz.setHeight(style->value(Sid::pageHeight).toReal());
     pf->setSize(sz);
@@ -155,7 +157,7 @@ void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Si
     bool sizeIsSpatiumDependent = false;
     FontStyle fontStyle = FontStyle::Normal;
     Align align = Align::LEFT;
-    QPointF offset;
+    PointF offset;
     OffsetType offsetType = OffsetType::SPATIUM;
 
     FrameType frameType = FrameType::NO_FRAME;
@@ -431,13 +433,13 @@ void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Si
             if (offsetValid) {
                 if (ss == Tid::TEMPO) {
                     style->set(Sid::tempoPosAbove, Spatium(offset.y()));
-                    offset = QPointF();
+                    offset = PointF();
                 } else if (ss == Tid::STAFF) {
                     style->set(Sid::staffTextPosAbove, Spatium(offset.y()));
-                    offset = QPointF();
+                    offset = PointF();
                 } else if (ss == Tid::REHEARSAL_MARK) {
                     style->set(Sid::rehearsalMarkPosAbove, Spatium(offset.y()));
-                    offset = QPointF();
+                    offset = PointF();
                 }
                 value = offset;
             }
@@ -1670,9 +1672,9 @@ bool readTupletProperties206(XmlReader& e, Tuplet* de)
     } else if (tag == "actualNotes") {
         de->setProperty(Pid::ACTUAL_NOTES, e.readInt());
     } else if (tag == "p1") {
-        de->setProperty(Pid::P1, e.readPoint() * de->score()->spatium());
+        de->setProperty(Pid::P1, QVariant::fromValue(e.readPoint() * de->score()->spatium()));
     } else if (tag == "p2") {
-        de->setProperty(Pid::P2, e.readPoint() * de->score()->spatium());
+        de->setProperty(Pid::P2, QVariant::fromValue(e.readPoint() * de->score()->spatium()));
     } else if (tag == "baseNote") {
         de->setBaseLen(TDuration(e.readElementText()));
     } else if (tag == "Number") {
@@ -1879,7 +1881,7 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
         readLyrics(l, e);
         ch->add(l);
     } else if (tag == "pos") {
-        QPointF pt = e.readPoint();
+        PointF pt = e.readPoint();
         ch->setOffset(pt * ch->spatium());
     } else if (ch->isRest() && tag == "Image") {
         if (MScore::noImages) {
@@ -1989,7 +1991,7 @@ bool readChordProperties206(XmlReader& e, Chord* ch)
     } else if (tag == "ChordLine") {
         ChordLine* cl = new ChordLine(ch->score());
         cl->read(e);
-        QPointF o = cl->offset();
+        PointF o = cl->offset();
         cl->setOffset(0.0, 0.0);
         ch->add(cl);
         e.fixOffsets().append({ cl, o });
@@ -2564,7 +2566,7 @@ void readTie206(XmlReader& e, Tie* t)
     if (t->score()->mscVersion() <= 114 && t->spannerSegments().size() == 1) {
         // ignore manual adjustments to single-segment ties in older scores
         TieSegment* ss = t->frontSegment();
-        QPointF zeroP;
+        PointF zeroP;
         ss->ups(Grip::START).off     = zeroP;
         ss->ups(Grip::BEZIER1).off   = zeroP;
         ss->ups(Grip::BEZIER2).off   = zeroP;
@@ -3014,7 +3016,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             RehearsalMark* el = new RehearsalMark(score);
             el->setTrack(e.track());
             readText206(e, el, el);
-//                  el->setOffset(el->offset() - el->score()->styleValue(Pid::OFFSET, Sid::rehearsalMarkPosAbove).toPointF());
+//                  el->setOffset(el->offset() - el->score()->styleValue(Pid::OFFSET, Sid::rehearsalMarkPosAbove).value<PointF>());
 //                  if (el->offset().isNull())
 //                        el->setAutoplace(true);
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
@@ -3376,13 +3378,13 @@ static void readStyle(MStyle* style, XmlReader& e)
             style->set(Sid::concertPitch, QVariant(bool(e.readInt())));
         } else if (tag == "pedalY") {
             qreal y = e.readDouble();
-            style->set(Sid::pedalPosBelow, QPointF(0.0, y));
+            style->set(Sid::pedalPosBelow, PointF(0.0, y));
         } else if (tag == "lyricsDistance") {
             qreal y = e.readDouble();
-            style->set(Sid::lyricsPosBelow, QPointF(0.0, y));
+            style->set(Sid::lyricsPosBelow, PointF(0.0, y));
         } else if (tag == "lyricsMinBottomDistance") {
             // no longer meaningful since it is now measured from skyline rather than staff
-            //style->set(Sid::lyricsMinBottomDistance, QPointF(0.0, y));
+            //style->set(Sid::lyricsMinBottomDistance, PointF(0.0, y));
             e.skipCurrentElement();
         } else if (tag == "ottavaHook") {
             qreal y = qAbs(e.readDouble());
@@ -3407,10 +3409,10 @@ static void readStyle(MStyle* style, XmlReader& e)
             qreal val = -e.readDouble();
             if (val > 0.0) {
                 style->set(Sid::harmonyPlacement, int(Placement::BELOW));
-                style->set(Sid::chordSymbolAPosBelow,  QPointF(.0, val));
+                style->set(Sid::chordSymbolAPosBelow,  PointF(.0, val));
             } else {
                 style->set(Sid::harmonyPlacement, int(Placement::ABOVE));
-                style->set(Sid::chordSymbolAPosBelow,  QPointF(.0, val));
+                style->set(Sid::chordSymbolAPosBelow,  PointF(.0, val));
             }
         } else {
             if (!style->readProperties(e)) {
@@ -3760,9 +3762,9 @@ void PageFormat::read(XmlReader& e)
                 _evenBottomMargin = bm;
             }
         } else if (tag == "page-height") {
-            _size.rheight() = e.readDouble() * 0.5 / PPI;
+            _size.setHeight(e.readDouble() * 0.5 / PPI);
         } else if (tag == "page-width") {
-            _size.rwidth() = e.readDouble() * .5 / PPI;
+            _size.setWidth(e.readDouble() * .5 / PPI);
         } else {
             e.unknown();
         }

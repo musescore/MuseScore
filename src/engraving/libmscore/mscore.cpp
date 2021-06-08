@@ -70,6 +70,8 @@
 #include "skyline.h"
 #include "scorefont.h"
 
+using namespace mu;
+
 namespace Ms {
 bool MScore::debugMode = false;
 bool MScore::testMode = false;

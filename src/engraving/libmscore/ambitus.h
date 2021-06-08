@@ -44,9 +44,9 @@ class Ambitus final : public Element
     int _topTpc, _bottomTpc;
 
     // internally managed, to optimize layout / drawing
-    mu::draw::PointF _topPos;       // position of top note symbol
-    mu::draw::PointF _bottomPos;    // position of bottom note symbol
-    mu::draw::LineF _line;          // the drawn line
+    mu::PointF _topPos;       // position of top note symbol
+    mu::PointF _bottomPos;    // position of bottom note symbol
+    mu::LineF _line;          // the drawn line
 
     void normalize();
 
@@ -96,7 +96,7 @@ public:
     // re-implemented virtual functions
     void      draw(mu::draw::Painter* painter) const override;
     void      layout() override;
-    QPointF   pagePos() const override;        ///< position in page coordinates
+    mu::PointF pagePos() const override;        ///< position in page coordinates
     void      read(XmlReader&) override;
     void      scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
     void      setTrack(int val) override;

@@ -27,8 +27,6 @@
 #include "durationtype.h"
 #include "staff.h"
 
-class QPointF;
-class QRectF;
 namespace Ms {
 //---------------------------------------------------------
 //   ShadowNote
@@ -70,8 +68,8 @@ public:
 
     void draw(mu::draw::Painter*) const override;
     void drawArticulations(mu::draw::Painter* painter) const;
-    void drawMarcato(mu::draw::Painter* painter, const SymId& articulation, QRectF& boundRect) const;
-    void drawArticulation(mu::draw::Painter* painter, const SymId& articulation, QRectF& boundRect) const;
+    void drawMarcato(mu::draw::Painter* painter, const SymId& articulation, mu::RectF& boundRect) const;
+    void drawArticulation(mu::draw::Painter* painter, const SymId& articulation, mu::RectF& boundRect) const;
 
     bool computeUp() const;
     SymId noteheadSymbol() const { return m_noteheadSymbol; }

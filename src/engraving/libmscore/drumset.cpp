@@ -27,6 +27,8 @@
 #include "sym.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 Drumset* smDrumset;           // standard midi drumset
 Drumset* gpDrumset;           // guitar pro drumset

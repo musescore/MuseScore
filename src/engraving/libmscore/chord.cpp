@@ -61,6 +61,8 @@
 #include "slur.h"
 #include "fingering.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   LedgerLineData
@@ -425,9 +427,9 @@ qreal Chord::stemPosX() const
 //    return page coordinates
 //---------------------------------------------------------
 
-QPointF Chord::stemPos() const
+PointF Chord::stemPos() const
 {
-    QPointF p(pagePos());
+    PointF p(pagePos());
 
     const Staff* stf = staff();
     const StaffType* st = stf ? stf->staffTypeForElement(this) : 0;
@@ -451,10 +453,10 @@ QPointF Chord::stemPos() const
 //    return page coordinates
 //---------------------------------------------------------
 
-QPointF Chord::stemPosBeam() const
+PointF Chord::stemPosBeam() const
 {
     qreal _spatium = spatium();
-    QPointF p(pagePos());
+    PointF p(pagePos());
 
     const Staff* stf = staff();
     const StaffType* st = stf ? stf->staffTypeForElement(this) : 0;
@@ -1588,7 +1590,7 @@ void Chord::layoutStem()
                     _hook->setHookType(hookIdx);
 #if 0
                     _hook->layout();
-                    QPointF p(_stem->hookPos());
+                    PointF p(_stem->hookPos());
                     p.rx() -= _stem->width();
                     _hook->setPos(p);
 #endif
@@ -1605,7 +1607,7 @@ void Chord::layoutStem()
     if (_stem) {
         if (_hook) {
             _hook->layout();
-            QPointF p(_stem->hookPos());
+            PointF p(_stem->hookPos());
             p.rx() -= _stem->width();
             _hook->setPos(p);
         }
@@ -1801,10 +1803,10 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
 //   pagePos
 //---------------------------------------------------------
 
-QPointF Chord::pagePos() const
+mu::PointF Chord::pagePos() const
 {
     if (isGrace()) {
-        QPointF p(pos());
+        PointF p(pos());
         if (parent() == 0) {
             return p;
         }
@@ -1990,8 +1992,8 @@ void Chord::layoutPitched()
             if (e->isFingering()) {
                 Fingering* f = toFingering(e);
                 if (f->layoutType() == ElementType::NOTE) {
-                    f->setPos(QPointF());
-                    f->setbbox(QRectF());
+                    f->setPos(PointF());
+                    f->setbbox(RectF());
                 }
             }
         }
@@ -2107,7 +2109,7 @@ void Chord::layoutPitched()
         }
         e->layout();
         if (e->type() == ElementType::CHORDLINE) {
-            QRectF tbbox = e->bbox().translated(e->pos());
+            RectF tbbox = e->bbox().translated(e->pos());
             qreal lx = tbbox.left() + chordX;
             qreal rx = tbbox.right() + chordX;
             if (-lx > _spaceLw) {
@@ -2318,7 +2320,7 @@ void Chord::layoutTablature()
                     rrr = stemX + _hook->width();
                 }
 
-                QPointF p(_stem->hookPos());
+                PointF p(_stem->hookPos());
                 p.rx() -= _stem->width();
                 _hook->setPos(p);
             }
@@ -2510,7 +2512,7 @@ void Chord::layoutTablature()
     for (Element* e : el()) {
         e->layout();
         if (e->type() == ElementType::CHORDLINE) {
-            QRectF tbbox = e->bbox().translated(e->pos());
+            RectF tbbox = e->bbox().translated(e->pos());
             qreal lx = tbbox.left();
             qreal rx = tbbox.right();
             if (-lx > _spaceLw) {
@@ -2525,10 +2527,10 @@ void Chord::layoutTablature()
     for (size_t i = 0; i < numOfNotes; ++i) {
         _notes.at(i)->layout2();
     }
-    QRectF bb;
-    processSiblings([&bb](Element* e) { bb |= e->bbox().translated(e->pos()); });
+    RectF bb;
+    processSiblings([&bb](Element* e) { bb.unite(e->bbox().translated(e->pos())); });
     if (_tabDur) {
-        bb |= _tabDur->bbox().translated(_tabDur->pos());
+        bb.unite(_tabDur->bbox().translated(_tabDur->pos()));
     }
     setbbox(bb);
 }
@@ -3000,7 +3002,7 @@ void Chord::setSlash(bool flag, bool stemless)
         // restore to normal
         undoChangeProperty(Pid::NO_STEM, false);
         undoChangeProperty(Pid::SMALL, false);
-        undoChangeProperty(Pid::OFFSET, QPointF());
+        undoChangeProperty(Pid::OFFSET, QVariant::fromValue(PointF()));
         for (Note* n : _notes) {
             n->undoChangeProperty(Pid::HEAD_GROUP, int(NoteHead::Group::HEAD_NORMAL));
             n->undoChangeProperty(Pid::FIXED, false);
@@ -3049,7 +3051,7 @@ void Chord::setSlash(bool flag, bool stemless)
         // for non-drum staves, add an additional offset
         // for drum staves, no offset, but use normal head
         if (!staff()->isDrumStaff(tick())) {
-            // undoChangeProperty(Pid::OFFSET, QPointF(0.0, y));
+            // undoChangeProperty(Pid::OFFSET, PointF(0.0, y));
             rypos() += y;
         } else {
             head = NoteHead::Group::HEAD_NORMAL;
@@ -3867,7 +3869,7 @@ void Chord::layoutArticulations2()
             // but adding to skyline is always good
             Segment* s = segment();
             Measure* m = s->measure();
-            QRectF r = a->bbox().translated(a->pos() + pos());
+            RectF r = a->bbox().translated(a->pos() + pos());
             // TODO: limit to width of chord
             // this avoids "staircase" effect due to space not having been allocated already
             // ANOTHER alternative is to allocate the space in layoutPitched() / layoutTablature()

@@ -93,7 +93,7 @@ void PaletteElementEditor::onElementAdded(const ElementPtr element)
         return;
     }
     QVariantMap mimeData;
-    mimeData[mu::commonscene::MIME_SYMBOL_FORMAT] = element->mimeData(QPointF());
+    mimeData[mu::commonscene::MIME_SYMBOL_FORMAT] = element->mimeData(mu::PointF());
     _controller->insert(_paletteIndex, -1, mimeData, Qt::CopyAction);
 }
 

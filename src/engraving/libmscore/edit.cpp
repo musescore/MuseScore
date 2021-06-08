@@ -77,6 +77,8 @@
 #include "lyrics.h"
 #include "tempotext.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   getSelectedNote
@@ -558,7 +560,7 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
     SlurSegment* ss = new SlurSegment(firstChordRest->score());
     ss->setSpannerSegmentType(SpannerSegmentType::SINGLE);
     if (firstChordRest == secondChordRest) {
-        ss->setSlurOffset(Grip::END, QPointF(3.0 * firstChordRest->score()->spatium(), 0.0));
+        ss->setSlurOffset(Grip::END, PointF(3.0 * firstChordRest->score()->spatium(), 0.0));
     }
     slur->add(ss);
 
@@ -2134,15 +2136,15 @@ void Score::cmdFlip()
             if (pf == PropertyFlags::STYLED) {
                 pf = PropertyFlags::UNSTYLED;
             }
-            qreal oldDefaultY = ee->propertyDefault(Pid::OFFSET).toPointF().y();
+            qreal oldDefaultY = ee->propertyDefault(Pid::OFFSET).value<PointF>().y();
             ee->undoChangeProperty(Pid::PLACEMENT, int(p), pf);
             // flip and rebase user offset to new default now that placement has changed
-            qreal newDefaultY = ee->propertyDefault(Pid::OFFSET).toPointF().y();
+            qreal newDefaultY = ee->propertyDefault(Pid::OFFSET).value<PointF>().y();
             if (ee->isSpanner()) {
                 Spanner* spanner = toSpanner(ee);
                 for (SpannerSegment* ss : spanner->spannerSegments()) {
                     if (!ss->isStyled(Pid::OFFSET)) {
-                        QPointF off = ss->getProperty(Pid::OFFSET).toPointF();
+                        PointF off = ss->getProperty(Pid::OFFSET).value<PointF>();
                         qreal oldY = off.y() - oldDefaultY;
                         off.ry() = newDefaultY - oldY;
                         ss->undoChangeProperty(Pid::OFFSET, off);
@@ -2150,7 +2152,7 @@ void Score::cmdFlip()
                     }
                 }
             } else if (!ee->isStyled(Pid::OFFSET)) {
-                QPointF off = ee->getProperty(Pid::OFFSET).toPointF();
+                PointF off = ee->getProperty(Pid::OFFSET).value<PointF>();
                 qreal oldY = off.y() - oldDefaultY;
                 off.ry() = newDefaultY - oldY;
                 ee->undoChangeProperty(Pid::OFFSET, off);

@@ -52,7 +52,7 @@ public:
     virtual bool acceptDrop(EditData&) const override;
     virtual Element* drop(EditData&) override;
     virtual void layout() override;
-    virtual QRectF drag(EditData&) override;
+    mu::RectF drag(EditData&) override;
 
     void writeProperties(XmlWriter& xml) const override;
     bool readProperties(XmlReader&) override;
@@ -62,9 +62,9 @@ public:
 
     const QList<Element*>& leafs() const { return _leafs; }
     QList<Element*>& leafs() { return _leafs; }
-    virtual QPointF pagePos() const override;
-    virtual QPointF canvasPos() const override;
-    QVector<QLineF> dragAnchorLines() const override;
+    mu::PointF pagePos() const override;
+    mu::PointF canvasPos() const override;
+    QVector<mu::LineF> dragAnchorLines() const override;
     Segment* segment() const { return (Segment*)parent(); }
 };
 }     // namespace Ms

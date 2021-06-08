@@ -59,7 +59,7 @@ class PalmMute final : public TextLineBase
     Sid getPropertyStyle(Pid) const override;
 
 protected:
-    QPointF linePos(Grip, System**) const override;
+    mu::PointF linePos(Grip, System**) const override;
 
 public:
     PalmMute(Score* s);

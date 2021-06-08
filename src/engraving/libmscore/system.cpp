@@ -55,6 +55,8 @@
 #include "bracketItem.h"
 #include "log.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   ~SysStaff
@@ -341,7 +343,7 @@ void System::layoutSystem(qreal xo1, const bool isFirstSystem, bool firstSystemI
         SysStaff* s  = _staves[staffIdx];
         Staff* staff = score()->staff(staffIdx);
         if (!staff->show() || !s->show()) {
-            s->setbbox(QRectF());
+            s->setbbox(RectF());
             continue;
         }
         ++nVisible;
@@ -707,7 +709,7 @@ void System::layout2()
         if (s->show() && ss->show()) {
             visibleStaves.append(std::pair<int, SysStaff*>(i, ss));
         } else {
-            ss->setbbox(QRectF());        // already done in layout() ?
+            ss->setbbox(RectF());        // already done in layout() ?
         }
     }
 
@@ -1238,7 +1240,7 @@ void System::change(Element* o, Element* n)
 //   snap
 //---------------------------------------------------------
 
-Fraction System::snap(const Fraction& tick, const QPointF p) const
+Fraction System::snap(const Fraction& tick, const PointF p) const
 {
     for (const MeasureBase* m : ml) {
         if (p.x() < m->x() + m->width()) {
@@ -1252,7 +1254,7 @@ Fraction System::snap(const Fraction& tick, const QPointF p) const
 //   snap
 //---------------------------------------------------------
 
-Fraction System::snapNote(const Fraction& tick, const QPointF p, int staff) const
+Fraction System::snapNote(const Fraction& tick, const PointF p, int staff) const
 {
     for (const MeasureBase* m : ml) {
         if (p.x() < m->x() + m->width()) {

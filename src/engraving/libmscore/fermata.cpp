@@ -33,6 +33,8 @@
 #include "sym.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   fermataStyle
@@ -173,7 +175,7 @@ void Fermata::draw(mu::draw::Painter* painter) const
     }
 #endif
     painter->setPen(curColor());
-    drawSymbol(_symId, painter, QPointF(-0.5 * width(), 0.0));
+    drawSymbol(_symId, painter, PointF(-0.5 * width(), 0.0));
 }
 
 //---------------------------------------------------------
@@ -227,16 +229,16 @@ Page* Fermata::page() const
 void Fermata::layout()
 {
     Segment* s = segment();
-    setPos(QPointF());
+    setPos(PointF());
     if (!s) {            // for use in palette
         setOffset(0.0, 0.0);
-        QRectF b(symBbox(_symId));
+        RectF b(symBbox(_symId));
         setbbox(b.translated(-0.5 * b.width(), 0.0));
         return;
     }
 
     if (isStyled(Pid::OFFSET)) {
-        setOffset(propertyDefault(Pid::OFFSET).toPointF());
+        setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
     }
     Element* e = s->element(track());
     if (e) {
@@ -258,7 +260,7 @@ void Fermata::layout()
             _symId = Sym::name2id(name.left(name.size() - 5) + "Below");
         }
     }
-    QRectF b(symBbox(_symId));
+    RectF b(symBbox(_symId));
     setbbox(b.translated(-0.5 * b.width(), 0.0));
     autoplaceSegmentElement();
 }
@@ -267,10 +269,10 @@ void Fermata::layout()
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<QLineF> Fermata::dragAnchorLines() const
+QVector<mu::LineF> Fermata::dragAnchorLines() const
 {
-    QVector<QLineF> result;
-    result << QLineF(canvasPos(), parent()->canvasPos());
+    QVector<LineF> result;
+    result << LineF(canvasPos(), parent()->canvasPos());
     return result;
 }
 

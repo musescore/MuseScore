@@ -49,6 +49,8 @@
 #include "harmony.h"
 #include "hook.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   subTypeName
@@ -541,7 +543,7 @@ void Segment::add(Element* el)
     Q_ASSERT(score()->nstaves() * VOICES == int(_elist.size()));
     // make sure offset is correct for staff
     if (el->isStyled(Pid::OFFSET)) {
-        el->setOffset(el->propertyDefault(Pid::OFFSET).toPointF());
+        el->setOffset(el->propertyDefault(Pid::OFFSET).value<PointF>());
     }
 
     switch (el->type()) {
@@ -1249,9 +1251,9 @@ void Segment::scanElements(void* data, void (* func)(void*, Element*), bool all)
     }
 }
 
-QRectF Segment::contentRect() const
+RectF Segment::contentRect() const
 {
-    QRectF result;
+    RectF result;
     for (const Element* element: elist()) {
         if (!element) {
             continue;
@@ -1265,7 +1267,7 @@ QRectF Segment::contentRect() const
 
             Hook* hook = chord->hook();
             if (hook) {
-                QRectF rect = QRectF(hook->pos().x(), hook->pos().y(), hook->width(), hook->height());
+                RectF rect = RectF(hook->pos().x(), hook->pos().y(), hook->width(), hook->height());
                 result = result.united(rect);
             }
 
@@ -2206,7 +2208,7 @@ void Segment::createShape(int staffIdx)
         setVisible(true);
         BarLine* bl = toBarLine(element(staffIdx * VOICES));
         if (bl) {
-            QRectF r = bl->layoutRect();
+            RectF r = bl->layoutRect();
 #ifndef NDEBUG
             s.add(r.translated(bl->pos()), bl->name());
 #else

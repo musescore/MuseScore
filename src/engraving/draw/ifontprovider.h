@@ -26,6 +26,7 @@
 #include "modularity/imoduleexport.h"
 
 #include "font.h"
+#include "geometry.h"
 
 namespace mu::draw {
 class IFontProvider : MODULE_EXPORT_INTERFACE
@@ -51,13 +52,13 @@ public:
     virtual qreal horizontalAdvance(const Font& f, const QString& string) const = 0;
     virtual qreal horizontalAdvance(const Font& f, const QChar& ch) const = 0;
 
-    virtual QRectF boundingRect(const Font& f, const QString& string) const = 0;
-    virtual QRectF boundingRect(const Font& f, const QChar& ch) const = 0;
-    virtual QRectF boundingRect(const Font& f, const QRectF& r, int flags, const QString& string) const = 0;
-    virtual QRectF tightBoundingRect(const Font& f, const QString& string) const = 0;
+    virtual RectF boundingRect(const Font& f, const QString& string) const = 0;
+    virtual RectF boundingRect(const Font& f, const QChar& ch) const = 0;
+    virtual RectF boundingRect(const Font& f, const RectF& r, int flags, const QString& string) const = 0;
+    virtual RectF tightBoundingRect(const Font& f, const QString& string) const = 0;
 
     // Score symbols
-    virtual QRectF symBBox(const Font& f, uint ucs4, qreal DPI_F) const = 0;
+    virtual RectF symBBox(const Font& f, uint ucs4, qreal DPI_F) const = 0;
     virtual qreal symAdvance(const Font& f, uint ucs4, qreal DPI_F) const = 0;
 };
 }

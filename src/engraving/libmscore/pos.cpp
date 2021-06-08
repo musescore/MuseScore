@@ -28,6 +28,8 @@
 #include "sig.h"
 #include "tempo.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   Pos

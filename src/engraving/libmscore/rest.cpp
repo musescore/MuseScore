@@ -44,6 +44,8 @@
 #include "icon.h"
 #include "image.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //    Rest
@@ -103,7 +105,7 @@ void Rest::draw(mu::draw::Painter* painter) const
 //      replaced by special symbols with ledger lines
 //---------------------------------------------------------
 
-void Rest::setOffset(const QPointF& o)
+void Rest::setOffset(const mu::PointF& o)
 {
     qreal _spatium = spatium();
     int line = lrint(o.y() / _spatium);
@@ -125,25 +127,25 @@ void Rest::setOffset(const QPointF& o)
 //   drag
 //---------------------------------------------------------
 
-QRectF Rest::drag(EditData& ed)
+mu::RectF Rest::drag(EditData& ed)
 {
     // don't allow drag for Measure Rests, because they can't be easily laid out in correct position while dragging
     if (measure() && durationType().type() == TDuration::DurationType::V_MEASURE) {
-        return QRectF();
+        return RectF();
     }
 
-    QPointF s(ed.delta);
-    QRectF r(abbox());
+    PointF s(ed.delta);
+    RectF r(abbox());
 
     // Limit horizontal drag range
     static const qreal xDragRange = spatium() * 5;
     if (fabs(s.x()) > xDragRange) {
         s.rx() = xDragRange * (s.x() < 0 ? -1.0 : 1.0);
     }
-    setOffset(QPointF(s.x(), s.y()));
+    setOffset(PointF(s.x(), s.y()));
     layout();
     score()->rebuildBspTree();
-    return abbox() | r;
+    return abbox().united(r);
 }
 
 //---------------------------------------------------------
@@ -746,7 +748,7 @@ int Rest::downLine() const
 //    point to connect stem
 //---------------------------------------------------------
 
-QPointF Rest::stemPos() const
+PointF Rest::stemPos() const
 {
     return pagePos();
 }
@@ -757,9 +759,9 @@ QPointF Rest::stemPos() const
 //    return canvas coordinates
 //---------------------------------------------------------
 
-QPointF Rest::stemPosBeam() const
+PointF Rest::stemPosBeam() const
 {
-    QPointF p(pagePos());
+    PointF p(pagePos());
     if (_up) {
         p.ry() += bbox().top() + spatium() * 1.5;
     } else {
@@ -812,10 +814,10 @@ void Rest::setAccent(bool flag)
             if (durationType() >= TDuration::DurationType::V_HALF) {
                 yOffset -= staff()->spatium(tick()) * 0.5;
             }
-            // undoChangeProperty(Pid::OFFSET, QPointF(0.0, yOffset));
+            // undoChangeProperty(Pid::OFFSET, PointF(0.0, yOffset));
             rypos() += yOffset;
         } else {
-            // undoChangeProperty(Pid::OFFSET, QPointF());  TODO::check
+            // undoChangeProperty(Pid::OFFSET, PointF());  TODO::check
         }
     }
 }
@@ -1020,7 +1022,7 @@ bool Rest::setProperty(Pid propertyId, const QVariant& v)
         break;
     case Pid::OFFSET:
         score()->addRefresh(canvasBoundingRect());
-        setOffset(v.toPointF());
+        setOffset(v.value<PointF>());
         layout();
         score()->addRefresh(canvasBoundingRect());
         if (measure() && durationType().type() == TDuration::DurationType::V_MEASURE) {

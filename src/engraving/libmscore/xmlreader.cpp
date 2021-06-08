@@ -28,6 +28,8 @@
 #include "beam.h"
 #include "tuplet.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   ~XmlReader
@@ -112,7 +114,7 @@ bool XmlReader::hasAttribute(const char* s) const
 //   readPoint
 //---------------------------------------------------------
 
-QPointF XmlReader::readPoint()
+PointF XmlReader::readPoint()
 {
     Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
 #ifndef NDEBUG
@@ -134,7 +136,7 @@ QPointF XmlReader::readPoint()
     qreal x = doubleAttribute("x", 0.0);
     qreal y = doubleAttribute("y", 0.0);
     readNext();
-    return QPointF(x, y);
+    return PointF(x, y);
 }
 
 //---------------------------------------------------------
@@ -157,10 +159,10 @@ QColor XmlReader::readColor()
 //   readSize
 //---------------------------------------------------------
 
-QSizeF XmlReader::readSize()
+SizeF XmlReader::readSize()
 {
     Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
-    QSizeF p;
+    SizeF p;
     p.setWidth(doubleAttribute("w", 0.0));
     p.setHeight(doubleAttribute("h", 0.0));
     skipCurrentElement();
@@ -171,10 +173,10 @@ QSizeF XmlReader::readSize()
 //   readRect
 //---------------------------------------------------------
 
-QRectF XmlReader::readRect()
+RectF XmlReader::readRect()
 {
     Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
-    QRectF p;
+    RectF p;
     p.setX(doubleAttribute("x", 0.0));
     p.setY(doubleAttribute("y", 0.0));
     p.setWidth(doubleAttribute("w", 0.0));

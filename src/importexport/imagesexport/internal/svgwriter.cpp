@@ -77,10 +77,10 @@ mu::Ret SvgWriter::write(INotationPtr notation, IODevice& destinationDevice, con
 
     const int TRIM_MARGINS_SIZE = options.value(OptionKey::TRIM_MARGINS_SIZE, Val(0)).toInt();
 
-    QRectF pageRect = page->abbox();
+    RectF pageRect = page->abbox();
     if (TRIM_MARGINS_SIZE >= 0) {
         QMarginsF margins(TRIM_MARGINS_SIZE, TRIM_MARGINS_SIZE, TRIM_MARGINS_SIZE, TRIM_MARGINS_SIZE);
-        pageRect = page->tbbox() + margins;
+        pageRect = RectF::fromQRectF(page->tbbox().toQRectF() + margins);
     }
 
     qreal width = pageRect.width();
@@ -153,9 +153,9 @@ mu::Ret SvgWriter::write(INotationPtr notation, IODevice& destinationDevice, con
                 qreal lastX =  lastSL->bbox().right()
                               + lastSL->pagePos().x()
                               - firstSL->pagePos().x();
-                std::vector<mu::draw::LineF>& lines = firstSL->getLines();
+                std::vector<mu::LineF>& lines = firstSL->getLines();
                 for (size_t l = 0, c = lines.size(); l < c; l++) {
-                    lines[l].setP2(mu::draw::PointF(lastX, lines[l].p2().y()));
+                    lines[l].setP2(mu::PointF(lastX, lines[l].p2().y()));
                 }
 
                 printer.setElement(firstSL);

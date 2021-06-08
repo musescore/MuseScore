@@ -50,7 +50,7 @@ enum class HairpinType : signed char {
 class HairpinSegment final : public TextLineBaseSegment
 {
     bool drawCircledTip;
-    QPointF circledTip;
+    mu::PointF circledTip;
     qreal circledTipRadius;
 
     void startEditDrag(EditData&) override;
@@ -76,7 +76,7 @@ public:
     Shape shape() const override;
 
     int gripsCount() const override { return 4; }
-    std::vector<QPointF> gripsPositions(const EditData& = EditData()) const override;
+    std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const Element*)> isDragged) override;
 };

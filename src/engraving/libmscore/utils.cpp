@@ -42,14 +42,16 @@
 #include "tuplet.h"
 #include "symid.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   handleRect
 //---------------------------------------------------------
 
-QRectF handleRect(const QPointF& pos)
+RectF handleRect(const PointF& pos)
 {
-    return QRectF(pos.x() - 4, pos.y() - 4, 8, 8);
+    return RectF(pos.x() - 4, pos.y() - 4, 8, 8);
 }
 
 //---------------------------------------------------------
@@ -265,12 +267,12 @@ BeatType Score::tick2beatType(const Fraction& tick)
 //   getStaff
 //---------------------------------------------------------
 
-int getStaff(System* system, const QPointF& p)
+int getStaff(System* system, const PointF& p)
 {
-    QPointF pp = p - system->page()->pos() - system->pos();
+    PointF pp = p - system->page()->pos() - system->pos();
     for (int i = 0; i < system->page()->score()->nstaves(); ++i) {
         qreal sp = system->spatium();
-        QRectF r = system->bboxStaff(i).adjusted(0.0, -sp, 0.0, sp);
+        RectF r = system->bboxStaff(i).adjusted(0.0, -sp, 0.0, sp);
         if (r.contains(pp)) {
             return i;
         }

@@ -35,6 +35,8 @@
 
 #include "translation.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   PaletteTreeModel::PaletteTreeModel
@@ -353,7 +355,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
         case MimeDataRole: {
             QVariantMap map;
             if (cell->element) {
-                map[mu::commonscene::MIME_SYMBOL_FORMAT] = cell->element->mimeData(QPointF());
+                map[mu::commonscene::MIME_SYMBOL_FORMAT] = cell->element->mimeData(PointF());
             }
             map[PaletteCell::mimeDataFormat] = cell->mimeData();
             return map;
@@ -575,7 +577,7 @@ QMimeData* PaletteTreeModel::mimeData(const QModelIndexList& indexes) const
     if (const PalettePanel* pp = findPalettePanel(indexes[0])) {
         mime->setData(PalettePanel::mimeDataFormat, pp->mimeData());
     } else if (PaletteCellConstPtr cell = findCell(indexes[0])) {
-        mime->setData(mu::commonscene::MIME_SYMBOL_FORMAT, cell->element->mimeData(QPointF()));
+        mime->setData(mu::commonscene::MIME_SYMBOL_FORMAT, cell->element->mimeData(PointF()));
     }
 
     return mime;

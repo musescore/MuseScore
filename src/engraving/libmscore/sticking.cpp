@@ -23,6 +23,8 @@
 #include "sticking.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   stickingStyle

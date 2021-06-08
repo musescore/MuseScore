@@ -71,6 +71,8 @@
 #include "chordlist.h"
 #include "mscore.h"
 
+using namespace mu;
+
 namespace Ms {
 static void removeRepeatMarkings(Score* score)
 {

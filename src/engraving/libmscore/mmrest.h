@@ -49,7 +49,7 @@ public:
     void layout() override;
     void setWidth(qreal width) override { m_width = width; }
     qreal width() const override { return m_width; }
-    QRectF numberRect() const override;
+    mu::RectF numberRect() const override;
 
     void write(XmlWriter&) const override;
 

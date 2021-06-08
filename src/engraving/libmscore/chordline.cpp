@@ -27,6 +27,9 @@
 #include "system.h"
 #include "note.h"
 
+using namespace mu;
+using namespace mu::draw;
+
 namespace Ms {
 const char* scorelineNames[] = {
     QT_TRANSLATE_NOOP("Ms", "Fall"),
@@ -100,7 +103,7 @@ void ChordLine::layout()
             break;
         }
         if (_chordLineType != ChordLineType::NOTYPE) {
-            path = QPainterPath();
+            path = PainterPath();
             // chordlines to the right of the note
             if (_chordLineType == ChordLineType::FALL || _chordLineType == ChordLineType::DOIT) {
                 if (_straight) {
@@ -123,7 +126,7 @@ void ChordLine::layout()
     qreal _spatium = spatium();
     if (parent()) {
         Note* note = chord()->upNote();
-        QPointF p(note->pos());
+        PointF p(note->pos());
         // chordlines to the right of the note
         if (_chordLineType == ChordLineType::FALL || _chordLineType == ChordLineType::DOIT) {
             setPos(p.x() + note->bboxRightPos() + _spatium * .2, p.y());
@@ -139,7 +142,7 @@ void ChordLine::layout()
     } else {
         setPos(0.0, 0.0);
     }
-    QRectF r(path.boundingRect());
+    RectF r = path.boundingRect();
     int x1, y1, width, height = 0;
 
     x1 = r.x() * _spatium;
@@ -155,13 +158,13 @@ void ChordLine::layout()
 
 void ChordLine::read(XmlReader& e)
 {
-    path = QPainterPath();
+    path = PainterPath();
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "Path") {
-            path = QPainterPath();
-            QPointF curveTo;
-            QPointF p1;
+            path = PainterPath();
+            PointF curveTo;
+            PointF p1;
             int state = 0;
             while (e.readNextStartElement()) {
                 const QStringRef& nextTag(e.name());
@@ -169,25 +172,25 @@ void ChordLine::read(XmlReader& e)
                     int type = e.intAttribute("type");
                     qreal x  = e.doubleAttribute("x");
                     qreal y  = e.doubleAttribute("y");
-                    switch (QPainterPath::ElementType(type)) {
-                    case QPainterPath::MoveToElement:
+                    switch (PainterPath::ElementType(type)) {
+                    case PainterPath::MoveToElement:
                         path.moveTo(x, y);
                         break;
-                    case QPainterPath::LineToElement:
+                    case PainterPath::LineToElement:
                         path.lineTo(x, y);
                         break;
-                    case QPainterPath::CurveToElement:
+                    case PainterPath::CurveToElement:
                         curveTo.rx() = x;
                         curveTo.ry() = y;
                         state = 1;
                         break;
-                    case QPainterPath::CurveToDataElement:
+                    case PainterPath::CurveToDataElement:
                         if (state == 1) {
                             p1.rx() = x;
                             p1.ry() = y;
                             state = 2;
                         } else if (state == 2) {
-                            path.cubicTo(curveTo, p1, QPointF(x, y));
+                            path.cubicTo(curveTo, p1, PointF(x, y));
                             state = 0;
                         }
                         break;
@@ -228,7 +231,7 @@ void ChordLine::write(XmlWriter& xml) const
         int n = path.elementCount();
         xml.stag("Path");
         for (int i = 0; i < n; ++i) {
-            const QPainterPath::Element& e = path.elementAt(i);
+            const PainterPath::Element& e = path.elementAt(i);
             xml.tagE(QString("Element type=\"%1\" x=\"%2\" y=\"%3\"")
                      .arg(int(e.type)).arg(e.x).arg(e.y));
         }
@@ -251,7 +254,7 @@ void ChordLine::draw(mu::draw::Painter* painter) const
         painter->setPen(QPen(curColor(), .15, Qt::SolidLine));
         painter->setBrush(Qt::NoBrush);
 
-        QPainterPath pathOffset = path;
+        PainterPath pathOffset = path;
         qreal offset = 0.5;
 
         if (_chordLineType == ChordLineType::FALL) {
@@ -294,7 +297,7 @@ void ChordLine::startEditDrag(EditData& ed)
 void ChordLine::editDrag(EditData& ed)
 {
     int n = path.elementCount();
-    QPainterPath p;
+    PainterPath p;
     qreal sp = spatium();
     _lengthX += ed.delta.x();
     _lengthY += ed.delta.y();
@@ -314,13 +317,13 @@ void ChordLine::editDrag(EditData& ed)
     qreal dx = ed.delta.x() / sp;
     qreal dy = ed.delta.y() / sp;
     for (int i = 0; i < n; ++i) {
-        const QPainterPath::Element& e = (_straight ? path.elementAt(1) : path.elementAt(i));
+        const PainterPath::Element& e = (_straight ? path.elementAt(1) : path.elementAt(i));
         if (_straight) {
             if (i > 0) {
                 break;
             }
             // check the gradient of the line
-            const QPainterPath::Element& startPoint = path.elementAt(0);
+            const PainterPath::Element& startPoint = path.elementAt(0);
             if ((_chordLineType == ChordLineType::FALL && (e.x + dx < startPoint.x || e.y + dy < startPoint.y))
                 || (_chordLineType == ChordLineType::DOIT && (e.x + dx < startPoint.x || e.y + dy > startPoint.y))
                 || (_chordLineType == ChordLineType::SCOOP && (e.x + dx > startPoint.x || e.y + dy < startPoint.y))
@@ -336,15 +339,15 @@ void ChordLine::editDrag(EditData& ed)
             y += dy;
         }
         switch (e.type) {
-        case QPainterPath::CurveToDataElement:
+        case PainterPath::CurveToDataElement:
             break;
-        case QPainterPath::MoveToElement:
+        case PainterPath::MoveToElement:
             p.moveTo(x, y);
             break;
-        case QPainterPath::LineToElement:
+        case PainterPath::LineToElement:
             p.lineTo(x, y);
             break;
-        case QPainterPath::CurveToElement:
+        case PainterPath::CurveToElement:
         {
             qreal x2 = path.elementAt(i + 1).x;
             qreal y2 = path.elementAt(i + 1).y;
@@ -371,33 +374,33 @@ void ChordLine::editDrag(EditData& ed)
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<QPointF> ChordLine::gripsPositions(const EditData&) const
+std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
 {
     qreal sp = spatium();
     int n    = path.elementCount();
-    QPointF cp(pagePos());
+    PointF cp(pagePos());
     if (_straight) {
         // limit the number of grips to one
         qreal offset = 0.5 * sp;
-        QPointF p;
+        PointF p;
 
         if (_chordLineType == ChordLineType::FALL) {
-            p = QPointF(offset, -offset);
+            p = PointF(offset, -offset);
         } else if (_chordLineType == ChordLineType::DOIT) {
-            p = QPointF(offset, offset);
+            p = PointF(offset, offset);
         } else if (_chordLineType == ChordLineType::SCOOP) {
-            p = QPointF(-offset, offset);
+            p = PointF(-offset, offset);
         } else if (_chordLineType == ChordLineType::PLOP) {
-            p = QPointF(-offset, -offset);
+            p = PointF(-offset, -offset);
         }
 
         // translate on the length and height - stops the grips from going past boundaries of slide
-        p += (cp + QPointF(path.elementAt(1).x * sp, path.elementAt(1).y * sp));
+        p += (cp + PointF(path.elementAt(1).x * sp, path.elementAt(1).y * sp));
         return { p };
     } else {
-        std::vector<QPointF> grips(n);
+        std::vector<PointF> grips(n);
         for (int i = 0; i < n; ++i) {
-            grips[i] = cp + QPointF(path.elementAt(i).x * sp, path.elementAt(i).y * sp);
+            grips[i] = cp + PointF(path.elementAt(i).x * sp, path.elementAt(i).y * sp);
         }
         return grips;
     }
@@ -443,7 +446,7 @@ bool ChordLine::setProperty(Pid propertyId, const QVariant& val)
 {
     switch (propertyId) {
     case Pid::PATH:
-        path = val.value<QPainterPath>();
+        path = val.value<PainterPath>();
         break;
     case Pid::CHORD_LINE_TYPE:
         setChordLineType(ChordLineType(val.toInt()));

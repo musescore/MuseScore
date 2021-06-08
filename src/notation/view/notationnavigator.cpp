@@ -50,12 +50,12 @@ bool NotationNavigator::isVerticalOrientation() const
 
 QRectF NotationNavigator::notationContentRect() const
 {
-    QRectF result;
+    RectF result;
     for (const Page* page: pages()) {
         result = result.united(page->bbox().translated(page->pos()));
     }
 
-    return result;
+    return result.toQRectF();
 }
 
 PageList NotationNavigator::pages() const
@@ -101,9 +101,9 @@ void NotationNavigator::wheelEvent(QWheelEvent*)
 
 void NotationNavigator::mousePressEvent(QMouseEvent* event)
 {
-    QPoint logicPos = toLogical(event->pos());
+    PointF logicPos = toLogical(event->pos());
     m_startMove = logicPos;
-    if (m_cursorRect.contains(logicPos)) {
+    if (m_cursorRect.contains(logicPos.toQPoint())) {
         return;
     }
 
@@ -116,8 +116,8 @@ void NotationNavigator::mousePressEvent(QMouseEvent* event)
 
 void NotationNavigator::mouseMoveEvent(QMouseEvent* event)
 {
-    QPoint logicPos = toLogical(event->pos());
-    QPoint delta = logicPos - m_startMove;
+    PointF logicPos = toLogical(event->pos());
+    PointF delta = logicPos - m_startMove;
     int dx = delta.x();
     int dy = delta.y();
     moveNotationRequested(-dx, -dy);
@@ -255,12 +255,12 @@ void NotationNavigator::paintPageNumbers(QPainter* painter)
     QFont font(QString::fromStdString(configuration()->fontFamily()), PAGE_NUMBER_FONT_SIZE);
 
     for (const Page* page : pages()) {
-        painter->translate(page->pos());
+        painter->translate(page->pos().toQPointF());
 
         painter->setFont(font);
         painter->setPen(configuration()->layoutBreakColor());
-        painter->drawText(page->bbox(), Qt::AlignCenter, QString("%1").arg(page->no() + 1));
+        painter->drawText(page->bbox().toQRectF(), Qt::AlignCenter, QString("%1").arg(page->no() + 1));
 
-        painter->translate(-page->pos());
+        painter->translate(-page->pos().toQPointF());
     }
 }

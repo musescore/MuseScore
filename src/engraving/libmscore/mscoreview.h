@@ -23,10 +23,8 @@
 #ifndef __MSCOREVIEW_H__
 #define __MSCOREVIEW_H__
 
-#include <QPointF>
 #include <QList>
 #include <QCursor>
-#include <QRectF>
 
 #include "draw/painter.h"
 
@@ -52,13 +50,13 @@ protected:
 
 public:
     virtual ~MuseScoreView() = default;
-    Page* point2page(const QPointF&);
-    Element* elementAt(const QPointF& p);
-    const QList<Element*> elementsAt(const QPointF&);
-    virtual Element* elementNear(QPointF) { return 0; }
+    Page* point2page(const mu::PointF&);
+    Element* elementAt(const mu::PointF& p);
+    const QList<Element*> elementsAt(const mu::PointF&);
+    virtual Element* elementNear(mu::PointF) { return 0; }
 
     virtual void layoutChanged() {}
-    virtual void dataChanged(const QRectF&) = 0;
+    virtual void dataChanged(const mu::RectF&) = 0;
     virtual void updateAll() = 0;
 
     virtual void moveCursor() {}
@@ -72,11 +70,11 @@ public:
     virtual void changeEditElement(Element*) {}
     virtual QCursor cursor() const { return QCursor(); }
     virtual void setCursor(const QCursor&) {}
-    virtual void setDropRectangle(const QRectF&) {}
+    virtual void setDropRectangle(const mu::RectF&) {}
     virtual void addSlur(ChordRest*, ChordRest*, const Slur* /* slurTemplate */) {}
     virtual void startEdit(Element*, Grip /*startGrip*/) {}
     virtual void startNoteEntryMode() {}
-    virtual void drawBackground(mu::draw::Painter*, const QRectF&) const = 0;
+    virtual void drawBackground(mu::draw::Painter*, const mu::RectF&) const = 0;
     virtual void setDropTarget(const Element*) {}
 
     virtual void textTab(bool /*back*/) {}
@@ -89,7 +87,7 @@ public:
 
     virtual void onElementDestruction(Element*) {}
 
-    virtual const QRect geometry() const = 0;
+    virtual const mu::Rect geometry() const = 0;
 };
 }     // namespace Ms
 

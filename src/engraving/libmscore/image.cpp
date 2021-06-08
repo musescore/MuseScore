@@ -27,6 +27,10 @@
 #include "mscore.h"
 #include "imageStore.h"
 
+#include "draw/transform.h"
+
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   propertyList
@@ -45,7 +49,7 @@ Image::Image(Score* s)
 {
     imageType        = ImageType::NONE;
     rasterDoc        = 0;
-    _size            = QSizeF(0, 0);
+    _size            = SizeF(0.0, 0.0);
     _storeItem       = 0;
     _dirty           = false;
     _lockAspectRatio = defaultLockAspectRatio;
@@ -114,12 +118,12 @@ void Image::setImageType(ImageType t)
 //   imageSize
 //---------------------------------------------------------
 
-QSizeF Image::imageSize() const
+SizeF Image::imageSize() const
 {
     if (!isValid()) {
-        return QSizeF();
+        return SizeF();
     }
-    return imageType == ImageType::RASTER ? rasterDoc->size() : svgDoc->defaultSize();
+    return SizeF::fromQSizeF(imageType == ImageType::RASTER ? rasterDoc->size() : svgDoc->defaultSize());
 }
 
 //---------------------------------------------------------
@@ -134,14 +138,14 @@ void Image::draw(mu::draw::Painter* painter) const
         if (!svgDoc) {
             emptyImage = true;
         } else {
-            svgDoc->render(painter->qpainter(), bbox());
+            svgDoc->render(painter->qpainter(), bbox().toQRectF());
         }
     } else if (imageType == ImageType::RASTER) {
         if (rasterDoc == nullptr) {
             emptyImage = true;
         } else {
             painter->save();
-            QSizeF s;
+            SizeF s;
             if (_sizeIsSpatium) {
                 s = _size * spatium();
             } else {
@@ -150,20 +154,20 @@ void Image::draw(mu::draw::Painter* painter) const
             if (score() && score()->printing() && !MScore::svgPrinting) {
                 // use original image size for printing, but not for svg for reasonable file size.
                 painter->scale(s.width() / rasterDoc->width(), s.height() / rasterDoc->height());
-                painter->drawPixmap(QPointF(0, 0), QPixmap::fromImage(*rasterDoc));
+                painter->drawPixmap(PointF(0, 0), QPixmap::fromImage(*rasterDoc));
             } else {
-                QTransform t = painter->worldTransform();
-                QSize ss = QSizeF(s.width() * t.m11(), s.height() * t.m22()).toSize();
+                Transform t = painter->worldTransform();
+                QSizeF ss = QSizeF(s.width() * t.m11(), s.height() * t.m22());
                 t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
                 painter->setWorldTransform(t);
                 if ((buffer.size() != ss || _dirty) && rasterDoc && !rasterDoc->isNull()) {
-                    buffer = QPixmap::fromImage(rasterDoc->scaled(ss, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                    buffer = QPixmap::fromImage(rasterDoc->scaled(ss.toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
                     _dirty = false;
                 }
                 if (buffer.isNull()) {
                     emptyImage = true;
                 } else {
-                    painter->drawPixmap(QPointF(0.0, 0.0), buffer);
+                    painter->drawPixmap(PointF(0.0, 0.0), buffer);
                 }
             }
             painter->restore();
@@ -496,12 +500,12 @@ void Image::editDrag(EditData& ed)
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<QPointF> Image::gripsPositions(const EditData&) const
+std::vector<mu::PointF> Image::gripsPositions(const EditData&) const
 {
-    QRectF r(pageBoundingRect());
+    RectF r(pageBoundingRect());
     return {
-        QPointF(r.x() + r.width(), r.y() + r.height() * .5),
-        QPointF(r.x() + r.width() * .5, r.y() + r.height())
+        PointF(r.x() + r.width(), r.y() + r.height() * .5),
+        PointF(r.x() + r.width() * .5, r.y() + r.height())
     };
 }
 
@@ -509,7 +513,7 @@ std::vector<QPointF> Image::gripsPositions(const EditData&) const
 //   pixel2Size
 //---------------------------------------------------------
 
-QSizeF Image::pixel2size(const QSizeF& s) const
+SizeF Image::pixel2size(const SizeF& s) const
 {
     return s / (_sizeIsSpatium ? spatium() : DPMM);
 }
@@ -518,7 +522,7 @@ QSizeF Image::pixel2size(const QSizeF& s) const
 //   size2pixel
 //---------------------------------------------------------
 
-QSizeF Image::size2pixel(const QSizeF& s) const
+SizeF Image::size2pixel(const SizeF& s) const
 {
     return s * (_sizeIsSpatium ? spatium() : DPMM);
 }
@@ -551,7 +555,7 @@ void Image::layout()
     if (autoScale() && parent() && ((parent()->isHBox() || parent()->isVBox()))) {
         if (_lockAspectRatio) {
             qreal f = _sizeIsSpatium ? spatium() : DPMM;
-            QSizeF size(imageSize());
+            SizeF size(imageSize());
             qreal ratio = size.width() / size.height();
             qreal w = parent()->width();
             qreal h = parent()->height();
@@ -568,7 +572,7 @@ void Image::layout()
     }
 
     // in any case, adjust position relative to parent
-    setbbox(QRectF(QPointF(), size2pixel(_size)));
+    setbbox(RectF(PointF(), size2pixel(_size)));
 }
 
 //---------------------------------------------------------
@@ -581,7 +585,7 @@ QVariant Image::getProperty(Pid propertyId) const
     case Pid::AUTOSCALE:
         return autoScale();
     case Pid::SIZE:
-        return size();
+        return QVariant::fromValue(size());
     case Pid::IMAGE_HEIGHT:
         return imageHeight();
     case Pid::IMAGE_WIDTH:
@@ -610,7 +614,7 @@ bool Image::setProperty(Pid propertyId, const QVariant& v)
         setAutoScale(v.toBool());
         break;
     case Pid::SIZE:
-        setSize(v.toSizeF());
+        setSize(SizeF::fromVariant(v));
         break;
     case Pid::IMAGE_HEIGHT:
         updateImageHeight(v.toDouble());
@@ -624,7 +628,7 @@ bool Image::setProperty(Pid propertyId, const QVariant& v)
         setLockAspectRatio(v.toBool());
         break;
     case Pid::SIZE_IS_SPATIUM: {
-        QSizeF s = size2pixel(_size);
+        SizeF s = size2pixel(_size);
         setSizeIsSpatium(v.toBool());
         _size = pixel2size(s);
     }
@@ -649,7 +653,7 @@ QVariant Image::propertyDefault(Pid id) const
     case Pid::AUTOSCALE:
         return defaultAutoScale;
     case Pid::SIZE:
-        return pixel2size(imageSize());
+        return QVariant::fromValue(pixel2size(imageSize()));
     case Pid::IMAGE_HEIGHT:
         return pixel2size(imageSize()).height();
     case Pid::IMAGE_WIDTH:

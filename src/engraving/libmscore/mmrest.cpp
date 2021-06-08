@@ -27,7 +27,7 @@
 #include "undo.h"
 #include "utils.h"
 
-using namespace mu::draw;
+using namespace mu;
 
 namespace Ms {
 static const ElementStyle mmRestStyle {
@@ -77,11 +77,11 @@ void MMRest::draw(mu::draw::Painter* painter) const
     // draw number
     painter->setPen(curColor());
     std::vector<SymId>&& numberSym = toTimeSigString(QString("%1").arg(m_number));
-    QRectF numberBox = symBbox(numberSym);
+    RectF numberBox = symBbox(numberSym);
     qreal x = (m_width - numberBox.width()) * .5;
     qreal y = m_numberPos * spatium() - staff()->height() * .5;
     if (m_numberVisible) {
-        drawSymbols(numberSym, painter, QPointF(x, y));
+        drawSymbols(numberSym, painter, PointF(x, y));
     }
 
     if (score()->styleB(Sid::oldStyleMultiMeasureRests)
@@ -91,7 +91,7 @@ void MMRest::draw(mu::draw::Painter* painter) const
         qreal spacing = score()->styleP(Sid::mmRestOldStyleSpacing);
         for (SymId sym : m_restSyms) {
             y = (sym == SymId::restWhole ? -spatium() : 0);
-            drawSymbol(sym, painter, QPointF(x, y));
+            drawSymbol(sym, painter, PointF(x, y));
             x += symBbox(sym).width() + spacing;
         }
     } else {
@@ -166,10 +166,10 @@ void MMRest::layout()
             }
         }
         qreal symHeight = symBbox(m_restSyms[0]).height();
-        setbbox(QRectF((m_width - m_symsWidth) * .5, -spatium(), m_symsWidth, symHeight));
+        setbbox(RectF((m_width - m_symsWidth) * .5, -spatium(), m_symsWidth, symHeight));
     } else { // H-bar
         qreal vStrokeHeight = score()->styleP(Sid::mmRestHBarVStrokeHeight);
-        setbbox(QRectF(0.0, -(vStrokeHeight * .5), m_width, vStrokeHeight));
+        setbbox(RectF(0.0, -(vStrokeHeight * .5), m_width, vStrokeHeight));
     }
     if (m_numberVisible) {
         addbbox(numberRect());
@@ -182,15 +182,15 @@ void MMRest::layout()
 ///   returns the mmrest number's bounding rectangle
 //---------------------------------------------------------
 
-QRectF MMRest::numberRect() const
+RectF MMRest::numberRect() const
 {
     std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(m_number));
 
-    QRectF r = symBbox(s);
+    RectF r = symBbox(s);
     qreal x = (m_width - r.width()) * .5;
     qreal y = m_numberPos * spatium() - staff()->height() * .5;
 
-    r.translate(QPointF(x, y));
+    r.translate(PointF(x, y));
     return r;
 }
 
@@ -267,7 +267,7 @@ Shape MMRest::shape() const
 {
     Shape shape;
     qreal vStrokeHeight = score()->styleP(Sid::mmRestHBarVStrokeHeight);
-    shape.add(QRectF(0.0, -(vStrokeHeight * .5), m_width, vStrokeHeight));
+    shape.add(RectF(0.0, -(vStrokeHeight * .5), m_width, vStrokeHeight));
     if (m_numberVisible) {
         shape.add(numberRect());
     }

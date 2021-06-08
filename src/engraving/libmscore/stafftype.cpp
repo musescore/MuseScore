@@ -32,6 +32,8 @@
 
 #include "draw/fontmetrics.h"
 
+using namespace mu;
+
 #define TAB_DEFAULT_LINE_SP   (1.5)
 #define TAB_RESTSYMBDISPL     2.0
 
@@ -443,7 +445,7 @@ void StaffType::setDurationMetrics() const
     font.setPointSizeF(_durationFontSize);
     mu::draw::FontMetrics fm(font);
     QString txt(_durationFonts[_durationFontIdx].displayValue, int(TabVal::NUM_OF));
-    QRectF bb(fm.tightBoundingRect(txt));
+    RectF bb(fm.tightBoundingRect(txt));
     // raise symbols by a default margin and, if marks are above lines, by half the line distance
     // (converted from spatium units to raster units)
     _durationGridYOffset = (TAB_DEFAULT_DUR_YOFFS - (_onLines ? 0.0 : lineDistance().val() * 0.5)) * SPATIUM20;
@@ -467,7 +469,7 @@ void StaffType::setFretMetrics() const
     }
 
     mu::draw::FontMetrics fm(fretFont());
-    QRectF bb;
+    RectF bb;
     // compute vertical displacement
     if (_useNumbers) {
         // compute total height of used characters
@@ -478,7 +480,7 @@ void StaffType::setFretMetrics() const
         bb = fm.tightBoundingRect(txt);
         // for numbers: centre on '0': move down by the whole part above (negative)
         // the base line ( -bb.y() ) then up by half the whole height ( -bb.height()/2 )
-        QRectF bx(fm.tightBoundingRect(_fretFonts[_fretFontIdx].displayDigit[0]));
+        RectF bx(fm.tightBoundingRect(_fretFonts[_fretFontIdx].displayDigit[0]));
         _fretYOffset = -(bx.y() + bx.height() / 2.0);
         // _fretYOffset = -(bb.y() + bb.height()/2.0);  // <- using bbox of all chars
     } else {
@@ -486,7 +488,7 @@ void StaffType::setFretMetrics() const
         QString txt(_fretFonts[_fretFontIdx].displayLetter, NUM_OF_LETTERFRETS);
         bb = fm.tightBoundingRect(txt);
         // for letters: centre on the 'a' ascender, by moving down half of the part above the base line in bx
-        QRectF bx(fm.tightBoundingRect(_fretFonts[_fretFontIdx].displayLetter[0]));
+        RectF bx(fm.tightBoundingRect(_fretFonts[_fretFontIdx].displayLetter[0]));
         _fretYOffset = -bx.y() / 2.0;
     }
     // if on string, we are done; if between strings, raise by half line distance
@@ -623,7 +625,7 @@ qreal StaffType::chordRestStemPosY(const ChordRest* chordRest) const
 //    return position of note at other side of beam
 //---------------------------------------------------------
 
-QPointF StaffType::chordStemPos(const Chord* chord) const
+PointF StaffType::chordStemPos(const Chord* chord) const
 {
     qreal y;
     if (stemThrough()) {
@@ -634,7 +636,7 @@ QPointF StaffType::chordStemPos(const Chord* chord) const
         // according to TAB parameters and stem up/down
         y = chordRestStemPosY(chord);
     }
-    return QPointF(chordStemPosX(chord), y);
+    return PointF(chordStemPosX(chord), y);
 }
 
 //---------------------------------------------------------
@@ -642,11 +644,11 @@ QPointF StaffType::chordStemPos(const Chord* chord) const
 //          return position of note at beam side of stem
 //---------------------------------------------------------
 
-QPointF StaffType::chordStemPosBeam(const Chord* chord) const
+PointF StaffType::chordStemPosBeam(const Chord* chord) const
 {
     qreal y = (stemsDown() ? chord->downString() : chord->upString()) * _lineDistance.val();
 
-    return QPointF(chordStemPosX(chord), y);
+    return PointF(chordStemPosX(chord), y);
 }
 
 //---------------------------------------------------------
@@ -873,7 +875,7 @@ TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
 void TabDurationSymbol::layout()
 {
     if (!_tab) {
-        setbbox(QRectF());
+        setbbox(RectF());
         return;
     }
     qreal _spatium    = spatium();
@@ -988,7 +990,7 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
         mu::draw::Font f(_tab->durationFont());
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
         painter->setFont(f);
-        painter->drawText(QPointF(0.0, 0.0), _text);
+        painter->drawText(PointF(0.0, 0.0), _text);
     } else {
         // if beam grid, draw stem line
         TablatureDurationFont& font = _tab->_durationFonts[_tab->_durationFontIdx];
@@ -998,7 +1000,7 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
         painter->setPen(pen);
         // take stem height from bbox, but de-magnify it, as drawing is already magnified
         qreal h     = bbox().y() / mag;
-        painter->drawLine(QPointF(0.0, h), QPointF(0.0, 0.0));
+        painter->drawLine(PointF(0.0, h), PointF(0.0, 0.0));
         // if beam grid is medial/final, draw beam lines too: lines go from mid of
         // previous stem (delta x stored in _beamLength) to mid of this' stem (0.0)
         if (_beamGrid == TabBeamGrid::MEDIALFINAL) {
@@ -1012,7 +1014,7 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
             qreal step  = -h / _beamLevel;
             qreal y     = h;
             for (int i = 0; i < _beamLevel; i++, y += step) {
-                painter->drawLine(QPointF(_beamLength, y), QPointF(0.0, y));
+                painter->drawLine(PointF(_beamLength, y), PointF(0.0, y));
             }
         }
     }

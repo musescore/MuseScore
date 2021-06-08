@@ -58,13 +58,13 @@ class Tuplet final : public DurationElement
 
     Fraction _tick;
 
-    QPointF p1, p2;
-    QPointF _p1, _p2;         // user offset
+    mu::PointF p1, p2;
+    mu::PointF _p1, _p2;         // user offset
     mutable int _id;          // used during read/write
 
     Text* _number;
-    mu::draw::PointF bracketL[4];
-    mu::draw::PointF bracketR[3];
+    mu::PointF bracketL[4];
+    mu::PointF bracketR[3];
 
     Fraction addMissingElement(const Fraction& startTick, const Fraction& endTick);
 
@@ -156,7 +156,7 @@ public:
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<QPointF> gripsPositions(const EditData&) const override;
+    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
     void sanitizeTuplet();
     void addMissingElements();

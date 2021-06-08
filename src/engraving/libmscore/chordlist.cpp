@@ -27,6 +27,8 @@
 #include "pitchspelling.h"
 #include "mscore.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   HChord

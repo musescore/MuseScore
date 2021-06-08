@@ -24,7 +24,7 @@
 #include "score.h"
 #include "chord.h"
 
-using namespace mu::draw;
+using namespace mu;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -47,7 +47,7 @@ void StemSlash::setLine(const LineF& l)
 {
     line = l;
     qreal w = score()->styleP(Sid::stemWidth) * .5;
-    setbbox(QRectF(line.p1().toQPointF(), line.p2().toQPointF()).normalized().adjusted(-w, -w, 2.0 * w, 2.0 * w));
+    setbbox(RectF(line.p1(), line.p2()).normalized().adjusted(-w, -w, 2.0 * w, 2.0 * w));
 }
 
 //---------------------------------------------------------

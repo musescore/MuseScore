@@ -23,6 +23,7 @@
 #include "sym.h"
 
 using namespace Ms;
+using namespace mu;
 
 //---------------------------------------------------------
 //   table of symbol names

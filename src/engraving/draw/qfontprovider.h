@@ -48,13 +48,13 @@ public:
     qreal horizontalAdvance(const Font& f, const QString& string) const override;
     qreal horizontalAdvance(const Font& f, const QChar& ch) const override;
 
-    QRectF boundingRect(const Font& f, const QString& string) const override;
-    QRectF boundingRect(const Font& f, const QChar& ch) const override;
-    QRectF boundingRect(const Font& f, const QRectF& r, int flags, const QString& string) const override;
-    QRectF tightBoundingRect(const Font& f, const QString& string) const override;
+    RectF boundingRect(const Font& f, const QString& string) const override;
+    RectF boundingRect(const Font& f, const QChar& ch) const override;
+    RectF boundingRect(const Font& f, const RectF& r, int flags, const QString& string) const override;
+    RectF tightBoundingRect(const Font& f, const QString& string) const override;
 
     // Score symbols
-    QRectF symBBox(const Font& f, uint ucs4, qreal DPI_F) const override;
+    RectF symBBox(const Font& f, uint ucs4, qreal DPI_F) const override;
     qreal symAdvance(const Font& f, uint ucs4, qreal DPI_F) const override;
 
 private:

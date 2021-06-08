@@ -35,6 +35,8 @@
 #include "select.h"
 #include "articulation.h"
 
+using namespace mu;
+
 namespace Ms {
 class DrumSet;
 

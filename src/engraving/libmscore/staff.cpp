@@ -45,6 +45,8 @@
 
 // #define DEBUG_CLEFS
 
+using namespace mu;
+
 #ifdef DEBUG_CLEFS
 #define DUMP_CLEFS(s) dumpClefs(s)
 #else

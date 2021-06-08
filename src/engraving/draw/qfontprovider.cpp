@@ -28,6 +28,7 @@
 #include "fontcompat.h"
 #include "fontengineft.h"
 
+using namespace mu;
 using namespace mu::draw;
 
 int QFontProvider::addApplicationFont(const QString& family, const QString& path)
@@ -86,34 +87,34 @@ qreal QFontProvider::horizontalAdvance(const Font& f, const QChar& ch) const
     return QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).horizontalAdvance(ch);
 }
 
-QRectF QFontProvider::boundingRect(const Font& f, const QString& string) const
+RectF QFontProvider::boundingRect(const Font& f, const QString& string) const
 {
-    return QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).boundingRect(string);
+    return RectF::fromQRectF(QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).boundingRect(string));
 }
 
-QRectF QFontProvider::boundingRect(const Font& f, const QChar& ch) const
+RectF QFontProvider::boundingRect(const Font& f, const QChar& ch) const
 {
-    return QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).boundingRect(ch);
+    return RectF::fromQRectF(QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).boundingRect(ch));
 }
 
-QRectF QFontProvider::boundingRect(const Font& f, const QRectF& r, int flags, const QString& string) const
+RectF QFontProvider::boundingRect(const Font& f, const RectF& r, int flags, const QString& string) const
 {
-    return QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).boundingRect(r, flags, string);
+    return RectF::fromQRectF(QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).boundingRect(r.toQRectF(), flags, string));
 }
 
-QRectF QFontProvider::tightBoundingRect(const Font& f, const QString& string) const
+RectF QFontProvider::tightBoundingRect(const Font& f, const QString& string) const
 {
-    return QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).tightBoundingRect(string);
+    return RectF::fromQRectF(QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).tightBoundingRect(string));
 }
 
 // Score symbols
-QRectF QFontProvider::symBBox(const Font& f, uint ucs4, qreal DPI_F) const
+RectF QFontProvider::symBBox(const Font& f, uint ucs4, qreal DPI_F) const
 {
     FontEngineFT* engine = symEngine(f);
     if (!engine) {
-        return QRectF();
+        return RectF();
     }
-    return engine->bbox(ucs4, DPI_F);
+    return RectF::fromQRectF(engine->bbox(ucs4, DPI_F));
 }
 
 qreal QFontProvider::symAdvance(const Font& f, uint ucs4, qreal DPI_F) const

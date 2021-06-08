@@ -25,6 +25,9 @@
 #include "mscore.h"
 #include "xml.h"
 
+using namespace mu;
+using namespace mu::draw;
+
 namespace Ms {
 //---------------------------------------------------------
 //   sectionBreakStyle
@@ -130,7 +133,7 @@ void LayoutBreak::draw(mu::draw::Painter* painter) const
     dashes.append(1);
     dashes.append(3);
     stroker.setDashPattern(dashes);
-    QPainterPath stroke = stroker.createStroke(path);
+    PainterPath stroke = stroker.createStroke(path);
 
     painter->fillPath(stroke, selected() ? MScore::selectColor[0] : MScore::layoutBreakColor);
 
@@ -147,13 +150,13 @@ void LayoutBreak::draw(mu::draw::Painter* painter) const
 void LayoutBreak::layout0()
 {
     qreal _spatium = spatium();
-    path      = QPainterPath();
-    path2      = QPainterPath();
+    path      = PainterPath();
+    path2      = PainterPath();
     qreal h  = _spatium * 2.5;
     qreal w  = _spatium * 2.5;
 
-    QRectF rect(0.0, 0.0, w, h);
-    path.addRect(rect);
+    RectF rect(0.0, 0.0, w, h);
+    path.addRect(rect.toQRectF());
 
     switch (layoutBreakType()) {
     case Type::LINE:
@@ -209,7 +212,7 @@ void LayoutBreak::layout0()
         qDebug("unknown layout break symbol");
         break;
     }
-    QRectF bb(0, 0, w, h);
+    RectF bb(0, 0, w, h);
     bb.adjust(-lw, -lw, lw, lw);
     setbbox(bb);
 }

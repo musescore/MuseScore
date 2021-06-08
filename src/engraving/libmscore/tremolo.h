@@ -23,8 +23,6 @@
 #ifndef __TREMOLO_H__
 #define __TREMOLO_H__
 
-#include <QPainterPath>
-
 #include "durationtype.h"
 #include "symbol.h"
 
@@ -53,12 +51,12 @@ class Tremolo final : public Element
     Chord* _chord1 { nullptr };
     Chord* _chord2 { nullptr };
     TDuration _durationType;
-    QPainterPath path;
+    mu::PainterPath path;
 
     int _lines;         // derived from _subtype
     TremoloStyle _style { TremoloStyle::DEFAULT };
 
-    QPainterPath basePath() const;
+    mu::PainterPath basePath() const;
     void computeShape();
     void layoutOneNoteTremolo(qreal x, qreal y, qreal spatium);
     void layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium);
