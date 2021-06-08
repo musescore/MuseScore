@@ -132,14 +132,14 @@ struct Event {
             || (u.byte[0] & 0xE0)
             ) {
             e.m_data[0] = (u.byte[0] << 16) | (u.byte[1] << 8) | u.byte[2];
-            e.setMessageType(MessageType::ChannelVoice20);
+            e.setMessageType(MessageType::ChannelVoice10);
         }
         return e;
     }
 
     uint32_t to_MIDI10Package() const
     {
-        if (messageType() == MessageType::ChannelVoice20) {
+        if (messageType() == MessageType::ChannelVoice10) {
             union {
                 unsigned char byte[4];
                 uint32_t uint32;

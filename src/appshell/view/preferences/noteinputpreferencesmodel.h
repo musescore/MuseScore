@@ -25,6 +25,7 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
+#include "shortcuts/ishortcutsconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "playback/iplaybackconfiguration.h"
 
@@ -33,6 +34,7 @@ class NoteInputPreferencesModel : public QObject
 {
     Q_OBJECT
 
+    INJECT(appshell, shortcuts::IShortcutsConfiguration, shortcutsConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, playback::IPlaybackConfiguration, playbackConfiguration)
 

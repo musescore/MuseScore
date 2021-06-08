@@ -42,6 +42,9 @@ public:
 
     io::path midiMappingsPath() const override;
 
+    bool advanceToNextNoteOnKeyRelease() const override;
+    void setAdvanceToNextNoteOnKeyRelease(bool value) override;
+
 private:
     async::Channel<io::path> m_userPathChanged;
 };
