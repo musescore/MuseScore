@@ -2631,7 +2631,10 @@ void MusicXMLParserDirection::direction(const QString& partId,
             } else {
                 _tpoSound /= 60;
                 t = new TempoText(_score->dummy()->segment());
-                t->setXmlText(_wordsText + _metroText);
+                QString rawWordsText = _wordsText;
+                rawWordsText.remove(QRegularExpression("(<.*?>)"));
+                QString sep = _metroText != "" && _wordsText != "" && rawWordsText.back() != ' ' ? " " : "";
+                t->setXmlText(_wordsText + sep + _metroText);
                 ((TempoText*)t)->setTempo(_tpoSound);
                 ((TempoText*)t)->setFollowText(true);
                 _score->setTempo(tick, _tpoSound);
@@ -3224,7 +3227,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
         auto& spdesc = _pass2.getSpanner({ ElementType::PEDAL, number });
         if (type == "start" || type == "resume") {
             if (spdesc._isStarted && !spdesc._isStopped) {
-                // Previous pedal unterminated—likely an unrecorded "discontinue", so delete the line.
+                // Previous pedal unterminated�likely an unrecorded "discontinue", so delete the line.
                 // TODO: if "change", create 0-length spanner rather than delete
                 _pass2.deleteHandledSpanner(spdesc._sp);
                 spdesc._isStarted = false;

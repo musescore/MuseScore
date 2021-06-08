@@ -236,6 +236,8 @@ private slots:
     void tempo2() { mxmlIoTestRef("testTempo2"); }
     void tempo3() { mxmlIoTestRef("testTempo3"); }
     void tempo4() { mxmlIoTestRef("testTempo4"); }
+    void tempoTextSpace1() { mxmlImportTestRef("testTempoTextSpace1"); }
+    void tempoTextSpace2() { mxmlImportTestRef("testTempoTextSpace2"); }
     void textOrder() { mxmlImportTestRef("testTextOrder"); }
     void timesig1() { mxmlIoTest("testTimesig1"); }
     void timesig3() { mxmlIoTest("testTimesig3"); }
