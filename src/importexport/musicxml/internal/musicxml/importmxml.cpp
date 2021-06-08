@@ -20,14 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "libmscore/box.h"
-#include "libmscore/measure.h"
-#include "libmscore/page.h"
-#include "libmscore/part.h"
-#include "libmscore/staff.h"
-#include "libmscore/sym.h"
-#include "libmscore/symbol.h"
-
 #include "importmxml.h"
 #include "importmxmllogger.h"
 #include "importmxmlpass1.h"

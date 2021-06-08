@@ -30,7 +30,7 @@ import MuseScore.Instruments 1.0
 Item {
     id: root
 
-    property var instruments: null
+    property alias instruments: instrumentsView.model
     property var instrumentOrderTypes: null
 
     property bool canLiftInstrument: currentInstrumentIndex > 0
@@ -43,9 +43,22 @@ Item {
 
     signal unselectInstrumentRequested(string id)
     signal orderChanged(string id)
+    signal soloistChanged(string id)
 
     function scrollViewToEnd() {
         instrumentsView.positionViewAtEnd()
+    }
+
+    function soloistsButtonText(soloist) {
+        return soloist ? qsTrc("instruments", "Undo soloist") : qsTrc("instruments", "Make soloist")
+    }
+
+    function instrumentName(data) {
+        var name = data.name
+        if (data.isSoloist) {
+            name = qsTrc("instruments", "Soloist: ") + name
+        }
+        return name
     }
 
     NavigationPanel {
@@ -85,7 +98,7 @@ Item {
 
             model: {
                 var resultList = []
-                var orders = instrumentOrderTypes
+                var orders = root.instrumentOrderTypes
 
                 for (var i = 0; i < orders.length; ++i) {
                     resultList.push({"text" : qsTrc("instruments", "Order: ") + orders[i].name, "value" : orders[i].id})
@@ -95,19 +108,8 @@ Item {
             }
 
             onValueChanged: {
-                orderChanged(value)
+                root.orderChanged(value)
             }
-        }
-
-        FlatButton {
-            Layout.preferredWidth: width
-
-            navigation.name: "Make soloist"
-            navigation.panel: navPanel
-            navigation.row: 2
-
-            enabled: isInstrumentSelected
-            text: qsTrc("instruments", "Make soloist")
         }
 
         FlatButton {
@@ -117,12 +119,12 @@ Item {
             navigation.panel: navPanel
             navigation.row: 3
 
-            enabled: isInstrumentSelected
+            enabled: root.isInstrumentSelected
             icon: IconCode.DELETE_TANK
 
             onClicked: {
-                unselectInstrumentRequested(instruments[currentInstrumentIndex].id)
-                currentInstrumentIndex--
+                root.unselectInstrumentRequested(instruments[root.currentInstrumentIndex].id)
+                root.currentInstrumentIndex--
             }
         }
     }
@@ -136,8 +138,6 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        model: instruments
-
         boundsBehavior: ListView.StopAtBounds
         clip: true
 
@@ -150,7 +150,7 @@ Item {
         delegate: ListItemBlank {
             id: item
 
-            isSelected: root.currentInstrumentIndex === index
+            isSelected: root.currentInstrumentIndex === model.index
 
             navigation.name: modelData.name
             navigation.panel: navPanel
@@ -165,12 +165,27 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
 
                 horizontalAlignment: Text.AlignLeft
-                text: modelData.name
+                text: instrumentName(modelData)
                 font: ui.theme.bodyBoldFont
             }
 
+            FlatButton {
+                anchors.right: parent.right
+                anchors.leftMargin: 4
+                anchors.rightMargin: 4
+                anchors.verticalCenter: parent.verticalCenter
+
+                visible: root.currentInstrumentIndex === index
+
+                text: soloistsButtonText(modelData.isSoloist)
+
+                onClicked: {
+                    soloistChanged(modelData.id)
+                }
+            }
+
             onClicked: {
-                root.currentInstrumentIndex = index
+                root.currentInstrumentIndex = model.index
             }
 
             onDoubleClicked: {

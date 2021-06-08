@@ -65,16 +65,17 @@ FocusScope {
         if (!root.activeFocus) {
             root.forceActiveFocus()
         }
-
-        if (!navCtrl.active) {
-            navCtrl.forceActive()
-        }
     }
 
     NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "ProgressButton"
         enabled: root.enabled && root.visible
+
+        accessible.role: MUAccessible.Button
+        accessible.name: root.text
+        accessible.visualItem: root
+
         onActiveChanged: {
             if (active) {
                 root.ensureActiveFocus()

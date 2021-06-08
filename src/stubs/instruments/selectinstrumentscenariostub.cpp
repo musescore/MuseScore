@@ -23,9 +23,9 @@
 
 using namespace mu::instruments;
 
-mu::RetVal<InstrumentList> SelectInstrumentsScenario::selectInstruments(ISelectInstrumentsScenario::SelectInstrumentsMode) const
+mu::RetVal<PartInstrumentList> SelectInstrumentsScenario::selectInstruments(ISelectInstrumentsScenario::SelectInstrumentsMode) const
 {
-    mu::RetVal<InstrumentList> result;
+    mu::RetVal<PartInstrumentList> result;
     result.ret = make_ret(Ret::Code::NotSupported);
     return result;
 }

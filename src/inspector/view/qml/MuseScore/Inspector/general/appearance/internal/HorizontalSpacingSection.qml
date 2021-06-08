@@ -39,7 +39,7 @@ Item {
     }
 
     function focusOnFirst() {
-        leadingValue.navigation.forceActive()
+        leadingValue.navigation.requestActive()
     }
 
     height: childrenRect.height

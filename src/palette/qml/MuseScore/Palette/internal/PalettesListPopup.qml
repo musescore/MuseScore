@@ -129,7 +129,7 @@ StyledPopup {
 
                         icon: IconCode.PLUS
 
-                        hint: qsTrc("palette", "Add %1 palette").arg(model.display)
+                        toolTipTitle: qsTrc("palette", "Add %1 palette").arg(model.display)
                         Accessible.description: ToolTip.text
 
                         onClicked: {

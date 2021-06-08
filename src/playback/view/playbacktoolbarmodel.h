@@ -97,7 +97,9 @@ signals:
 private:
     enum Roles {
         CodeRole = Qt::UserRole + 1,
-        HintRole,
+        TitleRole,
+        DescriptionRole,
+        ShortcutRole,
         IconRole,
         CheckedRole,
         SubitemsRole,

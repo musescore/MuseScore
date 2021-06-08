@@ -225,7 +225,8 @@ DebugWindow::DebugWindow(QWidget *parent)
     button->setText(QStringLiteral("Repaint all widgets"));
     layout->addWidget(button);
     connect(button, &QPushButton::clicked, this, [this] {
-        for (auto w : qApp->topLevelWidgets())
+        const auto topLevelWidgets = qApp->topLevelWidgets();
+        for (auto w : topLevelWidgets)
             repaintWidgetRecursive(w);
     });
 

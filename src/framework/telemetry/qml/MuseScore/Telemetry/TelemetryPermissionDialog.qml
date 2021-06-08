@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.12
+import QtQuick 2.15
 
 import MuseScore.Telemetry 1.0
 import MuseScore.Ui 1.0
@@ -32,133 +32,127 @@ StyledDialogView {
     contentHeight: 500
     contentWidth: 460
 
-    Rectangle {
+    TelemetryPermissionModel {
+        id: permissionModel
+    }
+
+    Column {
         anchors.fill: parent
+        anchors.leftMargin: 32
+        anchors.rightMargin: 32
 
-        color: ui.theme.backgroundPrimaryColor
+        spacing: 36
 
-        TelemetryPermissionModel {
-            id: permissionModel
+        Item {
+            height: 1
+            width: parent.width
+        }
+
+        StyledTextLabel {
+            width: parent.width
+
+            font: ui.theme.headerBoldFont
+
+            text: qsTrc("telemetry", "Help us improve MuseScore")
         }
 
         Column {
-            anchors.fill: parent
-            anchors.leftMargin: 32
-            anchors.rightMargin: 32
+            width: parent.width
 
-            spacing: 36
+            spacing: 24
 
-            Item {
-                height: 1
+            StyledTextLabel {
                 width: parent.width
+
+                text: qsTrc("telemetry", "We'd like to collect anonymous telemetry data to help us prioritize improvements. " +
+                            "This includes how often you use certain features, statistics " +
+                            "on preferred file formats, crashes, number of instruments per score, etc.")
+
+                horizontalAlignment: Qt.AlignLeft
+                wrapMode: Text.WordWrap
             }
 
             StyledTextLabel {
                 width: parent.width
 
-                font: ui.theme.headerBoldFont
+                text: qsTrc("telemetry", "We <u>do not</u> collect any personal data or sensitive information, such as " +
+                            "location, source code, file names, or music")
 
-                text: qsTrc("telemetry", "Help us improve MuseScore")
+                font: ui.theme.bodyBoldFont
+                horizontalAlignment: Qt.AlignLeft
+                wrapMode: Text.WordWrap
+            }
+
+            StyledTextLabel {
+                text: qsTrc("telemetry", "Do you allow MuseScore to send us anonymous reports?")
+
+                horizontalAlignment: Qt.AlignLeft
+                wrapMode: Text.WordWrap
+            }
+        }
+
+        Column {
+            width: parent.width
+
+            spacing: 32
+
+            Column {
+                width: parent.width
+
+                spacing: 12
+
+                FlatButton {
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    text: qsTrc("telemetry", "Yes, send anonymous reports")
+
+                    onClicked: {
+                        permissionModel.allowUseTelemetry()
+                        root.hide()
+                    }
+                }
+
+                StyledTextLabel {
+                    width: parent.width
+
+                    text: qsTrc("telemetry", "(You can change this behaviour any time in" +
+                                " Preferences… > General > Telemetry)")
+
+                    wrapMode: Text.WordWrap
+                }
             }
 
             Column {
                 width: parent.width
 
-                spacing: 24
+                spacing: 10
 
-                StyledTextLabel {
-                    width: parent.width
+                FlatButton {
+                    anchors.horizontalCenter: parent.horizontalCenter
 
-                    text: qsTrc("telemetry", "We'd like to collect anonymous telemetry data to help us prioritize improvements. " +
-                                "This includes how often you use certain features, statistics " +
-                                "on preferred file formats, crashes, number of instruments per score, etc.")
+                    text: qsTrc("telemetry", "Don't send")
 
-                    horizontalAlignment: Qt.AlignLeft
-                    wrapMode: Text.WordWrap
-                }
-
-                StyledTextLabel {
-                    width: parent.width
-
-                    text: qsTrc("telemetry", "We <u>do not</u> collect any personal data or sensitive information, such as " +
-                                "location, source code, file names, or music")
-
-                    font: ui.theme.bodyBoldFont
-                    horizontalAlignment: Qt.AlignLeft
-                    wrapMode: Text.WordWrap
+                    onClicked: {
+                        permissionModel.forbidUseTelemetry()
+                        root.hide()
+                    }
                 }
 
                 StyledTextLabel {
-                    text: qsTrc("telemetry", "Do you allow MuseScore to send us anonymous reports?")
+                    anchors.horizontalCenter: parent.horizontalCenter
 
-                    horizontalAlignment: Qt.AlignLeft
-                    wrapMode: Text.WordWrap
-                }
-            }
+                    text: qsTrc("telemetry", "For more information, please take a look at our %1Privacy Policy%2").arg("<a href=\"https://musescore.com/legal/privacy\">").arg("</a>")
 
-            Column {
-                width: parent.width
-
-                spacing: 32
-
-                Column {
-                    width: parent.width
-
-                    spacing: 12
-
-                    FlatButton {
-                        anchors.horizontalCenter: parent.horizontalCenter
-
-                        text: qsTrc("telemetry", "Yes, send anonymous reports")
-
-                        onClicked: {
-                            permissionModel.allowUseTelemetry()
-                            root.hide()
-                        }
-                    }
-
-                    StyledTextLabel {
-                        width: parent.width
-
-                        text: qsTrc("telemetry", "(You can change this behaviour any time in" +
-                                    " Preferences… > General > Telemetry)")
-
-                        wrapMode: Text.WordWrap
-                    }
-                }
-
-                Column {
-                    width: parent.width
-
-                    spacing: 10
-
-                    FlatButton {
-                        anchors.horizontalCenter: parent.horizontalCenter
-
-                        text: qsTrc("telemetry", "Don't send")
-
-                        onClicked: {
-                            permissionModel.forbidUseTelemetry()
-                            root.hide()
-                        }
-                    }
-
-                    StyledTextLabel {
-                        anchors.horizontalCenter: parent.horizontalCenter
-
-                        text: qsTrc("telemetry", "For more information, please take a look at our %1Privacy Policy%2").arg("<a href=\"https://musescore.com/legal/privacy\">").arg("</a>")
-
-                        onLinkActivated: {
-                            api.launcher.openUrl(link)
-                        }
+                    onLinkActivated: {
+                        api.launcher.openUrl(link)
                     }
                 }
             }
+        }
 
-            Item {
-                height: 1
-                width: parent.width
-            }
+        Item {
+            height: 1
+            width: parent.width
         }
     }
 }

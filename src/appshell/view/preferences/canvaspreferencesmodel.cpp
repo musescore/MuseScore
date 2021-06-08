@@ -40,10 +40,10 @@ void CanvasPreferencesModel::load()
 QVariantList CanvasPreferencesModel::zoomTypes() const
 {
     QVariantList types = {
-        QVariantMap { { "title", qtrc("appshell", "Percentage") }, { "value", static_cast<int>(ZoomType::Percentage) } },
-        QVariantMap { { "title", qtrc("appshell", "Page Width") }, { "value", static_cast<int>(ZoomType::PageWidth) } },
-        QVariantMap { { "title", qtrc("appshell", "Whole Page") }, { "value", static_cast<int>(ZoomType::WholePage) } },
-        QVariantMap { { "title", qtrc("appshell", "Two Pages") }, { "value", static_cast<int>(ZoomType::TwoPages) } }
+        QVariantMap { { "title", zoomTypeTitle(ZoomType::Percentage) }, { "value", static_cast<int>(ZoomType::Percentage) } },
+        QVariantMap { { "title", zoomTypeTitle(ZoomType::PageWidth) }, { "value", static_cast<int>(ZoomType::PageWidth) } },
+        QVariantMap { { "title", zoomTypeTitle(ZoomType::WholePage) }, { "value", static_cast<int>(ZoomType::WholePage) } },
+        QVariantMap { { "title", zoomTypeTitle(ZoomType::TwoPages) }, { "value", static_cast<int>(ZoomType::TwoPages) } }
     };
 
     return types;

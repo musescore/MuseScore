@@ -21,7 +21,11 @@
  */
 #include "scoredisplaysettingsmodel.h"
 
+#include "log.h"
+#include "translation.h"
+
 using namespace mu::inspector;
+using namespace mu::notation;
 
 ScoreSettingsModel::ScoreSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -30,10 +34,10 @@ ScoreSettingsModel::ScoreSettingsModel(QObject* parent, IElementRepositoryServic
     setTitle(qtrc("inspector", "Show"));
     createProperties();
 
-    m_shouldShowInvisible = adapter()->isNotationExisting() ? adapter()->scoreConfig().isShowInvisibleElements : true;
-    m_shouldShowUnprintable = adapter()->isNotationExisting() ? adapter()->scoreConfig().isShowUnprintableElements : true;
-    m_shouldShowFrames = adapter()->isNotationExisting() ? adapter()->scoreConfig().isShowFrames : true;
-    m_shouldShowPageMargins = adapter()->isNotationExisting() ? adapter()->scoreConfig().isShowPageMargins : false;
+    m_shouldShowInvisible = isNotationExisting() ? scoreConfig().isShowInvisibleElements : true;
+    m_shouldShowUnprintable = isNotationExisting() ? scoreConfig().isShowUnprintableElements : true;
+    m_shouldShowFrames = isNotationExisting() ? scoreConfig().isShowFrames : true;
+    m_shouldShowPageMargins = isNotationExisting() ? scoreConfig().isShowPageMargins : false;
 
     setupConnections();
 }
@@ -72,6 +76,32 @@ void ScoreSettingsModel::resetProperties()
     setShouldShowPageMargins(false);
 }
 
+ScoreConfig ScoreSettingsModel::scoreConfig() const
+{
+    IF_ASSERT_FAILED(context()) {
+        return ScoreConfig();
+    }
+
+    if (!context()->currentNotation()) {
+        return ScoreConfig();
+    }
+
+    return context()->currentNotation()->interaction()->scoreConfig();
+}
+
+mu::async::Channel<ScoreConfigType> ScoreSettingsModel::scoreConfigChanged() const
+{
+    IF_ASSERT_FAILED(context()) {
+        return mu::async::Channel<ScoreConfigType>();
+    }
+
+    if (!context()->currentNotation()) {
+        return mu::async::Channel<ScoreConfigType>();
+    }
+
+    return context()->currentNotation()->interaction()->scoreConfigChanged();
+}
+
 bool ScoreSettingsModel::shouldShowInvisible() const
 {
     return m_shouldShowInvisible;
@@ -98,8 +128,7 @@ void ScoreSettingsModel::setShouldShowInvisible(bool shouldShowInvisible)
         return;
     }
 
-    adapter()->toggleInvisibleElementsDisplaying();
-
+    dispatcher()->dispatch("show-invisible");
     updateShouldShowInvisible(shouldShowInvisible);
 }
 
@@ -109,8 +138,7 @@ void ScoreSettingsModel::setShouldShowUnprintable(bool shouldShowUnprintable)
         return;
     }
 
-    adapter()->toggleUnprintableElementsVisibility();
-
+    dispatcher()->dispatch("show-unprintable");
     updateShouldShowUnprintable(shouldShowUnprintable);
 }
 
@@ -120,8 +148,7 @@ void ScoreSettingsModel::setShouldShowFrames(bool shouldShowFrames)
         return;
     }
 
-    adapter()->toggleFramesVisibility();
-
+    dispatcher()->dispatch("show-frames");
     updateShouldShowFrames(shouldShowFrames);
 }
 
@@ -131,8 +158,7 @@ void ScoreSettingsModel::setShouldShowPageMargins(bool shouldShowPageMargins)
         return;
     }
 
-    adapter()->togglePageMarginsVisibility();
-
+    dispatcher()->dispatch("show-pageborders");
     updateShouldShowPageMargins(shouldShowPageMargins);
 }
 
@@ -176,20 +202,20 @@ void ScoreSettingsModel::updateShouldShowPageMargins(bool isVisible)
     emit shouldShowPageMarginsChanged(isVisible);
 }
 
-void ScoreSettingsModel::updateFromConfig(notation::ScoreConfigType configType)
+void ScoreSettingsModel::updateFromConfig(ScoreConfigType configType)
 {
     switch (configType) {
     case notation::ScoreConfigType::ShowInvisibleElements:
-        updateShouldShowInvisible(adapter()->scoreConfig().isShowInvisibleElements);
+        updateShouldShowInvisible(scoreConfig().isShowInvisibleElements);
         break;
     case notation::ScoreConfigType::ShowUnprintableElements:
-        updateShouldShowUnprintable(adapter()->scoreConfig().isShowUnprintableElements);
+        updateShouldShowUnprintable(scoreConfig().isShowUnprintableElements);
         break;
     case notation::ScoreConfigType::ShowFrames:
-        updateShouldShowFrames(adapter()->scoreConfig().isShowFrames);
+        updateShouldShowFrames(scoreConfig().isShowFrames);
         break;
     case notation::ScoreConfigType::ShowPageMargins:
-        updateShouldShowPageMargins(adapter()->scoreConfig().isShowPageMargins);
+        updateShouldShowPageMargins(scoreConfig().isShowPageMargins);
         break;
     default:
         break;
@@ -198,30 +224,26 @@ void ScoreSettingsModel::updateFromConfig(notation::ScoreConfigType configType)
 
 void ScoreSettingsModel::updateAll()
 {
-    updateShouldShowInvisible(adapter()->scoreConfig().isShowInvisibleElements);
-    updateShouldShowUnprintable(adapter()->scoreConfig().isShowUnprintableElements);
-    updateShouldShowFrames(adapter()->scoreConfig().isShowFrames);
-    updateShouldShowPageMargins(adapter()->scoreConfig().isShowPageMargins);
+    updateShouldShowInvisible(scoreConfig().isShowInvisibleElements);
+    updateShouldShowUnprintable(scoreConfig().isShowUnprintableElements);
+    updateShouldShowFrames(scoreConfig().isShowFrames);
+    updateShouldShowPageMargins(scoreConfig().isShowPageMargins);
 }
 
 void ScoreSettingsModel::setupConnections()
 {
-    if (adapter()->isNotationExisting()) {
-        adapter()->currentNotationChanged().onNotify(this, [this]() {
-            updateAll();
-        });
-
-        adapter()->scoreConfigChanged().onReceive(this, [this](notation::ScoreConfigType configType) {
-            updateFromConfig(configType);
-        });
-
-        return;
-    }
-
-    adapter()->currentNotationChanged().onNotify(this, [this]() {
+    if (isNotationExisting()) {
         updateAll();
 
-        adapter()->scoreConfigChanged().onReceive(this, [this](notation::ScoreConfigType configType) {
+        scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
+            updateFromConfig(configType);
+        });
+    }
+
+    currentNotationChanged().onNotify(this, [this]() {
+        updateAll();
+
+        scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
             updateFromConfig(configType);
         });
     });

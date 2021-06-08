@@ -44,10 +44,6 @@ FocusScope {
         if (!root.activeFocus) {
             root.forceActiveFocus()
         }
-
-        if (!navCtrl.active) {
-            navCtrl.forceActive()
-        }
     }
 
     onToggled: root.ensureActiveFocus()

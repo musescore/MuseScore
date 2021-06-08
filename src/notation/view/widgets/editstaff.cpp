@@ -40,7 +40,7 @@
 #include "widgetstatestore.h"
 
 using namespace mu::notation;
-using namespace mu::framework;
+using namespace mu::ui;
 
 static const QChar GO_UP_ICON = iconCodeToChar(IconCode::Code::ARROW_UP);
 static const QChar GO_DOWN_ICON = iconCodeToChar(IconCode::Code::ARROW_DOWN);

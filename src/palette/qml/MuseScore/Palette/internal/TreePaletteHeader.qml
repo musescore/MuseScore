@@ -95,7 +95,7 @@ Item {
         z: 1000
 
         icon: IconCode.DELETE_TANK
-        hint: deleteButton.text
+        toolTipTitle: deleteButton.text
         visible: root.hidePaletteElementVisible && root.editingEnabled
         activeFocusOnTab: mainPalette.currentItem === paletteTree.currentTreeItem
         normalStateColor: "transparent"
@@ -116,7 +116,7 @@ Item {
         height: parent.height
         anchors.right: parent.right
 
-        visible: root.expanded || root.hovered || menuLoader.isMenuOpened() || rootMenuButton.navigation.active
+        visible: root.expanded || root.hovered || menuLoader.isMenuOpened || rootMenuButton.navigation.active
 
         enabled: rootMenuButton.visible
         navigation.panel: root.navigationPanel

@@ -63,9 +63,9 @@ CoreMidiInPort::~CoreMidiInPort()
     }
 }
 
-std::vector<MidiDevice> CoreMidiInPort::devices() const
+MidiDeviceList CoreMidiInPort::devices() const
 {
-    std::vector<MidiDevice> ret;
+    MidiDeviceList ret;
 
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, false);
     int sources = MIDIGetNumberOfSources();
@@ -93,6 +93,11 @@ std::vector<MidiDevice> CoreMidiInPort::devices() const
     return ret;
 }
 
+async::Notification CoreMidiInPort::devicesChanged() const
+{
+    return m_devicesChanged;
+}
+
 static void proccess(const MIDIPacketList* list, void* readProc, void* srcConn)
 {
     UNUSED(srcConn);
@@ -105,8 +110,7 @@ static void proccess(const MIDIPacketList* list, void* readProc, void* srcConn)
             uint32_t message(0);
             memcpy(&message, packet->data, std::min(sizeof(message), sizeof(char) * packet->length));
             self->doProcess(message, packet->timeStamp);
-        }
-        if (packet->length > 4) {
+        } else if (packet->length > 4) {
             LOGW() << "unsupported midi message size " << packet->length << " bytes";
         }
 
@@ -118,14 +122,59 @@ void CoreMidiInPort::initCore()
 {
     OSStatus result;
 
+    static auto onCoreMidiNotificationReceived = [](const MIDINotification* notification, void* refCon) {
+        auto self = static_cast<CoreMidiInPort*>(refCon);
+        IF_ASSERT_FAILED(self) {
+            return;
+        }
+
+        switch (notification->messageID) {
+        case kMIDIMsgObjectAdded:
+        case kMIDIMsgObjectRemoved:
+            if (notification->messageSize == sizeof(MIDIObjectAddRemoveNotification)) {
+                auto addRemoveNotification = (const MIDIObjectAddRemoveNotification*)notification;
+                MIDIObjectType objectType = addRemoveNotification->childType;
+
+                if (objectType == kMIDIObjectType_Source) {
+                    if (notification->messageID == kMIDIMsgObjectRemoved) {
+                        MIDIObjectRef removedObject = addRemoveNotification->child;
+
+                        if (self->isConnected() && removedObject == self->m_core->sourceId) {
+                            self->disconnect();
+                        }
+                    }
+
+                    self->devicesChanged().notify();
+                }
+            } else {
+                LOGW() << "Received corrupted MIDIObjectAddRemoveNotification";
+            }
+            break;
+
+        // General message that should be ignored because we handle specific ones
+        case kMIDIMsgSetupChanged:
+
+        // Questionable whether we should send a notification for this ones
+        // Possibly we should send a notification when the changed property is the device name
+        case kMIDIMsgPropertyChanged:
+        case kMIDIMsgThruConnectionsChanged:
+        case kMIDIMsgSerialPortOwnerChanged:
+
+        case kMIDIMsgIOError:
+            break;
+        }
+    };
+
     QString name = "MuseScore";
-    result = MIDIClientCreate(name.toCFString(), nullptr, nullptr, &m_core->client);
+    result = MIDIClientCreate(name.toCFString(), onCoreMidiNotificationReceived, this, &m_core->client);
     IF_ASSERT_FAILED(result == noErr) {
         LOGE() << "failed create midi input client";
         return;
     }
 
     QString portName = "MuseScore MIDI input port";
+    // TODO: MIDIInputPortCreate is deprecated according to the documentation.
+    // Need to use MIDIInputPortCreateWithProtocol instead.
     result = MIDIInputPortCreate(m_core->client, portName.toCFString(), proccess, this, &m_core->inputPort);
     IF_ASSERT_FAILED(result == noErr) {
         LOGE() << "failed create midi input port";
@@ -136,7 +185,7 @@ void CoreMidiInPort::doProcess(uint32_t message, tick_t timing)
 {
     auto e = Event::fromMIDI10Package(message).toMIDI20();
     if (e) {
-        m_eventReceived.send({ timing, e });
+        m_eventReceived.send(timing, e);
     }
 }
 
@@ -223,7 +272,7 @@ bool CoreMidiInPort::isRunning() const
     return m_running;
 }
 
-async::Channel<std::pair<tick_t, Event> > CoreMidiInPort::eventReceived() const
+async::Channel<tick_t, Event> CoreMidiInPort::eventReceived() const
 {
     return m_eventReceived;
 }

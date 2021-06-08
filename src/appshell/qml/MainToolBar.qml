@@ -64,6 +64,7 @@ Rectangle {
     NavigationPanel {
         id: keynavSub
         name: "MainToolBar"
+        accessible.name: qsTrc("appshell", "Main tool bar") + " " + keynavSub.directionInfo
     }
 
     RadioButtonGroup {

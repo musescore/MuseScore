@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 import QtQml.Models 2.3
+import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -45,7 +46,7 @@ Rectangle {
     function focusFirstItem() {
         var item = inspectorRepeater.itemAt(0)
         if (item) {
-            item.navigation.forceActive()
+            item.navigation.requestActive()
         }
     }
 
@@ -54,6 +55,7 @@ Rectangle {
         name: "Inspector"
         section: root.navigationSection
         direction: NavigationPanel.Vertical
+        enabled: root.visible
         order: 2
     }
 
@@ -67,24 +69,24 @@ Rectangle {
         }
     }
 
+    StyledScrollBar {
+        id: scrollBar
+
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+
+        visible: flickableArea.contentHeight > flickableArea.height
+        z: 1
+    }
+
     Flickable {
         id: flickableArea
 
         anchors.fill: parent
         anchors.margins: 12
 
-        function updateContentHeight() {
-            var resultContentHeight = 0
-
-            for (var i = 0; i < inspectorRepeater.count; ++i) {
-                resultContentHeight += inspectorRepeater.itemAt(i).contentHeight
-            }
-
-            flickableArea.contentHeight = resultContentHeight
-        }
-
         function ensureContentVisible(delegateY, delegateContentHeight) {
-
             var contentBottomY = delegateY + delegateContentHeight
 
             if (contentBottomY > flickableArea.height) {
@@ -94,9 +96,18 @@ Rectangle {
             }
         }
 
+        clip: true
+        flickableDirection: Flickable.VerticalFlick
+        boundsBehavior: Flickable.StopAtBounds
+        maximumFlickVelocity: 1000
+
+        contentHeight: contentItem.childrenRect.height
+
         Behavior on contentY {
             NumberAnimation { duration: 250 }
         }
+
+        ScrollBar.vertical: scrollBar
 
         Column {
             anchors.left: parent.left
@@ -137,7 +148,6 @@ Rectangle {
 
                     function updateContentHeight(newContentHeight) {
                         expandableDelegate.contentHeight = newContentHeight
-                        flickableArea.updateContentHeight()
                         flickableArea.ensureContentVisible(y, newContentHeight)
                     }
 

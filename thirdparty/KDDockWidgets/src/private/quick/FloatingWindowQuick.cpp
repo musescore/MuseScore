@@ -33,7 +33,8 @@ public:
         : QQuickView(Config::self().qmlEngine(), nullptr)
         , m_floatingWindow(floatingWindow)
     {
-        setColor(QColor(Qt::transparent));
+        if (Config::self().internalFlags() & Config::InternalFlag_UseTransparentFloatingWindow)
+            setColor(QColor(Qt::transparent));
 
         updateSize();
 
@@ -82,7 +83,7 @@ public:
     }
 
 #ifdef Q_OS_WIN
-    bool nativeEvent(const QByteArray &eventType, void *message, long *result) override
+    bool nativeEvent(const QByteArray &eventType, void *message, Qt5Qt6Compat::qintptr *result) override
     {
         // To enable aero snap we need to tell Windows where's our custom title bar
         if (!m_floatingWindow->beingDeleted() && WidgetResizeHandler::handleWindowsNativeEvent(m_floatingWindow, eventType, message, result))
@@ -204,6 +205,8 @@ void FloatingWindowQuick::init()
     m_visualItem->setParentItem(this);
 
     m_quickWindow->setFlags(windowFlags());
+
+    updateTitleAndIcon();
 
     m_quickWindow->show();
 }

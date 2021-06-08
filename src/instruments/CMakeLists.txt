@@ -44,8 +44,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentlistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentlistmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractinstrumentpaneltreeitem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractinstrumentpaneltreeitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractinstrumentspaneltreeitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractinstrumentspaneltreeitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/roottreeitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/roottreeitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/parttreeitem.cpp
@@ -58,18 +58,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/stafftreeitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/staffcontroltreeitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/staffcontroltreeitem.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/instrumentpaneltreemodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/instrumentpaneltreemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/instrumentspaneltreemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/instrumentspaneltreemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/staffsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/staffsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/instrumentpaneltreemodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/instrumentpaneltreemodel.h
     )
 
 set(MODULE_LINK
-    libmscore
+    engraving
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

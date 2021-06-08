@@ -105,8 +105,19 @@ ScoreCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
 
     options.templatePath = info["templatePath"].toString();
 
-    for (const QVariant& obj: info["instruments"].toList()) {
-        options.instruments << obj.value<Instrument>();
+    QVariantMap partMap = info["parts"].toMap();
+    for (const QVariant& obj: partMap["instruments"].toList()) {
+        QVariantMap objMap = obj.toMap();
+        Q_ASSERT(!objMap["isExistingPart"].toBool());
+
+        PartInstrument pi;
+
+        pi.isExistingPart = false;
+        pi.isSoloist = false;
+        pi.partId = QString();
+        pi.instrument = objMap["instrument"].value<Instrument>();
+
+        options.parts << pi;
     }
 
     return options;

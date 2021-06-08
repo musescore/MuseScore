@@ -51,6 +51,7 @@ GridView {
         id: navPanel
         name: "RecentScores"
         direction: NavigationPanel.Both
+        accessible.name: qsTrc("appshell", "Recent scores grid")
     }
 
     header: Item {

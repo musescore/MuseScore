@@ -19,34 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #ifndef MU_DOCK_DOCKCENTRAL_H
 #define MU_DOCK_DOCKCENTRAL_H
 
-#include <QObject>
-
-#include "dockview.h"
-
-class QWidget;
+#include "internal/dockbase.h"
 
 namespace mu::dock {
-class DockCentral : public DockView
+class DockCentral : public DockBase
 {
     Q_OBJECT
 
 public:
     explicit DockCentral(QQuickItem* parent = nullptr);
 
-    struct Widget {
-        QWidget* widget = nullptr;
-    };
-
-    Widget widget() const;
-
 private:
-    void onComponentCompleted() override;
-
-    Widget m_widget;
+    DockType type() const override;
 };
 }
 

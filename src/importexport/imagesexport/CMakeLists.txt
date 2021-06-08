@@ -38,7 +38,7 @@ set(MODULE_SRC
     )
 
 set(MODULE_LINK
-    libmscore
+    engraving
     qzip
     notation
     )

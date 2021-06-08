@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -51,7 +51,7 @@ Item {
         panel: root.navigationPanel
         row: root.keynavRow
         column: 0
-        enabled: visible
+        enabled: root.visible
 
         onActiveChanged: {
             if (active) {
@@ -59,7 +59,6 @@ Item {
             }
         }
     }
-
 
     RowLayout {
         anchors.top: parent.top
@@ -93,16 +92,14 @@ Item {
             }
 
             StyledTextLabel {
-                anchors {
-                    left: addButton.right
-                    leftMargin: 8
-                    right: parent.right
-                    rightMargin: 8
-                    verticalCenter: addButton.verticalCenter
-                }
-                horizontalAlignment: Text.AlignLeft
+                anchors.left: addButton.right
+                anchors.leftMargin: 8
+                anchors.right: parent.right
+                anchors.rightMargin: 8
+                anchors.verticalCenter: addButton.verticalCenter
 
                 text: model ? model.itemRole.title : ""
+                horizontalAlignment: Text.AlignLeft
             }
         }
     }

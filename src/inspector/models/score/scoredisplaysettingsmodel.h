@@ -35,6 +35,7 @@ class ScoreSettingsModel : public AbstractInspectorModel, public mu::async::Asyn
     Q_PROPERTY(bool shouldShowUnprintable READ shouldShowUnprintable WRITE setShouldShowUnprintable NOTIFY shouldShowUnprintableChanged)
     Q_PROPERTY(bool shouldShowFrames READ shouldShowFrames WRITE setShouldShowFrames NOTIFY shouldShowFramesChanged)
     Q_PROPERTY(bool shouldShowPageMargins READ shouldShowPageMargins WRITE setShouldShowPageMargins NOTIFY shouldShowPageMarginsChanged)
+
 public:
     explicit ScoreSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -67,6 +68,9 @@ private:
     void updateShouldShowUnprintable(bool isVisible);
     void updateShouldShowFrames(bool isVisible);
     void updateShouldShowPageMargins(bool isVisible);
+
+    notation::ScoreConfig scoreConfig() const;
+    async::Channel<notation::ScoreConfigType> scoreConfigChanged() const;
 
     void updateFromConfig(mu::notation::ScoreConfigType configType);
     void updateAll();

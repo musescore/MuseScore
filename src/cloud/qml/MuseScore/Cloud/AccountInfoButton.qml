@@ -33,8 +33,6 @@ GradientTabButton {
     property string userName: accountModel.accountInfo.userName
     property string avatarUrl: accountModel.accountInfo.avatarUrl
 
-    property alias navirationPanel: navPanel
-
     signal userAuthorizedChanged()
 
     orientation: Qt.Horizontal
@@ -44,16 +42,6 @@ GradientTabButton {
 
     title: Boolean(userName) ? userName : qsTrc("cloud", "My Account")
     iconComponent: Boolean(avatarUrl) ? avatarComp : stubAvatarComp
-
-    NavigationPanel {
-        id: navPanel
-        name: "AccountInfo"
-        direction: NavigationPanel.Vertical
-    }
-
-    navigation.name: "AccountInfo"
-    navigation.panel: navPanel
-    navigation.row: 1
 
     AccountModel {
         id: accountModel

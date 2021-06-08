@@ -28,9 +28,9 @@ KeyNavDevControl::KeyNavDevControl(INavigationControl* control)
 {
 }
 
-void KeyNavDevControl::forceActive()
+void KeyNavDevControl::requestActive()
 {
-    m_control->forceActiveRequested().send(m_control);
+    m_control->activeRequested().send(m_control);
 }
 
 void KeyNavDevControl::trigger()

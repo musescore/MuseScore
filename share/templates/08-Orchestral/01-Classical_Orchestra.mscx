@@ -505,7 +505,7 @@
         <bracket type="0" span="5" col="0"/>
         </Staff>
       <trackName>Violin I</trackName>
-      <Instrument id="strings">
+      <Instrument id="violins">
         <longName>Violins I</longName>
         <shortName>Vln. I</shortName>
         <trackName>Violins</trackName>
@@ -567,7 +567,7 @@
           </StaffType>
         </Staff>
       <trackName>Violin II</trackName>
-      <Instrument id="strings">
+      <Instrument id="violins">
         <longName>Violins II</longName>
         <shortName>Vln. II</shortName>
         <trackName>Violins</trackName>
@@ -630,7 +630,7 @@
         <defaultClef>C3</defaultClef>
         </Staff>
       <trackName>Viola</trackName>
-      <Instrument id="strings">
+      <Instrument id="violas">
         <longName>Violas</longName>
         <shortName>Vla.</shortName>
         <trackName>Violas</trackName>
@@ -694,7 +694,7 @@
         <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Violoncello</trackName>
-      <Instrument id="strings">
+      <Instrument id="violoncellos">
         <longName>Violoncellos</longName>
         <shortName>Vc.</shortName>
         <trackName>Violoncellos</trackName>
@@ -759,7 +759,7 @@
         <defaultTransposingClef>F</defaultTransposingClef>
         </Staff>
       <trackName>Contrabasses</trackName>
-      <Instrument id="strings">
+      <Instrument id="contrabasses">
         <longName>Contrabasses</longName>
         <shortName>Cb.</shortName>
         <trackName>Contrabasses</trackName>

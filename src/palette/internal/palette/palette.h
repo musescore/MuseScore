@@ -26,7 +26,6 @@
 #include <QScrollArea>
 
 #include "palettetree.h"
-#include "libmscore/sym.h"
 
 #include "modularity/ioc.h"
 #include "ipaletteadapter.h"
@@ -36,7 +35,6 @@
 
 namespace Ms {
 class Element;
-class Sym;
 class XmlWriter;
 class XmlReader;
 class Palette;

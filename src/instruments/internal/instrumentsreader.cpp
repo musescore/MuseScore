@@ -155,7 +155,8 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
     InstrumentTemplate instrumentTemplate;
     Instrument& instrument = instrumentTemplate.instrument;
 
-    instrumentTemplate.id = reader.attributes().value("id").toString();
+    instrument.id = reader.attributes().value("id").toString();
+    instrumentTemplate.id = instrument.id;
 
     bool customDrumset = false;
 
@@ -242,7 +243,7 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
         } else if (reader.name() == "transposeDiatonic") {
             instrument.transpose.diatonic = reader.readElementText().toInt();
         } else if (reader.name() == "instrumentId") {
-            instrument.id = reader.readElementText();
+            instrument.musicXMLid = reader.readElementText();
         } else if (reader.name() == "StringData") {
             instrument.stringData = readStringData(reader);
         } else if (reader.name() == "useDrumset") {
@@ -296,7 +297,7 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
             QString templateId = reader.readElementText();
             initInstrument(instrument, generalMeta.instrumentTemplates[templateId].instrument);
         } else if (reader.name() == "musicXMLid") {
-            instrument.id = reader.readElementText();
+            instrument.musicXMLid = reader.readElementText();
         } else if (reader.name() == "genre") {
             instrument.genreIds << reader.readElementText();
         } else if (reader.name() == "singleNoteDynamics") {
@@ -306,7 +307,7 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
         }
     }
 
-    fillByDeffault(instrument);
+    fillByDefault(instrument);
 
     return instrumentTemplate;
 }
@@ -385,7 +386,7 @@ StringData InstrumentsReader::readStringData(Ms::XmlReader& reader) const
     return StringData(frets, strings);
 }
 
-void InstrumentsReader::fillByDeffault(Instrument& instrument) const
+void InstrumentsReader::fillByDefault(Instrument& instrument) const
 {
     if (instrument.channels.empty()) {
         Channel a;
@@ -417,6 +418,7 @@ void InstrumentsReader::fillByDeffault(Instrument& instrument) const
 void InstrumentsReader::initInstrument(Instrument& sourceInstrument, const Instrument& destinationInstrument) const
 {
     sourceInstrument.id = destinationInstrument.id;
+    sourceInstrument.musicXMLid = destinationInstrument.musicXMLid;
     sourceInstrument.longNames = destinationInstrument.longNames;
     sourceInstrument.shortNames = destinationInstrument.shortNames;
     sourceInstrument.staves = destinationInstrument.staves;

@@ -22,22 +22,23 @@
 #ifndef MU_MIDI_IMIDIINPORT_H
 #define MU_MIDI_IMIDIINPORT_H
 
-#include <vector>
+#include "modularity/imoduleexport.h"
 
-#include "modularity/ioc.h"
-
-#include "miditypes.h"
 #include "ret.h"
 #include "async/channel.h"
+#include "async/notification.h"
+#include "miditypes.h"
 
 namespace mu::midi {
 class IMidiInPort : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMidiInPort)
+
 public:
     virtual ~IMidiInPort() = default;
 
-    virtual std::vector<MidiDevice> devices() const = 0;
+    virtual MidiDeviceList devices() const = 0;
+    virtual async::Notification devicesChanged() const = 0;
 
     virtual Ret connect(const MidiDeviceID& deviceID) = 0;
     virtual void disconnect() = 0;
@@ -47,7 +48,7 @@ public:
     virtual Ret run() = 0;
     virtual void stop() = 0;
     virtual bool isRunning() const = 0;
-    virtual async::Channel<std::pair<tick_t, Event> > eventReceived() const = 0;
+    virtual async::Channel<tick_t, Event> eventReceived() const = 0;
 };
 }
 

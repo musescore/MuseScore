@@ -73,7 +73,7 @@ public:
      *
      * @sa DockWidgetBase::addDockWidgetAsTab()
      */
-    Q_INVOKABLE void addDockWidgetAsTab(DockWidgetBase *dockwidget);
+    Q_INVOKABLE void addDockWidgetAsTab(KDDockWidgets::DockWidgetBase *dockwidget);
 
     /**
      * @brief Docks a DockWidget into this main window.
@@ -84,10 +84,10 @@ public:
      * as hidden, recording only a placeholder in the tab. So it's restored to tabbed when eventually
      * shown.
      */
-    Q_INVOKABLE void addDockWidget(DockWidgetBase *dockWidget,
+    Q_INVOKABLE void addDockWidget(KDDockWidgets::DockWidgetBase *dockWidget,
                                    KDDockWidgets::Location location,
-                                   DockWidgetBase *relativeTo = nullptr,
-                                   InitialOption initialOption = {});
+                                   KDDockWidgets::DockWidgetBase *relativeTo = nullptr,
+                                   KDDockWidgets::InitialOption initialOption = {});
 
     /**
      * @brief Returns the unique name that was passed via constructor.
@@ -150,7 +150,7 @@ public:
     /// @brief like layoutEqually() but starts with the container that has @p dockWidget.
     /// While layoutEqually() starts from the root of the layout tree this function starts on a
     /// sub-tree.
-    Q_INVOKABLE void layoutParentContainerEqually(DockWidgetBase *dockWidget);
+    Q_INVOKABLE void layoutParentContainerEqually(KDDockWidgets::DockWidgetBase *dockWidget);
 
     ///@brief Moves the dock widget into one of the MainWindow's sidebar.
     /// Means the dock widget is removed from the layout, and the sidebar shows a button that if pressed
@@ -158,28 +158,29 @@ public:
     /// functionality.
     ///
     /// The chosen side bar will depend on some heuristics, mostly proximity.
-    Q_INVOKABLE void moveToSideBar(DockWidgetBase *);
+    Q_INVOKABLE void moveToSideBar(KDDockWidgets::DockWidgetBase *);
 
     /// @brief overload that allows to specify which sidebar to use, instead of using heuristics.
-    Q_INVOKABLE void moveToSideBar(DockWidgetBase *, SideBarLocation);
+    Q_INVOKABLE void moveToSideBar(KDDockWidgets::DockWidgetBase *, KDDockWidgets::SideBarLocation);
 
     /// @brief Removes the dock widget from the sidebar and docks it into the main window again
-    Q_INVOKABLE void restoreFromSideBar(DockWidgetBase *);
+    Q_INVOKABLE void restoreFromSideBar(KDDockWidgets::DockWidgetBase *);
 
     ///@brief Shows the dock widget overlayed on top of the main window, placed next to the sidebar
-    Q_INVOKABLE void overlayOnSideBar(DockWidgetBase *);
+    Q_INVOKABLE void overlayOnSideBar(KDDockWidgets::DockWidgetBase *);
 
     ///@brief Shows or hides an overlay. It's assumed the dock widget is already in a side-bar.
-    Q_INVOKABLE void toggleOverlayOnSideBar(DockWidgetBase *);
+    Q_INVOKABLE void toggleOverlayOnSideBar(KDDockWidgets::DockWidgetBase *);
 
     /// @brief closes any overlayed dock widget. The sidebar still displays them as button.
     Q_INVOKABLE void clearSideBarOverlay(bool deleteFrame = true);
 
     /// @brief Returns the sidebar this dockwidget is in. nullptr if not in any.
-    Q_INVOKABLE SideBar *sideBarForDockWidget(const DockWidgetBase *) const;
+    Q_INVOKABLE KDDockWidgets::SideBar *
+    sideBarForDockWidget(const KDDockWidgets::DockWidgetBase *) const;
 
     /// @brief Returns whether the specified sidebar is visible
-    Q_INVOKABLE bool sideBarIsVisible(SideBarLocation) const;
+    Q_INVOKABLE bool sideBarIsVisible(KDDockWidgets::SideBarLocation) const;
 
     /// @brief returns the dock widget which is currently overlayed. nullptr if none.
     /// This is only relevant when using the auto-hide and side-bar feature.
@@ -199,6 +200,13 @@ public:
     /// if all dock widgets were closed (0 or more)
     Q_INVOKABLE bool closeDockWidgets(bool force = false);
 
+    /// @brief Returns the window geometry
+    /// This is usually the same as MainWindowBase::geometry()
+    /// But fixes the following special cases:
+    /// - QWidgets: Our MainWindow is embedded in another widget
+    /// - QtQuick: Our MainWindow is QQuickItem
+    QRect windowGeometry() const;
+
 protected:
     void setUniqueName(const QString &uniqueName);
     void onResized(QResizeEvent *); // Because QtQuick doesn't have resizeEvent()
@@ -209,6 +217,11 @@ protected:
 Q_SIGNALS:
     void uniqueNameChanged();
 
+    /// @brief emitted when the number of docked frames changes
+    /// Note that we're using the "Frame" nomenculature instead of "DockWidget" here, as DockWidgets
+    /// can be tabbed together, in which case this signal isn't emitted.
+    void frameCountChanged(int);
+
 private:
     class Private;
     Private *const d;
@@ -218,7 +231,6 @@ private:
     bool deserialize(const LayoutSaver::MainWindow &);
     LayoutSaver::MainWindow serialize() const;
 };
-
 }
 
 #endif

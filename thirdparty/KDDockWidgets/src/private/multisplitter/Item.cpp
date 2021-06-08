@@ -2412,7 +2412,7 @@ void ItemBoxContainer::layoutEqually(SizingInfo::List &sizes)
                                        // minimum length
                 std::accumulate(sizes.constBegin(), sizes.constEnd(), 0,
                                 [this](size_t sum, const SizingInfo &sz) {
-                                    return sum + sz.missingLength(d->m_orientation);
+                                    return int(sum) + sz.missingLength(d->m_orientation);
                                 })
                 - size.missingLength(d->m_orientation);
 

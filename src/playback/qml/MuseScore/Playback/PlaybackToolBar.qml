@@ -97,20 +97,24 @@ Rectangle {
                             property var hasSubitems: modelData.subitems.length !== 0
 
                             icon: modelData.icon
-                            hint: modelData.hint
+
+                            toolTipTitle: modelData.title
+                            toolTipDescription: modelData.description
+                            toolTipShortcut: modelData.shortcut
+
                             iconFont: ui.theme.toolbarIconsFont
 
-                            normalStateColor: modelData.checked || menuLoader.isMenuOpened()
+                            normalStateColor: modelData.checked || menuLoader.isMenuOpened
                                               ? ui.theme.accentColor : "transparent"
-                            accentButton: modelData.checked || menuLoader.isMenuOpened()
+                            accentButton: modelData.checked || menuLoader.isMenuOpened
 
                             navigation.panel: keynavSub
-                            navigation.name: modelData.hint
+                            navigation.name: modelData.title
                             navigation.order: modelData.index
                             navigation.enabled: playbackModel.isPlayAllowed
 
                             onClicked: {
-                                if (menuLoader.isMenuOpened() || hasSubitems) {
+                                if (menuLoader.isMenuOpened || hasSubitems) {
                                     menuLoader.toggleOpened(modelData.subitems, btn.navigation)
                                     return
                                 }

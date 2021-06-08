@@ -19,38 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #ifndef MU_DOCK_DOCKSTATUSBAR_H
 #define MU_DOCK_DOCKSTATUSBAR_H
 
-#include "dockview.h"
-
-class QWidget;
+#include "internal/dockbase.h"
 
 namespace mu::dock {
-class DockStatusBar : public DockView
+class DockStatusBar : public DockBase
 {
     Q_OBJECT
 
 public:
     explicit DockStatusBar(QQuickItem* parent = nullptr);
-    ~DockStatusBar();
-
-    struct Widget {
-        QWidget* widget = nullptr;
-    };
-
-    Widget widget() const;
-
-    bool visible() const override;
-
-public slots:
-    void setVisible(bool visible) override;
 
 private:
-    void onComponentCompleted() override;
-
-    Widget m_widget;
-    bool m_visible = false;
+    DockType type() const override;
 };
 }
 

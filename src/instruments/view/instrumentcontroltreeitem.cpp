@@ -28,7 +28,7 @@ using namespace mu::instruments;
 using namespace mu::notation;
 
 InstrumentControlTreeItem::InstrumentControlTreeItem(INotationPartsPtr notationParts, QObject* parent)
-    : AbstractInstrumentPanelTreeItem(InstrumentTreeItemType::ItemType::CONTROL_ADD_DOUBLE_INSTRUMENT, notationParts, parent)
+    : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::CONTROL_ADD_DOUBLE_INSTRUMENT, notationParts, parent)
 {
 }
 

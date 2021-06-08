@@ -20,7 +20,7 @@ ApplicationWindow {
 
     KDDW.MainWindowLayout {
         anchors.fill: parent
-        uniqueName: "MyWindow1"
+        uniqueName: "MyMainLayout"
         options: KDDW.KDDockWidgets.MainWindowOption_MDI
     }
 }

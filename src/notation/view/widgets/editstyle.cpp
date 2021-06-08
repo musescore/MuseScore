@@ -33,7 +33,9 @@
 #include "framework/global/widgetstatestore.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/layout.h"
+#include "libmscore/scorefont.h"
 #include "libmscore/sym.h"
+#include "libmscore/realizedharmony.h"
 #include "log.h"
 #include "offsetSelect.h"
 #include "translation.h"
@@ -969,7 +971,7 @@ void EditStyle::adjustPagesStackSize(int currentPageIndex)
 ///   menu for every possible element on the score.
 //---------------------------------------------------------
 
-EditStylePage EditStyle::pageForElement(Element* e)
+EditStyle::EditStylePage EditStyle::pageForElement(Element* e)
 {
     switch (e->type()) {
     case ElementType::SCORE:
@@ -1214,6 +1216,8 @@ void EditStyle::buttonClicked(QAbstractButton* b)
         }
         break;
     }
+
+    globalContext()->currentNotation()->style()->styleChanged().notify();
 }
 
 //---------------------------------------------------------
@@ -1770,7 +1774,7 @@ void EditStyle::systemMinDistanceValueChanged(double val)
 //   styleWidget
 //---------------------------------------------------------
 
-const StyleWidget& EditStyle::styleWidget(StyleId idx) const
+const EditStyle::StyleWidget& EditStyle::styleWidget(StyleId idx) const
 {
     for (const StyleWidget& sw : styleWidgets) {
         if (sw.idx == idx) {
@@ -1795,7 +1799,7 @@ void EditStyle::valueChanged(int i)
     QVariant val  = getValue(idx);
     bool setValue = false;
     if (idx == StyleId::MusicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
-        Ms::ScoreFont* scoreFont = Ms::ScoreFont::fontFactory(val.toString());
+        Ms::ScoreFont* scoreFont = Ms::ScoreFont::fontByName(val.toString());
         if (scoreFont) {
             for (auto j : scoreFont->engravingDefaults()) {
                 setStyleValue(j.first, j.second);

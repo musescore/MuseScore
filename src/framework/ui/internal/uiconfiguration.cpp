@@ -30,6 +30,7 @@
 #include <QFontDatabase>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 
 using namespace mu::ui;
 using namespace mu::framework;
@@ -44,6 +45,7 @@ static const Settings::Key UI_MUSICAL_FONT_FAMILY_KEY("ui", "ui/theme/musicalFon
 static const Settings::Key UI_MUSICAL_FONT_SIZE_KEY("ui", "ui/theme/musicalFontSize");
 
 static const std::string STATES_PATH("ui/states");
+static const std::string WINDOW_GEOMETRY_PATH("ui/geometry/window");
 
 static const QMap<ThemeStyleKey, QVariant> LIGHT_THEME_VALUES {
     { BACKGROUND_PRIMARY_COLOR, "#F5F5F6" },
@@ -157,7 +159,7 @@ void UiConfiguration::init()
     });
 
     workspaceSettings()->valuesChanged().onNotify(nullptr, [this]() {
-        m_pageStateChanged.notify();
+        m_windowGeometryChanged.notify();
     });
 
     initThemes();
@@ -294,6 +296,29 @@ void UiConfiguration::writeThemes(const ThemeList& themes)
 
     Val value(jsonDoc.toJson(QJsonDocument::Compact).constData());
     settings()->setValue(UI_THEMES_KEY, value);
+}
+
+mu::Val UiConfiguration::uiArrangmentValue(const std::string& key) const
+{
+    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
+        IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, key };
+        return workspaceSettings()->value(workspaceKey);
+    }
+
+    Settings::Key settingsKey{ "global", key };
+    return settings()->value(settingsKey);
+}
+
+void UiConfiguration::setUiArrangmentValue(const std::string& key, const mu::Val& value) const
+{
+    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
+        IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, key };
+        workspaceSettings()->setValue(workspaceKey, value);
+        return;
+    }
+
+    Settings::Key settingsKey{ "global", key };
+    settings()->setValue(settingsKey, value);
 }
 
 ThemeList UiConfiguration::themes() const
@@ -483,16 +508,9 @@ float UiConfiguration::physicalDotsPerInch() const
 QByteArray UiConfiguration::pageState(const std::string& pageName) const
 {
     TRACEFUNC;
-    std::string key = STATES_PATH + "/" + pageName;
-    std::string stateString;
 
-    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
-        IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, key };
-        stateString = workspaceSettings()->value(workspaceKey).toString();
-    } else {
-        Settings::Key settingsKey{ "global", key };
-        stateString = settings()->value(settingsKey).toString();
-    }
+    std::string key = STATES_PATH + "/" + pageName;
+    std::string stateString = uiArrangmentValue(key).toString();
 
     return stringToByteArray(stateString);
 }
@@ -503,22 +521,33 @@ void UiConfiguration::setPageState(const std::string& pageName, const QByteArray
     std::string key = STATES_PATH + "/" + pageName;
     Val value = Val(byteArrayToString(state));
 
-    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
-        IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, key };
-        workspaceSettings()->setValue(workspaceKey, value);
-        return;
-    }
-
-    Settings::Key settingsKey{ "global", key };
-    settings()->setValue(settingsKey, value);
+    setUiArrangmentValue(key, value);
 }
 
-Notification UiConfiguration::pageStateChanged() const
+QByteArray UiConfiguration::windowGeometry() const
 {
-    return m_pageStateChanged;
+    TRACEFUNC;
+    std::string key = WINDOW_GEOMETRY_PATH;
+    std::string geometryString = uiArrangmentValue(key).toString();
+
+    return stringToByteArray(geometryString);
 }
 
-void UiConfiguration::applyPlatformStyle(QWidget* window)
+void UiConfiguration::setWindowGeometry(const QByteArray& geometry)
+{
+    TRACEFUNC;
+    std::string key = WINDOW_GEOMETRY_PATH;
+    Val value = Val(byteArrayToString(geometry));
+
+    setUiArrangmentValue(key, value);
+}
+
+Notification UiConfiguration::windowGeometryChanged() const
+{
+    return m_windowGeometryChanged;
+}
+
+void UiConfiguration::applyPlatformStyle(QWindow* window)
 {
     platformTheme()->applyPlatformStyleOnWindowForTheme(window, currentThemeCodeKey());
 }

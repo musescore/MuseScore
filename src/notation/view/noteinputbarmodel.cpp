@@ -60,13 +60,15 @@ QVariant NoteInputBarModel::data(const QModelIndex& index, int role) const
 {
     const MenuItem& item = m_items.at(index.row());
     switch (role) {
+    case TitleRole: return item.title;
     case IconRole: return static_cast<int>(item.iconCode);
     case SectionRole: return item.section;
     case CodeRole: return QString::fromStdString(item.code);
     case CheckedRole: return item.state.checked;
-    case HintRole: return item.description;
+    case DescriptionRole: return item.description;
+    case ShortcutRole: return QString::fromStdString(item.shortcut);
     case SubitemsRole: return subitems(item.code);
-    case ShowSubitemsByPressAndHoldRole: return isNeedShowSubitemsByPressAndHold(item.code);
+    case IsMenuSecondaryRole: return isMenuSecondary(item.code);
     case OrderRole: return index.row();
     }
     return QVariant();
@@ -80,13 +82,15 @@ int NoteInputBarModel::rowCount(const QModelIndex&) const
 QHash<int, QByteArray> NoteInputBarModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
+        { TitleRole, "titleRole" },
         { IconRole, "iconRole" },
         { SectionRole, "sectionRole" },
         { CodeRole, "codeRole" },
         { CheckedRole, "checkedRole" },
-        { HintRole, "hintRole" },
+        { DescriptionRole, "descriptionRole" },
+        { ShortcutRole, "shortcutRole" },
         { SubitemsRole, "subitemsRole" },
-        { ShowSubitemsByPressAndHoldRole, "showSubitemsByPressAndHoldRole" },
+        { IsMenuSecondaryRole, "isMenuSecondaryRole" },
         { OrderRole, "orderRole" },
     };
     return roles;
@@ -667,8 +671,6 @@ MenuItemList NoteInputBarModel::addItems() const
 MenuItemList NoteInputBarModel::notesItems() const
 {
     MenuItemList items {
-        makeAction("note-input"),
-        makeSeparator(),
         makeAction("note-c"),
         makeAction("note-d"),
         makeAction("note-e"),
@@ -785,7 +787,7 @@ MenuItemList NoteInputBarModel::linesItems() const
     return items;
 }
 
-bool NoteInputBarModel::isNeedShowSubitemsByPressAndHold(const ActionCode& actionCode) const
+bool NoteInputBarModel::isMenuSecondary(const ActionCode& actionCode) const
 {
     if (isNoteInputModeAction(actionCode)) {
         return true;

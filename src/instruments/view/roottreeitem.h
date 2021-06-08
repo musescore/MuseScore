@@ -22,19 +22,19 @@
 #ifndef MU_INSTRUMENTS_ROOTTREEITEM_H
 #define MU_INSTRUMENTS_ROOTTREEITEM_H
 
-#include "abstractinstrumentpaneltreeitem.h"
+#include "abstractinstrumentspaneltreeitem.h"
 
 #include "notation/inotationparts.h"
 
 namespace mu::instruments {
-class RootTreeItem : public AbstractInstrumentPanelTreeItem
+class RootTreeItem : public AbstractInstrumentsPanelTreeItem
 {
     Q_OBJECT
 
 public:
     explicit RootTreeItem(notation::INotationPartsPtr notationParts, QObject* parent = nullptr);
 
-    void moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
+    void moveChildren(const int sourceRow, const int count, AbstractInstrumentsPanelTreeItem* destinationParent,
                       const int destinationRow) override;
 
     void removeChildren(const int row, const int count, const bool deleteChild) override;

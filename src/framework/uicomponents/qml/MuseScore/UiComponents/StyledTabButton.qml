@@ -52,20 +52,19 @@ TabButton {
         if (!root.activeFocus) {
             root.forceActiveFocus()
         }
-
-        if (!navCtrl.active) {
-            navCtrl.forceActive()
-        }
     }
-
 
     NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "TabButton"
+
+        accessible.role: MUAccessible.RadioButton
+        accessible.name: root.text
+        accessible.selected: root.isCurrent
+
         onActiveChanged: {
             if (active) {
                 root.ensureActiveFocus()
-                root.navigationTriggered()
             }
         }
         onTriggered: root.navigationTriggered()

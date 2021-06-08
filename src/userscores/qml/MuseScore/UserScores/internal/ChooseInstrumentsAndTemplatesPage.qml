@@ -49,7 +49,9 @@ Item {
         var result = {}
 
         if (pagesStack.currentIndex === 0) {
-            result["instruments"] = instrumentsPage.selectedInstruments()
+            var parts = {}
+            parts["instruments"] = instrumentsPage.selectedInstruments()
+            result["parts"] = parts
         } else if (pagesStack.currentIndex === 1) {
             result["templatePath"] = templatePage.selectedTemplatePath
         }
@@ -58,7 +60,7 @@ Item {
     }
 
     function focusOnFirst() {
-        chooseInstrumentsBtn.navigation.forceActive()
+        chooseInstrumentsBtn.navigation.requestActive()
     }
 
     TabBar {

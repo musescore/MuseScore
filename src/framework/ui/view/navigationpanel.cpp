@@ -24,6 +24,7 @@
 #include <algorithm>
 
 #include "navigationsection.h"
+#include "translation.h"
 #include "log.h"
 
 using namespace mu::ui;
@@ -31,6 +32,7 @@ using namespace mu::ui;
 NavigationPanel::NavigationPanel(QObject* parent)
     : AbstractNavigation(parent)
 {
+    accessible()->setRole(MUAccessible::Panel);
 }
 
 NavigationPanel::~NavigationPanel()
@@ -57,7 +59,18 @@ mu::async::Channel<INavigation::Index> NavigationPanel::indexChanged() const
 
 bool NavigationPanel::enabled() const
 {
-    return AbstractNavigation::enabled();
+    if (!AbstractNavigation::enabled()) {
+        return false;
+    }
+
+    bool enbl = false;
+    for (INavigationControl* c : m_controls) {
+        if (c->enabled()) {
+            enbl = true;
+            break;
+        }
+    }
+    return enbl;
 }
 
 mu::async::Channel<bool> NavigationPanel::enabledChanged() const
@@ -73,6 +86,9 @@ bool NavigationPanel::active() const
 void NavigationPanel::setActive(bool arg)
 {
     AbstractNavigation::setActive(arg);
+    if (m_accessible) {
+        m_accessible->setState(IAccessible::State::Active, arg);
+    }
 }
 
 mu::async::Channel<bool> NavigationPanel::activeChanged() const
@@ -92,12 +108,22 @@ void NavigationPanel::setDirection(QmlDirection direction)
     }
 
     m_direction = direction;
-    emit directionChanged(m_direction);
+    emit directionChanged();
 }
 
 NavigationPanel::QmlDirection NavigationPanel::direction_property() const
 {
     return m_direction;
+}
+
+QString NavigationPanel::directionInfo() const
+{
+    switch (m_direction) {
+    case Horizontal: return qtrc("ui", "direction is horizontal");
+    case Vertical: return qtrc("ui", "direction is vertical");
+    case Both: return qtrc("ui", "direction is both");
+    }
+    return QString();
 }
 
 INavigationPanel::Direction NavigationPanel::direction() const
@@ -115,7 +141,7 @@ mu::async::Notification NavigationPanel::controlsListChanged() const
     return m_controlsListChanged;
 }
 
-mu::async::Channel<PanelControl> NavigationPanel::forceActiveRequested() const
+mu::async::Channel<PanelControl> NavigationPanel::activeRequested() const
 {
     return m_forceActiveRequested;
 }
@@ -162,10 +188,6 @@ void NavigationPanel::onSectionDestroyed()
     m_section = nullptr;
 }
 
-void NavigationPanel::componentComplete()
-{
-}
-
 void NavigationPanel::addControl(NavigationControl* control)
 {
     TRACEFUNC;
@@ -175,7 +197,7 @@ void NavigationPanel::addControl(NavigationControl* control)
 
     m_controls.insert(control);
 
-    control->forceActiveRequested().onReceive(this, [this](INavigationControl* c) {
+    control->activeRequested().onReceive(this, [this](INavigationControl* c) {
         m_forceActiveRequested.send(std::make_tuple(this, c));
     });
 
@@ -192,7 +214,7 @@ void NavigationPanel::removeControl(NavigationControl* control)
     }
 
     m_controls.erase(control);
-    control->forceActiveRequested().resetOnReceive(this);
+    control->activeRequested().resetOnReceive(this);
 
     if (m_controlsListChanged.isConnected()) {
         m_controlsListChanged.notify();

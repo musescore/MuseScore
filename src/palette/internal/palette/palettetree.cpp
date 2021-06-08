@@ -40,7 +40,7 @@
 #include "libmscore/element.h"
 #include "libmscore/bracket.h"
 
-#include "libmscore/draw/qpainterprovider.h"
+#include "engraving/draw/qpainterprovider.h"
 
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "thirdparty/qzip/qzipwriter_p.h"
@@ -54,6 +54,7 @@
 using namespace mu::palette;
 using namespace mu::framework;
 using namespace mu::actions;
+using namespace mu::draw;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -531,7 +532,7 @@ void PalettePanel::showWritingPaletteError(const QString& path) const
 {
     std::string title = mu::trc("palette", "Writing Palette File");
     std::string message = mu::qtrc("palette", "Writing Palette File\n%1\nfailed: ").arg(path).toStdString();
-    interactive()->message(IInteractive::Type::Critical, title, message);
+    interactive()->error(title, message);
 }
 
 //---------------------------------------------------------
@@ -1125,7 +1126,7 @@ void PaletteCellIconEngine::paintScoreElement(mu::draw::Painter& painter, Elemen
 /// distance from the top of the QRect to the uppermost staff line.
 //---------------------------------------------------------
 
-qreal PaletteCellIconEngine::paintStaff(mu::draw::Painter& painter, const QRect& rect, qreal spatium)
+qreal PaletteCellIconEngine::paintStaff(Painter& painter, const RectF& rect, qreal spatium)
 {
     painter.save(); // so we can restore painter after we are done using it
     QPen pen(configuration()->elementsColor());
@@ -1156,7 +1157,7 @@ qreal PaletteCellIconEngine::paintStaff(mu::draw::Painter& painter, const QRect&
 //   paintBackground
 //---------------------------------------------------------
 
-void PaletteCellIconEngine::paintBackground(mu::draw::Painter& painter, const QRect& rect, bool selected, bool current)
+void PaletteCellIconEngine::paintBackground(Painter& painter, const RectF& rect, bool selected, bool current)
 {
     QColor c(configuration()->accentColor());
     if (current || selected) {
@@ -1169,7 +1170,7 @@ void PaletteCellIconEngine::paintBackground(mu::draw::Painter& painter, const QR
 //   paintTag
 //---------------------------------------------------------
 
-void PaletteCellIconEngine::paintTag(mu::draw::Painter& painter, const QRect& rect, QString tag)
+void PaletteCellIconEngine::paintTag(Painter& painter, const RectF& rect, QString tag)
 {
     if (tag.isEmpty()) {
         return;
@@ -1177,8 +1178,8 @@ void PaletteCellIconEngine::paintTag(mu::draw::Painter& painter, const QRect& re
 
     painter.save();   // so we can restore it after we are done using it
     painter.setPen(configuration()->elementsColor());
-    QFont f(painter.font());
-    f.setPointSize(12);
+    Font f(painter.font());
+    f.setPointSizeF(12.0);
     painter.setFont(f);
 
     if (tag == "ShowMore") {

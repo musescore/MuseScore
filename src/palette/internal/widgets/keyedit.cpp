@@ -37,7 +37,7 @@
 #include "libmscore/mscore.h"
 #include "libmscore/xml.h"
 
-#include "libmscore/draw/qpainterprovider.h"
+#include "engraving/draw/qpainterprovider.h"
 
 #include "commonscene/commonscenetypes.h"
 #include "translation.h"

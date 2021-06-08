@@ -19,23 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
-import MuseScore.NotationScene 1.0
+import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
 Row {
     id: root
 
+    property alias currentZoomPercentage: zoomInputField.value
+    property alias minZoomPercentage: zoomInputField.minValue
+    property alias maxZoomPercentage: zoomInputField.maxValue
+    property var availableZoomList: []
+
+    signal changeZoomPercentageRequested(var newZoomPercentage)
+    signal changeZoomRequested(var newZoomIndex)
+    signal zoomInRequested()
+    signal zoomOutRequested()
+
     spacing: 4
-
-    ZoomControlModel {
-        id: model
-    }
-
-    Component.onCompleted: {
-        model.load()
-    }
 
     FlatButton {
         icon: IconCode.ZOOM_IN
@@ -43,7 +45,7 @@ Row {
         normalStateColor: "transparent"
 
         onClicked: {
-            model.zoomIn()
+            root.zoomInRequested()
         }
     }
 
@@ -53,15 +55,50 @@ Row {
         normalStateColor: "transparent"
 
         onClicked: {
-            model.zoomOut()
+            root.zoomOutRequested()
         }
     }
 
-    StyledTextLabel {
+    Row {
         height: parent.height
 
-        width: 60
+        spacing: 1
 
-        text: model.currentZoom + " %"
+        NumberInputField {
+            id: zoomInputField
+
+            addLeadingZeros: false
+            font: ui.theme.bodyFont
+
+            onValueEdited: {
+                root.changeZoomPercentageRequested(newValue)
+            }
+        }
+
+        StyledTextLabel {
+            anchors.verticalCenter: parent.verticalCenter
+
+            text: "%"
+        }
+    }
+
+    FlatButton {
+        width: 20
+
+        icon: IconCode.SMALL_ARROW_DOWN
+
+        normalStateColor: menu.isMenuOpened ? ui.theme.accentColor : "transparent"
+
+        StyledMenuLoader {
+            id: menu
+
+            onHandleAction: {
+                root.changeZoomRequested(actionIndex)
+            }
+        }
+
+        onClicked: {
+            menu.toggleOpened(root.availableZoomList, parent.navigation)
+        }
     }
 }

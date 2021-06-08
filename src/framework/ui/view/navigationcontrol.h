@@ -23,6 +23,7 @@
 #define MU_UI_NAVIGATIONCONTROL_H
 
 #include <QObject>
+#include <QQuickItem>
 
 #include "abstractnavigation.h"
 #include "async/asyncable.h"
@@ -56,9 +57,9 @@ public:
     void onEvent(EventPtr e) override;
 
     void trigger() override;
-    async::Channel<INavigationControl*> forceActiveRequested() const override;
+    async::Channel<INavigationControl*> activeRequested() const override;
 
-    Q_INVOKABLE void forceActive();
+    Q_INVOKABLE void requestActive();
 
 public slots:
     void setPanel(NavigationPanel* panel);

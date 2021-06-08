@@ -38,9 +38,19 @@ Rectangle {
 
     NavigationSection {
         id: navSec
-        name: "HomeMenu"
+        name: "HomeMenuSection"
         enabled: root.visible
         order: 2
+    }
+
+    NavigationPanel {
+        id: navPanel
+        name: "HomeMenuPanel"
+        section: navSec
+        order: 1
+        direction: NavigationPanel.Vertical
+
+        accessible.name: qsTrc("appshell", "Home menu") + " " + navPanel.directionInfo
     }
 
     ColumnLayout {
@@ -52,8 +62,9 @@ Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 60
 
-            navirationPanel.section: navSec
-            navirationPanel.order: 1
+            navigation.name: "AccountInfo"
+            navigation.panel: navPanel
+            navigation.row: 1
 
             checked: root.currentPageName === "account"
 
@@ -75,13 +86,6 @@ Rectangle {
             orientation: ListView.Vertical
             spacing: 0
 
-            property NavigationPanel navigationPanel: NavigationPanel {
-                name: "MenuPanel"
-                section: navSec
-                order: 2
-                direction: NavigationPanel.Vertical
-            }
-
             model: [
                 { "name": "scores", "title": qsTrc("appshell", "Scores"), "icon": IconCode.MUSIC_NOTES },
                 { "name": "add-ons", "title": qsTrc("appshell", "Add-ons"), "icon":  IconCode.PLUS },
@@ -99,8 +103,8 @@ Rectangle {
                 width: parent.width
 
                 navigation.name: title
-                navigation.panel: radioButtonList.navigationPanel
-                navigation.row: 1 + model.index
+                navigation.panel: navPanel
+                navigation.row: 2 + model.index
 
                 spacing: 30
                 leftPadding: spacing

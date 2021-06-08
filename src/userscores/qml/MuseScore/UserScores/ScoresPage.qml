@@ -45,8 +45,9 @@ FocusScope {
         enabled: root.visible
         order: 3
         onActiveChanged: {
-            if (active) {
+            if (navSec.active) {
                 root.requestActiveFocus()
+                root.forceActiveFocus()
             }
         }
     }
@@ -64,7 +65,8 @@ FocusScope {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                forceActiveFocus()
+                root.requestActiveFocus()
+                root.forceActiveFocus()
             }
         }
     }
@@ -86,6 +88,7 @@ FocusScope {
             name: "HomeScoresSearch"
             section: navSec
             order: 1
+            accessible.name: qsTrc("userscores", "Recent scores")
         }
 
         StyledTextLabel {
@@ -108,6 +111,7 @@ FocusScope {
             navigation.name: "Scores Search"
             navigation.panel: navSearchPanel
             navigation.order: 1
+            accessible.name: qsTrc("userscores", "Recent scores search")
         }
     }
 
@@ -180,10 +184,11 @@ FocusScope {
 
         NavigationPanel {
             id: navBottomPanel
-            name: "HomeScoresSearch"
+            name: "RecentScoresBottom"
             section: navSec
             direction: NavigationPanel.Horizontal
             order: 3
+            accessible.name: qsTrc("userscores", "Recent scores bottom")
         }
 
         Row {

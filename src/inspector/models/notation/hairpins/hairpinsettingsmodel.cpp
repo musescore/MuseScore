@@ -23,9 +23,11 @@
 
 #include <QPointF>
 
-#include "types/hairpintypes.h"
-#include "hairpin.h"
+#include "libmscore/hairpin.h"
+
+#include "translation.h"
 #include "dataformatter.h"
+#include "types/hairpintypes.h"
 
 using namespace mu::inspector;
 

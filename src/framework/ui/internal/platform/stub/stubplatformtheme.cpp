@@ -52,6 +52,6 @@ void StubPlatformTheme::applyPlatformStyleOnAppForTheme(ThemeCode)
 {
 }
 
-void StubPlatformTheme::applyPlatformStyleOnWindowForTheme(QWidget*, ThemeCode)
+void StubPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow*, ThemeCode)
 {
 }

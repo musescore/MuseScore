@@ -33,7 +33,7 @@
 #include "libmscore/system.h"
 #include "libmscore/staff.h"
 
-#include "libmscore/draw/qpainterprovider.h"
+#include "engraving/draw/qpainterprovider.h"
 
 namespace Ms {
 namespace PluginAPI {
@@ -178,7 +178,7 @@ void ScoreView::paint(QPainter* qp)
 {
     mu::draw::Painter p(qp, "plugins_scoreview");
     p.setAntialiasing(true);
-    p.fillRect(QRect(0, 0, width(), height()), _color);
+    p.fillRect(mu::draw::RectF(0.0, 0.0, width(), height()), _color);
     if (!score) {
         return;
     }

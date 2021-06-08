@@ -25,16 +25,19 @@
 #include <memory>
 #include <thread>
 
+#include "async/asyncable.h"
 #include "imidiinport.h"
+#include "internal/midideviceslistener.h"
 
 namespace mu::midi {
-class AlsaMidiInPort : public IMidiInPort
+class AlsaMidiInPort : public IMidiInPort, public async::Asyncable
 {
 public:
     AlsaMidiInPort();
     ~AlsaMidiInPort() override;
 
-    std::vector<MidiDevice> devices() const override;
+    MidiDeviceList devices() const override;
+    async::Notification devicesChanged() const override;
 
     Ret connect(const MidiDeviceID& deviceID) override;
     void disconnect() override;
@@ -44,19 +47,25 @@ public:
     Ret run() override;
     void stop() override;
     bool isRunning() const override;
-    async::Channel<std::pair<tick_t, Event> > eventReceived() const override;
+    async::Channel<tick_t, Event> eventReceived() const override;
 
 private:
-
     static void process(AlsaMidiInPort* self);
     void doProcess();
+
+    bool deviceExists(const MidiDeviceID& deviceId) const;
 
     struct Alsa;
     std::unique_ptr<Alsa> m_alsa;
     MidiDeviceID m_deviceID;
     std::shared_ptr<std::thread> m_thread;
     std::atomic<bool> m_running{ false };
-    async::Channel<std::pair<tick_t, Event> > m_eventReceived;
+    async::Channel<tick_t, Event> m_eventReceived;
+
+    async::Notification m_devicesChanged;
+    MidiDevicesListener m_devicesListener;
+
+    mutable std::mutex m_devicesMutex;
 };
 }
 

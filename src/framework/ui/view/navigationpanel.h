@@ -36,6 +36,7 @@ class NavigationPanel : public AbstractNavigation, public INavigationPanel, publ
     Q_OBJECT
     Q_PROPERTY(mu::ui::NavigationSection* section READ section_property WRITE setSection_property NOTIFY sectionChanged)
     Q_PROPERTY(QmlDirection direction READ direction_property WRITE setDirection NOTIFY directionChanged)
+    Q_PROPERTY(QString directionInfo READ directionInfo NOTIFY directionChanged)
 
 public:
     explicit NavigationPanel(QObject* parent = nullptr);
@@ -64,17 +65,16 @@ public:
     void onEvent(EventPtr e) override;
 
     QmlDirection direction_property() const;
+    QString directionInfo() const;
     Direction direction() const override;
 
     const std::set<INavigationControl*>& controls() const override;
     async::Notification controlsListChanged() const override;
 
-    async::Channel<PanelControl> forceActiveRequested() const override;
+    async::Channel<PanelControl> activeRequested() const override;
 
     INavigationSection* section() const override;
     NavigationSection* section_property() const;
-
-    void componentComplete() override;
 
     void addControl(NavigationControl* control);
     void removeControl(NavigationControl* control);
@@ -86,7 +86,7 @@ public slots:
 
 signals:
     void sectionChanged(NavigationSection* section);
-    void directionChanged(QmlDirection direction);
+    void directionChanged();
 
 private slots:
     void onSectionDestroyed();

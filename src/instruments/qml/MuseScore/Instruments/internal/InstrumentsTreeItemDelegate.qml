@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -34,7 +34,7 @@ Item {
     property string filterKey
     property bool isSelected: false
     property bool isDragAvailable: false
-    property var type: InstrumentTreeItemType.UNDEFINED
+    property int type: InstrumentsTreeItemType.UNDEFINED
 
     property int keynavRow: 0
     property NavigationPanel navigationPanel: null
@@ -42,6 +42,7 @@ Item {
     property int sideMargin: 0
 
     signal clicked(var mouse)
+    signal doubleClicked(var mouse)
     signal focusActived()
 
     signal popupOpened(var popupX, var popupY, var popupHeight)
@@ -54,7 +55,7 @@ Item {
 
         onDraggedChanged: {
             if (dragged && styleData.isExpanded) {
-                attachedControl.collapse(styleData.index)
+                root.attachedControl.collapse(styleData.index)
             }
         }
 
@@ -83,10 +84,8 @@ Item {
         }
     }
 
-    anchors {
-        verticalCenter: parent ? parent.verticalCenter : undefined
-        horizontalCenter: parent ? parent.horizontalCenter : undefined
-    }
+    anchors.verticalCenter: parent ? parent.verticalCenter : undefined
+    anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
 
     height: parent ? parent.height : implicitHeight
     width: parent ? parent.width : implicitWidth
@@ -106,7 +105,7 @@ Item {
         panel: root.navigationPanel
         row: root.keynavRow
         column: 0
-        enabled: visible
+        enabled: root.visible
 
         onActiveChanged: {
             if (active) {
@@ -163,7 +162,7 @@ Item {
             State {
                 name: "PART_EXPANDED"
                 when: styleData.isExpanded && !root.isSelected &&
-                      delegateType === InstrumentTreeItemType.PART
+                      root.type === InstrumentsTreeItemType.PART
 
                 PropertyChanges {
                     target: background
@@ -175,8 +174,8 @@ Item {
             State {
                 name: "PARENT_EXPANDED"
                 when: root.visible && !root.isSelected &&
-                      (delegateType === InstrumentTreeItemType.INSTRUMENT ||
-                       delegateType === InstrumentTreeItemType.STAFF)
+                      (root.type === InstrumentsTreeItemType.INSTRUMENT ||
+                       root.type === InstrumentsTreeItemType.STAFF)
 
                 PropertyChanges {
                     target: background
@@ -209,8 +208,11 @@ Item {
         drag.axis: Drag.YAxis
 
         onClicked: {
-            keynavItem.forceActive()
             root.clicked(mouse)
+        }
+
+        onDoubleClicked: {
+            root.doubleClicked(mouse)
         }
     }
 
@@ -297,32 +299,30 @@ Item {
 
                 icon: styleData.isExpanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
 
-                visible: styleData.hasChildren && (delegateType === InstrumentTreeItemType.INSTRUMENT ? styleData.index.row === 0 : true)
+                visible: styleData.hasChildren && (root.type === InstrumentsTreeItemType.INSTRUMENT ? styleData.index.row === 0 : true)
 
                 onClicked: {
                     if (!styleData.isExpanded) {
-                        attachedControl.expand(styleData.index)
+                        root.attachedControl.expand(styleData.index)
                     } else {
-                        attachedControl.collapse(styleData.index)
+                        root.attachedControl.collapse(styleData.index)
                     }
                 }
             }
 
             StyledTextLabel {
-                anchors {
-                    left: expandButton.right
-                    leftMargin: 4
-                    right: parent.right
-                    rightMargin: 8
-                    verticalCenter: expandButton.verticalCenter
-                }
-                horizontalAlignment: Text.AlignLeft
+                anchors.left: expandButton.right
+                anchors.leftMargin: 4
+                anchors.right: parent.right
+                anchors.rightMargin: 8
+                anchors.verticalCenter: expandButton.verticalCenter
 
                 text: model ? model.itemRole.title : ""
+                horizontalAlignment: Text.AlignLeft
                 opacity: model && model.itemRole.isVisible ? 1 : 0.75
 
                 font: {
-                    if (Boolean(model) && delegateType === InstrumentTreeItemType.PART && model.itemRole.isVisible) {
+                    if (Boolean(model) && root.type === InstrumentsTreeItemType.PART && model.itemRole.isVisible) {
                         return ui.theme.bodyBoldFont
                     }
 
@@ -345,8 +345,8 @@ Item {
 
             pressedStateColor: ui.theme.accentColor
 
-            visible: model ? delegateType === InstrumentTreeItemType.PART ||
-                             delegateType === InstrumentTreeItemType.STAFF : false
+            visible: model ? root.type === InstrumentsTreeItemType.PART ||
+                             root.type === InstrumentsTreeItemType.STAFF : false
 
             icon: IconCode.SETTINGS_COG
 
@@ -359,7 +359,7 @@ Item {
                 var popup = null
                 var item = {}
 
-                if (root.type === InstrumentTreeItemType.PART) {
+                if (root.type === InstrumentsTreeItemType.PART) {
 
                     popup = popupLoader.createPopup(instrumentSettingsComp, this)
 
@@ -369,7 +369,7 @@ Item {
                     item["instrumentName"] = model.itemRole.instrumentName()
                     item["abbreviature"] = model.itemRole.instrumentAbbreviature()
 
-                } else if (root.type === InstrumentTreeItemType.STAFF) {
+                } else if (root.type === InstrumentsTreeItemType.STAFF) {
 
                     popup = popupLoader.createPopup(staffSettingsComp, this)
 
@@ -408,7 +408,7 @@ Item {
 
             ParentChange {
                 target: root
-                parent: attachedControl.contentItem
+                parent: root.attachedControl.contentItem
             }
 
             PropertyChanges {

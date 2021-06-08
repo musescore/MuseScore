@@ -25,6 +25,7 @@ class DOCKS_EXPORT ClassicIndicators : public DropIndicatorOverlayInterface
 
     Q_PROPERTY(bool innerIndicatorsVisible READ innerIndicatorsVisible NOTIFY innerIndicatorsVisibleChanged)
     Q_PROPERTY(bool outterIndicatorsVisible READ outterIndicatorsVisible NOTIFY outterIndicatorsVisibleChanged)
+    Q_PROPERTY(bool tabIndicatorVisible READ tabIndicatorVisible NOTIFY tabIndicatorVisibleChanged)
 
 public:
     explicit ClassicIndicators(DropArea *dropArea);
@@ -44,6 +45,7 @@ protected:
 Q_SIGNALS:
     void innerIndicatorsVisibleChanged();
     void outterIndicatorsVisibleChanged();
+    void tabIndicatorVisibleChanged();
 private:
     friend class KDDockWidgets::Indicator;
     friend class KDDockWidgets::IndicatorWindow;
@@ -52,11 +54,11 @@ private:
     void setDropLocation(DropLocation);
     void updateWindowPosition();
 
-    QWidgetOrQuick *const m_rubberBand;
-    IndicatorWindow *const m_indicatorWindow;
     bool m_innerIndicatorsVisible = false;
     bool m_outterIndicatorsVisible = false;
     bool m_tabIndicatorVisible = false;
+    QWidgetOrQuick *const m_rubberBand;
+    IndicatorWindow *const m_indicatorWindow;
 };
 
 }

@@ -27,8 +27,10 @@
 #include "log.h"
 
 #include "libmscore/score.h"
+#include "libmscore/scorefont.h"
 #include "libmscore/page.h"
 #include "libmscore/rendermidi.h"
+#include "engraving/accessibility/accessibleelement.h"
 
 #include "notationinteraction.h"
 #include "notationplayback.h"
@@ -141,29 +143,13 @@ Notation::~Notation()
 
 void Notation::init()
 {
-    Ms::MScore::init(); // initialize libmscore
-
-    Ms::MScore::setNudgeStep(0.1); // cursor key (default 0.1)
-    Ms::MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)
-    Ms::MScore::setNudgeStep50(0.01); // Alt  + cursor key (default 0.01)
+    Ms::MScore::pixelRatio = Ms::DPI / QGuiApplication::primaryScreen()->logicalDotsPerInch();
 
     bool isVertical = configuration()->canvasOrientation().val == framework::Orientation::Vertical;
     Ms::MScore::setVerticalOrientation(isVertical);
 
-    Ms::MScore::pixelRatio = Ms::DPI / QGuiApplication::primaryScreen()->logicalDotsPerInch();
-
     Ms::MScore::panPlayback = configuration()->isAutomaticallyPanEnabled();
     Ms::MScore::playRepeats = configuration()->isPlayRepeatsEnabled();
-
-    Ms::gscore = new Ms::MasterScore();
-    Ms::gscore->setPaletteMode(true);
-    Ms::gscore->setMovements(new Ms::Movements());
-    Ms::gscore->setStyle(Ms::MScore::baseStyle());
-
-    Ms::gscore->style().set(Ms::Sid::MusicalTextFont, QString("Leland Text"));
-    Ms::ScoreFont* scoreFont = Ms::ScoreFont::fontFactory("Leland");
-    Ms::gscore->setScoreFont(scoreFont);
-    Ms::gscore->setNoteHeadWidth(scoreFont->width(Ms::SymId::noteheadBlack, Ms::gscore->spatium()) / Ms::SPATIUM20);
 
     for (int i = 0; i < VOICES; ++i) {
         Ms::MScore::selectColor[i] = configuration()->selectionColor(i);

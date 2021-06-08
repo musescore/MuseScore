@@ -21,8 +21,10 @@
  */
 #include "ornamentsettingsmodel.h"
 
+#include "libmscore/articulation.h"
+
 #include "log.h"
-#include "articulation.h"
+#include "translation.h"
 
 using namespace mu::inspector;
 
@@ -36,7 +38,7 @@ OrnamentSettingsModel::OrnamentSettingsModel(QObject* parent, IElementRepository
 
 void OrnamentSettingsModel::openChannelAndMidiProperties()
 {
-    adapter()->showArticulationPropertiesDialog();
+    NOT_IMPLEMENTED;
 }
 
 void OrnamentSettingsModel::createProperties()

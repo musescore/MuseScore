@@ -42,6 +42,14 @@ class DOCKS_EXPORT DockRegistry : public QObject
     Q_PROPERTY(
         KDDockWidgets::Frame *frameInMDIResize READ frameInMDIResize NOTIFY frameInMDIResizeChanged)
 public:
+
+    enum class DockByNameFlag {
+        None = 0,
+        ConsultRemapping = 1,
+        CreateIfNotFound = 2 ///< Creates the dock widget via the user's widget factory in case it doesn't exist
+    };
+    Q_DECLARE_FLAGS(DockByNameFlags, DockByNameFlag)
+
     static DockRegistry *self();
     ~DockRegistry();
     void registerDockWidget(DockWidgetBase *);
@@ -59,14 +67,15 @@ public:
     void registerFrame(Frame *);
     void unregisterFrame(Frame *);
 
-    Q_INVOKABLE DockWidgetBase *focusedDockWidget() const;
+    Q_INVOKABLE KDDockWidgets::DockWidgetBase *focusedDockWidget() const;
 
     Q_INVOKABLE bool containsDockWidget(const QString &uniqueName) const;
     Q_INVOKABLE bool containsMainWindow(const QString &uniqueName) const;
 
-    Q_INVOKABLE KDDockWidgets::DockWidgetBase *dockByName(const QString &) const;
-    Q_INVOKABLE MainWindowBase *mainWindowByName(const QString &) const;
-    Q_INVOKABLE MainWindowMDI *mdiMainWindowByName(const QString &) const;
+    Q_INVOKABLE KDDockWidgets::DockWidgetBase *dockByName(const QString &,
+                                                          DockByNameFlags = {}) const;
+    Q_INVOKABLE KDDockWidgets::MainWindowBase *mainWindowByName(const QString &) const;
+    Q_INVOKABLE KDDockWidgets::MainWindowMDI *mdiMainWindowByName(const QString &) const;
 
     /// @brief returns the dock widget that hosts @p guest widget. Nullptr if there's none.
     DockWidgetBase *dockWidgetForGuest(QWidgetOrQuick *guest) const;
@@ -226,6 +235,9 @@ Q_SIGNALS:
     /// @brief emitted when the MDI frame that's being resized changed
     void frameInMDIResizeChanged();
 
+    /// @brief emitted whenever Config::dropIndicatorsInhibited changes
+    void dropIndicatorsInhibitedChanged(bool inhibited);
+
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
 private:
@@ -243,6 +255,14 @@ private:
     QVector<FloatingWindow*> m_floatingWindows;
     QVector<LayoutWidget *> m_layouts;
     QPointer<DockWidgetBase> m_focusedDockWidget;
+
+    ///@brief Dock widget id remapping, used by LayoutSaver
+    ///
+    /// When LayoutSaver is trying to restore dock widget "foo", but it doesn't exist, it will
+    /// attempt to call a user provided factory function. That function can however return a dock
+    /// widget with another ID, such as "bar". When that happens this QHash gets a "foo" : "bar"
+    /// entry
+    mutable QHash<QString, QString> m_dockWidgetIdRemapping;
 };
 
 }

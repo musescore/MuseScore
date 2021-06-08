@@ -26,6 +26,7 @@
 #include <QDate>
 
 #include "io/path.h"
+#include "translation.h"
 
 #include "libmscore/element.h"
 #include "libmscore/page.h"
@@ -102,7 +103,8 @@ enum class DragMode
 {
     BothXY = 0,
     OnlyX,
-    OnlyY
+    OnlyY,
+    LassoList
 };
 
 enum class MoveDirection
@@ -224,6 +226,18 @@ enum class ZoomType {
     TwoPages
 };
 
+inline QString zoomTypeTitle(ZoomType type)
+{
+    switch (type) {
+    case ZoomType::Percentage: return qtrc("notation", "Percentage");
+    case ZoomType::PageWidth: return qtrc("notation", "Page width");
+    case ZoomType::WholePage: return qtrc("notation", "Whole page");
+    case ZoomType::TwoPages: return qtrc("notation", "Two pages");
+    }
+
+    return QString();
+}
+
 struct Meta
 {
     io::path fileName;
@@ -286,7 +300,8 @@ struct ScoreCreateOptions
     int measureTimesigDenominator = 0;
 
     io::path templatePath;
-    instruments::InstrumentList instruments;
+
+    instruments::PartInstrumentList parts;
 };
 
 struct SearchCommand

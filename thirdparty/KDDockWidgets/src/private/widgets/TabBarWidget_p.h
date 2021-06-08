@@ -55,6 +55,8 @@ protected:
     void mousePressEvent(QMouseEvent *) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *e) override;
+    bool event(QEvent *) override;
+
 private:
     TabWidget *const m_tabWidget;
 };

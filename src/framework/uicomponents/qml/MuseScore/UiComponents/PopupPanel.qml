@@ -34,6 +34,8 @@ Rectangle {
     property alias navigation: navPanel
     property NavigationControl navigationParentControl: null
 
+    property alias accessible: navPanel.accessible
+
     signal opened()
     signal closed()
 
@@ -64,7 +66,7 @@ Rectangle {
         root.visible = false
 
         if (root.navigationParentControl) {
-            root.navigationParentControl.forceActive()
+            root.navigationParentControl.requestActive()
         }
 
         root.closed()

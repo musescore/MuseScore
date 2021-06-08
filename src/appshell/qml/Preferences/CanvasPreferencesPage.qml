@@ -39,20 +39,6 @@ PreferencesPage {
         id: preferencesModel
     }
 
-    Rectangle {
-        anchors.fill: parent
-
-        color: ui.theme.backgroundSecondaryColor
-
-        MouseArea {
-            anchors.fill: parent
-
-            onClicked: {
-                root.forceActiveFocus()
-            }
-        }
-    }
-
     Column {
         anchors.fill: parent
         spacing: 24

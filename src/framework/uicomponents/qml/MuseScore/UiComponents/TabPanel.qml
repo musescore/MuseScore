@@ -34,14 +34,7 @@ TabView {
     function focusOnFirstTab() {
         var tabItem = root.getTab(0);
         if (tabItem && tabItem.navigation) {
-            tabItem.navigation.forceActive()
-        }
-    }
-
-    onCurrentIndexChanged: {
-        var tabItem = root.getTab(root.currentIndex)
-        if (tabItem.navigation) {
-            tabItem.navigation.forceActive()
+            tabItem.navigation.requestActive()
         }
     }
 
@@ -75,33 +68,30 @@ TabView {
 
         frameOverlap: 1
 
-        tab: Rectangle {
+        tab: Item {
+            id: tab
 
             property var tabItem: root.getTab(styleData.index)
 
             implicitWidth: styleData.availableWidth / count
             implicitHeight: tabBarHeight
 
-            color:  ui.theme.backgroundPrimaryColor
-            radius: 4
-            border.width: (tabItem.navigation && tabItem.navigation.active) ? 2 : 0
-            border.color: ui.theme.focusColor
-            opacity: styleData.selected ? ui.theme.buttonOpacityHit : ui.theme.buttonOpacityNormal
+            Rectangle {
 
-            Connections {
-                target: (tabItem && tabItem.navigation ) ? tabItem.navigation : null
-                function onActiveChanged() {
-                    if (tabItem.navigation.active) {
-                        root.currentIndex = styleData.index
-                    }
-                }
-            }
-
-            StyledTextLabel {
-                id: titleLabel
                 anchors.fill: parent
-                text: styleData.title
-                font: ui.theme.bodyBoldFont
+                color:  ui.theme.backgroundPrimaryColor
+                radius: 4
+                anchors.margins: 1
+                border.width: (tab.tabItem.navigation && tab.tabItem.navigation.active) ? 2 : 0
+                border.color: ui.theme.focusColor
+                opacity: styleData.selected ? ui.theme.buttonOpacityHit : ui.theme.buttonOpacityNormal
+
+                StyledTextLabel {
+                    id: titleLabel
+                    anchors.fill: parent
+                    text: styleData.title
+                    font: ui.theme.bodyBoldFont
+                }
             }
         }
 

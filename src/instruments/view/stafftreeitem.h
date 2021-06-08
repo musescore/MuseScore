@@ -22,12 +22,12 @@
 #ifndef MU_INSTRUMENTS_STAFFTREEITEM_H
 #define MU_INSTRUMENTS_STAFFTREEITEM_H
 
-#include "abstractinstrumentpaneltreeitem.h"
+#include "abstractinstrumentspaneltreeitem.h"
 
 #include "notation/inotationparts.h"
 
 namespace mu::instruments {
-class StaffTreeItem : public AbstractInstrumentPanelTreeItem
+class StaffTreeItem : public AbstractInstrumentsPanelTreeItem
 {
     Q_OBJECT
 

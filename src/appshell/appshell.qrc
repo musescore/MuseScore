@@ -1,17 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/Main.qml</file>
         <file>qml/Main.wasm.qml</file>
         <file>qml/MainToolBar.qml</file>
-        <file>qml/SequencerPage.qml</file>
-        <file>qml/PublishPage.qml</file>
-        <file>qml/HomePage/HomePage.qml</file>
         <file>qml/HomePage/HomeMenu.qml</file>
-        <file>qml/NotationPage/NotationPage.qml</file>
-        <file>qml/Window.qml</file>
         <file>qml/DevTools/Interactive/SampleDialog.qml</file>
         <file>qml/DevTools/Interactive/InteractiveTests.qml</file>
-        <file>qml/DevTools/DevToolsPage.qml</file>
         <file>qml/DevTools/DevToolsMenu.qml</file>
         <file>qml/DevTools/NotationDialogs/MU3Dialogs.qml</file>
         <file>qml/DevTools/Preferences/SettingsPage.qml</file>
@@ -20,12 +13,6 @@
         <file>qml/DevTools/VST/VSTTests.qml</file>
         <file>qml/DevTools/Gallery/GeneralComponentsGallery.qml</file>
         <file>qml/DevTools/Telemetry/TelemetryInfo.qml</file>
-        <file>view/dockwindow/resources/toolbar_grip_light_horizontal.svg</file>
-        <file>view/dockwindow/resources/toolbar_grip_light_vertical.svg</file>
-        <file>view/dockwindow/resources/toolbar_grip_dark_horizontal.svg</file>
-        <file>view/dockwindow/resources/toolbar_grip_dark_vertical.svg</file>
-        <file>view/dockwindow/resources/toolbar_grip_high_contrast_horizontal.svg</file>
-        <file>view/dockwindow/resources/toolbar_grip_high_contrast_vertical.svg</file>
         <file>qml/AboutDialog.qml</file>
         <file>qml/AboutMusicXMLDialog.qml</file>
         <file>qml/resources/mu_logo.svg</file>
@@ -66,23 +53,26 @@
         <file>qml/DevTools/KeyNav/KeyNavExample.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSection.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSubSection.qml</file>
-        <file>qml/kdab/docksystem/DockPage.qml</file>
-        <file>qml/kdab/docksystem/DropIndicators.qml</file>
-        <file>qml/kdab/docksystem/DropIndicator.qml</file>
-        <file>qml/kdab/HomePage/HomePage.qml</file>
-        <file>qml/kdab/NotationPage/NotationPage.qml</file>
-        <file>qml/kdab/PublishPage/PublishPage.qml</file>
-        <file>qml/kdab/DevTools/DevToolsPage.qml</file>
-        <file>qml/kdab/docksystem/DockTitleBar.qml</file>
-        <file>qml/kdab/docksystem/DockToolBar.qml</file>
-        <file>qml/kdab/docksystem/DockFrame.qml</file>
-        <file>qml/kdab/docksystem/DockSeparator.qml</file>
-        <file>qml/kdab/docksystem/DockFloatingWindow.qml</file>
-        <file>qml/kdab/AppTitleBar.qml</file>
-        <file>qml/kdab/AppWindow.qml</file>
-        <file>qml/kdab/Main.qml</file>
-        <file>qml/kdab/MainMacOS.qml</file>
-        <file>qml/kdab/WindowContent.qml</file>
-        <file>qml/kdab/AppMenuBar.qml</file>
+        <file>qml/HomePage/HomePage.qml</file>
+        <file>qml/NotationPage/NotationPage.qml</file>
+        <file>qml/PublishPage/PublishPage.qml</file>
+        <file>qml/DevTools/DevToolsPage.qml</file>
+        <file>qml/dockwindow/DockTitleBar.qml</file>
+        <file>qml/dockwindow/DockToolBar.qml</file>
+        <file>qml/dockwindow/DockFrame.qml</file>
+        <file>qml/dockwindow/DockPanelTab.qml</file>
+        <file>qml/dockwindow/DockSeparator.qml</file>
+        <file>qml/dockwindow/DockFloatingWindow.qml</file>
+        <file>qml/dockwindow/DockPage.qml</file>
+        <file>qml/dockwindow/DropIndicators.qml</file>
+        <file>qml/dockwindow/DropIndicator.qml</file>
+        <file>qml/AppTitleBar.qml</file>
+        <file>qml/AppWindow.qml</file>
+        <file>qml/WindowContent.qml</file>
+        <file>qml/AppMenuBar.qml</file>
+        <file>qml/platform/linux/AppTitleBarLinux.qml</file>
+        <file>qml/platform/linux/Main.qml</file>
+        <file>qml/platform/mac/Main.qml</file>
+        <file>qml/platform/win/Main.qml</file>
     </qresource>
 </RCC>

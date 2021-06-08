@@ -25,11 +25,11 @@ using namespace mu::instruments;
 using namespace mu::notation;
 
 RootTreeItem::RootTreeItem(INotationPartsPtr notationParts, QObject* parent)
-    : AbstractInstrumentPanelTreeItem(InstrumentTreeItemType::ItemType::ROOT, notationParts, parent)
+    : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::ROOT, notationParts, parent)
 {
 }
 
-void RootTreeItem::moveChildren(const int sourceRow, const int count, AbstractInstrumentPanelTreeItem* destinationParent,
+void RootTreeItem::moveChildren(const int sourceRow, const int count, AbstractInstrumentsPanelTreeItem* destinationParent,
                                 const int destinationRow)
 {
     IDList partIds;
@@ -46,14 +46,14 @@ void RootTreeItem::moveChildren(const int sourceRow, const int count, AbstractIn
         moveMode = INotationParts::InsertMode::After;
     }
 
-    const AbstractInstrumentPanelTreeItem* destinationPartItem = destinationParent->childAtRow(destinationRow_);
+    const AbstractInstrumentsPanelTreeItem* destinationPartItem = destinationParent->childAtRow(destinationRow_);
     if (!destinationPartItem) {
         return;
     }
 
     notationParts()->moveParts(partIds, destinationPartItem->id(), moveMode);
 
-    AbstractInstrumentPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow);
+    AbstractInstrumentsPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow);
 }
 
 void RootTreeItem::removeChildren(const int row, const int count, const bool deleteChild)
@@ -68,5 +68,5 @@ void RootTreeItem::removeChildren(const int row, const int count, const bool del
         notationParts()->removeParts(partIds);
     }
 
-    AbstractInstrumentPanelTreeItem::removeChildren(row, count, deleteChild);
+    AbstractInstrumentsPanelTreeItem::removeChildren(row, count, deleteChild);
 }

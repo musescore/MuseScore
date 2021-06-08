@@ -32,8 +32,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iworkspacedatastreamregister.h
     ${CMAKE_CURRENT_LIST_DIR}/view/workspacelistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/workspacelistmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/currentworkspacemodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/currentworkspacemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/newworkspacemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/newworkspacemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceconfiguration.cpp
@@ -67,7 +65,7 @@ endif (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_
 
 set(MODULE_LINK
     qzip
-    libmscore
+    engraving
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

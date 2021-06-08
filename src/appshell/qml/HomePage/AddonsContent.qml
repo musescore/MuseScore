@@ -76,6 +76,7 @@ FocusScope {
             name: "AddonsSearch"
             section: navSec
             order: 1
+            accessible.name: qsTrc("appshell", "Addons")
         }
 
         StyledTextLabel {
@@ -100,6 +101,7 @@ FocusScope {
                 navigation.name: "AddonsSearch"
                 navigation.panel: navSearchPanel
                 navigation.order: 1
+                accessible.name: qsTrc("appshell", "Addons search")
 
                 onSearchTextChanged: {
                     categoryComboBox.selectedCategory = ""
@@ -191,6 +193,7 @@ FocusScope {
             name: "AddonsTabs"
             section: navSec
             order: 2
+            accessible.name: qsTrc("appshell", "Addons tabs")
 
             onNavigationEvent: {
                 if (event.type === NavigationEvent.AboutActive) {
@@ -210,6 +213,7 @@ FocusScope {
             navigation.order: 1
             onNavigationTriggered: bar.currentIndex = 0
         }
+
         StyledTabButton {
             text: qsTrc("appshell", "Extensions")
             sideMargin: 22
@@ -221,6 +225,7 @@ FocusScope {
             navigation.order: 2
             onNavigationTriggered: bar.currentIndex = 1
         }
+
         StyledTabButton {
             text: qsTrc("appshell", "Languages")
             sideMargin: 22

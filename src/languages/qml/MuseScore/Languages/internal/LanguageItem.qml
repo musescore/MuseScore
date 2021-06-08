@@ -37,6 +37,7 @@ Rectangle {
     property alias navigation: navCtrl
 
     signal clicked()
+    signal navigationActive()
 
     height: 48
 
@@ -49,15 +50,20 @@ Rectangle {
         if (!root.activeFocus) {
             root.forceActiveFocus()
         }
-
-        if (!navCtrl.active) {
-            navCtrl.forceActive()
-        }
     }
 
     NavigationControl {
         id: navCtrl
         name: root.title
+        accessible.role: MUAccessible.ListItem
+        accessible.name: root.title + " " + root.statusTitle
+
+        onActiveChanged: {
+            if (navCtrl.active) {
+                root.navigationActive()
+            }
+        }
+
         onTriggered: root.clicked()
     }
 

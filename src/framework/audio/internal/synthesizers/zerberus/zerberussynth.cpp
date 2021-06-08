@@ -28,6 +28,7 @@
 #include "internal/controllers.h"
 #include "midi/miditypes.h"
 #include "midi/midierrors.h"
+#include "audioerrors.h"
 
 using namespace mu;
 using namespace mu::midi;

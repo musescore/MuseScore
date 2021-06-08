@@ -33,17 +33,22 @@ class QmlToolTip : public QObject
 public:
     explicit QmlToolTip(QObject* parent = nullptr);
 
-    Q_INVOKABLE void show(QQuickItem* item, const QString& text);
+    Q_INVOKABLE void show(QQuickItem* item, const QString& title, const QString& description = "", const QString& shortcut = "");
     Q_INVOKABLE void hide(QQuickItem* item);
 
 private slots:
-    void doShowToolTip();
+    void doShow();
     void doHide();
 
-private:
+signals:
+    void showToolTip(QQuickItem* item, const QString& title, const QString& description, const QString& shortcut);
+    void hideToolTip();
 
+private:
     QQuickItem* m_item = nullptr;
-    QString m_text;
+    QString m_title;
+    QString m_description;
+    QString m_shortcut;
     QTimer m_timer;
 };
 }

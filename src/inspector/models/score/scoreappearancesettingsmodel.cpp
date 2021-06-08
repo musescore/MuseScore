@@ -24,8 +24,10 @@
 #include <QPageSize>
 #include <QSize>
 
-#include "types/scoreappearancetypes.h"
+#include "log.h"
+#include "translation.h"
 #include "dataformatter.h"
+#include "types/scoreappearancetypes.h"
 
 using namespace mu::inspector;
 
@@ -82,12 +84,12 @@ PageTypeListModel* ScoreAppearanceSettingsModel::pageTypeListModel() const
 
 void ScoreAppearanceSettingsModel::showPageSettings()
 {
-    adapter()->showPageSettingsDialog();
+    dispatcher()->dispatch("page-settings");
 }
 
 void ScoreAppearanceSettingsModel::showStyleSettings()
 {
-    adapter()->showStyleSettingsDialog();
+    dispatcher()->dispatch("edit-style");
 }
 
 int ScoreAppearanceSettingsModel::orientationType() const
@@ -114,6 +116,10 @@ void ScoreAppearanceSettingsModel::setPageTypeListModel(PageTypeListModel* pageT
 
         updateStyleValue(Ms::Sid::pageWidth, pageSize.width());
         updateStyleValue(Ms::Sid::pageHeight, pageSize.height());
+
+        double oddLeftMargin = styleValue(Ms::Sid::pageOddLeftMargin).toDouble();
+        double evenLeftMargin = styleValue(Ms::Sid::pageEvenLeftMargin).toDouble();
+        updateStyleValue(Ms::Sid::pagePrintableWidth, pageSize.width() - (oddLeftMargin + evenLeftMargin));
     });
 }
 
@@ -129,6 +135,11 @@ void ScoreAppearanceSettingsModel::setOrientationType(int orientationType)
 
     updateStyleValue(Ms::Sid::pageWidth, pageSize.height());
     updateStyleValue(Ms::Sid::pageHeight, pageSize.width());
+
+    double oddLeftMargin = styleValue(Ms::Sid::pageOddLeftMargin).toDouble();
+    double evenLeftMargin = styleValue(Ms::Sid::pageEvenLeftMargin).toDouble();
+    updateStyleValue(Ms::Sid::pagePrintableWidth, pageSize.height() - (oddLeftMargin + evenLeftMargin));
+
     emit orientationTypeChanged(m_orientationType);
 }
 
