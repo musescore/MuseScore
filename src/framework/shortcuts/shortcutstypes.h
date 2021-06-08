@@ -48,9 +48,34 @@ struct Shortcut
 
 using ShortcutList = std::list<Shortcut>;
 
+enum RemoteEventType {
+    Undefined = 0,
+    Note,
+    Controller
+};
+
+struct RemoteEvent {
+    RemoteEventType type = RemoteEventType::Undefined;
+    int value = -1;
+
+    RemoteEvent() = default;
+    RemoteEvent(RemoteEventType type, int value)
+        : type(type), value(value) {}
+
+    bool isValid() const
+    {
+        return type != RemoteEventType::Undefined && value != -1;
+    }
+
+    bool operator ==(const RemoteEvent& other) const
+    {
+        return type == other.type && value == other.value;
+    }
+};
+
 struct MidiMapping {
     std::string action;
-    midi::Event event;
+    RemoteEvent event;
 
     MidiMapping() = default;
     MidiMapping(const std::string& action)
@@ -58,12 +83,12 @@ struct MidiMapping {
 
     bool isValid() const
     {
-        return !action.empty() && event;
+        return !action.empty() && event.isValid();
     }
 
-    bool operator ==(const MidiMapping& mm) const
+    bool operator ==(const MidiMapping& other) const
     {
-        return action == mm.action && mm.event == event;
+        return action == other.action && other.event == event;
     }
 };
 
