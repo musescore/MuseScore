@@ -30,7 +30,7 @@ import MuseScore.Midi 1.0
 Dialog {
     id: root
 
-    signal mapToValueRequested(int value)
+    signal mapToEventRequested(var event)
 
     title: qsTrc("midi", "MIDI Remote Control")
 
@@ -40,7 +40,7 @@ Dialog {
     standardButtons: Dialog.NoButton
 
     function startEdit(action) {
-        model.load(action.mappedValue)
+        model.load(action.mappedType, action.mappedValue)
         open()
 
         actionNameLabel.text = action.title
@@ -117,7 +117,7 @@ Dialog {
                     enabled: mappingField.hasText
 
                     onClicked: {
-                        root.mapToValueRequested(model.inputedValue())
+                        root.mapToEventRequested(model.inputedEvent())
                         root.close()
                     }
                 }

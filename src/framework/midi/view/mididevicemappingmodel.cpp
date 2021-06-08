@@ -37,6 +37,7 @@ static const QString TITLE_KEY("title");
 static const QString ICON_KEY("icon");
 static const QString STATUS_KEY("status");
 static const QString ENABLED_KEY("enabled");
+static const QString MAPPED_TYPE_KEY("mappedType");
 static const QString MAPPED_VALUE_KEY("mappedValue");
 
 inline std::vector<ActionCode> allMidiActions()
@@ -81,6 +82,7 @@ QVariant MidiDeviceMappingModel::data(const QModelIndex& index, int role) const
     case RoleIcon: return obj[ICON_KEY].toInt();
     case RoleStatus: return obj[STATUS_KEY].toString();
     case RoleEnabled: return obj[ENABLED_KEY].toBool();
+    case RoleMappedType: return obj[MAPPED_TYPE_KEY].toInt();
     case RoleMappedValue: return obj[MAPPED_VALUE_KEY].toInt();
     }
 
@@ -96,7 +98,8 @@ QVariantMap MidiDeviceMappingModel::midiMappingToObject(const MidiMapping& midiM
     obj[TITLE_KEY] = action.title;
     obj[ICON_KEY] = static_cast<int>(action.iconCode);
     obj[STATUS_KEY] = midiMapping.isValid() ? "Active" : "Inactive";
-    obj[MAPPED_VALUE_KEY] = midiMapping.isValid() ? midiMapping.event.to_MIDI10Package() : 0;
+    obj[MAPPED_TYPE_KEY] = static_cast<int>(midiMapping.event.type);
+    obj[MAPPED_VALUE_KEY] = midiMapping.event.value;
 
     return obj;
 }
@@ -113,6 +116,7 @@ QHash<int, QByteArray> MidiDeviceMappingModel::roleNames() const
         { RoleIcon, ICON_KEY.toUtf8() },
         { RoleStatus, STATUS_KEY.toUtf8() },
         { RoleEnabled, ENABLED_KEY.toUtf8() },
+        { RoleMappedType, MAPPED_TYPE_KEY.toUtf8() },
         { RoleMappedValue, MAPPED_VALUE_KEY.toUtf8() }
     };
 }
@@ -124,14 +128,14 @@ void MidiDeviceMappingModel::load()
 
     shortcuts::MidiMappingList midiMappings = midiRemote()->midiMappings();
 
-    auto midiEvent = [&midiMappings](const ActionCode& actionCode) {
+    auto remoteEvent = [&midiMappings](const ActionCode& actionCode) {
         for (const MidiMapping& midiMapping : midiMappings) {
             if (midiMapping.action == actionCode) {
                 return midiMapping.event;
             }
         }
 
-        return Event();
+        return RemoteEvent();
     };
 
     for (const ActionCode& actionCode : allMidiActions()) {
@@ -139,7 +143,7 @@ void MidiDeviceMappingModel::load()
 
         if (action.isValid()) {
             MidiMapping midiMapping(actionCode);
-            midiMapping.event = midiEvent(actionCode);
+            midiMapping.event = remoteEvent(actionCode);
             m_midiMappings.push_back(midiMapping);
         }
     }
@@ -217,8 +221,12 @@ QVariant MidiDeviceMappingModel::currentAction() const
     return midiMappingToObject(midiMapping);
 }
 
-void MidiDeviceMappingModel::mapCurrentActionToMidiValue(int value)
+void MidiDeviceMappingModel::mapCurrentActionToMidiEvent(const QVariant& event)
 {
-    m_midiMappings[m_selection.indexes().first().row()].event = Event::fromMIDI10Package(value);
+    QVariantMap eventMap = event.toMap();
+    RemoteEventType type = static_cast<RemoteEventType>(eventMap["type"].toInt());
+    int value = eventMap["value"].toInt();
+
+    m_midiMappings[m_selection.indexes().first().row()].event = RemoteEvent(type, value);
     emit dataChanged(m_selection.indexes().first(), m_selection.indexes().first());
 }

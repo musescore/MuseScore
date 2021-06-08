@@ -46,17 +46,17 @@ public:
 
     QString mappingTitle() const;
 
-    Q_INVOKABLE void load(int originValue);
-    Q_INVOKABLE int inputedValue() const;
+    Q_INVOKABLE void load(int originType, int originValue);
+    Q_INVOKABLE QVariant inputedEvent() const;
 
 signals:
     void mappingTitleChanged(const QString& title);
 
 private:
     QString deviceName(const MidiDeviceID& deviceId) const;
-    QString valueName(int value) const;
+    QString eventName(const shortcuts::RemoteEvent& event) const;
 
-    int m_value = -1;
+    shortcuts::RemoteEvent m_event;
 };
 }
 

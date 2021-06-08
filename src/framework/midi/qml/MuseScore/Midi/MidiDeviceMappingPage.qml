@@ -40,8 +40,8 @@ Item {
             editMappingDialog.startEdit(mappingsModel.currentAction())
         }
 
-        onMapToValueRequested: {
-            mappingsModel.mapCurrentActionToMidiValue(value)
+        onMapToEventRequested: {
+            mappingsModel.mapCurrentActionToMidiEvent(event)
         }
     }
 

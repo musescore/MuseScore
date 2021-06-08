@@ -66,7 +66,7 @@ public:
     Q_INVOKABLE void clearAllActions();
 
     Q_INVOKABLE QVariant currentAction() const;
-    Q_INVOKABLE void mapCurrentActionToMidiValue(int value);
+    Q_INVOKABLE void mapCurrentActionToMidiEvent(const QVariant& event);
 
 public slots:
     void setUseRemoteControl(bool value);
@@ -82,6 +82,7 @@ private:
         RoleIcon,
         RoleEnabled,
         RoleStatus,
+        RoleMappedType,
         RoleMappedValue
     };
 

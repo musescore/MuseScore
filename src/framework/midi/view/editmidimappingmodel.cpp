@@ -26,6 +26,7 @@
 #include "translation.h"
 
 using namespace mu::midi;
+using namespace mu::shortcuts;
 
 static const QString WAITING_STATE = qtrc("midi", "Waiting...");
 
@@ -39,37 +40,54 @@ EditMidiMappingModel::~EditMidiMappingModel()
     midiRemote()->setIsSettingMode(false);
 }
 
-void EditMidiMappingModel::load(int originValue)
+void EditMidiMappingModel::load(int originType, int originValue)
 {
     midiRemote()->setIsSettingMode(true);
 
     midiInPort()->eventReceived().onReceive(this, [this](const std::pair<tick_t, Event>& event) {
-        if (event.second.opcode() != Event::Opcode::NoteOn && event.second.opcode() != Event::Opcode::ControlChange) {
-            return;
-        }
+        if (event.second.opcode() == Event::Opcode::NoteOn || event.second.opcode() == Event::Opcode::ControlChange) {
+            LOGD() << "==== recive " << QString::fromStdString(event.second.to_string());
 
-        LOGD() << "==== recive " << QString::fromStdString(event.second.to_string());
-        m_value = event.second.to_MIDI10Package();
-        emit mappingTitleChanged(mappingTitle());
+            auto remoteEvent = [](const Event& midiEvent) { // todo
+                RemoteEvent event;
+                bool isNote = midiEvent.isOpcodeIn({ Event::Opcode::NoteOff, Event::Opcode::NoteOn });
+                bool isController = midiEvent.isOpcodeIn({ Event::Opcode::ControlChange });
+                if (isNote) {
+                    event.type = RemoteEventType::Note;
+                    event.value = midiEvent.note();
+                } else if (isController) {
+                    event.type = RemoteEventType::Controller;
+                    event.value = midiEvent.index();
+                }
+
+                return event;
+            };
+
+            m_event = remoteEvent(event.second);
+            emit mappingTitleChanged(mappingTitle());
+        }
     });
 
-    m_value = originValue;
+    m_event = RemoteEvent(static_cast<RemoteEventType>(originType), originValue);
     emit mappingTitleChanged(mappingTitle());
 }
 
 QString EditMidiMappingModel::mappingTitle() const
 {
     MidiDeviceID currentMidiInDeviceId = midiInPort()->deviceID();
-    if (currentMidiInDeviceId.empty() || m_value == 0) {
+    if (currentMidiInDeviceId.empty() || !m_event.isValid()) {
         return WAITING_STATE;
     }
 
-    return deviceName(currentMidiInDeviceId) + " > " + valueName(m_value);
+    return deviceName(currentMidiInDeviceId) + " > " + eventName(m_event);
 }
 
-int EditMidiMappingModel::inputedValue() const
+QVariant EditMidiMappingModel::inputedEvent() const
 {
-    return m_value;
+    QVariantMap obj;
+    obj["type"] = static_cast<int>(m_event.type);
+    obj["value"] = m_event.value;
+    return obj;
 }
 
 QString EditMidiMappingModel::deviceName(const MidiDeviceID& deviceId) const
@@ -83,16 +101,14 @@ QString EditMidiMappingModel::deviceName(const MidiDeviceID& deviceId) const
     return QString();
 }
 
-QString EditMidiMappingModel::valueName(int value) const
+QString EditMidiMappingModel::eventName(const RemoteEvent& event) const
 {
     QString title;
 
-    Event event = Event::fromMIDI10Package(value);
-
-    if (event.opcode() == Event::Opcode::NoteOn) {
-        return qtrc("midi", "Note ") + QString::number(event.note());
-    } else if (event.opcode() == Event::Opcode::ControlChange) {
-        return qtrc("midi", "Controller ") + QString::number(event.index());
+    if (event.type == RemoteEventType::Note) {
+        return qtrc("midi", "Note ") + QString::number(event.value);
+    } else if (event.type == RemoteEventType::Controller) {
+        return qtrc("midi", "Controller ") + QString::number(event.value);
     }
 
     return qtrc("midi", "None"); // todo

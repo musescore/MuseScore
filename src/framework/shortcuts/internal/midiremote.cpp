@@ -28,11 +28,13 @@
 
 using namespace mu::shortcuts;
 using namespace mu::framework;
+using namespace mu::midi;
 
 constexpr std::string_view MIDIMAPPING_TAG("MidiMapping");
 constexpr std::string_view EVENT_TAG("Event");
 constexpr std::string_view MAPPING_ACTION_CODE_TAG("key");
-constexpr std::string_view MAPPING_EVENT_DATA_TAG("EventData");
+constexpr std::string_view MAPPING_EVENT_TYPE_TAG("EventType");
+constexpr std::string_view MAPPING_EVENT_VALUE_TAG("EventValue");
 
 void MidiRemote::load()
 {
@@ -69,20 +71,37 @@ bool MidiRemote::isSettingMode() const
     return m_isSettingMode;
 }
 
-void MidiRemote::setCurrentActionEvent(const midi::Event& ev)
+void MidiRemote::setCurrentActionEvent(const Event& ev)
 {
     UNUSED(ev);
     NOT_IMPLEMENTED;
 }
 
-mu::Ret MidiRemote::process(const midi::Event& ev)
+mu::Ret MidiRemote::process(const Event& ev)
 {
     if (isSettingMode()) {
         return make_ret(Ret::Code::Ok); // todo
     }
 
+    auto remoteEvent = [](const Event& midiEvent) { // todo
+        RemoteEvent event;
+        bool isNote = midiEvent.isOpcodeIn({ Event::Opcode::NoteOff, Event::Opcode::NoteOn });
+        bool isController = midiEvent.isOpcodeIn({ Event::Opcode::ControlChange });
+        if (isNote) {
+            event.type = RemoteEventType::Note;
+            event.value = midiEvent.note();
+        } else if (isController) {
+            event.type = RemoteEventType::Controller;
+            event.value = midiEvent.index();
+        }
+
+        return event;
+    };
+
+    RemoteEvent event = remoteEvent(ev);
+
     for (const MidiMapping& midiMapping : m_midiMappings) {
-        if (midiMapping.event == ev) {
+        if (midiMapping.event == event) {
             dispatcher()->dispatch(midiMapping.action);
             return make_ret(Ret::Code::Ok);
         }
@@ -127,8 +146,10 @@ MidiMapping MidiRemote::readMidiMapping(XmlReader& reader) const
 
         if (tag == MAPPING_ACTION_CODE_TAG) {
             midiMapping.action = reader.readString();
-        } else if (tag == MAPPING_EVENT_DATA_TAG) {
-            midiMapping.event.fromMIDI10Package(reader.readInt());
+        } else if (tag == MAPPING_EVENT_TYPE_TAG) {
+            midiMapping.event.type = static_cast<RemoteEventType>(reader.readInt());
+        } else if (tag == MAPPING_EVENT_VALUE_TAG) {
+            midiMapping.event.value = reader.readInt();
         } else {
             reader.skipCurrentElement();
         }
@@ -161,6 +182,7 @@ void MidiRemote::writeMidiMapping(XmlWriter& writer, const MidiMapping& midiMapp
 {
     writer.writeStartElement(EVENT_TAG);
     writer.writeTextElement(MAPPING_ACTION_CODE_TAG, midiMapping.action);
-    writer.writeTextElement(MAPPING_EVENT_DATA_TAG, std::to_string(midiMapping.event.to_MIDI10Package()));
+    writer.writeTextElement(MAPPING_EVENT_TYPE_TAG, std::to_string(midiMapping.event.type));
+    writer.writeTextElement(MAPPING_EVENT_VALUE_TAG, std::to_string(midiMapping.event.value));
     writer.writeEndElement();
 }
