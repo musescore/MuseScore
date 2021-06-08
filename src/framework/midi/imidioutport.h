@@ -31,7 +31,7 @@
 namespace mu::midi {
 class IMidiOutPort : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IMidiPort)
+    INTERFACE_ID(IMidiOutPort)
 
 public:
     virtual ~IMidiOutPort() = default;

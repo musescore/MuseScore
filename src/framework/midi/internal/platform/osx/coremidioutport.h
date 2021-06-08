@@ -24,12 +24,10 @@
 
 #include <memory>
 
-#include "async/asyncable.h"
 #include "midi/imidioutport.h"
-#include "internal/midideviceslistener.h"
 
 namespace mu::midi {
-class CoreMidiOutPort : public IMidiOutPort, public async::Asyncable
+class CoreMidiOutPort : public IMidiOutPort
 {
 public:
     CoreMidiOutPort();
@@ -53,9 +51,6 @@ private:
     MidiDeviceID m_deviceID;
 
     async::Notification m_devicesChanged;
-    MidiDevicesListener m_devicesListener;
-
-    mutable std::mutex m_devicesMutex;
 };
 }
 
