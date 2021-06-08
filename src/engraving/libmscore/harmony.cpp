@@ -40,6 +40,8 @@
 
 #include "draw/fontmetrics.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   harmonyName
@@ -1389,7 +1391,7 @@ void Harmony::layout()
         return;
     }
     //if (isStyled(Pid::OFFSET))
-    //      setOffset(propertyDefault(Pid::OFFSET).toPointF());
+    //      setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
 
     layout1();
     setPos(calculateBoundingRect());
@@ -1418,7 +1420,7 @@ void Harmony::layout1()
 //   calculateBoundingRect
 //---------------------------------------------------------
 
-QPoint Harmony::calculateBoundingRect()
+PointF Harmony::calculateBoundingRect()
 {
     const qreal ypos = (placeBelow() && staff()) ? staff()->height() : 0.0;
     const FretDiagram* fd   = (parent() && parent()->isFretDiagram()) ? toFretDiagram(parent()) : nullptr;
@@ -1451,9 +1453,9 @@ QPoint Harmony::calculateBoundingRect()
         newx = xx;
         newy = yy;
     } else {
-        QRectF bb;
+        RectF bb;
         for (TextSegment* ts : qAsConst(textList)) {
-            bb |= ts->tightBoundingRect().translated(ts->x, ts->y);
+            bb.unite(ts->tightBoundingRect().translated(ts->x, ts->y));
         }
 
         qreal yy = -bb.y();      // Align::TOP
@@ -1487,7 +1489,7 @@ QPoint Harmony::calculateBoundingRect()
         }
 
         for (TextSegment* ts : qAsConst(textList)) {
-            ts->offset = QPointF(xx, yy);
+            ts->offset = PointF(xx, yy);
         }
 
         setbbox(bb.translated(xx, yy));
@@ -1501,12 +1503,12 @@ QPoint Harmony::calculateBoundingRect()
             // To correct placement of text in editing we need to layout textBlockList() elements
             t.layout(this);
             for (auto& s : t.fragments()) {
-                s.pos = { 0.0, 0.0 };
+                s.pos = PointF();
             }
         }
     }
 
-    return QPoint(newx, newy);
+    return PointF(newx, newy);
 }
 
 //---------------------------------------------------------
@@ -1581,7 +1583,7 @@ void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed)
         setColor(QColor(Qt::red));
         setSelected(false);
     }
-    QPointF pos(canvasPos());
+    PointF pos(canvasPos());
     p->translate(pos);
     TextBase::draw(p);
     p->translate(-pos);
@@ -1597,7 +1599,7 @@ void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed)
 
 TextSegment::TextSegment(const QString& s, const mu::draw::Font& f, qreal x, qreal y)
 {
-    set(s, f, x, y, QPointF());
+    set(s, f, x, y, PointF());
     select = false;
 }
 
@@ -1626,7 +1628,7 @@ qreal TextSegment::width() const
 //   boundingRect
 //---------------------------------------------------------
 
-QRectF TextSegment::boundingRect() const
+RectF TextSegment::boundingRect() const
 {
     return mu::draw::FontMetrics::boundingRect(m_font, text);
 }
@@ -1635,7 +1637,7 @@ QRectF TextSegment::boundingRect() const
 //   tightBoundingRect
 //---------------------------------------------------------
 
-QRectF TextSegment::tightBoundingRect() const
+RectF TextSegment::tightBoundingRect() const
 {
     return mu::draw::FontMetrics::tightBoundingRect(m_font, text);
 }
@@ -1644,7 +1646,7 @@ QRectF TextSegment::tightBoundingRect() const
 //   set
 //---------------------------------------------------------
 
-void TextSegment::set(const QString& s, const mu::draw::Font& f, qreal _x, qreal _y, QPointF _offset)
+void TextSegment::set(const QString& s, const mu::draw::Font& f, qreal _x, qreal _y, PointF _offset)
 {
     m_font   = f;
     x      = _x;
@@ -1676,7 +1678,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                      NoteCaseType noteCase)
 {
     ChordList* chordList = score()->style().chordList();
-    QStack<QPointF> stack;
+    QStack<PointF> stack;
     int fontIdx    = 0;
     qreal _spatium = spatium();
     qreal mag      = magS();
@@ -1703,10 +1705,10 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
             x += a.movex * mag * _spatium * .2;
             y += a.movey * mag * _spatium * .2;
         } else if (a.type == RenderAction::RenderActionType::PUSH) {
-            stack.push(QPointF(x, y));
+            stack.push(PointF(x, y));
         } else if (a.type == RenderAction::RenderActionType::POP) {
             if (!stack.empty()) {
-                QPointF pt = stack.pop();
+                PointF pt = stack.pop();
                 x = pt.x();
                 y = pt.y();
             } else {
@@ -2293,7 +2295,7 @@ QVariant Harmony::propertyDefault(Pid id) const
     break;
     case Pid::OFFSET:
         if (parent() && parent()->isFretDiagram()) {
-            v = QVariant(QPointF(0.0, 0.0));
+            v = QVariant::fromValue(PointF(0.0, 0.0));
             break;
         }
     // fall-through

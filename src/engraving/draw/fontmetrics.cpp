@@ -21,6 +21,7 @@
  */
 #include "fontmetrics.h"
 
+using namespace mu;
 using namespace mu::draw;
 
 FontMetrics::FontMetrics(const Font& font)
@@ -73,22 +74,22 @@ qreal FontMetrics::horizontalAdvance(const QChar& ch) const
     return fontProvider()->horizontalAdvance(m_font, ch);
 }
 
-QRectF FontMetrics::boundingRect(const QString& string) const
+RectF FontMetrics::boundingRect(const QString& string) const
 {
     return fontProvider()->boundingRect(m_font, string);
 }
 
-QRectF FontMetrics::boundingRect(const QChar& ch) const
+RectF FontMetrics::boundingRect(const QChar& ch) const
 {
     return fontProvider()->boundingRect(m_font, ch);
 }
 
-QRectF FontMetrics::boundingRect(const QRectF& r, int flags, const QString& string) const
+RectF FontMetrics::boundingRect(const RectF& r, int flags, const QString& string) const
 {
     return fontProvider()->boundingRect(m_font, r, flags, string);
 }
 
-QRectF FontMetrics::tightBoundingRect(const QString& string) const
+RectF FontMetrics::tightBoundingRect(const QString& string) const
 {
     return fontProvider()->tightBoundingRect(m_font, string);
 }
@@ -110,12 +111,12 @@ qreal FontMetrics::width(const Font& f, const QString& string)
     return FontMetrics(f).width(string);
 }
 
-QRectF FontMetrics::boundingRect(const Font& f, const QString& string)
+RectF FontMetrics::boundingRect(const Font& f, const QString& string)
 {
     return FontMetrics(f).boundingRect(string);
 }
 
-QRectF FontMetrics::tightBoundingRect(const Font& f, const QString& string)
+RectF FontMetrics::tightBoundingRect(const Font& f, const QString& string)
 {
     return FontMetrics(f).tightBoundingRect(string);
 }

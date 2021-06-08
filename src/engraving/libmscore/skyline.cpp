@@ -23,6 +23,8 @@
 #include "skyline.h"
 #include "segment.h"
 
+using namespace mu;
+
 namespace Ms {
 static const qreal MAXIMUM_Y = 1000000.0;
 static const qreal MINIMUM_Y = -1000000.0;
@@ -39,7 +41,7 @@ static const qreal MINIMUM_Y = -1000000.0;
 //   add
 //---------------------------------------------------------
 
-void Skyline::add(const QRectF& r)
+void Skyline::add(const RectF& r)
 {
     _north.add(r.x(), r.top(), r.width());
     _south.add(r.x(), r.bottom(), r.width());
@@ -98,7 +100,7 @@ void SkylineLine::add(const Shape& s)
     }
 }
 
-void SkylineLine::add(const QRectF& r)
+void SkylineLine::add(const RectF& r)
 {
     if (north) {
         add(r.x(), r.top(), r.width());
@@ -254,46 +256,6 @@ qreal SkylineLine::minDistance(const SkylineLine& sl) const
         x1 += i->w;
     }
     return dist;
-}
-
-//---------------------------------------------------------
-//   paint
-//---------------------------------------------------------
-
-void Skyline::paint(QPainter& p) const
-{
-    p.save();
-
-    p.setBrush(Qt::NoBrush);
-    QMatrix matrix = p.worldTransform().toAffine();
-    p.setPen(QPen(QBrush(Qt::darkYellow), 2.0 / matrix.m11()));
-    _north.paint(p);
-    p.setPen(QPen(QBrush(Qt::green), 2.0 / matrix.m11()));
-    _south.paint(p);
-    p.restore();
-}
-
-void SkylineLine::paint(QPainter& p) const
-{
-    qreal x1 = 0.0;
-    qreal x2;
-    qreal y = 0.0;
-
-    bool pvalid = false;
-    for (const SkylineSegment& s : *this) {
-        x2 = x1 + s.w;
-        if (valid(s)) {
-            if (pvalid) {
-                p.drawLine(QLineF(x1, y, x1, s.y));
-            }
-            y  = s.y;
-            p.drawLine(QLineF(x1, y, x2, y));
-            pvalid = true;
-        } else {
-            pvalid = false;
-        }
-        x1 = x2;
-    }
 }
 
 bool SkylineLine::valid() const

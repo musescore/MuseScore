@@ -32,6 +32,8 @@
 #include "undo.h"
 #include "musescoreCore.h"
 
+using namespace mu;
+
 namespace Ms {
 #define MIN_TEMPO 5.0 / 60
 #define MAX_TEMPO 999.0 / 60

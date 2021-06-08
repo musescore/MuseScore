@@ -48,14 +48,14 @@ public:
     int subtype() const override { return static_cast<int>(spanner()->type()); }
     void draw(mu::draw::Painter*) const override;
 
-    void layoutSegment(const QPointF& p1, const QPointF& p2);
+    void layoutSegment(const mu::PointF& p1, const mu::PointF& p2);
 
     bool isEdited() const;
     bool edit(EditData&) override;
 
     Slur* slur() const { return toSlur(spanner()); }
 
-    void computeBezier(QPointF so = QPointF()) override;
+    void computeBezier(mu::PointF so = mu::PointF()) override;
 };
 
 //---------------------------------------------------------

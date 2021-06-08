@@ -33,27 +33,27 @@ namespace Ms {
 
 class TieSegment final : public SlurTieSegment
 {
-    QPointF autoAdjustOffset;
+    mu::PointF autoAdjustOffset;
 
-    void setAutoAdjust(const QPointF& offset);
-    void setAutoAdjust(qreal x, qreal y) { setAutoAdjust(QPointF(x, y)); }
-    QPointF getAutoAdjust() const { return autoAdjustOffset; }
+    void setAutoAdjust(const mu::PointF& offset);
+    void setAutoAdjust(qreal x, qreal y) { setAutoAdjust(mu::PointF(x, y)); }
+    mu::PointF getAutoAdjust() const { return autoAdjustOffset; }
 
 protected:
     void changeAnchor(EditData&, Element*) override;
 
 public:
     TieSegment(Score* s)
-        : SlurTieSegment(s) { autoAdjustOffset = QPointF(); }
+        : SlurTieSegment(s) { autoAdjustOffset = mu::PointF(); }
     TieSegment(const TieSegment& s)
-        : SlurTieSegment(s) { autoAdjustOffset = QPointF(); }
+        : SlurTieSegment(s) { autoAdjustOffset = mu::PointF(); }
 
     TieSegment* clone() const override { return new TieSegment(*this); }
     ElementType type() const override { return ElementType::TIE_SEGMENT; }
     int subtype() const override { return static_cast<int>(spanner()->type()); }
     void draw(mu::draw::Painter*) const override;
 
-    void layoutSegment(const QPointF& p1, const QPointF& p2);
+    void layoutSegment(const mu::PointF& p1, const mu::PointF& p2);
 
     bool isEdited() const;
     void editDrag(EditData&) override;
@@ -61,7 +61,7 @@ public:
 
     Tie* tie() const { return (Tie*)spanner(); }
 
-    void computeBezier(QPointF so = QPointF()) override;
+    void computeBezier(mu::PointF so = mu::PointF()) override;
 };
 
 //---------------------------------------------------------

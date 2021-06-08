@@ -34,6 +34,8 @@
 #include "system.h"
 #include "stafftypechange.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   MeasureBase

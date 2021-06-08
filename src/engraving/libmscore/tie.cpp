@@ -29,6 +29,10 @@
 #include "chord.h"
 #include "tie.h"
 
+#include "draw/transform.h"
+
+using namespace mu;
+
 namespace Ms {
 Note* Tie::editStartNote;
 Note* Tie::editEndNote;
@@ -96,7 +100,7 @@ bool TieSegment::edit(EditData& ed)
         return true;
     }
     if (ed.key == Qt::Key_Home) {
-        ups(ed.curGrip).off = QPointF();
+        ups(ed.curGrip).off = PointF();
         sl->layout();
         return true;
     }
@@ -129,7 +133,7 @@ void TieSegment::changeAnchor(EditData& ed, Element* element)
     }
 
     const size_t segments  = spanner()->spannerSegments().size();
-    ups(ed.curGrip).off = QPointF();
+    ups(ed.curGrip).off = PointF();
     spanner()->layout();
     if (spanner()->spannerSegments().size() != segments) {
         const std::vector<SpannerSegment*>& ss = spanner()->spannerSegments();
@@ -179,17 +183,17 @@ void TieSegment::editDrag(EditData& ed)
     } else if (g == Grip::BEZIER1 || g == Grip::BEZIER2) {
         computeBezier();
     } else if (g == Grip::SHOULDER) {
-        ups(g).off = QPointF();
+        ups(g).off = PointF();
         computeBezier(ed.delta);
     } else if (g == Grip::DRAG) {
-        ups(Grip::DRAG).off = QPointF();
+        ups(Grip::DRAG).off = PointF();
         roffset() += ed.delta;
     }
 
     // if this SlurSegment was automatically adjusted to avoid collision
     // lock this edit by resetting SlurSegment to default position
     // and incorporating previous adjustment into user offset
-    QPointF offset = getAutoAdjust();
+    PointF offset = getAutoAdjust();
     if (!offset.isNull()) {
         setAutoAdjust(0.0, 0.0);
         roffset() += offset;
@@ -201,7 +205,7 @@ void TieSegment::editDrag(EditData& ed)
 //    compute help points of slur bezier segment
 //---------------------------------------------------------
 
-void TieSegment::computeBezier(QPointF p6o)
+void TieSegment::computeBezier(PointF p6o)
 {
     qreal _spatium  = spatium();
     qreal shoulderW;                // height as fraction of slur-length
@@ -215,17 +219,17 @@ void TieSegment::computeBezier(QPointF p6o)
     // pp5      drag
     // pp6      shoulder
     //
-    QPointF pp1 = ups(Grip::START).p + ups(Grip::START).off;
-    QPointF pp2 = ups(Grip::END).p + ups(Grip::END).off;
+    PointF pp1 = ups(Grip::START).p + ups(Grip::START).off;
+    PointF pp2 = ups(Grip::END).p + ups(Grip::END).off;
 
-    QPointF p2 = pp2 - pp1;         // normalize to zero
+    PointF p2 = pp2 - pp1;         // normalize to zero
     if (p2.x() == 0.0) {
         qDebug("zero tie");
         return;
     }
 
     qreal sinb = atan(p2.y() / p2.x());
-    QTransform t;
+    Transform t;
     t.rotateRadians(-sinb);
     p2  = t.map(p2);
     p6o = t.map(p6o);
@@ -247,52 +251,52 @@ void TieSegment::computeBezier(QPointF p6o)
     qreal c1   = (c - c * shoulderW) * .5 + p6o.x();
     qreal c2   = c1 + c * shoulderW + p6o.x();
 
-    QPointF p5 = QPointF(c * .5, 0.0);
+    PointF p5 = PointF(c * .5, 0.0);
 
-    QPointF p3(c1, -shoulderH);
-    QPointF p4(c2, -shoulderH);
+    PointF p3(c1, -shoulderH);
+    PointF p4(c2, -shoulderH);
 
     qreal w = score()->styleP(Sid::SlurMidWidth) - score()->styleP(Sid::SlurEndWidth);
     if (staff()) {
         w *= staff()->staffMag(tie()->tick());
     }
-    QPointF th(0.0, w);      // thickness of slur
+    PointF th(0.0, w);      // thickness of slur
 
-    QPointF p3o = p6o + t.map(ups(Grip::BEZIER1).off);
-    QPointF p4o = p6o + t.map(ups(Grip::BEZIER2).off);
+    PointF p3o = p6o + t.map(ups(Grip::BEZIER1).off);
+    PointF p4o = p6o + t.map(ups(Grip::BEZIER2).off);
 
     if (!p6o.isNull()) {
-        QPointF p6i = t.inverted().map(p6o);
+        PointF p6i = t.inverted().map(p6o);
         ups(Grip::BEZIER1).off += p6i;
         ups(Grip::BEZIER2).off += p6i;
     }
 
     //-----------------------------------calculate p6
-    QPointF pp3  = p3 + p3o;
-    QPointF pp4  = p4 + p4o;
-    QPointF ppp4 = pp4 - pp3;
+    PointF pp3  = p3 + p3o;
+    PointF pp4  = p4 + p4o;
+    PointF ppp4 = pp4 - pp3;
 
     qreal r2 = atan(ppp4.y() / ppp4.x());
     t.reset();
     t.rotateRadians(-r2);
-    QPointF p6  = QPointF(t.map(ppp4).x() * .5, 0.0);
+    PointF p6  = PointF(t.map(ppp4).x() * .5, 0.0);
 
     t.rotateRadians(2 * r2);
     p6 = t.map(p6) + pp3 - p6o;
     //-----------------------------------
 
-    path = QPainterPath();
-    path.moveTo(QPointF());
+    path = PainterPath();
+    path.moveTo(PointF());
     path.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
     if (tie()->lineType() == 0) {
-        path.cubicTo(p4 + p4o + th, p3 + p3o + th, QPointF());
+        path.cubicTo(p4 + p4o + th, p3 + p3o + th, PointF());
     }
 
-    th = QPointF(0.0, 3.0 * w);
-    shapePath = QPainterPath();
-    shapePath.moveTo(QPointF());
+    th = PointF(0.0, 3.0 * w);
+    shapePath = PainterPath();
+    shapePath.moveTo(PointF());
     shapePath.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
-    shapePath.cubicTo(p4 + p4o + th, p3 + p3o + th, QPointF());
+    shapePath.cubicTo(p4 + p4o + th, p3 + p3o + th, PointF());
 
     // translate back
     double y = pp1.y();
@@ -311,23 +315,23 @@ void TieSegment::computeBezier(QPointF p6o)
     ups(Grip::DRAG).p     = t.map(p5);
     ups(Grip::SHOULDER).p = t.map(p6);
 
-//      QPointF staffOffset;
+//      PointF staffOffset;
 //      if (system() && track() >= 0)
-//            staffOffset = QPointF(0.0, -system()->staff(staffIdx())->y());
+//            staffOffset = PointF(0.0, -system()->staff(staffIdx())->y());
 
 //      path.translate(staffOffset);
 //      shapePath.translate(staffOffset);
 
     _shape.clear();
-    QPointF start;
+    PointF start;
     start = t.map(start);
 
     qreal minH = qAbs(3.0 * w);
     int nbShapes = 15;
     const CubicBezier b(pp1, ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
     for (int i = 1; i <= nbShapes; i++) {
-        const QPointF point = b.pointAtPercent(i / float(nbShapes));
-        QRectF re = QRectF(start, point).normalized();
+        const PointF point = b.pointAtPercent(i / float(nbShapes));
+        RectF re = RectF(start, point).normalized();
         if (re.height() < minH) {
             d = (minH - re.height()) * .5;
             re.adjust(0.0, -d, 0.0, d);
@@ -342,9 +346,9 @@ void TieSegment::computeBezier(QPointF p6o)
 //    p1, p2  are in System coordinates
 //---------------------------------------------------------
 
-void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
+void TieSegment::layoutSegment(const PointF& p1, const PointF& p2)
 {
-    setPos(QPointF());
+    setPos(PointF());
     ups(Grip::START).p = p1;
     ups(Grip::END).p   = p2;
 
@@ -355,7 +359,7 @@ void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
 
     computeBezier();
 
-    QRectF bbox = path.boundingRect();
+    RectF bbox = path.boundingRect();
 
     // adjust position to avoid staff line if necessary
     Staff* st          = staff();
@@ -383,7 +387,7 @@ void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
     }
     qreal sp          = spatium();
     qreal minDistance = 0.5;
-    autoAdjustOffset  = QPointF();
+    autoAdjustOffset  = PointF();
     if (bbox.height() < minDistance * 2 * sp && st && !st->isTabStaff(slurTie()->tick())) {
         // slur/tie is fairly flat
         bool up       = slurTie()->up();
@@ -415,9 +419,9 @@ void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
 //   setAutoAdjust
 //---------------------------------------------------------
 
-void TieSegment::setAutoAdjust(const QPointF& offset)
+void TieSegment::setAutoAdjust(const PointF& offset)
 {
-    QPointF diff = offset - autoAdjustOffset;
+    PointF diff = offset - autoAdjustOffset;
     if (!diff.isNull()) {
         path.translate(diff);
         shapePath.translate(diff);
@@ -494,11 +498,11 @@ void Tie::slurPos(SlurPos* sp)
         xo = startNote()->x() + hw * 0.65;
         yo = startNote()->pos().y() + yOffOutside;
     }
-    sp->p1 += QPointF(xo, yo);
+    sp->p1 += PointF(xo, yo);
 
     //------p2
     if (endNote() == 0) {
-        sp->p2 = sp->p1 + QPointF(_spatium * 3, 0.0);
+        sp->p2 = sp->p1 + PointF(_spatium * 3, 0.0);
         sp->system2 = sp->system1;
         return;
     }
@@ -526,7 +530,7 @@ void Tie::slurPos(SlurPos* sp)
             yo = endNote()->pos().y() + yOffOutside;
         }
     }
-    sp->p2 += QPointF(xo, yo);
+    sp->p2 += PointF(xo, yo);
 
     // adjust for cross-staff
     if (sc->vStaffIdx() != vStaffIdx() && sp->system1) {
@@ -704,7 +708,7 @@ TieSegment* Tie::layoutFor(System* system)
     int n;
     if (sPos.system1 != sPos.system2) {
         n = 2;
-        sPos.p2 = QPointF(system->width(), sPos.p1.y());
+        sPos.p2 = PointF(system->width(), sPos.p1.y());
     } else {
         n = 1;
     }
@@ -742,7 +746,7 @@ TieSegment* Tie::layoutBack(System* system)
 
     qreal x = system->firstNoteRestSegmentX(true);
 
-    segment->layoutSegment(QPointF(x, sPos.p2.y()), sPos.p2);
+    segment->layoutSegment(PointF(x, sPos.p2.y()), sPos.p2);
     segment->setSpannerSegmentType(SpannerSegmentType::END);
     return segment;
 }

@@ -24,6 +24,8 @@
 #include "score.h"
 #include "page.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   elementLower
@@ -44,7 +46,7 @@ static bool elementLower(const Element* e1, const Element* e2)
 //   elementAt
 //---------------------------------------------------------
 
-Element* MuseScoreView::elementAt(const QPointF& p)
+Element* MuseScoreView::elementAt(const mu::PointF& p)
 {
     QList<Element*> el = elementsAt(p);
 #if 0
@@ -64,7 +66,7 @@ Element* MuseScoreView::elementAt(const QPointF& p)
 //   point2page
 //---------------------------------------------------------
 
-Page* MuseScoreView::point2page(const QPointF& p)
+Page* MuseScoreView::point2page(const mu::PointF& p)
 {
     if (score()->layoutMode() == LayoutMode::LINE) {
         return score()->pages().isEmpty() ? 0 : score()->pages().front();
@@ -82,7 +84,7 @@ Page* MuseScoreView::point2page(const QPointF& p)
 //    p is in canvas coordinates
 //---------------------------------------------------------
 
-const QList<Element*> MuseScoreView::elementsAt(const QPointF& p)
+const QList<Element*> MuseScoreView::elementsAt(const mu::PointF& p)
 {
     QList<Element*> el;
 

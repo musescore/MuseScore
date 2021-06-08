@@ -34,7 +34,7 @@ namespace Ms {
 class StaffLines final : public Element
 {
     qreal lw { 0.0 };
-    std::vector<mu::draw::LineF> lines;
+    std::vector<mu::LineF> lines;
 
 public:
     StaffLines(Score*);
@@ -43,12 +43,12 @@ public:
     ElementType type() const override { return ElementType::STAFF_LINES; }
     void layout() override;
     void draw(mu::draw::Painter*) const override;
-    QPointF pagePos() const override;      ///< position in page coordinates
-    QPointF canvasPos() const override;    ///< position in page coordinates
+    mu::PointF pagePos() const override;      ///< position in page coordinates
+    mu::PointF canvasPos() const override;    ///< position in page coordinates
 
     void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 
-    std::vector<mu::draw::LineF>& getLines() { return lines; }
+    std::vector<mu::LineF>& getLines() { return lines; }
     Measure* measure() const { return (Measure*)parent(); }
     qreal y1() const;
     void layoutForWidth(qreal width);

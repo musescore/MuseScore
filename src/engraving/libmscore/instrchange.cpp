@@ -33,6 +33,8 @@
 #include "chord.h"
 #include "keysig.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   instrumentChangeStyle

@@ -73,7 +73,7 @@ public:
     qreal width() const override;
     qreal height() const override;
 
-    QPoint toLogical(const QPoint& point) const override;
+    PointF toLogical(const QPoint& point) const override;
 
     Q_INVOKABLE void moveCanvas(int dx, int dy) override;
     void moveCanvasVertical(int dy) override;
@@ -83,7 +83,7 @@ public:
     void scale(qreal scaling, const QPoint& pos) override;
 
     bool isNoteEnterMode() const override;
-    void showShadowNote(const QPointF& pos) override;
+    void showShadowNote(const PointF& pos) override;
 
     void showContextMenu(const ElementType& elementType, const QPoint& pos) override;
     Q_INVOKABLE void handleAction(const QString& actionCode);
@@ -121,7 +121,7 @@ protected:
 
     QRectF notationContentRect() const;
 
-    QRect toLogical(const QRect& rect) const;
+    RectF toLogical(const QRect& rect) const;
 
     // Draw
     void paint(QPainter* painter) override;
@@ -175,12 +175,12 @@ private:
 
     void updateLoopMarkers(const LoopBoundaries& boundaries);
 
-    const Page* pointToPage(const QPointF& point) const;
+    const Page* pointToPage(const PointF& point) const;
     QPointF alignToCurrentPageBorder(const QRectF& showRect, const QPointF& pos) const;
 
-    void paintBackground(const draw::RectF& rect, draw::Painter* painter);
+    void paintBackground(const RectF& rect, draw::Painter* painter);
 
-    QPoint canvasCenter() const;
+    PointF canvasCenter() const;
     std::pair<int, int> constraintCanvas(int dx, int dy) const;
 
     notation::INotationPtr m_notation;

@@ -29,6 +29,7 @@
 #include "qpainterprovider.h"
 #endif
 
+using namespace mu;
 using namespace mu::draw;
 
 IPaintProviderPtr Painter::extended;
@@ -328,7 +329,7 @@ void Painter::drawLines(const LineF* lines, int lineCount)
 
 void Painter::drawLines(const PointF* pointPairs, int lineCount)
 {
-    Q_ASSERT(sizeof(LineF) == 2 * sizeof(PointF));
+    static_assert(sizeof(LineF) == 2 * sizeof(PointF), "must be: sizeof(LineF) == 2 * sizeof(PointF)");
 
     drawLines((const LineF*)pointPairs, lineCount);
 }

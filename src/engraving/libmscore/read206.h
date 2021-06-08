@@ -23,6 +23,8 @@
 #ifndef __READ206_H__
 #define __READ206_H__
 
+#include "draw/geometry.h"
+
 namespace Ms {
 class MStyle;
 
@@ -32,7 +34,7 @@ class MStyle;
 
 class PageFormat
 {
-    QSizeF _size;
+    mu::SizeF _size;
     qreal _printableWidth;          // _width - left margin - right margin
     qreal _evenLeftMargin;          // values in inch
     qreal _oddLeftMargin;
@@ -45,10 +47,10 @@ class PageFormat
 public:
     PageFormat() {}
 
-    const QSizeF& size() const { return _size; }                        // size in inch
+    const mu::SizeF& size() const { return _size; }                        // size in inch
     qreal width() const { return _size.width(); }
     qreal height() const { return _size.height(); }
-    void setSize(const QSizeF& s) { _size = s; }
+    void setSize(const mu::SizeF& s) { _size = s; }
 
     void read(XmlReader&);
     qreal evenLeftMargin() const { return _evenLeftMargin; }

@@ -24,6 +24,8 @@
 #include "mmrestrange.h"
 #include "measure.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   mmRestRangeStyle

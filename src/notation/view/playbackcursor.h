@@ -38,8 +38,8 @@ public:
 
     void paint(draw::Painter* painter);
 
-    const draw::RectF& rect() const;
-    void setRect(const draw::RectF& rect);
+    const RectF& rect() const;
+    void setRect(const RectF& rect);
 
     void setVisible(bool arg);
 
@@ -47,7 +47,7 @@ private:
     QColor color();
 
     bool m_visible = false;
-    draw::RectF m_rect;
+    RectF m_rect;
 };
 }
 

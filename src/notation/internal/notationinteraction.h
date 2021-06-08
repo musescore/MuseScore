@@ -24,8 +24,6 @@
 
 #include <memory>
 #include <vector>
-#include <QPointF>
-#include <QLineF>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -61,15 +59,15 @@ public:
     INotationNoteInputPtr noteInput() const override;
 
     // Shadow note
-    void showShadowNote(const QPointF& pos) override;
+    void showShadowNote(const PointF& pos) override;
     void hideShadowNote() override;
 
     // Visibility
     void toggleVisible() override;
 
     // Select
-    Element* hitElement(const QPointF& pos, float width) const override;
-    int hitStaffIndex(const QPointF& pos) const override;
+    Element* hitElement(const PointF& pos, float width) const override;
+    int hitStaffIndex(const PointF& pos) const override;
     void addChordToSelection(MoveDirection d) override;
     void moveChordNoteSelection(MoveDirection d) override;
     void select(const std::vector<Element*>& elements, SelectType type, int staffIndex = 0) override;
@@ -83,15 +81,15 @@ public:
 
     // Drag
     bool isDragStarted() const override;
-    void startDrag(const std::vector<Element*>& elems, const QPointF& eoffset, const IsDraggable& isDraggable) override;
-    void drag(const QPointF& fromPos, const QPointF& toPos, DragMode mode) override;
+    void startDrag(const std::vector<Element*>& elems, const PointF& eoffset, const IsDraggable& isDraggable) override;
+    void drag(const PointF& fromPos, const PointF& toPos, DragMode mode) override;
     void endDrag() override;
     async::Notification dragChanged() const override;
 
     // Drop
     void startDrop(const QByteArray& edata) override;
-    bool isDropAccepted(const QPointF& pos, Qt::KeyboardModifiers modifiers) override;
-    bool drop(const QPointF& pos, Qt::KeyboardModifiers modifiers) override;
+    bool isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
+    bool drop(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
     void endDrop() override;
     async::Notification dropChanged() const override;
 
@@ -105,17 +103,17 @@ public:
 
     // Text edit
     bool isTextEditingStarted() const override;
-    void startEditText(Element* element, const QPointF& cursorPos) override;
+    void startEditText(Element* element, const PointF& cursorPos) override;
     void editText(QKeyEvent* event) override;
     void endEditText() override;
-    void changeTextCursorPosition(const QPointF& newCursorPos) override;
+    void changeTextCursorPosition(const PointF& newCursorPos) override;
     async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
 
     // Grip edit
     bool isGripEditStarted() const override;
-    bool isHitGrip(const QPointF& pos) const override;
-    void startEditGrip(const QPointF& pos) override;
+    bool isHitGrip(const PointF& pos) const override;
+    void startEditGrip(const PointF& pos) override;
     void endEditGrip() override;
 
     // Measure
@@ -189,16 +187,16 @@ private:
     void notifyAboutNotationChanged();
     void notifyAboutTextEditingStarted();
     void notifyAboutTextEditingChanged();
-    void doDragLasso(const QPointF& p);
+    void doDragLasso(const PointF& p);
     void endLasso();
 
-    Ms::Page* point2page(const QPointF& p) const;
-    QList<Element*> hitElements(const QPointF& p_in, float w) const;
-    QList<Element*> elementsAt(const QPointF& p) const;
-    Element* elementAt(const QPointF& p) const;
+    Ms::Page* point2page(const PointF& p) const;
+    QList<Element*> hitElements(const PointF& p_in, float w) const;
+    QList<Element*> elementsAt(const PointF& p) const;
+    Element* elementAt(const PointF& p) const;
     static bool elementIsLess(const Ms::Element* e1, const Ms::Element* e2);
 
-    void setAnchorLines(const std::vector<draw::LineF>& anchorList);
+    void setAnchorLines(const std::vector<LineF>& anchorList);
     void resetAnchorLines();
     void drawAnchorLines(draw::Painter* painter);
     void drawTextEditMode(mu::draw::Painter* painter);
@@ -207,15 +205,15 @@ private:
     void moveElementSelection(MoveDirection d);
 
     Element* dropTarget(Ms::EditData& ed) const;
-    bool dragMeasureAnchorElement(const QPointF& pos);
-    bool dragTimeAnchorElement(const QPointF& pos);
+    bool dragMeasureAnchorElement(const PointF& pos);
+    bool dragTimeAnchorElement(const PointF& pos);
     void setDropTarget(Element* el);
     bool dropCanvas(Element* e);
 
     void selectInstrument(Ms::InstrumentChange* instrumentChange);
 
     void applyDropPaletteElement(Ms::Score* score, Ms::Element* target, Ms::Element* e, Qt::KeyboardModifiers modifiers,
-                                 QPointF pt = QPointF(), bool pasteMode = false);
+                                 PointF pt = PointF(), bool pasteMode = false);
 
     void doAddSlur(const Ms::Slur* slurTemplate = nullptr);
     void doAddSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Ms::Slur* slurTemplate);
@@ -239,12 +237,12 @@ private:
         Ms::Measure* measure = nullptr;
     };
 
-    HitMeasureData hitMeasure(const QPointF& pos) const;
+    HitMeasureData hitMeasure(const PointF& pos) const;
 
     struct DragData
     {
-        QPointF beginMove;
-        QPointF elementOffset;
+        PointF beginMove;
+        PointF elementOffset;
         Ms::EditData ed;
         std::vector<Element*> elements;
         std::vector<std::unique_ptr<Ms::ElementGroup> > dragGroups;
@@ -269,7 +267,7 @@ private:
 
     DragData m_dragData;
     async::Notification m_dragChanged;
-    std::vector<draw::LineF> m_anchorLines;
+    std::vector<LineF> m_anchorLines;
 
     Ms::EditData m_textEditData;
     async::Notification m_textEditingStarted;

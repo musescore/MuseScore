@@ -45,7 +45,7 @@ public:
     int startMeasureIndex() const override;
     int endMeasureIndex() const override;
 
-    std::vector<QRectF> boundingArea() const override;
+    std::vector<RectF> boundingArea() const override;
 
 private:
     Ms::Score* score() const;

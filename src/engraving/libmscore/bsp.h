@@ -23,9 +23,10 @@
 #ifndef __BSP_H__
 #define __BSP_H__
 
-#include <QRectF>
 #include <QVector>
 #include <QList>
+
+#include "draw/geometry.h"
 
 namespace Ms {
 class BspTreeVisitor;
@@ -55,30 +56,30 @@ public:
     };
 private:
     uint depth;
-    void initialize(const QRectF& rect, int depth, int index);
-    void climbTree(BspTreeVisitor* visitor, const QPointF& pos, int index = 0);
-    void climbTree(BspTreeVisitor* visitor, const QRectF& rect, int index = 0);
+    void initialize(const mu::RectF& rect, int depth, int index);
+    void climbTree(BspTreeVisitor* visitor, const mu::PointF& pos, int index = 0);
+    void climbTree(BspTreeVisitor* visitor, const mu::RectF& rect, int index = 0);
 
-    void findItems(QList<Element*>* foundItems, const QRectF& rect, int index);
-    void findItems(QList<Element*>* foundItems, const QPointF& pos, int index);
-    QRectF rectForIndex(int index) const;
+    void findItems(QList<Element*>* foundItems, const mu::RectF& rect, int index);
+    void findItems(QList<Element*>* foundItems, const mu::PointF& pos, int index);
+    mu::RectF rectForIndex(int index) const;
 
     QVector<Node> nodes;
     QVector<QList<Element*> > leaves;
     int leafCnt;
-    QRectF rect;
+    mu::RectF rect;
 
 public:
     BspTree();
 
-    void initialize(const QRectF& rect, int depth);
+    void initialize(const mu::RectF& rect, int depth);
     void clear();
 
     void insert(Element* item);
     void remove(Element* item);
 
-    QList<Element*> items(const QRectF& rect);
-    QList<Element*> items(const QPointF& pos);
+    QList<Element*> items(const mu::RectF& rect);
+    QList<Element*> items(const mu::PointF& pos);
 
     int leafCount() const { return leafCnt; }
     inline int firstChildIndex(int index) const { return index * 2 + 1; }

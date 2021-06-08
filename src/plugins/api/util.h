@@ -169,13 +169,13 @@ class ScoreView : public QQuickPaintedItem, public MuseScoreView
 
     virtual void setScore(Ms::Score*) override;
 
-    virtual void dataChanged(const QRectF&) override { update(); }
+    virtual void dataChanged(const mu::RectF&) override { update(); }
     virtual void updateAll() override { update(); }
 
     virtual void paint(QPainter*) override;
 
     virtual QRectF boundingRect() const override { return _boundingRect; }
-    virtual void drawBackground(mu::draw::Painter*, const QRectF&) const override {}
+    virtual void drawBackground(mu::draw::Painter*, const mu::RectF&) const override {}
 
 public slots:
     //@ --
@@ -195,7 +195,7 @@ public:
     void setColor(const QColor& c) { _color = c; }
     qreal scale() const { return mag; }
     void setScale(qreal v) { mag = v; }
-    virtual const QRect geometry() const override { return QRect(QQuickPaintedItem::x(), y(), width(), height()); }
+    virtual const mu::Rect geometry() const override { return mu::Rect(x(), y(), width(), height()); }
     /// \endcond
 };
 } // namespace PluginAPI

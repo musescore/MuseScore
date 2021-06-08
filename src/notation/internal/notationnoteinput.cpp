@@ -202,7 +202,7 @@ void NotationNoteInput::padNote(const Pad& pad)
 void NotationNoteInput::putNote(const QPointF& pos, bool replace, bool insert)
 {
     startEdit();
-    score()->putNote(pos, replace, insert);
+    score()->putNote(PointF::fromQPointF(pos), replace, insert);
     apply();
 
     notifyNoteAddedChanged();
@@ -290,7 +290,7 @@ QRectF NotationNoteInput::cursorRect() const
     constexpr int sideMargin = 4;
     constexpr int skylineMargin = 20;
 
-    QRectF segmentContentRect = segment->contentRect();
+    RectF segmentContentRect = segment->contentRect();
     double x = segmentContentRect.translated(segment->pagePos()).x() - sideMargin;
     double y = system->staffYpage(staffIdx) + system->page()->pos().y();
     double w = segmentContentRect.width() + 2 * sideMargin;
@@ -312,13 +312,13 @@ QRectF NotationNoteInput::cursorRect() const
         y -= skylineMargin;
     }
 
-    QRectF result = QRectF(x, y, w, h);
+    RectF result = RectF(x, y, w, h);
 
     if (configuration()->canvasOrientation().val == framework::Orientation::Horizontal) {
         result.translate(system->page()->pos());
     }
 
-    return result;
+    return result.toQRectF();
 }
 
 void NotationNoteInput::addSlur(Ms::Slur* slur)

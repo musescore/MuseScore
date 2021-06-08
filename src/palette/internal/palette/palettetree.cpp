@@ -51,10 +51,11 @@
 
 #include "../palette_config.h"
 
+using namespace mu;
+using namespace mu::draw;
 using namespace mu::palette;
 using namespace mu::framework;
 using namespace mu::actions;
-using namespace mu::draw;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -348,7 +349,7 @@ PaletteCellPtr PaletteCell::readMimeData(const QByteArray& data)
 
 PaletteCellPtr PaletteCell::readElementMimeData(const QByteArray& data)
 {
-    QPointF dragOffset;
+    PointF dragOffset;
     Fraction duration(1, 4);
     ElementPtr element(Element::readMimeData(gscore, data, &dragOffset, &duration));
 
@@ -812,7 +813,7 @@ static bool isSame(const Element& e1, const Element& e2)
 {
     return e1.type() == e2.type()
            && e1.subtype() == e2.subtype()
-           && e1.mimeData(QPointF()) == e2.mimeData(QPointF());
+           && e1.mimeData(PointF()) == e2.mimeData(PointF());
 }
 
 //---------------------------------------------------------
@@ -1068,7 +1069,7 @@ void PaletteTree::retranslate()
 /// aspect ratio, and leaving a small margin around the edges.
 //---------------------------------------------------------
 
-static void paintIconElement(mu::draw::Painter& painter, const QRect& rect, Element* e)
+static void paintIconElement(mu::draw::Painter& painter, const RectF& rect, Element* e)
 {
     Q_ASSERT(e && e->isIcon());
     painter.save();   // so we can restore it after we are done using it
@@ -1080,7 +1081,7 @@ static void paintIconElement(mu::draw::Painter& painter, const QRect& rect, Elem
     icon->setExtent(extent);
 
     extent /= 2.0;
-    QPointF iconCenter(extent, extent);
+    PointF iconCenter(extent, extent);
 
     painter.translate(rect.center() - iconCenter);   // change coordinates
     icon->draw(&painter);
@@ -1105,7 +1106,7 @@ void PaletteCellIconEngine::paintScoreElement(mu::draw::Painter& painter, Elemen
     painter.scale(sizeRatio, sizeRatio);   // scale coordinates so element is drawn at correct size
 
     element->layout(); // calculate bbox
-    QPointF origin = element->bbox().center();
+    PointF origin = element->bbox().center();
 
     if (alignToStaff) {
         // y = 0 is position of the element's parent.
@@ -1145,7 +1146,7 @@ qreal PaletteCellIconEngine::paintStaff(Painter& painter, const RectF& rect, qre
     // draw staff lines with middle line centered vertically on target
     qreal y = topLineDist;
     for (int i = 0; i < numStaffLines; ++i) {
-        painter.drawLine(QLineF(x1, y, x2, y));
+        painter.drawLine(LineF(x1, y, x2, y));
         y += spatium;
     }
 
@@ -1195,7 +1196,7 @@ void PaletteCellIconEngine::paintTag(Painter& painter, const RectF& rect, QStrin
 //   PaletteCellIconEngine::paintCell
 //---------------------------------------------------------
 
-void PaletteCellIconEngine::paintCell(mu::draw::Painter& painter, const QRect& rect, bool selected, bool current) const
+void PaletteCellIconEngine::paintCell(mu::draw::Painter& painter, const RectF& rect, bool selected, bool current) const
 {
     const qreal _yOffset = 0.0;   // TODO
 
@@ -1220,7 +1221,7 @@ void PaletteCellIconEngine::paintCell(mu::draw::Painter& painter, const QRect& r
     const bool drawStaff = _cell->drawStaff;
     const qreal spatium = PALETTE_SPATIUM * _extraMag * _cell->mag;
 
-    QPointF origin = rect.center();   // draw element at center of cell by default
+    PointF origin = rect.center();   // draw element at center of cell by default
     painter.translate(0, _yOffset * spatium);   // offset both element and staff
 
     if (drawStaff) {
@@ -1244,7 +1245,7 @@ void PaletteCellIconEngine::paint(QPainter* qp, const QRect& rect, QIcon::Mode m
     mu::draw::Painter p(qp, "palettecell");
     p.save();   // so we can restore it later
     p.setAntialiasing(true);
-    paintCell(p, rect, mode == QIcon::Selected, state == QIcon::On);
+    paintCell(p, RectF::fromQRectF(rect), mode == QIcon::Selected, state == QIcon::On);
     p.restore();   // return painter to saved initial state (undo any changes to pen, coordinates, font, etc.)
 }
 } // namespace Ms

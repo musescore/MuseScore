@@ -25,6 +25,8 @@
 #include "mscoreview.h"
 #include "score.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   Lasso
@@ -98,7 +100,7 @@ void Lasso::editDrag(EditData& ed)
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<QPointF> Lasso::gripsPositions(const EditData&) const
+std::vector<mu::PointF> Lasso::gripsPositions(const EditData&) const
 {
     const auto box(bbox());
     return {
@@ -106,10 +108,10 @@ std::vector<QPointF> Lasso::gripsPositions(const EditData&) const
         box.topRight(),
         box.bottomRight(),
         box.bottomLeft(),
-        QPointF(box.x() + box.width() * .5, box.top()),
-        QPointF(box.right(), box.y() + box.height() * .5),
-        QPointF(box.x() + box.width() * .5, box.bottom()),
-        QPointF(box.left(), box.y() + box.height() * .5)
+        PointF(box.x() + box.width() * .5, box.top()),
+        PointF(box.right(), box.y() + box.height() * .5),
+        PointF(box.x() + box.width() * .5, box.bottom()),
+        PointF(box.left(), box.y() + box.height() * .5)
     };
 }
 
@@ -121,10 +123,10 @@ bool Lasso::setProperty(Pid propertyId, const QVariant& v)
 {
     switch (propertyId) {
     case Pid::LASSO_POS:
-        bbox().moveTo(v.toPointF());
+        bbox().moveTo(PointF::fromVariant(v));
         break;
     case Pid::LASSO_SIZE:
-        bbox().setSize(v.toSizeF());
+        bbox().setSize(SizeF::fromVariant(v));
         break;
     default:
         if (!Element::setProperty(propertyId, v)) {
@@ -144,9 +146,9 @@ QVariant Lasso::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LASSO_POS:
-        return bbox().topLeft();
+        return QVariant::fromValue(bbox().topLeft());
     case Pid::LASSO_SIZE:
-        return bbox().size();
+        return QVariant::fromValue(bbox().size());
     default:
         break;
     }

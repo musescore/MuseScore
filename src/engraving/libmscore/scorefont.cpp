@@ -33,6 +33,7 @@
 #include "sym.h"
 
 using namespace Ms;
+using namespace mu;
 using namespace mu::draw;
 
 //---------------------------------------------------------
@@ -301,35 +302,35 @@ void ScoreFont::loadGlyphsWithAnchors(const QJsonObject& glyphsWithAnchors)
             if (anchorKey == "stemDownNW") {
                 qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
                 qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::stemDownNW, QPointF(x, -y) * 4.0 * DPI_F);
+                sym->setSmuflAnchor(SmuflAnchorId::stemDownNW, PointF(x, -y) * 4.0 * DPI_F);
             } else if (anchorKey == "stemUpSE") {
                 qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
                 qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::stemUpSE, QPointF(x, -y) * 4.0 * DPI_F);
+                sym->setSmuflAnchor(SmuflAnchorId::stemUpSE, PointF(x, -y) * 4.0 * DPI_F);
             } else if (anchorKey == "stemDownSW") {
                 qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
                 qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::stemDownSW, QPointF(x, -y) * 4.0 * DPI_F);
+                sym->setSmuflAnchor(SmuflAnchorId::stemDownSW, PointF(x, -y) * 4.0 * DPI_F);
             } else if (anchorKey == "stemUpNW") {
                 qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
                 qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::stemUpNW, QPointF(x, -y) * 4.0 * DPI_F);
+                sym->setSmuflAnchor(SmuflAnchorId::stemUpNW, PointF(x, -y) * 4.0 * DPI_F);
             } else if (anchorKey == "cutOutNE") {
                 qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
                 qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::cutOutNE, QPointF(x, -y) * scale);
+                sym->setSmuflAnchor(SmuflAnchorId::cutOutNE, PointF(x, -y) * scale);
             } else if (anchorKey == "cutOutNW") {
                 qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
                 qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::cutOutNW, QPointF(x, -y) * scale);
+                sym->setSmuflAnchor(SmuflAnchorId::cutOutNW, PointF(x, -y) * scale);
             } else if (anchorKey == "cutOutSE") {
                 qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
                 qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::cutOutSE, QPointF(x, -y) * scale);
+                sym->setSmuflAnchor(SmuflAnchorId::cutOutSE, PointF(x, -y) * scale);
             } else if (anchorKey == "cutOutSW") {
                 qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
                 qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::cutOutSW, QPointF(x, -y) * scale);
+                sym->setSmuflAnchor(SmuflAnchorId::cutOutSW, PointF(x, -y) * scale);
             }
         }
     }
@@ -553,7 +554,7 @@ void ScoreFont::loadEngravingDefaults(const QJsonObject& engravingDefaultsObject
 
 void ScoreFont::computeMetrics(Sym* sym, int code)
 {
-    QRectF bbox = fontProvider()->symBBox(m_font, code, DPI_F);
+    RectF bbox = fontProvider()->symBBox(m_font, code, DPI_F);
     qreal advance = fontProvider()->symAdvance(m_font, code, DPI_F);
 
     sym->setCode(code);
@@ -611,33 +612,33 @@ bool ScoreFont::useFallbackFont(SymId id) const
 // Symbol bouding box
 // =============================================
 
-const QRectF ScoreFont::bbox(SymId id, qreal mag) const
+const RectF ScoreFont::bbox(SymId id, qreal mag) const
 {
-    return bbox(id, QSizeF(mag, mag));
+    return bbox(id, SizeF(mag, mag));
 }
 
-const QRectF ScoreFont::bbox(SymId id, const QSizeF& mag) const
+const RectF ScoreFont::bbox(SymId id, const SizeF& mag) const
 {
     if (useFallbackFont(id)) {
         return fallbackFont()->bbox(id, mag);
     }
 
-    QRectF r = sym(id).bbox();
-    return QRectF(r.x() * mag.width(), r.y() * mag.height(),
-                  r.width() * mag.width(), r.height() * mag.height());
+    RectF r = sym(id).bbox();
+    return RectF(r.x() * mag.width(), r.y() * mag.height(),
+                 r.width() * mag.width(), r.height() * mag.height());
 }
 
-const QRectF ScoreFont::bbox(const std::vector<SymId>& s, qreal mag) const
+const RectF ScoreFont::bbox(const std::vector<SymId>& s, qreal mag) const
 {
-    return bbox(s, QSizeF(mag, mag));
+    return bbox(s, SizeF(mag, mag));
 }
 
-const QRectF ScoreFont::bbox(const std::vector<SymId>& s, const QSizeF& mag) const
+const RectF ScoreFont::bbox(const std::vector<SymId>& s, const SizeF& mag) const
 {
-    QRectF r;
-    QPointF pos;
+    RectF r;
+    PointF pos;
     for (SymId id : s) {
-        r |= bbox(id, mag).translated(pos);
+        r.unite(bbox(id, mag).translated(pos));
         pos.rx() += advance(id, mag.width());
     }
     return r;
@@ -671,7 +672,7 @@ qreal ScoreFont::width(const std::vector<SymId>& s, qreal mag) const
     return bbox(s, mag).width();
 }
 
-QPointF ScoreFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, qreal mag) const
+PointF ScoreFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, qreal mag) const
 {
     if (useFallbackFont(symId)) {
         return fallbackFont()->smuflAnchor(symId, anchorId, mag);

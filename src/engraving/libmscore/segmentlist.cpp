@@ -24,6 +24,8 @@
 #include "segment.h"
 #include "score.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   clone

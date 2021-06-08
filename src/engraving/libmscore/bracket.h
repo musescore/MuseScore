@@ -23,8 +23,6 @@
 #ifndef __BRACKET_H__
 #define __BRACKET_H__
 
-#include <QPainterPath>
-
 #include "element.h"
 #include "bracketItem.h"
 
@@ -46,7 +44,7 @@ class Bracket final : public Element
     int _firstStaff;
     int _lastStaff;
 
-    QPainterPath path;
+    mu::PainterPath path;
     SymId _braceSymbol;
     Shape _shape;
 
@@ -116,7 +114,7 @@ public:
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<QPointF> gripsPositions(const EditData&) const override;
+    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
     void setSelected(bool f) override;
 };

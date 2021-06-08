@@ -46,6 +46,8 @@
 #include "draw/fontmetrics.h"
 #include "draw/fontcompat.h"
 
+using namespace mu;
+
 namespace Ms {
 #ifdef Q_OS_MAC
 #define CONTROL_MODIFIER Qt::AltModifier
@@ -263,7 +265,7 @@ void TextCursor::updateCursorFormat()
 //   cursorRect
 //---------------------------------------------------------
 
-QRectF TextCursor::cursorRect() const
+RectF TextCursor::cursorRect() const
 {
     const TextBlock& tline       = curLine();
     const TextFragment* fragment = tline.fragment(column());
@@ -273,7 +275,7 @@ QRectF TextCursor::cursorRect() const
     qreal h = ascent;
     qreal x = tline.xpos(column(), _text);
     qreal y = tline.y() - ascent * .9;
-    return QRectF(x, y, 4.0, h);
+    return RectF(x, y, 4.0, h);
 }
 
 //---------------------------------------------------------
@@ -618,9 +620,9 @@ void TextCursor::doubleClickSelect()
 //   set
 //---------------------------------------------------------
 
-bool TextCursor::set(const QPointF& p, QTextCursor::MoveMode mode)
+bool TextCursor::set(const PointF& p, QTextCursor::MoveMode mode)
 {
-    QPointF pt  = p - _text->canvasPos();
+    PointF pt  = p - _text->canvasPos();
     if (!_text->bbox().contains(pt)) {
         return false;
     }
@@ -904,7 +906,7 @@ void TextFragment::draw(mu::draw::Painter* p, const TextBase* t) const
 //   drawTextWorkaround
 //---------------------------------------------------------
 
-void TextBase::drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const QPointF& pos, const QString& text)
+void TextBase::drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const mu::PointF& pos, const QString& text)
 {
     qreal mm = p->worldTransform().m11();
     if (!(MScore::pdfPrinting) && (mm < 1.0) && f.bold() && !(f.underline())) {
@@ -997,7 +999,7 @@ void TextBlock::draw(mu::draw::Painter* p, const TextBase* t) const
 
 void TextBlock::layout(TextBase* t)
 {
-    _bbox        = QRectF();
+    _bbox        = RectF();
     qreal x      = 0.0;
     _lineSpacing = 0.0;
     qreal lm     = 0.0;
@@ -1053,7 +1055,7 @@ void TextBlock::layout(TextBase* t)
             f.pos.setY(0.0);
         }
 
-        QRectF temp(0.0, -fm.ascent(), 1.0, fm.descent());
+        RectF temp(0.0, -fm.ascent(), 1.0, fm.descent());
         _bbox |= temp;
         _lineSpacing = qMax(_lineSpacing, fm.lineSpacing());
     } else {
@@ -1194,11 +1196,11 @@ const CharFormat* TextBlock::formatAt(int column) const
 //   boundingRect
 //---------------------------------------------------------
 
-QRectF TextBlock::boundingRect(int col1, int col2, const TextBase* t) const
+RectF TextBlock::boundingRect(int col1, int col2, const TextBase* t) const
 {
     qreal x1 = xpos(col1, t);
     qreal x2 = xpos(col2, t);
-    return QRectF(x1, _bbox.y(), x2 - x1, _bbox.height());
+    return RectF(x1, _bbox.y(), x2 - x1, _bbox.height());
 }
 
 //---------------------------------------------------------
@@ -1687,7 +1689,7 @@ TextBase::TextBase(const TextBase& st)
 //   drawSelection
 //---------------------------------------------------------
 
-void TextBase::drawSelection(mu::draw::Painter* p, const QRectF& r) const
+void TextBase::drawSelection(mu::draw::Painter* p, const RectF& r) const
 {
     QBrush bg(QColor("steelblue"));
     p->setCompositionMode(mu::draw::CompositionMode::HardLight);
@@ -1918,12 +1920,12 @@ void TextBase::createLayout()
 
 void TextBase::layout()
 {
-    setPos(QPointF());
+    setPos(PointF());
     if (!parent()) {
         setOffset(0.0, 0.0);
     }
 //      else if (isStyled(Pid::OFFSET))                                   // TODO: should be set already
-//            setOffset(propertyDefault(Pid::OFFSET).toPointF());
+//            setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
     if (placeBelow()) {
         rypos() = staff() ? staff()->height() : 0.0;
     }
@@ -1942,12 +1944,12 @@ void TextBase::layout1()
     if (_layout.empty()) {
         _layout.append(TextBlock());
     }
-    QRectF bb;
+    RectF bb;
     qreal y = 0;
     for (int i = 0; i < rows(); ++i) {
         TextBlock* t = &_layout[i];
         t->layout(this);
-        const QRectF* r = &t->boundingRect();
+        const RectF* r = &t->boundingRect();
 
         if (r->height() == 0) {
             r = &_layout[i - i].boundingRect();
@@ -1983,7 +1985,7 @@ void TextBase::layout1()
             }
         }
     } else {
-        setPos(QPointF());
+        setPos(PointF());
     }
 
     if (align() & Align::BOTTOM) {
@@ -2021,7 +2023,7 @@ void TextBase::layoutFrame()
         mu::draw::FontMetrics fm(font());
         qreal ch = fm.ascent();
         qreal cw = fm.width('n');
-        frame = QRectF(0.0, -ch, cw, ch);
+        frame = RectF(0.0, -ch, cw, ch);
     } else {
         frame = bbox();
     }
@@ -2447,29 +2449,29 @@ Pid TextBase::propertyId(const QStringRef& name) const
 //   pageRectangle
 //---------------------------------------------------------
 
-QRectF TextBase::pageRectangle() const
+RectF TextBase::pageRectangle() const
 {
     if (parent() && (parent()->isHBox() || parent()->isVBox() || parent()->isTBox())) {
         Box* box = toBox(parent());
-        QRectF r = box->abbox();
+        RectF r = box->abbox();
         qreal x = r.x() + box->leftMargin() * DPMM;
         qreal y = r.y() + box->topMargin() * DPMM;
         qreal h = r.height() - (box->topMargin() + box->bottomMargin()) * DPMM;
         qreal w = r.width() - (box->leftMargin() + box->rightMargin()) * DPMM;
 
-        // QSizeF ps = _doc->pageSize();
-        // return QRectF(x, y, ps.width(), ps.height());
+        // SizeF ps = _doc->pageSize();
+        // return RectF(x, y, ps.width(), ps.height());
 
-        return QRectF(x, y, w, h);
+        return RectF(x, y, w, h);
     }
     if (parent() && parent()->isPage()) {
         Page* box  = toPage(parent());
-        QRectF r = box->abbox();
+        RectF r = box->abbox();
         qreal x = r.x() + box->lm();
         qreal y = r.y() + box->tm();
         qreal h = r.height() - box->tm() - box->bm();
         qreal w = r.width() - box->lm() - box->rm();
-        return QRectF(x, y, w, h);
+        return RectF(x, y, w, h);
     }
     return abbox();
 }
@@ -2491,12 +2493,12 @@ void TextBase::dragTo(EditData& ed)
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<QLineF> TextBase::dragAnchorLines() const
+QVector<mu::LineF> TextBase::dragAnchorLines() const
 {
-    QVector<QLineF> result(genericDragAnchorLines());
+    QVector<LineF> result(genericDragAnchorLines());
 
     if (layoutToParentWidth() && !result.empty()) {
-        QLineF& line = result[0];
+        LineF& line = result[0];
         line.setP2(line.p2() + bbox().topLeft());
     }
 
@@ -3246,7 +3248,7 @@ void TextBase::draw(mu::draw::Painter* painter) const
 
 void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
-    QPointF pos(canvasPos());
+    PointF pos(canvasPos());
     p->translate(pos);
 
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
@@ -3269,7 +3271,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
         for (const TextBlock& t : qAsConst(_layout)) {
             t.draw(p, this);
             if (row >= r1 && row <= r2) {
-                QRectF br;
+                RectF br;
                 if (row == r1 && r1 == r2) {
                     br = t.boundingRect(c1, c2, this);
                 } else if (row == r1) {
@@ -3301,7 +3303,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
     p->setBrush(Qt::NoBrush);
 
     qreal m = spatium();
-    QRectF r = canvasBoundingRect().adjusted(-m, -m, m, m);
+    RectF r = canvasBoundingRect().adjusted(-m, -m, m, m);
 //      qDebug("%f %f %f %f\n", r.x(), r.y(), r.width(), r.height());
 
     p->drawRect(r);

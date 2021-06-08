@@ -28,6 +28,8 @@
 #include "part.h"
 #include "undo.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   longInstrumentStyle

@@ -46,7 +46,7 @@
 #include "xml.h"
 #include "spanner.h"
 
-using namespace mu::draw;
+using namespace mu;
 
 namespace Ms {
 static const ElementStyle beamStyle {
@@ -97,8 +97,8 @@ Beam::Beam(const Beam& b)
 {
     _elements     = b._elements;
     _id           = b._id;
-    for (const QLineF* bs : b.beamSegments) {
-        beamSegments.append(new QLineF(*bs));
+    for (const LineF* bs : b.beamSegments) {
+        beamSegments.append(new LineF(*bs));
     }
     _direction       = b._direction;
     _up              = b._up;
@@ -139,23 +139,23 @@ Beam::~Beam()
 //   pagePos
 //---------------------------------------------------------
 
-QPointF Beam::pagePos() const
+PointF Beam::pagePos() const
 {
     System* s = system();
     if (s == 0) {
         return pos();
     }
     qreal yp = y() + s->staff(staffIdx())->y() + s->y();
-    return QPointF(pageX(), yp);
+    return PointF(pageX(), yp);
 }
 
 //---------------------------------------------------------
 //   canvasPos
 //---------------------------------------------------------
 
-QPointF Beam::canvasPos() const
+PointF Beam::canvasPos() const
 {
-    QPointF p(pagePos());
+    PointF p(pagePos());
     if (system() && system()->parent()) {
         p += system()->parent()->pos();
     }
@@ -240,14 +240,14 @@ void Beam::draw(mu::draw::Painter* painter) const
     // make beam thickness independent of slant
     // (expression can be simplified?)
 
-    const QLineF* bs = beamSegments.front();
+    const LineF* bs = beamSegments.front();
     double d  = (qAbs(bs->y2() - bs->y1())) / (bs->x2() - bs->x1());
     if (beamSegments.size() > 1 && d > M_PI / 6.0) {
         d = M_PI / 6.0;
     }
     double ww = lw2 / sin(M_PI_2 - atan(d));
 
-    for (const QLineF* bs1 : beamSegments) {
+    for (const LineF* bs1 : beamSegments) {
         painter->drawPolygon(
             PolygonF({
                 PointF(bs1->x1(), bs1->y1() - ww),
@@ -265,7 +265,7 @@ void Beam::draw(mu::draw::Painter* painter) const
 
 bool Beam::isNoSlope() const
 {
-    QPointF currentBeamPos = beamPos();
+    PointF currentBeamPos = beamPos();
 
     return qFuzzyCompare(currentBeamPos.x(), currentBeamPos.y());
 }
@@ -276,7 +276,7 @@ bool Beam::isNoSlope() const
 
 void Beam::alignBeamPosition()
 {
-    QPointF currentBeamPos = beamPos();
+    PointF currentBeamPos = beamPos();
 
     qreal currentX = currentBeamPos.x();
     qreal currentY = currentBeamPos.y();
@@ -284,9 +284,9 @@ void Beam::alignBeamPosition()
     qreal maxValue = qMax(qAbs(currentX), qAbs(currentY));
 
     if (qFuzzyCompare(qAbs(currentX), maxValue)) {
-        setBeamPos(QPointF(currentX, currentX));
+        setBeamPos(PointF(currentX, currentX));
     } else {
-        setBeamPos(QPointF(currentY, currentY));
+        setBeamPos(PointF(currentY, currentY));
     }
 }
 
@@ -294,10 +294,10 @@ void Beam::alignBeamPosition()
 //   move
 //---------------------------------------------------------
 
-void Beam::move(const QPointF& offset)
+void Beam::move(const PointF& offset)
 {
     Element::move(offset);
-    for (QLineF* bs : qAsConst(beamSegments)) {
+    for (mu::LineF* bs : qAsConst(beamSegments)) {
         bs->translate(offset);
     }
 }
@@ -605,7 +605,7 @@ void Beam::layout()
         }
         crl.push_back(cr);
     }
-    setbbox(QRectF());
+    setbbox(RectF());
     if (!crl.empty()) {
         SpannerSegmentType st;
         if (n == 0) {
@@ -621,15 +621,15 @@ void Beam::layout()
         qreal lw2      = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
 //            ChordRest* cr  = crl.front();
 //            Shape& s       = cr->segment()->shape(staffIdx());
-//            QPointF offset = cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
+//            PointF offset = cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
 
-        for (const QLineF* bs : qAsConst(beamSegments)) {
-            QPolygonF a(4);
-            a[0] = QPointF(bs->x1(), bs->y1());
-            a[1] = QPointF(bs->x2(), bs->y2());
-            a[2] = QPointF(bs->x2(), bs->y2());
-            a[3] = QPointF(bs->x1(), bs->y1());
-            QRectF r(a.boundingRect().adjusted(0.0, -lw2, 0.0, lw2));
+        for (const LineF* bs : qAsConst(beamSegments)) {
+            PolygonF a(4);
+            a[0] = PointF(bs->x1(), bs->y1());
+            a[1] = PointF(bs->x2(), bs->y2());
+            a[2] = PointF(bs->x2(), bs->y2());
+            a[3] = PointF(bs->x1(), bs->y1());
+            RectF r(a.boundingRect().adjusted(0.0, -lw2, 0.0, lw2));
 //TODO                  s.add(r.translated(-offset));
             addbbox(r);
         }
@@ -1175,12 +1175,12 @@ static int adjust(qreal _spatium4, int slant, const std::vector<ChordRest*>& cl)
     const ChordRest* c1 = cl[0];
     const ChordRest* c2 = cl[n - 1];
 
-    QPointF p1(c1->stemPosBeam());     // canvas coordinates
+    PointF p1(c1->stemPosBeam());     // canvas coordinates
     qreal slope = (slant * _spatium4) / (c2->stemPosBeam().x() - p1.x());
     int ml = -1000;
     if (c1->up()) {
         for (size_t i = 1; i < n; ++i) {
-            QPointF p3(cl[i]->stemPosBeam());
+            PointF p3(cl[i]->stemPosBeam());
             qreal yUp   = p1.y() + (p3.x() - p1.x()) * slope;
             int l       = lrint((yUp - p3.y()) / (_spatium4));
             ml          = qMax(ml, l);
@@ -1188,7 +1188,7 @@ static int adjust(qreal _spatium4, int slant, const std::vector<ChordRest*>& cl)
     } else {
         for (size_t i = 1; i < n; ++i) {
             const ChordRest* c = cl[i];
-            QPointF p3(c->stemPosBeam());
+            PointF p3(c->stemPosBeam());
             qreal yUp   = p1.y() + (p3.x() - p1.x()) * slope;
             int l       = lrint((p3.y() - yUp) / (_spatium4));
             ml          = qMax(ml, l);
@@ -1591,7 +1591,7 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
     // Ensure the resulting stem lengths are not less than a reasonable minimum
     qreal firstStemLenPoints = bm.l * _spStaff4;
     const qreal sgn = (firstStemLenPoints < 0 ? -1.0 : 1.0);
-    const QPointF p1 = cl[0]->stemPosBeam();
+    const PointF p1 = cl[0]->stemPosBeam();
     bool small = true;
     for (const ChordRest* cr : cl) {
         if (cr->isChord()) {
@@ -1601,7 +1601,7 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
 
             const qreal minAbsLen = toChord(cr)->minAbsStemLength();
 
-            const QPointF p2 = cr->stemPosBeam();
+            const PointF p2 = cr->stemPosBeam();
 
             const qreal crStemAbsLen = std::abs((p2.x() - p1.x()) * slope - p2.y() + p1.y() + firstStemLenPoints);
 
@@ -1651,7 +1651,7 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
     qreal& py2      = f->py2[dIdx];
 
     qreal _spatium   = spatium();
-    QPointF _pagePos(pagePos());
+    PointF _pagePos(pagePos());
     qreal beamMinLen = score()->styleP(Sid::beamMinLen) * mag();
 
     if (beamLevels == 4) {
@@ -1701,7 +1701,7 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
                     continue;
                 }
                 Chord* c = toChord(cr);
-                QPointF p = c->upNote()->pagePos();
+                PointF p = c->upNote()->pagePos();
                 qreal y1  = beamY + (p.x() - px1) * slope;
                 bool nup  = y1 < p.y();
                 if (c->up() != nup) {
@@ -2051,7 +2051,7 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
                 || !qIsFinite(x3) || !qIsFinite(ly2)) {
                 qDebug("bad beam segment: slope %f", slope);
             } else {
-                beamSegments.push_back(new QLineF(x2, ly1, x3, ly2));
+                beamSegments.push_back(new LineF(x2, ly1, x3, ly2));
             }
         }
     }
@@ -2068,7 +2068,7 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
             score()->undoRemoveElement(c->hook());
         }
 
-        QPointF stemPos(c->stemPosX() + c->pagePos().x(), c->stemPos().y());
+        PointF stemPos(c->stemPosX() + c->pagePos().x(), c->stemPos().y());
         qreal x2   = stemPos.x() - _pagePos.x();
         qreal y1   = (x2 - x1) * slope + py1 + _pagePos.y();
         qreal y2   = stemPos.y();
@@ -2076,7 +2076,7 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
         qreal fuzz = _spatium * .4;       // something is wrong
 
         qreal by = y2 < y1 ? -1000000 : 1000000;
-        for (const QLineF* l : qAsConst(beamSegments)) {
+        for (const LineF* l : qAsConst(beamSegments)) {
             if ((x2 + fuzz) >= l->x1() && (x2 - fuzz) <= l->x2()) {
                 qreal y = (x2 - l->x1()) * slope + l->y1();
                 by = y2 < y1 ? qMax(by, y) : qMin(by, y);
@@ -2277,7 +2277,7 @@ void Beam::editDrag(EditData& ed)
     // Because of the logic in Beam::setProperty(),
     // changing Pid::BEAM_POS only has an effect if Pid::USER_MODIFIED is true.
     undoChangeProperty(Pid::USER_MODIFIED, true);
-    undoChangeProperty(Pid::BEAM_POS, QPointF(y1 / _spatium, y2 / _spatium));
+    undoChangeProperty(Pid::BEAM_POS, PointF(y1 / _spatium, y2 / _spatium));
     undoChangeProperty(Pid::GENERATED, false);
 
     triggerLayout();
@@ -2287,7 +2287,7 @@ void Beam::editDrag(EditData& ed)
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<QPointF> Beam::gripsPositions(const EditData& ed) const
+std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
 {
     int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
     BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
@@ -2298,7 +2298,7 @@ std::vector<QPointF> Beam::gripsPositions(const EditData& ed) const
     int n = _elements.size();
 
     if (n == 0) {
-        return std::vector<QPointF>();
+        return std::vector<PointF>();
     }
 
     for (int i = 0; i < n; ++i) {
@@ -2326,9 +2326,9 @@ std::vector<QPointF> Beam::gripsPositions(const EditData& ed) const
     qreal middleY = (f->py1[idx] + y + f->py2[idx] + y) / 2;
 
     return {
-        QPointF(c1->stemPosX() + c1->pageX(), f->py1[idx] + y),
-        QPointF(c2->stemPosX() + c2->pageX(), f->py2[idx] + y),
-        QPointF(middleX, middleY)
+        PointF(c1->stemPosX() + c1->pageX(), f->py1[idx] + y),
+        PointF(c2->stemPosX() + c2->pageX(), f->py2[idx] + y),
+        PointF(middleX, middleY)
     };
 }
 
@@ -2371,7 +2371,7 @@ void Beam::reset()
         undoChangeProperty(Pid::GROW_RIGHT, 1.0);
     }
     if (userModified()) {
-        undoChangeProperty(Pid::BEAM_POS, QVariant(beamPos()));
+        undoChangeProperty(Pid::BEAM_POS, QVariant::fromValue(beamPos()));
         undoChangeProperty(Pid::USER_MODIFIED, false);
     }
     undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
@@ -2443,25 +2443,25 @@ Element* Beam::drop(EditData& data)
 
 //---------------------------------------------------------
 //   beamPos
-//    misuse QPointF for y1-y2 real values
+//    misuse PointF for y1-y2 real values
 //---------------------------------------------------------
 
-QPointF Beam::beamPos() const
+PointF Beam::beamPos() const
 {
     if (fragments.empty()) {
-        return QPointF(0.0, 0.0);
+        return PointF(0.0, 0.0);
     }
     BeamFragment* f = fragments.back();
     int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
     qreal _spatium = spatium();
-    return QPointF(f->py1[idx] / _spatium, f->py2[idx] / _spatium);
+    return PointF(f->py1[idx] / _spatium, f->py2[idx] / _spatium);
 }
 
 //---------------------------------------------------------
 //   setBeamPos
 //---------------------------------------------------------
 
-void Beam::setBeamPos(const QPointF& bp)
+void Beam::setBeamPos(const PointF& bp)
 {
     if (fragments.empty()) {
         fragments.append(new BeamFragment);
@@ -2507,7 +2507,7 @@ QVariant Beam::getProperty(Pid propertyId) const
     case Pid::GROW_LEFT:      return growLeft();
     case Pid::GROW_RIGHT:     return growRight();
     case Pid::USER_MODIFIED:  return userModified();
-    case Pid::BEAM_POS:       return beamPos();
+    case Pid::BEAM_POS:       return QVariant::fromValue(beamPos());
     case Pid::BEAM_NO_SLOPE:  return isNoSlope();
     default:
         return Element::getProperty(propertyId);
@@ -2538,7 +2538,7 @@ bool Beam::setProperty(Pid propertyId, const QVariant& v)
         break;
     case Pid::BEAM_POS:
         if (userModified()) {
-            setBeamPos(v.toPointF());
+            setBeamPos(v.value<PointF>());
         }
         break;
     case Pid::BEAM_NO_SLOPE:
@@ -2570,8 +2570,8 @@ QVariant Beam::propertyDefault(Pid id) const
     case Pid::GROW_LEFT:      return 1.0;
     case Pid::GROW_RIGHT:     return 1.0;
     case Pid::USER_MODIFIED:  return false;
-    case Pid::BEAM_POS:       return beamPos();
-    default:                   return Element::propertyDefault(id);
+    case Pid::BEAM_POS:       return QVariant::fromValue(beamPos());
+    default:                  return Element::propertyDefault(id);
     }
 }
 
@@ -2586,7 +2586,7 @@ void Beam::addSkyline(Skyline& sk)
         return;
     }
     qreal lw2 = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
-    const QLineF* bs = beamSegments.front();
+    const LineF* bs = beamSegments.front();
     double d  = (qAbs(bs->y2() - bs->y1())) / (bs->x2() - bs->x1());
     if (beamSegments.size() > 1 && d > M_PI / 6.0) {
         d = M_PI / 6.0;
@@ -2594,7 +2594,7 @@ void Beam::addSkyline(Skyline& sk)
     double ww      = lw2 / sin(M_PI_2 - atan(d));
     qreal _spatium = spatium();
 
-    for (const QLineF* beamSegment : qAsConst(beamSegments)) {
+    for (const LineF* beamSegment : qAsConst(beamSegments)) {
         qreal x = beamSegment->x1();
         qreal y = beamSegment->y1();
         qreal w = beamSegment->x2() - x;
@@ -2681,7 +2681,7 @@ IconType Beam::iconType(Mode mode)
 //   drag
 //---------------------------------------------------------
 
-QRectF Beam::drag(EditData& ed)
+RectF Beam::drag(EditData& ed)
 {
     int idx  = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
     qreal dy = ed.pos.y() - ed.lastPos.y();
@@ -2698,7 +2698,7 @@ QRectF Beam::drag(EditData& ed)
     // Because of the logic in Beam::setProperty(),
     // changing Pid::BEAM_POS only has an effect if Pid::USER_MODIFIED is true.
     undoChangeProperty(Pid::USER_MODIFIED, true);
-    undoChangeProperty(Pid::BEAM_POS, QPointF(y1 / _spatium, y2 / _spatium));
+    undoChangeProperty(Pid::BEAM_POS, PointF(y1 / _spatium, y2 / _spatium));
     undoChangeProperty(Pid::GENERATED, false);
 
     triggerLayout();
@@ -2724,7 +2724,7 @@ void Beam::initBeamEditData(EditData& ed)
     bed->editFragment = 0;
     ed.addData(bed);
 
-    QPointF pt(ed.normalizedStartMove - pagePos());
+    PointF pt(ed.normalizedStartMove - pagePos());
     qreal ydiff = 100000000.0;
     int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
     int i = 0;

@@ -36,6 +36,8 @@
 
 #include "draw/fontmetrics.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   TBox
@@ -69,7 +71,7 @@ TBox::~TBox()
 
 void TBox::layout()
 {
-    setPos(QPointF());        // !?
+    setPos(PointF());        // !?
     bbox().setRect(0.0, 0.0, system()->width(), 0);
     _text->layout();
 

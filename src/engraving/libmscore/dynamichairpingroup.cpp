@@ -26,6 +26,8 @@
 #include "score.h"
 #include "segment.h"
 
+using namespace mu;
+
 namespace Ms {
 static std::pair<Hairpin*, Hairpin*> findAdjacentHairpins(Dynamic* d)
 {
@@ -112,16 +114,16 @@ void HairpinWithDynamicsDragGroup::startDrag(EditData& ed)
     }
 }
 
-QRectF HairpinWithDynamicsDragGroup::drag(EditData& ed)
+mu::RectF HairpinWithDynamicsDragGroup::drag(EditData& ed)
 {
-    QRectF r;
+    RectF r;
 
     if (startDynamic) {
-        r |= static_cast<Element*>(startDynamic)->drag(ed);
+        r.unite(static_cast<Element*>(startDynamic)->drag(ed));
     }
-    r |= hairpinSegment->drag(ed);
+    r.unite(hairpinSegment->drag(ed));
     if (endDynamic) {
-        r |= static_cast<Element*>(endDynamic)->drag(ed);
+        r.unite(static_cast<Element*>(endDynamic)->drag(ed));
     }
 
     Hairpin* h = hairpinSegment->hairpin();
@@ -183,9 +185,9 @@ void DynamicNearHairpinsDragGroup::startDrag(EditData& ed)
     dynamic->startDrag(ed);
 }
 
-QRectF DynamicNearHairpinsDragGroup::drag(EditData& ed)
+RectF DynamicNearHairpinsDragGroup::drag(EditData& ed)
 {
-    QRectF r(static_cast<Element*>(dynamic)->drag(ed));
+    RectF r(static_cast<Element*>(dynamic)->drag(ed));
 
     const Fraction tick = dynamic->segment()->tick();
 

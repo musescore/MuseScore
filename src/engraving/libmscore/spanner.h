@@ -49,8 +49,8 @@ class SpannerSegment : public Element
     SpannerSegmentType _spannerSegmentType;
 
 protected:
-    QPointF _p2;
-    QPointF _offset2;
+    mu::PointF _p2;
+    mu::PointF _offset2;
 
 public:
     SpannerSegment(Spanner*, Score*, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
@@ -80,24 +80,24 @@ public:
     void setSystem(System* s);
     System* system() const { return toSystem(parent()); }
 
-    const QPointF& userOff2() const { return _offset2; }
-    void setUserOff2(const QPointF& o) { _offset2 = o; }
+    const mu::PointF& userOff2() const { return _offset2; }
+    void setUserOff2(const mu::PointF& o) { _offset2 = o; }
     void setUserXoffset2(qreal x) { _offset2.setX(x); }
     qreal& rUserXoffset2() { return _offset2.rx(); }
     qreal& rUserYoffset2() { return _offset2.ry(); }
 
-    void setPos2(const QPointF& p) { _p2 = p; }
+    void setPos2(const mu::PointF& p) { _p2 = p; }
     //TODO: rename to spanSegPosWithUserOffset()
-    QPointF pos2() const { return _p2 + _offset2; }
+    mu::PointF pos2() const { return _p2 + _offset2; }
     //TODO: rename to spanSegPos()
-    const QPointF& ipos2() const { return _p2; }
-    QPointF& rpos2() { return _p2; }
+    const mu::PointF& ipos2() const { return _p2; }
+    mu::PointF& rpos2() { return _p2; }
     qreal& rxpos2() { return _p2.rx(); }
     qreal& rypos2() { return _p2.ry(); }
 
     virtual bool isEditable() const override { return true; }
 
-    QByteArray mimeData(const QPointF& dragOffset) const override;
+    QByteArray mimeData(const mu::PointF& dragOffset) const override;
 
     virtual void spatiumChanged(qreal ov, qreal nv) override;
 

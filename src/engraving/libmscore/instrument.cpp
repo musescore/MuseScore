@@ -37,6 +37,8 @@
 #include "framework/midi_old/midipatch.h"
 #include "log.h"
 
+using namespace mu;
+
 namespace Ms {
 //: Channel name for otherwise unamed channels
 const char* Channel::DEFAULT_NAME = QT_TRANSLATE_NOOP("InstrumentsXML", "normal");

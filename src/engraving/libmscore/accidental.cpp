@@ -31,7 +31,7 @@
 #include "undo.h"
 #include "xml.h"
 
-using namespace mu::draw;
+using namespace mu;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -376,7 +376,7 @@ void Accidental::layout()
     // TODO: remove Accidental in layout()
     // don't show accidentals for tab or slash notation
     if (onTabStaff() || (note() && note()->fixed())) {
-        setbbox(QRectF());
+        setbbox(RectF());
         return;
     }
 
@@ -403,7 +403,7 @@ void Accidental::layout()
 
 void Accidental::layoutSingleGlyphAccidental()
 {
-    QRectF r;
+    RectF r;
 
     SymId s = symbol();
     if (_bracket == AccidentalBracket::PARENTHESIS) {
@@ -434,14 +434,14 @@ void Accidental::layoutSingleGlyphAccidental()
 
     SymElement e(s, 0.0, 0.0);
     el.append(e);
-    r |= symBbox(s);
+    r.unite(symBbox(s));
     setbbox(r);
 }
 
 void Accidental::layoutMultiGlyphAccidental()
 {
     qreal margin = score()->styleP(Sid::bracketedAccidentalPadding);
-    QRectF r;
+    RectF r;
     qreal x = 0.0;
 
     // should always be true
@@ -462,14 +462,14 @@ void Accidental::layoutMultiGlyphAccidental()
         }
         SymElement se(id, 0.0, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
         el.append(se);
-        r |= symBbox(id);
+        r.unite(symBbox(id));
         x += symAdvance(id) + margin;
     }
 
     SymId s = symbol();
     SymElement e(s, x, 0.0);
     el.append(e);
-    r |= symBbox(s).translated(x, 0.0);
+    r.unite(symBbox(s).translated(x, 0.0));
 
     // should always be true
     if (_bracket != AccidentalBracket::NONE) {
@@ -490,7 +490,7 @@ void Accidental::layoutMultiGlyphAccidental()
         }
         SymElement se(id, x, _bracket == AccidentalBracket::BRACE ? spatium() * 0.4 : 0.0);
         el.append(se);
-        r |= symBbox(id).translated(x, 0.0);
+        r.unite(symBbox(id).translated(x, 0.0));
     }
     setbbox(r);
 }

@@ -34,6 +34,8 @@
 #include "textedit.h"
 #include "measure.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   lyricsElementStyle
@@ -115,7 +117,7 @@ void Lyrics::read(XmlReader& e)
         // 3.0: y offset was meaningless if autoplace is set
         QString version = masterScore()->mscoreVersion();
         if (autoplace() && !version.isEmpty() && version < "3.1") {
-            QPointF off = propertyDefault(Pid::OFFSET).toPointF();
+            PointF off = propertyDefault(Pid::OFFSET).value<PointF>();
             ryoffset() = off.y();
         }
     }
@@ -242,7 +244,7 @@ bool Lyrics::isMelisma() const
 void Lyrics::layout()
 {
     if (!parent()) {   // palette & clone trick
-        setPos(QPointF());
+        setPos(PointF());
         TextBase::layout1();
         return;
     }
@@ -304,7 +306,7 @@ void Lyrics::layout()
         }
     }
 
-    QPointF o(propertyDefault(Pid::OFFSET).toPointF());
+    PointF o(propertyDefault(Pid::OFFSET).value<PointF>());
     rxpos() = o.x();
     qreal x = pos().x();
     TextBase::layout1();
@@ -391,10 +393,10 @@ void Lyrics::layout2(int nAbove)
     if (placeBelow()) {
         qreal yo = segment()->measure()->system()->staff(staffIdx())->bbox().height();
         rypos()  = lh * (_no - nAbove) + yo - chordRest()->y();
-        rpos()  += styleValue(Pid::OFFSET, Sid::lyricsPosBelow).toPointF();
+        rpos()  += styleValue(Pid::OFFSET, Sid::lyricsPosBelow).value<PointF>();
     } else {
         rypos() = -lh * (nAbove - _no - 1) - chordRest()->y();
-        rpos() += styleValue(Pid::OFFSET, Sid::lyricsPosAbove).toPointF();
+        rpos() += styleValue(Pid::OFFSET, Sid::lyricsPosAbove).value<PointF>();
     }
 }
 
@@ -672,8 +674,8 @@ void Lyrics::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
         } else {
             // unsetting autoplace
             // rebase offset
-            QPointF off = offset();
-            qreal y = pos().y() - propertyDefault(Pid::OFFSET).toPointF().y();
+            PointF off = offset();
+            qreal y = pos().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
             off.ry() = placeAbove() ? y : y - staff()->height();
             undoChangeProperty(Pid::OFFSET, off, PropertyFlags::UNSTYLED);
         }

@@ -38,6 +38,8 @@
 #include "utils.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   LineSegment
@@ -61,7 +63,7 @@ bool LineSegment::readProperties(XmlReader& e)
         setUserOff2(e.readPoint() * score()->spatium());
     }
 /*      else if (tag == "pos") {
-            setOffset(QPointF());
+            setOffset(PointF());
             e.readNext();
             }
       */
@@ -87,10 +89,10 @@ void LineSegment::read(XmlReader& e)
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<QPointF> LineSegment::gripsPositions(const EditData&) const
+std::vector<PointF> LineSegment::gripsPositions(const EditData&) const
 {
-    std::vector<QPointF> grips(gripsCount());
-    QPointF pp(pagePos());
+    std::vector<PointF> grips(gripsCount());
+    PointF pp(pagePos());
     grips[int(Grip::START)] = pp;
     grips[int(Grip::END)] = pos2() + pp;
     grips[int(Grip::MIDDLE)] = pos2() * .5 + pp;
@@ -101,13 +103,13 @@ std::vector<QPointF> LineSegment::gripsPositions(const EditData&) const
 //   leftAnchorPosition
 //---------------------------------------------------------
 
-QPointF LineSegment::leftAnchorPosition(const qreal& systemPositionY) const
+PointF LineSegment::leftAnchorPosition(const qreal& systemPositionY) const
 {
     if (isMiddleType() || isEndType()) {
-        return QPointF(system()->firstMeasure()->abbox().left(), systemPositionY);
+        return PointF(system()->firstMeasure()->abbox().left(), systemPositionY);
     }
 
-    QPointF result;
+    PointF result;
 
     System* s;
     result = line()->linePos(Grip::START, &s);
@@ -123,13 +125,13 @@ QPointF LineSegment::leftAnchorPosition(const qreal& systemPositionY) const
 //   rightAnchorPosition
 //---------------------------------------------------------
 
-QPointF LineSegment::rightAnchorPosition(const qreal& systemPositionY) const
+PointF LineSegment::rightAnchorPosition(const qreal& systemPositionY) const
 {
     if (isMiddleType() || isBeginType()) {
-        return QPointF(system()->lastMeasure()->abbox().right(), systemPositionY);
+        return PointF(system()->lastMeasure()->abbox().right(), systemPositionY);
     }
 
-    QPointF result;
+    PointF result;
 
     System* s;
     result = line()->linePos(Grip::END, &s);
@@ -146,9 +148,9 @@ QPointF LineSegment::rightAnchorPosition(const qreal& systemPositionY) const
 //    return page coordinates
 //---------------------------------------------------------
 
-QVector<QLineF> LineSegment::gripAnchorLines(Grip grip) const
+QVector<LineF> LineSegment::gripAnchorLines(Grip grip) const
 {
-    QVector<QLineF> result;
+    QVector<LineF> result;
 
     // Middle or aperture grip have no anchor
     if (!system() || grip == Grip::APERTURE) {
@@ -172,17 +174,17 @@ QVector<QLineF> LineSegment::gripAnchorLines(Grip grip) const
     }
 
     const Page* p = system()->page();
-    const QPointF pageOffset = p ? p->pos() : QPointF();
+    const PointF pageOffset = p ? p->pos() : PointF();
     switch (grip) {
     case Grip::START:
-        result << QLineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset);
+        result << LineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset);
         break;
     case Grip::END:
-        result << QLineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset);
+        result << LineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset);
         break;
     case Grip::MIDDLE:
-        result << QLineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset);
-        result << QLineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset);
+        result << LineF(leftAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::START))).translated(pageOffset);
+        result << LineF(rightAnchorPosition(y), gripsPositions().at(static_cast<int>(Grip::END))).translated(pageOffset);
         break;
     default:
         break;
@@ -413,7 +415,7 @@ bool LineSegment::edit(EditData& ed)
 //   findSegmentForGrip
 //---------------------------------------------------------
 
-Segment* LineSegment::findSegmentForGrip(Grip grip, QPointF pos) const
+Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
 {
     if (grip != Grip::START && grip != Grip::END) {
         return nullptr;
@@ -449,10 +451,10 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, QPointF pos) const
 ///   Helper function for anchors rebasing when dragging.
 //---------------------------------------------------------
 
-QPointF LineSegment::deltaRebaseLeft(const Segment* oldSeg, const Segment* newSeg)
+PointF LineSegment::deltaRebaseLeft(const Segment* oldSeg, const Segment* newSeg)
 {
     if (oldSeg == newSeg) {
-        return QPointF();
+        return PointF();
     }
     return oldSeg->canvasPos() - newSeg->canvasPos();
 }
@@ -462,14 +464,14 @@ QPointF LineSegment::deltaRebaseLeft(const Segment* oldSeg, const Segment* newSe
 ///   Helper function for anchors rebasing when dragging.
 //---------------------------------------------------------
 
-QPointF LineSegment::deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg, int staffIndex)
+PointF LineSegment::deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg, int staffIndex)
 {
     if (oldSeg == newSeg) {
-        return QPointF();
+        return PointF();
     }
 
-    const QPointF oldBase = oldSeg->canvasPos() + QPointF(oldSeg->width(), 0);
-    const QPointF newBase = newSeg->canvasPos() + QPointF(newSeg->widthInStaff(staffIndex), 0);
+    const PointF oldBase = oldSeg->canvasPos() + PointF(oldSeg->width(), 0);
+    const PointF newBase = newSeg->canvasPos() + PointF(newSeg->widthInStaff(staffIndex), 0);
     return oldBase - newBase;
 }
 
@@ -544,7 +546,7 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
         l->layout();
         return left ? l->frontSegment() : l->backSegment();
     } else if (anchorChanged) {
-        const QPointF delta = left ? deltaRebaseLeft(oldSeg, newSeg) : deltaRebaseRight(oldSeg, newSeg, track2staff(l->effectiveTrack2()));
+        const PointF delta = left ? deltaRebaseLeft(oldSeg, newSeg) : deltaRebaseRight(oldSeg, newSeg, track2staff(l->effectiveTrack2()));
         if (left) {
             setOffset(offset() + delta);
             _offset2 -= delta;
@@ -598,9 +600,9 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
                 // Reset offset for the old line segment
                 if (left) {
                     _offset2.rx() -= offset().x();
-                    setOffset(QPointF());
+                    setOffset(PointF());
                 } else {
-                    setUserOff2(QPointF());
+                    setUserOff2(PointF());
                 }
 
                 // Switch to dragging the new line segment
@@ -609,12 +611,12 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
 
             // Set offset for the new line segment for grip to appear under the mouse cursor
             System* sys;
-            const QPointF lp = line()->linePos(grip, &sys);
+            const PointF lp = line()->linePos(grip, &sys);
             const qreal xoff = sys->mapFromCanvas(ed.pos).x() - lp.x();
 
             if (left) {
                 newLineSegment->rxoffset() = xoff;
-                newLineSegment->setUserOff2(QPointF(-xoff, 0.0));
+                newLineSegment->setUserOff2(PointF(-xoff, 0.0));
             } else {
                 newLineSegment->setUserXoffset2(xoff);
             }
@@ -634,7 +636,7 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
         // system changes, but that seems OK when dragging the entire line:
         // the line will just push away other systems according to autoplacement
         // rules if necessary.
-        QPointF cpos = canvasPos();
+        PointF cpos = canvasPos();
         cpos.setY(l->startSegment()->system()->staffCanvasYpage(l->staffIdx()));           // prevent cross-system move
 
         Segment* seg1 = findSegmentForGrip(Grip::START, cpos);
@@ -659,7 +661,7 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
 void LineSegment::editDrag(EditData& ed)
 {
     // Only for resizing according to the diagonal properties
-    const QPointF deltaResize(ed.evtDelta.x(), line()->diagonal() ? ed.evtDelta.y() : 0.0);
+    const PointF deltaResize(ed.evtDelta.x(), line()->diagonal() ? ed.evtDelta.y() : 0.0);
 
     switch (ed.curGrip) {
     case Grip::START:         // Resize the begin of element (left grip)
@@ -678,7 +680,7 @@ void LineSegment::editDrag(EditData& ed)
         break;
     case Grip::MIDDLE: {         // Move the element (middle grip)
         // Only for moving, no y limitation
-        const QPointF deltaMove(ed.evtDelta);
+        const PointF deltaMove(ed.evtDelta);
         setOffset(offset() + deltaMove);
         setOffsetChanged(true);
         if (isStyled(Pid::OFFSET)) {
@@ -759,12 +761,12 @@ Element* LineSegment::propertyDelegate(Pid pid)
 //   dragAnchorLines
 //---------------------------------------------------------
 
-QVector<QLineF> LineSegment::dragAnchorLines() const
+QVector<LineF> LineSegment::dragAnchorLines() const
 {
     return gripAnchorLines(Grip::MIDDLE);
 }
 
-QRectF LineSegment::drag(EditData& ed)
+RectF LineSegment::drag(EditData& ed)
 {
     setOffset(offset() + ed.evtDelta);
     setOffsetChanged(true);
@@ -808,7 +810,7 @@ SLine::SLine(const SLine& s)
 ///   - Other:         return (x position in system coordinates, 0)
 //---------------------------------------------------------
 
-QPointF SLine::linePos(Grip grip, System** sys) const
+PointF SLine::linePos(Grip grip, System** sys) const
 {
     qreal x = 0.0;
     qreal sp = staff() ? staff()->spatium(tick()) : 0;
@@ -1043,20 +1045,20 @@ QPointF SLine::linePos(Grip grip, System** sys) const
     case Spanner::Anchor::NOTE: {
         Element* e = grip == Grip::START ? startElement() : endElement();
         if (!e) {
-            return QPointF();
+            return PointF();
         }
         Note* n = toNote(e);
         System* s = n->chord()->segment()->system();
         if (s == 0) {
             qDebug("no system: %s  start %s chord parent %s\n", name(), n->name(), n->chord()->parent()->name());
-            return QPointF();
+            return PointF();
         }
         *sys = s;
         // return the position of the anchor note relative to the system
-//                  QPointF     elemPagePos = e->pagePos();                   // DEBUG
-//                  QPointF     systPagePos = s->pagePos();
+//                  PointF     elemPagePos = e->pagePos();                   // DEBUG
+//                  PointF     systPagePos = s->pagePos();
 //                  qreal       staffYPage  = s->staffYpage(e->staffIdx());
-        QPointF p = n->pagePos() - s->pagePos();
+        PointF p = n->pagePos() - s->pagePos();
         if (!isGlissando()) {
             p.rx() += n->headWidth() * 0.5;
         }
@@ -1067,7 +1069,7 @@ QPointF SLine::linePos(Grip grip, System** sys) const
         qFatal("Sline::linePos(): anchor not implemented");
         break;
     }
-    return QPointF(x, 0.0);
+    return PointF(x, 0.0);
 }
 
 //---------------------------------------------------------
@@ -1105,37 +1107,37 @@ SpannerSegment* SLine::layoutSystem(System* system)
     switch (sst) {
     case SpannerSegmentType::SINGLE: {
         System* s;
-        QPointF p1 = linePos(Grip::START, &s);
-        QPointF p2 = linePos(Grip::END,   &s);
+        PointF p1 = linePos(Grip::START, &s);
+        PointF p2 = linePos(Grip::END,   &s);
         qreal len = p2.x() - p1.x();
         lineSegm->setPos(p1);
-        lineSegm->setPos2(QPointF(len, p2.y() - p1.y()));
+        lineSegm->setPos2(PointF(len, p2.y() - p1.y()));
     }
     break;
     case SpannerSegmentType::BEGIN: {
         System* s;
-        QPointF p1 = linePos(Grip::START, &s);
+        PointF p1 = linePos(Grip::START, &s);
         lineSegm->setPos(p1);
         qreal x2 = system->bbox().right();
-        lineSegm->setPos2(QPointF(x2 - p1.x(), 0.0));
+        lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
     }
     break;
     case SpannerSegmentType::MIDDLE: {
         qreal x1 = system->firstNoteRestSegmentX(true);
         qreal x2 = system->bbox().right();
         System* s;
-        QPointF p1 = linePos(Grip::START, &s);
-        lineSegm->setPos(QPointF(x1, p1.y()));
-        lineSegm->setPos2(QPointF(x2 - x1, 0.0));
+        PointF p1 = linePos(Grip::START, &s);
+        lineSegm->setPos(PointF(x1, p1.y()));
+        lineSegm->setPos2(PointF(x2 - x1, 0.0));
     }
     break;
     case SpannerSegmentType::END: {
         System* s;
-        QPointF p2 = linePos(Grip::END,   &s);
+        PointF p2 = linePos(Grip::END,   &s);
         qreal x1 = system->firstNoteRestSegmentX(true);
         qreal len = p2.x() - x1;
-        lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
-        lineSegm->setPos2(QPointF(len, 0.0));
+        lineSegm->setPos(PointF(p2.x() - len, p2.y()));
+        lineSegm->setPos2(PointF(len, 0.0));
     }
     break;
     }
@@ -1172,8 +1174,8 @@ void SLine::layout()
 
     System* s1;
     System* s2;
-    QPointF p1(linePos(Grip::START, &s1));
-    QPointF p2(linePos(Grip::END,   &s2));
+    PointF p1(linePos(Grip::START, &s1));
+    PointF p2(linePos(Grip::END,   &s2));
 
     const QList<System*>& systems = score()->systems();
     int sysIdx1 = systems.indexOf(s1);
@@ -1200,9 +1202,9 @@ void SLine::layout()
                 LineSegment* lineSegm = segmentAt(i);
                 // set user offset to previous segment's offset
                 if (segCount > 0) {
-                    lineSegm->setOffset(QPointF(0, segmentAt(i - 1)->offset().y()));
+                    lineSegm->setOffset(PointF(0, segmentAt(i - 1)->offset().y()));
                 } else {
-                    lineSegm->setOffset(QPointF(0, offset().y()));
+                    lineSegm->setOffset(PointF(0, offset().y()));
                 }
             }
         }
@@ -1227,28 +1229,28 @@ void SLine::layout()
             //if (anchor() == Anchor::SEGMENT && type() != ElementType::PEDAL)
             //      len = qMax(1.0 * spatium(), len);
             lineSegm->setPos(p1);
-            lineSegm->setPos2(QPointF(len, p2.y() - p1.y()));
+            lineSegm->setPos2(PointF(len, p2.y() - p1.y()));
         } else if (i == sysIdx1) {
             // start segment
             lineSegm->setSpannerSegmentType(SpannerSegmentType::BEGIN);
             lineSegm->setPos(p1);
             qreal x2 = system->bbox().right();
-            lineSegm->setPos2(QPointF(x2 - p1.x(), 0.0));
+            lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
         } else if (i > 0 && i != sysIdx2) {
             // middle segment
             lineSegm->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
             qreal x1 = system->firstNoteRestSegmentX(true);
             qreal x2 = system->bbox().right();
-            lineSegm->setPos(QPointF(x1, p1.y()));
-            lineSegm->setPos2(QPointF(x2 - x1, 0.0));
+            lineSegm->setPos(PointF(x1, p1.y()));
+            lineSegm->setPos2(PointF(x2 - x1, 0.0));
         } else if (i == sysIdx2) {
             // end segment
             qreal minLen = 0.0;
             qreal x1 = system->firstNoteRestSegmentX(true);
             qreal len = qMax(minLen, p2.x() - x1);
             lineSegm->setSpannerSegmentType(SpannerSegmentType::END);
-            lineSegm->setPos(QPointF(p2.x() - len, p2.y()));
-            lineSegm->setPos2(QPointF(len, 0.0));
+            lineSegm->setPos(PointF(p2.x() - len, p2.y()));
+            lineSegm->setPos2(PointF(len, 0.0));
         }
         lineSegm->layout();
     }
@@ -1382,8 +1384,8 @@ void SLine::setLen(qreal l)
         add(createLineSegment());
     }
     LineSegment* s = frontSegment();
-    s->setPos(QPointF());
-    s->setPos2(QPointF(l, 0));
+    s->setPos(PointF());
+    s->setPos2(PointF(l, 0));
 }
 
 //---------------------------------------------------------
@@ -1391,10 +1393,10 @@ void SLine::setLen(qreal l)
 //    used by palette: only one segment
 //---------------------------------------------------------
 
-const QRectF& SLine::bbox() const
+const mu::RectF& SLine::bbox() const
 {
     if (spannerSegments().empty()) {
-        setbbox(QRectF());
+        setbbox(RectF());
     } else {
         setbbox(segmentAt(0)->bbox());
     }

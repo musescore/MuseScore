@@ -25,6 +25,8 @@
 #include "measure.h"
 #include "staff.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   MeasureNumberBase
@@ -112,7 +114,7 @@ bool MeasureNumberBase::readProperties(XmlReader& xml)
 
 void MeasureNumberBase::layout()
 {
-    setPos(QPointF());
+    setPos(PointF());
     if (!parent()) {
         setOffset(0.0, 0.0);
     }

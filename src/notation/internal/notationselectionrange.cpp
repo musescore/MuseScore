@@ -73,7 +73,7 @@ int NotationSelectionRange::endMeasureIndex() const
     return measureRange().endIndex;
 }
 
-std::vector<QRectF> NotationSelectionRange::boundingArea() const
+std::vector<mu::RectF> NotationSelectionRange::boundingArea() const
 {
     const Ms::Selection& selection = score()->selection();
     if (!selection.isRange()) {
@@ -87,7 +87,7 @@ std::vector<QRectF> NotationSelectionRange::boundingArea() const
         return {};
     }
 
-    std::vector<QRectF> result;
+    std::vector<RectF> result;
 
     std::vector<RangeSection> rangeSections = splitRangeBySections(startSegment, endSegment);
 
@@ -113,7 +113,7 @@ std::vector<QRectF> NotationSelectionRange::boundingArea() const
             x1 = sectionStartSegment->measure()->pagePos().x();
         }
 
-        QRectF rect = QRectF(QPointF(x1, y1), QPointF(x2, y2)).translated(sectionSystem->page()->pos());
+        RectF rect = RectF(PointF(x1, y1), PointF(x2, y2)).translated(sectionSystem->page()->pos());
         result.push_back(rect);
     }
 

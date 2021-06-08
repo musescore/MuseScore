@@ -269,17 +269,17 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
         setZoom(zoom, event->position().toPoint());
     } else if (keyState & Qt::ShiftModifier) {
         int abs = sqrt(dx * dx + dy * dy) * (dy > -dx ? 1 : -1);
-        QPoint d = m_view->toLogical(QPoint(0, abs)) - m_view->toLogical(QPoint(0, 0));
+        PointF d = m_view->toLogical(QPoint(0, abs)) - m_view->toLogical(QPoint(0, 0));
         m_view->moveCanvasHorizontal(d.y());
     } else {
-        QPoint d = m_view->toLogical(QPoint(dx, dy)) - m_view->toLogical(QPoint(0, 0));
+        PointF d = m_view->toLogical(QPoint(dx, dy)) - m_view->toLogical(QPoint(0, 0));
         m_view->moveCanvas(d.x(), d.y());
     }
 }
 
 void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 {
-    QPoint logicPos = m_view->toLogical(event->pos());
+    PointF logicPos = PointF(m_view->toLogical(event->pos()));
     Qt::KeyboardModifiers keyState = event->modifiers();
 
     // When using MiddleButton, just start moving the canvas
@@ -292,7 +292,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     if (m_view->isNoteEnterMode()) {
         bool replace = keyState & Qt::ShiftModifier;
         bool insert = keyState & Qt::ControlModifier;
-        dispatcher()->dispatch("put-note", ActionData::make_arg3<QPoint, bool, bool>(logicPos, replace, insert));
+        dispatcher()->dispatch("put-note", ActionData::make_arg3<QPoint, bool, bool>(logicPos.toQPoint(), replace, insert));
         return;
     }
 
@@ -370,7 +370,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         return;
     }
 
-    QPoint logicPos = m_view->toLogical(event->pos());
+    PointF logicPos = m_view->toLogical(event->pos());
     Qt::KeyboardModifiers keyState = event->modifiers();
 
     // start some drag operations after a minimum of movement:
@@ -402,7 +402,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         return;
     } else if (m_interactData.hitElement == nullptr && (keyState & (Qt::ShiftModifier | Qt::ControlModifier))) {
         if (!m_view->notationInteraction()->isDragStarted()) {
-            m_view->notationInteraction()->startDrag(std::vector<Element*>(), QPoint(), [](const Element*) { return false; });
+            m_view->notationInteraction()->startDrag(std::vector<Element*>(), PointF(), [](const Element*) { return false; });
         }
         m_view->notationInteraction()->drag(m_interactData.beginPoint, logicPos,
                                             keyState & Qt::ControlModifier ? DragMode::LassoList : DragMode::BothXY);
@@ -410,7 +410,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
 
     // move canvas
-    QPoint d = logicPos - m_interactData.beginPoint;
+    PointF d = logicPos - m_interactData.beginPoint;
     int dx = d.x();
     int dy = d.y();
 
@@ -422,7 +422,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     m_isCanvasDragged = true;
 }
 
-void NotationViewInputController::startDragElements(ElementType elementsType, const QPointF& elementsOffset)
+void NotationViewInputController::startDragElements(ElementType elementsType, const PointF& elementsOffset)
 {
     std::vector<Element*> elements = m_view->notationInteraction()->selection()->elements();
     IF_ASSERT_FAILED(!elements.empty()) {
@@ -467,7 +467,7 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
 void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
 {
     if (m_view->isNoteEnterMode()) {
-        QPoint pos = m_view->toLogical(event->pos());
+        PointF pos = m_view->toLogical(event->pos());
         m_view->showShadowNote(pos);
     }
 }
@@ -519,7 +519,7 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
         }
     }
 
-    QPointF pos = m_view->toLogical(event->pos());
+    PointF pos = m_view->toLogical(event->pos());
     Qt::KeyboardModifiers modifiers = event->keyboardModifiers();
 
     bool isAccepted = m_view->notationInteraction()->isDropAccepted(pos, modifiers);
@@ -537,7 +537,7 @@ void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent*)
 
 void NotationViewInputController::dropEvent(QDropEvent* event)
 {
-    QPointF pos = m_view->toLogical(event->pos());
+    PointF pos = m_view->toLogical(event->pos());
     Qt::KeyboardModifiers modifiers = event->keyboardModifiers();
 
     bool isAccepted = m_view->notationInteraction()->drop(pos, modifiers);

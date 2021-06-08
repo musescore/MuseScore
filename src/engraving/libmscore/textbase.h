@@ -149,7 +149,7 @@ public:
     void init();
 
     TextBlock& curLine() const;
-    QRectF cursorRect() const;
+    mu::RectF cursorRect() const;
     bool movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int count = 1);
     void doubleClickSelect();
     void moveCursorToEnd() { movePosition(QTextCursor::End); }
@@ -157,7 +157,7 @@ public:
     QChar currentCharacter() const;
     QString currentWord() const;
     QString currentLine() const;
-    bool set(const QPointF& p, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
+    bool set(const mu::PointF& p, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
     QString selectedText() const;
     QString extractText(int r1, int c1, int r2, int c2) const;
     void updateCursorFormat();
@@ -179,7 +179,7 @@ class TextFragment
 {
 public:
     mutable CharFormat format;
-    QPointF pos;                    // y is relative to TextBlock->y()
+    mu::PointF pos;                    // y is relative to TextBlock->y()
     mutable QString text;
 
     bool operator ==(const TextFragment& f) const;
@@ -204,7 +204,7 @@ class TextBlock
     QList<TextFragment> _fragments;
     qreal _y = 0;
     qreal _lineSpacing = 0.0;
-    QRectF _bbox;
+    mu::RectF _bbox;
     bool _eol = false;
 
     void simplify();
@@ -218,8 +218,8 @@ public:
     const QList<TextFragment>& fragments() const { return _fragments; }
     QList<TextFragment>& fragments() { return _fragments; }
     QList<TextFragment>* fragmentsWithoutEmpty();
-    const QRectF& boundingRect() const { return _bbox; }
-    QRectF boundingRect(int col1, int col2, const TextBase*) const;
+    const mu::RectF& boundingRect() const { return _bbox; }
+    mu::RectF boundingRect(int col1, int col2, const TextBase*) const;
     int columns() const;
     void insert(TextCursor*, const QString&);
     void insertEmptyFragmentIfNeeded(TextCursor*);
@@ -275,7 +275,7 @@ class TextBase : public Element
 
     TextCursor* _cursor           { nullptr };
 
-    void drawSelection(mu::draw::Painter*, const QRectF&) const;
+    void drawSelection(mu::draw::Painter*, const mu::RectF&) const;
     void insert(TextCursor*, uint code);
     void genText() const;
     virtual int getPropertyFlagsIdx(Pid id) const override;
@@ -284,7 +284,7 @@ class TextBase : public Element
 
 protected:
     QColor textColor() const;
-    QRectF frame;             // calculated in layout()
+    mu::RectF frame;             // calculated in layout()
     void layoutFrame();
     void layoutEdit();
     void createLayout();
@@ -301,7 +301,7 @@ public:
 
     virtual void draw(mu::draw::Painter*) const override;
     virtual void drawEditMode(mu::draw::Painter* p, EditData& ed) override;
-    static void drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const QPointF& pos, const QString& text);
+    static void drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const mu::PointF& pos, const QString& text);
 
     static QString plainToXmlText(const QString& s) { return s.toHtmlEscaped(); }
     void setPlainText(const QString& t) { setXmlText(plainToXmlText(t)); }
@@ -354,11 +354,11 @@ public:
 
     virtual void paste(EditData&);
 
-    QRectF pageRectangle() const;
+    mu::RectF pageRectangle() const;
 
     void dragTo(EditData&);
 
-    QVector<QLineF> dragAnchorLines() const override;
+    QVector<mu::LineF> dragAnchorLines() const override;
 
     virtual bool acceptDrop(EditData&) const override;
     virtual Element* drop(EditData&) override;

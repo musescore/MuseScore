@@ -23,9 +23,8 @@
 #ifndef __LAYOUTBREAK_H__
 #define __LAYOUTBREAK_H__
 
-#include <QPainterPath>
-
 #include "element.h"
+#include "draw/drawtypes.h"
 
 namespace Ms {
 // layout break subtypes:
@@ -48,8 +47,8 @@ private:
     Q_ENUM(Type);
 
     qreal lw;
-    QPainterPath path;
-    QPainterPath path2;
+    mu::PainterPath path;
+    mu::PainterPath path2;
     qreal _pause;
     bool _startWithLongNames;
     bool _startWithMeasureOne;

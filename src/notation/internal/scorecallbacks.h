@@ -34,10 +34,10 @@ class ScoreCallbacks : public Ms::MuseScoreView, public Ms::MuseScoreCore
 public:
     ScoreCallbacks() = default;
 
-    void dataChanged(const QRectF&) override;
+    void dataChanged(const mu::RectF&) override;
     void updateAll() override;
-    void drawBackground(mu::draw::Painter*, const QRectF&) const override;
-    const QRect geometry() const override;
+    void drawBackground(mu::draw::Painter*, const RectF&) const override;
+    const mu::Rect geometry() const override;
 };
 }
 

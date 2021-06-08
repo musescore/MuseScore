@@ -56,8 +56,8 @@ class Arpeggio final : public Element
     void symbolLine2(SymId end, SymId fill);
 
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
-    QVector<QLineF> dragAnchorLines() const override;
-    QVector<QLineF> gripAnchorLines(Grip) const override;
+    QVector<mu::LineF> dragAnchorLines() const override;
+    QVector<mu::LineF> gripAnchorLines(Grip) const override;
     void startEdit(EditData&) override;
 
     static const std::array<const char*, 6> arpeggioTypeNames;
@@ -111,7 +111,7 @@ public:
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<QPointF> gripsPositions(const EditData& = EditData()) const override;
+    std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
 };
 }     // namespace Ms
 #endif

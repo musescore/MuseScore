@@ -25,6 +25,8 @@
 #include "measure.h"
 #include "system.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   rehearsalMarkStyle

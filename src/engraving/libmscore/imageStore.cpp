@@ -25,6 +25,8 @@
 #include "score.h"
 #include "image.h"
 
+using namespace mu;
+
 namespace Ms {
 ImageStore imageStore;  // the global image store
 

@@ -24,6 +24,8 @@
 #include "xml.h"
 #include "score.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   key

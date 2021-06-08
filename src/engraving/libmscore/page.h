@@ -84,12 +84,12 @@ public:
     void draw(mu::draw::Painter*) const override;
     void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 
-    QList<Element*> items(const QRectF& r);
-    QList<Element*> items(const QPointF& p);
+    QList<Element*> items(const mu::RectF& r);
+    QList<Element*> items(const mu::PointF& p);
     void rebuildBspTree() { bspTreeValid = false; }
-    QPointF pagePos() const override { return QPointF(); }       ///< position in page coordinates
+    mu::PointF pagePos() const override { return mu::PointF(); }       ///< position in page coordinates
     QList<Element*> elements() const;           ///< list of visible elements
-    QRectF tbbox();                             // tight bounding box, excluding white space
+    mu::RectF tbbox();                             // tight bounding box, excluding white space
     Fraction endTick() const;
 };
 }     // namespace Ms

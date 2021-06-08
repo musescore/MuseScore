@@ -34,6 +34,8 @@
 
 #include <algorithm>
 
+using namespace mu;
+
 namespace Ms {
 static const ElementStyle voltaStyle {
     { Sid::voltaFontFace,                      Pid::BEGIN_FONT_FACE },

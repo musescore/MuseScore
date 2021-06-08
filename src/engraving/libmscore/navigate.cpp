@@ -40,6 +40,8 @@
 #include "staff.h"
 #include "barline.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   nextChordRest

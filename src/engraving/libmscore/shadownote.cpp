@@ -22,8 +22,6 @@
 
 #include "shadownote.h"
 
-#include <QPainter>
-
 #include "score.h"
 #include "drumset.h"
 #include "sym.h"
@@ -32,7 +30,7 @@
 #include "accidental.h"
 #include "articulation.h"
 
-using namespace mu::draw;
+using namespace mu;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -147,7 +145,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
         return;
     }
 
-    QPointF ap(pagePos());
+    PointF ap(pagePos());
     painter->translate(ap);
     qreal lw = score()->styleP(Sid::stemWidth);
     QPen pen(MScore::selectColor[voice()].lighter(SHADOW_NOTE_LIGHT), lw, Qt::SolidLine, Qt::FlatCap);
@@ -156,7 +154,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
     // Draw the accidental
     SymId acc = Accidental::subtype2symbol(score()->inputState().accidentalType());
     if (acc != SymId::noSym) {
-        QPointF posAcc;
+        PointF posAcc;
         posAcc.rx() -= symWidth(acc) + score()->styleP(Sid::accidentalNoteDistance) * mag();
         drawSymbol(acc, painter, posAcc);
     }
@@ -169,7 +167,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
     qreal sp2 = sp / 2;
     qreal noteheadWidth = symWidth(m_noteheadSymbol);
 
-    QPointF posDot;
+    PointF posDot;
     if (m_duration.dots() > 0) {
         qreal d  = score()->styleP(Sid::dotNoteDistance) * mag();
         qreal dd = score()->styleP(Sid::dotDotDistance) * mag();
@@ -198,7 +196,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
             if (up && m_duration.dots() && !(m_lineIndex & 1)) {
                 y2 -= sp2 * mag(); // Lengthen stem to avoid collision of flag with dots
             }
-            drawSymbol(flag, painter, QPointF(x - (lw / 2), y2), 1);
+            drawSymbol(flag, painter, PointF(x - (lw / 2), y2), 1);
             y2 += symSmuflAnchor(flag, up ? SmuflAnchorId::stemUpNW : SmuflAnchorId::stemDownSW).y();
         }
         painter->drawLine(LineF(x, y1, x, y2));
@@ -240,7 +238,7 @@ void ShadowNote::drawArticulations(mu::draw::Painter* painter) const
     qreal y1 = -ms * (m_lineIndex) + m_segmentSkylineTopY;
     qreal y2 = -ms * (m_lineIndex) + m_segmentSkylineBottomY;
 
-    QRectF boundRect = QRectF(QPointF(x1, y1), QPointF(x2, y2));
+    RectF boundRect = RectF(PointF(x1, y1), PointF(x2, y2));
 
     for (const SymId& articulation: score()->inputState().articulationIds()) {
         bool isMarcato = QString(Articulation::symId2ArticulationName(articulation)).contains("marcato");
@@ -253,9 +251,9 @@ void ShadowNote::drawArticulations(mu::draw::Painter* painter) const
     }
 }
 
-void ShadowNote::drawMarcato(mu::draw::Painter* painter, const SymId& articulation, QRectF& boundRect) const
+void ShadowNote::drawMarcato(mu::draw::Painter* painter, const SymId& articulation, RectF& boundRect) const
 {
-    QPointF coord;
+    PointF coord;
     qreal spacing = spatium();
 
     qreal topY = boundRect.y();
@@ -268,9 +266,9 @@ void ShadowNote::drawMarcato(mu::draw::Painter* painter, const SymId& articulati
     drawSymbol(articulation, painter, coord);
 }
 
-void ShadowNote::drawArticulation(mu::draw::Painter* painter, const SymId& articulation, QRectF& boundRect) const
+void ShadowNote::drawArticulation(mu::draw::Painter* painter, const SymId& articulation, RectF& boundRect) const
 {
-    QPointF coord;
+    PointF coord;
     qreal spacing = spatium();
 
     bool up = !computeUp();
@@ -300,12 +298,12 @@ void ShadowNote::drawArticulation(mu::draw::Painter* painter, const SymId& artic
 void ShadowNote::layout()
 {
     if (!isValid()) {
-        setbbox(QRectF());
+        setbbox(RectF());
         return;
     }
     qreal _spatium = spatium();
-    QRectF newBbox;
-    QRectF noteheadBbox = symBbox(m_noteheadSymbol);
+    RectF newBbox;
+    RectF noteheadBbox = symBbox(m_noteheadSymbol);
     SymId flag = getNoteFlag();
 
     // TODO: Take into account accidentals and articulations?
@@ -335,17 +333,17 @@ void ShadowNote::layout()
         if (up && flag != SymId::lastSym && m_duration.dots() && !(m_lineIndex & 1)) {
             stemLenght -= 0.5 * spatium(); // Lengthen stem to avoid collision of flag with dots
         }
-        newBbox |= QRectF(up ? x + w - stemWidth : x,
-                          stemAnchor,
-                          stemWidth,
-                          stemLenght - stemAnchor);
+        newBbox |= RectF(up ? x + w - stemWidth : x,
+                         stemAnchor,
+                         stemWidth,
+                         stemLenght - stemAnchor);
 
         if (flag != SymId::lastSym) { // If there is a flag
-            QRectF flagBbox = symBbox(flag);
-            newBbox |= QRectF(up ? x + w - stemWidth : x,
-                              stemAnchor + stemLenght + flagBbox.y(),
-                              flagBbox.width(),
-                              flagBbox.height());
+            RectF flagBbox = symBbox(flag);
+            newBbox |= RectF(up ? x + w - stemWidth : x,
+                             stemAnchor + stemLenght + flagBbox.y(),
+                             flagBbox.width(),
+                             flagBbox.height());
         }
     }
 
@@ -358,13 +356,13 @@ void ShadowNote::layout()
         qreal lw = score()->styleP(Sid::ledgerLineWidth);
 
         InputState ps = score()->inputState();
-        QRectF r(x, -lw * .5, w, lw);
+        RectF r(x, -lw * .5, w, lw);
         for (int i = -2; i >= m_lineIndex; i -= 2) {
-            newBbox |= r.translated(QPointF(0, _spatium * .5 * (i - m_lineIndex)));
+            newBbox |= r.translated(PointF(0, _spatium * .5 * (i - m_lineIndex)));
         }
         int l = staff()->lines(tick()) * 2; // first ledger line below staff
         for (int i = l; i <= m_lineIndex; i += 2) {
-            newBbox |= r.translated(QPointF(0, _spatium * .5 * (i - m_lineIndex)));
+            newBbox |= r.translated(PointF(0, _spatium * .5 * (i - m_lineIndex)));
         }
     }
     setbbox(newBbox);

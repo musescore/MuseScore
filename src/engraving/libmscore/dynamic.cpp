@@ -34,6 +34,8 @@
 #include "undo.h"
 #include "musescoreCore.h"
 
+using namespace mu;
+
 namespace Ms {
 //-----------------------------------------------------------------------------
 //   Dyn
@@ -336,7 +338,7 @@ void Dynamic::layout()
             break;
         }
     } else {
-        setPos(QPointF());          // for palette
+        setPos(PointF());          // for palette
     }
 }
 
@@ -354,8 +356,8 @@ void Dynamic::doAutoplace()
     }
 
     qreal minDistance = score()->styleS(Sid::dynamicsMinDistance).val() * spatium();
-    QRectF r          = bbox().translated(pos() + s->pos() + s->measure()->pos());
-    qreal yOff = offset().y() - propertyDefault(Pid::OFFSET).toPointF().y();
+    RectF r = bbox().translated(pos() + s->pos() + s->measure()->pos());
+    qreal yOff = offset().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
     r.translate(0.0, -yOff);
 
     Skyline& sl       = s->measure()->system()->staff(staffIdx())->skyline();
@@ -452,9 +454,9 @@ std::unique_ptr<ElementGroup> Dynamic::getDragGroup(std::function<bool(const Ele
 //   drag
 //---------------------------------------------------------
 
-QRectF Dynamic::drag(EditData& ed)
+mu::RectF Dynamic::drag(EditData& ed)
 {
-    QRectF f = Element::drag(ed);
+    RectF f = Element::drag(ed);
 
     //
     // move anchor
@@ -465,13 +467,13 @@ QRectF Dynamic::drag(EditData& ed)
         Segment* seg = segment();
         score()->dragPosition(canvasPos(), &si, &seg);
         if (seg != segment() || staffIdx() != si) {
-            const QPointF oldOffset = offset();
-            QPointF pos1(canvasPos());
+            const PointF oldOffset = offset();
+            PointF pos1(canvasPos());
             score()->undo(new ChangeParent(this, seg, si));
-            setOffset(QPointF());
+            setOffset(PointF());
             layout();
-            QPointF pos2(canvasPos());
-            const QPointF newOffset = pos1 - pos2;
+            PointF pos2(canvasPos());
+            const PointF newOffset = pos1 - pos2;
             setOffset(newOffset);
             ElementEditData* eed = ed.getData(this);
             eed->initOffset += newOffset - oldOffset;

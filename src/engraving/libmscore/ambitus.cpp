@@ -32,6 +32,8 @@
 #include "utils.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 static const NoteHead::Group NOTEHEADGROUP_DEFAULT = NoteHead::Group::HEAD_NORMAL;
 static const NoteHead::Type NOTEHEADTYPE_DEFAULT  = NoteHead::Type::HEAD_AUTO;
@@ -365,7 +367,7 @@ void Ambitus::layout()
         if (accidType != AccidentalType::NONE) {
             _topAccid.layout();
         } else {
-            _topAccid.setbbox(QRect());
+            _topAccid.setbbox(RectF());
         }
         _topAccid.rypos() = _topPos.y();
     }
@@ -392,7 +394,7 @@ void Ambitus::layout()
         if (accidType != AccidentalType::NONE) {
             _bottomAccid.layout();
         } else {
-            _bottomAccid.setbbox(QRect());
+            _bottomAccid.setbbox(RectF());
         }
         _bottomAccid.rypos() = _bottomPos.y();
     }
@@ -448,23 +450,22 @@ void Ambitus::layout()
     }
 
     // compute line from top note centre to bottom note centre
-    mu::draw::LineF fullLine(_topPos.x() + headWdt * 0.5, _topPos.y(), _bottomPos.x() + headWdt * 0.5, _bottomPos.y());
+    mu::LineF fullLine(_topPos.x() + headWdt * 0.5, _topPos.y(), _bottomPos.x() + headWdt * 0.5, _bottomPos.y());
     // shorten line on each side by offsets
     qreal yDelta = _bottomPos.y() - _topPos.y();
     if (yDelta != 0.0) {
         qreal off = _spatium * LINEOFFSET_DEFAULT;
-        mu::draw::PointF p1 = fullLine.pointAt(off / yDelta);
-        mu::draw::PointF p2 = fullLine.pointAt(1 - (off / yDelta));
-        _line = mu::draw::LineF(p1, p2);
+        mu::PointF p1 = fullLine.pointAt(off / yDelta);
+        mu::PointF p2 = fullLine.pointAt(1 - (off / yDelta));
+        _line = mu::LineF(p1, p2);
     } else {
         _line = fullLine;
     }
 
-    mu::draw::RectF headRect(0, -0.5 * _spatium, headWdt, 1 * _spatium);
+    mu::RectF headRect(0, -0.5 * _spatium, headWdt, 1 * _spatium);
     setbbox(headRect.translated(_topPos).united(headRect.translated(_bottomPos))
             .united(_topAccid.bbox().translated(_topAccid.ipos()))
             .united(_bottomAccid.bbox().translated(_bottomAccid.ipos()))
-            .toQRectF()
             );
 }
 
@@ -500,7 +501,7 @@ void Ambitus::draw(mu::draw::Painter* painter) const
             qreal xMin = _topPos.x() - ledgerLineLength;
             qreal xMax = _topPos.x() + headWidth() + ledgerLineLength;
             for (qreal y = -step; y >= _topPos.y() - stepTolerance; y -= step) {
-                painter->drawLine(mu::draw::PointF(xMin, y), mu::draw::PointF(xMax, y));
+                painter->drawLine(mu::PointF(xMin, y), mu::PointF(xMax, y));
             }
         }
 
@@ -508,7 +509,7 @@ void Ambitus::draw(mu::draw::Painter* painter) const
             qreal xMin = _bottomPos.x() - ledgerLineLength;
             qreal xMax = _bottomPos.x() + headWidth() + ledgerLineLength;
             for (qreal y = numOfLines * step; y <= _bottomPos.y() + stepTolerance; y += step) {
-                painter->drawLine(mu::draw::PointF(xMin, y), mu::draw::PointF(xMax, y));
+                painter->drawLine(mu::PointF(xMin, y), mu::PointF(xMax, y));
             }
         }
     }
@@ -564,7 +565,7 @@ qreal Ambitus::headWidth() const
 //   pagePos
 //---------------------------------------------------------
 
-QPointF Ambitus::pagePos() const
+mu::PointF Ambitus::pagePos() const
 {
     if (parent() == 0) {
         return pos();
@@ -574,7 +575,7 @@ QPointF Ambitus::pagePos() const
     if (system) {
         yp += system->staff(staffIdx())->y() + system->y();
     }
-    return QPointF(pageX(), yp);
+    return PointF(pageX(), yp);
 }
 
 //---------------------------------------------------------

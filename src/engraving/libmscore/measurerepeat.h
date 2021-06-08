@@ -68,7 +68,7 @@ public:
     bool setProperty(Pid, const QVariant&) override;
     QVariant getProperty(Pid) const override;
 
-    QRectF numberRect() const override;
+    mu::RectF numberRect() const override;
     Shape shape() const override;
 
     QString accessibleInfo() const override;

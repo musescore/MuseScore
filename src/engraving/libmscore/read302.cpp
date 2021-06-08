@@ -36,6 +36,8 @@
 #include "scoreOrder.h"
 #include "measurebase.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   read

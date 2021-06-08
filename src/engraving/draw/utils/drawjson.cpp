@@ -30,6 +30,7 @@
 #include "realfn.h"
 #include "log.h"
 
+using namespace mu;
 using namespace mu::draw;
 
 static int rtoi(qreal v)

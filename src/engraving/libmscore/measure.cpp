@@ -95,6 +95,8 @@
 #include "stafflines.h"
 #include "bracketItem.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   MStaff
@@ -935,7 +937,7 @@ void Measure::add(Element* e)
     case ElementType::MEASURE_NUMBER:
         if (e->staffIdx() < int(m_mstaves.size())) {
             if (e->isStyled(Pid::OFFSET)) {
-                e->setOffset(e->propertyDefault(Pid::OFFSET).toPointF());
+                e->setOffset(e->propertyDefault(Pid::OFFSET).value<PointF>());
             }
             m_mstaves[e->staffIdx()]->setNoText(toMeasureNumber(e));
         }
@@ -944,7 +946,7 @@ void Measure::add(Element* e)
     case ElementType::MMREST_RANGE:
         if (e->staffIdx() < int(m_mstaves.size())) {
             if (e->isStyled(Pid::OFFSET)) {
-                e->setOffset(e->propertyDefault(Pid::OFFSET).toPointF());
+                e->setOffset(e->propertyDefault(Pid::OFFSET).value<PointF>());
             }
             m_mstaves[e->staffIdx()]->setMMRangeText(toMMRestRange(e));
         }
@@ -1418,13 +1420,13 @@ void Measure::insertStaff(Staff* staff, int staffIdx)
 //   staffabbox
 //---------------------------------------------------------
 
-QRectF Measure::staffabbox(int staffIdx) const
+RectF Measure::staffabbox(int staffIdx) const
 {
     System* s = system();
-    QRectF sb(s->staff(staffIdx)->bbox());
-    QRectF rrr(sb.translated(s->pagePos()));
-    QRectF rr(abbox());
-    QRectF r(rr.x(), rrr.y(), rr.width(), rrr.height());
+    RectF sb(s->staff(staffIdx)->bbox());
+    RectF rrr(sb.translated(s->pagePos()));
+    RectF rr(abbox());
+    RectF r(rr.x(), rrr.y(), rr.width(), rrr.height());
     return r;
 }
 
@@ -1439,8 +1441,8 @@ QRectF Measure::staffabbox(int staffIdx) const
 bool Measure::acceptDrop(EditData& data) const
 {
     MuseScoreView* viewer = data.view;
-    QPointF pos           = data.pos;
-    Element* e            = data.dropElement;
+    PointF pos = data.pos;
+    Element* e = data.dropElement;
 
     int staffIdx;
     Segment* seg;
@@ -1448,8 +1450,8 @@ bool Measure::acceptDrop(EditData& data) const
         return false;
     }
 
-    QRectF staffR = system()->staff(staffIdx)->bbox().translated(system()->canvasPos());
-    staffR &= canvasBoundingRect();
+    RectF staffR = system()->staff(staffIdx)->bbox().translated(system()->canvasPos());
+    staffR.intersect(canvasBoundingRect());
 
     switch (e->type()) {
     case ElementType::MEASURE_LIST:
@@ -1558,7 +1560,7 @@ Element* Measure::drop(EditData& data)
         e->setTrack(staffIdx * VOICES);
         e->layout();
         {
-            QPointF uo(data.pos - e->canvasPos() - data.dragOffset);
+            PointF uo(data.pos - e->canvasPos() - data.dragOffset);
             e->setOffset(uo);
         }
         score()->undoAddElement(e);
@@ -3226,7 +3228,7 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
 //   snap
 //---------------------------------------------------------
 
-Fraction Measure::snap(const Fraction& tick, const QPointF p) const
+Fraction Measure::snap(const Fraction& tick, const PointF p) const
 {
     Segment* s = first();
     for (; s->next(); s = s->next()) {
@@ -3250,7 +3252,7 @@ Fraction Measure::snap(const Fraction& tick, const QPointF p) const
 //   snapNote
 //---------------------------------------------------------
 
-Fraction Measure::snapNote(const Fraction& /*tick*/, const QPointF p, int staff) const
+Fraction Measure::snapNote(const Fraction& /*tick*/, const PointF p, int staff) const
 {
     Segment* s = first();
     for (;;) {
@@ -4659,7 +4661,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
         fs = fs->nextActive();
     }
     bool first  = isFirstInSystem();
-    const Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
+    const Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, spatium() * 4));
 
     if (isMMRest()) {
         // Reset MM rest to initial size and position
@@ -4796,7 +4798,7 @@ void Measure::computeMinWidth()
     // left barriere:
     //    Make sure no elements crosses the left boarder if first measure in a system.
     //
-    Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
+    Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, spatium() * 4));
 
     x = s->minLeft(ls);
 

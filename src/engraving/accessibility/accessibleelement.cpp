@@ -202,9 +202,9 @@ QRect AccessibleElement::accessibleRect() const
         return QRect();
     }
 
-    QRectF bbox = m_element->bbox();
-    QPointF canvasPos = m_element->canvasPos();
-    QRect canvasRect = QRect(canvasPos.toPoint(), bbox.size().toSize());
+    RectF bbox = m_element->bbox();
+    PointF canvasPos = m_element->canvasPos();
+    QRect canvasRect = QRectF(canvasPos.toQPointF(), bbox.size().toQSizeF()).toRect();
 
     return accessibleScore()->toScreenRect(canvasRect);
 }

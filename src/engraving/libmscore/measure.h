@@ -219,8 +219,8 @@ public:
 
     Chord* findChord(Fraction tick, int track);
     ChordRest* findChordRest(Fraction tick, int track);
-    Fraction snap(const Fraction& tick, const QPointF p) const;
-    Fraction snapNote(const Fraction& tick, const QPointF p, int staff) const;
+    Fraction snap(const Fraction& tick, const mu::PointF p) const;
+    Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
 
     Segment* searchSegment(qreal x, SegmentType st, int strack, int etrack, const Segment* preferredSegment = nullptr,
                            qreal spacingFactor = 0.5) const;
@@ -290,7 +290,7 @@ public:
 
     int playbackCount() const { return m_playbackCount; }
     void setPlaybackCount(int val) { m_playbackCount = val; }
-    QRectF staffabbox(int staffIdx) const;
+    mu::RectF staffabbox(int staffIdx) const;
 
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;

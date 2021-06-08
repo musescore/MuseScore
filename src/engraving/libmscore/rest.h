@@ -87,12 +87,12 @@ public:
     void setAccent(bool flag);
     int computeLineOffset(int lines);
 
-    virtual int upLine() const override;
-    virtual int downLine() const override;
-    virtual QPointF stemPos() const override;
-    virtual qreal stemPosX() const override;
-    virtual QPointF stemPosBeam() const override;
-    virtual qreal rightEdge() const override;
+    int upLine() const override;
+    int downLine() const override;
+    mu::PointF stemPos() const override;
+    qreal stemPosX() const override;
+    mu::PointF stemPosBeam() const override;
+    qreal rightEdge() const override;
 
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
     QVariant propertyDefault(Pid) const override;
@@ -112,7 +112,7 @@ public:
 
 protected:
     Sid getPropertyStyle(Pid pid) const override;
-    virtual QRectF numberRect() const { return QRectF(); } // TODO: add style to show number over 1-measure rests
+    virtual mu::RectF numberRect() const { return mu::RectF(); } // TODO: add style to show number over 1-measure rests
 
 private:
 
@@ -122,10 +122,10 @@ private:
     bool m_gap      { false };       // invisible and not selectable for user
     std::vector<NoteDot*> m_dots;
 
-    QRectF drag(EditData&) override;
+    mu::RectF drag(EditData&) override;
     qreal upPos() const override;
     qreal downPos() const override;
-    void setOffset(const QPointF& o) override;
+    void setOffset(const mu::PointF& o) override;
 };
 }     // namespace Ms
 #endif

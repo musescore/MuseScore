@@ -27,6 +27,8 @@
 #include "undo.h"
 #include "musescoreCore.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   textLineSegmentStyle
@@ -125,7 +127,7 @@ void TextLineSegment::layout()
 {
     TextLineBaseSegment::layout();
     if (isStyled(Pid::OFFSET)) {
-        roffset() = textLine()->propertyDefault(Pid::OFFSET).toPointF();
+        roffset() = textLine()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
     autoplaceSpannerSegment();
 }
@@ -144,9 +146,9 @@ TextLine::TextLine(Score* s, bool system)
     setBeginText("");
     setContinueText("");
     setEndText("");
-    setBeginTextOffset(QPointF(0, 0));
-    setContinueTextOffset(QPointF(0, 0));
-    setEndTextOffset(QPointF(0, 0));
+    setBeginTextOffset(PointF(0, 0));
+    setContinueTextOffset(PointF(0, 0));
+    setEndTextOffset(PointF(0, 0));
     setLineVisible(true);
 
     setBeginHookType(HookType::NONE);
@@ -306,7 +308,7 @@ QVariant TextLine::propertyDefault(Pid propertyId) const
     case Pid::BEGIN_TEXT_OFFSET:
     case Pid::CONTINUE_TEXT_OFFSET:
     case Pid::END_TEXT_OFFSET:
-        return QPointF(0, 0);
+        return PointF(0, 0);
     case Pid::BEGIN_HOOK_TYPE:
     case Pid::END_HOOK_TYPE:
         return int(HookType::NONE);

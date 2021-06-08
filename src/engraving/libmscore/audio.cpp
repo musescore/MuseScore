@@ -23,6 +23,8 @@
 #include "audio.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   Audio

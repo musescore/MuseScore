@@ -27,6 +27,7 @@
 #include <functional>
 
 #include "elementgroup.h"
+#include "draw/geometry.h"
 
 namespace Ms {
 class Dynamic;
@@ -49,7 +50,7 @@ public:
         : startDynamic(start), hairpinSegment(hs), endDynamic(end) {}
 
     void startDrag(EditData&) override;
-    QRectF drag(EditData&) override;
+    mu::RectF drag(EditData&) override;
     void endDrag(EditData&) override;
 
     static std::unique_ptr<ElementGroup> detectFor(HairpinSegment* hs, std::function<bool(const Element*)> isDragged);
@@ -71,7 +72,7 @@ public:
         : leftHairpin(left), dynamic(d), rightHairpin(right) {}
 
     void startDrag(EditData&) override;
-    QRectF drag(EditData&) override;
+    mu::RectF drag(EditData&) override;
     void endDrag(EditData&) override;
 
     static std::unique_ptr<ElementGroup> detectFor(Dynamic* d, std::function<bool(const Element*)> isDragged);

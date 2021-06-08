@@ -31,12 +31,12 @@ void NoteInputCursor::paint(mu::draw::Painter* painter)
 
     QRectF cursorRect = rect();
     QColor cursorRectColor = cursorColor();
-    painter->fillRect(cursorRect, cursorRectColor);
+    painter->fillRect(RectF::fromQRectF(cursorRect), cursorRectColor);
 
     constexpr int leftLineWidth = 3;
     QRectF leftLine = QRectF(cursorRect.topLeft().x(), cursorRect.topLeft().y(), leftLineWidth, cursorRect.height());
     QColor lineColor = fillColor();
-    painter->fillRect(leftLine, lineColor);
+    painter->fillRect(RectF::fromQRectF(leftLine), lineColor);
 }
 
 INotationNoteInputPtr NoteInputCursor::currentNoteInput() const

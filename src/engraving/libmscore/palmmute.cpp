@@ -28,6 +28,8 @@
 
 #include "score.h"
 
+using namespace mu;
+
 namespace Ms {
 static const ElementStyle palmMuteStyle {
     { Sid::palmMuteFontFace,                      Pid::BEGIN_FONT_FACE },
@@ -184,7 +186,7 @@ QVariant PalmMute::propertyDefault(Pid propertyId) const
 
     case Pid::CONTINUE_TEXT_OFFSET:
     case Pid::END_TEXT_OFFSET:
-        return QPointF(0, 0);
+        return QVariant::fromValue(PointF(0, 0));
 
 //TODOws            case Pid::BEGIN_FONT_ITALIC:
 //                  return score()->styleV(Sid::palmMuteFontItalic);
@@ -213,7 +215,7 @@ QVariant PalmMute::propertyDefault(Pid propertyId) const
 //    return System() coordinates
 //---------------------------------------------------------
 
-QPointF PalmMute::linePos(Grip grip, System** sys) const
+mu::PointF PalmMute::linePos(Grip grip, System** sys) const
 {
     qreal x = 0.0;
     qreal nhw = score()->noteHeadWidth();
@@ -221,7 +223,7 @@ QPointF PalmMute::linePos(Grip grip, System** sys) const
     if (grip == Grip::START) {
         ChordRest* c = toChordRest(startElement());
         if (!c) {
-            return QPointF();
+            return PointF();
         }
         s = c->segment()->system();
         x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
@@ -286,6 +288,6 @@ QPointF PalmMute::linePos(Grip grip, System** sys) const
     }
 
     *sys = s;
-    return QPointF(x, 0);
+    return PointF(x, 0);
 }
 }

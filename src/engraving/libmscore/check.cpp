@@ -36,6 +36,8 @@
 #include "clef.h"
 #include "utils.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   checkSlurs

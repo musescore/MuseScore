@@ -61,6 +61,8 @@
 #include "rehearsalmark.h"
 #include "instrchange.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   ChordRest
@@ -305,7 +307,7 @@ bool ChordRest::readProperties(XmlReader& e)
         element->read(e);
         add(element);
     } else if (tag == "pos") {
-        QPointF pt = e.readPoint();
+        PointF pt = e.readPoint();
         setOffset(pt * spatium());
     }
 //      else if (tag == "offset")
@@ -419,7 +421,7 @@ Element* ChordRest::drop(EditData& data)
     case ElementType::BREATH:
     {
         Breath* b = toBreath(e);
-        b->setPos(QPointF());
+        b->setPos(PointF());
         // allow breath marks in voice > 1
         b->setTrack(this->track());
         b->setPlacement(b->track() & 1 ? Placement::BELOW : Placement::ABOVE);
@@ -439,7 +441,7 @@ Element* ChordRest::drop(EditData& data)
             score()->splitMeasure(segment());
         } else {
             BarLine* bl = toBarLine(e);
-            bl->setPos(QPointF());
+            bl->setPos(PointF());
             bl->setTrack(staffIdx() * VOICES);
             bl->setGenerated(false);
 
@@ -767,7 +769,7 @@ void ChordRest::add(Element* e)
         break;
     case ElementType::LYRICS:
         if (e->isStyled(Pid::OFFSET)) {
-            e->setOffset(e->propertyDefault(Pid::OFFSET).toPointF());
+            e->setOffset(e->propertyDefault(Pid::OFFSET).value<PointF>());
         }
         _lyrics.push_back(toLyrics(e));
         break;

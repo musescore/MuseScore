@@ -57,15 +57,15 @@ class TimeSig final : public Element
     std::vector<SymId> ns;
     std::vector<SymId> ds;
 
-    QPointF pz;
-    QPointF pn;
-    QPointF pointLargeLeftParen;
-    QPointF pointLargeRightParen;
+    mu::PointF pz;
+    mu::PointF pn;
+    mu::PointF pointLargeLeftParen;
+    mu::PointF pointLargeRightParen;
     Fraction _sig;
     Fraction _stretch;        // localSig / globalSig
     Groups _groups;
 
-    QSizeF _scale;
+    mu::SizeF _scale;
     TimeSigType _timeSigType;
     bool _showCourtesySig;
     bool _largeParentheses;
@@ -117,7 +117,7 @@ public:
 
     void setLargeParentheses(bool v) { _largeParentheses = v; }
 
-    void setScale(const QSizeF& s) { _scale = s; }
+    void setScale(const mu::SizeF& s) { _scale = s; }
 
     void setFrom(const TimeSig*);
 

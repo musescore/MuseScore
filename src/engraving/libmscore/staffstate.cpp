@@ -29,6 +29,9 @@
 #include "mscore.h"
 #include "xml.h"
 
+using namespace mu;
+using namespace mu::draw;
+
 namespace Ms {
 //---------------------------------------------------------
 //   StaffState
@@ -109,7 +112,7 @@ void StaffState::draw(mu::draw::Painter* painter) const
 void StaffState::layout()
 {
     qreal _spatium = spatium();
-    path      = QPainterPath();
+    path      = PainterPath();
     lw        = _spatium * 0.3;
     qreal h  = _spatium * 4;
     qreal w  = _spatium * 2.5;
@@ -152,7 +155,7 @@ void StaffState::layout()
         qDebug("unknown layout break symbol");
         break;
     }
-    QRectF bb(0, 0, w, h);
+    RectF bb(0, 0, w, h);
     bb.adjust(-lw, -lw, lw, lw);
     setbbox(bb);
     setPos(0.0, _spatium * -6.0);

@@ -309,7 +309,7 @@ private:
     QString _fretString;
 
     void startDrag(EditData&) override;
-    QRectF drag(EditData& ed) override;
+    mu::RectF drag(EditData& ed) override;
     void endDrag(EditData&) override;
     void editDrag(EditData& editData) override;
 
@@ -360,8 +360,8 @@ public:
     qreal headHeight() const;
     qreal tabHeadWidth(const StaffType* tab = 0) const;
     qreal tabHeadHeight(const StaffType* tab = 0) const;
-    QPointF stemDownNW() const;
-    QPointF stemUpSE() const;
+    mu::PointF stemDownNW() const;
+    mu::PointF stemUpSE() const;
     qreal bboxXShift() const;
     qreal noteheadCenterX() const;
     qreal bboxRightPos() const;

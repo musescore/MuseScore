@@ -27,6 +27,8 @@
 #include "scoreElement.h"
 #include "xml.h"
 
+using namespace mu;
+
 namespace Ms {
 //---------------------------------------------------------
 //   ConnectorInfo
