@@ -36,7 +36,6 @@ FlatButton {
     Layout.fillWidth: true
     Layout.minimumWidth: (popupAvailableWidth - 4) / 2
 
-
     onVisibleChanged: {
         if (!visible) {
             popup.close()
@@ -45,7 +44,6 @@ FlatButton {
 
     onClicked: {
         if (!popup.isOpened) {
-            popup.parent = root.contentItem
             popup.open()
         } else {
             popup.close()
