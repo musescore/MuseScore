@@ -28,6 +28,7 @@ Loader {
     signal handleAction(string actionCode, int actionIndex)
 
     property alias menu: loader.item
+    property var menuAnchorItem: null
 
     property bool isMenuOpened: Boolean(loader.menu) && loader.menu.isOpened
 
@@ -47,6 +48,7 @@ Loader {
             menu.navigationParentControl = navigationParentControl
             menu.navigation.name = navigationParentControl.name+"PopupMenu"
         }
+        menu.anchorItem = menuAnchorItem
         menu.model = model
         menu.open()
 

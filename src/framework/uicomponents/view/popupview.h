@@ -50,6 +50,7 @@ class PopupView : public QObject, public QQmlParserStatus
     Q_PROPERTY(bool showArrow READ showArrow WRITE setShowArrow NOTIFY showArrowChanged)
     Q_PROPERTY(int padding READ padding WRITE setPadding NOTIFY paddingChanged)
 
+    Q_PROPERTY(QQuickItem * anchorItem READ anchorItem WRITE setAnchorItem NOTIFY anchorItemChanged)
     Q_PROPERTY(bool opensUpward READ opensUpward NOTIFY opensUpwardChanged)
     Q_PROPERTY(int arrowX READ arrowX WRITE setArrowX NOTIFY arrowXChanged)
     Q_PROPERTY(Qt::AlignmentFlag cascadeAlign READ cascadeAlign WRITE setCascadeAlign NOTIFY cascadeAlignChanged)
@@ -119,6 +120,7 @@ public:
     Qt::AlignmentFlag cascadeAlign() const;
     int padding() const;
     bool showArrow() const;
+    QQuickItem* anchorItem() const;
 
 public slots:
     void setParentItem(QQuickItem* parent);
@@ -138,6 +140,7 @@ public slots:
     void setCascadeAlign(Qt::AlignmentFlag cascadeAlign);
     void setPadding(int padding);
     void setShowArrow(bool showArrow);
+    void setAnchorItem(QQuickItem* anchorItem);
 
 signals:
     void parentItemChanged();
@@ -161,6 +164,7 @@ signals:
     void cascadeAlignChanged(Qt::AlignmentFlag cascadeAlign);
     void paddingChanged(int padding);
     void showArrowChanged(bool showArrow);
+    void anchorItemChanged(QQuickItem* anchorItem);
 
 private slots:
     void onApplicationStateChanged(Qt::ApplicationState state);
@@ -187,8 +191,12 @@ protected:
     QQuickItem* parentPopupContentItem() const;
     Qt::AlignmentFlag parentCascadeAlign(const QQuickItem* parent) const;
 
+    QRect anchorGeometry() const;
+
     IPopupWindow* m_window = nullptr;
     QQuickItem* m_contentItem = nullptr;
+
+    QQuickItem* m_anchorItem = nullptr;
 
     QPointF m_localPos;
     QPointF m_globalPos;
