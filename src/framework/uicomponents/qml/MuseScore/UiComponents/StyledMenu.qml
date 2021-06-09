@@ -104,6 +104,20 @@ StyledPopupView {
 
         prv.itemLeftPartWidth = leftWidth
         prv.itemRightPartWidth = rightWidth
+
+        //! NOTE: Due to the fact that the view has a dynamic delegate,
+        //  the height calculation occurs with an error
+        //  (by default, the delegate height is taken as the menu item height).
+        //  Let's manually adjust the height of the content
+        var sepCount = 0
+        for (let k = 0; k < model.length; k++) {
+            if (!Boolean(model[k].title)) {
+                sepCount++
+            }
+        }
+
+        var itemHeight = (view.contentHeight - view.spacing * (model.length - 1)) / model.length
+        root.contentHeight = view.contentHeight - sepCount * (itemHeight - prv.separatorHeight)
     }
 
     QtObject {
@@ -118,6 +132,8 @@ StyledPopupView {
         property int itemRightPartWidth: 100
         readonly property int itemWidth:
             Math.max(itemLeftPartWidth + itemRightPartWidth, root.minimumMenuWidth)
+
+        readonly property int separatorHeight: 1
 
         readonly property int iconAndCheckMarkMode: {
             if (prv.hasItemsWithIconAndCheckable) {
@@ -145,7 +161,9 @@ StyledPopupView {
         delegate: Loader {
             id: loader
 
-            sourceComponent: Boolean(modelData.title) ? menuItemComp : separatorComp
+            property bool isSeparator: Boolean(modelData.title)
+
+            sourceComponent: isSeparator ? menuItemComp : separatorComp
 
             onLoaded: {
                 loader.item.modelData = Qt.binding(() => (modelData))
@@ -194,7 +212,7 @@ StyledPopupView {
                 id: separatorComp
 
                 Rectangle {
-                    height: 1
+                    height: prv.separatorHeight
                     color: ui.theme.strokeColor
 
                     property var modelData
