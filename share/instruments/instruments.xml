@@ -8036,11 +8036,11 @@
                         <velocity>100</velocity>
                         <gateTime>100</gateTime>
                   </Articulation>
-                  <Articulation name="sforzato">
-                        <velocity>130</velocity>
-                  </Articulation>
                   <Articulation name="marcato">
                         <velocity>500</velocity>
+                  </Articulation>
+                  <Articulation name="sforzato">
+                        <velocity>130</velocity>
                   </Articulation>
                   <genre>marching</genre>
             </Instrument>
@@ -8245,11 +8245,11 @@
                         <velocity>100</velocity>
                         <gateTime>100</gateTime>
                   </Articulation>
-                  <Articulation name="sforzato">
-                        <velocity>130</velocity>
-                  </Articulation>
                   <Articulation name="marcato">
                         <velocity>500</velocity>
+                  </Articulation>
+                  <Articulation name="sforzato">
+                        <velocity>130</velocity>
                   </Articulation>
                   <genre>marching</genre>
             </Instrument>
@@ -8356,11 +8356,11 @@
                         <velocity>100</velocity>
                         <gateTime>100</gateTime>
                   </Articulation>
-                  <Articulation name="sforzato">
-                        <velocity>130</velocity>
-                  </Articulation>
                   <Articulation name="marcato">
                         <velocity>500</velocity>
+                  </Articulation>
+                  <Articulation name="sforzato">
+                        <velocity>130</velocity>
                   </Articulation>
                   <genre>marching</genre>
             </Instrument>
@@ -8468,11 +8468,11 @@
                         <velocity>100</velocity>
                         <gateTime>100</gateTime>
                   </Articulation>
-                  <Articulation name="sforzato">
-                        <velocity>130</velocity>
-                  </Articulation>
                   <Articulation name="marcato">
                         <velocity>500</velocity>
+                  </Articulation>
+                  <Articulation name="sforzato">
+                        <velocity>130</velocity>
                   </Articulation>
                   <genre>marching</genre>
             </Instrument>
@@ -10790,6 +10790,14 @@
                         <!--MIDI: Bank 0, Prog 27; MS General: Clean Guitar-->
                         <program value="27"/> <!--Electric Guitar (clean)-->
                   </Channel>
+                  <Channel name="mute">
+                        <!--MIDI: Bank 0, Prog 28; MS General: Palm Muted Guitar-->
+                        <program value="28"/> <!--Electric Guitar (muted)-->
+                  </Channel>
+                  <Channel name="jazz">
+                        <!--MIDI: Bank 0, Prog 26; MS General: Jazz Guitar-->
+                        <program value="26"/> <!--Electric Guitar (jazz)-->
+                  </Channel>
                   <Channel name="harmonics">
                         <!--MIDI: Bank 0, Prog 31; MS General: Guitar Harmonics-->
                         <program value="31"/> <!--Guitar Harmonics-->
@@ -10801,14 +10809,6 @@
                   <Channel name="overdriven">
                         <!--MIDI: Bank 0, Prog 29; MS General: Overdrive Guitar-->
                         <program value="29"/> <!--Overdriven Guitar-->
-                  </Channel>
-                  <Channel name="mute">
-                        <!--MIDI: Bank 0, Prog 28; MS General: Palm Muted Guitar-->
-                        <program value="28"/> <!--Electric Guitar (muted)-->
-                  </Channel>
-                  <Channel name="jazz">
-                        <!--MIDI: Bank 0, Prog 26; MS General: Jazz Guitar-->
-                        <program value="26"/> <!--Electric Guitar (jazz)-->
                   </Channel>
                   <genre>common</genre>
                   <genre>popular</genre>
@@ -11684,6 +11684,14 @@
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <transposeDiatonic>-7</transposeDiatonic>
                   <transposeChromatic>-12</transposeChromatic>
+                  <Channel name="slap">
+                        <!--MIDI: Bank 0, Prog 36; MS General: Slap Bass-->
+                        <program value="36"/> <!--Slap Bass 1-->
+                  </Channel>
+                  <Channel name="pop">
+                        <!--MIDI: Bank 0, Prog 37; MS General: Pop Bass-->
+                        <program value="37"/> <!--Slap Bass 2-->
+                  </Channel>
                   <Channel name="pizzicato">
                         <!--MIDI: Bank 0, Prog 32; MS General: Acoustic Bass-->
                         <program value="32"/> <!--Acoustic Bass-->
@@ -11695,14 +11703,6 @@
                   <Channel name="tremolo">
                         <!--MIDI: Bank 0, Prog 44; MS General: Strings Tremolo-->
                         <program value="44"/> <!--Tremolo Strings-->
-                  </Channel>
-                  <Channel name="slap">
-                        <!--MIDI: Bank 0, Prog 36; MS General: Slap Bass-->
-                        <program value="36"/> <!--Slap Bass 1-->
-                  </Channel>
-                  <Channel name="pop">
-                        <!--MIDI: Bank 0, Prog 37; MS General: Pop Bass-->
-                        <program value="37"/> <!--Slap Bass 2-->
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
