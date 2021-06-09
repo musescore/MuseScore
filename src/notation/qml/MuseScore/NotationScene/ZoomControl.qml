@@ -87,10 +87,12 @@ Row {
 
         icon: IconCode.SMALL_ARROW_DOWN
 
-        normalStateColor: menu.isMenuOpened ? ui.theme.accentColor : "transparent"
+        normalStateColor: menuLoader.isMenuOpened ? ui.theme.accentColor : "transparent"
 
         StyledMenuLoader {
-            id: menu
+            id: menuLoader
+
+            menuAnchorItem: window
 
             onHandleAction: {
                 root.changeZoomRequested(actionIndex)
@@ -98,7 +100,7 @@ Row {
         }
 
         onClicked: {
-            menu.toggleOpened(root.availableZoomList, parent.navigation)
+            menuLoader.toggleOpened(root.availableZoomList, parent.navigation)
         }
     }
 }
