@@ -42,6 +42,7 @@ RowLayout {
 
     FlatButton {
         icon: IconCode.ZOOM_IN
+        iconFont: ui.theme.toolbarIconsFont
 
         normalStateColor: "transparent"
 
@@ -54,6 +55,7 @@ RowLayout {
         Layout.leftMargin: 4
 
         icon: IconCode.ZOOM_OUT
+        iconFont: ui.theme.toolbarIconsFont
 
         normalStateColor: "transparent"
 
@@ -70,6 +72,8 @@ RowLayout {
 
         NumberInputField {
             id: zoomInputField
+
+            anchors.verticalCenter: parent.verticalCenter
 
             addLeadingZeros: false
             font: ui.theme.bodyFont

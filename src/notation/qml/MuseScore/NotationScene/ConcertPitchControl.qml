@@ -50,6 +50,7 @@ Row {
 
         orientation: Qt.Horizontal
         normalStateColor: "transparent"
+        iconFont: ui.theme.toolbarIconsFont
 
         onClicked: {
             root.toggleConcertPitchRequested()
