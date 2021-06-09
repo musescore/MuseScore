@@ -542,6 +542,7 @@ void PopupView::updatePosition()
     bool isCascade = parentPopupContentItem != nullptr;
 
     if (popupRect.left() < screenRect.left()) {
+        // move to the right to an area that doesn't fit
         movePos(m_globalPos.x() + screenRect.left() - popupRect.left(), m_globalPos.y());
     }
 
@@ -551,22 +552,37 @@ void PopupView::updatePosition()
         qreal newY = m_globalPos.y() - popupShiftByY;
 
         if (screenRect.top() < newY && !isCascade) {
+            // move to the top of the parent
             movePos(m_globalPos.x(), newY);
             setOpensUpward(true);
         }
     }
 
     if (popupRect.bottom() > screenRect.bottom()) {
-        movePos(m_globalPos.x(), m_globalPos.y() - popupShiftByY);
-        setOpensUpward(true);
+        if (isCascade) {
+            // move to the top to an area that doesn't fit
+            movePos(m_globalPos.x(), m_globalPos.y() - (popupRect.bottom() - screenRect.bottom()));
+        } else {
+            qreal newY = m_globalPos.y() - popupShiftByY;
+            if (screenRect.top() < newY) {
+                // move to the top of the parent
+                movePos(m_globalPos.x(), newY);
+                setOpensUpward(true);
+            } else {
+                // move to the right of the parent and move to top to an area that doesn't fit
+                movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (popupRect.bottom() - screenRect.bottom()));
+            }
+        }
     }
 
     Qt::AlignmentFlag parentCascadeAlign = this->parentCascadeAlign(parentPopupContentItem);
     if (popupRect.right() > screenRect.right() || parentCascadeAlign != Qt::AlignmentFlag::AlignRight) {
         if (isCascade) {
+            // move to the right of the parent
             movePos(parentTopLeft.x() - popupRect.width(), m_globalPos.y());
             setCascadeAlign(Qt::AlignmentFlag::AlignLeft);
         } else {
+            // move to the left to an area that doesn't fit
             movePos(m_globalPos.x() - (popupRect.right() - screenRect.right()), m_globalPos.y());
         }
     }
