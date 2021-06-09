@@ -38,7 +38,6 @@ StyledPopupView {
     y: parent.height
 
     contentWidth: prv.itemWidth
-    contentHeight: view.childrenRect.height
 
     padding: 8
     margins: 0
@@ -117,7 +116,7 @@ StyledPopupView {
         }
 
         var itemHeight = (view.contentHeight - view.spacing * (model.length - 1)) / model.length
-        root.contentHeight = view.contentHeight - sepCount * (itemHeight - prv.separatorHeight)
+        root.contentHeight = view.contentHeight - sepCount * (itemHeight - prv.separatorHeight) + 8
     }
 
     QtObject {
@@ -154,8 +153,12 @@ StyledPopupView {
 
     ListView {
         id: view
+
         anchors.fill: parent
-        spacing: 2
+        anchors.topMargin: 4
+        anchors.bottomMargin: 4
+
+        spacing: 0
         interactive: false
 
         delegate: Loader {
