@@ -593,11 +593,10 @@ void PopupView::updatePosition()
     if (showArrow()) {
         setArrowX(parentTopLeft.x() + (parent->width() / 2) - m_globalPos.x());
     } else {
+        movePos(m_globalPos.x() - padding(), m_globalPos.y());
         if (opensUpward()) {
-            contentItem()->setX(-padding());
             contentItem()->setY(padding());
         } else {
-            contentItem()->setX(-padding());
             contentItem()->setY(-padding());
         }
     }
