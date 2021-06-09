@@ -49,6 +49,8 @@ ListItemBlank {
 
     signal requestParentItemActive()
 
+    implicitHeight: 32
+
     hoveredStateColor: ui.theme.accentColor
     pressedStateColor: ui.theme.accentColor
     enabled: (Boolean(modelData) && modelData.enabled !== undefined) ? Boolean(modelData.enabled) : true // default true

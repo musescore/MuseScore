@@ -126,6 +126,7 @@ PopupView {
                 id: contentBackground
                 anchors.fill: parent
                 color: ui.theme.backgroundPrimaryColor
+                radius: 3
                 border.width: 1
                 border.color: ui.theme.strokeColor
             }
