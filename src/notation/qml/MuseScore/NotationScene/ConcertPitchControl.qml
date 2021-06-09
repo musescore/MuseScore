@@ -24,36 +24,42 @@ import QtQuick 2.15
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
-Row {
+FlatButton {
     id: root
 
-    property alias text: concertPitchButton.text
-    property alias icon: concertPitchButton.icon
-    property alias checked: concertPitchCheckBox.checked
+    property bool checked: false
 
     signal toggleConcertPitchRequested()
 
-    spacing: 4
+    orientation: Qt.Horizontal
+    normalStateColor: "transparent"
 
-    CheckBox {
-        id: concertPitchCheckBox
+    contentItem: Row {
+        spacing: 6
 
-        anchors.verticalCenter: parent.verticalCenter
+        CheckBox {
+            checked: root.checked
 
-        onClicked: {
-            root.toggleConcertPitchRequested()
+            onClicked: {
+                root.toggleConcertPitchRequested()
+            }
+        }
+
+        StyledIconLabel {
+            anchors.verticalCenter: parent.verticalCenter
+
+            iconCode: root.icon
+            font: ui.theme.toolbarIconsFont
+        }
+
+        StyledTextLabel {
+            anchors.verticalCenter: parent.verticalCenter
+
+            text: root.text
         }
     }
 
-    FlatButton {
-        id: concertPitchButton
-
-        orientation: Qt.Horizontal
-        normalStateColor: "transparent"
-        iconFont: ui.theme.toolbarIconsFont
-
-        onClicked: {
-            root.toggleConcertPitchRequested()
-        }
+    onClicked: {
+        root.toggleConcertPitchRequested()
     }
 }
