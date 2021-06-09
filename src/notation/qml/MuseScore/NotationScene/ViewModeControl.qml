@@ -46,13 +46,18 @@ FlatButton {
 
         StyledIconLabel {
             iconCode: root.icon
+            font: ui.theme.toolbarIconsFont
         }
 
         StyledTextLabel {
+            anchors.verticalCenter: parent.verticalCenter
+
             text: root.text
         }
 
         StyledIconLabel {
+            anchors.verticalCenter: parent.verticalCenter
+
             iconCode: IconCode.SMALL_ARROW_DOWN
         }
     }
