@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Window 2.15
 
 import MuseScore.AppShell 1.0
 import MuseScore.UiComponents 1.0
@@ -46,15 +47,24 @@ Rectangle {
         anchors.left: parent.left
         anchors.leftMargin: 12
         anchors.right: statusBarRow.left
+        anchors.rightMargin: 12
         anchors.verticalCenter: parent.verticalCenter
 
         horizontalAlignment: Text.AlignLeft
 
         text: model.accessibilityInfo
+
+        visible: !hiddenControlsMenuButton.visible
     }
 
     Row {
         id: statusBarRow
+
+        //! TODO: hiding of controls is disabled because there is a bug
+        // Determination of the size of the window content works incorrectly
+        readonly property int eps: 100
+        //property int remainingSpace: Window.window ? Window.window.width - (viewModeControl.width + zoomControl.width + eps) : 0
+        property int remainingSpace: 999999
 
         anchors.right: parent.right
         anchors.rightMargin: hiddenControlsMenuButton.visible ? 4 : 12
@@ -73,6 +83,8 @@ Rectangle {
             text: model.currentWorkspaceAction.title
             normalStateColor: "transparent"
 
+            visible: statusBarRow.remainingSpace > width + concertPitchControl.width
+
             onClicked: {
                 Qt.callLater(model.selectWorkspace)
             }
@@ -90,6 +102,8 @@ Rectangle {
             checked: model.concertPitchAction.checked
             enabled: model.concertPitchAction.enabled
 
+            visible: statusBarRow.remainingSpace > width
+
             onToggleConcertPitchRequested: {
                 model.toggleConcertPitch()
             }
@@ -98,6 +112,8 @@ Rectangle {
         SeparatorLine { orientation: Qt.Vertical }
 
         ViewModeControl {
+            id: viewModeControl
+
             anchors.verticalCenter: parent.verticalCenter
 
             currentViewMode: model.currentViewMode
@@ -109,6 +125,8 @@ Rectangle {
         }
 
         ZoomControl {
+            id: zoomControl
+
             anchors.verticalCenter: parent.verticalCenter
 
             enabled: model.zoomEnabled
