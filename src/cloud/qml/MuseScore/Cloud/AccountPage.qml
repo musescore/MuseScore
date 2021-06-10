@@ -30,10 +30,6 @@ FocusScope {
 
     AccountModel {
         id: accountModel
-
-        onUserAuthorizedChanged: {
-            root.userAuthorizedChanged()
-        }
     }
 
     Component.onCompleted: {
@@ -43,7 +39,7 @@ FocusScope {
     Loader {
         anchors.fill: parent
 
-        sourceComponent: accountModel.userAuthorized ? authorizationComp : accountDetailsComp
+        sourceComponent: accountModel.userAuthorized ? accountDetailsComp : authorizationComp
     }
 
     Component {

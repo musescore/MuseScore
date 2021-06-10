@@ -37,11 +37,13 @@ public:
     explicit NetworkManager(QObject* parent = nullptr);
     ~NetworkManager() override;
 
-    Ret get(const QUrl& url, system::IODevice* incommingData) override;
-    Ret head(const QUrl& url) override;
-    Ret post(const QUrl& url, system::IODevice* outgoingData, system::IODevice* incommingData) override;
-    Ret put(const QUrl& url, system::IODevice* outgoingData, system::IODevice* incommingData) override;
-    Ret del(const QUrl& url, system::IODevice* incommingData) override;
+    Ret get(const QUrl& url, system::IODevice* incommingData, const RequestHeaders& headers = RequestHeaders()) override;
+    Ret head(const QUrl& url, const RequestHeaders& headers = RequestHeaders()) override;
+    Ret post(const QUrl& url, system::IODevice* outgoingData, system::IODevice* incommingData,
+             const RequestHeaders& headers = RequestHeaders()) override;
+    Ret put(const QUrl& url, system::IODevice* outgoingData, system::IODevice* incommingData,
+            const RequestHeaders& headers = RequestHeaders()) override;
+    Ret del(const QUrl& url, system::IODevice* incommingData, const RequestHeaders& headers = RequestHeaders()) override;
 
     framework::ProgressChannel progressChannel() const override;
 
@@ -60,7 +62,7 @@ private:
     };
 
     Ret execRequest(RequestType requestType, const QUrl& url, system::IODevice* incommingData = nullptr,
-                    system::IODevice* outgoingData = nullptr);
+                    system::IODevice* outgoingData = nullptr, const RequestHeaders& headers = RequestHeaders());
     QNetworkReply* receiveReply(RequestType requestType, const QNetworkRequest& request, system::IODevice* outgoingData = nullptr);
 
     bool openIoDevice(system::IODevice* device, QIODevice::OpenModeFlag flags);

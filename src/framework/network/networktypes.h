@@ -19,22 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_ACCOUNTCONTROLLERSTUB_H
-#define MU_CLOUD_ACCOUNTCONTROLLERSTUB_H
+#ifndef MU_NETWORK_NETWORKTYPES_H
+#define MU_NETWORK_NETWORKTYPES_H
 
-#include "cloud/iaccountcontroller.h"
+#include <QVariantMap>
+#include <QNetworkRequest>
 
-namespace mu::cloud {
-class AccountControllerStub : public IAccountController
+namespace mu::network {
+struct RequestHeaders
 {
-public:
-    void createAccount() override;
-    void signIn() override;
-    void signOut() override;
-
-    ValCh<bool> userAuthorized() const override;
-    ValCh<AccountInfo> accountInfo() const override;
+    QMap<QNetworkRequest::KnownHeaders, QVariant> knownHeaders;
+    QMap<QByteArray, QByteArray> rawHeaders;
 };
 }
 
-#endif // MU_CLOUD_ACCOUNTCONTROLLERSTUB_H
+#endif // MU_NETWORK_NETWORKTYPES_H

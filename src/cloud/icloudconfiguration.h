@@ -19,31 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_IACCOUNTCONTROLLER_H
-#define MU_CLOUD_IACCOUNTCONTROLLER_H
+#ifndef MU_CLOUD_ICLOUDCONFIGURATION_H
+#define MU_CLOUD_ICLOUDCONFIGURATION_H
 
 #include "modularity/imoduleexport.h"
-#include "cloudtypes.h"
+#include "io/path.h"
+#include "network/networktypes.h"
 
-#include "retval.h"
-
-namespace mu {
-namespace cloud {
-class IAccountController : MODULE_EXPORT_INTERFACE
+namespace mu::cloud {
+class ICloudConfiguration : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IAccountController)
+    INTERFACE_ID(ICloudConfiguration)
 
 public:
-    virtual ~IAccountController() = default;
+    virtual ~ICloudConfiguration() = default;
 
-    virtual void createAccount() = 0;
-    virtual void signIn() = 0;
-    virtual void signOut() = 0;
+    virtual network::RequestHeaders headers() const = 0;
+    virtual QByteArray clientId() const = 0;
 
-    virtual ValCh<bool> userAuthorized() const = 0;
-    virtual ValCh<AccountInfo> accountInfo() const = 0;
+    virtual QUrl authorizationUrl() const = 0;
+    virtual QUrl accessTokenUrl() const = 0;
+    virtual QUrl refreshApiUrl() const = 0;
+    virtual QUrl userInfoApiUrl() const = 0;
+    virtual QUrl loginApiUrl() const = 0;
+    virtual io::path tokensFilePath() const = 0;
 };
 }
-}
 
-#endif // MU_CLOUD_IACCOUNTCONTROLLER_H
+#endif // MU_CLOUD_ICLOUDCONFIGURATION_H

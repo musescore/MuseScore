@@ -19,11 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "mp3exporterstub.h"
+#ifndef MU_CLOUD_AUTHORIZATIONSERVICESTUB_H
+#define MU_CLOUD_AUTHORIZATIONSERVICESTUB_H
 
-using namespace mu::cloud;
+#include "cloud/iauthorizationservice.h"
 
-mu::Ret Mp3Exporter::saveCurrentScoreMp3(const QString&, int)
+namespace mu::cloud {
+class AuthorizationServiceStub : public IAuthorizationService
 {
-    return make_ret(Ret::Code::NotSupported);
+public:
+    void signIn() override;
+    void signOut() override;
+
+    ValCh<bool> userAuthorized() const override;
+    ValCh<AccountInfo> accountInfo() const override;
+};
 }
+
+#endif // MU_CLOUD_AUTHORIZATIONSERVICESTUB_H

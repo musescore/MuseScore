@@ -19,42 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_ACCOUNTCONTROLLER_H
-#define MU_CLOUD_ACCOUNTCONTROLLER_H
+#ifndef MU_CLOUD_IAUTHORIZATIONSERVICE_H
+#define MU_CLOUD_IAUTHORIZATIONSERVICE_H
 
-#include <QScopedPointer>
+#include "modularity/imoduleexport.h"
+#include "cloudtypes.h"
 
-#include "iaccountcontroller.h"
+#include "retval.h"
 
-namespace Ms {
-class CloudManager;
-}
-
-namespace mu {
-namespace cloud {
-class AccountController : public IAccountController
+namespace mu::cloud {
+class IAuthorizationService : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IAuthorizationService)
+
 public:
-    AccountController();
+    virtual ~IAuthorizationService() = default;
 
-    void init();
+    virtual void signIn() = 0;
+    virtual void signOut() = 0;
 
-    void createAccount() override;
-    void signIn() override;
-    void signOut() override;
-
-    ValCh<bool> userAuthorized() const override;
-    ValCh<AccountInfo> accountInfo() const override;
-
-private:
-    void setAccountInfo(const AccountInfo& info);
-
-    QScopedPointer<Ms::CloudManager> m_cloudManager;
-
-    ValCh<bool> m_userAuthorized;
-    ValCh<AccountInfo> m_accountInfo;
+    virtual ValCh<bool> userAuthorized() const = 0;
+    virtual ValCh<AccountInfo> accountInfo() const = 0;
 };
 }
-}
 
-#endif // MU_CLOUD_ACCOUNTCONTROLLER_H
+#endif // MU_CLOUD_IAUTHORIZATIONSERVICE_H

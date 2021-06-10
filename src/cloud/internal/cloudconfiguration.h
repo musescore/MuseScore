@@ -19,17 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_MP3EXPORTERSTUB_H
-#define MU_CLOUD_MP3EXPORTERSTUB_H
+#ifndef MU_CLOUD_CLOUDCONFIGURATION_H
+#define MU_CLOUD_CLOUDCONFIGURATION_H
 
-#include "cloud/imp3exporter.h"
+#include "icloudconfiguration.h"
+
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
 
 namespace mu::cloud {
-class Mp3Exporter : public IMp3Exporter
+class CloudConfiguration : public ICloudConfiguration
 {
+    INJECT(cloud, framework::IGlobalConfiguration, globalConfiguration)
+
 public:
-    Ret saveCurrentScoreMp3(const QString& mp3Path, int mp3Bitrate) override;
+    void init();
+
+    network::RequestHeaders headers() const override;
+    QByteArray clientId() const override;
+
+    QUrl authorizationUrl() const override;
+    QUrl accessTokenUrl() const override;
+    QUrl refreshApiUrl() const override;
+    QUrl userInfoApiUrl() const override;
+    QUrl loginApiUrl() const override;
+    io::path tokensFilePath() const override;
+
+private:
+    QString apiRootUrl() const;
 };
 }
 
-#endif // MU_CLOUD_MP3EXPORTERSTUB_H
+#endif // MU_CLOUD_CLOUDCONFIGURATION_H
