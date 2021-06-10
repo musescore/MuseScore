@@ -137,7 +137,7 @@ void DockWindow::loadPage(const QString& uri)
 
     bool isFirstOpening = m_currentPageUri.isEmpty();
     if (isFirstOpening) {
-        restoreGeometry();
+        //restoreGeometry();
     }
 
     DockPage* newPage = pageByUri(uri);
@@ -152,7 +152,7 @@ void DockWindow::loadPage(const QString& uri)
     }
 
     loadPageContent(newPage);
-    restorePageState(newPage->objectName());
+    //restorePageState(newPage->objectName());
     initDocks(newPage);
 
     for (DockBase* dock : newPage->allDocks()) {

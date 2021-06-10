@@ -34,6 +34,7 @@
 
 using namespace mu::cloud;
 using namespace mu::network;
+using namespace mu::framework;
 
 static const QString ACCESS_TOKEN_KEY("token");
 static const QString REFRESH_TOKEN_KEY("refresh_token");
@@ -270,4 +271,10 @@ void CloudService::setAccountInfo(const AccountInfo& info)
 
     m_accountInfo.set(info);
     m_userAuthorized.set(info.isValid());
+}
+
+ProgressChannel CloudService::uploadScore(notation::INotation& notation)
+{
+    UNUSED(notation);
+    NOT_IMPLEMENTED;
 }

@@ -28,6 +28,7 @@ class QOAuth2AuthorizationCodeFlow;
 class QOAuthHttpServerReplyHandler;
 
 #include "iauthorizationservice.h"
+#include "iuploadingservice.h"
 
 #include "modularity/ioc.h"
 #include "icloudconfiguration.h"
@@ -35,7 +36,7 @@ class QOAuthHttpServerReplyHandler;
 #include "network/inetworkmanagercreator.h"
 
 namespace mu::cloud {
-class CloudService : public QObject, public IAuthorizationService
+class CloudService : public QObject, public IAuthorizationService, public IUploadingService
 {
     Q_OBJECT
 
@@ -53,6 +54,8 @@ public:
 
     ValCh<bool> userAuthorized() const override;
     ValCh<AccountInfo> accountInfo() const override;
+
+    framework::ProgressChannel uploadScore(notation::INotation& notation) override;
 
 private slots:
     void onUserAuthorized();

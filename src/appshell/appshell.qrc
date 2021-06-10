@@ -56,6 +56,7 @@
         <file>qml/HomePage/HomePage.qml</file>
         <file>qml/NotationPage/NotationPage.qml</file>
         <file>qml/PublishPage/PublishPage.qml</file>
+        <file>qml/PublishPage/PublishToolBar.qml</file>
         <file>qml/DevTools/DevToolsPage.qml</file>
         <file>qml/dockwindow/DockTitleBar.qml</file>
         <file>qml/dockwindow/DockToolBar.qml</file>
