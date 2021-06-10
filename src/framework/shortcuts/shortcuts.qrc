@@ -7,5 +7,7 @@
         <file>data/shortcuts.xml</file>
         <file>data/shortcuts_AZERTY.xml</file>
         <file>data/shortcuts-Mac.xml</file>
+        <file>qml/MuseScore/Shortcuts/EditMidiMappingDialog.qml</file>
+        <file>qml/MuseScore/Shortcuts/MidiDeviceMappingPage.qml</file>
     </qresource>
 </RCC>

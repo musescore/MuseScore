@@ -19,32 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_FRAMEWORK_UTILS_H
+#define MU_FRAMEWORK_UTILS_H
 
-#include "editmidimappingmodel.h"
+#include <string>
 
-#include "log.h"
-
-using namespace mu::midi;
-
-EditMidiMappingModel::EditMidiMappingModel(QObject* parent)
-    : QObject(parent)
-{
+namespace mu {
+std::string pitchToString(int pitch);
 }
 
-void EditMidiMappingModel::load(int originValue)
-{
-    NOT_IMPLEMENTED;
-
-    m_originValue = originValue;
-    emit mappingTitleChanged(mappingTitle());
-}
-
-QString EditMidiMappingModel::mappingTitle() const
-{
-    return "MIDI Keyboard > Note C3";
-}
-
-int EditMidiMappingModel::inputedValue() const
-{
-    return m_inputedValue;
-}
+#endif // MU_FRAMEWORK_GLOBAL_H
