@@ -23,7 +23,7 @@
 
 #include "log.h"
 #include "translation.h"
-#include "ui/view/iconcodes.h"
+
 #include "internal/notationuiactions.h"
 
 using namespace mu::notation;
@@ -80,10 +80,16 @@ NoteInputBarModel::NoteInputBarModel(QObject* parent)
 
 QVariant NoteInputBarModel::data(const QModelIndex& index, int role) const
 {
-    const MenuItem& item = m_items.at(index.row());
+    int row = index.row();
+
+    if (!isIndexValid(row)) {
+        return QVariant();
+    }
+
+    const MenuItem& item = m_items.at(row);
     switch (role) {
     case IsMenuSecondaryRole: return isMenuSecondary(item.code);
-    case OrderRole: return index.row();
+    case OrderRole: return row;
     default: return AbstractMenuModel::data(index, role);
     }
 }
@@ -187,18 +193,14 @@ void NoteInputBarModel::onNotationChanged()
 
 void NoteInputBarModel::updateState()
 {
-    bool isPlaying = playbackController()->isPlaying();
-    if (!notation() || isPlaying) {
-        for (MenuItem& item : m_items) {
-            item.state.enabled = false;
-            item.state.checked = false;
-        }
-    } else {
-        for (MenuItem& item : m_items) {
-            item.state.enabled = true;
-            item.state.checked = false;
-        }
+    bool enabled = notation() && !playbackController()->isPlaying();
 
+    for (MenuItem& item : m_items) {
+        item.state.enabled = enabled;
+        item.state.checked = false;
+    }
+
+    if (enabled) {
         updateNoteInputState();
     }
 
@@ -293,6 +295,10 @@ void NoteInputBarModel::updateNoteAccidentalState()
 
 void NoteInputBarModel::updateTieState()
 {
+    if (!selection()) {
+        return;
+    }
+
     std::vector<Note*> tiedNotes = selection()->notes(NoteFilter::WithTie);
 
     bool checked = !tiedNotes.empty();
@@ -579,15 +585,17 @@ QVariantList NoteInputBarModel::subitems(const ActionCode& actionCode) const
 MenuItemList NoteInputBarModel::noteInputMethodItems() const
 {
     MenuItemList items;
-
     actions::ActionCode currentInputMethod = currentNoteInputModeAction().code;
+
     for (const auto& pair : noteInputModeActions) {
         ActionCode actionCode = pair.first;
-        MenuItem item = makeAction(actionCode);
+        MenuItem item = makeMenuItem(actionCode);
         item.selectable = true;
+
         if (actionCode == currentInputMethod) {
             item.selected = true;
         }
+
         items.push_back(item);
     }
 
@@ -597,15 +605,15 @@ MenuItemList NoteInputBarModel::noteInputMethodItems() const
 MenuItemList NoteInputBarModel::tupletItems() const
 {
     MenuItemList items = {
-        makeAction("duplet"),
-        makeAction("triplet"),
-        makeAction("quadruplet"),
-        makeAction("quintuplet"),
-        makeAction("sextuplet"),
-        makeAction("septuplet"),
-        makeAction("octuplet"),
-        makeAction("nonuplet"),
-        makeAction("tuplet-dialog")
+        makeMenuItem("duplet"),
+        makeMenuItem("triplet"),
+        makeMenuItem("quadruplet"),
+        makeMenuItem("quintuplet"),
+        makeMenuItem("sextuplet"),
+        makeMenuItem("septuplet"),
+        makeMenuItem("octuplet"),
+        makeMenuItem("nonuplet"),
+        makeMenuItem("tuplet-dialog")
     };
 
     return items;
@@ -628,21 +636,21 @@ MenuItemList NoteInputBarModel::addItems() const
 MenuItemList NoteInputBarModel::notesItems() const
 {
     MenuItemList items {
-        makeAction("note-c"),
-        makeAction("note-d"),
-        makeAction("note-e"),
-        makeAction("note-f"),
-        makeAction("note-g"),
-        makeAction("note-a"),
-        makeAction("note-b"),
+        makeMenuItem("note-c"),
+        makeMenuItem("note-d"),
+        makeMenuItem("note-e"),
+        makeMenuItem("note-f"),
+        makeMenuItem("note-g"),
+        makeMenuItem("note-a"),
+        makeMenuItem("note-b"),
         makeSeparator(),
-        makeAction("chord-c"),
-        makeAction("chord-d"),
-        makeAction("chord-e"),
-        makeAction("chord-f"),
-        makeAction("chord-g"),
-        makeAction("chord-a"),
-        makeAction("chord-b")
+        makeMenuItem("chord-c"),
+        makeMenuItem("chord-d"),
+        makeMenuItem("chord-e"),
+        makeMenuItem("chord-f"),
+        makeMenuItem("chord-g"),
+        makeMenuItem("chord-a"),
+        makeMenuItem("chord-b")
     };
 
     return items;
@@ -651,24 +659,24 @@ MenuItemList NoteInputBarModel::notesItems() const
 MenuItemList NoteInputBarModel::intervalsItems() const
 {
     MenuItemList items {
-        makeAction("interval1"),
-        makeAction("interval2"),
-        makeAction("interval3"),
-        makeAction("interval4"),
-        makeAction("interval5"),
-        makeAction("interval6"),
-        makeAction("interval7"),
-        makeAction("interval8"),
-        makeAction("interval9"),
+        makeMenuItem("interval1"),
+        makeMenuItem("interval2"),
+        makeMenuItem("interval3"),
+        makeMenuItem("interval4"),
+        makeMenuItem("interval5"),
+        makeMenuItem("interval6"),
+        makeMenuItem("interval7"),
+        makeMenuItem("interval8"),
+        makeMenuItem("interval9"),
         makeSeparator(),
-        makeAction("interval-2"),
-        makeAction("interval-3"),
-        makeAction("interval-4"),
-        makeAction("interval-5"),
-        makeAction("interval-6"),
-        makeAction("interval-7"),
-        makeAction("interval-8"),
-        makeAction("interval-9")
+        makeMenuItem("interval-2"),
+        makeMenuItem("interval-3"),
+        makeMenuItem("interval-4"),
+        makeMenuItem("interval-5"),
+        makeMenuItem("interval-6"),
+        makeMenuItem("interval-7"),
+        makeMenuItem("interval-8"),
+        makeMenuItem("interval-9")
     };
 
     return items;
@@ -677,11 +685,11 @@ MenuItemList NoteInputBarModel::intervalsItems() const
 MenuItemList NoteInputBarModel::measuresItems() const
 {
     MenuItemList items {
-        makeAction("insert-measure"),
-        makeAction("insert-measures"),
+        makeMenuItem("insert-measure"),
+        makeMenuItem("insert-measures"),
         makeSeparator(),
-        makeAction("append-measure"),
-        makeAction("append-measures")
+        makeMenuItem("append-measure"),
+        makeMenuItem("append-measures")
     };
 
     return items;
@@ -690,13 +698,13 @@ MenuItemList NoteInputBarModel::measuresItems() const
 MenuItemList NoteInputBarModel::framesItems() const
 {
     MenuItemList items {
-        makeAction("insert-hbox"),
-        makeAction("insert-vbox"),
-        makeAction("insert-textframe"),
+        makeMenuItem("insert-hbox"),
+        makeMenuItem("insert-vbox"),
+        makeMenuItem("insert-textframe"),
         makeSeparator(),
-        makeAction("append-hbox"),
-        makeAction("append-vbox"),
-        makeAction("append-textframe")
+        makeMenuItem("append-hbox"),
+        makeMenuItem("append-vbox"),
+        makeMenuItem("append-textframe")
     };
 
     return items;
@@ -705,26 +713,26 @@ MenuItemList NoteInputBarModel::framesItems() const
 MenuItemList NoteInputBarModel::textItems() const
 {
     MenuItemList items {
-        makeAction("title-text"),
-        makeAction("subtitle-text"),
-        makeAction("composer-text"),
-        makeAction("poet-text"),
-        makeAction("part-text"),
+        makeMenuItem("title-text"),
+        makeMenuItem("subtitle-text"),
+        makeMenuItem("composer-text"),
+        makeMenuItem("poet-text"),
+        makeMenuItem("part-text"),
         makeSeparator(),
-        makeAction("system-text"),
-        makeAction("staff-text"),
-        makeAction("expression-text"),
-        makeAction("rehearsalmark-text"),
-        makeAction("instrument-change-text"),
-        makeAction("fingering-text"),
+        makeMenuItem("system-text"),
+        makeMenuItem("staff-text"),
+        makeMenuItem("expression-text"),
+        makeMenuItem("rehearsalmark-text"),
+        makeMenuItem("instrument-change-text"),
+        makeMenuItem("fingering-text"),
         makeSeparator(),
-        makeAction("sticking-text"),
-        makeAction("chord-text"),
-        makeAction("roman-numeral-text"),
-        makeAction("nashville-number-text"),
-        makeAction("lyrics"),
-        makeAction("figured-bass"),
-        makeAction("tempo")
+        makeMenuItem("sticking-text"),
+        makeMenuItem("chord-text"),
+        makeMenuItem("roman-numeral-text"),
+        makeMenuItem("nashville-number-text"),
+        makeMenuItem("lyrics"),
+        makeMenuItem("figured-bass"),
+        makeMenuItem("tempo")
     };
 
     return items;
@@ -733,12 +741,12 @@ MenuItemList NoteInputBarModel::textItems() const
 MenuItemList NoteInputBarModel::linesItems() const
 {
     MenuItemList items {
-        makeAction("add-slur"),
-        makeAction("add-hairpin"),
-        makeAction("add-hairpin-reverse"),
-        makeAction("add-8va"),
-        makeAction("add-8vb"),
-        makeAction("add-noteline")
+        makeMenuItem("add-slur"),
+        makeMenuItem("add-hairpin"),
+        makeMenuItem("add-hairpin-reverse"),
+        makeMenuItem("add-8va"),
+        makeMenuItem("add-8vb"),
+        makeMenuItem("add-noteline")
     };
 
     return items;
@@ -789,12 +797,6 @@ std::vector<std::string> NoteInputBarModel::currentWorkspaceActions() const
     }
 
     return toolbarData->actions;
-}
-
-void NoteInputBarModel::handleAction(const QString& action)
-{
-    ActionCode actionCode = codeFromQString(action);
-    dispatcher()->dispatch(actionCode);
 }
 
 INotationPtr NoteInputBarModel::notation() const

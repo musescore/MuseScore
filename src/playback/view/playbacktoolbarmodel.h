@@ -26,7 +26,6 @@
 
 #include "modularity/ioc.h"
 #include "iplaybackcontroller.h"
-#include "actions/actiontypes.h"
 #include "workspace/iworkspacemanager.h"
 
 namespace mu::playback {

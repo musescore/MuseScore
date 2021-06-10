@@ -99,7 +99,7 @@ void PlaybackToolBarModel::updateActions()
             //! NOTE: In this case, we want to see the actions' description instead of the title
             additionalItems << makeActionWithDescriptionAsTitle(code);
         } else {
-            m_items << makeAction(code);
+            m_items << makeMenuItem(code);
         }
     }
 
@@ -159,7 +159,7 @@ bool PlaybackToolBarModel::isAdditionalAction(const actions::ActionCode& actionC
 
 MenuItem PlaybackToolBarModel::makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode) const
 {
-    MenuItem item = makeAction(actionCode);
+    MenuItem item = makeMenuItem(actionCode);
     item.title = item.description;
     return item;
 }
