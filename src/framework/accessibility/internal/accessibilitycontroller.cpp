@@ -182,6 +182,9 @@ void AccessibilityController::unreg(IAccessible* aitem)
     MYLOG() << aitem->accessibleName();
 
     Item item = m_allItems.take(aitem);
+    if (!item.isValid()) {
+        return;
+    }
 
     if (m_children.contains(aitem)) {
         m_children.removeOne(aitem);
