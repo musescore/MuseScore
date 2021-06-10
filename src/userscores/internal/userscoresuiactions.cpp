@@ -45,11 +45,6 @@ const UiActionList UserScoresUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Save"),
              QT_TRANSLATE_NOOP("action", "Save score to file")
              ),
-    UiAction("file-save-online",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Save Online..."),
-             QT_TRANSLATE_NOOP("action", "Save score on musescore.com")
-             ),
     UiAction("file-save-as",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Save As..."),
@@ -67,8 +62,9 @@ const UiActionList UserScoresUiActions::m_actions = {
              ),
     UiAction("file-export",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Export..."),
-             QT_TRANSLATE_NOOP("action", "Save a copy of the score in various formats")
+             QT_TRANSLATE_NOOP("action", "Export"),
+             QT_TRANSLATE_NOOP("action", "Save a copy of the score in various formats"),
+             IconCode::Code::SHARE_FILE
              ),
     UiAction("file-import",
              mu::context::UiCtxAny,

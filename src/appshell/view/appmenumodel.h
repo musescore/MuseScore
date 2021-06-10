@@ -22,8 +22,6 @@
 #ifndef MU_APPSHELL_APPMENUMODEL_H
 #define MU_APPSHELL_APPMENUMODEL_H
 
-#include <QObject>
-
 #include "modularity/ioc.h"
 
 #include "async/asyncable.h"
@@ -35,7 +33,7 @@
 #include "ui/view/abstractmenumodel.h"
 
 namespace mu::appshell {
-class AppMenuModel : public QObject, public ui::AbstractMenuModel
+class AppMenuModel : public ui::AbstractMenuModel
 {
     Q_OBJECT
 
@@ -47,9 +45,11 @@ class AppMenuModel : public QObject, public ui::AbstractMenuModel
     Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
 
 public:
-    explicit AppMenuModel(QObject* parent = nullptr);
+    explicit AppMenuModel(QObject* parent = nullptr); 
 
-    Q_INVOKABLE void load();
+    QVariantList items() const;
+
+    Q_INVOKABLE void load() override;
     Q_INVOKABLE void handleAction(const QString& actionCodeStr, int actionIndex);
 
 signals:

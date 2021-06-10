@@ -22,8 +22,6 @@
 #ifndef MU_NOTATION_NOTEINPUTBARMODEL_H
 #define MU_NOTATION_NOTEINPUTBARMODEL_H
 
-#include <QAbstractListModel>
-
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
@@ -35,7 +33,7 @@
 #include "ui/view/abstractmenumodel.h"
 
 namespace mu::notation {
-class NoteInputBarModel : public QAbstractListModel, public ui::AbstractMenuModel
+class NoteInputBarModel : public ui::AbstractMenuModel
 {
     Q_OBJECT
 
@@ -44,34 +42,18 @@ class NoteInputBarModel : public QAbstractListModel, public ui::AbstractMenuMode
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, workspace::IWorkspaceManager, workspaceManager)
 
-    Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
-
 public:
     explicit NoteInputBarModel(QObject* parent = nullptr);
 
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void load();
+    Q_INVOKABLE void load() override;
     Q_INVOKABLE void handleAction(const QString& action);
-
-    Q_INVOKABLE QVariantMap get(int index);
-
-signals:
-    void countChanged(int count);
 
 private:
     enum Roles {
-        CodeRole = Qt::UserRole + 1,
-        TitleRole,
-        IconRole,
-        SectionRole,
-        CheckedRole,
-        DescriptionRole,
-        ShortcutRole,
-        SubitemsRole,
-        IsMenuSecondaryRole,
+        IsMenuSecondaryRole = AbstractMenuModel::Roles::UserRole + 1,
         OrderRole
     };
 
@@ -121,7 +103,6 @@ private:
 
     std::vector<std::string> currentWorkspaceActions() const;
 
-    ui::MenuItem& item(const actions::ActionCode& actionCode);
     int findNoteInputModeItemIndex() const;
 
     INotationNoteInputPtr noteInput() const;
@@ -139,8 +120,6 @@ private:
     NoteInputState noteInputState() const;
 
     const ChordRest* elementToChordRest(const Element* element) const;
-
-    QList<ui::MenuItem> m_items;
 };
 }
 

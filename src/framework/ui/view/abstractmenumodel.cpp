@@ -26,37 +26,97 @@
 using namespace mu::ui;
 using namespace mu::actions;
 
-QVariantList AbstractMenuModel::items() const
+AbstractMenuModel::AbstractMenuModel(QObject* parent)
+    : QAbstractListModel(parent)
 {
-    QVariantList menuItems;
+}
 
-    for (const MenuItem& menuItem: m_items) {
-        menuItems << menuItem.toMap();
+QVariant AbstractMenuModel::data(const QModelIndex& index, int role) const
+{
+    int row = index.row();
+
+    if (row < 0 || row > m_items.size()) {
+        return QVariant();
     }
 
-    return menuItems;
+    const QVariantMap& item = m_items.at(row).toMap();
+
+    switch (role) {
+    case TitleRole: return item["title"];
+    case CodeRole: return item["code"];
+    case DescriptionRole: return item["description"];
+    case ShortcutRole: return item["shortcut"];
+    case IconRole: return item["icon"];
+    case CheckedRole: return item["checked"];
+    case EnabledRole: return item["enabled"];
+    case SubitemsRole: return item["subitems"];
+    case SectionRole: return item["section"];
+    case UserRole: return QVariant();
+    }
+
+    return QVariant();
+}
+
+int AbstractMenuModel::rowCount(const QModelIndex&) const
+{
+    return m_items.count();
+}
+
+QHash<int, QByteArray> AbstractMenuModel::roleNames() const
+{
+    static const QHash<int, QByteArray> roles {
+        { TitleRole, "title" },
+        { CodeRole, "code" },
+        { DescriptionRole, "description" },
+        { ShortcutRole, "shortcut" },
+        { IconRole, "icon" },
+        { CheckedRole, "checked" },
+        { EnabledRole, "enabled" },
+        { SubitemsRole, "subitems" },
+        { SectionRole, "section" }
+    };
+
+    return roles;
+}
+
+void AbstractMenuModel::handleAction(const QString& actionCode)
+{
+    dispatch(codeFromQString(actionCode));
+}
+
+void AbstractMenuModel::dispatch(const ActionCode& actionCode, const ActionData& args)
+{
+    dispatcher()->dispatch(actionCode, args);
+}
+
+QVariantMap AbstractMenuModel::get(int index)
+{
+    QVariantMap result;
+
+    QHash<int, QByteArray> names = roleNames();
+    QHashIterator<int, QByteArray> i(names);
+    while (i.hasNext()) {
+        i.next();
+        QModelIndex idx = this->index(index, 0);
+        QVariant data = idx.data(i.key());
+        result[i.value()] = data;
+    }
+
+    return result;
+}
+
+void AbstractMenuModel::load()
+{
+    m_items.clear();
+
+    uiactionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
+        onActionsStateChanges(codes);
+    });
 }
 
 void AbstractMenuModel::clear()
 {
     m_items.clear();
-}
-
-void AbstractMenuModel::appendItem(const MenuItem& item)
-{
-    m_items << item;
-}
-
-void AbstractMenuModel::appendItems(const MenuItemList& items)
-{
-    m_items << items;
-}
-
-void AbstractMenuModel::listenActionsStateChanges()
-{
-    uiactionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
-        onActionsStateChanges(codes);
-    });
 }
 
 MenuItem& AbstractMenuModel::findItem(const ActionCode& actionCode)
@@ -97,10 +157,6 @@ MenuItem AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& i
 MenuItem AbstractMenuModel::makeAction(const ActionCode& actionCode) const
 {
     const UiAction& action = uiactionsRegister()->action(actionCode);
-//    IF_ASSERT_FAILED(action.isValid()) {
-//        return MenuItem();
-//    }
-
     if (!action.isValid()) {
         return MenuItem();
     }

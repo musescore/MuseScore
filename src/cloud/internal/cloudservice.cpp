@@ -133,7 +133,7 @@ bool CloudService::updateTokens()
     refreshApiUrl.setQuery(query);
 
     QBuffer receivedData;
-    Ret ret = m_networkManager->post(refreshApiUrl, nullptr, &receivedData, configuration()->headers());
+    Ret ret = m_networkManager->post(refreshApiUrl, nullptr, &receivedData, headers());
 
     if (!ret) {
         LOGE() << ret.toString();
@@ -181,6 +181,11 @@ QUrl CloudService::prepareUrlForRequest(QUrl apiUrl) const
     return apiUrl;
 }
 
+RequestHeaders CloudService::headers() const
+{
+    return configuration()->headers();
+}
+
 CloudService::RequestStatus CloudService::downloadUserInfo()
 {
     TRACEFUNC;
@@ -191,7 +196,7 @@ CloudService::RequestStatus CloudService::downloadUserInfo()
     }
 
     QBuffer receivedData;
-    Ret ret = m_networkManager->get(userInfoUrl, &receivedData, configuration()->headers());
+    Ret ret = m_networkManager->get(userInfoUrl, &receivedData, headers());
 
     if (ret.code() == USER_UNAUTHORIZED_ERR_CODE) {
         return RequestStatus::UserUnauthorized;
@@ -238,7 +243,7 @@ void CloudService::signOut()
     QUrl signOutUrl = prepareUrlForRequest(configuration()->loginApiUrl());
     if (!signOutUrl.isEmpty()) {
         QBuffer receivedData;
-        Ret ret = m_networkManager->del(signOutUrl, &receivedData, configuration()->headers());
+        Ret ret = m_networkManager->del(signOutUrl, &receivedData, headers());
 
         if (!ret) {
             LOGE() << ret.toString();
@@ -273,8 +278,13 @@ void CloudService::setAccountInfo(const AccountInfo& info)
     m_userAuthorized.set(info.isValid());
 }
 
-ProgressChannel CloudService::uploadScore(notation::INotation& notation)
+ProgressChannel CloudService::uploadScore(const QByteArray& scoreData, const std::string& title, const QUrl& sourceUrl)
 {
-    UNUSED(notation);
+    UNUSED(scoreData);
+    UNUSED(title);
+    UNUSED(sourceUrl);
+
     NOT_IMPLEMENTED;
+
+    return ProgressChannel();
 }

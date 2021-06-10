@@ -1201,6 +1201,18 @@ const UiActionList NotationUiActions::m_noteInputActions = {
              QT_TRANSLATE_NOOP("action", "Toggle 'Concert Pitch'"),
              IconCode::Code::TUNING_FORK,
              Checkable::Yes
+             ),
+    UiAction("print",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Print"),
+             QT_TRANSLATE_NOOP("action", "Print score/part"),
+             IconCode::Code::PRINT
+             ),
+    UiAction("toggle-imagecapture",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Image Capture"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Image Capture' mode"),
+             IconCode::Code::CAMERA
              )
 };
 

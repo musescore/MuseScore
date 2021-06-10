@@ -31,69 +31,41 @@ Rectangle {
     color: ui.theme.backgroundPrimaryColor
 
     PublishToolBarModel {
-        id: model
+        id: toolBarModel
     }
 
     Component.onCompleted: {
-        model.load()
+        toolBarModel.load()
     }
 
-    Row {
+    ListView {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 12
 
+        height: contentItem.childrenRect.height
+        width: contentItem.childrenRect.width
+
+        orientation: Qt.Horizontal
+        interactive: false
+
         spacing: 16
 
-        FlatButton {
-            text: qsTrc("appshell", "Print")
-            icon: IconCode.PRINT
+        model: toolBarModel
 
-            enabled: model.printScoreEnabled
+        delegate: FlatButton {
+            text: model.title
+            icon: model.icon
+            //enabled: model.enabled
+            toolTipTitle: model.title
+            toolTipDescription: model.description
+            toolTipShortcut: model.shortcut
+
             orientation: Qt.Horizontal
             normalStateColor: "transparent"
 
             onClicked: {
-                model.printScore()
-            }
-        }
-
-        FlatButton {
-            text: qsTrc("appshell", "Upload to MuseScore.com")
-            icon: IconCode.CLOUD_FILE
-
-            enabled: model.uploadScoreEnabled
-            orientation: Qt.Horizontal
-            normalStateColor: "transparent"
-
-            onClicked: {
-                model.uploadScore()
-            }
-        }
-
-        FlatButton {
-            text: qsTrc("appshell", "Export")
-            icon: IconCode.SHARE_FILE
-
-            enabled: model.exportScoreEnabled
-            orientation: Qt.Horizontal
-            normalStateColor: "transparent"
-
-            onClicked: {
-                model.exportScore()
-            }
-        }
-
-        FlatButton {
-            text: qsTrc("appshell", "Image Capture")
-            icon: IconCode.CAMERA
-
-            enabled: model.imageCaptureEnabled
-            orientation: Qt.Horizontal
-            normalStateColor: "transparent"
-
-            onClicked: {
-                model.startImageCapture()
+                toolBarModel.handleAction(modelData.code)
             }
         }
     }

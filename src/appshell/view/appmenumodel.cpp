@@ -32,25 +32,35 @@ using namespace mu::workspace;
 using namespace mu::actions;
 
 AppMenuModel::AppMenuModel(QObject* parent)
-    : QObject(parent)
+    : AbstractMenuModel(parent)
 {
+}
+
+QVariantList AppMenuModel::items() const
+{
+    QVariantList menuItems;
+
+    for (const MenuItem& menuItem: m_items) {
+        menuItems << menuItem.toMap();
+    }
+
+    return menuItems;
 }
 
 void AppMenuModel::load()
 {
     TRACEFUNC;
 
-    clear();
+    AbstractMenuModel::load();
 
-    appendItem(fileItem());
-    appendItem(editItem());
-    appendItem(viewItem());
-    appendItem(addItem());
-    appendItem(formatItem());
-    appendItem(toolsItem());
-    appendItem(helpItem());
+    m_items << fileItem();
+    m_items << editItem();
+    m_items << viewItem();
+    m_items << addItem();
+    m_items << formatItem();
+    m_items << toolsItem();
+    m_items << helpItem();
 
-    listenActionsStateChanges();
     setupConnections();
 
     emit itemsChanged();

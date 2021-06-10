@@ -37,6 +37,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/cloudservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/cloudconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/cloudconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/cloudactionscontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/cloudactionscontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/clouduiactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/clouduiactions.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

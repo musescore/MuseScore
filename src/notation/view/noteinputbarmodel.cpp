@@ -74,7 +74,7 @@ static ActionCode actionCodeForNoteInputMethod(NoteInputMethod method)
 }
 
 NoteInputBarModel::NoteInputBarModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : AbstractMenuModel(parent)
 {
 }
 
@@ -82,45 +82,24 @@ QVariant NoteInputBarModel::data(const QModelIndex& index, int role) const
 {
     const MenuItem& item = m_items.at(index.row());
     switch (role) {
-    case TitleRole: return item.title;
-    case IconRole: return static_cast<int>(item.iconCode);
-    case SectionRole: return item.section;
-    case CodeRole: return QString::fromStdString(item.code);
-    case CheckedRole: return item.state.checked;
-    case DescriptionRole: return item.description;
-    case ShortcutRole: return QString::fromStdString(item.shortcut);
-    case SubitemsRole: return subitems(item.code);
     case IsMenuSecondaryRole: return isMenuSecondary(item.code);
     case OrderRole: return index.row();
+    default: return AbstractMenuModel::data(index, role);
     }
-    return QVariant();
-}
-
-int NoteInputBarModel::rowCount(const QModelIndex&) const
-{
-    return m_items.count();
 }
 
 QHash<int, QByteArray> NoteInputBarModel::roleNames() const
 {
-    static const QHash<int, QByteArray> roles = {
-        { TitleRole, "titleRole" },
-        { IconRole, "iconRole" },
-        { SectionRole, "sectionRole" },
-        { CodeRole, "codeRole" },
-        { CheckedRole, "checkedRole" },
-        { DescriptionRole, "descriptionRole" },
-        { ShortcutRole, "shortcutRole" },
-        { SubitemsRole, "subitemsRole" },
-        { IsMenuSecondaryRole, "isMenuSecondaryRole" },
-        { OrderRole, "orderRole" },
-    };
+    QHash<int, QByteArray> roles = AbstractMenuModel::roleNames();
+    roles[IsMenuSecondaryRole] = "isMenuSecondary";
+    roles[OrderRole] = "order";
+
     return roles;
 }
 
 void NoteInputBarModel::load()
 {
-    m_items.clear();
+    AbstractMenuModel::load();
 
     beginResetModel();
 
@@ -165,8 +144,6 @@ void NoteInputBarModel::load()
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
         updateState();
     });
-
-    listenActionsStateChanges();
 }
 
 void NoteInputBarModel::onActionsStateChanges(const actions::ActionCodeList& codes)
@@ -174,18 +151,6 @@ void NoteInputBarModel::onActionsStateChanges(const actions::ActionCodeList& cod
     UNUSED(codes);
     notifyAboutTupletItemChanged();
     notifyAboutAddItemChanged();
-}
-
-MenuItem& NoteInputBarModel::item(const ActionCode& actionCode)
-{
-    for (MenuItem& item : m_items) {
-        if (item.code == actionCode) {
-            return item;
-        }
-    }
-
-    static MenuItem null;
-    return null;
 }
 
 int NoteInputBarModel::findNoteInputModeItemIndex() const
@@ -281,7 +246,7 @@ void NoteInputBarModel::updateNoteDotState()
     int durationDots = noteInputState().duration.dots();
 
     for (const ActionCode& actionCode: dotActions) {
-        item(actionCode).state.checked = durationDots == NotationUiActions::actionDotCount(actionCode);
+        findItem(actionCode).state.checked = durationDots == NotationUiActions::actionDotCount(actionCode);
     }
 }
 
@@ -305,7 +270,7 @@ void NoteInputBarModel::updateNoteDurationState()
 
     DurationType durationType = resolveCurrentDurationType();
     for (const ActionCode& actionCode: noteActions) {
-        item(actionCode).state.checked = durationType == NotationUiActions::actionDurationType(actionCode);
+        findItem(actionCode).state.checked = durationType == NotationUiActions::actionDurationType(actionCode);
     }
 }
 
@@ -322,7 +287,7 @@ void NoteInputBarModel::updateNoteAccidentalState()
     AccidentalType accidentalType = noteInputState().accidentalType;
 
     for (const ActionCode& actionCode: accidentalActions) {
-        item(actionCode).state.checked = accidentalType == NotationUiActions::actionAccidentalType(actionCode);
+        findItem(actionCode).state.checked = accidentalType == NotationUiActions::actionAccidentalType(actionCode);
     }
 }
 
@@ -338,12 +303,12 @@ void NoteInputBarModel::updateTieState()
         }
     }
 
-    item("tie").state.checked = checked;
+    findItem("tie").state.checked = checked;
 }
 
 void NoteInputBarModel::updateSlurState()
 {
-    item("add-slur").state.checked = resolveSlurSelected();
+    findItem("add-slur").state.checked = resolveSlurSelected();
 }
 
 void NoteInputBarModel::updateVoicesState()
@@ -358,7 +323,7 @@ void NoteInputBarModel::updateVoicesState()
     int currentVoice = resolveCurrentVoiceIndex();
 
     for (const ActionCode& actionCode: voiceActions) {
-        item(actionCode).state.checked = currentVoice == NotationUiActions::actionVoice(actionCode);
+        findItem(actionCode).state.checked = currentVoice == NotationUiActions::actionVoice(actionCode);
     }
 }
 
@@ -379,13 +344,13 @@ void NoteInputBarModel::updateArticulationsState()
     };
 
     for (const ActionCode& actionCode: articulationActions) {
-        item(actionCode).state.checked = isArticulationSelected(NotationUiActions::actionArticulationSymbolId(actionCode));
+        findItem(actionCode).state.checked = isArticulationSelected(NotationUiActions::actionArticulationSymbolId(actionCode));
     }
 }
 
 void NoteInputBarModel::updateRestState()
 {
-    item("pad-rest").state.checked = resolveRestSelected();
+    findItem("pad-rest").state.checked = resolveRestSelected();
 }
 
 int NoteInputBarModel::resolveCurrentVoiceIndex() const
@@ -830,22 +795,6 @@ void NoteInputBarModel::handleAction(const QString& action)
 {
     ActionCode actionCode = codeFromQString(action);
     dispatcher()->dispatch(actionCode);
-}
-
-QVariantMap NoteInputBarModel::get(int index)
-{
-    QVariantMap result;
-
-    QHash<int, QByteArray> names = roleNames();
-    QHashIterator<int, QByteArray> i(names);
-    while (i.hasNext()) {
-        i.next();
-        QModelIndex idx = this->index(index, 0);
-        QVariant data = idx.data(i.key());
-        result[i.value()] = data;
-    }
-
-    return result;
 }
 
 INotationPtr NoteInputBarModel::notation() const

@@ -25,53 +25,24 @@
 #include "log.h"
 
 using namespace mu::appshell;
+using namespace mu::actions;
+using namespace mu::ui;
 
 PublishToolBarModel::PublishToolBarModel(QObject* parent)
-    : QObject(parent)
+    : AbstractMenuModel(parent)
 {
-}
-
-bool PublishToolBarModel::printScoreEnabled() const
-{
-    return true;
-}
-
-bool PublishToolBarModel::uploadScoreEnabled() const
-{
-    return true;
-}
-
-bool PublishToolBarModel::exportScoreEnabled() const
-{
-    return true;
-}
-
-bool PublishToolBarModel::imageCaptureEnabled() const
-{
-    return true;
 }
 
 void PublishToolBarModel::load()
 {
+    AbstractMenuModel::load();
 
-}
+    beginResetModel();
 
-void PublishToolBarModel::printScore()
-{
-    NOT_IMPLEMENTED;
-}
+    m_items << makeAction("print");
+    m_items << makeAction("file-save-online");
+    m_items << makeAction("file-export");
+    m_items << makeAction("toggle-imagecapture");
 
-void PublishToolBarModel::uploadScore()
-{
-    NOT_IMPLEMENTED;
-}
-
-void PublishToolBarModel::exportScore()
-{
-    dispatcher()->dispatch("file-export");
-}
-
-void PublishToolBarModel::startImageCapture()
-{
-    NOT_IMPLEMENTED;
+    endResetModel();
 }
