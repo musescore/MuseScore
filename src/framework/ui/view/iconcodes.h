@@ -295,10 +295,15 @@ public:
 
         PAGE = 0xF3A5,
 
+        CAMERA = 0xF3AE,
+
         CONTINUOUS_VIEW_VERTICAL = 0xF3AF,
 
         PAN_SCORE = 0xF3B0,
         COUNT_IN = 0xF3B1,
+
+        PRINT = 0xF3B7,
+
         LOOP_IN = 0xF3C7,
         LOOP_OUT = 0xF3C8,
         PAUSE = 0xF3C9,

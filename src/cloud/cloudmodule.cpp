@@ -49,6 +49,7 @@ void CloudModule::registerExports()
 {
     ioc()->registerExport<ICloudConfiguration>(moduleName(), s_cloudConfiguration);
     ioc()->registerExport<IAuthorizationService>(moduleName(), s_cloudService);
+    ioc()->registerExport<IUploadingService>(moduleName(), s_cloudService);
 }
 
 void CloudModule::registerResources()
