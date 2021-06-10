@@ -135,6 +135,8 @@
 #include "stubs/languages/languagesstubmodule.h"
 #endif
 
+#include "multiinstances/multiinstancesmodule.h"
+
 #ifdef BUILD_AUTOBOT_MODULE
 #include "autobot/autobotmodule.h"
 #endif
@@ -267,6 +269,8 @@ int main(int argc, char** argv)
 #else
     app.addModule(new mu::languages::LanguagesStubModule());
 #endif
+
+    app.addModule(new mu::mi::MultiInstancesModule());
 
 #ifdef BUILD_AUTOBOT_MODULE
     app.addModule(new mu::autobot::AutobotModule());
