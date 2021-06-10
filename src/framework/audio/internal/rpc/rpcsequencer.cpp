@@ -34,7 +34,9 @@ RpcSequencer::RpcSequencer()
 
 RpcSequencer::~RpcSequencer()
 {
-    rpcChannel()->unlisten(m_listenID);
+    if (rpcChannel()) {
+        rpcChannel()->unlisten(m_listenID);
+    }
 }
 
 void RpcSequencer::setup()
