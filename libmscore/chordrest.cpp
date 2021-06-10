@@ -1305,11 +1305,27 @@ Shape ChordRest::shape() const
             if (e->isHarmony() && e->staffIdx() == staffIdx()) {
                   Harmony* h = toHarmony(e);
                   // calculate bbox only (do not reset position)
-                  h->layout1();
+                  if (h->bbox().isEmpty()) h->layout1();
                   const qreal margin = styleP(Sid::minHarmonyDistance) * 0.5;
                   x1 = qMin(x1, e->bbox().x() - margin + e->pos().x());
                   x2 = qMax(x2, e->bbox().x() + e->bbox().width() + margin + e->pos().x());
                   adjustWidth = true;
+                  }
+            else if (e->isFretDiagram()) {
+                  FretDiagram* fd = toFretDiagram(e);
+                  if (fd->bbox().isEmpty()) fd->calculateBoundingRect();
+                  qreal margin = styleP(Sid::fretMinDistance) * 0.5;
+                  x1 = qMin(x1, e->bbox().x() - margin + e->pos().x());
+                  x2 = qMax(x2, e->bbox().x() + e->bbox().width() + margin + e->pos().x());
+                  adjustWidth = true;
+                  if (fd->harmony()) {
+                        Harmony* h = fd->harmony();
+                        if (h->bbox().isEmpty()) h->layout1();
+                        margin = styleP(Sid::minHarmonyDistance) * 0.5;
+                        x1 = qMin(x1, h->bbox().x() - margin + h->pos().x() + e->pos().x());
+                        x2 = qMax(x2, h->bbox().x() + h->bbox().width() + margin + h->pos().x() + e->pos().x());
+                        adjustWidth = true;
+                        }
                   }
             }
       if (adjustWidth)

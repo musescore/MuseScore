@@ -173,6 +173,7 @@ class FretDiagram final : public Element {
 
       ElementType type() const override { return ElementType::FRET_DIAGRAM; }
       void layout() override;
+      void calculateBoundingRect();
       void write(XmlWriter& xml) const override;
       void writeNew(XmlWriter& xml) const;
       void writeOld(XmlWriter& xml) const;

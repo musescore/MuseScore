@@ -452,10 +452,10 @@ void FretDiagram::draw(QPainter* painter) const
       }
 
 //---------------------------------------------------------
-//   layout
+//   calculateBoundingRect()
 //---------------------------------------------------------
 
-void FretDiagram::layout()
+void FretDiagram::calculateBoundingRect()
       {
       qreal _spatium  = spatium() * _userMag;
       stringLw        = _spatium * 0.08;
@@ -492,7 +492,15 @@ void FretDiagram::layout()
             }
 
       bbox().setRect(x, y, w, h);
+      }
 
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void FretDiagram::layout()
+      {
+      calculateBoundingRect();
       if (!parent() || !parent()->isSegment()) {
             setPos(QPointF());
             return;
@@ -522,7 +530,7 @@ void FretDiagram::layout()
             mainWidth = stringDist * (_strings - 1);
       else if (_orientation == Orientation::HORIZONTAL)
             mainWidth = fretDist * (_frets + 0.5);
-      setPos((noteheadWidth - mainWidth)/2, -(h + styleP(Sid::fretY)));
+      setPos((noteheadWidth - mainWidth)/2, -(bbox().height() + styleP(Sid::fretY)));
 
       autoplaceSegmentElement();
 
