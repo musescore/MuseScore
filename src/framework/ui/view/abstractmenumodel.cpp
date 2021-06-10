@@ -35,7 +35,7 @@ QVariant AbstractMenuModel::data(const QModelIndex& index, int role) const
 {
     int row = index.row();
 
-    if (row < 0 || row > m_items.size()) {
+    if (!isIndexValid(row)) {
         return QVariant();
     }
 
@@ -55,6 +55,11 @@ QVariant AbstractMenuModel::data(const QModelIndex& index, int role) const
     }
 
     return QVariant();
+}
+
+bool AbstractMenuModel::isIndexValid(int index) const
+{
+    return index >= 0 && index < m_items.size();
 }
 
 int AbstractMenuModel::rowCount(const QModelIndex&) const
@@ -79,9 +84,12 @@ QHash<int, QByteArray> AbstractMenuModel::roleNames() const
     return roles;
 }
 
-void AbstractMenuModel::handleAction(const QString& actionCode)
+void AbstractMenuModel::handleAction(const QString& actionCodeStr, int actionIndex)
 {
-    dispatch(codeFromQString(actionCode));
+    ActionCode actionCode = codeFromQString(actionCodeStr);
+    MenuItem menuItem = actionIndex == -1 ? findItem(actionCode) : findItemByIndex(actionCode, actionIndex);
+
+    dispatch(actionCode, menuItem.args);
 }
 
 void AbstractMenuModel::dispatch(const ActionCode& actionCode, const ActionData& args)
@@ -107,7 +115,7 @@ QVariantMap AbstractMenuModel::get(int index)
 
 void AbstractMenuModel::load()
 {
-    m_items.clear();
+    clear();
 
     uiactionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
         onActionsStateChanges(codes);
@@ -154,7 +162,7 @@ MenuItem AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& i
     return item;
 }
 
-MenuItem AbstractMenuModel::makeAction(const ActionCode& actionCode) const
+MenuItem AbstractMenuModel::makeMenuItem(const ActionCode& actionCode) const
 {
     const UiAction& action = uiactionsRegister()->action(actionCode);
     if (!action.isValid()) {

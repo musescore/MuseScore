@@ -25,7 +25,6 @@
 #include "log.h"
 
 using namespace mu::appshell;
-using namespace mu::actions;
 using namespace mu::ui;
 
 PublishToolBarModel::PublishToolBarModel(QObject* parent)
@@ -39,10 +38,10 @@ void PublishToolBarModel::load()
 
     beginResetModel();
 
-    m_items << makeAction("print");
-    m_items << makeAction("file-save-online");
-    m_items << makeAction("file-export");
-    m_items << makeAction("toggle-imagecapture");
+    m_items << makeMenuItem("print");
+    m_items << makeMenuItem("file-save-online");
+    m_items << makeMenuItem("file-export");
+    m_items << makeMenuItem("toggle-imagecapture");
 
     endResetModel();
 }

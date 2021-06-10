@@ -65,7 +65,7 @@ Rectangle {
             normalStateColor: "transparent"
 
             onClicked: {
-                toolBarModel.handleAction(modelData.code)
+                toolBarModel.handleAction(model.code)
             }
         }
     }

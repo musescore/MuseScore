@@ -22,25 +22,23 @@
 #ifndef MU_NOTATION_NOTEINPUTBARMODEL_H
 #define MU_NOTATION_NOTEINPUTBARMODEL_H
 
+#include "ui/view/abstractmenumodel.h"
+
 #include "modularity/ioc.h"
-#include "async/asyncable.h"
 #include "context/iglobalcontext.h"
-#include "ui/iuiactionsregister.h"
-#include "actions/iactionsdispatcher.h"
 #include "playback/iplaybackcontroller.h"
 #include "workspace/iworkspacemanager.h"
-#include "shortcuts/ishortcutsregister.h"
-#include "ui/view/abstractmenumodel.h"
 
 namespace mu::notation {
 class NoteInputBarModel : public ui::AbstractMenuModel
 {
     Q_OBJECT
 
-    INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, context)
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, workspace::IWorkspaceManager, workspaceManager)
+
+    Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 
 public:
     explicit NoteInputBarModel(QObject* parent = nullptr);
@@ -49,10 +47,12 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load() override;
-    Q_INVOKABLE void handleAction(const QString& action);
+
+signals:
+    void countChanged(int count);
 
 private:
-    enum Roles {
+    enum NoteInputRoles {
         IsMenuSecondaryRole = AbstractMenuModel::Roles::UserRole + 1,
         OrderRole
     };

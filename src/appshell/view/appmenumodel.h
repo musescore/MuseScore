@@ -22,15 +22,13 @@
 #ifndef MU_APPSHELL_APPMENUMODEL_H
 #define MU_APPSHELL_APPMENUMODEL_H
 
-#include "modularity/ioc.h"
+#include "ui/view/abstractmenumodel.h"
 
-#include "async/asyncable.h"
+#include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "workspace/iworkspacemanager.h"
 #include "iappshellconfiguration.h"
 #include "userscores/iuserscoresservice.h"
-
-#include "ui/view/abstractmenumodel.h"
 
 namespace mu::appshell {
 class AppMenuModel : public ui::AbstractMenuModel
@@ -50,7 +48,6 @@ public:
     QVariantList items() const;
 
     Q_INVOKABLE void load() override;
-    Q_INVOKABLE void handleAction(const QString& actionCodeStr, int actionIndex);
 
 signals:
     void itemsChanged();
