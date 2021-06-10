@@ -82,8 +82,6 @@ void GlobalModule::onInit(const IApplication::RunMode&)
 
 #ifndef NDEBUG
     logger->setLevel(haw::logger::Debug);
-#else
-    logger->setLevel(haw::logger::Normal);
 #endif
 
     LOGI() << "=== Started MuseScore " << framework::Version::fullVersion() << " ===";
