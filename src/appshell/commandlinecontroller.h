@@ -54,6 +54,7 @@ public:
     ConverterTask converterTask() const;
 
 private:
+    void printLongVersion() const;
 
     QCommandLineParser m_parser;
     ConverterTask m_converterTask;
