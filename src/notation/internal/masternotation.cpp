@@ -521,8 +521,6 @@ mu::Ret MasterNotation::save(const io::path& path, SaveMode saveMode)
     case SaveMode::SaveAs:
     case SaveMode::SaveCopy:
         return saveScore(path);
-    case SaveMode::SaveOnline:
-        return make_ret(Ret::Code::NotSupported);
     }
 
     return make_ret(Err::UnknownError);
@@ -694,4 +692,10 @@ mu::Ret MasterNotation::saveSelectionOnScore(const mu::io::path& path)
     }
 
     return ret;
+}
+
+mu::Ret MasterNotation::writeToDevice(system::IODevice& destinationDevice)
+{
+    bool ok = score()->saveCompressedFile(&destinationDevice, score()->title(), false);
+    return ok;
 }

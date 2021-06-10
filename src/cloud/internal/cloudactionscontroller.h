@@ -19,26 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_IUPLOADINGSERVICE_H
-#define MU_CLOUD_IUPLOADINGSERVICE_H
+#ifndef MU_CLOUD_CLOUDACTIONSCONTROLLER_H
+#define MU_CLOUD_CLOUDACTIONSCONTROLLER_H
 
-#include "modularity/imoduleexport.h"
-#include "progress.h"
-
-class QByteArray;
-class QUrl;
+#include "modularity/ioc.h"
+#include "actions/actionable.h"
+#include "actions/iactionsdispatcher.h"
+#include "context/iglobalcontext.h"
+#include "ui/iuiactionsregister.h"
+#include "async/asyncable.h"
 
 namespace mu::cloud {
-class IUploadingService : MODULE_EXPORT_INTERFACE
+class CloudActionsController : public actions::Actionable, public async::Asyncable
 {
-    INTERFACE_ID(IUploadingService)
+    INJECT(cloud, context::IGlobalContext, globalContext)
+    INJECT(cloud, actions::IActionsDispatcher, dispatcher)
 
 public:
-    virtual ~IUploadingService() = default;
+    void init();
 
-    virtual framework::ProgressChannel uploadScore(const QByteArray& scoreData, const std::string& title,
-                                                   const QUrl& sourceUrl = QUrl()) = 0;
+private:
+    void uploadScore();
 };
 }
 
-#endif // MU_CLOUD_IUPLOADINGSERVICE_H
+#endif // MU_CLOUD_CLOUDACTIONSCONTROLLER_H

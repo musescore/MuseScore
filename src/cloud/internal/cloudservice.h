@@ -55,7 +55,8 @@ public:
     ValCh<bool> userAuthorized() const override;
     ValCh<AccountInfo> accountInfo() const override;
 
-    framework::ProgressChannel uploadScore(notation::INotation& notation) override;
+    framework::ProgressChannel uploadScore(const QByteArray& scoreData, const std::string& title,
+                                           const QUrl& sourceUrl = QUrl()) override;
 
 private slots:
     void onUserAuthorized();
@@ -73,6 +74,7 @@ private:
     };
 
     QUrl prepareUrlForRequest(QUrl apiUrl) const;
+    network::RequestHeaders headers() const;
 
     RequestStatus downloadUserInfo();
 

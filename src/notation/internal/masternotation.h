@@ -64,6 +64,8 @@ public:
     INotationPartsPtr parts() const override;
     INotationPtr clone() const override;
 
+    Ret writeToDevice(system::IODevice& destinationDevice) override;
+
 private:
     Ret exportScore(const io::path& path, const std::string& suffix);
 

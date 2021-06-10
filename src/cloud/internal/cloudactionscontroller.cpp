@@ -19,26 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_IUPLOADINGSERVICE_H
-#define MU_CLOUD_IUPLOADINGSERVICE_H
 
-#include "modularity/imoduleexport.h"
-#include "progress.h"
+#include "cloudactionscontroller.h"
 
-class QByteArray;
-class QUrl;
+using namespace mu::cloud;
+using namespace mu::actions;
 
-namespace mu::cloud {
-class IUploadingService : MODULE_EXPORT_INTERFACE
+void CloudActionsController::init()
 {
-    INTERFACE_ID(IUploadingService)
-
-public:
-    virtual ~IUploadingService() = default;
-
-    virtual framework::ProgressChannel uploadScore(const QByteArray& scoreData, const std::string& title,
-                                                   const QUrl& sourceUrl = QUrl()) = 0;
-};
+    dispatcher()->reg(this, "file-save-online", this, &CloudActionsController::uploadScore);
 }
 
-#endif // MU_CLOUD_IUPLOADINGSERVICE_H
+void CloudActionsController::uploadScore()
+{
+
+}

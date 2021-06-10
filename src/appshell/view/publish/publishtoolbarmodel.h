@@ -22,45 +22,18 @@
 #ifndef MU_APPSHELL_PUBLISHTOOLBARMODEL_H
 #define MU_APPSHELL_PUBLISHTOOLBARMODEL_H
 
-#include <QObject>
-
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
-#include "ui/iuiactionsregister.h"
+#include "ui/view/abstractmenumodel.h"
 
 namespace mu::appshell {
-class PublishToolBarModel : public QObject
+class PublishToolBarModel : public ui::AbstractMenuModel
 {
     Q_OBJECT
-
-    INJECT(appshell, actions::IActionsDispatcher, dispatcher)
-    INJECT(appshell, ui::IUiActionsRegister, actionsRegister)
-
-    Q_PROPERTY(bool printScoreEnabled READ printScoreEnabled NOTIFY printScoreEnabledChanged)
-    Q_PROPERTY(bool uploadScoreEnabled READ uploadScoreEnabled NOTIFY uploadScoreEnabledChanged)
-    Q_PROPERTY(bool exportScoreEnabled READ exportScoreEnabled NOTIFY exportScoreEnabledChanged)
-    Q_PROPERTY(bool imageCaptureEnabled READ imageCaptureEnabled NOTIFY imageCaptureEnabledChanged)
 
 public:
     PublishToolBarModel(QObject* parent = nullptr);
 
-    bool printScoreEnabled() const;
-    bool uploadScoreEnabled() const;
-    bool exportScoreEnabled() const;
-    bool imageCaptureEnabled() const;
-
-    Q_INVOKABLE void load();
-
-    Q_INVOKABLE void printScore();
-    Q_INVOKABLE void uploadScore();
-    Q_INVOKABLE void exportScore();
-    Q_INVOKABLE void startImageCapture();
-
-signals:
-    void printScoreEnabledChanged();
-    void uploadScoreEnabledChanged();
-    void exportScoreEnabledChanged();
-    void imageCaptureEnabledChanged();
+    Q_INVOKABLE void load() override;
 };
 }
 
