@@ -85,6 +85,9 @@ if (BUILD_INSPECTOR_MODULE)
     add_subdirectory(inspector)
 endif (BUILD_INSPECTOR_MODULE)
 
+# Other
+add_subdirectory(multiinstances)
+
 if (BUILD_AUTOBOT_MODULE)
     add_subdirectory(autobot)
 endif()
