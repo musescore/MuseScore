@@ -26,6 +26,7 @@
 #include "async/channel.h"
 #include "global/progress.h"
 #include "system/iodevice.h"
+#include "networktypes.h"
 
 class QUrl;
 
@@ -35,11 +36,13 @@ class INetworkManager
 public:
     virtual ~INetworkManager() = default;
 
-    virtual Ret get(const QUrl& url, system::IODevice* incommingData) = 0;
-    virtual Ret head(const QUrl& url) = 0;
-    virtual Ret post(const QUrl& url, system::IODevice* outgoingData, system::IODevice* incommingData) = 0;
-    virtual Ret put(const QUrl& url, system::IODevice* outgoingData, system::IODevice* incommingData) = 0;
-    virtual Ret del(const QUrl& url, system::IODevice* incommingData) = 0;
+    virtual Ret get(const QUrl& url, system::IODevice* incommingData, const RequestHeaders& headers = RequestHeaders()) = 0;
+    virtual Ret head(const QUrl& url, const RequestHeaders& headers = RequestHeaders()) = 0;
+    virtual Ret post(const QUrl& url, system::IODevice* outgoingData, system::IODevice* incommingData,
+                     const RequestHeaders& headers = RequestHeaders()) = 0;
+    virtual Ret put(const QUrl& url, system::IODevice* outgoingData, system::IODevice* incommingData,
+                    const RequestHeaders& headers = RequestHeaders()) = 0;
+    virtual Ret del(const QUrl& url, system::IODevice* incommingData, const RequestHeaders& headers = RequestHeaders()) = 0;
 
     virtual framework::ProgressChannel progressChannel() const = 0;
 

@@ -37,6 +37,7 @@ public:
                                 ScanMode mode = ScanMode::IncludeSubdirs) const override;
 
     RetVal<QByteArray> readFile(const io::path& filePath) const override;
+    Ret writeToFile(const io::path& filePath, const QByteArray& data) const override;
 
 private:
     Ret removeFile(const QString& path) const;

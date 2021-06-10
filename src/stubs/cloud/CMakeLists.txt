@@ -27,10 +27,8 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/cloudstubmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/cloudstubmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/accountcontrollerstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/accountcontrollerstub.h
-    ${CMAKE_CURRENT_LIST_DIR}/mp3exporterstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/mp3exporterstub.h
+    ${CMAKE_CURRENT_LIST_DIR}/authorizationservicestub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/authorizationservicestub.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

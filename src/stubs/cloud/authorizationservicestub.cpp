@@ -19,28 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "accountcontrollerstub.h"
+
+#include "authorizationservicestub.h"
 
 using namespace mu::cloud;
 
-void AccountControllerStub::createAccount()
+void AuthorizationServiceStub::signIn()
 {
 }
 
-void AccountControllerStub::signIn()
+void AuthorizationServiceStub::signOut()
 {
 }
 
-void AccountControllerStub::signOut()
-{
-}
-
-mu::ValCh<bool> AccountControllerStub::userAuthorized() const
+mu::ValCh<bool> AuthorizationServiceStub::userAuthorized() const
 {
     return mu::ValCh<bool>();
 }
 
-mu::ValCh<AccountInfo> AccountControllerStub::accountInfo() const
+mu::ValCh<AccountInfo> AuthorizationServiceStub::accountInfo() const
 {
     return mu::ValCh<AccountInfo>();
 }
