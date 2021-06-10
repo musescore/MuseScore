@@ -33,6 +33,7 @@ using namespace mu::audio;
 using namespace mu::actions;
 
 static const ActionCode PLAY_CODE("play");
+static const ActionCode STOP_CODE("stop");
 static const ActionCode REWIND_CODE("rewind");
 static const ActionCode LOOP_CODE("loop");
 static const ActionCode LOOP_IN_CODE("loop-in");
@@ -46,6 +47,7 @@ static const ActionCode REPEAT_CODE("repeat");
 void PlaybackController::init()
 {
     dispatcher()->reg(this, PLAY_CODE, this, &PlaybackController::togglePlay);
+    dispatcher()->reg(this, STOP_CODE, this, &PlaybackController::pause);
     dispatcher()->reg(this, REWIND_CODE, this, &PlaybackController::rewind);
     dispatcher()->reg(this, LOOP_CODE, this, &PlaybackController::toggleLoopPlayback);
     dispatcher()->reg(this, LOOP_IN_CODE, [this]() { addLoopBoundary(LoopBoundaryType::LoopIn); });

@@ -34,6 +34,12 @@ const UiActionList PlaybackUiActions::m_mainActions = {
              QT_TRANSLATE_NOOP("action", "Start or stop playback"),
              IconCode::Code::PLAY
              ),
+    UiAction("stop",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "Stop"),
+             QT_TRANSLATE_NOOP("action", "Stop playback"),
+             IconCode::Code::STOP
+             ),
     UiAction("rewind",
              mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Rewind"),
