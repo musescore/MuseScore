@@ -37,6 +37,7 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
 
     m_parser.addOption(QCommandLineOption("long-version", "Print detailed version information"));
+    m_parser.addOption(QCommandLineOption({ "d", "debug" }, "Debug mode"));
 
     m_parser.addOption(QCommandLineOption({ "D", "monitor-resolution" }, "Specify monitor resolution", "DPI"));
 
@@ -68,6 +69,10 @@ void CommandLineController::apply()
     if (m_parser.isSet("long-version")) {
         printLongVersion();
         exit(EXIT_SUCCESS);
+    }
+
+    if (m_parser.isSet("d")) {
+        haw::logger::Logger::instance()->setLevel(haw::logger::Debug);
     }
 
     if (m_parser.isSet("D")) {
