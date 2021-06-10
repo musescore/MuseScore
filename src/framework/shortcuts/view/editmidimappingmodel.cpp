@@ -29,8 +29,6 @@
 using namespace mu::shortcuts;
 using namespace mu::midi;
 
-static const QString WAITING_STATE = mu::qtrc("shortcuts", "Waiting...");
-
 EditMidiMappingModel::EditMidiMappingModel(QObject* parent)
     : QObject(parent)
 {
@@ -60,7 +58,7 @@ QString EditMidiMappingModel::mappingTitle() const
 {
     MidiDeviceID currentMidiInDeviceId = midiInPort()->deviceID();
     if (currentMidiInDeviceId.empty() || !m_event.isValid()) {
-        return WAITING_STATE;
+        return qtrc("shortcuts", "Waiting...");
     }
 
     return deviceName(currentMidiInDeviceId) + " > " + eventName(m_event);

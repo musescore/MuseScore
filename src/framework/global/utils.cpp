@@ -25,34 +25,34 @@
 
 using namespace mu;
 
-static const std::vector<std::string> noteHeadNamesLower = {
-    trc("global", "c"),
-    trc("global", "c♯"),
-    trc("global", "d"),
-    trc("global", "d♯"),
-    trc("global", "e"),
-    trc("global", "f"),
-    trc("global", "f♯"),
-    trc("global", "g"),
-    trc("global", "g♯"),
-    trc("global", "a"),
-    trc("global", "a♯"),
-    trc("global", "b")
+static const char* noteHeadNamesLower[] = {
+    QT_TRANSLATE_NOOP("global", "c"),
+    QT_TRANSLATE_NOOP("global", "c♯"),
+    QT_TRANSLATE_NOOP("global", "d"),
+    QT_TRANSLATE_NOOP("global", "d♯"),
+    QT_TRANSLATE_NOOP("global", "e"),
+    QT_TRANSLATE_NOOP("global", "f"),
+    QT_TRANSLATE_NOOP("global", "f♯"),
+    QT_TRANSLATE_NOOP("global", "g"),
+    QT_TRANSLATE_NOOP("global", "g♯"),
+    QT_TRANSLATE_NOOP("global", "a"),
+    QT_TRANSLATE_NOOP("global", "a♯"),
+    QT_TRANSLATE_NOOP("global", "b")
 };
 
-static const std::vector<std::string> noteHeadNamesUpper = {
-    trc("global", "C"),
-    trc("global", "C♯"),
-    trc("global", "D"),
-    trc("global", "D♯"),
-    trc("global", "E"),
-    trc("global", "F"),
-    trc("global", "F♯"),
-    trc("global", "G"),
-    trc("global", "G♯"),
-    trc("global", "A"),
-    trc("global", "A♯"),
-    trc("global", "B")
+static const char* noteHeadNamesUpper[] = {
+    QT_TRANSLATE_NOOP("global", "C"),
+    QT_TRANSLATE_NOOP("global", "C♯"),
+    QT_TRANSLATE_NOOP("global", "D"),
+    QT_TRANSLATE_NOOP("global", "D♯"),
+    QT_TRANSLATE_NOOP("global", "E"),
+    QT_TRANSLATE_NOOP("global", "F"),
+    QT_TRANSLATE_NOOP("global", "F♯"),
+    QT_TRANSLATE_NOOP("global", "G"),
+    QT_TRANSLATE_NOOP("global", "G♯"),
+    QT_TRANSLATE_NOOP("global", "A"),
+    QT_TRANSLATE_NOOP("global", "A♯"),
+    QT_TRANSLATE_NOOP("global", "B")
 };
 
 std::string mu::pitchToString(int pitch)
@@ -63,5 +63,13 @@ std::string mu::pitchToString(int pitch)
 
     int octave = (pitch / 12) - 1;
     int i = pitch % 12;
-    return octave < 0 ? noteHeadNamesUpper[i] : (noteHeadNamesLower[i] + std::to_string(octave));
+
+    std::string result;
+    if (octave < 0) {
+        result = trc("global", noteHeadNamesUpper[i]);
+    } else {
+        result = trc("global", noteHeadNamesLower[i]) + std::to_string(octave);
+    }
+
+    return result;
 }

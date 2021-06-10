@@ -40,7 +40,7 @@ static const QString ENABLED_KEY("enabled");
 static const QString MAPPED_TYPE_KEY("mappedType");
 static const QString MAPPED_VALUE_KEY("mappedValue");
 
-inline std::vector<ActionCode> allMidiActions()
+inline ActionCodeList allMidiActions()
 {
     return {
         "rewind",
@@ -232,6 +232,10 @@ QVariant MidiDeviceMappingModel::currentAction() const
 
 void MidiDeviceMappingModel::mapCurrentActionToMidiEvent(const QVariant& event)
 {
+    if (m_selection.size() != 1) {
+        return;
+    }
+
     QVariantMap eventMap = event.toMap();
     RemoteEventType type = static_cast<RemoteEventType>(eventMap["type"].toInt());
     int value = eventMap["value"].toInt();

@@ -38,14 +38,24 @@ using namespace mu::framework;
 using namespace mu::network;
 
 static const QString DEFAULT_LANGUAGE("system");
-static const QString ANALYSING_STATUS = qtrc("languages", "Analysing...");
-static const QString DOWNLOADING_STATUS = qtrc("languages", "Downloading...");
 
 static const QStringList languageFileTypes = {
     "mscore",
     "instruments",
     "tours"
 };
+
+namespace mu::languages {
+QString analysingStatusTitle()
+{
+    return qtrc("languages", "Analysing...");
+}
+
+QString downloadingStatusTitle()
+{
+    return qtrc("languages", "Downloading...");
+}
+}
 
 void LanguagesService::init()
 {
@@ -405,7 +415,7 @@ RetVal<QString> LanguagesService::downloadLanguage(const QString& languageCode, 
 
     async::Channel<Progress> downloadChannel = networkManagerPtr->progressChannel();
     downloadChannel.onReceive(new async::Asyncable(), [&progressChannel](const Progress& progress) {
-        progressChannel->send(LanguageProgress(DOWNLOADING_STATUS, progress.current, progress.total));
+        progressChannel->send(LanguageProgress(downloadingStatusTitle(), progress.current, progress.total));
     });
 
     Ret getLanguage = networkManagerPtr->get(configuration()->languageFileServerUrl(languageCode), &buff);
@@ -516,7 +526,7 @@ void LanguagesService::th_refreshLanguages()
 void LanguagesService::th_install(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel,
                                   async::Channel<Ret>* finishChannel)
 {
-    progressChannel->send(LanguageProgress(ANALYSING_STATUS, true));
+    progressChannel->send(LanguageProgress(analysingStatusTitle(), true));
 
     RetVal<QString> download = downloadLanguage(languageCode, progressChannel);
     if (!download.ret) {
@@ -524,7 +534,7 @@ void LanguagesService::th_install(const QString& languageCode, async::Channel<La
         return;
     }
 
-    progressChannel->send(LanguageProgress(ANALYSING_STATUS, true));
+    progressChannel->send(LanguageProgress(analysingStatusTitle(), true));
 
     QString languageArchivePath = download.val;
 
@@ -545,14 +555,14 @@ void LanguagesService::th_install(const QString& languageCode, async::Channel<La
 void LanguagesService::th_update(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel,
                                  async::Channel<Ret>* finishChannel)
 {
-    progressChannel->send(LanguageProgress(ANALYSING_STATUS, true));
+    progressChannel->send(LanguageProgress(analysingStatusTitle(), true));
 
     RetVal<QString> download = downloadLanguage(languageCode, progressChannel);
     if (!download.ret) {
         finishChannel->send(download.ret);
     }
 
-    progressChannel->send(LanguageProgress(ANALYSING_STATUS, true));
+    progressChannel->send(LanguageProgress(analysingStatusTitle(), true));
 
     QString languageArchivePath = download.val;
 
