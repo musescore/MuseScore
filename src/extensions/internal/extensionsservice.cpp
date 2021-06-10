@@ -35,8 +35,17 @@ using namespace mu::extensions;
 using namespace mu::framework;
 using namespace mu::network;
 
-static const QString ANALYSING_STATUS = qtrc("extensions", "Analysing...");
-static const QString DOWNLOADING_STATUS = qtrc("extensions", "Downloading...");
+namespace mu::extensions {
+QString analysingStatusTitle()
+{
+    return qtrc("extensions", "Analysing...");
+}
+
+QString downloadingStatusTitle()
+{
+    return qtrc("extensions", "Downloading...");
+}
+}
 
 void ExtensionsService::init()
 {
@@ -260,7 +269,7 @@ RetVal<QString> ExtensionsService::downloadExtension(const QString& extensionCod
 
     async::Channel<Progress> downloadChannel = networkManagerPtr->progressChannel();
     downloadChannel.onReceive(new deto::async::Asyncable(), [&progressChannel](const Progress& progress) {
-        progressChannel->send(ExtensionProgress(DOWNLOADING_STATUS, progress.current,
+        progressChannel->send(ExtensionProgress(downloadingStatusTitle(), progress.current,
                                                 progress.total));
     });
 
@@ -362,7 +371,7 @@ void ExtensionsService::th_install(const QString& extensionCode,
                                    async::Channel<ExtensionProgress>* progressChannel,
                                    async::Channel<Ret>* finishChannel)
 {
-    progressChannel->send(ExtensionProgress(ANALYSING_STATUS, true));
+    progressChannel->send(ExtensionProgress(analysingStatusTitle(), true));
 
     RetVal<QString> download = downloadExtension(extensionCode, progressChannel);
     if (!download.ret) {
@@ -370,7 +379,7 @@ void ExtensionsService::th_install(const QString& extensionCode,
         return;
     }
 
-    progressChannel->send(ExtensionProgress(ANALYSING_STATUS, true));
+    progressChannel->send(ExtensionProgress(analysingStatusTitle(), true));
 
     QString extensionArchivePath = download.val;
 
@@ -391,14 +400,14 @@ void ExtensionsService::th_install(const QString& extensionCode,
 void ExtensionsService::th_update(const QString& extensionCode, async::Channel<ExtensionProgress>* progressChannel,
                                   async::Channel<Ret>* finishChannel)
 {
-    progressChannel->send(ExtensionProgress(ANALYSING_STATUS, true));
+    progressChannel->send(ExtensionProgress(analysingStatusTitle(), true));
 
     RetVal<QString> download = downloadExtension(extensionCode, progressChannel);
     if (!download.ret) {
         finishChannel->send(download.ret);
     }
 
-    progressChannel->send(ExtensionProgress(ANALYSING_STATUS, true));
+    progressChannel->send(ExtensionProgress(analysingStatusTitle(), true));
 
     QString extensionArchivePath = download.val;
 
