@@ -20,26 +20,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MIDI_MIDIDEVICEMAPPINGMODEL_H
-#define MU_MIDI_MIDIDEVICEMAPPINGMODEL_H
+#ifndef MU_SHORTCUTS_MIDIDEVICEMAPPINGMODEL_H
+#define MU_SHORTCUTS_MIDIDEVICEMAPPINGMODEL_H
 
 #include <QAbstractListModel>
 #include <QItemSelection>
 
 #include "modularity/ioc.h"
-#include "imidiconfiguration.h"
 #include "midi/miditypes.h"
+#include "midi/imidiconfiguration.h"
+#include "ishortcutsconfiguration.h"
+#include "imidiremote.h"
 
 #include "ui/iuiactionsregister.h"
 #include "ui/uitypes.h"
 
-namespace mu::midi {
+namespace mu::shortcuts {
 class MidiDeviceMappingModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    INJECT(midi, IMidiConfiguration, configuration)
-    INJECT(midi, ui::IUiActionsRegister, uiActionsRegister)
+    INJECT(shortcuts, ui::IUiActionsRegister, uiActionsRegister)
+    INJECT(shortcuts, shortcuts::IMidiRemote, midiRemote)
+    INJECT(shortcuts, IShortcutsConfiguration, configuration)
+    INJECT(shortcuts, midi::IMidiConfiguration, midiConfiguration)
 
     Q_PROPERTY(bool useRemoteControl READ useRemoteControl WRITE setUseRemoteControl NOTIFY useRemoteControlChanged)
 
@@ -64,7 +68,7 @@ public:
     Q_INVOKABLE void clearAllActions();
 
     Q_INVOKABLE QVariant currentAction() const;
-    Q_INVOKABLE void mapCurrentActionToMidiValue(int value);
+    Q_INVOKABLE void mapCurrentActionToMidiEvent(const QVariant& event);
 
 public slots:
     void setUseRemoteControl(bool value);
@@ -80,14 +84,15 @@ private:
         RoleIcon,
         RoleEnabled,
         RoleStatus,
+        RoleMappedType,
         RoleMappedValue
     };
 
-    QVariantMap actionToObject(const ui::UiAction& action) const;
+    QVariantMap midiMappingToObject(const MidiMapping& midiMapping) const;
 
-    ui::UiActionList m_actions;
+    QList<MidiMapping> m_midiMappings;
     QItemSelection m_selection;
 };
 }
 
-#endif // MU_MIDI_MIDIDEVICEMAPPINGMODEL_H
+#endif // MU_SHORTCUTS_MIDIDEVICEMAPPINGMODEL_H

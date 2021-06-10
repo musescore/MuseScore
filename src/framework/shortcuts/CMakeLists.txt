@@ -28,10 +28,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/ishortcutscontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/ishortcutsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/imidiremote.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/shortcutsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/shortcutsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/editshortcutmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/editshortcutmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutsinstancemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutsinstancemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutsregister.cpp
@@ -42,6 +38,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiremote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiremote.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/shortcutsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/shortcutsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/editshortcutmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/editshortcutmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/mididevicemappingmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/mididevicemappingmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/editmidimappingmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/editmidimappingmodel.h
     )
 
 set(MODULE_QRC shortcuts.qrc)

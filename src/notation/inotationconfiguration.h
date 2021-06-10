@@ -137,9 +137,6 @@ public:
     virtual bool isLimitCanvasScrollArea() const = 0;
     virtual void setIsLimitCanvasScrollArea(bool limited) = 0;
 
-    virtual bool advanceToNextNoteOnKeyRelease() const = 0;
-    virtual void setAdvanceToNextNoteOnKeyRelease(bool value) = 0;
-
     virtual bool colorNotesOusideOfUsablePitchRange() const = 0;
     virtual void setColorNotesOusideOfUsablePitchRange(bool value) = 0;
 

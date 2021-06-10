@@ -23,20 +23,24 @@
 #include "mididevicemappingmodel.h"
 
 #include "ui/view/iconcodes.h"
+#include "shortcuts/shortcutstypes.h"
 
 #include "log.h"
 #include "translation.h"
 
+using namespace mu::shortcuts;
 using namespace mu::midi;
 using namespace mu::ui;
+using namespace mu::actions;
 
 static const QString TITLE_KEY("title");
 static const QString ICON_KEY("icon");
 static const QString STATUS_KEY("status");
 static const QString ENABLED_KEY("enabled");
+static const QString MAPPED_TYPE_KEY("mappedType");
 static const QString MAPPED_VALUE_KEY("mappedValue");
 
-inline std::vector<std::string> allMidiActions()
+inline ActionCodeList allMidiActions()
 {
     return {
         "rewind",
@@ -51,11 +55,12 @@ inline std::vector<std::string> allMidiActions()
         "pad-note-16",
         "pad-note-32",
         "pad-note-64",
+        "undo",
         "pad-rest",
+        "tie",
         "pad-dot",
         "pad-dotdot",
-        "tie",
-        "undo"
+        "realtime-advance"
     };
 }
 
@@ -70,37 +75,38 @@ QVariant MidiDeviceMappingModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    QVariantMap obj = actionToObject(m_actions[index.row()]);
+    QVariantMap obj = midiMappingToObject(m_midiMappings[index.row()]);
 
     switch (role) {
     case RoleTitle: return obj[TITLE_KEY].toString();
     case RoleIcon: return obj[ICON_KEY].toInt();
     case RoleStatus: return obj[STATUS_KEY].toString();
     case RoleEnabled: return obj[ENABLED_KEY].toBool();
+    case RoleMappedType: return obj[MAPPED_TYPE_KEY].toInt();
     case RoleMappedValue: return obj[MAPPED_VALUE_KEY].toInt();
     }
 
     return QVariant();
 }
 
-QVariantMap MidiDeviceMappingModel::actionToObject(const UiAction& action) const
+QVariantMap MidiDeviceMappingModel::midiMappingToObject(const MidiMapping& midiMapping) const
 {
+    UiAction action = uiActionsRegister()->action(midiMapping.action);
+
     QVariantMap obj;
 
     obj[TITLE_KEY] = action.title;
     obj[ICON_KEY] = static_cast<int>(action.iconCode);
-
-    // not implemented:
-    obj[STATUS_KEY] = "Inactive";
-    obj[ENABLED_KEY] = false;
-    obj[MAPPED_VALUE_KEY] = 0;
+    obj[STATUS_KEY] = midiMapping.isValid() ? qtrc("shortcuts", "Active") : qtrc("shortcuts", "Inactive");
+    obj[MAPPED_TYPE_KEY] = static_cast<int>(midiMapping.event.type);
+    obj[MAPPED_VALUE_KEY] = midiMapping.event.value;
 
     return obj;
 }
 
 int MidiDeviceMappingModel::rowCount(const QModelIndex&) const
 {
-    return m_actions.size();
+    return m_midiMappings.size();
 }
 
 QHash<int, QByteArray> MidiDeviceMappingModel::roleNames() const
@@ -110,6 +116,7 @@ QHash<int, QByteArray> MidiDeviceMappingModel::roleNames() const
         { RoleIcon, ICON_KEY.toUtf8() },
         { RoleStatus, STATUS_KEY.toUtf8() },
         { RoleEnabled, ENABLED_KEY.toUtf8() },
+        { RoleMappedType, MAPPED_TYPE_KEY.toUtf8() },
         { RoleMappedValue, MAPPED_VALUE_KEY.toUtf8() }
     };
 }
@@ -117,13 +124,27 @@ QHash<int, QByteArray> MidiDeviceMappingModel::roleNames() const
 void MidiDeviceMappingModel::load()
 {
     beginResetModel();
-    m_actions.clear();
+    m_midiMappings.clear();
 
-    for (const std::string& actionCode : allMidiActions()) {
+    shortcuts::MidiMappingList midiMappings = midiRemote()->midiMappings();
+
+    auto remoteEvent = [&midiMappings](const ActionCode& actionCode) {
+        for (const MidiMapping& midiMapping : midiMappings) {
+            if (midiMapping.action == actionCode) {
+                return midiMapping.event;
+            }
+        }
+
+        return RemoteEvent();
+    };
+
+    for (const ActionCode& actionCode : allMidiActions()) {
         UiAction action = uiActionsRegister()->action(actionCode);
 
         if (action.isValid()) {
-            m_actions.push_back(action);
+            MidiMapping midiMapping(actionCode);
+            midiMapping.event = remoteEvent(actionCode);
+            m_midiMappings.push_back(midiMapping);
         }
     }
 
@@ -132,13 +153,22 @@ void MidiDeviceMappingModel::load()
 
 bool MidiDeviceMappingModel::apply()
 {
-    NOT_IMPLEMENTED;
-    return true;
+    MidiMappingList midiMappings;
+    for (const MidiMapping& midiMapping : m_midiMappings) {
+        midiMappings.push_back(midiMapping);
+    }
+
+    Ret ret = midiRemote()->setMidiMappings(midiMappings);
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
+
+    return ret;
 }
 
 bool MidiDeviceMappingModel::useRemoteControl() const
 {
-    return configuration()->useRemoteControl();
+    return midiConfiguration()->useRemoteControl();
 }
 
 void MidiDeviceMappingModel::setUseRemoteControl(bool value)
@@ -147,7 +177,7 @@ void MidiDeviceMappingModel::setUseRemoteControl(bool value)
         return;
     }
 
-    configuration()->setUseRemoteControl(value);
+    midiConfiguration()->setUseRemoteControl(value);
     emit useRemoteControlChanged(value);
 }
 
@@ -173,12 +203,21 @@ void MidiDeviceMappingModel::setSelection(const QItemSelection& selection)
 
 void MidiDeviceMappingModel::clearSelectedActions()
 {
-    NOT_IMPLEMENTED;
+    for (const QModelIndex& index : m_selection.indexes()) {
+        m_midiMappings[index.row()].event = RemoteEvent();
+        emit dataChanged(index, index);
+    }
 }
 
 void MidiDeviceMappingModel::clearAllActions()
 {
-    NOT_IMPLEMENTED;
+    beginResetModel();
+
+    for (MidiMapping& midiMapping: m_midiMappings) {
+        midiMapping.event = RemoteEvent();
+    }
+
+    endResetModel();
 }
 
 QVariant MidiDeviceMappingModel::currentAction() const
@@ -187,12 +226,20 @@ QVariant MidiDeviceMappingModel::currentAction() const
         return QVariant();
     }
 
-    UiAction action = m_actions[m_selection.indexes().first().row()];
-    return actionToObject(action);
+    MidiMapping midiMapping = m_midiMappings[m_selection.indexes().first().row()];
+    return midiMappingToObject(midiMapping);
 }
 
-void MidiDeviceMappingModel::mapCurrentActionToMidiValue(int value)
+void MidiDeviceMappingModel::mapCurrentActionToMidiEvent(const QVariant& event)
 {
-    UNUSED(value);
-    NOT_IMPLEMENTED;
+    if (m_selection.size() != 1) {
+        return;
+    }
+
+    QVariantMap eventMap = event.toMap();
+    RemoteEventType type = static_cast<RemoteEventType>(eventMap["type"].toInt());
+    int value = eventMap["value"].toInt();
+
+    m_midiMappings[m_selection.indexes().first().row()].event = RemoteEvent(type, value);
+    emit dataChanged(m_selection.indexes().first(), m_selection.indexes().first());
 }

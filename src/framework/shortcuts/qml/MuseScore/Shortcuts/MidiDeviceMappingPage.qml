@@ -24,7 +24,7 @@ import QtQuick.Layouts 1.12
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Midi 1.0
+import MuseScore.Shortcuts 1.0
 
 Item {
     id: root
@@ -40,8 +40,8 @@ Item {
             editMappingDialog.startEdit(mappingsModel.currentAction())
         }
 
-        onMapToValueRequested: {
-            mappingsModel.mapCurrentActionToMidiValue(value)
+        onMapToEventRequested: {
+            mappingsModel.mapCurrentActionToMidiEvent(event)
         }
     }
 
@@ -61,7 +61,7 @@ Item {
         spacing: 20
 
         CheckBox {
-            text: qsTrc("midi", "MIDI Remote Control")
+            text: qsTrc("shortcuts", "MIDI Remote Control")
             font: ui.theme.bodyBoldFont
 
             checked: mappingsModel.useRemoteControl
@@ -81,9 +81,9 @@ Item {
             readOnly: true
 
             keyRoleName: "title"
-            keyTitle: qsTrc("midi", "action")
+            keyTitle: qsTrc("shortcuts", "action")
             valueRoleName: "status"
-            valueTitle: qsTrc("midi", "status")
+            valueTitle: qsTrc("shortcuts", "status")
             iconRoleName: "icon"
             valueEnabledRoleName: "enabled"
 
@@ -103,7 +103,7 @@ Item {
 
             FlatButton {
                 enabled: mappingsModel.canEditAction
-                text: qsTrc("midi", "Assign MIDI mapping...")
+                text: qsTrc("shortcuts", "Assign MIDI mapping...")
 
                 onClicked: {
                     editMappingDialog.startEditCurrentAction()

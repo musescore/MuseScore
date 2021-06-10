@@ -75,7 +75,6 @@ static const Settings::Key TOOLBAR_KEY(module_name, "ui/toolbar/");
 static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/canvas/scroll/verticalOrientation");
 static const Settings::Key IS_LIMIT_CANVAS_SCROLL_AREA_KEY(module_name, "ui/canvas/scroll/limitScrollArea");
 
-static const Settings::Key ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE(module_name, "io/midi/advanceOnRelease");
 static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name, "score/note/warnPitchRange");
 static const Settings::Key REALTIME_DELAY(module_name, "io/midi/realtimeDelay");
 static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/defaultPlayDuration");
@@ -152,7 +151,6 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(IS_LIMIT_CANVAS_SCROLL_AREA_KEY, Val(false));
 
-    settings()->setDefaultValue(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE, Val(true));
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
     settings()->setDefaultValue(REALTIME_DELAY, Val(750));
     settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(300));
@@ -561,16 +559,6 @@ Settings::Key NotationConfiguration::toolbarSettingsKey(const std::string& toolb
     Settings::Key toolbarKey = TOOLBAR_KEY;
     toolbarKey.key += toolbarName;
     return toolbarKey;
-}
-
-bool NotationConfiguration::advanceToNextNoteOnKeyRelease() const
-{
-    return settings()->value(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE).toBool();
-}
-
-void NotationConfiguration::setAdvanceToNextNoteOnKeyRelease(bool value)
-{
-    settings()->setValue(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE, Val(value));
 }
 
 bool NotationConfiguration::colorNotesOusideOfUsablePitchRange() const
