@@ -35,6 +35,11 @@ bool Version::unstable()
 #endif
 }
 
+std::string Version::version()
+{
+    return VERSION;
+}
+
 std::string Version::fullVersion()
 {
     std::string version(VERSION);
@@ -44,4 +49,9 @@ std::string Version::fullVersion()
         version.append("-").append(versionLabel);
     }
     return version;
+}
+
+std::string Version::revision()
+{
+    return MUSESCORE_REVISION;
 }

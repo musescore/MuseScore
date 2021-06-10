@@ -22,6 +22,8 @@
 #include "commandlinecontroller.h"
 
 #include "log.h"
+#include "global/version.h"
+#include "config.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;
@@ -33,6 +35,8 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addVersionOption(); // -v, --version
 
     m_parser.addPositionalArgument("scorefiles", "The files to open", "[scorefile...]");
+
+    m_parser.addOption(QCommandLineOption("long-version", "Print detailed version information"));
 
     m_parser.addOption(QCommandLineOption({ "D", "monitor-resolution" }, "Specify monitor resolution", "DPI"));
 
@@ -60,6 +64,11 @@ void CommandLineController::apply()
     // Common
     // TODO: Open these files at launch if RunMode is Editor
     QStringList scorefiles = m_parser.positionalArguments();
+
+    if (m_parser.isSet("long-version")) {
+        printLongVersion();
+        exit(EXIT_SUCCESS);
+    }
 
     if (m_parser.isSet("D")) {
         std::optional<float> val = floatValue("D");
@@ -107,4 +116,15 @@ void CommandLineController::apply()
 CommandLineController::ConverterTask CommandLineController::converterTask() const
 {
     return m_converterTask;
+}
+
+void CommandLineController::printLongVersion() const
+{
+    if (Version::unstable()) {
+        printf("MuseScore: Music Score Editor\nUnstable Prerelease for Version %s; Build %s\n",
+               Version::version().c_str(), Version::revision().c_str());
+    } else {
+        printf("MuseScore: Music Score Editor; Version %s; Build %s\n",
+               Version::version().c_str(), Version::revision().c_str());
+    }
 }
