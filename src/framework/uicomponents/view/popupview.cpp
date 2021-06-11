@@ -560,7 +560,7 @@ void PopupView::updatePosition()
         movePos(m_globalPos.x() + anchorRect.left() - popupRect.left(), m_globalPos.y());
     }
 
-    qreal popupShiftByY = (parent->height() + popupRect.height()) / uiConfiguration()->guiScaling();
+    qreal popupShiftByY = parent->height() + popupRect.height();
     if (popupRect.bottom() > anchorRect.bottom()) {
         if (isCascade) {
             // move to the top to an area that doesn't fit

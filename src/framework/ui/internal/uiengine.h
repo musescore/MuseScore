@@ -43,6 +43,8 @@ class UiEngine : public QObject, public IUiEngine
     Q_PROPERTY(UiTheme * theme READ theme NOTIFY themeChanged)
     Q_PROPERTY(QmlToolTip * tooltip READ tooltip CONSTANT)
 
+    Q_PROPERTY(QQuickItem * rootItem READ rootItem WRITE setRootItem NOTIFY rootItemChanged)
+
     // for internal use
     Q_PROPERTY(InteractiveProvider * _interactiveProvider READ interactiveProvider_property CONSTANT)
 
@@ -69,8 +71,15 @@ public:
     void moveQQmlEngine(QQmlEngine* e);
     void quit();
 
+    QQuickItem* rootItem() const;
+
+public slots:
+    void setRootItem(QQuickItem* rootItem);
+
 signals:
     void themeChanged(UiTheme* theme);
+
+    void rootItemChanged(QQuickItem* rootItem);
 
 private:
     UiEngine();
@@ -85,6 +94,7 @@ private:
     std::shared_ptr<InteractiveProvider> m_interactiveProvider = nullptr;
     QmlApi* m_api = nullptr;
     QmlToolTip* m_tooltip = nullptr;
+    QQuickItem* m_rootItem = nullptr;
 };
 }
 

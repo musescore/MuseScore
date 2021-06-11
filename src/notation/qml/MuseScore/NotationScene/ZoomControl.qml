@@ -92,7 +92,7 @@ Row {
         StyledMenuLoader {
             id: menuLoader
 
-            menuAnchorItem: window
+            menuAnchorItem: ui.rootItem
 
             onHandleAction: {
                 root.changeZoomRequested(actionIndex)
