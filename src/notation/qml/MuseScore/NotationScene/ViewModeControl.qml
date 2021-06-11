@@ -69,7 +69,7 @@ FlatButton {
     StyledMenuLoader {
         id: menu
 
-        anchorItem: ui.rootItem
+        menuAnchorItem: ui.rootItem
 
         onHandleAction: {
             Qt.callLater(root.changeCurrentViewModeRequested, actionCode)
