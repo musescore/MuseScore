@@ -74,6 +74,7 @@ bool IpcSocket::connect(const QString& serverName)
     }
 
     m_socket->write(selfID().toUtf8());
+
     ok = m_socket->waitForBytesWritten(TIMEOUT_MSEC);
     if (!ok) {
         LOGE() << "failed init socket";
