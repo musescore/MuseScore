@@ -36,6 +36,8 @@ FlatButton {
     StyledMenuLoader {
         id: menuLoader
 
+        menuAnchorItem: ui.rootItem
+
         onHandleAction: {
             root.handleAction(actionCode, actionIndex)
         }

@@ -35,6 +35,8 @@ static const ActionCode SHOW_FRAMES_CODE("show-frames");
 static const ActionCode SHOW_PAGEBORDERS_CODE("show-pageborders");
 static const ActionCode SHOW_IRREGULAR_CODE("mark-irregular");
 
+static const ActionCode TOGGLE_CONCERT_PITCH_CODE("concert-pitch");
+
 const UiActionList NotationUiActions::m_actions = {
     UiAction("escape",
              mu::context::UiCtxNotationFocused,
@@ -940,7 +942,7 @@ const UiActionList NotationUiActions::m_actions = {
 };
 
 const UiActionList NotationUiActions::m_noteInputActions = {
-    UiAction("note-input",
+    UiAction(NOTE_INPUT_ACTION_CODE,
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Note Input"),
              QT_TRANSLATE_NOOP("action", "Enter notes with a mouse or keyboard"),
@@ -1193,6 +1195,13 @@ const UiActionList NotationUiActions::m_noteInputActions = {
              QT_TRANSLATE_NOOP("action", "Flip direction"),
              IconCode::Code::NOTE_FLIP
              ),
+    UiAction(TOGGLE_CONCERT_PITCH_CODE,
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Concert Pitch"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Concert Pitch'"),
+             IconCode::Code::TUNING_FORK,
+             Checkable::Yes
+             )
 };
 
 const UiActionList NotationUiActions::m_scoreConfigActions = {
@@ -1252,11 +1261,11 @@ void NotationUiActions::init()
     });
 
     m_controller->currentNotationChanged().onNotify(this, [this]() {
-        actions::ActionCodeList alist;
-        for (const UiAction& a : m_scoreConfigActions) {
-            alist.push_back(a.code);
+        actions::ActionCodeList actions;
+        for (const UiAction& action : m_scoreConfigActions) {
+            actions.push_back(action.code);
         }
-        m_actionCheckedChanged.send(alist);
+        m_actionCheckedChanged.send(actions);
 
         m_controller->currentNotationInteraction()->scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
             static const std::unordered_map<ScoreConfigType, std::string> configActions = {
@@ -1268,6 +1277,10 @@ void NotationUiActions::init()
             };
 
             m_actionCheckedChanged.send({ configActions.at(configType) });
+        });
+
+        m_controller->currentNotationStyleChanged().onNotify(this, [this]() {
+            m_actionCheckedChanged.send({ TOGGLE_CONCERT_PITCH_CODE });
         });
     });
 }
@@ -1329,6 +1342,13 @@ bool NotationUiActions::actionChecked(const UiAction& act) const
         auto noteInput = m_controller->currentNotationNoteInput();
         if (noteInput) {
             return noteInput->isNoteInputMode();
+        }
+    }
+
+    if (act.code == TOGGLE_CONCERT_PITCH_CODE) {
+        auto style = m_controller->currentNotationStyle();
+        if (style) {
+            return style->styleValue(StyleId::concertPitch).toBool();
         }
     }
 
