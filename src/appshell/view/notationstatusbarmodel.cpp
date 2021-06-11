@@ -79,10 +79,10 @@ QVariant NotationStatusBarModel::currentWorkspaceAction() const
 
 MenuItem NotationStatusBarModel::menuItem(const actions::ActionCode& actionCode) const
 {
-     MenuItem item = actionsRegister()->action(actionCode);
-     item.state = actionsRegister()->actionState(actionCode);
+    MenuItem item = actionsRegister()->action(actionCode);
+    item.state = actionsRegister()->actionState(actionCode);
 
-     return item;
+    return item;
 }
 
 QVariant NotationStatusBarModel::currentViewMode() const
@@ -163,6 +163,10 @@ void NotationStatusBarModel::load()
     m_currentZoomType = notationConfiguration()->defaultZoomType();
 
     context()->currentNotationChanged().onNotify(this, [this]() {
+        if (!notation()) {
+            return;
+        }
+
         emit currentViewModeChanged();
         emit zoomEnabledChanged();
 

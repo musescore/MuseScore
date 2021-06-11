@@ -1196,12 +1196,12 @@ const UiActionList NotationUiActions::m_noteInputActions = {
              IconCode::Code::NOTE_FLIP
              ),
     UiAction(TOGGLE_CONCERT_PITCH_CODE,
-            mu::context::UiCtxNotationOpened,
-            QT_TRANSLATE_NOOP("action", "Concert Pitch"),
-            QT_TRANSLATE_NOOP("action", "Toggle 'Concert Pitch"),
-            IconCode::Code::TUNING_FORK,
-            Checkable::Yes
-            )
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Concert Pitch"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Concert Pitch'"),
+             IconCode::Code::TUNING_FORK,
+             Checkable::Yes
+             )
 };
 
 const UiActionList NotationUiActions::m_scoreConfigActions = {
