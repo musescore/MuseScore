@@ -85,6 +85,7 @@ bool IpcServer::listen(const QString& serverName)
         });
 
         socket->waitForReadyRead(TIMEOUT_MSEC);
+
         QByteArray id = socket->readAll();
 
         IncomingSocket inc;
@@ -206,6 +207,7 @@ bool IpcServer::doSendToSocket(QLocalSocket* socket, const QByteArray& data)
     m_lock->lock();
 
     socket->write(data);
+
     bool ok = socket->waitForBytesWritten(TIMEOUT_MSEC);
     if (!ok) {
         LOGE() << "failed write data to socket";
