@@ -54,7 +54,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void handleAction(const QString& action, int actionIndex = -1);
+    Q_INVOKABLE void handleAction(const QString& action);
 
     Q_INVOKABLE QVariantMap get(int index);
 
@@ -80,9 +80,6 @@ private:
     INotationPtr notation() const;
 
     void onNotationChanged();
-
-    void toggleNoteInput();
-    void toggleNoteInputMethod(const actions::ActionCode& actionCode);
 
     void updateState();
     void updateNoteInputState();

@@ -942,10 +942,16 @@ const UiActionList NotationUiActions::m_actions = {
 const UiActionList NotationUiActions::m_noteInputActions = {
     UiAction("note-input",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Default (Step time)"),
+             QT_TRANSLATE_NOOP("action", "Note Input"),
              QT_TRANSLATE_NOOP("action", "Enter notes with a mouse or keyboard"),
              IconCode::Code::EDIT,
              Checkable::Yes
+             ),
+    UiAction("note-input-steptime",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Default (Step time)"),
+             QT_TRANSLATE_NOOP("action", "Enter notes with a mouse or keyboard"),
+             IconCode::Code::EDIT
              ),
     UiAction("note-input-rhythm",
              mu::context::UiCtxNotationOpened,

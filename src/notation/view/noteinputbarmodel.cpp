@@ -42,14 +42,36 @@ static const ActionCode TUPLET_ACTION_CODE("tuplet");
 
 static int INVALID_INDEX = -1;
 
-static QMap<ActionCode, NoteInputMethod> noteInputModeActions = {
-    { "note-input", NoteInputMethod::STEPTIME },
+static const std::vector<std::pair<ActionCode, NoteInputMethod> > noteInputModeActions = {
+    { "note-input-steptime", NoteInputMethod::STEPTIME },
     { "note-input-rhythm", NoteInputMethod::RHYTHM },
     { "note-input-repitch", NoteInputMethod::REPITCH },
     { "note-input-realtime-auto", NoteInputMethod::REALTIME_AUTO },
     { "note-input-realtime-manual", NoteInputMethod::REALTIME_MANUAL },
     { "note-input-timewise", NoteInputMethod::TIMEWISE },
 };
+
+static NoteInputMethod noteInputMethodForActionCode(const ActionCode& code)
+{
+    for (const auto& pair : noteInputModeActions) {
+        if (pair.first == code) {
+            return pair.second;
+        }
+    }
+
+    return NoteInputMethod::UNKNOWN;
+}
+
+static ActionCode actionCodeForNoteInputMethod(NoteInputMethod method)
+{
+    for (const auto& pair : noteInputModeActions) {
+        if (pair.second == method) {
+            return pair.first;
+        }
+    }
+
+    return {};
+}
 
 NoteInputBarModel::NoteInputBarModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -169,7 +191,7 @@ MenuItem& NoteInputBarModel::item(const ActionCode& actionCode)
 int NoteInputBarModel::findNoteInputModeItemIndex() const
 {
     for (int i = 0; i < m_items.size(); i++) {
-        if (noteInputModeActions.contains(m_items[i].code)) {
+        if (isNoteInputModeAction(m_items[i].code)) {
             return i;
         }
     }
@@ -196,37 +218,6 @@ void NoteInputBarModel::onNotationChanged()
     }
 
     updateState();
-}
-
-void NoteInputBarModel::toggleNoteInput()
-{
-    if (!noteInput()) {
-        return;
-    }
-
-    if (isNoteInputMode()) {
-        noteInput()->endNoteInput();
-    } else {
-        noteInput()->startNoteInput();
-    }
-}
-
-void NoteInputBarModel::toggleNoteInputMethod(const ActionCode& actionCode)
-{
-    if (!noteInput()) {
-        return;
-    }
-
-    NoteInputMethod currentMethod = noteInputState().method;
-    NoteInputMethod actionMethod = noteInputModeActions[actionCode];
-    if (currentMethod == actionMethod) {
-        toggleNoteInput();
-    } else {
-        if (!isNoteInputMode()) {
-            noteInput()->startNoteInput();
-        }
-        noteInput()->toggleNoteInputMethod(actionMethod);
-    }
 }
 
 void NoteInputBarModel::updateState()
@@ -568,13 +559,13 @@ bool NoteInputBarModel::resolveSlurSelected() const
 
 bool NoteInputBarModel::isNoteInputModeAction(const ActionCode& actionCode) const
 {
-    return noteInputModeActions.contains(actionCode);
+    return actionCode == "note-input" || noteInputMethodForActionCode(actionCode) != NoteInputMethod::UNKNOWN;
 }
 
 UiAction NoteInputBarModel::currentNoteInputModeAction() const
 {
     NoteInputMethod method = noteInputState().method;
-    return uiactionsRegister()->action(noteInputModeActions.key(method));
+    return uiactionsRegister()->action(actionCodeForNoteInputMethod(method));
 }
 
 int NoteInputBarModel::itemIndex(const ActionCode& actionCode) const
@@ -625,7 +616,8 @@ MenuItemList NoteInputBarModel::noteInputMethodItems() const
     MenuItemList items;
 
     actions::ActionCode currentInputMethod = currentNoteInputModeAction().code;
-    for (const ActionCode& actionCode : noteInputModeActions.keys()) {
+    for (const auto& pair : noteInputModeActions) {
+        ActionCode actionCode = pair.first;
         MenuItem item = makeAction(actionCode);
         item.selectable = true;
         if (actionCode == currentInputMethod) {
@@ -834,18 +826,9 @@ std::vector<std::string> NoteInputBarModel::currentWorkspaceActions() const
     return toolbarData->actions;
 }
 
-void NoteInputBarModel::handleAction(const QString& action, int actionIndex)
+void NoteInputBarModel::handleAction(const QString& action)
 {
     ActionCode actionCode = codeFromQString(action);
-    if (isNoteInputModeAction(actionCode)) {
-        if (actionIndex != INVALID_INDEX) {
-            toggleNoteInputMethod(actionCode);
-        } else {
-            toggleNoteInput();
-        }
-        return;
-    }
-
     dispatcher()->dispatch(actionCode);
 }
 

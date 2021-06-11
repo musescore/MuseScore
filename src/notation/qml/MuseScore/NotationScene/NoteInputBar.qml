@@ -157,7 +157,9 @@ Rectangle {
 
             StyledMenuLoader {
                 id: menuLoader
-                onHandleAction: noteInputModel.handleAction(actionCode, actionIndex)
+                onHandleAction: function(actionCode) {
+                    noteInputModel.handleAction(actionCode)
+                }
             }
         }
     }
