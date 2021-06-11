@@ -58,7 +58,11 @@ struct Msg
     QString method;
     QStringList args;
 
-    bool isValid() const { return type != MsgType::Undefined && !method.isEmpty(); }
+        << << << < HEAD
+        bool isValid() const { return type != MsgType::Undefined && !method.isEmpty(); }
+        ==
+        == ===bool isValid() const { return !method.isEmpty(); }
+        >> >> >> > moved ipc server to separated thread
 };
 
 struct Meta
