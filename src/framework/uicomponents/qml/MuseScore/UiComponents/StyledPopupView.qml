@@ -122,17 +122,20 @@ PopupView {
             opacity: root.animationEnabled ? 0.5 : 1.0
             transformOrigin: Item.Center
 
+            StyledDropShadow {
+                anchors.fill: parent
+                anchors.topMargin: root.padding / 2
+                anchors.bottomMargin: root.padding / 2
+                source: contentBackground
+            }
+
             Rectangle {
                 id: contentBackground
                 anchors.fill: parent
                 color: ui.theme.backgroundPrimaryColor
+                radius: 4
                 border.width: 1
                 border.color: ui.theme.strokeColor
-            }
-
-            StyledDropShadow {
-                anchors.fill: parent
-                source: contentBackground
             }
 
             Canvas {
