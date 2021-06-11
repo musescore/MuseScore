@@ -73,14 +73,21 @@ StyledPopupView {
         prv.hasItemsWithSubmenu = false
         prv.hasItemsWithShortcut = false
 
+        //! NOTE Policy:
+        //! - if the menu contains checkable items, space for the checkmarks is reserved
+        //! - if the menu contains items with an icon, space for icons is reserved
+        //! - selectable items that don't have an icon are treated as checkable
+        //! - selectable items that do have an icon are treated as non-checkable
+        //! - all selectable items that are selected get an accent color background
+
         for (let i = 0; i < model.length; i++) {
             let item = model[i]
             let hasIcon = (Boolean(item.icon) && item.icon !== IconCode.NONE)
 
-            if ((item.checkable || item.selectable) && hasIcon) {
+            if (item.checkable && hasIcon) {
                 prv.hasItemsWithIconAndCheckable = true
                 prv.hasItemsWithIconOrCheckable = true
-            } else if (item.checkable || item.selectable || hasIcon) {
+            } else if (item.checkable || hasIcon || item.selectable) {
                 prv.hasItemsWithIconOrCheckable = true
             }
 

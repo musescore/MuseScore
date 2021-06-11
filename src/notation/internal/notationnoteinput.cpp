@@ -114,6 +114,11 @@ void NotationNoteInput::startNoteInput()
 
     m_interaction->select({ el }, SelectType::SINGLE, 0);
 
+    // Not strictly necessary, just for safety
+    if (is.noteEntryMethod() == Ms::NoteEntryMethod::UNKNOWN) {
+        is.setNoteEntryMethod(Ms::NoteEntryMethod::STEPTIME);
+    }
+
     Duration d(is.duration());
     if (!d.isValid() || d.isZero() || d.type() == Duration::DurationType::V_MEASURE) {
         is.setDuration(Duration(Duration::DurationType::V_QUARTER));
