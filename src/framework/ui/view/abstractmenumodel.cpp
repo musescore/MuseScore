@@ -26,6 +26,8 @@
 using namespace mu::ui;
 using namespace mu::actions;
 
+const int AbstractMenuModel::INVALID_ITEM_INDEX = -1;
+
 AbstractMenuModel::AbstractMenuModel(QObject* parent)
     : QAbstractListModel(parent)
 {
@@ -115,16 +117,41 @@ QVariantMap AbstractMenuModel::get(int index)
 
 void AbstractMenuModel::load()
 {
-    clear();
-
     uiactionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
         onActionsStateChanges(codes);
     });
 }
 
-void AbstractMenuModel::clear()
+const MenuItemList& AbstractMenuModel::items() const
 {
-    m_items.clear();
+    return m_items;
+}
+
+MenuItemList& AbstractMenuModel::items()
+{
+    return m_items;
+}
+
+void AbstractMenuModel::setItems(const MenuItemList& items)
+{
+    TRACEFUNC;
+
+    beginResetModel();
+    m_items = items;
+    endResetModel();
+
+    emit countChanged(items.size());
+}
+
+int AbstractMenuModel::itemIndex(const actions::ActionCode& actionCode) const
+{
+    for (int i = 0; i < m_items.size(); ++i) {
+        if (m_items[i].code == actionCode) {
+            return i;
+        }
+    }
+
+    return INVALID_ITEM_INDEX;
 }
 
 MenuItem& AbstractMenuModel::findItem(const ActionCode& actionCode)

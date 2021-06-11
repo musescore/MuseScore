@@ -103,7 +103,9 @@ DockWindow {
             topToolKeyNavSec: root.topToolKeyNavSec
         },
 
-        PublishPage {},
+        PublishPage {
+            topToolKeyNavSec: root.topToolKeyNavSec
+        },
 
         DevToolsPage {}
     ]

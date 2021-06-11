@@ -36,12 +36,12 @@ void PublishToolBarModel::load()
 {
     AbstractMenuModel::load();
 
-    beginResetModel();
+    MenuItemList items {
+        makeMenuItem("print"),
+        makeMenuItem("file-save-online"),
+        makeMenuItem("file-export"),
+        makeMenuItem("toggle-imagecapture")
+    };
 
-    m_items << makeMenuItem("print");
-    m_items << makeMenuItem("file-save-online");
-    m_items << makeMenuItem("file-export");
-    m_items << makeMenuItem("toggle-imagecapture");
-
-    endResetModel();
+    setItems(items);
 }

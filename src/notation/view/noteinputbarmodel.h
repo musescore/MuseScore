@@ -38,8 +38,6 @@ class NoteInputBarModel : public ui::AbstractMenuModel
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, workspace::IWorkspaceManager, workspaceManager)
 
-    Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
-
 public:
     explicit NoteInputBarModel(QObject* parent = nullptr);
 
@@ -47,9 +45,6 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load() override;
-
-signals:
-    void countChanged(int count);
 
 private:
     enum NoteInputRoles {
@@ -79,8 +74,6 @@ private:
     bool isTupletChooseAction(const actions::ActionCode& actionCode) const;
 
     ui::UiAction currentNoteInputModeAction() const;
-
-    int itemIndex(const actions::ActionCode& actionCode) const;
 
     ui::MenuItem makeActionItem(const ui::UiAction& action, const QString& section);
     ui::MenuItem makeAddItem(const QString& section);

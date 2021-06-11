@@ -43,7 +43,7 @@ class AppMenuModel : public ui::AbstractMenuModel
     Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
 
 public:
-    explicit AppMenuModel(QObject* parent = nullptr); 
+    explicit AppMenuModel(QObject* parent = nullptr);
 
     QVariantList items() const;
 

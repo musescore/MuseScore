@@ -45,6 +45,12 @@ const UiActionList UserScoresUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Save"),
              QT_TRANSLATE_NOOP("action", "Save score to file")
              ),
+    UiAction("file-save-online",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Upload to MuseScore.com"),
+             QT_TRANSLATE_NOOP("action", "Save score on MuseScore.com"),
+             IconCode::Code::CLOUD_FILE
+             ),
     UiAction("file-save-as",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Save As..."),

@@ -23,7 +23,9 @@ import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.AppShell 1.0
 import MuseScore.Dock 1.0
+
 import MuseScore.NotationScene 1.0
 import MuseScore.Playback 1.0
 
@@ -34,9 +36,18 @@ DockPage {
     id: root
 
     property var color: ui.theme.backgroundPrimaryColor
+    property var topToolKeyNavSec
 
     objectName: "Publish"
     uri: "musescore://publish"
+
+    property NavigationSection publishToolBarKeyNavSec: NavigationSection {
+        id: keynavSec
+        name: "PublushToolBarSection"
+        order: 2
+    }
+
+    property NotationPageModel pageModel: NotationPageModel {}
 
     mainToolBars: [
         DockToolBar {
@@ -47,7 +58,15 @@ DockPage {
 
             minimumWidth: 198
 
-            contentComponent: NotationToolBar {}
+            contentComponent: NotationToolBar {
+                navigation.order: 2
+
+                onActiveFocusRequested: {
+                    if (navigation.active) {
+                        notationToolBar.forceActiveFocus()
+                    }
+                }
+            }
         },
 
         DockToolBar {
@@ -61,6 +80,9 @@ DockPage {
             minimumHeight: floating ? 56 : 48
 
             contentComponent: PlaybackToolBar {
+                navigation.section: root.topToolKeyNavSec
+                navigation.order: 3
+
                 floating: playbackToolBar.floating
             }
         },
@@ -84,23 +106,21 @@ DockPage {
         DockToolBar {
             objectName: "publishToolBar"
 
-            contentComponent: PublishToolBar {}
+            contentComponent: PublishToolBar {
+                navigation.section: root.publishToolBarKeyNavSec
+                navigation.order: 1
+            }
         }
     ]
 
     central: NotationView {}
 
     statusBar: DockStatusBar {
-        id: publishStatusBar
-
         objectName: "publishStatusBar"
-
-        height: 36
-        minimumHeight: 36
-        maximumHeight: 36
 
         NotationStatusBar {
             color: root.color
+            visible: root.pageModel.isStatusBarVisible
         }
     }
 }
