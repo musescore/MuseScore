@@ -54,6 +54,7 @@
 #include "view/preferences/iopreferencesmodel.h"
 #include "view/preferences/commonaudioapiconfigurationmodel.h"
 #include "view/framelesswindow/framelesswindowmodel.h"
+#include "view/publish/publishtoolbarmodel.h"
 
 #include "view/dockwindow/docksetup.h"
 
@@ -138,6 +139,7 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<AboutModel>("MuseScore.AppShell", 1, 0, "AboutModel");
     qmlRegisterType<StartupModel>("MuseScore.AppShell", 1, 0, "StartupModel");
     qmlRegisterType<FramelessWindowModel>("MuseScore.AppShell", 1, 0, "FramelessWindowModel");
+    qmlRegisterType<PublishToolBarModel>("MuseScore.AppShell", 1, 0, "PublishToolBarModel");
 }
 
 void AppShellModule::onInit(const IApplication::RunMode&)

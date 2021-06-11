@@ -26,37 +26,132 @@
 using namespace mu::ui;
 using namespace mu::actions;
 
-QVariantList AbstractMenuModel::items() const
-{
-    QVariantList menuItems;
+const int AbstractMenuModel::INVALID_ITEM_INDEX = -1;
 
-    for (const MenuItem& menuItem: m_items) {
-        menuItems << menuItem.toMap();
+AbstractMenuModel::AbstractMenuModel(QObject* parent)
+    : QAbstractListModel(parent)
+{
+}
+
+QVariant AbstractMenuModel::data(const QModelIndex& index, int role) const
+{
+    int row = index.row();
+
+    if (!isIndexValid(row)) {
+        return QVariant();
     }
 
-    return menuItems;
+    const QVariantMap& item = m_items.at(row).toMap();
+
+    switch (role) {
+    case TitleRole: return item["title"];
+    case CodeRole: return item["code"];
+    case DescriptionRole: return item["description"];
+    case ShortcutRole: return item["shortcut"];
+    case IconRole: return item["icon"];
+    case CheckedRole: return item["checked"];
+    case EnabledRole: return item["enabled"];
+    case SubitemsRole: return item["subitems"];
+    case SectionRole: return item["section"];
+    case UserRole: return QVariant();
+    }
+
+    return QVariant();
 }
 
-void AbstractMenuModel::clear()
+bool AbstractMenuModel::isIndexValid(int index) const
 {
-    m_items.clear();
+    return index >= 0 && index < m_items.size();
 }
 
-void AbstractMenuModel::appendItem(const MenuItem& item)
+int AbstractMenuModel::rowCount(const QModelIndex&) const
 {
-    m_items << item;
+    return m_items.count();
 }
 
-void AbstractMenuModel::appendItems(const MenuItemList& items)
+QHash<int, QByteArray> AbstractMenuModel::roleNames() const
 {
-    m_items << items;
+    static const QHash<int, QByteArray> roles {
+        { TitleRole, "title" },
+        { CodeRole, "code" },
+        { DescriptionRole, "description" },
+        { ShortcutRole, "shortcut" },
+        { IconRole, "icon" },
+        { CheckedRole, "checked" },
+        { EnabledRole, "enabled" },
+        { SubitemsRole, "subitems" },
+        { SectionRole, "section" }
+    };
+
+    return roles;
 }
 
-void AbstractMenuModel::listenActionsStateChanges()
+void AbstractMenuModel::handleAction(const QString& actionCodeStr, int actionIndex)
+{
+    ActionCode actionCode = codeFromQString(actionCodeStr);
+    MenuItem menuItem = actionIndex == -1 ? findItem(actionCode) : findItemByIndex(actionCode, actionIndex);
+
+    dispatch(actionCode, menuItem.args);
+}
+
+void AbstractMenuModel::dispatch(const ActionCode& actionCode, const ActionData& args)
+{
+    dispatcher()->dispatch(actionCode, args);
+}
+
+QVariantMap AbstractMenuModel::get(int index)
+{
+    QVariantMap result;
+
+    QHash<int, QByteArray> names = roleNames();
+    QHashIterator<int, QByteArray> i(names);
+    while (i.hasNext()) {
+        i.next();
+        QModelIndex idx = this->index(index, 0);
+        QVariant data = idx.data(i.key());
+        result[i.value()] = data;
+    }
+
+    return result;
+}
+
+void AbstractMenuModel::load()
 {
     uiactionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
         onActionsStateChanges(codes);
     });
+}
+
+const MenuItemList& AbstractMenuModel::items() const
+{
+    return m_items;
+}
+
+MenuItemList& AbstractMenuModel::items()
+{
+    return m_items;
+}
+
+void AbstractMenuModel::setItems(const MenuItemList& items)
+{
+    TRACEFUNC;
+
+    beginResetModel();
+    m_items = items;
+    endResetModel();
+
+    emit countChanged(items.size());
+}
+
+int AbstractMenuModel::itemIndex(const actions::ActionCode& actionCode) const
+{
+    for (int i = 0; i < m_items.size(); ++i) {
+        if (m_items[i].code == actionCode) {
+            return i;
+        }
+    }
+
+    return INVALID_ITEM_INDEX;
 }
 
 MenuItem& AbstractMenuModel::findItem(const ActionCode& actionCode)
@@ -94,13 +189,9 @@ MenuItem AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& i
     return item;
 }
 
-MenuItem AbstractMenuModel::makeAction(const ActionCode& actionCode) const
+MenuItem AbstractMenuModel::makeMenuItem(const ActionCode& actionCode) const
 {
     const UiAction& action = uiactionsRegister()->action(actionCode);
-//    IF_ASSERT_FAILED(action.isValid()) {
-//        return MenuItem();
-//    }
-
     if (!action.isValid()) {
         return MenuItem();
     }

@@ -154,6 +154,8 @@ FocusScope {
 
                 property bool isVertical: orientation === Qt.Vertical
 
+                visible: false
+
                 SplitView.preferredHeight: 100
                 SplitView.preferredWidth: 100
 

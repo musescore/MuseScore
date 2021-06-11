@@ -28,6 +28,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/cloudmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/cloudmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iauthorizationservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/iuploadingservice.h
     ${CMAKE_CURRENT_LIST_DIR}/icloudconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/cloudtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/view/accountmodel.h

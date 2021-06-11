@@ -136,7 +136,7 @@ QNetworkReply* NetworkManager::receiveReply(RequestType requestType, const QNetw
     return nullptr;
 }
 
-async::Channel<Progress> NetworkManager::progressChannel() const
+ProgressChannel NetworkManager::progressChannel() const
 {
     return m_progressCh;
 }

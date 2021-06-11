@@ -22,28 +22,62 @@
 #ifndef MU_UI_ABSTRACTMENUMODEL_H
 #define MU_UI_ABSTRACTMENUMODEL_H
 
-#include <QObject>
+#include <QAbstractListModel>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "../uitypes.h"
-#include "../iuiactionsregister.h"
-#include "shortcuts/ishortcutsregister.h"
+#include "ui/uitypes.h"
+#include "ui/iuiactionsregister.h"
+#include "actions/iactionsdispatcher.h"
 
 namespace mu::ui {
-class AbstractMenuModel : public async::Asyncable
+class AbstractMenuModel : public QAbstractListModel, public async::Asyncable
 {
+    Q_OBJECT
+
     INJECT(ui, IUiActionsRegister, uiactionsRegister)
+    INJECT(ui, actions::IActionsDispatcher, dispatcher)
+
+    Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 
 public:
-    QVariantList items() const;
+    explicit AbstractMenuModel(QObject* parent = nullptr);
+
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
+    QHash<int, QByteArray> roleNames() const override;
+
+    virtual void load();
+
+    Q_INVOKABLE void handleAction(const QString& actionCode, int actionIndex = -1);
+    Q_INVOKABLE QVariantMap get(int index);
+
+signals:
+    void countChanged(int count);
 
 protected:
-    void clear();
-    void appendItem(const MenuItem& item);
-    void appendItems(const MenuItemList& items);
-    void listenActionsStateChanges();
     virtual void onActionsStateChanges(const actions::ActionCodeList& codes);
+
+    enum Roles {
+        CodeRole = Qt::UserRole + 1,
+        TitleRole,
+        DescriptionRole,
+        ShortcutRole,
+        IconRole,
+        CheckedRole,
+        EnabledRole,
+        SubitemsRole,
+        SectionRole,
+
+        UserRole,
+    };
+
+    const MenuItemList& items() const;
+    MenuItemList& items();
+    void setItems(const MenuItemList& items);
+
+    static const int INVALID_ITEM_INDEX;
+    int itemIndex(const actions::ActionCode& actionCode) const;
 
     MenuItem& findItem(const actions::ActionCode& actionCode);
     MenuItem& findItemByIndex(const actions::ActionCode& menuActionCode, int actionIndex);
@@ -51,8 +85,12 @@ protected:
 
     MenuItem makeMenu(const QString& title, const MenuItemList& items, bool enabled = true,
                       const actions::ActionCode& menuActionCode = "") const;
-    MenuItem makeAction(const actions::ActionCode& actionCode) const;
+
+    MenuItem makeMenuItem(const actions::ActionCode& actionCode) const;
     MenuItem makeSeparator() const;
+
+    bool isIndexValid(int index) const;
+    void dispatch(const actions::ActionCode& actionCode, const actions::ActionData& args = actions::ActionData());
 
 private:
     MenuItem& item(MenuItemList& items, const actions::ActionCode& actionCode);

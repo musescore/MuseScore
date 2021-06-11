@@ -164,8 +164,7 @@ enum class SaveMode
     Save,
     SaveAs,
     SaveCopy,
-    SaveSelection,
-    SaveOnline
+    SaveSelection
 };
 
 enum class ResettableValueType
