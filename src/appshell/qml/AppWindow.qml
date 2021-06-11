@@ -42,4 +42,8 @@ ApplicationWindow {
 
     //! NOTE Need only create
     Shortcuts { }
+
+    Component.onCompleted: {
+        ui.rootItem = root.contentItem
+    }
 }
