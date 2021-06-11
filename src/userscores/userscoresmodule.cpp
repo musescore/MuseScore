@@ -40,6 +40,12 @@
 #include "internal/templatesrepository.h"
 #include "internal/userscoresuiactions.h"
 
+#ifdef Q_OS_MAC
+#include "internal/platform/macos/macosrecentfilescontroller.h"
+#else
+#include "internal/platform/stub/stubrecentfilescontroller.h"
+#endif
+
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 
@@ -69,6 +75,12 @@ void UserScoresModule::registerExports()
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
     ioc()->registerExport<IFileScoreController>(moduleName(), s_fileController);
     ioc()->registerExport<IExportScoreScenario>(moduleName(), s_exportScoreScenario);
+
+#ifdef Q_OS_MAC
+    ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new MacOSRecentFilesController());
+#else
+    ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new StubRecentFilesController());
+#endif
 }
 
 void UserScoresModule::resolveImports()

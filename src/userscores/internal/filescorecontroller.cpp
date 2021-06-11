@@ -207,6 +207,7 @@ void FileScoreController::importPdf()
 void FileScoreController::clearRecentScores()
 {
     configuration()->setRecentScorePaths({});
+    platformRecentFilesController()->clearRecentFiles();
 }
 
 void FileScoreController::continueLastSession()
@@ -313,6 +314,7 @@ void FileScoreController::prependToRecentScoreList(const io::path& filePath)
 
     recentScorePaths.insert(recentScorePaths.begin(), filePath);
     configuration()->setRecentScorePaths(recentScorePaths);
+    platformRecentFilesController()->addRecentFile(filePath);
 }
 
 bool FileScoreController::isScoreOpened() const
