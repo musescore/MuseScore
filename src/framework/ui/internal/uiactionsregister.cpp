@@ -47,11 +47,11 @@ void UiActionsRegister::init()
 void UiActionsRegister::reg(const IUiActionsModulePtr& module)
 {
     const UiActionList& alist = module->actionsList();
-    for (const UiAction& a : alist) {
+    for (const UiAction& action : alist) {
         Info info;
         info.module = module;
-        info.action = a;
-        m_actions[a.code] = std::move(info);
+        info.action = action;
+        m_actions[action.code] = std::move(info);
     }
 
     module->actionEnabledChanged().onReceive(this, [this](const ActionCodeList& codes) {
@@ -120,9 +120,9 @@ void UiActionsRegister::doUpdateEnabled(Info& inf,
                                         ActionCodeList& changedList)
 {
     bool oldEnabled = inf.state.enabled;
-    if (!ctxResolver->match(currentCtx, inf.action.context)) {
-        inf.state.enabled = false;
-    } else {
+    inf.state.enabled = false;
+
+    if (ctxResolver->match(currentCtx, inf.action.context)) {
         inf.state.enabled = inf.module->actionEnabled(inf.action);
     }
 

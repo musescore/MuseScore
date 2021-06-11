@@ -231,10 +231,6 @@ DockPage {
 
         objectName: "notationStatusBar"
 
-        height: root.toolBarHeight
-        minimumHeight: root.toolBarHeight
-        maximumHeight: root.toolBarHeight
-
         NotationStatusBar {
             color: root.color
             visible: root.pageModel.isStatusBarVisible

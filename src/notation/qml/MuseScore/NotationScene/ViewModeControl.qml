@@ -32,41 +32,47 @@ FlatButton {
 
     signal changeCurrentViewModeRequested(var newViewMode)
 
-    normalStateColor: menu.isOpened ? ui.theme.accentColor : "transparent"
+    normalStateColor: menu.isMenuOpened ? ui.theme.accentColor : "transparent"
+
+    visible: Boolean(root.currentViewMode)
 
     text: Boolean(root.currentViewMode) ? root.currentViewMode.title : ""
     icon: Boolean(root.currentViewMode) ? root.currentViewMode.icon : IconCode.NONE
 
-    visible: Boolean(root.currentViewMode)
-
     orientation: Qt.Horizontal
 
-    StyledIconLabel {
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
+    contentItem: Row {
+        spacing: 4
 
-        iconCode: IconCode.SMALL_ARROW_DOWN
+        StyledIconLabel {
+            iconCode: root.icon
+            font: ui.theme.toolbarIconsFont
+        }
+
+        StyledTextLabel {
+            anchors.verticalCenter: parent.verticalCenter
+
+            text: root.text
+        }
+
+        StyledIconLabel {
+            anchors.verticalCenter: parent.verticalCenter
+
+            iconCode: IconCode.SMALL_ARROW_DOWN
+        }
     }
 
     onClicked: {
-        if (menu.isOpened) {
-            menu.toggleOpened()
-            return
-        }
-
-        menu.model = 0
-        menu.model = root.availableViewModeList
-        menu.toggleOpened()
+        menu.toggleOpened(root.availableViewModeList, root.navigation)
     }
 
-    StyledMenu {
+    StyledMenuLoader {
         id: menu
 
-        anchorItem: ui.rootItem
+        menuAnchorItem: ui.rootItem
 
         onHandleAction: {
             Qt.callLater(root.changeCurrentViewModeRequested, actionCode)
-            menu.close()
         }
     }
 }

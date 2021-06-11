@@ -37,6 +37,10 @@ static const QString SELECTED_KEY("selected");
 static const QString TYPE_KEY("type");
 static const QString CODE_KEY("code");
 static const QString VALUE_KEY("value");
+
+static const ActionCode TOGGLE_CONCERT_PITCH_CODE("concert-pitch");
+static const ActionCode SELECT_WORKSPACE_CODE("configure-workspaces");
+
 static constexpr int MIN_DISPLAYED_ZOOM_PERCENTAGE = 25;
 
 static ActionCode zoomTypeToActionCode(ZoomType type)
@@ -61,14 +65,24 @@ QString NotationStatusBarModel::accessibilityInfo() const
     return accessibility() ? QString::fromStdString(accessibility()->accessibilityInfo().val) : QString();
 }
 
-QString NotationStatusBarModel::currentWorkspaceName() const
+QVariant NotationStatusBarModel::concertPitchAction() const
 {
-    return QString::fromStdString(workspaceConfiguration()->currentWorkspaceName().val);
+    return menuItem(TOGGLE_CONCERT_PITCH_CODE).toMap();
 }
 
-bool NotationStatusBarModel::concertPitchEnabled() const
+QVariant NotationStatusBarModel::currentWorkspaceAction() const
 {
-    return style() ? style()->styleValue(StyleId::concertPitch).toBool() : false;
+    MenuItem item = menuItem(SELECT_WORKSPACE_CODE);
+    item.title = qtrc("appshell", "Workspace: ") + QString::fromStdString(workspaceConfiguration()->currentWorkspaceName().val);
+    return item.toMap();
+}
+
+MenuItem NotationStatusBarModel::menuItem(const actions::ActionCode& actionCode) const
+{
+    MenuItem item = actionsRegister()->action(actionCode);
+    item.state = actionsRegister()->actionState(actionCode);
+
+    return item;
 }
 
 QVariant NotationStatusBarModel::currentViewMode() const
@@ -122,6 +136,11 @@ QVariantList NotationStatusBarModel::availableViewModeList() const
     return result;
 }
 
+bool NotationStatusBarModel::zoomEnabled() const
+{
+    return notation() != nullptr;
+}
+
 int NotationStatusBarModel::currentZoomPercentage() const
 {
     return notationConfiguration()->currentZoom().val;
@@ -143,30 +162,40 @@ void NotationStatusBarModel::load()
 
     m_currentZoomType = notationConfiguration()->defaultZoomType();
 
-    dispatcher()->reg(this, "concert-pitch", [this](const ActionCode& actionCode, const ActionData& args) {
-        UNUSED(actionCode);
-        bool enabled = args.count() > 0 ? args.arg<bool>(0) : false;
-        setConcertPitchEnabled(enabled);
-    });
-
     context()->currentNotationChanged().onNotify(this, [this]() {
+        if (!notation()) {
+            return;
+        }
+
         emit currentViewModeChanged();
+        emit zoomEnabledChanged();
 
         notation()->notationChanged().onNotify(this, [this]() {
             emit currentViewModeChanged();
         });
 
-        listenChangesInStyle();
         listenChangesInAccessibility();
     });
 
     workspaceConfiguration()->currentWorkspaceName().ch.onReceive(this, [this](const std::string&) {
-        emit currentWorkspaceNameChanged();
+        emit currentWorkspaceActionChanged();
     });
 
     notationConfiguration()->currentZoom().ch.onReceive(this, [this](int) {
         emit currentZoomPercentageChanged();
         emit availableZoomListChanged();
+    });
+
+    actionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codeList) {
+        for (const ActionCode& code : codeList) {
+            if (code == SELECT_WORKSPACE_CODE) {
+                emit currentWorkspaceActionChanged();
+            }
+
+            if (code == TOGGLE_CONCERT_PITCH_CODE) {
+                emit concertPitchActionChanged();
+            }
+        }
     });
 
     emit availableViewModeListChanged();
@@ -186,27 +215,14 @@ void NotationStatusBarModel::listenChangesInAccessibility()
     });
 }
 
-void NotationStatusBarModel::listenChangesInStyle()
-{
-    if (!style()) {
-        return;
-    }
-
-    emit concertPitchEnabledChanged();
-
-    style()->styleChanged().onNotify(this, [this]() {
-        emit concertPitchEnabledChanged();
-    });
-}
-
 void NotationStatusBarModel::selectWorkspace()
 {
-    dispatch("configure-workspaces");
+    dispatch(SELECT_WORKSPACE_CODE);
 }
 
 void NotationStatusBarModel::toggleConcertPitch()
 {
-    setConcertPitchEnabled(!concertPitchEnabled());
+    dispatch(TOGGLE_CONCERT_PITCH_CODE);
 }
 
 void NotationStatusBarModel::setCurrentViewMode(const QString& modeCode)
@@ -298,6 +314,11 @@ void NotationStatusBarModel::zoomOut()
     dispatch("zoomout");
 }
 
+void NotationStatusBarModel::handleAction(const QString& actionCode)
+{
+    dispatch(codeFromQString(actionCode));
+}
+
 INotationPtr NotationStatusBarModel::notation() const
 {
     return context()->currentNotation();
@@ -306,11 +327,6 @@ INotationPtr NotationStatusBarModel::notation() const
 INotationAccessibilityPtr NotationStatusBarModel::accessibility() const
 {
     return notation() ? notation()->accessibility() : nullptr;
-}
-
-INotationStylePtr NotationStatusBarModel::style() const
-{
-    return notation() ? notation()->style() : nullptr;
 }
 
 void NotationStatusBarModel::dispatch(const actions::ActionCode& code, const actions::ActionData& args)
@@ -329,15 +345,4 @@ QList<int> NotationStatusBarModel::possibleZoomPercentageList() const
     }
 
     return result;
-}
-
-void NotationStatusBarModel::setConcertPitchEnabled(bool enabled)
-{
-    if (!style() || concertPitchEnabled() == enabled) {
-        return;
-    }
-
-    notation()->undoStack()->prepareChanges();
-    style()->setStyleValue(StyleId::concertPitch, enabled);
-    notation()->undoStack()->commitChanges();
 }
