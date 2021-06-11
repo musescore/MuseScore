@@ -117,6 +117,11 @@ QUrl CloudConfiguration::loginApiUrl() const
     return apiRootUrl() + "/auth/login";
 }
 
+QUrl CloudConfiguration::uploadingApiUrl() const
+{
+    return apiRootUrl() + "/score/upload";
+}
+
 mu::io::path CloudConfiguration::tokensFilePath() const
 {
     return globalConfiguration()->dataPath() + "/cred.dat";

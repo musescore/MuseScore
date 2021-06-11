@@ -62,6 +62,7 @@ private:
     void saveScoreAs();
     void saveScoreCopy();
     void saveSelection();
+    void saveOnline();
 
     void importPdf();
 

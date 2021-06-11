@@ -19,36 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_CLOUDCONFIGURATION_H
-#define MU_CLOUD_CLOUDCONFIGURATION_H
+#ifndef MU_CLOUD_IUPLOADINGSERVICE_H
+#define MU_CLOUD_IUPLOADINGSERVICE_H
 
-#include "icloudconfiguration.h"
+#include "modularity/imoduleexport.h"
+#include "progress.h"
 
-#include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
+class QByteArray;
+class QUrl;
 
 namespace mu::cloud {
-class CloudConfiguration : public ICloudConfiguration
+class IUploadingService : MODULE_EXPORT_INTERFACE
 {
-    INJECT(cloud, framework::IGlobalConfiguration, globalConfiguration)
+    INTERFACE_ID(IUploadingService)
 
 public:
-    void init();
+    virtual ~IUploadingService() = default;
 
-    network::RequestHeaders headers() const override;
-    QByteArray clientId() const override;
-
-    QUrl authorizationUrl() const override;
-    QUrl accessTokenUrl() const override;
-    QUrl refreshApiUrl() const override;
-    QUrl userInfoApiUrl() const override;
-    QUrl loginApiUrl() const override;
-    QUrl uploadingApiUrl() const override;
-    io::path tokensFilePath() const override;
-
-private:
-    QString apiRootUrl() const;
+    virtual framework::ProgressChannel uploadScore(const QByteArray& scoreData, const std::string& title,
+                                                   const QUrl& sourceUrl = QUrl()) = 0;
 };
 }
 
-#endif // MU_CLOUD_CLOUDCONFIGURATION_H
+#endif // MU_CLOUD_IUPLOADINGSERVICE_H

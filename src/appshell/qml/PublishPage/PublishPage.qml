@@ -23,21 +23,104 @@ import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.AppShell 1.0
+import MuseScore.Dock 1.0
+
+import MuseScore.NotationScene 1.0
+import MuseScore.Playback 1.0
 
 import "../dockwindow"
+import "../NotationPage"
 
 DockPage {
-    id: publishPage
+    id: root
+
+    property var color: ui.theme.backgroundPrimaryColor
+    property var topToolKeyNavSec
 
     objectName: "Publish"
     uri: "musescore://publish"
 
-    central: Rectangle {
-        color: ui.theme.backgroundSecondaryColor
+    property NavigationSection publishToolBarKeyNavSec: NavigationSection {
+        id: keynavSec
+        name: "PublushToolBarSection"
+        order: 2
+    }
 
-        StyledTextLabel {
-            anchors.centerIn: parent
-            text: "Publish"
+    property NotationPageModel pageModel: NotationPageModel {}
+
+    mainToolBars: [
+        DockToolBar {
+            id: notationToolBar
+
+            objectName: root.objectName + "_notationToolBar"
+            title: qsTrc("appshell", "Notation Toolbar")
+
+            minimumWidth: 198
+
+            contentComponent: NotationToolBar {
+                navigation.order: 2
+
+                onActiveFocusRequested: {
+                    if (navigation.active) {
+                        notationToolBar.forceActiveFocus()
+                    }
+                }
+            }
+        },
+
+        DockToolBar {
+            id: playbackToolBar
+
+            objectName: root.objectName + "_playbackToolBar"
+            title: qsTrc("appshell", "Playback Controls")
+
+            width: root.width / 3
+            minimumWidth: floating ? 526 : 476
+            minimumHeight: floating ? 56 : 48
+
+            contentComponent: PlaybackToolBar {
+                navigation.section: root.topToolKeyNavSec
+                navigation.order: 3
+
+                floating: playbackToolBar.floating
+            }
+        },
+
+        DockToolBar {
+            id: undoRedoToolBar
+
+            objectName: root.objectName + "_undoRedoToolBar"
+            title: qsTrc("appshell", "Undo/Redo Toolbar")
+
+            minimumWidth: 74
+            maximumWidth: 74
+
+            movable: false
+
+            contentComponent: UndoRedoToolBar {}
+        }
+    ]
+
+    toolBars: [
+        DockToolBar {
+            objectName: "publishToolBar"
+
+            contentComponent: PublishToolBar {
+                navigation.section: root.publishToolBarKeyNavSec
+                navigation.order: 1
+            }
+        }
+    ]
+
+    central: NotationView {}
+
+    statusBar: DockStatusBar {
+        objectName: "publishStatusBar"
+
+        NotationStatusBar {
+            color: root.color
+            visible: root.pageModel.isStatusBarVisible
         }
     }
 }

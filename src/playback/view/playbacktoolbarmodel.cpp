@@ -24,7 +24,6 @@
 #include "log.h"
 #include "translation.h"
 
-#include "shortcuts/shortcutstypes.h"
 #include "ui/view/musicalsymbolcodes.h"
 #include "playback/playbacktypes.h"
 #include "playback/internal/playbackuiactions.h"
@@ -52,55 +51,14 @@ static MusicalSymbolCodes::Code tempoDurationToNoteIcon(DurationType durationTyp
 }
 
 PlaybackToolBarModel::PlaybackToolBarModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : AbstractMenuModel(parent)
 {
-}
-
-QVariant PlaybackToolBarModel::data(const QModelIndex& index, int role) const
-{
-    if (!index.isValid()) {
-        return QVariant();
-    }
-
-    const QVariantMap& item = items().at(index.row()).toMap();
-
-    switch (role) {
-    case TitleRole: return item["title"];
-    case CodeRole: return item["code"];
-    case DescriptionRole: return item["description"];
-    case ShortcutRole: return item["shortcut"];
-    case IconRole: return item["icon"];
-    case CheckedRole: return item["checked"];
-    case SubitemsRole: return item["subitems"];
-    }
-
-    return QVariant();
-}
-
-int PlaybackToolBarModel::rowCount(const QModelIndex&) const
-{
-    return items().count();
-}
-
-QHash<int, QByteArray> PlaybackToolBarModel::roleNames() const
-{
-    static const QHash<int, QByteArray> roles {
-        { TitleRole, "title" },
-        { CodeRole, "code" },
-        { DescriptionRole, "description" },
-        { ShortcutRole, "shortcut" },
-        { IconRole, "icon" },
-        { CheckedRole, "checked" },
-        { SubitemsRole, "subitems" },
-    };
-
-    return roles;
 }
 
 void PlaybackToolBarModel::load()
 {
+    AbstractMenuModel::load();
     updateActions();
-    listenActionsStateChanges();
     setupConnections();
 }
 
@@ -129,9 +87,7 @@ void PlaybackToolBarModel::setupConnections()
 
 void PlaybackToolBarModel::updateActions()
 {
-    beginResetModel();
-    clear();
-
+    MenuItemList result;
     MenuItemList settingsItems;
     MenuItemList additionalItems;
 
@@ -140,7 +96,7 @@ void PlaybackToolBarModel::updateActions()
             //! NOTE: In this case, we want to see the actions' description instead of the title
             additionalItems << makeActionWithDescriptionAsTitle(code);
         } else {
-            appendItem(makeAction(code));
+            result << makeMenuItem(code);
         }
     }
 
@@ -155,13 +111,13 @@ void PlaybackToolBarModel::updateActions()
 
     MenuItem settingsItem = makeMenu(qtrc("action", "Playback settings"), settingsItems);
     settingsItem.iconCode = IconCode::Code::SETTINGS_COG;
-    appendItem(settingsItem);
+    result << settingsItem;
 
     if (m_isToolbarFloating) {
-        appendItems(additionalItems);
+        result << additionalItems;
     }
 
-    endResetModel();
+    setItems(result);
 }
 
 void PlaybackToolBarModel::onActionsStateChanges(const actions::ActionCodeList& codes)
@@ -200,14 +156,9 @@ bool PlaybackToolBarModel::isAdditionalAction(const actions::ActionCode& actionC
 
 MenuItem PlaybackToolBarModel::makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode) const
 {
-    MenuItem item = makeAction(actionCode);
+    MenuItem item = makeMenuItem(actionCode);
     item.title = item.description;
     return item;
-}
-
-void PlaybackToolBarModel::handleAction(const QString& actionCode)
-{
-    dispatcher()->dispatch(actions::codeFromQString(actionCode));
 }
 
 bool PlaybackToolBarModel::isPlayAllowed() const
@@ -306,7 +257,7 @@ void PlaybackToolBarModel::doSetPlayTime(const QTime& time)
 
 void PlaybackToolBarModel::rewind(uint64_t milliseconds)
 {
-    dispatcher()->dispatch("rewind", ActionData::make_arg1<uint64_t>(milliseconds));
+    dispatch("rewind", ActionData::make_arg1<uint64_t>(milliseconds));
 }
 
 void PlaybackToolBarModel::rewindToBeat(const MeasureBeat& beat)

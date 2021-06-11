@@ -24,6 +24,7 @@
 #include <QQmlEngine>
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
+#include "ui/iuiactionsregister.h"
 
 #include "internal/cloudservice.h"
 #include "internal/cloudconfiguration.h"
@@ -49,6 +50,7 @@ void CloudModule::registerExports()
 {
     ioc()->registerExport<ICloudConfiguration>(moduleName(), s_cloudConfiguration);
     ioc()->registerExport<IAuthorizationService>(moduleName(), s_cloudService);
+    ioc()->registerExport<IUploadingService>(moduleName(), s_cloudService);
 }
 
 void CloudModule::registerResources()

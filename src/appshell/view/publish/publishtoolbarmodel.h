@@ -19,36 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_CLOUDCONFIGURATION_H
-#define MU_CLOUD_CLOUDCONFIGURATION_H
-
-#include "icloudconfiguration.h"
+#ifndef MU_APPSHELL_PUBLISHTOOLBARMODEL_H
+#define MU_APPSHELL_PUBLISHTOOLBARMODEL_H
 
 #include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
+#include "ui/view/abstractmenumodel.h"
 
-namespace mu::cloud {
-class CloudConfiguration : public ICloudConfiguration
+namespace mu::appshell {
+class PublishToolBarModel : public ui::AbstractMenuModel
 {
-    INJECT(cloud, framework::IGlobalConfiguration, globalConfiguration)
+    Q_OBJECT
 
 public:
-    void init();
+    PublishToolBarModel(QObject* parent = nullptr);
 
-    network::RequestHeaders headers() const override;
-    QByteArray clientId() const override;
-
-    QUrl authorizationUrl() const override;
-    QUrl accessTokenUrl() const override;
-    QUrl refreshApiUrl() const override;
-    QUrl userInfoApiUrl() const override;
-    QUrl loginApiUrl() const override;
-    QUrl uploadingApiUrl() const override;
-    io::path tokensFilePath() const override;
-
-private:
-    QString apiRootUrl() const;
+    Q_INVOKABLE void load() override;
 };
 }
 
-#endif // MU_CLOUD_CLOUDCONFIGURATION_H
+#endif // MU_APPSHELL_PUBLISHTOOLBARMODEL_H
