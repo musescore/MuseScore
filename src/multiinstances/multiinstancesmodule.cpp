@@ -22,8 +22,7 @@
 #include "multiinstancesmodule.h"
 
 #include <QQmlEngine>
-#include <QTimer>
-#include "internal/ipcchannel.h"
+
 #include "internal/multiinstancesuiactions.h"
 #include "internal/multiinstancesprovider.h"
 
@@ -35,10 +34,6 @@
 
 using namespace mu::mi;
 using namespace mu::framework;
-
-//static QTimer s_testTimer;
-//static IpcChannel s_testChannel;
-//static int s_testCounter = 0;
 
 static std::shared_ptr<MultiInstancesProvider> s_multiInstancesProvider = std::make_shared<MultiInstancesProvider>();
 
@@ -87,19 +82,4 @@ void MultiInstancesModule::onInit(const IApplication::RunMode& mode)
     }
 
     s_multiInstancesProvider->init();
-
-//    s_testTimer.setInterval(2000);
-//    s_testTimer.setSingleShot(true);
-//    QObject::connect(&s_testTimer, &QTimer::timeout, []() {
-//        ++s_testCounter;
-//        IpcChannel::Msg msg;
-//        msg.method = "test_ping";
-//        msg.args << QString::number(s_testCounter);
-
-//        s_testChannel.send(msg);
-
-//        s_testTimer.start();
-//    });
-
-//    s_testTimer.start();
 }

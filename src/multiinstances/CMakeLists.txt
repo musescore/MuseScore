@@ -35,10 +35,20 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/multiinstancesprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/multiinstancesprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ipcchannel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/ipcchannel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/multiinstancesuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/multiinstancesuiactions.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipclog.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipc.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipc.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipcchannel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipcchannel.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipcserver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipcserver.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipcsocket.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipcsocket.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipclock.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/ipc/ipclock.h
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/multiinstancesdevmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/multiinstancesdevmodel.h
