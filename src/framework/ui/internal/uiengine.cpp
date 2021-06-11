@@ -69,6 +69,21 @@ void UiEngine::quit()
     m_engine = nullptr;
 }
 
+QQuickItem* UiEngine::rootItem() const
+{
+    return m_rootItem;
+}
+
+void UiEngine::setRootItem(QQuickItem* rootItem)
+{
+    if (m_rootItem == rootItem) {
+        return;
+    }
+
+    m_rootItem = rootItem;
+    emit rootItemChanged(m_rootItem);
+}
+
 QQmlEngine* UiEngine::engine()
 {
     if (m_engine) {

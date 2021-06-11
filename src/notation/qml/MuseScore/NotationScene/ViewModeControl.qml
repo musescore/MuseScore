@@ -62,6 +62,8 @@ FlatButton {
     StyledMenu {
         id: menu
 
+        anchorItem: ui.rootItem
+
         onHandleAction: {
             Qt.callLater(root.changeCurrentViewModeRequested, actionCode)
             menu.close()
