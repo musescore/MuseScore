@@ -77,6 +77,7 @@ Rectangle {
 
         itemDelegate: FlatButton {
             id: btn
+
             property var item: Boolean(itemModel) ? itemModel : null
             property var hasMenu: Boolean(item) && item.subitems.length !== 0
 

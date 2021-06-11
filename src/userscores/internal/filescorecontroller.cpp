@@ -44,6 +44,7 @@ void FileScoreController::init()
     dispatcher()->reg(this, "file-save-as", this, &FileScoreController::saveScoreAs);
     dispatcher()->reg(this, "file-save-a-copy", this, &FileScoreController::saveScoreCopy);
     dispatcher()->reg(this, "file-save-selection", this, &FileScoreController::saveSelection);
+    dispatcher()->reg(this, "file-save-online", this, &FileScoreController::saveOnline);
 
     dispatcher()->reg(this, "file-export", this, &FileScoreController::exportScore);
 
@@ -191,6 +192,11 @@ void FileScoreController::saveSelection()
     if (!ret) {
         LOGE() << ret.toString();
     }
+}
+
+void FileScoreController::saveOnline()
+{
+    NOT_IMPLEMENTED;
 }
 
 void FileScoreController::importPdf()

@@ -28,8 +28,6 @@
 
 #include "internal/cloudservice.h"
 #include "internal/cloudconfiguration.h"
-#include "internal/cloudactionscontroller.h"
-#include "internal/clouduiactions.h"
 #include "view/accountmodel.h"
 
 using namespace mu::cloud;
@@ -37,8 +35,6 @@ using namespace mu::framework;
 
 static std::shared_ptr<CloudConfiguration> s_cloudConfiguration = std::make_shared<CloudConfiguration>();
 static std::shared_ptr<CloudService> s_cloudService = std::make_shared<CloudService>();
-static std::shared_ptr<CloudActionsController> s_actionsController = std::make_shared<CloudActionsController>();
-static std::shared_ptr<CloudUiActions> s_uiActions = std::make_shared<CloudUiActions>(s_actionsController);
 
 static void cloud_init_qrc()
 {
@@ -55,14 +51,6 @@ void CloudModule::registerExports()
     ioc()->registerExport<ICloudConfiguration>(moduleName(), s_cloudConfiguration);
     ioc()->registerExport<IAuthorizationService>(moduleName(), s_cloudService);
     ioc()->registerExport<IUploadingService>(moduleName(), s_cloudService);
-}
-
-void CloudModule::resolveImports()
-{
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(s_uiActions);
-    }
 }
 
 void CloudModule::registerResources()
@@ -85,5 +73,4 @@ void CloudModule::onInit(const IApplication::RunMode& mode)
 
     s_cloudConfiguration->init();
     s_cloudService->init();
-    s_actionsController->init();
 }

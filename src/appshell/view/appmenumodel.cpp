@@ -40,7 +40,7 @@ QVariantList AppMenuModel::items() const
 {
     QVariantList menuItems;
 
-    for (const MenuItem& menuItem: m_items) {
+    for (const MenuItem& menuItem: AbstractMenuModel::items()) {
         menuItems << menuItem.toMap();
     }
 
@@ -53,13 +53,17 @@ void AppMenuModel::load()
 
     AbstractMenuModel::load();
 
-    m_items << fileItem();
-    m_items << editItem();
-    m_items << viewItem();
-    m_items << addItem();
-    m_items << formatItem();
-    m_items << toolsItem();
-    m_items << helpItem();
+    MenuItemList items {
+        fileItem(),
+        editItem(),
+        viewItem(),
+        addItem(),
+        formatItem(),
+        toolsItem(),
+        helpItem()
+    };
+
+    setItems(items);
 
     setupConnections();
 

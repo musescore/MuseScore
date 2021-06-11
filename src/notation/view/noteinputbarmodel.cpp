@@ -40,8 +40,6 @@ static const IconCode::Code ADD_ACTION_ICON_CODE = IconCode::Code::PLUS;
 
 static const ActionCode TUPLET_ACTION_CODE("tuplet");
 
-static int INVALID_INDEX = -1;
-
 static const std::vector<std::pair<ActionCode, NoteInputMethod> > noteInputModeActions = {
     { "note-input-steptime", NoteInputMethod::STEPTIME },
     { "note-input-rhythm", NoteInputMethod::RHYTHM },
@@ -86,8 +84,9 @@ QVariant NoteInputBarModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    const MenuItem& item = m_items.at(row);
+    const MenuItem& item = items()[row];
     switch (role) {
+    case SubitemsRole: return subitems(item.code);
     case IsMenuSecondaryRole: return isMenuSecondary(item.code);
     case OrderRole: return row;
     default: return AbstractMenuModel::data(index, role);
@@ -106,8 +105,7 @@ QHash<int, QByteArray> NoteInputBarModel::roleNames() const
 void NoteInputBarModel::load()
 {
     AbstractMenuModel::load();
-
-    beginResetModel();
+    MenuItemList items;
 
     std::vector<std::string> noteInputActions = currentWorkspaceActions();
 
@@ -118,14 +116,11 @@ void NoteInputBarModel::load()
             continue;
         }
 
-        m_items << makeActionItem(uiactionsRegister()->action(actionCode), QString::number(section));
+        items << makeActionItem(uiactionsRegister()->action(actionCode), QString::number(section));
     }
 
-    m_items << makeAddItem(QString::number(++section));
-
-    endResetModel();
-
-    emit countChanged(rowCount());
+    items << makeAddItem(QString::number(++section));
+    setItems(items);
 
     RetValCh<IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
 
@@ -161,20 +156,20 @@ void NoteInputBarModel::onActionsStateChanges(const actions::ActionCodeList& cod
 
 int NoteInputBarModel::findNoteInputModeItemIndex() const
 {
-    for (int i = 0; i < m_items.size(); i++) {
-        if (isNoteInputModeAction(m_items[i].code)) {
+    const MenuItemList& items = this->items();
+
+    for (int i = 0; i < items.size(); i++) {
+        if (isNoteInputModeAction(items[i].code)) {
             return i;
         }
     }
 
-    return INVALID_INDEX;
+    return INVALID_ITEM_INDEX;
 }
 
 void NoteInputBarModel::onNotationChanged()
 {
-    INotationPtr notation = context()->currentNotation();
-
-    if (notation) {
+    if (context()->currentNotation()) {
         noteInput()->stateChanged().onNotify(this, [this]() {
             updateState();
         });
@@ -195,7 +190,7 @@ void NoteInputBarModel::updateState()
 {
     bool enabled = notation() && !playbackController()->isPlaying();
 
-    for (MenuItem& item : m_items) {
+    for (MenuItem& item : items()) {
         item.state.enabled = enabled;
         item.state.checked = false;
     }
@@ -224,14 +219,16 @@ void NoteInputBarModel::updateNoteInputState()
 void NoteInputBarModel::updateNoteInputModeState()
 {
     int noteInputModeIndex = findNoteInputModeItemIndex();
-    if (noteInputModeIndex == INVALID_INDEX) {
+    if (noteInputModeIndex == INVALID_ITEM_INDEX) {
         return;
     }
 
-    QString currentSection = m_items[noteInputModeIndex].section;
+    MenuItemList& items = this->items();
+    MenuItem& item = items[noteInputModeIndex];
 
-    m_items[noteInputModeIndex] = makeActionItem(currentNoteInputModeAction(), currentSection);
-    m_items[noteInputModeIndex].state.checked = isNoteInputMode();
+    QString currentSection = item.section;
+    item = makeActionItem(currentNoteInputModeAction(), currentSection);
+    item.state.checked = isNoteInputMode();
 
     emit dataChanged(index(noteInputModeIndex), index(noteInputModeIndex));
 }
@@ -539,17 +536,6 @@ UiAction NoteInputBarModel::currentNoteInputModeAction() const
     return uiactionsRegister()->action(actionCodeForNoteInputMethod(method));
 }
 
-int NoteInputBarModel::itemIndex(const ActionCode& actionCode) const
-{
-    for (int i = 0; i < m_items.size(); ++i) {
-        if (m_items[i].code == actionCode) {
-            return i;
-        }
-    }
-
-    return INVALID_INDEX;
-}
-
 MenuItem NoteInputBarModel::makeActionItem(const UiAction& action, const QString& section)
 {
     MenuItem item = action;
@@ -764,7 +750,7 @@ bool NoteInputBarModel::isMenuSecondary(const ActionCode& actionCode) const
 void NoteInputBarModel::notifyAboutTupletItemChanged()
 {
     int tupletItemIndex = itemIndex(TUPLET_ACTION_CODE);
-    if (tupletItemIndex == INVALID_INDEX) {
+    if (tupletItemIndex == INVALID_ITEM_INDEX) {
         return;
     }
 
@@ -774,7 +760,7 @@ void NoteInputBarModel::notifyAboutTupletItemChanged()
 void NoteInputBarModel::notifyAboutAddItemChanged()
 {
     int addItemIndex = itemIndex(ADD_ACTION_CODE);
-    if (addItemIndex == INVALID_INDEX) {
+    if (addItemIndex == INVALID_ITEM_INDEX) {
         return;
     }
 

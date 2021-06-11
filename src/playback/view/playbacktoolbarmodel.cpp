@@ -58,7 +58,6 @@ PlaybackToolBarModel::PlaybackToolBarModel(QObject* parent)
 void PlaybackToolBarModel::load()
 {
     AbstractMenuModel::load();
-
     updateActions();
     setupConnections();
 }
@@ -88,9 +87,7 @@ void PlaybackToolBarModel::setupConnections()
 
 void PlaybackToolBarModel::updateActions()
 {
-    beginResetModel();
-    clear();
-
+    MenuItemList result;
     MenuItemList settingsItems;
     MenuItemList additionalItems;
 
@@ -99,7 +96,7 @@ void PlaybackToolBarModel::updateActions()
             //! NOTE: In this case, we want to see the actions' description instead of the title
             additionalItems << makeActionWithDescriptionAsTitle(code);
         } else {
-            m_items << makeMenuItem(code);
+            result << makeMenuItem(code);
         }
     }
 
@@ -114,13 +111,13 @@ void PlaybackToolBarModel::updateActions()
 
     MenuItem settingsItem = makeMenu(qtrc("action", "Playback settings"), settingsItems);
     settingsItem.iconCode = IconCode::Code::SETTINGS_COG;
-    m_items << settingsItem;
+    result << settingsItem;
 
     if (m_isToolbarFloating) {
-        m_items << additionalItems;
+        result << additionalItems;
     }
 
-    endResetModel();
+    setItems(result);
 }
 
 void PlaybackToolBarModel::onActionsStateChanges(const actions::ActionCodeList& codes)
