@@ -24,14 +24,18 @@
 
 #include "../imultiinstancesprovider.h"
 
+#include <functional>
+#include <QEventLoop>
+#include <QTimer>
+
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "iinteractive.h"
 #include "async/asyncable.h"
+#include "ipc/ipcchannel.h"
 
 namespace mu::mi {
-class IpcChannel;
 class MultiInstancesProvider : public IMultiInstancesProvider, public actions::Actionable, public async::Asyncable
 {
     INJECT(mi, actions::IActionsDispatcher, dispatcher)
@@ -47,14 +51,20 @@ public:
     void activateWindowForScore(const io::path& scorePath) override;
 
     const std::string& selfID() const override;
-    void ping() override;
     std::vector<InstanceMeta> instances() const override;
     async::Notification instancesChanged() const override;
 
 private:
 
-    IpcChannel* m_ipcChannel = nullptr;
+    void onMsg(const ipc::Msg& msg);
+
+    ipc::IpcChannel* m_ipcChannel = nullptr;
     std::string m_selfID;
+
+    mutable QEventLoop m_loop;
+    mutable QTimer m_timeout;
+    mutable std::function<void(const ipc::Msg& msg)> m_onMsg;
+
     async::Notification m_instancesChanged;
 };
 }

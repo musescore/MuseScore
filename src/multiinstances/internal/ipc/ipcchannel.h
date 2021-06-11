@@ -19,32 +19,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MI_IMULTIINSTANCESPROVIDER_H
-#define MU_MI_IMULTIINSTANCESPROVIDER_H
+#ifndef MU_IPC_IPCCHANNEL_H
+#define MU_IPC_IPCCHANNEL_H
 
-#include <string>
-#include <vector>
+#include <QString>
+#include <QList>
 
-#include "modularity/imoduleexport.h"
-#include "io/path.h"
-#include "mitypes.h"
+#include "ipc.h"
+
+#include "async/asyncable.h"
+#include "async/channel.h"
 #include "async/notification.h"
 
-namespace mu::mi {
-class IMultiInstancesProvider : MODULE_EXPORT_INTERFACE
+namespace mu::ipc {
+//! NOTE Inter-Process Communication Channel
+class IpcSocket;
+class IpcServer;
+class IpcChannel : public async::Asyncable
 {
-    INTERFACE_ID(IMultiInstancesProvider)
 public:
-    virtual ~IMultiInstancesProvider() = default;
+    IpcChannel();
+    ~IpcChannel();
 
-    virtual bool isScoreAlreadyOpened(const io::path& scorePath) const = 0;
-    virtual void activateWindowForScore(const io::path& scorePath) = 0;
+    const ID& selfID() const;
 
-    //! NOTE Technical
-    virtual const std::string& selfID() const = 0;
-    virtual std::vector<InstanceMeta> instances() const = 0;
-    virtual async::Notification instancesChanged() const = 0;
+    void connect();
+
+    bool send(const Msg& msg);
+    async::Channel<Msg> msgReceived() const;
+
+    QList<Meta> instances() const;
+    async::Notification instancesChanged() const;
+
+private:
+
+    void setupConnection();
+    void onDisconected();
+
+    IpcSocket* m_selfSocket = nullptr;
+    IpcServer* m_server = nullptr;
 };
 }
 
-#endif // MU_MI_IMULTIINSTANCESPROVIDER_H
+#endif // MU_IPC_IPCCHANNEL_H

@@ -52,7 +52,6 @@ void MultiInstancesDevModel::update()
 
 void MultiInstancesDevModel::ping()
 {
-    multiInstancesProvider()->ping();
 }
 
 const QVariantList& MultiInstancesDevModel::instances() const

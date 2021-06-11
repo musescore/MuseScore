@@ -245,6 +245,11 @@ Ret FileScoreController::doOpenScore(const io::path& filePath)
 {
     TRACEFUNC;
 
+    if (multiInstancesProvider()->isScoreAlreadyOpened(filePath)) {
+        multiInstancesProvider()->activateWindowForScore(filePath);
+        return make_ret(Ret::Code::Ok);
+    }
+
     auto notation = notationCreator()->newMasterNotation();
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::InternalError);

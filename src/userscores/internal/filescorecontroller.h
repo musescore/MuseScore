@@ -32,6 +32,7 @@
 #include "notation/inotationcreator.h"
 #include "context/iglobalcontext.h"
 #include "iplatformrecentfilescontroller.h"
+#include "multiinstances/imultiinstancesprovider.h"
 
 namespace mu::userscores {
 class FileScoreController : public IFileScoreController, public actions::Actionable, public async::Asyncable
@@ -42,6 +43,7 @@ class FileScoreController : public IFileScoreController, public actions::Actiona
     INJECT(userscores, context::IGlobalContext, globalContext)
     INJECT(userscores, IUserScoresConfiguration, configuration)
     INJECT(userscores, IPlatformRecentFilesController, platformRecentFilesController)
+    INJECT(userscores, mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     void init();
