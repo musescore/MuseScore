@@ -52,7 +52,8 @@ PreferencesPage {
         ThemesSection {
             width: parent.width
 
-            themes: appearanceModel.themes
+            titleText: qsTrc("appshell", "Themes")
+            themes: appearanceModel.generalThemes
             currentThemeIndex: appearanceModel.currentThemeIndex
 
             onThemeChangeRequested: {
