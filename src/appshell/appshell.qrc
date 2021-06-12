@@ -75,5 +75,6 @@
         <file>qml/platform/linux/Main.qml</file>
         <file>qml/platform/mac/Main.qml</file>
         <file>qml/platform/win/Main.qml</file>
+        <file>qml/Preferences/AccessibilityPreferencesPage.qml</file>
     </qresource>
 </RCC>

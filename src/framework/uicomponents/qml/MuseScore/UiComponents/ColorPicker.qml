@@ -28,6 +28,8 @@ Rectangle {
     id: root
 
     property bool isIndeterminate: false
+    property bool overrideDefaultColors: false
+    property color setBorderColor: ui.theme.buttonColor
 
     property alias navigation: navCtrl
 
@@ -83,7 +85,7 @@ Rectangle {
             name: "NORMAL"
             when: !clickableArea.containsMouse && !colorDialog.visible
 
-            PropertyChanges { target: root; border.color: ui.theme.buttonColor }
+            PropertyChanges { target: root; border.color: overrideDefaultColors? setBorderColor : ui.theme.buttonColor }
         },
 
         State {

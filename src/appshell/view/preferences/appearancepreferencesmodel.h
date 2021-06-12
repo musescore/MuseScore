@@ -37,7 +37,7 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
 
-    Q_PROPERTY(QVariantList themes READ themes NOTIFY themesChanged)
+    Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)
     Q_PROPERTY(QStringList accentColors READ accentColors NOTIFY themesChanged)
 
     Q_PROPERTY(int currentThemeIndex READ currentThemeIndex WRITE setCurrentThemeIndex NOTIFY themesChanged)
@@ -61,7 +61,8 @@ public:
 
     Q_INVOKABLE void init();
 
-    QVariantList themes() const;
+    QVariantList generalThemes() const;
+
     QStringList accentColors() const;
 
     int currentThemeIndex() const;
