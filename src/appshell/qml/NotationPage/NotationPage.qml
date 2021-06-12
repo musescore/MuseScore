@@ -228,9 +228,9 @@ DockPage {
 
             allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
 
-            height: root.defaultPanelWidth
-            minimumHeight: root.defaultPanelWidth
-            maximumHeight: root.defaultPanelWidth
+            height: 200
+            minimumHeight: 100
+            maximumHeight: 300
 
             tabifyPanel: pianoRollPanel
 
@@ -253,9 +253,9 @@ DockPage {
 
             allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
 
-            height: root.defaultPanelWidth
-            minimumHeight: root.defaultPanelWidth
-            maximumHeight: root.defaultPanelWidth
+            height: 200
+            minimumHeight: 100
+            maximumHeight: 300
 
             Rectangle {
                 anchors.fill: parent
