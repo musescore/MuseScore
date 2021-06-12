@@ -31,15 +31,17 @@
 #include "async/asyncable.h"
 #include "notation/inotationcreator.h"
 #include "context/iglobalcontext.h"
+#include "iplatformrecentfilescontroller.h"
 
 namespace mu::userscores {
 class FileScoreController : public IFileScoreController, public actions::Actionable, public async::Asyncable
 {
-    INJECT(scores, actions::IActionsDispatcher, dispatcher)
-    INJECT(scores, framework::IInteractive, interactive)
-    INJECT(scores, notation::INotationCreator, notationCreator)
-    INJECT(scores, context::IGlobalContext, globalContext)
-    INJECT(scores, IUserScoresConfiguration, configuration)
+    INJECT(userscores, actions::IActionsDispatcher, dispatcher)
+    INJECT(userscores, framework::IInteractive, interactive)
+    INJECT(userscores, notation::INotationCreator, notationCreator)
+    INJECT(userscores, context::IGlobalContext, globalContext)
+    INJECT(userscores, IUserScoresConfiguration, configuration)
+    INJECT(userscores, IPlatformRecentFilesController, platformRecentFilesController)
 
 public:
     void init();
