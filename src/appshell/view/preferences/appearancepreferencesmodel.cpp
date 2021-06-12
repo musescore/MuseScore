@@ -62,16 +62,18 @@ void AppearancePreferencesModel::init()
     });
 }
 
-QVariantList AppearancePreferencesModel::themes() const
+QVariantList AppearancePreferencesModel::generalThemes() const
 {
     QVariantList result;
 
     for (const ThemeInfo& theme: allThemes()) {
-        result << ThemeConverter::toMap(theme);
+        if (theme.codeKey == LIGHT_THEME_CODE || theme.codeKey == DARK_THEME_CODE) {
+            result << ThemeConverter::toMap(theme);
+        }
     }
 
-    return result;
-}
+    return result;                                                                      //only returns General Themes
+}                                                                                       //i.e. excludes HC Themes
 
 QStringList AppearancePreferencesModel::accentColors() const
 {
@@ -96,10 +98,16 @@ QString AppearancePreferencesModel::wallpapersDir() const
 
 int AppearancePreferencesModel::currentThemeIndex() const
 {
-    ThemeList themes = allThemes();
+    ThemeList genThemes;                                        //creation of genThemes ensures that we only search in
+                                                                //a list of General Themes and not the entire list of Themes
+    for (const ThemeInfo& theme : allThemes()) {
+        if (theme.codeKey == LIGHT_THEME_CODE || theme.codeKey == DARK_THEME_CODE) {
+            genThemes.push_back(theme);
+        }
+    }
 
-    for (int i = 0; i < static_cast<int>(themes.size()); ++i) {
-        if (themes[i].codeKey == currentTheme().codeKey) {
+    for (int i = 0; i < static_cast<int>(genThemes.size()); ++i) {
+        if (genThemes[i].codeKey == currentTheme().codeKey) {
             return i;
         }
     }
@@ -174,9 +182,15 @@ QString AppearancePreferencesModel::foregroundWallpaperPath() const
 
 void AppearancePreferencesModel::setCurrentThemeIndex(int index)
 {
-    ThemeList themes = allThemes();
+    ThemeList genThemes;
 
-    if (index < 0 || index >= static_cast<int>(themes.size())) {
+    for (const ThemeInfo& theme : allThemes()) {
+        if (theme.codeKey == LIGHT_THEME_CODE || theme.codeKey == DARK_THEME_CODE) {
+            genThemes.push_back(theme);
+        }
+    }
+
+    if (index < 0 || index >= static_cast<int>(genThemes.size())) {
         return;
     }
 
@@ -184,7 +198,7 @@ void AppearancePreferencesModel::setCurrentThemeIndex(int index)
         return;
     }
 
-    uiConfiguration()->setCurrentTheme(themes[index].codeKey);
+    uiConfiguration()->setCurrentTheme(genThemes[index].codeKey);
     emit themesChanged();
 }
 

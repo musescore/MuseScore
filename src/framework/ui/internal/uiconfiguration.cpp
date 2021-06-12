@@ -282,10 +282,10 @@ ThemeInfo UiConfiguration::makeStandardTheme(const ThemeCode& codeKey) const
         theme.title = trc("ui", "Dark");
         theme.values = DARK_THEME_VALUES;
     } else if (codeKey == HIGH_CONTRAST_BLACK_THEME_CODE) {
-        theme.title = trc("ui", "High Contrast Black");
+        theme.title = trc("ui", "Black");
         theme.values = HIGH_CONTRAST_BLACK_THEME_VALUES;
     } else if (codeKey == HIGH_CONTRAST_WHITE_THEME_CODE) {
-        theme.title = trc("ui", "High Contrast White");
+        theme.title = trc("ui", "White");
         theme.values = HIGH_CONTRAST_WHITE_THEME_VALUES;
     }
 

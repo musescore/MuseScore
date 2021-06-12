@@ -26,15 +26,15 @@ import MuseScore.UiComponents 1.0
 Column {
     id: root
 
+    property alias titleText: styledtextlabel.text
     property alias currentThemeIndex: view.currentIndex
     property alias themes: view.model
-
     signal themeChangeRequested(var newThemeIndex)
 
     spacing: 18
 
     StyledTextLabel {
-        text: qsTrc("appshell", "Themes")
+        id: styledtextlabel
         font: ui.theme.bodyBoldFont
     }
 
@@ -70,9 +70,11 @@ Column {
             }
 
             RoundedRadioButton {
+                id: roundedradiobutton
                 width: parent.width
 
                 checked: view.currentIndex === model.index
+
                 text: modelData.title
 
                 onClicked: {
