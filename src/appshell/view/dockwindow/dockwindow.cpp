@@ -468,15 +468,17 @@ DockToolBarHolder* DockWindow::resolveToolbarDockingHolder(const QPoint& localPo
     }
 
     QRect centralFrameGeometry = centralDock->frameGeometry();
-    centralFrameGeometry.setTopLeft(m_mainWindow->mapFromGlobal(centralDock->mapToGlobal({ centralDock->x(), centralDock->y() })));
+    centralFrameGeometry.moveTopLeft(m_mainWindow->mapFromGlobal(centralDock->mapToGlobal({ centralDock->x(), centralDock->y() })));
 
     QRect mainFrameGeometry = m_mainWindow->rect();
     DockToolBarHolder* newHolder = nullptr;
 
     if (localPos.y() < MAX_DISTANCE_TO_HOLDER) { // main toolbar holder
         newHolder = m_mainToolBarDockingHolder;
-    } else if (localPos.y() > centralFrameGeometry.top()
-               && localPos.y() < centralFrameGeometry.top() + MAX_DISTANCE_TO_HOLDER) { // page top toolbar holder
+    }
+    // TODO: Need to take any panels docked at top into account
+    else if (localPos.y() > centralFrameGeometry.top()
+             && localPos.y() < centralFrameGeometry.top() + MAX_DISTANCE_TO_HOLDER) {   // page top toolbar holder
         newHolder = page->toolBarHolderByLocation(DockBase::DockLocation::Top);
     } else if (localPos.y() < centralFrameGeometry.bottom()) { // page left toolbar holder
         if (localPos.x() < MAX_DISTANCE_TO_HOLDER) {
@@ -504,9 +506,7 @@ DockPanelHolder* DockWindow::resolvePanelDockingHolder(const QPoint& localPos) c
     }
 
     QRect centralFrameGeometry = centralDock->frameGeometry();
-    centralFrameGeometry.setTopLeft(m_mainWindow->mapFromGlobal(centralDock->mapToGlobal({ centralDock->x(), centralDock->y() })));
-
-    QRect mainFrameGeometry = m_mainWindow->rect();
+    centralFrameGeometry.moveTopLeft(m_mainWindow->mapFromGlobal(centralDock->mapToGlobal({ centralDock->x(), centralDock->y() })));
     DockPanelHolder* newHolder = nullptr;
 
     if (localPos.y() > centralFrameGeometry.top()
@@ -515,10 +515,10 @@ DockPanelHolder* DockWindow::resolvePanelDockingHolder(const QPoint& localPos) c
     } else if (localPos.y() < centralFrameGeometry.bottom()) { // page left panel holder
         if (localPos.x() < MAX_DISTANCE_TO_HOLDER) {
             newHolder = page->panelHolderByLocation(DockBase::DockLocation::Left);
-        } else if (localPos.x() > mainFrameGeometry.right() - MAX_DISTANCE_TO_HOLDER) { // page right panel holder
+        } else if (localPos.x() > centralFrameGeometry.right() - MAX_DISTANCE_TO_HOLDER) { // page right panel holder
             newHolder = page->panelHolderByLocation(DockBase::DockLocation::Right);
         }
-    } else if (localPos.y() < mainFrameGeometry.bottom()) { // page bottom panel holder
+    } else if (localPos.y() < centralFrameGeometry.bottom()) { // page bottom panel holder
         newHolder = page->panelHolderByLocation(DockBase::DockLocation::Bottom);
     }
 
