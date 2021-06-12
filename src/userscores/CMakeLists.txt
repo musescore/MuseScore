@@ -35,6 +35,11 @@ if (OS_IS_MAC)
 
     set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosrecentfilescontroller.mm
                                 PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+elseif(OS_IS_WIN)
+    set(PLATFORM_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsrecentfilescontroller.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsrecentfilescontroller.h
+    )
 else()
     set(PLATFORM_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/stub/stubrecentfilescontroller.cpp
