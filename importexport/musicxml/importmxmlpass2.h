@@ -183,8 +183,10 @@ class Pedal;
 class Trill;
 class MxmlLogger;
 class MusicXMLDelayedDirectionElement;
+class MusicXMLInferredFingering;
 
 using DelayedDirectionsList = QList<MusicXMLDelayedDirectionElement*>;
+using InferredFingeringsList = QList<MusicXMLInferredFingering*>;
 using SlurStack = std::array<SlurDesc, MAX_NUMBER_LEVEL>;
 using TrillStack = std::array<Trill*, MAX_NUMBER_LEVEL>;
 using BracketsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
@@ -349,8 +351,10 @@ private:
 class MusicXMLParserDirection {
 public:
       MusicXMLParserDirection(QXmlStreamReader& e, Score* score, const MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2, MxmlLogger* logger);
-      void direction(const QString& partId, Measure* measure, const Fraction& tick, const int divisions, MusicXmlSpannerMap& spanners, DelayedDirectionsList& delayedDirections);
+      void direction(const QString& partId, Measure* measure, const Fraction& tick, const int divisions,
+                  MusicXmlSpannerMap& spanners, DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings);
       qreal totalY() const { return _defaultY + _relativeY; }
+      QString placement() const;
 
 private:
       QXmlStreamReader& _e;
@@ -372,11 +376,12 @@ private:
       QString _sndDalsegno;
       QString _sndSegno;
       QString _sndFine;
+      QString _placement;
       bool _hasDefaultY;
       qreal _defaultY;
       bool _hasRelativeY;
       qreal _relativeY;
-      bool hasTotalY() { return _hasRelativeY || _hasDefaultY; }
+      bool hasTotalY() const { return _hasRelativeY || _hasDefaultY; }
       bool _coda;
       bool _segno;
       double _tpoMetro;                 // tempo according to metronome
@@ -394,6 +399,7 @@ private:
       void sound();
       void dynamics();
       void handleRepeats(Measure* measure, const int track);
+      bool isLikelyFingering() const;
       void skipLogCurrElem();
       };
 
@@ -421,6 +427,38 @@ private:
       QString _placement;
       Measure* _measure;
       Fraction _tick;
+      };
+
+//---------------------------------------------------------
+//   MusicXMLInferredFingering
+//---------------------------------------------------------
+/**
+ Helper class to allow Direction elements to be reinterpreted as fingerings
+ */
+
+class MusicXMLInferredFingering {
+public:
+      MusicXMLInferredFingering(qreal totalY, Element* element, QString text, int track,
+                                    QString placement, Measure* measure, Fraction tick);
+      qreal totalY() const { return _totalY; }
+      Fraction tick() const { return _tick; }
+      int track() const { return _track; }
+      QList<QString> fingerings() const { return _fingerings; }
+      bool findAndAddToNotes(Measure* measure);
+      MusicXMLDelayedDirectionElement* toDelayedDirection();
+
+private:
+      qreal _totalY;
+      Element* _element;
+      QString _text;
+      QList<QString> _fingerings;
+      int _track;
+      QString _placement;
+      Measure* _measure;
+      Fraction _tick;
+
+      void roundTick(Measure* measure);
+      void addToNotes(std::vector<Note*>& notes) const;
       };
 
 } // namespace Ms
