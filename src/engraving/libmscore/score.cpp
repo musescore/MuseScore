@@ -2768,6 +2768,46 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
 }
 
 //---------------------------------------------------------
+//   getKeyList
+//      This is taken from MuseScore::editInstrList()
+//---------------------------------------------------------
+
+KeyList Score::keyList() const
+{
+    // find the keylist of the first pitched staff
+    KeyList tmpKeymap;
+    Staff* firstStaff = nullptr;
+    for (Staff* s : masterScore()->staves()) {
+        if (!s->isDrumStaff(Fraction(0, 1))) {
+            KeyList* km = s->keyList();
+            tmpKeymap.insert(km->begin(), km->end());
+            firstStaff = s;
+            break;
+        }
+    }
+
+    Key normalizedC = Key::C;
+    // normalize the keyevents to concert pitch if necessary
+    if (firstStaff && !masterScore()->styleB(Ms::Sid::concertPitch) && firstStaff->part()->instrument()->transpose().chromatic) {
+        int interval = firstStaff->part()->instrument()->transpose().chromatic;
+        normalizedC = transposeKey(normalizedC, interval);
+        for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
+            int tick = i->first;
+            Key oKey = i->second.key();
+            tmpKeymap[tick].setKey(transposeKey(oKey, interval));
+        }
+    }
+
+    // create initial keyevent for transposing instrument if necessary
+    auto i = tmpKeymap.begin();
+    if (i == tmpKeymap.end() || i->first != 0) {
+        tmpKeymap[0].setKey(normalizedC);
+    }
+
+    return tmpKeymap;
+}
+
+//---------------------------------------------------------
 //   cmdRemoveStaff
 //---------------------------------------------------------
 

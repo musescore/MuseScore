@@ -1213,6 +1213,13 @@ void NotationParts::appendStaves(Part* part, const mu::instruments::Instrument& 
 
         insertStaff(staff, staffIndex);
     }
+
+    if (!part->nstaves()) {
+        return;
+    }
+    int firstStaffIndex = part->staff(0)->idx();
+    int endStaffIndex = firstStaffIndex + part->nstaves();
+    masterScore()->adjustKeySigs(firstStaffIndex, endStaffIndex, masterScore()->keyList());
 }
 
 void NotationParts::removeMissingParts(const PartInstrumentList& parts)

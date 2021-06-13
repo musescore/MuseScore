@@ -1051,6 +1051,7 @@ public:
     void adjustBracketsDel(int sidx, int eidx);
     void adjustBracketsIns(int sidx, int eidx);
     void adjustKeySigs(int sidx, int eidx, KeyList km);
+    KeyList keyList() const;
 
     virtual inline const RepeatList& repeatList() const;
     virtual inline const RepeatList& repeatList2() const;
