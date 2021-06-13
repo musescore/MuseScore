@@ -2116,6 +2116,14 @@ void MuseScore::retranslate()
       feedbackTools->setWindowTitle(tr("Feedback"));
       workspacesTools->setWindowTitle(tr("Workspaces"));
 
+      // keep translatable (con)texts in sync with those from zoombox.cpp
+      zoomBox->setAccessibleName(qApp->translate("Ms::ZoomBox", "Zoom"));
+      zoomBox->setWhatsThis(qApp->translate("Ms::ZoomBox", "Zoom"));
+      zoomBox->setAccessibleName(qApp->translate("Ms::ZoomBox", "Zoom"));
+      zoomBox->setItemText(zoomBox->findData(int(ZoomIndex::ZOOM_PAGE_WIDTH)), qApp->translate("magTable", "Page Width"));
+      zoomBox->setItemText(zoomBox->findData(int(ZoomIndex::ZOOM_WHOLE_PAGE)), qApp->translate("magTable", "Whole Page"));
+      zoomBox->setItemText(zoomBox->findData(int(ZoomIndex::ZOOM_TWO_PAGES)), qApp->translate("magTable", "Two Pages"));
+
       viewModeCombo->setAccessibleName(tr("View Mode"));
       viewModeCombo->setItemText(viewModeCombo->findData(int(LayoutMode::PAGE)), tr("Page View"));
       viewModeCombo->setItemText(viewModeCombo->findData(int(LayoutMode::LINE)), tr("Continuous View"));
