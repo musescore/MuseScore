@@ -251,11 +251,15 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
         dy = pixelsScrolled.y();
         stepsX = static_cast<qreal>(dx) / static_cast<qreal>(PIXELSSTEPSFACTOR);
         stepsY = static_cast<qreal>(dy) / static_cast<qreal>(PIXELSSTEPSFACTOR);
+
+        m_view->closeElementPopup();
     } else if (!stepsScrolled.isNull()) {
         dx = (stepsScrolled.x() * qMax(2.0, m_view->width() / 10.0)) / QWheelEvent::DefaultDeltasPerStep;
         dy = (stepsScrolled.y() * qMax(2.0, m_view->height() / 10.0)) / QWheelEvent::DefaultDeltasPerStep;
         stepsX = static_cast<qreal>(stepsScrolled.x()) / static_cast<qreal>(QWheelEvent::DefaultDeltasPerStep);
         stepsY = static_cast<qreal>(stepsScrolled.y()) / static_cast<qreal>(QWheelEvent::DefaultDeltasPerStep);
+
+        m_view->closeElementPopup();
     }
 
     Qt::KeyboardModifiers keyState = event->modifiers();
@@ -461,6 +465,7 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
 
     if (element->isTextBase()) {
         m_view->notationInteraction()->startEditText(element, m_view->toLogical(event->pos()));
+        m_view->showElementPopup(element);
     }
 }
 

@@ -53,11 +53,15 @@ public:
     virtual void scale(qreal scaling, const QPoint& pos) = 0;
 
     virtual PointF toLogical(const QPoint& p) const = 0;
+    virtual PointF fromLogical(const QPoint& p) const = 0;
 
     virtual bool isNoteEnterMode() const = 0;
     virtual void showShadowNote(const PointF& pos) = 0;
 
     virtual void showContextMenu(const ElementType& elementType, const QPoint& pos) = 0;
+
+    virtual void showElementPopup(const Element* hitElement) = 0;
+    virtual void closeElementPopup() = 0;
 
     virtual INotationInteractionPtr notationInteraction() const = 0;
     virtual INotationPlaybackPtr notationPlayback() const = 0;

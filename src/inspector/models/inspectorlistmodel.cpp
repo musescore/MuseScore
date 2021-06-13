@@ -118,6 +118,19 @@ int InspectorListModel::columnCount(const QModelIndex&) const
     return 1;
 }
 
+QVariant InspectorListModel::inspectorModelBySection(const int type) const
+{
+    for (AbstractInspectorModel* model : m_modelList) {
+        if (static_cast<int>(model->sectionType()) == type) {
+            QObject* result = qobject_cast<QObject*>(model);
+
+            return QVariant::fromValue(result);
+        }
+    }
+
+    return QVariant::fromValue(nullptr);
+}
+
 void InspectorListModel::createModelsBySectionType(const QList<AbstractInspectorModel::InspectorSectionType>& sectionTypeList)
 {
     using SectionType = AbstractInspectorModel::InspectorSectionType;
