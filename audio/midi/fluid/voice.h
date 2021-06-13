@@ -134,10 +134,10 @@ public:
 	float root_pitch, root_pitch_hz;
 
 	/* sample and loop start and end points (offset in sample memory).  */
-	int start;
-	int end;
-	int loopstart;
-	int loopend;
+	unsigned int start;
+	unsigned int end;
+	unsigned int loopstart;
+	unsigned int loopend;
 
       /* Stuff needed for portamento calculations */
       float pitchoffset;        /* the portamento range in midicents */
