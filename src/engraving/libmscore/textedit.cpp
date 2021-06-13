@@ -675,6 +675,7 @@ void TextBase::paste(EditData& ed)
     QString token;
     QString sym;
     bool symState = false;
+    Ms::CharFormat format = *static_cast<TextEditData*>(ed.getData(this))->cursor()->format();
 
     score()->startCmd();
     for (int i = 0; i < txt.length(); i++) {
@@ -691,6 +692,7 @@ void TextBase::paste(EditData& ed)
                     sym += c;
                 } else {
                     deleteSelectedText(ed);
+                    static_cast<TextEditData*>(ed.getData(this))->cursor()->setFormat(format);
                     if (c.isHighSurrogate()) {
                         QChar highSurrogate = c;
                         Q_ASSERT(i + 1 < txt.length());
@@ -711,6 +713,8 @@ void TextBase::paste(EditData& ed)
                 } else if (token == "/sym") {
                     symState = false;
                     insertSym(ed, Sym::name2id(sym));
+                } else {
+                    prepareFormat(token, format);
                 }
             } else {
                 token += c;
@@ -876,7 +880,10 @@ bool TextBase::deleteSelectedText(EditData& ed)
             if (!_cursor->movePosition(QTextCursor::Left)) {
                 break;
             }
-            score()->undo(new RemoveText(_cursor, QString(cursor->currentCharacter())), &ed);
+            Ms::TextCursor undoCursor(*_cursor);
+            // can't rely on the cursor's current format as it doesn't preserve the special font "ScoreText"
+            undoCursor.setFormat(*_layout[_cursor->row()].formatAt(_cursor->column()));
+            score()->undo(new RemoveText(&undoCursor, QString(_cursor->currentCharacter())), &ed);
         }
     }
     return true;
