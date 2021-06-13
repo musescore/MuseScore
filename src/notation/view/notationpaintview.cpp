@@ -325,6 +325,36 @@ void NotationPaintView::hideContextMenu()
 {
     emit hideContextMenuRequested();
 }
+void NotationPaintView::showElementPopup(const Element* hitElement)
+{
+    if (!hitElement->needsElementPopup()) {
+        return;
+    }
+
+    const RectF& bbox = hitElement->canvasBoundingRect();
+    PointF canvasPos = hitElement->canvasPos();
+
+    QString type(hitElement->name());
+    PointF elementPos = fromLogical(canvasPos.toQPoint());
+    RectF size(fromLogical(QRect(0, 0, bbox.width(), bbox.height())));
+
+    emit openElementPopupRequested(type, elementPos.toQPoint(), QPoint(size.width(), size.height()));
+}
+
+void NotationPaintView::closeElementPopup()
+{
+    emit closeElementPopupRequested();
+}
+
+void NotationPaintView::handleAction(const QString& actionCode)
+{
+    MenuItem item = m_currentContextMenuModel.findItem(itemId);
+    if (item.isValid()) {
+        dispatcher()->dispatch(item.code);
+    }
+
+    m_currentContextMenuModel.setItems({});
+}
 
 void NotationPaintView::paint(QPainter* qp)
 {
@@ -781,6 +811,13 @@ PointF NotationPaintView::toLogical(const QPoint& point) const
     return PointF::fromQPointF(m_matrix.inverted().map(scaledPoint.toQPoint()));
 }
 
+PointF NotationPaintView::fromLogical(const QPoint& point) const
+{
+    PointF mappedPoint =  PointF::fromQPointF(m_matrix.map(point));
+
+    return mappedPoint / guiScaling();
+}
+
 double NotationPaintView::guiScaling() const
 {
     return configuration()->guiScaling();
@@ -794,6 +831,14 @@ RectF NotationPaintView::toLogical(const QRect& rect) const
     scaledRect.setBottomRight(rect.bottomRight() * scale);
 
     return RectF::fromQRectF(m_matrix.inverted().mapRect(scaledRect));
+}
+
+RectF NotationPaintView::fromLogical(const QRect& rect) const
+{
+    RectF mappedRect = RectF::fromQRectF(m_matrix.mapRect(rect));
+
+    mappedRect.setBottomRight(mappedRect.bottomRight() / guiScaling());
+    return mappedRect;
 }
 
 bool NotationPaintView::isInited() const

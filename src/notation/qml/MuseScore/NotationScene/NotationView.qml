@@ -26,6 +26,7 @@ import QtQuick.Controls 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.NotationScene 1.0
+import MuseScore.Inspector 1.0
 
 import "internal"
 
@@ -55,6 +56,10 @@ FocusScope {
     Component.onCompleted: {
         notationView.load()
         notationNavigator.load()
+    }
+
+    InspectorListModel {
+        id: inspectorListModel
     }
 
     ColumnLayout {
@@ -105,6 +110,14 @@ FocusScope {
                     contextMenuLoader.close()
                 }
 
+                onOpenElementPopupRequested: {
+                    privateProperties.showNotationPopup(type, pos, size)
+                }
+
+                onCloseElementPopupRequested: {
+                    privateProperties.closeNotationPopup();
+                }
+
                 onViewportChanged: {
                     notationNavigator.setCursorRect(viewport)
                 }
@@ -119,6 +132,16 @@ FocusScope {
                     if (!verticalScrollBar.pressed) {
                         verticalScrollBar.setPosition(notationView.startVerticalScrollPosition)
                     }
+                }
+
+                ContextMenu {
+                    id: contextMenu
+                }
+
+                ElementPopup {
+                    id: elementPopup
+
+                    model: inspectorListModel.inspectorModelBySection(Inspector.SECTION_NOTATION)
                 }
 
                 StyledScrollBar {
@@ -224,6 +247,65 @@ FocusScope {
             id: searchPopup
 
             Layout.fillWidth: true
+        }
+    }
+
+    Component.onCompleted: {
+        notationView.load()
+        notationNavigator.load()
+    }
+
+    QtObject {
+        id: privateProperties
+
+        property int scrollbarMargin: 4
+
+        function showNotationMenu(items) {
+            contextMenu.clear()
+
+            for (var i in items) {
+                var item = items[i]
+
+                var action = notationMenuAction.createObject(notationView, {
+                                                                 code: item.code,
+                                                                 text: item.title,
+                                                                 hintIcon: item.icon,
+                                                                 shortcut: item.shortcut
+                                                             })
+                contextMenu.addMenuItem(action)
+            }
+
+            contextMenu.popup()
+        }
+
+        function showNotationPopup(type, pos, size) {
+            elementPopup.close();
+
+            elementPopup.type = type;
+
+            elementPopup.x = pos.x + size.x / 2 - elementPopup.width / 2;
+            elementPopup.y = pos.y + size.y / 2;
+
+            elementPopup.open();
+        }
+
+        function closeNotationPopup() {
+            elementPopup.close();
+        }
+    }
+
+    Component {
+        id: notationMenuAction
+
+        Action {
+            property string code: ""
+            property string hintIcon: ""
+
+            icon.name: hintIcon
+
+            onTriggered: {
+                Qt.callLater(notationView.handleAction, code)
+            }
         }
     }
 }

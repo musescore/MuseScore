@@ -511,6 +511,8 @@ public:
 
     virtual bool isMovable() const { return flag(ElementFlag::MOVABLE); }
 
+    virtual bool needsElementPopup() const { return false; }
+
     bool enabled() const { return flag(ElementFlag::ENABLED); }
     void setEnabled(bool val) { setFlag(ElementFlag::ENABLED, val); }
 
