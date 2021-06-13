@@ -112,7 +112,7 @@ elseif(OS_IS_WASM)
         -O3 \
     ")
 else()
-    message(FATAL_ERROR "Unsopported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
+    message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
 
 ###########################################
@@ -489,7 +489,7 @@ elseif(OS_IS_WASM)
     copy_html_js_launch_files(mscore)
 
 else()
-    message(FATAL_ERROR "Unsopported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
+    message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
 
 
