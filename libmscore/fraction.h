@@ -106,7 +106,7 @@ class Fraction {
             {
             const int g = gcd(_numerator, _denominator);
             return Fraction(_numerator / g, _denominator / g);
-            }      
+            }
 
       // --- comparison --- //
 
