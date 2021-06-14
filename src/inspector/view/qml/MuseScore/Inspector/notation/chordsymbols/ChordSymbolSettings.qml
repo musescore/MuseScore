@@ -25,6 +25,7 @@ import QtQuick.Controls 2.15
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 import "../../common"
+import "internal"
 
 Column {
     id: root
@@ -34,6 +35,17 @@ Column {
     objectName: "ChordSymbolSettings"
 
     spacing: 16
+
+    InspectorPropertyView {
+        titleText: qsTrc("inspector", "Chord symbol style")
+        height: 120
+
+        ChordSymbolStyleSettings {
+            id: styleSettings
+            width: parent.width
+            chordStylesModel: root.model ? root.model.chordStylesModel : null
+        }
+    }
 
     InspectorPropertyView {
         titleText: qsTrc("inspector", "Interpretation")
