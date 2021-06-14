@@ -115,6 +115,8 @@
           <controller ctrl="32" value="17"/>
           <program value="73"/>
           <synti>Fluid</synti>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -167,6 +169,8 @@
           <controller ctrl="32" value="17"/>
           <program value="68"/>
           <synti>Fluid</synti>
+          <midiPort>0</midiPort>
+          <midiChannel>1</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -221,6 +225,8 @@
           <controller ctrl="32" value="17"/>
           <program value="71"/>
           <synti>Fluid</synti>
+          <midiPort>0</midiPort>
+          <midiChannel>2</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -267,14 +273,34 @@
           <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
-          <controller ctrl="0" value="0"/>
+        <Channel name="open">
           <controller ctrl="32" value="17"/>
           <program value="60"/>
           <synti>Fluid</synti>
+          <midiPort>0</midiPort>
+          <midiChannel>3</midiChannel>
+          </Channel>
+        <Channel name="mute">
+          <controller ctrl="32" value="17"/>
+          <program value="59"/>
+          <synti>Fluid</synti>
+          <midiPort>0</midiPort>
+          <midiChannel>5</midiChannel>
           </Channel>
         </Instrument>
       </Part>
@@ -328,6 +354,8 @@
           <controller ctrl="32" value="17"/>
           <program value="70"/>
           <synti>Fluid</synti>
+          <midiPort>0</midiPort>
+          <midiChannel>4</midiChannel>
           </Channel>
         </Instrument>
       </Part>
