@@ -22,6 +22,7 @@
 #include "chordsymbolstylesmodel.h"
 
 using namespace mu::inspector;
+using namespace mu::notation;
 ChordSymbolStylesModel::ChordSymbolStylesModel(QObject* parent)
     : QAbstractListModel(parent)
 {
@@ -48,4 +49,14 @@ QVariant ChordSymbolStylesModel::data(const QModelIndex &index, int role) const{
     case FileRole: return chordSymbolStyle.file;
     default: return QVariant();
     }
+}
+void ChordSymbolStylesModel::setChordStyle(QString styleName) const{
+    QString f = "chords_std.xml"; // Fall back
+    for(auto& c: m_styles){
+        if(c.styleName == styleName){
+            f = c.file;
+            break;
+        }
+    }
+    globalContext()->currentNotation()->style()->setStyleValue(StyleId::chordDescriptionFile,f);
 }

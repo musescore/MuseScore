@@ -38,7 +38,6 @@ Column {
 
     InspectorPropertyView {
         titleText: qsTrc("inspector", "Chord symbol style")
-        height: 120
 
         ChordSymbolStyleSettings {
             id: styleSettings

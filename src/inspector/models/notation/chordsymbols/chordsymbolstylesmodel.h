@@ -24,10 +24,16 @@
 
 #include <QObject>
 #include <QAbstractListModel>
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
+
 
 namespace mu::inspector {
 class ChordSymbolStylesModel : public QAbstractListModel
 {
+
+    INJECT(inspector, context::IGlobalContext, globalContext)
+
     Q_OBJECT
 
 public:
@@ -41,6 +47,8 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    Q_INVOKABLE void setChordStyle(QString styleName) const;
+
 private:
     // TODO: Reconsider the required roles (attributes)
     struct ChordSymbolStyle{
@@ -51,7 +59,8 @@ private:
     // TODO: Make the list dynamic (get info from styles)
     QList<ChordSymbolStyle> m_styles = {
         {"Standard","chords_std.xml"},
-        {"Jazz","chords_jazz.xml"}
+        {"Jazz","chords_jazz.xml"},
+        {"Jazz","chord_jazz.xml"}
     };
 };
 }

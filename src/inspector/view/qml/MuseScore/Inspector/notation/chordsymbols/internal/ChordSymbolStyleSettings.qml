@@ -27,36 +27,48 @@ import MuseScore.Ui 1.0
 import "../../../common"
 
 FocusableItem {
+    id: root
 
     property alias chordStylesModel: grid.model
-    height: 2*grid.cellHeight
+    height: 2*grid.cellHeight + 20
+    width: 2*grid.cellWidth + 20
 
         Component {
             id: styleDelegate
             Column{
                 FlatButton {
                     id: button
-                    anchors.margins: 5
-                    width: grid.cellWidth
-                    height: grid.cellHeight
+                    width: grid.cellWidth-10
+                    height: 55
                     Text {
                         text: styleName
                         horizontalAlignment: button.horizontalCenter
                         verticalAlignment: button.verticalCenter
                         wrapMode: Text.Wrap
                     }
+                    onClicked: {
+                        chordStylesModel.setChordStyle(styleName)
+                    }
                 }
                 Text {
                     id: label
                     text: qsTr(styleName)
+                    width: grid.cellWidth-10
+                    height: 15
+                    horizontalAlignment: label.horizontalCenter
                 }
             }
 
         }
+
         GridView {
             id: grid
-            anchors.fill: parent
-            cellWidth: grid.width/2;
+            anchors.left: root.left
+            anchors.right: root.right
+            height: 2*cellHeight
+            width: 2*cellWidth
+            clip: true
+            cellWidth: 100
             cellHeight: 80
             delegate: styleDelegate
         }
