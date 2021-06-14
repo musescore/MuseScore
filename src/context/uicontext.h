@@ -38,6 +38,7 @@ static constexpr ui::UiContext UiCtxHomeOpened = "UiCtxHomeOpened";
 // notation detail
 static constexpr ui::UiContext UiCtxNotationFocused = "UiCtxNotationFocused";
 static constexpr ui::UiContext UiCtxNotationTextEditing = "UiCtxNotationTextEditing";
+static constexpr ui::UiContext UiCtxNotationOpenedOrTextEditing = "UiCtxNotationOpenedOrTextEditing";
 }
 
 #endif // MU_CONTEXT_UICONTEXT_H
