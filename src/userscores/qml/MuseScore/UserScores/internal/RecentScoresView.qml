@@ -103,7 +103,7 @@ GridView {
             title: score.title
             thumbnail: score.thumbnail
             isAdd: score.isAddNew
-            timeSinceCreation: !isAdd ? score.timeSinceCreation : ""
+            timeSinceModified: !isAdd ? score.timeSinceModified : ""
 
             onClicked: {
                 if (isAdd) {

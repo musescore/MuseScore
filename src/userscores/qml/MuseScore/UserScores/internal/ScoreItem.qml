@@ -30,7 +30,7 @@ FocusScope {
     id: root
 
     property string title: ""
-    property alias timeSinceCreation: timeSinceCreation.text
+    property alias timeSinceModified: timeSinceModified.text
     property alias thumbnail: loader.thumbnail
     property bool isAdd: false
 
@@ -160,7 +160,7 @@ FocusScope {
             }
 
             StyledTextLabel {
-                id: timeSinceCreation
+                id: timeSinceModified
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
