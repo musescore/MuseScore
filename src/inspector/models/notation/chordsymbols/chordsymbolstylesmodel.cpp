@@ -26,8 +26,7 @@ using namespace mu::notation;
 ChordSymbolStylesModel::ChordSymbolStylesModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    m_roleNames.insert(StyleNameRole, "styleName");
-    m_roleNames.insert(FileRole, "fileName");
+
 }
 int ChordSymbolStylesModel::rowCount(const QModelIndex&) const
 {
@@ -35,7 +34,11 @@ int ChordSymbolStylesModel::rowCount(const QModelIndex&) const
 }
 QHash<int, QByteArray> ChordSymbolStylesModel::roleNames() const
 {
-    return m_roleNames;
+    static const QHash<int, QByteArray> roles = {
+        { StyleNameRole, "styleName" },
+        { FileRole, "fileName" }
+    };
+    return roles;
 }
 QVariant ChordSymbolStylesModel::data(const QModelIndex &index, int role) const{
     if (!index.isValid() || index.row() >= rowCount() || m_styles.isEmpty()) {
@@ -45,10 +48,14 @@ QVariant ChordSymbolStylesModel::data(const QModelIndex &index, int role) const{
     ChordSymbolStyle chordSymbolStyle = m_styles.at(index.row());
 
     switch (role) {
-    case StyleNameRole: return chordSymbolStyle.styleName;
-    case FileRole: return chordSymbolStyle.file;
-    default: return QVariant();
+        case StyleNameRole:
+            return chordSymbolStyle.styleName;
+        case FileRole:
+            return chordSymbolStyle.file;
+        default:
+            break;
     }
+    return QVariant();
 }
 void ChordSymbolStylesModel::setChordStyle(QString styleName) const{
     QString f = "chords_std.xml"; // Fall back

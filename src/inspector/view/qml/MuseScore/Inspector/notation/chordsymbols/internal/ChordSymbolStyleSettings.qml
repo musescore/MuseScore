@@ -21,10 +21,8 @@
  */
 import QtQuick 2.0
 import QtQuick.Controls 2.0
-import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
-import "../../../common"
 
 FocusableItem {
     id: root

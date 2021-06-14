@@ -37,10 +37,6 @@ class ChordSymbolStylesModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    enum RoleNames {
-        StyleNameRole = Qt::UserRole + 1,
-        FileRole
-    };
     explicit ChordSymbolStylesModel(QObject* parent = nullptr);
 
     QVariant data(const QModelIndex& index, int role) const override;
@@ -50,12 +46,15 @@ public:
     Q_INVOKABLE void setChordStyle(QString styleName) const;
 
 private:
+    enum RoleNames {
+        StyleNameRole = Qt::UserRole + 1,
+        FileRole
+    };
     // TODO: Reconsider the required roles (attributes)
     struct ChordSymbolStyle{
         QString styleName;
         QString file;
     };
-    QHash<int, QByteArray> m_roleNames;
     // TODO: Make the list dynamic (get info from styles)
     QList<ChordSymbolStyle> m_styles = {
         {"Standard","chords_std.xml"},
