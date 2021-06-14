@@ -448,163 +448,67 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
 
     //! NOTE This drawing code is based on the implementation in QML.
     switch (element) {
+    // Buttons (and ComboBoxes)
     case QStyle::PE_PanelButtonCommand: {
-        const QStyleOptionButton* buttonOption = qstyleoption_cast<const QStyleOptionButton*>(option);
+        auto buttonOption = qstyleoption_cast<const QStyleOptionButton*>(option);
         const bool accentButton = buttonOption && buttonOption->features & QStyleOptionButton::DefaultButton;
         const bool flat = buttonOption && buttonOption->features & QStyleOptionButton::Flat;
 
-        QColor backgroundColor(accentButton ? accentColor()
-                               : flat ? Qt::transparent
-                               : buttonColor());
-
-        backgroundColor.setAlphaF(!enabled ? buttonOpacityNormal() * itemOpacityDisabled()
-                                  : pressed ? buttonOpacityHit()
-                                  : hovered ? buttonOpacityHover()
-                                  : !flat ? buttonOpacityNormal()
-                                  : 0);
-
-        drawRoundedRect(painter, option->rect, 3, backgroundColor);
+        drawButtonBackground(painter, option->rect, enabled, hovered, pressed, accentButton, flat);
     } break;
+
+    // Checkboxes
     case QStyle::PE_IndicatorCheckBox: {
         const bool indeterminate = option->state & State_NoChange;
         const bool checked = option->state & State_On;
         const bool inMenu = qobject_cast<const QMenu*>(widget);
 
-        if (!inMenu) {
-            QColor backgroundColor = buttonColor();
-            backgroundColor.setAlphaF(!enabled ? buttonOpacityNormal() * itemOpacityDisabled()
-                                      : pressed ? buttonOpacityHit()
-                                      : hovered ? buttonOpacityHover()
-                                      : buttonOpacityNormal());
-
-            QColor borderColor = enabled && (hovered || pressed) ? strokeColor() : Qt::transparent;
-            borderColor.setAlphaF(enabled && pressed ? buttonOpacityHit()
-                                  : enabled && hovered ? buttonOpacityHover()
-                                  : 0);
-
-            const int borderWidth = enabled && (hovered || pressed) ? 1 : 0;
-            drawRoundedRect(painter, option->rect, 2, backgroundColor, QPen(borderColor, borderWidth));
-        }
-
-        if (checked || indeterminate) {
-            QColor tickColor = fontPrimaryColor();
-            if (!enabled) {
-                tickColor.setAlphaF(itemOpacityDisabled());
-            }
-            painter->setPen(tickColor);
-            painter->setFont(m_iconsFont);
-            painter->drawText(option->rect, Qt::AlignCenter,
-                              iconCodeToChar(indeterminate ? IconCode::Code::MINUS : IconCode::Code::TICK_RIGHT_ANGLE));
-        }
+        drawCheckboxIndicator(painter, option->rect, enabled, hovered, pressed, checked, indeterminate, inMenu);
     } break;
+
+    // Radio buttons
     case QStyle::PE_IndicatorRadioButton: {
-        bool selected = option->state & State_On;
+        const bool selected = option->state & State_On;
 
-        QColor borderColor(fontPrimaryColor());
-        QColor backgroundColor(textFieldColor());
-        QColor centerColor(accentColor());
-
-        if (pressed) {
-            backgroundColor.setAlphaF(accentOpacityHit());
-        } else if (selected && !hovered) {
-            backgroundColor.setAlphaF(accentOpacityNormal());
-        } else if (hovered && !selected && !pressed) {
-            backgroundColor.setAlphaF(buttonOpacityHover());
-        } else if (hovered && selected) {
-            backgroundColor.setAlphaF(accentOpacityHover());
-        } else {
-            backgroundColor.setAlphaF(buttonOpacityNormal());
-        }
-
-        borderColor.setAlphaF(backgroundColor.alphaF());
-
-        const int borderWidth = 1;
-        const qreal outerCircleRadius = 10; // diameter = 20
-        const QRect outerCircleRect(option->rect.center() + QPoint(1, 1) - QPoint(outerCircleRadius, outerCircleRadius),
-                                    QSize(outerCircleRadius, outerCircleRadius) * 2);
-        drawRoundedRect(painter, outerCircleRect, outerCircleRadius, backgroundColor, QPen(borderColor, borderWidth));
-
-        if (selected || pressed) {
-            const int innerCircleRadius = 5; // diameter = 10
-            const QRect innerCircleRect(option->rect.center() + QPoint(1, 1) - QPoint(innerCircleRadius, innerCircleRadius),
-                                        QSize(innerCircleRadius, innerCircleRadius) * 2);
-            drawRoundedRect(painter, innerCircleRect, innerCircleRadius, centerColor);
-        }
+        drawRadioButtonIndicator(painter, option->rect, enabled, hovered, pressed, selected);
     } break;
+
+    // Indicator icons
     case QStyle::PE_IndicatorSpinUp:
     case QStyle::PE_IndicatorSpinDown:
     case QStyle::PE_IndicatorSpinPlus:
     case QStyle::PE_IndicatorSpinMinus: {
-        QColor color = fontPrimaryColor();
-        if (!enabled) {
-            color.setAlphaF(itemOpacityDisabled());
-        }
-        painter->setPen(color);
-        painter->setFont(m_iconsFont);
-
-        IconCode::Code code;
-        switch (element) {
-        case QStyle::PE_IndicatorSpinPlus:
-            code = IconCode::Code::PLUS;
-            break;
-        case QStyle::PE_IndicatorSpinMinus:
-            code = IconCode::Code::MINUS;
-            break;
-        case QStyle::PE_IndicatorSpinUp:
-            code = IconCode::Code::SMALL_ARROW_UP;
-            break;
-        case QStyle::PE_IndicatorSpinDown:
-            code = IconCode::Code::SMALL_ARROW_DOWN;
-            break;
-        default:
-            code = IconCode::Code::NONE;
-            break;
-        }
-
-        painter->drawText(option->rect, Qt::AlignCenter, iconCodeToChar(code));
+        drawIndicatorIcon(painter, option->rect, enabled, element);
     } break;
+
+    // ListView
     case QStyle::PE_PanelItemViewItem: {
         bool selected = option->state & State_Selected;
 
-        QColor backgroundColor(Qt::transparent);
-        if (selected) {
-            backgroundColor = accentColor();
-            backgroundColor.setAlphaF(enabled ? accentOpacityHit() : accentOpacityHit() * itemOpacityDisabled());
-        } else if (enabled && pressed) {
-            backgroundColor = buttonColor();
-            backgroundColor.setAlphaF(buttonOpacityHit());
-        } else if (enabled && hovered) {
-            backgroundColor = buttonColor();
-            backgroundColor.setAlphaF(buttonOpacityHover());
-        }
-
-        painter->fillRect(option->rect, backgroundColor);
+        drawListViewItemBackground(painter, option->rect, enabled, hovered, pressed, selected);
     } break;
+
+    // Toolbar
     case QStyle::PE_PanelToolBar: {
         painter->fillRect(option->rect, backgroundPrimaryColor());
     } break;
     case QStyle::PE_IndicatorToolBarHandle: {
-        QColor gripColor(fontPrimaryColor());
-        gripColor.setAlphaF(0.5);
-        painter->setPen(gripColor);
-        painter->setFont(m_iconsFont);
-
-        int rotation = option->state & State_Horizontal ? 0 : 90;
-        QRect rect = option->state & State_Horizontal ? option->rect : QRect(option->rect.topLeft() + QPoint(0, -option->rect.width()),
-                                                                             option->rect.size().transposed());
-        painter->rotate(rotation);
-        painter->drawText(rect, Qt::AlignCenter, iconCodeToChar(IconCode::Code::TOOLBAR_GRIP));
-        painter->rotate(-rotation);
+        drawToolbarGrip(painter, option->rect, option->state & State_Horizontal);
     } break;
+
+    // GroupBox
     case QStyle::PE_FrameGroupBox: {
         drawRoundedRect(painter, option->rect, 3, QBrush("#03000000"), QPen(strokeColor(), 1));
     } break;
+
+    // Menu
     case QStyle::PE_PanelMenu: {
         drawRoundedRect(painter, option->rect, 3, backgroundPrimaryColor());
     } break;
     case QStyle::PE_FrameMenu: {
         drawRoundedRect(painter, option->rect, 3, NO_FILL, QPen(strokeColor(), 1));
     } break;
+
     default:
         QProxyStyle::drawPrimitive(element, option, painter, widget);
         break;
@@ -764,4 +668,155 @@ int UiTheme::styleHint(QStyle::StyleHint hint, const QStyleOption* option, const
     }
 
     return QProxyStyle::styleHint(hint, option, widget, returnData);
+}
+
+// ====================================================
+// QStyle elements drawing
+// ====================================================
+
+void UiTheme::drawButtonBackground(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool accentButton,
+                                   bool flat) const
+{
+    QColor backgroundColor(accentButton ? accentColor()
+                           : flat ? Qt::transparent
+                           : buttonColor());
+
+    backgroundColor.setAlphaF(!enabled ? buttonOpacityNormal() * itemOpacityDisabled()
+                              : pressed ? buttonOpacityHit()
+                              : hovered ? buttonOpacityHover()
+                              : !flat ? buttonOpacityNormal()
+                              : 0);
+
+    drawRoundedRect(painter, rect, 3, backgroundColor);
+}
+
+void UiTheme::drawCheckboxIndicator(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool checked,
+                                    bool indeterminate, bool inMenu) const
+{
+    if (!inMenu) {
+        QColor backgroundColor = buttonColor();
+        backgroundColor.setAlphaF(!enabled ? buttonOpacityNormal() * itemOpacityDisabled()
+                                  : pressed ? buttonOpacityHit()
+                                  : hovered ? buttonOpacityHover()
+                                  : buttonOpacityNormal());
+
+        QColor borderColor = enabled && (hovered || pressed) ? strokeColor() : Qt::transparent;
+        borderColor.setAlphaF(enabled && pressed ? buttonOpacityHit()
+                              : enabled && hovered ? buttonOpacityHover()
+                              : 0);
+
+        const int borderWidth = enabled && (hovered || pressed) ? 1 : 0;
+        drawRoundedRect(painter, rect, 2, backgroundColor, QPen(borderColor, borderWidth));
+    }
+
+    if (checked || indeterminate) {
+        QColor tickColor = fontPrimaryColor();
+        if (!enabled) {
+            tickColor.setAlphaF(itemOpacityDisabled());
+        }
+        painter->setPen(tickColor);
+        painter->setFont(m_iconsFont);
+        painter->drawText(rect, Qt::AlignCenter,
+                          iconCodeToChar(indeterminate ? IconCode::Code::MINUS : IconCode::Code::TICK_RIGHT_ANGLE));
+    }
+}
+
+void UiTheme::drawRadioButtonIndicator(QPainter* painter, const QRect& rect, bool /*enabled*/, bool hovered, bool pressed,
+                                       bool selected) const
+{
+    QColor borderColor(fontPrimaryColor());
+    QColor backgroundColor(textFieldColor());
+    QColor centerColor(accentColor());
+
+    if (pressed) {
+        backgroundColor.setAlphaF(accentOpacityHit());
+    } else if (selected && !hovered) {
+        backgroundColor.setAlphaF(accentOpacityNormal());
+    } else if (hovered && !selected && !pressed) {
+        backgroundColor.setAlphaF(buttonOpacityHover());
+    } else if (hovered && selected) {
+        backgroundColor.setAlphaF(accentOpacityHover());
+    } else {
+        backgroundColor.setAlphaF(buttonOpacityNormal());
+    }
+
+    borderColor.setAlphaF(backgroundColor.alphaF());
+
+    const int borderWidth = 1;
+    const qreal outerCircleRadius = 10; // diameter = 20
+    const QRect outerCircleRect(rect.center() + QPoint(1, 1) - QPoint(outerCircleRadius, outerCircleRadius),
+                                QSize(outerCircleRadius, outerCircleRadius) * 2);
+    drawRoundedRect(painter, outerCircleRect, outerCircleRadius, backgroundColor, QPen(borderColor, borderWidth));
+
+    if (selected || pressed) {
+        const int innerCircleRadius = 5; // diameter = 10
+        const QRect innerCircleRect(rect.center() + QPoint(1, 1) - QPoint(innerCircleRadius, innerCircleRadius),
+                                    QSize(innerCircleRadius, innerCircleRadius) * 2);
+        drawRoundedRect(painter, innerCircleRect, innerCircleRadius, centerColor);
+    }
+}
+
+void UiTheme::drawIndicatorIcon(QPainter* painter, const QRect& rect, bool enabled, QStyle::PrimitiveElement element) const
+{
+    QColor color = fontPrimaryColor();
+    if (!enabled) {
+        color.setAlphaF(itemOpacityDisabled());
+    }
+    painter->setPen(color);
+    painter->setFont(m_iconsFont);
+
+    IconCode::Code code;
+    switch (element) {
+    case QStyle::PE_IndicatorSpinPlus:
+        code = IconCode::Code::PLUS;
+        break;
+    case QStyle::PE_IndicatorSpinMinus:
+        code = IconCode::Code::MINUS;
+        break;
+    case QStyle::PE_IndicatorSpinUp:
+        code = IconCode::Code::SMALL_ARROW_UP;
+        break;
+    case QStyle::PE_IndicatorSpinDown:
+        code = IconCode::Code::SMALL_ARROW_DOWN;
+        break;
+    default:
+        return;
+    }
+
+    painter->drawText(rect, Qt::AlignCenter, iconCodeToChar(code));
+}
+
+void UiTheme::drawListViewItemBackground(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed,
+                                         bool selected) const
+{
+    QColor backgroundColor(Qt::transparent);
+    if (selected) {
+        backgroundColor = accentColor();
+        backgroundColor.setAlphaF(enabled ? accentOpacityHit() : accentOpacityHit() * itemOpacityDisabled());
+    } else if (enabled && pressed) {
+        backgroundColor = buttonColor();
+        backgroundColor.setAlphaF(buttonOpacityHit());
+    } else if (enabled && hovered) {
+        backgroundColor = buttonColor();
+        backgroundColor.setAlphaF(buttonOpacityHover());
+    } else {
+        return; // filling a rect with transparent does not make sense
+    }
+
+    painter->fillRect(rect, backgroundColor);
+}
+
+void UiTheme::drawToolbarGrip(QPainter* painter, const QRect& rect, bool horizontal) const
+{
+    QColor gripColor(fontPrimaryColor());
+    gripColor.setAlphaF(0.5);
+    painter->setPen(gripColor);
+    painter->setFont(m_iconsFont);
+
+    int rotation = horizontal ? 0 : 90;
+    QRect r = horizontal ? rect : QRect(rect.topLeft() + QPoint(0, -rect.width()),
+                                        rect.size().transposed());
+    painter->rotate(rotation);
+    painter->drawText(r, Qt::AlignCenter, iconCodeToChar(IconCode::Code::TOOLBAR_GRIP));
+    painter->rotate(-rotation);
 }
