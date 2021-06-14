@@ -2318,10 +2318,8 @@ void TextBase::selectAll(TextCursor* cursor)
         return;
     }
 
-    cursor->setSelectLine(0);
-    cursor->setSelectColumn(0);
-    cursor->setRow(rows() - 1);
-    cursor->setColumn(cursor->curLine().columns());
+    cursor->movePosition(QTextCursor::Start, QTextCursor::MoveMode::MoveAnchor);
+    cursor->movePosition(QTextCursor::End, QTextCursor::MoveMode::KeepAnchor);
 }
 
 //---------------------------------------------------------
