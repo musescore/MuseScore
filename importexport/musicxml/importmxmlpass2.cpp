@@ -2891,11 +2891,11 @@ static Marker* findMarker(const QString& repeat, Score* score)
 
 bool MusicXMLParserDirection::isLikelyFingering() const
       {
-            // One or more newline-separated digits, possibly lead or trailed by whitespace
-            return _wordsText.contains(QRegularExpression("^\\s*[0-5pimac](?:\\n[0-5pimac])*\\s*$"))
-                  && _rehearsalText == ""
-                  && _metroText == ""
-                  && _tpoSound < 0.1;
+      // One or more newline-separated digits (or changes), possibly lead or trailed by whitespace
+      return _wordsText.contains(QRegularExpression("^\\s*[0-5pimac](?:[-–][0-5pimac])?(?:\\n[0-5pimac](?:[-–][0-5pimac])?)*\\s*$"))
+            && _rehearsalText == ""
+            && _metroText == ""
+            && _tpoSound < 0.1;
       }
 
 //---------------------------------------------------------
