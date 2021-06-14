@@ -32,6 +32,7 @@ ChordSymbolSettingsModel::ChordSymbolSettingsModel(QObject* parent, IElementRepo
     setTitle(qtrc("inspector", "Chord symbol"));
     setIcon(ui::IconCode::Code::CHORD_SYMBOL);
     createProperties();
+    setChordStylesModel(new ChordSymbolStylesModel(this));
 }
 
 void ChordSymbolSettingsModel::createProperties()
@@ -58,6 +59,22 @@ void ChordSymbolSettingsModel::resetProperties()
     m_isLiteral->resetToDefault();
     m_voicingType->resetToDefault();
     m_durationType->resetToDefault();
+}
+
+void ChordSymbolSettingsModel::setChordStylesModel(ChordSymbolStylesModel* chordSymbolStylesModel)
+{
+    if (m_chordStylesModel == chordSymbolStylesModel) {
+        return;
+    }
+
+    m_chordStylesModel = chordSymbolStylesModel;
+
+    // TODO: Connect to respective signals for changing styles
+}
+
+ChordSymbolStylesModel* ChordSymbolSettingsModel::chordStylesModel() const
+{
+    return m_chordStylesModel;
 }
 
 PropertyItem* ChordSymbolSettingsModel::isLiteral() const
