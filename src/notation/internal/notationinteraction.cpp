@@ -492,7 +492,12 @@ void NotationInteraction::select(const std::vector<Element*>& elements, SelectTy
 
 void NotationInteraction::selectAll()
 {
-    score()->cmdSelectAll();
+    if (isTextEditingStarted()) {
+        auto textBase = toTextBase(m_textEditData.element);
+        textBase->selectAll(textBase->cursorFromEditData(m_textEditData));
+    } else {
+        score()->cmdSelectAll();
+    }
 
     notifyAboutSelectionChanged();
 }
@@ -2135,12 +2140,15 @@ void NotationInteraction::copySelection()
         return;
     }
 
-    QMimeData* mimeData = selection()->mimeData();
-    if (!mimeData) {
-        return;
+    if (isTextEditingStarted()) {
+        m_textEditData.element->editCopy(m_textEditData);
+    } else {
+        QMimeData* mimeData = selection()->mimeData();
+        if (!mimeData) {
+            return;
+        }
+        QApplication::clipboard()->setMimeData(mimeData);
     }
-
-    QApplication::clipboard()->setMimeData(mimeData);
 }
 
 void NotationInteraction::copyLyrics()
@@ -2153,9 +2161,12 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
 {
     startEdit();
 
-    const QMimeData* mimeData = QApplication::clipboard()->mimeData();
-    score()->cmdPaste(mimeData, nullptr, scale);
-
+    if (isTextEditingStarted()) {
+        toTextBase(m_textEditData.element)->paste(m_textEditData);
+    } else {
+        const QMimeData* mimeData = QApplication::clipboard()->mimeData();
+        score()->cmdPaste(mimeData, nullptr, scale);
+    }
     apply();
 
     notifyAboutSelectionChanged();
@@ -2215,7 +2226,15 @@ void NotationInteraction::deleteSelection()
     }
 
     startEdit();
-    score()->cmdDeleteSelection();
+    if (isTextEditingStarted()) {
+        auto textBase = toTextBase(m_textEditData.element);
+        if (!textBase->deleteSelectedText(m_textEditData)) {
+            m_textEditData.key = Qt::Key_Backspace;
+            textBase->edit(m_textEditData);
+        }
+    } else {
+        score()->cmdDeleteSelection();
+    }
     apply();
 
     notifyAboutSelectionChanged();

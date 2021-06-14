@@ -102,7 +102,7 @@ bool UiContextResolver::match(const ui::UiContext& currentCtx, const ui::UiConte
     //! NOTE If now editing the notation text, then we allow actions only with the context `UiCtxNotationTextEditing`,
     //! all others, even `UiCtxAny`, are forbidden
     if (currentCtx == context::UiCtxNotationTextEditing) {
-        return actCtx == context::UiCtxNotationTextEditing;
+        return actCtx == context::UiCtxNotationTextEditing || actCtx == context::UiCtxNotationOpenedOrTextEditing;
     }
 
     if (actCtx == context::UiCtxAny) {
@@ -111,7 +111,7 @@ bool UiContextResolver::match(const ui::UiContext& currentCtx, const ui::UiConte
 
     //! NOTE If the current context is `UiCtxNotationFocused`, then we allow `UiCtxNotationOpened` too
     if (currentCtx == context::UiCtxNotationFocused) {
-        if (actCtx == context::UiCtxNotationOpened) {
+        if (actCtx == context::UiCtxNotationOpened || actCtx == context::UiCtxNotationOpenedOrTextEditing) {
             return true;
         }
         return actCtx == context::UiCtxNotationFocused;
