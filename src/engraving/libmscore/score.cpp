@@ -3034,7 +3034,7 @@ void Score::padToggle(Pad p, const EditData& ed)
             _is.setRest(!_is.rest());
             _is.setAccidentalType(AccidentalType::NONE);
         } else if (selection().isNone()) {
-            ed.view->startNoteEntryMode();
+            ed.view()->startNoteEntryMode();
             _is.setDuration(TDuration::DurationType::V_QUARTER);
             _is.setRest(true);
         } else {
@@ -3185,12 +3185,12 @@ void Score::padToggle(Pad p, const EditData& ed)
         if (cr) {
             crs.push_back(cr);
         } else {
-            ed.view->startNoteEntryMode();
+            ed.view()->startNoteEntryMode();
             deselect(e);
         }
     } else if (selection().isNone() && p != Pad::REST) {
         TDuration td = _is.duration();
-        ed.view->startNoteEntryMode();
+        ed.view()->startNoteEntryMode();
         _is.setDuration(td);
         _is.setAccidentalType(AccidentalType::NONE);
     } else {

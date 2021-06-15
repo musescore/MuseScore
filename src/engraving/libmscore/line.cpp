@@ -401,7 +401,7 @@ bool LineSegment::edit(EditData& ed)
     }
 
     if (nls && (nls != this)) {
-        ed.view->changeEditElement(nls);
+        ed.view()->changeEditElement(nls);
     }
     if (ls) {
         score()->undoRemoveElement(ls);
@@ -606,7 +606,7 @@ void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
                 }
 
                 // Switch to dragging the new line segment
-                ed.view->changeEditElement(newLineSegment);
+                ed.view()->changeEditElement(newLineSegment);
             }
 
             // Set offset for the new line segment for grip to appear under the mouse cursor
@@ -696,7 +696,7 @@ void LineSegment::editDrag(EditData& ed)
         //
         // if we touch a different note, change anchor
         //
-        Element* e = ed.view->elementNear(ed.pos);
+        Element* e = ed.view()->elementNear(ed.pos);
         if (e && e->isNote()) {
             SLine* l = line();
             if (ed.curGrip == Grip::END && e != line()->endElement()) {

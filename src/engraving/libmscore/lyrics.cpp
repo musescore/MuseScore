@@ -406,7 +406,7 @@ void Lyrics::layout2(int nAbove)
 
 void Lyrics::paste(EditData& ed)
 {
-    MuseScoreView* scoreview = ed.view;
+    MuseScoreView* scoreview = ed.view();
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
     QClipboard::Mode mode = QClipboard::Clipboard;
 #else

@@ -1440,7 +1440,7 @@ RectF Measure::staffabbox(int staffIdx) const
 
 bool Measure::acceptDrop(EditData& data) const
 {
-    MuseScoreView* viewer = data.view;
+    MuseScoreView* viewer = data.view();
     PointF pos = data.pos;
     Element* e = data.dropElement;
 

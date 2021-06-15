@@ -61,7 +61,8 @@
 using namespace mu::notation;
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
-    : m_notation(notation), m_undoStack(undoStack), m_lasso(new Ms::Lasso(notation->score()))
+    : m_notation(notation), m_undoStack(undoStack), m_lasso(new Ms::Lasso(notation->score())),
+    m_gripEditData(&m_scoreCallbacks)
 {
     m_noteInput = std::make_shared<NotationNoteInput>(notation, this, m_undoStack);
     m_selection = std::make_shared<NotationSelection>(notation);
@@ -72,9 +73,8 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
         }
     });
 
-    m_dragData.ed.view = new ScoreCallbacks();
-    m_dropData.ed.view = new ScoreCallbacks();
-    m_gripEditData.view = new ScoreCallbacks();
+    m_dragData.ed = Ms::EditData(&m_scoreCallbacks);
+    m_dropData.ed = Ms::EditData(&m_scoreCallbacks);
 }
 
 NotationInteraction::~NotationInteraction()
@@ -550,7 +550,7 @@ void NotationInteraction::DragData::reset()
 {
     beginMove = QPointF();
     elementOffset = QPointF();
-    ed = Ms::EditData();
+    ed = Ms::EditData(ed.view());
     dragGroups.clear();
 }
 
@@ -651,7 +651,6 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_dragData.ed.curGrip = m_gripEditData.curGrip;
         m_dragData.ed.delta = m_dragData.ed.pos - m_dragData.ed.lastPos;
         m_dragData.ed.moveDelta = m_dragData.ed.delta - m_dragData.elementOffset;
-        m_dragData.ed.view = new ScoreCallbacks();
         m_dragData.ed.addData(m_gripEditData.getData(m_gripEditData.element));
         m_gripEditData.element->editDrag(m_dragData.ed);
     } else {
@@ -1357,8 +1356,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
                                                   Qt::KeyboardModifiers modifiers,
                                                   PointF pt, bool pasteMode)
 {
-    Ms::EditData dropData;
-    dropData.view        = new ScoreCallbacks();
+    Ms::EditData dropData(&m_scoreCallbacks);
     dropData.pos         = pt.isNull() ? target->pagePos() : pt;
     dropData.dragOffset  = QPointF();
     dropData.modifiers   = modifiers;
@@ -2299,8 +2297,7 @@ void NotationInteraction::addAccidentalToSelection(AccidentalType type)
         return;
     }
 
-    Ms::EditData editData;
-    editData.view = new ScoreCallbacks();
+    Ms::EditData editData(&m_scoreCallbacks);
 
     startEdit();
     score()->toggleAccidental(type, editData);

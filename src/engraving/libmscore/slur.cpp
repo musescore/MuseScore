@@ -244,7 +244,7 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
     if (spanner()->spannerSegments().size() != segments) {
         const std::vector<SpannerSegment*>& ss = spanner()->spannerSegments();
         SlurSegment* newSegment = toSlurSegment(ed.curGrip == Grip::END ? ss.back() : ss.front());
-        ed.view->startEdit(newSegment, ed.curGrip);
+        ed.view()->startEdit(newSegment, ed.curGrip);
         triggerLayout();
     }
 }

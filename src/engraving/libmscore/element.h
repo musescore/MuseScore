@@ -135,9 +135,10 @@ class ElementEditData;
 class EditData
 {
     QList<ElementEditData*> data;
+    MuseScoreView* view_ { 0 };
 
 public:
-    MuseScoreView* view              { 0 };
+    MuseScoreView* view() const { return view_; }
 
     QVector<mu::RectF> grip;
     int grips                        { 0 };                 // number of grips
@@ -166,7 +167,7 @@ public:
     Element* dropElement             { 0 };
 
     EditData(MuseScoreView* v = nullptr)
-        : view(v) {}
+        : view_(v) {}
     ~EditData();
     void clearData();
 
