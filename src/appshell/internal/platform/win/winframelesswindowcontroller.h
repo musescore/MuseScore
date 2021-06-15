@@ -43,6 +43,10 @@ public:
 private:
     bool calculateWindowSize(MSG* message, long* result) const;
     bool processMouseMove(MSG* message, long* result) const;
+    bool processMouseRightClick(MSG* message) const;
+
+    void updateContextMenuState(MSG* message) const;
+    bool showSystemMenuIfNeed(MSG* message) const;
 };
 }
 
