@@ -2023,7 +2023,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                         fbl.append(fb);
                   }
             else if (_e.name() == "harmony")
-                  harmony(partId, measure, time + mTime);
+                  harmony(partId, measure, time + mTime, delayedDirections);
             else if (_e.name() == "note") {
                   Fraction missingPrev;
                   Fraction dura;
@@ -2518,15 +2518,12 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
                   if (placement == "" && hasTotalY())
                         placement = totalY() < 0 ? "above" : "below";
-                  if (hasTotalY()) {
-                        // Add element to score later, after collecting all the others and sorting by default-y
-                        // This allows default-y to be at least respected by the order of elements
-                        MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), t, track, placement, measure, tick + _offset);
-                        delayedDirections.push_back(delayedDirection);
-                        }
-                  else {
-                        addElemOffset(t, track, placement, measure, tick + _offset);
-                        }
+
+                  // Add element to score later, after collecting all the others and sorting by default-y
+                  // This allows default-y to be at least respected by the order of elements
+                  MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, t, track, placement, measure, tick + _offset);
+                  delayedDirections.push_back(delayedDirection);
+                        
                   }
             }
       else if (_tpoSound > 0) {
@@ -2563,14 +2560,19 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         dynaValue = 0;
                   dyn->setVelocity( dynaValue );
                   }
-//TODO:ws            if (_hasDefaultY) dyn->textStyle().setYoff(_defaultY);
-            addElemOffset(dyn, track, placement, measure, tick + _offset);
+
+            // Add element to score later, after collecting all the others and sorting by default-y
+            // This allows default-y to be at least respected by the order of elements
+            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, dyn, track, placement, measure, tick + _offset);
+            delayedDirections.push_back(delayedDirection);
             }
 
       // handle the elems
       foreach( auto elem, _elems) {
-            // TODO (?) if (_hasDefaultY) elem->setYoff(_defaultY);
-            addElemOffset(elem, track, placement, measure, tick + _offset);
+            // Add element to score later, after collecting all the others and sorting by default-y
+            // This allows default-y to be at least respected by the order of elements
+            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, elem, track, placement, measure, tick + _offset);
+            delayedDirections.push_back(delayedDirection);
             }
 
       // handle the spanner stops first
@@ -5006,14 +5008,19 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
    which affects both single strings and barres
  */
 
-FretDiagram* MusicXMLParserPass2::frame()
+FretDiagram* MusicXMLParserPass2::frame(qreal& defaultY, qreal& relativeY, bool& hasTotalY)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "frame");
 
       FretDiagram* fd = new FretDiagram(_score);
 
       int fretOffset = 0;
-
+      bool tempHasY = false;
+      defaultY += _e.attributes().value("default-y").toDouble(&tempHasY) * -0.1;
+      hasTotalY |= tempHasY;
+      relativeY += _e.attributes().value("relative-y").toDouble(&tempHasY) * -0.1;
+      hasTotalY |= tempHasY;
+      
       // Format: fret: string
       std::map<int, int> bStarts;
       std::map<int, int> bEnds;
@@ -5130,7 +5137,7 @@ FretDiagram* MusicXMLParserPass2::frame()
  Parse the /score-partwise/part/measure/harmony node.
  */
 
-void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const Fraction sTime)
+void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const Fraction sTime, DelayedDirectionsList& delayedDirections)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "harmony");
 
@@ -5154,6 +5161,16 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       // previous code: double dy = -0.1 * e.attribute("default-y", QString::number(styleYOff* -10)).toDouble();
       double dy = -0.1 * _e.attributes().value("default-y").toDouble();
 #endif
+      QString placement = _e.attributes().value("placement").toString();
+      qreal defaultY = 0;
+      qreal relativeY = 0;
+      bool hasTotalY = false;
+      bool tempHasY = false;
+      defaultY += _e.attributes().value("default-y").toDouble(&tempHasY) * -0.1;
+      hasTotalY |= tempHasY;
+      relativeY += _e.attributes().value("relative-y").toDouble(&tempHasY) * -0.1;
+      hasTotalY |= tempHasY;
+
       bool printObject = _e.attributes().value("print-object") != "no";
       //QString printFrame = _e.attributes().value("print-frame").toString();
       //QString printStyle = _e.attributes().value("print-style").toString();
@@ -5275,7 +5292,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                         }
                   }
             else if (_e.name() == "frame")
-                  fd = frame();
+                  fd = frame(defaultY, relativeY, hasTotalY);
             else if (_e.name() == "level")
                   skipLogCurrElem();
             else if (_e.name() == "offset")
@@ -5312,17 +5329,26 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       // TODO-LV: do this only if ha points to a valid harmony
       // harmony = ha;
       ha->setTrack(track);
-      Segment* s = measure->getSegment(SegmentType::ChordRest, sTime + offset);
 
       // Add harmony to FretDiagram if present, otherwise add directly to Segment
+      Element* se;
       if (fd) {
             fd->setTrack(track);
-            s->add(fd);
             fd->add(ha);
+            se = fd;
             }
       else {
-            s->add(ha);
+            se = ha;
             }
+
+      qreal totalY = defaultY + relativeY;
+      if (placement == "") {
+            placement = totalY > 0 ? "below" : "above";  
+      }
+      // Add element to score later, after collecting all the others and sorting by default-y
+      // This allows default-y to be at least respected by the order of elements
+      MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY ? totalY : 100, se, track, placement, measure, sTime + offset);
+      delayedDirections.push_back(delayedDirection);
       }
 
 //---------------------------------------------------------

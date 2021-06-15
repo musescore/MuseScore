@@ -283,8 +283,8 @@ private:
       void notePrintSpacingNo(Fraction& dura);
       FiguredBassItem* figure(const int idx, const bool paren);
       FiguredBass* figuredBass();
-      FretDiagram* frame();
-      void harmony(const QString& partId, Measure* measure, const Fraction sTime);
+      FretDiagram* frame(qreal& defaultY, qreal& relativeY, bool& hasTotalY);
+      void harmony(const QString& partId, Measure* measure, const Fraction sTime, DelayedDirectionsList& delayedDirections);
       Accidental* accidental();
       void beam(Beam::Mode& beamMode);
       void duration(Fraction& dura);

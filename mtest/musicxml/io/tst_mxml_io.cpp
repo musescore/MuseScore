@@ -111,6 +111,7 @@ private slots:
       void fractionPlus() { mxmlIoTestRef("testFractionPlus"); }
       void fractionTicks() { mxmlIoTestRef("testFractionTicks"); }
       void fretboardDiagrams() { mxmlImportTestRef("testFretboardDiagrams"); }
+      void fretDiagramLayoutOrder() { mxmlImportTestRef("testFretDiagramLayoutOrder"); }
       void grace1() { mxmlIoTest("testGrace1"); }
       void grace2() { mxmlIoTest("testGrace2"); }
       void hairpinDynamics() { mxmlMscxExportTestRef("testHairpinDynamics"); }
