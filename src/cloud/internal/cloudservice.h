@@ -55,7 +55,7 @@ public:
     ValCh<bool> userAuthorized() const override;
     ValCh<AccountInfo> accountInfo() const override;
 
-    framework::ProgressChannel uploadScore(const QByteArray& scoreData, const std::string& title, const QUrl& sourceUrl = QUrl()) override;
+    framework::ProgressChannel uploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) override;
 
 private slots:
     void onUserAuthorized();
