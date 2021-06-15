@@ -31,6 +31,7 @@
 #include <QJsonObject>
 #include <QUrlQuery>
 #include <QBuffer>
+#include <QHttpMultiPart>
 
 using namespace mu::cloud;
 using namespace mu::network;
@@ -41,6 +42,17 @@ static const QString REFRESH_TOKEN_KEY("refresh_token");
 static const QString DEVICE_ID_KEY("device_id");
 
 constexpr int USER_UNAUTHORIZED_ERR_CODE = 401;
+constexpr int INVALID_SCORE_ID = 0;
+
+int scoreIdFromSourceUrl(const QUrl& sourceUrl)
+{
+    QStringList parts = sourceUrl.toString().split("/");
+    if (parts.isEmpty()) {
+        return INVALID_SCORE_ID;
+    }
+
+    return parts.last().toInt();
+}
 
 CloudService::CloudService(QObject* parent)
     : QObject(parent)
@@ -278,13 +290,52 @@ void CloudService::setAccountInfo(const AccountInfo& info)
     m_userAuthorized.set(info.isValid());
 }
 
-ProgressChannel CloudService::uploadScore(const QByteArray& scoreData, const std::string& title, const QUrl& sourceUrl)
+ProgressChannel CloudService::uploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
 {
-    UNUSED(scoreData);
-    UNUSED(title);
-    UNUSED(sourceUrl);
+    QUrl uploadUrl = prepareUrlForRequest(configuration()->uploadingApiUrl());
+    if (uploadUrl.isEmpty()) {
+        return ProgressChannel();
+    }
 
-    NOT_IMPLEMENTED;
+    int scoreId = scoreIdFromSourceUrl(sourceUrl);
+    bool isScoreAlreadyUploaded = scoreId != INVALID_SCORE_ID;
 
-    return ProgressChannel();
+    QHttpMultiPart* multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+
+    QHttpPart filePart;
+    filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
+    QString contentDisposition = QString("form-data; name=\"score_data\"; filename=\"temp_%1.mscz\"").arg(qrand() % 100000);
+    filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
+
+    filePart.setBodyDevice(&scoreSourceDevice);
+    multiPart->append(filePart);
+
+    if (isScoreAlreadyUploaded) {
+        QHttpPart scoreIdPart;
+        scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
+        scoreIdPart.setBody(QString::number(scoreId).toLatin1());
+        multiPart->append(scoreIdPart);
+    }
+
+    QHttpPart titlePart;
+    titlePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"title\""));
+    titlePart.setBody(title.toUtf8());
+    multiPart->append(titlePart);
+
+    QHttpPart licensePart;
+    licensePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"license\""));
+    licensePart.setBody("cc-by");
+    multiPart->append(licensePart);
+
+    Ret ret(true);
+    QBuffer receivedData;
+    OutgoingDevice device(multiPart);
+
+    if (isScoreAlreadyUploaded) { // score exists, update
+        ret = m_networkManager->put(uploadUrl, &device, &receivedData, headers());
+    } else { // score doesn't exist, post a new score
+        ret = m_networkManager->post(uploadUrl, &device, &receivedData, headers());
+    }
+
+    return m_networkManager->progressChannel();
 }

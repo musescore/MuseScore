@@ -22,6 +22,7 @@
 #include "filescorecontroller.h"
 
 #include <QObject>
+#include <QBuffer>
 
 #include "log.h"
 #include "translation.h"
@@ -217,7 +218,28 @@ void FileScoreController::saveSelection()
 
 void FileScoreController::saveOnline()
 {
-    NOT_IMPLEMENTED;
+    IMasterNotationPtr master = globalContext()->currentMasterNotation();
+    if (!master) {
+        return;
+    }
+
+    /*
+    QBuffer* scoreData = new QBuffer();
+    scoreData->open(QIODevice::ReadWrite);
+
+    Ret ret = master->writeToDevice(*scoreData);
+
+    if (!ret) {
+        LOGE() << ret.toString();
+        return;
+    }*/
+
+    Meta meta = master->metaInfo();
+
+    QFile* file = new QFile(meta.filePath.toQString());
+    file->open(QIODevice::ReadOnly);
+
+    uploadingService()->uploadScore(*file, meta.title, meta.source);
 }
 
 void FileScoreController::importPdf()

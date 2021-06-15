@@ -50,7 +50,7 @@ NetworkManager::~NetworkManager()
     }
 }
 
-Ret NetworkManager::get(const QUrl& url, IODevice* incommingData, const RequestHeaders& headers)
+Ret NetworkManager::get(const QUrl& url, IncomingDevice* incommingData, const RequestHeaders& headers)
 {
     return execRequest(GET_REQUEST, url, incommingData, nullptr, headers);
 }
@@ -60,26 +60,26 @@ Ret NetworkManager::head(const QUrl& url, const RequestHeaders& headers)
     return execRequest(HEAD_REQUEST, url, nullptr, nullptr, headers);
 }
 
-Ret NetworkManager::post(const QUrl& url, IODevice* outgoingData, IODevice* incommingData, const RequestHeaders& headers)
+Ret NetworkManager::post(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incommingData, const RequestHeaders& headers)
 {
     return execRequest(POST_REQUEST, url, incommingData, outgoingData, headers);
 }
 
-Ret NetworkManager::put(const QUrl& url, IODevice* outgoingData, IODevice* incommingData, const RequestHeaders& headers)
+Ret NetworkManager::put(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incommingData, const RequestHeaders& headers)
 {
     return execRequest(PUT_REQUEST, url, incommingData, outgoingData, headers);
 }
 
-Ret NetworkManager::del(const QUrl& url, IODevice* incommingData, const RequestHeaders& headers)
+Ret NetworkManager::del(const QUrl& url, IncomingDevice* incommingData, const RequestHeaders& headers)
 {
     return execRequest(DELETE_REQUEST, url, incommingData, nullptr, headers);
 }
 
-Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IODevice* incommingData, IODevice* outgoingData,
+Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IncomingDevice* incommingData, OutgoingDevice* outgoingData,
                                 const RequestHeaders& headers)
 {
-    if (outgoingData) {
-        if (!openIoDevice(outgoingData, IODevice::ReadOnly)) {
+    if (outgoingData && outgoingData->device()) {
+        if (!openIoDevice(outgoingData->device(), IODevice::ReadOnly)) {
             return make_ret(Err::FiledOpenIODeviceRead);
         }
     }
@@ -116,21 +116,38 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, IODevi
         LOGE() << ret.toString();
     }
 
-    closeIoDevice(outgoingData);
+    if (outgoingData && outgoingData->device()) {
+        closeIoDevice(outgoingData->device());
+    }
+
     closeIoDevice(m_incommingData);
     m_incommingData = nullptr;
 
     return ret;
 }
 
-QNetworkReply* NetworkManager::receiveReply(RequestType requestType, const QNetworkRequest& request, IODevice* outgoingData)
+QNetworkReply* NetworkManager::receiveReply(RequestType requestType, const QNetworkRequest& request, OutgoingDevice* outgoingData)
 {
     switch (requestType) {
     case GET_REQUEST: return m_manager->get(request);
     case HEAD_REQUEST: return m_manager->head(request);
     case DELETE_REQUEST: return m_manager->deleteResource(request);
-    case PUT_REQUEST: return m_manager->put(request, outgoingData);
-    case POST_REQUEST: return m_manager->post(request, outgoingData);
+    case PUT_REQUEST: {
+        if (outgoingData->device()) {
+            return m_manager->put(request, outgoingData->device());
+        } else if (outgoingData->multiPart()) {
+            return m_manager->put(request, outgoingData->multiPart());
+        }
+        break;
+    }
+    case POST_REQUEST: {
+        if (outgoingData->device()) {
+            return m_manager->post(request, outgoingData->device());
+        } else if (outgoingData->multiPart()) {
+            return m_manager->post(request, outgoingData->multiPart());
+        }
+        break;
+    }
     }
 
     return nullptr;
@@ -175,7 +192,7 @@ bool NetworkManager::isAborted() const
     return m_isAborted;
 }
 
-void NetworkManager::prepareReplyReceive(QNetworkReply* reply, IODevice* incommingData)
+void NetworkManager::prepareReplyReceive(QNetworkReply* reply, IncomingDevice* incommingData)
 {
     if (incommingData) {
         connect(reply, &QNetworkReply::downloadProgress, this, [this](const qint64 curr, const qint64 total) {
