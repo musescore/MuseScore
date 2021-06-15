@@ -22,6 +22,8 @@
 #ifndef MU_IPC_IPCCHANNEL_H
 #define MU_IPC_IPCCHANNEL_H
 
+#include <functional>
+
 #include <QString>
 #include <QList>
 
@@ -30,6 +32,8 @@
 #include "async/asyncable.h"
 #include "async/channel.h"
 #include "async/notification.h"
+
+#include "retval.h"
 
 namespace mu::ipc {
 //! NOTE Inter-Process Communication Channel
@@ -48,16 +52,23 @@ public:
     bool send(const Msg& msg);
     async::Channel<Msg> msgReceived() const;
 
-    QList<Meta> instances() const;
+    using OnReceived = std::function<bool (const QStringList&)>;
+    Code syncRequestToAll(const QString& method, const QStringList& args, const OnReceived& onReceived);
+    void response(const QString& method, const QStringList& args, const ID& destID);
+
+    QList<ID> instances() const;
     async::Notification instancesChanged() const;
 
 private:
 
     void setupConnection();
     void onDisconected();
+    void onSocketMsgReceived(const Msg& msg);
 
     IpcSocket* m_selfSocket = nullptr;
     IpcServer* m_server = nullptr;
+    std::function<void(const Msg&)> m_msgCallback;
+    async::Channel<Msg> m_msgReceived;
 };
 }
 

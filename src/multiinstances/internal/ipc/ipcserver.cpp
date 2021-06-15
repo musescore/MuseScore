@@ -90,7 +90,7 @@ bool IpcServer::listen(const QString& serverName)
 
         IncomingSocket inc;
         inc.socket = socket;
-        inc.meta.id = QString::fromUtf8(id);
+        inc.id = QString::fromUtf8(id);
         m_incomingSockets.append(inc);
 
         LOGI() << "id: " << id;
@@ -120,82 +120,73 @@ void IpcServer::onIncomingReadyRead(QLocalSocket* socket)
 
     IPCLOG() << data;
 
-//    async::Async::call(this, [this, socket, data]() {
-    Meta meta;
     Msg msg;
-    deserialize(data, meta, msg);
+    deserialize(data, msg);
 
-    IPCLOG() << "incoming [" << meta.id << "] data: " << data;
+    IPCLOG() << "incoming [" << msg.srcID << "] data: " << data;
 
     if (msg.method == IPC_INIT) {
-        onIncomingInit(socket, meta, msg);
+        onIncomingInit(socket, msg);
     }
 
     if (msg.method == IPC_WHOIS) {
-        onIncomingWhoIs(socket, meta, msg);
+        onIncomingWhoIs(socket, msg);
     }
 
     if (msg.method == IPC_PING) {
-        onIncomingPing(socket, meta, msg);
+        onIncomingPing(socket, msg);
     }
 
-    //! NOTE Resend to others (broadcast)
-    if (msg.destID == BROADCAST_ID) {
-        for (IncomingSocket& s : m_incomingSockets) {
-            //! NOTE We do not resend to incoming socket
-            if (socket != s.socket) {
-                IPCLOG() << "resend to " << s.meta.id;
-                doSendToSocket(s.socket, data);
-            }
+    //! NOTE Resend to others
+    for (IncomingSocket& s : m_incomingSockets) {
+        //! NOTE We do not resend to incoming socket
+        if (socket != s.socket || msg.destID == s.id || msg.destID == BROADCAST_ID) {
+            IPCLOG() << "resend to " << s.id;
+            doSendToSocket(s.socket, data);
         }
     }
-//    });
 }
 
-void IpcServer::onIncomingInit(QLocalSocket* socket, const Meta& meta, const Msg& msg)
+void IpcServer::onIncomingInit(QLocalSocket* socket, const Msg& msg)
 {
-    UNUSED(msg);
-
-    IPCLOG() << "init from: " << meta.id;
+    IPCLOG() << "init from: " << msg.srcID;
 
     IncomingSocket& s = incomingSocket(socket);
     if (!s.socket) {
         LOGE() << "not found incoming socket";
         return;
     }
-    s.meta = meta;
+    s.id = msg.srcID;
 
     sendMetaInfoToAllIncoming();
 }
 
-void IpcServer::onIncomingWhoIs(QLocalSocket* socket, const Meta& meta, const Msg& msg)
+void IpcServer::onIncomingWhoIs(QLocalSocket* socket, const Msg& msg)
 {
-    UNUSED(msg);
-
-    IPCLOG() << "who is answer: " << meta.id;
+    IPCLOG() << "who is answer: " << msg.srcID;
 
     IncomingSocket& s = incomingSocket(socket);
     if (!s.socket) {
         LOGE() << "not found incoming socket";
         return;
     }
-    s.meta = meta;
+    s.id = msg.srcID;
 
     sendMetaInfoToAllIncoming();
 }
 
-void IpcServer::onIncomingPing(QLocalSocket* socket, const Meta& meta, const Msg& msg)
+void IpcServer::onIncomingPing(QLocalSocket* socket, const Msg& msg)
 {
     UNUSED(msg);
 
-    IPCLOG() << "ping from: " << meta.id;
+    IPCLOG() << "ping from: " << msg.srcID;
 
     IncomingSocket& s = incomingSocket(socket);
     if (!s.socket) {
         LOGE() << "not found incoming socket";
         return;
     }
-    s.meta = meta;
+    s.id = msg.srcID;
 
     sendMetaInfoToAllIncoming();
 }
@@ -221,18 +212,15 @@ bool IpcServer::doSendToSocket(QLocalSocket* socket, const QByteArray& data)
 
 void IpcServer::sendToSocket(QLocalSocket* socket, const Msg& msg)
 {
-    Meta meta;
-    meta.id = SERVER_ID;
-
     QByteArray data;
-    serialize(meta, msg, data);
-
+    serialize(msg, data);
     doSendToSocket(socket, data);
 }
 
 void IpcServer::askWhoIs(QLocalSocket* socket)
 {
     Msg askMsg;
+    askMsg.srcID = SERVER_ID;
     askMsg.destID = DIRECT_SOCKET_ID;
     askMsg.method = IPC_WHOIS;
     sendToSocket(socket, askMsg);
@@ -240,20 +228,18 @@ void IpcServer::askWhoIs(QLocalSocket* socket)
 
 void IpcServer::sendMetaInfoToAllIncoming()
 {
-    Meta meta;
-    meta.id = SERVER_ID;
-
     Msg msg;
+    msg.srcID = SERVER_ID;
     msg.destID = DIRECT_SOCKET_ID;
     msg.method = IPC_METAINFO;
 
     msg.args << QString::number(m_incomingSockets.count());
     for (const IncomingSocket& s : qAsConst(m_incomingSockets)) {
-        msg.args << s.meta.id;
+        msg.args << s.id;
     }
 
     QByteArray data;
-    serialize(meta, msg, data);
+    serialize(msg, data);
 
     for (IncomingSocket& s : m_incomingSockets) {
         doSendToSocket(s.socket, data);

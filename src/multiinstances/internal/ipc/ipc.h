@@ -44,6 +44,13 @@ static const QString IPC_WHOIS("ipc_whois");
 static const QString IPC_METAINFO("ipc_metainfo");
 static const QString IPC_PING("ipc_ping");
 
+enum class Code {
+    Undefined = -1,
+    Success = 0,
+    Timeout,
+    AllRecevied
+};
+
 enum class MsgType {
     Undefined = 0,
     Notify,
@@ -53,6 +60,7 @@ enum class MsgType {
 
 struct Msg
 {
+    QString srcID;
     QString destID;
     MsgType type = MsgType::Undefined;
     QString method;
@@ -65,14 +73,8 @@ struct Msg
         >> >> >> > moved ipc server to separated thread
 };
 
-struct Meta
-{
-    QString id;
-    bool isValid() const { return !id.isEmpty(); }
-};
-
-static void serialize(const Meta& meta, const Msg& msg, QByteArray& data);
-static void deserialize(const QByteArray& data, Meta& meta, Msg& msg);
+static void serialize(const Msg& msg, QByteArray& data);
+static void deserialize(const QByteArray& data, Msg& msg);
 
 static QString socketErrorToString(int err);
 }

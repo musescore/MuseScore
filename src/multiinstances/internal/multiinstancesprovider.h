@@ -61,10 +61,6 @@ private:
     ipc::IpcChannel* m_ipcChannel = nullptr;
     std::string m_selfID;
 
-    mutable QEventLoop m_loop;
-    mutable QTimer m_timeout;
-    mutable std::function<void(const ipc::Msg& msg)> m_onMsg;
-
     async::Notification m_instancesChanged;
 };
 }
