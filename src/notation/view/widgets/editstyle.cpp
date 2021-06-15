@@ -1345,12 +1345,12 @@ QVariant EditStyle::getValue(StyleId idx)
             QTextEdit* te = qobject_cast<QTextEdit*>(sw.widget);
             return te->toPlainText();
         }
-    } else if (!strcmp("QPointF", type)) {
+    } else if (!strcmp("mu::PointF", type)) {
         OffsetSelect* cb = qobject_cast<OffsetSelect*>(sw.widget);
         if (cb) {
-            return cb->offset();
+            return mu::PointF::fromQPointF(cb->offset());
         } else {
-            qFatal("unhandled QPointF");
+            qFatal("unhandled mu::PointF");
         }
     } else if (!strcmp("Ms::Direction", type)) {
         QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
@@ -1454,10 +1454,10 @@ void EditStyle::setValues()
         } else if (!strcmp("Ms::Align", type)) {
             AlignSelect* as = qobject_cast<AlignSelect*>(sw.widget);
             as->setAlign(val.value<Ms::Align>());
-        } else if (!strcmp("QPointF", type)) {
+        } else if (!strcmp("mu::PointF", type)) {
             OffsetSelect* as = qobject_cast<OffsetSelect*>(sw.widget);
             if (as) {
-                as->setOffset(val.value<QPointF>());
+                as->setOffset(val.value<mu::PointF>().toQPointF());
             }
         } else {
             unhandledType(sw);
