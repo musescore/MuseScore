@@ -4704,6 +4704,25 @@ Note* MusicXMLParserPass2::note(const QString& partId,
         setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
         note->setVisible(hasHead && printObject);     // TODO also set the stem to invisible
 
+        if (mnd.calculatedDuration().isValid()
+            && mnd.specifiedDuration().isValid()
+            && mnd.calculatedDuration().isNotZero()
+            && mnd.calculatedDuration() != mnd.specifiedDuration()) {
+            // convert duration into note length
+            Fraction durationMult { (mnd.specifiedDuration() / mnd.calculatedDuration()).reduced() };
+            durationMult = (1000 * durationMult).reduced();
+            const int noteLen = durationMult.numerator() / durationMult.denominator();
+
+            NoteEventList nel;
+            NoteEvent ne;
+            ne.setLen(noteLen);
+            nel.push_back(ne);
+            note->setPlayEvents(nel);
+            if (c) {
+                c->setPlayEventType(PlayEventType::User);
+            }
+        }
+
         if (velocity > 0) {
             note->setVeloType(VeloType::USER_VAL);
             note->setVeloOffset(velocity);
