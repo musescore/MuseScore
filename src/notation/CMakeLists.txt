@@ -88,6 +88,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscznotationreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscznotationreader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/positionswriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/positionswriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationreadersregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationreadersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationwritersregister.cpp
