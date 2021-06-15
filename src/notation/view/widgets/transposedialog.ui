@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>483</height>
+    <height>517</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <widget class="QWidget" name="widget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QGroupBox" name="chromaticBox">
+       <widget class="mu::notation::RadioButtonGroupBox" name="chromaticBox">
         <property name="title">
          <string>Transpose Chromatically</string>
         </property>
@@ -27,7 +27,7 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QGroupBox" name="transposeByKey">
+          <widget class="mu::notation::RadioButtonGroupBox" name="transposeByKey">
            <property name="toolTip">
             <string>Transpose to key (specified at concert pitch)</string>
            </property>
@@ -157,7 +157,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="transposeByInterval">
+          <widget class="mu::notation::RadioButtonGroupBox" name="transposeByInterval">
            <property name="title">
             <string>By Interval</string>
            </property>
@@ -345,7 +345,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="diatonicBox">
+       <widget class="mu::notation::RadioButtonGroupBox" name="diatonicBox">
         <property name="title">
          <string>Transpose Diatonically</string>
         </property>
@@ -486,6 +486,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>mu::notation::RadioButtonGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>notation/view/widgets/radiobuttongroupbox.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>chromaticBox</tabstop>
   <tabstop>transposeByKey</tabstop>
