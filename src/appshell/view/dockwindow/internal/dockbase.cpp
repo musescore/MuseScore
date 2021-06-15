@@ -292,7 +292,7 @@ void DockBase::listenFloatingChanges()
     }
 
     connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::parentChanged, [this]() {
-        if (!m_dockWidget->parentItem()) {
+        if (!m_dockWidget || !m_dockWidget->parentItem()) {
             return;
         }
 
