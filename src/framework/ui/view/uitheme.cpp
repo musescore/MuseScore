@@ -24,6 +24,7 @@
 
 #include <QAbstractItemView>
 #include <QApplication>
+#include <QGroupBox>
 #include <QMenu>
 #include <QPalette>
 #include <QStyleFactory>
@@ -32,7 +33,6 @@
 #include <QVariant>
 
 #include "log.h"
-#include "uicomponents/view/widgets/radiobuttongroupbox.h"
 
 using namespace mu::ui;
 
@@ -534,7 +534,8 @@ QRect UiTheme::subControlRect(QStyle::ComplexControl control, const QStyleOption
             const bool checkable = option->subControls & QStyle::SC_GroupBoxCheckBox;
 
             if (checkable) {
-                const bool isRadioButtonGroupBox = qobject_cast<const uicomponents::RadioButtonGroupBox*>(widget);
+                const bool isRadioButtonGroupBox
+                    =widget && strcmp(widget->metaObject()->className(), "mu::uicomponents::RadioButtonGroupBox") == 0;
 
                 indicatorWidth = pixelMetric(isRadioButtonGroupBox ? PM_ExclusiveIndicatorWidth : PM_IndicatorWidth, option, widget);
                 indicatorHeight = pixelMetric(isRadioButtonGroupBox ? PM_ExclusiveIndicatorHeight : PM_IndicatorHeight, option, widget);
@@ -635,7 +636,8 @@ QSize UiTheme::sizeFromContents(QStyle::ContentsType type, const QStyleOption* o
         const bool checkable = groupBox && groupBox->isCheckable();
 
         if (checkable) {
-            const bool isRadioButtonGroupBox = qobject_cast<const uicomponents::RadioButtonGroupBox*>(groupBox);
+            const bool isRadioButtonGroupBox
+                =widget && strcmp(widget->metaObject()->className(), "mu::uicomponents::RadioButtonGroupBox") == 0;
 
             int pm = pixelMetric(isRadioButtonGroupBox ? PM_ExclusiveIndicatorHeight : PM_IndicatorHeight, option, widget);
             return commonStyleSize + QSize(0, std::max(pm, option->fontMetrics.height()));
@@ -662,6 +664,9 @@ QSize UiTheme::sizeFromContents(QStyle::ContentsType type, const QStyleOption* o
 int UiTheme::styleHint(QStyle::StyleHint hint, const QStyleOption* option, const QWidget* widget, QStyleHintReturn* returnData) const
 {
     switch (hint) {
+    case SH_DitherDisabledText:
+    case SH_EtchDisabledText:
+        return false;
     case SH_ItemView_ScrollMode:
         return QAbstractItemView::ScrollPerPixel;
     default:
