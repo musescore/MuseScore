@@ -25,6 +25,7 @@
 #include "modularity/imoduleexport.h"
 #include "progress.h"
 #include "system/iodevice.h"
+#include "progress.h"
 
 class QByteArray;
 class QUrl;
@@ -38,8 +39,8 @@ class IUploadingService : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUploadingService() = default;
 
-    virtual framework::ProgressChannel uploadScore(system::IODevice& scoreSourceDevice, const QString& title,
-                                                   const QUrl& sourceUrl = QUrl()) = 0;
+    virtual void uploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) = 0;
+    virtual framework::ProgressChannel progressChannel() const = 0;
 };
 }
 

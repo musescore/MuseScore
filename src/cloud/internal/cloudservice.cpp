@@ -177,7 +177,21 @@ void CloudService::onUserAuthorized()
     m_refreshToken = m_oauth2->refreshToken();
 
     saveTokens();
-    downloadUserInfo();
+
+    if (downloadUserInfo() == RequestStatus::Ok) {
+        m_onUserAuthorizedCallback();
+        m_onUserAuthorizedCallback = OnUserAuthorzedCallBack();
+    }
+}
+
+void CloudService::authorize(const OnUserAuthorzedCallBack& onUserAuthorizedCallback)
+{
+    if (m_userAuthorized.val) {
+        return;
+    }
+
+    m_onUserAuthorizedCallback = onUserAuthorizedCallback;
+    m_oauth2->grant();
 }
 
 QUrl CloudService::prepareUrlForRequest(QUrl apiUrl) const
@@ -237,11 +251,7 @@ CloudService::RequestStatus CloudService::downloadUserInfo()
 
 void CloudService::signIn()
 {
-    if (m_userAuthorized.val) {
-        return;
-    }
-
-    m_oauth2->grant();
+    authorize();
 }
 
 void CloudService::signOut()
@@ -290,11 +300,28 @@ void CloudService::setAccountInfo(const AccountInfo& info)
     m_userAuthorized.set(info.isValid());
 }
 
-ProgressChannel CloudService::uploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
+void CloudService::uploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
+{
+    if (!m_userAuthorized.val) {
+        authorize([this, &scoreSourceDevice, title, sourceUrl]() {
+            doUploadScore(scoreSourceDevice, title, sourceUrl);
+        });
+    };
+
+    if (doUploadScore(scoreSourceDevice, title, sourceUrl) != RequestStatus::UserUnauthorized) {
+        return;
+    }
+
+    if (updateTokens()) {
+        doUploadScore(scoreSourceDevice, title, sourceUrl);
+    }
+}
+
+CloudService::RequestStatus CloudService::doUploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
 {
     QUrl uploadUrl = prepareUrlForRequest(configuration()->uploadingApiUrl());
     if (uploadUrl.isEmpty()) {
-        return ProgressChannel();
+        return RequestStatus::Error;
     }
 
     int scoreId = scoreIdFromSourceUrl(sourceUrl);
@@ -337,5 +364,19 @@ ProgressChannel CloudService::uploadScore(system::IODevice& scoreSourceDevice, c
         ret = m_networkManager->post(uploadUrl, &device, &receivedData, headers());
     }
 
+    if (ret.code() == USER_UNAUTHORIZED_ERR_CODE) {
+        return RequestStatus::UserUnauthorized;
+    }
+
+    if (!ret) {
+        LOGE() << ret.toString();
+        return RequestStatus::Error;
+    }
+
+    return RequestStatus::Ok;
+}
+
+ProgressChannel CloudService::progressChannel() const
+{
     return m_networkManager->progressChannel();
 }

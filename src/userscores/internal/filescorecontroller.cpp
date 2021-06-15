@@ -239,6 +239,11 @@ void FileScoreController::saveOnline()
     QFile* file = new QFile(meta.filePath.toQString());
     file->open(QIODevice::ReadOnly);
 
+    ProgressChannel progressCh = uploadingService()->progressChannel();
+    progressCh.onReceive(this, [](const Progress& progress) {
+        LOGD() << "Uploading progress: " << progress.current << "/" << progress.total;
+    });
+
     uploadingService()->uploadScore(*file, meta.title, meta.source);
 }
 
