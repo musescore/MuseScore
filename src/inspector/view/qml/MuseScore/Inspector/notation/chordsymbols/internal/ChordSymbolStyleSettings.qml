@@ -28,46 +28,40 @@ FocusableItem {
     id: root
 
     property alias chordStylesModel: grid.model
-    height: 2*grid.cellHeight + 20
-    width: 2*grid.cellWidth + 20
+    height: grid.height
 
         Component {
             id: styleDelegate
-            Column{
-                FlatButton {
-                    id: button
-                    width: grid.cellWidth-10
-                    height: 55
-                    Text {
-                        text: styleName
-                        horizontalAlignment: button.horizontalCenter
-                        verticalAlignment: button.verticalCenter
-                        wrapMode: Text.Wrap
-                    }
-                    onClicked: {
-                        chordStylesModel.setChordStyle(styleName)
-                    }
-                }
+            FlatButton {
+                id: button
+                width: grid.cellWidth-5
+                height: grid.cellHeight-5
                 Text {
-                    id: label
-                    text: qsTr(styleName)
-                    width: grid.cellWidth-10
-                    height: 15
-                    horizontalAlignment: label.horizontalCenter
+                    text: styleName
+                    width: button.width
+                    height: button.height
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    wrapMode: Text.Wrap
+                }
+                onClicked: {
+                    chordStylesModel.setChordStyle(styleName)
+                    grid.currentIndex = index
                 }
             }
-
         }
 
         GridView {
             id: grid
-            anchors.left: root.left
-            anchors.right: root.right
             height: 2*cellHeight
             width: 2*cellWidth
             clip: true
-            cellWidth: 100
-            cellHeight: 80
+            cellWidth: 120
+            cellHeight: 60
             delegate: styleDelegate
+            highlight: Rectangle {
+                color: ui.theme.accentColor
+                radius: 3
+            }
         }
 }
