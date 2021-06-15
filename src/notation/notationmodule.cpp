@@ -97,8 +97,8 @@ void NotationModule::registerExports()
     readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());
 
     std::shared_ptr<INotationWritersRegister> writers = std::make_shared<NotationWritersRegister>();
-    writers->reg({ "segments_pos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::SEGMENT));
-    writers->reg({ "measures_pos" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE));
+    writers->reg({ "sposXML" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::SEGMENT));
+    writers->reg({ "mposXML" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE));
 
     ioc()->registerExport<INotationReadersRegister>(moduleName(), readers);
     ioc()->registerExport<INotationWritersRegister>(moduleName(), writers);
