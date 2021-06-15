@@ -3216,6 +3216,7 @@ void MusicXMLParserPass1::note(const QString& partId,
             else if (_e.name() == "lyric") {
                   const auto number = _e.attributes().value("number").toString();
                   _parts[partId].lyricNumberHandler().addNumber(number);
+                  _parts[partId].hasLyrics(true);
                   _e.skipCurrentElement();
                   }
             else if (_e.name() == "notations")

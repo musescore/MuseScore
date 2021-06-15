@@ -859,8 +859,11 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
             el->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
             }
 #endif
-      el->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
-      el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+      if (placement != "") {
+            el->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
+            el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+      }
+
 
       el->setTrack(el->isTempoText() ? 0 : track);    // TempoText must be in track 0
       Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
@@ -2490,6 +2493,8 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
       _placement = _e.attributes().value("placement").toString();
       int track = _pass1.trackForPart(partId);
+      bool isVocalStaff = _pass1.isVocalStaff(partId);
+      bool isExpressionText = false;
       //qDebug("direction track %d", track);
       QList<MusicXmlSpannerDesc> starts;
       QList<MusicXmlSpannerDesc> stops;
@@ -2574,6 +2579,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   if (_wordsText != "" || _metroText != "") {
                         t = new StaffText(_score);
                         t->setXmlText(_wordsText + _metroText);
+                        isExpressionText = _wordsText.contains("<i>") && _metroText.isEmpty();
                         }
                   else {
                         t = new RehearsalMark(_score);
@@ -2598,10 +2604,17 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         t->setFrameType(FrameType::SQUARE);
                         t->setFrameRound(0);
                         }
+
+                  QString wordsPlacement = placement();
+                  // Case-based defaults
+                  if (wordsPlacement.isEmpty()) {
+                        if (isVocalStaff) wordsPlacement = "above";
+                        else if (isExpressionText) wordsPlacement = "below";
+                        }
                   
                   if (isLikelyFingering()) {
                         _logger->logDebugInfo(QString("Inferring fingering: %1").arg(_wordsText));
-                        MusicXMLInferredFingering* inferredFingering = new MusicXMLInferredFingering(totalY(), t, _wordsText, track, placement(), measure, tick + _offset);
+                        MusicXMLInferredFingering* inferredFingering = new MusicXMLInferredFingering(totalY(), t, _wordsText, track, wordsPlacement, measure, tick + _offset);
                         inferredFingerings.push_back(inferredFingering);
                         }
                   else if (directionToDynamic()) {
@@ -2610,7 +2623,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   else {
                         // Add element to score later, after collecting all the others and sorting by default-y
                         // This allows default-y to be at least respected by the order of elements
-                        MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, t, track, placement(), measure, tick + _offset);
+                        MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, t, track, wordsPlacement, measure, tick + _offset);
                         delayedDirections.push_back(delayedDirection);
                         }
                   }
@@ -2650,9 +2663,14 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   dyn->setVelocity( dynaValue );
                   }
 
+            QString dynamicsPlacement = placement();
+            // Case-based defaults
+            if (dynamicsPlacement.isEmpty())
+                  dynamicsPlacement = isVocalStaff ? "above" : "below";
+
             // Add element to score later, after collecting all the others and sorting by default-y
             // This allows default-y to be at least respected by the order of elements
-            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, dyn, track, placement(), measure, tick + _offset);
+            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, dyn, track, dynamicsPlacement, measure, tick + _offset);
             delayedDirections.push_back(delayedDirection);
             }
 

@@ -166,6 +166,7 @@ public:
       int octaveShift(const QString& id, const int staff, const Fraction f) const;
       const CreditWordsList& credits() const { return _credits; }
       bool hasBeamingInfo() const { return _hasBeamingInfo; }
+      bool isVocalStaff(const QString& id) const { return _parts[id].isVocalStaff(); }
       static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75);
       QString supportsTranspose() const { return _supportsTranspose; }
       void addInferredTranspose(const QString& partId);
