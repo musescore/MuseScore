@@ -57,8 +57,8 @@ FocusScope {
 
     objectName: root.text
 
-    height: contentLoader.item.height + 14
-    width: (Boolean(text) ? Math.max(contentLoader.item.width + 32, prv.isVertical ? 132 : 0) : contentLoader.item.width + 16)
+    height: contentLoader.item.height + 11
+    width: (Boolean(text) ? Math.max(contentLoader.item.width + 32, prv.isVertical ? 132 : 0) : contentLoader.item.width + 12)
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
