@@ -24,22 +24,21 @@
 
 #include "../imultiinstancesprovider.h"
 
-#include <functional>
-#include <QEventLoop>
-#include <QTimer>
+#include "ipc/ipcchannel.h"
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "iinteractive.h"
 #include "async/asyncable.h"
-#include "ipc/ipcchannel.h"
+#include "userscores/ifilescorecontroller.h"
 
 namespace mu::mi {
 class MultiInstancesProvider : public IMultiInstancesProvider, public actions::Actionable, public async::Asyncable
 {
     INJECT(mi, actions::IActionsDispatcher, dispatcher)
     INJECT(mi, framework::IInteractive, interactive)
+    INJECT(mi, userscores::IFileScoreController, fileScoreController)
 
 public:
     MultiInstancesProvider() = default;
