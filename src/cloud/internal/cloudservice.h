@@ -55,7 +55,8 @@ public:
     ValCh<bool> userAuthorized() const override;
     ValCh<AccountInfo> accountInfo() const override;
 
-    framework::ProgressChannel uploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) override;
+    void uploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) override;
+    framework::ProgressChannel progressChannel() const override;
 
 private slots:
     void onUserAuthorized();
@@ -65,6 +66,9 @@ private:
     bool saveTokens();
     bool updateTokens();
     void clearTokens();
+
+    using OnUserAuthorzedCallBack = std::function<void()>;
+    void authorize(const OnUserAuthorzedCallBack& onUserAuthorizedCallback = OnUserAuthorzedCallBack());
 
     enum class RequestStatus {
         Ok,
@@ -76,6 +80,7 @@ private:
     network::RequestHeaders headers() const;
 
     RequestStatus downloadUserInfo();
+    RequestStatus doUploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl());
 
     void setAccountInfo(const AccountInfo& info);
 
@@ -88,6 +93,8 @@ private:
 
     QString m_accessToken;
     QString m_refreshToken;
+
+    OnUserAuthorzedCallBack m_onUserAuthorizedCallback;
 };
 }
 
