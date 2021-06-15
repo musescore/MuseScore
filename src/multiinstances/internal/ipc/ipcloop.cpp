@@ -21,6 +21,8 @@
  */
 #include "ipcloop.h"
 
+#include "log.h"
+
 using namespace mu::ipc;
 
 IpcLoop::IpcLoop()
@@ -33,6 +35,11 @@ IpcLoop::IpcLoop()
 
 Code IpcLoop::exec(int timeout)
 {
+    if (m_timer.isActive()) {
+        LOGE() << "already running";
+        return Code::Undefined;
+    }
+
     m_timer.start(timeout);
     return static_cast<Code>(m_loop.exec());
 }
