@@ -223,28 +223,37 @@ void FileScoreController::saveOnline()
         return;
     }
 
-    /*
-    QBuffer* scoreData = new QBuffer();
-    scoreData->open(QIODevice::ReadWrite);
+    std::shared_ptr<QBuffer> scoreData = std::make_shared<QBuffer>();
+    scoreData->open(QIODevice::WriteOnly);
 
     Ret ret = master->writeToDevice(*scoreData);
 
     if (!ret) {
         LOGE() << ret.toString();
         return;
-    }*/
+    }
 
-    Meta meta = master->metaInfo();
-
-    QFile* file = new QFile(meta.filePath.toQString());
-    file->open(QIODevice::ReadOnly);
+    scoreData->close();
+    scoreData->open(QIODevice::ReadOnly);
 
     ProgressChannel progressCh = uploadingService()->progressChannel();
     progressCh.onReceive(this, [](const Progress& progress) {
         LOGD() << "Uploading progress: " << progress.current << "/" << progress.total;
-    });
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
 
-    uploadingService()->uploadScore(*file, meta.title, meta.source);
+    async::Channel<QUrl> sourceUrlCh = uploadingService()->sourceUrlReceived();
+    sourceUrlCh.onReceive(this, [this, master, scoreData](const QUrl& url) {
+        LOGD() << "Source url received: " << url;
+
+        Meta meta = master->metaInfo();
+        meta.source = url.toString();
+        master->setMetaInfo(meta);
+
+        saveScore();
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
+
+    Meta meta = master->metaInfo();
+    uploadingService()->uploadScore(*scoreData, meta.title, meta.source);
 }
 
 void FileScoreController::importPdf()

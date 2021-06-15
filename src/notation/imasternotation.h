@@ -38,6 +38,7 @@ public:
     virtual INotationPtr notation() = 0;
 
     virtual Meta metaInfo() const = 0;
+    virtual void setMetaInfo(const Meta& meta) = 0;
 
     virtual Ret load(const io::path& path) = 0;
     virtual io::path path() const = 0;

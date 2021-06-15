@@ -40,6 +40,8 @@ public:
     virtual ~IUploadingService() = default;
 
     virtual void uploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) = 0;
+
+    virtual async::Channel<QUrl> sourceUrlReceived() const = 0;
     virtual framework::ProgressChannel progressChannel() const = 0;
 };
 }

@@ -26,12 +26,12 @@
 
 #include <QOAuth2AuthorizationCodeFlow>
 #include <QOAuthHttpServerReplyHandler>
-#include <QDesktopServices>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QUrlQuery>
 #include <QBuffer>
 #include <QHttpMultiPart>
+#include <QRandomGenerator>
 
 using namespace mu::cloud;
 using namespace mu::network;
@@ -72,23 +72,15 @@ void CloudService::init()
     m_oauth2->setAccessTokenUrl(configuration()->accessTokenUrl());
     m_oauth2->setReplyHandler(m_replyHandler);
 
-    connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, &QDesktopServices::openUrl);
+    connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, this, &CloudService::openUrl);
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::granted, this, &CloudService::onUserAuthorized);
 
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::error, [](const QString& error, const QString& errorDescription, const QUrl& uri) {
         LOGE() << "Error during authorization: " << error << "\n Description: " << errorDescription << "\n URI: " << uri.toString();
     });
 
-    if (!readTokens()) {
-        return;
-    }
-
-    if (downloadUserInfo() != RequestStatus::UserUnauthorized) {
-        return;
-    }
-
-    if (updateTokens()) {
-        downloadUserInfo();
+    if (readTokens()) {
+        executeRequest([this]() { return downloadUserInfo(); });
     }
 }
 
@@ -180,11 +172,11 @@ void CloudService::onUserAuthorized()
 
     if (downloadUserInfo() == RequestStatus::Ok) {
         m_onUserAuthorizedCallback();
-        m_onUserAuthorizedCallback = OnUserAuthorzedCallBack();
+        m_onUserAuthorizedCallback = OnUserAuthorizedCallback();
     }
 }
 
-void CloudService::authorize(const OnUserAuthorzedCallBack& onUserAuthorizedCallback)
+void CloudService::authorize(const OnUserAuthorizedCallback& onUserAuthorizedCallback)
 {
     if (m_userAuthorized.val) {
         return;
@@ -302,19 +294,16 @@ void CloudService::setAccountInfo(const AccountInfo& info)
 
 void CloudService::uploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
 {
-    if (!m_userAuthorized.val) {
-        authorize([this, &scoreSourceDevice, title, sourceUrl]() {
-            doUploadScore(scoreSourceDevice, title, sourceUrl);
-        });
+    auto uploadCallback = [this, &scoreSourceDevice, title, sourceUrl]() {
+        return doUploadScore(scoreSourceDevice, title, sourceUrl);
     };
 
-    if (doUploadScore(scoreSourceDevice, title, sourceUrl) != RequestStatus::UserUnauthorized) {
+    if (!m_userAuthorized.val) {
+        authorize(uploadCallback);
         return;
     }
 
-    if (updateTokens()) {
-        doUploadScore(scoreSourceDevice, title, sourceUrl);
-    }
+    executeRequest(uploadCallback);
 }
 
 CloudService::RequestStatus CloudService::doUploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
@@ -327,36 +316,37 @@ CloudService::RequestStatus CloudService::doUploadScore(system::IODevice& scoreS
     int scoreId = scoreIdFromSourceUrl(sourceUrl);
     bool isScoreAlreadyUploaded = scoreId != INVALID_SCORE_ID;
 
-    QHttpMultiPart* multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+    QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
 
     QHttpPart filePart;
     filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
-    QString contentDisposition = QString("form-data; name=\"score_data\"; filename=\"temp_%1.mscz\"").arg(qrand() % 100000);
+    int fileNameNumber = QRandomGenerator::global()->generate() % 100000;
+    QString contentDisposition = QString("form-data; name=\"score_data\"; filename=\"temp_%1.mscz\"").arg(fileNameNumber);
     filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
 
     filePart.setBodyDevice(&scoreSourceDevice);
-    multiPart->append(filePart);
+    multiPart.append(filePart);
 
     if (isScoreAlreadyUploaded) {
         QHttpPart scoreIdPart;
         scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
         scoreIdPart.setBody(QString::number(scoreId).toLatin1());
-        multiPart->append(scoreIdPart);
+        multiPart.append(scoreIdPart);
     }
 
     QHttpPart titlePart;
     titlePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"title\""));
     titlePart.setBody(title.toUtf8());
-    multiPart->append(titlePart);
+    multiPart.append(titlePart);
 
     QHttpPart licensePart;
     licensePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"license\""));
     licensePart.setBody("cc-by");
-    multiPart->append(licensePart);
+    multiPart.append(licensePart);
 
     Ret ret(true);
     QBuffer receivedData;
-    OutgoingDevice device(multiPart);
+    OutgoingDevice device(&multiPart);
 
     if (isScoreAlreadyUploaded) { // score exists, update
         ret = m_networkManager->put(uploadUrl, &device, &receivedData, headers());
@@ -373,10 +363,44 @@ CloudService::RequestStatus CloudService::doUploadScore(system::IODevice& scoreS
         return RequestStatus::Error;
     }
 
+    QJsonObject scoreInfo = QJsonDocument::fromJson(receivedData.data()).object();
+    QUrl newSourceUrl = QUrl(scoreInfo.value("permalink").toString());
+    QUrl editUrl = QUrl(scoreInfo.value("edit_url").toString());
+
+    if (newSourceUrl.isValid()) {
+        m_sourceUrlReceived.send(newSourceUrl);
+    }
+
+    openUrl(editUrl);
+
     return RequestStatus::Ok;
+}
+
+mu::async::Channel<QUrl> CloudService::sourceUrlReceived() const
+{
+    return m_sourceUrlReceived;
 }
 
 ProgressChannel CloudService::progressChannel() const
 {
     return m_networkManager->progressChannel();
+}
+
+void CloudService::executeRequest(const RequestCallback& requestCallback)
+{
+    if (requestCallback() != RequestStatus::UserUnauthorized) {
+        return;
+    }
+
+    if (updateTokens()) {
+        requestCallback();
+    }
+}
+
+void CloudService::openUrl(const QUrl& url)
+{
+    Ret ret = interactive()->openUrl(url.toString().toStdString());
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
 }

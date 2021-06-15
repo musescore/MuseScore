@@ -48,6 +48,7 @@ public:
     INotationPtr notation() override;
 
     Meta metaInfo() const override;
+    void setMetaInfo(const Meta& meta) override;
 
     Ret load(const io::path& path) override;
     io::path path() const override;
