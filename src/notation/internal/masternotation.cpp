@@ -71,6 +71,11 @@ Meta MasterNotation::metaInfo() const
     return meta;
 }
 
+void MasterNotation::setMetaInfo(const Meta& meta)
+{
+    Notation::setMetaInfo(meta);
+}
+
 mu::Ret MasterNotation::load(const io::path& path)
 {
     TRACEFUNC;
