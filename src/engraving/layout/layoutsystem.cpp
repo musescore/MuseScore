@@ -1027,6 +1027,29 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     }
 
     //-------------------------------------------------------------
+    // FretDiagram
+    //-------------------------------------------------------------
+
+    if (hasFretDiagram) {
+        for (const Segment* s : sl) {
+            for (EngravingItem* e : s->annotations()) {
+                if (e->isFretDiagram()) {
+                    e->layout();
+                }
+            }
+        }
+
+        //-------------------------------------------------------------
+        // Harmony, 2nd place
+        // We have FretDiagrams, we want the Harmony above this and
+        // above the volta.
+        //-------------------------------------------------------------
+
+        LayoutHarmonies::layoutHarmonies(sl);
+        LayoutHarmonies::alignHarmonies(system, sl, false, options.maxFretShiftAbove, options.maxFretShiftBelow);
+    }
+
+    //-------------------------------------------------------------
     // TempoText
     //-------------------------------------------------------------
 
@@ -1084,29 +1107,6 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
             voltaSegments.erase(voltaSegments.begin(), voltaSegments.begin() + idx);
         }
-    }
-
-    //-------------------------------------------------------------
-    // FretDiagram
-    //-------------------------------------------------------------
-
-    if (hasFretDiagram) {
-        for (const Segment* s : sl) {
-            for (EngravingItem* e : s->annotations()) {
-                if (e->isFretDiagram()) {
-                    e->layout();
-                }
-            }
-        }
-
-        //-------------------------------------------------------------
-        // Harmony, 2nd place
-        // We have FretDiagrams, we want the Harmony above this and
-        // above the volta.
-        //-------------------------------------------------------------
-
-        LayoutHarmonies::layoutHarmonies(sl);
-        LayoutHarmonies::alignHarmonies(system, sl, false, options.maxFretShiftAbove, options.maxFretShiftBelow);
     }
 
     //-------------------------------------------------------------
