@@ -90,17 +90,16 @@ mu::async::Notification IpcSocket::disconected()
     return m_disconected;
 }
 
-bool IpcSocket::send(const Msg& msg)
+bool IpcSocket::send(Msg msg)
 {
     IF_ASSERT_FAILED(m_socket) {
         return false;
     }
 
-    Meta meta;
-    meta.id = selfID();
+    msg.srcID = selfID();
 
     QByteArray data;
-    serialize(meta, msg, data);
+    serialize(msg, data);
 
     IPCLOG() << data;
 
@@ -130,23 +129,22 @@ void IpcSocket::onDataReceived(const QByteArray& data)
 {
     IPCLOG() << "received: " << data;
 
-    Meta receivedMeta;
     Msg receivedMsg;
-    deserialize(data, receivedMeta, receivedMsg);
+    deserialize(data, receivedMsg);
 
     if (receivedMsg.method.startsWith(IPC_)) {
-        onIpcMsg(receivedMeta, receivedMsg);
+        onIpcMsg(receivedMsg);
         return;
     }
 
-    if (receivedMeta.id == selfID()) {
+    if (receivedMsg.srcID == selfID()) {
         return;
     }
 
     m_msgReceived.send(receivedMsg);
 }
 
-void IpcSocket::onIpcMsg(const Meta& receivedMeta, const Msg& receivedMsg)
+void IpcSocket::onIpcMsg(const Msg& receivedMsg)
 {
     IPCLOG() << "received ipc msg: " << receivedMsg.method;
 
@@ -162,7 +160,7 @@ void IpcSocket::onIpcMsg(const Meta& receivedMeta, const Msg& receivedMsg)
 
     // receive meta info
     if (receivedMsg.method == IPC_METAINFO) {
-        IPCLOG() << "received meta info from: " << receivedMeta.id << ", args: " << receivedMsg.args;
+        IPCLOG() << "received meta info from: " << receivedMsg.srcID << ", args: " << receivedMsg.args;
 
         IF_ASSERT_FAILED(!receivedMsg.args.isEmpty()) {
             return;
@@ -176,9 +174,8 @@ void IpcSocket::onIpcMsg(const Meta& receivedMeta, const Msg& receivedMsg)
         m_instances.clear();
         count += 1;
         for (int i = 1; i < count; ++i) {
-            Meta meta;
-            meta.id = receivedMsg.args.at(i);
-            m_instances.append(meta);
+            ID id = receivedMsg.args.at(i);
+            m_instances.append(id);
         }
 
         m_instancesChanged.notify();
@@ -190,7 +187,7 @@ mu::async::Channel<Msg> IpcSocket::msgReceived() const
     return m_msgReceived;
 }
 
-QList<Meta> IpcSocket::instances() const
+QList<ID> IpcSocket::instances() const
 {
     return m_instances;
 }

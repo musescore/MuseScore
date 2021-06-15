@@ -27,16 +27,11 @@
 
 #include <QLocalSocket>
 
-void mu::ipc::serialize(const Meta& meta, const Msg& msg, QByteArray& data)
+void mu::ipc::serialize(const Msg& msg, QByteArray& data)
 {
-    QJsonObject obj;
-
-    QJsonObject metaObj;
-    metaObj["id"] = meta.id;
-
-    obj["meta"] = metaObj;
-
     QJsonObject msgObj;
+
+    msgObj["srcID"] = msg.srcID;
     msgObj["destID"] = msg.destID;
     msgObj["type"] = static_cast<int>(msg.type);
     msgObj["method"] = msg.method;
@@ -47,20 +42,15 @@ void mu::ipc::serialize(const Meta& meta, const Msg& msg, QByteArray& data)
     }
     msgObj["args"] = argsArr;
 
-    obj["msg"] = msgObj;
-
-    data = QJsonDocument(obj).toJson(QJsonDocument::Compact);
+    data = QJsonDocument(msgObj).toJson(QJsonDocument::Compact);
 }
 
-void mu::ipc::deserialize(const QByteArray& data, Meta& meta, Msg& msg)
+void mu::ipc::deserialize(const QByteArray& data, Msg& msg)
 {
     QJsonDocument doc = QJsonDocument::fromJson(data);
-    QJsonObject obj = doc.object();
+    QJsonObject msgObj = doc.object();
 
-    QJsonObject metaObj = obj.value("meta").toObject();
-    meta.id = metaObj.value("id").toString();
-
-    QJsonObject msgObj = obj.value("msg").toObject();
+    msg.srcID =  msgObj.value("srcID").toString();
     msg.destID =  msgObj.value("destID").toString();
     msg.type = static_cast<MsgType>(msgObj.value("type").toInt());
     msg.method = msgObj.value("method").toString();

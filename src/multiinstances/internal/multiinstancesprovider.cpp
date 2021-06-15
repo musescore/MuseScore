@@ -46,82 +46,35 @@ void MultiInstancesProvider::init()
     m_ipcChannel = new IpcChannel();
     m_selfID = m_ipcChannel->selfID().toStdString();
 
-    m_ipcChannel->msgReceived().onReceive(this, [this](const Msg& msg) {
-        onMsg(msg);
-    });
-
-    m_ipcChannel->instancesChanged().onNotify(this, [this]() {
-        m_instancesChanged.notify();
-    });
+    m_ipcChannel->msgReceived().onReceive(this, [this](const Msg& msg) { onMsg(msg); });
+    m_ipcChannel->instancesChanged().onNotify(this, [this]() { m_instancesChanged.notify(); });
 
     m_ipcChannel->connect();
-
-    m_timeout.setSingleShot(true);
-    QObject::connect(&m_timeout, &QTimer::timeout, [this]() {
-        LOGI() << "timeout";
-        m_loop.quit();
-    });
 }
 
 void MultiInstancesProvider::onMsg(const Msg& msg)
 {
     LOGI() << msg.method;
 
-    if (m_onMsg) {
-        m_onMsg(msg);
-    }
-
     if (msg.type == MsgType::Request && msg.method == "score_is_opened") {
-        Msg answer;
-        answer.destID = ipc::BROADCAST_ID;
-        answer.type = MsgType::Response;
-        answer.method = "score_is_opened";
-        answer.args << QString::number(0);
-        m_ipcChannel->send(answer);
+        m_ipcChannel->response("score_is_opened", { QString::number(0) }, msg.srcID);
     }
 }
 
 bool MultiInstancesProvider::isScoreAlreadyOpened(const io::path& scorePath) const
 {
-    //! NOTE Temporary solution, I will think how do this better
+    int ret = 0;
+    m_ipcChannel->syncRequestToAll("score_is_opened", { scorePath.toQString() }, [&ret](const QStringList& args) {
+        IF_ASSERT_FAILED(args.count() > 0) {
+            return false;
+        }
+        ret = args.at(0).toInt();
+        if (ret) {
+            return true;
+        }
 
-    int total = m_ipcChannel->instances().count();
-    if (total < 2) {
-        LOGD() << "only one instance";
         return false;
-    }
-
-    Msg msg;
-    msg.destID = ipc::BROADCAST_ID;
-    msg.type = MsgType::Request;
-    msg.method = "score_is_opened";
-    msg.args << scorePath.toQString();
-
-    total -= 1;
-    int recived = 0;
-    bool ret = false;
-    m_onMsg = [this, total, &recived, &ret](const Msg& msg) {
-        if (!(msg.type == MsgType::Response && msg.method == "score_is_opened")) {
-            return;
-        }
-
-        ++recived;
-        ret = msg.args.at(0).toInt();
-        if (ret || recived == total) {
-            m_timeout.stop();
-            m_loop.quit();
-        }
-    };
-
-    LOGI() << "send Request, selfID: " << m_ipcChannel->selfID();
-
-    m_ipcChannel->send(msg);
-
-    m_timeout.start(500);
-    m_loop.exec();
-
-    m_onMsg = nullptr;
-
+    });
     return ret;
 }
 
@@ -138,10 +91,10 @@ const std::string& MultiInstancesProvider::selfID() const
 std::vector<InstanceMeta> MultiInstancesProvider::instances() const
 {
     std::vector<InstanceMeta> ret;
-    QList<Meta> ints = m_ipcChannel->instances();
-    for (const Meta& m : qAsConst(ints)) {
+    QList<ID> ints = m_ipcChannel->instances();
+    for (const ID& id : qAsConst(ints)) {
         InstanceMeta im;
-        im.id = m.id.toStdString();
+        im.id = id.toStdString();
         ret.push_back(std::move(im));
     }
 
