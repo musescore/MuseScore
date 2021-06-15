@@ -49,6 +49,7 @@ public:
     void init();
 
     Ret openScore(const io::path& scorePath) override;
+    bool isScoreOpened(const io::path& scorePath) const override;
 
 private:
     void setupConnections();

@@ -29,6 +29,7 @@ using namespace mu::mi;
 using namespace mu::ipc;
 
 static const mu::UriQuery DEV_SHOW_INFO_URI("musescore://devtools/multiinstances/info?sync=false&modal=false");
+static const QString METHOD_SCORE_IS_OPENED("score_is_opened");
 
 MultiInstancesProvider::~MultiInstancesProvider()
 {
@@ -56,15 +57,20 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
 {
     LOGI() << msg.method;
 
-    if (msg.type == MsgType::Request && msg.method == "score_is_opened") {
-        m_ipcChannel->response("score_is_opened", { QString::number(0) }, msg.srcID);
+#define CHECK_ARGS_COUNT(c) IF_ASSERT_FAILED(msg.args.count() >= c) { return; }
+
+    if (msg.type == MsgType::Request && msg.method == METHOD_SCORE_IS_OPENED) {
+        CHECK_ARGS_COUNT(1)
+        io::path scorePath = io::path(msg.args.at(0));
+        bool isOpened = fileScoreController()->isScoreOpened(scorePath);
+        m_ipcChannel->response(METHOD_SCORE_IS_OPENED, { QString::number(isOpened) }, msg.srcID);
     }
 }
 
 bool MultiInstancesProvider::isScoreAlreadyOpened(const io::path& scorePath) const
 {
     int ret = 0;
-    m_ipcChannel->syncRequestToAll("score_is_opened", { scorePath.toQString() }, [&ret](const QStringList& args) {
+    m_ipcChannel->syncRequestToAll(METHOD_SCORE_IS_OPENED, { scorePath.toQString() }, [&ret](const QStringList& args) {
         IF_ASSERT_FAILED(args.count() > 0) {
             return false;
         }

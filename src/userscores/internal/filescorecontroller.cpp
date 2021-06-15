@@ -81,6 +81,20 @@ Ret FileScoreController::openScore(const io::path& scorePath)
     return doOpenScore(scorePath);
 }
 
+bool FileScoreController::isScoreOpened(const io::path& scorePath) const
+{
+    auto notation = globalContext()->currentMasterNotation();
+    if (!notation) {
+        return false;
+    }
+
+    if (notation->path() == scorePath) {
+        return true;
+    }
+
+    return false;
+}
+
 void FileScoreController::openScore(const actions::ActionData& args)
 {
     io::path scorePath = args.count() > 0 ? args.arg<io::path>(0) : "";
