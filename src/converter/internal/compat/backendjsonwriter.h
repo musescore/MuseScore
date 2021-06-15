@@ -19,18 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_MSCZNOTATIONREADER_H
-#define MU_NOTATION_MSCZNOTATIONREADER_H
+#ifndef MU_CONVERTER_BACKENDJSONWRITER_H
+#define MU_CONVERTER_BACKENDJSONWRITER_H
 
-#include "../inotationreader.h"
+#include <QFile>
 
-namespace mu::notation {
-class MsczNotationReader : public INotationReader
+#include "io/path.h"
+
+namespace mu::converter {
+class BackendJsonWriter
 {
 public:
+    BackendJsonWriter(const io::path& filePath);
+    ~BackendJsonWriter();
 
-    Ret read(Ms::MasterScore* score, const io::path& path) override;
+    void addKey(const char* arrayName);
+    void addValue(const QByteArray& data, bool lastJsonElement = false, bool isJson = false);
+
+    void openArray();
+    void closeArray(bool lastJsonElement = false);
+
+private:
+    QFile jsonFormatFile;
 };
 }
 
-#endif // MU_NOTATION_MSCZNOTATIONREADER_H
+#endif // MU_CONVERTER_BACKENDJSONWRITER_H

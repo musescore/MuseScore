@@ -31,6 +31,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iconvertercontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/convertercontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/convertercontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/backendapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/backendapi.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/backendjsonwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/backendjsonwriter.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

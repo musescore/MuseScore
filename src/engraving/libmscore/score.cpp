@@ -2001,7 +2001,7 @@ void Score::setSelection(const Selection& s)
 //   getText
 //---------------------------------------------------------
 
-Text* Score::getText(Tid tid)
+Text* Score::getText(Tid tid) const
 {
     MeasureBase* m = first();
     if (m && m->isVBox()) {
