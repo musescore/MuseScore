@@ -1279,18 +1279,19 @@ void NotationUiActions::init()
         }
         m_actionCheckedChanged.send(actions);
 
-        m_controller->currentNotationInteraction()->scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
-            static const std::unordered_map<ScoreConfigType, std::string> configActions = {
-                { ScoreConfigType::ShowInvisibleElements, SHOW_INVISIBLE_CODE },
-                { ScoreConfigType::ShowUnprintableElements, SHOW_UNPRINTABLE_CODE },
-                { ScoreConfigType::ShowFrames, SHOW_FRAMES_CODE },
-                { ScoreConfigType::ShowPageMargins, SHOW_PAGEBORDERS_CODE },
-                { ScoreConfigType::MarkIrregularMeasures, SHOW_IRREGULAR_CODE }
-            };
+        if (m_controller->currentNotationInteraction()) {
+            m_controller->currentNotationInteraction()->scoreConfigChanged().onReceive(this, [this](ScoreConfigType configType) {
+                static const std::unordered_map<ScoreConfigType, std::string> configActions = {
+                    { ScoreConfigType::ShowInvisibleElements, SHOW_INVISIBLE_CODE },
+                    { ScoreConfigType::ShowUnprintableElements, SHOW_UNPRINTABLE_CODE },
+                    { ScoreConfigType::ShowFrames, SHOW_FRAMES_CODE },
+                    { ScoreConfigType::ShowPageMargins, SHOW_PAGEBORDERS_CODE },
+                    { ScoreConfigType::MarkIrregularMeasures, SHOW_IRREGULAR_CODE }
+                };
 
-            m_actionCheckedChanged.send({ configActions.at(configType) });
-        });
-
+                m_actionCheckedChanged.send({ configActions.at(configType) });
+            });
+        }
         m_controller->currentNotationStyleChanged().onNotify(this, [this]() {
             m_actionCheckedChanged.send({ TOGGLE_CONCERT_PITCH_CODE });
         });
