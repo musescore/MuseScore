@@ -24,15 +24,13 @@
 
 #include "../inotationreader.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class MsczNotationReader : public INotationReader
 {
 public:
 
     Ret read(Ms::MasterScore* score, const io::path& path) override;
 };
-}
 }
 
 #endif // MU_NOTATION_MSCZNOTATIONREADER_H

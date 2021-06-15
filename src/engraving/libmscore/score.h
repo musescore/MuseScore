@@ -1019,7 +1019,7 @@ public:
 
     bool defaultsRead() const { return _defaultsRead; }
     void setDefaultsRead(bool b) { _defaultsRead = b; }
-    Text* getText(Tid subtype);
+    Text* getText(Tid subtype) const;
 
     bool isPalette() const { return _isPalette; }
     void setPaletteMode(bool palette) { _isPalette = palette; }
