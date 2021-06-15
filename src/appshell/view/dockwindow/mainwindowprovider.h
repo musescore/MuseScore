@@ -32,6 +32,9 @@ public:
     QMainWindow* qMainWindow() const override;
     QWindow* qWindow() const override;
 
+    void requestShowOnBack() override;
+    void requestShowOnFront() override;
+
     bool isFullScreen() const override;
     void toggleFullScreen() override;
     const QScreen* screen() const override;

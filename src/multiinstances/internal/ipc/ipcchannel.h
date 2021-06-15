@@ -52,9 +52,11 @@ public:
     bool send(const Msg& msg);
     async::Channel<Msg> msgReceived() const;
 
+    void response(const QString& method, const QStringList& args, const ID& destID);
+    void broadcast(const QString& method, const QStringList& args);
+
     using OnReceived = std::function<bool (const QStringList&)>;
     Code syncRequestToAll(const QString& method, const QStringList& args, const OnReceived& onReceived);
-    void response(const QString& method, const QStringList& args, const ID& destID);
 
     QList<ID> instances() const;
     async::Notification instancesChanged() const;

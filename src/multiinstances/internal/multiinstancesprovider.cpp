@@ -29,7 +29,8 @@ using namespace mu::mi;
 using namespace mu::ipc;
 
 static const mu::UriQuery DEV_SHOW_INFO_URI("musescore://devtools/multiinstances/info?sync=false&modal=false");
-static const QString METHOD_SCORE_IS_OPENED("score_is_opened");
+static const QString METHOD_SCORE_IS_OPENED("SCORE_IS_OPENED");
+static const QString METHOD_ACTIVATE_WINDOW_WITH_SCORE("ACTIVATE_WINDOW_WITH_SCORE");
 
 MultiInstancesProvider::~MultiInstancesProvider()
 {
@@ -60,10 +61,17 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
 #define CHECK_ARGS_COUNT(c) IF_ASSERT_FAILED(msg.args.count() >= c) { return; }
 
     if (msg.type == MsgType::Request && msg.method == METHOD_SCORE_IS_OPENED) {
-        CHECK_ARGS_COUNT(1)
+        CHECK_ARGS_COUNT(1);
         io::path scorePath = io::path(msg.args.at(0));
         bool isOpened = fileScoreController()->isScoreOpened(scorePath);
         m_ipcChannel->response(METHOD_SCORE_IS_OPENED, { QString::number(isOpened) }, msg.srcID);
+    } else if (msg.method == METHOD_ACTIVATE_WINDOW_WITH_SCORE) {
+        CHECK_ARGS_COUNT(1);
+        io::path scorePath = io::path(msg.args.at(0));
+        bool isOpened = fileScoreController()->isScoreOpened(scorePath);
+        if (isOpened) {
+            mainWindow()->requestShowOnFront();
+        }
     }
 }
 
@@ -86,7 +94,8 @@ bool MultiInstancesProvider::isScoreAlreadyOpened(const io::path& scorePath) con
 
 void MultiInstancesProvider::activateWindowForScore(const io::path& scorePath)
 {
-    Q_UNUSED(scorePath);
+    mainWindow()->requestShowOnBack();
+    m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_SCORE, { scorePath.toQString() });
 }
 
 const std::string& MultiInstancesProvider::selfID() const

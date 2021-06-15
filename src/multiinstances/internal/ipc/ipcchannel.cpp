@@ -61,6 +61,26 @@ bool IpcChannel::send(const Msg& msg)
     return m_selfSocket->send(msg);
 }
 
+void IpcChannel::response(const QString& method, const QStringList& args, const ID& destID)
+{
+    Msg res;
+    res.destID = destID;
+    res.type = MsgType::Response;
+    res.method = method;
+    res.args = args;
+    send(res);
+}
+
+void IpcChannel::broadcast(const QString& method, const QStringList& args)
+{
+    Msg res;
+    res.destID = BROADCAST_ID;
+    res.type = MsgType::Notify;
+    res.method = method;
+    res.args = args;
+    send(res);
+}
+
 Code IpcChannel::syncRequestToAll(const QString& method, const QStringList& args, const OnReceived& onReceived)
 {
     IF_ASSERT_FAILED(onReceived) {
@@ -92,7 +112,7 @@ Code IpcChannel::syncRequestToAll(const QString& method, const QStringList& args
         }
 
         if (recived == total) {
-            loop.exit(Code::AllRecevied);
+            loop.exit(Code::AllAnswered);
         }
     };
 
@@ -103,22 +123,7 @@ Code IpcChannel::syncRequestToAll(const QString& method, const QStringList& args
 
     m_msgCallback = nullptr;
 
-    //! NOTE
-    //! 0 - success
-    //! 1 - timeout
-    //! 2 - all recevied
-    //! TODO Add code enum (or Ret)
     return code;
-}
-
-void IpcChannel::response(const QString& method, const QStringList& args, const ID& destID)
-{
-    Msg res;
-    res.destID = destID;
-    res.type = MsgType::Response;
-    res.method = method;
-    res.args = args;
-    send(res);
 }
 
 void IpcChannel::onSocketMsgReceived(const Msg& msg)
