@@ -225,17 +225,22 @@ int AppShell::run(int argc, char** argv)
 
 int AppShell::processConverter(const CommandLineController::ConverterTask& task)
 {
-    Ret ret;
-    if (task.isBatchMode) {
+    Ret ret = make_ret(Ret::Code::Ok);
+
+    switch (task.type) {
+    case CommandLineController::ConvertType::Batch:
         ret = converter()->batchConvert(task.inputFile);
-        if (!ret) {
-            LOGE() << "failed batch convert, error: " << ret.toString();
-        }
-    } else {
+        break;
+    case CommandLineController::ConvertType::File:
         ret = converter()->fileConvert(task.inputFile, task.outputFile);
-        if (!ret) {
-            LOGE() << "failed file convert, error: " << ret.toString();
-        }
+        break;
+    case CommandLineController::ConvertType::ExportScoreMedia:
+        ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, task.data.toString().toStdString());
+        break;
+    }
+
+    if (!ret) {
+        LOGE() << "failed convert, error: " << ret.toString();
     }
 
     return ret.code();
