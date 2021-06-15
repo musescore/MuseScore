@@ -48,7 +48,7 @@ enum class Code {
     Undefined = -1,
     Success = 0,
     Timeout,
-    AllRecevied
+    AllAnswered
 };
 
 enum class MsgType {
@@ -66,11 +66,7 @@ struct Msg
     QString method;
     QStringList args;
 
-        << << << < HEAD
-        bool isValid() const { return type != MsgType::Undefined && !method.isEmpty(); }
-        ==
-        == ===bool isValid() const { return !method.isEmpty(); }
-        >> >> >> > moved ipc server to separated thread
+    bool isValid() const { return type != MsgType::Undefined && !method.isEmpty(); }
 };
 
 static void serialize(const Msg& msg, QByteArray& data);

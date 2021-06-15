@@ -87,6 +87,7 @@ bool FileScoreController::isScoreOpened(const io::path& scorePath) const
         return false;
     }
 
+    LOGD() << "notation->path: " << notation->path() << ", check path: " << scorePath;
     if (notation->path() == scorePath) {
         return true;
     }

@@ -26,6 +26,8 @@
 
 #include "thirdparty/KDDockWidgets/src/private/DockRegistry_p.h"
 
+#include "log.h"
+
 using namespace mu::dock;
 using namespace mu::async;
 
@@ -49,6 +51,32 @@ QMainWindow* MainWindowProvider::qMainWindow() const
 QWindow* MainWindowProvider::qWindow() const
 {
     return mainWindow();
+}
+
+void MainWindowProvider::requestShowOnBack()
+{
+    QWindow* w = mainWindow();
+    w->lower();
+}
+
+void MainWindowProvider::requestShowOnFront()
+{
+    struct Holder {
+        QMetaObject::Connection conn;
+    };
+
+    QWindow* w = mainWindow();
+    Holder* h = new Holder();
+    h->conn = QObject::connect(w, &QWindow::activeChanged, [w, h]() {
+        if (w->isActive()) {
+            w->raise();
+        }
+
+        QObject::disconnect(h->conn);
+        delete h;
+    });
+    w->show();
+    w->requestActivate();
 }
 
 bool MainWindowProvider::isFullScreen() const
