@@ -179,8 +179,7 @@ void NotationNoteInput::toggleNoteInputMethod(NoteInputMethod method)
 
 void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
 {
-    Ms::EditData editData;
-    editData.view = m_scoreCallbacks;
+    Ms::EditData editData(m_scoreCallbacks);
 
     startEdit();
     int inote = static_cast<int>(noteName);
@@ -194,11 +193,10 @@ void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
 
 void NotationNoteInput::padNote(const Pad& pad)
 {
-    Ms::EditData ed;
-    ed.view = m_scoreCallbacks;
+    Ms::EditData editData(m_scoreCallbacks);
 
     startEdit();
-    score()->padToggle(pad, ed);
+    score()->padToggle(pad, editData);
     apply();
 
     notifyAboutStateChanged();
@@ -215,8 +213,7 @@ void NotationNoteInput::putNote(const QPointF& pos, bool replace, bool insert)
 
 void NotationNoteInput::setAccidental(AccidentalType accidentalType)
 {
-    Ms::EditData editData;
-    editData.view = m_scoreCallbacks;
+    Ms::EditData editData(m_scoreCallbacks);
 
     score()->toggleAccidental(accidentalType, editData);
 

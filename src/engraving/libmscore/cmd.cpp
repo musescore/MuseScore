@@ -1814,7 +1814,7 @@ void Score::toggleAccidental(AccidentalType at, const EditData& ed)
         _is.setRest(false);
     } else {
         if (selection().isNone()) {
-            ed.view->startNoteEntryMode();
+            ed.view()->startNoteEntryMode();
             _is.setAccidentalType(at);
             _is.setDuration(TDuration::DurationType::V_QUARTER);
             _is.setRest(false);
@@ -3894,8 +3894,7 @@ void Score::cmdPitchDown()
     if (el && el->isLyrics()) {
         cmdMoveLyrics(toLyrics(el), Direction::DOWN);
     } else if (el && (el->isArticulation() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, QVariant::fromValue(el->offset() + PointF(0.0,
-                                                                                      MScore::nudgeStep* el->spatium())),
+        el->undoChangeProperty(Pid::OFFSET, QVariant::fromValue(el->offset() + PointF(0.0, MScore::nudgeStep* el->spatium())),
                                PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
         cmdMoveRest(toRest(el), Direction::DOWN);
@@ -4319,11 +4318,11 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
             }
         }
     }
-    ed.view->startNoteEntryMode();
+    ed.view()->startNoteEntryMode();
 
     int step = octave * 7 + note;
     cmdAddPitch(step,  addFlag, insert);
-    ed.view->adjustCanvasPosition(is.cr(), false);
+    ed.view()->adjustCanvasPosition(is.cr(), false);
 }
 
 void Score::cmdAddPitch(int step, bool addFlag, bool insert)

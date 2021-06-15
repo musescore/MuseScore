@@ -419,9 +419,9 @@ bool TextBase::edit(EditData& ed)
             if (ed.modifiers & CONTROL_MODIFIER) {
                 s = QString(QChar(0xa0));               // non-breaking space
             } else {
-                if (isFingering() && ed.view) {
+                if (isFingering() && ed.view()) {
                     score()->endCmd();
-                    ed.view->textTab(ed.modifiers & Qt::ShiftModifier);
+                    ed.view()->textTab(ed.modifiers & Qt::ShiftModifier);
                     return true;
                 }
                 s = " ";

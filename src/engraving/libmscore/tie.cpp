@@ -141,7 +141,7 @@ void TieSegment::changeAnchor(EditData& ed, Element* element)
         TieSegment* newSegment = toTieSegment(ed.curGrip == Grip::END ? ss.back() : ss.front());
         score()->endCmd();
         score()->startCmd();
-        ed.view->startEdit(newSegment, ed.curGrip);
+        ed.view()->startEdit(newSegment, ed.curGrip);
         triggerLayoutAll();
     }
 }
@@ -162,14 +162,14 @@ void TieSegment::editDrag(EditData& ed)
         //
         if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
             Spanner* spanner = tie();
-            Element* e = ed.view->elementNear(ed.pos);
+            Element* e = ed.view()->elementNear(ed.pos);
             Note* note = (e && e->isNote()) ? toNote(e) : nullptr;
             if (note && ((g == Grip::END && note->tick() > tie()->tick()) || (g == Grip::START && note->tick() < tie()->tick2()))) {
                 if (g == Grip::END) {
                     Tie* tie = toTie(spanner);
                     if (tie->startNote()->pitch() == note->pitch()
                         && tie->startNote()->chord()->tick() < note->chord()->tick()) {
-                        ed.view->setDropTarget(note);
+                        ed.view()->setDropTarget(note);
                         if (note != tie->endNote()) {
                             changeAnchor(ed, note);
                             return;
@@ -177,7 +177,7 @@ void TieSegment::editDrag(EditData& ed)
                     }
                 }
             } else {
-                ed.view->setDropTarget(0);
+                ed.view()->setDropTarget(0);
             }
         }
     } else if (g == Grip::BEZIER1 || g == Grip::BEZIER2) {

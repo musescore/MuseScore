@@ -35,6 +35,7 @@
 
 #include "libmscore/element.h"
 #include "libmscore/elementgroup.h"
+#include "scorecallbacks.h"
 
 namespace Ms {
 class ShadowNote;
@@ -256,6 +257,7 @@ private:
         Element* dropTarget = nullptr;
     };
 
+    ScoreCallbacks m_scoreCallbacks;
     Notation* m_notation = nullptr;
     INotationUndoStackPtr m_undoStack;
 
