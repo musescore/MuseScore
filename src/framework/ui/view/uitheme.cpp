@@ -32,7 +32,7 @@
 #include <QVariant>
 
 #include "log.h"
-#include "notation/view/widgets/radiobuttongroupbox.h"
+#include "uicomponents/view/widgets/radiobuttongroupbox.h"
 
 using namespace mu::ui;
 
@@ -534,11 +534,12 @@ QRect UiTheme::subControlRect(QStyle::ComplexControl control, const QStyleOption
             const bool checkable = option->subControls & QStyle::SC_GroupBoxCheckBox;
 
             if (checkable) {
-                auto radioButtonGroupBox = qobject_cast<const notation::RadioButtonGroupBox*>(widget);
+                const bool isRadioButtonGroupBox = qobject_cast<const uicomponents::RadioButtonGroupBox*>(widget);
 
-                indicatorWidth = pixelMetric(radioButtonGroupBox ? PM_ExclusiveIndicatorWidth : PM_IndicatorWidth, option, widget);
-                indicatorHeight = pixelMetric(radioButtonGroupBox ? PM_ExclusiveIndicatorHeight : PM_IndicatorHeight, option, widget);
-                indicatorSpacing = pixelMetric(radioButtonGroupBox ? PM_RadioButtonLabelSpacing : PM_CheckBoxLabelSpacing, option, widget);
+                indicatorWidth = pixelMetric(isRadioButtonGroupBox ? PM_ExclusiveIndicatorWidth : PM_IndicatorWidth, option, widget);
+                indicatorHeight = pixelMetric(isRadioButtonGroupBox ? PM_ExclusiveIndicatorHeight : PM_IndicatorHeight, option, widget);
+                indicatorSpacing
+                    = pixelMetric(isRadioButtonGroupBox ? PM_RadioButtonLabelSpacing : PM_CheckBoxLabelSpacing, option, widget);
             }
 
             if (subControl == SC_GroupBoxFrame) {
@@ -634,9 +635,9 @@ QSize UiTheme::sizeFromContents(QStyle::ContentsType type, const QStyleOption* o
         const bool checkable = groupBox && groupBox->isCheckable();
 
         if (checkable) {
-            const notation::RadioButtonGroupBox* radioButtonGroupBox = qobject_cast<const notation::RadioButtonGroupBox*>(groupBox);
+            const bool isRadioButtonGroupBox = qobject_cast<const uicomponents::RadioButtonGroupBox*>(groupBox);
 
-            int pm = pixelMetric(radioButtonGroupBox ? PM_ExclusiveIndicatorHeight : PM_IndicatorHeight, option, widget);
+            int pm = pixelMetric(isRadioButtonGroupBox ? PM_ExclusiveIndicatorHeight : PM_IndicatorHeight, option, widget);
             return commonStyleSize + QSize(0, std::max(pm, option->fontMetrics.height()));
         }
 
