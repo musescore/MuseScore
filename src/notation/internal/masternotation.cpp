@@ -625,23 +625,17 @@ void MasterNotation::updateExcerpts()
 {
     ExcerptNotationList newExcerpts;
 
-    for (IExcerptNotationPtr excerpt : m_excerpts.val) {
-        if (!get_impl(excerpt)->excerpt()->isEmpty()) {
-            newExcerpts.push_back(excerpt);
-        }
-    }
-
     QList<Ms::Excerpt*> excerpts = score()->excerpts();
 
     for (Part* part: score()->parts()) {
-        bool isNewPart = true;
+        auto existing = std::find_if(m_excerpts.val.begin(), m_excerpts.val.end(), [part](auto e) {
+            return get_impl(e)->excerpt()->containsPart(part);
+        });
 
-        for (Ms::Excerpt* exceprt: excerpts) {
-            isNewPart &= !exceprt->containsPart(part);
-        }
-
-        if (isNewPart) {
+        if (existing == m_excerpts.val.end()) {
             newExcerpts.push_back(createExcerpt(part));
+        } else if (std::find(newExcerpts.begin(), newExcerpts.end(), *existing) == newExcerpts.end()) {
+            newExcerpts.push_back(*existing);
         }
     }
 
