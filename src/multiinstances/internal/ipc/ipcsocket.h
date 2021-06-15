@@ -43,17 +43,17 @@ public:
     bool connect(const QString& serverName);
     async::Notification disconected();
 
-    bool send(const Msg& msg);
+    bool send(Msg msg);
     async::Channel<Msg> msgReceived() const;
 
-    QList<Meta> instances() const;
+    QList<ID> instances() const;
     async::Notification instancesChanged() const;
 
 private:
 
     void onReadyRead();
     void onDataReceived(const QByteArray& data);
-    void onIpcMsg(const Meta& receivedMeta, const Msg& receivedMsg);
+    void onIpcMsg(const Msg& receivedMsg);
 
     mutable ID m_selfID = 0;
     IpcLock* m_lock = nullptr;
@@ -61,7 +61,7 @@ private:
     async::Notification m_disconected;
     async::Channel<Msg> m_msgReceived;
 
-    QList<Meta> m_instances;
+    QList<ID> m_instances;
     async::Notification m_instancesChanged;
 };
 }

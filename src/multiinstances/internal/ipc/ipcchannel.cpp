@@ -26,6 +26,9 @@
 #include "ipcsocket.h"
 #include "ipcserver.h"
 #include "ipclock.h"
+#include "ipcloop.h"
+
+#include "log.h"
 
 using namespace mu::ipc;
 
@@ -33,6 +36,7 @@ IpcChannel::IpcChannel()
 {
     m_selfSocket = new IpcSocket();
     m_selfSocket->disconected().onNotify(this, [this]() { onDisconected(); });
+    m_selfSocket->msgReceived().onReceive(this, [this](const Msg& msg) { onSocketMsgReceived(msg); });
 }
 
 IpcChannel::~IpcChannel()
@@ -57,9 +61,78 @@ bool IpcChannel::send(const Msg& msg)
     return m_selfSocket->send(msg);
 }
 
+Code IpcChannel::syncRequestToAll(const QString& method, const QStringList& args, const OnReceived& onReceived)
+{
+    IF_ASSERT_FAILED(onReceived) {
+        return Code::Undefined;
+    }
+
+    Msg msg;
+    msg.destID = ipc::BROADCAST_ID;
+    msg.type = MsgType::Request;
+    msg.method = method;
+    msg.args = args;
+
+    IpcLoop loop;
+
+    int total = m_selfSocket->instances().count();
+    total -= 1; //! NOTE Exclude itself
+    int recived = 0;
+
+    m_msgCallback = [method, total, &recived, &loop, onReceived](const Msg& msg) {
+        if (!(msg.type == MsgType::Response && msg.method == method)) {
+            return;
+        }
+
+        ++recived;
+        bool success = onReceived(msg.args);
+        if (success) {
+            loop.exit(Code::Success);
+            return;
+        }
+
+        if (recived == total) {
+            loop.exit(Code::AllRecevied);
+        }
+    };
+
+    send(msg);
+
+    Code code = loop.exec(500);
+    LOGD() << "ret code: " << int(code);
+
+    m_msgCallback = nullptr;
+
+    //! NOTE
+    //! 0 - success
+    //! 1 - timeout
+    //! 2 - all recevied
+    //! TODO Add code enum (or Ret)
+    return code;
+}
+
+void IpcChannel::response(const QString& method, const QStringList& args, const ID& destID)
+{
+    Msg res;
+    res.destID = destID;
+    res.type = MsgType::Response;
+    res.method = method;
+    res.args = args;
+    send(res);
+}
+
+void IpcChannel::onSocketMsgReceived(const Msg& msg)
+{
+    if (m_msgCallback) {
+        m_msgCallback(msg);
+    }
+
+    m_msgReceived.send(msg);
+}
+
 mu::async::Channel<Msg> IpcChannel::msgReceived() const
 {
-    return m_selfSocket->msgReceived();
+    return m_msgReceived;
 }
 
 void IpcChannel::setupConnection()
@@ -94,7 +167,7 @@ void IpcChannel::onDisconected()
     });
 }
 
-QList<Meta> IpcChannel::instances() const
+QList<ID> IpcChannel::instances() const
 {
     return m_selfSocket->instances();
 }

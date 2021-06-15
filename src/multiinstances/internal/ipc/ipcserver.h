@@ -45,14 +45,14 @@ private:
 
     struct IncomingSocket
     {
-        Meta meta;
+        ID id;
         QLocalSocket* socket = nullptr;
     };
 
     void onIncomingReadyRead(QLocalSocket* socket);
-    void onIncomingInit(QLocalSocket* socket, const Meta& meta, const Msg& msg);
-    void onIncomingWhoIs(QLocalSocket* socket, const Meta& meta, const Msg& msg);
-    void onIncomingPing(QLocalSocket* socket, const Meta& meta, const Msg& msg);
+    void onIncomingInit(QLocalSocket* socket, const Msg& msg);
+    void onIncomingWhoIs(QLocalSocket* socket, const Msg& msg);
+    void onIncomingPing(QLocalSocket* socket, const Msg& msg);
 
     bool doSendToSocket(QLocalSocket* socket, const QByteArray& data);
     void sendToSocket(QLocalSocket* socket, const Msg& msg);
