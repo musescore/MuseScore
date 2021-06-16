@@ -146,6 +146,8 @@ void Settings::setValue(const Key& key, const Val& value)
         async::Channel<Val> channel = it->second;
         channel.send(value);
     }
+
+    multiInstancesProvider()->settingsSetValue(key.key, value);
 }
 
 void Settings::writeValue(const Key& key, const Val& value)
@@ -207,6 +209,8 @@ void Settings::beginTransaction()
 
     m_localSettings = m_items;
     m_isTransactionStarted = true;
+
+    multiInstancesProvider()->settingsBeginTransaction();
 }
 
 void Settings::commitTransaction()
@@ -229,6 +233,8 @@ void Settings::commitTransaction()
     }
 
     m_localSettings.clear();
+
+    multiInstancesProvider()->settingsCommitTransaction();
 }
 
 void Settings::rollbackTransaction()
@@ -246,6 +252,8 @@ void Settings::rollbackTransaction()
     }
 
     m_localSettings.clear();
+
+    multiInstancesProvider()->settingsRollbackTransaction();
 }
 
 Settings::Item& Settings::findItem(const Key& key) const

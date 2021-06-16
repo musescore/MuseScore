@@ -22,15 +22,21 @@
 #include "multiinstancesprovider.h"
 
 #include "uri.h"
-
+#include "settings.h"
 #include "log.h"
 
 using namespace mu::mi;
 using namespace mu::ipc;
+using namespace mu::framework;
 
 static const mu::UriQuery DEV_SHOW_INFO_URI("musescore://devtools/multiinstances/info?sync=false&modal=false");
 static const QString METHOD_SCORE_IS_OPENED("SCORE_IS_OPENED");
 static const QString METHOD_ACTIVATE_WINDOW_WITH_SCORE("ACTIVATE_WINDOW_WITH_SCORE");
+
+static const QString METHOD_SETTINGS_BEGIN_TRANSACTION("SETTINGS_BEGIN_TRANSACTION");
+static const QString METHOD_SETTINGS_COMMIT_TRANSACTION("SETTINGS_COMMIT_TRANSACTION");
+static const QString METHOD_SETTINGS_ROLLBACK_TRANSACTION("SETTINGS_ROLLBACK_TRANSACTION");
+static const QString METHOD_SETTINGS_SET_VALUE("SETTINGS_SET_VALUE");
 
 MultiInstancesProvider::~MultiInstancesProvider()
 {
@@ -60,6 +66,7 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
 
 #define CHECK_ARGS_COUNT(c) IF_ASSERT_FAILED(msg.args.count() >= c) { return; }
 
+    // Score opening
     if (msg.type == MsgType::Request && msg.method == METHOD_SCORE_IS_OPENED) {
         CHECK_ARGS_COUNT(1);
         io::path scorePath = io::path(msg.args.at(0));
@@ -72,6 +79,20 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
         if (isOpened) {
             mainWindow()->requestShowOnFront();
         }
+    }
+    // Settings
+    else if (msg.method == METHOD_SETTINGS_BEGIN_TRANSACTION) {
+        settings()->beginTransaction();
+    } else if (msg.method == METHOD_SETTINGS_COMMIT_TRANSACTION) {
+        settings()->commitTransaction();
+    } else if (msg.method == METHOD_SETTINGS_ROLLBACK_TRANSACTION) {
+        settings()->rollbackTransaction();
+    } else if (msg.method == METHOD_SETTINGS_SET_VALUE) {
+        CHECK_ARGS_COUNT(3);
+        Settings::Key key("", msg.args.at(0).toStdString());
+        Val val(msg.args.at(1).toStdString());
+        val.setType(static_cast<Val::Type>(msg.args.at(2).toInt()));
+        settings()->setValue(key, val);
     }
 }
 
@@ -96,6 +117,30 @@ void MultiInstancesProvider::activateWindowForScore(const io::path& scorePath)
 {
     mainWindow()->requestShowOnBack();
     m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_SCORE, { scorePath.toQString() });
+}
+
+void MultiInstancesProvider::settingsBeginTransaction()
+{
+    m_ipcChannel->broadcast(METHOD_SETTINGS_BEGIN_TRANSACTION);
+}
+
+void MultiInstancesProvider::settingsCommitTransaction()
+{
+    m_ipcChannel->broadcast(METHOD_SETTINGS_COMMIT_TRANSACTION);
+}
+
+void MultiInstancesProvider::settingsRollbackTransaction()
+{
+    m_ipcChannel->broadcast(METHOD_SETTINGS_ROLLBACK_TRANSACTION);
+}
+
+void MultiInstancesProvider::settingsSetValue(const std::string& key, const Val& value)
+{
+    QStringList args;
+    args << QString::fromStdString(key);
+    args << value.toQString();
+    args << QString::number(static_cast<int>(value.type()));
+    m_ipcChannel->broadcast(METHOD_SETTINGS_SET_VALUE, args);
 }
 
 const std::string& MultiInstancesProvider::selfID() const

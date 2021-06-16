@@ -51,6 +51,11 @@ public:
     bool isScoreAlreadyOpened(const io::path& scorePath) const override;
     void activateWindowForScore(const io::path& scorePath) override;
 
+    void settingsBeginTransaction() override;
+    void settingsCommitTransaction() override;
+    void settingsRollbackTransaction() override;
+    void settingsSetValue(const std::string& key, const Val& value) override;
+
     const std::string& selfID() const override;
     std::vector<InstanceMeta> instances() const override;
     async::Notification instancesChanged() const override;

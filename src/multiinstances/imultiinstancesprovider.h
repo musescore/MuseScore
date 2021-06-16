@@ -29,6 +29,7 @@
 #include "io/path.h"
 #include "mitypes.h"
 #include "async/notification.h"
+#include "val.h"
 
 namespace mu::mi {
 class IMultiInstancesProvider : MODULE_EXPORT_INTERFACE
@@ -37,8 +38,17 @@ class IMultiInstancesProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMultiInstancesProvider() = default;
 
+    // Score opening
     virtual bool isScoreAlreadyOpened(const io::path& scorePath) const = 0;
     virtual void activateWindowForScore(const io::path& scorePath) = 0;
+
+    // Settings
+    virtual bool isPreferencesAlreadyOpened() const = 0;
+    virtual bool activateWindowWithOpenedPreferences() const = 0;
+    virtual void settingsBeginTransaction() = 0;
+    virtual void settingsCommitTransaction() = 0;
+    virtual void settingsRollbackTransaction() = 0;
+    virtual void settingsSetValue(const std::string& key, const Val& value) = 0;
 
     //! NOTE Technical
     virtual const std::string& selfID() const = 0;
