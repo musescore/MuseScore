@@ -24,7 +24,7 @@
 
 #include "notation/inotationreader.h"
 
-namespace mu::iex::midiimport {
+namespace mu::iex::midi {
 class NotationMidiReader : public notation::INotationReader
 {
 public:

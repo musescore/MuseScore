@@ -19,28 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "midiimportconfiguration.h"
+#include "notationmidireader.h"
 
-#include "settings.h"
+#include "libmscore/score.h"
+#include "notation/notationerrors.h"
 
-#include "libmscore/mscore.h"
-
-using namespace mu::framework;
-using namespace mu::iex::midiimport;
-
-static const Settings::Key SHORTEST_NOTE_KEY("iex_midiimport", "io/midi/shortestNote");
-
-void MidiImportConfiguration::init()
-{
-    settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(Ms::MScore::division / 4));
+namespace Ms {
+extern Score::FileError importMidi(MasterScore*, const QString& name);
 }
 
-int MidiImportConfiguration::midiShortestNote() const
-{
-    return settings()->value(SHORTEST_NOTE_KEY).toInt();
-}
+using namespace mu::iex::midi;
 
-void MidiImportConfiguration::setMidiShortestNote(int ticks)
+mu::Ret NotationMidiReader::read(Ms::MasterScore* score, const io::path& path)
 {
-    settings()->setValue(SHORTEST_NOTE_KEY, Val(ticks));
+    Ms::Score::FileError err = Ms::importMidi(score, path.toQString());
+    return mu::notation::scoreFileErrorToRet(err);
 }
