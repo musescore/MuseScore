@@ -1437,6 +1437,19 @@ SpannerSet MusicXMLParserPass2::findIncompleteSpannersAtPartEnd()
       return res;
       }
 
+
+//---------------------------------------------------------
+//   isLikelyIncorrectPartName
+//---------------------------------------------------------
+/**
+ Sibelius exports part names of the form "P#" rather than
+ specifying print-object="no". This finds those.
+ */
+
+static bool isLikelyIncorrectPartName(const QString& partName) {
+      return partName.contains(QRegularExpression("^P[0-9]+$"));      
+      } 
+
 //---------------------------------------------------------
 // multi-measure rest state handling
 //---------------------------------------------------------
@@ -1653,7 +1666,7 @@ void MusicXMLParserPass2::part()
       // set the part name
       auto mxmlPart = _pass1.getMusicXmlPart(id);
       _pass1.getPart(id)->setPartName(mxmlPart.getName());
-      if (mxmlPart.getPrintName())
+      if (mxmlPart.getPrintName() && !isLikelyIncorrectPartName(mxmlPart.getName()))
             _pass1.getPart(id)->setLongName(mxmlPart.getName());
       else
             _pass1.getPart(id)->setLongName("");
