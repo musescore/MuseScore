@@ -234,6 +234,8 @@ DockPage {
 
             tabifyPanel: pianoRollPanel
 
+            visible: false
+
             Rectangle {
                 anchors.fill: parent
                 color: ui.theme.backgroundPrimaryColor
@@ -256,6 +258,8 @@ DockPage {
             height: 200
             minimumHeight: 100
             maximumHeight: 300
+
+            visible: false
 
             Rectangle {
                 anchors.fill: parent
