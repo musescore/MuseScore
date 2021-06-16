@@ -30,6 +30,7 @@ namespace mu::dock {
 enum class DockType {
     Undefined = -1,
     Panel,
+    PanelDockingHolder,
     ToolBar,
     ToolBarDockingHolder,
     StatusBar,

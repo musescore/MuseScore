@@ -54,6 +54,9 @@ public:
     virtual void requestShowToolBarDockingHolder(const QPoint& globalPos) = 0;
     virtual async::Channel<QPoint> showToolBarDockingHolderRequested() const = 0;
 
+    virtual void requestShowPanelDockingHolder(const QPoint& globalPos) = 0;
+    virtual async::Channel<QPoint> showPanelDockingHolderRequested() const = 0;
+
     virtual void requestHideAllDockingHolders() = 0;
     virtual async::Notification hideAllDockingHoldersRequested() const = 0;
 };
