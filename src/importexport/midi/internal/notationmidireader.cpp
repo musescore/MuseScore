@@ -19,20 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_MIDIIMPORTCONFIGURATION_H
-#define MU_IMPORTEXPORT_MIDIIMPORTCONFIGURATION_H
+#include "notationmidireader.h"
 
-#include "../imidiimportconfiguration.h"
+#include "libmscore/score.h"
+#include "notation/notationerrors.h"
 
-namespace mu::iex::midiimport {
-class MidiImportConfiguration : public IMidiImportConfiguration
-{
-public:
-    void init();
-
-    int midiShortestNote() const override; // ticks
-    void setMidiShortestNote(int ticks) override;
-};
+namespace Ms {
+extern Score::FileError importMidi(MasterScore*, const QString& name);
 }
 
-#endif // MU_IMPORTEXPORT_MIDIIMPORTCONFIGURATION_H
+using namespace mu::iex::midi;
+
+mu::Ret NotationMidiReader::read(Ms::MasterScore* score, const io::path& path)
+{
+    Ms::Score::FileError err = Ms::importMidi(score, path.toQString());
+    return mu::notation::scoreFileErrorToRet(err);
+}

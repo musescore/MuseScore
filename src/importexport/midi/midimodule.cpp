@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "midiimportmodule.h"
+#include "midimodule.h"
 
 #include "log.h"
 #include "modularity/ioc.h"
@@ -29,24 +29,24 @@
 #include "notation/inotationwritersregister.h"
 #include "internal/notationmidiwriter.h"
 
-#include "internal/midiimportconfiguration.h"
+#include "internal/midiconfiguration.h"
 
-using namespace mu::iex::midiimport;
+using namespace mu::iex::midi;
 using namespace mu::notation;
 
-static std::shared_ptr<MidiImportConfiguration> s_configuration = std::make_shared<MidiImportConfiguration>();
+static std::shared_ptr<MidiConfiguration> s_configuration = std::make_shared<MidiConfiguration>();
 
-std::string MidiImportModule::moduleName() const
+std::string MidiModule::moduleName() const
 {
-    return "iex_midiimport";
+    return "iex_midi";
 }
 
-void MidiImportModule::registerExports()
+void MidiModule::registerExports()
 {
-    framework::ioc()->registerExport<IMidiImportConfiguration>(moduleName(), s_configuration);
+    framework::ioc()->registerExport<IMidiImportExportConfiguration>(moduleName(), s_configuration);
 }
 
-void MidiImportModule::resolveImports()
+void MidiModule::resolveImports()
 {
     auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
@@ -59,7 +59,7 @@ void MidiImportModule::resolveImports()
     }
 }
 
-void MidiImportModule::onInit(const framework::IApplication::RunMode&)
+void MidiModule::onInit(const framework::IApplication::RunMode&)
 {
     s_configuration->init();
 }

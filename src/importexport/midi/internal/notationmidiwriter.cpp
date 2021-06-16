@@ -23,17 +23,27 @@
 #include "notationmidiwriter.h"
 
 #include "log.h"
+#include "midiexport/exportmidi.h"
 
-using namespace mu::iex::midiimport;
+using namespace mu::iex::midi;
 using namespace mu::system;
 
 mu::Ret NotationMidiWriter::write(notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
 {
-    UNUSED(notation)
-    UNUSED(destinationDevice)
-    UNUSED(options)
+    IF_ASSERT_FAILED(notation) {
+        return make_ret(Ret::Code::UnknownError);
+    }
 
-    NOT_IMPLEMENTED;
+    Ms::Score* score = notation->elements()->msScore();
+
+    IF_ASSERT_FAILED(score) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    Ms::ExportMidi em(score);
+    em.write(&destinationDevice, notationConfiguration()->isPlayRepeatsEnabled(), false, score->synthesizerState());
+//    return em.write(device, preferences.getBool(PREF_IO_MIDI_EXPANDREPEATS), preferences.getBool(PREF_IO_MIDI_EXPORTRPNS),
+//                    synthesizerState());
 
     return make_ret(Ret::Code::NotImplemented);
 }

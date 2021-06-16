@@ -19,18 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_NOTATIONMIDIREADER_H
-#define MU_IMPORTEXPORT_NOTATIONMIDIREADER_H
+#ifndef MU_IMPORTEXPORT_IMIDIIMPORTEXPORTCONFIGURATION_H
+#define MU_IMPORTEXPORT_IMIDIIMPORTEXPORTCONFIGURATION_H
 
-#include "notation/inotationreader.h"
+#include <string>
+#include <optional>
+#include "modularity/imoduleexport.h"
 
-namespace mu::iex::midiimport {
-class NotationMidiReader : public notation::INotationReader
+namespace mu::iex::midi {
+class IMidiImportExportConfiguration : MODULE_EXPORT_INTERFACE
 {
-public:
+    INTERFACE_ID(IMidiImportExportConfiguration)
 
-    Ret read(Ms::MasterScore* score, const io::path& path) override;
+public:
+    virtual ~IMidiImportExportConfiguration() = default;
+
+    virtual int midiShortestNote() const = 0; //ticks
+    virtual void setMidiShortestNote(int ticks) = 0;
 };
 }
 
-#endif // MU_IMPORTEXPORT_NOTATIONMIDIREADER_H
+#endif // MU_IMPORTEXPORT_IMIDIIMPORTEXPORTCONFIGURATION_H

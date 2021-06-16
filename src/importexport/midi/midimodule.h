@@ -19,24 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_IMIDIIMPORTCONFIGURATION_H
-#define MU_IMPORTEXPORT_IMIDIIMPORTCONFIGURATION_H
+#ifndef MU_IMPORTEXPORT_MIDIMODULE_H
+#define MU_IMPORTEXPORT_MIDIMODULE_H
 
-#include <string>
-#include <optional>
-#include "modularity/imoduleexport.h"
+#include "modularity/imodulesetup.h"
 
-namespace mu::iex::midiimport {
-class IMidiImportConfiguration : MODULE_EXPORT_INTERFACE
+namespace mu::iex::midi {
+class MidiModule : public framework::IModuleSetup
 {
-    INTERFACE_ID(IMidiImportConfiguration)
-
 public:
-    virtual ~IMidiImportConfiguration() = default;
 
-    virtual int midiShortestNote() const = 0; //ticks
-    virtual void setMidiShortestNote(int ticks) = 0;
+    std::string moduleName() const override;
+    void registerExports() override;
+    void resolveImports() override;
+    void onInit(const framework::IApplication::RunMode& mode) override;
 };
 }
 
-#endif // MU_IMPORTEXPORT_IMIDIIMPORTCONFIGURATION_H
+#endif // MU_IMPORTEXPORT_MIDIMODULE_H

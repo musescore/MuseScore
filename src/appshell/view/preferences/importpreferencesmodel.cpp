@@ -116,7 +116,7 @@ bool ImportPreferencesModel::needUseDefaultFont() const
 
 int ImportPreferencesModel::currentShortestNote() const
 {
-    return midiImportConfiguration()->midiShortestNote();
+    return midiImportExportConfiguration()->midiShortestNote();
 }
 
 bool ImportPreferencesModel::needAskAboutApplyingNewStyle() const
@@ -190,7 +190,7 @@ void ImportPreferencesModel::setCurrentShortestNote(int note)
         return;
     }
 
-    midiImportConfiguration()->setMidiShortestNote(note);
+    midiImportExportConfiguration()->setMidiShortestNote(note);
     emit currentShortestNoteChanged(note);
 }
 

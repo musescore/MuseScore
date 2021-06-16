@@ -19,18 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "midiconfiguration.h"
 
-#ifndef MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H
-#define MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H
+#include "settings.h"
 
-#include "notation/abstractnotationwriter.h"
+#include "libmscore/mscore.h"
 
-namespace mu::iex::midiimport {
-class NotationMidiWriter : public notation::AbstractNotationWriter
+using namespace mu::framework;
+using namespace mu::iex::midi;
+
+static const Settings::Key SHORTEST_NOTE_KEY("iex_midi", "io/midi/shortestNote");
+
+void MidiConfiguration::init()
 {
-public:
-    Ret write(notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
-};
+    settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(Ms::MScore::division / 4));
 }
 
-#endif // MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H
+int MidiConfiguration::midiShortestNote() const
+{
+    return settings()->value(SHORTEST_NOTE_KEY).toInt();
+}
+
+void MidiConfiguration::setMidiShortestNote(int ticks)
+{
+    settings()->setValue(SHORTEST_NOTE_KEY, Val(ticks));
+}
