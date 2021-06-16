@@ -27,7 +27,7 @@ using namespace mu::ipc;
 
 IpcLock::IpcLock(const QString& name)
 {
-    m_locker = new QSystemSemaphore(name, 1 /*allowed lock count*/, QSystemSemaphore::Open);
+    m_locker = new QSystemSemaphore("musescore-" + name, 1 /*allowed lock count*/, QSystemSemaphore::Open);
 }
 
 IpcLock::~IpcLock()

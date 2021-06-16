@@ -32,6 +32,8 @@ using namespace mu;
 using namespace mu::framework;
 using namespace mu::async;
 
+static const std::string MULTI_INSTANCES_LOCK_NAME("settings");
+
 Settings* Settings::instance()
 {
     static Settings s;
@@ -102,12 +104,20 @@ Settings::Items Settings::readItems() const
 {
     Items result;
 
+    if (multiInstancesProvider()) {
+        multiInstancesProvider()->lockResource(MULTI_INSTANCES_LOCK_NAME);
+    }
+
     for (const QString& key : m_settings->allKeys()) {
         Item item;
         item.key = Key(std::string(), key.toStdString());
         item.value = Val::fromQVariant(m_settings->value(key));
 
         result[item.key] = item;
+    }
+
+    if (multiInstancesProvider()) {
+        multiInstancesProvider()->unlockResource(MULTI_INSTANCES_LOCK_NAME);
     }
 
     return result;
@@ -147,13 +157,23 @@ void Settings::setValue(const Key& key, const Val& value)
         channel.send(value);
     }
 
-    multiInstancesProvider()->settingsSetValue(key.key, value);
+    if (multiInstancesProvider()) {
+        multiInstancesProvider()->settingsSetValue(key.key, value);
+    }
 }
 
 void Settings::writeValue(const Key& key, const Val& value)
 {
+    if (multiInstancesProvider()) {
+        multiInstancesProvider()->lockResource(MULTI_INSTANCES_LOCK_NAME);
+    }
+
     // TODO: implement writing/reading first part of key (module name)
     m_settings->setValue(QString::fromStdString(key.key), value.toQVariant());
+
+    if (multiInstancesProvider()) {
+        multiInstancesProvider()->unlockResource(MULTI_INSTANCES_LOCK_NAME);
+    }
 }
 
 QString Settings::dataPath() const
@@ -210,7 +230,9 @@ void Settings::beginTransaction()
     m_localSettings = m_items;
     m_isTransactionStarted = true;
 
-    multiInstancesProvider()->settingsBeginTransaction();
+    if (multiInstancesProvider()) {
+        multiInstancesProvider()->settingsBeginTransaction();
+    }
 }
 
 void Settings::commitTransaction()
@@ -234,7 +256,9 @@ void Settings::commitTransaction()
 
     m_localSettings.clear();
 
-    multiInstancesProvider()->settingsCommitTransaction();
+    if (multiInstancesProvider()) {
+        multiInstancesProvider()->settingsCommitTransaction();
+    }
 }
 
 void Settings::rollbackTransaction()
@@ -253,7 +277,9 @@ void Settings::rollbackTransaction()
 
     m_localSettings.clear();
 
-    multiInstancesProvider()->settingsRollbackTransaction();
+    if (multiInstancesProvider()) {
+        multiInstancesProvider()->settingsRollbackTransaction();
+    }
 }
 
 Settings::Item& Settings::findItem(const Key& key) const
