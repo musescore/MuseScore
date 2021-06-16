@@ -434,8 +434,7 @@ void ExportDialogModel::setMidiExpandRepeats(bool expandRepeats)
 
 bool ExportDialogModel::midiExportRpns() const
 {
-    NOT_IMPLEMENTED;
-    return true;
+    return midiImportExportConfiguration()->isMidiExportRpns();
 }
 
 void ExportDialogModel::setMidiExportRpns(bool exportRpns)
@@ -444,7 +443,7 @@ void ExportDialogModel::setMidiExportRpns(bool exportRpns)
         return;
     }
 
-    NOT_IMPLEMENTED;
+    midiImportExportConfiguration()->setIsMidiExportRpns(exportRpns);
     emit midiExportRpnsChanged(exportRpns);
 }
 

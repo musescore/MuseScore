@@ -48,7 +48,7 @@ endif (BUILD_WORKSPACE_MODULE)
 if (NOT OS_IS_WASM)
     add_subdirectory(importexport)
 
-    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/beatroot beatroot) # for midiimport
+    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/beatroot beatroot) # for midi import
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/rtf2html rtf2html) # for capella
 
     if (BUILD_CLOUD_MODULE)
@@ -105,7 +105,7 @@ if (BUILD_UNIT_TESTS)
     add_subdirectory(importexport/bww/tests)
     add_subdirectory(importexport/capella/tests)
 #    add_subdirectory(importexport/guitarpro/tests)
-    add_subdirectory(importexport/midiimport/tests)
+    add_subdirectory(importexport/midi/tests)
     add_subdirectory(importexport/musicxml/tests)
 endif(BUILD_UNIT_TESTS)
 

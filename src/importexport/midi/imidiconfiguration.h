@@ -19,21 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_IMPORTEXPORT_IMIDIIMPORTEXPORTCONFIGURATION_H
+#define MU_IMPORTEXPORT_IMIDIIMPORTEXPORTCONFIGURATION_H
 
-#include "notationmidiwriter.h"
+#include <string>
+#include <optional>
+#include "modularity/imoduleexport.h"
 
-#include "log.h"
-
-using namespace mu::iex::midiimport;
-using namespace mu::system;
-
-mu::Ret NotationMidiWriter::write(notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
+namespace mu::iex::midi {
+class IMidiImportExportConfiguration : MODULE_EXPORT_INTERFACE
 {
-    UNUSED(notation)
-    UNUSED(destinationDevice)
-    UNUSED(options)
+    INTERFACE_ID(IMidiImportExportConfiguration)
 
-    NOT_IMPLEMENTED;
+public:
+    virtual ~IMidiImportExportConfiguration() = default;
 
-    return make_ret(Ret::Code::NotImplemented);
+    virtual int midiShortestNote() const = 0; //ticks
+    virtual void setMidiShortestNote(int ticks) = 0;
+
+    virtual bool isMidiExportRpns() const = 0;
+    virtual void setIsMidiExportRpns(bool exportRpns) const = 0;
+};
 }
+
+#endif // MU_IMPORTEXPORT_IMIDIIMPORTEXPORTCONFIGURATION_H

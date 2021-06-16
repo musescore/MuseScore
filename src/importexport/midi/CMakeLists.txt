@@ -18,17 +18,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE iex_midiimport)
+set(MODULE iex_midi)
 
 include(${CMAKE_CURRENT_LIST_DIR}/internal/midiimport/midiimport.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/internal/midiexport/midiexport.cmake)
 
 set(MODULE_SRC
     ${MIDIIMPORT_SRC}
-    ${CMAKE_CURRENT_LIST_DIR}/midiimportmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/midiimportmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/imidiimportconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/midiimportconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/midiimportconfiguration.h
+    ${MIDIEXPORT_SRC}
+    ${CMAKE_CURRENT_LIST_DIR}/midimodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/midimodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/imidiconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/midiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidireader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidireader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidiwriter.cpp
@@ -36,8 +38,8 @@ set(MODULE_SRC
     )
 
 set(MODULE_LINK
-    midi_old    # for midiimport
-    beatroot    # for midiimport
+    midi_old    # for midi
+    beatroot    # for midi
     engraving
     qzip
     notation
