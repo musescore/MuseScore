@@ -22,9 +22,12 @@
 #ifndef MU_MI_MULTIINSTANCESPROVIDER_H
 #define MU_MI_MULTIINSTANCESPROVIDER_H
 
+#include <map>
+
 #include "../imultiinstancesprovider.h"
 
 #include "ipc/ipcchannel.h"
+#include "ipc/ipclock.h"
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
@@ -48,9 +51,11 @@ public:
 
     void init();
 
+    // Score opening
     bool isScoreAlreadyOpened(const io::path& scorePath) const override;
     void activateWindowWithScore(const io::path& scorePath) override;
 
+    // Settings
     bool isPreferencesAlreadyOpened() const override;
     void activateWindowWithOpenedPreferences() const override;
     void settingsBeginTransaction() override;
@@ -58,6 +63,11 @@ public:
     void settingsRollbackTransaction() override;
     void settingsSetValue(const std::string& key, const Val& value) override;
 
+    // Resources (files)
+    bool lockResource(const std::string& name) override;
+    bool unlockResource(const std::string& name) override;
+
+    // Instances info
     const std::string& selfID() const override;
     std::vector<InstanceMeta> instances() const override;
     async::Notification instancesChanged() const override;
@@ -66,10 +76,14 @@ private:
 
     void onMsg(const ipc::Msg& msg);
 
+    ipc::IpcLock* lock(const std::string& name);
+
     ipc::IpcChannel* m_ipcChannel = nullptr;
     std::string m_selfID;
 
     async::Notification m_instancesChanged;
+
+    std::map<std::string, ipc::IpcLock*> m_locks;
 };
 }
 

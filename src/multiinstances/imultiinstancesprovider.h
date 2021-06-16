@@ -50,7 +50,11 @@ public:
     virtual void settingsRollbackTransaction() = 0;
     virtual void settingsSetValue(const std::string& key, const Val& value) = 0;
 
-    //! NOTE Technical
+    // Resources (files)
+    virtual bool lockResource(const std::string& name) = 0;
+    virtual bool unlockResource(const std::string& name) = 0;
+
+    // Instances info
     virtual const std::string& selfID() const = 0;
     virtual std::vector<InstanceMeta> instances() const = 0;
     virtual async::Notification instancesChanged() const = 0;
