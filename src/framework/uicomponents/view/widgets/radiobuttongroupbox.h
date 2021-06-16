@@ -25,7 +25,7 @@
 
 #include <QGroupBox>
 
-namespace mu::notation {
+namespace mu::uicomponents {
 class RadioButtonGroupBox : public QGroupBox
 {
     Q_OBJECT

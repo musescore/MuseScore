@@ -26,7 +26,7 @@
 #include <QStyleOption>
 #include <QStylePainter>
 
-using namespace mu::notation;
+using namespace mu::uicomponents;
 
 RadioButtonGroupBox::RadioButtonGroupBox(QWidget* parent)
     : QGroupBox(parent)
