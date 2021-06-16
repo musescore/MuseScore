@@ -535,7 +535,7 @@ GridView {
             Accessible.name: model.accessibleText;
 
             // leftClickArea
-            mouseArea.drag.target: this
+            mouseArea.drag.target: draggedIcon
             mouseArea.onPressed: {
                 paletteView.currentIndex = paletteCell.rowIndex;
                 paletteView.updateSelection(true);
