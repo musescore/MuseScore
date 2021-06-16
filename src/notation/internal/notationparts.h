@@ -152,7 +152,7 @@ private:
     void removeMissingParts(const instruments::PartInstrumentList& parts);
     void appendNewParts(const instruments::PartInstrumentList& parts);
     void updateSoloist(const instruments::PartInstrumentList& parts);
-    void sortParts(const instruments::PartInstrumentList& parts);
+    void sortParts(const instruments::PartInstrumentList& parts, const QList<Ms::Staff*>& originalStaves);
 
     IDList allInstrumentsIds() const;
     int lastStaffIndex() const;

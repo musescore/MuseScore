@@ -140,6 +140,7 @@ private:
     bool m_isMovingUpAvailable = false;
     bool m_isMovingDownAvailable = false;
     bool m_isRemovingAvailable = false;
+    bool m_isLoadingBlocked = false;
 };
 }
 

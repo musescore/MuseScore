@@ -50,6 +50,10 @@ NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr intera
     interaction->dropChanged().onNotify(this, [this]() {
         updatePartTitles();
     });
+
+    m_undoStack->stackChanged().onNotify(this, [this]() {
+        m_partsChanged.notify();
+    });
 }
 
 NotationParts::~NotationParts()
@@ -131,11 +135,13 @@ NotifyList<const Staff*> NotationParts::staffList(const ID& partId, const ID& in
 
 void NotationParts::setParts(const mu::instruments::PartInstrumentList& parts)
 {
+    QList<Ms::Staff*> originalStaves = masterScore()->staves();
+
     removeMissingParts(parts);
     appendNewParts(parts);
     updateSoloist(parts);
 
-    sortParts(parts);
+    sortParts(parts, originalStaves);
 
     updateScore();
 
@@ -707,13 +713,38 @@ void NotationParts::removeParts(const IDList& partsIds)
         return;
     }
 
-    doRemoveParts(partsIds);
+    PartInstrumentList parts;
+    for (Ms::Part* currentPart: masterScore()->parts()) {
+        if (partsIds.contains(currentPart->id())) {
+            continue;
+        }
+        PartInstrument pi;
+        pi.isExistingPart = true;
+        pi.partId = currentPart->id();
+        parts << pi;
+    }
+
+    QList<Ms::Staff*> originalStaves = masterScore()->staves();
+
+    removeMissingParts(parts);
+
+    sortParts(parts, originalStaves);
+
     updateScore();
 }
 
 void NotationParts::doRemoveParts(const IDList& partsIds)
 {
     for (const ID& partId: partsIds) {
+        for (Ms::Excerpt* currentExcerpt: masterScore()->excerpts()) {
+            for (Ms::Part* currentPart: currentExcerpt->parts()) {
+                if (currentPart->id() == partId) {
+                    currentExcerpt->removePart(partId);
+                    break;
+                }
+            }
+        }
+
         score()->cmdRemovePart(part(partId));
     }
 }
@@ -785,11 +816,34 @@ void NotationParts::insertStaff(Staff* staff, int destinationStaffIndex)
 
 void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode)
 {
-    for (const ID& sourcePartId: sourcePartsIds) {
-        doMovePart(sourcePartId, destinationPartId, mode);
+    IDList partIds;
+
+    for (Ms::Part* currentPart: masterScore()->parts()) {
+        partIds << currentPart->id();
     }
 
+    for (const ID& sourcePartId: sourcePartsIds) {
+        int srcIndex = partIds.indexOf(sourcePartId);
+        int dstIndex = partIds.indexOf(destinationPartId);
+        dstIndex += (mode == InsertMode::Before) && (srcIndex < dstIndex) ? -1 : 0;
+        partIds.move(srcIndex, dstIndex);
+    }
+
+    PartInstrumentList parts;
+    for (ID& partId: partIds) {
+        PartInstrument pi;
+        pi.isExistingPart = true;
+        pi.partId = partId;
+        parts << pi;
+    }
+
+    QList<Ms::Staff*> originalStaves = masterScore()->staves();
+
+    sortParts(parts, originalStaves);
+
     updateScore();
+
+    m_partsNotifier->changed();
 }
 
 void NotationParts::moveInstruments(const IDList& sourceInstrumentsIds, const ID& sourcePartId, const ID& destinationPartId,
@@ -1245,8 +1299,10 @@ void NotationParts::removeMissingParts(const PartInstrumentList& parts)
 
 void NotationParts::appendNewParts(const PartInstrumentList& parts)
 {
+    int staffCount = 0;
     for (const PartInstrument& pi: parts) {
         if (pi.isExistingPart) {
+            staffCount += part(pi.partId)->nstaves();
             continue;
         }
 
@@ -1256,8 +1312,9 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
         part->setSoloist(pi.isSoloist);
         part->setInstrument(InstrumentsConverter::convertInstrument(pi.instrument));
 
-        score()->undo(new Ms::InsertPart(part, lastStaffIndex()));
+        score()->undo(new Ms::InsertPart(part, staffCount));
         appendStaves(part, pi.instrument);
+        staffCount += part->nstaves();
     }
 }
 
@@ -1270,26 +1327,35 @@ void NotationParts::updateSoloist(const PartInstrumentList& parts)
     }
 }
 
-void NotationParts::sortParts(const PartInstrumentList& parts)
+void NotationParts::sortParts(const PartInstrumentList& parts, const QList<Ms::Staff*>& originalStaves)
 {
-    Q_ASSERT(score()->parts().size() == static_cast<int>(parts.size()));
+    Q_ASSERT(!originalStaves.empty());
 
-    for (int i = 0; i < parts.size(); ++i) {
-        const Part* currentPart = score()->parts().at(i);
+    Ms::Score* score = originalStaves[0]->score();
 
-        if (currentPart->id() == parts.at(i).partId) {
-            continue;
+    QList<int> staffMapping;
+    QList<int> trackMapping;
+    int runningStaffIndex = 0;
+    bool sortingNeeded = false;
+
+    int partIndex = 0;
+    for (const PartInstrument& pi: parts) {
+        Ms::Part* currentPart = pi.isExistingPart ? part(pi.partId) : score->parts()[partIndex];
+        for (Ms::Staff* staff: *currentPart->staves()) {
+            int actualStaffIndex = score->staves().indexOf(staff);
+
+            trackMapping.append(originalStaves.indexOf(staff));
+            staffMapping.append(actualStaffIndex);
+            sortingNeeded |= actualStaffIndex != runningStaffIndex;
+            ++runningStaffIndex;
         }
-
-        for (int j = i; j < score()->parts().size(); ++j) {
-            const Part* part = score()->parts().at(j);
-
-            if (part->id() == parts.at(i).partId) {
-                doMovePart(part->id(), currentPart->id());
-                break;
-            }
-        }
+        ++partIndex;
     }
+
+    if (sortingNeeded) {
+        score->masterScore()->undo(new Ms::SortStaves(score->masterScore(), staffMapping));
+    }
+    score->masterScore()->undo(new Ms::MapExcerptTracks(score->masterScore(), trackMapping));
 }
 
 IDList NotationParts::allInstrumentsIds() const
