@@ -139,3 +139,10 @@ mu::Ret ConverterController::exportScoreMeta(const mu::io::path& in, const mu::i
 
     return BackendApi::exportScoreMeta(in, out);
 }
+
+mu::Ret ConverterController::exportScoreParts(const mu::io::path& in, const mu::io::path& out)
+{
+    TRACEFUNC;
+
+    return BackendApi::exportScoreParts(in, out);
+}

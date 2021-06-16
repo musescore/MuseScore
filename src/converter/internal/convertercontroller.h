@@ -45,6 +45,7 @@ public:
     Ret batchConvert(const io::path& batchJobFile) override;
     Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath) override;
     Ret exportScoreMeta(const io::path& in, const io::path& out) override;
+    Ret exportScoreParts(const io::path& in, const io::path& out) override;
 
 private:
 

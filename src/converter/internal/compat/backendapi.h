@@ -27,8 +27,13 @@
 
 #include "modularity/ioc.h"
 #include "system/ifilesystem.h"
+#include "system/iodevice.h"
 #include "notation/inotationcreator.h"
 #include "notation/inotationwritersregister.h"
+
+namespace Ms {
+class Score;
+}
 
 namespace mu::converter {
 class BackendJsonWriter;
@@ -41,9 +46,12 @@ class BackendApi
 public:
     static Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath);
     static Ret exportScoreMeta(const io::path& in, const io::path& out);
+    static Ret exportScoreParts(const io::path& in, const io::path& out);
 
 private:
-    static RetVal<notation::IMasterNotationPtr> openScore(const io::path& path);
+    static Ret openOutputFile(QFile& file, const io::path& out);
+
+    static RetVal<notation::INotationPtr> openScore(const io::path& path);
 
     static notation::PageList pages(const notation::INotationPtr notation);
 
@@ -59,6 +67,10 @@ private:
     static Ret exportScoreMetaData(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter);
 
     static Ret processWriter(const std::string& writerName, const notation::INotationPtr notation, BackendJsonWriter& jsonWriter);
+
+    static Ret doExportScoreParts(const notation::INotationPtr notation, mu::system::IODevice& destinationDevice);
+
+    static QByteArray scorePartJson(Ms::Score* score);
 };
 }
 

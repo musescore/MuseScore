@@ -25,12 +25,13 @@
 #include <QFile>
 
 #include "io/path.h"
+#include "system/iodevice.h"
 
 namespace mu::converter {
 class BackendJsonWriter
 {
 public:
-    BackendJsonWriter(const io::path& filePath);
+    BackendJsonWriter(mu::system::IODevice* destinationDevice);
     ~BackendJsonWriter();
 
     void addKey(const char* arrayName);
@@ -41,6 +42,7 @@ public:
 
 private:
     QFile jsonFormatFile;
+    system::IODevice* m_destinationDevice = nullptr;
 };
 }
 
