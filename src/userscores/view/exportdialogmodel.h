@@ -46,6 +46,7 @@ class ExportDialogModel : public QAbstractListModel
     INJECT(userscores, notation::INotationWritersRegister, writers)
     INJECT(userscores, iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
     INJECT(userscores, iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
+    INJECT(userscores, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
     INJECT(userscores, IExportScoreScenario, exportScoreScenario)
 
     Q_PROPERTY(int selectionLength READ selectionLength NOTIFY selectionChanged)

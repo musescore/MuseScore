@@ -19,21 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_MIDIIMPORTMODULE_H
-#define MU_IMPORTEXPORT_MIDIIMPORTMODULE_H
 
-#include "modularity/imodulesetup.h"
+#ifndef MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H
+#define MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H
 
-namespace mu::iex::midiimport {
-class MidiImportModule : public framework::IModuleSetup
+#include "notation/abstractnotationwriter.h"
+
+#include "modularity/ioc.h"
+#include "notation/inotationconfiguration.h"
+
+namespace mu::iex::midi {
+class NotationMidiWriter : public notation::AbstractNotationWriter
 {
-public:
+    INJECT(midi, notation::INotationConfiguration, notationConfiguration)
+    INJECT(midi, IMidiImportExportConfiguration, midiImportExportConfiguration)
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+public:
+    Ret write(notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
 };
 }
 
-#endif // MU_IMPORTEXPORT_MIDIIMPORTMODULE_H
+#endif // MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H
