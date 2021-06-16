@@ -87,7 +87,7 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
     else if (msg.type == MsgType::Request && msg.method == METHOD_PREFERENCES_IS_OPENED) {
         bool isOpened = interactive()->isOpened(PREFERENCES_URI).val;
         m_ipcChannel->response(METHOD_PREFERENCES_IS_OPENED, { QString::number(isOpened) }, msg.srcID);
-    } else if (msg.method == METHOD_SETTINGS_BEGIN_TRANSACTION) {
+    } else if (msg.method == METHOD_ACTIVATE_WINDOW_WITH_OPENED_PREFERENCES) {
         bool isOpened = interactive()->isOpened(PREFERENCES_URI).val;
         if (isOpened) {
             mainWindow()->requestShowOnFront();
@@ -175,6 +175,27 @@ void MultiInstancesProvider::settingsSetValue(const std::string& key, const Val&
     args << value.toQString();
     args << QString::number(static_cast<int>(value.type()));
     m_ipcChannel->broadcast(METHOD_SETTINGS_SET_VALUE, args);
+}
+
+mu::ipc::IpcLock* MultiInstancesProvider::lock(const std::string& name)
+{
+    auto it = m_locks.find(name);
+    if (it != m_locks.end()) {
+        return it->second;
+    }
+    ipc::IpcLock* l = new ipc::IpcLock(QString::fromStdString(name));
+    m_locks[name] = l;
+    return l;
+}
+
+bool MultiInstancesProvider::lockResource(const std::string& name)
+{
+    return lock(name)->lock();
+}
+
+bool MultiInstancesProvider::unlockResource(const std::string& name)
+{
+    return lock(name)->unlock();
 }
 
 const std::string& MultiInstancesProvider::selfID() const
