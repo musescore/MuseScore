@@ -26,22 +26,22 @@
 #include <QFile>
 
 using namespace mu::framework;
-using namespace mu::system;
+using namespace mu::io;
 
 XmlWriter::XmlWriter(const io::path& path)
 {
     m_device = std::make_unique<QFile>(path.toQString());
-    m_device->open(IODevice::WriteOnly);
+    m_device->open(Device::WriteOnly);
 
     initWriter(m_device.get());
 }
 
-XmlWriter::XmlWriter(IODevice* device)
+XmlWriter::XmlWriter(Device* device)
 {
     initWriter(device);
 }
 
-void XmlWriter::initWriter(IODevice* device)
+void XmlWriter::initWriter(Device* device)
 {
     m_writer = std::make_unique<QXmlStreamWriter>(device);
     m_writer->setAutoFormatting(true);

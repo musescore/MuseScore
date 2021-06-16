@@ -57,7 +57,7 @@ public:
     ValCh<bool> userAuthorized() const override;
     ValCh<AccountInfo> accountInfo() const override;
 
-    void uploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) override;
+    void uploadScore(io::Device& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) override;
 
     async::Channel<QUrl> sourceUrlReceived() const override;
     framework::ProgressChannel progressChannel() const override;
@@ -88,7 +88,7 @@ private:
     network::RequestHeaders headers() const;
 
     RequestStatus downloadUserInfo();
-    RequestStatus doUploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl());
+    RequestStatus doUploadScore(io::Device& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl());
 
     using RequestCallback = std::function<RequestStatus()>;
     void executeRequest(const RequestCallback& requestCallback);

@@ -44,7 +44,7 @@ static const QString DEVICE_ID_KEY("device_id");
 constexpr int USER_UNAUTHORIZED_ERR_CODE = 401;
 constexpr int INVALID_SCORE_ID = 0;
 
-int scoreIdFromSourceUrl(const QUrl& sourceUrl)
+static int scoreIdFromSourceUrl(const QUrl& sourceUrl)
 {
     QStringList parts = sourceUrl.toString().split("/");
     if (parts.isEmpty()) {
@@ -170,7 +170,7 @@ void CloudService::onUserAuthorized()
 
     saveTokens();
 
-    if (downloadUserInfo() == RequestStatus::Ok) {
+    if (downloadUserInfo() == RequestStatus::Ok && m_onUserAuthorizedCallback) {
         m_onUserAuthorizedCallback();
         m_onUserAuthorizedCallback = OnUserAuthorizedCallback();
     }
@@ -292,7 +292,7 @@ void CloudService::setAccountInfo(const AccountInfo& info)
     m_userAuthorized.set(info.isValid());
 }
 
-void CloudService::uploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
+void CloudService::uploadScore(io::Device& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
 {
     auto uploadCallback = [this, &scoreSourceDevice, title, sourceUrl]() {
         return doUploadScore(scoreSourceDevice, title, sourceUrl);
@@ -306,7 +306,7 @@ void CloudService::uploadScore(system::IODevice& scoreSourceDevice, const QStrin
     executeRequest(uploadCallback);
 }
 
-CloudService::RequestStatus CloudService::doUploadScore(system::IODevice& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
+CloudService::RequestStatus CloudService::doUploadScore(io::Device& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
 {
     QUrl uploadUrl = prepareUrlForRequest(configuration()->uploadingApiUrl());
     if (uploadUrl.isEmpty()) {

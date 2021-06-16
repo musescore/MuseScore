@@ -33,7 +33,7 @@
 using namespace mu;
 using namespace mu::network;
 using namespace mu::framework;
-using namespace mu::system;
+using namespace mu::io;
 
 static constexpr int NET_TIMEOUT_MS = 60000;
 
@@ -79,13 +79,13 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
                                 const RequestHeaders& headers)
 {
     if (outgoingData && outgoingData->device()) {
-        if (!openIoDevice(outgoingData->device(), IODevice::ReadOnly)) {
+        if (!openDevice(outgoingData->device(), Device::ReadOnly)) {
             return make_ret(Err::FiledOpenIODeviceRead);
         }
     }
 
     if (incommingData) {
-        if (!openIoDevice(incommingData, IODevice::WriteOnly)) {
+        if (!openDevice(incommingData, Device::WriteOnly)) {
             return make_ret(Err::FiledOpenIODeviceWrite);
         }
         m_incommingData = incommingData;
@@ -117,10 +117,10 @@ Ret NetworkManager::execRequest(RequestType requestType, const QUrl& url, Incomi
     }
 
     if (outgoingData && outgoingData->device()) {
-        closeIoDevice(outgoingData->device());
+        closeDevice(outgoingData->device());
     }
 
-    closeIoDevice(m_incommingData);
+    closeDevice(m_incommingData);
     m_incommingData = nullptr;
 
     return ret;
@@ -167,7 +167,7 @@ void NetworkManager::abort()
     emit aborted();
 }
 
-bool NetworkManager::openIoDevice(IODevice* device, IODevice::OpenModeFlag flags)
+bool NetworkManager::openDevice(Device* device, Device::OpenModeFlag flags)
 {
     IF_ASSERT_FAILED(device) {
         return false;
@@ -180,7 +180,7 @@ bool NetworkManager::openIoDevice(IODevice* device, IODevice::OpenModeFlag flags
     return device->open(flags);
 }
 
-void NetworkManager::closeIoDevice(IODevice* device)
+void NetworkManager::closeDevice(Device* device)
 {
     if (device && device->isOpen()) {
         device->close();

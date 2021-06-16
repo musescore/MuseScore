@@ -29,11 +29,11 @@
 
 using namespace mu::palette;
 using namespace mu::workspace;
-using namespace mu::system;
+using namespace mu::io;
 
 static const QString PALETTE_TAG("PaletteBox");
 
-AbstractDataPtrList WorkspacePaletteStream::read(IODevice& sourceDevice) const
+AbstractDataPtrList WorkspacePaletteStream::read(Device& sourceDevice) const
 {
     Ms::XmlReader reader(&sourceDevice);
 
@@ -58,7 +58,7 @@ PaletteWorkspaceDataPtr WorkspacePaletteStream::readPalettes(Ms::XmlReader& read
     return palettes;
 }
 
-void WorkspacePaletteStream::write(const AbstractDataPtrList& dataList, IODevice& destinationDevice) const
+void WorkspacePaletteStream::write(const AbstractDataPtrList& dataList, Device& destinationDevice) const
 {
     Ms::XmlWriter writer(nullptr, &destinationDevice);
 

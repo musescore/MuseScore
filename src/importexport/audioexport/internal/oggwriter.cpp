@@ -25,9 +25,9 @@
 #include "log.h"
 
 using namespace mu::iex::audioexport;
-using namespace mu::system;
+using namespace mu::io;
 
-mu::Ret OggWriter::write(notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
+mu::Ret OggWriter::write(notation::INotationPtr notation, Device& destinationDevice, const Options& options)
 {
     UNUSED(notation)
     UNUSED(destinationDevice)

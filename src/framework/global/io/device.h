@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SYSTEM_IODEVICE_H
-#define MU_SYSTEM_IODEVICE_H
+#ifndef MU_IO_DEVICE_H
+#define MU_IO_DEVICE_H
 
 #include <QIODevice>
 
-namespace mu::system {
-using IODevice = QIODevice;
+namespace mu::io {
+using Device = QIODevice;
 }
 
-#endif // MU_SYSTEM_IODEVICE_H
+#endif // MU_IO_DEVICE_H
