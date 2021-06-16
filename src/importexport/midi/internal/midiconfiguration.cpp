@@ -29,10 +29,12 @@ using namespace mu::framework;
 using namespace mu::iex::midi;
 
 static const Settings::Key SHORTEST_NOTE_KEY("iex_midi", "io/midi/shortestNote");
+static const Settings::Key EXPORTRPNS_KEY("iex_midi", "io/midi/exportRPNs");
 
 void MidiConfiguration::init()
 {
     settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(Ms::MScore::division / 4));
+    settings()->setDefaultValue(EXPORTRPNS_KEY, Val(false));
 }
 
 int MidiConfiguration::midiShortestNote() const
@@ -43,4 +45,14 @@ int MidiConfiguration::midiShortestNote() const
 void MidiConfiguration::setMidiShortestNote(int ticks)
 {
     settings()->setValue(SHORTEST_NOTE_KEY, Val(ticks));
+}
+
+bool MidiConfiguration::isMidiExportRpns() const
+{
+    return settings()->value(EXPORTRPNS_KEY).toBool();
+}
+
+void MidiConfiguration::setIsMidiExportRpns(bool exportRpns) const
+{
+    settings()->setValue(EXPORTRPNS_KEY, Val(exportRpns));
 }

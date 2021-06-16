@@ -31,6 +31,7 @@
 #include "notation/inotationwritersregister.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
+#include "importexport/midi/imidiconfiguration.h"
 #include "iexportscorescenario.h"
 
 class QItemSelectionModel;
