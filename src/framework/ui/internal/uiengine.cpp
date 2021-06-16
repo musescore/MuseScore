@@ -31,10 +31,6 @@
 #include "config.h"
 #include "log.h"
 
-namespace Ms {
-extern QString mscoreGlobalShare; //! FIXME Need to remove global variable
-}
-
 using namespace mu::ui;
 
 UiEngine* UiEngine::instance()
@@ -67,6 +63,8 @@ void UiEngine::quit()
     m_engine->quit();
     delete m_engine;
     m_engine = nullptr;
+    delete m_theme;
+    m_theme = nullptr;
 }
 
 QQuickItem* UiEngine::rootItem() const

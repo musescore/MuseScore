@@ -138,7 +138,6 @@ Sequencer* MScore::seq = 0;
 MuseScoreCore* MuseScoreCore::mscoreCore;
 
 extern void initDrumset();
-extern QString mscoreGlobalShare;
 
 std::vector<MScoreError> MScore::errorList {
     { MsError::MS_NO_ERROR,                     0,    0 },
