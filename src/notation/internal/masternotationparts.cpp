@@ -175,10 +175,6 @@ void MasterNotationParts::removeParts(const IDList& partsIds)
 
     NotationParts::removeParts(partsIds);
 
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->removeParts(partsIds);
-    }
-
     apply();
 }
 
@@ -213,10 +209,6 @@ void MasterNotationParts::moveParts(const IDList& sourcePartsIds, const ID& dest
     startEdit();
 
     NotationParts::moveParts(sourcePartsIds, destinationPartId, mode);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->moveParts(sourcePartsIds, destinationPartId, mode);
-    }
 
     apply();
 }

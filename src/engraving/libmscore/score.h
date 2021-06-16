@@ -1480,10 +1480,10 @@ public:
     Fraction pos(POS pos) const { return _pos[int(pos)]; }
     void setPos(POS pos, Fraction tick);
 
-    void addExcerpt(Excerpt*);
+    void addExcerpt(Excerpt*, int index=-1);
     void removeExcerpt(Excerpt*);
     void deleteExcerpt(Excerpt*);
-    void initExcerpt(Excerpt*);
+    void initExcerpt(Excerpt*, bool);
 
     void setPlaybackScore(Score*);
     Score* playbackScore() { return _playbackScore; }
