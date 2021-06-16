@@ -31,6 +31,7 @@
 #include "languages/ilanguagesservice.h"
 #include "iinteractive.h"
 #include "iappshellconfiguration.h"
+#include "multiinstances/imultiinstancesprovider.h"
 
 namespace mu::appshell {
 class ApplicationActionController : public actions::Actionable, public async::Asyncable
@@ -41,6 +42,7 @@ class ApplicationActionController : public actions::Actionable, public async::As
     INJECT(appshell, languages::ILanguagesService, languagesService)
     INJECT(appshell, framework::IInteractive, interactive)
     INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(appshell, mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     void init();

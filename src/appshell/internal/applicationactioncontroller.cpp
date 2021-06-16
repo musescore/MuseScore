@@ -109,6 +109,11 @@ void ApplicationActionController::openLeaveFeedbackPage()
 
 void ApplicationActionController::openPreferencesDialog()
 {
+    if (multiInstancesProvider()->isPreferencesAlreadyOpened()) {
+        multiInstancesProvider()->activateWindowWithOpenedPreferences();
+        return;
+    }
+
     interactive()->open("musescore://preferences");
 }
 

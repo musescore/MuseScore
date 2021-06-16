@@ -49,8 +49,10 @@ public:
     void init();
 
     bool isScoreAlreadyOpened(const io::path& scorePath) const override;
-    void activateWindowForScore(const io::path& scorePath) override;
+    void activateWindowWithScore(const io::path& scorePath) override;
 
+    bool isPreferencesAlreadyOpened() const override;
+    void activateWindowWithOpenedPreferences() const override;
     void settingsBeginTransaction() override;
     void settingsCommitTransaction() override;
     void settingsRollbackTransaction() override;

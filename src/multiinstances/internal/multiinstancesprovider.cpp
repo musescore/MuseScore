@@ -33,6 +33,9 @@ static const mu::UriQuery DEV_SHOW_INFO_URI("musescore://devtools/multiinstances
 static const QString METHOD_SCORE_IS_OPENED("SCORE_IS_OPENED");
 static const QString METHOD_ACTIVATE_WINDOW_WITH_SCORE("ACTIVATE_WINDOW_WITH_SCORE");
 
+static const mu::Uri PREFERENCES_URI("musescore://preferences");
+static const QString METHOD_PREFERENCES_IS_OPENED("PREFERENCES_IS_OPENED");
+static const QString METHOD_ACTIVATE_WINDOW_WITH_OPENED_PREFERENCES("ACTIVATE_WINDOW_WITH_OPENED_PREFERENCES");
 static const QString METHOD_SETTINGS_BEGIN_TRANSACTION("SETTINGS_BEGIN_TRANSACTION");
 static const QString METHOD_SETTINGS_COMMIT_TRANSACTION("SETTINGS_COMMIT_TRANSACTION");
 static const QString METHOD_SETTINGS_ROLLBACK_TRANSACTION("SETTINGS_ROLLBACK_TRANSACTION");
@@ -81,7 +84,15 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
         }
     }
     // Settings
-    else if (msg.method == METHOD_SETTINGS_BEGIN_TRANSACTION) {
+    else if (msg.type == MsgType::Request && msg.method == METHOD_PREFERENCES_IS_OPENED) {
+        bool isOpened = interactive()->isOpened(PREFERENCES_URI).val;
+        m_ipcChannel->response(METHOD_PREFERENCES_IS_OPENED, { QString::number(isOpened) }, msg.srcID);
+    } else if (msg.method == METHOD_SETTINGS_BEGIN_TRANSACTION) {
+        bool isOpened = interactive()->isOpened(PREFERENCES_URI).val;
+        if (isOpened) {
+            mainWindow()->requestShowOnFront();
+        }
+    } else if (msg.method == METHOD_SETTINGS_BEGIN_TRANSACTION) {
         settings()->beginTransaction();
     } else if (msg.method == METHOD_SETTINGS_COMMIT_TRANSACTION) {
         settings()->commitTransaction();
@@ -113,10 +124,33 @@ bool MultiInstancesProvider::isScoreAlreadyOpened(const io::path& scorePath) con
     return ret;
 }
 
-void MultiInstancesProvider::activateWindowForScore(const io::path& scorePath)
+void MultiInstancesProvider::activateWindowWithScore(const io::path& scorePath)
 {
     mainWindow()->requestShowOnBack();
     m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_SCORE, { scorePath.toQString() });
+}
+
+bool MultiInstancesProvider::isPreferencesAlreadyOpened() const
+{
+    int ret = 0;
+    m_ipcChannel->syncRequestToAll(METHOD_PREFERENCES_IS_OPENED, {}, [&ret](const QStringList& args) {
+        IF_ASSERT_FAILED(args.count() > 0) {
+            return false;
+        }
+        ret = args.at(0).toInt();
+        if (ret) {
+            return true;
+        }
+
+        return false;
+    });
+    return ret;
+}
+
+void MultiInstancesProvider::activateWindowWithOpenedPreferences() const
+{
+    mainWindow()->requestShowOnBack();
+    m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_OPENED_PREFERENCES);
 }
 
 void MultiInstancesProvider::settingsBeginTransaction()
