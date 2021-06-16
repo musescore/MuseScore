@@ -40,11 +40,11 @@ public:
 
     // Score opening
     virtual bool isScoreAlreadyOpened(const io::path& scorePath) const = 0;
-    virtual void activateWindowForScore(const io::path& scorePath) = 0;
+    virtual void activateWindowWithScore(const io::path& scorePath) = 0;
 
     // Settings
     virtual bool isPreferencesAlreadyOpened() const = 0;
-    virtual bool activateWindowWithOpenedPreferences() const = 0;
+    virtual void activateWindowWithOpenedPreferences() const = 0;
     virtual void settingsBeginTransaction() = 0;
     virtual void settingsCommitTransaction() = 0;
     virtual void settingsRollbackTransaction() = 0;
