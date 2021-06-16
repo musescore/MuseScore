@@ -37,9 +37,8 @@ class PdfWriter : public notation::AbstractNotationWriter
 
 public:
     std::vector<notation::INotationWriter::UnitType> supportedUnitTypes() const override;
-    Ret write(notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
-    Ret writeList(const notation::INotationPtrList& notations, system::IODevice& destinationDevice,
-                  const Options& options = Options()) override;
+    Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
+    Ret writeList(const notation::INotationPtrList& notations, io::Device& destinationDevice, const Options& options = Options()) override;
 
 private:
     QString documentTitle(const Ms::Score& score) const;

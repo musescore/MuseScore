@@ -86,7 +86,7 @@ bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const 
                                           ? chosenPath
                                           : completeExportPath(chosenPath, notation, isMainNotation(notation), page);
 
-                auto exportFunction = [writer, notation, options](system::IODevice& destinationDevice) {
+                auto exportFunction = [writer, notation, options](io::Device& destinationDevice) {
                         return writer->write(notation, destinationDevice, options);
                     };
 
@@ -106,7 +106,7 @@ bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const 
                                       ? chosenPath
                                       : completeExportPath(chosenPath, notation, isMainNotation(notation));
 
-            auto exportFunction = [writer, notation, options](system::IODevice& destinationDevice) {
+            auto exportFunction = [writer, notation, options](io::Device& destinationDevice) {
                     return writer->write(notation, destinationDevice, options);
                 };
 
@@ -119,7 +119,7 @@ bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const 
             { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
         };
 
-        auto exportFunction = [writer, notations, options](system::IODevice& destinationDevice) {
+        auto exportFunction = [writer, notations, options](io::Device& destinationDevice) {
                 return writer->writeList(notations, destinationDevice, options);
             };
 
@@ -262,7 +262,7 @@ bool ExportScoreScenario::askForRetry(const QString& filename) const
     return result.standartButton() == IInteractive::Button::Retry;
 }
 
-bool ExportScoreScenario::doExportLoop(const io::path& scorePath, std::function<bool(system::IODevice&)> exportFunction) const
+bool ExportScoreScenario::doExportLoop(const io::path& scorePath, std::function<bool(io::Device&)> exportFunction) const
 {
     IF_ASSERT_FAILED(exportFunction) {
         return false;

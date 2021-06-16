@@ -34,8 +34,8 @@ namespace mu::palette {
 class WorkspacePaletteStream : public workspace::IWorkspaceDataStream
 {
 public:
-    workspace::AbstractDataPtrList read(system::IODevice& sourceDevice) const override;
-    void write(const workspace::AbstractDataPtrList& dataList, system::IODevice& destinationDevice) const override;
+    workspace::AbstractDataPtrList read(io::Device& sourceDevice) const override;
+    void write(const workspace::AbstractDataPtrList& dataList, io::Device& destinationDevice) const override;
 
     workspace::WorkspaceTag tag() const override;
 

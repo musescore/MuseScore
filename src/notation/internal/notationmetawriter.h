@@ -19,24 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_NOTATION_NOTATIONMETAWRITER_H
+#define MU_NOTATION_NOTATIONMETAWRITER_H
 
-#ifndef MU_IMPORTEXPORT_PNGWRITER_H
-#define MU_IMPORTEXPORT_PNGWRITER_H
+#include "abstractnotationwriter.h"
 
-#include "notation/abstractnotationwriter.h"
+namespace Ms {
+class Score;
+}
 
-#include "../iimagesexportconfiguration.h"
-#include "modularity/ioc.h"
-
-namespace mu::iex::imagesexport {
-class PngWriter : public notation::AbstractNotationWriter
+namespace mu::notation {
+class NotationMetaWriter : public AbstractNotationWriter
 {
-    INJECT(iex_imagesexport, IImagesExportConfiguration, configuration)
-
 public:
-    std::vector<notation::INotationWriter::UnitType> supportedUnitTypes() const override;
     Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
+
+private:
+    std::string title(const Ms::Score* score) const;
+    std::string subtitle(const Ms::Score* score) const;
+    std::string composer(const Ms::Score* score) const;
+    std::string poet(const Ms::Score* score) const;
+    std::string timesig(const Ms::Score* score) const;
+    std::pair<std::string, std::string> tempo(const Ms::Score* score) const;
+    std::string parts(const Ms::Score* score) const;
+    std::string pageFormat(const Ms::Score* score) const;
+    std::string typeData(Ms::Score* score);
 };
 }
 
-#endif // MU_IMPORTEXPORT_PNGWRITER_H
+#endif // MU_NOTATION_MSCZNOTATIONMETAWRITER_H

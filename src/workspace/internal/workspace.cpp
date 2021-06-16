@@ -34,7 +34,7 @@
 
 using namespace mu;
 using namespace mu::workspace;
-using namespace mu::system;
+using namespace mu::io;
 using namespace mu::framework;
 
 static constexpr std::string_view WORKSPACE_MUSESCORE_TAG("museScore");
@@ -216,7 +216,7 @@ Ret Workspace::readWorkspace(const QByteArray& xmlData)
 {
     QBuffer buffer;
     buffer.setData(xmlData);
-    buffer.open(IODevice::ReadOnly);
+    buffer.open(Device::ReadOnly);
 
     XmlReader reader(&buffer);
     while (reader.canRead()) {
@@ -251,7 +251,7 @@ Ret Workspace::write()
     }
 
     QBuffer buffer;
-    buffer.open(IODevice::WriteOnly);
+    buffer.open(Device::WriteOnly);
     XmlWriter writer(&buffer);
 
     writer.writeStartDocument();

@@ -706,7 +706,7 @@ mu::Ret MasterNotation::saveSelectionOnScore(const mu::io::path& path)
     return ret;
 }
 
-mu::Ret MasterNotation::writeToDevice(system::IODevice& destinationDevice)
+mu::Ret MasterNotation::writeToDevice(io::Device& destinationDevice)
 {
     bool ok = score()->saveCompressedFile(&destinationDevice, score()->title(), false);
     return ok;
