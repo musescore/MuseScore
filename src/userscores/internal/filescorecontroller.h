@@ -61,6 +61,7 @@ private:
     void openScore(const actions::ActionData& args);
     void importScore();
     void newScore();
+    void closeScore();
 
     void saveScore();
     void saveScoreAs();
