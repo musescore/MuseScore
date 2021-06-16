@@ -132,3 +132,10 @@ mu::Ret ConverterController::exportScoreMedia(const mu::io::path& in, const mu::
 
     return BackendApi::exportScoreMedia(in, out, highlightConfigPath);
 }
+
+mu::Ret ConverterController::exportScoreMeta(const mu::io::path& in, const mu::io::path& out)
+{
+    TRACEFUNC;
+
+    return BackendApi::exportScoreMeta(in, out);
+}

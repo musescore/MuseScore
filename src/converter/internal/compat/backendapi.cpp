@@ -76,6 +76,28 @@ Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
+Ret BackendApi::exportScoreMeta(const io::path& in, const io::path& out)
+{
+    TRACEFUNC
+
+    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in);
+    if (!openScoreRetVal.ret) {
+        return openScoreRetVal.ret;
+    }
+
+    INotationPtr notation = openScoreRetVal.val ? openScoreRetVal.val->notation() : nullptr;
+    if (!notation) {
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    notation->setViewMode(ViewMode::PAGE);
+
+    BackendJsonWriter jsonWriter(out);
+    bool result = exportScoreMetaData(notation, jsonWriter);
+
+    return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
+}
+
 RetVal<notation::IMasterNotationPtr> BackendApi::openScore(const io::path& path)
 {
     TRACEFUNC
