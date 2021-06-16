@@ -21,12 +21,16 @@
  */
 #include "backendapi.h"
 
+#include <stdio.h>
+
 #include <QString>
 #include <QBuffer>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonValue>
+
+#include "libmscore/excerpt.h"
 
 #include "log.h"
 #include "backendjsonwriter.h"
@@ -48,21 +52,19 @@ Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const 
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in);
+    RetVal<INotationPtr> openScoreRetVal = openScore(in);
     if (!openScoreRetVal.ret) {
         return openScoreRetVal.ret;
     }
 
-    INotationPtr notation = openScoreRetVal.val ? openScoreRetVal.val->notation() : nullptr;
-    if (!notation) {
-        return make_ret(Ret::Code::InternalError);
-    }
-
-    notation->setViewMode(ViewMode::PAGE);
+    INotationPtr notation = openScoreRetVal.val;
 
     bool result = true;
 
-    BackendJsonWriter jsonWriter(out);
+    QFile outputFile;
+    openOutputFile(outputFile, out);
+
+    BackendJsonWriter jsonWriter(&outputFile);
 
     result &= exportScorePngs(notation, jsonWriter);
     result &= exportScoreSvgs(notation, jsonWriter, highlightConfigPath);
@@ -73,6 +75,8 @@ Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const 
     result &= exportScoreMusicXML(notation, jsonWriter);
     result &= exportScoreMetaData(notation, jsonWriter);
 
+    outputFile.close();
+
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
@@ -80,40 +84,84 @@ Ret BackendApi::exportScoreMeta(const io::path& in, const io::path& out)
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in);
+    RetVal<INotationPtr> openScoreRetVal = openScore(in);
     if (!openScoreRetVal.ret) {
         return openScoreRetVal.ret;
     }
 
-    INotationPtr notation = openScoreRetVal.val ? openScoreRetVal.val->notation() : nullptr;
+    INotationPtr notation = openScoreRetVal.val;
+
+    QFile outputFile;
+    openOutputFile(outputFile, out);
+
+    BackendJsonWriter jsonWriter(&outputFile);
+
+    bool result = exportScoreMetaData(notation, jsonWriter);
+
+    outputFile.close();
+
+    return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
+}
+
+Ret BackendApi::exportScoreParts(const io::path& in, const io::path& out)
+{
+    TRACEFUNC
+
+    RetVal<INotationPtr> openScoreRetVal = openScore(in);
+    if (!openScoreRetVal.ret) {
+        return openScoreRetVal.ret;
+    }
+
+    INotationPtr notation = openScoreRetVal.val;
+
+    QFile outputFile;
+    openOutputFile(outputFile, out);
+
+    Ret ret = doExportScoreParts(notation, outputFile);
+
+    outputFile.close();
+
+    return ret;
+}
+
+Ret BackendApi::openOutputFile(QFile& file, const io::path& out)
+{
+    bool ok = false;
+    if (!out.empty()) {
+        file.setFileName(out.toQString());
+        ok = file.open(QFile::WriteOnly);
+    } else {
+        ok = file.open(stdout, QFile::WriteOnly);
+    }
+
+    return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
+}
+
+RetVal<notation::INotationPtr> BackendApi::openScore(const io::path& path)
+{
+    TRACEFUNC
+
+    auto masterNotation = notationCreator()->newMasterNotation();
+    IF_ASSERT_FAILED(masterNotation) {
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    Ret ret = masterNotation->load(path);
+    if (!ret) {
+        LOGE() << "failed load: " << path << ", ret: " << ret.toString();
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    INotationPtr notation = masterNotation->notation();
     if (!notation) {
         return make_ret(Ret::Code::InternalError);
     }
 
     notation->setViewMode(ViewMode::PAGE);
 
-    BackendJsonWriter jsonWriter(out);
-    bool result = exportScoreMetaData(notation, jsonWriter);
+    // todo: implement set score style if need
 
-    return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
-}
-
-RetVal<notation::IMasterNotationPtr> BackendApi::openScore(const io::path& path)
-{
-    TRACEFUNC
-
-    auto notation = notationCreator()->newMasterNotation();
-    IF_ASSERT_FAILED(notation) {
-        return make_ret(Ret::Code::InternalError);
-    }
-
-    Ret ret = notation->load(path);
-    if (!ret) {
-        LOGE() << "failed load: " << path << ", ret: " << ret.toString();
-        return make_ret(Ret::Code::InternalError);
-    }
-
-    return RetVal<notation::IMasterNotationPtr>::make_ok(notation);
+    return RetVal<notation::INotationPtr>::make_ok(notation);
 }
 
 PageList BackendApi::pages(const INotationPtr notation)
@@ -304,4 +352,57 @@ Ret BackendApi::processWriter(const std::string& writerName, const INotationPtr 
     jsonWriter.addValue(data.toBase64());
 
     return make_ret(Ret::Code::Ok);
+}
+
+Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, system::IODevice& destinationDevice)
+{
+    Ms::Score* score = notation->elements()->msScore();
+
+    QJsonArray partsObjList;
+    QJsonArray partsMetaList;
+    QJsonArray partsTitles;
+
+    for (const Ms::Excerpt* excerpt : score->excerpts()) {
+        Ms::Score* part = excerpt->partScore();
+        QMap<QString, QString> partMetaTags = part->metaTags();
+
+        QJsonValue partTitle(part->title());
+        partsTitles << partTitle;
+
+        QVariantMap meta;
+        for (const QString& key: partMetaTags.keys()) {
+            meta[key] = partMetaTags[key];
+        }
+
+        QJsonValue partMetaObj = QJsonObject::fromVariantMap(meta);
+        partsMetaList << partMetaObj;
+
+        QJsonValue partObj(QString::fromLatin1(scorePartJson(part)));
+        partsObjList << partObj;
+    }
+
+    QJsonObject json;
+    json["parts"] = partsTitles;
+    json["partsMeta"] = partsMetaList;
+    json["partsBin"] = partsObjList;
+
+    bool ok = destinationDevice.write(QJsonDocument(json).toJson(QJsonDocument::Compact)) != -1;
+    destinationDevice.close();
+
+    return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
+}
+
+QByteArray BackendApi::scorePartJson(Ms::Score* score)
+{
+    QBuffer buffer;
+    buffer.open(QIODevice::ReadWrite);
+
+    QString fileName = io::escapeFileName(score->title().toStdString()).toQString() + ".mscz";
+    score->saveCompressedFile(&buffer, fileName, false, true);
+
+    buffer.open(QIODevice::ReadOnly);
+    QByteArray scoreData = buffer.readAll();
+    buffer.close();
+
+    return scoreData.toBase64();
 }

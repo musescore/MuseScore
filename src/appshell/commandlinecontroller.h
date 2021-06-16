@@ -46,7 +46,8 @@ public:
         File,
         Batch,
         ExportScoreMedia,
-        ExportScoreMeta
+        ExportScoreMeta,
+        ExportScoreParts
     };
 
     struct ConverterTask {

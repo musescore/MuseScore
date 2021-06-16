@@ -240,6 +240,8 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
     case CommandLineController::ConvertType::ExportScoreMeta:
         ret = converter()->exportScoreMeta(task.inputFile, task.outputFile);
         break;
+    case CommandLineController::ConvertType::ExportScoreParts:
+        ret = converter()->exportScoreParts(task.inputFile, task.outputFile);
     }
 
     if (!ret) {

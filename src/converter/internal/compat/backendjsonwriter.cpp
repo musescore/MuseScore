@@ -23,50 +23,50 @@
 
 using namespace mu::converter;
 
-BackendJsonWriter::BackendJsonWriter(const io::path& filePath)
+BackendJsonWriter::BackendJsonWriter(system::IODevice* destinationDevice)
 {
-    jsonFormatFile.setFileName(filePath.toQString());
-    jsonFormatFile.open(QIODevice::WriteOnly);
-    jsonFormatFile.write("{\n");
+    m_destinationDevice = destinationDevice;
+    m_destinationDevice->open(QIODevice::WriteOnly);
+    m_destinationDevice->write("{\n");
 }
 
 BackendJsonWriter::~BackendJsonWriter()
 {
-    jsonFormatFile.write("\n}\n");
-    jsonFormatFile.close();
+    m_destinationDevice->write("\n}\n");
+    m_destinationDevice->close();
 }
 
 void BackendJsonWriter::addKey(const char* arrayName)
 {
-    jsonFormatFile.write("\"");
-    jsonFormatFile.write(arrayName);
-    jsonFormatFile.write("\": ");
+    m_destinationDevice->write("\"");
+    m_destinationDevice->write(arrayName);
+    m_destinationDevice->write("\": ");
 }
 
 void BackendJsonWriter::addValue(const QByteArray& data, bool lastJsonElement, bool isJson)
 {
     if (!isJson) {
-        jsonFormatFile.write("\"");
+        m_destinationDevice->write("\"");
     }
-    jsonFormatFile.write(data);
+    m_destinationDevice->write(data);
     if (!isJson) {
-        jsonFormatFile.write("\"");
+        m_destinationDevice->write("\"");
     }
     if (!lastJsonElement) {
-        jsonFormatFile.write(",\n");
+        m_destinationDevice->write(",\n");
     }
 }
 
 void BackendJsonWriter::openArray()
 {
-    jsonFormatFile.write(" [");
+    m_destinationDevice->write(" [");
 }
 
 void BackendJsonWriter::closeArray(bool lastJsonElement)
 {
-    jsonFormatFile.write("]");
+    m_destinationDevice->write("]");
     if (!lastJsonElement) {
-        jsonFormatFile.write(",");
+        m_destinationDevice->write(",");
     }
-    jsonFormatFile.write("\n");
+    m_destinationDevice->write("\n");
 }
