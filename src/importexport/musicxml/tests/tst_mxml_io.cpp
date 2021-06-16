@@ -194,6 +194,7 @@ private slots:
     void notesRests2() { mxmlIoTest("testNotesRests2"); }
     void numberedLyrics() { mxmlIoTestRef("testNumberedLyrics"); }
     void overlappingSpanners() { mxmlIoTest("testOverlappingSpanners"); }
+    void partNames() { mxmlImportTestRef("testPartNames"); }
     void printSpacingNo() { mxmlIoTestRef("testPrintSpacingNo"); }
     void repeatCounts() { mxmlIoTest("testRepeatCounts"); }
     void repeatSingleMeasure() { mxmlIoTest("testRepeatSingleMeasure"); }
