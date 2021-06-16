@@ -36,6 +36,9 @@ public:
 
     virtual int midiShortestNote() const = 0; //ticks
     virtual void setMidiShortestNote(int ticks) = 0;
+
+    virtual bool isMidiExportRpns() const = 0;
+    virtual void setIsMidiExportRpns(bool exportRpns) const = 0;
 };
 }
 

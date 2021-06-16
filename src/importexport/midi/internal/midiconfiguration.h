@@ -32,6 +32,9 @@ public:
 
     int midiShortestNote() const override; // ticks
     void setMidiShortestNote(int ticks) override;
+
+    bool isMidiExportRpns() const override;
+    void setIsMidiExportRpns(bool exportRpns) const override;
 };
 }
 

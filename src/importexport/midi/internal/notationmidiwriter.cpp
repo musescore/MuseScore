@@ -28,7 +28,7 @@
 using namespace mu::iex::midi;
 using namespace mu::system;
 
-mu::Ret NotationMidiWriter::write(notation::INotationPtr notation, IODevice& destinationDevice, const Options& options)
+mu::Ret NotationMidiWriter::write(notation::INotationPtr notation, IODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -40,10 +40,13 @@ mu::Ret NotationMidiWriter::write(notation::INotationPtr notation, IODevice& des
         return make_ret(Ret::Code::UnknownError);
     }
 
-    Ms::ExportMidi em(score);
-    em.write(&destinationDevice, notationConfiguration()->isPlayRepeatsEnabled(), false, score->synthesizerState());
-//    return em.write(device, preferences.getBool(PREF_IO_MIDI_EXPANDREPEATS), preferences.getBool(PREF_IO_MIDI_EXPORTRPNS),
-//                    synthesizerState());
+    Ms::ExportMidi exportMidi(score);
 
-    return make_ret(Ret::Code::NotImplemented);
+    bool isPlayRepeatsEnabled = notationConfiguration()->isPlayRepeatsEnabled();
+    bool isMidiExportRpns = midiImportExportConfiguration()->isMidiExportRpns();
+    Ms::SynthesizerState synthesizerState = score->synthesizerState();
+
+    bool ok = exportMidi.write(&destinationDevice, isPlayRepeatsEnabled, isMidiExportRpns, synthesizerState);
+
+    return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
