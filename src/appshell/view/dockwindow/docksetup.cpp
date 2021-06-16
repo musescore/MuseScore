@@ -28,6 +28,7 @@
 
 #include "dockwindow.h"
 #include "dockpanel.h"
+#include "dockpanelholder.h"
 #include "dockstatusbar.h"
 #include "docktoolbarholder.h"
 #include "dockcentral.h"
@@ -86,6 +87,7 @@ void DockSetup::registerQmlTypes()
 {
     qmlRegisterType<DockWindow>("MuseScore.Dock", 1, 0, "DockWindow");
     qmlRegisterType<DockPanel>("MuseScore.Dock", 1, 0, "DockPanel");
+    qmlRegisterType<DockPanelHolder>("MuseScore.Dock", 1, 0, "DockPanelHolder");
     qmlRegisterType<DockStatusBar>("MuseScore.Dock", 1, 0, "DockStatusBar");
     qmlRegisterType<DockToolBar>("MuseScore.Dock", 1, 0, "DockToolBar");
     qmlRegisterType<DockToolBarHolder>("MuseScore.Dock", 1, 0, "DockToolBarHolder");

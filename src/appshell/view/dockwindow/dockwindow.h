@@ -43,6 +43,7 @@ class LayoutSaver;
 namespace mu::dock {
 class DockToolBar;
 class DockToolBarHolder;
+class DockPanelHolder;
 class DockPage;
 class DockBase;
 class DockWindow : public QQuickItem, public async::Asyncable
@@ -91,6 +92,7 @@ private:
     void loadPageContent(const DockPage* page);
     void unitePanelsToTabs(const DockPage* page);
     void loadPageToolbars(const DockPage* page);
+    void loadPagePanels(const DockPage* page);
 
     void addDock(DockBase* dock, KDDockWidgets::Location location, const DockBase* relativeTo = nullptr);
 
@@ -107,9 +109,12 @@ private:
     void initDocks(DockPage* page);
 
     DockToolBarHolder* resolveToolbarDockingHolder(const QPoint& localPos) const;
-
     void hideCurrentToolBarDockingHolder();
     bool isMouseOverCurrentToolBarDockingHolder(const QPoint& mouseLocalPos) const;
+
+    DockPanelHolder* resolvePanelDockingHolder(const QPoint& localPos) const;
+    void hideCurrentPanelDockingHolder();
+    bool isMouseOverCurrentPanelDockingHolder(const QPoint& mouseLocalPos) const;
 
     KDDockWidgets::MainWindowBase* m_mainWindow = nullptr;
     QString m_currentPageUri;
@@ -117,6 +122,7 @@ private:
     DockToolBarHolder* m_mainToolBarDockingHolder = nullptr;
     uicomponents::QmlListProperty<DockPage> m_pages;
     DockToolBarHolder* m_currentToolBarDockingHolder = nullptr;
+    DockPanelHolder* m_currentPanelDockingHolder = nullptr;
 };
 }
 
