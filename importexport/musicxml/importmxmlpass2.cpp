@@ -1658,8 +1658,12 @@ void MusicXMLParserPass2::part()
       _pass1.getPart(id)->setPartName(mxmlPart.getName());
       if (mxmlPart.getPrintName())
             _pass1.getPart(id)->setLongName(mxmlPart.getName());
+      else
+            _pass1.getPart(id)->setLongName("");
       if (mxmlPart.getPrintAbbr())
             _pass1.getPart(id)->setPlainShortName(mxmlPart.getAbbr());
+      else
+            _pass1.getPart(id)->setPlainShortName("");
       // try to prevent an empty track name
       if (_pass1.getPart(id)->partName() == "") {
             QString instrId = _pass1.getInstrList(id).instrument(Fraction(0, 1));
