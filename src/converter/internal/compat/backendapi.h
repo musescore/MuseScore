@@ -40,6 +40,7 @@ class BackendApi
 
 public:
     static Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath);
+    static Ret exportScoreMeta(const io::path& in, const io::path& out);
 
 private:
     static RetVal<notation::IMasterNotationPtr> openScore(const io::path& path);

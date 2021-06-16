@@ -237,6 +237,9 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
     case CommandLineController::ConvertType::ExportScoreMedia:
         ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, task.data.toString().toStdString());
         break;
+    case CommandLineController::ConvertType::ExportScoreMeta:
+        ret = converter()->exportScoreMeta(task.inputFile, task.outputFile);
+        break;
     }
 
     if (!ret) {

@@ -51,6 +51,7 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addOption(QCommandLineOption("score-media",
                                           "Export all media (excepting mp3) for a given score in a single JSON file and print it to stdout"));
     m_parser.addOption(QCommandLineOption("highlight-config", "Set highlight to svg, generated from a given score", "highlight-config"));
+    m_parser.addOption(QCommandLineOption("score-meta", "Export score metadata to JSON document and print it to stdout"));
 
     m_parser.process(args);
 }
@@ -123,6 +124,11 @@ void CommandLineController::apply()
         if (m_parser.isSet("highlight-config")) {
             m_converterTask.data = m_parser.value("highlight-config");
         }
+    }
+
+    if (m_parser.isSet("score-meta")) {
+        application()->setRunMode(IApplication::RunMode::Converter);
+        m_converterTask.type = ConvertType::ExportScoreMeta;
     }
 
     if (m_parser.isSet("F") || m_parser.isSet("R")) {
