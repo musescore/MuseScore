@@ -140,26 +140,6 @@ void PopupWindow_QQuickView::setOnHidden(const std::function<void()>& callback)
 
 bool PopupWindow_QQuickView::eventFilter(QObject* watched, QEvent* event)
 {
-// Please, don't remove
-//#define POPUPWINDOW_DEBUG_EVENTS_ENABLED
-#ifdef POPUPWINDOW_DEBUG_EVENTS_ENABLED
-    static QMetaEnum typeEnum = QMetaEnum::fromType<QEvent::Type>();
-    static QList<QEvent::Type> excludeLoggingTypes = { QEvent::MouseMove };
-    const char* typeStr = typeEnum.key(event->type());
-    if (!excludeLoggingTypes.contains(event->type())) {
-        LOGI() << (watched ? watched->objectName() : "null") << " event: " << (typeStr ? typeStr : "unknown");
-    }
-
-    static QList<QEvent::Type> trackEvents = { QEvent::Hide, QEvent::Show };
-    if (trackEvents.contains(event->type())) {
-        int k = 1;
-    }
-
-    if (QString(typeStr) == "WindowDeactivate") {
-        int k = 1;
-    }
-#endif
-
     if (watched == m_view) {
         if (event->type() == QEvent::Hide) {
             if (m_onHidden) {
