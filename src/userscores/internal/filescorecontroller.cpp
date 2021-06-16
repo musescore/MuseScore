@@ -39,6 +39,7 @@ void FileScoreController::init()
     dispatcher()->reg(this, "file-open", this, &FileScoreController::openScore);
     dispatcher()->reg(this, "file-import", this, &FileScoreController::importScore);
     dispatcher()->reg(this, "file-new", this, &FileScoreController::newScore);
+    dispatcher()->reg(this, "file-close", this, &FileScoreController::closeScore);
 
     dispatcher()->reg(this, "file-save", this, &FileScoreController::saveScore);
     dispatcher()->reg(this, "file-save-as", this, &FileScoreController::saveScoreAs);
@@ -135,6 +136,11 @@ void FileScoreController::newScore()
     if (!ret) {
         LOGE() << ret.toString();
     }
+}
+
+void FileScoreController::closeScore()
+{
+    globalContext()->setCurrentMasterNotation(nullptr);
 }
 
 void FileScoreController::saveScore()
