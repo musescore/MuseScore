@@ -25,9 +25,15 @@
 
 #include "modularity/ioc.h"
 #include "ui/iinteractiveuriregister.h"
+#include "ui/iuiactionsregister.h"
+
+#include "internal/diagnosticsactions.h"
+#include "internal/diagnosticsactionscontroller.h"
 
 using namespace mu::diagnostics;
 using namespace mu::framework;
+
+static std::shared_ptr<DiagnosticsActionsController> s_actionsController = std::make_shared<DiagnosticsActionsController>();
 
 std::string DiagnosticsModule::moduleName() const
 {
@@ -40,9 +46,14 @@ void DiagnosticsModule::registerExports()
 
 void DiagnosticsModule::resolveImports()
 {
-    auto ir = framework::ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("musescore://autobot/main"), "MuseScore/Diagnostics/DiagnosticsDialog.qml");
+        ir->registerQmlUri(Uri("musescore://diagnostics/main"), "MuseScore/Diagnostics/DiagnosticsDialog.qml");
+    }
+
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(std::make_shared<DiagnosticsActions>());
     }
 }
 
@@ -53,4 +64,5 @@ void DiagnosticsModule::registerUiTypes()
 
 void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)
 {
+    s_actionsController->init();
 }
