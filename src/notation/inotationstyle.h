@@ -26,6 +26,10 @@
 #include "notationtypes.h"
 #include "async/notification.h"
 
+namespace Ms {
+struct ChordSymbolStyle;
+}
+
 namespace mu::notation {
 class INotationStyle
 {
@@ -39,6 +43,8 @@ public:
 
     virtual bool canApplyToAllParts() const = 0;
     virtual void applyToAllParts() = 0;
+
+    virtual QList<Ms::ChordSymbolStyle> getChordStyles() const = 0;
 
     virtual async::Notification styleChanged() const = 0;
 };

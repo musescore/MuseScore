@@ -85,6 +85,11 @@ void NotationStyle::applyToAllParts()
     }
 }
 
+QList<Ms::ChordSymbolStyle> NotationStyle::getChordStyles() const
+{
+    return m_getScore->score()->style().getChordStyles();
+}
+
 Notification NotationStyle::styleChanged() const
 {
     return m_styleChanged;

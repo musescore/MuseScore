@@ -26,44 +26,54 @@ using namespace mu::notation;
 ChordSymbolStylesModel::ChordSymbolStylesModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-
+    m_styles = globalContext()->currentNotation()->style()->getChordStyles();
 }
+
 int ChordSymbolStylesModel::rowCount(const QModelIndex&) const
 {
     return m_styles.count();
 }
+
 QHash<int, QByteArray> ChordSymbolStylesModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
         { StyleNameRole, "styleName" },
         { FileRole, "fileName" }
     };
+
     return roles;
 }
-QVariant ChordSymbolStylesModel::data(const QModelIndex &index, int role) const{
+
+QVariant ChordSymbolStylesModel::data(const QModelIndex& index, int role) const
+{
     if (!index.isValid() || index.row() >= rowCount() || m_styles.isEmpty()) {
         return QVariant();
     }
 
-    ChordSymbolStyle chordSymbolStyle = m_styles.at(index.row());
+    Ms::ChordSymbolStyle chordSymbolStyle = m_styles.at(index.row());
 
     switch (role) {
-        case StyleNameRole:
-            return chordSymbolStyle.styleName;
-        case FileRole:
-            return chordSymbolStyle.file;
-        default:
-            break;
+    case StyleNameRole:
+        return chordSymbolStyle.styleName;
+    case FileRole:
+        return chordSymbolStyle.fileName;
+    default:
+        break;
     }
+
     return QVariant();
 }
-void ChordSymbolStylesModel::setChordStyle(QString styleName) const{
+
+void ChordSymbolStylesModel::setChordStyle(QString styleName) const
+{
     QString f = "chords_std.xml"; // Fall back
-    for(auto& c: m_styles){
-        if(c.styleName == styleName){
-            f = c.file;
+
+    for (auto& c: m_styles) {
+        if (c.styleName == styleName) {
+            f = c.fileName;
             break;
         }
     }
-    globalContext()->currentNotation()->style()->setStyleValue(StyleId::chordDescriptionFile,f);
+
+    globalContext()->currentNotation()->style()->setStyleValue(StyleId::chordDescriptionFile, f);
 }

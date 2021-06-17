@@ -28,22 +28,29 @@ FocusableItem {
     id: root
 
     property alias chordStylesModel: grid.model
+
     height: grid.height
 
         Component {
             id: styleDelegate
+
             FlatButton {
                 id: button
+
                 width: grid.cellWidth-5
                 height: grid.cellHeight-5
+
                 Text {
                     text: styleName
+
                     width: button.width
                     height: button.height
+
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     wrapMode: Text.Wrap
                 }
+
                 onClicked: {
                     chordStylesModel.setChordStyle(styleName)
                     grid.currentIndex = index
@@ -53,12 +60,19 @@ FocusableItem {
 
         GridView {
             id: grid
+
+            anchors.left: root.left
+            anchors.right: root.right
+
             height: 2*cellHeight
             width: 2*cellWidth
-            clip: true
+
             cellWidth: 120
             cellHeight: 60
+
             delegate: styleDelegate
+            clip: true
+
             highlight: Rectangle {
                 color: ui.theme.accentColor
                 radius: 3

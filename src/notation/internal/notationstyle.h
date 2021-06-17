@@ -41,6 +41,8 @@ public:
     bool canApplyToAllParts() const override;
     void applyToAllParts() override;
 
+    QList<Ms::ChordSymbolStyle> getChordStyles() const override;
+
     async::Notification styleChanged() const override;
 
 private:

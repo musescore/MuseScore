@@ -110,10 +110,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/brackets/bracesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/brackets/bracketsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/brackets/bracketsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/chordsymbols/chordsymbolstylesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/chordsymbols/chordsymbolstylesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/chordsymbols/chordsymbolsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/chordsymbols/chordsymbolsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/chordsymbols/chordsymbolstylesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/chordsymbols/chordsymbolstylesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/clefs/clefsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/clefs/clefsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/crescendos/crescendosettingsmodel.cpp
