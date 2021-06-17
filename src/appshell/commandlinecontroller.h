@@ -51,13 +51,18 @@ public:
         ExportScorePartsPdf
     };
 
+    enum class ParamKey {
+        HighlightConfigPath,
+        StylePath
+    };
+
     struct ConverterTask {
         ConvertType type = ConvertType::File;
 
         QString inputFile;
         QString outputFile;
 
-        QVariant data;
+        QMap<ParamKey, QVariant> params;
     };
 
     void parse(const QStringList& args);

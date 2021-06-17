@@ -34,7 +34,7 @@
 
 using namespace mu::converter;
 
-mu::Ret ConverterController::batchConvert(const io::path& batchJobFile)
+mu::Ret ConverterController::batchConvert(const io::path& batchJobFile, const io::path& stylePath)
 {
     RetVal<BatchJob> batchJob = parseBatchJob(batchJobFile);
     if (!batchJob.ret) {
@@ -44,7 +44,7 @@ mu::Ret ConverterController::batchConvert(const io::path& batchJobFile)
 
     Ret ret = make_ret(Ret::Code::Ok);
     for (const Job& job : batchJob.val) {
-        ret = fileConvert(job.in, job.out);
+        ret = fileConvert(job.in, job.out, stylePath);
         if (!ret) {
             LOGE() << "failed convert, err: " << ret.toString() << ", in: " << job.in << ", out: " << job.out;
             break;
@@ -54,7 +54,7 @@ mu::Ret ConverterController::batchConvert(const io::path& batchJobFile)
     return ret;
 }
 
-mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out)
+mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out, const io::path& stylePath)
 {
     TRACEFUNC;
     LOGI() << "in: " << in << ", out: " << out;
@@ -69,7 +69,7 @@ mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out
         return make_ret(Err::ConvertTypeUnknown);
     }
 
-    Ret ret = masterNotation->load(in);
+    Ret ret = masterNotation->load(in, stylePath);
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
         return make_ret(Err::InFileFailedLoad);
@@ -126,30 +126,30 @@ mu::RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(con
     return rv;
 }
 
-mu::Ret ConverterController::exportScoreMedia(const mu::io::path& in, const mu::io::path& out, const mu::io::path& highlightConfigPath)
+mu::Ret ConverterController::exportScoreMedia(const mu::io::path& in, const mu::io::path& out, const mu::io::path& highlightConfigPath, const io::path& stylePath)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreMedia(in, out, highlightConfigPath);
+    return BackendApi::exportScoreMedia(in, out, highlightConfigPath, stylePath);
 }
 
-mu::Ret ConverterController::exportScoreMeta(const mu::io::path& in, const mu::io::path& out)
+mu::Ret ConverterController::exportScoreMeta(const mu::io::path& in, const mu::io::path& out, const io::path& stylePath)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreMeta(in, out);
+    return BackendApi::exportScoreMeta(in, out, stylePath);
 }
 
-mu::Ret ConverterController::exportScoreParts(const mu::io::path& in, const mu::io::path& out)
+mu::Ret ConverterController::exportScoreParts(const mu::io::path& in, const mu::io::path& out, const io::path& stylePath)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreParts(in, out);
+    return BackendApi::exportScoreParts(in, out, stylePath);
 }
 
-mu::Ret ConverterController::exportScorePartsPdfs(const mu::io::path& in, const mu::io::path& out)
+mu::Ret ConverterController::exportScorePartsPdfs(const mu::io::path& in, const mu::io::path& out, const io::path& stylePath)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScorePartsPdfs(in, out);
+    return BackendApi::exportScorePartsPdfs(in, out, stylePath);
 }

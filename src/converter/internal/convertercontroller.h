@@ -41,12 +41,12 @@ class ConverterController : public IConverterController
 public:
     ConverterController() = default;
 
-    Ret fileConvert(const io::path& in, const io::path& out) override;
-    Ret batchConvert(const io::path& batchJobFile) override;
-    Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath) override;
-    Ret exportScoreMeta(const io::path& in, const io::path& out) override;
-    Ret exportScoreParts(const io::path& in, const io::path& out) override;
-    Ret exportScorePartsPdfs(const io::path& in, const io::path& out) override;
+    Ret fileConvert(const io::path& in, const io::path& out, const io::path& stylePath) override;
+    Ret batchConvert(const io::path& batchJobFile, const io::path& stylePath) override;
+    Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath, const io::path& stylePath) override;
+    Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath) override;
+    Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath) override;
+    Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath) override;
 
 private:
 

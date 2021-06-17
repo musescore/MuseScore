@@ -45,15 +45,15 @@ class BackendApi
     INJECT_STATIC(converter, notation::INotationWritersRegister, writers)
 
 public:
-    static Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath);
-    static Ret exportScoreMeta(const io::path& in, const io::path& out);
-    static Ret exportScoreParts(const io::path& in, const io::path& out);
-    static Ret exportScorePartsPdfs(const io::path& in, const io::path& out);
+    static Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath, const io::path& stylePath);
+    static Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath);
+    static Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath);
+    static Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath);
 
 private:
     static Ret openOutputFile(QFile& file, const io::path& out);
 
-    static RetVal<notation::IMasterNotationPtr> openScore(const io::path& path);
+    static RetVal<notation::IMasterNotationPtr> openScore(const io::path& path, const io::path& stylePath);
 
     static notation::PageList pages(const notation::INotationPtr notation);
 

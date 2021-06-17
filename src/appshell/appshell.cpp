@@ -227,24 +227,27 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
 {
     Ret ret = make_ret(Ret::Code::Ok);
 
+    io::path highlightConfigPath = task.params[CommandLineController::ParamKey::HighlightConfigPath].toString();
+    io::path stylePath = task.params[CommandLineController::ParamKey::StylePath].toString();
+
     switch (task.type) {
     case CommandLineController::ConvertType::Batch:
-        ret = converter()->batchConvert(task.inputFile);
+        ret = converter()->batchConvert(task.inputFile, stylePath);
         break;
     case CommandLineController::ConvertType::File:
-        ret = converter()->fileConvert(task.inputFile, task.outputFile);
+        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath);
         break;
     case CommandLineController::ConvertType::ExportScoreMedia:
-        ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, task.data.toString().toStdString());
+        ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, highlightConfigPath, stylePath);
         break;
     case CommandLineController::ConvertType::ExportScoreMeta:
-        ret = converter()->exportScoreMeta(task.inputFile, task.outputFile);
+        ret = converter()->exportScoreMeta(task.inputFile, task.outputFile, stylePath);
         break;
     case CommandLineController::ConvertType::ExportScoreParts:
-        ret = converter()->exportScoreParts(task.inputFile, task.outputFile);
+        ret = converter()->exportScoreParts(task.inputFile, task.outputFile, stylePath);
         break;
     case CommandLineController::ConvertType::ExportScorePartsPdf:
-        ret = converter()->exportScorePartsPdfs(task.inputFile, task.outputFile);
+        ret = converter()->exportScorePartsPdfs(task.inputFile, task.outputFile, stylePath);
         break;
     }
 

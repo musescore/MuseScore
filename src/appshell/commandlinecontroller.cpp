@@ -55,6 +55,7 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addOption(QCommandLineOption("score-parts", "Generate parts data for the given score and save them to separate mscz files"));
     m_parser.addOption(QCommandLineOption("score-parts-pdf",
                                           "Generate parts data for the given score and export the data to a single JSON file, print it to stdout"));
+    m_parser.addOption(QCommandLineOption({"S", "style"}, "Load style file", "style"));
 
     m_parser.process(args);
 }
@@ -126,7 +127,7 @@ void CommandLineController::apply()
         m_converterTask.type = ConvertType::ExportScoreMedia;
         m_converterTask.inputFile = scorefiles[0];
         if (m_parser.isSet("highlight-config")) {
-            m_converterTask.data = m_parser.value("highlight-config");
+            m_converterTask.params[CommandLineController::ParamKey::HighlightConfigPath] = m_parser.value("highlight-config");
         }
     }
 
@@ -150,6 +151,10 @@ void CommandLineController::apply()
 
     if (m_parser.isSet("F") || m_parser.isSet("R")) {
         configuration()->revertToFactorySettings(m_parser.isSet("R"));
+    }
+
+    if (m_parser.isSet("S")) {
+        m_converterTask.params[CommandLineController::ParamKey::StylePath] = m_parser.value("S");
     }
 }
 
