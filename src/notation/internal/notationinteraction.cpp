@@ -2231,6 +2231,7 @@ void NotationInteraction::deleteSelection()
         auto textBase = toTextBase(m_textEditData.element);
         if (!textBase->deleteSelectedText(m_textEditData)) {
             m_textEditData.key = Qt::Key_Backspace;
+            m_textEditData.modifiers = 0;
             textBase->edit(m_textEditData);
         }
     } else {

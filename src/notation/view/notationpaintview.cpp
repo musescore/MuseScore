@@ -688,7 +688,7 @@ void NotationPaintView::hoverMoveEvent(QHoverEvent* event)
     }
 }
 
-void NotationPaintView::keyReleaseEvent(QKeyEvent* event)
+void NotationPaintView::shortcutOverride(QKeyEvent* event)
 {
     if (isInited()) {
         std::string sequence = QKeySequence(event->key()).toString().toStdString();
@@ -712,6 +712,14 @@ void NotationPaintView::keyReleaseEvent(QKeyEvent* event)
         }
         m_inputController->keyReleaseEvent(event);
     }
+}
+
+bool NotationPaintView::event(QEvent* ev)
+{
+    if (ev->type() == QEvent::Type::ShortcutOverride) {
+        shortcutOverride(static_cast<QKeyEvent*>(ev));
+    }
+    return QQuickPaintedItem::event(ev);
 }
 
 void NotationPaintView::dragEnterEvent(QDragEnterEvent* event)
