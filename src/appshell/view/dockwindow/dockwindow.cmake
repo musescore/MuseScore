@@ -24,8 +24,8 @@ set (DOCK_LIBS
 
 if (OS_IS_MAC)
     set (DOCKWINDOW_PLATFORM_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/appwindowstyler.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/appwindowstyler.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosmainwindowprovider.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosmainwindowprovider.h
         )
 else()
     set (DOCKWINDOW_PLATFORM_SRC )

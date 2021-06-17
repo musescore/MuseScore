@@ -30,9 +30,8 @@ import "../../"
 AppWindow {
     id: root
 
-    AppWindowStyler {
-        id: appWindowStyler
-        targetWindow: root
+    MainWindowProvider {
+        window: root
     }
 
     PLATFORM.MenuBar {
@@ -44,7 +43,6 @@ AppWindow {
     }
 
     Component.onCompleted: {
-        appWindowStyler.init()
         menuModel.load()
 
         for (var i in menuModel.items) {
