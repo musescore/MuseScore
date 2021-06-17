@@ -27,57 +27,6 @@
 
 namespace Ms {
 
-//-----------------------------------------------------------------------------
-//   Dyn
-//    see: http://en.wikipedia.org/wiki/File:Dynamic's_Note_Velocity.svg
-//-----------------------------------------------------------------------------
-
-struct Dyn {
-      int velocity;      ///< associated midi velocity (0-127, -1 = none)
-      bool accent;       ///< if true add velocity to current chord velocity
-      const char* tag;   // name of dynamics, eg. "fff"
-      const char* text;  // utf8 text of dynamic
-      int changeInVelocity;
-      };
-
-// variant with ligatures, works for both emmentaler and bravura:
-
-static Dyn dynList[] = {
-      // dynamic:
-      {  -1,  true,  "other-dynamics", "", 0 },
-      {   1,  false, "pppppp", "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
-      {   5,  false, "ppppp",  "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
-      {  10,  false, "pppp",   "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
-      {  16,  false, "ppp",    "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
-      {  33,  false, "pp",     "<sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
-      {  49,  false, "p",      "<sym>dynamicPiano</sym>", 0 },
-      {  64,  false, "mp",     "<sym>dynamicMezzo</sym><sym>dynamicPiano</sym>", 0 },
-      {  80,  false, "mf",     "<sym>dynamicMezzo</sym><sym>dynamicForte</sym>", 0 },
-      {  96,  false, "f",      "<sym>dynamicForte</sym>", 0 },
-      { 112,  false, "ff",     "<sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
-      { 126,  false, "fff",    "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
-      { 127,  false, "ffff",   "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
-      { 127,  false, "fffff",  "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
-      { 127,  false, "ffffff", "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
-
-      // accents:
-      {  96,  true,  "fp",     "<sym>dynamicForte</sym><sym>dynamicPiano</sym>", -47 },
-      {  49,  true,  "pf",     "<sym>dynamicPiano</sym><sym>dynamicForte</sym>", 47 },
-      {  112, true,  "sf",     "<sym>dynamicSforzando</sym><sym>dynamicForte</sym>", -18 },
-      {  112, true,  "sfz",    "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>", -18 },
-      {  126, true,  "sff",    "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>", -18 },
-      {  126, true,  "sffz",   "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>", -18 },
-      {  112, true,  "sfp",    "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym>", -47 },
-      {  112, true,  "sfpp",   "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", -79 },
-      {  112, true,  "rfz",    "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>", -18 },
-      {  112, true,  "rf",     "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym>", -18 },
-      {  112, true,  "fz",     "<sym>dynamicForte</sym><sym>dynamicZ</sym>", -18 },
-      {  96,  true,  "m",      "<sym>dynamicMezzo</sym>", -16 },
-      {  112, true,  "r",      "<sym>dynamicRinforzando</sym>", -18 },
-      {  112, true,  "s",      "<sym>dynamicSforzando</sym>", -18 },
-      {  80,  true,  "z",      "<sym>dynamicZ</sym>", 0 },
-      {  49,  true,  "n",      "<sym>dynamicNiente</sym>", -48 }
-      };
 
 //---------------------------------------------------------
 //   dynamicsStyle

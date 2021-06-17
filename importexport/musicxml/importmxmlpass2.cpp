@@ -2601,6 +2601,9 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         MusicXMLInferredFingering* inferredFingering = new MusicXMLInferredFingering(totalY(), t, _wordsText, track, placement(), measure, tick + _offset);
                         inferredFingerings.push_back(inferredFingering);
                         }
+                  else if (directionToDynamic()) {
+                        delete t;
+                        }
                   else {
                         // Add element to score later, after collecting all the others and sorting by default-y
                         // This allows default-y to be at least respected by the order of elements
@@ -2737,7 +2740,9 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
                   _metroText = metronome(_tpoMetro);
             else if (_e.name() == "words") {
                   _enclosure      = _e.attributes().value("enclosure").toString();
-                  _wordsText += nextPartOfFormattedString(_e);
+                  QString nextPart = nextPartOfFormattedString(_e);
+                  textToDynamic(nextPart);
+                  _wordsText += nextPart;
                   }
             else if (_e.name() == "rehearsal") {
                   _enclosure      = _e.attributes().value("enclosure").toString();
@@ -2921,6 +2926,44 @@ static Marker* findMarker(const QString& repeat, Score* score)
             m->setMarkerType(Marker::Type::TOCODA);
             }
       return m;
+      }
+
+//---------------------------------------------------------
+//   textToDynamic
+//---------------------------------------------------------
+/**
+ Attempts to convert text to dynamic text. No-op if unable.
+ */
+void MusicXMLParserDirection::textToDynamic(QString& text) const
+      {
+      QString simplifiedText = text.simplified();
+      for (auto dyn : dynList) {
+            if (dyn.tag == simplifiedText) {
+                  text = text.replace(simplifiedText, dyn.text);
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   directionToDynamic
+//---------------------------------------------------------
+/**
+ Attempts to convert direction to dynamic. True if successful,
+ else false.
+ */
+bool MusicXMLParserDirection::directionToDynamic()
+      {
+      if (!_metroText.isEmpty() || !_rehearsalText.isEmpty() || !_enclosure.isEmpty())
+            return false;
+      QString simplifiedText = _wordsText.simplified(); 
+      for (auto dyn : dynList) {
+            if (dyn.tag == simplifiedText || dyn.text == simplifiedText) {
+                  _dynaVelocity = QString::number(round(dyn.velocity / 0.9));
+                  _dynamicsList.push_back(simplifiedText);
+                  return true;
+                  }
+            }
+      return false;
       }
 
 //---------------------------------------------------------
