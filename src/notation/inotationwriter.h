@@ -48,7 +48,6 @@ public:
         UNIT_TYPE,
         PAGE_NUMBER,
         TRANSPARENT_BACKGROUND,
-        TRIM_MARGINS_SIZE,
         NOTES_COLORS
     };
 

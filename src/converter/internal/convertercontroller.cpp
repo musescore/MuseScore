@@ -153,3 +153,10 @@ mu::Ret ConverterController::exportScorePartsPdfs(const mu::io::path& in, const 
 
     return BackendApi::exportScorePartsPdfs(in, out, stylePath);
 }
+
+mu::Ret ConverterController::updateSource(const io::path& in, const QString& newSource)
+{
+    TRACEFUNC;
+
+    return BackendApi::updateSource(in, newSource);
+}

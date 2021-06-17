@@ -47,6 +47,7 @@ public:
     Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath) override;
     Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath) override;
     Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath) override;
+    Ret updateSource(const io::path& in, const QString& newSource) override;
 
 private:
 

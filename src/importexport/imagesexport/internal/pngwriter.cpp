@@ -66,7 +66,7 @@ mu::Ret PngWriter::write(INotationPtr notation, Device& destinationDevice, const
 
     Ms::Page* page = pages[PAGE_NUMBER];
 
-    const int TRIM_MARGIN_SIZE = options.value(OptionKey::TRIM_MARGINS_SIZE, Val(0)).toInt();
+    const int TRIM_MARGIN_SIZE = configuration()->trimMarginPixelSize();
     RectF pageRect = page->abbox();
 
     if (TRIM_MARGIN_SIZE >= 0) {
