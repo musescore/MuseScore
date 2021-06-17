@@ -1,0 +1,3 @@
+module MuseScore.Diagnostics
+DiagnosticsPanel 1.0 DiagnosticsPanel.qml
+DiagnosticsDialog 1.0 DiagnosticsDialog.qml

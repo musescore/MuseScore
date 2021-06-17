@@ -90,6 +90,8 @@ if (BUILD_MULTIINSTANCES_MODULE)
     add_subdirectory(multiinstances)
 endif()
 
+add_subdirectory(diagnostics)
+
 if (BUILD_AUTOBOT_MODULE)
     add_subdirectory(autobot)
 endif()
