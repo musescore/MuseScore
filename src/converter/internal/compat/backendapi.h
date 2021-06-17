@@ -47,11 +47,12 @@ public:
     static Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath);
     static Ret exportScoreMeta(const io::path& in, const io::path& out);
     static Ret exportScoreParts(const io::path& in, const io::path& out);
+    static Ret exportScorePartsPdfs(const io::path& in, const io::path& out);
 
 private:
     static Ret openOutputFile(QFile& file, const io::path& out);
 
-    static RetVal<notation::INotationPtr> openScore(const io::path& path);
+    static RetVal<notation::IMasterNotationPtr> openScore(const io::path& path);
 
     static notation::PageList pages(const notation::INotationPtr notation);
 
@@ -62,13 +63,18 @@ private:
     static Ret exportScoreElementsPositions(const std::string& elementsPositionsWriterName, const notation::INotationPtr notation,
                                             BackendJsonWriter& jsonWriter);
     static Ret exportScorePdf(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter);
+    static Ret exportScorePdf(const notation::INotationPtr notation, mu::system::IODevice& destinationDevice);
     static Ret exportScoreMidi(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter);
     static Ret exportScoreMusicXML(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter);
     static Ret exportScoreMetaData(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter);
 
-    static Ret processWriter(const std::string& writerName, const notation::INotationPtr notation, BackendJsonWriter& jsonWriter);
+    static mu::RetVal<QByteArray> processWriter(const std::string& writerName, const notation::INotationPtr notation);
+    static mu::RetVal<QByteArray> processWriter(const std::string& writerName, const notation::INotationPtrList notations,
+                                                const notation::INotationWriter::Options& options);
 
     static Ret doExportScoreParts(const notation::INotationPtr notation, mu::system::IODevice& destinationDevice);
+    static Ret doExportScorePartsPdfs(const notation::IMasterNotationPtr notation, mu::system::IODevice& destinationDevice,
+                                      const std::string& scoreFileName);
 
     static QByteArray scorePartJson(Ms::Score* score);
 };

@@ -39,7 +39,7 @@ static QString boolToString(bool b)
     return b ? "true" : "false";
 }
 
-mu::RetVal<std::string> NotationMeta::metaString(INotationPtr notation)
+mu::RetVal<std::string> NotationMeta::metaJson(INotationPtr notation)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);

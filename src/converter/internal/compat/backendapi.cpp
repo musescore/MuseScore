@@ -53,12 +53,12 @@ Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const 
 {
     TRACEFUNC
 
-    RetVal<INotationPtr> openScoreRetVal = openScore(in);
+    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in);
     if (!openScoreRetVal.ret) {
         return openScoreRetVal.ret;
     }
 
-    INotationPtr notation = openScoreRetVal.val;
+    INotationPtr notation = openScoreRetVal.val->notation();
 
     bool result = true;
 
@@ -83,12 +83,12 @@ Ret BackendApi::exportScoreMeta(const io::path& in, const io::path& out)
 {
     TRACEFUNC
 
-    RetVal<INotationPtr> openScoreRetVal = openScore(in);
+    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in);
     if (!openScoreRetVal.ret) {
         return openScoreRetVal.ret;
     }
 
-    INotationPtr notation = openScoreRetVal.val;
+    INotationPtr notation = openScoreRetVal.val->notation();
 
     QFile outputFile;
     openOutputFile(outputFile, out);
@@ -104,17 +104,38 @@ Ret BackendApi::exportScoreParts(const io::path& in, const io::path& out)
 {
     TRACEFUNC
 
-    RetVal<INotationPtr> openScoreRetVal = openScore(in);
+    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in);
     if (!openScoreRetVal.ret) {
         return openScoreRetVal.ret;
     }
 
-    INotationPtr notation = openScoreRetVal.val;
+    INotationPtr notation = openScoreRetVal.val->notation();
 
     QFile outputFile;
     openOutputFile(outputFile, out);
 
     Ret ret = doExportScoreParts(notation, outputFile);
+
+    outputFile.close();
+
+    return ret;
+}
+
+Ret BackendApi::exportScorePartsPdfs(const io::path& in, const io::path& out)
+{
+    TRACEFUNC
+
+    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in);
+    if (!openScoreRetVal.ret) {
+        return openScoreRetVal.ret;
+    }
+
+    QFile outputFile;
+    openOutputFile(outputFile, out);
+
+    std::string scoreFileName = io::dirpath(in).toStdString() + "/" + io::completebasename(in).toStdString() + ".pdf";
+
+    Ret ret = doExportScorePartsPdfs(openScoreRetVal.val, outputFile, scoreFileName);
 
     outputFile.close();
 
@@ -134,7 +155,7 @@ Ret BackendApi::openOutputFile(QFile& file, const io::path& out)
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-RetVal<notation::INotationPtr> BackendApi::openScore(const io::path& path)
+RetVal<notation::IMasterNotationPtr> BackendApi::openScore(const io::path& path)
 {
     TRACEFUNC
 
@@ -158,7 +179,7 @@ RetVal<notation::INotationPtr> BackendApi::openScore(const io::path& path)
 
     // todo: implement set score style if need
 
-    return RetVal<notation::INotationPtr>::make_ok(notation);
+    return RetVal<notation::IMasterNotationPtr>::make_ok(masterNotation);
 }
 
 PageList BackendApi::pages(const INotationPtr notation)
@@ -295,35 +316,82 @@ Ret BackendApi::exportScoreElementsPositions(const std::string& elementsPosition
 {
     TRACEFUNC
 
-    return processWriter(elementsPositionsWriterName, notation, jsonWriter);
+    RetVal<QByteArray> writerRetVal = processWriter(elementsPositionsWriterName, notation);
+    if (!writerRetVal.ret) {
+        return writerRetVal.ret;
+    }
+
+    jsonWriter.addKey(elementsPositionsWriterName.c_str());
+    jsonWriter.addValue(writerRetVal.val);
+
+    return make_ret(Ret::Code::Ok);
 }
 
 Ret BackendApi::exportScorePdf(const INotationPtr notation, BackendJsonWriter& jsonWriter)
 {
     TRACEFUNC
 
-    return processWriter(PDF_WRITER_NAME, notation, jsonWriter);
+    RetVal<QByteArray> writerRetVal = processWriter(PDF_WRITER_NAME, notation);
+    if (!writerRetVal.ret) {
+        return writerRetVal.ret;
+    }
+
+    jsonWriter.addKey(PDF_WRITER_NAME.c_str());
+    jsonWriter.addValue(writerRetVal.val);
+
+    return make_ret(Ret::Code::Ok);
+}
+
+Ret BackendApi::exportScorePdf(const INotationPtr notation, system::IODevice& destinationDevice)
+{
+    TRACEFUNC
+
+    RetVal<QByteArray> writerRetVal = processWriter(PDF_WRITER_NAME, notation);
+    if (!writerRetVal.ret) {
+        return writerRetVal.ret;
+    }
+
+    bool ok = destinationDevice.write(QJsonDocument::fromJson(writerRetVal.val).toJson(QJsonDocument::Compact)) != -1;
+    destinationDevice.close();
+
+    return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
 Ret BackendApi::exportScoreMidi(const INotationPtr notation, BackendJsonWriter& jsonWriter)
 {
     TRACEFUNC
 
-    return processWriter(MIDI_WRITER_NAME, notation, jsonWriter);
+    RetVal<QByteArray> writerRetVal = processWriter(MIDI_WRITER_NAME, notation);
+    if (!writerRetVal.ret) {
+        return writerRetVal.ret;
+    }
+
+    jsonWriter.addKey(MIDI_WRITER_NAME.c_str());
+    jsonWriter.addValue(writerRetVal.val);
+
+    return make_ret(Ret::Code::Ok);
 }
 
 Ret BackendApi::exportScoreMusicXML(const INotationPtr notation, BackendJsonWriter& jsonWriter)
 {
     TRACEFUNC
 
-    return processWriter(MUSICXML_WRITER_NAME, notation, jsonWriter);
+    RetVal<QByteArray> writerRetVal = processWriter(MUSICXML_WRITER_NAME, notation);
+    if (!writerRetVal.ret) {
+        return writerRetVal.ret;
+    }
+
+    jsonWriter.addKey(MUSICXML_WRITER_NAME.c_str());
+    jsonWriter.addValue(writerRetVal.val);
+
+    return make_ret(Ret::Code::Ok);
 }
 
 Ret BackendApi::exportScoreMetaData(const INotationPtr notation, BackendJsonWriter& jsonWriter)
 {
     TRACEFUNC
 
-    RetVal<std::string> meta = NotationMeta::metaString(notation);
+    RetVal<std::string> meta = NotationMeta::metaJson(notation);
     if (!meta.ret) {
         LOGW() << meta.ret.toString();
         return meta.ret;
@@ -335,8 +403,7 @@ Ret BackendApi::exportScoreMetaData(const INotationPtr notation, BackendJsonWrit
     return make_ret(Ret::Code::Ok);
 }
 
-Ret BackendApi::processWriter(const std::string& writerName, const INotationPtr notation,
-                              BackendJsonWriter& jsonWriter)
+mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, const INotationPtr notation)
 {
     auto writer = writers()->writer(writerName);
     if (!writer) {
@@ -354,12 +421,41 @@ Ret BackendApi::processWriter(const std::string& writerName, const INotationPtr 
         return writeRet;
     }
 
-    jsonWriter.addKey(writerName.c_str());
-    jsonWriter.addValue(data.toBase64());
+    RetVal<QByteArray> result;
+    result.ret = make_ret(Ret::Code::Ok);
+    result.val = data.toBase64();
 
     device.close();
 
-    return make_ret(Ret::Code::Ok);
+    return result;
+}
+
+mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, const INotationPtrList notations,
+                                                 const INotationWriter::Options& options)
+{
+    auto writer = writers()->writer(writerName);
+    if (!writer) {
+        LOGW() << "Not found writer " << writerName;
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    QByteArray data;
+    QBuffer device(&data);
+    device.open(QIODevice::ReadWrite);
+
+    Ret writeRet = writer->writeList(notations, device, options);
+    if (!writeRet) {
+        LOGW() << writeRet.toString();
+        return writeRet;
+    }
+
+    RetVal<QByteArray> result;
+    result.ret = make_ret(Ret::Code::Ok);
+    result.val = data.toBase64();
+
+    device.close();
+
+    return result;
 }
 
 Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, system::IODevice& destinationDevice)
@@ -398,6 +494,47 @@ Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, system
     destinationDevice.close();
 
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
+}
+
+Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr notation, system::IODevice& destinationDevice,
+                                       const std::string& scoreFileName)
+{
+    QJsonObject jsonForPdfs;
+    jsonForPdfs["score"] = QString::fromStdString(scoreFileName);
+    QByteArray scoreBin = processWriter(PDF_WRITER_NAME, notation->notation()).val;
+    jsonForPdfs["scoreBin"] = QString::fromLatin1(scoreBin);
+
+    INotationPtrList notations;
+
+    QJsonArray partsArray;
+    QJsonArray partsNamesArray;
+    for (IExcerptNotationPtr e : notation->excerpts().val) {
+        QJsonValue partNameVal(e->metaInfo().title);
+        partsNamesArray.append(partNameVal);
+
+        QByteArray partBin = processWriter(PDF_WRITER_NAME, e->notation()).val;
+        QJsonValue partVal(QString::fromLatin1(partBin));
+        partsArray.append(partVal);
+
+        notations.push_back(e->notation());
+    }
+
+    jsonForPdfs["parts"] = partsNamesArray;
+    jsonForPdfs["partsBin"] = partsArray;
+
+    jsonForPdfs["scoreFullPostfix"] = QString("-Score_and_parts") + ".pdf";
+
+    INotationWriter::Options options {
+        { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(INotationWriter::UnitType::MULTI_PART)) }
+    };
+
+    QByteArray fullScoreData = processWriter(PDF_WRITER_NAME, notations, options).val;
+    jsonForPdfs["scoreFullBin"] = QString::fromLatin1(fullScoreData.toBase64());
+
+    QJsonDocument jsonDoc(jsonForPdfs);
+    bool ok = destinationDevice.write(QJsonDocument(jsonDoc).toJson(QJsonDocument::Compact)) != -1;
+
+    return ok;
 }
 
 QByteArray BackendApi::scorePartJson(Ms::Score* score)

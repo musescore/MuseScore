@@ -146,3 +146,10 @@ mu::Ret ConverterController::exportScoreParts(const mu::io::path& in, const mu::
 
     return BackendApi::exportScoreParts(in, out);
 }
+
+mu::Ret ConverterController::exportScorePartsPdfs(const mu::io::path& in, const mu::io::path& out)
+{
+    TRACEFUNC;
+
+    return BackendApi::exportScorePartsPdfs(in, out);
+}

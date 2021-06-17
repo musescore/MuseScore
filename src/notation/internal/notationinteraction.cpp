@@ -61,8 +61,8 @@
 using namespace mu::notation;
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
-    : m_notation(notation), m_undoStack(undoStack), m_lasso(new Ms::Lasso(notation->score())),
-    m_gripEditData(&m_scoreCallbacks)
+    : m_notation(notation), m_undoStack(undoStack), m_gripEditData(&m_scoreCallbacks),
+    m_lasso(new Ms::Lasso(notation->score()))
 {
     m_noteInput = std::make_shared<NotationNoteInput>(notation, this, m_undoStack);
     m_selection = std::make_shared<NotationSelection>(notation);

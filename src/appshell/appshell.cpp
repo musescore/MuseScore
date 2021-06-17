@@ -242,6 +242,10 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
         break;
     case CommandLineController::ConvertType::ExportScoreParts:
         ret = converter()->exportScoreParts(task.inputFile, task.outputFile);
+        break;
+    case CommandLineController::ConvertType::ExportScorePartsPdf:
+        ret = converter()->exportScorePartsPdfs(task.inputFile, task.outputFile);
+        break;
     }
 
     if (!ret) {

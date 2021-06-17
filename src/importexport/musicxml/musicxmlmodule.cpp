@@ -71,6 +71,6 @@ void MusicXmlModule::resolveImports()
     auto writers = framework::ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
         writers->reg({ "musicxml", "xml" }, std::make_shared<MusicXmlWriter>());
-        writers->reg({ "mxml" }, std::make_shared<MxlWriter>());
+        writers->reg({ "mxl", "mxml" }, std::make_shared<MxlWriter>());
     }
 }
