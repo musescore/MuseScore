@@ -59,6 +59,25 @@ DockPage {
         order: 2
     }
 
+    property NavigationSection keynavLeftPanelSec: NavigationSection {
+        name: "NavigationLeftPanel"
+        enabled: root.visible
+        order: 3
+    }
+
+    property NavigationSection keynavRightPanelSec: NavigationSection {
+        name: "NavigationRightPanel"
+        enabled: root.visible
+        order: 5
+    }
+
+    function navigationPanelSec(location) {
+        if (location === DockBase.Right) {
+            return keynavRightPanelSec
+        }
+        return keynavLeftPanelSec
+    }
+
     function updatePageState() {
         var states = [
                     {"Palette": palettePanel.visible},
@@ -167,6 +186,8 @@ DockPage {
             objectName: "palettePanel"
             title: qsTrc("appshell", "Palette")
 
+            navigationSection: root.navigationPanelSec(palettePanel.location)
+
             width: root.defaultPanelWidth
             minimumWidth: root.defaultPanelWidth
             maximumWidth: root.defaultPanelWidth
@@ -177,7 +198,9 @@ DockPage {
                 root.pageModel.isPalettePanelVisible = false
             }
 
-            PalettesWidget {}
+            PalettesWidget {
+                navigationSection: palettePanel.navigationSection
+            }
         },
 
         DockPanel {
@@ -185,6 +208,8 @@ DockPage {
 
             objectName: "instrumentsPanel"
             title: qsTrc("appshell", "Instruments")
+
+            navigationSection: root.navigationPanelSec(palettePanel.location)
 
             width: root.defaultPanelWidth
             minimumWidth: root.defaultPanelWidth
@@ -196,7 +221,9 @@ DockPage {
                 root.pageModel.isInstrumentsPanelVisible = false
             }
 
-            InstrumentsPanel {}
+            InstrumentsPanel {
+                navigationSection: instrumentsPanel.navigationSection
+            }
         },
 
         DockPanel {
@@ -204,6 +231,8 @@ DockPage {
 
             objectName: "inspectorPanel"
             title: qsTrc("appshell", "Inspector")
+
+            navigationSection: root.navigationPanelSec(palettePanel.location)
 
             width: root.defaultPanelWidth
             minimumWidth: root.defaultPanelWidth
@@ -213,7 +242,9 @@ DockPage {
                 root.pageModel.isInspectorPanelVisible = false
             }
 
-            InspectorForm {}
+            InspectorForm {
+                navigationSection: inspectorPanel.navigationSection
+            }
         },
 
         // =============================================
