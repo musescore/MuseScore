@@ -75,8 +75,6 @@ Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const 
     result &= exportScoreMusicXML(notation, jsonWriter);
     result &= exportScoreMetaData(notation, jsonWriter);
 
-    outputFile.close();
-
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
@@ -97,8 +95,6 @@ Ret BackendApi::exportScoreMeta(const io::path& in, const io::path& out)
     BackendJsonWriter jsonWriter(&outputFile);
 
     bool result = exportScoreMetaData(notation, jsonWriter);
-
-    outputFile.close();
 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
@@ -350,6 +346,8 @@ Ret BackendApi::processWriter(const std::string& writerName, const INotationPtr 
 
     jsonWriter.addKey(writerName.c_str());
     jsonWriter.addValue(data.toBase64());
+
+    device.close();
 
     return make_ret(Ret::Code::Ok);
 }
