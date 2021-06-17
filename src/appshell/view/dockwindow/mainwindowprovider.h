@@ -33,12 +33,17 @@ class MainWindowProvider : public QObject, public ui::IMainWindow
     Q_OBJECT
 
     Q_PROPERTY(QWindow * window READ qWindow WRITE setWindow NOTIFY windowChanged)
+    Q_PROPERTY(QString filePath READ filePath WRITE setFilePath NOTIFY filePathChanged)
+    Q_PROPERTY(bool fileModified READ fileModified WRITE setFileModified NOTIFY fileModifiedChanged)
 
 public:
     explicit MainWindowProvider(QObject* parent = nullptr);
 
     QMainWindow* qMainWindow() const override;
     QWindow* qWindow() const override;
+
+    QString filePath() const;
+    virtual bool fileModified() const;
 
     void requestShowOnBack() override;
     void requestShowOnFront() override;
@@ -61,15 +66,20 @@ public:
 
 signals:
     void windowChanged();
+    void filePathChanged();
+    void fileModifiedChanged();
 
 protected:
     virtual void init();
 
     QWindow* m_window = nullptr;
 
-private:
-    void setWindow(QWindow* window); // Should only be used from QML
+private slots: // Should only be used from QML
+    void setWindow(QWindow* window);
+    void setFilePath(const QString& filePath);
+    virtual void setFileModified(bool modified);
 
+private:
     async::Channel<QString, framework::Orientation> m_dockOrientationChanged;
     async::Channel<QPoint> m_showToolBarDockingHolderRequested;
     async::Channel<QPoint> m_showPanelDockingHolderRequested;

@@ -24,6 +24,8 @@ import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.Shortcuts 1.0
+import MuseScore.AppShell 1.0
+import MuseScore.Dock 1.0
 
 ApplicationWindow {
     id: root
@@ -36,7 +38,20 @@ ApplicationWindow {
 
     visible: true
 
-    title: qsTrc("appshell", "MuseScore 4")
+    MainWindowTitleProvider {
+        id: titleProvider
+    }
+
+    MainWindowProvider {
+        window: root
+
+        //! NOTE These properties of QWindow (of which ApplicationWindow is derived)
+        //!      are not available in QML, so we access them via MainWindowProvider
+        filePath: titleProvider.filePath
+        fileModified: titleProvider.fileModified
+    }
+
+    title: titleProvider.title
 
     ToolTipProvider { }
 
@@ -45,5 +60,6 @@ ApplicationWindow {
 
     Component.onCompleted: {
         ui.rootItem = root.contentItem
+        titleProvider.load()
     }
 }

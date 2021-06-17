@@ -23,7 +23,6 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 
 import MuseScore.UiComponents 1.0
-import MuseScore.Dock 1.0
 
 import "../../"
 
@@ -32,10 +31,6 @@ AppWindow {
 
     flags: Qt.FramelessWindowHint | Qt.Window
     color: "transparent"
-
-    MainWindowProvider {
-        window: root
-    }
 
     property int sideMargin: root.visibility === Window.Windowed ? 8 : 0
 

@@ -63,6 +63,34 @@ void MainWindowProvider::init()
     framework::ioc()->registerExport<ui::IMainWindow>("dock", this);
 }
 
+QString MainWindowProvider::filePath() const
+{
+    return m_window ? m_window->filePath() : "";
+}
+
+void MainWindowProvider::setFilePath(const QString& filePath)
+{
+    if (!m_window) {
+        return;
+    }
+
+    if (filePath == m_window->filePath()) {
+        return;
+    }
+
+    m_window->setFilePath(filePath);
+    emit filePathChanged();
+}
+
+bool MainWindowProvider::fileModified() const
+{
+    return false;
+}
+
+void MainWindowProvider::setFileModified(bool /*modified*/)
+{
+}
+
 void MainWindowProvider::requestShowOnBack()
 {
     m_window->lower();

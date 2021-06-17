@@ -21,9 +21,21 @@
  */
 #include "macosmainwindowprovider.h"
 
+#include <Cocoa/Cocoa.h>
 #include <QWindow>
 
 using namespace mu::dock;
+
+static NSWindow* nsWindowForQWindow(QWindow* qWindow)
+{
+    if (!qWindow) {
+        return nullptr;
+    }
+
+    NSView* nsView = (__bridge NSView*)reinterpret_cast<void*>(qWindow->winId());
+    NSWindow* nsWindow = [nsView window];
+    return nsWindow;
+}
 
 MacOSMainWindowProvider::MacOSMainWindowProvider(QObject* parent)
     : MainWindowProvider(parent)
@@ -39,4 +51,30 @@ void MacOSMainWindowProvider::init()
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         uiConfiguration()->applyPlatformStyle(m_window);
     });
+}
+
+bool MacOSMainWindowProvider::fileModified() const
+{
+    //! NOTE QWindow misses an API for this, so we'll do it ourselves.
+    NSWindow* nsWindow = nsWindowForQWindow(m_window);
+    if (!nsWindow) {
+        return false;
+    }
+
+    return [nsWindow isDocumentEdited];
+}
+
+void MacOSMainWindowProvider::setFileModified(bool modified)
+{
+    NSWindow* nsWindow = nsWindowForQWindow(m_window);
+    if (!nsWindow) {
+        return;
+    }
+
+    if ([nsWindow isDocumentEdited] == modified) {
+        return;
+    }
+
+    [nsWindow setDocumentEdited:modified];
+    emit fileModifiedChanged();
 }

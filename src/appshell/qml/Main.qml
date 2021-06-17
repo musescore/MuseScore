@@ -24,16 +24,11 @@ import QtQuick.Window 2.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.AppShell 1.0
-import MuseScore.Dock 1.0
 
 import "../.."
 
 AppWindow {
     id: root
-
-    MainWindowProvider {
-        window: root
-    }
 
     function toggleMaximized() {
         if (root.visibility === Window.Maximized) {

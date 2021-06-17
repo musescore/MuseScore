@@ -38,8 +38,10 @@ class MacOSMainWindowProvider : public MainWindowProvider, public async::Asyncab
 public:
     explicit MacOSMainWindowProvider(QObject* parent = nullptr);
 
-signals:
-    void targetWindowChanged();
+    bool fileModified() const override;
+
+public slots:
+    void setFileModified(bool modified) override;
 
 private:
     void init() override;
