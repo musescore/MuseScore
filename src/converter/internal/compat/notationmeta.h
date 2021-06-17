@@ -33,7 +33,7 @@ namespace mu::converter {
 class NotationMeta
 {
 public:
-    static RetVal<std::string> metaString(notation::INotationPtr notation);
+    static RetVal<std::string> metaJson(notation::INotationPtr notation);
 
 private:
     static QString title(const Ms::Score* score);

@@ -38,6 +38,7 @@ public:
     virtual Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath) = 0;
     virtual Ret exportScoreMeta(const io::path& in, const io::path& out) = 0;
     virtual Ret exportScoreParts(const io::path& in, const io::path& out) = 0;
+    virtual Ret exportScorePartsPdfs(const io::path& in, const io::path& out) = 0;
 };
 }
 

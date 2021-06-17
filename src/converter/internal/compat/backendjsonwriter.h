@@ -41,7 +41,6 @@ public:
     void closeArray(bool lastJsonElement = false);
 
 private:
-    QFile jsonFormatFile;
     system::IODevice* m_destinationDevice = nullptr;
 };
 }
