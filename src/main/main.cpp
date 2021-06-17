@@ -141,6 +141,8 @@
 #include "stubs/multiinstances/multiinstancesstubmodule.h"
 #endif
 
+#include "diagnostics/diagnosticsmodule.h"
+
 #ifdef BUILD_AUTOBOT_MODULE
 #include "autobot/autobotmodule.h"
 #endif
@@ -275,6 +277,7 @@ int main(int argc, char** argv)
 #endif
 
     app.addModule(new mu::mi::MultiInstancesModule());
+    app.addModule(new mu::diagnostics::DiagnosticsModule());
 
 #ifdef BUILD_AUTOBOT_MODULE
     app.addModule(new mu::autobot::AutobotModule());

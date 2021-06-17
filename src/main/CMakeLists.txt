@@ -181,6 +181,8 @@ if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB multiinstances)
 endif()
 
+list(APPEND LINK_LIB diagnostics)
+
 if (BUILD_AUTOBOT_MODULE)
     list(APPEND LINK_LIB autobot)
 endif()
