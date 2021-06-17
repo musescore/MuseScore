@@ -400,6 +400,8 @@ private:
       QString matchRepeat() const;
       bool isLikelyFingering() const;
       bool isLikelyCredit(const Fraction& tick) const;
+      void textToDynamic(QString& text) const;
+      bool directionToDynamic();
       void skipLogCurrElem();
       };
 
