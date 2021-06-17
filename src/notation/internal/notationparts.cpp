@@ -141,7 +141,7 @@ void NotationParts::setParts(const mu::instruments::PartInstrumentList& parts)
     appendNewParts(parts);
     updateSoloist(parts);
 
-    sortParts(parts, originalStaves);
+    sortParts(parts, masterScore(), originalStaves);
 
     updateScore();
 
@@ -728,7 +728,7 @@ void NotationParts::removeParts(const IDList& partsIds)
 
     removeMissingParts(parts);
 
-    sortParts(parts, originalStaves);
+    sortParts(parts, masterScore(), originalStaves);
 
     updateScore();
 }
@@ -837,9 +837,7 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
         parts << pi;
     }
 
-    QList<Ms::Staff*> originalStaves = masterScore()->staves();
-
-    sortParts(parts, originalStaves);
+    sortParts(parts, masterScore(), masterScore()->staves());
 
     updateScore();
 
@@ -1327,12 +1325,8 @@ void NotationParts::updateSoloist(const PartInstrumentList& parts)
     }
 }
 
-void NotationParts::sortParts(const PartInstrumentList& parts, const QList<Ms::Staff*>& originalStaves)
+void NotationParts::sortParts(const PartInstrumentList& parts, const Ms::Score* score, const QList<Ms::Staff*>& originalStaves)
 {
-    Q_ASSERT(!originalStaves.empty());
-
-    Ms::Score* score = originalStaves[0]->score();
-
     QList<int> staffMapping;
     QList<int> trackMapping;
     int runningStaffIndex = 0;
