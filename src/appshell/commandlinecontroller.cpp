@@ -122,6 +122,7 @@ void CommandLineController::apply()
     if (m_parser.isSet("score-media")) {
         application()->setRunMode(IApplication::RunMode::Converter);
         m_converterTask.type = ConvertType::ExportScoreMedia;
+        m_converterTask.inputFile = scorefiles[0];
         if (m_parser.isSet("highlight-config")) {
             m_converterTask.data = m_parser.value("highlight-config");
         }
@@ -130,11 +131,13 @@ void CommandLineController::apply()
     if (m_parser.isSet("score-meta")) {
         application()->setRunMode(IApplication::RunMode::Converter);
         m_converterTask.type = ConvertType::ExportScoreMeta;
+        m_converterTask.inputFile = scorefiles[0];
     }
 
     if (m_parser.isSet("score-parts")) {
         application()->setRunMode(IApplication::RunMode::Converter);
         m_converterTask.type = ConvertType::ExportScoreParts;
+        m_converterTask.inputFile = scorefiles[0];
     }
 
     if (m_parser.isSet("F") || m_parser.isSet("R")) {
