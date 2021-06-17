@@ -52,10 +52,27 @@ Rectangle {
         }
     }
 
+    Component.onDestruction: {
+        tabs.model = 0
+    }
+
     DockFrameModel {
         id: frameModel
 
         frame: root.frameCpp
+    }
+
+    NavigationPanel {
+        id: navPanel
+        name: root.objectName+"PanelTabs"
+        section: frameModel.navigationSection
+        order: 1
+
+        onNavigationEvent: {
+            if (event.type === NavigationEvent.AboutActive) {
+                event.setData("controlName", tabs.currentItem.navigation.name)
+            }
+        }
     }
 
     DockTitleBar {
@@ -128,8 +145,13 @@ Rectangle {
             model: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.dockWidgetModel : 0
 
             delegate: DockPanelTab {
-                text: title
 
+                navigation.name: title
+                navigation.panel: navPanel
+                navigation.order: model.index
+                onNavigationTriggered: tabsPanel.currentIndex = model.index
+
+                text: title
                 isCurrent: tabsPanel && (tabsPanel.currentIndex === model.index)
             }
         }
