@@ -125,7 +125,7 @@ void NavigationControl::setPanel(NavigationPanel* panel)
 
     emit panelChanged(m_panel);
 
-    setAccessibleParent(m_panel->accessible());
+    setAccessibleParent(m_panel ? m_panel->accessible() : nullptr);
 }
 
 void NavigationControl::onPanelDestroyed()
