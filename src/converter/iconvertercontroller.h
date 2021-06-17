@@ -39,6 +39,7 @@ public:
     virtual Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath) = 0;
     virtual Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath) = 0;
     virtual Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath) = 0;
+    virtual Ret updateSource(const io::path& in, const QString& newSource) = 0;
 };
 }
 

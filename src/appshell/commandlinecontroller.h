@@ -48,12 +48,14 @@ public:
         ExportScoreMedia,
         ExportScoreMeta,
         ExportScoreParts,
-        ExportScorePartsPdf
+        ExportScorePartsPdf,
+        SourceUpdate
     };
 
     enum class ParamKey {
         HighlightConfigPath,
-        StylePath
+        StylePath,
+        ScoreSource
     };
 
     struct ConverterTask {

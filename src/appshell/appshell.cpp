@@ -229,6 +229,7 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
 
     io::path highlightConfigPath = task.params[CommandLineController::ParamKey::HighlightConfigPath].toString();
     io::path stylePath = task.params[CommandLineController::ParamKey::StylePath].toString();
+    QString scoreSource = task.params[CommandLineController::ParamKey::ScoreSource].toString();
 
     switch (task.type) {
     case CommandLineController::ConvertType::Batch:
@@ -248,6 +249,9 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
         break;
     case CommandLineController::ConvertType::ExportScorePartsPdf:
         ret = converter()->exportScorePartsPdfs(task.inputFile, task.outputFile, stylePath);
+        break;
+    case CommandLineController::ConvertType::SourceUpdate:
+        ret = converter()->updateSource(task.inputFile, scoreSource);
         break;
     }
 

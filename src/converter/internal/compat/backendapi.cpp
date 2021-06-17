@@ -550,3 +550,18 @@ QByteArray BackendApi::scorePartJson(Ms::Score* score)
 
     return scoreData.toBase64();
 }
+
+Ret BackendApi::updateSource(const io::path& in, const QString& newSource)
+{
+    RetVal<IMasterNotationPtr> notation = openScore(in);
+    if (!notation.ret) {
+        return notation.ret;
+    }
+
+    Meta meta = notation.val->metaInfo();
+    meta.source = newSource;
+
+    notation.val->setMetaInfo(meta);
+
+    return notation.val->save();
+}

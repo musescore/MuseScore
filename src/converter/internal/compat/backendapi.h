@@ -49,11 +49,12 @@ public:
     static Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath);
     static Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath);
     static Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath);
+    static Ret updateSource(const io::path& in, const QString& newSource);
 
 private:
     static Ret openOutputFile(QFile& file, const io::path& out);
 
-    static RetVal<notation::IMasterNotationPtr> openScore(const io::path& path, const io::path& stylePath);
+    static RetVal<notation::IMasterNotationPtr> openScore(const io::path& path, const io::path& stylePath = io::path());
 
     static notation::PageList pages(const notation::INotationPtr notation);
 

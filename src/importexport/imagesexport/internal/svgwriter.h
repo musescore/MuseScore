@@ -25,9 +25,14 @@
 
 #include "notation/abstractnotationwriter.h"
 
+#include "modularity/ioc.h"
+#include "iimagesexportconfiguration.h"
+
 namespace mu::iex::imagesexport {
 class SvgWriter : public notation::AbstractNotationWriter
 {
+    INJECT(iex, IImagesExportConfiguration, configuration)
+
 public:
     std::vector<notation::INotationWriter::UnitType> supportedUnitTypes() const override;
     Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
