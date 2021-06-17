@@ -34,6 +34,7 @@
 
 #include "log.h"
 #include "backendjsonwriter.h"
+#include "notationmeta.h"
 
 using namespace mu;
 using namespace mu::converter;
@@ -46,7 +47,7 @@ static const std::string MEASURES_POSITIONS_WRITER_NAME = "mposXML";
 static const std::string PDF_WRITER_NAME = "pdf";
 static const std::string MIDI_WRITER_NAME = "midi";
 static const std::string MUSICXML_WRITER_NAME = "mxml";
-static const std::string META_DATA_WRITER_NAME = "metadata";
+static const std::string META_DATA_NAME = "metadata";
 
 Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath)
 {
@@ -322,7 +323,16 @@ Ret BackendApi::exportScoreMetaData(const INotationPtr notation, BackendJsonWrit
 {
     TRACEFUNC
 
-    return processWriter(META_DATA_WRITER_NAME, notation, jsonWriter);
+    RetVal<std::string> meta = NotationMeta::metaString(notation);
+    if (!meta.ret) {
+        LOGW() << meta.ret.toString();
+        return meta.ret;
+    }
+
+    jsonWriter.addKey(META_DATA_NAME.c_str());
+    jsonWriter.addValue(QString::fromStdString(meta.val).toUtf8(), true, true);
+
+    return make_ret(Ret::Code::Ok);
 }
 
 Ret BackendApi::processWriter(const std::string& writerName, const INotationPtr notation,
