@@ -52,8 +52,12 @@ DockWindow {
         order: 1
     }
 
+    StartupModel {
+        id: startupModel
+    }
+
     Component.onCompleted: {
-        api.launcher.open(homePage.uri)
+        startupModel.load()
     }
 
     toolBars: [
@@ -95,9 +99,7 @@ DockWindow {
     }
 
     pages: [
-        HomePage {
-            id: homePage
-        },
+        HomePage {},
 
         NotationPage {
             topToolKeyNavSec: root.topToolKeyNavSec
