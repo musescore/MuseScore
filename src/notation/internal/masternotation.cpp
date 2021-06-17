@@ -76,7 +76,7 @@ void MasterNotation::setMetaInfo(const Meta& meta)
     Notation::setMetaInfo(meta);
 }
 
-mu::Ret MasterNotation::load(const io::path& path)
+mu::Ret MasterNotation::load(const io::path& path, const io::path& stylePath)
 {
     TRACEFUNC;
 
@@ -90,7 +90,7 @@ mu::Ret MasterNotation::load(const io::path& path)
         return make_ret(Ret::Code::InternalError);
     }
 
-    return load(path, reader);
+    return load(path, stylePath, reader);
 }
 
 Ms::MasterScore* MasterNotation::masterScore() const
@@ -98,7 +98,7 @@ Ms::MasterScore* MasterNotation::masterScore() const
     return dynamic_cast<Ms::MasterScore*>(score());
 }
 
-mu::Ret MasterNotation::load(const io::path& path, const INotationReaderPtr& reader)
+mu::Ret MasterNotation::load(const io::path& path, const io::path& stylePath, const INotationReaderPtr& reader)
 {
     TRACEFUNC;
 
@@ -110,6 +110,14 @@ mu::Ret MasterNotation::load(const io::path& path, const INotationReaderPtr& rea
     if (ret) {
         setScore(score);
         initExcerpts();
+    }
+
+    if (!stylePath.empty()) {
+        score->loadStyle(stylePath.toQString());
+    }
+
+    if (!Ms::MScore::lastError.isEmpty()) {
+        LOGE() << Ms::MScore::lastError;
     }
 
     return ret;
