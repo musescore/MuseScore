@@ -23,6 +23,7 @@
 #include "dockpage.h"
 
 #include "docktoolbar.h"
+#include "docktoolbarholder.h"
 #include "dockcentral.h"
 #include "dockpanel.h"
 #include "dockpanelholder.h"
