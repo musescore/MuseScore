@@ -42,7 +42,7 @@ static const std::string TEMPLATES_PATH("/templates");
 
 void UserScoresConfiguration::init()
 {
-    settings()->setDefaultValue(USER_TEMPLATES_PATH, Val(globalConfiguration()->sharePath().toStdString() + "templates"));
+    settings()->setDefaultValue(USER_TEMPLATES_PATH, Val(mainTemplatesDirPath().toStdString()));
     settings()->valueChanged(USER_TEMPLATES_PATH).onReceive(nullptr, [this](const Val& val) {
         m_templatesPathChanged.send(val.toString());
     });
@@ -127,7 +127,7 @@ io::paths UserScoresConfiguration::parsePaths(const Val& value) const
 
 io::path UserScoresConfiguration::myFirstScorePath() const
 {
-    return templatesPath().val + "/My_First_Score.mscx";
+    return mainTemplatesDirPath() + "/My_First_Score.mscx";
 }
 
 io::path UserScoresConfiguration::userTemplatesPath() const
@@ -146,7 +146,7 @@ io::paths UserScoresConfiguration::availableTemplatesPaths() const
 
     dirs.push_back(globalConfiguration()->dataPath().toStdString() + TEMPLATES_PATH);
 
-    io::path defaultTemplatesPath  = this->defaultTemplatesPath();
+    io::path defaultTemplatesPath = this->defaultTemplatesPath();
     dirs.push_back(defaultTemplatesPath);
 
     io::path userTemplatesPath = this->userTemplatesPath();
