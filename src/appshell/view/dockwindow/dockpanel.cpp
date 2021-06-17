@@ -22,6 +22,8 @@
 
 #include "dockpanel.h"
 
+#include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
+
 #include "log.h"
 
 using namespace mu::dock;
@@ -51,4 +53,30 @@ void DockPanel::setTabifyPanel(DockPanel* panel)
 DockType DockPanel::type() const
 {
     return DockType::Panel;
+}
+
+void DockPanel::componentComplete()
+{
+    DockBase::componentComplete();
+
+    KDDockWidgets::DockWidgetQuick* w = dockWidget();
+    IF_ASSERT_FAILED(w) {
+        return;
+    }
+
+    w->setProperty("dockPanel", QVariant::fromValue(this));
+}
+
+QObject* DockPanel::navigationSection() const
+{
+    return m_navigationSection;
+}
+
+void DockPanel::setNavigationSection(QObject* newNavigation)
+{
+    if (m_navigationSection == newNavigation) {
+        return;
+    }
+    m_navigationSection = newNavigation;
+    emit navigationSectionChanged();
 }
