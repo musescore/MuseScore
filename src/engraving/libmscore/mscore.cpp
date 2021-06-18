@@ -21,6 +21,7 @@
  */
 
 #include <QDir>
+#include <QComboBox>
 
 #include "config.h"
 #include "musescoreCore.h"

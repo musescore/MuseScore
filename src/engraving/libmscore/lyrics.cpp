@@ -23,6 +23,7 @@
 #include "lyrics.h"
 
 #include <QClipboard>
+#include <QRegularExpression>
 
 #include "chord.h"
 #include "score.h"

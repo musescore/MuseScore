@@ -25,6 +25,7 @@
 #include <QStack>
 #include <QTextFragment>
 #include <QTextDocument>
+#include <QRegularExpression>
 
 #include "text.h"
 #include "textedit.h"

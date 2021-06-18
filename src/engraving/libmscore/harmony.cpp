@@ -23,6 +23,7 @@
 #include "harmony.h"
 
 #include <QStack>
+#include <QRegularExpression>
 
 #include "chordlist.h"
 #include "fret.h"
