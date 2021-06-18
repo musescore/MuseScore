@@ -19,30 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CONVERTER_BACKENDJSONWRITER_H
-#define MU_CONVERTER_BACKENDJSONWRITER_H
+#ifndef MU_CONVERTER_NOTATIONMETA_H
+#define MU_CONVERTER_NOTATIONMETA_H
 
-#include <QFile>
-
-#include "io/path.h"
 #include "system/iodevice.h"
+#include "notation/inotation.h"
+
+namespace Ms {
+class Score;
+}
 
 namespace mu::converter {
-class BackendJsonWriter
+class NotationMeta
 {
 public:
-    BackendJsonWriter(mu::system::IODevice* destinationDevice);
-    ~BackendJsonWriter();
-
-    void addKey(const char* arrayName);
-    void addValue(const QByteArray& data, bool lastJsonElement = false, bool isJson = false);
-
-    void openArray();
-    void closeArray(bool lastJsonElement = false);
+    static RetVal<std::string> metaJson(notation::INotationPtr notation);
 
 private:
-    system::IODevice* m_destinationDevice = nullptr;
+    static QString title(const Ms::Score* score);
+    static QString subtitle(const Ms::Score* score);
+    static QString composer(const Ms::Score* score);
+    static QString poet(const Ms::Score* score);
+    static QString timesig(const Ms::Score* score);
+    static std::pair<int, QString> tempo(const Ms::Score* score);
+    static QString parts(const Ms::Score* score);
+    static QString pageFormat(const Ms::Score* score);
+    static QString typeData(Ms::Score* score);
 };
 }
 
-#endif // MU_CONVERTER_BACKENDJSONWRITER_H
+#endif // MU_CONVERTER_NOTATIONMETA_H

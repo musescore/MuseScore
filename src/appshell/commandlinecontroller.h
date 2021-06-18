@@ -45,7 +45,10 @@ public:
     enum class ConvertType {
         File,
         Batch,
-        ExportScoreMedia
+        ExportScoreMedia,
+        ExportScoreMeta,
+        ExportScoreParts,
+        ExportScorePartsPdf
     };
 
     struct ConverterTask {

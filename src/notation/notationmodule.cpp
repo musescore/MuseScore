@@ -38,7 +38,6 @@
 #include "internal/mscznotationreader.h"
 #include "internal/msczmetareader.h"
 #include "internal/positionswriter.h"
-#include "internal/notationmetawriter.h"
 
 #include "view/notationpaintview.h"
 #include "view/notationswitchlistmodel.h"
@@ -100,7 +99,6 @@ void NotationModule::registerExports()
     std::shared_ptr<INotationWritersRegister> writers = std::make_shared<NotationWritersRegister>();
     writers->reg({ "sposXML" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::SEGMENT));
     writers->reg({ "mposXML" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE));
-    writers->reg({ "metadata" }, std::make_shared<NotationMetaWriter>());
 
     ioc()->registerExport<INotationReadersRegister>(moduleName(), readers);
     ioc()->registerExport<INotationWritersRegister>(moduleName(), writers);
