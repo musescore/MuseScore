@@ -167,6 +167,8 @@ public:
       const CreditWordsList& credits() const { return _credits; }
       bool hasBeamingInfo() const { return _hasBeamingInfo; }
       static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75);
+      QString supportsTranspose() const { return _supportsTranspose; }
+      void addInferredTranspose(const QString& partId);
 
 private:
       // functions
@@ -186,6 +188,7 @@ private:
       Score* _score;                            ///< MuseScore score
       MxmlLogger* _logger;                      ///< Error logger
       bool _hasBeamingInfo;                     ///< Whether the score supports or contains beaming info
+      QString _supportsTranspose;               ///< Whether the score supports transposition info
 
       // part specific data (TODO: move to part-specific class)
       Fraction _timeSigDura;                    ///< Measure duration according to last timesig read
