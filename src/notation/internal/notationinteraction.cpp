@@ -1902,7 +1902,7 @@ void NotationInteraction::moveText(MoveDirection d, bool quickly)
 
 bool NotationInteraction::isTextEditingStarted() const
 {
-    return m_textEditData.element != nullptr;
+    return m_textEditData.element && m_textEditData.element->isTextBase();
 }
 
 void NotationInteraction::startEditText(Element* element, const PointF& cursorPos)
@@ -1938,18 +1938,26 @@ void NotationInteraction::startEditText(Element* element, const PointF& cursorPo
 
 void NotationInteraction::editText(QKeyEvent* event)
 {
-    IF_ASSERT_FAILED(m_textEditData.element) {
+    if (!m_textEditData.element && selection()->element()) {
+        m_textEditData.element = selection()->element();
+    }
+
+    if (!m_textEditData.element) {
         return;
     }
 
     m_textEditData.key = event->key();
     m_textEditData.modifiers = event->modifiers();
     m_textEditData.s = event->text();
-    m_textEditData.element->edit(m_textEditData);
+    if (m_textEditData.element->edit(m_textEditData)) {
+        event->accept();
+    }
 
     score()->update();
 
-    notifyAboutTextEditingChanged();
+    if (isTextEditingStarted()) {
+        notifyAboutTextEditingChanged();
+    }
 }
 
 void NotationInteraction::endEditText()

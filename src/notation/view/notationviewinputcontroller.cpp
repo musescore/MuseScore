@@ -473,11 +473,9 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
     }
 }
 
-void NotationViewInputController::keyReleaseEvent(QKeyEvent* event)
+void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 {
-    if (m_view->notationInteraction()->isTextEditingStarted()) {
-        m_view->notationInteraction()->editText(event);
-    }
+    m_view->notationInteraction()->editText(event);
 }
 
 void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)

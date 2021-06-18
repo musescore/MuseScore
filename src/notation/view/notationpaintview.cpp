@@ -652,6 +652,7 @@ void NotationPaintView::mousePressEvent(QMouseEvent* event)
 {
     setFocus(true);
     emit activeFocusRequested();
+    forceActiveFocus();
 
     if (isInited()) {
         m_inputController->mousePressEvent(event);
@@ -691,26 +692,7 @@ void NotationPaintView::hoverMoveEvent(QHoverEvent* event)
 void NotationPaintView::shortcutOverride(QKeyEvent* event)
 {
     if (isInited()) {
-        std::string sequence = QKeySequence(event->key()).toString().toStdString();
-        if (event->key() < Qt::Key_Shift && sequence.length() > 0) {
-            if (event->modifiers() & Qt::KeyboardModifier::ShiftModifier) {
-                sequence = "Shift+" + sequence;
-            }
-            if (event->modifiers() & Qt::KeyboardModifier::AltModifier) {
-                sequence = "Alt+" + sequence;
-            }
-            if (event->modifiers() & Qt::KeyboardModifier::ControlModifier) {
-                sequence = "Ctrl+" + sequence;
-            }
-            const auto& shortcuts = shortcutsRegister()->shortcutsForSequence(sequence);
-            const std::shared_ptr<IUiActionsRegister> theRegister = actionsRegister();
-            if (std::find_if(shortcuts.begin(), shortcuts.end(), [theRegister](auto s) {
-                return theRegister->actionState(s.action).enabled;
-            }) != shortcuts.end()) {
-                return;
-            }
-        }
-        m_inputController->keyReleaseEvent(event);
+        m_inputController->keyPressEvent(event);
     }
 }
 
