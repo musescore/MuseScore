@@ -65,6 +65,7 @@ public:
       int nMeasures() const { return measureDurations.size(); }
       MusicXmlInstrList _instrList; // TODO: make private
       MusicXmlIntervalList _intervals;                     ///< Transpositions
+      Interval _inferredTranspose;
       Interval interval(const Fraction f) const;
       int octaveShift(const int staff, const Fraction f) const;
       void addOctaveShift(const int staff, const int shift, const Fraction f);
@@ -77,6 +78,8 @@ public:
       QString getAbbr() const { return abbr; }
       void setPrintAbbr(bool b) { printAbbr = b; }
       bool getPrintAbbr() const { return printAbbr; }
+      bool hasTab() const { return _hasTab; }
+      void hasTab(const bool b) { _hasTab = b; }
       LyricNumberHandler& lyricNumberHandler() { return _lyricNumberHandler; }
       const LyricNumberHandler& lyricNumberHandler() const { return _lyricNumberHandler; }
       void setMaxStaff(const int staff);
@@ -87,6 +90,7 @@ private:
       bool printName = true;
       QString abbr;
       bool printAbbr = true;
+      bool _hasTab = false;
       QStringList measureNumbers;             // MusicXML measure number attribute
       QList<Fraction> measureDurations;       // duration in fraction for every measure
       QVector<MusicXmlOctaveShiftList> octaveShifts; // octave shift list for every staff
