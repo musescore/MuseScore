@@ -19,43 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IPC_IPCLOCK_H
-#define MU_IPC_IPCLOCK_H
+#ifndef MU_MI_RESOURCELOCKGUARD_H
+#define MU_MI_RESOURCELOCKGUARD_H
 
-#include <QString>
+#include <string>
+#include <memory>
+#include "imultiinstancesprovider.h"
 
-class QSystemSemaphore;
-namespace mu::ipc {
-class IpcLock
+namespace mu::mi {
+class ResourceLockGuard
 {
 public:
-    IpcLock(const QString& name);
-    ~IpcLock();
-
-    bool lock();
-    bool unlock();
-
-private:
-    QSystemSemaphore* m_locker = nullptr;
-};
-
-class IpcLockGuard
-{
-public:
-    IpcLockGuard(IpcLock* lock)
-        : m_lock(lock)
+    ResourceLockGuard(std::shared_ptr<IMultiInstancesProvider> provider, const std::string& name)
+        : m_provider(provider), m_name(name)
     {
-        m_lock->lock();
+        if (m_provider) {
+            m_provider->lockResource(m_name);
+        }
     }
 
-    ~IpcLockGuard()
+    ~ResourceLockGuard()
     {
-        m_lock->unlock();
+        if (m_provider) {
+            m_provider->unlockResource(m_name);
+        }
     }
 
 private:
-    IpcLock* m_lock = nullptr;
+    std::shared_ptr<IMultiInstancesProvider> m_provider = nullptr;
+    std::string m_name;
 };
 }
 
-#endif // MU_IPC_IPCLOCK_H
+#endif // MU_MI_RESOURCELOCKGUARD_H

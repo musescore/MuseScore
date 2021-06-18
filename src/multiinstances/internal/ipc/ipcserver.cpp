@@ -44,6 +44,7 @@ IpcServer::~IpcServer()
         delete m_thread;
     }
     delete m_server;
+    delete m_lock;
 }
 
 bool IpcServer::listen(const QString& serverName)
@@ -195,7 +196,7 @@ bool IpcServer::doSendToSocket(QLocalSocket* socket, const QByteArray& data)
 {
     IPCLOG() << data;
 
-    m_lock->lock();
+    IpcLockGuard lock_guard(m_lock);
 
     socket->write(data);
 
@@ -204,8 +205,6 @@ bool IpcServer::doSendToSocket(QLocalSocket* socket, const QByteArray& data)
         LOGE() << "failed write data to socket";
         return false;
     }
-
-    m_lock->unlock();
 
     return true;
 }

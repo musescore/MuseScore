@@ -28,6 +28,8 @@
 #include <QStandardPaths>
 #include <QDir>
 
+#include "multiinstances/resourcelockguard.h"
+
 using namespace mu;
 using namespace mu::framework;
 using namespace mu::async;
@@ -104,9 +106,7 @@ Settings::Items Settings::readItems() const
 {
     Items result;
 
-    if (multiInstancesProvider()) {
-        multiInstancesProvider()->lockResource(MULTI_INSTANCES_LOCK_NAME);
-    }
+    mi::ResourceLockGuard resource_lock(multiInstancesProvider(), MULTI_INSTANCES_LOCK_NAME);
 
     for (const QString& key : m_settings->allKeys()) {
         Item item;
@@ -114,10 +114,6 @@ Settings::Items Settings::readItems() const
         item.value = Val::fromQVariant(m_settings->value(key));
 
         result[item.key] = item;
-    }
-
-    if (multiInstancesProvider()) {
-        multiInstancesProvider()->unlockResource(MULTI_INSTANCES_LOCK_NAME);
     }
 
     return result;
@@ -164,16 +160,10 @@ void Settings::setValue(const Key& key, const Val& value)
 
 void Settings::writeValue(const Key& key, const Val& value)
 {
-    if (multiInstancesProvider()) {
-        multiInstancesProvider()->lockResource(MULTI_INSTANCES_LOCK_NAME);
-    }
+    mi::ResourceLockGuard resource_lock(multiInstancesProvider(), MULTI_INSTANCES_LOCK_NAME);
 
     // TODO: implement writing/reading first part of key (module name)
     m_settings->setValue(QString::fromStdString(key.key), value.toQVariant());
-
-    if (multiInstancesProvider()) {
-        multiInstancesProvider()->unlockResource(MULTI_INSTANCES_LOCK_NAME);
-    }
 }
 
 QString Settings::dataPath() const
