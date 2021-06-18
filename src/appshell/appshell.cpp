@@ -252,6 +252,10 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
         QString scoreSource = task.params[CommandLineController::ParamKey::ScoreSource].toString();
         ret = converter()->updateSource(task.inputFile, scoreSource);
     } break;
+    case CommandLineController::ConvertType::ExportScoreTranspose:
+        std::string scoreTranspose = task.params[CommandLineController::ParamKey::ScoreTransposeOptions].toString().toStdString();
+        ret = converter()->exportScoreTranspose(task.inputFile, task.outputFile, scoreTranspose, stylePath);
+        break;
     }
 
     if (!ret) {

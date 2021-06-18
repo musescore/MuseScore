@@ -58,6 +58,9 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addOption(QCommandLineOption("score-parts", "Generate parts data for the given score and save them to separate mscz files"));
     m_parser.addOption(QCommandLineOption("score-parts-pdf",
                                           "Generate parts data for the given score and export the data to a single JSON file, print it to stdout"));
+    m_parser.addOption(QCommandLineOption("score-transpose",
+                                          "Transpose the given score and export the data to a single JSON file, print it to stdout",
+                                          "options"));
     m_parser.addOption(QCommandLineOption("source-update", "Update the source in the given score"));
 
     m_parser.addOption(QCommandLineOption({ "S", "style" }, "Load style file", "style"));
@@ -168,6 +171,13 @@ void CommandLineController::apply()
         application()->setRunMode(IApplication::RunMode::Converter);
         m_converterTask.type = ConvertType::ExportScorePartsPdf;
         m_converterTask.inputFile = scorefiles[0];
+    }
+
+    if (m_parser.isSet("score-transpose")) {
+        application()->setRunMode(IApplication::RunMode::Converter);
+        m_converterTask.type = ConvertType::ExportScoreTranspose;
+        m_converterTask.inputFile = scorefiles[0];
+        m_converterTask.params[CommandLineController::ParamKey::ScoreTransposeOptions] = m_parser.value("score-transpose");
     }
 
     if (m_parser.isSet("source-update")) {

@@ -161,3 +161,11 @@ mu::Ret ConverterController::updateSource(const io::path& in, const QString& new
 
     return BackendApi::updateSource(in, newSource);
 }
+
+mu::Ret ConverterController::exportScoreTranspose(const mu::io::path& in, const mu::io::path& out, const std::string& optionsJson,
+                                                  const io::path& stylePath)
+{
+    TRACEFUNC;
+
+    return BackendApi::exportScoreTranspose(in, out, optionsJson, stylePath);
+}
