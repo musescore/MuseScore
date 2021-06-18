@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Diagnostics 1.0
 
@@ -27,5 +28,53 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
+    Item {
+        id: topPanel
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 40
 
+        StyledComboBox {
+            id: selector
+            anchors.fill: parent
+            anchors.margins: 4
+
+            textRoleName: "title"
+            valueRoleName: "code"
+
+            property string curVal: "paths"
+            currentIndex: selector.indexOfValue(curVal)
+
+            model: [
+                { code: "paths", title: "Show paths" }
+            ]
+
+            onValueChanged: selector.curVal = value
+        }
+    }
+
+    Loader {
+        anchors.top: topPanel.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        sourceComponent: {
+            switch (selector.curVal) {
+            case "paths": return pathsComp
+            }
+            return defComp
+        }
+    }
+
+    Component {
+        id: defComp
+        Rectangle {
+            color: "#123456"
+        }
+    }
+
+    Component {
+        id: pathsComp
+        DiagnosticsPaths {}
+    }
 }

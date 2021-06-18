@@ -29,6 +29,9 @@
 
 #include "internal/diagnosticsactions.h"
 #include "internal/diagnosticsactionscontroller.h"
+#include "internal/diagnosticspathsregister.h"
+
+#include "view/diagnosticspathsmodel.h"
 
 using namespace mu::diagnostics;
 using namespace mu::framework;
@@ -42,6 +45,7 @@ std::string DiagnosticsModule::moduleName() const
 
 void DiagnosticsModule::registerExports()
 {
+    ioc()->registerExport<IDiagnosticsPathsRegister>(moduleName(), new DiagnosticsPathsRegister());
 }
 
 void DiagnosticsModule::resolveImports()
@@ -59,7 +63,7 @@ void DiagnosticsModule::resolveImports()
 
 void DiagnosticsModule::registerUiTypes()
 {
-    // qmlRegisterType<DiagnosticsModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticsModel");
+    qmlRegisterType<DiagnosticsPathsModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticsPathsModel");
 }
 
 void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)

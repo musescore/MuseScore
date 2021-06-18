@@ -47,6 +47,8 @@
 #include "internal/synthesizers/synthesizersregister.h"
 #include "view/synthssettingsmodel.h"
 
+#include "diagnostics/idiagnosticspathsregister.h"
+
 #include "log.h"
 
 using namespace mu::framework;
@@ -208,6 +210,15 @@ void AudioModule::onInit(const framework::IApplication::RunMode&)
             "onDriverOpened",
             rpc::Args::make_arg2<int, uint16_t>(activeSpec.sampleRate, activeSpec.samples)
             ));
+
+    //! --- Diagnostics ---
+    auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    if (pr) {
+        std::vector<io::path> paths = s_audioConfiguration->soundFontPaths();
+        for (const io::path& p : paths) {
+            pr->reg("soundfonts", p);
+        }
+    }
 }
 
 void AudioModule::onDeinit()
