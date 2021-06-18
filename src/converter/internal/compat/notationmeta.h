@@ -22,7 +22,6 @@
 #ifndef MU_CONVERTER_NOTATIONMETA_H
 #define MU_CONVERTER_NOTATIONMETA_H
 
-#include "system/iodevice.h"
 #include "notation/inotation.h"
 
 namespace Ms {

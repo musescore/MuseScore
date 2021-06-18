@@ -23,11 +23,12 @@
 #define MU_CONVERTER_BACKENDAPI_H
 
 #include "retval.h"
+
 #include "io/path.h"
+#include "io/device.h"
 
 #include "modularity/ioc.h"
 #include "system/ifilesystem.h"
-#include "system/iodevice.h"
 #include "notation/inotationcreator.h"
 #include "notation/inotationwritersregister.h"
 
@@ -63,7 +64,7 @@ private:
     static Ret exportScoreElementsPositions(const std::string& elementsPositionsWriterName, const notation::INotationPtr notation,
                                             BackendJsonWriter& jsonWriter);
     static Ret exportScorePdf(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter);
-    static Ret exportScorePdf(const notation::INotationPtr notation, mu::system::IODevice& destinationDevice);
+    static Ret exportScorePdf(const notation::INotationPtr notation, io::Device& destinationDevice);
     static Ret exportScoreMidi(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter);
     static Ret exportScoreMusicXML(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter);
     static Ret exportScoreMetaData(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter);
@@ -72,8 +73,8 @@ private:
     static mu::RetVal<QByteArray> processWriter(const std::string& writerName, const notation::INotationPtrList notations,
                                                 const notation::INotationWriter::Options& options);
 
-    static Ret doExportScoreParts(const notation::INotationPtr notation, mu::system::IODevice& destinationDevice);
-    static Ret doExportScorePartsPdfs(const notation::IMasterNotationPtr notation, mu::system::IODevice& destinationDevice,
+    static Ret doExportScoreParts(const notation::INotationPtr notation, mu::io::Device& destinationDevice);
+    static Ret doExportScorePartsPdfs(const notation::IMasterNotationPtr notation, mu::io::Device& destinationDevice,
                                       const std::string& scoreFileName);
 
     static QByteArray scorePartJson(Ms::Score* score);

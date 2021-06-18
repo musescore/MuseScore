@@ -223,7 +223,7 @@ void FileScoreController::saveOnline()
         return;
     }
 
-    std::shared_ptr<QBuffer> scoreData = std::make_shared<QBuffer>();
+    QBuffer* scoreData = new QBuffer();
     scoreData->open(QIODevice::WriteOnly);
 
     Ret ret = master->writeToDevice(*scoreData);
@@ -242,14 +242,23 @@ void FileScoreController::saveOnline()
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
     async::Channel<QUrl> sourceUrlCh = uploadingService()->sourceUrlReceived();
-    sourceUrlCh.onReceive(this, [this, master, scoreData](const QUrl& url) {
+    sourceUrlCh.onReceive(this, [master, scoreData](const QUrl& url) {
+        scoreData->deleteLater();
+
         LOGD() << "Source url received: " << url;
+        QString newSource = url.toString();
 
         Meta meta = master->metaInfo();
-        meta.source = url.toString();
+        if (meta.source == newSource) {
+            return;
+        }
+
+        meta.source = newSource;
         master->setMetaInfo(meta);
 
-        saveScore();
+        if (master->created().val) {
+            master->save();
+        }
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
     Meta meta = master->metaInfo();

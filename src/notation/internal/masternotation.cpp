@@ -708,6 +708,6 @@ mu::Ret MasterNotation::saveSelectionOnScore(const mu::io::path& path)
 
 mu::Ret MasterNotation::writeToDevice(io::Device& destinationDevice)
 {
-    bool ok = score()->saveCompressedFile(&destinationDevice, score()->title(), false);
+    bool ok = score()->saveCompressedFile(&destinationDevice, score()->title() + ".mscx", false);
     return ok;
 }
