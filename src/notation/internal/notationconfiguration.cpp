@@ -132,7 +132,7 @@ void NotationConfiguration::init()
         m_currentZoomChanged.send(val.toInt());
     });
 
-    settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->sharePath().toStdString() + "Styles"));
+    settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->appDataPath().toStdString() + "Styles"));
     settings()->valueChanged(USER_STYLES_PATH).onReceive(nullptr, [this](const Val& val) {
         m_stylesPathChanged.send(val.toString());
     });
@@ -260,7 +260,7 @@ async::Notification NotationConfiguration::foregroundChanged() const
 
 io::path NotationConfiguration::wallpapersDefaultDirPath() const
 {
-    return globalConfiguration()->sharePath() + "/wallpapers";
+    return globalConfiguration()->appDataPath() + "/wallpapers";
 }
 
 QColor NotationConfiguration::borderColor() const

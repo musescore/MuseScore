@@ -34,12 +34,12 @@ using namespace mu::framework;
 
 static const Settings::Key BACKUP_KEY("global", "application/backup/subfolder");
 
-io::path GlobalConfiguration::appDirPath() const
+io::path GlobalConfiguration::appBinPath() const
 {
     return io::path(QCoreApplication::applicationDirPath());
 }
 
-io::path GlobalConfiguration::sharePath() const
+io::path GlobalConfiguration::appDataPath() const
 {
     if (m_sharePath.empty()) {
         m_sharePath = getSharePath();
@@ -48,7 +48,7 @@ io::path GlobalConfiguration::sharePath() const
     return m_sharePath;
 }
 
-io::path GlobalConfiguration::dataPath() const
+io::path GlobalConfiguration::userDataPath() const
 {
 #if defined(WIN_PORTABLE)
     if (m_dataPath.empty()) {
@@ -91,7 +91,7 @@ QString GlobalConfiguration::getSharePath() const
 
 io::path GlobalConfiguration::logsPath() const
 {
-    return dataPath() + "/logs";
+    return userDataPath() + "/logs";
 }
 
 io::path GlobalConfiguration::backupPath() const
