@@ -124,7 +124,7 @@ QUrl CloudConfiguration::uploadingApiUrl() const
 
 mu::io::path CloudConfiguration::tokensFilePath() const
 {
-    return globalConfiguration()->dataPath() + "/cred.dat";
+    return globalConfiguration()->userDataPath() + "/cred.dat";
 }
 
 QString CloudConfiguration::apiRootUrl() const

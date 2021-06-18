@@ -47,7 +47,7 @@ void UserScoresConfiguration::init()
         m_templatesPathChanged.send(val.toString());
     });
 
-    settings()->setDefaultValue(USER_SCORES_PATH, Val(globalConfiguration()->sharePath().toStdString() + "Scores"));
+    settings()->setDefaultValue(USER_SCORES_PATH, Val(globalConfiguration()->appDataPath().toStdString() + "Scores"));
     settings()->valueChanged(USER_SCORES_PATH).onReceive(nullptr, [this](const Val& val) {
         m_scoresPathChanged.send(val.toString());
     });
@@ -69,7 +69,7 @@ void UserScoresConfiguration::init()
 
 io::path UserScoresConfiguration::mainTemplatesDirPath() const
 {
-    return globalConfiguration()->sharePath() + "templates";
+    return globalConfiguration()->appDataPath() + "templates";
 }
 
 io::paths UserScoresConfiguration::actualRecentScorePaths() const
@@ -144,7 +144,7 @@ io::paths UserScoresConfiguration::availableTemplatesPaths() const
 {
     io::paths dirs;
 
-    dirs.push_back(globalConfiguration()->dataPath().toStdString() + TEMPLATES_PATH);
+    dirs.push_back(globalConfiguration()->userDataPath().toStdString() + TEMPLATES_PATH);
 
     io::path defaultTemplatesPath = this->defaultTemplatesPath();
     dirs.push_back(defaultTemplatesPath);
