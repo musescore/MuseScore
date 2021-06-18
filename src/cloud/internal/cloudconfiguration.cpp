@@ -92,6 +92,11 @@ QByteArray CloudConfiguration::clientId() const
     return settings()->value(CLIENT_ID_KEY).toQVariant().toByteArray();
 }
 
+QByteArray CloudConfiguration::uploadingLicense() const
+{
+    return "all-rights-reserved";
+}
+
 QUrl CloudConfiguration::authorizationUrl() const
 {
     return QUrl("https://musescore.com/user/auth/oauth2server");

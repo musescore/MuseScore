@@ -33,6 +33,7 @@
 #include "context/iglobalcontext.h"
 #include "iplatformrecentfilescontroller.h"
 #include "multiinstances/imultiinstancesprovider.h"
+#include "cloud/iuploadingservice.h"
 
 namespace mu::userscores {
 class FileScoreController : public IFileScoreController, public actions::Actionable, public async::Asyncable
@@ -44,6 +45,7 @@ class FileScoreController : public IFileScoreController, public actions::Actiona
     INJECT(userscores, IUserScoresConfiguration, configuration)
     INJECT(userscores, IPlatformRecentFilesController, platformRecentFilesController)
     INJECT(userscores, mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(userscores, cloud::IUploadingService, uploadingService)
 
 public:
     void init();

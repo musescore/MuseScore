@@ -27,7 +27,7 @@
 #include "iexcerptnotation.h"
 #include "retval.h"
 #include "io/path.h"
-#include "system/iodevice.h"
+#include "io/device.h"
 
 namespace mu::notation {
 using ExcerptNotationList = std::vector<IExcerptNotationPtr>;
@@ -38,6 +38,7 @@ public:
     virtual INotationPtr notation() = 0;
 
     virtual Meta metaInfo() const = 0;
+    virtual void setMetaInfo(const Meta& meta) = 0;
 
     virtual Ret load(const io::path& path) = 0;
     virtual io::path path() const = 0;
@@ -54,7 +55,7 @@ public:
     virtual INotationPartsPtr parts() const = 0;
     virtual INotationPtr clone() const = 0;
 
-    virtual Ret writeToDevice(system::IODevice& destinationDevice) = 0;
+    virtual Ret writeToDevice(io::Device& destinationDevice) = 0;
 };
 
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;

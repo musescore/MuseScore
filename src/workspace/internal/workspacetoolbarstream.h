@@ -33,8 +33,8 @@ namespace mu::workspace {
 class WorkspaceToolbarStream : public IWorkspaceDataStream
 {
 public:
-    AbstractDataPtrList read(system::IODevice& sourceDevice) const override;
-    void write(const AbstractDataPtrList& toolbars, system::IODevice& destinationDevice) const override;
+    AbstractDataPtrList read(io::Device& sourceDevice) const override;
+    void write(const AbstractDataPtrList& toolbars, io::Device& destinationDevice) const override;
 
     WorkspaceTag tag() const override;
 

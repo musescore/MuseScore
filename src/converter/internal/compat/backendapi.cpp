@@ -39,6 +39,7 @@
 using namespace mu;
 using namespace mu::converter;
 using namespace mu::notation;
+using namespace mu::io;
 
 static const std::string PNG_WRITER_NAME = "png";
 static const std::string SVG_WRITER_NAME = "svg";
@@ -342,7 +343,7 @@ Ret BackendApi::exportScorePdf(const INotationPtr notation, BackendJsonWriter& j
     return make_ret(Ret::Code::Ok);
 }
 
-Ret BackendApi::exportScorePdf(const INotationPtr notation, system::IODevice& destinationDevice)
+Ret BackendApi::exportScorePdf(const INotationPtr notation, Device& destinationDevice)
 {
     TRACEFUNC
 
@@ -458,7 +459,7 @@ mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, 
     return result;
 }
 
-Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, system::IODevice& destinationDevice)
+Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, Device& destinationDevice)
 {
     Ms::Score* score = notation->elements()->msScore();
 
@@ -496,7 +497,7 @@ Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, system
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr notation, system::IODevice& destinationDevice,
+Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr notation, Device& destinationDevice,
                                        const std::string& scoreFileName)
 {
     QJsonObject jsonForPdfs;

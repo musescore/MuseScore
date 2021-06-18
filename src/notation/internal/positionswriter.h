@@ -49,7 +49,7 @@ public:
     explicit PositionsWriter() = default;
     explicit PositionsWriter(ElementType elementType);
 
-    Ret write(notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
+    Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
 
 private:
     qreal pngDpiResolution() const;

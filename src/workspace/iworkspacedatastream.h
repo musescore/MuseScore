@@ -25,7 +25,7 @@
 #include <memory>
 
 #include "workspacetypes.h"
-#include "framework/system/iodevice.h"
+#include "io/device.h"
 
 namespace mu::workspace {
 class IWorkspaceDataStream
@@ -33,8 +33,8 @@ class IWorkspaceDataStream
 public:
     virtual ~IWorkspaceDataStream() = default;
 
-    virtual AbstractDataPtrList read(system::IODevice& sourceDevice) const = 0;
-    virtual void write(const AbstractDataPtrList& dataList, system::IODevice& destinationDevice) const = 0;
+    virtual AbstractDataPtrList read(io::Device& sourceDevice) const = 0;
+    virtual void write(const AbstractDataPtrList& dataList, io::Device& destinationDevice) const = 0;
 
     virtual WorkspaceTag tag() const = 0;
 };
