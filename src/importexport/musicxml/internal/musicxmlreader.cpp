@@ -41,5 +41,5 @@ mu::Ret MusicXmlReader::read(Ms::MasterScore* score, const io::path& path)
     } else if (syffix == "mxl") {
         err = Ms::importCompressedMusicXml(score, path.toQString());
     }
-    return mu::notation::scoreFileErrorToRet(err);
+    return mu::notation::scoreFileErrorToRet(err, path);
 }

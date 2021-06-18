@@ -33,5 +33,5 @@ using namespace mu::iex::midi;
 mu::Ret NotationMidiReader::read(Ms::MasterScore* score, const io::path& path)
 {
     Ms::Score::FileError err = Ms::importMidi(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err);
+    return mu::notation::scoreFileErrorToRet(err, path);
 }

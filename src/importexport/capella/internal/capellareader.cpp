@@ -41,5 +41,5 @@ mu::Ret CapellaReader::read(Ms::MasterScore* score, const io::path& path)
     } else if (syffix == "capx") {
         err = Ms::importCapXml(score, path.toQString());
     }
-    return mu::notation::scoreFileErrorToRet(err);
+    return mu::notation::scoreFileErrorToRet(err, path);
 }

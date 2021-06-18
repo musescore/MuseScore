@@ -31,5 +31,5 @@ using namespace mu::iex::ove;
 mu::Ret OveReader::read(Ms::MasterScore* score, const io::path& path)
 {
     Ms::Score::FileError err = importOve(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err);
+    return mu::notation::scoreFileErrorToRet(err, path);
 }
