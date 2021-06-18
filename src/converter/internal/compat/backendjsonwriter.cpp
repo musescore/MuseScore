@@ -22,8 +22,9 @@
 #include "backendjsonwriter.h"
 
 using namespace mu::converter;
+using namespace mu::io;
 
-BackendJsonWriter::BackendJsonWriter(system::IODevice* destinationDevice)
+BackendJsonWriter::BackendJsonWriter(Device* destinationDevice)
 {
     m_destinationDevice = destinationDevice;
     m_destinationDevice->open(QIODevice::WriteOnly);
