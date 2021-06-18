@@ -34,6 +34,7 @@
 #include "ui/iuiconfiguration.h"
 #include "ui/imainwindow.h"
 #include "async/asyncable.h"
+#include "internal/istartupscenario.h"
 
 namespace KDDockWidgets {
 class MainWindowBase;
@@ -60,6 +61,7 @@ class DockWindow : public QQuickItem, public async::Asyncable
 
     INJECT(dock, ui::IUiConfiguration, configuration)
     INJECT(dock, ui::IMainWindow, mainWindow)
+    INJECT(dock, appshell::IStartupScenario, startupScenario)
 
 public:
     explicit DockWindow(QQuickItem* parent = nullptr);

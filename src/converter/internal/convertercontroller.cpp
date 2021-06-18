@@ -126,11 +126,12 @@ mu::RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(con
     return rv;
 }
 
-mu::Ret ConverterController::exportScoreMedia(const mu::io::path& in, const mu::io::path& out, const mu::io::path& highlightConfigPath, const io::path& stylePath)
+mu::Ret ConverterController::exportScoreMedia(const mu::io::path& in, const mu::io::path& out, const io::path& stylePath,
+                                              const mu::io::path& highlightConfigPath)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreMedia(in, out, highlightConfigPath, stylePath);
+    return BackendApi::exportScoreMedia(in, out, stylePath, highlightConfigPath);
 }
 
 mu::Ret ConverterController::exportScoreMeta(const mu::io::path& in, const mu::io::path& out, const io::path& stylePath)

@@ -45,7 +45,7 @@ class BackendApi
     INJECT_STATIC(converter, notation::INotationWritersRegister, writers)
 
 public:
-    static Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath, const io::path& stylePath);
+    static Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& stylePath, const io::path& highlightConfigPath);
     static Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath);
     static Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath);
     static Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath);
