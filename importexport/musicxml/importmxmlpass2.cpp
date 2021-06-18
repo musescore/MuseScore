@@ -216,7 +216,7 @@ static int MusicXMLStepAltOct2Pitch(int step, int alter, int octave)
  Note that n's staff and track have not been set yet
  */
 
-static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octaveShift, const Instrument* const instr)
+static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octaveShift, const Instrument* const instr, Interval inferredTranspose = Interval(0))
       {
       //qDebug("xmlSetPitch(n=%p, step=%d, alter=%d, octave=%d, octaveShift=%d)",
       //       n, step, alter, octave, octaveShift);
@@ -225,18 +225,20 @@ static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octa
       //const Instrument* instr = staff->part()->instr();
 
       const Interval intval = instr->transpose();
-
+      const Interval combinedIntval(intval.diatonic + inferredTranspose.diatonic, intval.chromatic + inferredTranspose.chromatic);
       //qDebug("  staff=%p instr=%p dia=%d chro=%d",
       //       staff, instr, static_cast<int>(intval.diatonic), static_cast<int>(intval.chromatic));
 
       int pitch = MusicXMLStepAltOct2Pitch(step, alter, octave);
       pitch += intval.chromatic; // assume not in concert pitch
       pitch += 12 * octaveShift; // correct for octave shift
+      pitch += inferredTranspose.chromatic;
       // ensure sane values
       pitch = limit(pitch, 0, 127);
 
       int tpc2 = step2tpc(step, AccidentalVal(alter));
-      int tpc1 = Ms::transposeTpc(tpc2, intval, true);
+      tpc2 = Ms::transposeTpc(tpc2, inferredTranspose, true);
+      int tpc1 = Ms::transposeTpc(tpc2, combinedIntval, true);
       n->setPitch(pitch, tpc1, tpc2);
       //qDebug("  pitch=%d tpc1=%d tpc2=%d", n->pitch(), n->tpc1(), n->tpc2());
       }
@@ -1666,6 +1668,9 @@ void MusicXMLParserPass2::part()
       _hasDrumset = hasDrumset(instruments);
 
       // set the parts first instrument
+      
+      if (_pass1.supportsTranspose() == "no")
+            _pass1.addInferredTranspose(id);
       setPartInstruments(_logger, &_e, _pass1.getPart(id), id, _score, _pass1.getInstrList(id), _pass1.getIntervals(id), instruments);
 
       // set the part name
@@ -4540,7 +4545,7 @@ static void setPitch(Note* note, MusicXMLParserPass1& pass1, const QString& part
                   }
             }
       else {
-            xmlSetPitch(note, mnp.step(), mnp.alter(), mnp.octave(), octaveShift, instrument);
+            xmlSetPitch(note, mnp.step(), mnp.alter(), mnp.octave(), octaveShift, instrument, pass1.getMusicXmlPart(partId)._inferredTranspose);
             }
       }
 

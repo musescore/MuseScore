@@ -1101,8 +1101,12 @@ void MusicXMLParserPass1::identification()
             else if (_e.name() == "encoding") {
                   // TODO
                   while (_e.readNextStartElement()) {
-                        if (_e.name() == "supports" && _e.attributes().value("element") == "beam" && _e.attributes().value("type") == "yes")
-                              _hasBeamingInfo = true;
+                        if (_e.name() == "supports" ) {
+                              if (_e.attributes().value("element") == "beam" && _e.attributes().value("type") == "yes")
+                                    _hasBeamingInfo = true;
+                              else if (_e.attributes().value("element") == "transpose")
+                                    _supportsTranspose = _e.attributes().value("type").toString();
+                              }
                         _e.skipCurrentElement();
                         }
                   // _score->setMetaTag("encoding", _e.readElementText()); works with DOM but not with pull parser
@@ -1799,6 +1803,23 @@ static const InstrumentTemplate* findInstrument(const QString& instrSound)
 #endif
 
 //---------------------------------------------------------
+//   addInferredTranspose
+//---------------------------------------------------------
+/**
+ In the case that transposition information is missing,
+ instrument-level transpositions are inferred here.
+ This changes the *written* pitch, but retains the sounding pitch.
+ */
+void MusicXMLParserPass1::addInferredTranspose(const QString& partId)
+      {
+      if (_parts[partId].getName().contains("guitar", Qt::CaseInsensitive)
+            && !_parts[partId].hasTab()) {
+            _parts[partId]._inferredTranspose = Interval(12);
+            _parts[partId]._intervals[Fraction(0, 1)] = Interval(-12);
+            }
+      }
+
+//---------------------------------------------------------
 //   scorePart
 //---------------------------------------------------------
 
@@ -2374,7 +2395,7 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
  TODO: Store the clef type, to simplify staff type setting in pass 2.
  */
 
-void MusicXMLParserPass1::clef(const QString& /* partId */)
+void MusicXMLParserPass1::clef(const QString& partId)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "clef");
       _logger->logDebugTrace("MusicXMLParserPass1::clef", &_e);
@@ -2394,8 +2415,11 @@ void MusicXMLParserPass1::clef(const QString& /* partId */)
       while (_e.readNextStartElement()) {
             if (_e.name() == "line")
                   _e.skipCurrentElement();  // skip but don't log
-            else if (_e.name() == "sign")
+            else if (_e.name() == "sign") {
                   QString sign = _e.readElementText();
+                  if (sign == "TAB")
+                        _parts[partId].hasTab(true);
+                  }
             else
                   skipLogCurrElem();
             }

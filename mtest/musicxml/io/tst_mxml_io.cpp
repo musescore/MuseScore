@@ -132,6 +132,7 @@ private slots:
       void incorrectStaffNumber2() { mxmlIoTestRef("testIncorrectStaffNumber2"); }
       void inferredCredits() { mxmlImportTestRef("testInferredCredits"); }
       void inferredFingerings() { mxmlImportTestRef("testInferredFingerings"); }
+      void inferredTransposition() { mxmlImportTestRef("testInferredTransposition"); }
       void instrumentChangeMIDIportExport() { mxmlMscxExportTestRef("testInstrumentChangeMIDIportExport"); }
       void instrumentSound() { mxmlIoTestRef("testInstrumentSound"); }
       void invalidTimesig() { mxmlIoTestRef("testInvalidTimesig"); }
