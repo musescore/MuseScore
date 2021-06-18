@@ -61,6 +61,11 @@ Settings::~Settings()
     delete m_settings;
 }
 
+io::path Settings::filePath() const
+{
+    return m_settings->fileName();
+}
+
 const Settings::Items& Settings::items() const
 {
     return m_isTransactionStarted ? m_localSettings : m_items;
