@@ -48,6 +48,7 @@ public:
     INotationPtr notation() override;
 
     Meta metaInfo() const override;
+    void setMetaInfo(const Meta& meta) override;
 
     Ret load(const io::path& path) override;
     io::path path() const override;
@@ -64,7 +65,7 @@ public:
     INotationPartsPtr parts() const override;
     INotationPtr clone() const override;
 
-    Ret writeToDevice(system::IODevice& destinationDevice) override;
+    Ret writeToDevice(io::Device& destinationDevice) override;
 
 private:
     Ret exportScore(const io::path& path, const std::string& suffix);

@@ -22,6 +22,7 @@
 #include "filescorecontroller.h"
 
 #include <QObject>
+#include <QBuffer>
 
 #include "log.h"
 #include "translation.h"
@@ -217,7 +218,51 @@ void FileScoreController::saveSelection()
 
 void FileScoreController::saveOnline()
 {
-    NOT_IMPLEMENTED;
+    IMasterNotationPtr master = globalContext()->currentMasterNotation();
+    if (!master) {
+        return;
+    }
+
+    QBuffer* scoreData = new QBuffer();
+    scoreData->open(QIODevice::WriteOnly);
+
+    Ret ret = master->writeToDevice(*scoreData);
+
+    if (!ret) {
+        LOGE() << ret.toString();
+        return;
+    }
+
+    scoreData->close();
+    scoreData->open(QIODevice::ReadOnly);
+
+    ProgressChannel progressCh = uploadingService()->progressChannel();
+    progressCh.onReceive(this, [](const Progress& progress) {
+        LOGD() << "Uploading progress: " << progress.current << "/" << progress.total;
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
+
+    async::Channel<QUrl> sourceUrlCh = uploadingService()->sourceUrlReceived();
+    sourceUrlCh.onReceive(this, [master, scoreData](const QUrl& url) {
+        scoreData->deleteLater();
+
+        LOGD() << "Source url received: " << url;
+        QString newSource = url.toString();
+
+        Meta meta = master->metaInfo();
+        if (meta.source == newSource) {
+            return;
+        }
+
+        meta.source = newSource;
+        master->setMetaInfo(meta);
+
+        if (master->created().val) {
+            master->save();
+        }
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
+
+    Meta meta = master->metaInfo();
+    uploadingService()->uploadScore(*scoreData, meta.title, meta.source);
 }
 
 void FileScoreController::importPdf()

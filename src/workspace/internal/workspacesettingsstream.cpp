@@ -30,7 +30,7 @@
 
 using namespace mu::workspace;
 using namespace mu::framework;
-using namespace mu::system;
+using namespace mu::io;
 
 static constexpr std::string_view SETTINGS_TAG("Preferences");
 static constexpr std::string_view UI_ARRANGMENT_TAG("UiArrangment");
@@ -42,7 +42,7 @@ WorkspaceSettingsStream::WorkspaceSettingsStream(WorkspaceTag tag)
 {
 }
 
-AbstractDataPtrList WorkspaceSettingsStream::read(IODevice& sourceDevice) const
+AbstractDataPtrList WorkspaceSettingsStream::read(Device& sourceDevice) const
 {
     XmlReader reader(&sourceDevice);
 
@@ -75,7 +75,7 @@ SettingsDataPtr WorkspaceSettingsStream::readSettings(XmlReader& reader) const
     return settings;
 }
 
-void WorkspaceSettingsStream::write(const AbstractDataPtrList& settingsList, IODevice& destinationDevice) const
+void WorkspaceSettingsStream::write(const AbstractDataPtrList& settingsList, Device& destinationDevice) const
 {
     XmlWriter writer(&destinationDevice);
 

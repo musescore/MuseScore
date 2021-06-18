@@ -71,6 +71,11 @@ Meta MasterNotation::metaInfo() const
     return meta;
 }
 
+void MasterNotation::setMetaInfo(const Meta& meta)
+{
+    Notation::setMetaInfo(meta);
+}
+
 mu::Ret MasterNotation::load(const io::path& path)
 {
     TRACEFUNC;
@@ -701,8 +706,8 @@ mu::Ret MasterNotation::saveSelectionOnScore(const mu::io::path& path)
     return ret;
 }
 
-mu::Ret MasterNotation::writeToDevice(system::IODevice& destinationDevice)
+mu::Ret MasterNotation::writeToDevice(io::Device& destinationDevice)
 {
-    bool ok = score()->saveCompressedFile(&destinationDevice, score()->title(), false);
+    bool ok = score()->saveCompressedFile(&destinationDevice, score()->title() + ".mscx", false);
     return ok;
 }

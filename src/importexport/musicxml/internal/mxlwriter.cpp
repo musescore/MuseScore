@@ -27,9 +27,9 @@
 #include "musicxml/exportxml.h"
 
 using namespace mu::iex::musicxml;
-using namespace mu::system;
+using namespace mu::io;
 
-mu::Ret MxlWriter::write(notation::INotationPtr notation, system::IODevice& destinationDevice, const Options&)
+mu::Ret MxlWriter::write(notation::INotationPtr notation, io::Device& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);

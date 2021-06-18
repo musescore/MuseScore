@@ -34,6 +34,7 @@ class QOAuthHttpServerReplyHandler;
 #include "icloudconfiguration.h"
 #include "system/ifilesystem.h"
 #include "network/inetworkmanagercreator.h"
+#include "iinteractive.h"
 
 namespace mu::cloud {
 class CloudService : public QObject, public IAuthorizationService, public IUploadingService
@@ -43,6 +44,7 @@ class CloudService : public QObject, public IAuthorizationService, public IUploa
     INJECT(cloud, ICloudConfiguration, configuration)
     INJECT(cloud, system::IFileSystem, fileSystem)
     INJECT(cloud, network::INetworkManagerCreator, networkManagerCreator)
+    INJECT(cloud, framework::IInteractive, interactive)
 
 public:
     CloudService(QObject* parent = nullptr);
@@ -55,7 +57,10 @@ public:
     ValCh<bool> userAuthorized() const override;
     ValCh<AccountInfo> accountInfo() const override;
 
-    framework::ProgressChannel uploadScore(const QByteArray& scoreData, const std::string& title, const QUrl& sourceUrl = QUrl()) override;
+    void uploadScore(io::Device& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) override;
+
+    async::Channel<QUrl> sourceUrlReceived() const override;
+    framework::ProgressChannel progressChannel() const override;
 
 private slots:
     void onUserAuthorized();
@@ -65,6 +70,13 @@ private:
     bool saveTokens();
     bool updateTokens();
     void clearTokens();
+
+    using OnUserAuthorizedCallback = std::function<void ()>;
+    void authorize(const OnUserAuthorizedCallback& onUserAuthorizedCallback = OnUserAuthorizedCallback());
+
+    void setAccountInfo(const AccountInfo& info);
+
+    void openUrl(const QUrl& url);
 
     enum class RequestStatus {
         Ok,
@@ -76,8 +88,10 @@ private:
     network::RequestHeaders headers() const;
 
     RequestStatus downloadUserInfo();
+    RequestStatus doUploadScore(io::Device& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl());
 
-    void setAccountInfo(const AccountInfo& info);
+    using RequestCallback = std::function<RequestStatus()>;
+    void executeRequest(const RequestCallback& requestCallback);
 
     QOAuth2AuthorizationCodeFlow* m_oauth2 = nullptr;
     QOAuthHttpServerReplyHandler* m_replyHandler = nullptr;
@@ -88,6 +102,9 @@ private:
 
     QString m_accessToken;
     QString m_refreshToken;
+
+    OnUserAuthorizedCallback m_onUserAuthorizedCallback;
+    async::Channel<QUrl> m_sourceUrlReceived;
 };
 }
 

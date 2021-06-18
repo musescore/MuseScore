@@ -22,16 +22,14 @@
 #ifndef MU_CONVERTER_BACKENDJSONWRITER_H
 #define MU_CONVERTER_BACKENDJSONWRITER_H
 
-#include <QFile>
-
 #include "io/path.h"
-#include "system/iodevice.h"
+#include "io/device.h"
 
 namespace mu::converter {
 class BackendJsonWriter
 {
 public:
-    BackendJsonWriter(mu::system::IODevice* destinationDevice);
+    BackendJsonWriter(io::Device* destinationDevice);
     ~BackendJsonWriter();
 
     void addKey(const char* arrayName);
@@ -41,7 +39,7 @@ public:
     void closeArray(bool lastJsonElement = false);
 
 private:
-    system::IODevice* m_destinationDevice = nullptr;
+    io::Device* m_destinationDevice = nullptr;
 };
 }
 
