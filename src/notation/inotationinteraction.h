@@ -129,7 +129,7 @@ public:
     virtual void addBeamToSelectedChordRests(BeamMode mode) = 0;
 
     virtual void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) = 0;
-    virtual void transpose(const TransposeOptions& options) = 0;
+    virtual bool transpose(const TransposeOptions& options) = 0;
     virtual void swapVoices(int voiceIndex1, int voiceIndex2) = 0;
     virtual void addIntervalToSelectedNotes(int interval) = 0;
     virtual void changeSelectedNotesVoice(int voiceIndex) = 0;

@@ -2478,16 +2478,18 @@ void NotationInteraction::setBreaksSpawnInterval(BreaksSpawnIntervalType interva
     notifyAboutNotationChanged();
 }
 
-void NotationInteraction::transpose(const TransposeOptions& options)
+bool NotationInteraction::transpose(const TransposeOptions& options)
 {
     startEdit();
 
-    score()->transpose(options.mode, options.direction, options.key, options.interval,
-                       options.needTransposeKeys, options.needTransposeChordNames, options.needTransposeDoubleSharpsFlats);
+    bool ok = score()->transpose(options.mode, options.direction, options.key, options.interval,
+                                 options.needTransposeKeys, options.needTransposeChordNames, options.needTransposeDoubleSharpsFlats);
 
     apply();
 
     notifyAboutNotationChanged();
+
+    return ok;
 }
 
 void NotationInteraction::swapVoices(int voiceIndex1, int voiceIndex2)

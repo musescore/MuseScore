@@ -144,7 +144,7 @@ public:
     void addBeamToSelectedChordRests(BeamMode mode) override;
 
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
-    void transpose(const TransposeOptions& options) override;
+    bool transpose(const TransposeOptions& options) override;
     void swapVoices(int voiceIndex1, int voiceIndex2) override;
     void addIntervalToSelectedNotes(int interval) override;
     void changeSelectedNotesVoice(int voiceIndex) override;
