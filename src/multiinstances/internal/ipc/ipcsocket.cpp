@@ -103,13 +103,10 @@ bool IpcSocket::send(Msg msg)
 
     IPCLOG() << data;
 
-    m_lock->lock();
+    IpcLockGuard lock_guard(m_lock);
 
     m_socket->write(data);
     bool ok = m_socket->waitForBytesWritten(TIMEOUT_MSEC);
-
-    m_lock->unlock();
-
     if (!ok) {
         LOGE() << "failed send to socket";
     }
