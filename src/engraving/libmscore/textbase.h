@@ -25,6 +25,8 @@
 
 #include <QTextCursor>
 
+class QInputMethodEvent;
+
 #include "element.h"
 #include "property.h"
 #include "style.h"
