@@ -86,7 +86,7 @@ struct FontConfig
     FontSizeType sizeType = FontSizeType::BODY;
 };
 
-UiTheme::UiTheme(QObject*)
+UiTheme::UiTheme()
     : QProxyStyle(QStyleFactory::create("Fusion"))
 {
     setObjectName("UiTheme");
