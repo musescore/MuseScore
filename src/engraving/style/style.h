@@ -45,29 +45,10 @@ namespace Ms {
 class XmlReader;
 class XmlWriter;
 
-struct ChordSymbolStyle {
-    QString styleName;
-    QString fileName;
-    QHash<QString, QHash<QString, bool>> styleDefaults;
-};
-
 class MStyle
 {
 public:
     MStyle();
-
-    QList<ChordSymbolStyle> _chordSymbolStylesList = {
-        // Sample styles for testing
-        { "Standard", "chords_std.xml", {
-              { "major", { { "maj", 0 }, { "Ma", 1 } } },
-              { "minor", { { "min", 0 }, { "m", 1 } } },
-          }
-        }, { "Jazz", "chords_jazz.xml", {
-                 { "major", { { "maj", 0 }, { "Ma", 1 } } },
-                 { "minor", { { "min", 0 }, { "m", 1 } } },
-             }
-        }
-    };
 
     //! TODO Can be optimized
     const QVariant& styleV(Sid idx) const { return value(idx); }
@@ -87,8 +68,6 @@ public:
     bool isDefault(Sid idx) const;
     void setDefaultStyleVersion(const int defaultsVersion);
     int defaultStyleVersion() const;
-
-    QList<ChordSymbolStyle> getChordStyles() { return _chordSymbolStylesList; }
 
     bool read(QIODevice* device, bool ign = false);
     bool write(QIODevice* device);

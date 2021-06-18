@@ -26,11 +26,11 @@
 #include <QAbstractListModel>
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+#include "notation/internal/chordsymbolstylemanager.h"
 
 namespace mu::inspector {
 class ChordSymbolStylesModel : public QAbstractListModel
 {
-
     INJECT(inspector, context::IGlobalContext, globalContext)
 
     Q_OBJECT
@@ -49,23 +49,9 @@ private:
         StyleNameRole = Qt::UserRole + 1,
         FileRole
     };
-    // TODO: Reconsider the required roles (attributes)
-//    struct ChordSymbolStyle{
-//        QString styleName;
-//        QString file;
-//    };
-    // TODO: Make the list dynamic (get info from styles)
-//    struct ChordSymbolStyle{
-//        QString styleName;
-//        QString fileName;
-//        QHash<QString,QHash<QString,bool>> styleDefaults;
-//    };
-    QList<Ms::ChordSymbolStyle> m_styles;
-//    QList<ChordSymbolStyle> m_styles = {
-//        {"Standard","chords_std.xml"},
-//        {"Jazz","chords_jazz.xml"},
-//        {"Jazz","chord_jazz.xml"}
-//    };
+
+    QList<notation::ChordSymbolStyle> m_styles;
+    notation::ChordSymbolStyleManager* styleManager;
 };
 }
 #endif // CHORDSYMBOLSTYLESMODEL_H

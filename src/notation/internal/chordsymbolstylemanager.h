@@ -19,34 +19,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef CHORDSYMBOLSTYLEMANAGER_H
+#define CHORDSYMBOLSTYLEMANAGER_H
 
-#ifndef MU_NOTATION_NOTATIONSTYLE_H
-#define MU_NOTATION_NOTATIONSTYLE_H
-
-#include "inotationstyle.h"
-
-#include "igetscore.h"
+#include "modularity/ioc.h"
+#include "system/ifilesystem.h"
+#include "engraving/infrastructure/io/xml.h"
 
 namespace mu::notation {
-class NotationStyle : public INotationStyle
+struct ChordSymbolStyle {
+    QString styleName;
+    QString fileName;
+    QHash<QString, QHash<QString, bool>> styleDefaults;
+};
+
+class ChordSymbolStyleManager
 {
+    INJECT(notation, mu::system::IFileSystem, fileSystem)
+
 public:
-    NotationStyle(IGetScore* getScore);
+    ChordSymbolStyleManager();
 
-    QVariant styleValue(const StyleId& styleId) const override;
-    QVariant defaultStyleValue(const StyleId& styleId) const override;
-    void setStyleValue(const StyleId& styleId, const QVariant& newValue) override;
-    void resetStyleValue(const StyleId& styleId) override;
+    mu::io::paths scanFileSystemForChordStyles();
+    void retrieveChordStyles();
+    bool isChordSymbolStylesFile(mu::io::path& f);
+    void extractChordStyleInfo(mu::io::path& f);
 
-    bool canApplyToAllParts() const override;
-    void applyToAllParts() override;
-
-    async::Notification styleChanged() const override;
+    QList<ChordSymbolStyle> getChordStyles();
 
 private:
-    IGetScore* m_getScore = nullptr;
-    async::Notification m_styleChanged;
+    QList<ChordSymbolStyle> _chordStyles;
 };
 }
 
-#endif // MU_NOTATION_NOTATIONSTYLE_H
+#endif // CHORDSYMBOLSTYLEMANAGER_H

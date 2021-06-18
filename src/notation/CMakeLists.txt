@@ -51,6 +51,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iinstrumentsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/iselectinstrumentscenario.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/internal/chordsymbolstylemanager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/chordsymbolstylemanager.h    
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/igetscore.h

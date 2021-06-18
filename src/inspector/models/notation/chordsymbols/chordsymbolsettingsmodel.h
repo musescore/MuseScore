@@ -48,9 +48,6 @@ public:
     PropertyItem* voicingType() const;
     PropertyItem* durationType() const;
 
-public slots:
-    void setChordStylesModel(ChordSymbolStylesModel* chordSymbolStylesModel);
-
 private:
     ChordSymbolStylesModel* m_chordStylesModel = nullptr;
     PropertyItem* m_isLiteral = nullptr;
