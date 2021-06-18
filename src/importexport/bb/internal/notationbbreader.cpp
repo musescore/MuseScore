@@ -33,5 +33,5 @@ using namespace mu::iex::bb;
 mu::Ret NotationBBReader::read(Ms::MasterScore* score, const io::path& path)
 {
     Ms::Score::FileError err = Ms::importBB(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err);
+    return mu::notation::scoreFileErrorToRet(err, path);
 }

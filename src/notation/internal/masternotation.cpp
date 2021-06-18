@@ -87,8 +87,7 @@ mu::Ret MasterNotation::load(const io::path& path, const io::path& stylePath)
     //! for others see readers in importexport module
     auto reader = readers()->reader(syffix);
     if (!reader) {
-        LOGE() << "not found reader for file: " << path;
-        return make_ret(Ret::Code::InternalError);
+        return make_ret(Err::FileUnknownType, path);
     }
 
     return load(path, stylePath, reader);

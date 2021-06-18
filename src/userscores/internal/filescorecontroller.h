@@ -66,6 +66,8 @@ private:
     void newScore();
     void closeScore();
 
+    bool checkCanIgnoreError(const Ret& ret);
+
     void saveScore();
     void saveScoreAs();
     void saveScoreCopy();

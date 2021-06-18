@@ -26,6 +26,7 @@
 
 #include "log.h"
 #include "translation.h"
+#include "notation/notationerrors.h"
 
 #include "userscoresconfiguration.h"
 
@@ -265,6 +266,35 @@ void FileScoreController::saveOnline()
     uploadingService()->uploadScore(*scoreData, meta.title, meta.source);
 }
 
+bool FileScoreController::checkCanIgnoreError(const Ret& ret)
+{
+    if (ret) {
+        return true;
+    }
+
+    static const QList<Err> ignorableErrors {
+        Err::FileTooOld,
+        Err::FileTooNew,
+        Err::FileCorrupted,
+        Err::FileOld300Format
+    };
+
+    bool canIgnore = ignorableErrors.contains(static_cast<Err>(ret.code()));
+    std::string title = trc("userscores", "Load Error");
+
+    if (!canIgnore) {
+        interactive()->error(title, ret.text());
+        return false;
+    }
+
+    IInteractive::Result result = interactive()->warning(title, ret.text(), {
+        IInteractive::Button::Cancel,
+        IInteractive::Button::Ignore
+    });
+
+    return result.standartButton() == IInteractive::Button::Ignore;
+}
+
 void FileScoreController::importPdf()
 {
     interactive()->openUrl("https://musescore.com/import");
@@ -322,10 +352,8 @@ Ret FileScoreController::doOpenScore(const io::path& filePath)
     }
 
     Ret ret = notation->load(filePath);
-    if (!ret) {
-        LOGE() << "failed load: " << filePath << ", ret: " << ret.toString();
-        //! TODO Show dialog about error
-        return make_ret(Ret::Code::InternalError);
+    if (!checkCanIgnoreError(ret)) {
+        return ret;
     }
 
     if (!globalContext()->containsMasterNotation(filePath)) {

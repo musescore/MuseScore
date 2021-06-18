@@ -218,8 +218,7 @@ mu::Ret EditStaffType::doLoadScore(Ms::MasterScore* score, const mu::io::path& p
     score->update();
 
     if (!score->sanityCheck(QString())) {
-        LOGE() << "Failed load score";
-        return make_ret(Err::FileCorrupted);
+        return make_ret(Err::FileCorrupted, path);
     }
 
     return make_ret(Ret::Code::Ok);

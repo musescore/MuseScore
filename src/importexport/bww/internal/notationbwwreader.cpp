@@ -33,5 +33,5 @@ using namespace mu::iex::bww;
 mu::Ret NotationBwwReader::read(Ms::MasterScore* score, const io::path& path)
 {
     Ms::Score::FileError err = Ms::importBww(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err);
+    return mu::notation::scoreFileErrorToRet(err, path);
 }
