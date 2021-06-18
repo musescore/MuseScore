@@ -37,6 +37,7 @@ public:
 
     network::RequestHeaders headers() const override;
     QByteArray clientId() const override;
+    QByteArray uploadingLicense() const override;
 
     QUrl authorizationUrl() const override;
     QUrl accessTokenUrl() const override;

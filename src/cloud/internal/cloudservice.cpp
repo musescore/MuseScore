@@ -341,7 +341,7 @@ CloudService::RequestStatus CloudService::doUploadScore(io::Device& scoreSourceD
 
     QHttpPart licensePart;
     licensePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"license\""));
-    licensePart.setBody("cc-by");
+    licensePart.setBody(configuration()->uploadingLicense());
     multiPart.append(licensePart);
 
     Ret ret(true);
