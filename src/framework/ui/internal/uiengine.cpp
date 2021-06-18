@@ -49,12 +49,15 @@ UiEngine::UiEngine()
     m_interactiveProvider = std::make_shared<InteractiveProvider>();
     m_api = new QmlApi(this);
     m_tooltip = new QmlToolTip(this);
-    m_theme = new UiTheme(this);
+
+    //! NOTE At the moment, UiTheme is also QProxyStyle
+    //! Inside the theme, QApplication::setStyle(this) is calling and the QStyleSheetStyle becomes as parent.
+    //! So, the UiTheme will be deleted when will deleted the application (as a child of QStyleSheetStyle).
+    m_theme = new UiTheme();
 }
 
 UiEngine::~UiEngine()
 {
-    delete m_theme;
     delete m_translation;
 }
 
