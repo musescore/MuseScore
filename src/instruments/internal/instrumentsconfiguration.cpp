@@ -37,7 +37,7 @@ static const Settings::Key SECOND_SCORE_ORDER_LIST_KEY(module_name, "application
 void InstrumentsConfiguration::init()
 {
     settings()->setDefaultValue(FIRST_INSTRUMENT_LIST_KEY,
-                                Val(globalConfiguration()->sharePath().toStdString() + "instruments/instruments.xml"));
+                                Val(globalConfiguration()->appDataPath().toStdString() + "instruments/instruments.xml"));
     settings()->valueChanged(FIRST_INSTRUMENT_LIST_KEY).onReceive(nullptr, [this](const Val&) {
         m_instrumentListPathsChanged.notify();
     });
@@ -48,7 +48,7 @@ void InstrumentsConfiguration::init()
     });
 
     settings()->setDefaultValue(FIRST_SCORE_ORDER_LIST_KEY,
-                                Val(globalConfiguration()->sharePath().toStdString() + "instruments/orders.xml"));
+                                Val(globalConfiguration()->appDataPath().toStdString() + "instruments/orders.xml"));
     settings()->valueChanged(FIRST_SCORE_ORDER_LIST_KEY).onReceive(nullptr, [this](const Val&) {
         m_scoreOrderListPathsChanged.notify();
     });

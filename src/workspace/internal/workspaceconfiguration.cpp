@@ -43,7 +43,7 @@ io::paths WorkspaceConfiguration::workspacePaths() const
 {
     io::paths paths;
 
-    io::path sharePath = globalConfiguration()->sharePath() + "/workspaces";
+    io::path sharePath = globalConfiguration()->appDataPath() + "/workspaces";
     paths.push_back(sharePath);
     paths.push_back(userWorkspacesDirPath());
 
@@ -55,7 +55,7 @@ io::paths WorkspaceConfiguration::workspacePaths() const
 
 io::path WorkspaceConfiguration::userWorkspacesDirPath() const
 {
-    return globalConfiguration()->dataPath() + "/workspaces";
+    return globalConfiguration()->userDataPath() + "/workspaces";
 }
 
 io::path WorkspaceConfiguration::userWorkspacePath(const std::string& workspaceName) const

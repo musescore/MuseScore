@@ -38,7 +38,7 @@ static const Settings::Key ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE(module_name, "io/
 
 void ShortcutsConfiguration::init()
 {
-    io::path defaultUserPath = globalConfiguration()->dataPath() + "/" + SHORTCUTS_FILE_NAME;
+    io::path defaultUserPath = globalConfiguration()->userDataPath() + "/" + SHORTCUTS_FILE_NAME;
     settings()->setDefaultValue(USER_PATH_KEY, Val(defaultUserPath.toStdString()));
 
     settings()->valueChanged(USER_PATH_KEY).onReceive(this, [this](const Val& val) {
@@ -69,7 +69,7 @@ mu::io::path ShortcutsConfiguration::shortcutsDefaultPath() const
 
 mu::io::path ShortcutsConfiguration::midiMappingsPath() const
 {
-    return globalConfiguration()->dataPath() + "/" + MIDIMAPPINGS_FILE_NAME;
+    return globalConfiguration()->userDataPath() + "/" + MIDIMAPPINGS_FILE_NAME;
 }
 
 bool ShortcutsConfiguration::advanceToNextNoteOnKeyRelease() const

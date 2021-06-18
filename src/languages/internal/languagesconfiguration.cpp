@@ -157,12 +157,12 @@ LanguagesHash LanguagesConfiguration::parseLanguagesConfig(const QByteArray& jso
 
 io::path LanguagesConfiguration::languagesSharePath() const
 {
-    return globalConfiguration()->sharePath() + "/locale";
+    return globalConfiguration()->appDataPath() + "/locale";
 }
 
 io::path LanguagesConfiguration::languagesDataPath() const
 {
-    return globalConfiguration()->dataPath() + "/locale";
+    return globalConfiguration()->userDataPath() + "/locale";
 }
 
 io::paths LanguagesConfiguration::languageFilePaths(const QString& languageCode) const

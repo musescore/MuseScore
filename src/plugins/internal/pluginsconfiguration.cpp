@@ -35,7 +35,7 @@ static const std::string PLUGINS_DIR("/plugins");
 
 void PluginsConfiguration::init()
 {
-    settings()->setDefaultValue(USER_PLUGINS_PATH, Val(globalConfiguration()->sharePath().toStdString() + "Plugins"));
+    settings()->setDefaultValue(USER_PLUGINS_PATH, Val(globalConfiguration()->appDataPath().toStdString() + "Plugins"));
     settings()->valueChanged(USER_PLUGINS_PATH).onReceive(nullptr, [this](const Val& val) {
         m_pluginsPathChanged.send(val.toString());
     });
@@ -52,7 +52,7 @@ mu::io::paths PluginsConfiguration::availablePluginsPaths() const
 {
     io::paths result;
 
-    result.push_back(globalConfiguration()->dataPath() + PLUGINS_DIR);
+    result.push_back(globalConfiguration()->userDataPath() + PLUGINS_DIR);
 
     io::path defaultPluginsPath  = this->defaultPluginsPath();
     result.push_back(defaultPluginsPath);

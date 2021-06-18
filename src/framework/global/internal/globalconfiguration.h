@@ -31,9 +31,9 @@ class GlobalConfiguration : public IGlobalConfiguration
 public:
     GlobalConfiguration() = default;
 
-    io::path appDirPath() const override;
-    io::path sharePath() const override;
-    io::path dataPath() const override;
+    io::path appBinPath() const override;
+    io::path appDataPath() const override;
+    io::path userDataPath() const override;
     io::path logsPath() const override;
     io::path backupPath() const override;
 

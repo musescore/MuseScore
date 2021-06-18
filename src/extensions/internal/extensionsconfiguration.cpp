@@ -53,7 +53,7 @@ void ExtensionsConfiguration::init()
 {
     settings()->setDefaultValue(CHECK_FOR_UPDATE, Val(true));
 
-    settings()->setDefaultValue(USER_EXTENSIONS_PATH, Val(globalConfiguration()->sharePath().toStdString() + EXTENSIONS_DIR.toStdString()));
+    settings()->setDefaultValue(USER_EXTENSIONS_PATH, Val((globalConfiguration()->appDataPath() + EXTENSIONS_DIR).toStdString()));
     settings()->valueChanged(USER_EXTENSIONS_PATH).onReceive(nullptr, [this](const Val& val) {
         m_extensionsPathChanged.send(val.toString());
     });
@@ -269,5 +269,5 @@ io::path ExtensionsConfiguration::extensionTemplatesPath(const QString& extensio
 
 io::path ExtensionsConfiguration::extensionsDataPath() const
 {
-    return globalConfiguration()->dataPath() + EXTENSIONS_DIR;
+    return globalConfiguration()->userDataPath() + EXTENSIONS_DIR;
 }
