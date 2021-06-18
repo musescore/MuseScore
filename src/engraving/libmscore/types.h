@@ -23,7 +23,9 @@
 #ifndef __TYPES_H__
 #define __TYPES_H__
 
-#include <QComboBox>
+class QComboBox;
+class QAction;
+class QMimeData;
 
 #include "config.h"
 
