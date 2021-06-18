@@ -135,7 +135,11 @@
 #include "stubs/languages/languagesstubmodule.h"
 #endif
 
+#ifdef BUILD_MULTIINSTANCES_MODULE
 #include "multiinstances/multiinstancesmodule.h"
+#else
+#include "stubs/multiinstances/multiinstancesstubmodule.h"
+#endif
 
 #ifdef BUILD_AUTOBOT_MODULE
 #include "autobot/autobotmodule.h"
