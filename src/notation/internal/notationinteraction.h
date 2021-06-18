@@ -282,7 +282,7 @@ private:
 
     async::Channel<ScoreConfigType> m_scoreConfigChanged;
 
-    Ms::Lasso* m_lasso;
+    Ms::Lasso* m_lasso = nullptr;
 };
 }
 

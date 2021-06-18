@@ -99,6 +99,12 @@ mu::io::path mu::io::basename(const mu::io::path& path)
     return fi.baseName();
 }
 
+mu::io::path mu::io::completebasename(const mu::io::path& path)
+{
+    QFileInfo fi(path.toQString());
+    return fi.completeBaseName();
+}
+
 mu::io::path mu::io::dirname(const mu::io::path& path)
 {
     return QFileInfo(path.toQString()).dir().dirName();
