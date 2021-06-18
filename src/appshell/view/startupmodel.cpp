@@ -27,7 +27,6 @@ using namespace mu::actions;
 
 static const std::string HOME_URI("musescore://home");
 static const std::string NOTATION_URI("musescore://notation");
-static const std::string NEW_SCORE_URI("musescore://userscores/newscore");
 
 StartupModel::StartupModel(QObject* parent)
     : QObject(parent)
@@ -56,7 +55,7 @@ void StartupModel::load()
     case StartupSessionType::StartEmpty:
         break;
     case StartupSessionType::StartWithNewScore:
-        interactive()->open(NEW_SCORE_URI);
+        dispatcher()->dispatch("file-new");
         break;
     case StartupSessionType::ContinueLastSession:
         dispatcher()->dispatch("continue-last-session");
