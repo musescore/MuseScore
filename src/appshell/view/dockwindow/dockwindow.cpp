@@ -48,6 +48,8 @@ DockWindow::DockWindow(QQuickItem* parent)
 
 void DockWindow::componentComplete()
 {
+    TRACEFUNC;
+
     QQuickItem::componentComplete();
 
     m_mainWindow = new KDDockWidgets::MainWindowQuick("mainWindow",
@@ -124,6 +126,8 @@ void DockWindow::componentComplete()
 
         m_currentPanelDockingHolder = holder;
     });
+
+    startupScenario()->run();
 }
 
 void DockWindow::onQuit()

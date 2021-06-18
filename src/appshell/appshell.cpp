@@ -226,10 +226,7 @@ int AppShell::run(int argc, char** argv)
 int AppShell::processConverter(const CommandLineController::ConverterTask& task)
 {
     Ret ret = make_ret(Ret::Code::Ok);
-
-    io::path highlightConfigPath = task.params[CommandLineController::ParamKey::HighlightConfigPath].toString();
     io::path stylePath = task.params[CommandLineController::ParamKey::StylePath].toString();
-    QString scoreSource = task.params[CommandLineController::ParamKey::ScoreSource].toString();
 
     switch (task.type) {
     case CommandLineController::ConvertType::Batch:
@@ -238,9 +235,10 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
     case CommandLineController::ConvertType::File:
         ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath);
         break;
-    case CommandLineController::ConvertType::ExportScoreMedia:
-        ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, highlightConfigPath, stylePath);
-        break;
+    case CommandLineController::ConvertType::ExportScoreMedia: {
+        io::path highlightConfigPath = task.params[CommandLineController::ParamKey::HighlightConfigPath].toString();
+        ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, stylePath, highlightConfigPath);
+    } break;
     case CommandLineController::ConvertType::ExportScoreMeta:
         ret = converter()->exportScoreMeta(task.inputFile, task.outputFile, stylePath);
         break;
@@ -250,9 +248,10 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
     case CommandLineController::ConvertType::ExportScorePartsPdf:
         ret = converter()->exportScorePartsPdfs(task.inputFile, task.outputFile, stylePath);
         break;
-    case CommandLineController::ConvertType::SourceUpdate:
+    case CommandLineController::ConvertType::SourceUpdate: {
+        QString scoreSource = task.params[CommandLineController::ParamKey::ScoreSource].toString();
         ret = converter()->updateSource(task.inputFile, scoreSource);
-        break;
+    } break;
     }
 
     if (!ret) {

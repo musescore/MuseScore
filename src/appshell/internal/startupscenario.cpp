@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "startupmodel.h"
+#include "startupscenario.h"
 
 using namespace mu::appshell;
 using namespace mu::actions;
@@ -28,12 +28,39 @@ using namespace mu::actions;
 static const std::string HOME_URI("musescore://home");
 static const std::string NOTATION_URI("musescore://notation");
 
-StartupModel::StartupModel(QObject* parent)
-    : QObject(parent)
+void StartupScenario::setStartupScorePaths(const io::paths& paths)
 {
+    m_startupScorePaths = paths;
 }
 
-std::string StartupModel::startupPageUri() const
+void StartupScenario::run()
+{
+    if (!m_startupScorePaths.empty()) {
+        for (const io::path& path : m_startupScorePaths) {
+            openScore(path);
+        }
+
+        return;
+    }
+
+    interactive()->open(startupPageUri());
+
+    switch (configuration()->startupSessionType()) {
+    case StartupSessionType::StartEmpty:
+        break;
+    case StartupSessionType::StartWithNewScore:
+        dispatcher()->dispatch("file-new");
+        break;
+    case StartupSessionType::ContinueLastSession:
+        dispatcher()->dispatch("continue-last-session");
+        break;
+    case StartupSessionType::StartWithScore: {
+        openScore(configuration()->startupScorePath());
+    } break;
+    }
+}
+
+std::string StartupScenario::startupPageUri() const
 {
     switch (configuration()->startupSessionType()) {
     case StartupSessionType::StartEmpty:
@@ -47,22 +74,7 @@ std::string StartupModel::startupPageUri() const
     return HOME_URI;
 }
 
-void StartupModel::load()
+void StartupScenario::openScore(const io::path& path)
 {
-    interactive()->open(startupPageUri());
-
-    switch (configuration()->startupSessionType()) {
-    case StartupSessionType::StartEmpty:
-        break;
-    case StartupSessionType::StartWithNewScore:
-        dispatcher()->dispatch("file-new");
-        break;
-    case StartupSessionType::ContinueLastSession:
-        dispatcher()->dispatch("continue-last-session");
-        break;
-    case StartupSessionType::StartWithScore: {
-        io::path scorePath = configuration()->startupScorePath();
-        dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(scorePath));
-    } break;
-    }
+    dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(path));
 }

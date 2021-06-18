@@ -35,7 +35,8 @@ public:
 
     virtual Ret fileConvert(const io::path& in, const io::path& out, const io::path& stylePath) = 0;
     virtual Ret batchConvert(const io::path& batchJobFile, const io::path& stylePath) = 0;
-    virtual Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath, const io::path& stylePath) = 0;
+    virtual Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& stylePath,
+                                 const io::path& highlightConfigPath) = 0;
     virtual Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath) = 0;
     virtual Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath) = 0;
     virtual Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath) = 0;

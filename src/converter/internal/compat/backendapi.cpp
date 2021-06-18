@@ -50,7 +50,7 @@ static const std::string MIDI_WRITER_NAME = "midi";
 static const std::string MUSICXML_WRITER_NAME = "mxml";
 static const std::string META_DATA_NAME = "metadata";
 
-Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath, const io::path& stylePath)
+Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const io::path& stylePath, const io::path& highlightConfigPath)
 {
     TRACEFUNC
 

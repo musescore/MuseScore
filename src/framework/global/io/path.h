@@ -25,8 +25,7 @@
 #include <QString>
 #include "framework/global/logstream.h"
 
-namespace mu {
-namespace io {
+namespace mu::io {
 struct path;
 using paths = std::vector<path>;
 struct path {
@@ -79,7 +78,8 @@ path dirname(const path& path);
 path dirpath(const path& path);
 
 path escapeFileName(const path& fn);
-}
+
+paths pathsFromStrings(const QStringList& list);
 }
 
 #endif // MU_IO_PATH_H

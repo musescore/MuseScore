@@ -137,3 +137,14 @@ mu::io::path mu::io::escapeFileName(const mu::io::path& fn_)
     fn = fn.replace(QRegExp("[" + QRegExp::escape("\\/:*?\"<>|") + "]"), "_");         //FAT/NTFS special chars
     return fn;
 }
+
+mu::io::paths mu::io::pathsFromStrings(const QStringList& list)
+{
+    paths result;
+
+    for (const QString& path : list) {
+        result.push_back(path);
+    }
+
+    return result;
+}
