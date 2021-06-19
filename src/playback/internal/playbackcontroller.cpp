@@ -61,6 +61,14 @@ void PlaybackController::init()
     onNotationChanged();
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
+        auto notation = globalContext()->currentNotation();
+        if (notation) {
+            notation->notationChanged().onNotify(this, [this, notation]() {
+                if (notation == m_notation) {
+                    onNotationChanged();
+                }
+            });
+        }
     });
 
     sequencer()->statusChanged().onReceive(this, [this](const ISequencer::Status&) {

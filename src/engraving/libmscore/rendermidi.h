@@ -115,8 +115,8 @@ private:
 
     void renderStaffChunk(const Chunk&, EventMap* events, const StaffContext& sctx);
     void renderSpanners(const Chunk&, EventMap* events);
-    void renderMetronome(const Chunk&, EventMap* events);
-    void renderMetronome(EventMap* events, Measure const* m, const Fraction& tickOffset);
+    void renderMetronome(const Chunk&, EventMap* events, bool audible);
+    void renderMetronome(EventMap* events, Measure const* m, const Fraction& tickOffset, bool audible);
 
     void collectMeasureEvents(EventMap* events, Measure const* m, const MidiRenderer::StaffContext& sctx, int tickOffset);
     void collectMeasureEventsSimple(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset);

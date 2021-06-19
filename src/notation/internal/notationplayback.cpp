@@ -258,7 +258,7 @@ void NotationPlayback::makeChunk(midi::Chunk& chunk, tick_t fromTick) const
 
         midi::EventType etype = static_cast<midi::EventType>(ev.type());
         static const std::set<EventType> SKIP_EVENTS
-            = { EventType::ME_INVALID, EventType::ME_EOT, EventType::ME_TICK1, EventType::ME_TICK2 };
+            = { EventType::ME_INVALID, EventType::ME_EOT };
         if (SKIP_EVENTS.find(etype) != SKIP_EVENTS.end()) {
             continue;
         }
@@ -716,7 +716,7 @@ QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, in
 
     for (int i = 0; i < score()->nstaves(); ++i) {
         Ms::SysStaff* ss = system->staff(i);
-        if (!ss->show() || !score()->staff(i)->show()) {
+        if (!ss || !ss->show() || !score()->staff(i)->show()) {
             continue;
         }
         y2 = ss->y() + ss->bbox().height();

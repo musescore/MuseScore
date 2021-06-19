@@ -2401,17 +2401,17 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
 
 //---------------------------------------------------------
 //   renderMetronome
-///   add metronome tick events
+///   add metronome tick events, as dummy event if they shouldn't be heard, needed to keep the cursor moving!
 //---------------------------------------------------------
 
-void MidiRenderer::renderMetronome(const Chunk& chunk, EventMap* events)
+void MidiRenderer::renderMetronome(const Chunk& chunk, EventMap* events, bool audible)
 {
     const int tickOffset = chunk.tickOffset();
     Measure const* const start = chunk.startMeasure();
     Measure const* const end = chunk.endMeasure();
 
     for (Measure const* m = start; m != end; m = m->nextMeasure()) {
-        renderMetronome(events, m, Fraction::fromTicks(tickOffset));
+        renderMetronome(events, m, Fraction::fromTicks(tickOffset), audible);
     }
 }
 
@@ -2420,7 +2420,7 @@ void MidiRenderer::renderMetronome(const Chunk& chunk, EventMap* events)
 ///   add metronome tick events
 //---------------------------------------------------------
 
-void MidiRenderer::renderMetronome(EventMap* events, Measure const* m, const Fraction& tickOffset)
+void MidiRenderer::renderMetronome(EventMap* events, Measure const* m, const Fraction& tickOffset, bool audible)
 {
     int msrTick         = m->tick().ticks();
     qreal tempo         = score->tempomap()->tempo(msrTick);
@@ -2440,7 +2440,8 @@ void MidiRenderer::renderMetronome(EventMap* events, Measure const* m, const Fra
     }
 
     for (int tick = msrTick; tick < endTick; tick += clickTicks, rtick += clickTicks) {
-        events->insert(std::pair<int, NPlayEvent>(tick + tickOffset.ticks(), NPlayEvent(timeSig.rtick2beatType(rtick))));
+        events->insert(std::pair<int, NPlayEvent>(tick + tickOffset.ticks(),
+                                                  audible ? NPlayEvent(timeSig.rtick2beatType(rtick)) : NPlayEvent()));
     }
 }
 
@@ -2530,9 +2531,7 @@ void MidiRenderer::renderChunk(const Chunk& chunk, EventMap* events, const Conte
     // create sustain pedal events
     renderSpanners(chunk, events);
 
-    if (ctx.metronome) {
-        renderMetronome(chunk, events);
-    }
+    renderMetronome(chunk, events, ctx.metronome);
 
     // NOTE:JT this is a temporary fix for duplicate events until polyphonic aftertouch support
     // can be implemented. This removes duplicate SND events.
