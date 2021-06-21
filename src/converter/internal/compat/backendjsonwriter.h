@@ -33,10 +33,10 @@ public:
     ~BackendJsonWriter();
 
     void addKey(const char* arrayName);
-    void addValue(const QByteArray& data, bool lastJsonElement = false, bool isJson = false);
+    void addValue(const QByteArray& data, bool addSeparator = false, bool isJson = false);
 
     void openArray();
-    void closeArray(bool lastJsonElement = false);
+    void closeArray(bool addSeparator = false);
 
 private:
     io::Device* m_destinationDevice = nullptr;
