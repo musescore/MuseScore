@@ -4468,9 +4468,8 @@ void Score::cmdToggleAutoplace(bool all)
 //   cmd
 //---------------------------------------------------------
 
-void Score::cmd(const QAction* a, EditData& ed)
+void Score::cmd(const QString& cmd, EditData& ed)
 {
-    QString cmd(a ? a->data().toString() : "");
     if (MScore::debugMode) {
         qDebug("<%s>", qPrintable(cmd));
     }
