@@ -32,7 +32,7 @@ extern Score::FileError importCapXml(MasterScore*, const QString& name);
 
 using namespace mu::iex::capella;
 
-mu::Ret CapellaReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret CapellaReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
 {
     Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
     std::string syffix = mu::io::syffix(path);
