@@ -203,7 +203,7 @@ void CommandLineController::apply()
     }
 
     if (application()->runMode() == IApplication::RunMode::Editor && !scorefiles.isEmpty()) {
-        startupScenario()->setStartupScorePaths(io::pathsFromStrings(scorefiles));
+        startupScenario()->setStartupScorePath(scorefiles[0]);
     }
 }
 

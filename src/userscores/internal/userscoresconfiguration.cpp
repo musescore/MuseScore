@@ -116,13 +116,7 @@ io::paths UserScoresConfiguration::parsePaths(const Val& value) const
     }
 
     QStringList paths = value.toQString().split(",");
-    io::paths result;
-
-    for (const QString& path : paths) {
-        result.push_back(path);
-    }
-
-    return result;
+    return io::pathsFromStrings(paths);
 }
 
 io::path UserScoresConfiguration::myFirstScorePath() const
