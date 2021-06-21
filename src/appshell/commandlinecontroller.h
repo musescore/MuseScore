@@ -32,6 +32,7 @@
 #include "importexport/midi/imidiconfiguration.h"
 #include "iappshellconfiguration.h"
 #include "internal/istartupscenario.h"
+#include "notation/inotationconfiguration.h"
 
 namespace mu::appshell {
 class CommandLineController
@@ -42,6 +43,7 @@ class CommandLineController
     INJECT(appshell, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, IStartupScenario, startupScenario)
+    INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
 
 public:
     CommandLineController() = default;

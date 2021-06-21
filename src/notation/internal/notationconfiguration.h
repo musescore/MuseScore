@@ -144,6 +144,9 @@ public:
     int notePlayDurationMilliseconds() const override;
     void setNotePlayDurationMilliseconds(int durationMs) override;
 
+    void setTemplateModeEnalbed(bool enabled) override;
+    void setTestModeEnabled(bool enabled) override;
+
 private:
 
     async::Notification m_backgroundChanged;

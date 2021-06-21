@@ -44,6 +44,9 @@ void CommandLineController::parse(const QStringList& args)
                                           "Use with '-o <file>.png' and '-o <file.svg>'. Trim exported image with specified margin (in pixels)",
                                           "margin"));
 
+    m_parser.addOption(QCommandLineOption("template-mode", "Save template mode, no page size")); // and no platform and creationDate tags
+    m_parser.addOption(QCommandLineOption({ "t", "test-mode" }, "Set test mode flag for all files")); // this includes --template-mode
+
     // Converter mode
     m_parser.addOption(QCommandLineOption({ "r", "image-resolution" }, "Set output resolution for image export", "DPI"));
     m_parser.addOption(QCommandLineOption({ "j", "job" }, "Process a conversion job", "file"));
@@ -124,6 +127,9 @@ void CommandLineController::apply()
     if (m_parser.isSet("M")) {
         midiImportExportConfiguration()->setMidiImportOperationsFile(m_parser.value("M").toStdString());
     }
+
+    notationConfiguration()->setTemplateModeEnalbed(m_parser.isSet("template-mode"));
+    notationConfiguration()->setTestModeEnabled(m_parser.isSet("t"));
 
     // Converter mode
     if (m_parser.isSet("r")) {
