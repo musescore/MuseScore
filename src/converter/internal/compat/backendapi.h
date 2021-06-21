@@ -45,17 +45,18 @@ class BackendApi
     INJECT_STATIC(converter, notation::INotationWritersRegister, writers)
 
 public:
-    static Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath, const io::path& stylePath);
-    static Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath);
-    static Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath);
-    static Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath);
-    static Ret updateSource(const io::path& in, const std::string& newSource);
-    static Ret exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson, const io::path& stylePath);
+    static Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath, const io::path& stylePath = "", bool forceMode = false);
+    static Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath, bool forceMode = false);
+    static Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath, bool forceMode = false);
+    static Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath, bool forceMode = false);
+    static Ret exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson, const io::path& stylePath, bool forceMode = false);
+
+    static Ret updateSource(const io::path& in, const std::string& newSource, bool forceMode = false);
 
 private:
     static Ret openOutputFile(QFile& file, const io::path& out);
 
-    static RetVal<notation::IMasterNotationPtr> openScore(const io::path& path, const io::path& stylePath = io::path());
+    static RetVal<notation::IMasterNotationPtr> openScore(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false);
 
     static notation::PageList pages(const notation::INotationPtr notation);
 

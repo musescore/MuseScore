@@ -34,8 +34,10 @@
 
 using namespace mu::converter;
 
-mu::Ret ConverterController::batchConvert(const io::path& batchJobFile, const io::path& stylePath)
+mu::Ret ConverterController::batchConvert(const io::path& batchJobFile, const io::path& stylePath, bool forceMode)
 {
+    TRACEFUNC;
+
     RetVal<BatchJob> batchJob = parseBatchJob(batchJobFile);
     if (!batchJob.ret) {
         LOGE() << "failed parse batch job file, err: " << batchJob.ret.toString();
@@ -44,7 +46,7 @@ mu::Ret ConverterController::batchConvert(const io::path& batchJobFile, const io
 
     Ret ret = make_ret(Ret::Code::Ok);
     for (const Job& job : batchJob.val) {
-        ret = fileConvert(job.in, job.out, stylePath);
+        ret = fileConvert(job.in, job.out, stylePath, forceMode);
         if (!ret) {
             LOGE() << "failed convert, err: " << ret.toString() << ", in: " << job.in << ", out: " << job.out;
             break;
@@ -54,9 +56,10 @@ mu::Ret ConverterController::batchConvert(const io::path& batchJobFile, const io
     return ret;
 }
 
-mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out, const io::path& stylePath)
+mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out, const io::path& stylePath, bool forceMode)
 {
     TRACEFUNC;
+
     LOGI() << "in: " << in << ", out: " << out;
     auto masterNotation = notationCreator()->newMasterNotation();
     IF_ASSERT_FAILED(masterNotation) {
@@ -69,7 +72,7 @@ mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out
         return make_ret(Err::ConvertTypeUnknown);
     }
 
-    Ret ret = masterNotation->load(in, stylePath);
+    Ret ret = masterNotation->load(in, stylePath, forceMode);
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
         return make_ret(Err::InFileFailedLoad);
@@ -93,6 +96,8 @@ mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out
 
 mu::RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const io::path& batchJobFile) const
 {
+    TRACEFUNC;
+
     RetVal<BatchJob> rv;
     QFile file(batchJobFile.toQString());
     if (!file.open(QIODevice::ReadOnly)) {
@@ -127,45 +132,46 @@ mu::RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(con
 }
 
 mu::Ret ConverterController::exportScoreMedia(const mu::io::path& in, const mu::io::path& out, const mu::io::path& highlightConfigPath,
-                                              const io::path& stylePath)
+                                              const io::path& stylePath, bool forceMode)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreMedia(in, out, highlightConfigPath, stylePath);
+    return BackendApi::exportScoreMedia(in, out, highlightConfigPath, stylePath, forceMode);
 }
 
-mu::Ret ConverterController::exportScoreMeta(const mu::io::path& in, const mu::io::path& out, const io::path& stylePath)
+mu::Ret ConverterController::exportScoreMeta(const mu::io::path& in, const mu::io::path& out, const io::path& stylePath, bool forceMode)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreMeta(in, out, stylePath);
+    return BackendApi::exportScoreMeta(in, out, stylePath, forceMode);
 }
 
-mu::Ret ConverterController::exportScoreParts(const mu::io::path& in, const mu::io::path& out, const io::path& stylePath)
+mu::Ret ConverterController::exportScoreParts(const mu::io::path& in, const mu::io::path& out, const io::path& stylePath, bool forceMode)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreParts(in, out, stylePath);
+    return BackendApi::exportScoreParts(in, out, stylePath, forceMode);
 }
 
-mu::Ret ConverterController::exportScorePartsPdfs(const mu::io::path& in, const mu::io::path& out, const io::path& stylePath)
+mu::Ret ConverterController::exportScorePartsPdfs(const mu::io::path& in, const mu::io::path& out, const io::path& stylePath, bool forceMode)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScorePartsPdfs(in, out, stylePath);
-}
-
-mu::Ret ConverterController::updateSource(const io::path& in, const std::string& newSource)
-{
-    TRACEFUNC;
-
-    return BackendApi::updateSource(in, newSource);
+    return BackendApi::exportScorePartsPdfs(in, out, stylePath, forceMode);
 }
 
 mu::Ret ConverterController::exportScoreTranspose(const mu::io::path& in, const mu::io::path& out, const std::string& optionsJson,
-                                                  const io::path& stylePath)
+                                                  const io::path& stylePath, bool forceMode)
 {
     TRACEFUNC;
 
-    return BackendApi::exportScoreTranspose(in, out, optionsJson, stylePath);
+    return BackendApi::exportScoreTranspose(in, out, optionsJson, stylePath, forceMode);
 }
+
+mu::Ret ConverterController::updateSource(const io::path& in, const std::string& newSource, bool forceMode)
+{
+    TRACEFUNC;
+
+    return BackendApi::updateSource(in, newSource, forceMode);
+}
+
