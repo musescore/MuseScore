@@ -51,6 +51,7 @@
 
 #include "ui/iinteractiveuriregister.h"
 #include "ui/uitypes.h"
+#include "view/widgets/chordsymboleditormodel.h"
 #include "view/widgets/editstyle.h"
 #include "view/widgets/measureproperties.h"
 #include "view/widgets/editstaff.h"
@@ -165,6 +166,7 @@ void NotationModule::registerResources()
 
 void NotationModule::registerUiTypes()
 {
+    qmlRegisterType<ChordSymbolEditorModel>("MuseScore.NotationScene", 1, 0, "ChordSymbolEditorModel");
     qmlRegisterType<NotationPaintView>("MuseScore.NotationScene", 1, 0, "NotationPaintView");
     qmlRegisterType<NotationContextMenuModel>("MuseScore.NotationScene", 1, 0, "NotationContextMenuModel");
     qmlRegisterType<NotationSwitchListModel>("MuseScore.NotationScene", 1, 0, "NotationSwitchListModel");

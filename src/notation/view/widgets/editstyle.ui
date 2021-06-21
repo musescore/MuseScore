@@ -224,6 +224,11 @@
       </item>
       <item>
        <property name="text">
+        <string>Chord Symbols New</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Fretboard Diagrams</string>
        </property>
       </item>
@@ -273,8 +278,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>623</width>
-                <height>696</height>
+                <width>597</width>
+                <height>465</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -863,8 +868,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>634</width>
-                <height>674</height>
+                <width>503</width>
+                <height>534</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2265,8 +2270,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>738</width>
-             <height>392</height>
+             <width>703</width>
+             <height>320</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -3947,8 +3952,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>422</width>
-                <height>900</height>
+                <width>332</width>
+                <height>604</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -6134,8 +6139,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>572</width>
-                <height>527</height>
+                <width>434</width>
+                <height>420</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54">
@@ -9892,8 +9897,8 @@ By default, they will be placed such as that their right end are at the same lev
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>584</width>
-             <height>465</height>
+             <width>458</width>
+             <height>364</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_57">
@@ -11292,8 +11297,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>574</width>
-                <height>551</height>
+                <width>614</width>
+                <height>461</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55">
@@ -11865,6 +11870,9 @@ By default, they will be placed such as that their right end are at the same lev
          </widget>
         </item>
        </layout>
+      </widget>
+      <widget class="QWidget" name="PageChordSymbolsNew">
+       <layout class="QVBoxLayout" name="verticalLayout_16"/>
       </widget>
       <widget class="QWidget" name="PageFretboardDiagrams">
        <layout class="QVBoxLayout" name="verticalLayout_52">

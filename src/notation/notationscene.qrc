@@ -26,5 +26,8 @@
         <file>qml/MuseScore/NotationScene/SelectionFilterPanel.qml</file>
         <file>qml/MuseScore/NotationScene/EditGridSizeDialog.qml</file>
         <file>qml/MuseScore/NotationScene/NotationZoomPinchArea.qml</file>
+        <file>view/widgets/ChordSymbolStyleEditor.qml</file>
+        <file>view/widgets/ChordSymbolEditorBasic.qml</file>
+        <file>view/widgets/ChordSymbolEditorAdvanced.qml</file>
     </qresource>
 </RCC>
