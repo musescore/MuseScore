@@ -30,6 +30,7 @@
 #include "ui/iuiconfiguration.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
+#include "importexport/audioexport/iaudioexportconfiguration.h"
 #include "iappshellconfiguration.h"
 #include "internal/istartupscenario.h"
 #include "notation/inotationconfiguration.h"
@@ -41,6 +42,7 @@ class CommandLineController
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
     INJECT(appshell, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
+    INJECT(appshell, iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, IStartupScenario, startupScenario)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
