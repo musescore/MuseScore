@@ -45,11 +45,11 @@ class BackendApi
     INJECT_STATIC(converter, notation::INotationWritersRegister, writers)
 
 public:
-    static Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& stylePath, const io::path& highlightConfigPath);
+    static Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath, const io::path& stylePath);
     static Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath);
     static Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath);
     static Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath);
-    static Ret updateSource(const io::path& in, const QString& newSource);
+    static Ret updateSource(const io::path& in, const std::string& newSource);
     static Ret exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson, const io::path& stylePath);
 
 private:
@@ -61,16 +61,16 @@ private:
 
     static QVariantMap readNotesColors(const io::path& filePath);
 
-    static Ret exportScorePngs(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool isLastElement = false);
+    static Ret exportScorePngs(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
     static Ret exportScoreSvgs(const notation::INotationPtr notation, const io::path& highlightConfigPath, BackendJsonWriter& jsonWriter,
-                               bool isLastElement = false);
+                               bool addSeparator = false);
     static Ret exportScoreElementsPositions(const std::string& elementsPositionsWriterName, const notation::INotationPtr notation,
-                                            BackendJsonWriter& jsonWriter, bool isLastElement = false);
-    static Ret exportScorePdf(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool isLastElement = false);
+                                            BackendJsonWriter& jsonWriter, bool addSeparator = false);
+    static Ret exportScorePdf(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
     static Ret exportScorePdf(const notation::INotationPtr notation, mu::io::Device& destinationDevice);
-    static Ret exportScoreMidi(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool isLastElement = false);
-    static Ret exportScoreMusicXML(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool isLastElement = false);
-    static Ret exportScoreMetaData(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool isLastElement = false);
+    static Ret exportScoreMidi(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
+    static Ret exportScoreMusicXML(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
+    static Ret exportScoreMetaData(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
 
     static mu::RetVal<QByteArray> processWriter(const std::string& writerName, const notation::INotationPtr notation);
     static mu::RetVal<QByteArray> processWriter(const std::string& writerName, const notation::INotationPtrList notations,
@@ -79,7 +79,7 @@ private:
     static Ret doExportScoreParts(const notation::INotationPtr notation, mu::io::Device& destinationDevice);
     static Ret doExportScorePartsPdfs(const notation::IMasterNotationPtr notation, mu::io::Device& destinationDevice,
                                       const std::string& scoreFileName);
-    static Ret doExportScoreTranspose(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool isLastElement = false);
+    static Ret doExportScoreTranspose(const notation::INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator = false);
 
     static RetVal<QByteArray> scorePartJson(Ms::Score* score, const std::string& fileName);
 

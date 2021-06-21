@@ -237,7 +237,7 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
         break;
     case CommandLineController::ConvertType::ExportScoreMedia: {
         io::path highlightConfigPath = task.params[CommandLineController::ParamKey::HighlightConfigPath].toString();
-        ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, stylePath, highlightConfigPath);
+        ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, highlightConfigPath, stylePath);
     } break;
     case CommandLineController::ConvertType::ExportScoreMeta:
         ret = converter()->exportScoreMeta(task.inputFile, task.outputFile, stylePath);
@@ -249,7 +249,7 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
         ret = converter()->exportScorePartsPdfs(task.inputFile, task.outputFile, stylePath);
         break;
     case CommandLineController::ConvertType::SourceUpdate: {
-        QString scoreSource = task.params[CommandLineController::ParamKey::ScoreSource].toString();
+        std::string scoreSource = task.params[CommandLineController::ParamKey::ScoreSource].toString().toStdString();
         ret = converter()->updateSource(task.inputFile, scoreSource);
     } break;
     case CommandLineController::ConvertType::ExportScoreTranspose:

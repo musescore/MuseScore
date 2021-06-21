@@ -51,7 +51,9 @@ static const std::string MIDI_WRITER_NAME = "midi";
 static const std::string MUSICXML_WRITER_NAME = "mxml";
 static const std::string META_DATA_NAME = "metadata";
 
-Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const io::path& stylePath, const io::path& highlightConfigPath)
+static const bool ADD_SEPARATOR = true;
+
+Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath, const io::path& stylePath)
 {
     TRACEFUNC
 
@@ -69,14 +71,14 @@ Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const 
 
     BackendJsonWriter jsonWriter(&outputFile);
 
-    result &= exportScorePngs(notation, jsonWriter);
-    result &= exportScoreSvgs(notation, highlightConfigPath, jsonWriter);
-    result &= exportScoreElementsPositions(SEGMENTS_POSITIONS_WRITER_NAME, notation, jsonWriter);
-    result &= exportScoreElementsPositions(MEASURES_POSITIONS_WRITER_NAME, notation, jsonWriter);
-    result &= exportScorePdf(notation, jsonWriter);
-    result &= exportScoreMidi(notation, jsonWriter);
-    result &= exportScoreMusicXML(notation, jsonWriter);
-    result &= exportScoreMetaData(notation, jsonWriter, true);
+    result &= exportScorePngs(notation, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreSvgs(notation, highlightConfigPath, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreElementsPositions(SEGMENTS_POSITIONS_WRITER_NAME, notation, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreElementsPositions(MEASURES_POSITIONS_WRITER_NAME, notation, jsonWriter, ADD_SEPARATOR);
+    result &= exportScorePdf(notation, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreMidi(notation, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreMusicXML(notation, jsonWriter, ADD_SEPARATOR);
+    result &= exportScoreMetaData(notation, jsonWriter);
 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
@@ -97,7 +99,7 @@ Ret BackendApi::exportScoreMeta(const io::path& in, const io::path& out, const i
 
     BackendJsonWriter jsonWriter(&outputFile);
 
-    bool result = exportScoreMetaData(notation, jsonWriter, true);
+    bool result = exportScoreMetaData(notation, jsonWriter);
 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
@@ -164,7 +166,7 @@ Ret BackendApi::exportScoreTranspose(const io::path& in, const io::path& out, co
 
     BackendJsonWriter jsonWriter(&outputFile);
 
-    bool result = doExportScoreTranspose(notation, jsonWriter, true);
+    bool result = doExportScoreTranspose(notation, jsonWriter);
 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
@@ -252,7 +254,7 @@ QVariantMap BackendApi::readNotesColors(const io::path& filePath)
     return result;
 }
 
-Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool isLastElement)
+Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     TRACEFUNC
 
@@ -288,13 +290,13 @@ Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& 
         jsonWriter.addValue(pngData.toBase64(), lastArrayValue);
     }
 
-    jsonWriter.closeArray(isLastElement);
+    jsonWriter.closeArray(addSeparator);
 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
 Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const io::path& highlightConfigPath, BackendJsonWriter& jsonWriter,
-                                bool isLastElement)
+                                bool addSeparator)
 {
     TRACEFUNC
 
@@ -329,16 +331,16 @@ Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const io::path& hig
         }
 
         bool lastArrayValue = ((notationPages.size() - 1) == i);
-        jsonWriter.addValue(svgData.toBase64(), lastArrayValue);
+        jsonWriter.addValue(svgData.toBase64(), !lastArrayValue);
     }
 
-    jsonWriter.closeArray(isLastElement);
+    jsonWriter.closeArray(addSeparator);
 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
 Ret BackendApi::exportScoreElementsPositions(const std::string& elementsPositionsWriterName, const INotationPtr notation,
-                                             BackendJsonWriter& jsonWriter, bool isLastElement)
+                                             BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     TRACEFUNC
 
@@ -348,12 +350,12 @@ Ret BackendApi::exportScoreElementsPositions(const std::string& elementsPosition
     }
 
     jsonWriter.addKey(elementsPositionsWriterName.c_str());
-    jsonWriter.addValue(writerRetVal.val, isLastElement, false);
+    jsonWriter.addValue(writerRetVal.val, addSeparator, false);
 
     return make_ret(Ret::Code::Ok);
 }
 
-Ret BackendApi::exportScorePdf(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool isLastElement)
+Ret BackendApi::exportScorePdf(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     TRACEFUNC
 
@@ -363,7 +365,7 @@ Ret BackendApi::exportScorePdf(const INotationPtr notation, BackendJsonWriter& j
     }
 
     jsonWriter.addKey(PDF_WRITER_NAME.c_str());
-    jsonWriter.addValue(writerRetVal.val, isLastElement);
+    jsonWriter.addValue(writerRetVal.val, addSeparator);
 
     return make_ret(Ret::Code::Ok);
 }
@@ -383,7 +385,7 @@ Ret BackendApi::exportScorePdf(const INotationPtr notation, Device& destinationD
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreMidi(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool isLastElement)
+Ret BackendApi::exportScoreMidi(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     TRACEFUNC
 
@@ -393,12 +395,12 @@ Ret BackendApi::exportScoreMidi(const INotationPtr notation, BackendJsonWriter& 
     }
 
     jsonWriter.addKey(MIDI_WRITER_NAME.c_str());
-    jsonWriter.addValue(writerRetVal.val, isLastElement);
+    jsonWriter.addValue(writerRetVal.val, addSeparator);
 
     return make_ret(Ret::Code::Ok);
 }
 
-Ret BackendApi::exportScoreMusicXML(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool isLastElement)
+Ret BackendApi::exportScoreMusicXML(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     TRACEFUNC
 
@@ -408,12 +410,12 @@ Ret BackendApi::exportScoreMusicXML(const INotationPtr notation, BackendJsonWrit
     }
 
     jsonWriter.addKey(MUSICXML_WRITER_NAME.c_str());
-    jsonWriter.addValue(writerRetVal.val, isLastElement);
+    jsonWriter.addValue(writerRetVal.val, addSeparator);
 
     return make_ret(Ret::Code::Ok);
 }
 
-Ret BackendApi::exportScoreMetaData(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool isLastElement)
+Ret BackendApi::exportScoreMetaData(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     TRACEFUNC
 
@@ -424,7 +426,7 @@ Ret BackendApi::exportScoreMetaData(const INotationPtr notation, BackendJsonWrit
     }
 
     jsonWriter.addKey(META_DATA_NAME.c_str());
-    jsonWriter.addValue(QString::fromStdString(meta.val).toUtf8(), isLastElement, true);
+    jsonWriter.addValue(QString::fromStdString(meta.val).toUtf8(), addSeparator, true);
 
     return make_ret(Ret::Code::Ok);
 }
@@ -564,7 +566,7 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr notation, Device
     return ok;
 }
 
-Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool isLastElement)
+Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonWriter& jsonWriter, bool addSeparator)
 {
     Ms::Score* score = notation->elements()->msScore();
 
@@ -578,16 +580,16 @@ Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonW
         LOGW() << "Transpose: adding mscz failed";
     }
 
-    jsonWriter.addValue(scoreJson.val);
+    jsonWriter.addValue(scoreJson.val, ADD_SEPARATOR);
 
-    Ret ret = exportScorePdf(notation, jsonWriter, isLastElement);
+    Ret ret = exportScorePdf(notation, jsonWriter, addSeparator);
     return ret;
 }
 
 RetVal<QByteArray> BackendApi::scorePartJson(Ms::Score* score, const std::string& fileName)
 {
     QBuffer buffer;
-    buffer.open(QIODevice::ReadWrite);
+    buffer.open(QIODevice::WriteOnly);
 
     bool ok = score->saveCompressedFile(&buffer, QString::fromStdString(fileName), false);
     if (!ok) {
@@ -693,7 +695,7 @@ Ret BackendApi::applyTranspose(const INotationPtr notation, const std::string& o
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::updateSource(const io::path& in, const QString& newSource)
+Ret BackendApi::updateSource(const io::path& in, const std::string& newSource)
 {
     RetVal<IMasterNotationPtr> notation = openScore(in);
     if (!notation.ret) {
@@ -701,7 +703,7 @@ Ret BackendApi::updateSource(const io::path& in, const QString& newSource)
     }
 
     Meta meta = notation.val->metaInfo();
-    meta.source = newSource;
+    meta.source = QString::fromStdString(newSource);
 
     notation.val->setMetaInfo(meta);
 
