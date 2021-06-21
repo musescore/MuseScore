@@ -241,6 +241,7 @@ void NotationInteraction::toggleVisible()
 {
     startEdit();
 
+    // TODO: Update `score()->cmdToggleVisible()` and call that here?
     for (Element* el : selection()->elements()) {
         if (el->isBracket()) {
             continue;
