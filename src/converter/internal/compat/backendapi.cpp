@@ -54,7 +54,8 @@ static const std::string META_DATA_NAME = "metadata";
 static constexpr bool ADD_SEPARATOR = true;
 static constexpr auto NO_STYLE = "";
 
-Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath, const io::path& stylePath, bool forceMode)
+Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath, const io::path& stylePath,
+                                 bool forceMode)
 {
     TRACEFUNC
 
@@ -147,7 +148,8 @@ Ret BackendApi::exportScorePartsPdfs(const io::path& in, const io::path& out, co
     return ret;
 }
 
-Ret BackendApi::exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson, const io::path& stylePath, bool forceMode)
+Ret BackendApi::exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson, const io::path& stylePath,
+                                     bool forceMode)
 {
     TRACEFUNC
 

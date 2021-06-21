@@ -266,7 +266,7 @@ void FileScoreController::saveOnline()
     uploadingService()->uploadScore(*scoreData, meta.title, meta.source);
 }
 
-bool FileScoreController::checkCanIgnoreError(const Ret& ret)
+bool FileScoreController::checkCanIgnoreError(const Ret& ret, const io::path& filePath)
 {
     static const QList<Err> ignorableErrors {
         Err::FileTooOld,
@@ -275,18 +275,28 @@ bool FileScoreController::checkCanIgnoreError(const Ret& ret)
         Err::FileOld300Format
     };
 
+    std::string title = trc("userscores", "Open Error");
+    std::string text = qtrc("userscores", "Cannot open file %1:\n%2")
+                       .arg(filePath.toQString())
+                       .arg(QString::fromStdString(ret.text())).toStdString();
+
+    IInteractive::Options options;
+    options.setFlag(IInteractive::Option::WithIcon);
+
     bool canIgnore = ignorableErrors.contains(static_cast<Err>(ret.code()));
-    std::string title = trc("userscores", "Load Error");
 
     if (!canIgnore) {
-        interactive()->error(title, ret.text());
+        interactive()->error(title, text, {
+            IInteractive::Button::Ok
+        }, IInteractive::Button::Ok, options);
+
         return false;
     }
 
-    IInteractive::Result result = interactive()->warning(title, ret.text(), {
+    IInteractive::Result result = interactive()->warning(title, text, {
         IInteractive::Button::Cancel,
         IInteractive::Button::Ignore
-    });
+    }, IInteractive::Button::Ignore, options);
 
     return result.standartButton() == IInteractive::Button::Ignore;
 }
@@ -349,7 +359,7 @@ Ret FileScoreController::doOpenScore(const io::path& filePath)
 
     Ret ret = notation->load(filePath);
 
-    if (!ret && checkCanIgnoreError(ret)) {
+    if (!ret && checkCanIgnoreError(ret, filePath)) {
         constexpr auto NO_STYLE = "";
         constexpr bool FORCE_MODE = true;
         ret = notation->load(filePath, NO_STYLE, FORCE_MODE);
