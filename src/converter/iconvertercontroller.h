@@ -37,10 +37,14 @@ public:
     virtual Ret batchConvert(const io::path& batchJobFile, const io::path& stylePath = io::path(), bool forceMode = false) = 0;
 
     virtual Ret exportScoreMedia(const io::path& in, const io::path& out,
-                                 const io::path& highlightConfigPath = io::path(), const io::path& stylePath = io::path(), bool forceMode = false) = 0;
-    virtual Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) = 0;
-    virtual Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) = 0;
-    virtual Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) = 0;
+                                 const io::path& highlightConfigPath = io::path(),
+                                 const io::path& stylePath = io::path(), bool forceMode = false) = 0;
+    virtual Ret exportScoreMeta(const io::path& in, const io::path& out,
+                                const io::path& stylePath = io::path(), bool forceMode = false) = 0;
+    virtual Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath = io::path(),
+                                 bool forceMode = false) = 0;
+    virtual Ret exportScorePartsPdfs(const io::path& in, const io::path& out,
+                                     const io::path& stylePath = io::path(), bool forceMode = false) = 0;
     virtual Ret exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson,
                                      const io::path& stylePath = io::path(), bool forceMode = false) = 0;
 

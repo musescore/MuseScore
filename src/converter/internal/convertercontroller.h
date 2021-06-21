@@ -45,10 +45,12 @@ public:
     Ret batchConvert(const io::path& batchJobFile, const io::path& stylePath = io::path(), bool forceMode = false) override;
 
     Ret exportScoreMedia(const io::path& in, const io::path& out,
-                         const io::path& highlightConfigPath = io::path(), const io::path& stylePath = io::path(), bool forceMode = false) override;
+                         const io::path& highlightConfigPath = io::path(), const io::path& stylePath = io::path(),
+                         bool forceMode = false) override;
     Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) override;
     Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) override;
-    Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) override;
+    Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath = io::path(),
+                             bool forceMode = false) override;
     Ret exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson,
                              const io::path& stylePath = io::path(), bool forceMode = false) override;
 

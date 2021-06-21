@@ -153,7 +153,8 @@ mu::Ret ConverterController::exportScoreParts(const mu::io::path& in, const mu::
     return BackendApi::exportScoreParts(in, out, stylePath, forceMode);
 }
 
-mu::Ret ConverterController::exportScorePartsPdfs(const mu::io::path& in, const mu::io::path& out, const io::path& stylePath, bool forceMode)
+mu::Ret ConverterController::exportScorePartsPdfs(const mu::io::path& in, const mu::io::path& out, const io::path& stylePath,
+                                                  bool forceMode)
 {
     TRACEFUNC;
 
@@ -174,4 +175,3 @@ mu::Ret ConverterController::updateSource(const io::path& in, const std::string&
 
     return BackendApi::updateSource(in, newSource, forceMode);
 }
-

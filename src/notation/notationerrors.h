@@ -53,50 +53,78 @@ enum class Err {
     NoScore = 1030,
 };
 
-inline Ret make_ret(Err e, const io::path& filePath = "")
+inline Ret make_ret(Err err, const io::path& filePath = "")
 {
-    int retCode = static_cast<int>(e);
+    int code = static_cast<int>(err);
     QString fileName = io::filename(filePath).toQString();
+    QString text;
 
-    switch (e) {
-    case Err::Undefined: return Ret(retCode);
-    case Err::NoError: return Ret(retCode);
-    case Err::UnknownError: return Ret(retCode);
-    case Err::UserAbort: return Ret(retCode);
-    case Err::IgnoreError: return Ret(retCode);
-    case Err::FileUnknownError: return Ret(retCode, trc("notation", "Unknown error"));
-    case Err::FileNotFound: return Ret(retCode, qtrc("notation", "File \"%1\" not found").arg(fileName).toStdString());
-    case Err::FileOpenError: return Ret(retCode, trc("notation", "File open error"));
-    case Err::FileBadFormat: return Ret(retCode, trc("notation", "Bad format"));
-    case Err::FileUnknownType: return Ret(retCode, trc("notation", "Unknown filetype"));
-    case Err::FileNoRootFile: return Ret(retCode, trc("notation", "Not found root file"));
-    case Err::FileTooOld: return Ret(retCode, qtrc("notation", "It was last saved with a version older than 2.0.0.\n"
-                                                               "You can convert this score by opening and then\n"
-                                                               "saving with MuseScore version 2.x.\n"
-                                                               "Visit the %1MuseScore download page%2 to obtain such a 2.x version.")
-                                     .arg("<a href=\"https://musescore.org/download#older-versions\">")
-                                     .arg("</a>").toStdString());
-    case Err::FileTooNew: return Ret(retCode, qtrc("notation", "This score was saved using a newer version of MuseScore.\n "
-                                                               "Visit the %1MuseScore website%2 to obtain the latest version.")
-                                     .arg("<a href=\"https://musescore.org\">")
-                                     .arg("</a>").toStdString());
-    case Err::FileOld300Format: return Ret(retCode, trc("notation", "It was last saved with a developer version of 3.0."));
-    case Err::FileCorrupted: return Ret(retCode, qtrc("notation", "File \"%1\" corrupted.").arg(fileName).toStdString());
-    case Err::FileCriticalCorrupted: return Ret(retCode, qtrc("notation",
-                                                              "File \"%1\" is critically corrupted and cannot be processed.").arg(fileName).toStdString());
-    case Err::NoScore: return Ret(retCode, trc("notation", "No score"));
+    switch (err) {
+    case Err::FileUnknownError:
+        text = qtrc("notation", "Unknown error");
+        break;
+    case Err::FileNotFound:
+        text = qtrc("notation", "File \"%1\" not found")
+               .arg(fileName);
+        break;
+    case Err::FileOpenError:
+        text = qtrc("notation", "File open error");
+        break;
+    case Err::FileBadFormat:
+        text = qtrc("notation", "Bad format");
+        break;
+    case Err::FileUnknownType:
+        text = qtrc("notation", "Unknown filetype");
+        break;
+    case Err::FileNoRootFile:
+        text = qtrc("notation", "Not found root file");
+        break;
+    case Err::FileTooOld:
+        text = qtrc("notation", "It was last saved with a version older than 2.0.0.\n"
+                                "You can convert this score by opening and then\n"
+                                "saving with MuseScore version 2.x.\n"
+                                "Visit the %1MuseScore download page%2 to obtain such a 2.x version.")
+               .arg("<a href=\"https://musescore.org/download#older-versions\">")
+               .arg("</a>");
+        break;
+    case Err::FileTooNew:
+        text = qtrc("notation", "This score was saved using a newer version of MuseScore.\n "
+                                "Visit the %1MuseScore website%2 to obtain the latest version.")
+               .arg("<a href=\"https://musescore.org\">")
+               .arg("</a>");
+        break;
+    case Err::FileOld300Format:
+        text = qtrc("notation", "It was last saved with a developer version of 3.0.");
+        break;
+    case Err::FileCorrupted:
+        text = qtrc("notation", "File \"%1\" corrupted.")
+               .arg(fileName);
+        break;
+    case Err::FileCriticalCorrupted:
+        text = qtrc("notation", "File \"%1\" is critically corrupted and cannot be processed.")
+               .arg(fileName);
+        break;
+    case Err::NoScore:
+        text = qtrc("notation", "No score");
+        break;
+    case Err::Undefined:
+    case Err::NoError:
+    case Err::UnknownError:
+    case Err::UserAbort:
+    case Err::IgnoreError:
+        break;
     }
 
-    return Ret(retCode);
+    return Ret(code, text.toStdString());
 }
 
-inline Ret scoreFileErrorToRet(Ms::Score::FileError e, const io::path& filePath)
+inline Ret scoreFileErrorToRet(Ms::Score::FileError err, const io::path& filePath)
 {
     auto makeRet = [=](Err err) {
         return make_ret(err, filePath);
     };
 
-    switch (e) {
+    switch (err) {
     case Ms::Score::FileError::FILE_NO_ERROR:       return makeRet(Err::NoError);
     case Ms::Score::FileError::FILE_ERROR:          return makeRet(Err::FileUnknownError);
     case Ms::Score::FileError::FILE_NOT_FOUND:      return makeRet(Err::FileNotFound);
