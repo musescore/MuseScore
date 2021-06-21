@@ -51,13 +51,15 @@ public:
         ExportScoreMeta,
         ExportScoreParts,
         ExportScorePartsPdf,
+        ExportScoreTranspose,
         SourceUpdate
     };
 
     enum class ParamKey {
         HighlightConfigPath,
         StylePath,
-        ScoreSource
+        ScoreSource,
+        ScoreTransposeOptions
     };
 
     struct ConverterTask {
