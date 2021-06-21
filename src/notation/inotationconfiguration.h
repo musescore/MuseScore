@@ -142,6 +142,9 @@ public:
 
     virtual int notePlayDurationMilliseconds() const = 0;
     virtual void setNotePlayDurationMilliseconds(int durationMs) = 0;
+
+    virtual void setTemplateModeEnalbed(bool enabled) = 0;
+    virtual void setTestModeEnabled(bool enabled) = 0;
 };
 }
 

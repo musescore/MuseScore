@@ -553,3 +553,13 @@ void NotationConfiguration::setNotePlayDurationMilliseconds(int durationMs)
     Ms::MScore::defaultPlayDuration = durationMs;
     settings()->setValue(NOTE_DEFAULT_PLAY_DURATION, Val(durationMs));
 }
+
+void NotationConfiguration::setTemplateModeEnalbed(bool enabled)
+{
+    Ms::MScore::saveTemplateMode = enabled;
+}
+
+void NotationConfiguration::setTestModeEnabled(bool enabled)
+{
+    Ms::MScore::testMode = enabled;
+}
