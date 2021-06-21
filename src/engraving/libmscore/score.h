@@ -44,6 +44,8 @@
 #include "layoutbreak.h"
 #include "property.h"
 
+class QMimeData;
+
 namespace mu::score {
 class AccessibleScore;
 }
@@ -907,7 +909,7 @@ public:
     MeasureBase* getNextPrevSectionBreak(MeasureBase*, bool) const;
     Element* getScoreElementOfMeasureBase(MeasureBase*) const;
 
-    void cmd(const QAction*, EditData&);
+    void cmd(const QString&, EditData&);
     int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision / 2) / _fileDivision; }
     void setFileDivision(int t) { _fileDivision = t; }
 

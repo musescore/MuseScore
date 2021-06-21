@@ -23,10 +23,6 @@
 #ifndef __TYPES_H__
 #define __TYPES_H__
 
-class QComboBox;
-class QAction;
-class QMimeData;
-
 #include "config.h"
 
 /**
@@ -44,7 +40,6 @@ Q_NAMESPACE
 ///   of elements on the canvas.
 ///   Note: keep in sync with array elementNames[] in scoreElement.cpp
 //-------------------------------------------------------------------
-#include <QHash>
 enum class ElementType {
     ///.\{
     INVALID = 0,
@@ -686,7 +681,6 @@ class Mops : public QObject
 extern Direction toDirection(const QString&);
 extern const char* toString(Direction);
 extern QString toUserString(Direction);
-extern void fillComboBoxDirection(QComboBox*);
 } // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Align);
