@@ -103,22 +103,17 @@ bool IpcSocket::send(Msg msg)
 
     IPCLOG() << data;
 
-    IpcLockGuard lock_guard(m_lock);
+    // IpcLockGuard lock_guard(m_lock);
 
-    m_socket->write(data);
-    bool ok = m_socket->waitForBytesWritten(TIMEOUT_MSEC);
-    if (!ok) {
-        LOGE() << "failed send to socket";
-    }
-    return ok;
+    return ipc::writeToSocket(m_socket, data);
 }
 
 void IpcSocket::onReadyRead()
 {
-    QByteArray data = m_socket->readAll();
-    IPCLOG() << data;
-    async::Async::call(this, [this, data]() {
-        onDataReceived(data);
+    ipc::readFromSocket(m_socket, [this](const QByteArray& data) {
+        async::Async::call(this, [this, data]() {
+            onDataReceived(data);
+        });
     });
 }
 
