@@ -23,7 +23,6 @@
 #ifndef __MUSESCORECORE_H__
 #define __MUSESCORECORE_H__
 
-#include <QAction>
 #include <QList>
 
 namespace Ms {
@@ -51,7 +50,6 @@ public:
     virtual bool saveAs(Score*, bool /*saveCopy*/, const QString& /*path*/, const QString& /*ext*/,
                         SaveReplacePolicy* /*replacePolicy*/ = nullptr) { return false; }
     virtual void closeScore(Score*) {}
-    virtual void cmd(QAction* /*a*/) {}
     virtual void setCurrentView(int /*tabIdx*/, int /*idx*/) {}
 
     virtual int appendScore(MasterScore* s) { scoreList.append(s); return 0; }
