@@ -52,14 +52,6 @@ DockWindow {
         order: 1
     }
 
-    StartupModel {
-        id: startupModel
-    }
-
-    Component.onCompleted: {
-        startupModel.load()
-    }
-
     toolBars: [
         DockToolBar {
             id: mainToolBar

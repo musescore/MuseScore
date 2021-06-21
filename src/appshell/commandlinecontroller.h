@@ -30,6 +30,7 @@
 #include "ui/iuiconfiguration.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "iappshellconfiguration.h"
+#include "internal/istartupscenario.h"
 
 namespace mu::appshell {
 class CommandLineController
@@ -38,6 +39,7 @@ class CommandLineController
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
     INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(appshell, IStartupScenario, startupScenario)
 
 public:
     CommandLineController() = default;
@@ -48,7 +50,14 @@ public:
         ExportScoreMedia,
         ExportScoreMeta,
         ExportScoreParts,
-        ExportScorePartsPdf
+        ExportScorePartsPdf,
+        SourceUpdate
+    };
+
+    enum class ParamKey {
+        HighlightConfigPath,
+        StylePath,
+        ScoreSource
     };
 
     struct ConverterTask {
@@ -57,7 +66,7 @@ public:
         QString inputFile;
         QString outputFile;
 
-        QVariant data;
+        QMap<ParamKey, QVariant> params;
     };
 
     void parse(const QStringList& args);

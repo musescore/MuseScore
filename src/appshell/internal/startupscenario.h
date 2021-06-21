@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_STARTUPMODEL_H
-#define MU_APPSHELL_STARTUPMODEL_H
+#ifndef MU_APPSHELL_STARTUPSCENARIO_H
+#define MU_APPSHELL_STARTUPSCENARIO_H
 
-#include <QObject>
+#include "istartupscenario.h"
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
@@ -30,22 +30,23 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::appshell {
-class StartupModel : public QObject
+class StartupScenario : public IStartupScenario
 {
-    Q_OBJECT
-
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, framework::IInteractive, interactive)
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
 
 public:
-    explicit StartupModel(QObject* parent = nullptr);
-
-    Q_INVOKABLE void load();
+    void setStartupScorePaths(const io::paths& paths) override;
+    void run() override;
 
 private:
     std::string startupPageUri() const;
+
+    void openScore(const io::path& path);
+
+    io::paths m_startupScorePaths;
 };
 }
 
-#endif // MU_APPSHELL_STARTUPMODEL_H
+#endif // MU_APPSHELL_STARTUPSCENARIO_H

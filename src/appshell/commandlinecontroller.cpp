@@ -40,6 +40,9 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addOption(QCommandLineOption({ "d", "debug" }, "Debug mode"));
 
     m_parser.addOption(QCommandLineOption({ "D", "monitor-resolution" }, "Specify monitor resolution", "DPI"));
+    m_parser.addOption(QCommandLineOption({ "T", "trim-image" },
+                                          "Use with '-o <file>.png' and '-o <file.svg>'. Trim exported image with specified margin (in pixels)",
+                                          "margin"));
 
     // Converter mode
     m_parser.addOption(QCommandLineOption({ "r", "image-resolution" }, "Set output resolution for image export", "DPI"));
@@ -55,6 +58,9 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addOption(QCommandLineOption("score-parts", "Generate parts data for the given score and save them to separate mscz files"));
     m_parser.addOption(QCommandLineOption("score-parts-pdf",
                                           "Generate parts data for the given score and export the data to a single JSON file, print it to stdout"));
+    m_parser.addOption(QCommandLineOption("source-update", "Update the source in the given score"));
+
+    m_parser.addOption(QCommandLineOption({ "S", "style" }, "Load style file", "style"));
 
     m_parser.process(args);
 }
@@ -62,7 +68,7 @@ void CommandLineController::parse(const QStringList& args)
 void CommandLineController::apply()
 {
     auto floatValue = [this](const QString& name) -> std::optional<float> {
-        bool ok;
+        bool ok = true;
         float val = m_parser.value(name).toFloat(&ok);
         if (ok) {
             return val;
@@ -70,8 +76,15 @@ void CommandLineController::apply()
         return std::nullopt;
     };
 
-    // Common
-    // TODO: Open these files at launch if RunMode is Editor
+    auto intValue = [this](const QString& name) -> std::optional<int> {
+        bool ok = true;
+        int val = m_parser.value(name).toInt(&ok);
+        if (ok) {
+            return val;
+        }
+        return std::nullopt;
+    };
+
     QStringList scorefiles = m_parser.positionalArguments();
 
     if (m_parser.isSet("long-version")) {
@@ -89,6 +102,15 @@ void CommandLineController::apply()
             uiConfiguration()->setPhysicalDotsPerInch(val);
         } else {
             LOGE() << "Option: -D not recognized DPI value: " << m_parser.value("D");
+        }
+    }
+
+    if (m_parser.isSet("T")) {
+        std::optional<int> val = intValue("T");
+        if (val) {
+            imagesExportConfiguration()->setTrimMarginPixelSize(val);
+        } else {
+            LOGE() << "Option: -T not recognized trim value: " << m_parser.value("T");
         }
     }
 
@@ -126,7 +148,7 @@ void CommandLineController::apply()
         m_converterTask.type = ConvertType::ExportScoreMedia;
         m_converterTask.inputFile = scorefiles[0];
         if (m_parser.isSet("highlight-config")) {
-            m_converterTask.data = m_parser.value("highlight-config");
+            m_converterTask.params[CommandLineController::ParamKey::HighlightConfigPath] = m_parser.value("highlight-config");
         }
     }
 
@@ -148,8 +170,30 @@ void CommandLineController::apply()
         m_converterTask.inputFile = scorefiles[0];
     }
 
+    if (m_parser.isSet("source-update")) {
+        QStringList args = m_parser.positionalArguments();
+
+        application()->setRunMode(IApplication::RunMode::Converter);
+        m_converterTask.type = ConvertType::SourceUpdate;
+        m_converterTask.inputFile = args[0];
+
+        if (args.size() >= 2) {
+            m_converterTask.params[CommandLineController::ParamKey::ScoreSource] = args[1];
+        } else {
+            LOGW() << "Option: --source-update no source specified";
+        }
+    }
+
     if (m_parser.isSet("F") || m_parser.isSet("R")) {
         configuration()->revertToFactorySettings(m_parser.isSet("R"));
+    }
+
+    if (m_parser.isSet("S")) {
+        m_converterTask.params[CommandLineController::ParamKey::StylePath] = m_parser.value("S");
+    }
+
+    if (application()->runMode() == IApplication::RunMode::Editor && !scorefiles.isEmpty()) {
+        startupScenario()->setStartupScorePaths(io::pathsFromStrings(scorefiles));
     }
 }
 
