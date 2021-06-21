@@ -19,18 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTS_SELECTINSTRUMENTSSCENARIOSTUB_H
-#define MU_INSTRUMENTS_SELECTINSTRUMENTSSCENARIOSTUB_H
+#ifndef MU_NOTATION_SCOREORDERCONVERTER_H
+#define MU_NOTATION_SCOREORDERCONVERTER_H
 
-#include "instruments/iselectinstrumentscenario.h"
+#include "instruments/instrumentstypes.h"
+#include "libmscore/scoreorder.h"
 
-namespace mu::instruments {
-class SelectInstrumentsScenario : public ISelectInstrumentsScenario
+namespace mu::notation {
+class ScoreOrderConverter
 {
 public:
-    RetVal<PartInstrumentListScoreOrder> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const override;
-    RetVal<Instrument> selectInstrument(const std::string& currentInstrumentId = "") const override;
+    static Ms::ScoreOrder convertScoreOrder(const instruments::ScoreOrder& order);
+    static instruments::ScoreOrder convertScoreOrder(const Ms::ScoreOrder& order);
 };
 }
 
-#endif // MU_INSTRUMENTS_SELECTINSTRUMENTSSCENARIOSTUB_H
+#endif // MU_NOTATION_SCOREORDERCONVERTER_H

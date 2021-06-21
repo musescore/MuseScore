@@ -35,6 +35,7 @@ public:
     void setExcerpts(ExcerptNotationList excerpts);
 
     void setParts(const instruments::PartInstrumentList& instruments) override;
+    void setScoreOrder(const instruments::ScoreOrder& order) override;
     void setInstrumentName(const ID& instrumentId, const ID& fromPartId, const QString& name) override;
     void setPartName(const ID& partId, const QString& name) override;
     void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) override;

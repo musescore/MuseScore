@@ -52,6 +52,7 @@ Item {
             var parts = {}
             parts["instruments"] = instrumentsPage.selectedInstruments()
             result["parts"] = parts
+            result["scoreOrder"] = instrumentsPage.selectedScoreOrder
         } else if (pagesStack.currentIndex === 1) {
             result["templatePath"] = templatePage.selectedTemplatePath
         }
