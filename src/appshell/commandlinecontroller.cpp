@@ -50,6 +50,7 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addOption(QCommandLineOption({ "o", "export-to" }, "Export to 'file'. Format depends on file's extension", "file"));
     m_parser.addOption(QCommandLineOption({ "F", "factory-settings" }, "Use factory settings"));
     m_parser.addOption(QCommandLineOption({ "R", "revert-settings" }, "Revert to factory settings, but keep default preferences"));
+    m_parser.addOption(QCommandLineOption({ "f", "force" }, "Use with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
 
     m_parser.addOption(QCommandLineOption("score-media",
                                           "Export all media (excepting mp3) for a given score in a single JSON file and print it to stdout"));
@@ -196,6 +197,10 @@ void CommandLineController::apply()
 
     if (m_parser.isSet("F") || m_parser.isSet("R")) {
         configuration()->revertToFactorySettings(m_parser.isSet("R"));
+    }
+
+    if (m_parser.isSet("f")) {
+        m_converterTask.params[CommandLineController::ParamKey::ForceMode] = m_parser.value("f");
     }
 
     if (m_parser.isSet("S")) {

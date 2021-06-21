@@ -59,7 +59,8 @@ public:
         HighlightConfigPath,
         StylePath,
         ScoreSource,
-        ScoreTransposeOptions
+        ScoreTransposeOptions,
+        ForceMode
     };
 
     struct ConverterTask {
