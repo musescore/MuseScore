@@ -241,7 +241,7 @@ void Settings::commitTransaction()
             item.value = it->second.value;
         }
 
-        writeValue(item.key, item.value);
+        writeValue(it->first, it->second.value);
     }
 
     m_localSettings.clear();
