@@ -94,12 +94,8 @@ bool mu::ipc::writeToSocket(QLocalSocket* socket, const QByteArray& data)
 
 bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByteArray& data)> onPackegReaded)
 {
-    if (socket->bytesAvailable() < (int)sizeof(quint32)) {
-        socket->waitForReadyRead(ipc::TIMEOUT_MSEC);
-    }
-
-    if (socket->bytesAvailable() < (int)sizeof(quint32)) {
-        LOGE() << "failed read from socket, err: " << socket->errorString();
+    qint64 bytesAvailable = socket->bytesAvailable();
+    if (bytesAvailable < (qint64)sizeof(quint32)) {
         return false;
     }
 
@@ -112,9 +108,10 @@ bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByt
         stream >> remaining;
         data.resize(remaining);
 
-        if (socket->bytesAvailable() < remaining) {
+        qint64 available = socket->bytesAvailable();
+        if (available < remaining) {
             if (!socket->waitForReadyRead(ipc::TIMEOUT_MSEC)) {
-                LOGE() << "failed read from socket, err: " << socket->errorString();
+                LOGE() << "failed read, remaining: " << remaining << ", available: " << available << ", err: " << socket->errorString();
                 return false;
             }
         }

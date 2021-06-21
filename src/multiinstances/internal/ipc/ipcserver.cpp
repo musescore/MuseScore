@@ -140,9 +140,11 @@ void IpcServer::onIncomingReadyRead(QLocalSocket* socket)
         //! NOTE Resend to others
         for (IncomingSocket& s : m_incomingSockets) {
             //! NOTE We do not resend to incoming socket
-            if (socket != s.socket || msg.destID == s.id || msg.destID == BROADCAST_ID) {
-                IPCLOG() << "resend to " << s.id;
-                doSendToSocket(s.socket, data);
+            if (socket != s.socket) {
+                if (msg.destID == s.id || msg.destID == BROADCAST_ID) {
+                    IPCLOG() << "resend to " << s.id;
+                    doSendToSocket(s.socket, data);
+                }
             }
         }
     });
