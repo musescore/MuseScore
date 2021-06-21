@@ -301,6 +301,7 @@ struct ScoreCreateOptions
     io::path templatePath;
 
     instruments::PartInstrumentList parts;
+    instruments::ScoreOrder order;
 };
 
 struct SearchCommand

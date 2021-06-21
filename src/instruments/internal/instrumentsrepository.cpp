@@ -48,6 +48,10 @@ void InstrumentsRepository::init()
         load();
     });
 
+    configuration()->scoreOrderListPathsChanged().onNotify(this, [this]() {
+        load();
+    });
+
     load();
 }
 
@@ -107,8 +111,19 @@ void InstrumentsRepository::load()
         }
         globalGroupsSequenceOrder += groups.size();
 
+        const ScoreOrderMap& scoreOrders = metaInstrument.val.scoreOrders;
+        for (auto it = scoreOrders.cbegin(); it != scoreOrders.cend(); ++it) {
+            m_instrumentsMeta.scoreOrders.insert(it.key(), it.value());
+        }
+
         Ms::loadInstrumentTemplates(filePath.toQString());
     }
+
+    ScoreOrder custom;
+    custom.index = m_instrumentsMeta.scoreOrders.size();
+    custom.id = "custom";
+    custom.name = qApp->translate("OrderXML", "Custom");
+    m_instrumentsMeta.scoreOrders.insert(custom.id, custom);
 
     for (InstrumentTemplate& instrumentTemplate: m_instrumentsMeta.instrumentTemplates) {
         instrumentTemplate.transposition = transposition(instrumentTemplate.id);
@@ -125,6 +140,7 @@ void InstrumentsRepository::clear()
     m_instrumentsMeta.genres.clear();
     m_instrumentsMeta.groups.clear();
     m_instrumentsMeta.articulations.clear();
+    m_instrumentsMeta.scoreOrders.clear();
 }
 
 Transposition InstrumentsRepository::transposition(const QString& instrumentTemplateId) const
