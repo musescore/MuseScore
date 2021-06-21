@@ -77,7 +77,7 @@ void MasterNotation::setMetaInfo(const Meta& meta)
     Notation::setMetaInfo(meta);
 }
 
-mu::Ret MasterNotation::load(const io::path& path, const io::path& stylePath)
+mu::Ret MasterNotation::load(const io::path& path, const io::path& stylePath, bool forceMode)
 {
     TRACEFUNC;
 
@@ -90,7 +90,7 @@ mu::Ret MasterNotation::load(const io::path& path, const io::path& stylePath)
         return make_ret(Err::FileUnknownType, path);
     }
 
-    return load(path, stylePath, reader);
+    return load(path, stylePath, reader, forceMode);
 }
 
 Ms::MasterScore* MasterNotation::masterScore() const
@@ -98,14 +98,14 @@ Ms::MasterScore* MasterNotation::masterScore() const
     return dynamic_cast<Ms::MasterScore*>(score());
 }
 
-mu::Ret MasterNotation::load(const io::path& path, const io::path& stylePath, const INotationReaderPtr& reader)
+mu::Ret MasterNotation::load(const io::path& path, const io::path& stylePath, const INotationReaderPtr& reader, bool forceMode)
 {
     TRACEFUNC;
 
     Ms::ScoreLoad sl;
 
     Ms::MasterScore* score = new Ms::MasterScore(scoreGlobal()->baseStyle());
-    Ret ret = doLoadScore(score, path, reader);
+    Ret ret = doLoadScore(score, path, reader, forceMode);
 
     if (ret) {
         setScore(score);
@@ -125,14 +125,20 @@ mu::Ret MasterNotation::load(const io::path& path, const io::path& stylePath, co
 
 mu::Ret MasterNotation::doLoadScore(Ms::MasterScore* score,
                                     const io::path& path,
-                                    const std::shared_ptr<INotationReader>& reader) const
+                                    const std::shared_ptr<INotationReader>& reader,
+                                    bool forceMode) const
 {
     QFileInfo fi(path.toQString());
     score->setName(fi.completeBaseName());
     score->setImportedFilePath(fi.filePath());
     score->setMetaTag("originalFormat", fi.suffix().toLower());
 
-    Ret ret = reader->read(score, path);
+    INotationReader::Options options;
+    if (forceMode) {
+        options[INotationReader::OptionKey::ForceMode] = forceMode;
+    }
+
+    Ret ret = reader->read(score, path, options);
     if (!ret) {
         return ret;
     }

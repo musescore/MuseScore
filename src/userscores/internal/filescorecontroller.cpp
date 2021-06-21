@@ -268,10 +268,6 @@ void FileScoreController::saveOnline()
 
 bool FileScoreController::checkCanIgnoreError(const Ret& ret)
 {
-    if (ret) {
-        return true;
-    }
-
     static const QList<Err> ignorableErrors {
         Err::FileTooOld,
         Err::FileTooNew,
@@ -352,7 +348,14 @@ Ret FileScoreController::doOpenScore(const io::path& filePath)
     }
 
     Ret ret = notation->load(filePath);
-    if (!checkCanIgnoreError(ret)) {
+
+    if (!ret && checkCanIgnoreError(ret)) {
+        constexpr auto NO_STYLE = "";
+        constexpr bool FORCE_MODE = true;
+        ret = notation->load(filePath, NO_STYLE, FORCE_MODE);
+    }
+
+    if (!ret) {
         return ret;
     }
 
