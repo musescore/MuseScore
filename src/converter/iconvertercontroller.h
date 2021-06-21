@@ -33,12 +33,14 @@ class IConverterController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IConverterController() = default;
 
-    virtual Ret fileConvert(const io::path& in, const io::path& out) = 0;
-    virtual Ret batchConvert(const io::path& batchJobFile) = 0;
-    virtual Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath) = 0;
-    virtual Ret exportScoreMeta(const io::path& in, const io::path& out) = 0;
-    virtual Ret exportScoreParts(const io::path& in, const io::path& out) = 0;
-    virtual Ret exportScorePartsPdfs(const io::path& in, const io::path& out) = 0;
+    virtual Ret fileConvert(const io::path& in, const io::path& out, const io::path& stylePath) = 0;
+    virtual Ret batchConvert(const io::path& batchJobFile, const io::path& stylePath) = 0;
+    virtual Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& stylePath,
+                                 const io::path& highlightConfigPath) = 0;
+    virtual Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath) = 0;
+    virtual Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath) = 0;
+    virtual Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath) = 0;
+    virtual Ret updateSource(const io::path& in, const QString& newSource) = 0;
 };
 }
 

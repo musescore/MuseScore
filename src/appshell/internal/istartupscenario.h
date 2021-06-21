@@ -19,29 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_IMPORTEXPORT_SVGWRITER_H
-#define MU_IMPORTEXPORT_SVGWRITER_H
-
-#include "notation/abstractnotationwriter.h"
+#ifndef MU_APPSHELL_ISTARTUPSCENARIO_H
+#define MU_APPSHELL_ISTARTUPSCENARIO_H
 
 #include "modularity/ioc.h"
-#include "iimagesexportconfiguration.h"
+#include "io/path.h"
 
-namespace mu::iex::imagesexport {
-class SvgWriter : public notation::AbstractNotationWriter
+namespace mu::appshell {
+class IStartupScenario : MODULE_EXPORT_INTERFACE
 {
-    INJECT(iex, IImagesExportConfiguration, configuration)
+    INTERFACE_ID(IStartupScenario)
 
 public:
-    std::vector<notation::INotationWriter::UnitType> supportedUnitTypes() const override;
-    Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
+    virtual ~IStartupScenario() = default;
 
-private:
-    using NotesColors = QHash<int /* noteIndex */, QColor>;
-
-    NotesColors parseNotesColors(const QVariant& obj) const;
+    virtual void setStartupScorePaths(const io::paths& paths) = 0;
+    virtual void run() = 0;
 };
 }
 
-#endif // MU_IMPORTEXPORT_SVGWRITER_H
+#endif // MU_APPSHELL_ISTARTUPSCENARIO_H

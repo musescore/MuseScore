@@ -72,3 +72,13 @@ void ImagesExportConfiguration::setExportPngWithTransparentBackground(bool trans
 {
     settings()->setValue(EXPORT_PNG_USE_TRANSPARENCY_KEY, Val(transparent));
 }
+
+int ImagesExportConfiguration::trimMarginPixelSize() const
+{
+    return m_trimMarginPixelSize ? m_trimMarginPixelSize.value() : 0;
+}
+
+void ImagesExportConfiguration::setTrimMarginPixelSize(std::optional<int> pixelSize)
+{
+    m_trimMarginPixelSize = pixelSize;
+}

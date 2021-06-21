@@ -50,7 +50,7 @@ public:
     Meta metaInfo() const override;
     void setMetaInfo(const Meta& meta) override;
 
-    Ret load(const io::path& path) override;
+    Ret load(const io::path& path, const io::path& stylePath = io::path()) override;
     io::path path() const override;
 
     Ret createNew(const ScoreCreateOptions& scoreOptions) override;
@@ -72,7 +72,7 @@ private:
 
     Ms::MasterScore* masterScore() const;
 
-    Ret load(const io::path& path, const INotationReaderPtr& reader);
+    Ret load(const io::path& path, const io::path& stylePath, const INotationReaderPtr& reader);
     Ret doLoadScore(Ms::MasterScore* score, const io::path& path, const INotationReaderPtr& reader) const;
     mu::RetVal<Ms::MasterScore*> newScore(const ScoreCreateOptions& scoreInfo);
 
