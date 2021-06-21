@@ -28,18 +28,15 @@ using namespace mu::actions;
 static const std::string HOME_URI("musescore://home");
 static const std::string NOTATION_URI("musescore://notation");
 
-void StartupScenario::setStartupScorePaths(const io::paths& paths)
+void StartupScenario::setStartupScorePath(const io::path& path)
 {
-    m_startupScorePaths = paths;
+    m_startupScorePath = path;
 }
 
 void StartupScenario::run()
 {
-    if (!m_startupScorePaths.empty()) {
-        for (const io::path& path : m_startupScorePaths) {
-            openScore(path);
-        }
-
+    if (!m_startupScorePath.empty()) {
+        openScore(m_startupScorePath);
         return;
     }
 
