@@ -370,6 +370,21 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Exchange Voice 3-4"),
              QT_TRANSLATE_NOOP("action", "Exchange voice 3-4")
              ),
+    UiAction("system-break",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Toggle System Break"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'System Break'")
+             ),
+    UiAction("page-break",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Toggle Page Break"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Page Break'")
+             ),
+    UiAction("section-break",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Toggle Section Break"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Section Break'")
+             ),
     UiAction("split-measure",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Split Measure Before Selected Note/Rest"),
