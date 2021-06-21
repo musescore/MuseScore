@@ -41,13 +41,16 @@ class ConverterController : public IConverterController
 public:
     ConverterController() = default;
 
-    Ret fileConvert(const io::path& in, const io::path& out, const io::path& stylePath) override;
-    Ret batchConvert(const io::path& batchJobFile, const io::path& stylePath) override;
-    Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& stylePath, const io::path& highlightConfigPath) override;
-    Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath) override;
-    Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath) override;
-    Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath) override;
-    Ret updateSource(const io::path& in, const QString& newSource) override;
+    Ret fileConvert(const io::path& in, const io::path& out, const io::path& stylePath = io::path()) override;
+    Ret batchConvert(const io::path& batchJobFile, const io::path& stylePath = io::path()) override;
+    Ret exportScoreMedia(const io::path& in, const io::path& out,
+                         const io::path& highlightConfigPath = io::path(), const io::path& stylePath = io::path()) override;
+    Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath = io::path()) override;
+    Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath = io::path()) override;
+    Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath = io::path()) override;
+    Ret exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson,
+                             const io::path& stylePath = io::path()) override;
+    Ret updateSource(const io::path& in, const std::string& newSource) override;
 
 private:
 

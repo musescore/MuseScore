@@ -44,7 +44,7 @@ void BackendJsonWriter::addKey(const char* arrayName)
     m_destinationDevice->write("\": ");
 }
 
-void BackendJsonWriter::addValue(const QByteArray& data, bool lastJsonElement, bool isJson)
+void BackendJsonWriter::addValue(const QByteArray& data, bool addSeparator, bool isJson)
 {
     if (!isJson) {
         m_destinationDevice->write("\"");
@@ -53,7 +53,7 @@ void BackendJsonWriter::addValue(const QByteArray& data, bool lastJsonElement, b
     if (!isJson) {
         m_destinationDevice->write("\"");
     }
-    if (!lastJsonElement) {
+    if (addSeparator) {
         m_destinationDevice->write(",\n");
     }
 }
@@ -63,10 +63,10 @@ void BackendJsonWriter::openArray()
     m_destinationDevice->write(" [");
 }
 
-void BackendJsonWriter::closeArray(bool lastJsonElement)
+void BackendJsonWriter::closeArray(bool addSeparator)
 {
     m_destinationDevice->write("]");
-    if (!lastJsonElement) {
+    if (addSeparator) {
         m_destinationDevice->write(",");
     }
     m_destinationDevice->write("\n");
