@@ -128,6 +128,7 @@ public:
     virtual void addTupletToSelectedChordRests(const TupletOptions& options) = 0;
     virtual void addBeamToSelectedChordRests(BeamMode mode) = 0;
 
+    virtual void toggleLayoutBreak(LayoutBreakType breakType) = 0;
     virtual void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) = 0;
     virtual bool transpose(const TransposeOptions& options) = 0;
     virtual void swapVoices(int voiceIndex1, int voiceIndex2) = 0;

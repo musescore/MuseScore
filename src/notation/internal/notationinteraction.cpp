@@ -2467,6 +2467,15 @@ void NotationInteraction::addBeamToSelectedChordRests(BeamMode mode)
     notifyAboutNotationChanged();
 }
 
+void NotationInteraction::toggleLayoutBreak(LayoutBreakType breakType)
+{
+    startEdit();
+    score()->cmdToggleLayoutBreak(breakType);
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval)
 {
     interval = intervalType == BreaksSpawnIntervalType::MeasuresInterval ? interval : 0;
