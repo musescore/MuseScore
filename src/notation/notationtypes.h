@@ -94,6 +94,7 @@ using TupletNumberType = Ms::TupletNumberType;
 using TupletBracketType = Ms::TupletBracketType;
 using GraceNoteType = Ms::NoteType;
 using BeamMode = Ms::Beam::Mode;
+using LayoutBreakType = Ms::LayoutBreak::Type;
 
 using PageList = std::vector<const Page*>;
 using StaffList = QList<const Staff*>;

@@ -115,6 +115,8 @@ private:
     void firstElement();
     void lastElement();
 
+    void toggleLayoutBreak(LayoutBreakType breakType);
+
     void splitMeasure();
     void joinSelectedMeasures();
     void selectMeasuresCountAndInsert();

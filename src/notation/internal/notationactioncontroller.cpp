@@ -165,6 +165,10 @@ void NotationActionController::init()
     dispatcher()->reg(this, "first-element", this, &NotationActionController::firstElement);
     dispatcher()->reg(this, "last-element", this, &NotationActionController::lastElement);
 
+    dispatcher()->reg(this, "system-break", [this]() { toggleLayoutBreak(LayoutBreakType::LINE); });
+    dispatcher()->reg(this, "page-break", [this]() { toggleLayoutBreak(LayoutBreakType::PAGE); });
+    dispatcher()->reg(this, "section-break", [this]() { toggleLayoutBreak(LayoutBreakType::SECTION); });
+
     dispatcher()->reg(this, "split-measure", this, &NotationActionController::splitMeasure);
     dispatcher()->reg(this, "join-measures", this, &NotationActionController::joinSelectedMeasures);
     dispatcher()->reg(this, "insert-measures", this, &NotationActionController::selectMeasuresCountAndInsert);
@@ -1069,6 +1073,16 @@ void NotationActionController::selectAll()
     }
 
     interaction->selectAll();
+}
+
+void NotationActionController::toggleLayoutBreak(LayoutBreakType breakType)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->toggleLayoutBreak(breakType);
 }
 
 void NotationActionController::splitMeasure()
