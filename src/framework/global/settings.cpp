@@ -129,7 +129,7 @@ Val Settings::defaultValue(const Key& key) const
     return findItem(key).defaultValue;
 }
 
-void Settings::setValue(const Key& key, const Val& value)
+void Settings::setValue(const Key& key, const Val& value, bool notifyToOtherInstances)
 {
     Item& item = findItem(key);
 
@@ -153,7 +153,7 @@ void Settings::setValue(const Key& key, const Val& value)
         channel.send(value);
     }
 
-    if (multiInstancesProvider()) {
+    if (notifyToOtherInstances && multiInstancesProvider()) {
         multiInstancesProvider()->settingsSetValue(key.key, value);
     }
 }
@@ -210,7 +210,7 @@ void Settings::insertNewItem(const Settings::Key& key, const Val& value)
     }
 }
 
-void Settings::beginTransaction()
+void Settings::beginTransaction(bool notifyToOtherInstances)
 {
     if (m_isTransactionStarted) {
         LOGW() << "Transaction is already started";
@@ -220,12 +220,12 @@ void Settings::beginTransaction()
     m_localSettings = m_items;
     m_isTransactionStarted = true;
 
-    if (multiInstancesProvider()) {
+    if (notifyToOtherInstances && multiInstancesProvider()) {
         multiInstancesProvider()->settingsBeginTransaction();
     }
 }
 
-void Settings::commitTransaction()
+void Settings::commitTransaction(bool notifyToOtherInstances)
 {
     m_isTransactionStarted = false;
 
@@ -246,12 +246,12 @@ void Settings::commitTransaction()
 
     m_localSettings.clear();
 
-    if (multiInstancesProvider()) {
+    if (notifyToOtherInstances && multiInstancesProvider()) {
         multiInstancesProvider()->settingsCommitTransaction();
     }
 }
 
-void Settings::rollbackTransaction()
+void Settings::rollbackTransaction(bool notifyToOtherInstances)
 {
     m_isTransactionStarted = false;
 
@@ -267,7 +267,7 @@ void Settings::rollbackTransaction()
 
     m_localSettings.clear();
 
-    if (multiInstancesProvider()) {
+    if (notifyToOtherInstances && multiInstancesProvider()) {
         multiInstancesProvider()->settingsRollbackTransaction();
     }
 }

@@ -93,17 +93,17 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
             mainWindow()->requestShowOnFront();
         }
     } else if (msg.method == METHOD_SETTINGS_BEGIN_TRANSACTION) {
-        settings()->beginTransaction();
+        settings()->beginTransaction(false);
     } else if (msg.method == METHOD_SETTINGS_COMMIT_TRANSACTION) {
-        settings()->commitTransaction();
+        settings()->commitTransaction(false);
     } else if (msg.method == METHOD_SETTINGS_ROLLBACK_TRANSACTION) {
-        settings()->rollbackTransaction();
+        settings()->rollbackTransaction(false);
     } else if (msg.method == METHOD_SETTINGS_SET_VALUE) {
         CHECK_ARGS_COUNT(3);
         Settings::Key key("", msg.args.at(0).toStdString());
         Val val(msg.args.at(1).toStdString());
         val.setType(static_cast<Val::Type>(msg.args.at(2).toInt()));
-        settings()->setValue(key, val);
+        settings()->setValue(key, val, false);
     }
 }
 
