@@ -94,8 +94,8 @@ void ShortcutsModule::onInit(const IApplication::RunMode& mode)
 
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        pr->reg("user shortcuts", s_configuration->shortcutsUserPath().val);
-        pr->reg("default shortcuts", s_configuration->shortcutsDefaultPath());
-        pr->reg("midi mappings", s_configuration->midiMappingsPath());
+        pr->reg("shortcutsUserAppDataPath", s_configuration->shortcutsUserAppDataPath());
+        pr->reg("shortcutsAppDataPath", s_configuration->shortcutsAppDataPath());
+        pr->reg("midiMappingUserAppDataPath", s_configuration->midiMappingUserAppDataPath());
     }
 }

@@ -26,6 +26,7 @@
 #include "modularity/ioc.h"
 #include "ishortcutsconfiguration.h"
 #include "async/asyncable.h"
+#include "system/ifilesystem.h"
 
 namespace mu::framework {
 class XmlReader;
@@ -36,6 +37,7 @@ namespace mu::shortcuts {
 class ShortcutsRegister : public IShortcutsRegister, public async::Asyncable
 {
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
+    INJECT(shortcuts, system::IFileSystem, fileSystem)
 
 public:
     ShortcutsRegister() = default;
@@ -50,7 +52,8 @@ public:
     const Shortcut& defaultShortcut(const std::string& actionCode) const override;
     ShortcutList shortcutsForSequence(const std::string& sequence) const override;
 
-    Ret saveToFile(const io::path& filePath) const override;
+    Ret importFromFile(const io::path& filePath) override;
+    Ret exportToFile(const io::path& filePath) const override;
 
 private:
 

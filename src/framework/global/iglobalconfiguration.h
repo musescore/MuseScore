@@ -60,6 +60,9 @@ public:
     //! Like: user/documents/MuseScore
     virtual io::path userDataPath() const = 0;
 
+    //! NOTE System paths
+    virtual io::path homePath() const = 0;
+
     virtual bool useFactorySettings() const = 0;
     virtual bool enableExperimental() const = 0;
 };
