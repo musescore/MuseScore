@@ -118,9 +118,9 @@ void GlobalModule::onInit(const IApplication::RunMode&)
     //! --- Diagnostics ---
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        pr->reg("appDirPath", s_globalConf->appDirPath());
-        pr->reg("sharePath", s_globalConf->sharePath());
-        pr->reg("dataPath", s_globalConf->dataPath());
+        pr->reg("appBinPath", s_globalConf->appBinPath());
+        pr->reg("appDataPath", s_globalConf->appDataPath());
+        pr->reg("userDataPath", s_globalConf->userDataPath());
         pr->reg("logsPath", s_globalConf->logsPath());
         pr->reg("log file", logFile->filePath());
         pr->reg("backupPath", s_globalConf->backupPath());
