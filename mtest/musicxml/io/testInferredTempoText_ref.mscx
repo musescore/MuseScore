@@ -120,18 +120,18 @@
         <height>12.5</height>
         <Text>
           <style>Title</style>
-          <offset x="0" y="-0.07525"/>
+          <offset x="0" y="-0.1505"/>
           <text><font size="22"/>Inferred Tempo Text</text>
           </Text>
         <Text>
           <style>Subtitle</style>
-          <offset x="0" y="9.92425"/>
+          <offset x="0" y="9.849"/>
           <text><font size="16"/>MuseScore Testcase</text>
           </Text>
         <Text>
           <style>Composer</style>
           <align>right,top</align>
-          <offset x="0" y="17.4247"/>
+          <offset x="0" y="17.3495"/>
           <text>Henry Ives</text>
           </Text>
         </VBox>
@@ -673,6 +673,11 @@
         </Measure>
       <Measure>
         <voice>
+          <Tempo>
+            <tempo>1.3333333333333333</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteQuarterUp</sym> = 80 <b>just kidding</b></text>
+            </Tempo>
           <Beam>
             <StemDirection>up</StemDirection>
             <l1>-1</l1>

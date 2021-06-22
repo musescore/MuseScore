@@ -2326,7 +2326,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
             }
 
       // Sort and add delayed directions
-      // delayedDirections.combineTempoText();
+      delayedDirections.combineTempoText();
       std::sort(delayedDirections.begin(), delayedDirections.end(),
             // Lambda: sort by absolute value of totalY
             [](const MusicXMLDelayedDirectionElement* a, const MusicXMLDelayedDirectionElement* b) -> bool {
@@ -2602,6 +2602,16 @@ static void preventNegativeTick(const Fraction& tick, Fraction& offset, MxmlLogg
             }
       }
 
+//---------------------------------------------------------
+//   isTempoOrphanCandidate
+//---------------------------------------------------------
+
+bool MusicXMLDelayedDirectionElement::isTempoOrphanCandidate() const
+      {
+      return _element->isStaffText()
+            && _placement == "above"
+            && toStaffText(_element)->xmlText().contains("<b>");
+      }
 
 //---------------------------------------------------------
 //   addElem
@@ -2624,22 +2634,28 @@ QString MusicXMLParserDirection::placement() const
 //---------------------------------------------------------
 /**
  Combine potentially separated tempo text.
- TODO: Use flags (hasTempoCandidate, etc.) to make more efficient
  */
 
 void DelayedDirectionsList::combineTempoText()
       {
-      // Iterate through each distinct pair (backwards, to allow for deletions)
+      // Iterate through candidates 
       for (auto ddi1 = rbegin(), ddi1Next = ddi1; ddi1 != rend(); ddi1 = ddi1Next) {
             ddi1Next = std::next(ddi1);
-            if (false)
-                  continue;
-            for (auto ddi2 = ddi1 + 1, ddi2Next = ddi1; ddi2 != rend(); ddi2 = ddi2Next) {
-                  ddi2Next = std::next(ddi2);
-                  // Combine and remove articulations if present in map
-                  if (false) {
-                        ddi1Next = decltype(ddi1){ erase(std::next(ddi1).base()) };
-                        ddi2Next = decltype(ddi2){ erase(std::next(ddi2).base()) };
+            if ((*ddi1)->isTempoOrphanCandidate()) {
+                  for (auto ddi2 = rbegin(), ddi2Next = ddi2; ddi2 != rend(); ddi2 = ddi2Next) {
+                        ddi2Next = std::next(ddi2);
+                        // Combine with tempo text if present
+                        if (ddi1 != ddi2
+                            && (*ddi2)->tick() == (*ddi1)->tick()
+                            && (*ddi2)->element()->isTempoText()) {
+                              TempoText* tt = toTempoText((*ddi2)->element());
+                              StaffText* st = toStaffText((*ddi1)->element());
+                              QString sep = tt->plainText().endsWith(' ') || st->plainText().startsWith(' ') ? "" : " ";
+                              tt->setXmlText(tt->xmlText() + sep + st->xmlText());
+                              delete st;
+                              ddi1Next = decltype(ddi1){ erase(std::next(ddi1).base()) };
+                              break;
+                              }
                         }
                   }
             }
