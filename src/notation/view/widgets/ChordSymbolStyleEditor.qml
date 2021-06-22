@@ -19,9 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.3
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.12
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
@@ -67,12 +67,13 @@ Rectangle {
 
     Column {
         anchors.fill: parent
-        StyledTextLabel{
+
+        StyledTextLabel {
             text: qsTrc("notation","Chord symbols")
             font.pixelSize: ui.theme.bodyFont.pixelSize * 1.5
         }
 
-        StyledTextLabel{
+        StyledTextLabel {
             text: qsTrc("notation","Choose a style")
         }
 
@@ -82,8 +83,8 @@ Rectangle {
             height: 2*cellHeight
             width: root.width
 
-            cellWidth: 120
-            cellHeight: 60
+            cellWidth: 180
+            cellHeight: 80
 
             model: chordSymbolEditorModel
 
@@ -102,7 +103,7 @@ Rectangle {
             color: ui.theme.backgroundSecondaryColor
         }
 
-        StyledTextLabel{
+        StyledTextLabel {
             text: qsTrc("notation","Adjust settings for ")
         }
 
@@ -136,12 +137,11 @@ Rectangle {
 
             ChordSymbolEditorBasic {
                 width: root.width
-                height: 200
+                editorModel: chordSymbolEditorModel
             }
 
             ChordSymbolEditorAdvanced {
                 width: root.width
-                height: 200
             }
         }
     }

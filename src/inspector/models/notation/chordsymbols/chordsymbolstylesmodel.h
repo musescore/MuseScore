@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef CHORDSYMBOLSTYLESMODEL_H
-#define CHORDSYMBOLSTYLESMODEL_H
+#ifndef MU_INSPECTOR_CHORDSYMBOLSTYLESMODEL_H
+#define MU_INSPECTOR_CHORDSYMBOLSTYLESMODEL_H
 
 #include <QObject>
 #include <QAbstractListModel>

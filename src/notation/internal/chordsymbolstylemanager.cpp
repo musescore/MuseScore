@@ -60,6 +60,18 @@ bool ChordSymbolStyleManager::isChordSymbolStylesFile(mu::io::path& f)
 {
     bool isStyleFile = false;
     QString path = f.toQString();
+
+    QFileInfo ftest(path);
+    if (!ftest.isAbsolute()) {
+#if defined(Q_OS_IOS)
+        path = QString("%1/%2").arg(Ms::MScore::globalShare()).arg(path);
+#elif defined(Q_OS_ANDROID)
+        path = QString(":/styles/%1").arg(path);
+#else
+        path = QString("%1styles/%2").arg(Ms::MScore::globalShare(), path);
+#endif
+    }
+
     QFile file(path);
     Ms::XmlReader e(&file);
     QFileInfo fi(path);
@@ -83,6 +95,18 @@ bool ChordSymbolStyleManager::isChordSymbolStylesFile(mu::io::path& f)
 void ChordSymbolStyleManager::extractChordStyleInfo(mu::io::path& f)
 {
     QString path = f.toQString();
+
+    QFileInfo ftest(path);
+    if (!ftest.isAbsolute()) {
+#if defined(Q_OS_IOS)
+        path = QString("%1/%2").arg(Ms::MScore::globalShare()).arg(path);
+#elif defined(Q_OS_ANDROID)
+        path = QString(":/styles/%1").arg(path);
+#else
+        path = QString("%1styles/%2").arg(Ms::MScore::globalShare(), path);
+#endif
+    }
+
     QFile file(path);
     Ms::XmlReader e(&file);
     QFileInfo fi(path);
@@ -101,10 +125,51 @@ void ChordSymbolStyleManager::extractChordStyleInfo(mu::io::path& f)
         }
     }
 
-    QHash<QString, QHash<QString, bool> > dummyDefaults = {
-        { "major", { { "maj", 0 }, { "Ma", 1 } } },
-        { "minor", { { "min", 0 }, { "m", 1 } } },
-    };
+    _chordStyles.push_back({ styleName, fi.fileName() });
+}
 
-    _chordStyles.push_back({ styleName, fi.fileName(), dummyDefaults });
+// TODO: Rewrite the XML format
+QHash<QString, QStringList> ChordSymbolStyleManager::getQualitySymbols(QString path)
+{
+    QHash<QString, QStringList> qualitySymbols;
+
+    QFileInfo ftest(path);
+    if (!ftest.isAbsolute()) {
+#if defined(Q_OS_IOS)
+        path = QString("%1/%2").arg(Ms::MScore::globalShare()).arg(path);
+#elif defined(Q_OS_ANDROID)
+        path = QString(":/styles/%1").arg(path);
+#else
+        path = QString("%1styles/%2").arg(Ms::MScore::globalShare(), path);
+#endif
+    }
+
+    QFile file(path);
+    Ms::XmlReader e(&file);
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        return qualitySymbols;
+    }
+
+    while (e.readNextStartElement()) {
+        if (e.name() == "museScore") {
+            if (e.attribute("type") == "chordStyle") {
+                // Inside the MuseScore element now, start reading the quality symbols
+                while (e.readNextStartElement()) {
+                    if (e.name() == "quality") {
+                        QString qual = e.attribute("q");
+                        QStringList rep;
+                        while (e.readNextStartElement()) {
+                            if (e.name() == "sym") {
+                                rep << e.readElementText();
+                            }
+                        }
+                        qualitySymbols.insert(qual, rep);
+                    }
+                }
+            }
+        }
+    }
+
+    return qualitySymbols;
 }

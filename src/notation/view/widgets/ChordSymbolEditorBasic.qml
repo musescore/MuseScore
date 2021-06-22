@@ -20,21 +20,204 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
-Item {
+Rectangle {
     id: root
 
-    Rectangle{
-        width: root.width
+    property var editorModel: null
+    property var listCellHeight: 60
+    property var listCellWidth: 60
+
+    Flickable {
+        id: flickableContainer
+
         height: root.height
-        color: "steelblue"
-        Text {
-            id: name
-            text: qsTr("Basic")
+        width: root.width
+
+        boundsBehavior: Flickable.StopAtBounds
+        interactive: true
+
+        ScrollBar.vertical: StyledScrollBar {}
+
+        GridView {
+            id: chordSpellingGridView
+
+            height: listCellHeight
+            width: root.width
+
+            anchors.left: flickableContainer.left
+
+            cellHeight: listCellHeight
+            cellWidth: listCellWidth
+
+            model: editorModel.chordSpellingList
+
+            delegate: FlatButton {
+                height: listCellHeight
+                width: listCellWidth
+                text: modelData
+                onClicked: {
+                    editorModel.setChordSpelling(modelData);
+                    chordSpellingGridView.currentIndex = index
+                }
+            }
+
+            boundsBehavior: Flickable.StopAtBounds
+
+            highlight: Rectangle {
+                color: ui.theme.accentColor
+                radius: 3
+            }
+        }
+
+        GridView {
+            id: majorSeventhGridView
+
+            anchors.top: chordSpellingGridView.bottom
+
+            height: listCellHeight
+            width: root.width
+
+            anchors.left: flickableContainer.left
+
+            cellHeight: listCellHeight
+            cellWidth: listCellWidth
+
+            model: editorModel.majorSeventhList
+
+            delegate: FlatButton {
+                height: listCellHeight
+                width: listCellWidth
+                text: modelData
+            }
+
+            boundsBehavior: Flickable.StopAtBounds
+
+            highlight: Rectangle {
+                color: ui.theme.accentColor
+                radius: 3
+            }
+        }
+
+        GridView {
+            id: halfDiminishedGridView
+
+            height: listCellHeight
+            width: root.width
+
+            anchors.left: flickableContainer.left
+
+            anchors.top: majorSeventhGridView.bottom
+
+            cellHeight: listCellHeight
+            cellWidth: listCellWidth
+
+            model: editorModel.halfDiminishedList
+
+            delegate: FlatButton {
+                height: listCellHeight
+                width: listCellWidth
+                text: modelData
+            }
+
+            boundsBehavior: Flickable.StopAtBounds
+
+            highlight: Rectangle {
+                color: ui.theme.accentColor
+                radius: 3
+            }
+        }
+
+        GridView {
+            id: minorGridView
+
+            height: listCellHeight
+            width: root.width
+
+            anchors.left: flickableContainer.left
+
+            cellHeight: listCellHeight
+            cellWidth: listCellWidth
+
+            anchors.top: halfDiminishedGridView.bottom
+
+            model: editorModel.minorList
+
+            delegate: FlatButton {
+                height: listCellHeight
+                width: listCellWidth
+                text: modelData
+            }
+
+            boundsBehavior: Flickable.StopAtBounds
+
+            highlight: Rectangle {
+                color: ui.theme.accentColor
+                radius: 3
+            }
+        }
+
+        GridView {
+            id: augmentedGridView
+
+            height: listCellHeight
+            width: root.width
+
+            anchors.left: flickableContainer.left
+
+            anchors.top: minorGridView.bottom
+
+            cellHeight: listCellHeight
+            cellWidth: listCellWidth
+
+            model: editorModel.augmentedList
+
+            delegate: FlatButton {
+                height: listCellHeight
+                width: listCellWidth
+                text: modelData
+            }
+
+            boundsBehavior: Flickable.StopAtBounds
+
+            highlight: Rectangle {
+                color: ui.theme.accentColor
+                radius: 3
+            }
+        }
+
+        GridView {
+            id: diminishedGridView
+
+            height: listCellHeight
+            width: root.width
+
+            anchors.left: flickableContainer.left
+
+            anchors.top: augmentedGridView.bottom
+
+            cellHeight: listCellHeight
+            cellWidth: listCellWidth
+
+            model: editorModel.diminishedList
+
+            delegate: FlatButton {
+                height: listCellHeight
+                width: listCellWidth
+                text: modelData
+            }
+
+            boundsBehavior: Flickable.StopAtBounds
+
+            highlight: Rectangle {
+                color: ui.theme.accentColor
+                radius: 3
+            }
         }
     }
 }

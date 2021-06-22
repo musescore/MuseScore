@@ -20,28 +20,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CHORDSYMBOLEDITORMODEL_H
-#define CHORDSYMBOLEDITORMODEL_H
+#ifndef MU_NOTATION_CHORDSYMBOLEDITORMODEL_H
+#define MU_NOTATION_CHORDSYMBOLEDITORMODEL_H
 
 #include <QObject>
 #include <QAbstractListModel>
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "engraving/libmscore/style.h"
+#include "engraving/style/style.h"
 #include "notation/internal/chordsymbolstylemanager.h"
 
+namespace mu::notation {
 class ChordSymbolEditorModel : public QAbstractListModel
 {
     INJECT(notation, mu::context::IGlobalContext, globalContext)
 
     Q_OBJECT
 
-    Q_PROPERTY(QList<QString> chordSpellingList READ chordSpellingList NOTIFY chordSpellingListChanged)
-    Q_PROPERTY(QList<QString> majorSeventhList READ majorSeventhList NOTIFY majorSeventhListChanged)
-    Q_PROPERTY(QList<QString> halfDiminishedList READ halfDiminishedList NOTIFY halfDiminishedListChanged)
-    Q_PROPERTY(QList<QString> minorList READ minorList NOTIFY minorListChanged)
-    Q_PROPERTY(QList<QString> augmentedList READ augmentedList NOTIFY augmentedListChanged)
-    Q_PROPERTY(QList<QString> diminishedList READ diminishedList NOTIFY diminishedListChanged)
+    Q_PROPERTY(QStringList chordSpellingList READ chordSpellingList NOTIFY chordSpellingListChanged)
+    Q_PROPERTY(QStringList majorSeventhList READ majorSeventhList NOTIFY majorSeventhListChanged)
+    Q_PROPERTY(QStringList halfDiminishedList READ halfDiminishedList NOTIFY halfDiminishedListChanged)
+    Q_PROPERTY(QStringList minorList READ minorList NOTIFY minorListChanged)
+    Q_PROPERTY(QStringList augmentedList READ augmentedList NOTIFY augmentedListChanged)
+    Q_PROPERTY(QStringList diminishedList READ diminishedList NOTIFY diminishedListChanged)
 
 public:
     ChordSymbolEditorModel(QObject* parent = nullptr);
@@ -50,14 +51,18 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    QList<QString> chordSpellingList() const;
-    QList<QString> majorSeventhList() const;
-    QList<QString> halfDiminishedList() const;
-    QList<QString> minorList() const;
-    QList<QString> augmentedList() const;
-    QList<QString> diminishedList() const;
+    QStringList chordSpellingList() const;
+    QStringList majorSeventhList() const;
+    QStringList halfDiminishedList() const;
+    QStringList minorList() const;
+    QStringList augmentedList() const;
+    QStringList diminishedList() const;
 
-    Q_INVOKABLE void setChordStyle(QString styleName) const;
+    void initChordSpellingList();
+    void setQualityRepresentationsLists();
+
+    Q_INVOKABLE void setChordStyle(QString styleName);
+    Q_INVOKABLE void setChordSpelling(QString spelling);
 
 signals:
     void chordSpellingListChanged();
@@ -73,16 +78,16 @@ private:
         FileRole
     };
 
-    QList<Ms::ChordSymbolStyle> m_styles;
+    QList<ChordSymbolStyle> m_styles;
     ChordSymbolStyleManager* styleManager;
+    QHash<QString, QStringList> m_qualitySymbols;
 
-    QList<QString> m_chordSpellingList;
-    QList<QString> m_majorSeventhList;
-    QList<QString> m_halfDiminishedList;
-    QList<QString> m_minorList;
-    QList<QString> m_augmentedList;
-    QList<QString> m_diminishedList;
-
+    QStringList m_chordSpellingList;
+    QStringList m_majorSeventhList;
+    QStringList m_halfDiminishedList;
+    QStringList m_minorList;
+    QStringList m_augmentedList;
+    QStringList m_diminishedList;
 };
-
+}
 #endif // CHORDSYMBOLEDITORMODEL_H

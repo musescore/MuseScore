@@ -20,16 +20,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 
 Item {
-    Rectangle{
+
+    Rectangle {
         width: root.width
-        height: root.height
+        height: root.height/2
+
         color: "red"
-        Text {
+
+        StyledTextLabel {
             id: name
-            text: qsTr("Advanced")
+
+            anchors.fill: parent
+
+            text: qsTr("Coming Soon...")
+            font.pixelSize: 30
         }
     }
 }

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef CHORDSYMBOLSTYLEMANAGER_H
-#define CHORDSYMBOLSTYLEMANAGER_H
+#ifndef MU_NOTATION_CHORDSYMBOLSTYLEMANAGER_H
+#define MU_NOTATION_CHORDSYMBOLSTYLEMANAGER_H
 
 #include "modularity/ioc.h"
 #include "system/ifilesystem.h"
@@ -46,6 +46,7 @@ public:
     void extractChordStyleInfo(mu::io::path& f);
 
     QList<ChordSymbolStyle> getChordStyles();
+    QHash<QString, QStringList> getQualitySymbols(QString path);
 
 private:
     QList<ChordSymbolStyle> _chordStyles;

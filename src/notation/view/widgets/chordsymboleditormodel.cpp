@@ -22,13 +22,14 @@
 
 #include "chordsymboleditormodel.h"
 
+using namespace mu::notation;
 ChordSymbolEditorModel::ChordSymbolEditorModel(QObject* parent)
     : QAbstractListModel(parent)
 {
     styleManager = new ChordSymbolStyleManager();
     m_styles = styleManager->getChordStyles();
-    // Testing
-    m_chordSpellingList = {"Standard","Solfege"};
+    setQualityRepresentationsLists();
+    initChordSpellingList();
 }
 
 int ChordSymbolEditorModel::rowCount(const QModelIndex&) const
@@ -52,7 +53,7 @@ QVariant ChordSymbolEditorModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    Ms::ChordSymbolStyle chordSymbolStyle = m_styles.at(index.row());
+    ChordSymbolStyle chordSymbolStyle = m_styles.at(index.row());
 
     switch (role) {
     case StyleNameRole:
@@ -66,26 +67,64 @@ QVariant ChordSymbolEditorModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-QList<QString> ChordSymbolEditorModel::chordSpellingList() const{
+QStringList ChordSymbolEditorModel::chordSpellingList() const
+{
     return m_chordSpellingList;
 }
-QList<QString> ChordSymbolEditorModel::majorSeventhList() const{
+
+QStringList ChordSymbolEditorModel::majorSeventhList() const
+{
     return m_majorSeventhList;
 }
-QList<QString> ChordSymbolEditorModel::halfDiminishedList() const{
+
+QStringList ChordSymbolEditorModel::halfDiminishedList() const
+{
     return m_halfDiminishedList;
 }
-QList<QString> ChordSymbolEditorModel::minorList() const{
+
+QStringList ChordSymbolEditorModel::minorList() const
+{
     return m_minorList;
 }
-QList<QString> ChordSymbolEditorModel::augmentedList() const{
+
+QStringList ChordSymbolEditorModel::augmentedList() const
+{
     return m_augmentedList;
 }
-QList<QString> ChordSymbolEditorModel::diminishedList() const{
+
+QStringList ChordSymbolEditorModel::diminishedList() const
+{
     return m_diminishedList;
 }
 
-void ChordSymbolEditorModel::setChordStyle(QString styleName) const
+void ChordSymbolEditorModel::initChordSpellingList()
+{
+    m_chordSpellingList << "Standard" << "German" << "German Full" << "Solfege" << "French";
+}
+
+void ChordSymbolEditorModel::setQualityRepresentationsLists()
+{
+    // Get the symbols from the file
+    QString descriptionFile = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordDescriptionFile).toString();
+    m_qualitySymbols = styleManager->getQualitySymbols(descriptionFile);
+
+    // Set the respective lists
+    m_majorSeventhList = m_qualitySymbols["major7th"];
+    m_halfDiminishedList = m_qualitySymbols["half-diminished"];
+    m_minorList = m_qualitySymbols["minor"];
+    m_augmentedList = m_qualitySymbols["augmented"];
+    m_diminishedList = m_qualitySymbols["diminished"];
+
+    // Notify QML ListViews about the change
+    emit chordSpellingListChanged();
+    emit majorSeventhListChanged();
+    emit halfDiminishedListChanged();
+    emit minorListChanged();
+    emit augmentedListChanged();
+    emit diminishedListChanged();
+}
+
+void ChordSymbolEditorModel::setChordStyle(QString styleName)
 {
     QString descriptionFileName = "chords_std.xml"; // Fall back
 
@@ -96,5 +135,28 @@ void ChordSymbolEditorModel::setChordStyle(QString styleName) const
         }
     }
 
-    globalContext()->currentNotation()->style()->setStyleValue(mu::notation::StyleId::chordDescriptionFile,descriptionFileName);
+    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, descriptionFileName);
+    setQualityRepresentationsLists();
+}
+
+void ChordSymbolEditorModel::setChordSpelling(QString newSpelling)
+{
+    QHash<QString, Ms::Sid> chordSpellingMap = {
+        { "Standard", Ms::Sid::useStandardNoteNames },
+        { "German", Ms::Sid::useGermanNoteNames },
+        { "German Full", Ms::Sid::useFullGermanNoteNames },
+        { "Solfege", Ms::Sid::useSolfeggioNoteNames },
+        { "French", Ms::Sid::useFrenchNoteNames }
+    };
+
+    for (auto i = chordSpellingMap.begin(); i != chordSpellingMap.end(); ++i) {
+        QString spelling = i.key();
+        Ms::Sid id = i.value();
+
+        if (spelling == newSpelling) {
+            globalContext()->currentNotation()->style()->setStyleValue(id, true);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(id, false);
+        }
+    }
 }
