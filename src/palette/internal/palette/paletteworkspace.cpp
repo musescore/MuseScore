@@ -901,7 +901,7 @@ bool PaletteWorkspace::resetPalette(const QModelIndex& index)
     IInteractive::Result result
         = interactive()->question("", mu::trc("palette",
                                               "Do you want to restore this palette to its default state? All changes to this palette will be lost."), {
-            IInteractive::Button::Yes, IInteractive::Button::No
+            IInteractive::Button::No, IInteractive::Button::Yes
         });
     if (result.standartButton() != IInteractive::Button::Yes) {
         return false;
