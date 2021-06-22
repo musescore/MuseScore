@@ -162,7 +162,7 @@ io::path LanguagesConfiguration::languagesSharePath() const
 
 io::path LanguagesConfiguration::languagesDataPath() const
 {
-    return globalConfiguration()->userDataPath() + "/locale";
+    return globalConfiguration()->userAppDataPath() + "/locale";
 }
 
 io::paths LanguagesConfiguration::languageFilePaths(const QString& languageCode) const

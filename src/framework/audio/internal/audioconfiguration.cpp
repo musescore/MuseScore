@@ -193,7 +193,7 @@ async::Notification AudioConfiguration::synthesizerStateGroupChanged(const std::
 
 io::path AudioConfiguration::stateFilePath() const
 {
-    return globalConfiguration()->userDataPath() + "/synthesizer.xml";
+    return globalConfiguration()->userAppDataPath() + "/synthesizer.xml";
 }
 
 bool AudioConfiguration::readState(const io::path& path, SynthesizerState& state) const
