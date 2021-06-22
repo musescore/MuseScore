@@ -41,7 +41,7 @@ void FileScoreController::init()
     dispatcher()->reg(this, "file-open", this, &FileScoreController::openScore);
     dispatcher()->reg(this, "file-import", this, &FileScoreController::importScore);
     dispatcher()->reg(this, "file-new", this, &FileScoreController::newScore);
-    dispatcher()->reg(this, "file-close", this, &FileScoreController::closeScore);
+    dispatcher()->reg(this, "file-close", [this]() { closeOpenedScore(); });
 
     dispatcher()->reg(this, "file-save", this, &FileScoreController::saveScore);
     dispatcher()->reg(this, "file-save-as", this, &FileScoreController::saveScoreAs);
@@ -155,9 +155,45 @@ void FileScoreController::newScore()
     }
 }
 
-void FileScoreController::closeScore()
+bool FileScoreController::closeOpenedScore()
 {
+    IMasterNotationPtr master = currentMasterNotation();
+    if (!master) {
+        return true;
+    }
+
+    if (master->needSave().val) {
+        IInteractive::Button btn = askAboutSavingScore(master->path());
+
+        if (btn == IInteractive::Button::Cancel) {
+            return false;
+        } else if (btn == IInteractive::Button::Save) {
+            saveScore();
+        }
+    }
+
     globalContext()->setCurrentMasterNotation(nullptr);
+    return true;
+}
+
+IInteractive::Button FileScoreController::askAboutSavingScore(const io::path& filePath)
+{
+    std::string title = qtrc("userscores", "Do you want to save changes to the score “%1”\n"
+                             "before closing?")
+                       .arg(io::completebasename(filePath).toQString()).toStdString();
+
+    std::string body = trc("userscores", "Your changes will be lost if you don’t save them.");
+
+    IInteractive::Options options;
+    options.setFlag(IInteractive::Option::WithIcon);
+
+    IInteractive::Result result = interactive()->warning(title, body, {
+        IInteractive::Button::DontSave,
+        IInteractive::Button::Cancel,
+        IInteractive::Button::Save
+    }, IInteractive::Button::Save, options);
+
+    return result.standartButton();
 }
 
 void FileScoreController::saveScore()
@@ -276,7 +312,7 @@ bool FileScoreController::checkCanIgnoreError(const Ret& ret, const io::path& fi
     };
 
     std::string title = trc("userscores", "Open Error");
-    std::string text = qtrc("userscores", "Cannot open file %1:\n%2")
+    std::string body = qtrc("userscores", "Cannot open file %1:\n%2")
                        .arg(filePath.toQString())
                        .arg(QString::fromStdString(ret.text())).toStdString();
 
@@ -286,14 +322,14 @@ bool FileScoreController::checkCanIgnoreError(const Ret& ret, const io::path& fi
     bool canIgnore = ignorableErrors.contains(static_cast<Err>(ret.code()));
 
     if (!canIgnore) {
-        interactive()->error(title, text, {
+        interactive()->error(title, body, {
             IInteractive::Button::Ok
         }, IInteractive::Button::Ok, options);
 
         return false;
     }
 
-    IInteractive::Result result = interactive()->warning(title, text, {
+    IInteractive::Result result = interactive()->warning(title, body, {
         IInteractive::Button::Cancel,
         IInteractive::Button::Ignore
     }, IInteractive::Button::Ignore, options);

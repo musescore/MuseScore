@@ -72,6 +72,7 @@ IInteractive::ButtonData Interactive::buttonData(Button b) const
     case IInteractive::Button::Ok:          return ButtonData(int(b), trc("ui", "OK"));
     case IInteractive::Button::Save:        return ButtonData(int(b), trc("ui", "Save"));
     case IInteractive::Button::SaveAll:     return ButtonData(int(b), trc("ui", "Save All"));
+    case IInteractive::Button::DontSave:    return ButtonData(int(b), trc("ui", "Don't save"));
     case IInteractive::Button::Open:        return ButtonData(int(b), trc("ui", "Open"));
     case IInteractive::Button::Yes:         return ButtonData(int(b), trc("ui", "Yes"));
     case IInteractive::Button::YesToAll:    return ButtonData(int(b), trc("ui", "Yes to All"));

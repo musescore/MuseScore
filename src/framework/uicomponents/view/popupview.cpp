@@ -107,7 +107,7 @@ bool PopupView::eventFilter(QObject* watched, QEvent* event)
         mousePressEvent(static_cast<QMouseEvent*>(event));
     } else if (QEvent::MouseButtonRelease == event->type()) {
         mouseReleaseEvent(static_cast<QMouseEvent*>(event));
-    } else if (QEvent::Close == event->type() && watched == mainWindow()->qMainWindow()) {
+    } else if (QEvent::Close == event->type() && watched == mainWindow()->qWindow()) {
         close();
     }
 
