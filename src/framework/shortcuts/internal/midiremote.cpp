@@ -99,7 +99,7 @@ mu::Ret MidiRemote::process(const Event& ev)
 
 void MidiRemote::readMidiMappings()
 {
-    io::path midiMappingsPath = configuration()->midiMappingsPath();
+    io::path midiMappingsPath = configuration()->midiMappingUserAppDataPath();
     XmlReader reader(midiMappingsPath);
 
     reader.readNextStartElement();
@@ -149,7 +149,7 @@ bool MidiRemote::writeMidiMappings(const MidiMappingList& midiMappings) const
 {
     TRACEFUNC;
 
-    io::path midiMappingsPath = configuration()->midiMappingsPath();
+    io::path midiMappingsPath = configuration()->midiMappingUserAppDataPath();
     XmlWriter writer(midiMappingsPath);
 
     writer.writeStartDocument();

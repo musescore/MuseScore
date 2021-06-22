@@ -105,6 +105,11 @@ io::path GlobalConfiguration::userDataPath() const
     return QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 }
 
+io::path GlobalConfiguration::homePath() const
+{
+    return QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+}
+
 bool GlobalConfiguration::useFactorySettings() const
 {
     return false;
