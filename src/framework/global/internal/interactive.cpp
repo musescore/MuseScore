@@ -56,13 +56,7 @@ IInteractive::Result Interactive::question(const std::string& title, const std::
                                            const Button& def,
                                            const Options& options) const
 {
-    ButtonDatas datas;
-    datas.reserve(buttons.size());
-    for (Button b : buttons) {
-        datas.push_back(buttonData(b));
-    }
-
-    return question(title, Text(text), datas, int(def), options);
+    return question(title, Text(text), buttonDataList(buttons), int(def), options);
 }
 
 IInteractive::Result Interactive::question(const std::string& title, const Text& text, const ButtonDatas& btns, int defBtn,
@@ -106,18 +100,30 @@ IInteractive::Result Interactive::info(const std::string& title, const std::stri
     return standardDialogResult(provider()->info(title, text, buttons, defBtn, options));
 }
 
-IInteractive::Result Interactive::warning(const std::string& title, const std::string& text, const ButtonDatas& buttons,
+Interactive::Result Interactive::warning(const std::string& title, const std::string& text, const Buttons& buttons, const Button& defBtn,
+                                         const Options& options) const
+{
+    return standardDialogResult(provider()->warning(title, text, buttonDataList(buttons), int(defBtn), options));
+}
+
+IInteractive::Result Interactive::warning(const std::string& title, const Text& text, const ButtonDatas& buttons,
                                           int defBtn,
                                           const QFlags<IInteractive::Option>& options) const
 {
-    return standardDialogResult(provider()->warning(title, text, buttons, defBtn, options));
+    return standardDialogResult(provider()->warning(title, text.text, buttons, defBtn, options));
 }
 
-IInteractive::Result Interactive::error(const std::string& title, const std::string& text, const ButtonDatas& buttons,
+IInteractive::Result Interactive::error(const std::string& title, const std::string& text, const Buttons& buttons, const Button& defBtn,
+                                        const Options& options) const
+{
+    return standardDialogResult(provider()->error(title, text, buttonDataList(buttons), int(defBtn), options));
+}
+
+IInteractive::Result Interactive::error(const std::string& title, const Text& text, const ButtonDatas& buttons,
                                         int defBtn,
                                         const Options& options) const
 {
-    return standardDialogResult(provider()->error(title, text, buttons, defBtn, options));
+    return standardDialogResult(provider()->error(title, text.text, buttons, defBtn, options));
 }
 
 mu::io::path Interactive::selectOpeningFile(const QString& title, const io::path& dir, const QString& filter)
@@ -192,4 +198,16 @@ Ret Interactive::openUrl(const std::string& url) const
 {
     QUrl _url(QString::fromStdString(url));
     return QDesktopServices::openUrl(_url);
+}
+
+IInteractive::ButtonDatas Interactive::buttonDataList(const Buttons& buttons) const
+{
+    ButtonDatas result;
+    result.reserve(buttons.size());
+
+    for (Button b : buttons) {
+        result.push_back(buttonData(b));
+    }
+
+    return result;
 }

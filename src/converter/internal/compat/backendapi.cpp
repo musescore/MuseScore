@@ -51,13 +51,15 @@ static const std::string MIDI_WRITER_NAME = "midi";
 static const std::string MUSICXML_WRITER_NAME = "mxml";
 static const std::string META_DATA_NAME = "metadata";
 
-static const bool ADD_SEPARATOR = true;
+static constexpr bool ADD_SEPARATOR = true;
+static constexpr auto NO_STYLE = "";
 
-Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath, const io::path& stylePath)
+Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath, const io::path& stylePath,
+                                 bool forceMode)
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath);
+    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath, forceMode);
     if (!openScoreRetVal.ret) {
         return openScoreRetVal.ret;
     }
@@ -83,11 +85,11 @@ Ret BackendApi::exportScoreMedia(const io::path& in, const io::path& out, const 
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath)
+Ret BackendApi::exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath, bool forceMode)
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath);
+    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath, forceMode);
     if (!openScoreRetVal.ret) {
         return openScoreRetVal.ret;
     }
@@ -104,11 +106,11 @@ Ret BackendApi::exportScoreMeta(const io::path& in, const io::path& out, const i
     return result ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath)
+Ret BackendApi::exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath, bool forceMode)
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath);
+    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath, forceMode);
     if (!openScoreRetVal.ret) {
         return openScoreRetVal.ret;
     }
@@ -125,11 +127,11 @@ Ret BackendApi::exportScoreParts(const io::path& in, const io::path& out, const 
     return ret;
 }
 
-Ret BackendApi::exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath)
+Ret BackendApi::exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath, bool forceMode)
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath);
+    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath, forceMode);
     if (!openScoreRetVal.ret) {
         return openScoreRetVal.ret;
     }
@@ -146,11 +148,12 @@ Ret BackendApi::exportScorePartsPdfs(const io::path& in, const io::path& out, co
     return ret;
 }
 
-Ret BackendApi::exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson, const io::path& stylePath)
+Ret BackendApi::exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson, const io::path& stylePath,
+                                     bool forceMode)
 {
     TRACEFUNC
 
-    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath);
+    RetVal<IMasterNotationPtr> openScoreRetVal = openScore(in, stylePath, forceMode);
     if (!openScoreRetVal.ret) {
         return openScoreRetVal.ret;
     }
@@ -184,7 +187,7 @@ Ret BackendApi::openOutputFile(QFile& file, const io::path& out)
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-RetVal<notation::IMasterNotationPtr> BackendApi::openScore(const io::path& path, const io::path& stylePath)
+RetVal<notation::IMasterNotationPtr> BackendApi::openScore(const io::path& path, const io::path& stylePath, bool forceMode)
 {
     TRACEFUNC
 
@@ -193,7 +196,7 @@ RetVal<notation::IMasterNotationPtr> BackendApi::openScore(const io::path& path,
         return make_ret(Ret::Code::InternalError);
     }
 
-    Ret ret = masterNotation->load(path, stylePath);
+    Ret ret = masterNotation->load(path, stylePath, forceMode);
     if (!ret) {
         LOGE() << "failed load: " << path << ", ret: " << ret.toString();
         return make_ret(Ret::Code::InternalError);
@@ -695,9 +698,9 @@ Ret BackendApi::applyTranspose(const INotationPtr notation, const std::string& o
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::updateSource(const io::path& in, const std::string& newSource)
+Ret BackendApi::updateSource(const io::path& in, const std::string& newSource, bool forceMode)
 {
-    RetVal<IMasterNotationPtr> notation = openScore(in);
+    RetVal<IMasterNotationPtr> notation = openScore(in, NO_STYLE, forceMode);
     if (!notation.ret) {
         return notation.ret;
     }

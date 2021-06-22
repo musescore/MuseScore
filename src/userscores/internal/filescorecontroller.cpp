@@ -26,6 +26,7 @@
 
 #include "log.h"
 #include "translation.h"
+#include "notation/notationerrors.h"
 
 #include "userscoresconfiguration.h"
 
@@ -265,6 +266,41 @@ void FileScoreController::saveOnline()
     uploadingService()->uploadScore(*scoreData, meta.title, meta.source);
 }
 
+bool FileScoreController::checkCanIgnoreError(const Ret& ret, const io::path& filePath)
+{
+    static const QList<Err> ignorableErrors {
+        Err::FileTooOld,
+        Err::FileTooNew,
+        Err::FileCorrupted,
+        Err::FileOld300Format
+    };
+
+    std::string title = trc("userscores", "Open Error");
+    std::string text = qtrc("userscores", "Cannot open file %1:\n%2")
+                       .arg(filePath.toQString())
+                       .arg(QString::fromStdString(ret.text())).toStdString();
+
+    IInteractive::Options options;
+    options.setFlag(IInteractive::Option::WithIcon);
+
+    bool canIgnore = ignorableErrors.contains(static_cast<Err>(ret.code()));
+
+    if (!canIgnore) {
+        interactive()->error(title, text, {
+            IInteractive::Button::Ok
+        }, IInteractive::Button::Ok, options);
+
+        return false;
+    }
+
+    IInteractive::Result result = interactive()->warning(title, text, {
+        IInteractive::Button::Cancel,
+        IInteractive::Button::Ignore
+    }, IInteractive::Button::Ignore, options);
+
+    return result.standartButton() == IInteractive::Button::Ignore;
+}
+
 void FileScoreController::importPdf()
 {
     interactive()->openUrl("https://musescore.com/import");
@@ -322,10 +358,15 @@ Ret FileScoreController::doOpenScore(const io::path& filePath)
     }
 
     Ret ret = notation->load(filePath);
+
+    if (!ret && checkCanIgnoreError(ret, filePath)) {
+        constexpr auto NO_STYLE = "";
+        constexpr bool FORCE_MODE = true;
+        ret = notation->load(filePath, NO_STYLE, FORCE_MODE);
+    }
+
     if (!ret) {
-        LOGE() << "failed load: " << filePath << ", ret: " << ret.toString();
-        //! TODO Show dialog about error
-        return make_ret(Ret::Code::InternalError);
+        return ret;
     }
 
     if (!globalContext()->containsMasterNotation(filePath)) {

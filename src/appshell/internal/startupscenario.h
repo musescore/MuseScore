@@ -37,7 +37,7 @@ class StartupScenario : public IStartupScenario
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
 
 public:
-    void setStartupScorePaths(const io::paths& paths) override;
+    void setStartupScorePath(const io::path& path) override;
     void run() override;
 
 private:
@@ -45,7 +45,7 @@ private:
 
     void openScore(const io::path& path);
 
-    io::paths m_startupScorePaths;
+    io::path m_startupScorePath;
 };
 }
 

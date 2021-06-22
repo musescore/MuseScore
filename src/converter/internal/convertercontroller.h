@@ -41,16 +41,20 @@ class ConverterController : public IConverterController
 public:
     ConverterController() = default;
 
-    Ret fileConvert(const io::path& in, const io::path& out, const io::path& stylePath = io::path()) override;
-    Ret batchConvert(const io::path& batchJobFile, const io::path& stylePath = io::path()) override;
+    Ret fileConvert(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) override;
+    Ret batchConvert(const io::path& batchJobFile, const io::path& stylePath = io::path(), bool forceMode = false) override;
+
     Ret exportScoreMedia(const io::path& in, const io::path& out,
-                         const io::path& highlightConfigPath = io::path(), const io::path& stylePath = io::path()) override;
-    Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath = io::path()) override;
-    Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath = io::path()) override;
-    Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath = io::path()) override;
+                         const io::path& highlightConfigPath = io::path(), const io::path& stylePath = io::path(),
+                         bool forceMode = false) override;
+    Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) override;
+    Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) override;
+    Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath = io::path(),
+                             bool forceMode = false) override;
     Ret exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson,
-                             const io::path& stylePath = io::path()) override;
-    Ret updateSource(const io::path& in, const std::string& newSource) override;
+                             const io::path& stylePath = io::path(), bool forceMode = false) override;
+
+    Ret updateSource(const io::path& in, const std::string& newSource, bool forceMode = false) override;
 
 private:
 

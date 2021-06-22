@@ -48,11 +48,17 @@ public:
                 const Options& options = {}) const override;
 
     // warning
-    Result warning(const std::string& title, const std::string& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
+    Result warning(const std::string& title, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,
+                   const Options& options = {}) const override;
+
+    Result warning(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
                    const Options& options = {}) const override;
 
     // error
-    Result error(const std::string& title, const std::string& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
+    Result error(const std::string& title, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,
+                 const Options& options = {}) const override;
+
+    Result error(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
                  const Options& options = {}) const override;
 
     // files
@@ -74,6 +80,9 @@ public:
     ValCh<Uri> currentUri() const override;
 
     Ret openUrl(const std::string& url) const override;
+
+private:
+    ButtonDatas buttonDataList(const Buttons& buttons) const;
 };
 }
 

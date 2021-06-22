@@ -40,7 +40,7 @@ public:
     virtual Meta metaInfo() const = 0;
     virtual void setMetaInfo(const Meta& meta) = 0;
 
-    virtual Ret load(const io::path& path, const io::path& stylePath = io::path()) = 0;
+    virtual Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false) = 0;
     virtual io::path path() const = 0;
 
     virtual Ret createNew(const ScoreCreateOptions& scoreInfo) = 0;
