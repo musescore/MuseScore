@@ -22,6 +22,7 @@
 #include "convertercontroller.h"
 
 #include <QFile>
+#include <QBuffer>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -33,6 +34,10 @@
 #include "compat/backendapi.h"
 
 using namespace mu::converter;
+using namespace mu::notation;
+
+static const std::string PDF_SUFFIX = "pdf";
+static const std::string PNG_SUFFIX = "png";
 
 mu::Ret ConverterController::batchConvert(const io::path& batchJobFile, const io::path& stylePath, bool forceMode)
 {
@@ -94,6 +99,36 @@ mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out
     return make_ret(Ret::Code::Ok);
 }
 
+mu::Ret ConverterController::convertScoreParts(const mu::io::path& in, const mu::io::path& out, const mu::io::path& stylePath,
+                                               bool forceMode)
+{
+    TRACEFUNC;
+
+    LOGI() << "in: " << in << ", out: " << out;
+
+    auto masterNotation = notationCreator()->newMasterNotation();
+    IF_ASSERT_FAILED(masterNotation) {
+        return make_ret(Err::UnknownError);
+    }
+
+    std::string suffix = io::syffix(out);
+    Ret ret = masterNotation->load(in, stylePath, forceMode);
+    if (!ret) {
+        LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
+        return make_ret(Err::InFileFailedLoad);
+    }
+
+    if (suffix == PDF_SUFFIX) {
+        ret = convertScorePartsToPdf(masterNotation, out);
+    } else if (suffix == PNG_SUFFIX) {
+        ret = convertScorePartsToPngs(masterNotation, out);
+    } else {
+        ret = make_ret(Ret::Code::NotSupported);
+    }
+
+    return make_ret(Ret::Code::Ok);
+}
+
 mu::RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const io::path& batchJobFile) const
 {
     TRACEFUNC;
@@ -129,6 +164,77 @@ mu::RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(con
 
     rv.ret = make_ret(Ret::Code::Ok);
     return rv;
+}
+
+mu::Ret ConverterController::convertScorePartsToPdf(IMasterNotationPtr masterNotation, const io::path& out) const
+{
+    auto writer = writers()->writer(PDF_SUFFIX);
+    if (!writer) {
+        return make_ret(Err::ConvertTypeUnknown);
+    }
+
+    INotationPtrList notations;
+    notations.push_back(masterNotation->notation());
+
+    for (IExcerptNotationPtr e : masterNotation->excerpts().val) {
+        notations.push_back(e->notation());
+    }
+
+    QFile file(out.toQString());
+    if (!file.open(QFile::WriteOnly)) {
+        return make_ret(Err::OutFileFailedOpen);
+    }
+
+    Ret ret = writer->writeList(notations, file);
+    if (!ret) {
+        LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
+        return make_ret(Err::OutFileFailedWrite);
+    }
+
+    file.close();
+
+    return make_ret(Ret::Code::Ok);
+}
+
+mu::Ret ConverterController::convertScorePartsToPngs(mu::notation::IMasterNotationPtr masterNotation, const io::path& out) const
+{
+    auto writer = writers()->writer(PDF_SUFFIX);
+    if (!writer) {
+        return make_ret(Err::ConvertTypeUnknown);
+    }
+
+    INotationPtrList notations;
+    notations.push_back(masterNotation->notation());
+
+    for (IExcerptNotationPtr e : masterNotation->excerpts().val) {
+        notations.push_back(e->notation());
+    }
+
+    const QString pngFilePathTemplate = io::path(io::basename(out) + "__excerpt__%1.png").toQString();
+    int padding = QString("%1").arg(notations.size()).size();
+
+    for (size_t i = 0; i < notations.size(); i++) {
+        QByteArray data;
+        QBuffer device(&data);
+        device.open(QIODevice::ReadWrite);
+
+        Ret ret = writer->write(notations[i], device);
+        if (!ret) {
+            LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
+            return make_ret(Err::OutFileFailedWrite);
+        }
+
+        io::path filePath = io::dirpath(out) + "/" + pngFilePathTemplate.arg(int(i), padding, 10, QLatin1Char('0')).toStdString();
+
+        ret = fileSystem()->writeToFile(filePath, data);
+        if (!ret) {
+            return ret;
+        }
+
+        device.close();
+    }
+
+    return make_ret(Ret::Code::Ok);
 }
 
 mu::Ret ConverterController::exportScoreMedia(const mu::io::path& in, const mu::io::path& out, const mu::io::path& highlightConfigPath,

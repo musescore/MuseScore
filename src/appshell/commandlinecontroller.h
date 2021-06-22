@@ -46,6 +46,7 @@ public:
 
     enum class ConvertType {
         File,
+        ConvertScoreParts,
         Batch,
         ExportScoreMedia,
         ExportScoreMeta,
@@ -60,6 +61,7 @@ public:
         StylePath,
         ScoreSource,
         ScoreTransposeOptions,
+        IsExportScoreParts,
         ForceMode
     };
 

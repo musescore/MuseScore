@@ -35,6 +35,8 @@ public:
 
     virtual Ret fileConvert(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) = 0;
     virtual Ret batchConvert(const io::path& batchJobFile, const io::path& stylePath = io::path(), bool forceMode = false) = 0;
+    virtual Ret convertScoreParts(const io::path& in, const io::path& out, const io::path& stylePath = io::path(),
+                                  bool forceMode = false) = 0;
 
     virtual Ret exportScoreMedia(const io::path& in, const io::path& out,
                                  const io::path& highlightConfigPath = io::path(),

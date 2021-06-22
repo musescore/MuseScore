@@ -27,6 +27,7 @@
 #include "../iconvertercontroller.h"
 
 #include "modularity/ioc.h"
+#include "system/ifilesystem.h"
 #include "notation/inotationcreator.h"
 #include "notation/inotationwritersregister.h"
 
@@ -37,12 +38,14 @@ class ConverterController : public IConverterController
 {
     INJECT(converter, notation::INotationCreator, notationCreator)
     INJECT(converter, notation::INotationWritersRegister, writers)
+    INJECT(converter, system::IFileSystem, fileSystem)
 
 public:
     ConverterController() = default;
 
     Ret fileConvert(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) override;
     Ret batchConvert(const io::path& batchJobFile, const io::path& stylePath = io::path(), bool forceMode = false) override;
+    Ret convertScoreParts(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) override;
 
     Ret exportScoreMedia(const io::path& in, const io::path& out,
                          const io::path& highlightConfigPath = io::path(), const io::path& stylePath = io::path(),
@@ -66,6 +69,9 @@ private:
     using BatchJob = std::list<Job>;
 
     RetVal<BatchJob> parseBatchJob(const io::path& batchJobFile) const;
+
+    Ret convertScorePartsToPdf(notation::IMasterNotationPtr masterNotation, const io::path& out) const;
+    Ret convertScorePartsToPngs(notation::IMasterNotationPtr masterNotation, const io::path& out) const;
 };
 }
 
