@@ -42,15 +42,15 @@
     </defaults>
   <credit page="1">
     <credit-type>title</credit-type>
-    <credit-words default-x="600" default-y="1611.86" justify="center" valign="top" font-size="22">Inferred Tempo Text</credit-words>
+    <credit-words default-x="600" default-y="1612.29" justify="center" valign="top" font-size="22">Inferred Tempo Text</credit-words>
     </credit>
   <credit page="1">
     <credit-type>subtitle</credit-type>
-    <credit-words default-x="600" default-y="1554.72" justify="center" valign="top" font-size="16">MuseScore Testcase</credit-words>
+    <credit-words default-x="600" default-y="1555.15" justify="center" valign="top" font-size="16">MuseScore Testcase</credit-words>
     </credit>
   <credit page="1">
     <credit-type>composer</credit-type>
-    <credit-words default-x="1114.29" default-y="1511.86" justify="right" valign="top">Henry Ives</credit-words>
+    <credit-words default-x="1114.29" default-y="1512.29" justify="right" valign="top">Henry Ives</credit-words>
     </credit>
   <part-list>
     <score-part id="P1">
@@ -726,6 +726,11 @@
         <type>eighth</type>
         <stem>down</stem>
         </note>
+      <direction placement="above">
+        <direction-type>
+          <words default-y="5.60" relative-y="10.00" font-weight="bold">rit.</words>
+          </direction-type>
+        </direction>
       <note default-x="63.84" default-y="-10.00">
         <pitch>
           <step>D</step>
