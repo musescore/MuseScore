@@ -1,0 +1,4 @@
+module MuseScore.Diagnostics
+DiagnosticsDialog 1.0 DiagnosticsDialog.qml
+DiagnosticsPanel 1.0 DiagnosticsPanel.qml
+DiagnosticsPaths 1.0 DiagnosticsPaths.qml

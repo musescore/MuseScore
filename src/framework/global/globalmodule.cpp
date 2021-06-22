@@ -39,6 +39,8 @@
 
 #include "settings.h"
 
+#include "diagnostics/idiagnosticspathsregister.h"
+
 using namespace mu::framework;
 
 static std::shared_ptr<GlobalConfiguration> s_globalConf = std::make_shared<GlobalConfiguration>();
@@ -76,9 +78,10 @@ void GlobalModule::onInit(const IApplication::RunMode&)
 
     //! File, this creates a file named "data/logs/MuseScore_yyMMdd.log"
     std::string logsPath = s_globalConf->logsPath().c_str();
-    LOGI() << "logs path: " << logsPath;
-    logger->addDest(new FileLogDest(logsPath, "MuseScore", "log",
-                                    LogLayout("${datetime} | ${type|5} | ${thread} | ${tag|10} | ${message}")));
+    FileLogDest* logFile = new FileLogDest(logsPath, "MuseScore", "log",
+                                           LogLayout("${datetime} | ${type|5} | ${thread} | ${tag|10} | ${message}"));
+    LOGI() << "log path: " << logFile->filePath();
+    logger->addDest(logFile);
 
 #ifndef NDEBUG
     logger->setLevel(haw::logger::Debug);
@@ -111,4 +114,16 @@ void GlobalModule::onInit(const IApplication::RunMode&)
     mu::async::onMainThreadInvoke([](const std::function<void()>& f, bool isAlwaysQueued) {
         s_asyncInvoker.invoke(f, isAlwaysQueued);
     });
+
+    //! --- Diagnostics ---
+    auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    if (pr) {
+        pr->reg("appDirPath", s_globalConf->appDirPath());
+        pr->reg("sharePath", s_globalConf->sharePath());
+        pr->reg("dataPath", s_globalConf->dataPath());
+        pr->reg("logsPath", s_globalConf->logsPath());
+        pr->reg("log file", logFile->filePath());
+        pr->reg("backupPath", s_globalConf->backupPath());
+        pr->reg("settings file", settings()->filePath());
+    }
 }
