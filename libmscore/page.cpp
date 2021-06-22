@@ -172,6 +172,7 @@ void Page::drawHeaderFooter(QPainter* p, int area, const QString& ss) const
                   text->setLayoutToParentWidth(true);
                   score()->setFooterText(text, area - MAX_HEADERS);
                   }
+            text->setLayoutRelativeToBottom(score()->styleB(Sid::footerInsideMargins));
             }
       text->setParent((Page*)this);
       Align flags = Align::LEFT;
