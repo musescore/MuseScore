@@ -138,6 +138,11 @@ void NotationActionController::init()
     dispatcher()->reg(this, "up-chord", [this]() { moveChord(MoveDirection::Up); });
     dispatcher()->reg(this, "down-chord", [this]() { moveChord(MoveDirection::Down); });
 
+    dispatcher()->reg(this, "double-duration", [this]() { increaseDecreaseDuration(-1, /*stepByDots*/ false); });
+    dispatcher()->reg(this, "half-duration", [this]() { increaseDecreaseDuration(1, false); });
+    dispatcher()->reg(this, "inc-duration-dotted", [this]() { increaseDecreaseDuration(-1, true); });
+    dispatcher()->reg(this, "dec-duration-dotted", [this]() { increaseDecreaseDuration(1, true); });
+
     dispatcher()->reg(this, "cut", this, &NotationActionController::cutSelection);
     dispatcher()->reg(this, "copy", this, &NotationActionController::copySelection);
     dispatcher()->reg(this, "paste", [this]() { pasteSelection(PastingType::Default); });
@@ -747,6 +752,16 @@ void NotationActionController::moveText(INotationInteractionPtr interaction, con
     }
 
     interaction->moveText(direction, quickly);
+}
+
+void NotationActionController::increaseDecreaseDuration(int steps, bool stepByDots)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->increaseDecreaseDuration(steps, stepByDots);
 }
 
 void NotationActionController::swapVoices(int voiceIndex1, int voiceIndex2)

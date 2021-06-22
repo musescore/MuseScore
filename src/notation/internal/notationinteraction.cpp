@@ -2467,6 +2467,19 @@ void NotationInteraction::addBeamToSelectedChordRests(BeamMode mode)
     notifyAboutNotationChanged();
 }
 
+void NotationInteraction::increaseDecreaseDuration(int steps, bool stepByDots)
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdIncDecDuration(steps, stepByDots);
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::toggleLayoutBreak(LayoutBreakType breakType)
 {
     startEdit();
