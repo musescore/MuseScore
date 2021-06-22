@@ -41,7 +41,6 @@ class IMainWindow : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMainWindow() = default;
 
-    virtual QMainWindow* qMainWindow() const = 0;
     virtual QWindow* qWindow() const = 0;
 
     virtual void requestShowOnBack() = 0;

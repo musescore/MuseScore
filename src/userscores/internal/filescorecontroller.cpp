@@ -148,8 +148,8 @@ bool FileScoreController::closeOpenedScore()
 IInteractive::Button FileScoreController::askAboutSavingScore(const io::path& filePath)
 {
     std::string title = qtrc("userscores", "Do you want to save changes to the score “%1”\n"
-                             "before closing?")
-                       .arg(io::completebasename(filePath).toQString()).toStdString();
+                                           "before closing?")
+                        .arg(io::completebasename(filePath).toQString()).toStdString();
 
     std::string body = trc("userscores", "Your changes will be lost if you don’t save them.");
 
