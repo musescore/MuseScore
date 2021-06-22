@@ -43,7 +43,7 @@ void AudioBuffer::forward()
     fillup();
 }
 
-void AudioBuffer::pop(float* dest, unsigned int sampleCount)
+void AudioBuffer::pop(float* dest, size_t sampleCount)
 {
     std::lock_guard<std::recursive_mutex> lock(m_mutex);
 
@@ -54,9 +54,9 @@ void AudioBuffer::pop(float* dest, unsigned int sampleCount)
         //fillup();
     }
 
-    unsigned int from = m_readIndex;
+    size_t from = m_readIndex;
     auto memStep = sizeof(float);
-    auto to = m_readIndex + sampleCount * m_audioChannelsCount;
+    size_t to = m_readIndex + sampleCount * m_audioChannelsCount;
     if (to > m_data.size()) {
         to = m_data.size();
     }
@@ -64,7 +64,7 @@ void AudioBuffer::pop(float* dest, unsigned int sampleCount)
     std::memcpy(dest, m_data.data() + from, count * memStep);
     m_readIndex += count;
 
-    int left = sampleCount * m_audioChannelsCount - count;
+    size_t left = sampleCount * m_audioChannelsCount - count;
     if (left > 0) {
         std::memcpy(dest + count, m_data.data(), left * memStep);
         m_readIndex = left;
@@ -75,7 +75,7 @@ void AudioBuffer::pop(float* dest, unsigned int sampleCount)
     }
 }
 
-void AudioBuffer::setMinSampleLag(unsigned int lag)
+void AudioBuffer::setMinSampleLag(size_t lag)
 {
     std::lock_guard<std::recursive_mutex> lock(m_mutex);
 
@@ -101,7 +101,7 @@ void AudioBuffer::updateWriteIndex(const unsigned int samplesPerChannel)
 {
     std::lock_guard<std::recursive_mutex> lock(m_mutex);
 
-    unsigned int from = m_writeIndex;
+    size_t from = m_writeIndex;
 
     auto to = m_writeIndex + samplesPerChannel * m_audioChannelsCount;
     if (to > m_data.size()) {
@@ -117,7 +117,7 @@ void AudioBuffer::updateWriteIndex(const unsigned int samplesPerChannel)
 
 unsigned int AudioBuffer::sampleLag() const
 {
-    unsigned int lag = 0;
+    size_t lag = 0;
     if (m_readIndex <= m_writeIndex) {
         lag = m_writeIndex - m_readIndex;
     } else {

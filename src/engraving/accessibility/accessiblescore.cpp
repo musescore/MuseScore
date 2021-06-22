@@ -99,7 +99,7 @@ size_t AccessibleScore::accessibleChildCount() const
 
 const IAccessible* AccessibleScore::accessibleChild(size_t i) const
 {
-    return m_children.at(i);
+    return m_children.at(int(i));
 }
 
 IAccessible::Role AccessibleScore::accessibleRole() const
