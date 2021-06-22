@@ -147,20 +147,26 @@ bool FileScoreController::closeOpenedScore()
 
 IInteractive::Button FileScoreController::askAboutSavingScore(const io::path& filePath)
 {
-    std::string title = qtrc("userscores", "Do you want to save changes to the score “%1”\n"
-                                           "before closing?")
+    if (!configuration()->needShowWarningAboutUnsavedScore()) {
+        return IInteractive::Button::DontSave;
+    }
+
+    std::string title = qtrc("userscores", "Do you want to save changes to the score “%1” before closing?")
                         .arg(io::completebasename(filePath).toQString()).toStdString();
 
     std::string body = trc("userscores", "Your changes will be lost if you don’t save them.");
 
-    IInteractive::Options options;
-    options.setFlag(IInteractive::Option::WithIcon);
+    IInteractive::Options options {
+        IInteractive::Option::WithIcon | IInteractive::Option::WithShowAgain
+    };
 
     IInteractive::Result result = interactive()->warning(title, body, {
         IInteractive::Button::DontSave,
         IInteractive::Button::Cancel,
         IInteractive::Button::Save
     }, IInteractive::Button::Save, options);
+
+    configuration()->setNeedShowWarningAboutUnsavedScore(result.showAgain());
 
     return result.standartButton();
 }

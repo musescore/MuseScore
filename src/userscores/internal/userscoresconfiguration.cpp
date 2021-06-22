@@ -35,6 +35,7 @@ static const Settings::Key RECENT_SCORE_PATHS(module_name, "userscores/recentLis
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
 static const Settings::Key USER_SCORES_PATH(module_name, "application/paths/myScores");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "userscores/preferredScoreCreationMode");
+static const Settings::Key NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY(module_name, "userscores/unsavedScoreWarning");
 
 const QString UserScoresConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
 
@@ -62,6 +63,8 @@ void UserScoresConfiguration::init()
 
     io::paths paths = actualRecentScorePaths();
     setRecentScorePaths(paths);
+
+    settings()->setDefaultValue(NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY, Val(true));
 
     fileSystem()->makePath(templatesPath().val);
     fileSystem()->makePath(scoresPath().val);
@@ -205,4 +208,14 @@ UserScoresConfiguration::PreferredScoreCreationMode UserScoresConfiguration::pre
 void UserScoresConfiguration::setPreferredScoreCreationMode(PreferredScoreCreationMode mode)
 {
     settings()->setValue(PREFERRED_SCORE_CREATION_MODE_KEY, Val(static_cast<int>(mode)));
+}
+
+bool UserScoresConfiguration::needShowWarningAboutUnsavedScore() const
+{
+    return settings()->value(NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY).toBool();
+}
+
+void UserScoresConfiguration::setNeedShowWarningAboutUnsavedScore(bool value)
+{
+    settings()->setValue(NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY, Val(value));
 }
