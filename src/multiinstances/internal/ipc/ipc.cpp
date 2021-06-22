@@ -27,7 +27,7 @@
 
 #include <QLocalSocket>
 
-#include "log.h"
+#include "ipclog.h"
 
 void mu::ipc::serialize(const Msg& msg, QByteArray& data)
 {
@@ -136,7 +136,7 @@ bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByt
         }
     }
 
-    LOGI() << "readed package count: " << packageCount;
+    IPCLOG() << "readed package count: " << packageCount;
 
     if (!ok) {
         LOGE() << "failed read package";

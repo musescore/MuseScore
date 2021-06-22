@@ -70,7 +70,7 @@ public:
 
     // drawing functions
     void drawPath(const QPainterPath& path) override;
-    void drawPolygon(const PointF* points, int pointCount, PolygonMode mode) override;
+    void drawPolygon(const PointF* points, size_t pointCount, PolygonMode mode) override;
 
     void drawText(const PointF& point, const QString& text) override;
     void drawText(const RectF& rect, int flags, const QString& text) override;

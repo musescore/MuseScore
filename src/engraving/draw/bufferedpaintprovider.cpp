@@ -219,10 +219,10 @@ void BufferedPaintProvider::drawPath(const QPainterPath& path)
     editableData().paths.push_back({ path, st.pen, st.brush, mode });
 }
 
-void BufferedPaintProvider::drawPolygon(const PointF* points, int pointCount, PolygonMode mode)
+void BufferedPaintProvider::drawPolygon(const PointF* points, size_t pointCount, PolygonMode mode)
 {
     PolygonF pol(pointCount);
-    for (int i = 0; i < pointCount; ++i) {
+    for (size_t i = 0; i < pointCount; ++i) {
         pol[i] = PointF(points[i].x(), points[i].y());
     }
     editableData().polygons.push_back(DrawPolygon { pol, mode });

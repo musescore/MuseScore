@@ -316,9 +316,9 @@ void Painter::drawPath(const QPainterPath& path)
     }
 }
 
-void Painter::drawLines(const LineF* lines, int lineCount)
+void Painter::drawLines(const LineF* lines, size_t lineCount)
 {
-    for (int i = 0; i < lineCount; ++i) {
+    for (size_t i = 0; i < lineCount; ++i) {
         PointF pts[2] = { lines[i].p1(), lines[i].p2() };
         IF_ASSERT_FAILED(pts[0] != pts[1]) {
             LOGE() << "draw point not implemented";
@@ -327,16 +327,16 @@ void Painter::drawLines(const LineF* lines, int lineCount)
     }
 }
 
-void Painter::drawLines(const PointF* pointPairs, int lineCount)
+void Painter::drawLines(const PointF* pointPairs, size_t lineCount)
 {
     static_assert(sizeof(LineF) == 2 * sizeof(PointF), "must be: sizeof(LineF) == 2 * sizeof(PointF)");
 
     drawLines((const LineF*)pointPairs, lineCount);
 }
 
-void Painter::drawRects(const RectF* rects, int rectCount)
+void Painter::drawRects(const RectF* rects, size_t rectCount)
 {
-    for (int i = 0; i < rectCount; ++i) {
+    for (size_t i = 0; i < rectCount; ++i) {
         QPainterPath path;
         path.addRect(rects[i].toQRectF());
         if (path.isEmpty()) {
@@ -356,7 +356,7 @@ void Painter::drawEllipse(const RectF& rect)
     }
 }
 
-void Painter::drawPolyline(const PointF* points, int pointCount)
+void Painter::drawPolyline(const PointF* points, size_t pointCount)
 {
     m_provider->drawPolygon(points, pointCount, PolygonMode::Polyline);
     if (extended) {
@@ -364,7 +364,7 @@ void Painter::drawPolyline(const PointF* points, int pointCount)
     }
 }
 
-void Painter::drawPolygon(const PointF* points, int pointCount, Qt::FillRule fillRule)
+void Painter::drawPolygon(const PointF* points, size_t pointCount, Qt::FillRule fillRule)
 {
     PolygonMode mode = (fillRule == Qt::OddEvenFill) ? PolygonMode::OddEven : PolygonMode::Winding;
     m_provider->drawPolygon(points, pointCount, mode);
@@ -373,7 +373,7 @@ void Painter::drawPolygon(const PointF* points, int pointCount, Qt::FillRule fil
     }
 }
 
-void Painter::drawConvexPolygon(const PointF* points, int pointCount)
+void Painter::drawConvexPolygon(const PointF* points, size_t pointCount)
 {
     m_provider->drawPolygon(points, pointCount, PolygonMode::Convex);
     if (extended) {
