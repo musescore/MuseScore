@@ -102,7 +102,7 @@ void TelemetryModule::onInit(const framework::IApplication::RunMode&)
 #endif
 
     io::path handlerPath = globalConf->appBinPath() + "/" + handlerFile;
-    io::path dumpsDir = globalConf->logsPath() + "/dumps";
+    io::path dumpsDir = globalConf->userAppDataPath() + "/logs/dumps";
     std::string serverUrl(CRASH_REPORT_URL);
 
     if (!s_configuration->isDumpUploadAllowed()) {

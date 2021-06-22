@@ -94,12 +94,12 @@ mu::async::Notification PaletteConfiguration::colorsChanged() const
 
 mu::io::path PaletteConfiguration::keySignaturesDirPath() const
 {
-    return globalConfiguration()->userDataPath() + "/keysigs";
+    return globalConfiguration()->userAppDataPath() + "/keysigs";
 }
 
 mu::io::path PaletteConfiguration::timeSignaturesDirPath() const
 {
-    return globalConfiguration()->userDataPath() + "/timesigs";
+    return globalConfiguration()->userAppDataPath() + "/timesigs";
 }
 
 bool PaletteConfiguration::useFactorySettings() const

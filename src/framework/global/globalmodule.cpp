@@ -77,8 +77,8 @@ void GlobalModule::onInit(const IApplication::RunMode&)
     logger->addDest(new ConsoleLogDest(LogLayout("${time} | ${type|5} | ${thread} | ${tag|10} | ${message}")));
 
     //! File, this creates a file named "data/logs/MuseScore_yyMMdd.log"
-    std::string logsPath = s_globalConf->logsPath().c_str();
-    FileLogDest* logFile = new FileLogDest(logsPath, "MuseScore", "log",
+    io::path logsPath = s_globalConf->userAppDataPath() + "/logs";
+    FileLogDest* logFile = new FileLogDest(logsPath.toStdString(), "MuseScore", "log",
                                            LogLayout("${datetime} | ${type|5} | ${thread} | ${tag|10} | ${message}"));
     LOGI() << "log path: " << logFile->filePath();
     logger->addDest(logFile);
@@ -120,10 +120,9 @@ void GlobalModule::onInit(const IApplication::RunMode&)
     if (pr) {
         pr->reg("appBinPath", s_globalConf->appBinPath());
         pr->reg("appDataPath", s_globalConf->appDataPath());
-        pr->reg("userDataPath", s_globalConf->userDataPath());
-        pr->reg("logsPath", s_globalConf->logsPath());
+        pr->reg("userDataPath", s_globalConf->userAppDataPath());
         pr->reg("log file", logFile->filePath());
-        pr->reg("backupPath", s_globalConf->backupPath());
+        pr->reg("backupPath", s_globalConf->userBackupPath());
         pr->reg("settings file", settings()->filePath());
     }
 }
