@@ -120,9 +120,11 @@ void GlobalModule::onInit(const IApplication::RunMode&)
     if (pr) {
         pr->reg("appBinPath", s_globalConf->appBinPath());
         pr->reg("appDataPath", s_globalConf->appDataPath());
-        pr->reg("userDataPath", s_globalConf->userAppDataPath());
+        pr->reg("appConfigPath", s_globalConf->appConfigPath());
+        pr->reg("userAppDataPath", s_globalConf->userAppDataPath());
+        pr->reg("userBackupPath", s_globalConf->userBackupPath());
+        pr->reg("userDataPath", s_globalConf->userDataPath());
         pr->reg("log file", logFile->filePath());
-        pr->reg("backupPath", s_globalConf->userBackupPath());
         pr->reg("settings file", settings()->filePath());
     }
 }
