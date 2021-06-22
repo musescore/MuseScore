@@ -29,25 +29,27 @@ NICE-TO-HAVE TODO:
       and SlurSegment::changeAnchor() in slur.cpp as models)
 */
 
+#include "glissando.h"
+
 #include <cmath>
 
-#include "log.h"
+#include "framework/global/log.h"
+#include "framework/global/translation.h"
 
+#include "accidental.h"
 #include "arpeggio.h"
-#include "glissando.h"
 #include "chord.h"
 #include "ledgerline.h"
+#include "measure.h"
 #include "note.h"
 #include "notedot.h"
 #include "score.h"
 #include "scorefont.h"
 #include "segment.h"
 #include "staff.h"
-#include "system.h"
-#include "measure.h"
 #include "style.h"
+#include "system.h"
 #include "xml.h"
-#include "accidental.h"
 
 #include "draw/fontmetrics.h"
 
@@ -55,24 +57,24 @@ using namespace mu;
 
 namespace Ms {
 static const ElementStyle glissandoElementStyle {
-    { Sid::glissandoFontFace,                  Pid::FONT_FACE },
-    { Sid::glissandoFontSize,                  Pid::FONT_SIZE },
-    { Sid::glissandoFontStyle,                 Pid::FONT_STYLE },
-    { Sid::glissandoLineWidth,                 Pid::LINE_WIDTH },
-    { Sid::glissandoText,                      Pid::GLISS_TEXT },
+    { Sid::glissandoFontFace,  Pid::FONT_FACE },
+    { Sid::glissandoFontSize,  Pid::FONT_SIZE },
+    { Sid::glissandoFontStyle, Pid::FONT_STYLE },
+    { Sid::glissandoLineWidth, Pid::LINE_WIDTH },
+    { Sid::glissandoText,      Pid::GLISS_TEXT },
 };
 
-static const qreal GLISS_PALETTE_WIDTH           = 4.0;
-static const qreal GLISS_PALETTE_HEIGHT          = 4.0;
+static constexpr qreal GLISS_PALETTE_WIDTH = 4.0;
+static constexpr qreal GLISS_PALETTE_HEIGHT = 4.0;
 
 const std::array<const char*, 2> Glissando::glissandoTypeNames = {
     QT_TRANSLATE_NOOP("Palette", "Straight glissando"),
     QT_TRANSLATE_NOOP("Palette", "Wavy glissando")
 };
 
-//---------------------------------------------------------
+//=========================================================
 //   GlisandoSegment
-//---------------------------------------------------------
+//=========================================================
 
 //---------------------------------------------------------
 //   layout
@@ -122,11 +124,8 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
         for (int i = 0; i < n; ++i) {
             ids.push_back(SymId::wiggleTrill);
         }
-        // this is very ugly but fix #68846 for now
-        bool tmp = MScore::pdfPrinting;
-        MScore::pdfPrinting = true;
+
         score()->scoreFont()->draw(ids, painter, magS(), PointF(x, -(b.y() + b.height() * 0.5)), scale);
-        MScore::pdfPrinting = tmp;
     }
 
     if (glissando()->showText()) {
@@ -209,6 +208,11 @@ Glissando::Glissando(const Glissando& g)
     _showText       = g._showText;
     _playGlissando  = g._playGlissando;
     _fontStyle      = g._fontStyle;
+}
+
+QString Glissando::glissandoTypeName() const
+{
+    return qtrc("Palette", glissandoTypeNames[int(glissandoType())]);
 }
 
 //---------------------------------------------------------
