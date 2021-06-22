@@ -22,6 +22,7 @@
 #ifndef MU_IMPORTEXPORT_MIDICONFIGURATION_H
 #define MU_IMPORTEXPORT_MIDICONFIGURATION_H
 
+#include "io/path.h"
 #include "../imidiconfiguration.h"
 
 namespace mu::iex::midi {
@@ -35,6 +36,8 @@ public:
 
     bool isMidiExportRpns() const override;
     void setIsMidiExportRpns(bool exportRpns) const override;
+
+    void setMidiImportOperationsFile(const io::path& filePath) const override;
 };
 }
 
