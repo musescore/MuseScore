@@ -39,7 +39,6 @@ using namespace mu::actions;
 void FileScoreController::init()
 {
     dispatcher()->reg(this, "file-open", this, &FileScoreController::openScore);
-    dispatcher()->reg(this, "file-import", this, &FileScoreController::importScore);
     dispatcher()->reg(this, "file-new", this, &FileScoreController::newScore);
     dispatcher()->reg(this, "file-close", [this]() { closeOpenedScore(); });
 
@@ -50,7 +49,6 @@ void FileScoreController::init()
     dispatcher()->reg(this, "file-save-online", this, &FileScoreController::saveOnline);
 
     dispatcher()->reg(this, "file-export", this, &FileScoreController::exportScore);
-
     dispatcher()->reg(this, "file-import-pdf", this, &FileScoreController::importPdf);
 
     dispatcher()->reg(this, "clear-recent", this, &FileScoreController::clearRecentScores);
@@ -103,40 +101,11 @@ void FileScoreController::openScore(const actions::ActionData& args)
     io::path scorePath = args.count() > 0 ? args.arg<io::path>(0) : "";
 
     if (scorePath.empty()) {
-        QStringList filter;
-        filter << QObject::tr("MuseScore Files") + " (*.mscz *.mscx)";
-        scorePath = selectScoreOpenningFile(filter);
+        scorePath = selectScoreOpenningFile();
+
         if (scorePath.empty()) {
             return;
         }
-    }
-
-    doOpenScore(scorePath);
-}
-
-void FileScoreController::importScore()
-{
-    QString allExt = "*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx"
-                     "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscz, *.mscx,";
-
-    QStringList filter;
-    filter << QObject::tr("All Supported Files") + " (" + allExt + ")"
-           << QObject::tr("MuseScore Files") + " (*.mscz *.mscx)"
-           << QObject::tr("MusicXML Files") + " (*.mxl *.musicxml *.xml)"
-           << QObject::tr("MIDI Files") + " (*.mid *.midi *.kar)"
-           << QObject::tr("MuseData Files") + " (*.md)"
-           << QObject::tr("Capella Files") + " (*.cap *.capx)"
-           << QObject::tr("BB Files (experimental)") + " (*.mgu *.sgu)"
-           << QObject::tr("Overture / Score Writer Files (experimental)") + " (*.ove *.scw)"
-           << QObject::tr("Bagpipe Music Writer Files (experimental)") + " (*.bmw *.bww)"
-           << QObject::tr("Guitar Pro Files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)"
-           << QObject::tr("Power Tab Editor Files (experimental)") + " (*.ptb)"
-           << QObject::tr("MuseScore Backup Files") + " (*.mscz, *.mscx,)";
-
-    io::path scorePath = selectScoreOpenningFile(filter);
-
-    if (scorePath.empty()) {
-        return;
     }
 
     doOpenScore(scorePath);
@@ -365,10 +334,26 @@ void FileScoreController::exportScore()
     interactive()->open("musescore://userscores/export");
 }
 
-io::path FileScoreController::selectScoreOpenningFile(const QStringList& filter)
+io::path FileScoreController::selectScoreOpenningFile()
 {
-    QString filterStr = filter.join(";;");
-    return interactive()->selectOpeningFile(qtrc("userscores", "Score"), "", filterStr);
+    QString allExt = "*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx"
+                     "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscz, *.mscx,";
+
+    QStringList filter;
+    filter << QObject::tr("All Supported Files") + " (" + allExt + ")"
+           << QObject::tr("MuseScore Files") + " (*.mscz *.mscx)"
+           << QObject::tr("MusicXML Files") + " (*.mxl *.musicxml *.xml)"
+           << QObject::tr("MIDI Files") + " (*.mid *.midi *.kar)"
+           << QObject::tr("MuseData Files") + " (*.md)"
+           << QObject::tr("Capella Files") + " (*.cap *.capx)"
+           << QObject::tr("BB Files (experimental)") + " (*.mgu *.sgu)"
+           << QObject::tr("Overture / Score Writer Files (experimental)") + " (*.ove *.scw)"
+           << QObject::tr("Bagpipe Music Writer Files (experimental)") + " (*.bmw *.bww)"
+           << QObject::tr("Guitar Pro Files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)"
+           << QObject::tr("Power Tab Editor Files (experimental)") + " (*.ptb)"
+           << QObject::tr("MuseScore Backup Files") + " (*.mscz, *.mscx,)";
+
+    return interactive()->selectOpeningFile(qtrc("userscores", "Score"), "", filter.join(";;"));
 }
 
 io::path FileScoreController::selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle)
