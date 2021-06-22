@@ -2326,6 +2326,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
             }
 
       // Sort and add delayed directions
+      // delayedDirections.combineTempoText();
       std::sort(delayedDirections.begin(), delayedDirections.end(),
             // Lambda: sort by absolute value of totalY
             [](const MusicXMLDelayedDirectionElement* a, const MusicXMLDelayedDirectionElement* b) -> bool {
@@ -2602,6 +2603,10 @@ static void preventNegativeTick(const Fraction& tick, Fraction& offset, MxmlLogg
       }
 
 
+//---------------------------------------------------------
+//   addElem
+//---------------------------------------------------------
+
 void MusicXMLDelayedDirectionElement::addElem()
       {
       addElemOffset(_element, _track, _placement, _measure, _tick);
@@ -2612,6 +2617,32 @@ QString MusicXMLParserDirection::placement() const
       if (_placement == "" && hasTotalY())
             return totalY() < 0 ? "above" : "below";
       else return _placement;
+      }
+
+//---------------------------------------------------------
+//   combineTempoText
+//---------------------------------------------------------
+/**
+ Combine potentially separated tempo text.
+ TODO: Use flags (hasTempoCandidate, etc.) to make more efficient
+ */
+
+void DelayedDirectionsList::combineTempoText()
+      {
+      // Iterate through each distinct pair (backwards, to allow for deletions)
+      for (auto ddi1 = rbegin(), ddi1Next = ddi1; ddi1 != rend(); ddi1 = ddi1Next) {
+            ddi1Next = std::next(ddi1);
+            if (false)
+                  continue;
+            for (auto ddi2 = ddi1 + 1, ddi2Next = ddi1; ddi2 != rend(); ddi2 = ddi2Next) {
+                  ddi2Next = std::next(ddi2);
+                  // Combine and remove articulations if present in map
+                  if (false) {
+                        ddi1Next = decltype(ddi1){ erase(std::next(ddi1).base()) };
+                        ddi2Next = decltype(ddi2){ erase(std::next(ddi2).base()) };
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -2698,13 +2729,12 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
       else if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
             TextBase* t = 0;
-            if (_tpoSound > 0.1) {
+            if (_tpoSound > 0.1 || isLikelyTempoText()) {
                   // to prevent duplicates, only create a TempoText if none is present yet
                   if (hasTempoTextAtTick(_score->tempomap(), tick.ticks())) {
                         _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
                         }
                   else {
-                        _tpoSound /= 60;
                         t = new TempoText(_score);
                         QString rawWordsText = _wordsText;
                         rawWordsText.remove(QRegularExpression("(<.*?>)"));
@@ -2714,29 +2744,30 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         QString sep = _metroText != "" && _wordsText != "" && rawWordsText.at(rawWordsText.size() - 1) != ' ' ? " " : "";
 #endif
                         t->setXmlText(_wordsText + sep + _metroText);
-                        ((TempoText*) t)->setTempo(_tpoSound);
-                        ((TempoText*) t)->setFollowText(true);
-                        _score->setTempo(tick, _tpoSound);
-                        }
-                  }
-            else {
-                  if (_wordsText != "" || _metroText != "") {
-                        t = new StaffText(_score);
-                        t->setXmlText(_wordsText + _metroText);
-                        isExpressionText = _wordsText.contains("<i>") && _metroText.isEmpty();
-                        }
-                  else {
-                        t = new RehearsalMark(_score);
-                        if (!_rehearsalText.contains("<b>"))
-                              _rehearsalText = "<b></b>" + _rehearsalText;  // explicitly turn bold off
-                        t->setXmlText(_rehearsalText);
-                        if (!_hasDefaultY) {
-                              t->setPlacement(Placement::ABOVE);  // crude way to force placement TODO improve ?
-                              t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+                        if (_tpoSound > 0.1) {
+                              _tpoSound /= 60;
+                              ((TempoText*) t)->setTempo(_tpoSound);
+                              ((TempoText*) t)->setFollowText(true);
+                              _score->setTempo(tick, _tpoSound);
                               }
                         }
                   }
-
+            else if (_wordsText != "" || _metroText != "") {
+                  t = new StaffText(_score);
+                  t->setXmlText(_wordsText + _metroText);
+                  isExpressionText = _wordsText.contains("<i>") && _metroText.isEmpty();
+                  }
+            else {
+                  t = new RehearsalMark(_score);
+                  if (!_rehearsalText.contains("<b>"))
+                        _rehearsalText = "<b></b>" + _rehearsalText;  // explicitly turn bold off
+                  t->setXmlText(_rehearsalText);
+                  if (!_hasDefaultY) {
+                        t->setPlacement(Placement::ABOVE);  // crude way to force placement TODO improve ?
+                        t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+                        }
+                  }
+               
             if (t) {
                   if (_enclosure == "circle") {
                         t->setFrameType(FrameType::CIRCLE);
@@ -3277,6 +3308,59 @@ MusicXMLDelayedDirectionElement* MusicXMLInferredFingering::toDelayedDirection()
       return dd;
       }
 
+//---------------------------------------------------------
+//   convertTextToNotes
+//---------------------------------------------------------
+/**
+ Converts note characters in _wordsText to proper symbols and
+ returns the tempo value of the resulting notes
+ */
+
+double MusicXMLParserDirection::convertTextToNotes()
+      {
+      QRegularExpression notesRegex("(?<note>[yxeqhwW]\\.{0,2})(\\s*=)");
+      QString notesSubstring = notesRegex.match(_wordsText).captured("note");
+
+      QList<QPair<QString, QString>> noteSyms{{"q", QString("<sym>metNoteQuarterUp</sym>")},   // note4_Sym
+                                                {"e", QString("<sym>metNote8thUp</sym>")},       // note8_Sym
+                                                {"h", QString("<sym>metNoteHalfUp</sym>")},      // note2_Sym
+                                                {"y", QString("<sym>metNote32ndUp</sym>")},      // note32_Sym
+                                                {"x", QString("<sym>metNote16thUp</sym>")},      // note16_Sym
+                                                {"w", QString("<sym>metNoteWhole</sym>")},
+                                                {"W", QString("<sym>metNoteDoubleWhole</sym>")}};
+      for (auto noteSym : noteSyms) {
+            if (notesSubstring.contains(noteSym.first)) {
+                  notesSubstring.replace(noteSym.first, noteSym.second);
+                  break;
+                  }
+            }
+      notesSubstring.replace(".", QString("<sym>metAugmentationDot</sym>")); // dot
+      _wordsText.replace(notesRegex, notesSubstring + "\\2");
+
+      double tempoValue = TempoText::findTempoValue(_wordsText);
+      if (!tempoValue) tempoValue = 1.0 / 60.0; // default to quarter note
+      return tempoValue;
+      }
+
+//---------------------------------------------------------
+//   isLikelyTempoText
+//---------------------------------------------------------
+/**
+ Infers if a direction is likely tempo text, possibly changing
+ the _wordsText to the appropriate note symbol and inferring the _tpoSound.
+ */
+
+bool MusicXMLParserDirection::isLikelyTempoText()
+      {
+      if (_tpoSound < 0.1 && _wordsText.contains(QRegularExpression("[yxeqhwW.]+\\s*=\\s*\\d+"))) {
+            QRegularExpression tempoValRegex("=\\s*(?<tempo>\\d+)");
+            double tempoVal = tempoValRegex.match(_wordsText).captured("tempo").toDouble();
+            double noteVal = convertTextToNotes() * 60.0;
+            _tpoSound = tempoVal / noteVal;
+            return true;
+            }
+      return false;
+      }
 
 //---------------------------------------------------------
 //   handleRepeats
@@ -6897,7 +6981,6 @@ bool MusicXMLParserNotations::skipCombine(const Notation& n1, const Notation& n2
 //---------------------------------------------------------
 //   combineArticulations
 //---------------------------------------------------------
-
 /**
  Combine any eligible articulations.
  i.e. accent + staccato = staccato accent
