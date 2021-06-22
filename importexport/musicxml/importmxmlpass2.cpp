@@ -2745,7 +2745,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
       else if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
             TextBase* t = 0;
-            if (_tpoSound > 0.1 || isLikelyTempoText()) {
+            if (_tpoSound > 0.1 || attemptTempoTextCoercion()) {
                   // to prevent duplicates, only create a TempoText if none is present yet
                   if (hasTempoTextAtTick(_score->tempomap(), tick.ticks())) {
                         _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
@@ -2763,9 +2763,12 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         if (_tpoSound > 0.1) {
                               _tpoSound /= 60;
                               ((TempoText*) t)->setTempo(_tpoSound);
-                              ((TempoText*) t)->setFollowText(true);
                               _score->setTempo(tick, _tpoSound);
                               }
+                        else {
+                              ((TempoText*) t)->setTempo(_score->tempo(tick)); // Maintain tempo (somewhat hacky)
+                              }
+                        ((TempoText*) t)->setFollowText(true);
                         }
                   }
             else if (_wordsText != "" || _metroText != "") {
@@ -3359,22 +3362,27 @@ double MusicXMLParserDirection::convertTextToNotes()
       }
 
 //---------------------------------------------------------
-//   isLikelyTempoText
+//   attemptTempoTextCoercion
 //---------------------------------------------------------
 /**
  Infers if a direction is likely tempo text, possibly changing
  the _wordsText to the appropriate note symbol and inferring the _tpoSound.
  */
 
-bool MusicXMLParserDirection::isLikelyTempoText()
+bool MusicXMLParserDirection::attemptTempoTextCoercion()
       {
-      if (_tpoSound < 0.1 && _wordsText.contains(QRegularExpression("[yxeqhwW.]+\\s*=\\s*\\d+"))) {
+      QList<QString> tempoWords{"rit", "rall", "accel", "tempo", "allegr", "poco", "molto", "piu", "meno", "mosso", "rubato"};
+      if (_wordsText.contains(QRegularExpression("[yxeqhwW.]+\\s*=\\s*\\d+"))) {
             QRegularExpression tempoValRegex("=\\s*(?<tempo>\\d+)");
             double tempoVal = tempoValRegex.match(_wordsText).captured("tempo").toDouble();
             double noteVal = convertTextToNotes() * 60.0;
             _tpoSound = tempoVal / noteVal;
             return true;
             }
+      else if (placement() == "above" && _wordsText.contains("<b>"))
+            for (auto tempoWord : tempoWords)
+                  if (_wordsText.contains(tempoWord, Qt::CaseInsensitive))
+                        return true;
       return false;
       }
 
