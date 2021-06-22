@@ -67,10 +67,12 @@ IInteractive::Result Interactive::question(const std::string& title, const Text&
 
 IInteractive::ButtonData Interactive::buttonData(Button b) const
 {
+    constexpr bool accent = true;
+
     switch (b) {
     case IInteractive::Button::NoButton:    return ButtonData(int(b), "");
     case IInteractive::Button::Ok:          return ButtonData(int(b), trc("ui", "OK"));
-    case IInteractive::Button::Save:        return ButtonData(int(b), trc("ui", "Save"));
+    case IInteractive::Button::Save:        return ButtonData(int(b), trc("ui", "Save"), accent);
     case IInteractive::Button::SaveAll:     return ButtonData(int(b), trc("ui", "Save All"));
     case IInteractive::Button::DontSave:    return ButtonData(int(b), trc("ui", "Don't save"));
     case IInteractive::Button::Open:        return ButtonData(int(b), trc("ui", "Open"));
