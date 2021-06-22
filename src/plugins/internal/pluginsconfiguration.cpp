@@ -52,7 +52,7 @@ mu::io::paths PluginsConfiguration::availablePluginsPaths() const
 {
     io::paths result;
 
-    result.push_back(globalConfiguration()->userDataPath() + PLUGINS_DIR);
+    result.push_back(globalConfiguration()->userAppDataPath() + PLUGINS_DIR);
 
     io::path defaultPluginsPath  = this->defaultPluginsPath();
     result.push_back(defaultPluginsPath);

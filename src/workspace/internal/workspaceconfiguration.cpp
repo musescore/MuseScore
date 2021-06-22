@@ -55,7 +55,7 @@ io::paths WorkspaceConfiguration::workspacePaths() const
 
 io::path WorkspaceConfiguration::userWorkspacesDirPath() const
 {
-    return globalConfiguration()->userDataPath() + "/workspaces";
+    return globalConfiguration()->userAppDataPath() + "/workspaces";
 }
 
 io::path WorkspaceConfiguration::userWorkspacePath(const std::string& workspaceName) const

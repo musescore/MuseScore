@@ -176,7 +176,7 @@ void NotationConfiguration::init()
     fileSystem()->makePath(stylesPath().val);
 
     // libmscore
-    preferences().setBackupDirPath(globalConfiguration()->backupPath().toQString());
+    preferences().setBackupDirPath(globalConfiguration()->userBackupPath().toQString());
     preferences().setDefaultStyleFilePath(defaultStyleFilePath().toQString());
 
     Ms::MScore::warnPitchRange = colorNotesOusideOfUsablePitchRange();

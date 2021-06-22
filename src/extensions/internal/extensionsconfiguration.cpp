@@ -269,5 +269,5 @@ io::path ExtensionsConfiguration::extensionTemplatesPath(const QString& extensio
 
 io::path ExtensionsConfiguration::extensionsDataPath() const
 {
-    return globalConfiguration()->userDataPath() + EXTENSIONS_DIR;
+    return globalConfiguration()->userAppDataPath() + EXTENSIONS_DIR;
 }

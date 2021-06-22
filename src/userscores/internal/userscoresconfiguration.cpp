@@ -144,7 +144,7 @@ io::paths UserScoresConfiguration::availableTemplatesPaths() const
 {
     io::paths dirs;
 
-    dirs.push_back(globalConfiguration()->userDataPath().toStdString() + TEMPLATES_PATH);
+    dirs.push_back(globalConfiguration()->userAppDataPath().toStdString() + TEMPLATES_PATH);
 
     io::path defaultTemplatesPath = this->defaultTemplatesPath();
     dirs.push_back(defaultTemplatesPath);
