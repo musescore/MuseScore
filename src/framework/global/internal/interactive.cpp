@@ -131,7 +131,7 @@ IInteractive::Result Interactive::error(const std::string& title, const Text& te
 
 mu::io::path Interactive::selectOpeningFile(const QString& title, const io::path& dir, const QString& filter)
 {
-    QString path = QFileDialog::getOpenFileName(mainWindow()->qMainWindow(), title, dir.toQString(), filter);
+    QString path = QFileDialog::getOpenFileName(nullptr, title, dir.toQString(), filter);
     return path;
 }
 
@@ -139,13 +139,13 @@ io::path Interactive::selectSavingFile(const QString& title, const io::path& dir
 {
     QFileDialog::Options options;
     options.setFlag(QFileDialog::DontConfirmOverwrite, !confirmOverwrite);
-    QString path = QFileDialog::getSaveFileName(mainWindow()->qMainWindow(), title, dir.toQString(), filter, nullptr, options);
+    QString path = QFileDialog::getSaveFileName(nullptr, title, dir.toQString(), filter, nullptr, options);
     return path;
 }
 
 io::path Interactive::selectDirectory(const QString& title, const io::path& dir)
 {
-    QString path = QFileDialog::getExistingDirectory(mainWindow()->qMainWindow(), title, dir.toQString());
+    QString path = QFileDialog::getExistingDirectory(nullptr, title, dir.toQString());
     return path;
 }
 

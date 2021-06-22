@@ -35,11 +35,6 @@ MainWindowProvider::MainWindowProvider(QObject* parent)
 {
 }
 
-QMainWindow* MainWindowProvider::qMainWindow() const
-{
-    return nullptr;
-}
-
 QWindow* MainWindowProvider::qWindow() const
 {
     return m_window;
