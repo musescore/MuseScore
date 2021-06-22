@@ -21,7 +21,9 @@
  */
 
 #include "dockframemodel.h"
+
 #include <QQuickItem>
+#include <QApplication>
 
 #include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
 
@@ -67,7 +69,7 @@ void DockFrameModel::listenChangesInFrame()
         return;
     }
 
-    connect(frame, &KDDockWidgets::Frame::numDockWidgetsChanged, [this, frame]() {
+    auto numDocksChangedCon = connect(frame, &KDDockWidgets::Frame::numDockWidgetsChanged, [this, frame]() {
         auto currentDock = frame->currentDockWidget();
         auto allDocks = frame->dockWidgets();
 
@@ -87,8 +89,13 @@ void DockFrameModel::listenChangesInFrame()
         updateNavigationSection();
     });
 
-    connect(frame, &KDDockWidgets::Frame::currentDockWidgetChanged, [this]() {
+    auto currentDockWidgetChangedCon = connect(frame, &KDDockWidgets::Frame::currentDockWidgetChanged, [this]() {
         updateNavigationSection();
+    });
+
+    connect(qApp, &QApplication::aboutToQuit, [numDocksChangedCon, currentDockWidgetChangedCon]() {
+        disconnect(numDocksChangedCon);
+        disconnect(currentDockWidgetChangedCon);
     });
 }
 
