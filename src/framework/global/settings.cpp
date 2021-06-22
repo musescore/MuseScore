@@ -97,6 +97,7 @@ void Settings::reset(bool keepDefaultSettings)
 
     if (!keepDefaultSettings) {
         QDir(dataPath()).removeRecursively();
+        QDir().mkpath(dataPath());
     }
 
     for (auto it = m_items.begin(); it != m_items.end(); ++it) {
