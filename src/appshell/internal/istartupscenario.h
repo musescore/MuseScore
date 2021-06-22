@@ -33,7 +33,7 @@ class IStartupScenario : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IStartupScenario() = default;
 
-    virtual void setStartupScorePaths(const io::paths& paths) = 0;
+    virtual void setStartupScorePath(const io::path& path) = 0;
     virtual void run() = 0;
 };
 }

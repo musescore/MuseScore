@@ -66,6 +66,8 @@ private:
     void newScore();
     void closeScore();
 
+    bool checkCanIgnoreError(const Ret& ret, const io::path& filePath);
+
     void saveScore();
     void saveScoreAs();
     void saveScoreCopy();
