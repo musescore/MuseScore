@@ -143,6 +143,8 @@ public:
     void addTupletToSelectedChordRests(const TupletOptions& options) override;
     void addBeamToSelectedChordRests(BeamMode mode) override;
 
+    void increaseDecreaseDuration(int steps, bool stepByDots) override;
+
     void toggleLayoutBreak(LayoutBreakType breakType) override;
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
     bool transpose(const TransposeOptions& options) override;

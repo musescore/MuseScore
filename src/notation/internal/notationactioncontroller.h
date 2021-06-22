@@ -89,6 +89,8 @@ private:
     void moveChord(MoveDirection direction);
     void moveText(INotationInteractionPtr interaction, const actions::ActionCode& actionCode);
 
+    void increaseDecreaseDuration(int steps, bool stepByDots);
+
     void swapVoices(int voiceIndex1, int voiceIndex2);
     void changeVoice(int voiceIndex);
 

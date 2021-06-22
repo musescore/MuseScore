@@ -541,7 +541,6 @@ private:
     void removeChordRest(ChordRest* cr, bool clearSegment);
     void cmdMoveRest(Rest*, Direction);
     void cmdMoveLyrics(Lyrics*, Direction);
-    void cmdIncDecDuration(int nSteps, bool stepDotted = false);
 
     void createMMRest(Measure*, Measure*, const Fraction&);
 
@@ -669,6 +668,7 @@ public:
     void cmdHalfDuration() { cmdIncDecDuration(1, false); }
     void cmdIncDurationDotted() { cmdIncDecDuration(-1, true); }
     void cmdDecDurationDotted() { cmdIncDecDuration(1, true); }
+    void cmdIncDecDuration(int nSteps, bool stepDotted = false);
     void cmdToggleLayoutBreak(LayoutBreak::Type);
     void cmdAddMeasureRepeat(Measure*, int numMeasures, int staffIdx);
     bool makeMeasureRepeatGroup(Measure*, int numMeasures, int staffIdx);
