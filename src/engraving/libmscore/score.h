@@ -562,7 +562,6 @@ private:
     void selectAdd(Element* e);
     void selectRange(Element* e, int staffIdx);
 
-    void cmdAddFret(int fret);
     void cmdToggleVisible();
 
     void putNote(const Position&, bool replace);
@@ -651,6 +650,7 @@ public:
     void cmdAddBracket();
     void cmdAddParentheses();
     void cmdAddBraces();
+    void cmdAddFret(int fret);
     void cmdSetBeamMode(Beam::Mode);
     void cmdRemovePart(Part*);
     void cmdAddTie(bool addToChord = false);

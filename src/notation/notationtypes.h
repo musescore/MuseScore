@@ -487,6 +487,8 @@ enum class BracketsType
 static constexpr int MIN_NOTES_INTERVAL = -9;
 static constexpr int MAX_NOTES_INTERVAL = 9;
 
+static constexpr int MAX_FRET = 14;
+
 inline bool isNotesIntervalValid(int interval)
 {
     return interval >= MIN_NOTES_INTERVAL && interval <= MAX_NOTES_INTERVAL
@@ -496,6 +498,11 @@ inline bool isNotesIntervalValid(int interval)
 inline bool isVoiceIndexValid(int voiceIndex)
 {
     return 0 <= voiceIndex && voiceIndex < VOICES;
+}
+
+inline bool isFretIndexValid(int fretIndex)
+{
+    return 0 <= fretIndex && fretIndex < MAX_FRET;
 }
 }
 

@@ -281,6 +281,10 @@ void NotationActionController::init()
         dispatcher()->reg(this, "voice-" + std::to_string(i + 1), [this, i]() { changeVoice(i); });
     }
 
+    for (int i = 0; i < MAX_FRET; ++i) {
+        dispatcher()->reg(this, "fret-" + std::to_string(i), [this, i]() { addFret(i); });
+    }
+
     // listen on state changes
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         auto notation = globalContext()->currentNotation();
@@ -921,6 +925,16 @@ void NotationActionController::addInterval(int interval)
     }
 
     interaction->addIntervalToSelectedNotes(interval);
+}
+
+void NotationActionController::addFret(int fretIndex)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->addFret(fretIndex);
 }
 
 void NotationActionController::undo()

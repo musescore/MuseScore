@@ -148,6 +148,7 @@ public:
     bool transpose(const TransposeOptions& options) override;
     void swapVoices(int voiceIndex1, int voiceIndex2) override;
     void addIntervalToSelectedNotes(int interval) override;
+    void addFret(int fretIndex) override;
     void changeSelectedNotesVoice(int voiceIndex) override;
     void addAnchoredLineToSelectedNotes() override;
 
