@@ -430,8 +430,13 @@ public:
                                     QString placement, Measure* measure, Fraction tick) :
                                      _totalY(totalY),  _element(element), _track(track), _placement(placement),
                                       _measure(measure), _tick(tick) {}
-      void addElem();
+      
       qreal totalY() const { return _totalY; }
+      Element* element() { return _element; }
+      Fraction tick() const { return _tick; }
+      
+      void addElem();
+      bool isTempoOrphanCandidate() const;
 
 private:
       qreal _totalY;
