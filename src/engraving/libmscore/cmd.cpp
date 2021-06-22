@@ -4483,21 +4483,6 @@ void Score::cmd(const QString& cmd, EditData& ed)
     // (It is never called)
 
     static const std::vector<ScoreCmd> cmdList {
-        { "fret-0",                     [](Score* cs, EditData&) { cs->cmdAddFret(0); } },
-        { "fret-1",                     [](Score* cs, EditData&) { cs->cmdAddFret(1); } },
-        { "fret-2",                     [](Score* cs, EditData&) { cs->cmdAddFret(2); } },
-        { "fret-3",                     [](Score* cs, EditData&) { cs->cmdAddFret(3); } },
-        { "fret-4",                     [](Score* cs, EditData&) { cs->cmdAddFret(4); } },
-        { "fret-5",                     [](Score* cs, EditData&) { cs->cmdAddFret(5); } },
-        { "fret-6",                     [](Score* cs, EditData&) { cs->cmdAddFret(6); } },
-        { "fret-7",                     [](Score* cs, EditData&) { cs->cmdAddFret(7); } },
-        { "fret-8",                     [](Score* cs, EditData&) { cs->cmdAddFret(8); } },
-        { "fret-9",                     [](Score* cs, EditData&) { cs->cmdAddFret(9); } },
-        { "fret-10",                    [](Score* cs, EditData&) { cs->cmdAddFret(10); } },
-        { "fret-11",                    [](Score* cs, EditData&) { cs->cmdAddFret(11); } },
-        { "fret-12",                    [](Score* cs, EditData&) { cs->cmdAddFret(12); } },
-        { "fret-13",                    [](Score* cs, EditData&) { cs->cmdAddFret(13); } },
-        { "fret-14",                    [](Score* cs, EditData&) { cs->cmdAddFret(14); } },
         { "toggle-visible",             [](Score* cs, EditData&) { cs->cmdToggleVisible(); } },
         { "mirror-note",                [](Score* cs, EditData&) { cs->cmdMirrorNoteHead(); } },
         { "double-duration",            [](Score* cs, EditData&) { cs->cmdDoubleDuration(); } },
