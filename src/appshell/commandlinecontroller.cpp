@@ -50,6 +50,7 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addOption(QCommandLineOption({ "o", "export-to" }, "Export to 'file'. Format depends on file's extension", "file"));
     m_parser.addOption(QCommandLineOption({ "F", "factory-settings" }, "Use factory settings"));
     m_parser.addOption(QCommandLineOption({ "R", "revert-settings" }, "Revert to factory settings, but keep default preferences"));
+    m_parser.addOption(QCommandLineOption({ "M", "midi-operations" }, "Specify MIDI import operations file", "file"));
     m_parser.addOption(QCommandLineOption({ "P", "export-score-parts" }, "Use with '-o <file>.pdf', export score and parts"));
     m_parser.addOption(QCommandLineOption({ "f", "force" },
                                           "Use with '-o <file>', ignore warnings reg. score being corrupted or from wrong version"));
@@ -118,6 +119,10 @@ void CommandLineController::apply()
         } else {
             LOGE() << "Option: -T not recognized trim value: " << m_parser.value("T");
         }
+    }
+
+    if (m_parser.isSet("M")) {
+        midiImportExportConfiguration()->setMidiImportOperationsFile(m_parser.value("M").toStdString());
     }
 
     // Converter mode
