@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
+#include "actions/iactionsdispatcher.h"
 
 namespace mu::notation {
 class NotationSwitchListModel : public QAbstractListModel, public async::Asyncable
@@ -35,6 +36,7 @@ class NotationSwitchListModel : public QAbstractListModel, public async::Asyncab
     Q_OBJECT
 
     INJECT(notation, context::IGlobalContext, context)
+    INJECT(notation, actions::IActionsDispatcher, dispatcher)
 
 public:
     explicit NotationSwitchListModel(QObject* parent = nullptr);
