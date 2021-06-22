@@ -82,13 +82,13 @@ public:
     Val value(const Key& key) const;
     Val defaultValue(const Key& key) const;
 
-    void setValue(const Key& key, const Val& value);
+    void setValue(const Key& key, const Val& value, bool notifyToOtherInstances = true);
     void setDefaultValue(const Key& key, const Val& value);
     void setCanBeMannualyEdited(const Settings::Key& key, bool canBeMannualyEdited);
 
-    void beginTransaction();
-    void commitTransaction();
-    void rollbackTransaction();
+    void beginTransaction(bool notifyToOtherInstances = true);
+    void commitTransaction(bool notifyToOtherInstances = true);
+    void rollbackTransaction(bool notifyToOtherInstances = true);
 
     async::Channel<Val> valueChanged(const Key& key) const;
 
