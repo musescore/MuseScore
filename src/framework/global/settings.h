@@ -27,6 +27,7 @@
 
 #include "val.h"
 #include "async/channel.h"
+#include "io/path.h"
 
 #include "modularity/ioc.h"
 #include "multiinstances/imultiinstancesprovider.h"
@@ -90,6 +91,8 @@ public:
     void rollbackTransaction();
 
     async::Channel<Val> valueChanged(const Key& key) const;
+
+    io::path filePath() const;
 
 private:
     Settings();

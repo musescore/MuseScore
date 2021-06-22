@@ -40,6 +40,8 @@
 #include "ui/iuiactionsregister.h"
 #include "instrumentstypes.h"
 
+#include "diagnostics/idiagnosticspathsregister.h"
+
 using namespace mu::instruments;
 using namespace mu::framework;
 using namespace mu::ui;
@@ -103,4 +105,27 @@ void InstrumentsModule::onInit(const IApplication::RunMode&)
 {
     s_configuration->init();
     m_instrumentsRepository->init();
+
+    auto pr = framework::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    if (pr) {
+        io::paths instrPaths = s_configuration->instrumentListPaths();
+        for (const io::path& p : instrPaths) {
+            pr->reg("instruments", p);
+        }
+
+        io::paths uinstrPaths = s_configuration->userInstrumentListPaths();
+        for (const io::path& p : uinstrPaths) {
+            pr->reg("user instruments", p);
+        }
+
+        io::paths scoreOrderPaths = s_configuration->scoreOrderListPaths();
+        for (const io::path& p : scoreOrderPaths) {
+            pr->reg("scoreOrder", p);
+        }
+
+        io::paths uscoreOrderPaths = s_configuration->userScoreOrderListPaths();
+        for (const io::path& p : uscoreOrderPaths) {
+            pr->reg("user scoreOrder", p);
+        }
+    }
 }

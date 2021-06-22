@@ -44,6 +44,8 @@
 #include "view/workspacelistmodel.h"
 #include "view/newworkspacemodel.h"
 
+#include "diagnostics/idiagnosticspathsregister.h"
+
 using namespace mu::workspace;
 using namespace mu::framework;
 using namespace mu::ui;
@@ -117,6 +119,14 @@ void WorkspaceModule::onInit(const IApplication::RunMode& mode)
     s_manager->init();
     s_settings->init();
     s_actionController->init();
+
+    auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    if (pr) {
+        io::paths paths = s_configuration->workspacePaths();
+        for (const io::path& p : paths) {
+            pr->reg("workspace", p);
+        }
+    }
 }
 
 void WorkspaceModule::onDeinit()
