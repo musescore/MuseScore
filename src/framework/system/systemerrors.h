@@ -32,10 +32,12 @@ enum class Err {
     UnknownError    = int(Ret::Code::SystemFirst),
 
     FSNotExist,
+    FSIsExist,
     FSRemoveError,
     FSReadError,
     FSWriteError,
-    FSMakingError
+    FSMakingError,
+    FSCopyError
 };
 
 inline Ret make_ret(Err e)
@@ -47,10 +49,12 @@ inline Ret make_ret(Err e)
     case Err::NoError: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
     case Err::FSNotExist: return Ret(retCode, trc("system", "The file does not exist"));
+    case Err::FSIsExist: return Ret(retCode, trc("system", "The file is exist"));
     case Err::FSRemoveError: return Ret(retCode, trc("system", "The file could not be removed"));
     case Err::FSReadError: return Ret(retCode, trc("system", "An error occurred when reading from the file"));
     case Err::FSWriteError: return Ret(retCode, trc("system", "An error occurred when writing to the file"));
     case Err::FSMakingError: return Ret(retCode, trc("system", "An error occurred when making a path"));
+    case Err::FSCopyError: return Ret(retCode, trc("system", "An error occurred when coping the file"));
     }
 
     return Ret(static_cast<int>(e));
