@@ -101,6 +101,7 @@ private:
     void chordTie();
     void addSlur();
     void addInterval(int interval);
+    void addFret(int fretIndex);
 
     void undo();
     void redo();

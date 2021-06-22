@@ -749,6 +749,81 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Eighth Rest"),
              QT_TRANSLATE_NOOP("action", "Note input: Eighth rest")
              ),
+    UiAction("fret-0",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Fret 0 (TAB)"),
+             QT_TRANSLATE_NOOP("action", "Add fret 0 on current string (TAB only)")
+             ),
+    UiAction("fret-1",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Fret 1 (TAB)"),
+             QT_TRANSLATE_NOOP("action", "Add fret 1 on current string (TAB only)")
+             ),
+    UiAction("fret-2",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Fret 2 (TAB)"),
+             QT_TRANSLATE_NOOP("action", "Add fret 2 on current string (TAB only)")
+             ),
+    UiAction("fret-3",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Fret 3 (TAB)"),
+             QT_TRANSLATE_NOOP("action", "Add fret 3 on current string (TAB only)")
+             ),
+    UiAction("fret-4",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Fret 4 (TAB)"),
+             QT_TRANSLATE_NOOP("action", "Add fret 4 on current string (TAB only)")
+             ),
+    UiAction("fret-5",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Fret 5 (TAB)"),
+             QT_TRANSLATE_NOOP("action", "Add fret 5 on current string (TAB only)")
+             ),
+    UiAction("fret-6",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Fret 6 (TAB)"),
+             QT_TRANSLATE_NOOP("action", "Add fret 6 on current string (TAB only)")
+             ),
+    UiAction("fret-7",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Fret 7 (TAB)"),
+             QT_TRANSLATE_NOOP("action", "Add fret 7 on current string (TAB only)")
+             ),
+    UiAction("fret-8",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Fret 8 (TAB)"),
+             QT_TRANSLATE_NOOP("action", "Add fret 8 on current string (TAB only)")
+             ),
+    UiAction("fret-9",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Fret 9 (TAB)"),
+             QT_TRANSLATE_NOOP("action", "Add fret 9 on current string (TAB only)")
+             ),
+    UiAction("fret-10",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Fret 10 (TAB)"),
+             QT_TRANSLATE_NOOP("action", "Add fret 10 on current string (TAB only)")
+             ),
+    UiAction("fret-11",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Fret 11 (TAB)"),
+             QT_TRANSLATE_NOOP("action", "Add fret 11 on current string (TAB only)")
+             ),
+    UiAction("fret-12",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Fret 12 (TAB)"),
+             QT_TRANSLATE_NOOP("action", "Add fret 12 on current string (TAB only)")
+             ),
+    UiAction("fret-13",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Fret 13 (TAB)"),
+             QT_TRANSLATE_NOOP("action", "Add fret 13 on current string (TAB only)")
+             ),
+    UiAction("fret-14",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Fret 14 (TAB)"),
+             QT_TRANSLATE_NOOP("action", "Add fret 14 on current string (TAB only)")
+             ),
     UiAction("add-8va",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Ottava 8va alta"),

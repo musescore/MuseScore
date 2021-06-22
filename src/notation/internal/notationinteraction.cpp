@@ -2554,6 +2554,15 @@ void NotationInteraction::addIntervalToSelectedNotes(int interval)
     notifyAboutSelectionChanged();
 }
 
+void NotationInteraction::addFret(int fretIndex)
+{
+    startEdit();
+    score()->cmdAddFret(fretIndex);
+    apply();
+
+    notifyAboutSelectionChanged();
+}
+
 void NotationInteraction::changeSelectedNotesVoice(int voiceIndex)
 {
     if (selection()->isNone()) {
