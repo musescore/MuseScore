@@ -136,6 +136,26 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Up Octave"),
              QT_TRANSLATE_NOOP("action", "Pitch up by an octave or move text or articulation up")
              ),
+    UiAction("double-duration",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Double Duration"),
+             QT_TRANSLATE_NOOP("action", "Double duration")
+             ),
+    UiAction("half-duration",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Half Duration"),
+             QT_TRANSLATE_NOOP("action", "Half duration")
+             ),
+    UiAction("inc-duration-dotted",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Increase Duration Dotted"),
+             QT_TRANSLATE_NOOP("action", "Increase duration dotted")
+             ),
+    UiAction("dec-duration-dotted",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Decrease Duration Dotted"),
+             QT_TRANSLATE_NOOP("action", "Decrease duration dotted")
+             ),
     UiAction("cut",
              mu::context::UiCtxNotationOpenedOrTextEditing,
              QT_TRANSLATE_NOOP("action", "Cut")

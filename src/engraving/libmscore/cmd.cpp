@@ -4485,10 +4485,6 @@ void Score::cmd(const QString& cmd, EditData& ed)
     static const std::vector<ScoreCmd> cmdList {
         { "toggle-visible",             [](Score* cs, EditData&) { cs->cmdToggleVisible(); } },
         { "mirror-note",                [](Score* cs, EditData&) { cs->cmdMirrorNoteHead(); } },
-        { "double-duration",            [](Score* cs, EditData&) { cs->cmdDoubleDuration(); } },
-        { "half-duration",              [](Score* cs, EditData&) { cs->cmdHalfDuration(); } },
-        { "inc-duration-dotted",        [](Score* cs, EditData&) { cs->cmdIncDurationDotted(); } },
-        { "dec-duration-dotted",        [](Score* cs, EditData&) { cs->cmdDecDurationDotted(); } },
         { "add-trill",                  [](Score* cs, EditData&) { cs->addArticulation(SymId::ornamentTrill); } },
         { "add-up-bow",                 [](Score* cs, EditData&) { cs->addArticulation(SymId::stringsUpBow); } },
         { "add-down-bow",               [](Score* cs, EditData&) { cs->addArticulation(SymId::stringsDownBow); } },
