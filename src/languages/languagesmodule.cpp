@@ -81,7 +81,7 @@ void LanguagesModule::onInit(const framework::IApplication::RunMode& mode)
 
     auto pr = framework::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        pr->reg("languagesSharePath", m_languagesConfiguration->languagesSharePath());
-        pr->reg("languagesDataPath", m_languagesConfiguration->languagesDataPath());
+        pr->reg("languagesAppDataPath", m_languagesConfiguration->languagesAppDataPath());
+        pr->reg("languagesUserAppDataPath", m_languagesConfiguration->languagesUserAppDataPath());
     }
 }
