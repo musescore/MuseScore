@@ -143,20 +143,20 @@ Item {
             FlatButton {
                 Layout.preferredWidth: privateProperties.buttonWidth
 
-                text: qsTrc("shortcuts", "Load...")
+                text: qsTrc("shortcuts", "Import")
 
                 onClicked: {
-                    shortcutsModel.loadShortcutsFromFile()
+                    shortcutsModel.importShortcutsFromFile()
                 }
             }
 
             FlatButton {
                 Layout.preferredWidth: privateProperties.buttonWidth
 
-                text: qsTrc("shortcuts", "Save")
+                text: qsTrc("shortcuts", "Export")
 
                 onClicked: {
-                    shortcutsModel.saveShortcutsToFile()
+                    shortcutsModel.exportShortcutsToFile()
                 }
             }
 

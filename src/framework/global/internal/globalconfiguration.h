@@ -39,6 +39,8 @@ public:
     io::path userBackupPath() const override;
     io::path userDataPath() const override;
 
+    io::path homePath() const override;
+
     bool useFactorySettings() const override;
     bool enableExperimental() const override;
 
