@@ -185,7 +185,6 @@ class MxmlLogger;
 class MusicXMLDelayedDirectionElement;
 class MusicXMLInferredFingering;
 
-using DelayedDirectionsList = QList<MusicXMLDelayedDirectionElement*>;
 using InferredFingeringsList = QList<MusicXMLInferredFingering*>;
 using SlurStack = std::array<SlurDesc, MAX_NUMBER_LEVEL>;
 using TrillStack = std::array<Trill*, MAX_NUMBER_LEVEL>;
@@ -194,6 +193,15 @@ using OttavasStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using HairpinsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerSet = std::set<Spanner*>;
+
+//---------------------------------------------------------
+//   DelayedDirectionsList
+//---------------------------------------------------------
+
+class DelayedDirectionsList : public QList<MusicXMLDelayedDirectionElement*> {
+public:
+      void combineTempoText();
+};
 
 //---------------------------------------------------------
 //   MusicXMLParserNotations
@@ -403,6 +411,8 @@ private:
       bool isLyricBracket() const;
       void textToDynamic(QString& text) const;
       bool directionToDynamic();
+      bool isLikelyTempoText();
+      double convertTextToNotes();
       void skipLogCurrElem();
       };
 
