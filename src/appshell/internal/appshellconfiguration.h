@@ -28,16 +28,17 @@
 #include "notation/inotationconfiguration.h"
 #include "playback/iplaybackconfiguration.h"
 #include "languages/ilanguagesconfiguration.h"
-#include "global/iworkspacesettings.h"
+#include "ui/iuiconfiguration.h"
+#include "async/asyncable.h"
 
 namespace mu::appshell {
-class AppShellConfiguration : public IAppShellConfiguration
+class AppShellConfiguration : public IAppShellConfiguration, public async::Asyncable
 {
     INJECT(appshell, userscores::IUserScoresConfiguration, userScoresConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(appshell, languages::ILanguagesConfiguration, languagesConfiguration)
-    INJECT(appshell, framework::IWorkspaceSettings, workspaceSettings)
+    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
 
 public:
     void init();

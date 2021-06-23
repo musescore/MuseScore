@@ -38,6 +38,8 @@ public:
     virtual std::string name() const = 0;
     virtual std::string title() const = 0;
 
+    virtual bool isManaged(const std::string& key) const = 0;
+
     virtual RetVal<QByteArray> readRawData(const std::string& name) const = 0;
     virtual Ret writeRawData(const std::string& name, const QByteArray& data) = 0;
 

@@ -68,6 +68,12 @@ std::string Workspace::title() const
     return name();
 }
 
+bool Workspace::isManaged(const std::string& key) const
+{
+    NOT_IMPLEMENTED;
+    return false;
+}
+
 RetVal<QByteArray> Workspace::readRawData(const std::string& name) const
 {
     NOT_IMPLEMENTED;

@@ -44,8 +44,7 @@ static const Settings::Key UI_ICONS_FONT_FAMILY_KEY("ui", "ui/theme/iconsFontFam
 static const Settings::Key UI_MUSICAL_FONT_FAMILY_KEY("ui", "ui/theme/musicalFontFamily");
 static const Settings::Key UI_MUSICAL_FONT_SIZE_KEY("ui", "ui/theme/musicalFontSize");
 
-static const std::string STATES_PATH("ui/states");
-static const std::string WINDOW_GEOMETRY_PATH("ui/geometry/window");
+static const QString WINDOW_GEOMETRY_KEY("window");
 
 static const QMap<ThemeStyleKey, QVariant> LIGHT_THEME_VALUES {
     { BACKGROUND_PRIMARY_COLOR, "#F5F5F6" },
@@ -121,6 +120,8 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_THEME_VALUES {
 
 void UiConfiguration::init()
 {
+    m_uiArrangement.init();
+
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val("Fira Sans"));
     settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(12));
@@ -158,9 +159,10 @@ void UiConfiguration::init()
         m_musicalFontChanged.notify();
     });
 
-    workspaceSettings()->valuesChanged().onNotify(nullptr, [this]() {
-        m_windowGeometryChanged.notify();
-    });
+    //! TODO
+//    workspaceSettings()->valuesChanged().onNotify(nullptr, [this]() {
+//        m_windowGeometryChanged.notify();
+//    });
 
     initThemes();
 }
@@ -296,25 +298,6 @@ void UiConfiguration::writeThemes(const ThemeList& themes)
 
     Val value(jsonDoc.toJson(QJsonDocument::Compact).constData());
     settings()->setValue(UI_THEMES_KEY, value);
-}
-
-mu::Val UiConfiguration::uiArrangmentValue(const std::string& key) const
-{
-    if (workspaceSettings()->isManage(IWorkspaceSettings::Tag::UiArrangement)) {
-        return workspaceSettings()->value({ IWorkspaceSettings::Tag::UiArrangement, key });
-    }
-
-    return settings()->value({ "ui", key });
-}
-
-void UiConfiguration::setUiArrangmentValue(const std::string& key, const mu::Val& value) const
-{
-    if (workspaceSettings()->isManage(IWorkspaceSettings::Tag::UiArrangement)) {
-        workspaceSettings()->setValue({ IWorkspaceSettings::Tag::UiArrangement, key }, value);
-        return;
-    }
-
-    settings()->setValue({ "ui", key }, value);
 }
 
 ThemeList UiConfiguration::themes() const
@@ -501,41 +484,24 @@ float UiConfiguration::physicalDotsPerInch() const
     return screen ? screen->physicalDotsPerInch() : 100;
 }
 
-QByteArray UiConfiguration::pageState(const std::string& pageName) const
+QByteArray UiConfiguration::pageState(const QString& pageName) const
 {
-    TRACEFUNC;
-
-    std::string key = STATES_PATH + "/" + pageName;
-    std::string stateString = uiArrangmentValue(key).toString();
-
-    return stringToByteArray(stateString);
+    return m_uiArrangement.state(pageName);
 }
 
-void UiConfiguration::setPageState(const std::string& pageName, const QByteArray& state)
+void UiConfiguration::setPageState(const QString& pageName, const QByteArray& state)
 {
-    TRACEFUNC;
-    std::string key = STATES_PATH + "/" + pageName;
-    Val value = Val(byteArrayToString(state));
-
-    setUiArrangmentValue(key, value);
+    m_uiArrangement.setState(pageName, state);
 }
 
 QByteArray UiConfiguration::windowGeometry() const
 {
-    TRACEFUNC;
-    std::string key = WINDOW_GEOMETRY_PATH;
-    std::string geometryString = uiArrangmentValue(key).toString();
-
-    return stringToByteArray(geometryString);
+    return m_uiArrangement.state(WINDOW_GEOMETRY_KEY);
 }
 
 void UiConfiguration::setWindowGeometry(const QByteArray& geometry)
 {
-    TRACEFUNC;
-    std::string key = WINDOW_GEOMETRY_PATH;
-    Val value = Val(byteArrayToString(geometry));
-
-    setUiArrangmentValue(key, value);
+    m_uiArrangement.setState(WINDOW_GEOMETRY_KEY, geometry);
 }
 
 Notification UiConfiguration::windowGeometryChanged() const
@@ -548,17 +514,20 @@ void UiConfiguration::applyPlatformStyle(QWindow* window)
     platformTheme()->applyPlatformStyleOnWindowForTheme(window, currentThemeCodeKey());
 }
 
-QByteArray UiConfiguration::stringToByteArray(const std::string& string) const
+bool UiConfiguration::isVisible(const QString& key, bool def) const
 {
-    QString qString = QString::fromStdString(string);
-    QByteArray byteArray64(qString.toUtf8());
-    QByteArray byteArray = QByteArray::fromBase64(byteArray64);
-
-    return byteArray;
+    QString val = m_uiArrangement.value(key);
+    bool ok = false;
+    int valInt = val.toInt(&ok);
+    return ok ? bool(valInt) : def;
 }
 
-std::string UiConfiguration::byteArrayToString(const QByteArray& byteArray) const
+void UiConfiguration::setIsVisible(const QString& key, bool val)
 {
-    QByteArray byteArray64 = byteArray.toBase64();
-    return byteArray64.toStdString();
+    m_uiArrangement.setValue(key, QString::number(val ? 1 : 0));
+}
+
+mu::async::Notification UiConfiguration::isVisibleChanged(const QString& key) const
+{
+    return m_uiArrangement.valueChanged(key);
 }

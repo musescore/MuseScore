@@ -45,8 +45,8 @@ static const std::string MUSICXML_LICENSE_DEED_URL("https://www.w3.org/community
 
 static const std::string UTM_MEDIUM_MENU("menu");
 
-static const Settings::Key NOTATION_NAVIGATOR_VISIBLE_KEY(module_name, "ui/application/startup/showNavigator");
-static const Settings::Key NOTATION_STATUSBAR_VISIBLE_KEY(module_name, "ui/application/showStatusBar");
+static const QString NOTATION_NAVIGATOR_VISIBLE_KEY("showNavigator");
+static const QString NOTATION_STATUSBAR_VISIBLE_KEY("showStatusBar");
 static const Settings::Key SPLASH_SCREEN_VISIBLE_KEY(module_name, "ui/application/startup/showSplashScreen");
 static const Settings::Key TOURS_VISIBLE_KEY(module_name, "ui/application/startup/showTours");
 
@@ -57,20 +57,12 @@ void AppShellConfiguration::init()
 
     settings()->setDefaultValue(CHECK_FOR_UPDATE_KEY, Val(isAppUpdatable()));
 
-    settings()->setDefaultValue(NOTATION_NAVIGATOR_VISIBLE_KEY, Val(false));
-    settings()->valueChanged(NOTATION_NAVIGATOR_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
+    uiConfiguration()->isVisibleChanged(NOTATION_STATUSBAR_VISIBLE_KEY).onNotify(this, [this]() {
+        m_notationStatusBarVisibleChanged.send(isNotationStatusBarVisible().val);
+    });
+
+    uiConfiguration()->isVisibleChanged(NOTATION_NAVIGATOR_VISIBLE_KEY).onNotify(this, [this]() {
         m_notationNavigatorVisibleChanged.send(isNotationNavigatorVisible().val);
-    });
-
-    settings()->setDefaultValue(NOTATION_STATUSBAR_VISIBLE_KEY, Val(true));
-    settings()->setCanBeMannualyEdited(NOTATION_STATUSBAR_VISIBLE_KEY, true);
-    settings()->valueChanged(NOTATION_STATUSBAR_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
-        m_notationStatusBarVisibleChanged.send(isNotationStatusBarVisible().val);
-    });
-
-    IWorkspaceSettings::Key workspaceKey{ IWorkspaceSettings::Tag::UiArrangement, NOTATION_STATUSBAR_VISIBLE_KEY.key };
-    workspaceSettings()->valueChanged(workspaceKey).onReceive(nullptr, [this](const Val&) {
-        m_notationStatusBarVisibleChanged.send(isNotationStatusBarVisible().val);
     });
 }
 
@@ -187,33 +179,27 @@ mu::ValCh<bool> AppShellConfiguration::isNotationStatusBarVisible() const
 {
     ValCh<bool> visible;
     visible.ch = m_notationStatusBarVisibleChanged;
-    visible.val = settings()->value(NOTATION_STATUSBAR_VISIBLE_KEY).toBool();
-
+    visible.val = uiConfiguration()->isVisible(NOTATION_STATUSBAR_VISIBLE_KEY);
     return visible;
 }
 
 void AppShellConfiguration::setIsNotationStatusBarVisible(bool visible) const
 {
-    if (workspaceSettings()->isManage(IWorkspaceSettings::Tag::UiArrangement)) {
-        IWorkspaceSettings::Key workspaceKey{ IWorkspaceSettings::Tag::UiArrangement, NOTATION_STATUSBAR_VISIBLE_KEY.key };
-        workspaceSettings()->setValue(workspaceKey, Val(visible));
-    } else {
-        settings()->setValue(NOTATION_STATUSBAR_VISIBLE_KEY, Val(visible));
-    }
+    uiConfiguration()->setIsVisible(NOTATION_STATUSBAR_VISIBLE_KEY, visible);
 }
 
 mu::ValCh<bool> AppShellConfiguration::isNotationNavigatorVisible() const
 {
     ValCh<bool> visible;
     visible.ch = m_notationNavigatorVisibleChanged;
-    visible.val = settings()->value(NOTATION_NAVIGATOR_VISIBLE_KEY).toBool();
+    visible.val = uiConfiguration()->isVisible(NOTATION_NAVIGATOR_VISIBLE_KEY);
 
     return visible;
 }
 
 void AppShellConfiguration::setIsNotationNavigatorVisible(bool visible) const
 {
-    settings()->setValue(NOTATION_NAVIGATOR_VISIBLE_KEY, Val(visible));
+    uiConfiguration()->setIsVisible(NOTATION_NAVIGATOR_VISIBLE_KEY, visible);
 }
 
 bool AppShellConfiguration::needShowSplashScreen() const
