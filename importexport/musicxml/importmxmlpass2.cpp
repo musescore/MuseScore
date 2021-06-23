@@ -2530,11 +2530,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
       // create text if any text was found
       if (isLikelyCredit(tick)) {
-            Text* t = new Text(_score, Tid::SUBTITLE);
-            t->setLayoutToParentWidth(true);
-            t->setXmlText(_wordsText);
+            Text* t = new Text(_score, Tid::COMPOSER);
+            t->setXmlText(_wordsText.trimmed());
             auto firstMeasure = _score->measures()->first();
             VBox* vbox = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXMLParserPass1::createAndAddVBoxForCreditWords(_score);
+            t->layout();
+            vbox->layout();
+            vbox->setBoxHeight(vbox->boxHeight() + Spatium(t->height()/_score->spatium())/2); // add some height
             vbox->add(t);
             }
       else if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
@@ -2939,7 +2941,7 @@ bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
             && _rehearsalText == ""
             && _metroText == ""
             && _tpoSound < 0.1
-            && _wordsText.contains(QRegularExpression("((Words|Music|Lyrics).*)+by\\s+([A-Z][a-zA-Z'’-]+\\s[A-Z][a-zA-Z'’-]+.*)+"));
+            && _wordsText.contains(QRegularExpression("^\\s*((Words|Music|Lyrics).*)*by\\s+([A-Z][a-zA-Zö'’-]+\\s[A-Z][a-zA-Zös'’-]+.*)+"));
       }
 
 //---------------------------------------------------------
