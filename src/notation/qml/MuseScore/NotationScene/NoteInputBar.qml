@@ -138,6 +138,11 @@ Rectangle {
             Canvas {
                 visible: Boolean(btn.item) && btn.item.isMenuSecondary
 
+                property color fillColor: ui.theme.fontPrimaryColor
+                onFillColorChanged: {
+                    requestPaint()
+                }
+
                 width: 4
                 height: 4
 
@@ -147,7 +152,7 @@ Rectangle {
 
                 onPaint: {
                     const ctx = getContext("2d");
-                    ctx.fillStyle = ui.theme.fontPrimaryColor;
+                    ctx.fillStyle = fillColor;
                     ctx.moveTo(width, 0);
                     ctx.lineTo(width, height);
                     ctx.lineTo(0, height);
