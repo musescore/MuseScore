@@ -70,6 +70,10 @@ private:
 
     RetVal<BatchJob> parseBatchJob(const io::path& batchJobFile) const;
 
+    bool isConvertPageByPage(const std::string& suffix) const;
+    Ret convertPageByPage(notation::INotationWriterPtr writer, notation::INotationPtr notation, const io::path& out) const;
+    Ret convertFullNotation(notation::INotationWriterPtr writer, notation::INotationPtr notation, const io::path& out) const;
+
     Ret convertScorePartsToPdf(notation::IMasterNotationPtr masterNotation, const io::path& out) const;
     Ret convertScorePartsToPngs(notation::IMasterNotationPtr masterNotation, const io::path& out) const;
 };
