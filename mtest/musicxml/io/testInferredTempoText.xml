@@ -95,10 +95,10 @@
         </attributes>
       <direction placement="above">
         <direction-type>
-          <words default-y="22.08" relative-y="10.00">q = 180 (go fast)</words>
+          <words default-y="22.07" relative-y="10.00" font-weight="bold">However ya feel</words>
           </direction-type>
         </direction>
-      <note default-x="80.72" default-y="-5.00">
+      <note default-x="73.72" default-y="-5.00">
         <pitch>
           <step>E</step>
           <octave>5</octave>
@@ -213,6 +213,11 @@
         <stem>down</stem>
         <beam number="1">begin</beam>
         </note>
+      <direction placement="above">
+        <direction-type>
+          <words default-y="22.08" relative-y="10.00">q = 180 ok now go fast</words>
+          </direction-type>
+        </direction>
       <note default-x="34.14" default-y="10.00">
         <pitch>
           <step>A</step>
@@ -728,7 +733,7 @@
         </note>
       <direction placement="above">
         <direction-type>
-          <words default-y="5.60" relative-y="10.00" font-weight="bold">rit.</words>
+          <words relative-y="20.00" font-weight="bold">rit.</words>
           </direction-type>
         </direction>
       <note default-x="63.84" default-y="-10.00">
