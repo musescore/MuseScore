@@ -300,7 +300,6 @@ void Score::endCmd(const bool isCmdFromInspector, bool rollback)
         masterScore()->setPlaylistDirty();      // TODO: flag individual operations
         masterScore()->setAutosaveDirty(true);
     }
-    MuseScoreCore::mscoreCore->endCmd(isCmdFromInspector, rollback);
     cmdState().reset();
 }
 

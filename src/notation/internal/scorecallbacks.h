@@ -23,13 +23,12 @@
 #define MU_NOTATION_SCORECALLBACKS_H
 
 #include "libmscore/mscoreview.h"
-#include "libmscore/musescoreCore.h"
 
 class QRectF;
 class QRect;
 
 namespace mu::notation {
-class ScoreCallbacks : public Ms::MuseScoreView, public Ms::MuseScoreCore
+class ScoreCallbacks : public Ms::MuseScoreView
 {
 public:
     ScoreCallbacks() = default;
