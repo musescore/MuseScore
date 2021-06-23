@@ -22,7 +22,6 @@
 #include "convertercontroller.h"
 
 #include <QFile>
-#include <QBuffer>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -117,9 +116,9 @@ mu::Ret ConverterController::convertScoreParts(const mu::io::path& in, const mu:
     }
 
     if (suffix == PDF_SUFFIX) {
-        ret = convertScorePartsToPdf(masterNotation, out);
+        ret = convertScorePartsToPdf(writer, masterNotation, out);
     } else if (suffix == PNG_SUFFIX) {
-        ret = convertScorePartsToPngs(masterNotation, out);
+        ret = convertScorePartsToPngs(writer, masterNotation, out);
     } else {
         ret = make_ret(Ret::Code::NotSupported);
     }
@@ -217,13 +216,9 @@ mu::Ret ConverterController::convertFullNotation(notation::INotationWriterPtr wr
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret ConverterController::convertScorePartsToPdf(IMasterNotationPtr masterNotation, const io::path& out) const
+mu::Ret ConverterController::convertScorePartsToPdf(notation::INotationWriterPtr writer, IMasterNotationPtr masterNotation,
+                                                    const io::path& out) const
 {
-    auto writer = writers()->writer(PDF_SUFFIX);
-    if (!writer) {
-        return make_ret(Err::ConvertTypeUnknown);
-    }
-
     INotationPtrList notations;
     notations.push_back(masterNotation->notation());
 
@@ -236,7 +231,11 @@ mu::Ret ConverterController::convertScorePartsToPdf(IMasterNotationPtr masterNot
         return make_ret(Err::OutFileFailedOpen);
     }
 
-    Ret ret = writer->writeList(notations, file);
+    INotationWriter::Options options {
+        { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(INotationWriter::UnitType::MULTI_PART)) },
+    };
+
+    Ret ret = writer->writeList(notations, file, options);
     if (!ret) {
         LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
         return make_ret(Err::OutFileFailedWrite);
@@ -247,42 +246,26 @@ mu::Ret ConverterController::convertScorePartsToPdf(IMasterNotationPtr masterNot
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret ConverterController::convertScorePartsToPngs(mu::notation::IMasterNotationPtr masterNotation, const io::path& out) const
+mu::Ret ConverterController::convertScorePartsToPngs(notation::INotationWriterPtr writer, mu::notation::IMasterNotationPtr masterNotation,
+                                                     const io::path& out) const
 {
-    auto writer = writers()->writer(PDF_SUFFIX);
-    if (!writer) {
-        return make_ret(Err::ConvertTypeUnknown);
+    Ret ret = convertPageByPage(writer, masterNotation->notation(), out);
+    if (!ret) {
+        return ret;
     }
 
-    INotationPtrList notations;
-    notations.push_back(masterNotation->notation());
-
+    INotationPtrList excerpts;
     for (IExcerptNotationPtr e : masterNotation->excerpts().val) {
-        notations.push_back(e->notation());
+        excerpts.push_back(e->notation());
     }
 
-    const QString pngFilePathTemplate = io::path(io::basename(out) + "__excerpt__%1.png").toQString();
-    int padding = QString("%1").arg(notations.size()).size();
+    io::path pngFilePath = io::dirpath(out) + "/" + io::path(io::basename(out) + "-excerpt.png");
 
-    for (size_t i = 0; i < notations.size(); i++) {
-        QByteArray data;
-        QBuffer device(&data);
-        device.open(QIODevice::ReadWrite);
-
-        Ret ret = writer->write(notations[i], device);
-        if (!ret) {
-            LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
-            return make_ret(Err::OutFileFailedWrite);
-        }
-
-        io::path filePath = io::dirpath(out) + "/" + pngFilePathTemplate.arg(int(i), padding, 10, QLatin1Char('0')).toStdString();
-
-        ret = fileSystem()->writeToFile(filePath, data);
+    for (size_t i = 0; i < excerpts.size(); i++) {
+        Ret ret = convertPageByPage(writer, excerpts[i], pngFilePath);
         if (!ret) {
             return ret;
         }
-
-        device.close();
     }
 
     return make_ret(Ret::Code::Ok);
