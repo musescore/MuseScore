@@ -27,7 +27,6 @@
 #include "../iconvertercontroller.h"
 
 #include "modularity/ioc.h"
-#include "system/ifilesystem.h"
 #include "notation/inotationcreator.h"
 #include "notation/inotationwritersregister.h"
 
@@ -38,7 +37,6 @@ class ConverterController : public IConverterController
 {
     INJECT(converter, notation::INotationCreator, notationCreator)
     INJECT(converter, notation::INotationWritersRegister, writers)
-    INJECT(converter, system::IFileSystem, fileSystem)
 
 public:
     ConverterController() = default;
@@ -74,8 +72,9 @@ private:
     Ret convertPageByPage(notation::INotationWriterPtr writer, notation::INotationPtr notation, const io::path& out) const;
     Ret convertFullNotation(notation::INotationWriterPtr writer, notation::INotationPtr notation, const io::path& out) const;
 
-    Ret convertScorePartsToPdf(notation::IMasterNotationPtr masterNotation, const io::path& out) const;
-    Ret convertScorePartsToPngs(notation::IMasterNotationPtr masterNotation, const io::path& out) const;
+    Ret convertScorePartsToPdf(notation::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation, const io::path& out) const;
+    Ret convertScorePartsToPngs(notation::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
+                                const io::path& out) const;
 };
 }
 
