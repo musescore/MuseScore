@@ -399,6 +399,7 @@ private:
       void handleRepeats(Measure* measure, const int track, const Fraction tick);
       QString matchRepeat() const;
       bool isLikelyFingering() const;
+      bool isLikelyCredit(const Fraction& tick) const;
       void skipLogCurrElem();
       };
 
