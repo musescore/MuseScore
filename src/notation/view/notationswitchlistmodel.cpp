@@ -167,10 +167,10 @@ void NotationSwitchListModel::closeNotation(int index)
     INotationPtr notation = m_notations[index];
 
     if (context()->currentNotation() == notation) {
-        context()->setCurrentNotation(nullptr);
+        dispatcher()->dispatch("file-close");
+    } else {
+        notation->setOpened(false);
     }
-
-    notation->setOpened(false);
 }
 
 bool NotationSwitchListModel::isIndexValid(int index) const

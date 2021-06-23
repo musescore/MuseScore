@@ -24,7 +24,7 @@
 
 #include <QMetaType>
 #include <QMetaProperty>
-#include <QMainWindow>
+#include <QWindow>
 
 #include "widgetdialog.h"
 
@@ -170,8 +170,6 @@ void InteractiveProvider::fillData(QObject* object, const UriQuery& q) const
             object->setProperty(metaProperty.name(), params[metaProperty.name()]);
         }
     }
-
-    object->setParent(mainWindow()->qMainWindow());
 }
 
 void InteractiveProvider::fillStandatdDialogData(QmlLaunchData* data, const QString& type, const QString& title,
@@ -387,9 +385,14 @@ RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const Q
 
 void InteractiveProvider::closeWidgetDialog(const QVariant& dialogMetaTypeId)
 {
+    const QWindow* window = mainWindow()->qWindow();
+    if (!window) {
+        return;
+    }
+
     int _dialogMetaTypeId = dialogMetaTypeId.toInt();
 
-    for (QObject* object : mainWindow()->qMainWindow()->children()) {
+    for (QObject* object : window->children()) {
         WidgetDialog* dialog = dynamic_cast<WidgetDialog*>(object);
         if (dialog && dialog->metaTypeId() == _dialogMetaTypeId) {
             dialog->close();

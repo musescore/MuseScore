@@ -161,6 +161,8 @@ Rectangle {
                     horizontalAlignment: Text.AlignLeft
                     maximumLineCount: 2
                     wrapMode: Text.WordWrap
+
+                    visible: !isEmpty
                 }
 
                 StyledTextLabel {

@@ -45,6 +45,7 @@ public:
         Ok,
         Save,
         SaveAll,
+        DontSave,
         Open,
         Yes,
         YesToAll,
