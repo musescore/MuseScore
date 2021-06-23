@@ -29,7 +29,7 @@ class DataFormatter
 {
 public:
     static double formatDouble(const double& val, const int decimals = 2);
-    static QString formatTimeSinceCreation(const QDate& creationDate);
+    static QString formatTimeSince(const QDate& creationDate);
 };
 
 #endif // MU_FRAMEWORK_DATAFORMATTER_H
