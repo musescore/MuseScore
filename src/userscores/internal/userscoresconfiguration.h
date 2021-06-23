@@ -65,6 +65,9 @@ public:
     PreferredScoreCreationMode preferredScoreCreationMode() const override;
     void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) override;
 
+    bool needShowWarningAboutUnsavedScore() const override;
+    void setNeedShowWarningAboutUnsavedScore(bool value) override;
+
 private:
     io::path mainTemplatesDirPath() const;
 

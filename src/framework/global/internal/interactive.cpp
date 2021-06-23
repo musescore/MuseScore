@@ -67,11 +67,14 @@ IInteractive::Result Interactive::question(const std::string& title, const Text&
 
 IInteractive::ButtonData Interactive::buttonData(Button b) const
 {
+    constexpr bool accent = true;
+
     switch (b) {
     case IInteractive::Button::NoButton:    return ButtonData(int(b), "");
     case IInteractive::Button::Ok:          return ButtonData(int(b), trc("ui", "OK"));
-    case IInteractive::Button::Save:        return ButtonData(int(b), trc("ui", "Save"));
+    case IInteractive::Button::Save:        return ButtonData(int(b), trc("ui", "Save"), accent);
     case IInteractive::Button::SaveAll:     return ButtonData(int(b), trc("ui", "Save All"));
+    case IInteractive::Button::DontSave:    return ButtonData(int(b), trc("ui", "Don't save"));
     case IInteractive::Button::Open:        return ButtonData(int(b), trc("ui", "Open"));
     case IInteractive::Button::Yes:         return ButtonData(int(b), trc("ui", "Yes"));
     case IInteractive::Button::YesToAll:    return ButtonData(int(b), trc("ui", "Yes to All"));
@@ -128,7 +131,7 @@ IInteractive::Result Interactive::error(const std::string& title, const Text& te
 
 mu::io::path Interactive::selectOpeningFile(const QString& title, const io::path& dir, const QString& filter)
 {
-    QString path = QFileDialog::getOpenFileName(mainWindow()->qMainWindow(), title, dir.toQString(), filter);
+    QString path = QFileDialog::getOpenFileName(nullptr, title, dir.toQString(), filter);
     return path;
 }
 
@@ -136,13 +139,13 @@ io::path Interactive::selectSavingFile(const QString& title, const io::path& dir
 {
     QFileDialog::Options options;
     options.setFlag(QFileDialog::DontConfirmOverwrite, !confirmOverwrite);
-    QString path = QFileDialog::getSaveFileName(mainWindow()->qMainWindow(), title, dir.toQString(), filter, nullptr, options);
+    QString path = QFileDialog::getSaveFileName(nullptr, title, dir.toQString(), filter, nullptr, options);
     return path;
 }
 
 io::path Interactive::selectDirectory(const QString& title, const io::path& dir)
 {
-    QString path = QFileDialog::getExistingDirectory(mainWindow()->qMainWindow(), title, dir.toQString());
+    QString path = QFileDialog::getExistingDirectory(nullptr, title, dir.toQString());
     return path;
 }
 

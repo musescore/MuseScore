@@ -35,6 +35,7 @@ public:
     virtual ~IFileScoreController() = default;
 
     virtual Ret openScore(const io::path& scorePath) = 0;
+    virtual bool closeOpenedScore() = 0;
     virtual bool isScoreOpened(const io::path& scorePath) const = 0;
 };
 }

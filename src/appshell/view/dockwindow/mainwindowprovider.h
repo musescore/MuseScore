@@ -39,7 +39,6 @@ class MainWindowProvider : public QObject, public ui::IMainWindow
 public:
     explicit MainWindowProvider(QObject* parent = nullptr);
 
-    QMainWindow* qMainWindow() const override;
     QWindow* qWindow() const override;
 
     QString filePath() const;
