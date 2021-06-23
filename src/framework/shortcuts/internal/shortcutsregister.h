@@ -27,6 +27,7 @@
 #include "ishortcutsconfiguration.h"
 #include "async/asyncable.h"
 #include "system/ifilesystem.h"
+#include "multiinstances/imultiinstancesprovider.h"
 
 namespace mu::framework {
 class XmlReader;
@@ -38,6 +39,7 @@ class ShortcutsRegister : public IShortcutsRegister, public async::Asyncable
 {
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
     INJECT(shortcuts, system::IFileSystem, fileSystem)
+    INJECT(shortcuts, mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     ShortcutsRegister() = default;
