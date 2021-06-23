@@ -120,7 +120,6 @@ DockPage {
 
         NotationStatusBar {
             color: root.color
-            visible: root.pageModel.isStatusBarVisible
         }
     }
 }
