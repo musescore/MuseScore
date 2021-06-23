@@ -3160,6 +3160,16 @@ static QString instrId(int partNr, int instrNr)
 }
 
 //---------------------------------------------------------
+//   isNoteheadParenthesis
+//---------------------------------------------------------
+
+static bool isNoteheadParenthesis(const Symbol* symbol)
+{
+    const SymId sym = symbol->sym();
+    return sym == SymId::noteheadParenthesisLeft || sym == SymId::noteheadParenthesisRight;
+}
+
+//---------------------------------------------------------
 //   writeNotehead
 //---------------------------------------------------------
 
@@ -3291,6 +3301,29 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
         } else {
             // TODO
         }
+    }
+}
+
+//---------------------------------------------------------
+//   writeNotationSymbols
+//---------------------------------------------------------
+
+static void writeNotationSymbols(XmlWriter& xml, Notations& notations, const ElementList& elist, bool excludeParentheses)
+{
+    for (const Element* e : elist) {
+        if (!e->isSymbol() || !ExportMusicXml::canWrite(e)) {
+            continue;
+        }
+
+        const Symbol* symbol = toSymbol(e);
+
+        if (excludeParentheses && isNoteheadParenthesis(symbol)) {
+            // Already handled when writing notehead properties.
+            continue;
+        }
+
+        notations.tag(xml, symbol);
+        xml.tagE(QString("other-notation type=\"single\" smufl=\"%1\"").arg(symbol->symName()));
     }
 }
 
@@ -3644,6 +3677,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
         }
 
         writeFingering(_xml, notations, technical, note);
+        writeNotationSymbols(_xml, notations, note->el(), true);
 
         // write tablature string / fret
         if (chord->staff() && chord->staff()->isTabStaff(Fraction(0, 1))) {
@@ -3809,6 +3843,8 @@ void ExportMusicXml::rest(Rest* rest, int staff)
     Ornaments ornaments;
     wavyLineStartStop(rest, notations, ornaments, _trillStart, _trillStop);
     ornaments.etag(_xml);
+
+    writeNotationSymbols(_xml, notations, rest->el(), false);
 
     sh.doSlurs(rest, notations, _xml);
 
@@ -4867,8 +4903,7 @@ void ExportMusicXml::symbol(Symbol const* const sym, int staff)
     } else if (name == "keyboardPedalUp") {
         mxmlName = "pedal type=\"stop\"";
     } else {
-        qDebug("ExportMusicXml::symbol(): %s not supported", qPrintable(name));
-        return;
+        mxmlName = QString("other-direction smufl=\"%1\"").arg(name);
     }
     directionTag(_xml, _attr, sym);
     mxmlName += positioningAttributes(sym);
