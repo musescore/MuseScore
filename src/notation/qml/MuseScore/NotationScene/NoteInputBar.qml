@@ -81,49 +81,55 @@ Rectangle {
             property var item: Boolean(itemModel) ? itemModel : null
             property var hasMenu: Boolean(item) && item.subitems.length !== 0
 
+            width: gridView.cellWidth
+            height: gridView.cellWidth
+
             accentButton: (Boolean(item) && item.checked) || menuLoader.isMenuOpened
             normalStateColor: accentButton ? ui.theme.accentColor : "transparent"
 
             icon: Boolean(item) ? item.icon : IconCode.NONE
+            iconFont: ui.theme.toolbarIconsFont
 
             toolTipTitle: Boolean(item) ? item.title : ""
             toolTipDescription: Boolean(item) ? item.description : ""
             toolTipShortcut: Boolean(item) ? item.shortcut : ""
-
-            iconFont: ui.theme.toolbarIconsFont
 
             navigation.panel: keynavSub
             navigation.name: toolTipTitle
             navigation.order: Boolean(item) ? item.order : 0
             isClickOnKeyNavTriggered: false
             navigation.onTriggered: {
-                if (hasMenu && item.isMenuSecondary) {
-                    btn.pressAndHold()
+                if (menuLoader.isMenuOpened || hasMenu) {
+                    toggleMenuOpened()
                 } else {
-                    btn.clicked()
+                    handleAction()
                 }
             }
 
             mouseArea.pressAndHoldInterval: 200
-
-            width: gridView.cellWidth
-            height: gridView.cellWidth
-
             mouseArea.acceptedButtons: hasMenu && item.isMenuSecondary
                                        ? Qt.LeftButton | Qt.RightButton
                                        : Qt.LeftButton
+
+            function toggleMenuOpened() {
+                menuLoader.toggleOpened(item.subitems, btn.navigation)
+            }
+
+            function handleAction() {
+                Qt.callLater(noteInputModel.handleAction, item.code)
+            }
 
             onClicked: function (mouse) {
                 if (menuLoader.isMenuOpened // If already menu open, close it
                         || (hasMenu // Or if can open menu
                             && (!item.isMenuSecondary // And _should_ open menu
                                 || mouse.button === Qt.RightButton))) {
-                    menuLoader.toggleOpened(item.subitems, btn.navigation)
+                    toggleMenuOpened()
                     return
                 }
 
                 if (mouse.button === Qt.LeftButton) {
-                    Qt.callLater(noteInputModel.handleAction, item.code)
+                    handleAction()
                 }
             }
 
@@ -132,7 +138,7 @@ Rectangle {
                     return
                 }
 
-                menuLoader.toggleOpened(item.subitems, btn.navigation)
+                toggleMenuOpened()
             }
 
             Canvas {
