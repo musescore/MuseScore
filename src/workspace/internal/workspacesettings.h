@@ -22,6 +22,9 @@
 #ifndef MU_WORKSPACE_WORKSPACEUSETTINGS_H
 #define MU_WORKSPACE_WORKSPACEUSETTINGS_H
 
+#include <map>
+#include <QJsonObject>
+
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "global/iworkspacesettings.h"
@@ -35,17 +38,17 @@ class WorkspaceSettings : public framework::IWorkspaceSettings, public async::As
 public:
     void init();
 
-    bool isManage(WorkspaceTag tag) const override;
+    bool isManage(Tag tag) const override;
 
     Val value(const Key& key) const override;
-    void setValue(const Key& key, const Val& value) const override;
+    void setValue(const Key& key, const Val& value) override;
 
     async::Channel<Val> valueChanged(const Key& key) const override;
     async::Notification valuesChanged() const override;
 
 private:
     IWorkspacePtr currentWorkspace() const;
-
+    QJsonObject m_data;
     mutable std::map<Key, async::Channel<Val> > m_channels;
     async::Notification m_valuesChanged;
 };

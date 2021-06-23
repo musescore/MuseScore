@@ -23,7 +23,9 @@
 #define MU_WORKSPACE_IWORKSPACE_H
 
 #include <memory>
+#include <QByteArray>
 
+#include "retval.h"
 #include "workspace/workspacetypes.h"
 #include "async/channel.h"
 
@@ -35,6 +37,14 @@ public:
 
     virtual std::string name() const = 0;
     virtual std::string title() const = 0;
+
+    virtual RetVal<QByteArray> readRawData(const std::string& name) const = 0;
+    virtual Ret writeRawData(const std::string& name, const QByteArray& data) = 0;
+
+    virtual RetVal<Data> readData(const std::string& name) const = 0;
+    virtual Ret writeData(const std::string& name, const Data& data) = 0;
+
+    // ===========================================
 
     virtual std::vector<WorkspaceTag> tags() const = 0;
     virtual void setTags(const std::vector<WorkspaceTag>& tags) = 0;

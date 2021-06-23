@@ -25,9 +25,18 @@
 #include <vector>
 #include <map>
 
+#include <QJsonValue>
+
 #include "val.h"
 
 namespace mu::workspace {
+static constexpr std::string_view DEFAULT_WORKSPACE_NAME("Default");
+
+struct Data
+{
+    QJsonValue data;
+};
+
 enum class WorkspaceTag
 {
     Unknown,
@@ -70,8 +79,6 @@ struct ToolbarData : public AbstractData
 };
 
 using ToolbarDataPtr = std::shared_ptr<ToolbarData>;
-
-static constexpr std::string_view DEFAULT_WORKSPACE_NAME("Default");
 }
 
 #endif // MU_WORKSPACE_WORKSPACETYPES_H

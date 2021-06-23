@@ -21,7 +21,8 @@
  */
 #include "workspace.h"
 
-#include "log.h"
+#include <QBuffer>
+
 #include "translation.h"
 #include "workspacefile.h"
 
@@ -30,7 +31,7 @@
 
 #include "libmscore/mscore.h"
 
-#include <QBuffer>
+#include "log.h"
 
 using namespace mu;
 using namespace mu::workspace;
@@ -65,6 +66,30 @@ std::string Workspace::name() const
 std::string Workspace::title() const
 {
     return name();
+}
+
+RetVal<QByteArray> Workspace::readRawData(const std::string& name) const
+{
+    NOT_IMPLEMENTED;
+    return RetVal<QByteArray>();
+}
+
+Ret Workspace::writeRawData(const std::string& name, const QByteArray& data)
+{
+    NOT_IMPLEMENTED;
+    return Ret();
+}
+
+RetVal<Data> Workspace::readData(const std::string& name) const
+{
+    NOT_IMPLEMENTED;
+    return RetVal<Data>();
+}
+
+Ret Workspace::writeData(const std::string& name, const Data& data)
+{
+    NOT_IMPLEMENTED;
+    return Ret();
 }
 
 WorkspaceTagList Workspace::tags() const

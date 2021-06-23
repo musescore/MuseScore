@@ -41,6 +41,14 @@ public:
     std::string name() const override;
     std::string title() const override;
 
+    RetVal<QByteArray> readRawData(const std::string& name) const override;
+    Ret writeRawData(const std::string& name, const QByteArray& data) override;
+
+    RetVal<Data> readData(const std::string& name) const override;
+    Ret writeData(const std::string& name, const Data& data) override;
+
+    // =======================================
+
     WorkspaceTagList tags() const override;
     void setTags(const WorkspaceTagList& tags) override;
 
