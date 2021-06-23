@@ -639,7 +639,7 @@ static Tid tidForCreditWords(const CreditWords* const word, std::vector<const Cr
 //   createAndAddVBoxForCreditWords
 //---------------------------------------------------------
 
-static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75)
+VBox* MusicXMLParserPass1::createAndAddVBoxForCreditWords(Score* const score, const int miny, const int maxy)
       {
       auto vbox = new VBox(score);
       qreal vboxHeight = 10;                         // default height in tenths
@@ -716,7 +716,7 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
                   const auto tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : Tid::DEFAULT;
                   double yoffs = (maxy - w->defaultY) * score->spatium() / 10;
                   if (!vbox)
-                        vbox = createAndAddVBoxForCreditWords(score, miny, maxy);
+                        vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score, miny, maxy);
                   addText2(vbox, score, w->words, tid, align, yoffs);
                   }
             }
@@ -754,7 +754,7 @@ static void createDefaultHeader(Score* const score)
       if (!metaPoet.isEmpty()) strPoet = metaPoet;
       if (!metaTranslator.isEmpty()) strTranslator = metaTranslator;
 
-      const auto vbox = createAndAddVBoxForCreditWords(score);
+      const auto vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score);
       addText(vbox, score, strTitle.toHtmlEscaped(),      Tid::TITLE);
       addText(vbox, score, strSubTitle.toHtmlEscaped(),   Tid::SUBTITLE);
       addText(vbox, score, strComposer.toHtmlEscaped(),   Tid::COMPOSER);

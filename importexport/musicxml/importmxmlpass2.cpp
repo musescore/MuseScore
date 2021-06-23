@@ -22,6 +22,7 @@
 
 #include "libmscore/arpeggio.h"
 #include "libmscore/accidental.h"
+#include "libmscore/box.h"
 #include "libmscore/breath.h"
 #include "libmscore/chord.h"
 #include "libmscore/chordline.h"
@@ -71,6 +72,7 @@
 #include "importmxmlnoteduration.h"
 #include "importmxmlnotepitch.h"
 #include "importmxmlpass2.h"
+#include "importmxmlpass1.h"
 #include "musicxmlfonthandler.h"
 #include "musicxmlsupport.h"
 
@@ -2527,7 +2529,15 @@ void MusicXMLParserDirection::direction(const QString& partId,
       //       qPrintable(_wordsText), qPrintable(_rehearsalText), qPrintable(_metroText), _tpoSound);
 
       // create text if any text was found
-      if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
+      if (isLikelyCredit(tick)) {
+            Text* t = new Text(_score, Tid::SUBTITLE);
+            t->setLayoutToParentWidth(true);
+            t->setXmlText(_wordsText);
+            auto firstMeasure = _score->measures()->first();
+            VBox* vbox = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXMLParserPass1::createAndAddVBoxForCreditWords(_score);
+            vbox->add(t);
+            }
+      else if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
             TextBase* t = 0;
             if (_tpoSound > 0.1) {
                   // to prevent duplicates, only create a TempoText if none is present yet
@@ -2917,6 +2927,19 @@ bool MusicXMLParserDirection::isLikelyFingering() const
             && _rehearsalText == ""
             && _metroText == ""
             && _tpoSound < 0.1;
+      }
+
+//---------------------------------------------------------
+//   isLikelyCredit
+//---------------------------------------------------------
+
+bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
+      {
+      return (tick + _offset < Fraction(5, 1)) // Only early in the piece
+            && _rehearsalText == ""
+            && _metroText == ""
+            && _tpoSound < 0.1
+            && _wordsText.contains(QRegularExpression("((Words|Music|Lyrics).*)+by\\s+([A-Z][a-zA-Z'’-]+\\s[A-Z][a-zA-Z'’-]+.*)+"));
       }
 
 //---------------------------------------------------------
