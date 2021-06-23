@@ -295,8 +295,6 @@ void TempoText::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
         ScoreElement::undoChangeProperty(id, v, ps);
         if (_followText) {
             updateTempo();
-            // update inspector?
-            MuseScoreCore::mscoreCore->updateInspector();
         }
     } else {
         ScoreElement::undoChangeProperty(id, v, ps);

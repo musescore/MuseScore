@@ -33,11 +33,13 @@
 #include "libmscore/score.h"
 #include "libmscore/spanner.h"
 #include "framework/shortcuts/ishortcutscontroller.h"
+#include "context/iglobalcontext.h"
 #include "modularity/ioc.h"
 
 namespace Ms {
 class Element;
 class MScore;
+class MuseScoreCore;
 
 /**
  * \namespace Ms::PluginAPI
@@ -74,6 +76,7 @@ class PluginAPI : public Ms::QmlPlugin
     Q_OBJECT
 
     INJECT(plugins, mu::shortcuts::IShortcutsController, shortcuts)
+    INJECT(userscores, mu::context::IGlobalContext, context)
 
     /** Path where the plugin is placed in menu */
     Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)
@@ -276,6 +279,9 @@ public:
     Q_INVOKABLE void closeLog();
 
     Q_INVOKABLE Ms::PluginAPI::FractionWrapper* fraction(int numerator, int denominator) const;
+
+protected:
+    virtual MuseScoreCore* msc() const;
 };
 
 #undef DECLARE_API_ENUM

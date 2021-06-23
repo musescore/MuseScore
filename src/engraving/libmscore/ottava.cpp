@@ -119,7 +119,6 @@ void OttavaSegment::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags 
 {
     if (id == Pid::OTTAVA_TYPE || id == Pid::NUMBERS_ONLY) {
         ScoreElement::undoChangeProperty(id, v, ps);
-        MuseScoreCore::mscoreCore->updateInspector();
     } else {
         ScoreElement::undoChangeProperty(id, v, ps);
     }
@@ -130,7 +129,6 @@ void Ottava::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
     if (id == Pid::OTTAVA_TYPE || id == Pid::NUMBERS_ONLY) {
         TextLineBase::undoChangeProperty(id, v, ps);
         styleChanged();       // these properties may change style settings
-        MuseScoreCore::mscoreCore->updateInspector();
     } else {
         TextLineBase::undoChangeProperty(id, v, ps);
     }

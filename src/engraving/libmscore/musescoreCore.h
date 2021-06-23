@@ -41,8 +41,7 @@ protected:
     QList<MasterScore*> scoreList;
 
 public:
-    static MuseScoreCore* mscoreCore;
-    MuseScoreCore() { mscoreCore = this; }
+    MuseScoreCore() = default;
     virtual ~MuseScoreCore() = default;
     Score* currentScore() const { return cs; }
     void setCurrentScore(Score* score) { cs = score; }
@@ -53,11 +52,9 @@ public:
     virtual void setCurrentView(int /*tabIdx*/, int /*idx*/) {}
 
     virtual int appendScore(MasterScore* s) { scoreList.append(s); return 0; }
-    virtual void endCmd(const bool /*isCmdFromInspector*/ = false, const bool /*undoRedo*/ = false) {}
     virtual Score* openScore(const QString& /*fn*/, bool /*switchTab*/, bool considerInCurrentSession = true,
                              const QString& /*withFilename*/ = "") { Q_UNUSED(considerInCurrentSession); return 0; }
     QList<MasterScore*>& scores() { return scoreList; }
-    virtual void updateInspector() {}
 };
 } // namespace Ms
 #endif
