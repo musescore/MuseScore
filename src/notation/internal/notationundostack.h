@@ -40,9 +40,11 @@ public:
 
     bool canUndo() const override;
     void undo() override;
+    async::Notification undoNotification() const override;
 
     bool canRedo() const override;
     void redo() override;
+    async::Notification redoNotification() const override;
 
     void prepareChanges() override;
     void rollbackChanges() override;
@@ -52,7 +54,9 @@ public:
 
 private:
     void notifyAboutNotationChanged();
-    void notifyAboutStackStateChanged();
+    void notifyAboutStateChanged();
+    void notifyAboutUndo();
+    void notifyAboutRedo();
 
     bool isStackClean() const;
 
@@ -64,6 +68,8 @@ private:
 
     async::Notification m_notationChanged;
     async::Notification m_stackStateChanged;
+    async::Notification m_undoNotification;
+    async::Notification m_redoNotification;
 };
 }
 
