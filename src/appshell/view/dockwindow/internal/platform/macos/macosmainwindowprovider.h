@@ -19,38 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "appwindowstyler.h"
+#ifndef MU_APPSHELL_MACOS_MAINWINDOWPROVIDER_H
+#define MU_APPSHELL_MACOS_MAINWINDOWPROVIDER_H
 
-#include <QObject>
-#include <QWindow>
+#include "async/asyncable.h"
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
 
-using namespace mu::appshell;
+#include "view/dockwindow/mainwindowprovider.h"
 
-AppWindowStyler::AppWindowStyler(QObject* parent)
-    : QObject(parent), m_targetWindow(nullptr)
+namespace mu::dock {
+class MacOSMainWindowProvider : public MainWindowProvider, public async::Asyncable
 {
+    Q_OBJECT
+
+    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
+
+public:
+    explicit MacOSMainWindowProvider(QObject* parent = nullptr);
+
+    bool fileModified() const override;
+
+public slots:
+    void setFileModified(bool modified) override;
+
+private:
+    void init() override;
+};
 }
 
-void AppWindowStyler::init()
-{
-    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
-        uiConfiguration()->applyPlatformStyle(m_targetWindow);
-    });
-}
-
-QWindow* AppWindowStyler::targetWindow() const
-{
-    return m_targetWindow;
-}
-
-void AppWindowStyler::setTargetWindow(QWindow* window)
-{
-    if (m_targetWindow == window) {
-        return;
-    }
-
-    m_targetWindow = window;
-    emit targetWindowChanged();
-
-    uiConfiguration()->applyPlatformStyle(m_targetWindow);
-}
+#endif // MU_APPSHELL_MACOS_MAINWINDOWPROVIDER_H
