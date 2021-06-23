@@ -2745,7 +2745,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
       else if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
             TextBase* t = 0;
-            if (_tpoSound > 0.1 || attemptTempoTextCoercion()) {
+            if (_tpoSound > 0.1 || attemptTempoTextCoercion(tick)) {
                   // to prevent duplicates, only create a TempoText if none is present yet
                   if (hasTempoTextAtTick(_score->tempomap(), tick.ticks())) {
                         _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
@@ -3369,9 +3369,9 @@ double MusicXMLParserDirection::convertTextToNotes()
  the _wordsText to the appropriate note symbol and inferring the _tpoSound.
  */
 
-bool MusicXMLParserDirection::attemptTempoTextCoercion()
+bool MusicXMLParserDirection::attemptTempoTextCoercion(const Fraction& tick)
       {
-      QList<QString> tempoWords{"rit", "rall", "accel", "tempo", "allegr", "poco", "molto", "piu", "meno", "mosso", "rubato"};
+      QList<QString> tempoWords{"rit", "rall", "accel", "tempo", "allegr", "poco", "molto", "più", "meno", "mosso", "rubato"};
       if (_wordsText.contains(QRegularExpression("[yxeqhwW.]+\\s*=\\s*\\d+"))) {
             QRegularExpression tempoValRegex("=\\s*(?<tempo>\\d+)");
             double tempoVal = tempoValRegex.match(_wordsText).captured("tempo").toDouble();
@@ -3380,6 +3380,7 @@ bool MusicXMLParserDirection::attemptTempoTextCoercion()
             return true;
             }
       else if (placement() == "above" && _wordsText.contains("<b>"))
+            if (tick == Fraction(0, 1)) return true;
             for (auto tempoWord : tempoWords)
                   if (_wordsText.contains(tempoWord, Qt::CaseInsensitive))
                         return true;

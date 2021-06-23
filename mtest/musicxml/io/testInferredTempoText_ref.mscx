@@ -146,9 +146,9 @@
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
-            <tempo>3</tempo>
+            <tempo>2</tempo>
             <followText>1</followText>
-            <text><sym>metNoteQuarterUp</sym> = 180 (go fast)</text>
+            <text><b>However ya feel</b></text>
             </Tempo>
           <Chord>
             <BeamMode>no</BeamMode>
@@ -232,6 +232,11 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
+          <Tempo>
+            <tempo>3</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteQuarterUp</sym> = 180 ok now go fast</text>
+            </Tempo>
           <Chord>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
