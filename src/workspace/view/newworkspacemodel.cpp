@@ -125,33 +125,11 @@ void NewWorkspaceModel::setUseToolbarCustomization(bool needUse)
 QVariant NewWorkspaceModel::createWorkspace()
 {
     IWorkspacePtr newWorkspace = workspaceCreator()->newWorkspace(m_workspaceName.toStdString());
-    IWorkspacePtr currentWorkspace = workspaceManager()->currentWorkspace().val;
 
-    WorkspaceTagList usedTags;
-
-    if (useUiPreferences()) {
-        usedTags.push_back(WorkspaceTag::Settings);
-    }
-
-    if (useUiArrangement()) {
-        usedTags.push_back(WorkspaceTag::UiArrangement);
-    }
-
-    if (useToolbarCustomization()) {
-        usedTags.push_back(WorkspaceTag::Toolbar);
-    }
-
-    if (usePalettes()) {
-        usedTags.push_back(WorkspaceTag::Palettes);
-    }
-
-    newWorkspace->setTags(usedTags);
-
-    for (WorkspaceTag tag : usedTags) {
-        for (AbstractDataPtr data : currentWorkspace->dataList(tag)) {
-            newWorkspace->addData(data);
-        }
-    }
+    newWorkspace->setIsManaged(Option::UiSettings, useUiPreferences());
+    newWorkspace->setIsManaged(Option::UiState, useUiArrangement());
+    newWorkspace->setIsManaged(Option::UiToolActions, useToolbarCustomization());
+    newWorkspace->setIsManaged(Option::Palettes, usePalettes());
 
     return QVariant::fromValue(newWorkspace);
 }

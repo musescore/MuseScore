@@ -75,19 +75,19 @@ void UiArrangement::updateData()
         return _fdata;
     };
 
-    if (workspace && workspace->isManaged(UI_SETTINGS_KEY.toStdString())) {
+    if (workspace && workspace->isManaged(workspace::Option::UiSettings)) {
         m_settings = workspaceData().value(UI_SETTINGS_KEY).toObject();
     } else {
         m_settings = fileData().value(UI_SETTINGS_KEY).toObject();
     }
 
-    if (workspace && workspace->isManaged(UI_STATES_KEY.toStdString())) {
+    if (workspace && workspace->isManaged(workspace::Option::UiState)) {
         m_states = workspaceData().value(UI_STATES_KEY).toObject();
     } else {
         m_states = fileData().value(UI_STATES_KEY).toObject();
     }
 
-    if (workspace && workspace->isManaged(UI_TOOLACTIONS_KEY.toStdString())) {
+    if (workspace && workspace->isManaged(workspace::Option::UiToolActions)) {
         m_toolactions = workspaceData().value(UI_TOOLACTIONS_KEY).toObject();
     } else {
         m_toolactions = fileData().value(UI_TOOLACTIONS_KEY).toObject();
@@ -103,19 +103,19 @@ void UiArrangement::saveData()
 
     IWorkspacePtr workspace = currentWorkspace();
 
-    if (workspace && workspace->isManaged(UI_SETTINGS_KEY.toStdString())) {
+    if (workspace && workspace->isManaged(workspace::Option::UiSettings)) {
         toWorkspace[UI_SETTINGS_KEY] = m_settings;
     } else {
         toFile[UI_SETTINGS_KEY] = m_settings;
     }
 
-    if (workspace && workspace->isManaged(UI_STATES_KEY.toStdString())) {
+    if (workspace && workspace->isManaged(workspace::Option::UiState)) {
         toWorkspace[UI_STATES_KEY] = m_states;
     } else {
         toFile[UI_STATES_KEY] = m_states;
     }
 
-    if (workspace && workspace->isManaged(UI_TOOLACTIONS_KEY.toStdString())) {
+    if (workspace && workspace->isManaged(workspace::Option::UiToolActions)) {
         toWorkspace[UI_TOOLACTIONS_KEY] = m_toolactions;
     } else {
         toFile[UI_TOOLACTIONS_KEY] = m_toolactions;
@@ -179,24 +179,30 @@ void UiArrangement::setState(const QString& key, const QByteArray& data)
     saveData();
 }
 
-QList<QString> UiArrangement::toolbarActions(const QString& toolbarName) const
+mu::actions::ActionCodeList UiArrangement::toolbarActions(const QString& toolbarName) const
 {
     QJsonArray actsArr = m_toolactions.value(toolbarName).toArray();
 
-    QList<QString> acts;
+    actions::ActionCodeList acts;
     acts.reserve(actsArr.size());
     for (const QJsonValue& v : actsArr) {
-        acts.push_back(v.toString());
+        acts.push_back(v.toString().toStdString());
     }
     return acts;
 }
 
-void UiArrangement::setToolbarActions(const QString& toolbarName, const QList<QString>& actions)
+void UiArrangement::setToolbarActions(const QString& toolbarName, const actions::ActionCodeList& actions)
 {
     QJsonArray arr;
-    for (const QString& a : actions) {
-        arr.append(a);
+    for (const actions::ActionCode& a : actions) {
+        arr.append(QString::fromStdString(a));
     }
     m_toolactions[toolbarName] = arr;
     saveData();
+}
+
+mu::async::Notification UiArrangement::toolbarActionsChanged(const QString& toolbarName) const
+{
+    NOT_IMPLEMENTED;
+    return mu::async::Notification();
 }

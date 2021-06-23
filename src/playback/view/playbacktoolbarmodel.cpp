@@ -30,11 +30,10 @@
 
 using namespace mu::playback;
 using namespace mu::actions;
-using namespace mu::workspace;
 using namespace mu::ui;
 using namespace mu::notation;
 
-static const std::string PLAYBACK_TOOLBAR_KEY("playbackControl");
+static const QString PLAYBACK_TOOLBAR_KEY("playbackControl");
 static const ActionCode PLAY_ACTION_CODE("play");
 
 static MusicalSymbolCodes::Code tempoDurationToNoteIcon(DurationType durationType)
@@ -80,7 +79,7 @@ void PlaybackToolBarModel::setupConnections()
         updatePlayTime();
     });
 
-    workspaceManager()->currentWorkspace().ch.onReceive(this, [this](IWorkspacePtr) {
+    uiConfiguration()->toolbarActionsChanged(PLAYBACK_TOOLBAR_KEY).onNotify(this, [this]() {
         updateActions();
     });
 }
@@ -91,7 +90,8 @@ void PlaybackToolBarModel::updateActions()
     MenuItemList settingsItems;
     MenuItemList additionalItems;
 
-    for (const ActionCode& code : currentWorkspaceActionCodes()) {
+    ActionCodeList actions = uiConfiguration()->toolbarActions(PLAYBACK_TOOLBAR_KEY);
+    for (const ActionCode& code : actions) {
         if (isAdditionalAction(code)) {
             //! NOTE: In this case, we want to see the actions' description instead of the title
             additionalItems << makeActionWithDescriptionAsTitle(code);
@@ -132,21 +132,9 @@ void PlaybackToolBarModel::onActionsStateChanges(const actions::ActionCodeList& 
     emit dataChanged(index(0), index(rowCount() - 1));
 }
 
-ActionCodeList PlaybackToolBarModel::currentWorkspaceActionCodes() const
+ActionCodeList PlaybackToolBarModel::savedActionCodes() const
 {
-    RetValCh<IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
-    if (!workspace.ret || !workspace.val) {
-        LOGE() << workspace.ret.toString();
-        return {};
-    }
-
-    AbstractDataPtr abstractData = workspace.val->data(WorkspaceTag::Toolbar, PLAYBACK_TOOLBAR_KEY);
-    ToolbarDataPtr toolbar = std::dynamic_pointer_cast<ToolbarData>(abstractData);
-    if (!toolbar) {
-        return {};
-    }
-
-    return toolbar->actions;
+    return uiConfiguration()->toolbarActions(PLAYBACK_TOOLBAR_KEY);
 }
 
 bool PlaybackToolBarModel::isAdditionalAction(const actions::ActionCode& actionCode) const

@@ -35,9 +35,6 @@ public:
     AbstractDataPtrList dataList(WorkspaceTag tag) const override;
     void addData(AbstractDataPtr data) override;
     async::Channel<AbstractDataPtr> dataChanged() const override;
-
-    Val settingValue(const std::string& key) const override;
-    std::vector<std::string> toolbarActions(const std::string& toolbarName) const override;
 };
 }
 

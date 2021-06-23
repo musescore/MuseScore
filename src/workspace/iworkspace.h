@@ -26,7 +26,7 @@
 #include <QByteArray>
 
 #include "retval.h"
-#include "workspace/workspacetypes.h"
+#include "workspacetypes.h"
 #include "async/channel.h"
 
 namespace mu::workspace {
@@ -38,7 +38,8 @@ public:
     virtual std::string name() const = 0;
     virtual std::string title() const = 0;
 
-    virtual bool isManaged(const std::string& key) const = 0;
+    virtual bool isManaged(const Option& key) const = 0;
+    virtual void setIsManaged(const Option& key, bool val) const = 0;
 
     virtual RetVal<QByteArray> readRawData(const std::string& name) const = 0;
     virtual Ret writeRawData(const std::string& name, const QByteArray& data) = 0;
@@ -55,11 +56,6 @@ public:
     virtual AbstractDataPtrList dataList(WorkspaceTag tag) const = 0;
     virtual void addData(AbstractDataPtr data) = 0;
     virtual async::Channel<AbstractDataPtr> dataChanged() const = 0;
-
-    //! NOTE Only methods associations with framework.
-    //! Other methods (for other data) must be in the appropriate modules.
-    virtual Val settingValue(const std::string& key) const = 0;
-    virtual std::vector<std::string> toolbarActions(const std::string& toolbarName) const = 0;
 };
 
 using IWorkspacePtr = std::shared_ptr<IWorkspace>;

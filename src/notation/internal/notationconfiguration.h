@@ -129,9 +129,6 @@ public:
     std::string notationRevision() const override;
     int notationDivision() const override;
 
-    std::vector<std::string> toolbarActions(const std::string& toolbarName) const override;
-    void setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions) override;
-
     ValCh<framework::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(framework::Orientation orientation) override;
 
@@ -148,9 +145,6 @@ public:
     void setNotePlayDurationMilliseconds(int durationMs) override;
 
 private:
-    std::vector<std::string> parseToolbarActions(const std::string& actions) const;
-
-    framework::Settings::Key toolbarSettingsKey(const std::string& toolbarName) const;
 
     async::Notification m_backgroundChanged;
     async::Notification m_foregroundChanged;

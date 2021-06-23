@@ -48,9 +48,6 @@ static const std::string WORKSPACE_TAGS_SEPARATOR(",");
 
 static std::map<WorkspaceTag, std::string> tagToName {
     { WorkspaceTag::Palettes, "Palettes" },
-    { WorkspaceTag::Settings, "Settings" },
-    { WorkspaceTag::Toolbar, "Toolbar" },
-    { WorkspaceTag::UiArrangement, "UiArrangement" }
 };
 
 Workspace::Workspace(const io::path& filePath)
@@ -68,10 +65,15 @@ std::string Workspace::title() const
     return name();
 }
 
-bool Workspace::isManaged(const std::string& key) const
+bool Workspace::isManaged(const Option& key) const
 {
     NOT_IMPLEMENTED;
     return false;
+}
+
+void Workspace::setIsManaged(const Option& key, bool val) const
+{
+    NOT_IMPLEMENTED;
 }
 
 RetVal<QByteArray> Workspace::readRawData(const std::string& name) const
@@ -129,20 +131,6 @@ AbstractDataPtrList Workspace::dataList(WorkspaceTag tag) const
     }
 
     return result;
-}
-
-mu::Val Workspace::settingValue(const std::string& key) const
-{
-    AbstractDataPtr data = this->data(WorkspaceTag::Settings);
-    SettingsDataPtr settings = std::dynamic_pointer_cast<SettingsData>(data);
-    return settings ? settings->values[key] : Val();
-}
-
-std::vector<std::string> Workspace::toolbarActions(const std::string& toolbarName) const
-{
-    AbstractDataPtr data = this->data(WorkspaceTag::Toolbar, toolbarName);
-    ToolbarDataPtr toolbar = std::dynamic_pointer_cast<ToolbarData>(data);
-    return toolbar ? toolbar->actions : std::vector<std::string>();
 }
 
 async::Channel<AbstractDataPtr> Workspace::dataChanged() const

@@ -31,6 +31,7 @@
 #include "modularity/ioc.h"
 #include "workspace/iworkspacemanager.h"
 #include "async/asyncable.h"
+#include "actions/actiontypes.h"
 
 namespace mu::ui {
 class UiArrangement : public async::Asyncable
@@ -48,8 +49,9 @@ public:
     QByteArray state(const QString& key) const;
     void setState(const QString& key, const QByteArray& data);
 
-    QList<QString> toolbarActions(const QString& toolbarName) const;
-    void setToolbarActions(const QString& toolbarName, const QList<QString>& actions);
+    actions::ActionCodeList toolbarActions(const QString& toolbarName) const;
+    void setToolbarActions(const QString& toolbarName, const actions::ActionCodeList& actions);
+    mu::async::Notification toolbarActionsChanged(const QString& toolbarName) const;
 
 private:
     workspace::IWorkspacePtr currentWorkspace() const;

@@ -27,6 +27,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "async/notification.h"
+#include "actions/actiontypes.h"
 
 #include "uitypes.h"
 
@@ -82,6 +83,10 @@ public:
     virtual bool isVisible(const QString& key, bool def = true) const = 0;
     virtual void setIsVisible(const QString& key, bool val) = 0;
     virtual async::Notification isVisibleChanged(const QString& key) const = 0;
+
+    virtual actions::ActionCodeList toolbarActions(const QString& toolbarName) const = 0;
+    virtual void setToolbarActions(const QString& toolbarName, const actions::ActionCodeList& actions) = 0;
+    virtual async::Notification toolbarActionsChanged(const QString& toolbarName) const = 0;
 };
 }
 
