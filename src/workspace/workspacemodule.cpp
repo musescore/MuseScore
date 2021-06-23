@@ -31,7 +31,6 @@
 
 #include "internal/workspaceconfiguration.h"
 #include "internal/workspacemanager.h"
-#include "internal/workspacedatastreamregister.h"
 #include "internal/workspacecreator.h"
 #include "internal/workspaceactioncontroller.h"
 #include "internal/workspaceuiactions.h"
@@ -46,7 +45,6 @@ using namespace mu::framework;
 using namespace mu::ui;
 
 static std::shared_ptr<WorkspaceManager> s_manager = std::make_shared<WorkspaceManager>();
-static std::shared_ptr<WorkspaceDataStreamRegister> s_streamRegister = std::make_shared<WorkspaceDataStreamRegister>();
 static std::shared_ptr<WorkspaceConfiguration> s_configuration = std::make_shared<WorkspaceConfiguration>();
 static std::shared_ptr<WorkspaceActionController> s_actionController = std::make_shared<WorkspaceActionController>();
 
@@ -64,7 +62,6 @@ void WorkspaceModule::registerExports()
 {
     ioc()->registerExport<IWorkspaceConfiguration>(moduleName(), s_configuration);
     ioc()->registerExport<IWorkspaceManager>(moduleName(), s_manager);
-    ioc()->registerExport<WorkspaceDataStreamRegister>(moduleName(), s_streamRegister);
     ioc()->registerExport<IWorkspaceCreator>(moduleName(), std::make_shared<WorkspaceCreator>());
 }
 
@@ -77,11 +74,8 @@ void WorkspaceModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerUri(Uri("musescore://workspace/select"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Workspace/WorkspacesDialog.qml"));
-
-        ir->registerUri(Uri("musescore://workspace/create"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Workspace/NewWorkspaceDialog.qml"));
+        ir->registerQmlUri(Uri("musescore://workspace/select"), "MuseScore/Workspace/WorkspacesDialog.qml");
+        ir->registerQmlUri(Uri("musescore://workspace/create"), "MuseScore/Workspace/NewWorkspaceDialog.qml");
     }
 }
 

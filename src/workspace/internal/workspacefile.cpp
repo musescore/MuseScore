@@ -171,7 +171,7 @@ void WorkspaceFile::MetaInfo::writeContainer(QByteArray* data) const
     }
 
     QBuffer buffer(data);
-    buffer.open(Device::WriteOnly);
+    buffer.open(io::Device::WriteOnly);
 
     XmlWriter writer(&buffer);
     writer.writeStartDocument();

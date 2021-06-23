@@ -22,19 +22,12 @@
 #ifndef MU_WORKSPACE_WORKSPACE_H
 #define MU_WORKSPACE_WORKSPACE_H
 
-#include <map>
-
 #include "../iworkspace.h"
-#include "modularity/ioc.h"
-#include "../iworkspacedatastreamregister.h"
 #include "io/path.h"
-#include "ret.h"
 
 namespace mu::workspace {
 class Workspace : public IWorkspace
 {
-    INJECT(workspace, IWorkspaceDataStreamRegister, streamRegister)
-
 public:
     Workspace(const io::path& filePath);
 
@@ -52,14 +45,6 @@ public:
 
     // =======================================
 
-    WorkspaceTagList tags() const override;
-    void setTags(const WorkspaceTagList& tags) override;
-
-    AbstractDataPtr data(WorkspaceTag tag, const std::string& name = std::string()) const override;
-    AbstractDataPtrList dataList(WorkspaceTag tag) const override;
-    void addData(AbstractDataPtr data) override;
-    async::Channel<AbstractDataPtr> dataChanged() const override;
-
     bool isInited() const;
     io::path filePath() const;
     Ret read();
@@ -69,34 +54,11 @@ private:
     Ret readWorkspace(const QByteArray& data);
     void clear();
 
-    std::string tagsNames() const;
-    std::vector<WorkspaceTag> parseTags(const std::string& tagsStr) const;
-
     io::path m_filePath;
     bool m_isInited = false;
     bool m_hasUnsavedChanges = false;
     std::string m_title;
     std::string m_source;
-
-    struct DataKey
-    {
-        WorkspaceTag tag;
-        std::string name;
-
-        inline bool operator ==(const DataKey& k) const { return k.tag == tag && k.name == name; }
-        inline bool operator <(const DataKey& k) const
-        {
-            if (k.tag != tag) {
-                return tag < k.tag;
-            }
-            return name < k.name;
-        }
-    };
-
-    std::map<DataKey, AbstractDataPtr> m_data;
-    async::Channel<AbstractDataPtr> m_dataChanged;
-
-    WorkspaceTagList m_tags;
 };
 
 using WorkspacePtr = std::shared_ptr<Workspace>;
