@@ -37,6 +37,12 @@ Rectangle {
     signal toggleWindowMaximizedRequested()
     signal closeWindowRequested()
 
+    NavigationSection {
+        id: navSec
+        name: "AppTitleBar"
+        order: 0
+    }
+
     Item {
         anchors.fill: parent
         anchors.margins: 8
@@ -46,6 +52,9 @@ Rectangle {
 
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+
+            navigation.section: navSec
+            navigation.order: 0
         }
 
         Item {
