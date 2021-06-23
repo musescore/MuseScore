@@ -36,19 +36,31 @@ class IWorkspaceSettings : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IWorkspaceSettings() = default;
 
-    struct Key
-    {
-        workspace::WorkspaceTag tag = workspace::WorkspaceTag::Unknown;
-        std::string key;
-
-        bool operator==(const Key& other) const { return key == other.key; }
-        bool operator<(const Key& other) const { return key < other.key; }
+    enum class Tag {
+        Undefined = 0,
+        Settings,
+        UiArrangement
     };
 
-    virtual bool isManage(workspace::WorkspaceTag tag) const = 0;
+    struct Key
+    {
+        Tag tag = Tag::Undefined;
+        std::string key;
+
+        bool operator==(const Key& other) const { return tag == other.tag && key == other.key; }
+        bool operator<(const Key& other) const
+        {
+            if (tag != other.tag) {
+                return tag < other.tag;
+            }
+            return key < other.key;
+        }
+    };
+
+    virtual bool isManage(Tag tag) const = 0;
 
     virtual Val value(const Key& key) const = 0;
-    virtual void setValue(const Key& key, const Val& value) const = 0;
+    virtual void setValue(const Key& key, const Val& value) = 0;
 
     virtual async::Channel<Val> valueChanged(const Key& key) const = 0;
     virtual async::Notification valuesChanged() const = 0;

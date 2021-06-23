@@ -26,9 +26,35 @@
 using namespace mu::workspace;
 using namespace mu::async;
 
+static const std::string DATA_NAME("settings");
+static std::map<WorkspaceSettings::Tag, QString> s_tags = {
+    { WorkspaceSettings::Tag::Settings, QString("settings") },
+    { WorkspaceSettings::Tag::UiArrangement, QString("uiarrangement") }
+};
+
+static const QString& tagToString(WorkspaceSettings::Tag tag)
+{
+    for (const auto& p : s_tags) {
+        if (p.first == tag) {
+            return p.second;
+        }
+    }
+    static QString null;
+    return null;
+}
+
 void WorkspaceSettings::init()
 {
-    manager()->currentWorkspace().ch.onReceive(this, [this](const IWorkspacePtr) {
+    RetValCh<IWorkspacePtr> w = manager()->currentWorkspace();
+    if (w.val) {
+        RetVal<Data> d = w.val->readData(DATA_NAME);
+        m_data = d.val.data.toObject();
+    }
+
+    w.ch.onReceive(this, [this](const IWorkspacePtr w) {
+        RetVal<Data> d = w->readData(DATA_NAME);
+        m_data = d.val.data.toObject();
+
         m_valuesChanged.notify();
 
         for (auto it = m_channels.begin(); it != m_channels.end(); ++it) {
@@ -37,53 +63,53 @@ void WorkspaceSettings::init()
     });
 }
 
-bool WorkspaceSettings::isManage(WorkspaceTag tag) const
+bool WorkspaceSettings::isManage(Tag tag) const
 {
-    if (tag != WorkspaceTag::Settings && tag != WorkspaceTag::UiArrangement) {
+    const QString& tagStr = tagToString(tag);
+    IF_ASSERT_FAILED(!tagStr.isEmpty()) {
         return false;
     }
 
-    IWorkspacePtr currentWorkspace = manager()->currentWorkspace().val;
-    if (!currentWorkspace) {
-        return false;
-    }
-
-    return containsTag(currentWorkspace->tags(), tag);
+    return m_data.contains(tagStr);
 }
 
 mu::Val WorkspaceSettings::value(const Key& key) const
 {
-    if (!currentWorkspace()) {
+    const QString& tagStr = tagToString(key.tag);
+    IF_ASSERT_FAILED(!tagStr.isEmpty()) {
         return Val();
     }
 
-    AbstractDataPtr abstractData = currentWorkspace()->data(key.tag);
-    SettingsDataPtr settingsData = std::dynamic_pointer_cast<SettingsData>(abstractData);
-    if (settingsData && settingsData->values.find(key.key) != settingsData->values.end()) {
-        return settingsData->values[key.key];
+    QJsonObject obj = m_data.value(tagStr).toObject();
+    QJsonValue val = obj.value(QString::fromStdString(key.key));
+    if (val.isUndefined()) {
+        return Val();
     }
 
-    return Val();
+    return Val(val.toString().toStdString());
 }
 
-void WorkspaceSettings::setValue(const Key& key, const mu::Val& value) const
+void WorkspaceSettings::setValue(const Key& key, const mu::Val& value)
 {
     if (!currentWorkspace()) {
         return;
     }
 
-    AbstractDataPtr abstractData = currentWorkspace()->data(key.tag);
-    SettingsDataPtr settingsData = std::dynamic_pointer_cast<SettingsData>(abstractData);
-
-    if (!settingsData) {
-        settingsData = std::make_shared<SettingsData>();
-        settingsData->tag = key.tag;
+    const QString& tagStr = tagToString(key.tag);
+    IF_ASSERT_FAILED(!tagStr.isEmpty()) {
+        return;
     }
 
-    settingsData->values[key.key] = value;
+    QJsonObject obj = m_data.value(tagStr).toObject();
+    obj[QString::fromStdString(key.key)] = value.toQString();
 
-    currentWorkspace()->addData(settingsData);
+    m_data[tagStr] = obj;
 
+    Data wdata;
+    wdata.data = m_data;
+    currentWorkspace()->writeData(DATA_NAME, wdata);
+
+    m_valuesChanged.notify();
     auto it = m_channels.find(key);
     if (it != m_channels.end()) {
         Channel<Val> channel = it->second;

@@ -300,25 +300,21 @@ void UiConfiguration::writeThemes(const ThemeList& themes)
 
 mu::Val UiConfiguration::uiArrangmentValue(const std::string& key) const
 {
-    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
-        IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, key };
-        return workspaceSettings()->value(workspaceKey);
+    if (workspaceSettings()->isManage(IWorkspaceSettings::Tag::UiArrangement)) {
+        return workspaceSettings()->value({ IWorkspaceSettings::Tag::UiArrangement, key });
     }
 
-    Settings::Key settingsKey{ "global", key };
-    return settings()->value(settingsKey);
+    return settings()->value({ "ui", key });
 }
 
 void UiConfiguration::setUiArrangmentValue(const std::string& key, const mu::Val& value) const
 {
-    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
-        IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, key };
-        workspaceSettings()->setValue(workspaceKey, value);
+    if (workspaceSettings()->isManage(IWorkspaceSettings::Tag::UiArrangement)) {
+        workspaceSettings()->setValue({ IWorkspaceSettings::Tag::UiArrangement, key }, value);
         return;
     }
 
-    Settings::Key settingsKey{ "global", key };
-    settings()->setValue(settingsKey, value);
+    settings()->setValue({ "ui", key }, value);
 }
 
 ThemeList UiConfiguration::themes() const

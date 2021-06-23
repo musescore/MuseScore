@@ -67,7 +67,8 @@ void AppShellConfiguration::init()
     settings()->valueChanged(NOTATION_STATUSBAR_VISIBLE_KEY).onReceive(nullptr, [this](const Val&) {
         m_notationStatusBarVisibleChanged.send(isNotationStatusBarVisible().val);
     });
-    IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, NOTATION_STATUSBAR_VISIBLE_KEY.key };
+
+    IWorkspaceSettings::Key workspaceKey{ IWorkspaceSettings::Tag::UiArrangement, NOTATION_STATUSBAR_VISIBLE_KEY.key };
     workspaceSettings()->valueChanged(workspaceKey).onReceive(nullptr, [this](const Val&) {
         m_notationStatusBarVisibleChanged.send(isNotationStatusBarVisible().val);
     });
@@ -193,8 +194,8 @@ mu::ValCh<bool> AppShellConfiguration::isNotationStatusBarVisible() const
 
 void AppShellConfiguration::setIsNotationStatusBarVisible(bool visible) const
 {
-    if (workspaceSettings()->isManage(workspace::WorkspaceTag::UiArrangement)) {
-        IWorkspaceSettings::Key workspaceKey{ workspace::WorkspaceTag::UiArrangement, NOTATION_STATUSBAR_VISIBLE_KEY.key };
+    if (workspaceSettings()->isManage(IWorkspaceSettings::Tag::UiArrangement)) {
+        IWorkspaceSettings::Key workspaceKey{ IWorkspaceSettings::Tag::UiArrangement, NOTATION_STATUSBAR_VISIBLE_KEY.key };
         workspaceSettings()->setValue(workspaceKey, Val(visible));
     } else {
         settings()->setValue(NOTATION_STATUSBAR_VISIBLE_KEY, Val(visible));
