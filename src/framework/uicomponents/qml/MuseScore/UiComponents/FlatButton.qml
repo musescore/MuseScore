@@ -88,7 +88,7 @@ FocusScope {
 
         onTriggered: {
             if (root.isClickOnKeyNavTriggered) {
-                root.clicked()
+                root.clicked(null)
             }
         }
     }
