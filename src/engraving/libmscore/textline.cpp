@@ -353,7 +353,6 @@ void TextLine::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
             score()->undo(new ChangeTextLineProperty(s, v));
             triggerLayout();
         }
-        MuseScoreCore::mscoreCore->updateInspector();
         return;
     }
     TextLineBase::undoChangeProperty(id, v, ps);
