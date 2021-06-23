@@ -27,6 +27,7 @@
 
 #include "global/xmlreader.h"
 #include "global/xmlwriter.h"
+#include "multiinstances/resourcelockguard.h"
 
 using namespace mu::shortcuts;
 using namespace mu::framework;
@@ -60,7 +61,11 @@ void ShortcutsRegister::load()
     bool ok = readFromFile(m_defaultShortcuts, defPath);
 
     if (ok) {
-        ok = readFromFile(m_shortcuts, userPath);
+        {
+            //! NOTE The user shortcut file may change, so we need to lock it
+            mi::ResourceLockGuard(multiInstancesProvider(), "shortcuts");
+            ok = readFromFile(m_shortcuts, userPath);
+        }
         if (!ok) {
             m_shortcuts = m_defaultShortcuts;
         } else {
@@ -141,6 +146,8 @@ void ShortcutsRegister::expandStandardKeys(ShortcutList& shortcuts) const
 
 bool ShortcutsRegister::readFromFile(ShortcutList& shortcuts, const io::path& path) const
 {
+    TRACEFUNC;
+
     XmlReader reader(path);
 
     reader.readNextStartElement();
@@ -214,6 +221,8 @@ bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::pat
 {
     TRACEFUNC;
 
+    mi::ResourceLockGuard(multiInstancesProvider(), "shortcuts");
+
     XmlWriter writer(path);
 
     writer.writeStartDocument();
@@ -270,6 +279,8 @@ ShortcutList ShortcutsRegister::shortcutsForSequence(const std::string& sequence
 
 mu::Ret ShortcutsRegister::importFromFile(const io::path& filePath)
 {
+    mi::ResourceLockGuard(multiInstancesProvider(), "shortcuts");
+
     Ret ret = fileSystem()->copy(filePath, configuration()->shortcutsUserAppDataPath(), true);
     if (!ret) {
         LOGE() << "failed import file: " << ret.toString();
