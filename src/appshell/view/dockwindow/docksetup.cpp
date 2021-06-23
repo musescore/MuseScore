@@ -34,13 +34,12 @@
 #include "dockcentral.h"
 #include "dockpage.h"
 
-#include "mainwindowprovider.h"
-
 #ifdef Q_OS_MAC
-#include "view/dockwindow/internal/platform/macos/appwindowstyler.h"
+#include "internal/platform/macos/macosmainwindowprovider.h"
+#else
+#include "mainwindowprovider.h"
 #endif
 
-#include "modularity/ioc.h"
 #include "docktypes.h"
 
 #include "thirdparty/KDDockWidgets/src/Config.h"
@@ -97,7 +96,9 @@ void DockSetup::registerQmlTypes()
     qmlRegisterType<DockBase>("MuseScore.Dock", 1, 0, "DockBase");
 
 #ifdef Q_OS_MAC
-    qmlRegisterType<AppWindowStyler>("MuseScore.Dock", 1, 0, "AppWindowStyler");
+    qmlRegisterType<MacOSMainWindowProvider>("MuseScore.Dock", 1, 0, "MainWindowProvider");
+#else
+    qmlRegisterType<MainWindowProvider>("MuseScore.Dock", 1, 0, "MainWindowProvider");
 #endif
 
     qRegisterMetaType<DropIndicators*>();
@@ -105,7 +106,6 @@ void DockSetup::registerQmlTypes()
 
 void DockSetup::registerExports()
 {
-    framework::ioc()->registerExport<ui::IMainWindow>("dock", new MainWindowProvider());
 }
 
 void DockSetup::setup(QQmlEngine* engine)
