@@ -65,7 +65,7 @@ DockWindow {
             movable: false
 
             contentComponent: MainToolBar {
-                navigation.section: topToolKeyNavSec
+                navigation.section: root.topToolKeyNavSec
                 navigation.order: 1
 
                 currentUri: root.currentPageUri
