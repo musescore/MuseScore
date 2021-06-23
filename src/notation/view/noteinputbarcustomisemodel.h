@@ -27,7 +27,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "inotationconfiguration.h"
-#include "workspace/iworkspacemanager.h"
+#include "ui/iuiconfiguration.h"
 #include "ui/iuiactionsregister.h"
 
 class QItemSelectionModel;
@@ -44,7 +44,7 @@ class NoteInputBarCustomiseModel : public QAbstractListModel, public async::Asyn
     Q_OBJECT
 
     INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, workspace::IWorkspaceManager, workspaceManager)
+    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, ui::IUiActionsRegister, actionsRegister)
 
     Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
@@ -110,8 +110,6 @@ private:
     actions::ActionCodeList customizedActions() const;
     actions::ActionCodeList defaultActions() const;
     actions::ActionCodeList currentActions() const;
-
-    actions::ActionCodeList currentWorkspaceActions() const;
 
     bool actionFromNoteInputModes(const actions::ActionCode& actionCode) const;
 

@@ -494,22 +494,6 @@ int NotationConfiguration::notationDivision() const
     return Ms::MScore::division;
 }
 
-std::vector<std::string> NotationConfiguration::toolbarActions(const std::string& toolbarName) const
-{
-    return parseToolbarActions(settings()->value(toolbarSettingsKey(toolbarName)).toString());
-}
-
-void NotationConfiguration::setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions)
-{
-    QStringList qactions;
-    for (const std::string& action: actions) {
-        qactions << QString::fromStdString(action);
-    }
-
-    Val value(qactions.join(",").toStdString());
-    settings()->setValue(toolbarSettingsKey(toolbarName), value);
-}
-
 ValCh<Orientation> NotationConfiguration::canvasOrientation() const
 {
     ValCh<Orientation> orientation;
@@ -536,29 +520,6 @@ bool NotationConfiguration::isLimitCanvasScrollArea() const
 void NotationConfiguration::setIsLimitCanvasScrollArea(bool limited)
 {
     settings()->setValue(IS_LIMIT_CANVAS_SCROLL_AREA_KEY, Val(limited));
-}
-
-std::vector<std::string> NotationConfiguration::parseToolbarActions(const std::string& actions) const
-{
-    if (actions.empty()) {
-        return {};
-    }
-
-    std::vector<std::string> result;
-
-    QStringList actionsList = QString::fromStdString(actions).split(",");
-    for (const QString& action: actionsList) {
-        result.push_back(action.toStdString());
-    }
-
-    return result;
-}
-
-Settings::Key NotationConfiguration::toolbarSettingsKey(const std::string& toolbarName) const
-{
-    Settings::Key toolbarKey = TOOLBAR_KEY;
-    toolbarKey.key += toolbarName;
-    return toolbarKey;
 }
 
 bool NotationConfiguration::colorNotesOusideOfUsablePitchRange() const

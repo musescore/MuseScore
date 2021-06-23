@@ -41,7 +41,8 @@ public:
     std::string name() const override;
     std::string title() const override;
 
-    bool isManaged(const std::string& key) const override;
+    bool isManaged(const Option& key) const override;
+    void setIsManaged(const Option& key, bool val) const override;
 
     RetVal<QByteArray> readRawData(const std::string& name) const override;
     Ret writeRawData(const std::string& name, const QByteArray& data) override;
@@ -58,9 +59,6 @@ public:
     AbstractDataPtrList dataList(WorkspaceTag tag) const override;
     void addData(AbstractDataPtr data) override;
     async::Channel<AbstractDataPtr> dataChanged() const override;
-
-    Val settingValue(const std::string& key) const override;
-    std::vector<std::string> toolbarActions(const std::string& toolbarName) const override;
 
     bool isInited() const;
     io::path filePath() const;
