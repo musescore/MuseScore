@@ -98,9 +98,9 @@ Rectangle {
             isClickOnKeyNavTriggered: false
             navigation.onTriggered: {
                 if (hasMenu && item.isMenuSecondary) {
-                    btn.pressAndHold()
+                    btn.pressAndHold(null)
                 } else {
-                    btn.clicked()
+                    btn.clicked(null)
                 }
             }
 
