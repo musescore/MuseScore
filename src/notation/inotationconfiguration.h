@@ -128,9 +128,6 @@ public:
     virtual std::string notationRevision() const = 0;
     virtual int notationDivision() const = 0;
 
-    virtual std::vector<std::string> toolbarActions(const std::string& toolbarName) const = 0;
-    virtual void setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions) = 0;
-
     virtual ValCh<framework::Orientation> canvasOrientation() const = 0;
     virtual void setCanvasOrientation(framework::Orientation orientation) = 0;
 

@@ -39,7 +39,7 @@ using namespace mu::ui;
 using namespace mu::uicomponents;
 using namespace mu::actions;
 
-static const std::string NOTE_INPUT_TOOLBAR_NAME("noteInput");
+static const QString NOTE_INPUT_TOOLBAR_NAME("noteInput");
 
 static const ActionCode NOTE_INPUT_ACTION_CODE("note-input");
 static const ActionCode NOTE_INPUT_MODE_ACTION_CODE("mode-note-input");
@@ -100,10 +100,10 @@ void NoteInputBarCustomiseModel::load()
         actions = defaultActions();
     }
 
-    for (const ActionCode& actionCode: actions) {
+    ActionCodeList savedActions = uiConfiguration()->toolbarActions(NOTE_INPUT_TOOLBAR_NAME);
+    for (const ActionCode& actionCode : actions) {
         UiAction action = actionsRegister()->action(actionCode);
-        ActionCodeList alist = currentWorkspaceActions();
-        bool checked = containsAction(currentWorkspaceActions(), actionCode);
+        bool checked = containsAction(savedActions, actionCode);
 
         m_actions << makeItem(action, checked);
     }
@@ -429,14 +429,14 @@ AbstractNoteInputBarItem* NoteInputBarCustomiseModel::makeSeparatorItem() const
 
 ActionCodeList NoteInputBarCustomiseModel::customizedActions() const
 {
-    ActionCodeList actionsFromConfiguration = configuration()->toolbarActions(NOTE_INPUT_TOOLBAR_NAME);
+    ActionCodeList actionsFromConfiguration = uiConfiguration()->toolbarActions(NOTE_INPUT_TOOLBAR_NAME);
 
     if (actionsFromConfiguration.empty()) {
         return {};
     }
 
     ActionCodeList result;
-    for (const ActionCode& actionCode: actionsFromConfiguration) {
+    for (const ActionCode& actionCode : actionsFromConfiguration) {
         if (containsAction(result, actionCode) && actionCode != SEPARATOR_LINE_ACTION_CODE) {
             continue;
         }
@@ -445,7 +445,7 @@ ActionCodeList NoteInputBarCustomiseModel::customizedActions() const
     }
 
     UiActionList allNoteInputActions = NotationUiActions::defaultNoteInputActions();
-    for (const UiAction& action: allNoteInputActions) {
+    for (const UiAction& action : allNoteInputActions) {
         if (actionFromNoteInputModes(action.code)) {
             continue;
         }
@@ -463,7 +463,7 @@ ActionCodeList NoteInputBarCustomiseModel::customizedActions() const
 ActionCodeList NoteInputBarCustomiseModel::defaultActions() const
 {
     UiActionList allNoteInputActions = NotationUiActions::defaultNoteInputActions();
-    ActionCodeList currentWorkspaceNoteInputActions = currentWorkspaceActions();
+    ActionCodeList savedActions = uiConfiguration()->toolbarActions(NOTE_INPUT_TOOLBAR_NAME);
 
     bool noteInputModeActionExists = false;
 
@@ -484,7 +484,7 @@ ActionCodeList NoteInputBarCustomiseModel::defaultActions() const
         ActionCodeList actions;
         for (size_t i = startActionIndex; i < allNoteInputActions.size(); ++i) {
             ActionCode actionCode = allNoteInputActions[i].code;
-            if (containsAction(currentWorkspaceNoteInputActions, actionCode)) {
+            if (containsAction(savedActions, actionCode)) {
                 break;
             }
 
@@ -504,7 +504,7 @@ ActionCodeList NoteInputBarCustomiseModel::defaultActions() const
     //!       but not at the beginning of the current workspace
     appendRelatedActions(0);
 
-    for (const ActionCode& actionCode: currentWorkspaceNoteInputActions) {
+    for (const ActionCode& actionCode : savedActions) {
         if (!canAppendAction(actionCode)) {
             continue;
         }
@@ -543,24 +543,6 @@ ActionCodeList NoteInputBarCustomiseModel::currentActions() const
     return result;
 }
 
-ActionCodeList NoteInputBarCustomiseModel::currentWorkspaceActions() const
-{
-    RetValCh<IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
-    if (!workspace.ret) {
-        LOGE() << workspace.ret.toString();
-        return {};
-    }
-
-    AbstractDataPtr abstractData = workspace.val->data(WorkspaceTag::Toolbar, NOTE_INPUT_TOOLBAR_NAME);
-    ToolbarDataPtr toolbarData = std::dynamic_pointer_cast<ToolbarData>(abstractData);
-    if (!toolbarData) {
-        LOGE() << "Failed to get data of actions for " << NOTE_INPUT_TOOLBAR_NAME;
-        return {};
-    }
-
-    return toolbarData->actions;
-}
-
 bool NoteInputBarCustomiseModel::actionFromNoteInputModes(const ActionCode& actionCode) const
 {
     return QString::fromStdString(actionCode).startsWith(QString::fromStdString(NOTE_INPUT_ACTION_CODE));
@@ -568,24 +550,6 @@ bool NoteInputBarCustomiseModel::actionFromNoteInputModes(const ActionCode& acti
 
 void NoteInputBarCustomiseModel::saveActions()
 {
-    RetValCh<IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
-    if (!workspace.ret) {
-        LOGW() << workspace.ret.toString();
-        return;
-    }
-
     ActionCodeList currentActions = this->currentActions();
-
-    ToolbarDataPtr toolbarData = std::make_shared<ToolbarData>();
-    toolbarData->tag = WorkspaceTag::Toolbar;
-    toolbarData->name = NOTE_INPUT_TOOLBAR_NAME;
-    toolbarData->actions = currentActions;
-    workspace.val->addData(toolbarData);
-
-    ActionCodeList items;
-    for (const AbstractNoteInputBarItem* actionItem: m_actions) {
-        items.push_back(actionItem->id().toStdString());
-    }
-
-    configuration()->setToolbarActions(NOTE_INPUT_TOOLBAR_NAME, items);
+    uiConfiguration()->setToolbarActions(NOTE_INPUT_TOOLBAR_NAME, currentActions);
 }

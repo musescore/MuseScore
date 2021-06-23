@@ -531,3 +531,18 @@ mu::async::Notification UiConfiguration::isVisibleChanged(const QString& key) co
 {
     return m_uiArrangement.valueChanged(key);
 }
+
+mu::actions::ActionCodeList UiConfiguration::toolbarActions(const QString& toolbarName) const
+{
+    return m_uiArrangement.toolbarActions(toolbarName);
+}
+
+void UiConfiguration::setToolbarActions(const QString& toolbarName, const actions::ActionCodeList& actions)
+{
+    m_uiArrangement.setToolbarActions(toolbarName, actions);
+}
+
+mu::async::Notification UiConfiguration::toolbarActionsChanged(const QString& toolbarName) const
+{
+    return m_uiArrangement.toolbarActionsChanged(toolbarName);
+}

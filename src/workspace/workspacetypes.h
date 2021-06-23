@@ -32,6 +32,14 @@
 namespace mu::workspace {
 static constexpr std::string_view DEFAULT_WORKSPACE_NAME("Default");
 
+enum class Option {
+    Undefined = 0,
+    UiSettings,
+    UiState,
+    UiToolActions,
+    Palettes,
+};
+
 struct Data
 {
     QJsonValue data;
@@ -40,10 +48,7 @@ struct Data
 enum class WorkspaceTag
 {
     Unknown,
-    UiArrangement,
-    Settings,
     Palettes,
-    Toolbar
 };
 using WorkspaceTagList = std::vector<WorkspaceTag>;
 
@@ -62,23 +67,6 @@ struct AbstractData
 
 using AbstractDataPtr = std::shared_ptr<AbstractData>;
 using AbstractDataPtrList = std::vector<AbstractDataPtr>;
-
-//! NOTE Only data associations with framework.
-//! Other data must be in the appropriate modules.
-
-struct SettingsData : public AbstractData
-{
-    std::map<std::string /*key*/, Val> values;
-};
-
-using SettingsDataPtr = std::shared_ptr<SettingsData>;
-
-struct ToolbarData : public AbstractData
-{
-    std::vector<std::string /*action*/> actions;
-};
-
-using ToolbarDataPtr = std::shared_ptr<ToolbarData>;
 }
 
 #endif // MU_WORKSPACE_WORKSPACETYPES_H
