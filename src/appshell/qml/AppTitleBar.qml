@@ -30,7 +30,8 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
-    property var titleMoveAreaRect: Qt.rect(titleMoveArea.x, titleMoveArea.y, titleMoveArea.width, titleMoveArea.height)
+    property alias title: titleLabel.text
+    property rect titleMoveAreaRect: Qt.rect(titleMoveArea.x, titleMoveArea.y, titleMoveArea.width, titleMoveArea.height)
 
     signal showWindowMinimizedRequested()
     signal toggleWindowMaximizedRequested()
@@ -57,6 +58,7 @@ Rectangle {
         }
 
         StyledTextLabel {
+            id: titleLabel
             anchors.centerIn: parent
 
             horizontalAlignment: Text.AlignLeft
@@ -76,7 +78,7 @@ Rectangle {
                 normalStateColor: "transparent"
 
                 onClicked: {
-                    showWindowMinimizedRequested()
+                    root.showWindowMinimizedRequested()
                 }
             }
 
@@ -85,7 +87,7 @@ Rectangle {
                 normalStateColor: "transparent"
 
                 onClicked: {
-                    toggleWindowMaximizedRequested()
+                    root.toggleWindowMaximizedRequested()
                 }
             }
 
@@ -96,7 +98,7 @@ Rectangle {
                 hoveredStateColor: "red"
 
                 onClicked: {
-                    closeWindowRequested()
+                    root.closeWindowRequested()
                 }
             }
         }
