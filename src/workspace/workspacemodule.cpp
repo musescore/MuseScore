@@ -36,7 +36,6 @@
 #include "internal/workspaceactioncontroller.h"
 #include "internal/workspaceuiactions.h"
 
-#include "internal/workspacesettingsstream.h"
 #include "internal/workspacetoolbarstream.h"
 
 #include "internal/workspacesettings.h"
@@ -77,8 +76,6 @@ void WorkspaceModule::registerExports()
 
 void WorkspaceModule::resolveImports()
 {
-    s_streamRegister->regStream(std::make_shared<WorkspaceSettingsStream>(WorkspaceTag::Settings));
-    s_streamRegister->regStream(std::make_shared<WorkspaceSettingsStream>(WorkspaceTag::UiArrangement));
     s_streamRegister->regStream(std::make_shared<WorkspaceToolbarStream>());
 
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
