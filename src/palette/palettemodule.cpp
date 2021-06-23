@@ -41,9 +41,6 @@
 #include "view/palettepropertiesmodel.h"
 #include "view/palettecellpropertiesmodel.h"
 
-#include "workspace/iworkspacedatastreamregister.h"
-#include "internal/workspacepalettestream.h"
-
 #include "internal/paletteworkspacesetup.h"
 
 using namespace mu::palette;
@@ -73,11 +70,6 @@ void PaletteModule::registerExports()
 
 void PaletteModule::resolveImports()
 {
-    auto workspaceStreams = ioc()->resolve<workspace::IWorkspaceDataStreamRegister>(moduleName());
-    if (workspaceStreams) {
-        workspaceStreams->regStream(std::make_shared<WorkspacePaletteStream>());
-    }
-
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(s_paletteUiActions);
