@@ -78,6 +78,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/navigationcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/navigationuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/navigationuiactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/uiarrangement.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/uiarrangement.h
     ${PLATFORM_THEME_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.cpp

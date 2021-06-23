@@ -28,7 +28,6 @@
 #include "ui/iuiconfiguration.h"
 #include "iglobalconfiguration.h"
 #include "settings.h"
-#include "iworkspacesettings.h"
 #include "system/ifilesystem.h"
 
 namespace mu::notation {
@@ -36,7 +35,6 @@ class NotationConfiguration : public INotationConfiguration, public async::Async
 {
     INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(notation, framework::IWorkspaceSettings, workspaceSettings)
     INJECT(notation, system::IFileSystem, fileSystem)
 
 public:

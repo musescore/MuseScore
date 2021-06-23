@@ -407,14 +407,14 @@ void DockWindow::savePageState(const QString& pageName)
 {
     TRACEFUNC;
 
-    configuration()->setPageState(pageName.toStdString(), windowState());
+    configuration()->setPageState(pageName, windowState());
 }
 
 void DockWindow::restorePageState(const QString& pageName)
 {
     TRACEFUNC;
 
-    QByteArray state = configuration()->pageState(pageName.toStdString());
+    QByteArray state = configuration()->pageState(pageName);
     if (state.isEmpty()) {
         return;
     }

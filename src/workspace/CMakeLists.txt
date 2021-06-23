@@ -44,13 +44,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacefile.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacedatastreamregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacedatastreamregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacetoolbarstream.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacetoolbarstream.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/iworkspacecreator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacecreator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacecreator.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacesettings.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacesettings.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceactioncontroller.cpp
