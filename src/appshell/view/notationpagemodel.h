@@ -22,13 +22,17 @@
 #ifndef MU_APPSHELL_NOTATIONPAGEMODEL_H
 #define MU_APPSHELL_NOTATIONPAGEMODEL_H
 
-#include <QObject>
+#include <QQuickItem>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
 #include "inotationpagestate.h"
+
+namespace mu::dock {
+class DockWindow;
+}
 
 namespace mu::appshell {
 class NotationPageModel : public QObject, public async::Asyncable, public actions::Actionable
@@ -38,66 +42,38 @@ class NotationPageModel : public QObject, public async::Asyncable, public action
     INJECT(appshell, INotationPageState, pageState)
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
 
-    Q_PROPERTY(bool isPalettePanelVisible READ isPalettePanelVisible WRITE setIsPalettePanelVisible NOTIFY isPalettePanelVisibleChanged)
-    Q_PROPERTY(
-        bool isInstrumentsPanelVisible READ isInstrumentsPanelVisible WRITE setIsInstrumentsPanelVisible NOTIFY isInstrumentsPanelVisibleChanged)
-    Q_PROPERTY(
-        bool isInspectorPanelVisible READ isInspectorPanelVisible WRITE setIsInspectorPanelVisible NOTIFY isInspectorPanelVisibleChanged)
-    Q_PROPERTY(bool isStatusBarVisible READ isStatusBarVisible WRITE setIsStatusBarVisible NOTIFY isStatusBarVisibleChanged)
-    Q_PROPERTY(bool isNoteInputBarVisible READ isNoteInputBarVisible WRITE setIsNoteInputBarVisible NOTIFY isNoteInputBarVisibleChanged)
-    Q_PROPERTY(
-        bool isNotationToolBarVisible READ isNotationToolBarVisible WRITE setIsNotationToolBarVisible NOTIFY isNotationToolBarVisibleChanged)
-    Q_PROPERTY(
-        bool isPlaybackToolBarVisible READ isPlaybackToolBarVisible WRITE setIsPlaybackToolBarVisible NOTIFY isPlaybackToolBarVisibleChanged)
-    Q_PROPERTY(
-        bool isUndoRedoToolBarVisible READ isUndoRedoToolBarVisible WRITE setIsUndoRedoToolBarVisible NOTIFY isUndoRedoToolBarVisibleChanged)
-    Q_PROPERTY(
-        bool isNotationNavigatorVisible READ isNotationNavigatorVisible WRITE setIsNotationNavigatorVisible NOTIFY isNotationNavigatorVisibleChanged)
+    Q_PROPERTY(bool isNavigatorVisible READ isNavigatorVisible NOTIFY isNavigatorVisibleChanged)
 
 public:
     explicit NotationPageModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void init();
-    Q_INVOKABLE void setPanelsState(const QVariantList& states);
+    bool isNavigatorVisible() const;
 
-    bool isPalettePanelVisible() const;
-    bool isInstrumentsPanelVisible() const;
-    bool isInspectorPanelVisible() const;
-    bool isStatusBarVisible() const;
-    bool isNoteInputBarVisible() const;
-    bool isNotationToolBarVisible() const;
-    bool isPlaybackToolBarVisible() const;
-    bool isUndoRedoToolBarVisible() const;
-    bool isNotationNavigatorVisible() const;
+    Q_INVOKABLE void setNotationToolBarDockName(const QString& dockName);
+    Q_INVOKABLE void setPlaybackToolBarDockName(const QString& dockName);
+    Q_INVOKABLE void setUndoRedoToolBarDockName(const QString& dockName);
+    Q_INVOKABLE void setNoteInputBarDockName(const QString& dockName);
 
-public slots:
-    void setIsPalettePanelVisible(bool visible);
-    void setIsInstrumentsPanelVisible(bool visible);
-    void setIsInspectorPanelVisible(bool visible);
-    void setIsStatusBarVisible(bool visible);
-    void setIsNoteInputBarVisible(bool visible);
-    void setIsNotationToolBarVisible(bool visible);
-    void setIsPlaybackToolBarVisible(bool visible);
-    void setIsUndoRedoToolBarVisible(bool visible);
-    void setIsNotationNavigatorVisible(bool visible);
+    Q_INVOKABLE void setPalettePanelDockName(const QString& dockName);
+    Q_INVOKABLE void setInstrumentsPanelDockName(const QString& dockName);
+    Q_INVOKABLE void setInspectorPanelDockName(const QString& dockName);
+
+    Q_INVOKABLE void setPianoRollDockName(const QString& dockName);
+    Q_INVOKABLE void setMixerDockName(const QString& dockName);
+
+    Q_INVOKABLE void setStatusBarDockName(const QString& dockName);
+
+    Q_INVOKABLE void init(QQuickItem* dockWindow);
 
 signals:
-    void isPalettePanelVisibleChanged();
-    void isInstrumentsPanelVisibleChanged();
-    void isInspectorPanelVisibleChanged();
-    void isStatusBarVisibleChanged();
-    void isNotationToolBarVisibleChanged();
-    void isNoteInputBarVisibleChanged();
-    void isPlaybackToolBarVisibleChanged();
-    void isUndoRedoToolBarVisibleChanged();
-    void isNotationNavigatorVisibleChanged();
+    void isNavigatorVisibleChanged();
 
 private:
-    void notifyAboutPanelChanged(PanelType type);
-
+    void setPanelDockName(PanelType type, const QString& dockName);
     void togglePanel(PanelType type);
 
-    PanelType panelTypeFromString(const QString& string) const;
+    QMap<PanelType, QString /* dockName */> m_panelTypeToDockName;
+    dock::DockWindow* m_window = nullptr;
 };
 }
 

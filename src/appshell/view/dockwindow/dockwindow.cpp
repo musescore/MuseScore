@@ -197,6 +197,20 @@ void DockWindow::loadPage(const QString& uri)
     emit currentPageUriChanged(uri);
 }
 
+bool DockWindow::isDockShown(const QString& dockName) const
+{
+    const DockPage* currPage = currentPage();
+    return currPage ? currPage->isDockShown(dockName) : false;
+}
+
+void DockWindow::toggleDockVisibility(const QString& dockName)
+{
+    DockPage* currPage = currentPage();
+    if (currPage) {
+        currPage->toggleDockVisibility(dockName);
+    }
+}
+
 DockToolBarHolder* DockWindow::mainToolBarDockingHolder() const
 {
     return m_mainToolBarDockingHolder;
