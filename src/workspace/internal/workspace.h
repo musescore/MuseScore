@@ -41,6 +41,8 @@ public:
     std::string name() const override;
     std::string title() const override;
 
+    bool isManaged(const std::string& key) const override;
+
     RetVal<QByteArray> readRawData(const std::string& name) const override;
     Ret writeRawData(const std::string& name, const QByteArray& data) override;
 
