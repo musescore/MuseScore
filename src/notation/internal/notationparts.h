@@ -160,6 +160,7 @@ private:
 
     void initStaff(Staff* staff, const instruments::Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex);
 
+    void notifyAboutPartChanged(const ID& partId) const;
     void notifyAboutStaffChanged(const ID& staffId) const;
     void notifyAboutInstrumentsChanged(const ID& partId) const;
 
