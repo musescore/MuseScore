@@ -21,13 +21,43 @@
  */
 #include "paletteworkspacesetup.h"
 
-#include "log.h"
-#include "workspacepalettestream.h"
+#include <QBuffer>
+
 #include "palette/paletteworkspace.h"
 #include "palette/palettecreator.h"
 
+#include "log.h"
+
 using namespace mu::palette;
-using namespace Ms;
+
+static const QString PALETTE_XML_TAG("PaletteBox");
+static const std::string PALETTE_DATA_NAME("palette");
+
+static Ms::PaletteTreePtr readPalette(const QByteArray& data)
+{
+    QBuffer buf;
+    buf.setData(data);
+    Ms::XmlReader reader(&buf);
+
+    while (!reader.atEnd()) {
+        reader.readNextStartElement();
+
+        if (reader.name() == PALETTE_XML_TAG) {
+            Ms::PaletteTreePtr tree = std::make_shared<Ms::PaletteTree>();
+            tree->read(reader);
+            return tree;
+        }
+    }
+
+    return nullptr;
+}
+
+static void writePalette(const Ms::PaletteTreePtr& tree, QByteArray& data)
+{
+    QBuffer buf(&data);
+    Ms::XmlWriter writer(nullptr, &buf);
+    tree->write(writer);
+}
 
 void PaletteWorkspaceSetup::setup()
 {
@@ -35,28 +65,29 @@ void PaletteWorkspaceSetup::setup()
         return;
     }
 
-    PaletteWorkspace* paletteWorkspace = adapter()->paletteWorkspace();
+    Ms::PaletteWorkspace* paletteWorkspace = adapter()->paletteWorkspace();
     auto updateWorkspaceConnection = std::make_shared<QMetaObject::Connection>();
 
     auto applyWorkspaceData = [paletteWorkspace, updateWorkspaceConnection](workspace::IWorkspacePtr workspace) {
-        workspace::AbstractDataPtr data = workspace->data(workspace::WorkspaceTag::Palettes);
-        PaletteWorkspaceDataPtr palette = std::dynamic_pointer_cast<PaletteWorkspaceData>(data);
-
-        if (!palette) {
+        RetVal<QByteArray> data = workspace->readRawData(PALETTE_DATA_NAME);
+        if (!data.ret) {
             LOGW() << "no palette data in workspace: " << workspace->name();
             return false;
         }
 
-        paletteWorkspace->setDefaultPaletteTree(palette->tree);
-        paletteWorkspace->setUserPaletteTree(palette->tree);
+        Ms::PaletteTreePtr tree = readPalette(data.val);
+
+        paletteWorkspace->setDefaultPaletteTree(tree);
+        paletteWorkspace->setUserPaletteTree(tree);
 
         if (updateWorkspaceConnection) {
             QObject::disconnect(*updateWorkspaceConnection);
         }
 
-        auto newConnection
-            = QObject::connect(paletteWorkspace, &PaletteWorkspace::userPaletteChanged, [workspace, palette]() {
-            workspace->addData(palette);
+        auto newConnection = QObject::connect(paletteWorkspace, &Ms::PaletteWorkspace::userPaletteChanged, [workspace, tree]() {
+            QByteArray newData;
+            writePalette(tree, newData);
+            workspace->writeRawData(PALETTE_DATA_NAME, newData);
         });
 
         *updateWorkspaceConnection = newConnection;
