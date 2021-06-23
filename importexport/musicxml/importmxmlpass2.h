@@ -400,6 +400,7 @@ private:
       void dynamics();
       void handleRepeats(Measure* measure, const int track);
       bool isLikelyFingering() const;
+      bool isLikelyCredit(const Fraction& tick) const;
       void skipLogCurrElem();
       };
 
