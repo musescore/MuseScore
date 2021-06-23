@@ -21,10 +21,13 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.AppShell 1.0
 
 ListView {
+
+    property alias navigation: navPanel
 
     height: contentItem.childrenRect.height
     width: contentWidth
@@ -46,6 +49,11 @@ ListView {
         property var showedMenu: null
     }
 
+    NavigationPanel {
+        id: navPanel
+        name: "AppMenuBar"
+    }
+
     delegate: FlatButton {
         id: radioButtonDelegate
 
@@ -56,6 +64,9 @@ ListView {
         normalStateColor: !menuLoader.isMenuOpened ? "transparent" : ui.theme.accentColor
         hoveredStateColor: ui.theme.accentColor
         text: Boolean(item) ? item.title : ""
+
+        navigation.panel: navPanel
+        navigation.order: index
 
         mouseArea.onContainsMouseChanged: {
             if (!mouseArea.containsMouse || !prv.showedMenu ||
