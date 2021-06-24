@@ -74,6 +74,8 @@ public:
 
 private:
 
+    bool isInited() const;
+
     void onMsg(const ipc::Msg& msg);
 
     ipc::IpcLock* lock(const std::string& name);

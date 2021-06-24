@@ -63,6 +63,11 @@ void MultiInstancesProvider::init()
     m_ipcChannel->connect();
 }
 
+bool MultiInstancesProvider::isInited() const
+{
+    return m_ipcChannel != nullptr;
+}
+
 void MultiInstancesProvider::onMsg(const Msg& msg)
 {
     LOGI() << msg.method;
@@ -109,6 +114,10 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
 
 bool MultiInstancesProvider::isScoreAlreadyOpened(const io::path& scorePath) const
 {
+    if (!isInited()) {
+        return false;
+    }
+
     int ret = 0;
     m_ipcChannel->syncRequestToAll(METHOD_SCORE_IS_OPENED, { scorePath.toQString() }, [&ret](const QStringList& args) {
         IF_ASSERT_FAILED(args.count() > 0) {
@@ -126,12 +135,20 @@ bool MultiInstancesProvider::isScoreAlreadyOpened(const io::path& scorePath) con
 
 void MultiInstancesProvider::activateWindowWithScore(const io::path& scorePath)
 {
+    if (!isInited()) {
+        return;
+    }
+
     mainWindow()->requestShowOnBack();
     m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_SCORE, { scorePath.toQString() });
 }
 
 bool MultiInstancesProvider::isPreferencesAlreadyOpened() const
 {
+    if (!isInited()) {
+        return false;
+    }
+
     int ret = 0;
     m_ipcChannel->syncRequestToAll(METHOD_PREFERENCES_IS_OPENED, {}, [&ret](const QStringList& args) {
         IF_ASSERT_FAILED(args.count() > 0) {
@@ -149,27 +166,47 @@ bool MultiInstancesProvider::isPreferencesAlreadyOpened() const
 
 void MultiInstancesProvider::activateWindowWithOpenedPreferences() const
 {
+    if (!isInited()) {
+        return;
+    }
+
     mainWindow()->requestShowOnBack();
     m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_OPENED_PREFERENCES);
 }
 
 void MultiInstancesProvider::settingsBeginTransaction()
 {
+    if (!isInited()) {
+        return;
+    }
+
     m_ipcChannel->broadcast(METHOD_SETTINGS_BEGIN_TRANSACTION);
 }
 
 void MultiInstancesProvider::settingsCommitTransaction()
 {
+    if (!isInited()) {
+        return;
+    }
+
     m_ipcChannel->broadcast(METHOD_SETTINGS_COMMIT_TRANSACTION);
 }
 
 void MultiInstancesProvider::settingsRollbackTransaction()
 {
+    if (!isInited()) {
+        return;
+    }
+
     m_ipcChannel->broadcast(METHOD_SETTINGS_ROLLBACK_TRANSACTION);
 }
 
 void MultiInstancesProvider::settingsSetValue(const std::string& key, const Val& value)
 {
+    if (!isInited()) {
+        return;
+    }
+
     QStringList args;
     args << QString::fromStdString(key);
     args << value.toQString();
