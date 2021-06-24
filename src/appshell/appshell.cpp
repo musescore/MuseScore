@@ -233,6 +233,9 @@ int AppShell::processConverter(const CommandLineController::ConverterTask& task)
     case CommandLineController::ConvertType::Batch:
         ret = converter()->batchConvert(task.inputFile, stylePath, forceMode);
         break;
+    case CommandLineController::ConvertType::ConvertScoreParts:
+        ret = converter()->convertScoreParts(task.inputFile, task.outputFile, stylePath);
+        break;
     case CommandLineController::ConvertType::File:
         ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode);
         break;

@@ -43,6 +43,7 @@ public:
 
     Ret fileConvert(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) override;
     Ret batchConvert(const io::path& batchJobFile, const io::path& stylePath = io::path(), bool forceMode = false) override;
+    Ret convertScoreParts(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) override;
 
     Ret exportScoreMedia(const io::path& in, const io::path& out,
                          const io::path& highlightConfigPath = io::path(), const io::path& stylePath = io::path(),
@@ -66,6 +67,14 @@ private:
     using BatchJob = std::list<Job>;
 
     RetVal<BatchJob> parseBatchJob(const io::path& batchJobFile) const;
+
+    bool isConvertPageByPage(const std::string& suffix) const;
+    Ret convertPageByPage(notation::INotationWriterPtr writer, notation::INotationPtr notation, const io::path& out) const;
+    Ret convertFullNotation(notation::INotationWriterPtr writer, notation::INotationPtr notation, const io::path& out) const;
+
+    Ret convertScorePartsToPdf(notation::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation, const io::path& out) const;
+    Ret convertScorePartsToPngs(notation::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
+                                const io::path& out) const;
 };
 }
 

@@ -25,6 +25,8 @@
 
 #include "libmscore/mscore.h"
 
+#include "internal/midiimport/importmidi_operations.h"
+
 using namespace mu::framework;
 using namespace mu::iex::midi;
 
@@ -55,4 +57,9 @@ bool MidiConfiguration::isMidiExportRpns() const
 void MidiConfiguration::setIsMidiExportRpns(bool exportRpns) const
 {
     settings()->setValue(EXPORTRPNS_KEY, Val(exportRpns));
+}
+
+void MidiConfiguration::setMidiImportOperationsFile(const mu::io::path& filePath) const
+{
+    Ms::midiImportOperations.setOperationsFile(filePath.toQString());
 }
