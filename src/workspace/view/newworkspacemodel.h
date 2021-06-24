@@ -25,9 +25,9 @@
 
 #include <QObject>
 
+#include "modularity/ioc.h"
 #include "internal/iworkspacecreator.h"
 #include "iworkspacemanager.h"
-#include "modularity/ioc.h"
 
 namespace mu::workspace {
 class NewWorkspaceModel : public QObject

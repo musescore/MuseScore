@@ -126,10 +126,10 @@ QVariant NewWorkspaceModel::createWorkspace()
 {
     IWorkspacePtr newWorkspace = workspaceCreator()->newWorkspace(m_workspaceName.toStdString());
 
-    newWorkspace->setIsManaged(Option::UiSettings, useUiPreferences());
-    newWorkspace->setIsManaged(Option::UiState, useUiArrangement());
-    newWorkspace->setIsManaged(Option::UiToolActions, useToolbarCustomization());
-    newWorkspace->setIsManaged(Option::Palettes, usePalettes());
+    newWorkspace->setIsManaged(DataKey::UiSettings, useUiPreferences());
+    newWorkspace->setIsManaged(DataKey::UiStates, useUiArrangement());
+    newWorkspace->setIsManaged(DataKey::UiToolActions, useToolbarCustomization());
+    newWorkspace->setIsManaged(DataKey::Palettes, usePalettes());
 
     return QVariant::fromValue(newWorkspace);
 }

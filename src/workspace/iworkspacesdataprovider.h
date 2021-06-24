@@ -19,23 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_WORKSPACE_IWORKSPACESDATAPROVIDER_H
+#define MU_WORKSPACE_IWORKSPACESDATAPROVIDER_H
 
-#ifndef MU_WORKSPACE_IWORKSPACECREATOR_H
-#define MU_WORKSPACE_IWORKSPACECREATOR_H
+#include <QByteArray>
 
-#include "iworkspace.h"
 #include "modularity/imoduleexport.h"
+#include "workspacetypes.h"
+#include "retval.h"
+#include "async/notification.h"
 
 namespace mu::workspace {
-class IWorkspaceCreator : MODULE_EXPORT_INTERFACE
+class IWorkspacesDataProvider : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IWorkspaceCreator)
-
+    INTERFACE_ID(IWorkspacesDataProvider)
 public:
-    virtual ~IWorkspaceCreator() = default;
+    virtual ~IWorkspacesDataProvider() = default;
 
-    virtual IWorkspacePtr newWorkspace(const std::string& workspaceName) const = 0;
+    virtual RetVal<QByteArray> rawData(DataKey key) const = 0;
+    virtual Ret setRawData(DataKey key, const QByteArray& data) = 0;
+
+    virtual RetVal<Data> data(DataKey key) const = 0;
+    virtual Ret setData(DataKey key, const Data& data) = 0;
+
+    virtual async::Notification dataChanged(DataKey key) = 0;
 };
 }
 
-#endif // MU_WORKSPACE_IWORKSPACECREATOR_H
+#endif // MU_WORKSPACE_IWORKSPACESDATAPROVIDER_H

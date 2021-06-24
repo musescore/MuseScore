@@ -30,122 +30,39 @@
 using namespace mu::ui;
 using namespace mu::workspace;
 
-static const std::string DATA_NAME("uiarrangement");
-
-static const QString UI_SETTINGS_KEY("uisettings");
-static const QString UI_STATES_KEY("uistates");
-static const QString UI_TOOLACTIONS_KEY("uitoolactions");
-
 void UiArrangement::init()
 {
-    RetValCh<IWorkspacePtr> w = workspaceManager()->currentWorkspace();
-    w.ch.onReceive(this, [this](const IWorkspacePtr) {
-        updateData();
+    workspacesDataProvider()->dataChanged(DataKey::UiSettings).onNotify(this, [this]() {
+        updateData(DataKey::UiSettings, m_settings);
     });
 
-    updateData();
+    workspacesDataProvider()->dataChanged(DataKey::UiSettings).onNotify(this, [this]() {
+        updateData(DataKey::UiStates, m_states);
+    });
+
+    workspacesDataProvider()->dataChanged(DataKey::UiSettings).onNotify(this, [this]() {
+        updateData(DataKey::UiToolActions, m_toolactions);
+    });
+
+    updateData(DataKey::UiSettings, m_settings);
+    updateData(DataKey::UiStates, m_states);
+    updateData(DataKey::UiToolActions, m_toolactions);
 }
 
-IWorkspacePtr UiArrangement::currentWorkspace() const
+void UiArrangement::updateData(DataKey key, QJsonObject& obj)
 {
-    return workspaceManager()->currentWorkspace().val;
+    RetVal<Data> data = workspacesDataProvider()->data(key);
+    if (!data.ret) {
+        LOGE() << "failed get data: " << int(key) << ", ret: " << data.ret.toString();
+        return;
+    }
+
+    obj = data.val.data.toObject();
 }
 
-void UiArrangement::updateData()
+void UiArrangement::saveData(workspace::DataKey key, const QJsonObject& obj)
 {
-    TRACEFUNC;
-
-    IWorkspacePtr workspace = currentWorkspace();
-
-    QJsonObject _wdata;
-    QJsonObject _fdata;
-
-    auto workspaceData = [&]() {
-        if (_wdata.isEmpty()) {
-            RetVal<Data> d = workspace->readData(DATA_NAME);
-            _wdata = d.val.data.toObject();
-        }
-        return _wdata;
-    };
-
-    auto fileData = [&]() {
-        if (_fdata.isEmpty()) {
-            _fdata = readFromFile();
-        }
-        return _fdata;
-    };
-
-    if (workspace && workspace->isManaged(workspace::Option::UiSettings)) {
-        m_settings = workspaceData().value(UI_SETTINGS_KEY).toObject();
-    } else {
-        m_settings = fileData().value(UI_SETTINGS_KEY).toObject();
-    }
-
-    if (workspace && workspace->isManaged(workspace::Option::UiState)) {
-        m_states = workspaceData().value(UI_STATES_KEY).toObject();
-    } else {
-        m_states = fileData().value(UI_STATES_KEY).toObject();
-    }
-
-    if (workspace && workspace->isManaged(workspace::Option::UiToolActions)) {
-        m_toolactions = workspaceData().value(UI_TOOLACTIONS_KEY).toObject();
-    } else {
-        m_toolactions = fileData().value(UI_TOOLACTIONS_KEY).toObject();
-    }
-}
-
-void UiArrangement::saveData()
-{
-    TRACEFUNC;
-
-    QJsonObject toWorkspace;
-    QJsonObject toFile;
-
-    IWorkspacePtr workspace = currentWorkspace();
-
-    if (workspace && workspace->isManaged(workspace::Option::UiSettings)) {
-        toWorkspace[UI_SETTINGS_KEY] = m_settings;
-    } else {
-        toFile[UI_SETTINGS_KEY] = m_settings;
-    }
-
-    if (workspace && workspace->isManaged(workspace::Option::UiState)) {
-        toWorkspace[UI_STATES_KEY] = m_states;
-    } else {
-        toFile[UI_STATES_KEY] = m_states;
-    }
-
-    if (workspace && workspace->isManaged(workspace::Option::UiToolActions)) {
-        toWorkspace[UI_TOOLACTIONS_KEY] = m_toolactions;
-    } else {
-        toFile[UI_TOOLACTIONS_KEY] = m_toolactions;
-    }
-
-    if (workspace && !toWorkspace.isEmpty()) {
-        Ret ret = workspace->writeData(DATA_NAME, { toWorkspace });
-        if (!ret) {
-            LOGE() << ret.toString();
-        }
-    }
-
-    if (!toFile.isEmpty()) {
-        Ret ret = writeToFile(toFile);
-        if (!ret) {
-            LOGE() << ret.toString();
-        }
-    }
-}
-
-mu::Ret UiArrangement::writeToFile(const QJsonObject& data)
-{
-    NOT_IMPLEMENTED;
-    return Ret();
-}
-
-QJsonObject UiArrangement::readFromFile() const
-{
-    NOT_IMPLEMENTED;
-    return QJsonObject();
+    workspacesDataProvider()->setData(key, { obj });
 }
 
 QString UiArrangement::value(const QString& key) const
@@ -157,7 +74,7 @@ QString UiArrangement::value(const QString& key) const
 void UiArrangement::setValue(const QString& key, const QString& val)
 {
     m_settings[key] = val;
-    saveData();
+    saveData(DataKey::UiSettings, m_settings);
 }
 
 mu::async::Notification UiArrangement::valueChanged(const QString& key) const
@@ -176,7 +93,7 @@ QByteArray UiArrangement::state(const QString& key) const
 void UiArrangement::setState(const QString& key, const QByteArray& data)
 {
     m_states[key] = QString::fromLocal8Bit(data);
-    saveData();
+    saveData(DataKey::UiStates, m_states);
 }
 
 mu::actions::ActionCodeList UiArrangement::toolbarActions(const QString& toolbarName) const
@@ -198,7 +115,7 @@ void UiArrangement::setToolbarActions(const QString& toolbarName, const actions:
         arr.append(QString::fromStdString(a));
     }
     m_toolactions[toolbarName] = arr;
-    saveData();
+    saveData(DataKey::UiToolActions, m_toolactions);
 }
 
 mu::async::Notification UiArrangement::toolbarActionsChanged(const QString& toolbarName) const

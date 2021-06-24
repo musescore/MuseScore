@@ -24,10 +24,11 @@ set(MODULE_QRC workspace.qrc)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/workspacemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/workspacemodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/iworkspace.h
     ${CMAKE_CURRENT_LIST_DIR}/workspacetypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/iworkspacemanager.h
     ${CMAKE_CURRENT_LIST_DIR}/iworkspaceconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/iworkspace.h
+    ${CMAKE_CURRENT_LIST_DIR}/iworkspacemanager.h
+    ${CMAKE_CURRENT_LIST_DIR}/iworkspacesdataprovider.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceconfiguration.h
@@ -35,6 +36,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspace.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacemanager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacemanager.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacesdataprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacesdataprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacefile.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspacefile.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/iworkspacecreator.h
