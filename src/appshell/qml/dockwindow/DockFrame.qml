@@ -145,7 +145,6 @@ Rectangle {
             model: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.dockWidgetModel : 0
 
             delegate: DockPanelTab {
-
                 navigation.name: title
                 navigation.panel: navPanel
                 navigation.order: model.index
@@ -176,6 +175,16 @@ Rectangle {
 
         width: parent.width
 
-        currentIndex: tabsPanel.currentIndex
+        currentIndex: {
+            var currentDockUniqueName = frameModel.currentDockUniqueName
+
+            for (var i in children) {
+                if (children[i].uniqueName === currentDockUniqueName) {
+                    return i
+                }
+            }
+
+            return 0
+        }
     }
 }

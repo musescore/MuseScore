@@ -268,7 +268,7 @@ void DockBase::componentComplete()
 
     writePropertiesToObject(properties, *m_dockWidget);
 
-    listenFloatingChanges(); 
+    listenFloatingChanges();
 
     connect(this, &DockBase::minimumSizeChanged, this, &DockBase::resize);
     connect(this, &DockBase::maximumSizeChanged, this, &DockBase::resize);
