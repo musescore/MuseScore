@@ -33,9 +33,11 @@ public:
 
     virtual bool canUndo() const = 0;
     virtual void undo() = 0;
+    virtual async::Notification undoNotification() const = 0;
 
     virtual bool canRedo() const = 0;
     virtual void redo() = 0;
+    virtual async::Notification redoNotification() const = 0;
 
     virtual void prepareChanges() = 0;
     virtual void rollbackChanges() = 0;

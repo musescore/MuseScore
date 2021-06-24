@@ -47,11 +47,6 @@ InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
 
         if (masterNotation) {
             m_masterNotationParts = masterNotation->parts();
-            m_masterNotationParts->partsChanged().onNotify(this, [this]() {
-                if (m_notationParts) {
-                    load();
-                }
-            });
         }
     });
 

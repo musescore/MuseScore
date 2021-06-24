@@ -54,7 +54,13 @@ void NotationUndoStack::undo()
     masterScore()->setSaved(isStackClean());
 
     notifyAboutNotationChanged();
-    notifyAboutStackStateChanged();
+    notifyAboutUndo();
+    notifyAboutStateChanged();
+}
+
+Notification NotationUndoStack::undoNotification() const
+{
+    return m_undoNotification;
 }
 
 bool NotationUndoStack::canRedo() const
@@ -76,7 +82,13 @@ void NotationUndoStack::redo()
     masterScore()->setSaved(isStackClean());
 
     notifyAboutNotationChanged();
-    notifyAboutStackStateChanged();
+    notifyAboutRedo();
+    notifyAboutStateChanged();
+}
+
+Notification NotationUndoStack::redoNotification() const
+{
+    return m_redoNotification;
 }
 
 void NotationUndoStack::prepareChanges()
@@ -97,7 +109,7 @@ void NotationUndoStack::rollbackChanges()
     score()->endCmd(false, true);
     masterScore()->setSaved(isStackClean());
 
-    notifyAboutStackStateChanged();
+    notifyAboutStateChanged();
 }
 
 void NotationUndoStack::commitChanges()
@@ -109,7 +121,7 @@ void NotationUndoStack::commitChanges()
     score()->endCmd();
     masterScore()->setSaved(isStackClean());
 
-    notifyAboutStackStateChanged();
+    notifyAboutStateChanged();
 }
 
 mu::async::Notification NotationUndoStack::stackChanged() const
@@ -137,9 +149,19 @@ void NotationUndoStack::notifyAboutNotationChanged()
     m_notationChanged.notify();
 }
 
-void NotationUndoStack::notifyAboutStackStateChanged()
+void NotationUndoStack::notifyAboutStateChanged()
 {
     m_stackStateChanged.notify();
+}
+
+void NotationUndoStack::notifyAboutUndo()
+{
+    m_undoNotification.notify();
+}
+
+void NotationUndoStack::notifyAboutRedo()
+{
+    m_redoNotification.notify();
 }
 
 bool NotationUndoStack::isStackClean() const
