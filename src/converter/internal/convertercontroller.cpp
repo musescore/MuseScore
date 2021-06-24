@@ -96,8 +96,6 @@ mu::Ret ConverterController::convertScoreParts(const mu::io::path& in, const mu:
 {
     TRACEFUNC;
 
-    LOGI() << "in: " << in << ", out: " << out;
-
     auto masterNotation = notationCreator()->newMasterNotation();
     IF_ASSERT_FAILED(masterNotation) {
         return make_ret(Err::UnknownError);
@@ -174,6 +172,8 @@ bool ConverterController::isConvertPageByPage(const std::string& suffix) const
 
 mu::Ret ConverterController::convertPageByPage(notation::INotationWriterPtr writer, INotationPtr notation, const mu::io::path& out) const
 {
+    TRACEFUNC;
+
     for (size_t i = 0; i < notation->elements()->pages().size(); i++) {
         const QString filePath = io::path(io::dirpath(out) + "/" + io::basename(out) + "-%1." + io::syffix(out)).toQString().arg(i + 1);
 
@@ -219,6 +219,8 @@ mu::Ret ConverterController::convertFullNotation(notation::INotationWriterPtr wr
 mu::Ret ConverterController::convertScorePartsToPdf(notation::INotationWriterPtr writer, IMasterNotationPtr masterNotation,
                                                     const io::path& out) const
 {
+    TRACEFUNC;
+
     INotationPtrList notations;
     notations.push_back(masterNotation->notation());
 
@@ -249,6 +251,8 @@ mu::Ret ConverterController::convertScorePartsToPdf(notation::INotationWriterPtr
 mu::Ret ConverterController::convertScorePartsToPngs(notation::INotationWriterPtr writer, mu::notation::IMasterNotationPtr masterNotation,
                                                      const io::path& out) const
 {
+    TRACEFUNC;
+
     Ret ret = convertPageByPage(writer, masterNotation->notation(), out);
     if (!ret) {
         return ret;

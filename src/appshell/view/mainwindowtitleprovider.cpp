@@ -38,9 +38,11 @@ void MainWindowTitleProvider::load()
         update();
 
         IMasterNotationPtr masterNotation = context()->currentMasterNotation();
-        masterNotation->needSave().notification.onNotify(this, [this]() {
-            update();
-        });
+        if (masterNotation) {
+            masterNotation->needSave().notification.onNotify(this, [this]() {
+                update();
+            });
+        }
     });
 }
 
