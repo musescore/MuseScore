@@ -532,17 +532,17 @@ mu::async::Notification UiConfiguration::isVisibleChanged(const QString& key) co
     return m_uiArrangement.valueChanged(key);
 }
 
-mu::actions::ActionCodeList UiConfiguration::toolbarActions(const QString& toolbarName) const
+ToolConfig UiConfiguration::toolConfig(const QString& toolName) const
 {
-    return m_uiArrangement.toolbarActions(toolbarName);
+    return m_uiArrangement.toolConfig(toolName);
 }
 
-void UiConfiguration::setToolbarActions(const QString& toolbarName, const actions::ActionCodeList& actions)
+void UiConfiguration::setToolConfig(const QString& toolName, const ToolConfig& config)
 {
-    m_uiArrangement.setToolbarActions(toolbarName, actions);
+    m_uiArrangement.setToolConfig(toolName, config);
 }
 
-mu::async::Notification UiConfiguration::toolbarActionsChanged(const QString& toolbarName) const
+mu::async::Notification UiConfiguration::toolConfigChanged(const QString& toolName) const
 {
-    return m_uiArrangement.toolbarActionsChanged(toolbarName);
+    return m_uiArrangement.toolConfigChanged(toolName);
 }

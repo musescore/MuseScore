@@ -107,7 +107,6 @@ private:
     AbstractNoteInputBarItem* makeItem(const ui::UiAction& action, bool checked);
     AbstractNoteInputBarItem* makeSeparatorItem() const;
 
-    actions::ActionCodeList customizedActions() const;
     actions::ActionCodeList defaultActions() const;
     actions::ActionCodeList currentActions() const;
 

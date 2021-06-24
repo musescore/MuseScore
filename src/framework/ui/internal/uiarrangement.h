@@ -31,7 +31,7 @@
 #include "modularity/ioc.h"
 #include "workspace/iworkspacesdataprovider.h"
 #include "async/asyncable.h"
-#include "actions/actiontypes.h"
+#include "uitypes.h"
 
 namespace mu::ui {
 class UiArrangement : public async::Asyncable
@@ -49,9 +49,9 @@ public:
     QByteArray state(const QString& key) const;
     void setState(const QString& key, const QByteArray& data);
 
-    actions::ActionCodeList toolbarActions(const QString& toolbarName) const;
-    void setToolbarActions(const QString& toolbarName, const actions::ActionCodeList& actions);
-    mu::async::Notification toolbarActionsChanged(const QString& toolbarName) const;
+    ToolConfig toolConfig(const QString& toolName) const;
+    void setToolConfig(const QString& toolName, const ToolConfig& config);
+    mu::async::Notification toolConfigChanged(const QString& toolName) const;
 
 private:
 
@@ -60,7 +60,7 @@ private:
 
     QJsonObject m_settings;
     QJsonObject m_states;
-    QJsonObject m_toolactions;
+    QJsonObject m_toolconfigs;
 };
 }
 

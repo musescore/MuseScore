@@ -72,7 +72,7 @@ static ActionCode actionCodeForNoteInputMethod(NoteInputMethod method)
 NoteInputBarModel::NoteInputBarModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
-    uiConfiguration()->toolbarActionsChanged(TOOLBAR_NAME).onNotify(this, [this]() {
+    uiConfiguration()->toolConfigChanged(TOOLBAR_NAME).onNotify(this, [this]() {
         load();
     });
 
@@ -116,16 +116,16 @@ void NoteInputBarModel::load()
     AbstractMenuModel::load();
     MenuItemList items;
 
-    ActionCodeList noteInputActions = uiConfiguration()->toolbarActions(TOOLBAR_NAME);
+    ToolConfig noteInputConfig = uiConfiguration()->toolConfig(TOOLBAR_NAME);
 
     int section = 0;
-    for (const ActionCode& actionCode : noteInputActions) {
-        if (actionCode.empty()) {
+    for (const ToolConfig::Item& item : noteInputConfig.items) {
+        if (item.action.empty()) {
             section++;
             continue;
         }
 
-        items << makeActionItem(uiactionsRegister()->action(actionCode), QString::number(section));
+        items << makeActionItem(uiactionsRegister()->action(item.action), QString::number(section));
     }
 
     items << makeAddItem(QString::number(++section));

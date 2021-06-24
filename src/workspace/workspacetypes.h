@@ -31,7 +31,7 @@ enum class DataKey {
     Undefined = 0,
     UiSettings,
     UiStates,
-    UiToolActions,
+    UiToolConfigs,
     Palettes,
 };
 

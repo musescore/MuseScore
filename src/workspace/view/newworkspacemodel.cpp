@@ -128,7 +128,7 @@ QVariant NewWorkspaceModel::createWorkspace()
 
     newWorkspace->setIsManaged(DataKey::UiSettings, useUiPreferences());
     newWorkspace->setIsManaged(DataKey::UiStates, useUiArrangement());
-    newWorkspace->setIsManaged(DataKey::UiToolActions, useToolbarCustomization());
+    newWorkspace->setIsManaged(DataKey::UiToolConfigs, useToolbarCustomization());
     newWorkspace->setIsManaged(DataKey::Palettes, usePalettes());
 
     return QVariant::fromValue(newWorkspace);
