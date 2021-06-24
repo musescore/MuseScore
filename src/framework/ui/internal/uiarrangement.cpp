@@ -41,12 +41,12 @@ void UiArrangement::init()
     });
 
     workspacesDataProvider()->dataChanged(DataKey::UiSettings).onNotify(this, [this]() {
-        updateData(DataKey::UiToolActions, m_toolactions);
+        updateData(DataKey::UiToolConfigs, m_toolconfigs);
     });
 
     updateData(DataKey::UiSettings, m_settings);
     updateData(DataKey::UiStates, m_states);
-    updateData(DataKey::UiToolActions, m_toolactions);
+    updateData(DataKey::UiToolConfigs, m_toolconfigs);
 }
 
 void UiArrangement::updateData(DataKey key, QJsonObject& obj)
@@ -96,29 +96,52 @@ void UiArrangement::setState(const QString& key, const QByteArray& data)
     saveData(DataKey::UiStates, m_states);
 }
 
-mu::actions::ActionCodeList UiArrangement::toolbarActions(const QString& toolbarName) const
+ToolConfig UiArrangement::toolConfig(const QString& toolName) const
 {
-    QJsonArray actsArr = m_toolactions.value(toolbarName).toArray();
+    TRACEFUNC;
 
-    actions::ActionCodeList acts;
-    acts.reserve(actsArr.size());
-    for (const QJsonValue& v : actsArr) {
-        acts.push_back(v.toString().toStdString());
+    //! NOTE Maybe we need to cache?
+
+    QJsonObject confObj = m_toolconfigs.value(toolName).toObject();
+    QJsonArray itemsArr = confObj.value("items").toArray();
+
+    ToolConfig config;
+
+    config.items.reserve(itemsArr.size());
+    for (const QJsonValue& v : itemsArr) {
+        QJsonObject itemObj = v.toObject();
+
+        ToolConfig::Item item;
+        item.action = itemObj.value("action").toString().toStdString();
+        item.show = itemObj.value("show").toInt(1);
+
+        config.items.push_back(std::move(item));
     }
-    return acts;
+
+    return config;
 }
 
-void UiArrangement::setToolbarActions(const QString& toolbarName, const actions::ActionCodeList& actions)
+void UiArrangement::setToolConfig(const QString& toolName, const ToolConfig& config)
 {
-    QJsonArray arr;
-    for (const actions::ActionCode& a : actions) {
-        arr.append(QString::fromStdString(a));
+    TRACEFUNC;
+    QJsonObject confObj;
+    QJsonArray itemsArr;
+
+    for (const ToolConfig::Item& item : config.items) {
+        QJsonObject itemObj;
+        itemObj["action"] = QString::fromStdString(item.action);
+        itemObj["show"] = item.show ? 1 : 0;
+
+        itemsArr.append(itemObj);
     }
-    m_toolactions[toolbarName] = arr;
-    saveData(DataKey::UiToolActions, m_toolactions);
+
+    confObj["items"] = itemsArr;
+
+    m_toolconfigs[toolName] = confObj;
+    saveData(DataKey::UiToolConfigs, m_toolconfigs);
 }
 
-mu::async::Notification UiArrangement::toolbarActionsChanged(const QString& toolbarName) const
+mu::async::Notification UiArrangement::toolConfigChanged(const QString& toolName) const
 {
     NOT_IMPLEMENTED;
     return mu::async::Notification();

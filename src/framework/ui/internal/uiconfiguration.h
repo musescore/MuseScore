@@ -83,9 +83,9 @@ public:
     void setIsVisible(const QString& key, bool val) override;
     async::Notification isVisibleChanged(const QString& key) const override;
 
-    actions::ActionCodeList toolbarActions(const QString& toolbarName) const override;
-    void setToolbarActions(const QString& toolbarName, const actions::ActionCodeList& actions) override;
-    async::Notification toolbarActionsChanged(const QString& toolbarName) const override;
+    ToolConfig toolConfig(const QString& toolName) const override;
+    void setToolConfig(const QString& toolName, const ToolConfig& config) override;
+    async::Notification toolConfigChanged(const QString& toolName) const override;
 
 private:
     bool needFollowSystemTheme() const;

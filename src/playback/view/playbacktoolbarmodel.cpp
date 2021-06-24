@@ -79,7 +79,7 @@ void PlaybackToolBarModel::setupConnections()
         updatePlayTime();
     });
 
-    uiConfiguration()->toolbarActionsChanged(PLAYBACK_TOOLBAR_KEY).onNotify(this, [this]() {
+    uiConfiguration()->toolConfigChanged(PLAYBACK_TOOLBAR_KEY).onNotify(this, [this]() {
         updateActions();
     });
 }
@@ -90,13 +90,13 @@ void PlaybackToolBarModel::updateActions()
     MenuItemList settingsItems;
     MenuItemList additionalItems;
 
-    ActionCodeList actions = uiConfiguration()->toolbarActions(PLAYBACK_TOOLBAR_KEY);
-    for (const ActionCode& code : actions) {
-        if (isAdditionalAction(code)) {
+    ToolConfig config = uiConfiguration()->toolConfig(PLAYBACK_TOOLBAR_KEY);
+    for (const ToolConfig::Item& item : config.items) {
+        if (isAdditionalAction(item.action)) {
             //! NOTE: In this case, we want to see the actions' description instead of the title
-            additionalItems << makeActionWithDescriptionAsTitle(code);
+            additionalItems << makeActionWithDescriptionAsTitle(item.action);
         } else {
-            result << makeMenuItem(code);
+            result << makeMenuItem(item.action);
         }
     }
 
@@ -130,11 +130,6 @@ void PlaybackToolBarModel::onActionsStateChanges(const actions::ActionCodeList& 
     }
 
     emit dataChanged(index(0), index(rowCount() - 1));
-}
-
-ActionCodeList PlaybackToolBarModel::savedActionCodes() const
-{
-    return uiConfiguration()->toolbarActions(PLAYBACK_TOOLBAR_KEY);
 }
 
 bool PlaybackToolBarModel::isAdditionalAction(const actions::ActionCode& actionCode) const
