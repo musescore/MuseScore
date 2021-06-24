@@ -24,8 +24,8 @@
 
 #include "modularity/imoduleexport.h"
 
-#include "retval.h"
 #include "iworkspace.h"
+#include "retval.h"
 
 namespace mu::workspace {
 class IWorkspaceManager : MODULE_EXPORT_INTERFACE

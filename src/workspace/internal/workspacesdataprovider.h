@@ -19,26 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACETYPES_H
-#define MU_WORKSPACE_WORKSPACETYPES_H
+#ifndef MU_WORKSPACE_WORKSPACESDATAPROVIDER_H
+#define MU_WORKSPACE_WORKSPACESDATAPROVIDER_H
 
-#include <QJsonValue>
+#include "../iworkspacesdataprovider.h"
 
 namespace mu::workspace {
-static const std::string DEFAULT_WORKSPACE_NAME("Default");
-
-enum class DataKey {
-    Undefined = 0,
-    UiSettings,
-    UiStates,
-    UiToolActions,
-    Palettes,
-};
-
-struct Data
+class WorkspacesDataProvider : public IWorkspacesDataProvider
 {
-    QJsonValue data;
+public:
+    WorkspacesDataProvider() = default;
+
+    RetVal<QByteArray> rawData(DataKey key) const override;
+    Ret setRawData(DataKey key, const QByteArray& data) override;
+
+    RetVal<Data> data(DataKey key) const override;
+    Ret setData(DataKey key, const Data& data) override;
+
+    async::Notification dataChanged(DataKey key) override;
 };
 }
-
-#endif // MU_WORKSPACE_WORKSPACETYPES_H
+#endif // MU_WORKSPACE_WORKSPACEPROVIDER_H

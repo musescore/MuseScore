@@ -34,6 +34,7 @@
 #include "internal/workspacecreator.h"
 #include "internal/workspaceactioncontroller.h"
 #include "internal/workspaceuiactions.h"
+#include "internal/workspacesdataprovider.h"
 
 #include "view/workspacelistmodel.h"
 #include "view/newworkspacemodel.h"
@@ -47,6 +48,7 @@ using namespace mu::ui;
 static std::shared_ptr<WorkspaceManager> s_manager = std::make_shared<WorkspaceManager>();
 static std::shared_ptr<WorkspaceConfiguration> s_configuration = std::make_shared<WorkspaceConfiguration>();
 static std::shared_ptr<WorkspaceActionController> s_actionController = std::make_shared<WorkspaceActionController>();
+static std::shared_ptr<WorkspacesDataProvider> s_provider= std::make_shared<WorkspacesDataProvider>();
 
 static void workspace_init_qrc()
 {
@@ -63,6 +65,7 @@ void WorkspaceModule::registerExports()
     ioc()->registerExport<IWorkspaceConfiguration>(moduleName(), s_configuration);
     ioc()->registerExport<IWorkspaceManager>(moduleName(), s_manager);
     ioc()->registerExport<IWorkspaceCreator>(moduleName(), std::make_shared<WorkspaceCreator>());
+    ioc()->registerExport<IWorkspacesDataProvider>(moduleName(), s_provider);
 }
 
 void WorkspaceModule::resolveImports()
