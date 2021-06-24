@@ -29,6 +29,7 @@
 #include "global/iapplication.h"
 #include "ui/iuiconfiguration.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
+#include "importexport/midi/imidiconfiguration.h"
 #include "iappshellconfiguration.h"
 #include "internal/istartupscenario.h"
 
@@ -38,6 +39,7 @@ class CommandLineController
     INJECT(appshell, framework::IApplication, application)
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
+    INJECT(appshell, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, IStartupScenario, startupScenario)
 
@@ -47,6 +49,7 @@ public:
     enum class ConvertType {
         File,
         Batch,
+        ConvertScoreParts,
         ExportScoreMedia,
         ExportScoreMeta,
         ExportScoreParts,

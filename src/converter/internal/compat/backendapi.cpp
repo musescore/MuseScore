@@ -528,19 +528,19 @@ Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, Device
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr notation, Device& destinationDevice,
+Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, Device& destinationDevice,
                                        const std::string& scoreFileName)
 {
     QJsonObject jsonForPdfs;
     jsonForPdfs["score"] = QString::fromStdString(scoreFileName);
-    QByteArray scoreBin = processWriter(PDF_WRITER_NAME, notation->notation()).val;
+    QByteArray scoreBin = processWriter(PDF_WRITER_NAME, masterNotation->notation()).val;
     jsonForPdfs["scoreBin"] = QString::fromLatin1(scoreBin);
 
     INotationPtrList notations;
 
     QJsonArray partsArray;
     QJsonArray partsNamesArray;
-    for (IExcerptNotationPtr e : notation->excerpts().val) {
+    for (IExcerptNotationPtr e : masterNotation->excerpts().val) {
         QJsonValue partNameVal(e->metaInfo().title);
         partsNamesArray.append(partNameVal);
 

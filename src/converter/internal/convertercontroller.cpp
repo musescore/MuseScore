@@ -33,6 +33,10 @@
 #include "compat/backendapi.h"
 
 using namespace mu::converter;
+using namespace mu::notation;
+
+static const std::string PDF_SUFFIX = "pdf";
+static const std::string PNG_SUFFIX = "png";
 
 mu::Ret ConverterController::batchConvert(const io::path& batchJobFile, const io::path& stylePath, bool forceMode)
 {
@@ -78,18 +82,46 @@ mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out
         return make_ret(Err::InFileFailedLoad);
     }
 
-    QFile file(out.toQString());
-    if (!file.open(QFile::WriteOnly)) {
-        return make_ret(Err::OutFileFailedOpen);
+    if (isConvertPageByPage(suffix)) {
+        ret = convertPageByPage(writer, masterNotation->notation(), out);
+    } else {
+        ret = convertFullNotation(writer, masterNotation->notation(), out);
     }
 
-    ret = writer->write(masterNotation->notation(), file);
+    return make_ret(Ret::Code::Ok);
+}
+
+mu::Ret ConverterController::convertScoreParts(const mu::io::path& in, const mu::io::path& out, const mu::io::path& stylePath,
+                                               bool forceMode)
+{
+    TRACEFUNC;
+
+    LOGI() << "in: " << in << ", out: " << out;
+
+    auto masterNotation = notationCreator()->newMasterNotation();
+    IF_ASSERT_FAILED(masterNotation) {
+        return make_ret(Err::UnknownError);
+    }
+
+    std::string suffix = io::syffix(out);
+    auto writer = writers()->writer(suffix);
+    if (!writer) {
+        return make_ret(Err::ConvertTypeUnknown);
+    }
+
+    Ret ret = masterNotation->load(in, stylePath, forceMode);
     if (!ret) {
-        LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
-        return make_ret(Err::OutFileFailedWrite);
+        LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
+        return make_ret(Err::InFileFailedLoad);
     }
 
-    file.close();
+    if (suffix == PDF_SUFFIX) {
+        ret = convertScorePartsToPdf(writer, masterNotation, out);
+    } else if (suffix == PNG_SUFFIX) {
+        ret = convertScorePartsToPngs(writer, masterNotation, out);
+    } else {
+        ret = make_ret(Ret::Code::NotSupported);
+    }
 
     return make_ret(Ret::Code::Ok);
 }
@@ -129,6 +161,114 @@ mu::RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(con
 
     rv.ret = make_ret(Ret::Code::Ok);
     return rv;
+}
+
+bool ConverterController::isConvertPageByPage(const std::string& suffix) const
+{
+    QList<std::string> types {
+        PNG_SUFFIX
+    };
+
+    return types.contains(suffix);
+}
+
+mu::Ret ConverterController::convertPageByPage(notation::INotationWriterPtr writer, INotationPtr notation, const mu::io::path& out) const
+{
+    for (size_t i = 0; i < notation->elements()->pages().size(); i++) {
+        const QString filePath = io::path(io::dirpath(out) + "/" + io::basename(out) + "-%1." + io::syffix(out)).toQString().arg(i + 1);
+
+        QFile file(filePath);
+        if (!file.open(QFile::WriteOnly)) {
+            return make_ret(Err::OutFileFailedOpen);
+        }
+
+        INotationWriter::Options options {
+            { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(i)) },
+        };
+
+        Ret ret = writer->write(notation, file, options);
+        if (!ret) {
+            LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
+            return make_ret(Err::OutFileFailedWrite);
+        }
+
+        file.close();
+    }
+
+    return make_ret(Ret::Code::Ok);
+}
+
+mu::Ret ConverterController::convertFullNotation(notation::INotationWriterPtr writer, INotationPtr notation, const mu::io::path& out) const
+{
+    QFile file(out.toQString());
+    if (!file.open(QFile::WriteOnly)) {
+        return make_ret(Err::OutFileFailedOpen);
+    }
+
+    Ret ret = writer->write(notation, file);
+    if (!ret) {
+        LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
+        return make_ret(Err::OutFileFailedWrite);
+    }
+
+    file.close();
+
+    return make_ret(Ret::Code::Ok);
+}
+
+mu::Ret ConverterController::convertScorePartsToPdf(notation::INotationWriterPtr writer, IMasterNotationPtr masterNotation,
+                                                    const io::path& out) const
+{
+    INotationPtrList notations;
+    notations.push_back(masterNotation->notation());
+
+    for (IExcerptNotationPtr e : masterNotation->excerpts().val) {
+        notations.push_back(e->notation());
+    }
+
+    QFile file(out.toQString());
+    if (!file.open(QFile::WriteOnly)) {
+        return make_ret(Err::OutFileFailedOpen);
+    }
+
+    INotationWriter::Options options {
+        { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(INotationWriter::UnitType::MULTI_PART)) },
+    };
+
+    Ret ret = writer->writeList(notations, file, options);
+    if (!ret) {
+        LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
+        return make_ret(Err::OutFileFailedWrite);
+    }
+
+    file.close();
+
+    return make_ret(Ret::Code::Ok);
+}
+
+mu::Ret ConverterController::convertScorePartsToPngs(notation::INotationWriterPtr writer, mu::notation::IMasterNotationPtr masterNotation,
+                                                     const io::path& out) const
+{
+    Ret ret = convertPageByPage(writer, masterNotation->notation(), out);
+    if (!ret) {
+        return ret;
+    }
+
+    INotationPtrList excerpts;
+    for (IExcerptNotationPtr e : masterNotation->excerpts().val) {
+        excerpts.push_back(e->notation());
+    }
+
+    io::path pngFilePath = io::dirpath(out) + "/" + io::path(io::basename(out) + "-excerpt.png");
+
+    for (size_t i = 0; i < excerpts.size(); i++) {
+        Ret ret = convertPageByPage(writer, excerpts[i], pngFilePath);
+        if (!ret) {
+            return ret;
+        }
+    }
+
+    return make_ret(Ret::Code::Ok);
 }
 
 mu::Ret ConverterController::exportScoreMedia(const mu::io::path& in, const mu::io::path& out, const mu::io::path& highlightConfigPath,
