@@ -51,6 +51,7 @@ static std::shared_ptr<MU4PaletteAdapter> s_adapter = std::make_shared<MU4Palett
 static std::shared_ptr<PaletteActionsController> s_actionsController = std::make_shared<PaletteActionsController>();
 static std::shared_ptr<PaletteUiActions> s_paletteUiActions = std::make_shared<PaletteUiActions>(s_actionsController);
 static std::shared_ptr<PaletteConfiguration> s_configuration = std::make_shared<PaletteConfiguration>();
+static std::shared_ptr<PaletteWorkspaceSetup> s_paletteWorkspaceSetup = std::make_shared<PaletteWorkspaceSetup>();
 
 static void palette_init_qrc()
 {
@@ -117,8 +118,7 @@ void PaletteModule::onInit(const IApplication::RunMode& mode)
     }
 
     // load workspace
-    PaletteWorkspaceSetup w;
-    w.setup();
+    s_paletteWorkspaceSetup->setup();
 
     s_configuration->init();
     s_actionsController->init();

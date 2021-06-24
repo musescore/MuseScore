@@ -29,14 +29,14 @@
 #include <QJsonObject>
 
 #include "modularity/ioc.h"
-#include "workspace/iworkspacemanager.h"
+#include "workspace/iworkspacesdataprovider.h"
 #include "async/asyncable.h"
 #include "actions/actiontypes.h"
 
 namespace mu::ui {
 class UiArrangement : public async::Asyncable
 {
-    INJECT(ui, workspace::IWorkspaceManager, workspaceManager)
+    INJECT(ui, workspace::IWorkspacesDataProvider, workspacesDataProvider)
 public:
     UiArrangement() = default;
 
@@ -54,13 +54,9 @@ public:
     mu::async::Notification toolbarActionsChanged(const QString& toolbarName) const;
 
 private:
-    workspace::IWorkspacePtr currentWorkspace() const;
 
-    void updateData();
-    void saveData();
-
-    Ret writeToFile(const QJsonObject& data);
-    QJsonObject readFromFile() const;
+    void updateData(workspace::DataKey key, QJsonObject& obj);
+    void saveData(workspace::DataKey key, const QJsonObject& obj);
 
     QJsonObject m_settings;
     QJsonObject m_states;

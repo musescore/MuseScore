@@ -22,7 +22,8 @@
 #ifndef MU_WORKSPACE_WORKSPACEMANAGER_H
 #define MU_WORKSPACE_WORKSPACEMANAGER_H
 
-#include "../iworkspacemanager.h"
+#include "iworkspacemanager.h"
+
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "../iworkspaceconfiguration.h"

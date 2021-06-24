@@ -22,7 +22,7 @@
 #ifndef MU_WORKSPACE_WORKSPACE_H
 #define MU_WORKSPACE_WORKSPACE_H
 
-#include "../iworkspace.h"
+#include "iworkspace.h"
 #include "io/path.h"
 
 namespace mu::workspace {
@@ -34,8 +34,8 @@ public:
     std::string name() const override;
     std::string title() const override;
 
-    bool isManaged(const Option& key) const override;
-    void setIsManaged(const Option& key, bool val) const override;
+    bool isManaged(const DataKey& key) const override;
+    void setIsManaged(const DataKey& key, bool val) const override;
 
     RetVal<QByteArray> readRawData(const std::string& name) const override;
     Ret writeRawData(const std::string& name, const QByteArray& data) override;

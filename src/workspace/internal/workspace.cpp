@@ -47,13 +47,13 @@ std::string Workspace::title() const
     return name();
 }
 
-bool Workspace::isManaged(const Option& key) const
+bool Workspace::isManaged(const DataKey& key) const
 {
     NOT_IMPLEMENTED;
     return false;
 }
 
-void Workspace::setIsManaged(const Option& key, bool val) const
+void Workspace::setIsManaged(const DataKey& key, bool val) const
 {
     NOT_IMPLEMENTED;
 }
