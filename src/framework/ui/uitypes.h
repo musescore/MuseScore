@@ -278,6 +278,17 @@ struct MenuItem : public UiAction
     }
 };
 using MenuItemList = QList<MenuItem>;
+
+struct ToolConfig
+{
+    struct Item
+    {
+        actions::ActionCode action;
+        bool show = true;
+    };
+
+    QList<Item> items;
+};
 }
 
 #endif // MU_UI_UIERRORS_H

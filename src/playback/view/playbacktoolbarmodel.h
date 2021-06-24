@@ -88,8 +88,6 @@ private:
     void updateActions();
     void onActionsStateChanges(const actions::ActionCodeList& codes) override;
 
-    actions::ActionCodeList savedActionCodes() const;
-
     bool isAdditionalAction(const actions::ActionCode& actionCode) const;
 
     ui::MenuItem makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode) const;

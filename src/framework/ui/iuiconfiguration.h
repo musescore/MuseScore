@@ -84,9 +84,9 @@ public:
     virtual void setIsVisible(const QString& key, bool val) = 0;
     virtual async::Notification isVisibleChanged(const QString& key) const = 0;
 
-    virtual actions::ActionCodeList toolbarActions(const QString& toolbarName) const = 0;
-    virtual void setToolbarActions(const QString& toolbarName, const actions::ActionCodeList& actions) = 0;
-    virtual async::Notification toolbarActionsChanged(const QString& toolbarName) const = 0;
+    virtual ToolConfig toolConfig(const QString& toolName) const = 0;
+    virtual void setToolConfig(const QString& toolName, const ToolConfig& config) = 0;
+    virtual async::Notification toolConfigChanged(const QString& toolName) const = 0;
 };
 }
 

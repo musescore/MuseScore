@@ -95,17 +95,10 @@ void NoteInputBarCustomiseModel::load()
 
     beginResetModel();
 
-    ActionCodeList actions = customizedActions();
-    if (actions.empty()) {
-        actions = defaultActions();
-    }
-
-    ActionCodeList savedActions = uiConfiguration()->toolbarActions(NOTE_INPUT_TOOLBAR_NAME);
-    for (const ActionCode& actionCode : actions) {
-        UiAction action = actionsRegister()->action(actionCode);
-        bool checked = containsAction(savedActions, actionCode);
-
-        m_actions << makeItem(action, checked);
+    ToolConfig toolConfig = uiConfiguration()->toolConfig(NOTE_INPUT_TOOLBAR_NAME);
+    for (const ToolConfig::Item& item : toolConfig.items) {
+        UiAction action = actionsRegister()->action(item.action);
+        m_actions << makeItem(action, item.show);
     }
 
     endResetModel();
@@ -427,99 +420,70 @@ AbstractNoteInputBarItem* NoteInputBarCustomiseModel::makeSeparatorItem() const
     return item;
 }
 
-ActionCodeList NoteInputBarCustomiseModel::customizedActions() const
-{
-    ActionCodeList actionsFromConfiguration = uiConfiguration()->toolbarActions(NOTE_INPUT_TOOLBAR_NAME);
-
-    if (actionsFromConfiguration.empty()) {
-        return {};
-    }
-
-    ActionCodeList result;
-    for (const ActionCode& actionCode : actionsFromConfiguration) {
-        if (containsAction(result, actionCode) && actionCode != SEPARATOR_LINE_ACTION_CODE) {
-            continue;
-        }
-
-        result.push_back(actionCode);
-    }
-
-    UiActionList allNoteInputActions = NotationUiActions::defaultNoteInputActions();
-    for (const UiAction& action : allNoteInputActions) {
-        if (actionFromNoteInputModes(action.code)) {
-            continue;
-        }
-
-        if (containsAction(result, action.code)) {
-            continue;
-        }
-
-        result.push_back(action.code);
-    }
-
-    return result;
-}
-
 ActionCodeList NoteInputBarCustomiseModel::defaultActions() const
 {
     UiActionList allNoteInputActions = NotationUiActions::defaultNoteInputActions();
-    ActionCodeList savedActions = uiConfiguration()->toolbarActions(NOTE_INPUT_TOOLBAR_NAME);
-
-    bool noteInputModeActionExists = false;
-
     ActionCodeList result;
-    auto canAppendAction = [&](const ActionCode& actionCode) {
-        if (actionFromNoteInputModes(actionCode)) {
-            if (noteInputModeActionExists) {
-                return false;
-            }
-
-            noteInputModeActionExists = true;
-        }
-
-        return true;
-    };
-
-    auto appendRelatedActions = [&](size_t startActionIndex) {
-        ActionCodeList actions;
-        for (size_t i = startActionIndex; i < allNoteInputActions.size(); ++i) {
-            ActionCode actionCode = allNoteInputActions[i].code;
-            if (containsAction(savedActions, actionCode)) {
-                break;
-            }
-
-            if (!canAppendAction(actionCode)) {
-                continue;
-            }
-
-            actions.push_back(actionCode);
-        }
-
-        if (!actions.empty()) {
-            result.insert(result.end(), actions.begin(), actions.end());
-        }
-    };
-
-    //! NOTE: if there are actions at the beginning of the all note input actions,
-    //!       but not at the beginning of the current workspace
-    appendRelatedActions(0);
-
-    for (const ActionCode& actionCode : savedActions) {
-        if (!canAppendAction(actionCode)) {
-            continue;
-        }
-
-        result.push_back(actionCode);
-
-        std::optional<size_t> indexInDefaultActions = allNoteInputActions.indexOf(actionCode);
-        if (indexInDefaultActions) {
-            appendRelatedActions(indexInDefaultActions.value() + 1);
-        }
+    for (const UiAction& a : allNoteInputActions) {
+        result.push_back(a.code);
     }
 
-    if (!noteInputModeActionExists) {
-        result.insert(result.begin(), NOTE_INPUT_ACTION_CODE);
-    }
+//    ActionCodeList savedActions = uiConfiguration()->toolConfig(NOTE_INPUT_TOOLBAR_NAME);
+
+//    bool noteInputModeActionExists = false;
+
+//    auto canAppendAction = [&](const ActionCode& actionCode) {
+//        if (actionFromNoteInputModes(actionCode)) {
+//            if (noteInputModeActionExists) {
+//                return false;
+//            }
+
+//            noteInputModeActionExists = true;
+//        }
+
+//        return true;
+//    };
+
+//    auto appendRelatedActions = [&](size_t startActionIndex) {
+//        ActionCodeList actions;
+//        for (size_t i = startActionIndex; i < allNoteInputActions.size(); ++i) {
+//            ActionCode actionCode = allNoteInputActions[i].code;
+//            if (containsAction(savedActions, actionCode)) {
+//                break;
+//            }
+
+//            if (!canAppendAction(actionCode)) {
+//                continue;
+//            }
+
+//            actions.push_back(actionCode);
+//        }
+
+//        if (!actions.empty()) {
+//            result.insert(result.end(), actions.begin(), actions.end());
+//        }
+//    };
+
+//    //! NOTE: if there are actions at the beginning of the all note input actions,
+//    //!       but not at the beginning of the current workspace
+//    appendRelatedActions(0);
+
+//    for (const ActionCode& actionCode : savedActions) {
+//        if (!canAppendAction(actionCode)) {
+//            continue;
+//        }
+
+//        result.push_back(actionCode);
+
+//        std::optional<size_t> indexInDefaultActions = allNoteInputActions.indexOf(actionCode);
+//        if (indexInDefaultActions) {
+//            appendRelatedActions(indexInDefaultActions.value() + 1);
+//        }
+//    }
+
+//    if (!noteInputModeActionExists) {
+//        result.insert(result.begin(), NOTE_INPUT_ACTION_CODE);
+//    }
 
     return result;
 }
@@ -550,6 +514,6 @@ bool NoteInputBarCustomiseModel::actionFromNoteInputModes(const ActionCode& acti
 
 void NoteInputBarCustomiseModel::saveActions()
 {
-    ActionCodeList currentActions = this->currentActions();
-    uiConfiguration()->setToolbarActions(NOTE_INPUT_TOOLBAR_NAME, currentActions);
+    // ActionCodeList currentActions = this->currentActions();
+    // uiConfiguration()->setToolConfig(NOTE_INPUT_TOOLBAR_NAME, currentActions);
 }
