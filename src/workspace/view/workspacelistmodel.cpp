@@ -41,15 +41,12 @@ void WorkspaceListModel::load()
     beginResetModel();
     m_workspaces.clear();
 
-    RetVal<IWorkspacePtrList> workspaces = workspacesManager()->workspaces();
-    if (!workspaces.ret) {
-        LOGE() << workspaces.ret.toString();
-    }
+    IWorkspacePtrList workspaces = workspacesManager()->workspaces();
 
-    IWorkspacePtr currentWorkspace = workspacesManager()->currentWorkspace().val;
+    IWorkspacePtr currentWorkspace = workspacesManager()->currentWorkspace();
     IWorkspacePtr selectedWorkspace;
 
-    for (const IWorkspacePtr& workspace : workspaces.val) {
+    for (const IWorkspacePtr& workspace : workspaces) {
         if (workspace == currentWorkspace) {
             selectedWorkspace = workspace;
         }

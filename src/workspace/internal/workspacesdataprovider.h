@@ -24,17 +24,19 @@
 
 #include "../iworkspacesdataprovider.h"
 
+#include "modularity/ioc.h"
+#include "iworkspacemanager.h"
+
 namespace mu::workspace {
 class WorkspacesDataProvider : public IWorkspacesDataProvider
 {
+    INJECT(workspace, IWorkspaceManager, manager)
+
 public:
     WorkspacesDataProvider() = default;
 
     RetVal<QByteArray> rawData(DataKey key) const override;
     Ret setRawData(DataKey key, const QByteArray& data) override;
-
-    RetVal<Data> data(DataKey key) const override;
-    Ret setData(DataKey key, const Data& data) override;
 
     async::Notification dataChanged(DataKey key) override;
 };

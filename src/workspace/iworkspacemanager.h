@@ -26,6 +26,7 @@
 
 #include "iworkspace.h"
 #include "retval.h"
+#include "async/notification.h"
 
 namespace mu::workspace {
 class IWorkspaceManager : MODULE_EXPORT_INTERFACE
@@ -35,10 +36,18 @@ class IWorkspaceManager : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IWorkspaceManager() = default;
 
-    virtual RetValCh<IWorkspacePtr> currentWorkspace() const = 0;
+    //! NOTE Default from user app data, writable, full managed
+    virtual IWorkspacePtr defaultWorkspace() const = 0;
 
-    virtual RetVal<IWorkspacePtrList> workspaces() const = 0;
+    //! NOTE Current selected by a user, writable, optionally managed
+    virtual IWorkspacePtr currentWorkspace() const = 0;
+    virtual async::Notification currentWorkspaceChanged() const = 0;
+
+    virtual IWorkspacePtrList workspaces() const = 0;
     virtual Ret setWorkspaces(const IWorkspacePtrList& workspaces) = 0;
+    virtual async::Notification workspacesListChanged() const = 0;
+
+    virtual IWorkspacePtr newWorkspace(const std::string& workspaceName) const = 0;
 };
 }
 

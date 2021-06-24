@@ -117,10 +117,13 @@ void PaletteModule::onInit(const IApplication::RunMode& mode)
         return;
     }
 
-    // load workspace
-    s_paletteWorkspaceSetup->setup();
-
     s_configuration->init();
     s_actionsController->init();
     s_paletteUiActions->init();
+}
+
+void PaletteModule::onStartApp()
+{
+    // load workspace
+    s_paletteWorkspaceSetup->setup();
 }

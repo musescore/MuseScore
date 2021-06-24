@@ -55,12 +55,12 @@ public:
 
 private:
 
-    void updateData(workspace::DataKey key, QJsonObject& obj);
+    void updateData(workspace::DataKey key, QJsonObject& obj) const;
     void saveData(workspace::DataKey key, const QJsonObject& obj);
 
-    QJsonObject m_settings;
-    QJsonObject m_states;
-    QJsonObject m_toolconfigs;
+    mutable QJsonObject m_settings;
+    mutable QJsonObject m_states;
+    mutable QJsonObject m_toolconfigs;
 };
 }
 
