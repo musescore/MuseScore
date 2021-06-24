@@ -62,7 +62,8 @@ void ScoreAppearanceSettingsModel::loadProperties()
 {
     QSizeF pageSize = QSizeF(styleValue(Ms::Sid::pageWidth).toDouble(), styleValue(Ms::Sid::pageHeight).toDouble());
 
-    m_pageTypeListModel->setCurrentPageSizeId(static_cast<int>(QPageSize::id(pageSize, QPageSize::Inch, QPageSize::FuzzyOrientationMatch)));
+    m_currentPageSizeId = static_cast<int>(QPageSize::id(pageSize, QPageSize::Inch, QPageSize::FuzzyOrientationMatch));
+    m_pageTypeListModel->setCurrentPageSizeId(m_currentPageSizeId);
 
     ScoreAppearanceTypes::OrientationType pageOrientationType = pageSize.width() > pageSize.height()
                                                                 ? ScoreAppearanceTypes::OrientationType::ORIENTATION_LANDSCAPE
@@ -112,6 +113,9 @@ void ScoreAppearanceSettingsModel::setPageTypeListModel(PageTypeListModel* pageT
     m_pageTypeListModel = pageTypeListModel;
 
     connect(m_pageTypeListModel, &PageTypeListModel::currentPageSizeIdChanged, this, [this](const int newCurrentPageSizeId) {
+        if (m_currentPageSizeId == newCurrentPageSizeId) {
+            return;
+        }
         QSizeF pageSize = QPageSize::size(QPageSize::PageSizeId(newCurrentPageSizeId), QPageSize::Inch);
 
         updateStyleValue(Ms::Sid::pageWidth, pageSize.width());
