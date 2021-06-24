@@ -38,8 +38,10 @@ public:
 
     virtual io::paths workspacePaths() const = 0;
 
-    virtual io::path userWorkspacesDirPath() const = 0;
-    virtual io::path userWorkspacePath(const std::string& workspaceName) const = 0;
+    //! NOTE The path to the read-only template for the default workspace
+    virtual io::path templateWorkspacePath() const = 0;
+
+    virtual io::path userWorkspacesPath() const = 0;
 
     virtual ValCh<std::string> currentWorkspaceName() const = 0;
     virtual void setCurrentWorkspaceName(const std::string& workspaceName) = 0;

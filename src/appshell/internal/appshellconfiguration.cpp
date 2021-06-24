@@ -56,14 +56,6 @@ void AppShellConfiguration::init()
     settings()->setDefaultValue(STARTUP_SCORE_PATH, Val(userScoresConfiguration()->myFirstScorePath().toStdString()));
 
     settings()->setDefaultValue(CHECK_FOR_UPDATE_KEY, Val(isAppUpdatable()));
-
-    uiConfiguration()->isVisibleChanged(NOTATION_STATUSBAR_VISIBLE_KEY).onNotify(this, [this]() {
-        m_notationStatusBarVisibleChanged.send(isNotationStatusBarVisible().val);
-    });
-
-    uiConfiguration()->isVisibleChanged(NOTATION_NAVIGATOR_VISIBLE_KEY).onNotify(this, [this]() {
-        m_notationNavigatorVisibleChanged.send(isNotationNavigatorVisible().val);
-    });
 }
 
 StartupSessionType AppShellConfiguration::startupSessionType() const
@@ -175,12 +167,9 @@ mu::ValCh<mu::io::paths> AppShellConfiguration::recentScorePaths() const
     return userScoresConfiguration()->recentScorePaths();
 }
 
-mu::ValCh<bool> AppShellConfiguration::isNotationStatusBarVisible() const
+bool AppShellConfiguration::isNotationStatusBarVisible() const
 {
-    ValCh<bool> visible;
-    visible.ch = m_notationStatusBarVisibleChanged;
-    visible.val = uiConfiguration()->isVisible(NOTATION_STATUSBAR_VISIBLE_KEY);
-    return visible;
+    return uiConfiguration()->isVisible(NOTATION_STATUSBAR_VISIBLE_KEY);
 }
 
 void AppShellConfiguration::setIsNotationStatusBarVisible(bool visible) const
@@ -188,18 +177,24 @@ void AppShellConfiguration::setIsNotationStatusBarVisible(bool visible) const
     uiConfiguration()->setIsVisible(NOTATION_STATUSBAR_VISIBLE_KEY, visible);
 }
 
-mu::ValCh<bool> AppShellConfiguration::isNotationNavigatorVisible() const
+mu::async::Notification AppShellConfiguration::isNotationStatusBarVisibleChanged() const
 {
-    ValCh<bool> visible;
-    visible.ch = m_notationNavigatorVisibleChanged;
-    visible.val = uiConfiguration()->isVisible(NOTATION_NAVIGATOR_VISIBLE_KEY);
+    return uiConfiguration()->isVisibleChanged(NOTATION_STATUSBAR_VISIBLE_KEY);
+}
 
-    return visible;
+bool AppShellConfiguration::isNotationNavigatorVisible() const
+{
+    return uiConfiguration()->isVisible(NOTATION_NAVIGATOR_VISIBLE_KEY);
 }
 
 void AppShellConfiguration::setIsNotationNavigatorVisible(bool visible) const
 {
     uiConfiguration()->setIsVisible(NOTATION_NAVIGATOR_VISIBLE_KEY, visible);
+}
+
+mu::async::Notification AppShellConfiguration::isNotationNavigatorVisibleChanged() const
+{
+    return uiConfiguration()->isVisibleChanged(NOTATION_NAVIGATOR_VISIBLE_KEY);
 }
 
 bool AppShellConfiguration::needShowSplashScreen() const

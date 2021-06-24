@@ -95,7 +95,7 @@ ProgrammeStartPreferencesModel::PanelList ProgrammeStartPreferencesModel::allPan
 {
     PanelList panels {
         Panel { SplashScreen, qtrc("appshell", "Show splash screen"), configuration()->needShowSplashScreen() },
-        Panel { Navigator, qtrc("appshell", "Show navigator"), configuration()->isNotationNavigatorVisible().val },
+        Panel { Navigator, qtrc("appshell", "Show navigator"), configuration()->isNotationNavigatorVisible() },
         Panel { Tours, qtrc("appshell", "Show tours"), configuration()->needShowTours() }
     };
 

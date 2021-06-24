@@ -69,10 +69,13 @@ public:
 
     ValCh<io::paths> recentScorePaths() const override;
 
-    ValCh<bool> isNotationStatusBarVisible() const override;
+    bool isNotationStatusBarVisible() const override;
     void setIsNotationStatusBarVisible(bool visible) const override;
-    ValCh<bool> isNotationNavigatorVisible() const override;
+    async::Notification isNotationStatusBarVisibleChanged() const override;
+
+    bool isNotationNavigatorVisible() const override;
     void setIsNotationNavigatorVisible(bool visible) const override;
+    async::Notification isNotationNavigatorVisibleChanged() const override;
 
     bool needShowSplashScreen() const override;
     void setNeedShowSplashScreen(bool show) override;
@@ -92,7 +95,6 @@ private:
 
     std::string currentLanguageCode() const;
 
-    async::Channel<bool> m_notationStatusBarVisibleChanged;
     async::Channel<bool> m_notationNavigatorVisibleChanged;
 };
 }

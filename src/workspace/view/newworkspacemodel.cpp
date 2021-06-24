@@ -124,7 +124,7 @@ void NewWorkspaceModel::setUseToolbarCustomization(bool needUse)
 
 QVariant NewWorkspaceModel::createWorkspace()
 {
-    IWorkspacePtr newWorkspace = workspaceCreator()->newWorkspace(m_workspaceName.toStdString());
+    IWorkspacePtr newWorkspace = workspaceManager()->newWorkspace(m_workspaceName.toStdString());
 
     newWorkspace->setIsManaged(DataKey::UiSettings, useUiPreferences());
     newWorkspace->setIsManaged(DataKey::UiStates, useUiArrangement());

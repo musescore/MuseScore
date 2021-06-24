@@ -26,7 +26,6 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
-#include "internal/iworkspacecreator.h"
 #include "iworkspacemanager.h"
 
 namespace mu::workspace {
@@ -34,7 +33,6 @@ class NewWorkspaceModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(workspace, IWorkspaceCreator, workspaceCreator)
     INJECT(workspace, IWorkspaceManager, workspaceManager)
 
     Q_PROPERTY(QString workspaceName READ workspaceName WRITE setWorkspaceName NOTIFY dataChanged)

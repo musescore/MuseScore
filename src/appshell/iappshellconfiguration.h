@@ -27,6 +27,7 @@
 
 #include "io/path.h"
 #include "appshelltypes.h"
+#include "async/notification.h"
 
 namespace mu::appshell {
 class IAppShellConfiguration : MODULE_EXPORT_INTERFACE
@@ -62,10 +63,13 @@ public:
 
     virtual ValCh<io::paths> recentScorePaths() const = 0;
 
-    virtual ValCh<bool> isNotationStatusBarVisible() const = 0;
+    virtual bool isNotationStatusBarVisible() const = 0;
     virtual void setIsNotationStatusBarVisible(bool visible) const = 0;
-    virtual ValCh<bool> isNotationNavigatorVisible() const = 0;
+    virtual async::Notification isNotationStatusBarVisibleChanged() const = 0;
+
+    virtual bool isNotationNavigatorVisible() const = 0;
     virtual void setIsNotationNavigatorVisible(bool visible) const = 0;
+    virtual async::Notification isNotationNavigatorVisibleChanged() const = 0;
 
     virtual bool needShowSplashScreen() const = 0;
     virtual void setNeedShowSplashScreen(bool show) = 0;

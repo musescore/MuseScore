@@ -22,8 +22,6 @@
 #ifndef MU_WORKSPACE_WORKSPACETYPES_H
 #define MU_WORKSPACE_WORKSPACETYPES_H
 
-#include <QJsonValue>
-
 namespace mu::workspace {
 static const std::string DEFAULT_WORKSPACE_NAME("Default");
 
@@ -33,11 +31,6 @@ enum class DataKey {
     UiStates,
     UiToolConfigs,
     Palettes,
-};
-
-struct Data
-{
-    QJsonValue data;
 };
 }
 
