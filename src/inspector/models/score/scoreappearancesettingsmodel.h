@@ -69,6 +69,7 @@ signals:
 private:
     void updatePageSize();
 
+    int m_currentPageSizeId = -1;
     int m_orientationType = 0;
     qreal m_staffSpacing = 0.0;
     qreal m_staffDistance = 0.0;
