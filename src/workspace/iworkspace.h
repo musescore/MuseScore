@@ -41,11 +41,8 @@ public:
     virtual bool isManaged(const DataKey& key) const = 0;
     virtual void setIsManaged(const DataKey& key, bool val) const = 0;
 
-    virtual RetVal<QByteArray> readRawData(const std::string& name) const = 0;
-    virtual Ret writeRawData(const std::string& name, const QByteArray& data) = 0;
-
-    virtual RetVal<Data> readData(const std::string& name) const = 0;
-    virtual Ret writeData(const std::string& name, const Data& data) = 0;
+    virtual RetVal<QByteArray> rawData(const DataKey& key) const = 0;
+    virtual Ret setRawData(const DataKey& key, const QByteArray& data) = 0;
 };
 
 using IWorkspacePtr = std::shared_ptr<IWorkspace>;

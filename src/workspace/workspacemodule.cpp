@@ -31,7 +31,6 @@
 
 #include "internal/workspaceconfiguration.h"
 #include "internal/workspacemanager.h"
-#include "internal/workspacecreator.h"
 #include "internal/workspaceactioncontroller.h"
 #include "internal/workspaceuiactions.h"
 #include "internal/workspacesdataprovider.h"
@@ -64,7 +63,6 @@ void WorkspaceModule::registerExports()
 {
     ioc()->registerExport<IWorkspaceConfiguration>(moduleName(), s_configuration);
     ioc()->registerExport<IWorkspaceManager>(moduleName(), s_manager);
-    ioc()->registerExport<IWorkspaceCreator>(moduleName(), std::make_shared<WorkspaceCreator>());
     ioc()->registerExport<IWorkspacesDataProvider>(moduleName(), s_provider);
 }
 

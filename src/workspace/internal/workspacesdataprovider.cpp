@@ -27,26 +27,40 @@ using namespace mu::workspace;
 
 mu::RetVal<QByteArray> WorkspacesDataProvider::rawData(DataKey key) const
 {
-    NOT_IMPLEMENTED;
-    return RetVal<QByteArray>();
+    IWorkspacePtr current = manager()->currentWorkspace();
+    IF_ASSERT_FAILED(current) {
+        return RetVal<QByteArray>(make_ret(Ret::Code::InternalError));
+    }
+
+    if (current->isManaged(key)) {
+        return current->rawData(key);
+    }
+
+    IWorkspacePtr def = manager()->defaultWorkspace();
+    IF_ASSERT_FAILED(def) {
+        return RetVal<QByteArray>(make_ret(Ret::Code::InternalError));
+    }
+
+    return def->rawData(key);
 }
 
 mu::Ret WorkspacesDataProvider::setRawData(DataKey key, const QByteArray& data)
 {
-    NOT_IMPLEMENTED;
-    return Ret();
-}
+    IWorkspacePtr current = manager()->currentWorkspace();
+    IF_ASSERT_FAILED(current) {
+        return make_ret(Ret::Code::InternalError);
+    }
 
-mu::RetVal<Data> WorkspacesDataProvider::data(DataKey key) const
-{
-    NOT_IMPLEMENTED;
-    return RetVal<Data>();
-}
+    if (current->isManaged(key)) {
+        return current->setRawData(key, data);
+    }
 
-mu::Ret WorkspacesDataProvider::setData(DataKey key, const Data& data)
-{
-    NOT_IMPLEMENTED;
-    return Ret();
+    IWorkspacePtr def = manager()->defaultWorkspace();
+    IF_ASSERT_FAILED(def) {
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    return def->setRawData(key, data);
 }
 
 mu::async::Notification WorkspacesDataProvider::dataChanged(DataKey key)

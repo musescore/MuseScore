@@ -25,11 +25,11 @@ using namespace mu::appshell;
 
 void NotationPageState::init()
 {
-    configuration()->isNotationNavigatorVisible().ch.onReceive(this, [this](bool) {
+    configuration()->isNotationNavigatorVisibleChanged().onNotify(this, [this]() {
         m_panelsVisibleChanged.send({ PanelType::NotationNavigator });
     });
 
-    configuration()->isNotationStatusBarVisible().ch.onReceive(this, [this](bool) {
+    configuration()->isNotationStatusBarVisibleChanged().onNotify(this, [this]() {
         m_panelsVisibleChanged.send({ PanelType::NotationStatusBar });
     });
 }
@@ -46,9 +46,9 @@ bool NotationPageState::isPanelVisible(PanelType type) const
     case PanelType::PlaybackToolBar:
         return m_panelVisibleMap[type];
     case PanelType::NotationNavigator:
-        return configuration()->isNotationNavigatorVisible().val;
+        return configuration()->isNotationNavigatorVisible();
     case PanelType::NotationStatusBar:
-        return configuration()->isNotationStatusBarVisible().val;
+        return configuration()->isNotationStatusBarVisible();
     case PanelType::Mixer:
     case PanelType::TimeLine:
     case PanelType::Synthesizer:

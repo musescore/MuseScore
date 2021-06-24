@@ -22,6 +22,7 @@
 
 #include "uiarrangement.h"
 
+#include <QJsonDocument>
 #include <QJsonValue>
 #include <QJsonArray>
 
@@ -43,30 +44,32 @@ void UiArrangement::init()
     workspacesDataProvider()->dataChanged(DataKey::UiSettings).onNotify(this, [this]() {
         updateData(DataKey::UiToolConfigs, m_toolconfigs);
     });
-
-    updateData(DataKey::UiSettings, m_settings);
-    updateData(DataKey::UiStates, m_states);
-    updateData(DataKey::UiToolConfigs, m_toolconfigs);
 }
 
-void UiArrangement::updateData(DataKey key, QJsonObject& obj)
+void UiArrangement::updateData(DataKey key, QJsonObject& obj) const
 {
-    RetVal<Data> data = workspacesDataProvider()->data(key);
+    RetVal<QByteArray> data = workspacesDataProvider()->rawData(key);
     if (!data.ret) {
         LOGE() << "failed get data: " << int(key) << ", ret: " << data.ret.toString();
         return;
     }
 
-    obj = data.val.data.toObject();
+    obj = QJsonDocument::fromJson(data.val).object();
 }
 
 void UiArrangement::saveData(workspace::DataKey key, const QJsonObject& obj)
 {
-    workspacesDataProvider()->setData(key, { obj });
+    QByteArray data = QJsonDocument(obj).toJson();
+
+    workspacesDataProvider()->setRawData(key, data);
 }
 
 QString UiArrangement::value(const QString& key) const
 {
+    if (m_settings.isEmpty()) {
+        updateData(DataKey::UiSettings, m_settings);
+    }
+
     QJsonValue val = m_settings.value(key);
     return val.toString();
 }
@@ -85,6 +88,10 @@ mu::async::Notification UiArrangement::valueChanged(const QString& key) const
 
 QByteArray UiArrangement::state(const QString& key) const
 {
+    if (m_states.isEmpty()) {
+        updateData(DataKey::UiStates, m_states);
+    }
+
     QJsonValue val = m_states.value(key);
     QString valStr = val.toString();
     return valStr.toLocal8Bit();
@@ -99,6 +106,10 @@ void UiArrangement::setState(const QString& key, const QByteArray& data)
 ToolConfig UiArrangement::toolConfig(const QString& toolName) const
 {
     TRACEFUNC;
+
+    if (m_toolconfigs.isEmpty()) {
+        updateData(DataKey::UiToolConfigs, m_toolconfigs);
+    }
 
     //! NOTE Maybe we need to cache?
 

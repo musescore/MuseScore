@@ -37,18 +37,13 @@ public:
     bool isManaged(const DataKey& key) const override;
     void setIsManaged(const DataKey& key, bool val) const override;
 
-    RetVal<QByteArray> readRawData(const std::string& name) const override;
-    Ret writeRawData(const std::string& name, const QByteArray& data) override;
+    RetVal<QByteArray> rawData(const DataKey& key) const override;
+    Ret setRawData(const DataKey& key, const QByteArray& data) override;
 
-    RetVal<Data> readData(const std::string& name) const override;
-    Ret writeData(const std::string& name, const Data& data) override;
-
-    // =======================================
-
-    bool isInited() const;
     io::path filePath() const;
-    Ret read();
-    Ret write();
+    bool isLoaded() const;
+    Ret load();
+    Ret save();
 
 private:
     Ret readWorkspace(const QByteArray& data);

@@ -58,31 +58,19 @@ void Workspace::setIsManaged(const DataKey& key, bool val) const
     NOT_IMPLEMENTED;
 }
 
-RetVal<QByteArray> Workspace::readRawData(const std::string& name) const
+RetVal<QByteArray> Workspace::rawData(const DataKey& key) const
 {
     NOT_IMPLEMENTED;
     return RetVal<QByteArray>();
 }
 
-Ret Workspace::writeRawData(const std::string& name, const QByteArray& data)
+Ret Workspace::setRawData(const DataKey& key, const QByteArray& data)
 {
     NOT_IMPLEMENTED;
     return Ret();
 }
 
-RetVal<Data> Workspace::readData(const std::string& name) const
-{
-    NOT_IMPLEMENTED;
-    return RetVal<Data>();
-}
-
-Ret Workspace::writeData(const std::string& name, const Data& data)
-{
-    NOT_IMPLEMENTED;
-    return Ret();
-}
-
-bool Workspace::isInited() const
+bool Workspace::isLoaded() const
 {
     return m_isInited;
 }
@@ -92,7 +80,7 @@ io::path Workspace::filePath() const
     return m_filePath;
 }
 
-Ret Workspace::read()
+Ret Workspace::load()
 {
     clear();
 
@@ -123,7 +111,7 @@ Ret Workspace::readWorkspace(const QByteArray& xmlData)
     return make_ret(Ret::Code::Ok);
 }
 
-Ret Workspace::write()
+Ret Workspace::save()
 {
     if (!m_hasUnsavedChanges) {
         return make_ret(Ret::Code::Ok);

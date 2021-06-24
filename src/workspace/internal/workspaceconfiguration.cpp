@@ -29,7 +29,7 @@ using namespace mu;
 using namespace mu::workspace;
 using namespace mu::framework;
 
-static const Settings::Key CURRENT_WORKSPACE("workspace", "application/workspace");
+static const Settings::Key CURRENT_WORKSPACE("workspace", "workspace");
 
 void WorkspaceConfiguration::init()
 {
@@ -42,10 +42,7 @@ void WorkspaceConfiguration::init()
 io::paths WorkspaceConfiguration::workspacePaths() const
 {
     io::paths paths;
-
-    io::path sharePath = globalConfiguration()->appDataPath() + "/workspaces";
-    paths.push_back(sharePath);
-    paths.push_back(userWorkspacesDirPath());
+    paths.push_back(userWorkspacesPath());
 
     std::vector<io::path> extensionsPath = this->extensionsPaths();
     paths.insert(paths.end(), extensionsPath.begin(), extensionsPath.end());
@@ -53,14 +50,14 @@ io::paths WorkspaceConfiguration::workspacePaths() const
     return paths;
 }
 
-io::path WorkspaceConfiguration::userWorkspacesDirPath() const
+io::path WorkspaceConfiguration::templateWorkspacePath() const
 {
-    return globalConfiguration()->userAppDataPath() + "/workspaces";
+    return ":/workspace/template";
 }
 
-io::path WorkspaceConfiguration::userWorkspacePath(const std::string& workspaceName) const
+io::path WorkspaceConfiguration::userWorkspacesPath() const
 {
-    return userWorkspacesDirPath() + "/" + workspaceName + ".workspace";
+    return globalConfiguration()->userAppDataPath() + "/workspaces";
 }
 
 ValCh<std::string> WorkspaceConfiguration::currentWorkspaceName() const
