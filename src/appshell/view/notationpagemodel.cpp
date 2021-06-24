@@ -87,7 +87,7 @@ void NotationPageModel::setStatusBarDockName(const QString& dockName)
     setPanelDockName(PanelType::NotationStatusBar, dockName);
 }
 
-void NotationPageModel::setPanelDockName(PanelType type, const QString &dockName)
+void NotationPageModel::setPanelDockName(PanelType type, const QString& dockName)
 {
     m_panelTypeToDockName[type] = dockName;
 }
@@ -124,7 +124,7 @@ void NotationPageModel::init(QQuickItem* dockWindow)
     };
 
     for (const std::string& actionCode : actionToPanelType.keys()) {
-        dispatcher()->reg(this, actionCode, [=]() { togglePanel(actionToPanelType[actionCode]); });;
+        dispatcher()->reg(this, actionCode, [=]() { togglePanel(actionToPanelType[actionCode]); });
     }
 
     pageState()->panelsVisibleChanged().onReceive(this, [this](PanelTypeList types) {
