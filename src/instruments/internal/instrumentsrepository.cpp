@@ -110,8 +110,13 @@ void InstrumentsRepository::fillInstrumentsMeta(InstrumentsMeta& meta)
         meta.groups << group;
 
         for (const Ms::InstrumentTemplate* msTemplate : msGroup->instrumentTemplates) {
+            if (msTemplate->trackName.isEmpty() || msTemplate->longNames.isEmpty()) {
+                continue;
+            }
+
             Instrument templ = notation::InstrumentsConverter::convertInstrument(*msTemplate);
             templ.groupId = msGroup->id;
+
             meta.instrumentTemplates << templ;
         }
     }

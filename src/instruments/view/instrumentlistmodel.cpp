@@ -37,6 +37,21 @@ static const QString CONFIG_KEY("config");
 static const QString SOLOIST_KEY("isSoloist");
 static const QString IS_EXISTING_PART_KEY("isExistingPart");
 
+static QString formatSelectedInstrumentTitle(const Instrument& instrument)
+{
+    const QString& transpositioName = instrument.transposition.name;
+    const QString& instrumentName = instrument.name;
+
+    switch (instrument.transposition.type) {
+    case TranspositionType::Tuning: return transpositioName + " " + instrumentName;
+    case TranspositionType::Course: return instrumentName + " (" + transpositioName + ")";
+    case TranspositionType::Transposition: return instrumentName + " " + qtrc("instruments", "in") + " " + transpositioName;
+    case TranspositionType::Unknown: break;
+    }
+
+    return instrumentName;
+}
+
 InstrumentListModel::InstrumentListModel(QObject* parent)
     : QObject(parent)
 {
@@ -302,11 +317,9 @@ void InstrumentListModel::selectInstrument(const QString& instrumentName, const 
     SelectedInstrumentInfo info;
     info.isExistingPart = false;
     info.isSoloist = false;
-    //! TODO
-    //info.id = codeKey;
-    info.name = QString();
+    info.id = suitedInstrument.templateId;
+    info.name = formatSelectedInstrumentTitle(suitedInstrument);
     info.familyId = suitedInstrument.familyId;
-    info.transposition = suitedInstrument.transposition;
     info.config = suitedInstrument;
 
     if (!m_canSelectMultipleInstruments) {
@@ -321,29 +334,19 @@ void InstrumentListModel::selectInstrument(const QString& instrumentName, const 
     emit selectedInstrumentsChanged();
 }
 
-int InstrumentListModel::findInstrumentIndex(const QString& instrumentId) const
+void InstrumentListModel::unselectInstrument(int instrumentIndex)
 {
-    for (int index = 0; index < m_selectedInstruments.count(); ++index) {
-        if (m_selectedInstruments[index].id == instrumentId) {
-            return index;
-        }
-    }
-    return -1;
-}
-
-void InstrumentListModel::unselectInstrument(int index)
-{
-    if (!isInsrumentIndexValid(index)) {
+    if (!isInsrumentIndexValid(instrumentIndex)) {
         return;
     }
 
-    m_selectedInstruments.removeAt(index);
+    m_selectedInstruments.removeAt(instrumentIndex);
     emit selectedInstrumentsChanged();
 }
 
-void InstrumentListModel::swapSelectedInstruments(int firstIndex, int secondIndex)
+void InstrumentListModel::swapSelectedInstruments(int firstInstrumentIndex, int secondInstrumentIndex)
 {
-    m_selectedInstruments.swapItemsAt(firstIndex, secondIndex);
+    m_selectedInstruments.swapItemsAt(firstInstrumentIndex, secondInstrumentIndex);
     emit selectedInstrumentsChanged();
     checkScoreOrderMatching(true);
 }
@@ -394,13 +397,13 @@ void InstrumentListModel::setSelectedScoreOrderIndex(const QVariant& index)
     emit scoreOrdersChanged();
 }
 
-void InstrumentListModel::toggleSoloist(int index)
+void InstrumentListModel::toggleSoloist(int instrumentIndex)
 {
-    if (!isInsrumentIndexValid(index)) {
+    if (!isInsrumentIndexValid(instrumentIndex)) {
         return;
     }
 
-    SelectedInstrumentInfo sio = m_selectedInstruments.takeAt(index);
+    SelectedInstrumentInfo sio = m_selectedInstruments.takeAt(instrumentIndex);
     sio.isSoloist = !sio.isSoloist;
     m_selectedInstruments.insert(instrumentInsertIndex(sio), sio);
     emit selectedInstrumentsChanged();
@@ -531,14 +534,14 @@ QVariantList InstrumentListModel::selectedInstruments() const
     QVariantList result;
 
     for (const SelectedInstrumentInfo& instrument: m_selectedInstruments) {
-         QVariantMap obj;
-         obj[ID_KEY] = instrument.id;
-         obj[NAME_KEY] = instrument.name;
-         obj[IS_EXISTING_PART_KEY] = instrument.isExistingPart;
-         obj[SOLOIST_KEY] = instrument.isSoloist;
-         obj[CONFIG_KEY] = QVariant::fromValue(instrument.config);
+        QVariantMap obj;
+        obj[ID_KEY] = instrument.id;
+        obj[NAME_KEY] = instrument.name;
+        obj[IS_EXISTING_PART_KEY] = instrument.isExistingPart;
+        obj[SOLOIST_KEY] = instrument.isSoloist;
+        obj[CONFIG_KEY] = QVariant::fromValue(instrument.config);
 
-         result << obj;
+        result << obj;
     }
 
     return result;
