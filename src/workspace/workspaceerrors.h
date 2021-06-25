@@ -19,34 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_IWORKSPACE_H
-#define MU_WORKSPACE_IWORKSPACE_H
+#ifndef MU_WORKSPACE_WORKSPACEERRORS_H
+#define MU_WORKSPACE_WORKSPACEERRORS_H
 
-#include <memory>
-#include <QByteArray>
-
-#include "retval.h"
-#include "workspacetypes.h"
-#include "async/channel.h"
+#include "ret.h"
 
 namespace mu::workspace {
-class IWorkspace
-{
-public:
-    virtual ~IWorkspace() = default;
+enum class Err {
+    Undefined       = int(Ret::Code::Undefined),
+    NoError         = int(Ret::Code::Ok),
+    UnknownError    = int(Ret::Code::WorkspaceFirst),
 
-    virtual std::string name() const = 0;
-    virtual std::string title() const = 0;
+    NotLoaded       = 1502,
+    NoData          = 1503,
 
-    virtual bool isManaged(const DataKey& key) const = 0;
-    virtual void setIsManaged(const DataKey& key, bool val) = 0;
-
-    virtual RetVal<QByteArray> rawData(const DataKey& key) const = 0;
-    virtual Ret setRawData(const DataKey& key, const QByteArray& data) = 0;
+    FailedPack      = 1510,
+    FailedUnPack    = 1511,
 };
 
-using IWorkspacePtr = std::shared_ptr<IWorkspace>;
-using IWorkspacePtrList = std::vector<IWorkspacePtr>;
+inline mu::Ret make_ret(Err e)
+{
+    return Ret(static_cast<int>(e));
+}
 }
 
-#endif // MU_WORKSPACE_IWORKSPACE_H
+#endif // MU_WORKSPACE_WORKSPACEERRORS_H
