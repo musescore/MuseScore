@@ -49,7 +49,7 @@ public:
 private:
     void load();
     void clear();
-    void fillInstrumentsMeta();
+    void fillInstrumentsMeta(InstrumentsMeta& meta);
 
     InstrumentsMeta m_instrumentsMeta;
     QMutex m_instrumentsMutex;

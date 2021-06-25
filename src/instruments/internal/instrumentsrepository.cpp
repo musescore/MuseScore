@@ -25,8 +25,9 @@
 #include "translation.h"
 
 #include "libmscore/instrtemplate.h"
-
 #include "libmscore/articulation.h"
+
+#include "notation/internal/instrumentsconverter.h"
 
 using namespace mu;
 using namespace mu::instruments;
@@ -73,7 +74,7 @@ void InstrumentsRepository::load()
     TRACEFUNC;
 
     QMutexLocker locker(&m_instrumentsMutex);
-    clear();
+    Ms::clearInstrumentTemplates();
 
     for (const io::path& filePath: configuration()->instrumentListPaths()) {
         if (!Ms::loadInstrumentTemplates(filePath.toQString())) {
@@ -81,31 +82,23 @@ void InstrumentsRepository::load()
         }
     }
 
-    fillInstrumentsMeta();
+    fillInstrumentsMeta(m_instrumentsMeta);
+    m_instrumentsMetaChannel.send(m_instrumentsMeta);
 }
 
-void InstrumentsRepository::clear()
+void InstrumentsRepository::fillInstrumentsMeta(InstrumentsMeta& meta)
 {
-    Ms::clearInstrumentTemplates();
+    TRACEFUNC;
 
-    m_instrumentsMeta.instrumentTemplates.clear();
-    m_instrumentsMeta.genres.clear();
-    m_instrumentsMeta.groups.clear();
-    m_instrumentsMeta.articulations.clear();
-    m_instrumentsMeta.scoreOrders.clear();
-}
-
-void InstrumentsRepository::fillInstrumentsMeta()
-{
-    InstrumentsMeta metaInstrument;
-    metaInstrument.articulations = Ms::articulation;
+    meta.clear();
+    meta.articulations = Ms::articulation;
 
     for (const Ms::InstrumentGenre* msGenre : Ms::instrumentGenres) {
         InstrumentGenre genre;
         genre.id = msGenre->id;
         genre.name = msGenre->name;
 
-        metaInstrument.genres << genre;
+        meta.genres << genre;
     }
 
     for (const Ms::InstrumentGroup* msGroup : Ms::instrumentGroups) {
@@ -114,7 +107,13 @@ void InstrumentsRepository::fillInstrumentsMeta()
         group.name = msGroup->name;
         group.extended = msGroup->extended;
 
-        metaInstrument.groups << group;
+        meta.groups << group;
+
+        for (const Ms::InstrumentTemplate* msTemplate : msGroup->instrumentTemplates) {
+            Instrument templ = notation::InstrumentsConverter::convertInstrument(*msTemplate);
+            templ.groupId = msGroup->id;
+            meta.instrumentTemplates << templ;
+        }
     }
 
     for (const Ms::ScoreOrder& msOrder : Ms::instrumentOrders) {
@@ -123,21 +122,11 @@ void InstrumentsRepository::fillInstrumentsMeta()
         order.name = msOrder.name;
         order.instrumentMap = msOrder.instrumentMap;
 
-        metaInstrument.scoreOrders << order;
+        meta.scoreOrders << order;
     }
-
-    /*
-    const InstrumentTemplateMap& templates = metaInstrument.val.instrumentTemplates;
-    for (auto it = templates.cbegin(); it != templates.cend(); ++it) {
-        metaInstrument.instrumentTemplates.insert(it.key(), it.value());
-    }
-    */
 
     ScoreOrder custom;
     custom.id = "custom";
     custom.name = qApp->translate("OrderXML", "Custom");
-    m_instrumentsMeta.scoreOrders << custom;
-
-    m_instrumentsMetaChannel.send(m_instrumentsMeta);
-
+    meta.scoreOrders << custom;
 }
