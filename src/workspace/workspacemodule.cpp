@@ -101,6 +101,7 @@ void WorkspaceModule::onInit(const IApplication::RunMode& mode)
 
     s_configuration->init();
     s_manager->init();
+    s_provider->init();
     s_actionController->init();
 
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());

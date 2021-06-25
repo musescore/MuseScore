@@ -152,6 +152,7 @@ public:
 
     void setPaletteTree(PaletteTreePtr tree);
     const PaletteTree* paletteTree() const { return _paletteTree.get(); }
+    const PaletteTreePtr paletteTreePtr() const { return _paletteTree; }
 
     bool paletteTreeChanged() const { return _treeChanged; }
 

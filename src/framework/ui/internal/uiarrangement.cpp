@@ -33,15 +33,9 @@ using namespace mu::workspace;
 
 void UiArrangement::load()
 {
-    workspacesDataProvider()->dataChanged(DataKey::UiSettings).onNotify(this, [this]() {
+    workspacesDataProvider()->workspaceChanged().onNotify(this, [this]() {
         updateData(DataKey::UiSettings, m_settings, m_valuesNotifications);
-    });
-
-    workspacesDataProvider()->dataChanged(DataKey::UiStates).onNotify(this, [this]() {
         updateData(DataKey::UiStates, m_states, m_statesNotifications);
-    });
-
-    workspacesDataProvider()->dataChanged(DataKey::UiToolConfigs).onNotify(this, [this]() {
         updateData(DataKey::UiToolConfigs, m_toolconfigs, m_toolconfigsNotifications);
     });
 
@@ -89,6 +83,9 @@ void UiArrangement::setValue(const QString& key, const QString& val)
 {
     m_settings[key] = val;
     saveData(DataKey::UiSettings, m_settings);
+    if (m_valuesNotifications.contains(key)) {
+        m_valuesNotifications[key].notify();
+    }
 }
 
 mu::async::Notification UiArrangement::valueChanged(const QString& key) const
@@ -107,6 +104,9 @@ void UiArrangement::setState(const QString& key, const QByteArray& data)
 {
     m_states[key] = QString::fromLocal8Bit(data);
     saveData(DataKey::UiStates, m_states);
+    if (m_statesNotifications.contains(key)) {
+        m_statesNotifications[key].notify();
+    }
 }
 
 mu::async::Notification UiArrangement::stateChanged(const QString& key) const
@@ -157,6 +157,9 @@ void UiArrangement::setToolConfig(const QString& toolName, const ToolConfig& con
 
     m_toolconfigs[toolName] = confObj;
     saveData(DataKey::UiToolConfigs, m_toolconfigs);
+    if (m_toolconfigsNotifications.contains(toolName)) {
+        m_toolconfigsNotifications[toolName].notify();
+    }
 }
 
 mu::async::Notification UiArrangement::toolConfigChanged(const QString& toolName) const

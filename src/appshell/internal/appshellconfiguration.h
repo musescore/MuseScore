@@ -94,8 +94,6 @@ private:
     std::string sha() const;
 
     std::string currentLanguageCode() const;
-
-    async::Channel<bool> m_notationNavigatorVisibleChanged;
 };
 }
 
