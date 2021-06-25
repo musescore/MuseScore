@@ -189,6 +189,7 @@ private slots:
       void sound1() { mxmlIoTest("testSound1"); }
       void sound2() { mxmlIoTestRef("testSound2"); }
       // void specialCharacters() { mxmlIoTest("testSpecialCharacters"); }
+      void staffEmptiness() { mxmlImportTestRef("testStaffEmptiness"); }
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
       void stringVoiceName() { mxmlIoTestRef("testStringVoiceName"); }
       void systemBrackets1() { mxmlIoTest("testSystemBrackets1"); }

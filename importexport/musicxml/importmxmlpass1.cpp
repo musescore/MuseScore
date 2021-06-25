@@ -1650,6 +1650,7 @@ static void createPart(Score* score, const QString& id, PartMap& pm)
       score->appendPart(part);
       Staff* staff = new Staff(score);
       staff->setPart(part);
+      staff->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
       part->staves()->push_back(staff);
       score->staves().push_back(staff);
       // TODO TBD tuplets.resize(VOICES); // part now contains one staff, thus VOICES voices
@@ -2018,13 +2019,27 @@ void MusicXMLParserPass1::midiInstrument(const QString& partId)
 /**
  Set number of staves for part \a partId to the max value
  of the current value \a staves.
+ Also handle HideMode.
  */
 
 static void setNumberOfStavesForPart(Part* const part, const int staves)
       {
       Q_ASSERT(part);
-      if (staves > part->nstaves())
+      int prevnstaves = part->nstaves();
+      if (staves > part->nstaves()) {
             part->setStaves(staves);
+            // New staves default to INSTRUMENT hide mode
+            for (int i = prevnstaves; i < staves; ++i)
+                  part->staff(i)->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
+            }
+      if (staves != 0 && prevnstaves != 1 && prevnstaves != staves ) {
+            for (int i = 0; i < part->nstaves(); ++i) {
+                  // A "staves" value different from the existing nstaves means
+                  // staves in a part will sometimes be hidden.
+                  // We can approximate this with the AUTO hide mode.
+                  part->staff(i)->setHideWhenEmpty(Staff::HideMode::AUTO);
+                  }
+            }
       }
 
 //---------------------------------------------------------
