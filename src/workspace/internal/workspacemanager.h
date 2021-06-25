@@ -70,8 +70,8 @@ private:
     Ret removeWorkspace(const IWorkspacePtr& workspace);
     bool canRemoveWorkspace(const std::string& workspaceName) const;
 
-    Ret createInexistentWorkspaces(const IWorkspacePtrList& newWorkspaceList);
-    Ret createWorkspace(IWorkspacePtr workspace);
+    Ret addNonExistentWorkspaces(const IWorkspacePtrList& newWorkspaceList);
+    Ret addWorkspace(IWorkspacePtr workspace);
 
     WorkspacePtr findByName(const std::string& name) const;
     WorkspacePtr findAndInit(const std::string& name) const;

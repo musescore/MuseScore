@@ -124,12 +124,11 @@ void NewWorkspaceModel::setUseToolbarCustomization(bool needUse)
 
 QVariant NewWorkspaceModel::createWorkspace()
 {
-    IWorkspacePtr newWorkspace = workspaceManager()->newWorkspace(m_workspaceName.toStdString());
-
-    newWorkspace->setIsManaged(DataKey::UiSettings, useUiPreferences());
-    newWorkspace->setIsManaged(DataKey::UiStates, useUiArrangement());
-    newWorkspace->setIsManaged(DataKey::UiToolConfigs, useToolbarCustomization());
-    newWorkspace->setIsManaged(DataKey::Palettes, usePalettes());
-
-    return QVariant::fromValue(newWorkspace);
+    QVariantMap meta;
+    meta["name"] = m_workspaceName;
+    meta["ui_settings"] = useUiPreferences();
+    meta["ui_states"] = useUiArrangement();
+    meta["ui_toolconfigs"] = useToolbarCustomization();
+    meta["palettes"] = usePalettes();
+    return meta;
 }
