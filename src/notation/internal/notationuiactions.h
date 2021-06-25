@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "context/iuicontextresolver.h"
 #include "async/asyncable.h"
+#include "ui/uitypes.h"
 
 namespace mu::notation {
 class NotationUiActions : public ui::IUiActionsModule, public async::Asyncable
@@ -54,6 +55,8 @@ public:
     static int actionDotCount(const actions::ActionCode& actionCode);
     static int actionVoice(const actions::ActionCode& actionCode);
     static SymbolId actionArticulationSymbolId(const actions::ActionCode& actionCode);
+
+    static const ui::ToolConfig& defaultNoteInputBarConfig();
 
 private:
     static const ui::UiActionList m_actions;

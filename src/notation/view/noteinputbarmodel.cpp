@@ -117,6 +117,9 @@ void NoteInputBarModel::load()
     MenuItemList items;
 
     ToolConfig noteInputConfig = uiConfiguration()->toolConfig(TOOLBAR_NAME);
+    if (!noteInputConfig.isValid()) {
+        noteInputConfig = NotationUiActions::defaultNoteInputBarConfig();
+    }
 
     int section = 0;
     for (const ToolConfig::Item& item : noteInputConfig.items) {
