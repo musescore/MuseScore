@@ -127,40 +127,39 @@ void UiConfiguration::init()
     settings()->setDefaultValue(UI_MUSICAL_FONT_FAMILY_KEY, Val("Leland"));
     settings()->setDefaultValue(UI_MUSICAL_FONT_SIZE_KEY, Val(12));
 
-    settings()->valueChanged(UI_THEMES_KEY).onReceive(nullptr, [this](const Val&) {
+    settings()->valueChanged(UI_THEMES_KEY).onReceive(this, [this](const Val&) {
         updateThemes();
         notifyAboutCurrentThemeChanged();
     });
 
-    settings()->valueChanged(UI_CURRENT_THEME_CODE_KEY).onReceive(nullptr, [this](const Val&) {
+    settings()->valueChanged(UI_CURRENT_THEME_CODE_KEY).onReceive(this, [this](const Val&) {
         notifyAboutCurrentThemeChanged();
     });
 
-    settings()->valueChanged(UI_FONT_FAMILY_KEY).onReceive(nullptr, [this](const Val&) {
+    settings()->valueChanged(UI_FONT_FAMILY_KEY).onReceive(this, [this](const Val&) {
         m_fontChanged.notify();
     });
 
-    settings()->valueChanged(UI_FONT_SIZE_KEY).onReceive(nullptr, [this](const Val&) {
+    settings()->valueChanged(UI_FONT_SIZE_KEY).onReceive(this, [this](const Val&) {
         m_fontChanged.notify();
         m_iconsFontChanged.notify();
     });
 
-    settings()->valueChanged(UI_ICONS_FONT_FAMILY_KEY).onReceive(nullptr, [this](const Val&) {
+    settings()->valueChanged(UI_ICONS_FONT_FAMILY_KEY).onReceive(this, [this](const Val&) {
         m_iconsFontChanged.notify();
     });
 
-    settings()->valueChanged(UI_MUSICAL_FONT_FAMILY_KEY).onReceive(nullptr, [this](const Val&) {
+    settings()->valueChanged(UI_MUSICAL_FONT_FAMILY_KEY).onReceive(this, [this](const Val&) {
         m_musicalFontChanged.notify();
     });
 
-    settings()->valueChanged(UI_MUSICAL_FONT_SIZE_KEY).onReceive(nullptr, [this](const Val&) {
+    settings()->valueChanged(UI_MUSICAL_FONT_SIZE_KEY).onReceive(this, [this](const Val&) {
         m_musicalFontChanged.notify();
     });
 
-    //! TODO
-//    workspaceSettings()->valuesChanged().onNotify(nullptr, [this]() {
-//        m_windowGeometryChanged.notify();
-//    });
+    m_uiArrangement.stateChanged(WINDOW_GEOMETRY_KEY).onNotify(this, [this]() {
+        m_windowGeometryChanged.notify();
+    });
 
     initThemes();
 }

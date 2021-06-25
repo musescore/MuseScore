@@ -28,7 +28,8 @@ using namespace mu::workspace;
 void WorkspacesDataProvider::init()
 {
     manager()->currentWorkspaceChanged().onNotify(this, [this]() {
-        for (auto& n : m_notifications) {
+        m_workspaceChanged.notify();
+        for (auto& n : m_dataNotifications) {
             n.second.notify();
         }
     });
@@ -42,6 +43,7 @@ mu::RetVal<QByteArray> WorkspacesDataProvider::rawData(DataKey key) const
     }
 
     if (current->isManaged(key)) {
+        LOGD() << "get data from current workspace, key: " << key_to_string(key);
         return current->rawData(key);
     }
 
@@ -50,6 +52,7 @@ mu::RetVal<QByteArray> WorkspacesDataProvider::rawData(DataKey key) const
         return RetVal<QByteArray>(make_ret(Ret::Code::InternalError));
     }
 
+    LOGD() << "get data from default workspace, key: " << key_to_string(key);
     return def->rawData(key);
 }
 
@@ -60,19 +63,25 @@ mu::Ret WorkspacesDataProvider::setRawData(DataKey key, const QByteArray& data)
         return make_ret(Ret::Code::InternalError);
     }
 
+    Ret ret = false;
     if (current->isManaged(key)) {
-        return current->setRawData(key, data);
+        LOGD() << "set data to current workspace, key: " << key_to_string(key);
+        ret = current->setRawData(key, data);
     }
 
-    IWorkspacePtr def = manager()->defaultWorkspace();
-    IF_ASSERT_FAILED(def) {
-        return make_ret(Ret::Code::InternalError);
+    if (!ret) {
+        IWorkspacePtr def = manager()->defaultWorkspace();
+        IF_ASSERT_FAILED(def) {
+            return make_ret(Ret::Code::InternalError);
+        }
+
+        LOGD() << "set data to default workspace, key: " << key_to_string(key);
+        ret = def->setRawData(key, data);
     }
 
-    Ret ret = def->setRawData(key, data);
     if (ret) {
-        auto n = m_notifications.find(key);
-        if (n != m_notifications.end()) {
+        auto n = m_dataNotifications.find(key);
+        if (n != m_dataNotifications.end()) {
             n->second.notify();
         }
     }
@@ -80,7 +89,12 @@ mu::Ret WorkspacesDataProvider::setRawData(DataKey key, const QByteArray& data)
     return ret;
 }
 
-mu::async::Notification WorkspacesDataProvider::dataChanged(DataKey key)
+mu::async::Notification WorkspacesDataProvider::dataChanged(DataKey key) const
 {
-    return m_notifications[key];
+    return m_dataNotifications[key];
+}
+
+mu::async::Notification WorkspacesDataProvider::workspaceChanged() const
+{
+    return m_workspaceChanged;
 }

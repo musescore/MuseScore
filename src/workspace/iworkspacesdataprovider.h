@@ -38,8 +38,9 @@ public:
 
     virtual RetVal<QByteArray> rawData(DataKey key) const = 0;
     virtual Ret setRawData(DataKey key, const QByteArray& data) = 0;
+    virtual async::Notification dataChanged(DataKey key) const = 0;
 
-    virtual async::Notification dataChanged(DataKey key) = 0;
+    virtual async::Notification workspaceChanged() const = 0;
 };
 }
 

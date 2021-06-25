@@ -31,9 +31,10 @@
 
 #include "val.h"
 #include "uiarrangement.h"
+#include "async/asyncable.h"
 
 namespace mu::ui {
-class UiConfiguration : public IUiConfiguration
+class UiConfiguration : public IUiConfiguration, public async::Asyncable
 {
     INJECT(ui, IMainWindow, mainWindow)
     INJECT(ui, IPlatformTheme, platformTheme)

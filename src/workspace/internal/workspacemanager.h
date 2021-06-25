@@ -78,9 +78,10 @@ private:
 
     WorkspacePtr m_defaultWorkspace;
     WorkspacePtr m_currentWorkspace;
-    std::vector<WorkspacePtr> m_workspaces;
+    async::Notification m_currentWorkspaceChanged;
 
-    async::Channel<IWorkspacePtr> m_currentWorkspaceChanged;
+    std::vector<WorkspacePtr> m_workspaces;
+    async::Notification m_workspacesListChanged;
 };
 }
 
