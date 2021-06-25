@@ -25,15 +25,10 @@
 
 #include <QObject>
 
-#include "modularity/ioc.h"
-#include "iworkspacemanager.h"
-
 namespace mu::workspace {
 class NewWorkspaceModel : public QObject
 {
     Q_OBJECT
-
-    INJECT(workspace, IWorkspaceManager, workspaceManager)
 
     Q_PROPERTY(QString workspaceName READ workspaceName WRITE setWorkspaceName NOTIFY dataChanged)
     Q_PROPERTY(bool useUiPreferences READ useUiPreferences WRITE setUseUiPreferences NOTIFY dataChanged)
