@@ -29,11 +29,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/instrumentsmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/instrumentstypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iinstrumentsconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/iinstrumentsreader.h
     ${CMAKE_CURRENT_LIST_DIR}/iinstrumentsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/iselectinstrumentscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsreader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsreader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconfiguration.cpp

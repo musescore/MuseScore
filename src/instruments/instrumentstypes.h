@@ -89,7 +89,7 @@ struct MidiAction
 };
 using MidiActionList = QList<MidiAction>;
 
-using MidiArticulationMap = QMap<QString /*id*/, MidiArticulation>;
+using MidiArticulations = QList<Ms::MidiArticulation>;
 
 struct InstrumentGroup
 {
@@ -99,24 +99,16 @@ struct InstrumentGroup
     int sequenceOrder = 0;
 };
 
-using InstrumentGroupList = QList<InstrumentGroup>;
-using InstrumentGroupMap = QMap<QString /*id*/, InstrumentGroup>;
+using InstrumentGroups = QList<InstrumentGroup>;
 
 struct InstrumentGenre
 {
     QString id;
     QString name;
 };
-using InstrumentGenreMap = QMap<QString /*id*/, InstrumentGenre>;
+using InstrumentGenres = QList<InstrumentGenre>;
 
 static const QString COMMON_GENRE_ID("common");
-
-struct InstrumentFamily
-{
-    QString id;
-    QString name;
-};
-using InstrumentFamilyMap = QMap<QString /*id*/, InstrumentFamily>;
 
 struct Instrument
 {
@@ -168,20 +160,23 @@ struct Instrument
     QString abbreviature() const { return !shortNames.isEmpty() ? shortNames.first().name() : QString(); }
 };
 
-struct PartInstrument {
-    bool isExistingPart = false;
-    bool isSoloist = false;
+struct PartInstrument
+{
     QString partId;
     Instrument instrument;
+
+    bool isExistingPart = false;
+    bool isSoloist = false;
 };
 
 using PartInstrumentList = QList<PartInstrument>;
 
-struct ScoreOrderGroup {
-    int index = -1;
+struct ScoreOrderGroup
+{
     QString family;
     QString section;
     QString unsorted;
+
     bool bracket = false;
     bool showSystemMarkings = false;
     bool barLineSpan = false;
@@ -190,8 +185,8 @@ struct ScoreOrderGroup {
 
 using InstrumentOverwrite = Ms::InstrumentOverwrite;
 
-struct ScoreOrder {
-    int index = -1;
+struct ScoreOrder
+{
     QString id;
     QString name;
     QMap<QString, InstrumentOverwrite> instrumentMap;
@@ -200,7 +195,10 @@ struct ScoreOrder {
     bool isValid() { return !groups.empty(); }
 };
 
-struct PartInstrumentListScoreOrder {
+using ScoreOrders = QList<ScoreOrder>;
+
+struct PartInstrumentListScoreOrder
+{
     PartInstrumentList instruments;
     ScoreOrder scoreOrder;
 };
@@ -213,18 +211,15 @@ struct InstrumentTemplate
     bool isValid() const { return !id.isEmpty(); }
 };
 
-using InstrumentTemplateMap = QMap<QString /*id*/, InstrumentTemplate>;
-using InstrumentTemplateList = QList<InstrumentTemplate>;
-using ScoreOrderMap = QMap<QString /*id*/, ScoreOrder>;
+using InstrumentTemplates = QList<InstrumentTemplate>;
 
 struct InstrumentsMeta
 {
-    InstrumentTemplateMap instrumentTemplates;
-    InstrumentGroupMap groups;
-    InstrumentGenreMap genres;
-    InstrumentFamilyMap families;
-    MidiArticulationMap articulations;
-    ScoreOrderMap scoreOrders;
+    InstrumentTemplates instrumentTemplates;
+    InstrumentGroups groups;
+    InstrumentGenres genres;
+    MidiArticulations articulations;
+    ScoreOrders scoreOrders;
 };
 
 class InstrumentsTreeItemType

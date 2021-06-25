@@ -63,7 +63,6 @@ mu::instruments::ScoreOrder ScoreOrderConverter::convertScoreOrder(const Ms::Sco
 {
     ScoreOrder result;
 
-    result.index = -1;
     result.id = order.id;
     result.name = order.name;
 

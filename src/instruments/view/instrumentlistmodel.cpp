@@ -116,10 +116,6 @@ INotationPartsPtr InstrumentListModel::notationParts() const
 
 void InstrumentListModel::InstrumentListModel::initScoreOrders(const QString& currentId)
 {
-    auto less = [](const ScoreOrder& a, const ScoreOrder& b) {
-        return a.index < b.index;
-    };
-
     auto toList = [](const ScoreOrder& order) {
         ScoreOrderInfo info;
         info.id = order.id;
@@ -128,12 +124,10 @@ void InstrumentListModel::InstrumentListModel::initScoreOrders(const QString& cu
         return info;
     };
 
-    QList<ScoreOrder> orders = m_instrumentsMeta.scoreOrders.values();
-    std::sort(orders.begin(), orders.end(), less);
-
-    for (auto& order: orders) {
+    for (const ScoreOrder& order: m_instrumentsMeta.scoreOrders) {
         m_scoreOrders << toList(order);
     }
+
     emit scoreOrdersChanged();
 
     if (currentId.isEmpty()) {
@@ -194,7 +188,7 @@ QVariantList InstrumentListModel::groups() const
 
     QVariantList result;
 
-    for (const InstrumentGroup& group: sortedGroupList()) {
+    for (const InstrumentGroup& group: m_instrumentsMeta.groups) {
         if (!availableGroups.contains(group.id)) {
             continue;
         }
@@ -214,7 +208,7 @@ QVariantList InstrumentListModel::instruments() const
     QHash<QString, QStringList> transpositions;
     QVariantMap availableInstruments;
 
-    for (const InstrumentTemplate& templ: m_instrumentsMeta.instrumentTemplates.values()) {
+    for (const InstrumentTemplate& templ: m_instrumentsMeta.instrumentTemplates) {
         const Instrument& instrument = templ.instrument;
         const Transposition& transposition = instrument.transposition;
 
@@ -294,7 +288,7 @@ void InstrumentListModel::selectInstrument(const QString& instrumentName, const 
 {
     InstrumentTemplate suitedTempl;
 
-    for (const InstrumentTemplate& templ : m_instrumentsMeta.instrumentTemplates.values()) {
+    for (const InstrumentTemplate& templ : m_instrumentsMeta.instrumentTemplates) {
         if (templ.instrument.name == instrumentName && templ.instrument.transposition.name == transpositionName) {
             suitedTempl = templ;
             break;
@@ -567,17 +561,6 @@ void InstrumentListModel::setInstrumentsMeta(const InstrumentsMeta& meta)
 {
     m_instrumentsMeta = meta;
     emit dataChanged();
-}
-
-InstrumentGroupList InstrumentListModel::sortedGroupList() const
-{
-    InstrumentGroupList result = m_instrumentsMeta.groups.values();
-
-    std::sort(result.begin(), result.end(), [](const InstrumentGroup& group1, const InstrumentGroup& group2) {
-        return group1.sequenceOrder < group2.sequenceOrder;
-    });
-
-    return result;
 }
 
 QVariantMap InstrumentListModel::allInstrumentsItem() const
