@@ -223,7 +223,7 @@ void WorkspaceManager::setupDefaultWorkspace()
         return;
     }
 
-    LOGW() << "not found default workspace, will be created new from template";
+    LOGW() << "not found default workspace, will be created new";
 
     m_defaultWorkspace = doNewWorkspace(DEFAULT_WORKSPACE_NAME);
     m_workspaces.push_back(m_defaultWorkspace);
@@ -235,7 +235,7 @@ void WorkspaceManager::setupDefaultWorkspace()
     }
 
     ret = m_defaultWorkspace->save();
-    if (ret) {
+    if (!ret) {
         LOGE() << "failed save default workspace";
     }
 }

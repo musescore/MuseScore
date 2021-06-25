@@ -74,7 +74,10 @@ public:
         ConverterLast   = 1399,
 
         VstFirst        = 1400,
-        VstLast         = 1499
+        VstLast         = 1499,
+
+        WorkspaceFirst  = 1500,
+        WorkspaceLast   = 1599
     };
 
     Ret() = default;

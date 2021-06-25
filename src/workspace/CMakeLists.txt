@@ -25,6 +25,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/workspacemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/workspacemodule.h
     ${CMAKE_CURRENT_LIST_DIR}/workspacetypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/workspaceerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/iworkspaceconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iworkspace.h
     ${CMAKE_CURRENT_LIST_DIR}/iworkspacemanager.h

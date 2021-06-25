@@ -24,6 +24,7 @@
 
 #include "iworkspace.h"
 #include "io/path.h"
+#include "workspacefile.h"
 
 namespace mu::workspace {
 class Workspace : public IWorkspace
@@ -35,7 +36,7 @@ public:
     std::string title() const override;
 
     bool isManaged(const DataKey& key) const override;
-    void setIsManaged(const DataKey& key, bool val) const override;
+    void setIsManaged(const DataKey& key, bool val) override;
 
     RetVal<QByteArray> rawData(const DataKey& key) const override;
     Ret setRawData(const DataKey& key, const QByteArray& data) override;
@@ -46,14 +47,9 @@ public:
     Ret save();
 
 private:
-    Ret readWorkspace(const QByteArray& data);
-    void clear();
 
-    io::path m_filePath;
-    bool m_isInited = false;
+    WorkspaceFile m_file;
     bool m_hasUnsavedChanges = false;
-    std::string m_title;
-    std::string m_source;
 };
 
 using WorkspacePtr = std::shared_ptr<Workspace>;
