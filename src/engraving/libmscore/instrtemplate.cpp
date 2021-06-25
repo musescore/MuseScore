@@ -31,6 +31,7 @@
 #include "stringdata.h"
 #include "utils.h"
 #include "xml.h"
+#include "scoreorder.h"
 
 using namespace mu;
 
@@ -39,6 +40,7 @@ QList<InstrumentGroup*> instrumentGroups;
 QList<MidiArticulation> articulation;                 // global articulations
 QList<InstrumentGenre*> instrumentGenres;
 QList<InstrumentFamily*> instrumentFamilies;
+QList<ScoreOrder> instrumentOrders;
 
 //---------------------------------------------------------
 //   searchInstrumentGenre
@@ -670,6 +672,10 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                         instrumentFamilies.append(fam);
                     }
                     fam->read(e);
+                } else if (tag == "Order") {
+                    ScoreOrder order;
+                    order.read(e);
+                    instrumentOrders.append(order);
                 } else {
                     e.unknown();
                 }

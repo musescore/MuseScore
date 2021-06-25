@@ -34,13 +34,11 @@
 #include "instrumentstypes.h"
 #include "iinstrumentsrepository.h"
 #include "iinstrumentsconfiguration.h"
-#include "iinstrumentsreader.h"
 
 namespace mu::instruments {
 class InstrumentsRepository : public IInstrumentsRepository, public async::Asyncable
 {
     INJECT(instruments, IInstrumentsConfiguration, configuration)
-    INJECT(instruments, IInstrumentsReader, reader)
     INJECT(instruments, extensions::IExtensionsService, extensionsService)
 
 public:
@@ -51,10 +49,10 @@ public:
 private:
     void load();
     void clear();
+    void fillInstrumentsMeta();
 
-    QMutex m_instrumentsMutex;
     InstrumentsMeta m_instrumentsMeta;
-
+    QMutex m_instrumentsMutex;
     async::Channel<InstrumentsMeta> m_instrumentsMetaChannel;
 };
 }

@@ -26,7 +26,6 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
-#include "internal/instrumentsreader.h"
 #include "internal/instrumentsrepository.h"
 #include "internal/instrumentsconfiguration.h"
 #include "internal/selectinstrumentscenario.h"
@@ -62,8 +61,7 @@ std::string InstrumentsModule::moduleName() const
 void InstrumentsModule::registerExports()
 {
     ioc()->registerExport<IInstrumentsConfiguration>(moduleName(), s_configuration);
-    ioc()->registerExport<IInstrumentsRepository>(moduleName(), s_instrumentsRepository);
-    ioc()->registerExport<IInstrumentsReader>(moduleName(), new InstrumentsReader());
+    ioc()->registerExport<IInstrumentsRepository>(moduleName(), m_instrumentsRepository);
     ioc()->registerExport<ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenario());
 }
 
