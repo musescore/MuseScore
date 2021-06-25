@@ -37,7 +37,7 @@ Item {
 
     property alias navigation: navPanel
 
-    signal selectInstrumentRequested(var instrumentId, var transposition)
+    signal selectInstrumentRequested(var instrumentName, var transpositionName)
     signal instrumentClicked()
 
     NavigationPanel {
@@ -154,7 +154,7 @@ Item {
 
             onDoubleClicked: {
                 var currentSelection = root.currentInstrument()
-                root.selectInstrumentRequested(currentSelection.instrument.id, currentSelection.transposition)
+                root.selectInstrumentRequested(currentSelection.instrument.name, currentSelection.transpositionName)
             }
 
             Dropdown {
@@ -192,7 +192,7 @@ Item {
             function resetCurrentInstrument() {
                 prv.currentInstrument = {
                     "instrument": modelData,
-                    "transposition": transpositionsBox.value
+                    "transpositionName": transpositionsBox.value
                 }
 
                 root.instrumentClicked()

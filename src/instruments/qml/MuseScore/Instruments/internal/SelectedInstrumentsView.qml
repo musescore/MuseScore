@@ -41,7 +41,7 @@ Item {
 
     property alias navigation: navPanel
 
-    signal unselectInstrumentRequested(string id)
+    signal unselectInstrumentRequested(var index)
     signal orderChanged(string id)
     signal soloistChanged(string id)
 
@@ -52,6 +52,11 @@ Item {
 
     function scrollViewToEnd() {
         instrumentsView.positionViewAtEnd()
+    }
+
+    function unselectCurrentInstrument() {
+        unselectInstrumentRequested(currentInstrumentIndex)
+        currentInstrumentIndex--
     }
 
     function soloistsButtonText(soloist) {
@@ -123,8 +128,7 @@ Item {
             icon: IconCode.DELETE_TANK
 
             onClicked: {
-                root.unselectInstrumentRequested(instruments[root.currentInstrumentIndex].id)
-                root.currentInstrumentIndex--
+                root.unselectCurrentInstrument()
             }
         }
     }
@@ -191,7 +195,7 @@ Item {
             }
 
             onDoubleClicked: {
-                root.unselectInstrumentRequested(modelData.id)
+                root.unselectCurrentInstrument()
             }
         }
     }
