@@ -24,8 +24,7 @@
 
 #include <string>
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 class Version
 {
 public:
@@ -35,7 +34,6 @@ public:
     static std::string fullVersion();  // e.g. 3.4.0-Beta
     static std::string revision();
 };
-}
 }
 
 #endif // MU_FRAMEWORK_VERSION_H

@@ -50,7 +50,8 @@ void UiArrangement::updateData(DataKey key, QJsonObject& obj) const
 {
     RetVal<QByteArray> data = workspacesDataProvider()->rawData(key);
     if (!data.ret) {
-        LOGE() << "failed get data: " << int(key) << ", ret: " << data.ret.toString();
+        LOGD() << "no data: " << key_to_string(key);
+        obj = QJsonObject();
         return;
     }
 
