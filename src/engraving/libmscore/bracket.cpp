@@ -533,6 +533,7 @@ const char* Bracket::bracketTypeName(BracketType type)
 
 void Bracket::write(XmlWriter& xml) const
 {
+    bool isStartTag = false;
     switch (_bi->bracketType()) {
     case BracketType::BRACE:
     case BracketType::SQUARE:
@@ -540,19 +541,26 @@ void Bracket::write(XmlWriter& xml) const
     {
         const char* type = bracketTypeName(_bi->bracketType());
         xml.stag(this, QString("type=\"%1\"").arg(type));
+        isStartTag = true;
     }
     break;
     case BracketType::NORMAL:
         xml.stag(this);
+        isStartTag = true;
         break;
     case BracketType::NO_BRACKET:
         break;
     }
-    if (_bi->column()) {
-        xml.tag("level", _bi->column());
+
+    if (isStartTag) {
+        if (_bi->column()) {
+            xml.tag("level", _bi->column());
+        }
+
+        Element::writeProperties(xml);
+
+        xml.etag();
     }
-    Element::writeProperties(xml);
-    xml.etag();
 }
 
 //---------------------------------------------------------

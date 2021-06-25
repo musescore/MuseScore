@@ -26,7 +26,7 @@
 using namespace mu;
 using namespace mu::workspace;
 
-static const std::string WORKSPACE_EXT(".workspace");
+static const std::string WORKSPACE_EXT(".mws");
 
 static bool containsWorkspace(const IWorkspacePtrList& list, const IWorkspacePtr& workspace)
 {
@@ -37,6 +37,7 @@ void WorkspaceManager::init()
 {
     configuration()->currentWorkspaceName().ch.onReceive(this, [this](const std::string&) {
         setupCurrentWorkspace();
+        LOGI() << "current workspace changed, now: " << m_currentWorkspace->name();
     });
 
     load();
@@ -68,8 +69,7 @@ IWorkspacePtr WorkspaceManager::currentWorkspace() const
 
 async::Notification WorkspaceManager::currentWorkspaceChanged() const
 {
-    NOT_IMPLEMENTED;
-    return async::Notification();
+    return m_currentWorkspaceChanged;
 }
 
 IWorkspacePtrList WorkspaceManager::workspaces() const
@@ -90,13 +90,14 @@ Ret WorkspaceManager::setWorkspaces(const IWorkspacePtrList& workspaces)
         ret = addNonExistentWorkspaces(workspaces);
     }
 
+    m_workspacesListChanged.notify();
+
     return ret;
 }
 
 async::Notification WorkspaceManager::workspacesListChanged() const
 {
-    NOT_IMPLEMENTED;
-    return async::Notification();
+    return m_workspacesListChanged;
 }
 
 IWorkspacePtr WorkspaceManager::newWorkspace(const std::string& workspaceName) const
@@ -192,6 +193,8 @@ void WorkspaceManager::load()
         m_workspaces.push_back(workspace);
     }
 
+    m_workspacesListChanged.notify();
+
     setupDefaultWorkspace();
     setupCurrentWorkspace();
 }
@@ -267,7 +270,7 @@ void WorkspaceManager::setupCurrentWorkspace()
     }
 
     m_currentWorkspace = workspace;
-    m_currentWorkspaceChanged.send(workspace);
+    m_currentWorkspaceChanged.notify();
 }
 
 WorkspacePtr WorkspaceManager::findByName(const std::string& name) const

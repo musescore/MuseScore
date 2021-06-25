@@ -42,12 +42,14 @@ public:
 
     RetVal<QByteArray> rawData(DataKey key) const override;
     Ret setRawData(DataKey key, const QByteArray& data) override;
+    async::Notification dataChanged(DataKey key) const override;
 
-    async::Notification dataChanged(DataKey key) override;
+    async::Notification workspaceChanged() const override;
 
 private:
 
-    std::map<DataKey, async::Notification> m_notifications;
+    mutable std::map<DataKey, async::Notification> m_dataNotifications;
+    async::Notification m_workspaceChanged;
 };
 }
 #endif // MU_WORKSPACE_WORKSPACEPROVIDER_H
