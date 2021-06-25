@@ -87,7 +87,7 @@ Ret WorkspaceManager::setWorkspaces(const IWorkspacePtrList& workspaces)
     Ret ret = removeMissingWorkspaces(workspaces);
 
     if (ret) {
-        ret = createInexistentWorkspaces(workspaces);
+        ret = addNonExistentWorkspaces(workspaces);
     }
 
     return ret;
@@ -149,7 +149,7 @@ bool WorkspaceManager::canRemoveWorkspace(const std::string& workspaceName) cons
     return workspaceName != DEFAULT_WORKSPACE_NAME;
 }
 
-Ret WorkspaceManager::createInexistentWorkspaces(const IWorkspacePtrList& newWorkspaceList)
+Ret WorkspaceManager::addNonExistentWorkspaces(const IWorkspacePtrList& newWorkspaceList)
 {
     IWorkspacePtrList existentWorkspaces = workspaces();
     for (const IWorkspacePtr& workspace : newWorkspaceList) {
@@ -157,7 +157,7 @@ Ret WorkspaceManager::createInexistentWorkspaces(const IWorkspacePtrList& newWor
             continue;
         }
 
-        Ret ret = createWorkspace(workspace);
+        Ret ret = addWorkspace(workspace);
         if (!ret) {
             return ret;
         }
@@ -166,7 +166,7 @@ Ret WorkspaceManager::createInexistentWorkspaces(const IWorkspacePtrList& newWor
     return make_ret(Ret::Code::Ok);
 }
 
-Ret WorkspaceManager::createWorkspace(IWorkspacePtr workspace)
+Ret WorkspaceManager::addWorkspace(IWorkspacePtr workspace)
 {
     auto writable = std::dynamic_pointer_cast<Workspace>(workspace);
     if (!writable) {
@@ -202,7 +202,8 @@ io::paths WorkspaceManager::findWorkspaceFiles() const
     io::paths dirPaths = configuration()->workspacePaths();
 
     for (const io::path& dirPath : dirPaths) {
-        RetVal<io::paths> files = fileSystem()->scanFiles(dirPath, { "*.workspace" });
+        QString filter = QString::fromStdString("*" + WORKSPACE_EXT);
+        RetVal<io::paths> files = fileSystem()->scanFiles(dirPath, { filter });
         if (!files.ret) {
             LOGE() << files.ret.toString();
             continue;
