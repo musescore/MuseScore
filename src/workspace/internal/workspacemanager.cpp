@@ -227,8 +227,6 @@ void WorkspaceManager::setupDefaultWorkspace()
     m_defaultWorkspace = doNewWorkspace(DEFAULT_WORKSPACE_NAME);
     m_workspaces.push_back(m_defaultWorkspace);
 
-    //! TODO Needs add data from the template
-
     Ret ret = fileSystem()->makePath(configuration()->userWorkspacesPath());
     if (!ret) {
         LOGE() << ret.toString();

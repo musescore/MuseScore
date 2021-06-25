@@ -1594,3 +1594,42 @@ SymbolId NotationUiActions::actionArticulationSymbolId(const ActionCode& actionC
 
     return symbolId;
 }
+
+const mu::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
+{
+    static ToolConfig config;
+    if (!config.isValid()) {
+        config.items = {
+            { "note-input", true },
+            { "pad-note-1", true },
+            { "pad-note-2", true },
+            { "pad-note-4", true },
+            { "pad-note-8", true },
+            { "pad-note-16", true },
+            { "pad-note-32", true },
+            { "pad-note-64", true },
+            { "", true },
+            { "pad-dot", true },
+            { "", true },
+            { "pad-rest", true },
+            { "", true },
+            { "flat", true },
+            { "nat", true },
+            { "sharp", true },
+            { "tie", true },
+            { "add-slur", true },
+            { "", true },
+            { "add-marcato", true },
+            { "add-sforzato", true },
+            { "add-tenuto", true },
+            { "add-staccato", true },
+            { "", true },
+            { "tuplet", true },
+            { "", true },
+            { "voice-1", true },
+            { "", true },
+            { "flip", true },
+        };
+    }
+    return config;
+}
