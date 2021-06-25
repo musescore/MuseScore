@@ -27,6 +27,7 @@
 #include <QByteArray>
 #include <QList>
 #include <QJsonObject>
+#include <QMap>
 
 #include "modularity/ioc.h"
 #include "workspace/iworkspacesdataprovider.h"
@@ -40,27 +41,35 @@ class UiArrangement : public async::Asyncable
 public:
     UiArrangement() = default;
 
-    void init();
+    void load();
 
     QString value(const QString& key) const;
     void setValue(const QString& key, const QString& val);
-    mu::async::Notification valueChanged(const QString& key) const;
+    async::Notification valueChanged(const QString& key) const;
 
     QByteArray state(const QString& key) const;
     void setState(const QString& key, const QByteArray& data);
+    async::Notification stateChanged(const QString& key) const;
 
     ToolConfig toolConfig(const QString& toolName) const;
     void setToolConfig(const QString& toolName, const ToolConfig& config);
-    mu::async::Notification toolConfigChanged(const QString& toolName) const;
+    async::Notification toolConfigChanged(const QString& toolName) const;
 
 private:
 
-    void updateData(workspace::DataKey key, QJsonObject& obj) const;
+    using Notifications = QMap<QString, async::Notification>;
+
+    void updateData(workspace::DataKey key, QJsonObject& obj, Notifications& notifications) const;
     void saveData(workspace::DataKey key, const QJsonObject& obj);
 
-    mutable QJsonObject m_settings;
-    mutable QJsonObject m_states;
-    mutable QJsonObject m_toolconfigs;
+    QJsonObject m_settings;
+    Notifications m_valuesNotifications;
+
+    QJsonObject m_states;
+    Notifications m_statesNotifications;
+
+    QJsonObject m_toolconfigs;
+    Notifications m_toolconfigsNotifications;
 };
 }
 

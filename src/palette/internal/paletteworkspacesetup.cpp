@@ -71,7 +71,7 @@ void PaletteWorkspaceSetup::setup()
     auto applyWorkspaceData = [this, paletteWorkspace, updateWorkspaceConnection]() {
         RetVal<QByteArray> data = workspacesDataProvider()->rawData(DataKey::Palettes);
         if (!data.ret) {
-            LOGW() << "no palette data, ret: " << data.ret.toString();
+            LOGD() << "no palette data";
             return false;
         }
 

@@ -25,6 +25,15 @@
 
 using namespace mu::workspace;
 
+void WorkspacesDataProvider::init()
+{
+    manager()->currentWorkspaceChanged().onNotify(this, [this]() {
+        for (auto& n : m_notifications) {
+            n.second.notify();
+        }
+    });
+}
+
 mu::RetVal<QByteArray> WorkspacesDataProvider::rawData(DataKey key) const
 {
     IWorkspacePtr current = manager()->currentWorkspace();
@@ -60,11 +69,18 @@ mu::Ret WorkspacesDataProvider::setRawData(DataKey key, const QByteArray& data)
         return make_ret(Ret::Code::InternalError);
     }
 
-    return def->setRawData(key, data);
+    Ret ret = def->setRawData(key, data);
+    if (ret) {
+        auto n = m_notifications.find(key);
+        if (n != m_notifications.end()) {
+            n->second.notify();
+        }
+    }
+
+    return ret;
 }
 
 mu::async::Notification WorkspacesDataProvider::dataChanged(DataKey key)
 {
-    NOT_IMPLEMENTED;
-    return async::Notification();
+    return m_notifications[key];
 }
