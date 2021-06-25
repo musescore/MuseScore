@@ -117,6 +117,7 @@ struct Instrument
     StaffNameList shortNames;
     QString name;
     QString musicXMLid;
+    QString templateId;
     QString description;
     int sequenceOrder = 0;
 
@@ -159,6 +160,8 @@ struct Instrument
     bool isValid() const { return !id.isEmpty(); }
     QString abbreviature() const { return !shortNames.isEmpty() ? shortNames.first().name() : QString(); }
 };
+
+using Instruments = QList<Instrument>;
 
 struct PartInstrument
 {
@@ -203,23 +206,22 @@ struct PartInstrumentListScoreOrder
     ScoreOrder scoreOrder;
 };
 
-struct InstrumentTemplate
-{
-    QString id;
-    Instrument instrument;
-
-    bool isValid() const { return !id.isEmpty(); }
-};
-
-using InstrumentTemplates = QList<InstrumentTemplate>;
-
 struct InstrumentsMeta
 {
-    InstrumentTemplates instrumentTemplates;
+    Instruments instrumentTemplates;
     InstrumentGroups groups;
     InstrumentGenres genres;
     MidiArticulations articulations;
     ScoreOrders scoreOrders;
+
+    void clear()
+    {
+        instrumentTemplates.clear();
+        groups.clear();
+        genres.clear();
+        articulations.clear();
+        scoreOrders.clear();
+    }
 };
 
 class InstrumentsTreeItemType

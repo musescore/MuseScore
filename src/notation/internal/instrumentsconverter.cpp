@@ -109,6 +109,20 @@ mu::instruments::Instrument InstrumentsConverter::convertInstrument(const Ms::In
     return result;
 }
 
+mu::instruments::Instrument InstrumentsConverter::convertInstrument(const Ms::InstrumentTemplate& templ)
+{
+    Ms::Instrument msInstrument = Ms::Instrument::fromTemplate(&templ);
+    Instrument result = convertInstrument(msInstrument);
+    result.templateId = templ.id;
+    result.familyId = templ.family->id;
+
+    for (const Ms::InstrumentGenre* msGenre : templ.genres) {
+        result.genreIds << msGenre->id;
+    }
+
+    return result;
+}
+
 QList<Ms::NamedEventList> InstrumentsConverter::convertMidiActions(const MidiActionList& midiActions)
 {
     QList<Ms::NamedEventList> result;

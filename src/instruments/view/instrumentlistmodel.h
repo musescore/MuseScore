@@ -125,7 +125,7 @@ private:
 
     bool isInstrumentAccepted(const Instrument& instrument, bool compareWithSelectedGroup = true) const;
 
-    InstrumentTemplate instrumentTemplate(const QString& instrumentId) const;
+    Instrument instrumentById(const QString& instrumentId) const;
 
     int indexOfScoreOrderId(const QString& id) const;
     void sortSelectedInstruments();

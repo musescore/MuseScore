@@ -27,6 +27,7 @@
 
 namespace Ms {
 class Instrument;
+class InstrumentTemplate;
 struct NamedEventList;
 }
 
@@ -36,6 +37,7 @@ class InstrumentsConverter
 public:
     static Ms::Instrument convertInstrument(const instruments::Instrument& instrument);
     static instruments::Instrument convertInstrument(const Ms::Instrument& insturment);
+    static instruments::Instrument convertInstrument(const Ms::InstrumentTemplate& templ);
 
 private:
     static instruments::MidiActionList convertMidiActions(const QList<Ms::NamedEventList>& midiActions);
