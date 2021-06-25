@@ -65,6 +65,7 @@ Ms::Instrument InstrumentsConverter::convertInstrument(const mu::instruments::In
 
     result.setStringData(instrument.stringData);
     result.setSingleNoteDynamics(instrument.singleNoteDynamics);
+    result.setTransposition(instrument.transposition);
 
     return result;
 }
@@ -103,6 +104,7 @@ mu::instruments::Instrument InstrumentsConverter::convertInstrument(const Ms::In
 
     result.stringData = *instrument.stringData();
     result.singleNoteDynamics = instrument.singleNoteDynamics();
+    result.transposition = instrument.transpotision();
 
     return result;
 }

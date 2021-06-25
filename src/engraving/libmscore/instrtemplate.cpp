@@ -239,6 +239,8 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
     channel     = t.channel;
     family     = t.family;
     singleNoteDynamics = t.singleNoteDynamics;
+
+    transposition = t.transposition;
 }
 
 InstrumentTemplate::~InstrumentTemplate()
@@ -479,8 +481,11 @@ void InstrumentTemplate::read(XmlReader& e)
         } else if (tag == "transposeDiatonic") {
             transpose.diatonic = e.readInt();
         } else if (tag == "dropdownName") {
-            // not implemented
-            e.readElementText();
+            transposition.type = transpotionTypeFromString(e.attribute("meaning"));
+            QString transpositionName = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
+            transposition.name = transpositionName;
+            transposition.isDefault = transpositionName.contains("*");
+            transposition.isHiddenOnScore = transpositionName.contains("(") && transpositionName.contains(")");
         } else if (tag == "StringData") {
             stringData.read(e);
         } else if (tag == "drumset") {

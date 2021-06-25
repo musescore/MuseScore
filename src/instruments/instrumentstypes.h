@@ -50,6 +50,8 @@ using Channel = Ms::Channel;
 using StaffName = Ms::StaffName;
 using StaffNameList = Ms::StaffNameList;
 using MidiArticulation = Ms::MidiArticulation;
+using Transposition = Ms::Transposition;
+using TranspositionType = Ms::TranspositionType;
 
 using ChannelList = QList<Channel>;
 
@@ -116,14 +118,6 @@ struct InstrumentFamily
 };
 using InstrumentFamilyMap = QMap<QString /*id*/, InstrumentFamily>;
 
-struct Transposition
-{
-    QString id;
-    QString name;
-
-    bool isValid() const { return !id.isEmpty(); }
-};
-
 struct Instrument
 {
     QString id;
@@ -167,6 +161,8 @@ struct Instrument
     QList<MidiArticulation> midiArticulations;
 
     ChannelList channels;
+
+    Transposition transposition;
 
     bool isValid() const { return !id.isEmpty(); }
     QString abbreviature() const { return !shortNames.isEmpty() ? shortNames.first().name() : QString(); }
@@ -212,7 +208,6 @@ struct PartInstrumentListScoreOrder {
 struct InstrumentTemplate
 {
     QString id;
-    Transposition transposition;
     Instrument instrument;
 
     bool isValid() const { return !id.isEmpty(); }
