@@ -63,16 +63,14 @@ public:
     Q_INVOKABLE void selectFamily(const QString& familyId);
     Q_INVOKABLE void selectGroup(const QString& groupId);
 
-    Q_INVOKABLE void selectInstrument(const QString& instrumentId, const QString& transpositionId = QString());
-    Q_INVOKABLE void unselectInstrument(const QString& instrumentId);
+    Q_INVOKABLE void selectInstrument(const QString& instrumentName, const QString& transpositionName = QString());
+    Q_INVOKABLE void unselectInstrument(int index);
     Q_INVOKABLE void swapSelectedInstruments(int firstIndex, int secondIndex);
-    Q_INVOKABLE void toggleSoloist(const QString& instrumentId);
+    Q_INVOKABLE void toggleSoloist(int index);
 
     Q_INVOKABLE void setSearchText(const QString& text);
 
     Q_INVOKABLE void selectScoreOrder(const QString& orderId);
-
-    Q_INVOKABLE QString findInstrument(const QString& instrumentId) const;
 
 signals:
     void dataChanged();
@@ -124,8 +122,6 @@ private:
     QVariantMap allInstrumentsItem() const;
     InstrumentGroupList sortedGroupList() const;
 
-    QVariantMap defaultInstrumentTranspositionItem() const;
-
     void updateFamilyStateBySearch();
 
     bool isInstrumentAccepted(const Instrument& instrument, bool compareWithSelectedGroup = true) const;
@@ -139,6 +135,8 @@ private:
     bool matchesScoreOrder() const;
     void checkScoreOrderMatching(bool block);
     void makeCustomizedScoreOrder(const ScoreOrderInfo& order);
+
+    bool isInsrumentIndexValid(int index) const;
 
     bool m_canSelectMultipleInstruments = false;
 
