@@ -91,6 +91,10 @@ void PlaybackToolBarModel::updateActions()
     MenuItemList additionalItems;
 
     ToolConfig config = uiConfiguration()->toolConfig(PLAYBACK_TOOLBAR_KEY);
+    if (!config.isValid()) {
+        config = PlaybackUiActions::defaultPlaybackToolConfig();
+    }
+
     for (const ToolConfig::Item& item : config.items) {
         if (isAdditionalAction(item.action)) {
             //! NOTE: In this case, we want to see the actions' description instead of the title

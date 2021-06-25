@@ -184,7 +184,7 @@ mu::async::Notification AppShellConfiguration::isNotationStatusBarVisibleChanged
 
 bool AppShellConfiguration::isNotationNavigatorVisible() const
 {
-    return uiConfiguration()->isVisible(NOTATION_NAVIGATOR_VISIBLE_KEY);
+    return uiConfiguration()->isVisible(NOTATION_NAVIGATOR_VISIBLE_KEY, false);
 }
 
 void AppShellConfiguration::setIsNotationNavigatorVisible(bool visible) const

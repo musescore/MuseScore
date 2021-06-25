@@ -285,9 +285,15 @@ struct ToolConfig
     {
         actions::ActionCode action;
         bool show = true;
+
+        Item() = default;
+        Item(const actions::ActionCode& a, bool sh)
+            : action(a), show(sh) {}
     };
 
     QList<Item> items;
+
+    bool isValid() const { return !items.isEmpty(); }
 };
 }
 
