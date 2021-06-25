@@ -104,7 +104,7 @@ mu::instruments::Instrument InstrumentsConverter::convertInstrument(const Ms::In
 
     result.stringData = *instrument.stringData();
     result.singleNoteDynamics = instrument.singleNoteDynamics();
-    result.transposition = instrument.transpotision();
+    result.transposition = instrument.transposition();
 
     return result;
 }

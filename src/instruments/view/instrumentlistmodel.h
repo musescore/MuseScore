@@ -64,9 +64,9 @@ public:
     Q_INVOKABLE void selectGroup(const QString& groupId);
 
     Q_INVOKABLE void selectInstrument(const QString& instrumentName, const QString& transpositionName = QString());
-    Q_INVOKABLE void unselectInstrument(int index);
-    Q_INVOKABLE void swapSelectedInstruments(int firstIndex, int secondIndex);
-    Q_INVOKABLE void toggleSoloist(int index);
+    Q_INVOKABLE void unselectInstrument(int instrumentIndex);
+    Q_INVOKABLE void swapSelectedInstruments(int firstInstrumentIndex, int secondInstrumentIndex);
+    Q_INVOKABLE void toggleSoloist(int instrumentIndex);
 
     Q_INVOKABLE void setSearchText(const QString& text);
 
@@ -93,7 +93,6 @@ private:
         QString familyId;
         bool isSoloist = false;
         bool isExistingPart = false;
-        Transposition transposition;
         Instrument config;
 
         bool operator==(const SelectedInstrumentInfo& info) const { return id == info.id; }
@@ -113,8 +112,6 @@ private:
     void initScoreOrders(const QString& currentId);
 
     void sortInstruments(QVariantList& instruments) const;
-
-    int findInstrumentIndex(const QString& instrumentId) const;
 
     bool isSearching() const;
 

@@ -114,6 +114,17 @@ static int readStaffIdx(XmlReader& e)
     return idx;
 }
 
+static TranspositionType transpotionTypeFromString(const QString& str)
+{
+    static const QMap<QString, TranspositionType> types {
+        { "transposition", TranspositionType::Transposition },
+        { "tuning", TranspositionType::Tuning },
+        { "course", TranspositionType::Course }
+    };
+
+    return types.value(str.toLower(), TranspositionType::Unknown);
+}
+
 //---------------------------------------------------------
 //   read InstrumentGroup
 //---------------------------------------------------------
@@ -485,9 +496,9 @@ void InstrumentTemplate::read(XmlReader& e)
         } else if (tag == "dropdownName") {
             transposition.type = transpotionTypeFromString(e.attribute("meaning"));
             QString transpositionName = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
-            transposition.name = transpositionName;
             transposition.isDefault = transpositionName.contains("*");
             transposition.isHiddenOnScore = transpositionName.contains("(") && transpositionName.contains(")");
+            transposition.name = transpositionName.remove("\*").remove("(").remove(")");
         } else if (tag == "StringData") {
             stringData.read(e);
         } else if (tag == "drumset") {

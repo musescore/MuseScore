@@ -1716,7 +1716,7 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
     return instr;
 }
 
-Transposition Instrument::transpotision() const
+Transposition Instrument::transposition() const
 {
     return _transposition;
 }

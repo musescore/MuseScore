@@ -155,6 +155,8 @@ private:
     void updateSoloist(const instruments::PartInstrumentList& parts);
     void sortParts(const instruments::PartInstrumentList& parts, const Ms::Score* score, const QList<Ms::Staff*>& originalStaves);
 
+    int resolveInstrumentNumber(const instruments::Instruments& newInstruments, const instruments::Instrument& currentInstrument) const;
+
     IDList allInstrumentsIds() const;
     int lastStaffIndex() const;
 
