@@ -68,6 +68,9 @@ public:
     // styles
     virtual INotationStylePtr style() const = 0;
 
+    // score
+    virtual Ms::Score* score() const = 0;
+
     // playback (midi)
     virtual INotationPlaybackPtr playback() const = 0;
 

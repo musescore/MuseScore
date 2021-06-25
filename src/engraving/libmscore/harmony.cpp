@@ -1259,21 +1259,24 @@ const ChordDescription* Harmony::descr(const QString& name, const ParsedChord* p
 {
     const ChordList* cl = score()->chordList();
     const ChordDescription* match = 0;
-    if (cl) {
-        for (const ChordDescription& cd : *cl) {
-            for (const QString& s : cd.names) {
-                if (s == name) {
-                    return &cd;
-                } else if (pc) {
-                    for (const ParsedChord& sParsed : cd.parsedChords) {
-                        if (sParsed == *pc) {
-                            match = &cd;
-                        }
-                    }
-                }
-            }
-        }
-    }
+
+    // This interferes with quality respelling
+    // Commented out for now, will remove later if not needed
+//    if (cl) {
+//        for (const ChordDescription& cd : *cl) {
+//            for (const QString& s : cd.names) {
+//                if (s == name) {
+//                    return &cd;
+//                } else if (pc) {
+//                    for (const ParsedChord& sParsed : cd.parsedChords) {
+//                        if (sParsed == *pc) {
+//                            match = &cd;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
     // exact match failed, so fall back on parsed match if one was found
     return match;
 }

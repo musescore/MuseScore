@@ -63,6 +63,7 @@ public:
 
     Q_INVOKABLE void setChordStyle(QString styleName);
     Q_INVOKABLE void setChordSpelling(QString spelling);
+    Q_INVOKABLE void setQualitySymbol(QString quality, QString symbol);
 
 signals:
     void chordSpellingListChanged();

@@ -124,6 +124,28 @@ void ChordSymbolEditorModel::setQualityRepresentationsLists()
     emit diminishedListChanged();
 }
 
+void ChordSymbolEditorModel::setQualitySymbol(QString quality, QString symbol)
+{
+    QHash<QString, Ms::Sid> qualityToSid = {
+        { "major7th", Ms::Sid::chordQualityMajorSeventh },
+        { "half-diminished", Ms::Sid::chordQualityHalfDiminished },
+        { "minor", Ms::Sid::chordQualityMinor },
+        { "augmented", Ms::Sid::chordQualityAugmented },
+        { "diminished", Ms::Sid::chordQualityDiminished },
+    };
+
+    Ms::Sid id = qualityToSid.value(quality);
+    globalContext()->currentNotation()->style()->setStyleValue(id, symbol);
+    globalContext()->currentNotation()->score()->setUpQualitySymbols();
+
+    emit chordSpellingListChanged();
+    emit majorSeventhListChanged();
+    emit halfDiminishedListChanged();
+    emit minorListChanged();
+    emit augmentedListChanged();
+    emit diminishedListChanged();
+}
+
 void ChordSymbolEditorModel::setChordStyle(QString styleName)
 {
     QString descriptionFileName = "chords_std.xml"; // Fall back

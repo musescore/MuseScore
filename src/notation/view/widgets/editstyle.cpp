@@ -656,7 +656,7 @@ EditStyle::EditStyle(QWidget* parent)
     connect(resetSignalMapper, &QSignalMapper::mappedInt, this, &EditStyle::resetStyleValue);
 
     // ====================================================
-    // Chord Symbols (QML)
+    // New Chord Symbols Page(QML)
     // ====================================================
 
     QQuickWidget* chordSymbolsQuickWidget = new QQuickWidget(

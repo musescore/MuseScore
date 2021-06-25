@@ -46,6 +46,7 @@ void ReadChordListHook::read(Ms::XmlReader& e)
 
     m_score->chordList()->clear();
     m_score->chordList()->read(e);
+    m_score->setUpQualitySymbols();
     m_score->chordList()->setCustomChordList(true);
 
     m_chordListTag = true;
@@ -84,5 +85,6 @@ void ReadChordListHook::validate()
     // make sure we have a chordlist
     if (!m_chordListTag) {
         chordList->checkChordList(style);
+        m_score->setUpQualitySymbols();
     }
 }
