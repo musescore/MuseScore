@@ -120,8 +120,6 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_THEME_VALUES {
 
 void UiConfiguration::init()
 {
-    m_uiArrangement.init();
-
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val("Fira Sans"));
     settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(12));
@@ -165,6 +163,11 @@ void UiConfiguration::init()
 //    });
 
     initThemes();
+}
+
+void UiConfiguration::load()
+{
+    m_uiArrangement.load();
 }
 
 void UiConfiguration::deinit()

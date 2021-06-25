@@ -22,23 +22,32 @@
 #ifndef MU_WORKSPACE_WORKSPACESDATAPROVIDER_H
 #define MU_WORKSPACE_WORKSPACESDATAPROVIDER_H
 
+#include <map>
+
 #include "../iworkspacesdataprovider.h"
 
 #include "modularity/ioc.h"
 #include "iworkspacemanager.h"
+#include "async/asyncable.h"
 
 namespace mu::workspace {
-class WorkspacesDataProvider : public IWorkspacesDataProvider
+class WorkspacesDataProvider : public IWorkspacesDataProvider, public async::Asyncable
 {
     INJECT(workspace, IWorkspaceManager, manager)
 
 public:
     WorkspacesDataProvider() = default;
 
+    void init();
+
     RetVal<QByteArray> rawData(DataKey key) const override;
     Ret setRawData(DataKey key, const QByteArray& data) override;
 
     async::Notification dataChanged(DataKey key) override;
+
+private:
+
+    std::map<DataKey, async::Notification> m_notifications;
 };
 }
 #endif // MU_WORKSPACE_WORKSPACEPROVIDER_H
