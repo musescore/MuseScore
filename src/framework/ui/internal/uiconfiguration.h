@@ -40,6 +40,7 @@ class UiConfiguration : public IUiConfiguration
 
 public:
     void init();
+    void load();
     void deinit();
 
     ThemeList themes() const override;

@@ -31,22 +31,26 @@
 using namespace mu::ui;
 using namespace mu::workspace;
 
-void UiArrangement::init()
+void UiArrangement::load()
 {
     workspacesDataProvider()->dataChanged(DataKey::UiSettings).onNotify(this, [this]() {
-        updateData(DataKey::UiSettings, m_settings);
+        updateData(DataKey::UiSettings, m_settings, m_valuesNotifications);
     });
 
-    workspacesDataProvider()->dataChanged(DataKey::UiSettings).onNotify(this, [this]() {
-        updateData(DataKey::UiStates, m_states);
+    workspacesDataProvider()->dataChanged(DataKey::UiStates).onNotify(this, [this]() {
+        updateData(DataKey::UiStates, m_states, m_statesNotifications);
     });
 
-    workspacesDataProvider()->dataChanged(DataKey::UiSettings).onNotify(this, [this]() {
-        updateData(DataKey::UiToolConfigs, m_toolconfigs);
+    workspacesDataProvider()->dataChanged(DataKey::UiToolConfigs).onNotify(this, [this]() {
+        updateData(DataKey::UiToolConfigs, m_toolconfigs, m_toolconfigsNotifications);
     });
+
+    updateData(DataKey::UiSettings, m_settings, m_valuesNotifications);
+    updateData(DataKey::UiStates, m_states, m_statesNotifications);
+    updateData(DataKey::UiToolConfigs, m_toolconfigs, m_toolconfigsNotifications);
 }
 
-void UiArrangement::updateData(DataKey key, QJsonObject& obj) const
+void UiArrangement::updateData(DataKey key, QJsonObject& obj, Notifications& notifications) const
 {
     RetVal<QByteArray> data = workspacesDataProvider()->rawData(key);
     if (!data.ret) {
@@ -55,7 +59,17 @@ void UiArrangement::updateData(DataKey key, QJsonObject& obj) const
         return;
     }
 
+    QJsonObject oldObj = obj;
     obj = QJsonDocument::fromJson(data.val).object();
+
+    Notifications::Iterator it = notifications.begin();
+    for (; it != notifications.end(); ++it) {
+        const QString& key = it.key();
+
+        if (oldObj.value(key) != obj.value(key)) {
+            it.value().notify();
+        }
+    }
 }
 
 void UiArrangement::saveData(workspace::DataKey key, const QJsonObject& obj)
@@ -67,10 +81,6 @@ void UiArrangement::saveData(workspace::DataKey key, const QJsonObject& obj)
 
 QString UiArrangement::value(const QString& key) const
 {
-    if (m_settings.isEmpty()) {
-        updateData(DataKey::UiSettings, m_settings);
-    }
-
     QJsonValue val = m_settings.value(key);
     return val.toString();
 }
@@ -83,16 +93,11 @@ void UiArrangement::setValue(const QString& key, const QString& val)
 
 mu::async::Notification UiArrangement::valueChanged(const QString& key) const
 {
-    NOT_IMPLEMENTED;
-    return mu::async::Notification();
+    return m_valuesNotifications[key];
 }
 
 QByteArray UiArrangement::state(const QString& key) const
 {
-    if (m_states.isEmpty()) {
-        updateData(DataKey::UiStates, m_states);
-    }
-
     QJsonValue val = m_states.value(key);
     QString valStr = val.toString();
     return valStr.toLocal8Bit();
@@ -104,13 +109,14 @@ void UiArrangement::setState(const QString& key, const QByteArray& data)
     saveData(DataKey::UiStates, m_states);
 }
 
+mu::async::Notification UiArrangement::stateChanged(const QString& key) const
+{
+    return m_statesNotifications[key];
+}
+
 ToolConfig UiArrangement::toolConfig(const QString& toolName) const
 {
     TRACEFUNC;
-
-    if (m_toolconfigs.isEmpty()) {
-        updateData(DataKey::UiToolConfigs, m_toolconfigs);
-    }
 
     //! NOTE Maybe we need to cache?
 
@@ -155,6 +161,5 @@ void UiArrangement::setToolConfig(const QString& toolName, const ToolConfig& con
 
 mu::async::Notification UiArrangement::toolConfigChanged(const QString& toolName) const
 {
-    NOT_IMPLEMENTED;
-    return mu::async::Notification();
+    return m_toolconfigsNotifications[toolName];
 }

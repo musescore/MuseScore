@@ -155,6 +155,11 @@ void UiModule::onInit(const IApplication::RunMode&)
 
 void UiModule::onStartApp()
 {
+    //! NOTE Some of the settings are taken from the workspace,
+    //! we need to be sure that the workspaces are initialized.
+    //! So, we loads these settings on onStartApp
+    s_configuration->load();
+
     //! NOTE UIActions are collected from many modules, and these modules determine the state of their UIActions.
     //! All modules need to be initialized in order to get the correct state of UIActions.
     //! So, we do init on onStartApp
