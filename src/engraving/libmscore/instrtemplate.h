@@ -83,6 +83,8 @@ public:
     QString musicXMLid;          ///< used in MusicXML 3.0
     QString description;         ///< a longer description of the instrument
 
+    Transposition transposition;
+
     char minPitchA;           // pitch range playable by an amateur
     char maxPitchA;
     char minPitchP;           // pitch range playable by professional

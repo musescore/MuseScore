@@ -26,6 +26,7 @@
 
 #include "libmscore/utils.h"
 #include "libmscore/xml.h"
+#include "libmscore/instrtemplate.h"
 
 using namespace mu;
 using namespace mu::instruments;
@@ -360,6 +361,12 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
             instrument.transpose.chromatic = reader.readElementText().toInt();
         } else if (reader.name() == "transposeDiatonic") {
             instrument.transpose.diatonic = reader.readElementText().toInt();
+        } else if (reader.name() == "dropdownName") {
+            instrument.transposition.type = Ms::transpotionTypeFromString(reader.attribute("meaning"));
+            QString transpositionName = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
+            instrument.transposition.name = transpositionName;
+            instrument.transposition.isDefault = transpositionName.contains("*");
+            instrument.transposition.isHiddenOnScore = transpositionName.contains("(") && transpositionName.contains(")");
         } else if (reader.name() == "instrumentId") {
             instrument.musicXMLid = reader.readElementText();
         } else if (reader.name() == "StringData") {

@@ -186,6 +186,7 @@ Instrument::Instrument(const Instrument& i)
         _channel.append(new Channel(*c));
     }
     _clefType     = i._clefType;
+    _transposition = i._transposition;
 }
 
 void Instrument::operator=(const Instrument& i)
@@ -216,6 +217,7 @@ void Instrument::operator=(const Instrument& i)
         _channel.append(new Channel(*c));
     }
     _clefType     = i._clefType;
+    _transposition = i._transposition;
 }
 
 //---------------------------------------------------------
@@ -1710,7 +1712,18 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
     }
     instr.setStringData(t->stringData);
     instr.setSingleNoteDynamics(t->singleNoteDynamics);
+    instr.setTransposition(t->transposition);
     return instr;
+}
+
+Transposition Instrument::transpotision() const
+{
+    return _transposition;
+}
+
+void Instrument::setTransposition(const Transposition& transposition)
+{
+    _transposition = transposition;
 }
 
 //---------------------------------------------------------

@@ -277,6 +277,42 @@ public:
 };
 
 //---------------------------------------------------------
+//   InstrumentTransposition
+//---------------------------------------------------------
+
+enum class TranspositionType
+{
+    Unknown,
+    Tuning,
+    Transpotion,
+    Course
+};
+
+inline TranspositionType transpotionTypeFromString(const QString& str)
+{
+    static const QMap<QString, TranspositionType> types {
+        { "transposition", TranspositionType::Transpotion },
+        { "tuning", TranspositionType::Tuning },
+        { "course", TranspositionType::Course }
+    };
+
+    return types.value(str.toLower(), TranspositionType::Unknown);
+}
+
+struct Transposition
+{
+    QString name;
+
+    TranspositionType type = TranspositionType::Unknown;
+
+    bool isDefault = false;
+    bool isHiddenOnScore = false;
+
+    bool isValid() const { return !name.isEmpty(); }
+};
+
+
+//---------------------------------------------------------
 //   Instrument
 //---------------------------------------------------------
 
@@ -301,6 +337,8 @@ class Instrument
     QList<ClefTypeList> _clefType;
 
     bool _singleNoteDynamics;
+
+    Transposition _transposition;
 
 public:
     Instrument(QString id="");
@@ -384,6 +422,9 @@ public:
     QString name() const;
     QString abbreviature() const;
     static Instrument fromTemplate(const InstrumentTemplate* t);
+
+    Transposition transpotision() const;
+    void setTransposition(const Transposition& transposition);
 
     void updateInstrumentId();
 

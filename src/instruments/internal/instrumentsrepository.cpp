@@ -125,10 +125,6 @@ void InstrumentsRepository::load()
     custom.name = qApp->translate("OrderXML", "Custom");
     m_instrumentsMeta.scoreOrders.insert(custom.id, custom);
 
-    for (InstrumentTemplate& instrumentTemplate: m_instrumentsMeta.instrumentTemplates) {
-        instrumentTemplate.transposition = transposition(instrumentTemplate.id);
-    }
-
     m_instrumentsMetaChannel.send(m_instrumentsMeta);
 }
 
@@ -141,29 +137,4 @@ void InstrumentsRepository::clear()
     m_instrumentsMeta.groups.clear();
     m_instrumentsMeta.articulations.clear();
     m_instrumentsMeta.scoreOrders.clear();
-}
-
-Transposition InstrumentsRepository::transposition(const QString& instrumentTemplateId) const
-{
-    static Transposition transpositions[] = {
-        { "a-", qtrc("instruments", "A") },
-        { "ab-", qtrc("instruments", "A♭") },
-        { "b-", qtrc("instruments", "B") },
-        { "bb-", qtrc("instruments", "B♭") },
-        { "c-", qtrc("instruments", "C") },
-        { "d-", qtrc("instruments", "D") },
-        { "db-", qtrc("instruments", "D♭") },
-        { "e-", qtrc("instruments", "E") },
-        { "eb-", qtrc("instruments", "E♭") },
-        { "f-", qtrc("instruments", "F") },
-        { "g-", qtrc("instruments", "G") }
-    };
-
-    for (const Transposition& transposition: transpositions) {
-        if (instrumentTemplateId.startsWith(transposition.id)) {
-            return transposition;
-        }
-    }
-
-    return Transposition();
 }
