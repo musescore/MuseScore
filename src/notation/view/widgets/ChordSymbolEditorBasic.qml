@@ -57,6 +57,7 @@ Rectangle {
                     cellWidth: listCellWidth + listCellMargin
 
                     model: editorModel.chordSpellingList
+                    currentIndex: editorModel.chordSpellingIndex
 
                     delegate: FlatButton {
                         height: listCellHeight
@@ -66,7 +67,6 @@ Rectangle {
 
                         onClicked: {
                             editorModel.setChordSpelling(modelData);
-                            chordSpellingGridView.currentIndex = index
                         }
                     }
 
@@ -92,6 +92,7 @@ Rectangle {
                     cellWidth: listCellWidth + listCellMargin
 
                     model: editorModel.majorSeventhList
+                    currentIndex: editorModel.majorSeventhIndex
 
                     delegate: FlatButton {
                         height: listCellHeight
@@ -101,7 +102,6 @@ Rectangle {
 
                         onClicked: {
                             editorModel.setQualitySymbol("major7th",modelData);
-                            majorSeventhGridView.currentIndex = index
                         }
                     }
 
@@ -127,6 +127,7 @@ Rectangle {
                     cellWidth: listCellWidth + listCellMargin
 
                     model: editorModel.halfDiminishedList
+                    currentIndex: editorModel.halfDiminishedIndex
 
                     delegate: FlatButton {
                         height: listCellHeight
@@ -136,7 +137,6 @@ Rectangle {
 
                         onClicked: {
                             editorModel.setQualitySymbol("half-diminished",modelData);
-                            halfDiminishedGridView.currentIndex = index
                         }
                     }
 
@@ -162,6 +162,7 @@ Rectangle {
                     anchors.top: halfDiminishedGridView.bottom
 
                     model: editorModel.minorList
+                    currentIndex: editorModel.minorIndex
 
                     delegate: FlatButton {
                         height: listCellHeight
@@ -171,7 +172,6 @@ Rectangle {
 
                         onClicked: {
                             editorModel.setQualitySymbol("minor",modelData);
-                            minorGridView.currentIndex = index
                         }
                     }
 
@@ -197,6 +197,7 @@ Rectangle {
                     cellWidth: listCellWidth + listCellMargin
 
                     model: editorModel.augmentedList
+                    currentIndex: editorModel.augmentedIndex
 
                     delegate: FlatButton {
                         height: listCellHeight
@@ -206,7 +207,6 @@ Rectangle {
 
                         onClicked: {
                             editorModel.setQualitySymbol("augmented",modelData);
-                            augmentedGridView.currentIndex = index
                         }
                     }
 
@@ -232,6 +232,7 @@ Rectangle {
                     cellWidth: listCellWidth + listCellMargin
 
                     model: editorModel.diminishedList
+                    currentIndex: editorModel.diminishedIndex
 
                     delegate: FlatButton {
                         height: listCellHeight
@@ -241,7 +242,6 @@ Rectangle {
 
                         onClicked: {
                             editorModel.setQualitySymbol("diminished",modelData);
-                            diminishedGridView.currentIndex = index
                         }
                     }
 

@@ -29,6 +29,7 @@ ChordSymbolStylesModel::ChordSymbolStylesModel(QObject* parent)
 {
     styleManager = new ChordSymbolStyleManager();
     m_styles = styleManager->getChordStyles();
+    initCurrentStyleIndex();
 }
 
 int ChordSymbolStylesModel::rowCount(const QModelIndex&) const
@@ -66,16 +67,47 @@ QVariant ChordSymbolStylesModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-void ChordSymbolStylesModel::setChordStyle(QString styleName) const
+int ChordSymbolStylesModel::currentStyleIndex() const
+{
+    return m_currentStyleIndex;
+}
+
+void ChordSymbolStylesModel::initCurrentStyleIndex()
+{
+    int index = 0;
+    bool foundCurrentStyle = false;
+    QString descriptionFile = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordDescriptionFile).toString();
+
+    for (auto& chordStyle: m_styles) {
+        if (chordStyle.fileName == descriptionFile) {
+            m_currentStyleIndex = index;
+            foundCurrentStyle = true;
+            break;
+        }
+        index++;
+    }
+
+    if (!foundCurrentStyle && (m_styles.size() > 0)) {
+        setChordStyle(m_styles[0].styleName);
+    }
+    emit currentStyleIndexChanged();
+}
+
+void ChordSymbolStylesModel::setChordStyle(QString styleName)
 {
     QString descriptionFileName = "chords_std.xml"; // Fall back
 
+    int index = 0;
     for (auto& chordStyle: m_styles) {
         if (chordStyle.styleName == styleName) {
             descriptionFileName = chordStyle.fileName;
+            m_currentStyleIndex = index;
             break;
         }
+        index++;
     }
 
     globalContext()->currentNotation()->style()->setStyleValue(StyleId::chordDescriptionFile, descriptionFileName);
+
+    emit currentStyleIndexChanged();
 }

@@ -44,6 +44,14 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(QStringList augmentedList READ augmentedList NOTIFY augmentedListChanged)
     Q_PROPERTY(QStringList diminishedList READ diminishedList NOTIFY diminishedListChanged)
 
+    Q_PROPERTY(int chordSpellingIndex READ chordSpellingIndex NOTIFY chordSpellingIndexChanged)
+    Q_PROPERTY(int currentStyleIndex READ currentStyleIndex NOTIFY currentStyleIndexChanged)
+    Q_PROPERTY(int majorSeventhIndex READ majorSeventhIndex NOTIFY majorSeventhIndexChanged)
+    Q_PROPERTY(int halfDiminishedIndex READ halfDiminishedIndex NOTIFY halfDiminishedIndexChanged)
+    Q_PROPERTY(int minorIndex READ minorIndex NOTIFY minorIndexChanged)
+    Q_PROPERTY(int augmentedIndex READ augmentedIndex NOTIFY augmentedIndexChanged)
+    Q_PROPERTY(int diminishedIndex READ diminishedIndex NOTIFY diminishedIndexChanged)
+
 public:
     ChordSymbolEditorModel(QObject* parent = nullptr);
 
@@ -58,8 +66,19 @@ public:
     QStringList augmentedList() const;
     QStringList diminishedList() const;
 
+    int chordSpellingIndex() const;
+    int currentStyleIndex() const;
+    int majorSeventhIndex() const;
+    int halfDiminishedIndex() const;
+    int minorIndex() const;
+    int augmentedIndex() const;
+    int diminishedIndex() const;
+
     void initChordSpellingList();
-    void setQualityRepresentationsLists();
+    void initCurrentStyleIndex();
+    void updatePropertyIndices();
+    void updateQualitySymbolsIndices();
+    void setQualitySymbolsLists();
 
     Q_INVOKABLE void setChordStyle(QString styleName);
     Q_INVOKABLE void setChordSpelling(QString spelling);
@@ -72,6 +91,14 @@ signals:
     void minorListChanged();
     void augmentedListChanged();
     void diminishedListChanged();
+
+    void chordSpellingIndexChanged();
+    void currentStyleIndexChanged();
+    void majorSeventhIndexChanged();
+    void halfDiminishedIndexChanged();
+    void minorIndexChanged();
+    void augmentedIndexChanged();
+    void diminishedIndexChanged();
 
 private:
     enum RoleNames {
@@ -89,6 +116,22 @@ private:
     QStringList m_minorList;
     QStringList m_augmentedList;
     QStringList m_diminishedList;
+
+    int m_chordSpellingIndex;
+    int m_currentStyleIndex;
+    int m_majorSeventhIndex;
+    int m_halfDiminishedIndex;
+    int m_minorIndex;
+    int m_augmentedIndex;
+    int m_diminishedIndex;
+
+    QHash<QString, Ms::Sid> chordSpellingMap = {
+        { "Standard", Ms::Sid::useStandardNoteNames },
+        { "German", Ms::Sid::useGermanNoteNames },
+        { "German Full", Ms::Sid::useFullGermanNoteNames },
+        { "Solfege", Ms::Sid::useSolfeggioNoteNames },
+        { "French", Ms::Sid::useFrenchNoteNames }
+    };
 };
 }
 #endif // CHORDSYMBOLEDITORMODEL_H

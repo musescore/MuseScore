@@ -43,8 +43,8 @@ Rectangle {
         FlatButton {
             id: button
 
-            width: grid.cellWidth-5
-            height: grid.cellHeight-5
+            width: chordSymbolStyleGrid.cellWidth-5
+            height: chordSymbolStyleGrid.cellHeight-5
 
             Text {
                 id: buttontext
@@ -60,7 +60,6 @@ Rectangle {
 
             onClicked: {
                 chordSymbolEditorModel.setChordStyle(styleName)
-                grid.currentIndex = index
             }
         }
     }
@@ -78,7 +77,7 @@ Rectangle {
         }
 
         GridView {
-            id: grid
+            id: chordSymbolStyleGrid
 
             height: 2*cellHeight
             width: root.width
@@ -87,6 +86,7 @@ Rectangle {
             cellHeight: 80
 
             model: chordSymbolEditorModel
+            currentIndex: chordSymbolEditorModel.currentStyleIndex
 
             delegate: chordStyleDelegate
             clip: true

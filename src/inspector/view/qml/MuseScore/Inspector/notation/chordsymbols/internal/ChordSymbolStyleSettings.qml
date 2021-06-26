@@ -27,7 +27,7 @@ import MuseScore.Ui 1.0
 FocusableItem {
     id: root
 
-    property alias chordStylesModel: grid.model
+    property alias chordStylesModel: chordSymbolStylesGrid.model
 
     height: grid.height
 
@@ -37,8 +37,8 @@ FocusableItem {
             FlatButton {
                 id: button
 
-                width: grid.cellWidth-5
-                height: grid.cellHeight-5
+                width: chordSymbolStylesGrid.cellWidth-5
+                height: chordSymbolStylesGrid.cellHeight-5
 
                 Text {
                     text: styleName
@@ -53,22 +53,23 @@ FocusableItem {
 
                 onClicked: {
                     chordStylesModel.setChordStyle(styleName)
-                    grid.currentIndex = index
                 }
             }
         }
 
         GridView {
-            id: grid
+            id: chordSymbolStylesGrid
 
             anchors.left: root.left
             anchors.right: root.right
 
-            height: 2*cellHeight
-            width: 2*cellWidth
+            height: cellHeight
+            width: cellWidth
 
             cellWidth: 120
             cellHeight: 60
+
+            currentIndex: chordStylesModel.currentStyleIndex
 
             delegate: styleDelegate
             clip: true

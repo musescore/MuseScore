@@ -28,8 +28,11 @@ ChordSymbolEditorModel::ChordSymbolEditorModel(QObject* parent)
 {
     styleManager = new ChordSymbolStyleManager();
     m_styles = styleManager->getChordStyles();
-    setQualityRepresentationsLists();
+    setQualitySymbolsLists();
     initChordSpellingList();
+    initCurrentStyleIndex();
+    updatePropertyIndices();
+    updateQualitySymbolsIndices();
 }
 
 int ChordSymbolEditorModel::rowCount(const QModelIndex&) const
@@ -97,12 +100,158 @@ QStringList ChordSymbolEditorModel::diminishedList() const
     return m_diminishedList;
 }
 
+int ChordSymbolEditorModel::chordSpellingIndex() const
+{
+    return m_chordSpellingIndex;
+}
+
+int ChordSymbolEditorModel::currentStyleIndex() const
+{
+    return m_currentStyleIndex;
+}
+
+int ChordSymbolEditorModel::majorSeventhIndex() const
+{
+    return m_majorSeventhIndex;
+}
+
+int ChordSymbolEditorModel::halfDiminishedIndex() const
+{
+    return m_halfDiminishedIndex;
+}
+
+int ChordSymbolEditorModel::minorIndex() const
+{
+    return m_minorIndex;
+}
+
+int ChordSymbolEditorModel::augmentedIndex() const
+{
+    return m_augmentedIndex;
+}
+
+int ChordSymbolEditorModel::diminishedIndex() const
+{
+    return m_diminishedIndex;
+}
+
 void ChordSymbolEditorModel::initChordSpellingList()
 {
     m_chordSpellingList << "Standard" << "German" << "German Full" << "Solfege" << "French";
+    emit chordSpellingListChanged();
 }
 
-void ChordSymbolEditorModel::setQualityRepresentationsLists()
+void ChordSymbolEditorModel::initCurrentStyleIndex()
+{
+    int index = 0;
+    bool foundCurrentStyle = false;
+    QString descriptionFile = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordDescriptionFile).toString();
+
+    for (auto& chordStyle: m_styles) {
+        if (chordStyle.fileName == descriptionFile) {
+            m_currentStyleIndex = index;
+            foundCurrentStyle = true;
+            break;
+        }
+        index++;
+    }
+
+    if (!foundCurrentStyle && (m_styles.size() > 0)) {
+        setChordStyle(m_styles[0].styleName);
+    }
+
+    emit currentStyleIndexChanged();
+}
+
+void ChordSymbolEditorModel::updatePropertyIndices()
+{
+    // Will include extension, scaling and stuff in the future
+    for (auto& spelling: m_chordSpellingList) {
+        Ms::Sid id = chordSpellingMap.value(spelling);
+        bool isCurrentChordSpelling = globalContext()->currentNotation()->style()->styleValue(id).toBool();
+        if (isCurrentChordSpelling) {
+            m_chordSpellingIndex = m_chordSpellingList.indexOf(spelling);
+        }
+    }
+
+    emit chordSpellingIndexChanged();
+}
+
+void ChordSymbolEditorModel::updateQualitySymbolsIndices()
+{
+    QHash<QString, Ms::Sid> qualityToSid = {
+        { "major7th", Ms::Sid::chordQualityMajorSeventh },
+        { "half-diminished", Ms::Sid::chordQualityHalfDiminished },
+        { "minor", Ms::Sid::chordQualityMinor },
+        { "augmented", Ms::Sid::chordQualityAugmented },
+        { "diminished", Ms::Sid::chordQualityDiminished },
+    };
+
+    // Major Seventh
+    Ms::Sid id = qualityToSid.value("major7th");
+    QString currentSymbol = globalContext()->currentNotation()->style()->styleValue(id).toString();
+    if (m_majorSeventhList.contains(currentSymbol)) {
+        m_majorSeventhIndex = m_majorSeventhList.indexOf(currentSymbol);
+    } else {
+        //set the default
+        m_majorSeventhIndex = 0;
+        globalContext()->currentNotation()->style()->setStyleValue(id, m_majorSeventhList[0]);
+    }
+
+    // Half Diminished
+    id = qualityToSid.value("half-diminished");
+    currentSymbol = globalContext()->currentNotation()->style()->styleValue(id).toString();
+    if (m_halfDiminishedList.contains(currentSymbol)) {
+        m_halfDiminishedIndex = m_halfDiminishedList.indexOf(currentSymbol);
+    } else {
+        //set the default
+        m_halfDiminishedIndex = 0;
+        globalContext()->currentNotation()->style()->setStyleValue(id, m_halfDiminishedList[0]);
+    }
+
+    // Minor
+    id = qualityToSid.value("minor");
+    currentSymbol = globalContext()->currentNotation()->style()->styleValue(id).toString();
+    if (m_minorList.contains(currentSymbol)) {
+        m_minorIndex = m_minorList.indexOf(currentSymbol);
+    } else {
+        //set the default
+        m_minorIndex = 0;
+        globalContext()->currentNotation()->style()->setStyleValue(id, m_minorList[0]);
+    }
+
+    // Augmented
+    id = qualityToSid.value("augmented");
+    currentSymbol = globalContext()->currentNotation()->style()->styleValue(id).toString();
+    if (m_augmentedList.contains(currentSymbol)) {
+        m_augmentedIndex = m_augmentedList.indexOf(currentSymbol);
+    } else {
+        //set the default
+        m_augmentedIndex = 0;
+        globalContext()->currentNotation()->style()->setStyleValue(id, m_augmentedList[0]);
+    }
+
+    // Diminished
+    id = qualityToSid.value("diminished");
+    currentSymbol = globalContext()->currentNotation()->style()->styleValue(id).toString();
+    if (m_diminishedList.contains(currentSymbol)) {
+        m_diminishedIndex = m_diminishedList.indexOf(currentSymbol);
+    } else {
+        //set the default
+        m_diminishedIndex = 0;
+        globalContext()->currentNotation()->style()->setStyleValue(id, m_diminishedList[0]);
+    }
+
+    globalContext()->currentNotation()->score()->setUpQualitySymbols();
+
+    emit majorSeventhIndexChanged();
+    emit halfDiminishedIndexChanged();
+    emit minorIndexChanged();
+    emit augmentedIndexChanged();
+    emit diminishedIndexChanged();
+}
+
+void ChordSymbolEditorModel::setQualitySymbolsLists()
 {
     // Get the symbols from the file
     QString descriptionFile = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordDescriptionFile).toString();
@@ -136,44 +285,34 @@ void ChordSymbolEditorModel::setQualitySymbol(QString quality, QString symbol)
 
     Ms::Sid id = qualityToSid.value(quality);
     globalContext()->currentNotation()->style()->setStyleValue(id, symbol);
-    globalContext()->currentNotation()->score()->setUpQualitySymbols();
-
-    emit chordSpellingListChanged();
-    emit majorSeventhListChanged();
-    emit halfDiminishedListChanged();
-    emit minorListChanged();
-    emit augmentedListChanged();
-    emit diminishedListChanged();
+    updateQualitySymbolsIndices();
 }
 
 void ChordSymbolEditorModel::setChordStyle(QString styleName)
 {
     QString descriptionFileName = "chords_std.xml"; // Fall back
 
+    int index = 0;
     for (auto& chordStyle: m_styles) {
         if (chordStyle.styleName == styleName) {
             descriptionFileName = chordStyle.fileName;
+            m_currentStyleIndex = index;
             break;
         }
+        index++;
     }
 
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, descriptionFileName);
-    setQualityRepresentationsLists();
+    setQualitySymbolsLists();
+    updateQualitySymbolsIndices();
+
+    emit currentStyleIndexChanged();
 }
 
 void ChordSymbolEditorModel::setChordSpelling(QString newSpelling)
 {
-    QHash<QString, Ms::Sid> chordSpellingMap = {
-        { "Standard", Ms::Sid::useStandardNoteNames },
-        { "German", Ms::Sid::useGermanNoteNames },
-        { "German Full", Ms::Sid::useFullGermanNoteNames },
-        { "Solfege", Ms::Sid::useSolfeggioNoteNames },
-        { "French", Ms::Sid::useFrenchNoteNames }
-    };
-
-    for (auto i = chordSpellingMap.begin(); i != chordSpellingMap.end(); ++i) {
-        QString spelling = i.key();
-        Ms::Sid id = i.value();
+    for (auto& spelling: m_chordSpellingList) {
+        Ms::Sid id = chordSpellingMap.value(spelling);
 
         if (spelling == newSpelling) {
             globalContext()->currentNotation()->style()->setStyleValue(id, true);
@@ -181,4 +320,6 @@ void ChordSymbolEditorModel::setChordSpelling(QString newSpelling)
             globalContext()->currentNotation()->style()->setStyleValue(id, false);
         }
     }
+
+    updatePropertyIndices();
 }
