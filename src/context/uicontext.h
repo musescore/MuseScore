@@ -34,6 +34,8 @@ static constexpr ui::UiContext UiCtxAny = ui::UiCtxAny;
 // pages
 static constexpr ui::UiContext UiCtxNotationOpened = "UiCtxNotationOpened";
 static constexpr ui::UiContext UiCtxHomeOpened = "UiCtxHomeOpened";
+static constexpr ui::UiContext UiCtxStandardNotationFocused = "UiCtxStandardNotationFocused";
+static constexpr ui::UiContext UiCtxTabNotationFocused = "UiCtxTabNotationFocused";
 
 // notation detail
 static constexpr ui::UiContext UiCtxNotationFocused = "UiCtxNotationFocused";
