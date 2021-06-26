@@ -68,13 +68,13 @@ void NotationActionController::init()
     dispatcher()->reg(this, "pad-dot4", [this]() { padNote(Pad::DOT4); });
     dispatcher()->reg(this, "pad-rest", [this]() { padNote(Pad::REST); });
 
-    dispatcher()->reg(this, "note-c", [this]() { addNote(NoteName::C, NoteAddingMode::NextChord); });
-    dispatcher()->reg(this, "note-d", [this]() { addNote(NoteName::D, NoteAddingMode::NextChord); });
-    dispatcher()->reg(this, "note-e", [this]() { addNote(NoteName::E, NoteAddingMode::NextChord); });
-    dispatcher()->reg(this, "note-f", [this]() { addNote(NoteName::F, NoteAddingMode::NextChord); });
-    dispatcher()->reg(this, "note-g", [this]() { addNote(NoteName::G, NoteAddingMode::NextChord); });
-    dispatcher()->reg(this, "note-a", [this]() { addNote(NoteName::A, NoteAddingMode::NextChord); });
-    dispatcher()->reg(this, "note-b", [this]() { addNote(NoteName::B, NoteAddingMode::NextChord); });
+    registerAction("note-c", [this]() { addNote(NoteName::C, NoteAddingMode::NextChord); }, &NotationActionController::isStandardStaff);
+    registerAction("note-d", [this]() { addNote(NoteName::D, NoteAddingMode::NextChord); }, &NotationActionController::isStandardStaff);
+    registerAction("note-e", [this]() { addNote(NoteName::E, NoteAddingMode::NextChord); }, &NotationActionController::isStandardStaff);
+    registerAction("note-f", [this]() { addNote(NoteName::F, NoteAddingMode::NextChord); }, &NotationActionController::isStandardStaff);
+    registerAction("note-g", [this]() { addNote(NoteName::G, NoteAddingMode::NextChord); }, &NotationActionController::isStandardStaff);
+    registerAction("note-a", [this]() { addNote(NoteName::A, NoteAddingMode::NextChord); }, &NotationActionController::isStandardStaff);
+    registerAction("note-b", [this]() { addNote(NoteName::B, NoteAddingMode::NextChord); }, &NotationActionController::isStandardStaff);
 
     dispatcher()->reg(this, "chord-c", [this]() { addNote(NoteName::C, NoteAddingMode::CurrentChord); });
     dispatcher()->reg(this, "chord-d", [this]() { addNote(NoteName::D, NoteAddingMode::CurrentChord); });
@@ -84,13 +84,13 @@ void NotationActionController::init()
     dispatcher()->reg(this, "chord-a", [this]() { addNote(NoteName::A, NoteAddingMode::CurrentChord); });
     dispatcher()->reg(this, "chord-b", [this]() { addNote(NoteName::B, NoteAddingMode::CurrentChord); });
 
-    dispatcher()->reg(this, "insert-c", [this]() { addNote(NoteName::C, NoteAddingMode::InsertChord); });
-    dispatcher()->reg(this, "insert-d", [this]() { addNote(NoteName::D, NoteAddingMode::InsertChord); });
-    dispatcher()->reg(this, "insert-e", [this]() { addNote(NoteName::E, NoteAddingMode::InsertChord); });
-    dispatcher()->reg(this, "insert-f", [this]() { addNote(NoteName::F, NoteAddingMode::InsertChord); });
-    dispatcher()->reg(this, "insert-g", [this]() { addNote(NoteName::G, NoteAddingMode::InsertChord); });
-    dispatcher()->reg(this, "insert-a", [this]() { addNote(NoteName::A, NoteAddingMode::InsertChord); });
-    dispatcher()->reg(this, "insert-b", [this]() { addNote(NoteName::B, NoteAddingMode::InsertChord); });
+    registerAction("insert-c", [this]() { addNote(NoteName::C, NoteAddingMode::InsertChord); }, &NotationActionController::isStandardStaff);
+    registerAction("insert-d", [this]() { addNote(NoteName::D, NoteAddingMode::InsertChord); }, &NotationActionController::isStandardStaff);
+    registerAction("insert-e", [this]() { addNote(NoteName::E, NoteAddingMode::InsertChord); }, &NotationActionController::isStandardStaff);
+    registerAction("insert-f", [this]() { addNote(NoteName::F, NoteAddingMode::InsertChord); }, &NotationActionController::isStandardStaff);
+    registerAction("insert-g", [this]() { addNote(NoteName::G, NoteAddingMode::InsertChord); }, &NotationActionController::isStandardStaff);
+    registerAction("insert-a", [this]() { addNote(NoteName::A, NoteAddingMode::InsertChord); }, &NotationActionController::isStandardStaff);
+    registerAction("insert-b", [this]() { addNote(NoteName::B, NoteAddingMode::InsertChord); }, &NotationActionController::isStandardStaff);
 
     dispatcher()->reg(this, "flat2", [this]() { toggleAccidental(AccidentalType::FLAT2); });
     dispatcher()->reg(this, "flat", [this]() { toggleAccidental(AccidentalType::FLAT); });
@@ -287,7 +287,7 @@ void NotationActionController::init()
     }
 
     for (int i = 0; i < MAX_FRET; ++i) {
-        dispatcher()->reg(this, "fret-" + std::to_string(i), [this, i]() { addFret(i); });
+        registerAction("fret-" + std::to_string(i), [this, i]() { addFret(i); }, &NotationActionController::isTablatureStaff);
     }
 
     // listen on state changes
@@ -320,6 +320,11 @@ bool NotationActionController::canReceiveAction(const actions::ActionCode& code)
     //! NOTE At the moment, if we are in the text editing mode, we can only handle clipboard commands
     if (isTextEditting()) {
         return code == ESCAPE_ACTION_CODE || code == "copy" || code == "paste" || code == "cut" || code == "select-all" || code == "delete";
+    }
+
+    auto iter = m_isEnabledMap.find(code);
+    if (iter != m_isEnabledMap.end()) {
+        return (this->*iter->second)();
     }
 
     return true;
@@ -1622,4 +1627,21 @@ bool NotationActionController::canRedo() const
 bool NotationActionController::isNotationPage() const
 {
     return interactive()->isOpened("musescore://notation").val;
+}
+
+bool NotationActionController::isStandardStaff() const
+{
+    return !isTablatureStaff();
+}
+
+bool NotationActionController::isTablatureStaff() const
+{
+    return currentNotation()->elements()->msScore()->inputState().staffGroup() == Ms::StaffGroup::TAB;
+}
+
+void NotationActionController::registerAction(const mu::actions::ActionCode& code,
+                                              std::function<void()> handler, bool (NotationActionController::* isEnabled)() const)
+{
+    m_isEnabledMap[code] = isEnabled;
+    dispatcher()->reg(this, code, handler);
 }

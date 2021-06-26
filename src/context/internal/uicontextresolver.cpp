@@ -88,8 +88,7 @@ UiContext UiContextResolver::currentUiContext() const
 
         ui::INavigationSection* activeSection = navigationController()->activeSection();
         if (!activeSection || activeSection->name() == NOTATION_NAVIGATION_SECTION) {
-            return notation->elements()->msScore()->inputState().staffGroup() == Ms::StaffGroup::TAB
-                   ? context::UiCtxTabNotationFocused : context::UiCtxStandardNotationFocused;
+            return context::UiCtxNotationFocused;
         }
 
         return context::UiCtxNotationOpened;
@@ -110,15 +109,12 @@ bool UiContextResolver::match(const ui::UiContext& currentCtx, const ui::UiConte
         return true;
     }
 
-    //! NOTE If the current context is `UiCtx*NotationFocused`, then we allow `UiCtxNotationOpened` too
-
-    if (currentCtx == context::UiCtxStandardNotationFocused || currentCtx == context::UiCtxTabNotationFocused) {
+    //! NOTE If the current context is `UiCtxNotationFocused`, then we allow `UiCtxNotationOpened` too
+    if (currentCtx == context::UiCtxNotationFocused) {
         if (actCtx == context::UiCtxNotationOpened || actCtx == context::UiCtxNotationOpenedOrTextEditing) {
             return true;
         }
-        if (actCtx == context::UiCtxNotationFocused) {
-            return true;
-        }
+        return actCtx == context::UiCtxNotationFocused;
     }
 
     return currentCtx == actCtx;
