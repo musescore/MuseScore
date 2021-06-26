@@ -26,15 +26,15 @@ import MuseScore.UiComponents 1.0
 Column {
     id: root
 
-    property alias titleText: styledtextlabel.text
-    property alias currentThemeIndex: view.currentIndex
+    property alias titleText: titleLabel.text
     property alias themes: view.model
-    signal themeChangeRequested(var newThemeIndex)
+    property string currentThemeCode
+    signal themeChangeRequested(var newThemeCode)
 
     spacing: 18
 
     StyledTextLabel {
-        id: styledtextlabel
+        id: titleLabel
         font: ui.theme.bodyBoldFont
     }
 
@@ -65,20 +65,19 @@ Column {
                 accentColor: modelData.accentColor
 
                 onClicked: {
-                    root.themeChangeRequested(model.index)
+                    root.themeChangeRequested(modelData.codeKey)
                 }
             }
 
             RoundedRadioButton {
-                id: roundedradiobutton
                 width: parent.width
 
-                checked: view.currentIndex === model.index
-
+                //checked: view.currentIndex === model.index
+                checked: root.currentThemeCode === modelData.codeKey
                 text: modelData.title
 
                 onClicked: {
-                    root.themeChangeRequested(model.index)
+                    root.themeChangeRequested(modelData.codeKey)
                 }
             }
         }

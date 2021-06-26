@@ -23,6 +23,7 @@
         <file>qml/Preferences/NoteInputPreferencesPage.qml</file>
         <file>qml/Preferences/StubPreferencesPage.qml</file>
         <file>qml/Preferences/AppearancePreferencesPage.qml</file>
+        <file>qml/Preferences/AccessibilityPreferencesPage.qml</file>
         <file>qml/Preferences/FoldersPreferencesPage.qml</file>
         <file>qml/Preferences/AdvancedPreferencesPage.qml</file>
         <file>qml/Preferences/CanvasPreferencesPage.qml</file>
@@ -38,6 +39,7 @@
         <file>qml/Preferences/internal/ThemesSection.qml</file>
         <file>qml/Preferences/internal/AccentColorsSection.qml</file>
         <file>qml/Preferences/internal/UiFontSection.qml</file>
+        <file>qml/Preferences/internal/UiColorsSection.qml</file>
         <file>qml/Preferences/internal/ColorAndWallpaperSection.qml</file>
         <file>qml/Preferences/internal/ImportStyleSection.qml</file>
         <file>qml/Preferences/internal/CharsetsSection.qml</file>
@@ -75,6 +77,5 @@
         <file>qml/platform/linux/Main.qml</file>
         <file>qml/platform/mac/Main.qml</file>
         <file>qml/platform/win/Main.qml</file>
-        <file>qml/Preferences/AccessibilityPreferencesPage.qml</file>
     </qresource>
 </RCC>
