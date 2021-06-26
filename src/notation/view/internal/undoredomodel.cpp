@@ -65,14 +65,14 @@ void UndoRedoModel::load()
 void UndoRedoModel::redo()
 {
     if (undoStack()) {
-        undoStack()->redo();
+        undoStack()->redo(nullptr);
     }
 }
 
 void UndoRedoModel::undo()
 {
     if (undoStack()) {
-        undoStack()->undo();
+        undoStack()->undo(nullptr);
     }
 }
 

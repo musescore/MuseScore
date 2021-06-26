@@ -1938,7 +1938,8 @@ void NotationInteraction::startEditText(Element* element, const PointF& cursorPo
 
 void NotationInteraction::editText(QKeyEvent* event)
 {
-    if (!m_textEditData.element && selection()->element()) {
+    bool wasEditingText = m_textEditData.element != nullptr;
+    if (!wasEditingText && selection()->element()) {
         m_textEditData.element = selection()->element();
     }
 
@@ -1949,12 +1950,16 @@ void NotationInteraction::editText(QKeyEvent* event)
     m_textEditData.key = event->key();
     m_textEditData.modifiers = event->modifiers();
     m_textEditData.s = event->text();
+    startEdit();
     if (m_textEditData.element->edit(m_textEditData)) {
         event->accept();
+        apply();
+    } else {
+        m_undoStack->rollbackChanges();
     }
-
-    score()->update();
-
+    if (!wasEditingText) {
+        m_textEditData.element = nullptr;
+    }
     if (isTextEditingStarted()) {
         notifyAboutTextEditingChanged();
     }
@@ -1987,6 +1992,16 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
     m_textEditData.element->mousePress(m_textEditData);
 
     notifyAboutTextEditingChanged();
+}
+
+void NotationInteraction::undo()
+{
+    m_undoStack->undo(&m_textEditData);
+}
+
+void NotationInteraction::redo()
+{
+    m_undoStack->redo(&m_textEditData);
 }
 
 mu::async::Notification NotationInteraction::textEditingStarted() const

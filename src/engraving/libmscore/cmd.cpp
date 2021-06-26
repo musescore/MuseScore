@@ -4412,6 +4412,7 @@ void Score::cmdAddFret(int fret)
         qDebug("cannot enter notes here (no chord rest at current position)");
         return;
     }
+    is.setRest(false);
     Position pos;
     pos.segment   = is.segment();
     pos.staffIdx  = is.track() / VOICES;
