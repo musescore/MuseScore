@@ -157,15 +157,15 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Decrease duration dotted")
              ),
     UiAction("cut",
-             mu::context::UiCtxNotationOpenedOrTextEditing,
+             mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Cut")
              ),
     UiAction("copy",
-             mu::context::UiCtxNotationOpenedOrTextEditing,
+             mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Copy")
              ),
     UiAction("paste",
-             mu::context::UiCtxNotationOpenedOrTextEditing,
+             mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Paste")
              ),
     UiAction("paste-half",
@@ -194,7 +194,7 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Toggle visibility of elements")
              ),
     UiAction("select-all",
-             mu::context::UiCtxNotationOpenedOrTextEditing,
+             mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Select All"),
              QT_TRANSLATE_NOOP("action", "Select all")
              ),
@@ -224,7 +224,7 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Select all similar elements with more options")
              ),
     UiAction("delete",
-             mu::context::UiCtxNotationOpenedOrTextEditing,
+             mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Delete"),
              QT_TRANSLATE_NOOP("action", "Delete the selected element(s)"),
              IconCode::Code::DELETE_TANK
@@ -349,13 +349,13 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Edit score properties")
              ),
     UiAction("undo",
-             mu::context::UiCtxNotationOpenedOrTextEditing,
+             mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Undo"),
              QT_TRANSLATE_NOOP("action", "Undo last change"),
              IconCode::Code::UNDO
              ),
     UiAction("redo",
-             mu::context::UiCtxNotationOpenedOrTextEditing,
+             mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Redo"),
              QT_TRANSLATE_NOOP("action", "Redo last undo"),
              IconCode::Code::REDO

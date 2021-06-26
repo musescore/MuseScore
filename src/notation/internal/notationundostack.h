@@ -30,6 +30,7 @@ namespace Ms {
 class Score;
 class MasterScore;
 class UndoStack;
+class EditData;
 }
 
 namespace mu::notation {
@@ -39,11 +40,11 @@ public:
     NotationUndoStack(IGetScore* getScore, async::Notification notationChanged);
 
     bool canUndo() const override;
-    void undo() override;
+    void undo(Ms::EditData*) override;
     async::Notification undoNotification() const override;
 
     bool canRedo() const override;
-    void redo() override;
+    void redo(Ms::EditData*) override;
     async::Notification redoNotification() const override;
 
     void prepareChanges() override;

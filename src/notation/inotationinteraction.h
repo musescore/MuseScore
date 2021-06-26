@@ -78,6 +78,8 @@ public:
     virtual async::Notification dropChanged() const = 0;
 
     virtual bool applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers = {}) = 0;
+    virtual void undo() = 0;
+    virtual void redo() = 0;
 
     // Move
     //! NOTE Perform operations on selected elements

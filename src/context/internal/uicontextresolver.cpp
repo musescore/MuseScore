@@ -51,6 +51,10 @@ void UiContextResolver::init()
             notation->interaction()->textEditingStarted().onNotify(this, [this]() {
                 notifyAboutContextChanged();
             });
+
+            notation->undoStack()->stackChanged().onNotify(this, [this]() {
+                notifyAboutContextChanged();
+            });
         }
         notifyAboutContextChanged();
     });
@@ -82,10 +86,6 @@ UiContext UiContextResolver::currentUiContext() const
             return context::UiCtxUnknown;
         }
 
-        if (notation->interaction()->isTextEditingStarted()) {
-            return context::UiCtxNotationTextEditing;
-        }
-
         ui::INavigationSection* activeSection = navigationController()->activeSection();
         if (!activeSection || activeSection->name() == NOTATION_NAVIGATION_SECTION) {
             return context::UiCtxNotationFocused;
@@ -99,22 +99,13 @@ UiContext UiContextResolver::currentUiContext() const
 
 bool UiContextResolver::match(const ui::UiContext& currentCtx, const ui::UiContext& actCtx) const
 {
-    //! NOTE If now editing the notation text, then we allow actions only with the context `UiCtxNotationTextEditing`,
-    //! all others, even `UiCtxAny`, are forbidden
-    if (currentCtx == context::UiCtxNotationTextEditing) {
-        return actCtx == context::UiCtxNotationTextEditing || actCtx == context::UiCtxNotationOpenedOrTextEditing;
-    }
-
     if (actCtx == context::UiCtxAny) {
         return true;
     }
 
     //! NOTE If the current context is `UiCtxNotationFocused`, then we allow `UiCtxNotationOpened` too
-    if (currentCtx == context::UiCtxNotationFocused) {
-        if (actCtx == context::UiCtxNotationOpened || actCtx == context::UiCtxNotationOpenedOrTextEditing) {
-            return true;
-        }
-        return actCtx == context::UiCtxNotationFocused;
+    if (currentCtx == context::UiCtxNotationFocused && actCtx == context::UiCtxNotationOpened) {
+        return true;
     }
 
     return currentCtx == actCtx;
