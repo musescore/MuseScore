@@ -174,6 +174,11 @@ QColor UiTheme::buttonColor() const
     return m_buttonColor;
 }
 
+QColor UiTheme::borderColor() const
+{
+    return colorByKey(BORDER_COLOR);
+}
+
 QColor UiTheme::fontPrimaryColor() const
 {
     return m_fontPrimaryColor;
@@ -252,6 +257,17 @@ QFont UiTheme::toolbarIconsFont() const
 QFont UiTheme::musicalFont() const
 {
     return m_musicalFont;
+}
+
+qreal UiTheme::borderWidth() const
+{
+    qDebug("BORDER WIDTH REQUESTED!");
+    qDebug("BORDER WIDTH REQUESTED!");
+    qDebug("BORDER WIDTH REQUESTED!");
+    qDebug("BORDER WIDTH REQUESTED!");
+    qDebug("BORDER WIDTH REQUESTED!");
+    qDebug("BORDER WIDTH REQUESTED!");
+    return realByKey(BORDER_WIDTH);
 }
 
 qreal UiTheme::accentOpacityNormal() const

@@ -72,12 +72,19 @@ QVariantList AppearancePreferencesModel::generalThemes() const
         }
     }
 
-    return result;                                                                      //only returns General Themes
-}                                                                                       //i.e. excludes HC Themes
+    return result;
+}
 
 QStringList AppearancePreferencesModel::accentColors() const
 {
     return uiConfiguration()->possibleAccentColors();
+}
+
+void AppearancePreferencesModel::load()
+{
+    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
+        emit themesChanged();
+    });
 }
 
 QStringList AppearancePreferencesModel::allFonts() const
@@ -96,23 +103,9 @@ QString AppearancePreferencesModel::wallpapersDir() const
     return notationConfiguration()->wallpapersDefaultDirPath().toQString();
 }
 
-int AppearancePreferencesModel::currentThemeIndex() const
+QString AppearancePreferencesModel::currentThemeCode() const
 {
-    ThemeList genThemes;                                        //creation of genThemes ensures that we only search in
-                                                                //a list of General Themes and not the entire list of Themes
-    for (const ThemeInfo& theme : allThemes()) {
-        if (theme.codeKey == LIGHT_THEME_CODE || theme.codeKey == DARK_THEME_CODE) {
-            genThemes.push_back(theme);
-        }
-    }
-
-    for (int i = 0; i < static_cast<int>(genThemes.size()); ++i) {
-        if (genThemes[i].codeKey == currentTheme().codeKey) {
-            return i;
-        }
-    }
-
-    return INVALID_INDEX;
+    return QString::fromStdString(currentTheme().codeKey);
 }
 
 int AppearancePreferencesModel::currentAccentColorIndex() const
@@ -180,8 +173,12 @@ QString AppearancePreferencesModel::foregroundWallpaperPath() const
     return notationConfiguration()->foregroundWallpaperPath().toQString();
 }
 
-void AppearancePreferencesModel::setCurrentThemeIndex(int index)
+void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
 {
+    if (themeCode == currentThemeCode()) {
+        return;
+    }
+
     ThemeList genThemes;
 
     for (const ThemeInfo& theme : allThemes()) {
@@ -190,15 +187,11 @@ void AppearancePreferencesModel::setCurrentThemeIndex(int index)
         }
     }
 
-    if (index < 0 || index >= static_cast<int>(genThemes.size())) {
-        return;
+    for (const ThemeInfo& theme : genThemes) {
+        if (themeCode == QString::fromStdString(theme.codeKey)) {
+            uiConfiguration()->setCurrentTheme(theme.codeKey);
+        }
     }
-
-    if (index == currentThemeIndex()) {
-        return;
-    }
-
-    uiConfiguration()->setCurrentTheme(genThemes[index].codeKey);
     emit themesChanged();
 }
 

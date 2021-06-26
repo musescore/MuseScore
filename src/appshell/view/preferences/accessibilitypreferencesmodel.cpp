@@ -45,27 +45,43 @@ QVariantList AccessibilityPreferencesModel::highContrastThemes() const
     return result;
 }
 
-int AccessibilityPreferencesModel::currentThemeIndex() const
+QString AccessibilityPreferencesModel::currentThemeCode() const
 {
-    ThemeList hcThemes;                                        //creation of hcThemes ensures that we only search in
-                                                               //a list of High Contrast Themes and not the entire list of Themes
-    for (const ThemeInfo& theme : uiConfiguration()->themes()) {
-        if (theme.codeKey == HIGH_CONTRAST_BLACK_THEME_CODE || theme.codeKey == HIGH_CONTRAST_WHITE_THEME_CODE) {
-            hcThemes.push_back(theme);
-        }
-    }
-
-    for (int i = 0; i < static_cast<int>(hcThemes.size()); ++i) {
-        if (hcThemes[i].codeKey == (uiConfiguration()->currentTheme()).codeKey) {
-            return i;
-        }
-    }
-
-    return -1;
+    return QString::fromStdString(uiConfiguration()->currentTheme().codeKey);
 }
 
-void AccessibilityPreferencesModel::setCurrentThemeIndex(int index)
+void AccessibilityPreferencesModel::load()
 {
+    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
+        emit themesChanged();
+    });
+}
+
+void AccessibilityPreferencesModel::setNewColor(const QColor& newColor, const QString& propertyName)
+{
+    //!NOTE: Considered using a "switch()" statement here, but it would require a type conversion
+    //! from std::string to some form of a primitive literal. This has a workaround by implementing
+    //! a hash function, but i went for the "if/else if" ladder instead since we don't have that many cases anyway.
+
+    if (propertyName.toStdString() == "Accent Color:") {
+        uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(newColor));
+    } else if (propertyName.toStdString() == "Text and Icons:") {
+        uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::FONT_PRIMARY_COLOR, Val(newColor));
+    } else if (propertyName.toStdString() == "Disabled Text:") {
+        return;
+    } else if (propertyName.toStdString() == "Stroke:") {
+        uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::STROKE_COLOR, Val(newColor));
+        //uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::BUTTON_BORDER_COLOR, Val(newColor));
+    }
+    emit themesChanged();
+}
+
+void AccessibilityPreferencesModel::setCurrentThemeCode(const QString& themeCode)
+{
+    if (themeCode == currentThemeCode()) {
+        return;
+    }
+
     ThemeList hcThemes;
 
     for (const ThemeInfo& theme : uiConfiguration()->themes()) {
@@ -74,14 +90,10 @@ void AccessibilityPreferencesModel::setCurrentThemeIndex(int index)
         }
     }
 
-    if (index < 0 || index >= static_cast<int>(hcThemes.size())) {
-        return;
+    for (const ThemeInfo& theme : hcThemes) {
+        if (themeCode == QString::fromStdString(theme.codeKey)) {
+            uiConfiguration()->setCurrentTheme(theme.codeKey);
+        }
     }
-
-    if (index == currentThemeIndex()) {
-        return;
-    }
-
-    uiConfiguration()->setCurrentTheme(hcThemes[index].codeKey);
     emit themesChanged();
 }

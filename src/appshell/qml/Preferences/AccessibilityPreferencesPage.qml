@@ -28,8 +28,11 @@ import "internal"
 
 PreferencesPage {
     id: root
-
     contentHeight: content.height
+
+    Component.onCompleted: {
+        accessibilityModel.load()
+    }
 
     AccessibilityPreferencesModel {
         id: accessibilityModel
@@ -50,49 +53,21 @@ PreferencesPage {
 
             titleText: qsTrc("appshell", "High Contrast Themes")
             themes: accessibilityModel.highContrastThemes
-            currentThemeIndex: accessibilityModel.currentThemeIndex
+            currentThemeCode: accessibilityModel.currentThemeCode
 
             onThemeChangeRequested: {
-                accessibilityModel.currentThemeIndex = newThemeIndex
+                accessibilityModel.currentThemeCode = newThemeCode
             }
         }
 
         SeparatorLine {}
 
-        StyledTextLabel {
-            text: qsTrc("appshell", "UI Colours")
-            font: ui.theme.bodyBoldFont
-        }
-
-        Repeater {
+        UiColorsSection {
             width: parent.width
-            //spacing: 12
-            //orientation: Qt.Vertical
+            firstColumnWidth: content.firstColumnWidth
 
-            model: [
-                { textRole: "Accent Color:", colorRole: ui.theme.accentColor},
-                { textRole: "Text and Icons:", colorRole: ui.theme.fontPrimaryColor},
-                { textRole: "Disabled Text:", colorRole: "#000000"},
-                { textRole: "Stroke:", colorRole: ui.theme.strokeColor}
-            ]
-
-            delegate: Row {
-                anchors.left: parent.left
-                anchors.right: parent.right
-
-                StyledTextLabel {
-                    text: modelData["textRole"]
-                    width: content.firstColumnWidth
-                    horizontalAlignment: Text.AlignLeft
-                }
-
-                ColorPicker {
-                    y: -8
-                    width: 112
-                    color: modelData["colorRole"]
-                    overrideDefaultColors: true
-                    setBorderColor: ui.theme.strokeColor
-                }
+            onColorChangeRequested: {
+                accessibilityModel.setNewColor(newColor, propertyName)
             }
         }
     }
