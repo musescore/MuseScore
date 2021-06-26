@@ -386,17 +386,17 @@ private:
     QString _rehearsalText;
     QString _dynaVelocity;
     QString _tempo;
-    QString _sndCapo;
     QString _sndCoda;
     QString _sndDacapo;
     QString _sndDalsegno;
-    QString _sndSegno;
     QString _sndFine;
+    QString _sndSegno;
+    QString _sndToCoda;
     bool _hasDefaultY;
     qreal _defaultY;
     bool _hasRelativeY;
     qreal _relativeY;
-    bool hasTotalY() { return _hasRelativeY || _hasDefaultY; }
+    bool hasTotalY() const { return _hasRelativeY || _hasDefaultY; }
     bool _coda;
     bool _segno;
     double _tpoMetro;                   // tempo according to metronome
@@ -413,7 +413,8 @@ private:
     QString metronome(double& r);
     void sound();
     void dynamics();
-    void handleRepeats(Measure* measure, const int track);
+    void handleRepeats(Measure* measure, const int track, const Fraction tick);
+    QString matchRepeat() const;
     void skipLogCurrElem();
 };
 
