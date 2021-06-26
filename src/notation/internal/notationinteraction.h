@@ -95,6 +95,8 @@ public:
     async::Notification dropChanged() const override;
 
     bool applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers = {}) override;
+    void undo() override;
+    void redo() override;
 
     // Move
     //! NOTE Perform operations on selected elements

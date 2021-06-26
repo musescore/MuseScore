@@ -44,13 +44,13 @@ bool NotationUndoStack::canUndo() const
     return undoStack()->canUndo();
 }
 
-void NotationUndoStack::undo()
+void NotationUndoStack::undo(Ms::EditData* editData)
 {
     IF_ASSERT_FAILED(score()) {
         return;
     }
 
-    score()->undoRedo(true, nullptr);
+    score()->undoRedo(true, editData);
     masterScore()->setSaved(isStackClean());
 
     notifyAboutNotationChanged();
@@ -72,13 +72,13 @@ bool NotationUndoStack::canRedo() const
     return undoStack()->canRedo();
 }
 
-void NotationUndoStack::redo()
+void NotationUndoStack::redo(Ms::EditData* editData)
 {
     IF_ASSERT_FAILED(score()) {
         return;
     }
 
-    score()->undoRedo(false, nullptr);
+    score()->undoRedo(false, editData);
     masterScore()->setSaved(isStackClean());
 
     notifyAboutNotationChanged();
