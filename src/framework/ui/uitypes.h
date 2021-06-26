@@ -62,6 +62,8 @@ enum ThemeStyleKey
     ACCENT_COLOR,
     STROKE_COLOR,
     BUTTON_COLOR,
+    BORDER_COLOR,
+    BORDER_WIDTH,
     FONT_PRIMARY_COLOR,
     FONT_SECONDARY_COLOR,
     LINK_COLOR,
@@ -200,8 +202,8 @@ public:
     bool contains(const actions::ActionCode& code) const
     {
         auto it = std::find_if(cbegin(), cend(), [code](const UiAction& a) {
-            return a.code == code;
-        });
+                return a.code == code;
+            });
         return it != cend();
     }
 
@@ -234,12 +236,12 @@ struct UiActionState
 
     static UiActionState make_disabled(bool checked = false)
     {
-        return UiActionState{ false, checked };
+        return UiActionState { false, checked };
     }
 
     static UiActionState make_enabled(bool checked = false)
     {
-        return UiActionState{ true, checked };
+        return UiActionState { true, checked };
     }
 };
 

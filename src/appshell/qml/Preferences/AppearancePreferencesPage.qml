@@ -31,6 +31,10 @@ PreferencesPage {
 
     contentHeight: content.height
 
+    Component.onCompleted: {
+        appearanceModel.load()
+    }
+
     AppearancePreferencesModel {
         id: appearanceModel
     }
@@ -54,10 +58,10 @@ PreferencesPage {
 
             titleText: qsTrc("appshell", "Themes")
             themes: appearanceModel.generalThemes
-            currentThemeIndex: appearanceModel.currentThemeIndex
+            currentThemeCode: appearanceModel.currentThemeCode
 
             onThemeChangeRequested: {
-                appearanceModel.currentThemeIndex = newThemeIndex
+                appearanceModel.currentThemeCode = newThemeCode
             }
         }
 

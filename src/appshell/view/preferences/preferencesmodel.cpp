@@ -145,7 +145,7 @@ void PreferencesModel::load(const QString& currentPageId)
 
     m_rootItem = new PreferencePageItem();
 
-    QList<PreferencePageItem*> generalItems {                                                               //Child items for General Tab
+    QList<PreferencePageItem*> generalItems { //Child items for General Tab
         makeItem("general-start", qtrc("appshell", "Programme Start"), IconCode::Code::NONE,
                  "Preferences/ProgrammeStartPreferencesPage.qml"),
 
@@ -153,7 +153,7 @@ void PreferencesModel::load(const QString& currentPageId)
                  "Preferences/FoldersPreferencesPage.qml")
     };
 
-    QList<PreferencePageItem*> appearanceItems {                                                            //Child items for Appearance Tab
+    QList<PreferencePageItem*> appearanceItems { //Child items for Appearance Tab
         makeItem("appearance-accessibility", qtrc("appshell", "Accessibility"), IconCode::Code::NONE,
                  "Preferences/AccessibilityPreferencesPage.qml")
     };

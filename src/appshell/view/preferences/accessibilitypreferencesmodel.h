@@ -23,36 +23,57 @@
 #define MU_APPSHELL_ACCESSIBILITYPREFERENCESMODEL_H
 
 #include <QObject>
-//#include "appearancepreferencesmodel.h"
+
+//#include "ui/view/uitheme.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
-//#include "async/asyncable.h"
+#include "async/asyncable.h"
 
 namespace mu::appshell {
-class AccessibilityPreferencesModel : public QObject
+class AccessibilityPreferencesModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
 
     Q_PROPERTY(QVariantList highContrastThemes READ highContrastThemes NOTIFY themesChanged)
-    Q_PROPERTY(int currentThemeIndex READ currentThemeIndex WRITE setCurrentThemeIndex NOTIFY themesChanged)
-
+    Q_PROPERTY(QString currentThemeCode READ currentThemeCode WRITE setCurrentThemeCode NOTIFY themesChanged)
+/*
+    Q_PROPERTY(QColor accentColor READ accentColor WRITE setAccentColor NOTIFY themesChanged)
+    Q_PROPERTY(QColor textAndIconsColor READ textAndIconsColor WRITE setTextAndIconsColor NOTIFY themesChanged)
+    Q_PROPERTY(QColor disabledTextColor READ disabledTextColor WRITE setDisabledTextColor NOTIFY themesChanged)
+    Q_PROPERTY(QColor strokeColor READ strokeColor WRITE setStrokeColor NOTIFY themesChanged)
+*/
 public:
     explicit AccessibilityPreferencesModel(QObject* parent = nullptr);
 
     QVariantList highContrastThemes() const;
-    int currentThemeIndex() const;
+    QString currentThemeCode() const;
+/*
+    QColor accentColor() const;
+    QColor textAndIconsColor() const;
+    QColor disabledTextColor() const;
+    QColor strokeColor() const;
+*/
+    Q_INVOKABLE void load();
+    Q_INVOKABLE void setNewColor(const QColor& newColor, const QString& propertyName);
+//    Q_INVOKABLE void setAccentColor(const QColor& newColor);
+//    Q_INVOKABLE void setTextAndIconsColor(const QColor& newColor);
+//    Q_INVOKABLE void setDisabledTextColor(const QColor& newColor);
+//    Q_INVOKABLE void setStrokeColor(const QColor& newColor);
 
 public slots:
-    void setCurrentThemeIndex(int index);
-
+    void setCurrentThemeCode(const QString& themeCode);
+/*
+    void setAccentColor(const QColor& newColor);
+    void setTextAndIconsColor(const QColor& newColor);
+    void setDisabledTextColor(const QColor& newColor);
+    void setStrokeColor(const QColor& newColor);
+*/
 signals:
     void themesChanged();
-
 };
 }
-
 
 #endif // MU_APPSHELL_ACCESSIBILITYPREFERENCESMODEL_H

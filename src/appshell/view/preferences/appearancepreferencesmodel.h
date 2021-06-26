@@ -40,7 +40,7 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
     Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)
     Q_PROPERTY(QStringList accentColors READ accentColors NOTIFY themesChanged)
 
-    Q_PROPERTY(int currentThemeIndex READ currentThemeIndex WRITE setCurrentThemeIndex NOTIFY themesChanged)
+    Q_PROPERTY(QString currentThemeCode READ currentThemeCode WRITE setCurrentThemeCode NOTIFY themesChanged)
     Q_PROPERTY(int currentAccentColorIndex READ currentAccentColorIndex WRITE setCurrentAccentColorIndex NOTIFY themesChanged)
 
     Q_PROPERTY(int currentFontIndex READ currentFontIndex WRITE setCurrentFontIndex NOTIFY currentFontIndexChanged)
@@ -65,7 +65,7 @@ public:
 
     QStringList accentColors() const;
 
-    int currentThemeIndex() const;
+    QString currentThemeCode() const;
     int currentAccentColorIndex() const;
 
     int currentFontIndex() const;
@@ -79,12 +79,13 @@ public:
     QColor foregroundColor() const;
     QString foregroundWallpaperPath() const;
 
+    Q_INVOKABLE void load();
     Q_INVOKABLE QStringList allFonts() const;
     Q_INVOKABLE QString wallpaperPathFilter() const;
     Q_INVOKABLE QString wallpapersDir() const;
 
 public slots:
-    void setCurrentThemeIndex(int index);
+    void setCurrentThemeCode(const QString& themeCode);
     void setCurrentAccentColorIndex(int index);
     void setCurrentFontIndex(int index);
     void setBodyTextSize(int size);
