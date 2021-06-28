@@ -75,7 +75,7 @@ ValCh<QString> LanguagesConfiguration::currentLanguageCode() const
 void LanguagesConfiguration::setCurrentLanguageCode(const QString& languageCode) const
 {
     Val value(languageCode.toStdString());
-    settings()->setValue(LANGUAGE_KEY, value);
+    settings()->setSharedValue(LANGUAGE_KEY, value);
 }
 
 QUrl LanguagesConfiguration::languagesUpdateUrl() const

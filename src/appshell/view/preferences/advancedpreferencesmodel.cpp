@@ -102,7 +102,7 @@ void AdvancedPreferencesModel::changeVal(int index, QVariant newVal)
     item.value = Val::fromQVariant(newVal);
     item.value.setType(type);
 
-    settings()->setValue(item.key, item.value);
+    settings()->setSharedValue(item.key, item.value);
 }
 
 void AdvancedPreferencesModel::resetToDefault()

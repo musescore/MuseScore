@@ -61,5 +61,5 @@ bool ShortcutsConfiguration::advanceToNextNoteOnKeyRelease() const
 
 void ShortcutsConfiguration::setAdvanceToNextNoteOnKeyRelease(bool value)
 {
-    settings()->setValue(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE, Val(value));
+    settings()->setSharedValue(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE, Val(value));
 }

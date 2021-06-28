@@ -299,7 +299,7 @@ void UiConfiguration::writeThemes(const ThemeList& themes)
     QJsonDocument jsonDoc(jsonArray);
 
     Val value(jsonDoc.toJson(QJsonDocument::Compact).constData());
-    settings()->setValue(UI_THEMES_KEY, value);
+    settings()->setSharedValue(UI_THEMES_KEY, value);
 }
 
 ThemeList UiConfiguration::themes() const
@@ -360,7 +360,7 @@ ThemeCode UiConfiguration::currentThemeCodeKey() const
 
 void UiConfiguration::setCurrentTheme(const ThemeCode& codeKey)
 {
-    settings()->setValue(UI_CURRENT_THEME_CODE_KEY, Val(codeKey));
+    settings()->setSharedValue(UI_CURRENT_THEME_CODE_KEY, Val(codeKey));
 }
 
 void UiConfiguration::setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val)
@@ -394,7 +394,7 @@ std::string UiConfiguration::fontFamily() const
 
 void UiConfiguration::setFontFamily(const std::string& family)
 {
-    settings()->setValue(UI_FONT_FAMILY_KEY, Val(family));
+    settings()->setSharedValue(UI_FONT_FAMILY_KEY, Val(family));
 }
 
 int UiConfiguration::fontSize(FontSizeType type) const
@@ -422,7 +422,7 @@ int UiConfiguration::fontSize(FontSizeType type) const
 
 void UiConfiguration::setBodyFontSize(int size)
 {
-    settings()->setValue(UI_FONT_SIZE_KEY, Val(size));
+    settings()->setSharedValue(UI_FONT_SIZE_KEY, Val(size));
 }
 
 Notification UiConfiguration::fontChanged() const

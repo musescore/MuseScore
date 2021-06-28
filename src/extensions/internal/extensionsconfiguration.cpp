@@ -85,7 +85,7 @@ bool ExtensionsConfiguration::needCheckForUpdate() const
 
 void ExtensionsConfiguration::setNeedCheckForUpdate(bool needCheck)
 {
-    settings()->setValue(CHECK_FOR_UPDATE, Val(needCheck));
+    settings()->setSharedValue(CHECK_FOR_UPDATE, Val(needCheck));
 }
 
 ValCh<ExtensionsHash> ExtensionsConfiguration::extensions() const
@@ -110,7 +110,7 @@ Ret ExtensionsConfiguration::setExtensions(const ExtensionsHash& extensions) con
     QJsonDocument jsonDoc(jsonArray);
 
     Val value(jsonDoc.toJson(QJsonDocument::Compact).constData());
-    settings()->setValue(EXTENSIONS_JSON, value);
+    settings()->setSharedValue(EXTENSIONS_JSON, value);
 
     return make_ret(Err::NoError);
 }
@@ -259,7 +259,7 @@ ValCh<io::path> ExtensionsConfiguration::extensionsPath() const
 
 void ExtensionsConfiguration::setExtensionsPath(const io::path& path)
 {
-    settings()->setValue(USER_EXTENSIONS_PATH, Val(path.toStdString()));
+    settings()->setSharedValue(USER_EXTENSIONS_PATH, Val(path.toStdString()));
 }
 
 io::path ExtensionsConfiguration::extensionTemplatesPath(const QString& extensionCode) const

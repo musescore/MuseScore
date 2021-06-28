@@ -48,7 +48,7 @@ bool PlaybackConfiguration::playNotesWhenEditing() const
 
 void PlaybackConfiguration::setPlayNotesWhenEditing(bool value)
 {
-    settings()->setValue(PLAY_NOTES_WHEN_EDITING, Val(value));
+    settings()->setSharedValue(PLAY_NOTES_WHEN_EDITING, Val(value));
 }
 
 bool PlaybackConfiguration::playChordWhenEditing() const
@@ -58,7 +58,7 @@ bool PlaybackConfiguration::playChordWhenEditing() const
 
 void PlaybackConfiguration::setPlayChordWhenEditing(bool value)
 {
-    settings()->setValue(PLAY_CHORD_WHEN_EDITING, Val(value));
+    settings()->setSharedValue(PLAY_CHORD_WHEN_EDITING, Val(value));
 }
 
 bool PlaybackConfiguration::playHarmonyWhenEditing() const
@@ -68,7 +68,7 @@ bool PlaybackConfiguration::playHarmonyWhenEditing() const
 
 void PlaybackConfiguration::setPlayHarmonyWhenEditing(bool value)
 {
-    settings()->setValue(PLAY_HARMONY_WHEN_EDITING, Val(value));
+    settings()->setSharedValue(PLAY_HARMONY_WHEN_EDITING, Val(value));
 }
 
 PlaybackCursorType PlaybackConfiguration::cursorType() const

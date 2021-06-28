@@ -79,7 +79,7 @@ void Settings::reload()
     Items items = readItems();
 
     for (auto it = items.cbegin(); it != items.cend(); ++it) {
-        setValue(it->first, it->second.value);
+        setSharedValue(it->first, it->second.value);
     }
 }
 
@@ -135,7 +135,16 @@ Val Settings::defaultValue(const Key& key) const
     return findItem(key).defaultValue;
 }
 
-void Settings::setValue(const Key& key, const Val& value, bool notifyToOtherInstances)
+void Settings::setSharedValue(const Key& key, const Val& value)
+{
+    setLocalValue(key, value);
+
+    if (multiInstancesProvider()) {
+        multiInstancesProvider()->settingsSetValue(key.key, value);
+    }
+}
+
+void Settings::setLocalValue(const Key& key, const Val& value)
 {
     Item& item = findItem(key);
 
@@ -157,10 +166,6 @@ void Settings::setValue(const Key& key, const Val& value, bool notifyToOtherInst
     if (it != m_channels.end()) {
         async::Channel<Val> channel = it->second;
         channel.send(value);
-    }
-
-    if (notifyToOtherInstances && multiInstancesProvider()) {
-        multiInstancesProvider()->settingsSetValue(key.key, value);
     }
 }
 

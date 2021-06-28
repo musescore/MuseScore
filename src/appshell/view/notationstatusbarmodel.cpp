@@ -73,7 +73,7 @@ QVariant NotationStatusBarModel::concertPitchAction() const
 QVariant NotationStatusBarModel::currentWorkspaceAction() const
 {
     MenuItem item = menuItem(SELECT_WORKSPACE_CODE);
-    item.title = qtrc("appshell", "Workspace: ") + QString::fromStdString(workspaceConfiguration()->currentWorkspaceName().val);
+    item.title = qtrc("appshell", "Workspace: ") + QString::fromStdString(workspaceConfiguration()->currentWorkspaceName());
     return item.toMap();
 }
 
@@ -177,7 +177,7 @@ void NotationStatusBarModel::load()
         listenChangesInAccessibility();
     });
 
-    workspaceConfiguration()->currentWorkspaceName().ch.onReceive(this, [this](const std::string&) {
+    workspaceConfiguration()->currentWorkspaceNameChanged().onReceive(this, [this](const std::string&) {
         emit currentWorkspaceActionChanged();
     });
 

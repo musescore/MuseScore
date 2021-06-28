@@ -108,7 +108,7 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
         Settings::Key key("", msg.args.at(0).toStdString());
         Val val(msg.args.at(1).toStdString());
         val.setType(static_cast<Val::Type>(msg.args.at(2).toInt()));
-        settings()->setValue(key, val, false);
+        settings()->setLocalValue(key, val);
     }
 }
 
