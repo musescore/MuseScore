@@ -26,7 +26,6 @@
 
 #include "modularity/ioc.h"
 #include "iplaybackcontroller.h"
-#include "ui/iuiconfiguration.h"
 
 namespace mu::playback {
 class PlaybackToolBarModel : public ui::AbstractMenuModel
@@ -34,7 +33,6 @@ class PlaybackToolBarModel : public ui::AbstractMenuModel
     Q_OBJECT
 
     INJECT(playback, IPlaybackController, playbackController)
-    INJECT(playback, ui::IUiConfiguration, uiConfiguration)
 
     Q_PROPERTY(bool isToolbarFloating READ isToolbarFloating WRITE setIsToolbarFloating NOTIFY isToolbarFloatingChanged)
     Q_PROPERTY(bool isPlayAllowed READ isPlayAllowed NOTIFY isPlayAllowedChanged)
