@@ -109,7 +109,7 @@ void UserScoresConfiguration::setRecentScorePaths(const io::paths& recentScorePa
     }
 
     Val value(paths.join(",").toStdString());
-    settings()->setValue(RECENT_SCORE_PATHS, value);
+    settings()->setSharedValue(RECENT_SCORE_PATHS, value);
 }
 
 io::paths UserScoresConfiguration::parsePaths(const Val& value) const
@@ -168,7 +168,7 @@ ValCh<io::path> UserScoresConfiguration::templatesPath() const
 
 void UserScoresConfiguration::setTemplatesPath(const io::path& path)
 {
-    settings()->setValue(USER_TEMPLATES_PATH, Val(path.toStdString()));
+    settings()->setSharedValue(USER_TEMPLATES_PATH, Val(path.toStdString()));
 }
 
 ValCh<io::path> UserScoresConfiguration::scoresPath() const
@@ -182,7 +182,7 @@ ValCh<io::path> UserScoresConfiguration::scoresPath() const
 
 void UserScoresConfiguration::setScoresPath(const io::path& path)
 {
-    settings()->setValue(USER_SCORES_PATH, Val(path.toStdString()));
+    settings()->setSharedValue(USER_SCORES_PATH, Val(path.toStdString()));
 }
 
 io::path UserScoresConfiguration::defaultSavingFilePath(const io::path& fileName) const
@@ -207,7 +207,7 @@ UserScoresConfiguration::PreferredScoreCreationMode UserScoresConfiguration::pre
 
 void UserScoresConfiguration::setPreferredScoreCreationMode(PreferredScoreCreationMode mode)
 {
-    settings()->setValue(PREFERRED_SCORE_CREATION_MODE_KEY, Val(static_cast<int>(mode)));
+    settings()->setSharedValue(PREFERRED_SCORE_CREATION_MODE_KEY, Val(static_cast<int>(mode)));
 }
 
 bool UserScoresConfiguration::needShowWarningAboutUnsavedScore() const
@@ -217,5 +217,5 @@ bool UserScoresConfiguration::needShowWarningAboutUnsavedScore() const
 
 void UserScoresConfiguration::setNeedShowWarningAboutUnsavedScore(bool value)
 {
-    settings()->setValue(NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY, Val(value));
+    settings()->setSharedValue(NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY, Val(value));
 }

@@ -46,7 +46,7 @@ bool MidiConfiguration::useRemoteControl() const
 
 void MidiConfiguration::setUseRemoteControl(bool value)
 {
-    settings()->setValue(USE_REMOTE_CONTROL_KEY, Val(value));
+    settings()->setSharedValue(USE_REMOTE_CONTROL_KEY, Val(value));
 }
 
 MidiDeviceID MidiConfiguration::midiInputDeviceId() const
@@ -56,7 +56,7 @@ MidiDeviceID MidiConfiguration::midiInputDeviceId() const
 
 void MidiConfiguration::setMidiInputDeviceId(const MidiDeviceID& deviceId)
 {
-    settings()->setValue(MIDI_INPUT_DEVICE_ID, Val(deviceId));
+    settings()->setSharedValue(MIDI_INPUT_DEVICE_ID, Val(deviceId));
 }
 
 MidiDeviceID MidiConfiguration::midiOutputDeviceId() const
@@ -66,5 +66,5 @@ MidiDeviceID MidiConfiguration::midiOutputDeviceId() const
 
 void MidiConfiguration::setMidiOutputDeviceId(const MidiDeviceID& deviceId)
 {
-    settings()->setValue(MIDI_OUTPUT_DEVICE_ID, Val(deviceId));
+    settings()->setSharedValue(MIDI_OUTPUT_DEVICE_ID, Val(deviceId));
 }

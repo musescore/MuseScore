@@ -82,7 +82,12 @@ public:
     Val value(const Key& key) const;
     Val defaultValue(const Key& key) const;
 
-    void setValue(const Key& key, const Val& value, bool notifyToOtherInstances = true);
+    //! NOTE Will be write to global config and sync between all instances
+    void setSharedValue(const Key& key, const Val& value);
+
+    //! NOTE Will be write to global config and NOT sync between instances
+    void setLocalValue(const Key& key, const Val& value);
+
     void setDefaultValue(const Key& key, const Val& value);
     void setCanBeMannualyEdited(const Settings::Key& key, bool canBeMannualyEdited);
 

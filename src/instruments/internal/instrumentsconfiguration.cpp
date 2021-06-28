@@ -119,7 +119,7 @@ io::path InstrumentsConfiguration::firstInstrumentListPath() const
 
 void InstrumentsConfiguration::setFirstInstrumentListPath(const io::path& path)
 {
-    settings()->setValue(FIRST_INSTRUMENT_LIST_KEY, Val(path.toStdString()));
+    settings()->setSharedValue(FIRST_INSTRUMENT_LIST_KEY, Val(path.toStdString()));
 }
 
 io::path InstrumentsConfiguration::secondInstrumentListPath() const
@@ -129,7 +129,7 @@ io::path InstrumentsConfiguration::secondInstrumentListPath() const
 
 void InstrumentsConfiguration::setSecondInstrumentListPath(const io::path& path)
 {
-    settings()->setValue(SECOND_INSTRUMENT_LIST_KEY, Val(path.toStdString()));
+    settings()->setSharedValue(SECOND_INSTRUMENT_LIST_KEY, Val(path.toStdString()));
 }
 
 io::paths InstrumentsConfiguration::scoreOrderListPaths() const
@@ -181,7 +181,7 @@ io::path InstrumentsConfiguration::firstScoreOrderListPath() const
 
 void InstrumentsConfiguration::setFirstScoreOrderListPath(const io::path& path)
 {
-    settings()->setValue(FIRST_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
+    settings()->setSharedValue(FIRST_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
 }
 
 io::path InstrumentsConfiguration::secondScoreOrderListPath() const
@@ -191,7 +191,7 @@ io::path InstrumentsConfiguration::secondScoreOrderListPath() const
 
 void InstrumentsConfiguration::setSecondScoreOrderListPath(const io::path& path)
 {
-    settings()->setValue(SECOND_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
+    settings()->setSharedValue(SECOND_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
 }
 
 io::paths InstrumentsConfiguration::extensionsPaths() const

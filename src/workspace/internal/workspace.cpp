@@ -22,6 +22,7 @@
 #include "workspace.h"
 
 #include "global/version.h"
+#include "multiinstances/resourcelockguard.h"
 
 #include "workspacefile.h"
 #include "workspaceerrors.h"
@@ -94,11 +95,13 @@ io::path Workspace::filePath() const
 
 Ret Workspace::load()
 {
+    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "WORKSPACE_FILE");
     return m_file.load();
 }
 
 Ret Workspace::save()
 {
+    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "WORKSPACE_FILE");
     m_file.setMeta("app_version", Val(Version::version()));
     return m_file.save();
 }

@@ -76,7 +76,7 @@ mu::ValCh<mu::io::path> PluginsConfiguration::pluginsPath() const
 
 void PluginsConfiguration::setPluginsPath(const io::path& path)
 {
-    settings()->setValue(USER_PLUGINS_PATH, Val(path.toStdString()));
+    settings()->setSharedValue(USER_PLUGINS_PATH, Val(path.toStdString()));
 }
 
 mu::ValCh<CodeKeyList> PluginsConfiguration::installedPlugins() const
@@ -96,7 +96,7 @@ void PluginsConfiguration::setInstalledPlugins(const CodeKeyList& codeKeyList)
         plugins << codeKey;
     }
 
-    settings()->setValue(INSTALLED_PLUGINS, Val::fromQVariant(plugins));
+    settings()->setSharedValue(INSTALLED_PLUGINS, Val::fromQVariant(plugins));
 }
 
 CodeKeyList PluginsConfiguration::parseInstalledPlugins(const mu::Val& val) const

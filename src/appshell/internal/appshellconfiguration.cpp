@@ -65,7 +65,7 @@ StartupSessionType AppShellConfiguration::startupSessionType() const
 
 void AppShellConfiguration::setStartupSessionType(StartupSessionType type)
 {
-    settings()->setValue(STARTUP_SESSION_TYPE, Val(static_cast<int>(type)));
+    settings()->setSharedValue(STARTUP_SESSION_TYPE, Val(static_cast<int>(type)));
 }
 
 mu::io::path AppShellConfiguration::startupScorePath() const
@@ -75,7 +75,7 @@ mu::io::path AppShellConfiguration::startupScorePath() const
 
 void AppShellConfiguration::setStartupScorePath(const io::path& scorePath)
 {
-    settings()->setValue(STARTUP_SCORE_PATH, Val(scorePath.toStdString()));
+    settings()->setSharedValue(STARTUP_SCORE_PATH, Val(scorePath.toStdString()));
 }
 
 bool AppShellConfiguration::isAppUpdatable() const
@@ -94,7 +94,7 @@ bool AppShellConfiguration::needCheckForUpdate() const
 
 void AppShellConfiguration::setNeedCheckForUpdate(bool needCheck)
 {
-    settings()->setValue(CHECK_FOR_UPDATE_KEY, Val(needCheck));
+    settings()->setSharedValue(CHECK_FOR_UPDATE_KEY, Val(needCheck));
 }
 
 std::string AppShellConfiguration::handbookUrl() const
@@ -204,7 +204,7 @@ bool AppShellConfiguration::needShowSplashScreen() const
 
 void AppShellConfiguration::setNeedShowSplashScreen(bool show)
 {
-    settings()->setValue(SPLASH_SCREEN_VISIBLE_KEY, Val(show));
+    settings()->setSharedValue(SPLASH_SCREEN_VISIBLE_KEY, Val(show));
 }
 
 bool AppShellConfiguration::needShowTours() const
@@ -214,7 +214,7 @@ bool AppShellConfiguration::needShowTours() const
 
 void AppShellConfiguration::setNeedShowTours(bool show)
 {
-    settings()->setValue(TOURS_VISIBLE_KEY, Val(show));
+    settings()->setSharedValue(TOURS_VISIBLE_KEY, Val(show));
 }
 
 void AppShellConfiguration::startEditSettings()

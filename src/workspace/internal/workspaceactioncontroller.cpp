@@ -51,7 +51,7 @@ void WorkspaceActionController::openConfigureWorkspacesDialog()
 
 void WorkspaceActionController::setCurrentWorkspaceName(const std::string& workspaceName)
 {
-    if (configuration()->currentWorkspaceName().val == workspaceName || workspaceName.empty()) {
+    if (configuration()->currentWorkspaceName() == workspaceName || workspaceName.empty()) {
         return;
     }
 

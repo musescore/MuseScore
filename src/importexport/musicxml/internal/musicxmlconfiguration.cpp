@@ -52,7 +52,7 @@ bool MusicXmlConfiguration::musicxmlImportBreaks() const
 
 void MusicXmlConfiguration::setMusicxmlImportBreaks(bool value)
 {
-    settings()->setValue(MUSICXML_IMPORT_BREAKS_KEY, Val(value));
+    settings()->setSharedValue(MUSICXML_IMPORT_BREAKS_KEY, Val(value));
 }
 
 bool MusicXmlConfiguration::musicxmlImportLayout() const
@@ -62,7 +62,7 @@ bool MusicXmlConfiguration::musicxmlImportLayout() const
 
 void MusicXmlConfiguration::setMusicxmlImportLayout(bool value)
 {
-    settings()->setValue(MUSICXML_IMPORT_LAYOUT_KEY, Val(value));
+    settings()->setSharedValue(MUSICXML_IMPORT_LAYOUT_KEY, Val(value));
 }
 
 bool MusicXmlConfiguration::musicxmlExportLayout() const
@@ -72,7 +72,7 @@ bool MusicXmlConfiguration::musicxmlExportLayout() const
 
 void MusicXmlConfiguration::setMusicxmlExportLayout(bool value)
 {
-    settings()->setValue(MUSICXML_EXPORT_LAYOUT_KEY, Val(value));
+    settings()->setSharedValue(MUSICXML_EXPORT_LAYOUT_KEY, Val(value));
 }
 
 MusicXmlConfiguration::MusicxmlExportBreaksType MusicXmlConfiguration::musicxmlExportBreaksType() const
@@ -82,7 +82,7 @@ MusicXmlConfiguration::MusicxmlExportBreaksType MusicXmlConfiguration::musicxmlE
 
 void MusicXmlConfiguration::setMusicxmlExportBreaksType(MusicxmlExportBreaksType breaksType)
 {
-    settings()->setValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(static_cast<int>(breaksType)));
+    settings()->setSharedValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(static_cast<int>(breaksType)));
 }
 
 bool MusicXmlConfiguration::needUseDefaultFont() const
@@ -92,7 +92,7 @@ bool MusicXmlConfiguration::needUseDefaultFont() const
 
 void MusicXmlConfiguration::setNeedUseDefaultFont(bool value)
 {
-    settings()->setValue(MIGRATION_APPLY_EDWIN_FOR_XML, Val(value));
+    settings()->setSharedValue(MIGRATION_APPLY_EDWIN_FOR_XML, Val(value));
 }
 
 bool MusicXmlConfiguration::needAskAboutApplyingNewStyle() const
@@ -102,7 +102,7 @@ bool MusicXmlConfiguration::needAskAboutApplyingNewStyle() const
 
 void MusicXmlConfiguration::setNeedAskAboutApplyingNewStyle(bool value)
 {
-    settings()->setValue(MIGRATION_NOT_ASK_AGAING_KEY, Val(!value));
+    settings()->setSharedValue(MIGRATION_NOT_ASK_AGAING_KEY, Val(!value));
 }
 
 mu::io::path MusicXmlConfiguration::styleFileImportPath() const
@@ -112,5 +112,5 @@ mu::io::path MusicXmlConfiguration::styleFileImportPath() const
 
 void MusicXmlConfiguration::setStyleFileImportPath(const io::path& path)
 {
-    settings()->setValue(STYLE_FILE_IMPORT_PATH_KEY, Val(path.toStdString()));
+    settings()->setSharedValue(STYLE_FILE_IMPORT_PATH_KEY, Val(path.toStdString()));
 }
