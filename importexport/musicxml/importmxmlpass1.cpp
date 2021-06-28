@@ -725,7 +725,7 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
       }
 
 //---------------------------------------------------------
-//   createMeasuresAndVboxes
+//   createDefaultHeader
 //---------------------------------------------------------
 
 static void createDefaultHeader(Score* const score)
@@ -1096,8 +1096,13 @@ void MusicXMLParserPass1::identification()
                   QString strType = _e.attributes().value("type").toString();
                   _score->setMetaTag(strType, _e.readElementText());
                   }
-            else if (_e.name() == "rights")
-                  _score->setMetaTag("copyright", _e.readElementText());
+            else if (_e.name() == "rights") {
+                  _score->setMetaTag("copyright", _e.readElementText().trimmed());
+                  bool copyrightFirstPageOnly = true; // TODO: expose as import setting 
+                  if (copyrightFirstPageOnly)
+                        // Somewhat temporary fix: hide footer and make copyright a text box
+                        _score->setStyleValue(Sid::showFooter, false);
+                  }
             else if (_e.name() == "encoding") {
                   // TODO
                   while (_e.readNextStartElement()) {
