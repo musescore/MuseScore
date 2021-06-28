@@ -1433,6 +1433,169 @@ qreal ChordList::position(const QStringList& names, ChordTokenClass ctc) const
 }
 
 //---------------------------------------------------------
+//   stripParenthesis
+//---------------------------------------------------------
+void ParsedChord::stripParenthesis()
+{
+    QString special = "()[],";
+    for (int index = 0; index < _tokenList.size(); index++) {
+        const ChordToken& tok = _tokenList.at(index);
+        for (QString s: tok.names) {
+            if (special.contains(s)) {
+                _tokenList.removeAt(index);
+                index--;
+                break;
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   respellQualitySymbols
+//---------------------------------------------------------
+
+void ParsedChord::respellQualitySymbols(const ChordList* cl)
+{
+    if (!skipList.empty()) {
+        skipList.clear();
+    }
+    if (!removeAfterRenderList.empty()) {
+        removeAfterRenderList.clear();
+    }
+
+    // Major seventh chords
+    bool isMajorSeventh = false;
+    bool hasSeven = true;
+    if ((_quality == "major" || _quality == "dominant") && _extension == "7") {
+        isMajorSeventh = true;
+    }
+
+    if (_quality == "dominant") {
+        // Case of implicit major
+        // a symbol added just for respelling purpose
+        // to be removed after
+        ChordToken majTok;
+        majTok.names += "Ma";
+        majTok.tokenClass = ChordTokenClass::QUALITY;
+        _tokenList.insert(0, majTok);
+        removeAfterRenderList.push_back(0);
+    }
+
+    // Half-diminished chords with input: <minor>7b5
+    bool isHalfDiminished = false;
+    bool hasSevenFlatFive = false;
+    if (_quality == "minor" && _extension.contains("7") && _modifierList.contains("b5")) {
+        isHalfDiminished = true;
+    }
+
+    for (int index = 0; index < _tokenList.size(); index++) {
+        const ChordToken& tok = _tokenList.at(index);
+
+        // Skip the extension 7 of Major 7th chords if needed
+        if (isMajorSeventh && !hasSeven) {
+            // Skip extension 7
+            if ((tok.tokenClass == ChordTokenClass::EXTENSION) && tok.names.contains("7")) {
+                skipList.push_back(index);
+                continue;
+            }
+        }
+
+        // Skip the extension 7 and modifier b5 of Half-diminished chords if needed
+        if (isHalfDiminished && !hasSevenFlatFive) {
+            // Skip extension 7
+            if ((tok.tokenClass == ChordTokenClass::EXTENSION) && tok.names.contains("7")) {
+                skipList.push_back(index);
+                continue;
+            }
+
+            // Skip flat
+            if ((tok.tokenClass == ChordTokenClass::MODIFIER) && tok.names.contains("b")) {
+                // To ensure other modifiers like b9 are safe
+                if (_tokenList.at(index + 1).names.contains("5")) {
+                    skipList.push_back(index);
+                    continue;
+                }
+            }
+
+            // Skip 5
+            if ((tok.tokenClass == ChordTokenClass::MODIFIER) && tok.names.contains("5")) {
+                // To ensure other modifiers like b9 are safe
+                if (_tokenList.at(index - 1).names.contains("b")) {
+                    skipList.push_back(index);
+                    continue;
+                }
+            }
+        }
+
+        if (tok.tokenClass == ChordTokenClass::QUALITY && cl) {
+            if (isMajorSeventh) {
+                QStringList majorSeventhTokens = cl->qualitySymbols.value("major7th").split(" ");
+                ChordToken majTok;
+                majTok.names += majorSeventhTokens.at(0);
+                majTok.tokenClass = ChordTokenClass::QUALITY;
+                _tokenList.removeAt(index);
+                _tokenList.insert(index, majTok);
+
+                // Whether to allow or prevent the rendering of 7 extension
+                hasSeven = majorSeventhTokens.contains("7");
+            } else if (isHalfDiminished) {
+                // This part of code is encountered when the input is <minor>7b5.
+                QStringList halfDiminishedTokens = cl->qualitySymbols.value("half-diminished").split(" ");
+                ChordToken hdTok;
+                hdTok.names += halfDiminishedTokens.at(0);
+                hdTok.tokenClass = ChordTokenClass::QUALITY;
+                _tokenList.removeAt(index);
+                _tokenList.insert(index, hdTok);
+
+                // Here depending on the quality symbols set, the program will
+                // decide whether or not to skip the 7 and b5.
+                hasSevenFlatFive = halfDiminishedTokens.size() > 1;
+            } else if (_quality == "half-diminished") {
+                // This part of code is encountered when the input is 0.
+                QStringList halfDiminishedTokens = cl->qualitySymbols.value("half-diminished").split(" ");
+
+                ChordToken hdTok;
+                hdTok.names += halfDiminishedTokens.at(0);
+                hdTok.tokenClass = ChordTokenClass::QUALITY;
+                _tokenList.removeAt(index);
+                _tokenList.insert(index, hdTok);
+
+                if (halfDiminishedTokens.size() > 1) {
+                    // insert extension 7
+                    ChordToken sevenToken;
+                    sevenToken.names += "7";
+                    sevenToken.tokenClass = ChordTokenClass::EXTENSION;
+                    _tokenList.insert(index + 1, sevenToken);
+                    removeAfterRenderList.push_back(index + 1);
+
+                    // insert modifier flat
+                    ChordToken flatToken;
+                    flatToken.names += "b";
+                    flatToken.tokenClass = ChordTokenClass::MODIFIER;
+                    _tokenList.insert(index + 2, flatToken);
+                    removeAfterRenderList.push_back(index + 2);
+
+                    // insert modifier 5
+                    ChordToken fiveToken;
+                    fiveToken.names += "5";
+                    fiveToken.tokenClass = ChordTokenClass::MODIFIER;
+                    _tokenList.insert(index + 3, fiveToken);
+                    removeAfterRenderList.push_back(index + 3);
+                }
+            } else {
+                // Works for minor, augmented and diminished chords.
+                QString sym = cl->qualitySymbols.value(_quality);
+                ChordToken qualTok;
+                qualTok.names += sym;
+                qualTok.tokenClass = ChordTokenClass::QUALITY;
+                _tokenList.removeAt(index);
+                _tokenList.insert(index, qualTok);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   renderList
 //---------------------------------------------------------
 
@@ -1445,51 +1608,13 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
     }
     bool adjust = cl ? cl->autoAdjust() : false;
 
-    // For Quality Respelling
+    stripParenthesis();
+    respellQualitySymbols(cl);
 
-    // Major seventh chords
-    bool isMajorSeventh = false;
-    bool hasSeven = true;
-    if ((_quality == "major" || _quality == "") && _extension == "7") {
-        isMajorSeventh = true;
-    }
-
-    // half-diminished chords
-    bool isHalfDiminished = false;
-    bool hasSevenFlatFive = false;
-    bool flatStopped = false;
-    if (_quality == "minor" && _extension == "7" && _modifiers.contains("<b5>")) {
-        isHalfDiminished = true;
-    }
-
+    int index = 0;
     for (const ChordToken& tok : qAsConst(_tokenList)) {
-        // Skip the extension 7 of Major 7th chords if needed
-        if (isMajorSeventh
-            && !hasSeven
-            && (tok.tokenClass == ChordTokenClass::EXTENSION)
-            && tok.names.contains("7")) {
-            continue;
-        }
-
-        // Skip the extension 7 and modifier b5 of Half-diminished chords if needed
-        if (isHalfDiminished
-            && !hasSevenFlatFive
-            && (tok.tokenClass == ChordTokenClass::EXTENSION)
-            && tok.names.contains("7")) {
-            continue;
-        }
-        if (isHalfDiminished
-            && !hasSevenFlatFive
-            && (tok.tokenClass == ChordTokenClass::MODIFIER)
-            && tok.names.contains("5")) {
-            continue;
-        }
-        if (isHalfDiminished
-            && !hasSevenFlatFive
-            && !flatStopped
-            && (tok.tokenClass == ChordTokenClass::MODIFIER)
-            && tok.names.contains("b")) {
-            flatStopped = true;
+        if (skipList.contains(index)) {
+            index++;
             continue;
         }
 
@@ -1533,88 +1658,31 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             m1.movey = p;
             _renderList.append(m1);
         }
-
-        if (tok.tokenClass == ChordTokenClass::QUALITY) {
-            if (isMajorSeventh) {
-                // This part renders only the quality of the major seventh
-                QStringList majorSeventhTokens = cl->qualitySymbols.value("major7th").split(" ");
-                RenderAction a(RenderAction::RenderActionType::SET);
-                a.text = majorSeventhTokens[0];
-                _renderList.append(a);
-                // Whether to allow or prevent rendering the following 7 extension
-                hasSeven = majorSeventhTokens.contains("7");
-            } else if (isHalfDiminished) {
-                QStringList halfDiminishedTokens = cl->qualitySymbols.value("half-diminished").split(" ");
-                RenderAction a(RenderAction::RenderActionType::SET);
-                a.text = halfDiminishedTokens[0];
-                _renderList.append(a);
-                hasSevenFlatFive = halfDiminishedTokens.size() > 1;
-            } else if (_quality == "half-diminished") {
-                QStringList halfDiminishedTokens = cl->qualitySymbols.value("half-diminished").split(" ");
-
-                for (QString& s: halfDiminishedTokens) {
-                    RenderAction a(RenderAction::RenderActionType::SET);
-                    a.text = s;
-                    _renderList.append(a);
-                }
-
-                if (halfDiminishedTokens.size() > 1) {
-                    //Insert in reverse order (i.e. 5 b 7)
-                    // insert five
-                    ChordToken fiveToken;
-                    for (ChordToken tok: cl->chordTokenList) {
-                        if (tok.names.contains("5") && tok.tokenClass == ChordTokenClass::MODIFIER) {
-                            fiveToken = tok;
-                            break;
-                        }
-                    }
-                    _tokenList.insert(0, fiveToken);
-
-                    // insert flat
-                    ChordToken flatToken;
-                    for (ChordToken tok: cl->chordTokenList) {
-                        if (tok.names.contains("b") && tok.tokenClass == ChordTokenClass::MODIFIER) {
-                            flatToken = tok;
-                            break;
-                        }
-                    }
-                    _tokenList.insert(0, flatToken);
-
-                    // insert seven
-                    ChordToken sevenToken;
-                    for (ChordToken tok: cl->chordTokenList) {
-                        if (tok.names.contains("7") && tok.tokenClass == ChordTokenClass::EXTENSION) {
-                            sevenToken = tok;
-                            break;
-                        }
-                    }
-                    _tokenList.insert(0, sevenToken);
-                }
-            } else {
-                // Works for minor, augmented and diminished chords.
-                RenderAction a(RenderAction::RenderActionType::SET);
-                QString sym = cl->qualitySymbols.value(_quality);
-                a.text = sym;
-                _renderList.append(a);
-            }
+        if (found) {
+            _renderList.append(rl);
         } else {
-            if (found) {
-                _renderList.append(rl);
-            } else {
-                // no definition for token, so render as literal
-                RenderAction a(RenderAction::RenderActionType::SET);
-                a.text = tok.names.first();
-                _renderList.append(a);
-            }
+            // no definition for token, so render as literal
+            RenderAction a(RenderAction::RenderActionType::SET);
+            a.text = tok.names.first();
+            _renderList.append(a);
         }
-
         if (p != 0.0) {
             RenderAction m2 = RenderAction(RenderAction::RenderActionType::MOVE);
             m2.movex = 0.0;
             m2.movey = -p;
             _renderList.append(m2);
         }
+        index++;
     }
+
+    // The items added in the respelling function are removed here
+    // to prevent multiple occurrences
+    for (int index = _tokenList.size(); index >= 0; index--) {
+        if (removeAfterRenderList.contains(index)) {
+            _tokenList.removeAt(index);
+        }
+    }
+
     return _renderList;
 }
 

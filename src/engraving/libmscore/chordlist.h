@@ -153,6 +153,8 @@ public:
     bool parse(const QString&, const ChordList*, bool syntaxOnly = false, bool preferMinor = false);
     QString fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&, const ChordList*);
     const QList<RenderAction>& renderList(const ChordList*);
+    void respellQualitySymbols(const ChordList* cl);
+    void stripParenthesis();
     bool parseable() const { return _parseable; }
     bool understandable() const { return _understandable; }
     const QString& name() const { return _name; }
@@ -188,6 +190,8 @@ private:
     QString _xmlParens;
     QStringList _xmlDegrees;
     QStringList major, minor, diminished, augmented, lower, raise, mod1, mod2, symbols;
+    QList<int> skipList; // Indices to be skipped while rendering. (useful in cases like <minor>7b5 --> oslash)
+    QList<int> removeAfterRenderList; // Indices of items that were added by respelling function. To be removed after rendering.
     HChord chord;
     bool _parseable;
     bool _understandable;
