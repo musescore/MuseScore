@@ -374,5 +374,16 @@ void PluginAPI::registerQmlTypes()
 
     qmlTypesRegistered = true;
 }
+
+MuseScoreCore* PluginAPI::msc() const
+{
+    static MuseScoreCore mscStatic;
+    if (this->context() && this->context()->currentNotation()) {
+        mscStatic.setCurrentScore(this->context()->currentNotation()->elements()->msScore());
+    } else {
+        mscStatic.setCurrentScore(0);
+    }
+    return &mscStatic;
+}
 }
 }

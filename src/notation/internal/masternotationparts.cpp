@@ -52,6 +52,13 @@ void MasterNotationParts::setParts(const instruments::PartInstrumentList& instru
     apply();
 }
 
+void MasterNotationParts::setScoreOrder(const instruments::ScoreOrder& order)
+{
+    startEdit();
+    NotationParts::setScoreOrder(order);
+    apply();
+}
+
 void MasterNotationParts::setInstrumentName(const ID& instrumentId, const ID& fromPartId, const QString& name)
 {
     startEdit();
@@ -175,10 +182,6 @@ void MasterNotationParts::removeParts(const IDList& partsIds)
 
     NotationParts::removeParts(partsIds);
 
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->removeParts(partsIds);
-    }
-
     apply();
 }
 
@@ -213,10 +216,6 @@ void MasterNotationParts::moveParts(const IDList& sourcePartsIds, const ID& dest
     startEdit();
 
     NotationParts::moveParts(sourcePartsIds, destinationPartId, mode);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->moveParts(sourcePartsIds, destinationPartId, mode);
-    }
 
     apply();
 }

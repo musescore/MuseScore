@@ -50,7 +50,7 @@ AppWindow {
 
         cursorShape: {
             const mouse = Qt.point(mouseX, mouseY)
-            const borderOffset = sideMargin + 10
+            const borderOffset = root.sideMargin + 10
             if (mouse.x < borderOffset && mouse.y < borderOffset) return Qt.SizeFDiagCursor
             if (mouse.x >= width - borderOffset && mouse.y >= height - borderOffset) return Qt.SizeFDiagCursor
             if (mouse.x >= width - borderOffset && mouse.y < borderOffset) return Qt.SizeBDiagCursor
@@ -81,10 +81,10 @@ AppWindow {
 
             const p = resizeHandler.centroid.position
             var e = 0
-            if (p.x / width < 0.10) { e |= Qt.LeftEdge }
-            if (p.x / width > 0.90) { e |= Qt.RightEdge }
-            if (p.y / height < 0.10) { e |= Qt.TopEdge }
-            if (p.y / height > 0.90) { e |= Qt.BottomEdge }
+            if (p.x / root.width < 0.10) { e |= Qt.LeftEdge }
+            if (p.x / root.width > 0.90) { e |= Qt.RightEdge }
+            if (p.y / root.height < 0.10) { e |= Qt.TopEdge }
+            if (p.y / root.height > 0.90) { e |= Qt.BottomEdge }
             root.startSystemResize(e)
         }
     }
@@ -104,6 +104,7 @@ AppWindow {
             anchors.right: parent.right
 
             height: 48
+            title: root.title
 
             onShowWindowMinimizedRequested: {
                 root.showMinimized()

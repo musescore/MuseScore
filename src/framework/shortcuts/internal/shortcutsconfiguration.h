@@ -35,18 +35,13 @@ class ShortcutsConfiguration : public IShortcutsConfiguration, public async::Asy
 public:
     void init();
 
-    ValCh<io::path> shortcutsUserPath() const override;
-    void setShortcutsUserPath(const io::path& path) override;
+    io::path shortcutsUserAppDataPath() const override;
+    io::path shortcutsAppDataPath() const override;
 
-    io::path shortcutsDefaultPath() const override;
-
-    io::path midiMappingsPath() const override;
+    io::path midiMappingUserAppDataPath() const override;
 
     bool advanceToNextNoteOnKeyRelease() const override;
     void setAdvanceToNextNoteOnKeyRelease(bool value) override;
-
-private:
-    async::Channel<io::path> m_userPathChanged;
 };
 }
 

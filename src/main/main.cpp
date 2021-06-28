@@ -74,7 +74,7 @@
 #include "importexport/bww/bwwmodule.h"
 #include "importexport/capella/capellamodule.h"
 #include "importexport/guitarpro/guitarpromodule.h"
-#include "importexport/midiimport/midiimportmodule.h"
+#include "importexport/midi/midimodule.h"
 #include "importexport/ove/ovemodule.h"
 #include "importexport/audioexport/audioexportmodule.h"
 #include "importexport/imagesexport/imagesexportmodule.h"
@@ -134,6 +134,14 @@
 #else
 #include "stubs/languages/languagesstubmodule.h"
 #endif
+
+#ifdef BUILD_MULTIINSTANCES_MODULE
+#include "multiinstances/multiinstancesmodule.h"
+#else
+#include "stubs/multiinstances/multiinstancesstubmodule.h"
+#endif
+
+#include "diagnostics/diagnosticsmodule.h"
 
 #ifdef BUILD_AUTOBOT_MODULE
 #include "autobot/autobotmodule.h"
@@ -237,7 +245,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::iex::musicxml::MusicXmlModule());
     app.addModule(new mu::iex::capella::CapellaModule());
     app.addModule(new mu::iex::guitarpro::GuitarProModule());
-    app.addModule(new mu::iex::midiimport::MidiImportModule());
+    app.addModule(new mu::iex::midi::MidiModule());
     app.addModule(new mu::iex::ove::OveModule());
     app.addModule(new mu::iex::audioexport::AudioExportModule());
     app.addModule(new mu::iex::imagesexport::ImagesExportModule());
@@ -267,6 +275,9 @@ int main(int argc, char** argv)
 #else
     app.addModule(new mu::languages::LanguagesStubModule());
 #endif
+
+    app.addModule(new mu::mi::MultiInstancesModule());
+    app.addModule(new mu::diagnostics::DiagnosticsModule());
 
 #ifdef BUILD_AUTOBOT_MODULE
     app.addModule(new mu::autobot::AutobotModule());

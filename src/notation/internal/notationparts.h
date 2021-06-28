@@ -43,6 +43,7 @@ public:
     bool voiceVisible(int voiceIndex) const override;
 
     void setParts(const instruments::PartInstrumentList& parts) override;
+    void setScoreOrder(const instruments::ScoreOrder& order) override;
     void setPartVisible(const ID& partId, bool visible) override;
     void setInstrumentVisible(const ID& instrumentId, const ID& fromPartId, bool visible) override;
     void setStaffVisible(const ID& staffId, bool visible) override;
@@ -152,13 +153,14 @@ private:
     void removeMissingParts(const instruments::PartInstrumentList& parts);
     void appendNewParts(const instruments::PartInstrumentList& parts);
     void updateSoloist(const instruments::PartInstrumentList& parts);
-    void sortParts(const instruments::PartInstrumentList& parts);
+    void sortParts(const instruments::PartInstrumentList& parts, const Ms::Score* score, const QList<Ms::Staff*>& originalStaves);
 
     IDList allInstrumentsIds() const;
     int lastStaffIndex() const;
 
     void initStaff(Staff* staff, const instruments::Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex);
 
+    void notifyAboutPartChanged(const ID& partId) const;
     void notifyAboutStaffChanged(const ID& staffId) const;
     void notifyAboutInstrumentsChanged(const ID& partId) const;
 

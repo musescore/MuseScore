@@ -69,7 +69,7 @@ public:
 
     // drawing functions
     virtual void drawPath(const QPainterPath& path) = 0;
-    virtual void drawPolygon(const PointF* points, int pointCount, PolygonMode mode) = 0;
+    virtual void drawPolygon(const PointF* points, size_t pointCount, PolygonMode mode) = 0;
 
     virtual void drawText(const PointF& point, const QString& text) = 0;
     virtual void drawText(const RectF& rect, int flags, const QString& text) = 0;

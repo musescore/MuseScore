@@ -22,6 +22,7 @@
 #include "applicationactioncontroller.h"
 
 #include <QCoreApplication>
+#include <QCloseEvent>
 
 #include "translation.h"
 
@@ -45,6 +46,20 @@ void ApplicationActionController::init()
     dispatcher()->reg(this, "preference-dialog", this, &ApplicationActionController::openPreferencesDialog);
 
     dispatcher()->reg(this, "revert-factory", this, &ApplicationActionController::revertToFactorySettings);
+
+    qApp->installEventFilter(this);
+}
+
+bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
+{
+    QCloseEvent* closeEvent = dynamic_cast<QCloseEvent*>(event);
+    if (closeEvent && watched == mainWindow()->qWindow()) {
+        quit();
+        closeEvent->ignore();
+        return true;
+    }
+
+    return QObject::eventFilter(watched, event);
 }
 
 mu::ValCh<bool> ApplicationActionController::isFullScreen() const
@@ -58,7 +73,9 @@ mu::ValCh<bool> ApplicationActionController::isFullScreen() const
 
 void ApplicationActionController::quit()
 {
-    QCoreApplication::quit();
+    if (fileScoreController()->closeOpenedScore()) {
+        QCoreApplication::quit();
+    }
 }
 
 void ApplicationActionController::toggleFullScreen()
@@ -109,6 +126,11 @@ void ApplicationActionController::openLeaveFeedbackPage()
 
 void ApplicationActionController::openPreferencesDialog()
 {
+    if (multiInstancesProvider()->isPreferencesAlreadyOpened()) {
+        multiInstancesProvider()->activateWindowWithOpenedPreferences();
+        return;
+    }
+
     interactive()->open("musescore://preferences");
 }
 

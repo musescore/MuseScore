@@ -26,7 +26,7 @@
 #include <QFile>
 
 using namespace mu::framework;
-using namespace mu::system;
+using namespace mu::io;
 
 static XmlReader::TokenType convertTokenType(QXmlStreamReader::TokenType type)
 {
@@ -57,12 +57,12 @@ static XmlReader::TokenType convertTokenType(QXmlStreamReader::TokenType type)
 XmlReader::XmlReader(const io::path& path)
 {
     m_device = std::make_unique<QFile>(path.toQString());
-    m_device->open(IODevice::ReadOnly);
+    m_device->open(Device::ReadOnly);
 
     m_reader = std::make_unique<QXmlStreamReader>(m_device.get());
 }
 
-XmlReader::XmlReader(IODevice* device)
+XmlReader::XmlReader(Device* device)
 {
     m_reader = std::make_unique<QXmlStreamReader>(device);
 }

@@ -25,6 +25,7 @@
 #include <QStack>
 #include <QTextFragment>
 #include <QTextDocument>
+#include <QRegularExpression>
 
 #include "text.h"
 #include "textedit.h"
@@ -659,14 +660,14 @@ bool TextCursor::set(const PointF& p, QTextCursor::MoveMode mode)
 //    return current selection
 //---------------------------------------------------------
 
-QString TextCursor::selectedText() const
+QString TextCursor::selectedText(bool withFormat) const
 {
     int r1 = selectLine();
     int r2 = _row;
     int c1 = selectColumn();
     int c2 = column();
     sort(r1, c1, r2, c2);
-    return extractText(r1, c1, r2, c2);
+    return extractText(r1, c1, r2, c2, withFormat);
 }
 
 //---------------------------------------------------------
@@ -674,22 +675,22 @@ QString TextCursor::selectedText() const
 //    return text between (r1,c1) and (r2,c2).
 //---------------------------------------------------------
 
-QString TextCursor::extractText(int r1, int c1, int r2, int c2) const
+QString TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat) const
 {
     Q_ASSERT(isSorted(r1, c1, r2, c2));
     const QList<TextBlock>& tb = _text->_layout;
 
     if (r1 == r2) {
-        return tb.at(r1).text(c1, c2 - c1);
+        return tb.at(r1).text(c1, c2 - c1, withFormat);
     }
 
-    QString str = tb.at(r1).text(c1, -1) + "\n";
+    QString str = tb.at(r1).text(c1, -1, withFormat) + "\n";
 
     for (int r = r1 + 1; r < r2; ++r) {
-        str += tb.at(r).text(0, -1) + "\n";
+        str += tb.at(r).text(0, -1, withFormat) + "\n";
     }
 
-    str += tb.at(r2).text(0, c2);
+    str += tb.at(r2).text(0, c2, withFormat);
     return str;
 }
 
@@ -1605,13 +1606,19 @@ TextBlock TextBlock::split(int column, Ms::TextCursor* cursor)
 //    extract text, symbols are marked with <sym>xxx</sym>
 //---------------------------------------------------------
 
-QString TextBlock::text(int col1, int len) const
+QString TextBlock::text(int col1, int len, bool withFormat) const
 {
     QString s;
     int col = 0;
+    qreal size;
+    QString family;
     for (const auto& f : _fragments) {
         if (f.text.isEmpty()) {
             continue;
+        }
+        if (withFormat) {
+            s += TextBase::getHtmlStartTag(f.format.fontSize(), size, f.format.fontFamily(), family, f.format.bold(),
+                                           f.format.italic(), f.format.underline());
         }
         for (const QChar& c : qAsConst(f.text)) {
             if (col >= col1 && (len < 0 || ((col - col1) < len))) {
@@ -1620,6 +1627,9 @@ QString TextBlock::text(int col1, int len) const
             if (!c.isHighSurrogate()) {
                 ++col;
             }
+        }
+        if (withFormat) {
+            s += TextBase::getHtmlEndTag(f.format.bold(), f.format.italic(), f.format.underline());
         }
     }
     return s;
@@ -1825,66 +1835,26 @@ void TextBase::createLayout()
             }
         } else if (state == 1) {
             if (c == '>') {
-                bool unstyleFontStyle = false;
                 state = 0;
-                if (token == "b") {
-                    cursor.format()->setBold(true);
-                    unstyleFontStyle = true;
-                } else if (token == "/b") {
-                    cursor.format()->setBold(false);
-                } else if (token == "i") {
-                    cursor.format()->setItalic(true);
-                    unstyleFontStyle = true;
-                } else if (token == "/i") {
-                    cursor.format()->setItalic(false);
-                } else if (token == "u") {
-                    cursor.format()->setUnderline(true);
-                    unstyleFontStyle = true;
-                } else if (token == "/u") {
-                    cursor.format()->setUnderline(false);
-                } else if (token == "sub") {
-                    cursor.format()->setValign(VerticalAlignment::AlignSubScript);
-                } else if (token == "/sub") {
-                    cursor.format()->setValign(VerticalAlignment::AlignNormal);
-                } else if (token == "sup") {
-                    cursor.format()->setValign(VerticalAlignment::AlignSuperScript);
-                } else if (token == "/sup") {
-                    cursor.format()->setValign(VerticalAlignment::AlignNormal);
-                } else if (token == "sym") {
+                prepareFormat(token, cursor);
+                if (token == "sym") {
                     symState = true;
                     sym.clear();
                 } else if (token == "/sym") {
                     symState = false;
                     SymId id = Sym::name2id(sym);
                     if (id != SymId::noSym) {
-                        CharFormat fmt = *cursor.format();              // save format
-                        // uint code = score()->scoreFont()->sym(id).code();
+                        CharFormat fmt = *cursor.format();  // save format
+                                                            // uint code = score()->scoreFont()->sym(id).code();
                         uint code = ScoreFont::fallbackFont()->sym(id).code();
                         cursor.format()->setFontFamily("ScoreText");
                         cursor.format()->setBold(false);
                         cursor.format()->setItalic(false);
                         insert(&cursor, code);
-                        cursor.setFormat(fmt);              // restore format
+                        cursor.setFormat(fmt);  // restore format
                     } else {
                         qDebug("unknown symbol <%s>", qPrintable(sym));
                     }
-                } else if (token.startsWith("font ")) {
-                    token = token.mid(5);
-                    if (token.startsWith("size=\"")) {
-                        cursor.format()->setFontSize(parseNumProperty(token.mid(6)));
-                        setPropertyFlags(Pid::FONT_SIZE, PropertyFlags::UNSTYLED);
-                    } else if (token.startsWith("face=\"")) {
-                        QString face = parseStringProperty(token.mid(6));
-                        face = unEscape(face);
-                        cursor.format()->setFontFamily(face);
-                        setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
-                    } else {
-                        qDebug("cannot parse html property <%s> in text <%s>",
-                               qPrintable(token), qPrintable(_text));
-                    }
-                }
-                if (unstyleFontStyle) {
-                    setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
                 }
             } else {
                 token += c;
@@ -1912,6 +1882,66 @@ void TextBase::createLayout()
         _layout.append(TextBlock());
     }
     layoutInvalid = false;
+}
+
+//---------------------------------------------------------
+//   prepareFormat - used when reading from XML and when pasting from clipboard
+//---------------------------------------------------------
+bool TextBase::prepareFormat(const QString& token, Ms::CharFormat& format)
+{
+    if (token == "b") {
+        format.setBold(true);
+        return true;
+    } else if (token == "/b") {
+        format.setBold(false);
+    } else if (token == "i") {
+        format.setItalic(true);
+        return true;
+    } else if (token == "/i") {
+        format.setItalic(false);
+    } else if (token == "u") {
+        format.setUnderline(true);
+        return true;
+    } else if (token == "/u") {
+        format.setUnderline(false);
+    } else if (token == "sub") {
+        format.setValign(VerticalAlignment::AlignSubScript);
+    } else if (token == "/sub") {
+        format.setValign(VerticalAlignment::AlignNormal);
+    } else if (token == "sup") {
+        format.setValign(VerticalAlignment::AlignSuperScript);
+    } else if (token == "/sup") {
+        format.setValign(VerticalAlignment::AlignNormal);
+    } else if (token.startsWith("font ")) {
+        QString remainder = token.mid(5);
+        if (remainder.startsWith("size=\"")) {
+            format.setFontSize(parseNumProperty(remainder.mid(6)));
+            return true;
+        } else if (remainder.startsWith("face=\"")) {
+            QString face = parseStringProperty(remainder.mid(6));
+            face = unEscape(face);
+            format.setFontFamily(face);
+            if (face == "ScoreText") {
+                format.setBold(false);
+                format.setItalic(false);
+            }
+            return true;
+        } else {
+            qDebug("cannot parse html property <%s> in text <%s>",
+                   qPrintable(token), qPrintable(_text));
+        }
+    }
+    return false;
+}
+
+//---------------------------------------------------------
+//   prepareFormat - used when reading from XML
+//---------------------------------------------------------
+void TextBase::prepareFormat(const QString& token, Ms::TextCursor& cursor)
+{
+    if (prepareFormat(token, *cursor.format())) {
+        setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
+    }
 }
 
 //---------------------------------------------------------
@@ -2288,10 +2318,8 @@ void TextBase::selectAll(TextCursor* cursor)
         return;
     }
 
-    cursor->setSelectLine(0);
-    cursor->setSelectColumn(0);
-    cursor->setRow(rows() - 1);
-    cursor->setColumn(cursor->curLine().columns());
+    cursor->movePosition(QTextCursor::Start, QTextCursor::MoveMode::MoveAnchor);
+    cursor->movePosition(QTextCursor::End, QTextCursor::MoveMode::KeepAnchor);
 }
 
 //---------------------------------------------------------
@@ -2785,7 +2813,7 @@ bool TextBase::validateText(QString& s)
                 d.append("&amp;");
             }
         } else if (c == '<') {
-            const char* ok[] { "b>", "/b>", "i>", "/i>", "u>", "/u", "font ", "/font>", "sym>", "/sym>" };
+            const char* ok[] { "b>", "/b>", "i>", "/i>", "u>", "/u", "font ", "/font>", "sym>", "/sym>", "sub>", "/sub>", "sup>", "/sup>" };
             QString t = s.mid(i + 1);
             bool found = false;
             for (auto k : ok) {
@@ -3056,6 +3084,50 @@ Sid TextBase::offsetSid() const
 }
 
 //---------------------------------------------------------
+//   getHtmlStartTag - helper function for extractText with withFormat = true
+//---------------------------------------------------------
+QString TextBase::getHtmlStartTag(qreal newSize, qreal& curSize, const QString& newFamily, QString& curFamily, bool bold, bool italic,
+                                  bool underline)
+{
+    QString s;
+    if (fabs(newSize - curSize) > 0.1) {
+        curSize = newSize;
+        s += QString("<font size=\"%1\"/>").arg(newSize);
+    }
+    if (newFamily != curFamily) {
+        curFamily = newFamily;
+        s += QString("<font face=\"%1\"/>").arg(newFamily);
+    }
+    if (bold) {
+        s += "<b>";
+    }
+    if (italic) {
+        s += "<i>";
+    }
+    if (underline) {
+        s += "<u>";
+    }
+    return s;
+}
+
+//---------------------------------------------------------
+//   getHtmlEndTag - helper function for extractText with withFormat = true
+//---------------------------------------------------------
+QString TextBase::getHtmlEndTag(bool bold, bool italic, bool underline)
+{
+    if (underline) {
+        return "</u>";
+    }
+    if (italic) {
+        return "</i>";
+    }
+    if (bold) {
+        return "</b>";
+    }
+    return QString();
+}
+
+//---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
 
@@ -3163,7 +3235,7 @@ void TextBase::editCut(EditData& ed)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
     TextCursor* cursor = ted->cursor();
-    QString s = cursor->selectedText();
+    QString s = cursor->selectedText(true);
 
     if (!s.isEmpty()) {
         QApplication::clipboard()->setText(s, QClipboard::Clipboard);
@@ -3185,7 +3257,7 @@ void TextBase::editCopy(EditData& ed)
     //
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
     TextCursor* cursor = ted->cursor();
-    QString s = cursor->selectedText();
+    QString s = cursor->selectedText(true);
     if (!s.isEmpty()) {
         QApplication::clipboard()->setText(s, QClipboard::Clipboard);
     }

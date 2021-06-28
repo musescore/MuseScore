@@ -22,11 +22,15 @@
 
 #include "dockframemodel.h"
 
-#include "../docktypes.h"
+#include <QQuickItem>
+#include <QApplication>
 
 #include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
 
-#include <QQuickItem>
+#include "../docktypes.h"
+#include "../dockpanel.h"
+
+#include "log.h"
 
 using namespace mu::dock;
 
@@ -65,7 +69,7 @@ void DockFrameModel::listenChangesInFrame()
         return;
     }
 
-    connect(frame, &KDDockWidgets::Frame::numDockWidgetsChanged, [this, frame]() {
+    auto numDocksChangedCon = connect(frame, &KDDockWidgets::Frame::numDockWidgetsChanged, [this, frame]() {
         auto currentDock = frame->currentDockWidget();
         auto allDocks = frame->dockWidgets();
 
@@ -81,6 +85,17 @@ void DockFrameModel::listenChangesInFrame()
         DockProperties properties = readPropertiesFromObject(allDocks.first());
         bool visible = (properties.type == DockType::Panel && properties.allowedAreas != Qt::NoDockWidgetArea);
         setTitleBarVisible(visible);
+
+        updateNavigationSection();
+    });
+
+    auto currentDockWidgetChangedCon = connect(frame, &KDDockWidgets::Frame::currentDockWidgetChanged, [this]() {
+        updateNavigationSection();
+    });
+
+    connect(qApp, &QApplication::aboutToQuit, [numDocksChangedCon, currentDockWidgetChangedCon]() {
+        disconnect(numDocksChangedCon);
+        disconnect(currentDockWidgetChangedCon);
     });
 }
 
@@ -92,4 +107,38 @@ void DockFrameModel::setTitleBarVisible(bool visible)
 
     m_titleBarVisible = visible;
     emit titleBarVisibleChanged(visible);
+}
+
+QObject* DockFrameModel::currentNavigationSection() const
+{
+    auto frame = dynamic_cast<KDDockWidgets::Frame*>(m_frame);
+    if (!frame) {
+        return nullptr;
+    }
+
+    KDDockWidgets::DockWidgetBase* w = frame->currentDockWidget();
+    if (!w) {
+        return nullptr;
+    }
+
+    DockPanel* dockPanel = w->property("dockPanel").value<DockPanel*>();
+    if (!dockPanel) {
+        return nullptr;
+    }
+
+    return dockPanel->navigationSection();
+}
+
+void DockFrameModel::updateNavigationSection()
+{
+    QObject* n = currentNavigationSection();
+    if (m_navigationSection != n) {
+        m_navigationSection = n;
+        emit navigationSectionChanged();
+    }
+}
+
+QObject* DockFrameModel::navigationSection() const
+{
+    return m_navigationSection;
 }

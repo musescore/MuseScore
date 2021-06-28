@@ -620,7 +620,7 @@ static const StyleType styleTypes[] {
     { Sid::tupletFrameBgColor,      "tupletFrameBgColor",      QColor(255, 255, 255, 0) },
 
     { Sid::barreLineWidth,          "barreLineWidth",          QVariant(1.0) },
-    { Sid::scaleBarlines,           "scaleBarlines",           QVariant(true) },
+    { Sid::scaleBarlines,           "scaleBarlines",           QVariant(false) },
     { Sid::barGraceDistance,        "barGraceDistance",        Spatium(1.0) },
     { Sid::minVerticalDistance,     "minVerticalDistance",     Spatium(0.5) },
     { Sid::ornamentStyle,           "ornamentStyle",           int(MScore::OrnamentStyle::DEFAULT) },

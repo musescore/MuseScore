@@ -33,8 +33,24 @@ class IConverterController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IConverterController() = default;
 
-    virtual Ret fileConvert(const io::path& in, const io::path& out) = 0;
-    virtual Ret batchConvert(const io::path& batchJobFile) = 0;
+    virtual Ret fileConvert(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) = 0;
+    virtual Ret batchConvert(const io::path& batchJobFile, const io::path& stylePath = io::path(), bool forceMode = false) = 0;
+    virtual Ret convertScoreParts(const io::path& in, const io::path& out, const io::path& stylePath = io::path(),
+                                  bool forceMode = false) = 0;
+
+    virtual Ret exportScoreMedia(const io::path& in, const io::path& out,
+                                 const io::path& highlightConfigPath = io::path(),
+                                 const io::path& stylePath = io::path(), bool forceMode = false) = 0;
+    virtual Ret exportScoreMeta(const io::path& in, const io::path& out,
+                                const io::path& stylePath = io::path(), bool forceMode = false) = 0;
+    virtual Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath = io::path(),
+                                 bool forceMode = false) = 0;
+    virtual Ret exportScorePartsPdfs(const io::path& in, const io::path& out,
+                                     const io::path& stylePath = io::path(), bool forceMode = false) = 0;
+    virtual Ret exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson,
+                                     const io::path& stylePath = io::path(), bool forceMode = false) = 0;
+
+    virtual Ret updateSource(const io::path& in, const std::string& newSource, bool forceMode = false) = 0;
 };
 }
 

@@ -32,6 +32,7 @@
 #include "ui/iuiactionsregister.h"
 #include "async/asyncable.h"
 #include "iinteractive.h"
+#include "iglobalconfiguration.h"
 
 class QItemSelection;
 
@@ -44,6 +45,7 @@ class ShortcutsModel : public QAbstractListModel, public async::Asyncable
     INJECT(shortcuts, ui::IUiActionsRegister, uiactionsRegister)
     INJECT(shortcuts, framework::IInteractive, interactive)
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
+    INJECT(shortcuts, framework::IGlobalConfiguration, globalConfiguration)
 
     Q_PROPERTY(QItemSelection selection READ selection WRITE setSelection NOTIFY selectionChanged)
     Q_PROPERTY(QString currentSequence READ currentSequence NOTIFY selectionChanged)
@@ -61,8 +63,8 @@ public:
     Q_INVOKABLE void load();
     Q_INVOKABLE bool apply();
 
-    Q_INVOKABLE void loadShortcutsFromFile();
-    Q_INVOKABLE void saveShortcutsToFile();
+    Q_INVOKABLE void importShortcutsFromFile();
+    Q_INVOKABLE void exportShortcutsToFile();
 
     Q_INVOKABLE void applySequenceToCurrentShortcut(const QString& newSequence);
 

@@ -39,8 +39,11 @@ public:
     bool exportPngWithTransparentBackground() const override;
     void setExportPngWithTransparentBackground(bool transparent) override;
 
-private:
+    int trimMarginPixelSize() const override;
+    void setTrimMarginPixelSize(std::optional<int> pixelSize) override;
 
+private:
+    std::optional<int> m_trimMarginPixelSize;
     std::optional<float> m_customExportPngDpi;
 };
 }

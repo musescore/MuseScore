@@ -132,7 +132,7 @@ void NotationConfiguration::init()
         m_currentZoomChanged.send(val.toInt());
     });
 
-    settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->sharePath().toStdString() + "Styles"));
+    settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->appDataPath().toStdString() + "Styles"));
     settings()->valueChanged(USER_STYLES_PATH).onReceive(nullptr, [this](const Val& val) {
         m_stylesPathChanged.send(val.toString());
     });
@@ -176,7 +176,7 @@ void NotationConfiguration::init()
     fileSystem()->makePath(stylesPath().val);
 
     // libmscore
-    preferences().setBackupDirPath(globalConfiguration()->backupPath().toQString());
+    preferences().setBackupDirPath(globalConfiguration()->userBackupPath().toQString());
     preferences().setDefaultStyleFilePath(defaultStyleFilePath().toQString());
 
     Ms::MScore::warnPitchRange = colorNotesOusideOfUsablePitchRange();
@@ -260,7 +260,7 @@ async::Notification NotationConfiguration::foregroundChanged() const
 
 io::path NotationConfiguration::wallpapersDefaultDirPath() const
 {
-    return globalConfiguration()->sharePath() + "/wallpapers";
+    return globalConfiguration()->appDataPath() + "/wallpapers";
 }
 
 QColor NotationConfiguration::borderColor() const

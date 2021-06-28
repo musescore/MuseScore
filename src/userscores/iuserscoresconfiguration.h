@@ -64,6 +64,9 @@ public:
 
     virtual PreferredScoreCreationMode preferredScoreCreationMode() const = 0;
     virtual void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) = 0;
+
+    virtual bool needShowWarningAboutUnsavedScore() const = 0;
+    virtual void setNeedShowWarningAboutUnsavedScore(bool value) = 0;
 };
 }
 

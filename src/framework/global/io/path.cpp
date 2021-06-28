@@ -99,6 +99,12 @@ mu::io::path mu::io::basename(const mu::io::path& path)
     return fi.baseName();
 }
 
+mu::io::path mu::io::completebasename(const mu::io::path& path)
+{
+    QFileInfo fi(path.toQString());
+    return fi.completeBaseName();
+}
+
 mu::io::path mu::io::dirname(const mu::io::path& path)
 {
     return QFileInfo(path.toQString()).dir().dirName();
@@ -130,4 +136,15 @@ mu::io::path mu::io::escapeFileName(const mu::io::path& fn_)
     fn = fn.replace(QChar(0x266f), "#");   // musical sharp sign, can happen in titles, so can happen in score (file) names
     fn = fn.replace(QRegExp("[" + QRegExp::escape("\\/:*?\"<>|") + "]"), "_");         //FAT/NTFS special chars
     return fn;
+}
+
+mu::io::paths mu::io::pathsFromStrings(const QStringList& list)
+{
+    paths result;
+
+    for (const QString& path : list) {
+        result.push_back(path);
+    }
+
+    return result;
 }

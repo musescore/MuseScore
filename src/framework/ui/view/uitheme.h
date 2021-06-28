@@ -23,15 +23,15 @@
 #ifndef MU_UI_UITHEME_H
 #define MU_UI_UITHEME_H
 
-#include <QObject>
 #include <QFont>
+#include <QProxyStyle>
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "async/asyncable.h"
 
 namespace mu::ui {
-class UiTheme : public QObject, public async::Asyncable
+class UiTheme : public QProxyStyle, public async::Asyncable
 {
     Q_OBJECT
 
@@ -75,7 +75,7 @@ class UiTheme : public QObject, public async::Asyncable
     Q_PROPERTY(QFont musicalFont READ musicalFont NOTIFY themeChanged)
 
 public:
-    UiTheme(QObject* parent = nullptr);
+    UiTheme();
 
     void init();
     void update();
@@ -116,6 +116,18 @@ public:
 
     qreal itemOpacityDisabled() const;
 
+    void polish(QWidget* widget) override;
+    void unpolish(QWidget* widget) override;
+
+    void drawPrimitive(PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const override;
+    QRect subControlRect(QStyle::ComplexControl control, const QStyleOptionComplex* option, QStyle::SubControl subControl,
+                         const QWidget* widget = nullptr) const override;
+    int pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget) const override;
+    QSize sizeFromContents(ContentsType type, const QStyleOption* option, const QSize& contentsSize,
+                           const QWidget* widget = nullptr) const override;
+    int styleHint(StyleHint hint, const QStyleOption* option = nullptr, const QWidget* widget = nullptr,
+                  QStyleHintReturn* returnData = nullptr) const override;
+
 signals:
     void themeChanged();
 
@@ -135,6 +147,15 @@ private:
     void setupWidgetTheme();
 
     void notifyAboutThemeChanged();
+
+    void drawButtonBackground(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool accentButton,
+                              bool flat) const;
+    void drawCheckboxIndicator(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool checked,
+                               bool indeterminate, bool inMenu) const;
+    void drawRadioButtonIndicator(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool selected) const;
+    void drawIndicatorIcon(QPainter* painter, const QRect& rect, bool enabled, QStyle::PrimitiveElement element) const;
+    void drawListViewItemBackground(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool selected) const;
+    void drawToolbarGrip(QPainter* painter, const QRect& rect, bool horizontal) const;
 
     QFont m_bodyFont;
     QFont m_bodyBoldFont;

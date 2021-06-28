@@ -32,9 +32,8 @@ public:
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    virtual Ret write(INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
-    virtual Ret writeList(const INotationPtrList& notations, system::IODevice& destinationDevice,
-                          const Options& options = Options()) override;
+    virtual Ret write(INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
+    virtual Ret writeList(const INotationPtrList& notations, io::Device& destinationDevice, const Options& options = Options()) override;
 
     void abort() override;
     framework::ProgressChannel progress() const override;

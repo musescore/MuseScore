@@ -38,7 +38,7 @@ bool AbstractNotationWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret AbstractNotationWriter::write(INotationPtr, system::IODevice&, const Options& options)
+mu::Ret AbstractNotationWriter::write(INotationPtr, io::Device&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) != UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
@@ -53,7 +53,7 @@ mu::Ret AbstractNotationWriter::write(INotationPtr, system::IODevice&, const Opt
     return Ret(Ret::Code::NotSupported);
 }
 
-mu::Ret AbstractNotationWriter::writeList(const INotationPtrList&, system::IODevice&, const Options& options)
+mu::Ret AbstractNotationWriter::writeList(const INotationPtrList&, io::Device&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) == UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);

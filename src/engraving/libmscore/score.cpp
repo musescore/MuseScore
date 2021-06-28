@@ -75,8 +75,8 @@
 #include "layoutbreak.h"
 #include "harmony.h"
 #include "mscore.h"
-#include "scoreOrder.h"
 #include "scorefont.h"
+#include "scoreorder.h"
 
 #include "bracket.h"
 #include "audio.h"
@@ -318,7 +318,6 @@ Score::Score()
     _style  = MScore::defaultStyle();
 //      accInfo = tr("No selection");     // ??
     accInfo = "No selection";
-    _scoreOrder = nullptr;
 
 #ifdef USE_SCORE_ACCESSIBLE_TREE
     m_accessible = new mu::score::AccessibleScore(this);
@@ -435,7 +434,7 @@ Score* Score::clone()
         }
     }
 
-    masterScore()->initExcerpt(excerpt);
+    masterScore()->initExcerpt(excerpt, true);
     masterScore()->removeExcerpt(excerpt);
 
     return excerpt->partScore();
@@ -2001,7 +2000,7 @@ void Score::setSelection(const Selection& s)
 //   getText
 //---------------------------------------------------------
 
-Text* Score::getText(Tid tid)
+Text* Score::getText(Tid tid) const
 {
     MeasureBase* m = first();
     if (m && m->isVBox()) {
@@ -2039,7 +2038,7 @@ void Score::setMetaTag(const QString& tag, const QString& val)
 //   addExcerpt
 //---------------------------------------------------------
 
-void MasterScore::addExcerpt(Excerpt* ex)
+void MasterScore::addExcerpt(Excerpt* ex, int index)
 {
     Score* score = ex->partScore();
 
@@ -2086,7 +2085,7 @@ void MasterScore::addExcerpt(Excerpt* ex)
         }
         ex->setTracks(tracks);
     }
-    excerpts().append(ex);
+    excerpts().insert(index < 0 ? excerpts().size() : index, ex);
     setExcerptsChanged(true);
 }
 
@@ -2520,6 +2519,13 @@ void Score::cmdRemovePart(Part* part)
         return;
     }
 
+    QList<Excerpt*> excerpts;
+    for (Excerpt* excerpt: masterScore()->excerpts()) {
+        if (excerpt->containsPart(part)) {
+            excerpts.append(excerpt);
+        }
+    }
+
     int sidx   = staffIdx(part);
     int n      = part->nstaves();
 
@@ -2528,6 +2534,12 @@ void Score::cmdRemovePart(Part* part)
     }
 
     undoRemovePart(part, sidx);
+
+    for (Excerpt* excerpt: excerpts) {
+        if (excerpt->isEmpty()) {
+            masterScore()->undo(new RemoveExcerpt(excerpt));
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -2571,17 +2583,6 @@ void Score::removePart(Part* part)
     }
 
     _parts.removeAt(index);
-
-    if (_excerpt) {
-        for (Part* excerptPart : _excerpt->parts()) {
-            if (excerptPart->id() != part->id()) {
-                continue;
-            }
-
-            _excerpt->parts().removeOne(excerptPart);
-            break;
-        }
-    }
 
     masterScore()->rebuildMidiMapping();
     setInstrumentsChanged(true);
@@ -3034,7 +3035,7 @@ void Score::padToggle(Pad p, const EditData& ed)
             _is.setRest(!_is.rest());
             _is.setAccidentalType(AccidentalType::NONE);
         } else if (selection().isNone()) {
-            ed.view->startNoteEntryMode();
+            ed.view()->startNoteEntryMode();
             _is.setDuration(TDuration::DurationType::V_QUARTER);
             _is.setRest(true);
         } else {
@@ -3185,12 +3186,12 @@ void Score::padToggle(Pad p, const EditData& ed)
         if (cr) {
             crs.push_back(cr);
         } else {
-            ed.view->startNoteEntryMode();
+            ed.view()->startNoteEntryMode();
             deselect(e);
         }
     } else if (selection().isNone() && p != Pad::REST) {
         TDuration td = _is.duration();
-        ed.view->startNoteEntryMode();
+        ed.view()->startNoteEntryMode();
         _is.setDuration(td);
         _is.setAccidentalType(AccidentalType::NONE);
     } else {
@@ -3744,6 +3745,33 @@ qreal Score::maxSystemDistance() const
     } else {
         return styleP(Sid::maxSystemDistance);
     }
+}
+
+//---------------------------------------------------------
+//   scoreOrder
+//---------------------------------------------------------
+
+ScoreOrder Score::scoreOrder() const
+{
+    return _scoreOrder;
+}
+
+//---------------------------------------------------------
+//   setScoreOrder
+//---------------------------------------------------------
+
+void Score::setScoreOrder(ScoreOrder order)
+{
+    _scoreOrder = order;
+}
+
+//---------------------------------------------------------
+//   setBracketsAndBarlines
+//---------------------------------------------------------
+
+void Score::setBracketsAndBarlines()
+{
+    scoreOrder().setBracketsAndBarlines(this);
 }
 
 //---------------------------------------------------------

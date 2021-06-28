@@ -66,7 +66,7 @@ private:
     bool shouldReplaceFile(const QString& filename) const;
     bool askForRetry(const QString& filename) const;
 
-    bool doExportLoop(const io::path& path, std::function<bool(system::IODevice&)> exportFunction) const;
+    bool doExportLoop(const io::path& path, std::function<bool(io::Device&)> exportFunction) const;
 
     mutable FileConflictPolicy m_fileConflictPolicy;
 };

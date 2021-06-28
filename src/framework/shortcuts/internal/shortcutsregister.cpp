@@ -27,6 +27,7 @@
 
 #include "global/xmlreader.h"
 #include "global/xmlwriter.h"
+#include "multiinstances/resourcelockguard.h"
 
 using namespace mu::shortcuts;
 using namespace mu::framework;
@@ -54,15 +55,17 @@ void ShortcutsRegister::load()
 {
     m_shortcuts.clear();
 
-    ValCh<io::path> userPath = configuration()->shortcutsUserPath();
-    userPath.ch.onReceive(this, [this](const io::path&) {
-        load();
-    });
+    io::path defPath = configuration()->shortcutsAppDataPath();
+    io::path userPath = configuration()->shortcutsUserAppDataPath();
 
-    bool ok = readFromFile(m_defaultShortcuts, configuration()->shortcutsDefaultPath());
+    bool ok = readFromFile(m_defaultShortcuts, defPath);
 
     if (ok) {
-        ok = readFromFile(m_shortcuts, userPath.val);
+        {
+            //! NOTE The user shortcut file may change, so we need to lock it
+            mi::ResourceLockGuard(multiInstancesProvider(), "shortcuts");
+            ok = readFromFile(m_shortcuts, userPath);
+        }
         if (!ok) {
             m_shortcuts = m_defaultShortcuts;
         } else {
@@ -143,6 +146,8 @@ void ShortcutsRegister::expandStandardKeys(ShortcutList& shortcuts) const
 
 bool ShortcutsRegister::readFromFile(ShortcutList& shortcuts, const io::path& path) const
 {
+    TRACEFUNC;
+
     XmlReader reader(path);
 
     reader.readNextStartElement();
@@ -201,7 +206,7 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
         return true;
     }
 
-    bool ok = writeToFile(shortcuts, configuration()->shortcutsUserPath().val);
+    bool ok = writeToFile(shortcuts, configuration()->shortcutsUserAppDataPath());
 
     if (ok) {
         m_shortcuts = shortcuts;
@@ -215,6 +220,8 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
 bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::path& path) const
 {
     TRACEFUNC;
+
+    mi::ResourceLockGuard(multiInstancesProvider(), "shortcuts");
 
     XmlWriter writer(path);
 
@@ -270,7 +277,22 @@ ShortcutList ShortcutsRegister::shortcutsForSequence(const std::string& sequence
     return list;
 }
 
-mu::Ret ShortcutsRegister::saveToFile(const io::path& filePath) const
+mu::Ret ShortcutsRegister::importFromFile(const io::path& filePath)
+{
+    mi::ResourceLockGuard(multiInstancesProvider(), "shortcuts");
+
+    Ret ret = fileSystem()->copy(filePath, configuration()->shortcutsUserAppDataPath(), true);
+    if (!ret) {
+        LOGE() << "failed import file: " << ret.toString();
+        return ret;
+    }
+
+    load();
+
+    return make_ret(Ret::Code::Ok);
+}
+
+mu::Ret ShortcutsRegister::exportToFile(const io::path& filePath) const
 {
     return writeToFile(m_shortcuts, filePath);
 }

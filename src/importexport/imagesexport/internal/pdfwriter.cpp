@@ -31,7 +31,7 @@
 
 using namespace mu::iex::imagesexport;
 using namespace mu::notation;
-using namespace mu::system;
+using namespace mu::io;
 using namespace Ms;
 
 std::vector<INotationWriter::UnitType> PdfWriter::supportedUnitTypes() const
@@ -39,7 +39,7 @@ std::vector<INotationWriter::UnitType> PdfWriter::supportedUnitTypes() const
     return { UnitType::PER_PART, UnitType::MULTI_PART };
 }
 
-mu::Ret PdfWriter::write(INotationPtr notation, system::IODevice& destinationDevice, const Options& options)
+mu::Ret PdfWriter::write(INotationPtr notation, io::Device& destinationDevice, const Options& options)
 {
     UnitType unitType = unitTypeFromOptions(options);
     IF_ASSERT_FAILED(unitType == UnitType::PER_PART) {
@@ -69,7 +69,7 @@ mu::Ret PdfWriter::write(INotationPtr notation, system::IODevice& destinationDev
     return true;
 }
 
-mu::Ret PdfWriter::writeList(const INotationPtrList& notations, system::IODevice& destinationDevice, const Options& options)
+mu::Ret PdfWriter::writeList(const INotationPtrList& notations, io::Device& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(!notations.empty()) {
         return make_ret(Ret::Code::UnknownError);

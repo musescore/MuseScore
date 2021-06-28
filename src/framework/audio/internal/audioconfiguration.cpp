@@ -100,7 +100,7 @@ std::vector<io::path> AudioConfiguration::soundFontPaths() const
 {
     std::string pathsStr = settings()->value(USER_SOUNDFONTS_PATH).toString();
     std::vector<io::path> paths = io::path::pathsFromString(pathsStr, ";");
-    paths.push_back(globalConfiguration()->sharePath());
+    paths.push_back(globalConfiguration()->appDataPath());
 
     //! TODO Implement me
     // append extensions directory
@@ -193,7 +193,7 @@ async::Notification AudioConfiguration::synthesizerStateGroupChanged(const std::
 
 io::path AudioConfiguration::stateFilePath() const
 {
-    return globalConfiguration()->dataPath() + "/synthesizer.xml";
+    return globalConfiguration()->userAppDataPath() + "/synthesizer.xml";
 }
 
 bool AudioConfiguration::readState(const io::path& path, SynthesizerState& state) const

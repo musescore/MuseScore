@@ -30,7 +30,7 @@
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "importexport/guitarpro/iguitarproconfiguration.h"
 #include "importexport/ove/ioveconfiguration.h"
-#include "importexport/midiimport/imidiimportconfiguration.h"
+#include "importexport/midi/imidiconfiguration.h"
 #include "notation/inotationconfiguration.h"
 
 namespace mu::appshell {
@@ -41,7 +41,7 @@ class ImportPreferencesModel : public QObject, public async::Asyncable
     INJECT(appshell, iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
     INJECT(appshell, iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
     INJECT(appshell, iex::ove::IOveConfiguration, oveConfiguration)
-    INJECT(appshell, iex::midiimport::IMidiImportConfiguration, midiImportConfiguration)
+    INJECT(appshell, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
 
     Q_PROPERTY(QString styleFileImportPath READ styleFileImportPath WRITE setStyleFileImportPath NOTIFY styleFileImportPathChanged)

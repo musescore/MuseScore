@@ -56,13 +56,7 @@ IInteractive::Result Interactive::question(const std::string& title, const std::
                                            const Button& def,
                                            const Options& options) const
 {
-    ButtonDatas datas;
-    datas.reserve(buttons.size());
-    for (Button b : buttons) {
-        datas.push_back(buttonData(b));
-    }
-
-    return question(title, Text(text), datas, int(def), options);
+    return question(title, Text(text), buttonDataList(buttons), int(def), options);
 }
 
 IInteractive::Result Interactive::question(const std::string& title, const Text& text, const ButtonDatas& btns, int defBtn,
@@ -73,11 +67,14 @@ IInteractive::Result Interactive::question(const std::string& title, const Text&
 
 IInteractive::ButtonData Interactive::buttonData(Button b) const
 {
+    constexpr bool accent = true;
+
     switch (b) {
     case IInteractive::Button::NoButton:    return ButtonData(int(b), "");
     case IInteractive::Button::Ok:          return ButtonData(int(b), trc("ui", "OK"));
-    case IInteractive::Button::Save:        return ButtonData(int(b), trc("ui", "Save"));
+    case IInteractive::Button::Save:        return ButtonData(int(b), trc("ui", "Save"), accent);
     case IInteractive::Button::SaveAll:     return ButtonData(int(b), trc("ui", "Save All"));
+    case IInteractive::Button::DontSave:    return ButtonData(int(b), trc("ui", "Don't save"));
     case IInteractive::Button::Open:        return ButtonData(int(b), trc("ui", "Open"));
     case IInteractive::Button::Yes:         return ButtonData(int(b), trc("ui", "Yes"));
     case IInteractive::Button::YesToAll:    return ButtonData(int(b), trc("ui", "Yes to All"));
@@ -106,23 +103,35 @@ IInteractive::Result Interactive::info(const std::string& title, const std::stri
     return standardDialogResult(provider()->info(title, text, buttons, defBtn, options));
 }
 
-IInteractive::Result Interactive::warning(const std::string& title, const std::string& text, const ButtonDatas& buttons,
+Interactive::Result Interactive::warning(const std::string& title, const std::string& text, const Buttons& buttons, const Button& defBtn,
+                                         const Options& options) const
+{
+    return standardDialogResult(provider()->warning(title, text, buttonDataList(buttons), int(defBtn), options));
+}
+
+IInteractive::Result Interactive::warning(const std::string& title, const Text& text, const ButtonDatas& buttons,
                                           int defBtn,
                                           const QFlags<IInteractive::Option>& options) const
 {
-    return standardDialogResult(provider()->warning(title, text, buttons, defBtn, options));
+    return standardDialogResult(provider()->warning(title, text.text, buttons, defBtn, options));
 }
 
-IInteractive::Result Interactive::error(const std::string& title, const std::string& text, const ButtonDatas& buttons,
+IInteractive::Result Interactive::error(const std::string& title, const std::string& text, const Buttons& buttons, const Button& defBtn,
+                                        const Options& options) const
+{
+    return standardDialogResult(provider()->error(title, text, buttonDataList(buttons), int(defBtn), options));
+}
+
+IInteractive::Result Interactive::error(const std::string& title, const Text& text, const ButtonDatas& buttons,
                                         int defBtn,
                                         const Options& options) const
 {
-    return standardDialogResult(provider()->error(title, text, buttons, defBtn, options));
+    return standardDialogResult(provider()->error(title, text.text, buttons, defBtn, options));
 }
 
 mu::io::path Interactive::selectOpeningFile(const QString& title, const io::path& dir, const QString& filter)
 {
-    QString path = QFileDialog::getOpenFileName(mainWindow()->qMainWindow(), title, dir.toQString(), filter);
+    QString path = QFileDialog::getOpenFileName(nullptr, title, dir.toQString(), filter);
     return path;
 }
 
@@ -130,13 +139,13 @@ io::path Interactive::selectSavingFile(const QString& title, const io::path& dir
 {
     QFileDialog::Options options;
     options.setFlag(QFileDialog::DontConfirmOverwrite, !confirmOverwrite);
-    QString path = QFileDialog::getSaveFileName(mainWindow()->qMainWindow(), title, dir.toQString(), filter, nullptr, options);
+    QString path = QFileDialog::getSaveFileName(nullptr, title, dir.toQString(), filter, nullptr, options);
     return path;
 }
 
 io::path Interactive::selectDirectory(const QString& title, const io::path& dir)
 {
-    QString path = QFileDialog::getExistingDirectory(mainWindow()->qMainWindow(), title, dir.toQString());
+    QString path = QFileDialog::getExistingDirectory(nullptr, title, dir.toQString());
     return path;
 }
 
@@ -192,4 +201,16 @@ Ret Interactive::openUrl(const std::string& url) const
 {
     QUrl _url(QString::fromStdString(url));
     return QDesktopServices::openUrl(_url);
+}
+
+IInteractive::ButtonDatas Interactive::buttonDataList(const Buttons& buttons) const
+{
+    ButtonDatas result;
+    result.reserve(buttons.size());
+
+    for (Button b : buttons) {
+        result.push_back(buttonData(b));
+    }
+
+    return result;
 }

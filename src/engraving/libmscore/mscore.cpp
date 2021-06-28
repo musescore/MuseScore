@@ -135,7 +135,6 @@ double MScore::pixelRatio  = 0.8;         // DPI / logicalDPI
 MPaintDevice* MScore::_paintDevice;
 
 Sequencer* MScore::seq = 0;
-MuseScoreCore* MuseScoreCore::mscoreCore;
 
 extern void initDrumset();
 extern QString mscoreGlobalShare;
@@ -240,18 +239,6 @@ QString toUserString(Direction val)
     // The MSVC __assume() optimizer hint is similar, though not identical, to __builtin_unreachable()
     __assume(0);
 #endif
-}
-
-//---------------------------------------------------------
-//   fillComboBox
-//---------------------------------------------------------
-
-void fillComboBoxDirection(QComboBox* cb)
-{
-    cb->clear();
-    cb->addItem(toUserString(Direction::AUTO), QVariant::fromValue<Direction>(Direction::AUTO));
-    cb->addItem(toUserString(Direction::UP),   QVariant::fromValue<Direction>(Direction::UP));
-    cb->addItem(toUserString(Direction::DOWN), QVariant::fromValue<Direction>(Direction::DOWN));
 }
 
 //---------------------------------------------------------

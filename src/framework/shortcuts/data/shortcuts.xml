@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Shortcuts>
-    <SC>
-        <key>accessibility-dev-show-tree</key>
-        <seq>Ctrl+F2</seq>
-    </SC>
-<!-- Keyboard navigation -->
+<!-- Dev -->
     <SC>
         <key>nav-dev-show-controls</key>
         <seq>Ctrl+F1</seq>
     </SC>
+    <SC>
+        <key>accessibility-dev-show-tree</key>
+        <seq>Ctrl+F2</seq>
+    </SC>
+    <SC>
+        <key>multiinstances-dev-show-info</key>
+        <seq>Ctrl+F3</seq>
+    </SC>
+    <SC>
+        <key>diagnostics-show</key>
+        <seq>Ctrl+F8</seq>
+    </SC>
+<!-- Keyboard navigation -->
     <SC>
         <key>nav-next-section</key>
         <seq>F6</seq>

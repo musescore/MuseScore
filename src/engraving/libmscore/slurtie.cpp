@@ -186,21 +186,21 @@ void SlurTieSegment::editDrag(EditData& ed)
         if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
             Spanner* spanner = slurTie();
             Qt::KeyboardModifiers km = qApp->keyboardModifiers();
-            Element* e = ed.view->elementNear(ed.pos);
+            Element* e = ed.view()->elementNear(ed.pos);
             if (e && e->isNote()) {
                 Note* note = toNote(e);
                 Fraction tick = note->chord()->tick();
                 if ((g == Grip::END && tick > slurTie()->tick()) || (g == Grip::START && tick < slurTie()->tick2())) {
                     if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
                         Chord* c = note->chord();
-                        ed.view->setDropTarget(note);
+                        ed.view()->setDropTarget(note);
                         if (c->part() == spanner->part() && c != spanner->endCR()) {
                             changeAnchor(ed, c);
                         }
                     }
                 }
             } else {
-                ed.view->setDropTarget(0);
+                ed.view()->setDropTarget(0);
             }
         }
         break;

@@ -248,10 +248,16 @@ void TextBase::insertText(EditData& ed, const QString& s)
 bool TextBase::edit(EditData& ed)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    if (!ted) {
+        return false;
+    }
     TextCursor* cursor = ted->cursor();
 
     // do nothing on Shift, it messes up IME on Windows. See #64046
     if (ed.key == Qt::Key_Shift) {
+        return false;
+    }
+    if (ed.key == Qt::Key_Escape) {
         return false;
     }
     QString s         = ed.s;
@@ -304,9 +310,10 @@ bool TextBase::edit(EditData& ed)
 //printf("======%x\n", s.isEmpty() ? -1 : s[0].unicode());
 
         switch (ed.key) {
+        case Qt::Key_Y:
         case Qt::Key_Z:                   // happens when the undo stack is empty
             if (ed.modifiers == Qt::ControlModifier) {
-                return true;
+                return false;
             }
             break;
 
@@ -419,9 +426,9 @@ bool TextBase::edit(EditData& ed)
             if (ed.modifiers & CONTROL_MODIFIER) {
                 s = QString(QChar(0xa0));               // non-breaking space
             } else {
-                if (isFingering() && ed.view) {
+                if (isFingering() && ed.view()) {
                     score()->endCmd();
-                    ed.view->textTab(ed.modifiers & Qt::ShiftModifier);
+                    ed.view()->textTab(ed.modifiers & Qt::ShiftModifier);
                     return true;
                 }
                 s = " ";
@@ -675,6 +682,7 @@ void TextBase::paste(EditData& ed)
     QString token;
     QString sym;
     bool symState = false;
+    Ms::CharFormat format = *static_cast<TextEditData*>(ed.getData(this))->cursor()->format();
 
     score()->startCmd();
     for (int i = 0; i < txt.length(); i++) {
@@ -691,6 +699,7 @@ void TextBase::paste(EditData& ed)
                     sym += c;
                 } else {
                     deleteSelectedText(ed);
+                    static_cast<TextEditData*>(ed.getData(this))->cursor()->setFormat(format);
                     if (c.isHighSurrogate()) {
                         QChar highSurrogate = c;
                         Q_ASSERT(i + 1 < txt.length());
@@ -711,6 +720,8 @@ void TextBase::paste(EditData& ed)
                 } else if (token == "/sym") {
                     symState = false;
                     insertSym(ed, Sym::name2id(sym));
+                } else {
+                    prepareFormat(token, format);
                 }
             } else {
                 token += c;
@@ -876,7 +887,10 @@ bool TextBase::deleteSelectedText(EditData& ed)
             if (!_cursor->movePosition(QTextCursor::Left)) {
                 break;
             }
-            score()->undo(new RemoveText(_cursor, QString(cursor->currentCharacter())), &ed);
+            Ms::TextCursor undoCursor(*_cursor);
+            // can't rely on the cursor's current format as it doesn't preserve the special font "ScoreText"
+            undoCursor.setFormat(*_layout[_cursor->row()].formatAt(_cursor->column()));
+            score()->undo(new RemoveText(&undoCursor, QString(_cursor->currentCharacter())), &ed);
         }
     }
     return true;

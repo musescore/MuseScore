@@ -35,6 +35,7 @@
 
 #include "libmscore/element.h"
 #include "libmscore/elementgroup.h"
+#include "scorecallbacks.h"
 
 namespace Ms {
 class ShadowNote;
@@ -94,6 +95,8 @@ public:
     async::Notification dropChanged() const override;
 
     bool applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers = {}) override;
+    void undo() override;
+    void redo() override;
 
     // Move
     //! NOTE Perform operations on selected elements
@@ -142,10 +145,14 @@ public:
     void addTupletToSelectedChordRests(const TupletOptions& options) override;
     void addBeamToSelectedChordRests(BeamMode mode) override;
 
+    void increaseDecreaseDuration(int steps, bool stepByDots) override;
+
+    void toggleLayoutBreak(LayoutBreakType breakType) override;
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
-    void transpose(const TransposeOptions& options) override;
+    bool transpose(const TransposeOptions& options) override;
     void swapVoices(int voiceIndex1, int voiceIndex2) override;
     void addIntervalToSelectedNotes(int interval) override;
+    void addFret(int fretIndex) override;
     void changeSelectedNotesVoice(int voiceIndex) override;
     void addAnchoredLineToSelectedNotes() override;
 
@@ -256,6 +263,7 @@ private:
         Element* dropTarget = nullptr;
     };
 
+    ScoreCallbacks m_scoreCallbacks;
     Notation* m_notation = nullptr;
     INotationUndoStackPtr m_undoStack;
 
@@ -280,7 +288,9 @@ private:
 
     async::Channel<ScoreConfigType> m_scoreConfigChanged;
 
-    Ms::Lasso* m_lasso;
+    Ms::Lasso* m_lasso = nullptr;
+
+    bool m_notifyAboutDropChanged = false;
 };
 }
 

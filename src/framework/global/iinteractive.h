@@ -45,6 +45,7 @@ public:
         Ok,
         Save,
         SaveAll,
+        DontSave,
         Open,
         Yes,
         YesToAll,
@@ -129,12 +130,18 @@ public:
                         int defBtn = int(Button::NoButton), const Options& options = {}) const = 0;
 
     // warning
-    virtual Result warning(const std::string& title, const std::string& text, const ButtonDatas& buttons = {},
-                           int defBtn = int(Button::NoButton), const Options& options = {}) const = 0;
+    virtual Result warning(const std::string& title, const std::string& text, const Buttons& buttons = {},
+                           const Button& def = Button::NoButton, const Options& options = {}) const = 0;
+
+    virtual Result warning(const std::string& title, const Text& text, const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton),
+                           const Options& options = {}) const = 0;
 
     // error
-    virtual Result error(const std::string& title, const std::string& text, const ButtonDatas& buttons = {},
-                         int defBtn = int(Button::NoButton), const Options& options = {}) const = 0;
+    virtual Result error(const std::string& title, const std::string& text, const Buttons& buttons = {},
+                         const Button& def = Button::NoButton, const Options& options = {}) const = 0;
+
+    virtual Result error(const std::string& title, const Text& text, const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton),
+                         const Options& options = {}) const = 0;
 
     // files
     virtual io::path selectOpeningFile(const QString& title, const io::path& dir, const QString& filter) = 0;

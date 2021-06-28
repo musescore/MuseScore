@@ -31,7 +31,7 @@ Item {
     id: root
 
     property alias instruments: instrumentsView.model
-    property var instrumentOrderTypes: null
+    property var instrumentsModel: null
 
     property bool canLiftInstrument: currentInstrumentIndex > 0
     property bool canLowerInstrument: isInstrumentSelected && (currentInstrumentIndex < instrumentsView.count - 1)
@@ -44,6 +44,11 @@ Item {
     signal unselectInstrumentRequested(string id)
     signal orderChanged(string id)
     signal soloistChanged(string id)
+
+    function selectedScoreOrder() {
+        var orders = instrumentsModel.scoreOrders
+        return orders[scoreOrderComboBox.currentIndex].config
+    }
 
     function scrollViewToEnd() {
         instrumentsView.positionViewAtEnd()
@@ -87,25 +92,20 @@ Item {
         anchors.right: parent.right
 
         StyledComboBox {
+            id: scoreOrderComboBox
+
             Layout.fillWidth: true
 
             navigation.name: "Orders"
             navigation.panel: navPanel
             navigation.row: 1
 
-            textRoleName: "text"
-            valueRoleName: "value"
+            textRoleName: "name"
+            valueRoleName: "id"
 
-            model: {
-                var resultList = []
-                var orders = root.instrumentOrderTypes
+            model: instrumentsModel.scoreOrders
 
-                for (var i = 0; i < orders.length; ++i) {
-                    resultList.push({"text" : qsTrc("instruments", "Order: ") + orders[i].name, "value" : orders[i].id})
-                }
-
-                return resultList
-            }
+            currentIndex: instrumentsModel.selectedScoreOrderIndex
 
             onValueChanged: {
                 root.orderChanged(value)
@@ -174,6 +174,8 @@ Item {
                 anchors.leftMargin: 4
                 anchors.rightMargin: 4
                 anchors.verticalCenter: parent.verticalCenter
+
+                narrowMargins: true
 
                 visible: root.currentInstrumentIndex === index
 

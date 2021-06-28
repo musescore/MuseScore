@@ -42,7 +42,12 @@ InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
 {
     context()->currentMasterNotationChanged().onNotify(this, [this]() {
         IMasterNotationPtr masterNotation = context()->currentMasterNotation();
-        m_masterNotationParts = masterNotation ? masterNotation->parts() : nullptr;
+
+        m_masterNotationParts = nullptr;
+
+        if (masterNotation) {
+            m_masterNotationParts = masterNotation->parts();
+        }
     });
 
     context()->currentNotationChanged().onNotify(this, [this]() {
@@ -98,6 +103,10 @@ void InstrumentsPanelTreeModel::deleteItems()
 
 void InstrumentsPanelTreeModel::load()
 {
+    if (m_isLoadingBlocked) {
+        return;
+    }
+
     TRACEFUNC;
     beginResetModel();
 
@@ -151,13 +160,14 @@ void InstrumentsPanelTreeModel::selectRow(const QModelIndex& rowIndex)
 void InstrumentsPanelTreeModel::addInstruments()
 {
     auto mode = ISelectInstrumentsScenario::SelectInstrumentsMode::ShowCurrentInstruments;
-    RetVal<PartInstrumentList> selectedInstruments = selectInstrumentsScenario()->selectInstruments(mode);
+    RetVal<PartInstrumentListScoreOrder> selectedInstruments = selectInstrumentsScenario()->selectInstruments(mode);
     if (!selectedInstruments.ret) {
         LOGE() << selectedInstruments.ret.toString();
         return;
     }
 
-    m_masterNotationParts->setParts(selectedInstruments.val);
+    m_masterNotationParts->setScoreOrder(selectedInstruments.val.scoreOrder);
+    m_masterNotationParts->setParts(selectedInstruments.val.instruments);
 
     emit isEmptyChanged();
 }
@@ -219,11 +229,13 @@ bool InstrumentsPanelTreeModel::removeRows(int row, int count, const QModelIndex
         parentItem = m_rootItem;
     }
 
+    m_isLoadingBlocked = true;
     beginRemoveRows(parent, row, row + count - 1);
 
     parentItem->removeChildren(row, count, true);
 
     endRemoveRows();
+    m_isLoadingBlocked = false;
 
     emit isEmptyChanged();
 
@@ -238,6 +250,8 @@ AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::modelIndexToItem(co
 bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                                          int destinationChild)
 {
+    m_isLoadingBlocked = true;
+
     AbstractInstrumentsPanelTreeItem* sourceParentItem = modelIndexToItem(sourceParent);
     AbstractInstrumentsPanelTreeItem* destinationParentItem = modelIndexToItem(destinationParent);
 
@@ -259,6 +273,8 @@ bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int so
     endMoveRows();
 
     updateRearrangementAvailability();
+
+    m_isLoadingBlocked = false;
 
     return true;
 }

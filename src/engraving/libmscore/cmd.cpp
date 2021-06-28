@@ -300,7 +300,6 @@ void Score::endCmd(const bool isCmdFromInspector, bool rollback)
         masterScore()->setPlaylistDirty();      // TODO: flag individual operations
         masterScore()->setAutosaveDirty(true);
     }
-    MuseScoreCore::mscoreCore->endCmd(isCmdFromInspector, rollback);
     cmdState().reset();
 }
 
@@ -1814,7 +1813,7 @@ void Score::toggleAccidental(AccidentalType at, const EditData& ed)
         _is.setRest(false);
     } else {
         if (selection().isNone()) {
-            ed.view->startNoteEntryMode();
+            ed.view()->startNoteEntryMode();
             _is.setAccidentalType(at);
             _is.setDuration(TDuration::DurationType::V_QUARTER);
             _is.setRest(false);
@@ -3894,8 +3893,7 @@ void Score::cmdPitchDown()
     if (el && el->isLyrics()) {
         cmdMoveLyrics(toLyrics(el), Direction::DOWN);
     } else if (el && (el->isArticulation() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, QVariant::fromValue(el->offset() + PointF(0.0,
-                                                                                      MScore::nudgeStep* el->spatium())),
+        el->undoChangeProperty(Pid::OFFSET, QVariant::fromValue(el->offset() + PointF(0.0, MScore::nudgeStep* el->spatium())),
                                PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
         cmdMoveRest(toRest(el), Direction::DOWN);
@@ -4319,11 +4317,11 @@ void Score::cmdAddPitch(const EditData& ed, int note, bool addFlag, bool insert)
             }
         }
     }
-    ed.view->startNoteEntryMode();
+    ed.view()->startNoteEntryMode();
 
     int step = octave * 7 + note;
     cmdAddPitch(step,  addFlag, insert);
-    ed.view->adjustCanvasPosition(is.cr(), false);
+    ed.view()->adjustCanvasPosition(is.cr(), false);
 }
 
 void Score::cmdAddPitch(int step, bool addFlag, bool insert)
@@ -4413,6 +4411,7 @@ void Score::cmdAddFret(int fret)
         qDebug("cannot enter notes here (no chord rest at current position)");
         return;
     }
+    is.setRest(false);
     Position pos;
     pos.segment   = is.segment();
     pos.staffIdx  = is.track() / VOICES;
@@ -4469,9 +4468,8 @@ void Score::cmdToggleAutoplace(bool all)
 //   cmd
 //---------------------------------------------------------
 
-void Score::cmd(const QAction* a, EditData& ed)
+void Score::cmd(const QString& cmd, EditData& ed)
 {
-    QString cmd(a ? a->data().toString() : "");
     if (MScore::debugMode) {
         qDebug("<%s>", qPrintable(cmd));
     }
@@ -4481,153 +4479,32 @@ void Score::cmd(const QAction* a, EditData& ed)
         std::function<void(Score* cs, EditData& ed)> cmd;
     };
 
+    // TODO: Implement all these actions in NotationActionController and then remove this method entirely
+    // (It is never called)
+
     static const std::vector<ScoreCmd> cmdList {
-        { "note-c",                     [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 0, false, false); } },
-        { "note-d",                     [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 1, false, false); } },
-        { "note-e",                     [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 2, false, false); } },
-        { "note-f",                     [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 3, false, false); } },
-        { "note-g",                     [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 4, false, false); } },
-        { "note-a",                     [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 5, false, false); } },
-        { "note-b",                     [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 6, false, false); } },
-        { "chord-c",                    [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 0, true, false); } },
-        { "chord-d",                    [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 1, true, false); } },
-        { "chord-e",                    [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 2, true, false); } },
-        { "chord-f",                    [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 3, true, false); } },
-        { "chord-g",                    [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 4, true, false); } },
-        { "chord-a",                    [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 5, true, false); } },
-        { "chord-b",                    [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 6, true, false); } },
-        { "insert-c",                   [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 0, false, true); } },
-        { "insert-d",                   [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 1, false, true); } },
-        { "insert-e",                   [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 2, false, true); } },
-        { "insert-f",                   [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 3, false, true); } },
-        { "insert-g",                   [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 4, false, true); } },
-        { "insert-a",                   [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 5, false, true); } },
-        { "insert-b",                   [](Score* cs, EditData& ed) { cs->cmdAddPitch(ed, 6, false, true); } },
-        { "fret-0",                     [](Score* cs, EditData&) { cs->cmdAddFret(0); } },
-        { "fret-1",                     [](Score* cs, EditData&) { cs->cmdAddFret(1); } },
-        { "fret-2",                     [](Score* cs, EditData&) { cs->cmdAddFret(2); } },
-        { "fret-3",                     [](Score* cs, EditData&) { cs->cmdAddFret(3); } },
-        { "fret-4",                     [](Score* cs, EditData&) { cs->cmdAddFret(4); } },
-        { "fret-5",                     [](Score* cs, EditData&) { cs->cmdAddFret(5); } },
-        { "fret-6",                     [](Score* cs, EditData&) { cs->cmdAddFret(6); } },
-        { "fret-7",                     [](Score* cs, EditData&) { cs->cmdAddFret(7); } },
-        { "fret-8",                     [](Score* cs, EditData&) { cs->cmdAddFret(8); } },
-        { "fret-9",                     [](Score* cs, EditData&) { cs->cmdAddFret(9); } },
-        { "fret-10",                    [](Score* cs, EditData&) { cs->cmdAddFret(10); } },
-        { "fret-11",                    [](Score* cs, EditData&) { cs->cmdAddFret(11); } },
-        { "fret-12",                    [](Score* cs, EditData&) { cs->cmdAddFret(12); } },
-        { "fret-13",                    [](Score* cs, EditData&) { cs->cmdAddFret(13); } },
-        { "fret-14",                    [](Score* cs, EditData&) { cs->cmdAddFret(14); } },
         { "toggle-visible",             [](Score* cs, EditData&) { cs->cmdToggleVisible(); } },
-        { "reset-stretch",              [](Score* cs, EditData&) { cs->resetUserStretch(); } },
         { "mirror-note",                [](Score* cs, EditData&) { cs->cmdMirrorNoteHead(); } },
-        { "double-duration",            [](Score* cs, EditData&) { cs->cmdDoubleDuration(); } },
-        { "half-duration",              [](Score* cs, EditData&) { cs->cmdHalfDuration(); } },
-        { "inc-duration-dotted",        [](Score* cs, EditData&) { cs->cmdIncDurationDotted(); } },
-        { "dec-duration-dotted",        [](Score* cs, EditData&) { cs->cmdDecDurationDotted(); } },
-        { "add-staccato",               [](Score* cs, EditData&) { cs->addArticulation(SymId::articStaccatoAbove); } },
-        { "add-tenuto",                 [](Score* cs, EditData&) { cs->addArticulation(SymId::articTenutoAbove); } },
-        { "add-marcato",                [](Score* cs, EditData&) { cs->addArticulation(SymId::articMarcatoAbove); } },
-        { "add-sforzato",               [](Score* cs, EditData&) { cs->addArticulation(SymId::articAccentAbove); } },
         { "add-trill",                  [](Score* cs, EditData&) { cs->addArticulation(SymId::ornamentTrill); } },
         { "add-up-bow",                 [](Score* cs, EditData&) { cs->addArticulation(SymId::stringsUpBow); } },
         { "add-down-bow",               [](Score* cs, EditData&) { cs->addArticulation(SymId::stringsDownBow); } },
-        { "add-8va",                    [](Score* cs, EditData&) { cs->cmdAddOttava(OttavaType::OTTAVA_8VA); } },
-        { "add-8vb",                    [](Score* cs, EditData&) { cs->cmdAddOttava(OttavaType::OTTAVA_8VB); } },
-        { "note-longa",                 [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE00, ed); } },
-        { "note-longa-TAB",             [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE00, ed); } },
-        { "note-breve",                 [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE0, ed); } },
-        { "note-breve-TAB",             [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE0, ed); } },
-        { "pad-note-1",                 [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE1, ed); } },
-        { "pad-note-1-TAB",             [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE1, ed); } },
-        { "pad-note-2",                 [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE2, ed); } },
-        { "pad-note-2-TAB",             [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE2, ed); } },
-        { "pad-note-4",                 [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE4, ed); } },
-        { "pad-note-4-TAB",             [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE4, ed); } },
-        { "pad-note-8",                 [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE8, ed); } },
-        { "pad-note-8-TAB",             [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE8, ed); } },
-        { "pad-note-16",                [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE16, ed); } },
-        { "pad-note-16-TAB",            [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE16, ed); } },
-        { "pad-note-32",                [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE32, ed); } },
-        { "pad-note-32-TAB",            [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE32, ed); } },
-        { "pad-note-64",                [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE64, ed); } },
-        { "pad-note-64-TAB",            [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE64, ed); } },
-        { "pad-note-128",               [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE128, ed); } },
-        { "pad-note-128-TAB",           [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE128, ed); } },
-        { "pad-note-256",               [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE256, ed); } },
-        { "pad-note-256-TAB",           [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE256, ed); } },
-        { "pad-note-512",               [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE512, ed); } },
-        { "pad-note-512-TAB",           [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE512, ed); } },
-        { "pad-note-1024",              [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE1024, ed); } },
-        { "pad-note-1024-TAB",          [](Score* cs, EditData& ed) { cs->padToggle(Pad::NOTE1024, ed); } },
         { "reset-style",                [](Score* cs, EditData&) { cs->cmdResetAllStyle(); } },
-        { "reset-text-style-overrides", [](Score* cs, EditData&) { cs->cmdResetTextStyleOverrides(); } },
-        { "reset-beammode",             [](Score* cs, EditData&) { cs->cmdResetBeamMode(); } },
-        { "reset-groupings",            [](Score* cs, EditData&) { cs->cmdResetNoteAndRestGroupings(); } },
         { "clef-violin",                [](Score* cs, EditData&) { cs->cmdInsertClef(ClefType::G); } },
         { "clef-bass",                  [](Score* cs, EditData&) { cs->cmdInsertClef(ClefType::F); } },
-        { "voice-x12",                  [](Score* cs, EditData&) { cs->cmdExchangeVoice(0, 1); } },
-        { "voice-x13",                  [](Score* cs, EditData&) { cs->cmdExchangeVoice(0, 2); } },
-        { "voice-x14",                  [](Score* cs, EditData&) { cs->cmdExchangeVoice(0, 3); } },
-        { "voice-x23",                  [](Score* cs, EditData&) { cs->cmdExchangeVoice(1, 2); } },
-        { "voice-x24",                  [](Score* cs, EditData&) { cs->cmdExchangeVoice(1, 3); } },
-        { "voice-x34",                  [](Score* cs, EditData&) { cs->cmdExchangeVoice(2, 3); } },
-        { "pad-rest",                   [](Score* cs, EditData& ed) { cs->padToggle(Pad::REST, ed); } },
-        { "pad-dot",                    [](Score* cs, EditData& ed) { cs->padToggle(Pad::DOT, ed); } },
-        { "pad-dotdot",                 [](Score* cs, EditData& ed) { cs->padToggle(Pad::DOTDOT, ed); } },
-        { "pad-dot3",                   [](Score* cs, EditData& ed) { cs->padToggle(Pad::DOT3, ed); } },
-        { "pad-dot4",                   [](Score* cs, EditData& ed) { cs->padToggle(Pad::DOT4, ed); } },
-        { "beam-start",                 [](Score* cs, EditData&) { cs->cmdSetBeamMode(Beam::Mode::BEGIN); } },
-        { "beam-mid",                   [](Score* cs, EditData&) { cs->cmdSetBeamMode(Beam::Mode::MID); } },
-        { "no-beam",                    [](Score* cs, EditData&) { cs->cmdSetBeamMode(Beam::Mode::NONE); } },
-        { "beam32",                     [](Score* cs, EditData&) { cs->cmdSetBeamMode(Beam::Mode::BEGIN32); } },
-        { "beam64",                     [](Score* cs, EditData&) { cs->cmdSetBeamMode(Beam::Mode::BEGIN64); } },
-        { "auto-beam",                  [](Score* cs, EditData&) { cs->cmdSetBeamMode(Beam::Mode::AUTO); } },
-        { "sharp2",                     [](Score* cs, EditData& ed) { cs->toggleAccidental(AccidentalType::SHARP2, ed); } },
-        { "sharp",                      [](Score* cs, EditData& ed) { cs->toggleAccidental(AccidentalType::SHARP, ed); } },
-        { "nat",                        [](Score* cs, EditData& ed) { cs->toggleAccidental(AccidentalType::NATURAL, ed); } },
-        { "flat",                       [](Score* cs, EditData& ed) { cs->toggleAccidental(AccidentalType::FLAT, ed); } },
-        { "flat2",                      [](Score* cs, EditData& ed) { cs->toggleAccidental(AccidentalType::FLAT2, ed); } },
         { "sharp2-post",                [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::SHARP2); } },
         { "sharp-post",                 [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::SHARP); } },
         { "nat-post",                   [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::NATURAL); } },
         { "flat-post",                  [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::FLAT); } },
         { "flat2-post",                 [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::FLAT2); } },
-        { "flip",                       [](Score* cs, EditData&) { cs->cmdFlip(); } },
-        { "stretch+",                   [](Score* cs, EditData&) { cs->cmdAddStretch(0.1); } },
-        { "stretch-",                   [](Score* cs, EditData&) { cs->cmdAddStretch(-0.1); } },
-        { "pitch-spell",                [](Score* cs, EditData&) { cs->spell(); } },
-        { "select-all",                 [](Score* cs, EditData&) { cs->cmdSelectAll(); } },
-        { "select-section",             [](Score* cs, EditData&) { cs->cmdSelectSection(); } },
-        { "add-brackets",               [](Score* cs, EditData&) { cs->cmdAddBracket(); } },
-        { "add-parentheses",            [](Score* cs, EditData&) { cs->cmdAddParentheses(); } },
-        { "add-braces",                 [](Score* cs, EditData&) { cs->cmdAddBraces(); } },
-        { "acciaccatura",               [](Score* cs, EditData&) { cs->cmdAddGrace(NoteType::ACCIACCATURA, MScore::division / 2); } },
-        { "appoggiatura",               [](Score* cs, EditData&) { cs->cmdAddGrace(NoteType::APPOGGIATURA, MScore::division / 2); } },
-        { "grace4",                     [](Score* cs, EditData&) { cs->cmdAddGrace(NoteType::GRACE4, MScore::division); } },
-        { "grace16",                    [](Score* cs, EditData&) { cs->cmdAddGrace(NoteType::GRACE16, MScore::division / 4); } },
-        { "grace32",                    [](Score* cs, EditData&) { cs->cmdAddGrace(NoteType::GRACE32, MScore::division / 8); } },
-        { "grace8after",                [](Score* cs, EditData&) { cs->cmdAddGrace(NoteType::GRACE8_AFTER, MScore::division / 2); } },
-        { "grace16after",               [](Score* cs, EditData&) { cs->cmdAddGrace(NoteType::GRACE16_AFTER, MScore::division / 4); } },
-        { "grace32after",               [](Score* cs, EditData&) { cs->cmdAddGrace(NoteType::GRACE32_AFTER, MScore::division / 8); } },
-        { "explode",                    [](Score* cs, EditData&) { cs->cmdExplode(); } },
-        { "implode",                    [](Score* cs, EditData&) { cs->cmdImplode(); } },
-        { "realize-chord-symbols",      [](Score* cs, EditData&) { cs->cmdRealizeChordSymbols(); } },
-        { "slash-fill",                 [](Score* cs, EditData&) { cs->cmdSlashFill(); } },
-        { "slash-rhythm",               [](Score* cs, EditData&) { cs->cmdSlashRhythm(); } },
-        { "resequence-rehearsal-marks", [](Score* cs, EditData&) { cs->cmdResequenceRehearsalMarks(); } },
-        { "del-empty-measures",         [](Score* cs, EditData&) { cs->cmdRemoveEmptyTrailingMeasures(); } },
         { "add-audio",                  [](Score* cs, EditData&) { cs->addAudioTrack(); } },
         { "transpose-up",               [](Score* cs, EditData&) { cs->transposeSemitone(1); } },
         { "transpose-down",             [](Score* cs, EditData&) { cs->transposeSemitone(-1); } },
         { "pitch-up-diatonic-alterations",   [](Score* cs, EditData&) { cs->transposeDiatonicAlterations(TransposeDirection::UP); } },
         { "pitch-down-diatonic-alterations", [](Score* cs, EditData&) { cs->transposeDiatonicAlterations(TransposeDirection::DOWN); } },
-        { "delete",                     [](Score* cs, EditData&) { cs->cmdDeleteSelection(); } },
         { "full-measure-rest",          [](Score* cs, EditData&) { cs->cmdFullMeasureRest(); } },
         { "toggle-insert-mode",         [](Score* cs, EditData&) { cs->_is.setInsertMode(!cs->_is.insertMode()); } },
         { "pitch-up",                   [](Score* cs, EditData&) { cs->cmdPitchUp(); } },
         { "pitch-down",                 [](Score* cs, EditData&) { cs->cmdPitchDown(); } },
-        { "time-delete",                [](Score* cs, EditData&) { cs->cmdTimeDelete(); } },
         { "pitch-up-octave",            [](Score* cs, EditData&) { cs->cmdPitchUpOctave(); } },
         { "pitch-down-octave",          [](Score* cs, EditData&) { cs->cmdPitchDownOctave(); } },
         { "pad-note-increase",          [](Score* cs, EditData& ed) { cs->cmdPadNoteIncreaseTAB(ed); } },
@@ -4638,9 +4515,6 @@ void Score::cmd(const QAction* a, EditData& ed)
         { "toggle-hide-empty",          [](Score* cs, EditData&) { cs->cmdToggleHideEmpty(); } },
         { "set-visible",                [](Score* cs, EditData&) { cs->cmdSetVisible(); } },
         { "unset-visible",              [](Score* cs, EditData&) { cs->cmdUnsetVisible(); } },
-        { "system-break",               [](Score* cs, EditData&) { cs->cmdToggleLayoutBreak(LayoutBreak::Type::LINE); } },
-        { "page-break",                 [](Score* cs, EditData&) { cs->cmdToggleLayoutBreak(LayoutBreak::Type::PAGE); } },
-        { "section-break",              [](Score* cs, EditData&) { cs->cmdToggleLayoutBreak(LayoutBreak::Type::SECTION); } },
         { "relayout",                   [](Score* cs, EditData&) { cs->cmdRelayout(); } },
         { "toggle-autoplace",           [](Score* cs, EditData&) { cs->cmdToggleAutoplace(false); } },
         { "autoplace-enabled",          [](Score* cs, EditData&) { cs->cmdToggleAutoplace(true); } },

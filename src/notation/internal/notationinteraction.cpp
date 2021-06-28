@@ -26,6 +26,7 @@
 #include <QRectF>
 #include <QPainter>
 #include <QClipboard>
+#include <QApplication>
 
 #include "ptrutils.h"
 
@@ -61,7 +62,8 @@
 using namespace mu::notation;
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
-    : m_notation(notation), m_undoStack(undoStack), m_lasso(new Ms::Lasso(notation->score()))
+    : m_notation(notation), m_undoStack(undoStack), m_gripEditData(&m_scoreCallbacks),
+    m_lasso(new Ms::Lasso(notation->score()))
 {
     m_noteInput = std::make_shared<NotationNoteInput>(notation, this, m_undoStack);
     m_selection = std::make_shared<NotationSelection>(notation);
@@ -72,9 +74,8 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
         }
     });
 
-    m_dragData.ed.view = new ScoreCallbacks();
-    m_dropData.ed.view = new ScoreCallbacks();
-    m_gripEditData.view = new ScoreCallbacks();
+    m_dragData.ed = Ms::EditData(&m_scoreCallbacks);
+    m_dropData.ed = Ms::EditData(&m_scoreCallbacks);
 }
 
 NotationInteraction::~NotationInteraction()
@@ -95,12 +96,16 @@ Ms::Score* NotationInteraction::score() const
 
 void NotationInteraction::startEdit()
 {
+    m_notifyAboutDropChanged = false;
     m_undoStack->prepareChanges();
 }
 
 void NotationInteraction::apply()
 {
     m_undoStack->commitChanges();
+    if (m_notifyAboutDropChanged) {
+        notifyAboutDropChanged();
+    }
 }
 
 void NotationInteraction::notifyAboutDragChanged()
@@ -241,6 +246,7 @@ void NotationInteraction::toggleVisible()
 {
     startEdit();
 
+    // TODO: Update `score()->cmdToggleVisible()` and call that here?
     for (Element* el : selection()->elements()) {
         if (el->isBracket()) {
             continue;
@@ -492,7 +498,12 @@ void NotationInteraction::select(const std::vector<Element*>& elements, SelectTy
 
 void NotationInteraction::selectAll()
 {
-    score()->cmdSelectAll();
+    if (isTextEditingStarted()) {
+        auto textBase = toTextBase(m_textEditData.element);
+        textBase->selectAll(textBase->cursorFromEditData(m_textEditData));
+    } else {
+        score()->cmdSelectAll();
+    }
 
     notifyAboutSelectionChanged();
 }
@@ -550,7 +561,7 @@ void NotationInteraction::DragData::reset()
 {
     beginMove = QPointF();
     elementOffset = QPointF();
-    ed = Ms::EditData();
+    ed = Ms::EditData(ed.view());
     dragGroups.clear();
 }
 
@@ -651,7 +662,6 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
         m_dragData.ed.curGrip = m_gripEditData.curGrip;
         m_dragData.ed.delta = m_dragData.ed.pos - m_dragData.ed.lastPos;
         m_dragData.ed.moveDelta = m_dragData.ed.delta - m_dragData.elementOffset;
-        m_dragData.ed.view = new ScoreCallbacks();
         m_dragData.ed.addData(m_gripEditData.getData(m_gripEditData.element));
         m_gripEditData.element->editDrag(m_dragData.ed);
     } else {
@@ -1357,8 +1367,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
                                                   Qt::KeyboardModifiers modifiers,
                                                   PointF pt, bool pasteMode)
 {
-    Ms::EditData dropData;
-    dropData.view        = new ScoreCallbacks();
+    Ms::EditData dropData(&m_scoreCallbacks);
     dropData.pos         = pt.isNull() ? target->pagePos() : pt;
     dropData.dragOffset  = QPointF();
     dropData.modifiers   = modifiers;
@@ -1389,7 +1398,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
         }
         dropData.dropElement = 0;
 
-        notifyAboutDropChanged();
+        m_notifyAboutDropChanged = true;
     }
 }
 
@@ -1596,7 +1605,7 @@ bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
         m_dropData.ed.dropElement->setTrack(track);
         m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
-        notifyAboutDropChanged();
+        m_notifyAboutDropChanged = true;
         return true;
     }
     m_dropData.ed.dropElement->score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
@@ -1898,7 +1907,7 @@ void NotationInteraction::moveText(MoveDirection d, bool quickly)
 
 bool NotationInteraction::isTextEditingStarted() const
 {
-    return m_textEditData.element != nullptr;
+    return m_textEditData.element && m_textEditData.element->isTextBase();
 }
 
 void NotationInteraction::startEditText(Element* element, const PointF& cursorPos)
@@ -1934,18 +1943,31 @@ void NotationInteraction::startEditText(Element* element, const PointF& cursorPo
 
 void NotationInteraction::editText(QKeyEvent* event)
 {
-    IF_ASSERT_FAILED(m_textEditData.element) {
+    bool wasEditingText = m_textEditData.element != nullptr;
+    if (!wasEditingText && selection()->element()) {
+        m_textEditData.element = selection()->element();
+    }
+
+    if (!m_textEditData.element) {
         return;
     }
 
     m_textEditData.key = event->key();
     m_textEditData.modifiers = event->modifiers();
     m_textEditData.s = event->text();
-    m_textEditData.element->edit(m_textEditData);
-
-    score()->update();
-
-    notifyAboutTextEditingChanged();
+    startEdit();
+    if (m_textEditData.element->edit(m_textEditData)) {
+        event->accept();
+        apply();
+    } else {
+        m_undoStack->rollbackChanges();
+    }
+    if (!wasEditingText) {
+        m_textEditData.element = nullptr;
+    }
+    if (isTextEditingStarted()) {
+        notifyAboutTextEditingChanged();
+    }
 }
 
 void NotationInteraction::endEditText()
@@ -1975,6 +1997,16 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
     m_textEditData.element->mousePress(m_textEditData);
 
     notifyAboutTextEditingChanged();
+}
+
+void NotationInteraction::undo()
+{
+    m_undoStack->undo(&m_textEditData);
+}
+
+void NotationInteraction::redo()
+{
+    m_undoStack->redo(&m_textEditData);
 }
 
 mu::async::Notification NotationInteraction::textEditingStarted() const
@@ -2137,12 +2169,15 @@ void NotationInteraction::copySelection()
         return;
     }
 
-    QMimeData* mimeData = selection()->mimeData();
-    if (!mimeData) {
-        return;
+    if (isTextEditingStarted()) {
+        m_textEditData.element->editCopy(m_textEditData);
+    } else {
+        QMimeData* mimeData = selection()->mimeData();
+        if (!mimeData) {
+            return;
+        }
+        QApplication::clipboard()->setMimeData(mimeData);
     }
-
-    QApplication::clipboard()->setMimeData(mimeData);
 }
 
 void NotationInteraction::copyLyrics()
@@ -2155,9 +2190,12 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
 {
     startEdit();
 
-    const QMimeData* mimeData = QApplication::clipboard()->mimeData();
-    score()->cmdPaste(mimeData, nullptr, scale);
-
+    if (isTextEditingStarted()) {
+        toTextBase(m_textEditData.element)->paste(m_textEditData);
+    } else {
+        const QMimeData* mimeData = QApplication::clipboard()->mimeData();
+        score()->cmdPaste(mimeData, nullptr, scale);
+    }
     apply();
 
     notifyAboutSelectionChanged();
@@ -2217,7 +2255,16 @@ void NotationInteraction::deleteSelection()
     }
 
     startEdit();
-    score()->cmdDeleteSelection();
+    if (isTextEditingStarted()) {
+        auto textBase = toTextBase(m_textEditData.element);
+        if (!textBase->deleteSelectedText(m_textEditData)) {
+            m_textEditData.key = Qt::Key_Backspace;
+            m_textEditData.modifiers = {};
+            textBase->edit(m_textEditData);
+        }
+    } else {
+        score()->cmdDeleteSelection();
+    }
     apply();
 
     notifyAboutSelectionChanged();
@@ -2299,8 +2346,7 @@ void NotationInteraction::addAccidentalToSelection(AccidentalType type)
         return;
     }
 
-    Ms::EditData editData;
-    editData.view = new ScoreCallbacks();
+    Ms::EditData editData(&m_scoreCallbacks);
 
     startEdit();
     score()->toggleAccidental(type, editData);
@@ -2450,6 +2496,28 @@ void NotationInteraction::addBeamToSelectedChordRests(BeamMode mode)
     notifyAboutNotationChanged();
 }
 
+void NotationInteraction::increaseDecreaseDuration(int steps, bool stepByDots)
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    startEdit();
+    score()->cmdIncDecDuration(steps, stepByDots);
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::toggleLayoutBreak(LayoutBreakType breakType)
+{
+    startEdit();
+    score()->cmdToggleLayoutBreak(breakType);
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval)
 {
     interval = intervalType == BreaksSpawnIntervalType::MeasuresInterval ? interval : 0;
@@ -2462,16 +2530,18 @@ void NotationInteraction::setBreaksSpawnInterval(BreaksSpawnIntervalType interva
     notifyAboutNotationChanged();
 }
 
-void NotationInteraction::transpose(const TransposeOptions& options)
+bool NotationInteraction::transpose(const TransposeOptions& options)
 {
     startEdit();
 
-    score()->transpose(options.mode, options.direction, options.key, options.interval,
-                       options.needTransposeKeys, options.needTransposeChordNames, options.needTransposeDoubleSharpsFlats);
+    bool ok = score()->transpose(options.mode, options.direction, options.key, options.interval,
+                                 options.needTransposeKeys, options.needTransposeChordNames, options.needTransposeDoubleSharpsFlats);
 
     apply();
 
     notifyAboutNotationChanged();
+
+    return ok;
 }
 
 void NotationInteraction::swapVoices(int voiceIndex1, int voiceIndex2)
@@ -2521,6 +2591,15 @@ void NotationInteraction::addIntervalToSelectedNotes(int interval)
 
     startEdit();
     score()->addInterval(interval, notes);
+    apply();
+
+    notifyAboutSelectionChanged();
+}
+
+void NotationInteraction::addFret(int fretIndex)
+{
+    startEdit();
+    score()->cmdAddFret(fretIndex);
     apply();
 
     notifyAboutSelectionChanged();

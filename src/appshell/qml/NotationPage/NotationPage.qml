@@ -23,6 +23,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 import MuseScore.Dock 1.0
 import MuseScore.AppShell 1.0
 
@@ -56,6 +57,25 @@ DockPage {
         id: keynavSec
         name: "NoteInputSection"
         order: 2
+    }
+
+    property NavigationSection keynavLeftPanelSec: NavigationSection {
+        name: "NavigationLeftPanel"
+        enabled: root.visible
+        order: 3
+    }
+
+    property NavigationSection keynavRightPanelSec: NavigationSection {
+        name: "NavigationRightPanel"
+        enabled: root.visible
+        order: 5
+    }
+
+    function navigationPanelSec(location) {
+        if (location === DockBase.Right) {
+            return keynavRightPanelSec
+        }
+        return keynavLeftPanelSec
     }
 
     function updatePageState() {
@@ -166,6 +186,8 @@ DockPage {
             objectName: "palettePanel"
             title: qsTrc("appshell", "Palette")
 
+            navigationSection: root.navigationPanelSec(palettePanel.location)
+
             width: root.defaultPanelWidth
             minimumWidth: root.defaultPanelWidth
             maximumWidth: root.defaultPanelWidth
@@ -176,7 +198,9 @@ DockPage {
                 root.pageModel.isPalettePanelVisible = false
             }
 
-            PalettesWidget {}
+            PalettesWidget {
+                navigationSection: palettePanel.navigationSection
+            }
         },
 
         DockPanel {
@@ -184,6 +208,8 @@ DockPage {
 
             objectName: "instrumentsPanel"
             title: qsTrc("appshell", "Instruments")
+
+            navigationSection: root.navigationPanelSec(palettePanel.location)
 
             width: root.defaultPanelWidth
             minimumWidth: root.defaultPanelWidth
@@ -195,7 +221,9 @@ DockPage {
                 root.pageModel.isInstrumentsPanelVisible = false
             }
 
-            InstrumentsPanel {}
+            InstrumentsPanel {
+                navigationSection: instrumentsPanel.navigationSection
+            }
         },
 
         DockPanel {
@@ -203,6 +231,8 @@ DockPage {
 
             objectName: "inspectorPanel"
             title: qsTrc("appshell", "Inspector")
+
+            navigationSection: root.navigationPanelSec(palettePanel.location)
 
             width: root.defaultPanelWidth
             minimumWidth: root.defaultPanelWidth
@@ -212,7 +242,65 @@ DockPage {
                 root.pageModel.isInspectorPanelVisible = false
             }
 
-            InspectorForm {}
+            InspectorForm {
+                navigationSection: inspectorPanel.navigationSection
+            }
+        },
+
+        // =============================================
+        // Horizontal Panels
+        // =============================================
+
+        DockPanel {
+            id: mixerPanel
+
+            objectName: "mixerPanel"
+            title: qsTrc("appshell", "Mixer")
+
+            allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
+
+            height: 200
+            minimumHeight: 100
+            maximumHeight: 300
+
+            tabifyPanel: pianoRollPanel
+
+            visible: false
+
+            Rectangle {
+                anchors.fill: parent
+                color: ui.theme.backgroundPrimaryColor
+
+                StyledTextLabel {
+                    anchors.centerIn: parent
+                    text: mixerPanel.title
+                }
+            }
+        },
+
+        DockPanel {
+            id: pianoRollPanel
+
+            objectName: "pianoRollPanel"
+            title: qsTrc("appshell", "Piano Roll")
+
+            allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
+
+            height: 200
+            minimumHeight: 100
+            maximumHeight: 300
+
+            visible: false
+
+            Rectangle {
+                anchors.fill: parent
+                color: ui.theme.backgroundPrimaryColor
+
+                StyledTextLabel {
+                    anchors.centerIn: parent
+                    text: pianoRollPanel.title
+                }
+            }
         }
     ]
 

@@ -29,7 +29,7 @@ namespace mu::iex::audioexport {
 class Mp3Writer : public notation::AbstractNotationWriter
 {
 public:
-    Ret write(notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) override;
+    Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
 };
 }
 

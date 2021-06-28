@@ -30,6 +30,8 @@ public:
     std::string name() const;
     void write(const LogMsg& logMsg);
 
+    std::string filePath() const;
+
 private:
 
     void rotate();
@@ -37,6 +39,7 @@ private:
     Date m_rotateDate;
     std::ofstream m_file;
     std::string m_path;
+    std::string m_filePath;
     std::string m_name;
     std::string m_ext;
 };

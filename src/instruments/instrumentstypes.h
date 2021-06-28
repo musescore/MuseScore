@@ -31,6 +31,7 @@
 #include "libmscore/stringdata.h"
 #include "libmscore/clef.h"
 #include "libmscore/instrument.h"
+#include "libmscore/scoreorder.h"
 #include "framework/midi/miditypes.h"
 
 namespace mu::instruments {
@@ -108,6 +109,13 @@ using InstrumentGenreMap = QMap<QString /*id*/, InstrumentGenre>;
 
 static const QString COMMON_GENRE_ID("common");
 
+struct InstrumentFamily
+{
+    QString id;
+    QString name;
+};
+using InstrumentFamilyMap = QMap<QString /*id*/, InstrumentFamily>;
+
 struct Transposition
 {
     QString id;
@@ -124,12 +132,14 @@ struct Instrument
     QString name;
     QString musicXMLid;
     QString description;
+    int sequenceOrder = 0;
 
     bool extended = false;
     int staves = 1;
 
     QString groupId;
     QStringList genreIds;
+    QString familyId;
 
     PitchRange amateurPitchRange;
     PitchRange professionalPitchRange;
@@ -163,13 +173,41 @@ struct Instrument
 };
 
 struct PartInstrument {
-    bool isExistingPart;
-    bool isSoloist;
+    bool isExistingPart = false;
+    bool isSoloist = false;
     QString partId;
     Instrument instrument;
 };
 
 using PartInstrumentList = QList<PartInstrument>;
+
+struct ScoreOrderGroup {
+    int index = -1;
+    QString family;
+    QString section;
+    QString unsorted;
+    bool bracket = false;
+    bool showSystemMarkings = false;
+    bool barLineSpan = false;
+    bool thinBracket = false;
+};
+
+using InstrumentOverwrite = Ms::InstrumentOverwrite;
+
+struct ScoreOrder {
+    int index = -1;
+    QString id;
+    QString name;
+    QMap<QString, InstrumentOverwrite> instrumentMap;
+    QList<ScoreOrderGroup> groups;
+
+    bool isValid() { return !groups.empty(); }
+};
+
+struct PartInstrumentListScoreOrder {
+    PartInstrumentList instruments;
+    ScoreOrder scoreOrder;
+};
 
 struct InstrumentTemplate
 {
@@ -182,13 +220,16 @@ struct InstrumentTemplate
 
 using InstrumentTemplateMap = QMap<QString /*id*/, InstrumentTemplate>;
 using InstrumentTemplateList = QList<InstrumentTemplate>;
+using ScoreOrderMap = QMap<QString /*id*/, ScoreOrder>;
 
 struct InstrumentsMeta
 {
     InstrumentTemplateMap instrumentTemplates;
     InstrumentGroupMap groups;
     InstrumentGenreMap genres;
+    InstrumentFamilyMap families;
     MidiArticulationMap articulations;
+    ScoreOrderMap scoreOrders;
 };
 
 class InstrumentsTreeItemType
@@ -211,5 +252,6 @@ public:
 }
 
 Q_DECLARE_METATYPE(mu::instruments::Instrument)
+Q_DECLARE_METATYPE(mu::instruments::ScoreOrder)
 
 #endif // MU_INSTRUMENTS_INSTRUMENTSTYPES_H

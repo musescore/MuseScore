@@ -36,7 +36,7 @@ static constexpr std::string_view TOOLBAR_TAG("Toolbar");
 static constexpr std::string_view ACTION_TAG("action");
 static constexpr std::string_view TOOLBAR_NAME_TAG("name");
 
-AbstractDataPtrList WorkspaceToolbarStream::read(IODevice& sourceDevice) const
+AbstractDataPtrList WorkspaceToolbarStream::read(Device& sourceDevice) const
 {
     XmlReader reader(&sourceDevice);
     AbstractDataPtrList toolbars;
@@ -73,7 +73,7 @@ AbstractDataPtr WorkspaceToolbarStream::readToolbar(XmlReader& reader) const
     return toolbar;
 }
 
-void WorkspaceToolbarStream::write(const AbstractDataPtrList& toolbars, IODevice& destinationDevice) const
+void WorkspaceToolbarStream::write(const AbstractDataPtrList& toolbars, Device& destinationDevice) const
 {
     XmlWriter writer(&destinationDevice);
 

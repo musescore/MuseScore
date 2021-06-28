@@ -25,12 +25,27 @@
 
 #include "framework/ui/imainwindow.h"
 
+#include <QObject>
+
 namespace mu::dock {
-class MainWindowProvider : public ui::IMainWindow
+class MainWindowProvider : public QObject, public ui::IMainWindow
 {
+    Q_OBJECT
+
+    Q_PROPERTY(QWindow * window READ qWindow WRITE setWindow NOTIFY windowChanged)
+    Q_PROPERTY(QString filePath READ filePath WRITE setFilePath NOTIFY filePathChanged)
+    Q_PROPERTY(bool fileModified READ fileModified WRITE setFileModified NOTIFY fileModifiedChanged)
+
 public:
-    QMainWindow* qMainWindow() const override;
+    explicit MainWindowProvider(QObject* parent = nullptr);
+
     QWindow* qWindow() const override;
+
+    QString filePath() const;
+    virtual bool fileModified() const;
+
+    void requestShowOnBack() override;
+    void requestShowOnFront() override;
 
     bool isFullScreen() const override;
     void toggleFullScreen() override;
@@ -42,12 +57,31 @@ public:
     void requestShowToolBarDockingHolder(const QPoint& globalPos) override;
     async::Channel<QPoint> showToolBarDockingHolderRequested() const override;
 
+    void requestShowPanelDockingHolder(const QPoint& globalPos) override;
+    async::Channel<QPoint> showPanelDockingHolderRequested() const override;
+
     void requestHideAllDockingHolders() override;
     async::Notification hideAllDockingHoldersRequested() const override;
 
+signals:
+    void windowChanged();
+    void filePathChanged();
+    void fileModifiedChanged();
+
+protected:
+    virtual void init();
+
+    QWindow* m_window = nullptr;
+
+private slots: // Should only be used from QML
+    void setWindow(QWindow* window);
+    void setFilePath(const QString& filePath);
+    virtual void setFileModified(bool modified);
+
 private:
     async::Channel<QString, framework::Orientation> m_dockOrientationChanged;
-    async::Channel<QPoint> m_showDockingHolderRequested;
+    async::Channel<QPoint> m_showToolBarDockingHolderRequested;
+    async::Channel<QPoint> m_showPanelDockingHolderRequested;
     async::Notification m_hideAllHoldersRequested;
 };
 }

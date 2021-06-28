@@ -24,58 +24,114 @@
 
 #include <QWindow>
 
-#include "thirdparty/KDDockWidgets/src/private/DockRegistry_p.h"
+#include "modularity/ioc.h"
+#include "log.h"
 
 using namespace mu::dock;
 using namespace mu::async;
 
-inline QWindow* mainWindow()
+MainWindowProvider::MainWindowProvider(QObject* parent)
+    : QObject(parent), m_window(nullptr)
 {
-    auto windows = KDDockWidgets::DockRegistry::self()->mainwindows();
-
-    if (windows.isEmpty()) {
-        return nullptr;
-    }
-
-    auto mainWindow = windows.first();
-    return mainWindow ? mainWindow->windowHandle() : nullptr;
-}
-
-QMainWindow* MainWindowProvider::qMainWindow() const
-{
-    return nullptr;
 }
 
 QWindow* MainWindowProvider::qWindow() const
 {
-    return mainWindow();
+    return m_window;
+}
+
+void MainWindowProvider::setWindow(QWindow* window)
+{
+    if (m_window != nullptr) {
+        LOGW() << "Window for this MainWindowProvider is already set. Refusing to set it again.";
+        return;
+    }
+
+    m_window = window;
+    emit windowChanged();
+
+    init();
+}
+
+void MainWindowProvider::init()
+{
+    framework::ioc()->registerExport<ui::IMainWindow>("dock", this);
+}
+
+QString MainWindowProvider::filePath() const
+{
+    return m_window ? m_window->filePath() : "";
+}
+
+void MainWindowProvider::setFilePath(const QString& filePath)
+{
+    if (!m_window) {
+        return;
+    }
+
+    if (filePath == m_window->filePath()) {
+        return;
+    }
+
+    m_window->setFilePath(filePath);
+    emit filePathChanged();
+}
+
+bool MainWindowProvider::fileModified() const
+{
+    return false;
+}
+
+void MainWindowProvider::setFileModified(bool /*modified*/)
+{
+}
+
+void MainWindowProvider::requestShowOnBack()
+{
+    m_window->lower();
+}
+
+void MainWindowProvider::requestShowOnFront()
+{
+    struct Holder {
+        QMetaObject::Connection conn;
+    };
+
+    Holder* h = new Holder();
+    h->conn = QObject::connect(m_window, &QWindow::activeChanged, [this, h]() {
+        if (m_window->isActive()) {
+            m_window->raise();
+        }
+
+        QObject::disconnect(h->conn);
+        delete h;
+    });
+    m_window->show();
+    m_window->requestActivate();
 }
 
 bool MainWindowProvider::isFullScreen() const
 {
-    const QWindow* window = mainWindow();
-    Qt::WindowStates states = window ? window->windowStates() : Qt::WindowStates();
+    Qt::WindowStates states = m_window ? m_window->windowStates() : Qt::WindowStates();
     return states.testFlag(Qt::WindowFullScreen);
 }
 
 void MainWindowProvider::toggleFullScreen()
 {
-    QWindow* window = mainWindow();
-    if (!window) {
+    if (!m_window) {
         return;
     }
 
     if (isFullScreen()) {
-        window->showNormal();
+        m_window->showNormal();
     } else {
-        window->showFullScreen();
+        m_window->showFullScreen();
     }
 }
 
 const QScreen* MainWindowProvider::screen() const
 {
-    const QWindow* window = mainWindow();
-    return window ? window->screen() : nullptr;
+    return m_window ? m_window->screen() : nullptr;
 }
 
 void MainWindowProvider::requestChangeToolBarOrientation(const QString& toolBarName, mu::framework::Orientation orientation)
@@ -90,12 +146,22 @@ Channel<QString, mu::framework::Orientation> MainWindowProvider::changeToolBarOr
 
 void MainWindowProvider::requestShowToolBarDockingHolder(const QPoint& globalPos)
 {
-    m_showDockingHolderRequested.send(globalPos);
+    m_showToolBarDockingHolderRequested.send(globalPos);
 }
 
 mu::async::Channel<QPoint> MainWindowProvider::showToolBarDockingHolderRequested() const
 {
-    return m_showDockingHolderRequested;
+    return m_showToolBarDockingHolderRequested;
+}
+
+void MainWindowProvider::requestShowPanelDockingHolder(const QPoint& globalPos)
+{
+    m_showPanelDockingHolderRequested.send(globalPos);
+}
+
+mu::async::Channel<QPoint> MainWindowProvider::showPanelDockingHolderRequested() const
+{
+    return m_showPanelDockingHolderRequested;
 }
 
 void MainWindowProvider::requestHideAllDockingHolders()

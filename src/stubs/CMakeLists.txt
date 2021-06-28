@@ -59,3 +59,7 @@ endif (NOT BUILD_INSTRUMENTS_MODULE)
 if (NOT BUILD_INSPECTOR_MODULE)
     add_subdirectory(inspector)
 endif (NOT BUILD_INSPECTOR_MODULE)
+
+if (NOT BUILD_MULTIINSTANCES_MODULE)
+    add_subdirectory(multiinstances)
+endif()

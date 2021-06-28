@@ -25,6 +25,8 @@
 
 #include <QTextCursor>
 
+class QInputMethodEvent;
+
 #include "element.h"
 #include "property.h"
 #include "style.h"
@@ -158,8 +160,8 @@ public:
     QString currentWord() const;
     QString currentLine() const;
     bool set(const mu::PointF& p, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
-    QString selectedText() const;
-    QString extractText(int r1, int c1, int r2, int c2) const;
+    QString selectedText(bool withFormat = false) const;
+    QString extractText(int r1, int c1, int r2, int c2, bool withFormat = false) const;
     void updateCursorFormat();
     void setFormat(FormatId, QVariant);
     void changeSelectionFormat(FormatId id, QVariant val);
@@ -235,7 +237,7 @@ public:
     qreal y() const { return _y; }
     void setY(qreal val) { _y = val; }
     qreal lineSpacing() const { return _lineSpacing; }
-    QString text(int, int) const;
+    QString text(int, int, bool = false) const;
     bool eol() const { return _eol; }
     void setEol(bool val) { _eol = val; }
     void changeFormat(FormatId, QVariant val, int start, int n);
@@ -282,6 +284,10 @@ class TextBase : public Element
     QString stripText(bool, bool, bool) const;
     Sid offsetSid() const;
 
+    static QString getHtmlStartTag(qreal newSize, qreal& curSize, const QString& newFamily, QString& curFamily, bool bold, bool italic,
+                                   bool underline);
+    static QString getHtmlEndTag(bool bold, bool italic, bool underline);
+
 protected:
     QColor textColor() const;
     mu::RectF frame;             // calculated in layout()
@@ -289,6 +295,8 @@ protected:
     void layoutEdit();
     void createLayout();
     void insertSym(EditData& ed, SymId id);
+    void prepareFormat(const QString& token, Ms::TextCursor& cursor);
+    bool prepareFormat(const QString& token, Ms::CharFormat& format);
 
 public:
     TextBase(Score* = 0, Tid tid = Tid::DEFAULT, ElementFlags = ElementFlag::NOTHING);

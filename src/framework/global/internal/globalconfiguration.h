@@ -31,20 +31,25 @@ class GlobalConfiguration : public IGlobalConfiguration
 public:
     GlobalConfiguration() = default;
 
-    io::path appDirPath() const override;
-    io::path sharePath() const override;
-    io::path dataPath() const override;
-    io::path logsPath() const override;
-    io::path backupPath() const override;
+    io::path appBinPath() const override;
+    io::path appDataPath() const override;
+    io::path appConfigPath() const override;
+
+    io::path userAppDataPath() const override;
+    io::path userBackupPath() const override;
+    io::path userDataPath() const override;
+
+    io::path homePath() const override;
 
     bool useFactorySettings() const override;
     bool enableExperimental() const override;
 
 private:
-    QString getSharePath() const;
+    QString resolveAppDataPath() const;
+    QString resolveUserAppDataPath() const;
 
-    mutable io::path m_sharePath;
-    mutable io::path m_dataPath;
+    mutable io::path m_appDataPath;
+    mutable io::path m_userAppDataPath;
 };
 }
 

@@ -112,7 +112,7 @@ elseif(OS_IS_WASM)
         -O3 \
     ")
 else()
-    message(FATAL_ERROR "Unsopported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
+    message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
 
 ###########################################
@@ -172,13 +172,16 @@ if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB iex_bww)
     list(APPEND LINK_LIB iex_capella)
     list(APPEND LINK_LIB iex_guitarpro)
-    list(APPEND LINK_LIB iex_midiimport)
+    list(APPEND LINK_LIB iex_midi)
     list(APPEND LINK_LIB iex_musedata)
     list(APPEND LINK_LIB iex_ove)
     list(APPEND LINK_LIB iex_audioexport)
     list(APPEND LINK_LIB iex_imagesexport)
     list(APPEND LINK_LIB plugins)
+    list(APPEND LINK_LIB multiinstances)
 endif()
+
+list(APPEND LINK_LIB diagnostics)
 
 if (BUILD_AUTOBOT_MODULE)
     list(APPEND LINK_LIB autobot)
@@ -489,7 +492,7 @@ elseif(OS_IS_WASM)
     copy_html_js_launch_files(mscore)
 
 else()
-    message(FATAL_ERROR "Unsopported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
+    message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
 
 

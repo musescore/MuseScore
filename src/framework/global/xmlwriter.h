@@ -26,7 +26,7 @@
 #include <memory>
 
 #include "io/path.h"
-#include "system/iodevice.h"
+#include "io/device.h"
 
 class QXmlStreamWriter;
 
@@ -35,7 +35,7 @@ class XmlWriter
 {
 public:
     XmlWriter(const io::path& path);
-    XmlWriter(system::IODevice* device);
+    XmlWriter(io::Device* device);
     ~XmlWriter();
 
     void writeStartDocument(std::string_view version = std::string_view());
@@ -51,9 +51,9 @@ public:
     bool success() const;
 
 private:
-    void initWriter(system::IODevice* device);
+    void initWriter(io::Device* device);
 
-    std::unique_ptr<system::IODevice> m_device;
+    std::unique_ptr<io::Device> m_device;
     std::unique_ptr<QXmlStreamWriter> m_writer;
 };
 }

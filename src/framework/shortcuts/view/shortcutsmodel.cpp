@@ -29,7 +29,7 @@
 using namespace mu::shortcuts;
 using namespace mu::ui;
 
-QString shorcutsFileFilter()
+static QString shorcutsFileFilter()
 {
     return mu::qtrc("shortcuts", "MuseScore Shortcuts File") + " (*.xml)";
 }
@@ -93,7 +93,7 @@ void ShortcutsModel::load()
     beginResetModel();
     m_shortcuts.clear();
 
-    for (const Shortcut& shortcut: shortcutsRegister()->shortcuts()) {
+    for (const Shortcut& shortcut : shortcutsRegister()->shortcuts()) {
         if (actionTitle(shortcut.action).isEmpty()) {
             continue;
         }
@@ -164,30 +164,30 @@ void ShortcutsModel::setSelection(const QItemSelection& selection)
     emit selectionChanged();
 }
 
-void ShortcutsModel::loadShortcutsFromFile()
+void ShortcutsModel::importShortcutsFromFile()
 {
     io::path path = interactive()->selectOpeningFile(
-        qtrc("shortcuts", "Load Shortcuts"),
-        configuration()->shortcutsUserPath().val,
+        qtrc("shortcuts", "Import Shortcuts"),
+        globalConfiguration()->homePath(),
         shorcutsFileFilter());
 
     if (!path.empty()) {
-        configuration()->setShortcutsUserPath(path);
+        shortcutsRegister()->importFromFile(path);
     }
 }
 
-void ShortcutsModel::saveShortcutsToFile()
+void ShortcutsModel::exportShortcutsToFile()
 {
     io::path path = interactive()->selectSavingFile(
-        qtrc("shortcuts", "Save Shortcuts"),
-        configuration()->shortcutsUserPath().val,
+        qtrc("shortcuts", "Export Shortcuts"),
+        globalConfiguration()->homePath(),
         shorcutsFileFilter());
 
     if (path.empty()) {
         return;
     }
 
-    Ret ret = shortcutsRegister()->saveToFile(path);
+    Ret ret = shortcutsRegister()->exportToFile(path);
     if (!ret) {
         LOGE() << ret.toString();
     }

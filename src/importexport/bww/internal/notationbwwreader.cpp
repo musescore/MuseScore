@@ -30,8 +30,8 @@ extern Score::FileError importBww(MasterScore*, const QString& name);
 
 using namespace mu::iex::bww;
 
-mu::Ret NotationBwwReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret NotationBwwReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
 {
     Ms::Score::FileError err = Ms::importBww(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err);
+    return mu::notation::scoreFileErrorToRet(err, path);
 }

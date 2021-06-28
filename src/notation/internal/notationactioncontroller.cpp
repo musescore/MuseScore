@@ -41,56 +41,56 @@ void NotationActionController::init()
     //! NOTE For historical reasons, the name of the action does not match what needs to be done
     dispatcher()->reg(this, ESCAPE_ACTION_CODE, this, &NotationActionController::resetState);
 
-    dispatcher()->reg(this, "note-input", [this]() { toggleNoteInput(); });
-    dispatcher()->reg(this, "note-input-steptime", [this]() { toggleNoteInputMethod(NoteInputMethod::STEPTIME); });
-    dispatcher()->reg(this, "note-input-rhythm", [this]() { toggleNoteInputMethod(NoteInputMethod::RHYTHM); });
-    dispatcher()->reg(this, "note-input-repitch", [this]() { toggleNoteInputMethod(NoteInputMethod::REPITCH); });
-    dispatcher()->reg(this, "note-input-realtime-auto", [this]() { toggleNoteInputMethod(NoteInputMethod::REALTIME_AUTO); });
-    dispatcher()->reg(this, "note-input-realtime-manual", [this]() { toggleNoteInputMethod(NoteInputMethod::REALTIME_MANUAL); });
-    dispatcher()->reg(this, "note-input-timewise", [this]() { toggleNoteInputMethod(NoteInputMethod::TIMEWISE); });
+    registerAction("note-input", [this]() { toggleNoteInput(); }, &NotationActionController::isNotTextEditing);
+    registerNoteInputAction("note-input-steptime", NoteInputMethod::STEPTIME);
+    registerNoteInputAction("note-input-rhythm", NoteInputMethod::RHYTHM);
+    registerNoteInputAction("note-input-repitch", NoteInputMethod::REPITCH);
+    registerNoteInputAction("note-input-realtime-auto", NoteInputMethod::REALTIME_AUTO);
+    registerNoteInputAction("note-input-realtime-manual", NoteInputMethod::REALTIME_MANUAL);
+    registerNoteInputAction("note-input-timewise", NoteInputMethod::TIMEWISE);
 
-    dispatcher()->reg(this, "note-longa", [this]() { padNote(Pad::NOTE00); });
-    dispatcher()->reg(this, "note-breve", [this]() { padNote(Pad::NOTE0); });
-    dispatcher()->reg(this, "pad-note-1", [this]() { padNote(Pad::NOTE1); });
-    dispatcher()->reg(this, "pad-note-2", [this]() { padNote(Pad::NOTE2); });
-    dispatcher()->reg(this, "pad-note-4", [this]() { padNote(Pad::NOTE4); });
-    dispatcher()->reg(this, "pad-note-8", [this]() { padNote(Pad::NOTE8); });
-    dispatcher()->reg(this, "pad-note-16", [this]() { padNote(Pad::NOTE16); });
-    dispatcher()->reg(this, "pad-note-32", [this]() { padNote(Pad::NOTE32); });
-    dispatcher()->reg(this, "pad-note-64", [this]() { padNote(Pad::NOTE64); });
-    dispatcher()->reg(this, "pad-note-128", [this]() { padNote(Pad::NOTE128); });
-    dispatcher()->reg(this, "pad-note-256", [this]() { padNote(Pad::NOTE256); });
-    dispatcher()->reg(this, "pad-note-512", [this]() { padNote(Pad::NOTE512); });
-    dispatcher()->reg(this, "pad-note-1024", [this]() { padNote(Pad::NOTE1024); });
-    dispatcher()->reg(this, "pad-dot", [this]() { padNote(Pad::DOT); });
-    dispatcher()->reg(this, "pad-dotdot", [this]() { padNote(Pad::DOTDOT); });
-    dispatcher()->reg(this, "pad-dot3", [this]() { padNote(Pad::DOT3); });
-    dispatcher()->reg(this, "pad-dot4", [this]() { padNote(Pad::DOT4); });
-    dispatcher()->reg(this, "pad-rest", [this]() { padNote(Pad::REST); });
+    registerPadNoteAction("note-longa", Pad::NOTE00);
+    registerPadNoteAction("note-breve", Pad::NOTE0);
+    registerPadNoteAction("pad-note-1", Pad::NOTE1);
+    registerPadNoteAction("pad-note-2", Pad::NOTE2);
+    registerPadNoteAction("pad-note-4", Pad::NOTE4);
+    registerPadNoteAction("pad-note-8", Pad::NOTE8);
+    registerPadNoteAction("pad-note-16", Pad::NOTE16);
+    registerPadNoteAction("pad-note-32", Pad::NOTE32);
+    registerPadNoteAction("pad-note-64", Pad::NOTE64);
+    registerPadNoteAction("pad-note-128", Pad::NOTE128);
+    registerPadNoteAction("pad-note-256", Pad::NOTE256);
+    registerPadNoteAction("pad-note-512", Pad::NOTE512);
+    registerPadNoteAction("pad-note-1024", Pad::NOTE1024);
+    registerPadNoteAction("pad-dot", Pad::DOT);
+    registerPadNoteAction("pad-dotdot", Pad::DOTDOT);
+    registerPadNoteAction("pad-dot3", Pad::DOT3);
+    registerPadNoteAction("pad-dot4", Pad::DOT4);
+    registerPadNoteAction("pad-rest", Pad::REST);
 
-    dispatcher()->reg(this, "note-c", [this]() { addNote(NoteName::C, NoteAddingMode::NextChord); });
-    dispatcher()->reg(this, "note-d", [this]() { addNote(NoteName::D, NoteAddingMode::NextChord); });
-    dispatcher()->reg(this, "note-e", [this]() { addNote(NoteName::E, NoteAddingMode::NextChord); });
-    dispatcher()->reg(this, "note-f", [this]() { addNote(NoteName::F, NoteAddingMode::NextChord); });
-    dispatcher()->reg(this, "note-g", [this]() { addNote(NoteName::G, NoteAddingMode::NextChord); });
-    dispatcher()->reg(this, "note-a", [this]() { addNote(NoteName::A, NoteAddingMode::NextChord); });
-    dispatcher()->reg(this, "note-b", [this]() { addNote(NoteName::B, NoteAddingMode::NextChord); });
+    registerNoteAction("note-c", NoteName::C);
+    registerNoteAction("note-d", NoteName::D);
+    registerNoteAction("note-e", NoteName::E);
+    registerNoteAction("note-f", NoteName::F);
+    registerNoteAction("note-g", NoteName::G);
+    registerNoteAction("note-a", NoteName::A);
+    registerNoteAction("note-b", NoteName::B);
 
-    dispatcher()->reg(this, "chord-c", [this]() { addNote(NoteName::C, NoteAddingMode::CurrentChord); });
-    dispatcher()->reg(this, "chord-d", [this]() { addNote(NoteName::D, NoteAddingMode::CurrentChord); });
-    dispatcher()->reg(this, "chord-e", [this]() { addNote(NoteName::E, NoteAddingMode::CurrentChord); });
-    dispatcher()->reg(this, "chord-f", [this]() { addNote(NoteName::F, NoteAddingMode::CurrentChord); });
-    dispatcher()->reg(this, "chord-g", [this]() { addNote(NoteName::G, NoteAddingMode::CurrentChord); });
-    dispatcher()->reg(this, "chord-a", [this]() { addNote(NoteName::A, NoteAddingMode::CurrentChord); });
-    dispatcher()->reg(this, "chord-b", [this]() { addNote(NoteName::B, NoteAddingMode::CurrentChord); });
+    registerNoteAction("chord-c", NoteName::C, NoteAddingMode::CurrentChord);
+    registerNoteAction("chord-d", NoteName::D, NoteAddingMode::CurrentChord);
+    registerNoteAction("chord-e", NoteName::E, NoteAddingMode::CurrentChord);
+    registerNoteAction("chord-f", NoteName::F, NoteAddingMode::CurrentChord);
+    registerNoteAction("chord-g", NoteName::G, NoteAddingMode::CurrentChord);
+    registerNoteAction("chord-a", NoteName::A, NoteAddingMode::CurrentChord);
+    registerNoteAction("chord-b", NoteName::B, NoteAddingMode::CurrentChord);
 
-    dispatcher()->reg(this, "insert-c", [this]() { addNote(NoteName::C, NoteAddingMode::InsertChord); });
-    dispatcher()->reg(this, "insert-d", [this]() { addNote(NoteName::D, NoteAddingMode::InsertChord); });
-    dispatcher()->reg(this, "insert-e", [this]() { addNote(NoteName::E, NoteAddingMode::InsertChord); });
-    dispatcher()->reg(this, "insert-f", [this]() { addNote(NoteName::F, NoteAddingMode::InsertChord); });
-    dispatcher()->reg(this, "insert-g", [this]() { addNote(NoteName::G, NoteAddingMode::InsertChord); });
-    dispatcher()->reg(this, "insert-a", [this]() { addNote(NoteName::A, NoteAddingMode::InsertChord); });
-    dispatcher()->reg(this, "insert-b", [this]() { addNote(NoteName::B, NoteAddingMode::InsertChord); });
+    registerNoteAction("insert-c", NoteName::C, NoteAddingMode::InsertChord);
+    registerNoteAction("insert-d", NoteName::D, NoteAddingMode::InsertChord);
+    registerNoteAction("insert-e", NoteName::E, NoteAddingMode::InsertChord);
+    registerNoteAction("insert-f", NoteName::F, NoteAddingMode::InsertChord);
+    registerNoteAction("insert-g", NoteName::G, NoteAddingMode::InsertChord);
+    registerNoteAction("insert-a", NoteName::A, NoteAddingMode::InsertChord);
+    registerNoteAction("insert-b", NoteName::B, NoteAddingMode::InsertChord);
 
     dispatcher()->reg(this, "flat2", [this]() { toggleAccidental(AccidentalType::FLAT2); });
     dispatcher()->reg(this, "flat", [this]() { toggleAccidental(AccidentalType::FLAT); });
@@ -138,6 +138,11 @@ void NotationActionController::init()
     dispatcher()->reg(this, "up-chord", [this]() { moveChord(MoveDirection::Up); });
     dispatcher()->reg(this, "down-chord", [this]() { moveChord(MoveDirection::Down); });
 
+    dispatcher()->reg(this, "double-duration", [this]() { increaseDecreaseDuration(-1, /*stepByDots*/ false); });
+    dispatcher()->reg(this, "half-duration", [this]() { increaseDecreaseDuration(1, false); });
+    dispatcher()->reg(this, "inc-duration-dotted", [this]() { increaseDecreaseDuration(-1, true); });
+    dispatcher()->reg(this, "dec-duration-dotted", [this]() { increaseDecreaseDuration(1, true); });
+
     dispatcher()->reg(this, "cut", this, &NotationActionController::cutSelection);
     dispatcher()->reg(this, "copy", this, &NotationActionController::copySelection);
     dispatcher()->reg(this, "paste", [this]() { pasteSelection(PastingType::Default); });
@@ -151,8 +156,8 @@ void NotationActionController::init()
     dispatcher()->reg(this, "chord-tie", this, &NotationActionController::chordTie);
     dispatcher()->reg(this, "add-slur", this, &NotationActionController::addSlur);
 
-    dispatcher()->reg(this, UNDO_ACTION_CODE, this, &NotationActionController::undo);
-    dispatcher()->reg(this, REDO_ACTION_CODE, this, &NotationActionController::redo);
+    registerAction(UNDO_ACTION_CODE, &NotationActionController::undo, &NotationActionController::canUndo);
+    registerAction(REDO_ACTION_CODE, &NotationActionController::redo, &NotationActionController::canRedo);
 
     dispatcher()->reg(this, "select-next-chord", [this]() { addChordToSelection(MoveDirection::Right); });
     dispatcher()->reg(this, "select-prev-chord", [this]() { addChordToSelection(MoveDirection::Left); });
@@ -164,6 +169,10 @@ void NotationActionController::init()
     dispatcher()->reg(this, "select-section", this, &NotationActionController::selectSection);
     dispatcher()->reg(this, "first-element", this, &NotationActionController::firstElement);
     dispatcher()->reg(this, "last-element", this, &NotationActionController::lastElement);
+
+    dispatcher()->reg(this, "system-break", [this]() { toggleLayoutBreak(LayoutBreakType::LINE); });
+    dispatcher()->reg(this, "page-break", [this]() { toggleLayoutBreak(LayoutBreakType::PAGE); });
+    dispatcher()->reg(this, "section-break", [this]() { toggleLayoutBreak(LayoutBreakType::SECTION); });
 
     dispatcher()->reg(this, "split-measure", this, &NotationActionController::splitMeasure);
     dispatcher()->reg(this, "join-measures", this, &NotationActionController::joinSelectedMeasures);
@@ -277,6 +286,10 @@ void NotationActionController::init()
         dispatcher()->reg(this, "voice-" + std::to_string(i + 1), [this, i]() { changeVoice(i); });
     }
 
+    for (int i = 0; i < MAX_FRET; ++i) {
+        registerAction("fret-" + std::to_string(i), [this, i]() { addFret(i); }, &NotationActionController::isTablatureStaff);
+    }
+
     // listen on state changes
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         auto notation = globalContext()->currentNotation();
@@ -296,17 +309,9 @@ bool NotationActionController::canReceiveAction(const actions::ActionCode& code)
         return false;
     }
 
-    //! NOTE At the moment, if we are in the text editing mode, we can only process the escape
-    if (isTextEditting()) {
-        return code == ESCAPE_ACTION_CODE;
-    }
-
-    if (code == UNDO_ACTION_CODE) {
-        return canUndo();
-    }
-
-    if (code == REDO_ACTION_CODE) {
-        return canRedo();
+    auto iter = m_isEnabledMap.find(code);
+    if (iter != m_isEnabledMap.end()) {
+        return (this->*iter->second)();
     }
 
     return true;
@@ -741,6 +746,16 @@ void NotationActionController::moveText(INotationInteractionPtr interaction, con
     interaction->moveText(direction, quickly);
 }
 
+void NotationActionController::increaseDecreaseDuration(int steps, bool stepByDots)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->increaseDecreaseDuration(steps, stepByDots);
+}
+
 void NotationActionController::swapVoices(int voiceIndex1, int voiceIndex2)
 {
     auto interaction = currentNotationInteraction();
@@ -919,24 +934,32 @@ void NotationActionController::addInterval(int interval)
     interaction->addIntervalToSelectedNotes(interval);
 }
 
-void NotationActionController::undo()
+void NotationActionController::addFret(int fretIndex)
 {
-    auto notation = currentNotation();
-    if (!notation) {
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
         return;
     }
 
-    notation->undoStack()->undo();
+    interaction->addFret(fretIndex);
+}
+
+void NotationActionController::undo()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+    interaction->undo();
 }
 
 void NotationActionController::redo()
 {
-    auto notation = currentNotation();
-    if (!notation) {
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
         return;
     }
-
-    notation->undoStack()->redo();
+    interaction->redo();
 }
 
 void NotationActionController::addChordToSelection(MoveDirection direction)
@@ -1069,6 +1092,16 @@ void NotationActionController::selectAll()
     }
 
     interaction->selectAll();
+}
+
+void NotationActionController::toggleLayoutBreak(LayoutBreakType breakType)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->toggleLayoutBreak(breakType);
 }
 
 void NotationActionController::splitMeasure()
@@ -1466,7 +1499,7 @@ FilterElementsOptions NotationActionController::elementsFilterOptions(const Elem
     return options;
 }
 
-bool NotationActionController::isTextEditting() const
+bool NotationActionController::isTextEditing() const
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
@@ -1579,4 +1612,49 @@ bool NotationActionController::canRedo() const
 bool NotationActionController::isNotationPage() const
 {
     return interactive()->isOpened("musescore://notation").val;
+}
+
+bool NotationActionController::isStandardStaff() const
+{
+    return isNotTextEditing() && !isTablatureStaff();
+}
+
+bool NotationActionController::isTablatureStaff() const
+{
+    return isNotTextEditing() && currentNotation()->elements()->msScore()->inputState().staffGroup() == Ms::StaffGroup::TAB;
+}
+
+bool NotationActionController::isNotTextEditing() const
+{
+    return !isTextEditing();
+}
+
+void NotationActionController::registerAction(const mu::actions::ActionCode& code,
+                                              std::function<void()> handler, bool (NotationActionController::* isEnabled)() const)
+{
+    m_isEnabledMap[code] = isEnabled;
+    dispatcher()->reg(this, code, handler);
+}
+
+void NotationActionController::registerAction(const mu::actions::ActionCode& code,
+                                              void (NotationActionController::* handler)(),
+                                              bool (NotationActionController::* isEnabled)() const)
+{
+    m_isEnabledMap[code] = isEnabled;
+    dispatcher()->reg(this, code, this, handler);
+}
+
+void NotationActionController::registerNoteInputAction(const mu::actions::ActionCode& code, NoteInputMethod inputMethod)
+{
+    registerAction(code, [this, inputMethod]() { toggleNoteInputMethod(inputMethod); }, &NotationActionController::isNotTextEditing);
+}
+
+void NotationActionController::registerNoteAction(const mu::actions::ActionCode& code, NoteName noteName, NoteAddingMode addingMode)
+{
+    registerAction(code, [this, noteName, addingMode]() { addNote(noteName, addingMode); }, &NotationActionController::isStandardStaff);
+}
+
+void NotationActionController::registerPadNoteAction(const mu::actions::ActionCode& code, Pad padding)
+{
+    registerAction(code, [this, padding]() { padNote(padding); }, &NotationActionController::isNotTextEditing);
 }

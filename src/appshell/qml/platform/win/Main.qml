@@ -56,6 +56,7 @@ AppWindow {
         anchors.right: parent.right
 
         height: 48
+        title: root.title
 
         onShowWindowMinimizedRequested: {
             root.showMinimized()

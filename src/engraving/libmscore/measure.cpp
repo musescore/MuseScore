@@ -1440,7 +1440,7 @@ RectF Measure::staffabbox(int staffIdx) const
 
 bool Measure::acceptDrop(EditData& data) const
 {
-    MuseScoreView* viewer = data.view;
+    MuseScoreView* viewer = data.view();
     PointF pos = data.pos;
     Element* e = data.dropElement;
 
@@ -3928,6 +3928,11 @@ void Measure::setEndBarLineType(BarLineType val, int track, bool visible, QColor
         bl = new BarLine(score());
         bl->setParent(seg);
         bl->setTrack(track);
+        Part* part = score()->staff(track / VOICES)->part();
+        // by default, barlines for multi-staff parts should span across staves
+        if (part && part->nstaves() > 1) {
+            bl->setSpanStaff(true);
+        }
         score()->addElement(bl);
     }
     bl->setGenerated(false);

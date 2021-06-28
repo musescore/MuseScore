@@ -22,6 +22,8 @@
 #ifndef MU_APPSHELL_APPLICATIONCONTROLLER_H
 #define MU_APPSHELL_APPLICATIONCONTROLLER_H
 
+#include <QObject>
+
 #include "modularity/ioc.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
@@ -31,9 +33,11 @@
 #include "languages/ilanguagesservice.h"
 #include "iinteractive.h"
 #include "iappshellconfiguration.h"
+#include "multiinstances/imultiinstancesprovider.h"
+#include "userscores/ifilescorecontroller.h"
 
 namespace mu::appshell {
-class ApplicationActionController : public actions::Actionable, public async::Asyncable
+class ApplicationActionController : public QObject, public actions::Actionable, public async::Asyncable
 {
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
     INJECT(appshell, ui::IUiActionsRegister, actionsRegister)
@@ -41,6 +45,8 @@ class ApplicationActionController : public actions::Actionable, public async::As
     INJECT(appshell, languages::ILanguagesService, languagesService)
     INJECT(appshell, framework::IInteractive, interactive)
     INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(appshell, mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(appshell, userscores::IFileScoreController, fileScoreController)
 
 public:
     void init();
@@ -48,6 +54,8 @@ public:
     ValCh<bool> isFullScreen() const;
 
 private:
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
     void setupConnections();
 
     void quit();

@@ -64,4 +64,31 @@ Dock.DockPage {
             Rectangle { color: ui.theme.backgroundPrimaryColor }
         }
     ]
+
+    panelsDockingHolders: [
+        Dock.DockPanelHolder {
+            objectName: root.objectName + "_panelsDockingHolderLeft"
+            location: Dock.DockBase.Left
+
+            Rectangle { color: ui.theme.backgroundPrimaryColor }
+        },
+        Dock.DockPanelHolder {
+            objectName: root.objectName + "_panelsDockingHolderRight"
+            location: Dock.DockBase.Right
+
+            Rectangle { color: ui.theme.backgroundPrimaryColor }
+        },
+        Dock.DockPanelHolder {
+            objectName: root.objectName + "_panelsDockingHolderTop"
+            location: Dock.DockBase.Top
+
+            Rectangle { color: ui.theme.backgroundPrimaryColor }
+        },
+        Dock.DockPanelHolder {
+            objectName: root.objectName + "_panelsDockingHolderBottom"
+            location: Dock.DockBase.Bottom
+
+            Rectangle { color: ui.theme.backgroundPrimaryColor }
+        }
+    ]
 }

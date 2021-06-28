@@ -22,6 +22,7 @@
 #include "masternotation.h"
 #include "excerptnotation.h"
 #include "masternotationparts.h"
+#include "scoreorderconverter.h"
 
 #include <QFileInfo>
 
@@ -71,7 +72,12 @@ Meta MasterNotation::metaInfo() const
     return meta;
 }
 
-mu::Ret MasterNotation::load(const io::path& path)
+void MasterNotation::setMetaInfo(const Meta& meta)
+{
+    Notation::setMetaInfo(meta);
+}
+
+mu::Ret MasterNotation::load(const io::path& path, const io::path& stylePath, bool forceMode)
 {
     TRACEFUNC;
 
@@ -81,11 +87,10 @@ mu::Ret MasterNotation::load(const io::path& path)
     //! for others see readers in importexport module
     auto reader = readers()->reader(syffix);
     if (!reader) {
-        LOGE() << "not found reader for file: " << path;
-        return make_ret(Ret::Code::InternalError);
+        return make_ret(Err::FileUnknownType, path);
     }
 
-    return load(path, reader);
+    return load(path, stylePath, reader, forceMode);
 }
 
 Ms::MasterScore* MasterNotation::masterScore() const
@@ -93,18 +98,26 @@ Ms::MasterScore* MasterNotation::masterScore() const
     return dynamic_cast<Ms::MasterScore*>(score());
 }
 
-mu::Ret MasterNotation::load(const io::path& path, const INotationReaderPtr& reader)
+mu::Ret MasterNotation::load(const io::path& path, const io::path& stylePath, const INotationReaderPtr& reader, bool forceMode)
 {
     TRACEFUNC;
 
     Ms::ScoreLoad sl;
 
     Ms::MasterScore* score = new Ms::MasterScore(scoreGlobal()->baseStyle());
-    Ret ret = doLoadScore(score, path, reader);
+    Ret ret = doLoadScore(score, path, reader, forceMode);
 
     if (ret) {
         setScore(score);
         initExcerpts();
+    }
+
+    if (!stylePath.empty()) {
+        score->loadStyle(stylePath.toQString());
+    }
+
+    if (!Ms::MScore::lastError.isEmpty()) {
+        LOGE() << Ms::MScore::lastError;
     }
 
     return ret;
@@ -112,14 +125,20 @@ mu::Ret MasterNotation::load(const io::path& path, const INotationReaderPtr& rea
 
 mu::Ret MasterNotation::doLoadScore(Ms::MasterScore* score,
                                     const io::path& path,
-                                    const std::shared_ptr<INotationReader>& reader) const
+                                    const std::shared_ptr<INotationReader>& reader,
+                                    bool forceMode) const
 {
     QFileInfo fi(path.toQString());
     score->setName(fi.completeBaseName());
     score->setImportedFilePath(fi.filePath());
     score->setMetaTag("originalFormat", fi.suffix().toLower());
 
-    Ret ret = reader->read(score, path);
+    INotationReader::Options options;
+    if (forceMode) {
+        options[INotationReader::OptionKey::ForceMode] = forceMode;
+    }
+
+    Ret ret = reader->read(score, path, options);
     if (!ret) {
         return ret;
     }
@@ -197,6 +216,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
             return ret;
         }
         score->setStyle(tscore->style());
+        score->setScoreOrder(tscore->scoreOrder());
 
         // create instruments from template
         for (Ms::Part* tpart : tscore->parts()) {
@@ -247,6 +267,7 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
         delete tscore;
     } else {
         score = new Ms::MasterScore(scoreGlobal()->baseStyle());
+        score->setScoreOrder(ScoreOrderConverter::convertScoreOrder(scoreOptions.order));
     }
 
     score->setName(qtrc("notation", "Untitled"));
@@ -563,11 +584,13 @@ void MasterNotation::initExcerpts(const QList<Ms::Excerpt*>& scoreExcerpts)
     ExcerptNotationList notationExcerpts;
 
     for (Ms::Excerpt* excerpt : excerpts) {
-        masterScore()->initExcerpt(excerpt);
+        masterScore()->initExcerpt(excerpt, true);
         notationExcerpts.push_back(std::make_shared<ExcerptNotation>(excerpt));
     }
 
     doSetExcerpts(notationExcerpts);
+
+    updateExcerpts();
 
     m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
@@ -615,7 +638,7 @@ void MasterNotation::createNonexistentExcerpts(const ExcerptNotationList& newExc
 
         if (isNewExcerpt && isEmpty) {
             Ms::Excerpt* excerpt = new Ms::Excerpt(masterScore());
-            masterScore()->initExcerpt(excerpt);
+            masterScore()->initExcerpt(excerpt, false);
             get_impl(excerptNotation)->setExcerpt(excerpt);
         }
     }
@@ -626,8 +649,13 @@ void MasterNotation::updateExcerpts()
     ExcerptNotationList newExcerpts;
 
     for (IExcerptNotationPtr excerpt : m_excerpts.val) {
-        if (!get_impl(excerpt)->excerpt()->isEmpty()) {
+        Ms::Excerpt* ex = get_impl(excerpt)->excerpt();
+        if (!ex->isEmpty()) {
             newExcerpts.push_back(excerpt);
+        } else {
+            if (masterScore()->excerpts().contains(ex)) {
+                masterScore()->undo(new Ms::RemoveExcerpt(ex));
+            }
         }
     }
 
@@ -653,7 +681,7 @@ void MasterNotation::updateExcerpts()
 IExcerptNotationPtr MasterNotation::createExcerpt(Part* part)
 {
     Ms::Excerpt* excerpt = Ms::Excerpt::createExcerptFromPart(part);
-    masterScore()->initExcerpt(excerpt);
+    masterScore()->initExcerpt(excerpt, false);
 
     return std::make_shared<ExcerptNotation>(excerpt);
 }
@@ -694,8 +722,8 @@ mu::Ret MasterNotation::saveSelectionOnScore(const mu::io::path& path)
     return ret;
 }
 
-mu::Ret MasterNotation::writeToDevice(system::IODevice& destinationDevice)
+mu::Ret MasterNotation::writeToDevice(io::Device& destinationDevice)
 {
-    bool ok = score()->saveCompressedFile(&destinationDevice, score()->title(), false);
+    bool ok = score()->saveCompressedFile(&destinationDevice, score()->title() + ".mscx", false);
     return ok;
 }

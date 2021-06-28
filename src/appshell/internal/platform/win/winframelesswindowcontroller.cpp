@@ -22,6 +22,7 @@
 
 #include "winframelesswindowcontroller.h"
 
+#include <Windows.h>
 #include <windowsx.h>
 #include <dwmapi.h>
 
@@ -77,6 +78,9 @@ bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType
     }
     case WM_NCHITTEST: {
         return processMouseMove(msg, result);
+    }
+    case WM_NCRBUTTONDOWN: {
+        return processMouseRightClick(msg);
     }
     default:
         break;
@@ -173,4 +177,67 @@ bool WinFramelessWindowController::processMouseMove(MSG* message, long* result) 
     }
 
     return false;
+}
+
+bool WinFramelessWindowController::processMouseRightClick(MSG* message) const
+{
+    return showSystemMenuIfNeed(message);
+}
+
+void WinFramelessWindowController::updateContextMenuState(MSG* message) const
+{
+    HMENU menu = GetSystemMenu(message->hwnd, false);
+
+    MENUITEMINFO menuItemInfo;
+    menuItemInfo.cbSize = sizeof(MENUITEMINFO);
+    menuItemInfo.fMask = MIIM_STATE;
+    menuItemInfo.fType = 0;
+
+    menuItemInfo.fState = MF_ENABLED;
+
+    SetMenuItemInfo(menu, SC_RESTORE, FALSE, &menuItemInfo);
+    SetMenuItemInfo(menu, SC_SIZE, FALSE, &menuItemInfo);
+    SetMenuItemInfo(menu, SC_MOVE, FALSE, &menuItemInfo);
+    SetMenuItemInfo(menu, SC_MAXIMIZE, FALSE, &menuItemInfo);
+    SetMenuItemInfo(menu, SC_MINIMIZE, FALSE, &menuItemInfo);
+
+    menuItemInfo.fState = MF_GRAYED;
+
+    WINDOWPLACEMENT windowPlacement;
+    GetWindowPlacement(s_hwnd, &windowPlacement);
+
+    switch (windowPlacement.showCmd) {
+    case SW_SHOWMAXIMIZED:
+        SetMenuItemInfo(menu, SC_SIZE, FALSE, &menuItemInfo);
+        SetMenuItemInfo(menu, SC_MOVE, FALSE, &menuItemInfo);
+        SetMenuItemInfo(menu, SC_MAXIMIZE, FALSE, &menuItemInfo);
+        SetMenuDefaultItem(menu, SC_CLOSE, FALSE);
+        break;
+    case SW_SHOWMINIMIZED:
+        SetMenuItemInfo(menu, SC_MINIMIZE, FALSE, &menuItemInfo);
+        SetMenuDefaultItem(menu, SC_RESTORE, FALSE);
+        break;
+    case SW_SHOWNORMAL:
+        SetMenuItemInfo(menu, SC_RESTORE, FALSE, &menuItemInfo);
+        SetMenuDefaultItem(menu, SC_CLOSE, FALSE);
+        break;
+    }
+}
+
+bool WinFramelessWindowController::showSystemMenuIfNeed(MSG* message) const
+{
+    updateContextMenuState(message);
+
+    HMENU menu = GetSystemMenu(message->hwnd, false);
+
+    long x = GET_X_LPARAM(message->lParam);
+    long y = GET_Y_LPARAM(message->lParam);
+
+    uint command = TrackPopupMenu(menu, TPM_LEFTBUTTON | TPM_RETURNCMD, x, y, 0, message->hwnd, nullptr);
+    if (command == 0) {
+        return false;
+    }
+
+    PostMessage(message->hwnd, WM_SYSCOMMAND, command, 0);
+    return true;
 }

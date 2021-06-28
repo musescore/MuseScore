@@ -28,9 +28,13 @@
 #include <QStandardPaths>
 #include <QDir>
 
+#include "multiinstances/resourcelockguard.h"
+
 using namespace mu;
 using namespace mu::framework;
 using namespace mu::async;
+
+static const std::string MULTI_INSTANCES_LOCK_NAME("settings");
 
 Settings* Settings::instance()
 {
@@ -55,6 +59,11 @@ Settings::Settings()
 Settings::~Settings()
 {
     delete m_settings;
+}
+
+io::path Settings::filePath() const
+{
+    return m_settings->fileName();
 }
 
 const Settings::Items& Settings::items() const
@@ -88,6 +97,7 @@ void Settings::reset(bool keepDefaultSettings)
 
     if (!keepDefaultSettings) {
         QDir(dataPath()).removeRecursively();
+        QDir().mkpath(dataPath());
     }
 
     for (auto it = m_items.begin(); it != m_items.end(); ++it) {
@@ -101,6 +111,8 @@ void Settings::reset(bool keepDefaultSettings)
 Settings::Items Settings::readItems() const
 {
     Items result;
+
+    mi::ResourceLockGuard resource_lock(multiInstancesProvider(), MULTI_INSTANCES_LOCK_NAME);
 
     for (const QString& key : m_settings->allKeys()) {
         Item item;
@@ -123,7 +135,7 @@ Val Settings::defaultValue(const Key& key) const
     return findItem(key).defaultValue;
 }
 
-void Settings::setValue(const Key& key, const Val& value)
+void Settings::setValue(const Key& key, const Val& value, bool notifyToOtherInstances)
 {
     Item& item = findItem(key);
 
@@ -146,10 +158,16 @@ void Settings::setValue(const Key& key, const Val& value)
         async::Channel<Val> channel = it->second;
         channel.send(value);
     }
+
+    if (notifyToOtherInstances && multiInstancesProvider()) {
+        multiInstancesProvider()->settingsSetValue(key.key, value);
+    }
 }
 
 void Settings::writeValue(const Key& key, const Val& value)
 {
+    mi::ResourceLockGuard resource_lock(multiInstancesProvider(), MULTI_INSTANCES_LOCK_NAME);
+
     // TODO: implement writing/reading first part of key (module name)
     m_settings->setValue(QString::fromStdString(key.key), value.toQVariant());
 }
@@ -198,7 +216,7 @@ void Settings::insertNewItem(const Settings::Key& key, const Val& value)
     }
 }
 
-void Settings::beginTransaction()
+void Settings::beginTransaction(bool notifyToOtherInstances)
 {
     if (m_isTransactionStarted) {
         LOGW() << "Transaction is already started";
@@ -207,9 +225,13 @@ void Settings::beginTransaction()
 
     m_localSettings = m_items;
     m_isTransactionStarted = true;
+
+    if (notifyToOtherInstances && multiInstancesProvider()) {
+        multiInstancesProvider()->settingsBeginTransaction();
+    }
 }
 
-void Settings::commitTransaction()
+void Settings::commitTransaction(bool notifyToOtherInstances)
 {
     m_isTransactionStarted = false;
 
@@ -225,13 +247,17 @@ void Settings::commitTransaction()
             item.value = it->second.value;
         }
 
-        writeValue(item.key, item.value);
+        writeValue(it->first, it->second.value);
     }
 
     m_localSettings.clear();
+
+    if (notifyToOtherInstances && multiInstancesProvider()) {
+        multiInstancesProvider()->settingsCommitTransaction();
+    }
 }
 
-void Settings::rollbackTransaction()
+void Settings::rollbackTransaction(bool notifyToOtherInstances)
 {
     m_isTransactionStarted = false;
 
@@ -246,6 +272,10 @@ void Settings::rollbackTransaction()
     }
 
     m_localSettings.clear();
+
+    if (notifyToOtherInstances && multiInstancesProvider()) {
+        multiInstancesProvider()->settingsRollbackTransaction();
+    }
 }
 
 Settings::Item& Settings::findItem(const Key& key) const

@@ -58,7 +58,7 @@ void Lasso::draw(mu::draw::Painter* painter) const
 
 void Lasso::editDrag(EditData& ed)
 {
-    Qt::CursorShape cursorShape = ed.view->cursor().shape();
+    Qt::CursorShape cursorShape = ed.view()->cursor().shape();
     switch (int(ed.curGrip)) {
     case 0:
         cursorShape = Qt::SizeFDiagCursor;
@@ -93,7 +93,7 @@ void Lasso::editDrag(EditData& ed)
         bbox().setLeft(bbox().left() + ed.delta.x());
         break;
     }
-    ed.view->setCursor(QCursor(cursorShape));
+    ed.view()->setCursor(QCursor(cursorShape));
 }
 
 //---------------------------------------------------------

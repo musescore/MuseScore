@@ -652,6 +652,7 @@ void NotationPaintView::mousePressEvent(QMouseEvent* event)
 {
     setFocus(true);
     emit activeFocusRequested();
+    forceActiveFocus();
 
     if (isInited()) {
         m_inputController->mousePressEvent(event);
@@ -688,11 +689,19 @@ void NotationPaintView::hoverMoveEvent(QHoverEvent* event)
     }
 }
 
-void NotationPaintView::keyReleaseEvent(QKeyEvent* event)
+void NotationPaintView::shortcutOverride(QKeyEvent* event)
 {
     if (isInited()) {
-        m_inputController->keyReleaseEvent(event);
+        m_inputController->keyPressEvent(event);
     }
+}
+
+bool NotationPaintView::event(QEvent* ev)
+{
+    if (ev->type() == QEvent::Type::ShortcutOverride) {
+        shortcutOverride(static_cast<QKeyEvent*>(ev));
+    }
+    return QQuickPaintedItem::event(ev);
 }
 
 void NotationPaintView::dragEnterEvent(QDragEnterEvent* event)

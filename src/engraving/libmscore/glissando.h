@@ -23,8 +23,6 @@
 #ifndef __GLISSANDO_H__
 #define __GLISSANDO_H__
 
-#include <QApplication>
-
 #include "element.h"
 #include "line.h"
 #include "property.h"
@@ -82,7 +80,7 @@ public:
     static Note* guessInitialNote(Chord* chord);
     static Note* guessFinalNote(Chord* chord);
 
-    QString glissandoTypeName() { return qApp->translate("Palette", glissandoTypeNames[int(glissandoType())]); }
+    QString glissandoTypeName() const;
 
     // overridden inherited methods
     Glissando* clone() const override { return new Glissando(*this); }
