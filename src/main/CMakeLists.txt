@@ -250,8 +250,6 @@ else (MSCORE_OUTPUT_NAME)
 endif (MSCORE_OUTPUT_NAME)
 set(MSCORE_EXECUTABLE_NAME "${MSCORE_EXECUTABLE_NAME}" PARENT_SCOPE)
 
-add_dependencies(mscore workspaces)
-
 ###########################################
 # Link
 ###########################################

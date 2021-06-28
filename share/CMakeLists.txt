@@ -18,8 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-subdirs(templates wallpaper locale styles sound manual
-   workspaces instruments tours)
+subdirs(templates wallpaper locale styles sound manual instruments tours)
 
 install (DIRECTORY
       plugins
