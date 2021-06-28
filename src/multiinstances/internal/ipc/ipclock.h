@@ -38,6 +38,24 @@ public:
 private:
     QSystemSemaphore* m_locker = nullptr;
 };
+
+class IpcLockGuard
+{
+public:
+    IpcLockGuard(IpcLock* lock)
+        : m_lock(lock)
+    {
+        m_lock->lock();
+    }
+
+    ~IpcLockGuard()
+    {
+        m_lock->unlock();
+    }
+
+private:
+    IpcLock* m_lock = nullptr;
+};
 }
 
 #endif // MU_IPC_IPCLOCK_H

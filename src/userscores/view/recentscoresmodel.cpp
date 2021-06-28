@@ -34,7 +34,7 @@ namespace {
 const QString SCORE_TITLE_KEY("title");
 const QString SCORE_PATH_KEY("path");
 const QString SCORE_THUMBNAIL_KEY("thumbnail");
-const QString SCORE_TIME_SINCE_CREATION_KEY("timeSinceCreation");
+const QString SCORE_TIME_SINCE_MODIFIED_KEY("timeSinceModified");
 const QString SCORE_ADD_NEW_KEY("isAddNew");
 }
 
@@ -114,7 +114,7 @@ void RecentScoresModel::updateRecentScores(const MetaList& recentScoresList)
         obj[SCORE_TITLE_KEY] = !meta.title.isEmpty() ? meta.title : meta.fileName.toQString();
         obj[SCORE_PATH_KEY] = meta.filePath.toQString();
         obj[SCORE_THUMBNAIL_KEY] = meta.thumbnail;
-        obj[SCORE_TIME_SINCE_CREATION_KEY] = DataFormatter::formatTimeSinceCreation(meta.creationDate);
+        obj[SCORE_TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(QFileInfo(meta.filePath.toQString()).lastModified().date());
         obj[SCORE_ADD_NEW_KEY] = false;
 
         recentScores << obj;

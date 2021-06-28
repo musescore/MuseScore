@@ -51,7 +51,7 @@ Item {
     signal editPalettePropertiesRequested()
 
     implicitHeight: paletteExpandArrow.height
-    implicitWidth: paletteExpandArrow.implicitWidth + textItem.implicitWidth + rootMenuButton.implicitWidth + 8 // 8 for margins
+    implicitWidth: paletteExpandArrow.implicitWidth + textItem.implicitWidth + menuButton.implicitWidth + 8 // 8 for margins
 
     FlatButton {
         id: paletteExpandArrow
@@ -76,7 +76,7 @@ Item {
         horizontalAlignment: Text.AlignHLeft
         anchors {
             left: paletteExpandArrow.right; leftMargin: 4;
-            right: deleteButton.visible ? deleteButton.left : (rootMenuButton.visible ? rootMenuButton.left : parent.right)
+            right: deleteButton.visible ? deleteButton.left : (menuButton.visible ? menuButton.left : parent.right)
         }
 
         text: root.text
@@ -86,7 +86,7 @@ Item {
     FlatButton {
         id: deleteButton
 
-        anchors.right: rootMenuButton.left
+        anchors.right: menuButton.left
         anchors.rightMargin: 6
 
         height: parent.height
@@ -110,56 +110,42 @@ Item {
         }
     }
 
-    FlatButton {
-        id: rootMenuButton
-        z: 1000
-        height: parent.height
-        anchors.right: parent.right
-
-        visible: root.expanded || root.hovered || menuLoader.isMenuOpened || rootMenuButton.navigation.active
-
-        enabled: rootMenuButton.visible
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRow
-        navigation.column: 3
-
-        icon: IconCode.MENU_THREE_DOTS
-        normalStateColor: "transparent"
-
-        onClicked: {
-            menuLoader.toggleContextMenu(rootMenuButton.navigation)
-        }
-    }
-
     MouseArea {
         id: rightClickArea
+
         anchors.fill: parent
         acceptedButtons: Qt.RightButton
 
         onClicked: {
-            menuLoader.toggleContextMenu(null)
+            menuButton.toggleMenu(this, mouseX, mouseY)
         }
     }
 
-    StyledMenuLoader {
-        id: menuLoader
+    MenuButton {
+        id: menuButton
 
-        function toggleContextMenu(navigationParentControl) {
-            var items = [
-                        {code: "hide", title: root.custom ? qsTrc("palette", "Hide/Delete Palette") : qsTrc("palette", "Hide Palette") },
-                        {code: "new", title: qsTrc("palette", "Insert New Palette") },
-                        {code: "", title: "" }, // separator
-                        {code: "edit", title: qsTrc("palette", "Enable Editing"), checkable: true, checked: root.editingEnabled },
-                        {code: "", title: "" }, // separator
-                        {code: "reset", title: qsTrc("palette", "Reset Palette") },
-                        {code: "save", title: qsTrc("palette", "Save Palette…") },
-                        {code: "load", title: qsTrc("palette", "Load Palette…") },
-                        {code: "", title: "" }, // separator
-                        {code: "properties", title: qsTrc("palette", "Palette Properties…") },
-                    ]
+        anchors.right: parent.right
 
-            toggleOpened(items, navigationParentControl)
-        }
+        z: 1000
+
+        visible: root.expanded || root.hovered || isMenuOpened || navigation.active
+
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRow
+        navigation.column: 3
+
+        menuModel: [
+            {code: "hide", title: root.custom ? qsTrc("palette", "Hide/Delete Palette") : qsTrc("palette", "Hide Palette") },
+            {code: "new", title: qsTrc("palette", "Insert New Palette") },
+            {code: "", title: "" }, // separator
+            {code: "edit", title: qsTrc("palette", "Enable Editing"), checkable: true, checked: root.editingEnabled },
+            {code: "", title: "" }, // separator
+            {code: "reset", title: qsTrc("palette", "Reset Palette") },
+            {code: "save", title: qsTrc("palette", "Save Palette…") },
+            {code: "load", title: qsTrc("palette", "Load Palette…") },
+            {code: "", title: "" }, // separator
+            {code: "properties", title: qsTrc("palette", "Palette Properties…") },
+        ]
 
         onHandleAction: {
             switch(actionCode) {

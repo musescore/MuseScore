@@ -34,12 +34,10 @@ class IShortcutsConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IShortcutsConfiguration() = default;
 
-    virtual ValCh<io::path> shortcutsUserPath() const = 0;
-    virtual void setShortcutsUserPath(const io::path& path) = 0;
+    virtual io::path shortcutsUserAppDataPath() const = 0;
+    virtual io::path shortcutsAppDataPath() const = 0;
 
-    virtual io::path shortcutsDefaultPath() const = 0;
-
-    virtual io::path midiMappingsPath() const = 0;
+    virtual io::path midiMappingUserAppDataPath() const = 0;
 
     virtual bool advanceToNextNoteOnKeyRelease() const = 0;
     virtual void setAdvanceToNextNoteOnKeyRelease(bool value) = 0;

@@ -44,6 +44,7 @@ IpcServer::~IpcServer()
         delete m_thread;
     }
     delete m_server;
+    delete m_lock;
 }
 
 bool IpcServer::listen(const QString& serverName)
@@ -116,35 +117,37 @@ bool IpcServer::listen(const QString& serverName)
 
 void IpcServer::onIncomingReadyRead(QLocalSocket* socket)
 {
-    QByteArray data = socket->readAll();
+    ipc::readFromSocket(socket, [this, socket](const QByteArray& data) {
+        IPCLOG() << data;
 
-    IPCLOG() << data;
+        Msg msg;
+        deserialize(data, msg);
 
-    Msg msg;
-    deserialize(data, msg);
+        IPCLOG() << "incoming [" << msg.srcID << "] data: " << data;
 
-    IPCLOG() << "incoming [" << msg.srcID << "] data: " << data;
-
-    if (msg.method == IPC_INIT) {
-        onIncomingInit(socket, msg);
-    }
-
-    if (msg.method == IPC_WHOIS) {
-        onIncomingWhoIs(socket, msg);
-    }
-
-    if (msg.method == IPC_PING) {
-        onIncomingPing(socket, msg);
-    }
-
-    //! NOTE Resend to others
-    for (IncomingSocket& s : m_incomingSockets) {
-        //! NOTE We do not resend to incoming socket
-        if (socket != s.socket || msg.destID == s.id || msg.destID == BROADCAST_ID) {
-            IPCLOG() << "resend to " << s.id;
-            doSendToSocket(s.socket, data);
+        if (msg.method == IPC_INIT) {
+            onIncomingInit(socket, msg);
         }
-    }
+
+        if (msg.method == IPC_WHOIS) {
+            onIncomingWhoIs(socket, msg);
+        }
+
+        if (msg.method == IPC_PING) {
+            onIncomingPing(socket, msg);
+        }
+
+        //! NOTE Resend to others
+        for (IncomingSocket& s : m_incomingSockets) {
+            //! NOTE We do not resend to incoming socket
+            if (socket != s.socket) {
+                if (msg.destID == s.id || msg.destID == BROADCAST_ID) {
+                    IPCLOG() << "resend to " << s.id;
+                    doSendToSocket(s.socket, data);
+                }
+            }
+        }
+    });
 }
 
 void IpcServer::onIncomingInit(QLocalSocket* socket, const Msg& msg)
@@ -195,19 +198,9 @@ bool IpcServer::doSendToSocket(QLocalSocket* socket, const QByteArray& data)
 {
     IPCLOG() << data;
 
-    m_lock->lock();
+    // IpcLockGuard lock_guard(m_lock);
 
-    socket->write(data);
-
-    bool ok = socket->waitForBytesWritten(TIMEOUT_MSEC);
-    if (!ok) {
-        LOGE() << "failed write data to socket";
-        return false;
-    }
-
-    m_lock->unlock();
-
-    return true;
+    return ipc::writeToSocket(socket, data);
 }
 
 void IpcServer::sendToSocket(QLocalSocket* socket, const Msg& msg)

@@ -28,11 +28,13 @@ namespace mu::network {
 class NetworkManagerStub : public INetworkManager
 {
 public:
-    Ret get(const QUrl&, system::IODevice*) override;
-    Ret head(const QUrl&) override;
-    Ret post(const QUrl&, system::IODevice*, system::IODevice*) override;
-    Ret put(const QUrl&, system::IODevice*, system::IODevice*) override;
-    Ret del(const QUrl&, system::IODevice*) override;
+    Ret get(const QUrl& url, IncomingDevice* incommingData, const RequestHeaders& headers = RequestHeaders()) override;
+    Ret head(const QUrl& url, const RequestHeaders& headers = RequestHeaders()) override;
+    Ret post(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incommingData,
+             const RequestHeaders& headers = RequestHeaders()) override;
+    Ret put(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incommingData,
+            const RequestHeaders& headers = RequestHeaders()) override;
+    Ret del(const QUrl& url, IncomingDevice* incommingData, const RequestHeaders& headers = RequestHeaders()) override;
 
     framework::ProgressChannel progressChannel() const override;
 

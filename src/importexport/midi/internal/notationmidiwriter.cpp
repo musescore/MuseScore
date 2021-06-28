@@ -26,9 +26,10 @@
 #include "midiexport/exportmidi.h"
 
 using namespace mu::iex::midi;
-using namespace mu::system;
+using namespace mu::io;
+using namespace mu::notation;
 
-mu::Ret NotationMidiWriter::write(notation::INotationPtr notation, IODevice& destinationDevice, const Options&)
+mu::Ret NotationMidiWriter::write(INotationPtr notation, io::Device& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);

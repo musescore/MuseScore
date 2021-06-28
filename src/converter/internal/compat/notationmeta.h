@@ -19,40 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_APPWINDOWSTYLER_H
-#define MU_APPSHELL_APPWINDOWSTYLER_H
+#ifndef MU_CONVERTER_NOTATIONMETA_H
+#define MU_CONVERTER_NOTATIONMETA_H
 
-#include "async/asyncable.h"
-#include "modularity/ioc.h"
-#include "ui/iuiconfiguration.h"
+#include "notation/inotation.h"
 
-#include <QObject>
+namespace Ms {
+class Score;
+}
 
-class QWindow;
-
-namespace mu::appshell {
-class AppWindowStyler : public QObject, public async::Asyncable
+namespace mu::converter {
+class NotationMeta
 {
-    Q_OBJECT
-
-    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
-
-    Q_PROPERTY(QWindow * targetWindow READ targetWindow WRITE setTargetWindow NOTIFY targetWindowChanged)
-
 public:
-    explicit AppWindowStyler(QObject* parent = nullptr);
-
-    Q_INVOKABLE void init();
-
-    QWindow* targetWindow() const;
-    void setTargetWindow(QWindow* window);
-
-signals:
-    void targetWindowChanged();
+    static RetVal<std::string> metaJson(notation::INotationPtr notation);
 
 private:
-    QWindow* m_targetWindow;
+    static QString title(const Ms::Score* score);
+    static QString subtitle(const Ms::Score* score);
+    static QString composer(const Ms::Score* score);
+    static QString poet(const Ms::Score* score);
+    static QString timesig(const Ms::Score* score);
+    static std::pair<int, QString> tempo(const Ms::Score* score);
+    static QString parts(const Ms::Score* score);
+    static QString pageFormat(const Ms::Score* score);
+    static QString typeData(Ms::Score* score);
 };
 }
 
-#endif // MU_APPSHELL_APPWINDOWSTYLER_H
+#endif // MU_CONVERTER_NOTATIONMETA_H

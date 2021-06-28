@@ -2853,7 +2853,7 @@ void MoveTremolo::undo(EditData*)
 
 void ChangeScoreOrder::flip(EditData*)
 {
-    ScoreOrder* s = score->scoreOrder();
+    ScoreOrder s = score->scoreOrder();
     score->setScoreOrder(order);
     order = s;
 }

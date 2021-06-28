@@ -32,6 +32,7 @@ class FileSystemMock : public IFileSystem
 public:
     MOCK_METHOD(Ret, exists, (const io::path&), (const, override));
     MOCK_METHOD(Ret, remove, (const io::path&), (const, override));
+    MOCK_METHOD(Ret, copy, (const io::path& src, const io::path& dst, bool replace), (const, override));
 
     MOCK_METHOD(RetVal<QByteArray>, readFile, (const io::path&), (const, override));
     MOCK_METHOD(Ret, writeToFile, (const io::path&, const QByteArray&), (const, override));

@@ -30,8 +30,8 @@ extern Score::FileError importMuseData(MasterScore*, const QString& name);
 
 using namespace mu::iex::musedata;
 
-mu::Ret MuseDataReader::read(Ms::MasterScore* score, const io::path& path)
+mu::Ret MuseDataReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
 {
     Ms::Score::FileError err = Ms::importMuseData(score, path.toQString());
-    return mu::notation::scoreFileErrorToRet(err);
+    return mu::notation::scoreFileErrorToRet(err, path);
 }

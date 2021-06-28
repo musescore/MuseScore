@@ -46,8 +46,8 @@ public:
     void setSource(std::shared_ptr<IAudioSource> source) override;
     void forward() override;
 
-    void pop(float* dest, unsigned int sampleCount) override;
-    void setMinSampleLag(unsigned int lag) override;
+    void pop(float* dest, size_t sampleCount) override;
+    void setMinSampleLag(size_t lag) override;
 
 private:
 
@@ -56,9 +56,9 @@ private:
     void updateWriteIndex(const unsigned int samplesPerChannel);
 
     std::recursive_mutex m_mutex; //! TODO get rid *recursive*
-    unsigned int m_minSampleLag = FILL_SAMPLES;
-    unsigned int m_writeIndex = 0;
-    unsigned int m_readIndex = 0;
+    size_t m_minSampleLag = FILL_SAMPLES;
+    size_t m_writeIndex = 0;
+    size_t m_readIndex = 0;
     int m_audioChannelsCount = 2;
 
     std::vector<float> m_data = {};

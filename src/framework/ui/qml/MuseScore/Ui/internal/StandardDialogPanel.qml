@@ -42,7 +42,7 @@ Rectangle {
     property var buttons: []
     property int defaultButtonId: 0
 
-    property var contentWidth: Math.max(textContent.contentWidth, buttons.contentWidth)
+    property var contentWidth: Math.max(textContent.contentWidth, buttons.width)
     property var contentHeight: content.contentHeight
 
     property alias navigation: navPanel
@@ -123,9 +123,9 @@ Rectangle {
         RowLayout {
             id: textContent
 
-            property int contentWidth: childrenRect.width
+            property int contentWidth: (icon.visible ? icon.width + textContent.spacing : 0) + textColumn._preferredWidth
 
-            Layout.preferredWidth: childrenRect.width
+            Layout.preferredWidth: content.width
             Layout.preferredHeight: childrenRect.height
 
             spacing: 28
@@ -144,6 +144,8 @@ Rectangle {
             }
 
             Column {
+                id: textColumn
+
                 property int _preferredWidth: Math.max(Math.min(titleLabel.implicitWidth, 420),
                                                        Math.min(textLabel.implicitWidth, 420))
 
@@ -160,7 +162,9 @@ Rectangle {
                     font: ui.theme.largeBodyBoldFont
                     horizontalAlignment: Text.AlignLeft
                     maximumLineCount: 2
-                    wrapMode: Text.WordWrap
+                    wrapMode: Text.Wrap
+
+                    visible: !isEmpty
                 }
 
                 StyledTextLabel {
@@ -170,7 +174,7 @@ Rectangle {
 
                     horizontalAlignment: Text.AlignLeft
                     maximumLineCount: 3
-                    wrapMode: Text.WordWrap
+                    wrapMode: Text.Wrap
 
                     visible: !isEmpty
                 }
@@ -195,7 +199,7 @@ Rectangle {
 
         Item {
             Layout.preferredHeight: 30
-            Layout.fillWidth: true
+            Layout.preferredWidth: content.width
 
             ListView {
                 id: buttons

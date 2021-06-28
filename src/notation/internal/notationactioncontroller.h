@@ -25,6 +25,7 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
+#include "actions/actiontypes.h"
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "inotation.h"
@@ -44,6 +45,9 @@ class NotationActionController : public actions::Actionable, public async::Async
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(notation, INotationConfiguration, configuration)
+
+private:
+    std::map<mu::actions::ActionCode, bool (NotationActionController::*)() const> m_isEnabledMap;
 
 public:
     void init();
@@ -89,6 +93,8 @@ private:
     void moveChord(MoveDirection direction);
     void moveText(INotationInteractionPtr interaction, const actions::ActionCode& actionCode);
 
+    void increaseDecreaseDuration(int steps, bool stepByDots);
+
     void swapVoices(int voiceIndex1, int voiceIndex2);
     void changeVoice(int voiceIndex);
 
@@ -101,6 +107,7 @@ private:
     void chordTie();
     void addSlur();
     void addInterval(int interval);
+    void addFret(int fretIndex);
 
     void undo();
     void redo();
@@ -114,6 +121,8 @@ private:
     void selectSection();
     void firstElement();
     void lastElement();
+
+    void toggleLayoutBreak(LayoutBreakType breakType);
 
     void splitMeasure();
     void joinSelectedMeasures();
@@ -168,7 +177,8 @@ private:
 
     void playSelectedElement(bool playChord = true);
 
-    bool isTextEditting() const;
+    bool isTextEditing() const;
+    bool isNotTextEditing() const;
 
     void pasteSelection(PastingType type = PastingType::Default);
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
@@ -181,6 +191,13 @@ private:
     bool canUndo() const;
     bool canRedo() const;
     bool isNotationPage() const;
+    bool isStandardStaff() const;
+    bool isTablatureStaff() const;
+    void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(), bool (NotationActionController::*)() const);
+    void registerAction(const mu::actions::ActionCode&, std::function<void()>, bool (NotationActionController::*)() const);
+    void registerNoteInputAction(const mu::actions::ActionCode&, NoteInputMethod inputMethod);
+    void registerNoteAction(const mu::actions::ActionCode&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
+    void registerPadNoteAction(const mu::actions::ActionCode&, Pad padding);
 
     async::Notification m_currentNotationNoteInputChanged;
 };

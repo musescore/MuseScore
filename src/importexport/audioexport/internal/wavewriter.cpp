@@ -27,7 +27,7 @@
 using namespace mu::iex::audioexport;
 using namespace mu::framework;
 
-mu::Ret WaveWriter::write(notation::INotationPtr notation, system::IODevice& destinationDevice, const Options& options)
+mu::Ret WaveWriter::write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options)
 {
     UNUSED(notation)
     UNUSED(destinationDevice)

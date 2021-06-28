@@ -37,14 +37,14 @@
 
 using namespace mu::iex::imagesexport;
 using namespace mu::notation;
-using namespace mu::system;
+using namespace mu::io;
 
 std::vector<INotationWriter::UnitType> SvgWriter::supportedUnitTypes() const
 {
     return { UnitType::PER_PAGE };
 }
 
-mu::Ret SvgWriter::write(INotationPtr notation, IODevice& destinationDevice, const Options& options)
+mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -75,7 +75,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, IODevice& destinationDevice, con
     printer.setTitle(pages.size() > 1 ? QString("%1 (%2)").arg(title).arg(PAGE_NUMBER + 1) : title);
     printer.setOutputDevice(&destinationDevice);
 
-    const int TRIM_MARGINS_SIZE = options.value(OptionKey::TRIM_MARGINS_SIZE, Val(0)).toInt();
+    const int TRIM_MARGINS_SIZE = configuration()->trimMarginPixelSize();
 
     RectF pageRect = page->abbox();
     if (TRIM_MARGINS_SIZE >= 0) {

@@ -27,6 +27,8 @@
 
 #include <QLocalSocket>
 
+#include "ipclog.h"
+
 void mu::ipc::serialize(const Msg& msg, QByteArray& data)
 {
     QJsonObject msgObj;
@@ -77,4 +79,67 @@ QString mu::ipc::socketErrorToString(int err)
     case QLocalSocket::OperationError: return "OperationError";
     }
     return "Unknown error";
+}
+
+bool mu::ipc::writeToSocket(QLocalSocket* socket, const QByteArray& data)
+{
+    QDataStream stream(socket);
+    stream.writeBytes(data.constData(), data.size());
+    bool ok = socket->waitForBytesWritten(ipc::TIMEOUT_MSEC);
+    if (!ok) {
+        LOGE() << "failed write to socket, err: " << socket->errorString();
+    }
+    return ok;
+}
+
+bool mu::ipc::readFromSocket(QLocalSocket* socket, std::function<void(const QByteArray& data)> onPackegReaded)
+{
+    qint64 bytesAvailable = socket->bytesAvailable();
+    if (bytesAvailable < (qint64)sizeof(quint32)) {
+        return false;
+    }
+
+    int packageCount = 0;
+    QDataStream stream(socket);
+
+    auto readPackage = [socket, &stream, onPackegReaded]() {
+        QByteArray data;
+        quint32 remaining;
+        stream >> remaining;
+        data.resize(remaining);
+
+        qint64 available = socket->bytesAvailable();
+        if (available < remaining) {
+            if (!socket->waitForReadyRead(ipc::TIMEOUT_MSEC)) {
+                LOGE() << "failed read, remaining: " << remaining << ", available: " << available << ", err: " << socket->errorString();
+                return false;
+            }
+        }
+
+        char* ptr = data.data();
+        int readed = stream.readRawData(ptr, remaining);
+        if (quint32(readed) != remaining) {
+            LOGE() << "failed read from socket";
+            return false;
+        }
+
+        onPackegReaded(data);
+        return true;
+    };
+
+    bool ok = true;
+    while (socket->bytesAvailable() > 0) {
+        ok = readPackage();
+        ++packageCount;
+        if (!ok) {
+            break;
+        }
+    }
+
+    IPCLOG() << "readed package count: " << packageCount;
+
+    if (!ok) {
+        LOGE() << "failed read package";
+    }
+    return ok;
 }

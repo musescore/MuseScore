@@ -78,6 +78,8 @@ public:
     virtual async::Notification dropChanged() const = 0;
 
     virtual bool applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers = {}) = 0;
+    virtual void undo() = 0;
+    virtual void redo() = 0;
 
     // Move
     //! NOTE Perform operations on selected elements
@@ -128,10 +130,14 @@ public:
     virtual void addTupletToSelectedChordRests(const TupletOptions& options) = 0;
     virtual void addBeamToSelectedChordRests(BeamMode mode) = 0;
 
+    virtual void increaseDecreaseDuration(int steps, bool stepByDots) = 0;
+
+    virtual void toggleLayoutBreak(LayoutBreakType breakType) = 0;
     virtual void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) = 0;
-    virtual void transpose(const TransposeOptions& options) = 0;
+    virtual bool transpose(const TransposeOptions& options) = 0;
     virtual void swapVoices(int voiceIndex1, int voiceIndex2) = 0;
     virtual void addIntervalToSelectedNotes(int interval) = 0;
+    virtual void addFret(int fretIndex) = 0;
     virtual void changeSelectedNotesVoice(int voiceIndex) = 0;
     virtual void addAnchoredLineToSelectedNotes() = 0;
 

@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "notationmetawriter.h"
+#include "notationmeta.h"
 
 #include <cmath>
 
@@ -32,15 +32,14 @@
 #include "log.h"
 #include "global/xmlwriter.h"
 
-using namespace mu::notation;
-using namespace mu::framework;
+using namespace mu::converter;
 
-static std::string boolToString(bool b)
+static QString boolToString(bool b)
 {
     return b ? "true" : "false";
 }
 
-mu::Ret NotationMetaWriter::write(INotationPtr notation, mu::system::IODevice& destinationDevice, const INotationWriter::Options&)
+mu::RetVal<std::string> NotationMeta::metaJson(INotationPtr notation)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -52,44 +51,40 @@ mu::Ret NotationMetaWriter::write(INotationPtr notation, mu::system::IODevice& d
         return make_ret(Ret::Code::UnknownError);
     }
 
-    XmlWriter writer(&destinationDevice);
+    QJsonObject json;
 
-    writer.writeStartDocument();
+    json["title"] =  title(score);
+    json["subtitle"] =  subtitle(score);
+    json["composer"] =  composer(score);
+    json["poet"] =  poet(score);
+    json["mscoreVersion"] =  score->mscoreVersion();
+    json["fileVersion"] =  score->mscVersion();
+    json["pages"] =  score->npages();
+    json["measures"] =  score->nmeasures();
+    json["hasLyrics"] =  boolToString(score->hasLyrics());
+    json["hasHarmonies"] =  boolToString(score->hasHarmonies());
+    json["keysig"] =  score->keysig();
+    json["previousSource"] =  score->metaTag("source");
+    json["timesig"] =  timesig(score);
+    json["duration"] =  score->duration();
+    json["lyrics"] =  score->extractLyrics();
 
-    writer.writeAttribute("title", title(score));
-    writer.writeAttribute("subtitle", subtitle(score));
-    writer.writeAttribute("composer", composer(score));
-    writer.writeAttribute("poet", poet(score));
-    writer.writeAttribute("mscoreVersion", score->mscoreVersion().toStdString());
-    writer.writeAttribute("fileVersion", std::to_string(score->mscVersion()));
-    writer.writeAttribute("pages", std::to_string(score->npages()));
-    writer.writeAttribute("measures", std::to_string(score->nmeasures()));
-    writer.writeAttribute("hasLyrics", boolToString(score->hasLyrics()));
-    writer.writeAttribute("hasHarmonies", boolToString(score->hasHarmonies()));
-    writer.writeAttribute("keysig", std::to_string(score->keysig()));
-    writer.writeAttribute("previousSource", score->metaTag("source").toStdString());
-    writer.writeAttribute("timesig", timesig(score));
-    writer.writeAttribute("duration", std::to_string(score->duration()));
-    writer.writeAttribute("lyrics", score->extractLyrics().toStdString());
+    auto _tempo = tempo(score);
+    json["tempo"] =  _tempo.first;
+    json["tempoText"] =  _tempo.second;
 
-    auto tempo = this->tempo(score);
-    writer.writeAttribute("tempo", tempo.first);
-    writer.writeAttribute("tempoText", tempo.second);
+    json["parts"] =  parts(score);
+    json["pageFormat"] =  pageFormat(score);
+    json["textFramesData"] =  typeData(score);
 
-    writer.writeAttribute("parts", parts(score));
-    writer.writeAttribute("pageFormat", pageFormat(score));
-    writer.writeAttribute("textFramesData", typeData(score));
+    RetVal<std::string> result;
+    result.ret = make_ret(Ret::Code::Ok);
+    result.val = QJsonDocument(json).toJson(QJsonDocument::Compact).toStdString();
 
-    writer.writeEndDocument();
-
-    if (!writer.success()) {
-        LOGE() << "failed write xml";
-    }
-
-    return writer.success();
+    return result;
 }
 
-std::string NotationMetaWriter::title(const Ms::Score* score) const
+QString NotationMeta::title(const Ms::Score* score)
 {
     QString title;
     const Ms::Text* text = score->getText(Ms::Tid::TITLE);
@@ -105,10 +100,10 @@ std::string NotationMetaWriter::title(const Ms::Score* score) const
         title = score->title();
     }
 
-    return title.toStdString();
+    return title;
 }
 
-std::string NotationMetaWriter::subtitle(const Ms::Score* score) const
+QString NotationMeta::subtitle(const Ms::Score* score)
 {
     QString subtitle;
     const Ms::Text* text = score->getText(Ms::Tid::SUBTITLE);
@@ -116,10 +111,10 @@ std::string NotationMetaWriter::subtitle(const Ms::Score* score) const
         subtitle = text->plainText();
     }
 
-    return subtitle.toStdString();
+    return subtitle;
 }
 
-std::string NotationMetaWriter::composer(const Ms::Score* score) const
+QString NotationMeta::composer(const Ms::Score* score)
 {
     QString composer;
     const Ms::Text* text = score->getText(Ms::Tid::COMPOSER);
@@ -131,10 +126,10 @@ std::string NotationMetaWriter::composer(const Ms::Score* score) const
         composer = score->metaTag("composer");
     }
 
-    return composer.toStdString();
+    return composer;
 }
 
-std::string NotationMetaWriter::poet(const Ms::Score* score) const
+QString NotationMeta::poet(const Ms::Score* score)
 {
     QString poet;
     const Ms::Text* text = score->getText(Ms::Tid::POET);
@@ -146,16 +141,16 @@ std::string NotationMetaWriter::poet(const Ms::Score* score) const
         poet = score->metaTag("lyricist");
     }
 
-    return poet.toStdString();
+    return poet;
 }
 
-std::string NotationMetaWriter::timesig(const Ms::Score* score) const
+QString NotationMeta::timesig(const Ms::Score* score)
 {
     int staves = score->nstaves();
     int tracks = staves * VOICES;
     const Ms::Segment* timeSigSegment = score->firstSegmentMM(Ms::SegmentType::TimeSig);
     if (!timeSigSegment) {
-        return std::string();
+        return QString();
     }
 
     QString timeSig;
@@ -172,10 +167,10 @@ std::string NotationMetaWriter::timesig(const Ms::Score* score) const
         timeSig = QString("%1/%2").arg(ts->numerator()).arg(ts->denominator());
     }
 
-    return timeSig.toStdString();
+    return timeSig;
 }
 
-std::pair<std::string, std::string> NotationMetaWriter::tempo(const Ms::Score* score) const
+std::pair<int, QString> NotationMeta::tempo(const Ms::Score* score)
 {
     int tempo = 0;
     QString tempoText;
@@ -190,10 +185,10 @@ std::pair<std::string, std::string> NotationMetaWriter::tempo(const Ms::Score* s
         }
     }
 
-    return { std::to_string(tempo), tempoText.toStdString() };
+    return { tempo, tempoText };
 }
 
-std::string NotationMetaWriter::parts(const Ms::Score* score) const
+QString NotationMeta::parts(const Ms::Score* score)
 {
     QJsonArray jsonPartsArray;
     for (const Part* part : score->parts()) {
@@ -204,24 +199,24 @@ std::string NotationMetaWriter::parts(const Ms::Score* score) const
         jsonPart.insert("instrumentId", part->instrumentId());
         jsonPart.insert("lyricCount", part->lyricCount());
         jsonPart.insert("harmonyCount", part->harmonyCount());
-        jsonPart.insert("hasPitchedStaff", QString::fromStdString(boolToString(part->hasPitchedStaff())));
-        jsonPart.insert("hasTabStaff", QString::fromStdString(boolToString(part->hasTabStaff())));
-        jsonPart.insert("hasDrumStaff", QString::fromStdString(boolToString(part->hasDrumStaff())));
-        jsonPart.insert("isVisible", QString::fromStdString(boolToString(part->show())));
+        jsonPart.insert("hasPitchedStaff", boolToString(part->hasPitchedStaff()));
+        jsonPart.insert("hasTabStaff", boolToString(part->hasTabStaff()));
+        jsonPart.insert("hasDrumStaff", boolToString(part->hasDrumStaff()));
+        jsonPart.insert("isVisible", boolToString(part->show()));
         jsonPartsArray.append(jsonPart);
     }
 
-    return QJsonDocument(jsonPartsArray).toJson(QJsonDocument::Compact).toStdString();
+    return QJsonDocument(jsonPartsArray).toJson(QJsonDocument::Compact);
 }
 
-std::string NotationMetaWriter::pageFormat(const Ms::Score* score) const
+QString NotationMeta::pageFormat(const Ms::Score* score)
 {
     QJsonObject format;
     format.insert("height", round(score->styleD(Ms::Sid::pageHeight) * Ms::INCH));
     format.insert("width", round(score->styleD(Ms::Sid::pageWidth) * Ms::INCH));
-    format.insert("twosided", QString::fromStdString(boolToString(score->styleB(Ms::Sid::pageTwosided))));
+    format.insert("twosided", boolToString(score->styleB(Ms::Sid::pageTwosided)));
 
-    return QJsonDocument(format).toJson(QJsonDocument::Compact).toStdString();
+    return QJsonDocument(format).toJson(QJsonDocument::Compact);
 }
 
 static void findTextByType(void* data, Element* element)
@@ -239,7 +234,7 @@ static void findTextByType(void* data, Element* element)
     }
 }
 
-std::string NotationMetaWriter::typeData(Ms::Score* score)
+QString NotationMeta::typeData(Ms::Score* score)
 {
     QJsonObject typesData;
     static std::vector<std::pair<QString, Ms::Tid> > namesTypesList {
@@ -260,5 +255,5 @@ std::string NotationMetaWriter::typeData(Ms::Score* score)
         typesData.insert(nameType.first, typeData);
     }
 
-    return QJsonDocument(typesData).toJson(QJsonDocument::Compact).toStdString();
+    return QJsonDocument(typesData).toJson(QJsonDocument::Compact);
 }

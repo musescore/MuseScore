@@ -28,47 +28,27 @@
 
 #include "config.h"
 #include "settings.h"
+#include "log.h"
 
 using namespace mu;
 using namespace mu::framework;
 
 static const Settings::Key BACKUP_KEY("global", "application/backup/subfolder");
 
-io::path GlobalConfiguration::appDirPath() const
+io::path GlobalConfiguration::appBinPath() const
 {
     return io::path(QCoreApplication::applicationDirPath());
 }
 
-io::path GlobalConfiguration::sharePath() const
+io::path GlobalConfiguration::appDataPath() const
 {
-    if (m_sharePath.empty()) {
-        m_sharePath = getSharePath();
+    if (m_appDataPath.empty()) {
+        m_appDataPath = resolveAppDataPath();
     }
-
-    return m_sharePath;
+    return m_appDataPath;
 }
 
-io::path GlobalConfiguration::dataPath() const
-{
-#if defined(WIN_PORTABLE)
-    if (m_dataPath.empty()) {
-        m_dataPath = QDir::cleanPath(QString("%1/../../../Data/settings")
-                                     .arg(QCoreApplication::applicationDirPath())
-                                     .arg(QCoreApplication::applicationName()));
-    }
-#elif defined(Q_OS_WASM)
-    if (m_dataPath.empty()) {
-        m_dataPath = std::string("/files/data");
-    }
-#else
-    if (m_dataPath.empty()) {
-        m_dataPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    }
-#endif
-    return m_dataPath;
-}
-
-QString GlobalConfiguration::getSharePath() const
+QString GlobalConfiguration::resolveAppDataPath() const
 {
 #ifdef Q_OS_WIN
     QDir dir(QCoreApplication::applicationDirPath() + QString("/../" INSTALL_NAME));
@@ -89,14 +69,45 @@ QString GlobalConfiguration::getSharePath() const
 #endif
 }
 
-io::path GlobalConfiguration::logsPath() const
+io::path GlobalConfiguration::appConfigPath() const
 {
-    return dataPath() + "/logs";
+    return QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
 }
 
-io::path GlobalConfiguration::backupPath() const
+io::path GlobalConfiguration::userAppDataPath() const
+{
+    if (m_userAppDataPath.empty()) {
+        m_userAppDataPath = resolveUserAppDataPath();
+    }
+    return m_userAppDataPath;
+}
+
+QString GlobalConfiguration::resolveUserAppDataPath() const
+{
+#if defined(WIN_PORTABLE)
+    return QDir::cleanPath(QString("%1/../../../Data/settings")
+                           .arg(QCoreApplication::applicationDirPath())
+                           .arg(QCoreApplication::applicationName()));
+#elif defined(Q_OS_WASM)
+    return QString("/files/data");
+#else
+    return QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+#endif
+}
+
+io::path GlobalConfiguration::userBackupPath() const
 {
     return settings()->value(BACKUP_KEY).toString();
+}
+
+io::path GlobalConfiguration::userDataPath() const
+{
+    return QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+}
+
+io::path GlobalConfiguration::homePath() const
+{
+    return QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
 }
 
 bool GlobalConfiguration::useFactorySettings() const

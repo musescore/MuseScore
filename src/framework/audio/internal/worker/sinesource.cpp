@@ -39,7 +39,7 @@ void SineSource::process(float* buffer, unsigned int sampleCount)
     for (unsigned int i = 0; i < sampleCount; ++i) {
         m_phase += m_frequency / m_sampleRate * 2 * M_PI;
         if (m_phase > 2 * M_PI) {
-            m_phase -= 2 * M_PI;
+            m_phase -= 2 * float(M_PI);
         }
 
         for (unsigned int s = 0; s < streams; ++s) {

@@ -38,6 +38,8 @@
 
 #include "ui/iuiengine.h"
 
+#include "diagnostics/idiagnosticspathsregister.h"
+
 using namespace mu::shortcuts;
 using namespace mu::framework;
 using namespace mu::ui;
@@ -89,4 +91,11 @@ void ShortcutsModule::onInit(const IApplication::RunMode& mode)
     s_configuration->init();
     s_shortcutsRegister->load();
     s_midiRemote->load();
+
+    auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    if (pr) {
+        pr->reg("shortcutsUserAppDataPath", s_configuration->shortcutsUserAppDataPath());
+        pr->reg("shortcutsAppDataPath", s_configuration->shortcutsAppDataPath());
+        pr->reg("midiMappingUserAppDataPath", s_configuration->midiMappingUserAppDataPath());
+    }
 }

@@ -186,7 +186,7 @@ void QPainterProvider::drawPath(const QPainterPath& path)
     m_painter->drawPath(path);
 }
 
-void QPainterProvider::drawPolygon(const PointF* points, int pointCount, PolygonMode mode)
+void QPainterProvider::drawPolygon(const PointF* points, size_t pointCount, PolygonMode mode)
 {
     static_assert(sizeof(QPointF) == sizeof(PointF), "sizeof(QPointF) and sizeof(PointF) must be equal");
 
@@ -194,16 +194,16 @@ void QPainterProvider::drawPolygon(const PointF* points, int pointCount, Polygon
 
     switch (mode) {
     case PolygonMode::OddEven: {
-        m_painter->drawPolygon(qpoints, pointCount, Qt::OddEvenFill);
+        m_painter->drawPolygon(qpoints, int(pointCount), Qt::OddEvenFill);
     } break;
     case PolygonMode::Winding: {
-        m_painter->drawPolygon(qpoints, pointCount, Qt::WindingFill);
+        m_painter->drawPolygon(qpoints, int(pointCount), Qt::WindingFill);
     } break;
     case PolygonMode::Convex: {
-        m_painter->drawConvexPolygon(qpoints, pointCount);
+        m_painter->drawConvexPolygon(qpoints, int(pointCount));
     } break;
     case PolygonMode::Polyline: {
-        m_painter->drawPolyline(qpoints, pointCount);
+        m_painter->drawPolyline(qpoints, int(pointCount));
     } break;
     }
 }

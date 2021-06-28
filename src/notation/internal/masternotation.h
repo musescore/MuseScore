@@ -48,8 +48,9 @@ public:
     INotationPtr notation() override;
 
     Meta metaInfo() const override;
+    void setMetaInfo(const Meta& meta) override;
 
-    Ret load(const io::path& path) override;
+    Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false) override;
     io::path path() const override;
 
     Ret createNew(const ScoreCreateOptions& scoreOptions) override;
@@ -64,15 +65,15 @@ public:
     INotationPartsPtr parts() const override;
     INotationPtr clone() const override;
 
-    Ret writeToDevice(system::IODevice& destinationDevice) override;
+    Ret writeToDevice(io::Device& destinationDevice) override;
 
 private:
     Ret exportScore(const io::path& path, const std::string& suffix);
 
     Ms::MasterScore* masterScore() const;
 
-    Ret load(const io::path& path, const INotationReaderPtr& reader);
-    Ret doLoadScore(Ms::MasterScore* score, const io::path& path, const INotationReaderPtr& reader) const;
+    Ret load(const io::path& path, const io::path& stylePath, const INotationReaderPtr& reader, bool forceMode = false);
+    Ret doLoadScore(Ms::MasterScore* score, const io::path& path, const INotationReaderPtr& reader, bool forceMode = false) const;
     mu::RetVal<Ms::MasterScore*> newScore(const ScoreCreateOptions& scoreInfo);
 
     void doSetExcerpts(ExcerptNotationList excerpts);

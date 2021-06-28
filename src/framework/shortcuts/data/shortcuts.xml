@@ -13,6 +13,10 @@
         <key>multiinstances-dev-show-info</key>
         <seq>Ctrl+F3</seq>
     </SC>
+    <SC>
+        <key>diagnostics-show</key>
+        <seq>Ctrl+F8</seq>
+    </SC>
 <!-- Keyboard navigation -->
     <SC>
         <key>nav-next-section</key>

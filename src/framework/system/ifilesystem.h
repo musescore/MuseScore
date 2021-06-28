@@ -36,6 +36,7 @@ public:
 
     virtual Ret exists(const io::path& path) const = 0;
     virtual Ret remove(const io::path& path) const = 0;
+    virtual Ret copy(const io::path& src, const io::path& dst, bool replace = false) const = 0;
 
     virtual Ret makePath(const io::path& path) const = 0;
 

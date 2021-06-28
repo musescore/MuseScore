@@ -19,13 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SYSTEM_IODEVICE_H
-#define MU_SYSTEM_IODEVICE_H
+#ifndef MU_APPSHELL_STARTUPSCENARIO_H
+#define MU_APPSHELL_STARTUPSCENARIO_H
 
-#include <QIODevice>
+#include "istartupscenario.h"
 
-namespace mu::system {
-using IODevice = QIODevice;
+#include "modularity/ioc.h"
+#include "iinteractive.h"
+#include "iappshellconfiguration.h"
+#include "actions/iactionsdispatcher.h"
+
+namespace mu::appshell {
+class StartupScenario : public IStartupScenario
+{
+    INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(appshell, framework::IInteractive, interactive)
+    INJECT(appshell, actions::IActionsDispatcher, dispatcher)
+
+public:
+    void setStartupScorePath(const io::path& path) override;
+    void run() override;
+
+private:
+    std::string startupPageUri() const;
+
+    void openScore(const io::path& path);
+
+    io::path m_startupScorePath;
+};
 }
 
-#endif // MU_SYSTEM_IODEVICE_H
+#endif // MU_APPSHELL_STARTUPSCENARIO_H

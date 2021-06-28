@@ -36,12 +36,15 @@
 #include "config.h"
 #include "input.h"
 #include "instrument.h"
+#include "scoreorder.h"
 #include "select.h"
 #include "synthesizerstate.h"
 #include "mscoreview.h"
 #include "spannermap.h"
 #include "layoutbreak.h"
 #include "property.h"
+
+class QMimeData;
 
 namespace mu::score {
 class AccessibleScore;
@@ -105,7 +108,6 @@ class UndoStack;
 class Volta;
 class XmlWriter;
 class Channel;
-class ScoreOrder;
 struct Interval;
 struct TEvent;
 struct LayoutContext;
@@ -503,7 +505,7 @@ private:
                                                 ///< saves will not overwrite the backup file.
     bool _defaultsRead        { false };        ///< defaults were read at MusicXML import, allow export of defaults in convertermode
     bool _isPalette           { false };
-    ScoreOrder* _scoreOrder   { nullptr };      ///< used for score ordering
+    ScoreOrder _scoreOrder;                     ///< used for score ordering
 
     int _mscVersion { MSCVERSION };     ///< version of current loading *.msc file
 
@@ -539,7 +541,6 @@ private:
     void removeChordRest(ChordRest* cr, bool clearSegment);
     void cmdMoveRest(Rest*, Direction);
     void cmdMoveLyrics(Lyrics*, Direction);
-    void cmdIncDecDuration(int nSteps, bool stepDotted = false);
 
     void createMMRest(Measure*, Measure*, const Fraction&);
 
@@ -560,7 +561,6 @@ private:
     void selectAdd(Element* e);
     void selectRange(Element* e, int staffIdx);
 
-    void cmdAddFret(int fret);
     void cmdToggleVisible();
 
     void putNote(const Position&, bool replace);
@@ -649,6 +649,7 @@ public:
     void cmdAddBracket();
     void cmdAddParentheses();
     void cmdAddBraces();
+    void cmdAddFret(int fret);
     void cmdSetBeamMode(Beam::Mode);
     void cmdRemovePart(Part*);
     void cmdAddTie(bool addToChord = false);
@@ -667,6 +668,7 @@ public:
     void cmdHalfDuration() { cmdIncDecDuration(1, false); }
     void cmdIncDurationDotted() { cmdIncDecDuration(-1, true); }
     void cmdDecDurationDotted() { cmdIncDecDuration(1, true); }
+    void cmdIncDecDuration(int nSteps, bool stepDotted = false);
     void cmdToggleLayoutBreak(LayoutBreak::Type);
     void cmdAddMeasureRepeat(Measure*, int numMeasures, int staffIdx);
     bool makeMeasureRepeatGroup(Measure*, int numMeasures, int staffIdx);
@@ -907,7 +909,7 @@ public:
     MeasureBase* getNextPrevSectionBreak(MeasureBase*, bool) const;
     Element* getScoreElementOfMeasureBase(MeasureBase*) const;
 
-    void cmd(const QAction*, EditData&);
+    void cmd(const QString&, EditData&);
     int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision / 2) / _fileDivision; }
     void setFileDivision(int t) { _fileDivision = t; }
 
@@ -1028,8 +1030,9 @@ public:
     void setEnableVerticalSpread(bool val);
     qreal maxSystemDistance() const;
 
-    ScoreOrder* scoreOrder() const { return _scoreOrder; }
-    void setScoreOrder(ScoreOrder* order) { _scoreOrder = order; }
+    ScoreOrder scoreOrder() const;
+    void setScoreOrder(ScoreOrder order);
+    void setBracketsAndBarlines();
 
     void lassoSelect(const mu::RectF&);
     void lassoSelectEnd(bool);

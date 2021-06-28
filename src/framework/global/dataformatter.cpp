@@ -33,7 +33,7 @@ double DataFormatter::formatDouble(const double& val, const int decimals)
     return QString::number(val, 'f', decimals).toDouble();
 }
 
-QString DataFormatter::formatTimeSinceCreation(const QDate& creationDate)
+QString DataFormatter::formatTimeSince(const QDate& dateTime)
 {
     QDateTime currentDateTime = QDateTime::currentDateTime();
 #if (defined (_MSCVER) || defined (_MSC_VER))
@@ -44,7 +44,7 @@ QString DataFormatter::formatTimeSinceCreation(const QDate& creationDate)
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
     // ToDo for Qt 5.15: QDateTime::QDateTime() vs. QDate::startOfDay() (available as of Qt 5.14) ??
-    int days = QDateTime(creationDate).daysTo(currentDateTime);
+    int days = QDateTime(dateTime).daysTo(currentDateTime);
 #if (defined (_MSCVER) || defined (_MSC_VER))
 #pragma warning (pop)
 #else
@@ -83,7 +83,7 @@ QString DataFormatter::formatTimeSinceCreation(const QDate& creationDate)
 
     QDate currentDate = currentDateTime.date();
     constexpr int monthInYear = 12;
-    int months = (currentDate.year() - creationDate.year()) * monthInYear + (currentDate.month() - creationDate.month());
+    int months = (currentDate.year() - dateTime.year()) * monthInYear + (currentDate.month() - dateTime.month());
 
     if (months == 1) {
         return qtrc("global", "Last month");
@@ -93,7 +93,7 @@ QString DataFormatter::formatTimeSinceCreation(const QDate& creationDate)
         return qtrc("global", "%1 months ago").arg(months);
     }
 
-    int years = currentDate.year() - creationDate.year();
+    int years = currentDate.year() - dateTime.year();
     if (years == 1) {
         return qtrc("global", "1 year ago");
     }

@@ -50,6 +50,8 @@ public:
     Meta metaInfo() const override;
     void setMetaInfo(const Meta& meta) override;
 
+    instruments::ScoreOrder scoreOrder() const override;
+
     INotationPtr clone() const override;
 
     void setViewSize(const QSizeF& vs) override;

@@ -23,27 +23,27 @@
 
 using namespace mu::network;
 
-mu::Ret NetworkManagerStub::get(const QUrl&, mu::system::IODevice*)
+mu::Ret NetworkManagerStub::get(const QUrl&, IncomingDevice*, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-mu::Ret NetworkManagerStub::head(const QUrl&)
+mu::Ret NetworkManagerStub::head(const QUrl&, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-mu::Ret NetworkManagerStub::post(const QUrl&, mu::system::IODevice*, mu::system::IODevice*)
+mu::Ret NetworkManagerStub::post(const QUrl&, OutgoingDevice*, IncomingDevice*, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-mu::Ret NetworkManagerStub::put(const QUrl&, mu::system::IODevice*, mu::system::IODevice*)
+mu::Ret NetworkManagerStub::put(const QUrl&, OutgoingDevice*, IncomingDevice*, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-mu::Ret NetworkManagerStub::del(const QUrl&, mu::system::IODevice*)
+mu::Ret NetworkManagerStub::del(const QUrl&, IncomingDevice*, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);
 }

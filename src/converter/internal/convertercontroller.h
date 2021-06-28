@@ -41,9 +41,21 @@ class ConverterController : public IConverterController
 public:
     ConverterController() = default;
 
-    Ret fileConvert(const io::path& in, const io::path& out) override;
-    Ret batchConvert(const io::path& batchJobFile) override;
-    Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath) override;
+    Ret fileConvert(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) override;
+    Ret batchConvert(const io::path& batchJobFile, const io::path& stylePath = io::path(), bool forceMode = false) override;
+    Ret convertScoreParts(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) override;
+
+    Ret exportScoreMedia(const io::path& in, const io::path& out,
+                         const io::path& highlightConfigPath = io::path(), const io::path& stylePath = io::path(),
+                         bool forceMode = false) override;
+    Ret exportScoreMeta(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) override;
+    Ret exportScoreParts(const io::path& in, const io::path& out, const io::path& stylePath = io::path(), bool forceMode = false) override;
+    Ret exportScorePartsPdfs(const io::path& in, const io::path& out, const io::path& stylePath = io::path(),
+                             bool forceMode = false) override;
+    Ret exportScoreTranspose(const io::path& in, const io::path& out, const std::string& optionsJson,
+                             const io::path& stylePath = io::path(), bool forceMode = false) override;
+
+    Ret updateSource(const io::path& in, const std::string& newSource, bool forceMode = false) override;
 
 private:
 
@@ -55,6 +67,14 @@ private:
     using BatchJob = std::list<Job>;
 
     RetVal<BatchJob> parseBatchJob(const io::path& batchJobFile) const;
+
+    bool isConvertPageByPage(const std::string& suffix) const;
+    Ret convertPageByPage(notation::INotationWriterPtr writer, notation::INotationPtr notation, const io::path& out) const;
+    Ret convertFullNotation(notation::INotationWriterPtr writer, notation::INotationPtr notation, const io::path& out) const;
+
+    Ret convertScorePartsToPdf(notation::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation, const io::path& out) const;
+    Ret convertScorePartsToPngs(notation::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
+                                const io::path& out) const;
 };
 }
 
