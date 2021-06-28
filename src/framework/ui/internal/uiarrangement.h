@@ -63,13 +63,13 @@ private:
     void saveData(workspace::DataKey key, const QJsonObject& obj);
 
     QJsonObject m_settings;
-    Notifications m_valuesNotifications;
+    mutable Notifications m_valuesNotifications;
 
     QJsonObject m_states;
-    Notifications m_statesNotifications;
+    mutable Notifications m_statesNotifications;
 
     QJsonObject m_toolconfigs;
-    Notifications m_toolconfigsNotifications;
+    mutable Notifications m_toolconfigsNotifications;
 };
 }
 
