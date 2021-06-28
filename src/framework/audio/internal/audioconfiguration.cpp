@@ -83,7 +83,7 @@ std::string AudioConfiguration::currentAudioApi() const
 
 void AudioConfiguration::setCurrentAudioApi(const std::string& name)
 {
-    settings()->setValue(AUDIO_API_KEY, Val(name));
+    settings()->setSharedValue(AUDIO_API_KEY, Val(name));
 }
 
 int AudioConfiguration::audioChannelsCount() const
@@ -116,7 +116,7 @@ bool AudioConfiguration::isShowControlsInMixer() const
 
 void AudioConfiguration::setIsShowControlsInMixer(bool show)
 {
-    settings()->setValue(SHOW_CONTROLS_IN_MIXER, Val(show));
+    settings()->setSharedValue(SHOW_CONTROLS_IN_MIXER, Val(show));
 }
 
 const SynthesizerState& AudioConfiguration::defaultSynthesizerState() const

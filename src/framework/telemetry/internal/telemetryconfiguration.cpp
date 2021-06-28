@@ -59,7 +59,7 @@ mu::ValCh<bool> TelemetryConfiguration::isTelemetryAllowed() const
 
 void TelemetryConfiguration::setIsTelemetryAllowed(bool val)
 {
-    return settings()->setValue(IS_TELEMETRY_ALLOWED, Val(val));
+    return settings()->setSharedValue(IS_TELEMETRY_ALLOWED, Val(val));
 }
 
 bool TelemetryConfiguration::isDumpUploadAllowed() const
@@ -69,5 +69,5 @@ bool TelemetryConfiguration::isDumpUploadAllowed() const
 
 void TelemetryConfiguration::setIsDumpUploadAllowed(bool val)
 {
-    settings()->setValue(IS_DUMP_UPLOAD_ALLOWED, Val(val));
+    settings()->setSharedValue(IS_DUMP_UPLOAD_ALLOWED, Val(val));
 }

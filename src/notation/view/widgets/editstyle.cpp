@@ -1253,7 +1253,7 @@ void EditStyle::buttonClicked(QAbstractButton* b)
     switch (buttonBox->standardButton(b)) {
     case QDialogButtonBox::Ok:
         accept();
-        settings()->setValue(STYLE_MENU_ORDER, Val(arrayToString(pageListMap)));
+        settings()->setSharedValue(STYLE_MENU_ORDER, Val(arrayToString(pageListMap)));
         break;
     case QDialogButtonBox::Cancel:
         reject();

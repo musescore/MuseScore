@@ -35,9 +35,8 @@ static bool containsWorkspace(const IWorkspacePtrList& list, const IWorkspacePtr
 
 void WorkspaceManager::init()
 {
-    configuration()->currentWorkspaceName().ch.onReceive(this, [this](const std::string&) {
+    configuration()->currentWorkspaceNameChanged().onReceive(this, [this](const std::string&) {
         setupCurrentWorkspace();
-        LOGI() << "current workspace changed, now: " << m_currentWorkspace->name();
     });
 
     load();
@@ -245,7 +244,7 @@ void WorkspaceManager::setupDefaultWorkspace()
 
 void WorkspaceManager::setupCurrentWorkspace()
 {
-    std::string workspaceName = configuration()->currentWorkspaceName().val;
+    std::string workspaceName = configuration()->currentWorkspaceName();
     if (m_currentWorkspace && m_currentWorkspace->isLoaded()) {
         if (m_currentWorkspace->name() == workspaceName) {
             return;

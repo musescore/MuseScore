@@ -42,5 +42,5 @@ std::string GuitarProConfiguration::importGuitarProCharset() const
 
 void GuitarProConfiguration::setImportGuitarProCharset(const std::string& charset)
 {
-    settings()->setValue(IMPORT_GUITARPRO_CHARSET_KEY, Val(charset));
+    settings()->setSharedValue(IMPORT_GUITARPRO_CHARSET_KEY, Val(charset));
 }

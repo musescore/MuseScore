@@ -267,7 +267,7 @@ static void fixupScore(Score* score)
 
 void TestMxmlIO::setValue(const std::string& key, const Val& value)
 {
-    settings()->setValue(Settings::Key(MODULE_NAME, key), value);
+    settings()->setSharedValue(Settings::Key(MODULE_NAME, key), value);
 }
 
 //---------------------------------------------------------

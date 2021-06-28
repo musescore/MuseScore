@@ -50,28 +50,25 @@ io::paths WorkspaceConfiguration::workspacePaths() const
     return paths;
 }
 
-io::path WorkspaceConfiguration::templateWorkspacePath() const
-{
-    return ":/workspace/template";
-}
-
 io::path WorkspaceConfiguration::userWorkspacesPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/workspaces";
 }
 
-ValCh<std::string> WorkspaceConfiguration::currentWorkspaceName() const
+std::string WorkspaceConfiguration::currentWorkspaceName() const
 {
-    ValCh<std::string> result;
-    result.ch = m_currentWorkspaceNameChanged;
-    result.val = settings()->value(CURRENT_WORKSPACE).toString();
-
-    return result;
+    return settings()->value(CURRENT_WORKSPACE).toString();
 }
 
 void WorkspaceConfiguration::setCurrentWorkspaceName(const std::string& workspaceName)
 {
-    settings()->setValue(CURRENT_WORKSPACE, Val(workspaceName));
+    //! NOTE Workspace selection does not need to be synchronized between instances
+    settings()->setLocalValue(CURRENT_WORKSPACE, Val(workspaceName));
+}
+
+async::Channel<std::string> WorkspaceConfiguration::currentWorkspaceNameChanged() const
+{
+    return m_currentWorkspaceNameChanged;
 }
 
 io::paths WorkspaceConfiguration::extensionsPaths() const

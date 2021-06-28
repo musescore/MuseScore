@@ -46,7 +46,7 @@ int MidiConfiguration::midiShortestNote() const
 
 void MidiConfiguration::setMidiShortestNote(int ticks)
 {
-    settings()->setValue(SHORTEST_NOTE_KEY, Val(ticks));
+    settings()->setSharedValue(SHORTEST_NOTE_KEY, Val(ticks));
 }
 
 bool MidiConfiguration::isMidiExportRpns() const
@@ -56,7 +56,7 @@ bool MidiConfiguration::isMidiExportRpns() const
 
 void MidiConfiguration::setIsMidiExportRpns(bool exportRpns) const
 {
-    settings()->setValue(EXPORTRPNS_KEY, Val(exportRpns));
+    settings()->setSharedValue(EXPORTRPNS_KEY, Val(exportRpns));
 }
 
 void MidiConfiguration::setMidiImportOperationsFile(const mu::io::path& filePath) const

@@ -26,9 +26,13 @@
 #include "io/path.h"
 #include "workspacefile.h"
 
+#include "modularity/ioc.h"
+#include "multiinstances/imultiinstancesprovider.h"
+
 namespace mu::workspace {
 class Workspace : public IWorkspace
 {
+    INJECT(workspace, mi::IMultiInstancesProvider, multiInstancesProvider)
 public:
     Workspace(const io::path& filePath);
 

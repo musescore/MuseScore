@@ -72,7 +72,7 @@ static QString userAgent()
 void CloudConfiguration::init()
 {
     if (settings()->value(CLIENT_ID_KEY).isNull()) {
-        settings()->setValue(CLIENT_ID_KEY, Val(QVariant(generateClientId())));
+        settings()->setSharedValue(CLIENT_ID_KEY, Val(QVariant(generateClientId())));
     }
 }
 
