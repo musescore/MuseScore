@@ -661,6 +661,7 @@ void PaletteWorkspace::setSearching(bool searching)
     m_searching = searching;
 
     mainPalette = nullptr;
+    mainPaletteController = nullptr;
     emit mainPaletteChanged();
 }
 
@@ -684,7 +685,6 @@ AbstractPaletteController* PaletteWorkspace::getMainPaletteController()
     if (!mainPaletteController) {
         mainPaletteController = new UserPaletteController(mainPaletteModel(), userPalette, this);
     }
-//             mainPaletteController = new PaletteController(mainPaletteModel(), this, this);
     return mainPaletteController;
 }
 
