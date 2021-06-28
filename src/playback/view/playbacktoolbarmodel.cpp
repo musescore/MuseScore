@@ -33,7 +33,6 @@ using namespace mu::actions;
 using namespace mu::ui;
 using namespace mu::notation;
 
-static const QString PLAYBACK_TOOLBAR_KEY("playbackControl");
 static const ActionCode PLAY_ACTION_CODE("play");
 
 static MusicalSymbolCodes::Code tempoDurationToNoteIcon(DurationType durationType)
@@ -78,10 +77,6 @@ void PlaybackToolBarModel::setupConnections()
     playbackController()->playbackPositionChanged().onNotify(this, [this]() {
         updatePlayTime();
     });
-
-    uiConfiguration()->toolConfigChanged(PLAYBACK_TOOLBAR_KEY).onNotify(this, [this]() {
-        updateActions();
-    });
 }
 
 void PlaybackToolBarModel::updateActions()
@@ -90,11 +85,8 @@ void PlaybackToolBarModel::updateActions()
     MenuItemList settingsItems;
     MenuItemList additionalItems;
 
-    ToolConfig config = uiConfiguration()->toolConfig(PLAYBACK_TOOLBAR_KEY);
-    if (!config.isValid()) {
-        config = PlaybackUiActions::defaultPlaybackToolConfig();
-    }
-
+    //! NOTE At the moment no customization ability
+    ToolConfig config = PlaybackUiActions::defaultPlaybackToolConfig();
     for (const ToolConfig::Item& item : config.items) {
         if (isAdditionalAction(item.action)) {
             //! NOTE: In this case, we want to see the actions' description instead of the title
