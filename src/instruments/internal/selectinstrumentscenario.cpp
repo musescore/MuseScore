@@ -24,11 +24,12 @@
 using namespace mu::instruments;
 using namespace mu::notation;
 
-mu::RetVal<PartInstrumentList> SelectInstrumentsScenario::selectInstruments(SelectInstrumentsMode mode) const
+mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(SelectInstrumentsMode mode) const
 {
     QStringList params;
     if (mode == SelectInstrumentsMode::ShowCurrentInstruments) {
         params << "initiallySelectedPartIds=" + partsIds().join(",");
+        params << "currentScoreOrderId=" + scoreOrder().id;
     }
 
     return selectInstruments(params);
@@ -43,7 +44,7 @@ mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const std::st
         "currentInstrumentId=" + QString::fromStdString(currentInstrumentId)
     };
 
-    RetVal<PartInstrumentList> selectedInstruments = selectInstruments(params);
+    RetVal<PartInstrumentListScoreOrder> selectedInstruments = selectInstruments(params);
     if (!selectedInstruments.ret) {
         result.ret = selectedInstruments.ret;
         return result;
@@ -51,17 +52,17 @@ mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const std::st
 
     result.ret = make_ret(Ret::Code::Ok);
 
-    if (selectedInstruments.val.empty()) {
+    if (selectedInstruments.val.instruments.empty()) {
         return result;
     }
 
-    result.val = selectedInstruments.val.first().instrument;
+    result.val = selectedInstruments.val.instruments.first().instrument;
     return result;
 }
 
-mu::RetVal<PartInstrumentList> SelectInstrumentsScenario::selectInstruments(const QStringList& params) const
+mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const QStringList& params) const
 {
-    RetVal<PartInstrumentList> result;
+    RetVal<PartInstrumentListScoreOrder> result;
 
     QString uri = QString("musescore://instruments/select?%1").arg(params.join('&'));
     RetVal<Val> instruments = interactive()->open(uri.toStdString());
@@ -72,8 +73,9 @@ mu::RetVal<PartInstrumentList> SelectInstrumentsScenario::selectInstruments(cons
 
     result.ret = make_ret(Ret::Code::Ok);
 
-    QVariantList objList = instruments.val.toQVariant().toList();
-    for (const QVariant& obj: objList) {
+    QVariantMap info = instruments.val.toQVariant().toMap();
+    result.val.scoreOrder = info["scoreOrder"].value<instruments::ScoreOrder>();
+    for (const QVariant& obj: info["instrumentList"].toList()) {
         QVariantMap map = obj.toMap();
         PartInstrument pi;
 
@@ -82,7 +84,7 @@ mu::RetVal<PartInstrumentList> SelectInstrumentsScenario::selectInstruments(cons
         pi.partId = map["id"].toString();
         pi.instrument = map["instrument"].value<Instrument>();
 
-        result.val << pi;
+        result.val.instruments << pi;
     }
 
     return result;
@@ -113,4 +115,14 @@ IDList SelectInstrumentsScenario::partsIds() const
     }
 
     return result;
+}
+
+ScoreOrder SelectInstrumentsScenario::scoreOrder() const
+{
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return ScoreOrder();
+    }
+
+    return notation->scoreOrder();
 }

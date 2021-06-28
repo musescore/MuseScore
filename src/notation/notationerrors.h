@@ -23,10 +23,11 @@
 #define MU_NOTATION_NOTATIONERRORS_H
 
 #include "ret.h"
+#include "translation.h"
+#include "io/path.h"
 #include "libmscore/score.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 // 1000 - 1299
 enum class Err {
     Undefined       = int(Ret::Code::Undefined),
@@ -52,31 +53,94 @@ enum class Err {
     NoScore = 1030,
 };
 
-inline mu::Ret make_ret(Err e)
+inline Ret make_ret(Err err, const io::path& filePath = "")
 {
-    return Ret(static_cast<int>(e));
+    int code = static_cast<int>(err);
+    QString fileName = io::filename(filePath).toQString();
+    QString text;
+
+    switch (err) {
+    case Err::FileUnknownError:
+        text = qtrc("notation", "Unknown error");
+        break;
+    case Err::FileNotFound:
+        text = qtrc("notation", "File \"%1\" not found")
+               .arg(fileName);
+        break;
+    case Err::FileOpenError:
+        text = qtrc("notation", "File open error");
+        break;
+    case Err::FileBadFormat:
+        text = qtrc("notation", "Bad format");
+        break;
+    case Err::FileUnknownType:
+        text = qtrc("notation", "Unknown filetype");
+        break;
+    case Err::FileNoRootFile:
+        text = qtrc("notation", "Not found root file");
+        break;
+    case Err::FileTooOld:
+        text = qtrc("notation", "It was last saved with a version older than 2.0.0.\n"
+                                "You can convert this score by opening and then\n"
+                                "saving with MuseScore version 2.x.\n"
+                                "Visit the %1MuseScore download page%2 to obtain such a 2.x version.")
+               .arg("<a href=\"https://musescore.org/download#older-versions\">")
+               .arg("</a>");
+        break;
+    case Err::FileTooNew:
+        text = qtrc("notation", "This score was saved using a newer version of MuseScore.\n "
+                                "Visit the %1MuseScore website%2 to obtain the latest version.")
+               .arg("<a href=\"https://musescore.org\">")
+               .arg("</a>");
+        break;
+    case Err::FileOld300Format:
+        text = qtrc("notation", "It was last saved with a developer version of 3.0.");
+        break;
+    case Err::FileCorrupted:
+        text = qtrc("notation", "File \"%1\" corrupted.")
+               .arg(fileName);
+        break;
+    case Err::FileCriticalCorrupted:
+        text = qtrc("notation", "File \"%1\" is critically corrupted and cannot be processed.")
+               .arg(fileName);
+        break;
+    case Err::NoScore:
+        text = qtrc("notation", "No score");
+        break;
+    case Err::Undefined:
+    case Err::NoError:
+    case Err::UnknownError:
+    case Err::UserAbort:
+    case Err::IgnoreError:
+        break;
+    }
+
+    return Ret(code, text.toStdString());
 }
 
-inline Ret scoreFileErrorToRet(Ms::Score::FileError e)
+inline Ret scoreFileErrorToRet(Ms::Score::FileError err, const io::path& filePath)
 {
-    switch (e) {
-    case Ms::Score::FileError::FILE_NO_ERROR:       return make_ret(Err::NoError);
-    case Ms::Score::FileError::FILE_ERROR:          return make_ret(Err::FileUnknownError);
-    case Ms::Score::FileError::FILE_NOT_FOUND:      return make_ret(Err::FileNotFound);
-    case Ms::Score::FileError::FILE_OPEN_ERROR:     return make_ret(Err::FileOpenError);
-    case Ms::Score::FileError::FILE_BAD_FORMAT:     return make_ret(Err::FileBadFormat);
-    case Ms::Score::FileError::FILE_UNKNOWN_TYPE:   return make_ret(Err::FileUnknownType);
-    case Ms::Score::FileError::FILE_NO_ROOTFILE:    return make_ret(Err::FileNoRootFile);
-    case Ms::Score::FileError::FILE_TOO_OLD:        return make_ret(Err::FileTooOld);
-    case Ms::Score::FileError::FILE_TOO_NEW:        return make_ret(Err::FileTooNew);
-    case Ms::Score::FileError::FILE_OLD_300_FORMAT: return make_ret(Err::FileOld300Format);
-    case Ms::Score::FileError::FILE_CORRUPTED:      return make_ret(Err::FileCorrupted);
-    case Ms::Score::FileError::FILE_CRITICALLY_CORRUPTED: return make_ret(Err::FileCriticalCorrupted);
-    case Ms::Score::FileError::FILE_USER_ABORT:      return make_ret(Err::UserAbort);
-    case Ms::Score::FileError::FILE_IGNORE_ERROR:    return make_ret(Err::IgnoreError);
+    auto makeRet = [=](Err err) {
+        return make_ret(err, filePath);
+    };
+
+    switch (err) {
+    case Ms::Score::FileError::FILE_NO_ERROR:       return makeRet(Err::NoError);
+    case Ms::Score::FileError::FILE_ERROR:          return makeRet(Err::FileUnknownError);
+    case Ms::Score::FileError::FILE_NOT_FOUND:      return makeRet(Err::FileNotFound);
+    case Ms::Score::FileError::FILE_OPEN_ERROR:     return makeRet(Err::FileOpenError);
+    case Ms::Score::FileError::FILE_BAD_FORMAT:     return makeRet(Err::FileBadFormat);
+    case Ms::Score::FileError::FILE_UNKNOWN_TYPE:   return makeRet(Err::FileUnknownType);
+    case Ms::Score::FileError::FILE_NO_ROOTFILE:    return makeRet(Err::FileNoRootFile);
+    case Ms::Score::FileError::FILE_TOO_OLD:        return makeRet(Err::FileTooOld);
+    case Ms::Score::FileError::FILE_TOO_NEW:        return makeRet(Err::FileTooNew);
+    case Ms::Score::FileError::FILE_OLD_300_FORMAT: return makeRet(Err::FileOld300Format);
+    case Ms::Score::FileError::FILE_CORRUPTED:      return makeRet(Err::FileCorrupted);
+    case Ms::Score::FileError::FILE_CRITICALLY_CORRUPTED: return makeRet(Err::FileCriticalCorrupted);
+    case Ms::Score::FileError::FILE_USER_ABORT:      return makeRet(Err::UserAbort);
+    case Ms::Score::FileError::FILE_IGNORE_ERROR:    return makeRet(Err::IgnoreError);
     }
     return Ret();
-}
 }
 }
 

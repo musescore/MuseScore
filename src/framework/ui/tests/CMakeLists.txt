@@ -24,12 +24,19 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/navigationcontroller_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/mocks/navigationmocks.h
-)
+    )
 
 set(MODULE_TEST_LINK
     actions
     ui
     )
+
+if (OS_IS_MAC)
+    set(MODULE_TEST_LINK
+        ${MODULE_TEST_LINK}
+        ${OsxFrameworks}
+        )
+endif()
 
 include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
 

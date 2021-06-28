@@ -28,7 +28,7 @@
 
 #include "async/channel.h"
 #include "global/progress.h"
-#include "system/iodevice.h"
+#include "io/device.h"
 #include "inotation.h"
 
 namespace mu::notation {
@@ -48,7 +48,6 @@ public:
         UNIT_TYPE,
         PAGE_NUMBER,
         TRANSPARENT_BACKGROUND,
-        TRIM_MARGINS_SIZE,
         NOTES_COLORS
     };
 
@@ -56,8 +55,8 @@ public:
 
     virtual ~INotationWriter() = default;
 
-    virtual Ret write(INotationPtr notation, system::IODevice& destinationDevice, const Options& options = Options()) = 0;
-    virtual Ret writeList(const INotationPtrList& notations, system::IODevice& destinationDevice, const Options& options = Options()) = 0;
+    virtual Ret write(INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) = 0;
+    virtual Ret writeList(const INotationPtrList& notations, io::Device& destinationDevice, const Options& options = Options()) = 0;
     virtual void abort() = 0;
     virtual framework::ProgressChannel progress() const = 0;
 };

@@ -19,38 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "appwindowstyler.h"
+#ifndef MU_NOTATION_SCOREORDERCONVERTER_H
+#define MU_NOTATION_SCOREORDERCONVERTER_H
 
-#include <QObject>
-#include <QWindow>
+#include "instruments/instrumentstypes.h"
+#include "libmscore/scoreorder.h"
 
-using namespace mu::appshell;
-
-AppWindowStyler::AppWindowStyler(QObject* parent)
-    : QObject(parent), m_targetWindow(nullptr)
+namespace mu::notation {
+class ScoreOrderConverter
 {
+public:
+    static Ms::ScoreOrder convertScoreOrder(const instruments::ScoreOrder& order);
+    static instruments::ScoreOrder convertScoreOrder(const Ms::ScoreOrder& order);
+};
 }
 
-void AppWindowStyler::init()
-{
-    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
-        uiConfiguration()->applyPlatformStyle(m_targetWindow);
-    });
-}
-
-QWindow* AppWindowStyler::targetWindow() const
-{
-    return m_targetWindow;
-}
-
-void AppWindowStyler::setTargetWindow(QWindow* window)
-{
-    if (m_targetWindow == window) {
-        return;
-    }
-
-    m_targetWindow = window;
-    emit targetWindowChanged();
-
-    uiConfiguration()->applyPlatformStyle(m_targetWindow);
-}
+#endif // MU_NOTATION_SCOREORDERCONVERTER_H

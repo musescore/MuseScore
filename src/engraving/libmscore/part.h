@@ -91,6 +91,7 @@ public:
     Staff* staff(int idx) const;
     void setId(const QString& s) { _id = s; }
     QString id() const { return _id; }
+    QString familyId() const;
 
     int startTrack() const;
     int endTrack() const;

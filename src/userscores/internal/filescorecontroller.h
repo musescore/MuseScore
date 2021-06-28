@@ -33,6 +33,7 @@
 #include "context/iglobalcontext.h"
 #include "iplatformrecentfilescontroller.h"
 #include "multiinstances/imultiinstancesprovider.h"
+#include "cloud/iuploadingservice.h"
 
 namespace mu::userscores {
 class FileScoreController : public IFileScoreController, public actions::Actionable, public async::Asyncable
@@ -44,11 +45,13 @@ class FileScoreController : public IFileScoreController, public actions::Actiona
     INJECT(userscores, IUserScoresConfiguration, configuration)
     INJECT(userscores, IPlatformRecentFilesController, platformRecentFilesController)
     INJECT(userscores, mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(userscores, cloud::IUploadingService, uploadingService)
 
 public:
     void init();
 
     Ret openScore(const io::path& scorePath) override;
+    bool closeOpenedScore() override;
     bool isScoreOpened(const io::path& scorePath) const override;
 
 private:
@@ -62,7 +65,9 @@ private:
     void openScore(const actions::ActionData& args);
     void importScore();
     void newScore();
-    void closeScore();
+
+    bool checkCanIgnoreError(const Ret& ret, const io::path& filePath);
+    framework::IInteractive::Button askAboutSavingScore(const io::path& filePath);
 
     void saveScore();
     void saveScoreAs();
@@ -76,8 +81,9 @@ private:
 
     void continueLastSession();
 
-    io::path selectScoreOpenningFile(const QStringList& filter);
+    io::path selectScoreOpenningFile();
     io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
+
     Ret doOpenScore(const io::path& filePath);
     void doSaveScore(const io::path& filePath = io::path(), notation::SaveMode saveMode = notation::SaveMode::Save);
 

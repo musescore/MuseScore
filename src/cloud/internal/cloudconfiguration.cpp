@@ -92,6 +92,11 @@ QByteArray CloudConfiguration::clientId() const
     return settings()->value(CLIENT_ID_KEY).toQVariant().toByteArray();
 }
 
+QByteArray CloudConfiguration::uploadingLicense() const
+{
+    return "all-rights-reserved";
+}
+
 QUrl CloudConfiguration::authorizationUrl() const
 {
     return QUrl("https://musescore.com/user/auth/oauth2server");
@@ -124,7 +129,7 @@ QUrl CloudConfiguration::uploadingApiUrl() const
 
 mu::io::path CloudConfiguration::tokensFilePath() const
 {
-    return globalConfiguration()->dataPath() + "/cred.dat";
+    return globalConfiguration()->userAppDataPath() + "/cred.dat";
 }
 
 QString CloudConfiguration::apiRootUrl() const

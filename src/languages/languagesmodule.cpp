@@ -31,6 +31,8 @@
 #include "internal/languageunpacker.h"
 #include "view/languagelistmodel.h"
 
+#include "diagnostics/idiagnosticspathsregister.h"
+
 using namespace mu::languages;
 
 static LanguagesConfiguration* m_languagesConfiguration = new LanguagesConfiguration();
@@ -76,4 +78,10 @@ void LanguagesModule::onInit(const framework::IApplication::RunMode& mode)
     }
 
     m_languagesService->init();
+
+    auto pr = framework::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    if (pr) {
+        pr->reg("languagesAppDataPath", m_languagesConfiguration->languagesAppDataPath());
+        pr->reg("languagesUserAppDataPath", m_languagesConfiguration->languagesUserAppDataPath());
+    }
 }

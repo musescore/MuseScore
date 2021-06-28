@@ -35,9 +35,15 @@ namespace mu::notation {
 class INotationReader
 {
 public:
+    enum class OptionKey {
+        ForceMode // Ignore lower priority errors (like version errors)
+    };
+
+    using Options = QMap<OptionKey, QVariant>;
+
     virtual ~INotationReader() = default;
 
-    virtual Ret read(Ms::MasterScore* score, const io::path& path) = 0;
+    virtual Ret read(Ms::MasterScore* score, const io::path& path, const Options& options = Options()) = 0;
 };
 
 using INotationReaderPtr = std::shared_ptr<INotationReader>;

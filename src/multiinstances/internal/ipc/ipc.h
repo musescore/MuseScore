@@ -25,6 +25,9 @@
 
 #include <QString>
 #include <QByteArray>
+#include <functional>
+
+class QLocalSocket;
 
 namespace mu::ipc {
 static const QString SERVER_NAME("musescore-app-ipc");
@@ -73,6 +76,9 @@ static void serialize(const Msg& msg, QByteArray& data);
 static void deserialize(const QByteArray& data, Msg& msg);
 
 static QString socketErrorToString(int err);
+
+static bool writeToSocket(QLocalSocket* socket, const QByteArray& data);
+static bool readFromSocket(QLocalSocket* socket, std::function<void(const QByteArray& data)> onPackegReaded);
 }
 
 #endif // MU_IPC_IPC_H

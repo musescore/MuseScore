@@ -42,10 +42,9 @@ public:
     virtual QUrl languageFileServerUrl(const QString& languageCode) const = 0;
 
     virtual ValCh<LanguagesHash> languages() const = 0;
-    virtual Ret setLanguages(const LanguagesHash& languages) const = 0;
+    virtual Ret setLanguages(const LanguagesHash& languages) = 0;
 
-    virtual io::path languagesSharePath() const = 0;
-    virtual io::path languagesDataPath() const = 0;
+    virtual io::path languagesUserAppDataPath() const = 0;
 
     virtual io::paths languageFilePaths(const QString& languageCode) const = 0;
     virtual io::path languageArchivePath(const QString& languageCode) const = 0;

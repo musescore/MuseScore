@@ -72,11 +72,6 @@ const UiActionList UserScoresUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Save a copy of the score in various formats"),
              IconCode::Code::SHARE_FILE
              ),
-    UiAction("file-import",
-             mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Import..."),
-             QT_TRANSLATE_NOOP("action", "Import score from file")
-             ),
     UiAction("file-import-pdf",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Import PDF..."),

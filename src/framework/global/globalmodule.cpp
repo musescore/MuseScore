@@ -39,6 +39,8 @@
 
 #include "settings.h"
 
+#include "diagnostics/idiagnosticspathsregister.h"
+
 using namespace mu::framework;
 
 static std::shared_ptr<GlobalConfiguration> s_globalConf = std::make_shared<GlobalConfiguration>();
@@ -75,10 +77,11 @@ void GlobalModule::onInit(const IApplication::RunMode&)
     logger->addDest(new ConsoleLogDest(LogLayout("${time} | ${type|5} | ${thread} | ${tag|10} | ${message}")));
 
     //! File, this creates a file named "data/logs/MuseScore_yyMMdd.log"
-    std::string logsPath = s_globalConf->logsPath().c_str();
-    LOGI() << "logs path: " << logsPath;
-    logger->addDest(new FileLogDest(logsPath, "MuseScore", "log",
-                                    LogLayout("${datetime} | ${type|5} | ${thread} | ${tag|10} | ${message}")));
+    io::path logsPath = s_globalConf->userAppDataPath() + "/logs";
+    FileLogDest* logFile = new FileLogDest(logsPath.toStdString(), "MuseScore", "log",
+                                           LogLayout("${datetime} | ${type|5} | ${thread} | ${tag|10} | ${message}"));
+    LOGI() << "log path: " << logFile->filePath();
+    logger->addDest(logFile);
 
 #ifndef NDEBUG
     logger->setLevel(haw::logger::Debug);
@@ -111,4 +114,17 @@ void GlobalModule::onInit(const IApplication::RunMode&)
     mu::async::onMainThreadInvoke([](const std::function<void()>& f, bool isAlwaysQueued) {
         s_asyncInvoker.invoke(f, isAlwaysQueued);
     });
+
+    //! --- Diagnostics ---
+    auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    if (pr) {
+        pr->reg("appBinPath", s_globalConf->appBinPath());
+        pr->reg("appDataPath", s_globalConf->appDataPath());
+        pr->reg("appConfigPath", s_globalConf->appConfigPath());
+        pr->reg("userAppDataPath", s_globalConf->userAppDataPath());
+        pr->reg("userBackupPath", s_globalConf->userBackupPath());
+        pr->reg("userDataPath", s_globalConf->userDataPath());
+        pr->reg("log file", logFile->filePath());
+        pr->reg("settings file", settings()->filePath());
+    }
 }

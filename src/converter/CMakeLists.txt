@@ -35,6 +35,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/compat/backendapi.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/compat/backendjsonwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/compat/backendjsonwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/notationmeta.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/notationmeta.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

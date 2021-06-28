@@ -101,8 +101,8 @@ void TelemetryModule::onInit(const framework::IApplication::RunMode&)
     io::path handlerFile("crashpad_handler");
 #endif
 
-    io::path handlerPath = globalConf->appDirPath() + "/" + handlerFile;
-    io::path dumpsDir = globalConf->logsPath() + "/dumps";
+    io::path handlerPath = globalConf->appBinPath() + "/" + handlerFile;
+    io::path dumpsDir = globalConf->userAppDataPath() + "/logs/dumps";
     std::string serverUrl(CRASH_REPORT_URL);
 
     if (!s_configuration->isDumpUploadAllowed()) {

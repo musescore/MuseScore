@@ -75,7 +75,7 @@ class UiTheme : public QProxyStyle, public async::Asyncable
     Q_PROPERTY(QFont musicalFont READ musicalFont NOTIFY themeChanged)
 
 public:
-    UiTheme(QObject* parent = nullptr);
+    UiTheme();
 
     void init();
     void update();

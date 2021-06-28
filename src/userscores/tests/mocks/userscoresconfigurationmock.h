@@ -50,6 +50,9 @@ public:
 
     MOCK_METHOD(PreferredScoreCreationMode, preferredScoreCreationMode, (), (const, override));
     MOCK_METHOD(void, setPreferredScoreCreationMode, (PreferredScoreCreationMode), (override));
+
+    MOCK_METHOD(bool, needShowWarningAboutUnsavedScore, (), (const, override));
+    MOCK_METHOD(void, setNeedShowWarningAboutUnsavedScore, (bool), (override));
 };
 }
 

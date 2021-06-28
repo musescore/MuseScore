@@ -52,6 +52,13 @@ void MasterNotationParts::setParts(const instruments::PartInstrumentList& instru
     apply();
 }
 
+void MasterNotationParts::setScoreOrder(const instruments::ScoreOrder& order)
+{
+    startEdit();
+    NotationParts::setScoreOrder(order);
+    apply();
+}
+
 void MasterNotationParts::setInstrumentName(const ID& instrumentId, const ID& fromPartId, const QString& name)
 {
     startEdit();

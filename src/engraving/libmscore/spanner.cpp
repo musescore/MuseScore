@@ -1641,7 +1641,6 @@ void Spanner::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
                 s->triggerLayout();
             }
         }
-        MuseScoreCore::mscoreCore->updateInspector();
         return;
     }
     Element::undoChangeProperty(id, v, ps);

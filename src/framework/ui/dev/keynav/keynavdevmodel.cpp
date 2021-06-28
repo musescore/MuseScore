@@ -33,7 +33,7 @@ template<class T>
 static QList<T*> toQList(std::set<T*> set)
 {
     QList<T*> l;
-    l.reserve(set.size());
+    l.reserve(int(set.size()));
     for (T* s : set) {
         l.append(s);
     }

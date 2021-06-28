@@ -32,9 +32,11 @@ Rectangle {
     id: root
 
     property string initiallySelectedPartIds: ""
+    property string currentScoreOrderId: ""
     property bool hasSelectedInstruments: instrumentsModel.selectedInstruments.length > 0
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
+    property var selectedScoreOrder: selectedInstrumentsView.selectedScoreOrder()
 
     property NavigationSection navigationSection: null
 
@@ -63,7 +65,7 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        instrumentsModel.load(canSelectMultipleInstruments, currentInstrumentId, initiallySelectedPartIds)
+        instrumentsModel.load(canSelectMultipleInstruments, currentInstrumentId, currentScoreOrderId, initiallySelectedPartIds)
 
         var groupId = instrumentsModel.selectedGroupId()
         familyView.focusGroup(groupId)
@@ -211,14 +213,14 @@ Rectangle {
             Layout.fillHeight: true
 
             instruments: instrumentsModel.selectedInstruments
-            instrumentOrderTypes: instrumentsModel.instrumentOrderTypes
+            instrumentsModel: instrumentsModel
 
             onUnselectInstrumentRequested: {
                 instrumentsModel.unselectInstrument(id)
             }
 
             onOrderChanged: {
-                instrumentsModel.selectOrderType(id)
+                instrumentsModel.selectScoreOrder(id)
             }
 
             onSoloistChanged: {

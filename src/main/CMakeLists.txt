@@ -112,7 +112,7 @@ elseif(OS_IS_WASM)
         -O3 \
     ")
 else()
-    message(FATAL_ERROR "Unsopported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
+    message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
 
 ###########################################
@@ -180,6 +180,8 @@ if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB plugins)
     list(APPEND LINK_LIB multiinstances)
 endif()
+
+list(APPEND LINK_LIB diagnostics)
 
 if (BUILD_AUTOBOT_MODULE)
     list(APPEND LINK_LIB autobot)
@@ -490,7 +492,7 @@ elseif(OS_IS_WASM)
     copy_html_js_launch_files(mscore)
 
 else()
-    message(FATAL_ERROR "Unsopported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
+    message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
 
 

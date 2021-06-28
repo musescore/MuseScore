@@ -52,10 +52,6 @@ DockWindow {
         order: 1
     }
 
-    Component.onCompleted: {
-        api.launcher.open(homePage.uri)
-    }
-
     toolBars: [
         DockToolBar {
             id: mainToolBar
@@ -69,7 +65,7 @@ DockWindow {
             movable: false
 
             contentComponent: MainToolBar {
-                navigation.section: topToolKeyNavSec
+                navigation.section: root.topToolKeyNavSec
                 navigation.order: 1
 
                 currentUri: root.currentPageUri
@@ -95,9 +91,7 @@ DockWindow {
     }
 
     pages: [
-        HomePage {
-            id: homePage
-        },
+        HomePage {},
 
         NotationPage {
             topToolKeyNavSec: root.topToolKeyNavSec

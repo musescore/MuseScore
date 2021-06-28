@@ -26,11 +26,12 @@
 
 #include <QOAuth2AuthorizationCodeFlow>
 #include <QOAuthHttpServerReplyHandler>
-#include <QDesktopServices>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QUrlQuery>
 #include <QBuffer>
+#include <QHttpMultiPart>
+#include <QRandomGenerator>
 
 using namespace mu::cloud;
 using namespace mu::network;
@@ -41,6 +42,17 @@ static const QString REFRESH_TOKEN_KEY("refresh_token");
 static const QString DEVICE_ID_KEY("device_id");
 
 constexpr int USER_UNAUTHORIZED_ERR_CODE = 401;
+constexpr int INVALID_SCORE_ID = 0;
+
+static int scoreIdFromSourceUrl(const QUrl& sourceUrl)
+{
+    QStringList parts = sourceUrl.toString().split("/");
+    if (parts.isEmpty()) {
+        return INVALID_SCORE_ID;
+    }
+
+    return parts.last().toInt();
+}
 
 CloudService::CloudService(QObject* parent)
     : QObject(parent)
@@ -60,23 +72,15 @@ void CloudService::init()
     m_oauth2->setAccessTokenUrl(configuration()->accessTokenUrl());
     m_oauth2->setReplyHandler(m_replyHandler);
 
-    connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, &QDesktopServices::openUrl);
+    connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, this, &CloudService::openUrl);
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::granted, this, &CloudService::onUserAuthorized);
 
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::error, [](const QString& error, const QString& errorDescription, const QUrl& uri) {
         LOGE() << "Error during authorization: " << error << "\n Description: " << errorDescription << "\n URI: " << uri.toString();
     });
 
-    if (!readTokens()) {
-        return;
-    }
-
-    if (downloadUserInfo() != RequestStatus::UserUnauthorized) {
-        return;
-    }
-
-    if (updateTokens()) {
-        downloadUserInfo();
+    if (readTokens()) {
+        executeRequest([this]() { return downloadUserInfo(); });
     }
 }
 
@@ -165,7 +169,21 @@ void CloudService::onUserAuthorized()
     m_refreshToken = m_oauth2->refreshToken();
 
     saveTokens();
-    downloadUserInfo();
+
+    if (downloadUserInfo() == RequestStatus::Ok && m_onUserAuthorizedCallback) {
+        m_onUserAuthorizedCallback();
+        m_onUserAuthorizedCallback = OnUserAuthorizedCallback();
+    }
+}
+
+void CloudService::authorize(const OnUserAuthorizedCallback& onUserAuthorizedCallback)
+{
+    if (m_userAuthorized.val) {
+        return;
+    }
+
+    m_onUserAuthorizedCallback = onUserAuthorizedCallback;
+    m_oauth2->grant();
 }
 
 QUrl CloudService::prepareUrlForRequest(QUrl apiUrl) const
@@ -225,11 +243,7 @@ CloudService::RequestStatus CloudService::downloadUserInfo()
 
 void CloudService::signIn()
 {
-    if (m_userAuthorized.val) {
-        return;
-    }
-
-    m_oauth2->grant();
+    authorize();
 }
 
 void CloudService::signOut()
@@ -278,13 +292,115 @@ void CloudService::setAccountInfo(const AccountInfo& info)
     m_userAuthorized.set(info.isValid());
 }
 
-ProgressChannel CloudService::uploadScore(const QByteArray& scoreData, const std::string& title, const QUrl& sourceUrl)
+void CloudService::uploadScore(io::Device& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
 {
-    UNUSED(scoreData);
-    UNUSED(title);
-    UNUSED(sourceUrl);
+    auto uploadCallback = [this, &scoreSourceDevice, title, sourceUrl]() {
+        return doUploadScore(scoreSourceDevice, title, sourceUrl);
+    };
 
-    NOT_IMPLEMENTED;
+    if (!m_userAuthorized.val) {
+        authorize(uploadCallback);
+        return;
+    }
 
-    return ProgressChannel();
+    executeRequest(uploadCallback);
+}
+
+CloudService::RequestStatus CloudService::doUploadScore(io::Device& scoreSourceDevice, const QString& title, const QUrl& sourceUrl)
+{
+    QUrl uploadUrl = prepareUrlForRequest(configuration()->uploadingApiUrl());
+    if (uploadUrl.isEmpty()) {
+        return RequestStatus::Error;
+    }
+
+    int scoreId = scoreIdFromSourceUrl(sourceUrl);
+    bool isScoreAlreadyUploaded = scoreId != INVALID_SCORE_ID;
+
+    QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
+
+    QHttpPart filePart;
+    filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
+    int fileNameNumber = QRandomGenerator::global()->generate() % 100000;
+    QString contentDisposition = QString("form-data; name=\"score_data\"; filename=\"temp_%1.mscz\"").arg(fileNameNumber);
+    filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
+
+    filePart.setBodyDevice(&scoreSourceDevice);
+    multiPart.append(filePart);
+
+    if (isScoreAlreadyUploaded) {
+        QHttpPart scoreIdPart;
+        scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
+        scoreIdPart.setBody(QString::number(scoreId).toLatin1());
+        multiPart.append(scoreIdPart);
+    }
+
+    QHttpPart titlePart;
+    titlePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"title\""));
+    titlePart.setBody(title.toUtf8());
+    multiPart.append(titlePart);
+
+    QHttpPart licensePart;
+    licensePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"license\""));
+    licensePart.setBody(configuration()->uploadingLicense());
+    multiPart.append(licensePart);
+
+    Ret ret(true);
+    QBuffer receivedData;
+    OutgoingDevice device(&multiPart);
+
+    if (isScoreAlreadyUploaded) { // score exists, update
+        ret = m_networkManager->put(uploadUrl, &device, &receivedData, headers());
+    } else { // score doesn't exist, post a new score
+        ret = m_networkManager->post(uploadUrl, &device, &receivedData, headers());
+    }
+
+    if (ret.code() == USER_UNAUTHORIZED_ERR_CODE) {
+        return RequestStatus::UserUnauthorized;
+    }
+
+    if (!ret) {
+        LOGE() << ret.toString();
+        return RequestStatus::Error;
+    }
+
+    QJsonObject scoreInfo = QJsonDocument::fromJson(receivedData.data()).object();
+    QUrl newSourceUrl = QUrl(scoreInfo.value("permalink").toString());
+    QUrl editUrl = QUrl(scoreInfo.value("edit_url").toString());
+
+    if (newSourceUrl.isValid()) {
+        m_sourceUrlReceived.send(newSourceUrl);
+    }
+
+    openUrl(editUrl);
+
+    return RequestStatus::Ok;
+}
+
+mu::async::Channel<QUrl> CloudService::sourceUrlReceived() const
+{
+    return m_sourceUrlReceived;
+}
+
+ProgressChannel CloudService::progressChannel() const
+{
+    return m_networkManager->progressChannel();
+}
+
+void CloudService::executeRequest(const RequestCallback& requestCallback)
+{
+    if (requestCallback() != RequestStatus::UserUnauthorized) {
+        return;
+    }
+
+    if (updateTokens()) {
+        requestCallback();
+    }
+}
+
+void CloudService::openUrl(const QUrl& url)
+{
+    Ret ret = interactive()->openUrl(url.toString().toStdString());
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
 }

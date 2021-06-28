@@ -25,6 +25,7 @@
 #include <QStack>
 #include <QTextFragment>
 #include <QTextDocument>
+#include <QRegularExpression>
 
 #include "text.h"
 #include "textedit.h"
@@ -1834,7 +1835,6 @@ void TextBase::createLayout()
             }
         } else if (state == 1) {
             if (c == '>') {
-                bool unstyleFontStyle = false;
                 state = 0;
                 prepareFormat(token, cursor);
                 if (token == "sym") {

@@ -30,11 +30,18 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
-    property var titleMoveAreaRect: Qt.rect(titleMoveArea.x, titleMoveArea.y, titleMoveArea.width, titleMoveArea.height)
+    property alias title: titleLabel.text
+    property rect titleMoveAreaRect: Qt.rect(titleMoveArea.x, titleMoveArea.y, titleMoveArea.width, titleMoveArea.height)
 
     signal showWindowMinimizedRequested()
     signal toggleWindowMaximizedRequested()
     signal closeWindowRequested()
+
+    NavigationSection {
+        id: navSec
+        name: "AppTitleBar"
+        order: 0
+    }
 
     Item {
         anchors.fill: parent
@@ -45,6 +52,9 @@ Rectangle {
 
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+
+            navigation.section: navSec
+            navigation.order: 0
         }
 
         Item {
@@ -57,6 +67,7 @@ Rectangle {
         }
 
         StyledTextLabel {
+            id: titleLabel
             anchors.centerIn: parent
 
             horizontalAlignment: Text.AlignLeft
@@ -76,7 +87,7 @@ Rectangle {
                 normalStateColor: "transparent"
 
                 onClicked: {
-                    showWindowMinimizedRequested()
+                    root.showWindowMinimizedRequested()
                 }
             }
 
@@ -85,7 +96,7 @@ Rectangle {
                 normalStateColor: "transparent"
 
                 onClicked: {
-                    toggleWindowMaximizedRequested()
+                    root.toggleWindowMaximizedRequested()
                 }
             }
 
@@ -96,7 +107,7 @@ Rectangle {
                 hoveredStateColor: "red"
 
                 onClicked: {
-                    closeWindowRequested()
+                    root.closeWindowRequested()
                 }
             }
         }

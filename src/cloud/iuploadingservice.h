@@ -24,9 +24,12 @@
 
 #include "modularity/imoduleexport.h"
 #include "progress.h"
+#include "io/device.h"
+#include "progress.h"
 
 class QByteArray;
 class QUrl;
+class QString;
 
 namespace mu::cloud {
 class IUploadingService : MODULE_EXPORT_INTERFACE
@@ -36,8 +39,10 @@ class IUploadingService : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUploadingService() = default;
 
-    virtual framework::ProgressChannel uploadScore(const QByteArray& scoreData, const std::string& title,
-                                                   const QUrl& sourceUrl = QUrl()) = 0;
+    virtual void uploadScore(io::Device& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl()) = 0;
+
+    virtual async::Channel<QUrl> sourceUrlReceived() const = 0;
+    virtual framework::ProgressChannel progressChannel() const = 0;
 };
 }
 

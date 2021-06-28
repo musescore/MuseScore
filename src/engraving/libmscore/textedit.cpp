@@ -248,10 +248,16 @@ void TextBase::insertText(EditData& ed, const QString& s)
 bool TextBase::edit(EditData& ed)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    if (!ted) {
+        return false;
+    }
     TextCursor* cursor = ted->cursor();
 
     // do nothing on Shift, it messes up IME on Windows. See #64046
     if (ed.key == Qt::Key_Shift) {
+        return false;
+    }
+    if (ed.key == Qt::Key_Escape) {
         return false;
     }
     QString s         = ed.s;
@@ -304,9 +310,10 @@ bool TextBase::edit(EditData& ed)
 //printf("======%x\n", s.isEmpty() ? -1 : s[0].unicode());
 
         switch (ed.key) {
+        case Qt::Key_Y:
         case Qt::Key_Z:                   // happens when the undo stack is empty
             if (ed.modifiers == Qt::ControlModifier) {
-                return true;
+                return false;
             }
             break;
 

@@ -26,7 +26,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     brew install ccache
 else
-    echo "Unsopported OS: $OSTYPE"; exit 1;
+    echo "Unsupported OS: $OSTYPE"; exit 1;
 fi
 
 echo "Setup config"

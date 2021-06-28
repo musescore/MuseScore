@@ -22,9 +22,8 @@
 #ifndef MU_IMPORTEXPORT_IMIDIIMPORTEXPORTCONFIGURATION_H
 #define MU_IMPORTEXPORT_IMIDIIMPORTEXPORTCONFIGURATION_H
 
-#include <string>
-#include <optional>
 #include "modularity/imoduleexport.h"
+#include "io/path.h"
 
 namespace mu::iex::midi {
 class IMidiImportExportConfiguration : MODULE_EXPORT_INTERFACE
@@ -39,6 +38,8 @@ public:
 
     virtual bool isMidiExportRpns() const = 0;
     virtual void setIsMidiExportRpns(bool exportRpns) const = 0;
+
+    virtual void setMidiImportOperationsFile(const io::path& filePath) const = 0;
 };
 }
 

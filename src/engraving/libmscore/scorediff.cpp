@@ -22,6 +22,8 @@
 
 #include "scorediff.h"
 
+#include <QRegularExpression>
+
 #include "duration.h"
 #include "measure.h"
 #include "score.h"

@@ -61,6 +61,13 @@ RetVal<InstrumentsMeta> InstrumentsReader::readMeta(const io::path& path) const
             } else if (reader.name() == "Genre") {
                 InstrumentGenre genre = readGenre(reader);
                 meta.genres.insert(genre.id, genre);
+            } else if (reader.name() == "Family") {
+                InstrumentFamily family = readFamily(reader);
+                meta.families.insert(family.id, family);
+            } else if (reader.name() == "Order") {
+                ScoreOrder order = readScoreOrder(reader);
+                order.index = meta.scoreOrders.size();
+                meta.scoreOrders.insert(order.id, order);
             } else {
                 reader.skipCurrentElement();
             }
@@ -150,6 +157,115 @@ InstrumentGenre InstrumentsReader::readGenre(Ms::XmlReader& reader) const
     return genre;
 }
 
+InstrumentFamily InstrumentsReader::readFamily(Ms::XmlReader& reader) const
+{
+    InstrumentFamily family;
+    family.id = reader.attributes().value("id").toString();
+
+    while (reader.readNextStartElement()) {
+        if (reader.name() == "name") {
+            family.name = qApp->translate("InstrumentsXML", reader.readElementText().toUtf8().data());
+        } else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    return family;
+}
+
+ScoreOrder InstrumentsReader::readScoreOrder(Ms::XmlReader& reader) const
+{
+    ScoreOrder order;
+
+    order.id = reader.attributes().value("id").toString();
+
+    while (reader.readNextStartElement()) {
+        if (reader.name() == "name") {
+            order.name = qApp->translate("OrderXML", reader.readElementText().toUtf8().data());
+        } else if (reader.name() == "instrument") {
+            QString instrumentId = reader.attributes().value("id").toString();
+            InstrumentOverwrite overwrite;
+            while (reader.readNextStartElement()) {
+                if (reader.name() == "family") {
+                    overwrite.id = reader.attributes().value("id").toString();
+                    overwrite.name = reader.readElementText();
+                } else {
+                    reader.skipCurrentElement();
+                }
+            }
+            order.instrumentMap.insert(instrumentId, overwrite);
+        } else if (reader.name() == "family") {
+            ScoreOrderGroup sg;
+            sg.index = order.groups.size();
+            sg.family = reader.readElementText();
+            order.groups << sg;
+        } else if (reader.name() == "soloists") {
+            ScoreOrderGroup sg;
+            sg.index = order.groups.size();
+            sg.family = QString("<soloists>");
+            order.groups << sg;
+            reader.skipCurrentElement();
+        } else if (reader.name() == "unsorted") {
+            ScoreOrderGroup sg;
+            sg.index = order.groups.size();
+            sg.family = QString("<unsorted>");
+            sg.unsorted = reader.attribute("group", QString(""));
+            order.groups << sg;
+            reader.skipCurrentElement();
+        } else if (reader.name() == "section") {
+            QString section = reader.attributes().value("id").toString();
+            while (reader.readNextStartElement()) {
+                if (reader.name() == "family") {
+                    ScoreOrderGroup sg;
+                    sg.index = order.groups.size();
+                    sg.family = reader.readElementText();
+                    sg.section = section;
+                    sg.bracket = true;
+                    sg.showSystemMarkings = readBoolAttribute(reader, "showSystemMarkings", false);
+                    sg.barLineSpan = readBoolAttribute(reader, "barLineSpan", true);
+                    sg.thinBracket = readBoolAttribute(reader, "thinBrackets", true);
+                    order.groups << sg;
+                } else if (reader.name() == "soloists") {
+                    ScoreOrderGroup sg;
+                    sg.index = order.groups.size();
+                    sg.family = QString("<soloists>");
+                    sg.section = section;
+                    order.groups << sg;
+                    reader.skipCurrentElement();
+                } else if (reader.name() == "unsorted") {
+                    ScoreOrderGroup sg;
+                    sg.index = order.groups.size();
+                    sg.family = QString("<unsorted>");
+                    sg.unsorted = reader.attribute("group", QString(""));
+                    order.groups << sg;
+                    reader.skipCurrentElement();
+                } else {
+                    reader.skipCurrentElement();
+                }
+            }
+        } else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    return order;
+}
+
+bool InstrumentsReader::readBoolAttribute(Ms::XmlReader& reader, const char* name, bool defvalue) const
+{
+    if (!reader.hasAttribute(name)) {
+        return defvalue;
+    }
+    QString attr { reader.attribute(name) };
+    if (attr.toLower() == "false") {
+        return false;
+    } else if (attr.toLower() == "true") {
+        return true;
+    } else {
+        return defvalue;
+    }
+}
+
 InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& reader, InstrumentsMeta& generalMeta) const
 {
     InstrumentTemplate instrumentTemplate;
@@ -157,6 +273,8 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
 
     instrument.id = reader.attributes().value("id").toString();
     instrumentTemplate.id = instrument.id;
+
+    instrument.sequenceOrder =  generalMeta.instrumentTemplates.size();
 
     bool customDrumset = false;
 
@@ -300,6 +418,8 @@ InstrumentTemplate InstrumentsReader::readInstrumentTemplate(Ms::XmlReader& read
             instrument.musicXMLid = reader.readElementText();
         } else if (reader.name() == "genre") {
             instrument.genreIds << reader.readElementText();
+        } else if (reader.name() == "family") {
+            instrument.familyId = reader.readElementText();
         } else if (reader.name() == "singleNoteDynamics") {
             instrument.singleNoteDynamics = reader.readElementText().toInt();
         } else {

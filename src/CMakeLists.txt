@@ -86,7 +86,11 @@ if (BUILD_INSPECTOR_MODULE)
 endif (BUILD_INSPECTOR_MODULE)
 
 # Other
-add_subdirectory(multiinstances)
+if (BUILD_MULTIINSTANCES_MODULE)
+    add_subdirectory(multiinstances)
+endif()
+
+add_subdirectory(diagnostics)
 
 if (BUILD_AUTOBOT_MODULE)
     add_subdirectory(autobot)

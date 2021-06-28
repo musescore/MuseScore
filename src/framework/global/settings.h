@@ -27,6 +27,10 @@
 
 #include "val.h"
 #include "async/channel.h"
+#include "io/path.h"
+
+#include "modularity/ioc.h"
+#include "multiinstances/imultiinstancesprovider.h"
 
 //! NOTE We are gradually abandoning Qt in non-GUI classes.
 //! This settings interface is almost independent of Qt,
@@ -38,6 +42,8 @@ class QSettings;
 namespace mu::framework {
 class Settings
 {
+    INJECT(framework, mi::IMultiInstancesProvider, multiInstancesProvider)
+
 public:
     static Settings* instance();
 
@@ -76,15 +82,17 @@ public:
     Val value(const Key& key) const;
     Val defaultValue(const Key& key) const;
 
-    void setValue(const Key& key, const Val& value);
+    void setValue(const Key& key, const Val& value, bool notifyToOtherInstances = true);
     void setDefaultValue(const Key& key, const Val& value);
     void setCanBeMannualyEdited(const Settings::Key& key, bool canBeMannualyEdited);
 
-    void beginTransaction();
-    void commitTransaction();
-    void rollbackTransaction();
+    void beginTransaction(bool notifyToOtherInstances = true);
+    void commitTransaction(bool notifyToOtherInstances = true);
+    void rollbackTransaction(bool notifyToOtherInstances = true);
 
     async::Channel<Val> valueChanged(const Key& key) const;
+
+    io::path filePath() const;
 
 private:
     Settings();

@@ -55,12 +55,19 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, std::shared_ptr<ui::IUiCon
     }
     // popup
     else {
-        m_view->setFlags(Qt::Dialog                             // The most appropriate behavior for us on all platforms
-                         | Qt::FramelessWindowHint              // Without border
-                         | Qt::NoDropShadowWindowHint           // Without system shadow
-                         | Qt::BypassWindowManagerHint          // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
-                         );
+        Qt::WindowFlags flags(
+            Qt::FramelessWindowHint              // Without border
+            | Qt::NoDropShadowWindowHint         // Without system shadow
+            | Qt::BypassWindowManagerHint        // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
+            );
 
+#ifdef Q_OS_MACOS
+        flags.setFlag(Qt::Tool);
+#else
+        flags.setFlag(Qt::Dialog);
+#endif
+
+        m_view->setFlags(flags);
         m_view->setColor(QColor(Qt::transparent));
     }
 
@@ -140,26 +147,6 @@ void PopupWindow_QQuickView::setOnHidden(const std::function<void()>& callback)
 
 bool PopupWindow_QQuickView::eventFilter(QObject* watched, QEvent* event)
 {
-// Please, don't remove
-//#define POPUPWINDOW_DEBUG_EVENTS_ENABLED
-#ifdef POPUPWINDOW_DEBUG_EVENTS_ENABLED
-    static QMetaEnum typeEnum = QMetaEnum::fromType<QEvent::Type>();
-    static QList<QEvent::Type> excludeLoggingTypes = { QEvent::MouseMove };
-    const char* typeStr = typeEnum.key(event->type());
-    if (!excludeLoggingTypes.contains(event->type())) {
-        LOGI() << (watched ? watched->objectName() : "null") << " event: " << (typeStr ? typeStr : "unknown");
-    }
-
-    static QList<QEvent::Type> trackEvents = { QEvent::Hide, QEvent::Show };
-    if (trackEvents.contains(event->type())) {
-        int k = 1;
-    }
-
-    if (QString(typeStr) == "WindowDeactivate") {
-        int k = 1;
-    }
-#endif
-
     if (watched == m_view) {
         if (event->type() == QEvent::Hide) {
             if (m_onHidden) {

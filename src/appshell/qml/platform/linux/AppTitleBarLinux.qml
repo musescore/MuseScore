@@ -33,7 +33,7 @@ AppTitleBar {
         gesturePolicy: TapHandler.DragThreshold
         onTapped: {
             if (tapCount === maximizeTapCount) {
-                toggleWindowMaximizedRequested()
+                root.toggleWindowMaximizedRequested()
             }
         }
     }
@@ -42,7 +42,7 @@ AppTitleBar {
         grabPermissions: TapHandler.CanTakeOverFromAnything
         onActiveChanged: {
             if (active) {
-                startSystemMoveRequested()
+                root.startSystemMoveRequested()
             }
         }
     }

@@ -25,11 +25,39 @@
 #include <QVariantMap>
 #include <QNetworkRequest>
 
+#include "io/device.h"
+
+class QHttpMultiPart;
+
 namespace mu::network {
 struct RequestHeaders
 {
     QMap<QNetworkRequest::KnownHeaders, QVariant> knownHeaders;
     QMap<QByteArray, QByteArray> rawHeaders;
+};
+
+using IncomingDevice = io::Device;
+
+struct OutgoingDevice
+{
+    OutgoingDevice(io::Device* device)
+        : m_device(device), m_multiPart(nullptr) {}
+    OutgoingDevice(QHttpMultiPart* multiPart)
+        : m_device(nullptr), m_multiPart(multiPart) {}
+
+    io::Device* device() const
+    {
+        return m_device;
+    }
+
+    QHttpMultiPart* multiPart() const
+    {
+        return m_multiPart;
+    }
+
+private:
+    io::Device* m_device = nullptr;
+    QHttpMultiPart* m_multiPart = nullptr;
 };
 }
 

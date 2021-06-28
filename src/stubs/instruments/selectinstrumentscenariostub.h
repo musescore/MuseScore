@@ -28,7 +28,7 @@ namespace mu::instruments {
 class SelectInstrumentsScenario : public ISelectInstrumentsScenario
 {
 public:
-    RetVal<PartInstrumentList> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const override;
+    RetVal<PartInstrumentListScoreOrder> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const override;
     RetVal<Instrument> selectInstrument(const std::string& currentInstrumentId = "") const override;
 };
 }

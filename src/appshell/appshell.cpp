@@ -226,17 +226,40 @@ int AppShell::run(int argc, char** argv)
 int AppShell::processConverter(const CommandLineController::ConverterTask& task)
 {
     Ret ret = make_ret(Ret::Code::Ok);
+    io::path stylePath = task.params[CommandLineController::ParamKey::StylePath].toString();
+    bool forceMode = task.params[CommandLineController::ParamKey::ForceMode].toBool();
 
     switch (task.type) {
     case CommandLineController::ConvertType::Batch:
-        ret = converter()->batchConvert(task.inputFile);
+        ret = converter()->batchConvert(task.inputFile, stylePath, forceMode);
+        break;
+    case CommandLineController::ConvertType::ConvertScoreParts:
+        ret = converter()->convertScoreParts(task.inputFile, task.outputFile, stylePath);
         break;
     case CommandLineController::ConvertType::File:
-        ret = converter()->fileConvert(task.inputFile, task.outputFile);
+        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode);
         break;
-    case CommandLineController::ConvertType::ExportScoreMedia:
-        ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, task.data.toString().toStdString());
+    case CommandLineController::ConvertType::ExportScoreMedia: {
+        io::path highlightConfigPath = task.params[CommandLineController::ParamKey::HighlightConfigPath].toString();
+        ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, highlightConfigPath, stylePath, forceMode);
+    } break;
+    case CommandLineController::ConvertType::ExportScoreMeta:
+        ret = converter()->exportScoreMeta(task.inputFile, task.outputFile, stylePath, forceMode);
         break;
+    case CommandLineController::ConvertType::ExportScoreParts:
+        ret = converter()->exportScoreParts(task.inputFile, task.outputFile, stylePath, forceMode);
+        break;
+    case CommandLineController::ConvertType::ExportScorePartsPdf:
+        ret = converter()->exportScorePartsPdfs(task.inputFile, task.outputFile, stylePath, forceMode);
+        break;
+    case CommandLineController::ConvertType::ExportScoreTranspose: {
+        std::string scoreTranspose = task.params[CommandLineController::ParamKey::ScoreTransposeOptions].toString().toStdString();
+        ret = converter()->exportScoreTranspose(task.inputFile, task.outputFile, scoreTranspose, stylePath, forceMode);
+    } break;
+    case CommandLineController::ConvertType::SourceUpdate: {
+        std::string scoreSource = task.params[CommandLineController::ParamKey::ScoreSource].toString().toStdString();
+        ret = converter()->updateSource(task.inputFile, scoreSource, forceMode);
+    } break;
     }
 
     if (!ret) {

@@ -46,12 +46,12 @@ static const QStringList languageFileTypes = {
 };
 
 namespace mu::languages {
-QString analysingStatusTitle()
+static QString analysingStatusTitle()
 {
     return qtrc("languages", "Analysing...");
 }
 
-QString downloadingStatusTitle()
+static QString downloadingStatusTitle()
 {
     return qtrc("languages", "Downloading...");
 }
@@ -59,9 +59,6 @@ QString downloadingStatusTitle()
 
 void LanguagesService::init()
 {
-    fileSystem()->makePath(configuration()->languagesSharePath());
-    fileSystem()->makePath(configuration()->languagesDataPath());
-
     ValCh<QString> languageCode = configuration()->currentLanguageCode();
     loadLanguage(languageCode.val);
 
@@ -229,12 +226,6 @@ void LanguagesService::setCurrentLanguage(const QString& languageCode)
         return;
     }
 
-    for (QTranslator* t: m_translatorList) {
-        qApp->removeTranslator(t);
-        delete t;
-    }
-    m_translatorList.clear();
-
     Ret load = loadLanguage(languageCode);
     if (!load) {
         LOGE() << load.toString();
@@ -271,6 +262,7 @@ RetVal<LanguagesHash> LanguagesService::parseLanguagesConfig(const QByteArray& j
     QJsonParseError err;
     QJsonDocument jsonDoc = QJsonDocument::fromJson(json, &err);
     if (err.error != QJsonParseError::NoError || !jsonDoc.isObject()) {
+        LOGE() << "failed parse, err: " << err.errorString();
         result.ret = make_ret(Err::ErrorParseConfig);
         return result;
     }
@@ -368,7 +360,7 @@ RetVal<LanguagesHash> LanguagesService::correctLanguagesStates(LanguagesHash& la
 
     ValCh<QString> currentLanguageCode = configuration()->currentLanguageCode();
 
-    for (Language& language: languages) {
+    for (Language& language : languages) {
         LanguageStatus::Status status = languageStatus(language);
         if (status != language.status) {
             language.status = status;
@@ -452,10 +444,19 @@ Ret LanguagesService::removeLanguage(const QString& languageCode) const
 
 Ret LanguagesService::loadLanguage(const QString& languageCode)
 {
-    io::paths files = configuration()->languageFilePaths(languageCode);
+    const io::paths files = configuration()->languageFilePaths(languageCode);
+    if (files.empty()) {
+        return make_ret(Err::UnknownError);
+    }
 
-    for (const io::path& filePath: files) {
-        QTranslator* translator = new QTranslator;
+    for (QTranslator* t : m_translatorList) {
+        qApp->removeTranslator(t);
+        delete t;
+    }
+    m_translatorList.clear();
+
+    for (const io::path& filePath : files) {
+        QTranslator* translator = new QTranslator();
         bool ok = translator->load(filePath.toQString());
         if (ok) {
             qApp->installTranslator(translator);
@@ -538,7 +539,7 @@ void LanguagesService::th_install(const QString& languageCode, async::Channel<La
 
     QString languageArchivePath = download.val;
 
-    Ret unpack = languageUnpacker()->unpack(languageCode, languageArchivePath, configuration()->languagesSharePath().toQString());
+    Ret unpack = languageUnpacker()->unpack(languageCode, languageArchivePath, configuration()->languagesUserAppDataPath());
     if (!unpack) {
         LOGE() << unpack.toString();
         fileSystem()->remove(languageArchivePath);
@@ -571,7 +572,7 @@ void LanguagesService::th_update(const QString& languageCode, async::Channel<Lan
         finishChannel->send(remove);
     }
 
-    Ret unpack = languageUnpacker()->unpack(languageCode, languageArchivePath, configuration()->languagesSharePath().toQString());
+    Ret unpack = languageUnpacker()->unpack(languageCode, languageArchivePath, configuration()->languagesUserAppDataPath());
     if (!unpack) {
         LOGE() << "Error unpack" << unpack.toString();
         finishChannel->send(unpack);

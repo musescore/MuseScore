@@ -31,7 +31,7 @@
 #include "global/xmlwriter.h"
 
 using namespace mu::notation;
-using namespace mu::system;
+using namespace mu::io;
 using namespace mu::framework;
 
 constexpr std::string_view SCORE_TAG("score");
@@ -76,7 +76,7 @@ PositionsWriter::PositionsWriter(PositionsWriter::ElementType elementType)
 {
 }
 
-mu::Ret PositionsWriter::write(notation::INotationPtr notation, system::IODevice& destinationDevice, const Options&)
+mu::Ret PositionsWriter::write(INotationPtr notation, Device& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
