@@ -87,6 +87,7 @@ NoteInputBarModel::NoteInputBarModel(QObject* parent)
 
 QVariant NoteInputBarModel::data(const QModelIndex& index, int role) const
 {
+    TRACEFUNC;
     int row = index.row();
 
     if (!isIndexValid(row)) {
@@ -122,13 +123,19 @@ void NoteInputBarModel::load()
     }
 
     int section = 0;
-    for (const ToolConfig::Item& item : noteInputConfig.items) {
-        if (item.action.empty()) {
+    for (const ToolConfig::Item& citem : noteInputConfig.items) {
+        if (!citem.show) {
+            continue;
+        }
+
+        if (citem.action.empty()) {
             section++;
             continue;
         }
 
-        items << makeActionItem(uiactionsRegister()->action(item.action), QString::number(section));
+        MenuItem item = makeActionItem(uiactionsRegister()->action(citem.action), QString::number(section));
+        LOGI() << "code: " << item.code << ", section: " << item.section;
+        items << item;
     }
 
     items << makeAddItem(QString::number(++section));

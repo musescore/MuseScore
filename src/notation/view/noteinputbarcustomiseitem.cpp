@@ -19,37 +19,66 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "actionnoteinputbaritem.h"
+#include "noteinputbarcustomiseitem.h"
 
 using namespace mu::notation;
-using namespace mu::ui;
 
-ActionNoteInputBarItem::ActionNoteInputBarItem(const ItemType& type, QObject* parent)
-    : AbstractNoteInputBarItem(type, parent)
+NoteInputBarCustomiseItem::NoteInputBarCustomiseItem(const ItemType& type, QObject* parent)
+    : QObject(parent), m_type(type)
 {
 }
 
-int ActionNoteInputBarItem::icon() const
+QString NoteInputBarCustomiseItem::id() const
+{
+    return m_id;
+}
+
+QString NoteInputBarCustomiseItem::title() const
+{
+    return m_title;
+}
+
+NoteInputBarCustomiseItem::ItemType NoteInputBarCustomiseItem::type() const
+{
+    return m_type;
+}
+
+void NoteInputBarCustomiseItem::setTitle(QString title)
+{
+    if (m_title == title) {
+        return;
+    }
+
+    m_title = title;
+    emit titleChanged();
+}
+
+void NoteInputBarCustomiseItem::setId(const QString& id)
+{
+    m_id = id;
+}
+
+int NoteInputBarCustomiseItem::icon() const
 {
     return static_cast<int>(m_icon);
 }
 
-bool ActionNoteInputBarItem::checked() const
+bool NoteInputBarCustomiseItem::checked() const
 {
     return m_checked;
 }
 
-void ActionNoteInputBarItem::setIcon(IconCode::Code icon)
+void NoteInputBarCustomiseItem::setIcon(ui::IconCode::Code icon)
 {
     if (m_icon == icon) {
         return;
     }
 
     m_icon = icon;
-    emit iconChanged(this->icon());
+    emit iconChanged();
 }
 
-void ActionNoteInputBarItem::setChecked(bool checked)
+void NoteInputBarCustomiseItem::setChecked(bool checked)
 {
     if (m_checked == checked) {
         return;
