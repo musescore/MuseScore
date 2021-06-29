@@ -61,6 +61,7 @@ public:
     Q_INVOKABLE void selectPart(int partIndex);
     Q_INVOKABLE void removePart(int partIndex);
     Q_INVOKABLE void setPartTitle(int partIndex, const QString& title);
+    Q_INVOKABLE void validatePartTitle(int partIndex);
     Q_INVOKABLE void setVoiceVisible(int partIndex, int voiceIndex, bool visible);
     Q_INVOKABLE void copyPart(int partIndex);
 

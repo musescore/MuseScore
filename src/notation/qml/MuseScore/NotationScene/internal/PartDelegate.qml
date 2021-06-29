@@ -41,6 +41,8 @@ ListItemBlank {
     signal removePartRequested()
     signal voicesVisibilityChangeRequested(var voiceIndex, var voiceVisible)
     signal partClicked()
+    signal titleEdited()
+    signal titleEditingFinished()
 
     function startEditTitle() {
         if (titleLoader.sourceComponent !== editPartTitleField) {
@@ -51,6 +53,7 @@ ListItemBlank {
     function endEditTitle() {
         if (titleLoader.sourceComponent !== partTitle) {
             titleLoader.sourceComponent = partTitle
+            titleEditingFinished()
         }
     }
 
@@ -58,6 +61,7 @@ ListItemBlank {
 
     onClicked: {
         voicesPopup.close()
+        endEditTitle()
         root.partClicked()
     }
 
@@ -99,7 +103,11 @@ ListItemBlank {
             currentText: root.title
 
             onCurrentTextEdited: {
-                root.title = newTextValue
+                root.titleEdited(newTextValue)
+            }
+
+            onTextEditingFinished: {
+                Qt.callLater(root.endEditTitle)
             }
         }
     }

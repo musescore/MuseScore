@@ -116,8 +116,12 @@ Item {
                 view.currentIndex = model.index
             }
 
-            onTitleChanged: {
+            onTitleEdited: {
                 root.model.setPartTitle(model.index, title)
+            }
+
+            onTitleEditingFinished: {
+                root.model.validatePartTitle(model.index)
             }
 
             onVoicesVisibilityChangeRequested: {
