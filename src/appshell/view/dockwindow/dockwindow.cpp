@@ -400,7 +400,9 @@ void DockWindow::restoreGeometry()
     QByteArray state = configuration()->windowGeometry();
 
     KDDockWidgets::LayoutSaver layoutSaver;
-    layoutSaver.restoreLayout(state);
+    if (!layoutSaver.restoreLayout(state)) {
+        LOGE() << "Could not restore the window geometry!";
+    }
 }
 
 void DockWindow::savePageState(const QString& pageName)
@@ -423,7 +425,9 @@ void DockWindow::restorePageState(const QString& pageName)
     KDDockWidgets::RestoreOption option = KDDockWidgets::RestoreOption::RestoreOption_RelativeToMainWindow;
 
     KDDockWidgets::LayoutSaver layoutSaver(option);
-    layoutSaver.restoreLayout(state);
+    if (!layoutSaver.restoreLayout(state)) {
+        LOGE() << "Could not restore the state of " << pageName << "!";
+    }
 }
 
 QByteArray DockWindow::windowState() const
