@@ -45,7 +45,7 @@ GridView {
         height: root.cellHeight
         width: root.cellWidth
 
-        itemBorderColor: ui.theme.borderColor
+        itemBorderColor: ui.theme.strokeColor
         itemBorderWidth: ui.theme.borderWidth > 0 ? 1 : ui.theme.borderWidth
 
         radius: 3
