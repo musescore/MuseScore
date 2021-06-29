@@ -113,8 +113,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationselectionrange.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconverter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconverter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/scoreorderconverter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/scoreorderconverter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationmidievents.h
@@ -180,6 +178,7 @@ set(MODULE_LINK
     qzip
     ${Z_LIB}
     engraving
+    instruments
     commonscene
     uicomponents
     ui

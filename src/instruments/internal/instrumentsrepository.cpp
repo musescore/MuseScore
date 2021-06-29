@@ -27,7 +27,7 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/articulation.h"
 
-#include "notation/internal/instrumentsconverter.h"
+#include "instrumentsconverter.h"
 
 using namespace mu;
 using namespace mu::instruments;
@@ -114,7 +114,7 @@ void InstrumentsRepository::fillInstrumentsMeta(InstrumentsMeta& meta)
                 continue;
             }
 
-            Instrument templ = notation::InstrumentsConverter::convertInstrument(*msTemplate);
+            Instrument templ = InstrumentsConverter::convertInstrument(*msTemplate);
             templ.groupId = msGroup->id;
 
             meta.instrumentTemplates << templ;
@@ -126,6 +126,20 @@ void InstrumentsRepository::fillInstrumentsMeta(InstrumentsMeta& meta)
         order.id = msOrder.id;
         order.name = msOrder.name;
         order.instrumentMap = msOrder.instrumentMap;
+
+        for (const Ms::ScoreGroup& msGroup : msOrder.groups) {
+            ScoreOrderGroup group;
+            group.family = msGroup.family;
+            group.section = msGroup.section;
+            group.unsorted = msGroup.unsorted;
+
+            group.bracket = msGroup.bracket;
+            group.showSystemMarkings = msGroup.showSystemMarkings;
+            group.barLineSpan = msGroup.barLineSpan;
+            group.thinBracket = msGroup.thinBracket;
+
+            order.groups << group;
+        }
 
         meta.scoreOrders << order;
     }
