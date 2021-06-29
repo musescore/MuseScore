@@ -78,7 +78,6 @@ private:
 
     void savePath(FolderType folderType, const QString& path);
 
-    QString pluginsPath() const;
     QString extensionsPath() const;
 
     void setPath(FolderType folderType, const QString& path);
