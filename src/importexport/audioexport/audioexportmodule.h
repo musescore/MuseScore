@@ -28,8 +28,8 @@ namespace mu::iex::audioexport {
 class AudioExportModule : public framework::IModuleSetup
 {
 public:
-
     std::string moduleName() const override;
+    void registerExports() override;
     void resolveImports() override;
 };
 }
