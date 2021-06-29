@@ -31,6 +31,11 @@ using namespace mu::notation;
 using namespace mu::uicomponents;
 using namespace mu::framework;
 
+static QString defaultPartTitle()
+{
+    return mu::qtrc("notation", "Part");
+}
+
 PartListModel::PartListModel(QObject* parent)
     : QAbstractListModel(parent), m_selectionModel(new ItemMultiSelectionModel(this))
 {
@@ -162,7 +167,7 @@ bool PartListModel::isRemovingAvailable() const
 void PartListModel::createNewPart()
 {
     Meta meta;
-    meta.title = qtrc("notation", "Part");
+    meta.title = defaultPartTitle();
 
     INotationPtr notation = masterNotation()->newExcerptNotation()->notation();
     notation->setMetaInfo(meta);
@@ -230,6 +235,25 @@ void PartListModel::setPartTitle(int partIndex, const QString& title)
     }
 
     meta.title = title;
+    notation->setMetaInfo(meta);
+
+    notifyAboutNotationChanged(partIndex);
+}
+
+void PartListModel::validatePartTitle(int partIndex)
+{
+    if (!isNotationIndexValid(partIndex)) {
+        return;
+    }
+
+    INotationPtr notation = m_notations[partIndex];
+    Meta meta = notation->metaInfo();
+
+    if (!meta.title.isEmpty()) {
+        return;
+    }
+
+    meta.title = defaultPartTitle();
     notation->setMetaInfo(meta);
 
     notifyAboutNotationChanged(partIndex);
