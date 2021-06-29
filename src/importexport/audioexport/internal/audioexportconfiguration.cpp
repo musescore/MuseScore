@@ -19,19 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_AUDIOEXPORTMODULE_H
-#define MU_IMPORTEXPORT_AUDIOEXPORTMODULE_H
 
-#include "modularity/imodulesetup.h"
+#include "audioexportconfiguration.h"
 
-namespace mu::iex::audioexport {
-class AudioExportModule : public framework::IModuleSetup
+using namespace mu::iex::audioexport;
+
+static constexpr int DEFAULT_BITRATE = 128;
+
+int AudioExportConfiguration::exportMp3Bitrate()
 {
-public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
-};
+    return m_exportMp3Bitrate ? m_exportMp3Bitrate.value() : DEFAULT_BITRATE;
 }
 
-#endif // MU_IMPORTEXPORT_AUDIOEXPORTMODULE_H
+void AudioExportConfiguration::setExportMp3Bitrate(std::optional<int> bitrate)
+{
+    m_exportMp3Bitrate = bitrate;
+}

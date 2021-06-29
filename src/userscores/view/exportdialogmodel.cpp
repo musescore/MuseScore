@@ -402,8 +402,7 @@ QList<int> ExportDialogModel::availableBitRates() const
 
 int ExportDialogModel::bitRate() const
 {
-    NOT_IMPLEMENTED;
-    return 192;
+    return audioExportConfiguration()->exportMp3Bitrate();
 }
 
 void ExportDialogModel::setBitRate(int bitRate)
@@ -412,7 +411,7 @@ void ExportDialogModel::setBitRate(int bitRate)
         return;
     }
 
-    NOT_IMPLEMENTED;
+    audioExportConfiguration()->setExportMp3Bitrate(bitRate);
     emit bitRateChanged(bitRate);
 }
 

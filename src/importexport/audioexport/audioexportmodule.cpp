@@ -30,17 +30,27 @@
 #include "internal/oggwriter.h"
 #include "internal/flacwriter.h"
 
+#include "internal/audioexportconfiguration.h"
+
 using namespace mu::iex::audioexport;
 using namespace mu::notation;
+using namespace mu::framework;
+
+static std::shared_ptr<AudioExportConfiguration> s_configuration = std::make_shared<AudioExportConfiguration>();
 
 std::string AudioExportModule::moduleName() const
 {
     return "iex_audioexport";
 }
 
+void AudioExportModule::registerExports()
+{
+    ioc()->registerExport<AudioExportConfiguration>(moduleName(), s_configuration);
+}
+
 void AudioExportModule::resolveImports()
 {
-    auto writers = framework::ioc()->resolve<INotationWritersRegister>(moduleName());
+    auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
         writers->reg({ "wav" }, std::make_shared<WaveWriter>());
         writers->reg({ "mp3" }, std::make_shared<Mp3Writer>());

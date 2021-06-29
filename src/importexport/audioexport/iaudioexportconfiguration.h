@@ -19,19 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_AUDIOEXPORTMODULE_H
-#define MU_IMPORTEXPORT_AUDIOEXPORTMODULE_H
+#ifndef MU_IMPORTEXPORT_IAUDIOEXPORTCONFIGURATION_H
+#define MU_IMPORTEXPORT_IAUDIOEXPORTCONFIGURATION_H
 
-#include "modularity/imodulesetup.h"
+#include <optional>
+
+#include "modularity/imoduleexport.h"
 
 namespace mu::iex::audioexport {
-class AudioExportModule : public framework::IModuleSetup
+class IAudioExportConfiguration : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IAudioExportConfiguration)
+
 public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void resolveImports() override;
+    virtual ~IAudioExportConfiguration() = default;
+
+    virtual int exportMp3Bitrate() = 0;
+    virtual void setExportMp3Bitrate(std::optional<int> bitrate) = 0;
 };
 }
 
-#endif // MU_IMPORTEXPORT_AUDIOEXPORTMODULE_H
+#endif // MU_IMPORTEXPORT_IAUDIOEXPORTCONFIGURATION_H

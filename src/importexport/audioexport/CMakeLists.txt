@@ -23,6 +23,9 @@ set(MODULE iex_audioexport)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audioexportmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/audioexportmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudioexportconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audioexportconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audioexportconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mp3writer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/mp3writer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/wavewriter.cpp
