@@ -35,7 +35,7 @@ Dialog {
     function startEdit(sequence, allShortcuts) {
         open()
         model.load(sequence, allShortcuts)
-        newSequenceField.forceActiveFocus()
+        content.forceActiveFocus()
     }
 
     height: 240
@@ -50,9 +50,13 @@ Dialog {
     }
 
     Rectangle {
+        id: content
+
         anchors.fill: parent
 
         color: ui.theme.backgroundPrimaryColor
+
+        focus: true
 
         Column {
             anchors.fill: parent
@@ -120,13 +124,9 @@ Dialog {
                         readOnly: true
                         currentText: model.inputedSequence
 
-                        Keys.onPressed: {
-                            model.inputKey(event.key, event.modifiers)
-                        }
-
                         onActiveFocusChanged: {
-                            if (!activeFocus) {
-                                forceActiveFocus()
+                            if (activeFocus) {
+                                content.forceActiveFocus()
                             }
                         }
                     }
@@ -185,6 +185,14 @@ Dialog {
                     }
                 }
             }
+        }
+
+        Keys.onShortcutOverride: {
+            event.accepted = true
+        }
+
+        Keys.onPressed: {
+            model.inputKey(event.key, event.modifiers)
         }
     }
 }
