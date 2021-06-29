@@ -338,7 +338,7 @@ class ExportMusicXml {
       int findOttava(const Ottava* tl) const;
       int findTrill(const Trill* tl) const;
       void chord(Chord* chord, int staff, const std::vector<Lyrics*>* ll, bool useDrumset);
-      void rest(Rest* chord, int staff);
+      void rest(Rest* chord, int staff, const std::vector<Lyrics*>* ll);
       void clef(int staff, const ClefType ct, const QString& extraAttributes = "");
       void timesig(TimeSig* tsig);
       void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
@@ -3474,7 +3474,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
  For a single-staff part, \a staff equals zero, suppressing the <staff> element.
  */
 
-void ExportMusicXml::rest(Rest* rest, int staff)
+void ExportMusicXml::rest(Rest* rest, int staff, const std::vector<Lyrics*>* ll)
       {
       static char table2[]  = "CDEFGAB";
 #ifdef DEBUG_TICK
@@ -3584,6 +3584,8 @@ void ExportMusicXml::rest(Rest* rest, int staff)
 
       tupletStartStop(rest, notations, _xml);
       notations.etag(_xml);
+
+      lyrics(ll, rest->track());
 
       _xml.etag();
       }
@@ -6129,8 +6131,10 @@ void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, boo
             }
       else if (el->isRest()) {
             const auto r = toRest(el);
-            if (!(r->isGap()))
-                  rest(r, sstaff);
+            if (!(r->isGap())) {
+                  const auto ll = &r->lyrics();
+                  rest(r, sstaff, ll);
+                  }
             }
       else if (el->isBarLine()) {
             const auto barln = toBarLine(el);
