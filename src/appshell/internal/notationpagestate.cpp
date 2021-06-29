@@ -28,10 +28,6 @@ void NotationPageState::init()
     configuration()->isNotationNavigatorVisibleChanged().onNotify(this, [this]() {
         m_panelsVisibleChanged.send({ PanelType::NotationNavigator });
     });
-
-    configuration()->isNotationStatusBarVisibleChanged().onNotify(this, [this]() {
-        m_panelsVisibleChanged.send({ PanelType::NotationStatusBar });
-    });
 }
 
 bool NotationPageState::isPanelVisible(PanelType type) const
@@ -44,12 +40,11 @@ bool NotationPageState::isPanelVisible(PanelType type) const
     case PanelType::NoteInputBar:
     case PanelType::UndoRedoToolBar:
     case PanelType::PlaybackToolBar:
+    case PanelType::NotationStatusBar:
+    case PanelType::Mixer:
         return m_panelVisibleMap[type];
     case PanelType::NotationNavigator:
         return configuration()->isNotationNavigatorVisible();
-    case PanelType::NotationStatusBar:
-        return configuration()->isNotationStatusBarVisible();
-    case PanelType::Mixer:
     case PanelType::TimeLine:
     case PanelType::Synthesizer:
     case PanelType::SelectionFilter:
@@ -88,15 +83,13 @@ void NotationPageState::setIsPanelVisible(PanelType type, bool visible)
     case PanelType::NoteInputBar:
     case PanelType::UndoRedoToolBar:
     case PanelType::PlaybackToolBar: {
+    case PanelType::NotationStatusBar:
+    case PanelType::Mixer:
         m_panelVisibleMap[type] = visible;
         break;
     }
     case PanelType::NotationNavigator: {
         configuration()->setIsNotationNavigatorVisible(visible);
-        break;
-    }
-    case PanelType::NotationStatusBar: {
-        configuration()->setIsNotationStatusBarVisible(visible);
         break;
     }
     default: {

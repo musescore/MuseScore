@@ -69,10 +69,6 @@ public:
 
     ValCh<io::paths> recentScorePaths() const override;
 
-    bool isNotationStatusBarVisible() const override;
-    void setIsNotationStatusBarVisible(bool visible) const override;
-    async::Notification isNotationStatusBarVisibleChanged() const override;
-
     bool isNotationNavigatorVisible() const override;
     void setIsNotationNavigatorVisible(bool visible) const override;
     async::Notification isNotationNavigatorVisibleChanged() const override;
