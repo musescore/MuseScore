@@ -83,6 +83,11 @@ void Environment::setup()
         m->onInit(runMode);
     }
 
+    globalModule.onAllInited();
+    for (mu::framework::IModuleSetup* m : m_dependencyModules) {
+        m->onAllInited();
+    }
+
     globalModule.onStartApp();
     for (mu::framework::IModuleSetup* m : m_dependencyModules) {
         m->onStartApp();

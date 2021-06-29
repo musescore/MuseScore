@@ -122,8 +122,9 @@ void PaletteModule::onInit(const IApplication::RunMode& mode)
     s_paletteUiActions->init();
 }
 
-void PaletteModule::onStartApp()
+void PaletteModule::onAllInited()
 {
-    // load workspace
+    //! NOTE We need to be sure that the workspaces are initialized.
+    //! So, we loads these settings on onAllInited
     s_paletteWorkspaceSetup->setup();
 }

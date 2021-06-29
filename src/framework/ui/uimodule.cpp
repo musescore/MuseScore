@@ -153,7 +153,7 @@ void UiModule::onInit(const IApplication::RunMode&)
     s_keyNavigationController->init();
 }
 
-void UiModule::onStartApp()
+void UiModule::onAllInited()
 {
     //! NOTE Some of the settings are taken from the workspace,
     //! we need to be sure that the workspaces are initialized.
