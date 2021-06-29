@@ -59,6 +59,10 @@ void DockWindow::componentComplete()
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
 
     configuration()->windowGeometryChanged().onNotify(this, [this]() {
+        if (m_quiting) {
+            return;
+        }
+
         resetWindowState();
     });
 
@@ -133,6 +137,8 @@ void DockWindow::componentComplete()
 void DockWindow::onQuit()
 {
     TRACEFUNC;
+
+    m_quiting = true;
 
     saveGeometry();
 

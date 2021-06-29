@@ -128,6 +128,8 @@ private:
     uicomponents::QmlListProperty<DockPage> m_pages;
     DockToolBarHolder* m_currentToolBarDockingHolder = nullptr;
     DockPanelHolder* m_currentPanelDockingHolder = nullptr;
+
+    bool m_quiting = false;
 };
 }
 
