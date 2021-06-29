@@ -35,7 +35,7 @@
 #include "ui/iuiactionsregister.h"
 
 using namespace mu::accessibility;
-using namespace mu::framework;
+using namespace mu::modularity;
 
 static std::shared_ptr<AccessibilityController> s_accessibilityController = std::make_shared<AccessibilityController>();
 
@@ -57,7 +57,7 @@ void AccessibilityModule::registerExports()
 
 void AccessibilityModule::resolveImports()
 {
-    auto ir = framework::ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://devtools/accessible/tree"), "MuseScore/Accessibility/AccessibleDevDialog.qml");
     }

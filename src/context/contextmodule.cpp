@@ -37,8 +37,8 @@ std::string ContextModule::moduleName() const
 
 void ContextModule::registerExports()
 {
-    framework::ioc()->registerExport<IGlobalContext>(moduleName(), s_globalContext);
-    framework::ioc()->registerExport<IUiContextResolver>(moduleName(), s_uicontextResolver);
+    modularity::ioc()->registerExport<IGlobalContext>(moduleName(), s_globalContext);
+    modularity::ioc()->registerExport<IUiContextResolver>(moduleName(), s_uicontextResolver);
 }
 
 void ContextModule::onInit(const framework::IApplication::RunMode& mode)

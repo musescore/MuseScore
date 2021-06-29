@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::extensions {
-class ExtensionsModule : public framework::IModuleSetup
+class ExtensionsModule : public modularity::IModuleSetup
 {
 public:
 

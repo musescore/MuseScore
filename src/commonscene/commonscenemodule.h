@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::commonscene {
-class CommonSceneModule : public framework::IModuleSetup
+class CommonSceneModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

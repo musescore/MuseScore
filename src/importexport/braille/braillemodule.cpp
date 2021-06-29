@@ -36,7 +36,7 @@ std::string BrailleModule::moduleName() const
 
 void BrailleModule::resolveImports()
 {
-    auto writers = framework::ioc()->resolve<INotationWritersRegister>(moduleName());
+    auto writers = modularity::ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
     }
 }

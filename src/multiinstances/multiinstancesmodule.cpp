@@ -33,7 +33,7 @@
 #include "dev/multiinstancesdevmodel.h"
 
 using namespace mu::mi;
-using namespace mu::framework;
+using namespace mu::modularity;
 
 static std::shared_ptr<MultiInstancesProvider> s_multiInstancesProvider = std::make_shared<MultiInstancesProvider>();
 
@@ -75,9 +75,9 @@ void MultiInstancesModule::registerResources()
     multiinstances_init_qrc();
 }
 
-void MultiInstancesModule::onInit(const IApplication::RunMode& mode)
+void MultiInstancesModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (mode != IApplication::RunMode::Editor) {
+    if (mode != framework::IApplication::RunMode::Editor) {
         return;
     }
 

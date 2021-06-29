@@ -41,12 +41,12 @@ std::string OveModule::moduleName() const
 
 void OveModule::registerExports()
 {
-    framework::ioc()->registerExport<IOveConfiguration>(moduleName(), s_configuration);
+    modularity::ioc()->registerExport<IOveConfiguration>(moduleName(), s_configuration);
 }
 
 void OveModule::resolveImports()
 {
-    auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "ove", "scw" }, std::make_shared<OveReader>());
     }

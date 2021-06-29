@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::actions {
-class ActionsModule : public framework::IModuleSetup
+class ActionsModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

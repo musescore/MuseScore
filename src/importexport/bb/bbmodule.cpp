@@ -37,7 +37,7 @@ std::string BBModule::moduleName() const
 
 void BBModule::resolveImports()
 {
-    auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "mgu", "sgu" }, std::make_shared<NotationBBReader>());
     }

@@ -69,5 +69,5 @@ void InstrumentsStubModule::registerResources()
 
 void InstrumentsStubModule::registerUiTypes()
 {
-    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(instruments_QML_IMPORT);
+    modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(instruments_QML_IMPORT);
 }

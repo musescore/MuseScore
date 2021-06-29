@@ -61,6 +61,7 @@
 
 using namespace mu::appshell;
 using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 using namespace mu::dock;
 

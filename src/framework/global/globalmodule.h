@@ -24,9 +24,8 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace framework {
-class GlobalModule : public IModuleSetup
+namespace mu::framework {
+class GlobalModule : public modularity::IModuleSetup
 {
 public:
 
@@ -34,7 +33,6 @@ public:
     void registerExports() override;
     void onInit(const IApplication::RunMode& mode) override;
 };
-}
 }
 
 #endif // MU_FRAMEWORK_GLOBALMODULE_H

@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::playback {
-class PlaybackStubModule : public framework::IModuleSetup
+class PlaybackStubModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

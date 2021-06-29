@@ -26,7 +26,7 @@
 #include "framework/global/modularity/imodulesetup.h"
 
 namespace mu::accessibility {
-class AccessibilityModule : public framework::IModuleSetup
+class AccessibilityModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

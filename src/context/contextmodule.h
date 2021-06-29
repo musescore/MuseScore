@@ -26,7 +26,7 @@
 
 namespace mu {
 namespace context {
-class ContextModule : public framework::IModuleSetup
+class ContextModule : public modularity::IModuleSetup
 {
 public:
 

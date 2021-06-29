@@ -34,7 +34,7 @@
 
 using namespace mu::iex::audioexport;
 using namespace mu::notation;
-using namespace mu::framework;
+using namespace mu::modularity;
 
 static std::shared_ptr<AudioExportConfiguration> s_configuration = std::make_shared<AudioExportConfiguration>();
 

@@ -43,17 +43,17 @@ std::string MidiModule::moduleName() const
 
 void MidiModule::registerExports()
 {
-    framework::ioc()->registerExport<IMidiImportExportConfiguration>(moduleName(), s_configuration);
+    modularity::ioc()->registerExport<IMidiImportExportConfiguration>(moduleName(), s_configuration);
 }
 
 void MidiModule::resolveImports()
 {
-    auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiReader>());
     }
 
-    auto writers = framework::ioc()->resolve<INotationWritersRegister>(moduleName());
+    auto writers = modularity::ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
         writers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiWriter>());
     }

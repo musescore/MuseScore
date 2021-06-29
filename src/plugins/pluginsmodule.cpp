@@ -36,7 +36,7 @@
 #include "ui/iinteractiveuriregister.h"
 
 using namespace mu::plugins;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
 static std::shared_ptr<PluginsConfiguration> s_configuration = std::make_shared<PluginsConfiguration>();
@@ -72,9 +72,9 @@ void PluginsModule::registerUiTypes()
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(plugins_QML_IMPORT);
 }
 
-void PluginsModule::onInit(const IApplication::RunMode& mode)
+void PluginsModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (IApplication::RunMode::Converter == mode) {
+    if (framework::IApplication::RunMode::Converter == mode) {
         return;
     }
     s_configuration->init();

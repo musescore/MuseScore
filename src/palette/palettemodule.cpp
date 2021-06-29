@@ -44,7 +44,7 @@
 #include "internal/paletteworkspacesetup.h"
 
 using namespace mu::palette;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
 static std::shared_ptr<MU4PaletteAdapter> s_adapter = std::make_shared<MU4PaletteAdapter>();
@@ -111,7 +111,7 @@ void PaletteModule::registerUiTypes()
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
 }
 
-void PaletteModule::onInit(const IApplication::RunMode& mode)
+void PaletteModule::onInit(const framework::IApplication::RunMode& mode)
 {
     if (framework::IApplication::RunMode::Editor != mode) {
         return;

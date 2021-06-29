@@ -34,7 +34,7 @@
 #include "view/diagnosticspathsmodel.h"
 
 using namespace mu::diagnostics;
-using namespace mu::framework;
+using namespace mu::modularity;
 
 static std::shared_ptr<DiagnosticsActionsController> s_actionsController = std::make_shared<DiagnosticsActionsController>();
 

@@ -20,8 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_FRAMEWORK_IOC_H
-#define MU_FRAMEWORK_IOC_H
+#ifndef MU_MODULARITY_IOC_H
+#define MU_MODULARITY_IOC_H
+
 #include <memory>
 #include "modulesioc.h"
 
@@ -31,7 +32,7 @@ private: \
 public: \
     std::shared_ptr<Interface> getter() const {  \
         if (!_##getter) { \
-            _##getter = mu::framework::ioc()->resolve<Interface>(#Module); \
+            _##getter = mu::modularity::ioc()->resolve<Interface>(#Module); \
         } \
         return _##getter; \
     } \
@@ -42,18 +43,16 @@ public: \
     static std::shared_ptr<Interface> getter() {  \
         static std::shared_ptr<Interface> _static##getter = nullptr; \
         if (!_static##getter) { \
-            _static##getter = mu::framework::ioc()->resolve<Interface>(#Module); \
+            _static##getter = mu::modularity::ioc()->resolve<Interface>(#Module); \
         } \
         return _static##getter; \
     } \
 
-namespace mu {
-namespace framework {
+namespace mu::modularity {
 inline ModulesIoC* ioc()
 {
     return ModulesIoC::instance();
 }
 }
-}
 
-#endif // MU_FRAMEWORK_IOC_H
+#endif // MU_MODULARITY_IOC_H

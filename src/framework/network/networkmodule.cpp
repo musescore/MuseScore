@@ -33,5 +33,5 @@ std::string NetworkModule::moduleName() const
 
 void NetworkModule::registerExports()
 {
-    framework::ioc()->registerExport<INetworkManagerCreator>(moduleName(), new NetworkManagerCreator());
+    modularity::ioc()->registerExport<INetworkManagerCreator>(moduleName(), new NetworkManagerCreator());
 }

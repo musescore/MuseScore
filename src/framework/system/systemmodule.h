@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::system {
-class SystemModule : public framework::IModuleSetup
+class SystemModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

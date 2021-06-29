@@ -32,7 +32,7 @@ class Environment
 {
 public:
 
-    using Modules = std::vector<framework::IModuleSetup*>;
+    using Modules = std::vector<modularity::IModuleSetup*>;
     using PreInit = std::function<void ()>;
     using PostInit = std::function<void ()>;
 

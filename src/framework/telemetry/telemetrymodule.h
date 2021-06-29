@@ -26,7 +26,7 @@
 #include "framework/global/modularity/imodulesetup.h"
 
 namespace mu::telemetry {
-class TelemetryModule : public mu::framework::IModuleSetup
+class TelemetryModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

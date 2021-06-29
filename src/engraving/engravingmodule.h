@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::engraving {
-class EngravingModule : public framework::IModuleSetup
+class EngravingModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
