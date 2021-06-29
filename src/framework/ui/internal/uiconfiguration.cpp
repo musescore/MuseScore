@@ -54,7 +54,6 @@ static const QMap<ThemeStyleKey, QVariant> LIGHT_THEME_VALUES {
     { ACCENT_COLOR, "#70AFEA" },
     { STROKE_COLOR, "#CED1D4" },
     { BUTTON_COLOR, "#CFD5DD" },
-    { BORDER_COLOR, "#000000" },    //Border width is 0, so color really doesn't matter here
     { BORDER_WIDTH, 0 },
     { FONT_PRIMARY_COLOR, "#111132" },
     { FONT_SECONDARY_COLOR, "#FFFFFF" },
@@ -80,7 +79,6 @@ static const QMap<ThemeStyleKey, QVariant> DARK_THEME_VALUES {
     { ACCENT_COLOR, "#FF4848" },
     { STROKE_COLOR, "#1E1E1E" },
     { BUTTON_COLOR, "#595959" },
-    { BORDER_COLOR, "#000000" },    //Border width is 0, so color really doesn't matter here
     { BORDER_WIDTH, 0 },
     { FONT_PRIMARY_COLOR, "#EBEBEB" },
     { FONT_SECONDARY_COLOR, "#BDBDBD" },
@@ -106,7 +104,6 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_BLACK_THEME_VALUES {
     { ACCENT_COLOR, "#0071DA" },
     { STROKE_COLOR, "#FFFFFF" },
     { BUTTON_COLOR, "#000000" },
-    { BORDER_COLOR, "#FFFFFF" },
     { BORDER_WIDTH, 2.0 },
     { FONT_PRIMARY_COLOR, "#FFFD38" },
     { FONT_SECONDARY_COLOR, "#BDBDBD" },
@@ -132,7 +129,6 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_WHITE_THEME_VALUES {
     { ACCENT_COLOR, "#00D87D" },
     { STROKE_COLOR, "#000000" },
     { BUTTON_COLOR, "#FFFFFF" },
-    { BORDER_COLOR, "#000000" },
     { BORDER_WIDTH, 2.0 },
     { FONT_PRIMARY_COLOR, "#1E0073" },
     { FONT_SECONDARY_COLOR, "#000000" },

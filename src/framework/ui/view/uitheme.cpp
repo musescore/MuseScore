@@ -174,11 +174,6 @@ QColor UiTheme::buttonColor() const
     return m_buttonColor;
 }
 
-QColor UiTheme::borderColor() const
-{
-    return colorByKey(BORDER_COLOR);
-}
-
 QColor UiTheme::fontPrimaryColor() const
 {
     return m_fontPrimaryColor;
