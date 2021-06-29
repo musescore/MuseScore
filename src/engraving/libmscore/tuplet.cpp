@@ -34,6 +34,7 @@
 #include "beam.h"
 #include "measure.h"
 #include "system.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -707,6 +708,7 @@ void Tuplet::layout()
 void Tuplet::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     // if in a TAB without stems, tuplets are not shown
     const StaffType* stt = staffType();
     if (stt && stt->isTabStaff() && stt->stemless()) {
@@ -722,7 +724,7 @@ void Tuplet::draw(mu::draw::Painter* painter) const
         painter->translate(-pos);
     }
     if (_hasBracket) {
-        painter->setPen(QPen(color, _bracketWidth.val()));
+        painter->setPen(Pen(color, _bracketWidth.val()));
         if (!_number) {
             painter->drawPolyline(bracketL, 4);
         } else {

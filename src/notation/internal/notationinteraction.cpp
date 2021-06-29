@@ -59,6 +59,8 @@
 
 #include "instrumentsconverter.h"
 
+#include "draw/pen.h"
+
 using namespace mu::notation;
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
@@ -1681,7 +1683,7 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
     }
 
     const auto dropAnchorColor = configuration()->anchorLineColor();
-    QPen pen(QBrush(dropAnchorColor), 2.0 / painter->worldTransform().m11(), Qt::DotLine);
+    mu::draw::Pen pen(QBrush(dropAnchorColor), 2.0 / painter->worldTransform().m11(), mu::draw::DotLine);
 
     for (const LineF& anchor : m_anchorLines) {
         painter->setPen(pen);
@@ -1710,6 +1712,7 @@ void NotationInteraction::drawTextEditMode(draw::Painter* painter)
 
 void NotationInteraction::drawSelectionRange(draw::Painter* painter)
 {
+    using namespace draw;
     if (!m_selection->isRange()) {
         return;
     }
@@ -1719,10 +1722,10 @@ void NotationInteraction::drawSelectionRange(draw::Painter* painter)
     QColor selectionColor = configuration()->selectionColor();
     qreal penWidth = 3.0 / painter->worldTransform().toAffine().m11();
 
-    QPen pen;
+    Pen pen;
     pen.setColor(selectionColor);
     pen.setWidthF(penWidth);
-    pen.setStyle(Qt::SolidLine);
+    pen.setStyle(SolidLine);
     painter->setPen(pen);
 
     std::vector<RectF> rangeArea = m_selection->range()->boundingArea();

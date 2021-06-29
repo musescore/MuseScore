@@ -30,6 +30,7 @@
 #include "tie.h"
 
 #include "draw/transform.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -44,12 +45,13 @@ Note* Tie::editEndNote;
 void TieSegment::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     // hide tie toward the second chord of a cross-measure value
     if (tie()->endNote() && tie()->endNote()->chord()->crossMeasure() == CrossMeasure::SECOND) {
         return;
     }
 
-    QPen pen(curColor());
+    Pen pen(curColor());
     qreal mag = staff() ? staff()->staffMag(tie()->tick()) : 1.0;
 
     //Replace generic Qt dash patterns with improved equivalents to show true dots (keep in sync with slur.cpp)
@@ -60,13 +62,13 @@ void TieSegment::draw(mu::draw::Painter* painter) const
     switch (slurTie()->lineType()) {
     case 0:
         painter->setBrush(QBrush(pen.color()));
-        pen.setCapStyle(Qt::RoundCap);
-        pen.setJoinStyle(Qt::RoundJoin);
+        pen.setCapStyle(RoundCap);
+        pen.setJoinStyle(RoundJoin);
         pen.setWidthF(score()->styleP(Sid::SlurEndWidth) * mag);
         break;
     case 1:
         painter->setBrush(Qt::NoBrush);
-        pen.setCapStyle(Qt::RoundCap);           // True dots
+        pen.setCapStyle(RoundCap);           // True dots
         pen.setDashPattern(dotted);
         pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
         break;

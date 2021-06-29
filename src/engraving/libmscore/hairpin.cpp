@@ -39,6 +39,7 @@
 #include "changeMap.h"
 
 #include "draw/transform.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -484,6 +485,7 @@ void HairpinSegment::editDrag(EditData& ed)
 void HairpinSegment::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     TextLineBaseSegment::draw(painter);
 
 #if 0
@@ -499,7 +501,7 @@ void HairpinSegment::draw(mu::draw::Painter* painter) const
     if (staff()) {
         w *= staff()->staffMag(hairpin()->tick());
     }
-    QPen pen(color, w, hairpin()->lineStyle());
+    Pen pen(color, w, hairpin()->lineStyle());
     painter->setPen(pen);
 
     if (drawCircledTip) {

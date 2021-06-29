@@ -25,12 +25,12 @@
 #include <vector>
 #include <stack>
 
-#include <QPen>
 #include <QBrush>
 #include <QFont>
 
 #include "ipaintprovider.h"
 #include "buffereddrawtypes.h"
+#include "pen.h"
 
 namespace mu::draw {
 class DrawObjectsLogger;
@@ -57,9 +57,9 @@ public:
     void setFont(const Font& font) override;
     const Font& font() const override;
 
-    void setPen(const QPen& pen) override;
+    void setPen(const Pen& pen) override;
     void setNoPen() override;
-    const QPen& pen() const override;
+    const Pen& pen() const override;
 
     void setBrush(const QBrush& brush) override;
     const QBrush& brush() const override;

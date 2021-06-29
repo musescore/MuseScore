@@ -43,7 +43,7 @@ static qreal itor(int v)
     return static_cast<qreal>(v) / 1000.0;
 }
 
-static QJsonObject toObj(const QPen& pen)
+static QJsonObject toObj(const Pen& pen)
 {
     QJsonObject obj;
     obj["style"] = static_cast<int>(pen.style());
@@ -52,9 +52,9 @@ static QJsonObject toObj(const QPen& pen)
     return obj;
 }
 
-static void fromObj(const QJsonObject& obj, QPen& pen)
+static void fromObj(const QJsonObject& obj, Pen& pen)
 {
-    pen.setStyle(static_cast<Qt::PenStyle>(obj["style"].toInt()));
+    pen.setStyle(static_cast<PenStyle>(obj["style"].toInt()));
     pen.setColor(QColor(obj["color"].toString()));
     pen.setWidth(obj["width"].toInt());
 }

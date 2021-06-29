@@ -132,19 +132,21 @@ const Font& QPainterProvider::font() const
     return m_font;
 }
 
-void QPainterProvider::setPen(const QPen& pen)
+void QPainterProvider::setPen(const Pen& pen)
 {
-    m_painter->setPen(pen);
+    m_pen = pen;
+    m_painter->setPen(m_pen.toQPen());
 }
 
 void QPainterProvider::setNoPen()
 {
-    m_painter->setPen(QPen(Qt::NoPen));
+    m_pen = Pen(NoPen);
+    m_painter->setPen(m_pen.toQPen());
 }
 
-const QPen& QPainterProvider::pen() const
+const Pen& QPainterProvider::pen() const
 {
-    return m_painter->pen();
+    return m_pen;
 }
 
 void QPainterProvider::setBrush(const QBrush& brush)

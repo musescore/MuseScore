@@ -35,6 +35,7 @@
 #include "articulation.h"
 
 #include "draw/transform.h"
+#include "draw/pen.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -47,7 +48,8 @@ namespace Ms {
 void SlurSegment::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
-    QPen pen(curColor());
+    using namespace mu::draw;
+    Pen pen(curColor());
     qreal mag = staff() ? staff()->staffMag(slur()->tick()) : 1.0;
 
     //Replace generic Qt dash patterns with improved equivalents to show true dots (keep in sync with tie.cpp)
@@ -58,13 +60,13 @@ void SlurSegment::draw(mu::draw::Painter* painter) const
     switch (slurTie()->lineType()) {
     case 0:
         painter->setBrush(QBrush(pen.color()));
-        pen.setCapStyle(Qt::RoundCap);
-        pen.setJoinStyle(Qt::RoundJoin);
+        pen.setCapStyle(RoundCap);
+        pen.setJoinStyle(RoundJoin);
         pen.setWidthF(score()->styleP(Sid::SlurEndWidth) * mag);
         break;
     case 1:
         painter->setBrush(Qt::NoBrush);
-        pen.setCapStyle(Qt::RoundCap);           // round dots
+        pen.setCapStyle(RoundCap);           // round dots
         pen.setDashPattern(dotted);
         pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
         break;

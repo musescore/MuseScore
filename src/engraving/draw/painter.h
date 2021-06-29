@@ -25,7 +25,7 @@
 #include <list>
 #include <stack>
 
-#include <QPen>
+#include "pen.h"
 #include <QColor>
 #include <QPainter>
 
@@ -74,10 +74,10 @@ public:
     void setFont(const Font& font);
     const Font& font() const;
 
-    void setPen(const QPen& pen);
+    void setPen(const Pen& pen);
     inline void setPen(const QColor& color);
     void setNoPen();
-    const QPen& pen() const;
+    const Pen& pen() const;
 
     void setBrush(const QBrush& brush);
     const QBrush& brush() const;
@@ -100,7 +100,7 @@ public:
     // drawing
     void fillPath(const QPainterPath& path, const QBrush& brush);
     void drawPath(const QPainterPath& path);
-    void strokePath(const QPainterPath& path, const QPen& pen);
+    void strokePath(const QPainterPath& path, const Pen& pen);
 
     void drawLines(const LineF* lines, size_t lineCount);
     void drawLines(const PointF* pointPairs, size_t lineCount);
@@ -195,7 +195,7 @@ private:
 
 inline void Painter::setPen(const QColor& color)
 {
-    setPen(QPen(color.isValid() ? color : QColor(Qt::black)));
+    setPen(Pen(color.isValid() ? color : QColor(Qt::black)));
 }
 
 inline void Painter::translate(const PointF& offset)

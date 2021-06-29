@@ -159,7 +159,7 @@ const Font& Painter::font() const
     return m_provider->font();
 }
 
-void Painter::setPen(const QPen& pen)
+void Painter::setPen(const Pen& pen)
 {
     m_provider->setPen(pen);
     if (extended) {
@@ -169,10 +169,10 @@ void Painter::setPen(const QPen& pen)
 
 void Painter::setNoPen()
 {
-    setPen(QPen(Qt::NoPen));
+    setPen(Pen(Qt::NoPen));
 }
 
-const QPen& Painter::pen() const
+const Pen& Painter::pen() const
 {
     return m_provider->pen();
 }
@@ -284,9 +284,9 @@ void Painter::setViewport(const RectF& viewport)
 
 void Painter::fillPath(const QPainterPath& path, const QBrush& brush)
 {
-    QPen oldPen = this->pen();
+    Pen oldPen = this->pen();
     QBrush oldBrush = this->brush();
-    setPen(QPen(Qt::NoPen));
+    setPen(Pen(NoPen));
     setBrush(brush);
 
     drawPath(path);
@@ -295,9 +295,9 @@ void Painter::fillPath(const QPainterPath& path, const QBrush& brush)
     setBrush(oldBrush);
 }
 
-void Painter::strokePath(const QPainterPath& path, const QPen& pen)
+void Painter::strokePath(const QPainterPath& path, const Pen& pen)
 {
-    QPen oldPen = this->pen();
+    Pen oldPen = this->pen();
     QBrush oldBrush = this->brush();
     setPen(pen);
     setBrush(Qt::NoBrush);
@@ -439,9 +439,9 @@ void Painter::drawSymbol(const PointF& point, uint ucs4Code)
 
 void Painter::fillRect(const RectF& rect, const QBrush& brush)
 {
-    QPen oldPen = this->pen();
+    Pen oldPen = this->pen();
     QBrush oldBrush = this->brush();
-    setPen(QPen(Qt::NoPen));
+    setPen(Pen(NoPen));
     setBrush(brush);
 
     drawRect(rect);
