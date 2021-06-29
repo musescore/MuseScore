@@ -58,7 +58,7 @@
 #include "notationnoteinput.h"
 #include "notationselection.h"
 
-#include "instrumentsconverter.h"
+#include "instruments/internal/instrumentsconverter.h"
 
 #include "draw/pen.h"
 
@@ -1051,7 +1051,7 @@ void NotationInteraction::selectInstrument(Ms::InstrumentChange* instrumentChang
         return;
     }
 
-    Ms::Instrument instrument = InstrumentsConverter::convertInstrument(selectedIstrument);
+    Ms::Instrument instrument = instruments::InstrumentsConverter::convertInstrument(selectedIstrument);
 
     instrumentChange->setInit(true);
     instrumentChange->setupInstrument(&instrument);

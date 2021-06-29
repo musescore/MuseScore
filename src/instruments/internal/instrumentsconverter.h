@@ -20,10 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_INSTRUMENTSCONVERTER_H
-#define MU_NOTATION_INSTRUMENTSCONVERTER_H
+#ifndef MU_INSTRUMENTS_INSTRUMENTSCONVERTER_H
+#define MU_INSTRUMENTS_INSTRUMENTSCONVERTER_H
 
-#include "instruments/instrumentstypes.h"
+#include "../instrumentstypes.h"
 
 namespace Ms {
 class Instrument;
@@ -31,18 +31,18 @@ class InstrumentTemplate;
 struct NamedEventList;
 }
 
-namespace mu::notation {
+namespace mu::instruments {
 class InstrumentsConverter
 {
 public:
-    static Ms::Instrument convertInstrument(const instruments::Instrument& instrument);
-    static instruments::Instrument convertInstrument(const Ms::Instrument& insturment);
-    static instruments::Instrument convertInstrument(const Ms::InstrumentTemplate& templ);
+    static Ms::Instrument convertInstrument(const Instrument& instrument);
+    static Instrument convertInstrument(const Ms::Instrument& insturment);
+    static Instrument convertInstrument(const Ms::InstrumentTemplate& templ);
 
 private:
-    static instruments::MidiActionList convertMidiActions(const QList<Ms::NamedEventList>& midiActions);
-    static QList<Ms::NamedEventList> convertMidiActions(const instruments::MidiActionList& midiActions);
+    static MidiActionList convertMidiActions(const QList<Ms::NamedEventList>& midiActions);
+    static QList<Ms::NamedEventList> convertMidiActions(const MidiActionList& midiActions);
 };
 }
 
-#endif // MU_NOTATION_INSTRUMENTSCONVERTER_H
+#endif // MU_INSTRUMENTS_INSTRUMENTSCONVERTER_H

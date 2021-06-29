@@ -28,7 +28,7 @@
 #include "libmscore/instrchange.h"
 #include "libmscore/page.h"
 
-#include "instrumentsconverter.h"
+#include "instruments/internal/instrumentsconverter.h"
 #include "scoreorderconverter.h"
 
 #include "igetscore.h"

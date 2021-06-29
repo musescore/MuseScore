@@ -23,11 +23,13 @@
 #include "instrumentsconverter.h"
 
 #include "libmscore/instrument.h"
+#include "libmscore/instrtemplate.h"
 
-using namespace mu::notation;
+#include "midi/midievent.h"
+
 using namespace mu::instruments;
 
-Ms::Instrument InstrumentsConverter::convertInstrument(const mu::instruments::Instrument& instrument)
+Ms::Instrument InstrumentsConverter::convertInstrument(const Instrument& instrument)
 {
     Ms::Instrument result;
     result.setAmateurPitchRange(instrument.amateurPitchRange.min, instrument.amateurPitchRange.max);
@@ -70,9 +72,9 @@ Ms::Instrument InstrumentsConverter::convertInstrument(const mu::instruments::In
     return result;
 }
 
-mu::instruments::Instrument InstrumentsConverter::convertInstrument(const Ms::Instrument& instrument)
+Instrument InstrumentsConverter::convertInstrument(const Ms::Instrument& instrument)
 {
-    mu::instruments::Instrument result;
+    Instrument result;
     result.amateurPitchRange = PitchRange(instrument.minPitchA(), instrument.maxPitchA());
     result.professionalPitchRange = PitchRange(instrument.minPitchP(), instrument.maxPitchP());
 
@@ -109,7 +111,7 @@ mu::instruments::Instrument InstrumentsConverter::convertInstrument(const Ms::In
     return result;
 }
 
-mu::instruments::Instrument InstrumentsConverter::convertInstrument(const Ms::InstrumentTemplate& templ)
+Instrument InstrumentsConverter::convertInstrument(const Ms::InstrumentTemplate& templ)
 {
     Ms::Instrument msInstrument = Ms::Instrument::fromTemplate(&templ);
     Instrument result = convertInstrument(msInstrument);
