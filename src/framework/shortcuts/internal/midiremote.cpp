@@ -21,10 +21,12 @@
  */
 #include "midiremote.h"
 
-#include "log.h"
-
 #include "global/xmlreader.h"
 #include "global/xmlwriter.h"
+
+#include "multiinstances/resourcelockguard.h"
+
+#include "log.h"
 
 using namespace mu::shortcuts;
 using namespace mu::framework;
@@ -99,6 +101,8 @@ mu::Ret MidiRemote::process(const Event& ev)
 
 void MidiRemote::readMidiMappings()
 {
+    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "MIDIMAPPING");
+
     io::path midiMappingsPath = configuration()->midiMappingUserAppDataPath();
     XmlReader reader(midiMappingsPath);
 
@@ -148,6 +152,8 @@ MidiMapping MidiRemote::readMidiMapping(XmlReader& reader) const
 bool MidiRemote::writeMidiMappings(const MidiMappingList& midiMappings) const
 {
     TRACEFUNC;
+
+    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "MIDIMAPPING");
 
     io::path midiMappingsPath = configuration()->midiMappingUserAppDataPath();
     XmlWriter writer(midiMappingsPath);
