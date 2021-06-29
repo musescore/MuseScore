@@ -99,18 +99,9 @@ FocusScope {
         color: root.normalStateColor
         opacity: ui.theme.buttonOpacityNormal
         radius: 3
+
         border.width: navCtrl.active ? 2 : ui.theme.borderWidth
-        property color borderColor: ui.theme.borderColor
-        onBorderColorChanged: {
-            console.log("BORDER COLOR CHANGED!")
-        }
-
-        property color primaryFont: ui.theme.fontPrimaryColor
-        onPrimaryFontChanged: {
-            console.log("PRIMARY FONT COLOR CHANGED!")
-        }
-
-        border.color: navCtrl.active ? ui.theme.focusColor : borderColor
+        border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.borderColor
     }
 
     Loader {

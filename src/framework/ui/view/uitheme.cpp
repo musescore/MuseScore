@@ -261,12 +261,6 @@ QFont UiTheme::musicalFont() const
 
 qreal UiTheme::borderWidth() const
 {
-    qDebug("BORDER WIDTH REQUESTED!");
-    qDebug("BORDER WIDTH REQUESTED!");
-    qDebug("BORDER WIDTH REQUESTED!");
-    qDebug("BORDER WIDTH REQUESTED!");
-    qDebug("BORDER WIDTH REQUESTED!");
-    qDebug("BORDER WIDTH REQUESTED!");
     return realByKey(BORDER_WIDTH);
 }
 

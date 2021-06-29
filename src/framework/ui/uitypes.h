@@ -202,8 +202,8 @@ public:
     bool contains(const actions::ActionCode& code) const
     {
         auto it = std::find_if(cbegin(), cend(), [code](const UiAction& a) {
-                return a.code == code;
-            });
+            return a.code == code;
+        });
         return it != cend();
     }
 
