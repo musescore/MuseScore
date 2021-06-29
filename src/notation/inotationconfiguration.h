@@ -98,8 +98,9 @@ public:
     virtual std::string fontFamily() const = 0;
     virtual int fontSize() const = 0;
 
-    virtual ValCh<io::path> stylesPath() const = 0;
-    virtual void setStylesPath(const io::path& path) = 0;
+    virtual io::path userStylesPath() const = 0;
+    virtual void setUserStylesPath(const io::path& path) = 0;
+    virtual async::Channel<io::path> userStylesPathChanged() const = 0;
 
     virtual io::path defaultStyleFilePath() const = 0;
     virtual void setDefaultStyleFilePath(const io::path& path) = 0;
