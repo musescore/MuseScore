@@ -27,6 +27,7 @@
 #include "retval.h"
 
 #include "io/path.h"
+#include "async/channel.h"
 
 namespace mu::plugins {
 class IPluginsConfiguration : MODULE_EXPORT_INTERFACE
@@ -38,8 +39,9 @@ public:
 
     virtual io::paths availablePluginsPaths() const = 0;
 
-    virtual ValCh<io::path> pluginsPath() const = 0;
-    virtual void setPluginsPath(const io::path& path) = 0;
+    virtual io::path userPluginsPath() const = 0;
+    virtual void setUserPluginsPath(const io::path& path) = 0;
+    virtual async::Channel<io::path> userPluginsPathChanged() const = 0;
 
     virtual ValCh<CodeKeyList> installedPlugins() const = 0;
     virtual void setInstalledPlugins(const CodeKeyList& codeKeyList) = 0;

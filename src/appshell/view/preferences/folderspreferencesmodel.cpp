@@ -84,7 +84,7 @@ void FoldersPreferencesModel::load()
         { FolderType::Scores, qtrc("appshell", "Scores"), userScoresConfiguration()->userScoresPath().toQString() },
         { FolderType::Styles, qtrc("appshell", "Styles"), notationConfiguration()->userStylesPath().toQString() },
         { FolderType::Templates, qtrc("appshell", "Templates"), userScoresConfiguration()->userTemplatesPath().toQString() },
-        { FolderType::Plugins, qtrc("appshell", "Plugins"), pluginsPath() },
+        { FolderType::Plugins, qtrc("appshell", "Plugins"), pluginsConfiguration()->userPluginsPath().toQString() },
         { FolderType::SoundFonts, qtrc("appshell", "SoundFonts"), "" }, // todo: need implement
         { FolderType::Images, qtrc("appshell", "Images"), "" }, // todo: need implement
         { FolderType::Extensions, qtrc("appshell", "Extensions"), extensionsPath() }
@@ -109,7 +109,7 @@ void FoldersPreferencesModel::setupConnections()
         setPath(FolderType::Templates, path.toQString());
     });
 
-    pluginsConfiguration()->pluginsPath().ch.onReceive(this, [this](const io::path& path) {
+    pluginsConfiguration()->userPluginsPathChanged().onReceive(this, [this](const io::path& path) {
         setPath(FolderType::Plugins, path.toQString());
     });
 
@@ -133,7 +133,7 @@ void FoldersPreferencesModel::savePath(FoldersPreferencesModel::FolderType folde
         userScoresConfiguration()->setUserTemplatesPath(folderPath);
         break;
     case FolderType::Plugins:
-        pluginsConfiguration()->setPluginsPath(folderPath);
+        pluginsConfiguration()->setUserPluginsPath(folderPath);
         break;
     case FolderType::Extensions:
         extensionsConfiguration()->setExtensionsPath(folderPath);
@@ -145,11 +145,6 @@ void FoldersPreferencesModel::savePath(FoldersPreferencesModel::FolderType folde
         NOT_IMPLEMENTED;
         break;
     }
-}
-
-QString FoldersPreferencesModel::pluginsPath() const
-{
-    return pluginsConfiguration()->pluginsPath().val.toQString();
 }
 
 QString FoldersPreferencesModel::extensionsPath() const
