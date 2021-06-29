@@ -520,7 +520,7 @@ int Rest::getDotline(TDuration::DurationType durationType)
 int Rest::computeLineOffset(int lines)
       {
       Segment* s = segment();
-      bool offsetVoices = s && measure() && measure()->hasVoices(staffIdx(), tick(), actualTicks());
+      bool offsetVoices = s && measure() && (voice() > 0 || measure()->hasVoices(staffIdx(), tick(), actualTicks()));
       if (offsetVoices && voice() == 0) {
             // do not offset voice 1 rest if there exists a matching invisible rest in voice 2;
             Element* e = s->element(track() + 1);
