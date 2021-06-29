@@ -7568,11 +7568,11 @@
                         <velocity>100</velocity>
                         <gateTime>100</gateTime>
                   </Articulation>
-                  <Articulation name="sforzato">
-                        <velocity>130</velocity>
-                  </Articulation>
                   <Articulation name="marcato">
                         <velocity>500</velocity>
+                  </Articulation>
+                  <Articulation name="sforzato">
+                        <velocity>130</velocity>
                   </Articulation>
                   <Channel>
                         <controller ctrl="0" value="1"/>
@@ -7776,11 +7776,11 @@
                         <velocity>100</velocity>
                         <gateTime>100</gateTime>
                   </Articulation>
-                  <Articulation name="sforzato">
-                        <velocity>130</velocity>
-                  </Articulation>
                   <Articulation name="marcato">
                         <velocity>500</velocity>
+                  </Articulation>
+                  <Articulation name="sforzato">
+                        <velocity>130</velocity>
                   </Articulation>
                   <Channel>
                         <controller ctrl="0" value="1"/>
@@ -7886,11 +7886,11 @@
                         <velocity>100</velocity>
                         <gateTime>100</gateTime>
                   </Articulation>
-                  <Articulation name="sforzato">
-                        <velocity>130</velocity>
-                  </Articulation>
                   <Articulation name="marcato">
                         <velocity>500</velocity>
+                  </Articulation>
+                  <Articulation name="sforzato">
+                        <velocity>130</velocity>
                   </Articulation>
                   <Channel>
                         <controller ctrl="0" value="1"/>
@@ -7997,11 +7997,11 @@
                         <velocity>100</velocity>
                         <gateTime>100</gateTime>
                   </Articulation>
-                  <Articulation name="sforzato">
-                        <velocity>130</velocity>
-                  </Articulation>
                   <Articulation name="marcato">
                         <velocity>500</velocity>
+                  </Articulation>
+                  <Articulation name="sforzato">
+                        <velocity>130</velocity>
                   </Articulation>
                   <Channel>
                         <controller ctrl="0" value="1"/>
@@ -10542,6 +10542,12 @@ Aeolus organ synthesizer, currently disabled -->
                   <Channel name="open">
                         <program value="27"/> <!--Electric Guitar (clean)-->
                   </Channel>
+                  <Channel name="mute">
+                        <program value="28"/> <!--Electric Guitar (muted)-->
+                  </Channel>
+                  <Channel name="jazz">
+                        <program value="26"/> <!--Electric Guitar (jazz)-->
+                  </Channel>
                   <Channel name="harmonics">
                         <program value="31"/> <!--Guitar Harmonics-->
                   </Channel>
@@ -10550,12 +10556,6 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
                   <Channel name="overdriven">
                         <program value="29"/> <!--Overdriven Guitar-->
-                  </Channel>
-                  <Channel name="mute">
-                        <program value="28"/> <!--Electric Guitar (muted)-->
-                  </Channel>
-                  <Channel name="jazz">
-                        <program value="26"/> <!--Electric Guitar (jazz)-->
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>
@@ -11377,7 +11377,7 @@ Aeolus organ synthesizer, currently disabled -->
                   <genre>popular</genre>
             </Instrument>
             <Instrument id="acoustic-bass">
-                  <!-- Same instrument as the orchestral contrabass, but used by default plucked, rather than bowed can't init from it, as it has not been read yet. -->
+                  <!--Same instrument as the orchestral contrabass, but by default plucked rather than bowed, and with string date for tablatur-->
                   <family>bass-guitars</family>
                   <longName>Acoustic Bass</longName>
                   <shortName>Bass</shortName>
@@ -11401,17 +11401,17 @@ Aeolus organ synthesizer, currently disabled -->
                   <Channel name="pizzicato">
                         <program value="32"/> <!--Acoustic Bass-->
                   </Channel>
-                  <Channel name="arco">
-                        <program value="43"/> <!--Contrabass-->
-                  </Channel>
-                  <Channel name="tremolo">
-                        <program value="44"/> <!--Tremolo Strings-->
-                  </Channel>
                   <Channel name="slap">
                         <program value="36"/> <!--Slap Bass 1-->
                   </Channel>
                   <Channel name="pop">
                         <program value="37"/> <!--Slap Bass 2-->
+                  </Channel>
+                  <Channel name="arco">
+                        <program value="43"/> <!--Contrabass-->
+                  </Channel>
+                  <Channel name="tremolo">
+                        <program value="44"/> <!--Tremolo Strings-->
                   </Channel>
                   <genre>common</genre>
                   <genre>jazz</genre>

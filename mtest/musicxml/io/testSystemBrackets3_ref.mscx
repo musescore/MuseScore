@@ -194,28 +194,28 @@ Gtr. 1</shortName>
           <midiPort>0</midiPort>
           <midiChannel>2</midiChannel>
           </Channel>
+        <Channel name="mute">
+          <program value="28"/>
+          <midiPort>0</midiPort>
+          <midiChannel>1</midiChannel>
+          </Channel>
+        <Channel name="jazz">
+          <program value="26"/>
+          <midiPort>0</midiPort>
+          <midiChannel>3</midiChannel>
+          </Channel>
         <Channel name="harmonics">
           <program value="31"/>
           <midiPort>0</midiPort>
-          <midiChannel>1</midiChannel>
+          <midiChannel>4</midiChannel>
           </Channel>
         <Channel name="distortion">
           <program value="30"/>
           <midiPort>0</midiPort>
-          <midiChannel>3</midiChannel>
+          <midiChannel>5</midiChannel>
           </Channel>
         <Channel name="overdriven">
           <program value="29"/>
-          <midiPort>0</midiPort>
-          <midiChannel>4</midiChannel>
-          </Channel>
-        <Channel name="mute">
-          <program value="28"/>
-          <midiPort>0</midiPort>
-          <midiChannel>5</midiChannel>
-          </Channel>
-        <Channel name="jazz">
-          <program value="26"/>
           <midiPort>0</midiPort>
           <midiChannel>6</midiChannel>
           </Channel>
@@ -323,28 +323,28 @@ Gtr. 2</shortName>
           <midiPort>0</midiPort>
           <midiChannel>8</midiChannel>
           </Channel>
+        <Channel name="mute">
+          <program value="28"/>
+          <midiPort>0</midiPort>
+          <midiChannel>7</midiChannel>
+          </Channel>
+        <Channel name="jazz">
+          <program value="26"/>
+          <midiPort>0</midiPort>
+          <midiChannel>10</midiChannel>
+          </Channel>
         <Channel name="harmonics">
           <program value="31"/>
           <midiPort>0</midiPort>
-          <midiChannel>7</midiChannel>
+          <midiChannel>11</midiChannel>
           </Channel>
         <Channel name="distortion">
           <program value="30"/>
           <midiPort>0</midiPort>
-          <midiChannel>10</midiChannel>
+          <midiChannel>12</midiChannel>
           </Channel>
         <Channel name="overdriven">
           <program value="29"/>
-          <midiPort>0</midiPort>
-          <midiChannel>11</midiChannel>
-          </Channel>
-        <Channel name="mute">
-          <program value="28"/>
-          <midiPort>0</midiPort>
-          <midiChannel>12</midiChannel>
-          </Channel>
-        <Channel name="jazz">
-          <program value="26"/>
           <midiPort>0</midiPort>
           <midiChannel>13</midiChannel>
           </Channel>
