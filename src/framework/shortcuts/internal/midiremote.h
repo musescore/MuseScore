@@ -24,6 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
+#include "multiinstances/imultiinstancesprovider.h"
 #include "ishortcutsconfiguration.h"
 #include "shortcutstypes.h"
 #include "../imidiremote.h"
@@ -38,6 +39,7 @@ class MidiRemote : public IMidiRemote
 {
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
     INJECT(shortcuts, actions::IActionsDispatcher, dispatcher)
+    INJECT(shortcuts, mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     MidiRemote() = default;
