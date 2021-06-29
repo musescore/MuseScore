@@ -1427,7 +1427,7 @@ static void readPedal114(XmlReader& e, Pedal* pedal)
             pedal->setLineWidth(qreal(e.readDouble()));
             pedal->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
         } else if (tag == "lineStyle") {
-            pedal->setLineStyle(Qt::PenStyle(e.readInt()));
+            pedal->setLineStyle(mu::draw::PenStyle(e.readInt()));
             pedal->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
         } else if (!readTextLineProperties114(e, pedal)) {
             e.unknown();

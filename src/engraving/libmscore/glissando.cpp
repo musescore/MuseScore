@@ -52,6 +52,7 @@ NICE-TO-HAVE TODO:
 #include "xml.h"
 
 #include "draw/fontmetrics.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -97,12 +98,13 @@ void GlissandoSegment::layout()
 void GlissandoSegment::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     painter->save();
     qreal _spatium = spatium();
 
-    QPen pen(curColor(visible(), glissando()->lineColor()));
+    Pen pen(curColor(visible(), glissando()->lineColor()));
     pen.setWidthF(glissando()->lineWidth());
-    pen.setCapStyle(Qt::RoundCap);
+    pen.setCapStyle(RoundCap);
     painter->setPen(pen);
 
     // rotate painter so that the line become horizontal

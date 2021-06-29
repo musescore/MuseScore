@@ -31,6 +31,7 @@
 #include "mscore.h"
 #include "harmony.h"
 #include "staff.h"
+#include "draw/pen.h"
 #include "undo.h"
 
 #include "draw/fontmetrics.h"
@@ -311,6 +312,7 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
 void FretDiagram::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     PointF translation = -PointF(stringDist * (_strings - 1), 0);
     if (_orientation == Orientation::HORIZONTAL) {
         painter->save();
@@ -320,8 +322,8 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
 
     // Init pen and other values
     qreal _spatium = spatium() * _userMag;
-    QPen pen(curColor());
-    pen.setCapStyle(Qt::FlatCap);
+    Pen pen(curColor());
+    pen.setCapStyle(FlatCap);
     painter->setBrush(QBrush(QColor(painter->pen().color())));
 
     // x2 is the x val of the rightmost string
@@ -351,8 +353,8 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     qreal dotd = _spatium * .49 * score()->styleD(Sid::fretDotSize);
 
     // Draw dots, sym pen is used to draw them (and markers)
-    QPen symPen(pen);
-    symPen.setCapStyle(Qt::RoundCap);
+    Pen symPen(pen);
+    symPen.setCapStyle(RoundCap);
     qreal symPenWidth = stringLw * 1.2;
     symPen.setWidthF(symPenWidth);
 
@@ -430,7 +432,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
         qreal newX2 = endString == -1 ? x2 : stringDist * endString;
         qreal y     = fretDist * (fret - 1) + fretDist * .5;
         pen.setWidthF(dotd * score()->styleD(Sid::barreLineWidth));
-        pen.setCapStyle(Qt::RoundCap);
+        pen.setCapStyle(RoundCap);
         painter->setPen(pen);
         painter->drawLine(LineF(x1, y, newX2, y));
     }

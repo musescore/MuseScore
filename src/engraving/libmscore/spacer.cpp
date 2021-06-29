@@ -26,6 +26,7 @@
 #include "mscore.h"
 #include "xml.h"
 #include "measure.h"
+#include "draw/pen.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -60,7 +61,7 @@ void Spacer::draw(mu::draw::Painter* painter) const
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }
-    QPen pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
+    Pen pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
              spatium() * 0.3);
     painter->setPen(pen);
     painter->setBrush(Qt::NoBrush);

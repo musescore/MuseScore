@@ -38,6 +38,33 @@ enum class PolygonMode {
     Convex,
     Polyline
 };
+
+enum PenStyle { // pen style
+    NoPen,
+    SolidLine,
+    DashLine,
+    DotLine,
+    DashDotLine,
+    DashDotDotLine,
+    CustomDashLine,
+    MPenStyle = 0x0f
+};
+
+enum PenCapStyle { // line endcap style
+    FlatCap = 0x00,
+    SquareCap = 0x10,
+    RoundCap = 0x20,
+    MPenCapStyle = 0x30
+};
+
+enum PenJoinStyle { // line join style
+    MiterJoin = 0x00,
+    BevelJoin = 0x40,
+    RoundJoin = 0x80,
+    SvgMiterJoin = 0x100,
+    MPenJoinStyle = 0x1c0
+};
+
 }
 
 #endif // MU_DRAW_DRAWTYPES_H

@@ -50,6 +50,7 @@
 #include "translation.h"
 
 #include "../palette_config.h"
+#include "draw/pen.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -1130,7 +1131,7 @@ void PaletteCellIconEngine::paintScoreElement(mu::draw::Painter& painter, Elemen
 qreal PaletteCellIconEngine::paintStaff(Painter& painter, const RectF& rect, qreal spatium)
 {
     painter.save(); // so we can restore painter after we are done using it
-    QPen pen(configuration()->elementsColor());
+    Pen pen(configuration()->elementsColor());
     pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * spatium);
     painter.setPen(pen);
 
@@ -1231,7 +1232,7 @@ void PaletteCellIconEngine::paintCell(mu::draw::Painter& painter, const RectF& r
 
     painter.translate(origin);
     painter.translate(_cell->xoffset * spatium, _cell->yoffset * spatium);   // additional offset for element only
-    painter.setPen(QPen(configuration()->elementsColor()));
+    painter.setPen(Pen(configuration()->elementsColor()));
 
     paintScoreElement(painter, el, spatium, drawStaff);
 }
