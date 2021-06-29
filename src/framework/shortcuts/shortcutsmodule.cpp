@@ -42,6 +42,7 @@
 
 using namespace mu::shortcuts;
 using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
 static std::shared_ptr<ShortcutsRegister> s_shortcutsRegister = std::make_shared<ShortcutsRegister>();

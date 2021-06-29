@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::braille {
-class BrailleModule : public framework::IModuleSetup
+class BrailleModule : public modularity::IModuleSetup
 {
 public:
 

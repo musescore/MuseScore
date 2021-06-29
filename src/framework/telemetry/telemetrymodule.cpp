@@ -41,7 +41,7 @@
 #include "config.h"
 
 using namespace mu::telemetry;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
 static std::shared_ptr<TelemetryConfiguration> s_configuration = std::make_shared<TelemetryConfiguration>();
@@ -86,7 +86,7 @@ void TelemetryModule::onInit(const framework::IApplication::RunMode&)
 {
     s_configuration->init();
 
-    auto globalConf = framework::ioc()->resolve<framework::IGlobalConfiguration>(moduleName());
+    auto globalConf = modularity::ioc()->resolve<framework::IGlobalConfiguration>(moduleName());
     IF_ASSERT_FAILED(globalConf) {
         return;
     }

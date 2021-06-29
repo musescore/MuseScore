@@ -41,7 +41,7 @@
 #include "diagnostics/idiagnosticspathsregister.h"
 
 using namespace mu::workspace;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
 static std::shared_ptr<WorkspaceManager> s_manager = std::make_shared<WorkspaceManager>();
@@ -93,9 +93,9 @@ void WorkspaceModule::registerUiTypes()
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(workspace_QML_IMPORT);
 }
 
-void WorkspaceModule::onInit(const IApplication::RunMode& mode)
+void WorkspaceModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (IApplication::RunMode::Converter == mode) {
+    if (framework::IApplication::RunMode::Converter == mode) {
         return;
     }
 

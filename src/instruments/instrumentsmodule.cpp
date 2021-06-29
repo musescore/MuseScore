@@ -43,10 +43,10 @@
 #include "diagnostics/idiagnosticspathsregister.h"
 
 using namespace mu::instruments;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
-static InstrumentsRepository* m_instrumentsRepository = new InstrumentsRepository();
+static InstrumentsRepository* s_instrumentsRepository = new InstrumentsRepository();
 static std::shared_ptr<InstrumentsConfiguration> s_configuration = std::make_shared<InstrumentsConfiguration>();
 
 static void instruments_init_qrc()
@@ -62,14 +62,14 @@ std::string InstrumentsModule::moduleName() const
 void InstrumentsModule::registerExports()
 {
     ioc()->registerExport<IInstrumentsConfiguration>(moduleName(), s_configuration);
-    ioc()->registerExport<IInstrumentsRepository>(moduleName(), m_instrumentsRepository);
+    ioc()->registerExport<IInstrumentsRepository>(moduleName(), s_instrumentsRepository);
     ioc()->registerExport<IInstrumentsReader>(moduleName(), new InstrumentsReader());
     ioc()->registerExport<ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenario());
 }
 
 void InstrumentsModule::resolveImports()
 {
-    auto ar = framework::ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    auto ar = modularity::ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<InstrumentsUiActions>());
     }
@@ -95,18 +95,18 @@ void InstrumentsModule::registerUiTypes()
     qmlRegisterUncreatableType<InstrumentsTreeItemType>("MuseScore.Instruments", 1, 0, "InstrumentsTreeItemType",
                                                         "Cannot create a ContainerType");
 
-    auto uiengine = framework::ioc()->resolve<ui::IUiEngine>(moduleName());
+    auto uiengine = modularity::ioc()->resolve<ui::IUiEngine>(moduleName());
     if (uiengine) {
         uiengine->addSourceImportPath(instruments_QML_IMPORT);
     }
 }
 
-void InstrumentsModule::onInit(const IApplication::RunMode&)
+void InstrumentsModule::onInit(const framework::IApplication::RunMode&)
 {
     s_configuration->init();
-    m_instrumentsRepository->init();
+    s_instrumentsRepository->init();
 
-    auto pr = framework::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         io::paths instrPaths = s_configuration->instrumentListPaths();
         for (const io::path& p : instrPaths) {

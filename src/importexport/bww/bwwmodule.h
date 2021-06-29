@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::bww {
-class BwwModule : public framework::IModuleSetup
+class BwwModule : public modularity::IModuleSetup
 {
 public:
 

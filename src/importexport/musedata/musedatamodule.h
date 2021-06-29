@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::musedata {
-class MuseDataModule : public framework::IModuleSetup
+class MuseDataModule : public modularity::IModuleSetup
 {
 public:
 

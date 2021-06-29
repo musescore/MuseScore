@@ -52,7 +52,7 @@
 #include "ui/iuiactionsregister.h"
 
 using namespace mu::userscores;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
 static std::shared_ptr<FileScoreController> s_fileController = std::make_shared<FileScoreController>();
@@ -123,9 +123,9 @@ void UserScoresModule::registerUiTypes()
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(userscores_QML_IMPORT);
 }
 
-void UserScoresModule::onInit(const IApplication::RunMode& mode)
+void UserScoresModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (IApplication::RunMode::Converter == mode) {
+    if (framework::IApplication::RunMode::Converter == mode) {
         return;
     }
     s_userScoresConfiguration->init();

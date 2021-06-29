@@ -33,5 +33,5 @@ std::string ActionsModule::moduleName() const
 
 void ActionsModule::registerExports()
 {
-    framework::ioc()->registerExport<IActionsDispatcher>("actions", new ActionsDispatcher());
+    modularity::ioc()->registerExport<IActionsDispatcher>("actions", new ActionsDispatcher());
 }

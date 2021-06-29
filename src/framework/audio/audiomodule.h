@@ -26,7 +26,7 @@
 #include "async/asyncable.h"
 
 namespace mu::audio {
-class AudioModule : public framework::IModuleSetup, public async::Asyncable
+class AudioModule : public modularity::IModuleSetup, public async::Asyncable
 {
 public:
     AudioModule();

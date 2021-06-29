@@ -51,7 +51,7 @@
 
 #include "log.h"
 
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::audio;
 
 static std::shared_ptr<AudioConfiguration> s_audioConfiguration = std::make_shared<AudioConfiguration>();

@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::fonts {
-class FontsModule : public framework::IModuleSetup
+class FontsModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

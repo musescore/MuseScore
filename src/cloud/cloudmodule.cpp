@@ -31,7 +31,7 @@
 #include "view/accountmodel.h"
 
 using namespace mu::cloud;
-using namespace mu::framework;
+using namespace mu::modularity;
 
 static std::shared_ptr<CloudConfiguration> s_cloudConfiguration = std::make_shared<CloudConfiguration>();
 static std::shared_ptr<CloudService> s_cloudService = std::make_shared<CloudService>();
@@ -62,12 +62,12 @@ void CloudModule::registerUiTypes()
 {
     qmlRegisterType<AccountModel>("MuseScore.Cloud", 1, 0, "AccountModel");
 
-    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(cloud_QML_IMPORT);
+    modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(cloud_QML_IMPORT);
 }
 
-void CloudModule::onInit(const IApplication::RunMode& mode)
+void CloudModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (mode != IApplication::RunMode::Editor) {
+    if (mode != framework::IApplication::RunMode::Editor) {
         return;
     }
 

@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::capella {
-class CapellaModule : public framework::IModuleSetup
+class CapellaModule : public modularity::IModuleSetup
 {
 public:
 

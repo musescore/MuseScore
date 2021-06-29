@@ -24,7 +24,6 @@
 #include "translation.h"
 
 using namespace mu::inspector;
-using namespace mu::framework;
 
 GlissandoPlaybackModel::GlissandoPlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)

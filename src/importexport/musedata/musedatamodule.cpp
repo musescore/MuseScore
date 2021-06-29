@@ -37,7 +37,7 @@ std::string MuseDataModule::moduleName() const
 
 void MuseDataModule::registerResources()
 {
-    auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "md" }, std::make_shared<MuseDataReader>());
     }

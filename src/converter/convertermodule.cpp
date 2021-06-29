@@ -33,5 +33,5 @@ std::string ConverterModule::moduleName() const
 
 void ConverterModule::registerExports()
 {
-    framework::ioc()->registerExport<IConverterController>(moduleName(), new ConverterController());
+    modularity::ioc()->registerExport<IConverterController>(moduleName(), new ConverterController());
 }

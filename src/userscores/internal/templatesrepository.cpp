@@ -29,7 +29,6 @@
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::userscores;
-using namespace mu::framework;
 
 RetVal<Templates> TemplatesRepository::templates() const
 {

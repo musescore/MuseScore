@@ -66,7 +66,7 @@
 #include "view/internal/undoredomodel.h"
 
 using namespace mu::notation;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 using namespace mu::actions;
 using namespace mu::uicomponents;
@@ -183,7 +183,7 @@ void NotationModule::registerUiTypes()
     }
 }
 
-void NotationModule::onInit(const IApplication::RunMode&)
+void NotationModule::onInit(const framework::IApplication::RunMode&)
 {
     s_configuration->init();
     s_actionController->init();

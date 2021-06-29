@@ -131,7 +131,7 @@ void ScoreFont::initScoreFonts()
         Sym::oldNameToSymIdHash.insert(i.name, SymId(i.symId));
     }
 
-    auto fprovider = mu::framework::ioc()->resolve<mu::draw::IFontProvider>("score");
+    auto fprovider = mu::modularity::ioc()->resolve<mu::draw::IFontProvider>("score");
     fprovider->insertSubstitution("Leland Text",    "Bravura Text");
     fprovider->insertSubstitution("Bravura Text",   "Leland Text");
     fprovider->insertSubstitution("MScore Text",    "Leland Text");
