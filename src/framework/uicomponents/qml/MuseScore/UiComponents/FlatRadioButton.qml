@@ -62,8 +62,8 @@ RadioDelegate {
         anchors.fill: parent
         anchors.margins: navCtrl.active ? 1 : 0
 
-        border.width: navCtrl.active ? 2 : 0
-        border.color: ui.theme.focusColor
+        border.width: navCtrl.active ? 2 : ui.theme.borderWidth
+        border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.borderColor
 
         color: normalStateColor
         opacity: ui.theme.buttonOpacityNormal

@@ -29,6 +29,9 @@ FocusScope {
     property alias contentItem: contentItemContaner
     property alias background: focusRectItem
 
+    property int itemBorderWidth: 0
+    property color itemBorderColor: ui.theme.focusColor
+
     property alias mouseArea: mouseAreaItem
     property alias pressAndHoldInterval: mouseAreaItem.pressAndHoldInterval
 
@@ -63,8 +66,8 @@ FocusScope {
     Rectangle {
         id: focusRectItem
         anchors.fill: parent
-        border.color: ui.theme.focusColor
-        border.width: keynavItem.active ? 2 : 0
+        border.color: keynavItem.active ? ui.theme.focusColor : root.itemBorderColor
+        border.width: keynavItem.active ? 2 : root.itemBorderWidth
     }
 
     MouseArea {

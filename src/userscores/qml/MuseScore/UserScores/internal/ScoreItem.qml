@@ -110,6 +110,16 @@ FocusScope {
 
             states: [
                 State {
+                    name: "NORMAL"
+                    when: !mouseArea.containsMouse && !mouseArea.pressed
+
+                    PropertyChanges {
+                        target: scoreRect
+                        borderWidth: ui.theme.borderWidth
+                    }
+                },
+
+                State {
                     name: "HOVERED"
                     when: mouseArea.containsMouse && !mouseArea.pressed
 
