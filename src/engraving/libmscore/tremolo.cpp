@@ -33,6 +33,7 @@
 #include "xml.h"
 
 #include "draw/transform.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -112,6 +113,7 @@ qreal Tremolo::minHeight() const
 void Tremolo::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     if (isBuzzRoll()) {
         painter->setPen(curColor());
         drawSymbol(SymId::buzzRoll, painter);
@@ -123,7 +125,7 @@ void Tremolo::draw(mu::draw::Painter* painter) const
     // for palette
     if (!parent() && !twoNotes()) {
         qreal x = 0.0;     // bbox().width() * .25;
-        QPen pen(curColor(), point(score()->styleS(Sid::stemWidth)));
+        Pen pen(curColor(), point(score()->styleS(Sid::stemWidth)));
         painter->setPen(pen);
         const qreal sp = spatium();
         if (isBuzzRoll()) {

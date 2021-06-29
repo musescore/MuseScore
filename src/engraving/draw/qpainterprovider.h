@@ -55,9 +55,9 @@ public:
     void setFont(const Font& font) override;
     const Font& font() const override;
 
-    void setPen(const QPen& pen) override;
+    void setPen(const Pen& pen) override;
     void setNoPen() override;
-    const QPen& pen() const override;
+    const Pen& pen() const override;
 
     void setBrush(const QBrush& brush) override;
     const QBrush& brush() const override;
@@ -84,6 +84,7 @@ public:
 private:
     QPainter* m_painter = nullptr;
     Font m_font;
+    Pen m_pen;
     bool m_overship = false;
     DrawObjectsLogger* m_drawObjectsLogger = nullptr;
 

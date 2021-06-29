@@ -30,6 +30,7 @@
 #include "tie.h"
 #include "chord.h"
 #include "page.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -392,6 +393,7 @@ void SlurTieSegment::read(XmlReader& e)
 
 void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
+    using namespace mu::draw;
     PolygonF polygon(7);
     polygon[0] = PointF(ed.grip[int(Grip::START)].center());
     polygon[1] = PointF(ed.grip[int(Grip::BEZIER1)].center());
@@ -400,10 +402,10 @@ void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed)
     polygon[4] = PointF(ed.grip[int(Grip::END)].center());
     polygon[5] = PointF(ed.grip[int(Grip::DRAG)].center());
     polygon[6] = PointF(ed.grip[int(Grip::START)].center());
-    p->setPen(QPen(MScore::frameMarginColor, 0.0));
+    p->setPen(Pen(MScore::frameMarginColor, 0.0));
     p->drawPolyline(polygon);
 
-    p->setPen(QPen(MScore::defaultColor, 0.0));
+    p->setPen(Pen(MScore::defaultColor, 0.0));
     for (int i = 0; i < ed.grips; ++i) {
         // This must be done with an if-else statement rather than a ternary operator.
         // This is because there are two setBrush methods that take different types

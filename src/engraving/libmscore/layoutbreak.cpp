@@ -120,6 +120,7 @@ void LayoutBreak::read(XmlReader& e)
 void LayoutBreak::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }
@@ -137,8 +138,8 @@ void LayoutBreak::draw(mu::draw::Painter* painter) const
 
     painter->fillPath(stroke, selected() ? MScore::selectColor[0] : MScore::layoutBreakColor);
 
-    painter->setPen(QPen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
-                         lw, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
+    painter->setPen(Pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
+                         lw, SolidLine, SquareCap, MiterJoin));
     painter->setBrush(Qt::NoBrush);
     painter->drawPath(path2);
 }

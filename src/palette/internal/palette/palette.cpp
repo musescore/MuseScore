@@ -72,6 +72,8 @@
 
 #include "../palette_config.h"
 
+#include "draw/pen.h"
+
 using namespace mu;
 using namespace mu::framework;
 using namespace mu::palette;
@@ -1040,7 +1042,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
     //
     // draw symbols
     //
-    QPen pen(configuration()->elementsColor());
+    Pen pen(configuration()->elementsColor());
     pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * magS);
 
     for (int idx = 0; idx < ccp().size(); ++idx) {
@@ -1143,7 +1145,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
             color = palette().color(QPalette::Normal, QPalette::HighlightedText);
         }
 
-        painter.setPen(QPen(color));
+        painter.setPen(Pen(color));
         el->scanElements(&painter, paintPaletteElement);
         painter.restore();
     }
@@ -1204,7 +1206,7 @@ QPixmap Palette::pixmap(int paletteIdx) const
         color = palette().color(QPalette::Normal, QPalette::Text);
     }
 
-    painter.setPen(QPen(color));
+    painter.setPen(Pen(color));
     element->scanElements(&painter, paintPaletteElement);
 
     element->setPos(pos);

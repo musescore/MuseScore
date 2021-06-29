@@ -230,6 +230,7 @@ void Arpeggio::layout()
 void Arpeggio::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     if (_hidden) {
         return;
     }
@@ -239,9 +240,9 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     qreal y1 = -_userLen1;
     qreal y2 = _height + _userLen2;
 
-    painter->setPen(QPen(curColor(),
+    painter->setPen(Pen(curColor(),
                          score()->styleS(Sid::ArpeggioLineWidth).val() * _spatium,
-                         Qt::SolidLine, Qt::RoundCap));
+                         SolidLine, RoundCap));
 
     painter->save();
     switch (arpeggioType()) {

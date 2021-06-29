@@ -40,6 +40,7 @@
 #include "xml.h"
 
 #include "draw/fontmetrics.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -1530,6 +1531,7 @@ qreal Harmony::xShapeOffset() const
 void Harmony::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     // painter->setPen(curColor());
     if (textList.empty()) {
         TextBase::draw(painter);
@@ -1538,8 +1540,8 @@ void Harmony::draw(mu::draw::Painter* painter) const
     if (hasFrame()) {
         if (frameWidth().val() != 0.0) {
             QColor color = frameColor();
-            QPen pen(color, frameWidth().val() * spatium(), Qt::SolidLine,
-                     Qt::SquareCap, Qt::MiterJoin);
+            Pen pen(color, frameWidth().val() * spatium(), SolidLine,
+                     SquareCap, MiterJoin);
             painter->setPen(pen);
         } else {
             painter->setNoPen();

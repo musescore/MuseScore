@@ -130,7 +130,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     RectF background = RectF::fromQRectF(imatrix.mapRect(QRectF(0, 0, ww, wh)));
     painter.fillRect(background, Qt::white);
 
-    QPen pen(Qt::black);
+    Pen pen(Qt::black);
     pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * gscore->spatium());
     painter.setPen(pen);
 

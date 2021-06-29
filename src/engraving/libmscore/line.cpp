@@ -1358,7 +1358,7 @@ bool SLine::readProperties(XmlReader& e)
     } else if (tag == "lineWidth") {
         _lineWidth = e.readDouble() * spatium();
     } else if (tag == "lineStyle") {
-        _lineStyle = Qt::PenStyle(e.readInt());
+        _lineStyle = mu::draw::PenStyle(e.readInt());
     } else if (tag == "dashLineLength") {
         _dashLineLen = e.readDouble();
     } else if (tag == "dashGapLength") {
@@ -1474,7 +1474,7 @@ bool SLine::setProperty(Pid id, const QVariant& v)
         _lineWidth = v.toReal();
         break;
     case Pid::LINE_STYLE:
-        _lineStyle = Qt::PenStyle(v.toInt());
+        _lineStyle = mu::draw::PenStyle(v.toInt());
         break;
     case Pid::DASH_LINE_LEN:
         setDashLineLen(v.toDouble());

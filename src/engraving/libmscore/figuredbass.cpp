@@ -24,6 +24,7 @@
 #include "score.h"
 #include "note.h"
 #include "measure.h"
+#include "draw/pen.h"
 #include "system.h"
 #include "segment.h"
 #include "chord.h"
@@ -617,6 +618,7 @@ void FiguredBassItem::layout()
 void FiguredBassItem::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     int font = 0;
     qreal _spatium = spatium();
     // set font from general style
@@ -628,7 +630,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
 
     painter->setFont(f);
     painter->setBrush(Qt::NoBrush);
-    QPen pen(figuredBass()->curColor(), FB_CONTLINE_THICKNESS * _spatium, Qt::SolidLine, Qt::RoundCap);
+    Pen pen(figuredBass()->curColor(), FB_CONTLINE_THICKNESS * _spatium, SolidLine, RoundCap);
     painter->setPen(pen);
     painter->drawText(bbox(), Qt::TextDontClip | Qt::AlignLeft | Qt::AlignTop, displayText());
 
@@ -1343,11 +1345,12 @@ void FiguredBass::layoutLines()
 
 void FiguredBass::draw(mu::draw::Painter* painter) const
 {
+    using namespace mu::draw;
     // if not printing, draw duration line(s)
     if (!score()->printing() && score()->showUnprintable()) {
         for (qreal len : _lineLengths) {
             if (len > 0) {
-                painter->setPen(QPen(Qt::lightGray, 3));
+                painter->setPen(Pen(Qt::lightGray, 3));
                 painter->drawLine(0.0, -2, len, -2);              // -2: 2 rast. un. above digits
             }
         }

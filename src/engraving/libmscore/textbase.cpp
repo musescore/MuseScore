@@ -46,6 +46,7 @@
 
 #include "draw/fontmetrics.h"
 #include "draw/fontcompat.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -3281,13 +3282,14 @@ TextCursor* TextBase::cursorFromEditData(const EditData& ed)
 void TextBase::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     if (hasFrame()) {
         qreal baseSpatium = MScore::baseStyle().value(Sid::spatium).toDouble();
         if (frameWidth().val() != 0.0) {
             QColor fColor = curColor(visible(), frameColor());
             qreal frameWidthVal = frameWidth().val() * (sizeIsSpatiumDependent() ? spatium() : baseSpatium);
 
-            QPen pen(fColor, frameWidthVal, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
+            Pen pen(fColor, frameWidthVal, SolidLine, SquareCap, MiterJoin);
             painter->setPen(pen);
         } else {
             painter->setNoPen();
@@ -3320,6 +3322,7 @@ void TextBase::draw(mu::draw::Painter* painter) const
 
 void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
+    using namespace mu::draw;
     PointF pos(canvasPos());
     p->translate(pos);
 
@@ -3360,8 +3363,8 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
         }
     }
     p->setBrush(curColor());
-    QPen pen(curColor());
-    pen.setJoinStyle(Qt::MiterJoin);
+    Pen pen(curColor());
+    pen.setJoinStyle(MiterJoin);
     p->setPen(pen);
 
     // Don't draw cursor if there is a selection
@@ -3371,7 +3374,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
 
     QMatrix matrix = p->worldTransform().toAffine();
     p->translate(-pos);
-    p->setPen(QPen(QBrush(Qt::lightGray), 4.0 / matrix.m11()));    // 4 pixel pen size
+    p->setPen(Pen(QBrush(Qt::lightGray), 4.0 / matrix.m11()));    // 4 pixel pen size
     p->setBrush(Qt::NoBrush);
 
     qreal m = spatium();
@@ -3379,7 +3382,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
 //      qDebug("%f %f %f %f\n", r.x(), r.y(), r.width(), r.height());
 
     p->drawRect(r);
-    pen = QPen(MScore::defaultColor, 0.0);
+    pen = Pen(MScore::defaultColor, 0.0);
 }
 
 //---------------------------------------------------------

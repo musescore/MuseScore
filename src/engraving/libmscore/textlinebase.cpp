@@ -33,6 +33,7 @@
 #include "text.h"
 #include "mscore.h"
 #include "staff.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -86,6 +87,7 @@ void TextLineBaseSegment::setSelected(bool f)
 void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     TextLineBase* tl   = textLineBase();
 
     if (!_text->empty()) {
@@ -121,8 +123,8 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
     if (staff()) {
         textlineLineWidth *= mag();
     }
-    QPen pen(color, textlineLineWidth, tl->lineStyle());
-    QPen solidPen(color, textlineLineWidth, Qt::SolidLine);
+    Pen pen(color, textlineLineWidth, tl->lineStyle());
+    Pen solidPen(color, textlineLineWidth, SolidLine);
 
     //Replace generic Qt dash patterns with improved equivalents to show true dots
     QVector<qreal> dotted        = { 0.01, 1.99 };   // 0.01 for cap dots. tighter than default Qt Dotline (would be { 0.01, 2.99 }).
@@ -132,20 +134,20 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
     QVector<qreal> customDashes  = { tl->dashLineLen(), tl->dashGapLen() };
 
     switch (tl->lineStyle()) {
-    case Qt::DashLine:
+    case DashLine:
         pen.setDashPattern(dashed);
         break;
-    case Qt::DotLine:
+    case DotLine:
         pen.setDashPattern(dotted);
-        pen.setCapStyle(Qt::RoundCap);         // round dots
+        pen.setCapStyle(RoundCap);         // round dots
         break;
-    case Qt::DashDotLine:
+    case DashDotLine:
         pen.setDashPattern(dashDotted);
         break;
-    case Qt::DashDotDotLine:
+    case DashDotDotLine:
         pen.setDashPattern(dashDotDotted);
         break;
-    case Qt::CustomDashLine:
+    case CustomDashLine:
         pen.setDashPattern(customDashes);
         break;
     default:
@@ -172,7 +174,7 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
         }
         //draw rest of line as regular
         //calculate new gap
-        if (tl->lineStyle() == Qt::CustomDashLine) {
+        if (tl->lineStyle() == CustomDashLine) {
             qreal adjustedLineLength = lineLength / textlineLineWidth;
             qreal dash = tl->dashLineLen();
             qreal gap = tl->dashGapLen();

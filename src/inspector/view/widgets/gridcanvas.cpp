@@ -26,6 +26,8 @@
 #include <QPalette>
 #include <cmath>
 
+#include "draw/pen.h"
+
 using namespace mu::inspector;
 using namespace mu::ui;
 

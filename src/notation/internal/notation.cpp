@@ -42,6 +42,7 @@
 #include "notationparts.h"
 #include "notationtypes.h"
 #include "scoreorderconverter.h"
+#include "draw/pen.h"
 
 using namespace mu::notation;
 
@@ -319,10 +320,11 @@ void Notation::paintPages(draw::Painter* painter, const RectF& frameRect, const 
 
 void Notation::paintPageBorder(draw::Painter* painter, const Ms::Page* page) const
 {
+    using namespace mu::draw;
     RectF boundingRect(page->canvasBoundingRect());
 
     painter->setBrush(Qt::NoBrush);
-    painter->setPen(QPen(configuration()->borderColor(), configuration()->borderWidth()));
+    painter->setPen(Pen(configuration()->borderColor(), configuration()->borderWidth()));
     painter->drawRect(boundingRect);
 
     if (!score()->showPageborders()) {

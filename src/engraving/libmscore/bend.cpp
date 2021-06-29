@@ -27,6 +27,7 @@
 #include "chord.h"
 #include "note.h"
 #include "xml.h"
+#include "draw/pen.h"
 
 #include "draw/fontmetrics.h"
 
@@ -260,10 +261,11 @@ void Bend::layout()
 void Bend::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     qreal _spatium = spatium();
     qreal _lw = _lineWidth;
 
-    QPen pen(curColor(), _lw, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    Pen pen(curColor(), _lw, SolidLine, RoundCap, RoundJoin);
     painter->setPen(pen);
     painter->setBrush(QBrush(curColor()));
 

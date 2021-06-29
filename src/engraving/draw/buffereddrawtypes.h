@@ -25,11 +25,11 @@
 #include <memory>
 #include <QPainterPath>
 #include <QBrush>
-#include <QPen>
 
 #include "geometry.h"
 #include "drawtypes.h"
 #include "font.h"
+#include "pen.h"
 
 namespace mu::draw {
 enum class DrawMode {
@@ -45,14 +45,14 @@ struct Scale {
 
 struct DrawPath {
     QPainterPath path;
-    QPen pen;
+    Pen pen;
     QBrush brush;
     DrawMode mode = DrawMode::StrokeAndFill;
 };
 
 struct DrawRect {
     RectF rect;
-    QPen pen;
+    Pen pen;
     QBrush brush;
     DrawMode mode = DrawMode::StrokeAndFill;
 };
@@ -87,7 +87,7 @@ struct DrawTiledPixmap {
 struct DrawData
 {
     struct State {
-        QPen pen;
+        Pen pen;
         QBrush brush;
         Font font;
         QTransform transform;

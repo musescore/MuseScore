@@ -89,7 +89,7 @@ static bool isEqual(const QSize& sz1, const QSize& sz2)
     return true;
 }
 
-static bool isEqual(const QPen& p1, const QPen& p2)
+static bool isEqual(const Pen& p1, const Pen& p2)
 {
     if (p1.style() != p2.style()) {
         return false;
