@@ -115,6 +115,14 @@ int AppShell::run(int argc, char** argv)
     }
 
     // ====================================================
+    // Setup modules: onAllInited
+    // ====================================================
+    globalModule.onAllInited();
+    for (mu::framework::IModuleSetup* m : m_modules) {
+        m->onAllInited();
+    }
+
+    // ====================================================
     // Setup modules: onStartApp (on next event loop)
     // ====================================================
     QMetaObject::invokeMethod(qApp, [this]() {
