@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::diagnostics {
-class DiagnosticsModule : public framework::IModuleSetup
+class DiagnosticsModule : public modularity::IModuleSetup
 {
 public:
 

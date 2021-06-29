@@ -118,7 +118,7 @@ MidiOperations::QuantValue fractionToQuantValue(const ReducedFraction& fraction)
 
 MidiOperations::QuantValue defaultQuantValueFromPreferences()
 {
-    auto conf = mu::framework::ioc()->resolve<mu::iex::midi::IMidiImportExportConfiguration>("iex_midi");
+    auto conf = mu::modularity::ioc()->resolve<mu::iex::midi::IMidiImportExportConfiguration>("iex_midi");
     int ticks = conf ? conf->midiShortestNote() : (MScore::division / 4);
     const auto fraction = ReducedFraction::fromTicks(ticks);
     MidiOperations::QuantValue quantValue = fractionToQuantValue(fraction);

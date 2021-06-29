@@ -22,7 +22,7 @@
 
 #include "modulesioc.h"
 
-using namespace mu::framework;
+using namespace mu::modularity;
 
 ModulesIoC* ModulesIoC::instance()
 {

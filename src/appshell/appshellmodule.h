@@ -26,7 +26,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::appshell {
-class AppShellModule : public framework::IModuleSetup
+class AppShellModule : public modularity::IModuleSetup
 {
 public:
     AppShellModule();

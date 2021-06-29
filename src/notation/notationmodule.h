@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::notation {
-class NotationModule : public framework::IModuleSetup
+class NotationModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

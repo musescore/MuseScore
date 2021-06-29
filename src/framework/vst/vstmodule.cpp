@@ -38,7 +38,7 @@
 #include "view/vstplugineditorview.h"
 
 using namespace mu::vst;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
 static std::shared_ptr<IVstConfiguration> s_configuration = std::make_shared<VstConfiguration>();
@@ -81,7 +81,7 @@ void VSTModule::registerUiTypes()
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(vst_QML_IMPORT);
 }
 
-void VSTModule::onInit(const IApplication::RunMode& mode)
+void VSTModule::onInit(const framework::IApplication::RunMode& mode)
 {
     if (framework::IApplication::RunMode::Editor != mode) {
         return;

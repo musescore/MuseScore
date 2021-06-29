@@ -41,7 +41,7 @@ class AppShell
 public:
     AppShell();
 
-    void addModule(mu::framework::IModuleSetup* module);
+    void addModule(modularity::IModuleSetup* module);
 
     int run(int argc, char** argv);
 
@@ -49,7 +49,7 @@ private:
 
     int processConverter(const CommandLineController::ConverterTask& task);
 
-    QList<mu::framework::IModuleSetup*> m_modules;
+    QList<modularity::IModuleSetup*> m_modules;
 };
 }
 

@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::imagesexport {
-class ImagesExportModule : public framework::IModuleSetup
+class ImagesExportModule : public modularity::IModuleSetup
 {
 public:
 

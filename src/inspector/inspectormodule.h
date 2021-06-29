@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::inspector {
-class InspectorModule : public mu::framework::IModuleSetup
+class InspectorModule : public modularity::IModuleSetup
 {
 public:
     InspectorModule() = default;

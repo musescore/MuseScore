@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_FRAMEWORK_IMODULESETUP_H
-#define MU_FRAMEWORK_IMODULESETUP_H
+#ifndef MU_MODULARITY_IMODULESETUP_H
+#define MU_MODULARITY_IMODULESETUP_H
 
 #include <string>
 #include "../iapplication.h"
 
-namespace mu::framework {
+namespace mu::modularity {
 class IModuleSetup
 {
 public:
@@ -49,4 +49,4 @@ public:
 };
 }
 
-#endif // MU_FRAMEWORK_IMODULESETUP_H
+#endif // MU_MODULARITY_IMODULESETUP_H

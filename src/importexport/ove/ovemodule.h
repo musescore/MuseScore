@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::ove {
-class OveModule : public framework::IModuleSetup
+class OveModule : public modularity::IModuleSetup
 {
 public:
 

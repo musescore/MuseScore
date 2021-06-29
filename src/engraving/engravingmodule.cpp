@@ -32,7 +32,7 @@
 #include "notation/inotationconfiguration.h"
 
 using namespace mu::engraving;
-using namespace mu::framework;
+using namespace mu::modularity;
 
 std::string EngravingModule::moduleName() const
 {

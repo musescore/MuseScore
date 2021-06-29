@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_FRAMEWORK_MODULESIOC_H
-#define MU_FRAMEWORK_MODULESIOC_H
+#ifndef MU_MODULARITY_MODULESIOC_H
+#define MU_MODULARITY_MODULESIOC_H
 
 #include <memory>
 #include <map>
@@ -30,8 +30,7 @@
 #include <iostream>
 #include "imoduleexport.h"
 
-namespace mu {
-namespace framework {
+namespace mu::modularity {
 class ModulesIoC
 {
 public:
@@ -178,6 +177,5 @@ struct Creator : MODULE_EXPORT_CREATOR
     std::shared_ptr<IModuleExportInterface> create() { return std::make_shared<T>(); }
 };
 }
-}
 
-#endif // MU_FRAMEWORK_MODULESIOC_H
+#endif // MU_MODULARITY_MODULESIOC_H

@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::converter {
-class ConverterModule : public framework::IModuleSetup
+class ConverterModule : public modularity::IModuleSetup
 {
 public:
 

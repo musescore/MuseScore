@@ -104,7 +104,7 @@ static Palette* toPalette(PalettePanel* pp)
 
 void populateIconPalette(Palette* p, const IconAction* a)
 {
-    auto adapter = mu::framework::ioc()->resolve<mu::palette::IPaletteAdapter>("palette");
+    auto adapter = mu::modularity::ioc()->resolve<mu::palette::IPaletteAdapter>("palette");
     while (a->subtype != IconType::NONE) {
         auto ik = makeElement<Icon>(Ms::gscore);
         ik->setIconType(a->subtype);
@@ -421,7 +421,7 @@ PaletteTree* PaletteCreator::newDefaultPaletteTree()
 
 static void populateIconPalettePanel(PalettePanel* p, const IconAction* a)
 {
-    auto adapter = mu::framework::ioc()->resolve<mu::palette::IPaletteAdapter>("palette");
+    auto adapter = mu::modularity::ioc()->resolve<mu::palette::IPaletteAdapter>("palette");
     while (a->subtype != IconType::NONE) {
         auto ik = makeElement<Icon>(gscore);
         ik->setIconType(a->subtype);

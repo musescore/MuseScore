@@ -61,16 +61,16 @@ void Environment::setup()
 
     m_dependencyModules.push_back(new mu::system::SystemModule());
 
-    for (mu::framework::IModuleSetup* m : m_dependencyModules) {
+    for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
         m->registerResources();
     }
 
-    for (mu::framework::IModuleSetup* m : m_dependencyModules) {
+    for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
         m->registerExports();
     }
 
     globalModule.resolveImports();
-    for (mu::framework::IModuleSetup* m : m_dependencyModules) {
+    for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
         m->registerUiTypes();
         m->resolveImports();
     }
@@ -79,17 +79,17 @@ void Environment::setup()
         m_preInit();
     }
 
-    for (mu::framework::IModuleSetup* m : m_dependencyModules) {
+    for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
         m->onInit(runMode);
     }
 
     globalModule.onAllInited();
-    for (mu::framework::IModuleSetup* m : m_dependencyModules) {
+    for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
         m->onAllInited();
     }
 
     globalModule.onStartApp();
-    for (mu::framework::IModuleSetup* m : m_dependencyModules) {
+    for (mu::modularity::IModuleSetup* m : m_dependencyModules) {
         m->onStartApp();
     }
 

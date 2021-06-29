@@ -70,10 +70,10 @@ std::string MidiModule::moduleName() const
 
 void MidiModule::registerExports()
 {
-    framework::ioc()->registerExport<IMidiConfiguration>(moduleName(), s_configuration);
-    framework::ioc()->registerExport<IMidiPortDataSender>(moduleName(), new MidiPortDataSender());
-    framework::ioc()->registerExport<IMidiOutPort>(moduleName(), midiOutPort);
-    framework::ioc()->registerExport<IMidiInPort>(moduleName(), midiInPort);
+    modularity::ioc()->registerExport<IMidiConfiguration>(moduleName(), s_configuration);
+    modularity::ioc()->registerExport<IMidiPortDataSender>(moduleName(), new MidiPortDataSender());
+    modularity::ioc()->registerExport<IMidiOutPort>(moduleName(), midiOutPort);
+    modularity::ioc()->registerExport<IMidiInPort>(moduleName(), midiInPort);
 }
 
 void MidiModule::registerUiTypes()

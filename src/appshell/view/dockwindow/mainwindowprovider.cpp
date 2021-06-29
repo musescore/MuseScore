@@ -55,7 +55,7 @@ void MainWindowProvider::setWindow(QWindow* window)
 
 void MainWindowProvider::init()
 {
-    framework::ioc()->registerExport<ui::IMainWindow>("dock", this);
+    modularity::ioc()->registerExport<ui::IMainWindow>("dock", this);
 }
 
 QString MainWindowProvider::filePath() const
