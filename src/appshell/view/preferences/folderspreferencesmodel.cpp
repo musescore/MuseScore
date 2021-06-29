@@ -81,9 +81,9 @@ void FoldersPreferencesModel::load()
     beginResetModel();
 
     m_folders = {
-        { FolderType::Scores, qtrc("appshell", "Scores"), scoresPath() },
-        { FolderType::Styles, qtrc("appshell", "Styles"), stylesPath() },
-        { FolderType::Templates, qtrc("appshell", "Templates"), templatesPath() },
+        { FolderType::Scores, qtrc("appshell", "Scores"), userScoresConfiguration()->userScoresPath().toQString() },
+        { FolderType::Styles, qtrc("appshell", "Styles"), notationConfiguration()->userStylesPath().toQString() },
+        { FolderType::Templates, qtrc("appshell", "Templates"), userScoresConfiguration()->userTemplatesPath().toQString() },
         { FolderType::Plugins, qtrc("appshell", "Plugins"), pluginsPath() },
         { FolderType::SoundFonts, qtrc("appshell", "SoundFonts"), "" }, // todo: need implement
         { FolderType::Images, qtrc("appshell", "Images"), "" }, // todo: need implement
@@ -101,7 +101,7 @@ void FoldersPreferencesModel::setupConnections()
         setPath(FolderType::Scores, path.toQString());
     });
 
-    notationConfiguration()->stylesPath().ch.onReceive(this, [this](const io::path& path) {
+    notationConfiguration()->userStylesPathChanged().onReceive(this, [this](const io::path& path) {
         setPath(FolderType::Styles, path.toQString());
     });
 
@@ -127,7 +127,7 @@ void FoldersPreferencesModel::savePath(FoldersPreferencesModel::FolderType folde
         userScoresConfiguration()->setUserScoresPath(folderPath);
         break;
     case FolderType::Styles:
-        notationConfiguration()->setStylesPath(folderPath);
+        notationConfiguration()->setUserStylesPath(folderPath);
         break;
     case FolderType::Templates:
         userScoresConfiguration()->setUserTemplatesPath(folderPath);
@@ -145,21 +145,6 @@ void FoldersPreferencesModel::savePath(FoldersPreferencesModel::FolderType folde
         NOT_IMPLEMENTED;
         break;
     }
-}
-
-QString FoldersPreferencesModel::scoresPath() const
-{
-    return userScoresConfiguration()->userScoresPath().toQString();
-}
-
-QString FoldersPreferencesModel::stylesPath() const
-{
-    return notationConfiguration()->stylesPath().val.toQString();
-}
-
-QString FoldersPreferencesModel::templatesPath() const
-{
-    return userScoresConfiguration()->userTemplatesPath().toQString();
 }
 
 QString FoldersPreferencesModel::pluginsPath() const

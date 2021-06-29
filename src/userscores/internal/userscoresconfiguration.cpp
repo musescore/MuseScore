@@ -41,15 +41,15 @@ const QString UserScoresConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
 
 void UserScoresConfiguration::init()
 {
-    settings()->setDefaultValue(USER_TEMPLATES_PATH, Val((globalConfiguration()->userDataPath() + "/Templates").toStdString()));
+    settings()->setDefaultValue(USER_TEMPLATES_PATH, Val(globalConfiguration()->userDataPath() + "/Templates"));
     settings()->valueChanged(USER_TEMPLATES_PATH).onReceive(nullptr, [this](const Val& val) {
-        m_userTemplatesPathChanged.send(val.toString());
+        m_userTemplatesPathChanged.send(val.toPath());
     });
     fileSystem()->makePath(userTemplatesPath());
 
-    settings()->setDefaultValue(USER_SCORES_PATH, Val((globalConfiguration()->userDataPath() + "/Scores").toStdString()));
+    settings()->setDefaultValue(USER_SCORES_PATH, Val(globalConfiguration()->userDataPath() + "/Scores"));
     settings()->valueChanged(USER_SCORES_PATH).onReceive(nullptr, [this](const Val& val) {
-        m_userScoresPathChanged.send(val.toString());
+        m_userScoresPathChanged.send(val.toPath());
     });
     fileSystem()->makePath(userScoresPath());
 
@@ -144,12 +144,12 @@ io::paths UserScoresConfiguration::availableTemplatesPaths() const
 
 io::path UserScoresConfiguration::userTemplatesPath() const
 {
-    return settings()->value(USER_TEMPLATES_PATH).toString();
+    return settings()->value(USER_TEMPLATES_PATH).toPath();
 }
 
 void UserScoresConfiguration::setUserTemplatesPath(const io::path& path)
 {
-    settings()->setSharedValue(USER_TEMPLATES_PATH, Val(path.toStdString()));
+    settings()->setSharedValue(USER_TEMPLATES_PATH, Val(path));
 }
 
 async::Channel<io::path> UserScoresConfiguration::userTemplatesPathChanged() const
@@ -159,12 +159,12 @@ async::Channel<io::path> UserScoresConfiguration::userTemplatesPathChanged() con
 
 io::path UserScoresConfiguration::userScoresPath() const
 {
-    return settings()->value(USER_SCORES_PATH).toString();
+    return settings()->value(USER_SCORES_PATH).toPath();
 }
 
 void UserScoresConfiguration::setUserScoresPath(const io::path& path)
 {
-    settings()->setSharedValue(USER_SCORES_PATH, Val(path.toStdString()));
+    settings()->setSharedValue(USER_SCORES_PATH, Val(path));
 }
 
 async::Channel<io::path> UserScoresConfiguration::userScoresPathChanged() const
