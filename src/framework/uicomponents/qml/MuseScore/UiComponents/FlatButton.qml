@@ -101,7 +101,7 @@ FocusScope {
         radius: 3
 
         border.width: navCtrl.active ? 2 : ui.theme.borderWidth
-        border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.borderColor
+        border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
     }
 
     Loader {

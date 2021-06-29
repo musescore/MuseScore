@@ -47,7 +47,7 @@ Column {
                 { textRole: "Accent Color:", colorRole: ui.theme.accentColor},
                 { textRole: "Text and Icons:", colorRole: ui.theme.fontPrimaryColor},
                 { textRole: "Disabled Text:", colorRole: "#000000"},
-                { textRole: "Stroke:", colorRole: ui.theme.strokeColor}
+                { textRole: "Border Color:", colorRole: ui.theme.strokeColor}
             ]
 
             delegate: Row {

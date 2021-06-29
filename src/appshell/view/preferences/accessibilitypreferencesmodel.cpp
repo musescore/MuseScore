@@ -69,9 +69,8 @@ void AccessibilityPreferencesModel::setNewColor(const QColor& newColor, const QS
         uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::FONT_PRIMARY_COLOR, Val(newColor));
     } else if (propertyName.toStdString() == "Disabled Text:") {
         return;
-    } else if (propertyName.toStdString() == "Stroke:") {
+    } else if (propertyName.toStdString() == "Border Color:") {
         uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::STROKE_COLOR, Val(newColor));
-        //uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::BUTTON_BORDER_COLOR, Val(newColor));
     }
     emit themesChanged();
 }
