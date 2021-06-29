@@ -22,8 +22,6 @@
 
 #include "cloudservice.h"
 
-#include "log.h"
-
 #include <QOAuth2AuthorizationCodeFlow>
 #include <QOAuthHttpServerReplyHandler>
 #include <QJsonDocument>
@@ -32,6 +30,10 @@
 #include <QBuffer>
 #include <QHttpMultiPart>
 #include <QRandomGenerator>
+
+#include "multiinstances/resourcelockguard.h"
+
+#include "log.h"
 
 using namespace mu::cloud;
 using namespace mu::network;
@@ -88,6 +90,8 @@ bool CloudService::readTokens()
 {
     TRACEFUNC;
 
+    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "CLOUD_ACCESS_TOKEN");
+
     io::path tokensPath = configuration()->tokensFilePath();
     if (!fileSystem()->exists(tokensPath)) {
         return false;
@@ -111,6 +115,8 @@ bool CloudService::readTokens()
 bool CloudService::saveTokens()
 {
     TRACEFUNC;
+
+    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "CLOUD_ACCESS_TOKEN");
 
     QJsonObject tokensObject;
     tokensObject[ACCESS_TOKEN_KEY] = m_accessToken;
@@ -263,6 +269,8 @@ void CloudService::signOut()
             LOGE() << ret.toString();
         }
     }
+
+    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "CLOUD_ACCESS_TOKEN");
 
     Ret ret = fileSystem()->remove(configuration()->tokensFilePath());
     if (!ret) {

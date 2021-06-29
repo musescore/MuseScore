@@ -34,6 +34,7 @@ class QOAuthHttpServerReplyHandler;
 #include "icloudconfiguration.h"
 #include "system/ifilesystem.h"
 #include "network/inetworkmanagercreator.h"
+#include "multiinstances/imultiinstancesprovider.h"
 #include "iinteractive.h"
 
 namespace mu::cloud {
@@ -45,6 +46,7 @@ class CloudService : public QObject, public IAuthorizationService, public IUploa
     INJECT(cloud, system::IFileSystem, fileSystem)
     INJECT(cloud, network::INetworkManagerCreator, networkManagerCreator)
     INJECT(cloud, framework::IInteractive, interactive)
+    INJECT(cloud, mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     CloudService(QObject* parent = nullptr);
