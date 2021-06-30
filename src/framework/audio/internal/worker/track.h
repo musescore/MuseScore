@@ -29,9 +29,9 @@ public:
     bool isValid() const
     {
         return id != -1
-                && type != Undefined
-                && audioSource
-                && mixerChannel;
+               && type != Undefined
+               && audioSource
+               && mixerChannel;
     }
 
     virtual AudioInputParams inputParams() const = 0;

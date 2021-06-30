@@ -49,7 +49,8 @@ IAudioSourcePtr Mixer::mixedSource()
     return shared_from_this();
 }
 
-RetVal<IMixerChannelPtr> Mixer::addChannel(IAudioSourcePtr source, const AudioOutputParams& params, async::Channel<AudioOutputParams> paramsChanged)
+RetVal<IMixerChannelPtr> Mixer::addChannel(IAudioSourcePtr source, const AudioOutputParams& params,
+                                           async::Channel<AudioOutputParams> paramsChanged)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -190,7 +191,6 @@ void Mixer::mixOutput(float* outBuffer, float* inBuffer, unsigned int samplesCou
     }
 
     for (audioch_t audioChNum = 0; audioChNum < audioChannelsCount(); ++audioChNum) {
-
         float squaredSum = 0.f;
 
         gain_t totalGain = balanceGain(m_masterParams.balance, audioChNum) * gainFromDecibels(m_masterParams.volume);

@@ -107,7 +107,7 @@ private:
     void handleBackgroundStream(const msecs_t nextMsecsNumber);
     void handleMainStream(const msecs_t nextMsecsNumber);
 
-    void findAndSendNextEvents(EventsBuffer &eventsBuffer, const midi::tick_t nextTicks);
+    void findAndSendNextEvents(EventsBuffer& eventsBuffer, const midi::tick_t nextTicks);
     bool sendEvents(const std::vector<midi::Event>& events);
     void requestNextEvents(const midi::tick_t nextTicksNumber);
 
