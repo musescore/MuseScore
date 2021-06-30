@@ -44,6 +44,7 @@ class MasterNotation : public IMasterNotation, public Notation, public std::enab
 
 public:
     explicit MasterNotation();
+    ~MasterNotation();
 
     INotationPtr notation() override;
 
@@ -89,7 +90,6 @@ private:
     Ret saveSelectionOnScore(const io::path& path = io::path());
 
     ValCh<ExcerptNotationList> m_excerpts;
-    INotationPartsPtr m_parts;
 };
 }
 
