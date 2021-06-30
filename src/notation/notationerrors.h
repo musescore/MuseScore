@@ -51,6 +51,9 @@ enum class Err {
 
     // notation
     NoScore = 1030,
+
+    //playback
+    UnableToPlaybackElement = 1040,
 };
 
 inline Ret make_ret(Err err, const io::path& filePath = "")
@@ -106,6 +109,9 @@ inline Ret make_ret(Err err, const io::path& filePath = "")
         break;
     case Err::NoScore:
         text = qtrc("notation", "No score");
+        break;
+    case Err::UnableToPlaybackElement:
+        text = qtrc("notation", "Unable to playback element");
         break;
     case Err::Undefined:
     case Err::NoError:
