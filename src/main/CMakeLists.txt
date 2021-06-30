@@ -152,6 +152,7 @@ set(LINK_LIB ${LINK_LIB}
     midi
     midi_old
     userscores
+    learn
     notation
     commonscene
     palette
