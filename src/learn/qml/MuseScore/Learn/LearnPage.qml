@@ -34,6 +34,12 @@ FocusScope {
 
     signal requestActiveFocus()
 
+    QtObject {
+        id: prv
+
+        readonly property int sideMargin: 46
+    }
+
     NavigationSection {
         id: navSec
         name: "Learn"
@@ -62,11 +68,11 @@ FocusScope {
     RowLayout {
         id: topLayout
         anchors.top: parent.top
-        anchors.topMargin: 46
+        anchors.topMargin: prv.sideMargin
         anchors.left: parent.left
-        anchors.leftMargin: 46
+        anchors.leftMargin: prv.sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: 46
+        anchors.rightMargin: prv.sideMargin
 
         spacing: 12
 
@@ -81,12 +87,13 @@ FocusScope {
         StyledTextLabel {
             id: learnLabel
 
-            font: ui.theme.titleBoldFont
             text: qsTrc("learn", "Learn")
+            font: ui.theme.titleBoldFont
+            horizontalAlignment: Text.AlignLeft
         }
 
         Item {
-            Layout.preferredWidth: topLayout.width - learnLabel.width - 24 - searchField.width
+            Layout.preferredWidth: topLayout.width - learnLabel.width - searchField.width - topLayout.spacing * 2
             Layout.fillHeight: true
         }
 
@@ -108,10 +115,12 @@ FocusScope {
         anchors.top: topLayout.bottom
         anchors.topMargin: 36
         anchors.left: parent.left
-        anchors.leftMargin: 24
+        anchors.leftMargin: prv.sideMargin - itemSideMargin
 
         contentHeight: 32
         spacing: 0
+
+        readonly property int itemSideMargin: 22
 
         function pageIndex(pageName) {
             switch (pageName) {
@@ -143,7 +152,7 @@ FocusScope {
 
         StyledTabButton {
             text: qsTrc("learn", "Get Started")
-            sideMargin: 22
+            sideMargin: bar.itemSideMargin
             isCurrent: bar.currentIndex === 0
             backgroundColor: root.color
 
@@ -155,7 +164,7 @@ FocusScope {
 
         StyledTabButton {
             text: qsTrc("learn", "Advanced")
-            sideMargin: 22
+            sideMargin: bar.itemSideMargin
             isCurrent: bar.currentIndex === 1
             backgroundColor: root.color
 
@@ -167,7 +176,7 @@ FocusScope {
 
         StyledTabButton {
             text: qsTrc("learn", "Classes")
-            sideMargin: 22
+            sideMargin: bar.itemSideMargin
             isCurrent: bar.currentIndex === 2
             backgroundColor: root.color
 
