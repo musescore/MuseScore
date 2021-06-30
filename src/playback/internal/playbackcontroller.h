@@ -22,6 +22,8 @@
 #ifndef MU_PLAYBACK_PLAYBACKCONTROLLER_H
 #define MU_PLAYBACK_PLAYBACKCONTROLLER_H
 
+#include <unordered_map>
+
 #include "modularity/ioc.h"
 #include "retval.h"
 #include "async/asyncable.h"
