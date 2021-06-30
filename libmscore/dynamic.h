@@ -36,7 +36,7 @@ struct Dyn {
 
 // variant with ligatures, works for both emmentaler and bravura:
 
-static Dyn dynList[] = {
+static const Dyn dynList[] = {
       // dynamic:
       {  -1,  true,  "other-dynamics", "", 0 },
       {   1,  false, "pppppp", "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
