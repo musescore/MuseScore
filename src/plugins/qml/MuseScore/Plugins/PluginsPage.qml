@@ -34,6 +34,8 @@ Item {
     property string selectedCategory: ""
     property string backgroundColor: ui.theme.backgroundPrimaryColor
 
+    property int sideMargin: 46
+
     function categories() {
         return pluginsModel.categories()
     }
@@ -51,10 +53,9 @@ Item {
     }
 
     QtObject {
-        id: privateProperties
+        id: prv
 
         property var selectedPlugin: undefined
-        property int sideMargin: 133
 
         function resetSelectedPlugin() {
             selectedPlugin = undefined
@@ -94,9 +95,9 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 5
         anchors.left: parent.left
-        anchors.leftMargin: privateProperties.sideMargin
+        anchors.leftMargin: root.sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: privateProperties.sideMargin
+        anchors.rightMargin: root.sideMargin
         anchors.bottom: panel.visible ? panel.top : parent.bottom
         anchors.bottomMargin: panel.visible ? 0 : 21
 
@@ -140,7 +141,7 @@ Item {
                 model: pluginsModel
 
                 onPluginClicked: {
-                    privateProperties.selectedPlugin = plugin
+                    prv.selectedPlugin = plugin
                     panel.open()
                 }
             }
@@ -158,7 +159,7 @@ Item {
                 model: pluginsModel
 
                 onPluginClicked: {
-                    privateProperties.selectedPlugin = Object.assign({}, plugin)
+                    prv.selectedPlugin = Object.assign({}, plugin)
                     panel.open()
                 }
             }
@@ -190,7 +191,7 @@ Item {
     InstallationPanel {
         id: panel
 
-        property alias selectedPlugin: privateProperties.selectedPlugin
+        property alias selectedPlugin: prv.selectedPlugin
 
         title: Boolean(selectedPlugin) ? selectedPlugin.name : ""
         description: Boolean(selectedPlugin) ? selectedPlugin.description : ""
@@ -225,7 +226,7 @@ Item {
         }
 
         onClosed: {
-            privateProperties.resetSelectedPlugin()
+            prv.resetSelectedPlugin()
         }
     }
 }

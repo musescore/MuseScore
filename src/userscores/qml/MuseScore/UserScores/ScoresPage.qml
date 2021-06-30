@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.3
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -35,7 +36,7 @@ FocusScope {
     QtObject {
         id: prv
 
-        readonly property int sideMargin: 133
+        readonly property int sideMargin: 46
         readonly property int buttonWidth: 134
     }
 
@@ -71,17 +72,19 @@ FocusScope {
         }
     }
 
-    Item {
-        id: headerItem
+    RowLayout {
+        id: topLayout
 
         anchors.top: parent.top
-        anchors.topMargin: 66
+        anchors.topMargin: prv.sideMargin
         anchors.left: parent.left
         anchors.leftMargin: prv.sideMargin
         anchors.right: parent.right
         anchors.rightMargin: prv.sideMargin
 
         height: childrenRect.height
+
+        spacing: 12
 
         NavigationPanel {
             id: navSearchPanel
@@ -94,19 +97,20 @@ FocusScope {
         StyledTextLabel {
             id: pageTitle
 
-            anchors.left: parent.left
-            anchors.right: searchField.left
-            anchors.rightMargin: 12
-
             text: qsTrc("userscores", "Scores")
             font: ui.theme.titleBoldFont
             horizontalAlignment: Text.AlignLeft
         }
 
+        Item {
+            Layout.preferredWidth: topLayout.width - pageTitle.width - searchField.width - topLayout.spacing * 2
+            Layout.fillHeight: true
+        }
+
         SearchField {
             id: searchField
 
-            anchors.centerIn: parent
+            Layout.preferredWidth: 220
 
             navigation.name: "Scores Search"
             navigation.panel: navSearchPanel
@@ -138,7 +142,7 @@ FocusScope {
     RecentScoresView {
         id: view
 
-        anchors.top: headerItem.bottom
+        anchors.top: topLayout.bottom
         anchors.topMargin: 74
         anchors.left: parent.left
         anchors.leftMargin: prv.sideMargin - view.sideMargin
