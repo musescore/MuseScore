@@ -118,7 +118,7 @@ DockPage {
             title: qsTrc("appshell", "Playback Controls")
 
             width: root.width / 3
-            minimumWidth: floating ? 526 : 476
+            minimumWidth: floating ? 526 : 452
             minimumHeight: floating ? 56 : root.toolBarHeight
 
             contentComponent: PlaybackToolBar {
