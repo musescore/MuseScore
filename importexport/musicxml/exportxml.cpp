@@ -4347,6 +4347,9 @@ void ExportMusicXml::pedal(Pedal const* const pd, int staff, const Fraction& tic
                               pedalType = "resume";
                               break;
                               }
+                        else {
+                              // FALLTHROUGH
+                              }
                   default:
                         pedalType = "start";
                   }

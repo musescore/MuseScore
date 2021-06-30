@@ -1101,11 +1101,12 @@ void MusicXMLParserPass1::identification()
             else if (_e.name() == "encoding") {
                   // TODO
                   while (_e.readNextStartElement()) {
-                        if (_e.name() == "supports" )
+                        if (_e.name() == "supports" ) {
                               if (_e.attributes().value("element") == "beam" && _e.attributes().value("type") == "yes")
                                     _hasBeamingInfo = true;
                               else if (_e.attributes().value("element") == "transpose")
                                     _supportsTranspose = _e.attributes().value("type").toString();
+                              }
                         _e.skipCurrentElement();
                         }
                   // _score->setMetaTag("encoding", _e.readElementText()); works with DOM but not with pull parser
