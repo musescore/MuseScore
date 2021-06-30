@@ -22,22 +22,24 @@
 #include "audiomodule.h"
 
 #include <QQmlEngine>
-#include "modularity/ioc.h"
-#include "internal/worker/audioengine.h"
-#include "internal/audioconfiguration.h"
+
 #include "ui/iuiengine.h"
-#include "devtools/audioenginedevtools.h"
+#include "modularity/ioc.h"
+#include "log.h"
 
 #include "internal/rpc/queuedrpcchannel.h"
 #include "internal/rpc/rpccontrollers.h"
 #include "internal/rpc/rpcaudioenginecontroller.h"
-#include "internal/rpc/rpcsequencer.h"
-#include "internal/rpc/rpcsequencercontroller.h"
 #include "internal/rpc/rpcdevtoolscontroller.h"
 
+#include "internal/audioconfiguration.h"
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"
 #include "internal/audiobuffer.h"
+
+#include "internal/worker/audioengine.h"
+#include "internal/worker/playback.h"
+#include "internal/worker/mixer.h"
 
 // synthesizers
 #include "internal/synthesizers/fluidsynth/fluidsynth.h"
@@ -45,6 +47,7 @@
 #include "internal/synthesizers/soundfontsprovider.h"
 #include "internal/synthesizers/synthesizercontroller.h"
 #include "internal/synthesizers/synthesizersregister.h"
+
 #include "view/synthssettingsmodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
@@ -59,7 +62,8 @@ static std::shared_ptr<AudioThread> s_audioWorker = std::make_shared<AudioThread
 static std::shared_ptr<mu::audio::AudioBuffer> s_audioBuffer = std::make_shared<mu::audio::AudioBuffer>();
 
 static std::shared_ptr<rpc::RpcControllers> s_rpcControllers = std::make_shared<rpc::RpcControllers>();
-static std::shared_ptr<rpc::RpcSequencer> s_rpcSequencer = std::make_shared<rpc::RpcSequencer>();
+static std::shared_ptr<IPlayback> s_playbackFacade = std::make_shared<Playback>();
+static std::shared_ptr<IMixer> s_mixer = std::make_shared<Mixer>();
 
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/linuxaudiodriver.h"
@@ -102,7 +106,8 @@ void AudioModule::registerExports()
 {
     ioc()->registerExport<IAudioConfiguration>(moduleName(), s_audioConfiguration);
     ioc()->registerExport<IAudioDriver>(moduleName(), s_audioDriver);
-    ioc()->registerExport<ISequencer>(moduleName(), s_rpcSequencer);
+    ioc()->registerExport<IPlayback>(moduleName(), s_playbackFacade);
+    ioc()->registerExport<IMixer>(moduleName(), s_mixer);
 
     // synthesizers
     std::shared_ptr<synth::ISynthesizersRegister> sreg = std::make_shared<synth::SynthesizersRegister>();
@@ -168,18 +173,17 @@ void AudioModule::onInit(const framework::IApplication::RunMode&)
     s_audioBuffer->init();
 
     // Setup rpc system and worker
-    s_rpcSequencer->setup();
     s_audioWorker->channel()->setupMainThread();
     s_audioWorker->setAudioBuffer(s_audioBuffer);
     s_audioWorker->run([]() {
         AudioSanitizer::setupWorkerThread();
         ONLY_AUDIO_WORKER_THREAD;
 
+        AudioEngine::instance()->setMixer(s_mixer);
         AudioEngine::instance()->setAudioBuffer(s_audioBuffer);
         AudioEngine::instance()->init();
 
         s_rpcControllers->reg(std::make_shared<rpc::RpcAudioEngineController>());
-        s_rpcControllers->reg(std::make_shared<rpc::RpcSequencerController>());
         s_rpcControllers->reg(std::make_shared<rpc::RpcDevToolsController>());
         s_rpcControllers->init(s_audioWorker->channel());
     });
