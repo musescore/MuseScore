@@ -48,7 +48,6 @@ private:
     void doCall(const Calls& calls, const Msg& msg);
 
     AudioEngine* audioEngine() const;
-    ISequencerPtr sequencer() const;
 
     void audioEngineHandle(const Msg& msg);
     void sequencerHandle(const Msg& msg);

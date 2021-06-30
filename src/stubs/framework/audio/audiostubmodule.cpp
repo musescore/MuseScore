@@ -26,7 +26,6 @@
 
 #include "audioconfigurationstub.h"
 #include "audiodriverstub.h"
-#include "sequencerstub.h"
 #include "synthesizersregisterstub.h"
 #include "soundfontsproviderstub.h"
 #include "internal/rpc/rpcchannelstub.h"
@@ -48,7 +47,6 @@ void AudioStubModule::registerExports()
 {
     ioc()->registerExport<IAudioConfiguration>(moduleName(), new AudioConfigurationStub());
     ioc()->registerExport<IAudioDriver>(moduleName(), new AudioDriverStub());
-    ioc()->registerExport<ISequencer>(moduleName(), new SequencerStub());
 
     ioc()->registerExport<synth::ISynthesizersRegister>(moduleName(), new synth::SynthesizersRegisterStub());
     ioc()->registerExport<synth::ISoundFontsProvider>(moduleName(), new synth::SoundFontsProviderStub());
