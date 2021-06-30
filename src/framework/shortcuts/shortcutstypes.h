@@ -73,12 +73,12 @@ struct RemoteEvent {
     }
 };
 
-struct MidiMapping {
+struct MidiControlsMapping {
     std::string action;
     RemoteEvent event;
 
-    MidiMapping() = default;
-    MidiMapping(const std::string& action)
+    MidiControlsMapping() = default;
+    MidiControlsMapping(const std::string& action)
         : action(action) {}
 
     bool isValid() const
@@ -86,13 +86,13 @@ struct MidiMapping {
         return !action.empty() && event.isValid();
     }
 
-    bool operator ==(const MidiMapping& other) const
+    bool operator ==(const MidiControlsMapping& other) const
     {
         return action == other.action && other.event == event;
     }
 };
 
-using MidiMappingList = std::list<MidiMapping>;
+using MidiMappingList = std::list<MidiControlsMapping>;
 
 inline RemoteEvent remoteEventFromMidiEvent(const midi::Event& midiEvent)
 {
