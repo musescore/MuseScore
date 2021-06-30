@@ -11,6 +11,8 @@ namespace mu::audio {
 class ISequenceIO
 {
 public:
+    virtual ~ISequenceIO() = default;
+
     virtual RetVal<AudioInputParams> inputParams(const TrackId id) const = 0;
     virtual RetVal<AudioOutputParams> outputParams(const TrackId id) const = 0;
 
