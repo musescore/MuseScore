@@ -28,6 +28,7 @@ import MuseScore.Dock 1.0
 
 import MuseScore.UserScores 1.0
 import MuseScore.Cloud 1.0
+import MuseScore.Learn 1.0
 
 import "../dockwindow"
 
@@ -124,10 +125,7 @@ DockPage {
     Component {
         id: learnComp
 
-        StyledTextLabel {
-            anchors.centerIn: parent
-            text: "Learn"
-        }
+        LearnPage {}
     }
 
     Component {
