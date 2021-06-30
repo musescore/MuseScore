@@ -106,7 +106,7 @@ void NotationUndoStack::rollbackChanges()
         return;
     }
 
-    score()->endCmd(false, true);
+    score()->endCmd(true);
     masterScore()->setSaved(isStackClean());
 
     notifyAboutStateChanged();

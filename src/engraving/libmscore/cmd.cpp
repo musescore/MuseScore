@@ -85,6 +85,7 @@
 #include "tremolo.h"
 #include "rehearsalmark.h"
 #include "sym.h"
+#include "log.h"
 
 using namespace mu;
 
@@ -273,13 +274,14 @@ void Score::undoRedo(bool undo, EditData* ed)
 ///   and (always) updating the redraw area.
 //---------------------------------------------------------
 
-void Score::endCmd(const bool isCmdFromInspector, bool rollback)
+void Score::endCmd(bool rollback)
 {
     if (!undoStack()->active()) {
-        qDebug("Score::endCmd(): no cmd active");
+        LOGW() << "no command active";
         update();
         return;
     }
+
     if (readOnly() || MScore::_error != MsError::MS_NO_ERROR) {
         rollback = true;
     }
@@ -290,16 +292,16 @@ void Score::endCmd(const bool isCmdFromInspector, bool rollback)
 
     update(false);
 
-    if (MScore::debugMode) {
-        qDebug("===endCmd() %d", undoStack()->current()->childCount());
-    }
-    const bool noUndo = undoStack()->current()->empty();         // nothing to undo?
+    LOGD() << "Undo stack current macro child count: " << undoStack()->current()->childCount();
+
+    const bool noUndo = undoStack()->current()->empty(); // nothing to undo?
     undoStack()->endMacro(noUndo);
 
     if (dirty()) {
-        masterScore()->setPlaylistDirty();      // TODO: flag individual operations
+        masterScore()->setPlaylistDirty(); // TODO: flag individual operations
         masterScore()->setAutosaveDirty(true);
     }
+
     cmdState().reset();
 }
 
