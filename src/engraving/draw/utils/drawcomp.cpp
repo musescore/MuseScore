@@ -94,10 +94,8 @@ static bool isEqual(const Pen& p1, const Pen& p2)
     if (p1.style() != p2.style()) {
         return false;
     }
-    
-    double epsilon = 0.0001;
 
-    if (fabs(p1.widthF() - p2.widthF()) > epsilon) {
+    if (!RealIsEqual(p1.widthF(), p2.widthF())) {
         return false;
     }
 

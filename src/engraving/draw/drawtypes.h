@@ -60,7 +60,6 @@ enum class PenJoinStyle { // line join style
     BevelJoin = 0x40,
     RoundJoin = 0x80
 };
-
 }
 
 #endif // MU_DRAW_DRAWTYPES_H

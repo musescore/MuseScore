@@ -1509,7 +1509,7 @@ QVariant SLine::propertyDefault(Pid pid) const
         if (propertyFlags(pid) != PropertyFlags::NOSTYLE) {
             return Spanner::propertyDefault(pid);
         }
-        return int(Qt::PenStyle::SolidLine);
+        return static_cast<int>(mu::draw::PenStyle::SolidLine);
     case Pid::DASH_LINE_LEN:
     case Pid::DASH_GAP_LEN:
         if (propertyFlags(pid) != PropertyFlags::NOSTYLE) {

@@ -130,13 +130,13 @@ void LayoutBreak::draw(mu::draw::Painter* painter) const
     stroker.setJoinStyle(Qt::PenJoinStyle::MiterJoin);
     stroker.setCapStyle(Qt::PenCapStyle::SquareCap);
 
-    stroker.setDashPattern({1, 3});
+    stroker.setDashPattern({ 1, 3 });
     PainterPath stroke = stroker.createStroke(path);
 
     painter->fillPath(stroke, selected() ? MScore::selectColor[0] : MScore::layoutBreakColor);
 
     painter->setPen(Pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
-                         lw, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
+                        lw, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
     painter->setBrush(Qt::NoBrush);
     painter->drawPath(path2);
 }

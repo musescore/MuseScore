@@ -62,7 +62,7 @@ void Spacer::draw(mu::draw::Painter* painter) const
         return;
     }
     Pen pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
-             spatium() * 0.3);
+            spatium() * 0.3);
     painter->setPen(pen);
     painter->setBrush(Qt::NoBrush);
     painter->drawPath(path);
