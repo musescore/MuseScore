@@ -44,9 +44,6 @@ public:
     virtual Ret addSoundFonts(const std::vector<io::path>& sfonts) = 0;
     virtual Ret removeSoundFonts() = 0;
 
-    virtual bool isActive() const = 0;
-    virtual void setIsActive(bool arg) = 0;
-
     virtual Ret setupMidiChannels(const std::vector<midi::Event>& events) = 0;
     virtual bool handleEvent(const midi::Event& e) = 0;
     virtual void writeBuf(float* stream, unsigned int samples) = 0;
