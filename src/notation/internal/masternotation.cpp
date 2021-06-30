@@ -56,6 +56,11 @@ MasterNotation::MasterNotation()
     m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack());
 }
 
+MasterNotation::~MasterNotation()
+{
+    m_parts = nullptr;
+}
+
 INotationPtr MasterNotation::notation()
 {
     return shared_from_this();
@@ -272,11 +277,8 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
 
     score->setName(qtrc("notation", "Untitled"));
     score->setCreated(true);
-    setScore(score);
 
-    if (templatePath.empty()) {
-        parts()->setParts(scoreOptions.parts);
-    }
+    setScore(score);
 
     score->style().checkChordList();
     if (!scoreOptions.title.isEmpty()) {
@@ -518,6 +520,10 @@ mu::Ret MasterNotation::createNew(const ScoreCreateOptions& scoreOptions)
     initExcerpts(excerpts);
 
     score->setExcerptsChanged(true);
+
+    if (templatePath.empty()) {
+        parts()->setParts(scoreOptions.parts);
+    }
 
     return make_ret(Err::NoError);
 }
