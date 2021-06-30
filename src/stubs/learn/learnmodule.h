@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::learn {
-class LearnModule : public framework::IModuleSetup
+class LearnModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
