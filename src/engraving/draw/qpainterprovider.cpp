@@ -169,6 +169,7 @@ void QPainterProvider::restore()
 {
     m_painter->restore();
     m_font = mu::draw::fromQFont(m_painter->font());
+    m_pen = Pen::fromQPen(m_painter->pen());
 }
 
 void QPainterProvider::setTransform(const QTransform& transform)
