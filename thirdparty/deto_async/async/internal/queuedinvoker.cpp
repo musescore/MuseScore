@@ -26,7 +26,9 @@ void QueuedInvoker::processEvents()
     Queue& q = m_queues[std::this_thread::get_id()];
     while (!q.empty()) {
         const auto& f = q.front();
-        f();
+        if (f) {
+            f();
+        }
         q.pop();
     }
 }

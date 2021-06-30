@@ -38,6 +38,17 @@ public:
     };
 
     template<typename Exec>
+    Promise(Exec exec, const std::thread::id& th = std::this_thread::get_id())
+    {
+        Resolve res(*this);
+        Reject rej(*this);
+
+        Async::call(nullptr, [res, rej](Exec exec) mutable {
+            exec(res, rej);
+        }, exec, th);
+    }
+
+    template<typename Exec>
     Promise(Exec exec)
     {
         Resolve res(*this);
@@ -83,6 +94,7 @@ private:
     {
         NotifyData nd;
         nd.setArg<T>(0, d);
+        nd.setArg<std::shared_ptr<PromiseInvoker> >(1, ptr());
         ptr()->invoke(OnResolve, nd);
     }
 
@@ -91,6 +103,7 @@ private:
         NotifyData nd;
         nd.setArg<int>(0, code);
         nd.setArg<std::string>(1, msg);
+        nd.setArg<std::shared_ptr<PromiseInvoker> >(2, ptr());
         ptr()->invoke(OnReject, nd);
     }
 
