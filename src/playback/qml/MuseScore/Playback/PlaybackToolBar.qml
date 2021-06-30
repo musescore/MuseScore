@@ -191,12 +191,6 @@ Rectangle {
                 noteSymbolFont.pixelSize: ui.theme.iconsFont.pixelSize
                 tempoValueFont: timeField.font
             }
-
-            SeparatorLine {
-                Layout.leftMargin: 24
-                orientation: Qt.Vertical
-                visible: !root.floating
-            }
         }
 
         StyledSlider {
