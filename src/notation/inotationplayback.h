@@ -25,7 +25,6 @@
 #include <QRect>
 #include "retval.h"
 #include "midi/miditypes.h"
-#include "notationtypes.h"
 
 #include "notationtypes.h"
 
@@ -33,37 +32,40 @@ namespace mu::notation {
 class INotationPlayback
 {
 public:
+
+    using InstrumentTrackId = std::string;
+
     virtual ~INotationPlayback() = default;
 
-    virtual std::shared_ptr<midi::MidiStream> midiStream() const = 0;
+    virtual std::vector<InstrumentTrackId> instrumentTrackIdList() const = 0;
+    virtual midi::MidiData instrumentMidiData(const InstrumentTrackId& id) const = 0;
+    virtual async::Channel<InstrumentTrackId> instrumentTrackRemoved() const = 0;
+    virtual async::Channel<InstrumentTrackId> instrumentTrackAdded() const = 0;
 
     virtual QTime totalPlayTime() const = 0;
 
-    virtual float tickToSec(int tick) const = 0;
-    virtual int secToTick(float sec) const = 0;
+    virtual float tickToSec(midi::tick_t tick) const = 0;
+    virtual midi::tick_t secToTick(float sec) const = 0;
 
-    virtual QRect playbackCursorRectByTick(int tick) const = 0;
+    virtual QRect playbackCursorRectByTick(midi::tick_t tick) const = 0;
 
-    virtual RetVal<int> playPositionTick() const = 0;
-    virtual void setPlayPositionTick(int tick) = 0;
-    virtual bool setPlayPositionByElement(const Element* element) = 0;
-    virtual async::Channel<int> playPositionTickChanged() const = 0;
+    virtual RetVal<midi::tick_t> playPositionTickByElement(const Element* element) const = 0;
 
-    virtual midi::MidiData playElementMidiData(const Element* element) const = 0;
+    virtual Ret playElementMidiData(const Element* element) = 0;
 
-    enum BoundaryTick : int {
-        FirstScoreTick = -3,
+    enum BoundaryTick : midi::tick_t {
+        FirstScoreTick = 0,
         SelectedNoteTick,
         LastScoreTick
     };
 
-    virtual void addLoopBoundary(LoopBoundaryType boundaryType, int tick) = 0;
+    virtual void addLoopBoundary(LoopBoundaryType boundaryType, midi::tick_t tick) = 0;
     virtual void setLoopBoundariesVisible(bool visible) = 0;
     virtual ValCh<LoopBoundaries> loopBoundaries() const = 0;
 
-    virtual Tempo tempo(int tick) const = 0;
-    virtual MeasureBeat beat(int tick) const = 0;
-    virtual int beatToTick(int measureIndex, int beatIndex) const = 0;
+    virtual Tempo tempo(midi::tick_t tick) const = 0;
+    virtual MeasureBeat beat(midi::tick_t tick) const = 0;
+    virtual midi::tick_t beatToTick(int measureIndex, int beatIndex) const = 0;
 };
 
 using INotationPlaybackPtr = std::shared_ptr<INotationPlayback>;
