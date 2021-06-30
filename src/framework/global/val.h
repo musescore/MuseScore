@@ -29,6 +29,8 @@
 #include <QVariant>
 #endif
 
+#include "io/path.h"
+
 namespace mu {
 class Val
 {
@@ -51,6 +53,7 @@ public:
     explicit Val(double val);
     explicit Val(bool val);
     explicit Val(int val);
+    explicit Val(const io::path& path);
 
     void setType(Type t);
     Type type() const;
@@ -61,6 +64,7 @@ public:
     float toFloat() const;
     bool toBool() const;
     int toInt() const;
+    io::path toPath() const;
 
 #ifndef NO_QT_SUPPORT
     explicit Val(QColor color);

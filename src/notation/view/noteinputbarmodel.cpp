@@ -134,7 +134,6 @@ void NoteInputBarModel::load()
         }
 
         MenuItem item = makeActionItem(uiactionsRegister()->action(citem.action), QString::number(section));
-        LOGI() << "code: " << item.code << ", section: " << item.section;
         items << item;
     }
 

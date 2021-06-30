@@ -102,12 +102,14 @@ io::path GlobalConfiguration::userBackupPath() const
 
 io::path GlobalConfiguration::userDataPath() const
 {
-    return QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    static io::path p = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/MuseScore";
+    return p;
 }
 
 io::path GlobalConfiguration::homePath() const
 {
-    return QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    static io::path p = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    return p;
 }
 
 bool GlobalConfiguration::useFactorySettings() const

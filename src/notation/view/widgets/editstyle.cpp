@@ -1593,7 +1593,7 @@ void EditStyle::setValues()
 
 void EditStyle::selectChordDescriptionFile()
 {
-    io::path dir = configuration()->stylesPath().val;
+    io::path dir = configuration()->userStylesPath();
     QString filter = qtrc("notation", "MuseScore Styles") + " (*.mss)";
 
     mu::io::path path = interactive()->selectOpeningFile(qtrc("notation", "Load Style"), dir, filter);
