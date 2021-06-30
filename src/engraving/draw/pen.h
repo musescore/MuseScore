@@ -31,54 +31,49 @@ namespace mu::draw {
 class Pen {
 public:
     
-    Pen() { setDefaults(); }
-    
-    Pen(PenStyle style) {
-        setDefaults();
+    Pen(PenStyle style)
+    {
         _style = style;
     }
     
-    Pen(const QColor &color) {
-        setDefaults();
-        _brush = color;
+    Pen(const QColor &color = Qt::black, double width = 1, PenStyle s = PenStyle::SolidLine, PenCapStyle c = PenCapStyle::SquareCap, PenJoinStyle j = PenJoinStyle::BevelJoin)
+        : _color(color), _width(width), _style(s), _capStyle(c), _joinStyle(j)
+    {
     }
     
-    Pen(const QBrush &brush, double width, PenStyle s = SolidLine,
-        PenCapStyle c = SquareCap, PenJoinStyle j = BevelJoin) :
-    _brush(brush), _width(width), _style(s), _capStyle(c), _joinStyle(j) {}
+    PenStyle style() const
+    {
+        return _style;
+    }
     
-    PenStyle style() const { return _style; }
-    void setStyle(PenStyle style) {
+    void setStyle(PenStyle style)
+    {
         if (_style == style)
             return;
         _style = style;
         _dashPattern.clear();
       }
     
-    QVector<double> dashPattern() const
+    std::vector<double> dashPattern() const
     {
-        if (_style == SolidLine || _style == NoPen) {
-            return QVector<qreal>();
-        } else if (_dashPattern.isEmpty()) {
-            const qreal space = 2;
-            const qreal dot = 1;
-            const qreal dash = 4;
+        if (_style == PenStyle::SolidLine || _style == PenStyle::NoPen) {
+            return std::vector<double>();
+        } else if (_dashPattern.empty()) {
+            const double space = 2;
+            const double dot = 1;
+            const double dash = 4;
             switch (_style) {
-            case DashLine:
-                _dashPattern.reserve(2);
-                _dashPattern << dash << space;
+            case PenStyle::DashLine:
+                _dashPattern = {dash, space};
                 break;
-            case DotLine:
-                _dashPattern.reserve(2);
-                _dashPattern << dot << space;
+            case PenStyle::DotLine:
+                _dashPattern = {dot, space};
                 break;
-            case DashDotLine:
-                _dashPattern.reserve(4);
-                _dashPattern << dash << space << dot << space;
-                break;
-            case DashDotDotLine:
-                _dashPattern.reserve(6);
-                _dashPattern << dash << space << dot << space << dot << space;
+            case PenStyle::DashDotLine:
+                _dashPattern = {dash, space, dot, space};
+                 break;
+            case PenStyle::DashDotDotLine:
+                _dashPattern = {dash, space, dot, space, dot, space};
                 break;
             default:
                 break;
@@ -87,59 +82,77 @@ public:
         return _dashPattern;
     }
     
-    void setDashPattern(const QVector<double> &pattern)
+    void setDashPattern(const std::vector<double> &pattern)
     {
-        if (pattern.isEmpty())
+        if (pattern.empty())
             return;
         _dashPattern = pattern;
-        _style = CustomDashLine;
+        _style = PenStyle::CustomDashLine;
         if ((_dashPattern.size() % 2) == 1) {
             LOGW() << "Pattern not of even length";
-            _dashPattern << 1;
+            _dashPattern.push_back(1);
         }
     }
     
-    double widthF() const { return _width; }
-    void setWidthF(double width) { _width = width; }
+    double widthF() const
+    {
+        return _width;
+    }
+    
+    void setWidthF(double width)
+    {
+        _width = width;
+    }
 
-
-    int width() const { return qRound(_width); }
-    void setWidth(int width) { _width = width; }
-
-    QColor color() const { return _brush.color(); }
-    void setColor(const QColor &color) { _brush = QBrush(color); }
-    QBrush brush() const { return _brush; }
-    void setBrush(const QBrush &brush) { _brush = brush; }
-    bool isSolid() const { return _brush.style() == Qt::SolidPattern; }
-    PenCapStyle capStyle() const { return _capStyle; }
-    void setCapStyle(PenCapStyle pcs) { _capStyle = pcs; }
-    PenJoinStyle joinStyle() const { return _joinStyle; }
-    void setJoinStyle(PenJoinStyle pcs) { _joinStyle = pcs; }
+    QColor color() const
+    {
+        return _color;
+    }
+    
+    void setColor(const QColor &color)
+    {
+        _color = color;
+    }
+    
+    PenCapStyle capStyle() const
+    {
+        return _capStyle;
+    }
+    
+    void setCapStyle(PenCapStyle pcs)
+    {
+        _capStyle = pcs;
+    }
+    
+    PenJoinStyle joinStyle() const
+    {
+        return _joinStyle;
+    }
+    
+    void setJoinStyle(PenJoinStyle pcs)
+    {
+        _joinStyle = pcs;
+    }
     
 #ifndef NO_QT_SUPPORT
-    QPen toQPen() const { return QPen(_brush, _width, static_cast<Qt::PenStyle>(_style), static_cast<Qt::PenCapStyle>(_capStyle), static_cast<Qt::PenJoinStyle>(_joinStyle)); }
+    static QPen toQPen(const Pen& pen)
+    {
+        return QPen(pen._color, pen._width, static_cast<Qt::PenStyle>(pen._style), static_cast<Qt::PenCapStyle>(pen._capStyle), static_cast<Qt::PenJoinStyle>(pen._joinStyle));
+    }
+    static Pen fromQPen(const QPen& pen)
+    {
+        return Pen(pen.color(), pen.widthF(), static_cast<PenStyle>(pen.style()), static_cast<PenCapStyle>(pen.capStyle()), static_cast<PenJoinStyle>(pen.joinStyle()));
+    }
 #endif
 
 private:
-    void setDefaults() {
-        _brush = Qt::black;
-        _width = _defaultWidth;
-        _style = _penDefaultStyle;
-        _capStyle = _penDefaultCap;
-        _joinStyle = _penDefaultJoin;
-    }
     
-    QBrush _brush;
-    double _width;
-    PenStyle _style;
-    PenCapStyle _capStyle;
-    PenJoinStyle _joinStyle;
-    mutable QVector<double> _dashPattern; s
-    
-    static constexpr unsigned int _defaultWidth    = 1;
-    static constexpr PenStyle     _penDefaultStyle = SolidLine;
-    static constexpr PenCapStyle  _penDefaultCap   = SquareCap;
-    static constexpr PenJoinStyle _penDefaultJoin  = BevelJoin;
+    QColor _color           = Qt::black;
+    double _width           = 1;
+    PenStyle _style         = PenStyle::SolidLine;
+    PenCapStyle _capStyle   = PenCapStyle::SquareCap;
+    PenJoinStyle _joinStyle = PenJoinStyle::BevelJoin;
+    mutable std::vector<double> _dashPattern;
 };
 
 } // namespace mu::draw

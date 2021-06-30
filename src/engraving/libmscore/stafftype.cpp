@@ -997,7 +997,7 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
         // if beam grid, draw stem line
         TablatureDurationFont& font = _tab->_durationFonts[_tab->_durationFontIdx];
         qreal _spatium = spatium();
-        pen.setCapStyle(FlatCap);
+        pen.setCapStyle(PenCapStyle::FlatCap);
         pen.setWidthF(font.gridStemWidth * _spatium);
         painter->setPen(pen);
         // take stem height from bbox, but de-magnify it, as drawing is already magnified

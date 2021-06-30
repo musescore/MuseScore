@@ -111,7 +111,7 @@ void TremoloBar::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
-    Pen pen(curColor(), m_lw.val(), SolidLine, RoundCap, RoundJoin);
+    Pen pen(curColor(), m_lw.val(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->drawPolyline(m_polygon);
 }

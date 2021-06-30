@@ -187,7 +187,7 @@ void Stem::draw(mu::draw::Painter* painter) const
     const StaffType* stt = st ? st->staffType(chord()->tick()) : 0;
     bool useTab          = stt && stt->isTabStaff();
 
-    painter->setPen(Pen(curColor(), lineWidthMag(), SolidLine, FlatCap));
+    painter->setPen(Pen(curColor(), lineWidthMag(), PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLine(line);
 
     if (!useTab) {

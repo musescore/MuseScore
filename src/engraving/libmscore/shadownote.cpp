@@ -150,7 +150,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
     PointF ap(pagePos());
     painter->translate(ap);
     qreal lw = score()->styleP(Sid::stemWidth);
-    Pen pen(MScore::selectColor[voice()].lighter(SHADOW_NOTE_LIGHT), lw, SolidLine, FlatCap);
+    Pen pen(MScore::selectColor[voice()].lighter(SHADOW_NOTE_LIGHT), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
 
     // Draw the accidental

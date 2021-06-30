@@ -191,7 +191,7 @@ void StaffLines::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
-    painter->setPen(Pen(curColor(), lw, SolidLine, FlatCap));
+    painter->setPen(Pen(curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLines(lines);
 }
 

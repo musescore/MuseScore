@@ -127,19 +127,16 @@ void LayoutBreak::draw(mu::draw::Painter* painter) const
 
     QPainterPathStroker stroker;
     stroker.setWidth(lw / 2);
-    stroker.setJoinStyle(Qt::MiterJoin);
-    stroker.setCapStyle(Qt::SquareCap);
+    stroker.setJoinStyle(Qt::PenJoinStyle::MiterJoin);
+    stroker.setCapStyle(Qt::PenCapStyle::SquareCap);
 
-    QVector<qreal> dashes;
-    dashes.append(1);
-    dashes.append(3);
-    stroker.setDashPattern(dashes);
+    stroker.setDashPattern({1, 3});
     PainterPath stroke = stroker.createStroke(path);
 
     painter->fillPath(stroke, selected() ? MScore::selectColor[0] : MScore::layoutBreakColor);
 
     painter->setPen(Pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
-                         lw, SolidLine, SquareCap, MiterJoin));
+                         lw, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
     painter->setBrush(Qt::NoBrush);
     painter->drawPath(path2);
 }

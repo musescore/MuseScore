@@ -39,6 +39,7 @@ QPainterProvider::QPainterProvider(QPainter* painter, bool overship)
 {
     m_drawObjectsLogger = new DrawObjectsLogger();
     m_font = mu::draw::fromQFont(m_painter->font());
+    m_pen = Pen::fromQPen(m_painter->pen());
 }
 
 QPainterProvider::~QPainterProvider()
@@ -135,13 +136,13 @@ const Font& QPainterProvider::font() const
 void QPainterProvider::setPen(const Pen& pen)
 {
     m_pen = pen;
-    m_painter->setPen(m_pen.toQPen());
+    m_painter->setPen(Pen::toQPen(m_pen));
 }
 
 void QPainterProvider::setNoPen()
 {
-    m_pen = Pen(NoPen);
-    m_painter->setPen(m_pen.toQPen());
+    m_pen = Pen(PenStyle::NoPen);
+    m_painter->setPen(Pen::toQPen(m_pen));
 }
 
 const Pen& QPainterProvider::pen() const
