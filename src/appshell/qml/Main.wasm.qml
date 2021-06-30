@@ -66,11 +66,6 @@ ApplicationWindow {
             }
         }
 
-        AudioEngineTests {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
-
     }
 
 }
