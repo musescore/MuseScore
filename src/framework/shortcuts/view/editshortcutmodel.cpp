@@ -22,6 +22,8 @@
 
 #include "editshortcutmodel.h"
 
+#include <QKeySequence>
+
 #include "log.h"
 #include "translation.h"
 
@@ -56,6 +58,12 @@ void EditShortcutModel::inputKey(int key, Qt::KeyboardModifiers modifiers)
     }
 
     key += modifiers;
+
+    for (int i = 0; i < m_inputedSequence.count(); i++) {
+        if (m_inputedSequence[i] == key) {
+            return;
+        }
+    }
 
     switch (m_inputedSequence.count()) {
     case 0:
