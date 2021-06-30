@@ -48,6 +48,9 @@
 #include "libmscore/measure.h"
 #include "libmscore/ottava.h"
 #include "libmscore/hairpin.h"
+#include "libmscore/harmony.h"
+#include "libmscore/realizedharmony.h"
+#include "libmscore/instrument.h"
 
 #include "instruments/instrumentstypes.h"
 
@@ -79,6 +82,8 @@ using Fraction = Ms::Fraction;
 using ElementPattern = Ms::ElementPattern;
 using Chord = Ms::Chord;
 using ChordRest = Ms::ChordRest;
+using Harmony = Ms::Harmony;
+using RealisedHarmony = Ms::RealizedHarmony;
 using Articulation = Ms::Articulation;
 using SlurSegment = Ms::SlurSegment;
 using Rest = Ms::Rest;
@@ -95,6 +100,7 @@ using TupletBracketType = Ms::TupletBracketType;
 using GraceNoteType = Ms::NoteType;
 using BeamMode = Ms::Beam::Mode;
 using LayoutBreakType = Ms::LayoutBreak::Type;
+using InstrumentChannel = Ms::Channel;
 
 using PageList = std::vector<const Page*>;
 using StaffList = QList<const Staff*>;
@@ -406,8 +412,8 @@ struct LoopBoundaries
     int loopInTick = 0;
     int loopOutTick = 0;
 
-    QRect loopInRect;
-    QRect loopOutRect;
+    QRect loopInRect = {};
+    QRect loopOutRect = {};
 
     bool visible = false;
 
