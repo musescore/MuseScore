@@ -29,6 +29,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/userscoresstubmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/userscoresconfigurationstub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/userscoresconfigurationstub.h
+    ${CMAKE_CURRENT_LIST_DIR}/filescorecontrollerstub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/filescorecontrollerstub.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

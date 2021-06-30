@@ -29,12 +29,39 @@ const ShortcutList& ShortcutsRegisterStub::shortcuts() const
     return list;
 }
 
-Shortcut ShortcutsRegisterStub::shortcut(const std::string&) const
+mu::Ret ShortcutsRegisterStub::setShortcuts(const ShortcutList&)
 {
-    return Shortcut();
+    return make_ret(Ret::Code::NotImplemented);
+}
+
+mu::async::Notification ShortcutsRegisterStub::shortcutsChanged() const
+{
+    return async::Notification();
+}
+
+const Shortcut& ShortcutsRegisterStub::shortcut(const std::string&) const
+{
+    static Shortcut s;
+    return s;
+}
+
+const Shortcut& ShortcutsRegisterStub::defaultShortcut(const std::string&) const
+{
+    static Shortcut s;
+    return s;
 }
 
 ShortcutList ShortcutsRegisterStub::shortcutsForSequence(const std::string&) const
 {
     return {};
+}
+
+mu::Ret ShortcutsRegisterStub::importFromFile(const io::path&)
+{
+    return make_ret(Ret::Code::NotImplemented);
+}
+
+mu::Ret ShortcutsRegisterStub::exportToFile(const io::path&) const
+{
+    return make_ret(Ret::Code::NotImplemented);
 }

@@ -33,8 +33,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/shortcutscontrollerstub.h
     ${CMAKE_CURRENT_LIST_DIR}/shortcutsconfigurationstub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/shortcutsconfigurationstub.h
-    ${CMAKE_CURRENT_LIST_DIR}/shortcutcontextresolverstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/shortcutcontextresolverstub.h
     ${CMAKE_CURRENT_LIST_DIR}/midiremotestub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/midiremotestub.h
     )

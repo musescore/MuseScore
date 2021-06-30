@@ -28,11 +28,9 @@
 
 #include "workspaceconfigurationstub.h"
 #include "workspacemanagerstub.h"
-#include "workspacedatastreamregisterstub.h"
-#include "internal/workspacecreatorstub.h"
 
 using namespace mu::workspace;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
 static void workspace_init_qrc()
@@ -49,8 +47,6 @@ void WorkspaceStubModule::registerExports()
 {
     ioc()->registerExport<IWorkspaceConfiguration>(moduleName(), new WorkspaceConfigurationStub());
     ioc()->registerExport<IWorkspaceManager>(moduleName(), new WorkspaceManagerStub());
-    ioc()->registerExport<IWorkspaceDataStreamRegister>(moduleName(), new WorkspaceDataStreamRegisterStub());
-    ioc()->registerExport<IWorkspaceCreator>(moduleName(), new WorkspaceCreatorStub());
 }
 
 void WorkspaceStubModule::resolveImports()

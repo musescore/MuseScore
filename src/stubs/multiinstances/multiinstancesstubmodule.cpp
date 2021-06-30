@@ -25,7 +25,7 @@
 #include "multiinstancesstubprovider.h"
 
 using namespace mu::mi;
-using namespace mu::framework;
+using namespace mu::modularity;
 
 std::string MultiInstancesModule::moduleName() const
 {

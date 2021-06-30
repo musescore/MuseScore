@@ -31,7 +31,7 @@
 #include "soundfontsproviderstub.h"
 #include "internal/rpc/rpcchannelstub.h"
 
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::audio;
 
 static void audio_init_qrc()

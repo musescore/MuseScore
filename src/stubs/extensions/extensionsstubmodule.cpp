@@ -29,7 +29,7 @@
 #include "ui/iuiengine.h"
 
 using namespace mu::extensions;
-using namespace mu::framework;
+using namespace mu::modularity;
 
 static void extensions_init_qrc()
 {

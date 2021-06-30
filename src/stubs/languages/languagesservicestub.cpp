@@ -48,16 +48,9 @@ Ret LanguagesServiceStub::uninstall(const QString&)
     return make_ret(Ret::Code::NotSupported);
 }
 
-RetVal<Language> LanguagesServiceStub::currentLanguage() const
+ValCh<Language> LanguagesServiceStub::currentLanguage() const
 {
-    RetVal<Language> result;
-    result.ret = make_ret(Ret::Code::NotSupported);
-    return result;
-}
-
-Ret LanguagesServiceStub::setCurrentLanguage(const QString&)
-{
-    return make_ret(Ret::Code::NotSupported);
+    return ValCh<Language>();
 }
 
 RetCh<Language> LanguagesServiceStub::languageChanged()

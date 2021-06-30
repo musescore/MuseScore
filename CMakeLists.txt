@@ -70,7 +70,7 @@ option(BUILD_PALETTE_MODULE "Build palette module" ON)
 option(BUILD_INSTRUMENTS_MODULE "Build instruments module" ON)
 option(BUILD_INSPECTOR_MODULE "Build inspector module" ON)
 option(BUILD_AUTOBOT_MODULE "Build autobot module" OFF)
-option(BUILD_MULTIINSTANCES_MODULE "Build multiinstances module" OFF) # Temporary off
+option(BUILD_MULTIINSTANCES_MODULE "Build multiinstances module" ON)
 
 option(USE_SCORE_ACCESSIBLE_TREE "Use score accessible tree" OFF)
 

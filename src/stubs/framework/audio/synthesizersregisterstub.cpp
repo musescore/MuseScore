@@ -40,6 +40,11 @@ std::vector<ISynthesizerPtr> SynthesizersRegisterStub::synthesizers() const
     return {};
 }
 
+mu::async::Channel<ISynthesizerPtr> SynthesizersRegisterStub::synthesizerAdded() const
+{
+    return mu::async::Channel<ISynthesizerPtr>();
+}
+
 void SynthesizersRegisterStub::setDefaultSynthesizer(const SynthName&)
 {
 }

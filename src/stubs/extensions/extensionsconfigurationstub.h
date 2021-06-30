@@ -31,6 +31,9 @@ public:
     QUrl extensionsUpdateUrl() const;
     QUrl extensionFileServerUrl(const QString&) const;
 
+    bool needCheckForUpdate() const override;
+    void setNeedCheckForUpdate(bool needCheck) override;
+
     ValCh<ExtensionsHash> extensions() const;
     Ret setExtensions(const ExtensionsHash& extensions) const override;
 

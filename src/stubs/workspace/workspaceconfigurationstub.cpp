@@ -26,24 +26,24 @@ using namespace mu;
 
 io::paths WorkspaceConfigurationStub::workspacePaths() const
 {
-    return {};
+    return io::paths();
 }
 
-io::path WorkspaceConfigurationStub::userWorkspacesDirPath() const
+io::path WorkspaceConfigurationStub::userWorkspacesPath() const
 {
     return io::path();
 }
 
-io::path WorkspaceConfigurationStub::userWorkspacePath(const std::string&) const
+std::string WorkspaceConfigurationStub::currentWorkspaceName() const
 {
-    return io::path();
-}
-
-ValCh<std::string> WorkspaceConfigurationStub::currentWorkspaceName() const
-{
-    return ValCh<std::string>();
+    return std::string();
 }
 
 void WorkspaceConfigurationStub::setCurrentWorkspaceName(const std::string&)
 {
+}
+
+async::Channel<std::string> WorkspaceConfigurationStub::currentWorkspaceNameChanged() const
+{
+    return async::Channel<std::string>();
 }

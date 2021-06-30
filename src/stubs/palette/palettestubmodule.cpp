@@ -29,7 +29,7 @@
 #include "paletteconfigurationstub.h"
 
 using namespace mu::palette;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
 static void palette_init_qrc()

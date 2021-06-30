@@ -23,12 +23,26 @@
 
 using namespace mu::shortcuts;
 
-mu::io::path ShortcutsConfigurationStub::shortcutsUserPath() const
+mu::io::path ShortcutsConfigurationStub::shortcutsUserAppDataPath() const
 {
     return mu::io::path();
 }
 
-mu::io::path ShortcutsConfigurationStub::shortcutsDefaultPath() const
+mu::io::path ShortcutsConfigurationStub::shortcutsAppDataPath() const
 {
     return mu::io::path();
+}
+
+mu::io::path ShortcutsConfigurationStub::midiMappingUserAppDataPath() const
+{
+    return mu::io::path();
+}
+
+bool ShortcutsConfigurationStub::advanceToNextNoteOnKeyRelease() const
+{
+    return false;
+}
+
+void ShortcutsConfigurationStub::setAdvanceToNextNoteOnKeyRelease(bool)
+{
 }

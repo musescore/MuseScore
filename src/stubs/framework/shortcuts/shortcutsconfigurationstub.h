@@ -28,8 +28,14 @@ namespace mu::shortcuts {
 class ShortcutsConfigurationStub : public IShortcutsConfiguration
 {
 public:
-    io::path shortcutsUserPath() const override;
-    io::path shortcutsDefaultPath() const override;
+
+    io::path shortcutsUserAppDataPath() const override;
+    io::path shortcutsAppDataPath() const override;
+
+    io::path midiMappingUserAppDataPath() const override;
+
+    bool advanceToNextNoteOnKeyRelease() const override;
+    void setAdvanceToNextNoteOnKeyRelease(bool value) override;
 };
 }
 

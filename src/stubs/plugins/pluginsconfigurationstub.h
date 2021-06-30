@@ -28,7 +28,11 @@ namespace mu::plugins {
 class PluginsConfigurationStub : public IPluginsConfiguration
 {
 public:
-    io::paths pluginsDirPaths() const override;
+
+    io::paths availablePluginsPaths() const override;
+
+    ValCh<io::path> pluginsPath() const override;
+    void setPluginsPath(const io::path& path) override;
 
     ValCh<CodeKeyList> installedPlugins() const override;
     void setInstalledPlugins(const CodeKeyList& codeKeyList) override;

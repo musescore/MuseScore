@@ -34,6 +34,15 @@ QUrl ExtensionsConfigurationStub::extensionFileServerUrl(const QString&) const
     return QUrl();
 }
 
+bool ExtensionsConfigurationStub::needCheckForUpdate() const
+{
+    return false;
+}
+
+void ExtensionsConfigurationStub::setNeedCheckForUpdate(bool)
+{
+}
+
 ValCh<ExtensionsHash> ExtensionsConfigurationStub::extensions() const
 {
     return ValCh<ExtensionsHash>();
@@ -50,16 +59,6 @@ io::path ExtensionsConfigurationStub::extensionPath(const QString&) const
 }
 
 io::path ExtensionsConfigurationStub::extensionArchivePath(const QString&) const
-{
-    return io::path();
-}
-
-io::path ExtensionsConfigurationStub::extensionsSharePath() const
-{
-    return io::path();
-}
-
-io::path ExtensionsConfigurationStub::extensionsDataPath() const
 {
     return io::path();
 }

@@ -25,14 +25,10 @@
 
 using namespace mu::palette;
 
-QAction* PaletteAdapterStub::getAction(const char*) const
+const mu::ui::UiAction& PaletteAdapterStub::getAction(const actions::ActionCode&) const
 {
-    return new QAction();
-}
-
-QString PaletteAdapterStub::actionHelp(const char*) const
-{
-    return QString();
+    static mu::ui::UiAction a;
+    return a;
 }
 
 void PaletteAdapterStub::showMasterPalette(const QString&)
