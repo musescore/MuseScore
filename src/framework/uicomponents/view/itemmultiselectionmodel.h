@@ -34,6 +34,8 @@ public:
 
     void setAllowedModifiers(Qt::KeyboardModifiers modifiers);
 
+    using QItemSelectionModel::select;
+
 public slots:
     Q_INVOKABLE void select(const QModelIndex& index);
 
