@@ -384,13 +384,8 @@ mu::async::Notification NotationActionController::currentNotationStyleChanged() 
 
 void NotationActionController::resetState()
 {
-    auto isAudioPlaying = [this]() {
-        return sequencer()->status() == audio::ISequencer::PLAYING;
-    };
-
-    if (isAudioPlaying()) {
-        sequencer()->stop();
-        return;
+    if (playbackController()->isPlaying()) {
+        playbackController()->reset();
     }
 
     auto noteInput = currentNotationNoteInput();
