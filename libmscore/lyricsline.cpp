@@ -378,19 +378,19 @@ void LyricsLineSegment::layout()
 
       // VERTICAL POSITION: at the base line of the syllable text
       if (!isEndType()) {
-            rypos() = lyr->ipos().y();
-            ryoffset() = lyr->offset().y();
+            rypos() = lyr->ipos().y() + lyr->chordRest()->ipos().y();
+            ryoffset() = lyr->offset().y() + lyr->chordRest()->offset().y();
             }
       else {
             // use Y position of *next* syllable if there is one on same system
             Lyrics* nextLyr1 = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());
             if (nextLyr1 && nextLyr1->segment()->system() == system()) {
-                  rypos() = nextLyr1->ipos().y();
-                  ryoffset() = nextLyr1->offset().y();
+                  rypos() = nextLyr1->ipos().y() + nextLyr1->chordRest()->ipos().y();
+                  ryoffset() = nextLyr1->offset().y() + nextLyr1->chordRest()->offset().y();
                   }
             else {
-                  rypos() = lyr->ipos().y();
-                  ryoffset() = lyr->offset().y();
+                  rypos() = lyr->ipos().y() + lyr->chordRest()->ipos().y();
+                  ryoffset() = lyr->offset().y() + lyr->chordRest()->offset().y();
                   }
             }
 
