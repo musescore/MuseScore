@@ -39,6 +39,10 @@ if (BUILD_USERSCORES_MODULE)
     add_subdirectory(userscores)
 endif (BUILD_USERSCORES_MODULE)
 
+if (BUILD_LEARN_MODULE)
+    add_subdirectory(learn)
+endif (BUILD_LEARN_MODULE)
+
 add_subdirectory(converter)
 
 if (BUILD_WORKSPACE_MODULE)

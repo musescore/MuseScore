@@ -66,6 +66,12 @@
 #include "stubs/userscores/userscoresstubmodule.h"
 #endif
 
+#ifdef BUILD_LEARN_MODULE
+#include "learn/learnmodule.h"
+#else
+#include "stubs/learn/learnmodule.h"
+#endif
+
 #include "engraving/engravingmodule.h"
 #include "notation/notationmodule.h"
 
@@ -211,6 +217,8 @@ int main(int argc, char** argv)
 #else
     app.addModule(new mu::userscores::UserScoresStubModule());
 #endif
+
+    app.addModule(new mu::learn::LearnModule());
 
     app.addModule(new mu::engraving::EngravingModule());
     app.addModule(new mu::notation::NotationModule());
