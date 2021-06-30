@@ -281,7 +281,7 @@ public:
     Q_INVOKABLE Ms::PluginAPI::FractionWrapper* fraction(int numerator, int denominator) const;
 
 protected:
-    virtual MuseScoreCore* msc() const;
+    virtual MuseScoreCore* msc() const override;
 };
 
 #undef DECLARE_API_ENUM
