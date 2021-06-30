@@ -24,11 +24,15 @@
 
 #include <memory>
 
+#include "audiotypes.h"
+
 namespace mu::audio {
-class IAudioProcessor
+class IFxProcessor
 {
 public:
-    virtual ~IAudioProcessor() = default;
+    virtual ~IFxProcessor() = default;
+
+    virtual FxProcessorId id() const = 0;
 
     virtual void setSampleRate(unsigned int sampleRate) = 0;
 
@@ -41,7 +45,7 @@ public:
     virtual void process(float* input, float* output, unsigned int sampleCount) = 0;
 };
 
-using IAudioProcessorPtr = std::shared_ptr<IAudioProcessor>;
+using IFxProcessorPtr = std::shared_ptr<IFxProcessor>;
 }
 
 #endif // MU_AUDIO_IAUDIOPROCESSOR_H
