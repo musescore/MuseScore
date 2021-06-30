@@ -28,9 +28,17 @@ double PaletteConfigurationStub::paletteScaling() const
     return 0.f;
 }
 
+void PaletteConfigurationStub::setPaletteScaling(double)
+{
+}
+
 bool PaletteConfigurationStub::isSinglePalette() const
 {
     return false;
+}
+
+void PaletteConfigurationStub::setIsSinglePalette(bool)
+{
 }
 
 QColor PaletteConfigurationStub::elementsBackgroundColor() const

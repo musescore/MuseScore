@@ -24,10 +24,8 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
-#include "inspectoradapterstub.h"
-
 using namespace mu::inspector;
-using namespace mu::framework;
+using namespace mu::modularity;
 
 static void inspector_init_qrc()
 {
@@ -41,7 +39,6 @@ std::string InspectorModule::moduleName() const
 
 void InspectorModule::registerExports()
 {
-    ioc()->registerExport<IInspectorAdapter>(moduleName(), new InspectorAdapterStub());
 }
 
 void InspectorModule::registerResources()

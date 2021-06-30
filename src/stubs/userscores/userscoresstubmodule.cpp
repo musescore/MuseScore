@@ -29,7 +29,7 @@
 #include "ui/iinteractiveuriregister.h"
 
 using namespace mu::userscores;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
 static void userscores_init_qrc()

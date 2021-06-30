@@ -22,13 +22,23 @@
 #include "pluginsconfigurationstub.h"
 
 using namespace mu::plugins;
+using namespace mu;
 
-mu::io::paths PluginsConfigurationStub::pluginsDirPaths() const
+io::paths PluginsConfigurationStub::availablePluginsPaths() const
 {
     return {};
 }
 
-mu::ValCh<CodeKeyList> PluginsConfigurationStub::installedPlugins() const
+ValCh<io::path> PluginsConfigurationStub::pluginsPath() const
+{
+    return ValCh<io::path>();
+}
+
+void PluginsConfigurationStub::setPluginsPath(const io::path&)
+{
+}
+
+ValCh<CodeKeyList> PluginsConfigurationStub::installedPlugins() const
 {
     return mu::ValCh<CodeKeyList>();
 }

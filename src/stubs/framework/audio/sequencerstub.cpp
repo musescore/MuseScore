@@ -88,7 +88,7 @@ async::Notification SequencerStub::positionChanged() const
     return async::Notification();
 }
 
-float SequencerStub::playbackPosition() const
+float SequencerStub::playbackPositionInSeconds() const
 {
     return 0.f;
 }

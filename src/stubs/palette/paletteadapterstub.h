@@ -28,8 +28,8 @@ namespace mu::palette {
 class PaletteAdapterStub : public IPaletteAdapter
 {
 public:
-    QAction* getAction(const char* id) const override;
-    QString actionHelp(const char* id) const override;
+
+    const ui::UiAction& getAction(const actions::ActionCode& code) const override;
 
     void showMasterPalette(const QString&) override;
 

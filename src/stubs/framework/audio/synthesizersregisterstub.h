@@ -31,6 +31,7 @@ public:
     void registerSynthesizer(const SynthName& name, ISynthesizerPtr synthesizer) override;
     ISynthesizerPtr synthesizer(const SynthName& name) const override;
     std::vector<ISynthesizerPtr> synthesizers() const override;
+    async::Channel<ISynthesizerPtr> synthesizerAdded() const override;
 
     void setDefaultSynthesizer(const SynthName& name) override;
     ISynthesizerPtr defaultSynthesizer() const override;

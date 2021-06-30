@@ -31,10 +31,11 @@ public:
     std::string name() const override;
     std::string title() const override;
 
-    AbstractDataPtr data(WorkspaceTag tag, const std::string& name = std::string()) const override;
-    AbstractDataPtrList dataList(WorkspaceTag tag) const override;
-    void addData(AbstractDataPtr data) override;
-    async::Channel<AbstractDataPtr> dataChanged() const override;
+    bool isManaged(const DataKey& key) const override;
+    void setIsManaged(const DataKey& key, bool val) override;
+
+    RetVal<QByteArray> rawData(const DataKey& key) const override;
+    Ret setRawData(const DataKey& key, const QByteArray& data) override;
 };
 }
 

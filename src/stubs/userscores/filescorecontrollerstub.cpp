@@ -19,18 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACEDATASTREAMREGISTERSTUB_H
-#define MU_WORKSPACE_WORKSPACEDATASTREAMREGISTERSTUB_H
+#include "filescorecontrollerstub.h"
 
-#include "workspace/iworkspacedatastreamregister.h"
+using namespace mu::userscores;
 
-namespace mu::workspace {
-class WorkspaceDataStreamRegisterStub : public IWorkspaceDataStreamRegister
+mu::Ret FileScoreControllerStub::openScore(const io::path&)
 {
-public:
-    void regStream(IWorkspaceDataStreamPtr stream) override;
-    IWorkspaceDataStreamPtrList streams() const override;
-};
+    return make_ret(Ret::Code::NotImplemented);
 }
 
-#endif // MU_WORKSPACE_WORKSPACEDATASTREAMREGISTERSTUB_H
+bool FileScoreControllerStub::closeOpenedScore()
+{
+    return true;
+}
+
+bool FileScoreControllerStub::isScoreOpened(const io::path&) const
+{
+    return false;
+}

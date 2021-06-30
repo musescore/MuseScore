@@ -28,9 +28,17 @@ namespace mu::shortcuts {
 class ShortcutsRegisterStub : public IShortcutsRegister
 {
 public:
+
     const ShortcutList& shortcuts() const override;
-    Shortcut shortcut(const std::string& actionCode) const override;
+    Ret setShortcuts(const ShortcutList& shortcuts) override;
+    async::Notification shortcutsChanged() const override;
+
+    const Shortcut& shortcut(const std::string& actionCode) const override;
+    const Shortcut& defaultShortcut(const std::string& actionCode) const override;
     ShortcutList shortcutsForSequence(const std::string& sequence) const override;
+
+    Ret importFromFile(const io::path& filePath) override;
+    Ret exportToFile(const io::path& filePath) const override;
 };
 }
 

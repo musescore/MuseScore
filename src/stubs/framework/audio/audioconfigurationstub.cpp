@@ -24,25 +24,49 @@
 using namespace mu::audio;
 using namespace mu;
 
+std::string AudioConfigurationStub::currentAudioApi() const
+{
+    return std::string();
+}
+
+void AudioConfigurationStub::setCurrentAudioApi(const std::string&)
+{
+}
+
+int AudioConfigurationStub::audioChannelsCount() const
+{
+    return 2;
+}
+
 unsigned int AudioConfigurationStub::driverBufferSize() const
 {
     return 0;
 }
 
+bool AudioConfigurationStub::isShowControlsInMixer() const
+{
+    return false;
+}
+
+void AudioConfigurationStub::setIsShowControlsInMixer(bool)
+{
+}
+
+// synthesizers
 std::vector<io::path> AudioConfigurationStub::soundFontPaths() const
 {
-    return {};
+    return std::vector<io::path>();
 }
 
 const synth::SynthesizerState& AudioConfigurationStub::synthesizerState() const
 {
-    static const synth::SynthesizerState state;
-    return state;
+    static synth::SynthesizerState s;
+    return s;
 }
 
 Ret AudioConfigurationStub::saveSynthesizerState(const synth::SynthesizerState&)
 {
-    return make_ret(Ret::Code::NotSupported);
+    return make_ret(Ret::Code::NotImplemented);
 }
 
 async::Notification AudioConfigurationStub::synthesizerStateChanged() const
