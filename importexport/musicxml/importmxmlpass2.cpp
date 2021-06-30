@@ -41,6 +41,7 @@
 #include "libmscore/interval.h"
 #include "libmscore/jump.h"
 #include "libmscore/keysig.h"
+#include "libmscore/line.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/marker.h"
 #include "libmscore/measure.h"
@@ -3135,6 +3136,7 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track, c
 
 /**
  Parse the /score-partwise/part/measure/direction/direction-type/bracket node.
+ This creates a TextLine for all line-types except "wavy", for which it creates a Trill
  */
 
 void MusicXMLParserDirection::bracket(const QString& type, const int number,
@@ -3142,38 +3144,63 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
       {
       QStringRef lineEnd = _e.attributes().value("line-end");
       QStringRef lineType = _e.attributes().value("line-type");
-      const auto& spdesc = _pass2.getSpanner({ ElementType::TEXTLINE, number });
+      const bool isWavy = lineType == "wavy";
+      const ElementType elementType = isWavy ? ElementType::TRILL : ElementType::TEXTLINE;
+      const auto& spdesc = _pass2.getSpanner({ elementType, number });
       if (type == "start") {
-            auto b = spdesc._isStopped ? toTextLine(spdesc._sp) : new TextLine(_score);
-            // if (placement == "") placement = "above";  // TODO ? set default
+            SLine* sline = spdesc._isStopped ? spdesc._sp : 0;
+            if ((sline && sline->isTrill()) || (!sline && isWavy)) {
+                  if (!sline) sline = new Trill(_score);
+                  auto trill = toTrill(sline);
+                  trill->setTrillType(Trill::Type::PRALLPRALL_LINE);
 
-            b->setBeginHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
-            if (lineEnd == "up")
-                  b->setBeginHookHeight(-1 * b->beginHookHeight());
+                  if (!lineEnd.isEmpty() && lineEnd != "none")
+                        _logger->logError(QString("line-end not supported for line-type \"wavy\""));
+                  }
+            else if ((sline && sline->isTextLine()) || (!sline && !isWavy)) {
+                  if (!sline) sline = new TextLine(_score);
+                  auto textLine = toTextLine(sline);
+                  // if (placement == "") placement = "above";  // TODO ? set default
 
-            // hack: combine with a previous words element
-            if (!_wordsText.isEmpty()) {
-                  // TextLine supports only limited formatting, remove all (compatible with 1.3)
-                  b->setBeginText(MScoreTextToMXML::toPlainText(_wordsText));
-                  _wordsText = "";
+                  textLine->setBeginHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
+                  if (lineEnd == "up")
+                        textLine->setBeginHookHeight(-1 * textLine->beginHookHeight());
+
+                  // hack: combine with a previous words element
+                  if (!_wordsText.isEmpty()) {
+                        // TextLine supports only limited formatting, remove all (compatible with 1.3)
+                        textLine->setBeginText(MScoreTextToMXML::toPlainText(_wordsText));
+                        _wordsText = "";
+                        }
+
+                  if (lineType == "solid")
+                        textLine->setLineStyle(Qt::SolidLine);
+                  else if (lineType == "dashed")
+                        textLine->setLineStyle(Qt::DashLine);
+                  else if (lineType == "dotted")
+                        textLine->setLineStyle(Qt::DotLine);
+                  else if (lineType != "wavy")
+                        _logger->logError(QString("unsupported line-type: %1").arg(lineType.toString()), &_e);
                   }
 
-            if (lineType == "solid")
-                  b->setLineStyle(Qt::SolidLine);
-            else if (lineType == "dashed")
-                  b->setLineStyle(Qt::DashLine);
-            else if (lineType == "dotted")
-                  b->setLineStyle(Qt::DotLine);
-            else
-                  _logger->logError(QString("unsupported line-type: %1").arg(lineType.toString()), &_e);
-            starts.append(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
+            starts.append(MusicXmlSpannerDesc(sline, elementType, number));
             }
       else if (type == "stop") {
-            auto b = spdesc._isStarted ? toTextLine(spdesc._sp) : new TextLine(_score);
-            b->setEndHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
-            if (lineEnd == "up")
-                  b->setEndHookHeight(-1 * b->endHookHeight());
-            stops.append(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
+            SLine* sline = spdesc._isStarted ? spdesc._sp : 0;
+            if ((sline && sline->isTrill()) || (!sline && isWavy)) {
+                  if (!sline) sline = new Trill(_score);
+                  if (!lineEnd.isEmpty() && lineEnd != "none") 
+                        _logger->logError(QString("line-end not supported for line-type \"wavy\""));
+                  }
+            else if ((sline && sline->isTextLine()) || (!sline && !isWavy)) {
+                  if (!sline) sline = new TextLine(_score);
+                  auto textLine = toTextLine(sline);
+                  textLine->setEndHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
+                  if (lineEnd == "up")
+                        textLine->setEndHookHeight(-1 * textLine->endHookHeight());
+                  }
+
+            stops.append(MusicXmlSpannerDesc(sline, elementType, number));
             }
       _e.skipCurrentElement();
       }
@@ -3405,7 +3432,8 @@ MusicXmlExtendedSpannerDesc& MusicXMLParserPass2::getSpanner(const MusicXmlSpann
             return _ottavas[d._nr];
       else if (d._tp == ElementType::PEDAL && 0 == d._nr)
             return _pedal;
-      else if (d._tp == ElementType::TEXTLINE && 0 <= d._nr && d._nr < MAX_NUMBER_LEVEL)
+      else if ((d._tp == ElementType::TEXTLINE || d._tp == ElementType::TRILL)
+                && 0 <= d._nr && d._nr < MAX_NUMBER_LEVEL)
             return _brackets[d._nr];
       _logger->logError(QString("invalid number %1").arg(d._nr + 1), &_e);
       return _dummyNewMusicXmlSpannerDesc;
