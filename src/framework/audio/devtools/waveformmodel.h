@@ -40,7 +40,6 @@ public slots:
     void setAvailableSources(QStringList availableSources);
     void setCurrentSourceName(QString currentSourceName);
 
-
     void setCurrentSignalAmplitude(float currentSignalAmplitude);
     void setCurrentVolumePressure(float currentVolumePressure);
 

@@ -30,12 +30,12 @@ void AbstractAudioSource::setSampleRate(unsigned int sampleRate)
 
 bool AbstractAudioSource::isActive() const
 {
-    return true;
+    return m_isActive;
 }
 
-void AbstractAudioSource::setIsActive(bool)
+void AbstractAudioSource::setIsActive(bool isActive)
 {
-
+    m_isActive = isActive;
 }
 
 mu::async::Channel<unsigned int> AbstractAudioSource::audioChannelsCountChanged() const

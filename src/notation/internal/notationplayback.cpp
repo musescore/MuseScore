@@ -466,7 +466,7 @@ Ret NotationPlayback::playNoteMidiData(const Ms::Note* note) const
     MidiData midiData = instrumentMidiData(masterNote->part()->id().toStdString());
 
     Events events = m_midiEventsProvider->retrieveEventsForElement(masterNote, midiChannel);
-    midiData.stream.backgroundStream.send(std::move(events), Ms::MScore::defaultPlayDuration * 2);
+    midiData.stream.backgroundStream.send(std::move(events), Ms::MScore::defaultPlayDuration* 2);
 
     return make_ret(Ret::Code::Ok);
 }
@@ -481,7 +481,7 @@ Ret NotationPlayback::playChordMidiData(const Ms::Chord* chord) const
     MidiData midiData = instrumentMidiData(part->id().toStdString());
 
     Events events = m_midiEventsProvider->retrieveEventsForElement(chord, midiChannel);
-    midiData.stream.backgroundStream.send(std::move(events), Ms::MScore::defaultPlayDuration * 2);
+    midiData.stream.backgroundStream.send(std::move(events), Ms::MScore::defaultPlayDuration* 2);
 
     return make_ret(Ret::Code::Ok);
 }
@@ -506,7 +506,7 @@ Ret NotationPlayback::playHarmonyMidiData(const Ms::Harmony* harmony) const
     MidiData midiData = instrumentMidiData(harmony->part()->id().toStdString());
 
     Events events = m_midiEventsProvider->retrieveEventsForElement(harmony, midiChannel);
-    midiData.stream.backgroundStream.send(std::move(events), Ms::MScore::defaultPlayDuration * 2);
+    midiData.stream.backgroundStream.send(std::move(events), Ms::MScore::defaultPlayDuration* 2);
 
     return make_ret(Ret::Code::Ok);
 }

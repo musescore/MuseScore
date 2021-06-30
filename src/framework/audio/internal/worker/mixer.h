@@ -46,7 +46,8 @@ public:
     // IMixer
     IAudioSourcePtr mixedSource() override;
 
-    RetVal<IMixerChannelPtr> addChannel(IAudioSourcePtr source, const AudioOutputParams& params, async::Channel<AudioOutputParams> paramsChanged) override;
+    RetVal<IMixerChannelPtr> addChannel(IAudioSourcePtr source, const AudioOutputParams& params,
+                                        async::Channel<AudioOutputParams> paramsChanged) override;
     Ret removeChannel(const MixerChannelId id) override;
 
     void addClock(IClockPtr clock) override;

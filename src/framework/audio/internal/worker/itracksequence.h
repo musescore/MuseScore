@@ -17,7 +17,8 @@ public:
 
     virtual TrackSequenceId id() const = 0;
 
-    virtual RetVal<TrackId> addTrack(const std::string& trackName, const midi::MidiData& midiData, const AudioOutputParams& outputParams) = 0;
+    virtual RetVal<TrackId> addTrack(const std::string& trackName, const midi::MidiData& midiData,
+                                     const AudioOutputParams& outputParams) = 0;
     virtual RetVal<TrackId> addTrack(const std::string& trackName, const io::path& filePath, const AudioOutputParams& outputParams) = 0;
 
     virtual TrackIdList trackIdList() const = 0;

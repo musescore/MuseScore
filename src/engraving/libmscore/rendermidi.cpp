@@ -914,7 +914,7 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
     }
 }
 
-MidiRenderer::MidiRenderer(Score *s)
+MidiRenderer::MidiRenderer(Score* s)
     : score(s)
 {
     setMinChunkSize(MIN_CHUNK_SIZE);
