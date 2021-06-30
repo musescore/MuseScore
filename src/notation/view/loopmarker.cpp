@@ -78,7 +78,7 @@ void LoopMarker::paint(mu::draw::Painter* painter)
     case LoopBoundaryType::Unknown: return;
     }
 
-    painter->setPen(Pen(color, 2.0, SolidLine, FlatCap, MiterJoin));
+    painter->setPen(Pen(color, 2.0, PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin));
     painter->drawLine(x, y, x, m_rect.bottom());
     painter->setBrush(color);
     painter->drawConvexPolygon(triangle);

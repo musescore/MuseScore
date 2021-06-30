@@ -1683,7 +1683,7 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
     }
 
     const auto dropAnchorColor = configuration()->anchorLineColor();
-    mu::draw::Pen pen(QBrush(dropAnchorColor), 2.0 / painter->worldTransform().m11(), mu::draw::DotLine);
+    mu::draw::Pen pen(dropAnchorColor, 2.0 / painter->worldTransform().m11(), mu::draw::PenStyle::DotLine);
 
     for (const LineF& anchor : m_anchorLines) {
         painter->setPen(pen);
@@ -1725,7 +1725,7 @@ void NotationInteraction::drawSelectionRange(draw::Painter* painter)
     Pen pen;
     pen.setColor(selectionColor);
     pen.setWidthF(penWidth);
-    pen.setStyle(SolidLine);
+    pen.setStyle(PenStyle::SolidLine);
     painter->setPen(pen);
 
     std::vector<RectF> rangeArea = m_selection->range()->boundingArea();

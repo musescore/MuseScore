@@ -94,7 +94,7 @@ class SLine : public Spanner
 {
     qreal _lineWidth;
     QColor _lineColor       { MScore::defaultColor };
-    mu::draw::PenStyle _lineStyle { mu::draw::SolidLine };
+    mu::draw::PenStyle _lineStyle { mu::draw::PenStyle::SolidLine };
     qreal _dashLineLen      { 5.0 };
     qreal _dashGapLen       { 5.0 };
     bool _diagonal          { false };

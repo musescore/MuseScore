@@ -104,7 +104,7 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
 
     Pen pen(curColor(visible(), glissando()->lineColor()));
     pen.setWidthF(glissando()->lineWidth());
-    pen.setCapStyle(RoundCap);
+    pen.setCapStyle(PenCapStyle::RoundCap);
     painter->setPen(pen);
 
     // rotate painter so that the line become horizontal

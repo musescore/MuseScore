@@ -169,7 +169,7 @@ void Painter::setPen(const Pen& pen)
 
 void Painter::setNoPen()
 {
-    setPen(Pen(Qt::NoPen));
+    setPen(Pen(PenStyle::NoPen));
 }
 
 const Pen& Painter::pen() const
@@ -286,7 +286,7 @@ void Painter::fillPath(const QPainterPath& path, const QBrush& brush)
 {
     Pen oldPen = this->pen();
     QBrush oldBrush = this->brush();
-    setPen(Pen(NoPen));
+    setPen(Pen(PenStyle::NoPen));
     setBrush(brush);
 
     drawPath(path);
@@ -441,7 +441,7 @@ void Painter::fillRect(const RectF& rect, const QBrush& brush)
 {
     Pen oldPen = this->pen();
     QBrush oldBrush = this->brush();
-    setPen(Pen(NoPen));
+    setPen(Pen(mu::draw::PenStyle::NoPen));
     setBrush(brush);
 
     drawRect(rect);

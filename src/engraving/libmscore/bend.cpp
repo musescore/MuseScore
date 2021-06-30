@@ -265,7 +265,7 @@ void Bend::draw(mu::draw::Painter* painter) const
     qreal _spatium = spatium();
     qreal _lw = _lineWidth;
 
-    Pen pen(curColor(), _lw, SolidLine, RoundCap, RoundJoin);
+    Pen pen(curColor(), _lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(QBrush(curColor()));
 

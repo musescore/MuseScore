@@ -242,7 +242,7 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
 
     painter->setPen(Pen(curColor(),
                          score()->styleS(Sid::ArpeggioLineWidth).val() * _spatium,
-                         SolidLine, RoundCap));
+                         PenStyle::SolidLine, PenCapStyle::RoundCap));
 
     painter->save();
     switch (arpeggioType()) {

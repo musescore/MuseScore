@@ -25,7 +25,6 @@
 #include <list>
 #include <stack>
 
-#include "pen.h"
 #include <QColor>
 #include <QPainter>
 
@@ -35,6 +34,7 @@
 #include "geometry.h"
 #include "drawtypes.h"
 #include "font.h"
+#include "pen.h"
 
 class QPaintDevice;
 class QImage;
