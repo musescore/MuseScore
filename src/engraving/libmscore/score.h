@@ -805,8 +805,8 @@ public:
     bool checkTimeDelete(Segment*, Segment*);
     void timeDelete(Measure*, Segment*, const Fraction&);
 
-    void startCmd();                            // start undoable command
-    void endCmd(const bool isCmdFromInspector = false, bool rollback = false);       // end undoable command
+    void startCmd();                    // start undoable command
+    void endCmd(bool rollback = false); // end undoable command
     void update() { update(true); }
     void undoRedo(bool undo, EditData*);
 
