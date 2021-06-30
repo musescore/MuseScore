@@ -244,18 +244,18 @@ qreal RepeatList::utick2utime(int tick) const
 //   utime2utick
 //---------------------------------------------------------
 
-int RepeatList::utime2utick(qreal t) const
+int RepeatList::utime2utick(qreal secs) const
 {
-    unsigned n = size();
-    unsigned ii = (idx2 < n) && (t >= at(idx2)->utime) ? idx2 : 0;
-    for (unsigned i = ii; i < n; ++i) {
-        if ((t >= at(i)->utime) && ((i + 1 == n) || (t < at(i + 1)->utime))) {
+    unsigned repeatSegmentsCount = size();
+    unsigned ii = (idx2 < repeatSegmentsCount) && (secs >= at(idx2)->utime) ? idx2 : 0;
+    for (unsigned i = ii; i < repeatSegmentsCount; ++i) {
+        if ((secs >= at(i)->utime) && ((i + 1 == repeatSegmentsCount) || (secs < at(i + 1)->utime))) {
             idx2 = i;
-            return _score->tempomap()->time2tick(t - at(i)->timeOffset) + (at(i)->utick - at(i)->tick);
+            return _score->tempomap()->time2tick(secs - at(i)->timeOffset) + (at(i)->utick - at(i)->tick);
         }
     }
     if (MScore::debugMode) {
-        qFatal("time %f not found in RepeatList", t);
+        qFatal("time %f not found in RepeatList", secs);
     }
     return 0;
 }
