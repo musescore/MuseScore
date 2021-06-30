@@ -3281,7 +3281,7 @@ TimeSignature::TimeSignature()
     m_beamGroup4 = 0;
 
     m_beamCount16th = 4;
-    m_beamCount32th = 1;
+    m_beamCount32nd = 1;
 }
 
 void TimeSignature::setNumerator(int numerator)
@@ -3437,9 +3437,9 @@ void TimeSignature::set16thBeamCount(int count)
     m_beamCount16th = count;
 }
 
-void TimeSignature::set32thBeamCount(int count)
+void TimeSignature::set32ndBeamCount(int count)
 {
-    m_beamCount32th = count;
+    m_beamCount32nd = count;
 }
 
 Key::Key()
@@ -5549,11 +5549,11 @@ bool BarsParse::parseTimeSignature(Measure* measure, int /* length */)
     }
     timeSignature->set16thBeamCount(placeHolder.toUnsignedInt());
 
-    // beam 32th
+    // beam 32nd
     if (!readBuffer(placeHolder, 1)) {
         return false;
     }
-    timeSignature->set32thBeamCount(placeHolder.toUnsignedInt());
+    timeSignature->set32ndBeamCount(placeHolder.toUnsignedInt());
 
     return true;
 }

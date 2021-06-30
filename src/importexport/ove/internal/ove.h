@@ -1927,7 +1927,7 @@ public:
     void setBeamGroup4(int count);
 
     void set16thBeamCount(int count);
-    void set32thBeamCount(int count);
+    void set32ndBeamCount(int count);
 
 private:
     int m_numerator;
@@ -1967,7 +1967,7 @@ private:
     int m_beamGroup4;
 
     int m_beamCount16th;
-    int m_beamCount32th;
+    int m_beamCount32nd;
 };
 
 class Key : public MusicData
