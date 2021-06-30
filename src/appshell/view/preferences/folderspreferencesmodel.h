@@ -78,12 +78,6 @@ private:
 
     void savePath(FolderType folderType, const QString& path);
 
-    QString scoresPath() const;
-    QString stylesPath() const;
-    QString templatesPath() const;
-    QString pluginsPath() const;
-    QString extensionsPath() const;
-
     void setPath(FolderType folderType, const QString& path);
     QModelIndex folderIndex(FolderType folderType);
 

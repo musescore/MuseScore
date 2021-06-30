@@ -39,8 +39,9 @@ public:
 
     io::paths availablePluginsPaths() const override;
 
-    ValCh<io::path> pluginsPath() const override;
-    void setPluginsPath(const io::path& path) override;
+    io::path userPluginsPath() const override;
+    void setUserPluginsPath(const io::path& path) override;
+    async::Channel<io::path> userPluginsPathChanged() const override;
 
     ValCh<CodeKeyList> installedPlugins() const override;
     void setInstalledPlugins(const CodeKeyList& codeKeyList) override;
@@ -48,11 +49,8 @@ public:
 private:
     CodeKeyList parseInstalledPlugins(const mu::Val& val) const;
 
-    io::path userPluginsPath() const;
-    io::path defaultPluginsPath() const;
-
     async::Channel<CodeKeyList> m_installedPluginsChanged;
-    async::Channel<io::path> m_pluginsPathChanged;
+    async::Channel<io::path> m_userPluginsPathChanged;
 };
 }
 

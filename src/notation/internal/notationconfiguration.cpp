@@ -132,10 +132,11 @@ void NotationConfiguration::init()
         m_currentZoomChanged.send(val.toInt());
     });
 
-    settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->appDataPath().toStdString() + "Styles"));
+    settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->userDataPath() + "/Styles"));
     settings()->valueChanged(USER_STYLES_PATH).onReceive(nullptr, [this](const Val& val) {
-        m_stylesPathChanged.send(val.toString());
+        m_userStylesPathChanged.send(val.toPath());
     });
+    fileSystem()->makePath(userStylesPath());
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(6));
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(false));
@@ -172,8 +173,6 @@ void NotationConfiguration::init()
             m_selectionColorChanged.send(i);
         });
     }
-
-    fileSystem()->makePath(stylesPath().val);
 
     // libmscore
     preferences().setBackupDirPath(globalConfiguration()->userBackupPath().toQString());
@@ -387,18 +386,19 @@ int NotationConfiguration::fontSize() const
     return uiConfiguration()->fontSize(FontSizeType::BODY);
 }
 
-ValCh<io::path> NotationConfiguration::stylesPath() const
+io::path NotationConfiguration::userStylesPath() const
 {
-    ValCh<io::path> result;
-    result.ch = m_stylesPathChanged;
-    result.val = settings()->value(USER_STYLES_PATH).toString();
-
-    return result;
+    return settings()->value(USER_STYLES_PATH).toPath();
 }
 
-void NotationConfiguration::setStylesPath(const io::path& path)
+void NotationConfiguration::setUserStylesPath(const io::path& path)
 {
-    settings()->setSharedValue(USER_STYLES_PATH, Val(path.toStdString()));
+    settings()->setSharedValue(USER_STYLES_PATH, Val(path));
+}
+
+async::Channel<io::path> NotationConfiguration::userStylesPathChanged() const
+{
+    return m_userStylesPathChanged;
 }
 
 io::path NotationConfiguration::defaultStyleFilePath() const

@@ -99,8 +99,9 @@ public:
     std::string fontFamily() const override;
     int fontSize() const override;
 
-    ValCh<io::path> stylesPath() const override;
-    void setStylesPath(const io::path& path) override;
+    io::path userStylesPath() const override;
+    void setUserStylesPath(const io::path& path) override;
+    async::Channel<io::path> userStylesPathChanged() const override;
 
     io::path defaultStyleFilePath() const override;
     void setDefaultStyleFilePath(const io::path& path) override;
@@ -153,7 +154,7 @@ private:
     async::Notification m_foregroundChanged;
     async::Channel<int> m_currentZoomChanged;
     async::Channel<framework::Orientation> m_canvasOrientationChanged;
-    async::Channel<io::path> m_stylesPathChanged;
+    async::Channel<io::path> m_userStylesPathChanged;
     async::Channel<int> m_selectionColorChanged;
 };
 }

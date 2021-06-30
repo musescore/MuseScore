@@ -153,7 +153,7 @@ mu::io::path ExportScoreScenario::askExportPath(const INotationPtrList& notation
 {
     IMasterNotationPtr currentMasterNotation = context()->currentMasterNotation();
 
-    io::path suggestedPath = configuration()->scoresPath().val;
+    io::path suggestedPath = configuration()->userScoresPath();
     io::path masterNotationDirPath = io::dirpath(currentMasterNotation->path());
     if (masterNotationDirPath != "") {
         suggestedPath = masterNotationDirPath;
