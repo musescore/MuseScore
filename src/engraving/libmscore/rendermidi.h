@@ -25,6 +25,7 @@
 
 #include "fraction.h"
 #include "measure.h"
+#include "synthesizerstate.h"
 
 namespace Ms {
 class EventMap;
@@ -123,16 +124,15 @@ private:
     void collectMeasureEventsDefault(EventMap* events, Measure const* m, const StaffContext& sctx, int tickOffset);
 
 public:
-    explicit MidiRenderer(Score* s)
-        : score(s) {}
+    explicit MidiRenderer(Score* s);
 
     struct Context
     {
-        const SynthesizerState& synthState;
+        Ms::SynthesizerState synthState;
         bool metronome{ true };
         bool renderHarmony{ false };
-        Context(const SynthesizerState& ss)
-            : synthState(ss) {}
+
+        Context() {}
     };
 
     void renderScore(EventMap* events, const Context& ctx);
@@ -146,6 +146,7 @@ public:
     static const int ARTICULATION_CONV_FACTOR { 100000 };
 
     Chunk chunkAt(int utick);
+    std::vector<Chunk> chunksFromRange(const int fromTick, const int toTick);
 };
 
 class Spanner;

@@ -33,6 +33,7 @@
 #include "engraving/accessibility/accessibleelement.h"
 
 #include "notationinteraction.h"
+#include "notationmidievents.h"
 #include "notationplayback.h"
 #include "notationundostack.h"
 #include "notationstyle.h"
@@ -90,10 +91,11 @@ Notation::Notation(Ms::Score* score)
 
     m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);
     m_interaction = std::make_shared<NotationInteraction>(this, m_undoStack);
-    m_playback = std::make_shared<NotationPlayback>(this, m_notationChanged);
     m_midiInput = std::make_shared<NotationMidiInput>(this, m_undoStack);
     m_accessibility = std::make_shared<NotationAccessibility>(this, m_interaction->selectionChanged());
     m_parts = std::make_shared<NotationParts>(this, m_interaction, m_undoStack);
+    m_midiEventsProvider = std::make_shared<NotationMidiEvents>(this, m_notationChanged);
+    m_playback = std::make_shared<NotationPlayback>(this, m_notationChanged, m_midiEventsProvider);
     m_style = std::make_shared<NotationStyle>(this);
     m_elements = std::make_shared<NotationElements>(this);
 
@@ -141,6 +143,20 @@ Notation::Notation(Ms::Score* score)
 
 Notation::~Notation()
 {
+    //! Note Dereference internal pointers before the deallocation of Ms::Score* in order to prevent access to dereferenced object
+    //! Makes sense to use std::shared_ptr<Ms::Score*> ubiquitous instead of the raw pointers
+    m_parts = nullptr;
+    m_playback = nullptr;
+    m_undoStack = nullptr;
+    m_interaction = nullptr;
+    m_midiInput = nullptr;
+    m_accessibility = nullptr;
+    m_parts = nullptr;
+    m_midiEventsProvider = nullptr;
+    m_playback = nullptr;
+    m_style = nullptr;
+    m_elements = nullptr;
+
     delete m_score;
 }
 
@@ -168,7 +184,7 @@ void Notation::setScore(Ms::Score* score)
 
     if (score) {
         static_cast<NotationInteraction*>(m_interaction.get())->init();
-        static_cast<NotationPlayback*>(m_playback.get())->init();
+        static_cast<NotationPlayback*>(m_playback.get())->init(m_parts);
     }
 }
 

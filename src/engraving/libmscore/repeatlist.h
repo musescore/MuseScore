@@ -101,7 +101,7 @@ public:
 
     int utick2tick(int tick) const;
     int tick2utick(int tick) const;
-    int utime2utick(qreal) const;
+    int utime2utick(qreal secs) const;
     qreal utick2utime(int) const;
     void updateTempo();
     int ticks() const;
