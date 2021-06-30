@@ -526,8 +526,8 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("beam-64",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Beam 32th Sub"),
-             QT_TRANSLATE_NOOP("action", "Beam 32th sub"),
+             QT_TRANSLATE_NOOP("action", "Beam 32nd Sub"),
+             QT_TRANSLATE_NOOP("action", "Beam 32nd sub"),
              IconCode::Code::BEAM_64
              ),
     UiAction("auto-beam",
@@ -1139,9 +1139,9 @@ const UiActionList NotationUiActions::m_noteInputActions = {
              ),
     UiAction("pad-note-32",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "32th note"),
-             QT_TRANSLATE_NOOP("action", "Note duration: 32th note"),
-             IconCode::Code::NOTE_32TH
+             QT_TRANSLATE_NOOP("action", "32nd note"),
+             QT_TRANSLATE_NOOP("action", "Note duration: 32nd note"),
+             IconCode::Code::NOTE_32ND
              ),
     UiAction("pad-note-64",
              mu::context::UiCtxNotationOpened,

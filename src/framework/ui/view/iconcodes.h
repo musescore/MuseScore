@@ -236,7 +236,7 @@ public:
         NOTE_QUARTER = 0xF368,
         NOTE_8TH = 0xF369,
         NOTE_16TH = 0xF36A,
-        NOTE_32TH = 0xF36B,
+        NOTE_32ND = 0xF36B,
         NOTE_64TH = 0xF36C,
         NOTE_128TH = 0xF36D,
         NOTE_256TH = 0xF36E,
