@@ -40,6 +40,7 @@ public:
 protected:
     unsigned int m_sampleRate = 1;
     async::Channel<unsigned int> m_streamsCountChanged;
+    bool m_isActive = false;
 };
 }
 
