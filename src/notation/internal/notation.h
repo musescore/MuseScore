@@ -24,6 +24,7 @@
 
 #include "inotation.h"
 #include "igetscore.h"
+#include "inotationmidievents.h"
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
@@ -79,6 +80,8 @@ protected:
     Ms::MScore* scoreGlobal() const;
     void notifyAboutNotationChanged();
 
+    INotationPartsPtr m_parts = nullptr;
+
 private:
     friend class NotationInteraction;
 
@@ -93,14 +96,14 @@ private:
     Ms::Score* m_score = nullptr;
     ValCh<bool> m_opened;
 
-    INotationInteractionPtr m_interaction;
-    INotationPlaybackPtr m_playback;
-    INotationUndoStackPtr m_undoStack;
-    INotationStylePtr m_style;
-    INotationMidiInputPtr m_midiInput;
-    INotationAccessibilityPtr m_accessibility;
-    INotationElementsPtr m_elements;
-    INotationPartsPtr m_parts;
+    INotationInteractionPtr m_interaction = nullptr;
+    INotationMidiEventsPtr m_midiEventsProvider = nullptr;
+    INotationPlaybackPtr m_playback = nullptr;
+    INotationUndoStackPtr m_undoStack = nullptr;
+    INotationStylePtr m_style = nullptr;
+    INotationMidiInputPtr m_midiInput = nullptr;
+    INotationAccessibilityPtr m_accessibility = nullptr;
+    INotationElementsPtr m_elements = nullptr;
 
     async::Notification m_notationChanged;
 };
