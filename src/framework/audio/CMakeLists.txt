@@ -173,6 +173,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcaudioenginecontroller.h
 
     # DevTools
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/waveformmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/waveformmodel.h
     )                           
 
 set(FLUIDSYNTH_DIR ${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth/fluidsynth-2.1.4)
