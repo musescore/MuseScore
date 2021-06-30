@@ -34,6 +34,11 @@ Ret FileSystemStub::remove(const io::path&) const
     return make_ret(Ret::Code::NotSupported);
 }
 
+Ret FileSystemStub::copy(const io::path&, const io::path&, bool replace) const
+{
+    return make_ret(Ret::Code::NotSupported);
+}
+
 Ret FileSystemStub::makePath(const io::path&) const
 {
     return make_ret(Ret::Code::NotSupported);
@@ -51,4 +56,9 @@ RetVal<QByteArray> FileSystemStub::readFile(const io::path&) const
     RetVal<QByteArray> result;
     result.ret = make_ret(Ret::Code::NotSupported);
     return result;
+}
+
+Ret FileSystemStub::writeToFile(const io::path&, const QByteArray&) const
+{
+    return make_ret(Ret::Code::NotSupported);
 }

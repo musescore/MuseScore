@@ -19,13 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "workspacecreatorstub.h"
+#ifndef MU_USERSCORES_FILESCORECONTROLLERSTUB_H
+#define MU_USERSCORES_FILESCORECONTROLLERSTUB_H
 
-#include "workspacestub.h"
+#include "userscores/ifilescorecontroller.h"
 
-using namespace mu::workspace;
-
-IWorkspacePtr WorkspaceCreatorStub::newWorkspace(const std::string&) const
+namespace mu::userscores {
+class FileScoreControllerStub : public IFileScoreController
 {
-    return std::make_shared<WorkspaceStub>();
+public:
+    FileScoreControllerStub() = default;
+
+    Ret openScore(const io::path& scorePath) override;
+    bool closeOpenedScore() override;
+    bool isScoreOpened(const io::path& scorePath) const override;
+};
 }
+
+#endif // MU_USERSCORES_FILESCORECONTROLLERSTUB_H

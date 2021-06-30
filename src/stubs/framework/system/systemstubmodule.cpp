@@ -25,7 +25,7 @@
 #include "filesystemstub.h"
 
 using namespace mu::system;
-using namespace mu::framework;
+using namespace mu::modularity;
 
 std::string SystemStubModule::moduleName() const
 {

@@ -28,10 +28,17 @@ namespace mu::workspace {
 class WorkspaceManagerStub : public IWorkspaceManager
 {
 public:
-    RetValCh<IWorkspacePtr> currentWorkspace() const override;
 
-    RetVal<IWorkspacePtrList> workspaces() const override;
+    IWorkspacePtr defaultWorkspace() const override;
+
+    IWorkspacePtr currentWorkspace() const override;
+    async::Notification currentWorkspaceChanged() const override;
+
+    IWorkspacePtrList workspaces() const override;
     Ret setWorkspaces(const IWorkspacePtrList& workspaces) override;
+    async::Notification workspacesListChanged() const override;
+
+    IWorkspacePtr newWorkspace(const std::string& workspaceName) const override;
 };
 }
 

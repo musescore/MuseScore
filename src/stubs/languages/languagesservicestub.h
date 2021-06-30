@@ -33,8 +33,7 @@ public:
     RetCh<LanguageProgress> update(const QString& languageCode) override;
     Ret uninstall(const QString& languageCode) override;
 
-    RetVal<Language> currentLanguage() const override;
-    Ret setCurrentLanguage(const QString& languageCode) override;
+    ValCh<Language> currentLanguage() const override;
 
     RetCh<Language> languageChanged() override;
 };

@@ -28,6 +28,10 @@ namespace mu::shortcuts {
 class MidiRemoteStub : public IMidiRemote
 {
 public:
+
+    const MidiMappingList& midiMappings() const override;
+    Ret setMidiMappings(const MidiMappingList& midiMappings) override;
+
     void setIsSettingMode(bool arg) override;
     bool isSettingMode() const override;
 
