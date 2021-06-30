@@ -60,10 +60,10 @@ public:
 
 private:
     void readMidiMappings();
-    MidiMapping readMidiMapping(framework::XmlReader& reader) const;
+    MidiControlsMapping readMidiMapping(framework::XmlReader& reader) const;
 
     bool writeMidiMappings(const MidiMappingList& midiMappings) const;
-    void writeMidiMapping(framework::XmlWriter& writer, const MidiMapping& midiMapping) const;
+    void writeMidiMapping(framework::XmlWriter& writer, const MidiControlsMapping& midiMapping) const;
 
     bool needIgnoreEvent(const midi::Event& event) const;
 
