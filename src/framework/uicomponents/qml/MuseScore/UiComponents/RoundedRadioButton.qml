@@ -22,6 +22,8 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 
+import "internal/Utils.js" as Utils
+
 RadioButton {
     id: root
 
@@ -67,25 +69,25 @@ RadioButton {
         implicitHeight: implicitWidth
 
         Rectangle {
-            id: borderRect
-            implicitWidth: 20
-            implicitHeight: implicitWidth
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            radius: 13
+            id: backgroundRect
+            anchors.centerIn: parent
+            width: 2 * radius
+            height: width
+            radius: 10
+
+            property real borderColorOpacity: ui.theme.buttonOpacityNormal
 
             color: ui.theme.textFieldColor
-            border.color: ui.theme.fontPrimaryColor
-            opacity: ui.theme.buttonOpacityNormal
+            border.color: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, borderColorOpacity)
+            border.width: 1
         }
 
         Rectangle {
-            id: mainRect
-            width: 10
+            id: highlightRect
+            anchors.centerIn: parent
+            width: 2 * radius
             height: width
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            radius: 7
+            radius: 5
 
             color: ui.theme.accentColor
             visible: root.checked
@@ -98,12 +100,12 @@ RadioButton {
             when: root.pressed
 
             PropertyChanges {
-                target: borderRect
-                opacity: ui.theme.accentOpacityHit
+                target: backgroundRect
+                borderColorOpacity: ui.theme.buttonOpacityHit
             }
 
             PropertyChanges {
-                target: mainRect
+                target: highlightRect
                 visible: true
             }
         },
@@ -113,12 +115,12 @@ RadioButton {
             when: root.checked && !root.hovered
 
             PropertyChanges {
-                target: borderRect
-                opacity: ui.theme.accentOpacityNormal
+                target: backgroundRect
+                borderColorOpacity: ui.theme.buttonOpacityNormal
             }
 
             PropertyChanges {
-                target: mainRect
+                target: highlightRect
                 visible: true
             }
         },
@@ -128,8 +130,8 @@ RadioButton {
             when: root.hovered && !root.checked && !root.pressed
 
             PropertyChanges {
-                target: borderRect
-                opacity: ui.theme.buttonOpacityHover
+                target: backgroundRect
+                borderColorOpacity: ui.theme.buttonOpacityHover
             }
         },
 
@@ -138,12 +140,12 @@ RadioButton {
             when: root.hovered && root.checked
 
             PropertyChanges {
-                target: borderRect
-                opacity: ui.theme.accentOpacityHover
+                target: backgroundRect
+                borderColorOpacity: ui.theme.buttonOpacityHover
             }
 
             PropertyChanges {
-                target: mainRect
+                target: highlightRect
                 visible: true
             }
         }
