@@ -43,7 +43,8 @@ public:
 
     virtual IAudioSourcePtr mixedSource() = 0;
 
-    virtual RetVal<IMixerChannelPtr> addChannel(IAudioSourcePtr source, const AudioOutputParams& params, async::Channel<AudioOutputParams> paramsChanged) = 0;
+    virtual RetVal<IMixerChannelPtr> addChannel(IAudioSourcePtr source, const AudioOutputParams& params,
+                                                async::Channel<AudioOutputParams> paramsChanged) = 0;
     virtual Ret removeChannel(const MixerChannelId id) = 0;
 
     virtual AudioOutputParams masterOutputParams() const = 0;

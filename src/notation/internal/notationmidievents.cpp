@@ -12,8 +12,8 @@ NotationMidiEvents::NotationMidiEvents(IGetScore* getScore, async::Notification 
     : m_getScore(getScore)
 {
     notationChanged.onNotify(this, [this]() {
-       m_renderRanges.clear();
-       m_eventsCache.clear();
+        m_renderRanges.clear();
+        m_eventsCache.clear();
     });
 }
 
@@ -292,7 +292,7 @@ NotationMidiEvents::TickRangeMap NotationMidiEvents::RenderRangeMap::unrenderedG
 
     if (m_renderedRanges.empty()) {
         result.emplace(from, std::move(searchRange));
-        return result;;
+        return result;
     }
 
     for (const auto& range : m_renderedRanges) {

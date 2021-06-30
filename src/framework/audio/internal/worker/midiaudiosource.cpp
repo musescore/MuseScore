@@ -270,7 +270,7 @@ void MidiAudioSource::buildTempoMap()
         tempos.push_back({ 0, 500000 });
     }
 
-    uint64_t msec{ 0 };
+    uint64_t msec { 0 };
     for (size_t i = 0; i < tempos.size(); ++i) {
         TempoItem t;
 
