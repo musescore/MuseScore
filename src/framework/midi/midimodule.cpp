@@ -27,7 +27,6 @@
 #include "modularity/ioc.h"
 
 #include "internal/midiconfiguration.h"
-#include "internal/midiportdatasender.h"
 
 #include "internal/platform/lin/alsamidioutport.h"
 
@@ -71,7 +70,6 @@ std::string MidiModule::moduleName() const
 void MidiModule::registerExports()
 {
     modularity::ioc()->registerExport<IMidiConfiguration>(moduleName(), s_configuration);
-    modularity::ioc()->registerExport<IMidiPortDataSender>(moduleName(), new MidiPortDataSender());
     modularity::ioc()->registerExport<IMidiOutPort>(moduleName(), midiOutPort);
     modularity::ioc()->registerExport<IMidiInPort>(moduleName(), midiInPort);
 }
