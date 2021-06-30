@@ -34,6 +34,8 @@ Item {
     property string search: ""
     property string backgroundColor: ui.theme.backgroundPrimaryColor
 
+    property int sideMargin: 46
+
     property alias navigation: navPanel
 
     NavigationPanel {
@@ -47,7 +49,6 @@ Item {
         id: prv
 
         property var selectedLanguage: undefined
-        property int sideMargin: 133
 
         function resetSelectedLanguage() {
             selectedLanguage = undefined
@@ -104,9 +105,9 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 16
         anchors.left: parent.left
-        anchors.leftMargin: prv.sideMargin
+        anchors.leftMargin: root.sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: prv.sideMargin
+        anchors.rightMargin: root.sideMargin
 
         height: 40
 
@@ -198,7 +199,7 @@ Item {
             color: (index % 2 == 0) ? ui.theme.popupBackgroundColor : root.backgroundColor
 
             headerWidth: header.itemWidth
-            sideMargin: 133
+            sideMargin: root.sideMargin
 
             onClicked: {
                 prv.selectedLanguage = languageListModel.language(model.code)

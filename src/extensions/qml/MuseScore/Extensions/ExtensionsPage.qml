@@ -33,12 +33,14 @@ Item {
     property string search: ""
     property string backgroundColor: ui.theme.backgroundPrimaryColor
 
+    property int sideMargin: 46
+
     Component.onCompleted: {
         extensionListModel.load()
     }
 
     QtObject {
-        id: privateProperties
+        id: prv
 
         property var selectedExtension: undefined
 
@@ -51,18 +53,18 @@ Item {
         id: extensionListModel
 
         onProgress: {
-            if (privateProperties.selectedExtension.code !== extensionCode) {
+            if (prv.selectedExtension.code !== extensionCode) {
                 return
             }
 
             extensionPanel.setProgress(status, indeterminate, current, total)
         }
         onFinish: {
-            if (privateProperties.selectedExtension.code !== item.code) {
+            if (prv.selectedExtension.code !== item.code) {
                 return
             }
 
-            privateProperties.selectedExtension = item
+            prv.selectedExtension = item
             extensionPanel.resetProgress()
         }
     }
@@ -93,9 +95,9 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 5
         anchors.left: parent.left
-        anchors.leftMargin: 133
+        anchors.leftMargin: root.sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: 133
+        anchors.rightMargin: root.sideMargin
         anchors.bottom: extensionPanel.visible ? extensionPanel.top : parent.bottom
 
         clip: true
@@ -136,7 +138,7 @@ Item {
                 model: extensionListModel
                 visible: count > 0
 
-                selectedExtensionCode: Boolean(privateProperties.selectedExtension) ? privateProperties.selectedExtension.code : ""
+                selectedExtensionCode: Boolean(prv.selectedExtension) ? prv.selectedExtension.code : ""
 
                 filters: [
                     FilterValue {
@@ -152,7 +154,7 @@ Item {
                 ]
 
                 onClicked: {
-                    privateProperties.selectedExtension = extensionListModel.extension(extension.code)
+                    prv.selectedExtension = extensionListModel.extension(extension.code)
 
                     extensionPanel.open()
                 }
@@ -169,7 +171,7 @@ Item {
                 model: extensionListModel
                 visible: count > 0
 
-                selectedExtensionCode: Boolean(privateProperties.selectedExtension) ? privateProperties.selectedExtension.code : ""
+                selectedExtensionCode: Boolean(prv.selectedExtension) ? prv.selectedExtension.code : ""
 
                 filters: [
                     FilterValue {
@@ -185,7 +187,7 @@ Item {
                 ]
 
                 onClicked: {
-                    privateProperties.selectedExtension = extensionListModel.extension(extension.code)
+                    prv.selectedExtension = extensionListModel.extension(extension.code)
 
                     extensionPanel.open()
                 }
@@ -221,7 +223,7 @@ Item {
     InstallationPanel {
         id: extensionPanel
 
-        property alias selectedExtension: privateProperties.selectedExtension
+        property alias selectedExtension: prv.selectedExtension
 
         title: Boolean(selectedExtension) ? selectedExtension.name : ""
         description: Boolean(selectedExtension) ? selectedExtension.description : ""
@@ -257,7 +259,7 @@ Item {
         }
 
         onClosed: {
-            privateProperties.resetSelectedExtension()
+            prv.resetSelectedExtension()
         }
     }
 }

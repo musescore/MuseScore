@@ -37,6 +37,12 @@ FocusScope {
 
     signal requestActiveFocus()
 
+    QtObject {
+        id: prv
+
+        readonly property int sideMargin: 46
+    }
+
     NavigationSection {
         id: navSec
         name: "Addons"
@@ -64,10 +70,13 @@ FocusScope {
 
     RowLayout {
         id: topLayout
+
         anchors.top: parent.top
-        anchors.topMargin: 66
+        anchors.topMargin: prv.sideMargin
         anchors.left: parent.left
+        anchors.leftMargin: prv.sideMargin
         anchors.right: parent.right
+        anchors.rightMargin: prv.sideMargin
 
         spacing: 12
 
@@ -82,16 +91,18 @@ FocusScope {
         StyledTextLabel {
             id: addonsLabel
 
-            Layout.leftMargin: 133
-            Layout.alignment: Qt.AlignLeft
-
-            font: ui.theme.titleBoldFont
-
             text: qsTrc("appshell", "Add-ons")
+            font: ui.theme.titleBoldFont
+            horizontalAlignment: Text.AlignLeft
+        }
+
+        Item {
+            Layout.preferredWidth: topLayout.width - addonsLabel.width - serchAndCategoryLayout.width - topLayout.spacing * 2
+            Layout.fillHeight: true
         }
 
         Row {
-            Layout.alignment: Qt.AlignHCenter
+            id: serchAndCategoryLayout
 
             spacing: 12
 
@@ -145,24 +156,21 @@ FocusScope {
                 }
             }
         }
-
-        Item {
-            Layout.preferredWidth: addonsLabel.width
-            Layout.rightMargin: 133
-        }
     }
 
     TabBar {
         id: bar
 
         anchors.top: topLayout.bottom
-        anchors.topMargin: 54
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.topMargin: 36
+        anchors.left: parent.left
+        anchors.leftMargin: prv.sideMargin - itemSideMargin
 
         contentHeight: 32
         spacing: 0
 
         property bool canFilterByCategories: bar.currentIndex === 0 || bar.currentIndex === 1
+        readonly property int itemSideMargin: 22
 
         function categories() {
             var result = []
@@ -204,7 +212,7 @@ FocusScope {
 
         StyledTabButton {
             text: qsTrc("appshell", "Plugins")
-            sideMargin: 22
+            sideMargin: bar.itemSideMargin
             isCurrent: bar.currentIndex === 0
             backgroundColor: root.color
 
@@ -216,7 +224,7 @@ FocusScope {
 
         StyledTabButton {
             text: qsTrc("appshell", "Extensions")
-            sideMargin: 22
+            sideMargin: bar.itemSideMargin
             isCurrent: bar.currentIndex === 1
             backgroundColor: root.color
 
@@ -228,7 +236,7 @@ FocusScope {
 
         StyledTabButton {
             text: qsTrc("appshell", "Languages")
-            sideMargin: 22
+            sideMargin: bar.itemSideMargin
             isCurrent: bar.currentIndex === 2
             backgroundColor: root.color
 
@@ -254,6 +262,8 @@ FocusScope {
             search: searchField.searchText
             selectedCategory: categoryComboBox.selectedCategory
             backgroundColor: root.color
+
+            sideMargin: prv.sideMargin
         }
 
         ExtensionsPage {
@@ -261,14 +271,19 @@ FocusScope {
 
             search: searchField.searchText
             backgroundColor: root.color
+
+            sideMargin: prv.sideMargin
         }
 
         LanguagesPage {
             id: languagesComp
+
             navigation.section: navSec
             navigation.order: 3
             search: searchField.searchText
             backgroundColor: root.color
+
+            sideMargin: prv.sideMargin
         }
     }
 }

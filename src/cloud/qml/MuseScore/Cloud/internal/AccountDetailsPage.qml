@@ -35,9 +35,9 @@ FocusScope {
     signal signOutRequested()
 
     QtObject {
-        id: privateProperties
+        id: prv
 
-        readonly property int sideMargin: 133
+        readonly property int sideMargin: 46
         readonly property int buttonWidth: 133
     }
 
@@ -51,8 +51,8 @@ FocusScope {
 
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 66
-        anchors.leftMargin: privateProperties.sideMargin
+        anchors.topMargin: prv.sideMargin
+        anchors.leftMargin: prv.sideMargin
 
         font: ui.theme.titleBoldFont
     }
@@ -61,7 +61,7 @@ FocusScope {
         anchors.top: userName.bottom
         anchors.topMargin: 106
         anchors.left: parent.left
-        anchors.leftMargin: privateProperties.sideMargin
+        anchors.leftMargin: prv.sideMargin
 
         width: parent.width
         spacing: 67
@@ -107,12 +107,12 @@ FocusScope {
         Row {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
-            anchors.rightMargin: 133
+            anchors.rightMargin: prv.sideMargin
 
             spacing: 22
 
             FlatButton {
-                width: privateProperties.buttonWidth
+                width: prv.buttonWidth
                 text: qsTrc("cloud", "Account info")
 
                 accentButton: true
@@ -123,7 +123,7 @@ FocusScope {
             }
 
             FlatButton {
-                width: privateProperties.buttonWidth
+                width: prv.buttonWidth
                 text: qsTrc("cloud", "Sign out")
 
                 onClicked: {
