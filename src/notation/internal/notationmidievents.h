@@ -2,6 +2,7 @@
 #define MU_NOTATION_NOTATIONMIDEVENTS_H
 
 #include <map>
+#include <unordered_map>
 
 #include "async/asyncable.h"
 #include "async/notification.h"

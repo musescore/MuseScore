@@ -30,7 +30,7 @@ class Equaliser : public IFxProcessor
 public:
     Equaliser();
 
-    FxProcessorId id() const;
+    FxProcessorId id() const override;
 
     unsigned int streamCount() const override;
     void setSampleRate(unsigned int sampleRate) override;

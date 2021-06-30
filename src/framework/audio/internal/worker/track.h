@@ -1,6 +1,8 @@
 #ifndef MU_AUDIO_TRACK_H
 #define MU_AUDIO_TRACK_H
 
+#include <unordered_map>
+#include <memory>
 #include <vector>
 
 #include "async/channel.h"
