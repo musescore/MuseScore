@@ -33,8 +33,7 @@
 #include "zone.h"
 #include "controllers.h"
 
-using namespace mu::zerberus;
-
+namespace mu::zerberus {
 // static const float PI_2 =  1.57079632679489661923;    /* pi/2 */
 
 //---------------------------------------------------------
@@ -143,4 +142,5 @@ void Channel::resetCC()
             ctrl[i] = _instrument->getSetCC(i);
         }
     }
+}
 }
