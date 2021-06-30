@@ -96,9 +96,8 @@ void MMRest::draw(mu::draw::Painter* painter) const
             x += symBbox(sym).width() + spacing;
         }
     } else {
-        using namespace mu::draw;
-        Pen pen(painter->pen());
-        pen.setCapStyle(FlatCap);
+        mu::draw::Pen pen(painter->pen());
+        pen.setCapStyle(mu::draw::PenCapStyle::FlatCap);
 
         // draw horizontal line
         qreal hBarThickness = score()->styleP(Sid::mmRestHBarThickness);

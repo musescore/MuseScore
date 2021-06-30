@@ -165,7 +165,7 @@ void BufferedPaintProvider::setPen(const Pen& pen)
 
 void BufferedPaintProvider::setNoPen()
 {
-    editableState().pen.setStyle(NoPen);
+    editableState().pen.setStyle(PenStyle::NoPen);
 }
 
 const Pen& BufferedPaintProvider::pen() const
@@ -208,7 +208,7 @@ void BufferedPaintProvider::drawPath(const QPainterPath& path)
 {
     const DrawData::State& st = currentState();
     DrawMode mode = DrawMode::StrokeAndFill;
-    if (st.pen.style() == NoPen) {
+    if (st.pen.style() == PenStyle::NoPen) {
         mode = DrawMode::Fill;
     } else if (st.brush.style() == Qt::NoBrush) {
         mode = DrawMode::Stroke;

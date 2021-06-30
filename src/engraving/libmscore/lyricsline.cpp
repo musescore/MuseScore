@@ -477,7 +477,7 @@ void LyricsLineSegment::draw(mu::draw::Painter* painter) const
 
     Pen pen(lyricsLine()->lyrics()->curColor());
     pen.setWidthF(lyricsLine()->lineWidth());
-    pen.setCapStyle(FlatCap);
+    pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setPen(pen);
     if (lyricsLine()->isEndMelisma()) {               // melisma
         painter->drawLine(PointF(), pos2());

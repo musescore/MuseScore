@@ -323,7 +323,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     // Init pen and other values
     qreal _spatium = spatium() * _userMag;
     Pen pen(curColor());
-    pen.setCapStyle(FlatCap);
+    pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setBrush(QBrush(QColor(painter->pen().color())));
 
     // x2 is the x val of the rightmost string
@@ -354,7 +354,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
 
     // Draw dots, sym pen is used to draw them (and markers)
     Pen symPen(pen);
-    symPen.setCapStyle(RoundCap);
+    symPen.setCapStyle(PenCapStyle::RoundCap);
     qreal symPenWidth = stringLw * 1.2;
     symPen.setWidthF(symPenWidth);
 
@@ -432,7 +432,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
         qreal newX2 = endString == -1 ? x2 : stringDist * endString;
         qreal y     = fretDist * (fret - 1) + fretDist * .5;
         pen.setWidthF(dotd * score()->styleD(Sid::barreLineWidth));
-        pen.setCapStyle(RoundCap);
+        pen.setCapStyle(PenCapStyle::RoundCap);
         painter->setPen(pen);
         painter->drawLine(LineF(x1, y, newX2, y));
     }

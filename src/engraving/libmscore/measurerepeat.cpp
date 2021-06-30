@@ -72,7 +72,7 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
             qreal hBarThickness = score()->styleP(Sid::mmRestHBarThickness);
             if (hBarThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
                 Pen pen(painter->pen());
-                pen.setCapStyle(FlatCap);
+                pen.setCapStyle(PenCapStyle::FlatCap);
                 pen.setWidthF(hBarThickness);
                 painter->setPen(pen);
 

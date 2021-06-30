@@ -276,7 +276,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
         qreal _spatium = spatium();
         qreal w        = score()->styleP(Sid::bracketWidth);
         qreal bd       = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
-        Pen pen(curColor(), w, SolidLine, FlatCap);
+        Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.0, -bd - w * .5, 0.0, h + bd + w * .5));
         qreal x    =  -w * .5;
@@ -290,7 +290,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
         qreal h = 2 * h2;
         qreal _spatium = spatium();
         qreal w = score()->styleP(Sid::staffLineWidth);
-        Pen pen(curColor(), w, SolidLine, SquareCap);
+        Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::SquareCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.0, 0.0, 0.0, h));
         painter->drawLine(LineF(0.0, 0.0, w + .5 * _spatium, 0.0));
@@ -300,7 +300,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
     case BracketType::LINE: {
         qreal h = 2 * h2;
         qreal w = 0.67 * score()->styleP(Sid::bracketWidth);
-        Pen pen(curColor(), w, SolidLine, FlatCap);
+        Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
         qreal bd = score()->styleP(Sid::staffLineWidth) * 0.5;
         painter->drawLine(LineF(0.0, -bd, 0.0, h + bd));

@@ -612,7 +612,7 @@ void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
     noteList nl = getNoteList();
     BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), nl.size());
 
-    Pen pen(curColor(), dx.lw, SolidLine, FlatCap);
+    Pen pen(curColor(), dx.lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
 
     bool drawBeam = nl.size() > 1;
@@ -637,7 +637,7 @@ void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
     if (drawBeam) {
         // beam drawing setup
         BEDrawingDataY dy(0, score()->spatium());
-        Pen beamPen(curColor(), dy.bw, SolidLine, FlatCap);
+        Pen beamPen(curColor(), dy.bw, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(beamPen);
         // draw the beams
         drawBeams(painter, dx.spatium, dx.xl - dx.lw * .5, x - dx.headp - dx.lw * .5, dy.y1b);

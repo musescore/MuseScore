@@ -4582,9 +4582,10 @@ int ExportMusicXml::findBracket(const TextLineBase* tl) const
 
 void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fraction& tick)
 {
+    using namespace mu::draw;
     int n;
     // special case: a dashed line w/o hooks is written as dashes
-    const auto isDashes = tl->lineStyle() == Qt::DashLine && (tl->beginHookType() == HookType::NONE)
+    const auto isDashes = tl->lineStyle() == PenStyle::DashLine && (tl->beginHookType() == HookType::NONE)
                           && (tl->endHookType() == HookType::NONE);
 
     if (isDashes) {
@@ -4626,13 +4627,13 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fra
         if (!isDashes) {
             QString lineType;
             switch (tl->lineStyle()) {
-            case Qt::SolidLine:
+            case PenStyle::SolidLine:
                 lineType = "solid";
                 break;
-            case Qt::DashLine:
+            case PenStyle::DashLine:
                 lineType = "dashed";
                 break;
-            case Qt::DotLine:
+            case PenStyle::DotLine:
                 lineType = "dotted";
                 break;
             default:

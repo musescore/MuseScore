@@ -102,7 +102,7 @@ void LedgerLine::draw(mu::draw::Painter* painter) const
     if (chord()->crossMeasure() == CrossMeasure::SECOND) {
         return;
     }
-    painter->setPen(Pen(curColor(), _width, SolidLine, FlatCap));
+    painter->setPen(Pen(curColor(), _width, PenStyle::SolidLine, PenCapStyle::FlatCap));
     if (vertical) {
         painter->drawLine(LineF(0.0, 0.0, 0.0, _len));
     } else {

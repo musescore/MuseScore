@@ -630,7 +630,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
 
     painter->setFont(f);
     painter->setBrush(Qt::NoBrush);
-    Pen pen(figuredBass()->curColor(), FB_CONTLINE_THICKNESS * _spatium, SolidLine, RoundCap);
+    Pen pen(figuredBass()->curColor(), FB_CONTLINE_THICKNESS * _spatium, PenStyle::SolidLine, PenCapStyle::RoundCap);
     painter->setPen(pen);
     painter->drawText(bbox(), Qt::TextDontClip | Qt::AlignLeft | Qt::AlignTop, displayText());
 
@@ -1328,7 +1328,7 @@ void FiguredBass::layoutLines()
         }
         // store length item, reusing array items if already present
         if (_lineLengths.size() <= segIdx) {
-            _lineLengths.append(len);
+            _lineLengths.push_back(len);
         } else {
             _lineLengths[segIdx] = len;
         }

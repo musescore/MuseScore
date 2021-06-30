@@ -37,7 +37,7 @@ void StemSlash::draw(mu::draw::Painter* painter) const
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
     qreal lw = score()->styleP(Sid::stemWidth);
-    painter->setPen(Pen(curColor(), lw, SolidLine, FlatCap));
+    painter->setPen(Pen(curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLine(line);
 }
 

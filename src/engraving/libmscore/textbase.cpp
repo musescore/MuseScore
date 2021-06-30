@@ -3289,7 +3289,7 @@ void TextBase::draw(mu::draw::Painter* painter) const
             QColor fColor = curColor(visible(), frameColor());
             qreal frameWidthVal = frameWidth().val() * (sizeIsSpatiumDependent() ? spatium() : baseSpatium);
 
-            Pen pen(fColor, frameWidthVal, SolidLine, SquareCap, MiterJoin);
+            Pen pen(fColor, frameWidthVal, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
             painter->setPen(pen);
         } else {
             painter->setNoPen();
@@ -3364,7 +3364,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
     }
     p->setBrush(curColor());
     Pen pen(curColor());
-    pen.setJoinStyle(MiterJoin);
+    pen.setJoinStyle(PenJoinStyle::MiterJoin);
     p->setPen(pen);
 
     // Don't draw cursor if there is a selection
@@ -3374,7 +3374,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
 
     QMatrix matrix = p->worldTransform().toAffine();
     p->translate(-pos);
-    p->setPen(Pen(QBrush(Qt::lightGray), 4.0 / matrix.m11()));    // 4 pixel pen size
+    p->setPen(Pen(Qt::lightGray, 4.0 / matrix.m11()));    // 4 pixel pen size
     p->setBrush(Qt::NoBrush);
 
     qreal m = spatium();

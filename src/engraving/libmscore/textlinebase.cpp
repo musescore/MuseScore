@@ -124,30 +124,30 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
         textlineLineWidth *= mag();
     }
     Pen pen(color, textlineLineWidth, tl->lineStyle());
-    Pen solidPen(color, textlineLineWidth, SolidLine);
+    Pen solidPen(color, textlineLineWidth, PenStyle::SolidLine);
 
     //Replace generic Qt dash patterns with improved equivalents to show true dots
-    QVector<qreal> dotted        = { 0.01, 1.99 };   // 0.01 for cap dots. tighter than default Qt Dotline (would be { 0.01, 2.99 }).
-    QVector<qreal> dashed        = { 3.0, 3.0 };     // Compensating for caps. Qt default DashLine is { 4.0, 2.0 }
-    QVector<qreal> dashDotted    = { 3.0, 3.0, 0.01, 2.99 };
-    QVector<qreal> dashDotDotted = { 3.0, 3.0, 0.01, 2.99, 0.01, 2.99 };
-    QVector<qreal> customDashes  = { tl->dashLineLen(), tl->dashGapLen() };
+    std::vector<double> dotted        = { 0.01, 1.99 };   // 0.01 for cap dots. tighter than default Qt Dotline (would be { 0.01, 2.99 }).
+    std::vector<double> dashed        = { 3.0, 3.0 };     // Compensating for caps. Qt default PenStyle::DashLine is { 4.0, 2.0 }
+    std::vector<double> dashDotted    = { 3.0, 3.0, 0.01, 2.99 };
+    std::vector<double> dashDotDotted = { 3.0, 3.0, 0.01, 2.99, 0.01, 2.99 };
+    std::vector<double> customDashes  = { tl->dashLineLen(), tl->dashGapLen() };
 
     switch (tl->lineStyle()) {
-    case DashLine:
+    case PenStyle::DashLine:
         pen.setDashPattern(dashed);
         break;
-    case DotLine:
+    case PenStyle::DotLine:
         pen.setDashPattern(dotted);
-        pen.setCapStyle(RoundCap);         // round dots
+        pen.setCapStyle(PenCapStyle::RoundCap);         // round dots
         break;
-    case DashDotLine:
+    case PenStyle::DashDotLine:
         pen.setDashPattern(dashDotted);
         break;
-    case DashDotDotLine:
+    case PenStyle::DashDotDotLine:
         pen.setDashPattern(dashDotDotted);
         break;
-    case CustomDashLine:
+    case PenStyle::CustomDashLine:
         pen.setDashPattern(customDashes);
         break;
     default:
@@ -174,13 +174,13 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
         }
         //draw rest of line as regular
         //calculate new gap
-        if (tl->lineStyle() == CustomDashLine) {
+        if (tl->lineStyle() == PenStyle::CustomDashLine) {
             qreal adjustedLineLength = lineLength / textlineLineWidth;
             qreal dash = tl->dashLineLen();
             qreal gap = tl->dashGapLen();
             int numPairs;
             qreal newGap = 0;
-            QVector<qreal> nDashes { dash, newGap };
+            std::vector<double> nDashes { dash, newGap };
             if (tl->beginHookType() == HookType::HOOK_45 || tl->beginHookType() == HookType::HOOK_90) {
                 qreal absD
                     = sqrt(PointF::dotProduct(points[start + 1] - points[start], points[start + 1] - points[start])) / textlineLineWidth;
