@@ -19,25 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_IMIDIPORTDATASENDER_H
-#define MU_MIDI_IMIDIPORTDATASENDER_H
+#ifndef MU_AUDIO_ISEQUENCER_H
+#define MU_AUDIO_ISEQUENCER_H
 
 #include "modularity/imoduleexport.h"
-#include "miditypes.h"
+#include "async/channel.h"
+#include "async/promise.h"
 
-namespace mu::midi {
-class IMidiPortDataSender : MODULE_EXPORT_INTERFACE
+#include "iplayers.h"
+#include "itracks.h"
+#include "iaudioio.h"
+#include "audiotypes.h"
+
+namespace mu::audio {
+class IPlayback : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IMidiPortDataSender)
+    INTERFACE_ID(IPlayback)
 
 public:
-    virtual ~IMidiPortDataSender() = default;
+    virtual ~IPlayback() = default;
 
-    virtual void setMidiStream(std::shared_ptr<MidiStream> stream) = 0;
+    virtual async::Promise<TrackSequenceId> addSequence() = 0;
+    virtual async::Promise<TrackSequenceIdList> sequenceIdList() const = 0;
+    virtual void removeSequence(const TrackSequenceId id) = 0;
 
-    virtual bool sendEvents(tick_t from, tick_t toTick) = 0;
-    virtual bool sendSingleEvent(const midi::Event& event) = 0;
+    virtual ITracksPtr tracks() const = 0;
+    virtual IPlayersPtr players() const = 0;
+    virtual IAudioIOPtr audioIO() const = 0;
 };
-}
 
-#endif // MU_MIDI_IMIDIPORTDATASENDER_H
+using IPlaybackPtr = std::shared_ptr<IPlayback>;
+}
+#endif // MU_AUDIO_ISEQUENCER_H
