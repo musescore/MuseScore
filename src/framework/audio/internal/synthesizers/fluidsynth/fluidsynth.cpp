@@ -249,28 +249,28 @@ bool FluidSynth::handleEvent(const Event& e)
     }
 
     int ret = FLUID_OK;
-    switch (e.type()) {
-    case EventType::ME_NOTEON: {
+    switch (e.opcode()) {
+    case Event::Opcode::NoteOn: {
         ret = fluid_synth_noteon(m_fluid->synth, e.channel(), e.note(), e.velocity());
     } break;
-    case EventType::ME_NOTEOFF: {
+    case Event::Opcode::NoteOff: {
         ret = fluid_synth_noteoff(m_fluid->synth, e.channel(), e.note());
     } break;
-    case EventType::ME_CONTROLLER: {
+    case Event::Opcode::ControlChange: {
         if (e.index() == CntrType::CTRL_PROGRAM) {
-            ret = fluid_synth_program_change(m_fluid->synth, e.channel(), e.data());
+            ret = fluid_synth_program_change(m_fluid->synth, e.channel(), e.program());
         } else {
             ret = fluid_synth_cc(m_fluid->synth, e.channel(), e.index(), e.data());
         }
     } break;
-    case EventType::ME_PROGRAM: {
+    case Event::Opcode::ProgramChange: {
         fluid_synth_program_change(m_fluid->synth, e.channel(), e.program());
     } break;
-    case EventType::ME_PITCHBEND: {
+    case Event::Opcode::PitchBend: {
         ret = fluid_synth_pitch_bend(m_fluid->synth, e.channel(), e.data());
     } break;
     default: {
-        LOGW() << "not supported event type: " << static_cast<int>(e.type());
+        LOGW() << "not supported event type: " << e.opcodeString();
         ret = FLUID_FAILED;
     }
     }
