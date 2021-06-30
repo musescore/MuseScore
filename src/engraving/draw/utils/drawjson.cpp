@@ -56,7 +56,7 @@ static void fromObj(const QJsonObject& obj, Pen& pen)
 {
     pen.setStyle(static_cast<PenStyle>(obj["style"].toInt()));
     pen.setColor(QColor(obj["color"].toString()));
-    pen.setWidthF(obj["width"].toInt());
+    pen.setWidthF(obj["width"].toDouble());
 }
 
 static QJsonObject toObj(const QBrush& brush)

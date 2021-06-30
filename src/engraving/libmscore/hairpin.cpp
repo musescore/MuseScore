@@ -644,17 +644,17 @@ void Hairpin::setHairpinType(HairpinType val)
     case HairpinType::DECRESC_HAIRPIN:
         setBeginText("");
         setContinueText("");
-        setLineStyle(Qt::PenStyle::SolidLine);
+        setLineStyle(PenStyle::SolidLine);
         break;
     case HairpinType::CRESC_LINE:
         setBeginText("cresc.");
         setContinueText("(cresc.)");
-        setLineStyle(Qt::PenStyle::CustomDashLine);
+        setLineStyle(PenStyle::CustomDashLine);
         break;
     case HairpinType::DECRESC_LINE:
         setBeginText("dim.");
         setContinueText("(dim.)");
-        setLineStyle(Qt::PenStyle::CustomDashLine);
+        setLineStyle(PenStyle::CustomDashLine);
         break;
     case HairpinType::INVALID:
         break;
@@ -842,9 +842,9 @@ QVariant Hairpin::propertyDefault(Pid id) const
 
     case Pid::LINE_STYLE:
         if (isLineType()) {
-            return int(Qt::PenStyle::CustomDashLine);
+            return int(mu::draw::PenStyle::CustomDashLine);
         }
-        return int(Qt::PenStyle::SolidLine);
+        return int(mu::draw::PenStyle::SolidLine);
 
     case Pid::BEGIN_TEXT:
         if (_hairpinType == HairpinType::CRESC_LINE) {

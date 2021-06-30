@@ -1541,7 +1541,7 @@ void Harmony::draw(mu::draw::Painter* painter) const
         if (frameWidth().val() != 0.0) {
             QColor color = frameColor();
             Pen pen(color, frameWidth().val() * spatium(), PenStyle::SolidLine,
-                     PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
+                    PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
             painter->setPen(pen);
         } else {
             painter->setNoPen();

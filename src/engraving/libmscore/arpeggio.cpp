@@ -241,8 +241,8 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     qreal y2 = _height + _userLen2;
 
     painter->setPen(Pen(curColor(),
-                         score()->styleS(Sid::ArpeggioLineWidth).val() * _spatium,
-                         PenStyle::SolidLine, PenCapStyle::RoundCap));
+                        score()->styleS(Sid::ArpeggioLineWidth).val() * _spatium,
+                        PenStyle::SolidLine, PenCapStyle::RoundCap));
 
     painter->save();
     switch (arpeggioType()) {

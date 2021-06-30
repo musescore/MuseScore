@@ -114,7 +114,7 @@ void Box::draw(mu::draw::Painter* painter) const
         stroker.setJoinStyle(Qt::PenJoinStyle::MiterJoin);
         stroker.setCapStyle(Qt::PenCapStyle::SquareCap);
 
-        stroker.setDashPattern({1, 3});
+        stroker.setDashPattern({ 1, 3 });
         PainterPath path;
         w *= .5;
         path.addRect(bbox().adjusted(w, w, -w, -w).toQRectF());

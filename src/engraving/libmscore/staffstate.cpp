@@ -100,7 +100,7 @@ void StaffState::draw(mu::draw::Painter* painter) const
         return;
     }
     Pen pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
-             lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+            lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(Qt::NoBrush);
     painter->drawPath(path);
