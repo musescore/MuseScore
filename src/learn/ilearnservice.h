@@ -19,21 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LEARN_LEARNMODULE_H
-#define MU_LEARN_LEARNMODULE_H
+#ifndef MU_LEARN_ILEARNSERVICE_H
+#define MU_LEARN_ILEARNSERVICE_H
 
-#include "modularity/imodulesetup.h"
+#include "modularity/imoduleexport.h"
+
+#include "learntypes.h"
 
 namespace mu::learn {
-class LearnModule : public modularity::IModuleSetup
+class ILearnService : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(ILearnService)
+
 public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode&) override;
+    virtual ~ILearnService() = default;
+
+    virtual Playlist startedPlaylist() const = 0;
+    virtual Playlist advancedPlaylist() const = 0;
+
+    virtual void openVideo(const std::string& videoId) const = 0;
 };
 }
 
-#endif // MU_LEARN_LEARNMODULE_H
+#endif // MU_LEARN_ILEARNSERVICE_H

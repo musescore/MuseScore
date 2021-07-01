@@ -23,9 +23,18 @@
 
 #include <QQmlEngine>
 
+#include "modularity/ioc.h"
+
+#include "internal/learnconfiguration.h"
+#include "internal/learnservice.h"
+
 #include "view/learnpagemodel.h"
 
 using namespace mu::learn;
+using namespace mu::framework;
+
+static std::shared_ptr<LearnConfiguration> s_learnConfiguration = std::make_shared<LearnConfiguration>();
+static std::shared_ptr<LearnService> s_learnService = std::make_shared<LearnService>();
 
 static void learn_init_qrc()
 {
@@ -37,6 +46,12 @@ std::string LearnModule::moduleName() const
     return "learn";
 }
 
+void LearnModule::registerExports()
+{
+    ioc()->registerExport<ILearnConfiguration>(moduleName(), s_learnConfiguration);
+    ioc()->registerExport<ILearnService>(moduleName(), s_learnService);
+}
+
 void LearnModule::registerResources()
 {
     learn_init_qrc();
@@ -45,4 +60,9 @@ void LearnModule::registerResources()
 void LearnModule::registerUiTypes()
 {
     qmlRegisterType<LearnPageModel>("MuseScore.Learn", 1, 0, "LearnPageModel");
+}
+
+void LearnModule::onInit(const IApplication::RunMode&)
+{
+    s_learnService->init();
 }

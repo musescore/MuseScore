@@ -19,21 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LEARN_LEARNMODULE_H
-#define MU_LEARN_LEARNMODULE_H
+#ifndef MU_CLOUD_ILEARNCONFIGURATION_H
+#define MU_CLOUD_ILEARNCONFIGURATION_H
 
-#include "modularity/imodulesetup.h"
+#include "modularity/imoduleexport.h"
+#include "network/networktypes.h"
 
 namespace mu::learn {
-class LearnModule : public modularity::IModuleSetup
+class ILearnConfiguration : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(ILearnConfiguration)
+
 public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode&) override;
+    virtual ~ILearnConfiguration() = default;
+
+    virtual network::RequestHeaders headers() const = 0;
+
+    virtual QUrl startedPlaylistUrl() const = 0;
+    virtual QUrl advancedPlaylistUrl() const = 0;
+
+    virtual QUrl videoUrl(const std::string& videoId) const = 0;
 };
 }
 
-#endif // MU_LEARN_LEARNMODULE_H
+#endif // MU_CLOUD_ILEARNCONFIGURATION_H
