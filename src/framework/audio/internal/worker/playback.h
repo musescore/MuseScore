@@ -26,7 +26,7 @@
 
 #include "async/asyncable.h"
 
-#include "iplayers.h"
+#include "iplayer.h"
 #include "itracks.h"
 #include "iaudiooutput.h"
 #include "igettracksequence.h"
@@ -43,7 +43,7 @@ public:
     async::Promise<TrackSequenceIdList> sequenceIdList() const override;
     void removeSequence(const TrackSequenceId id) override;
 
-    IPlayersPtr players() const override;
+    IPlayerPtr player() const override;
     ITracksPtr tracks() const override;
     IAudioOutputPtr audioOutput() const override;
 
@@ -52,7 +52,7 @@ protected:
     ITrackSequencePtr sequence(const TrackSequenceId id) const override;
 
 private:
-    IPlayersPtr m_playerHandlersPtr = nullptr;
+    IPlayerPtr m_playerHandlersPtr = nullptr;
     ITracksPtr m_trackHandlersPtr = nullptr;
     IAudioOutputPtr m_audioOutputPtr = nullptr;
 
