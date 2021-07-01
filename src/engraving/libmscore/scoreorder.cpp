@@ -21,6 +21,8 @@
  */
 #include <iostream>
 
+#include <QGuiApplication>
+
 #include "scoreorder.h"
 
 #include "libmscore/score.h"

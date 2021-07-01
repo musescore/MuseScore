@@ -22,6 +22,7 @@
 
 #include <cmath>
 #include <QtMath>
+#include <QGuiApplication>
 
 #include "config.h"
 #include "score.h"

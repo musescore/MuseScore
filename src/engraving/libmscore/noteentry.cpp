@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QMessageBox>
-
 #include "utils.h"
 #include "score.h"
 #include "chord.h"
@@ -40,7 +38,11 @@
 #include "accidental.h"
 #include "measurerepeat.h"
 
+#include "translation.h"
+#include "interactive/messagebox.h"
+
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -378,12 +380,10 @@ void Score::putNote(const Position& p, bool replace)
     Measure* m = _is.segment()->measure();
     int staffIdx = track2staff(_is.track());
     if (m->isMeasureRepeatGroup(staffIdx)) {
-        auto b = QMessageBox::warning(0, QObject::tr("Note input will remove measure repeat"),
-                                      QObject::tr("There is a measure repeat here.")
-                                      + QObject::tr("\nContinue with adding note and delete measure repeat?"),
-                                      QMessageBox::Cancel | QMessageBox::Ok,
-                                      QMessageBox::Ok);
-        if (b == QMessageBox::Cancel) {
+        auto b = MessageBox::warning(trc("engraving", "Note input will remove measure repeat"),
+                                     trc("engraving", "There is a measure repeat here.")
+                                     + trc("engraving", "\nContinue with adding note and delete measure repeat?"));
+        if (b == MessageBox::Cancel) {
             return;
         }
         Score::deleteItem(m->measureRepeatElement(staffIdx));

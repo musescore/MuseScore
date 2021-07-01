@@ -25,6 +25,8 @@
  Implementation of classes Clef (partial) and ClefList (complete).
 */
 
+#include <QCoreApplication>
+
 #include "clef.h"
 #include "measure.h"
 #include "ambitus.h"

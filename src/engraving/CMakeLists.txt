@@ -40,6 +40,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/draw/buffereddrawtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/bufferedpaintprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/bufferedpaintprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/svgrenderer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/draw/svgrenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/ifontprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/font.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/font.h
@@ -47,10 +49,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontmetrics.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontcompat.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontcompat.h
-    ${CMAKE_CURRENT_LIST_DIR}/draw/qfontprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/draw/qfontprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/draw/fontengineft.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/draw/fontengineft.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/utils/drawlogger.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/utils/drawlogger.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/utils/drawjson.cpp
@@ -64,22 +62,38 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleelement.h
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/interactive/messagebox.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/interactive/messagebox.h
     )
+
+if (NO_ENGRAVING_QFONTENGINE)
+    set(MODULE_DEF ${MODULE_DEF} -DNO_ENGRAVING_QFONTENGINE)
+else()
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/draw/qfontprovider.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/draw/qfontprovider.h
+        ${CMAKE_CURRENT_LIST_DIR}/draw/fontengineft.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/draw/fontengineft.h
+        )
+
+    set(FREETYPE_LIB )
+    if (USE_SYSTEM_FREETYPE)
+         set(MODULE_LINK freetype)
+    else (USE_SYSTEM_FREETYPE)
+         set(MODULE_LINK mscore_freetype)
+    endif (USE_SYSTEM_FREETYPE)
+
+endif()
 
 set(MODULE_INCLUDE
     ${PROJECT_SOURCE_DIR}/thirdparty/dtl
     )
 
-set(FREETYPE_LIB )
-if (USE_SYSTEM_FREETYPE)
-     set(MODULE_LINK freetype)
-else (USE_SYSTEM_FREETYPE)
-     set(MODULE_LINK mscore_freetype)
-endif (USE_SYSTEM_FREETYPE)
-
 set(MODULE_LINK ${MODULE_LINK} midi_old qzip)
 
+set(MODULE_NOT_LINK_GLOBAL ON)
 set(MODULE_USE_UNITY_NONE ON) # not work
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)
 
 set_property(TARGET ${MODULE} APPEND PROPERTY AUTOMOC_MACRO_NAMES "BEGIN_QT_REGISTERED_ENUM")

@@ -19,37 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "drawlogger.h"
+#ifndef MU_ENGRAVING_MESSAGEBOX_H
+#define MU_ENGRAVING_MESSAGEBOX_H
 
-#include "log.h"
+#include <string>
 
-using namespace mu::draw;
-
-static const std::string DRAW_OBJ_TAG("DRAW_OBJ");
-
-void DrawObjectsLogger::beginObject(const std::string& name, const PointF& pagePos)
-{
-    m_objects.push(name);
-    std::string gap;
-    gap.resize(m_objects.size());
-#ifdef LOG_STREAM
-    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG) << "Begin: " << gap << name << "{" << pagePos.x() << "," << pagePos.y() << "}";
-#else
-    UNUSED(pagePos);
-#endif
-}
-
-void DrawObjectsLogger::endObject()
-{
-    IF_ASSERT_FAILED(!m_objects.empty()) {
-        return;
-    }
-
-    std::string gap;
-    gap.resize(m_objects.size());
-#ifdef LOG_STREAM
-    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG) << "End:   " << gap << m_objects.top();
+#ifndef NO_ENGRAVING_INTERACTIVE
+#include "modularity/ioc.h"
+#include "iinteractive.h"
 #endif
 
-    m_objects.pop();
+namespace mu::engraving {
+class MessageBox
+{
+#ifndef NO_ENGRAVING_INTERACTIVE
+    INJECT_STATIC(engraving, framework::IInteractive, interactive)
+#endif
+public:
+
+    enum Button {
+        Ok,
+        Cancel
+    };
+
+    static Button warning(const std::string& title, const std::string& text);
+};
 }
+
+#endif // MU_ENGRAVING_MESSAGEBOX_H

@@ -32,7 +32,6 @@
  between startUndo() and endUndo().
 */
 
-#include "log.h"
 #include "undo.h"
 #include "element.h"
 #include "note.h"

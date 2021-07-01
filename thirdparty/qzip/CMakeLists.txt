@@ -31,6 +31,7 @@ elseif (NOT CC_IS_MSVC)
     set(MODULE_LINK z)
 endif()
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+set(MODULE_NOT_LINK_GLOBAL ON)
+include(SetupModule)
 
 target_no_warning(${MODULE} -Wimplicit-fallthrough=0)

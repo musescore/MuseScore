@@ -25,6 +25,10 @@
 
 #include "config.h"
 
+#ifdef SCRIPT_INTERFACE
+#include <QObject>
+#endif
+
 /**
  * \namespace Ms .
  */

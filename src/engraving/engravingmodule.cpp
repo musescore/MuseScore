@@ -23,7 +23,9 @@
 
 #include "modularity/ioc.h"
 
+#ifndef NO_ENGRAVING_QFONTENGINE
 #include "engraving/draw/qfontprovider.h"
+#endif
 
 #include "engraving/libmscore/mscore.h"
 #include "engraving/libmscore/score.h"
@@ -41,7 +43,9 @@ std::string EngravingModule::moduleName() const
 
 void EngravingModule::registerExports()
 {
+#ifndef NO_ENGRAVING_QFONTENGINE
     ioc()->registerExport<draw::IFontProvider>(moduleName(), new draw::QFontProvider());
+#endif
 }
 
 void EngravingModule::resolveImports()

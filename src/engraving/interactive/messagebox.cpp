@@ -19,37 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "drawlogger.h"
+#include "messagebox.h"
 
 #include "log.h"
 
-using namespace mu::draw;
+using namespace mu::engraving;
 
-static const std::string DRAW_OBJ_TAG("DRAW_OBJ");
-
-void DrawObjectsLogger::beginObject(const std::string& name, const PointF& pagePos)
+MessageBox::Button MessageBox::warning(const std::string& title, const std::string& text)
 {
-    m_objects.push(name);
-    std::string gap;
-    gap.resize(m_objects.size());
-#ifdef LOG_STREAM
-    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG) << "Begin: " << gap << name << "{" << pagePos.x() << "," << pagePos.y() << "}";
-#else
-    UNUSED(pagePos);
-#endif
-}
-
-void DrawObjectsLogger::endObject()
-{
-    IF_ASSERT_FAILED(!m_objects.empty()) {
-        return;
+#ifndef NO_ENGRAVING_INTERACTIVE
+    using namespace mu::framework;
+    IInteractive::Result res = interactive()->warning(title, text, { IInteractive::Button::Ok, IInteractive::Button::Cancel });
+    if (res.standartButton() == IInteractive::Button::Ok) {
+        return MessageBox::Button::Ok;
     }
 
-    std::string gap;
-    gap.resize(m_objects.size());
-#ifdef LOG_STREAM
-    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG) << "End:   " << gap << m_objects.top();
-#endif
+    return MessageBox::Button::Cancel;
 
-    m_objects.pop();
+#else
+    LOGW() << "interactive disabled, will be return Ok, message: " << title << " " << text;
+    return MessageBox::Button::Ok;
+#endif
 }
