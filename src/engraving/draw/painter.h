@@ -79,8 +79,8 @@ public:
     void setNoPen();
     const Pen& pen() const;
 
-    void setBrush(const QBrush& brush);
-    const QBrush& brush() const;
+    void setBrush(const Brush& brush);
+    const Brush& brush() const;
 
     void setWorldTransform(const QTransform& matrix, bool combine = false);
     const QTransform& worldTransform() const;
@@ -98,7 +98,7 @@ public:
     void restore();
 
     // drawing
-    void fillPath(const QPainterPath& path, const QBrush& brush);
+    void fillPath(const QPainterPath& path, const Brush& brush);
     void drawPath(const QPainterPath& path);
     void strokePath(const QPainterPath& path, const Pen& pen);
 
@@ -159,7 +159,7 @@ public:
 
     void drawSymbol(const PointF& point, uint ucs4Code);
 
-    void fillRect(const RectF& rect, const QBrush& brush);
+    void fillRect(const RectF& rect, const Brush& brush);
 
     void drawPixmap(const PointF& point, const QPixmap& pm);
     void drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset = PointF());

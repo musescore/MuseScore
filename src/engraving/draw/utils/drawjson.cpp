@@ -59,7 +59,7 @@ static void fromObj(const QJsonObject& obj, Pen& pen)
     pen.setWidthF(obj["width"].toDouble());
 }
 
-static QJsonObject toObj(const QBrush& brush)
+static QJsonObject toObj(const Brush& brush)
 {
     QJsonObject obj;
     obj["style"] = static_cast<int>(brush.style());
@@ -67,9 +67,9 @@ static QJsonObject toObj(const QBrush& brush)
     return obj;
 }
 
-static void fromObj(const QJsonObject& obj, QBrush& brush)
+static void fromObj(const QJsonObject& obj, Brush& brush)
 {
-    brush.setStyle(static_cast<Qt::BrushStyle>(obj["style"].toInt()));
+    brush.setStyle(static_cast<BrushStyle>(obj["style"].toInt()));
     brush.setColor(QColor(obj["color"].toString()));
 }
 

@@ -40,6 +40,7 @@
 #include "xml.h"
 
 #include "draw/fontmetrics.h"
+#include "draw/brush.h"
 #include "draw/pen.h"
 
 using namespace mu;
@@ -1547,7 +1548,7 @@ void Harmony::draw(mu::draw::Painter* painter) const
             painter->setNoPen();
         }
         QColor bg(bgColor());
-        painter->setBrush(bg.alpha() ? QBrush(bg) : Qt::NoBrush);
+        painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
         if (circle()) {
             painter->drawArc(frame, 0, 5760);
         } else {
@@ -1558,7 +1559,7 @@ void Harmony::draw(mu::draw::Painter* painter) const
             painter->drawRoundedRect(frame, frameRound(), r2);
         }
     }
-    painter->setBrush(Qt::NoBrush);
+    painter->setBrush(BrushStyle::NoBrush);
     QColor color = textColor();
     painter->setPen(color);
     for (const TextSegment* ts : textList) {

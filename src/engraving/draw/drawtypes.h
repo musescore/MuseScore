@@ -60,6 +60,28 @@ enum class PenJoinStyle { // line join style
     BevelJoin = 0x40,
     RoundJoin = 0x80
 };
+
+enum class BrushStyle { // brush style
+    NoBrush,
+    SolidPattern,
+    Dense1Pattern,
+    Dense2Pattern,
+    Dense3Pattern,
+    Dense4Pattern,
+    Dense5Pattern,
+    Dense6Pattern,
+    Dense7Pattern,
+    HorPattern,
+    VerPattern,
+    CrossPattern,
+    BDiagPattern,
+    FDiagPattern,
+    DiagCrossPattern,
+    LinearGradientPattern,
+    RadialGradientPattern,
+    ConicalGradientPattern,
+    TexturePattern = 24
+};
 }
 
 #endif // MU_DRAW_DRAWTYPES_H

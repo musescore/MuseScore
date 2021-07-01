@@ -1692,7 +1692,7 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
         qreal d = 4.0 / painter->worldTransform().m11();
         RectF rect(-d, -d, 2 * d, 2 * d);
 
-        painter->setBrush(QBrush(dropAnchorColor));
+        painter->setBrush(mu::draw::Brush(dropAnchorColor));
         painter->setNoPen();
         rect.moveCenter(anchor.p1());
         painter->drawEllipse(rect);
@@ -1717,7 +1717,7 @@ void NotationInteraction::drawSelectionRange(draw::Painter* painter)
         return;
     }
 
-    painter->setBrush(Qt::NoBrush);
+    painter->setBrush(BrushStyle::NoBrush);
 
     QColor selectionColor = configuration()->selectionColor();
     qreal penWidth = 3.0 / painter->worldTransform().toAffine().m11();

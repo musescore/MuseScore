@@ -71,6 +71,7 @@
 
 #include "config.h"
 #include "log.h"
+#include "draw/brush.h"
 
 #ifdef USE_SCORE_ACCESSIBLE_TREE
 #include "accessibility/accessiblenote.h"
@@ -1395,7 +1396,7 @@ void Note::draw(mu::draw::Painter* painter) const
             if (fretConflict() && !score()->printing() && score()->showUnprintable()) {                //on fret conflict, draw on red background
                 painter->save();
                 painter->setPen(Qt::red);
-                painter->setBrush(QBrush(QColor(Qt::red)));
+                painter->setBrush(mu::draw::Brush(QColor(Qt::red)));
                 painter->drawRect(bb);
                 painter->restore();
             }

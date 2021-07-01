@@ -30,6 +30,7 @@
 #include "drawtypes.h"
 #include "font.h"
 #include "pen.h"
+#include "brush.h"
 
 namespace mu::draw {
 class Painter;
@@ -58,8 +59,8 @@ public:
     virtual void setNoPen() = 0;
     virtual const Pen& pen() const = 0;
 
-    virtual void setBrush(const QBrush& brush) = 0;
-    virtual const QBrush& brush() const = 0;
+    virtual void setBrush(const Brush& brush) = 0;
+    virtual const Brush& brush() const = 0;
 
     virtual void save() = 0;
     virtual void restore() = 0;

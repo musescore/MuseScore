@@ -31,6 +31,7 @@
 #include "ipaintprovider.h"
 #include "buffereddrawtypes.h"
 #include "pen.h"
+#include "brush.h"
 
 namespace mu::draw {
 class DrawObjectsLogger;
@@ -61,8 +62,8 @@ public:
     void setNoPen() override;
     const Pen& pen() const override;
 
-    void setBrush(const QBrush& brush) override;
-    const QBrush& brush() const override;
+    void setBrush(const Brush& brush) override;
+    const Brush& brush() const override;
 
     void save() override;
     void restore() override;

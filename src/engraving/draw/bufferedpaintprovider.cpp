@@ -173,12 +173,12 @@ const Pen& BufferedPaintProvider::pen() const
     return currentState().pen;
 }
 
-void BufferedPaintProvider::setBrush(const QBrush& brush)
+void BufferedPaintProvider::setBrush(const Brush& brush)
 {
     editableState().brush = brush;
 }
 
-const QBrush& BufferedPaintProvider::brush() const
+const Brush& BufferedPaintProvider::brush() const
 {
     return currentState().brush;
 }
@@ -210,7 +210,7 @@ void BufferedPaintProvider::drawPath(const QPainterPath& path)
     DrawMode mode = DrawMode::StrokeAndFill;
     if (st.pen.style() == PenStyle::NoPen) {
         mode = DrawMode::Fill;
-    } else if (st.brush.style() == Qt::NoBrush) {
+    } else if (st.brush.style() == BrushStyle::NoBrush) {
         mode = DrawMode::Stroke;
     } else {
         LOGW() << "not set pen or brush, path will not draw";

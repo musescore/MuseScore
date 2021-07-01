@@ -31,6 +31,7 @@
 
 #include "draw/transform.h"
 #include "draw/pen.h"
+#include "draw/brush.h"
 
 using namespace mu;
 
@@ -61,24 +62,24 @@ void TieSegment::draw(mu::draw::Painter* painter) const
 
     switch (slurTie()->lineType()) {
     case 0:
-        painter->setBrush(QBrush(pen.color()));
+        painter->setBrush(Brush(pen.color()));
         pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setJoinStyle(PenJoinStyle::RoundJoin);
         pen.setWidthF(score()->styleP(Sid::SlurEndWidth) * mag);
         break;
     case 1:
-        painter->setBrush(Qt::NoBrush);
+        painter->setBrush(BrushStyle::NoBrush);
         pen.setCapStyle(PenCapStyle::RoundCap);           // True dots
         pen.setDashPattern(dotted);
         pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
         break;
     case 2:
-        painter->setBrush(Qt::NoBrush);
+        painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(dashed);
         pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
         break;
     case 3:
-        painter->setBrush(Qt::NoBrush);
+        painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(wideDashed);
         pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
         break;
