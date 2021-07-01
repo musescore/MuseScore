@@ -288,7 +288,7 @@ private:
       FretDiagram* frame(qreal& defaultY, qreal& relativeY, bool& hasTotalY);
       void harmony(const QString& partId, Measure* measure, const Fraction sTime, DelayedDirectionsList& delayedDirections);
       Accidental* accidental();
-      void beam(Beam::Mode& beamMode);
+      void beam(QMap<int, QString>& beamTypes);
       void duration(Fraction& dura);
       void forward(Fraction& dura);
       void backup(Fraction& dura);

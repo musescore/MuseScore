@@ -2928,6 +2928,8 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
       int blp = -1; // beam level previous chord
       int blc = -1; // beam level current chord
       int bln = -1; // beam level next chord
+      Beam::Mode bmc = Beam::Mode::AUTO; // beam mode current chord
+      Beam::Mode bmn = Beam::Mode::AUTO; // beam mode next chord
       // find beam level previous chord
       for (int i = idx - 1; blp == -1 && i >= 0; --i) {
             const auto crst = elements[i];
@@ -2935,23 +2937,34 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
                   blp = toChord(crst)->beams();
             }
       // find beam level current chord
-      if (cr->isChord())
+      if (cr->isChord()) {
             blc = toChord(cr)->beams();
+            bmc = toChord(cr)->beamMode();
+            }
       // find beam level next chord
       for (int i = idx + 1; bln == -1 && i < elements.size(); ++i) {
             const auto crst = elements[i];
-            if (crst->isChord())
+            if (crst->isChord()) {
                   bln = toChord(crst)->beams();
+                  bmn = toChord(crst)->beamMode();
+                  }
             }
       // find beam type and write
       for (int i = 1; i <= blc; ++i) {
             QString text;
-            if (blp < i && bln >= i) text = "begin";
+            // TODO: correctly handle Beam::Mode::AUTO
+            // when equivalent to BEGIN32 or BEGIN64
+            if ((blp < i && bln >= i)
+             || (bmc == Beam::Mode::BEGIN32 && i > 1)
+             || (bmc == Beam::Mode::BEGIN64 && i > 2))
+                  text = "begin";
             else if (blp < i && bln < i) {
                   if (bln > 0) text = "forward hook";
                   else if (blp > 0) text = "backward hook";
                   }
-            else if (blp >= i && bln < i)
+            else if ((blp >= i && bln < i)
+                  || (bmn == Beam::Mode::BEGIN32 && i > 1)
+                  || (bmn == Beam::Mode::BEGIN64 && i > 2))
                   text = "end";
             else if (blp >= i && bln >= i)
                   text = "continue";
