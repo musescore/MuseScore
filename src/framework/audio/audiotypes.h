@@ -51,7 +51,7 @@ using MixerChannelId = int32_t;
 using AudioSourceName = std::string;
 
 using FxProcessorId = std::string;
-using FxProcessorIdList =  std::vector<std::string>;
+using FxProcessorIdList =  std::vector<FxProcessorId>;
 
 struct AudioOutputParams {
     FxProcessorIdList fxProcessors;
@@ -59,7 +59,7 @@ struct AudioOutputParams {
     balance_t balance = 0.f;
     bool isMuted = false;
 
-    bool operator ==(const AudioOutputParams& other)
+    bool operator ==(const AudioOutputParams& other) const
     {
         return fxProcessors == other.fxProcessors
                && volume == other.volume
