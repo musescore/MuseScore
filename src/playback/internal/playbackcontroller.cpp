@@ -468,7 +468,7 @@ void PlaybackController::setCurrentSequence(const TrackSequenceId sequenceId)
     });
 
     playback()->player()->playbackPositionMsecs().onReceive(this, [this, cursor = std::move(cursorType)]
-                                                                 (const TrackSequenceId id, const audio::msecs_t& msecs) {
+                                                                (const TrackSequenceId id, const audio::msecs_t& msecs) {
         if (m_currentSequenceId != id) {
             return;
         }
