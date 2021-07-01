@@ -39,12 +39,20 @@ class IPlayback : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPlayback() = default;
 
+    // A quick guide how to playback something:
+
+    // 1. Add Sequence
     virtual async::Promise<TrackSequenceId> addSequence() = 0;
     virtual async::Promise<TrackSequenceIdList> sequenceIdList() const = 0;
     virtual void removeSequence(const TrackSequenceId id) = 0;
 
+    // 2. Setup tracks for Sequence
     virtual ITracksPtr tracks() const = 0;
+
+    // 3. Play Sequence
     virtual IPlayerPtr player() const = 0;
+
+    // 4. Adjust a Sequence output
     virtual IAudioOutputPtr audioOutput() const = 0;
 };
 
