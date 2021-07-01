@@ -119,7 +119,7 @@ void Box::draw(mu::draw::Painter* painter) const
         w *= .5;
         path.addRect(bbox().adjusted(w, w, -w, -w).toQRectF());
         PainterPath stroke = stroker.createStroke(path);
-        painter->setBrush(Qt::NoBrush);
+        painter->setBrush(BrushStyle::NoBrush);
         painter->fillPath(stroke, (selected() || editMode || dropTarget()) ? MScore::selectColor[0] : MScore::frameMarginColor);
     }
 }

@@ -47,6 +47,7 @@
 #include "draw/fontmetrics.h"
 #include "draw/fontcompat.h"
 #include "draw/pen.h"
+#include "draw/brush.h"
 
 using namespace mu;
 
@@ -1702,7 +1703,7 @@ TextBase::TextBase(const TextBase& st)
 
 void TextBase::drawSelection(mu::draw::Painter* p, const RectF& r) const
 {
-    QBrush bg(QColor("steelblue"));
+    mu::draw::Brush bg(QColor("steelblue"));
     p->setCompositionMode(mu::draw::CompositionMode::HardLight);
     p->setBrush(bg);
     p->setNoPen();
@@ -3295,7 +3296,7 @@ void TextBase::draw(mu::draw::Painter* painter) const
             painter->setNoPen();
         }
         QColor bg(bgColor());
-        painter->setBrush(bg.alpha() ? QBrush(bg) : Qt::NoBrush);
+        painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
         if (circle()) {
             painter->drawEllipse(frame);
         } else {
@@ -3308,7 +3309,7 @@ void TextBase::draw(mu::draw::Painter* painter) const
             painter->drawRoundedRect(frame, frameRound() * frameRoundFactor, r2);
         }
     }
-    painter->setBrush(Qt::NoBrush);
+    painter->setBrush(BrushStyle::NoBrush);
     painter->setPen(textColor());
     for (const TextBlock& t : _layout) {
         t.draw(painter, this);
@@ -3334,7 +3335,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
     TextCursor* cursor = ted->cursor();
 
     if (cursor->hasSelection()) {
-        p->setBrush(Qt::NoBrush);
+        p->setBrush(BrushStyle::NoBrush);
         p->setPen(textColor());
         int r1 = cursor->selectLine();
         int r2 = cursor->row();
@@ -3375,7 +3376,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
     QMatrix matrix = p->worldTransform().toAffine();
     p->translate(-pos);
     p->setPen(Pen(Qt::lightGray, 4.0 / matrix.m11()));    // 4 pixel pen size
-    p->setBrush(Qt::NoBrush);
+    p->setBrush(BrushStyle::NoBrush);
 
     qreal m = spatium();
     RectF r = canvasBoundingRect().adjusted(-m, -m, m, m);

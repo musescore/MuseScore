@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "painter.h"
+#include "brush.h"
 
 #include <QPainterPath>
 
@@ -177,7 +178,7 @@ const Pen& Painter::pen() const
     return m_provider->pen();
 }
 
-void Painter::setBrush(const QBrush& brush)
+void Painter::setBrush(const Brush& brush)
 {
     m_provider->setBrush(brush);
     if (extended) {
@@ -185,7 +186,7 @@ void Painter::setBrush(const QBrush& brush)
     }
 }
 
-const QBrush& Painter::brush() const
+const Brush& Painter::brush() const
 {
     return m_provider->brush();
 }
@@ -282,10 +283,10 @@ void Painter::setViewport(const RectF& viewport)
 
 // drawing functions
 
-void Painter::fillPath(const QPainterPath& path, const QBrush& brush)
+void Painter::fillPath(const QPainterPath& path, const Brush& brush)
 {
     Pen oldPen = this->pen();
-    QBrush oldBrush = this->brush();
+    Brush oldBrush = this->brush();
     setPen(Pen(PenStyle::NoPen));
     setBrush(brush);
 
@@ -298,9 +299,9 @@ void Painter::fillPath(const QPainterPath& path, const QBrush& brush)
 void Painter::strokePath(const QPainterPath& path, const Pen& pen)
 {
     Pen oldPen = this->pen();
-    QBrush oldBrush = this->brush();
+    Brush oldBrush = this->brush();
     setPen(pen);
-    setBrush(Qt::NoBrush);
+    setBrush(BrushStyle::NoBrush);
 
     drawPath(path);
 
@@ -437,10 +438,10 @@ void Painter::drawSymbol(const PointF& point, uint ucs4Code)
     }
 }
 
-void Painter::fillRect(const RectF& rect, const QBrush& brush)
+void Painter::fillRect(const RectF& rect, const Brush& brush)
 {
     Pen oldPen = this->pen();
-    QBrush oldBrush = this->brush();
+    Brush oldBrush = this->brush();
     setPen(Pen(mu::draw::PenStyle::NoPen));
     setBrush(brush);
 

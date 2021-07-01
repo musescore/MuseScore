@@ -35,6 +35,7 @@
 #include "undo.h"
 
 #include "draw/fontmetrics.h"
+#include "draw/brush.h"
 
 using namespace mu;
 
@@ -324,7 +325,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     qreal _spatium = spatium() * _userMag;
     Pen pen(curColor());
     pen.setCapStyle(PenCapStyle::FlatCap);
-    painter->setBrush(QBrush(QColor(painter->pen().color())));
+    painter->setBrush(Brush(QColor(painter->pen().color())));
 
     // x2 is the x val of the rightmost string
     qreal x2 = (_strings - 1) * stringDist;
@@ -383,7 +384,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
                 symPen.setWidthF(symPenWidth);
                 break;
             case FretDotType::SQUARE:
-                painter->setBrush(Qt::NoBrush);
+                painter->setBrush(BrushStyle::NoBrush);
                 painter->drawRect(RectF(x, y, dotd, dotd));
                 break;
             case FretDotType::TRIANGLE:
@@ -403,7 +404,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
 
     // Draw markers
     symPen.setWidthF(symPenWidth * 1.2);
-    painter->setBrush(Qt::NoBrush);
+    painter->setBrush(BrushStyle::NoBrush);
     painter->setPen(symPen);
     for (auto const& i : _markers) {
         int string = i.first;
