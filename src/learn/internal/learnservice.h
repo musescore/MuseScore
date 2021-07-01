@@ -55,6 +55,7 @@ private:
 
     void openUrl(const QUrl& url);
 
+    std::vector<std::string> parsePlaylistItemsIds(const QVariantMap& playlistMap) const;
     Playlist parsePlaylist(const QVariantMap& playlistMap) const;
 
     network::INetworkManagerPtr m_networkManager;

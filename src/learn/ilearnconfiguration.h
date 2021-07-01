@@ -38,7 +38,8 @@ public:
     virtual QUrl startedPlaylistUrl() const = 0;
     virtual QUrl advancedPlaylistUrl() const = 0;
 
-    virtual QUrl videoUrl(const std::string& videoId) const = 0;
+    virtual QUrl videosInfoUrl(const std::vector<std::string>& videosIds) const = 0;
+    virtual QUrl videoOpenUrl(const std::string& videoId) const = 0;
 };
 }
 
