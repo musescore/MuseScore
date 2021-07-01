@@ -95,6 +95,7 @@ private slots:
     void barStyles2() { mxmlIoTest("testBarStyles2"); }
     void barStyles3() { mxmlIoTest("testBarStyles3"); }
     void bracketTypes() { mxmlImportTestRef("testBracketTypes"); }
+    void beamModes() { mxmlImportTestRef("testBeamModes"); }
     void barlinesGrandStaff1() { mxmlImportTestRef("testBarlinesGrandStaff"); }
     void barlinesGrandStaff2() { mxmlIoTest("testBarlinesGrandStaff"); }
     void breaksImplExpl() { mxmlMscxExportTestRefBreaks("testBreaksImplExpl"); }

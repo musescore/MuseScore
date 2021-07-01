@@ -1839,7 +1839,8 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direc
             qDebug("handleBeamAndStemDir() in beam, bm Beam::Mode::NONE -> abort beam");
             // reset beam mode for all elements and remove the beam
             removeBeam(beam);
-        } else if (!(bm == Beam::Mode::BEGIN || bm == Beam::Mode::MID || bm == Beam::Mode::END)) {
+        } else if (!(bm == Beam::Mode::BEGIN || bm == Beam::Mode::MID || bm == Beam::Mode::END || bm == Beam::Mode::BEGIN32
+                     || bm == Beam::Mode::BEGIN64)) {
             qDebug("handleBeamAndStemDir() in beam, bm %d -> abort beam", static_cast<int>(bm));
             // reset beam mode for all elements and remove the beam
             removeBeam(beam);
@@ -4376,6 +4377,38 @@ static void setNoteHead(Note* note, const QColor noteheadColor, const bool noteh
 }
 
 //---------------------------------------------------------
+//   computeBeamMode
+//---------------------------------------------------------
+
+/**
+ Calculate the beam mode based on the collected beamTypes.
+ */
+
+static Beam::Mode computeBeamMode(const QMap<int, QString>& beamTypes)
+{
+    // Start with uniquely-handled beam modes
+    if (beamTypes.value(1) == "continue"
+        && beamTypes.value(2) == "begin") {
+        return Beam::Mode::BEGIN32;
+    } else if (beamTypes.value(1) == "continue"
+               && beamTypes.value(2) == "continue"
+               && beamTypes.value(3) == "begin") {
+        return Beam::Mode::BEGIN64;
+    }
+    // Generic beam modes are naive to all except the first beam
+    else if (beamTypes.value(1) == "begin") {
+        return Beam::Mode::BEGIN;
+    } else if (beamTypes.value(1) == "continue") {
+        return Beam::Mode::MID;
+    } else if (beamTypes.value(1) == "end") {
+        return Beam::Mode::END;
+    } else {
+        // backward-hook, forward-hook, and other unknown combinations
+        return Beam::Mode::AUTO;
+    }
+}
+
+//---------------------------------------------------------
 //   addFiguredBassElemens
 //---------------------------------------------------------
 
@@ -4597,7 +4630,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     int velocity = round(_e.attributes().value("dynamics").toDouble() * 0.9);
     bool graceSlash = false;
     bool printObject = _e.attributes().value("print-object") != "no";
-    Beam::Mode bm  = Beam::Mode::AUTO;
+    Beam::Mode bm;
+    QMap<int, QString> beamTypes;
     QString instrumentId;
     MusicXMLParserLyric lyric { _pass1.getMusicXmlPart(partId).lyricNumberHandler(), _e, _score, _logger };
     MusicXMLParserNotations notations { _e, _score, _logger };
@@ -4611,7 +4645,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
         } else if (mnd.readProperties(_e)) {
             // element handled
         } else if (_e.name() == "beam") {
-            beam(bm);
+            beam(beamTypes);
         } else if (_e.name() == "chord") {
             chord = true;
             _e.skipCurrentElement();  // skip but don't log
@@ -4686,6 +4720,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
         currBeams.insert(currentVoice, (Beam*)nullptr);
     }
     Beam*& currBeam = currBeams[currentVoice];
+
+    bm = computeBeamMode(beamTypes);
 
     // check for timing error(s) and set dura
     // keep in this order as checkTiming() might change dura
@@ -5475,29 +5511,16 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
 
 /**
  Parse the /score-partwise/part/measure/note/beam node.
- Sets beamMode in case of begin, continue or end beam number 1.
+ Collects beamTypes, used in computeBeamMode.
  */
 
-void MusicXMLParserPass2::beam(Beam::Mode& beamMode)
+void MusicXMLParserPass2::beam(QMap<int, QString>& beamTypes)
 {
-    int beamNo = _e.attributes().value("number").toInt();
+    bool hasBeamNo;
+    int beamNo = _e.attributes().value("number").toInt(&hasBeamNo);
+    QString s = _e.readElementText();
 
-    if (beamNo == 1) {
-        QString s = _e.readElementText();
-        if (s == "begin") {
-            beamMode = Beam::Mode::BEGIN;
-        } else if (s == "end") {
-            beamMode = Beam::Mode::END;
-        } else if (s == "continue") {
-            beamMode = Beam::Mode::MID;
-        } else if (s == "backward hook") {
-        } else if (s == "forward hook") {
-        } else {
-            _logger->logError(QString("unknown beam keyword '%1'").arg(s), &_e);
-        }
-    } else {
-        _e.skipCurrentElement();
-    }
+    beamTypes.insert(hasBeamNo ? beamNo : 1, s);
 }
 
 //---------------------------------------------------------
