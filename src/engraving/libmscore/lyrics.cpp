@@ -22,6 +22,7 @@
 
 #include "lyrics.h"
 
+#include <QGuiApplication>
 #include <QClipboard>
 #include <QRegularExpression>
 
@@ -413,7 +414,7 @@ void Lyrics::paste(EditData& ed)
 #else
     QClipboard::Mode mode = QClipboard::Selection;
 #endif
-    QString txt = QApplication::clipboard()->text(mode);
+    QString txt = QGuiApplication::clipboard()->text(mode);
     QString regex = QString("[^\\S") + QChar(0xa0) + QChar(0x202F) + "]+";
     QStringList sl = txt.split(QRegExp(regex), Qt::SkipEmptyParts);
     if (sl.empty()) {
@@ -462,7 +463,7 @@ void Lyrics::paste(EditData& ed)
     score()->endCmd();
     txt = sl.join(" ");
 
-    QApplication::clipboard()->setText(txt, mode);
+    QGuiApplication::clipboard()->setText(txt, mode);
     if (minus) {
         scoreview->lyricsMinus();
     } else if (underscore) {

@@ -21,6 +21,8 @@
  */
 
 #include <cmath>
+
+#include <QGuiApplication>
 #include <QClipboard>
 #include <QStack>
 #include <QTextFragment>
@@ -648,7 +650,7 @@ bool TextCursor::set(const PointF& p, QTextCursor::MoveMode mode)
             clearSelection();
         }
         if (hasSelection()) {
-            QApplication::clipboard()->setText(selectedText(), QClipboard::Selection);
+            QGuiApplication::clipboard()->setText(selectedText(), QClipboard::Selection);
         }
     }
     updateCursorFormat();
@@ -3238,7 +3240,7 @@ void TextBase::editCut(EditData& ed)
     QString s = cursor->selectedText(true);
 
     if (!s.isEmpty()) {
-        QApplication::clipboard()->setText(s, QClipboard::Clipboard);
+        QGuiApplication::clipboard()->setText(s, QClipboard::Clipboard);
         ed.curGrip = Grip::START;
         ed.key     = Qt::Key_Delete;
         ed.s       = QString();
@@ -3259,7 +3261,7 @@ void TextBase::editCopy(EditData& ed)
     TextCursor* cursor = ted->cursor();
     QString s = cursor->selectedText(true);
     if (!s.isEmpty()) {
-        QApplication::clipboard()->setText(s, QClipboard::Clipboard);
+        QGuiApplication::clipboard()->setText(s, QClipboard::Clipboard);
     }
 }
 

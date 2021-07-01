@@ -33,8 +33,8 @@ NICE-TO-HAVE TODO:
 
 #include <cmath>
 
-#include "framework/global/log.h"
-#include "framework/global/translation.h"
+#include "log.h"
+#include "translation.h"
 
 #include "accidental.h"
 #include "arpeggio.h"

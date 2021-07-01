@@ -22,6 +22,8 @@
 
 #include <cmath>
 
+#include <QGuiApplication>
+
 #include "vibrato.h"
 #include "style.h"
 #include "system.h"
