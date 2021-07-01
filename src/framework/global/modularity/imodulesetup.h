@@ -42,7 +42,7 @@ public:
     virtual void registerUiTypes() {}
 
     virtual void onInit(const framework::IApplication::RunMode& mode) { (void)mode; }
-    virtual void onAllInited() {}
+    virtual void onAllInited(const framework::IApplication::RunMode& mode) { (void)mode; }
     virtual void onDeinit() {}
 
     virtual void onStartApp() {}

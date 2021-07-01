@@ -117,9 +117,9 @@ int AppShell::run(int argc, char** argv)
     // ====================================================
     // Setup modules: onAllInited
     // ====================================================
-    globalModule.onAllInited();
+    globalModule.onAllInited(runMode);
     for (mu::modularity::IModuleSetup* m : m_modules) {
-        m->onAllInited();
+        m->onAllInited(runMode);
     }
 
     // ====================================================

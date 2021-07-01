@@ -122,8 +122,12 @@ void PaletteModule::onInit(const framework::IApplication::RunMode& mode)
     s_paletteUiActions->init();
 }
 
-void PaletteModule::onAllInited()
+void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
 {
+    if (framework::IApplication::RunMode::Editor != mode) {
+        return;
+    }
+
     //! NOTE We need to be sure that the workspaces are initialized.
     //! So, we loads these settings on onAllInited
     s_paletteWorkspaceSetup->setup();
