@@ -19,21 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LEARN_LEARNMODULE_H
-#define MU_LEARN_LEARNMODULE_H
+#ifndef MU_LEARN_LEARNCONFIGURATION_H
+#define MU_LEARN_LEARNCONFIGURATION_H
 
-#include "modularity/imodulesetup.h"
+#include "ilearnconfiguration.h"
 
 namespace mu::learn {
-class LearnModule : public modularity::IModuleSetup
+class LearnConfiguration : public ILearnConfiguration
 {
 public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode&) override;
+    network::RequestHeaders headers() const override;
+
+    QUrl startedPlaylistUrl() const override;
+    QUrl advancedPlaylistUrl() const override;
+
+    QUrl videoUrl(const std::string& videoId) const override;
+
+private:
+    QString apiRootUrl() const;
+
+    QString playlistItemsParams(const QString& playlistId) const;
 };
 }
 
-#endif // MU_LEARN_LEARNMODULE_H
+#endif // MU_LEARN_LEARNCONFIGURATION_H

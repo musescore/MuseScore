@@ -19,21 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LEARN_LEARNMODULE_H
-#define MU_LEARN_LEARNMODULE_H
+#ifndef MU_LEARN_LEARNTYPES_H
+#define MU_LEARN_LEARNTYPES_H
 
-#include "modularity/imodulesetup.h"
+#include <string>
+#include <vector>
 
 namespace mu::learn {
-class LearnModule : public modularity::IModuleSetup
-{
-public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode&) override;
+struct PlaylistItem {
+    std::string videoId;
+    std::string title;
+    std::string author;
+    std::string thumbnailUrl;
+    int durationSec = 0;
+
+    bool operator==(const PlaylistItem& other) const
+    {
+        return videoId == other.videoId;
+    }
 };
+
+using Playlist = std::vector<PlaylistItem>;
 }
 
-#endif // MU_LEARN_LEARNMODULE_H
+#endif // MU_LEARN_LEARNTYPES_H
