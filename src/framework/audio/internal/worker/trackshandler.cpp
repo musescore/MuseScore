@@ -150,6 +150,48 @@ Channel<TrackSequenceId, TrackId> TracksHandler::trackRemoved() const
     return m_trackRemoved;
 }
 
+Promise<AudioInputParams> TracksHandler::inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const
+{
+    return Promise<AudioInputParams>([this, sequenceId, trackId](Promise<AudioInputParams>::Resolve resolve,
+                                                                 Promise<AudioInputParams>::Reject reject) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        ITrackSequencePtr s = sequence(sequenceId);
+
+        if (!s) {
+            reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+        }
+
+        RetVal<AudioInputParams> result = s->audioIO()->inputParams(trackId);
+
+        if (!result.ret) {
+            reject(result.ret.code(), result.ret.text());
+        }
+
+        resolve(result.val);
+    }, AudioThread::ID);
+}
+
+void TracksHandler::setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params)
+{
+    Async::call(this, [this, sequenceId, trackId, params]() {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        ITrackSequencePtr s = sequence(sequenceId);
+
+        if (s) {
+            s->audioIO()->setInputParams(trackId, params);
+        }
+    }, AudioThread::ID);
+}
+
+Channel<TrackSequenceId, TrackId, AudioInputParams> TracksHandler::inputParamsChanged() const
+{
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
+    return m_inputParamsChanged;
+}
+
 ITrackSequencePtr TracksHandler::sequence(const TrackSequenceId id) const
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -170,6 +212,12 @@ void TracksHandler::ensureSubscriptions(const ITrackSequencePtr s) const
 
     if (!s) {
         return;
+    }
+
+    if (!s->audioIO()->inputParamsChanged().isConnected()) {
+        s->audioIO()->inputParamsChanged().onReceive(this, [this, s](const TrackId trackId, const AudioInputParams& params) {
+            m_inputParamsChanged.send(s->id(), trackId, params);
+        });
     }
 
     if (!s->trackAdded().isConnected()) {

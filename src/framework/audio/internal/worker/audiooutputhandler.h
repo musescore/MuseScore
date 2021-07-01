@@ -26,29 +26,25 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "iaudioio.h"
+#include "iaudiooutput.h"
 #include "imixer.h"
 #include "igettracksequence.h"
 
 namespace mu::audio {
-class AudioIOHandler : public IAudioIO, public async::Asyncable
+class AudioOutputHandler : public IAudioOutput, public async::Asyncable
 {
     INJECT(audio, IMixer, mixer)
 
 public:
-    explicit AudioIOHandler(IGetTrackSequence* getSequence);
-
-    async::Promise<AudioInputParams> inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const override;
-    void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) override;
-    async::Channel<TrackSequenceId, TrackId, AudioInputParams> inputParamsChanged() const override;
+    explicit AudioOutputHandler(IGetTrackSequence* getSequence);
 
     async::Promise<AudioOutputParams> outputParams(const TrackSequenceId sequenceId, const TrackId trackId) const override;
     void setOutputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioOutputParams& params) override;
     async::Channel<TrackSequenceId, TrackId, AudioOutputParams> outputParamsChanged() const override;
 
-    async::Promise<AudioOutputParams> globalOutputParams() const override;
-    void setGlobalOutputParams(const AudioOutputParams& params) override;
-    async::Channel<AudioOutputParams> globalOutputParamsChanged() const override;
+    async::Promise<AudioOutputParams> masterOutputParams() const override;
+    void setMasterOutputParams(const AudioOutputParams& params) override;
+    async::Channel<AudioOutputParams> masterOutputParamsChanged() const override;
 
     async::Channel<audioch_t, float> masterSignalAmplitudeChanged() const override;
     async::Channel<audioch_t, volume_dbfs_t> masterVolumePressureChanged() const override;
@@ -59,7 +55,6 @@ private:
 
     IGetTrackSequence* m_getSequence = nullptr;
 
-    mutable async::Channel<TrackSequenceId, TrackId, AudioInputParams> m_inputParamsChanged;
     mutable async::Channel<TrackSequenceId, TrackId, AudioOutputParams> m_outputParamsChanged;
 };
 }
