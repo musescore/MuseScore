@@ -27,7 +27,7 @@
 #include "internal/audiothread.h"
 #include "internal/audiosanitizer.h"
 
-#include "internal/worker/playershandler.h"
+#include "internal/worker/playerhandler.h"
 #include "internal/worker/trackshandler.h"
 #include "internal/worker/audiooutputhandler.h"
 #include "internal/worker/tracksequence.h"
@@ -40,7 +40,7 @@ using namespace mu::async;
 
 Playback::Playback()
 {
-    m_playerHandlersPtr = std::make_shared<PlayersHandler>(this);
+    m_playerHandlersPtr = std::make_shared<PlayerHandler>(this);
     m_trackHandlersPtr = std::make_shared<TracksHandler>(this);
     m_audioOutputPtr = std::make_shared<AudioOutputHandler>(this);
 }
@@ -83,7 +83,7 @@ void Playback::removeSequence(const TrackSequenceId id)
     }, AudioThread::ID);
 }
 
-IPlayersPtr Playback::players() const
+IPlayerPtr Playback::player() const
 {
     return m_playerHandlersPtr;
 }

@@ -25,15 +25,15 @@
 
 #include "async/asyncable.h"
 
-#include "iplayers.h"
+#include "iplayer.h"
 #include "igettracksequence.h"
 
 namespace mu::audio {
-class PlayersHandler : public IPlayers, public async::Asyncable
+class PlayerHandler : public IPlayer, public async::Asyncable
 {
 public:
-    explicit PlayersHandler(IGetTrackSequence* getSequence);
-    ~PlayersHandler();
+    explicit PlayerHandler(IGetTrackSequence* getSequence);
+    ~PlayerHandler();
 
     void play(const TrackSequenceId sequenceId) override;
     void seek(const TrackSequenceId sequenceId, const msecs_t newPositionMsecs) override;

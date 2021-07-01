@@ -26,7 +26,7 @@
 #include "async/channel.h"
 #include "async/promise.h"
 
-#include "iplayers.h"
+#include "iplayer.h"
 #include "itracks.h"
 #include "iaudiooutput.h"
 #include "audiotypes.h"
@@ -44,7 +44,7 @@ public:
     virtual void removeSequence(const TrackSequenceId id) = 0;
 
     virtual ITracksPtr tracks() const = 0;
-    virtual IPlayersPtr players() const = 0;
+    virtual IPlayerPtr player() const = 0;
     virtual IAudioOutputPtr audioOutput() const = 0;
 };
 

@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "playershandler.h"
+#include "playerhandler.h"
 
 #include "log.h"
 #include "async/async.h"
@@ -32,17 +32,17 @@
 using namespace mu::audio;
 using namespace mu::async;
 
-PlayersHandler::PlayersHandler(IGetTrackSequence* getSequence)
+PlayerHandler::PlayerHandler(IGetTrackSequence* getSequence)
     : m_getSequence(getSequence)
 {
 }
 
-PlayersHandler::~PlayersHandler()
+PlayerHandler::~PlayerHandler()
 {
     m_getSequence = nullptr;
 }
 
-void PlayersHandler::play(const TrackSequenceId sequenceId)
+void PlayerHandler::play(const TrackSequenceId sequenceId)
 {
     Async::call(this, [this, sequenceId]() {
         ONLY_AUDIO_WORKER_THREAD;
@@ -54,7 +54,7 @@ void PlayersHandler::play(const TrackSequenceId sequenceId)
     }, AudioThread::ID);
 }
 
-void PlayersHandler::seek(const TrackSequenceId sequenceId, const msecs_t newPositionMsecs)
+void PlayerHandler::seek(const TrackSequenceId sequenceId, const msecs_t newPositionMsecs)
 {
     Async::call(this, [this, sequenceId, newPositionMsecs]() {
         ONLY_AUDIO_WORKER_THREAD;
@@ -66,7 +66,7 @@ void PlayersHandler::seek(const TrackSequenceId sequenceId, const msecs_t newPos
     }, AudioThread::ID);
 }
 
-void PlayersHandler::stop(const TrackSequenceId sequenceId)
+void PlayerHandler::stop(const TrackSequenceId sequenceId)
 {
     Async::call(this, [this, sequenceId]() {
         ONLY_AUDIO_WORKER_THREAD;
@@ -78,7 +78,7 @@ void PlayersHandler::stop(const TrackSequenceId sequenceId)
     }, AudioThread::ID);
 }
 
-void PlayersHandler::pause(const TrackSequenceId sequenceId)
+void PlayerHandler::pause(const TrackSequenceId sequenceId)
 {
     Async::call(this, [this, sequenceId]() {
         ONLY_AUDIO_WORKER_THREAD;
@@ -90,7 +90,7 @@ void PlayersHandler::pause(const TrackSequenceId sequenceId)
     }, AudioThread::ID);
 }
 
-Promise<bool> PlayersHandler::setLoop(const TrackSequenceId sequenceId, const msecs_t fromMsec, const msecs_t toMsec)
+Promise<bool> PlayerHandler::setLoop(const TrackSequenceId sequenceId, const msecs_t fromMsec, const msecs_t toMsec)
 {
     return Promise<bool>([this, sequenceId, fromMsec, toMsec](Promise<bool>::Resolve resolve, Promise<bool>::Reject reject) {
         ONLY_AUDIO_WORKER_THREAD;
@@ -111,7 +111,7 @@ Promise<bool> PlayersHandler::setLoop(const TrackSequenceId sequenceId, const ms
     }, AudioThread::ID);
 }
 
-void PlayersHandler::resetLoop(const TrackSequenceId sequenceId)
+void PlayerHandler::resetLoop(const TrackSequenceId sequenceId)
 {
     Async::call(this, [this, sequenceId]() {
         ONLY_AUDIO_WORKER_THREAD;
@@ -123,14 +123,14 @@ void PlayersHandler::resetLoop(const TrackSequenceId sequenceId)
     }, AudioThread::ID);
 }
 
-Channel<TrackSequenceId, msecs_t> PlayersHandler::playbackPositionMsecs() const
+Channel<TrackSequenceId, msecs_t> PlayerHandler::playbackPositionMsecs() const
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 
     return m_playbackPositionMsecsChanged;
 }
 
-ITrackSequencePtr PlayersHandler::sequence(const TrackSequenceId id) const
+ITrackSequencePtr PlayerHandler::sequence(const TrackSequenceId id) const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -144,7 +144,7 @@ ITrackSequencePtr PlayersHandler::sequence(const TrackSequenceId id) const
     return s;
 }
 
-void PlayersHandler::ensureSubscriptions(const ITrackSequencePtr s) const
+void PlayerHandler::ensureSubscriptions(const ITrackSequencePtr s) const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
