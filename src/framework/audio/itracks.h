@@ -48,6 +48,10 @@ public:
 
     virtual async::Channel<TrackSequenceId, TrackId> trackAdded() const = 0;
     virtual async::Channel<TrackSequenceId, TrackId> trackRemoved() const = 0;
+
+    virtual async::Promise<AudioInputParams> inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
+    virtual void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) = 0;
+    virtual async::Channel<TrackSequenceId, TrackId, AudioInputParams> inputParamsChanged() const = 0;
 };
 
 using ITracksPtr = std::shared_ptr<ITracks>;

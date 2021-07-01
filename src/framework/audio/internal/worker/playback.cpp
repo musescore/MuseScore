@@ -29,7 +29,7 @@
 
 #include "internal/worker/playershandler.h"
 #include "internal/worker/trackshandler.h"
-#include "internal/worker/audioiohandler.h"
+#include "internal/worker/audiooutputhandler.h"
 #include "internal/worker/tracksequence.h"
 
 #include "audioerrors.h"
@@ -42,7 +42,7 @@ Playback::Playback()
 {
     m_playerHandlersPtr = std::make_shared<PlayersHandler>(this);
     m_trackHandlersPtr = std::make_shared<TracksHandler>(this);
-    m_audioIOPtr = std::make_shared<AudioIOHandler>(this);
+    m_audioOutputPtr = std::make_shared<AudioOutputHandler>(this);
 }
 
 Promise<TrackSequenceId> Playback::addSequence()
@@ -93,9 +93,9 @@ ITracksPtr Playback::tracks() const
     return m_trackHandlersPtr;
 }
 
-IAudioIOPtr Playback::audioIO() const
+IAudioOutputPtr Playback::audioOutput() const
 {
-    return m_audioIOPtr;
+    return m_audioOutputPtr;
 }
 
 ITrackSequencePtr Playback::sequence(const TrackSequenceId id) const
