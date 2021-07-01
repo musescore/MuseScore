@@ -2993,7 +2993,7 @@ MusicXMLInferredFingering::MusicXMLInferredFingering(qreal totalY,
                                                      QString placement,
                                                      Measure* measure,
                                                      Fraction tick)
-      : _totalY(totalY),  _text(text), _element(element), _track(track), _placement(placement), _measure(measure), _tick(tick)
+      : _totalY(totalY), _element(element), _text(text), _track(track), _placement(placement), _measure(measure), _tick(tick)
       {
       _fingerings = _text.simplified().split(" ");
       }
