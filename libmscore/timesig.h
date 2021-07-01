@@ -79,7 +79,6 @@ class TimeSig final : public Element {
       void write(XmlWriter& xml) const override;
       void read(XmlReader&) override;
       void layout() override;
-      Shape shape() const override;
 
       Fraction sig() const               { return _sig; }
       void setSig(const Fraction& f, TimeSigType st = TimeSigType::NORMAL);

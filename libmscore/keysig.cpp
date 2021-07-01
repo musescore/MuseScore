@@ -281,26 +281,6 @@ void KeySig::layout()
       }
 
 //---------------------------------------------------------
-//   shape
-//---------------------------------------------------------
-
-Shape KeySig::shape() const
-      {
-      QRectF box(bbox());
-      const Staff* st = staff();
-      if (st && addToSkyline()) {
-            // Extend key signature shape up and down to
-            // the first ledger line height to ensure that
-            // no notes will be too close to the keysig.
-            const qreal sp = spatium();
-            const qreal y = pos().y();
-            box.setTop(std::min(-sp - y, box.top()));
-            box.setBottom(std::max(st->height() - y + sp, box.bottom()));
-            }
-      return Shape(box);
-      }
-
-//---------------------------------------------------------
 //   set
 //---------------------------------------------------------
 

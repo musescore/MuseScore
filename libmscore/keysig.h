@@ -44,7 +44,6 @@ class KeySig final : public Element {
       bool acceptDrop(EditData&) const override;
       Element* drop(EditData&) override;
       void layout() override;
-      Shape shape() const override;
       qreal mag() const override;
 
       //@ sets the key of the key signature
