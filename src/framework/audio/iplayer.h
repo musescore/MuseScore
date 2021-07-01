@@ -31,10 +31,10 @@
 #include "audiotypes.h"
 
 namespace mu::audio {
-class IPlayers
+class IPlayer
 {
 public:
-    virtual ~IPlayers() = default;
+    virtual ~IPlayer() = default;
 
     virtual void play(const TrackSequenceId sequenceId) = 0;
     virtual void seek(const TrackSequenceId sequenceId, const msecs_t newPositionMsecs) = 0;
@@ -47,7 +47,7 @@ public:
     virtual async::Channel<TrackSequenceId, msecs_t> playbackPositionMsecs() const = 0;
 };
 
-using IPlayersPtr = std::shared_ptr<IPlayers>;
+using IPlayerPtr = std::shared_ptr<IPlayer>;
 }
 
 #endif // MU_AUDIO_IPLAYER_H
