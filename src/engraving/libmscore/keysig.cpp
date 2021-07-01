@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <QGuiApplication>
+
 #include "sym.h"
 #include "staff.h"
 #include "clef.h"

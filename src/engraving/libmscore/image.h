@@ -23,9 +23,11 @@
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
-#include <QSvgRenderer>
-
 #include "bsymbol.h"
+
+namespace mu::draw {
+class SvgRenderer;
+}
 
 namespace Ms {
 class ImageStoreItem;
@@ -42,7 +44,7 @@ class Image final : public BSymbol
 {
     union {
         QImage* rasterDoc;
-        QSvgRenderer* svgDoc;
+        mu::draw::SvgRenderer* svgDoc;
     };
     ImageType imageType;
 

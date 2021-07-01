@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <QGuiApplication>
 #include <QClipboard>
 #include <QInputMethodEvent>
 
@@ -673,7 +674,7 @@ Element* TextBase::drop(EditData& ed)
 
 void TextBase::paste(EditData& ed)
 {
-    QString txt = QApplication::clipboard()->text(QClipboard::Clipboard);
+    QString txt = QGuiApplication::clipboard()->text(QClipboard::Clipboard);
     if (MScore::debugMode) {
         qDebug("<%s>", qPrintable(txt));
     }

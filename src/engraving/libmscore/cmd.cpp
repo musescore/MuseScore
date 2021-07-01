@@ -26,7 +26,6 @@
 */
 
 #include <assert.h>
-#include <QMessageBox>
 
 #include "types.h"
 #include "musescoreCore.h"
@@ -85,9 +84,13 @@
 #include "tremolo.h"
 #include "rehearsalmark.h"
 #include "sym.h"
+
+#include "translation.h"
+#include "interactive/messagebox.h"
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -3027,13 +3030,9 @@ bool Score::makeMeasureRepeatGroup(Measure* firstMeasure, int numMeasures, int s
     }
 
     if (!empty) {
-        auto b = QMessageBox::warning(0, QObject::tr("Current contents of measures will be replaced"),
-                                      // QMessageBox titles aren't being shown, so include in message
-                                      QObject::tr("Current contents of measures will be replaced.")
-                                      + QObject::tr("\nContinue with inserting measure repeat?"),
-                                      QMessageBox::Cancel | QMessageBox::Ok,
-                                      QMessageBox::Ok);
-        if (b == QMessageBox::Cancel) {
+        auto b = MessageBox::warning(trc("engraving", "Current contents of measures will be replaced"),
+                                     trc("engraving", "Continue with inserting measure repeat?"));
+        if (b == MessageBox::Button::Cancel) {
             return false;
         }
     }

@@ -327,11 +327,6 @@ void XmlWriter::tag(const QString& name, QVariant data)
     }
 }
 
-void XmlWriter::tag(const char* name, const QWidget* g)
-{
-    tag(name, QRect(g->pos(), g->size()));
-}
-
 //---------------------------------------------------------
 //   comment
 //---------------------------------------------------------

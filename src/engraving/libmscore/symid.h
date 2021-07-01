@@ -26,7 +26,7 @@
 
 // Needs to be duplicated here and in style.h since moc doesn't handle macros from #include'd files
 #ifdef SCRIPT_INTERFACE
-#include <QtGlobal>
+#include <QObject>
 #define BEGIN_QT_REGISTERED_ENUM(Name) \
     class MSQE_##Name { \
         Q_GADGET \

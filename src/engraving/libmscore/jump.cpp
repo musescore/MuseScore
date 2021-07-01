@@ -22,7 +22,7 @@
 
 #include "jump.h"
 
-#include <QApplication>
+#include <QGuiApplication>
 
 #include "score.h"
 #include "xml.h"

@@ -23,7 +23,7 @@
 #ifndef __ARPEGGIO_H__
 #define __ARPEGGIO_H__
 
-#include <QApplication>
+#include <QGuiApplication>
 
 #include "element.h"
 

@@ -24,6 +24,8 @@
 
 #include <cmath>
 
+#include <QGuiApplication>
+
 #include "style.h"
 #include "system.h"
 #include "measure.h"
