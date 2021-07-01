@@ -138,11 +138,15 @@ void TracksHandler::removeAllTracks(const TrackSequenceId sequenceId)
 
 Channel<TrackSequenceId, TrackId> TracksHandler::trackAdded() const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
     return m_trackAdded;
 }
 
 Channel<TrackSequenceId, TrackId> TracksHandler::trackRemoved() const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
     return m_trackRemoved;
 }
 

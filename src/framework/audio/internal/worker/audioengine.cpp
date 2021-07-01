@@ -127,11 +127,15 @@ IAudioBufferPtr AudioEngine::buffer() const
 
 IMixerPtr AudioEngine::mixer() const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
     return m_mixer;
 }
 
 void AudioEngine::setMixer(IMixerPtr mixerPtr)
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
     m_mixer = mixerPtr;
 }
 
