@@ -34,6 +34,7 @@
 
 #include "draw/transform.h"
 #include "draw/pen.h"
+#include "draw/brush.h"
 
 using namespace mu;
 
@@ -118,7 +119,7 @@ void Tremolo::draw(mu::draw::Painter* painter) const
         painter->setPen(curColor());
         drawSymbol(SymId::buzzRoll, painter);
     } else {
-        painter->setBrush(QBrush(curColor()));
+        painter->setBrush(Brush(curColor()));
         painter->setNoPen();
         painter->drawPath(path);
     }

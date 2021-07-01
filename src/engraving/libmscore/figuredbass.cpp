@@ -629,7 +629,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
     f.setPointSizeF(m * MScore::pixelRatio);
 
     painter->setFont(f);
-    painter->setBrush(Qt::NoBrush);
+    painter->setBrush(BrushStyle::NoBrush);
     Pen pen(figuredBass()->curColor(), FB_CONTLINE_THICKNESS * _spatium, PenStyle::SolidLine, PenCapStyle::RoundCap);
     painter->setPen(pen);
     painter->drawText(bbox(), Qt::TextDontClip | Qt::AlignLeft | Qt::AlignTop, displayText());

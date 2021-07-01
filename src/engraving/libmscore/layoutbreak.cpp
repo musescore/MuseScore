@@ -137,7 +137,7 @@ void LayoutBreak::draw(mu::draw::Painter* painter) const
 
     painter->setPen(Pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
                         lw, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
-    painter->setBrush(Qt::NoBrush);
+    painter->setBrush(BrushStyle::NoBrush);
     painter->drawPath(path2);
 }
 

@@ -2163,7 +2163,7 @@ void Element::drawEditMode(mu::draw::Painter* p, EditData& ed)
         if (Grip(i) == ed.curGrip) {
             p->setBrush(MScore::frameMarginColor);
         } else {
-            p->setBrush(Qt::NoBrush);
+            p->setBrush(BrushStyle::NoBrush);
         }
         p->drawRect(ed.grip[i]);
     }

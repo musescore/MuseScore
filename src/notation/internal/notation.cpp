@@ -323,7 +323,7 @@ void Notation::paintPageBorder(draw::Painter* painter, const Ms::Page* page) con
     using namespace mu::draw;
     RectF boundingRect(page->canvasBoundingRect());
 
-    painter->setBrush(Qt::NoBrush);
+    painter->setBrush(BrushStyle::NoBrush);
     painter->setPen(Pen(configuration()->borderColor(), configuration()->borderWidth()));
     painter->drawRect(boundingRect);
 
@@ -331,7 +331,7 @@ void Notation::paintPageBorder(draw::Painter* painter, const Ms::Page* page) con
         return;
     }
 
-    painter->setBrush(Qt::NoBrush);
+    painter->setBrush(BrushStyle::NoBrush);
     painter->setPen(Ms::MScore::frameMarginColor);
     boundingRect.adjust(page->lm(), page->tm(), -page->rm(), -page->bm());
     painter->drawRect(boundingRect);

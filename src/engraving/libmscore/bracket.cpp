@@ -31,6 +31,7 @@
 #include "system.h"
 #include "mscore.h"
 #include "bracketItem.h"
+#include "draw/brush.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -258,7 +259,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
     case BracketType::BRACE: {
         if (_braceSymbol == SymId::noSym) {
             painter->setNoPen();
-            painter->setBrush(QBrush(curColor()));
+            painter->setBrush(Brush(curColor()));
             painter->drawPath(path);
         } else {
             qreal h        = 2 * h2;

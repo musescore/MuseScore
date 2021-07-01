@@ -106,7 +106,7 @@ static bool isEqual(const Pen& p1, const Pen& p2)
     return true;
 }
 
-static bool isEqual(const QBrush& b1, const QBrush& b2)
+static bool isEqual(const Brush& b1, const Brush& b2)
 {
     if (b1.style() != b2.style()) {
         return false;

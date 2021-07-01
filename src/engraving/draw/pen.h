@@ -154,10 +154,10 @@ public:
 
 private:
 
-    QColor m_color           = Qt::black;
-    double m_width           = 1;
-    PenStyle m_style         = PenStyle::SolidLine;
-    PenCapStyle m_capStyle   = PenCapStyle::SquareCap;
+    QColor m_color = Qt::black;
+    double m_width = 1;
+    PenStyle m_style = PenStyle::SolidLine;
+    PenCapStyle m_capStyle = PenCapStyle::SquareCap;
     PenJoinStyle m_joinStyle = PenJoinStyle::BevelJoin;
     mutable std::vector<double> m_dashPattern;
 };

@@ -31,6 +31,7 @@
 #include "tremolo.h"
 #include "note.h"
 #include "xml.h"
+#include "draw/brush.h"
 
 // TEMPORARY HACK!!
 #include "symid.h"
@@ -222,7 +223,7 @@ void Stem::draw(mu::draw::Painter* painter) const
             path.closeSubpath();
             y += displ;
         }
-        painter->setBrush(QBrush(curColor()));
+        painter->setBrush(Brush(curColor()));
         painter->setNoPen();
         painter->drawPath(path);
     }

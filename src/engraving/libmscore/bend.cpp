@@ -28,6 +28,7 @@
 #include "note.h"
 #include "xml.h"
 #include "draw/pen.h"
+#include "draw/brush.h"
 
 #include "draw/fontmetrics.h"
 
@@ -267,7 +268,7 @@ void Bend::draw(mu::draw::Painter* painter) const
 
     Pen pen(curColor(), _lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
-    painter->setBrush(QBrush(curColor()));
+    painter->setBrush(Brush(curColor()));
 
     mu::draw::Font f = font(_spatium * MScore::pixelRatio);
     painter->setFont(f);
@@ -317,7 +318,7 @@ void Bend::draw(mu::draw::Painter* painter) const
             PainterPath path;
             path.moveTo(x, y);
             path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
-            painter->setBrush(Qt::NoBrush);
+            painter->setBrush(BrushStyle::NoBrush);
             painter->drawPath(path);
 
             painter->setBrush(curColor());
@@ -338,7 +339,7 @@ void Bend::draw(mu::draw::Painter* painter) const
             PainterPath path;
             path.moveTo(x, y);
             path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
-            painter->setBrush(Qt::NoBrush);
+            painter->setBrush(BrushStyle::NoBrush);
             painter->drawPath(path);
 
             painter->setBrush(curColor());
