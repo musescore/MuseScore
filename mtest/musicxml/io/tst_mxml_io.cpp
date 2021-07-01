@@ -67,6 +67,7 @@ private slots:
       void barStyles2() { mxmlIoTest("testBarStyles2"); }
       void barStyles3() { mxmlIoTest("testBarStyles3"); }
       void beamEnd() { mxmlIoTest("testBeamEnd"); }
+      void beamModes() { mxmlImportTestRef("testBeamModes"); }
       void beams1() { mxmlIoTest("testBeams1"); }
       void beams2() { mxmlIoTest("testBeams2"); }
       void beams3() { mxmlIoTestRef("testBeams3"); }
