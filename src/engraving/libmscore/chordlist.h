@@ -265,6 +265,7 @@ class ChordList : public QMap<int, ChordDescription>
     QMap<QString, ChordSymbol> symbols;
     bool _autoAdjust = false;
     qreal _nmag = 1.0, _nadjust = 0.0;
+    qreal _qmag = 1.0, _qadjust = 1.0;
     qreal _emag = 1.0, _eadjust = 0.0;
     qreal _mmag = 1.0, _madjust = 0.0;
 
@@ -282,7 +283,8 @@ public:
     bool autoAdjust() const { return _autoAdjust; }
     qreal nominalMag() const { return _nmag; }
     qreal nominalAdjust() const { return _nadjust; }
-    void configureAutoAdjust(qreal emag = 1.0, qreal eadjust = 0.0, qreal mmag = 1.0, qreal madjust = 0.0);
+    void configureAutoAdjust(qreal qmag = 1.0, qreal qadjust = 0.0, qreal emag = 1.0, qreal eadjust = 0.0, qreal mmag = 1.0,
+                             qreal madjust = 0.0);
     qreal position(const QStringList& names, ChordTokenClass ctc) const;
 
     bool read(const QString&);

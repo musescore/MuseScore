@@ -43,6 +43,7 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(QStringList minorList READ minorList NOTIFY minorListChanged)
     Q_PROPERTY(QStringList augmentedList READ augmentedList NOTIFY augmentedListChanged)
     Q_PROPERTY(QStringList diminishedList READ diminishedList NOTIFY diminishedListChanged)
+    Q_PROPERTY(QStringList omitList READ omitList NOTIFY omitListChanged)
 
     Q_PROPERTY(int chordSpellingIndex READ chordSpellingIndex NOTIFY chordSpellingIndexChanged)
     Q_PROPERTY(int currentStyleIndex READ currentStyleIndex NOTIFY currentStyleIndexChanged)
@@ -51,6 +52,20 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(int minorIndex READ minorIndex NOTIFY minorIndexChanged)
     Q_PROPERTY(int augmentedIndex READ augmentedIndex NOTIFY augmentedIndexChanged)
     Q_PROPERTY(int diminishedIndex READ diminishedIndex NOTIFY diminishedIndexChanged)
+    Q_PROPERTY(int omitIndex READ omitIndex NOTIFY omitIndexChanged)
+
+    Q_PROPERTY(qreal qualityMag READ qualityMag NOTIFY qualityMagChanged)
+    Q_PROPERTY(qreal qualityAdjust READ qualityAdjust NOTIFY qualityAdjustChanged)
+    Q_PROPERTY(qreal extensionMag READ extensionMag NOTIFY extensionMagChanged)
+    Q_PROPERTY(qreal extensionAdjust READ extensionAdjust NOTIFY extensionAdjustChanged)
+    Q_PROPERTY(qreal modifierMag READ modifierMag NOTIFY modifierMagChanged)
+    Q_PROPERTY(qreal modifierAdjust READ modifierAdjust NOTIFY modifierAdjustChanged)
+    Q_PROPERTY(qreal harmonyFretDistance READ harmonyFretDistance NOTIFY harmonyFretDistanceChanged)
+    Q_PROPERTY(qreal minHarmonyDistance READ minHarmonyDistance NOTIFY minHarmonyDistanceChanged)
+    Q_PROPERTY(qreal maxHarmonyBarDistance READ maxHarmonyBarDistance NOTIFY maxHarmonyBarDistanceChanged)
+    Q_PROPERTY(qreal maxChordShiftAbove READ maxChordShiftAbove NOTIFY maxChordShiftAboveChanged)
+    Q_PROPERTY(qreal maxChordShiftBelow READ maxChordShiftBelow NOTIFY maxChordShiftBelowChanged)
+    Q_PROPERTY(qreal capoFretPosition READ capoFretPosition NOTIFY capoFretPositionChanged)
 
 public:
     ChordSymbolEditorModel(QObject* parent = nullptr);
@@ -65,6 +80,7 @@ public:
     QStringList minorList() const;
     QStringList augmentedList() const;
     QStringList diminishedList() const;
+    QStringList omitList() const;
 
     int chordSpellingIndex() const;
     int currentStyleIndex() const;
@@ -73,17 +89,35 @@ public:
     int minorIndex() const;
     int augmentedIndex() const;
     int diminishedIndex() const;
+    int omitIndex() const;
+
+    qreal qualityMag() const;
+    qreal qualityAdjust() const;
+    qreal extensionMag() const;
+    qreal extensionAdjust() const;
+    qreal modifierMag() const;
+    qreal modifierAdjust() const;
+    qreal harmonyFretDistance() const;
+    qreal minHarmonyDistance() const;
+    qreal maxHarmonyBarDistance() const;
+    qreal maxChordShiftAbove() const;
+    qreal maxChordShiftBelow() const;
+    qreal capoFretPosition() const;
 
     void initChordSpellingList();
     void initCurrentStyleIndex();
+    void initProperties();
     void updatePropertyIndices();
-    void updateQualitySymbolsIndices();
+    void updateQualitySymbolsIndices(bool chordStyleChanged);
     void setQualitySymbolsLists();
-    void refreshChordSymbols();
+    void stringifyAndSaveSelectionHistory();
+    void extractSelectionHistory(QString selectionHistory);
+    void updateSelectionHistory(QString currentStyle);
 
     Q_INVOKABLE void setChordStyle(QString styleName);
     Q_INVOKABLE void setChordSpelling(QString spelling);
     Q_INVOKABLE void setQualitySymbol(QString quality, QString symbol);
+    Q_INVOKABLE void setProperty(QString property, qreal val);
 
 signals:
     void chordSpellingListChanged();
@@ -92,6 +126,7 @@ signals:
     void minorListChanged();
     void augmentedListChanged();
     void diminishedListChanged();
+    void omitListChanged();
 
     void chordSpellingIndexChanged();
     void currentStyleIndexChanged();
@@ -100,6 +135,20 @@ signals:
     void minorIndexChanged();
     void augmentedIndexChanged();
     void diminishedIndexChanged();
+    void omitIndexChanged();
+
+    void qualityMagChanged();
+    void qualityAdjustChanged();
+    void extensionMagChanged();
+    void extensionAdjustChanged();
+    void modifierMagChanged();
+    void modifierAdjustChanged();
+    void harmonyFretDistanceChanged();
+    void minHarmonyDistanceChanged();
+    void maxHarmonyBarDistanceChanged();
+    void maxChordShiftAboveChanged();
+    void maxChordShiftBelowChanged();
+    void capoFretPositionChanged();
 
 private:
     enum RoleNames {
@@ -110,6 +159,7 @@ private:
     QList<ChordSymbolStyle> m_styles;
     ChordSymbolStyleManager* styleManager;
     QHash<QString, QStringList> m_qualitySymbols;
+    QHash<QString, QStringList> m_selectionHistory;
 
     QStringList m_chordSpellingList;
     QStringList m_majorSeventhList;
@@ -117,6 +167,7 @@ private:
     QStringList m_minorList;
     QStringList m_augmentedList;
     QStringList m_diminishedList;
+    QStringList m_omitList;
 
     int m_chordSpellingIndex;
     int m_currentStyleIndex;
@@ -125,6 +176,20 @@ private:
     int m_minorIndex;
     int m_augmentedIndex;
     int m_diminishedIndex;
+    int m_omitIndex;
+
+    qreal m_qualityMag;
+    qreal m_qualityAdjust;
+    qreal m_extensionMag;
+    qreal m_extensionAdjust;
+    qreal m_modifierMag;
+    qreal m_modifierAdjust;
+    qreal m_harmonyFretDistance;
+    qreal m_minHarmonyDistance;
+    qreal m_maxHarmonyBarDistance;
+    qreal m_maxChordShiftAbove;
+    qreal m_maxChordShiftBelow;
+    qreal m_capoFretPosition;
 
     QHash<QString, Ms::Sid> chordSpellingMap = {
         { "Standard", Ms::Sid::useStandardNoteNames },

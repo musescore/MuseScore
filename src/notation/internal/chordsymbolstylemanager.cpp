@@ -165,6 +165,17 @@ QHash<QString, QStringList> ChordSymbolStyleManager::getQualitySymbols(QString p
                             }
                         }
                         qualitySymbols.insert(qual, rep);
+                    } else if (e.name() == "modifier") {
+                        // Created a separate tag for omit just in case
+                        // in the future, if modifiers are handled differently
+                        QString mod = e.attribute("m");
+                        QStringList rep;
+                        while (e.readNextStartElement()) {
+                            if (e.name() == "sym") {
+                                rep << e.readElementText();
+                            }
+                        }
+                        qualitySymbols.insert(mod, rep);
                     }
                 }
             }

@@ -37,221 +37,259 @@ Rectangle {
     Flickable {
         id: flickableContainer
 
-        height: root.height
+        height: 200
         width: root.width
 
         boundsBehavior: Flickable.StopAtBounds
         interactive: true
 
+        contentHeight: 400
+
         ScrollBar.vertical: StyledScrollBar {}
         Column{
-                GridView {
-                    id: chordSpellingGridView
+            GridView {
+                id: chordSpellingGridView
 
-                    height: listCellHeight + 2*listCellMargin
-                    width: root.width
+                height: listCellHeight + 2*listCellMargin
+                width: root.width
 
-                    anchors.left: flickableContainer.left
+                anchors.left: flickableContainer.left
 
-                    cellHeight: listCellHeight
-                    cellWidth: listCellWidth + listCellMargin
+                cellHeight: listCellHeight
+                cellWidth: listCellWidth + listCellMargin
 
-                    model: editorModel.chordSpellingList
-                    currentIndex: editorModel.chordSpellingIndex
+                model: editorModel.chordSpellingList
+                currentIndex: editorModel.chordSpellingIndex
 
-                    delegate: FlatButton {
-                        height: listCellHeight
-                        width: listCellWidth
-                        anchors.rightMargin: listCellMargin
-                        text: modelData
+                delegate: FlatButton {
+                    height: listCellHeight
+                    width: listCellWidth
+                    anchors.rightMargin: listCellMargin
+                    text: modelData
 
-                        onClicked: {
-                            editorModel.setChordSpelling(modelData);
-                        }
-                    }
-
-                    boundsBehavior: Flickable.StopAtBounds
-
-                    highlight: Rectangle {
-                        color: ui.theme.accentColor
-                        radius: 3
+                    onClicked: {
+                        editorModel.setChordSpelling(modelData);
                     }
                 }
 
-                GridView {
-                    id: majorSeventhGridView
+                boundsBehavior: Flickable.StopAtBounds
 
-                    anchors.top: chordSpellingGridView.bottom
+                highlight: Rectangle {
+                    color: ui.theme.accentColor
+                    radius: 3
+                }
+            }
 
-                    height: listCellHeight + 2*listCellMargin
-                    width: root.width
+            GridView {
+                id: majorSeventhGridView
 
-                    anchors.left: flickableContainer.left
+                anchors.top: chordSpellingGridView.bottom
 
-                    cellHeight: listCellHeight
-                    cellWidth: listCellWidth + listCellMargin
+                height: listCellHeight + 2*listCellMargin
+                width: root.width
 
-                    model: editorModel.majorSeventhList
-                    currentIndex: editorModel.majorSeventhIndex
+                anchors.left: flickableContainer.left
 
-                    delegate: FlatButton {
-                        height: listCellHeight
-                        width: listCellWidth
-                        anchors.rightMargin: listCellMargin
-                        text: modelData
+                cellHeight: listCellHeight
+                cellWidth: listCellWidth + listCellMargin
 
-                        onClicked: {
-                            editorModel.setQualitySymbol("major7th",modelData);
-                        }
-                    }
+                model: editorModel.majorSeventhList
+                currentIndex: editorModel.majorSeventhIndex
 
-                    boundsBehavior: Flickable.StopAtBounds
+                delegate: FlatButton {
+                    height: listCellHeight
+                    width: listCellWidth
+                    anchors.rightMargin: listCellMargin
+                    text: modelData
 
-                    highlight: Rectangle {
-                        color: ui.theme.accentColor
-                        radius: 3
+                    onClicked: {
+                        editorModel.setQualitySymbol("major7th",modelData);
                     }
                 }
 
-                GridView {
-                    id: halfDiminishedGridView
+                boundsBehavior: Flickable.StopAtBounds
 
-                    height: listCellHeight + 2*listCellMargin
-                    width: root.width
+                highlight: Rectangle {
+                    color: ui.theme.accentColor
+                    radius: 3
+                }
+            }
 
-                    anchors.left: flickableContainer.left
+            GridView {
+                id: halfDiminishedGridView
 
-                    anchors.top: majorSeventhGridView.bottom
+                height: listCellHeight + 2*listCellMargin
+                width: root.width
 
-                    cellHeight: listCellHeight
-                    cellWidth: listCellWidth + listCellMargin
+                anchors.left: flickableContainer.left
 
-                    model: editorModel.halfDiminishedList
-                    currentIndex: editorModel.halfDiminishedIndex
+                anchors.top: majorSeventhGridView.bottom
 
-                    delegate: FlatButton {
-                        height: listCellHeight
-                        width: listCellWidth
-                        anchors.rightMargin: listCellMargin
-                        text: modelData
+                cellHeight: listCellHeight
+                cellWidth: listCellWidth + listCellMargin
 
-                        onClicked: {
-                            editorModel.setQualitySymbol("half-diminished",modelData);
-                        }
-                    }
+                model: editorModel.halfDiminishedList
+                currentIndex: editorModel.halfDiminishedIndex
 
-                    boundsBehavior: Flickable.StopAtBounds
+                delegate: FlatButton {
+                    height: listCellHeight
+                    width: listCellWidth
+                    anchors.rightMargin: listCellMargin
+                    text: modelData
 
-                    highlight: Rectangle {
-                        color: ui.theme.accentColor
-                        radius: 3
+                    onClicked: {
+                        editorModel.setQualitySymbol("half-diminished",modelData);
                     }
                 }
 
-                GridView {
-                    id: minorGridView
+                boundsBehavior: Flickable.StopAtBounds
 
-                    height: listCellHeight + 2*listCellMargin
-                    width: root.width
+                highlight: Rectangle {
+                    color: ui.theme.accentColor
+                    radius: 3
+                }
+            }
 
-                    anchors.left: flickableContainer.left
+            GridView {
+                id: minorGridView
 
-                    cellHeight: listCellHeight
-                    cellWidth: listCellWidth + listCellMargin
+                height: listCellHeight + 2*listCellMargin
+                width: root.width
 
-                    anchors.top: halfDiminishedGridView.bottom
+                anchors.left: flickableContainer.left
 
-                    model: editorModel.minorList
-                    currentIndex: editorModel.minorIndex
+                cellHeight: listCellHeight
+                cellWidth: listCellWidth + listCellMargin
 
-                    delegate: FlatButton {
-                        height: listCellHeight
-                        width: listCellWidth
-                        anchors.rightMargin: listCellMargin
-                        text: modelData
+                anchors.top: halfDiminishedGridView.bottom
 
-                        onClicked: {
-                            editorModel.setQualitySymbol("minor",modelData);
-                        }
-                    }
+                model: editorModel.minorList
+                currentIndex: editorModel.minorIndex
 
-                    boundsBehavior: Flickable.StopAtBounds
+                delegate: FlatButton {
+                    height: listCellHeight
+                    width: listCellWidth
+                    anchors.rightMargin: listCellMargin
+                    text: modelData
 
-                    highlight: Rectangle {
-                        color: ui.theme.accentColor
-                        radius: 3
+                    onClicked: {
+                        editorModel.setQualitySymbol("minor",modelData);
                     }
                 }
 
-                GridView {
-                    id: augmentedGridView
+                boundsBehavior: Flickable.StopAtBounds
 
-                    height: listCellHeight + 2*listCellMargin
-                    width: root.width
+                highlight: Rectangle {
+                    color: ui.theme.accentColor
+                    radius: 3
+                }
+            }
 
-                    anchors.left: flickableContainer.left
+            GridView {
+                id: augmentedGridView
 
-                    anchors.top: minorGridView.bottom
+                height: listCellHeight + 2*listCellMargin
+                width: root.width
 
-                    cellHeight: listCellHeight
-                    cellWidth: listCellWidth + listCellMargin
+                anchors.left: flickableContainer.left
 
-                    model: editorModel.augmentedList
-                    currentIndex: editorModel.augmentedIndex
+                anchors.top: minorGridView.bottom
 
-                    delegate: FlatButton {
-                        height: listCellHeight
-                        width: listCellWidth
-                        anchors.rightMargin: listCellMargin
-                        text: modelData
+                cellHeight: listCellHeight
+                cellWidth: listCellWidth + listCellMargin
 
-                        onClicked: {
-                            editorModel.setQualitySymbol("augmented",modelData);
-                        }
-                    }
+                model: editorModel.augmentedList
+                currentIndex: editorModel.augmentedIndex
 
-                    boundsBehavior: Flickable.StopAtBounds
+                delegate: FlatButton {
+                    height: listCellHeight
+                    width: listCellWidth
+                    anchors.rightMargin: listCellMargin
+                    text: modelData
 
-                    highlight: Rectangle {
-                        color: ui.theme.accentColor
-                        radius: 3
+                    onClicked: {
+                        editorModel.setQualitySymbol("augmented",modelData);
                     }
                 }
 
-                GridView {
-                    id: diminishedGridView
+                boundsBehavior: Flickable.StopAtBounds
 
-                    height: listCellHeight + 2*listCellMargin
-                    width: root.width
+                highlight: Rectangle {
+                    color: ui.theme.accentColor
+                    radius: 3
+                }
+            }
 
-                    anchors.left: flickableContainer.left
+            GridView {
+                id: diminishedGridView
 
-                    anchors.top: augmentedGridView.bottom
+                height: listCellHeight + 2*listCellMargin
+                width: root.width
 
-                    cellHeight: listCellHeight
-                    cellWidth: listCellWidth + listCellMargin
+                anchors.left: flickableContainer.left
 
-                    model: editorModel.diminishedList
-                    currentIndex: editorModel.diminishedIndex
+                anchors.top: augmentedGridView.bottom
 
-                    delegate: FlatButton {
-                        height: listCellHeight
-                        width: listCellWidth
-                        anchors.rightMargin: listCellMargin
-                        text: modelData
+                cellHeight: listCellHeight
+                cellWidth: listCellWidth + listCellMargin
 
-                        onClicked: {
-                            editorModel.setQualitySymbol("diminished",modelData);
-                        }
-                    }
+                model: editorModel.diminishedList
+                currentIndex: editorModel.diminishedIndex
 
-                    boundsBehavior: Flickable.StopAtBounds
+                delegate: FlatButton {
+                    height: listCellHeight
+                    width: listCellWidth
+                    anchors.rightMargin: listCellMargin
+                    text: modelData
 
-                    highlight: Rectangle {
-                        color: ui.theme.accentColor
-                        radius: 3
+                    onClicked: {
+                        editorModel.setQualitySymbol("diminished",modelData);
                     }
                 }
+
+                boundsBehavior: Flickable.StopAtBounds
+
+                highlight: Rectangle {
+                    color: ui.theme.accentColor
+                    radius: 3
+                }
+            }
+
+            GridView {
+                id: omitGridView
+
+                height: listCellHeight + 2*listCellMargin
+                width: root.width
+
+                anchors.left: flickableContainer.left
+
+                anchors.top: diminishedGridView.bottom
+
+                cellHeight: listCellHeight
+                cellWidth: listCellWidth + listCellMargin
+
+                model: editorModel.omitList
+                currentIndex: editorModel.omitIndex
+
+                delegate: FlatButton {
+                    height: listCellHeight
+                    width: listCellWidth
+                    anchors.rightMargin: listCellMargin
+                    text: modelData
+
+                    onClicked: {
+                        editorModel.setQualitySymbol("omit",modelData);
+                    }
+                }
+
+                boundsBehavior: Flickable.StopAtBounds
+
+                highlight: Rectangle {
+                    color: ui.theme.accentColor
+                    radius: 3
+                }
+            }
+
         }
     }
 }

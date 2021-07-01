@@ -142,6 +142,7 @@ Rectangle {
 
             ChordSymbolEditorAdvanced {
                 width: root.width
+                editorModel: chordSymbolEditorModel
             }
         }
     }

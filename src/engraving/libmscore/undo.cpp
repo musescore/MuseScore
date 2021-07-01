@@ -1809,22 +1809,33 @@ void ChangeStyleVal::flip(EditData*)
     if (v != value) {
         score->style().set(idx, value);
         switch (idx) {
+        case Sid::chordQualityMag:
+        case Sid::chordQualityAdjust:
         case Sid::chordExtensionMag:
         case Sid::chordExtensionAdjust:
         case Sid::chordModifierMag:
         case Sid::chordModifierAdjust:
-        case Sid::chordDescriptionFile: {
+        case Sid::chordDescriptionFile:
+        case Sid::chordQualityMajorSeventh:
+        case Sid::chordQualityHalfDiminished:
+        case Sid::chordQualityMinor:
+        case Sid::chordQualityAugmented:
+        case Sid::chordQualityDiminished:
+        case Sid::chordModifierOmit: {
             score->chordList()->unload();
+            qreal qmag = score->styleD(Sid::chordQualityMag);
+            qreal qadjust = score->styleD(Sid::chordQualityAdjust);
             qreal emag = score->styleD(Sid::chordExtensionMag);
             qreal eadjust = score->styleD(Sid::chordExtensionAdjust);
             qreal mmag = score->styleD(Sid::chordModifierMag);
             qreal madjust = score->styleD(Sid::chordModifierAdjust);
-            score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
+            score->chordList()->configureAutoAdjust(qmag, qadjust, emag, eadjust, mmag, madjust);
             if (score->styleB(Sid::chordsXmlFile)) {
                 score->chordList()->read("chords.xml");
             }
             score->chordList()->read(score->styleSt(Sid::chordDescriptionFile));
             score->chordList()->setCustomChordList(score->styleSt(Sid::chordStyle) == "custom");
+            score->setUpQualitySymbols();
         }
         break;
         case Sid::spatium:

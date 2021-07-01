@@ -4953,6 +4953,15 @@ void Score::setUpQualitySymbols()
     _chordList.qualitySymbols.insert("major7th", style().value(Sid::chordQualityMajorSeventh).toString());
     _chordList.qualitySymbols.insert("diminished", style().value(Sid::chordQualityDiminished).toString());
     _chordList.qualitySymbols.insert("augmented", style().value(Sid::chordQualityAugmented).toString());
+
+    _chordList.qualitySymbols.clear();
+    _chordList.qualitySymbols.insert("major", "");
+    _chordList.qualitySymbols.insert("minor", style().value(Sid::chordQualityMinor).toString());
+    _chordList.qualitySymbols.insert("half-diminished", style().value(Sid::chordQualityHalfDiminished).toString());
+    _chordList.qualitySymbols.insert("major7th", style().value(Sid::chordQualityMajorSeventh).toString());
+    _chordList.qualitySymbols.insert("diminished", style().value(Sid::chordQualityDiminished).toString());
+    _chordList.qualitySymbols.insert("augmented", style().value(Sid::chordQualityAugmented).toString());
+    _chordList.qualitySymbols.insert("omit", style().value(Sid::chordModifierOmit).toString());
 }
 
 //---------------------------------------------------------
