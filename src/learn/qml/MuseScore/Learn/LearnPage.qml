@@ -25,6 +25,9 @@ import QtQuick.Layouts 1.3
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Learn 1.0
+
+import "internal"
 
 FocusScope {
     id: root
@@ -58,6 +61,14 @@ FocusScope {
         }
 
         bar.selectPage(root.item)
+    }
+
+    LearnPageModel {
+        id: pageModel
+    }
+
+    Component.onCompleted: {
+        pageModel.load()
     }
 
     Rectangle {
@@ -106,6 +117,10 @@ FocusScope {
             navigation.panel: navSearchPanel
             navigation.order: 1
             accessible.name: qsTrc("learn", "Learn search")
+
+            onSearchTextChanged: {
+                pageModel.setSearchText(searchText)
+            }
         }
     }
 
@@ -193,25 +208,50 @@ FocusScope {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+        anchors.bottomMargin: 24
 
         currentIndex: bar.currentIndex
 
-        Rectangle {
+        Playlist {
             id: getStartedComp
 
-            color: root.color
+            playlist: pageModel.startedPlaylist
 
-            //            search: searchField.searchText
-            //            backgroundColor: root.color
+            navigation.section: navSec
+            navigation.order: 3
+            navigation.name: "LearnGetStarted"
+            navigation.accessible.name: qsTrc("learn", "Get Started") + navigation.directionInfo
+
+            sideMargin: prv.sideMargin
+
+            onRequestOpenVideo: {
+                pageModel.openVideo(videoId)
+            }
+
+            onRequestActiveFocus: {
+                root.requestActiveFocus()
+            }
         }
 
-        Rectangle {
+        Playlist {
             id: advancedComp
 
-            color: root.color
+            playlist: pageModel.advancedPlaylist
 
-            //            search: searchField.searchText
-            //            backgroundColor: root.color
+            navigation.section: navSec
+            navigation.order: 4
+            navigation.name: "LearnAdvanced"
+            navigation.accessible.name: qsTrc("learn", "Advanced") + navigation.directionInfo
+
+            sideMargin: prv.sideMargin
+
+            onRequestOpenVideo: {
+                pageModel.openVideo(videoId)
+            }
+
+            onRequestActiveFocus: {
+                root.requestActiveFocus()
+            }
         }
 
         Rectangle {

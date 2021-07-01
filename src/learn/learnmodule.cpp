@@ -23,6 +23,8 @@
 
 #include <QQmlEngine>
 
+#include "view/learnpagemodel.h"
+
 using namespace mu::learn;
 
 static void learn_init_qrc()
@@ -38,4 +40,9 @@ std::string LearnModule::moduleName() const
 void LearnModule::registerResources()
 {
     learn_init_qrc();
+}
+
+void LearnModule::registerUiTypes()
+{
+    qmlRegisterType<LearnPageModel>("MuseScore.Learn", 1, 0, "LearnPageModel");
 }

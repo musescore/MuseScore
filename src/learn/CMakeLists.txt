@@ -27,6 +27,8 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/learnmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/learnmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/learnpagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/learnpagemodel.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

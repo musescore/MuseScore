@@ -125,7 +125,9 @@ DockPage {
     Component {
         id: learnComp
 
-        LearnPage {}
+        LearnPage {
+            item: root.subItem
+        }
     }
 
     Component {
