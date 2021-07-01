@@ -28,7 +28,7 @@
 
 #include "iplayers.h"
 #include "itracks.h"
-#include "iaudioio.h"
+#include "iaudiooutput.h"
 #include "audiotypes.h"
 
 namespace mu::audio {
@@ -45,7 +45,7 @@ public:
 
     virtual ITracksPtr tracks() const = 0;
     virtual IPlayersPtr players() const = 0;
-    virtual IAudioIOPtr audioIO() const = 0;
+    virtual IAudioOutputPtr audioOutput() const = 0;
 };
 
 using IPlaybackPtr = std::shared_ptr<IPlayback>;

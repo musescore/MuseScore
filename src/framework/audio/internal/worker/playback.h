@@ -28,7 +28,7 @@
 
 #include "iplayers.h"
 #include "itracks.h"
-#include "iaudioio.h"
+#include "iaudiooutput.h"
 #include "igettracksequence.h"
 #include "iplayback.h"
 
@@ -45,7 +45,7 @@ public:
 
     IPlayersPtr players() const override;
     ITracksPtr tracks() const override;
-    IAudioIOPtr audioIO() const override;
+    IAudioOutputPtr audioOutput() const override;
 
 protected:
     // IGetTrackSequence
@@ -54,7 +54,7 @@ protected:
 private:
     IPlayersPtr m_playerHandlersPtr = nullptr;
     ITracksPtr m_trackHandlersPtr = nullptr;
-    IAudioIOPtr m_audioIOPtr = nullptr;
+    IAudioOutputPtr m_audioOutputPtr = nullptr;
 
     std::map<TrackSequenceId, ITrackSequencePtr> m_sequences;
 };

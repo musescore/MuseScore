@@ -69,7 +69,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iplayers.h
     ${CMAKE_CURRENT_LIST_DIR}/itracks.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaudioio.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiooutput.h
     ${CMAKE_CURRENT_LIST_DIR}/iplayback.h
 
     # Common internal
@@ -124,8 +124,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/trackshandler.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/playershandler.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/playershandler.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audioiohandler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audioiohandler.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiooutputhandler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiooutputhandler.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/itracksequence.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/igettracksequence.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/igettracks.h

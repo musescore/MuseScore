@@ -46,12 +46,17 @@ public:
     async::Channel<TrackSequenceId, TrackId> trackAdded() const override;
     async::Channel<TrackSequenceId, TrackId> trackRemoved() const override;
 
+    async::Promise<AudioInputParams> inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const override;
+    void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) override;
+    async::Channel<TrackSequenceId, TrackId, AudioInputParams> inputParamsChanged() const override;
+
 private:
     ITrackSequencePtr sequence(const TrackSequenceId id) const;
     void ensureSubscriptions(const ITrackSequencePtr s) const;
 
     mutable async::Channel<TrackSequenceId, TrackId> m_trackAdded;
     mutable async::Channel<TrackSequenceId, TrackId> m_trackRemoved;
+    mutable async::Channel<TrackSequenceId, TrackId, AudioInputParams> m_inputParamsChanged;
 
     IGetTrackSequence* m_getSequence = nullptr;
 };

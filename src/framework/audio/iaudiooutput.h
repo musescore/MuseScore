@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_IAUDIOIO_H
-#define MU_AUDIO_IAUDIOIO_H
+#ifndef MU_AUDIO_IAUDIOOUTPUT_H
+#define MU_AUDIO_IAUDIOOUTPUT_H
 
 #include <memory>
 
@@ -31,28 +31,24 @@
 #include "audiotypes.h"
 
 namespace mu::audio {
-class IAudioIO
+class IAudioOutput
 {
 public:
-    virtual ~IAudioIO() = default;
-
-    virtual async::Promise<AudioInputParams> inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
-    virtual void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) = 0;
-    virtual async::Channel<TrackSequenceId, TrackId, AudioInputParams> inputParamsChanged() const = 0;
+    virtual ~IAudioOutput() = default;
 
     virtual async::Promise<AudioOutputParams> outputParams(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
     virtual void setOutputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioOutputParams& params) = 0;
     virtual async::Channel<TrackSequenceId, TrackId, AudioOutputParams> outputParamsChanged() const = 0;
 
-    virtual async::Promise<AudioOutputParams> globalOutputParams() const = 0;
-    virtual void setGlobalOutputParams(const AudioOutputParams& params) = 0;
-    virtual async::Channel<AudioOutputParams> globalOutputParamsChanged() const = 0;
+    virtual async::Promise<AudioOutputParams> masterOutputParams() const = 0;
+    virtual void setMasterOutputParams(const AudioOutputParams& params) = 0;
+    virtual async::Channel<AudioOutputParams> masterOutputParamsChanged() const = 0;
 
     virtual async::Channel<audioch_t, float> masterSignalAmplitudeChanged() const = 0;
     virtual async::Channel<audioch_t, volume_dbfs_t> masterVolumePressureChanged() const = 0;
 };
 
-using IAudioIOPtr = std::shared_ptr<IAudioIO>;
+using IAudioOutputPtr = std::shared_ptr<IAudioOutput>;
 }
 
-#endif // MU_AUDIO_IAUDIOIO_H
+#endif // MU_AUDIO_IAUDIOOUTPUT_H
