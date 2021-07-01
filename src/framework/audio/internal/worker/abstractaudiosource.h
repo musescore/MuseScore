@@ -32,8 +32,8 @@ public:
 
     virtual void setSampleRate(unsigned int sampleRate) override;
 
-    virtual bool isActive() const override;
-    virtual void setIsActive(bool arg) override;
+    bool isActive() const override;
+    void setIsActive(bool arg) override;
 
     mu::async::Channel<unsigned int> audioChannelsCountChanged() const override;
 
