@@ -33,12 +33,14 @@ public:
     QUrl startedPlaylistUrl() const override;
     QUrl advancedPlaylistUrl() const override;
 
-    QUrl videoUrl(const std::string& videoId) const override;
+    QUrl videosInfoUrl(const std::vector<std::string>& videosIds) const override;
+    QUrl videoOpenUrl(const std::string& videoId) const override;
 
 private:
     QString apiRootUrl() const;
 
     QString playlistItemsParams(const QString& playlistId) const;
+    QString videosParams(const std::vector<std::string>& videosIds) const;
 };
 }
 

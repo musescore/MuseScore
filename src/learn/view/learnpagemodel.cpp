@@ -22,6 +22,7 @@
 #include "learnpagemodel.h"
 
 #include <QVariant>
+#include <QDateTime>
 
 using namespace mu::learn;
 
@@ -95,7 +96,7 @@ QVariantList LearnPageModel::playlistToVariantList(const Playlist& playlist) con
         itemObj["title"] = QString::fromStdString(item.title);
         itemObj["author"] =QString::fromStdString(item.author);
         itemObj["thumbnailUrl"] = QString::fromStdString(item.thumbnailUrl);
-        itemObj["duration"] = item.durationSec; // todo
+        itemObj["duration"] = QDateTime::fromSecsSinceEpoch(item.durationSec).toString("hh:mm::ss");
 
         result << itemObj;
     }
