@@ -125,6 +125,8 @@ void PlayersHandler::resetLoop(const TrackSequenceId sequenceId)
 
 Channel<TrackSequenceId, msecs_t> PlayersHandler::playbackPositionMsecs() const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
     return m_playbackPositionMsecsChanged;
 }
 

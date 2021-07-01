@@ -74,6 +74,8 @@ void AudioIOHandler::setInputParams(const TrackSequenceId sequenceId, const Trac
 
 Channel<TrackSequenceId, TrackId, AudioInputParams> AudioIOHandler::inputParamsChanged() const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
     return m_inputParamsChanged;
 }
 
@@ -114,6 +116,8 @@ void AudioIOHandler::setOutputParams(const TrackSequenceId sequenceId, const Tra
 
 Channel<TrackSequenceId, TrackId, AudioOutputParams> AudioIOHandler::outputParamsChanged() const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
     return m_outputParamsChanged;
 }
 
@@ -138,16 +142,22 @@ void AudioIOHandler::setGlobalOutputParams(const AudioOutputParams& params)
 
 Channel<AudioOutputParams> AudioIOHandler::globalOutputParamsChanged() const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
     return mixer()->masterOutputParamsChanged();
 }
 
 Channel<audioch_t, float> AudioIOHandler::masterSignalAmplitudeChanged() const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
     return mixer()->masterSignalAmplitudeRmsChanged();
 }
 
 Channel<audioch_t, volume_dbfs_t> AudioIOHandler::masterVolumePressureChanged() const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
     return mixer()->masterVolumePressureDbfsChanged();
 }
 
