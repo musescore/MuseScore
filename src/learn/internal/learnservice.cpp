@@ -69,23 +69,39 @@ Playlist LearnService::advancedPlaylist() const
 
 void LearnService::openVideo(const std::string& videoId) const
 {
-    QUrl videoUrl = configuration()->videoUrl(videoId);
+    QUrl videoUrl = configuration()->videoOpenUrl(videoId);
     interactive()->openUrl(videoUrl.toString().toStdString());
 }
 
 Playlist LearnService::requestPlaylist(const QUrl& playlistUrl) const
 {
-    QBuffer receivedData;
     RequestHeaders headers = configuration()->headers();
 
-    Ret getPlaylist = m_networkManager->get(playlistUrl, &receivedData, headers);
-    if (!getPlaylist) {
-        LOGE() << getPlaylist.toString();
+    QBuffer playlistItemsData;
+    Ret playlistItems = m_networkManager->get(playlistUrl, &playlistItemsData, headers);
+    if (!playlistItems) {
+        LOGE() << playlistItems.toString();
         return {};
     }
 
-    QVariantMap playlistInfo = QJsonDocument::fromJson(receivedData.data()).toVariant().toMap();
-    return parsePlaylist(playlistInfo);
+    QVariantMap playlistInfo = QJsonDocument::fromJson(playlistItemsData.data()).toVariant().toMap();
+
+    std::vector<std::string> playlistItemsIds = parsePlaylistItemsIds(playlistInfo);
+    if (playlistItemsIds.empty()) {
+        LOGW() << "Empty list of playlist items";
+        return {};
+    }
+
+    QUrl playlistVideosInfoUrl = configuration()->videosInfoUrl(playlistItemsIds);
+    QBuffer videosInfoData;
+    Ret videos = m_networkManager->get(playlistVideosInfoUrl, &videosInfoData, headers);
+    if (!videos) {
+        LOGE() << videos.toString();
+        return {};
+    }
+
+    QVariantMap videosInfo = QJsonDocument::fromJson(videosInfoData.data()).toVariant().toMap();
+    return parsePlaylist(videosInfo);
 }
 
 void LearnService::openUrl(const QUrl& url)
@@ -96,26 +112,45 @@ void LearnService::openUrl(const QUrl& url)
     }
 }
 
+std::vector<std::string> LearnService::parsePlaylistItemsIds(const QVariantMap& playlistMap) const
+{
+    std::vector<std::string> result;
+
+    QVariantList items = playlistMap["items"].toList();
+    for (const QVariant& itemVar : items) {
+        QVariantMap snippet = itemVar.toMap()["snippet"].toMap();
+        QVariantMap resourceId = snippet["resourceId"].toMap();
+        std::string videoId = resourceId["videoId"].toString().toStdString();
+
+        result.push_back(videoId);
+    }
+
+    return result;
+}
+
 Playlist LearnService::parsePlaylist(const QVariantMap& playlistMap) const
 {
     Playlist result;
 
     QVariantList items = playlistMap["items"].toList();
     for (const QVariant& itemVar : items) {
-        QVariantMap snippet = itemVar.toMap()["snippet"].toMap();
+        QVariantMap itemMap = itemVar.toMap();
 
         PlaylistItem item;
+        item.videoId = itemMap["id"].toString().toStdString();
 
-        QVariantMap resourceId = snippet["resourceId"].toMap();
-        item.videoId = resourceId["videoId"].toString().toStdString();
-
+        QVariantMap snippet = itemMap["snippet"].toMap();
         item.title = snippet["title"].toString().toStdString();
-        item.author = snippet["videoOwnerChannelTitle"].toString().toStdString();
+        item.author = snippet["channelTitle"].toString().toStdString();
 
         QVariantMap thumbnails = snippet["thumbnails"].toMap();
         QVariantMap thumbnailsMedium = thumbnails["medium"].toMap();
         item.thumbnailUrl = thumbnailsMedium["url"].toString().toStdString();
-        // todo duration
+
+        QVariantMap contentDetails = itemMap["contentDetails"].toMap();
+//        QString duration = contentDetails["duration"].toString();
+//        QDateTime time = QDateTime::fromString(duration, "'P'D'T'hh'H'mm'M'ss'S'");
+//        item.durationSec = time.toSecsSinceEpoch();
 
         result.push_back(item);
     }
