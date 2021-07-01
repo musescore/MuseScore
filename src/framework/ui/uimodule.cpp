@@ -153,8 +153,12 @@ void UiModule::onInit(const framework::IApplication::RunMode&)
     s_keyNavigationController->init();
 }
 
-void UiModule::onAllInited()
+void UiModule::onAllInited(const framework::IApplication::RunMode& mode)
 {
+    if (framework::IApplication::RunMode::Editor != mode) {
+        return;
+    }
+
     //! NOTE Some of the settings are taken from the workspace,
     //! we need to be sure that the workspaces are initialized.
     //! So, we loads these settings on onStartApp
