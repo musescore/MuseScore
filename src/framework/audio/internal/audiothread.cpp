@@ -71,6 +71,12 @@ void AudioThread::stop(const OnFinished& onFinished)
     }
 }
 
+bool AudioThread::isRunning() const
+{
+    bool running = m_running;
+    return running;
+}
+
 void AudioThread::setAudioBuffer(std::shared_ptr<IAudioBuffer> buffer)
 {
     m_buffer = buffer;
