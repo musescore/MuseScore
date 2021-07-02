@@ -31,9 +31,9 @@
 #include "isoundfontsprovider.h"
 #include "iaudiodriver.h"
 #include "isynthesizersregister.h"
-#include "imixer.h"
-
+#include "internal/worker/imixer.h"
 #include "internal/synthesizers/synthesizercontroller.h"
+#include "internal/worker/mixer.h"
 #include "internal/iaudiobuffer.h"
 
 namespace mu::audio {
@@ -46,30 +46,22 @@ public:
 
     static AudioEngine* instance();
 
-    Ret init();
+    Ret init(IAudioBufferPtr bufferPtr);
     void deinit();
-    void onDriverOpened(unsigned int sampleRate, uint16_t readBufferSize);
 
     void setSampleRate(unsigned int sampleRate);
     void setReadBufferSize(uint16_t readBufferSize);
 
-    bool isInited() const;
-    async::Channel<bool> initChanged() const;
-    unsigned int sampleRate() const;
     IMixerPtr mixer() const;
-    void setMixer(IMixerPtr mixerPtr);
-    IAudioBufferPtr buffer() const;
-    void setAudioBuffer(IAudioBufferPtr buffer);
 
 private:
-
     AudioEngine();
 
     bool m_inited = false;
-    mu::async::Channel<bool> m_initChanged;
+
     unsigned int m_sampleRate = 0;
 
-    IMixerPtr m_mixer = nullptr;
+    std::shared_ptr<Mixer> m_mixer = nullptr;
     IAudioBufferPtr m_buffer = nullptr;
 
     // synthesizers

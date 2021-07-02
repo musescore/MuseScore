@@ -24,8 +24,9 @@
 
 #include "log.h"
 #include "ptrutils.h"
-#include "audioerrors.h"
+
 #include "internal/audiosanitizer.h"
+#include "audioerrors.h"
 
 using namespace mu::audio;
 using namespace mu::audio::synth;
@@ -43,33 +44,30 @@ AudioEngine::AudioEngine()
 
 AudioEngine::~AudioEngine()
 {
-}
-
-bool AudioEngine::isInited() const
-{
     ONLY_AUDIO_WORKER_THREAD;
-    return m_inited;
 }
 
-mu::Ret AudioEngine::init()
+mu::Ret AudioEngine::init(IAudioBufferPtr bufferPtr)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    if (isInited()) {
+    if (m_inited) {
         return make_ret(Ret::Code::Ok);
     }
 
-    IF_ASSERT_FAILED(m_buffer && m_mixer) {
+    IF_ASSERT_FAILED(bufferPtr) {
         return make_ret(Ret::Code::InternalError);
     }
 
+    m_mixer = std::make_shared<Mixer>();
+
+    m_buffer = bufferPtr;
     m_buffer->setSource(m_mixer->mixedSource());
 
     m_synthesizerController = std::make_shared<SynthesizerController>(synthesizersRegister(), soundFontsProvider());
     m_synthesizerController->init();
 
     m_inited = true;
-    m_initChanged.send(m_inited);
 
     return make_ret(Ret::Code::Ok);
 }
@@ -77,26 +75,21 @@ mu::Ret AudioEngine::init()
 void AudioEngine::deinit()
 {
     ONLY_AUDIO_WORKER_THREAD;
-    if (isInited()) {
+    if (m_inited) {
         m_buffer->setSource(nullptr);
+        m_buffer = nullptr;
         m_mixer = nullptr;
         m_inited = false;
-        m_initChanged.send(m_inited);
     }
-}
-
-void AudioEngine::onDriverOpened(unsigned int sampleRate, uint16_t readBufferSize)
-{
-    ONLY_AUDIO_WORKER_THREAD;
-
-    setSampleRate(sampleRate);
-    setReadBufferSize(readBufferSize);
 }
 
 void AudioEngine::setSampleRate(unsigned int sampleRate)
 {
     ONLY_AUDIO_WORKER_THREAD;
-    m_sampleRate = sampleRate;
+
+    IF_ASSERT_FAILED(m_mixer) {
+        return;
+    }
 
     m_mixer->mixedSource()->setSampleRate(sampleRate);
 }
@@ -104,46 +97,16 @@ void AudioEngine::setSampleRate(unsigned int sampleRate)
 void AudioEngine::setReadBufferSize(uint16_t readBufferSize)
 {
     ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_buffer) {
+        return;
+    }
+
     m_buffer->setMinSampleLag(readBufferSize);
-}
-
-mu::async::Channel<bool> AudioEngine::initChanged() const
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    return m_initChanged;
-}
-
-unsigned int AudioEngine::sampleRate() const
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    return m_sampleRate;
-}
-
-IAudioBufferPtr AudioEngine::buffer() const
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    return m_buffer;
 }
 
 IMixerPtr AudioEngine::mixer() const
 {
     ONLY_AUDIO_WORKER_THREAD;
-
     return m_mixer;
-}
-
-void AudioEngine::setMixer(IMixerPtr mixerPtr)
-{
-    ONLY_AUDIO_WORKER_THREAD;
-
-    m_mixer = mixerPtr;
-}
-
-void AudioEngine::setAudioBuffer(IAudioBufferPtr buffer)
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    m_buffer = buffer;
-    if (m_buffer && m_mixer) {
-        m_buffer->setSource(m_mixer->mixedSource());
-    }
 }
