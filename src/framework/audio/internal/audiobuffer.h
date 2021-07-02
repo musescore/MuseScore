@@ -25,9 +25,11 @@
 #include <vector>
 #include <memory>
 #include <atomic>
+
+#include "modularity/ioc.h"
+
 #include "iaudiobuffer.h"
 #include "iaudioconfiguration.h"
-#include "modularity/ioc.h"
 
 namespace mu::audio {
 class AudioBuffer : public IAudioBuffer
@@ -55,7 +57,7 @@ private:
     void fillup();
     void updateWriteIndex(const unsigned int samplesPerChannel);
 
-    std::recursive_mutex m_mutex; //! TODO get rid *recursive*
+    std::mutex m_mutex;
     size_t m_minSampleLag = FILL_SAMPLES;
     size_t m_writeIndex = 0;
     size_t m_readIndex = 0;
