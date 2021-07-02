@@ -294,9 +294,9 @@ public:
 //                                                            list.append(&item);
 //                                                      return QDeclarativeListProperty<FiguredBassItem>(this, &items, qmlItemsAppend);
 //                                                }
-    qreal             lineLength(int idx) const
+    qreal lineLength(size_t idx) const
     {
-        if (_lineLengths.size() > idx) {
+        if (idx < _lineLengths.size()) {
             return _lineLengths.at(idx);
         }
         return 0;
