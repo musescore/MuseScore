@@ -72,6 +72,7 @@ StyledPopupView {
                 isMultipleDotsModeOn: root.model ? root.model.isMultipleDotsModeOn : false
                 currentFretDotType: root.model ? root.model.currentFretDotType : false
                 visible: root.model ? root.model.areSettingsAvailable : false
+                color: ui.theme.fontPrimaryColor
 
                 width: parent.width
             }
