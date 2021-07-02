@@ -21,8 +21,11 @@
  */
 
 #include <QDir>
+#include <QCoreApplication>
 
 #include "config.h"
+#include "translation.h"
+
 #include "musescoreCore.h"
 #include "style.h"
 #include "mscore.h"
@@ -229,9 +232,9 @@ const char* toString(Direction val)
 QString toUserString(Direction val)
 {
     switch (val) {
-    case Direction::AUTO: return qApp->translate("Direction", "Auto");
-    case Direction::UP:   return qApp->translate("Direction", "Up");
-    case Direction::DOWN: return qApp->translate("Direction", "Down");
+    case Direction::AUTO: return qtrc("Direction", "Auto");
+    case Direction::UP:   return qtrc("Direction", "Up");
+    case Direction::DOWN: return qtrc("Direction", "Down");
     }
 #if (!defined (_MSCVER) && !defined (_MSC_VER))
     __builtin_unreachable();

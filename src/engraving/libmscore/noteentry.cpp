@@ -20,6 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "translation.h"
+#include "interactive/messagebox.h"
+
 #include "utils.h"
 #include "score.h"
 #include "chord.h"
@@ -37,9 +40,6 @@
 #include "excerpt.h"
 #include "accidental.h"
 #include "measurerepeat.h"
-
-#include "translation.h"
-#include "interactive/messagebox.h"
 
 using namespace mu;
 using namespace mu::engraving;

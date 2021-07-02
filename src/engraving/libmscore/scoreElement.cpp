@@ -20,9 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QGuiApplication>
-
 #include "scoreElement.h"
+
+#include "translation.h"
+
 #include "score.h"
 #include "undo.h"
 #include "xml.h"
@@ -886,7 +887,7 @@ const char* ScoreElement::name(ElementType type)
 
 QString ScoreElement::userName() const
 {
-    return qApp->translate("elementName", elementNames[int(type())].userName);
+    return qtrc("elementName", elementNames[int(type())].userName);
 }
 
 //---------------------------------------------------------

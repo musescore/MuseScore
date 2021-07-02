@@ -20,11 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QGuiApplication>
+#include "style.h"
+
 #include <QDebug>
 
+#include "translation.h"
+
 #include "mscore.h"
-#include "style.h"
 #include "xml.h"
 #include "score.h"
 #include "articulation.h"
@@ -2582,7 +2584,7 @@ const char* textStyleName(Tid idx)
 QString textStyleUserName(Tid idx)
 {
     Q_ASSERT(idx == textStyles[int(idx)].tid);
-    return qApp->translate("TextStyle", textStyleName(idx));
+    return qtrc("TextStyle", textStyleName(idx));
 }
 
 static std::vector<Tid> _allTextStyles;

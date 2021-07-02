@@ -20,9 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QGuiApplication>
-
 #include "instrtemplate.h"
+
+#include "translation.h"
+
 #include "bracket.h"
 #include "drumset.h"
 #include "stafftype.h"
@@ -118,7 +119,7 @@ static int readStaffIdx(XmlReader& e)
 void InstrumentGroup::read(XmlReader& e)
 {
     id       = e.attribute("id");
-    name     = qApp->translate("InstrumentsXML", e.attribute("name").toUtf8().data());
+    name     = qtrc("InstrumentsXML", e.attribute("name").toUtf8().data());
     extended = e.intAttribute("extended", 0);
 
     while (e.readNextStartElement()) {
@@ -141,7 +142,7 @@ void InstrumentGroup::read(XmlReader& e)
                 qDebug("instrument reference not found <%s>", e.text().toUtf8().data());
             }
         } else if (tag == "name") {
-            name = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
+            name = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
         } else if (tag == "extended") {
             extended = e.readInt();
         } else {
@@ -406,7 +407,7 @@ void InstrumentTemplate::read(XmlReader& e)
                     break;
                 }
             }
-            longNames.append(StaffName(qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
+            longNames.append(StaffName(qtrc("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
         } else if (tag == "shortName" || tag == "short-name") {     // "short-name" is obsolete
             int pos = e.intAttribute("pos", 0);
             for (QList<StaffName>::iterator i = shortNames.begin(); i != shortNames.end(); ++i) {
@@ -415,9 +416,9 @@ void InstrumentTemplate::read(XmlReader& e)
                     break;
                 }
             }
-            shortNames.append(StaffName(qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
+            shortNames.append(StaffName(qtrc("InstrumentsXML", e.readElementText().toUtf8().data()), pos));
         } else if (tag == "trackName") {
-            trackName = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
+            trackName = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
         } else if (tag == "description") {
             description = e.readElementText();
         } else if (tag == "extended") {
@@ -856,7 +857,7 @@ void InstrumentGenre::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "name") {
-            name = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
+            name = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
         } else {
             e.unknown();
         }
@@ -891,7 +892,7 @@ void InstrumentFamily::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "name") {
-            name = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
+            name = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
         } else {
             e.unknown();
         }

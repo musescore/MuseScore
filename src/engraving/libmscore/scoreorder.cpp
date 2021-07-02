@@ -21,9 +21,8 @@
  */
 #include <iostream>
 
-#include <QGuiApplication>
-
 #include "scoreorder.h"
+#include "translation.h"
 
 #include "libmscore/score.h"
 #include "libmscore/part.h"
@@ -32,6 +31,8 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/undo.h"
 #include "libmscore/xml.h"
+
+using namespace mu;
 
 namespace Ms {
 static const QString SOLOISTS_ID("<soloists>");
@@ -72,7 +73,7 @@ void ScoreOrder::readInstrument(Ms::XmlReader& reader)
         if (reader.name() == "family") {
             InstrumentOverwrite io;
             io.id = reader.attribute("id");
-            io.name = qApp->translate("OrderXML", reader.readElementText().toUtf8().data());
+            io.name = qtrc("OrderXML", reader.readElementText().toUtf8().data());
             instrumentMap.insert(instrumentId, io);
         } else {
             reader.unknown();
@@ -322,7 +323,7 @@ void ScoreOrder::read(Ms::XmlReader& reader)
     const QString sectionId { "" };
     while (reader.readNextStartElement()) {
         if (reader.name() == "name") {
-            name = qApp->translate("OrderXML", reader.readElementText().toUtf8().data());
+            name = qtrc("OrderXML", reader.readElementText().toUtf8().data());
         } else if (reader.name() == "section") {
             readSection(reader);
         } else if (reader.name() == "instrument") {

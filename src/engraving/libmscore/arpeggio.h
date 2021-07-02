@@ -70,7 +70,7 @@ public:
 
     ArpeggioType arpeggioType() const { return _arpeggioType; }
     void setArpeggioType(ArpeggioType v) { _arpeggioType = v; }
-    QString arpeggioTypeName() { return qApp->translate("Palette", arpeggioTypeNames[int(_arpeggioType)]); }
+    QString arpeggioTypeName() const;
 
     Chord* chord() const { return (Chord*)parent(); }
 

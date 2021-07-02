@@ -23,8 +23,11 @@
 #define MU_DRAW_PEN_H
 
 #include <QColor>
+#ifndef NO_QT_SUPPORT
+#include <QPen>
+#endif
+
 #include "drawtypes.h"
-#include "global/log.h"
 
 namespace mu::draw {
 class Pen
@@ -92,7 +95,6 @@ public:
         m_dashPattern = pattern;
         m_style = PenStyle::CustomDashLine;
         if ((m_dashPattern.size() % 2) == 1) {
-            LOGW() << "Pattern not of even length";
             m_dashPattern.push_back(1);
         }
     }

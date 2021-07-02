@@ -24,6 +24,8 @@
 
 #include <cmath>
 
+#include "translation.h"
+
 #include "scorefont.h"
 #include "chord.h"
 #include "note.h"
@@ -61,6 +63,11 @@ Arpeggio::Arpeggio(Score* s)
     _userLen2 = 0.0;
     _playArpeggio = true;
     _stretch = 1.0;
+}
+
+QString Arpeggio::arpeggioTypeName() const
+{
+    return qtrc("Palette", arpeggioTypeNames[int(_arpeggioType)]);
 }
 
 //---------------------------------------------------------
