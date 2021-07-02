@@ -38,7 +38,7 @@ WaveFormModel::WaveFormModel(QObject* parent)
         if (pressure < MIN_DISPLAYED_DBFS) {
             setCurrentVolumePressure(MIN_DISPLAYED_DBFS);
         } else if (pressure > MAX_DISPLAYED_DBFS) {
-            setCurrentVolumePressure(MIN_DISPLAYED_DBFS);
+            setCurrentVolumePressure(MAX_DISPLAYED_DBFS);
         } else {
             setCurrentVolumePressure(pressure);
         }
