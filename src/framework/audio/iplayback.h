@@ -26,7 +26,6 @@
 #include "async/channel.h"
 #include "async/promise.h"
 
-
 #include "audiotypes.h"
 
 namespace mu::audio {
