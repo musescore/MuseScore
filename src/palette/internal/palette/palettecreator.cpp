@@ -1099,11 +1099,15 @@ PalettePanel* PaletteCreator::newBracketsPalettePanel()
             { BracketType::LINE,   QT_TRANSLATE_NOOP("palette", "Line") } }
     };
 
-    for (auto type : types) {
+    static Staff bracketItemOwner(nullptr);
+    bracketItemOwner.setBracketType(types.size() - 1, BracketType::NORMAL);
+
+    for (int i = 0; i < types.size(); ++i) {
         auto b1 = makeElement<Bracket>(gscore);
-        auto bi1 = makeElement<BracketItem>(gscore);
+        auto bi1 = bracketItemOwner.brackets()[i];
+        const auto& type = types[i];
         bi1->setBracketType(type.first);
-        b1->setBracketItem(bi1.get());
+        b1->setBracketItem(bi1);
         sp->append(b1, type.second); // Bracket, Brace, Square, Line
     }
     return sp;
