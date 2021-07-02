@@ -29,7 +29,6 @@
 #include <functional>
 
 #include "modularity/ioc.h"
-#include "iaudioconfiguration.h"
 
 #include "isynthesizer.h"
 
@@ -37,8 +36,6 @@ namespace mu::audio::synth {
 struct Fluid;
 class FluidSynth : public ISynthesizer
 {
-    INJECT(audio, IAudioConfiguration, config)
-
 public:
     FluidSynth();
 
