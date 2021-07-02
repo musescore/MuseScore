@@ -48,6 +48,8 @@ Playback::Playback()
 Promise<TrackSequenceId> Playback::addSequence()
 {
     return Promise<TrackSequenceId>([this](Promise<TrackSequenceId>::Resolve resolve, Promise<TrackSequenceId>::Reject /*reject*/) {
+        ONLY_AUDIO_WORKER_THREAD;
+
         TrackSequenceId newId = m_sequences.size();
 
         m_sequences.emplace(newId, std::make_shared<TrackSequence>(newId));
@@ -60,6 +62,8 @@ Promise<TrackSequenceIdList> Playback::sequenceIdList() const
 {
     return Promise<TrackSequenceIdList>([this](Promise<TrackSequenceIdList>::Resolve resolve,
                                                Promise<TrackSequenceIdList>::Reject /*reject*/) {
+        ONLY_AUDIO_WORKER_THREAD;
+
         TrackSequenceIdList result(m_sequences.size());
 
         for (const auto& pair : m_sequences) {
@@ -85,16 +89,22 @@ void Playback::removeSequence(const TrackSequenceId id)
 
 IPlayerPtr Playback::player() const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
     return m_playerHandlersPtr;
 }
 
 ITracksPtr Playback::tracks() const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
     return m_trackHandlersPtr;
 }
 
 IAudioOutputPtr Playback::audioOutput() const
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
     return m_audioOutputPtr;
 }
 
