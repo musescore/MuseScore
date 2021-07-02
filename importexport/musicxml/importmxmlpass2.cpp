@@ -1627,6 +1627,8 @@ void MusicXMLParserPass2::scorePartwise()
       auto lm = _score->lastMeasure();
       if (lm && lm->endBarLineType() == BarLineType::NORMAL)
             lm->setEndBarLineType(BarLineType::NORMAL, 0);
+
+      _score->connectArpeggios();
       }
 
 //---------------------------------------------------------

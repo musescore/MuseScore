@@ -2825,6 +2825,26 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
       }
 
 //---------------------------------------------------------
+//   findArpeggio
+//---------------------------------------------------------
+
+static Arpeggio* findArpeggio(Note* note)
+      {
+      if (note->chord()->arpeggio()) return note->chord()->arpeggio();
+
+      // Check if there is an arpeggio in any voice that intersects the note on the y-axis
+      for (int i = staff2track(note->staffIdx()); i < staff2track(note->staffIdx() + 1); ++i) {
+            Element* elem =  note->chord()->segment()->elist()[i];
+            if (elem && elem->isChord()
+                  && toChord(elem)->arpeggio()
+                  && note->pageBoundingRect().top() + note->headHeight() >= toChord(elem)->arpeggio()->pageBoundingRect().top()
+                  && note->pageBoundingRect().top() + note->headHeight() <= toChord(elem)->arpeggio()->pageBoundingRect().bottom())
+                  return toChord(elem)->arpeggio();
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
 //   arpeggiate
 //---------------------------------------------------------
 
@@ -3464,8 +3484,8 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
                         }
 
             technical.etag(_xml);
-            if (chord->arpeggio()) {
-                  arpeggiate(chord->arpeggio(), note == nl.front(), note == nl.back(), _xml, notations);
+            if (Arpeggio* arp = findArpeggio(note)) {
+                  arpeggiate(arp, note == nl.front(), note == nl.back(), _xml, notations);
                   }
             for (Spanner* spanner : note->spannerFor())
                   if (spanner->type() == ElementType::GLISSANDO) {

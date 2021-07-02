@@ -1035,6 +1035,7 @@ class Score : public QObject, public ScoreElement {
       Segment* lastSegmentMM() const;
 
       void connectTies(bool silent=false);
+      void connectArpeggios();
 
       qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
