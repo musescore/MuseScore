@@ -25,9 +25,10 @@
  Implementation of classes Clef (partial) and ClefList (complete).
 */
 
-#include <QCoreApplication>
-
 #include "clef.h"
+
+#include "translation.h"
+
 #include "measure.h"
 #include "ambitus.h"
 #include "xml.h"
@@ -593,7 +594,7 @@ Element* Clef::prevSegmentElement()
 
 QString Clef::accessibleInfo() const
 {
-    return qApp->translate("clefTable", ClefInfo::name(clefType()));
+    return qtrc("clefTable", ClefInfo::name(clefType()));
 }
 
 //---------------------------------------------------------
