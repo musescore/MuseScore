@@ -30,6 +30,8 @@
 #include "network/inetworkmanagercreator.h"
 #include "iinteractive.h"
 
+class QJsonDocument;
+
 namespace mu::learn {
 class LearnService : public ILearnService, public async::Asyncable
 {
@@ -51,8 +53,8 @@ private:
 
     void openUrl(const QUrl& url);
 
-    std::vector<std::string> parsePlaylistItemsIds(const QVariantMap& playlistMap) const;
-    Playlist parsePlaylist(const QVariantMap& playlistMap) const;
+    std::vector<std::string> parsePlaylistItemsIds(const QJsonDocument& playlistDoc) const;
+    Playlist parsePlaylist(const QJsonDocument& playlistDoc) const;
 
     Playlist m_startedPlaylist;
     Playlist m_advancedPlaylist;
