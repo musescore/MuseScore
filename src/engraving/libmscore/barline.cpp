@@ -21,6 +21,11 @@
  */
 
 #include "barline.h"
+
+#include "translation.h"
+#include "draw/font.h"
+#include "draw/fontmetrics.h"
+
 #include "score.h"
 #include "scorefont.h"
 #include "sym.h"
@@ -39,9 +44,6 @@
 #include "fermata.h"
 #include "symbol.h"
 #include "image.h"
-
-#include "draw/font.h"
-#include "draw/fontmetrics.h"
 
 using namespace mu;
 
@@ -273,7 +275,7 @@ QString BarLine::userTypeName(BarLineType t)
 {
     for (const auto& i : barLineTable) {
         if (i.type == t) {
-            return qApp->translate("symUserNames", i.userName);
+            return qtrc("symUserNames", i.userName);
         }
     }
     return QString();

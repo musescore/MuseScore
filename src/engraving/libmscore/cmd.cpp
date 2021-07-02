@@ -26,6 +26,10 @@
 */
 
 #include <assert.h>
+#include <QGuiApplication>
+
+#include "translation.h"
+#include "interactive/messagebox.h"
 
 #include "types.h"
 #include "musescoreCore.h"
@@ -85,8 +89,6 @@
 #include "rehearsalmark.h"
 #include "sym.h"
 
-#include "translation.h"
-#include "interactive/messagebox.h"
 #include "log.h"
 
 using namespace mu;

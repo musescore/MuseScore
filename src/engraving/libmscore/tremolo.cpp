@@ -20,9 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QGuiApplication>
-
 #include "tremolo.h"
+
+#include "translation.h"
+#include "draw/transform.h"
+#include "draw/pen.h"
+#include "draw/brush.h"
+
 #include "score.h"
 #include "staff.h"
 #include "style.h"
@@ -33,10 +37,6 @@
 #include "stem.h"
 #include "symid.h"
 #include "xml.h"
-
-#include "draw/transform.h"
-#include "draw/pen.h"
-#include "draw/brush.h"
 
 using namespace mu;
 
@@ -695,7 +695,7 @@ Fraction Tremolo::tremoloLen() const
 
 QString Tremolo::subtypeName() const
 {
-    return qApp->translate("Tremolo", tremoloName[subtype()]);
+    return qtrc("Tremolo", tremoloName[subtype()]);
 }
 
 //---------------------------------------------------------

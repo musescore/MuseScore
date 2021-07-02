@@ -24,7 +24,7 @@
 
 #include <cmath>
 
-#include <QGuiApplication>
+#include "translation.h"
 
 #include "style.h"
 #include "system.h"
@@ -464,7 +464,7 @@ QString Trill::trillTypeName() const
 
 QString Trill::trillTypeUserName() const
 {
-    return qApp->translate("trillType", trillTable[static_cast<int>(trillType())].userName.toUtf8().constData());
+    return qtrc("trillType", trillTable[static_cast<int>(trillType())].userName.toUtf8().constData());
 }
 
 //---------------------------------------------------------

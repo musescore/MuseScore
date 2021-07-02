@@ -33,8 +33,9 @@ NICE-TO-HAVE TODO:
 
 #include <cmath>
 
-#include "log.h"
 #include "translation.h"
+#include "draw/fontmetrics.h"
+#include "draw/pen.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -51,8 +52,7 @@ NICE-TO-HAVE TODO:
 #include "system.h"
 #include "xml.h"
 
-#include "draw/fontmetrics.h"
-#include "draw/pen.h"
+#include "log.h"
 
 using namespace mu;
 
