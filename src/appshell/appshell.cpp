@@ -196,6 +196,16 @@ int AppShell::run(int argc, char** argv)
         QQuickWindow::setDefaultAlphaBuffer(true);
 
         engine->load(url);
+
+        // ====================================================
+        // Setup modules: onDelayedInit
+        // ====================================================
+        QTimer::singleShot(5000, [this]() {
+                globalModule.onDelayedInit();
+                for (mu::modularity::IModuleSetup* m : m_modules) {
+                    m->onDelayedInit();
+                }
+            });
     }
     }
 

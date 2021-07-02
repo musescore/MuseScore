@@ -46,7 +46,14 @@ QVariantList LearnPageModel::advancedPlaylist() const
 void LearnPageModel::load()
 {
     setStartedPlaylist(learnService()->startedPlaylist());
+    learnService()->startedPlaylistChanged().onReceive(this, [this](const Playlist& playlist) {
+        setStartedPlaylist(playlist);
+    });
+
     setAdvancedPlaylist(learnService()->advancedPlaylist());
+    learnService()->advancedPlaylistChanged().onReceive(this, [this](const Playlist& playlist) {
+        setAdvancedPlaylist(playlist);
+    });
 }
 
 void LearnPageModel::openVideo(const QString& videoId) const

@@ -32,7 +32,7 @@ public:
     void registerExports() override;
     void registerResources() override;
     void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode&) override;
+    void onDelayedInit() override;
 };
 }
 

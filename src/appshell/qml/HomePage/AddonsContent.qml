@@ -33,7 +33,7 @@ FocusScope {
     id: root
 
     property var color: ui.theme.backgroundSecondaryColor
-    property string item: ""
+    property string section: ""
 
     signal requestActiveFocus()
 
@@ -55,12 +55,12 @@ FocusScope {
         }
     }
 
-    onItemChanged: {
-        if (!Boolean(root.item)) {
+    onSectionChanged: {
+        if (!Boolean(root.section)) {
             return
         }
 
-        bar.selectPage(root.item)
+        bar.selectPage(root.section)
     }
 
     Rectangle {

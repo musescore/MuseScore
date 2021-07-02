@@ -25,10 +25,11 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 #include "ilearnservice.h"
 
 namespace mu::learn {
-class LearnPageModel : public QObject
+class LearnPageModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
