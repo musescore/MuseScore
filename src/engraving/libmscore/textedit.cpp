@@ -21,7 +21,6 @@
  */
 
 #include <QGuiApplication>
-#include <QClipboard>
 #include <QInputMethodEvent>
 
 #include "log.h"
@@ -672,9 +671,8 @@ Element* TextBase::drop(EditData& ed)
 //   paste
 //---------------------------------------------------------
 
-void TextBase::paste(EditData& ed)
+void TextBase::paste(EditData& ed, const QString& txt)
 {
-    QString txt = QGuiApplication::clipboard()->text(QClipboard::Clipboard);
     if (MScore::debugMode) {
         qDebug("<%s>", qPrintable(txt));
     }

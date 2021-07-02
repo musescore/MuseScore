@@ -360,7 +360,7 @@ public:
     void writeProperties(XmlWriter&, bool, bool) const;
     bool readProperties(XmlReader&) override;
 
-    virtual void paste(EditData&);
+    virtual void paste(EditData& ed, const QString& txt);
 
     mu::RectF pageRectangle() const;
 
