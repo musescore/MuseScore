@@ -62,8 +62,8 @@ jobs:
       run: |
         source ./../musescore_environment.sh
         mkdir -p "$HOME/musescore_ref"
-        # bash ninja_build.sh -t clean
-        # MUSESCORE_INSTALL_DIR="$HOME/musescore_ref" bash ninja_build.sh -t installdebug
+        bash ninja_build.sh -t clean
+        MUSESCORE_INSTALL_DIR="$HOME/musescore_ref" bash ninja_build.sh -t installdebug
     - name: Checkout on current branch
       if: env.DO_RUN == 'true'
       uses: actions/checkout@v2    
@@ -72,7 +72,7 @@ jobs:
     - name: Generate ref png
       if: env.DO_RUN == 'true'
       run: |
-        # xvfb-run ./vtest/vtest.sh -c gen_ref -m $HOME/musescore_ref/bin/mscore
+        xvfb-run ./vtest/vtest.sh -c gen_ref -m $HOME/musescore_ref/bin/mscore
     - name: Generate current png
       if: env.DO_RUN == 'true'
       run: |
