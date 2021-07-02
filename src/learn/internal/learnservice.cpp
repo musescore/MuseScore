@@ -94,9 +94,9 @@ void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<Re
         return;
     }
 
-    QVariantMap playlistInfo = QJsonDocument::fromJson(playlistItemsData.data()).toVariant().toMap();
+    QJsonDocument playlistInfoDoc = QJsonDocument::fromJson(playlistItemsData.data());
 
-    std::vector<std::string> playlistItemsIds = parsePlaylistItemsIds(playlistInfo);
+    std::vector<std::string> playlistItemsIds = parsePlaylistItemsIds(playlistInfoDoc);
     if (playlistItemsIds.empty()) {
         finishChannel->send(make_ret(Err::PlaylistIsEmpty));
         return;
@@ -110,11 +110,11 @@ void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<Re
         return;
     }
 
-    QVariantMap videosInfo = QJsonDocument::fromJson(videosInfoData.data()).toVariant().toMap();
+    QJsonDocument videosInfoDoc = QJsonDocument::fromJson(videosInfoData.data());
 
     RetVal<Playlist> result;
     result.ret = make_ret(Ret::Code::Ok);
-    result.val = parsePlaylist(videosInfo);
+    result.val = parsePlaylist(videosInfoDoc);
 
     finishChannel->send(result);
 }
@@ -127,15 +127,18 @@ void LearnService::openUrl(const QUrl& url)
     }
 }
 
-std::vector<std::string> LearnService::parsePlaylistItemsIds(const QVariantMap& playlistMap) const
+std::vector<std::string> LearnService::parsePlaylistItemsIds(const QJsonDocument& playlistDoc) const
 {
     std::vector<std::string> result;
 
-    QVariantList items = playlistMap["items"].toList();
-    for (const QVariant& itemVar : items) {
-        QVariantMap snippet = itemVar.toMap()["snippet"].toMap();
-        QVariantMap resourceId = snippet["resourceId"].toMap();
-        std::string videoId = resourceId["videoId"].toString().toStdString();
+    QJsonObject obj = playlistDoc.object();
+    QJsonArray items = obj.value("items").toArray();
+
+    for (const QJsonValue& itemVal : items) {
+        QJsonObject itemObj = itemVal.toObject();
+        QJsonObject snippetObj = itemObj.value("snippet").toObject();
+        QJsonObject resourceIdObj = snippetObj.value("resourceId").toObject();
+        std::string videoId = resourceIdObj.value("videoId").toString().toStdString();
 
         result.push_back(videoId);
     }
@@ -143,26 +146,28 @@ std::vector<std::string> LearnService::parsePlaylistItemsIds(const QVariantMap& 
     return result;
 }
 
-Playlist LearnService::parsePlaylist(const QVariantMap& playlistMap) const
+Playlist LearnService::parsePlaylist(const QJsonDocument& playlistDoc) const
 {
     Playlist result;
 
-    QVariantList items = playlistMap["items"].toList();
-    for (const QVariant& itemVar : items) {
-        QVariantMap itemMap = itemVar.toMap();
+    QJsonObject obj = playlistDoc.object();
+    QJsonArray items = obj.value("items").toArray();
+
+    for (const QJsonValue& itemVal : items) {
+        QJsonObject itemObj = itemVal.toObject();
+        QJsonObject snippetObj = itemObj.value("snippet").toObject();
 
         PlaylistItem item;
-        item.videoId = itemMap["id"].toString().toStdString();
+        item.videoId = itemObj.value("id").toString().toStdString();
 
-        QVariantMap snippet = itemMap["snippet"].toMap();
-        item.title = snippet["title"].toString().toStdString();
-        item.author = snippet["channelTitle"].toString().toStdString();
+        item.title = snippetObj.value("title").toString().toStdString();
+        item.author = snippetObj.value("channelTitle").toString().toStdString();
 
-        QVariantMap thumbnails = snippet["thumbnails"].toMap();
-        QVariantMap thumbnailsMedium = thumbnails["medium"].toMap();
-        item.thumbnailUrl = thumbnailsMedium["url"].toString().toStdString();
+        QJsonObject thumbnailsObj = snippetObj.value("thumbnails").toObject();
+        QJsonObject thumbnailsMediumObj = thumbnailsObj.value("medium").toObject();
+        item.thumbnailUrl = thumbnailsMediumObj.value("url").toString().toStdString();
 
-        QVariantMap contentDetails = itemMap["contentDetails"].toMap();
+        QJsonObject contentDetails = itemObj.value("contentDetails").toObject();
 //        QString duration = contentDetails["duration"].toString();
 //        QDateTime time = QDateTime::fromString(duration, "'P'D'T'hh'H'mm'M'ss'S'");
 //        item.durationSec = time.toSecsSinceEpoch();
