@@ -26,12 +26,14 @@ SKIP_ERR=true
 ARTIFACTS_DIR=build.artifacts
 TELEMETRY_TRACK_ID=""
 CRASH_REPORT_URL=""
+YOUTUBE_API_KEY=""
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -n|--number) BUILD_NUMBER="$2"; shift ;;
         --telemetry) TELEMETRY_TRACK_ID="$2"; shift ;;
         --crash_log_url) CRASH_REPORT_URL="$2"; shift ;;
+        --youtube_api_key) YOUTUBE_API_KEY="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -39,6 +41,7 @@ done
 
 if [ -z "$BUILD_NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
 if [ -z "$TELEMETRY_TRACK_ID" ]; then TELEMETRY_TRACK_ID=""; fi
+if [ -z "$YOUTUBE_API_KEY" ]; then YOUTUBE_API_KEY=""; fi
 
 BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env)
 MUSESCORE_BUILD_CONFIG=dev
@@ -59,6 +62,7 @@ echo "BUILD_NUMBER: $BUILD_NUMBER"
 echo "TELEMETRY_TRACK_ID: $TELEMETRY_TRACK_ID"
 echo "CRASH_REPORT_URL: $CRASH_REPORT_URL"
 echo "VST3_SDK_PATH: $VST3_SDK_PATH"
+echo "YOUTUBE_API_KEY: $YOUTUBE_API_KEY"
 
 MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
 
@@ -70,6 +74,7 @@ MUSESCORE_TELEMETRY_ID=$TELEMETRY_TRACK_ID \
 MUSESCORE_CRASHREPORT_URL=$CRASH_REPORT_URL \
 MUSESCORE_BUILD_VST=$BUILD_VST \
 MUSESCORE_VST3_SDK_PATH=$VST3_SDK_PATH \
+MUSESCORE_YOUTUBE_API_KEY=$YOUTUBE_API_KEY \
 bash ./ninja_build.sh -t install
 
 bash ./build/ci/tools/make_release_channel_env.sh -c $MUSESCORE_BUILD_CONFIG
