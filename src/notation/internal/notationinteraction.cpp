@@ -105,6 +105,7 @@ void NotationInteraction::apply()
     m_undoStack->commitChanges();
     if (m_notifyAboutDropChanged) {
         notifyAboutDropChanged();
+        notifyAboutSelectionChanged();
     }
 }
 
@@ -481,7 +482,7 @@ void NotationInteraction::moveChordNoteSelection(MoveDirection d)
     notifyAboutSelectionChanged();
 }
 
-void NotationInteraction::select(const std::vector<Element*>& elements, SelectType type, int staffIndex)
+void NotationInteraction::selectInternal(const std::vector<Element*>& elements, SelectType type, int staffIndex)
 {
     if (needEndTextEditing(elements)) {
         endEditText();
@@ -492,7 +493,11 @@ void NotationInteraction::select(const std::vector<Element*>& elements, SelectTy
     for (Element* element: elements) {
         score()->select(element, type, staffIndex);
     }
+}
 
+void NotationInteraction::select(const std::vector<Element*>& elements, SelectType type, int staffIndex)
+{
+    selectInternal(elements, type, staffIndex);
     notifyAboutSelectionChanged();
 }
 
@@ -1394,7 +1399,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
         }
 
         if (el && !score->inputState().noteEntryMode()) {
-            select({ el }, Ms::SelectType::SINGLE, 0);
+            selectInternal({ el }, Ms::SelectType::SINGLE, 0);
         }
         dropData.dropElement = 0;
 
@@ -2651,7 +2656,7 @@ void NotationInteraction::addText(TextType type)
     apply();
 
     if (textBox) {
-        select({ textBox }, SelectType::SINGLE);
+        selectInternal({ textBox }, SelectType::SINGLE, 0);
         startEditText(textBox, PointF());
     }
 
