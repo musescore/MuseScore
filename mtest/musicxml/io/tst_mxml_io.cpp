@@ -86,6 +86,8 @@ private slots:
       void clefs1() { mxmlIoTest("testClefs1"); }
       void clefs2() { mxmlIoTest("testClefs2"); }
       void completeMeasureRests() { mxmlIoTest("testCompleteMeasureRests"); }
+      void connectedArpeggios1() { mxmlImportTestRef("testConnectedArpeggios"); }
+      void connectedArpeggios2() { mxmlIoTestRef("testConnectedArpeggios"); }
       void cueNotes() { mxmlIoTest("testCueNotes"); }
       void cueNotes2() { mxmlMscxExportTestRef("testCueNotes2"); }
       void cueNotes3() { mxmlImportTestRef("testCueNotes3"); }
