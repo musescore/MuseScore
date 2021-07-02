@@ -22,27 +22,22 @@
 #ifndef MU_LEARN_LEARNSERVICE_H
 #define MU_LEARN_LEARNSERVICE_H
 
-#include <QObject>
-
 #include "ilearnservice.h"
 
 #include "modularity/ioc.h"
+#include "async/asyncable.h"
 #include "ilearnconfiguration.h"
 #include "network/inetworkmanagercreator.h"
 #include "iinteractive.h"
 
 namespace mu::learn {
-class LearnService : public QObject, public ILearnService
+class LearnService : public ILearnService, public async::Asyncable
 {
-    Q_OBJECT
-
     INJECT(learn, ILearnConfiguration, configuration)
     INJECT(learn, network::INetworkManagerCreator, networkManagerCreator)
     INJECT(learn, framework::IInteractive, interactive)
 
 public:
-    LearnService(QObject* parent = nullptr);
-
     void init();
 
     Playlist startedPlaylist() const override;
@@ -51,14 +46,16 @@ public:
     void openVideo(const std::string& videoId) const override;
 
 private:
-    Playlist requestPlaylist(const QUrl& playlistUrl) const;
+    void refreshPlaylists();
+    void th_requestPlaylist(const QUrl& playlistUrl, async::Channel<RetVal<Playlist> >* finishChannel) const;
 
     void openUrl(const QUrl& url);
 
     std::vector<std::string> parsePlaylistItemsIds(const QVariantMap& playlistMap) const;
     Playlist parsePlaylist(const QVariantMap& playlistMap) const;
 
-    network::INetworkManagerPtr m_networkManager;
+    Playlist m_startedPlaylist;
+    Playlist m_advancedPlaylist;
 };
 }
 
