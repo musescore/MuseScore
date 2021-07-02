@@ -23,7 +23,7 @@
 #include <cmath>
 
 #include <QGuiApplication>
-#include <QClipboard>
+
 #include <QStack>
 #include <QTextFragment>
 #include <QTextDocument>
@@ -650,9 +650,6 @@ bool TextCursor::set(const PointF& p, QTextCursor::MoveMode mode)
         _text->score()->setUpdateAll();
         if (mode == QTextCursor::MoveAnchor) {
             clearSelection();
-        }
-        if (hasSelection()) {
-            QGuiApplication::clipboard()->setText(selectedText(), QClipboard::Selection);
         }
     }
     updateCursorFormat();
@@ -2549,9 +2546,7 @@ bool TextBase::mousePress(EditData& ed)
     if (!ted->cursor()->set(ed.startMove, shift ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor)) {
         return false;
     }
-    if (ed.buttons == Qt::MiddleButton) {
-        paste(ed);
-    }
+
     score()->setUpdateAll();
     return true;
 }
@@ -3242,7 +3237,7 @@ void TextBase::editCut(EditData& ed)
     QString s = cursor->selectedText(true);
 
     if (!s.isEmpty()) {
-        QGuiApplication::clipboard()->setText(s, QClipboard::Clipboard);
+        ted->selectedText = cursor->selectedText(true);
         ed.curGrip = Grip::START;
         ed.key     = Qt::Key_Delete;
         ed.s       = QString();
@@ -3261,10 +3256,7 @@ void TextBase::editCopy(EditData& ed)
     //
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
     TextCursor* cursor = ted->cursor();
-    QString s = cursor->selectedText(true);
-    if (!s.isEmpty()) {
-        QGuiApplication::clipboard()->setText(s, QClipboard::Clipboard);
-    }
+    ted->selectedText = cursor->selectedText(true);
 }
 
 //---------------------------------------------------------

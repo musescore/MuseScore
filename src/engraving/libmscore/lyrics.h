@@ -105,7 +105,7 @@ public:
     void removeFromScore();
 
     using ScoreElement::undoChangeProperty;
-    void paste(EditData&) override;
+    void paste(EditData& ed, const QString& txt) override;
 
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;

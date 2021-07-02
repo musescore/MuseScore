@@ -1308,7 +1308,8 @@ void FiguredBass::layoutLines()
         // probably be implemented.
     }
 
-    int i, len, segIdx;
+    int i, len;
+    size_t segIdx = 0;
     for (i = sysIdx1, segIdx = 0; i <= sysIdx2; ++i, ++segIdx) {
         len = 0;
         if (sysIdx1 == sysIdx2 || i == sysIdx1) {

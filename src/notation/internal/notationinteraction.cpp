@@ -51,6 +51,7 @@
 #include "libmscore/keysig.h"
 #include "libmscore/instrchange.h"
 #include "libmscore/lasso.h"
+#include "libmscore/textedit.h"
 
 #include "masternotation.h"
 #include "scorecallbacks.h"
@@ -1997,7 +1998,19 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
     }
 
     m_textEditData.startMove = newCursorPos;
-    m_textEditData.element->mousePress(m_textEditData);
+
+    Ms::TextBase* textEl = Ms::toTextBase(m_textEditData.element);
+
+    textEl->mousePress(m_textEditData);
+    if (m_textEditData.buttons == Qt::MiddleButton) {
+        #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+        QClipboard::Mode mode = QClipboard::Clipboard;
+        #else
+        QClipboard::Mode mode = QClipboard::Selection;
+        #endif
+        QString txt = QGuiApplication::clipboard()->text(mode);
+        textEl->paste(m_textEditData, txt);
+    }
 
     notifyAboutTextEditingChanged();
 }
@@ -2174,6 +2187,10 @@ void NotationInteraction::copySelection()
 
     if (isTextEditingStarted()) {
         m_textEditData.element->editCopy(m_textEditData);
+        Ms::TextEditData* ted = static_cast<Ms::TextEditData*>(m_textEditData.getData(m_textEditData.element));
+        if (!ted->selectedText.isEmpty()) {
+            QGuiApplication::clipboard()->setText(ted->selectedText, QClipboard::Clipboard);
+        }
     } else {
         QMimeData* mimeData = selection()->mimeData();
         if (!mimeData) {
@@ -2194,7 +2211,13 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     startEdit();
 
     if (isTextEditingStarted()) {
-        toTextBase(m_textEditData.element)->paste(m_textEditData);
+        #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+        QClipboard::Mode mode = QClipboard::Clipboard;
+        #else
+        QClipboard::Mode mode = QClipboard::Selection;
+        #endif
+        QString txt = QGuiApplication::clipboard()->text(mode);
+        toTextBase(m_textEditData.element)->paste(m_textEditData, txt);
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         score()->cmdPaste(mimeData, nullptr, scale);
