@@ -58,6 +58,7 @@ private slots:
       void accidentals1() { mxmlIoTest("testAccidentals1"); }
       void accidentals2() { mxmlIoTest("testAccidentals2"); }
       void accidentals3() { mxmlIoTest("testAccidentals3"); }
+      void additionalFermatas() { mxmlImportTestRef("testAdditionalFermatas"); }
       void arpGliss1() { mxmlIoTest("testArpGliss1"); }
       void arpGliss2() { mxmlIoTest("testArpGliss2"); }
       void arpGliss3() { mxmlIoTest("testArpGliss3"); }

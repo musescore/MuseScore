@@ -1029,6 +1029,28 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
             cr->el().push_back(na);       // store for later move to segment
       else
             cr->segment()->add(na);
+
+      // Move or hide fermata based on existing fermatas.
+      bool alreadyAbove = false;
+      bool alreadyBelow = false;
+      for (Element* e: cr->segment()->annotations()) {
+            if (e->isFermata() && e != na
+            && e->staffIdx() == na->staffIdx() && e->track() != na->track()) {
+                  Element* otherCr = cr->segment()->elist()[e->track()];
+                  if (toFermata(e)->placement() == Placement::BELOW) alreadyBelow = true;
+                  if (toFermata(e)->placement() == Placement::ABOVE) alreadyAbove = true;
+                  
+                  if (direction.isEmpty() && alreadyAbove)
+                        na->setPlacement(Placement::BELOW);
+                  else if (direction.isEmpty() && alreadyBelow)
+                        na->setPlacement(Placement::ABOVE);
+                  
+                  if ((otherCr->isChord() && cr->isChord()
+                  && toChord(otherCr)->durationType() == toChord(cr)->durationType())
+                  || (alreadyAbove && alreadyBelow))
+                        na->setVisible(false);
+                  }
+            }     
       }
 
 //---------------------------------------------------------
