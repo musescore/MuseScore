@@ -3,7 +3,7 @@ name: CI_utests
 on:
   pull_request:
     branches:
-    - master
+    - master_off
 
 jobs:
   run_tests:

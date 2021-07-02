@@ -46,6 +46,7 @@ public:
 
     void run(const OnStart& onStart = nullptr);
     void stop(const OnFinished& onFinished = nullptr);
+    bool isRunning() const;
 
     void setAudioBuffer(std::shared_ptr<IAudioBuffer> buffer);
 
