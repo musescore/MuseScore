@@ -31,12 +31,19 @@
 
 #include "log.h"
 #include "audioerrors.h"
-
-static const double FLUID_GLOBAL_VOLUME_GAIN{ 1.8 };
+#include "audiotypes.h"
 
 using namespace mu;
 using namespace mu::midi;
+using namespace mu::audio;
 using namespace mu::audio::synth;
+
+static const double FLUID_GLOBAL_VOLUME_GAIN{ 1.8 };
+
+/// @note
+///  Fluid does not support MONO, so they start counting audio channels from 1, which means "1 pair of audio channels"
+/// @see https://www.fluidsynth.org/api/settings_synth.html
+static const audioch_t FLUID_AUDIO_CHANNELS_PAIR = 1;
 
 struct mu::audio::synth::Fluid {
     fluid_settings_t* settings = nullptr;
@@ -102,7 +109,7 @@ Ret FluidSynth::init()
 
     m_fluid->settings = new_fluid_settings();
     fluid_settings_setnum(m_fluid->settings, "synth.gain", FLUID_GLOBAL_VOLUME_GAIN);
-    fluid_settings_setint(m_fluid->settings, "synth.audio-channels", 1);
+    fluid_settings_setint(m_fluid->settings, "synth.audio-channels", FLUID_AUDIO_CHANNELS_PAIR); // 1 pair of audio channels
     fluid_settings_setint(m_fluid->settings, "synth.lock-memory", 0);
     fluid_settings_setint(m_fluid->settings, "synth.threadsafe-api", 0);
     fluid_settings_setint(m_fluid->settings, "synth.midi-channels", 80);
@@ -114,7 +121,7 @@ Ret FluidSynth::init()
     //fluid_settings_setint(_fluid->settings, "synth.min-note-length", 50);
     //fluid_settings_setint(_fluid->settings, "synth.polyphony", conf.polyphony);
 
-//    fluid_settings_setstr(m_fluid->settings, "synth.chorus.active", 0);
+    fluid_settings_setstr(m_fluid->settings, "synth.chorus.active", 0);
 //    fluid_settings_setnum(m_fluid->settings, "synth.chorus.depth", 8);
 //    fluid_settings_setnum(m_fluid->settings, "synth.chorus.level", 10);
 //    fluid_settings_setint(m_fluid->settings, "synth.chorus.nr", 4);
@@ -374,13 +381,13 @@ void FluidSynth::writeBuf(float* stream, unsigned int samples)
     }
 
     fluid_synth_write_float(m_fluid->synth, static_cast<int>(samples),
-                            stream, 0, config()->audioChannelsCount(),
-                            stream, 1, config()->audioChannelsCount());
+                            stream, 0, audioChannelsCount(),
+                            stream, 1, audioChannelsCount());
 }
 
 unsigned int FluidSynth::audioChannelsCount() const
 {
-    return config()->audioChannelsCount();
+    return FLUID_AUDIO_CHANNELS_PAIR * 2;
 }
 
 void FluidSynth::process(float* buffer, unsigned int sampleCount)
