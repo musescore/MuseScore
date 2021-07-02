@@ -302,6 +302,7 @@ public:
     TextBase(Score* = 0, Tid tid = Tid::DEFAULT, ElementFlags = ElementFlag::NOTHING);
     TextBase(Score*, ElementFlags);
     TextBase(const TextBase&);
+    ~TextBase();
 
     virtual bool mousePress(EditData&) override;
 

@@ -176,7 +176,6 @@ bool Rest::acceptDrop(EditData& data) const
         || (type == ElementType::STAFF_STATE)
         || (type == ElementType::INSTRUMENT_CHANGE)
         || (type == ElementType::DYNAMIC)
-        || (type == ElementType::HAIRPIN)
         || (type == ElementType::HARMONY)
         || (type == ElementType::TEMPO_TEXT)
         || (type == ElementType::REHEARSAL_MARK)
@@ -188,7 +187,7 @@ bool Rest::acceptDrop(EditData& data) const
         ) {
         return true;
     }
-    return false;
+    return type != ElementType::SLUR && e->isSpanner();
 }
 
 //---------------------------------------------------------

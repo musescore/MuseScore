@@ -1668,10 +1668,10 @@ TextBase::TextBase(Score* s, ElementFlags f)
 TextBase::TextBase(const TextBase& st)
     : Element(st)
 {
-    _cursor                      = st._cursor;
+    _cursor                      = new TextCursor(this);
     _text                        = st._text;
-    _layout                      = st._layout;
     textInvalid                  = st.textInvalid;
+    _layout                      = st._layout;
     layoutInvalid                = st.layoutInvalid;
     frame                        = st.frame;
     _layoutToParentWidth         = st._layoutToParentWidth;
@@ -1694,6 +1694,11 @@ TextBase::TextBase(const TextBase& st)
         _propertyFlagsList[i] = st._propertyFlagsList[i];
     }
     _links = 0;
+}
+
+TextBase::~TextBase()
+{
+    delete _cursor;
 }
 
 //---------------------------------------------------------

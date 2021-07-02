@@ -1854,8 +1854,6 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::KEYSIG)
            || (type == ElementType::TIMESIG)
            || (type == ElementType::BAR_LINE)
-           || (type == ElementType::SLUR)
-           || (type == ElementType::HAIRPIN)
            || (type == ElementType::STAFF_TEXT)
            || (type == ElementType::SYSTEM_TEXT)
            || (type == ElementType::STICKING)
@@ -1864,7 +1862,8 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::TREMOLOBAR)
            || (type == ElementType::FRET_DIAGRAM)
            || (type == ElementType::FIGURED_BASS)
-           || (type == ElementType::LYRICS);
+           || (type == ElementType::LYRICS)
+           || e->isSpanner();
 }
 
 //---------------------------------------------------------
@@ -1899,15 +1898,6 @@ Element* Note::drop(EditData& data)
             delete e;
         }
         return 0;
-
-    case ElementType::SLUR:
-        data.view()->addSlur(chord(), nullptr, toSlur(e));
-        delete e;
-        return 0;
-
-    case ElementType::HAIRPIN:
-        // forward this event to a chord
-        return chord()->drop(data);
 
     case ElementType::LYRICS:
         e->setParent(ch);
@@ -2089,6 +2079,17 @@ Element* Note::drop(EditData& data)
     break;
 
     default:
+        Spanner* spanner;
+        if (e->isSpanner() && (spanner = toSpanner(e))->anchor() == Spanner::Anchor::NOTE) {
+            spanner->setParent(this);
+            spanner->setStartElement(this);
+            spanner->setTick(tick());
+            spanner->setTrack(track());
+            spanner->setTrack2(track());
+            spanner->computeEndElement();
+            score()->undoAddElement(spanner);
+            return e;
+        }
         return ch->drop(data);
     }
     return 0;
