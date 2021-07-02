@@ -28,6 +28,7 @@
 #include "part.h"
 #include "mscore.h"
 #include "xml.h"
+#include "draw/pen.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -98,10 +99,10 @@ void StaffState::draw(mu::draw::Painter* painter) const
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }
-    QPen pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
-             lw, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    Pen pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
+            lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
-    painter->setBrush(Qt::NoBrush);
+    painter->setBrush(BrushStyle::NoBrush);
     painter->drawPath(path);
 }
 

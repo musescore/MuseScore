@@ -764,7 +764,9 @@ void NotationParts::doRemoveParts(const IDList& partsIds)
             }
         }
 
-        score()->cmdRemovePart(part(partId));
+        Part* p = part(partId);
+        m_partsNotifier->itemRemoved(p);
+        score()->cmdRemovePart(p);
     }
 }
 
@@ -1338,6 +1340,8 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
         score()->undo(new Ms::InsertPart(part, staffCount));
         appendStaves(part, pi.instrument);
         staffCount += part->nstaves();
+
+        m_partsNotifier->itemAdded(part);
     }
 }
 

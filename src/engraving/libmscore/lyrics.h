@@ -42,7 +42,7 @@ public:
         SINGLE, BEGIN, END, MIDDLE
         ///\}
     };
-    Q_ENUM(Syllabic);
+    Q_ENUM(Syllabic)
 
     // MELISMA FIRST UNDERSCORE:
     // used as_ticks value to mark a melisma for which only the first chord has been spanned so far
@@ -105,7 +105,7 @@ public:
     void removeFromScore();
 
     using ScoreElement::undoChangeProperty;
-    void paste(EditData&) override;
+    void paste(EditData& ed, const QString& txt) override;
 
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;

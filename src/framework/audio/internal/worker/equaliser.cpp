@@ -28,6 +28,12 @@ Equaliser::Equaliser()
 {
 }
 
+FxProcessorId Equaliser::id() const
+{
+    static std::string id = "InternalEqualiser";
+    return id;
+}
+
 unsigned int Equaliser::streamCount() const
 {
     return 1;

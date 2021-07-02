@@ -20,15 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "utils.h"
+
 #include <cmath>
 #include <QtMath>
+
+#include "translation.h"
 
 #include "config.h"
 #include "score.h"
 #include "page.h"
 #include "segment.h"
 #include "clef.h"
-#include "utils.h"
 #include "system.h"
 #include "measure.h"
 #include "pitchspelling.h"
@@ -529,7 +532,7 @@ QString pitch2string(int v)
     QString o;
     o = QString::asprintf("%d", octave);
     int i = v % 12;
-    return qApp->translate("utils", octave < 0 ? valu[i] : vall[i]) + o;
+    return qtrc("utils", octave < 0 ? valu[i] : vall[i]) + o;
 }
 
 /*!

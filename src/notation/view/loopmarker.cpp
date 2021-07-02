@@ -21,6 +21,7 @@
  */
 
 #include "loopmarker.h"
+#include "draw/pen.h"
 
 using namespace mu::notation;
 using namespace mu;
@@ -47,6 +48,7 @@ void LoopMarker::setStyle(INotationStylePtr style)
 
 void LoopMarker::paint(mu::draw::Painter* painter)
 {
+    using namespace mu::draw;
     if (!m_visible || !m_style) {
         return;
     }
@@ -76,7 +78,7 @@ void LoopMarker::paint(mu::draw::Painter* painter)
     case LoopBoundaryType::Unknown: return;
     }
 
-    painter->setPen(QPen(color, 2.0, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+    painter->setPen(Pen(color, 2.0, PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin));
     painter->drawLine(x, y, x, m_rect.bottom());
     painter->setBrush(color);
     painter->drawConvexPolygon(triangle);

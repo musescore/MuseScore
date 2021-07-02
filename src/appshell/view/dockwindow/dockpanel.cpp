@@ -35,6 +35,16 @@ DockPanel::DockPanel(QQuickItem* parent)
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 }
 
+DockPanel::~DockPanel()
+{
+    KDDockWidgets::DockWidgetQuick* w = dockWidget();
+    IF_ASSERT_FAILED(w) {
+        return;
+    }
+
+    w->setProperty("dockPanel", QVariant::fromValue(nullptr));
+}
+
 DockPanel* DockPanel::tabifyPanel() const
 {
     return m_tabifyPanel;

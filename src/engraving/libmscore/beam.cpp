@@ -45,6 +45,7 @@
 #include "groups.h"
 #include "xml.h"
 #include "spanner.h"
+#include "draw/brush.h"
 
 using namespace mu;
 
@@ -233,7 +234,7 @@ void Beam::draw(mu::draw::Painter* painter) const
     if (beamSegments.empty()) {
         return;
     }
-    painter->setBrush(QBrush(curColor()));
+    painter->setBrush(mu::draw::Brush(curColor()));
     painter->setNoPen();
     qreal lw2 = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
 

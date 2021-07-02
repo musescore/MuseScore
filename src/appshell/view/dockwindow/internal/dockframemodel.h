@@ -33,6 +33,7 @@ class DockFrameModel : public QObject
     Q_PROPERTY(QQuickItem * frame READ frame WRITE setFrame NOTIFY frameChanged)
     Q_PROPERTY(bool titleBarVisible READ titleBarVisible NOTIFY titleBarVisibleChanged)
     Q_PROPERTY(QObject * navigationSection READ navigationSection NOTIFY navigationSectionChanged)
+    Q_PROPERTY(QString currentDockUniqueName READ currentDockUniqueName NOTIFY currentDockUniqueNameChanged)
 
 public:
     explicit DockFrameModel(QObject* parent = nullptr);
@@ -42,6 +43,8 @@ public:
 
     QObject* navigationSection() const;
 
+    QString currentDockUniqueName() const;
+
 public slots:
     void setFrame(QQuickItem* item);
 
@@ -49,6 +52,7 @@ signals:
     void frameChanged(QQuickItem* frame);
     void titleBarVisibleChanged(bool visible);
     void navigationSectionChanged();
+    void currentDockUniqueNameChanged();
 
 private:
     void listenChangesInFrame();

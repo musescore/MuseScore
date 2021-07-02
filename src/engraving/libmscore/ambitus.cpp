@@ -31,6 +31,7 @@
 #include "system.h"
 #include "utils.h"
 #include "xml.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -476,9 +477,10 @@ void Ambitus::layout()
 void Ambitus::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     qreal _spatium = spatium();
     qreal lw = lineWidth().val() * _spatium;
-    painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
+    painter->setPen(Pen(curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
     drawSymbol(noteHead(), painter, _topPos);
     drawSymbol(noteHead(), painter, _bottomPos);
     if (_hasLine) {
@@ -495,7 +497,7 @@ void Ambitus::draw(mu::draw::Painter* painter) const
         qreal stepTolerance    = step * 0.1;
         qreal ledgerLineLength = score()->styleS(Sid::ledgerLineLength).val() * _spatium;
         qreal ledgerLineWidth  = score()->styleS(Sid::ledgerLineWidth).val() * _spatium;
-        painter->setPen(QPen(curColor(), ledgerLineWidth, Qt::SolidLine, Qt::FlatCap));
+        painter->setPen(Pen(curColor(), ledgerLineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
 
         if (_topPos.y() - stepTolerance <= -step) {
             qreal xMin = _topPos.x() - ledgerLineLength;

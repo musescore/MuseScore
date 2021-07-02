@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "painter.h"
+#include "brush.h"
 
 #include <QPainterPath>
 
@@ -159,7 +160,7 @@ const Font& Painter::font() const
     return m_provider->font();
 }
 
-void Painter::setPen(const QPen& pen)
+void Painter::setPen(const Pen& pen)
 {
     m_provider->setPen(pen);
     if (extended) {
@@ -169,15 +170,15 @@ void Painter::setPen(const QPen& pen)
 
 void Painter::setNoPen()
 {
-    setPen(QPen(Qt::NoPen));
+    setPen(Pen(PenStyle::NoPen));
 }
 
-const QPen& Painter::pen() const
+const Pen& Painter::pen() const
 {
     return m_provider->pen();
 }
 
-void Painter::setBrush(const QBrush& brush)
+void Painter::setBrush(const Brush& brush)
 {
     m_provider->setBrush(brush);
     if (extended) {
@@ -185,7 +186,7 @@ void Painter::setBrush(const QBrush& brush)
     }
 }
 
-const QBrush& Painter::brush() const
+const Brush& Painter::brush() const
 {
     return m_provider->brush();
 }
@@ -282,11 +283,11 @@ void Painter::setViewport(const RectF& viewport)
 
 // drawing functions
 
-void Painter::fillPath(const QPainterPath& path, const QBrush& brush)
+void Painter::fillPath(const QPainterPath& path, const Brush& brush)
 {
-    QPen oldPen = this->pen();
-    QBrush oldBrush = this->brush();
-    setPen(QPen(Qt::NoPen));
+    Pen oldPen = this->pen();
+    Brush oldBrush = this->brush();
+    setPen(Pen(PenStyle::NoPen));
     setBrush(brush);
 
     drawPath(path);
@@ -295,12 +296,12 @@ void Painter::fillPath(const QPainterPath& path, const QBrush& brush)
     setBrush(oldBrush);
 }
 
-void Painter::strokePath(const QPainterPath& path, const QPen& pen)
+void Painter::strokePath(const QPainterPath& path, const Pen& pen)
 {
-    QPen oldPen = this->pen();
-    QBrush oldBrush = this->brush();
+    Pen oldPen = this->pen();
+    Brush oldBrush = this->brush();
     setPen(pen);
-    setBrush(Qt::NoBrush);
+    setBrush(BrushStyle::NoBrush);
 
     drawPath(path);
 
@@ -437,11 +438,11 @@ void Painter::drawSymbol(const PointF& point, uint ucs4Code)
     }
 }
 
-void Painter::fillRect(const RectF& rect, const QBrush& brush)
+void Painter::fillRect(const RectF& rect, const Brush& brush)
 {
-    QPen oldPen = this->pen();
-    QBrush oldBrush = this->brush();
-    setPen(QPen(Qt::NoPen));
+    Pen oldPen = this->pen();
+    Brush oldBrush = this->brush();
+    setPen(Pen(mu::draw::PenStyle::NoPen));
     setBrush(brush);
 
     drawRect(rect);

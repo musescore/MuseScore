@@ -94,7 +94,7 @@ class SLine : public Spanner
 {
     qreal _lineWidth;
     QColor _lineColor       { MScore::defaultColor };
-    Qt::PenStyle _lineStyle { Qt::SolidLine };
+    mu::draw::PenStyle _lineStyle { mu::draw::PenStyle::SolidLine };
     qreal _dashLineLen      { 5.0 };
     qreal _dashGapLen       { 5.0 };
     bool _diagonal          { false };
@@ -124,10 +124,10 @@ public:
 
     qreal lineWidth() const { return _lineWidth; }
     QColor lineColor() const { return _lineColor; }
-    Qt::PenStyle lineStyle() const { return _lineStyle; }
+    mu::draw::PenStyle lineStyle() const { return _lineStyle; }
     void setLineWidth(const qreal& v) { _lineWidth = v; }
     void setLineColor(const QColor& v) { _lineColor = v; }
-    void setLineStyle(Qt::PenStyle v) { _lineStyle = v; }
+    void setLineStyle(mu::draw::PenStyle v) { _lineStyle = v; }
 
     qreal dashLineLen() const { return _dashLineLen; }
     void setDashLineLen(qreal val) { _dashLineLen = val; }

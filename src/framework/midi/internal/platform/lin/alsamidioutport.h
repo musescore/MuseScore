@@ -32,8 +32,10 @@ namespace mu::midi {
 class AlsaMidiOutPort : public IMidiOutPort, public async::Asyncable
 {
 public:
-    AlsaMidiOutPort();
+    AlsaMidiOutPort() = default;
     ~AlsaMidiOutPort() override;
+
+    void init();
 
     MidiDeviceList devices() const override;
     async::Notification devicesChanged() const override;

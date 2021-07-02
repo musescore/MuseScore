@@ -38,6 +38,7 @@ class DockPanel : public DockBase
 
 public:
     explicit DockPanel(QQuickItem* parent = nullptr);
+    ~DockPanel();
 
     DockPanel* tabifyPanel() const;
     QObject* navigationSection() const;

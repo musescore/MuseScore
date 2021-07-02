@@ -51,6 +51,7 @@
 #include "libmscore/keysig.h"
 #include "libmscore/instrchange.h"
 #include "libmscore/lasso.h"
+#include "libmscore/textedit.h"
 
 #include "masternotation.h"
 #include "scorecallbacks.h"
@@ -58,6 +59,8 @@
 #include "notationselection.h"
 
 #include "instrumentsconverter.h"
+
+#include "draw/pen.h"
 
 using namespace mu::notation;
 
@@ -482,7 +485,7 @@ void NotationInteraction::moveChordNoteSelection(MoveDirection d)
     notifyAboutSelectionChanged();
 }
 
-void NotationInteraction::selectInternal(const std::vector<Element*>& elements, SelectType type, int staffIndex)
+void NotationInteraction::doSelect(const std::vector<Element*>& elements, SelectType type, int staffIndex)
 {
     if (needEndTextEditing(elements)) {
         endEditText();
@@ -497,7 +500,7 @@ void NotationInteraction::selectInternal(const std::vector<Element*>& elements, 
 
 void NotationInteraction::select(const std::vector<Element*>& elements, SelectType type, int staffIndex)
 {
-    selectInternal(elements, type, staffIndex);
+    doSelect(elements, type, staffIndex);
     notifyAboutSelectionChanged();
 }
 
@@ -1399,7 +1402,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
         }
 
         if (el && !score->inputState().noteEntryMode()) {
-            selectInternal({ el }, Ms::SelectType::SINGLE, 0);
+            doSelect({ el }, Ms::SelectType::SINGLE, 0);
         }
         dropData.dropElement = 0;
 
@@ -1686,7 +1689,7 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
     }
 
     const auto dropAnchorColor = configuration()->anchorLineColor();
-    QPen pen(QBrush(dropAnchorColor), 2.0 / painter->worldTransform().m11(), Qt::DotLine);
+    mu::draw::Pen pen(dropAnchorColor, 2.0 / painter->worldTransform().m11(), mu::draw::PenStyle::DotLine);
 
     for (const LineF& anchor : m_anchorLines) {
         painter->setPen(pen);
@@ -1695,7 +1698,7 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
         qreal d = 4.0 / painter->worldTransform().m11();
         RectF rect(-d, -d, 2 * d, 2 * d);
 
-        painter->setBrush(QBrush(dropAnchorColor));
+        painter->setBrush(mu::draw::Brush(dropAnchorColor));
         painter->setNoPen();
         rect.moveCenter(anchor.p1());
         painter->drawEllipse(rect);
@@ -1715,19 +1718,20 @@ void NotationInteraction::drawTextEditMode(draw::Painter* painter)
 
 void NotationInteraction::drawSelectionRange(draw::Painter* painter)
 {
+    using namespace draw;
     if (!m_selection->isRange()) {
         return;
     }
 
-    painter->setBrush(Qt::NoBrush);
+    painter->setBrush(BrushStyle::NoBrush);
 
     QColor selectionColor = configuration()->selectionColor();
     qreal penWidth = 3.0 / painter->worldTransform().toAffine().m11();
 
-    QPen pen;
+    Pen pen;
     pen.setColor(selectionColor);
     pen.setWidthF(penWidth);
-    pen.setStyle(Qt::SolidLine);
+    pen.setStyle(PenStyle::SolidLine);
     painter->setPen(pen);
 
     std::vector<RectF> rangeArea = m_selection->range()->boundingArea();
@@ -1999,7 +2003,19 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
     }
 
     m_textEditData.startMove = newCursorPos;
-    m_textEditData.element->mousePress(m_textEditData);
+
+    Ms::TextBase* textEl = Ms::toTextBase(m_textEditData.element);
+
+    textEl->mousePress(m_textEditData);
+    if (m_textEditData.buttons == Qt::MiddleButton) {
+        #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+        QClipboard::Mode mode = QClipboard::Clipboard;
+        #else
+        QClipboard::Mode mode = QClipboard::Selection;
+        #endif
+        QString txt = QGuiApplication::clipboard()->text(mode);
+        textEl->paste(m_textEditData, txt);
+    }
 
     notifyAboutTextEditingChanged();
 }
@@ -2176,6 +2192,10 @@ void NotationInteraction::copySelection()
 
     if (isTextEditingStarted()) {
         m_textEditData.element->editCopy(m_textEditData);
+        Ms::TextEditData* ted = static_cast<Ms::TextEditData*>(m_textEditData.getData(m_textEditData.element));
+        if (!ted->selectedText.isEmpty()) {
+            QGuiApplication::clipboard()->setText(ted->selectedText, QClipboard::Clipboard);
+        }
     } else {
         QMimeData* mimeData = selection()->mimeData();
         if (!mimeData) {
@@ -2196,7 +2216,13 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     startEdit();
 
     if (isTextEditingStarted()) {
-        toTextBase(m_textEditData.element)->paste(m_textEditData);
+        #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+        QClipboard::Mode mode = QClipboard::Clipboard;
+        #else
+        QClipboard::Mode mode = QClipboard::Selection;
+        #endif
+        QString txt = QGuiApplication::clipboard()->text(mode);
+        toTextBase(m_textEditData.element)->paste(m_textEditData, txt);
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         score()->cmdPaste(mimeData, nullptr, scale);
@@ -2656,7 +2682,7 @@ void NotationInteraction::addText(TextType type)
     apply();
 
     if (textBox) {
-        selectInternal({ textBox }, SelectType::SINGLE, 0);
+        doSelect({ textBox }, SelectType::SINGLE, 0);
         startEditText(textBox, PointF());
     }
 

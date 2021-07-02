@@ -31,6 +31,7 @@
 #include "system.h"
 #include "mscore.h"
 #include "bracketItem.h"
+#include "draw/brush.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -258,7 +259,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
     case BracketType::BRACE: {
         if (_braceSymbol == SymId::noSym) {
             painter->setNoPen();
-            painter->setBrush(QBrush(curColor()));
+            painter->setBrush(Brush(curColor()));
             painter->drawPath(path);
         } else {
             qreal h        = 2 * h2;
@@ -276,7 +277,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
         qreal _spatium = spatium();
         qreal w        = score()->styleP(Sid::bracketWidth);
         qreal bd       = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
-        QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
+        Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.0, -bd - w * .5, 0.0, h + bd + w * .5));
         qreal x    =  -w * .5;
@@ -290,7 +291,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
         qreal h = 2 * h2;
         qreal _spatium = spatium();
         qreal w = score()->styleP(Sid::staffLineWidth);
-        QPen pen(curColor(), w, Qt::SolidLine, Qt::SquareCap);
+        Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::SquareCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.0, 0.0, 0.0, h));
         painter->drawLine(LineF(0.0, 0.0, w + .5 * _spatium, 0.0));
@@ -300,7 +301,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
     case BracketType::LINE: {
         qreal h = 2 * h2;
         qreal w = 0.67 * score()->styleP(Sid::bracketWidth);
-        QPen pen(curColor(), w, Qt::SolidLine, Qt::FlatCap);
+        Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
         qreal bd = score()->styleP(Sid::staffLineWidth) * 0.5;
         painter->drawLine(LineF(0.0, -bd, 0.0, h + bd));

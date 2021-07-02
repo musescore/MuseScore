@@ -318,7 +318,6 @@ public:
     void tag(const QString&, QVariant data);
     void tag(const char* name, const char* s) { tag(name, QVariant(s)); }
     void tag(const char* name, const QString& s) { tag(name, QVariant(s)); }
-    void tag(const char* name, const QWidget*);
 
     void comment(const QString&);
 

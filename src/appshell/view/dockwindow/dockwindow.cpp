@@ -59,6 +59,10 @@ void DockWindow::componentComplete()
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
 
     configuration()->windowGeometryChanged().onNotify(this, [this]() {
+        if (m_quiting) {
+            return;
+        }
+
         resetWindowState();
     });
 
@@ -134,6 +138,8 @@ void DockWindow::onQuit()
 {
     TRACEFUNC;
 
+    m_quiting = true;
+
     saveGeometry();
 
     const DockPage* currPage = currentPage();
@@ -195,6 +201,20 @@ void DockWindow::loadPage(const QString& uri)
 
     m_currentPageUri = uri;
     emit currentPageUriChanged(uri);
+}
+
+bool DockWindow::isDockShown(const QString& dockName) const
+{
+    const DockPage* currPage = currentPage();
+    return currPage ? currPage->isDockShown(dockName) : false;
+}
+
+void DockWindow::toggleDockVisibility(const QString& dockName)
+{
+    DockPage* currPage = currentPage();
+    if (currPage) {
+        currPage->toggleDockVisibility(dockName);
+    }
 }
 
 DockToolBarHolder* DockWindow::mainToolBarDockingHolder() const

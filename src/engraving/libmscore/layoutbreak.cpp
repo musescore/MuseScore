@@ -120,26 +120,24 @@ void LayoutBreak::read(XmlReader& e)
 void LayoutBreak::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }
 
     QPainterPathStroker stroker;
     stroker.setWidth(lw / 2);
-    stroker.setJoinStyle(Qt::MiterJoin);
-    stroker.setCapStyle(Qt::SquareCap);
+    stroker.setJoinStyle(Qt::PenJoinStyle::MiterJoin);
+    stroker.setCapStyle(Qt::PenCapStyle::SquareCap);
 
-    QVector<qreal> dashes;
-    dashes.append(1);
-    dashes.append(3);
-    stroker.setDashPattern(dashes);
+    stroker.setDashPattern({ 1, 3 });
     PainterPath stroke = stroker.createStroke(path);
 
     painter->fillPath(stroke, selected() ? MScore::selectColor[0] : MScore::layoutBreakColor);
 
-    painter->setPen(QPen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
-                         lw, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
-    painter->setBrush(Qt::NoBrush);
+    painter->setPen(Pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
+                        lw, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
+    painter->setBrush(BrushStyle::NoBrush);
     painter->drawPath(path2);
 }
 

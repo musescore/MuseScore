@@ -234,8 +234,7 @@ void TestText::testPaste()
     text->layout();
     text->moveCursorToEnd();
 
-    QApplication::clipboard()->setText("copy & paste");
-    text->paste(0);
+    text->paste(0, "copy & paste");
     text->endEdit(editData);
     QCOMPARE(text->xmlText(), QString("copy &amp; paste"));
 
@@ -244,8 +243,7 @@ void TestText::testPaste()
     text->startEdit(editData);
     text->layout();
     text->moveCursorToEnd();
-    QApplication::clipboard()->setText("copy &aa paste");
-    text->paste(0);
+    text->paste(0, "copy &aa paste");
     text->endEdit(editData);
     QCOMPARE(text->xmlText(), QString("copy &amp;aa paste"));
 
@@ -254,8 +252,7 @@ void TestText::testPaste()
     text->startEdit(editData);
     text->layout();
     text->moveCursorToEnd();
-    QApplication::clipboard()->setText("&");
-    text->paste(0);
+    text->paste(0, "&");
     text->endEdit(editData);
     QCOMPARE(text->xmlText(), QString("&amp;"));
 
@@ -264,8 +261,7 @@ void TestText::testPaste()
     text->startEdit(editData);
     text->layout();
     text->moveCursorToEnd();
-    QApplication::clipboard()->setText("&sometext");
-    text->paste(0);
+    text->paste(0, "&sometext");
     text->endEdit(editData);
     QCOMPARE(text->xmlText(), QString("&amp;sometext"));
 }
@@ -578,23 +574,21 @@ void TestText::testSupplementaryUnicodePaste()
     text->setPlainText(QString(""));
     text->layout();
 
-    QApplication::clipboard()->setText(QString("𝄏"));
-
     text->startEdit(editData);
     text->moveCursorToStart();
-    text->paste(0);
+    text->paste(0, "𝄏");
     text->endEdit(editData);
     QCOMPARE(text->xmlText(), QString("𝄏"));
 
     text->startEdit(editData);
     text->moveCursorToStart();
-    text->paste(0);
+    text->paste(0, "𝄏");
     text->endEdit(editData);
     QCOMPARE(text->xmlText(), QString("𝄏𝄏"));
 
     text->startEdit(editData);
     text->moveCursorToEnd();
-    text->paste(0);
+    text->paste(0, "𝄏");
     text->endEdit(editData);
     QCOMPARE(text->xmlText(), QString("𝄏𝄏𝄏"));
 }
@@ -647,11 +641,9 @@ void TestText::testPasteSymbolAndSupplemental()
     text->setPlainText(QString(""));
     text->layout();
 
-    QApplication::clipboard()->setText(QString("<sym>gClef</sym>𝄎"));
-
     text->startEdit(editData);
     text->moveCursorToStart();
-    text->paste(0);
+    text->paste(0, "<sym>gClef</sym>𝄎");
     text->endEdit(editData);
     QVERIFY(text->fragmentList()[0].format.type() == CharFormatType::SYMBOL);
     QVERIFY(text->fragmentList()[1].format.type() == CharFormatType::TEXT);
@@ -676,11 +668,10 @@ void TestText::testMixedSelectionDelete()
     Text* text = new Text(score);
     text->initSubStyle(SubStyle::DYNAMICS);
     text->layout();
-    QApplication::clipboard()->setText(QString("[A]𝄎<sym>gClef</sym> 𝄎𝄇"));
 
     text->startEdit(editData);
     text->moveCursorToStart();
-    text->paste(0);
+    text->paste(0, "[A]𝄎<sym>gClef</sym> 𝄎𝄇");
     text->endEdit(editData);
     QCOMPARE(text->xmlText(), QString("[A]𝄎<sym>gClef</sym> 𝄎𝄇"));
 
@@ -723,17 +714,16 @@ void TestText::testChineseBasicSupplemental()
     text->insertText(QString("你"));    // this is supplemental unicode
     text->insertText(QString("好"));    // this is basic unicode
     text->insertText(QString("。"));
-    QApplication::clipboard()->setText(QString("我爱Musescore"));
-    text->paste(0);
+
+    text->paste(0, "我爱Musescore");
     text->endEdit(editData);
     QCOMPARE(text->xmlText(), QString("你好。我爱Musescore"));
 
     text->startEdit(editData);
-    QApplication::clipboard()->setText(QString("你屠槪真軔"));   // some random supplemental unicode
     text->moveCursorToStart();
-    text->paste(0);
+    text->paste(0, "你屠槪真軔");
     text->moveCursorToEnd();
-    text->paste(0);
+    text->paste(0, "你屠槪真軔");
     text->endEdit(editData);
     QCOMPARE(text->xmlText(), QString("你屠槪真軔你好。我爱Musescore你屠槪真軔"));
 

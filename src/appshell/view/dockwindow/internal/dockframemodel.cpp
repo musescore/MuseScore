@@ -91,6 +91,8 @@ void DockFrameModel::listenChangesInFrame()
 
     auto currentDockWidgetChangedCon = connect(frame, &KDDockWidgets::Frame::currentDockWidgetChanged, [this]() {
         updateNavigationSection();
+
+        emit currentDockUniqueNameChanged();
     });
 
     connect(qApp, &QApplication::aboutToQuit, [numDocksChangedCon, currentDockWidgetChangedCon]() {
@@ -141,4 +143,14 @@ void DockFrameModel::updateNavigationSection()
 QObject* DockFrameModel::navigationSection() const
 {
     return m_navigationSection;
+}
+
+QString DockFrameModel::currentDockUniqueName() const
+{
+    auto frame = dynamic_cast<KDDockWidgets::Frame*>(m_frame);
+    if (frame && frame->currentDockWidget()) {
+        return frame->currentDockWidget()->uniqueName();
+    }
+
+    return QString();
 }

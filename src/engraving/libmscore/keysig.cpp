@@ -20,10 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "keysig.h"
+
+#include "translation.h"
+
 #include "sym.h"
 #include "staff.h"
 #include "clef.h"
-#include "keysig.h"
 #include "measure.h"
 #include "segment.h"
 #include "score.h"
@@ -745,19 +748,19 @@ QString KeySig::accessibleInfo() const
 {
     QString keySigType;
     if (isAtonal()) {
-        return QString("%1: %2").arg(Element::accessibleInfo(), qApp->translate("MuseScore", keyNames[15]));
+        return QString("%1: %2").arg(Element::accessibleInfo(), qtrc("MuseScore", keyNames[15]));
     } else if (isCustom()) {
         return QObject::tr("%1: Custom").arg(Element::accessibleInfo());
     }
 
     if (key() == Key::C) {
-        return QString("%1: %2").arg(Element::accessibleInfo(), qApp->translate("MuseScore", keyNames[14]));
+        return QString("%1: %2").arg(Element::accessibleInfo(), qtrc("MuseScore", keyNames[14]));
     }
     int keyInt = static_cast<int>(key());
     if (keyInt < 0) {
-        keySigType = qApp->translate("MuseScore", keyNames[(7 + keyInt) * 2 + 1]);
+        keySigType = qtrc("MuseScore", keyNames[(7 + keyInt) * 2 + 1]);
     } else {
-        keySigType = qApp->translate("MuseScore", keyNames[(keyInt - 1) * 2]);
+        keySigType = qtrc("MuseScore", keyNames[(keyInt - 1) * 2]);
     }
     return QString("%1: %2").arg(Element::accessibleInfo(), keySigType);
 }

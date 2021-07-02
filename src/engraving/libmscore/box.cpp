@@ -111,18 +111,15 @@ void Box::draw(mu::draw::Painter* painter) const
         qreal w = spatium() * .15;
         QPainterPathStroker stroker;
         stroker.setWidth(w);
-        stroker.setJoinStyle(Qt::MiterJoin);
-        stroker.setCapStyle(Qt::SquareCap);
+        stroker.setJoinStyle(Qt::PenJoinStyle::MiterJoin);
+        stroker.setCapStyle(Qt::PenCapStyle::SquareCap);
 
-        QVector<qreal> dashes;
-        dashes.append(1);
-        dashes.append(3);
-        stroker.setDashPattern(dashes);
+        stroker.setDashPattern({ 1, 3 });
         PainterPath path;
         w *= .5;
         path.addRect(bbox().adjusted(w, w, -w, -w).toQRectF());
         PainterPath stroke = stroker.createStroke(path);
-        painter->setBrush(Qt::NoBrush);
+        painter->setBrush(BrushStyle::NoBrush);
         painter->fillPath(stroke, (selected() || editMode || dropTarget()) ? MScore::selectColor[0] : MScore::frameMarginColor);
     }
 }

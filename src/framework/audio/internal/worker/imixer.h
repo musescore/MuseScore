@@ -23,51 +23,42 @@
 #define MU_AUDIO_IMIXER_H
 
 #include <memory>
-#include <complex>
+
+#include "modularity/imoduleexport.h"
+#include "async/promise.h"
+#include "retval.h"
+
 #include "iaudiosource.h"
-#include "iaudioprocessor.h"
-#include "imixerchannel.h"
+#include "internal/worker/clock.h"
+#include "internal/worker/imixerchannel.h"
+#include "audiotypes.h"
 
 namespace mu::audio {
-class IMixer
+class IMixer : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IMixer)
+
 public:
-
-    //! number of mix channel
-    using ChannelID = unsigned int;
-
-    enum Mode {
-        MONO,
-        STEREO,
-//TODO: SURROUND, //NOTE: 5.1, 7.1, etc
-//TODO: SPATIAL //NOTE: 2 channel output with HRTF
-    };
-
     virtual ~IMixer() = default;
 
-    virtual Mode mode() const = 0;
-    virtual void setMode(const Mode& mode) = 0;
-
-    //! set master level
-    virtual void setLevel(float level) = 0;
-
-    //! return processor at master
-    virtual IAudioProcessorPtr processor(unsigned int number) const = 0;
-
-    //! set master processors
-    virtual void setProcessor(unsigned int number, IAudioProcessorPtr proc) = 0;
-
-    //! add source to the mix
-    virtual ChannelID addChannel(std::shared_ptr<IAudioSource> source) = 0;
-    virtual void removeChannel(ChannelID channelId) = 0;
-    virtual std::shared_ptr<IMixerChannel> channel(ChannelID channelId) const = 0;
-
-    //! mixed source
     virtual IAudioSourcePtr mixedSource() = 0;
 
-    virtual void setActive(ChannelID channelId, bool active) = 0;
-    virtual void setLevel(ChannelID channelId, unsigned int streamId, float level) = 0;
-    virtual void setBalance(ChannelID channelId, unsigned int streamId, std::complex<float> balance) = 0;
+    virtual RetVal<IMixerChannelPtr> addChannel(IAudioSourcePtr source, const AudioOutputParams& params,
+                                                async::Channel<AudioOutputParams> paramsChanged) = 0;
+    virtual Ret removeChannel(const MixerChannelId id) = 0;
+
+    virtual AudioOutputParams masterOutputParams() const = 0;
+    virtual void setMasterOutputParams(const AudioOutputParams& params) = 0;
+    virtual async::Channel<AudioOutputParams> masterOutputParamsChanged() const = 0;
+
+    virtual void addClock(IClockPtr clock) = 0;
+    virtual void removeClock(IClockPtr clock) = 0;
+
+    // root mean square of a processed sample block
+    virtual async::Channel<audioch_t, float> masterSignalAmplitudeRmsChanged() const = 0;
+
+    // root mean square of a processed sample block in the "decibels relative to full scale" units
+    virtual async::Channel<audioch_t, volume_dbfs_t> masterVolumePressureDbfsChanged() const = 0;
 };
 
 using IMixerPtr = std::shared_ptr<IMixer>;

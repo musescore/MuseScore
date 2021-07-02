@@ -22,43 +22,26 @@
 #ifndef MU_AUDIO_AUDIOPLAYER_H
 #define MU_AUDIO_AUDIOPLAYER_H
 
-#include "iaudioplayer.h"
+#include "iaudiostream.h"
 #include "abstractaudiosource.h"
 
 namespace mu::audio {
-class AudioPlayer : public IAudioPlayer, public AbstractAudioSource, public std::enable_shared_from_this<AudioPlayer>
+class AudioPlayer : public AbstractAudioSource
 {
 public:
-    AudioPlayer();
+    explicit AudioPlayer();
 
-    // IPlayer
-    Status status() const override;
-    async::Channel<Status> statusChanged() const override;
+    unsigned long milliseconds() const;
+    void forwardTime(unsigned long);
 
-    bool isRunning() const override;
-
-    void run() override;
-    void seek(unsigned long milliseconds) override;
-    void stop() override;
-    void pause() override;
-
-    unsigned long milliseconds() const override;
-    void forwardTime(unsigned long) override;
-
-    // IAudioPlayer
-    void unload() override;
-    Ret load(const std::shared_ptr<audio::IAudioStream>& stream) override;
-    IAudioSourcePtr audioSource() override;
+    void unload();
+    Ret load(const std::shared_ptr<audio::IAudioStream>& stream);
 
     // IAudioSource (AbstractAudioSource)
-    unsigned int audioChannelsCount() const override;
-    void process(float* buffer, unsigned int sampleCount) override;
+    unsigned int audioChannelsCount() const;
+    void process(float* buffer, unsigned int sampleCount);
 
 private:
-    void setStatus(const Status& status);
-
-    Status m_status = Status::Stoped;
-    async::Channel<Status> m_statusChanged;
     std::shared_ptr<audio::IAudioStream> m_stream = nullptr;
     unsigned long m_position = 0;
 };

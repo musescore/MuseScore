@@ -24,6 +24,10 @@
 using namespace mu;
 using namespace mu::midi;
 
+void DummyMidiInPort::init()
+{
+}
+
 std::vector<MidiDevice> DummyMidiInPort::devices() const
 {
     MidiDevice d;

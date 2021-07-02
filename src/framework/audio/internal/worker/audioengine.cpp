@@ -59,20 +59,11 @@ mu::Ret AudioEngine::init()
         return make_ret(Ret::Code::Ok);
     }
 
-    IF_ASSERT_FAILED(m_buffer) {
+    IF_ASSERT_FAILED(m_buffer && m_mixer) {
         return make_ret(Ret::Code::InternalError);
     }
 
-    m_sequencer = std::make_shared<Sequencer>();
-
-    m_mixer = std::make_shared<Mixer>();
-    m_mixer->setClock(m_sequencer->clock());
-
     m_buffer->setSource(m_mixer->mixedSource());
-
-    m_sequencer->audioTrackAdded().onReceive(this, [this](Sequencer::AudioTrack player) {
-        m_mixer->addChannel(player->audioSource());
-    });
 
     m_synthesizerController = std::make_shared<SynthesizerController>(synthesizersRegister(), soundFontsProvider());
     m_synthesizerController->init();
@@ -89,7 +80,6 @@ void AudioEngine::deinit()
     if (isInited()) {
         m_buffer->setSource(nullptr);
         m_mixer = nullptr;
-        m_sequencer = nullptr;
         m_inited = false;
         m_initChanged.send(m_inited);
     }
@@ -101,22 +91,14 @@ void AudioEngine::onDriverOpened(unsigned int sampleRate, uint16_t readBufferSiz
 
     setSampleRate(sampleRate);
     setReadBufferSize(readBufferSize);
-
-    std::vector<ISynthesizerPtr> synths = synthesizersRegister()->synthesizers();
-    for (const ISynthesizerPtr& synth : synths) {
-        m_mixer->addChannel(synth);
-    }
-
-    synthesizersRegister()->synthesizerAdded().onReceive(this, [this](const ISynthesizerPtr& synth) {
-        m_mixer->addChannel(synth);
-    });
 }
 
 void AudioEngine::setSampleRate(unsigned int sampleRate)
 {
     ONLY_AUDIO_WORKER_THREAD;
     m_sampleRate = sampleRate;
-    m_mixer->setSampleRate(sampleRate);
+
+    m_mixer->mixedSource()->setSampleRate(sampleRate);
 }
 
 void AudioEngine::setReadBufferSize(uint16_t readBufferSize)
@@ -137,22 +119,24 @@ unsigned int AudioEngine::sampleRate() const
     return m_sampleRate;
 }
 
-std::shared_ptr<IAudioBuffer> AudioEngine::buffer() const
+IAudioBufferPtr AudioEngine::buffer() const
 {
     ONLY_AUDIO_WORKER_THREAD;
     return m_buffer;
 }
 
-std::shared_ptr<IMixer> AudioEngine::mixer() const
+IMixerPtr AudioEngine::mixer() const
 {
     ONLY_AUDIO_WORKER_THREAD;
+
     return m_mixer;
 }
 
-std::shared_ptr<ISequencer> AudioEngine::sequencer() const
+void AudioEngine::setMixer(IMixerPtr mixerPtr)
 {
     ONLY_AUDIO_WORKER_THREAD;
-    return m_sequencer;
+
+    m_mixer = mixerPtr;
 }
 
 void AudioEngine::setAudioBuffer(IAudioBufferPtr buffer)

@@ -30,7 +30,6 @@
 #include "context/iglobalcontext.h"
 #include "inotation.h"
 #include "iinteractive.h"
-#include "audio/isequencer.h"
 #include "playback/iplaybackcontroller.h"
 #include "playback/iplaybackconfiguration.h"
 #include "inotationconfiguration.h"
@@ -41,7 +40,6 @@ class NotationActionController : public actions::Actionable, public async::Async
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, framework::IInteractive, interactive)
-    INJECT(notation, audio::ISequencer, sequencer)
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(notation, INotationConfiguration, configuration)
