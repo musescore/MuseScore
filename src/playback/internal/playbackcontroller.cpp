@@ -455,15 +455,19 @@ void PlaybackController::setCurrentSequence(const TrackSequenceId sequenceId)
     m_trackIdMap.clear();
     playback()->tracks()->removeAllTracks(m_currentSequenceId);
 
+    if (!notationPlayback()) {
+        return;
+    }
+
     for (const INotationPlayback::InstrumentTrackId& id : notationPlayback()->instrumentTrackIdList()) {
         addTrack(id);
     }
 
-    m_notation->playback()->instrumentTrackAdded().onReceive(this, [this](INotationPlayback::InstrumentTrackId&& id) {
+    notationPlayback()->instrumentTrackAdded().onReceive(this, [this](INotationPlayback::InstrumentTrackId&& id) {
         addTrack(id);
     });
 
-    m_notation->playback()->instrumentTrackRemoved().onReceive(this, [this](INotationPlayback::InstrumentTrackId&& id) {
+    notationPlayback()->instrumentTrackRemoved().onReceive(this, [this](INotationPlayback::InstrumentTrackId&& id) {
         removeTrack(id);
     });
 
