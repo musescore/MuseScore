@@ -86,7 +86,7 @@ private:
 
         bool isEmpty() const
         {
-            return m_eventsMap.empty() && endTick == 0;
+            return m_eventsMap.empty();
         }
 
         void reset()
@@ -114,6 +114,8 @@ private:
     void resolveSynth(const synth::SynthName& synthName);
     void buildTempoMap();
     void setupChannels();
+
+    void invalidateCaches(EventsBuffer& eventsBuffer);
 
     bool m_hasActiveRequest = false;
 

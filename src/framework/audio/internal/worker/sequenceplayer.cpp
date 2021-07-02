@@ -84,6 +84,17 @@ void SequencePlayer::pause()
     }
 }
 
+void SequencePlayer::resume()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    m_clock->resume();
+
+    for (auto& pair : tracks()) {
+        pair.second->audioSource->setIsActive(true);
+    }
+}
+
 Ret SequencePlayer::setLoop(const msecs_t fromMsec, const msecs_t toMsec)
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -103,6 +114,13 @@ Channel<msecs_t> SequencePlayer::playbackPositionMSecs() const
     ONLY_AUDIO_WORKER_THREAD;
 
     return m_clock->timeChanged();
+}
+
+Channel<PlaybackStatus> SequencePlayer::playbackStatusChanged() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return m_clock->statusChanged();
 }
 
 TracksMap SequencePlayer::tracks() const

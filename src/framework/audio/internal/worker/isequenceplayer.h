@@ -38,11 +38,13 @@ public:
     virtual void seek(const msecs_t newPositionMsecs) = 0;
     virtual void stop() = 0;
     virtual void pause() = 0;
+    virtual void resume() = 0;
 
     virtual Ret setLoop(const msecs_t fromMsec, const msecs_t toMsec) = 0;
     virtual void resetLoop() = 0;
 
     virtual async::Channel<msecs_t> playbackPositionMSecs() const = 0;
+    virtual async::Channel<PlaybackStatus> playbackStatusChanged() const = 0;
 };
 using ISequencePlayerPtr = std::shared_ptr<ISequencePlayer>;
 }

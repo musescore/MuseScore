@@ -30,6 +30,8 @@ namespace mu::audio {
 class Clock : public IClock, public async::Asyncable
 {
 public:
+    Clock();
+
     msecs_t currentTime() const override;
 
     void forward(const msecs_t nextMsecs) override;
@@ -38,6 +40,7 @@ public:
     void reset() override;
     void stop() override;
     void pause() override;
+    void resume() override;
     void seek(const msecs_t msecs) override;
 
     Ret setTimeLoop(const msecs_t fromMsec, const msecs_t toMsec) override;
@@ -47,15 +50,11 @@ public:
 
     async::Channel<msecs_t> timeChanged() const override;
     async::Notification seekOccurred() const override;
+    async::Channel<PlaybackStatus> statusChanged() const override;
 
 private:
-    enum Status {
-        Stoped = 0,
-        Paused,
-        Running
-    };
 
-    Status m_status = Stoped;
+    ValCh<PlaybackStatus> m_status;
     msecs_t m_time = 0;
     msecs_t m_timeLoopStart = 0;
     msecs_t m_timeLoopEnd = 0;

@@ -39,11 +39,13 @@ public:
     void seek(const TrackSequenceId sequenceId, const msecs_t newPositionMsecs) override;
     void stop(const TrackSequenceId sequenceId) override;
     void pause(const TrackSequenceId sequenceId) override;
+    void resume(const TrackSequenceId sequenceId) override;
 
     async::Promise<bool> setLoop(const TrackSequenceId sequenceId, const msecs_t fromMsec, const msecs_t toMsec) override;
     void resetLoop(const TrackSequenceId sequenceId) override;
 
     async::Channel<TrackSequenceId, msecs_t> playbackPositionMsecs() const override;
+    async::Channel<TrackSequenceId, PlaybackStatus> playbackStatusChanged() const override;
 
 private:
     ITrackSequencePtr sequence(const TrackSequenceId id) const;
@@ -52,6 +54,7 @@ private:
     IGetTrackSequence* m_getSequence = nullptr;
 
     mutable async::Channel<TrackSequenceId, msecs_t> m_playbackPositionMsecsChanged;
+    mutable async::Channel<TrackSequenceId, PlaybackStatus> m_playbackStatusChanged;
 };
 }
 
