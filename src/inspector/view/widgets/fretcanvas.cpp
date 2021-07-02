@@ -43,6 +43,8 @@ FretCanvas::FretCanvas(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
+    setAcceptHoverEvents(true);
+
     m_cstring = -2;
     m_cfret   = -2;
 }
@@ -80,6 +82,7 @@ void FretCanvas::draw(QPainter* painter)
     QPen pen(painter->pen());
     pen.setWidthF(lw2);
     pen.setCapStyle(Qt::FlatCap);
+    pen.setColor(color());
     painter->setPen(pen);
     painter->setBrush(pen.color());
     double x2 = (_strings - 1) * stringDist;
@@ -246,7 +249,7 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
         return;
     }
 
-    m_diagram->score()->startCmd();
+    globalContext()->currentNotation()->undoStack()->prepareChanges();
 
     // Click above the fret diagram, so change the open/closed string marker
     if (fret == 0) {
@@ -318,20 +321,22 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
         }
     }
     m_diagram->triggerLayout();
-    m_diagram->score()->endCmd();
+    globalContext()->currentNotation()->undoStack()->commitChanges();
     update();
+
+    globalContext()->currentNotation()->notationChanged().notify();
 }
 
 //---------------------------------------------------------
-//   mouseMoveEvent
+//   hoverMoveEvent
 //---------------------------------------------------------
 
-void FretCanvas::mouseMoveEvent(QMouseEvent* ev)
+void FretCanvas::hoverMoveEvent(QHoverEvent* ev)
 {
     int string;
     int fret;
     getPosition(ev->pos(), &string, &fret);
-    if (string != m_cstring || m_cfret != fret) {
+    if (m_cstring != string || m_cfret != fret) {
         m_cfret = fret;
         m_cstring = string;
         update();
@@ -395,6 +400,11 @@ bool FretCanvas::isMultipleDotsModeOn() const
     return m_multidotMode;
 }
 
+QColor FretCanvas::color() const
+{
+    return m_color;
+}
+
 void FretCanvas::setCurrentFretDotType(int currentFretDotType)
 {
     Ms::FretDotType newDotType = static_cast<Ms::FretDotType>(currentFretDotType);
@@ -425,4 +435,15 @@ void FretCanvas::setIsMultipleDotsModeOn(bool isMultipleDotsModeOn)
 
     m_multidotMode = isMultipleDotsModeOn;
     emit isMultipleDotsModeOnChanged(m_multidotMode);
+}
+
+void FretCanvas::setColor(QColor color)
+{
+    if (m_color == color) {
+        return;
+    }
+
+    m_color = color;
+    update();
+    emit colorChanged(m_color);
 }
