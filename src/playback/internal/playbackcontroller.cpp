@@ -285,7 +285,7 @@ void PlaybackController::resume()
         return;
     }
 
-    playback()->player()->play(m_currentSequenceId);
+    playback()->player()->resume(m_currentSequenceId);
 
     m_isPlaying = true;
     m_isPlayingChanged.notify();
@@ -486,6 +486,14 @@ void PlaybackController::setCurrentSequence(const TrackSequenceId sequenceId)
 
         setCurrentTick(tick);
         m_tickPlayed.send(std::move(tick));
+    });
+
+    playback()->player()->playbackStatusChanged().onReceive(this, [this](const TrackSequenceId id, const PlaybackStatus status) {
+        if (m_currentSequenceId != id) {
+            return;
+        }
+
+        m_currentPlaybackStatus = status;
     });
 }
 

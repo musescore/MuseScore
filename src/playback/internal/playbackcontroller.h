@@ -129,6 +129,7 @@ private:
     bool m_isPlaying = false;
 
     audio::TrackSequenceId m_currentSequenceId = -1;
+    audio::PlaybackStatus m_currentPlaybackStatus = audio::PlaybackStatus::Stopped;
     midi::tick_t m_currentTick = 0;
     std::unordered_map<std::string /* score file path*/, audio::TrackSequenceId> m_sequenceIdMap;
     std::unordered_map<notation::INotationPlayback::InstrumentTrackId, audio::TrackId> m_trackIdMap;

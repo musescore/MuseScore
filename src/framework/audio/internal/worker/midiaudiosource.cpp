@@ -55,7 +55,7 @@ MidiAudioSource::MidiAudioSource(const MidiData& midiData, async::Channel<AudioI
     resolveSynth(m_mapping.synthName);
 
     m_stream.backgroundStream.onReceive(this, [this](Events events, tick_t endTick) {
-        m_backgroundStreamEvents.reset();
+        invalidateCaches(m_backgroundStreamEvents);
 
         m_backgroundStreamEvents.endTick = std::move(endTick);
         m_backgroundStreamEvents.push(std::move(events));
@@ -93,8 +93,12 @@ void MidiAudioSource::setIsActive(const bool active)
         return;
     }
 
+    // invalidate cached events when we stop playing
+    if (!active) {
+        invalidateCaches(m_mainStreamEvents);
+    }
+
     m_synth->setIsActive(active);
-    m_synth->flushSound();
 }
 
 void MidiAudioSource::setupChannels()
@@ -102,6 +106,16 @@ void MidiAudioSource::setupChannels()
     ONLY_AUDIO_WORKER_THREAD;
 
     m_synth->setupMidiChannels(m_stream.controlEventsStream.val);
+}
+
+void MidiAudioSource::invalidateCaches(EventsBuffer& eventsBuffer)
+{
+    IF_ASSERT_FAILED(m_synth) {
+        return;
+    }
+
+    m_synth->flushSound();
+    eventsBuffer.reset();
 }
 
 void MidiAudioSource::requestNextEvents(const tick_t nextTicksNumber)
@@ -237,7 +251,7 @@ bool MidiAudioSource::sendEvents(const std::vector<Event>& events)
 
 void MidiAudioSource::resolveSynth(const SynthName& synthName)
 {
-    if (m_synth) {
+    if (m_synth && m_synth->name() == synthName) {
         return;
     }
 
@@ -250,7 +264,7 @@ void MidiAudioSource::seek(const msecs_t newPositionMsecs)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_mainStreamEvents.reset();
+    invalidateCaches(m_mainStreamEvents);
     m_mainStreamEvents.currentTick = tickFromMsec(newPositionMsecs);
 
     requestNextEvents(MINIMAL_REQUIRED_LOOKAHEAD);

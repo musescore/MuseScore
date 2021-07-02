@@ -39,11 +39,13 @@ public:
     void seek(const msecs_t newPositionMsecs) override;
     void stop() override;
     void pause() override;
+    void resume() override;
 
     Ret setLoop(const msecs_t fromMsec, const msecs_t toMsec) override;
     void resetLoop() override;
 
     async::Channel<msecs_t> playbackPositionMSecs() const override;
+    async::Channel<PlaybackStatus> playbackStatusChanged() const override;
 
 private:
     TracksMap tracks() const;

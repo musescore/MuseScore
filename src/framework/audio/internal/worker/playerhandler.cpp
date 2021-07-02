@@ -90,6 +90,18 @@ void PlayerHandler::pause(const TrackSequenceId sequenceId)
     }, AudioThread::ID);
 }
 
+void PlayerHandler::resume(const TrackSequenceId sequenceId)
+{
+    Async::call(this, [this, sequenceId]() {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        ITrackSequencePtr s = sequence(sequenceId);
+        if (s) {
+            s->player()->resume();
+        }
+    }, AudioThread::ID);
+}
+
 Promise<bool> PlayerHandler::setLoop(const TrackSequenceId sequenceId, const msecs_t fromMsec, const msecs_t toMsec)
 {
     return Promise<bool>([this, sequenceId, fromMsec, toMsec](Promise<bool>::Resolve resolve, Promise<bool>::Reject reject) {
@@ -130,6 +142,13 @@ Channel<TrackSequenceId, msecs_t> PlayerHandler::playbackPositionMsecs() const
     return m_playbackPositionMsecsChanged;
 }
 
+Channel<TrackSequenceId, PlaybackStatus> PlayerHandler::playbackStatusChanged() const
+{
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
+    return m_playbackStatusChanged;
+}
+
 ITrackSequencePtr PlayerHandler::sequence(const TrackSequenceId id) const
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -154,5 +173,9 @@ void PlayerHandler::ensureSubscriptions(const ITrackSequencePtr s) const
 
     s->player()->playbackPositionMSecs().onReceive(this, [this, s](const msecs_t newPosMsecs) {
         m_playbackPositionMsecsChanged.send(s->id(), newPosMsecs);
+    });
+
+    s->player()->playbackStatusChanged().onReceive(this, [this, s](const PlaybackStatus newStatus) {
+        m_playbackStatusChanged.send(s->id(), newStatus);
     });
 }

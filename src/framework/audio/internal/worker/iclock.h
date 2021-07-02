@@ -45,6 +45,7 @@ public:
     virtual void reset() = 0;
     virtual void stop() = 0;
     virtual void pause() = 0;
+    virtual void resume() = 0;
     virtual void seek(const msecs_t msecs) = 0;
 
     virtual Ret setTimeLoop(const msecs_t fromMsec, const msecs_t toMsec) = 0;
@@ -54,6 +55,7 @@ public:
 
     virtual async::Channel<msecs_t> timeChanged() const = 0;
     virtual async::Notification seekOccurred() const = 0;
+    virtual async::Channel<PlaybackStatus> statusChanged() const = 0;
 };
 
 using IClockPtr = std::shared_ptr<IClock>;

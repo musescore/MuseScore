@@ -79,6 +79,12 @@ struct VolumePressureDbfsBoundaries {
     volume_dbfs_t max = 0;
     volume_dbfs_t min = -60;
 };
+
+enum class PlaybackStatus {
+    Stopped = 0,
+    Paused,
+    Running
+};
 }
 
 #endif // MU_AUDIO_AUDIOTYPES_H
