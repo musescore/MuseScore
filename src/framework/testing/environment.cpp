@@ -55,9 +55,6 @@ void Environment::setup()
     globalModule.registerResources();
     globalModule.registerExports();
     globalModule.registerUiTypes();
-    globalModule.onInit(runMode);
-
-    //! NOTE Now we can use logger and profiler
 
     m_dependencyModules.push_back(new mu::system::SystemModule());
 
@@ -74,6 +71,9 @@ void Environment::setup()
         m->registerUiTypes();
         m->resolveImports();
     }
+
+    globalModule.onInit(runMode);
+    //! NOTE Now we can use logger and profiler
 
     if (m_preInit) {
         m_preInit();
