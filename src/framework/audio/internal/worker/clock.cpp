@@ -26,6 +26,11 @@
 using namespace mu;
 using namespace mu::audio;
 
+Clock::Clock()
+{
+    m_status.set(PlaybackStatus::Stopped);
+}
+
 msecs_t Clock::currentTime() const
 {
     return m_time;
@@ -48,7 +53,7 @@ void Clock::forward(const msecs_t nextMsecs)
 
 void Clock::start()
 {
-    m_status = Running;
+    m_status.set(PlaybackStatus::Running);
 }
 
 void Clock::reset()
@@ -59,13 +64,19 @@ void Clock::reset()
 
 void Clock::stop()
 {
-    m_status = Stoped;
+    m_status.set(PlaybackStatus::Stopped);
     seek(0);
 }
 
 void Clock::pause()
 {
-    m_status = Paused;
+    m_status.set(PlaybackStatus::Paused);
+}
+
+void Clock::resume()
+{
+    m_status.set(PlaybackStatus::Running);
+    seek(m_time);
 }
 
 void Clock::seek(const msecs_t msecs)
@@ -95,7 +106,7 @@ void Clock::resetTimeLoop()
 
 bool Clock::isRunning() const
 {
-    return m_status == Running;
+    return m_status.val == PlaybackStatus::Running;
 }
 
 async::Channel<msecs_t> Clock::timeChanged() const
@@ -106,4 +117,9 @@ async::Channel<msecs_t> Clock::timeChanged() const
 async::Notification Clock::seekOccurred() const
 {
     return m_seekOccurred;
+}
+
+async::Channel<PlaybackStatus> Clock::statusChanged() const
+{
+    return m_status.ch;
 }
