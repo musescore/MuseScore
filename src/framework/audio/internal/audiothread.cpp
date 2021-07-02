@@ -35,7 +35,6 @@ std::thread::id AudioThread::ID;
 
 AudioThread::AudioThread()
 {
-    m_channel = std::make_shared<rpc::QueuedRpcChannel>();
 }
 
 AudioThread::~AudioThread()
@@ -85,7 +84,6 @@ void AudioThread::setAudioBuffer(std::shared_ptr<IAudioBuffer> buffer)
 void AudioThread::loopBody()
 {
     mu::async::processEvents();
-    m_channel->process();
     if (m_buffer) {
         m_buffer->forward();
     }
@@ -94,7 +92,6 @@ void AudioThread::loopBody()
 void AudioThread::main()
 {
     mu::runtime::setThreadName("audio_worker");
-    m_channel->setupWorkerThread();
 
     AudioThread::ID = std::this_thread::get_id();
 
@@ -110,9 +107,4 @@ void AudioThread::main()
     if (m_onFinished) {
         m_onFinished();
     }
-}
-
-rpc::QueuedRpcChannelPtr AudioThread::channel() const
-{
-    return m_channel;
 }

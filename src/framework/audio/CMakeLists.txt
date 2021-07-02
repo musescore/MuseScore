@@ -151,23 +151,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.h
 
-    # Rpc
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpctypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/irpcchannel.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/irpccontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/queuedrpcchannel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/queuedrpcchannel.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpccontrollers.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpccontrollers.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpccontrollerbase.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpccontrollerbase.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcdevtoolscontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcdevtoolscontroller.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcaudioenginecontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcaudioenginecontroller.h
-
     # DevTools
     ${CMAKE_CURRENT_LIST_DIR}/devtools/waveformmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/waveformmodel.h
