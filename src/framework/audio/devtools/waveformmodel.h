@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
+#include "iaudiooutput.h"
 #include "iplayback.h"
 
 namespace mu::audio {

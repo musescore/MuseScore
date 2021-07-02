@@ -26,12 +26,14 @@
 #include "async/channel.h"
 #include "async/promise.h"
 
-#include "iplayer.h"
-#include "itracks.h"
-#include "iaudiooutput.h"
+
 #include "audiotypes.h"
 
 namespace mu::audio {
+class ITracks;
+class IPlayer;
+class IAudioOutput;
+
 class IPlayback : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IPlayback)
@@ -47,13 +49,13 @@ public:
     virtual void removeSequence(const TrackSequenceId id) = 0;
 
     // 2. Setup tracks for Sequence
-    virtual ITracksPtr tracks() const = 0;
+    virtual std::shared_ptr<ITracks> tracks() const = 0;
 
     // 3. Play Sequence
-    virtual IPlayerPtr player() const = 0;
+    virtual std::shared_ptr<IPlayer> player() const = 0;
 
     // 4. Adjust a Sequence output
-    virtual IAudioOutputPtr audioOutput() const = 0;
+    virtual std::shared_ptr<IAudioOutput> audioOutput() const = 0;
 };
 
 using IPlaybackPtr = std::shared_ptr<IPlayback>;
