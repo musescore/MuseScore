@@ -42,7 +42,7 @@ class AudioEngine : public async::Asyncable
     INJECT(audio, synth::ISoundFontsProvider, soundFontsProvider)
     INJECT(audio, synth::ISynthesizersRegister, synthesizersRegister)
 public:
-    ~AudioEngine();
+    ~AudioEngine() = default;
 
     static AudioEngine* instance();
 
