@@ -500,7 +500,7 @@
           <program value="0"/>
           <controller ctrl="7" value="101"/>
           <controller ctrl="10" value="63"/>
-          <synti>Zerberus</synti>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>

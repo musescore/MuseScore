@@ -45,7 +45,6 @@ void SynthsSettingsModel::load()
     };
 
     doLoad("Fluid");
-    doLoad("Zerberus");
 }
 
 void SynthsSettingsModel::apply()
