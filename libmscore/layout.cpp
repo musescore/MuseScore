@@ -11,6 +11,7 @@
 //=============================================================================
 
 #include "accidental.h"
+#include "arpeggio.h"
 #include "barline.h"
 #include "beam.h"
 #include "box.h"
@@ -1521,6 +1522,56 @@ void Score::connectTies(bool silent)
                               }
                         }
 #endif
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   connectArpeggios
+//  Fake cross-voice arpeggios by hiding all but the first
+//  and extending the first to cover the others.
+//  Retains the other properties of the first arpeggio.
+//---------------------------------------------------------
+
+void Score::connectArpeggios()
+      {
+      for (auto segment = firstSegment(SegmentType::ChordRest); segment; segment = segment->next1(SegmentType::ChordRest)) {
+            for (int staff = 0; staff < nstaves(); ++staff) {
+                  qreal minTop = 10000;
+                  qreal maxBottom = -10000;
+                  int firstArpeggio = -1;
+                  bool multipleArpeggios = false;
+                  for (int i = staff2track(staff); i < staff2track(staff + 1); ++i) {
+                        if (segment->elist()[i] && segment->elist()[i]->isChord()) {
+                              Chord* chord = toChord(segment->elist()[i]);
+                              if (chord->arpeggio() && chord->arpeggio()->visible()) {
+                                    if (chord->pagePos() == QPointF(0, 0)) doLayout();
+                                    qreal localTop = chord->arpeggio()->pageBoundingRect().top();                   
+                                    qreal localBottom = chord->arpeggio()->pageBoundingRect().bottom();                             
+                                    minTop = qMin(localTop, minTop);
+                                    maxBottom = qMax(localBottom, maxBottom);
+                                    if (firstArpeggio == -1)
+                                          // Leave arpeggio, adjust height after collecting
+                                          firstArpeggio = i;
+                                    else {
+                                          // Hide arpeggio; firstArpeggio will be extended to cover it.
+                                          chord->arpeggio()->setVisible(false);                                          
+                                          multipleArpeggios = true;
+                                          }
+                                    }
+                              }
+                        }
+                  if (firstArpeggio != -1 && multipleArpeggios) {
+                        // Stretch first arpeggio to cover deleted
+                        Chord* firstArpeggioChord = toChord(segment->elist()[firstArpeggio]);
+                        Arpeggio* arpeggio = firstArpeggioChord->arpeggio();
+                        qreal topDiff = minTop - arpeggio->pageBoundingRect().top();
+                        qreal bottomDiff = maxBottom - arpeggio->pageBoundingRect().bottom();
+                        arpeggio->setUserLen1(topDiff);
+                        arpeggio->setUserLen2(bottomDiff);
+                        arpeggio->setPropertyFlags(Pid::ARP_USER_LEN1, PropertyFlags::UNSTYLED);
+                        arpeggio->setPropertyFlags(Pid::ARP_USER_LEN2, PropertyFlags::UNSTYLED);
+                        }
                   }
             }
       }
