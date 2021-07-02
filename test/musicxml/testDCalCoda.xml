@@ -68,7 +68,7 @@
         <direction-type>
           <words>To Coda</words>
           </direction-type>
-        <sound tocoda="coda"/>
+        <sound tocoda="codab"/>
         </direction>
       </measure>
     <measure number="3">
@@ -98,7 +98,7 @@
         <direction-type>
           <coda/>
           </direction-type>
-        <sound coda="coda"/>
+        <sound coda="codab"/>
         </direction>
       <note>
         <pitch>

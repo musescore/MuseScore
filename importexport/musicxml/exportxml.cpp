@@ -324,6 +324,7 @@ class ExportMusicXml {
       Hairpin const* hairpins[MAX_NUMBER_LEVEL];
       Ottava const* ottavas[MAX_NUMBER_LEVEL];
       Trill const* trills[MAX_NUMBER_LEVEL];
+      std::vector<const Jump*> _jumpElements;
       int div;
       double millimeters;
       int tenths;
@@ -359,6 +360,8 @@ class ExportMusicXml {
       void writeElement(Element* el, const Measure* m, int sstaff, bool useDrumset);
       void writeMeasureTracks(const Measure* const m, const int partIndex, const int strack, const int staves, const bool useDrumset, FigBassMap& fbMap, QSet<const Spanner*>& spannersStopped);
       void writeMeasure(const Measure* const m, const int idx, const int staffCount, MeasureNumberStateHandler& mnsh, FigBassMap& fbMap, const MeasurePrintContext& mpc, QSet<const Spanner*>& spannersStopped);
+      void repeatAtMeasureStart(Attributes& attr, const Measure* const m, int strack, int etrack, int track);
+      void repeatAtMeasureStop(const Measure* const m, int strack, int etrack, int track);
       void writeParts();
 
 public:
@@ -4705,56 +4708,64 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
       QString words = "";
       QString type  = "";
       QString sound = "";
+      bool isDaCapo = false;
+      bool isDalSegno = false;
       if (jtp == Jump::Type::DC) {
             if (jp->xmlText() == "")
                   words = "D.C.";
             else
                   words = jp->xmlText();
-            sound = "dacapo=\"yes\"";
+            isDaCapo = true;
             }
       else if (jtp == Jump::Type::DC_AL_FINE) {
             if (jp->xmlText() == "")
                   words = "D.C. al Fine";
             else
                   words = jp->xmlText();
-            sound = "dacapo=\"yes\"";
+            isDaCapo = true;
             }
       else if (jtp == Jump::Type::DC_AL_CODA) {
             if (jp->xmlText() == "")
                   words = "D.C. al Coda";
             else
                   words = jp->xmlText();
-            sound = "dacapo=\"yes\"";
+            isDaCapo = true;
             }
       else if (jtp == Jump::Type::DS_AL_CODA) {
             if (jp->xmlText() == "")
                   words = "D.S. al Coda";
             else
                   words = jp->xmlText();
-            if (jp->jumpTo() == "")
-                  sound = "dalsegno=\"1\"";
-            else
-                  sound = "dalsegno=\"" + jp->jumpTo() + "\"";
+            isDalSegno = true;
             }
       else if (jtp == Jump::Type::DS_AL_FINE) {
             if (jp->xmlText() == "")
                   words = "D.S. al Fine";
             else
                   words = jp->xmlText();
-            if (jp->jumpTo() == "")
-                  sound = "dalsegno=\"1\"";
-            else
-                  sound = "dalsegno=\"" + jp->jumpTo() + "\"";
+            isDalSegno = true;
             }
       else if (jtp == Jump::Type::DS) {
             words = "D.S.";
+            isDalSegno = true;
+            }
+      else {
+            words = jp->xmlText();
+
+            if (jp->jumpTo() == "start")
+                  isDaCapo = true;
+            else
+                  isDalSegno = true;
+            }
+
+      if (isDaCapo)
+            sound = "dacapo=\"yes\"";
+      else if (isDalSegno) {
             if (jp->jumpTo() == "")
                   sound = "dalsegno=\"1\"";
             else
                   sound = "dalsegno=\"" + jp->jumpTo() + "\"";
             }
-      else
-            qDebug("jump type=%d not implemented", static_cast<int>(jtp));
 
       if (sound != "") {
             xml.stag(QString("direction placement=\"%1\"").arg((jp->placement() == Placement::BELOW ) ? "below" : "above"));
@@ -4769,48 +4780,106 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
       }
 
 //---------------------------------------------------------
+//   getEffectiveMarkerType
+//---------------------------------------------------------
+
+static Marker::Type getEffectiveMarkerType(const Marker* const m, const std::vector<const Jump*>& jumps)
+      {
+      Marker::Type mtp = m->markerType();
+
+      if (mtp != Marker::Type::USER)
+            return mtp;
+
+      // Try to guess marker type from its usage in jumps.
+      const QString label = m->label();
+
+      for (const Jump* j : jumps) {
+            Marker::Type guessedMarkerType = mtp;
+
+            if (j->jumpTo() == label)
+                  guessedMarkerType = Marker::Type::SEGNO;
+            else if (j->playUntil() == label)
+                  guessedMarkerType = j->continueAt().isEmpty() ? Marker::Type::FINE : Marker::Type::TOCODA;
+            else if (j->continueAt() == label)
+                  guessedMarkerType = Marker::Type::CODA;
+
+            if (guessedMarkerType != mtp) {
+                  if (mtp != Marker::Type::USER) {
+                        // Type guesses differ for different jump elements.
+                        qDebug("Cannot guess type for marker with label=\"%s\"", qPrintable(label));
+                        return Marker::Type::USER;
+                        }
+                  mtp = guessedMarkerType;
+                  }
+            }
+
+      return mtp;
+      }
+
+//---------------------------------------------------------
+//   findCodaLabel
+//---------------------------------------------------------
+
+static QString findCodaLabel(const std::vector<const Jump*>& jumps, const QString& toCodaLabel)
+      {
+      for (const Jump* j : jumps) {
+            if (j->playUntil() == toCodaLabel)
+                  return j->continueAt();
+            }
+
+      return QString();
+      }
+
+//---------------------------------------------------------
 //   directionMarker -- write marker
 //---------------------------------------------------------
 
-static void directionMarker(XmlWriter& xml, const Marker* const m)
+static void directionMarker(XmlWriter& xml, const Marker* const m, const std::vector<const Jump*>& jumps)
       {
-      Marker::Type mtp = m->markerType();
+      const Marker::Type mtp = getEffectiveMarkerType(m, jumps);
       QString words = "";
       QString type  = "";
       QString sound = "";
-      if (mtp == Marker::Type::CODA) {
-            type = "coda";
-            if (m->label() == "")
-                  sound = "coda=\"1\"";
-            else
-                  // LVIFIX hack: force label to "coda" to match to coda label
-                  // sound = "coda=\"" + m->label() + "\"";
-                  sound = "coda=\"coda\"";
+
+      switch (mtp) {
+            case Marker::Type::CODA:
+            case Marker::Type::VARCODA:
+            case Marker::Type::CODETTA:
+                  type = "coda";
+                  if (m->label() == "")
+                        sound = "coda=\"1\"";
+                  else
+                        sound = "coda=\"" + m->label() + "\"";
+                  break;
+            case Marker::Type::SEGNO:
+            case Marker::Type::VARSEGNO:
+                  type = "segno";
+                  if (m->label() == "")
+                        sound = "segno=\"1\"";
+                  else
+                        sound = "segno=\"" + m->label() + "\"";
+                  break;
+            case Marker::Type::FINE:
+                  words = "Fine";
+                  sound = "fine=\"yes\"";
+                  break;
+            case Marker::Type::TOCODA:
+            case Marker::Type::TOCODASYM: {
+                  if (m->xmlText() == "")
+                        words = "To Coda";
+                  else
+                        words = m->xmlText();
+                  const QString codaLabel = findCodaLabel(jumps, m->label());
+                  if (codaLabel == "")
+                        sound = "tocoda=\"1\"";
+                  else
+                        sound = "tocoda=\"" + codaLabel + "\"";
+                  }
+                  break;
+            case Marker::Type::USER:
+                  qDebug("marker type=%d not implemented", int(mtp));
+                  break;
             }
-      else if (mtp == Marker::Type::SEGNO) {
-            type = "segno";
-            if (m->label() == "")
-                  sound = "segno=\"1\"";
-            else
-                  sound = "segno=\"" + m->label() + "\"";
-            }
-      else if (mtp == Marker::Type::FINE) {
-            words = "Fine";
-            sound = "fine=\"yes\"";
-            }
-      else if (mtp == Marker::Type::TOCODA ||
-               mtp == Marker::Type::TOCODASYM) {
-            if (m->xmlText() == "")
-                  words = "To Coda";
-            else
-                  words = m->xmlText();
-            if (m->label() == "")
-                  sound = "tocoda=\"1\"";
-            else
-                  sound = "tocoda=\"" + m->label() + "\"";
-            }
-      else
-            qDebug("marker type=%d not implemented", int(mtp));
 
       if (sound != "") {
             xml.stag(QString("direction placement=\"%1\"").arg((m->placement() == Placement::BELOW ) ? "below" : "above"));
@@ -4858,7 +4927,7 @@ static int findTrackForAnnotations(int track, Segment* seg)
 //  repeatAtMeasureStart -- write repeats at begin of measure
 //---------------------------------------------------------
 
-static void repeatAtMeasureStart(XmlWriter& xml, Attributes& attr, const Measure* const m, int strack, int etrack, int track)
+void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const m, int strack, int etrack, int track)
       {
       // loop over all segments
       for (Element* e : m->el()) {
@@ -4872,22 +4941,26 @@ static void repeatAtMeasureStart(XmlWriter& xml, Attributes& attr, const Measure
                         {
                         // filter out the markers at measure Start
                         const Marker* const mk = toMarker(e);
-                        Marker::Type mtp = mk->markerType();
-                        if (   mtp == Marker::Type::SEGNO
-                               || mtp == Marker::Type::CODA
-                               ) {
-                              qDebug(" -> handled");
-                              attr.doAttr(xml, false);
-                              directionMarker(xml, mk);
-                              }
-                        else if (   mtp == Marker::Type::FINE ||
-                                    mtp == Marker::Type::TOCODA ||
-                                    mtp == Marker::Type::TOCODASYM
-                                    ) {
-                              // ignore
-                              }
-                        else {
-                              qDebug("repeatAtMeasureStart: marker %d not implemented", int(mtp));
+                        const Marker::Type mtp = getEffectiveMarkerType(mk, _jumpElements);
+
+                        switch (mtp) {
+                              case Marker::Type::SEGNO:
+                              case Marker::Type::VARSEGNO:
+                              case Marker::Type::CODA:
+                              case Marker::Type::VARCODA:
+                              case Marker::Type::CODETTA:
+                                    qDebug(" -> handled");
+                                    attr.doAttr(_xml, false);
+                                    directionMarker(_xml, mk, _jumpElements);
+                                    break;
+                              case Marker::Type::FINE:
+                              case Marker::Type::TOCODA:
+                              case Marker::Type::TOCODASYM:
+                                    // ignore
+                                    break;
+                              case Marker::Type::USER:
+                                    qDebug("repeatAtMeasureStart: marker %d not implemented", int(mtp));
+                                    break;
                               }
                         }
                         break;
@@ -4903,7 +4976,7 @@ static void repeatAtMeasureStart(XmlWriter& xml, Attributes& attr, const Measure
 //  repeatAtMeasureStop -- write repeats at end of measure
 //---------------------------------------------------------
 
-static void repeatAtMeasureStop(XmlWriter& xml, const Measure* const m, int strack, int etrack, int track)
+void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, int strack, int etrack, int track)
       {
       for (Element* e : m->el()) {
             int wtrack = -1; // track to write jump
@@ -4916,22 +4989,29 @@ static void repeatAtMeasureStop(XmlWriter& xml, const Measure* const m, int stra
                         {
                         // filter out the markers at measure stop
                         const Marker* const mk = toMarker(e);
-                        Marker::Type mtp = mk->markerType();
-                        if (mtp == Marker::Type::FINE ||
-                            mtp == Marker::Type::TOCODA ||
-                            mtp == Marker::Type::TOCODASYM) {
-                              directionMarker(xml, mk);
-                              }
-                        else if (mtp == Marker::Type::SEGNO || mtp == Marker::Type::CODA) {
-                              // ignore
-                              }
-                        else {
-                              qDebug("repeatAtMeasureStop: marker %d not implemented", int(mtp));
+                        const Marker::Type mtp = getEffectiveMarkerType(mk, _jumpElements);
+
+                        switch (mtp) {
+                              case Marker::Type::FINE:
+                              case Marker::Type::TOCODA:
+                              case Marker::Type::TOCODASYM:
+                                    directionMarker(_xml, mk, _jumpElements);
+                                    break;
+                              case Marker::Type::SEGNO:
+                              case Marker::Type::VARSEGNO:
+                              case Marker::Type::CODA:
+                              case Marker::Type::VARCODA:
+                              case Marker::Type::CODETTA:
+                                    // ignore
+                                    break;
+                              case Marker::Type::USER:
+                                    qDebug("repeatAtMeasureStop: marker %d not implemented", int(mtp));
+                                    break;
                               }
                         }
                         break;
                   case ElementType::JUMP:
-                        directionJump(xml, toJump(e));
+                        directionJump(_xml, toJump(e));
                         break;
                   default:
                         qDebug("repeatAtMeasureStop: direction type %s at tick %d not implemented",
@@ -6489,7 +6569,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
       // MuseScore limitation: repeats are always in the first part
       // and are implicitly placed at either measure start or stop
       if (partIndex == 0)
-            repeatAtMeasureStart(_xml, _attr, m, strack, etrack, strack);
+            repeatAtMeasureStart(_attr, m, strack, etrack, strack);
 
       // write data in the tracks
       writeMeasureTracks(m, partIndex, strack, staves, part->instrument()->useDrumset(), fbMap, spannersStopped);
@@ -6503,7 +6583,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
        #endif
       moveToTick(m->endTick());
       if (partIndex == 0)
-            repeatAtMeasureStop(_xml, m, strack, etrack, strack);
+            repeatAtMeasureStop(m, strack, etrack, strack);
       // note: don't use "m->repeatFlags() & Repeat::END" here, because more
       // barline types need to be handled besides repeat end ("light-heavy")
       barlineRight(m, strack, etrack);
@@ -6600,6 +6680,25 @@ void ExportMusicXml::writeParts()
       }
 
 //---------------------------------------------------------
+//  findJumpElements
+//---------------------------------------------------------
+
+static std::vector<const Jump*> findJumpElements(const Score* score)
+      {
+      std::vector<const Jump*> jumps;
+
+      for (const MeasureBase* m = score->first(); m; m = m->next()) {
+            for (const Element* e : m->el()) {
+                  if (e->isJump()) {
+                        jumps.push_back(toJump(e));
+                        }
+                  }
+            }
+
+      return jumps;
+      }
+
+//---------------------------------------------------------
 //  write
 //---------------------------------------------------------
 
@@ -6629,6 +6728,8 @@ void ExportMusicXml::write(QIODevice* dev)
             ottavas[i] = nullptr;
             trills[i] = nullptr;
             }
+
+      _jumpElements = findJumpElements(_score);
 
       _xml.setDevice(dev);
       _xml.setCodec("UTF-8");
