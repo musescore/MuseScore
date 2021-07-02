@@ -78,7 +78,7 @@ std::vector<Event> NotationMidiEvents::retrieveSetupEvents(const std::list<Instr
     for (const InstrumentChannel* instrChannel : instrChannels) {
         Event e;
 
-        e.setMessageType(Event::MessageType::ChannelVoice20);
+        e.setMessageType(Event::MessageType::ChannelVoice10);
         e.setOpcode(Event::Opcode::ProgramChange);
         e.setProgram(instrChannel->program());
         e.setBank(instrChannel->bank());
