@@ -30,8 +30,10 @@ namespace mu::midi {
 class CoreMidiOutPort : public IMidiOutPort
 {
 public:
-    CoreMidiOutPort();
+    CoreMidiOutPort() = default;
     ~CoreMidiOutPort() override;
+
+    void init();
 
     MidiDeviceList devices() const override;
     async::Notification devicesChanged() const override;

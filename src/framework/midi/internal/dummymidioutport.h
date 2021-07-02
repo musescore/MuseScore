@@ -28,6 +28,9 @@ namespace mu::midi {
 class DummyMidiOutPort : public IMidiOutPort
 {
 public:
+
+    void init();
+
     MidiDeviceList devices() const override;
     async::Notification devicesChanged() const override;
 
