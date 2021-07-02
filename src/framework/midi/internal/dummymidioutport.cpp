@@ -26,6 +26,10 @@
 
 using namespace mu::midi;
 
+void DummyMidiOutPort::init()
+{
+}
+
 MidiDeviceList DummyMidiOutPort::devices() const
 {
     MidiDevice d;

@@ -33,8 +33,10 @@ namespace mu::midi {
 class AlsaMidiInPort : public IMidiInPort, public async::Asyncable
 {
 public:
-    AlsaMidiInPort();
+    AlsaMidiInPort() = default;
     ~AlsaMidiInPort() override;
+
+    void init();
 
     MidiDeviceList devices() const override;
     async::Notification devicesChanged() const override;

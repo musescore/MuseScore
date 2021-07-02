@@ -41,8 +41,8 @@ static std::shared_ptr<MidiConfiguration> s_configuration = std::make_shared<Mid
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/alsamidioutport.h"
 #include "internal/platform/lin/alsamidiinport.h"
-static std::shared_ptr<IMidiOutPort> midiOutPort = std::make_shared<AlsaMidiOutPort>();
-static std::shared_ptr<IMidiInPort> midiInPort = std::make_shared<AlsaMidiInPort>();
+static std::shared_ptr<AlsaMidiOutPort> midiOutPort = std::make_shared<AlsaMidiOutPort>();
+static std::shared_ptr<AlsaMidiInPort> midiInPort = std::make_shared<AlsaMidiInPort>();
 
 #elif defined(Q_OS_WIN)
 #include "internal/platform/win/winmidioutport.h"
@@ -81,7 +81,12 @@ void MidiModule::registerUiTypes()
     qmlRegisterType<MidiPortDevModel>("MuseScore.Midi", 1, 0, "MidiPortDevModel");
 }
 
-void MidiModule::onInit(const framework::IApplication::RunMode&)
+void MidiModule::onInit(const framework::IApplication::RunMode& mode)
 {
     s_configuration->init();
+
+    if (mode == framework::IApplication::RunMode::Editor) {
+        midiOutPort->init();
+        midiInPort->init();
+    }
 }

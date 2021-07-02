@@ -39,12 +39,6 @@ struct mu::midi::CoreMidiOutPort::Core {
     int deviceID = -1;
 };
 
-CoreMidiOutPort::CoreMidiOutPort()
-{
-    m_core = std::unique_ptr<Core>(new Core());
-    initCore();
-}
-
 CoreMidiOutPort::~CoreMidiOutPort()
 {
     if (isConnected()) {
@@ -57,6 +51,12 @@ CoreMidiOutPort::~CoreMidiOutPort()
     if (m_core->client) {
         MIDIClientDispose(m_core->client);
     }
+}
+
+void CoreMidiOutPort::init()
+{
+    m_core = std::unique_ptr<Core>(new Core());
+    initCore();
 }
 
 void CoreMidiOutPort::initCore()

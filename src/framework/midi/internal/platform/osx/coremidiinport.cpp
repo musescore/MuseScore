@@ -38,12 +38,6 @@ struct mu::midi::CoreMidiInPort::Core {
     int deviceID = -1;
 };
 
-CoreMidiInPort::CoreMidiInPort()
-{
-    m_core = std::unique_ptr<Core>(new Core());
-    initCore();
-}
-
 CoreMidiInPort::~CoreMidiInPort()
 {
     if (isConnected()) {
@@ -57,6 +51,12 @@ CoreMidiInPort::~CoreMidiInPort()
     if (m_core->client) {
         MIDIClientDispose(m_core->client);
     }
+}
+
+void CoreMidiInPort::init()
+{
+    m_core = std::unique_ptr<Core>(new Core());
+    initCore();
 }
 
 MidiDeviceList CoreMidiInPort::devices() const
