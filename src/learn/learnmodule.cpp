@@ -63,7 +63,7 @@ void LearnModule::registerUiTypes()
     qmlRegisterType<LearnPageModel>("MuseScore.Learn", 1, 0, "LearnPageModel");
 }
 
-void LearnModule::onInit(const IApplication::RunMode&)
+void LearnModule::onDelayedInit()
 {
-    s_learnService->init();
+    s_learnService->refreshPlaylists();
 }

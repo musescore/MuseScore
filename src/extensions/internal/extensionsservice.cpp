@@ -47,7 +47,7 @@ QString downloadingStatusTitle()
 }
 }
 
-void ExtensionsService::init()
+void ExtensionsService::refreshExtensions()
 {
     if (configuration()->needCheckForUpdate()) {
         QtConcurrent::run(this, &ExtensionsService::th_refreshExtensions);

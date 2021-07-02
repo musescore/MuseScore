@@ -39,7 +39,7 @@ class ExtensionsService : public IExtensionsService, public async::Asyncable
     INJECT(extensions, network::INetworkManagerCreator, networkManagerCreator)
 
 public:
-    void init();
+    void refreshExtensions();
 
     ValCh<ExtensionsHash> extensions() const override;
     RetCh<ExtensionProgress> install(const QString& extensionCode) override;

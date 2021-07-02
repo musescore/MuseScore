@@ -40,15 +40,17 @@ class LearnService : public ILearnService, public async::Asyncable
     INJECT(learn, framework::IInteractive, interactive)
 
 public:
-    void init();
+    void refreshPlaylists();
 
     Playlist startedPlaylist() const override;
+    async::Channel<Playlist> startedPlaylistChanged() const override;
+
     Playlist advancedPlaylist() const override;
+    async::Channel<Playlist> advancedPlaylistChanged() const override;
 
     void openVideo(const std::string& videoId) const override;
 
 private:
-    void refreshPlaylists();
     void th_requestPlaylist(const QUrl& playlistUrl, async::Channel<RetVal<Playlist> >* finishChannel) const;
 
     void openUrl(const QUrl& url);
@@ -57,7 +59,10 @@ private:
     Playlist parsePlaylist(const QJsonDocument& playlistDoc) const;
 
     Playlist m_startedPlaylist;
+    async::Channel<Playlist> m_startedPlaylistChannel;
+
     Playlist m_advancedPlaylist;
+    async::Channel<Playlist> m_advancedPlaylistChannel;
 };
 }
 

@@ -72,6 +72,10 @@ void ExtensionsModule::onInit(const framework::IApplication::RunMode& runMode)
         return;
     }
 
-    m_extensionsService->init();
     m_extensionsConfiguration->init();
+}
+
+void ExtensionsModule::onDelayedInit()
+{
+    m_extensionsService->refreshExtensions();
 }
