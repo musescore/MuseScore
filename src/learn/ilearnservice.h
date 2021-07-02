@@ -23,7 +23,7 @@
 #define MU_LEARN_ILEARNSERVICE_H
 
 #include "modularity/imoduleexport.h"
-
+#include "async/channel.h"
 #include "learntypes.h"
 
 namespace mu::learn {
@@ -35,7 +35,10 @@ public:
     virtual ~ILearnService() = default;
 
     virtual Playlist startedPlaylist() const = 0;
+    virtual async::Channel<Playlist> startedPlaylistChanged() const = 0;
+
     virtual Playlist advancedPlaylist() const = 0;
+    virtual async::Channel<Playlist> advancedPlaylistChanged() const = 0;
 
     virtual void openVideo(const std::string& videoId) const = 0;
 };

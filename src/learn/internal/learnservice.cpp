@@ -33,27 +33,6 @@
 using namespace mu::learn;
 using namespace mu::network;
 
-void LearnService::init()
-{
-    refreshPlaylists();
-}
-
-Playlist LearnService::startedPlaylist() const
-{
-    return m_startedPlaylist;
-}
-
-Playlist LearnService::advancedPlaylist() const
-{
-    return m_advancedPlaylist;
-}
-
-void LearnService::openVideo(const std::string& videoId) const
-{
-    QUrl videoUrl = configuration()->videoOpenUrl(videoId);
-    interactive()->openUrl(videoUrl.toString().toStdString());
-}
-
 void LearnService::refreshPlaylists()
 {
     async::Channel<RetVal<Playlist> >* startedPlaylistFinishChannel = new async::Channel<RetVal<Playlist> >();
@@ -63,7 +42,12 @@ void LearnService::refreshPlaylists()
             return;
         }
 
+        if (m_startedPlaylist == result.val) {
+            return;
+        }
+
         m_startedPlaylist = result.val;
+        m_startedPlaylistChannel.send(m_startedPlaylist);
     });
 
     async::Channel<RetVal<Playlist> >* advancedPlaylistFinishChannel = new async::Channel<RetVal<Playlist> >();
@@ -73,11 +57,42 @@ void LearnService::refreshPlaylists()
             return;
         }
 
+        if (m_advancedPlaylist == result.val) {
+            return;
+        }
+
         m_advancedPlaylist = result.val;
+        m_advancedPlaylistChannel.send(m_advancedPlaylist);
     });
 
     QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->startedPlaylistUrl(), startedPlaylistFinishChannel);
     QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->advancedPlaylistUrl(), advancedPlaylistFinishChannel);
+}
+
+Playlist LearnService::startedPlaylist() const
+{
+    return m_startedPlaylist;
+}
+
+mu::async::Channel<Playlist> LearnService::startedPlaylistChanged() const
+{
+    return m_startedPlaylistChannel;
+}
+
+Playlist LearnService::advancedPlaylist() const
+{
+    return m_advancedPlaylist;
+}
+
+mu::async::Channel<Playlist> LearnService::advancedPlaylistChanged() const
+{
+    return m_advancedPlaylistChannel;
+}
+
+void LearnService::openVideo(const std::string& videoId) const
+{
+    QUrl videoUrl = configuration()->videoOpenUrl(videoId);
+    interactive()->openUrl(videoUrl.toString().toStdString());
 }
 
 void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<RetVal<Playlist> >* finishChannel) const
