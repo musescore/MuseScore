@@ -32,6 +32,7 @@
 
 using namespace mu::learn;
 using namespace mu::framework;
+using namespace mu::modularity;
 
 static std::shared_ptr<LearnConfiguration> s_learnConfiguration = std::make_shared<LearnConfiguration>();
 static std::shared_ptr<LearnService> s_learnService = std::make_shared<LearnService>();
