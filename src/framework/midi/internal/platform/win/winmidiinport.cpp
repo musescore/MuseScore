@@ -55,7 +55,14 @@ static std::string errorString(MMRESULT ret)
 }
 }
 
-WinMidiInPort::WinMidiInPort()
+WinMidiInPort::~WinMidiInPort()
+{
+    if (isConnected()) {
+        disconnect();
+    }
+}
+
+void WinMidiInPort::init()
 {
     m_win = std::unique_ptr<Win>(new Win());
 
@@ -66,13 +73,6 @@ WinMidiInPort::WinMidiInPort()
     m_devicesListener.devicesChanged().onNotify(this, [this]() {
         m_devicesChanged.notify();
     });
-}
-
-WinMidiInPort::~WinMidiInPort()
-{
-    if (isConnected()) {
-        disconnect();
-    }
 }
 
 MidiDeviceList WinMidiInPort::devices() const
