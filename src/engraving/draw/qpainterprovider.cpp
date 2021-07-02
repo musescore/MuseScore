@@ -35,10 +35,11 @@
 using namespace mu::draw;
 
 QPainterProvider::QPainterProvider(QPainter* painter, bool overship)
-    : m_painter(painter), m_overship(overship)
+    : m_painter(painter), m_overship(overship), m_drawObjectsLogger(new DrawObjectsLogger()),
+    m_font(mu::draw::fromQFont(m_painter->font())),
+    m_pen(Pen::fromQPen(m_painter->pen())),
+    m_brush(Brush::fromQBrush(m_painter->brush()))
 {
-    m_drawObjectsLogger = new DrawObjectsLogger();
-    m_font = mu::draw::fromQFont(m_painter->font());
 }
 
 QPainterProvider::~QPainterProvider()
@@ -132,29 +133,32 @@ const Font& QPainterProvider::font() const
     return m_font;
 }
 
-void QPainterProvider::setPen(const QPen& pen)
+void QPainterProvider::setPen(const Pen& pen)
 {
-    m_painter->setPen(pen);
+    m_pen = pen;
+    m_painter->setPen(Pen::toQPen(m_pen));
 }
 
 void QPainterProvider::setNoPen()
 {
-    m_painter->setPen(QPen(Qt::NoPen));
+    m_pen = Pen(PenStyle::NoPen);
+    m_painter->setPen(Pen::toQPen(m_pen));
 }
 
-const QPen& QPainterProvider::pen() const
+const Pen& QPainterProvider::pen() const
 {
-    return m_painter->pen();
+    return m_pen;
 }
 
-void QPainterProvider::setBrush(const QBrush& brush)
+void QPainterProvider::setBrush(const Brush& brush)
 {
-    m_painter->setBrush(brush);
+    m_brush = brush;
+    m_painter->setBrush(Brush::toQBrush(m_brush));
 }
 
-const QBrush& QPainterProvider::brush() const
+const Brush& QPainterProvider::brush() const
 {
-    return m_painter->brush();
+    return m_brush;
 }
 
 void QPainterProvider::save()
@@ -166,6 +170,8 @@ void QPainterProvider::restore()
 {
     m_painter->restore();
     m_font = mu::draw::fromQFont(m_painter->font());
+    m_pen = Pen::fromQPen(m_painter->pen());
+    m_brush = Brush::fromQBrush(m_painter->brush());
 }
 
 void QPainterProvider::setTransform(const QTransform& transform)

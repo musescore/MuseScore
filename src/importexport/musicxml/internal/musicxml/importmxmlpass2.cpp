@@ -3028,11 +3028,11 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
         }
 
         if (lineType == "solid") {
-            b->setLineStyle(Qt::SolidLine);
+            b->setLineStyle(mu::draw::PenStyle::SolidLine);
         } else if (lineType == "dashed") {
-            b->setLineStyle(Qt::DashLine);
+            b->setLineStyle(mu::draw::PenStyle::DashLine);
         } else if (lineType == "dotted") {
-            b->setLineStyle(Qt::DotLine);
+            b->setLineStyle(mu::draw::PenStyle::DotLine);
         } else {
             _logger->logError(QString("unsupported line-type: %1").arg(lineType.toString()), &_e);
         }
@@ -3073,7 +3073,7 @@ void MusicXMLParserDirection::dashes(const QString& type, const int number,
 
         b->setBeginHookType(HookType::NONE);
         b->setEndHookType(HookType::NONE);
-        b->setLineStyle(Qt::DashLine);
+        b->setLineStyle(mu::draw::PenStyle::DashLine);
         // TODO brackets and dashes now share the same storage
         // because they both use ElementType::TEXTLINE
         // use mxml specific type instead

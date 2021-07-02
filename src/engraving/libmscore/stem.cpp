@@ -31,6 +31,7 @@
 #include "tremolo.h"
 #include "note.h"
 #include "xml.h"
+#include "draw/brush.h"
 
 // TEMPORARY HACK!!
 #include "symid.h"
@@ -187,7 +188,7 @@ void Stem::draw(mu::draw::Painter* painter) const
     const StaffType* stt = st ? st->staffType(chord()->tick()) : 0;
     bool useTab          = stt && stt->isTabStaff();
 
-    painter->setPen(QPen(curColor(), lineWidthMag(), Qt::SolidLine, Qt::FlatCap));
+    painter->setPen(Pen(curColor(), lineWidthMag(), PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLine(line);
 
     if (!useTab) {
@@ -222,7 +223,7 @@ void Stem::draw(mu::draw::Painter* painter) const
             path.closeSubpath();
             y += displ;
         }
-        painter->setBrush(QBrush(curColor()));
+        painter->setBrush(Brush(curColor()));
         painter->setNoPen();
         painter->drawPath(path);
     }

@@ -25,9 +25,14 @@
  Implementation of classes Note and ShadowNote.
 */
 
+#include "note.h"
+
 #include <assert.h>
 
-#include "note.h"
+#include "config.h"
+#include "translation.h"
+#include "draw/brush.h"
+
 #include "score.h"
 #include "chord.h"
 #include "sym.h"
@@ -69,7 +74,6 @@
 #include <QtMath>
 #include <QVector2D>
 
-#include "config.h"
 #include "log.h"
 
 #ifdef USE_SCORE_ACCESSIBLE_TREE
@@ -389,7 +393,7 @@ static NoteHeadName noteHeadTypeNames[] = {
 
 QString NoteHead::scheme2userName(NoteHead::Scheme scheme)
 {
-    return qApp->translate("noteheadschemes", noteHeadSchemeNames[int(scheme) + 1].username);
+    return qtrc("noteheadschemes", noteHeadSchemeNames[int(scheme) + 1].username);
 }
 
 //---------------------------------------------------------
@@ -398,7 +402,7 @@ QString NoteHead::scheme2userName(NoteHead::Scheme scheme)
 
 QString NoteHead::group2userName(NoteHead::Group group)
 {
-    return qApp->translate("noteheadnames", noteHeadGroupNames[int(group)].username);
+    return qtrc("noteheadnames", noteHeadGroupNames[int(group)].username);
 }
 
 //---------------------------------------------------------
@@ -407,7 +411,7 @@ QString NoteHead::group2userName(NoteHead::Group group)
 
 QString NoteHead::type2userName(NoteHead::Type type)
 {
-    return qApp->translate("noteheadnames", noteHeadTypeNames[int(type) + 1].username);
+    return qtrc("noteheadnames", noteHeadTypeNames[int(type) + 1].username);
 }
 
 //---------------------------------------------------------
@@ -919,9 +923,9 @@ int Note::tpc() const
 QString Note::tpcUserName(const int tpc, const int pitch, const bool explicitAccidental)
 {
     const auto pitchStr
-        = qApp->translate("InspectorAmbitus",
-                          tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental).replace("b", "♭").replace("#",
-                                                                                                                                      "♯").toUtf8().constData());
+        = qtrc("InspectorAmbitus",
+               tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental).replace("b", "♭").replace("#",
+                                                                                                                           "♯").toUtf8().constData());
     const auto octaveStr = QString::number(((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1);
 
     return pitchStr + (explicitAccidental ? " " : "") + octaveStr;
@@ -1395,7 +1399,7 @@ void Note::draw(mu::draw::Painter* painter) const
             if (fretConflict() && !score()->printing() && score()->showUnprintable()) {                //on fret conflict, draw on red background
                 painter->save();
                 painter->setPen(Qt::red);
-                painter->setBrush(QBrush(QColor(Qt::red)));
+                painter->setBrush(mu::draw::Brush(QColor(Qt::red)));
                 painter->drawRect(bb);
                 painter->restore();
             }
@@ -3226,7 +3230,7 @@ QString Note::accessibleInfo() const
     if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH) {
         pitchName = chord()->noStem() ? QObject::tr("Beat slash") : QObject::tr("Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
-        pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
+        pitchName = qtrc("drumset", drumset->name(pitch()).toUtf8().constData());
     } else if (staff()->isTabStaff(tick())) {
         pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(false), QString::number(string() + 1), QString::number(fret()));
     } else {
@@ -3251,7 +3255,7 @@ QString Note::screenReaderInfo() const
     if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH) {
         pitchName = chord()->noStem() ? QObject::tr("Beat Slash") : QObject::tr("Rhythm Slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
-        pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
+        pitchName = qtrc("drumset", drumset->name(pitch()).toUtf8().constData());
     } else if (staff()->isTabStaff(tick())) {
         pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(true), QString::number(string() + 1), QString::number(fret()));
     } else {

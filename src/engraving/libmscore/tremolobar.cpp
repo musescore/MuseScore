@@ -27,6 +27,7 @@
 #include "chord.h"
 #include "note.h"
 #include "xml.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -109,7 +110,8 @@ void TremoloBar::layout()
 void TremoloBar::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
-    QPen pen(curColor(), m_lw.val(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    using namespace mu::draw;
+    Pen pen(curColor(), m_lw.val(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->drawPolyline(m_polygon);
 }

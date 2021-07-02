@@ -188,7 +188,7 @@ private:
     void startEdit();
     void apply();
 
-    void selectInternal(const std::vector<Element*>& elements, SelectType type, int staffIndex);
+    void doSelect(const std::vector<Element*>& elements, SelectType type, int staffIndex);
     void notifyAboutDragChanged();
     void notifyAboutDropChanged();
     void notifyAboutSelectionChanged();

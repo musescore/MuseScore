@@ -20,10 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "style.h"
+
 #include <QDebug>
 
+#include "translation.h"
+
 #include "mscore.h"
-#include "style.h"
 #include "xml.h"
 #include "score.h"
 #include "articulation.h"
@@ -275,14 +278,14 @@ static const StyleType styleTypes[] {
     { Sid::hairpinDecrescText,      "hairpinDecrescText",      QString("dim.") },
     { Sid::hairpinCrescContText,    "hairpinCrescContText",    QString("(cresc.)") },
     { Sid::hairpinDecrescContText,  "hairpinDecrescContText",  QString("(dim.)") },
-    { Sid::hairpinLineStyle,        "hairpinLineStyle",        QVariant(int(Qt::SolidLine)) },
-    { Sid::hairpinLineLineStyle,    "hairpinLineLineStyle",    QVariant(int(Qt::CustomDashLine)) },
+    { Sid::hairpinLineStyle,        "hairpinLineStyle",        QVariant(static_cast<int>(mu::draw::PenStyle::SolidLine)) },
+    { Sid::hairpinLineLineStyle,    "hairpinLineLineStyle",    QVariant(static_cast<int>(mu::draw::PenStyle::CustomDashLine)) },
 
     { Sid::pedalPlacement,          "pedalPlacement",          int(Placement::BELOW) },
     { Sid::pedalPosAbove,           "pedalPosAbove",           PointF(.0, -1) },
     { Sid::pedalPosBelow,           "pedalPosBelow",           PointF(.0, 2.5) },
     { Sid::pedalLineWidth,          "pedalLineWidth",          Spatium(0.11) },
-    { Sid::pedalLineStyle,          "pedalListStyle",          QVariant(int(Qt::SolidLine)) },
+    { Sid::pedalLineStyle,          "pedalListStyle",          QVariant(static_cast<int>(mu::draw::PenStyle::SolidLine)) },
     { Sid::pedalBeginTextOffset,    "pedalBeginTextOffset",    PointF(0.0, 0.15) },
     { Sid::pedalHookHeight,         "pedalHookHeight",         Spatium(-1.2) },
     { Sid::pedalFontFace,           "pedalFontFace",           "Edwin" },
@@ -508,7 +511,7 @@ static const StyleType styleTypes[] {
     { Sid::voltaPosAbove,           "voltaPosAbove",           PointF(0.0, -3.0) },
     { Sid::voltaHook,               "voltaHook",               Spatium(2.2) },
     { Sid::voltaLineWidth,          "voltaLineWidth",          Spatium(0.11) },
-    { Sid::voltaLineStyle,          "voltaLineStyle",          QVariant(int(Qt::SolidLine)) },
+    { Sid::voltaLineStyle,          "voltaLineStyle",          QVariant(static_cast<int>(mu::draw::PenStyle::SolidLine)) },
     { Sid::voltaFontFace,           "voltaFontFace",           "Edwin" },
     { Sid::voltaFontSize,           "voltaFontSize",           11.0 },
     { Sid::voltaLineSpacing,        "voltaLineSpacing",        1.0 },
@@ -562,7 +565,7 @@ static const StyleType styleTypes[] {
     { Sid::ottavaHookAbove,         "ottavaHookAbove",         Spatium(1) },
     { Sid::ottavaHookBelow,         "ottavaHookBelow",         Spatium(-1) },
     { Sid::ottavaLineWidth,         "ottavaLineWidth",         Spatium(0.11) },
-    { Sid::ottavaLineStyle,         "ottavaLineStyle",         QVariant(int(Qt::DashLine)) },
+    { Sid::ottavaLineStyle,         "ottavaLineStyle",         QVariant(static_cast<int>(mu::draw::PenStyle::DashLine)) },
     { Sid::ottavaNumbersOnly,       "ottavaNumbersOnly",       true },
     { Sid::ottavaFontFace,          "ottavaFontFace",          "Edwin" },
     { Sid::ottavaFontSize,          "ottavaFontSize",          10.0 },
@@ -1409,7 +1412,7 @@ static const StyleType styleTypes[] {
     { Sid::letRingPosAbove,               "letRingPosAbove",              PointF(.0, 0.0) },
     { Sid::letRingPosBelow,               "letRingPosBelow",              PointF(.0, 0.0) },
     { Sid::letRingLineWidth,              "letRingLineWidth",             Spatium(0.15) },
-    { Sid::letRingLineStyle,              "letRingLineStyle",             QVariant(int(Qt::DashLine)) },
+    { Sid::letRingLineStyle,              "letRingLineStyle",             QVariant(static_cast<int>(mu::draw::PenStyle::DashLine)) },
     { Sid::letRingBeginTextOffset,        "letRingBeginTextOffset",       PointF(0.0, 0.15) },
     { Sid::letRingText,                   "letRingText",                  "let ring" },
     { Sid::letRingFrameType,              "letRingFrameType",             int(FrameType::NO_FRAME) },
@@ -1432,7 +1435,7 @@ static const StyleType styleTypes[] {
     { Sid::palmMutePosAbove,              "palmMutePosAbove",              PointF(.0, -4.0) },
     { Sid::palmMutePosBelow,              "palmMutePosBelow",              PointF(.0, 4.0) },
     { Sid::palmMuteLineWidth,             "palmMuteLineWidth",             Spatium(0.15) },
-    { Sid::palmMuteLineStyle,             "palmMuteLineStyle",             QVariant(int(Qt::DashLine)) },
+    { Sid::palmMuteLineStyle,             "palmMuteLineStyle",             QVariant(static_cast<int>(mu::draw::PenStyle::DashLine)) },
     { Sid::palmMuteBeginTextOffset,       "palmMuteBeginTextOffset",       PointF(0.0, 0.15) },
     { Sid::palmMuteText,                  "palmMuteText",                  "P.M." },
     { Sid::palmMuteFrameType,             "palmMuteFrameType",             int(FrameType::NO_FRAME) },
@@ -2581,7 +2584,7 @@ const char* textStyleName(Tid idx)
 QString textStyleUserName(Tid idx)
 {
     Q_ASSERT(idx == textStyles[int(idx)].tid);
-    return qApp->translate("TextStyle", textStyleName(idx));
+    return qtrc("TextStyle", textStyleName(idx));
 }
 
 static std::vector<Tid> _allTextStyles;

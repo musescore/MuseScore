@@ -59,15 +59,18 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audiomodule.h
     ${CMAKE_CURRENT_LIST_DIR}/audioerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudioconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/isequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiostream.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
-    ${CMAKE_CURRENT_LIST_DIR}/iaudioprocessor.h
     ${CMAKE_CURRENT_LIST_DIR}/synthtypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/iplayer.h
+    ${CMAKE_CURRENT_LIST_DIR}/itracks.h
+    ${CMAKE_CURRENT_LIST_DIR}/iaudiooutput.h
+    ${CMAKE_CURRENT_LIST_DIR}/iplayback.h
 
     # Common internal
     ${CMAKE_CURRENT_LIST_DIR}/internal/iaudiobuffer.h
@@ -79,17 +82,17 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/audiomathutils.h
 
     # Driver
     ${DRIVER_SRC}
 
     # Worker
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/iaudioengine.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/imixer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/ifxprocessor.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/imixerchannel.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/iplayer.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/iaudioplayer.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/imidiplayer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/imixer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/playback.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/playback.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/abstractaudiosource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/abstractaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/samplerateconvertor.cpp
@@ -98,24 +101,42 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiostream.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audioplayer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audioplayer.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/midiplayer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/midiplayer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/midiaudiosource.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/midiaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sinesource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sinesource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/noisesource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/noisesource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audioengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audioengine.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sequencer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sequencer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/tracksequence.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/tracksequence.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/mixer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/mixer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/mixerchannel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/mixerchannel.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/iclock.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/clock.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/clock.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/equaliser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/equaliser.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/trackshandler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/trackshandler.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/playerhandler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/playerhandler.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiooutputhandler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiooutputhandler.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/itracksequence.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/igettracksequence.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/igettracks.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/isequenceplayer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/isequenceio.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sequenceplayer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sequenceplayer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sequenceio.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sequenceio.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/track.h
+
 
     # Synthesizers
     ${ZERBERUS_SRC}
@@ -151,16 +172,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcaudioenginecontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcaudioenginecontroller.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcsequencer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcsequencer.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcsequencercontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcsequencercontroller.h
-
     # DevTools
-    ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/devtools/audioenginedevtools.h
-    ${CMAKE_CURRENT_LIST_DIR}/devtools/audiodevtoolscontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/devtools/audiodevtoolscontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/waveformmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/devtools/waveformmodel.h
     )                           
 
 set(FLUIDSYNTH_DIR ${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth/fluidsynth-2.1.4)

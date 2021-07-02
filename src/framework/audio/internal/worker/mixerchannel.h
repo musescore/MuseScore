@@ -22,51 +22,48 @@
 #ifndef MU_AUDIO_MIXERCHANNEL_H
 #define MU_AUDIO_MIXERCHANNEL_H
 
-#include <complex>
-#include <memory>
-#include <map>
 #include "async/asyncable.h"
+
 #include "iaudiosource.h"
-#include "iaudioprocessor.h"
+#include "ifxprocessor.h"
 #include "imixerchannel.h"
-#include "abstractaudiosource.h"
 
 namespace mu::audio {
-class MixerChannel : public IMixerChannel, public AbstractAudioSource, public async::Asyncable
+class MixerChannel : public IMixerChannel, public IAudioSource, public async::Asyncable
 {
 public:
-    MixerChannel();
+    explicit MixerChannel(const MixerChannelId id, IAudioSourcePtr source, AudioOutputParams params,
+                          async::Channel<AudioOutputParams> paramsChanged, const unsigned int sampleRate);
 
-    unsigned int audioChannelsCount() const override;
-    void checkStreams();
-    void process(float* buffer, unsigned int sampleCount) override;
+    MixerChannelId id() const override;
+
+    async::Channel<audioch_t, float> signalAmplitudeRmsChanged() const override;
+    async::Channel<audioch_t, volume_dbfs_t> volumePressureDbfsChanged() const override;
+
+    bool isActive() const override;
+    void setIsActive(bool arg) override;
+
     void setSampleRate(unsigned int sampleRate) override;
+    unsigned int audioChannelsCount() const override;
+    async::Channel<unsigned int> audioChannelsCountChanged() const override;
+    void process(float* buffer, unsigned int sampleCount) override;
 
-    void setSource(std::shared_ptr<IAudioSource> source) override;
+private:
+    void setOutputParams(const AudioOutputParams& params);
+    void completeOutput(float* buffer, unsigned int samplesCount) const;
 
-    bool active() const override;
-    void setActive(bool active) override;
+    MixerChannelId m_id = -1;
 
-    float level(unsigned int streamId) const override;
-    void setLevel(float level) override;
-    void setLevel(unsigned int streamId, float level) override;
+    AudioOutputParams m_params;
 
-    std::complex<float> balance(unsigned int streamId) const override;
-    void setBalance(std::complex<float> value) override;
-    void setBalance(unsigned int streamId, std::complex<float> value) override;
+    IAudioSourcePtr m_audioSource = nullptr;
+    std::vector<IFxProcessorPtr> m_fxProcessors = {};
 
-    IAudioProcessorPtr processor(unsigned int number) const override;
-    void setProcessor(unsigned int number, IAudioProcessorPtr proc) override;
-
-protected:
-    void updateBalanceLevelMaps();
-
-    bool m_active = false;
-    std::shared_ptr<IAudioSource> m_source = nullptr;
-    std::map<unsigned int, std::complex<float> > m_balance = {};
-    std::map<unsigned int, float> m_level = {};
-    std::map<unsigned int, IAudioProcessorPtr > m_processorList = {};
+    mutable async::Channel<audioch_t, float> m_signalAmplitudeRmsChanged;
+    mutable async::Channel<audioch_t, volume_dbfs_t> m_volumePressureDbfsChanged;
 };
+
+using MixerChannelPtr = std::shared_ptr<MixerChannel>;
 }
 
 #endif // MU_AUDIO_MIXERCHANNEL_H

@@ -89,7 +89,7 @@ QVariant MidiDeviceMappingModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-QVariantMap MidiDeviceMappingModel::midiMappingToObject(const MidiMapping& midiMapping) const
+QVariantMap MidiDeviceMappingModel::midiMappingToObject(const MidiControlsMapping& midiMapping) const
 {
     UiAction action = uiActionsRegister()->action(midiMapping.action);
 
@@ -129,7 +129,7 @@ void MidiDeviceMappingModel::load()
     shortcuts::MidiMappingList midiMappings = midiRemote()->midiMappings();
 
     auto remoteEvent = [&midiMappings](const ActionCode& actionCode) {
-        for (const MidiMapping& midiMapping : midiMappings) {
+        for (const MidiControlsMapping& midiMapping : midiMappings) {
             if (midiMapping.action == actionCode) {
                 return midiMapping.event;
             }
@@ -142,7 +142,7 @@ void MidiDeviceMappingModel::load()
         UiAction action = uiActionsRegister()->action(actionCode);
 
         if (action.isValid()) {
-            MidiMapping midiMapping(actionCode);
+            MidiControlsMapping midiMapping(actionCode);
             midiMapping.event = remoteEvent(actionCode);
             m_midiMappings.push_back(midiMapping);
         }
@@ -154,7 +154,7 @@ void MidiDeviceMappingModel::load()
 bool MidiDeviceMappingModel::apply()
 {
     MidiMappingList midiMappings;
-    for (const MidiMapping& midiMapping : m_midiMappings) {
+    for (const MidiControlsMapping& midiMapping : m_midiMappings) {
         midiMappings.push_back(midiMapping);
     }
 
@@ -213,7 +213,7 @@ void MidiDeviceMappingModel::clearAllActions()
 {
     beginResetModel();
 
-    for (MidiMapping& midiMapping: m_midiMappings) {
+    for (MidiControlsMapping& midiMapping: m_midiMappings) {
         midiMapping.event = RemoteEvent();
     }
 
@@ -226,7 +226,7 @@ QVariant MidiDeviceMappingModel::currentAction() const
         return QVariant();
     }
 
-    MidiMapping midiMapping = m_midiMappings[m_selection.indexes().first().row()];
+    MidiControlsMapping midiMapping = m_midiMappings[m_selection.indexes().first().row()];
     return midiMappingToObject(midiMapping);
 }
 

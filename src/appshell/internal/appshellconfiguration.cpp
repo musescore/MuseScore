@@ -46,7 +46,6 @@ static const std::string MUSICXML_LICENSE_DEED_URL("https://www.w3.org/community
 static const std::string UTM_MEDIUM_MENU("menu");
 
 static const QString NOTATION_NAVIGATOR_VISIBLE_KEY("showNavigator");
-static const QString NOTATION_STATUSBAR_VISIBLE_KEY("showStatusBar");
 static const Settings::Key SPLASH_SCREEN_VISIBLE_KEY(module_name, "ui/application/startup/showSplashScreen");
 static const Settings::Key TOURS_VISIBLE_KEY(module_name, "ui/application/startup/showTours");
 
@@ -165,21 +164,6 @@ std::string AppShellConfiguration::museScoreRevision() const
 mu::ValCh<mu::io::paths> AppShellConfiguration::recentScorePaths() const
 {
     return userScoresConfiguration()->recentScorePaths();
-}
-
-bool AppShellConfiguration::isNotationStatusBarVisible() const
-{
-    return uiConfiguration()->isVisible(NOTATION_STATUSBAR_VISIBLE_KEY);
-}
-
-void AppShellConfiguration::setIsNotationStatusBarVisible(bool visible) const
-{
-    uiConfiguration()->setIsVisible(NOTATION_STATUSBAR_VISIBLE_KEY, visible);
-}
-
-mu::async::Notification AppShellConfiguration::isNotationStatusBarVisibleChanged() const
-{
-    return uiConfiguration()->isVisibleChanged(NOTATION_STATUSBAR_VISIBLE_KEY);
 }
 
 bool AppShellConfiguration::isNotationNavigatorVisible() const

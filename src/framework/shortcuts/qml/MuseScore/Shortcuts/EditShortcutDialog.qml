@@ -68,7 +68,7 @@ Dialog {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 width: parent.width
-                text: qsTrc("shortcuts", "Press up to four key combinations to enter shortcut sequence. \nNote: “Ctrl+Shift+1” is one key combination.")
+                text: qsTrc("shortcuts", "Define Keyboard Shortcut.")
             }
 
             Column {

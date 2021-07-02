@@ -37,7 +37,14 @@ struct mu::midi::AlsaMidiOutPort::Alsa {
 
 using namespace mu::midi;
 
-AlsaMidiOutPort::AlsaMidiOutPort()
+AlsaMidiOutPort::~AlsaMidiOutPort()
+{
+    if (isConnected()) {
+        disconnect();
+    }
+}
+
+void AlsaMidiOutPort::init()
 {
     m_alsa = std::unique_ptr<Alsa>(new Alsa());
 
@@ -59,13 +66,6 @@ AlsaMidiOutPort::AlsaMidiOutPort()
 
         m_devicesChanged.notify();
     });
-}
-
-AlsaMidiOutPort::~AlsaMidiOutPort()
-{
-    if (isConnected()) {
-        disconnect();
-    }
 }
 
 std::vector<MidiDevice> AlsaMidiOutPort::devices() const

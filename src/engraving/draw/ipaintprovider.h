@@ -24,12 +24,13 @@
 
 #include <memory>
 
-#include <QPen>
 #include <QColor>
 
 #include "geometry.h"
 #include "drawtypes.h"
 #include "font.h"
+#include "pen.h"
+#include "brush.h"
 
 namespace mu::draw {
 class Painter;
@@ -54,12 +55,12 @@ public:
     virtual void setFont(const Font& font) = 0;
     virtual const Font& font() const = 0;
 
-    virtual void setPen(const QPen& pen) = 0;
+    virtual void setPen(const Pen& pen) = 0;
     virtual void setNoPen() = 0;
-    virtual const QPen& pen() const = 0;
+    virtual const Pen& pen() const = 0;
 
-    virtual void setBrush(const QBrush& brush) = 0;
-    virtual const QBrush& brush() const = 0;
+    virtual void setBrush(const Brush& brush) = 0;
+    virtual const Brush& brush() const = 0;
 
     virtual void save() = 0;
     virtual void restore() = 0;

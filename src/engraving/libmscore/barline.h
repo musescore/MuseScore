@@ -23,8 +23,6 @@
 #ifndef __BARLINE_H__
 #define __BARLINE_H__
 
-#include <QApplication>
-
 #include "element.h"
 #include "mscore.h"
 
@@ -144,7 +142,6 @@ public:
     static BarLineType barLineType(const QString&);
 
     int subtype() const override { return int(_barLineType); }
-    QString subtypeName() const override { return qApp->translate("barline", barLineTypeName().toUtf8()); }
 
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;

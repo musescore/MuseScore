@@ -48,6 +48,8 @@ void DockPage::init()
     for (DockBase* dock : allDocks()) {
         dock->init();
     }
+
+    emit inited();
 }
 
 QString DockPage::uri() const
@@ -192,6 +194,20 @@ DockPanelHolder* DockPage::panelHolderByLocation(DockBase::DockLocation location
     }
 
     return nullptr;
+}
+
+bool DockPage::isDockShown(const QString& dockName) const
+{
+    const DockBase* dock = dockByName(dockName);
+    return dock ? dock->isShown() : false;
+}
+
+void DockPage::toggleDockVisibility(const QString& dockName)
+{
+    DockBase* dock = dockByName(dockName);
+    if (dock) {
+        dock->toggle();
+    }
 }
 
 void DockPage::setUri(const QString& uri)

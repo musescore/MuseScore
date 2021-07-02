@@ -31,6 +31,7 @@
 #include "undo.h"
 #include "textedit.h"
 #include "measure.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -469,13 +470,14 @@ void LyricsLineSegment::layout()
 void LyricsLineSegment::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     if (_numOfDashes < 1) {               // nothing to draw
         return;
     }
 
-    QPen pen(lyricsLine()->lyrics()->curColor());
+    Pen pen(lyricsLine()->lyrics()->curColor());
     pen.setWidthF(lyricsLine()->lineWidth());
-    pen.setCapStyle(Qt::FlatCap);
+    pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setPen(pen);
     if (lyricsLine()->isEndMelisma()) {               // melisma
         painter->drawLine(PointF(), pos2());

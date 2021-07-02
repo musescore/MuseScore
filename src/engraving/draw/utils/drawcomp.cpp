@@ -89,13 +89,13 @@ static bool isEqual(const QSize& sz1, const QSize& sz2)
     return true;
 }
 
-static bool isEqual(const QPen& p1, const QPen& p2)
+static bool isEqual(const Pen& p1, const Pen& p2)
 {
     if (p1.style() != p2.style()) {
         return false;
     }
 
-    if (p1.width() != p2.width()) {
+    if (!RealIsEqual(p1.widthF(), p2.widthF())) {
         return false;
     }
 
@@ -106,7 +106,7 @@ static bool isEqual(const QPen& p1, const QPen& p2)
     return true;
 }
 
-static bool isEqual(const QBrush& b1, const QBrush& b2)
+static bool isEqual(const Brush& b1, const Brush& b2)
 {
     if (b1.style() != b2.style()) {
         return false;

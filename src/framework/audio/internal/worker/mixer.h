@@ -24,60 +24,62 @@
 
 #include <memory>
 #include <map>
+
+#include "modularity/ioc.h"
+#include "async/asyncable.h"
+
 #include "imixer.h"
+#include "iaudioconfiguration.h"
 #include "abstractaudiosource.h"
 #include "mixerchannel.h"
 #include "clock.h"
 
 namespace mu::audio {
-class Mixer : public IMixer, public AbstractAudioSource, public std::enable_shared_from_this<Mixer>
+class Mixer : public IMixer, public AbstractAudioSource, public std::enable_shared_from_this<Mixer>, public async::Asyncable
 {
+    INJECT(audio, IAudioConfiguration, config)
+
 public:
     Mixer();
     ~Mixer();
 
     // IMixer
-    Mode mode() const override;
-    void setMode(const Mode& mode) override;
-
-    void setLevel(float level) override;
-
-    std::shared_ptr<IAudioProcessor> processor(unsigned int number) const override;
-    void setProcessor(unsigned int number, std::shared_ptr<IAudioProcessor> insert) override;
-
     IAudioSourcePtr mixedSource() override;
 
-    ChannelID addChannel(std::shared_ptr<IAudioSource> source) override;
-    void removeChannel(ChannelID channelId) override;
-    std::shared_ptr<IMixerChannel> channel(unsigned int number) const override;
+    RetVal<IMixerChannelPtr> addChannel(IAudioSourcePtr source, const AudioOutputParams& params,
+                                        async::Channel<AudioOutputParams> paramsChanged) override;
+    Ret removeChannel(const MixerChannelId id) override;
 
-    void setActive(ChannelID channelId, bool active) override;
-    void setLevel(ChannelID channelId, unsigned int streamId, float level) override;
-    void setBalance(ChannelID channelId, unsigned int streamId, std::complex<float> balance) override;
+    void addClock(IClockPtr clock) override;
+    void removeClock(IClockPtr clock) override;
 
-    // IAudioSource (AbstractAudioSource)
+    AudioOutputParams masterOutputParams() const override;
+    void setMasterOutputParams(const AudioOutputParams& params) override;
+    async::Channel<AudioOutputParams> masterOutputParamsChanged() const override;
+
+    async::Channel<audioch_t, float> masterSignalAmplitudeRmsChanged() const override;
+    async::Channel<audioch_t, volume_dbfs_t> masterVolumePressureDbfsChanged() const override;
+
+    // IAudioSource
     void setSampleRate(unsigned int sampleRate) override;
-
     unsigned int audioChannelsCount() const override;
-
     void process(float* outBuffer, unsigned int samplesPerChannel) override;
 
-    // Self
-
-    void setClock(std::shared_ptr<Clock> clock);
-
 private:
-    //! mix the channel in to the buffer
-    void mixinChannel(float* outBuffer, float* inBuffer, std::shared_ptr<MixerChannel> channel, unsigned int samplesCount);
-    void mixinChannelStream(float* outBuffer, float* inBuffer, std::shared_ptr<MixerChannel> channel, unsigned int streamId,
-                            unsigned int samplesCount);
+    void mixOutput(float* outBuffer, float* inBuffer, unsigned int samplesCount);
 
-    Mode m_mode = STEREO;
-    float m_masterLevel = 1.f;
     std::vector<float> m_writeCacheBuff;
-    std::map<ChannelID, std::shared_ptr<MixerChannel> > m_inputList = {};
-    std::map<unsigned int, std::shared_ptr<IAudioProcessor> > m_insertList = {};
-    std::shared_ptr<Clock> m_clock;
+
+    AudioOutputParams m_masterParams;
+    async::Channel<AudioOutputParams> m_globalOutputParamsChanged;
+    std::vector<IFxProcessorPtr> m_globalFxProcessors = {};
+
+    std::map<MixerChannelId, MixerChannelPtr> m_mixerChannels = {};
+
+    std::set<IClockPtr> m_clocks;
+
+    async::Channel<audioch_t, float> m_masterSignalAmplitudeRmsChanged;
+    async::Channel<audioch_t, volume_dbfs_t> m_masterVolumePressureDbfsChanged;
 };
 }
 

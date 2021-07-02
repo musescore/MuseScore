@@ -28,8 +28,10 @@
 #include "imageStore.h"
 
 #include "draw/transform.h"
+#include "draw/svgrenderer.h"
 
 using namespace mu;
+using namespace mu::draw;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -77,7 +79,7 @@ Image::Image(const Image& img)
     if (imageType == ImageType::RASTER) {
         rasterDoc = img.rasterDoc ? new QImage(*img.rasterDoc) : 0;
     } else if (imageType == ImageType::SVG) {
-        svgDoc = img.svgDoc ? new QSvgRenderer(_storeItem->buffer()) : 0;
+        svgDoc = img.svgDoc ? new SvgRenderer(_storeItem->buffer()) : 0;
     }
     setZ(img.z());
 }
@@ -123,7 +125,12 @@ SizeF Image::imageSize() const
     if (!isValid()) {
         return SizeF();
     }
-    return SizeF::fromQSizeF(imageType == ImageType::RASTER ? rasterDoc->size() : svgDoc->defaultSize());
+
+    if (imageType == ImageType::RASTER) {
+        return SizeF::fromQSizeF(rasterDoc->size());
+    }
+
+    return svgDoc->defaultSize();
 }
 
 //---------------------------------------------------------
@@ -138,7 +145,7 @@ void Image::draw(mu::draw::Painter* painter) const
         if (!svgDoc) {
             emptyImage = true;
         } else {
-            svgDoc->render(painter->qpainter(), bbox().toQRectF());
+            svgDoc->render(painter, bbox());
         }
     } else if (imageType == ImageType::RASTER) {
         if (rasterDoc == nullptr) {
@@ -174,14 +181,14 @@ void Image::draw(mu::draw::Painter* painter) const
         }
     }
     if (emptyImage) {
-        painter->setBrush(Qt::NoBrush);
+        painter->setBrush(mu::draw::BrushStyle::NoBrush);
         painter->setPen(Qt::black);
         painter->drawRect(bbox());
         painter->drawLine(0.0, 0.0, bbox().width(), bbox().height());
         painter->drawLine(bbox().width(), 0.0, 0.0, bbox().height());
     }
     if (selected() && !(score() && score()->printing())) {
-        painter->setBrush(Qt::NoBrush);
+        painter->setBrush(mu::draw::BrushStyle::NoBrush);
         painter->setPen(MScore::selectColor[0]);
         painter->drawRect(bbox());
     }
@@ -536,7 +543,7 @@ void Image::layout()
     setPos(0.0, 0.0);
     if (imageType == ImageType::SVG && !svgDoc) {
         if (_storeItem) {
-            svgDoc = new QSvgRenderer(_storeItem->buffer());
+            svgDoc = new SvgRenderer(_storeItem->buffer());
         }
     } else if (imageType == ImageType::RASTER && !rasterDoc) {
         if (_storeItem) {

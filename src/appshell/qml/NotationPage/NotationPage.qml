@@ -44,10 +44,7 @@ DockPage {
     property var color: ui.theme.backgroundPrimaryColor
     property var borderColor: ui.theme.strokeColor
 
-    property bool isNotationToolBarVisible: false
-    property bool isPlaybackToolBarVisible: false
-    property bool isUndoRedoToolBarVisible: false
-    property bool isNotationNavigatorVisible: false
+    property DockWindow dockWindow: null
 
     property var topToolKeyNavSec
 
@@ -78,27 +75,19 @@ DockPage {
         return keynavLeftPanelSec
     }
 
-    function updatePageState() {
-        var states = [
-                    {"Palette": palettePanel.visible},
-                    {"Instruments": instrumentsPanel.visible},
-                    {"Inspector": inspectorPanel.visible},
-                    {"NotationToolBar": isNotationToolBarVisible},
-                    {"PlaybackToolBar": isPlaybackToolBarVisible},
-                    {"UndoRedoToolBar": isUndoRedoToolBarVisible}
-                ]
+    onInited: {
+        pageModel.setNotationToolBarDockName(notationToolBar.objectName)
+        pageModel.setPlaybackToolBarDockName(playbackToolBar.objectName)
+        pageModel.setUndoRedoToolBarDockName(undoRedoToolBar.objectName)
+        pageModel.setNoteInputBarDockName(noteInputBar.objectName)
+        pageModel.setInspectorPanelDockName(inspectorPanel.objectName)
+        pageModel.setInstrumentsPanelDockName(instrumentsPanel.objectName)
+        pageModel.setPalettePanelDockName(palettePanel.objectName)
+        pageModel.setPianoRollDockName(pianoRollPanel.objectName)
+        pageModel.setMixerDockName(mixerPanel.objectName)
+        pageModel.setStatusBarDockName(notationStatusBar.objectName)
 
-        pageModel.setPanelsState(states)
-    }
-
-    Component.onCompleted: {
-        updatePageState()
-
-        palettePanel.visible = Qt.binding(function() { return pageModel.isPalettePanelVisible })
-        instrumentsPanel.visible = Qt.binding(function() { return pageModel.isInstrumentsPanelVisible })
-        inspectorPanel.visible = Qt.binding(function() { return pageModel.isInspectorPanelVisible })
-
-        pageModel.init()
+        Qt.callLater(pageModel.init, root.dockWindow)
     }
 
     readonly property int defaultPanelWidth: 260
@@ -194,10 +183,6 @@ DockPage {
 
             tabifyPanel: instrumentsPanel
 
-            onClosed: {
-                root.pageModel.isPalettePanelVisible = false
-            }
-
             PalettesWidget {
                 navigationSection: palettePanel.navigationSection
             }
@@ -217,10 +202,6 @@ DockPage {
 
             tabifyPanel: inspectorPanel
 
-            onClosed: {
-                root.pageModel.isInstrumentsPanelVisible = false
-            }
-
             InstrumentsPanel {
                 navigationSection: instrumentsPanel.navigationSection
             }
@@ -237,10 +218,6 @@ DockPage {
             width: root.defaultPanelWidth
             minimumWidth: root.defaultPanelWidth
             maximumWidth: root.defaultPanelWidth
-
-            onClosed: {
-                root.pageModel.isInspectorPanelVisible = false
-            }
 
             InspectorForm {
                 navigationSection: inspectorPanel.navigationSection
@@ -307,7 +284,7 @@ DockPage {
     central: NotationView {
         id: notationView
 
-        isNavigatorVisible: root.pageModel.isNotationNavigatorVisible
+        isNavigatorVisible: pageModel.isNavigatorVisible
 
         onTextEdittingStarted: {
             notationView.forceActiveFocus()
@@ -321,7 +298,6 @@ DockPage {
 
         NotationStatusBar {
             color: root.color
-            visible: root.pageModel.isStatusBarVisible
         }
     }
 }

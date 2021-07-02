@@ -21,100 +21,105 @@
  */
 #include "clock.h"
 
+#include "audioerrors.h"
+
+using namespace mu;
 using namespace mu::audio;
 
 Clock::Clock()
 {
+    m_status.set(PlaybackStatus::Stopped);
 }
 
-Clock::time_t Clock::time() const
+msecs_t Clock::currentTime() const
 {
     return m_time;
 }
 
-float Clock::timeInSeconds() const
+void Clock::forward(const msecs_t nextMsecs)
 {
-    return m_time / static_cast<float>(m_sampleRate);
-}
-
-Clock::time_t Clock::timeInMiliSeconds() const
-{
-    return m_time * 1000 / m_sampleRate;
-}
-
-void Clock::setSampleRate(unsigned int sampleRate)
-{
-    m_sampleRate = sampleRate;
-}
-
-void Clock::forward(Clock::time_t samples)
-{
-    auto deltaMiliseconds = samples * 1000 / m_sampleRate;
-    runCallbacks(m_beforeCallbacks, deltaMiliseconds);
-
-    if (m_status == Running) {
-        m_time += samples;
-        m_timeChanged.send(m_time);
-        runCallbacks(m_afterCallbacks, deltaMiliseconds);
+    if (!isRunning()) {
+        return;
     }
+
+    m_time += nextMsecs;
+
+    if (m_timeLoopStart < m_timeLoopEnd && m_time >= m_timeLoopEnd) {
+        seek(m_timeLoopStart);
+    }
+
+    m_timeChanged.send(m_time);
 }
 
 void Clock::start()
 {
-    m_status = Running;
+    m_status.set(PlaybackStatus::Running);
 }
 
 void Clock::reset()
 {
-    m_time = 0;
+    seek(0);
+    resetTimeLoop();
 }
 
 void Clock::stop()
 {
-    m_status = Stoped;
-    reset();
+    m_status.set(PlaybackStatus::Stopped);
+    seek(0);
 }
 
 void Clock::pause()
 {
-    m_status = Paused;
+    m_status.set(PlaybackStatus::Paused);
 }
 
-void Clock::seek(time_t time)
+void Clock::resume()
 {
-    m_time = time;
+    m_status.set(PlaybackStatus::Running);
+    seek(m_time);
+}
+
+void Clock::seek(const msecs_t msecs)
+{
+    m_time = msecs;
     m_timeChanged.send(m_time);
+    m_seekOccurred.notify();
 }
 
-void Clock::seekMiliseconds(Clock::time_t value)
+Ret Clock::setTimeLoop(const msecs_t fromMsec, const msecs_t toMsec)
 {
-    m_time = value * m_sampleRate / 1000;
-    m_timeChanged.send(m_time);
+    if (fromMsec >= toMsec) {
+        return make_ret(Err::InvalidTimeLoop);
+    }
+
+    m_timeLoopStart = fromMsec;
+    m_timeLoopEnd = toMsec;
+
+    return Ret(Ret::Code::Ok);
 }
 
-void Clock::seekSeconds(float seconds)
+void Clock::resetTimeLoop()
 {
-    seek(seconds * m_sampleRate);
+    m_timeLoopStart = 0;
+    m_timeLoopEnd = 0;
 }
 
-mu::async::Channel<Clock::time_t> Clock::timeChanged() const
+bool Clock::isRunning() const
+{
+    return m_status.val == PlaybackStatus::Running;
+}
+
+async::Channel<msecs_t> Clock::timeChanged() const
 {
     return m_timeChanged;
 }
 
-void Clock::addBeforeCallback(Clock::SyncCallback callback)
+async::Notification Clock::seekOccurred() const
 {
-    m_beforeCallbacks.push_back(callback);
+    return m_seekOccurred;
 }
 
-void Clock::addAfterCallback(Clock::SyncCallback callback)
+async::Channel<PlaybackStatus> Clock::statusChanged() const
 {
-    m_afterCallbacks.push_back(callback);
-}
-
-void Clock::runCallbacks(const std::list<Clock::SyncCallback>& list, time_t milliseconds)
-{
-    for (auto& callback : list) {
-        callback(milliseconds);
-    }
+    return m_status.ch;
 }

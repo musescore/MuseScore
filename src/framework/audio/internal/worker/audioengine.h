@@ -23,25 +23,21 @@
 #define MU_AUDIO_AUDIOENGINE_H
 
 #include <memory>
-#include <map>
-#include <set>
 
-#include "iaudioengine.h"
 #include "modularity/ioc.h"
-
-#include "ret.h"
+#include "async/asyncable.h"
 #include "retval.h"
 
-#include "mixer.h"
-#include "internal/audiobuffer.h"
-#include "sequencer.h"
-#include "async/asyncable.h"
 #include "isoundfontsprovider.h"
+#include "iaudiodriver.h"
 #include "isynthesizersregister.h"
+#include "imixer.h"
+
 #include "internal/synthesizers/synthesizercontroller.h"
+#include "internal/iaudiobuffer.h"
 
 namespace mu::audio {
-class AudioEngine : public IAudioEngine, public async::Asyncable
+class AudioEngine : public async::Asyncable
 {
     INJECT(audio, synth::ISoundFontsProvider, soundFontsProvider)
     INJECT(audio, synth::ISynthesizersRegister, synthesizersRegister)
@@ -57,13 +53,13 @@ public:
     void setSampleRate(unsigned int sampleRate);
     void setReadBufferSize(uint16_t readBufferSize);
 
-    bool isInited() const override;
-    async::Channel<bool> initChanged() const override;
-    unsigned int sampleRate() const override;
-    std::shared_ptr<IMixer> mixer() const override;
-    std::shared_ptr<ISequencer> sequencer() const override;
-    IAudioBufferPtr buffer() const override;
-    void setAudioBuffer(IAudioBufferPtr buffer) override;
+    bool isInited() const;
+    async::Channel<bool> initChanged() const;
+    unsigned int sampleRate() const;
+    IMixerPtr mixer() const;
+    void setMixer(IMixerPtr mixerPtr);
+    IAudioBufferPtr buffer() const;
+    void setAudioBuffer(IAudioBufferPtr buffer);
 
 private:
 
@@ -72,13 +68,11 @@ private:
     bool m_inited = false;
     mu::async::Channel<bool> m_initChanged;
     unsigned int m_sampleRate = 0;
-    std::shared_ptr<Sequencer> m_sequencer = nullptr;
-    std::shared_ptr<IAudioDriver> m_driver = nullptr;
-    std::shared_ptr<Mixer> m_mixer = nullptr;
-    std::shared_ptr<IAudioBuffer> m_buffer = nullptr;
+
+    IMixerPtr m_mixer = nullptr;
+    IAudioBufferPtr m_buffer = nullptr;
 
     // synthesizers
-
     std::shared_ptr<synth::SynthesizerController> m_synthesizerController = nullptr;
 };
 }

@@ -113,6 +113,8 @@
 #include "palmmute.h"
 #include "fermata.h"
 #include "shape.h"
+
+#include "draw/pen.h"
 //#include "musescoreCore.h"
 
 #include "config.h"
@@ -2154,13 +2156,14 @@ void EditData::addData(ElementEditData* ed)
 
 void Element::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
-    QPen pen(MScore::defaultColor, 0.0);
+    using namespace mu::draw;
+    Pen pen(MScore::defaultColor, 0.0);
     p->setPen(pen);
     for (int i = 0; i < ed.grips; ++i) {
         if (Grip(i) == ed.curGrip) {
             p->setBrush(MScore::frameMarginColor);
         } else {
-            p->setBrush(Qt::NoBrush);
+            p->setBrush(BrushStyle::NoBrush);
         }
         p->drawRect(ed.grip[i]);
     }

@@ -63,10 +63,6 @@ public:
 
     virtual ValCh<io::paths> recentScorePaths() const = 0;
 
-    virtual bool isNotationStatusBarVisible() const = 0;
-    virtual void setIsNotationStatusBarVisible(bool visible) const = 0;
-    virtual async::Notification isNotationStatusBarVisibleChanged() const = 0;
-
     virtual bool isNotationNavigatorVisible() const = 0;
     virtual void setIsNotationNavigatorVisible(bool visible) const = 0;
     virtual async::Notification isNotationNavigatorVisibleChanged() const = 0;

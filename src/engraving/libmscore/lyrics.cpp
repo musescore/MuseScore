@@ -22,7 +22,7 @@
 
 #include "lyrics.h"
 
-#include <QClipboard>
+#include <QGuiApplication>
 #include <QRegularExpression>
 
 #include "chord.h"
@@ -405,15 +405,9 @@ void Lyrics::layout2(int nAbove)
 //   paste
 //---------------------------------------------------------
 
-void Lyrics::paste(EditData& ed)
+void Lyrics::paste(EditData& ed, const QString& txt)
 {
     MuseScoreView* scoreview = ed.view();
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-    QClipboard::Mode mode = QClipboard::Clipboard;
-#else
-    QClipboard::Mode mode = QClipboard::Selection;
-#endif
-    QString txt = QApplication::clipboard()->text(mode);
     QString regex = QString("[^\\S") + QChar(0xa0) + QChar(0x202F) + "]+";
     QStringList sl = txt.split(QRegExp(regex), Qt::SkipEmptyParts);
     if (sl.empty()) {
@@ -460,9 +454,7 @@ void Lyrics::paste(EditData& ed)
     }
 
     score()->endCmd();
-    txt = sl.join(" ");
 
-    QApplication::clipboard()->setText(txt, mode);
     if (minus) {
         scoreview->lyricsMinus();
     } else if (underscore) {

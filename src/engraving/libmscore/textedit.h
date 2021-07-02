@@ -40,6 +40,8 @@ struct TextEditData : public ElementEditData {
     TextBase* _textBase = nullptr;
     bool deleteText = false;
 
+    QString selectedText;
+
     TextEditData(TextBase* t)
         : _textBase(t) {}
     TextEditData(const TextEditData&) = delete;

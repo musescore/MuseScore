@@ -77,12 +77,16 @@ public:
     DockToolBarHolder* toolBarHolderByLocation(DockBase::DockLocation location) const;
     DockPanelHolder* panelHolderByLocation(DockBase::DockLocation location) const;
 
+    bool isDockShown(const QString& dockName) const;
+    void toggleDockVisibility(const QString& dockName);
+
 public slots:
     void setUri(const QString& uri);
     void setCentralDock(DockCentral* central);
     void setStatusBar(DockStatusBar* statusBar);
 
 signals:
+    void inited();
     void uriChanged(const QString& uri);
     void centralDockChanged(DockCentral* central);
     void statusBarChanged(DockStatusBar* statusBar);

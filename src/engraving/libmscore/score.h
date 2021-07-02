@@ -837,7 +837,6 @@ public:
 
     void changeSelectedNotesVoice(int);
 
-    void colorItem(Element*);
     QList<Part*>& parts() { return _parts; }
     const QList<Part*>& parts() const { return _parts; }
 

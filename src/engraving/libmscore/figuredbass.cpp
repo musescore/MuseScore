@@ -24,6 +24,7 @@
 #include "score.h"
 #include "note.h"
 #include "measure.h"
+#include "draw/pen.h"
 #include "system.h"
 #include "segment.h"
 #include "chord.h"
@@ -617,6 +618,7 @@ void FiguredBassItem::layout()
 void FiguredBassItem::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     int font = 0;
     qreal _spatium = spatium();
     // set font from general style
@@ -627,8 +629,8 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
     f.setPointSizeF(m * MScore::pixelRatio);
 
     painter->setFont(f);
-    painter->setBrush(Qt::NoBrush);
-    QPen pen(figuredBass()->curColor(), FB_CONTLINE_THICKNESS * _spatium, Qt::SolidLine, Qt::RoundCap);
+    painter->setBrush(BrushStyle::NoBrush);
+    Pen pen(figuredBass()->curColor(), FB_CONTLINE_THICKNESS * _spatium, PenStyle::SolidLine, PenCapStyle::RoundCap);
     painter->setPen(pen);
     painter->drawText(bbox(), Qt::TextDontClip | Qt::AlignLeft | Qt::AlignTop, displayText());
 
@@ -1306,7 +1308,8 @@ void FiguredBass::layoutLines()
         // probably be implemented.
     }
 
-    int i, len, segIdx;
+    int i, len;
+    size_t segIdx = 0;
     for (i = sysIdx1, segIdx = 0; i <= sysIdx2; ++i, ++segIdx) {
         len = 0;
         if (sysIdx1 == sysIdx2 || i == sysIdx1) {
@@ -1326,7 +1329,7 @@ void FiguredBass::layoutLines()
         }
         // store length item, reusing array items if already present
         if (_lineLengths.size() <= segIdx) {
-            _lineLengths.append(len);
+            _lineLengths.push_back(len);
         } else {
             _lineLengths[segIdx] = len;
         }
@@ -1343,11 +1346,12 @@ void FiguredBass::layoutLines()
 
 void FiguredBass::draw(mu::draw::Painter* painter) const
 {
+    using namespace mu::draw;
     // if not printing, draw duration line(s)
     if (!score()->printing() && score()->showUnprintable()) {
         for (qreal len : _lineLengths) {
             if (len > 0) {
-                painter->setPen(QPen(Qt::lightGray, 3));
+                painter->setPen(Pen(Qt::lightGray, 3));
                 painter->drawLine(0.0, -2, len, -2);              // -2: 2 rast. un. above digits
             }
         }

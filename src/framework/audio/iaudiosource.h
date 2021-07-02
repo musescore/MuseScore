@@ -25,13 +25,21 @@
 
 #include <memory>
 #include <vector>
+
 #include "async/channel.h"
+
+#include "audiotypes.h"
 
 namespace mu::audio {
 class IAudioSource
 {
 public:
     virtual ~IAudioSource() = default;
+
+    virtual bool isActive() const = 0;
+    virtual void setIsActive(bool arg) = 0;
+
+    virtual void seek(const msecs_t newPositionMsecs) { UNUSED(newPositionMsecs) }
 
     //! set current sample rate. Called by destination.
     virtual void setSampleRate(unsigned int sampleRate) = 0;

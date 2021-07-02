@@ -22,13 +22,15 @@
 #ifndef MU_AUDIO_EQUALISER_H
 #define MU_AUDIO_EQUALISER_H
 
-#include "iaudioprocessor.h"
+#include "ifxprocessor.h"
 
 namespace mu::audio {
-class Equaliser : public IAudioProcessor
+class Equaliser : public IFxProcessor
 {
 public:
     Equaliser();
+
+    FxProcessorId id() const override;
 
     unsigned int streamCount() const override;
     void setSampleRate(unsigned int sampleRate) override;

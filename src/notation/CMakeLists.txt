@@ -113,6 +113,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconverter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/scoreorderconverter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/scoreorderconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/inotationmidievents.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidievents.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidievents.h
     ${CMAKE_CURRENT_LIST_DIR}/view/inotationcontextmenu.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h
