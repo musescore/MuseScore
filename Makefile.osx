@@ -35,6 +35,7 @@ MUSESCORE_BUILD_CONFIG="dev"
 MUSESCORE_REVISION=""
 BUILD_VST="OFF"
 VST3_SDK_PATH=""
+YOUTUBE_API_KEY=""
 
 XCODEPROJ = mscore.xcodeproj
 
@@ -54,6 +55,7 @@ release:
 	      -DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" \
 	      -DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
 	      -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
+	      -DYOUTUBE_API_KEY="${YOUTUBE_API_KEY}" \
 	      .. -G Xcode; \
 	xcodebuild -project ${XCODEPROJ} -target lrelease; \
 	$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target ALL_BUILD $(FORMATTER_END); \
@@ -110,6 +112,7 @@ ci:
 	      -DMUSESCORE_BUILD_CONFIG="${MUSESCORE_BUILD_CONFIG}" \
 	      -DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
 	      -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
+	      -DYOUTUBE_API_KEY="${YOUTUBE_API_KEY}" \
 	      -DCRASH_REPORT_URL="${CRASH_REPORT_URL}" \
 	      .. -G Xcode; \
 	xcodebuild -project ${XCODEPROJ} -target lrelease; \
