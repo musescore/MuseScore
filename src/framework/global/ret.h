@@ -77,7 +77,10 @@ public:
         VstLast         = 1499,
 
         WorkspaceFirst  = 1500,
-        WorkspaceLast   = 1599
+        WorkspaceLast   = 1599,
+
+        LearnFirst      = 1600,
+        LearnLast       = 1699
     };
 
     Ret() = default;

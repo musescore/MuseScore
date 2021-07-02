@@ -25,46 +25,27 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QBuffer>
+#include <QtConcurrent>
 
 #include "log.h"
+#include "learnerrors.h"
 
 using namespace mu::learn;
 using namespace mu::network;
 
-LearnService::LearnService(QObject* parent)
-    : QObject(parent)
-{
-}
-
 void LearnService::init()
 {
-    TRACEFUNC;
-
-    m_networkManager = networkManagerCreator()->makeNetworkManager();
+    refreshPlaylists();
 }
 
 Playlist LearnService::startedPlaylist() const
 {
-    TRACEFUNC;
-
-    QUrl playlistUrl = configuration()->startedPlaylistUrl();
-    if (playlistUrl.isEmpty()) {
-        return {};
-    }
-
-    return requestPlaylist(playlistUrl);
+    return m_startedPlaylist;
 }
 
 Playlist LearnService::advancedPlaylist() const
 {
-    TRACEFUNC;
-
-    QUrl playlistUrl = configuration()->advancedPlaylistUrl();
-    if (playlistUrl.isEmpty()) {
-        return {};
-    }
-
-    return requestPlaylist(playlistUrl);
+    return m_advancedPlaylist;
 }
 
 void LearnService::openVideo(const std::string& videoId) const
@@ -73,35 +54,69 @@ void LearnService::openVideo(const std::string& videoId) const
     interactive()->openUrl(videoUrl.toString().toStdString());
 }
 
-Playlist LearnService::requestPlaylist(const QUrl& playlistUrl) const
+void LearnService::refreshPlaylists()
 {
+    async::Channel<RetVal<Playlist> >* startedPlaylistFinishChannel = new async::Channel<RetVal<Playlist> >();
+    startedPlaylistFinishChannel->onReceive(this, [this](const RetVal<Playlist>& result) {
+        if (!result.ret) {
+            LOGW() << result.ret.toString();
+            return;
+        }
+
+        m_startedPlaylist = result.val;
+    });
+
+    async::Channel<RetVal<Playlist> >* advancedPlaylistFinishChannel = new async::Channel<RetVal<Playlist> >();
+    advancedPlaylistFinishChannel->onReceive(this, [this](const RetVal<Playlist>& result) {
+        if (!result.ret) {
+            LOGW() << result.ret.toString();
+            return;
+        }
+
+        m_advancedPlaylist = result.val;
+    });
+
+    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->startedPlaylistUrl(), startedPlaylistFinishChannel);
+    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->advancedPlaylistUrl(), advancedPlaylistFinishChannel);
+}
+
+void LearnService::th_requestPlaylist(const QUrl& playlistUrl, async::Channel<RetVal<Playlist> >* finishChannel) const
+{
+    TRACEFUNC;
+
+    network::INetworkManagerPtr networkManager = networkManagerCreator()->makeNetworkManager();
     RequestHeaders headers = configuration()->headers();
 
     QBuffer playlistItemsData;
-    Ret playlistItems = m_networkManager->get(playlistUrl, &playlistItemsData, headers);
-    if (!playlistItems) {
-        LOGE() << playlistItems.toString();
-        return {};
+    Ret playlistItemsRet = networkManager->get(playlistUrl, &playlistItemsData, headers);
+    if (!playlistItemsRet) {
+        finishChannel->send(playlistItemsRet);
+        return;
     }
 
     QVariantMap playlistInfo = QJsonDocument::fromJson(playlistItemsData.data()).toVariant().toMap();
 
     std::vector<std::string> playlistItemsIds = parsePlaylistItemsIds(playlistInfo);
     if (playlistItemsIds.empty()) {
-        LOGW() << "Empty list of playlist items";
-        return {};
+        finishChannel->send(make_ret(Err::PlaylistIsEmpty));
+        return;
     }
 
     QUrl playlistVideosInfoUrl = configuration()->videosInfoUrl(playlistItemsIds);
     QBuffer videosInfoData;
-    Ret videos = m_networkManager->get(playlistVideosInfoUrl, &videosInfoData, headers);
-    if (!videos) {
-        LOGE() << videos.toString();
-        return {};
+    Ret videosRet = networkManager->get(playlistVideosInfoUrl, &videosInfoData, headers);
+    if (!videosRet) {
+        finishChannel->send(videosRet);
+        return;
     }
 
     QVariantMap videosInfo = QJsonDocument::fromJson(videosInfoData.data()).toVariant().toMap();
-    return parsePlaylist(videosInfo);
+
+    RetVal<Playlist> result;
+    result.ret = make_ret(Ret::Code::Ok);
+    result.val = parsePlaylist(videosInfo);
+
+    finishChannel->send(result);
 }
 
 void LearnService::openUrl(const QUrl& url)
