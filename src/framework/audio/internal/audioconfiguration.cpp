@@ -48,7 +48,6 @@ static const Settings::Key SHOW_CONTROLS_IN_MIXER("midi", "io/midi/showControlsI
 
 //! FIXME Temporary for tests
 static const std::string DEFAULT_FLUID_SOUNDFONT = "MuseScore_General.sf3";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
-static const std::string DEFAULT_ZERBERUS_SOUNDFONT = "FM-Piano1-20190916.sfz"; // "";
 
 void AudioConfiguration::init()
 {
@@ -127,11 +126,6 @@ const SynthesizerState& AudioConfiguration::defaultSynthesizerState() const
         gf.name = "Fluid";
         gf.vals.push_back(SynthesizerState::Val(SynthesizerState::ValID::SoundFontID, DEFAULT_FLUID_SOUNDFONT));
         state.groups.insert({ gf.name, std::move(gf) });
-
-        SynthesizerState::Group gz;
-        gz.name = "Zerberus";
-        gz.vals.push_back(SynthesizerState::Val(SynthesizerState::ValID::SoundFontID, DEFAULT_ZERBERUS_SOUNDFONT));
-        state.groups.insert({ gz.name, std::move(gz) });
     }
 
     return state;

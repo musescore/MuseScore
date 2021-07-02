@@ -49,7 +49,6 @@ elseif(OS_IS_WASM)
     )
 endif()
 
-include(${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/zerberus/internal/zerberus.cmake)
 add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth fluidsynth)
 
 set(MODULE_SRC
@@ -139,13 +138,10 @@ set(MODULE_SRC
 
 
     # Synthesizers
-    ${ZERBERUS_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/sanitysynthesizer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/sanitysynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynth.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynth.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/zerberus/zerberussynth.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/zerberus/zerberussynth.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthesizercontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthesizercontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthesizersregister.cpp
