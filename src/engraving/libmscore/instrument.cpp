@@ -446,12 +446,6 @@ void Instrument::read(XmlReader& e, Part* part)
     if (!readSingleNoteDynamics) {
         setSingleNoteDynamicsFromTemplate();
     }
-
-    if (_useDrumset) {
-        if (_channel[0]->bank() == 0 && _channel[0]->synti().toLower() != "zerberus") {
-            _channel[0]->setBank(128);
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -947,9 +941,6 @@ void Channel::read(XmlReader& e, Part* part)
         } else {
             e.unknown();
         }
-    }
-    if (128 == _bank && "zerberus" == _synti.toLower()) {
-        _bank = 0;
     }
 
     _mustUpdateInit = true;

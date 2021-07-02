@@ -565,11 +565,7 @@ void InstrumentTemplate::read(XmlReader& e)
         a.setPan(0);
         channel.append(a);
     }
-    if (useDrumset) {
-        if (channel[0].bank() == 0 && channel[0].synti().toLower() != "zerberus") {
-            channel[0].setBank(128);
-        }
-    }
+
     if (trackName.isEmpty() && !longNames.isEmpty()) {
         trackName = longNames[0].name();
     }

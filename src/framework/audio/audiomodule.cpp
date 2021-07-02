@@ -43,7 +43,6 @@
 
 // synthesizers
 #include "internal/synthesizers/fluidsynth/fluidsynth.h"
-#include "internal/synthesizers/zerberus/zerberussynth.h"
 #include "internal/synthesizers/soundfontsprovider.h"
 #include "internal/synthesizers/synthesizercontroller.h"
 #include "internal/synthesizers/synthesizersregister.h"
@@ -112,7 +111,6 @@ void AudioModule::registerExports()
 
     // synthesizers
     std::shared_ptr<synth::ISynthesizersRegister> sreg = std::make_shared<synth::SynthesizersRegister>();
-    sreg->registerSynthesizer("Zerberus", std::make_shared<synth::ZerberusSynth>());
     sreg->registerSynthesizer("Fluid", std::make_shared<synth::FluidSynth>());
     sreg->setDefaultSynthesizer("Fluid");
 

@@ -97,11 +97,6 @@ public:
 
 static SynthesizerState defaultState = {
     { "master", {
-#ifdef ZITA_REVERB
-          {
-              0, "Zita1"
-          },
-#endif
           {
               2, "0.1"
           },
@@ -113,11 +108,7 @@ static SynthesizerState defaultState = {
     { "Fluid", {
           { 0, "MuseScore_General.sf3" },
       },
-    },
-//      { "Zerberus", {
-//            { 0, "SalamanderGrandPiano.sfz" },
-//            },
-//            },
+    }
 };
 }     // namespace Ms
 #endif

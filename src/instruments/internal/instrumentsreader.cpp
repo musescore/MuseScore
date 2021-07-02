@@ -519,11 +519,7 @@ void InstrumentsReader::fillByDefault(Instrument& instrument) const
         a.setPan(0);
         instrument.channels.append(a);
     }
-    if (instrument.useDrumset) {
-        if (instrument.channels[0].bank() == 0 && instrument.channels[0].synti().toLower() != "zerberus") {
-            instrument.channels[0].setBank(128);
-        }
-    }
+
     if (instrument.name.isEmpty() && !instrument.longNames.isEmpty()) {
         instrument.name = instrument.longNames[0].name();
     }
