@@ -72,6 +72,7 @@ option(BUILD_INSTRUMENTS_MODULE "Build instruments module" ON)
 option(BUILD_INSPECTOR_MODULE "Build inspector module" ON)
 option(BUILD_AUTOBOT_MODULE "Build autobot module" OFF)
 option(BUILD_MULTIINSTANCES_MODULE "Build multiinstances module" ON)
+set(YOUTUBE_API_KEY "" CACHE STRING "YouTube API key")
 
 option(USE_SCORE_ACCESSIBLE_TREE "Use score accessible tree" OFF)
 
