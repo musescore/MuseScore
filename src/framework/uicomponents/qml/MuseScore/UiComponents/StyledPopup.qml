@@ -33,9 +33,11 @@ Popup {
 
     property Item anchorItem: null
     property real arrowX: Boolean(anchorItem) ? anchorItem.x - x + anchorItem.width / 2 : width / 2
+    property alias arrowHeight: arrow.height
 
     property alias navigation: navPanel
     property bool isDoActiveParentOnClose: true
+
 
     QtObject {
         id: prv
@@ -43,7 +45,6 @@ Popup {
         property bool isOpened: false
 
         readonly property int padding: 12
-        readonly property alias arrowHeight: arrow.height
 
         readonly property color backgroundColor: ui.theme.backgroundPrimaryColor
         readonly property color borderColor: ui.theme.strokeColor

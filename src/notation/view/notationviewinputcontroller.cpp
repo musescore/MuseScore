@@ -349,6 +349,8 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
     }
 
+    m_view->closeElementPopup();
+
     if (event->button() == Qt::MouseButton::RightButton) {
         ElementType type = selectionType();
         m_view->showContextMenu(type, event->pos());
@@ -513,9 +515,10 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         return;
     }
 
+    m_view->showElementPopup(element);
+
     if (element->isTextBase()) {
         viewInteraction()->startEditText(element, m_view->toLogical(event->pos()));
-        m_view->showElementPopup(element);
     }
 }
 

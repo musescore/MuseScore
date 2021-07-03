@@ -95,7 +95,7 @@ TabView {
                     id: titleLabel
                     anchors.fill: parent
                     text: styleData.title
-                    font: ui.theme.bodyBoldFont
+                    font: styleData.selected ? ui.theme.bodyBoldFont : ui.theme.bodyFont
                 }
             }
         }

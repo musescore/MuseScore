@@ -1035,6 +1035,55 @@ TDuration OveNoteType_To_Duration(ovebase::NoteType noteType)
         d.setType(TDuration::DurationType::V_256TH);
         break;
     }
+    //  case ovebase::NoteType::Note_512: {
+    //      d.setType(TDuration::DurationType::V_512TH);
+    //      break;
+    //  }
+    //  case ovebase::NoteType::Note_1024: {
+    //      d.setType(TDuration::DurationType::V_1024TH);
+    //      break;
+    //  }
+    default:
+        d.setType(TDuration::DurationType::V_QUARTER);
+        break;
+    }
+
+    return d;
+}
+
+QString OveNoteType_To_EquationString(ovebase::NoteType noteType)
+{
+    switch (noteType) {
+    case ovebase::NoteType::Note_DoubleWhole: {
+        return "d";
+    }
+    case ovebase::NoteType::Note_Whole: {
+        return "w";
+    }
+    case ovebase::NoteType::Note_Half: {
+        return "h";
+    }
+    case ovebase::NoteType::Note_Quarter: {
+        return "q";
+    }
+    case ovebase::NoteType::Note_Eight: {
+        return "e";
+    }
+    case ovebase::NoteType::Note_Sixteen: {
+        return "s";
+    }
+    case ovebase::NoteType::Note_32: {
+        return "t";
+    }
+    //case ovebase::NoteType::Note_64: {
+    //    return "w";
+    //}
+    //case ovebase::NoteType::Note_128: {
+    //    return "w";
+    //}
+    //case ovebase::NoteType::Note_256: {
+    //    return "w";
+    //}
 //  case ovebase::NoteType::Note_512: {
 //      d.setType(TDuration::DurationType::V_512TH);
 //      break;
@@ -1044,11 +1093,8 @@ TDuration OveNoteType_To_Duration(ovebase::NoteType noteType)
 //      break;
 //  }
     default:
-        d.setType(TDuration::DurationType::V_QUARTER);
-        break;
+        return "q";
     }
-
-    return d;
 }
 
 int accidentalToAlter(ovebase::AccidentalType type)
@@ -1359,62 +1405,65 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
 
         m_score->setTempo(Fraction::fromTicks(absTick), tpo);
 
-        t->setTempo(tpo);
-        QString durationTempoL;
-        QString durationTempoR;
-        if (static_cast<int>(tempoPtr->getLeftNoteType())) {
-            durationTempoL = TempoText::duration2tempoTextString(OveNoteType_To_Duration(tempoPtr->getLeftNoteType()));
-        }
-        if (static_cast<int>(tempoPtr->getRightNoteType())) {
-            durationTempoR = TempoText::duration2tempoTextString(OveNoteType_To_Duration(tempoPtr->getRightNoteType()));
-        }
-        QString textTempo;
+        QString text;
+        QString equation;
+
         if (tempoPtr->getShowBeforeText()) {
-            textTempo += (tempoPtr->getLeftText()).toHtmlEscaped();
+            text += (tempoPtr->getLeftText()).toHtmlEscaped();
         }
         if (tempoPtr->getShowMark()) {
-            if (!textTempo.isEmpty()) {
-                textTempo += " ";
+            if (!text.isEmpty()) {
+                text += " ";
             }
             if (tempoPtr->getShowParenthesis()) {
-                textTempo += "(";
+                equation += "(";
             }
-            textTempo += durationTempoL;
+
+            equation += OveNoteType_To_EquationString(tempoPtr->getLeftNoteType());
             if (tempoPtr->getLeftNoteDot()) {
-                textTempo += "<sym>space</sym><sym>metAugmentationDot</sym>";
+                equation += ".";
             }
-            textTempo += " = ";
+
+            equation += " = ";
+
             switch (tempoPtr->getRightSideType()) {
             case 1:
-                textTempo += durationTempoR;
+                equation += OveNoteType_To_EquationString(tempoPtr->getLeftNoteType());
                 if (tempoPtr->getRightNoteDot()) {
-                    textTempo += "<sym>space</sym><sym>metAugmentationDot</sym>";
+                    equation += ".";
                 }
                 break;
             case 2:
-                textTempo += (tempoPtr->getRightText()).toHtmlEscaped();
                 break;
             case 3:
-                textTempo += QString::number(qFloor(tempoPtr->getTypeTempo()));
+                equation += QString::number(qFloor(tempoPtr->getTypeTempo()));
                 break;
             case 0:
             default:
-                textTempo += QString::number(tempoPtr->getTypeTempo());
+                equation += QString::number(tempoPtr->getTypeTempo());
                 break;
             }
             if (tempoPtr->getShowParenthesis()) {
-                textTempo += ")";
+                equation += ")";
             }
         }
-        if (textTempo.isEmpty()) {
-            textTempo = durationTempoL;
+
+        if (equation.isEmpty()) {
+            equation = OveNoteType_To_EquationString(tempoPtr->getLeftNoteType());
             if (tempoPtr->getLeftNoteDot()) {
-                textTempo += "<sym>space</sym><sym>metAugmentationDot</sym>";
+                equation += ".";
             }
-            textTempo += " = " + QString::number(tempoPtr->getTypeTempo());
+
+            equation += " = " + QString::number(tempoPtr->getTypeTempo());
+
             t->setVisible(false);
         }
-        t->setXmlText(textTempo);
+
+        t->setXmlText(text);
+        t->setEquation(equation);
+        t->parseEquation();
+        t->setXmlText(t->xmlText() + tempoPtr->getRightText());
+
 // TODO:ws  t->setAbove(true);
         t->setTrack(track);
 

@@ -321,6 +321,10 @@ bool TextBase::edit(EditData& ed)
             return true;
 
         case Qt::Key_Delete:
+            if (canDelete(cursor, ed.key)) {
+                return true;
+            }
+
             if (!deleteSelectedText(ed)) {
                 // check for move down
                 if (cursor->column() == cursor->columns()) {               // if you are on the end of the line, delete the newline char
@@ -337,6 +341,10 @@ bool TextBase::edit(EditData& ed)
             return true;
 
         case Qt::Key_Backspace:
+            if (canDelete(cursor, ed.key)) {
+                return true;
+            }
+
             if (ctrlPressed) {
                 // delete last word
                 cursor->movePosition(TextCursor::MoveOperation::WordLeft, TextCursor::MoveMode::KeepAnchor);
@@ -357,21 +365,14 @@ bool TextBase::edit(EditData& ed)
             return true;
 
         case Qt::Key_Left:
-            if (!_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::WordLeft : TextCursor::MoveOperation::Left,
-                                       mm) && type() == ElementType::LYRICS) {
-                return false;
-            }
-            s.clear();
-            break;
-
         case Qt::Key_Right:
-            if (!_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::NextWord : TextCursor::MoveOperation::Right,
-                                       mm) && type() == ElementType::LYRICS) {
+            if (moveCursor(_cursor, ed.key, ctrlPressed, mm) && type() == ElementType::LYRICS) {
                 return false;
             }
-            s.clear();
-            break;
 
+            s.clear();
+
+            break;
         case Qt::Key_Up:
 #if defined(Q_OS_MAC)
             if (!cursor->movePosition(TextCursor::MoveOperation::Up, mm)) {

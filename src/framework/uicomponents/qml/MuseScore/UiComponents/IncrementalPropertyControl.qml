@@ -45,6 +45,7 @@ Item {
     readonly property int spacing: 8
 
     signal valueEdited(var newValue)
+    signal activeFocusChanged(var focus)
 
     implicitHeight: 30
     implicitWidth: parent.width
@@ -148,6 +149,10 @@ Item {
             }
 
             root.valueEdited(+newVal.toFixed(root.decimals))
+        }
+
+        onActiveFocusChanged: {
+            root.activeFocusChanged(activeFocus)
         }
     }
 

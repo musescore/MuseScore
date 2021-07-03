@@ -81,7 +81,10 @@
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
-            <tempo>2</tempo>
+            <playbackTempo>2</playbackTempo>
+            <notatedTempo>120</notatedTempo>
+            <equation>q = 120</equation>
+            <equationVisible>1</equationVisible>
             <followText>1</followText>
             <text>Tempo text</text>
             </Tempo>

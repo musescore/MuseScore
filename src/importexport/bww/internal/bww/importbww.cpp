@@ -119,11 +119,9 @@ static void xmlSetPitch(Ms::Note* n, char step, int alter, int octave)
 static void setTempo(Ms::Score* score, int tempo)
 {
     Ms::TempoText* tt = new Ms::TempoText(score);
-    tt->setTempo(double(tempo) / 60.0);
+    tt->setEquationFromTempo(tempo);
     tt->setTrack(0);
-    QString tempoText = Ms::TempoText::duration2tempoTextString(Ms::TDuration::DurationType::V_QUARTER);
-    tempoText += QString(" = %1").arg(tempo);
-    tt->setPlainText(tempoText);
+
     Ms::Measure* measure = score->firstMeasure();
     Ms::Segment* segment = measure->getSegment(Ms::SegmentType::ChordRest, Ms::Fraction(0, 1));
     segment->add(tt);

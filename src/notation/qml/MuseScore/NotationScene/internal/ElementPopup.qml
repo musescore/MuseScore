@@ -8,25 +8,34 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 import MuseScore.Inspector 1.0
 
-StyledPopup {
+Popup {
     id: root
 
     property var model;
     property string type;
 
-    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-
-    width: 200
-
-    leftPadding: 0
+    leftPadding: 10
+    rightPadding: 10
+    bottomPadding: 20
 
     function isVisible(type) {
         return type === root.type;
     }
 
+    function preOpening() {
+        switch(root.type) {
+        case "Tempo":
+            tempoPopup.model = root.model.modelByType(Inspector.TYPE_TEMPO);
+            tempoPopup.parseEquation();
+            tempoPopup.setActiveTab();
+            break;
+        default:
+            break;
+        }
+    }
+
     TempoPopup {
-        model: root.model.modelByType(Inspector.TYPE_TEMPO)
-        width: root.width
+        id: tempoPopup
         visible: isVisible("Tempo")
     }
 }

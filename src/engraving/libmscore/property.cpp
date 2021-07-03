@@ -153,6 +153,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SPACE,                   false, "space",                 P_TYPE::SP_REAL,        DUMMY_QT_TR_NOOP("propertyName", "space") },
     { Pid::TEMPO,                   true,  "tempo",                 P_TYPE::TEMPO,          DUMMY_QT_TR_NOOP("propertyName", "tempo") },
     { Pid::TEMPO_FOLLOW_TEXT,       true,  "followText",            P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "following text") },
+    { Pid::TEMPO_EQUATION,          true,  "tempoEquation",         P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "tempo equation") },
+    { Pid::TEMPO_EQUATION_VISIBLE,  true,  "tempoEquationVisible",  P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "tempo is equation visible") },
     { Pid::ACCIDENTAL_BRACKET,      false, "bracket",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "bracket") },
     { Pid::ACCIDENTAL_TYPE,         true,  "subtype",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "type") },
     { Pid::NUMERATOR_STRING,        false, "textN",                 P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "numerator string") },
@@ -316,6 +318,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SIZE_SPATIUM_DEPENDENT,  false, "sizeIsSpatiumDependent",P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "spatium dependent font") },
     { Pid::ALIGN,                   false, "align",                 P_TYPE::ALIGN,          DUMMY_QT_TR_NOOP("propertyName", "align") },
     { Pid::TEXT_SCRIPT_ALIGN,       false, "align",                 P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "text script align") },
+    { Pid::TEXT_HIDE_CURSOR,        true,  "hideTextCursor",        P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "hideTextCursor") },
     { Pid::SYSTEM_FLAG,             false, "systemFlag",            P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "system flag") },
 
     { Pid::BEGIN_TEXT,              true,  "beginText",             P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "begin text") },

@@ -1356,8 +1356,7 @@ void GuitarPro::setTempo(int temp, Measure* measure)
         }
 
         TempoText* tt = new TempoText(score);
-        tt->setTempo(double(temp) / 60.0);
-        tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(temp));
+        tt->setEquationFromTempo(temp);
         tt->setTrack(0);
 
         segment->add(tt);

@@ -45,6 +45,9 @@ void TempoSettingsModel::createProperties()
     });
 
     m_tempo = buildPropertyItem(Ms::Pid::TEMPO);
+    m_equation = buildPropertyItem(Ms::Pid::TEMPO_EQUATION);
+    m_isEquationVisible = buildPropertyItem(Ms::Pid::TEMPO_EQUATION_VISIBLE);
+    m_hideTextCursor = buildPropertyItem(Ms::Pid::TEXT_HIDE_CURSOR);
 }
 
 void TempoSettingsModel::requestElements()
@@ -58,12 +61,18 @@ void TempoSettingsModel::loadProperties()
     loadPropertyItem(m_tempo, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::formatDouble(elementPropertyValue.toDouble());
     });
+    loadPropertyItem(m_equation);
+    loadPropertyItem(m_isEquationVisible);
+    loadPropertyItem(m_hideTextCursor);
 }
 
 void TempoSettingsModel::resetProperties()
 {
     m_isDefaultTempoForced->resetToDefault();
     m_tempo->resetToDefault();
+    m_equation->resetToDefault();
+    m_isEquationVisible->resetToDefault();
+    m_hideTextCursor->resetToDefault();
 }
 
 PropertyItem* TempoSettingsModel::isDefaultTempoForced() const
@@ -74,4 +83,19 @@ PropertyItem* TempoSettingsModel::isDefaultTempoForced() const
 PropertyItem* TempoSettingsModel::tempo() const
 {
     return m_tempo;
+}
+
+PropertyItem* TempoSettingsModel::equation() const
+{
+    return m_equation;
+}
+
+PropertyItem* TempoSettingsModel::isEquationVisible() const
+{
+    return m_isEquationVisible;
+}
+
+PropertyItem* TempoSettingsModel::isCursorHidden() const
+{
+    return m_hideTextCursor;
 }

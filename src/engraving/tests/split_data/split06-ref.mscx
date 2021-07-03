@@ -122,7 +122,11 @@
       <Measure len="2/4">
         <voice>
           <Tempo>
-            <tempo>1.66667</tempo>
+            <playbackTempo>1.66667</playbackTempo>
+            <notatedTempo>100</notatedTempo>
+            <equation>q = 100</equation>
+            <equationVisible>1</equationVisible>
+            <followText>1</followText>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Chord>

@@ -1105,75 +1105,48 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
     sp->setDrawGrid(true);
 
     struct TempoPattern {
-        QString pattern;
-        const char* name;
-        double f;
-        bool relative;
-        bool italian;
-        bool followText;
-        bool basic;
-        bool masterOnly;
+        QString text;
+        QString equation;
+        QString name;
 
-        TempoPattern(const QString& s, const char* n, double v, bool r, bool i, bool f, bool b, bool m)
-            : pattern(s), name(n), f(v), relative(r), italian(i), followText(f), basic(b), masterOnly(m) {}
+        TempoPattern(const QString& t, const QString& e, const QString& n = "")
+            : text(t)
+            , equation(e)
+            , name(n)
+        {
+        }
     };
 
-    static const TempoPattern tps[] = {
-        TempoPattern("<sym>metNoteHalfUp</sym> = 80",
-                     QT_TRANSLATE_NOOP("palette", "Half note = 80 BPM"),
-                     80.0 / 30.0, false, false, true, true, false),
-        TempoPattern("<sym>metNoteQuarterUp</sym> = 80",
-                     QT_TRANSLATE_NOOP("palette", "Quarter note = 80 BPM"),
-                     80.0 / 60.0, false, false, true, true, false),
-        TempoPattern("<sym>metNote8thUp</sym> = 80",
-                     QT_TRANSLATE_NOOP("palette", "Eighth note = 80 BPM"),
-                     80.0 / 120.0, false, false, true, true, false),
-        TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80",
-                     QT_TRANSLATE_NOOP("palette", "Dotted half note = 80 BPM"),
-                     120 / 30.0, false, false, true, false, false),
-        TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80",
-                     QT_TRANSLATE_NOOP("palette", "Dotted quarter note = 80 BPM"),
-                     120 / 60.0, false, false, true, true,  false),
-        TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80",
-                     QT_TRANSLATE_NOOP("palette", "Dotted eighth note = 80 BPM"),
-                     120 / 120.0, false, false, true, false, false),
+    static const TempoPattern tempoPatterns[] = {
+        TempoPattern("", "h = 80", "Half notes = 80 BPM"),
+        TempoPattern("", "q = 80", "Quarter notes = 80 BPM"),
+        TempoPattern("", "e = 80", "Eighth notes = 80 BPM"),
 
-        TempoPattern("Grave",            "Grave",             35.0 / 60.0, false, true, false, false, false),
-        TempoPattern("Largo",            "Largo",             50.0 / 60.0, false, true, false, false, false),
-        TempoPattern("Lento",            "Lento",             52.5 / 60.0, false, true, false, false, false),
-        TempoPattern("Larghetto",        "Larghetto",         63.0 / 60.0, false, true, false, false, true),
-        TempoPattern("Adagio",           "Adagio",            71.0 / 60.0, false, true, false, false, false),
-        TempoPattern("Andante",          "Andante",           92.0 / 60.0, false, true, false, false, false),
-        TempoPattern("Andantino",        "Andantino",         94.0 / 60.0, false, true, false, false, true),
-        TempoPattern("Moderato",         "Moderato",         114.0 / 60.0, false, true, false, false, false),
-        TempoPattern("Allegretto",       "Allegretto",       116.0 / 60.0, false, true, false, false, false),
-        TempoPattern("Allegro moderato", "Allegro moderato", 118.0 / 60.0, false, true, false, false, true),
-        TempoPattern("Allegro",          "Allegro",          144.0 / 60.0, false, true, false, false, false),
-        TempoPattern("Vivace",           "Vivace",           172.0 / 60.0, false, true, false, false, false),
-        TempoPattern("Presto",           "Presto",           187.0 / 60.0, false, true, false, false, false),
-        TempoPattern("Prestissimo",      "Prestissimo",      200.0 / 60.0, false, true, false, false, true),
+        TempoPattern("", "h. = 80", "Dotted half note = 80 BPM"),
+        TempoPattern("", "q. = 80", "Dotted quarter note = 80 BPM"),
+        TempoPattern("", "e. = 80", "Dotted eighth note = 80 BPM"),
 
-        TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Quarter note = dotted quarter note metric modulation"),
-                     3.0 / 2.0, true, false, true, false, false),
-        TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Dotted quarter note = quarter note metric modulation"),
-                     2.0 / 3.0, true, false, true, false, false),
-        TempoPattern("<sym>metNoteHalfUp</sym> = <sym>metNoteQuarterUp</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Half note = quarter note metric modulation"),
-                     1.0 / 2.0, true, false, true, false, false),
-        TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteHalfUp</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Quarter note = half note metric modulation"),
-                     2.0 / 1.0, true, false, true, false, false),
-        TempoPattern("<sym>metNote8thUp</sym> = <sym>metNote8thUp</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Eighth note = eighth note metric modulation"),
-                     1.0 / 1.0, true, false, true, false, false),
-        TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Quarter note = quarter note metric modulation"),
-                     1.0 / 1.0, true, false, true, false, false),
-        TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",
-                     QT_TRANSLATE_NOOP("palette", "Dotted eighth note = quarter note metric modulation"),
-                     2.0 / 3.0, true, false, true, false, false),
+        TempoPattern("Grave",           "q = 35"),
+        TempoPattern("Largo",           "q = 50"),
+        TempoPattern("Lento",           "q = 52"),
+        TempoPattern("Larghetto",       "q = 63"),
+        TempoPattern("Adagio",          "q = 71"),
+        TempoPattern("Andante",         "q = 92"),
+        TempoPattern("Andantino",       "q = 94"),
+        TempoPattern("Moderato",        "q = 114"),
+        TempoPattern("Allegretto",      "q = 116"),
+        TempoPattern("Allegro moderato", "q = 118"),
+        TempoPattern("Allegro",         "q = 144"),
+        TempoPattern("Vivace",          "q = 172"),
+        TempoPattern("Presto",          "q = 187"),
+        TempoPattern("Prestissimo",     "q = 200"),
+
+        TempoPattern("", "q = q.", "Quarter note = dotted quarter note metric modulation"),
+        TempoPattern("", "q. = q", "Dotted quarter note = quarter note metric modulation"),
+        TempoPattern("", "h = q",  "Half note = quarter note metric modulation"),
+        TempoPattern("", "q = h",  "Quarter note = half note metric modulation"),
+        TempoPattern("", "e = e",  "Eighth note = eighth note metric modulation"),
+        TempoPattern("", "q = q",  "Quarter note = quarter note metric modulation")
     };
 
     auto stxt = makeElement<SystemText>(gscore);
@@ -1182,20 +1155,18 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
     stxt->setSwing(true);
     sp->appendElement(stxt, QT_TRANSLATE_NOOP("palette", "Swing"))->setElementTranslated(true);
 
-    for (TempoPattern tp : tps) {
-        auto tt = makeElement<TempoText>(gscore);
-        tt->setFollowText(tp.followText);
-        tt->setXmlText(tp.pattern);
-        if (tp.relative) {
-            tt->setRelative(tp.f);
-            sp->appendElement(tt, mu::qtrc("palette", tp.name), 1.5);
-        } else if (tp.italian) {
-            tt->setTempo(tp.f);
-            sp->appendElement(tt, tp.name, 1.3);
-        } else {
-            tt->setTempo(tp.f);
-            sp->appendElement(tt, mu::qtrc("palette", tp.name), 1.5);
-        }
+    for (TempoPattern tempoPattern : tempoPatterns) {
+        auto tempoText = makeElement<TempoText>(gscore);
+
+        tempoText->setFollowText(true);
+        tempoText->setXmlText(tempoPattern.text + " ");
+        tempoText->setEquation(tempoPattern.equation);
+        tempoText->setEquationVisible(tempoPattern.text.isEmpty());
+        tempoText->parseEquation();
+
+        sp->appendElement(tempoText, tempoPattern.name.isEmpty() ? tempoPattern.text : mu::qtrc("palette",
+                                                                                                tempoPattern.name.toStdString().c_str()),
+                          tempoPattern.name.isEmpty() ? 1.5 : 1.3);
     }
 
     return sp;

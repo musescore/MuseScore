@@ -238,7 +238,10 @@
       <Measure>
         <voice>
           <Tempo>
-            <tempo>1.3333299999999999</tempo>
+            <playbackTempo>1.3333299999999999</playbackTempo>
+            <notatedTempo>80</notatedTempo>
+            <equation>q = 80</equation>
+            <equationVisible>1</equationVisible>
             <followText>1</followText>
             <text><sym>metNoteQuarterUp</sym> = 80</text>
             </Tempo>
@@ -257,7 +260,10 @@
               </Note>
             </Chord>
           <Tempo>
-            <tempo>1.5</tempo>
+            <playbackTempo>1.5</playbackTempo>
+            <notatedTempo>90</notatedTempo>
+            <equation>q = 90</equation>
+            <equationVisible>1</equationVisible>
             <followText>1</followText>
             <visible>0</visible>
             <text><b></b><font face="ScoreText"></font><b><font face="Edwin"></font> = 90</b></text>

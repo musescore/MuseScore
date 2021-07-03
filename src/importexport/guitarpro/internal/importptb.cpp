@@ -834,8 +834,7 @@ void PowerTab::addToScore(ptSection& sec)
     }
     if (sec.tempo) {
         TempoText* tt = new TempoText(score);
-        tt->setTempo(double(sec.tempo) / 60.0f);
-        tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(sec.tempo));
+        tt->setEquationFromTempo(sec.tempo);
         tt->setTrack(0);
         Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
         segment->add(tt);

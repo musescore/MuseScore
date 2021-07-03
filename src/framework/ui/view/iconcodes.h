@@ -232,7 +232,9 @@ public:
 
         LONGO = 0xF364,
         NOTE_WHOLE_DOUBLE = 0xF365,
+        NOTE_WHOLE_DOUBLE_VERTICAL = 0xF3D3,
         NOTE_WHOLE = 0xF366,
+        NOTE_WHOLE_VERTICAL = 0xF3D4,
         NOTE_HALF = 0xF367,
         NOTE_QUARTER = 0xF368,
         NOTE_8TH = 0xF369,

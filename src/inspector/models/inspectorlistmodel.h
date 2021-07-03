@@ -47,7 +47,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
-    Q_INVOKABLE QVariant inspectorModelBySection(const int type) const;
+    Q_INVOKABLE QVariant inspectorModelBySection(const int type);
 
 signals:
     void elementsModified();

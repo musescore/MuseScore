@@ -2915,6 +2915,8 @@ QVariant TextBase::getProperty(Pid propertyId) const
         return static_cast<int>(_cursor->selectedFragmentsFormat().valign());
     case Pid::TEXT:
         return xmlText();
+    case Pid::TEXT_HIDE_CURSOR:
+        return _hideCursor;
     default:
         return Element::getProperty(propertyId);
     }
@@ -2973,6 +2975,9 @@ bool TextBase::setProperty(Pid pid, const QVariant& v)
         break;
     case Pid::TEXT_SCRIPT_ALIGN:
         _cursor->setFormat(FormatId::Valign, v.toInt());
+        break;
+    case Pid::TEXT_HIDE_CURSOR:
+        _hideCursor = v.toBool();
         break;
     default:
         rv = Element::setProperty(pid, v);
@@ -3082,6 +3087,17 @@ Sid TextBase::offsetSid() const
         break;
     }
     return Sid::NOSTYLE;
+}
+
+bool TextBase::moveCursor(TextCursor* cursor, int key, bool ctrlPressed, TextCursor::MoveMode moveMode) const
+{
+    if (key == Qt::Key_Left) {
+        return cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::WordLeft : TextCursor::MoveOperation::Left, moveMode);
+    } else if (key == Qt::Key_Right) {
+        return cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::NextWord : TextCursor::MoveOperation::Right, moveMode);
+    } else {
+        return false;
+    }
 }
 
 //---------------------------------------------------------
@@ -3365,7 +3381,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
     p->setPen(pen);
 
     // Don't draw cursor if there is a selection
-    if (!cursor->hasSelection()) {
+    if (!cursor->hasSelection() && !_hideCursor) {
         p->drawRect(cursor->cursorRect());
     }
 

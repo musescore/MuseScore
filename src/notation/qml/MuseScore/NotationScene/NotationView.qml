@@ -22,6 +22,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
+import QtQuick.Window 2.12
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -134,14 +135,8 @@ FocusScope {
                     }
                 }
 
-                ContextMenu {
-                    id: contextMenu
-                }
-
                 ElementPopup {
                     id: elementPopup
-
-                    model: inspectorListModel.inspectorModelBySection(Inspector.SECTION_NOTATION)
                 }
 
                 StyledScrollBar {
@@ -250,11 +245,6 @@ FocusScope {
         }
     }
 
-    Component.onCompleted: {
-        notationView.load()
-        notationNavigator.load()
-    }
-
     QtObject {
         id: privateProperties
 
@@ -281,12 +271,21 @@ FocusScope {
         function showNotationPopup(type, pos, size) {
             elementPopup.close();
 
+            elementPopup.model = inspectorListModel.inspectorModelBySection(Inspector.SECTION_NOTATION);
+
             elementPopup.type = type;
 
             elementPopup.x = pos.x + size.x / 2 - elementPopup.width / 2;
             elementPopup.y = pos.y + size.y / 2;
 
-            elementPopup.open();
+            if(pos.y + elementPopup.height > notationView.height) {
+                elementPopup.x = pos.x + size.x + 6;
+                elementPopup.y = notationView.height - elementPopup.height - 12;
+            }
+
+            elementPopup.preOpening();
+
+            Qt.callLater(elementPopup.open);
         }
 
         function closeNotationPopup() {

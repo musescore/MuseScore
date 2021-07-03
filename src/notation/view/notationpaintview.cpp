@@ -325,6 +325,7 @@ void NotationPaintView::hideContextMenu()
 {
     emit hideContextMenuRequested();
 }
+
 void NotationPaintView::showElementPopup(const Element* hitElement)
 {
     if (!hitElement->needsElementPopup()) {
@@ -344,16 +345,6 @@ void NotationPaintView::showElementPopup(const Element* hitElement)
 void NotationPaintView::closeElementPopup()
 {
     emit closeElementPopupRequested();
-}
-
-void NotationPaintView::handleAction(const QString& actionCode)
-{
-    MenuItem item = m_currentContextMenuModel.findItem(itemId);
-    if (item.isValid()) {
-        dispatcher()->dispatch(item.code);
-    }
-
-    m_currentContextMenuModel.setItems({});
 }
 
 void NotationPaintView::paint(QPainter* qp)

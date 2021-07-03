@@ -2136,10 +2136,8 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
                 } else {
                     double tpo = tempo.toDouble() / 60;
                     TempoText* t = new TempoText(_score);
-                    t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER)),
-                                                         tempo));
+                    t->setEquationFromTempo(tempo.toDouble());
                     t->setVisible(false);
-                    t->setTempo(tpo);
                     t->setFollowText(true);
 
                     _score->setTempo(tick, tpo);
@@ -2631,16 +2629,9 @@ void MusicXMLParserDirection::direction(const QString& partId,
         if (hasTempoTextAtTick(_score->tempomap(), tick.ticks())) {
             _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
         } else {
-            double tpo = _tpoSound / 60;
             TempoText* t = new TempoText(_score);
-            t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER))).arg(
-                              _tpoSound));
-            t->setVisible(false);
-            t->setTempo(tpo);
+            t->setEquationFromTempo(_tpoSound);
             t->setFollowText(true);
-
-            // TBD may want ro use tick + _offset if sound is affected
-            _score->setTempo(tick, tpo);
 
             addElemOffset(t, track, placement, measure, tick + _offset);
         }
@@ -3366,7 +3357,7 @@ QString MusicXMLParserDirection::metronome(double& r)
         tempoText += ")";
     }
 
-    return tempoText;
+    return TempoText::mapEquationToText(tempoText);
 }
 
 //---------------------------------------------------------

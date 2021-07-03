@@ -4130,6 +4130,12 @@ static bool findMetronome(const QList<TextFragment>& list,
             int rparen = s6.indexOf(")");
             hasParen = (lparen == s1.length() - 1 && rparen == 0);
 
+            if (!hasParen) {
+                lparen = s1.indexOf("[");
+                rparen = s6.indexOf("]");
+                hasParen = (lparen == s1.length() - 1 && rparen == 0);
+            }
+
             metroLeft = s2;
             metroRight = s5;
 

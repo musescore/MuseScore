@@ -289,6 +289,7 @@ class TextBase : public Element
     bool _primed                  { 0 };
 
     TextCursor* _cursor           { nullptr };
+    bool _hideCursor              { false };
 
     void drawSelection(mu::draw::Painter*, const mu::RectF&) const;
     void insert(TextCursor*, uint code);
@@ -310,6 +311,9 @@ protected:
     void insertSym(EditData& ed, SymId id);
     void prepareFormat(const QString& token, Ms::TextCursor& cursor);
     bool prepareFormat(const QString& token, Ms::CharFormat& format);
+
+    virtual bool moveCursor(TextCursor* cursor, int key, bool ctrlPressed, TextCursor::MoveMode moveMode) const;
+    virtual bool canDelete(TextCursor*, int) const { return true; }
 
 public:
     TextBase(Score* = 0, Tid tid = Tid::DEFAULT, ElementFlags = ElementFlag::NOTHING);
@@ -378,7 +382,7 @@ public:
 
     mu::RectF pageRectangle() const;
 
-    void dragTo(EditData&);
+    virtual void dragTo(EditData&);
 
     QVector<mu::LineF> dragAnchorLines() const override;
 

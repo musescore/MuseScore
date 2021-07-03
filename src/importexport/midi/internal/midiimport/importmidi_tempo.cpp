@@ -76,8 +76,7 @@ void setTempoToScore(Score* score, int tick, double beatsPerSecond)
         const int tempoInBpm = qRound(beatsPerSecond * 60.0);
 
         TempoText* tempoText = new TempoText(score);
-        tempoText->setTempo(beatsPerSecond);
-        tempoText->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(tempoInBpm));
+        tempoText->setEquationFromTempo(tempoInBpm);
         tempoText->setTrack(0);
 
         Measure* measure = score->tick2measure(Fraction::fromTicks(tick));
