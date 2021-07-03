@@ -59,6 +59,8 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
 public:
     explicit AppearancePreferencesModel(QObject* parent = nullptr);
 
+    Q_INVOKABLE void init();
+
     QVariantList themes() const;
     QStringList accentColors() const;
 
@@ -94,14 +96,14 @@ public slots:
 
 signals:
     void themesChanged();
-    void currentFontIndexChanged(int index);
-    void bodyTextSizeChanged(int size);
-    void backgroundUseColorChanged(bool value);
-    void backgroundColorChanged(const QColor& color);
-    void backgroundWallpaperPathChanged(const QString& path);
-    void foregroundUseColorChanged(bool value);
-    void foregroundColorChanged(const QColor& color);
-    void foregroundWallpaperPathChanged(const QString& path);
+    void currentFontIndexChanged();
+    void bodyTextSizeChanged();
+    void backgroundUseColorChanged();
+    void backgroundColorChanged();
+    void backgroundWallpaperPathChanged();
+    void foregroundUseColorChanged();
+    void foregroundColorChanged();
+    void foregroundWallpaperPathChanged();
 
 private:
     ui::ThemeInfo currentTheme() const;

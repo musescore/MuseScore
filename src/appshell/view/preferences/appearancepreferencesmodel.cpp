@@ -38,6 +38,30 @@ AppearancePreferencesModel::AppearancePreferencesModel(QObject* parent)
 {
 }
 
+void AppearancePreferencesModel::init()
+{
+    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
+        emit themesChanged();
+    });
+
+    uiConfiguration()->fontChanged().onNotify(this, [this]() {
+        emit currentFontIndexChanged();
+        emit bodyTextSizeChanged();
+    });
+
+    notationConfiguration()->backgroundChanged().onNotify(this, [this]() {
+        emit backgroundColorChanged();
+        emit backgroundUseColorChanged();
+        emit backgroundWallpaperPathChanged();
+    });
+
+    notationConfiguration()->foregroundChanged().onNotify(this, [this]() {
+        emit foregroundColorChanged();
+        emit foregroundUseColorChanged();
+        emit foregroundWallpaperPathChanged();
+    });
+}
+
 QVariantList AppearancePreferencesModel::themes() const
 {
     QVariantList result;
@@ -188,7 +212,7 @@ void AppearancePreferencesModel::setCurrentFontIndex(int index)
     }
 
     uiConfiguration()->setFontFamily(fonts[index].toStdString());
-    emit currentFontIndexChanged(index);
+    emit currentFontIndexChanged();
 }
 
 void AppearancePreferencesModel::setBodyTextSize(int size)
@@ -198,7 +222,7 @@ void AppearancePreferencesModel::setBodyTextSize(int size)
     }
 
     uiConfiguration()->setBodyFontSize(size);
-    emit bodyTextSizeChanged(size);
+    emit bodyTextSizeChanged();
 }
 
 void AppearancePreferencesModel::setBackgroundUseColor(bool value)
@@ -208,7 +232,7 @@ void AppearancePreferencesModel::setBackgroundUseColor(bool value)
     }
 
     notationConfiguration()->setBackgroundUseColor(value);
-    emit backgroundUseColorChanged(value);
+    emit backgroundUseColorChanged();
 }
 
 void AppearancePreferencesModel::setBackgroundColor(const QColor& color)
@@ -218,7 +242,7 @@ void AppearancePreferencesModel::setBackgroundColor(const QColor& color)
     }
 
     notationConfiguration()->setBackgroundColor(color);
-    emit backgroundColorChanged(color);
+    emit backgroundColorChanged();
 }
 
 void AppearancePreferencesModel::setBackgroundWallpaperPath(const QString& path)
@@ -228,7 +252,7 @@ void AppearancePreferencesModel::setBackgroundWallpaperPath(const QString& path)
     }
 
     notationConfiguration()->setBackgroundWallpaperPath(path);
-    emit backgroundWallpaperPathChanged(path);
+    emit backgroundWallpaperPathChanged();
 }
 
 void AppearancePreferencesModel::setForegroundUseColor(bool value)
@@ -238,7 +262,7 @@ void AppearancePreferencesModel::setForegroundUseColor(bool value)
     }
 
     notationConfiguration()->setForegroundUseColor(value);
-    emit foregroundUseColorChanged(value);
+    emit foregroundUseColorChanged();
 }
 
 void AppearancePreferencesModel::setForegroundColor(const QColor& color)
@@ -248,7 +272,7 @@ void AppearancePreferencesModel::setForegroundColor(const QColor& color)
     }
 
     notationConfiguration()->setForegroundColor(color);
-    emit foregroundColorChanged(color);
+    emit foregroundColorChanged();
 }
 
 void AppearancePreferencesModel::setForegroundWallpaperPath(const QString& path)
@@ -258,5 +282,5 @@ void AppearancePreferencesModel::setForegroundWallpaperPath(const QString& path)
     }
 
     notationConfiguration()->setForegroundWallpaperPath(path);
-    emit foregroundWallpaperPathChanged(path);
+    emit foregroundWallpaperPathChanged();
 }

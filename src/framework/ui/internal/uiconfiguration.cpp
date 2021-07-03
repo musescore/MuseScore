@@ -126,6 +126,7 @@ void UiConfiguration::init()
     settings()->setDefaultValue(UI_ICONS_FONT_FAMILY_KEY, Val("MusescoreIcon"));
     settings()->setDefaultValue(UI_MUSICAL_FONT_FAMILY_KEY, Val("Leland"));
     settings()->setDefaultValue(UI_MUSICAL_FONT_SIZE_KEY, Val(12));
+    settings()->setDefaultValue(UI_THEMES_KEY, Val(""));
 
     settings()->valueChanged(UI_THEMES_KEY).onReceive(this, [this](const Val&) {
         updateThemes();
@@ -217,6 +218,15 @@ void UiConfiguration::updateCurrentTheme()
 void UiConfiguration::updateThemes()
 {
     ThemeList modifiedThemes = readThemes();
+
+    if (modifiedThemes.empty()) {
+        m_themes.clear();
+        for (const ThemeCode& codeKey : allStandardThemeCodes()) {
+            m_themes.push_back(makeStandardTheme(codeKey));
+        }
+
+        return;
+    }
 
     for (ThemeInfo& theme: m_themes) {
         auto it = std::find_if(modifiedThemes.begin(), modifiedThemes.end(), [theme](const ThemeInfo& modifiedTheme) {
