@@ -47,7 +47,6 @@ public:
 
     virtual bool backgroundUseColor() const = 0;
     virtual void setBackgroundUseColor(bool value) = 0;
-
     virtual async::Notification backgroundChanged() const = 0;
 
     virtual QColor foregroundColor() const = 0;
@@ -58,7 +57,6 @@ public:
 
     virtual bool foregroundUseColor() const = 0;
     virtual void setForegroundUseColor(bool value) = 0;
-
     virtual async::Notification foregroundChanged() const = 0;
 
     virtual io::path wallpapersDefaultDirPath() const = 0;
