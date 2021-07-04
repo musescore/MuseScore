@@ -2620,6 +2620,48 @@ static void fermatas(const QVector<Element*>& cra, XmlWriter& xml, Notations& no
 }
 
 //---------------------------------------------------------
+//   splitCompoundArticulations
+//---------------------------------------------------------
+
+static std::vector<SymId> splitCompoundArticulations(const SymId sid)
+{
+#define ARTIC_2(compound, single1, single2) \
+case SymId::artic##compound##Above: { \
+    return { SymId::artic##single1##Above, SymId::artic##single2##Above }; \
+} \
+case SymId::artic##compound##Below: { \
+    return { SymId::artic##single1##Below, SymId::artic##single2##Below }; \
+}
+
+#define ARTIC_3(compound, single1, single2, single3) \
+case SymId::artic##compound##Above: { \
+    return { SymId::artic##single1##Above, SymId::artic##single2##Above, SymId::artic##single3##Above }; \
+} \
+case SymId::artic##compound##Below: { \
+    return { SymId::artic##single1##Below, SymId::artic##single2##Below, SymId::artic##single3##Below }; \
+}
+
+    switch (sid) {
+        // Order of single articulations follows the order these
+        // articulations should appear in a MusicXML file.
+        ARTIC_2(AccentStaccato, Staccato, Accent)
+        ARTIC_2(MarcatoStaccato, Staccato, Marcato)
+        ARTIC_2(MarcatoTenuto, Marcato, Tenuto)
+        ARTIC_2(TenutoAccent, Tenuto, Accent)
+        ARTIC_2(SoftAccentStaccato, Staccato, SoftAccent)
+        ARTIC_2(SoftAccentTenuto, SoftAccent, Tenuto)
+        ARTIC_3(SoftAccentTenutoStaccato, Staccato, SoftAccent, Tenuto)
+
+    default:
+        break;
+    }
+
+#undef ARTIC_2
+#undef ARTIC_3
+    return { sid };
+}
+
+//---------------------------------------------------------
 //   symIdToArtic
 //---------------------------------------------------------
 
@@ -2842,21 +2884,22 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
     // first the attributes whose elements are children of <articulations>
     Articulations articulations;
     for (const Articulation* a : na) {
-        auto sid = a->symId();
-        auto mxmlArtic = symIdToArtic(sid);
+        for (SymId sid : splitCompoundArticulations(a->symId())) {
+            auto mxmlArtic = symIdToArtic(sid);
 
-        if (mxmlArtic != "") {
-            if (sid == SymId::articMarcatoAbove || sid == SymId::articMarcatoBelow) {
-                if (a->up()) {
-                    mxmlArtic += " type=\"up\"";
-                } else {
-                    mxmlArtic += " type=\"down\"";
+            if (mxmlArtic != "") {
+                if (sid == SymId::articMarcatoAbove || sid == SymId::articMarcatoBelow) {
+                    if (a->up()) {
+                        mxmlArtic += " type=\"up\"";
+                    } else {
+                        mxmlArtic += " type=\"down\"";
+                    }
                 }
-            }
 
-            notations.tag(_xml);
-            articulations.tag(_xml);
-            _xml.tagE(mxmlArtic);
+                notations.tag(_xml);
+                articulations.tag(_xml);
+                _xml.tagE(mxmlArtic);
+            }
         }
     }
 
