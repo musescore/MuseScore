@@ -22,15 +22,23 @@
 import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import MuseScore.NotationScene 1.0
 
 Rectangle {
     id: root
 
+    property alias navigation: navPanel
+
     color: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
         model.load()
+    }
+
+    NavigationPanel {
+        id: navPanel
+        name: "UndoRedoToolBar"
     }
 
     UndoRedoModel {
@@ -54,6 +62,9 @@ Rectangle {
             enabled: model.undoItem.enabled
             normalStateColor: "transparent"
 
+            navigation.panel: navPanel
+            navigation.order: 1
+
             onClicked: {
                 model.undo()
             }
@@ -69,6 +80,9 @@ Rectangle {
 
             enabled: model.redoItem.enabled
             normalStateColor: "transparent"
+
+            navigation.panel: navPanel
+            navigation.order: 2
 
             onClicked: {
                 model.redo()
