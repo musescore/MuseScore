@@ -75,6 +75,9 @@ Rectangle {
             navigation.panel: navPanel
             navigation.order: model.index
 
+            iconFont: ui.theme.toolbarIconsFont
+            height: 36
+
             onClicked: {
                 toolBarModel.handleAction(model.code)
             }
