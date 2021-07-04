@@ -332,6 +332,9 @@ Lexer::Lexer(QIODevice* inDevice)
     graceMap["tf"]  = "HA F";
     graceMap["thg"] = "HA HG";
 
+    // piobraich
+    graceMap["endari"] ) "E LA F LA"
+
     getSym();
 
     qDebug() << "Lexer::Lexer() end";
