@@ -59,6 +59,7 @@ DockPage {
             minimumWidth: 198
 
             contentComponent: NotationToolBar {
+                navigation.section: root.topToolKeyNavSec
                 navigation.order: 2
 
                 onActiveFocusRequested: {
