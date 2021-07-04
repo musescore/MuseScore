@@ -39,6 +39,7 @@ Rectangle {
     NavigationPanel {
         id: navPanel
         name: "UndoRedoToolBar"
+        enabled: root.enabled && root.visible
     }
 
     UndoRedoModel {

@@ -34,8 +34,8 @@ Rectangle {
 
     NavigationPanel {
         id: keynavSub
-
         name: "PublishToolBar"
+        enabled: root.enabled && root.visible
     }
 
     PublishToolBarModel {
