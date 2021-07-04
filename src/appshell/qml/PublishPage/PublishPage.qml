@@ -98,7 +98,10 @@ DockPage {
 
             movable: false
 
-            contentComponent: UndoRedoToolBar {}
+            contentComponent: UndoRedoToolBar {
+                navigation.section: root.topToolKeyNavSec
+                navigation.order: 4
+            }
         }
     ]
 
