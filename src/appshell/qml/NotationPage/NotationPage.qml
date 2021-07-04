@@ -41,9 +41,6 @@ DockPage {
     objectName: "Notation"
     uri: "musescore://notation"
 
-    property var color: ui.theme.backgroundPrimaryColor
-    property var borderColor: ui.theme.strokeColor
-
     property DockWindow dockWindow: null
 
     property var topToolKeyNavSec
@@ -299,8 +296,6 @@ DockPage {
 
         objectName: "notationStatusBar"
 
-        NotationStatusBar {
-            color: root.color
-        }
+        NotationStatusBar {}
     }
 }
