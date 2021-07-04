@@ -35,11 +35,10 @@ import "../NotationPage"
 DockPage {
     id: root
 
-    property var color: ui.theme.backgroundPrimaryColor
-    property var topToolKeyNavSec
-
     objectName: "Publish"
     uri: "musescore://publish"
+
+    property var topToolKeyNavSec
 
     property NavigationSection publishToolBarKeyNavSec: NavigationSection {
         id: keynavSec
@@ -122,8 +121,6 @@ DockPage {
     statusBar: DockStatusBar {
         objectName: "publishStatusBar"
 
-        NotationStatusBar {
-            color: root.color
-        }
+        NotationStatusBar {}
     }
 }
