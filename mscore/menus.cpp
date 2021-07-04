@@ -1414,6 +1414,7 @@ PalettePanel* MuseScore::newLinesPalettePanel()
       ottava = new Ottava(gscore);
       ottava->setOttavaType(OttavaType::OTTAVA_22MB);
       ottava->setLen(w);
+      ottava->setPlacement(Placement::BELOW);
       ottava->styleChanged();
       sp->append(ottava, QT_TRANSLATE_NOOP("Palette", "22ma bassa"));
 
