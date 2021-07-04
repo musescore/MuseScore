@@ -147,7 +147,7 @@ Rectangle {
             delegate: DockPanelTab {
                 navigation.name: title
                 navigation.panel: navPanel
-                navigation.order: model.index
+                navigation.order: model.index * 2 // NOTE '...' button will have +1 order
                 onNavigationTriggered: tabsPanel.currentIndex = model.index
 
                 text: title
