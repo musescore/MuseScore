@@ -70,7 +70,7 @@ public:
     const std::set<INavigationPanel*>& panels() const override;
     async::Notification panelsListChanged() const override;
 
-    async::Channel<SectionPanelControl> activeRequested() const override;
+    SectionPanelControlChannel activeRequested() const override;
 
     void componentComplete() override;
 
@@ -87,7 +87,7 @@ private:
 
     std::set<INavigationPanel*> m_panels;
     async::Notification m_panelsListChanged;
-    async::Channel<SectionPanelControl> m_forceActiveRequested;
+    SectionPanelControlChannel m_forceActiveRequested;
     QmlType m_type = Regular;
 };
 }
