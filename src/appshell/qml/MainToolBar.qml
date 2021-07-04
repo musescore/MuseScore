@@ -35,7 +35,7 @@ Rectangle {
 
     property alias navigation: keynavSub
 
-    property var currentUri: "musescore://home"
+    property string currentUri: "musescore://home"
     property var items: [
         {
             title: qsTrc("appshell", "Home"),
@@ -64,6 +64,7 @@ Rectangle {
     NavigationPanel {
         id: keynavSub
         name: "MainToolBar"
+        enabled: root.enabled && root.visible
         accessible.name: qsTrc("appshell", "Main tool bar") + " " + keynavSub.directionInfo
     }
 

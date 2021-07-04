@@ -40,6 +40,7 @@ Rectangle {
     NavigationPanel {
         id: keynavSub
         name: "NotationToolBar"
+        enabled: root.enabled && root.visible
         onActiveChanged: {
             if (active) {
                 root.activeFocusRequested()
