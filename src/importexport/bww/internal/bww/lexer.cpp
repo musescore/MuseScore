@@ -333,7 +333,7 @@ Lexer::Lexer(QIODevice* inDevice)
     graceMap["thg"] = "HA HG";
 
     // piobraich
-    graceMap["endari"] ) "E LA F LA"
+    graceMap["endari"] = "E LA F LA";
 
     getSym();
 
