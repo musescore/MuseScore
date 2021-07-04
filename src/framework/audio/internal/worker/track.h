@@ -45,6 +45,7 @@ struct Track
 public:
     Track(const TrackType trackType = Undefined)
         : type(trackType) {}
+    virtual ~Track() = default;
 
     TrackId id = -1;
     TrackType type = Undefined;
