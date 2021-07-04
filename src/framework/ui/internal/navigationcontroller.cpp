@@ -305,8 +305,8 @@ void NavigationController::reg(INavigationSection* section)
     TRACEFUNC;
     m_sections.insert(section);
 
-    section->activeRequested().onReceive(this, [this](const SectionPanelControl& ssc) {
-        onActiveRequested(std::get<0>(ssc), std::get<1>(ssc), std::get<2>(ssc));
+    section->activeRequested().onReceive(this, [this](INavigationSection* section, INavigationPanel* panel, INavigationControl* control) {
+        onActiveRequested(section, panel, control);
     });
 }
 

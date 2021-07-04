@@ -71,7 +71,7 @@ public:
     const std::set<INavigationControl*>& controls() const override;
     async::Notification controlsListChanged() const override;
 
-    async::Channel<PanelControl> activeRequested() const override;
+    PanelControlChannel activeRequested() const override;
 
     INavigationSection* section() const override;
     NavigationSection* section_property() const;
@@ -95,7 +95,7 @@ private:
     NavigationSection* m_section = nullptr;
     std::set<INavigationControl*> m_controls;
     async::Notification m_controlsListChanged;
-    async::Channel<PanelControl> m_forceActiveRequested;
+    PanelControlChannel m_forceActiveRequested;
     QmlDirection m_direction = QmlDirection::Horizontal;
 };
 }
