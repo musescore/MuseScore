@@ -1344,7 +1344,7 @@ void Score::hideEmptyStaves(System* system, bool isFirstSystem)
                     && hideMode != Staff::HideMode::NEVER)) {
                   bool hideStaff = true;
                   for (auto spanner : spanners) {
-                        if (spanner.value->staff() == staff) {
+                        if (spanner.value->staff() == staff && !spanner.value->systemFlag()) {
                               hideStaff = false;
                               break;
                               }
