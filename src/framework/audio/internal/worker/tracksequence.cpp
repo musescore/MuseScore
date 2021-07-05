@@ -30,6 +30,7 @@
 #include "midiaudiosource.h"
 #include "sequenceplayer.h"
 #include "sequenceio.h"
+#include "audioengine.h"
 #include "audioerrors.h"
 
 using namespace mu;
@@ -72,10 +73,15 @@ RetVal<TrackId> TrackSequence::addTrack(const std::string& trackName, const midi
     ONLY_AUDIO_WORKER_THREAD;
 
     RetVal<TrackId> result;
+    result.val = -1;
+
+    IF_ASSERT_FAILED(mixer()) {
+        result.ret = make_ret(Err::Undefined);
+        return result;
+    }
 
     if (!midiData.mapping.isValid()) {
         result.ret = make_ret(Err::InvalidMidiMapping);
-        result.val = -1;
         return result;
     }
 
@@ -143,6 +149,10 @@ Ret TrackSequence::removeTrack(const TrackId id)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
+    IF_ASSERT_FAILED(mixer()) {
+        return make_ret(Err::Undefined);
+    }
+
     auto search = m_tracks.find(id);
 
     if (search != m_tracks.end() && search->second) {
@@ -197,4 +207,9 @@ TracksMap TrackSequence::allTracks() const
     ONLY_AUDIO_WORKER_THREAD;
 
     return m_tracks;
+}
+
+std::shared_ptr<Mixer> TrackSequence::mixer() const
+{
+    return AudioEngine::instance()->mixer();
 }

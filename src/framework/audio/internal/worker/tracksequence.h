@@ -26,7 +26,6 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "imixer.h"
 #include "imixerchannel.h"
 #include "itracksequence.h"
 #include "igettracks.h"
@@ -36,10 +35,9 @@
 #include "audiotypes.h"
 
 namespace mu::audio {
+class Mixer;
 class TrackSequence : public ITrackSequence, public IGetTracks, public async::Asyncable
 {
-    INJECT(audio, IMixer, mixer)
-
 public:
     TrackSequence(const TrackSequenceId id);
     ~TrackSequence();
@@ -65,6 +63,8 @@ public:
     TracksMap allTracks() const override;
 
 private:
+    std::shared_ptr<Mixer> mixer() const;
+
     TrackSequenceId m_id = -1;
 
     TracksMap m_tracks;

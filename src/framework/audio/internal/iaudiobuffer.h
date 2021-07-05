@@ -36,7 +36,6 @@ public:
 
     virtual void pop(float* dest, size_t sampleCount) = 0;
     virtual void setMinSampleLag(size_t lag) = 0;
-    virtual void setAudioChannelsCount(const audioch_t count) = 0;
 };
 
 using IAudioBufferPtr = std::shared_ptr<IAudioBuffer>;

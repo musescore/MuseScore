@@ -27,6 +27,7 @@
 
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"
+#include "internal/worker/audioengine.h"
 #include "audioerrors.h"
 
 using namespace mu::audio;
@@ -35,6 +36,7 @@ using namespace mu::async;
 AudioOutputHandler::AudioOutputHandler(IGetTrackSequence* getSequence)
     : m_getSequence(getSequence)
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 }
 
 Promise<AudioOutputParams> AudioOutputHandler::outputParams(const TrackSequenceId sequenceId, const TrackId trackId) const
@@ -76,14 +78,22 @@ Channel<TrackSequenceId, TrackId, AudioOutputParams> AudioOutputHandler::outputP
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 
+    IF_ASSERT_FAILED(mixer()) {
+        return {};
+    }
+
     return m_outputParamsChanged;
 }
 
 Promise<AudioOutputParams> AudioOutputHandler::masterOutputParams() const
 {
     return Promise<AudioOutputParams>([this](Promise<AudioOutputParams>::Resolve resolve,
-                                             Promise<AudioOutputParams>::Reject /*reject*/) {
+                                             Promise<AudioOutputParams>::Reject reject) {
         ONLY_AUDIO_WORKER_THREAD;
+
+        IF_ASSERT_FAILED(mixer()) {
+            reject(static_cast<int>(Err::Undefined), "undefined reference to a mixer");
+        }
 
         resolve(mixer()->masterOutputParams());
     }, AudioThread::ID);
@@ -94,6 +104,10 @@ void AudioOutputHandler::setMasterOutputParams(const AudioOutputParams& params)
     Async::call(this, [this, params]() {
         ONLY_AUDIO_WORKER_THREAD;
 
+        IF_ASSERT_FAILED(mixer()) {
+            return;
+        }
+
         mixer()->setMasterOutputParams(params);
     }, AudioThread::ID);
 }
@@ -102,12 +116,20 @@ Channel<AudioOutputParams> AudioOutputHandler::masterOutputParamsChanged() const
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 
+    IF_ASSERT_FAILED(mixer()) {
+        return {};
+    }
+
     return mixer()->masterOutputParamsChanged();
 }
 
 Channel<audioch_t, float> AudioOutputHandler::masterSignalAmplitudeChanged() const
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(mixer()) {
+        return {};
+    }
 
     return mixer()->masterSignalAmplitudeRmsChanged();
 }
@@ -116,7 +138,16 @@ Channel<audioch_t, volume_dbfs_t> AudioOutputHandler::masterVolumePressureChange
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 
+    IF_ASSERT_FAILED(mixer()) {
+        return {};
+    }
+
     return mixer()->masterVolumePressureDbfsChanged();
+}
+
+std::shared_ptr<Mixer> AudioOutputHandler::mixer() const
+{
+    return AudioEngine::instance()->mixer();
 }
 
 ITrackSequencePtr AudioOutputHandler::sequence(const TrackSequenceId id) const

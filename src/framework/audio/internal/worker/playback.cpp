@@ -38,8 +38,10 @@ using namespace mu;
 using namespace mu::audio;
 using namespace mu::async;
 
-Playback::Playback()
+void Playback::init()
 {
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
     m_playerHandlersPtr = std::make_shared<PlayerHandler>(this);
     m_trackHandlersPtr = std::make_shared<TracksHandler>(this);
     m_audioOutputPtr = std::make_shared<AudioOutputHandler>(this);
