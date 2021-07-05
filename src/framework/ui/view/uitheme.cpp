@@ -730,23 +730,16 @@ void UiTheme::drawCheckboxIndicator(QPainter* painter, const QRect& rect, bool e
 void UiTheme::drawRadioButtonIndicator(QPainter* painter, const QRect& rect, bool /*enabled*/, bool hovered, bool pressed,
                                        bool selected) const
 {
-    QColor borderColor(fontPrimaryColor());
-    QColor backgroundColor(textFieldColor());
-    QColor centerColor(accentColor());
+    QColor borderColor = fontPrimaryColor();
+    QColor backgroundColor = textFieldColor();
 
     if (pressed) {
-        backgroundColor.setAlphaF(accentOpacityHit());
-    } else if (selected && !hovered) {
-        backgroundColor.setAlphaF(accentOpacityNormal());
-    } else if (hovered && !selected && !pressed) {
-        backgroundColor.setAlphaF(buttonOpacityHover());
-    } else if (hovered && selected) {
-        backgroundColor.setAlphaF(accentOpacityHover());
+        borderColor.setAlphaF(buttonOpacityHit());
+    } else if (hovered) {
+        borderColor.setAlphaF(buttonOpacityHover());
     } else {
-        backgroundColor.setAlphaF(buttonOpacityNormal());
+        borderColor.setAlphaF(buttonOpacityNormal());
     }
-
-    borderColor.setAlphaF(backgroundColor.alphaF());
 
     const int borderWidth = 1;
     const qreal outerCircleRadius = 10; // diameter = 20
@@ -755,6 +748,7 @@ void UiTheme::drawRadioButtonIndicator(QPainter* painter, const QRect& rect, boo
     drawRoundedRect(painter, outerCircleRect, outerCircleRadius, backgroundColor, QPen(borderColor, borderWidth));
 
     if (selected || pressed) {
+        QColor centerColor = accentColor();
         const int innerCircleRadius = 5; // diameter = 10
         const QRect innerCircleRect(rect.center() + QPoint(1, 1) - QPoint(innerCircleRadius, innerCircleRadius),
                                     QSize(innerCircleRadius, innerCircleRadius) * 2);
