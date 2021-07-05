@@ -37,10 +37,12 @@ using namespace mu::async;
 
 Mixer::Mixer()
 {
+    ONLY_AUDIO_WORKER_THREAD;
 }
 
 Mixer::~Mixer()
 {
+    ONLY_AUDIO_WORKER_THREAD;
 }
 
 IAudioSourcePtr Mixer::mixedSource()
@@ -85,6 +87,13 @@ Ret Mixer::removeChannel(const MixerChannelId id)
     return make_ret(Err::InvalidMixerChannelId);
 }
 
+void Mixer::setAudioChannelsCount(const audioch_t count)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    m_audioChannelsCount = count;
+}
+
 void Mixer::setSampleRate(unsigned int sampleRate)
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -99,7 +108,7 @@ unsigned int Mixer::audioChannelsCount() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    return config()->audioChannelsCount();
+    return m_audioChannelsCount;
 }
 
 void Mixer::process(float* outBuffer, unsigned int samplesPerChannel)

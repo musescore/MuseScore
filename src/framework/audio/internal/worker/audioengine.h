@@ -31,7 +31,6 @@
 #include "isoundfontsprovider.h"
 #include "iaudiodriver.h"
 #include "isynthesizersregister.h"
-#include "internal/worker/imixer.h"
 #include "internal/synthesizers/synthesizercontroller.h"
 #include "internal/worker/mixer.h"
 #include "internal/iaudiobuffer.h"

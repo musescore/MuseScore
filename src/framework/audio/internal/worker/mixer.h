@@ -28,37 +28,34 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "imixer.h"
-#include "iaudioconfiguration.h"
 #include "abstractaudiosource.h"
 #include "mixerchannel.h"
 #include "clock.h"
 
 namespace mu::audio {
-class Mixer : public IMixer, public AbstractAudioSource, public std::enable_shared_from_this<Mixer>, public async::Asyncable
+class Mixer : public AbstractAudioSource, public std::enable_shared_from_this<Mixer>, public async::Asyncable
 {
-    INJECT(audio, IAudioConfiguration, config)
-
 public:
     Mixer();
     ~Mixer();
 
-    // IMixer
-    IAudioSourcePtr mixedSource() override;
+    IAudioSourcePtr mixedSource();
 
     RetVal<IMixerChannelPtr> addChannel(IAudioSourcePtr source, const AudioOutputParams& params,
-                                        async::Channel<AudioOutputParams> paramsChanged) override;
-    Ret removeChannel(const MixerChannelId id) override;
+                                        async::Channel<AudioOutputParams> paramsChanged);
+    Ret removeChannel(const MixerChannelId id);
 
-    void addClock(IClockPtr clock) override;
-    void removeClock(IClockPtr clock) override;
+    void setAudioChannelsCount(const audioch_t count);
 
-    AudioOutputParams masterOutputParams() const override;
-    void setMasterOutputParams(const AudioOutputParams& params) override;
-    async::Channel<AudioOutputParams> masterOutputParamsChanged() const override;
+    void addClock(IClockPtr clock);
+    void removeClock(IClockPtr clock);
 
-    async::Channel<audioch_t, float> masterSignalAmplitudeRmsChanged() const override;
-    async::Channel<audioch_t, volume_dbfs_t> masterVolumePressureDbfsChanged() const override;
+    AudioOutputParams masterOutputParams() const;
+    void setMasterOutputParams(const AudioOutputParams& params);
+    async::Channel<AudioOutputParams> masterOutputParamsChanged() const;
+
+    async::Channel<audioch_t, float> masterSignalAmplitudeRmsChanged() const;
+    async::Channel<audioch_t, volume_dbfs_t> masterVolumePressureDbfsChanged() const;
 
     // IAudioSource
     void setSampleRate(unsigned int sampleRate) override;
@@ -77,10 +74,13 @@ private:
     std::map<MixerChannelId, MixerChannelPtr> m_mixerChannels = {};
 
     std::set<IClockPtr> m_clocks;
+    audioch_t m_audioChannelsCount = 0;
 
     async::Channel<audioch_t, float> m_masterSignalAmplitudeRmsChanged;
     async::Channel<audioch_t, volume_dbfs_t> m_masterVolumePressureDbfsChanged;
 };
+
+using MixerPtr = std::shared_ptr<Mixer>;
 }
 
 #endif // MU_AUDIO_MIXER_H
