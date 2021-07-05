@@ -24,6 +24,7 @@
 
 #include "log.h"
 #include "translation.h"
+#include "io/path.h"
 
 using namespace mu::workspace;
 
@@ -68,7 +69,16 @@ bool NewWorkspaceModel::useToolbarCustomization() const
 
 bool NewWorkspaceModel::canCreateWorkspace() const
 {
-    return !m_workspaceName.isEmpty();
+    if (m_workspaceName.isEmpty()) {
+        return false;
+    }
+
+    //! NOTE A file will be created with this name, so let's check if the name is valid for the file name
+    if (!io::isAllowedFileName(io::path(m_workspaceName))) {
+        return false;
+    }
+
+    return true;
 }
 
 void NewWorkspaceModel::setWorkspaceName(const QString& name)
