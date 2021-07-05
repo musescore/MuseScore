@@ -26,6 +26,8 @@
 #include "io/path.h"
 #include "ret.h"
 #include "async/notification.h"
+
+#include "audiotypes.h"
 #include "synthtypes.h"
 
 namespace mu::audio {
@@ -40,7 +42,7 @@ public:
     virtual std::string currentAudioApi() const = 0;
     virtual void setCurrentAudioApi(const std::string& name) = 0;
 
-    virtual int audioChannelsCount() const = 0;
+    virtual audioch_t audioChannelsCount() const = 0;
     virtual unsigned int driverBufferSize() const = 0; // samples
 
     virtual bool isShowControlsInMixer() const = 0;

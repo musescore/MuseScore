@@ -36,7 +36,7 @@ using namespace mu::framework;
 using namespace mu::audio;
 using namespace mu::audio::synth;
 
-static const int AUDIO_CHANNELS = 2;
+static const audioch_t AUDIO_CHANNELS = 2;
 
 //TODO: add other setting: audio device etc
 static const Settings::Key AUDIO_API_KEY("audio", "io/audioApi");
@@ -85,7 +85,7 @@ void AudioConfiguration::setCurrentAudioApi(const std::string& name)
     settings()->setSharedValue(AUDIO_API_KEY, Val(name));
 }
 
-int AudioConfiguration::audioChannelsCount() const
+audioch_t AudioConfiguration::audioChannelsCount() const
 {
     return AUDIO_CHANNELS;
 }
