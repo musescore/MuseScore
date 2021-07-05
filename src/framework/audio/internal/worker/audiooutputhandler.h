@@ -27,14 +27,12 @@
 #include "async/asyncable.h"
 
 #include "iaudiooutput.h"
-#include "imixer.h"
 #include "igettracksequence.h"
 
 namespace mu::audio {
+class Mixer;
 class AudioOutputHandler : public IAudioOutput, public async::Asyncable
 {
-    INJECT(audio, IMixer, mixer)
-
 public:
     explicit AudioOutputHandler(IGetTrackSequence* getSequence);
 
@@ -50,6 +48,7 @@ public:
     async::Channel<audioch_t, volume_dbfs_t> masterVolumePressureChanged() const override;
 
 private:
+    std::shared_ptr<Mixer> mixer() const;
     ITrackSequencePtr sequence(const TrackSequenceId id) const;
     void ensureSubscriptions(const ITrackSequencePtr s) const;
 
