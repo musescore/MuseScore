@@ -24,8 +24,8 @@
 
 #include "thirdparty/deto_async/async/promise.h"
 namespace mu::async {
-template<typename T>
-using Promise = deto::async::Promise<T>;
+template<typename ... T>
+using Promise = deto::async::Promise<T...>;
 }
 
 #endif // MU_ASYNC_PROMISE_H
