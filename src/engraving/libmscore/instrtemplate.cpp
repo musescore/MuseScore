@@ -143,6 +143,7 @@ void InstrumentGroup::read(XmlReader& e)
             if (t == 0) {
                 t = new InstrumentTemplate;
                 t->articulation.append(articulation);             // init with global articulation
+                t->sequenceOrder = instrumentTemplates.size();
                 instrumentTemplates.append(t);
             }
             t->read(e);
