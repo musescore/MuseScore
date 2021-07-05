@@ -118,6 +118,7 @@ Instrument InstrumentsConverter::convertInstrument(const Ms::InstrumentTemplate&
     Instrument result = convertInstrument(msInstrument);
     result.templateId = templ.id;
     result.familyId = templ.family->id;
+    result.sequenceOrder = templ.sequenceOrder;
 
     for (const Ms::InstrumentGenre* msGenre : templ.genres) {
         result.genreIds << msGenre->id;
