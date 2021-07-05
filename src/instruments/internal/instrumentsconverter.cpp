@@ -93,6 +93,7 @@ Instrument InstrumentsConverter::convertInstrument(const Ms::Instrument& instrum
     result.useDrumset = instrument.useDrumset();
     result.drumset = instrument.drumset();
 
+    result.staves = instrument.cleffTypeCount();
     for (int i = 0; i < instrument.cleffTypeCount(); ++i) {
         result.clefs[i] = instrument.clefType(i);
     }
