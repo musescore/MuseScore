@@ -26,6 +26,7 @@ import QtQuick.Controls 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.NotationScene 1.0
+import MuseScore.Inspector 1.0
 
 import "internal"
 
@@ -41,6 +42,10 @@ FocusScope {
         name: "NotationView"
         order: 4
         enabled: root.visible
+    }
+
+    InspectorListModel {
+        id: inspectorListModel
     }
 
     ColumnLayout {
@@ -82,6 +87,14 @@ FocusScope {
                     privateProperties.showNotationMenu(items)
                 }
 
+                onOpenElementPopupRequested: {
+                    privateProperties.showNotationPopup(type, pos, size)
+                }
+
+                onCloseElementPopupRequested: {
+                    privateProperties.closeNotationPopup();
+                }
+
                 onViewportChanged: {
                     notationNavigator.setCursorRect(viewport)
                 }
@@ -100,6 +113,12 @@ FocusScope {
 
                 ContextMenu {
                     id: contextMenu
+                }
+
+                ElementPopup {
+                    id: elementPopup
+
+                    model: inspectorListModel.inspectorModelBySection(Inspector.SECTION_NOTATION)
                 }
 
                 StyledScrollBar {
@@ -226,6 +245,21 @@ FocusScope {
             }
 
             contextMenu.popup()
+        }
+
+        function showNotationPopup(type, pos, size) {
+            elementPopup.close();
+
+            elementPopup.type = type;
+
+            elementPopup.x = pos.x + size.x / 2 - elementPopup.width / 2;
+            elementPopup.y = pos.y + size.y / 2;
+
+            elementPopup.open();
+        }
+
+        function closeNotationPopup() {
+            elementPopup.close();
         }
     }
 

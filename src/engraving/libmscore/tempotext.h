@@ -83,6 +83,8 @@ public:
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid id) const override;
     QString accessibleInfo() const override;
+
+    bool needsElementPopup() const override { return true; }
 };
 }     // namespace Ms
 #endif

@@ -63,7 +63,8 @@ void InspectorListModel::buildModelsForEmptySelection(const QSet<Ms::ElementType
 {
     static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList {
         AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_DISPLAY,
-        AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_APPEARANCE
+        AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_APPEARANCE,
+        AbstractInspectorModel::InspectorSectionType::SECTION_NOTATION,
     };
 
     removeUnusedModels(selectedElementSet, persistentSectionList);
@@ -116,6 +117,19 @@ QHash<int, QByteArray> InspectorListModel::roleNames() const
 int InspectorListModel::columnCount(const QModelIndex&) const
 {
     return 1;
+}
+
+QVariant InspectorListModel::inspectorModelBySection(const int type) const
+{
+    for (AbstractInspectorModel* model : m_modelList) {
+        if (static_cast<int>(model->sectionType()) == type) {
+            QObject* result = qobject_cast<QObject*>(model);
+
+            return QVariant::fromValue(result);
+        }
+    }
+
+    return QVariant::fromValue(nullptr);
 }
 
 void InspectorListModel::createModelsBySectionType(const QList<AbstractInspectorModel::InspectorSectionType>& sectionTypeList)
