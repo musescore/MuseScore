@@ -115,6 +115,58 @@ mu::io::path mu::io::dirpath(const mu::io::path& path)
     return QFileInfo(path.toQString()).dir().path();
 }
 
+bool mu::io::isAllowedFileName(const path& fn_)
+{
+    QString fn = basename(fn_).toQString();
+
+    // Windows filenames are not case sensitive.
+    fn = fn.toUpper();
+
+    static const QString illegal="<>:\"|?*";
+
+    for (const QChar& c : fn) {
+        // Check for control characters
+        if (c.toLatin1() > 0 && c.toLatin1() < 32) {
+            return false;
+        }
+
+        // Check for illegal characters
+        if (illegal.contains(c)) {
+            return false;
+        }
+    }
+
+    // Check for device names in filenames
+    static const QStringList devices = {
+        "CON", "PRN",  "AUX",  "NUL",
+        "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+        "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
+    };
+
+    foreach (const QString& s, devices) {
+        if (fn == s) {
+            return false;
+        }
+    }
+
+    // Check for trailing periods or spaces
+    if (fn.right(1) == "." || fn.right(1) == " ") {
+        return false;
+    }
+
+    // Check for pathnames that are too long
+    if (fn.length() > 96) {
+        return false;
+    }
+
+    // Since we are checking for a filename, it mustn't be a directory
+    if (fn.right(1) == "\\") {
+        return false;
+    }
+
+    return true;
+}
+
 mu::io::path mu::io::escapeFileName(const mu::io::path& fn_)
 {
     //
