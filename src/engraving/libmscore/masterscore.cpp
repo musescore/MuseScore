@@ -285,7 +285,7 @@ Score::FileError MasterScore::loadMscz(const mu::engraving::MscReader& mscReader
         QBuffer buf(&styleData);
         buf.open(QIODevice::ReadOnly);
         chordList()->read(&buf);
-        score()->setUpQualitySymbols();
+        score()->updateChordList();
     }
 
     // Read images

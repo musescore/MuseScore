@@ -40,16 +40,7 @@ FocusableItem {
                 width: chordSymbolStylesGrid.cellWidth-5
                 height: chordSymbolStylesGrid.cellHeight-5
 
-                Text {
-                    text: styleName
-
-                    width: button.width
-                    height: button.height
-
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    wrapMode: Text.Wrap
-                }
+                text: styleName
 
                 onClicked: {
                     chordStylesModel.setChordStyle(styleName)

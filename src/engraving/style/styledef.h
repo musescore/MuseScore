@@ -417,6 +417,7 @@ enum class Sid {
     lowerCaseMinorChords,
     lowerCaseBassNotes,
     allCapsNoteNames,
+    stackModifiers,
     chordStyle,
     chordsXmlFile,
     chordDescriptionFile,

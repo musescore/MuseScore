@@ -290,6 +290,44 @@ Rectangle {
                 }
             }
 
+            GridView {
+                id: stackModifierGridView
+
+                height: listCellHeight + 2*listCellMargin
+                width: root.width
+
+                anchors.left: flickableContainer.left
+
+                anchors.top: omitGridView.bottom
+
+                cellHeight: listCellHeight
+                cellWidth: listCellWidth + listCellMargin
+
+                model: [
+                    {"name" : "Stacked","value" : 1.0},
+                    {"name" : "Non-stacked","value" : 0.0}
+                ]
+                currentIndex: editorModel.stackModifiersIndex
+
+                delegate: FlatButton {
+                    height: listCellHeight
+                    width: listCellWidth
+                    anchors.rightMargin: listCellMargin
+                    text: modelData["name"]
+
+                    onClicked: {
+                        editorModel.setProperty("stackModifiers", modelData["value"]);
+                    }
+                }
+
+                boundsBehavior: Flickable.StopAtBounds
+
+                highlight: Rectangle {
+                    color: ui.theme.accentColor
+                    radius: 3
+                }
+            }
+
         }
     }
 }

@@ -46,17 +46,7 @@ Rectangle {
             width: chordSymbolStyleGrid.cellWidth-5
             height: chordSymbolStyleGrid.cellHeight-5
 
-            Text {
-                id: buttontext
-                text: styleName
-
-                width: button.width
-                height: button.height
-
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                wrapMode: Text.Wrap
-            }
+            text: styleName
 
             onClicked: {
                 chordSymbolEditorModel.setChordStyle(styleName)

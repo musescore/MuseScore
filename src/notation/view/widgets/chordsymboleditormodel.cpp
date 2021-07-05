@@ -29,7 +29,6 @@ ChordSymbolEditorModel::ChordSymbolEditorModel(QObject* parent)
     styleManager = new ChordSymbolStyleManager();
     m_styles = styleManager->getChordStyles();
     setQualitySymbolsLists();
-    initChordSpellingList();
     initCurrentStyleIndex();
     initProperties();
     updatePropertyIndices();
@@ -141,6 +140,11 @@ int ChordSymbolEditorModel::diminishedIndex() const
     return m_diminishedIndex;
 }
 
+int ChordSymbolEditorModel::stackModifiersIndex() const
+{
+    return m_stackModifiersIndex;
+}
+
 int ChordSymbolEditorModel::omitIndex() const
 {
     return m_omitIndex;
@@ -206,14 +210,9 @@ qreal ChordSymbolEditorModel::capoFretPosition() const
     return m_capoFretPosition;
 }
 
-void ChordSymbolEditorModel::initChordSpellingList()
-{
-    m_chordSpellingList << "Standard" << "German" << "German Full" << "Solfege" << "French";
-    emit chordSpellingListChanged();
-}
-
 void ChordSymbolEditorModel::initProperties()
 {
+    m_chordSpellingList << "Standard" << "German" << "German Full" << "Solfege" << "French";
     m_qualityMag = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualityMag).toReal();
     m_qualityAdjust = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualityAdjust).toReal();
     m_extensionMag = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordExtensionMag).toReal();
@@ -226,7 +225,13 @@ void ChordSymbolEditorModel::initProperties()
     m_maxChordShiftAbove = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::maxChordShiftAbove).toReal();
     m_maxChordShiftBelow = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::maxChordShiftBelow).toReal();
     m_capoFretPosition = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::capoPosition).toReal();
+    if (globalContext()->currentNotation()->style()->styleValue(Ms::Sid::stackModifiers).toBool()) {
+        m_stackModifiersIndex = 0;
+    } else {
+        m_stackModifiersIndex = 1;
+    }
 
+    emit chordSpellingListChanged();
     emit qualityMagChanged();
     emit qualityAdjustChanged();
     emit extensionMagChanged();
@@ -238,6 +243,7 @@ void ChordSymbolEditorModel::initProperties()
     emit maxHarmonyBarDistanceChanged();
     emit maxChordShiftAboveChanged();
     emit maxChordShiftBelowChanged();
+    emit stackModifiersIndexChanged();
 }
 
 void ChordSymbolEditorModel::initCurrentStyleIndex()
@@ -255,6 +261,8 @@ void ChordSymbolEditorModel::initCurrentStyleIndex()
         index++;
     }
 
+    // If the current style is not found in m_styles(i.e. no curresponding file),
+    // set the first style available
     if (!foundCurrentStyle && (m_styles.size() > 0)) {
         setChordStyle(m_styles[0].styleName);
     }
@@ -264,7 +272,6 @@ void ChordSymbolEditorModel::initCurrentStyleIndex()
 
 void ChordSymbolEditorModel::updatePropertyIndices()
 {
-    // Will include extension, scaling and stuff in the future
     for (auto& spelling: m_chordSpellingList) {
         Ms::Sid id = chordSpellingMap.value(spelling);
         bool isCurrentChordSpelling = globalContext()->currentNotation()->style()->styleValue(id).toBool();
@@ -278,6 +285,14 @@ void ChordSymbolEditorModel::updatePropertyIndices()
 
 void ChordSymbolEditorModel::updateQualitySymbolsIndices(bool chordStyleChanged)
 {
+    // Steps/Checks for each quality/modifier
+    // 1. Check if the current symbol is present in the current list. If so, set the index.
+    // 2. Check if the selection history contains the symbol. If so, set the index.
+    // 3. Set the first symbol. This condition occurs when that style is set for the first time.
+
+    // Whenever the chord style is changed, skip 1st step
+    // to preserve the selection history
+
     QString currentStyle = m_styles[m_currentStyleIndex].styleName;
 
     // Major Seventh
@@ -400,7 +415,7 @@ void ChordSymbolEditorModel::setQualitySymbolsLists()
     m_diminishedList = m_qualitySymbols["diminished"];
     m_omitList = m_qualitySymbols["omit"];
 
-    // Get the selection History
+    // Get and extract the selection History
     QString selectionHistory = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualitySelectionHistory).toString();
     extractSelectionHistory(selectionHistory);
 
@@ -516,6 +531,24 @@ void ChordSymbolEditorModel::setProperty(QString property, qreal val)
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::capoPosition, val);
         m_capoFretPosition = val;
         emit capoFretPositionChanged();
+    } else if (property == "stackModifiers") {
+        bool stackMod;
+
+        if (val == 1) {
+            stackMod = true;
+        } else {
+            stackMod = false;
+        }
+
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::stackModifiers, stackMod);
+
+        if (stackMod) {
+            m_stackModifiersIndex = 0;
+        } else {
+            m_stackModifiersIndex = 1;
+        }
+
+        emit stackModifiersIndexChanged();
     }
 }
 
@@ -533,6 +566,8 @@ void ChordSymbolEditorModel::stringifyAndSaveSelectionHistory()
 
 void ChordSymbolEditorModel::extractSelectionHistory(QString selectionHistory)
 {
+    // The selection history is of the format
+    // "StyleName1|maj7,half-dim,min,aug,dim,omit\nStyleName2...."
     m_selectionHistory.clear();
     QStringList selectionHistoryList = selectionHistory.split("\n");
     for (auto s: selectionHistoryList) {

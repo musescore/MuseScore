@@ -1821,7 +1821,8 @@ void ChangeStyleVal::flip(EditData*)
         case Sid::chordQualityMinor:
         case Sid::chordQualityAugmented:
         case Sid::chordQualityDiminished:
-        case Sid::chordModifierOmit: {
+        case Sid::chordModifierOmit:
+        case Sid::stackModifiers: {
             score->chordList()->unload();
             qreal qmag = score->styleD(Sid::chordQualityMag);
             qreal qadjust = score->styleD(Sid::chordQualityAdjust);
@@ -1835,7 +1836,7 @@ void ChangeStyleVal::flip(EditData*)
             }
             score->chordList()->read(score->styleSt(Sid::chordDescriptionFile));
             score->chordList()->setCustomChordList(score->styleSt(Sid::chordStyle) == "custom");
-            score->setUpQualitySymbols();
+            score->updateChordList();
         }
         break;
         case Sid::spatium:

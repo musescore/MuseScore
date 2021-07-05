@@ -44,6 +44,7 @@ mu::io::paths ChordSymbolStyleManager::scanFileSystemForChordStyles()
 {
     mu::io::paths result;
 
+    // Are there any other share paths?
     mu::io::path dirPath = Ms::MScore::globalShare();
     mu::RetVal<mu::io::paths> files = fileSystem()->scanFiles(dirPath, { "*.xml" });
 
@@ -56,6 +57,7 @@ QList<ChordSymbolStyle> ChordSymbolStyleManager::getChordStyles()
     return _chordStyles;
 }
 
+// Check if the file is a chord symbol style file
 bool ChordSymbolStyleManager::isChordSymbolStylesFile(mu::io::path& f)
 {
     bool isStyleFile = false;
@@ -92,6 +94,7 @@ bool ChordSymbolStyleManager::isChordSymbolStylesFile(mu::io::path& f)
     return isStyleFile;
 }
 
+// Extract info from a file that is confirmed as a style file
 void ChordSymbolStyleManager::extractChordStyleInfo(mu::io::path& f)
 {
     QString path = f.toQString();

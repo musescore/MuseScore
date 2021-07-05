@@ -919,7 +919,7 @@ public:
     ChordList* chordList() { return &_chordList; }
     const ChordList* chordList() const { return &_chordList; }
     void checkChordList() { _chordList.checkChordList(style()); }
-    void setUpQualitySymbols();
+    void updateChordList();
 
     virtual MStyle& style() { return _style; }
     virtual const MStyle& style() const { return _style; }

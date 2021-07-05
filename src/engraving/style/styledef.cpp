@@ -414,6 +414,7 @@ const StyleDef::StyleValue StyleDef::styleValues[int(Sid::STYLES)] = {
     { Sid::lowerCaseMinorChords,    "lowerCaseMinorChords",    QVariant(false) },
     { Sid::lowerCaseBassNotes,      "lowerCaseBassNotes",      QVariant(false) },
     { Sid::allCapsNoteNames,        "allCapsNoteNames",        QVariant(false) },
+    { Sid::stackModifiers,          "stackModifiers",          QVariant(false) },
     { Sid::chordStyle,              "chordStyle",              QVariant(QString("std")) },
     { Sid::chordsXmlFile,           "chordsXmlFile",           QVariant(false) },
     { Sid::chordDescriptionFile,    "chordDescriptionFile",    QVariant(QString("chords_std.xml")) },
