@@ -21,24 +21,6 @@
  */
 .pragma library
 
-var style = {
-    popupMargin: 3
-}
-
-function stretched(cw, w) {
-    return cw + (w % cw) / Math.floor(w / cw);
-}
-
-function dropEventMimeData(drag) {
-    var formats = drag.formats;
-    var mime = {};
-    for (var i = 0; i < formats.length; i++) {
-        var fmt = formats[i];
-        mime[fmt] = drag.getDataAsArrayBuffer(fmt);
-    }
-    return mime;
-}
-
-function removeSelectedItems(paletteController, selectionModel, parentIndex) {
-    paletteController.removeSelection(selectionModel.selectedIndexes, parentIndex);
+function colorWithAlpha(color, alpha) {
+    return Qt.rgba(color.red, color.green, color.blue, alpha)
 }
