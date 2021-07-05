@@ -128,7 +128,7 @@ ComboBox {
 
     delegate: ItemDelegate {
         height: root.implicitHeight
-        width: root.width
+        width: 800 //root.width * 2
 
         contentItem: StyledTextLabel {
             leftPadding: privateProperties.textPadding

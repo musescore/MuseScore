@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
+import QtQuick 2.15
 import QtQuick.Controls 2.0
 import QtQuick.Controls 1.5
 import QtQuick.Layouts 1.3
@@ -101,33 +101,54 @@ Rectangle {
     Component {
         id: comboboxSample
 
-        StyledComboBox {
+        Row {
+            spacing: 16
 
-            property var currValue
+            StyledComboBox {
 
-            width: 400
+                property var currValue
 
-            textRoleName: "text"
-            valueRoleName: "value"
+                width: 400
 
-            model: [
-                { text: "Option 1", value: 1 },
-                { text: "Option 2", value: 2 },
-                { text: "Option 3", value: 3 },
-                { text: "Option 4", value: 4 },
-                { text: "Option 5", value: 5 },
-                { text: "Option 6", value: 6 },
-                { text: "Option 7", value: 7 },
-                { text: "Option 8", value: 8 },
-                { text: "Option 9", value: 9 },
-                { text: "Option 10", value: 10 },
-                { text: "Option 11", value: 11 }
-            ]
+                textRoleName: "text"
+                valueRoleName: "value"
 
-            currentIndex: indexOfValue(currValue)
+                model: [
+                    { text: "Option 1", value: 1 },
+                    { text: "Option 2", value: 2 },
+                    { text: "Option 3", value: 3 },
+                    { text: "Option 4", value: 4 },
+                    { text: "Option 5", value: 5 },
+                    { text: "Option 6", value: 6 },
+                    { text: "Option 7", value: 7 },
+                    { text: "Option 8", value: 8 },
+                    { text: "Option 9", value: 9 },
+                    { text: "Option 10", value: 10 },
+                    { text: "Option 11", value: 11 }
+                ]
 
-            onValueChanged: {
-                currValue = value
+                currentIndex: indexOfValue(currValue)
+
+                onValueChanged: {
+                    currValue = value
+                }
+            }
+
+            Dropdown {
+                currentIndex: 0
+                model: [
+                    { text: "Option 1", value: 1 },
+                    { text: "Option 2", value: 2 },
+                    { text: "Option 3", value: 3 },
+                    { text: "Option 4", value: 4 },
+                    { text: "Option 5", value: 5 },
+                    { text: "Option 6", value: 6 },
+                    { text: "Option 7", value: 7 },
+                    { text: "Option 8", value: 8 },
+                    { text: "Option 9", value: 9 },
+                    { text: "Option 10", value: 10 },
+                    { text: "Option 11", value: 11 }
+                ]
             }
         }
     }
