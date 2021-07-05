@@ -33,6 +33,8 @@ using namespace mu::audio::synth;
 
 AudioEngine* AudioEngine::instance()
 {
+    ONLY_AUDIO_WORKER_THREAD;
+
     static AudioEngine e;
     return &e;
 }
@@ -61,7 +63,7 @@ mu::Ret AudioEngine::init(IAudioBufferPtr bufferPtr)
 
     m_mixer = std::make_shared<Mixer>();
 
-    m_buffer = bufferPtr;
+    m_buffer = std::move(bufferPtr);
     m_buffer->setSource(m_mixer->mixedSource());
 
     m_synthesizerController = std::make_shared<SynthesizerController>(synthesizersRegister(), soundFontsProvider());
@@ -105,7 +107,18 @@ void AudioEngine::setReadBufferSize(uint16_t readBufferSize)
     m_buffer->setMinSampleLag(readBufferSize);
 }
 
-IMixerPtr AudioEngine::mixer() const
+void AudioEngine::setAudioChannelsCount(const audioch_t count)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_mixer) {
+        return;
+    }
+
+    m_mixer->setAudioChannelsCount(count);
+}
+
+MixerPtr AudioEngine::mixer() const
 {
     ONLY_AUDIO_WORKER_THREAD;
     return m_mixer;

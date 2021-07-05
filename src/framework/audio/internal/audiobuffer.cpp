@@ -20,17 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "audiobuffer.h"
+
 #include <cstring>
+
 #include "log.h"
 
 using namespace mu::audio;
 
-void AudioBuffer::init(int samplesPerChannel)
+void AudioBuffer::init(const audioch_t audioChannelsCount, const samples_t samplesPerChannel)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
 
-    m_audioChannelsCount = config()->audioChannelsCount();
-    m_data.resize(samplesPerChannel * m_audioChannelsCount, 0.f);
+    m_samplesPerChannel = samplesPerChannel;
+    m_audioChannelsCount = audioChannelsCount;
+
+    m_data.resize(m_samplesPerChannel * m_audioChannelsCount, 0.f);
 }
 
 void AudioBuffer::setSource(std::shared_ptr<IAudioSource> source)

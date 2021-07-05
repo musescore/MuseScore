@@ -50,17 +50,19 @@ public:
 
     void setSampleRate(unsigned int sampleRate);
     void setReadBufferSize(uint16_t readBufferSize);
+    void setAudioChannelsCount(const audioch_t count);
 
-    IMixerPtr mixer() const;
+    MixerPtr mixer() const;
 
 private:
     AudioEngine();
 
     bool m_inited = false;
 
+    audioch_t m_audioChCount = 0;
     unsigned int m_sampleRate = 0;
 
-    std::shared_ptr<Mixer> m_mixer = nullptr;
+    MixerPtr m_mixer = nullptr;
     IAudioBufferPtr m_buffer = nullptr;
 
     // synthesizers
