@@ -336,7 +336,7 @@ void InstrumentListModel::selectInstrument(const QString& instrumentName, const 
 
 void InstrumentListModel::unselectInstrument(int instrumentIndex)
 {
-    if (!isInsrumentIndexValid(instrumentIndex)) {
+    if (!isInstrumentIndexValid(instrumentIndex)) {
         return;
     }
 
@@ -399,7 +399,7 @@ void InstrumentListModel::setSelectedScoreOrderIndex(const QVariant& index)
 
 void InstrumentListModel::toggleSoloist(int instrumentIndex)
 {
-    if (!isInsrumentIndexValid(instrumentIndex)) {
+    if (!isInstrumentIndexValid(instrumentIndex)) {
         return;
     }
 
@@ -647,7 +647,7 @@ void InstrumentListModel::makeCustomizedScoreOrder(const ScoreOrderInfo& order)
     m_scoreOrders.insert(m_selectedScoreOrderIndex, customizedOrder);
 }
 
-bool InstrumentListModel::isInsrumentIndexValid(int index) const
+bool InstrumentListModel::isInstrumentIndexValid(int index) const
 {
     return index >= 0 && index < m_selectedInstruments.size();
 }

@@ -132,7 +132,7 @@ private:
     void checkScoreOrderMatching(bool block);
     void makeCustomizedScoreOrder(const ScoreOrderInfo& order);
 
-    bool isInsrumentIndexValid(int index) const;
+    bool isInstrumentIndexValid(int index) const;
 
     bool m_canSelectMultipleInstruments = false;
 

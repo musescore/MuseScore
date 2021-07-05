@@ -45,7 +45,7 @@ using namespace mu::instruments;
 using namespace mu::modularity;
 using namespace mu::ui;
 
-static InstrumentsRepository* s_instrumentsRepository = new InstrumentsRepository();
+static InstrumentsRepository* m_instrumentsRepository = new InstrumentsRepository();
 static std::shared_ptr<InstrumentsConfiguration> s_configuration = std::make_shared<InstrumentsConfiguration>();
 
 static void instruments_init_qrc()
@@ -102,7 +102,7 @@ void InstrumentsModule::registerUiTypes()
 void InstrumentsModule::onInit(const framework::IApplication::RunMode&)
 {
     s_configuration->init();
-    s_instrumentsRepository->init();
+    m_instrumentsRepository->init();
 
     auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {

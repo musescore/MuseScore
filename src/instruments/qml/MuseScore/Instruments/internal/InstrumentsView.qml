@@ -102,6 +102,10 @@ Item {
         navigation.panel: navPanel
         navigation.row: 1
 
+        onCurrentTextEdited: {
+            root.resetSelectedInstrument()
+        }
+
         onTextCleared: {
             root.resetSelectedInstrument()
         }
