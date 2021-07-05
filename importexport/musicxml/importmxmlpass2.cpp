@@ -1406,6 +1406,59 @@ static void resetTuplets(Tuplets& tuplets)
       }
 
 //---------------------------------------------------------
+//   cleanFretDiagrams
+//---------------------------------------------------------
+/**
+ PVG scores sometimes display fretboards for all chords at
+ the beginning. These often fail to translate correctly to
+ MusicXML, so we delete them here.
+ */
+
+static void cleanFretDiagrams(Measure* measure)
+      {
+      if (measure->no() > 0)
+            return;
+      // Case 1: Dummy hidden first measure with all fretboards attached
+      bool isDummyMeasure = toMeasureBase(measure)->lineBreak();
+      for (Segment* s = measure->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            if (!isDummyMeasure) break;
+            for (Element* e : s->elist()) {
+                  if (e && e->isChord() && e->visible()) {
+                        isDummyMeasure = false;
+                        break;
+                        }
+                  }
+            }
+      if (isDummyMeasure) {
+            for (Segment* s = measure->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                  for (Element* e : s->annotations()) {
+                        if (e->isFretDiagram()) {
+                              s->remove(e);
+                              delete e;
+                              }
+                        }
+                  }
+            }
+      
+      // Case 2: All the fretboards attached to first beat
+      Segment* firstBeat = measure->first(SegmentType::ChordRest);
+      QList<FretDiagram*> beat1FretDiagrams;
+      int fretDiagramsTrack = -1;
+      for (Element* e : firstBeat->annotations()) {
+            if (e->isFretDiagram()
+            && (fretDiagramsTrack == e->track() || fretDiagramsTrack == -1)) {
+                  beat1FretDiagrams.append(toFretDiagram(e));
+                  fretDiagramsTrack = e->track();
+                  }
+            }
+      if (beat1FretDiagrams.length() > 1 && fretDiagramsTrack != -1) {
+            for (FretDiagram* fd : beat1FretDiagrams) {
+                  firstBeat->remove(fd);
+                  delete fd;
+                  }
+            }
+      }
+//---------------------------------------------------------
 //   initPartState
 //---------------------------------------------------------
 
@@ -1629,6 +1682,7 @@ void MusicXMLParserPass2::scorePartwise()
             lm->setEndBarLineType(BarLineType::NORMAL, 0);
 
       _score->connectArpeggios();
+      cleanFretDiagrams(_score->firstMeasure());
       }
 
 //---------------------------------------------------------
