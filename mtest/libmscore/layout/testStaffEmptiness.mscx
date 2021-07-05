@@ -273,7 +273,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <text>Hanging Slur</text>
+            <text>Hanging Slur (unhides staff 2)</text>
             </StaffText>
           <Chord>
             <durationType>quarter</durationType>
@@ -526,6 +526,10 @@
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
+          <StaffText>
+            <offset x="-10.8383" y="-3.22005"/>
+            <text>Staff 2 hidden</text>
+            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -545,6 +549,9 @@
       <!-- Measure 21 -->
       <Measure>
         <voice>
+          <StaffText>
+            <text>Pedal line (unhides staff 2)</text>
+            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -606,9 +613,6 @@
       <!-- Measure 24 -->
       <Measure>
         <voice>
-          <StaffText>
-            <text>Pedal Line</text>
-            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -815,9 +819,6 @@
         </Measure>
       <!-- Measure 31 -->
       <Measure>
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <voice>
           <Rest>
             <durationType>measure</durationType>
@@ -828,9 +829,6 @@
       <!-- Measure 32 -->
       <Measure>
         <voice>
-          <StaffText>
-            <text>Ottava Line</text>
-            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -892,6 +890,9 @@
       <!-- Measure 36 -->
       <Measure>
         <voice>
+          <StaffText>
+            <text>Ottava line (unhides staff 2)</text>
+            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -955,7 +956,20 @@
         </Measure>
       <!-- Measure 40 -->
       <Measure>
+        <endRepeat>2</endRepeat>
         <voice>
+          <Spanner type="Volta">
+            <Volta>
+              <endHookType>1</endHookType>
+              <beginText>1.</beginText>
+              <endings>1</endings>
+              </Volta>
+            <next>
+              <location>
+                <measures>1</measures>
+                </location>
+              </next>
+            </Spanner>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -965,10 +979,36 @@
       <!-- Measure 41 -->
       <Measure>
         <voice>
+          <Spanner type="Volta">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                </location>
+              </prev>
+            </Spanner>
+          <Spanner type="Volta">
+            <Volta>
+              <endHookType>1</endHookType>
+              <beginText>2.</beginText>
+              <endings>2</endings>
+              </Volta>
+            <next>
+              <location>
+                <fractions>1/1</fractions>
+                </location>
+              </next>
+            </Spanner>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
+          <Spanner type="Volta">
+            <prev>
+              <location>
+                <fractions>-1/1</fractions>
+                </location>
+              </prev>
+            </Spanner>
           </voice>
         </Measure>
       </Staff>
@@ -1203,6 +1243,23 @@
       <!-- Measure 21 -->
       <Measure>
         <voice>
+          <Spanner type="Pedal">
+            <Pedal>
+              <endHookType>1</endHookType>
+              <beginHookType>1</beginHookType>
+              <Segment>
+                <subtype>0</subtype>
+                <offset x="-1.65822" y="1.78426"/>
+                <off2 x="1.79962" y="0"/>
+                <minDistance>0.47426</minDistance>
+                </Segment>
+              </Pedal>
+            <next>
+              <location>
+                <measures>1</measures>
+                </location>
+              </next>
+            </Spanner>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -1212,6 +1269,13 @@
       <!-- Measure 22 -->
       <Measure>
         <voice>
+          <Spanner type="Pedal">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                </location>
+              </prev>
+            </Spanner>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -1230,17 +1294,6 @@
       <!-- Measure 24 -->
       <Measure>
         <voice>
-          <Spanner type="Pedal">
-            <Pedal>
-              <endHookType>1</endHookType>
-              <beginHookType>1</beginHookType>
-              </Pedal>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -1250,13 +1303,6 @@
       <!-- Measure 25 -->
       <Measure>
         <voice>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -1495,6 +1541,12 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
+          <StaffText>
+            <placement>below</placement>
+            <minDistance>-999</minDistance>
+            <offset x="-11.5541" y="4.40686"/>
+            <text>Volta (should NOT unhide staff 1)</text>
+            </StaffText>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
