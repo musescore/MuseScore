@@ -1099,7 +1099,7 @@ PalettePanel* PaletteCreator::newBracketsPalettePanel()
             { BracketType::LINE,   QT_TRANSLATE_NOOP("palette", "Line") } }
     };
 
-    static Staff bracketItemOwner(nullptr);
+    static Staff bracketItemOwner(gscore);
     bracketItemOwner.setBracketType(types.size() - 1, BracketType::NORMAL);
 
     for (size_t i = 0; i < types.size(); ++i) {
