@@ -3082,6 +3082,17 @@ Sid TextBase::offsetSid() const
     return Sid::NOSTYLE;
 }
 
+bool TextBase::moveCursor(TextCursor* cursor, int key, bool ctrlPressed, QTextCursor::MoveMode moveMode) const
+{
+    if (key == Qt::Key_Left) {
+        return cursor->movePosition(ctrlPressed ? QTextCursor::WordLeft : QTextCursor::Left, moveMode);
+    } else if (key == Qt::Key_Right) {
+        return cursor->movePosition(ctrlPressed ? QTextCursor::WordRight : QTextCursor::Right, moveMode);
+    } else {
+        return false;
+    }
+}
+
 //---------------------------------------------------------
 //   getHtmlStartTag - helper function for extractText with withFormat = true
 //---------------------------------------------------------

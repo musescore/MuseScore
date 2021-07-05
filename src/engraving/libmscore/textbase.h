@@ -319,6 +319,8 @@ public:
 
     void insertText(EditData&, const QString&);
 
+    virtual bool moveCursor(TextCursor* cursor, int key, bool ctrlPressed, QTextCursor::MoveMode moveMode) const;
+
     virtual void layout() override;
     virtual void layout1();
     qreal lineSpacing() const;
@@ -364,7 +366,7 @@ public:
 
     mu::RectF pageRectangle() const;
 
-    void dragTo(EditData&);
+    virtual void dragTo(EditData&);
 
     QVector<mu::LineF> dragAnchorLines() const override;
 

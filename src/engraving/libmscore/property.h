@@ -156,6 +156,8 @@ enum class Pid {
     SPACE,            // used for spacer
     TEMPO,
     TEMPO_FOLLOW_TEXT,
+    TEMPO_EQUATION,
+    TEMPO_EQUATION_VISIBLE,
     ACCIDENTAL_BRACKET,
     ACCIDENTAL_TYPE,
     NUMERATOR_STRING,

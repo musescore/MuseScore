@@ -21,9 +21,11 @@
  */
 
 #include <cmath>
+#include <utility>
 
 #include "score.h"
 #include "tempotext.h"
+#include "textedit.h"
 #include "tempo.h"
 #include "system.h"
 #include "measure.h"
@@ -31,6 +33,10 @@
 #include "xml.h"
 #include "undo.h"
 #include "musescoreCore.h"
+
+#include "log.h"
+
+#include <QRegularExpression>
 
 using namespace mu;
 
@@ -58,10 +64,13 @@ TempoText::TempoText(Score* s)
     : TextBase(s, Tid::TEMPO, ElementFlags(ElementFlag::SYSTEM))
 {
     initElementStyle(&tempoStyle);
-    _tempo      = 2.0;        // propertyDefault(P_TEMPO).toDouble();
+    _playbackTempo      = 2.0;        // propertyDefault(P_TEMPO).toDouble();
     _followText = false;
     _relative   = 1.0;
     _isRelative = false;
+    _equation   = "q = 120";
+    _tempoText = "";
+    _isEquationVisible = true;
 }
 
 //---------------------------------------------------------
@@ -71,7 +80,10 @@ TempoText::TempoText(Score* s)
 void TempoText::write(XmlWriter& xml) const
 {
     xml.stag(this);
-    xml.tag("tempo", _tempo);
+    xml.tag("playbackTempo", _playbackTempo);
+    xml.tag("notatedTempo", _notatedTempo);
+    xml.tag("equation", _equation);
+    xml.tag("tempoText", _tempoText);
     if (_followText) {
         xml.tag("followText", _followText);
     }
@@ -87,34 +99,30 @@ void TempoText::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
-        if (tag == "tempo") {
+        if (tag == "playbackTempo") {
             setTempo(e.readDouble());
         } else if (tag == "followText") {
             _followText = e.readInt();
+        } else if (tag == "equation") {
+            _equation = e.readElementText();
+        } else if (tag == "notatedTempo") {
+            _notatedTempo = e.readInt();
+        } else if (tag == "tempoText") {
+            _tempoText = e.readElementText();
         } else if (!TextBase::readProperties(e)) {
             e.unknown();
         }
     }
     // check sanity
     if (xmlText().isEmpty()) {
-        setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(lrint(60 * _tempo)));
+        setXmlText(QString("q = %1").arg(lrint(60 * _playbackTempo)));
         setVisible(false);
     }
 }
 
 qreal TempoText::tempoBpm() const
 {
-    //! NOTE: find tempo in format " = 180"
-    QRegExp regExp("\\s*=\\s*(\\d+[.]{0,1}\\d*)");
-    regExp.indexIn(xmlText());
-    QStringList matches = regExp.capturedTexts();
-
-    if (matches.empty() || matches.size() < 1) {
-        return 0;
-    }
-
-    qreal tempo = matches[1].toDouble();
-    return tempo;
+    return _notatedTempo;
 }
 
 //---------------------------------------------------------
@@ -246,7 +254,7 @@ QString TempoText::duration2tempoTextString(const TDuration dur)
 void TempoText::updateScore()
 {
     if (segment()) {
-        score()->setTempo(segment(), _tempo);
+        score()->setTempo(segment(), _playbackTempo);
     }
     score()->fixTicks();
     score()->setPlaylistDirty();
@@ -260,6 +268,21 @@ void TempoText::updateRelative()
 {
     qreal tempoBefore = score()->tempo(tick() - Fraction::fromTicks(1));
     setTempo(tempoBefore * _relative);
+}
+
+void TempoText::startEdit(EditData& ed)
+{
+    TextBase::startEdit(ed);
+
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextCursor* cursor = ted->cursor();
+
+    int cursorIndex = textIndexFromCursor(cursor->row(), cursor->column());
+    std::pair<int, int> eqnIndices = equationIndices();
+
+    if (cursorIndex >= eqnIndices.first && cursorIndex <= eqnIndices.second) {
+        cursor->movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, cursorIndex - eqnIndices.first);
+    }
 }
 
 //---------------------------------------------------------
@@ -285,6 +308,105 @@ void TempoText::endEdit(EditData& ed)
     }
 }
 
+int TempoText::textIndexFromCursor(int row, int column) const
+{
+    int index = 0;
+    for (int i = 0; i < row; i++) {
+        index = xmlText().indexOf("\n", index);
+    }
+
+    index += column;
+
+    return index;
+}
+
+std::pair<int, int> TempoText::cursorIndexFromTextIndex(int index) const
+{
+    int row = 0;
+    int lineIndex = xmlText().indexOf("\n");
+
+    while (lineIndex < index && row < xmlText().count("\n")) {
+        lineIndex = xmlText().indexOf("\n", lineIndex);
+        row++;
+    }
+
+    int column = index - lineIndex - 1;
+
+    return std::make_pair(row, column);
+}
+
+std::pair<int, int> TempoText::equationIndices() const
+{
+    static const QRegularExpression equationExpression("(?<equation>[\\[\\(]?[\uECA0-\uECB7]+ *= *[\uECA0-\uECB70-9]+[\\]\\)]?)");
+    QRegularExpressionMatch match = equationExpression.match(xmlText());
+
+    if (!match.hasMatch()) {
+        return std::make_pair(0, 0);
+    }
+
+    return std::make_pair(match.capturedStart("equation"), match.capturedEnd("equation"));
+}
+
+bool TempoText::moveCursor(TextCursor* cursor, int key, bool ctrlPressed, QTextCursor::MoveMode moveMode) const
+{
+    int cursorIndex = textIndexFromCursor(cursor->row(), cursor->column());
+
+    std::pair<int, int> eqnIndices = equationIndices();
+
+    if (eqnIndices.first == 0 && eqnIndices.second == 0) {
+        return TextBase::moveCursor(cursor, key, ctrlPressed, moveMode);
+    }
+
+    int length = eqnIndices.second - eqnIndices.first;
+
+    if (eqnIndices.first == cursorIndex && key == Qt::Key_Right) {
+        return cursor->movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, length);
+    } else if (eqnIndices.second == cursorIndex && key == Qt::Key_Left) {
+        return cursor->movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, length);
+    } else {
+        if (key == Qt::Key_Left) {
+            return cursor->movePosition(ctrlPressed ? QTextCursor::WordLeft : QTextCursor::Left, moveMode);
+        } else if (key == Qt::Key_Right) {
+            return cursor->movePosition(ctrlPressed ? QTextCursor::WordRight : QTextCursor::Right, moveMode);
+        }
+    }
+
+    return false;
+}
+
+void TempoText::dragTo(EditData& ed)
+{
+    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
+    TextCursor* cursor = ted->cursor();
+
+    cursor->set(ed.pos, QTextCursor::KeepAnchor);
+
+    int cursorEndIndex = textIndexFromCursor(cursor->row(), cursor->column());
+    int cursorStartIndex = textIndexFromCursor(cursor->selectLine(), cursor->selectColumn());
+
+    std::pair<int, int> eqnIndices = equationIndices();
+
+    if (!(eqnIndices.first == 0 && eqnIndices.second == 0)) {
+        int equationStart = eqnIndices.first;
+        int equationEnd = eqnIndices.second;
+
+        if (cursorStartIndex <= equationStart && cursorEndIndex > equationStart) {
+            std::pair<int, int> indices = cursorIndexFromTextIndex(equationStart);
+
+            cursor->setRow(indices.first);
+            cursor->setColumn(indices.second);
+        } else if (cursorStartIndex >= equationEnd && cursorEndIndex < equationEnd) {
+            std::pair<int, int> indices = cursorIndexFromTextIndex(equationEnd);
+
+            cursor->setRow(indices.first);
+            cursor->setColumn(indices.second);
+        }
+    }
+
+    score()->setUpdateAll();
+    score()->update();
+}
+
 //---------------------------------------------------------
 //   undoChangeProperty
 //---------------------------------------------------------
@@ -307,49 +429,38 @@ void TempoText::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
 
 void TempoText::updateTempo()
 {
-    // cache regexp, they are costly to create
-    static QHash<QString, QRegExp> regexps;
-    static QHash<QString, QRegExp> regexps2;
-    QString s = plainText();
-    s.replace(",", ".");
-    s.replace("<sym>space</sym>", " ");
-    for (const TempoPattern& pa : tp) {
-        QRegExp re;
-        if (!regexps.contains(pa.pattern)) {
-            re = QRegExp(QString("%1\\s*=\\s*(\\d+[.]{0,1}\\d*)\\s*").arg(pa.pattern));
-            regexps[pa.pattern] = re;
+    static const float quarterNotePlayback = 1.f / 60.f;
+
+    static const QRegularExpression bpmExpression("^[\\[,\\(]?[ ]*(?<note>[d,w,h,q,e,s,t].*) *= *(?<bpm>\\d+)[\\],\\)]?$");
+    static const QRegularExpression relativeExpression(
+        "^[\\[,\\(]?[ ]*(?<note1>[d,w,h,q,e,s,t].*) *= *(?<note2>[d,w,h,q,e,s,t].*)[\\],\\)]?$");
+
+    QRegularExpressionMatch bpmMatch = bpmExpression.match(_equation);
+    QRegularExpressionMatch relativeMatch = relativeExpression.match(_equation);
+
+    if (bpmMatch.hasMatch()) {
+        const float relativeDuration = getRelativeDuration(bpmMatch.captured("note"));
+        const float bpm = bpmMatch.captured("bpm").toFloat();
+
+        _notatedTempo = bpm;
+
+        qreal playbackTempo(relativeDuration * bpm * quarterNotePlayback);
+
+        if (playbackTempo != _playbackTempo) {
+            //undoChangeProperty(Pid::TEMPO, QVariant(playbackTempo), propertyFlags(Pid::TEMPO));
+            _playbackTempo = playbackTempo;
+
+            _relative = 1.0;
+            _isRelative = false;
+
+            updateScore();
         }
-        re = regexps.value(pa.pattern);
-        if (re.indexIn(s) != -1) {
-            QStringList sl = re.capturedTexts();
-            if (sl.size() == 2) {
-                qreal nt = qreal(sl[1].toDouble()) * pa.f;
-                if (nt != _tempo) {
-                    undoChangeProperty(Pid::TEMPO, QVariant(qreal(sl[1].toDouble()) * pa.f), propertyFlags(Pid::TEMPO));
-                    _relative = 1.0;
-                    _isRelative = false;
-                    updateScore();
-                }
-                break;
-            }
-        } else {
-            for (const TempoPattern& pa2 : tp) {
-                QString key = QString("%1_%2").arg(pa.pattern, pa2.pattern);
-                QRegExp re2;
-                if (!regexps2.contains(key)) {
-                    re2 = QRegExp(QString("%1\\s*=\\s*%2\\s*").arg(pa.pattern, pa2.pattern));
-                    regexps2[key] = re2;
-                }
-                re2 = regexps2.value(key);
-                if (re2.indexIn(s) != -1) {
-                    _relative = pa2.f / pa.f;
-                    _isRelative = true;
-                    updateRelative();
-                    updateScore();
-                    return;
-                }
-            }
-        }
+    } else if (relativeMatch.hasMatch()) {
+        _relative = getRelativeDuration(relativeMatch.captured("note2")) / getRelativeDuration(relativeMatch.captured("note1"));
+        _isRelative = true;
+
+        updateRelative();
+        updateScore();
     }
 }
 
@@ -364,7 +475,7 @@ void TempoText::setTempo(qreal v)
     } else if (v > MAX_TEMPO) {
         v = MAX_TEMPO;
     }
-    _tempo = v;
+    _playbackTempo = v;
 }
 
 //---------------------------------------------------------
@@ -393,9 +504,14 @@ QVariant TempoText::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TEMPO:
-        return _tempo;
+        return _playbackTempo;
     case Pid::TEMPO_FOLLOW_TEXT:
         return _followText;
+    case Pid::TEMPO_EQUATION:
+        LOGD() << _equation;
+        return _equation;
+    case Pid::TEMPO_EQUATION_VISIBLE:
+        return _isEquationVisible;
     default:
         return TextBase::getProperty(propertyId);
     }
@@ -410,11 +526,21 @@ bool TempoText::setProperty(Pid propertyId, const QVariant& v)
     switch (propertyId) {
     case Pid::TEMPO:
         setTempo(v.toDouble());
-        score()->setTempo(segment(), _tempo);
+        score()->setTempo(segment(), _playbackTempo);
         score()->fixTicks();
         break;
     case Pid::TEMPO_FOLLOW_TEXT:
         _followText = v.toBool();
+        break;
+    case Pid::TEMPO_EQUATION:
+        if (isEquationValid(v.toString())) {
+            _equation = v.toString();
+            parseEquation();
+        }
+        break;
+    case Pid::TEMPO_EQUATION_VISIBLE:
+        _isEquationVisible = v.toBool();
+        parseEquation();
         break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
@@ -439,6 +565,10 @@ QVariant TempoText::propertyDefault(Pid id) const
         return 2.0;
     case Pid::TEMPO_FOLLOW_TEXT:
         return false;
+    case Pid::TEMPO_EQUATION:
+        return "q = 120";
+    case Pid::TEMPO_EQUATION_VISIBLE:
+        return true;
     default:
         return TextBase::propertyDefault(id);
     }
@@ -471,6 +601,88 @@ void TempoText::layout()
         }
     }
     autoplaceSegmentElement();
+}
+
+//---------------------------------------------------------
+//   parseEquation
+//---------------------------------------------------------
+
+void TempoText::parseEquation()
+{
+    static const QRegularExpression equationExpression("[\\[\\(]?[\uECA0-\uECB7]+ *= *[\uECA0-\uECB70-9]+[\\]\\)]?");
+
+    static const std::map<QString, QString> equationMap = {
+        { "d", "\uECA0" },
+        { "w", "\uECA2" },
+        { "h", "\uECA3" },
+        { "q", "\uECA5" },
+        { "e", "\uECA7" },
+        { "s", "\uECA9" },
+        { "t", "\uECAB" },
+        { ".", "\uECB7" }
+    };
+
+    if (_isEquationVisible) {
+        QString equation = _equation;
+
+        for (auto replacement : equationMap) {
+            equation.replace(replacement.first, replacement.second);
+        }
+
+        if (equationExpression.match(xmlText()).hasMatch()) {
+            setXmlText(xmlText().replace(equationExpression, equation));
+        } else {
+            setXmlText(xmlText() + equation);
+        }
+    } else {
+        setXmlText(xmlText().replace(equationExpression, ""));
+    }
+
+    if (_followText) {
+        updateTempo();
+    }
+}
+
+//---------------------------------------------------------
+//   isEquationValid
+//---------------------------------------------------------
+
+bool TempoText::isEquationValid(const QString equation) const
+{
+    const QRegularExpression equationExpression("^[\\[,\\(]?[ ]*([dwhqest].*) *= *(\\d+|[dwhqest].*)[\\],\\)]?$");
+    QRegularExpressionMatch match = equationExpression.match(equation);
+
+    return match.hasMatch();
+}
+
+//---------------------------------------------------------
+//   getRelativeDuration
+//---------------------------------------------------------
+
+float TempoText::getRelativeDuration(const QString marking) const
+{
+    static const std::map<QString, float> durationMap = {
+        { "d", 8.0f },
+        { "w", 4.0f },
+        { "h", 2.0f },
+        { "q", 1.0f },
+        { "e", 0.5f },
+        { "s", 0.25f },
+        { "t", 0.125f },
+    };
+
+    float baseDuration = 1.0f;
+
+    for (auto duration : durationMap) {
+        if (marking[0] == duration.first) {
+            baseDuration = duration.second;
+            break;
+        }
+    }
+
+    const int dots = marking.count(".");
+
+    return baseDuration * std::powf(1.5, dots);
 }
 
 //---------------------------------------------------------

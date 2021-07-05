@@ -78,6 +78,7 @@ public:
     qreal height() const override;
 
     PointF toLogical(const QPoint& point) const override;
+    PointF fromLogical(const QPoint& point) const override;
 
     Q_INVOKABLE void moveCanvas(int dx, int dy) override;
     void moveCanvasVertical(int dy) override;
@@ -92,6 +93,9 @@ public:
     void showContextMenu(const ElementType& elementType, const QPoint& pos) override;
     Q_INVOKABLE void handleAction(const QString& actionCode);
 
+    void showElementPopup(const Element* hitElement) override;
+    void closeElementPopup() override;
+
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
 
@@ -105,6 +109,8 @@ public:
 
 signals:
     void openContextMenuRequested(const QVariantList& items, const QPoint& pos);
+    void openElementPopupRequested(const QString& type, const QPoint& pos, const QPoint& size);
+    void closeElementPopupRequested();
     void textEdittingStarted();
 
     void horizontalScrollChanged();
@@ -126,6 +132,7 @@ protected:
     QRectF notationContentRect() const;
 
     RectF toLogical(const QRect& rect) const;
+    RectF fromLogical(const QRect& rect) const;
 
     // Draw
     void paint(QPainter* painter) override;

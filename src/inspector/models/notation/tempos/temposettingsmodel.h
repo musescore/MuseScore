@@ -31,6 +31,8 @@ class TempoSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(PropertyItem * isDefaultTempoForced READ isDefaultTempoForced CONSTANT)
     Q_PROPERTY(PropertyItem * tempo READ tempo CONSTANT)
+    Q_PROPERTY(PropertyItem * equation READ equation CONSTANT)
+    Q_PROPERTY(PropertyItem * isEquationVisible READ isEquationVisible CONSTANT)
 
 public:
     explicit TempoSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -42,10 +44,14 @@ public:
 
     PropertyItem* isDefaultTempoForced() const;
     PropertyItem* tempo() const;
+    PropertyItem* equation() const;
+    PropertyItem* isEquationVisible() const;
 
 private:
     PropertyItem* m_isDefaultTempoForced = nullptr;
     PropertyItem* m_tempo = nullptr;
+    PropertyItem* m_equation = nullptr;
+    PropertyItem* m_isEquationVisible = nullptr;
 };
 }
 

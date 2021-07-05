@@ -37,15 +37,29 @@ namespace Ms {
 
 class TempoText final : public TextBase
 {
-    qreal _tempo;             // beats per second
+    qreal _playbackTempo;     // beats per second
+    qreal _notatedTempo;      // tempo user enters
     bool _followText;         // parse text to determine tempo
     qreal _relative;
     bool _isRelative;
+    QString _equation;
+    QString _tempoText;
+    bool _isEquationVisible;
 
     void updateScore();
     void updateTempo();
+
+    void startEdit(EditData&) override;
     void endEdit(EditData&) override;
+
     void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+
+    bool isEquationValid(const QString equation) const;
+    float getRelativeDuration(const QString marking) const;
+
+    int textIndexFromCursor(int row, int column) const;
+    std::pair<int, int> cursorIndexFromTextIndex(int index) const;
+    std::pair<int, int> equationIndices() const;
 
 public:
     TempoText(Score*);
@@ -59,7 +73,7 @@ public:
     Segment* segment() const { return toSegment(parent()); }
     Measure* measure() const { return toMeasure(parent()->parent()); }
 
-    qreal tempo() const { return _tempo; }
+    qreal tempo() const { return _playbackTempo; }
     qreal tempoBpm() const;
     void setTempo(qreal v);
     void undoSetTempo(qreal v);
@@ -68,8 +82,16 @@ public:
 
     bool followText() const { return _followText; }
     void setFollowText(bool v) { _followText = v; }
+    void setEquation(QString equation) { _equation = equation; }
+    void setEquationVisible(bool equationVisible) { _isEquationVisible = equationVisible; }
     void undoSetFollowText(bool v);
     void updateRelative();
+
+    void parseEquation();
+
+    bool moveCursor(TextCursor* cursor, int key, bool ctrlPressed, QTextCursor::MoveMode moveMode) const override;
+
+    void dragTo(EditData& ed) override;
 
     void layout() override;
 
@@ -83,6 +105,8 @@ public:
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid id) const override;
     QString accessibleInfo() const override;
+
+    bool needsElementPopup() const override { return true; }
 };
 }     // namespace Ms
 #endif
