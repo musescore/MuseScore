@@ -59,9 +59,6 @@ private:
 
     bool m_inited = false;
 
-    audioch_t m_audioChCount = 0;
-    unsigned int m_sampleRate = 0;
-
     MixerPtr m_mixer = nullptr;
     IAudioBufferPtr m_buffer = nullptr;
 
