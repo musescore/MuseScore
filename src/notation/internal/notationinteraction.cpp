@@ -1721,7 +1721,7 @@ void NotationInteraction::drawSelectionRange(draw::Painter* painter)
     painter->setBrush(BrushStyle::NoBrush);
 
     QColor selectionColor = configuration()->selectionColor();
-    qreal penWidth = 3.0 / painter->worldTransform().toAffine().m11();
+    qreal penWidth = 3.0 / painter->worldTransform().m11();
 
     Pen pen;
     pen.setColor(selectionColor);
