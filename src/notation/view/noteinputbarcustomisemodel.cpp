@@ -38,12 +38,6 @@ using namespace mu::actions;
 
 static const QString NOTE_INPUT_TOOLBAR_NAME("noteInput");
 
-static const ActionCode NOTE_INPUT_ACTION_CODE("note-input");
-static const ActionCode NOTE_INPUT_MODE_ACTION_CODE("mode-note-input");
-
-static const std::string SEPARATOR_LINE_TITLE("-------  Separator line  -------");
-static const ActionCode SEPARATOR_LINE_ACTION_CODE("");
-
 NoteInputBarCustomiseModel::NoteInputBarCustomiseModel(QObject* parent)
     : QAbstractListModel(parent)
 {
@@ -419,14 +413,9 @@ NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeItem(const UiAction& 
 NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeSeparatorItem()
 {
     NoteInputBarCustomiseItem* item = new NoteInputBarCustomiseItem(NoteInputBarCustomiseItem::ItemType::SEPARATOR, this);
-    item->setTitle(qtrc("notation", SEPARATOR_LINE_TITLE.c_str()));
+    item->setTitle(qtrc("notation", "-------  Separator line  -------"));
     item->setChecked(true); //! NOTE Can't be unchecked
     return item;
-}
-
-bool NoteInputBarCustomiseModel::actionFromNoteInputModes(const ActionCode& actionCode) const
-{
-    return QString::fromStdString(actionCode).startsWith(QString::fromStdString(NOTE_INPUT_ACTION_CODE));
 }
 
 void NoteInputBarCustomiseModel::saveActions()

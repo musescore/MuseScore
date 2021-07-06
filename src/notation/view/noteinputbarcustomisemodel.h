@@ -105,8 +105,6 @@ private:
     NoteInputBarCustomiseItem* makeItem(const ui::UiAction& action, bool checked);
     NoteInputBarCustomiseItem* makeSeparatorItem();
 
-    bool actionFromNoteInputModes(const actions::ActionCode& actionCode) const;
-
     void saveActions();
 
     QList<NoteInputBarCustomiseItem*> m_items;
