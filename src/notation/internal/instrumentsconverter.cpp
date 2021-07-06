@@ -57,6 +57,8 @@ Ms::Instrument InstrumentsConverter::convertInstrument(const mu::instruments::In
     result.setMidiActions(convertMidiActions(instrument.midiActions));
     result.setArticulation(instrument.midiArticulations);
 
+    result.clearChannels();
+
     for (const instruments::Channel& channel : instrument.channels) {
         result.appendChannel(new instruments::Channel(channel));
     }
