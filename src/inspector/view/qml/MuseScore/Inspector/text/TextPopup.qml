@@ -342,15 +342,14 @@ StyledPopupView {
             navigation.panel: root.navigation
             navigation.row: 19
 
-            StyledComboBox {
+            Dropdown {
+                id: textStyles
+
                 width: parent.width
 
                 navigation.name: "Text style Value"
                 navigation.panel: root.navigation
                 navigation.row: 20
-
-                textRoleName: "text"
-                valueRoleName: "value"
 
                 model: [
                     { text: qsTrc("inspector", "Title"), value: TextTypes.TEXT_TYPE_TITLE },
@@ -382,10 +381,10 @@ StyledPopupView {
                     { text: qsTrc("inspector", "Sticking"), value: TextTypes.TEXT_TYPE_STICKING }
                 ]
 
-                currentIndex: root.model && !root.model.textType.isUndefined ? indexOfValue(root.model.textType.value) : -1
+                currentIndex: root.model && !root.model.textType.isUndefined ? textStyles.indexOfValue(root.model.textType.value) : -1
 
-                onValueChanged: {
-                    root.model.textType.value = value
+                onCurrentValueChanged: {
+                    root.model.textType.value = textStyles.currentValue
                 }
             }
         }

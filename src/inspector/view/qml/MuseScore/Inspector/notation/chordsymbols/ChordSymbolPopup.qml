@@ -76,11 +76,10 @@ StyledPopupView {
             titleText: qsTrc("inspector", "Voicing")
             propertyItem: root.model ? root.model.voicingType : null
 
-            StyledComboBox {
-                width: parent.width
+            Dropdown {
+                id: voicing
 
-                textRoleName: "text"
-                valueRoleName: "value"
+                width: parent.width
 
                 model: [
                     { text: qsTrc("inspector", "Auto"), value: ChordSymbolTypes.VOICING_AUTO },
@@ -92,10 +91,10 @@ StyledPopupView {
                     { text: qsTrc("inspector", "Three note"), value: ChordSymbolTypes.VOICING_THREE_NOTE }
                 ]
 
-                currentIndex: root.model && !root.model.voicingType.isUndefined ? indexOfValue(root.model.voicingType.value) : -1
+                currentIndex: root.model && !root.model.voicingType.isUndefined ? voicing.indexOfValue(root.model.voicingType.value) : -1
 
-                onValueChanged: {
-                    root.model.voicingType.value = value
+                onCurrentValueChanged: {
+                    root.model.voicingType.value = voicing.currentValue
                 }
             }
         }
@@ -104,11 +103,10 @@ StyledPopupView {
             titleText: qsTrc("inspector", "Duration")
             propertyItem: root.model ? root.model.durationType : null
 
-            StyledComboBox {
-                width: parent.width
+            Dropdown {
+                id: durations
 
-                textRoleName: "text"
-                valueRoleName: "value"
+                width: parent.width
 
                 model: [
                     { text: qsTrc("inspector", "Until the next chord symbol"), value: ChordSymbolTypes.DURATION_UNTIL_NEXT_CHORD_SYMBOL },
@@ -116,10 +114,10 @@ StyledPopupView {
                     { text: qsTrc("inspector", "Until the end of the attached duration"), value: ChordSymbolTypes.DURATION_SEGMENT_DURATION }
                 ]
 
-                currentIndex: root.model && !root.model.durationType.isUndefined ? indexOfValue(root.model.durationType.value) : -1
+                currentIndex: root.model && !root.model.durationType.isUndefined ? durations.indexOfValue(root.model.durationType.value) : -1
 
-                onValueChanged: {
-                    root.model.durationType.value = value
+                onCurrentValueChanged: {
+                    root.model.durationType.value = durations.currentValue
                 }
             }
         }

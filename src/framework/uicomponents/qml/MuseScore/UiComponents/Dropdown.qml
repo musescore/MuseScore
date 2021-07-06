@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQml.Models 2.2
 
 import MuseScore.Ui 1.0
 
@@ -30,17 +31,17 @@ DropdownItem {
 
     id: root
 
-    property alias model: view.model
+    property var model: null
     property alias count: view.count
 
     property int currentIndex: 0
-    property string currentText: root.valueFromModel(root.currentIndex, root.textRole)
-    property string currentValue: root.valueFromModel(root.currentIndex, root.valueRole)
+    property string currentText: "--"
+    property string currentValue: ""
 
     property string displayText: root.currentText
 
     property int popupWidth: root.width
-    property int popupItemsCount: 8
+    property int popupItemsCount: root.defaultPopupItemsCount()
 
     property alias navigation: navCtrl
 
@@ -49,30 +50,72 @@ DropdownItem {
     property string textRole: "text"
     property string valueRole: "value"
 
-    signal activated(int index)
-
     text: root.displayText
 
     onClicked: {
-        console.log("Dropdown.qml onClicked")
         popup.open()
     }
 
-    function valueFromModel(index, roleName) {
+    //! NOTE We should not just bind to the current values, because when the component is created,
+    //! the `onCurrentValueChanged` slot will be called, often in the handlers of which there are not yet initialized values
+    Component.onCompleted: root.updateCurrent()
+    onCurrentIndexChanged: root.updateCurrent()
+
+    function updateCurrent() {
+        if (!(root.currentIndex >= 0 && root.currentIndex < root.count)) {
+            root.currentText = "--"
+            root.currentValue = ""
+        }
+
+        root.currentText = root.valueFromModel(root.currentIndex, root.textRole, "")
+        root.currentValue = root.valueFromModel(root.currentIndex, root.valueRole, "")
+    }
+
+    function valueFromModel(index, roleName, def) {
+
+
+        if (!(index >= 0 && index < root.count)) {
+            return def
+        }
 
         // Simple models (like JS array) with single predefined role name - modelData
-        if (model[index] !== undefined) {
-            if (model[index][roleName] === undefined) {
-                return model[index]
+        if (root.model[index] !== undefined) {
+            if (root.model[index][roleName] === undefined) {
+                return root.model[index]
             }
 
-            return model[index][roleName]
+            return root.model[index][roleName]
         }
 
         // Complex models (like QAbstractItemModel) with multiple role names
-        var item = delegateModel.items.get(index)
+        if (!(index < delegateModel.count)) {
+            return def
+        }
 
+        var item = delegateModel.items.get(index)
         return item.model[roleName]
+    }
+
+    function indexOfValue(value) {
+        if (!root.model) {
+            return -1
+        }
+
+        for (var i = 0; i < root.count; ++i) {
+            if (root.valueFromModel(i, root.valueRole) === value) {
+                return i
+            }
+        }
+
+        return -1
+    }
+
+    function defaultPopupItemsCount() {
+        if (root.count > 20) {
+            return 16
+        }
+
+        return 6
     }
 
     NavigationControl {
@@ -102,7 +145,11 @@ DropdownItem {
         iconCode: IconCode.SMALL_ARROW_DOWN
     }
 
-    //StyledPopupView {
+    DelegateModel {
+        id: delegateModel
+        model: root.model
+    }
+
     Popup {
         id: popup
 
@@ -110,8 +157,6 @@ DropdownItem {
         contentHeight: root.height * Math.min(root.count, root.popupItemsCount)
         padding: 0
         margins: 0
-        //showArrow: false
-        //background.color: "#CFD5DD"
 
         x: 0
         y: 0
@@ -120,15 +165,25 @@ DropdownItem {
             view.positionViewAtIndex(root.currentIndex, ListView.Center)
         }
 
-        background: Rectangle {
-            color: root.background.color
-            radius: 4
+        background: Item {
+            anchors.fill: parent
+
+            Rectangle {
+                id: bgItem
+                anchors.fill: parent
+                color: root.background.color
+                radius: 4
+            }
+
+            StyledDropShadow {
+                anchors.fill: parent
+                source: bgItem
+            }
         }
 
         contentItem: Rectangle {
             color: root.background.color
             radius: 4
-            clip: true
 
             ListView {
                 id: view
@@ -136,6 +191,8 @@ DropdownItem {
                 anchors.fill: parent
                 clip: true
                 boundsBehavior: Flickable.StopAtBounds
+
+                model: root.model
 
                 ScrollBar.vertical: StyledScrollBar {
                     anchors.right: parent.right
@@ -153,11 +210,10 @@ DropdownItem {
                     hoveredColor: ui.theme.accentColor
 
                     selected: model.index === root.currentIndex
-                    text: root.valueFromModel(model.index, root.textRole)
+                    text: root.valueFromModel(model.index, root.textRole, "")
 
                     onClicked: {
                         root.currentIndex = model.index
-                        root.activated(model.index)
                         popup.close()
                     }
 

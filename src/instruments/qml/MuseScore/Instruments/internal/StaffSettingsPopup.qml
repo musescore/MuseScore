@@ -57,29 +57,17 @@ StyledPopupView {
             text: qsTrc("instruments", "Staff type")
         }
 
-        StyledComboBox {
+        Dropdown {
             id: staffTypesComboBox
             width: parent.width
 
             navigation.panel: root.navigation
             navigation.row: 1
 
-            textRoleName: "text"
-            valueRoleName: "value"
+            model: settingsModel.allStaffTypes()
 
-            model: {
-                var types = settingsModel.allStaffTypes()
-                var result = []
-
-                for (var i = 0; i < types.length; ++i) {
-                    result.push({ text: types[i].title, value: types[i].value })
-                }
-
-                return result
-            }
-
-            onValueChanged: {
-                settingsModel.setStaffType(value)
+            onCurrentValueChanged: {
+                settingsModel.setStaffType(staffTypesComboBox.currentValue)
             }
         }
 

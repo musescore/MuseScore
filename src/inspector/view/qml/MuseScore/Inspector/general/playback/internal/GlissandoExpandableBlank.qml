@@ -46,16 +46,15 @@ ExpandableBlank {
         titleText: qsTrc("inspector", "Style")
         propertyItem: root.model ? root.model.styleType : null
 
-        StyledComboBox {
+        Dropdown {
+            id: gstyles
+
             width: parent.width
 
             navigation.name: "Glissando Style Value"
             navigation.panel: root.navigation.panel
             navigation.column: root.navigation.column
             navigation.row: root.navigation.row + 2
-
-            textRoleName: "text"
-            valueRoleName: "value"
 
             model: [
                 { text: "Chromatic", value: Glissando.STYLE_CHROMATIC },
@@ -65,10 +64,10 @@ ExpandableBlank {
                 { text: "Portamento", value: Glissando.STYLE_PORTAENTO }
             ]
 
-            currentIndex: root.model && !root.model.styleType.isUndefined ? indexOfValue(root.model.styleType.value) : -1
+            currentIndex: root.model && !root.model.styleType.isUndefined ? gstyles.indexOfValue(root.model.styleType.value) : -1
 
-            onValueChanged: {
-                root.model.styleType.value = value
+            onCurrentValueChanged: {
+                root.model.styleType.value = gstyles.currentValue
             }
         }
     }

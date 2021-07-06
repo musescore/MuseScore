@@ -53,7 +53,9 @@ ExpandableBlank {
             navigation.column: root.navigation.column
             navigation.row: root.navigation.row + 1
 
-            StyledComboBox {
+            Dropdown {
+                id: applies
+
                 width: parent.width
 
                 navigation.name: "Dynamic Applies Value"
@@ -61,19 +63,16 @@ ExpandableBlank {
                 navigation.column: root.navigation.column
                 navigation.row: root.navigation.row + 2
 
-                textRoleName: "text"
-                valueRoleName: "value"
-
                 model: [
                     { text: qsTrc("inspector", "Staff"), value: Dynamic.SCOPE_STAFF },
                     { text: qsTrc("inspector", "Single instrument"), value: Dynamic.SCOPE_SINGLE_INSTRUMENT },
                     { text: qsTrc("inspector", "All instruments"), value: Dynamic.SCOPE_ALL_INSTRUMENTS }
                 ]
 
-                currentIndex: root.model && !root.model.scopeType.isUndefined ? indexOfValue(root.model.scopeType.value) : -1
+                currentIndex: root.model && !root.model.scopeType.isUndefined ? applies.indexOfValue(root.model.scopeType.value) : -1
 
-                onValueChanged: {
-                    root.model.scopeType.value = value
+                onCurrentValueChanged: {
+                    root.model.scopeType.value = applies.currentValue
                 }
             }
         }

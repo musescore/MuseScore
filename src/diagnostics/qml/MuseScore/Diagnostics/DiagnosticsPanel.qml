@@ -34,22 +34,19 @@ Rectangle {
         anchors.right: parent.right
         height: 40
 
-        StyledComboBox {
+        Dropdown {
             id: selector
             anchors.fill: parent
             anchors.margins: 4
 
-            textRoleName: "title"
-            valueRoleName: "code"
+            textRole: "title"
+            valueRole: "code"
 
-            property string curVal: "paths"
-            currentIndex: selector.indexOfValue(curVal)
+            currentIndex: 0
 
             model: [
                 { code: "paths", title: "Show paths" }
             ]
-
-            onValueChanged: selector.curVal = value
         }
     }
 
@@ -59,7 +56,7 @@ Rectangle {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         sourceComponent: {
-            switch (selector.curVal) {
+            switch (selector.currentValue) {
             case "paths": return pathsComp
             }
             return defComp

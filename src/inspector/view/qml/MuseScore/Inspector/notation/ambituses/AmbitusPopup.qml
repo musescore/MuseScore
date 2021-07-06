@@ -113,21 +113,19 @@ StyledPopupView {
                     titleText: qsTrc("inspector", "Top TPC")
                     propertyItem: root.model ? root.model.topTpc : null
 
-                    StyledComboBox {
+                    Dropdown {
+                        id: ttpcs
                         anchors.left: parent.left
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 2
                         width: parent.width
 
-                        textRoleName: "text"
-                        valueRoleName: "value"
-
                         model: tpcListModel()
 
-                        currentIndex: root.model && !root.model.topTpc.isUndefined ? indexOfValue(root.model.topTpc.value) : -1
+                        currentIndex: root.model && !root.model.topTpc.isUndefined ? ttpcs.indexOfValue(root.model.topTpc.value) : -1
 
-                        onValueChanged: {
-                            root.model.topTpc.value = value
+                        onCurrentValueChanged: {
+                            root.model.topTpc.value = ttpcs.currentValue
                         }
                     }
                 }
@@ -165,21 +163,19 @@ StyledPopupView {
                 height: childrenRect.height
                 width: parent.width
 
-                StyledComboBox {
+                Dropdown {
+                    id: tpcs
                     anchors.left: parent.left
                     anchors.right: parent.horizontalCenter
                     anchors.rightMargin: 2
                     width: parent.width
 
-                    textRoleName: "text"
-                    valueRoleName: "value"
-
                     model: tpcListModel()
 
-                    currentIndex: root.model && !root.model.bottomTpc.isUndefined ? indexOfValue(root.model.bottomTpc.value) : -1
+                    currentIndex: root.model && !root.model.bottomTpc.isUndefined ? tpcs.indexOfValue(root.model.bottomTpc.value) : -1
 
-                    onValueChanged: {
-                        root.model.bottomTpc.value = value
+                    onCurrentValueChanged: {
+                        root.model.bottomTpc.value = tpcs.currentValue
                     }
                 }
 

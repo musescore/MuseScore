@@ -79,11 +79,10 @@ StyledPopupView {
             titleText: qsTrc("inspector", "Placement")
             propertyItem: root.model ? root.model.placement : null
 
-            StyledComboBox {
-                width: parent.width
+            Dropdown {
+                id: placements
 
-                textRoleName: "text"
-                valueRoleName: "value"
+                width: parent.width
 
                 model: [
                     { text: qsTrc("inspector", "Above staff"), value: ArticulationTypes.TYPE_ABOVE_STAFF },
@@ -93,10 +92,10 @@ StyledPopupView {
                     { text: qsTrc("inspector", "Below chord"), value: ArticulationTypes.TYPE_BELOW_CHORD }
                 ]
 
-                currentIndex: root.model && !root.model.placement.isUndefined ? indexOfValue(root.model.placement.value) : -1
+                currentIndex: root.model && !root.model.placement.isUndefined ? placements.indexOfValue(root.model.placement.value) : -1
 
-                onValueChanged: {
-                    root.model.placement.value = value
+                onCurrentValueChanged: {
+                    root.model.placement.value = placements.currentValue
                 }
             }
         }

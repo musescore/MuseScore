@@ -47,19 +47,17 @@ ColumnLayout {
         text: qsTrc("userscores", "Sample rate:")
         firstColumnWidth: root.firstColumnWidth
 
-        StyledComboBox {
+        Dropdown {
+            id: srates
             Layout.preferredWidth: 126
 
             model: root.model.availableSampleRates().map(function (sampleRate) {
                 return { text: qsTrc("userscores", "%1 Hz").arg(sampleRate), value: sampleRate }
             })
 
-            textRoleName: "text"
-            valueRoleName: "value"
-
-            currentIndex: indexOfValue(root.model.sampleRate)
-            onValueChanged: {
-                root.model.sampleRate = value
+            currentIndex: srates.indexOfValue(root.model.sampleRate)
+            onCurrentValueChanged: {
+                root.model.sampleRate = srates.currentValue
             }
         }
     }
@@ -69,19 +67,17 @@ ColumnLayout {
         text: qsTrc("userscores", "Bitrate:")
         firstColumnWidth: root.firstColumnWidth
 
-        StyledComboBox {
+        Dropdown {
+            id: bitrates
             Layout.preferredWidth: 126
 
             model: root.model.availableBitRates().map(function (bitRate) {
                 return { text: qsTrc("userscores", "%1 kBit/s").arg(bitRate), value: bitRate }
             })
 
-            textRoleName: "text"
-            valueRoleName: "value"
-
-            currentIndex: indexOfValue(root.model.bitRate)
-            onValueChanged: {
-                root.model.bitRate = value
+            currentIndex: bitrates.indexOfValue(root.model.bitRate)
+            onCurrentValueChanged: {
+                root.model.bitRate = bitrates.currentValue
             }
         }
     }
