@@ -28,8 +28,8 @@
  http://forums.bobdunsire.com/forums/showthread.php?t=123219
  */
 
-#include <QtCore/QRegExp>
-#include <QtCore/QtDebug>
+#include <QRegularExpression>
+#include <QDebug>
 
 #include "lexer.h"
 
@@ -366,11 +366,11 @@ void Lexer::getSym()
     }while (line == "");
 
     qDebug() << "getSym: read line" << line;
-    QRegExp rHeaderIgnore("^Bagpipe Reader|^MIDINoteMappings|^FrequencyMappings"
-                          "|^InstrumentMappings|^GracenoteDurations|^FontSizes"
-                          "|^TuneFormat");
-    QRegExp rTuneTempo("^TuneTempo");
-    if (rHeaderIgnore.indexIn(line) == 0) {
+    QRegularExpression rHeaderIgnore("^Bagpipe Reader|^MIDINoteMappings|^FrequencyMappings"
+                                     "|^InstrumentMappings|^GracenoteDurations|^FontSizes"
+                                     "|^TuneFormat");
+    QRegularExpression rTuneTempo("^TuneTempo");
+    if (rHeaderIgnore.match(line).capturedStart() == 0) {
         type = COMMENT;
         value = "";
         qDebug()
@@ -380,7 +380,7 @@ void Lexer::getSym()
         ;
         line = "";
         return;
-    } else if (rTuneTempo.indexIn(line) == 0) {
+    } else if (rTuneTempo.match(line).capturedStart() == 0) {
         type = TEMPO;
         value = line;
         qDebug()
@@ -401,7 +401,7 @@ void Lexer::getSym()
         line = "";
     } else {
         // split line into space-separated words
-        list = line.trimmed().split(QRegExp("\\s+"));
+        list = line.trimmed().split(QRegularExpression("\\s+"));
         qDebug()
             << "-> words"
             << list
@@ -442,33 +442,33 @@ void Lexer::categorizeWord(QString word)
     type = NONE;
     value = word;
 
-    QRegExp rClef("&");
-    QRegExp rKey("sharp[cf]");
-    QRegExp rTSig("\\d+_(1|2|4|8|16|32)");
-    QRegExp rPart("I!''|I!|''!I|!I|'intro|[2-9]|'[12]|_'");
-    QRegExp rBar("!|!t|!!t");
-    QRegExp rNote("(LG|LA|[B-F]|HG|HA)[lr]?_(1|2|4|8|16|32)");
-    QRegExp rTie("\\^t[es]");
-    QRegExp rTriplet("\\^3[es]");
-    QRegExp rDot("'([hl][ag]|[b-f])");
+    QRegularExpression rClef(QRegularExpression::anchoredPattern("&"));
+    QRegularExpression rKey(QRegularExpression::anchoredPattern("sharp[cf]"));
+    QRegularExpression rTSig(QRegularExpression::anchoredPattern("\\d+_(1|2|4|8|16|32)"));
+    QRegularExpression rPart(QRegularExpression::anchoredPattern("I!''|I!|''!I|!I|'intro|[2-9]|'[12]|_'"));
+    QRegularExpression rBar(QRegularExpression::anchoredPattern("!|!t|!!t"));
+    QRegularExpression rNote(QRegularExpression::anchoredPattern("(LG|LA|[B-F]|HG|HA)[lr]?_(1|2|4|8|16|32)"));
+    QRegularExpression rTie(QRegularExpression::anchoredPattern("\\^t[es]"));
+    QRegularExpression rTriplet(QRegularExpression::anchoredPattern("\\^3[es]"));
+    QRegularExpression rDot(QRegularExpression::anchoredPattern("'([hl][ag]|[b-f])"));
 
-    if (rClef.exactMatch(word)) {
+    if (rClef.match(word).hasMatch()) {
         type = CLEF;
-    } else if (rKey.exactMatch(word)) {
+    } else if (rKey.match(word).hasMatch()) {
         type = KEY;
-    } else if (rTSig.exactMatch(word)) {
+    } else if (rTSig.match(word).hasMatch()) {
         type = TSIG;
-    } else if (rPart.exactMatch(word)) {
+    } else if (rPart.match(word).hasMatch()) {
         type = PART;
-    } else if (rBar.exactMatch(word)) {
+    } else if (rBar.match(word).hasMatch()) {
         type = BAR;
-    } else if (rNote.exactMatch(word)) {
+    } else if (rNote.match(word).hasMatch()) {
         type = NOTE;
-    } else if (rTie.exactMatch(word)) {
+    } else if (rTie.match(word).hasMatch()) {
         type = TIE;
-    } else if (rTriplet.exactMatch(word)) {
+    } else if (rTriplet.match(word).hasMatch()) {
         type = TRIPLET;
-    } else if (rDot.exactMatch(word)) {
+    } else if (rDot.match(word).hasMatch()) {
         type = DOT;
     } else if (graceMap.contains(word)) {
         type  = GRACE;

@@ -66,7 +66,7 @@ QQmlListProperty<SorterValue> SortFilterProxyModel::sorters()
 
 void SortFilterProxyModel::refresh()
 {
-    setFilterFixedString(filterRegExp().pattern());
+    setFilterFixedString(filterRegularExpression().pattern());
     setSortCaseSensitivity(sortCaseSensitivity());
 }
 
@@ -146,7 +146,7 @@ void SortFilterProxyModel::fillRoleIds()
         ++it;
     }
 
-    setFilterFixedString(filterRegExp().pattern());
+    setFilterFixedString(filterRegularExpression().pattern());
 }
 
 SorterValue* SortFilterProxyModel::currentSorterValue() const

@@ -24,6 +24,7 @@
 
 #include <cmath>
 #include <QtMath>
+#include <QRegularExpression>
 
 #include "translation.h"
 
@@ -636,28 +637,30 @@ int searchInterval(int steps, int semitones)
     return -1;
 }
 
-static int _majorVersion, _minorVersion, _updateVersion;
+static int _majorVersion, _minorVersion, _patchVersion;
 
 /*!
  * Returns the program version
  *
  * @return
- *  Version in the format: MMmmuu
- *  Where M=Major, m=minor, and u=update
+ *  Version in the format: MMmmpp
+ *  Where M=Major, m=minor, and p=patch
  */
 
 int version()
 {
-    QRegExp re("(\\d+)\\.(\\d+)\\.(\\d+)");
-    if (re.indexIn(VERSION) != -1) {
-        QStringList sl = re.capturedTexts();
-        if (sl.size() == 4) {
-            _majorVersion = sl[1].toInt();
-            _minorVersion = sl[2].toInt();
-            _updateVersion = sl[3].toInt();
-            return _majorVersion * 10000 + _minorVersion * 100 + _updateVersion;
+    QRegularExpression versionRegEx("(\\d+)\\.(\\d+)\\.(\\d+)");
+    QRegularExpressionMatch versionMatch = versionRegEx.match(VERSION);
+    if (versionMatch.hasMatch()) {
+        QStringList versionStringList = versionMatch.capturedTexts();
+        if (versionStringList.size() == 4) {
+            _majorVersion = versionStringList[1].toInt();
+            _minorVersion = versionStringList[2].toInt();
+            _patchVersion = versionStringList[3].toInt();
+            return _majorVersion * 10000 + _minorVersion * 100 + _patchVersion;
         }
     }
+    qDebug() << "Could not parse version:" << VERSION;
     return 0;
 }
 
@@ -682,17 +685,17 @@ int minorVersion()
 }
 
 //---------------------------------------------------------
-//   updateVersion
+//   patchVersion
 //---------------------------------------------------------
 
-int updateVersion()
+int patchVersion()
 {
     version();
-    return _updateVersion;
+    return _patchVersion;
 }
 
 //---------------------------------------------------------
-//   updateVersion
+//   compareVersion
 ///  Up to 4 digits X.X.X.X
 ///  Each digit can be double XX.XX.XX.XX
 ///  return true if v1 < v2
