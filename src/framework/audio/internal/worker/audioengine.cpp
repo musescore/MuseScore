@@ -46,7 +46,7 @@ AudioEngine::AudioEngine()
 
 AudioEngine::~AudioEngine()
 {
-    ONLY_AUDIO_WORKER_THREAD;
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 }
 
 mu::Ret AudioEngine::init(IAudioBufferPtr bufferPtr)
