@@ -35,7 +35,7 @@ ScoreSettingsModel::ScoreSettingsModel(QObject* parent, IElementRepositoryServic
     createProperties();
 
     m_shouldShowInvisible = isNotationExisting() ? scoreConfig().isShowInvisibleElements : true;
-    m_shouldShowUnprintable = isNotationExisting() ? scoreConfig().isShowUnprintableElements : true;
+    m_shouldShowFormatting = isNotationExisting() ? scoreConfig().isShowUnprintableElements : true;
     m_shouldShowFrames = isNotationExisting() ? scoreConfig().isShowFrames : true;
     m_shouldShowPageMargins = isNotationExisting() ? scoreConfig().isShowPageMargins : false;
 
@@ -63,7 +63,7 @@ bool ScoreSettingsModel::hasAcceptableElements() const
 void ScoreSettingsModel::loadProperties()
 {
     emit shouldShowInvisibleChanged(shouldShowInvisible());
-    emit shouldShowUnprintableChanged(shouldShowUnprintable());
+    emit shouldShowFormattingChanged(shouldShowFormatting());
     emit shouldShowFramesChanged(shouldShowFrames());
     emit shouldShowPageMarginsChanged(shouldShowPageMargins());
 }
@@ -71,7 +71,7 @@ void ScoreSettingsModel::loadProperties()
 void ScoreSettingsModel::resetProperties()
 {
     setShouldShowInvisible(false);
-    setShouldShowUnprintable(false);
+    setShouldShowFormatting(false);
     setShouldShowFrames(false);
     setShouldShowPageMargins(false);
 }
@@ -107,9 +107,9 @@ bool ScoreSettingsModel::shouldShowInvisible() const
     return m_shouldShowInvisible;
 }
 
-bool ScoreSettingsModel::shouldShowUnprintable() const
+bool ScoreSettingsModel::shouldShowFormatting() const
 {
-    return m_shouldShowUnprintable;
+    return m_shouldShowFormatting;
 }
 
 bool ScoreSettingsModel::shouldShowFrames() const
@@ -132,14 +132,14 @@ void ScoreSettingsModel::setShouldShowInvisible(bool shouldShowInvisible)
     updateShouldShowInvisible(shouldShowInvisible);
 }
 
-void ScoreSettingsModel::setShouldShowUnprintable(bool shouldShowUnprintable)
+void ScoreSettingsModel::setShouldShowFormatting(bool shouldShowFormatting)
 {
-    if (m_shouldShowUnprintable == shouldShowUnprintable) {
+    if (m_shouldShowFormatting == shouldShowFormatting) {
         return;
     }
 
     dispatcher()->dispatch("show-unprintable");
-    updateShouldShowUnprintable(shouldShowUnprintable);
+    updateShouldShowFormatting(shouldShowFormatting);
 }
 
 void ScoreSettingsModel::setShouldShowFrames(bool shouldShowFrames)
@@ -172,14 +172,14 @@ void ScoreSettingsModel::updateShouldShowInvisible(bool isVisible)
     emit shouldShowInvisibleChanged(isVisible);
 }
 
-void ScoreSettingsModel::updateShouldShowUnprintable(bool isVisible)
+void ScoreSettingsModel::updateShouldShowFormatting(bool isVisible)
 {
-    if (isVisible == m_shouldShowUnprintable) {
+    if (isVisible == m_shouldShowFormatting) {
         return;
     }
 
-    m_shouldShowUnprintable = isVisible;
-    emit shouldShowUnprintableChanged(isVisible);
+    m_shouldShowFormatting = isVisible;
+    emit shouldShowFormattingChanged(isVisible);
 }
 
 void ScoreSettingsModel::updateShouldShowFrames(bool isVisible)
@@ -209,7 +209,7 @@ void ScoreSettingsModel::updateFromConfig(ScoreConfigType configType)
         updateShouldShowInvisible(scoreConfig().isShowInvisibleElements);
         break;
     case notation::ScoreConfigType::ShowUnprintableElements:
-        updateShouldShowUnprintable(scoreConfig().isShowUnprintableElements);
+        updateShouldShowFormatting(scoreConfig().isShowUnprintableElements);
         break;
     case notation::ScoreConfigType::ShowFrames:
         updateShouldShowFrames(scoreConfig().isShowFrames);
@@ -225,7 +225,7 @@ void ScoreSettingsModel::updateFromConfig(ScoreConfigType configType)
 void ScoreSettingsModel::updateAll()
 {
     updateShouldShowInvisible(scoreConfig().isShowInvisibleElements);
-    updateShouldShowUnprintable(scoreConfig().isShowUnprintableElements);
+    updateShouldShowFormatting(scoreConfig().isShowUnprintableElements);
     updateShouldShowFrames(scoreConfig().isShowFrames);
     updateShouldShowPageMargins(scoreConfig().isShowPageMargins);
 }

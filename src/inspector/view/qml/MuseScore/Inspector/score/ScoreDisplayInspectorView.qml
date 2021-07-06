@@ -59,12 +59,12 @@ InspectorSectionView {
             Layout.maximumWidth: parent.width/2
 
             navigation.panel: root.navigationPanel
-            navigation.name: "Unprintable"
+            navigation.name: "Formatting"
             navigation.row: root.navigationRow(3)
 
-            text: qsTrc("inspector", "Unprintable")
-            isVisible: model ? model.shouldShowUnprintable : false
-            onVisibleEdited: { model.shouldShowUnprintable = !model.shouldShowUnprintable }
+            text: qsTrc("inspector", "Formatting")
+            isVisible: model ? model.shouldShowFormatting : false
+            onVisibleToggled: { model.shouldShowFormatting = !model.shouldShowFormatting }
         }
 
         VisibilityBox {
