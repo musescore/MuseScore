@@ -1335,8 +1335,8 @@ const UiActionList NotationUiActions::m_scoreConfigActions = {
              ),
     UiAction(SHOW_UNPRINTABLE_CODE,
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Show Unprintable"),
-             QT_TRANSLATE_NOOP("action", "Show unprintable"),
+             QT_TRANSLATE_NOOP("action", "Show Formatting"),
+             QT_TRANSLATE_NOOP("action", "Show Formatting"),
              Checkable::Yes
              ),
     UiAction(SHOW_FRAMES_CODE,
