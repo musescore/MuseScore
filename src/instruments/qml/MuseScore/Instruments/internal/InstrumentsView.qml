@@ -178,21 +178,9 @@ Item {
                     }
                 }
 
-                model: {
-                    var resultList = []
-
-                    var _transpositions = modelData.transpositions
-
-                    if (!_transpositions) {
-                        return
-                    }
-
-                    for (var i = 0; i < _transpositions.length; ++i) {
-                        resultList.push({"text" : _transpositions[i].name, "value" : _transpositions[i].id})
-                    }
-
-                    return resultList
-                }
+                textRole: "name"
+                valueRole: "id"
+                model: modelData.transpositions
 
                 onCurrentValueChanged: {
                     if (prv.currentInstrumentIndex === index) {

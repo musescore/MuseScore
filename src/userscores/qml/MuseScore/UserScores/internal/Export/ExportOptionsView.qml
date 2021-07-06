@@ -43,15 +43,15 @@ ColumnLayout {
         firstColumnWidth: privateProperties.firstColumnWidth
         text: qsTrc("userscores", "Format:")
 
-        StyledComboBox {
+        Dropdown {
             id: typeComboBox
             Layout.fillWidth: true
 
             model: exportModel.exportTypeList()
-            maxVisibleItemCount: count
+            popupItemsCount: typeComboBox.count
 
-            textRoleName: "name"
-            valueRoleName: "id"
+            textRole: "name"
+            valueRole: "id"
 
             currentIndex: {
                 // First, check if it's a subtype
@@ -66,11 +66,11 @@ ColumnLayout {
                 }
 
                 // Otherwise, it must be a toplevel type
-                return indexOfValue(exportModel.selectedExportType.id)
+                return typeComboBox.indexOfValue(exportModel.selectedExportType.id)
             }
 
-            onValueChanged: {
-                exportModel.selectExportTypeById(value)
+            onCurrentValueChanged: {
+                exportModel.selectExportTypeById(typeComboBox.currentValue)
             }
         }
     }
@@ -80,7 +80,7 @@ ColumnLayout {
         text: qsTrc("userscores", "File type:")
         firstColumnWidth: privateProperties.firstColumnWidth
 
-        StyledComboBox {
+        Dropdown {
             id: subtypeComboBox
             Layout.fillWidth: true
 
@@ -92,12 +92,12 @@ ColumnLayout {
                 return []
             }
 
-            textRoleName: "name"
-            valueRoleName: "id"
+            textRole: "name"
+            valueRole: "id"
 
-            currentIndex: indexOfValue(exportModel.selectedExportType.id)
-            onValueChanged: {
-                exportModel.selectExportTypeById(value)
+            currentIndex: subtypeComboBox.indexOfValue(exportModel.selectedExportType.id)
+            onCurrentValueChanged: {
+                exportModel.selectExportTypeById(subtypeComboBox.currentValue)
             }
         }
     }

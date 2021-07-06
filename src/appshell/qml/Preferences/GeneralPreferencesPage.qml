@@ -54,20 +54,20 @@ PreferencesPage {
             Row {
                 spacing: 12
 
-                StyledComboBox {
+                Dropdown {
+                    id: dropdown
+
                     width: 208
 
-                    property var currValue
-
-                    textRoleName: "name"
-                    valueRoleName: "code"
+                    textRole: "name"
+                    valueRole: "code"
 
                     model: preferencesModel.languages
 
-                    currentIndex: indexOfValue(preferencesModel.currentLanguageCode)
+                    currentIndex: dropdown.indexOfValue(preferencesModel.currentLanguageCode)
 
-                    onValueChanged: {
-                        preferencesModel.currentLanguageCode = value
+                    onCurrentValueChanged: {
+                        preferencesModel.currentLanguageCode = dropdown.currentValue
                     }
                 }
 

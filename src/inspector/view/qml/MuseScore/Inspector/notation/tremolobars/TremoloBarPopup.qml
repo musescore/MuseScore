@@ -46,11 +46,10 @@ StyledPopupView {
             titleText: qsTrc("inspector", "Tremolo bar type")
             propertyItem: root.model ? root.model.type : null
 
-            StyledComboBox {
-                width: parent.width
+            Dropdown {
+                id: tremolos
 
-                textRoleName: "text"
-                valueRoleName: "value"
+                width: parent.width
 
                 model: [
                     { text: qsTrc("inspector", "Dip"), value: TremoloBarTypes.TYPE_DIP },
@@ -62,10 +61,10 @@ StyledPopupView {
                     { text: qsTrc("inspector", "Custom"), value: TremoloBarTypes.TYPE_CUSTOM }
                 ]
 
-                currentIndex: root.model && !root.model.type.isUndefined ? indexOfValue(root.model.type.value) : -1
+                currentIndex: root.model && !root.model.type.isUndefined ? tremolos.indexOfValue(root.model.type.value) : -1
 
-                onValueChanged: {
-                    root.model.type.value = value
+                onCurrentValueChanged: {
+                    root.model.type.value = tremolos.currentValue
                 }
             }
         }

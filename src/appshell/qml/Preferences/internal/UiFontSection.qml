@@ -52,8 +52,6 @@ Column {
             title: qsTrc("appshell", "Font face:")
             titleWidth: root.firstColumnWidth
 
-            control.popupItemsCount: 16
-
             onValueEdited: {
                 root.fontChangeRequested(currentIndex)
             }
