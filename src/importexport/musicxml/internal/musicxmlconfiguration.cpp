@@ -94,7 +94,7 @@ bool MusicXmlConfiguration::musicxmlExportInvisibleElements() const
 
 void MusicXmlConfiguration::setMusicxmlExportInvisibleElements(bool value)
 {
-    settings()->setValue(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, Val(value));
+    settings()->setSharedValue(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, Val(value));
 }
 
 bool MusicXmlConfiguration::needUseDefaultFont() const
