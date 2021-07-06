@@ -55,5 +55,6 @@
         <file>qml/MuseScore/UiComponents/StyledToolTip.qml</file>
         <file>qml/MuseScore/UiComponents/internal/Utils.js</file>
         <file>qml/MuseScore/UiComponents/Dropdown.qml</file>
+        <file>qml/MuseScore/UiComponents/internal/DropdownItem.qml</file>
     </qresource>
 </RCC>

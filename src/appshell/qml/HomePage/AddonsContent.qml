@@ -119,7 +119,7 @@ FocusScope {
                 }
             }
 
-            StyledComboBox {
+            Dropdown {
                 id: categoryComboBox
 
                 width: searchField.width
@@ -128,14 +128,11 @@ FocusScope {
                 navigation.panel: navSearchPanel
                 navigation.order: 2
 
-                textRoleName: "text"
-                valueRoleName: "value"
-
                 visible: bar.canFilterByCategories
 
                 property string selectedCategory: Boolean(value) ? value : ""
 
-                displayText: qsTrc("appshell", "Category: ") + currentText
+                displayText: qsTrc("appshell", "Category: ") + categoryComboBox.currentText
 
                 function initModel() {
                     var categories = bar.categories()
