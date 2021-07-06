@@ -3367,9 +3367,9 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
         p->drawRect(cursor->cursorRect());
     }
 
-    QMatrix matrix = p->worldTransform().toAffine();
+    QTransform transform = p->worldTransform();
     p->translate(-pos);
-    p->setPen(Pen(Qt::lightGray, 4.0 / matrix.m11()));    // 4 pixel pen size
+    p->setPen(Pen(Qt::lightGray, 4.0 / transform.m11()));    // 4 pixel pen size
     p->setBrush(BrushStyle::NoBrush);
 
     qreal m = spatium();
