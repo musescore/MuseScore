@@ -157,20 +157,20 @@ Item {
                 root.selectInstrumentRequested(currentSelection.instrument.id, currentSelection.transposition)
             }
 
-            StyledComboBox {
+            Dropdown {
                 id: transpositionsBox
 
                 anchors.right: parent.right
                 anchors.rightMargin: 4
                 anchors.verticalCenter: parent.verticalCenter
 
-                width: 72
-                implicitHeight: 24
+                width: 86
+                height: 24
 
-                textRoleName: "text"
-                valueRoleName: "value"
+                label.anchors.leftMargin: 8
+                dropIcon.anchors.rightMargin: 4
 
-                visible: count > 1
+                visible: transpositionsBox.count > 1
 
                 onFocusChanged: {
                     if (focus) {
@@ -194,7 +194,7 @@ Item {
                     return resultList
                 }
 
-                onValueChanged: {
+                onCurrentValueChanged: {
                     if (prv.currentInstrumentIndex === index) {
                         item.resetCurrentInstrument()
                     }

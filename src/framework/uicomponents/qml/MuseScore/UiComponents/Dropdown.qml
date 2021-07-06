@@ -20,58 +20,147 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 
-Rectangle {
+import MuseScore.Ui 1.0
+
+import "internal"
+
+DropdownItem {
 
     id: root
 
-    property int currentIndex: 0
     property alias model: view.model
+    property alias count: view.count
 
-    height: 30
-    width: 120
-    color: "#ff0000"
+    property int currentIndex: 0
+    property string currentText: root.valueFromModel(root.currentIndex, root.textRole)
+    property string currentValue: root.valueFromModel(root.currentIndex, root.valueRole)
 
-    StyledTextLabel {
-        anchors.fill: parent
-        text: root.model[root.currentIndex].text
+    property string displayText: root.currentText
+
+    property int popupWidth: root.width
+    property int popupItemsCount: 8
+
+    property alias navigation: navCtrl
+
+    property alias dropIcon: dropIconItem
+
+    property string textRole: "text"
+    property string valueRole: "value"
+
+    signal activated(int index)
+
+    text: root.displayText
+
+    onClicked: {
+        console.log("Dropdown.qml onClicked")
+        popup.open()
     }
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            popup.open()
+    function valueFromModel(index, roleName) {
+
+        // Simple models (like JS array) with single predefined role name - modelData
+        if (model[index] !== undefined) {
+            if (model[index][roleName] === undefined) {
+                return model[index]
+            }
+
+            return model[index][roleName]
+        }
+
+        // Complex models (like QAbstractItemModel) with multiple role names
+        var item = delegateModel.items.get(index)
+
+        return item.model[roleName]
+    }
+
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName != "" ? root.objectName : "Dropdown"
+        enabled: root.enabled
+        onActiveChanged: {
+            if (!root.activeFocus) {
+                root.forceActiveFocus()
+            }
+        }
+        onTriggered: {
+            if (popup.opened) {
+                popup.close()
+            } else {
+                popup.open()
+            }
         }
     }
 
-    StyledPopupView {
+    StyledIconLabel {
+        id: dropIconItem
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: parent.right
+        anchors.rightMargin: 8
+
+        iconCode: IconCode.SMALL_ARROW_DOWN
+    }
+
+    //StyledPopupView {
+    Popup {
         id: popup
 
-        contentWidth: root.width
-        contentHeight: 300
+        contentWidth: root.popupWidth
+        contentHeight: root.height * Math.min(root.count, root.popupItemsCount)
         padding: 0
         margins: 0
-        showArrow: false
+        //showArrow: false
+        //background.color: "#CFD5DD"
 
         x: 0
         y: 0
 
-        ListView {
-            id: view
+        onOpened: {
+            view.positionViewAtIndex(root.currentIndex, ListView.Center)
+        }
 
-            anchors.fill: parent
+        background: Rectangle {
+            color: root.background.color
+            radius: 4
+        }
+
+        contentItem: Rectangle {
+            color: root.background.color
+            radius: 4
             clip: true
 
-            delegate: ListItemBlank {
-                height: root.height
-                width: parent.width
-                StyledTextLabel {
-                    anchors.fill: parent
-                    text: modelData.text
+            ListView {
+                id: view
+
+                anchors.fill: parent
+                clip: true
+                boundsBehavior: Flickable.StopAtBounds
+
+                ScrollBar.vertical: StyledScrollBar {
+                    anchors.right: parent.right
+                    anchors.rightMargin: 4
+                    width: 4
                 }
-                onClicked: {
-                    root.currentIndex = model.index
-                    popup.close()
+
+                delegate: DropdownItem {
+
+                    height: root.height
+                    width: popup.contentWidth
+
+                    background.radius: 0
+                    background.opacity: 1.0
+                    hoveredColor: ui.theme.accentColor
+
+                    selected: model.index === root.currentIndex
+                    text: root.valueFromModel(model.index, root.textRole)
+
+                    onClicked: {
+                        root.currentIndex = model.index
+                        root.activated(model.index)
+                        popup.close()
+                    }
+
                 }
             }
         }

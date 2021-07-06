@@ -150,6 +150,24 @@ Rectangle {
                     { text: "Option 11", value: 11 }
                 ]
             }
+
+            Dropdown {
+                currentIndex: 10
+                popupWidth: 200
+                model: [
+                    { text: "Option 1", value: 1 },
+                    { text: "Option 2", value: 2 },
+                    { text: "Option 3", value: 3 },
+                    { text: "Option 4", value: 4 },
+                    { text: "Option 5", value: 5 },
+                    { text: "Option 6", value: 6 },
+                    { text: "Option 7", value: 7 },
+                    { text: "Option 8", value: 8 },
+                    { text: "Option 9", value: 9 },
+                    { text: "Option 10", value: 10 },
+                    { text: "Option 11", value: 11 }
+                ]
+            }
         }
     }
 

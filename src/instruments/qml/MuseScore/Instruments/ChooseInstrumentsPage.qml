@@ -88,7 +88,7 @@ Rectangle {
         FamilyView {
             id: familyView
 
-            Layout.preferredWidth: root.canSelectMultipleInstruments ? root.width / 4 : 0
+            Layout.preferredWidth: root.canSelectMultipleInstruments ? root.width / 5 : 0
             Layout.fillWidth: !root.canSelectMultipleInstruments
             Layout.fillHeight: true
 

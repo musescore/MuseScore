@@ -43,6 +43,10 @@ public:
 
     virtual QWindow* qWindow() const = 0;
 
+    virtual QWindow* topWindow() const = 0;
+    virtual void pushWindow(QWindow* w) = 0;
+    virtual void popWindow(QWindow* w) = 0;
+
     virtual void requestShowOnBack() = 0;
     virtual void requestShowOnFront() = 0;
 
