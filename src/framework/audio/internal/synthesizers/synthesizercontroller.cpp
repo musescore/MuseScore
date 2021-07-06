@@ -50,11 +50,13 @@ void SynthesizerController::init()
     for (ISynthesizerPtr& synth : synthesizers) {
         synth->init();
 
-        reloadSoundFonts(synth);
+        // !Note Temporarily disabled a loading of soundfonts during the startup time
+        //       This part of the system will be reworked soon, see a task - https://github.com/musescore/MuseScore/issues/8539
+        /*reloadSoundFonts(synth);
         auto notification = m_soundFontProvider->soundFontPathsForSynthChanged(synth->name());
         notification.onNotify(this, [this, synth]() {
             reloadSoundFonts(synth);
-        });
+        });*/
     }
 }
 
