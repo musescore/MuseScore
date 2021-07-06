@@ -26,6 +26,7 @@
 #include "framework/ui/imainwindow.h"
 
 #include <QObject>
+#include <QStack>
 
 namespace mu::dock {
 class MainWindowProvider : public QObject, public ui::IMainWindow
@@ -40,6 +41,10 @@ public:
     explicit MainWindowProvider(QObject* parent = nullptr);
 
     QWindow* qWindow() const override;
+
+    QWindow* topWindow() const override;
+    void pushWindow(QWindow* w) override;
+    void popWindow(QWindow* w) override;
 
     QString filePath() const;
     virtual bool fileModified() const;
@@ -79,6 +84,7 @@ private slots: // Should only be used from QML
     virtual void setFileModified(bool modified);
 
 private:
+    QStack<QWindow*> m_windows;
     async::Channel<QString, framework::Orientation> m_dockOrientationChanged;
     async::Channel<QPoint> m_showToolBarDockingHolderRequested;
     async::Channel<QPoint> m_showPanelDockingHolderRequested;

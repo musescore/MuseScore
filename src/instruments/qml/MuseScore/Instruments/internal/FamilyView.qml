@@ -79,7 +79,7 @@ Item {
         text: qsTrc("instruments", "Family")
     }
 
-    StyledComboBox {
+    Dropdown {
         id: familiesBox
 
         anchors.top: familyLabel.bottom
@@ -87,15 +87,15 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        navigation.name: "familiesBox"
-        navigation.panel: navPanel
-        navigation.row: 1
+//        navigation.name: "familiesBox"
+//        navigation.panel: navPanel
+//        navigation.row: 1
 
-        textRoleName: "name"
-        valueRoleName: "id"
+        textRole: "name"
+        valueRole: "id"
 
         onActivated: {
-            root.familySelected(value)
+            root.familySelected(familiesBox.currentValue)
         }
     }
 

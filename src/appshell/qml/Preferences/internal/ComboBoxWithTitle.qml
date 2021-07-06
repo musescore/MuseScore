@@ -48,7 +48,7 @@ Row {
         horizontalAlignment: Qt.AlignLeft
     }
 
-    StyledComboBox {
+   Dropdown {
         id: comboBox
 
         width: 210
