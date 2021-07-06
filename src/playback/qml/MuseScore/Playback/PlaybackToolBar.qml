@@ -70,9 +70,7 @@ Rectangle {
                 Layout.preferredWidth: childrenRect.width
                 Layout.preferredHeight: childrenRect.height
 
-                contentHeight: 32
-                contentWidth: contentHeight
-
+                contentHeight: root.floating ? 32 : 48
                 spacing: 4
 
                 model: playbackModel
@@ -82,6 +80,7 @@ Rectangle {
 
                 delegate: Loader {
                     id: itemLoader
+                    anchors.verticalCenter: parent ? parent.verticalCenter : undefined
 
                     sourceComponent: Boolean(model.code) || model.subitems.length !== 0 ? menuItemComp : separatorComp
 
@@ -94,6 +93,7 @@ Rectangle {
 
                         FlatButton {
                             id: btn
+
                             property var modelData
                             property bool hasSubitems: modelData.subitems.length !== 0
 
