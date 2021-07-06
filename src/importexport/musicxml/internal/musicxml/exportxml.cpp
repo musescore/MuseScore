@@ -42,6 +42,7 @@
 #include <math.h>
 #include <QBuffer>
 #include <QDate>
+#include <QRegularExpression>
 
 #include "config.h"
 
@@ -2056,8 +2057,8 @@ void ExportMusicXml::timesig(TimeSig* tsig)
     tagName += color2xml(tsig);
     _xml.stag(tagName);
 
-    QRegExp rx("^\\d+(\\+\\d+)+$");   // matches a compound numerator
-    if (rx.exactMatch(ns)) {
+    QRegularExpression regex(QRegularExpression::anchoredPattern("^\\d+(\\+\\d+)+$")); // matches a compound numerator
+    if (regex.match(ns).hasMatch()) {
         // if compound numerator, exported as is
         _xml.tag("beats", ns);
     } else {
@@ -4033,10 +4034,11 @@ static bool findMetronome(const QList<TextFragment>& list,
     // find first note, limiting search to the part left of the first '=',
     // to prevent matching the second note in a "note1 = note2" metronome
     int pos1 = TempoText::findTempoDuration(words.left(indEq), len1, dur);
-    QRegExp eq("\\s*=\\s*");
-    int pos2 = eq.indexIn(words, pos1 + len1);
+    QRegularExpression equationRegEx("\\s*=\\s*");
+    QRegularExpressionMatch equationMatch;
+    int pos2 = words.indexOf(equationRegEx, pos1 + len1, &equationMatch);
     if (pos1 != -1 && pos2 == pos1 + len1) {
-        int len2 = eq.matchedLength();
+        int len2 = equationMatch.capturedLength();
         if (words.length() > pos2 + len2) {
             QString s1 = words.mid(0, pos1);           // string to the left of metronome
             QString s2 = words.mid(pos1, len1);        // first note
@@ -4054,13 +4056,14 @@ static bool findMetronome(const QList<TextFragment>& list,
             // now determine what is to the right of the equals sign
             // must have either a (dotted) note or a number at start of s4
             int len3 = 0;
-            QRegExp nmb("\\d+");
+            QRegularExpression numberRegEx("\\d+");
             int pos3 = TempoText::findTempoDuration(s4, len3, dur);
             if (pos3 == -1) {
                 // did not find note, try to find a number
-                pos3 = nmb.indexIn(s4);
+                QRegularExpressionMatch numberMatch;
+                pos3 = s4.indexOf(numberRegEx, 0, &numberMatch);
                 if (pos3 == 0) {
-                    len3 = nmb.matchedLength();
+                    len3 = numberMatch.capturedLength();
                 }
             }
             if (pos3 == -1) {

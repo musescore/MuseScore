@@ -28,6 +28,7 @@
 
 #include <assert.h>
 #include <cmath>
+#include <QRegularExpression>
 
 #include "libmscore/score.h"
 #include "thirdparty/qzip/qzipreader_p.h"
@@ -426,9 +427,10 @@ void ChordObj::readCapx(XmlReader& e)
 
 static signed char pitchStr2Char(QString& strPitch)
 {
-    QRegExp pitchRegExp("[A-G][0-9]");
+    QRegularExpression pitchRegex(QRegularExpression::anchoredPattern("[A-G][0-9]"));
+    QRegularExpressionMatch match = pitchRegex.match(strPitch);
 
-    if (!pitchRegExp.exactMatch(strPitch)) {
+    if (!match.hasMatch()) {
         qDebug("pitchStr2Char: illegal pitch '%s'", qPrintable(strPitch));
         return 0;
     }

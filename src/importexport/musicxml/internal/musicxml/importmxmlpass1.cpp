@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <QRegularExpression>
+
 #include "libmscore/box.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/instrtemplate.h"
@@ -1255,13 +1257,13 @@ static QString text2syms(const QString& t)
 static QString decodeEntities(const QString& src)
 {
     QString ret(src);
-    QRegExp re("&#([0-9]+);");
-    re.setMinimal(true);
+    QRegularExpression re("&#([0-9]+);", QRegularExpression::InvertedGreedinessOption);
 
     int pos = 0;
-    while ((pos = re.indexIn(src, pos)) != -1) {
-        ret = ret.replace(re.cap(0), QChar(re.cap(1).toInt(0, 10)));
-        pos += re.matchedLength();
+    QRegularExpressionMatch match;
+    while ((pos = src.indexOf(re, pos, &match)) != -1) {
+        ret = ret.replace(match.capturedTexts()[0], QChar(match.capturedTexts()[1].toInt(0, 10)));
+        pos += match.capturedLength();
     }
     return ret;
 }
