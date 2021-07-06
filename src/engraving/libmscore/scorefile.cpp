@@ -23,6 +23,7 @@
 #include <cmath>
 #include <QDir>
 #include <QBuffer>
+#include <QRegularExpression>
 
 #include "config.h"
 #include "score.h"
@@ -52,6 +53,7 @@
 #include "scoreorder.h"
 
 #include "preferences.h"
+#include "utils.h"
 
 #include "sig.h"
 #include "undo.h"
@@ -943,49 +945,46 @@ Score::FileError MasterScore::loadMsc(QString name, QIODevice* io, bool ignoreVe
 
 void MasterScore::parseVersion(const QString& val)
 {
-    QRegExp re("(\\d+)\\.(\\d+)\\.(\\d+)");
-    int v1, v2, v3, rv1, rv2, rv3;
-    if (re.indexIn(VERSION) != -1) {
-        QStringList sl = re.capturedTexts();
-        if (sl.size() == 4) {
-            v1 = sl[1].toInt();
-            v2 = sl[2].toInt();
-            v3 = sl[3].toInt();
-            if (re.indexIn(val) != -1) {
-                sl = re.capturedTexts();
-                if (sl.size() == 4) {
-                    rv1 = sl[1].toInt();
-                    rv2 = sl[2].toInt();
-                    rv3 = sl[3].toInt();
+    int appVersion = version();
 
-                    int currentVersion = v1 * 10000 + v2 * 100 + v3;
-                    int readVersion = rv1 * 10000 + rv2 * 100 + rv3;
-                    if (readVersion > currentVersion) {
-                        qDebug("read future version");
-                    }
-                }
-            } else {
-                QRegExp re1("(\\d+)\\.(\\d+)");
-                if (re1.indexIn(val) != -1) {
-                    sl = re.capturedTexts();
-                    if (sl.size() == 3) {
-                        rv1 = sl[1].toInt();
-                        rv2 = sl[2].toInt();
+    QRegularExpression majorMinorPatchRegEx("(\\d+)\\.(\\d+)\\.(\\d+)");
+    QRegularExpressionMatch scoreVersionMatch = majorMinorPatchRegEx.match(val);
 
-                        int currentVersion = v1 * 10000 + v2 * 100 + v3;
-                        int readVersion = rv1 * 10000 + rv2 * 100;
-                        if (readVersion > currentVersion) {
-                            qDebug("read future version");
-                        }
-                    }
-                } else {
-                    qDebug("1cannot parse <%s>", qPrintable(val));
-                }
+    if (scoreVersionMatch.hasMatch()) {
+        QStringList scoreVersionList = scoreVersionMatch.capturedTexts();
+        if (scoreVersionList.size() == 4) {
+            int rv1 = scoreVersionList[1].toInt();
+            int rv2 = scoreVersionList[2].toInt();
+            int rv3 = scoreVersionList[3].toInt();
+
+            int scoreVersion = rv1 * 10000 + rv2 * 100 + rv3;
+            if (scoreVersion > appVersion) {
+                qDebug("Parsed score version is higher than current app version: %d vs %d", scoreVersion, appVersion);
             }
+
+            return;
         }
-    } else {
-        qDebug("2cannot parse <%s>", VERSION);
     }
+
+    QRegularExpression majorMinorRegEx("(\\d+)\\.(\\d+)");
+    scoreVersionMatch = majorMinorRegEx.match(val);
+
+    if (scoreVersionMatch.hasMatch()) {
+        QStringList scoreVersionList = scoreVersionMatch.capturedTexts();
+        if (scoreVersionList.size() == 3) {
+            int rv1 = scoreVersionList[1].toInt();
+            int rv2 = scoreVersionList[2].toInt();
+
+            int scoreVersion = rv1 * 10000 + rv2 * 100;
+            if (scoreVersion > appVersion) {
+                qDebug("Parsed score version is higher than current app version: %d vs %d", scoreVersion, appVersion);
+            }
+
+            return;
+        }
+    }
+
+    qDebug("Cannot parse score version: %s", qPrintable(val));
 }
 
 //---------------------------------------------------------
