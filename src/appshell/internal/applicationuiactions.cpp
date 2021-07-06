@@ -102,8 +102,8 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("inspector",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Inspector"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Inspector'"),
+             QT_TRANSLATE_NOOP("action", "Properties"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Properties'"),
              Checkable::Yes
              ),
     UiAction("toggle-statusbar",
