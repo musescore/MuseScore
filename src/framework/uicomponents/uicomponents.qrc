@@ -10,7 +10,6 @@
         <file>qml/MuseScore/UiComponents/FlatButton.qml</file>
         <file>qml/MuseScore/UiComponents/ExpandableBlankSection.qml</file>
         <file>qml/MuseScore/UiComponents/ExpandableBlank.qml</file>
-        <file>qml/MuseScore/UiComponents/StyledComboBox.qml</file>
         <file>qml/MuseScore/UiComponents/TabPanel.qml</file>
         <file>qml/MuseScore/UiComponents/RadioButtonGroup.qml</file>
         <file>qml/MuseScore/UiComponents/TextInputField.qml</file>
