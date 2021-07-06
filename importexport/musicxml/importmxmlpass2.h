@@ -205,7 +205,7 @@ public:
       void parse();
       void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,
                       Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners, TrillStack& trills,
-                      Tie*& tie);
+                      std::map<int, Tie*>& ties);
       MusicXmlTupletDesc tupletDesc() const { return _tupletDesc; }
       QString tremoloType() const { return _tremoloType; }
       int tremoloNr() const { return _tremoloNr; }
@@ -327,7 +327,7 @@ private:
 
       Glissando* _glissandi[MAX_NUMBER_LEVEL][2];   ///< Current slides ([0]) / glissandi ([1])
 
-      Tie* _tie;
+      std::map<int, Tie*> _ties;
       Volta* _lastVolta;
       bool _hasDrumset;                           ///< drumset defined TODO: move to pass 1
 

@@ -1473,7 +1473,6 @@ void MusicXMLParserPass2::initPartState(const QString& partId)
       {
       Q_UNUSED(partId);
       _timeSigDura = Fraction(0, 0);             // invalid
-      _tie    = 0;
       _lastVolta = 0;
       _hasDrumset = false;
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
@@ -1524,6 +1523,35 @@ SpannerSet MusicXMLParserPass2::findIncompleteSpannersAtPartEnd()
       return res;
       }
 
+//---------------------------------------------------------
+//   addArticLaissezVibrer
+//---------------------------------------------------------
+
+static void addArticLaissezVibrer(const Note* const note)
+      {
+      Q_ASSERT(note);
+      auto chord = note->chord();
+      if (!hasLaissezVibrer(chord)) {
+            Articulation* na = new Articulation(SymId::articLaissezVibrerBelow, chord->score());
+            chord->add(na);
+            }
+
+      }
+
+//---------------------------------------------------------
+//   cleanupUnterminatedTie
+//---------------------------------------------------------
+/**
+ Delete tie and add Laissez Vibrer where it was
+ */
+
+static void cleanupUnterminatedTie(Tie*& tie)
+      {
+      Note* unterminatedTieNote = tie->startNote();
+      unterminatedTieNote->remove(tie);
+      delete tie;
+      addArticLaissezVibrer(unterminatedTieNote); // Treat as let-ring
+      }
 
 //---------------------------------------------------------
 //   isLikelyIncorrectPartName
@@ -1836,6 +1864,15 @@ void MusicXMLParserPass2::part()
             ++i;
             }
       _spanners.clear();
+      
+      // Clean up unterminated ties
+      for (auto tie : _ties) {
+            if (tie.second) {
+                  cleanupUnterminatedTie(tie.second);                  
+                  _ties[tie.first] = 0;
+                  }
+            } 
+      _ties.clear();
 
       if (_hasDrumset) {
             Drumset* drumset = new Drumset;
@@ -5175,7 +5212,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
       // handle notations
       if (cr) {
-            notations.addToScore(cr, note, noteStartTime.ticks(), _slurs, _glissandi, _spanners, _trills, _tie);
+            notations.addToScore(cr, note, noteStartTime.ticks(), _slurs, _glissandi, _spanners, _trills, _ties);
             }
 
       // handle grace after state: remember current grace list size
@@ -6112,7 +6149,11 @@ void MusicXMLParserNotations::tied()
       Q_ASSERT(_e.isStartElement() && _e.name() == "tied");
 
       Notation notation = Notation::notationWithAttributes(_e.name().toString(), _e.attributes(), "notations");
-      _notations.push_back(notation);
+      // Make sure "stops" get processed before "starts"
+      if (notation.attribute("type") == "stop")
+            _notations.insert(_notations.begin(), notation);
+      else
+            _notations.push_back(notation);
       QString tiedType = notation.attribute("type");
       if (tiedType != "start" && tiedType != "stop" && tiedType != "let-ring") {
             _logger->logError(QString("unknown tied type %1").arg(tiedType), &_e);
@@ -6512,26 +6553,11 @@ static void addArpeggio(ChordRest* cr, const QString& arpeggioType,
       }
 
 //---------------------------------------------------------
-//   addArticLaissezVibrer
-//---------------------------------------------------------
-
-static void addArticLaissezVibrer(const Note* const note)
-      {
-      Q_ASSERT(note);
-      auto chord = note->chord();
-      if (!hasLaissezVibrer(chord)) {
-            Articulation* na = new Articulation(SymId::articLaissezVibrerBelow, chord->score());
-            chord->add(na);
-            }
-
-      }
-
-//---------------------------------------------------------
 //   addTie
 //---------------------------------------------------------
 
 static void addTie(const Notation& notation, Score* score, Note* note, const int track,
-                   Tie*& tie, MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
+                   std::map<int, Tie*>& ties, MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
       {
       Q_ASSERT(note);
       const QString& type = notation.attribute("type");
@@ -6542,18 +6568,22 @@ static void addTie(const Notation& notation, Score* score, Note* note, const int
             // ignore, nothing to do
             }
       else if (type == "start") {
-            if (tie) {
+            if (ties[note->pitch()]) {
+                  // Unterminated tie on this pitch. Clean this up, then resume.
                   logger->logError(QString("Tie already active"), xmlreader);
+                  cleanupUnterminatedTie(ties[note->pitch()]);
+                  ties[note->pitch()] = 0;
                   }
-            tie = new Tie(score);
-            note->setTieFor(tie);
-            tie->setStartNote(note);
-            tie->setTrack(track);
+            ties[note->pitch()] = new Tie(score);
+            Tie* currTie = ties[note->pitch()];
+            note->setTieFor(currTie);
+            currTie->setStartNote(note);
+            currTie->setTrack(track);
 
             if (orientation == "over")
-                  tie->setSlurDirection(Direction::UP);
+                  currTie->setSlurDirection(Direction::UP);
             else if (orientation == "under")
-                  tie->setSlurDirection(Direction::DOWN);
+                  currTie->setSlurDirection(Direction::DOWN);
             else if (orientation == "auto")
                   ;                    // ignore
             else if (orientation == "")
@@ -6562,13 +6592,20 @@ static void addTie(const Notation& notation, Score* score, Note* note, const int
                   logger->logError(QString("unknown tied orientation: %1").arg(orientation), xmlreader);
 
             if (lineType == "dotted")
-                  tie->setLineType(1);
+                  currTie->setLineType(1);
             else if (lineType == "dashed")
-                  tie->setLineType(2);
-            tie = nullptr;
+                  currTie->setLineType(2);
+
             }
       else if (type == "stop")
-            ;              // ignore
+            if (ties[note->pitch()]) {
+                  Tie* currTie = ties[note->pitch()];
+                  currTie->setEndNote(note);
+                  note->setTieBack(currTie);
+                  ties[note->pitch()] = 0;
+                  }
+            else
+                  logger->logError(QString("Non-started tie terminated. No-op."), xmlreader);
       else if (type == "let-ring")
             addArticLaissezVibrer(note);
       else
@@ -6981,7 +7018,7 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
 
 void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,
                                          Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners,
-                                         TrillStack& trills, Tie*& tie)
+                                         TrillStack& trills, std::map<int, Tie*>& ties)
       {
       addArpeggio(cr, _arpeggioType, _logger, &_e);
       addBreath(cr, cr->tick(), _breath);
@@ -6998,7 +7035,7 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
                   addGlissandoSlide(notation, note, glissandi, spanners, _logger, &_e);
                   }
             else if (note && notation.name() == "tied") {
-                  addTie(notation, _score, note, cr->track(), tie, _logger, &_e);
+                  addTie(notation, _score, note, cr->track(), ties, _logger, &_e);
                   }
             else if (note && notation.parent() == "technical") {
                   addTechnical(notation, note);
