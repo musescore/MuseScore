@@ -1681,11 +1681,21 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
     int fontIdx    = 0;
     qreal _spatium = spatium();
     qreal mag      = magS();
+    bool shrinkModifiersStack = false;
+    qreal stackedModifiersMag = 0.5;
 
 // qDebug("===");
     for (const RenderAction& a : renderList) {
 // a.print();
         if (a.type == RenderAction::RenderActionType::SET) {
+            if (a.text == "startStacking") {
+                shrinkModifiersStack = true;
+                continue;
+            } else if (a.text == "endStacking") {
+                shrinkModifiersStack = false;
+                continue;
+            }
+
             TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
             ChordSymbol cs = chordList->symbol(a.text);
             if (cs.isValid()) {
@@ -1698,6 +1708,11 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
                 qreal nmag = chordList->nominalMag();
                 ts->m_font.setPointSizeF(ts->m_font.pointSizeF() * nmag);
             }
+
+            if (shrinkModifiersStack) {
+                ts->m_font.setPointSizeF(ts->m_font.pointSizeF() * stackedModifiersMag);
+            }
+
             textList.append(ts);
             x += ts->width();
         } else if (a.type == RenderAction::RenderActionType::MOVE) {

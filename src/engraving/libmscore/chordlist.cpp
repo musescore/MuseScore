@@ -1725,6 +1725,11 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         // Modifier Stacking
         if (modifierStartIndices.contains(index)) {
             if (index == modifierStartIndices.first()) {
+                // To let the Harmony render function know that these modifiers are stacked
+                RenderAction a(RenderAction::RenderActionType::SET);
+                a.text = "startStacking";
+                _renderList.append(a);
+
                 RenderAction push = RenderAction(RenderAction::RenderActionType::PUSH);
                 _renderList.append(push);
             } else {
@@ -1735,16 +1740,20 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             }
             RenderAction stackPosition = RenderAction(RenderAction::RenderActionType::MOVE);
             stackPosition.movex = 0.0;
-            stackPosition.movey = (modifierStartIndices.indexOf(index) + 1 - (modifierStartIndices.size() + 1) / 2.0)
-                                  * cl->modifierMag() * 10;
+            stackPosition.movey = (modifierStartIndices.indexOf(index) + 0.5 - (modifierStartIndices.size() + 1) / 2.0)
+                                  * cl->modifierMag() * 5;
             _renderList.append(stackPosition);
         } else if (index == stackingEnd) {
+            RenderAction a(RenderAction::RenderActionType::SET);
+            a.text = "endStacking";
+            _renderList.append(a);
+
             // Modifiers like sus are not stacked and so must return to the normal level
             RenderAction returnPosition = RenderAction(RenderAction::RenderActionType::MOVE);
             returnPosition.movex = 0.0;
-            // Revert y displacement of the last modifier
-            returnPosition.movey = -((modifierStartIndices.size() - 1) / 2.0)
-                                   * cl->modifierMag() * 10;
+            // Reverse y displacement of the last modifier (substitute index as size()-1 in the previous eqn)
+            returnPosition.movey = -((modifierStartIndices.size() - 2) / 2.0)
+                                   * cl->modifierMag() * 5;
             _renderList.append(returnPosition);
         }
 
@@ -1755,14 +1764,6 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             RenderAction a(RenderAction::RenderActionType::SET);
             a.text = tok.names.first();
             _renderList.append(a);
-        }
-
-        if (modifierStartIndices.contains(index)) {
-            RenderAction stackPosition = RenderAction(RenderAction::RenderActionType::MOVE);
-            stackPosition.movex = 0.0;
-            stackPosition.movey = -(modifierStartIndices.indexOf(index) - (qreal)(modifierStartIndices.size() + 1) / 2)
-                                  * cl->modifierMag();
-            _renderList.append(stackPosition);
         }
 
         if (p != 0.0) {
