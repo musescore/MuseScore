@@ -2610,7 +2610,7 @@ bool MusicXMLDelayedDirectionElement::isTempoOrphanCandidate() const
       {
       return _element->isStaffText()
             && _placement == "above"
-            && toStaffText(_element)->xmlText().contains("<b>");
+            && toStaffText(_element)->xmlText().contains(QRegularExpression("^(<.*/>)*<b>.*</b>$"));
       }
 
 //---------------------------------------------------------
@@ -3379,11 +3379,12 @@ bool MusicXMLParserDirection::attemptTempoTextCoercion(const Fraction& tick)
             _tpoSound = tempoVal / noteVal;
             return true;
             }
-      else if (placement() == "above" && _wordsText.contains("<b>"))
+      else if (placement() == "above" && _wordsText.contains(QRegularExpression("^(<.*/>)*<b>.*</b>$"))) {
             if (tick == Fraction(0, 1)) return true;
             for (auto tempoWord : tempoWords)
                   if (_wordsText.contains(tempoWord, Qt::CaseInsensitive))
                         return true;
+            }
       return false;
       }
 
