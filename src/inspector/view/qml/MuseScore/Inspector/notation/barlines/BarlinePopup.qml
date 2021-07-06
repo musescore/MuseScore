@@ -46,11 +46,10 @@ StyledPopupView {
             titleText: qsTrc("inspector", "Style")
             propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.type : null
 
-            StyledComboBox {
-                width: parent.width
+            Dropdown {
+                id: styles
 
-                textRoleName: "text"
-                valueRoleName: "value"
+                width: parent.width
 
                 model: [
                     { text: qsTranslate("symUserNames", "Single barline"), value: BarlineTypes.TYPE_NORMAL },
@@ -66,10 +65,10 @@ StyledPopupView {
                     { text: qsTranslate("symUserNames", "Heavy double barline"), value: BarlineTypes.TYPE_DOUBLE_HEAVY },
                 ]
 
-                currentIndex: root.barlineSettingsModel && !root.barlineSettingsModel.type.isUndefined ? indexOfValue(root.barlineSettingsModel.type.value) : -1
+                currentIndex: root.barlineSettingsModel && !root.barlineSettingsModel.type.isUndefined ? styles.indexOfValue(root.barlineSettingsModel.type.value) : -1
 
-                onValueChanged: {
-                    root.barlineSettingsModel.type.value = value
+                onCurrentValueChanged: {
+                    root.barlineSettingsModel.type.value = styles.currentValue
                 }
             }
         }

@@ -39,7 +39,7 @@ InspectorSectionView {
         width: parent.width
 
         spacing: 24
- 
+
         Column {
             width: parent.width
 

@@ -63,16 +63,14 @@ Row {
         text: "/"
     }
 
-    StyledComboBox {
+    Dropdown {
         id: timeComboBox
 
-        implicitWidth: control.width
+        width: control.width
         anchors.verticalCenter: parent.verticalCenter
 
-        textRoleName: "text"
-        valueRoleName: "value"
-
-        currentIndex: indexOfValue(root.denominator)
+        popupItemsCount: 4
+        currentIndex: timeComboBox.indexOfValue(root.denominator)
 
         model: {
             var resultList = []
@@ -85,8 +83,8 @@ Row {
             return resultList
         }
 
-        onValueChanged: {
-            root.denominatorSelected(value)
+        onCurrentValueChanged: {
+            root.denominatorSelected(timeComboBox.currentValue)
         }
     }
 }

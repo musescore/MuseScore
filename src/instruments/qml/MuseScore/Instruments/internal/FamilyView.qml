@@ -87,14 +87,14 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-//        navigation.name: "familiesBox"
-//        navigation.panel: navPanel
-//        navigation.row: 1
+        navigation.name: "familiesBox"
+        navigation.panel: navPanel
+        navigation.row: 1
 
         textRole: "name"
         valueRole: "id"
 
-        onActivated: {
+        onCurrentValueChanged: {
             root.familySelected(familiesBox.currentValue)
         }
     }

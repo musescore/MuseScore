@@ -91,7 +91,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        StyledComboBox {
+        Dropdown {
             id: scoreOrderComboBox
 
             Layout.fillWidth: true
@@ -100,15 +100,15 @@ Item {
             navigation.panel: navPanel
             navigation.row: 1
 
-            textRoleName: "name"
-            valueRoleName: "id"
+            textRole: "name"
+            valueRole: "id"
 
             model: instrumentsModel.scoreOrders
 
             currentIndex: instrumentsModel.selectedScoreOrderIndex
 
-            onValueChanged: {
-                root.orderChanged(value)
+            onCurrentValueChanged: {
+                root.orderChanged(scoreOrderComboBox.currentValue)
             }
         }
 

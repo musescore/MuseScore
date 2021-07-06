@@ -205,11 +205,10 @@ StyledPopupView {
             titleText: qsTrc("inspector", "Notehead scheme")
             propertyItem: root.model ? root.model.noteheadSchemeType : null
 
-            StyledComboBox {
-                width: parent.width
+            Dropdown {
+                id: shemes
 
-                textRoleName: "text"
-                valueRoleName: "value"
+                width: parent.width
 
                 model: [
                     { text: qsTrc("inspector", "Auto"), value: NoteHead.SCHEME_AUTO },
@@ -224,10 +223,10 @@ StyledPopupView {
                     { text: qsTrc("inspector", "7-shape (Walker)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_WALKER }
                 ]
 
-                currentIndex: root.model && !root.model.noteheadSchemeType.isUndefined ? indexOfValue(root.model.noteheadSchemeType.value) : -1
+                currentIndex: root.model && !root.model.noteheadSchemeType.isUndefined ? shemes.indexOfValue(root.model.noteheadSchemeType.value) : -1
 
-                onValueChanged: {
-                    root.model.noteheadSchemeType.value = value
+                onCurrentValueChanged: {
+                    root.model.noteheadSchemeType.value = shemes.currentValue
                 }
             }
         }
