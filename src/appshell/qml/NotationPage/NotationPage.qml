@@ -211,7 +211,7 @@ DockPage {
             id: inspectorPanel
 
             objectName: "inspectorPanel"
-            title: qsTrc("appshell", "Inspector")
+            title: qsTrc("appshell", "Properties")
 
             navigationSection: root.navigationPanelSec(palettePanel.location)
 
