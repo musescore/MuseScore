@@ -50,10 +50,14 @@ public:
 private:
     std::shared_ptr<Mixer> mixer() const;
     ITrackSequencePtr sequence(const TrackSequenceId id) const;
-    void ensureSubscriptions(const ITrackSequencePtr s) const;
+    void ensureSeqSubscriptions(const ITrackSequencePtr s) const;
+    void ensureMixerSubscriptions() const;
 
     IGetTrackSequence* m_getSequence = nullptr;
 
+    mutable async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
+    mutable async::Channel<audioch_t, float> m_masterSignalAmplitudeChanged;
+    mutable async::Channel<audioch_t, volume_dbfs_t> m_masterVolumePressureChanged;
     mutable async::Channel<TrackSequenceId, TrackId, AudioOutputParams> m_outputParamsChanged;
 };
 }

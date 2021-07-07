@@ -68,7 +68,7 @@ private:
     std::vector<float> m_writeCacheBuff;
 
     AudioOutputParams m_masterParams;
-    async::Channel<AudioOutputParams> m_globalOutputParamsChanged;
+    async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
     std::vector<IFxProcessorPtr> m_globalFxProcessors = {};
 
     std::map<MixerChannelId, MixerChannelPtr> m_mixerChannels = {};

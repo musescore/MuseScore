@@ -162,7 +162,6 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
     s_audioConfiguration->init();
 
     s_audioBuffer->init(s_audioConfiguration->audioChannelsCount());
-    s_playbackFacade->init();
 
     // Setup audio driver
     IAudioDriver::Spec requiredSpec;
@@ -183,7 +182,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
     }
 
     // Setup worker
-    auto setupAudioEngine = [activeSpec]() {
+    auto workerSetup = [activeSpec]() {
         AudioSanitizer::setupWorkerThread();
         ONLY_AUDIO_WORKER_THREAD;
 
@@ -192,6 +191,9 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
         AudioEngine::instance()->setAudioChannelsCount(s_audioConfiguration->audioChannelsCount());
         AudioEngine::instance()->setSampleRate(activeSpec.sampleRate);
         AudioEngine::instance()->setReadBufferSize(activeSpec.samples);
+
+        // Initialize IPlayback facade and make sure that it's initialized after the audio-engine
+        s_playbackFacade->init();
     };
 
     auto workerLoopBody = []() {
@@ -199,7 +201,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
         s_audioBuffer->forward();
     };
 
-    s_audioWorker->run(setupAudioEngine, workerLoopBody);
+    s_audioWorker->run(workerSetup, workerLoopBody);
 
     //! --- Diagnostics ---
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
