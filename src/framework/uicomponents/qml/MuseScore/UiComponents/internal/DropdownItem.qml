@@ -42,9 +42,6 @@ Item {
 
     signal clicked()
 
-    height: 30
-    width: 126
-
     NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "Dropdown"
