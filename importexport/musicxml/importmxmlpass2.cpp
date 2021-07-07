@@ -2604,7 +2604,7 @@ bool MusicXMLDelayedDirectionElement::isTempoOrphanCandidate() const
       {
       return _element->isStaffText()
             && _placement == "above"
-            && toStaffText(_element)->xmlText().contains(QRegularExpression("^(<.*/>)*<b>.*</b>$"));
+            && isBold();
       }
 
 //---------------------------------------------------------
@@ -2806,7 +2806,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   else {
                         // Add element to score later, after collecting all the others and sorting by default-y
                         // This allows default-y to be at least respected by the order of elements
-                        MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), t, track, wordsPlacement, measure, tick + _offset);
+                        MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), t, track, wordsPlacement, measure, tick + _offset, _isBold);
                         delayedDirections.push_back(delayedDirection);
                         }
                   }
@@ -2853,7 +2853,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
             // Add element to score later, after collecting all the others and sorting by default-y
             // This allows default-y to be at least respected by the order of elements
-            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), dyn, track, dynamicsPlacement, measure, tick + _offset);
+            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), dyn, track, dynamicsPlacement, measure, tick + _offset, _isBold);
             delayedDirections.push_back(delayedDirection);
             }
 
@@ -2861,7 +2861,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
       foreach( auto elem, _elems) {
             // Add element to score later, after collecting all the others and sorting by default-y
             // This allows default-y to be at least respected by the order of elements
-            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), elem, track, placement(), measure, tick + _offset);
+            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), elem, track, placement(), measure, tick + _offset, _isBold);
             delayedDirections.push_back(delayedDirection);
             }
 
@@ -2939,6 +2939,7 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
                   _relativeY = relativeYCandidate;  
             _hasDefaultY |= hasDefaultYCandidate;
             _hasRelativeY |= hasRelativeYCandidate;
+            _isBold &= _e.attributes().value("font-weight").toString() == "bold";
             QString number = _e.attributes().value("number").toString();
             int n = 0;
             if (number != "") {
@@ -3312,7 +3313,7 @@ void MusicXMLInferredFingering::addToNotes(std::vector<Note*>& notes) const
 
 MusicXMLDelayedDirectionElement* MusicXMLInferredFingering::toDelayedDirection()
       {
-      auto dd = new MusicXMLDelayedDirectionElement(_totalY, _element, _track, _placement, _measure, _tick);
+      auto dd = new MusicXMLDelayedDirectionElement(_totalY, _element, _track, _placement, _measure, _tick, false);
       return dd;
       }
 
@@ -3368,7 +3369,7 @@ bool MusicXMLParserDirection::attemptTempoTextCoercion(const Fraction& tick)
             _tpoSound = tempoVal / noteVal;
             return true;
             }
-      else if (placement() == "above" && _wordsText.contains(QRegularExpression("^(<.*/>)*<b>.*</b>$"))) {
+      else if (placement() == "above" && _isBold) {
             if (tick == Fraction(0, 1)) return true;
             for (auto tempoWord : tempoWords)
                   if (_wordsText.contains(tempoWord, Qt::CaseInsensitive))
@@ -5981,7 +5982,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       }
       // Add element to score later, after collecting all the others and sorting by default-y
       // This allows default-y to be at least respected by the order of elements
-      MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY, se, track, placement, measure, sTime + offset);
+      MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY, se, track, placement, measure, sTime + offset, false);
       delayedDirections.push_back(delayedDirection);
       }
 
@@ -7329,7 +7330,7 @@ MusicXMLParserDirection::MusicXMLParserDirection(QXmlStreamReader& e,
                                                  MusicXMLParserPass2& pass2,
                                                  MxmlLogger* logger)
       : _e(e), _score(score), _pass1(pass1), _pass2(pass2), _logger(logger),
-      _hasDefaultY(false), _defaultY(0.0), _hasRelativeY(false), _relativeY(0.0), 
+      _hasDefaultY(false), _defaultY(0.0), _hasRelativeY(false), _relativeY(0.0), _isBold(true),
       _tpoMetro(0), _tpoSound(0), _offset(0, 1)
       {
       // nothing
