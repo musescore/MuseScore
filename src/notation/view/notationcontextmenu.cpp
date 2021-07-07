@@ -34,33 +34,51 @@ MenuItemList NotationContextMenu::items(const ElementType& elementType) const
     case ElementType::PAGE:
         return pageItems();
     default:
-        return elementItems();
+        break;
     }
-}
 
-MenuItem NotationContextMenu::makeItem(const UiAction& action, const QString& section, bool enabled, bool checked) const
-{
-    MenuItem item = action;
-    item.section = section;
-    item.state.enabled = enabled;
-    item.state.checked = checked;
-    return item;
-}
-
-MenuItemList NotationContextMenu::measureItems() const
-{
-    MenuItemList items = defaultCopyPasteItems();
-    items << makeItem(actionsRegister()->action("staff-properties"));
-
-    return items;
+    return elementItems();
 }
 
 MenuItemList NotationContextMenu::pageItems() const
 {
     MenuItemList items {
-        makeItem(actionsRegister()->action("edit-style")),
-        makeItem(actionsRegister()->action("page-settings")),
-        makeItem(actionsRegister()->action("load-style"))
+        makeMenuItem("edit-style"),
+        makeMenuItem("page-settings"),
+        makeMenuItem("load-style"),
+    };
+
+    return items;
+}
+
+MenuItemList NotationContextMenu::defaultCopyPasteItems() const
+{
+    MenuItemList items {
+        makeMenuItem("cut"),
+        makeMenuItem("copy"),
+        makeMenuItem("paste"),
+        makeMenuItem("swap"),
+        makeMenuItem("delete"),
+    };
+
+    return items;
+}
+
+MenuItemList NotationContextMenu::measureItems() const
+{
+    MenuItemList items = defaultCopyPasteItems();
+    items << makeMenuItem("staff-properties");
+
+    return items;
+}
+
+MenuItemList NotationContextMenu::selectItems() const
+{
+    MenuItemList items {
+        makeMenuItem("select-similar"),
+        makeMenuItem("select-similar-staff"),
+        makeMenuItem("select-similar-range"),
+        makeMenuItem("select-dialog"),
     };
 
     return items;
@@ -69,23 +87,7 @@ MenuItemList NotationContextMenu::pageItems() const
 MenuItemList NotationContextMenu::elementItems() const
 {
     MenuItemList items = defaultCopyPasteItems();
-    items << makeItem(actionsRegister()->action("select-similar"))
-          << makeItem(actionsRegister()->action("select-similar-staff"))
-          << makeItem(actionsRegister()->action("select-similar-range"))
-          << makeItem(actionsRegister()->action("select-dialog"));
-
-    return items;
-}
-
-MenuItemList NotationContextMenu::defaultCopyPasteItems() const
-{
-    MenuItemList items {
-        makeItem(actionsRegister()->action("cut")),
-        makeItem(actionsRegister()->action("copy")),
-        makeItem(actionsRegister()->action("paste")),
-        makeItem(actionsRegister()->action("swap")),
-        makeItem(actionsRegister()->action("delete")),
-    };
+    items << makeMenu(qtrc("notation", "Select"), selectItems());
 
     return items;
 }

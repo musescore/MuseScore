@@ -22,29 +22,23 @@
 #ifndef MU_NOTATION_NOTATIONCONTEXTMENU_H
 #define MU_NOTATION_NOTATIONCONTEXTMENU_H
 
-#include "modularity/ioc.h"
-
-#include "shortcuts/ishortcutsregister.h"
-#include "ui/iuiactionsregister.h"
-
+#include "ui/view/abstractmenumodel.h"
 #include "inotationcontextmenu.h"
 
 namespace mu::notation {
-class NotationContextMenu : public INotationContextMenu
+class NotationContextMenu : public ui::AbstractMenuModel, public INotationContextMenu
 {
-    INJECT(notation, ui::IUiActionsRegister, actionsRegister)
+    Q_OBJECT
 
 public:
     ui::MenuItemList items(const ElementType& elementType) const override;
 
 private:
-    ui::MenuItem makeItem(const ui::UiAction& action, const QString& section = "", bool enabled = true, bool checked = false) const;
-
-    ui::MenuItemList measureItems() const;
     ui::MenuItemList pageItems() const;
-    ui::MenuItemList elementItems() const;
-
     ui::MenuItemList defaultCopyPasteItems() const;
+    ui::MenuItemList measureItems() const;
+    ui::MenuItemList selectItems() const;
+    ui::MenuItemList elementItems() const;
 };
 }
 
