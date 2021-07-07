@@ -180,7 +180,7 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
 
 Channel<AudioOutputParams> Mixer::masterOutputParamsChanged() const
 {
-    return m_globalOutputParamsChanged;
+    return m_masterOutputParamsChanged;
 }
 
 Channel<audioch_t, float> Mixer::masterSignalAmplitudeRmsChanged() const

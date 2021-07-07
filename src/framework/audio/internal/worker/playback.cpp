@@ -40,7 +40,7 @@ using namespace mu::async;
 
 void Playback::init()
 {
-    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+    ONLY_AUDIO_WORKER_THREAD;
 
     m_playerHandlersPtr = std::make_shared<PlayerHandler>(this);
     m_trackHandlersPtr = std::make_shared<TracksHandler>(this);
