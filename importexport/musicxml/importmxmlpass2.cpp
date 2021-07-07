@@ -2597,9 +2597,10 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
                   QString wordsPlacement = placement();
                   // Case-based defaults
-                  if (wordsPlacement.isEmpty())
+                  if (wordsPlacement.isEmpty()) {
                         if (isVocalStaff) wordsPlacement = "above";
                         else if (isExpressionText) wordsPlacement = "below";
+                        }
                   
                   if (isLikelyFingering()) {
                         _logger->logDebugInfo(QString("Inferring fingering: %1").arg(_wordsText));
