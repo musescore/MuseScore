@@ -220,6 +220,7 @@ public:
         MULTIMEASURE_REST = 0xF355,
         IMPORT = 0xF357,
         UPDATE = 0xF358,
+        OPEN_LINK = 0xF359,
         GUITAR_TREMOLO_BAR = 0xF35C,
         SHORTCUTS = 0xF35D,
 

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -33,7 +33,7 @@ FocusScope {
     id: root
 
     property var color: ui.theme.backgroundSecondaryColor
-    property string item: ""
+    property string section: ""
 
     signal requestActiveFocus()
 
@@ -55,12 +55,12 @@ FocusScope {
         }
     }
 
-    onItemChanged: {
-        if (!Boolean(root.item)) {
+    onSectionChanged: {
+        if (!Boolean(root.section)) {
             return
         }
 
-        bar.selectPage(root.item)
+        bar.selectPage(root.section)
     }
 
     LearnPageModel {
@@ -254,15 +254,28 @@ FocusScope {
             }
         }
 
-        Rectangle {
+        ClassesPage {
             id: classesComp
 
-            color: root.color
+            property var author: pageModel.classesAuthor()
 
-            //            navigation.section: navSec
-            //            navigation.order: 3
-            //            search: searchField.searchText
-            //            backgroundColor: root.color
+            authorName: author.name
+            authorPosition: author.position
+            authorRole: author.role
+            authorDescription: author.description
+            authorAvatarUrl: author.avatarUrl
+            authorOrganizationName: author.organizationName
+
+            navigation.section: navSec
+            navigation.order: 4
+            navigation.name: "LearnClasses"
+            navigation.accessible.name: qsTrc("learn", "Classes") + navigation.directionInfo
+
+            sideMargin: prv.sideMargin
+
+            onRequestOpenOrganizationUrl: {
+                pageModel.openUrl(author.organizationUrl)
+            }
         }
     }
 }
