@@ -31,7 +31,7 @@ struct PlaylistItem {
     std::string title;
     std::string author;
     std::string thumbnailUrl;
-    int durationSec = 0;
+    int durationSecs = 0;
 
     bool operator==(const PlaylistItem& other) const
     {
