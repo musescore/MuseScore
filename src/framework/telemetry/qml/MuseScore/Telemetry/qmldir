@@ -1,2 +1,1 @@
 module MuseScore.Telemetry
-TelemetryPermissionDialog 1.0 TelemetryPermissionDialog.qml

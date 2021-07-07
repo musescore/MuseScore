@@ -24,15 +24,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/telemetrymodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/telemetrymodule.h
     ${CMAKE_CURRENT_LIST_DIR}/itelemetryconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/itelemetryservice.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/actioneventobserver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/actioneventobserver.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryservice.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/telemetryservice.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissionmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/telemetrypermissionmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/devtools/telemetrydevtools.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/telemetrydevtools.h
     )
@@ -44,13 +37,6 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 set(MODULE_INCLUDE
     ${PROJECT_SOURCE_DIR}/thirdparty/google_crashpad_client
     ${PROJECT_SOURCE_DIR}/thirdparty/google_crashpad_client/third_party/mini_chromium/mini_chromium
-)
-
-add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/qt-google-analytics qt-google-analytics)
-
-
-set(MODULE_LINK
-    qt-google-analytics
 )
 
 if (NOT MSVC)

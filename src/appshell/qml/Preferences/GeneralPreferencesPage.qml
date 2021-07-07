@@ -82,12 +82,14 @@ PreferencesPage {
             }
         }
 
-        SeparatorLine { }
+        //SeparatorLine { }
 
         Column {
             anchors.left: parent.left
             anchors.right: parent.right
             spacing: 18
+
+            visible: false
 
             StyledTextLabel {
                 text: qsTrc("appshell", "Telemetry")
