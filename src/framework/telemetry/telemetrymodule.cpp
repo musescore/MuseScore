@@ -27,8 +27,6 @@
 #include "modularity/ioc.h"
 
 #include "internal/telemetryconfiguration.h"
-#include "internal/telemetryservice.h"
-#include "view/telemetrypermissionmodel.h"
 
 #include "global/iglobalconfiguration.h"
 #include "internal/dump/crashhandler.h"
@@ -64,21 +62,14 @@ void TelemetryModule::registerResources()
 void TelemetryModule::registerExports()
 {
     ioc()->registerExport<ITelemetryConfiguration>(moduleName(), s_configuration);
-    ioc()->registerExport<ITelemetryService>(moduleName(), new TelemetryService());
 }
 
 void TelemetryModule::resolveImports()
 {
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
-    if (ir) {
-        ir->registerUri(Uri("musescore://telemetry/permission"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Telemetry/TelemetryPermissionDialog.qml"));
-    }
 }
 
 void TelemetryModule::registerUiTypes()
 {
-    qmlRegisterType<TelemetryPermissionModel>("MuseScore.Telemetry", 1, 0, "TelemetryPermissionModel");
     qmlRegisterType<TelemetryDevTools>("MuseScore.Telemetry", 1, 0, "TelemetryDevTools");
 }
 
