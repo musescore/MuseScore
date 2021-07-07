@@ -63,8 +63,8 @@ PreferencesPage {
                         title: qsTrc("appshell", "Default zoom:")
                         titleWidth: 210
 
-                        control.textRoleName: "title"
-                        control.valueRoleName: "value"
+                        control.textRole: "title"
+                        control.valueRole: "value"
 
                         currentIndex: control.indexOfValue(preferencesModel.defaultZoom.type)
 

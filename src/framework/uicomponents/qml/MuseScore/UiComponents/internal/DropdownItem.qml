@@ -21,6 +21,8 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
+
 import ".."
 
 Item {
@@ -33,13 +35,26 @@ Item {
 
     property alias background: backgroundItem
     property alias label: labelItem
+    property alias mouseArea: mouseAreaItem
 
     property color hoveredColor: backgroundItem.color
 
+    property alias navigation: navCtrl
+
     signal clicked()
 
-    height: 30
-    width: 126
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName != "" ? root.objectName : "Dropdown"
+        enabled: root.enabled && root.visible
+        onActiveChanged: {
+            if (!root.activeFocus) {
+                root.forceActiveFocus()
+            }
+        }
+
+        onTriggered: root.clicked()
+    }
 
     Rectangle {
         id: backgroundItem
@@ -47,6 +62,8 @@ Item {
         color: "#CFD5DD"
         radius: 4
         opacity: 0.7
+        border.color: ui.theme.focusColor
+        border.width: navCtrl.active ? 2 : 0
     }
 
     StyledTextLabel {
@@ -57,7 +74,7 @@ Item {
     }
 
     MouseArea {
-        id: mouseArea
+        id: mouseAreaItem
         anchors.fill: parent
         hoverEnabled: true
         onClicked: root.clicked()
@@ -66,7 +83,7 @@ Item {
     states: [
         State {
             name: "HOVERED"
-            when: mouseArea.containsMouse && !mouseArea.pressed
+            when: mouseAreaItem.containsMouse && !mouseAreaItem.pressed
 
             PropertyChanges {
                 target: backgroundItem
@@ -77,7 +94,7 @@ Item {
 
         State {
             name: "PRESSED"
-            when: mouseArea.pressed
+            when: mouseAreaItem.pressed
 
             PropertyChanges {
                 target: backgroundItem
