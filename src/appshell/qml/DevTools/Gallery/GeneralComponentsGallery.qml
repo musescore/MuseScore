@@ -119,7 +119,9 @@ Rectangle {
             }
 
             Dropdown {
+                navigation.name: "Dropdown 1"
                 navigation.panel: dropdownNav
+                navigation.order: 1
                 currentIndex: 0
                 model: [
                     { text: "1 Option 1", value: 1 },
@@ -137,7 +139,9 @@ Rectangle {
             }
 
             Dropdown {
+                navigation.name: "Dropdown 2"
                 navigation.panel: dropdownNav
+                navigation.order: 2
                 currentIndex: 10
                 popupWidth: 200
                 model: [

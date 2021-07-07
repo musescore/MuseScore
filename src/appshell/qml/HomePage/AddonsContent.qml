@@ -132,7 +132,7 @@ FocusScope {
 
                 property string selectedCategory: Boolean(value) ? value : ""
 
-                displayText: qsTrc("appshell", "Category: ") + categoryComboBox.currentText
+                text: qsTrc("appshell", "Category: ") + categoryComboBox.currentText
 
                 function initModel() {
                     var categories = bar.categories()

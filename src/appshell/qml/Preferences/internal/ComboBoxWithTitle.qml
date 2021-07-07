@@ -53,8 +53,8 @@ Row {
 
         width: 210
 
-        onActivated: {
-            root.valueEdited(currentValue)
+        onCurrentValueChanged: {
+            root.valueEdited(comboBox.currentValue)
         }
     }
 }

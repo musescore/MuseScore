@@ -38,22 +38,20 @@ DropdownItem {
     property string currentText: "--"
     property string currentValue: ""
 
-    property string displayText: root.currentText
-
     property int popupWidth: root.width
     property int popupItemsCount: root.defaultPopupItemsCount()
-
-    property alias navigation: navCtrl
 
     property alias dropIcon: dropIconItem
 
     property string textRole: "text"
     property string valueRole: "value"
 
-    text: root.displayText
+    text: root.currentText
 
     onClicked: {
+        popup.navigationParentControl = root.navigation
         popup.open()
+
     }
 
     //! NOTE We should not just bind to the current values, because when the component is created,
@@ -139,24 +137,6 @@ DropdownItem {
         }
     }
 
-    NavigationControl {
-        id: navCtrl
-        name: root.objectName != "" ? root.objectName : "Dropdown"
-        enabled: root.enabled
-        onActiveChanged: {
-            if (!root.activeFocus) {
-                root.forceActiveFocus()
-            }
-        }
-        onTriggered: {
-            if (popup.opened) {
-                popup.close()
-            } else {
-                popup.open()
-            }
-        }
-    }
-
     StyledIconLabel {
         id: dropIconItem
         anchors.verticalCenter: parent.verticalCenter
@@ -174,6 +154,8 @@ DropdownItem {
     Popup {
         id: popup
 
+        property NavigationControl navigationParentControl: null
+
         contentWidth: root.popupWidth
         contentHeight: root.height * Math.min(root.count, root.popupItemsCount)
         padding: 0
@@ -183,9 +165,41 @@ DropdownItem {
         y: 0
 
         onOpened: {
-            view.positionViewAtIndex(root.currentIndex, ListView.Center)
             popup.forceActiveFocus()
             contentItem.forceActiveFocus()
+            view.positionViewAtIndex(root.currentIndex, ListView.Center)
+            var item = view.itemAtIndex(root.currentIndex)
+            item.navigation.requestActive()
+        }
+
+        function closeAndReturnFocus() {
+            popup.close()
+            popup.navigationParentControl.requestActive()
+        }
+
+        NavigationPanel {
+            id: popupNavPanel
+            name: root.navigation.name + "Popup"
+            enabled: popup.opened
+            direction: NavigationPanel.Vertical
+            section: root.navigation.panel.section
+            order: root.navigation.panel.order + 1
+
+            onActiveChanged: {
+                if (popupNavPanel.active) {
+                    popup.forceActiveFocus()
+                    contentItem.forceActiveFocus()
+                } else {
+                    popup.closeAndReturnFocus()
+                }
+            }
+
+            onNavigationEvent: {
+                console.log("onNavigationEvent event: " + JSON.stringify(event))
+                if (event.type === NavigationEvent.Escape) {
+                    popup.closeAndReturnFocus()
+                }
+            }
         }
 
         background: Item {
@@ -212,9 +226,16 @@ DropdownItem {
                 if (event.text !== "") {
                     event.accepted = true
                 }
+
+                if (event.key === Qt.Key_Escape) {
+                    event.accepted = false
+                }
+
+                console.log("onShortcutOverride event: " + JSON.stringify(event))
             }
 
             Keys.onReleased: {
+                console.log("onReleased event: " + JSON.stringify(event))
                 if (event.text === "") {
                     return
                 }
@@ -243,8 +264,19 @@ DropdownItem {
 
                     delegate: DropdownItem {
 
+                        id: item
+
                         height: root.height
                         width: popup.contentWidth
+
+                        navigation.name: item.text
+                        navigation.panel: popupNavPanel
+                        navigation.row: model.index
+                        navigation.onActiveChanged: {
+                            if (navigation.active) {
+                                view.positionViewAtIndex(model.index, ListView.Contain)
+                            }
+                        }
 
                         background.radius: 0
                         background.opacity: 1.0
@@ -255,9 +287,8 @@ DropdownItem {
 
                         onClicked: {
                             root.currentIndex = model.index
-                            popup.close()
+                            popup.closeAndReturnFocus()
                         }
-
                     }
                 }
             }

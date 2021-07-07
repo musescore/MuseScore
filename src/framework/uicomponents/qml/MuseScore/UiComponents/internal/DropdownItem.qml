@@ -21,6 +21,8 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
+
 import ".."
 
 Item {
@@ -36,10 +38,25 @@ Item {
 
     property color hoveredColor: backgroundItem.color
 
+    property alias navigation: navCtrl
+
     signal clicked()
 
     height: 30
     width: 126
+
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName != "" ? root.objectName : "Dropdown"
+        enabled: root.enabled && root.visible
+        onActiveChanged: {
+            if (!root.activeFocus) {
+                root.forceActiveFocus()
+            }
+        }
+
+        onTriggered: root.clicked()
+    }
 
     Rectangle {
         id: backgroundItem
@@ -47,6 +64,8 @@ Item {
         color: "#CFD5DD"
         radius: 4
         opacity: 0.7
+        border.color: ui.theme.focusColor
+        border.width: navCtrl.active ? 2 : 0
     }
 
     StyledTextLabel {
