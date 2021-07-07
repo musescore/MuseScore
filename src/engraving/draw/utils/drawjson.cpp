@@ -201,7 +201,7 @@ static void fromObj(const QJsonObject& obj, QPainterPath& path)
 
     QJsonArray elsArr = obj["elements"].toArray();
     std::vector<QPainterPath::Element> curveEls;
-    for (const QJsonValue elVal : elsArr) {
+    for (const QJsonValue& elVal : elsArr) {
         QJsonArray elArr = elVal.toArray();
         IF_ASSERT_FAILED(elArr.size() == 3) {
             continue;
