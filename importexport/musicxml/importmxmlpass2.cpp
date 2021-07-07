@@ -1711,6 +1711,7 @@ void MusicXMLParserPass2::scorePartwise()
 
       _score->connectArpeggios();
       cleanFretDiagrams(_score->firstMeasure());
+      _score->fixupLaissezVibrer(); 
       }
 
 //---------------------------------------------------------
