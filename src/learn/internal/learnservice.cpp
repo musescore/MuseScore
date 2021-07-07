@@ -28,6 +28,7 @@
 #include <QtConcurrent>
 
 #include "log.h"
+#include "dataformatter.h"
 #include "learnerrors.h"
 
 using namespace mu::learn;
@@ -183,9 +184,8 @@ Playlist LearnService::parsePlaylist(const QJsonDocument& playlistDoc) const
         item.thumbnailUrl = thumbnailsMediumObj.value("url").toString().toStdString();
 
         QJsonObject contentDetails = itemObj.value("contentDetails").toObject();
-//        QString duration = contentDetails["duration"].toString();
-//        QDateTime time = QDateTime::fromString(duration, "'P'D'T'hh'H'mm'M'ss'S'");
-//        item.durationSec = time.toSecsSinceEpoch();
+        QString durationInIsoFormat = contentDetails["duration"].toString();
+        item.durationSecs = DataFormatter::dateTimeFromIsoFormat(durationInIsoFormat).toSecsSinceEpoch();
 
         result.push_back(item);
     }

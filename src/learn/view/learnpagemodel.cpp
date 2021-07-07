@@ -97,13 +97,22 @@ QVariantList LearnPageModel::playlistToVariantList(const Playlist& playlist) con
 {
     QVariantList result;
 
+    auto formatDuration = [](int durationSecs) {
+        QTime duration = QDateTime::fromSecsSinceEpoch(durationSecs).time();
+        int hour = duration.hour();
+        int minute = duration.minute();
+        int second = duration.second();
+
+        return (hour > 0 ? QString::number(hour) + ":" : "") + QString::number(minute) + ":" + QString::number(second);
+    };
+
     for (const PlaylistItem& item : playlist) {
         QVariantMap itemObj;
         itemObj["videoId"] = QString::fromStdString(item.videoId);
         itemObj["title"] = QString::fromStdString(item.title);
         itemObj["author"] =QString::fromStdString(item.author);
         itemObj["thumbnailUrl"] = QString::fromStdString(item.thumbnailUrl);
-        itemObj["duration"] = QDateTime::fromSecsSinceEpoch(item.durationSec).toString("hh:mm::ss");
+        itemObj["duration"] = formatDuration(item.durationSecs);
 
         result << itemObj;
     }
