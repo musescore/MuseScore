@@ -2869,7 +2869,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
 
       // handle the elems
-      foreach( auto elem, _elems) {
+      for (auto elem : _elems) {
             // Add element to score later, after collecting all the others and sorting by default-y
             // This allows default-y to be at least respected by the order of elements
             MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), elem, track, placement(), measure, tick + _offset, _isBold);
