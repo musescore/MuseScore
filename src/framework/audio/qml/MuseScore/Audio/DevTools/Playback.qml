@@ -54,22 +54,34 @@ Rectangle {
 
         spacing: 8
 
+        Column {
+            id: controlsColumn
+
+            spacing: 8
+
+            KnobControl {
+                id: panningKnob
+
+                anchors.horizontalCenter: controlsColumn.horizontalCenter
+            }
+
+            VolumePressureMeter {
+                id: volumePressureMeter
+
+                anchors.horizontalCenter: panningKnob.horizontalCenter
+
+                currentVolumePressure: waveModel.currentVolumePressure
+                minDisplayedVolumePressure: waveModel.minDisplayedDbfs
+                maxDisplayedVolumePressure: waveModel.maxDisplayedDbfs
+            }
+        }
+
         WaveFormView {
             id: waveView
 
             Layout.fillWidth: true
 
             currentSignalAmplitude: waveModel.currentSignalAmplitude
-        }
-
-        VolumePressureMeter {
-            id: volumePressureMeter
-
-            Layout.alignment: Qt.AlignRight
-
-            currentVolumePressure: waveModel.currentVolumePressure
-            minDisplayedVolumePressure: waveModel.minDisplayedDbfs
-            maxDisplayedVolumePressure: waveModel.maxDisplayedDbfs
         }
     }
 }
