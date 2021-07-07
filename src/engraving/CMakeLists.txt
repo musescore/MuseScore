@@ -65,6 +65,10 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/interactive/messagebox.cpp
     ${CMAKE_CURRENT_LIST_DIR}/interactive/messagebox.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/io/msczfile.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/io/msczfile.h
+
     )
 
 if (NO_ENGRAVING_QFONTENGINE)
