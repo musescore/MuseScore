@@ -1578,6 +1578,51 @@ void Score::connectArpeggios()
       }
 
 //---------------------------------------------------------
+//   fixupLaissezVibrer
+//    This is a temporary hack to improve the placement of
+//    l.v. articulations when importing MusciXML.
+//    TODO: vastly improve the automatic placement of the
+//    l.v. articulation.
+//---------------------------------------------------------
+
+void Score::fixupLaissezVibrer()
+      {
+      int tracks = nstaves() * VOICES;
+      Measure* m = firstMeasure();
+      if (!m)
+            return;
+      if (m->canvasPos() == QPointF(0, 0))
+            doLayout();
+
+      SegmentType st = SegmentType::ChordRest;
+      for (Segment* s = m->first(st); s; s = s->next1(st)) {
+            for (int i = 0; i < tracks; ++i) {
+                  Element* e = s->element(i);
+                  if (e == 0 || !e->isChord())
+                        continue;
+                  Chord* c = toChord(e);
+                  for (auto a : c->articulations()) {
+                        if (a->symId() != SymId::articLaissezVibrerAbove && a->symId() != SymId::articLaissezVibrerBelow)
+                              continue;
+
+                        // Manually override placement
+                        a->setAutoplace(false);
+                        a->setMinDistance(Spatium(0));
+                        c->layoutArticulations();
+                        c->layoutArticulations2();
+                        bool below = a->symId() == SymId::articLaissezVibrerBelow;
+                        Note* n = below ? c->notes().front() : c->notes().back();
+
+                        QPointF target = below  ? n->canvasBoundingRect().bottomLeft() + QPointF(0.5 * n->width(), 0.25 * spatium())
+                                                : n->canvasBoundingRect().topLeft() + QPointF(0.5 * n->width(), -0.25 * spatium());
+                        QPointF current = below ? a->canvasBoundingRect().topLeft() : a->canvasBoundingRect().bottomLeft();
+                        a->setOffset(a->offset() + target - current);
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   checkDivider
 //---------------------------------------------------------
 

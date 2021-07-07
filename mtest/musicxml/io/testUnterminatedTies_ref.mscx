@@ -227,6 +227,8 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articLaissezVibrerBelow</subtype>
+              <autoplace>0</autoplace>
+              <offset x="1.17797" y="-0.21"/>
               </Articulation>
             <StemDirection>up</StemDirection>
             <Note>
@@ -240,10 +242,15 @@
         <voice>
           <Chord>
             <durationType>quarter</durationType>
-            <StemDirection>up</StemDirection>
+            <Articulation>
+              <subtype>articLaissezVibrerAbove</subtype>
+              <autoplace>0</autoplace>
+              <offset x="1.17797" y="0.23"/>
+              </Articulation>
+            <StemDirection>down</StemDirection>
             <Note>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
               </Note>
             </Chord>
           <Rest>
@@ -258,10 +265,15 @@
         <voice>
           <Chord>
             <durationType>quarter</durationType>
-            <StemDirection>up</StemDirection>
+            <Articulation>
+              <subtype>articLaissezVibrerAbove</subtype>
+              <autoplace>0</autoplace>
+              <offset x="1.17797" y="0.23"/>
+              </Articulation>
+            <StemDirection>down</StemDirection>
             <Note>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
@@ -382,6 +394,8 @@
             <durationType>quarter</durationType>
             <Articulation>
               <subtype>articLaissezVibrerBelow</subtype>
+              <autoplace>0</autoplace>
+              <offset x="1.17797" y="-0.21"/>
               </Articulation>
             <StemDirection>up</StemDirection>
             <Note>
