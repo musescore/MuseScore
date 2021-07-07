@@ -31,6 +31,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "global/iinteractive.h"
+#include "instruments/iselectinstrumentscenario.h"
 
 namespace mu::notation {
 class EditStaffType;
@@ -41,6 +42,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase
 
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, framework::IInteractive, interactive)
+    INJECT(notation, instruments::ISelectInstrumentsScenario, selectInstrumentsScenario)
 
     Q_PROPERTY(int staffIdx READ staffIdx WRITE setStaffIdx NOTIFY staffIdxChanged)
 
@@ -62,7 +64,7 @@ private:
 private slots:
     void bboxClicked(QAbstractButton* button);
     void editStringDataClicked();
-    void showInstrumentDialog();
+    void showReplaceInstrumentDialog();
     void showStaffTypeDialog();
     void minPitchAClicked();
     void maxPitchAClicked();
