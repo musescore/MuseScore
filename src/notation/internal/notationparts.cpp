@@ -523,7 +523,7 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
     }
 
     staff->setVisible(config.visible);
-    staff->undoChangeProperty(Ms::Pid::COLOR, config.linesColor);
+    staff->undoChangeProperty(Ms::Pid::STAFF_COLOR, config.linesColor);
     staff->setInvisible(Fraction(0, 1), config.visibleLines);
     staff->setUserDist(config.userDistance);
     staff->undoChangeProperty(Ms::Pid::MAG, config.scale);

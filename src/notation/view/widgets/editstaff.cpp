@@ -58,24 +58,29 @@ EditStaff::EditStaff(QWidget* parent)
 
     WidgetStateStore::restoreGeometry(this);
 
-    connect(buttonBox,            SIGNAL(clicked(QAbstractButton*)), SLOT(bboxClicked(QAbstractButton*)));
-    connect(changeInstrument,     SIGNAL(clicked()),            SLOT(showInstrumentDialog()));
-    connect(changeStaffType,      SIGNAL(clicked()),            SLOT(showStaffTypeDialog()));
-    connect(minPitchASelect,      SIGNAL(clicked()),            SLOT(minPitchAClicked()));
-    connect(maxPitchASelect,      SIGNAL(clicked()),            SLOT(maxPitchAClicked()));
-    connect(minPitchPSelect,      SIGNAL(clicked()),            SLOT(minPitchPClicked()));
-    connect(maxPitchPSelect,      SIGNAL(clicked()),            SLOT(maxPitchPClicked()));
-    connect(editStringData,       SIGNAL(clicked()),            SLOT(editStringDataClicked()));
-    connect(lines,                SIGNAL(valueChanged(int)),    SLOT(numOfLinesChanged()));
-    connect(lineDistance,         SIGNAL(valueChanged(double)), SLOT(lineDistanceChanged()));
-    connect(showClef,             SIGNAL(clicked()),            SLOT(showClefChanged()));
-    connect(showTimesig,          SIGNAL(clicked()),            SLOT(showTimeSigChanged()));
-    connect(showBarlines,         SIGNAL(clicked()),            SLOT(showBarlinesChanged()));
-    connect(invisible,            SIGNAL(clicked()),            SLOT(invisibleChanged()));
-    connect(nextButton,           SIGNAL(clicked()),            SLOT(gotoNextStaff()));
-    connect(previousButton,       SIGNAL(clicked()),            SLOT(gotoPreviousStaff()));
+    connect(buttonBox,        &QDialogButtonBox::clicked, this, &EditStaff::bboxClicked);
+    connect(changeInstrument, &QPushButton::clicked, this, &EditStaff::showReplaceInstrumentDialog);
+    connect(changeStaffType,  &QPushButton::clicked, this, &EditStaff::showStaffTypeDialog);
+    connect(minPitchASelect,  &QPushButton::clicked, this, &EditStaff::minPitchAClicked);
+    connect(maxPitchASelect,  &QPushButton::clicked, this, &EditStaff::maxPitchAClicked);
+    connect(minPitchPSelect,  &QPushButton::clicked, this, &EditStaff::minPitchPClicked);
+    connect(maxPitchPSelect,  &QPushButton::clicked, this, &EditStaff::maxPitchPClicked);
+    connect(editStringData,   &QPushButton::clicked, this, &EditStaff::editStringDataClicked);
+    connect(nextButton,       &QPushButton::clicked, this, &EditStaff::gotoNextStaff);
+    connect(previousButton,   &QPushButton::clicked, this, &EditStaff::gotoPreviousStaff);
 
-    connect(iList,                SIGNAL(currentIndexChanged(int)),  SLOT(transpositionChanged()));
+    connect(showClef,     &QCheckBox::clicked, this, &EditStaff::showClefChanged);
+    connect(showTimesig,  &QCheckBox::clicked, this, &EditStaff::showTimeSigChanged);
+    connect(showBarlines, &QCheckBox::clicked, this, &EditStaff::showBarlinesChanged);
+    connect(invisible,    &QCheckBox::clicked, this, &EditStaff::invisibleChanged);
+
+    connect(iList, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &EditStaff::transpositionChanged);
+
+    connect(lines, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, &EditStaff::numOfLinesChanged);
+    connect(lineDistance, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &EditStaff::lineDistanceChanged);
 
     nextButton->setText(GO_DOWN_ICON);
     previousButton->setText(GO_UP_ICON);
@@ -576,10 +581,16 @@ bool EditStaff::isInstrumentChanged()
            || m_instrument.singleNoteDynamics != m_orgInstrument.singleNoteDynamics;
 }
 
-void EditStaff::showInstrumentDialog()
+void EditStaff::showReplaceInstrumentDialog()
 {
-    //!TODO: implement after merge  the select instrument dialogue to master branch
-    NOT_IMPLEMENTED;
+    RetVal<instruments::Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(m_instrumentId.toStdString());
+    if (!selectedInstrument.ret) {
+        LOGE() << selectedInstrument.ret.toString();
+        return;
+    }
+
+    m_instrument = selectedInstrument.val;
+    updateInstrument();
 }
 
 void EditStaff::editStringDataClicked()
