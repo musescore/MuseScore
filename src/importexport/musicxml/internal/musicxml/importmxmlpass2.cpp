@@ -2710,7 +2710,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
     }
 
     // handle the elems
-    foreach (auto elem, _elems) {
+    for (auto elem : _elems) {
         // TODO (?) if (_hasDefaultY) elem->setYoff(_defaultY);
         addElemOffset(elem, track, placement, measure, tick + _offset);
     }
