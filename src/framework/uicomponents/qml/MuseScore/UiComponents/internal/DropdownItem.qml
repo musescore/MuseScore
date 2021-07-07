@@ -59,7 +59,7 @@ Item {
     Rectangle {
         id: backgroundItem
         anchors.fill: parent
-        color: "#CFD5DD"
+        color: ui.theme.buttonColor
         radius: 4
         opacity: 0.7
         border.color: ui.theme.focusColor
