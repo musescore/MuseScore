@@ -21,79 +21,55 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQml.Models 2.2
 
 import MuseScore.Ui 1.0
 
 import "internal"
 
-DropdownItem {
+Item {
 
     id: root
 
     property var model: null
     property alias count: view.count
+    property string textRole: "text"
+    property string valueRole: "value"
 
     property int currentIndex: 0
     property string currentText: "--"
     property string currentValue: ""
 
-    property string displayText: root.currentText
+    property string displayText : root.currentText
 
     property int popupWidth: root.width
     property int popupItemsCount: root.defaultPopupItemsCount()
 
-    property alias navigation: navCtrl
-
     property alias dropIcon: dropIconItem
+    property alias label: mainItem.label
 
-    property string textRole: "text"
-    property string valueRole: "value"
+    property alias navigation: mainItem.navigation
 
-    text: root.displayText
+    height: 30
+    width: 126
 
-    onClicked: {
-        popup.open()
-    }
 
     //! NOTE We should not just bind to the current values, because when the component is created,
     //! the `onCurrentValueChanged` slot will be called, often in the handlers of which there are not yet initialized values
-    Component.onCompleted: root.updateCurrent()
-    onCurrentIndexChanged: root.updateCurrent()
+    Component.onCompleted: prv.updateCurrent()
+    onCurrentIndexChanged: prv.updateCurrent()
 
-    function updateCurrent() {
-        if (!(root.currentIndex >= 0 && root.currentIndex < root.count)) {
-            root.currentText = "--"
-            root.currentValue = ""
-        }
+    QtObject {
+        id: prv
 
-        root.currentText = root.valueFromModel(root.currentIndex, root.textRole, "")
-        root.currentValue = root.valueFromModel(root.currentIndex, root.valueRole, "")
-    }
-
-    function valueFromModel(index, roleName, def) {
-
-
-        if (!(index >= 0 && index < root.count)) {
-            return def
-        }
-
-        // Simple models (like JS array) with single predefined role name - modelData
-        if (root.model[index] !== undefined) {
-            if (root.model[index][roleName] === undefined) {
-                return root.model[index]
+        function updateCurrent() {
+            if (!(root.currentIndex >= 0 && root.currentIndex < root.count)) {
+                root.currentText = "--"
+                root.currentValue = ""
             }
 
-            return root.model[index][roleName]
+            root.currentText = accesser.itemAt(root.currentIndex).text
+            root.currentValue = accesser.itemAt(root.currentIndex).value
         }
-
-        // Complex models (like QAbstractItemModel) with multiple role names
-        if (!(index < delegateModel.count)) {
-            return def
-        }
-
-        var item = delegateModel.items.get(index)
-        return item.model[roleName]
     }
 
     function indexOfValue(value) {
@@ -101,8 +77,8 @@ DropdownItem {
             return -1
         }
 
-        for (var i = 0; i < root.count; ++i) {
-            if (root.valueFromModel(i, root.valueRole) === value) {
+        for (var i = 0; i < view.count; ++i) {
+            if (accesser.itemAt(i).value === value) {
                 return i
             }
         }
@@ -118,20 +94,47 @@ DropdownItem {
         return 6
     }
 
-    NavigationControl {
-        id: navCtrl
-        name: root.objectName != "" ? root.objectName : "Dropdown"
-        enabled: root.enabled
-        onActiveChanged: {
-            if (!root.activeFocus) {
-                root.forceActiveFocus()
+    function positionViewAtFirstChar(text) {
+
+        if (text === "") {
+            return;
+        }
+
+        text = text.toLowerCase()
+        var idx = -1
+        for (var i = 0; i < root.count; ++i) {
+            var itemText = accesser.itemAt(i).text
+            if (itemText.toLowerCase().startsWith(text)) {
+                idx = i;
+                break;
             }
         }
-        onTriggered: {
-            if (popup.opened) {
-                popup.close()
+
+        if (idx > -1) {
+            view.positionViewAtIndex(idx, ListView.Center)
+        }
+    }
+
+    DropdownItem {
+        id: mainItem
+        anchors.fill: parent
+        text: root.displayText
+
+        onClicked: {
+            popup.navigationParentControl = root.navigation
+            popup.open()
+        }
+
+        mouseArea.onWheel: {
+            var angleY = wheel.angleDelta.y
+            if (angleY > 0) {
+                if (root.currentIndex > 0) {
+                    root.currentIndex -= 1
+                }
             } else {
-                popup.open()
+                if (root.currentIndex < (root.count - 1)) {
+                    root.currentIndex += 1
+                }
             }
         }
     }
@@ -145,13 +148,19 @@ DropdownItem {
         iconCode: IconCode.SMALL_ARROW_DOWN
     }
 
-    DelegateModel {
-        id: delegateModel
+    Repeater {
+        id: accesser
         model: root.model
+        delegate: Item {
+            property string text: modelData[root.textRole]
+            property string value: modelData[root.valueRole]
+        }
     }
 
     Popup {
         id: popup
+
+        property NavigationControl navigationParentControl: null
 
         contentWidth: root.popupWidth
         contentHeight: root.height * Math.min(root.count, root.popupItemsCount)
@@ -162,7 +171,41 @@ DropdownItem {
         y: 0
 
         onOpened: {
+            popup.forceActiveFocus()
+            contentItem.forceActiveFocus()
             view.positionViewAtIndex(root.currentIndex, ListView.Center)
+            var item = view.itemAtIndex(root.currentIndex)
+            item.navigation.requestActive()
+        }
+
+        function closeAndReturnFocus() {
+            popup.close()
+            popup.navigationParentControl.requestActive()
+        }
+
+        NavigationPanel {
+            id: popupNavPanel
+            name: root.navigation.name + "Popup"
+            enabled: popup.opened
+            direction: NavigationPanel.Vertical
+            section: root.navigation.panel.section
+            order: root.navigation.panel.order + 1
+
+            onActiveChanged: {
+                if (popupNavPanel.active) {
+                    popup.forceActiveFocus()
+                    contentItem.forceActiveFocus()
+                } else {
+                    popup.closeAndReturnFocus()
+                }
+            }
+
+            onNavigationEvent: {
+                console.log("onNavigationEvent event: " + JSON.stringify(event))
+                if (event.type === NavigationEvent.Escape) {
+                    popup.closeAndReturnFocus()
+                }
+            }
         }
 
         background: Item {
@@ -171,7 +214,7 @@ DropdownItem {
             Rectangle {
                 id: bgItem
                 anchors.fill: parent
-                color: root.background.color
+                color: mainItem.background.color
                 radius: 4
             }
 
@@ -181,42 +224,77 @@ DropdownItem {
             }
         }
 
-        contentItem: Rectangle {
-            color: root.background.color
-            radius: 4
+        contentItem: FocusScope {
+            id: contentItem
+            focus: true
 
-            ListView {
-                id: view
-
-                anchors.fill: parent
-                clip: true
-                boundsBehavior: Flickable.StopAtBounds
-
-                model: root.model
-
-                ScrollBar.vertical: StyledScrollBar {
-                    anchors.right: parent.right
-                    anchors.rightMargin: 4
-                    width: 4
+            Keys.onShortcutOverride: {
+                // console.log("onShortcutOverride event: " + JSON.stringify(event))
+                if (event.text !== "") {
+                    event.accepted = true
                 }
 
-                delegate: DropdownItem {
+                if (event.key === Qt.Key_Escape) {
+                    event.accepted = false
+                }
+            }
 
-                    height: root.height
-                    width: popup.contentWidth
+            Keys.onReleased: {
+                // console.log("onReleased event: " + JSON.stringify(event))
+                if (event.text === "") {
+                    return
+                }
+                root.positionViewAtFirstChar(event.text)
+            }
 
-                    background.radius: 0
-                    background.opacity: 1.0
-                    hoveredColor: ui.theme.accentColor
+            Rectangle {
+                anchors.fill: parent
+                color: mainItem.background.color
+                radius: 4
 
-                    selected: model.index === root.currentIndex
-                    text: root.valueFromModel(model.index, root.textRole, "")
+                ListView {
+                    id: view
 
-                    onClicked: {
-                        root.currentIndex = model.index
-                        popup.close()
+                    anchors.fill: parent
+                    clip: true
+                    boundsBehavior: Flickable.StopAtBounds
+
+                    model: root.model
+
+                    ScrollBar.vertical: StyledScrollBar {
+                        anchors.right: parent.right
+                        anchors.rightMargin: 4
+                        width: 4
                     }
 
+                    delegate: DropdownItem {
+
+                        id: item
+
+                        height: root.height
+                        width: popup.contentWidth
+
+                        navigation.name: item.text
+                        navigation.panel: popupNavPanel
+                        navigation.row: model.index
+                        navigation.onActiveChanged: {
+                            if (navigation.active) {
+                                view.positionViewAtIndex(model.index, ListView.Contain)
+                            }
+                        }
+
+                        background.radius: 0
+                        background.opacity: 1.0
+                        hoveredColor: ui.theme.accentColor
+
+                        selected: model.index === root.currentIndex
+                        text: modelData[root.textRole]
+
+                        onClicked: {
+                            root.currentIndex = model.index
+                            popup.closeAndReturnFocus()
+                        }
+                    }
                 }
             }
         }
