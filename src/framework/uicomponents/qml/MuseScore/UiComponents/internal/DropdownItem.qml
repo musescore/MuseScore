@@ -35,6 +35,7 @@ Item {
 
     property alias background: backgroundItem
     property alias label: labelItem
+    property alias mouseArea: mouseAreaItem
 
     property color hoveredColor: backgroundItem.color
 
@@ -73,7 +74,7 @@ Item {
     }
 
     MouseArea {
-        id: mouseArea
+        id: mouseAreaItem
         anchors.fill: parent
         hoverEnabled: true
         onClicked: root.clicked()
@@ -82,7 +83,7 @@ Item {
     states: [
         State {
             name: "HOVERED"
-            when: mouseArea.containsMouse && !mouseArea.pressed
+            when: mouseAreaItem.containsMouse && !mouseAreaItem.pressed
 
             PropertyChanges {
                 target: backgroundItem
@@ -93,7 +94,7 @@ Item {
 
         State {
             name: "PRESSED"
-            when: mouseArea.pressed
+            when: mouseAreaItem.pressed
 
             PropertyChanges {
                 target: backgroundItem
