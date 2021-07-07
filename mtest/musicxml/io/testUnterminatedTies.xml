@@ -194,13 +194,16 @@
     <measure number="3" width="90.13">
       <note default-x="16.50" default-y="-55.00">
         <pitch>
-          <step>B</step>
-          <octave>3</octave>
+          <step>E</step>
+          <octave>5</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
+        <notations>
+          <tied type="start"/>
+          </notations>
         </note>
       <note>
         <rest/>
@@ -218,13 +221,16 @@
     <measure number="4" width="90.13">
       <note default-x="16.50" default-y="-55.00">
         <pitch>
-          <step>B</step>
-          <octave>3</octave>
+          <step>D</step>
+          <octave>5</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
+        <notations>
+          <tied type="let-ring"/>
+          </notations>
         </note>
       <note>
         <rest/>
