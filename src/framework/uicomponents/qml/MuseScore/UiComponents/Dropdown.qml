@@ -118,6 +118,27 @@ DropdownItem {
         return 6
     }
 
+    function positionViewAtFirstChar(text) {
+
+        if (text === "") {
+            return;
+        }
+
+        text = text.toLowerCase()
+        var idx = -1
+        for (var i = 0; i < root.count; ++i) {
+            var itemText = root.valueFromModel(i, root.textRole)
+            if (itemText.toLowerCase().startsWith(text)) {
+                idx = i;
+                break;
+            }
+        }
+
+        if (idx > -1) {
+            view.positionViewAtIndex(idx, ListView.Center)
+        }
+    }
+
     NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "Dropdown"
@@ -163,6 +184,8 @@ DropdownItem {
 
         onOpened: {
             view.positionViewAtIndex(root.currentIndex, ListView.Center)
+            popup.forceActiveFocus()
+            contentItem.forceActiveFocus()
         }
 
         background: Item {
@@ -181,42 +204,61 @@ DropdownItem {
             }
         }
 
-        contentItem: Rectangle {
-            color: root.background.color
-            radius: 4
+        contentItem: FocusScope {
+            id: contentItem
+            focus: true
 
-            ListView {
-                id: view
-
-                anchors.fill: parent
-                clip: true
-                boundsBehavior: Flickable.StopAtBounds
-
-                model: root.model
-
-                ScrollBar.vertical: StyledScrollBar {
-                    anchors.right: parent.right
-                    anchors.rightMargin: 4
-                    width: 4
+            Keys.onShortcutOverride: {
+                if (event.text !== "") {
+                    event.accepted = true
                 }
+            }
 
-                delegate: DropdownItem {
+            Keys.onReleased: {
+                if (event.text === "") {
+                    return
+                }
+                root.positionViewAtFirstChar(event.text)
+            }
 
-                    height: root.height
-                    width: popup.contentWidth
+            Rectangle {
+                anchors.fill: parent
+                color: root.background.color
+                radius: 4
 
-                    background.radius: 0
-                    background.opacity: 1.0
-                    hoveredColor: ui.theme.accentColor
+                ListView {
+                    id: view
 
-                    selected: model.index === root.currentIndex
-                    text: root.valueFromModel(model.index, root.textRole, "")
+                    anchors.fill: parent
+                    clip: true
+                    boundsBehavior: Flickable.StopAtBounds
 
-                    onClicked: {
-                        root.currentIndex = model.index
-                        popup.close()
+                    model: root.model
+
+                    ScrollBar.vertical: StyledScrollBar {
+                        anchors.right: parent.right
+                        anchors.rightMargin: 4
+                        width: 4
                     }
 
+                    delegate: DropdownItem {
+
+                        height: root.height
+                        width: popup.contentWidth
+
+                        background.radius: 0
+                        background.opacity: 1.0
+                        hoveredColor: ui.theme.accentColor
+
+                        selected: model.index === root.currentIndex
+                        text: root.valueFromModel(model.index, root.textRole, "")
+
+                        onClicked: {
+                            root.currentIndex = model.index
+                            popup.close()
+                        }
+
+                    }
                 }
             }
         }
