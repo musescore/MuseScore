@@ -37,6 +37,10 @@ AudioOutputHandler::AudioOutputHandler(IGetTrackSequence* getSequence)
     : m_getSequence(getSequence)
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
+    Async::call(this, [this]() {
+        ensureMixerSubscriptions();
+    }, AudioThread::ID);
 }
 
 Promise<AudioOutputParams> AudioOutputHandler::outputParams(const TrackSequenceId sequenceId, const TrackId trackId) const
@@ -78,10 +82,6 @@ Channel<TrackSequenceId, TrackId, AudioOutputParams> AudioOutputHandler::outputP
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(mixer()) {
-        return {};
-    }
-
     return m_outputParamsChanged;
 }
 
@@ -116,33 +116,21 @@ Channel<AudioOutputParams> AudioOutputHandler::masterOutputParamsChanged() const
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(mixer()) {
-        return {};
-    }
-
-    return mixer()->masterOutputParamsChanged();
+    return m_masterOutputParamsChanged;
 }
 
 Channel<audioch_t, float> AudioOutputHandler::masterSignalAmplitudeChanged() const
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(mixer()) {
-        return {};
-    }
-
-    return mixer()->masterSignalAmplitudeRmsChanged();
+    return m_masterSignalAmplitudeChanged;
 }
 
 Channel<audioch_t, volume_dbfs_t> AudioOutputHandler::masterVolumePressureChanged() const
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(mixer()) {
-        return {};
-    }
-
-    return mixer()->masterVolumePressureDbfsChanged();
+    return m_masterVolumePressureChanged;
 }
 
 std::shared_ptr<Mixer> AudioOutputHandler::mixer() const
@@ -159,12 +147,12 @@ ITrackSequencePtr AudioOutputHandler::sequence(const TrackSequenceId id) const
     }
 
     ITrackSequencePtr s = m_getSequence->sequence(id);
-    ensureSubscriptions(s);
+    ensureSeqSubscriptions(s);
 
     return s;
 }
 
-void AudioOutputHandler::ensureSubscriptions(const ITrackSequencePtr s) const
+void AudioOutputHandler::ensureSeqSubscriptions(const ITrackSequencePtr s) const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -175,6 +163,33 @@ void AudioOutputHandler::ensureSubscriptions(const ITrackSequencePtr s) const
     if (!s->audioIO()->outputParamsChanged().isConnected()) {
         s->audioIO()->outputParamsChanged().onReceive(this, [this, s](const TrackId trackId, const AudioOutputParams& params) {
             m_outputParamsChanged.send(s->id(), trackId, params);
+        });
+    }
+}
+
+void AudioOutputHandler::ensureMixerSubscriptions() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    if (!mixer()) {
+        return;
+    }
+
+    if (!mixer()->masterVolumePressureDbfsChanged().isConnected()) {
+        mixer()->masterVolumePressureDbfsChanged().onReceive(this, [this](const audioch_t ch, const volume_dbfs_t value) {
+            m_masterVolumePressureChanged.send(ch, value);
+        });
+    }
+
+    if (!mixer()->masterSignalAmplitudeRmsChanged().isConnected()) {
+        mixer()->masterSignalAmplitudeRmsChanged().onReceive(this, [this](const audioch_t ch, const float value) {
+            m_masterSignalAmplitudeChanged.send(ch, value);
+        });
+    }
+
+    if (!mixer()->masterOutputParamsChanged().isConnected()) {
+        mixer()->masterOutputParamsChanged().onReceive(this, [this](const AudioOutputParams& params) {
+            m_masterOutputParamsChanged.send(params);
         });
     }
 }
