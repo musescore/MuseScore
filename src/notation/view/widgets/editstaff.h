@@ -30,29 +30,27 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+#include "global/iinteractive.h"
 
 namespace mu::notation {
-class EditStaff;
 class EditStaffType;
-
-//---------------------------------------------------------
-//   EditStaff
-//    edit staff and part properties
-//---------------------------------------------------------
 
 class EditStaff : public QDialog, private Ui::EditStaffBase
 {
     Q_OBJECT
 
-    INJECT(notation, mu::context::IGlobalContext, globalContext)
+    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(notation, framework::IInteractive, interactive)
 
     Q_PROPERTY(int staffIdx READ staffIdx WRITE setStaffIdx NOTIFY staffIdxChanged)
 
+public:
     EditStaff(QWidget* parent = nullptr);
     EditStaff(const EditStaff&);
 
     static int metaTypeId();
 
+private:
     virtual void hideEvent(QHideEvent*);
     void apply();
     void setStaff(Ms::Staff*, const Ms::Fraction& tick);
@@ -60,9 +58,6 @@ class EditStaff : public QDialog, private Ui::EditStaffBase
     void updateStaffType(const Ms::StaffType& staffType);
     void updateInstrument();
     void updateNextPreviousButtons();
-
-protected:
-    QString midiCodeToStr(int midiCode);
 
 private slots:
     void bboxClicked(QAbstractButton* button);
@@ -102,7 +97,8 @@ private:
 
     bool isInstrumentChanged();
 
-private:
+    QString midiCodeToStr(int midiCode);
+
     int m_staffIdx = -1;
     Ms::Staff* m_staff = nullptr;
     Ms::Staff* m_orgStaff = nullptr;

@@ -541,6 +541,8 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
     staff->setMergeMatchingRests(config.mergeMatchingRests);
     staff->setHideWhenEmpty(config.hideMode);
     staff->setDefaultClefType(config.clefType);
+    staff->setCutaway(config.cutaway);
+    staff->undoChangeProperty(Ms::Pid::SMALL, config.small);
 
     score()->undo(new Ms::ChangeStaff(staff));
     updateScore();
