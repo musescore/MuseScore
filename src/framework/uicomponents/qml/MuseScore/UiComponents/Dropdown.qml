@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQml.Models 2.15
 
 import MuseScore.Ui 1.0
 
@@ -67,9 +68,32 @@ Item {
                 root.currentValue = ""
             }
 
-            root.currentText = accesser.itemAt(root.currentIndex).text
-            root.currentValue = accesser.itemAt(root.currentIndex).value
+            root.currentText = root.valueFromModel(root.currentIndex, root.textRole, "")
+            root.currentValue = root.valueFromModel(root.currentIndex, root.valueRole, "")
         }
+    }
+
+    function valueFromModel(index, roleName, def) {
+        if (!(index >= 0 && index < root.count)) {
+            return def
+        }
+
+        // Simple models (like JS array) with single predefined role name - modelData
+        if (root.model[index] !== undefined) {
+            if (root.model[index][roleName] === undefined) {
+                return root.model[index]
+            }
+
+            return root.model[index][roleName]
+        }
+
+        // Complex models (like QAbstractItemModel) with multiple role names
+        if (!(index < delegateModel.count)) {
+            return def
+        }
+
+        var item = delegateModel.items.get(index)
+        return item.model[roleName]
     }
 
     function indexOfValue(value) {
@@ -77,8 +101,8 @@ Item {
             return -1
         }
 
-        for (var i = 0; i < view.count; ++i) {
-            if (accesser.itemAt(i).value === value) {
+        for (var i = 0; i < root.count; ++i) {
+            if (root.valueFromModel(i, root.valueRole) === value) {
                 return i
             }
         }
@@ -148,13 +172,9 @@ Item {
         iconCode: IconCode.SMALL_ARROW_DOWN
     }
 
-    Repeater {
-        id: accesser
+    DelegateModel {
+        id: delegateModel
         model: root.model
-        delegate: Item {
-            property string text: modelData[root.textRole]
-            property string value: modelData[root.valueRole]
-        }
     }
 
     Popup {
@@ -188,8 +208,8 @@ Item {
             name: root.navigation.name + "Popup"
             enabled: popup.opened
             direction: NavigationPanel.Vertical
-            section: root.navigation.panel.section
-            order: root.navigation.panel.order + 1
+            section: root.navigation.panel ? root.navigation.panel.section : null
+            order: root.navigation.panel ? (root.navigation.panel.order + 1) : 0
 
             onActiveChanged: {
                 if (popupNavPanel.active) {
@@ -288,7 +308,7 @@ Item {
                         hoveredColor: ui.theme.accentColor
 
                         selected: model.index === root.currentIndex
-                        text: modelData[root.textRole]
+                        text: root.valueFromModel(model.index, root.textRole, "")
 
                         onClicked: {
                             root.currentIndex = model.index
