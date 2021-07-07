@@ -24,6 +24,8 @@
 #include <QVariant>
 #include <QDateTime>
 
+#include "translation.h"
+
 using namespace mu::learn;
 
 LearnPageModel::LearnPageModel(QObject* parent)
@@ -61,6 +63,11 @@ void LearnPageModel::openVideo(const QString& videoId) const
     learnService()->openVideo(videoId.toStdString());
 }
 
+void LearnPageModel::openUrl(const QString& url) const
+{
+    interactive()->openUrl(url.toStdString());
+}
+
 void LearnPageModel::setSearchText(const QString& text)
 {
     if (m_searchText == text) {
@@ -71,6 +78,28 @@ void LearnPageModel::setSearchText(const QString& text)
 
     emit startedPlaylistChanged();
     emit advancedPlaylistChanged();
+}
+
+QVariantMap LearnPageModel::classesAuthor() const
+{
+    QVariantMap author;
+    author["name"] = qtrc("learn", "Marc Sabatella");
+    author["role"] = qtrc("learn", "Instructor");
+    author["position"] = qtrc("learn", "Founder, Director of Mastering MuseScore School");
+    author["description"] = qtrc("learn", "My name is Marc Sabatella, and I am the founder and director of the Mastering MuseScore School. "
+                                          "I am one of the developers and chief ambassadors for MuseScore, "
+                                          "the world's most popular music notation software. "
+                                          "I have been teaching music online since the dawn of the World Wide Web, "
+                                          "and I have been teaching in person for even longer. "
+                                          "From the publication of my groundbreaking Jazz Improvisation Primer back in the 1990’s, "
+                                          "to my years on the faculty at major music schools, "
+                                          "and culminating in this Mastering MuseScore School, "
+                                          "I have dedicated most of my life to helping as many musicians as I can.");
+    author["avatarUrl"] = "qrc:/qml/MuseScore/Learn/resources/marc_sabatella.JPG";
+    author["organizationName"] = qtrc("learn", "Open Mastering MuseScore School");
+    author["organizationUrl"] = "https://school.masteringmusescore.com/";
+
+    return author;
 }
 
 void LearnPageModel::setStartedPlaylist(Playlist startedPlaylist)
