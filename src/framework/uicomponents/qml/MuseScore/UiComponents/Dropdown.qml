@@ -21,77 +21,55 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQml.Models 2.2
 
 import MuseScore.Ui 1.0
 
 import "internal"
 
-DropdownItem {
+Item {
 
     id: root
 
     property var model: null
     property alias count: view.count
+    property string textRole: "text"
+    property string valueRole: "value"
 
     property int currentIndex: 0
     property string currentText: "--"
     property string currentValue: ""
 
+    property string displayText : root.currentText
+
     property int popupWidth: root.width
     property int popupItemsCount: root.defaultPopupItemsCount()
 
     property alias dropIcon: dropIconItem
+    property alias label: mainItem.label
 
-    property string textRole: "text"
-    property string valueRole: "value"
+    property alias navigation: mainItem.navigation
 
-    text: root.currentText
+    height: 30
+    width: 126
 
-    onClicked: {
-        popup.navigationParentControl = root.navigation
-        popup.open()
-
-    }
 
     //! NOTE We should not just bind to the current values, because when the component is created,
     //! the `onCurrentValueChanged` slot will be called, often in the handlers of which there are not yet initialized values
-    Component.onCompleted: root.updateCurrent()
-    onCurrentIndexChanged: root.updateCurrent()
+    Component.onCompleted: prv.updateCurrent()
+    onCurrentIndexChanged: prv.updateCurrent()
 
-    function updateCurrent() {
-        if (!(root.currentIndex >= 0 && root.currentIndex < root.count)) {
-            root.currentText = "--"
-            root.currentValue = ""
-        }
+    QtObject {
+        id: prv
 
-        root.currentText = root.valueFromModel(root.currentIndex, root.textRole, "")
-        root.currentValue = root.valueFromModel(root.currentIndex, root.valueRole, "")
-    }
-
-    function valueFromModel(index, roleName, def) {
-
-
-        if (!(index >= 0 && index < root.count)) {
-            return def
-        }
-
-        // Simple models (like JS array) with single predefined role name - modelData
-        if (root.model[index] !== undefined) {
-            if (root.model[index][roleName] === undefined) {
-                return root.model[index]
+        function updateCurrent() {
+            if (!(root.currentIndex >= 0 && root.currentIndex < root.count)) {
+                root.currentText = "--"
+                root.currentValue = ""
             }
 
-            return root.model[index][roleName]
+            root.currentText = accesser.itemAt(root.currentIndex).text
+            root.currentValue = accesser.itemAt(root.currentIndex).value
         }
-
-        // Complex models (like QAbstractItemModel) with multiple role names
-        if (!(index < delegateModel.count)) {
-            return def
-        }
-
-        var item = delegateModel.items.get(index)
-        return item.model[roleName]
     }
 
     function indexOfValue(value) {
@@ -99,8 +77,8 @@ DropdownItem {
             return -1
         }
 
-        for (var i = 0; i < root.count; ++i) {
-            if (root.valueFromModel(i, root.valueRole) === value) {
+        for (var i = 0; i < view.count; ++i) {
+            if (accesser.itemAt(i).value === value) {
                 return i
             }
         }
@@ -125,7 +103,7 @@ DropdownItem {
         text = text.toLowerCase()
         var idx = -1
         for (var i = 0; i < root.count; ++i) {
-            var itemText = root.valueFromModel(i, root.textRole)
+            var itemText = accesser.itemAt(i).text
             if (itemText.toLowerCase().startsWith(text)) {
                 idx = i;
                 break;
@@ -134,6 +112,17 @@ DropdownItem {
 
         if (idx > -1) {
             view.positionViewAtIndex(idx, ListView.Center)
+        }
+    }
+
+    DropdownItem {
+        id: mainItem
+        anchors.fill: parent
+        text: root.displayText
+
+        onClicked: {
+            popup.navigationParentControl = root.navigation
+            popup.open()
         }
     }
 
@@ -146,9 +135,13 @@ DropdownItem {
         iconCode: IconCode.SMALL_ARROW_DOWN
     }
 
-    DelegateModel {
-        id: delegateModel
+    Repeater {
+        id: accesser
         model: root.model
+        delegate: Item {
+            property string text: modelData[root.textRole]
+            property string value: modelData[root.valueRole]
+        }
     }
 
     Popup {
@@ -208,7 +201,7 @@ DropdownItem {
             Rectangle {
                 id: bgItem
                 anchors.fill: parent
-                color: root.background.color
+                color: mainItem.background.color
                 radius: 4
             }
 
@@ -223,6 +216,7 @@ DropdownItem {
             focus: true
 
             Keys.onShortcutOverride: {
+                // console.log("onShortcutOverride event: " + JSON.stringify(event))
                 if (event.text !== "") {
                     event.accepted = true
                 }
@@ -230,12 +224,10 @@ DropdownItem {
                 if (event.key === Qt.Key_Escape) {
                     event.accepted = false
                 }
-
-                console.log("onShortcutOverride event: " + JSON.stringify(event))
             }
 
             Keys.onReleased: {
-                console.log("onReleased event: " + JSON.stringify(event))
+                // console.log("onReleased event: " + JSON.stringify(event))
                 if (event.text === "") {
                     return
                 }
@@ -244,7 +236,7 @@ DropdownItem {
 
             Rectangle {
                 anchors.fill: parent
-                color: root.background.color
+                color: mainItem.background.color
                 radius: 4
 
                 ListView {
@@ -283,7 +275,7 @@ DropdownItem {
                         hoveredColor: ui.theme.accentColor
 
                         selected: model.index === root.currentIndex
-                        text: root.valueFromModel(model.index, root.textRole, "")
+                        text: modelData[root.textRole]
 
                         onClicked: {
                             root.currentIndex = model.index

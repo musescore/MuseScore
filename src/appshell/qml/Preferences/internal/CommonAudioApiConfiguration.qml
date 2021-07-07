@@ -60,7 +60,7 @@ Item {
 
             currentIndex: apiModel.currentSampleRateIndex
             model: apiModel.sampleRateHzList()
-            control.text: currentValue
+            control.displayText: currentValue
 
             onValueEdited: {
                 apiModel.currentSampleRateIndex = currentIndex
