@@ -68,6 +68,8 @@
 
 #include "draw/qpainterprovider.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -407,143 +409,93 @@ bool MasterScore::saveFile(bool generateBackup)
     if (readOnly()) {
         return false;
     }
-    QString suffix = info.suffix();
-    if (info.exists() && !info.isWritable()) {
-        MScore::lastError = tr("The following file is locked: \n%1 \n\nTry saving to a different location.").arg(info.filePath());
-        return false;
-    }
-    //
-    // step 1
-    // save into temporary file to prevent partially overwriting
-    // the original file in case of "disc full"
-    //
 
-    QString tempName = info.filePath() + QString(".temp");
-    QFile temp(tempName);
-    if (!temp.open(QIODevice::WriteOnly)) {
-        MScore::lastError = tr("Open Temp File\n%1\nfailed: %2").arg(tempName, strerror(errno));
-        return false;
-    }
-
-    bool rv = false;
-    if ("mscx" == suffix) {
-        rv = Score::saveFile(&temp, false);
-    } else {
-        QString fileName = info.completeBaseName() + ".mscx";
-        rv = Score::saveCompressedFile(&temp, fileName, false);
-    }
-
-    if (!rv) {
-        return false;
-    }
-
-    if (temp.error() != QFile::NoError) {
-        MScore::lastError = tr("Save File failed: %1").arg(temp.errorString());
-        return false;
-    }
-    temp.close();
-
-    const QString name(info.filePath());
-    const QString basename(info.fileName());
-    QDir dir(info.path());
     if (!saved() && generateBackup) {
         // if file was already saved in this session
         // save but don't overwrite backup again
 
-        //
-        // step 2
-        // remove old backup file if exists
-        // remove the backup file in the same dir as score (the traditional place) if exists
-        //
-        const QString backupSubdirString = preferences().backupDirPath();
-        const QString backupDirString = info.path() + QString(QDir::separator()) + backupSubdirString;
-        QDir backupDir(backupDirString);
-        if (!backupDir.exists()) {
-            dir.mkdir(backupSubdirString);
-#ifdef Q_OS_WIN
-            const QString backupDirNativePath = QDir::toNativeSeparators(backupDirString);
-            SetFileAttributesW(reinterpret_cast<LPCWSTR>(backupDirNativePath.utf16()), FILE_ATTRIBUTE_HIDDEN);
-#endif
-        }
-        const QString backupName = QString(".") + info.fileName() + QString(",");
-        if (backupDir.exists(backupName)) {
-            if (!backupDir.remove(backupName)) {
-//                      if (!MScore::noGui)
-//                            QMessageBox::critical(0, QObject::tr("Save File"),
-//                               tr("Removing old backup file %1 failed").arg(backupName));
-            }
-        }
-        // backup files prior to 3.5 were saved in the same directory as the file itself.
-        // remove these old backup files if needed
-        if (dir != backupDir && dir.exists(backupName)) {
-            if (!dir.remove(backupName)) {
-//                      if (!MScore::noGui)
-//                            QMessageBox::critical(0, QObject::tr("Save File"),
-//                               tr("Removing old backup file %1 failed").arg(backupName));
-            }
-        }
-
-        //
-        // step 3
-        // rename old file into backup
-        //
-        if (dir.exists(basename)) {
-            if (!QFile::rename(name, backupDirString + (backupDirString.endsWith("/") ? "" : "/") + backupName)) {
-//                      if (!MScore::noGui)
-//                            QMessageBox::critical(0, tr("Save File"),
-//                               tr("Renaming old file <%1> to backup <%2> failed").arg(name, backupDirString + "/" + backupName);
-            }
-        }
-
-        QFileInfo fileBackup(backupDir, backupName);
-        _sessionStartBackupInfo = fileBackup;
-    } else {
-        // file has previously been saved - remove the old file
-        if (dir.exists(basename)) {
-            if (!dir.remove(basename)) {
-//                      if (!MScore::noGui)
-//                            QMessageBox::critical(0, tr("Save File"),
-//                               tr("Removing old file %1 failed").arg(name));
-            }
-        }
+        //! TODO Make backup
+        NOT_IMPLEMENTED << "generate backup";
     }
 
-    //
-    // step 4
-    // rename temp name into file name
-    //
-    if (!QFile::rename(tempName, name)) {
-        MScore::lastError = tr("Renaming temp. file <%1> to <%2> failed:\n%3").arg(tempName, name, strerror(errno));
+    if (m_msczFile.exists() && !m_msczFile.isWritable()) {
+        MScore::lastError = tr("The following file is locked: \n%1 \n\nTry saving to a different location.").arg(m_msczFile.filePath());
         return false;
     }
-    // make file readable by all
-    QFile::setPermissions(name, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser
-                          | QFile::ReadGroup | QFile::ReadOther);
+
+    //! TODO Perhaps we need to write a file to the tempo first
+
+    bool ok = writeMscz(m_msczFile);
+    if (!ok) {
+        MScore::lastError = tr("Failed write mscz file: %1").arg(m_msczFile.filePath());
+    }
 
     undoStack()->setClean();
     setSaved(true);
-    info.refresh();
     update();
+}
+
+bool Score::writeMscz(mu::engraving::MsczFile& msczFile, bool onlySelection, bool createThumbnail)
+{
+    IF_ASSERT_FAILED(msczFile.isOpened()) {
+        return false;
+    }
+
+    // Write score
+    {
+        QByteArray scoreData;
+        QBuffer scoreBuf(&scoreData);
+        scoreBuf.open(QIODevice::ReadWrite);
+        Score::writeScore(&scoreBuf, onlySelection);
+
+        msczFile.writeMscx(scoreData);
+    }
+
+    // Write images
+    {
+        for (ImageStoreItem* ip : imageStore) {
+            if (!ip->isUsed(this)) {
+                continue;
+            }
+            msczFile.addImage(ip->hashName(), ip->buffer());
+        }
+    }
+
+    // Write thumbnail
+    {
+        if (createThumbnail && !pages().isEmpty()) {
+            QImage pm = createThumbnail();
+
+            QByteArray ba;
+            QBuffer b(&ba);
+            b.open(QIODevice::WriteOnly);
+            pm.save(&b, "PNG");
+            msczFile.writeThumbnail(ba);
+        }
+    }
+
+    msczFile.flush();
+
     return true;
 }
 
-//---------------------------------------------------------
-//   saveCompressedFile
-//---------------------------------------------------------
-
-bool Score::saveCompressedFile(QFileInfo& info, bool onlySelection, bool createThumbnail)
+bool Score::writeMscz(const QString& filePath, bool onlySelection, bool createThumbnail)
 {
-    if (readOnly() && info == *masterScore()->fileInfo()) {
-        return false;
-    }
-    QFile fp(info.filePath());
-    if (!fp.open(QIODevice::WriteOnly)) {
-        MScore::lastError = tr("Open File\n%1\nfailed: %2").arg(info.filePath(), strerror(errno));
-        return false;
-    }
+    mu::engraving::MsczFile msczFile(filePath);
+    msczFile.open();
+    bool ok = writeMscz(msczFile, onlySelection, createThumbnail);
+    msczFile.close();
+    return ok;
+}
 
-    QString fileName = info.completeBaseName() + ".mscx";
-    return saveCompressedFile(&fp, fileName, onlySelection, createThumbnail);
+bool Score::writeMscz(QIODevice* device, const QString& fileName, bool onlySelection, bool createThumbnail)
+{
+    mu::engraving::MsczFile msczFile(device);
+    msczFile.setFilePath(fileName);
+    msczFile.open();
+    bool ok = writeMscz(msczFile, onlySelection, createThumbnail);
+    msczFile.close();
+    return ok;
 }
 
 //---------------------------------------------------------
@@ -585,85 +537,6 @@ QImage Score::createThumbnail()
         doLayout();
     }
     return pm;
-}
-
-//---------------------------------------------------------
-//   saveCompressedFile
-//    file is already opened
-//---------------------------------------------------------
-
-bool Score::saveCompressedFile(QIODevice* f, const QString& fn, bool onlySelection, bool doCreateThumbnail)
-{
-    MQZipWriter uz(f);
-
-    QBuffer cbuf;
-    cbuf.open(QIODevice::ReadWrite);
-    XmlWriter xml(this, &cbuf);
-    xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    xml.stag("container");
-    xml.stag("rootfiles");
-    xml.stag(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString(fn)));
-    xml.etag();
-    for (ImageStoreItem* ip : imageStore) {
-        if (!ip->isUsed(this)) {
-            continue;
-        }
-        QString path = QString("Pictures/") + ip->hashName();
-        xml.tag("file", path);
-    }
-
-    xml.etag();
-    xml.etag();
-    cbuf.seek(0);
-    //uz.addDirectory("META-INF");
-    uz.addFile("META-INF/container.xml", cbuf.data());
-
-    QBuffer dbuf;
-    dbuf.open(QIODevice::ReadWrite);
-    saveFile(&dbuf, true, onlySelection);
-    dbuf.seek(0);
-    uz.addFile(fn, dbuf.data());
-
-    QFileDevice* fd = dynamic_cast<QFileDevice*>(f);
-    if (fd) { // if is file (may be buffer)
-        fd->flush();     // flush to preserve score data in case of
-    }
-    // any failures on the further operations.
-
-    // save images
-    //uz.addDirectory("Pictures");
-    for (ImageStoreItem* ip : imageStore) {
-        if (!ip->isUsed(this)) {
-            continue;
-        }
-        QString path = QString("Pictures/") + ip->hashName();
-        uz.addFile(path, ip->buffer());
-    }
-
-    // create thumbnail
-    if (doCreateThumbnail && !pages().isEmpty()) {
-        QImage pm = createThumbnail();
-
-        QByteArray ba;
-        QBuffer b(&ba);
-        if (!b.open(QIODevice::WriteOnly)) {
-            qDebug("open buffer failed");
-        }
-        if (!pm.save(&b, "PNG")) {
-            qDebug("save failed");
-        }
-        uz.addFile("Thumbnails/thumbnail.png", ba);
-    }
-
-    //
-    // save audio
-    //
-    if (_audio) {
-        uz.addFile("audio.ogg", _audio->data());
-    }
-
-    uz.close();
-    return true;
 }
 
 //---------------------------------------------------------
@@ -749,7 +622,7 @@ bool Score::saveStyle(const QString& name)
 //extern QString revision;
 static QString revision;
 
-bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
+bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection)
 {
     XmlWriter xml(this, f);
     xml.setWriteOmr(msczFormat);

@@ -695,14 +695,14 @@ IExcerptNotationPtr MasterNotation::createExcerpt(Part* part)
 mu::Ret MasterNotation::saveScore(const mu::io::path& path, SaveMode saveMode)
 {
     std::string suffix = io::syffix(path);
-    if (suffix != "mscz" && suffix != "mscx" && !suffix.empty()) {
+    if (suffix != "mscz" && !suffix.empty()) {
         return exportScore(path, suffix);
     }
 
-    io::path oldFilePath = score()->masterScore()->fileInfo()->filePath().toStdString();
+    io::path oldFilePath = score()->masterScore()->mscxFile().filePath().toStdString();
 
     if (!path.empty()) {
-        score()->masterScore()->fileInfo()->setFile(path.toQString());
+        score()->masterScore()->mscxFile().setFilePath(path.toQString());
     }
 
     Ret ret = score()->masterScore()->saveFile(true);
@@ -718,9 +718,7 @@ mu::Ret MasterNotation::saveScore(const mu::io::path& path, SaveMode saveMode)
 
 mu::Ret MasterNotation::saveSelectionOnScore(const mu::io::path& path)
 {
-    QFileInfo fileInfo(path.toQString());
-
-    Ret ret = score()->saveCompressedFile(fileInfo, true);
+    Ret ret = score()->writeMscz(path.toQString(), true);
     if (!ret) {
         ret.setText(Ms::MScore::lastError.toStdString());
     }
@@ -730,6 +728,6 @@ mu::Ret MasterNotation::saveSelectionOnScore(const mu::io::path& path)
 
 mu::Ret MasterNotation::writeToDevice(io::Device& destinationDevice)
 {
-    bool ok = score()->saveCompressedFile(&destinationDevice, score()->title() + ".mscx", false);
+    bool ok = score()->writeMscz(&destinationDevice, score()->title() + ".mscx");
     return ok;
 }

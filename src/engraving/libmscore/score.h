@@ -44,6 +44,8 @@
 #include "layoutbreak.h"
 #include "property.h"
 
+#include "io/msczfile.h"
+
 class QMimeData;
 
 namespace mu::score {
@@ -862,9 +864,10 @@ public:
     void setShowVBox(bool v) { _showVBox = v; }
 
     bool saveFile(QFileInfo& info);
-    bool saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false);
-    bool saveCompressedFile(QFileInfo&, bool onlySelection, bool createThumbnail = true);
-    bool saveCompressedFile(QIODevice*, const QString& fileName, bool onlySelection, bool createThumbnail = true);
+    bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection = false);
+    bool writeMscz(mu::engraving::MsczFile& msczFile, bool onlySelection = false, bool createThumbnail = true);
+    bool writeMscz(const QString& filePath, bool onlySelection = false, bool createThumbnail = true); // to file
+    bool writeMscz(QIODevice* device, const QString& fileName, bool onlySelection = false, bool createThumbnail = true); // to device (file or buffer)
 
     void print(mu::draw::Painter* printer, int page);
     ChordRest* getSelectedChordRest() const;
@@ -1378,6 +1381,7 @@ class MasterScore : public Score
 
     QFileInfo _sessionStartBackupInfo;
     QFileInfo info;
+    mu::engraving::MsczFile m_msczFile;
 
     bool read(XmlReader&);
     void setPrev(MasterScore* s) { _prev = s; }
@@ -1438,6 +1442,7 @@ public:
     void setTempomap(TempoMap* tm);
 
     bool saveFile(bool generateBackup = true);
+
     FileError read1(XmlReader&, bool ignoreVersionError);
     FileError loadCompressedMsc(QIODevice*, bool ignoreVersionError);
     FileError loadMsc(QString name, bool ignoreVersionError);
@@ -1498,6 +1503,8 @@ public:
     QFileInfo* fileInfo() { return &info; }
     const QFileInfo* fileInfo() const { return &info; }
     void setName(const QString&);
+    mu::engraving::MsczFile& mscxFile() { return m_msczFile; }
+    const mu::engraving::MsczFile& mscxFile() const { return m_msczFile; }
 
     const QFileInfo& sessionStartBackupInfo() const { return _sessionStartBackupInfo; }
 
