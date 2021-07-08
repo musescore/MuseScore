@@ -27,17 +27,26 @@ set(MODULE_QRC
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
 set(MODULE_SRC
+    #public
     ${CMAKE_CURRENT_LIST_DIR}/playbackmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playbackmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iplaybackcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iplaybackconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/playbacktypes.h
+
+    #internals
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackconfiguration.h
+
+    #view
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/mixerchannelitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/mixerchannelitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbacktoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/playbacktoolbarmodel.h
     )
