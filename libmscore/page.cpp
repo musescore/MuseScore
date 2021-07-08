@@ -335,28 +335,32 @@ QString Page::replaceTextMacros(const QString& s) const
                               d += masterScore()->fileInfo()->absoluteFilePath().toHtmlEscaped();
                               break;
                         case 'd':
-                              d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
+                              d += QLocale().toString(QDate::currentDate(), QLocale::ShortFormat);
                               break;
                         case 'D':
                               {
                               QString creationDate = score()->metaTag("creationDate");
                               if (creationDate.isNull())
-                                    d += masterScore()->fileInfo()->created().date().toString(Qt::DefaultLocaleShortDate);
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+                                    d += QLocale().toString(masterScore()->fileInfo()->created().date(), QLocale::ShortFormat);
+#else
+                                    d += QLocale().toString(masterScore()->fileInfo()->birthTime().date(), QLocale::ShortFormat);
+#endif
                               else
-                                    d += QDate::fromString(creationDate, Qt::ISODate).toString(Qt::DefaultLocaleShortDate);
+                                    d += QLocale().toString(QDate::fromString(creationDate, Qt::ISODate), QLocale::ShortFormat);
                               }
                               break;
                         case 'm':
                               if (score()->dirty())
-                                    d += QTime::currentTime().toString(Qt::DefaultLocaleShortDate);
+                                    d += QLocale().toString(QDate::currentDate(), QLocale::ShortFormat);
                               else
-                                    d += masterScore()->fileInfo()->lastModified().time().toString(Qt::DefaultLocaleShortDate);
+                                    d += QLocale().toString(masterScore()->fileInfo()->lastModified().time(), QLocale::ShortFormat);
                               break;
                         case 'M':
                               if (score()->dirty())
-                                    d += QDate::currentDate().toString(Qt::DefaultLocaleShortDate);
+                                    d += QLocale().toString(QDate::currentDate(), QLocale::ShortFormat);
                               else
-                                    d += masterScore()->fileInfo()->lastModified().date().toString(Qt::DefaultLocaleShortDate);
+                                    d += QLocale().toString(masterScore()->fileInfo()->lastModified().date(), QLocale::ShortFormat);
                               break;
                         case 'C': // only on page 1
                               if (!_no) // FALLTHROUGH
