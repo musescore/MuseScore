@@ -24,6 +24,7 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QBuffer>
+#include <QFileInfo>
 
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "thirdparty/qzip/qzipwriter_p.h"
@@ -33,23 +34,42 @@
 using namespace mu::engraving;
 
 MsczFile::MsczFile(const QString& filePath)
+    : m_filePath(filePath), m_device(new QFile(filePath)), m_selfDeviceOwner(true)
 {
-    m_file.setFileName(filePath);
+}
+
+MsczFile::MsczFile(QIODevice* device)
+    : m_device(device), m_selfDeviceOwner(false)
+{
 }
 
 MsczFile::~MsczFile()
 {
     close();
+
+    if (m_selfDeviceOwner) {
+        delete m_device;
+    }
+}
+
+bool MsczFile::exists() const
+{
+    return QFileInfo::exists(filePath());
+}
+
+bool MsczFile::isWritable() const
+{
+    return QFileInfo(filePath()).isWritable();
 }
 
 bool MsczFile::open()
 {
-    if (!m_file.open(QIODevice::ReadWrite)) {
+    if (!m_device->open(QIODevice::ReadWrite)) {
         LOGE() << "failed open file: " << filePath();
         return false;
     }
 
-    if (!readInfo(m_info)) {
+    if (!readMeta(m_meta)) {
         LOGE() << "failed read meta, file: " << filePath();
         return false;
     }
@@ -59,39 +79,62 @@ bool MsczFile::open()
 
 bool MsczFile::flush()
 {
-    return m_file.flush();
+    QFileDevice* fd = dynamic_cast<QFileDevice*>(f);
+    if (fd) {
+        return fd->flush();
+    }
+    return true;
 }
 
 void MsczFile::close()
 {
     flush();
-    m_file.close();
+    m_device->close();
+}
+
+bool MsczFile::isOpened() const
+{
+    return m_device->isOpen();
 }
 
 void MsczFile::setFilePath(const QString& filePath)
 {
-    m_file.setFileName(filePath);
+    m_filePath = filePath;
+    if (!m_device) {
+        m_device = new QFile(filePath);
+        m_selfDeviceOwner = true;
+    }
 }
 
 QString MsczFile::filePath() const
 {
-    return m_file.fileName();
+    return m_filePath;
 }
 
-const MsczFile::Info& MsczFile::info() const
+const MsczFile::Meta& MsczFile::meta() const
 {
-    return m_info;
+    return m_meta;
 }
 
-QByteArray MsczFile::mscx() const
+QByteArray MsczFile::readMscx() const
 {
-    return fileData(info().mscxFileName);
+    return fileData(meta().mscxFileName);
 }
 
-void MsczFile::setMscx(const QString& fileName, const QByteArray& data)
+void MsczFile::writeMscx(const QByteArray& data)
 {
-    m_info.mscxFileName = fileName;
-    addFileData(fileName, data);
+    addFileData(m_meta.mscxFileName, data);
+}
+
+std::vector<QByteArray> MsczFile::readImages() const
+{
+    NOT_IMPLEMENTED;
+    return std::vector<QByteArray>();
+}
+
+void MsczFile::addImage(const QString& name, const QByteArray& data)
+{
+    addFileData("Pictures/" + name, data);
 }
 
 QByteArray MsczFile::thumbnail() const
@@ -99,14 +142,14 @@ QByteArray MsczFile::thumbnail() const
     return fileData("Thumbnails/thumbnail.png");
 }
 
-void MsczFile::setThumbnail(const QByteArray& data)
+void MsczFile::writeThumbnail(const QByteArray& data)
 {
     addFileData("Thumbnails/thumbnail.png", data);
 }
 
 QByteArray MsczFile::fileData(const QString& fileName) const
 {
-    MQZipReader zip(&m_file);
+    MQZipReader zip(m_device);
     QByteArray fdata = zip.fileData(fileName);
     if (zip.status() != MQZipReader::NoError) {
         LOGE() << "failed read data, status: " << zip.status();
@@ -120,7 +163,7 @@ QByteArray MsczFile::fileData(const QString& fileName) const
 
 bool MsczFile::addFileData(const QString& fileName, const QByteArray& data)
 {
-    MQZipWriter zip(&m_file);
+    MQZipWriter zip(m_device);
     zip.addFile(fileName, data);
     if (zip.status() != MQZipWriter::NoError) {
         LOGE() << "failed write files to zip, status: " << zip.status();
@@ -132,9 +175,9 @@ bool MsczFile::addFileData(const QString& fileName, const QByteArray& data)
     return true;
 }
 
-bool MsczFile::readInfo(Info& info) const
+bool MsczFile::readMeta(Meta& info) const
 {
-    MQZipReader zip(&m_file);
+    MQZipReader zip(m_device);
 
     QVector<MQZipReader::FileInfo> files = zip.fileInfoList();
     for (const MQZipReader::FileInfo& fi : files) {
@@ -155,7 +198,7 @@ bool MsczFile::readInfo(Info& info) const
     return true;
 }
 
-void MsczFile::writeMeta(MQZipWriter& zip, const std::map<QString, QString>& meta)
+void MsczFile::writeMetaData(MQZipWriter& zip, const std::map<QString, QString>& meta)
 {
     QByteArray data;
     QXmlStreamWriter xml(&data);
@@ -177,7 +220,7 @@ void MsczFile::writeMeta(MQZipWriter& zip, const std::map<QString, QString>& met
     zip.addFile("META-INF/metadata.xml", data);
 }
 
-void MsczFile::readMeta(MQZipReader& zip, std::map<QString, QString>& meta)
+void MsczFile::readMetaData(MQZipReader& zip, std::map<QString, QString>& meta)
 {
     QByteArray data = zip.fileData("META-INF/metadata.xml");
     if (data.isEmpty()) {

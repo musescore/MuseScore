@@ -591,17 +591,17 @@ Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonW
 
 RetVal<QByteArray> BackendApi::scorePartJson(Ms::Score* score, const std::string& fileName)
 {
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
+    QByteArray scoreData;
+    QBuffer buf(&scoreData);
+    buf.open(QIODevice::ReadWrite);
 
-    bool ok = score->saveCompressedFile(&buffer, QString::fromStdString(fileName), false);
+    mu::engraving::MsczFile msczFile(&buf);
+    msczFile.setFilePath(QString::fromStdString(fileName));
+
+    bool ok = score->writeMscz(msczFile);
     if (!ok) {
         LOGW() << "Error save compressed file";
     }
-
-    buffer.open(QIODevice::ReadOnly);
-    QByteArray scoreData = buffer.readAll();
-    buffer.close();
 
     RetVal<QByteArray> result;
     result.ret = ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
