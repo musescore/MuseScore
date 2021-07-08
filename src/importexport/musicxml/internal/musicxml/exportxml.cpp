@@ -3409,7 +3409,7 @@ static bool isSmallNote(const Note* const note)
 
 static bool isCueNote(const Note* const note)
 {
-    return (!note->chord()->isGrace()) && isSmallNote(note) && !note->play();
+    return isSmallNote(note) && !note->play();
 }
 
 //---------------------------------------------------------
@@ -3452,6 +3452,8 @@ static void writeTypeAndDots(XmlWriter& xml, const Note* const note)
     // small notes are indicated by size=cue, but for grace and cue notes this is implicit
     if (isSmallNote(note) && !isCueNote(note) && !note->chord()->isGrace()) {
         xml.tag("type size=\"cue\"", s);
+    } else if (isSmallNote(note) && !isCueNote(note) && note->chord()->isGrace()) {
+        xml.tag("type size=\"grace-cue\"", s);
     } else {
         xml.tag("type", s);
     }

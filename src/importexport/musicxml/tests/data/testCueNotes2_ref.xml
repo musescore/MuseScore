@@ -36,7 +36,7 @@
   <part id="P1">
     <measure number="1">
       <attributes>
-        <divisions>2</divisions>
+        <divisions>1</divisions>
         <key>
           <fifths>0</fifths>
           </key>
@@ -67,7 +67,7 @@
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
         <type>half</type>
         <stem>up</stem>
@@ -86,7 +86,7 @@
           <octave>4</octave>
           </pitch>
         <voice>1</voice>
-        <type>eighth</type>
+        <type size="grace-cue">eighth</type>
         <stem>up</stem>
         <notations>
           <slur type="start" placement="below" number="1"/>
@@ -97,7 +97,7 @@
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
         <type>half</type>
         <stem>up</stem>
@@ -119,40 +119,6 @@
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
-        <type>eighth</type>
-        <stem>up</stem>
-        <beam number="1">begin</beam>
-        <notations>
-          <tied type="start"/>
-          </notations>
-        <lyric number="1">
-          <syllabic>single</syllabic>
-          <text>tiedcue</text>
-          </lyric>
-        </note>
-      <note>
-        <cue/>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <stem>up</stem>
-        <beam number="1">end</beam>
-        <notations>
-          <tied type="stop"/>
-          </notations>
-        </note>
-      <note>
-        <cue/>
-        <pitch>
-          <step>D</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
         <lyric number="1">
@@ -163,10 +129,21 @@
       <note>
         <cue/>
         <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      <note>
+        <cue/>
+        <pitch>
           <step>E</step>
           <octave>5</octave>
           </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
@@ -178,7 +155,7 @@
           <step>G</step>
           <octave>5</octave>
           </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
@@ -189,7 +166,7 @@
           <step>F</step>
           <octave>5</octave>
           </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
@@ -202,47 +179,23 @@
           <octave>5</octave>
           </pitch>
         <duration>1</duration>
-        <tie type="start"/>
         <voice>1</voice>
-        <type size="cue">eighth</type>
-        <stem>up</stem>
-        <beam number="1">begin</beam>
-        <notations>
-          <tied type="start"/>
-          </notations>
+        <type size="cue">quarter</type>
+        <stem>down</stem>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>tiedsmall</text>
+          <text>small</text>
           </lyric>
-        </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>1</duration>
-        <tie type="stop"/>
-        <voice>1</voice>
-        <type size="cue">eighth</type>
-        <stem>up</stem>
-        <beam number="1">end</beam>
-        <notations>
-          <tied type="stop"/>
-          </notations>
         </note>
       <note>
         <pitch>
           <step>G</step>
           <octave>4</octave>
           </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <voice>1</voice>
         <type size="cue">quarter</type>
         <stem>up</stem>
-        <lyric number="1">
-          <syllabic>single</syllabic>
-          <text>small</text>
-          </lyric>
         </note>
       <note>
         <chord/>
@@ -250,14 +203,14 @@
           <step>B</step>
           <octave>4</octave>
           </pitch>
-        <duration>2</duration>
+        <duration>1</duration>
         <voice>1</voice>
         <type size="cue">quarter</type>
         <stem>up</stem>
         </note>
       <note>
         <rest/>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
         <type size="cue">half</type>
         </note>

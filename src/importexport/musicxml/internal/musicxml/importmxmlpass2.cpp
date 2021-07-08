@@ -1932,6 +1932,32 @@ static void markUserAccidentals(const int firstStaff,
 }
 
 //---------------------------------------------------------
+//   coerceGraceCue
+//---------------------------------------------------------
+
+/**
+ If the mainChord is small and/or silent, the grace note should likely
+ match this. Exporters tend to incorrectly omit <cue> or <type size="cue">
+ from grace notes.
+ */
+
+static void coerceGraceCue(Chord* mainChord, Chord* graceChord)
+{
+    if (mainChord->isSmall()) {
+        graceChord->setSmall(true);
+    }
+    bool anyPlays = false;
+    for (auto n : mainChord->notes()) {
+        anyPlays |= n->play();
+    }
+    if (!anyPlays) {
+        for (auto gn : graceChord->notes()) {
+            gn->setPlay(false);
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   addGraceChordsAfter
 //---------------------------------------------------------
 
@@ -1952,6 +1978,7 @@ static void addGraceChordsAfter(Chord* c, GraceChordList& gcl, int& gac)
             gcl.removeFirst();
             graceChord->toGraceAfter();
             c->add(graceChord);              // TODO check if same voice ?
+            coerceGraceCue(c, graceChord);
             qDebug("addGraceChordsAfter chord %p grace after chord %p", c, graceChord);
         }
         gac--;
@@ -1979,6 +2006,7 @@ static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
             }
         }
         c->add(gc);            // TODO check if same voice ?
+        coerceGraceCue(c, gc);
     }
     gcl.clear();
 }
@@ -4282,11 +4310,14 @@ NoteType graceNoteType(const TDuration duration, const bool slash)
  */
 
 static Chord* createGraceChord(Score* score, const int track,
-                               const TDuration duration, const bool slash)
+                               const TDuration duration, const bool slash, const bool small)
 {
     Chord* c = Factory::createChord(score->dummy()->segment());
     c->setNoteType(graceNoteType(duration, slash));
     c->setTrack(track);
+    // Chord is initialized with the smallness of its first note.
+    // If a non-small note is added later, this is handled in handleSmallness.
+    c->setSmall(small);
     // note grace notes have no durations, use default fraction 0/1
     setChordRestDuration(c, duration, Fraction());
     return c;
@@ -4689,7 +4720,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
         } else if (_e.name() == "stem") {
             stem(stemDir, noStem);
         } else if (_e.name() == "type") {
-            isSmall = _e.attributes().value("size") == "cue";
+            isSmall = _e.attributes().value("size") == "cue" | _e.attributes().value("size") == "grace-cue";
             type = _e.readElementText();
         } else if (_e.name() == "voice") {
             voice = _e.readElementText();
@@ -4808,7 +4839,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             // TODO: check if explicit stem direction should also be set for grace notes
             // (the DOM parser does that, but seems to have no effect on the autotester)
             if (!chord || gcl.isEmpty()) {
-                c = createGraceChord(_score, msTrack + msVoice, duration, graceSlash);
+                c = createGraceChord(_score, msTrack + msVoice, duration, graceSlash, isSmall || cue);
                 // TODO FIX
                 // the setStaffMove() below results in identical behaviour as 2.0:
                 // grace note will be at the wrong staff with the wrong pitch,
@@ -4857,6 +4888,15 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             handleDisplayStep(cr, mnp.displayStep(), mnp.displayOctave(), noteStartTime, _score->spatium());
         }
     } else {
+        handleSmallness(cue || isSmall, note, c);
+        note->setPlay(!cue);              // cue notes don't play
+        note->setHeadGroup(headGroup);
+        if (noteColor != QColor::Invalid) {
+            note->setColor(noteColor);
+        }
+        setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
+        note->setVisible(printObject);     // TODO also set the stem to invisible
+
         if (!grace) {
             // regular note
             // handle beam
@@ -4873,15 +4913,6 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             // append any grace chord
             addGraceChordsBefore(c, gcl);
         }
-
-        handleSmallness(cue || isSmall, note, c);
-        note->setPlay(!cue);              // cue notes don't play
-        note->setHeadGroup(headGroup);
-        if (noteColor != QColor::Invalid) {
-            note->setColor(noteColor);
-        }
-        setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
-        note->setVisible(printObject);     // TODO also set the stem to invisible
 
         if (velocity > 0) {
             note->setVeloType(Note::ValueType::USER_VAL);

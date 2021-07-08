@@ -107,6 +107,8 @@ private slots:
     void chordNoVoice() { mxmlIoTestRef("testChordNoVoice"); }
     void clefs1() { mxmlIoTest("testClefs1"); }
     void completeMeasureRests() { mxmlIoTest("testCompleteMeasureRests"); }
+    void cueGraceNotes1() { mxmlImportTestRef("testCueGraceNotes"); }
+    void cueGraceNotes2() { mxmlIoTestRef("testCueGraceNotes"); }
     void cueNotes() { mxmlIoTest("testCueNotes"); }
     void cueNotes2() { mxmlMscxExportTestRef("testCueNotes2"); }
     void cueNotes3() { mxmlImportTestRef("testCueNotes3"); }
