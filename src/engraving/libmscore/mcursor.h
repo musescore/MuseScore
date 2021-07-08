@@ -50,7 +50,6 @@ class MCursor
 public:
     MCursor(MasterScore* s = 0);
     void createScore(const QString& s);
-    void saveScore();
 
     void addPart(const QString& instrument);
     Chord* addChord(int pitch, const TDuration& duration);

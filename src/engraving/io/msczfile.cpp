@@ -33,6 +33,9 @@
 
 using namespace mu::engraving;
 
+//! NOTE The current implementation resolves files by extension.
+//! This will probably be changed in the future.
+
 MsczFile::MsczFile(const QString& filePath)
     : m_filePath(filePath), m_device(new QFile(filePath)), m_selfDeviceOwner(true)
 {
@@ -69,17 +72,26 @@ bool MsczFile::open()
         return false;
     }
 
+<<<<<<< HEAD
     if (!readMeta(m_meta)) {
         LOGE() << "failed read meta, file: " << filePath();
         return false;
     }
 
+=======
+>>>>>>> 0f29cce76 (added use mscx file implementation)
     return true;
 }
 
 bool MsczFile::flush()
 {
+<<<<<<< HEAD
     QFileDevice* fd = dynamic_cast<QFileDevice*>(f);
+=======
+    writeMeta(m_meta);
+
+    QFileDevice* fd = dynamic_cast<QFileDevice*>(m_device);
+>>>>>>> 0f29cce76 (added use mscx file implementation)
     if (fd) {
         return fd->flush();
     }
@@ -109,6 +121,7 @@ void MsczFile::setFilePath(const QString& filePath)
 QString MsczFile::filePath() const
 {
     return m_filePath;
+<<<<<<< HEAD
 }
 
 const MsczFile::Meta& MsczFile::meta() const
@@ -135,6 +148,33 @@ std::vector<QByteArray> MsczFile::readImages() const
 void MsczFile::addImage(const QString& name, const QByteArray& data)
 {
     addFileData("Pictures/" + name, data);
+=======
+}
+
+const MsczFile::Meta& MsczFile::meta() const
+{
+    if (!m_meta.isValid()) {
+        if (!readMeta(m_meta)) {
+            LOGE() << "failed read meta, file: " << filePath();
+        }
+    }
+    return m_meta;
+}
+
+QByteArray MsczFile::readMscx() const
+{
+    return fileData(meta().mscxFileName);
+}
+
+void MsczFile::writeMscx(const QByteArray& data)
+{
+    QString completeBaseName = QFileInfo(filePath()).completeBaseName();
+    IF_ASSERT_FAILED(!completeBaseName.isEmpty()) {
+        completeBaseName = "score";
+    }
+    m_meta.mscxFileName = completeBaseName + ".mscx";
+    addFileData(m_meta.mscxFileName, data);
+>>>>>>> 0f29cce76 (added use mscx file implementation)
 }
 
 QByteArray MsczFile::thumbnail() const
@@ -145,6 +185,30 @@ QByteArray MsczFile::thumbnail() const
 void MsczFile::writeThumbnail(const QByteArray& data)
 {
     addFileData("Thumbnails/thumbnail.png", data);
+}
+
+std::vector<MsczFile::File> MsczFile::readImages() const
+{
+    NOT_IMPLEMENTED;
+    return std::vector<File>();
+}
+
+void MsczFile::addImage(const QString& fileName, const QByteArray& data)
+{
+    QString path = "Pictures/" + fileName;
+    m_meta.imageFilePaths.push_back(path);
+    addFileData(path, data);
+}
+
+QByteArray MsczFile::readAudio() const
+{
+    return fileData("audio.ogg");
+}
+
+void MsczFile::writeAudio(const QByteArray& data)
+{
+    m_meta.audioFile = "audio.ogg";
+    addFileData(m_meta.audioFile, data);
 }
 
 QByteArray MsczFile::fileData(const QString& fileName) const
@@ -175,7 +239,37 @@ bool MsczFile::addFileData(const QString& fileName, const QByteArray& data)
     return true;
 }
 
+<<<<<<< HEAD
 bool MsczFile::readMeta(Meta& info) const
+=======
+bool MsczFile::writeMeta(Meta& meta)
+{
+    MQZipWriter zip(m_device);
+
+    std::vector<QString> paths;
+    paths.push_back(meta.mscxFileName);
+    for (const QString& image : meta.imageFilePaths) {
+        paths.push_back(image);
+    }
+
+    if (!meta.audioFile.isEmpty()) {
+        paths.push_back(meta.audioFile);
+    }
+
+    writeContainer(zip, paths);
+
+    if (zip.status() != MQZipWriter::NoError) {
+        LOGE() << "failed write container file to zip, status: " << zip.status();
+        zip.close();
+        return false;
+    }
+
+    zip.close();
+    return true;
+}
+
+bool MsczFile::readMeta(Meta& meta) const
+>>>>>>> 0f29cce76 (added use mscx file implementation)
 {
     MQZipReader zip(m_device);
 
@@ -183,7 +277,11 @@ bool MsczFile::readMeta(Meta& info) const
     for (const MQZipReader::FileInfo& fi : files) {
         if (fi.isFile) {
             if (fi.filePath.endsWith(".mscx")) {
-                info.mscxFileName = fi.filePath;
+                meta.mscxFileName = fi.filePath;
+            } else if (fi.filePath.endsWith(".png")) {
+                meta.imageFilePaths.push_back(fi.filePath);
+            } else if (fi.filePath.endsWith(".ogg")) {
+                meta.audioFile = fi.filePath;
             }
         }
     }
