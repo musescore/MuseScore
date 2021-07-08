@@ -11,7 +11,7 @@ Basic font information
 
 Leland is a Unicode typeface designed by MuseScore BVBA for its music notation and scoring applications.
 
-It is compliant with version 1.2 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
+It is compliant with version 1.4 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
 
 The latest version of the SMuFL specification can be found at:
 
@@ -32,6 +32,43 @@ https://musescore.com/contact
 
 Change log
 ----------
+08 July 2021 (Martin Keary & Simon Smith) Leland Version 0.61)
+- Added missing points at extrema throughout
+
+05 July 2021 (Martin Keary & Simon Smith) Leland Version 0.6
+- Leland
+  - Added:
+    - Notehead parentheses (E0F5, E0F6)
+    - Noteheads:
+      - square white/black (E0B8, E0B9)
+      - triangle up white/black (E0BD, E0BE)
+      - triangle left white/black (E0BF, E0C0)
+      - moon white/black (E0CA, E0CB)
+      - triangle-round down white/black (E0CC, E0CD)
+      - slashed (E0CF-E0D6)
+      - diamond double whole and whole (E0D7, E0D8)
+      - round double-slashed black/white (E11C, E11D)
+    - Straight flags (stylistic alternates for E240-E24D)
+    - Metronome mark double whole note, whole note, 32nd note (ECA0, ECA2, ECAB)
+    - Z-style quarter rest (E4F6)
+  - Modified:
+    - Treble clefs (E050-E057, E07A)
+    - Whole note and double whole note (E0A0, E0A2)
+    - Diamond half and whole noteheads (E0D9, E0DB)
+    - Flags (E240-E251)
+    - Some quartertones with arrows (E274-E278)
+    - Laissez vibrer ties (E4BA, E4BB)
+    - Maxima, longa and double whole rests (E4E0-E4E2)
+    - Metronome mark notes (ECA3, ECA5, ECA7, ECA9) and dot (ECB7)
+- Leland Text
+  - Added:
+    - Chord symbols (E870-E87C)
+    - Metronome mark double whole note, whole note, 32nd note (ECA0, ECA2, ECAB)
+    - Standard accidentals for chord symbols (ED60-ED66)
+  - Modified:
+    - Metronome mark notes (ECA3, ECA5, ECA7, ECA9) and dot (ECB7)
+- Added metadata for glyphsWithAlternates and ligatures
+- Added metadata for preferred text fonts, in engravingDefaults
 
 04 February 2021 (Martin Keary & Simon Smith) Leland Version 0.52
 - Packaged with MuseScore 3.6.2
