@@ -5848,13 +5848,13 @@ GreendotButton::GreendotButton(QWidget* parent)
 QRectF drawHandle(QPainter& p, const QPointF& pos, bool active)
       {
       p.save();
-      p.setPen(QPen(QColor(MScore::selectColor[0]), 2.0/p.worldTransform().toAffine().m11()));
+      p.setPen(QPen(QColor(MScore::selectColor[0]), 2.0/p.worldTransform().m11()));
       if (active)
             p.setBrush(MScore::selectColor[0]);
       else
             p.setBrush(Qt::NoBrush);
-      qreal w = 8.0 / p.worldTransform().toAffine().m11();
-      qreal h = 8.0 / p.worldTransform().toAffine().m22();
+      qreal w = 8.0 / p.worldTransform().m11();
+      qreal h = 8.0 / p.worldTransform().m22();
 
       QRectF r(-w/2, -h/2, w, h);
       r.translate(pos);

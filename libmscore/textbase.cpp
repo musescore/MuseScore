@@ -778,7 +778,7 @@ void TextBase::drawTextWorkaround(QPainter* p, QFont& f, const QPointF pos, cons
             qreal dx = p->worldTransform().dx();
             qreal dy = p->worldTransform().dy();
             // diagonal elements will now be changed to 1.0
-            p->setMatrix(QMatrix(1.0, 0.0, 0.0, 1.0, dx, dy));
+            p->setTransform(QTransform(1.0, 0.0, 0.0, 1.0, dx, dy));
             // correction factor for bold text drawing, due to the change of the diagonal elements
             qreal factor = 1.0 / mm;
             QFont fnew(f, p->device());
@@ -825,7 +825,7 @@ void TextBase::drawTextWorkaround(QPainter* p, QFont& f, const QPointF pos, cons
                   positions2.clear();
                   }
             // Restore the QPainter to its former state
-            p->setMatrix(QMatrix(mm, 0.0, 0.0, mm, dx, dy));
+            p->setTransform(QTransform(mm, 0.0, 0.0, mm, dx, dy));
             p->restore();
             }
       else {
@@ -3143,9 +3143,9 @@ void TextBase::drawEditMode(QPainter* p, EditData& ed)
       if (!_cursor->hasSelection())
             p->drawRect(_cursor->cursorRect());
 
-      QMatrix matrix = p->worldTransform().toAffine();
+      QTransform transform = p->worldTransform();
       p->translate(-pos);
-      p->setPen(QPen(QBrush(Qt::lightGray), 4.0 / matrix.m11()));  // 4 pixel pen size
+      p->setPen(QPen(QBrush(Qt::lightGray), 4.0 / transform.m11()));  // 4 pixel pen size
       p->setBrush(Qt::NoBrush);
 
       qreal m = spatium();
