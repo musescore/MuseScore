@@ -706,18 +706,28 @@ InstrumentTemplate* searchTemplateForMusicXmlId(const QString& mxmlId)
 
 InstrumentTemplate* searchTemplateForInstrNameList(const QList<QString>& nameList)
 {
+    InstrumentTemplate* bestMatch = nullptr; // default if no matches
+    int bestMatchStrength = 0; // higher for better matches
     for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
         for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
             for (const QString& name : nameList) {
-                if (it->trackName == name
-                    || it->longNames.contains(StaffName(name))
-                    || it->shortNames.contains(StaffName(name))) {
-                    return it;
+                int matchStrength = 0
+                                    + (4 * (it->trackName == name)) // most weight to track name since there are fewer duplicates
+                                    + (2 * it->longNames.contains(StaffName(name)))
+                                    + (1 * it->shortNames.contains(StaffName(name))); // least weight to short name
+                const int perfectMatchStrength = 7;
+                Q_ASSERT(matchStrength <= perfectMatchStrength);
+                if (matchStrength > bestMatchStrength) {
+                    bestMatch = it;
+                    bestMatchStrength = matchStrength;
+                    if (bestMatchStrength == perfectMatchStrength) {
+                        break; // stop looking for matches
+                    }
                 }
             }
         }
     }
-    return nullptr;
+    return bestMatch; // nullptr if no matches found
 }
 
 InstrumentTemplate* searchTemplateForMidiProgram(int midiProgram, const bool useDrumSet)
