@@ -39,6 +39,15 @@ public:
 
     struct Meta {
         QString mscxFileName;
+        std::vector<QString> imageFilePaths;
+        QString audioFile;
+
+        bool isValid() const { return !mscxFileName.isEmpty(); }
+    };
+
+    struct File {
+        QString fileName;
+        QByteArray data;
     };
 
     void setFilePath(const QString& filePath);
@@ -51,6 +60,7 @@ public:
     bool flush();
     void close();
     bool isOpened() const;
+<<<<<<< HEAD
 
     const Meta& meta() const;
 
@@ -62,11 +72,32 @@ public:
 
     QByteArray thumbnail() const;
     void writeThumbnail(const QByteArray& data);
+=======
+
+    const Meta& meta() const;
+
+    QByteArray readMscx() const;
+    void writeMscx(const QByteArray& data);
+
+    QByteArray thumbnail() const;
+    void writeThumbnail(const QByteArray& data);
+
+    std::vector<File> readImages() const;
+    void addImage(const QString& fileName, const QByteArray& data);
+
+    QByteArray readAudio() const;
+    void writeAudio(const QByteArray& data);
+>>>>>>> 0f29cce76 (added use mscx file implementation)
 
 private:
 
     // meta
+<<<<<<< HEAD
     bool readMeta(Meta& info) const;
+=======
+    bool writeMeta(Meta& meta);
+    bool readMeta(Meta& meta) const;
+>>>>>>> 0f29cce76 (added use mscx file implementation)
     void writeMetaData(MQZipWriter& zip, const std::map<QString, QString>& meta);
     void readMetaData(MQZipReader& zip, std::map<QString, QString>& meta);
     void writeContainer(MQZipWriter& zip, const std::vector<QString>& paths);
@@ -75,11 +106,18 @@ private:
     QByteArray fileData(const QString& fileName) const;
     bool addFileData(const QString& fileName, const QByteArray& data);
 
+<<<<<<< HEAD
     mutable QFile m_file;
     QIODevice* m_device = nullptr;
     bool m_selfDeviceOwner = false;
     QString m_filePath;
     Meta m_meta;
+=======
+    QString m_filePath;
+    QIODevice* m_device = nullptr;
+    bool m_selfDeviceOwner = false;
+    mutable Meta m_meta;
+>>>>>>> 0f29cce76 (added use mscx file implementation)
 };
 }
 

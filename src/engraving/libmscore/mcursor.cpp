@@ -177,17 +177,4 @@ void MCursor::addPart(const QString& instrument)
     _score->insertStaff(staff, 0);
 }
 
-//---------------------------------------------------------
-//   saveScore
-//---------------------------------------------------------
-
-void MCursor::saveScore()
-{
-    QFile fp(_score->fileInfo()->completeBaseName() + ".mscx");
-    if (!fp.open(QIODevice::WriteOnly)) {
-        qFatal("Open <%s> failed", qPrintable(fp.fileName()));
-    }
-    _score->Score::saveFile(&fp, false);
-    fp.close();
-}
 }

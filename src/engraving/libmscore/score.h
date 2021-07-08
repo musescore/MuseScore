@@ -863,7 +863,6 @@ public:
     void setShowInstrumentNames(bool v) { _showInstrumentNames = v; }
     void setShowVBox(bool v) { _showVBox = v; }
 
-    bool saveFile(QFileInfo& info);
     bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection = false);
     bool writeMscz(mu::engraving::MsczFile& msczFile, bool onlySelection = false, bool createThumbnail = true);
     bool writeMscz(const QString& filePath, bool onlySelection = false, bool createThumbnail = true); // to file
@@ -1384,6 +1383,11 @@ class MasterScore : public Score
     mu::engraving::MsczFile m_msczFile;
 
     bool read(XmlReader&);
+    FileError read1(XmlReader&, bool ignoreVersionError);
+    FileError read114(XmlReader&);
+    FileError read206(XmlReader&);
+    FileError read302(XmlReader&);
+
     void setPrev(MasterScore* s) { _prev = s; }
     void setNext(MasterScore* s) { _next = s; }
 
@@ -1443,15 +1447,9 @@ public:
 
     bool saveFile(bool generateBackup = true);
 
-    FileError read1(XmlReader&, bool ignoreVersionError);
-    FileError loadCompressedMsc(QIODevice*, bool ignoreVersionError);
-    FileError loadMsc(QString name, bool ignoreVersionError);
-    FileError loadMsc(QString name, QIODevice*, bool ignoreVersionError);
-    FileError read114(XmlReader&);
-    FileError read206(XmlReader&);
-    FileError read302(XmlReader&);
-    QByteArray readToBuffer();
-    QByteArray readCompressedToBuffer();
+    FileError loadMscz(const QString& fileName, bool ignoreVersionError);
+    FileError loadMscz(mu::engraving::MsczFile& msczFile, bool ignoreVersionError);
+
     int readStyleDefaultsVersion();
     int styleDefaultByMscVersion(const int mscVer) const;
 
