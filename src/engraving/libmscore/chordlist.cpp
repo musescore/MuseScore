@@ -1437,7 +1437,7 @@ qreal ChordList::position(const QStringList& names, ChordTokenClass ctc) const
 //---------------------------------------------------------
 //   findModifierStartIndices
 //---------------------------------------------------------
-void ParsedChord::findModifierStartIndices()
+void ParsedChord::findModifierStackIndices()
 {
     QStringList modifiersToBeStacked = { "b", "bb", "#", "##", "natural", "omit", "no", "add" };
     for (int index = 0; index < _tokenList.size(); index++) {
@@ -1454,7 +1454,7 @@ void ParsedChord::findModifierStartIndices()
     }
     // To know where to end stacking and return cursor to the normal position
     if (modifierStartIndices.size() > 0) {
-        stackingEnd = modifierStartIndices.last() + 2;
+        stackingEnd = modifierStartIndices.last() + 1;
     }
     // To remove double references to a single modifier like add(b9)
     for (int i = 0; i < modifierStartIndices.size(); i++) {
@@ -1465,9 +1465,133 @@ void ParsedChord::findModifierStartIndices()
 }
 
 //---------------------------------------------------------
+//   checkQualitySymbolsLetterCase
+//---------------------------------------------------------
+void ParsedChord::checkQualitySymbolsLetterCase(const ChordList* cl)
+{
+    // Changes the letter case of the first letter in quality symbols
+    // Leaves untouched if there is no other replacement
+    if (cl->autoCapitalization) {
+        // It is important to have the lists synced
+        QStringList upperCase = { "Maj", "Ma", "Min", "Mi", "Aug", "Dim" };
+        QStringList lowerCase = { "maj", "ma", "min", "mi", "aug", "dim" };
+        for (int index = 0; index < _tokenList.size(); index++) {
+            const ChordToken& tok = _tokenList.at(index);
+            if (tok.tokenClass == ChordTokenClass::QUALITY) {
+                if (cl->lowerCaseQualitySymbols) {
+                    if (upperCase.contains(tok.names.first())) {
+                        // Replace by lowercase version
+                        ChordToken qualTok;
+                        qualTok.names += lowerCase.at(upperCase.indexOf(tok.names.first()));
+                        qualTok.tokenClass = ChordTokenClass::QUALITY;
+                        _tokenList.removeAt(index);
+                        _tokenList.insert(index, qualTok);
+                    }
+                } else {
+                    if (lowerCase.contains(tok.names.first())) {
+                        // Replace by uppercase version
+                        ChordToken qualTok;
+                        qualTok.names += upperCase.at(lowerCase.indexOf(tok.names.first()));
+                        qualTok.tokenClass = ChordTokenClass::QUALITY;
+                        _tokenList.removeAt(index);
+                        _tokenList.insert(index, qualTok);
+                    }
+                }
+                return; // Remove this when there could be more than one quality symbol
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   addParentheses
+//---------------------------------------------------------
+void ParsedChord::addParentheses(const ChordList* cl)
+{
+    QStringList allModifiers = { "b", "bb", "#", "##", "natural", "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
+    QStringList nonAlterationModifiers = { "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
+    QStringList alterations = { "b", "bb", "#", "##", "natural" };
+    QStringList addOmitSymbols = { "omit", "no", "add" };
+    for (int index = 0; index < _tokenList.size(); index++) {
+        const ChordToken& tok = _tokenList.at(index);
+        if (tok.tokenClass == ChordTokenClass::MODIFIER) {
+            if (tok.names.first() == "sus" && cl->suspensionsParentheses) {
+                openParenthesesIndices.push_back(index);
+                bool foundNextModifier = false;
+                while (!foundNextModifier) {
+                    index++;
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    const ChordToken& tok2 = _tokenList.at(index);
+                    foundNextModifier = allModifiers.contains(tok2.names.first());
+                }
+                index--;
+                closeParenthesesIndices.push_back(index);
+            } else if (_quality == "minor" && tok.names.first() == "maj" && cl->minMajParentheses) {
+                openParenthesesIndices.push_back(index);
+                bool foundNextModifier = false;
+                while (!foundNextModifier) {
+                    index++;
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    const ChordToken& tok2 = _tokenList.at(index);
+                    foundNextModifier = allModifiers.contains(tok2.names.first());
+                }
+                index--;
+                closeParenthesesIndices.push_back(index);
+            } else if (addOmitSymbols.contains(tok.names.first())) {
+                if (cl->addOmitParentheses) {
+                    if (!cl->stackModifiers) {
+                        openParenthesesIndices.push_back(index);
+                    } else if (index <= modifierStartIndices.first()) {
+                        openParenthesesIndices.push_back(index);
+                    }
+                    bool foundNextModifier = false;
+                    index++; // To skip the immediate next accidental symbol
+                    while (!foundNextModifier) {
+                        index++;
+                        if (index >= _tokenList.size()) {
+                            break;
+                        }
+                        const ChordToken& tok2 = _tokenList.at(index);
+                        foundNextModifier = allModifiers.contains(tok2.names.first());
+                    }
+                    index--;
+                    if (!cl->stackModifiers) {
+                        closeParenthesesIndices.push_back(index);
+                    } else if (modifierStartIndices.size() > 0 && index >= modifierStartIndices.last()) {
+                        closeParenthesesIndices.push_back(index);
+                    }
+                } else {
+                    // To prevent the immediate next accidental to be handled as a separate modifier
+                    index++;
+                }
+            } else if (alterations.contains(tok.names.first()) && cl->alterationsParentheses) {
+                openParenthesesIndices.push_back(index);
+                bool foundNextModifier = false;
+                // Assuming all alterations will occur together,
+                // we search for the next non-alteration modifier here
+                while (!foundNextModifier) {
+                    index++;
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    const ChordToken& tok2 = _tokenList.at(index);
+                    foundNextModifier = nonAlterationModifiers.contains(tok2.names.first());
+                }
+                index--;
+                closeParenthesesIndices.push_back(index);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   stripParenthesis
 //---------------------------------------------------------
-void ParsedChord::stripParenthesis()
+void ParsedChord::stripParentheses()
 {
     QString special = "()[],";
     for (int index = 0; index < _tokenList.size(); index++) {
@@ -1666,12 +1790,71 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
     if (!modifierStartIndices.empty()) {
         modifierStartIndices.clear();
     }
+    if (!openParenthesesIndices.empty()) {
+        openParenthesesIndices.clear();
+    }
+    if (!closeParenthesesIndices.empty()) {
+        closeParenthesesIndices.clear();
+    }
     stackingEnd = -1;
 
-    stripParenthesis();
+    stripParentheses();
     respellQualitySymbols(cl);
+    checkQualitySymbolsLetterCase(cl);
     if (cl->stackModifiers) {
-        findModifierStartIndices();
+        findModifierStackIndices();
+    }
+    addParentheses(cl);
+
+    // Find the suitable opening and closing parentheses
+    QList<RenderAction> openParen;
+    QList<ChordToken> definedTokensParen;
+    // potential definitions for token
+    for (const ChordToken& ct : cl->chordTokenList) {
+        for (const QString& ctn : qAsConst(ct.names)) {
+            if (ctn == "(") {
+                definedTokensParen += ct;
+            }
+        }
+    }
+    // find matching class, fallback on ChordTokenClass::ALL
+    for (const ChordToken& matchingTok : qAsConst(definedTokensParen)) {
+        if (matchingTok.tokenClass == ChordTokenClass::MODIFIER) {
+            openParen = matchingTok.renderList;
+            break;
+        } else if (matchingTok.tokenClass == ChordTokenClass::ALL) {
+            openParen = matchingTok.renderList;
+        }
+    }
+    if (openParen.empty()) {
+        RenderAction a(RenderAction::RenderActionType::SET);
+        a.text = "(";
+        openParen.append(a);
+    }
+
+    QList<RenderAction> closeParen;
+    definedTokensParen.clear();
+    // potential definitions for token
+    for (const ChordToken& ct : cl->chordTokenList) {
+        for (const QString& ctn : qAsConst(ct.names)) {
+            if (ctn == ")") {
+                definedTokensParen += ct;
+            }
+        }
+    }
+    // find matching class, fallback on ChordTokenClass::ALL
+    for (const ChordToken& matchingTok : qAsConst(definedTokensParen)) {
+        if (matchingTok.tokenClass == ChordTokenClass::MODIFIER) {
+            closeParen = matchingTok.renderList;
+            break;
+        } else if (matchingTok.tokenClass == ChordTokenClass::ALL) {
+            closeParen = matchingTok.renderList;
+        }
+    }
+    if (closeParen.empty()) {
+        RenderAction a(RenderAction::RenderActionType::SET);
+        a.text = "(";
+        closeParen.append(a);
     }
 
     int index = 0;
@@ -1722,8 +1905,12 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             _renderList.append(m1);
         }
 
-        // Modifier Stacking
+        // Modifier Stacking + Opening Parentheses
         if (modifierStartIndices.contains(index)) {
+            // Opening parenthesis should render before moving away from the normal position
+            if (openParenthesesIndices.contains(index)) {
+                _renderList.append(openParen);
+            }
             if (index == modifierStartIndices.first()) {
                 // To let the Harmony render function know that these modifiers are stacked
                 RenderAction a(RenderAction::RenderActionType::SET);
@@ -1743,7 +1930,22 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             stackPosition.movey = (modifierStartIndices.indexOf(index) + 0.5 - (modifierStartIndices.size() + 1) / 2.0)
                                   * cl->modifierMag() * 5;
             _renderList.append(stackPosition);
-        } else if (index == stackingEnd) {
+        } else {
+            if (openParenthesesIndices.contains(index)) {
+                _renderList.append(openParen);
+            }
+        }
+
+        if (found) {
+            _renderList.append(rl);
+        } else {
+            // no definition for token, so render as literal
+            RenderAction a(RenderAction::RenderActionType::SET);
+            a.text = tok.names.first();
+            _renderList.append(a);
+        }
+
+        if (index == stackingEnd) {
             RenderAction a(RenderAction::RenderActionType::SET);
             a.text = "endStacking";
             _renderList.append(a);
@@ -1757,13 +1959,9 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             _renderList.append(returnPosition);
         }
 
-        if (found) {
-            _renderList.append(rl);
-        } else {
-            // no definition for token, so render as literal
-            RenderAction a(RenderAction::RenderActionType::SET);
-            a.text = tok.names.first();
-            _renderList.append(a);
+        // Closing Parenthesis
+        if (closeParenthesesIndices.contains(index)) {
+            _renderList.append(closeParen);
         }
 
         if (p != 0.0) {
@@ -1777,6 +1975,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
 
     // The items added in the respelling function are removed here
     // to prevent multiple occurrences
+    stripParentheses(); // remove from render list contains indices from when there were no parentheses
     for (int index = _tokenList.size(); index >= 0; index--) {
         if (removeAfterRenderList.contains(index)) {
             _tokenList.removeAt(index);

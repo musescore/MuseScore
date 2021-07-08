@@ -67,6 +67,15 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(qreal maxChordShiftAbove READ maxChordShiftAbove NOTIFY maxChordShiftAboveChanged)
     Q_PROPERTY(qreal maxChordShiftBelow READ maxChordShiftBelow NOTIFY maxChordShiftBelowChanged)
     Q_PROPERTY(qreal capoFretPosition READ capoFretPosition NOTIFY capoFretPositionChanged)
+    Q_PROPERTY(qreal autoCapitalization READ autoCapitalization NOTIFY autoCapitalizationChanged)
+    Q_PROPERTY(qreal minorRootCapitalization READ minorRootCapitalization NOTIFY minorRootCapitalizationChanged)
+    Q_PROPERTY(qreal qualitySymbolsCapitalization READ qualitySymbolsCapitalization NOTIFY qualitySymbolsCapitalizationChanged)
+    Q_PROPERTY(qreal bassNotesCapitalization READ bassNotesCapitalization NOTIFY bassNotesCapitalizationChanged)
+    Q_PROPERTY(qreal solfegeNotesCapitalization READ solfegeNotesCapitalization NOTIFY solfegeNotesCapitalizationChanged)
+    Q_PROPERTY(qreal alterationsParentheses READ alterationsParentheses NOTIFY alterationsParenthesesChanged)
+    Q_PROPERTY(qreal suspensionsParentheses READ suspensionsParentheses NOTIFY suspensionsParenthesesChanged)
+    Q_PROPERTY(qreal minMajParentheses READ minMajParentheses NOTIFY minMajParenthesesChanged)
+    Q_PROPERTY(qreal addOmitParentheses READ addOmitParentheses NOTIFY addOmitParenthesesChanged)
 
 public:
     ChordSymbolEditorModel(QObject* parent = nullptr);
@@ -105,6 +114,15 @@ public:
     qreal maxChordShiftAbove() const;
     qreal maxChordShiftBelow() const;
     qreal capoFretPosition() const;
+    qreal autoCapitalization() const;
+    qreal minorRootCapitalization() const;
+    qreal qualitySymbolsCapitalization() const;
+    qreal bassNotesCapitalization() const;
+    qreal solfegeNotesCapitalization() const;
+    qreal alterationsParentheses() const;
+    qreal suspensionsParentheses() const;
+    qreal minMajParentheses() const;
+    qreal addOmitParentheses() const;
 
     void initCurrentStyleIndex();
     void initProperties();
@@ -151,6 +169,15 @@ signals:
     void maxChordShiftAboveChanged();
     void maxChordShiftBelowChanged();
     void capoFretPositionChanged();
+    void autoCapitalizationChanged();
+    void minorRootCapitalizationChanged();
+    void qualitySymbolsCapitalizationChanged();
+    void bassNotesCapitalizationChanged();
+    void solfegeNotesCapitalizationChanged();
+    void alterationsParenthesesChanged();
+    void suspensionsParenthesesChanged();
+    void minMajParenthesesChanged();
+    void addOmitParenthesesChanged();
 
 private:
     enum RoleNames {
@@ -193,6 +220,15 @@ private:
     qreal m_maxChordShiftAbove;
     qreal m_maxChordShiftBelow;
     qreal m_capoFretPosition;
+    qreal m_autoCapitalization;
+    qreal m_minorRootCapitalization;
+    qreal m_qualitySymbolsCapitalization;
+    qreal m_bassNotesCapitalization;
+    qreal m_solfegeNotesCapitalization;
+    qreal m_alterationsParentheses;
+    qreal m_suspensionsParentheses;
+    qreal m_minMajParentheses;
+    qreal m_addOmitParentheses;
 
     QHash<QString, Ms::Sid> chordSpellingMap = {
         { "Standard", Ms::Sid::useStandardNoteNames },

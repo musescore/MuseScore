@@ -154,8 +154,10 @@ public:
     QString fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&, const ChordList*);
     const QList<RenderAction>& renderList(const ChordList*);
     void respellQualitySymbols(const ChordList* cl);
-    void stripParenthesis();
-    void findModifierStartIndices();
+    void stripParentheses();
+    void findModifierStackIndices();
+    void checkQualitySymbolsLetterCase(const ChordList* cl);
+    void addParentheses(const ChordList* cl);
     bool parseable() const { return _parseable; }
     bool understandable() const { return _understandable; }
     const QString& name() const { return _name; }
@@ -194,6 +196,8 @@ private:
     QList<int> skipList; // Indices to be skipped while rendering. (useful in cases like <minor>7b5 --> oslash)
     QList<int> removeAfterRenderList; // Indices of items that were added by respelling function. To be removed after rendering.
     QList<int> modifierStartIndices; // Starting indices of modifiers for stacking
+    QList<int> openParenthesesIndices;
+    QList<int> closeParenthesesIndices;
     int stackingEnd = -1;
     HChord chord;
     bool _parseable;
@@ -284,6 +288,12 @@ public:
     static int privateID;
 
     bool stackModifiers = false;
+    bool autoCapitalization = false;
+    bool lowerCaseQualitySymbols = false;
+    bool alterationsParentheses = true;
+    bool suspensionsParentheses = true;
+    bool minMajParentheses = true;
+    bool addOmitParentheses = true;
 
     bool autoAdjust() const { return _autoAdjust; }
     qreal nominalMag() const { return _nmag; }
