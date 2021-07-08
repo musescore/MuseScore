@@ -342,12 +342,12 @@ void FileScoreController::exportScore()
 
 io::path FileScoreController::selectScoreOpenningFile()
 {
-    QString allExt = "*.mscz *.mscx *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx"
+    QString allExt = "*.mscz *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx"
                      "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscz, *.mscx,";
 
     QStringList filter;
     filter << QObject::tr("All Supported Files") + " (" + allExt + ")"
-           << QObject::tr("MuseScore Files") + " (*.mscz *.mscx)"
+           << QObject::tr("MuseScore File") + " (*.mscz)"
            << QObject::tr("MusicXML Files") + " (*.mxl *.musicxml *.xml)"
            << QObject::tr("MIDI Files") + " (*.mid *.midi *.kar)"
            << QObject::tr("MuseData Files") + " (*.md)"
