@@ -86,7 +86,7 @@
           <octave>4</octave>
           </pitch>
         <voice>1</voice>
-        <type>eighth</type>
+        <type size="grace-cue">eighth</type>
         <stem>up</stem>
         <notations>
           <slur type="start" placement="below" number="1"/>
