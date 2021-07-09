@@ -3698,6 +3698,15 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track, c
                   if (!_wordsText.isEmpty()) {
                         tb->setXmlText(_wordsText);
                         _wordsText = "";
+
+                        // Temporary fix for symbol sizing issues
+                        qreal symSize = _score->style().value(Sid::repeatLeftFontSize).toReal();
+                        qreal textSize = _score->style().value(Sid::repeatRightFontSize).toReal();
+                        if (tb->xmlText() != "<sym>coda</sym>" && tb->xmlText() != "<sym>segno</sym>")
+                              tb->setSize(textSize);
+                        else
+                              tb->setSize(symSize);
+                        tb->setPropertyFlags(Pid::FONT_SIZE, PropertyFlags::UNSTYLED);
                         }
                   else tb->setVisible(false);
 
