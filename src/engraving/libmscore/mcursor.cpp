@@ -176,5 +176,4 @@ void MCursor::addPart(const QString& instrument)
     _score->appendPart(part);
     _score->insertStaff(staff, 0);
 }
-
 }

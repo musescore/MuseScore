@@ -593,15 +593,16 @@ RetVal<QByteArray> BackendApi::scorePartJson(Ms::Score* score, const std::string
 {
     QByteArray scoreData;
     QBuffer buf(&scoreData);
-    buf.open(QIODevice::ReadWrite);
 
-    mu::engraving::MsczWriter msczFile(&buf);
-    msczFile.setFilePath(QString::fromStdString(fileName));
+    mu::engraving::MsczWriter msczWriter(&buf);
+    msczWriter.setFilePath(QString::fromStdString(fileName));
+    msczWriter.open();
 
-    bool ok = score->writeMscz(msczFile);
+    bool ok = score->writeMscz(msczWriter);
     if (!ok) {
-        LOGW() << "Error save compressed file";
+        LOGW() << "Error save mscz file";
     }
+    msczWriter.close();
 
     RetVal<QByteArray> result;
     result.ret = ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);

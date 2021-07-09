@@ -1448,11 +1448,7 @@ public:
     bool saveFile(bool generateBackup = true);
 
     FileError loadMscz(const QString& fileName, bool ignoreVersionError);
-<<<<<<< HEAD
-    FileError loadMscz(mu::engraving::MsczFile& msczFile, bool ignoreVersionError);
-=======
     FileError loadMscz(mu::engraving::MsczReader& msczFile, bool ignoreVersionError);
->>>>>>> b1a9bcf18 (added mscz reader and writer)
 
     int readStyleDefaultsVersion();
     int styleDefaultByMscVersion(const int mscVer) const;

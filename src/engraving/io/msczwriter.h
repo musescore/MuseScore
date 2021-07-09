@@ -51,10 +51,6 @@ public:
 
 private:
 
-    void writeMetaData(MQZipWriter& zip, const std::map<QString, QString>& meta);
-    void readMetaData(MQZipReader& zip, std::map<QString, QString>& meta);
-    void writeContainer(MQZipWriter& zip, const std::vector<QString>& paths);
-
     struct Meta {
         QString mscxFileName;
         std::vector<QString> imageFilePaths;

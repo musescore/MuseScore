@@ -29,6 +29,7 @@
 Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* score, const QString& path, bool ignoreVersionError)
 {
     QByteArray msczData;
+    QString filePath = path;
     if (path.endsWith("mscx")) {
         //! NOTE Convert mscx -> mscz
 
@@ -42,7 +43,8 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
 
         QBuffer buf(&msczData);
         MsczWriter writer(&buf);
-        writer.setFilePath(path + ".mscz");
+        filePath = path + ".mscz";
+        writer.setFilePath(filePath);
         writer.open();
         writer.writeScore(mscxData);
     } else {
@@ -57,6 +59,7 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
 
     QBuffer msczBuf(&msczData);
     MsczReader reader(&msczBuf);
+    reader.setFilePath(filePath);
     reader.open();
 
     Ms::Score::FileError err = score->loadMscz(reader, ignoreVersionError);

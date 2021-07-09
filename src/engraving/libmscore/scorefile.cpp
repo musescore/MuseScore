@@ -410,6 +410,7 @@ bool MasterScore::saveFile(bool generateBackup)
         return false;
     }
 
+    // Step 1: create backup if need
     if (!saved() && generateBackup) {
         // if file was already saved in this session
         // save but don't overwrite backup again
@@ -418,32 +419,51 @@ bool MasterScore::saveFile(bool generateBackup)
         NOT_IMPLEMENTED << "generate backup";
     }
 
+    // Step 2: check writable
     if (info.exists() && !info.isWritable()) {
         MScore::lastError = tr("The following file is locked: \n%1 \n\nTry saving to a different location.").arg(info.filePath());
         return false;
     }
 
-    //! TODO Perhaps we need to write a file to the tempo first
+    // Step 3: save into temporary file to prevent partially overwriting
+    // the original file in case of "disc full"
 
-    mu::engraving::MsczWriter msczWriter(info.filePath());
-    bool ok = msczWriter.open();
-    if (!ok) {
-        MScore::lastError = tr("Failed open mscz file: %1").arg(msczWriter.filePath());
-        return false;
+    QString tempFilePath = info.filePath() + QString(".temp");
+    {
+        mu::engraving::MsczWriter msczWriter(tempFilePath);
+        bool ok = msczWriter.open();
+        if (!ok) {
+            MScore::lastError = tr("Failed open mscz file: %1").arg(msczWriter.filePath());
+            return false;
+        }
+
+        ok = writeMscz(msczWriter);
+        if (!ok) {
+            MScore::lastError = tr("Failed write mscz file: %1").arg(msczWriter.filePath());
+            return false;
+        }
+
+        msczWriter.close();
     }
 
-    ok = writeMscz(msczWriter);
-    if (!ok) {
-        MScore::lastError = tr("Failed write mscz file: %1").arg(msczWriter.filePath());
-        return false;
-    }
+    // Step 4: rename temp name into file name
+    {
+        QFile::remove(info.filePath());
+        if (!QFile::rename(tempFilePath, info.filePath())) {
+            MScore::lastError = tr("Renaming temp. file <%1> to <%2> failed:\n%3").arg(tempFilePath, info.filePath(), strerror(errno));
+            return false;
+        }
 
-    msczWriter.close();
+        // make file readable by all
+        QFile::setPermissions(info.filePath(),
+                              QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
+    }
 
     undoStack()->setClean();
     setSaved(true);
     update();
 
+    LOGI() << "success save file: " << info.filePath();
     return true;
 }
 
