@@ -27,9 +27,12 @@ using namespace mu::notation;
 ChordSymbolStylesModel::ChordSymbolStylesModel(QObject* parent)
     : QAbstractListModel(parent)
 {
+    m_chordSpellingList << "Standard" << "German" << "German Full" << "Solfege" << "French";
     styleManager = new ChordSymbolStyleManager();
     m_styles = styleManager->getChordStyles();
     initCurrentStyleIndex();
+    setQualitySymbolsOnStyleChange();
+    setPropertiesOnStyleChange();
 }
 
 int ChordSymbolStylesModel::rowCount(const QModelIndex&) const
@@ -72,6 +75,16 @@ int ChordSymbolStylesModel::currentStyleIndex() const
     return m_currentStyleIndex;
 }
 
+void ChordSymbolStylesModel::setStyleR(Ms::Sid id, qreal val)
+{
+    globalContext()->currentNotation()->style()->setStyleValue(id, val);
+}
+
+void ChordSymbolStylesModel::setStyleB(Ms::Sid id, bool val)
+{
+    globalContext()->currentNotation()->style()->setStyleValue(id, val);
+}
+
 void ChordSymbolStylesModel::initCurrentStyleIndex()
 {
     int index = 0;
@@ -90,7 +103,10 @@ void ChordSymbolStylesModel::initCurrentStyleIndex()
     if (!foundCurrentStyle && (m_styles.size() > 0)) {
         setChordStyle(m_styles[0].styleName);
     }
-    updateQualitySymbols();
+
+    // Extract the selection history everytime because it could have been changed
+    QString selectionHistory = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualitySelectionHistory).toString();
+    extractSelectionHistory(selectionHistory);
 
     emit currentStyleIndexChanged();
 }
@@ -110,93 +126,150 @@ void ChordSymbolStylesModel::setChordStyle(QString styleName)
     }
 
     globalContext()->currentNotation()->style()->setStyleValue(StyleId::chordDescriptionFile, descriptionFileName);
-    updateQualitySymbols();
-
-    emit currentStyleIndexChanged();
-}
-
-void ChordSymbolStylesModel::updateQualitySymbols()
-{
-    QString currentStyle = m_styles[m_currentStyleIndex].styleName;
-
-    // Get quality symbols
-    QString descriptionFile = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordDescriptionFile).toString();
-    QHash<QString, QStringList> qualitySymbols = styleManager->getQualitySymbols(descriptionFile);
 
     // Extract the selection history everytime because it could have been changed
     QString selectionHistory = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualitySelectionHistory).toString();
     extractSelectionHistory(selectionHistory);
 
-    // Major Seventh
-    Ms::Sid id = Ms::Sid::chordQualityMajorSeventh;
-    if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
-        // check if current style present in m_selectionHistory
-        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).at(0);
-        globalContext()->currentNotation()->style()->setStyleValue(id, previousSelectedSymbol);
-    } else {
-        //set the default
-        QString symMaj7 = qualitySymbols.value("major7th").at(0);
-        globalContext()->currentNotation()->style()->setStyleValue(id, symMaj7);
-    }
+    setQualitySymbolsOnStyleChange();
+    setPropertiesOnStyleChange();
 
-    // Half Diminished
-    id = Ms::Sid::chordQualityHalfDiminished;
-    if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
-        // check if current style present in m_selectionHistory
-        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).at(1);
-        globalContext()->currentNotation()->style()->setStyleValue(id, previousSelectedSymbol);
-    } else {
-        //set the default
-        QString symHD = qualitySymbols.value("half-diminished").at(0);
-        globalContext()->currentNotation()->style()->setStyleValue(id, symHD);
-    }
+    emit currentStyleIndexChanged();
+}
 
-    // Minor
-    id = Ms::Sid::chordQualityMinor;
-    if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
-        // check if current style present in m_selectionHistory
-        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).at(2);
-        globalContext()->currentNotation()->style()->setStyleValue(id, previousSelectedSymbol);
-    } else {
-        //set the default
-        QString symMin = qualitySymbols.value("minor").at(0);
-        globalContext()->currentNotation()->style()->setStyleValue(id, symMin);
-    }
+void ChordSymbolStylesModel::setQualitySymbolsOnStyleChange()
+{
+    QString currentStyle = m_styles[m_currentStyleIndex].styleName;
 
-    // Augmented
-    id = Ms::Sid::chordQualityAugmented;
     if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
         // check if current style present in m_selectionHistory
-        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).at(3);
-        globalContext()->currentNotation()->style()->setStyleValue(id, previousSelectedSymbol);
-    } else {
-        //set the default
-        QString symAug = qualitySymbols.value("augmented").at(0);
-        globalContext()->currentNotation()->style()->setStyleValue(id, symAug);
-    }
+        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("maj7th").toString();
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMajorSeventh, previousSelectedSymbol);
 
-    // Diminished
-    id = Ms::Sid::chordQualityDiminished;
-    if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
-        // check if current style present in m_selectionHistory
-        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).at(4);
-        globalContext()->currentNotation()->style()->setStyleValue(id, previousSelectedSymbol);
-    } else {
-        //set the default
-        QString symDim = qualitySymbols.value("diminished").at(0);
-        globalContext()->currentNotation()->style()->setStyleValue(id, symDim);
-    }
+        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("half-dim").toString();
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityHalfDiminished, previousSelectedSymbol);
 
-    //omit
-    id = Ms::Sid::chordModifierOmit;
-    if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
-        // check if current style present in m_selectionHistory
-        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).at(5);
-        globalContext()->currentNotation()->style()->setStyleValue(id, previousSelectedSymbol);
+        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("min").toString();
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMinor, previousSelectedSymbol);
+
+        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("aug").toString();
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityAugmented, previousSelectedSymbol);
+
+        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("dim").toString();
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished, previousSelectedSymbol);
+
+        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("omit").toString();
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit, previousSelectedSymbol);
     } else {
+        // Get quality symbols
+        QString descriptionFile = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordDescriptionFile).toString();
+        QHash<QString, QStringList> qualitySymbols = styleManager->getQualitySymbols(descriptionFile);
+
         //set the default
-        QString symOmit = qualitySymbols.value("omit").at(0);
-        globalContext()->currentNotation()->style()->setStyleValue(id, symOmit);
+        QString defaultSymbol = qualitySymbols.value("major7th").at(0);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMajorSeventh, defaultSymbol);
+
+        defaultSymbol = qualitySymbols.value("half-diminished").at(0);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityHalfDiminished, defaultSymbol);
+
+        defaultSymbol = qualitySymbols.value("minor").at(0);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMinor, defaultSymbol);
+
+        defaultSymbol = qualitySymbols.value("augmented").at(0);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityAugmented, defaultSymbol);
+
+        defaultSymbol = qualitySymbols.value("diminished").at(0);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished, defaultSymbol);
+
+        defaultSymbol = qualitySymbols.value("omit").at(0);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit, defaultSymbol);
+    }
+}
+
+void ChordSymbolStylesModel::setPropertiesOnStyleChange()
+{
+    QString currentStyle = m_styles[m_currentStyleIndex].styleName;
+
+    if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
+        int chordSpellingIndex = m_selectionHistory.value(currentStyle).value("chrdSpell").toInt();
+        setChordSpelling(m_chordSpellingList[chordSpellingIndex]);
+        setStyleR(Ms::Sid::chordQualityMag, m_selectionHistory.value(currentStyle).value("qualMag").toReal());
+        setStyleR(Ms::Sid::chordQualityAdjust, m_selectionHistory.value(currentStyle).value("qualAdj").toReal());
+        setStyleR(Ms::Sid::chordExtensionMag, m_selectionHistory.value(currentStyle).value("extMag").toReal());
+        setStyleR(Ms::Sid::chordExtensionAdjust, m_selectionHistory.value(currentStyle).value("extAdj").toReal());
+        setStyleR(Ms::Sid::chordModifierMag, m_selectionHistory.value(currentStyle).value("modMag").toReal());
+        setStyleR(Ms::Sid::chordModifierAdjust, m_selectionHistory.value(currentStyle).value("modAdj").toReal());
+
+        setStyleR(Ms::Sid::harmonyFretDist, m_selectionHistory.value(currentStyle).value("hFretDist").toReal());
+        setStyleR(Ms::Sid::minHarmonyDistance, m_selectionHistory.value(currentStyle).value("mnHDist").toReal());
+        setStyleR(Ms::Sid::maxHarmonyBarDistance, m_selectionHistory.value(currentStyle).value("mxHBarDist").toReal());
+        setStyleR(Ms::Sid::maxChordShiftAbove, m_selectionHistory.value(currentStyle).value("mxSftAbv").toReal());
+        setStyleR(Ms::Sid::maxChordShiftBelow, m_selectionHistory.value(currentStyle).value("mxSftBlw").toReal());
+        setStyleR(Ms::Sid::capoPosition, m_selectionHistory.value(currentStyle).value("cpFretPos").toReal());
+
+        setStyleB(Ms::Sid::stackModifiers, (m_selectionHistory.value(currentStyle).value("stkMod").toReal() == 1));
+
+        setStyleB(Ms::Sid::automaticCapitalization, (m_selectionHistory.value(currentStyle).value("autoCap").toReal() == 1));
+        setStyleB(Ms::Sid::lowerCaseMinorChords, !(m_selectionHistory.value(currentStyle).value("minRtCap").toReal() == 1));
+        setStyleB(Ms::Sid::lowerCaseQualitySymbols, !(m_selectionHistory.value(currentStyle).value("qualCap").toReal() == 1));
+        setStyleB(Ms::Sid::lowerCaseBassNotes, !(m_selectionHistory.value(currentStyle).value("bsNtCap").toReal() == 1));
+        setStyleB(Ms::Sid::allCapsNoteNames, (m_selectionHistory.value(currentStyle).value("solNtCap").toReal() == 1));
+
+        setStyleB(Ms::Sid::chordAlterationsParentheses, (m_selectionHistory.value(currentStyle).value("altParen").toReal() == 1));
+        setStyleB(Ms::Sid::chordSuspensionsParentheses, (m_selectionHistory.value(currentStyle).value("susParen").toReal() == 1));
+        setStyleB(Ms::Sid::chordMinMajParentheses, (m_selectionHistory.value(currentStyle).value("minMajParen").toReal() == 1));
+        setStyleB(Ms::Sid::chordAddOmitParentheses, (m_selectionHistory.value(currentStyle).value("addOmitParen").toReal() == 1));
+    } else {
+        // Set default values
+        setChordSpelling(m_chordSpellingList[0]);
+
+        setStyleR(Ms::Sid::chordQualityMag, 1.0);
+        setStyleR(Ms::Sid::chordQualityAdjust, 0.0);
+        setStyleR(Ms::Sid::chordExtensionMag, 1.0);
+        setStyleR(Ms::Sid::chordExtensionAdjust, 0.0);
+        setStyleR(Ms::Sid::chordModifierMag, 1.0);
+        setStyleR(Ms::Sid::chordModifierAdjust, 0.0);
+
+        setStyleR(Ms::Sid::harmonyFretDist, 1.0);
+        setStyleR(Ms::Sid::minHarmonyDistance, 0.5);
+        setStyleR(Ms::Sid::maxHarmonyBarDistance, 3.0);
+        setStyleR(Ms::Sid::maxChordShiftAbove, 0.0);
+        setStyleR(Ms::Sid::maxChordShiftBelow, 0.0);
+        setStyleR(Ms::Sid::capoPosition, 0.0);
+
+        setStyleB(Ms::Sid::stackModifiers, true);
+
+        setStyleB(Ms::Sid::automaticCapitalization, true);
+        setStyleB(Ms::Sid::lowerCaseMinorChords, false);
+        setStyleB(Ms::Sid::lowerCaseQualitySymbols, false);
+        setStyleB(Ms::Sid::lowerCaseBassNotes, false);
+        setStyleB(Ms::Sid::allCapsNoteNames, false);
+
+        setStyleB(Ms::Sid::chordAlterationsParentheses, true);
+        setStyleB(Ms::Sid::chordSuspensionsParentheses, true);
+        setStyleB(Ms::Sid::chordMinMajParentheses, true);
+        setStyleB(Ms::Sid::chordAddOmitParentheses, true);
+    }
+}
+
+void ChordSymbolStylesModel::setChordSpelling(QString newSpelling)
+{
+    QHash<QString, Ms::Sid> chordSpellingMap = {
+        { "Standard", Ms::Sid::useStandardNoteNames },
+        { "German", Ms::Sid::useGermanNoteNames },
+        { "German Full", Ms::Sid::useFullGermanNoteNames },
+        { "Solfege", Ms::Sid::useSolfeggioNoteNames },
+        { "French", Ms::Sid::useFrenchNoteNames }
+    };
+
+    for (auto& spelling: m_chordSpellingList) {
+        Ms::Sid id = chordSpellingMap.value(spelling);
+
+        if (spelling == newSpelling) {
+            globalContext()->currentNotation()->style()->setStyleValue(id, true);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(id, false);
+        }
     }
 }
 
@@ -204,8 +277,14 @@ void ChordSymbolStylesModel::extractSelectionHistory(QString selectionHistory)
 {
     m_selectionHistory.clear();
     QStringList selectionHistoryList = selectionHistory.split("\n");
-    for (auto s: selectionHistoryList) {
-        QStringList selectionHistoryOfStyle = s.split("|");
-        m_selectionHistory.insert(selectionHistoryOfStyle[0], selectionHistoryOfStyle[1].split(","));
+    for (auto style: selectionHistoryList) {
+        QStringList selectionHistoryOfStyle = style.split("|"); // { styleName, comma-separated properties }
+        QStringList properties = selectionHistoryOfStyle[1].split(",");
+        QHash<QString, QVariant> propHash;
+        for (auto prop: properties) {
+            QStringList keyValue = prop.split(":"); // {propValue, value}
+            propHash.insert(keyValue[0], keyValue[1]);
+        }
+        m_selectionHistory.insert(selectionHistoryOfStyle[0], propHash);
     }
 }

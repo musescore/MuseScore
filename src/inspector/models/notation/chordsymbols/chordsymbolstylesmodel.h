@@ -47,8 +47,12 @@ public:
     int currentStyleIndex() const;
 
     void initCurrentStyleIndex();
-    void updateQualitySymbols();
+    void setQualitySymbolsOnStyleChange();
+    void setPropertiesOnStyleChange();
+    void setChordSpelling(QString newSpelling);
     void extractSelectionHistory(QString selectionHistory);
+    void setStyleR(Ms::Sid id, qreal val);
+    void setStyleB(Ms::Sid id, bool val);
 
     Q_INVOKABLE void setChordStyle(QString styleName);
 
@@ -63,7 +67,9 @@ private:
 
     QList<notation::ChordSymbolStyle> m_styles;
     notation::ChordSymbolStyleManager* styleManager;
-    QHash<QString, QStringList> m_selectionHistory;
+    QHash<QString, QHash<QString, QVariant> > m_selectionHistory;
+
+    QStringList m_chordSpellingList;
 
     int m_currentStyleIndex;
 };
