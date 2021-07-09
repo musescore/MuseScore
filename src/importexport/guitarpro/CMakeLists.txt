@@ -29,14 +29,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarproreader.h
 
-     ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp.cpp
-     ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp-gp4.cpp
-     ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp-gp5.cpp
-     ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp-gp6.cpp
-     ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp-gp7.cpp
-     ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp.h
-     ${CMAKE_CURRENT_LIST_DIR}/internal/importptb.cpp
-     ${CMAKE_CURRENT_LIST_DIR}/internal/importptb.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp-gp4.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp-gp5.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp-gp6.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp-gp7.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importptb.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importptb.h
     )
 
 set(MODULE_LINK

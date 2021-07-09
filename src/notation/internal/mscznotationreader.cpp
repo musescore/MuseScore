@@ -26,37 +26,14 @@
 #include <QBuffer>
 
 #include "libmscore/score.h"
-#include "io/msczfile.h"
 #include "notation/notationerrors.h"
+#include "engraving/compat/mscxcompat.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
 
 mu::Ret MsczNotationReader::read(Ms::MasterScore* score, const io::path& path, const Options& options)
 {
-    Ms::Score::FileError err;
-    if (io::syffix(path) == "mscx") {
-        //! NOTE Convert mscx -> mscz
-
-        QFile mscxFile(path.toQString());
-        if (mscxFile.open(QIODevice::ReadOnly)) {
-            QByteArray mscxData = mscxFile.readAll();
-
-            QByteArray msczData;
-            QBuffer buf(&msczData);
-            buf.open(QIODevice::ReadWrite);
-
-            MsczFile msczFile(&buf);
-            msczFile.setFilePath(path.toQString());
-            msczFile.writeMscx(mscxData);
-
-            err = score->loadMscz(msczFile, options.contains(OptionKey::ForceMode));
-        } else {
-            err = Ms::Score::FileError::FILE_OPEN_ERROR;
-        }
-    } else {
-        err = score->loadMscz(path.toQString(), options.contains(OptionKey::ForceMode));
-    }
-
+    Ms::Score::FileError err = compat::loadMsczOrMscx(score, path.toQString(), options.contains(OptionKey::ForceMode));
     return mu::notation::scoreFileErrorToRet(err, path);
 }
