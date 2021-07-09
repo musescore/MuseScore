@@ -18,23 +18,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE iex_capella)
+set(MODULE_TEST engraving_utests)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/capellamodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/capellamodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/capellareader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/capellareader.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/capella.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/capella.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/capxml.cpp
-    )
+set(MODULE_TEST_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/msczfile_tests.cpp
+)
 
-set(MODULE_LINK
-    rtf2html    # for capella
+set(MODULE_TEST_LINK
     qzip
     engraving
     )
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
 

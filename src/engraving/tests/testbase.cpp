@@ -36,8 +36,12 @@
 #include "libmscore/excerpt.h"
 #include "thirdparty/qzip/qzipreader_p.h"
 
+#include "engraving/compat/mscxcompat.h"
+
 #include "framework/global/globalmodule.h"
 #include "framework/fonts/fontsmodule.h"
+
+using namespace mu::engraving;
 
 static void initMyResources()
 {
@@ -107,7 +111,7 @@ MasterScore* MTest::readCreatedScore(const QString& name)
     ScoreLoad sl;
     Score::FileError rv;
     if (csl == "mscz" || csl == "mscx") {
-        rv = score->loadMsc(name, false);
+        rv = compat::loadMsczOrMscx(score, name, false);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }
@@ -130,9 +134,11 @@ MasterScore* MTest::readCreatedScore(const QString& name)
 
 bool MTest::saveScore(Score* score, const QString& name) const
 {
-    QFileInfo fi(name);
-//      MScore::testMode = true;
-    return score->Score::saveFile(fi);
+    QFile file(name);
+    if (!file.open(QIODevice::ReadWrite)) {
+        return false;
+    }
+    return score->Score::writeScore(&file, false);
 }
 
 //---------------------------------------------------------

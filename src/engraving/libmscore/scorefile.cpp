@@ -425,12 +425,20 @@ bool MasterScore::saveFile(bool generateBackup)
 
     //! TODO Perhaps we need to write a file to the tempo first
 
-    mu::engraving::MsczFile msczFile(info.filePath());
-    bool ok = writeMscz(msczFile);
+    mu::engraving::MsczWriter msczWriter(info.filePath());
+    bool ok = msczWriter.open();
     if (!ok) {
-        MScore::lastError = tr("Failed write mscz file: %1").arg(msczFile.filePath());
+        MScore::lastError = tr("Failed open mscz file: %1").arg(msczWriter.filePath());
         return false;
     }
+
+    ok = writeMscz(msczWriter);
+    if (!ok) {
+        MScore::lastError = tr("Failed write mscz file: %1").arg(msczWriter.filePath());
+        return false;
+    }
+
+    msczWriter.close();
 
     undoStack()->setClean();
     setSaved(true);
@@ -439,9 +447,9 @@ bool MasterScore::saveFile(bool generateBackup)
     return true;
 }
 
-bool Score::writeMscz(mu::engraving::MsczFile& msczFile, bool onlySelection, bool doCreateThumbnail)
+bool Score::writeMscz(engraving::MsczWriter& msczWriter, bool onlySelection, bool doCreateThumbnail)
 {
-    IF_ASSERT_FAILED(msczFile.isOpened()) {
+    IF_ASSERT_FAILED(msczWriter.isOpened()) {
         return false;
     }
 
@@ -452,7 +460,7 @@ bool Score::writeMscz(mu::engraving::MsczFile& msczFile, bool onlySelection, boo
         scoreBuf.open(QIODevice::ReadWrite);
         Score::writeScore(&scoreBuf, onlySelection);
 
-        msczFile.writeMscx(scoreData);
+        msczWriter.writeScore(scoreData);
     }
 
     // Write images
@@ -461,7 +469,7 @@ bool Score::writeMscz(mu::engraving::MsczFile& msczFile, bool onlySelection, boo
             if (!ip->isUsed(this)) {
                 continue;
             }
-            msczFile.addImage(ip->hashName(), ip->buffer());
+            msczWriter.addImage(ip->hashName(), ip->buffer());
         }
     }
 
@@ -474,14 +482,14 @@ bool Score::writeMscz(mu::engraving::MsczFile& msczFile, bool onlySelection, boo
             QBuffer b(&ba);
             b.open(QIODevice::WriteOnly);
             pm.save(&b, "PNG");
-            msczFile.writeThumbnail(ba);
+            msczWriter.writeThumbnail(ba);
         }
     }
 
     // Write audio
     {
         if (_audio) {
-            msczFile.writeAudio(_audio->data());
+            msczWriter.writeAudio(_audio->data());
         }
     }
 
@@ -490,16 +498,25 @@ bool Score::writeMscz(mu::engraving::MsczFile& msczFile, bool onlySelection, boo
 
 bool Score::writeMscz(const QString& filePath, bool onlySelection, bool createThumbnail)
 {
-    mu::engraving::MsczFile msczFile(filePath);
-    msczFile.open();
-    bool ok = writeMscz(msczFile, onlySelection, createThumbnail);
+    mu::engraving::MsczWriter msczFile(filePath);
+    bool ok = msczFile.open();
+    if (!ok) {
+        LOGE() << "failed open file: " << filePath;
+        return false;
+    }
+
+    ok = writeMscz(msczFile, onlySelection, createThumbnail);
     msczFile.close();
+    if (!ok) {
+        LOGE() << "failed write file: " << filePath;
+        return false;
+    }
     return ok;
 }
 
 bool Score::writeMscz(QIODevice* device, const QString& fileName, bool onlySelection, bool createThumbnail)
 {
-    mu::engraving::MsczFile msczFile(device);
+    mu::engraving::MsczWriter msczFile(device);
     msczFile.setFilePath(fileName);
     msczFile.open();
     bool ok = writeMscz(msczFile, onlySelection, createThumbnail);
@@ -641,25 +658,28 @@ bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection)
 
 Score::FileError MasterScore::loadMscz(const QString& fileName, bool ignoreVersionError)
 {
-    mu::engraving::MsczFile msczFile(fileName);
-    return loadMscz(msczFile, ignoreVersionError);
+    mu::engraving::MsczReader msczReader(fileName);
+    if (!msczReader.open()) {
+        return FileError::FILE_OPEN_ERROR;
+    }
+    return loadMscz(msczReader, ignoreVersionError);
 }
 
-Score::FileError MasterScore::loadMscz(mu::engraving::MsczFile& msczFile, bool ignoreVersionError)
+Score::FileError MasterScore::loadMscz(mu::engraving::MsczReader& msczReader, bool ignoreVersionError)
 {
     using namespace mu::engraving;
 
-    if (!msczFile.open()) {
+    IF_ASSERT_FAILED(msczReader.isOpened()) {
         return FileError::FILE_OPEN_ERROR;
     }
 
     ScoreLoad sl;
-    fileInfo()->setFile(msczFile.filePath());
+    fileInfo()->setFile(msczReader.filePath());
 
     FileError retval;
     // Read score
     {
-        QByteArray dbuf = msczFile.readMscx();
+        QByteArray dbuf = msczReader.readScore();
         XmlReader e(dbuf);
         e.setDocName(masterScore()->fileInfo()->completeBaseName());
 
@@ -669,9 +689,9 @@ Score::FileError MasterScore::loadMscz(mu::engraving::MsczFile& msczFile, bool i
     // Read images
     {
         if (!MScore::noImages) {
-            std::vector<MsczFile::File> images = msczFile.readImages();
-            foreach (const MsczFile::File& i, images) {
-                imageStore.add(i.fileName, i.data);
+            std::vector<QString> images = msczReader.imageFileNames();
+            for (const QString& name : images) {
+                imageStore.add(name, msczReader.readImage(name));
             }
         }
     }
@@ -679,7 +699,7 @@ Score::FileError MasterScore::loadMscz(mu::engraving::MsczFile& msczFile, bool i
     //  Read audio
     {
         if (audio()) {
-            QByteArray dbuf1 = msczFile.readAudio();
+            QByteArray dbuf1 = msczReader.readAudio();
             audio()->setData(dbuf1);
         }
     }
@@ -717,10 +737,9 @@ int MasterScore::readStyleDefaultsVersion()
     QByteArray scoreData;
     {
         using namespace mu::engraving;
-        MsczFile msczFile(info.fileName());
-        msczFile.open();
-        scoreData = msczFile.readMscx();
-        msczFile.close();
+        MsczReader msczReader(info.fileName());
+        msczReader.open();
+        scoreData = msczReader.readScore();
     }
 
     XmlReader e(scoreData);

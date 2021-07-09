@@ -24,6 +24,10 @@
 #include "testbase.h"
 #include "libmscore/score.h"
 
+#include "engraving/compat/mscxcompat.h"
+
+using namespace mu::engraving;
+
 static const QString LAYOUT_DATA_DIR("layout_data/");
 
 using namespace Ms;
@@ -71,7 +75,7 @@ void TestLayoutBenchmark::benchmark3()
     score->setName(path);
     MScore::testMode = true;
     QBENCHMARK {
-        score->loadMsc(path, false);
+        compat::loadMsczOrMscx(score, path);
     }
 }
 
