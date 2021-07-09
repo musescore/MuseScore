@@ -72,9 +72,7 @@ private:
 
     RetVal<Meta> doReadMeta(framework::XmlReader& xmlReader) const;
     RawMeta doReadBox(framework::XmlReader& xmlReader) const;
-    RetVal<Meta> loadCompressedMsc(const io::path& filePath) const;
-    io::path readRootFile(MQZipReader* zipReader) const;
-    QPixmap loadThumbnail(MQZipReader* zipReader) const;
+    RetVal<Meta> readMetaFromMscx(const io::path& filePath) const;
     RawMeta doReadRawMeta(framework::XmlReader& xmlReader) const;
     QString formatFromXml(const std::string& xml) const;
 
