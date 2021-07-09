@@ -595,7 +595,7 @@ RetVal<QByteArray> BackendApi::scorePartJson(Ms::Score* score, const std::string
     QBuffer buf(&scoreData);
     buf.open(QIODevice::ReadWrite);
 
-    mu::engraving::MsczFile msczFile(&buf);
+    mu::engraving::MsczWriter msczFile(&buf);
     msczFile.setFilePath(QString::fromStdString(fileName));
 
     bool ok = score->writeMscz(msczFile);

@@ -30,7 +30,11 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/musescoreCore.h"
 
+#include "engraving/compat/mscxcompat.h"
+
 #include "importexport/musicxml/internal/musicxml/exportxml.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 extern Score::FileError importMusicXml(MasterScore*, const QString&);
@@ -59,7 +63,7 @@ MasterScore* MTest::readCreatedScore(const QString& name)
     ScoreLoad sl;
     Score::FileError rv;
     if (csl == "mscz" || csl == "mscx") {
-        rv = score->loadMsc(name, false);
+        rv = compat::loadMsczOrMscx(score, name, false);
     } else if (csl == "xml" || csl == "musicxml") {
         rv = importMusicXml(score, name);
     } else if (csl == "mxl") {
@@ -82,9 +86,12 @@ MasterScore* MTest::readCreatedScore(const QString& name)
 
 bool MTest::saveScore(Score* score, const QString& name) const
 {
-    QFileInfo fi(name);
 //      MScore::testMode = true;
-    return score->Score::saveFile(fi);
+    QFile file(name);
+    if (!file.open(QIODevice::ReadWrite)) {
+        return false;
+    }
+    return score->Score::writeScore(&file, false);
 }
 
 bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)

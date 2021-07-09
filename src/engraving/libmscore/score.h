@@ -44,7 +44,8 @@
 #include "layoutbreak.h"
 #include "property.h"
 
-#include "io/msczfile.h"
+#include "io/msczwriter.h"
+#include "io/msczreader.h"
 
 class QMimeData;
 
@@ -864,7 +865,7 @@ public:
     void setShowVBox(bool v) { _showVBox = v; }
 
     bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection = false);
-    bool writeMscz(mu::engraving::MsczFile& msczFile, bool onlySelection = false, bool createThumbnail = true);
+    bool writeMscz(mu::engraving::MsczWriter& msczWriter, bool onlySelection = false, bool createThumbnail = true);
     bool writeMscz(const QString& filePath, bool onlySelection = false, bool createThumbnail = true); // to file
     bool writeMscz(QIODevice* device, const QString& fileName, bool onlySelection = false, bool createThumbnail = true); // to device (file or buffer)
 
@@ -1380,7 +1381,6 @@ class MasterScore : public Score
 
     QFileInfo _sessionStartBackupInfo;
     QFileInfo info;
-    mu::engraving::MsczFile m_msczFile;
 
     bool read(XmlReader&);
     FileError read1(XmlReader&, bool ignoreVersionError);
@@ -1448,7 +1448,11 @@ public:
     bool saveFile(bool generateBackup = true);
 
     FileError loadMscz(const QString& fileName, bool ignoreVersionError);
+<<<<<<< HEAD
     FileError loadMscz(mu::engraving::MsczFile& msczFile, bool ignoreVersionError);
+=======
+    FileError loadMscz(mu::engraving::MsczReader& msczFile, bool ignoreVersionError);
+>>>>>>> b1a9bcf18 (added mscz reader and writer)
 
     int readStyleDefaultsVersion();
     int styleDefaultByMscVersion(const int mscVer) const;
@@ -1501,8 +1505,6 @@ public:
     QFileInfo* fileInfo() { return &info; }
     const QFileInfo* fileInfo() const { return &info; }
     void setName(const QString&);
-    mu::engraving::MsczFile& mscxFile() { return m_msczFile; }
-    const mu::engraving::MsczFile& mscxFile() const { return m_msczFile; }
 
     const QFileInfo& sessionStartBackupInfo() const { return _sessionStartBackupInfo; }
 

@@ -30,6 +30,10 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/musescoreCore.h"
 
+#include "engraving/compat/mscxcompat.h"
+
+using namespace mu::engraving;
+
 namespace Ms {
 MTest::MTest()
 {
@@ -47,7 +51,7 @@ MasterScore* MTest::readScore(const QString& name)
     ScoreLoad sl;
     Score::FileError rv;
     if (csl == "mscz" || csl == "mscx") {
-        rv = score->loadMsc(path, false);
+        rv = compat::loadMsczOrMscx(score, path, false);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }
@@ -66,9 +70,11 @@ MasterScore* MTest::readScore(const QString& name)
 
 bool MTest::saveScore(Score* score, const QString& name) const
 {
-    QFileInfo fi(name);
-//      MScore::testMode = true;
-    return score->Score::saveFile(fi);
+    QFile file(name);
+    if (!file.open(QIODevice::ReadWrite)) {
+        return false;
+    }
+    return score->Score::writeScore(&file, false);
 }
 
 bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)

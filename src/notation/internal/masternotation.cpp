@@ -699,10 +699,10 @@ mu::Ret MasterNotation::saveScore(const mu::io::path& path, SaveMode saveMode)
         return exportScore(path, suffix);
     }
 
-    io::path oldFilePath = score()->masterScore()->mscxFile().filePath().toStdString();
+    io::path oldFilePath = score()->masterScore()->fileInfo()->filePath().toStdString();
 
     if (!path.empty()) {
-        score()->masterScore()->mscxFile().setFilePath(path.toQString());
+        score()->masterScore()->fileInfo()->setFile(path.toQString());
     }
 
     Ret ret = score()->masterScore()->saveFile(true);
