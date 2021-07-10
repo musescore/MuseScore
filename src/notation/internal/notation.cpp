@@ -326,11 +326,14 @@ void Notation::paintPages(draw::Painter* painter, const RectF& frameRect, const 
         PointF pagePosition(page->pos());
         painter->translate(pagePosition);
         paintForeground(painter, page->bbox());
+        painter->setClipping(true);
+        painter->setClipRect(page->bbox());
 
         QList<Element*> elements = page->items(frameRect.translated(-page->pos()));
         Ms::paintElements(*painter, elements);
 
         painter->translate(-pagePosition);
+        painter->setClipping(false);
     }
 }
 

@@ -164,6 +164,9 @@ public:
     void drawPixmap(const PointF& point, const QPixmap& pm);
     void drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset = PointF());
 
+    void setClipRect(const RectF& rect);
+    void setClipping(bool enable);
+
     //! NOTE Provider for tests.
     //! We're not ready to use DI (ModuleIoC) here yet
     static IPaintProviderPtr extended;
