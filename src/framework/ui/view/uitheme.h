@@ -132,9 +132,7 @@ signals:
     void themeChanged();
 
 private:
-    QColor colorByKey(ThemeStyleKey key) const;
-    qreal realByKey(ThemeStyleKey key) const;
-    const ThemeInfo& currentTheme() const;
+    void initThemeValues();
 
     void initUiFonts();
     void initIconsFont();
@@ -169,6 +167,26 @@ private:
     QFont m_iconsFont;
     QFont m_toolbarIconsFont;
     QFont m_musicalFont;
+
+    QColor m_backgroundPrimaryColor;
+    QColor m_backgroundSecondaryColor;
+    QColor m_popupBackgroundColor;
+    QColor m_textFieldColor;
+    QColor m_accentColor;
+    QColor m_strokeColor;
+    QColor m_buttonColor;
+    QColor m_fontPrimaryColor;
+    QColor m_fontSecondaryColor;
+    QColor m_linkColor;
+    QColor m_focusColor;
+
+    qreal m_accentOpacityNormal;
+    qreal m_accentOpacityHover;
+    qreal m_accentOpacityHit;
+    qreal m_buttonOpacityNormal;
+    qreal m_buttonOpacityHover;
+    qreal m_buttonOpacityHit;
+    qreal m_itemOpacityDisabled;
 };
 }
 
