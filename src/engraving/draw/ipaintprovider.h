@@ -80,6 +80,9 @@ public:
 
     virtual void drawPixmap(const PointF& point, const QPixmap& pm) = 0;
     virtual void drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset = PointF()) = 0;
+
+    virtual void setClipRect(const RectF& rect) = 0;
+    virtual void setClipping(bool enable) = 0;
 };
 
 using IPaintProviderPtr = std::shared_ptr<IPaintProvider>;

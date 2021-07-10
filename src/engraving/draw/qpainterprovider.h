@@ -81,6 +81,9 @@ public:
     void drawPixmap(const PointF& point, const QPixmap& pm) override;
     void drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset = PointF()) override;
 
+    void setClipRect(const RectF& rect) override;
+    void setClipping(bool enable) override;
+
 private:
     QPainter* m_painter = nullptr;
     bool m_overship = false;
