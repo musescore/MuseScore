@@ -31,6 +31,7 @@
 #include "libmscore/stringdata.h"
 #include "libmscore/text.h"
 #include "libmscore/utils.h"
+#include "libmscore/undo.h"
 
 #include "log.h"
 #include "translation.h"
@@ -303,8 +304,10 @@ void EditStaff::bboxClicked(QAbstractButton* button)
 
 void EditStaff::apply()
 {
+    int index = m_staff->score()->undoStack()->getCurIdx();
     applyStaffProperties();
     applyPartProperties();
+    m_staff->score()->undoStack()->mergeCommands(index);
 }
 
 void EditStaff::minPitchAClicked()

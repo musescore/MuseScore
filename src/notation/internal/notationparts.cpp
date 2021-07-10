@@ -706,8 +706,8 @@ void NotationParts::replaceInstrument(const ID& instrumentId, const ID& fromPart
         return;
     }
 
-    part->setInstrument(InstrumentsConverter::convertInstrument(newInstrument), oldInstrumentInfo.fraction);
-    doSetPartName(part, formatPartName(part));
+    score()->undo(new Ms::ChangePart(part, new Ms::Instrument(InstrumentsConverter::convertInstrument(newInstrument)),
+                                     formatPartName(part)));
     updateScore();
 
     ChangedNotifier<mu::instruments::Instrument>* notifier = partNotifier(part->id());
