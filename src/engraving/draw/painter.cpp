@@ -498,3 +498,13 @@ void Painter::updateMatrix()
         extended->setTransform(st.transform);
     }
 }
+
+void Painter::setClipRect(const RectF& rect)
+{
+    m_provider->setClipRect(rect);
+}
+
+void Painter::setClipping(bool enable)
+{
+    m_provider->setClipping(enable);
+}

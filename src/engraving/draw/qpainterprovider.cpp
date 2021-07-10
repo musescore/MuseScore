@@ -304,3 +304,13 @@ void QPainterProvider::drawTiledPixmap(const RectF& rect, const QPixmap& pm, con
 {
     m_painter->drawTiledPixmap(rect.toQRectF(), pm, QPointF(offset.x(), offset.y()));
 }
+
+void QPainterProvider::setClipRect(const RectF& rect)
+{
+    m_painter->setClipRect(rect.toQRectF());
+}
+
+void QPainterProvider::setClipping(bool enable)
+{
+    m_painter->setClipping(enable);
+}
