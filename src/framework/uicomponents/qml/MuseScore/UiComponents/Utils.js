@@ -22,5 +22,5 @@
 .pragma library
 
 function colorWithAlpha(color, alpha) {
-    return Qt.rgba(color.red, color.green, color.blue, alpha)
+    return Qt.rgba(color.r, color.g, color.b, alpha)
 }

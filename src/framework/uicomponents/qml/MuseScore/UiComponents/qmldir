@@ -47,3 +47,4 @@ FilePicker 1.0 FilePicker.qml
 ValueList 1.0 ValueList.qml
 StyledDropShadow 1.0 StyledDropShadow.qml
 VisibilityBox 1.0 VisibilityBox.qml
+Utils 1.0 Utils.js
