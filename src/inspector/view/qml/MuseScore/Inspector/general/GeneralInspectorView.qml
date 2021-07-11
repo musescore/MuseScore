@@ -36,35 +36,42 @@ InspectorSectionView {
 
     implicitHeight: contentColumn.height
 
-    Column {
+    ColumnLayout {
         id: contentColumn
 
-        height: implicitHeight
         width: parent.width
 
-        spacing: 16
+        spacing: 12
 
-        Item {
+        GridLayout {
+            id: grid
 
-            height: childrenRect.height
             width: parent.width
 
-            CheckBox {
-                anchors.left: parent.left
+            columns: 2
+
+            rowSpacing: 12
+            columnSpacing: 4
+
+            VisibilityBox {
+                Layout.fillWidth: true
+                Layout.maximumWidth: parent.width / 2
+
                 navigation.panel: root.navigationPanel
                 navigation.name: "Visible"
                 navigation.row: root.navigationRow(1)
+
                 text: qsTrc("inspector", "Visible")
 
-                isIndeterminate: model ? model.isVisible.isUndefined : false
-                checked: model && !model.isVisible.isUndefined ? model.isVisible.value : false
+                isVisible: model && !model.isVisible.isUndefined ? model.isVisible.value : false
 
-                onClicked: { model.isVisible.value = !checked }
+                onVisibleToggled: { model.isVisible.value = !model.isVisible.value }
             }
 
-            CheckBox {
-                anchors.left: parent.horizontalCenter
-                anchors.leftMargin: 6
+            VisibilityBox {
+                Layout.fillWidth: true
+                Layout.maximumWidth: parent.width / 2
+
                 navigation.panel: root.navigationPanel
                 navigation.name: "Cue size"
                 navigation.row: root.navigationRow(2)
@@ -72,34 +79,28 @@ InspectorSectionView {
                 text: qsTrc("inspector", "Cue size")
 
                 enabled: model ? model.isSmall.isEnabled : false
-                isIndeterminate: model && enabled ? model.isSmall.isUndefined : false
-                checked: model && !model.isSmall.isUndefined ? model.isSmall.value : false
+                isVisible: model && !model.isSmall.isUndefined ? model.isSmall.value : false
 
-                onClicked: { model.isSmall.value = !checked }
+                onVisibleToggled: { model.isSmall.value = !model.isSmall.value }
             }
-        }
 
-        Item {
+            VisibilityBox {
+                Layout.fillWidth: true
+                Layout.maximumWidth: parent.width / 2
 
-            height: childrenRect.height
-            width: root.width
-
-            CheckBox {
-                anchors.left: parent.left
                 navigation.panel: root.navigationPanel
                 navigation.name: "Auto-place"
                 navigation.row: root.navigationRow(3)
+
                 text: qsTrc("inspector", "Auto-place")
-
-                isIndeterminate: model ? model.isAutoPlaceAllowed.isUndefined : false
-                checked: model && !model.isAutoPlaceAllowed.isUndefined ? model.isAutoPlaceAllowed.value : false
-
-                onClicked: { model.isAutoPlaceAllowed.value = !checked }
+                isVisible: model && !model.isAutoPlaceAllowed.isUndefined ? model.isAutoPlaceAllowed.value : false
+                onVisibleToggled: { model.isAutoPlaceAllowed.value = !model.isAutoPlaceAllowed.value }
             }
 
-            CheckBox {
-                anchors.left: parent.horizontalCenter
-                anchors.leftMargin: 6
+            VisibilityBox {
+                Layout.fillWidth: true
+                Layout.maximumWidth: parent.width / 2
+
                 navigation.panel: root.navigationPanel
                 navigation.name: "Play"
                 navigation.row: root.navigationRow(4)
@@ -107,10 +108,8 @@ InspectorSectionView {
                 text: qsTrc("inspector", "Play")
 
                 enabled: model ? model.isPlayable.isEnabled : false
-                isIndeterminate: model && enabled ? model.isPlayable.isUndefined : false
-                checked: model && !model.isPlayable.isUndefined && enabled ? model.isPlayable.value : false
-
-                onClicked: { model.isPlayable.value = !checked }
+                isVisible: model && !model.isPlayable.isUndefined ? model.isPlayable.value : false
+                onVisibleToggled: { model.isPlayable.value = !model.isPlayable.value }
             }
         }
 
