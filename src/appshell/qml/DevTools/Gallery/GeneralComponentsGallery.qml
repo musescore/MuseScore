@@ -63,6 +63,7 @@ Rectangle {
                     { textRole: "StyledPopupView", componentRole: styledPopupViewComponent },
                     { textRole: "StyledMenu", componentRole: styledMenuComponent },
                     { textRole: "CheckBox", componentRole: checkBoxSample },
+                    { textRole: "VisibilityBox", componentRole: visibilityBoxSample },
                     { textRole: "ColorPicker", componentRole: colorPickerSample },
                     { textRole: "ExpandableBlank", componentRole: expandableBlankSample },
                     { textRole: "FlatButton", componentRole: flatButtonSample },
@@ -328,6 +329,24 @@ Rectangle {
             text: "Option"
             onClicked: {
                 checked = !checked
+            }
+        }
+    }
+
+    Component {
+        id: visibilityBoxSample
+
+        Column {
+            spacing: 8
+
+            width: 200
+
+            VisibilityBox {
+                text: "Visibility Box"
+
+                onVisibleToggled: {
+                    isVisible = !isVisible
+                }
             }
         }
     }
