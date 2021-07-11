@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
-import "internal/Utils.js" as Utils
+import MuseScore.UiComponents 1.0
 
 RadioButton {
     id: root
@@ -48,7 +48,7 @@ RadioButton {
 
             anchors.fill: parent
 
-            sourceComponent: Boolean(contentComponent) ? contentComponent : textLabel
+            sourceComponent: Boolean(root.contentComponent) ? root.contentComponent : textLabel
 
             Component {
                 id: textLabel
