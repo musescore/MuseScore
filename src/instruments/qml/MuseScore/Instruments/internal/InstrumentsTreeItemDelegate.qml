@@ -254,7 +254,7 @@ Item {
 
         spacing: 2
 
-        FlatButton {
+        VisibilityBox {
             Layout.alignment: Qt.AlignLeft
             Layout.preferredWidth: width
 
@@ -263,13 +263,10 @@ Item {
             navigation.row: root.keynavRow
             navigation.column: 1
 
-            normalStateColor: "transparent"
-            pressedStateColor: ui.theme.accentColor
-
-            icon: model && model.itemRole.isVisible ? IconCode.VISIBILITY_ON : IconCode.VISIBILITY_OFF
+            isVisible: model && model.itemRole.isVisible
             enabled: root.visible && model && model.itemRole.canChangeVisibility
 
-            onClicked: {
+            onVisibleToggled: {
                 if (!model) {
                     return
                 }
