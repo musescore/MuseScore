@@ -33,14 +33,17 @@ class SequenceIO : public ISequenceIO
 public:
     explicit SequenceIO(IGetTracks* getTracks);
 
-    RetVal<AudioInputParams> inputParams(const TrackId id) const;
-    RetVal<AudioOutputParams> outputParams(const TrackId id) const;
+    RetVal<AudioInputParams> inputParams(const TrackId id) const override;
+    RetVal<AudioOutputParams> outputParams(const TrackId id) const override;
 
-    void setInputParams(const TrackId id, const AudioInputParams& params);
-    void setOutputParams(const TrackId id, const AudioOutputParams& params);
+    void setInputParams(const TrackId id, const AudioInputParams& params) override;
+    void setOutputParams(const TrackId id, const AudioOutputParams& params) override;
 
-    async::Channel<TrackId, AudioInputParams> inputParamsChanged() const;
-    async::Channel<TrackId, AudioOutputParams> outputParamsChanged() const;
+    async::Channel<TrackId, AudioInputParams> inputParamsChanged() const override;
+    async::Channel<TrackId, AudioOutputParams> outputParamsChanged() const override;
+
+    async::Channel<audioch_t, float> signalAmplitudeChanged(const TrackId id) const override;
+    async::Channel<audioch_t, volume_dbfs_t> volumePressureChanged(const TrackId id) const override;
 
 private:
     IGetTracks* m_getTracks = nullptr;

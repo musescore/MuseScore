@@ -52,6 +52,8 @@ TrackSequence::TrackSequence(const TrackSequenceId id)
 
 TrackSequence::~TrackSequence()
 {
+    ONLY_AUDIO_WORKER_THREAD;
+
     mixer()->removeClock(m_clock);
 
     for (const auto& pair : m_tracks) {
