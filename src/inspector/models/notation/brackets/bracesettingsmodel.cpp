@@ -31,6 +31,7 @@ using namespace mu::inspector;
 BraceSettingsModel::BraceSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
+    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_BRACE);
     setTitle(qtrc("inspector", "Brace"));
     createProperties();

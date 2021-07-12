@@ -30,6 +30,7 @@ using namespace mu::inspector;
 HookSettingsModel::HookSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
+    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_HOOK);
     setTitle(qtrc("inspector", "Flag")); // internally called "Hook", but "Flag" in SMuFL, so here externally too
 

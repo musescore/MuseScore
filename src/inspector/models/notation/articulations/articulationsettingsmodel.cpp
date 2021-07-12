@@ -31,6 +31,7 @@ using namespace mu::inspector;
 ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
+    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_ARTICULATION);
     setTitle(qtrc("inspector", "Articulation"));
     createProperties();

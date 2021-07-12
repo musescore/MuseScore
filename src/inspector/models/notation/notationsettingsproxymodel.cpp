@@ -61,7 +61,7 @@ using namespace mu::inspector;
 NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorProxyModel(parent)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION);
+    setSectionType(InspectorSectionType::SECTION_NOTATION_MULTI_ELEMENTS);
     setTitle(QStringLiteral("Notation"));
 
     addModel(new NoteSettingsProxyModel(this, repository));

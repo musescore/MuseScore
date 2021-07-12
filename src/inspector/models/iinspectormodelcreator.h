@@ -19,22 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_INSPECTORMODULE_H
-#define MU_INSPECTOR_INSPECTORMODULE_H
+#ifndef MU_INSPECTOR_IINSPECTORMODELCREATOR_H
+#define MU_INSPECTOR_IINSPECTORMODELCREATOR_H
 
-#include "modularity/imodulesetup.h"
+#include "modularity/imoduleexport.h"
+
+#include "abstractinspectormodel.h"
 
 namespace mu::inspector {
-class InspectorModule : public modularity::IModuleSetup
+class IInspectorModelCreator : MODULE_EXPORT_INTERFACE
 {
-public:
-    InspectorModule() = default;
+    INTERFACE_ID(IInspectorModelCreator)
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
+public:
+    virtual ~IInspectorModelCreator() = default;
+
+    virtual AbstractInspectorModel* newInspectorModel(AbstractInspectorModel::InspectorModelType modelType, QObject* parent,
+                                                      IElementRepositoryService* repository) const = 0;
 };
 }
 
-#endif // MU_INSPECTOR_INSPECTORMODULE_H
+#endif // MU_INSPECTOR_IINSPECTORMODELCREATOR_H

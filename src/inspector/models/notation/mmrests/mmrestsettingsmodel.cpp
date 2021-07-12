@@ -28,6 +28,7 @@ using namespace mu::inspector;
 MMRestSettingsModel::MMRestSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
+    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_MMREST);
     setTitle(qtrc("inspector", "Multimeasure rest"));
     createProperties();

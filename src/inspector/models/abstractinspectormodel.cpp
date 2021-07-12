@@ -27,47 +27,47 @@
 using namespace mu::inspector;
 using namespace mu::notation;
 
-static const QList<Ms::ElementType> NOTATION_ELEMENT_TYPES = {
-    Ms::ElementType::NOTE,
-    Ms::ElementType::STEM,
-    Ms::ElementType::NOTEDOT,
-    Ms::ElementType::NOTEHEAD,
-    Ms::ElementType::NOTELINE,
-    Ms::ElementType::SHADOW_NOTE,
-    Ms::ElementType::HOOK,
-    Ms::ElementType::BEAM,
-    Ms::ElementType::GLISSANDO,
-    Ms::ElementType::GLISSANDO_SEGMENT,
-    Ms::ElementType::TEMPO_TEXT,
-    Ms::ElementType::FERMATA,
-    Ms::ElementType::LAYOUT_BREAK,
-    Ms::ElementType::BAR_LINE,
-    Ms::ElementType::MARKER,
-    Ms::ElementType::JUMP,
-    Ms::ElementType::KEYSIG,
-    Ms::ElementType::ACCIDENTAL,
-    Ms::ElementType::FRET_DIAGRAM,
-    Ms::ElementType::PEDAL,
-    Ms::ElementType::PEDAL_SEGMENT,
-    Ms::ElementType::SPACER,
-    Ms::ElementType::CLEF,
-    Ms::ElementType::HAIRPIN,
-    Ms::ElementType::HAIRPIN_SEGMENT,
-    Ms::ElementType::STAFFTYPE_CHANGE,
-    Ms::ElementType::TBOX, // text frame
-    Ms::ElementType::VBOX, // vertical frame
-    Ms::ElementType::HBOX, // horizontal frame
-    Ms::ElementType::ARTICULATION,
-    Ms::ElementType::IMAGE,
-    Ms::ElementType::HARMONY,
-    Ms::ElementType::AMBITUS,
-    Ms::ElementType::BRACKET,
-    Ms::ElementType::TIMESIG,
-    Ms::ElementType::MMREST,
-    Ms::ElementType::BEND,
-    Ms::ElementType::TREMOLOBAR,
-    Ms::ElementType::TREMOLO,
-    Ms::ElementType::MEASURE_REPEAT
+static const QMap<Ms::ElementType, AbstractInspectorModel::InspectorModelType> NOTATION_ELEMENT_MODEL_TYPES = {
+    { Ms::ElementType::NOTE, AbstractInspectorModel::InspectorModelType::TYPE_NOTE },
+    { Ms::ElementType::STEM, AbstractInspectorModel::InspectorModelType::TYPE_STEM },
+    { Ms::ElementType::NOTEDOT, AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED },
+    { Ms::ElementType::NOTEHEAD, AbstractInspectorModel::InspectorModelType::TYPE_NOTEHEAD },
+    { Ms::ElementType::NOTELINE, AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED },
+    { Ms::ElementType::SHADOW_NOTE, AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED },
+    { Ms::ElementType::HOOK, AbstractInspectorModel::InspectorModelType::TYPE_HOOK },
+    { Ms::ElementType::BEAM, AbstractInspectorModel::InspectorModelType::TYPE_BEAM },
+    { Ms::ElementType::GLISSANDO, AbstractInspectorModel::InspectorModelType::TYPE_GLISSANDO },
+    { Ms::ElementType::GLISSANDO_SEGMENT, AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED },
+    { Ms::ElementType::TEMPO_TEXT, AbstractInspectorModel::InspectorModelType::TYPE_TEMPO },
+    { Ms::ElementType::FERMATA, AbstractInspectorModel::InspectorModelType::TYPE_FERMATA },
+    { Ms::ElementType::LAYOUT_BREAK, AbstractInspectorModel::InspectorModelType::TYPE_SECTIONBREAK },
+    { Ms::ElementType::BAR_LINE, AbstractInspectorModel::InspectorModelType::TYPE_BARLINE },
+    { Ms::ElementType::MARKER, AbstractInspectorModel::InspectorModelType::TYPE_MARKER },
+    { Ms::ElementType::JUMP, AbstractInspectorModel::InspectorModelType::TYPE_JUMP },
+    { Ms::ElementType::KEYSIG, AbstractInspectorModel::InspectorModelType::TYPE_KEYSIGNATURE },
+    { Ms::ElementType::ACCIDENTAL, AbstractInspectorModel::InspectorModelType::TYPE_ACCIDENTAL },
+    { Ms::ElementType::FRET_DIAGRAM, AbstractInspectorModel::InspectorModelType::TYPE_FRET_DIAGRAM },
+    { Ms::ElementType::PEDAL, AbstractInspectorModel::InspectorModelType::TYPE_PEDAL },
+    { Ms::ElementType::PEDAL_SEGMENT, AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED },
+    { Ms::ElementType::SPACER, AbstractInspectorModel::InspectorModelType::TYPE_SPACER },
+    { Ms::ElementType::CLEF, AbstractInspectorModel::InspectorModelType::TYPE_CLEF },
+    { Ms::ElementType::HAIRPIN, AbstractInspectorModel::InspectorModelType::TYPE_HAIRPIN },
+    { Ms::ElementType::HAIRPIN_SEGMENT, AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED },
+    { Ms::ElementType::STAFFTYPE_CHANGE, AbstractInspectorModel::InspectorModelType::TYPE_STAFF_TYPE_CHANGES },
+    { Ms::ElementType::TBOX, AbstractInspectorModel::InspectorModelType::TYPE_TEXT_FRAME },// text frame
+    { Ms::ElementType::VBOX, AbstractInspectorModel::InspectorModelType::TYPE_VERTICAL_FRAME },// vertical frame
+    { Ms::ElementType::HBOX, AbstractInspectorModel::InspectorModelType::TYPE_HORIZONTAL_FRAME },// horizontal frame
+    { Ms::ElementType::ARTICULATION, AbstractInspectorModel::InspectorModelType::TYPE_ARTICULATION },
+    { Ms::ElementType::IMAGE, AbstractInspectorModel::InspectorModelType::TYPE_IMAGE },
+    { Ms::ElementType::HARMONY, AbstractInspectorModel::InspectorModelType::TYPE_CHORD_SYMBOL },
+    { Ms::ElementType::AMBITUS, AbstractInspectorModel::InspectorModelType::TYPE_AMBITUS },
+    { Ms::ElementType::BRACKET, AbstractInspectorModel::InspectorModelType::TYPE_BRACKET },
+    { Ms::ElementType::TIMESIG, AbstractInspectorModel::InspectorModelType::TYPE_TIME_SIGNATURE },
+    { Ms::ElementType::MMREST, AbstractInspectorModel::InspectorModelType::TYPE_MMREST },
+    { Ms::ElementType::BEND, AbstractInspectorModel::InspectorModelType::TYPE_BEND },
+    { Ms::ElementType::TREMOLOBAR, AbstractInspectorModel::InspectorModelType::TYPE_TREMOLOBAR },
+    { Ms::ElementType::TREMOLO, AbstractInspectorModel::InspectorModelType::TYPE_TREMOLOBAR },
+    { Ms::ElementType::MEASURE_REPEAT, AbstractInspectorModel::InspectorModelType::TYPE_MEASURE_REPEAT }
 };
 
 static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = {
@@ -115,13 +115,22 @@ AbstractInspectorModel::InspectorModelType AbstractInspectorModel::modelType() c
 AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionTypeFromElementType(
     const Ms::ElementType elementType)
 {
-    if (NOTATION_ELEMENT_TYPES.contains(elementType)) {
-        return InspectorSectionType::SECTION_NOTATION;
+    if (NOTATION_ELEMENT_MODEL_TYPES.keys().contains(elementType)) {
+        return InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT;
     } else if (TEXT_ELEMENT_TYPES.contains(elementType)) {
         return InspectorSectionType::SECTION_TEXT;
     }
 
     return InspectorSectionType::SECTION_UNDEFINED;
+}
+
+AbstractInspectorModel::InspectorModelType AbstractInspectorModel::notationElementModelType(const Ms::ElementType elementType)
+{
+    if (NOTATION_ELEMENT_MODEL_TYPES.contains(elementType)) {
+        return NOTATION_ELEMENT_MODEL_TYPES.value(elementType);
+    }
+
+    return InspectorModelType::TYPE_UNDEFINED;
 }
 
 bool AbstractInspectorModel::isEmpty() const
@@ -135,8 +144,8 @@ QList<Ms::ElementType> AbstractInspectorModel::supportedElementTypesBySectionTyp
     switch (sectionType) {
     case InspectorSectionType::SECTION_GENERAL:
         return { Ms::ElementType::MAXTYPE };
-    case InspectorSectionType::SECTION_NOTATION: {
-        return NOTATION_ELEMENT_TYPES;
+    case InspectorSectionType::SECTION_NOTATION_MULTI_ELEMENTS: {
+        return NOTATION_ELEMENT_MODEL_TYPES.keys();
     }
     case InspectorSectionType::SECTION_TEXT: {
         return TEXT_ELEMENT_TYPES;
