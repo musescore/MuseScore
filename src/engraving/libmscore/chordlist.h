@@ -195,7 +195,7 @@ private:
     QStringList major, minor, diminished, augmented, lower, raise, mod1, mod2, symbols;
     QList<int> skipList; // Indices to be skipped while rendering. (useful in cases like <minor>7b5 --> oslash)
     QList<int> removeAfterRenderList; // Indices of items that were added by respelling function. To be removed after rendering.
-    QList<int> modifierStartIndices; // Starting indices of modifiers for stacking
+    QList<int> modifierStackIndices; // Starting indices of modifiers for stacking
     QList<int> openParenthesesIndices;
     QList<int> closeParenthesesIndices;
     int stackingEnd = -1;
