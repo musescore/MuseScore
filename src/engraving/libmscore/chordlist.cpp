@@ -1906,7 +1906,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         }
 
         // Modifier Stacking + Opening Parentheses
-        if (modifierStartIndices.contains(index)) {
+        if (modifierStartIndices.contains(index) && modifierStartIndices.size() > 1) {
             // Opening parenthesis should render before moving away from the normal position
             if (openParenthesesIndices.contains(index)) {
                 _renderList.append(openParen);
@@ -1927,7 +1927,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             }
             RenderAction stackPosition = RenderAction(RenderAction::RenderActionType::MOVE);
             stackPosition.movex = 0.0;
-            stackPosition.movey = (modifierStartIndices.indexOf(index) + 0.5 - (modifierStartIndices.size() + 1) / 2.0)
+            stackPosition.movey = -(modifierStartIndices.indexOf(index) + 0.5 - (modifierStartIndices.size() - 1) / 2.0)
                                   * cl->modifierMag() * 5;
             _renderList.append(stackPosition);
         } else {
@@ -1945,7 +1945,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             _renderList.append(a);
         }
 
-        if (index == stackingEnd) {
+        if (index == stackingEnd && modifierStartIndices.size() > 1) {
             RenderAction a(RenderAction::RenderActionType::SET);
             a.text = "endStacking";
             _renderList.append(a);
@@ -1954,7 +1954,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             RenderAction returnPosition = RenderAction(RenderAction::RenderActionType::MOVE);
             returnPosition.movex = 0.0;
             // Reverse y displacement of the last modifier (substitute index as size()-1 in the previous eqn)
-            returnPosition.movey = -((modifierStartIndices.size() - 2) / 2.0)
+            returnPosition.movey = (modifierStartIndices.size() / 2.0)
                                    * cl->modifierMag() * 5;
             _renderList.append(returnPosition);
         }
