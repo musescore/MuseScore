@@ -37,7 +37,7 @@ Item {
 
     property alias navigation: navPanel
 
-    signal selectInstrumentRequested(var instrumentName, var transpositionName)
+    signal selectInstrumentRequested(var instrumentName, var traitName)
     signal instrumentClicked()
 
     NavigationPanel {
@@ -142,7 +142,7 @@ Item {
             StyledTextLabel {
                 anchors.left: parent.left
                 anchors.leftMargin: 12
-                anchors.right: transpositionsBox.visible ? transpositionsBox.left : parent.right
+                anchors.right: traitsBox.visible ? traitsBox.left : parent.right
                 anchors.rightMargin: 4
                 anchors.verticalCenter: parent.verticalCenter
 
@@ -158,11 +158,11 @@ Item {
 
             onDoubleClicked: {
                 var currentSelection = root.currentInstrument()
-                root.selectInstrumentRequested(currentSelection.instrument.name, currentSelection.transpositionName)
+                root.selectInstrumentRequested(currentSelection.instrument.name, currentSelection.traitName)
             }
 
             Dropdown {
-                id: transpositionsBox
+                id: traitsBox
 
                 anchors.right: parent.right
                 anchors.rightMargin: 4
@@ -174,7 +174,7 @@ Item {
                 label.anchors.leftMargin: 8
                 dropIcon.anchors.rightMargin: 4
 
-                visible: transpositionsBox.count > 1
+                visible: traitsBox.count > 1
 
                 onFocusChanged: {
                     if (focus) {
@@ -184,19 +184,19 @@ Item {
 
                 textRole: "name"
                 valueRole: "id"
-                model: modelData.transpositions
+                model: modelData.traits
 
                 onCurrentValueChanged: {
                     if (prv.currentInstrumentIndex === index) {
-                        item.resetCurrentInstrument()
+                        item.updateCurrentInstrument()
                     }
                 }
             }
 
-            function resetCurrentInstrument() {
+            function updateCurrentInstrument() {
                 prv.currentInstrument = {
                     "instrument": modelData,
-                    "transpositionName": transpositionsBox.value
+                    "traitName": traitsBox.currentValue
                 }
 
                 root.instrumentClicked()
@@ -206,7 +206,7 @@ Item {
                 target: prv
                 function onCurrentInstrumentIndexChanged() {
                     if (prv.currentInstrumentIndex === model.index) {
-                        item.resetCurrentInstrument()
+                        item.updateCurrentInstrument()
                     }
                 }
             }

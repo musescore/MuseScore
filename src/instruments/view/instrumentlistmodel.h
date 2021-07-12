@@ -63,7 +63,7 @@ public:
     Q_INVOKABLE void selectFamily(const QString& familyId);
     Q_INVOKABLE void selectGroup(const QString& groupId);
 
-    Q_INVOKABLE void selectInstrument(const QString& instrumentName, const QString& transpositionName = QString());
+    Q_INVOKABLE void selectInstrument(const QString& instrumentName, const QString& traitName = QString());
     Q_INVOKABLE void unselectInstrument(int instrumentIndex);
     Q_INVOKABLE void swapSelectedInstruments(int firstInstrumentIndex, int secondInstrumentIndex);
     Q_INVOKABLE void toggleSoloist(int instrumentIndex);

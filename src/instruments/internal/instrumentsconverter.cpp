@@ -67,7 +67,7 @@ Ms::Instrument InstrumentsConverter::convertInstrument(const Instrument& instrum
 
     result.setStringData(instrument.stringData);
     result.setSingleNoteDynamics(instrument.singleNoteDynamics);
-    result.setTransposition(instrument.transposition);
+    result.setTrait(instrument.trait);
 
     return result;
 }
@@ -107,7 +107,7 @@ Instrument InstrumentsConverter::convertInstrument(const Ms::Instrument& instrum
 
     result.stringData = *instrument.stringData();
     result.singleNoteDynamics = instrument.singleNoteDynamics();
-    result.transposition = instrument.transposition();
+    result.trait = instrument.trait();
 
     return result;
 }

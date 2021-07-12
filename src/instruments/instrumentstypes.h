@@ -50,8 +50,8 @@ using Channel = Ms::Channel;
 using StaffName = Ms::StaffName;
 using StaffNameList = Ms::StaffNameList;
 using MidiArticulation = Ms::MidiArticulation;
-using Transposition = Ms::Transposition;
-using TranspositionType = Ms::TranspositionType;
+using Trait = Ms::Trait;
+using TraitType = Ms::TraitType;
 
 using ChannelList = QList<Channel>;
 
@@ -155,7 +155,7 @@ struct Instrument
 
     ChannelList channels;
 
-    Transposition transposition;
+    Trait trait;
 
     bool isValid() const { return !id.isEmpty(); }
     QString abbreviature() const { return !shortNames.isEmpty() ? shortNames.first().name() : QString(); }
