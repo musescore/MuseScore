@@ -31,6 +31,7 @@ using namespace mu::inspector;
 NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
+    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setTitle(qtrc("inspector", "Head"));
     setModelType(InspectorModelType::TYPE_NOTEHEAD);
 
@@ -154,7 +155,8 @@ void NoteheadSettingsModel::setNoteheadTypesModel(NoteheadTypesModel* noteheadTy
         } else {
             m_noteheadTypesModel->init(static_cast<Ms::NoteHead::Group>(noteHeadGroup.toInt()));
         }
+        emit noteheadTypesModelChanged();
     });
 
-    emit noteheadTypesModelChanged(m_noteheadTypesModel);
+    emit noteheadTypesModelChanged();
 }

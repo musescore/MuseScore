@@ -31,8 +31,10 @@ class AbstractInspectorProxyModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(InspectorModelType subModelType READ subModelType CONSTANT)
+
 public:
-    explicit AbstractInspectorProxyModel(QObject* parent);
+    explicit AbstractInspectorProxyModel(QObject* parent, InspectorModelType subModelType = InspectorModelType::TYPE_UNDEFINED);
 
     Q_INVOKABLE QObject* modelByType(const InspectorModelType type);
 
@@ -44,11 +46,14 @@ public:
     void requestResetToDefaults() override;
     bool hasAcceptableElements() const override;
 
+    InspectorModelType subModelType() const;
+
 protected:
     void addModel(AbstractInspectorModel* model);
 
 private:
     QHash<int, AbstractInspectorModel*> m_modelsHash;
+    InspectorModelType m_subModelType = InspectorModelType::TYPE_UNDEFINED;
 };
 }
 

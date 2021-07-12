@@ -69,7 +69,6 @@ private:
 
     QList<HeadTypeData> m_noteheadTypeDataList;
     QHash<int, QByteArray> m_roleNames;
-    Ms::Score* m_score = nullptr;
     int m_selectedHeadTypeIndex = 0;
 };
 }

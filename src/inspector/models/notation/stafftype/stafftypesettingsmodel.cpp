@@ -30,6 +30,7 @@ using namespace mu::inspector;
 StaffTypeSettingsModel::StaffTypeSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
+    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_STAFF_TYPE_CHANGES);
     setTitle(qtrc("inspector", "Staff type changes"));
     createProperties();

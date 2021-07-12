@@ -30,6 +30,7 @@ using namespace mu::inspector;
 VerticalFrameSettingsModel::VerticalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
+    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_VERTICAL_FRAME);
     setTitle(qtrc("inspector", "Vertical frame"));
     createProperties();

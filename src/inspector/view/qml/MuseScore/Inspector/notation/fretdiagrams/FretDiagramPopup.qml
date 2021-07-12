@@ -28,7 +28,7 @@ StyledPopupView {
 
     property alias model: content.model
 
-    contentHeight: content.implicitHeight
+    contentHeight: content.height
 
     FretDiagramSettingsPanel {
         id: content

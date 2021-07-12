@@ -58,7 +58,7 @@ public slots:
     void setNoteheadTypesModel(NoteheadTypesModel* noteheadTypesModel);
 
 signals:
-    void noteheadTypesModelChanged(QObject* noteheadTypesModel);
+    void noteheadTypesModelChanged();
 
 protected:
     void createProperties() override;

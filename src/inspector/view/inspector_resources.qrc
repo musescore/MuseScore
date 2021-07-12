@@ -102,12 +102,10 @@
         <file>qml/MuseScore/Inspector/common/InspectorSectionView.qml</file>
         <file>qml/MuseScore/Inspector/notation/hairpins/HairpinSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/hairpins/HairpinPopup.qml</file>
-        <file>qml/MuseScore/Inspector/notation/hairpins/internal/HairpinTabPanel.qml</file>
         <file>qml/MuseScore/Inspector/notation/hairpins/internal/HairpinStyleSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/hairpins/internal/HairpinTextSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/crescendos/CrescendoSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/crescendos/CrescendoPopup.qml</file>
-        <file>qml/MuseScore/Inspector/notation/crescendos/internal/CrescendoTabPanel.qml</file>
         <file>qml/MuseScore/Inspector/notation/crescendos/internal/CrescendoStyleSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/crescendos/internal/CrescendoTextSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml</file>
@@ -159,5 +157,37 @@
         <file>qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatPopup.qml</file>
         <file>qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml</file>
         <file>qml/MuseScore/Inspector/common/ColorSection.qml</file>
+        <file>qml/MuseScore/Inspector/notation/NotationInspectorViewLoader.qml</file>
+        <file>qml/MuseScore/Inspector/notation/fermatas/FermataSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/glissandos/GlissandoSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/tempos/TempoSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/markers/MarkerSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/jumps/JumpSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/accidentals/AccidentalSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/pedals/PedalSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/spacers/SpacerSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/clefs/ClefSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/hairpins/HairpinTabPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/crescendos/CrescendoTabPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/TextFrameSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/VerticalFrameSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/articulations/ArticulationSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/ornaments/OrnamentSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/ambituses/AmbitusSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/images/ImageSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/brackets/BracketSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/mmrests/MMRestSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/bends/BendSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/tremolos/TremoloSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/brackets/BraceSettingsPanel.qml</file>
     </qresource>
 </RCC>

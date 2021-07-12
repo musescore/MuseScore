@@ -134,7 +134,8 @@ Rectangle {
                         switch (inspectorData.sectionType) {
                         case Inspector.SECTION_GENERAL: return generalInspector
                         case Inspector.SECTION_TEXT: return textInspector
-                        case Inspector.SECTION_NOTATION: return notationInspector
+                        case Inspector.SECTION_NOTATION_MULTI_ELEMENTS: return notationInspectorMultiElements
+                        case Inspector.SECTION_NOTATION_SINGLE_ELEMENT: return notationInspectorSingleElement
                         case Inspector.SECTION_SCORE_DISPLAY: return scoreInspector
                         case Inspector.SECTION_SCORE_APPEARANCE: return scoreAppearanceInspector
                         }
@@ -169,8 +170,10 @@ Rectangle {
                             onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
+
                     Component {
-                        id: notationInspector
+                        id: notationInspectorMultiElements
+
                         NotationInspectorView {
                             model: inspectorData
                             navigationPanel: navPanel
@@ -178,6 +181,18 @@ Rectangle {
                             onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
+
+                    Component {
+                        id: notationInspectorSingleElement
+
+                        NotationInspectorViewLoader {
+                            model: inspectorData
+                            navigationPanel: navPanel
+                            navigationRowOffset: expandableDelegate.navigation.row + 1
+                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
+                        }
+                    }
+
                     Component {
                         id: scoreInspector
 

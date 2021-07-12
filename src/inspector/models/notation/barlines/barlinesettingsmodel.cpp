@@ -30,6 +30,7 @@ using namespace mu::inspector;
 BarlineSettingsModel::BarlineSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
+    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_BARLINE);
     setTitle(qtrc("inspector", "Barline"));
     createProperties();

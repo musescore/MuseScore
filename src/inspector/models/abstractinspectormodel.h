@@ -56,7 +56,8 @@ public:
         SECTION_UNDEFINED = -1,
         SECTION_GENERAL,
         SECTION_TEXT,
-        SECTION_NOTATION,
+        SECTION_NOTATION_MULTI_ELEMENTS,
+        SECTION_NOTATION_SINGLE_ELEMENT,
         SECTION_SCORE_DISPLAY,
         SECTION_SCORE_APPEARANCE
     };
@@ -117,6 +118,7 @@ public:
 
     static QList<Ms::ElementType> supportedElementTypesBySectionType(const InspectorSectionType sectionType);
     static InspectorSectionType sectionTypeFromElementType(const Ms::ElementType elementType);
+    static InspectorModelType notationElementModelType(const Ms::ElementType elementType);
 
     virtual bool hasAcceptableElements() const;
 

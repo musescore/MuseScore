@@ -30,6 +30,7 @@ using namespace mu::inspector;
 BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
+    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_BEND);
     setTitle(qtrc("inspector", "Bend"));
     createProperties();

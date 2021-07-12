@@ -49,6 +49,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/texttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/tremolobartypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/tremolotypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/iinspectormodelcreator.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/inspectormodelcreator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/inspectormodelcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/models/abstractinspectormodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/abstractinspectormodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/abstractinspectorproxymodel.cpp

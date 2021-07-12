@@ -66,7 +66,7 @@ TabPanel {
 
             width: root.width
 
-            model: beamModel
+            model: beamTab.beamModel
         }
     }
 
@@ -86,7 +86,7 @@ TabPanel {
 
             width: root.width
 
-            model: headModel
+            model: headTab.headModel
         }
     }
 

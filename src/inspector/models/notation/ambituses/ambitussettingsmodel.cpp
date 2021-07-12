@@ -30,6 +30,7 @@ using namespace mu::inspector;
 AmbitusSettingsModel::AmbitusSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
+    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_AMBITUS);
     setTitle(qtrc("inspector", "Ambitus"));
     createProperties();

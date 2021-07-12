@@ -28,6 +28,7 @@ using namespace mu::inspector;
 ClefSettingsModel::ClefSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
+    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_CLEF);
     setTitle(qtrc("inspector", "Clef"));
     createProperties();

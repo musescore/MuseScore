@@ -28,6 +28,7 @@ using namespace mu::inspector;
 MarkerSettingsModel::MarkerSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
+    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_MARKER);
     setTitle(qtrc("inspector", "Marker"));
     createProperties();
