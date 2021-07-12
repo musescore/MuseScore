@@ -26,6 +26,7 @@
 #include "translation.h"
 #include "io/path.h"
 #include "libmscore/score.h"
+#include "engraving/engravingerrors.h"
 
 namespace mu::notation {
 // 1000 - 1299
@@ -122,6 +123,11 @@ inline Ret make_ret(Err err, const io::path& filePath = "")
     }
 
     return Ret(code, text.toStdString());
+}
+
+inline Ret make_ret(engraving::Err e)
+{
+    return Ret(static_cast<int>(e));
 }
 
 inline Ret scoreFileErrorToRet(Ms::Score::FileError err, const io::path& filePath)

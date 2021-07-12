@@ -2136,6 +2136,16 @@ MasterScore* MasterScore::clone()
     return score;
 }
 
+Score* MasterScore::createScore()
+{
+    return new Score(this, MScore::baseStyle());
+}
+
+Score* MasterScore::createScore(const MStyle& s)
+{
+    return new Score(this, s);
+}
+
 //---------------------------------------------------------
 //   setSynthesizerState
 //---------------------------------------------------------

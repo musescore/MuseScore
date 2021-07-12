@@ -22,7 +22,7 @@
 #ifndef MU_NOTATION_INOTATIONCREATOR_H
 #define MU_NOTATION_INOTATIONCREATOR_H
 
-#include "imasternotation.h"
+#include "inotationproject.h"
 #include "iexcerptnotation.h"
 
 #include "modularity/imoduleexport.h"
@@ -35,7 +35,7 @@ class INotationCreator : MODULE_EXPORT_INTERFACE
 public:
     virtual ~INotationCreator() = default;
 
-    virtual IMasterNotationPtr newMasterNotation() const = 0;
+    virtual INotationProjectPtr newNotationProject() const = 0;
     virtual IExcerptNotationPtr newExcerptNotation() const = 0;
 };
 }

@@ -49,6 +49,11 @@
 
 class QMimeData;
 
+namespace mu::engraving {
+class ScoreAccess;
+class EngravingProject;
+}
+
 namespace mu::score {
 class AccessibleScore;
 }
@@ -429,7 +434,6 @@ public:
 class Score : public QObject, public ScoreElement
 {
     Q_OBJECT
-
 public:
     enum class FileError : char {
         FILE_NO_ERROR,
@@ -599,14 +603,16 @@ protected:
     inline virtual Movements* movements();
     inline virtual const Movements* movements() const;
 
+    friend class MasterScore;
+    Score();
+    Score(MasterScore*, bool forcePartStyle = true);
+    Score(MasterScore*, const MStyle&);
+
 signals:
     void posChanged(POS, unsigned);
     void playlistChanged();
 
 public:
-    Score();
-    Score(MasterScore*, bool forcePartStyle = true);
-    Score(MasterScore*, const MStyle&);
     Score(const Score&) = delete;
     Score& operator=(const Score&) = delete;
     virtual ~Score();
@@ -1391,11 +1397,23 @@ class MasterScore : public Score
     void setPrev(MasterScore* s) { _prev = s; }
     void setNext(MasterScore* s) { _next = s; }
 
-public:
+    friend class mu::engraving::ScoreAccess;
+    friend class mu::engraving::EngravingProject;
     MasterScore();
     MasterScore(const MStyle&);
+
+    FileError loadMscz(const QString& fileName, bool ignoreVersionError);
+    FileError loadMscz(mu::engraving::MsczReader& msczFile, bool ignoreVersionError);
+
+    bool saveFile(bool generateBackup = true);
+
+public:
+
     virtual ~MasterScore();
     MasterScore* clone();
+
+    Score* createScore();
+    Score* createScore(const MStyle& s);
 
     virtual bool isMaster() const override { return true; }
     virtual bool readOnly() const override { return _readOnly; }
@@ -1444,11 +1462,6 @@ public:
 
     bool isSavable() const;
     void setTempomap(TempoMap* tm);
-
-    bool saveFile(bool generateBackup = true);
-
-    FileError loadMscz(const QString& fileName, bool ignoreVersionError);
-    FileError loadMscz(mu::engraving::MsczReader& msczFile, bool ignoreVersionError);
 
     int readStyleDefaultsVersion(const QByteArray& scoreData, const QString& completeBaseName);
     int styleDefaultByMscVersion(const int mscVer) const;

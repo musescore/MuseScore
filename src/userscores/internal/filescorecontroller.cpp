@@ -38,9 +38,9 @@ using namespace mu::actions;
 
 void FileScoreController::init()
 {
-    dispatcher()->reg(this, "file-open", this, &FileScoreController::openScore);
-    dispatcher()->reg(this, "file-new", this, &FileScoreController::newScore);
-    dispatcher()->reg(this, "file-close", [this]() { closeOpenedScore(); });
+    dispatcher()->reg(this, "file-open", this, &FileScoreController::openProject);
+    dispatcher()->reg(this, "file-new", this, &FileScoreController::newProject);
+    dispatcher()->reg(this, "file-close", [this]() { closeOpenedProject(); });
 
     dispatcher()->reg(this, "file-save", this, &FileScoreController::saveScore);
     dispatcher()->reg(this, "file-save-as", this, &FileScoreController::saveScoreAs);
@@ -56,9 +56,14 @@ void FileScoreController::init()
     dispatcher()->reg(this, "continue-last-session", this, &FileScoreController::continueLastSession);
 }
 
+INotationProjectPtr FileScoreController::currentNotationProject() const
+{
+    return globalContext()->currentNotationProject();
+}
+
 IMasterNotationPtr FileScoreController::currentMasterNotation() const
 {
-    return globalContext()->currentMasterNotation();
+    return currentNotationProject() ? currentNotationProject()->masterNotation() : nullptr;
 }
 
 INotationPtr FileScoreController::currentNotation() const
@@ -76,27 +81,27 @@ INotationSelectionPtr FileScoreController::currentNotationSelection() const
     return currentNotation() ? currentInteraction()->selection() : nullptr;
 }
 
-Ret FileScoreController::openScore(const io::path& scorePath)
+Ret FileScoreController::openProject(const io::path& projectPath)
 {
-    return doOpenScore(scorePath);
+    return doOpenProject(projectPath);
 }
 
-bool FileScoreController::isScoreOpened(const io::path& scorePath) const
+bool FileScoreController::isProjectOpened(const io::path& scorePath) const
 {
-    auto notation = globalContext()->currentMasterNotation();
-    if (!notation) {
+    auto project = globalContext()->currentNotationProject();
+    if (!project) {
         return false;
     }
 
-    LOGD() << "notation->path: " << notation->path() << ", check path: " << scorePath;
-    if (notation->path() == scorePath) {
+    LOGD() << "project->path: " << project->path() << ", check path: " << scorePath;
+    if (project->path() == scorePath) {
         return true;
     }
 
     return false;
 }
 
-void FileScoreController::openScore(const actions::ActionData& args)
+void FileScoreController::openProject(const actions::ActionData& args)
 {
     io::path scorePath = args.count() > 0 ? args.arg<io::path>(0) : "";
 
@@ -108,10 +113,10 @@ void FileScoreController::openScore(const actions::ActionData& args)
         }
     }
 
-    doOpenScore(scorePath);
+    doOpenProject(scorePath);
 }
 
-void FileScoreController::newScore()
+void FileScoreController::newProject()
 {
     Ret ret = interactive()->open("musescore://userscores/newscore").ret;
 
@@ -124,15 +129,15 @@ void FileScoreController::newScore()
     }
 }
 
-bool FileScoreController::closeOpenedScore()
+bool FileScoreController::closeOpenedProject()
 {
-    IMasterNotationPtr master = currentMasterNotation();
-    if (!master) {
+    INotationProjectPtr project = currentNotationProject();
+    if (!project) {
         return true;
     }
 
-    if (master->needSave().val) {
-        IInteractive::Button btn = askAboutSavingScore(master->path());
+    if (project->needSave().val) {
+        IInteractive::Button btn = askAboutSavingScore(project->path());
 
         if (btn == IInteractive::Button::Cancel) {
             return false;
@@ -141,7 +146,7 @@ bool FileScoreController::closeOpenedScore()
         }
     }
 
-    globalContext()->setCurrentMasterNotation(nullptr);
+    globalContext()->setCurrentNotationProject(nullptr);
     return true;
 }
 
@@ -173,7 +178,7 @@ IInteractive::Button FileScoreController::askAboutSavingScore(const io::path& fi
 
 void FileScoreController::saveScore()
 {
-    if (!currentMasterNotation()->created().val) {
+    if (!currentNotationProject()->created().val) {
         doSaveScore();
         return;
     }
@@ -222,7 +227,7 @@ void FileScoreController::saveSelection()
         return;
     }
 
-    Ret ret = currentMasterNotation()->save(selectedFilePath, SaveMode::SaveSelection);
+    Ret ret = currentNotationProject()->save(selectedFilePath, SaveMode::SaveSelection);
     if (!ret) {
         LOGE() << ret.toString();
     }
@@ -230,23 +235,24 @@ void FileScoreController::saveSelection()
 
 void FileScoreController::saveOnline()
 {
-    IMasterNotationPtr master = globalContext()->currentMasterNotation();
-    if (!master) {
+    INotationProjectPtr project = globalContext()->currentNotationProject();
+    if (!project) {
         return;
     }
 
-    QBuffer* scoreData = new QBuffer();
-    scoreData->open(QIODevice::WriteOnly);
+    QBuffer* projectData = new QBuffer();
+    projectData->open(QIODevice::WriteOnly);
 
-    Ret ret = master->writeToDevice(*scoreData);
-
+    Ret ret = project->writeToDevice(*projectData);
     if (!ret) {
         LOGE() << ret.toString();
+        delete projectData;
         return;
     }
 
-    scoreData->close();
-    scoreData->open(QIODevice::ReadOnly);
+    projectData->close();
+
+    projectData->open(QIODevice::ReadOnly);
 
     ProgressChannel progressCh = uploadingService()->progressChannel();
     progressCh.onReceive(this, [](const Progress& progress) {
@@ -254,27 +260,27 @@ void FileScoreController::saveOnline()
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
     async::Channel<QUrl> sourceUrlCh = uploadingService()->sourceUrlReceived();
-    sourceUrlCh.onReceive(this, [master, scoreData](const QUrl& url) {
-        scoreData->deleteLater();
+    sourceUrlCh.onReceive(this, [project, projectData](const QUrl& url) {
+        projectData->deleteLater();
 
         LOGD() << "Source url received: " << url;
         QString newSource = url.toString();
 
-        Meta meta = master->metaInfo();
+        Meta meta = project->metaInfo();
         if (meta.source == newSource) {
             return;
         }
 
         meta.source = newSource;
-        master->setMetaInfo(meta);
+        project->setMetaInfo(meta);
 
-        if (master->created().val) {
-            master->save();
+        if (project->created().val) {
+            project->save();
         }
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
-    Meta meta = master->metaInfo();
-    uploadingService()->uploadScore(*scoreData, meta.title, meta.source);
+    Meta meta = project->metaInfo();
+    uploadingService()->uploadScore(*projectData, meta.title, meta.source);
 }
 
 bool FileScoreController::checkCanIgnoreError(const Ret& ret, const io::path& filePath)
@@ -332,7 +338,7 @@ void FileScoreController::continueLastSession()
     }
 
     io::path lastScorePath = recentScorePaths.front();
-    openScore(lastScorePath);
+    openProject(lastScorePath);
 }
 
 void FileScoreController::exportScore()
@@ -370,7 +376,7 @@ io::path FileScoreController::selectScoreSavingFile(const io::path& defaultFileP
     return filePath;
 }
 
-Ret FileScoreController::doOpenScore(const io::path& filePath)
+Ret FileScoreController::doOpenProject(const io::path& filePath)
 {
     TRACEFUNC;
 
@@ -379,7 +385,7 @@ Ret FileScoreController::doOpenScore(const io::path& filePath)
         return make_ret(Ret::Code::Ok);
     }
 
-    auto notation = notationCreator()->newMasterNotation();
+    auto notation = notationCreator()->newNotationProject();
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::InternalError);
     }
@@ -396,11 +402,11 @@ Ret FileScoreController::doOpenScore(const io::path& filePath)
         return ret;
     }
 
-    if (!globalContext()->containsMasterNotation(filePath)) {
-        globalContext()->addMasterNotation(notation);
+    if (!globalContext()->containsNotationProject(filePath)) {
+        globalContext()->addNotationProject(notation);
     }
 
-    globalContext()->setCurrentMasterNotation(notation);
+    globalContext()->setCurrentNotationProject(notation);
 
     prependToRecentScoreList(filePath);
 
@@ -411,9 +417,9 @@ Ret FileScoreController::doOpenScore(const io::path& filePath)
 
 void FileScoreController::doSaveScore(const io::path& filePath, SaveMode saveMode)
 {
-    io::path oldPath = currentMasterNotation()->metaInfo().filePath;
+    io::path oldPath = currentNotationProject()->metaInfo().filePath;
 
-    Ret ret = currentMasterNotation()->save(filePath, saveMode);
+    Ret ret = currentNotationProject()->save(filePath, saveMode);
     if (!ret) {
         LOGE() << ret.toString();
         return;
@@ -428,7 +434,7 @@ void FileScoreController::doSaveScore(const io::path& filePath, SaveMode saveMod
 
 io::path FileScoreController::defaultSavingFilePath() const
 {
-    Meta scoreMetaInfo = currentMasterNotation()->metaInfo();
+    Meta scoreMetaInfo = currentNotationProject()->metaInfo();
 
     io::path fileName = scoreMetaInfo.title;
     if (fileName.empty()) {
@@ -456,14 +462,14 @@ void FileScoreController::prependToRecentScoreList(const io::path& filePath)
     platformRecentFilesController()->addRecentFile(filePath);
 }
 
-bool FileScoreController::isScoreOpened() const
+bool FileScoreController::isProjectOpened() const
 {
-    return currentMasterNotation() != nullptr;
+    return currentNotationProject() != nullptr;
 }
 
 bool FileScoreController::isNeedSaveScore() const
 {
-    return currentMasterNotation() && currentMasterNotation()->needSave().val;
+    return currentNotationProject() && currentNotationProject()->needSave().val;
 }
 
 bool FileScoreController::hasSelection() const
