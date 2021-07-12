@@ -22,17 +22,20 @@
 import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 
-StyledPopupView {
+Column {
     id: root
 
-    property alias model: glissandoSettingsPanel.model
+    property QtObject model: null
 
-    contentHeight: glissandoSettingsPanel.implicitHeight
+    spacing: 12
 
-    GlissandoSettingsPanel {
-        id: glissandoSettingsPanel
+    CheckBox {
+        isIndeterminate: root.model ? root.model.shouldShowCourtesy.isUndefined : false
+        checked: root.model && !isIndeterminate ? root.model.shouldShowCourtesy.value : false
+        text: qsTrc("inspector", "Show courtesy clef on previous measure")
 
-        width: parent.width
+        onClicked: { root.model.shouldShowCourtesy.value = !checked }
     }
 }

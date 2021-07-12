@@ -19,42 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import MuseScore.Inspector 1.0
+import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
-import MuseScore.Ui 1.0
-import "../../common"
 
 StyledPopupView {
     id: root
 
-    property QtObject model: null
+    property alias model: content.model
 
-    contentHeight: contentColumn.implicitHeight
+    contentHeight: content.implicitHeight
 
-    Column {
-        id: contentColumn
+    MeasureRepeatSettingsPanel {
+        id: content
 
         width: parent.width
-
-        spacing: 12
-
-        InspectorPropertyView {
-            titleText: qsTrc("inspector", "Number position")
-            propertyItem: model ? model.numberPosition : null
-
-            IncrementalPropertyControl {
-                isIndeterminate: model ? model.numberPosition.isUndefined : false
-                currentValue: model ? model.numberPosition.value : 0
-                iconMode: iconModeEnum.hidden
-                maxValue: 99.0
-                minValue: -99.0
-                step: 0.5
-                decimals: 2
-
-                onValueEdited: { model.numberPosition.value = newValue }
-            }
-        }
     }
 }

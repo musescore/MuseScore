@@ -19,49 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import QtQuick.Dialogs 1.2
+import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
-import "../../common"
-import "internal"
 
 StyledPopupView {
     id: root
 
-    property QtObject model: undefined
+    property alias model: content.model
 
-    contentHeight: contentColumn.implicitHeight
+    contentHeight: content.implicitHeight
 
-    Column {
-        id: contentColumn
+    VerticalFrameSettingsPanel {
+        id: content
 
-        height: implicitHeight
         width: parent.width
-
-        spacing: 16
-
-        HeightSection {
-            heightProperty: model ? model.frameHeight : null
-        }
-
-        SeparatorLine { anchors.margins: -10 }
-
-        VerticalGapsSection {
-            gapAbove: model ? model.gapAbove : null
-            gapBelow: model ? model.gapBelow : null
-        }
-
-        SeparatorLine { anchors.margins: -10 }
-
-        HorizontalMarginsSection {
-            frameLeftMargin: model ? model.frameLeftMargin : null
-            frameRightMargin: model ? model.frameRightMargin : null
-        }
-
-        VerticalMarginsSection {
-            frameTopMargin: model ? model.frameTopMargin : null
-            frameBottomMargin: model ? model.frameBottomMargin : null
-        }
     }
 }
