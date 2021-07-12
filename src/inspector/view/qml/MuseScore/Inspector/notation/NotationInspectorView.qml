@@ -119,8 +119,7 @@ InspectorSectionView {
             navigation.row: root.navigationRow(5)
             popupPositionX: mapToGlobal(grid.x, grid.y).x - mapToGlobal(x, y).x
             popupAvailableWidth: root.width
-            barlineSettingsModel: root.model ? root.model.modelByType(Inspector.TYPE_BARLINE) : null
-            staffSettingsModel: root.model ? root.model.modelByType(Inspector.TYPE_STAFF) : null
+            model: root.model ? root.model.modelByType(Inspector.TYPE_BARLINE) : null
             onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
         }
 

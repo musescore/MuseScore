@@ -189,5 +189,6 @@
         <file>qml/MuseScore/Inspector/notation/tremolos/TremoloSettingsPanel.qml</file>
         <file>qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettingsPanel.qml</file>
         <file>qml/MuseScore/Inspector/notation/brackets/BraceSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/barlines/BarlineSettingsPanel.qml</file>
     </qresource>
 </RCC>

@@ -29,7 +29,7 @@
 #include "notation/fermatas/fermatasettingsmodel.h"
 #include "notation/tempos/temposettingsmodel.h"
 #include "notation/glissandos/glissandosettingsmodel.h"
-#include "notation/barlines/barlinesettingsmodel.h"
+#include "notation/barlines/barlinesettingsproxymodel.h"
 #include "notation/staffs/staffsettingsmodel.h"
 #include "notation/sectionbreaks/sectionbreaksettingsmodel.h"
 #include "notation/markers/markersettingsmodel.h"
@@ -83,7 +83,7 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(AbstractInspect
     case AbstractInspectorModel::InspectorModelType::TYPE_GLISSANDO:
         return new GlissandoSettingsModel(parent, repository);
     case AbstractInspectorModel::InspectorModelType::TYPE_BARLINE:
-        return new BarlineSettingsModel(parent, repository);
+        return new BarlineSettingsProxyModel(parent, repository);
     case AbstractInspectorModel::InspectorModelType::TYPE_STAFF:
         return new StaffSettingsModel(parent, repository);
     case AbstractInspectorModel::InspectorModelType::TYPE_MARKER:
