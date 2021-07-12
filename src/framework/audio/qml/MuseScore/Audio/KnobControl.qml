@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
 Dial {
     id: root
@@ -17,7 +17,7 @@ Dial {
         id: internal
 
         property real radius: 24
-        readonly property bool reversed: angle < 0
+        readonly property bool reversed: root.angle < 0
 
         property real handlerHeight: 8
         property real handlerWidth: 2
@@ -26,15 +26,8 @@ Dial {
         property real innerArcLineWidth: 3
 
         property color valueArcColor: ui.theme.accentColor
-        property color outerArcColor: {
-            var oc = ui.theme.buttonColor
-            return Qt.rgba(oc.r, oc.g, oc.b, 0.7)
-        }
-
-        property color innerArcColor: {
-            var ic = ui.theme.fontPrimaryColor
-            return Qt.rgba(ic.r, ic.g, ic.b, 0.5)
-        }
+        property color outerArcColor: Utils.colorWithAlpha(ui.theme.buttonColor, 0.7)
+        property color innerArcColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
     }
 
     background: Canvas {
