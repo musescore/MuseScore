@@ -24,6 +24,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
 FocusScope {
     id: root
@@ -135,7 +136,7 @@ FocusScope {
             focus: false
             activeFocusOnPress: false
             selectByMouse: true
-            selectionColor: Qt.rgba(ui.theme.accentColor.r, ui.theme.accentColor.g, ui.theme.accentColor.b, ui.theme.accentOpacityNormal)
+            selectionColor: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.accentOpacityNormal)
             selectedTextColor: ui.theme.fontPrimaryColor
             visible: !root.isIndeterminate || activeFocus
 
