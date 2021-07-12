@@ -31,7 +31,7 @@ static const QString ALL_INSTRUMENTS_GENRE_ID("ALL_INSTRUMENTS");
 
 static const QString ID_KEY("id");
 static const QString NAME_KEY("name");
-static const QString TRANSPOSITIONS_KEY("transpositions");
+static const QString TRAITS_KEY("traits");
 static const QString GROUP_ID("groupId");
 static const QString CONFIG_KEY("config");
 static const QString SOLOIST_KEY("isSoloist");
@@ -39,14 +39,14 @@ static const QString IS_EXISTING_PART_KEY("isExistingPart");
 
 static QString formatSelectedInstrumentTitle(const Instrument& instrument)
 {
-    const QString& transpositioName = instrument.transposition.name;
+    const QString& traitName = instrument.trait.name;
     const QString& instrumentName = instrument.name;
 
-    switch (instrument.transposition.type) {
-    case TranspositionType::Tuning: return transpositioName + " " + instrumentName;
-    case TranspositionType::Course: return instrumentName + " (" + transpositioName + ")";
-    case TranspositionType::Transposition: return instrumentName + " " + qtrc("instruments", "in") + " " + transpositioName;
-    case TranspositionType::Unknown: break;
+    switch (instrument.trait.type) {
+    case TraitType::Tuning: return qtrc("instruments", "%1 %2").arg(traitName).arg(instrumentName);
+    case TraitType::Course: return qtrc("instruments", "%1 (%2)").arg(instrumentName).arg(traitName);
+    case TraitType::Transposition: return qtrc("instruments", "%1 in %2").arg(instrumentName).arg(traitName);
+    case TraitType::Unknown: break;
     }
 
     return instrumentName;
@@ -218,21 +218,21 @@ QVariantList InstrumentListModel::groups() const
 
 QVariantList InstrumentListModel::instruments() const
 {
-    QHash<QString, QStringList> transpositions;
+    QHash<QString, QStringList> traits;
     QVariantMap availableInstruments;
 
     for (const Instrument& instrument: m_instrumentsMeta.instrumentTemplates) {
-        const Transposition& transposition = instrument.transposition;
+        const Trait& trait = instrument.trait;
 
         if (!isInstrumentAccepted(instrument)) {
             continue;
         }
 
-        if (!transposition.name.isEmpty()) {
-            if (transposition.isDefault) {
-                transpositions[instrument.name].prepend(transposition.name);
+        if (!trait.name.isEmpty()) {
+            if (trait.isDefault) {
+                traits[instrument.name].prepend(trait.name);
             } else {
-                transpositions[instrument.name] << transposition.name;
+                traits[instrument.name] << trait.name;
             }
         }
 
@@ -241,8 +241,8 @@ QVariantList InstrumentListModel::instruments() const
         instrumentObj[NAME_KEY] = instrument.name;
         instrumentObj[GROUP_ID] = instrument.groupId;
 
-        if (transpositions.contains(instrument.name)) {
-            instrumentObj[TRANSPOSITIONS_KEY] = transpositions[instrument.name];
+        if (traits.contains(instrument.name)) {
+            instrumentObj[TRAITS_KEY] = traits[instrument.name];
         }
 
         availableInstruments[instrument.name] = instrumentObj;
@@ -296,21 +296,21 @@ void InstrumentListModel::selectGroup(const QString& groupId)
     emit selectedGroupChanged(groupId);
 }
 
-void InstrumentListModel::selectInstrument(const QString& instrumentName, const QString& transpositionName)
+void InstrumentListModel::selectInstrument(const QString& instrumentName, const QString& traitName)
 {
     Instrument suitedInstrument;
 
     for (const Instrument& instrument : m_instrumentsMeta.instrumentTemplates) {
-        if (instrument.name == instrumentName && instrument.transposition.name == transpositionName) {
+        if (instrument.name == instrumentName && instrument.trait.name == traitName) {
             suitedInstrument = instrument;
             break;
         }
     }
 
     if (!suitedInstrument.isValid()) {
-        LOGE() << QString("Instrument %1 with transposition %2 does not exist")
+        LOGE() << QString("Instrument %1 with trait %2 does not exist")
             .arg(instrumentName)
-            .arg(transpositionName);
+            .arg(traitName);
         return;
     }
 

@@ -114,15 +114,15 @@ static int readStaffIdx(XmlReader& e)
     return idx;
 }
 
-static TranspositionType transpotionTypeFromString(const QString& str)
+static TraitType traitTypeFromString(const QString& str)
 {
-    static const QMap<QString, TranspositionType> types {
-        { "transposition", TranspositionType::Transposition },
-        { "tuning", TranspositionType::Tuning },
-        { "course", TranspositionType::Course }
+    static const QMap<QString, TraitType> types {
+        { "transposition", TraitType::Transposition },
+        { "tuning", TraitType::Tuning },
+        { "course", TraitType::Course }
     };
 
-    return types.value(str.toLower(), TranspositionType::Unknown);
+    return types.value(str.toLower(), TraitType::Unknown);
 }
 
 //---------------------------------------------------------
@@ -254,7 +254,7 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
     family     = t.family;
     singleNoteDynamics = t.singleNoteDynamics;
 
-    transposition = t.transposition;
+    trait = t.trait;
 }
 
 InstrumentTemplate::~InstrumentTemplate()
@@ -495,11 +495,11 @@ void InstrumentTemplate::read(XmlReader& e)
         } else if (tag == "transposeDiatonic") {
             transpose.diatonic = e.readInt();
         } else if (tag == "dropdownName") {
-            transposition.type = transpotionTypeFromString(e.attribute("meaning"));
-            QString transpositionName = qApp->translate("InstrumentsXML", e.readElementText().toUtf8().data());
-            transposition.isDefault = transpositionName.contains("*");
-            transposition.isHiddenOnScore = transpositionName.contains("(") && transpositionName.contains(")");
-            transposition.name = transpositionName.remove("\*").remove("(").remove(")");
+            trait.type = traitTypeFromString(e.attribute("meaning"));
+            QString traitName = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
+            trait.isDefault = traitName.contains("*");
+            trait.isHiddenOnScore = traitName.contains("(") && traitName.contains(")");
+            trait.name = traitName.remove("\*").remove("(").remove(")");
         } else if (tag == "StringData") {
             stringData.read(e);
         } else if (tag == "drumset") {

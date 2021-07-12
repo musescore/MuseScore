@@ -41,15 +41,15 @@ using namespace mu::notation;
 
 static const Ms::Fraction DEFAULT_TICK = Ms::Fraction(0, 1);
 
-static QString formatInstrumentName(const QString& instrumentName, const Transposition& transposition, int instrumentNumber)
+static QString formatInstrumentName(const QString& instrumentName, const Trait& trait, int instrumentNumber)
 {
     QString numberPart = instrumentNumber > 0 ? " " + QString::number(instrumentNumber) : QString();
 
-    if (transposition.type != TranspositionType::Transposition || transposition.isHiddenOnScore) {
+    if (trait.type != TraitType::Transposition || trait.isHiddenOnScore) {
         return instrumentName + numberPart;
     }
 
-    return instrumentName + " " + qtrc("instruments", "in") + " " + transposition.name + numberPart;
+    return qtrc("instruments", "%1 in %2 %3").arg(instrumentName).arg(trait.name).arg(numberPart);
 }
 
 NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
@@ -1440,9 +1440,9 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
         int instrumentNumber = resolveInstrumentNumber(newInstruments, instrument);
 
         QString longName = !instrument.longNames.empty() ? instrument.longNames.first().name() : QString();
-        QString formattedLongName = formatInstrumentName(longName, instrument.transposition, instrumentNumber);
+        QString formattedLongName = formatInstrumentName(longName, instrument.trait, instrumentNumber);
         QString shortName = !instrument.shortNames.empty() ? instrument.shortNames.first().name() : QString();
-        QString formattedShortName = formatInstrumentName(shortName, instrument.transposition, instrumentNumber);
+        QString formattedShortName = formatInstrumentName(shortName, instrument.trait, instrumentNumber);
 
         part->setLongName(formattedLongName);
         part->setShortName(formattedShortName);
@@ -1503,8 +1503,8 @@ int NotationParts::resolveInstrumentNumber(const instruments::Instruments& newIn
     for (const Part* part : score()->parts()) {
         const Ms::Instrument* partInstrument = part->instrument();
 
-        if (partInstrument->instrumentId() == currentInstrument.musicXMLid
-            && partInstrument->transposition().name == currentInstrument.transposition.name) {
+        if (partInstrument->getId() == currentInstrument.id
+            && partInstrument->trait().name == currentInstrument.trait.name) {
             ++count;
         }
     }
@@ -1514,8 +1514,8 @@ int NotationParts::resolveInstrumentNumber(const instruments::Instruments& newIn
     }
 
     for (const Instrument& newInstrument: newInstruments) {
-        if (newInstrument.musicXMLid == currentInstrument.musicXMLid
-            && newInstrument.transposition.name == currentInstrument.transposition.name) {
+        if (newInstrument.id == currentInstrument.id
+            && newInstrument.trait.name == currentInstrument.trait.name) {
             ++count;
         }
     }

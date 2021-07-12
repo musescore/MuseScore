@@ -86,7 +86,7 @@ public:
 
     int sequenceOrder = 0;
 
-    Transposition transposition;
+    Trait trait;
 
     char minPitchA;           // pitch range playable by an amateur
     char maxPitchA;

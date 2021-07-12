@@ -277,10 +277,10 @@ public:
 };
 
 //---------------------------------------------------------
-//   Transposition
+//   Trait
 //---------------------------------------------------------
 
-enum class TranspositionType
+enum class TraitType
 {
     Unknown,
     Tuning,
@@ -288,11 +288,11 @@ enum class TranspositionType
     Course
 };
 
-struct Transposition
+struct Trait
 {
     QString name;
 
-    TranspositionType type = TranspositionType::Unknown;
+    TraitType type = TraitType::Unknown;
 
     bool isDefault = false;
     bool isHiddenOnScore = false;
@@ -326,7 +326,7 @@ class Instrument
 
     bool _singleNoteDynamics;
 
-    Transposition _transposition;
+    Trait _trait;
 
 public:
     Instrument(QString id="");
@@ -411,8 +411,8 @@ public:
     QString abbreviature() const;
     static Instrument fromTemplate(const InstrumentTemplate* t);
 
-    Transposition transposition() const;
-    void setTransposition(const Transposition& transposition);
+    Trait trait() const;
+    void setTrait(const Trait& trait);
 
     void updateInstrumentId();
 
