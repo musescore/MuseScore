@@ -25,8 +25,10 @@ void QueuedInvoker::processEvents()
     Queue q;
     {
         std::lock_guard<std::recursive_mutex> lock(m_mutex);
-        q = m_queues[std::this_thread::get_id()];
-        m_queues[std::this_thread::get_id()] = Queue();
+        auto n = m_queues.extract(std::this_thread::get_id());
+        if (!n.empty()) {
+            q = n.mapped();
+        }
     }
     while (!q.empty()) {
         const auto& f = q.front();
