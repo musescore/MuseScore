@@ -135,6 +135,10 @@ MasterScore* MTest::readCreatedScore(const QString& name)
 bool MTest::saveScore(Score* score, const QString& name) const
 {
     QFile file(name);
+    if (file.exists()) {
+        file.remove();
+    }
+
     if (!file.open(QIODevice::ReadWrite)) {
         return false;
     }
