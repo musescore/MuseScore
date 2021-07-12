@@ -22,17 +22,24 @@
 import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 
-StyledPopupView {
+import "internal"
+
+Column {
     id: root
 
-    property alias model: glissandoSettingsPanel.model
+    property QtObject model: null
 
-    contentHeight: glissandoSettingsPanel.implicitHeight
+    spacing: 12
 
-    GlissandoSettingsPanel {
-        id: glissandoSettingsPanel
+    BracketPopupSection {
+        intBracketProperty: root.model ? root.model.bracketColumnPosition : null
+        titleText: qsTrc("inspector", "Column")
+    }
 
-        width: parent.width
+    BracketPopupSection {
+        intBracketProperty: root.model ? root.model.bracketSpanStaves : null
+        titleText: qsTrc("inspector", "Span")
     }
 }

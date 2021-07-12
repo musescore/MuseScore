@@ -19,47 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import QtQuick.Dialogs 1.2
+import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
-import "../../common"
-import "internal"
 
 StyledPopupView {
     id: root
 
-    property QtObject model: undefined
+    property alias model: content.model
 
-    contentHeight: contentColumn.implicitHeight
+    contentHeight: content.implicitHeight
 
-    Column {
-        id: contentColumn
+    HorizontalFrameSettingsPanel {
+        id: content
 
-        height: implicitHeight
         width: parent.width
-
-        spacing: 16
-
-        WidthSection {
-            widthProperty: model ? model.frameWidth : null
-        }
-
-        SeparatorLine { anchors.margins: -10 }
-
-        HorizontalGapsSection {
-            leftGap: model ? model.leftGap : null
-            rightGap: model ? model.rightGap: null
-        }
-
-        SeparatorLine { anchors.margins: -10 }
-
-        CheckBox {
-            isIndeterminate: model ? model.shouldDisplayKeysAndBrackets.isUndefined : false
-            checked: model && !isIndeterminate ? model.shouldDisplayKeysAndBrackets.value : false
-            text: qsTrc("inspector", "Display key, brackets and braces")
-
-            onClicked: { model.shouldDisplayKeysAndBrackets.value = !checked }
-        }
     }
 }

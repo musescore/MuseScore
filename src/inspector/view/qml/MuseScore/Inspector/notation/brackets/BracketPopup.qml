@@ -19,35 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
 
-import "../../common"
-import "internal"
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 
 StyledPopupView {
     id: root
 
-    property QtObject model: null
+    property alias model: content.model
 
-    contentHeight: contentColumn.implicitHeight
+    contentHeight: content.implicitHeight
 
-    Column {
-        id: contentColumn
+    BracketSettingsPanel {
+        id: content
 
         width: parent.width
-
-        spacing: 12
-
-        BracketPopupSection {
-             intBracketProperty: model ? model.bracketColumnPosition : null
-             titleText: qsTrc("inspector", "Column")
-        }
-
-        BracketPopupSection {
-             intBracketProperty: model ? model.bracketSpanStaves : null
-             titleText: qsTrc("inspector", "Span")
-        }
     }
 }

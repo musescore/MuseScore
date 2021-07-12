@@ -29,19 +29,34 @@ import "../../common"
 TabPanel {
     id: root
 
-    property QtObject proxyModel: null
+    property QtObject model: null
 
     implicitHeight: Math.max(beamTab.visible ? beamTab.implicitHeight : 0,
                              headTab.visible ? headTab.implicitHeight : 0,
                              stemTab.visible ? stemTab.implicitHeight : 0) + tabBarHeight + 24
     width: parent ? parent.width : 0
 
+    currentIndex: root.model ? indexByType(root.model.subModelType) : 0 // todo: not work for notehead
+
+    function indexByType(modelType) {
+        switch (modelType) {
+        case Inspector.TYPE_BEAM: return 0
+        case Inspector.TYPE_NOTE: return 1
+        case Inspector.TYPE_NOTEHEAD: return 1
+        case Inspector.TYPE_STEM: return 2
+        case Inspector.TYPE_HOOK: return 2
+        }
+
+        return 1 // note
+    }
+
     Tab {
         id: beamTab
 
-        property QtObject beamModel: proxyModel ? proxyModel.modelByType(Inspector.TYPE_BEAM) : null
+        property QtObject beamModel: root.model ? root.model.modelByType(Inspector.TYPE_BEAM) : null
 
         title: beamModel ? beamModel.title : ""
+        width: root.width
 
         BeamSettings {
             id: beamSettings
@@ -58,9 +73,10 @@ TabPanel {
     Tab {
         id: headTab
 
-        property QtObject headModel: proxyModel ? proxyModel.modelByType(Inspector.TYPE_NOTEHEAD) : null
+        property QtObject headModel: root.model ? root.model.modelByType(Inspector.TYPE_NOTEHEAD) : null
 
         title: headModel ? headModel.title : ""
+        width: root.width
 
         HeadSettings {
             id: headSettings
@@ -77,9 +93,9 @@ TabPanel {
     Tab {
         id: stemTab
 
-        property QtObject stemModel: proxyModel ? proxyModel.modelByType(Inspector.TYPE_STEM) : null
-        property QtObject hookModel: proxyModel ? proxyModel.modelByType(Inspector.TYPE_HOOK) : null
-        property QtObject beamModel: proxyModel ? proxyModel.modelByType(Inspector.TYPE_BEAM) : null
+        property QtObject stemModel: root.model ? root.model.modelByType(Inspector.TYPE_STEM) : null
+        property QtObject hookModel: root.model ? root.model.modelByType(Inspector.TYPE_HOOK) : null
+        property QtObject beamModel: root.model ? root.model.modelByType(Inspector.TYPE_BEAM) : null
 
         height: implicitHeight
         width: root.width

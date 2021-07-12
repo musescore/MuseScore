@@ -19,52 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import MuseScore.Inspector 1.0
+import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
-import MuseScore.Ui 1.0
-import "../../common"
 
 StyledPopupView {
     id: root
 
-    property QtObject model: null
+    property alias model: content.model
 
-    contentHeight: contentColumn.implicitHeight
+    contentHeight: content.implicitHeight
 
-    InspectorPropertyView {
-        id: contentColumn
+    TremoloSettingsPanel {
+        id: content
 
-        titleText: qsTrc("inspector", "Style (between notes)")
-        propertyItem: root.model ? root.model.style : null
-
-        RadioButtonGroup {
-            id: radioButtonList
-
-            height: 30
-            width: parent.width
-
-            model: [
-                { iconRole: IconCode.TREMOLO_STYLE_DEFAULT, typeRole: TremoloTypes.STYLE_DEFAULT },
-                { iconRole: IconCode.TREMOLO_STYLE_TRADITIONAL, typeRole: TremoloTypes.STYLE_TRADITIONAL },
-                { iconRole: IconCode.TREMOLO_STYLE_TRADITIONAL_ALTERNATE, typeRole: TremoloTypes.STYLE_TRADITIONAL_ALTERNATE }
-            ]
-
-            delegate: FlatRadioButton {
-                ButtonGroup.group: radioButtonList.radioButtonGroup
-
-                checked: root.model && !root.model.style.isUndefined ? root.model.style.value === modelData["typeRole"]
-                                                                     : false
-
-                onToggled: {
-                    root.model.style.value = modelData["typeRole"]
-                }
-
-                StyledIconLabel {
-                    iconCode: modelData["iconRole"]
-                }
-            }
-        }
+        width: parent.width
     }
 }

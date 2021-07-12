@@ -27,7 +27,7 @@ import "../../common"
 StyledPopupView {
     id: root
 
-    property alias model: noteSettingsTabPanel.proxyModel
+    property alias model: noteSettingsTabPanel.model
 
     contentHeight: noteSettingsTabPanel.implicitHeight
 

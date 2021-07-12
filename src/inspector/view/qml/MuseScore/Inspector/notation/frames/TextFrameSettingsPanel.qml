@@ -22,17 +22,29 @@
 import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
+import "internal"
 
-StyledPopupView {
+Column {
     id: root
 
-    property alias model: glissandoSettingsPanel.model
+    property QtObject model: null
 
-    contentHeight: glissandoSettingsPanel.implicitHeight
+    spacing: 16
 
-    GlissandoSettingsPanel {
-        id: glissandoSettingsPanel
+    VerticalGapsSection {
+        gapAbove: root.model ? root.model.gapAbove : null
+        gapBelow: root.model ? root.model.gapBelow : null
+    }
 
-        width: parent.width
+    SeparatorLine { anchors.margins: -10 }
+
+    HorizontalMarginsSection {
+        frameLeftMargin: root.model ? root.model.frameLeftMargin : null
+        frameRightMargin: root.model ? root.model.frameRightMargin : null
+    }
+
+    VerticalMarginsSection {
+        frameTopMargin: root.model ? root.model.frameTopMargin : null
+        frameBottomMargin: root.model ? root.model.frameBottomMargin : null
     }
 }

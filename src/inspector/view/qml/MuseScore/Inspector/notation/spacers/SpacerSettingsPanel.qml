@@ -22,17 +22,29 @@
 import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+import "../../common"
 
-StyledPopupView {
+Column {
     id: root
 
-    property alias model: glissandoSettingsPanel.model
+    property QtObject model: null
 
-    contentHeight: glissandoSettingsPanel.implicitHeight
+    spacing: 12
 
-    GlissandoSettingsPanel {
-        id: glissandoSettingsPanel
+    InspectorPropertyView {
+        titleText: qsTrc("inspector", "Height")
+        propertyItem: root.model ? root.model.spacerHeight : null
 
-        width: parent.width
+        IncrementalPropertyControl {
+            isIndeterminate: root.model ? root.model.spacerHeight.isUndefined : false
+            currentValue: root.model ? root.model.spacerHeight.value : 0
+            iconMode: iconModeEnum.hidden
+            maxValue: 999
+            minValue: 0
+            step: 0.5
+
+            onValueEdited: { root.model.spacerHeight.value = newValue }
+        }
     }
 }

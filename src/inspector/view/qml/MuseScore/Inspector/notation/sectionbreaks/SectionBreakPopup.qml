@@ -28,48 +28,13 @@ import "../../common"
 StyledPopupView {
     id: root
 
-    property QtObject model: null
+    property alias model: sectionBreakSettingsPanel.model
 
-    contentHeight: contentColumn.implicitHeight
+    contentHeight: sectionBreakSettingsPanel.implicitHeight
 
-    Column {
-        id: contentColumn
+    SectionBreakSettingsPanel {
+        id: sectionBreakSettingsPanel
 
         width: parent.width
-
-        spacing: 12
-
-        InspectorPropertyView {
-            titleText: qsTrc("inspector", "Pause before new section starts")
-            propertyItem: model ? model.pauseDuration : null
-
-            IncrementalPropertyControl {
-                isIndeterminate: model ? model.pauseDuration.isUndefined : false
-                currentValue: model ? model.pauseDuration.value : 0
-                iconMode: iconModeEnum.hidden
-                maxValue: 999
-                minValue: 0
-                step: 0.5
-                measureUnitsSymbol: qsTrc("inspector", "s")
-
-                onValueEdited: { model.pauseDuration.value = newValue }
-            }
-        }
-
-        CheckBox {
-            isIndeterminate: model ? model.shouldStartWithLongInstrNames.isUndefined : false
-            checked: model && !isIndeterminate ? model.shouldStartWithLongInstrNames.value : false
-            text: qsTrc("inspector", "Start new section with long instrument names")
-
-            onClicked: { model.shouldStartWithLongInstrNames.value = !checked }
-        }
-
-        CheckBox {
-            isIndeterminate: model ? model.shouldResetBarNums.isUndefined : false
-            checked: model && !isIndeterminate ? model.shouldResetBarNums.value : false
-            text: qsTrc("inspector", "Reset bar numbers for new section")
-
-            onClicked: { model.shouldResetBarNums.value = !checked }
-        }
     }
 }

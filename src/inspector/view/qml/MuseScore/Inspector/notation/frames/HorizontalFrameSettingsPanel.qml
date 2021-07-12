@@ -22,17 +22,34 @@
 import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
+import "internal"
 
-StyledPopupView {
+Column {
     id: root
 
-    property alias model: glissandoSettingsPanel.model
+    property QtObject model: undefined
 
-    contentHeight: glissandoSettingsPanel.implicitHeight
+    height: implicitHeight
+    spacing: 16
 
-    GlissandoSettingsPanel {
-        id: glissandoSettingsPanel
+    WidthSection {
+        widthProperty: root.model ? root.model.frameWidth : null
+    }
 
-        width: parent.width
+    SeparatorLine { anchors.margins: -10 }
+
+    HorizontalGapsSection {
+        leftGap: root.model ? root.model.leftGap : null
+        rightGap: root.model ? root.model.rightGap: null
+    }
+
+    SeparatorLine { anchors.margins: -10 }
+
+    CheckBox {
+        isIndeterminate: root.model ? root.model.shouldDisplayKeysAndBrackets.isUndefined : false
+        checked: root.model && !isIndeterminate ? root.model.shouldDisplayKeysAndBrackets.value : false
+        text: qsTrc("inspector", "Display key, brackets and braces")
+
+        onClicked: { root.model.shouldDisplayKeysAndBrackets.value = !checked }
     }
 }

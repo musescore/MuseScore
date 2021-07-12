@@ -28,46 +28,13 @@ import "../../common"
 StyledPopupView {
     id: root
 
-    property QtObject model: null
+    property alias model: fermataSettingsPanel.model
 
-    contentHeight: contentColumn.implicitHeight
+    contentHeight: fermataSettingsPanel.implicitHeight
 
-    InspectorPropertyView {
-        id: contentColumn
+    FermataSettingsPanel {
+        id: fermataSettingsPanel
 
-        titleText: qsTrc("inspector", "Placement on staff")
-        propertyItem: root.model ? root.model.placementType : null
-
-        RadioButtonGroup {
-            id: radioButtonList
-
-            height: 30
-            width: parent.width
-
-            model: [
-                { textRole: "Above", valueRole: FermataTypes.ABOVE },
-                { textRole: "Below", valueRole: FermataTypes.BELOW }
-            ]
-
-            delegate: FlatRadioButton {
-                id: radioButtonDelegate
-
-                ButtonGroup.group: radioButtonList.radioButtonGroup
-
-                checked: root.model && !root.model.placementType.isUndefined ? root.model.placementType.value === modelData["valueRole"]
-                                                                             : false
-                onToggled: {
-                    root.model.placementType.value = modelData["valueRole"]
-                }
-
-                StyledTextLabel {
-                    text: modelData["textRole"]
-
-                    elide: Text.ElideRight
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                }
-            }
-        }
+        width: parent.width
     }
 }
