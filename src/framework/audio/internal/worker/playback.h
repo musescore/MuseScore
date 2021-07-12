@@ -43,6 +43,9 @@ public:
     async::Promise<TrackSequenceIdList> sequenceIdList() const override;
     void removeSequence(const TrackSequenceId id) override;
 
+    async::Channel<TrackSequenceId> sequenceAdded() const override;
+    async::Channel<TrackSequenceId> sequenceRemoved() const override;
+
     IPlayerPtr player() const override;
     ITracksPtr tracks() const override;
     IAudioOutputPtr audioOutput() const override;
@@ -57,6 +60,9 @@ private:
     IAudioOutputPtr m_audioOutputPtr = nullptr;
 
     std::map<TrackSequenceId, ITrackSequencePtr> m_sequences;
+
+    async::Channel<TrackSequenceId> m_sequenceAdded;
+    async::Channel<TrackSequenceId> m_sequenceRemoved;
 };
 }
 
