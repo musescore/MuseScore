@@ -1,3 +1,25 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #ifndef MU_PLAYBACK_MIXERCHANNELITEM_H
 #define MU_PLAYBACK_MIXERCHANNELITEM_H
 
@@ -10,7 +32,7 @@
 #include "audio/audiotypes.h"
 
 namespace mu::playback {
-class MixerChannelItem : public QObject
+class MixerChannelItem : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
@@ -28,7 +50,11 @@ class MixerChannelItem : public QObject
     Q_PROPERTY(bool solo READ solo WRITE setSolo NOTIFY soloChanged)
 
 public:
-    explicit MixerChannelItem(QObject* parent);
+    explicit MixerChannelItem(QObject* parent, const audio::TrackId id = -1, const bool isMaster = false);
+
+    audio::TrackId id() const;
+
+    bool isMasterChannel() const;
 
     QString title() const;
 
@@ -43,6 +69,8 @@ public:
 
     void setInputParams(audio::AudioInputParams&& inputParams);
     void setOutputParams(audio::AudioOutputParams&& outParams);
+
+    void subscribeOnAudioSignalChanges(audio::AudioSignalChanges&& audioSignalChanges);
 
 public slots:
     void setTitle(QString title);
@@ -68,19 +96,25 @@ signals:
     void mutedChanged(bool muted);
     void soloChanged(bool solo);
 
+    void inputParamsChanged(const audio::AudioInputParams& params);
+    void outputParamsChanged(const audio::AudioOutputParams& params);
+
 private:
+    void setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue);
+
+    audio::TrackId m_id = -1;
+
     audio::AudioInputParams m_inputParams;
     audio::AudioOutputParams m_outParams;
 
+    audio::AudioSignalChanges m_audioSignalChanges;
+
+    bool m_isMaster = false;
     QString m_title;
 
     float m_leftChannelPressure = 0.0;
     float m_rightChannelPressure = 0.0;
 
-    float m_volumeLevel = 0.0;
-    float m_balance = 0.0;
-
-    bool m_muted = false;
     bool m_solo = false;
 };
 }
