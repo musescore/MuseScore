@@ -81,7 +81,7 @@ private:
 
     void continueLastSession();
 
-    io::path selectScoreOpenningFile();
+    io::path selectScoreOpeningFile();
     io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
 
     Ret doOpenScore(const io::path& filePath);

@@ -2120,9 +2120,16 @@ MasterScore* MasterScore::clone()
 
     buffer.close();
 
-    XmlReader r(buffer.buffer());
+    QByteArray scoreData = buffer.buffer();
+    QString completeBaseName = masterScore()->fileInfo()->completeBaseName();
+
+    auto getStyleDefaultsVersion = [this, &scoreData, &completeBaseName]() {
+        return readStyleDefaultsVersion(scoreData, completeBaseName);
+    };
+
+    XmlReader r(scoreData);
     MasterScore* score = new MasterScore(style());
-    score->read1(r, true);
+    score->read1(r, true, getStyleDefaultsVersion);
 
     score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();

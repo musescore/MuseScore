@@ -699,11 +699,16 @@ Score::FileError MasterScore::loadMscz(mu::engraving::MsczReader& msczReader, bo
     FileError retval;
     // Read score
     {
-        QByteArray dbuf = msczReader.readScore();
-        XmlReader e(dbuf);
-        e.setDocName(masterScore()->fileInfo()->completeBaseName());
+        QByteArray scoreData = msczReader.readScore();
+        QString completeBaseName = masterScore()->fileInfo()->completeBaseName();
+        XmlReader e(scoreData);
+        e.setDocName(completeBaseName);
 
-        retval = read1(e, ignoreVersionError);
+        auto getStyleDefaultsVersion = [this, &scoreData, &completeBaseName]() {
+            return readStyleDefaultsVersion(scoreData, completeBaseName);
+        };
+
+        retval = read1(e, ignoreVersionError, getStyleDefaultsVersion);
     }
 
     // Read images
@@ -748,22 +753,14 @@ int MasterScore::styleDefaultByMscVersion(const int mscVer) const
     return MSCVERSION;
 }
 
-int MasterScore::readStyleDefaultsVersion()
+int MasterScore::readStyleDefaultsVersion(const QByteArray& scoreData, const QString& completeBaseName)
 {
     if (styleB(Sid::usePre_3_6_defaults)) {
         return style().defaultStyleVersion();
     }
 
-    QByteArray scoreData;
-    {
-        using namespace mu::engraving;
-        MsczReader msczReader(info.fileName());
-        msczReader.open();
-        scoreData = msczReader.readScore();
-    }
-
     XmlReader e(scoreData);
-    e.setDocName(masterScore()->fileInfo()->completeBaseName());
+    e.setDocName(completeBaseName);
 
     while (!e.atEnd()) {
         e.readNext();
@@ -828,7 +825,7 @@ void MasterScore::parseVersion(const QString& val)
 //    return true on success
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
+Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, const std::function<int()>& getStyleDefaultsVersion)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -851,7 +848,10 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
             if (created() && !preferences().defaultStyleFilePath().isEmpty()) {
                 setStyle(MScore::defaultStyle());
             } else {
-                int defaultsVersion = readStyleDefaultsVersion();
+                IF_ASSERT_FAILED(getStyleDefaultsVersion) {
+                    return Score::FileError::FILE_ERROR;
+                }
+                int defaultsVersion = getStyleDefaultsVersion();
 
                 setStyle(*MStyle::resolveStyleDefaults(defaultsVersion));
                 style().setDefaultStyleVersion(defaultsVersion);
