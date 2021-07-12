@@ -145,6 +145,16 @@ float PlaybackController::playbackPositionInSeconds() const
     return notationPlayback()->tickToSec(m_currentTick);
 }
 
+TrackSequenceId PlaybackController::currentTrackSequenceId() const
+{
+    return m_currentSequenceId;
+}
+
+Notification PlaybackController::currentTrackSequenceIdChanged() const
+{
+    return m_currentSequenceIdChanged;
+}
+
 void PlaybackController::playElement(const notation::Element* element)
 {
     if (!configuration()->playNotesWhenEditing()) {
@@ -451,6 +461,7 @@ void PlaybackController::setCurrentSequence(const TrackSequenceId sequenceId)
     PlaybackCursorType cursorType = configuration()->cursorType();
 
     m_currentSequenceId = sequenceId;
+    m_currentSequenceIdChanged.notify();
 
     m_trackIdMap.clear();
     playback()->tracks()->removeAllTracks(m_currentSequenceId);

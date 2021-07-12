@@ -68,6 +68,9 @@ public:
     async::Channel<uint32_t> midiTickPlayed() const override;
     float playbackPositionInSeconds() const override;
 
+    audio::TrackSequenceId currentTrackSequenceId() const override;
+    async::Notification currentTrackSequenceIdChanged() const override;
+
     void playElement(const notation::Element* element) override;
 
     bool actionChecked(const actions::ActionCode& actionCode) const override;
@@ -131,6 +134,7 @@ private:
     bool m_isPlaying = false;
 
     audio::TrackSequenceId m_currentSequenceId = -1;
+    async::Notification m_currentSequenceIdChanged;
     audio::PlaybackStatus m_currentPlaybackStatus = audio::PlaybackStatus::Stopped;
     midi::tick_t m_currentTick = 0;
     std::unordered_map<std::string /* score file path*/, audio::TrackSequenceId> m_sequenceIdMap;
