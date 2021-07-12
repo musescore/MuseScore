@@ -101,7 +101,7 @@ void FileScoreController::openScore(const actions::ActionData& args)
     io::path scorePath = args.count() > 0 ? args.arg<io::path>(0) : "";
 
     if (scorePath.empty()) {
-        scorePath = selectScoreOpenningFile();
+        scorePath = selectScoreOpeningFile();
 
         if (scorePath.empty()) {
             return;
@@ -340,7 +340,7 @@ void FileScoreController::exportScore()
     interactive()->open("musescore://userscores/export");
 }
 
-io::path FileScoreController::selectScoreOpenningFile()
+io::path FileScoreController::selectScoreOpeningFile()
 {
     QString allExt = "*.mscz *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx"
                      "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscz,";
