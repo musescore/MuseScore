@@ -113,3 +113,29 @@ Channel<TrackId, AudioOutputParams> SequenceIO::outputParamsChanged() const
 {
     return m_outputParamsChanged;
 }
+
+Channel<audioch_t, float> SequenceIO::signalAmplitudeChanged(const TrackId id) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_getTracks) {
+        return {};
+    }
+
+    TrackPtr track = m_getTracks->track(id);
+
+    return track->mixerChannel->signalAmplitudeRmsChanged();
+}
+
+Channel<audioch_t, volume_dbfs_t> SequenceIO::volumePressureChanged(const TrackId id) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_getTracks) {
+        return {};
+    }
+
+    TrackPtr track = m_getTracks->track(id);
+
+    return track->mixerChannel->volumePressureDbfsChanged();
+}

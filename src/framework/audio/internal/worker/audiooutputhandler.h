@@ -44,8 +44,8 @@ public:
     void setMasterOutputParams(const AudioOutputParams& params) override;
     async::Channel<AudioOutputParams> masterOutputParamsChanged() const override;
 
-    async::Channel<audioch_t, float> masterSignalAmplitudeChanged() const override;
-    async::Channel<audioch_t, volume_dbfs_t> masterVolumePressureChanged() const override;
+    async::Promise<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const override;
+    async::Promise<AudioSignalChanges> masterSignalChanges() const override;
 
 private:
     std::shared_ptr<Mixer> mixer() const;
@@ -56,8 +56,6 @@ private:
     IGetTrackSequence* m_getSequence = nullptr;
 
     mutable async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
-    mutable async::Channel<audioch_t, float> m_masterSignalAmplitudeChanged;
-    mutable async::Channel<audioch_t, volume_dbfs_t> m_masterVolumePressureChanged;
     mutable async::Channel<TrackSequenceId, TrackId, AudioOutputParams> m_outputParamsChanged;
 };
 }
