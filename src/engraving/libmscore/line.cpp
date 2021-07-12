@@ -432,7 +432,7 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
     System* sys = oldSeg->system();
     const QList<System*> foundSystems = score()->searchSystem(pos, sys, spacingFactor);
 
-    if (!foundSystems.empty() && !foundSystems.contains(sys)) {
+    if (!foundSystems.empty() && !foundSystems.contains(sys) && foundSystems[0]->staves()->size()) {
         sys = foundSystems[0];
     }
 
