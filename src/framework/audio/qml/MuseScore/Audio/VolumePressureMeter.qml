@@ -36,7 +36,7 @@ Canvas {
     width: 24
     height: 140
 
-    renderStrategy: Canvas.Threaded
+    renderStrategy: Canvas.Cooperative
     renderTarget: Canvas.FramebufferObject
 
     QtObject {

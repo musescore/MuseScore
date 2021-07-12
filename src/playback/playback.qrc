@@ -3,5 +3,6 @@
         <file>qml/MuseScore/Playback/qmldir</file>
         <file>qml/MuseScore/Playback/PlaybackToolBar.qml</file>
         <file>qml/MuseScore/Playback/internal/MeasureAndBeatFields.qml</file>
+        <file>qml/MuseScore/Playback/MixerPanel.qml</file>
     </qresource>
 </RCC>
