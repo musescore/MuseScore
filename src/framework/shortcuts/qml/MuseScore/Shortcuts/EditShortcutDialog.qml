@@ -68,7 +68,9 @@ Dialog {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 width: parent.width
-                text: qsTrc("shortcuts", "Define Keyboard Shortcut.")
+                text: qsTrc("shortcuts", "Define keyboard shortcut")
+                horizontalAlignment: Text.AlignLeft
+                font:ui.theme.headerBoldFont
             }
 
             Column {
