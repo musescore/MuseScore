@@ -87,7 +87,7 @@ RadioDelegate {
             anchors.fill: parent
             anchors.margins: 2 //! NOTE margin needed to show focus border
 
-            property bool isVertical: orientation === Qt.Vertical
+            readonly property bool isVertical: root.orientation === Qt.Vertical
             visible: false
 
             LinearGradient {
@@ -95,13 +95,17 @@ RadioDelegate {
                 anchors.fill: parent
 
                 start: Qt.point(0, 0)
-                end: backgroundGradientRect.isVertical ? Qt.point(0, root.width) : Qt.point(root.width, 0)
+                end: backgroundGradientRect.isVertical ? Qt.point(0, root.height) : Qt.point(root.width, 0)
                 gradient: Gradient {
-                    GradientStop { position: 0.0; color: "transparent" }
-                    GradientStop { position: 1.0; color: Qt.rgba(ui.theme.accentColor.r,
-                                                                 ui.theme.accentColor.g,
-                                                                 ui.theme.accentColor.b,
-                                                                 backgroundGradientRect.isVertical ? 0.2 : 0.1) }
+                    GradientStop {
+                        position: 0.0
+                        color: "transparent"
+                    }
+                    GradientStop {
+                        position: 1.0
+                        color: Utils.colorWithAlpha(ui.theme.accentColor,
+                                                    backgroundGradientRect.isVertical ? 0.2 : 0.1)
+                    }
                 }
             }
 
