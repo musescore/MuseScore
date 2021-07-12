@@ -29,6 +29,7 @@
 
 #include "midi/miditypes.h"
 #include "io/path.h"
+#include "async/channel.h"
 
 namespace mu::audio {
 using msecs_t = uint64_t;
@@ -73,6 +74,11 @@ using AudioInputParams = std::variant<midi::MidiData, io::path>;
 struct AudioParams {
     AudioInputParams in;
     AudioOutputParams out;
+};
+
+struct AudioSignalChanges {
+    async::Channel<audioch_t, float> amplitudeChanges;
+    async::Channel<audioch_t, volume_dbfs_t> pressureChanges;
 };
 
 struct VolumePressureDbfsBoundaries {

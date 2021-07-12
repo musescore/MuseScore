@@ -119,18 +119,34 @@ Channel<AudioOutputParams> AudioOutputHandler::masterOutputParamsChanged() const
     return m_masterOutputParamsChanged;
 }
 
-Channel<audioch_t, float> AudioOutputHandler::masterSignalAmplitudeChanged() const
+Promise<AudioSignalChanges> AudioOutputHandler::signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const
 {
-    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+    return Promise<AudioSignalChanges>([this, sequenceId, trackId](Promise<AudioSignalChanges>::Resolve resolve,
+                                                                   Promise<AudioSignalChanges>::Reject reject) {
+        ONLY_AUDIO_WORKER_THREAD;
 
-    return m_masterSignalAmplitudeChanged;
+        ITrackSequencePtr s = sequence(sequenceId);
+
+        if (!s) {
+            reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+        }
+
+        resolve({ s->audioIO()->signalAmplitudeChanged(trackId), s->audioIO()->volumePressureChanged(trackId) });
+    }, AudioThread::ID);
 }
 
-Channel<audioch_t, volume_dbfs_t> AudioOutputHandler::masterVolumePressureChanged() const
+Promise<AudioSignalChanges> AudioOutputHandler::masterSignalChanges() const
 {
-    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+    return Promise<AudioSignalChanges>([this](Promise<AudioSignalChanges>::Resolve resolve,
+                                              Promise<AudioSignalChanges>::Reject reject) {
+        ONLY_AUDIO_WORKER_THREAD;
 
-    return m_masterVolumePressureChanged;
+        IF_ASSERT_FAILED(mixer()) {
+            reject(static_cast<int>(Err::Undefined), "undefined reference to a mixer");
+        }
+
+        resolve({ mixer()->masterSignalAmplitudeRmsChanged(), mixer()->masterVolumePressureDbfsChanged() });
+    }, AudioThread::ID);
 }
 
 std::shared_ptr<Mixer> AudioOutputHandler::mixer() const
@@ -173,18 +189,6 @@ void AudioOutputHandler::ensureMixerSubscriptions() const
 
     if (!mixer()) {
         return;
-    }
-
-    if (!mixer()->masterVolumePressureDbfsChanged().isConnected()) {
-        mixer()->masterVolumePressureDbfsChanged().onReceive(this, [this](const audioch_t ch, const volume_dbfs_t value) {
-            m_masterVolumePressureChanged.send(ch, value);
-        });
-    }
-
-    if (!mixer()->masterSignalAmplitudeRmsChanged().isConnected()) {
-        mixer()->masterSignalAmplitudeRmsChanged().onReceive(this, [this](const audioch_t ch, const float value) {
-            m_masterSignalAmplitudeChanged.send(ch, value);
-        });
     }
 
     if (!mixer()->masterOutputParamsChanged().isConnected()) {
