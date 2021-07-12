@@ -55,6 +55,7 @@ Promise<TrackSequenceId> Playback::addSequence()
         TrackSequenceId newId = m_sequences.size();
 
         m_sequences.emplace(newId, std::make_shared<TrackSequence>(newId));
+        m_sequenceAdded.send(newId);
 
         resolve(std::move(newId));
     }, AudioThread::ID);
@@ -86,7 +87,23 @@ void Playback::removeSequence(const TrackSequenceId id)
         if (search != m_sequences.end()) {
             m_sequences.erase(search);
         }
+
+        m_sequenceRemoved.send(id);
     }, AudioThread::ID);
+}
+
+Channel<TrackSequenceId> Playback::sequenceAdded() const
+{
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
+    return m_sequenceAdded;
+}
+
+Channel<TrackSequenceId> Playback::sequenceRemoved() const
+{
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
+    return m_sequenceRemoved;
 }
 
 IPlayerPtr Playback::player() const
