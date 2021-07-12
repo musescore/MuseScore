@@ -127,12 +127,7 @@ InspectorSectionView {
         sourceComponent: root.model ? prv.componentByType(root.model.modelType) : null
 
         onLoaded: {
-            loader.item.model = /* Qt.binding(() => (*/root.model/*))*/
-//            loader.item.navigation.panel =  Qt.binding(() => (root.navigationPanel))
-//            loader.item.navigation.row = root.navigationRow
-//            loader.item.popupContentHeightChanged(function(height) {
-//                root.updateContentHeight(height)
-//            })
+            loader.item.model = root.model
         }
 
         Component {
@@ -156,10 +151,8 @@ InspectorSectionView {
         }
 
         Component {
-            id: barlineComp // todo
-            BarlineSettings {
-                navigation.name: "BarlineSettings"
-            }
+            id: barlineComp
+            BarlineSettingsPanel { }
         }
 
         Component {

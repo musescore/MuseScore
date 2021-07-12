@@ -25,7 +25,7 @@
 #include "fermatas/fermatasettingsmodel.h"
 #include "tempos/temposettingsmodel.h"
 #include "glissandos/glissandosettingsmodel.h"
-#include "barlines/barlinesettingsmodel.h"
+#include "barlines/barlinesettingsproxymodel.h"
 #include "staffs/staffsettingsmodel.h"
 #include "sectionbreaks/sectionbreaksettingsmodel.h"
 #include "markers/markersettingsmodel.h"
@@ -68,7 +68,7 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     addModel(new FermataSettingsModel(this, repository));
     addModel(new TempoSettingsModel(this, repository));
     addModel(new GlissandoSettingsModel(this, repository));
-    addModel(new BarlineSettingsModel(this, repository));
+    addModel(new BarlineSettingsProxyModel(this, repository));
     addModel(new StaffSettingsModel(this, repository));
     addModel(new SectionBreakSettingsModel(this, repository));
     addModel(new MarkerSettingsModel(this, repository));

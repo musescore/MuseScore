@@ -19,24 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
-import MuseScore.Ui 1.0
-import "../../common"
+#include "barlinesettingsproxymodel.h"
 
-PopupViewButton {
-    id: root
+#include "translation.h"
 
-    property alias model: barlinePopup.model
+#include "barlinesettingsmodel.h"
+#include "../staffs/staffsettingsmodel.h"
 
-    icon: IconCode.SECTION_BREAK
-    text: qsTrc("inspector", "Barlines")
+using namespace mu::inspector;
 
-    visible: root.model ? !root.model.isEmpty : false
+BarlineSettingsProxyModel::BarlineSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorProxyModel(parent)
+{
+    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
+    setModelType(InspectorModelType::TYPE_BARLINE);
+    setTitle(qtrc("inspector", "Barline"));
 
-    BarlinePopup {
-        id: barlinePopup
-    }
+    addModel(new BarlineSettingsModel(this, repository));
+    addModel(new StaffSettingsModel(this, repository));
 }
