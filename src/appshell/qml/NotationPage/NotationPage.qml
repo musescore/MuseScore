@@ -236,22 +236,15 @@ DockPage {
 
             allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
 
-            height: 200
-            minimumHeight: 100
-            maximumHeight: 300
+            height: minimumHeight
+            minimumHeight: 180
+            maximumHeight: 520
 
             tabifyPanel: pianoRollPanel
 
-            visible: false
-
-            Rectangle {
-                anchors.fill: parent
-                color: ui.theme.backgroundPrimaryColor
-
-                StyledTextLabel {
-                    anchors.centerIn: parent
-                    text: mixerPanel.title
-                }
+            Loader {
+                asynchronous: true
+                sourceComponent: MixerPanel {}
             }
         },
 
