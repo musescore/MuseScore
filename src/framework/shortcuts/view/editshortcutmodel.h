@@ -26,6 +26,8 @@
 
 #include "modularity/ioc.h"
 
+class QKeySequence;
+
 namespace mu::shortcuts {
 class EditShortcutModel : public QObject
 {
