@@ -163,17 +163,14 @@ for group in groups.values():
         to_subelement(el, instrument, 'init') # must be first subelement
         to_subelement(el, instrument, 'family')
         to_comment(el, instrument, 'comment')
-        to_subelement(el, instrument, 'trackName')
-        to_subelement(el, instrument, 'longName')
-        to_subelement(el, instrument, 'shortName')
-        # if instrument["ddName"] != '[hide]':
-        #     to_subelement(el, instrument, 'trackName')
-        #     to_subelement(el, instrument, 'longName')
-        #     to_subelement(el, instrument, 'shortName')
-        #     if instrument["ddName"]:
-        #         dd_el = ET.SubElement(el, 'dropdownName')
-        #         dd_el.text = instrument["ddName"]
-        #         to_attribute(dd_el, instrument, 'ddMeaning', 'meaning')
+        if instrument["ddName"] != '[hide]':
+             to_subelement(el, instrument, 'trackName')
+             to_subelement(el, instrument, 'longName')
+             to_subelement(el, instrument, 'shortName')
+             if instrument["ddName"]:
+                 dd_el = ET.SubElement(el, 'dropdownName')
+                 dd_el.text = instrument["ddName"]
+                 to_attribute(dd_el, instrument, 'ddMeaning', 'meaning')
         to_subelement(el, instrument, 'description')
         to_subelement(el, instrument, 'musicXMLid')
 
