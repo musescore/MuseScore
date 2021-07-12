@@ -110,6 +110,7 @@ private:
     void restorePageState(const QString& pageName);
 
     void resetWindowState();
+    bool restoreLayout(const QByteArray& layout, KDDockWidgets::RestoreOptions options = KDDockWidgets::RestoreOptions());
 
     void initDocks(DockPage* page);
 
