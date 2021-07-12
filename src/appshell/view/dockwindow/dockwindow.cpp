@@ -417,10 +417,7 @@ void DockWindow::restoreGeometry()
 {
     TRACEFUNC;
 
-    QByteArray state = configuration()->windowGeometry();
-
-    KDDockWidgets::LayoutSaver layoutSaver;
-    if (!layoutSaver.restoreLayout(state)) {
+    if (!restoreLayout(configuration()->windowGeometry())) {
         LOGE() << "Could not restore the window geometry!";
     }
 }
@@ -436,18 +433,24 @@ void DockWindow::restorePageState(const QString& pageName)
 {
     TRACEFUNC;
 
-    QByteArray state = configuration()->pageState(pageName);
-    if (state.isEmpty()) {
-        return;
-    }
-
     /// NOTE: Do not restore geometry
-    KDDockWidgets::RestoreOption option = KDDockWidgets::RestoreOption::RestoreOption_RelativeToMainWindow;
-
-    KDDockWidgets::LayoutSaver layoutSaver(option);
-    if (!layoutSaver.restoreLayout(state)) {
+    bool ok = restoreLayout(configuration()->pageState(pageName), KDDockWidgets::RestoreOption::RestoreOption_RelativeToMainWindow);
+    if (!ok) {
         LOGE() << "Could not restore the state of " << pageName << "!";
     }
+}
+
+bool DockWindow::restoreLayout(const QByteArray& layout, KDDockWidgets::RestoreOptions)
+{
+    if (layout.isEmpty()) {
+        return true;
+    }
+
+    LOGI() << "TODO: restoring of layout is temporary disabled because it troubles";
+    //KDDockWidgets::LayoutSaver layoutSaver(option);
+    //return layoutSaver.restoreLayout(state);
+
+    return true;
 }
 
 QByteArray DockWindow::windowState() const
