@@ -19,19 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "notationcreator.h"
+#include "scoreaccess.h"
 
-#include "notationproject.h"
-#include "excerptnotation.h"
+using namespace mu::engraving;
 
-using namespace mu::notation;
-
-INotationProjectPtr NotationCreator::newNotationProject() const
+Ms::MasterScore* ScoreAccess::createMasterScore()
 {
-    return std::make_shared<NotationProject>();
+    return new Ms::MasterScore();
 }
 
-IExcerptNotationPtr NotationCreator::newExcerptNotation() const
+Ms::MasterScore* ScoreAccess::createMasterScore(const Ms::MStyle& style)
 {
-    return std::make_shared<ExcerptNotation>();
+    return new Ms::MasterScore(style);
+}
+
+Ms::Score::FileError ScoreAccess::loadMscz(Ms::MasterScore* masterScore, mu::engraving::MsczReader& msczFile, bool ignoreVersionError)
+{
+    return masterScore->loadMscz(msczFile, ignoreVersionError);
 }

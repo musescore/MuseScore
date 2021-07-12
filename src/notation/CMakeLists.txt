@@ -31,6 +31,7 @@ set(MODULE_SRC
     ${WIDGETS_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/notationmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notationmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationproject.h
     ${CMAKE_CURRENT_LIST_DIR}/imasternotation.h
     ${CMAKE_CURRENT_LIST_DIR}/iexcerptnotation.h
     ${CMAKE_CURRENT_LIST_DIR}/inotation.h
@@ -54,9 +55,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationelements.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationparts.h
+
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/igetscore.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationproject.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationproject.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/masternotation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/masternotation.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/excerptnotation.cpp

@@ -31,6 +31,7 @@
 #include "libmscore/musescoreCore.h"
 
 #include "engraving/compat/mscxcompat.h"
+#include "engraving/scoreaccess.h"
 
 #include "importexport/musicxml/internal/musicxml/exportxml.h"
 
@@ -55,7 +56,7 @@ MasterScore* MTest::readScore(const QString& name)
 
 MasterScore* MTest::readCreatedScore(const QString& name)
 {
-    MasterScore* score = new MasterScore(mscore->baseStyle());
+    MasterScore* score = ScoreAccess::createMasterScore(mscore->baseStyle());
     QFileInfo fi(name);
     score->setName(fi.completeBaseName());
     QString csl  = fi.suffix().toLower();

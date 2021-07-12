@@ -63,16 +63,16 @@ QString TemplatePaintView::zoomOutSequence() const
 
 void TemplatePaintView::load()
 {
-    IMasterNotationPtr masterNotation = notationCreator()->newMasterNotation();
-    Ret ret = masterNotation->load(m_templatePath);
+    INotationProjectPtr notationProject = notationCreator()->newNotationProject();
+    Ret ret = notationProject->load(m_templatePath);
 
     if (!ret) {
         LOGE() << ret.toString();
     }
 
-    setNotation(masterNotation->notation());
+    setNotation(notationProject->masterNotation()->notation());
 
-    if (masterNotation) {
+    if (notationProject) {
         adjustCanvas();
     }
 }

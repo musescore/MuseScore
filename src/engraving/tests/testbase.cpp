@@ -37,6 +37,7 @@
 #include "thirdparty/qzip/qzipreader_p.h"
 
 #include "engraving/compat/mscxcompat.h"
+#include "engraving/scoreaccess.h"
 
 #include "framework/global/globalmodule.h"
 #include "framework/fonts/fontsmodule.h"
@@ -103,7 +104,7 @@ MasterScore* MTest::readScore(const QString& name)
 
 MasterScore* MTest::readCreatedScore(const QString& name)
 {
-    MasterScore* score = new MasterScore(mscore->baseStyle());
+    MasterScore* score = mu::engraving::ScoreAccess::createMasterScore(mscore->baseStyle());
     QFileInfo fi(name);
     score->setName(fi.completeBaseName());
     QString csl  = fi.suffix().toLower();

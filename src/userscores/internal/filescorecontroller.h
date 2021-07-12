@@ -50,21 +50,22 @@ class FileScoreController : public IFileScoreController, public actions::Actiona
 public:
     void init();
 
-    Ret openScore(const io::path& scorePath) override;
-    bool closeOpenedScore() override;
-    bool isScoreOpened(const io::path& scorePath) const override;
+    Ret openProject(const io::path& projectPath) override;
+    bool closeOpenedProject() override;
+    bool isProjectOpened(const io::path& scorePath) const override;
 
 private:
     void setupConnections();
 
+    notation::INotationProjectPtr currentNotationProject() const;
     notation::IMasterNotationPtr currentMasterNotation() const;
     notation::INotationPtr currentNotation() const;
     notation::INotationInteractionPtr currentInteraction() const;
     notation::INotationSelectionPtr currentNotationSelection() const;
 
-    void openScore(const actions::ActionData& args);
+    void openProject(const actions::ActionData& args);
     void importScore();
-    void newScore();
+    void newProject();
 
     bool checkCanIgnoreError(const Ret& ret, const io::path& filePath);
     framework::IInteractive::Button askAboutSavingScore(const io::path& filePath);
@@ -84,7 +85,7 @@ private:
     io::path selectScoreOpeningFile();
     io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
 
-    Ret doOpenScore(const io::path& filePath);
+    Ret doOpenProject(const io::path& filePath);
     void doSaveScore(const io::path& filePath = io::path(), notation::SaveMode saveMode = notation::SaveMode::Save);
 
     void exportScore();
@@ -93,7 +94,7 @@ private:
 
     void prependToRecentScoreList(const io::path& filePath);
 
-    bool isScoreOpened() const;
+    bool isProjectOpened() const;
     bool isNeedSaveScore() const;
     bool hasSelection() const;
 };

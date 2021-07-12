@@ -65,8 +65,8 @@ mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out
     TRACEFUNC;
 
     LOGI() << "in: " << in << ", out: " << out;
-    auto masterNotation = notationCreator()->newMasterNotation();
-    IF_ASSERT_FAILED(masterNotation) {
+    auto notationProject = notationCreator()->newNotationProject();
+    IF_ASSERT_FAILED(notationProject) {
         return make_ret(Err::UnknownError);
     }
 
@@ -76,16 +76,16 @@ mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out
         return make_ret(Err::ConvertTypeUnknown);
     }
 
-    Ret ret = masterNotation->load(in, stylePath, forceMode);
+    Ret ret = notationProject->load(in, stylePath, forceMode);
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
         return make_ret(Err::InFileFailedLoad);
     }
 
     if (isConvertPageByPage(suffix)) {
-        ret = convertPageByPage(writer, masterNotation->notation(), out);
+        ret = convertPageByPage(writer, notationProject->masterNotation()->notation(), out);
     } else {
-        ret = convertFullNotation(writer, masterNotation->notation(), out);
+        ret = convertFullNotation(writer, notationProject->masterNotation()->notation(), out);
     }
 
     return make_ret(Ret::Code::Ok);
@@ -96,8 +96,8 @@ mu::Ret ConverterController::convertScoreParts(const mu::io::path& in, const mu:
 {
     TRACEFUNC;
 
-    auto masterNotation = notationCreator()->newMasterNotation();
-    IF_ASSERT_FAILED(masterNotation) {
+    auto notationProject = notationCreator()->newNotationProject();
+    IF_ASSERT_FAILED(notationProject) {
         return make_ret(Err::UnknownError);
     }
 
@@ -107,16 +107,16 @@ mu::Ret ConverterController::convertScoreParts(const mu::io::path& in, const mu:
         return make_ret(Err::ConvertTypeUnknown);
     }
 
-    Ret ret = masterNotation->load(in, stylePath, forceMode);
+    Ret ret = notationProject->load(in, stylePath, forceMode);
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
         return make_ret(Err::InFileFailedLoad);
     }
 
     if (suffix == PDF_SUFFIX) {
-        ret = convertScorePartsToPdf(writer, masterNotation, out);
+        ret = convertScorePartsToPdf(writer, notationProject->masterNotation(), out);
     } else if (suffix == PNG_SUFFIX) {
-        ret = convertScorePartsToPngs(writer, masterNotation, out);
+        ret = convertScorePartsToPngs(writer, notationProject->masterNotation(), out);
     } else {
         ret = make_ret(Ret::Code::NotSupported);
     }

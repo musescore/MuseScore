@@ -26,6 +26,11 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/engravingmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/engravingmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/engravingerrors.h
+    ${CMAKE_CURRENT_LIST_DIR}/engravingproject.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/engravingproject.h
+    ${CMAKE_CURRENT_LIST_DIR}/scoreaccess.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/scoreaccess.h
 
     ${LIBMSCORE_SRC}
 

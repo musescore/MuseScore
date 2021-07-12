@@ -27,11 +27,14 @@
 #include "libmscore/staff.h"
 #include "libmscore/stringdata.h"
 
+#include "engraving/scoreaccess.h"
+
 #include "widgetstatestore.h"
 #include "internal/mscznotationreader.h"
 
-#include "log.h"
 #include "notationerrors.h"
+
+#include "log.h"
 
 using namespace mu::notation;
 
@@ -85,7 +88,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     }
 
     // load a sample standard score in preview
-    Ms::MasterScore* sc = new Ms::MasterScore(Ms::MScore::defaultStyle());
+    Ms::MasterScore* sc = mu::engraving::ScoreAccess::createMasterScore(Ms::MScore::defaultStyle());
     if (loadScore(sc, ":/view/resources/data/std_sample.mscx")) {
         standardPreview->setScore(sc);
     } else {
@@ -93,7 +96,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     }
 
     // load a sample tabulature score in preview
-    sc = new Ms::MasterScore(Ms::MScore::defaultStyle());
+    sc = mu::engraving::ScoreAccess::createMasterScore(Ms::MScore::defaultStyle());
     if (loadScore(sc, ":/view/resources/data/tab_sample.mscx")) {
         tabPreview->setScore(sc);
     } else {
