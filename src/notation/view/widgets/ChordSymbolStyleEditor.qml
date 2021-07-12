@@ -21,7 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.12
+import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
@@ -43,8 +43,8 @@ Rectangle {
         FlatButton {
             id: button
 
-            width: chordSymbolStyleGrid.cellWidth-5
-            height: chordSymbolStyleGrid.cellHeight-5
+            width: 170
+            height: 76
 
             text: styleName
 
@@ -54,32 +54,33 @@ Rectangle {
         }
     }
 
-    Column {
+    ColumnLayout {
         anchors.fill: parent
+        spacing: 12
 
         StyledTextLabel {
-            text: qsTrc("notation","Chord symbols")
-            font.pixelSize: ui.theme.bodyFont.pixelSize * 1.5
+            text: qsTrc("notation", "Chord symbols")
+            font: ui.theme.headerBoldFont
         }
 
         StyledTextLabel {
-            text: qsTrc("notation","Choose a style")
+            text: qsTrc("notation", "Choose a style")
         }
 
-        GridView {
-            id: chordSymbolStyleGrid
+        ListView {
+            id: chordSymbolStyleList
+            Layout.fillWidth: true
 
-            height: 2*cellHeight
-            width: root.width
+            height: 76
+            spacing: 12
 
-            cellWidth: 180
-            cellHeight: 80
+            clip: true
+            orientation: Qt.Horizontal
 
             model: chordSymbolEditorModel
             currentIndex: chordSymbolEditorModel.currentStyleIndex
 
             delegate: chordStyleDelegate
-            clip: true
 
             highlight: Rectangle {
                 color: ui.theme.accentColor
@@ -87,32 +88,28 @@ Rectangle {
             }
         }
 
-        Rectangle {
-            width: root.width
-            height: 2
-            color: ui.theme.backgroundSecondaryColor
-        }
+        SeparatorLine {}
 
+        // To be modified still
         StyledTextLabel {
-            text: qsTrc("notation","Adjust settings for ")
+            text: qsTrc("notation", "Adjust settings for ")
         }
 
         TabBar {
             id: bar
-
-            width: root.width
-            implicitHeight: 60
+            Layout.fillWidth: true
+            height: 60
 
             StyledTabButton {
                 text: qsTrc("notation", "Basic")
-                sideMargin: 120
+                width: bar.width/2
                 height: 60
                 isCurrent: bar.currentIndex === 0
             }
 
             StyledTabButton {
                 text: qsTrc("notation", "Advanced")
-                sideMargin: 120
+                width: bar.width/2
                 height: 60
                 isCurrent: bar.currentIndex === 1
             }
@@ -121,17 +118,16 @@ Rectangle {
         StackLayout {
             id: editorStack
 
-            anchors.top: bar.bottom
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
             currentIndex: bar.currentIndex
 
             ChordSymbolEditorBasic {
-                width: root.width
                 editorModel: chordSymbolEditorModel
             }
 
             ChordSymbolEditorAdvanced {
-                width: root.width
                 editorModel: chordSymbolEditorModel
             }
         }

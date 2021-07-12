@@ -25,497 +25,510 @@ import QtQuick.Controls 2.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.NotationScene 1.0
 
-Item {
+Flickable {
     id: root
 
-    property var editorModel: null
+    property ChordSymbolEditorModel editorModel: null
 
-    Flickable{
-        id: flickable
+    contentWidth: width
+    contentHeight: content.height
 
-        // Just to make it scroll
-        height: 200
-        width: root.width
+    boundsBehavior: Flickable.StopAtBounds
+    clip: true
 
-        boundsBehavior: Flickable.StopAtBounds
-        interactive: true
+    ScrollBar.vertical: StyledScrollBar {}
 
-        contentHeight: 400
+    Row{
+        id: content
+        anchors.left: parent.left
+        anchors.right: parent.right
+        spacing: 24
+        Column{
+            id: leftColumn
+            width: (content.width - content.spacing) / 2
+            spacing: 18
 
-        ScrollBar.vertical: StyledScrollBar {}
+            StyledTextLabel{
+                text: qsTrc("notation", "Quality")
+                font: ui.theme.bodyBoldFont
+            }
 
-        Row{
-            Column{
-                id: leftColumn
+            Row{
+                width: parent.width
+                spacing: 12
+                LabelledSpinBox {
+                    id: qualityAdjustSpinBox
+                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    text: qsTrc("notation", "Vertical Offset")
 
-                StyledTextLabel{
-                    text: qsTrc("notation","Quality")
+                    currentValue: root.editorModel.qualityAdjust
+                    step: 1
+                    minValue: -10
+                    maxValue: 10
+
+                    onValueEdited: root.editorModel.setProperty("QualityAdjust", newValue)
                 }
 
-                Row{
-                    Column{
-                        StyledTextLabel{
-                            text: qsTrc("notation","Vertical Offset")
-                        }
+                LabelledSpinBox {
+                    id: qualityMagSpinBox
+                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    text: qsTrc("notation", "Scaling")
 
-                        IncrementalPropertyControl {
-                            id: qualityAdjustSpinBox
+                    currentValue: root.editorModel.qualityMag
+                    step: 0.1
+                    minValue: -10
+                    maxValue: 10
 
-                            width: root.width/4
+                    onValueEdited: root.editorModel.setProperty("QualityMag", newValue)
+                }
+            }
 
-                            currentValue: editorModel.qualityAdjust
+            StyledTextLabel {
+                text: qsTrc("notation", "Extensions")
+                font: ui.theme.bodyBoldFont
+            }
 
-                            step: 1
-                            minValue: -10
-                            maxValue: 10
+            Row{
+                width: parent.width
+                spacing: 12
+                LabelledSpinBox {
+                    id: extensionAdjustSpinBox
+                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    text: qsTrc("notation", "Vertical Offset")
 
-                            onValueEdited: editorModel.setProperty("QualityAdjust", newValue)
-                        }
-                    }
+                    currentValue: root.editorModel.extensionAdjust
+                    step: 1
+                    minValue: -10
+                    maxValue: 10
 
-                    Column{
-                        StyledTextLabel{
-                            text: qsTrc("notation","Scaling")
-                        }
-
-                        IncrementalPropertyControl {
-                            id: qualityMagSpinBox
-
-                            width: root.width/4
-
-                            currentValue: editorModel.qualityMag
-
-                            step: 0.1
-                            minValue: -10
-                            maxValue: 10
-
-                            onValueEdited: editorModel.setProperty("QualityMag", newValue)
-                        }
-                    }
-
+                    onValueEdited: root.editorModel.setProperty("ExtensionAdjust", newValue)
                 }
 
-                StyledTextLabel{
-                    text: qsTrc("notation","Extensions")
+                LabelledSpinBox {
+                    id: extensionMagSpinBox
+                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    text: qsTrc("notation", "Scaling")
+
+                    currentValue: root.editorModel.extensionMag
+                    step: 0.1
+                    minValue: -10
+                    maxValue: 10
+
+                    onValueEdited: root.editorModel.setProperty("ExtensionMag", newValue)
+                }
+            }
+
+            StyledTextLabel {
+                text: qsTrc("notation", "Alterations")
+                font: ui.theme.bodyBoldFont
+            }
+
+            Row{
+                width: parent.width
+                spacing: 12
+                LabelledSpinBox {
+                    id: modifierAdjustSpinBox
+                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    text: qsTrc("notation", "Vertical Offset")
+
+                    currentValue: root.editorModel.modifierAdjust
+                    step: 1
+                    minValue: -10
+                    maxValue: 10
+
+                    onValueEdited: root.editorModel.setProperty("ModifierAdjust", newValue)
                 }
 
-                Row{
-                    Column{
-                        StyledTextLabel{
-                            text: qsTrc("notation","Vertical Offset")
-                        }
+                LabelledSpinBox {
+                    id: modifierMagSpinBox
+                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    text: qsTrc("notation", "Scaling")
 
-                        IncrementalPropertyControl {
-                            id: extensionAdjustSpinBox
+                    currentValue: root.editorModel.modifierMag
 
-                            width: root.width/4
+                    step: 0.1
+                    minValue: -10
+                    maxValue: 10
 
-                            currentValue: editorModel.extensionAdjust
+                    onValueEdited: root.editorModel.setProperty("ModifierMag", newValue)
+                }
+            }
 
-                            step: 1
-                            minValue: -10
-                            maxValue: 10
+            StyledTextLabel {
+                text: qsTrc("notation", "Positioning")
+                font: ui.theme.bodyBoldFont
+            }
 
-                            onValueEdited: editorModel.setProperty("ExtensionAdjust", newValue)
-                        }
-                    }
+            LabelledSpinBox {
+                id: chordSpacingSpinBox
+                width: Math.min(126, (parent.width - parent.spacing) / 2)
+                text: qsTrc("notation", "Minimum chord spacing")
 
-                    Column{
-                        StyledTextLabel{
-                            text: qsTrc("notation","Scaling")
-                        }
+                currentValue: root.editorModel.minHarmonyDistance
 
-                        IncrementalPropertyControl {
-                            id: extensionMagSpinBox
+                step: 0.1
+                minValue: -50
+                maxValue: 10
 
-                            width: root.width/4
+                units: qsTrc("notation", "sp")
 
-                            currentValue: editorModel.extensionMag
+                onValueEdited: root.editorModel.setProperty("minHarmonyDistance", newValue)
+            }
 
-                            step: 0.1
-                            minValue: -10
-                            maxValue: 10
+            LabelledSpinBox {
+                id: barlineDistanceSpinBox
+                width: Math.min(126, (parent.width - parent.spacing) / 2)
+                text: qsTrc("notation", "Minimum barline distance")
 
-                            onValueEdited: editorModel.setProperty("ExtensionMag", newValue)
-                        }
-                    }
+                currentValue: root.editorModel.maxHarmonyBarDistance
 
+                step: 0.5
+                minValue: -50
+                maxValue: 50
+
+                units: qsTrc("notation", "sp")
+
+                onValueEdited: root.editorModel.setProperty("maxHarmonyBarDistance", newValue)
+            }
+
+            LabelledSpinBox {
+                id: distToFretboardSpinBox
+                width: Math.min(126, (parent.width - parent.spacing) / 2)
+                text: qsTrc("notation", "Distance to fretboard diagram")
+
+                currentValue: root.editorModel.harmonyFretDistance
+
+                step: 0.5
+                minValue: -10000
+                maxValue: 10000
+
+                units: qsTrc("notation", "sp")
+
+                onValueEdited: root.editorModel.setProperty("HarmonyFretDistance", newValue)
+            }
+
+            Row{
+                width: parent.width
+                spacing: 12
+                LabelledSpinBox {
+                    id: shiftAboveSpinBox
+                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    text: qsTrc("notation", "Minimum shift above")
+
+                    currentValue: root.editorModel.maxChordShiftAbove
+
+                    step: 0.5
+                    minValue: 0
+                    maxValue: 100
+
+                    units: qsTrc("notation", "sp")
+
+                    onValueEdited: root.editorModel.setProperty("maxChordShiftAbove", newValue)
                 }
 
-                StyledTextLabel{
-                    text: qsTrc("notation","Alterations")
+                LabelledSpinBox {
+                    id: shiftBelowSpinBox
+                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    text: qsTrc("notation", "Minimum shift below")
+
+                    currentValue: root.editorModel.maxChordShiftBelow
+
+                    step: 0.5
+                    minValue: 0
+                    maxValue: 100
+
+                    units: qsTrc("notation", "sp")
+
+                    onValueEdited: root.editorModel.setProperty("maxChordShiftBelow", newValue)
                 }
+            }
+            LabelledSpinBox {
+                id: capoFretSpinBox
+                width: Math.min(126, (parent.width - parent.spacing) / 2)
+                text: qsTrc("notation","Capo fret position")
 
-                Row{
-                    Column{
-                        StyledTextLabel{
-                            text: qsTrc("notation","Vertical Offset")
-                        }
+                currentValue: root.editorModel.capoFretPosition
 
-                        IncrementalPropertyControl {
-                            id: modifierAdjustSpinBox
+                step: 1
+                minValue: 0
+                maxValue: 11
 
-                            width: root.width/4
+                onValueEdited: root.editorModel.setProperty("capoPosition", newValue)
+            }
+        }
+        Column{
+            id: rightColumn
 
-                            currentValue: editorModel.modifierAdjust
+            width: (content.width - content.spacing) / 2
+            spacing: 18
 
-                            step: 1
-                            minValue: -10
-                            maxValue: 10
+            StyledTextLabel {
+                text: qsTrc("notation", "Capitalization")
+                font: ui.theme.bodyBoldFont
+            }
 
-                            onValueEdited: editorModel.setProperty("ModifierAdjust", newValue)
-                        }
-                    }
+            CheckBox {
+                width: Math.min(126, (parent.width - parent.spacing) / 2)
+                property int autoCapital: -1
+                checked: (editorModel.autoCapitalization === 1.0)
 
-                    Column{
-                        StyledTextLabel{
-                            text: qsTrc("notation","Scaling")
-                        }
-
-                        IncrementalPropertyControl {
-                            id: modifierMagSpinBox
-
-                            width: root.width/4
-
-                            currentValue: editorModel.modifierMag
-
-                            step: 0.1
-                            minValue: -10
-                            maxValue: 10
-
-                            onValueEdited: editorModel.setProperty("ModifierMag", newValue)
-                        }
-                    }
-
+                text: "Automatically capitalize note names"
+                onClicked: {
+                    editorModel.setProperty("autoCapitalization", checked ? 0 : 1)
                 }
-                StyledTextLabel{
-                    text: qsTrc("notation","Positioning")
-                }
+            }
 
-                Column{
+            StyledTextLabel {
+                text: qsTrc("notation", "Chord Root")
+            }
+
+            RadioButtonGroup {
+                id: minorRootCapitalization
+
+                height: 50
+
+                model: [
+                    { name: "Cmin", value: 1.0 },
+                    { name: "cmin", value: 0.0 },
+                ]
+
+                delegate: FlatRadioButton {
+                    height: 50
+                    width: 100
+
+                    ButtonGroup.group: minorRootCapitalization.radioButtonGroup
+
                     StyledTextLabel{
-                        text: qsTrc("notation","Minimum chord spacing")
+                        text: qsTrc("notation", modelData["name"])
                     }
+                    checked: editorModel.minorRootCapitalization === modelData["value"]
 
-                    IncrementalPropertyControl {
-                        id: chordSpacingSpinBox
-
-                        width: root.width/4
-
-                        currentValue: editorModel.minHarmonyDistance
-                        measureUnitsSymbol: qsTrc("notation", "sp")
-
-                        step: 0.1
-                        minValue: -50
-                        maxValue: 10
-
-                        onValueEdited: editorModel.setProperty("minHarmonyDistance", newValue)
-                    }
-                }
-
-                Column{
-                    StyledTextLabel{
-                        text: qsTrc("notation","Minimum barline distance")
-                    }
-
-                    IncrementalPropertyControl {
-                        id: barlineDistanceSpinBox
-
-                        width: root.width/4
-
-                        currentValue: editorModel.maxHarmonyBarDistance
-                        measureUnitsSymbol: qsTrc("notation", "sp")
-
-                        step: 0.5
-                        minValue: -50
-                        maxValue: 50
-
-                        onValueEdited: editorModel.setProperty("maxHarmonyBarDistance", newValue)
-                    }
-                }
-
-                Column{
-                    StyledTextLabel{
-                        text: qsTrc("notation","Distance to fretboard diagram")
-                    }
-
-                    IncrementalPropertyControl {
-                        id: distToFretboardSpinBox
-
-                        width: root.width/4
-
-                        currentValue: editorModel.harmonyFretDistance
-                        measureUnitsSymbol: qsTrc("notation", "sp")
-
-                        step: 0.5
-                        minValue: -10000
-                        maxValue: 10000
-
-                        onValueEdited: editorModel.setProperty("HarmonyFretDistance", newValue)
-                    }
-                }
-                Row{
-                    Column{
-                        StyledTextLabel{
-                            text: qsTrc("notation","Minimum shift above")
-                        }
-
-                        IncrementalPropertyControl {
-                            id: shiftBelowSpinBox
-
-                            width: root.width/4
-
-                            currentValue: editorModel.maxChordShiftAbove
-                            measureUnitsSymbol: qsTrc("notation", "sp")
-
-                            step: 0.5
-                            minValue: 0
-                            maxValue: 100
-
-                            onValueEdited: editorModel.setProperty("maxChordShiftAbove", newValue)
-                        }
-                    }
-
-                    Column{
-                        StyledTextLabel{
-                            text: qsTrc("notation","Minimum shift below")
-                        }
-
-                        IncrementalPropertyControl {
-                            id: shiftAboveSpinBox
-
-                            width: root.width/4
-
-                            currentValue: editorModel.maxChordShiftBelow
-                            measureUnitsSymbol: qsTrc("notation", "sp")
-
-                            step: 0.5
-                            minValue: 0
-                            maxValue: 100
-
-                            onValueEdited: editorModel.setProperty("maxChordShiftBelow", newValue)
-                        }
-                    }
-
-                }
-                Column{
-                    StyledTextLabel{
-                        text: qsTrc("notation","Capo fret position")
-                    }
-
-                    IncrementalPropertyControl {
-                        id: capoFretSpinBox
-
-                        width: root.width/4
-
-                        currentValue: editorModel.capoFretPosition
-
-                        step: 1
-                        minValue: 0
-                        maxValue: 11
-
-                        onValueEdited: editorModel.setProperty("capoPosition", newValue)
+                    onToggled: {
+                        editorModel.setProperty("minorRootCapitalization", modelData["value"])
                     }
                 }
             }
-            Column{
-                id: rightColumn
-                CheckBox {
-                    width: 200
-                    property int autoCapital: -1
-                    checked: (editorModel.autoCapitalization === 1.0)
 
-                    text: "Automatic Capitalization"
-                    onClicked: {
-                        editorModel.setProperty("autoCapitalization", checked?0:1)
+            StyledTextLabel {
+                text: qsTrc("notation", "Chord quality")
+            }
+
+            RadioButtonGroup {
+                id: qualitySymbolsCapitalization
+
+                height: 50
+
+                model: [
+                    { name: "Maj", value: 1.0 },
+                    { name: "maj", value: 0.0 },
+                ]
+
+                delegate: FlatRadioButton {
+                    height: 50
+                    width: 100
+
+                    ButtonGroup.group: qualitySymbolsCapitalization.radioButtonGroup
+
+                    StyledTextLabel{
+                        text: qsTrc("notation", modelData["name"])
+                    }
+                    checked: editorModel.qualitySymbolsCapitalization === modelData["value"]
+
+                    onToggled: {
+                        editorModel.setProperty("qualitySymbolsCapitalization", modelData["value"])
                     }
                 }
-                RadioButtonGroup {
-                    id: minorRootCapitalization
+            }
 
-                    height: 30
+            StyledTextLabel {
+                text: qsTrc("notation", "Bass notes")
+            }
 
-                    model: [
-                        { name: "Cmin", value: 1.0 },
-                        { name: "cmin", value: 0.0 },
-                    ]
+            RadioButtonGroup {
+                id: bassNotesCapitalization
 
-                    delegate: FlatRadioButton {
-                        ButtonGroup.group: minorRootCapitalization.radioButtonGroup
+                height: 50
 
-                        StyledTextLabel{
-                            text: qsTrc("notation",modelData["name"])
-                        }
-                        checked: editorModel.minorRootCapitalization === modelData["value"]
+                model: [
+                    { name: "C/B", value: 1.0 },
+                    { name: "C/b", value: 0.0 },
+                ]
 
-                        onToggled: {
-                            editorModel.setProperty("minorRootCapitalization", modelData["value"])
-                        }
+                delegate: FlatRadioButton {
+                    height: 50
+                    width: 100
+
+                    ButtonGroup.group: bassNotesCapitalization.radioButtonGroup
+
+                    StyledTextLabel{
+                        text: qsTrc("notation", modelData["name"])
+                    }
+                    checked: editorModel.bassNotesCapitalization === modelData["value"]
+
+                    onToggled: {
+                        editorModel.setProperty("bassNotesCapitalization", modelData["value"])
                     }
                 }
-                RadioButtonGroup {
-                    id: qualitySymbolsCapitalization
+            }
 
-                    height: 30
+            StyledTextLabel {
+                text: qsTrc("notation", "Solfege")
+            }
 
-                    model: [
-                        { name: "Maj", value: 1.0 },
-                        { name: "maj", value: 0.0 },
-                    ]
+            RadioButtonGroup {
+                id: solfegeNotesCapitalization
 
-                    delegate: FlatRadioButton {
-                        ButtonGroup.group: qualitySymbolsCapitalization.radioButtonGroup
+                height: 50
 
-                        StyledTextLabel{
-                            text: qsTrc("notation",modelData["name"])
-                        }
-                        checked: editorModel.qualitySymbolsCapitalization === modelData["value"]
+                model: [
+                    { name: "DO", value: 1.0 },
+                    { name: "Do", value: 0.0 },
+                ]
 
-                        onToggled: {
-                            editorModel.setProperty("qualitySymbolsCapitalization", modelData["value"])
-                        }
+                delegate: FlatRadioButton {
+                    height: 50
+                    width: 100
+
+                    ButtonGroup.group: solfegeNotesCapitalization.radioButtonGroup
+
+                    StyledTextLabel{
+                        text: qsTrc("notation", modelData["name"])
+                    }
+                    checked: editorModel.solfegeNotesCapitalization === modelData["value"]
+
+                    onToggled: {
+                        editorModel.setProperty("solfegeNotesCapitalization", modelData["value"])
                     }
                 }
-                RadioButtonGroup {
-                    id: bassNotesCapitalization
+            }
 
-                    height: 30
+            StyledTextLabel {
+                text: qsTrc("notation", "Parentheses")
+                font: ui.theme.bodyBoldFont
+            }
 
-                    model: [
-                        { name: "C/B", value: 1.0 },
-                        { name: "C/b", value: 0.0 },
-                    ]
+            StyledTextLabel {
+                text: qsTrc("notation", "Alterations")
+            }
 
-                    delegate: FlatRadioButton {
-                        ButtonGroup.group: bassNotesCapitalization.radioButtonGroup
+            RadioButtonGroup {
+                id: alterationsParentheses
 
-                        StyledTextLabel{
-                            text: qsTrc("notation",modelData["name"])
-                        }
-                        checked: editorModel.bassNotesCapitalization === modelData["value"]
+                height: 50
 
-                        onToggled: {
-                            editorModel.setProperty("bassNotesCapitalization", modelData["value"])
-                        }
+                model: [
+                    { name: "(b5)", value: 1.0 },
+                    { name: "b5", value: 0.0 },
+                ]
+
+                delegate: FlatRadioButton {
+                    height: 50
+                    width: 100
+
+                    ButtonGroup.group: alterationsParentheses.radioButtonGroup
+
+                    StyledTextLabel{
+                        text: qsTrc("notation", modelData["name"])
+                    }
+                    checked: editorModel.alterationsParentheses === modelData["value"]
+
+                    onToggled: {
+                        editorModel.setProperty("alterationsParentheses", modelData["value"])
                     }
                 }
-                RadioButtonGroup {
-                    id: solfegeNotesCapitalization
+            }
 
-                    height: 30
+            StyledTextLabel {
+                text: qsTrc("notation", "Suspensions")
+            }
 
-                    model: [
-                        { name: "DO", value: 1.0 },
-                        { name: "Do", value: 0.0 },
-                    ]
+            RadioButtonGroup {
+                id: suspensionsParentheses
 
-                    delegate: FlatRadioButton {
-                        ButtonGroup.group: solfegeNotesCapitalization.radioButtonGroup
+                height: 50
 
-                        StyledTextLabel{
-                            text: qsTrc("notation",modelData["name"])
-                        }
-                        checked: editorModel.solfegeNotesCapitalization === modelData["value"]
+                model: [
+                    { name: "(sus)", value: 1.0 },
+                    { name: "sus", value: 0.0 },
+                ]
 
-                        onToggled: {
-                            editorModel.setProperty("solfegeNotesCapitalization", modelData["value"])
-                        }
+                delegate: FlatRadioButton {
+                    height: 50
+                    width: 100
+
+                    ButtonGroup.group: suspensionsParentheses.radioButtonGroup
+
+                    StyledTextLabel{
+                        text: qsTrc("notation", modelData["name"])
+                    }
+                    checked: editorModel.suspensionsParentheses === modelData["value"]
+
+                    onToggled: {
+                        editorModel.setProperty("suspensionsParentheses", modelData["value"])
                     }
                 }
-                StyledTextLabel{
-                    text: qsTrc("notation","Parentheses")
-                }
-                RadioButtonGroup {
-                    id: alterationsParentheses
+            }
 
-                    height: 30
+            StyledTextLabel {
+                text: qsTrc("notation", "Minor-Major sevenths")
+            }
 
-                    model: [
-                        { name: "(b5)", value: 1.0 },
-                        { name: "b5", value: 0.0 },
-                    ]
+            RadioButtonGroup {
+                id: minMajParentheses
 
-                    delegate: FlatRadioButton {
-                        ButtonGroup.group: alterationsParentheses.radioButtonGroup
+                height: 50
 
-                        StyledTextLabel{
-                            text: qsTrc("notation",modelData["name"])
-                        }
-                        checked: editorModel.alterationsParentheses === modelData["value"]
+                model: [
+                    { name: "m(maj7)", value: 1.0 },
+                    { name: "mmaj7", value: 0.0 },
+                ]
 
-                        onToggled: {
-                            editorModel.setProperty("alterationsParentheses", modelData["value"])
-                        }
+                delegate: FlatRadioButton {
+                    height: 50
+                    width: 100
+
+                    ButtonGroup.group: minMajParentheses.radioButtonGroup
+
+                    StyledTextLabel{
+                        text: qsTrc("notation", modelData["name"])
+                    }
+                    checked: editorModel.minMajParentheses === modelData["value"]
+
+                    onToggled: {
+                        editorModel.setProperty("minMajParentheses", modelData["value"])
                     }
                 }
-                RadioButtonGroup {
-                    id: suspensionsParentheses
+            }
 
-                    height: 30
+            StyledTextLabel {
+                text: qsTrc("notation", "Additions and omissions")
+            }
 
-                    model: [
-                        { name: "(sus)", value: 1.0 },
-                        { name: "sus", value: 0.0 },
-                    ]
+            RadioButtonGroup {
+                id: addOmitParentheses
 
-                    delegate: FlatRadioButton {
-                        ButtonGroup.group: suspensionsParentheses.radioButtonGroup
+                height: 50
 
-                        StyledTextLabel{
-                            text: qsTrc("notation",modelData["name"])
-                        }
-                        checked: editorModel.suspensionsParentheses === modelData["value"]
+                model: [
+                    { name: "(add)", value: 1.0 },
+                    { name: "add", value: 0.0 },
+                ]
 
-                        onToggled: {
-                            editorModel.setProperty("suspensionsParentheses", modelData["value"])
-                        }
+                delegate: FlatRadioButton {
+                    height: 50
+                    width: 100
+
+                    ButtonGroup.group: addOmitParentheses.radioButtonGroup
+
+                    StyledTextLabel{
+                        text: qsTrc("notation", modelData["name"])
                     }
-                }
-                RadioButtonGroup {
-                    id: minMajParentheses
+                    checked: editorModel.addOmitParentheses === modelData["value"]
 
-                    height: 30
-
-                    model: [
-                        { name: "m(maj7)", value: 1.0 },
-                        { name: "mmaj7", value: 0.0 },
-                    ]
-
-                    delegate: FlatRadioButton {
-                        ButtonGroup.group: minMajParentheses.radioButtonGroup
-
-                        StyledTextLabel{
-                            text: qsTrc("notation",modelData["name"])
-                        }
-                        checked: editorModel.minMajParentheses === modelData["value"]
-
-                        onToggled: {
-                            editorModel.setProperty("minMajParentheses", modelData["value"])
-                        }
-                    }
-                }
-                RadioButtonGroup {
-                    id: addOmitParentheses
-
-                    height: 30
-
-                    model: [
-                        { name: "(add)", value: 1.0 },
-                        { name: "add", value: 0.0 },
-                    ]
-
-                    delegate: FlatRadioButton {
-                        ButtonGroup.group: addOmitParentheses.radioButtonGroup
-
-                        StyledTextLabel{
-                            text: qsTrc("notation",modelData["name"])
-                        }
-                        checked: editorModel.addOmitParentheses === modelData["value"]
-
-                        onToggled: {
-                            editorModel.setProperty("addOmitParentheses", modelData["value"])
-                        }
+                    onToggled: {
+                        editorModel.setProperty("addOmitParentheses", modelData["value"])
                     }
                 }
             }
