@@ -1383,7 +1383,7 @@ class MasterScore : public Score
     QFileInfo info;
 
     bool read(XmlReader&);
-    FileError read1(XmlReader&, bool ignoreVersionError);
+    FileError read1(XmlReader&, bool ignoreVersionError, const std::function<int()>& readStyleDefaultsVersion);
     FileError read114(XmlReader&);
     FileError read206(XmlReader&);
     FileError read302(XmlReader&);
@@ -1450,7 +1450,7 @@ public:
     FileError loadMscz(const QString& fileName, bool ignoreVersionError);
     FileError loadMscz(mu::engraving::MsczReader& msczFile, bool ignoreVersionError);
 
-    int readStyleDefaultsVersion();
+    int readStyleDefaultsVersion(const QByteArray& scoreData, const QString& completeBaseName);
     int styleDefaultByMscVersion(const int mscVer) const;
 
     Omr* omr() const { return _omr; }

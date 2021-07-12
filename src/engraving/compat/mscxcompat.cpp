@@ -30,7 +30,7 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
 {
     QByteArray msczData;
     QString filePath = path;
-    if (path.endsWith("mscx")) {
+    if (path.endsWith(".mscx")) {
         //! NOTE Convert mscx -> mscz
 
         QFile mscxFile(path);
@@ -47,7 +47,7 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
         writer.setFilePath(filePath);
         writer.open();
         writer.writeScore(mscxData);
-    } else {
+    } else if (path.endsWith(".mscz")) {
         QFile msczFile(path);
         if (!msczFile.open(QIODevice::ReadOnly)) {
             LOGE() << "failed open file: " << path;
@@ -55,6 +55,9 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
         }
 
         msczData = msczFile.readAll();
+    } else {
+        LOGE() << "unknown type, path: " << path;
+        return Ms::Score::FileError::FILE_UNKNOWN_TYPE;
     }
 
     QBuffer msczBuf(&msczData);
