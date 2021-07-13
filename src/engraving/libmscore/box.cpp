@@ -107,7 +107,11 @@ void Box::draw(mu::draw::Painter* painter) const
     if (score() && score()->printing()) {
         return;
     }
-    if (!(selected() || editMode || dropTarget() || score()->showFrames())) {
+
+    const bool showBlueFrame = selected() || dropTarget();
+    const bool showFrame = showBlueFrame || (score() ? score()->showFrames() : false);
+
+    if (showFrame) {
         qreal w = spatium() * .15;
         QPainterPathStroker stroker;
         stroker.setWidth(w);
@@ -120,18 +124,8 @@ void Box::draw(mu::draw::Painter* painter) const
         path.addRect(bbox().adjusted(w, w, -w, -w).toQRectF());
         PainterPath stroke = stroker.createStroke(path);
         painter->setBrush(BrushStyle::NoBrush);
-        painter->fillPath(stroke, (selected() || editMode || dropTarget()) ? MScore::selectColor[0] : MScore::frameMarginColor);
+        painter->fillPath(stroke, showBlueFrame ? MScore::selectColor[0] : MScore::frameMarginColor);
     }
-}
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void Box::startEdit(EditData& ed)
-{
-    Element::startEdit(ed);
-    editMode   = true;
 }
 
 //---------------------------------------------------------
@@ -191,7 +185,6 @@ void Box::editDrag(EditData& ed)
 
 void Box::endEdit(EditData&)
 {
-    editMode = false;
     layout();
 }
 
