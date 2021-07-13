@@ -2110,6 +2110,8 @@ System* Score::getNextSystem(LayoutContext& lc)
       if (!isVBox) {
             int nstaves = Score::nstaves();
             system->adjustStavesNumber(nstaves);
+            for (int i = 0; i < nstaves; ++i)
+                  system->staff(i)->setShow(score()->staff(i)->show());
             }
       return system;
       }
