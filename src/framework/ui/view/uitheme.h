@@ -180,13 +180,13 @@ private:
     QColor m_linkColor;
     QColor m_focusColor;
 
-    qreal m_accentOpacityNormal;
-    qreal m_accentOpacityHover;
-    qreal m_accentOpacityHit;
-    qreal m_buttonOpacityNormal;
-    qreal m_buttonOpacityHover;
-    qreal m_buttonOpacityHit;
-    qreal m_itemOpacityDisabled;
+    qreal m_accentOpacityNormal = 0;
+    qreal m_accentOpacityHover = 0;
+    qreal m_accentOpacityHit = 0;
+    qreal m_buttonOpacityNormal = 0;
+    qreal m_buttonOpacityHover = 0;
+    qreal m_buttonOpacityHit = 0;
+    qreal m_itemOpacityDisabled = 0;
 };
 }
 

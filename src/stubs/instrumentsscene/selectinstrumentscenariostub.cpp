@@ -19,29 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "selectinstrumentscenariostub.h"
 
-#include "testing/environment.h"
+using namespace mu::instrumentsscene;
+using namespace mu::notation;
 
-#include "engraving/engravingmodule.h"
-#include "framework/fonts/fontsmodule.h"
-
-#include "framework/uicomponents/uicomponentsmodule.h"
-
-#include "libmscore/score.h"
-#include "libmscore/musescoreCore.h"
-
-#include "log.h"
-
-static mu::testing::SuiteEnvironment engraving_se(
+mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenarioStub::selectInstruments(SelectInstrumentsMode) const
 {
-    new mu::fonts::FontsModule(),
-    new mu::engraving::EngravingModule(),
-    new mu::uicomponents::UiComponentsModule()
-},
-    []() {
-    LOGI() << "engraving tests suite post init";
-    Ms::MScore::noGui = true;
-
-    new Ms::MuseScoreCore();
+    mu::RetVal<PartInstrumentListScoreOrder> result;
+    result.ret = make_ret(Ret::Code::NotSupported);
+    return result;
 }
-    );
+
+mu::RetVal<Instrument> SelectInstrumentsScenarioStub::selectInstrument(const std::string&) const
+{
+    mu::RetVal<Instrument> result;
+    result.ret = make_ret(Ret::Code::NotSupported);
+    return result;
+}
