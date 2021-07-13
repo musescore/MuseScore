@@ -32,8 +32,6 @@
 #include "property.h"
 
 namespace Ms {
-class MuseScoreView;
-
 //---------------------------------------------------------
 //   @@ Box
 ///    virtual base class for frames "boxes"
@@ -52,7 +50,6 @@ class Box : public MeasureBase
     qreal _topMargin              { 0.0 };
     qreal _bottomMargin           { 0.0 };
     bool _isAutoSizeEnabled       { true };
-    bool editMode                 { false };
 
 public:
     Box(Score*);
@@ -62,7 +59,6 @@ public:
     virtual void draw(mu::draw::Painter*) const override;
     virtual bool isEditable() const override { return true; }
 
-    virtual void startEdit(EditData&) override;
     virtual bool edit(EditData&) override;
     virtual void startEditDrag(EditData&) override;
     virtual void editDrag(EditData&) override;
