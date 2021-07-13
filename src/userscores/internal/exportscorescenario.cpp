@@ -151,15 +151,15 @@ bool ExportScoreScenario::isMainNotation(INotationPtr notation) const
 
 mu::io::path ExportScoreScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType, UnitType unitType) const
 {
-    IMasterNotationPtr currentMasterNotation = context()->currentMasterNotation();
+    INotationProjectPtr currentNotationProject = context()->currentNotationProject();
 
     io::path suggestedPath = configuration()->userScoresPath();
-    io::path masterNotationDirPath = io::dirpath(currentMasterNotation->path());
-    if (masterNotationDirPath != "") {
-        suggestedPath = masterNotationDirPath;
+    io::path notationProjectDirPath = io::dirpath(currentNotationProject->path());
+    if (notationProjectDirPath != "") {
+        suggestedPath = notationProjectDirPath;
     }
 
-    suggestedPath += "/" + currentMasterNotation->metaInfo().title;
+    suggestedPath += "/" + currentNotationProject->metaInfo().title;
 
     // If only one file will be created, the filename will be exactly what the user
     // types in the save dialog and therefore we can put the file dialog in charge of

@@ -51,19 +51,19 @@ bool NewScoreModel::createScore(const QVariant& info)
 {
     ScoreCreateOptions options = parseOptions(info.toMap());
 
-    auto notation = notationCreator()->newMasterNotation();
-    Ret ret = notation->createNew(options);
+    auto project = notationCreator()->newNotationProject();
+    Ret ret = project->createNew(options);
 
     if (!ret) {
         LOGE() << ret.toString();
         return false;
     }
 
-    if (!globalContext()->containsMasterNotation(notation->path())) {
-        globalContext()->addMasterNotation(notation);
+    if (!globalContext()->containsNotationProject(project->path())) {
+        globalContext()->addNotationProject(project);
     }
 
-    globalContext()->setCurrentMasterNotation(notation);
+    globalContext()->setCurrentNotationProject(project);
 
     bool isScoreCreatedFromInstruments = options.templatePath.empty();
     updatePreferredScoreCreationMode(isScoreCreatedFromInstruments);

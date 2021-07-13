@@ -28,7 +28,7 @@ namespace mu::notation {
 class NotationCreator : public INotationCreator
 {
 public:
-    IMasterNotationPtr newMasterNotation() const override;
+    INotationProjectPtr newNotationProject() const override;
     IExcerptNotationPtr newExcerptNotation() const override;
 };
 }

@@ -58,6 +58,9 @@ public:
 private:
     static Ret openOutputFile(QFile& file, const io::path& out);
 
+    static RetVal<notation::INotationProjectPtr> openProject(const io::path& path,
+                                                             const io::path& stylePath = io::path(), bool forceMode = false);
+
     static RetVal<notation::IMasterNotationPtr> openScore(const io::path& path,
                                                           const io::path& stylePath = io::path(), bool forceMode = false);
 

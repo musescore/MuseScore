@@ -34,9 +34,9 @@ class IFileScoreController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IFileScoreController() = default;
 
-    virtual Ret openScore(const io::path& scorePath) = 0;
-    virtual bool closeOpenedScore() = 0;
-    virtual bool isScoreOpened(const io::path& scorePath) const = 0;
+    virtual Ret openProject(const io::path& scorePath) = 0;
+    virtual bool closeOpenedProject() = 0;
+    virtual bool isProjectOpened(const io::path& scorePath) const = 0;
 };
 }
 

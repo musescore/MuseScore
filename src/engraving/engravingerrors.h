@@ -19,19 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "notationcreator.h"
 
-#include "notationproject.h"
-#include "excerptnotation.h"
+#ifndef MU_ENGRAVING_ENGRAVINGERRORS_H
+#define MU_ENGRAVING_ENGRAVINGERRORS_H
 
-using namespace mu::notation;
+namespace mu::engraving {
+enum class Err {
+    Undefined       = -1,
+    NoError         = 0,
+    UnknownError    = 2000,
 
-INotationProjectPtr NotationCreator::newNotationProject() const
-{
-    return std::make_shared<NotationProject>();
+    // file
+    FileUnknownError = 2001,
+    FileNotFound = 2002,
+    FileOpenFailed = 2003,
+    FileBadFormat = 2004,
+    FileUnknownType = 2005,
+    FileTooOld = 2006,
+    FileTooNew = 2007,
+    FileOld300Format = 2008,
+    FileCorrupted = 2009,
+    FileCriticallyCorrupated = 2010,
+    FileUserAbort = 2011,
+    FileIgnoreError = 2012
+};
 }
 
-IExcerptNotationPtr NotationCreator::newExcerptNotation() const
-{
-    return std::make_shared<ExcerptNotation>();
-}
+#endif // MU_ENGRAVING_ENGRAVINGERRORS_H

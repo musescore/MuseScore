@@ -187,29 +187,42 @@ Ret BackendApi::openOutputFile(QFile& file, const io::path& out)
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-RetVal<notation::IMasterNotationPtr> BackendApi::openScore(const io::path& path, const io::path& stylePath, bool forceMode)
+RetVal<notation::INotationProjectPtr> BackendApi::openProject(const io::path& path,
+                                                              const io::path& stylePath,
+                                                              bool forceMode)
 {
     TRACEFUNC
 
-    auto masterNotation = notationCreator()->newMasterNotation();
-    IF_ASSERT_FAILED(masterNotation) {
+    auto notationProject = notationCreator()->newNotationProject();
+    IF_ASSERT_FAILED(notationProject) {
         return make_ret(Ret::Code::InternalError);
     }
 
-    Ret ret = masterNotation->load(path, stylePath, forceMode);
+    Ret ret = notationProject->load(path, stylePath, forceMode);
     if (!ret) {
         LOGE() << "failed load: " << path << ", ret: " << ret.toString();
         return make_ret(Ret::Code::InternalError);
     }
 
-    INotationPtr notation = masterNotation->notation();
+    INotationPtr notation = notationProject->masterNotation()->notation();
     if (!notation) {
         return make_ret(Ret::Code::InternalError);
     }
 
     notation->setViewMode(ViewMode::PAGE);
 
-    return RetVal<notation::IMasterNotationPtr>::make_ok(masterNotation);
+    return RetVal<notation::INotationProjectPtr>::make_ok(notationProject);
+}
+
+RetVal<notation::IMasterNotationPtr> BackendApi::openScore(const io::path& path, const io::path& stylePath, bool forceMode)
+{
+    TRACEFUNC
+    RetVal<notation::INotationProjectPtr> prj = openProject(path, stylePath, forceMode);
+    if (!prj.ret) {
+        return prj.ret;
+    }
+
+    return RetVal<notation::IMasterNotationPtr>::make_ok(prj.val->masterNotation());
 }
 
 PageList BackendApi::pages(const INotationPtr notation)
@@ -701,15 +714,15 @@ Ret BackendApi::applyTranspose(const INotationPtr notation, const std::string& o
 
 Ret BackendApi::updateSource(const io::path& in, const std::string& newSource, bool forceMode)
 {
-    RetVal<IMasterNotationPtr> notation = openScore(in, NO_STYLE, forceMode);
+    RetVal<INotationProjectPtr> notation = openProject(in, NO_STYLE, forceMode);
     if (!notation.ret) {
         return notation.ret;
     }
 
-    Meta meta = notation.val->metaInfo();
+    Meta meta = notation.val->masterNotation()->metaInfo();
     meta.source = QString::fromStdString(newSource);
 
-    notation.val->setMetaInfo(meta);
+    notation.val->masterNotation()->setMetaInfo(meta);
 
     return notation.val->save();
 }
