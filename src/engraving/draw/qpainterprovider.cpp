@@ -26,6 +26,7 @@
 #include <QTextLayout>
 #include <QTextLine>
 #include <QGlyphRun>
+#include <QPixmapCache>
 #include <QStaticText>
 
 #include "fontcompat.h"
@@ -293,6 +294,30 @@ void QPainterProvider::drawSymbol(const PointF& point, uint ucs4Code)
     }
 
     m_painter->drawText(QPointF(point.x(), point.y()), cache[ucs4Code]);
+}
+
+void QPainterProvider::drawPixmap(const PointF& point, const Pixmap& pm)
+{
+    QString key = QString(pm.cashKey());
+    QPixmap pixmap;
+    if (!QPixmapCache::find(key, &pixmap)) {
+        pixmap.loadFromData(pm.data());
+        QPixmapCache::insert(key, pixmap);
+    }
+
+    m_painter->drawPixmap(QPointF(point.x(), point.y()), pixmap);
+}
+
+void QPainterProvider::drawTiledPixmap(const RectF& rect, const Pixmap& pm, const PointF& offset)
+{
+    QString key = QString(pm.cashKey());
+    QPixmap pixmap;
+    if (!QPixmapCache::find(key, &pixmap)) {
+        pixmap.loadFromData(pm.data());
+        QPixmapCache::insert(key, pixmap);
+    }
+
+    m_painter->drawTiledPixmap(rect.toQRectF(), pixmap, QPointF(offset.x(), offset.y()));
 }
 
 void QPainterProvider::drawPixmap(const PointF& point, const QPixmap& pm)

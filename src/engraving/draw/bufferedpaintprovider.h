@@ -81,8 +81,8 @@ public:
 
     void drawSymbol(const PointF& point, uint ucs4Code) override;
 
-    void drawPixmap(const PointF& p, const QPixmap& pm) override;
-    void drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset = PointF()) override;
+    void drawPixmap(const PointF& p, const Pixmap& pm) override;
+    void drawTiledPixmap(const RectF& rect, const Pixmap& pm, const PointF& offset = PointF()) override;
 
     // ---
 

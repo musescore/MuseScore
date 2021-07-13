@@ -37,6 +37,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/draw/geometry.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/transform.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/drawtypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/pixmap.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/painter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/painter.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/ipaintprovider.h
@@ -48,6 +49,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/draw/svgrenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/svgrenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/ifontprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/iimageconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/qimageconverter.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/font.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/font.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontmetrics.cpp
