@@ -127,7 +127,7 @@ static void createExcerpts(MasterScore* cs, QList<Excerpt*> excerpts)
 {
     // borrowed from musescore.cpp endsWith(".pdf")
     for (Excerpt* e: excerpts) {
-        Score* nscore = new Score(e->oscore());
+        Score* nscore = e->oscore()->createScore();
         e->setPartScore(nscore);
         nscore->style().set(Sid::createMultiMeasureRests, true);
         cs->startCmd();

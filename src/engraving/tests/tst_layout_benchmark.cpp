@@ -25,6 +25,7 @@
 #include "libmscore/score.h"
 
 #include "engraving/compat/mscxcompat.h"
+#include "engraving/scoreaccess.h"
 
 using namespace mu::engraving;
 
@@ -71,7 +72,7 @@ void TestLayoutBenchmark::initTestCase()
 void TestLayoutBenchmark::benchmark3()
 {
     QString path = root + "/" + LAYOUT_DATA_DIR + "goldberg.mscx";
-    score = new MasterScore(mscore->baseStyle());
+    score = mu::engraving::ScoreAccess::createMasterScore(mscore->baseStyle());
     score->setName(path);
     MScore::testMode = true;
     QBENCHMARK {

@@ -1289,7 +1289,7 @@ Score::FileError PowerTab::read()
     int id = 0;
     for (Part* part : score->parts()) {
         QMultiMap<int, int> tracks;
-        Score* pscore = new Score(score);
+        Score* pscore = score->createScore();
 
 //TODO-ws            pscore->tuning.clear();
         auto& info = song.track1.infos[id++];

@@ -31,6 +31,7 @@
 #include "libmscore/musescoreCore.h"
 
 #include "engraving/compat/mscxcompat.h"
+#include "engraving/scoreaccess.h"
 
 using namespace mu::engraving;
 
@@ -47,7 +48,7 @@ MTest::MTest()
 MasterScore* MTest::readScore(const QString& name)
 {
     QString path = root + "/" + name;
-    MasterScore* score = new MasterScore(mscore->baseStyle());
+    MasterScore* score = ScoreAccess::createMasterScore(mscore->baseStyle());
     QFileInfo fi(path);
     score->setName(fi.completeBaseName());
     QString csl  = fi.suffix().toLower();

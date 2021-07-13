@@ -19,38 +19,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_IMASTERNOTATION_H
-#define MU_NOTATION_IMASTERNOTATION_H
+#ifndef MU_NOTATION_INOTATIONPROJECT_H
+#define MU_NOTATION_INOTATIONPROJECT_H
 
-#include "modularity/imoduleexport.h"
-#include "inotation.h"
-#include "iexcerptnotation.h"
-#include "retval.h"
+#include <memory>
+
 #include "io/path.h"
-#include "io/device.h"
+#include "ret.h"
+
+#include "imasternotation.h"
 
 namespace mu::notation {
-using ExcerptNotationList = std::vector<IExcerptNotationPtr>;
-
-class IMasterNotation
+class INotationProject
 {
 public:
-    virtual INotationPtr notation() = 0;
+    virtual ~INotationProject() = default;
 
-    virtual Meta metaInfo() const = 0;
-    virtual void setMetaInfo(const Meta& meta) = 0;
+    virtual io::path path() const = 0;
+
+    virtual Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false) = 0;
+    virtual Ret createNew(const ScoreCreateOptions& scoreInfo) = 0;
 
     virtual RetVal<bool> created() const = 0;
     virtual ValNt<bool> needSave() const = 0;
 
-    virtual ValCh<ExcerptNotationList> excerpts() const = 0;
-    virtual void setExcerpts(const ExcerptNotationList& excerpts) = 0;
+    virtual Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) = 0;
+    virtual Ret writeToDevice(io::Device& destinationDevice) = 0;
 
-    virtual INotationPartsPtr parts() const = 0;
-    virtual INotationPtr clone() const = 0;
+    virtual Meta metaInfo() const = 0;
+    virtual void setMetaInfo(const Meta& meta) = 0;
+
+    virtual IMasterNotationPtr masterNotation() const = 0;
 };
 
-using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;
+using INotationProjectPtr = std::shared_ptr<INotationProject>;
 }
 
-#endif // MU_NOTATION_IMASTERNOTATION_H
+#endif // MU_NOTATION_INOTATIONPROJECT_H

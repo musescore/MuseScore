@@ -33,6 +33,8 @@
 
 #include "notation/inotationconfiguration.h"
 
+#include "scoreaccess.h"
+
 using namespace mu::engraving;
 using namespace mu::modularity;
 
@@ -69,7 +71,7 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
     Ms::MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)
     Ms::MScore::setNudgeStep50(0.01); // Alt  + cursor key (default 0.01)
 
-    Ms::gscore = new Ms::MasterScore();
+    Ms::gscore = ScoreAccess::createMasterScore();
     Ms::gscore->setPaletteMode(true);
     Ms::gscore->setMovements(new Ms::Movements());
     Ms::gscore->setStyle(Ms::MScore::baseStyle());

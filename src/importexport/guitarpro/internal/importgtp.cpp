@@ -2975,7 +2975,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             continue;
         }
         QMultiMap<int, int> tracks;
-        Score* pscore = new Score(score);
+        Score* pscore = score->createScore();
         //TODO-ws		pscore->showLyrics = score->showLyrics;
         pscore->style().set(Sid::createMultiMeasureRests, false);
         pscore->style().set(Sid::ArpeggioHiddenInStdIfTab, true);

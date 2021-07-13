@@ -64,8 +64,8 @@ public:
         MidiFirst       = 600,
         MidiLast        = 699,
 
-        LanguagesFirst = 700,
-        LanguagesLast  = 799,
+        LanguagesFirst  = 700,
+        LanguagesLast   = 799,
 
         NotationFirst   = 1000,
         NotationLast    = 1299,
@@ -80,7 +80,10 @@ public:
         WorkspaceLast   = 1599,
 
         LearnFirst      = 1600,
-        LearnLast       = 1699
+        LearnLast       = 1699,
+
+        EngravingFirst  = 2000,
+        EngravingLast   = 2999,
     };
 
     Ret() = default;
