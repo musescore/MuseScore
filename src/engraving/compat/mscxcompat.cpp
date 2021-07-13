@@ -48,7 +48,7 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
         filePath = path + ".mscz";
         writer.setFilePath(filePath);
         writer.open();
-        writer.writeScore(mscxData);
+        writer.writeScoreFile(mscxData);
     } else if (path.endsWith(".mscz")) {
         QFile msczFile(path);
         if (!msczFile.open(QIODevice::ReadOnly)) {

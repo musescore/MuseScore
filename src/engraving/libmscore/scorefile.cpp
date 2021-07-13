@@ -480,7 +480,7 @@ bool Score::writeMscz(engraving::MsczWriter& msczWriter, bool onlySelection, boo
         scoreBuf.open(QIODevice::ReadWrite);
         Score::writeScore(&scoreBuf, onlySelection);
 
-        msczWriter.writeScore(scoreData);
+        msczWriter.writeScoreFile(scoreData);
     }
 
     // Write images
@@ -489,7 +489,7 @@ bool Score::writeMscz(engraving::MsczWriter& msczWriter, bool onlySelection, boo
             if (!ip->isUsed(this)) {
                 continue;
             }
-            msczWriter.addImage(ip->hashName(), ip->buffer());
+            msczWriter.addImageFile(ip->hashName(), ip->buffer());
         }
     }
 
@@ -502,14 +502,14 @@ bool Score::writeMscz(engraving::MsczWriter& msczWriter, bool onlySelection, boo
             QBuffer b(&ba);
             b.open(QIODevice::WriteOnly);
             pm.save(&b, "PNG");
-            msczWriter.writeThumbnail(ba);
+            msczWriter.writeThumbnailFile(ba);
         }
     }
 
     // Write audio
     {
         if (_audio) {
-            msczWriter.writeAudio(_audio->data());
+            msczWriter.writeAudioFile(_audio->data());
         }
     }
 
@@ -699,7 +699,7 @@ Score::FileError MasterScore::loadMscz(mu::engraving::MsczReader& msczReader, bo
     FileError retval;
     // Read score
     {
-        QByteArray scoreData = msczReader.readScore();
+        QByteArray scoreData = msczReader.readScoreFile();
         QString completeBaseName = masterScore()->fileInfo()->completeBaseName();
         XmlReader e(scoreData);
         e.setDocName(completeBaseName);
@@ -716,7 +716,7 @@ Score::FileError MasterScore::loadMscz(mu::engraving::MsczReader& msczReader, bo
         if (!MScore::noImages) {
             std::vector<QString> images = msczReader.imageFileNames();
             for (const QString& name : images) {
-                imageStore.add(name, msczReader.readImage(name));
+                imageStore.add(name, msczReader.readImageFile(name));
             }
         }
     }
@@ -724,7 +724,7 @@ Score::FileError MasterScore::loadMscz(mu::engraving::MsczReader& msczReader, bo
     //  Read audio
     {
         if (audio()) {
-            QByteArray dbuf1 = msczReader.readAudio();
+            QByteArray dbuf1 = msczReader.readAudioFile();
             audio()->setData(dbuf1);
         }
     }

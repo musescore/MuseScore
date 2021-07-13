@@ -136,8 +136,6 @@ const MsczReader::Meta& MsczReader::meta() const
                 m_meta.mscxFileName = fi.filePath;
             } else if (fi.filePath.startsWith("Pictures/")) {
                 m_meta.imageFilePaths.push_back(fi.filePath);
-            } else if (fi.filePath.endsWith(".ogg")) {
-                m_meta.audioFile = fi.filePath;
             }
         }
     }
@@ -159,17 +157,17 @@ QByteArray MsczReader::fileData(const QString& fileName) const
     return data;
 }
 
-QByteArray MsczReader::readScore() const
+QByteArray MsczReader::readScoreFile() const
 {
     return fileData(meta().mscxFileName);
 }
 
-QByteArray MsczReader::readThumbnail() const
+QByteArray MsczReader::readThumbnailFile() const
 {
     return fileData("Thumbnails/thumbnail.png");
 }
 
-QByteArray MsczReader::readImage(const QString& fileName) const
+QByteArray MsczReader::readImageFile(const QString& fileName) const
 {
     return fileData("Pictures/" + fileName);
 }
@@ -183,7 +181,12 @@ std::vector<QString> MsczReader::imageFileNames() const
     return names;
 }
 
-QByteArray MsczReader::readAudio() const
+QByteArray MsczReader::readAudioFile() const
 {
-    return fileData(m_meta.audioFile);
+    return fileData("audio.ogg");
+}
+
+QByteArray MsczReader::readAudioSettingsJsonFile() const
+{
+    return fileData("audiosettings.json");
 }

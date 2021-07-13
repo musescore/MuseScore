@@ -130,37 +130,40 @@ bool MsczWriter::addFileData(const QString& fileName, const QByteArray& data)
         LOGE() << "failed write files to zip, status: " << writer()->status();
         return false;
     }
+
+    m_meta.addFile(fileName);
+
     return true;
 }
 
-void MsczWriter::writeScore(const QByteArray& data)
+void MsczWriter::writeScoreFile(const QByteArray& data)
 {
     QString completeBaseName = QFileInfo(filePath()).completeBaseName();
     IF_ASSERT_FAILED(!completeBaseName.isEmpty()) {
         completeBaseName = "score";
     }
-    m_meta.mscxFileName = completeBaseName + ".mscx";
-    addFileData(m_meta.mscxFileName, data);
+    QString fileName = completeBaseName + ".mscx";
+    addFileData(fileName, data);
 }
 
-void MsczWriter::writeThumbnail(const QByteArray& data)
+void MsczWriter::writeThumbnailFile(const QByteArray& data)
 {
     addFileData("Thumbnails/thumbnail.png", data);
 }
 
-void MsczWriter::addImage(const QString& fileName, const QByteArray& data)
+void MsczWriter::addImageFile(const QString& fileName, const QByteArray& data)
 {
-    QString path = "Pictures/" + fileName;
-    if (std::find(m_meta.imageFilePaths.begin(), m_meta.imageFilePaths.end(), path) == m_meta.imageFilePaths.end()) {
-        m_meta.imageFilePaths.push_back(path);
-    }
-    addFileData(path, data);
+    addFileData("Pictures/" + fileName, data);
 }
 
-void MsczWriter::writeAudio(const QByteArray& data)
+void MsczWriter::writeAudioFile(const QByteArray& data)
 {
-    m_meta.audioFile = "audio.ogg";
-    addFileData(m_meta.audioFile, data);
+    addFileData("audio.ogg", data);
+}
+
+void MsczWriter::writeAudioSettingsJsonFile(const QByteArray& data)
+{
+    addFileData("audiosettings.json", data);
 }
 
 void MsczWriter::writeMeta()
@@ -169,17 +172,7 @@ void MsczWriter::writeMeta()
         return;
     }
 
-    std::vector<QString> paths;
-    paths.push_back(m_meta.mscxFileName);
-    for (const QString& image : m_meta.imageFilePaths) {
-        paths.push_back(image);
-    }
-
-    if (!m_meta.audioFile.isEmpty()) {
-        paths.push_back(m_meta.audioFile);
-    }
-
-    writeContainer(paths);
+    writeContainer(m_meta.files);
 
     m_meta.isWrited = true;
 }

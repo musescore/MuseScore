@@ -100,13 +100,13 @@ mu::RetVal<Meta> MsczMetaReader::readMetaFromMscx(const io::path& filePath) cons
     msczReader.open();
 
     // Read score meta
-    QByteArray scoreData = msczReader.readScore();
+    QByteArray scoreData = msczReader.readScoreFile();
 
     framework::XmlReader xmlReader(scoreData);
     meta = doReadMeta(xmlReader);
 
     // Read thumbnail
-    QByteArray thumbnailData = msczReader.readThumbnail();
+    QByteArray thumbnailData = msczReader.readThumbnailFile();
     if (thumbnailData.isEmpty()) {
         LOGD() << "Can't find thumbnail";
     } else {

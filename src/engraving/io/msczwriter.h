@@ -44,21 +44,32 @@ public:
     void close();
     bool isOpened() const;
 
-    void writeScore(const QByteArray& data);
-    void writeThumbnail(const QByteArray& data);
-    void addImage(const QString& fileName, const QByteArray& data);
-    void writeAudio(const QByteArray& data);
+    void writeScoreFile(const QByteArray& data);
+    void writeThumbnailFile(const QByteArray& data);
+    void addImageFile(const QString& fileName, const QByteArray& data);
+    void writeAudioFile(const QByteArray& data);
+    void writeAudioSettingsJsonFile(const QByteArray& data);
 
 private:
 
     struct Meta {
-        QString mscxFileName;
-        std::vector<QString> imageFilePaths;
-        QString audioFile;
-
+        std::vector<QString> files;
         bool isWrited = false;
 
-        bool isValid() const { return !mscxFileName.isEmpty(); }
+        bool contains(const QString& file) const
+        {
+            if (std::find(files.begin(), files.end(), file) != files.end()) {
+                return true;
+            }
+            return false;
+        }
+
+        void addFile(const QString& file)
+        {
+            if (!contains(file)) {
+                files.push_back(file);
+            }
+        }
     };
 
     MQZipWriter* writer() const;
