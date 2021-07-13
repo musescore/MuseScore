@@ -24,8 +24,6 @@
 
 #include <QByteArray>
 
-#include "modularity/ioc.h"
-
 #include "geometry.h"
 
 namespace mu::draw {
