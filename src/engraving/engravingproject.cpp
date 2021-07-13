@@ -30,22 +30,26 @@ using namespace mu::engraving;
 
 std::shared_ptr<EngravingProject> EngravingProject::create()
 {
-    return std::shared_ptr<EngravingProject>(new EngravingProject(Ms::MScore::defaultStyle()));
+    std::shared_ptr<EngravingProject> p = std::shared_ptr<EngravingProject>(new EngravingProject());
+    p->init(Ms::MScore::defaultStyle());
+    return p;
 }
 
 std::shared_ptr<EngravingProject> EngravingProject::create(const Ms::MStyle& style)
 {
-    return std::shared_ptr<EngravingProject>(new EngravingProject(style));
-}
-
-EngravingProject::EngravingProject(const Ms::MStyle& style)
-{
-    m_masterScore = new Ms::MasterScore(style);
+    std::shared_ptr<EngravingProject> p = std::shared_ptr<EngravingProject>(new EngravingProject());
+    p->init(style);
+    return p;
 }
 
 EngravingProject::~EngravingProject()
 {
     delete m_masterScore;
+}
+
+void EngravingProject::init(const Ms::MStyle& style)
+{
+    m_masterScore = new Ms::MasterScore(style, shared_from_this());
 }
 
 void EngravingProject::setPath(const QString& path)

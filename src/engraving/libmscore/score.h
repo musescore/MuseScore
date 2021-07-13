@@ -1379,6 +1379,8 @@ class MasterScore : public Score
     QSet<int> occupiedMidiChannels;                   // each entry is port*16+channel, port range: 0-inf, channel: 0-15
     unsigned int searchMidiMappingFrom = 0;           // makes getting next free MIDI mapping faster
 
+    std::shared_ptr<mu::engraving::EngravingProject> m_project = nullptr;
+
     void parseVersion(const QString&);
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
@@ -1399,8 +1401,8 @@ class MasterScore : public Score
 
     friend class mu::engraving::ScoreAccess;
     friend class mu::engraving::EngravingProject;
-    MasterScore();
-    MasterScore(const MStyle&);
+    MasterScore(std::shared_ptr<mu::engraving::EngravingProject> project);
+    MasterScore(const MStyle&, std::shared_ptr<mu::engraving::EngravingProject> project);
 
     FileError loadMscz(const QString& fileName, bool ignoreVersionError);
     FileError loadMscz(mu::engraving::MsczReader& msczFile, bool ignoreVersionError);
