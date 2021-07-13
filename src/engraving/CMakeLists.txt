@@ -51,6 +51,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/draw/ifontprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/iimageconverter.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/qimageconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/qimageconverter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/font.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/font.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontmetrics.cpp

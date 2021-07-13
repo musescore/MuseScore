@@ -453,7 +453,6 @@ void Painter::fillRect(const RectF& rect, const Brush& brush)
 
 void Painter::drawPixmap(const PointF& point, const Pixmap& pm)
 {
-    TRACEFUNC;
     m_provider->drawPixmap(point, pm);
     if (extended) {
         extended->drawPixmap(point, pm);
