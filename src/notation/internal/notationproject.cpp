@@ -26,6 +26,7 @@
 
 #include "notationerrors.h"
 #include "masternotation.h"
+#include "projectaudiosettings.h"
 
 #include "log.h"
 
@@ -36,6 +37,7 @@ NotationProject::NotationProject()
 {
     m_engravingProject = EngravingProject::create();
     m_masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
+    m_projectAudioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
 }
 
 mu::io::path NotationProject::path() const
@@ -233,4 +235,9 @@ Meta NotationProject::metaInfo() const
 void NotationProject::setMetaInfo(const Meta& meta)
 {
     m_masterNotation->setMetaInfo(meta);
+}
+
+IProjectAudioSettingsPtr NotationProject::audioSettings() const
+{
+    return m_projectAudioSettings;
 }
