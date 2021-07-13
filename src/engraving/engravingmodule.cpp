@@ -26,6 +26,7 @@
 #ifndef NO_ENGRAVING_QFONTENGINE
 #include "engraving/draw/qfontprovider.h"
 #endif
+#include "engraving/draw/qimageconverter.h"
 
 #include "engraving/libmscore/mscore.h"
 #include "engraving/libmscore/score.h"
@@ -48,6 +49,7 @@ void EngravingModule::registerExports()
 #ifndef NO_ENGRAVING_QFONTENGINE
     ioc()->registerExport<draw::IFontProvider>(moduleName(), new draw::QFontProvider());
 #endif
+    ioc()->registerExport<draw::IImageConverter>(moduleName(), new draw::QImageConverter());
 }
 
 void EngravingModule::resolveImports()

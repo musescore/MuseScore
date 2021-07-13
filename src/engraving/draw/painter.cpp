@@ -451,6 +451,24 @@ void Painter::fillRect(const RectF& rect, const Brush& brush)
     setPen(oldPen);
 }
 
+void Painter::drawPixmap(const PointF& point, const Pixmap& pm)
+{
+    TRACEFUNC;
+    m_provider->drawPixmap(point, pm);
+    if (extended) {
+        extended->drawPixmap(point, pm);
+    }
+}
+
+void Painter::drawTiledPixmap(const RectF& rect, const Pixmap& pm, const PointF& offset)
+{
+    m_provider->drawTiledPixmap(rect, pm, offset);
+    if (extended) {
+        extended->drawTiledPixmap(rect, pm, offset);
+    }
+}
+
+#ifndef NO_QT_SUPPORT
 void Painter::drawPixmap(const PointF& point, const QPixmap& pm)
 {
     m_provider->drawPixmap(point, pm);
@@ -466,6 +484,8 @@ void Painter::drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF
         extended->drawTiledPixmap(rect, pm, offset);
     }
 }
+
+#endif
 
 Painter::State& Painter::editableState()
 {

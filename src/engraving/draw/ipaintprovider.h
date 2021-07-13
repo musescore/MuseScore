@@ -26,11 +26,12 @@
 
 #include <QColor>
 
-#include "geometry.h"
+#include "brush.h"
 #include "drawtypes.h"
+#include "geometry.h"
 #include "font.h"
 #include "pen.h"
-#include "brush.h"
+#include "pixmap.h"
 
 namespace mu::draw {
 class Painter;
@@ -78,8 +79,13 @@ public:
 
     virtual void drawSymbol(const PointF& point, uint ucs4Code) = 0;
 
+    virtual void drawPixmap(const PointF& point, const Pixmap& pm) = 0;
+    virtual void drawTiledPixmap(const RectF& rect, const Pixmap& pm, const PointF& offset = PointF()) = 0;
+
+#ifndef NO_QT_SUPPORT
     virtual void drawPixmap(const PointF& point, const QPixmap& pm) = 0;
     virtual void drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset = PointF()) = 0;
+#endif
 
     virtual void setClipRect(const RectF& rect) = 0;
     virtual void setClipping(bool enable) = 0;

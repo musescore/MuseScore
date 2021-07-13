@@ -136,17 +136,17 @@ static void fromArr(const QJsonArray& arr, RectF& r)
     r = QRectF(itor(arr.at(0).toInt()), itor(arr.at(1).toInt()), itor(arr.at(2).toInt()), itor(arr.at(3).toInt()));
 }
 
-static QJsonArray toArr(const QSize& sz)
+static QJsonArray toArr(const Size& sz)
 {
     return QJsonArray({ sz.width(), sz.height() });
 }
 
-static void fromArr(const QJsonArray& arr, QSize& sz)
+static void fromArr(const QJsonArray& arr, Size& sz)
 {
     IF_ASSERT_FAILED(arr.size() == 2) {
         return;
     }
-    sz = QSize(arr.at(0).toInt(), arr.at(1).toInt());
+    sz = Size(arr.at(0).toInt(), arr.at(1).toInt());
 }
 
 static QJsonObject toObj(const DrawData::State& st)
@@ -332,9 +332,9 @@ static QJsonObject toObj(const DrawPixmap& pm)
 static void fromObj(const QJsonObject& obj, DrawPixmap& pm)
 {
     fromArr(obj["pos"].toArray(), pm.pos);
-    QSize size;
+    Size size;
     fromArr(obj["pmSize"].toArray(), size);
-    pm.pm = QPixmap(size);
+    pm.pm = Pixmap(size);
 }
 
 static QJsonObject toObj(const DrawTiledPixmap& pm)
@@ -349,9 +349,9 @@ static QJsonObject toObj(const DrawTiledPixmap& pm)
 static void fromObj(const QJsonObject& obj, DrawTiledPixmap& pm)
 {
     fromArr(obj["rect"].toArray(), pm.rect);
-    QSize size;
+    Size size;
     fromArr(obj["pmSize"].toArray(), size);
-    pm.pm = QPixmap(size);
+    pm.pm = Pixmap(size);
     fromArr(obj["offset"].toArray(), pm.offset);
 }
 

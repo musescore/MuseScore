@@ -25,11 +25,12 @@
 #include <memory>
 #include <QPainterPath>
 
-#include "geometry.h"
+#include "brush.h"
 #include "drawtypes.h"
+#include "geometry.h"
 #include "font.h"
 #include "pen.h"
-#include "brush.h"
+#include "pixmap.h"
 
 namespace mu::draw {
 enum class DrawMode {
@@ -75,12 +76,12 @@ struct DrawRectText {
 
 struct DrawPixmap {
     PointF pos;
-    QPixmap pm;
+    Pixmap pm;
 };
 
 struct DrawTiledPixmap {
     RectF rect;
-    QPixmap pm;
+    Pixmap pm;
     PointF offset;
 };
 

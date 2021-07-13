@@ -249,12 +249,12 @@ void BufferedPaintProvider::drawSymbol(const PointF& point, uint ucs4Code)
     drawText(point, QString::fromUcs4(&ucs4Code, 1));
 }
 
-void BufferedPaintProvider::drawPixmap(const PointF& p, const QPixmap& pm)
+void BufferedPaintProvider::drawPixmap(const PointF& p, const Pixmap& pm)
 {
     editableData().pixmaps.push_back(DrawPixmap { p, pm });
 }
 
-void BufferedPaintProvider::drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset)
+void BufferedPaintProvider::drawTiledPixmap(const RectF& rect, const Pixmap& pm, const PointF& offset)
 {
     editableData().tiledPixmap.push_back(DrawTiledPixmap { rect, pm, offset });
 }

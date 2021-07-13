@@ -35,9 +35,9 @@
 #include "drawtypes.h"
 #include "font.h"
 #include "pen.h"
+#include "pixmap.h"
 
 class QPaintDevice;
-class QImage;
 
 #ifndef NO_QT_SUPPORT
 class QPainter;
@@ -161,8 +161,13 @@ public:
 
     void fillRect(const RectF& rect, const Brush& brush);
 
+    void drawPixmap(const PointF& point, const Pixmap& pm);
+    void drawTiledPixmap(const RectF& rect, const Pixmap& pm, const PointF& offset = PointF());
+
+#ifndef NO_QT_SUPPORT
     void drawPixmap(const PointF& point, const QPixmap& pm);
     void drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset = PointF());
+#endif
 
     void setClipRect(const RectF& rect);
     void setClipping(bool enable);
