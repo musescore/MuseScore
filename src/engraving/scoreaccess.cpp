@@ -25,12 +25,12 @@ using namespace mu::engraving;
 
 Ms::MasterScore* ScoreAccess::createMasterScore()
 {
-    return new Ms::MasterScore();
+    return new Ms::MasterScore(nullptr);
 }
 
 Ms::MasterScore* ScoreAccess::createMasterScore(const Ms::MStyle& style)
 {
-    return new Ms::MasterScore(style);
+    return new Ms::MasterScore(style, nullptr);
 }
 
 Ms::Score::FileError ScoreAccess::loadMscz(Ms::MasterScore* masterScore, mu::engraving::MsczReader& msczFile, bool ignoreVersionError)

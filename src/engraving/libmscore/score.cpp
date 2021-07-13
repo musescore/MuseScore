@@ -89,6 +89,8 @@
 
 #include "config.h"
 
+#include "engravingproject.h"
+
 #ifdef USE_SCORE_ACCESSIBLE_TREE
 #include "accessibility/accessiblescore.h"
 #endif
@@ -2128,7 +2130,7 @@ MasterScore* MasterScore::clone()
     };
 
     XmlReader r(scoreData);
-    MasterScore* score = new MasterScore(style());
+    MasterScore* score = new MasterScore(style(), m_project);
     score->read1(r, true, getStyleDefaultsVersion);
 
     score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
@@ -5252,9 +5254,10 @@ QString Score::getTextStyleUserName(Tid tid)
 //   MasterScore
 //---------------------------------------------------------
 
-MasterScore::MasterScore()
+MasterScore::MasterScore(std::shared_ptr<engraving::EngravingProject> project)
     : Score()
 {
+    m_project = project;
     _tempomap    = new TempoMap;
     _sigmap      = new TimeSigMap();
     _repeatList  = new RepeatList(this);
@@ -5289,8 +5292,8 @@ MasterScore::MasterScore()
     metaTags().insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
 }
 
-MasterScore::MasterScore(const MStyle& s)
-    : MasterScore{}
+MasterScore::MasterScore(const MStyle& s, std::shared_ptr<engraving::EngravingProject> project)
+    : MasterScore{project}
 {
     _movements = new Movements;
     _movements->push_back(this);
@@ -5299,6 +5302,11 @@ MasterScore::MasterScore(const MStyle& s)
 
 MasterScore::~MasterScore()
 {
+    if (m_project) {
+        m_project->m_masterScore = nullptr;
+        m_project = nullptr;
+    }
+
     delete _revisions;
     delete _repeatList;
     delete _repeatList2;

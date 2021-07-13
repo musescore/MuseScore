@@ -384,7 +384,7 @@ Score::FileError MasterScore::read302(XmlReader& e)
                 score = this;
                 top   = false;
             } else {
-                score = new MasterScore();
+                score = new MasterScore(m_project);
                 score->setMscVersion(mscVersion());
                 addMovement(score);
             }

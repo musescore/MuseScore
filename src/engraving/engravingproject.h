@@ -43,7 +43,7 @@ class MStyle;
 }
 
 namespace mu::engraving {
-class EngravingProject
+class EngravingProject : public std::enable_shared_from_this<EngravingProject>
 {
 public:
     ~EngravingProject();
@@ -63,7 +63,12 @@ public:
     bool writeMscz(QIODevice* device, const QString& filePath);
 
 private:
-    EngravingProject(const Ms::MStyle& style);
+
+    friend class Ms::MasterScore;
+
+    EngravingProject() = default;
+
+    void init(const Ms::MStyle& style);
 
     Err doSetupMasterScore(Ms::MasterScore* score);
 
