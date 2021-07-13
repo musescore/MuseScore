@@ -27,6 +27,7 @@
 #include "mscore.h"
 #include "imageStore.h"
 
+#include "draw/pixmap.h"
 #include "draw/transform.h"
 #include "draw/svgrenderer.h"
 
@@ -77,7 +78,7 @@ Image::Image(const Image& img)
     _linkPath        = img._linkPath;
     _linkIsValid     = img._linkIsValid;
     if (imageType == ImageType::RASTER) {
-        rasterDoc = img.rasterDoc ? new QImage(*img.rasterDoc) : 0;
+        rasterDoc = img.rasterDoc ? new Pixmap(*img.rasterDoc) : 0;
     } else if (imageType == ImageType::SVG) {
         svgDoc = img.svgDoc ? new SvgRenderer(_storeItem->buffer()) : 0;
     }
@@ -127,7 +128,8 @@ SizeF Image::imageSize() const
     }
 
     if (imageType == ImageType::RASTER) {
-        return SizeF::fromQSizeF(rasterDoc->size());
+        Size rasterSize = rasterDoc->size();
+        return SizeF(rasterSize.width(), rasterSize.height());
     }
 
     return svgDoc->defaultSize();
@@ -161,14 +163,14 @@ void Image::draw(mu::draw::Painter* painter) const
             if (score() && score()->printing() && !MScore::svgPrinting) {
                 // use original image size for printing, but not for svg for reasonable file size.
                 painter->scale(s.width() / rasterDoc->width(), s.height() / rasterDoc->height());
-                painter->drawPixmap(PointF(0, 0), QPixmap::fromImage(*rasterDoc));
+                painter->drawPixmap(PointF(0, 0), *rasterDoc);
             } else {
                 Transform t = painter->worldTransform();
-                QSizeF ss = QSizeF(s.width() * t.m11(), s.height() * t.m22());
+                Size ss = Size(s.width() * t.m11(), s.height() * t.m22());
                 t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
                 painter->setWorldTransform(t);
                 if ((buffer.size() != ss || _dirty) && rasterDoc && !rasterDoc->isNull()) {
-                    buffer = QPixmap::fromImage(rasterDoc->scaled(ss.toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                    buffer = imageConverter()->scaled(*rasterDoc, ss);
                     _dirty = false;
                 }
                 if (buffer.isNull()) {
@@ -547,8 +549,8 @@ void Image::layout()
         }
     } else if (imageType == ImageType::RASTER && !rasterDoc) {
         if (_storeItem) {
-            rasterDoc = new QImage;
-            rasterDoc->loadFromData(_storeItem->buffer());
+            rasterDoc = new Pixmap;
+            rasterDoc->setData(_storeItem->buffer());
             if (!rasterDoc->isNull()) {
                 _dirty = true;
             }

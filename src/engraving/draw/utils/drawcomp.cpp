@@ -89,6 +89,19 @@ static bool isEqual(const QSize& sz1, const QSize& sz2)
     return true;
 }
 
+static bool isEqual(const Size& sz1, const Size& sz2)
+{
+    if (sz1.width() != sz2.width()) {
+        return false;
+    }
+
+    if (sz1.height() != sz2.height()) {
+        return false;
+    }
+
+    return true;
+}
+
 static bool isEqual(const Pen& p1, const Pen& p2)
 {
     if (p1.style() != p2.style()) {
