@@ -385,17 +385,17 @@ Ret FileScoreController::doOpenProject(const io::path& filePath)
         return make_ret(Ret::Code::Ok);
     }
 
-    auto notation = notationCreator()->newNotationProject();
-    IF_ASSERT_FAILED(notation) {
+    auto project = notationCreator()->newNotationProject();
+    IF_ASSERT_FAILED(project) {
         return make_ret(Ret::Code::InternalError);
     }
 
-    Ret ret = notation->load(filePath);
+    Ret ret = project->load(filePath);
 
     if (!ret && checkCanIgnoreError(ret, filePath)) {
         constexpr auto NO_STYLE = "";
         constexpr bool FORCE_MODE = true;
-        ret = notation->load(filePath, NO_STYLE, FORCE_MODE);
+        ret = project->load(filePath, NO_STYLE, FORCE_MODE);
     }
 
     if (!ret) {
@@ -403,10 +403,10 @@ Ret FileScoreController::doOpenProject(const io::path& filePath)
     }
 
     if (!globalContext()->containsNotationProject(filePath)) {
-        globalContext()->addNotationProject(notation);
+        globalContext()->addNotationProject(project);
     }
 
-    globalContext()->setCurrentNotationProject(notation);
+    globalContext()->setCurrentNotationProject(project);
 
     prependToRecentScoreList(filePath);
 

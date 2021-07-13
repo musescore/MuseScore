@@ -78,6 +78,8 @@ private:
 
     ValCh<ExcerptNotationList> m_excerpts;
 };
+
+using MasterNotationPtr = std::shared_ptr<MasterNotation>;
 }
 
 #endif // MU_NOTATION_MASTERNOTATION_H
