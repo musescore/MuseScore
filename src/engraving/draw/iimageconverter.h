@@ -24,6 +24,8 @@
 
 #include <QByteArray>
 
+#include "modularity/ioc.h"
+
 #include "geometry.h"
 #include "pixmap.h"
 
