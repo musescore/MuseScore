@@ -19,29 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_INSTRUMENTSSCENE_STAFFCONTROLTREEITEM_H
+#define MU_INSTRUMENTSSCENE_STAFFCONTROLTREEITEM_H
 
-#include "testing/environment.h"
+#include "abstractinstrumentspaneltreeitem.h"
 
-#include "engraving/engravingmodule.h"
-#include "framework/fonts/fontsmodule.h"
+#include "notation/inotationparts.h"
 
-#include "framework/uicomponents/uicomponentsmodule.h"
-
-#include "libmscore/score.h"
-#include "libmscore/musescoreCore.h"
-
-#include "log.h"
-
-static mu::testing::SuiteEnvironment engraving_se(
+namespace mu::instrumentsscene {
+class StaffControlTreeItem : public AbstractInstrumentsPanelTreeItem
 {
-    new mu::fonts::FontsModule(),
-    new mu::engraving::EngravingModule(),
-    new mu::uicomponents::UiComponentsModule()
-},
-    []() {
-    LOGI() << "engraving tests suite post init";
-    Ms::MScore::noGui = true;
+    Q_OBJECT
 
-    new Ms::MuseScoreCore();
+public:
+    explicit StaffControlTreeItem(notation::INotationPartsPtr notationParts, QObject* parent = nullptr);
+
+    Q_INVOKABLE void appendNewItem() override;
+
+    void setPartId(const QString& id);
+
+private:
+    const notation::Part* part() const;
+
+    QString m_partId;
+};
 }
-    );
+
+#endif // MU_INSTRUMENTSSCENE_STAFFCONTROLTREEITEM_H

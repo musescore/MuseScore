@@ -19,29 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_INSTRUMENTSSCENE_SELECTINSTRUMENTSSCENARIOSTUB_H
+#define MU_INSTRUMENTSSCENE_SELECTINSTRUMENTSSCENARIOSTUB_H
 
-#include "testing/environment.h"
+#include "notation/iselectinstrumentscenario.h"
 
-#include "engraving/engravingmodule.h"
-#include "framework/fonts/fontsmodule.h"
-
-#include "framework/uicomponents/uicomponentsmodule.h"
-
-#include "libmscore/score.h"
-#include "libmscore/musescoreCore.h"
-
-#include "log.h"
-
-static mu::testing::SuiteEnvironment engraving_se(
+namespace mu::instrumentsscene {
+class SelectInstrumentsScenarioStub : public notation::ISelectInstrumentsScenario
 {
-    new mu::fonts::FontsModule(),
-    new mu::engraving::EngravingModule(),
-    new mu::uicomponents::UiComponentsModule()
-},
-    []() {
-    LOGI() << "engraving tests suite post init";
-    Ms::MScore::noGui = true;
-
-    new Ms::MuseScoreCore();
+public:
+    RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const
+    override;
+    RetVal<notation::Instrument> selectInstrument(const std::string& currentInstrumentId = "") const override;
+};
 }
-    );
+
+#endif // MU_INSTRUMENTSSCENE_SELECTINSTRUMENTSSCENARIOSTUB_H

@@ -97,10 +97,10 @@
 #else
 #include "stubs/playback/playbackstubmodule.h"
 #endif
-#ifdef BUILD_INSTRUMENTS_MODULE
-#include "instruments/instrumentsmodule.h"
+#ifdef BUILD_INSTRUMENTSSCENE_MODULE
+#include "instrumentsscene/instrumentsscenemodule.h"
 #else
-#include "stubs/instruments/instrumentsstubmodule.h"
+#include "stubs/instrumentsscene/instrumentsscenestubmodule.h"
 #endif
 #include "converter/convertermodule.h"
 
@@ -229,10 +229,10 @@ int main(int argc, char** argv)
     app.addModule(new mu::playback::PlaybackStubModule());
 #endif
 
-#ifdef BUILD_INSTRUMENTS_MODULE
-    app.addModule(new mu::instruments::InstrumentsModule());
+#ifdef BUILD_INSTRUMENTSSCENE_MODULE
+    app.addModule(new mu::instrumentsscene::InstrumentsSceneModule());
 #else
-    app.addModule(new mu::instruments::InstrumentsStubModule());
+    app.addModule(new mu::instrumentsscene::InstrumentsSceneStubModule());
 #endif
 
 #ifdef BUILD_VST

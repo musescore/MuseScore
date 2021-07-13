@@ -19,29 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_INSTRUMENTSSCENE_ROOTTREEITEM_H
+#define MU_INSTRUMENTSSCENE_ROOTTREEITEM_H
 
-#include "testing/environment.h"
+#include "abstractinstrumentspaneltreeitem.h"
 
-#include "engraving/engravingmodule.h"
-#include "framework/fonts/fontsmodule.h"
+#include "notation/inotationparts.h"
 
-#include "framework/uicomponents/uicomponentsmodule.h"
-
-#include "libmscore/score.h"
-#include "libmscore/musescoreCore.h"
-
-#include "log.h"
-
-static mu::testing::SuiteEnvironment engraving_se(
+namespace mu::instrumentsscene {
+class RootTreeItem : public AbstractInstrumentsPanelTreeItem
 {
-    new mu::fonts::FontsModule(),
-    new mu::engraving::EngravingModule(),
-    new mu::uicomponents::UiComponentsModule()
-},
-    []() {
-    LOGI() << "engraving tests suite post init";
-    Ms::MScore::noGui = true;
+    Q_OBJECT
 
-    new Ms::MuseScoreCore();
+public:
+    explicit RootTreeItem(notation::INotationPartsPtr notationParts, QObject* parent = nullptr);
+
+    void moveChildren(const int sourceRow, const int count, AbstractInstrumentsPanelTreeItem* destinationParent,
+                      const int destinationRow) override;
+
+    void removeChildren(const int row, const int count, const bool deleteChild) override;
+};
 }
-    );
+
+#endif // MU_INSTRUMENTSSCENE_ROOTTREEITEM_H
