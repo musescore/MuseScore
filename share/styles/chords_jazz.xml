@@ -35,7 +35,38 @@
 
   ]>
 
-<museScore version="1.24">
+<museScore version="1.24" type="chordStyle" styleName="Jazz">
+
+  <quality q = "major7th">
+    <sym>Maj 7</sym>
+    <sym>triangle 7</sym>
+    <sym>triangle</sym>
+  </quality>
+  <quality q = "minor">
+    <sym>mi</sym>
+    <sym>-</sym>
+    <sym>min</sym>
+  </quality>
+  <quality q = "augmented">
+    <sym>aug</sym>
+    <sym>+</sym>
+    <sym>+ 5</sym>
+    <sym>maj #5</sym>
+  </quality>
+  <quality q = "diminished">
+    <sym>circle</sym>
+    <sym>dim</sym>
+    <sym>min b5</sym>
+  </quality>
+  <quality q = "half-diminished">
+    <sym>oslash</sym>
+    <sym>0</sym>
+    <sym>min 7 b5</sym>
+  </quality>
+  <modifier m = "omit">
+    <sym>omit</sym>
+    <sym>no</sym>
+  </modifier>
 
 <!--
       Part I: font list
@@ -49,15 +80,8 @@
 
   <font family="MuseJazz Text">
 
-    <sym code="0xe180" name="ma"/>
-    <sym code="0xe181" name="mi"/>
     <sym code="0xe185" name="sus"/>
-    <sym code="0xe186" name="+"/>
-    <sym code="0xe187" name="degree"/>
-    <sym code="0xe18a" name="triangle"/>
     <sym code="0xe18d" name="sus4"/>
-    <sym code="0xe18e" name="circle"/>
-    <sym code="0xe18f" name="oslash"/>
 
     <sym code="0x266d" name="b"/>
     <sym code="0x266e" name="natural"/>
@@ -78,6 +102,33 @@
     <sym class="note" name="b"/>
     <sym class="note" name="mi"/>
 
+    </font>
+
+  <font class="quality" family="MuseJazz Text">
+  <!-- Major chords -->
+    <sym value="maj" name="maj"/>
+    <sym value="Maj" name="Maj"/>
+    <sym code="0xe180" name="Ma"/>
+    <sym value="ma" name="ma"/>
+    <sym value="M" name="M"/>
+    <sym code="0xe18a" name="triangle"/>
+  <!-- Minor chords -->
+    <sym value="min" name="min"/>
+    <sym value="mi" name="mi"/>
+    <sym code="0xe181" name="Mi"/>
+    <sym value="m" name="m"/>
+    <sym value="-" name="-"/>
+  <!-- Augmented chords -->
+    <sym value="aug" name="aug"/>
+    <sym value="Aug" name="Aug"/>
+    <sym code="0xe186" name="+"/>
+  <!-- Diminished chords -->
+    <sym code="0xe187" name="degree"/>
+    <sym code="0xe18e" name="circle"/>
+    <sym value="dim" name="dim"/>
+    <sym value="Dim" name="Dim"/>
+  <!-- Half-diminished -->
+    <sym code="0xe18f" name="oslash"/>
     </font>
 
   <font class="modifier" family="MuseJazz Text">
@@ -107,18 +158,6 @@
 
     <sym name="("/>
     <sym name=")"/>
-    <sym name="M"/>
-    <sym name="Ma"/>
-    <sym name="Maj"/>
-    <sym name="maj"/>
-    <sym name="m"/>
-    <sym name="min"/>
-    <sym name="Mi"/>
-    <sym name="Min"/>
-    <sym name="aug"/>
-    <sym name="Aug"/>
-    <sym name="dim"/>
-    <sym name="Dim"/>
     <sym name="alt"/>
     <sym name="Alt"/>
     <sym name="bass"/>
@@ -175,6 +214,103 @@
     <name>t</name>
     <name>^</name>
     <render>triangle</render>
+    </token>
+    
+  <token class="quality">
+    <name>maj</name>
+    <render>maj</render>
+    </token>
+
+  <token class="quality">
+    <name>Maj</name>
+    <render>Maj</render>
+    </token>
+
+  <token class="quality">
+    <name>Ma</name>
+    <render>Ma</render>
+    </token>
+
+  <token class="quality">
+    <name>ma</name>
+    <render>ma</render>
+    </token>
+
+  <token class="quality">
+    <name>M</name>
+    <render>M</render>
+    </token>
+
+  <token class="quality">
+    <name>t</name>
+    <name>^</name>
+    <name>triangle</name>
+    <render>triangle</render>
+    </token>
+
+  <token class="quality">
+    <name>min</name>
+    <render>min</render>
+    </token>
+
+  <token class="quality">
+    <name>mi</name>
+    <render>mi</render>
+    </token>
+
+  <token class="quality">
+    <name>Mi</name>
+    <render>Mi</render>
+    </token>
+
+  <token class="quality">
+    <name>m</name>
+    <render>m</render>
+    </token>
+
+  <token class="quality">
+    <name>-</name>
+    <render>-</render>
+    </token>
+
+  <token class="quality">
+    <name>aug</name>
+    <render>aug</render>
+    </token>
+
+  <token class="quality">
+    <name>Aug</name>
+    <render>Aug</render>
+    </token>
+
+  <token class="quality">
+    <name>+</name>
+    <render>+</render>
+    </token>
+
+  <token class="quality">
+    <name>degree</name>
+    <render>degree</render>
+    </token>
+
+  <token class="quality">
+    <name>o</name>
+    <render>circle</render>
+    </token>
+
+  <token class="quality">
+    <name>dim</name>
+    <render>dim</render>
+    </token>
+
+  <token class="quality">
+    <name>Dim</name>
+    <render>Dim</render>
+    </token>
+
+  <token class="quality">
+    <name>0</name>
+    <render>oslash</render>
     </token>
 
   <token class="modifier">

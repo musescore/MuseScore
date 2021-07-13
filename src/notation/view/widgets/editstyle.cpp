@@ -23,6 +23,7 @@
 #include "editstyle.h"
 
 #include <QButtonGroup>
+#include <QQuickWidget>
 #include <QSignalMapper>
 
 #include "alignSelect.h"
@@ -654,6 +655,17 @@ EditStyle::EditStyle(QWidget* parent)
 
     connect(setSignalMapper, &QSignalMapper::mappedInt, this, &EditStyle::valueChanged);
     connect(resetSignalMapper, &QSignalMapper::mappedInt, this, &EditStyle::resetStyleValue);
+
+    // ====================================================
+    // New Chord Symbols Page(QML)
+    // ====================================================
+
+    QQuickWidget* chordSymbolsQuickWidget = new QQuickWidget(
+        /*QmlEngine*/ qmlEngineProvider()->qmlEngine(), /*parent*/ PageChordSymbolsNew);
+    chordSymbolsQuickWidget->setObjectName("chordSymbolsQuickWidget");
+    chordSymbolsQuickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    chordSymbolsQuickWidget->setSource(QUrl(QString::fromUtf8("qrc:/view/widgets/ChordSymbolStyleEditor.qml")));
+    PageChordSymbolsNew->layout()->addWidget(chordSymbolsQuickWidget);
 
     textStyles->clear();
     for (auto ss : Ms::allTextStyles()) {

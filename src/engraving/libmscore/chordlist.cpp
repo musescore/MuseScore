@@ -1484,6 +1484,8 @@ qreal ChordList::position(const QStringList& names, ChordTokenClass ctc) const
 {
     QString name = names.empty() ? "" : names.first();
     switch (ctc) {
+    case ChordTokenClass::QUALITY:
+        return _qadjust;
     case ChordTokenClass::EXTENSION:
         return _eadjust;
     case ChordTokenClass::MODIFIER: {
@@ -1504,6 +1506,660 @@ qreal ChordList::position(const QStringList& names, ChordTokenClass ctc) const
 }
 
 //---------------------------------------------------------
+//   findModifierStartIndices
+//---------------------------------------------------------
+void ParsedChord::findModifierStackIndices()
+{
+    QStringList alterationsList = { "b", "bb", "#", "##", "natural" };
+    QStringList addOmitList = { "omit", "no", "add" };
+    for (int index = 0; index < _tokenList.size(); index++) {
+        if (skipList.contains(index)) {
+            continue;
+        }
+        const ChordToken& tok = _tokenList.at(index);
+        if (tok.names.size() > 0) {
+            if (alterationsList.contains(tok.names.first())) {
+                alterationStackIndices.push_back(index);
+            } else if (addOmitList.contains(tok.names.first())) {
+                addOmitStackIndices.push_back(index);
+                // To prevent the immediate next accidental to be treated as new modifier
+                if (alterationsList.contains(_tokenList.at(index + 1).names.first())) {
+                    index++;
+                    addOmitStackIndices.push_back(index);
+                }
+            }
+        }
+    }
+    // To know where to end stacking and return cursor to the normal position
+    if (alterationStackIndices.size() > 0) {
+        alterationStackingEnd = alterationStackIndices.last() + 1;
+    }
+    if (addOmitStackIndices.size() > 0) {
+        addOmitStackingEnd = addOmitStackIndices.last() + 1;
+    }
+    // To remove double references to a single modifier like add(b9)
+    // All we need is one index per modifier(the starting index)
+    for (int i = 0; i < addOmitStackIndices.size(); i++) {
+        if (addOmitStackIndices.contains(addOmitStackIndices[i] - 1)) {
+            addOmitStackIndices.removeAt(i);
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   checkQualitySymbolsLetterCase
+//---------------------------------------------------------
+void ParsedChord::checkQualitySymbolsLetterCase(const ChordList* cl)
+{
+    // Changes the letter case of the first letter in quality symbols
+    // Leaves untouched if there is no other replacement
+    if (cl->autoCapitalization) {
+        // It is important to have the lists synced
+        QStringList upperCase = { "Maj", "Ma", "Min", "Mi", "Aug", "Dim" };
+        QStringList lowerCase = { "maj", "ma", "min", "mi", "aug", "dim" };
+        for (int index = 0; index < _tokenList.size(); index++) {
+            const ChordToken& tok = _tokenList.at(index);
+            if (tok.tokenClass == ChordTokenClass::QUALITY) {
+                if (cl->lowerCaseQualitySymbols) {
+                    if (upperCase.contains(tok.names.first())) {
+                        // Replace by lowercase version
+                        ChordToken qualTok;
+                        qualTok.names += lowerCase.at(upperCase.indexOf(tok.names.first()));
+                        qualTok.tokenClass = ChordTokenClass::QUALITY;
+                        _tokenList.removeAt(index);
+                        _tokenList.insert(index, qualTok);
+                    }
+                } else {
+                    if (lowerCase.contains(tok.names.first())) {
+                        // Replace by uppercase version
+                        ChordToken qualTok;
+                        qualTok.names += upperCase.at(lowerCase.indexOf(tok.names.first()));
+                        qualTok.tokenClass = ChordTokenClass::QUALITY;
+                        _tokenList.removeAt(index);
+                        _tokenList.insert(index, qualTok);
+                    }
+                }
+                return; // Remove this when there could be more than one quality symbol
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   addParentheses
+//---------------------------------------------------------
+void ParsedChord::addParentheses(const ChordList* cl)
+{
+    QStringList allModifiers = { "b", "bb", "#", "##", "natural", "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
+    QStringList nonAlterationModifiers = { "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
+    QStringList alterations = { "b", "bb", "#", "##", "natural" };
+    QStringList addOmitSymbols = { "omit", "no", "add" };
+    for (int index = 0; index < _tokenList.size(); index++) {
+        const ChordToken& tok = _tokenList.at(index);
+        if (tok.tokenClass == ChordTokenClass::MODIFIER) {
+            if (tok.names.first() == "sus" && cl->suspensionsParentheses) {
+                openParenthesesIndices.push_back(index);
+                bool foundNextModifier = false;
+                while (!foundNextModifier) {
+                    index++;
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    const ChordToken& tok2 = _tokenList.at(index);
+                    foundNextModifier = allModifiers.contains(tok2.names.first());
+                }
+                index--;
+                closeParenthesesIndices.push_back(index);
+            } else if (_quality == "minor" && tok.names.first() == "maj" && cl->minMajParentheses) {
+                openParenthesesIndices.push_back(index);
+                bool foundNextModifier = false;
+                while (!foundNextModifier) {
+                    index++;
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    const ChordToken& tok2 = _tokenList.at(index);
+                    foundNextModifier = allModifiers.contains(tok2.names.first());
+                }
+                index--;
+                closeParenthesesIndices.push_back(index);
+            } else if (addOmitSymbols.contains(tok.names.first())) {
+                if (cl->addOmitParentheses) {
+                    if (!cl->stackModifiers) {
+                        openParenthesesIndices.push_back(index);
+                    } else if (index <= addOmitStackIndices.first()) {
+                        openParenthesesIndices.push_back(index);
+                    }
+                    bool foundNextModifier = false;
+                    index++; // To skip the immediate next accidental symbol
+                    while (!foundNextModifier) {
+                        index++;
+                        if (index >= _tokenList.size()) {
+                            break;
+                        }
+                        const ChordToken& tok2 = _tokenList.at(index);
+                        foundNextModifier = allModifiers.contains(tok2.names.first());
+                    }
+                    index--;
+                    if (!cl->stackModifiers) {
+                        closeParenthesesIndices.push_back(index);
+                    } else if (addOmitStackIndices.size() > 0 && index >= addOmitStackIndices.last()) {
+                        closeParenthesesIndices.push_back(index);
+                    }
+                } else {
+                    // To prevent the immediate next accidental to be handled as a separate modifier
+                    index++;
+                }
+            } else if (alterations.contains(tok.names.first()) && cl->alterationsParentheses) {
+                openParenthesesIndices.push_back(index);
+                bool foundNextModifier = false;
+                // Assuming all alterations will occur together,
+                // we search for the next non-alteration modifier here
+                while (!foundNextModifier) {
+                    index++;
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    const ChordToken& tok2 = _tokenList.at(index);
+                    foundNextModifier = nonAlterationModifiers.contains(tok2.names.first());
+                }
+                index--;
+                closeParenthesesIndices.push_back(index);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   sortModifiers
+//---------------------------------------------------------
+void ParsedChord::sortModifiers()
+{
+    QStringList allModifiers = { "b", "bb", "#", "##", "natural", "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
+
+    QList<ChordToken> alterations;
+    QStringList alterationsList = { "b", "bb", "#", "##", "natural" };
+
+    QList<ChordToken> suspension;
+
+    QList<ChordToken> maj7;
+
+    QList<ChordToken> addOmit;
+    QStringList addOmitList = { "omit", "no", "add" };
+
+    QList<ChordToken> alt;
+    QStringList altList = { "alt", "alt#", "altb" };
+    int firstModifierIndex = -1;
+    // Dismantle the list into the separate modifier categories
+    for (int index = 0; index < _tokenList.size(); index++) {
+        ChordToken tok = _tokenList.at(index);
+        if (tok.tokenClass == ChordTokenClass::MODIFIER) {
+            if (firstModifierIndex == -1) {
+                firstModifierIndex = index;
+            }
+            if (tok.names.first() == "sus") {
+                bool foundNextModifier = false;
+                while (!foundNextModifier) {
+                    suspension.push_back(tok);
+                    _tokenList.removeAt(index);
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    tok = _tokenList.at(index);
+                    if (allModifiers.contains(tok.names.first())) {
+                        foundNextModifier = true;
+                    }
+                }
+                index--;
+            } else if (tok.names.first() == "maj") {
+                bool foundNextModifier = false;
+                while (!foundNextModifier) {
+                    maj7.push_back(tok);
+                    _tokenList.removeAt(index);
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    tok = _tokenList.at(index);
+                    if (allModifiers.contains(tok.names.first())) {
+                        foundNextModifier = true;
+                    }
+                }
+                index--;
+            } else if (addOmitList.contains(tok.names.first())) {
+                addOmit.push_back(tok);
+                _tokenList.removeAt(index);
+                tok = _tokenList.at(index); // To skip the immediate next accidental if any
+
+                bool foundNextModifier = false;
+                while (!foundNextModifier) {
+                    addOmit.push_back(tok);
+                    _tokenList.removeAt(index);
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    tok = _tokenList.at(index);
+                    if (allModifiers.contains(tok.names.first())) {
+                        foundNextModifier = true;
+                    }
+                }
+                index--;
+            } else if (alterationsList.contains(tok.names.first())) {
+                bool foundNextModifier = false;
+                while (!foundNextModifier) {
+                    alterations.push_back(tok);
+                    _tokenList.removeAt(index);
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    tok = _tokenList.at(index);
+                    if (allModifiers.contains(tok.names.first())) {
+                        foundNextModifier = true;
+                    }
+                }
+                index--;
+            } else if (altList.contains(tok.names.first())) {
+                bool foundNextModifier = false;
+                while (!foundNextModifier) {
+                    alt.push_back(tok);
+                    _tokenList.removeAt(index);
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    tok = _tokenList.at(index);
+                    if (allModifiers.contains(tok.names.first())) {
+                        foundNextModifier = true;
+                    }
+                }
+                index--;
+            }
+        }
+    }
+    // Sort the alterations based on note numbers
+    for (int i = 0; i < (alterations.size() / 2) - 1; i++) {
+        for (int j = 0; j < (alterations.size() / 2) - i - 1; j++) {
+            // Comparing the note numbers
+            if (alterations.at(2 * j + 1).names.first().toInt() > alterations.at(2 * (j + 1) + 1).names.first().toInt()) {
+                // Swap accidentals
+                alterations.swapItemsAt(2 * j, 2 * (j + 1));
+
+                //Swap note numbers
+                alterations.swapItemsAt(2 * j + 1, 2 * (j + 1) + 1);
+            }
+        }
+    }
+    // Rebuild the list in the correct order
+    for (int index = alterations.size() - 1; index >= 0; index--) {
+        _tokenList.insert(firstModifierIndex, alterations.at(index));
+    }
+    for (int index = addOmit.size() - 1; index >= 0; index--) {
+        _tokenList.insert(firstModifierIndex, addOmit.at(index));
+    }
+    for (int index = alt.size() - 1; index >= 0; index--) {
+        _tokenList.insert(firstModifierIndex, alt.at(index));
+    }
+    for (int index = suspension.size() - 1; index >= 0; index--) {
+        _tokenList.insert(firstModifierIndex, suspension.at(index));
+    }
+    for (int index = maj7.size() - 1; index >= 0; index--) {
+        _tokenList.insert(firstModifierIndex, maj7.at(index));
+    }
+}
+
+//---------------------------------------------------------
+//   stripParenthesis
+//---------------------------------------------------------
+void ParsedChord::stripParentheses()
+{
+    QString special = "()[],";
+    for (int index = 0; index < _tokenList.size(); index++) {
+        const ChordToken& tok = _tokenList.at(index);
+        for (QString s: tok.names) {
+            if (special.contains(s)) {
+                _tokenList.removeAt(index);
+                index--;
+                break;
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   respellQualitySymbols (also omit symbol)
+//---------------------------------------------------------
+
+void ParsedChord::respellQualitySymbols(const ChordList* cl)
+{
+//   Note: This function is build under the assumption that
+//   1. half diminished can have only 7 and b5
+//   2. diminished can have only b5
+//   3. augmented can have only 5 or #5
+//      after the quality symbols, as additional tokens to be added
+    if (!skipList.empty()) {
+        skipList.clear();
+    }
+    if (!removeAfterRenderList.empty()) {
+        removeAfterRenderList.clear();
+    }
+
+    // Major seventh chords
+    bool isMajorSeventh = false;
+    bool hasSeven = true;
+    if ((_quality == "major" || _quality == "dominant") && (_extension.contains("7") || _modifierList.contains("7"))) {
+        if (_modifierList.contains("7")) {
+            // moving extension 7 to the correct place
+            _extension += "7";
+            _modifierList.removeAll("7");
+        }
+        isMajorSeventh = true;
+    }
+
+    if (_quality == "dominant") {
+        // Case of implicit major
+        // a symbol added just for respelling purpose
+        // to be removed after
+        ChordToken majTok;
+        majTok.names += "Ma";
+        majTok.tokenClass = ChordTokenClass::QUALITY;
+        _tokenList.insert(0, majTok);
+        removeAfterRenderList.push_back(0);
+    }
+
+    // Diminished chords with input: <minor>b5
+    bool isDiminished = false;
+    bool hasFlatFive = true;
+    if (_quality == "minor" && _modifierList.contains("b5")) {
+        isDiminished = true;
+    }
+
+    // Half-diminished chords with input: <minor>7b5
+    bool isHalfDiminished = false;
+    // 7 when surrounded by parenthesis is considered as modifier. Why??? Any reason??
+    if (_quality == "minor" && (_extension.contains("7") || _modifierList.contains("7")) && _modifierList.contains("b5")) {
+        if (_modifierList.contains("7")) {
+            // moving extension 7 to the correct place
+            _extension += "7";
+            _modifierList.removeAll("7");
+        }
+        isHalfDiminished = true;
+    }
+
+    // Augmented chords
+    bool isAugmented = false;
+    bool hasSharpFive = true;
+    bool hasFive = true;
+    if (_quality == "major" && _modifierList.contains("#5")) {
+        isAugmented = true;
+    }
+    if (_quality == "augmented" && (_extension.contains("5") || _modifierList.contains("5"))) {
+        if (_modifierList.contains("5")) {
+            // moving extension 5 to the correct place
+            _extension += "5";
+            _modifierList.removeAll("5");
+        }
+        isAugmented = true;
+    }
+
+    for (int index = 0; index < _tokenList.size(); index++) {
+        const ChordToken& tok = _tokenList.at(index);
+
+        // Skip the extension 5 if needed
+        if (!hasFive) {
+            // Skip extension 5
+            if ((tok.tokenClass == ChordTokenClass::EXTENSION) && tok.names.contains("5")) {
+                skipList.push_back(index);
+                continue;
+            }
+        }
+
+        // Skip the extension 7 if needed
+        if (!hasSeven) {
+            // Skip extension 7
+            if ((tok.tokenClass == ChordTokenClass::EXTENSION) && tok.names.contains("7")) {
+                skipList.push_back(index);
+                continue;
+            }
+        }
+
+        // Skip the modifier b5 if needed
+        if (!hasFlatFive) {
+            // Skip flat
+            if ((tok.tokenClass == ChordTokenClass::MODIFIER) && tok.names.contains("b")) {
+                // To ensure other modifiers like b9 are safe
+                if (_tokenList.at(index + 1).names.contains("5")) {
+                    skipList.push_back(index);
+                    continue;
+                }
+            }
+
+            // Skip 5
+            if ((tok.tokenClass == ChordTokenClass::MODIFIER) && tok.names.contains("5")) {
+                // To ensure other modifiers like b9 are safe
+                if (_tokenList.at(index - 1).names.contains("b")) {
+                    skipList.push_back(index);
+                    continue;
+                }
+            }
+        }
+
+        // Skip the modifier #5 if needed
+        if (!hasSharpFive) {
+            // Skip sharp
+            if ((tok.tokenClass == ChordTokenClass::MODIFIER) && tok.names.contains("#")) {
+                // To ensure other modifiers like b9 are safe
+                if (_tokenList.at(index + 1).names.contains("5")) {
+                    skipList.push_back(index);
+                    continue;
+                }
+            }
+
+            // Skip 5
+            if ((tok.tokenClass == ChordTokenClass::MODIFIER) && tok.names.contains("5")) {
+                // To ensure other modifiers like b9 are safe
+                if (_tokenList.at(index - 1).names.contains("#")) {
+                    skipList.push_back(index);
+                    continue;
+                }
+            }
+        }
+
+        if (tok.tokenClass == ChordTokenClass::QUALITY && cl) {
+            if (isMajorSeventh) {
+                QStringList majorSeventhTokens = cl->qualitySymbols.value("major7th").split(" ");
+                ChordToken majTok;
+                majTok.names += majorSeventhTokens.at(0);
+                majTok.tokenClass = ChordTokenClass::QUALITY;
+                _tokenList.removeAt(index);
+                _tokenList.insert(index, majTok);
+
+                // Whether to allow or prevent the rendering of 7 extension
+                hasSeven = majorSeventhTokens.contains("7");
+            } else if (isHalfDiminished) {
+                // This part of code is encountered when the input is <minor>7b5.
+                QStringList halfDiminishedTokens = cl->qualitySymbols.value("half-diminished").split(" ");
+                ChordToken hdTok;
+                hdTok.names += halfDiminishedTokens.at(0);
+                hdTok.tokenClass = ChordTokenClass::QUALITY;
+                _tokenList.removeAt(index);
+                _tokenList.insert(index, hdTok);
+
+                // Here depending on the quality symbols set,
+                // decide whether or not to skip the 7 and b5.
+                hasSeven = hasFlatFive = halfDiminishedTokens.size() > 1;
+            } else if (_quality == "half-diminished") {
+                // This part of code is encountered when the input is 0.
+                QStringList halfDiminishedTokens = cl->qualitySymbols.value("half-diminished").split(" ");
+
+                ChordToken hdTok;
+                hdTok.names += halfDiminishedTokens.at(0);
+                hdTok.tokenClass = ChordTokenClass::QUALITY;
+                _tokenList.removeAt(index);
+                _tokenList.insert(index, hdTok);
+
+                if (halfDiminishedTokens.size() > 1) {
+                    // insert extension 7
+                    ChordToken sevenToken;
+                    sevenToken.names += "7";
+                    sevenToken.tokenClass = ChordTokenClass::EXTENSION;
+                    _tokenList.insert(index + 1, sevenToken);
+                    removeAfterRenderList.push_back(index + 1);
+
+                    // insert modifier flat
+                    ChordToken flatToken;
+                    flatToken.names += "b";
+                    flatToken.tokenClass = ChordTokenClass::MODIFIER;
+                    _tokenList.insert(index + 2, flatToken);
+                    removeAfterRenderList.push_back(index + 2);
+
+                    // insert modifier 5
+                    ChordToken fiveToken;
+                    fiveToken.names += "5";
+                    fiveToken.tokenClass = ChordTokenClass::MODIFIER;
+                    _tokenList.insert(index + 3, fiveToken);
+                    removeAfterRenderList.push_back(index + 3);
+                }
+            } else if (isDiminished) {
+                // This part of code is encountered when the input is <minor>b5.
+                QStringList diminishedTokens = cl->qualitySymbols.value("diminished").split(" ");
+                ChordToken dimTok;
+                dimTok.names += diminishedTokens.at(0);
+                dimTok.tokenClass = ChordTokenClass::QUALITY;
+                _tokenList.removeAt(index);
+                _tokenList.insert(index, dimTok);
+
+                // Here depending on the quality symbols set,
+                // decide whether or not to skip the  b5.
+                hasFlatFive = diminishedTokens.size() > 1;
+            } else if (_quality == "diminished") {
+                // This part of code is encountered when the input is dim or o.
+                QStringList diminishedTokens = cl->qualitySymbols.value("diminished").split(" ");
+                ChordToken dimTok;
+                dimTok.names += diminishedTokens.at(0);
+                dimTok.tokenClass = ChordTokenClass::QUALITY;
+                _tokenList.removeAt(index);
+                _tokenList.insert(index, dimTok);
+
+                if (diminishedTokens.size() > 1) {
+                    // insert modifier flat
+                    ChordToken flatToken;
+                    flatToken.names += "b";
+                    flatToken.tokenClass = ChordTokenClass::MODIFIER;
+                    _tokenList.insert(index + 1, flatToken);
+                    removeAfterRenderList.push_back(index + 1);
+
+                    // insert modifier 5
+                    ChordToken fiveToken;
+                    fiveToken.names += "5";
+                    fiveToken.tokenClass = ChordTokenClass::MODIFIER;
+                    _tokenList.insert(index + 2, fiveToken);
+                    removeAfterRenderList.push_back(index + 2);
+                }
+            } else if (isAugmented) {
+                // Augmented chords are handled slightly different than the other three chords
+                // because it has 2 diff additional representations(+5 and <major>#5)
+
+                // This part of code is encountered when the input is <major>#5 or +5.
+                QStringList augmentedTokens = cl->qualitySymbols.value("augmented").split(" ");
+                ChordToken augTok;
+                augTok.names += augmentedTokens.at(0);
+                augTok.tokenClass = ChordTokenClass::QUALITY;
+                _tokenList.removeAt(index);
+                _tokenList.insert(index, augTok);
+
+                // We add the extension or modifier anyway here and
+                // then if already present we can block it
+                if (augmentedTokens.contains("5")) {
+                    // insert extension 5
+                    ChordToken fiveToken;
+                    fiveToken.names += "5";
+                    fiveToken.tokenClass = ChordTokenClass::EXTENSION;
+                    _tokenList.insert(index + 1, fiveToken);
+                    removeAfterRenderList.push_back(index + 1);
+                    index++; // Just to prevent this added 5 from being blocked
+                }
+
+                if (augmentedTokens.contains("#5")) {
+                    // insert modifier sharp
+                    ChordToken sharpToken;
+                    sharpToken.names += "#";
+                    sharpToken.tokenClass = ChordTokenClass::MODIFIER;
+                    _tokenList.insert(index + 1, sharpToken);
+                    removeAfterRenderList.push_back(index + 1);
+
+                    // insert modifier 5
+                    ChordToken fiveToken;
+                    fiveToken.names += "5";
+                    fiveToken.tokenClass = ChordTokenClass::MODIFIER;
+                    _tokenList.insert(index + 2, fiveToken);
+                    removeAfterRenderList.push_back(index + 2);
+                    index+=2; // Just to prevent this added #5 from being blocked
+                }
+                hasSharpFive = false;
+                hasFive = false;
+            } else if (_quality == "augmented") {
+                // This part of code is encountered when the input is aug or +.
+                QStringList augmentedTokens = cl->qualitySymbols.value("augmented").split(" ");
+                ChordToken augTok;
+                augTok.names += augmentedTokens.at(0);
+                augTok.tokenClass = ChordTokenClass::QUALITY;
+                _tokenList.removeAt(index);
+                _tokenList.insert(index, augTok);
+
+                // We add the extension or modifier anyway here and
+                // then if already present we can block it
+                if (augmentedTokens.contains("5")) {
+                    // insert extension 5
+                    ChordToken fiveToken;
+                    fiveToken.names += "5";
+                    fiveToken.tokenClass = ChordTokenClass::EXTENSION;
+                    _tokenList.insert(index + 1, fiveToken);
+                    removeAfterRenderList.push_back(index + 1);
+                    index++; // Just to prevent this added 5 from being blocked
+                }
+
+                if (augmentedTokens.contains("#5")) {
+                    // insert modifier sharp
+                    ChordToken sharpToken;
+                    sharpToken.names += "#";
+                    sharpToken.tokenClass = ChordTokenClass::MODIFIER;
+                    _tokenList.insert(index + 1, sharpToken);
+                    removeAfterRenderList.push_back(index + 1);
+
+                    // insert modifier 5
+                    ChordToken fiveToken;
+                    fiveToken.names += "5";
+                    fiveToken.tokenClass = ChordTokenClass::MODIFIER;
+                    _tokenList.insert(index + 2, fiveToken);
+                    removeAfterRenderList.push_back(index + 2);
+                    index+=2; // Just to prevent this added #5 from being blocked
+                }
+                hasSharpFive = false;
+                hasFive = false;
+            } else {
+                // for minor chords(has only one component).
+                QString sym = cl->qualitySymbols.value(_quality);
+                ChordToken qualTok;
+                qualTok.names += sym;
+                qualTok.tokenClass = ChordTokenClass::QUALITY;
+                _tokenList.removeAt(index);
+                _tokenList.insert(index, qualTok);
+            }
+        }
+
+        // For omit/no modifier
+        if (tok.tokenClass == ChordTokenClass::MODIFIER && cl) {
+            if (tok.names.contains("omit") || tok.names.contains("no")) {
+                QString sym = cl->qualitySymbols.value("omit");
+                ChordToken omitTok;
+                omitTok.names += sym;
+                omitTok.tokenClass = ChordTokenClass::MODIFIER;
+                _tokenList.removeAt(index);
+                _tokenList.insert(index, omitTok);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   renderList
 //---------------------------------------------------------
 
@@ -1515,7 +2171,89 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         _renderList.clear();
     }
     bool adjust = cl ? cl->autoAdjust() : false;
+
+    if (!alterationStackIndices.empty()) {
+        alterationStackIndices.clear();
+    }
+    if (!addOmitStackIndices.empty()) {
+        addOmitStackIndices.clear();
+    }
+    if (!openParenthesesIndices.empty()) {
+        openParenthesesIndices.clear();
+    }
+    if (!closeParenthesesIndices.empty()) {
+        closeParenthesesIndices.clear();
+    }
+    alterationStackingEnd = -1;
+    addOmitStackingEnd = -1;
+
+    stripParentheses();
+    respellQualitySymbols(cl);
+    checkQualitySymbolsLetterCase(cl);
+    sortModifiers();
+    if (cl->stackModifiers) {
+        findModifierStackIndices();
+    }
+    addParentheses(cl);
+
+    // Find the suitable opening and closing parentheses
+    QList<RenderAction> openParen;
+    QList<ChordToken> definedTokensParen;
+    // potential definitions for token
+    for (const ChordToken& ct : cl->chordTokenList) {
+        for (const QString& ctn : qAsConst(ct.names)) {
+            if (ctn == "(") {
+                definedTokensParen += ct;
+            }
+        }
+    }
+    // find matching class, fallback on ChordTokenClass::ALL
+    for (const ChordToken& matchingTok : qAsConst(definedTokensParen)) {
+        if (matchingTok.tokenClass == ChordTokenClass::MODIFIER) {
+            openParen = matchingTok.renderList;
+            break;
+        } else if (matchingTok.tokenClass == ChordTokenClass::ALL) {
+            openParen = matchingTok.renderList;
+        }
+    }
+    if (openParen.empty()) {
+        RenderAction a(RenderAction::RenderActionType::SET);
+        a.text = "(";
+        openParen.append(a);
+    }
+
+    QList<RenderAction> closeParen;
+    definedTokensParen.clear();
+    // potential definitions for token
+    for (const ChordToken& ct : cl->chordTokenList) {
+        for (const QString& ctn : qAsConst(ct.names)) {
+            if (ctn == ")") {
+                definedTokensParen += ct;
+            }
+        }
+    }
+    // find matching class, fallback on ChordTokenClass::ALL
+    for (const ChordToken& matchingTok : qAsConst(definedTokensParen)) {
+        if (matchingTok.tokenClass == ChordTokenClass::MODIFIER) {
+            closeParen = matchingTok.renderList;
+            break;
+        } else if (matchingTok.tokenClass == ChordTokenClass::ALL) {
+            closeParen = matchingTok.renderList;
+        }
+    }
+    if (closeParen.empty()) {
+        RenderAction a(RenderAction::RenderActionType::SET);
+        a.text = "(";
+        closeParen.append(a);
+    }
+
+    int index = 0;
     for (const ChordToken& tok : qAsConst(_tokenList)) {
+        if (skipList.contains(index)) {
+            index++;
+            continue;
+        }
+
         QString n = tok.names.first();
         QList<RenderAction> rl;
         QList<ChordToken> definedTokens;
@@ -1556,6 +2294,62 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             m1.movey = p;
             _renderList.append(m1);
         }
+
+        // Modifier Stacking + Opening Parentheses
+        if (alterationStackIndices.contains(index) && alterationStackIndices.size() > 1) {
+            // Opening parenthesis should render before moving away from the normal position
+            if (openParenthesesIndices.contains(index)) {
+                _renderList.append(openParen);
+            }
+            if (index == alterationStackIndices.first()) {
+                // To let the Harmony render function know that these modifiers are stacked
+                RenderAction a(RenderAction::RenderActionType::SET);
+                a.text = "startStacking";
+                _renderList.append(a);
+
+                RenderAction push = RenderAction(RenderAction::RenderActionType::PUSH);
+                _renderList.append(push);
+            } else {
+                RenderAction pop = RenderAction(RenderAction::RenderActionType::POP);
+                _renderList.append(pop);
+                RenderAction push = RenderAction(RenderAction::RenderActionType::PUSH);
+                _renderList.append(push);
+            }
+            RenderAction stackPosition = RenderAction(RenderAction::RenderActionType::MOVE);
+            stackPosition.movex = 0.0;
+            stackPosition.movey = -(alterationStackIndices.indexOf(index) + 0.5 - (alterationStackIndices.size() - 1) / 2.0)
+                                  * cl->modifierMag() * 5;
+            _renderList.append(stackPosition);
+        } else if (addOmitStackIndices.contains(index) && addOmitStackIndices.size() > 1) {
+            // Opening parenthesis should render before moving away from the normal position
+            if (openParenthesesIndices.contains(index)) {
+                _renderList.append(openParen);
+            }
+            if (index == addOmitStackIndices.first()) {
+                // To let the Harmony render function know that these modifiers are stacked
+                RenderAction a(RenderAction::RenderActionType::SET);
+                a.text = "startStacking";
+                _renderList.append(a);
+
+                RenderAction push = RenderAction(RenderAction::RenderActionType::PUSH);
+                _renderList.append(push);
+            } else {
+                RenderAction pop = RenderAction(RenderAction::RenderActionType::POP);
+                _renderList.append(pop);
+                RenderAction push = RenderAction(RenderAction::RenderActionType::PUSH);
+                _renderList.append(push);
+            }
+            RenderAction stackPosition = RenderAction(RenderAction::RenderActionType::MOVE);
+            stackPosition.movex = 0.0;
+            stackPosition.movey = -(addOmitStackIndices.indexOf(index) + 0.5 - (addOmitStackIndices.size() - 1) / 2.0)
+                                  * cl->modifierMag() * 5;
+            _renderList.append(stackPosition);
+        } else {
+            if (openParenthesesIndices.contains(index)) {
+                _renderList.append(openParen);
+            }
+        }
+
         if (found) {
             _renderList.append(rl);
         } else {
@@ -1564,13 +2358,56 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             a.text = tok.names.first();
             _renderList.append(a);
         }
+
+        if (index == alterationStackingEnd && alterationStackIndices.size() > 1) {
+            RenderAction a(RenderAction::RenderActionType::SET);
+            a.text = "endStacking";
+            _renderList.append(a);
+
+            // Modifiers like sus are not stacked and so must return to the normal level
+            RenderAction returnPosition = RenderAction(RenderAction::RenderActionType::MOVE);
+            returnPosition.movex = 0.0;
+            // Reverse y displacement of the last modifier (substitute index as size()-1 in the previous eqn)
+            returnPosition.movey = (alterationStackIndices.size() / 2.0)
+                                   * cl->modifierMag() * 5;
+            _renderList.append(returnPosition);
+        } else if (index == addOmitStackingEnd && addOmitStackIndices.size() > 1) {
+            RenderAction a(RenderAction::RenderActionType::SET);
+            a.text = "endStacking";
+            _renderList.append(a);
+
+            // Modifiers like sus are not stacked and so must return to the normal level
+            RenderAction returnPosition = RenderAction(RenderAction::RenderActionType::MOVE);
+            returnPosition.movex = 0.0;
+            // Reverse y displacement of the last modifier (substitute index as size()-1 in the previous eqn)
+            returnPosition.movey = (addOmitStackIndices.size() / 2.0)
+                                   * cl->modifierMag() * 5;
+            _renderList.append(returnPosition);
+        }
+
+        // Closing Parenthesis
+        if (closeParenthesesIndices.contains(index)) {
+            _renderList.append(closeParen);
+        }
+
         if (p != 0.0) {
             RenderAction m2 = RenderAction(RenderAction::RenderActionType::MOVE);
             m2.movex = 0.0;
             m2.movey = -p;
             _renderList.append(m2);
         }
+        index++;
     }
+
+    // The items added in the respelling function are removed here
+    // to prevent multiple occurrences
+    stripParentheses(); // remove from render list contains indices from when there were no parentheses
+    for (int index = _tokenList.size(); index >= 0; index--) {
+        if (removeAfterRenderList.contains(index)) {
+            _tokenList.removeAt(index);
+        }
+    }
+
     return _renderList;
 }
 
@@ -1724,8 +2561,10 @@ int ChordList::privateID = -1000;
 //   configureAutoAdjust
 //---------------------------------------------------------
 
-void ChordList::configureAutoAdjust(qreal emag, qreal eadjust, qreal mmag, qreal madjust)
+void ChordList::configureAutoAdjust(qreal qmag, qreal qadjust, qreal emag, qreal eadjust, qreal mmag, qreal madjust)
 {
+    _qmag = qmag;
+    _qadjust = qadjust;
     _emag = emag;
     _eadjust = eadjust;
     _mmag = mmag;
@@ -1808,6 +2647,8 @@ void ChordList::read(XmlReader& e)
                     f.mag *= _emag;
                 } else if (f.fontClass == "modifier") {
                     f.mag *= _mmag;
+                } else if (f.fontClass == "quality") {
+                    f.mag *= _qmag;
                 }
             }
             fonts.append(f);

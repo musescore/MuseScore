@@ -423,15 +423,30 @@ enum class Sid {
     useFrenchNoteNames,
     automaticCapitalization,
     lowerCaseMinorChords,
+    lowerCaseQualitySymbols,
     lowerCaseBassNotes,
     allCapsNoteNames,
+    stackModifiers,
     chordStyle,
     chordsXmlFile,
     chordDescriptionFile,
+    chordQualityMag,
+    chordQualityAdjust,
     chordExtensionMag,
     chordExtensionAdjust,
     chordModifierMag,
     chordModifierAdjust,
+    chordAlterationsParentheses,
+    chordSuspensionsParentheses,
+    chordMinMajParentheses,
+    chordAddOmitParentheses,
+    chordQualitySelectionHistory,
+    chordQualityMajorSeventh,
+    chordQualityHalfDiminished,
+    chordQualityMinor,
+    chordQualityAugmented,
+    chordQualityDiminished,
+    chordModifierOmit,
     concertPitch,
     createMultiMeasureRests,
     minEmptyMeasures,
@@ -1468,6 +1483,15 @@ inline uint qHash(Sid id)
 }
 
 //---------------------------------------------------------
+//   ChordSymbolStyle
+//---------------------------------------------------------
+
+struct ChordSymbolStyle {
+    QString styleName;
+    QString fileName;
+};
+
+//---------------------------------------------------------
 //   MStyle
 ///   \cond PLUGIN_API \private \endcond
 //    the name "Style" gives problems with some microsoft
@@ -1501,6 +1525,7 @@ public:
     void setChordList(ChordList*, bool custom = true);      // Style gets ownership of ChordList
     void setCustomChordList(bool t) { _customChordList = t; }
     void checkChordList();
+    void updateChordList();
 
     bool load(QFile* qf, bool ign = false);
     void load(XmlReader& e);

@@ -54,6 +54,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationelements.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationparts.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/chordsymbolstylemanager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/chordsymbolstylemanager.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/igetscore.h
@@ -147,6 +149,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomiseitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/chordsymboleditormodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/chordsymboleditormodel.cpp
     )
 
 set(MODULE_UI

@@ -27,6 +27,7 @@
 #include "context/iglobalcontext.h"
 #include "inotationconfiguration.h"
 #include "iinteractive.h"
+#include "ui/iuiengine.h"
 
 namespace mu::notation {
 class EditStyle : public QDialog, private Ui::EditStyleBase
@@ -36,6 +37,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
     INJECT(notation, mu::context::IGlobalContext, globalContext)
     INJECT(notation, mu::notation::INotationConfiguration, configuration)
     INJECT(notation, mu::framework::IInteractive, interactive)
+    INJECT(notation, mu::ui::IUiEngine, qmlEngineProvider)
 
 public:
     EditStyle(QWidget* = nullptr);

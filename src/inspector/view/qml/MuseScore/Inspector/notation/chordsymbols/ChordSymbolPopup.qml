@@ -24,6 +24,7 @@ import QtQuick.Controls 2.2
 import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
 import "../../common"
+import "internal"
 
 StyledPopupView {
     id: root
@@ -38,6 +39,16 @@ StyledPopupView {
         width: parent.width
 
         spacing: 16
+
+        InspectorPropertyView {
+            titleText: qsTrc("inspector", "Chord symbol style")
+
+            ChordSymbolStyleSettings {
+                id: styleSettings
+                width: parent.width
+                chordStylesModel: root.model ? root.model.chordStylesModel : null
+            }
+        }
 
         InspectorPropertyView {
             titleText: qsTrc("inspector", "Interpretation")

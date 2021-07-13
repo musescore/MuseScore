@@ -22,5 +22,9 @@
         <file>qml/MuseScore/NotationScene/internal/NoteInputBarActionDelegate.qml</file>
         <file>qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml</file>
         <file>qml/MuseScore/NotationScene/UndoRedoToolBar.qml</file>
+        <file>view/widgets/ChordSymbolStyleEditor.qml</file>
+        <file>view/widgets/ChordSymbolEditorBasic.qml</file>
+        <file>view/widgets/ChordSymbolEditorAdvanced.qml</file>
+        <file>view/widgets/LabelledSpinBox.qml</file>
     </qresource>
 </RCC>

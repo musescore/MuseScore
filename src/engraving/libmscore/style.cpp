@@ -437,17 +437,36 @@ static const StyleType styleTypes[] {
     { Sid::useFrenchNoteNames,      "useFrenchNoteNames",      QVariant(false) },
     { Sid::automaticCapitalization, "automaticCapitalization", QVariant(true) },
     { Sid::lowerCaseMinorChords,    "lowerCaseMinorChords",    QVariant(false) },
+    { Sid::lowerCaseQualitySymbols, "lowerCaseQualitySymbols", QVariant(false) },
     { Sid::lowerCaseBassNotes,      "lowerCaseBassNotes",      QVariant(false) },
     { Sid::allCapsNoteNames,        "allCapsNoteNames",        QVariant(false) },
+    { Sid::stackModifiers,          "stackModifiers",          QVariant(false) },
     { Sid::chordStyle,              "chordStyle",              QVariant(QString("std")) },
     { Sid::chordsXmlFile,           "chordsXmlFile",           QVariant(false) },
     { Sid::chordDescriptionFile,    "chordDescriptionFile",    QVariant(QString("chords_std.xml")) },
+    { Sid::chordQualityMag,         "chordQualityMag",         QVariant(1.0) },
+    { Sid::chordQualityAdjust,      "chordQualityAdjust",      QVariant(0.0) },
     { Sid::chordExtensionMag,       "chordExtensionMag",       QVariant(1.0) },
     { Sid::chordExtensionAdjust,    "chordExtensionAdjust",    QVariant(0.0) },
     { Sid::chordModifierMag,        "chordModifierMag",        QVariant(1.0) },
     { Sid::chordModifierAdjust,     "chordModifierAdjust",     QVariant(0.0) },
-    { Sid::concertPitch,            "concertPitch",            QVariant(false) },
+    { Sid::chordAlterationsParentheses, "chordAlterationsParentheses", QVariant(true) },
+    { Sid::chordSuspensionsParentheses, "chordSuspensionsParentheses", QVariant(true) },
+    { Sid::chordMinMajParentheses,  "chordMinMajParentheses",  QVariant(true) },
+    { Sid::chordAddOmitParentheses, "chordAddOmitParentheses", QVariant(true) },
 
+    // Atleast one item in the selection history is required
+    { Sid::chordQualitySelectionHistory, "chordQualitySelectionHistory",
+      QVariant(QString(
+                   "Standard|maj7th:maj 7,half-dim:m 7 b5,min:mi,aug:aug,dim:dim,omit:omit,chrdSpell:0,stkMod:1.0,qualMag:1.0,qualAdj:0.0,extMag:1.0,extAdj:0.0,modMag:1.0,modAdj:0.0,hFretDist:1.0,mnHDist:0.5,mxHBarDist:3.0,mxSftAbv:0.0,mxSftBlw:0.0,cpFretPos:0.0,autoCap:1.0,minRtCap:1.0,qualCap:1.0,bsNtCap:1.0,solNtCap:0.0,altParen:1.0,susParen:1.0,minMajParen:1.0,addOmitParen:1.0")) },
+    { Sid::chordQualityMajorSeventh, "chordQualityMajorSeventh", QVariant(QString("maj 7")) },
+    { Sid::chordQualityHalfDiminished, "chordQualityHalfDiminished", QVariant(QString("m 7 b5")) },
+    { Sid::chordQualityMinor,       "chordQualityMinor",       QVariant(QString("mi")) },
+    { Sid::chordQualityAugmented,   "chordQualityAugmented",   QVariant(QString("aug")) },
+    { Sid::chordQualityDiminished,  "chordQualityDiminished",  QVariant(QString("dim")) },
+    { Sid::chordModifierOmit,       "chordModifierOmit",       QVariant(QString("omit")) },
+
+    { Sid::concertPitch,            "concertPitch",            QVariant(false) },
     { Sid::createMultiMeasureRests, "createMultiMeasureRests", QVariant(false) },
     { Sid::minEmptyMeasures,        "minEmptyMeasures",        QVariant(2) },
     { Sid::minMMRestWidth,          "minMMRestWidth",          Spatium(4) },
@@ -2805,15 +2824,18 @@ void MStyle::checkChordList()
 {
     // make sure we have a chordlist
     if (!_chordList.loaded()) {
+        qreal qmag = value(Sid::chordQualityMag).toDouble();
+        qreal qadjust = value(Sid::chordQualityAdjust).toDouble();
         qreal emag = value(Sid::chordExtensionMag).toDouble();
         qreal eadjust = value(Sid::chordExtensionAdjust).toDouble();
         qreal mmag = value(Sid::chordModifierMag).toDouble();
         qreal madjust = value(Sid::chordModifierAdjust).toDouble();
-        _chordList.configureAutoAdjust(emag, eadjust, mmag, madjust);
+        _chordList.configureAutoAdjust(qmag, qadjust, emag, eadjust, mmag, madjust);
         if (value(Sid::chordsXmlFile).toBool()) {
             _chordList.read("chords.xml");
         }
         _chordList.read(value(Sid::chordDescriptionFile).toString());
+        updateChordList();
     }
 }
 
@@ -2825,6 +2847,27 @@ void MStyle::setChordList(ChordList* cl, bool custom)
 {
     _chordList       = *cl;
     _customChordList = custom;
+    updateChordList();
+}
+
+void MStyle::updateChordList()
+{
+    _chordList.qualitySymbols.clear();
+    _chordList.qualitySymbols.insert("major", "");
+    _chordList.qualitySymbols.insert("minor", value(Sid::chordQualityMinor).toString());
+    _chordList.qualitySymbols.insert("half-diminished", value(Sid::chordQualityHalfDiminished).toString());
+    _chordList.qualitySymbols.insert("major7th", value(Sid::chordQualityMajorSeventh).toString());
+    _chordList.qualitySymbols.insert("diminished", value(Sid::chordQualityDiminished).toString());
+    _chordList.qualitySymbols.insert("augmented", value(Sid::chordQualityAugmented).toString());
+    _chordList.qualitySymbols.insert("omit", value(Sid::chordModifierOmit).toString());
+
+    _chordList.stackModifiers = value(Sid::stackModifiers).toBool();
+    _chordList.autoCapitalization = value(Sid::automaticCapitalization).toBool();
+    _chordList.lowerCaseQualitySymbols = value(Sid::lowerCaseQualitySymbols).toBool();
+    _chordList.alterationsParentheses = value(Sid::chordAlterationsParentheses).toBool();
+    _chordList.suspensionsParentheses = value(Sid::chordSuspensionsParentheses).toBool();
+    _chordList.minMajParentheses = value(Sid::chordMinMajParentheses).toBool();
+    _chordList.addOmitParentheses = value(Sid::chordAddOmitParentheses).toBool();
 }
 
 //---------------------------------------------------------
@@ -3066,6 +3109,7 @@ void MStyle::load(XmlReader& e)
         } else if (tag == "ChordList") {
             _chordList.unload();
             _chordList.read(e);
+            updateChordList();
             _customChordList = true;
             chordListTag = true;
         } else if (tag == "lyricsDashMaxLegth") { // pre-3.6 typo
