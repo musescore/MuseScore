@@ -31,22 +31,7 @@ namespace mu::draw {
 class QImageConverter : public IImageConverter
 {
 public:
-    Pixmap scaled(const Pixmap& origin, const Size& s) override
-    {
-        QPixmap qtPixMap;
-        qtPixMap.loadFromData(origin.data());
-        qtPixMap = qtPixMap.scaled(s.width(), s.height());
-
-        QByteArray bytes;
-        QBuffer buffer(&bytes);
-        buffer.open(QIODevice::WriteOnly);
-        qtPixMap.save(&buffer, "PNG");
-
-        Pixmap result({ qtPixMap.width(), qtPixMap.height() });
-        result.setData(bytes);
-
-        return result;
-    }
+    Pixmap scaled(const Pixmap& origin, const Size& s) const override;
 };
 }
 

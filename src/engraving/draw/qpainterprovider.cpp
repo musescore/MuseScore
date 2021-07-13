@@ -298,7 +298,7 @@ void QPainterProvider::drawSymbol(const PointF& point, uint ucs4Code)
 
 void QPainterProvider::drawPixmap(const PointF& point, const Pixmap& pm)
 {
-    QString key = QString(pm.cashKey());
+    QString key = QString::number(pm.key());
     QPixmap pixmap;
     if (!QPixmapCache::find(key, &pixmap)) {
         pixmap.loadFromData(pm.data());
@@ -310,7 +310,7 @@ void QPainterProvider::drawPixmap(const PointF& point, const Pixmap& pm)
 
 void QPainterProvider::drawTiledPixmap(const RectF& rect, const Pixmap& pm, const PointF& offset)
 {
-    QString key = QString(pm.cashKey());
+    QString key = QString::number(pm.key());
     QPixmap pixmap;
     if (!QPixmapCache::find(key, &pixmap)) {
         pixmap.loadFromData(pm.data());

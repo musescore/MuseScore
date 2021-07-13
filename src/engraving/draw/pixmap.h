@@ -35,27 +35,27 @@ public:
 
     Pixmap() = default;
     Pixmap(Size size)
-        : m_Size(size) {}
+        : m_size(size) {}
 
-    int width() const { return m_Size.width(); }
-    int height() const { return m_Size.height(); }
-    Size size() const { return m_Size; }
-    QByteArray data() const { return m_Data; }
+    int width() const { return m_size.width(); }
+    int height() const { return m_size.height(); }
+    Size size() const { return m_size; }
+    QByteArray data() const { return m_data; }
 
-    bool isNull() const { return m_Data.isNull(); }
+    bool isNull() const { return m_data.isNull(); }
 
     void setData(const QByteArray& data)
     {
-        m_Data = data;
-        m_cashKey = qHash(data);
+        m_data = data;
+        m_key = qHash(data);
     }
 
-    uint cashKey() const { return m_cashKey; }
+    uint key() const { return m_key; }
 
 private:
-    Size m_Size;
-    QByteArray m_Data;
-    uint m_cashKey;
+    Size m_size;
+    QByteArray m_data; //! usually png
+    uint m_key;
 };
 }
 
