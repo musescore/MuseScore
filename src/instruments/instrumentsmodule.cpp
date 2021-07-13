@@ -26,9 +26,6 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
-#include "internal/instrumentsreader.h"
-#include "internal/instrumentsrepository.h"
-#include "internal/instrumentsconfiguration.h"
 #include "internal/selectinstrumentscenario.h"
 #include "internal/instrumentsuiactions.h"
 
@@ -38,16 +35,12 @@
 #include "view/staffsettingsmodel.h"
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
-#include "instrumentstypes.h"
 
-#include "diagnostics/idiagnosticspathsregister.h"
+#include "instrumentstypes.h"
 
 using namespace mu::instruments;
 using namespace mu::modularity;
 using namespace mu::ui;
-
-static InstrumentsRepository* s_instrumentsRepository = new InstrumentsRepository();
-static std::shared_ptr<InstrumentsConfiguration> s_configuration = std::make_shared<InstrumentsConfiguration>();
 
 static void instruments_init_qrc()
 {
@@ -61,10 +54,7 @@ std::string InstrumentsModule::moduleName() const
 
 void InstrumentsModule::registerExports()
 {
-    ioc()->registerExport<IInstrumentsConfiguration>(moduleName(), s_configuration);
-    ioc()->registerExport<IInstrumentsRepository>(moduleName(), s_instrumentsRepository);
-    ioc()->registerExport<IInstrumentsReader>(moduleName(), new InstrumentsReader());
-    ioc()->registerExport<ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenario());
+    ioc()->registerExport<notation::ISelectInstrumentsScenario>(moduleName(), new SelectInstrumentsScenario());
 }
 
 void InstrumentsModule::resolveImports()
@@ -98,34 +88,5 @@ void InstrumentsModule::registerUiTypes()
     auto uiengine = modularity::ioc()->resolve<ui::IUiEngine>(moduleName());
     if (uiengine) {
         uiengine->addSourceImportPath(instruments_QML_IMPORT);
-    }
-}
-
-void InstrumentsModule::onInit(const framework::IApplication::RunMode&)
-{
-    s_configuration->init();
-    s_instrumentsRepository->init();
-
-    auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
-    if (pr) {
-        io::paths instrPaths = s_configuration->instrumentListPaths();
-        for (const io::path& p : instrPaths) {
-            pr->reg("instruments", p);
-        }
-
-        io::paths uinstrPaths = s_configuration->userInstrumentListPaths();
-        for (const io::path& p : uinstrPaths) {
-            pr->reg("user instruments", p);
-        }
-
-        io::paths scoreOrderPaths = s_configuration->scoreOrderListPaths();
-        for (const io::path& p : scoreOrderPaths) {
-            pr->reg("scoreOrder", p);
-        }
-
-        io::paths uscoreOrderPaths = s_configuration->userScoreOrderListPaths();
-        for (const io::path& p : uscoreOrderPaths) {
-            pr->reg("user scoreOrder", p);
-        }
     }
 }

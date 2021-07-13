@@ -20,15 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "scoreorderconverter.h"
+
 #include "libmscore/scoreorder.h"
-#include "libmscore/score.h"
-#include "libmscore/xml.h"
-#include <QBuffer>
+#include "notation/notationtypes.h"
 
 using namespace mu::notation;
-using namespace mu::instruments;
 
-Ms::ScoreOrder ScoreOrderConverter::convertScoreOrder(const mu::instruments::ScoreOrder& order)
+Ms::ScoreOrder ScoreOrderConverter::convertScoreOrder(const ScoreOrder& order)
 {
     Ms::ScoreOrder result;
 
@@ -59,11 +57,10 @@ Ms::ScoreOrder ScoreOrderConverter::convertScoreOrder(const mu::instruments::Sco
     return result;
 }
 
-mu::instruments::ScoreOrder ScoreOrderConverter::convertScoreOrder(const Ms::ScoreOrder& order)
+ScoreOrder ScoreOrderConverter::convertScoreOrder(const Ms::ScoreOrder& order)
 {
     ScoreOrder result;
 
-    result.index = -1;
     result.id = order.id;
     result.name = order.name;
 

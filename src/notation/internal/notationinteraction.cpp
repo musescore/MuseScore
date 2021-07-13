@@ -1046,7 +1046,7 @@ void NotationInteraction::selectInstrument(Ms::InstrumentChange* instrumentChang
         return;
     }
 
-    instruments::Instrument selectedIstrument = retVal.val.toQVariant().value<instruments::Instrument>();
+    Instrument selectedIstrument = retVal.val.toQVariant().value<Instrument>();
     if (!selectedIstrument.isValid()) {
         return;
     }

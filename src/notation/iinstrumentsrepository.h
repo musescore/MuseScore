@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTS_IINSTRUMENTSREPOSITORY_H
-#define MU_INSTRUMENTS_IINSTRUMENTSREPOSITORY_H
+#ifndef MU_NOTATION_IINSTRUMENTSREPOSITORY_H
+#define MU_NOTATION_IINSTRUMENTSREPOSITORY_H
 
 #include "modularity/imoduleexport.h"
 
 #include "retval.h"
-#include "instrumentstypes.h"
+#include "notationtypes.h"
 
-namespace mu::instruments {
+namespace mu::notation {
 class IInstrumentsRepository : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IInstrumentsRepository)
@@ -39,4 +39,4 @@ public:
 };
 }
 
-#endif // MU_INSTRUMENTS_IINSTRUMENTSREPOSITORY_H
+#endif // MU_NOTATION_IINSTRUMENTSREPOSITORY_H

@@ -23,10 +23,11 @@
 #ifndef MU_NOTATION_INSTRUMENTSCONVERTER_H
 #define MU_NOTATION_INSTRUMENTSCONVERTER_H
 
-#include "instruments/instrumentstypes.h"
+#include "notation/notationtypes.h"
 
 namespace Ms {
 class Instrument;
+class InstrumentTemplate;
 struct NamedEventList;
 }
 
@@ -34,12 +35,13 @@ namespace mu::notation {
 class InstrumentsConverter
 {
 public:
-    static Ms::Instrument convertInstrument(const instruments::Instrument& instrument);
-    static instruments::Instrument convertInstrument(const Ms::Instrument& insturment);
+    static Ms::Instrument convertInstrument(const Instrument& instrument);
+    static Instrument convertInstrument(const Ms::Instrument& instrument);
+    static Instrument convertInstrument(const Ms::InstrumentTemplate& templ);
 
 private:
-    static instruments::MidiActionList convertMidiActions(const QList<Ms::NamedEventList>& midiActions);
-    static QList<Ms::NamedEventList> convertMidiActions(const instruments::MidiActionList& midiActions);
+    static MidiActionList convertMidiActions(const QList<Ms::NamedEventList>& midiActions);
+    static QList<Ms::NamedEventList> convertMidiActions(const MidiActionList& midiActions);
 };
 }
 

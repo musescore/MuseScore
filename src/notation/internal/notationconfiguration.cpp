@@ -84,6 +84,11 @@ static const Settings::Key VOICE2_COLOR_KEY(module_name, "ui/score/voice2/color"
 static const Settings::Key VOICE3_COLOR_KEY(module_name, "ui/score/voice3/color");
 static const Settings::Key VOICE4_COLOR_KEY(module_name, "ui/score/voice4/color");
 
+static const Settings::Key FIRST_INSTRUMENT_LIST_KEY(module_name, "application/paths/instrumentList1");
+static const Settings::Key SECOND_INSTRUMENT_LIST_KEY(module_name, "application/paths/instrumentList2");
+static const Settings::Key FIRST_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList1");
+static const Settings::Key SECOND_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList2");
+
 static std::map<int, Settings::Key> voicesKeys {
     { 0, VOICE1_COLOR_KEY },
     { 1, VOICE2_COLOR_KEY },
@@ -173,6 +178,28 @@ void NotationConfiguration::init()
             m_selectionColorChanged.send(i);
         });
     }
+
+    settings()->setDefaultValue(FIRST_INSTRUMENT_LIST_KEY,
+                                Val(globalConfiguration()->appDataPath().toStdString() + "instruments/instruments.xml"));
+    settings()->valueChanged(FIRST_INSTRUMENT_LIST_KEY).onReceive(nullptr, [this](const Val&) {
+        m_instrumentListPathsChanged.notify();
+    });
+
+    settings()->setDefaultValue(SECOND_INSTRUMENT_LIST_KEY, Val(""));
+    settings()->valueChanged(SECOND_INSTRUMENT_LIST_KEY).onReceive(nullptr, [this](const Val&) {
+        m_instrumentListPathsChanged.notify();
+    });
+
+    settings()->setDefaultValue(FIRST_SCORE_ORDER_LIST_KEY,
+                                Val(globalConfiguration()->appDataPath().toStdString() + "instruments/orders.xml"));
+    settings()->valueChanged(FIRST_SCORE_ORDER_LIST_KEY).onReceive(nullptr, [this](const Val&) {
+        m_scoreOrderListPathsChanged.notify();
+    });
+
+    settings()->setDefaultValue(SECOND_SCORE_ORDER_LIST_KEY, Val(""));
+    settings()->valueChanged(SECOND_SCORE_ORDER_LIST_KEY).onReceive(nullptr, [this](const Val&) {
+        m_scoreOrderListPathsChanged.notify();
+    });
 
     // libmscore
     preferences().setBackupDirPath(globalConfiguration()->userBackupPath().toQString());
@@ -562,4 +589,136 @@ void NotationConfiguration::setTemplateModeEnalbed(bool enabled)
 void NotationConfiguration::setTestModeEnabled(bool enabled)
 {
     Ms::MScore::testMode = enabled;
+}
+
+io::paths NotationConfiguration::instrumentListPaths() const
+{
+    io::paths paths;
+
+    io::path firstInstrumentListPath = this->firstInstrumentListPath();
+    paths.push_back(firstInstrumentListPath);
+
+    io::path secondInstrumentListPath = this->secondInstrumentListPath();
+    if (!secondInstrumentListPath.empty()) {
+        paths.push_back(secondInstrumentListPath);
+    }
+
+    io::path firstScoreOrderListPath = this->firstScoreOrderListPath();
+    paths.push_back(firstScoreOrderListPath);
+
+    io::path secondScoreOrderListPath = this->secondScoreOrderListPath();
+    if (!secondScoreOrderListPath.empty()) {
+        paths.push_back(secondScoreOrderListPath);
+    }
+
+    return paths;
+}
+
+async::Notification NotationConfiguration::instrumentListPathsChanged() const
+{
+    return m_instrumentListPathsChanged;
+}
+
+io::paths NotationConfiguration::userInstrumentListPaths() const
+{
+    io::paths paths = {
+        firstInstrumentListPath(),
+        secondInstrumentListPath()
+    };
+
+    return paths;
+}
+
+void NotationConfiguration::setUserInstrumentListPaths(const io::paths& paths)
+{
+    if (paths.empty()) {
+        return;
+    }
+
+    setFirstInstrumentListPath(paths[0]);
+    if (paths.size() > 1) {
+        setSecondInstrumentListPath(paths[1]);
+    }
+}
+
+io::path NotationConfiguration::firstInstrumentListPath() const
+{
+    return settings()->value(FIRST_INSTRUMENT_LIST_KEY).toString();
+}
+
+void NotationConfiguration::setFirstInstrumentListPath(const io::path& path)
+{
+    settings()->setSharedValue(FIRST_INSTRUMENT_LIST_KEY, Val(path.toStdString()));
+}
+
+io::path NotationConfiguration::secondInstrumentListPath() const
+{
+    return settings()->value(SECOND_INSTRUMENT_LIST_KEY).toString();
+}
+
+void NotationConfiguration::setSecondInstrumentListPath(const io::path& path)
+{
+    settings()->setSharedValue(SECOND_INSTRUMENT_LIST_KEY, Val(path.toStdString()));
+}
+
+io::paths NotationConfiguration::scoreOrderListPaths() const
+{
+    io::paths paths;
+
+    io::path firstScoreOrderListPath = this->firstScoreOrderListPath();
+    paths.push_back(firstScoreOrderListPath);
+
+    io::path secondScoreOrderListPath = this->secondScoreOrderListPath();
+    if (!secondScoreOrderListPath.empty()) {
+        paths.push_back(secondScoreOrderListPath);
+    }
+
+    return paths;
+}
+
+async::Notification NotationConfiguration::scoreOrderListPathsChanged() const
+{
+    return m_scoreOrderListPathsChanged;
+}
+
+io::paths NotationConfiguration::userScoreOrderListPaths() const
+{
+    io::paths paths = {
+        firstScoreOrderListPath(),
+        secondScoreOrderListPath()
+    };
+
+    return paths;
+}
+
+void NotationConfiguration::setUserScoreOrderListPaths(const io::paths& paths)
+{
+    if (paths.empty()) {
+        return;
+    }
+
+    setFirstScoreOrderListPath(paths[0]);
+    if (paths.size() > 1) {
+        setSecondScoreOrderListPath(paths[1]);
+    }
+}
+
+io::path NotationConfiguration::firstScoreOrderListPath() const
+{
+    return settings()->value(FIRST_SCORE_ORDER_LIST_KEY).toString();
+}
+
+void NotationConfiguration::setFirstScoreOrderListPath(const io::path& path)
+{
+    settings()->setSharedValue(FIRST_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
+}
+
+io::path NotationConfiguration::secondScoreOrderListPath() const
+{
+    return settings()->value(SECOND_SCORE_ORDER_LIST_KEY).toString();
+}
+
+void NotationConfiguration::setSecondScoreOrderListPath(const io::path& path)
+{
+    settings()->setSharedValue(SECOND_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
 }

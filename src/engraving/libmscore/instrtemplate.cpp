@@ -31,6 +31,7 @@
 #include "stringdata.h"
 #include "utils.h"
 #include "xml.h"
+#include "scoreorder.h"
 
 using namespace mu;
 
@@ -39,6 +40,7 @@ QList<InstrumentGroup*> instrumentGroups;
 QList<MidiArticulation> articulation;                 // global articulations
 QList<InstrumentGenre*> instrumentGenres;
 QList<InstrumentFamily*> instrumentFamilies;
+QList<ScoreOrder*> instrumentOrders;
 
 //---------------------------------------------------------
 //   searchInstrumentGenre
@@ -112,6 +114,17 @@ static int readStaffIdx(XmlReader& e)
     return idx;
 }
 
+static TraitType traitTypeFromString(const QString& str)
+{
+    static const QMap<QString, TraitType> types {
+        { "transposition", TraitType::Transposition },
+        { "tuning", TraitType::Tuning },
+        { "course", TraitType::Course }
+    };
+
+    return types.value(str.toLower(), TraitType::Unknown);
+}
+
 //---------------------------------------------------------
 //   read InstrumentGroup
 //---------------------------------------------------------
@@ -130,6 +143,7 @@ void InstrumentGroup::read(XmlReader& e)
             if (t == 0) {
                 t = new InstrumentTemplate;
                 t->articulation.append(articulation);             // init with global articulation
+                t->sequenceOrder = instrumentTemplates.size();
                 instrumentTemplates.append(t);
             }
             t->read(e);
@@ -239,6 +253,9 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
     channel     = t.channel;
     family     = t.family;
     singleNoteDynamics = t.singleNoteDynamics;
+
+    sequenceOrder = t.sequenceOrder;
+    trait = t.trait;
 }
 
 InstrumentTemplate::~InstrumentTemplate()
@@ -479,8 +496,11 @@ void InstrumentTemplate::read(XmlReader& e)
         } else if (tag == "transposeDiatonic") {
             transpose.diatonic = e.readInt();
         } else if (tag == "dropdownName") {
-            // not implemented
-            e.readElementText();
+            trait.type = traitTypeFromString(e.attribute("meaning"));
+            QString traitName = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
+            trait.isDefault = traitName.contains("*");
+            trait.isHiddenOnScore = traitName.contains("(") && traitName.contains(")");
+            trait.name = traitName.remove("\*").remove("(").remove(")");
         } else if (tag == "StringData") {
             stringData.read(e);
         } else if (tag == "drumset") {
@@ -616,6 +636,8 @@ void clearInstrumentTemplates()
     qDeleteAll(instrumentFamilies);
     instrumentFamilies.clear();
     articulation.clear();
+    qDeleteAll(instrumentOrders);
+    instrumentOrders.clear();
 }
 
 //---------------------------------------------------------
@@ -665,6 +687,10 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                         instrumentFamilies.append(fam);
                     }
                     fam->read(e);
+                } else if (tag == "Order") {
+                    ScoreOrder* order = new ScoreOrder;
+                    order->read(e);
+                    instrumentOrders.append(order);
                 } else {
                     e.unknown();
                 }

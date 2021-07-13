@@ -36,14 +36,14 @@ public:
     ~NotationParts() override;
 
     async::NotifyList<const Part*> partList() const override;
-    async::NotifyList<instruments::Instrument> instrumentList(const ID& partId) const override;
+    async::NotifyList<Instrument> instrumentList(const ID& partId) const override;
     async::NotifyList<const Staff*> staffList(const ID& partId, const ID& instrumentId) const override;
 
     ValCh<bool> canChangeInstrumentVisibility(const ID& instrumentId, const ID& fromPartId) const override;
     bool voiceVisible(int voiceIndex) const override;
 
-    void setParts(const instruments::PartInstrumentList& parts) override;
-    void setScoreOrder(const instruments::ScoreOrder& order) override;
+    void setParts(const PartInstrumentList& parts) override;
+    void setScoreOrder(const ScoreOrder& order) override;
     void setPartVisible(const ID& partId, bool visible) override;
     void setInstrumentVisible(const ID& instrumentId, const ID& fromPartId, bool visible) override;
     void setStaffVisible(const ID& staffId, bool visible) override;
@@ -51,7 +51,7 @@ public:
     void setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) override;
     void setPartName(const ID& partId, const QString& name) override;
     void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) override;
-    void setPartTransposition(const ID& partId, const instruments::Interval& transpose) override;
+    void setPartTransposition(const ID& partId, const Interval& transpose) override;
     void setInstrumentName(const ID& instrumentId, const ID& fromPartId, const QString& name) override;
     void setInstrumentAbbreviature(const ID& instrumentId, const ID& fromPartId, const QString& abbreviature) override;
     void setStaffType(const ID& staffId, StaffType type) override;
@@ -69,12 +69,12 @@ public:
                          const ID& destinationInstrumentId, InsertMode mode = InsertMode::Before) override;
     void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
 
-    void appendDoublingInstrument(const instruments::Instrument& instrument, const ID& destinationPartId) override;
+    void appendDoublingInstrument(const Instrument& instrument, const ID& destinationPartId) override;
     void appendStaff(Staff* staff, const ID& destinationPartId) override;
 
     void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) override;
 
-    void replaceInstrument(const ID& instrumentId, const ID& fromPartId, const instruments::Instrument& newInstrument) override;
+    void replaceInstrument(const ID& instrumentId, const ID& fromPartId, const Instrument& newInstrument) override;
 
     async::Notification partsChanged() const override;
 
@@ -148,23 +148,25 @@ private:
     void appendPart(Part* part);
     int resolvePartIndex(Part* part) const;
 
-    void appendStaves(Part* part, const instruments::Instrument& instrument);
+    void appendStaves(Part* part, const Instrument& instrument);
 
-    void removeMissingParts(const instruments::PartInstrumentList& parts);
-    void appendNewParts(const instruments::PartInstrumentList& parts);
-    void updateSoloist(const instruments::PartInstrumentList& parts);
-    void sortParts(const instruments::PartInstrumentList& parts, const Ms::Score* score, const QList<Ms::Staff*>& originalStaves);
+    void removeMissingParts(const PartInstrumentList& parts);
+    void appendNewParts(const PartInstrumentList& parts);
+    void updateSoloist(const PartInstrumentList& parts);
+    void sortParts(const PartInstrumentList& parts, const Ms::Score* score, const QList<Ms::Staff*>& originalStaves);
+
+    int resolveInstrumentNumber(const Instruments& newInstruments, const Instrument& currentInstrument) const;
 
     IDList allInstrumentsIds() const;
     int lastStaffIndex() const;
 
-    void initStaff(Staff* staff, const instruments::Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex);
+    void initStaff(Staff* staff, const Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex);
 
     void notifyAboutPartChanged(const ID& partId) const;
     void notifyAboutStaffChanged(const ID& staffId) const;
     void notifyAboutInstrumentsChanged(const ID& partId) const;
 
-    async::ChangedNotifier<instruments::Instrument>* partNotifier(const ID& partId) const;
+    async::ChangedNotifier<Instrument>* partNotifier(const ID& partId) const;
     async::ChangedNotifier<const Staff*>* instrumentNotifier(const ID& instrumentId, const ID& fromPartId) const;
 
     QString formatPartName(const Part* part) const;
@@ -180,7 +182,7 @@ private:
     async::Notification m_partsChanged;
 
     mutable async::ChangedNotifier<const Part*>* m_partsNotifier = nullptr;
-    mutable std::map<ID, async::ChangedNotifier<instruments::Instrument>*> m_partsNotifiersMap;
+    mutable std::map<ID, async::ChangedNotifier<Instrument>*> m_partsNotifiersMap;
     mutable QHash<InstrumentKey, async::ChangedNotifier<const Staff*>*> m_instrumentsNotifiersHash;
     mutable QHash<InstrumentKey, ValCh<bool> > m_canChangeInstrumentsVisibilityHash;
 };

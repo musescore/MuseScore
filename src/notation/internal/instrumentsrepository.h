@@ -19,29 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTS_INSTRUMENTSREPOSITORY_H
-#define MU_INSTRUMENTS_INSTRUMENTSREPOSITORY_H
-
-#include <QMutex>
+#ifndef MU_NOTATION_INSTRUMENTSREPOSITORY_H
+#define MU_NOTATION_INSTRUMENTSREPOSITORY_H
 
 #include "modularity/ioc.h"
 
-#include "retval.h"
 #include "async/channel.h"
 #include "async/asyncable.h"
-#include "extensions/iextensionsservice.h"
 
-#include "instrumentstypes.h"
 #include "iinstrumentsrepository.h"
-#include "iinstrumentsconfiguration.h"
-#include "iinstrumentsreader.h"
+#include "inotationconfiguration.h"
 
-namespace mu::instruments {
+namespace mu::notation {
 class InstrumentsRepository : public IInstrumentsRepository, public async::Asyncable
 {
-    INJECT(instruments, IInstrumentsConfiguration, configuration)
-    INJECT(instruments, IInstrumentsReader, reader)
-    INJECT(instruments, extensions::IExtensionsService, extensionsService)
+    INJECT(notation, INotationConfiguration, configuration)
 
 public:
     void init();
@@ -51,14 +43,11 @@ public:
 private:
     void load();
     void clear();
+    void fillInstrumentsMeta(InstrumentsMeta& meta);
 
-    Transposition transposition(const QString& instrumentTemplateId) const;
-
-    QMutex m_instrumentsMutex;
     InstrumentsMeta m_instrumentsMeta;
-
     async::Channel<InstrumentsMeta> m_instrumentsMetaChannel;
 };
 }
 
-#endif // MU_INSTRUMENTS_INSTRUMENTSREPOSITORY_H
+#endif // MU_NOTATION_INSTRUMENTSREPOSITORY_H

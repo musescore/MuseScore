@@ -22,28 +22,28 @@
 #ifndef MU_INSTRUMENTS_SELECTINSTRUMENTSSCENARIO_H
 #define MU_INSTRUMENTS_SELECTINSTRUMENTSSCENARIO_H
 
-#include "iselectinstrumentscenario.h"
+#include "notation/iselectinstrumentscenario.h"
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "iinteractive.h"
 
 namespace mu::instruments {
-class SelectInstrumentsScenario : public ISelectInstrumentsScenario
+class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario
 {
     INJECT(instruments, context::IGlobalContext, globalContext)
     INJECT(instruments, framework::IInteractive, interactive)
 
 public:
-    RetVal<PartInstrumentListScoreOrder> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const override;
-    RetVal<Instrument> selectInstrument(const std::string& currentInstrumentId = "") const override;
+    RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const
+    override;
+    RetVal<notation::Instrument> selectInstrument(const std::string& currentInstrumentId = "") const override;
 
 private:
-    RetVal<PartInstrumentListScoreOrder> selectInstruments(const QStringList& params) const;
+    RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(const QStringList& params) const;
 
     notation::INotationPartsPtr notationParts() const;
     notation::IDList partsIds() const;
-
-    ScoreOrder scoreOrder() const;
+    notation::ScoreOrder scoreOrder() const;
 };
 }
 

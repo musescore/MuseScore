@@ -70,14 +70,13 @@ Rectangle {
         var groupId = instrumentsModel.selectedGroupId()
         familyView.focusGroup(groupId)
 
-        if (currentInstrumentId !== "") {
-            focusOnCurrentInstrument()
-        }
+        focusOnCurrentInstrument()
     }
 
     function focusOnCurrentInstrument() {
-        var instrumentId = instrumentsModel.findInstrument(currentInstrumentId)
-        Qt.callLater(instrumentsView.focusInstrument, instrumentId)
+        if (Boolean(currentInstrumentId)) {
+            Qt.callLater(instrumentsView.focusInstrument, currentInstrumentId)
+        }
     }
 
     RowLayout {
@@ -141,7 +140,7 @@ Rectangle {
             }
 
             onSelectInstrumentRequested: {
-                instrumentsModel.selectInstrument(instrumentId, transposition)
+                instrumentsModel.selectInstrument(instrumentName, traitName)
                 Qt.callLater(selectedInstrumentsView.scrollViewToEnd)
             }
 
@@ -150,7 +149,7 @@ Rectangle {
                 familyView.focusGroup(currentSelection.instrument.groupId)
 
                 if (!root.canSelectMultipleInstruments) {
-                    instrumentsModel.selectInstrument(currentSelection.instrument.id, currentSelection.transposition)
+                    instrumentsModel.selectInstrument(currentSelection.instrument.name, currentSelection.traitName)
                 }
             }
 
@@ -192,7 +191,7 @@ Rectangle {
 
             onClicked: {
                 var currentSelect = instrumentsView.currentInstrument()
-                instrumentsModel.selectInstrument(currentSelect.instrument.id, currentSelect.transposition)
+                instrumentsModel.selectInstrument(currentSelect.instrument.name, currentSelect.traitName)
             }
         }
 
@@ -216,7 +215,7 @@ Rectangle {
             instrumentsModel: instrumentsModel
 
             onUnselectInstrumentRequested: {
-                instrumentsModel.unselectInstrument(id)
+                instrumentsModel.unselectInstrument(index)
             }
 
             onOrderChanged: {
