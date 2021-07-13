@@ -57,6 +57,8 @@ public:
     Ms::MasterScore* masterScore() const;
     Err setupMasterScore();
 
+    Err loadMscz(mu::engraving::MsczReader& reader, bool ignoreVersionError);
+
     bool saveFile(bool generateBackup = true);
     bool saveSelectionOnScore(const QString& filePath);
 

@@ -23,6 +23,8 @@
 #ifndef MU_ENGRAVING_ENGRAVINGERRORS_H
 #define MU_ENGRAVING_ENGRAVINGERRORS_H
 
+#include "libmscore/score.h"
+
 namespace mu::engraving {
 enum class Err {
     Undefined       = -1,
@@ -32,17 +34,39 @@ enum class Err {
     // file
     FileUnknownError = 2001,
     FileNotFound = 2002,
-    FileOpenFailed = 2003,
+    FileOpenError = 2003,
     FileBadFormat = 2004,
     FileUnknownType = 2005,
     FileTooOld = 2006,
     FileTooNew = 2007,
     FileOld300Format = 2008,
     FileCorrupted = 2009,
-    FileCriticallyCorrupated = 2010,
-    FileUserAbort = 2011,
-    FileIgnoreError = 2012
+    FileCriticalCorrupted = 2010,
+
+    UserAbort = 2011,
+    IgnoreError = 2012
 };
+
+inline Err scoreFileErrorToErr(Ms::Score::FileError err)
+{
+    switch (err) {
+    case Ms::Score::FileError::FILE_NO_ERROR:       return Err::NoError;
+    case Ms::Score::FileError::FILE_ERROR:          return Err::FileUnknownError;
+    case Ms::Score::FileError::FILE_NOT_FOUND:      return Err::FileNotFound;
+    case Ms::Score::FileError::FILE_OPEN_ERROR:     return Err::FileOpenError;
+    case Ms::Score::FileError::FILE_BAD_FORMAT:     return Err::FileBadFormat;
+    case Ms::Score::FileError::FILE_UNKNOWN_TYPE:   return Err::FileUnknownType;
+    case Ms::Score::FileError::FILE_NO_ROOTFILE:    return Err::FileBadFormat;
+    case Ms::Score::FileError::FILE_TOO_OLD:        return Err::FileTooOld;
+    case Ms::Score::FileError::FILE_TOO_NEW:        return Err::FileTooNew;
+    case Ms::Score::FileError::FILE_OLD_300_FORMAT: return Err::FileOld300Format;
+    case Ms::Score::FileError::FILE_CORRUPTED:      return Err::FileCorrupted;
+    case Ms::Score::FileError::FILE_CRITICALLY_CORRUPTED: return Err::FileCriticalCorrupted;
+    case Ms::Score::FileError::FILE_USER_ABORT:      return Err::UserAbort;
+    case Ms::Score::FileError::FILE_IGNORE_ERROR:    return Err::IgnoreError;
+    }
+    return Err::FileUnknownError;
+}
 }
 
 #endif // MU_ENGRAVING_ENGRAVINGERRORS_H
