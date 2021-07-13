@@ -22,6 +22,8 @@
 #ifndef MU_NOTATION_PROJECTAUDIOSETTINGS_H
 #define MU_NOTATION_PROJECTAUDIOSETTINGS_H
 
+#include <memory>
+
 #include "../iprojectaudiosettings.h"
 
 #include "ret.h"
@@ -36,6 +38,9 @@ public:
     int someValue() const override;
     void setSomeValue(int val) override;
 
+    //! NOTE Used for new or imported project (score)
+    void makeDefault();
+
     Ret read(const engraving::MsczReader& reader);
     Ret write(engraving::MsczWriter& writer);
 
@@ -46,6 +51,8 @@ private:
 
     int m_someValue = 0;
 };
+
+using ProjectAudioSettingsPtr = std::shared_ptr<ProjectAudioSettings>;
 }
 
 #endif // MU_NOTATION_PROJECTAUDIOSETTINGS_H

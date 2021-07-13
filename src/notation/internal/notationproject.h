@@ -23,16 +23,25 @@
 #define MU_NOTATION_NOTATIONPROJECT_H
 
 #include "../inotationproject.h"
+
+#include "modularity/ioc.h"
+#include "inotationreadersregister.h"
+#include "inotationwritersregister.h"
+#include "system/ifilesystem.h"
+
 #include "engraving/engravingproject.h"
 
-#include "../inotationreadersregister.h"
-#include "../inotationwritersregister.h"
+#include "masternotation.h"
+#include "projectaudiosettings.h"
+
+namespace mu::engraving {
+class MsczReader;
+}
 
 namespace mu::notation {
-class MasterNotation;
-class ProjectAudioSettings;
 class NotationProject : public INotationProject
 {
+    INJECT(notation, system::IFileSystem, fileSystem)
     INJECT(notation, INotationReadersRegister, readers)
     INJECT(notation, INotationWritersRegister, writers)
 
@@ -58,15 +67,16 @@ public:
 
 private:
 
-    Ret load(const io::path& path, const io::path& stylePath, const INotationReaderPtr& reader, bool forceMode);
+    Ret doLoad(engraving::MsczReader& reader, const io::path& stylePath, bool forceMode);
+    Ret doImport(const io::path& path, const io::path& stylePath, bool forceMode);
 
     Ret saveScore(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save);
     Ret saveSelectionOnScore(const io::path& path = io::path());
     Ret exportProject(const io::path& path, const std::string& suffix);
 
     mu::engraving::EngravingProjectPtr m_engravingProject = nullptr;
-    std::shared_ptr<MasterNotation> m_masterNotation = nullptr;
-    std::shared_ptr<ProjectAudioSettings> m_projectAudioSettings = nullptr;
+    MasterNotationPtr m_masterNotation = nullptr;
+    ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
 };
 }
 

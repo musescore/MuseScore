@@ -21,8 +21,11 @@
  */
 #include "notationproject.h"
 
+#include <QBuffer>
+
 #include "engraving/engravingproject.h"
 #include "engraving/scoreaccess.h"
+#include "engraving/compat/mscxcompat.h"
 
 #include "notationerrors.h"
 #include "masternotation.h"
@@ -50,111 +53,180 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
     TRACEFUNC;
 
     std::string syffix = io::syffix(path);
-
-    //! NOTE For "mscz", "mscx" see MsczNotationReader
-    //! for others see readers in importexport module
-    auto reader = readers()->reader(syffix);
-    if (!reader) {
-        return make_ret(notation::Err::FileUnknownType, path);
+    if (syffix != "mscz" && syffix != "mscx") {
+        return doImport(path, stylePath, forceMode);
     }
 
-    return load(path, stylePath, reader, forceMode);
+    QByteArray msczData;
+    if (syffix == "mscz") {
+        RetVal<QByteArray> rv = fileSystem()->readFile(path);
+        if (!rv.ret) {
+            return rv.ret;
+        }
+        msczData = rv.val;
+    } else if (syffix == "mscx") {
+        Ms::Score::FileError err = engraving::compat::mscxToMscz(path.toQString(), &msczData);
+        if (err != Ms::Score::FileError::FILE_NO_ERROR) {
+            return scoreFileErrorToRet(err, path);
+        }
+    } else {
+        UNREACHABLE;
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    QBuffer msczBuf(&msczData);
+    MsczReader reader(&msczBuf);
+    reader.setFilePath(path.toQString());
+    reader.open();
+
+    return doLoad(reader, stylePath, forceMode);
 }
 
-mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, const INotationReaderPtr& reader, bool forceMode)
+mu::Ret NotationProject::doLoad(engraving::MsczReader& reader, const io::path& stylePath, bool forceMode)
 {
+    // Create new engraving project
     EngravingProjectPtr project = EngravingProject::create();
-    project->setPath(path.toQString());
+    project->setPath(reader.filePath());
 
-    INotationReader::Options options;
-    if (forceMode) {
-        options[INotationReader::OptionKey::ForceMode] = forceMode;
+    // Load engraving project
+    engraving::Err err = project->loadMscz(reader, forceMode);
+    if (err != engraving::Err::NoError) {
+        return make_ret(err);
     }
 
-    Ms::ScoreLoad sl;
-
-    Ms::MasterScore* score = project->masterScore();
-    Ret ret = reader->read(score, path, options);
-    if (!ret) {
-        return ret;
+    // Setup master score
+    err = project->setupMasterScore();
+    if (err != engraving::Err::NoError) {
+        return make_ret(err);
     }
 
-    if (!Ms::MScore::lastError.isEmpty()) {
-        LOGE() << Ms::MScore::lastError;
-    }
-
-    project->setupMasterScore();
-    if (!Ms::MScore::lastError.isEmpty()) {
-        LOGE() << Ms::MScore::lastError;
-    }
-
+    // Load style if present
     if (!stylePath.empty()) {
-        score->loadStyle(stylePath.toQString());
-
+        project->masterScore()->loadStyle(stylePath.toQString());
         if (!Ms::MScore::lastError.isEmpty()) {
             LOGE() << Ms::MScore::lastError;
         }
     }
 
+    // Load other stuff from the project file
+    ProjectAudioSettingsPtr audioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
+    Ret ret = audioSettings->read(reader);
+    if (!ret) {
+        return ret;
+    }
+
+    // Set current if all success
     m_engravingProject = project;
+
+    m_masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
     m_masterNotation->setMasterScore(project->masterScore());
+
+    m_projectAudioSettings = audioSettings;
 
     return make_ret(Ret::Code::Ok);
 }
 
-IMasterNotationPtr NotationProject::masterNotation() const
+mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePath, bool forceMode)
 {
-    return m_masterNotation;
+    // Find import reader
+    std::string syffix = io::syffix(path);
+    INotationReaderPtr scoreReader = readers()->reader(syffix);
+    if (!scoreReader) {
+        return make_ret(Err::FileUnknownType, path);
+    }
+
+    // Create new engraving project
+    EngravingProjectPtr project = EngravingProject::create();
+    project->setPath(path.toQString());
+
+    // Setup import reader
+    INotationReader::Options options;
+    if (forceMode) {
+        options[INotationReader::OptionKey::ForceMode] = forceMode;
+    }
+
+    // Read(import) master score
+    Ms::ScoreLoad sl;
+    Ms::MasterScore* score = project->masterScore();
+    Ret ret = scoreReader->read(score, path, options);
+    if (!ret) {
+        return ret;
+    }
+
+    if (!Ms::MScore::lastError.isEmpty()) {
+        LOGE() << Ms::MScore::lastError;
+    }
+
+    // Setup master score
+    engraving::Err err = project->setupMasterScore();
+    if (err != engraving::Err::NoError) {
+        return make_ret(err);
+    }
+
+    // Load style if present
+    if (!stylePath.empty()) {
+        project->masterScore()->loadStyle(stylePath.toQString());
+        if (!Ms::MScore::lastError.isEmpty()) {
+            LOGE() << Ms::MScore::lastError;
+        }
+    }
+
+    // Setup other stuff
+    ProjectAudioSettingsPtr audioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
+    audioSettings->makeDefault();
+
+    // Set current if all success
+    m_engravingProject = project;
+
+    m_masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
+    m_masterNotation->setMasterScore(project->masterScore());
+
+    m_projectAudioSettings = audioSettings;
+
+    return make_ret(Ret::Code::Ok);
 }
 
 mu::Ret NotationProject::createNew(const ScoreCreateOptions& scoreOptions)
 {
+    // Create new engraving project
     EngravingProjectPtr project = EngravingProject::create();
-    Ms::MasterScore* masterScore = project->masterScore();
 
+    // Load template if present
     io::path templatePath = scoreOptions.templatePath;
-    Ms::MasterScore* templateScore = nullptr;
+    EngravingProjectPtr templateProject;
     if (!templatePath.empty()) {
-        std::string syffix = io::syffix(templatePath);
-        auto reader = readers()->reader(syffix);
-        if (!reader) {
-            LOGE() << "not found reader for file: " << templatePath;
-            return make_ret(Ret::Code::InternalError);
+        templateProject = EngravingProject::create(Ms::MScore::baseStyle());
+        engraving::Err err = engraving::compat::loadMsczOrMscx(templateProject, templatePath.toQString());
+        if (err != engraving::Err::NoError) {
+            LOGE() << "failed load template";
+            return make_ret(err);
         }
 
-        EngravingProjectPtr templateProject = EngravingProject::create(Ms::MScore::baseStyle());
-        templateScore = templateProject->masterScore();
-        Ret ret = reader->read(templateScore, templatePath);
-        if (!ret) {
-            return ret;
-        }
-
-        templateProject->setupMasterScore();
-        if (!ret) {
-            return ret;
+        err = templateProject->setupMasterScore();
+        if (err != engraving::Err::NoError) {
+            LOGE() << "failed load template";
+            return make_ret(err);
         }
     }
 
-    Ret ret = m_masterNotation->setupNewScore(masterScore, templateScore, scoreOptions);
+    // Make new master score
+    MasterNotationPtr masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
+    Ms::MasterScore* templateScore = templateProject ? templateProject->masterScore() : nullptr;
+    Ret ret = masterNotation->setupNewScore(project->masterScore(), templateScore, scoreOptions);
     if (!ret) {
-        //! NOTE Return old
-        m_masterNotation->setMasterScore(m_engravingProject->masterScore());
         return ret;
     }
 
+    // Setup other stuff
+    ProjectAudioSettingsPtr audioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
+    audioSettings->makeDefault();
+
+    // Set current if all success
     m_engravingProject = project;
+    m_masterNotation = masterNotation;
+    m_projectAudioSettings = audioSettings;
 
     return make_ret(Ret::Code::Ok);
-}
-
-mu::RetVal<bool> NotationProject::created() const
-{
-    return m_masterNotation->created();
-}
-
-mu::ValNt<bool> NotationProject::needSave() const
-{
-    return m_masterNotation->needSave();
 }
 
 mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
@@ -225,6 +297,21 @@ mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path& path)
     }
 
     return ret;
+}
+
+IMasterNotationPtr NotationProject::masterNotation() const
+{
+    return m_masterNotation;
+}
+
+mu::RetVal<bool> NotationProject::created() const
+{
+    return m_masterNotation->created();
+}
+
+mu::ValNt<bool> NotationProject::needSave() const
+{
+    return m_masterNotation->needSave();
 }
 
 Meta NotationProject::metaInfo() const

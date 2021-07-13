@@ -104,6 +104,12 @@ Ms::MasterScore* EngravingProject::masterScore() const
     return m_masterScore;
 }
 
+Err EngravingProject::loadMscz(mu::engraving::MsczReader& reader, bool ignoreVersionError)
+{
+    Ms::Score::FileError err = m_masterScore->loadMscz(reader, ignoreVersionError);
+    return scoreFileErrorToErr(err);
+}
+
 bool EngravingProject::saveFile(bool generateBackup)
 {
     return m_masterScore->saveFile(generateBackup);
