@@ -31,7 +31,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "global/iinteractive.h"
-#include "instruments/iselectinstrumentscenario.h"
+#include "iselectinstrumentscenario.h"
 
 namespace mu::notation {
 class EditStaffType;
@@ -42,7 +42,7 @@ class EditStaff : public QDialog, private Ui::EditStaffBase
 
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, framework::IInteractive, interactive)
-    INJECT(notation, instruments::ISelectInstrumentsScenario, selectInstrumentsScenario)
+    INJECT(notation, ISelectInstrumentsScenario, selectInstrumentsScenario)
 
     Q_PROPERTY(int staffIdx READ staffIdx WRITE setStaffIdx NOTIFY staffIdxChanged)
 
@@ -92,7 +92,7 @@ private:
     void updateCurrentStaff();
 
     Staff* staff(int staffIndex) const;
-    instruments::Instrument instrument() const;
+    Instrument instrument() const;
 
     void applyStaffProperties();
     void applyPartProperties();
@@ -106,8 +106,8 @@ private:
     Ms::Staff* m_orgStaff = nullptr;
     ID m_partId;
     ID m_instrumentId;
-    instruments::Instrument m_instrument;
-    instruments::Instrument m_orgInstrument;
+    Instrument m_instrument;
+    Instrument m_orgInstrument;
     int m_minPitchA, m_maxPitchA, m_minPitchP, m_maxPitchP;
     Ms::Fraction m_tickStart, m_tickEnd;
 

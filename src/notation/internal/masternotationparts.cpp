@@ -45,14 +45,14 @@ void MasterNotationParts::apply()
     partsChanged().notify();
 }
 
-void MasterNotationParts::setParts(const instruments::PartInstrumentList& instruments)
+void MasterNotationParts::setParts(const PartInstrumentList& instruments)
 {
     startEdit();
     NotationParts::setParts(instruments);
     apply();
 }
 
-void MasterNotationParts::setScoreOrder(const instruments::ScoreOrder& order)
+void MasterNotationParts::setScoreOrder(const ScoreOrder& order)
 {
     startEdit();
     NotationParts::setScoreOrder(order);
@@ -98,7 +98,7 @@ void MasterNotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sh
     apply();
 }
 
-void MasterNotationParts::setPartTransposition(const ID& partId, const instruments::Interval& transpose)
+void MasterNotationParts::setPartTransposition(const ID& partId, const Interval& transpose)
 {
     startEdit();
 
@@ -247,7 +247,7 @@ void MasterNotationParts::moveStaves(const IDList& sourceStavesIds, const ID& de
     apply();
 }
 
-void MasterNotationParts::appendDoublingInstrument(const instruments::Instrument& instrument, const ID& destinationPartId)
+void MasterNotationParts::appendDoublingInstrument(const Instrument& instrument, const ID& destinationPartId)
 {
     startEdit();
 
@@ -286,7 +286,7 @@ void MasterNotationParts::cloneStaff(const ID& sourceStaffId, const ID& destinat
     apply();
 }
 
-void MasterNotationParts::replaceInstrument(const ID& instrumentId, const ID& fromPartId, const instruments::Instrument& newInstrument)
+void MasterNotationParts::replaceInstrument(const ID& instrumentId, const ID& fromPartId, const Instrument& newInstrument)
 {
     startEdit();
 

@@ -161,7 +161,7 @@ void EditStaffType::setStaffType(const Ms::StaffType* stafftype)
     setValues();
 }
 
-void EditStaffType::setInstrument(const instruments::Instrument instrument)
+void EditStaffType::setInstrument(const Instrument& instrument)
 {
     // template combo
 

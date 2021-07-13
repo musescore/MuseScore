@@ -435,9 +435,11 @@ Staff* EditStaff::staff(int staffIndex) const
 
     async::NotifyList<const Part*> parts = notationParts->partList();
     for (const Part* part: parts) {
-        async::NotifyList<mu::instruments::Instrument> instruments = notationParts->instrumentList(part->id());
-        for (mu::instruments::Instrument instrument: instruments) {
+        async::NotifyList<Instrument> instruments = notationParts->instrumentList(part->id());
+
+        for (const Instrument& instrument: instruments) {
             async::NotifyList<const Staff*> staves = notationParts->staffList(part->id(), instrument.id);
+
             for (const Staff* staff: staves) {
                 if (staff->idx() == staffIndex) {
                     return const_cast<Staff*>(staff);
@@ -449,18 +451,19 @@ Staff* EditStaff::staff(int staffIndex) const
     return nullptr;
 }
 
-mu::instruments::Instrument EditStaff::instrument() const
+Instrument EditStaff::instrument() const
 {
     INotationPartsPtr notationParts = this->notationParts();
     if (!notationParts) {
-        return mu::instruments::Instrument();
+        return Instrument();
     }
 
     async::NotifyList<const Part*> parts = notationParts->partList();
     for (const Part* part: parts) {
         if (part->id() == m_partId) {
-            async::NotifyList<mu::instruments::Instrument> instruments = notationParts->instrumentList(part->id());
-            for (mu::instruments::Instrument instrument: instruments) {
+            async::NotifyList<Instrument> instruments = notationParts->instrumentList(part->id());
+
+            for (const Instrument& instrument: instruments) {
                 if (instrument.id == m_instrumentId) {
                     return instrument;
                 }
@@ -468,7 +471,7 @@ mu::instruments::Instrument EditStaff::instrument() const
         }
     }
 
-    return mu::instruments::Instrument();
+    return Instrument();
 }
 
 void EditStaff::applyStaffProperties()
@@ -493,7 +496,7 @@ void EditStaff::applyStaffProperties()
     config.hideSystemBarline = hideSystemBarLine->isChecked();
     config.mergeMatchingRests = mergeMatchingRests->isChecked();
     config.hideMode = Staff::HideMode(hideMode->currentIndex());
-    config.clefType = m_instrument.clefs[m_orgStaff->rstaff()];
+    config.clefTypeList = m_instrument.clefs[m_orgStaff->rstaff()];
 
     notationParts()->setStaffConfig(m_orgStaff->id(), config);
 
@@ -583,7 +586,7 @@ bool EditStaff::isInstrumentChanged()
 
 void EditStaff::showReplaceInstrumentDialog()
 {
-    RetVal<instruments::Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(m_instrumentId.toStdString());
+    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(m_instrumentId.toStdString());
     if (!selectedInstrument.ret) {
         LOGE() << selectedInstrument.ret.toString();
         return;

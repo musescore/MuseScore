@@ -277,6 +277,30 @@ public:
 };
 
 //---------------------------------------------------------
+//   Trait
+//---------------------------------------------------------
+
+enum class TraitType
+{
+    Unknown,
+    Tuning,
+    Transposition,
+    Course
+};
+
+struct Trait
+{
+    QString name;
+
+    TraitType type = TraitType::Unknown;
+
+    bool isDefault = false;
+    bool isHiddenOnScore = false;
+
+    bool isValid() const { return !name.isEmpty(); }
+};
+
+//---------------------------------------------------------
 //   Instrument
 //---------------------------------------------------------
 
@@ -301,6 +325,8 @@ class Instrument
     QList<ClefTypeList> _clefType;
 
     bool _singleNoteDynamics;
+
+    Trait _trait;
 
 public:
     Instrument(QString id="");
@@ -384,6 +410,9 @@ public:
     QString name() const;
     QString abbreviature() const;
     static Instrument fromTemplate(const InstrumentTemplate* t);
+
+    Trait trait() const;
+    void setTrait(const Trait& trait);
 
     void updateInstrumentId();
 

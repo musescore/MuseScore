@@ -27,7 +27,6 @@
 
 using namespace mu::userscores;
 using namespace mu::notation;
-using namespace mu::instruments;
 using namespace mu::ui;
 
 using PreferredScoreCreationMode = IUserScoresConfiguration::PreferredScoreCreationMode;
@@ -120,7 +119,7 @@ ScoreCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
         options.parts << pi;
     }
 
-    options.order = info["scoreOrder"].value<instruments::ScoreOrder>();
+    options.order = info["scoreOrder"].value<ScoreOrder>();
 
     return options;
 }

@@ -34,6 +34,7 @@ class Part;
 class Staff;
 class StringData;
 class StaffType;
+struct ScoreOrder;
 
 //---------------------------------------------------------
 //   InstrumentGenre
@@ -82,6 +83,10 @@ public:
     StaffNameList shortNames;    ///< shown on followup systems
     QString musicXMLid;          ///< used in MusicXML 3.0
     QString description;         ///< a longer description of the instrument
+
+    int sequenceOrder = 0;
+
+    Trait trait;
 
     char minPitchA;           // pitch range playable by an amateur
     char maxPitchA;
@@ -164,6 +169,7 @@ extern QList<InstrumentGenre*> instrumentGenres;
 extern QList<InstrumentFamily*> instrumentFamilies;
 extern QList<MidiArticulation> articulation;
 extern QList<InstrumentGroup*> instrumentGroups;
+extern QList<ScoreOrder*> instrumentOrders;
 extern void clearInstrumentTemplates();
 extern bool loadInstrumentTemplates(const QString& instrTemplates);
 extern InstrumentTemplate* searchTemplate(const QString& name);
