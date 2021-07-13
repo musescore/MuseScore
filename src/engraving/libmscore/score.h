@@ -872,8 +872,6 @@ public:
 
     bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection = false);
     bool writeMscz(mu::engraving::MsczWriter& msczWriter, bool onlySelection = false, bool createThumbnail = true);
-    bool writeMscz(const QString& filePath, bool onlySelection = false, bool createThumbnail = true); // to file
-    bool writeMscz(QIODevice* device, const QString& fileName, bool onlySelection = false, bool createThumbnail = true); // to device (file or buffer)
 
     void print(mu::draw::Painter* printer, int page);
     ChordRest* getSelectedChordRest() const;
@@ -1404,10 +1402,7 @@ class MasterScore : public Score
     MasterScore(std::shared_ptr<mu::engraving::EngravingProject> project);
     MasterScore(const MStyle&, std::shared_ptr<mu::engraving::EngravingProject> project);
 
-    FileError loadMscz(const QString& fileName, bool ignoreVersionError);
-    FileError loadMscz(mu::engraving::MsczReader& msczFile, bool ignoreVersionError);
-
-    bool saveFile(bool generateBackup = true);
+    FileError loadMscz(const mu::engraving::MsczReader& msczFile, bool ignoreVersionError);
 
 public:
 

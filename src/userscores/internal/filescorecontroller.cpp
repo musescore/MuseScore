@@ -243,7 +243,7 @@ void FileScoreController::saveOnline()
     QBuffer* projectData = new QBuffer();
     projectData->open(QIODevice::WriteOnly);
 
-    Ret ret = project->writeToDevice(*projectData);
+    Ret ret = project->writeToDevice(projectData);
     if (!ret) {
         LOGE() << ret.toString();
         delete projectData;
