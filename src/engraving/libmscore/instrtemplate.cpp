@@ -478,6 +478,9 @@ void InstrumentTemplate::read(XmlReader& e)
             transpose.chromatic = e.readInt();
         } else if (tag == "transposeDiatonic") {
             transpose.diatonic = e.readInt();
+        } else if (tag == "dropdownName") {
+            // not implemented
+            e.readElementText();
         } else if (tag == "StringData") {
             stringData.read(e);
         } else if (tag == "drumset") {

@@ -1759,10 +1759,10 @@ void Instrument::updateInstrumentId()
                 }
             } else {
                 int matchStrength = 0
-                                    + (minPitchP() == it->minPitchP)
-                                    + (minPitchA() == it->minPitchA)
-                                    + (maxPitchA() == it->maxPitchA)
-                                    + (maxPitchP() == it->maxPitchP);
+                                    + ((minPitchP() == it->minPitchP) ? 1 : 0)
+                                    + ((minPitchA() == it->minPitchA) ? 1 : 0)
+                                    + ((maxPitchA() == it->maxPitchA) ? 1 : 0)
+                                    + ((maxPitchP() == it->maxPitchP) ? 1 : 0);
                 const int perfectMatchStrength = 4;
                 Q_ASSERT(matchStrength <= perfectMatchStrength);
                 if (fallback.isEmpty() || matchStrength > bestMatchStrength) {
