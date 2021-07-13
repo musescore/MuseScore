@@ -74,7 +74,8 @@ mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstru
     result.ret = make_ret(Ret::Code::Ok);
 
     QVariantMap info = instruments.val.toQVariant().toMap();
-    result.val.scoreOrder = info["scoreOrder"].value<instruments::ScoreOrder>();
+    result.val.scoreOrder = info["scoreOrder"].value<ScoreOrder>();
+
     for (const QVariant& obj: info["instrumentList"].toList()) {
         QVariantMap map = obj.toMap();
         PartInstrument pi;

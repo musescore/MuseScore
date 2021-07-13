@@ -28,14 +28,14 @@
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "notation/notationtypes.h"
-#include "iselectinstrumentscenario.h"
+#include "notation/iselectinstrumentscenario.h"
 
 namespace mu::instruments {
 class InstrumentSettingsModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(instruments, ISelectInstrumentsScenario, selectInstrumentsScenario)
+    INJECT(instruments, notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
     INJECT(instruments, context::IGlobalContext, context)
 
     Q_PROPERTY(QString instrumentName READ instrumentName WRITE setInstrumentName NOTIFY dataChanged)

@@ -27,7 +27,7 @@
 #include "libmscore/mscore.h"
 #include "libmscore/stafftype.h"
 
-#include "instruments/instrumentstypes.h"
+#include "notation/notationtypes.h"
 
 namespace mu::notation {
 class ScoreView;
@@ -75,7 +75,7 @@ public:
     void setStaffType(const Ms::StaffType* staffType);
     Ms::StaffType getStaffType() const { return staffType; }
 
-    void setInstrument(const instruments::Instrument instrument);
+    void setInstrument(const Instrument& instrument);
 
 private:
     mu::Ret loadScore(Ms::MasterScore* score, const io::path& path);

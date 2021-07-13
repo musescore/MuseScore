@@ -19,29 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTS_ISELECTINSTRUMENTSSCENARIO_H
-#define MU_INSTRUMENTS_ISELECTINSTRUMENTSSCENARIO_H
+#ifndef MU_NOTATION_IINSTRUMENTSREPOSITORY_H
+#define MU_NOTATION_IINSTRUMENTSREPOSITORY_H
 
 #include "modularity/imoduleexport.h"
-#include "instrumentstypes.h"
-#include "retval.h"
 
-namespace mu::instruments {
-class ISelectInstrumentsScenario : MODULE_EXPORT_INTERFACE
+#include "retval.h"
+#include "notationtypes.h"
+
+namespace mu::notation {
+class IInstrumentsRepository : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(ISelectInstrumentsScenario)
+    INTERFACE_ID(IInstrumentsRepository)
 
 public:
-    virtual ~ISelectInstrumentsScenario() = default;
+    virtual ~IInstrumentsRepository() = default;
 
-    enum class SelectInstrumentsMode {
-        None,
-        ShowCurrentInstruments
-    };
-
-    virtual RetVal<PartInstrumentListScoreOrder> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const = 0;
-    virtual RetVal<Instrument> selectInstrument(const std::string& currentInstrumentId = "") const = 0;
+    virtual RetValCh<InstrumentsMeta> instrumentsMeta() = 0;
 };
 }
 
-#endif // MU_INSTRUMENTS_ISELECTINSTRUMENTSSCENARIO_H
+#endif // MU_NOTATION_IINSTRUMENTSREPOSITORY_H

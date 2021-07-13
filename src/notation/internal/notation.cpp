@@ -244,12 +244,9 @@ void Notation::setMetaInfo(const Meta& meta)
     score()->setMetaTags(tags);
 }
 
-mu::instruments::ScoreOrder Notation::scoreOrder() const
+ScoreOrder Notation::scoreOrder() const
 {
-    if (!m_score) {
-        return mu::instruments::ScoreOrder();
-    }
-    return ScoreOrderConverter::convertScoreOrder(m_score->scoreOrder());
+    return m_score ? ScoreOrderConverter::convertScoreOrder(m_score->scoreOrder()) : ScoreOrder();
 }
 
 INotationPtr Notation::clone() const

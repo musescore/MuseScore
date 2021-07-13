@@ -26,7 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "iinstrumentsrepository.h"
+#include "notation/iinstrumentsrepository.h"
 #include "context/iglobalcontext.h"
 
 namespace mu::instruments {
@@ -34,7 +34,7 @@ class InstrumentListModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(instruments, IInstrumentsRepository, repository)
+    INJECT(instruments, notation::IInstrumentsRepository, repository)
     INJECT(instruments, context::IGlobalContext, globalContext)
 
     Q_PROPERTY(QVariantList families READ families NOTIFY dataChanged)
@@ -93,7 +93,7 @@ private:
         QString familyId;
         bool isSoloist = false;
         bool isExistingPart = false;
-        Instrument config;
+        notation::Instrument config;
 
         bool operator==(const SelectedInstrumentInfo& info) const { return id == info.id; }
     };
@@ -102,7 +102,7 @@ private:
     {
         QString id;
         bool customized = false;
-        ScoreOrder info;
+        notation::ScoreOrder info;
 
         bool operator==(const ScoreOrderInfo& info) const { return id == info.id; }
     };
@@ -115,14 +115,14 @@ private:
 
     bool isSearching() const;
 
-    void setInstrumentsMeta(const InstrumentsMeta& meta);
+    void setInstrumentsMeta(const notation::InstrumentsMeta& meta);
     QVariantMap allInstrumentsItem() const;
 
     void updateFamilyStateBySearch();
 
-    bool isInstrumentAccepted(const Instrument& instrument, bool compareWithSelectedGroup = true) const;
+    bool isInstrumentAccepted(const notation::Instrument& instrument, bool compareWithSelectedGroup = true) const;
 
-    Instrument instrumentById(const QString& instrumentId) const;
+    notation::Instrument instrumentById(const QString& instrumentId) const;
 
     int indexOfScoreOrderId(const QString& id) const;
     void sortSelectedInstruments();
@@ -143,7 +143,7 @@ private:
     QString m_savedFamilyId;
     int m_selectedScoreOrderIndex = -1;
 
-    InstrumentsMeta m_instrumentsMeta;
+    notation::InstrumentsMeta m_instrumentsMeta;
     QString m_searchText;
 
     QList<SelectedInstrumentInfo> m_selectedInstruments;

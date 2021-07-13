@@ -28,12 +28,11 @@
 #include "abstractinstrumentspaneltreeitem.h"
 #include "modularity/ioc.h"
 #include "notation/inotationparts.h"
+#include "notation/iselectinstrumentscenario.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
-#include "instrumentstypes.h"
-#include "iselectinstrumentscenario.h"
 
 namespace mu::uicomponents {
 class ItemMultiSelectionModel;
@@ -49,7 +48,7 @@ class InstrumentsPanelTreeModel : public QAbstractItemModel, public async::Async
     Q_OBJECT
 
     INJECT(instruments, context::IGlobalContext, context)
-    INJECT(instruments, ISelectInstrumentsScenario, selectInstrumentsScenario)
+    INJECT(instruments, notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
     INJECT(instruments, actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)

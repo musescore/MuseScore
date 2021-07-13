@@ -22,15 +22,17 @@
 #ifndef MU_NOTATION_SCOREORDERCONVERTER_H
 #define MU_NOTATION_SCOREORDERCONVERTER_H
 
-#include "instruments/instrumentstypes.h"
-#include "libmscore/scoreorder.h"
+namespace Ms {
+struct ScoreOrder;
+}
 
 namespace mu::notation {
+struct ScoreOrder;
 class ScoreOrderConverter
 {
 public:
-    static Ms::ScoreOrder convertScoreOrder(const instruments::ScoreOrder& order);
-    static instruments::ScoreOrder convertScoreOrder(const Ms::ScoreOrder& order);
+    static Ms::ScoreOrder convertScoreOrder(const ScoreOrder& order);
+    static ScoreOrder convertScoreOrder(const Ms::ScoreOrder& order);
 };
 }
 

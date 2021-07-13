@@ -20,10 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_INSTRUMENTS_INSTRUMENTSCONVERTER_H
-#define MU_INSTRUMENTS_INSTRUMENTSCONVERTER_H
+#ifndef MU_NOTATION_INSTRUMENTSCONVERTER_H
+#define MU_NOTATION_INSTRUMENTSCONVERTER_H
 
-#include "../instrumentstypes.h"
+#include "notation/notationtypes.h"
 
 namespace Ms {
 class Instrument;
@@ -31,12 +31,12 @@ class InstrumentTemplate;
 struct NamedEventList;
 }
 
-namespace mu::instruments {
+namespace mu::notation {
 class InstrumentsConverter
 {
 public:
     static Ms::Instrument convertInstrument(const Instrument& instrument);
-    static Instrument convertInstrument(const Ms::Instrument& insturment);
+    static Instrument convertInstrument(const Ms::Instrument& instrument);
     static Instrument convertInstrument(const Ms::InstrumentTemplate& templ);
 
 private:
@@ -45,4 +45,4 @@ private:
 };
 }
 
-#endif // MU_INSTRUMENTS_INSTRUMENTSCONVERTER_H
+#endif // MU_NOTATION_INSTRUMENTSCONVERTER_H

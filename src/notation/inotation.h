@@ -50,7 +50,7 @@ public:
     virtual Meta metaInfo() const = 0;
     virtual void setMetaInfo(const Meta& meta) = 0;
 
-    virtual instruments::ScoreOrder scoreOrder() const = 0;
+    virtual ScoreOrder scoreOrder() const = 0;
 
     virtual INotationPtr clone() const = 0;
 
