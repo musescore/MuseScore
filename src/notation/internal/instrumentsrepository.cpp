@@ -29,24 +29,10 @@
 
 #include "instrumentsconverter.h"
 
-using namespace mu;
-using namespace mu::instruments;
-using namespace mu::extensions;
-using namespace mu::framework;
+using namespace mu::notation;
 
 void InstrumentsRepository::init()
 {
-    if (extensionsService()) {
-        RetCh<Extension> extensionChanged = extensionsService()->extensionChanged();
-        if (extensionChanged.ret) {
-            extensionChanged.ch.onReceive(this, [this](const Extension& newExtension) {
-                if (newExtension.types.testFlag(Extension::Instruments)) {
-                    load();
-                }
-            });
-        }
-    }
-
     configuration()->instrumentListPathsChanged().onNotify(this, [this]() {
         load();
     });
@@ -58,9 +44,8 @@ void InstrumentsRepository::init()
     load();
 }
 
-RetValCh<InstrumentsMeta> InstrumentsRepository::instrumentsMeta()
+mu::RetValCh<InstrumentsMeta> InstrumentsRepository::instrumentsMeta()
 {
-    QMutexLocker locker(&m_instrumentsMutex);
     RetValCh<InstrumentsMeta> result;
     result.ret = make_ret(Ret::Code::Ok);
     result.val = m_instrumentsMeta;
@@ -73,8 +58,8 @@ void InstrumentsRepository::load()
 {
     TRACEFUNC;
 
-    QMutexLocker locker(&m_instrumentsMutex);
     Ms::clearInstrumentTemplates();
+    m_instrumentsMeta.clear();
 
     for (const io::path& filePath: configuration()->instrumentListPaths()) {
         if (!Ms::loadInstrumentTemplates(filePath.toQString())) {
@@ -90,7 +75,6 @@ void InstrumentsRepository::fillInstrumentsMeta(InstrumentsMeta& meta)
 {
     TRACEFUNC;
 
-    meta.clear();
     meta.articulations = Ms::articulation;
 
     for (const Ms::InstrumentGenre* msGenre : Ms::instrumentGenres) {
@@ -114,20 +98,20 @@ void InstrumentsRepository::fillInstrumentsMeta(InstrumentsMeta& meta)
                 continue;
             }
 
-            Instrument templ = InstrumentsConverter::convertInstrument(*msTemplate);
+            Instrument templ = notation::InstrumentsConverter::convertInstrument(*msTemplate);
             templ.groupId = msGroup->id;
 
             meta.instrumentTemplates << templ;
         }
     }
 
-    for (const Ms::ScoreOrder& msOrder : Ms::instrumentOrders) {
+    for (const Ms::ScoreOrder* msOrder : Ms::instrumentOrders) {
         ScoreOrder order;
-        order.id = msOrder.id;
-        order.name = msOrder.name;
-        order.instrumentMap = msOrder.instrumentMap;
+        order.id = msOrder->id;
+        order.name = msOrder->name;
+        order.instrumentMap = msOrder->instrumentMap;
 
-        for (const Ms::ScoreGroup& msGroup : msOrder.groups) {
+        for (const Ms::ScoreGroup& msGroup : msOrder->groups) {
             ScoreOrderGroup group;
             group.family = msGroup.family;
             group.section = msGroup.section;

@@ -40,7 +40,7 @@ QList<InstrumentGroup*> instrumentGroups;
 QList<MidiArticulation> articulation;                 // global articulations
 QList<InstrumentGenre*> instrumentGenres;
 QList<InstrumentFamily*> instrumentFamilies;
-QList<ScoreOrder> instrumentOrders;
+QList<ScoreOrder*> instrumentOrders;
 
 //---------------------------------------------------------
 //   searchInstrumentGenre
@@ -254,6 +254,7 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
     family     = t.family;
     singleNoteDynamics = t.singleNoteDynamics;
 
+    sequenceOrder = t.sequenceOrder;
     trait = t.trait;
 }
 
@@ -635,6 +636,8 @@ void clearInstrumentTemplates()
     qDeleteAll(instrumentFamilies);
     instrumentFamilies.clear();
     articulation.clear();
+    qDeleteAll(instrumentOrders);
+    instrumentOrders.clear();
 }
 
 //---------------------------------------------------------
@@ -685,8 +688,8 @@ bool loadInstrumentTemplates(const QString& instrTemplates)
                     }
                     fam->read(e);
                 } else if (tag == "Order") {
-                    ScoreOrder order;
-                    order.read(e);
+                    ScoreOrder* order = new ScoreOrder;
+                    order->read(e);
                     instrumentOrders.append(order);
                 } else {
                     e.unknown();

@@ -28,19 +28,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/instrumentsmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/instrumentsmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/instrumentstypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/iinstrumentsconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/iinstrumentsrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/iselectinstrumentscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/selectinstrumentscenario.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/selectinstrumentscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsuiactions.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconverter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconverter.h
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentlistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentlistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractinstrumentspaneltreeitem.cpp

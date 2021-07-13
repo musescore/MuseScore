@@ -153,7 +153,7 @@ void ScorePreferencesModel::savePath(ScorePreferencesModel::DefaultFileType file
 
 QString ScorePreferencesModel::firstInstrumentListPath() const
 {
-    io::paths instrumentListPaths = instrumentsConfiguration()->userInstrumentListPaths();
+    io::paths instrumentListPaths = notationConfiguration()->userInstrumentListPaths();
     if (instrumentListPaths.empty()) {
         return QString();
     }
@@ -163,18 +163,18 @@ QString ScorePreferencesModel::firstInstrumentListPath() const
 
 void ScorePreferencesModel::setFirstInstrumentListPath(const QString& path)
 {
-    io::paths instrumentListPaths = instrumentsConfiguration()->userInstrumentListPaths();
+    io::paths instrumentListPaths = notationConfiguration()->userInstrumentListPaths();
     if (instrumentListPaths.empty()) {
         return;
     }
 
     instrumentListPaths[0] = path.toStdString();
-    instrumentsConfiguration()->setUserInstrumentListPaths(instrumentListPaths);
+    notationConfiguration()->setUserInstrumentListPaths(instrumentListPaths);
 }
 
 QString ScorePreferencesModel::secondInstrumentListPath() const
 {
-    io::paths instrumentListPaths = instrumentsConfiguration()->userInstrumentListPaths();
+    io::paths instrumentListPaths = notationConfiguration()->userInstrumentListPaths();
     if (instrumentListPaths.size() < 1) {
         return QString();
     }
@@ -184,18 +184,18 @@ QString ScorePreferencesModel::secondInstrumentListPath() const
 
 void ScorePreferencesModel::setSecondInstrumentListPath(const QString& path)
 {
-    io::paths instrumentListPaths = instrumentsConfiguration()->userInstrumentListPaths();
+    io::paths instrumentListPaths = notationConfiguration()->userInstrumentListPaths();
     if (instrumentListPaths.size() < 1) {
         return;
     }
 
     instrumentListPaths[1] = path.toStdString();
-    instrumentsConfiguration()->setUserInstrumentListPaths(instrumentListPaths);
+    notationConfiguration()->setUserInstrumentListPaths(instrumentListPaths);
 }
 
 QString ScorePreferencesModel::firstScoreOrderListPath() const
 {
-    io::paths scoreOrderListPaths = instrumentsConfiguration()->userScoreOrderListPaths();
+    io::paths scoreOrderListPaths = notationConfiguration()->userScoreOrderListPaths();
     if (scoreOrderListPaths.empty()) {
         return QString();
     }
@@ -205,18 +205,18 @@ QString ScorePreferencesModel::firstScoreOrderListPath() const
 
 void ScorePreferencesModel::setFirstScoreOrderListPath(const QString& path)
 {
-    io::paths scoreOrderListPaths = instrumentsConfiguration()->userScoreOrderListPaths();
+    io::paths scoreOrderListPaths = notationConfiguration()->userScoreOrderListPaths();
     if (scoreOrderListPaths.empty()) {
         return;
     }
 
     scoreOrderListPaths[0] = path.toStdString();
-    instrumentsConfiguration()->setUserScoreOrderListPaths(scoreOrderListPaths);
+    notationConfiguration()->setUserScoreOrderListPaths(scoreOrderListPaths);
 }
 
 QString ScorePreferencesModel::secondScoreOrderListPath() const
 {
-    io::paths scoreOrderListPaths = instrumentsConfiguration()->userScoreOrderListPaths();
+    io::paths scoreOrderListPaths = notationConfiguration()->userScoreOrderListPaths();
     if (scoreOrderListPaths.size() < 1) {
         return QString();
     }
@@ -226,13 +226,13 @@ QString ScorePreferencesModel::secondScoreOrderListPath() const
 
 void ScorePreferencesModel::setSecondScoreOrderListPath(const QString& path)
 {
-    io::paths scoreOrderListPaths = instrumentsConfiguration()->userScoreOrderListPaths();
+    io::paths scoreOrderListPaths = notationConfiguration()->userScoreOrderListPaths();
     if (scoreOrderListPaths.size() < 1) {
         return;
     }
 
     scoreOrderListPaths[1] = path.toStdString();
-    instrumentsConfiguration()->setUserScoreOrderListPaths(scoreOrderListPaths);
+    notationConfiguration()->setUserScoreOrderListPaths(scoreOrderListPaths);
 }
 
 QString ScorePreferencesModel::stylePath() const

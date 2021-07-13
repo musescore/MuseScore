@@ -26,14 +26,14 @@
 
 #include "modularity/ioc.h"
 #include "notation/inotationparts.h"
-#include "iselectinstrumentscenario.h"
+#include "notation/iselectinstrumentscenario.h"
 
 namespace mu::instruments {
 class InstrumentControlTreeItem : public AbstractInstrumentsPanelTreeItem
 {
     Q_OBJECT
 
-    INJECT(instruments, ISelectInstrumentsScenario, selectInstrumentsScenario)
+    INJECT(instruments, notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
 
 public:
     explicit InstrumentControlTreeItem(notation::INotationPartsPtr notationParts, QObject* parent = nullptr);

@@ -24,10 +24,9 @@
 
 #include "libmscore/instrument.h"
 #include "libmscore/instrtemplate.h"
+#include "libmscore/drumset.h"
 
-#include "midi/midievent.h"
-
-using namespace mu::instruments;
+using namespace mu::notation;
 
 Ms::Instrument InstrumentsConverter::convertInstrument(const Instrument& instrument)
 {
@@ -61,8 +60,8 @@ Ms::Instrument InstrumentsConverter::convertInstrument(const Instrument& instrum
 
     result.clearChannels();
 
-    for (const instruments::Channel& channel : instrument.channels) {
-        result.appendChannel(new instruments::Channel(channel));
+    for (const InstrumentChannel& channel : instrument.channels) {
+        result.appendChannel(new InstrumentChannel(channel));
     }
 
     result.setStringData(instrument.stringData);
@@ -101,7 +100,7 @@ Instrument InstrumentsConverter::convertInstrument(const Ms::Instrument& instrum
     result.midiActions = convertMidiActions(instrument.midiActions());
     result.midiArticulations = instrument.articulation();
 
-    for (const instruments::Channel* channel : instrument.channel()) {
+    for (const InstrumentChannel* channel : instrument.channel()) {
         result.channels.append(*channel);
     }
 

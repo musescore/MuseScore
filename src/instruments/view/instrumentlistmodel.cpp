@@ -43,9 +43,9 @@ static QString formatSelectedInstrumentTitle(const Instrument& instrument)
     const QString& instrumentName = instrument.name;
 
     switch (instrument.trait.type) {
-    case TraitType::Tuning: return qtrc("instruments", "%1 %2").arg(traitName).arg(instrumentName);
-    case TraitType::Course: return qtrc("instruments", "%1 (%2)").arg(instrumentName).arg(traitName);
-    case TraitType::Transposition: return qtrc("instruments", "%1 in %2").arg(instrumentName).arg(traitName);
+    case TraitType::Tuning: return mu::qtrc("instruments", "%1 %2").arg(traitName).arg(instrumentName);
+    case TraitType::Course: return mu::qtrc("instruments", "%1 (%2)").arg(instrumentName).arg(traitName);
+    case TraitType::Transposition: return mu::qtrc("instruments", "%1 in %2").arg(instrumentName).arg(traitName);
     case TraitType::Unknown: break;
     }
 

@@ -58,7 +58,7 @@
 #include "notationnoteinput.h"
 #include "notationselection.h"
 
-#include "instruments/internal/instrumentsconverter.h"
+#include "instrumentsconverter.h"
 
 #include "draw/pen.h"
 
@@ -1046,12 +1046,12 @@ void NotationInteraction::selectInstrument(Ms::InstrumentChange* instrumentChang
         return;
     }
 
-    instruments::Instrument selectedIstrument = retVal.val.toQVariant().value<instruments::Instrument>();
+    Instrument selectedIstrument = retVal.val.toQVariant().value<Instrument>();
     if (!selectedIstrument.isValid()) {
         return;
     }
 
-    Ms::Instrument instrument = instruments::InstrumentsConverter::convertInstrument(selectedIstrument);
+    Ms::Instrument instrument = InstrumentsConverter::convertInstrument(selectedIstrument);
 
     instrumentChange->setInit(true);
     instrumentChange->setupInstrument(&instrument);
