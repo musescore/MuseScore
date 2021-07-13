@@ -34,7 +34,7 @@ class IImageConverter : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IImageConverter() = default;
 
-    virtual Pixmap scaled(const Pixmap& origin, const Size& s) = 0;
+    virtual Pixmap scaled(const Pixmap& origin, const Size& s) const = 0;
 };
 }
 
