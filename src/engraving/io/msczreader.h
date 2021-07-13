@@ -44,18 +44,18 @@ public:
     void close();
     bool isOpened() const;
 
-    QByteArray readScore() const;
-    QByteArray readThumbnail() const;
-    QByteArray readImage(const QString& fileName) const;
+    QByteArray readScoreFile() const;
+    QByteArray readThumbnailFile() const;
+    QByteArray readImageFile(const QString& fileName) const;
     std::vector<QString> imageFileNames() const;
-    QByteArray readAudio() const;
+    QByteArray readAudioFile() const;
+    QByteArray readAudioSettingsJsonFile() const;
 
 private:
 
     struct Meta {
         QString mscxFileName;
         std::vector<QString> imageFilePaths;
-        QString audioFile;
 
         bool isValid() const { return !mscxFileName.isEmpty(); }
     };

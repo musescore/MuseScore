@@ -28,6 +28,7 @@
 #include "ret.h"
 
 #include "imasternotation.h"
+#include "iprojectaudiosettings.h"
 
 namespace mu::notation {
 class INotationProject
@@ -50,6 +51,7 @@ public:
     virtual void setMetaInfo(const Meta& meta) = 0;
 
     virtual IMasterNotationPtr masterNotation() const = 0;
+    virtual IProjectAudioSettingsPtr audioSettings() const = 0;
 };
 
 using INotationProjectPtr = std::shared_ptr<INotationProject>;

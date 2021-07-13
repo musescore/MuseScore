@@ -30,6 +30,7 @@
 
 namespace mu::notation {
 class MasterNotation;
+class ProjectAudioSettings;
 class NotationProject : public INotationProject
 {
     INJECT(notation, INotationReadersRegister, readers)
@@ -53,6 +54,7 @@ public:
     void setMetaInfo(const Meta& meta) override;
 
     IMasterNotationPtr masterNotation() const override;
+    IProjectAudioSettingsPtr audioSettings() const override;
 
 private:
 
@@ -64,6 +66,7 @@ private:
 
     mu::engraving::EngravingProjectPtr m_engravingProject = nullptr;
     std::shared_ptr<MasterNotation> m_masterNotation = nullptr;
+    std::shared_ptr<ProjectAudioSettings> m_projectAudioSettings = nullptr;
 };
 }
 
