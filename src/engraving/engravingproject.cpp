@@ -25,6 +25,9 @@
 
 #include "libmscore/score.h"
 #include "libmscore/part.h"
+#include "libmscore/undo.h"
+
+#include "log.h"
 
 using namespace mu::engraving;
 
@@ -67,6 +70,11 @@ QString EngravingProject::path() const
     return m_path;
 }
 
+bool EngravingProject::readOnly() const
+{
+    return m_masterScore->readOnly();
+}
+
 Err EngravingProject::setupMasterScore()
 {
     return doSetupMasterScore(m_masterScore);
@@ -104,23 +112,20 @@ Ms::MasterScore* EngravingProject::masterScore() const
     return m_masterScore;
 }
 
-Err EngravingProject::loadMscz(mu::engraving::MsczReader& reader, bool ignoreVersionError)
+Err EngravingProject::loadMscz(const MsczReader& reader, bool ignoreVersionError)
 {
     Ms::Score::FileError err = m_masterScore->loadMscz(reader, ignoreVersionError);
     return scoreFileErrorToErr(err);
 }
 
-bool EngravingProject::saveFile(bool generateBackup)
+bool EngravingProject::writeMscz(mu::engraving::MsczWriter& writer, bool onlySelection, bool createThumbnail)
 {
-    return m_masterScore->saveFile(generateBackup);
-}
+    bool ok = m_masterScore->writeMscz(writer, onlySelection, createThumbnail);
+    if (ok && !onlySelection) {
+        m_masterScore->undoStack()->setClean();
+        m_masterScore->setSaved(true);
+        m_masterScore->update();
+    }
 
-bool EngravingProject::saveSelectionOnScore(const QString& filePath)
-{
-    return m_masterScore->writeMscz(filePath, true);
-}
-
-bool EngravingProject::writeMscz(QIODevice* device, const QString& filePath)
-{
-    return m_masterScore->writeMscz(device, filePath);
+    return ok;
 }

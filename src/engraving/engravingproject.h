@@ -26,6 +26,7 @@
 
 #include "engravingerrors.h"
 #include "io/msczreader.h"
+#include "io/msczwriter.h"
 
 //! NOTE In addition to the score itself, the mscz file also stores other data,
 //! such as synthesizer, mixer settings, omr, etc.
@@ -54,15 +55,13 @@ public:
     void setPath(const QString& path);
     QString path() const;
 
+    bool readOnly() const;
+
     Ms::MasterScore* masterScore() const;
     Err setupMasterScore();
 
-    Err loadMscz(mu::engraving::MsczReader& reader, bool ignoreVersionError);
-
-    bool saveFile(bool generateBackup = true);
-    bool saveSelectionOnScore(const QString& filePath);
-
-    bool writeMscz(QIODevice* device, const QString& filePath);
+    Err loadMscz(const mu::engraving::MsczReader& reader, bool ignoreVersionError);
+    bool writeMscz(mu::engraving::MsczWriter& writer, bool onlySelection, bool createThumbnail);
 
 private:
 

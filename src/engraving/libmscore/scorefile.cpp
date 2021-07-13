@@ -395,78 +395,6 @@ void Score::readStaff(XmlReader& e)
     }
 }
 
-//---------------------------------------------------------
-//   saveFile
-///   If file has generated name, create a modal file save dialog
-///   and ask filename.
-///   Rename old file to backup file (.xxxx.msc?,).
-///   Default is to save score in .mscz format,
-///   Return true if OK and false on error.
-//---------------------------------------------------------
-
-bool MasterScore::saveFile(bool generateBackup)
-{
-    if (readOnly()) {
-        return false;
-    }
-
-    // Step 1: create backup if need
-    if (!saved() && generateBackup) {
-        // if file was already saved in this session
-        // save but don't overwrite backup again
-
-        //! TODO Make backup
-        NOT_IMPLEMENTED << "generate backup";
-    }
-
-    // Step 2: check writable
-    if (info.exists() && !info.isWritable()) {
-        MScore::lastError = tr("The following file is locked: \n%1 \n\nTry saving to a different location.").arg(info.filePath());
-        return false;
-    }
-
-    // Step 3: save into temporary file to prevent partially overwriting
-    // the original file in case of "disc full"
-
-    QString tempFilePath = info.filePath() + QString(".temp");
-    {
-        mu::engraving::MsczWriter msczWriter(tempFilePath);
-        bool ok = msczWriter.open();
-        if (!ok) {
-            MScore::lastError = tr("Failed open mscz file: %1").arg(msczWriter.filePath());
-            return false;
-        }
-
-        ok = writeMscz(msczWriter);
-        if (!ok) {
-            MScore::lastError = tr("Failed write mscz file: %1").arg(msczWriter.filePath());
-            return false;
-        }
-
-        msczWriter.close();
-    }
-
-    // Step 4: rename temp name into file name
-    {
-        QFile::remove(info.filePath());
-        if (!QFile::rename(tempFilePath, info.filePath())) {
-            MScore::lastError = tr("Renaming temp. file <%1> to <%2> failed:\n%3").arg(tempFilePath, info.filePath(), strerror(errno));
-            return false;
-        }
-
-        // make file readable by all
-        QFile::setPermissions(info.filePath(),
-                              QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
-    }
-
-    undoStack()->setClean();
-    setSaved(true);
-    update();
-
-    LOGI() << "success save file: " << info.filePath();
-    return true;
-}
-
 bool Score::writeMscz(engraving::MsczWriter& msczWriter, bool onlySelection, bool doCreateThumbnail)
 {
     IF_ASSERT_FAILED(msczWriter.isOpened()) {
@@ -514,34 +442,6 @@ bool Score::writeMscz(engraving::MsczWriter& msczWriter, bool onlySelection, boo
     }
 
     return true;
-}
-
-bool Score::writeMscz(const QString& filePath, bool onlySelection, bool createThumbnail)
-{
-    mu::engraving::MsczWriter msczFile(filePath);
-    bool ok = msczFile.open();
-    if (!ok) {
-        LOGE() << "failed open file: " << filePath;
-        return false;
-    }
-
-    ok = writeMscz(msczFile, onlySelection, createThumbnail);
-    msczFile.close();
-    if (!ok) {
-        LOGE() << "failed write file: " << filePath;
-        return false;
-    }
-    return ok;
-}
-
-bool Score::writeMscz(QIODevice* device, const QString& fileName, bool onlySelection, bool createThumbnail)
-{
-    mu::engraving::MsczWriter msczFile(device);
-    msczFile.setFilePath(fileName);
-    msczFile.open();
-    bool ok = writeMscz(msczFile, onlySelection, createThumbnail);
-    msczFile.close();
-    return ok;
 }
 
 //---------------------------------------------------------
@@ -671,21 +571,7 @@ bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection)
     return true;
 }
 
-//---------------------------------------------------------
-//   loadCompressedMsc
-//    return false on error
-//---------------------------------------------------------
-
-Score::FileError MasterScore::loadMscz(const QString& fileName, bool ignoreVersionError)
-{
-    mu::engraving::MsczReader msczReader(fileName);
-    if (!msczReader.open()) {
-        return FileError::FILE_OPEN_ERROR;
-    }
-    return loadMscz(msczReader, ignoreVersionError);
-}
-
-Score::FileError MasterScore::loadMscz(mu::engraving::MsczReader& msczReader, bool ignoreVersionError)
+Score::FileError MasterScore::loadMscz(const mu::engraving::MsczReader& msczReader, bool ignoreVersionError)
 {
     using namespace mu::engraving;
 
