@@ -154,6 +154,7 @@ public:
     QString fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&, const ChordList*);
     const QList<RenderAction>& renderList(const ChordList*);
     void respellQualitySymbols(const ChordList* cl);
+    void sortModifiers();
     void stripParentheses();
     void findModifierStackIndices();
     void checkQualitySymbolsLetterCase(const ChordList* cl);

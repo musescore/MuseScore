@@ -1589,6 +1589,137 @@ void ParsedChord::addParentheses(const ChordList* cl)
 }
 
 //---------------------------------------------------------
+//   sortModifiers
+//---------------------------------------------------------
+void ParsedChord::sortModifiers()
+{
+    QStringList allModifiers = { "b", "bb", "#", "##", "natural", "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
+
+    QList<ChordToken> alterations;
+    QStringList alterationsList = { "b", "bb", "#", "##", "natural" };
+
+    QList<ChordToken> suspension;
+
+    QList<ChordToken> maj7;
+
+    QList<ChordToken> addOmit;
+    QStringList addOmitList = { "omit", "no", "add" };
+
+    QList<ChordToken> alt;
+    QStringList altList = { "alt", "alt#", "altb" };
+    int firstModifierIndex = -1;
+    // Dismantle the list into the separate modifier categories
+    for (int index = 0; index < _tokenList.size(); index++) {
+        ChordToken tok = _tokenList.at(index);
+        if (tok.tokenClass == ChordTokenClass::MODIFIER) {
+            if (firstModifierIndex == -1) {
+                firstModifierIndex = index;
+            }
+            if (tok.names.first() == "sus") {
+                bool foundNextModifier = false;
+                while (!foundNextModifier) {
+                    suspension.push_back(tok);
+                    _tokenList.removeAt(index);
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    tok = _tokenList.at(index);
+                    if (allModifiers.contains(tok.names.first())) {
+                        foundNextModifier = true;
+                    }
+                }
+                index--;
+            } else if (tok.names.first() == "maj") {
+                bool foundNextModifier = false;
+                while (!foundNextModifier) {
+                    maj7.push_back(tok);
+                    _tokenList.removeAt(index);
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    tok = _tokenList.at(index);
+                    if (allModifiers.contains(tok.names.first())) {
+                        foundNextModifier = true;
+                    }
+                }
+                index--;
+            } else if (addOmitList.contains(tok.names.first())) {
+                bool foundNextModifier = false;
+                while (!foundNextModifier) {
+                    addOmit.push_back(tok);
+                    _tokenList.removeAt(index);
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    tok = _tokenList.at(index);
+                    if (allModifiers.contains(tok.names.first())) {
+                        foundNextModifier = true;
+                    }
+                }
+                index--;
+            } else if (alterationsList.contains(tok.names.first())) {
+                bool foundNextModifier = false;
+                while (!foundNextModifier) {
+                    alterations.push_back(tok);
+                    _tokenList.removeAt(index);
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    tok = _tokenList.at(index);
+                    if (allModifiers.contains(tok.names.first())) {
+                        foundNextModifier = true;
+                    }
+                }
+                index--;
+            } else if (altList.contains(tok.names.first())) {
+                bool foundNextModifier = false;
+                while (!foundNextModifier) {
+                    alt.push_back(tok);
+                    _tokenList.removeAt(index);
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    tok = _tokenList.at(index);
+                    if (allModifiers.contains(tok.names.first())) {
+                        foundNextModifier = true;
+                    }
+                }
+                index--;
+            }
+        }
+    }
+    // Sort the alterations based on note numbers
+    for (int i = 0; i < (alterations.size() / 2) - 1; i++) {
+        for (int j = 0; j < (alterations.size() / 2) - i - 1; j++) {
+            // Comparing the note numbers
+            if (alterations.at(2 * j + 1).names.first().toInt() > alterations.at(2 * (j + 1) + 1).names.first().toInt()) {
+                // Swap accidentals
+                alterations.swapItemsAt(2 * j, 2 * (j + 1));
+
+                //Swap note numbers
+                alterations.swapItemsAt(2 * j + 1, 2 * (j + 1) + 1);
+            }
+        }
+    }
+    // Rebuild the list in the correct order
+    for (int index = alterations.size() - 1; index >= 0; index--) {
+        _tokenList.insert(firstModifierIndex, alterations.at(index));
+    }
+    for (int index = addOmit.size() - 1; index >= 0; index--) {
+        _tokenList.insert(firstModifierIndex, addOmit.at(index));
+    }
+    for (int index = alt.size() - 1; index >= 0; index--) {
+        _tokenList.insert(firstModifierIndex, alt.at(index));
+    }
+    for (int index = suspension.size() - 1; index >= 0; index--) {
+        _tokenList.insert(firstModifierIndex, suspension.at(index));
+    }
+    for (int index = maj7.size() - 1; index >= 0; index--) {
+        _tokenList.insert(firstModifierIndex, maj7.at(index));
+    }
+}
+
+//---------------------------------------------------------
 //   stripParenthesis
 //---------------------------------------------------------
 void ParsedChord::stripParentheses()
@@ -1969,6 +2100,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
     stripParentheses();
     respellQualitySymbols(cl);
     checkQualitySymbolsLetterCase(cl);
+    sortModifiers();
     if (cl->stackModifiers) {
         findModifierStackIndices();
     }
