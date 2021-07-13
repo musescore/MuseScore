@@ -1439,27 +1439,38 @@ qreal ChordList::position(const QStringList& names, ChordTokenClass ctc) const
 //---------------------------------------------------------
 void ParsedChord::findModifierStackIndices()
 {
-    QStringList modifiersToBeStacked = { "b", "bb", "#", "##", "natural", "omit", "no", "add" };
+    QStringList alterationsList = { "b", "bb", "#", "##", "natural" };
+    QStringList addOmitList = { "omit", "no", "add" };
     for (int index = 0; index < _tokenList.size(); index++) {
         if (skipList.contains(index)) {
             continue;
         }
         const ChordToken& tok = _tokenList.at(index);
         if (tok.names.size() > 0) {
-            if (modifiersToBeStacked.contains(tok.names.first())) {
-                modifierStackIndices.push_back(index);
+            if (alterationsList.contains(tok.names.first())) {
+                alterationStackIndices.push_back(index);
+            } else if (addOmitList.contains(tok.names.first())) {
+                addOmitStackIndices.push_back(index);
+                // To prevent the immediate next accidental to be treated as new modifier
+                if (alterationsList.contains(_tokenList.at(index + 1).names.first())) {
+                    index++;
+                    addOmitStackIndices.push_back(index);
+                }
             }
         }
-        qDebug() << tok.names;
     }
     // To know where to end stacking and return cursor to the normal position
-    if (modifierStackIndices.size() > 0) {
-        stackingEnd = modifierStackIndices.last() + 1;
+    if (alterationStackIndices.size() > 0) {
+        alterationStackingEnd = alterationStackIndices.last() + 1;
+    }
+    if (addOmitStackIndices.size() > 0) {
+        addOmitStackingEnd = addOmitStackIndices.last() + 1;
     }
     // To remove double references to a single modifier like add(b9)
-    for (int i = 0; i < modifierStackIndices.size(); i++) {
-        if (modifierStackIndices.contains(modifierStackIndices[i] - 1)) {
-            modifierStackIndices.removeAt(i);
+    // All we need is one index per modifier(the starting index)
+    for (int i = 0; i < addOmitStackIndices.size(); i++) {
+        if (addOmitStackIndices.contains(addOmitStackIndices[i] - 1)) {
+            addOmitStackIndices.removeAt(i);
         }
     }
 }
@@ -1545,7 +1556,7 @@ void ParsedChord::addParentheses(const ChordList* cl)
                 if (cl->addOmitParentheses) {
                     if (!cl->stackModifiers) {
                         openParenthesesIndices.push_back(index);
-                    } else if (index <= modifierStackIndices.first()) {
+                    } else if (index <= addOmitStackIndices.first()) {
                         openParenthesesIndices.push_back(index);
                     }
                     bool foundNextModifier = false;
@@ -1561,7 +1572,7 @@ void ParsedChord::addParentheses(const ChordList* cl)
                     index--;
                     if (!cl->stackModifiers) {
                         closeParenthesesIndices.push_back(index);
-                    } else if (modifierStackIndices.size() > 0 && index >= modifierStackIndices.last()) {
+                    } else if (addOmitStackIndices.size() > 0 && index >= addOmitStackIndices.last()) {
                         closeParenthesesIndices.push_back(index);
                     }
                 } else {
@@ -1644,6 +1655,10 @@ void ParsedChord::sortModifiers()
                 }
                 index--;
             } else if (addOmitList.contains(tok.names.first())) {
+                addOmit.push_back(tok);
+                _tokenList.removeAt(index);
+                tok = _tokenList.at(index); // To skip the immediate next accidental if any
+
                 bool foundNextModifier = false;
                 while (!foundNextModifier) {
                     addOmit.push_back(tok);
@@ -2086,8 +2101,11 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
     }
     bool adjust = cl ? cl->autoAdjust() : false;
 
-    if (!modifierStackIndices.empty()) {
-        modifierStackIndices.clear();
+    if (!alterationStackIndices.empty()) {
+        alterationStackIndices.clear();
+    }
+    if (!addOmitStackIndices.empty()) {
+        addOmitStackIndices.clear();
     }
     if (!openParenthesesIndices.empty()) {
         openParenthesesIndices.clear();
@@ -2095,7 +2113,8 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
     if (!closeParenthesesIndices.empty()) {
         closeParenthesesIndices.clear();
     }
-    stackingEnd = -1;
+    alterationStackingEnd = -1;
+    addOmitStackingEnd = -1;
 
     stripParentheses();
     respellQualitySymbols(cl);
@@ -2206,12 +2225,12 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         }
 
         // Modifier Stacking + Opening Parentheses
-        if (modifierStackIndices.contains(index) && modifierStackIndices.size() > 1) {
+        if (alterationStackIndices.contains(index) && alterationStackIndices.size() > 1) {
             // Opening parenthesis should render before moving away from the normal position
             if (openParenthesesIndices.contains(index)) {
                 _renderList.append(openParen);
             }
-            if (index == modifierStackIndices.first()) {
+            if (index == alterationStackIndices.first()) {
                 // To let the Harmony render function know that these modifiers are stacked
                 RenderAction a(RenderAction::RenderActionType::SET);
                 a.text = "startStacking";
@@ -2227,7 +2246,31 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             }
             RenderAction stackPosition = RenderAction(RenderAction::RenderActionType::MOVE);
             stackPosition.movex = 0.0;
-            stackPosition.movey = -(modifierStackIndices.indexOf(index) + 0.5 - (modifierStackIndices.size() - 1) / 2.0)
+            stackPosition.movey = -(alterationStackIndices.indexOf(index) + 0.5 - (alterationStackIndices.size() - 1) / 2.0)
+                                  * cl->modifierMag() * 5;
+            _renderList.append(stackPosition);
+        } else if (addOmitStackIndices.contains(index) && addOmitStackIndices.size() > 1) {
+            // Opening parenthesis should render before moving away from the normal position
+            if (openParenthesesIndices.contains(index)) {
+                _renderList.append(openParen);
+            }
+            if (index == addOmitStackIndices.first()) {
+                // To let the Harmony render function know that these modifiers are stacked
+                RenderAction a(RenderAction::RenderActionType::SET);
+                a.text = "startStacking";
+                _renderList.append(a);
+
+                RenderAction push = RenderAction(RenderAction::RenderActionType::PUSH);
+                _renderList.append(push);
+            } else {
+                RenderAction pop = RenderAction(RenderAction::RenderActionType::POP);
+                _renderList.append(pop);
+                RenderAction push = RenderAction(RenderAction::RenderActionType::PUSH);
+                _renderList.append(push);
+            }
+            RenderAction stackPosition = RenderAction(RenderAction::RenderActionType::MOVE);
+            stackPosition.movex = 0.0;
+            stackPosition.movey = -(addOmitStackIndices.indexOf(index) + 0.5 - (addOmitStackIndices.size() - 1) / 2.0)
                                   * cl->modifierMag() * 5;
             _renderList.append(stackPosition);
         } else {
@@ -2245,7 +2288,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             _renderList.append(a);
         }
 
-        if (index == stackingEnd && modifierStackIndices.size() > 1) {
+        if (index == alterationStackingEnd && alterationStackIndices.size() > 1) {
             RenderAction a(RenderAction::RenderActionType::SET);
             a.text = "endStacking";
             _renderList.append(a);
@@ -2254,7 +2297,19 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             RenderAction returnPosition = RenderAction(RenderAction::RenderActionType::MOVE);
             returnPosition.movex = 0.0;
             // Reverse y displacement of the last modifier (substitute index as size()-1 in the previous eqn)
-            returnPosition.movey = (modifierStackIndices.size() / 2.0)
+            returnPosition.movey = (alterationStackIndices.size() / 2.0)
+                                   * cl->modifierMag() * 5;
+            _renderList.append(returnPosition);
+        } else if (index == addOmitStackingEnd && addOmitStackIndices.size() > 1) {
+            RenderAction a(RenderAction::RenderActionType::SET);
+            a.text = "endStacking";
+            _renderList.append(a);
+
+            // Modifiers like sus are not stacked and so must return to the normal level
+            RenderAction returnPosition = RenderAction(RenderAction::RenderActionType::MOVE);
+            returnPosition.movex = 0.0;
+            // Reverse y displacement of the last modifier (substitute index as size()-1 in the previous eqn)
+            returnPosition.movey = (addOmitStackIndices.size() / 2.0)
                                    * cl->modifierMag() * 5;
             _renderList.append(returnPosition);
         }
