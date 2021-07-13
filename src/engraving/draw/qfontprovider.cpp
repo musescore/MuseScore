@@ -44,67 +44,67 @@ void QFontProvider::insertSubstitution(const QString& familyName, const QString&
 
 qreal QFontProvider::lineSpacing(const Font& f) const
 {
-    return QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).lineSpacing();
+    return QFontMetricsF(toQFont(f)).lineSpacing();
 }
 
 qreal QFontProvider::xHeight(const Font& f) const
 {
-    return QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).xHeight();
+    return QFontMetricsF(toQFont(f)).xHeight();
 }
 
 qreal QFontProvider::height(const Font& f) const
 {
-    return QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).height();
+    return QFontMetricsF(toQFont(f)).height();
 }
 
 qreal QFontProvider::ascent(const Font& f) const
 {
-    return QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).ascent();
+    return QFontMetricsF(toQFont(f)).ascent();
 }
 
 qreal QFontProvider::descent(const Font& f) const
 {
-    return QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).descent();
+    return QFontMetricsF(toQFont(f)).descent();
 }
 
 bool QFontProvider::inFont(const Font& f, QChar ch) const
 {
-    return QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).inFont(ch);
+    return QFontMetricsF(toQFont(f)).inFont(ch);
 }
 
 bool QFontProvider::inFontUcs4(const Font& f, uint ucs4) const
 {
-    return QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).inFontUcs4(ucs4);
+    return QFontMetricsF(toQFont(f)).inFontUcs4(ucs4);
 }
 
 qreal QFontProvider::horizontalAdvance(const Font& f, const QString& string) const
 {
-    return QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).horizontalAdvance(string);
+    return QFontMetricsF(toQFont(f)).horizontalAdvance(string);
 }
 
 qreal QFontProvider::horizontalAdvance(const Font& f, const QChar& ch) const
 {
-    return QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).horizontalAdvance(ch);
+    return QFontMetricsF(toQFont(f)).horizontalAdvance(ch);
 }
 
 RectF QFontProvider::boundingRect(const Font& f, const QString& string) const
 {
-    return RectF::fromQRectF(QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).boundingRect(string));
+    return RectF::fromQRectF(QFontMetricsF(toQFont(f)).boundingRect(string));
 }
 
 RectF QFontProvider::boundingRect(const Font& f, const QChar& ch) const
 {
-    return RectF::fromQRectF(QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).boundingRect(ch));
+    return RectF::fromQRectF(QFontMetricsF(toQFont(f)).boundingRect(ch));
 }
 
 RectF QFontProvider::boundingRect(const Font& f, const RectF& r, int flags, const QString& string) const
 {
-    return RectF::fromQRectF(QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).boundingRect(r.toQRectF(), flags, string));
+    return RectF::fromQRectF(QFontMetricsF(toQFont(f)).boundingRect(r.toQRectF(), flags, string));
 }
 
 RectF QFontProvider::tightBoundingRect(const Font& f, const QString& string) const
 {
-    return RectF::fromQRectF(QFontMetricsF(toQFont(f), Ms::MScore::paintDevice()).tightBoundingRect(string));
+    return RectF::fromQRectF(QFontMetricsF(toQFont(f)).tightBoundingRect(string));
 }
 
 // Score symbols

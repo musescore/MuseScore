@@ -135,8 +135,6 @@ bool MScore::svgPrinting = false;
 
 double MScore::pixelRatio  = 0.8;         // DPI / logicalDPI
 
-MPaintDevice* MScore::_paintDevice;
-
 Sequencer* MScore::seq = 0;
 
 extern void initDrumset();
@@ -437,42 +435,5 @@ const char* MScore::errorGroup()
         }
     }
     return "";
-}
-
-//---------------------------------------------------------
-//   paintDevice
-//---------------------------------------------------------
-
-MPaintDevice* MScore::paintDevice()
-{
-    if (!_paintDevice) {
-        _paintDevice = new MPaintDevice();
-    }
-    return _paintDevice;
-}
-
-//---------------------------------------------------------
-//   metric
-//---------------------------------------------------------
-
-int MPaintDevice::metric(PaintDeviceMetric m) const
-{
-    switch (m) {
-    case QPaintDevice::PdmDpiY:
-        return int(DPI);
-    default:
-//printf("debug: metric %d\n", int(m));
-        return 1;
-    }
-}
-
-//---------------------------------------------------------
-//   paintEngine
-//---------------------------------------------------------
-
-QPaintEngine* MPaintDevice::paintEngine() const
-{
-//printf("paint engine\n");
-    return 0;
 }
 }
