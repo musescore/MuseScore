@@ -19,29 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_INSTRUMENTSSCENE_INSTRUMENTSTYPES_H
+#define MU_INSTRUMENTSSCENE_INSTRUMENTSTYPES_H
 
-#include "testing/environment.h"
+#include <QObject>
 
-#include "engraving/engravingmodule.h"
-#include "framework/fonts/fontsmodule.h"
-
-#include "framework/uicomponents/uicomponentsmodule.h"
-
-#include "libmscore/score.h"
-#include "libmscore/musescoreCore.h"
-
-#include "log.h"
-
-static mu::testing::SuiteEnvironment engraving_se(
+namespace mu::instrumentsscene {
+class InstrumentsTreeItemType
 {
-    new mu::fonts::FontsModule(),
-    new mu::engraving::EngravingModule(),
-    new mu::uicomponents::UiComponentsModule()
-},
-    []() {
-    LOGI() << "engraving tests suite post init";
-    Ms::MScore::noGui = true;
+    Q_GADGET
 
-    new Ms::MuseScoreCore();
+public:
+    enum class ItemType {
+        UNDEFINED = -1,
+        ROOT,
+        PART,
+        INSTRUMENT,
+        STAFF,
+        CONTROL_ADD_STAFF,
+        CONTROL_ADD_DOUBLE_INSTRUMENT
+    };
+
+    Q_ENUM(ItemType)
+};
 }
-    );
+
+#endif // MU_INSTRUMENTSSCENE_INSTRUMENTSTYPES_H

@@ -19,29 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_INSTRUMENTSSCENE_INSTRUMENTSSCENEMODULE_H
+#define MU_INSTRUMENTSSCENE_INSTRUMENTSSCENEMODULE_H
 
-#include "testing/environment.h"
+#include "modularity/imodulesetup.h"
 
-#include "engraving/engravingmodule.h"
-#include "framework/fonts/fontsmodule.h"
-
-#include "framework/uicomponents/uicomponentsmodule.h"
-
-#include "libmscore/score.h"
-#include "libmscore/musescoreCore.h"
-
-#include "log.h"
-
-static mu::testing::SuiteEnvironment engraving_se(
+namespace mu::instrumentsscene {
+class InstrumentsSceneModule : public modularity::IModuleSetup
 {
-    new mu::fonts::FontsModule(),
-    new mu::engraving::EngravingModule(),
-    new mu::uicomponents::UiComponentsModule()
-},
-    []() {
-    LOGI() << "engraving tests suite post init";
-    Ms::MScore::noGui = true;
-
-    new Ms::MuseScoreCore();
+public:
+    std::string moduleName() const override;
+    void registerExports() override;
+    void resolveImports() override;
+    void registerResources() override;
+    void registerUiTypes() override;
+};
 }
-    );
+
+#endif // MU_INSTRUMENTSSCENE_INSTRUMENTSSCENEMODULE_H

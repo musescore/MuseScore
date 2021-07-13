@@ -158,7 +158,7 @@ set(LINK_LIB ${LINK_LIB}
     palette
     inspector
     playback
-    instruments
+    instrumentsscene
     converter
     )
 

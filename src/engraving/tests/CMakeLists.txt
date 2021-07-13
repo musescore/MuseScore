@@ -77,10 +77,6 @@ set(MODULE_TEST_LINK
     qzip
     engraving
     fonts
-#    ui
-#    actions
-#    notation
-    instruments
     uicomponents
     )
 
