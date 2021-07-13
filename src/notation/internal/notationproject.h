@@ -57,7 +57,7 @@ public:
     ValNt<bool> needSave() const override;
 
     Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) override;
-    Ret writeToDevice(io::Device& destinationDevice) override;
+    Ret writeToDevice(io::Device* device) override;
 
     Meta metaInfo() const override;
     void setMetaInfo(const Meta& meta) override;
@@ -73,6 +73,8 @@ private:
     Ret saveScore(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save);
     Ret saveSelectionOnScore(const io::path& path = io::path());
     Ret exportProject(const io::path& path, const std::string& suffix);
+    Ret doSave(bool generateBackup);
+    Ret writeProject(io::Device* device, bool onlySelection);
 
     mu::engraving::EngravingProjectPtr m_engravingProject = nullptr;
     MasterNotationPtr m_masterNotation = nullptr;

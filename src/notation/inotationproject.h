@@ -45,7 +45,7 @@ public:
     virtual ValNt<bool> needSave() const = 0;
 
     virtual Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) = 0;
-    virtual Ret writeToDevice(io::Device& destinationDevice) = 0;
+    virtual Ret writeToDevice(io::Device* device) = 0;
 
     virtual Meta metaInfo() const = 0;
     virtual void setMetaInfo(const Meta& meta) = 0;
