@@ -302,23 +302,6 @@ struct MScoreError {
 };
 
 //---------------------------------------------------------
-//   MPaintDevice
-///   \cond PLUGIN_API \private \endcond
-//---------------------------------------------------------
-
-class MPaintDevice : public QPaintDevice
-{
-protected:
-    virtual int metric(PaintDeviceMetric m) const;
-
-public:
-    MPaintDevice()
-        : QPaintDevice() {}
-    virtual QPaintEngine* paintEngine() const;
-    virtual ~MPaintDevice() {}
-};
-
-//---------------------------------------------------------
 //   MScore
 //    MuseScore application object
 //---------------------------------------------------------
@@ -333,8 +316,6 @@ class MScore
     static QString _globalShare;
     static int _hRaster, _vRaster;
     static bool _verticalOrientation;
-
-    static MPaintDevice* _paintDevice;
 
 public:
     enum class DirectionH : char {   /**.\{*/
@@ -426,8 +407,6 @@ public:
     static qreal verticalPageGap;
     static qreal horizontalPageGapEven;
     static qreal horizontalPageGapOdd;
-
-    static MPaintDevice* paintDevice();
 
     static void setError(MsError e) { _error = e; }
     static const char* errorMessage();
