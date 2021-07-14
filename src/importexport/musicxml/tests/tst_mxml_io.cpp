@@ -93,8 +93,8 @@ private slots:
     void barStyles() { mxmlIoTest("testBarStyles"); }
     void barStyles2() { mxmlIoTest("testBarStyles2"); }
     void barStyles3() { mxmlIoTest("testBarStyles3"); }
-    // void breaksImplExpl() { mxmlMscxExportTestRefBreaks("testBreaksImplExpl"); } fail after sync with 3.x
-    // void breaksMMRest() { mxmlMscxExportTestRefBreaks("testBreaksMMRest"); } fail after sync with 3.x
+    void breaksImplExpl() { mxmlMscxExportTestRefBreaks("testBreaksImplExpl"); }
+    void breaksMMRest() { mxmlMscxExportTestRefBreaks("testBreaksMMRest"); }
     // void breaksManual() { mxmlIoTestRefBreaks("testBreaksManual"); } fail after sync with 3.x
     // void breaksPage() { mxmlMscxExportTestRefBreaks("testBreaksPage"); } fail after sync with 3.x
     // void breaksSystem() { mxmlMscxExportTestRefBreaks("testBreaksSystem"); } fail after sync with 3.x
@@ -144,7 +144,7 @@ private slots:
     void incorrectStaffNumber1() { mxmlIoTestRef("testIncorrectStaffNumber1"); }
     void incorrectStaffNumber2() { mxmlIoTestRef("testIncorrectStaffNumber2"); }
     void instrumentChangeMIDIportExport() { mxmlMscxExportTestRef("testInstrumentChangeMIDIportExport"); }
-    //void instrumentSound() { mxmlIoTestRef("testInstrumentSound"); } fail XML parsing failed. (3) Opening and ending tag mismatch.
+    void instrumentSound() { mxmlIoTestRef("testInstrumentSound"); }
     void invalidTimesig() { mxmlIoTestRef("testInvalidTimesig"); }
     void invisibleElements() { mxmlIoTest("testInvisibleElements"); }
     void keysig1() { mxmlIoTest("testKeysig1"); }
@@ -159,7 +159,7 @@ private slots:
     void lyricsVoice2a() { mxmlIoTest("testLyricsVoice2a"); }
     void lyricsVoice2b() { mxmlIoTestRef("testLyricsVoice2b"); }
     void measureLength() { mxmlIoTestRef("testMeasureLength"); }
-    //void measureRepeats1() { mxmlIoTestRef("testMeasureRepeats1"); } fail libmscore/style.cpp Q_ASSERT(idx == textStyles[int(idx)].tid);
+    void measureRepeats1() { mxmlIoTestRef("testMeasureRepeats1"); }
     //void measureRepeats2() { mxmlIoTestRef("testMeasureRepeats2"); } fail libmscore/style.cpp Q_ASSERT(idx == textStyles[int(idx)].tid);
     void measureRepeats3() { mxmlIoTest("testMeasureRepeats3"); }
     void midiPortExport() { mxmlMscxExportTestRef("testMidiPortExport"); }
@@ -232,7 +232,7 @@ private slots:
     void twoNoteTremoloTuplet() { mxmlIoTest("testTwoNoteTremoloTuplet"); }
     void uninitializedDivisions() { mxmlIoTestRef("testUninitializedDivisions"); }
     void unusualDurations() { mxmlIoTestRef("testUnusualDurations"); }
-    //void virtualInstruments() { mxmlIoTestRef("testVirtualInstruments"); } fail XML parsing failed. (3) Opening and ending tag mismatch.
+    void virtualInstruments() { mxmlIoTestRef("testVirtualInstruments"); }
     void voiceMapper1() { mxmlIoTestRef("testVoiceMapper1"); }
     void voiceMapper2() { mxmlIoTestRef("testVoiceMapper2"); }
     void voiceMapper3() { mxmlIoTestRef("testVoiceMapper3"); }
