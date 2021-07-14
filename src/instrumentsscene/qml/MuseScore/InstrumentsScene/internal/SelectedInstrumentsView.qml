@@ -25,7 +25,7 @@ import QtQuick.Controls 2.12
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Instruments 1.0
+import MuseScore.InstrumentsScene 1.0
 
 Item {
     id: root
