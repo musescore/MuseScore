@@ -2282,6 +2282,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
             }
 
       // Sort and add delayed directions
+      delayedDirections.combineTempoText();
       std::sort(delayedDirections.begin(), delayedDirections.end(),
             // Lambda: sort by absolute value of totalY
             [](const MusicXMLDelayedDirectionElement* a, const MusicXMLDelayedDirectionElement* b) -> bool {
@@ -2557,6 +2558,20 @@ static void preventNegativeTick(const Fraction& tick, Fraction& offset, MxmlLogg
             }
       }
 
+//---------------------------------------------------------
+//   isTempoOrphanCandidate
+//---------------------------------------------------------
+
+bool MusicXMLDelayedDirectionElement::isTempoOrphanCandidate() const
+      {
+      return _element->isStaffText()
+            && _placement == "above"
+            && isBold();
+      }
+
+//---------------------------------------------------------
+//   addElem
+//---------------------------------------------------------
 
 void MusicXMLDelayedDirectionElement::addElem()
       {
@@ -2568,6 +2583,38 @@ QString MusicXMLParserDirection::placement() const
       if (_placement == "" && hasTotalY())
             return totalY() < 0 ? "above" : "below";
       else return _placement;
+      }
+
+//---------------------------------------------------------
+//   combineTempoText
+//---------------------------------------------------------
+/**
+ Combine potentially separated tempo text.
+ */
+
+void DelayedDirectionsList::combineTempoText()
+      {
+      // Iterate through candidates 
+      for (auto ddi1 = rbegin(), ddi1Next = ddi1; ddi1 != rend(); ddi1 = ddi1Next) {
+            ddi1Next = std::next(ddi1);
+            if ((*ddi1)->isTempoOrphanCandidate()) {
+                  for (auto ddi2 = rbegin(), ddi2Next = ddi2; ddi2 != rend(); ddi2 = ddi2Next) {
+                        ddi2Next = std::next(ddi2);
+                        // Combine with tempo text if present
+                        if (ddi1 != ddi2
+                            && (*ddi2)->tick() == (*ddi1)->tick()
+                            && (*ddi2)->element()->isTempoText()) {
+                              TempoText* tt = toTempoText((*ddi2)->element());
+                              StaffText* st = toStaffText((*ddi1)->element());
+                              QString sep = tt->plainText().endsWith(' ') || st->plainText().startsWith(' ') ? "" : " ";
+                              tt->setXmlText(tt->xmlText() + sep + st->xmlText());
+                              delete st;
+                              ddi1Next = decltype(ddi1){ erase(std::next(ddi1).base()) };
+                              break;
+                              }
+                        }
+                  }
+            }
       }
 
 //---------------------------------------------------------
@@ -2652,41 +2699,44 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
       else if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
             TextBase* t = 0;
-            if (_tpoSound > 0.1) {
+            if (_tpoSound > 0.1 || attemptTempoTextCoercion(tick)) {
                   // to prevent duplicates, only create a TempoText if none is present yet
                   if (hasTempoTextAtTick(_score->tempomap(), tick.ticks())) {
                         _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
                         }
                   else {
-                        _tpoSound /= 60;
                         t = new TempoText(_score);
                         QString rawWordsText = _wordsText;
                         rawWordsText.remove(QRegularExpression("(<.*?>)"));
                         QString sep = _metroText != "" && _wordsText != "" && rawWordsText.back() != ' ' ? " " : "";
                         t->setXmlText(_wordsText + sep + _metroText);
-                        ((TempoText*) t)->setTempo(_tpoSound);
+                        if (_tpoSound > 0.1) {
+                              _tpoSound /= 60;
+                              ((TempoText*) t)->setTempo(_tpoSound);
+                              _score->setTempo(tick, _tpoSound);
+                              }
+                        else {
+                              ((TempoText*) t)->setTempo(_score->tempo(tick)); // Maintain tempo (somewhat hacky)
+                              }
                         ((TempoText*) t)->setFollowText(true);
-                        _score->setTempo(tick, _tpoSound);
                         }
+                  }
+            else if (_wordsText != "" || _metroText != "") {
+                  t = new StaffText(_score);
+                  t->setXmlText(_wordsText + _metroText);
+                  isExpressionText = _wordsText.contains("<i>") && _metroText.isEmpty();
                   }
             else {
-                  if (_wordsText != "" || _metroText != "") {
-                        t = new StaffText(_score);
-                        t->setXmlText(_wordsText + _metroText);
-                        isExpressionText = _wordsText.contains("<i>") && _metroText.isEmpty();
-                        }
-                  else {
-                        t = new RehearsalMark(_score);
-                        if (!_rehearsalText.contains("<b>"))
-                              _rehearsalText = "<b></b>" + _rehearsalText;  // explicitly turn bold off
-                        t->setXmlText(_rehearsalText);
-                        if (!_hasDefaultY) {
-                              t->setPlacement(Placement::ABOVE);  // crude way to force placement TODO improve ?
-                              t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
-                              }
+                  t = new RehearsalMark(_score);
+                  if (!_rehearsalText.contains("<b>"))
+                        _rehearsalText = "<b></b>" + _rehearsalText;  // explicitly turn bold off
+                  t->setXmlText(_rehearsalText);
+                  if (!_hasDefaultY) {
+                        t->setPlacement(Placement::ABOVE);  // crude way to force placement TODO improve ?
+                        t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
                         }
                   }
-
+               
             if (t) {
                   if (_enclosure == "circle") {
                         t->setFrameType(FrameType::CIRCLE);
@@ -2716,7 +2766,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   else {
                         // Add element to score later, after collecting all the others and sorting by default-y
                         // This allows default-y to be at least respected by the order of elements
-                        MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, t, track, wordsPlacement, measure, tick + _offset);
+                        MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, t, track, wordsPlacement, measure, tick + _offset, _isBold);
                         delayedDirections.push_back(delayedDirection);
                         }
                   }
@@ -2763,15 +2813,15 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
             // Add element to score later, after collecting all the others and sorting by default-y
             // This allows default-y to be at least respected by the order of elements
-            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, dyn, track, dynamicsPlacement, measure, tick + _offset);
+            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, dyn, track, dynamicsPlacement, measure, tick + _offset, _isBold);
             delayedDirections.push_back(delayedDirection);
             }
 
       // handle the elems
-      foreach( auto elem, _elems) {
+      for (auto elem : _elems) {
             // Add element to score later, after collecting all the others and sorting by default-y
             // This allows default-y to be at least respected by the order of elements
-            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, elem, track, placement(), measure, tick + _offset);
+            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, elem, track, placement(), measure, tick + _offset, _isBold);
             delayedDirections.push_back(delayedDirection);
             }
 
@@ -2840,6 +2890,7 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
       while (_e.readNextStartElement()) {
             _defaultY = _e.attributes().value("default-y").toDouble(&_hasDefaultY) * -0.1;
             _relativeY = _e.attributes().value("relative-y").toDouble(&_hasRelativeY) * -0.1;
+            _isBold &= _e.attributes().value("font-weight").toString() == "bold";
             QString number = _e.attributes().value("number").toString();
             int n = 0;
             if (number != "") {
@@ -3198,10 +3249,70 @@ void MusicXMLInferredFingering::addToNotes(std::vector<Note*>& notes) const
 
 MusicXMLDelayedDirectionElement* MusicXMLInferredFingering::toDelayedDirection()
       {
-      auto dd = new MusicXMLDelayedDirectionElement(_totalY, _element, _track, _placement, _measure, _tick);
+      auto dd = new MusicXMLDelayedDirectionElement(_totalY, _element, _track, _placement, _measure, _tick, false);
       return dd;
       }
 
+//---------------------------------------------------------
+//   convertTextToNotes
+//---------------------------------------------------------
+/**
+ Converts note characters in _wordsText to proper symbols and
+ returns the tempo value of the resulting notes
+ */
+
+double MusicXMLParserDirection::convertTextToNotes()
+      {
+      QRegularExpression notesRegex("(?<note>[yxeqhwW]\\.{0,2})(\\s*=)");
+      QString notesSubstring = notesRegex.match(_wordsText).captured("note");
+
+      QList<QPair<QString, QString>> noteSyms{{"q", QString("<sym>metNoteQuarterUp</sym>")},   // note4_Sym
+                                                {"e", QString("<sym>metNote8thUp</sym>")},       // note8_Sym
+                                                {"h", QString("<sym>metNoteHalfUp</sym>")},      // note2_Sym
+                                                {"y", QString("<sym>metNote32ndUp</sym>")},      // note32_Sym
+                                                {"x", QString("<sym>metNote16thUp</sym>")},      // note16_Sym
+                                                {"w", QString("<sym>metNoteWhole</sym>")},
+                                                {"W", QString("<sym>metNoteDoubleWhole</sym>")}};
+      for (auto noteSym : noteSyms) {
+            if (notesSubstring.contains(noteSym.first)) {
+                  notesSubstring.replace(noteSym.first, noteSym.second);
+                  break;
+                  }
+            }
+      notesSubstring.replace(".", QString("<sym>metAugmentationDot</sym>")); // dot
+      _wordsText.replace(notesRegex, notesSubstring + "\\2");
+
+      double tempoValue = TempoText::findTempoValue(_wordsText);
+      if (!tempoValue) tempoValue = 1.0 / 60.0; // default to quarter note
+      return tempoValue;
+      }
+
+//---------------------------------------------------------
+//   attemptTempoTextCoercion
+//---------------------------------------------------------
+/**
+ Infers if a direction is likely tempo text, possibly changing
+ the _wordsText to the appropriate note symbol and inferring the _tpoSound.
+ */
+
+bool MusicXMLParserDirection::attemptTempoTextCoercion(const Fraction& tick)
+      {
+      QList<QString> tempoWords{"rit", "rall", "accel", "tempo", "allegr", "poco", "molto", "più", "meno", "mosso", "rubato"};
+      if (_wordsText.contains(QRegularExpression("[yxeqhwW.]+\\s*=\\s*\\d+"))) {
+            QRegularExpression tempoValRegex("=\\s*(?<tempo>\\d+)");
+            double tempoVal = tempoValRegex.match(_wordsText).captured("tempo").toDouble();
+            double noteVal = convertTextToNotes() * 60.0;
+            _tpoSound = tempoVal / noteVal;
+            return true;
+            }
+      else if (placement() == "above" && _isBold) {
+            if (tick == Fraction(0, 1)) return true;
+            for (auto tempoWord : tempoWords)
+                  if (_wordsText.contains(tempoWord, Qt::CaseInsensitive))
+                        return true;
+            }
+      return false;
+      }
 
 //---------------------------------------------------------
 //   handleRepeats
@@ -5771,7 +5882,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       }
       // Add element to score later, after collecting all the others and sorting by default-y
       // This allows default-y to be at least respected by the order of elements
-      MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY ? totalY : 100, se, track, placement, measure, sTime + offset);
+      MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY ? totalY : 100, se, track, placement, measure, sTime + offset, false);
       delayedDirections.push_back(delayedDirection);
       }
 
@@ -6785,7 +6896,6 @@ bool MusicXMLParserNotations::skipCombine(const Notation& n1, const Notation& n2
 //---------------------------------------------------------
 //   combineArticulations
 //---------------------------------------------------------
-
 /**
  Combine any eligible articulations.
  i.e. accent + staccato = staccato accent
@@ -7120,7 +7230,7 @@ MusicXMLParserDirection::MusicXMLParserDirection(QXmlStreamReader& e,
                                                  MusicXMLParserPass2& pass2,
                                                  MxmlLogger* logger)
       : _e(e), _score(score), _pass1(pass1), _pass2(pass2), _logger(logger),
-      _hasDefaultY(false), _defaultY(0.0), _hasRelativeY(false), _relativeY(0.0), 
+      _hasDefaultY(false), _defaultY(0.0), _hasRelativeY(false), _relativeY(0.0), _isBold(true),
       _tpoMetro(0), _tpoSound(0), _offset(0, 1)
       {
       // nothing

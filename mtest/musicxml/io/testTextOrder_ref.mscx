@@ -154,9 +154,11 @@
           <StaffText>
             <text>2nd time ad lib.</text>
             </StaffText>
-          <StaffText>
+          <Tempo>
+            <tempo>2</tempo>
+            <followText>1</followText>
             <text><font size="12"/><b>Straight</b></text>
-            </StaffText>
+            </Tempo>
           <StaffText>
             <placement>below</placement>
             <text><i>Cantabile</i></text>

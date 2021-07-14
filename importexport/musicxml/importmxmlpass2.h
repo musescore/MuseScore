@@ -185,7 +185,6 @@ class MxmlLogger;
 class MusicXMLDelayedDirectionElement;
 class MusicXMLInferredFingering;
 
-using DelayedDirectionsList = QList<MusicXMLDelayedDirectionElement*>;
 using InferredFingeringsList = QList<MusicXMLInferredFingering*>;
 using SlurStack = std::array<SlurDesc, MAX_NUMBER_LEVEL>;
 using TrillStack = std::array<Trill*, MAX_NUMBER_LEVEL>;
@@ -194,6 +193,15 @@ using OttavasStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using HairpinsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerSet = std::set<Spanner*>;
+
+//---------------------------------------------------------
+//   DelayedDirectionsList
+//---------------------------------------------------------
+
+class DelayedDirectionsList : public QList<MusicXMLDelayedDirectionElement*> {
+public:
+      void combineTempoText();
+};
 
 //---------------------------------------------------------
 //   MusicXMLParserNotations
@@ -382,6 +390,7 @@ private:
       bool _hasRelativeY;
       qreal _relativeY;
       bool hasTotalY() const { return _hasRelativeY || _hasDefaultY; }
+      bool _isBold;
       double _tpoMetro;                 // tempo according to metronome
       double _tpoSound;                 // tempo according to sound
       QList<Element*> _elems;
@@ -402,6 +411,9 @@ private:
       bool isLikelyCredit(const Fraction& tick) const;
       void textToDynamic(QString& text) const;
       bool directionToDynamic();
+      bool isLikelyTempoText();
+      bool attemptTempoTextCoercion(const Fraction& tick);
+      double convertTextToNotes();
       void skipLogCurrElem();
       };
 
@@ -410,17 +422,23 @@ private:
 //---------------------------------------------------------
 /**
  Helper class to allow Direction elements to be sorted by _totalY
- before being added to the score.
+ before being added to the score. TODO: merge into MusicXMLParserDirection.
  */
 
 class MusicXMLDelayedDirectionElement {
 public:
       MusicXMLDelayedDirectionElement(qreal totalY, Element* element, int track,
-                                    QString placement, Measure* measure, Fraction tick) :
+                                    QString placement, Measure* measure, Fraction tick, bool isBold) :
                                      _totalY(totalY),  _element(element), _track(track), _placement(placement),
-                                      _measure(measure), _tick(tick) {}
-      void addElem();
+                                      _measure(measure), _tick(tick), _isBold(isBold) {}
+      
       qreal totalY() const { return _totalY; }
+      Element* element() { return _element; }
+      Fraction tick() const { return _tick; }
+      
+      void addElem();
+      bool isBold() const { return _isBold; }
+      bool isTempoOrphanCandidate() const;
 
 private:
       qreal _totalY;
@@ -429,6 +447,7 @@ private:
       QString _placement;
       Measure* _measure;
       Fraction _tick;
+      bool _isBold;
       };
 
 //---------------------------------------------------------

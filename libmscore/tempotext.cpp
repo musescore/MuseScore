@@ -179,6 +179,23 @@ static const TempoPattern tpSym[] = {
       };
 
 //---------------------------------------------------------
+//   findTempoValue
+//    find the value (fraction of a minute) of the symbols
+//    in a string.
+//---------------------------------------------------------
+
+double TempoText::findTempoValue(const QString& s)
+      {
+      for (const auto& i : tpSym) {
+            QRegularExpression re(i.pattern);
+            if (s.contains(re)) {
+                  return i.f;
+                  }
+            }
+      return 0;
+      }
+
+//---------------------------------------------------------
 //   duration2tempoTextString
 //    find the tempoText string representation for duration
 //---------------------------------------------------------
