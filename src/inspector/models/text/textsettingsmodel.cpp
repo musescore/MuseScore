@@ -169,7 +169,7 @@ void TextSettingsModel::resetProperties()
 
 void TextSettingsModel::insertSpecialCharacters()
 {
-    NOT_IMPLEMENTED;
+    dispatcher()->dispatch("show-keys");
 }
 
 void TextSettingsModel::showStaffTextProperties()
