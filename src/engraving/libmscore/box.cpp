@@ -112,19 +112,18 @@ void Box::draw(mu::draw::Painter* painter) const
     const bool showFrame = showBlueFrame || (score() ? score()->showFrames() : false);
 
     if (showFrame) {
-        qreal w = spatium() * .15;
-        QPainterPathStroker stroker;
-        stroker.setWidth(w);
-        stroker.setJoinStyle(Qt::PenJoinStyle::MiterJoin);
-        stroker.setCapStyle(Qt::PenCapStyle::SquareCap);
+        qreal lineWidth = spatium() * .15;
+        Pen pen;
+        pen.setWidthF(lineWidth);
+        pen.setJoinStyle(PenJoinStyle::MiterJoin);
+        pen.setCapStyle(PenCapStyle::SquareCap);
+        pen.setColor(showBlueFrame ? MScore::selectColor[0] : MScore::frameMarginColor);
+        pen.setDashPattern({ 1, 3 });
 
-        stroker.setDashPattern({ 1, 3 });
-        PainterPath path;
-        w *= .5;
-        path.addRect(bbox().adjusted(w, w, -w, -w).toQRectF());
-        PainterPath stroke = stroker.createStroke(path);
         painter->setBrush(BrushStyle::NoBrush);
-        painter->fillPath(stroke, showBlueFrame ? MScore::selectColor[0] : MScore::frameMarginColor);
+        painter->setPen(pen);
+        lineWidth *= 0.5;
+        painter->drawRect(bbox().adjusted(lineWidth, lineWidth, -lineWidth, -lineWidth));
     }
 }
 
