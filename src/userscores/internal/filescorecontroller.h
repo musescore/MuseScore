@@ -29,7 +29,7 @@
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
 #include "async/asyncable.h"
-#include "project/inotationcreator.h"
+#include "project/iprojectcreator.h"
 #include "context/iglobalcontext.h"
 #include "iplatformrecentfilescontroller.h"
 #include "multiinstances/imultiinstancesprovider.h"
@@ -40,7 +40,7 @@ class FileScoreController : public IFileScoreController, public actions::Actiona
 {
     INJECT(userscores, actions::IActionsDispatcher, dispatcher)
     INJECT(userscores, framework::IInteractive, interactive)
-    INJECT(userscores, project::INotationCreator, notationCreator)
+    INJECT(userscores, project::IProjectCreator, notationCreator)
     INJECT(userscores, context::IGlobalContext, globalContext)
     INJECT(userscores, IUserScoresConfiguration, configuration)
     INJECT(userscores, IPlatformRecentFilesController, platformRecentFilesController)

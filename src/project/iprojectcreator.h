@@ -19,13 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "notationcreator.h"
+#ifndef MU_PROJECT_IPROJECTCREATOR_H
+#define MU_PROJECT_IPROJECTCREATOR_H
 
-#include "notationproject.h"
+#include "inotationproject.h"
 
-using namespace mu::project;
+#include "modularity/imoduleexport.h"
 
-INotationProjectPtr NotationCreator::newNotationProject() const
+namespace mu::project {
+class IProjectCreator : MODULE_EXPORT_INTERFACE
 {
-    return std::make_shared<NotationProject>();
+    INTERFACE_ID(IProjectCreator)
+
+public:
+    virtual ~IProjectCreator() = default;
+
+    virtual INotationProjectPtr newNotationProject() const = 0;
+};
 }
+
+#endif // MU_PROJECT_IPROJECTCREATOR_H

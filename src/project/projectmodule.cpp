@@ -24,7 +24,7 @@
 #include <QQmlEngine>
 
 #include "modularity/ioc.h"
-#include "internal/notationcreator.h"
+#include "internal/projectcreator.h"
 #include "internal/notationreadersregister.h"
 #include "internal/notationwritersregister.h"
 
@@ -38,7 +38,7 @@ std::string ProjectModule::moduleName() const
 
 void ProjectModule::registerExports()
 {
-    ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
+    ioc()->registerExport<IProjectCreator>(moduleName(), new ProjectCreator());
     ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());
     ioc()->registerExport<INotationWritersRegister>(moduleName(), new NotationWritersRegister());
 }
