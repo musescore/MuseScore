@@ -23,7 +23,7 @@ import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Instruments 1.0
+import MuseScore.InstrumentsScene 1.0
 
 StyledPopupView {
     id: root

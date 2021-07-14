@@ -67,7 +67,7 @@ void InstrumentsSceneModule::resolveImports()
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerUri(Uri("musescore://instruments/select"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Instruments/InstrumentsDialog.qml"));
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/InstrumentsScene/InstrumentsDialog.qml"));
     }
 }
 
@@ -78,11 +78,11 @@ void InstrumentsSceneModule::registerResources()
 
 void InstrumentsSceneModule::registerUiTypes()
 {
-    qmlRegisterType<InstrumentListModel>("MuseScore.Instruments", 1, 0, "InstrumentListModel");
-    qmlRegisterType<InstrumentSettingsModel>("MuseScore.Instruments", 1, 0, "InstrumentSettingsModel");
-    qmlRegisterType<StaffSettingsModel>("MuseScore.Instruments", 1, 0, "StaffSettingsModel");
-    qmlRegisterType<InstrumentsPanelTreeModel>("MuseScore.Instruments", 1, 0, "InstrumentsPanelTreeModel");
-    qmlRegisterUncreatableType<InstrumentsTreeItemType>("MuseScore.Instruments", 1, 0, "InstrumentsTreeItemType",
+    qmlRegisterType<InstrumentListModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentListModel");
+    qmlRegisterType<InstrumentSettingsModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentSettingsModel");
+    qmlRegisterType<StaffSettingsModel>("MuseScore.InstrumentsScene", 1, 0, "StaffSettingsModel");
+    qmlRegisterType<InstrumentsPanelTreeModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentsPanelTreeModel");
+    qmlRegisterUncreatableType<InstrumentsTreeItemType>("MuseScore.InstrumentsScene", 1, 0, "InstrumentsTreeItemType",
                                                         "Cannot create a ContainerType");
 
     auto uiengine = ioc()->resolve<IUiEngine>(moduleName());
