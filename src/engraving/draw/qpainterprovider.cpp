@@ -62,11 +62,6 @@ IPaintProviderPtr QPainterProvider::make(QPainter* qp, bool overship)
     return std::make_shared<QPainterProvider>(qp, overship);
 }
 
-QPaintDevice* QPainterProvider::device() const
-{
-    return m_painter->device();
-}
-
 QPainter* QPainterProvider::qpainter() const
 {
     return m_painter;

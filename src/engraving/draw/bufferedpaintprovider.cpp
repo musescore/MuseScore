@@ -40,16 +40,6 @@ BufferedPaintProvider::~BufferedPaintProvider()
     delete m_drawObjectsLogger;
 }
 
-QPaintDevice* BufferedPaintProvider::device() const
-{
-    return nullptr;
-}
-
-QPainter* BufferedPaintProvider::qpainter() const
-{
-    return nullptr;
-}
-
 void BufferedPaintProvider::beginTarget(const std::string& name)
 {
     clear();

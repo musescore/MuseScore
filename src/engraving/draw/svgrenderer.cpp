@@ -22,7 +22,10 @@
 #include "svgrenderer.h"
 
 #ifndef NO_ENGRAVING_QSVGRENDER
+#include <QPainter>
 #include <QSvgRenderer>
+
+#include "qpainterprovider.h"
 #endif
 
 #include "log.h"
@@ -61,7 +64,11 @@ mu::SizeF SvgRenderer::defaultSize() const
 void SvgRenderer::render(Painter* painter, const RectF& rect)
 {
 #ifndef NO_ENGRAVING_QSVGRENDER
-    m_qSvgRenderer->render(painter->qpainter(), rect.toQRectF());
+    IPaintProviderPtr paintProvider = painter->provider();
+    std::shared_ptr<QPainterProvider> qPaintProvider = std::dynamic_pointer_cast<QPainterProvider>(paintProvider);
+    if (qPaintProvider) {
+        m_qSvgRenderer->render(qPaintProvider->qpainter(), rect.toQRectF());
+    }
 #else
     NOT_SUPPORTED;
     UNUSED(painter);
