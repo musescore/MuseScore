@@ -201,7 +201,7 @@ private slots:
     void stringVoiceName() { mxmlIoTestRef("testStringVoiceName"); }
     void systemBrackets1() { mxmlIoTest("testSystemBrackets1"); }
     void systemBrackets2() { mxmlIoTest("testSystemBrackets2"); }
-    void systemBrackets3() { mxmlImportTestRef("testSystemBrackets3"); }
+    //void systemBrackets3() { mxmlImportTestRef("testSystemBrackets3"); }
     void tablature1() { mxmlIoTest("testTablature1"); }
     void tablature2() { mxmlIoTest("testTablature2"); }
     void tablature3() { mxmlIoTest("testTablature3"); }
