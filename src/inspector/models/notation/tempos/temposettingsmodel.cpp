@@ -30,7 +30,6 @@ using namespace mu::inspector;
 TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_TEMPO);
     setTitle(qtrc("inspector", "Tempo"));
     createProperties();

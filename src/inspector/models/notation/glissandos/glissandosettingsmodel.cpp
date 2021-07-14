@@ -28,7 +28,6 @@ using namespace mu::inspector;
 GlissandoSettingsModel::GlissandoSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_GLISSANDO);
     setTitle(qtrc("inspector", "Glissando"));
     createProperties();

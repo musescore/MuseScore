@@ -28,7 +28,6 @@ using namespace mu::inspector;
 TextFrameSettingsModel::TextFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_TEXT_FRAME);
     setTitle(qtrc("inspector", "Text frame"));
     createProperties();

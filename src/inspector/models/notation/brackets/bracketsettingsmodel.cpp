@@ -31,7 +31,6 @@ using namespace mu::inspector;
 BracketSettingsModel::BracketSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_BRACKET);
     setTitle(qtrc("inspector", "Bracket"));
     createProperties();

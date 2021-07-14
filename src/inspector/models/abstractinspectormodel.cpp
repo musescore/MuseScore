@@ -116,7 +116,7 @@ AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionType
     const Ms::ElementType elementType)
 {
     if (NOTATION_ELEMENT_MODEL_TYPES.keys().contains(elementType)) {
-        return InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT;
+        return InspectorSectionType::SECTION_NOTATION;
     } else if (TEXT_ELEMENT_TYPES.contains(elementType)) {
         return InspectorSectionType::SECTION_TEXT;
     }
@@ -133,6 +133,15 @@ AbstractInspectorModel::InspectorModelType AbstractInspectorModel::notationEleme
     return InspectorModelType::TYPE_UNDEFINED;
 }
 
+Ms::ElementType AbstractInspectorModel::notationElementType(const AbstractInspectorModel::InspectorModelType modelType)
+{
+    if (NOTATION_ELEMENT_MODEL_TYPES.values().contains(modelType)) {
+        return NOTATION_ELEMENT_MODEL_TYPES.key(modelType);
+    }
+
+    return Ms::ElementType::INVALID;
+}
+
 bool AbstractInspectorModel::isEmpty() const
 {
     return m_isEmpty;
@@ -144,7 +153,7 @@ QList<Ms::ElementType> AbstractInspectorModel::supportedElementTypesBySectionTyp
     switch (sectionType) {
     case InspectorSectionType::SECTION_GENERAL:
         return { Ms::ElementType::MAXTYPE };
-    case InspectorSectionType::SECTION_NOTATION_MULTI_ELEMENTS: {
+    case InspectorSectionType::SECTION_NOTATION: {
         return NOTATION_ELEMENT_MODEL_TYPES.keys();
     }
     case InspectorSectionType::SECTION_TEXT: {

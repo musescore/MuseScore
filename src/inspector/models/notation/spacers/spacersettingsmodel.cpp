@@ -30,7 +30,6 @@ using namespace mu::inspector;
 SpacerSettingsModel::SpacerSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_SPACER);
     setTitle(qtrc("inspector", "Spacer"));
     createProperties();

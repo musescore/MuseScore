@@ -32,7 +32,6 @@ using namespace mu::inspector;
 TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_TIME_SIGNATURE);
     setTitle(qtrc("inspector", "Time signature"));
     createProperties();

@@ -33,6 +33,31 @@ QObject* AbstractInspectorProxyModel::modelByType(const InspectorModelType type)
     return m_modelsHash.value(static_cast<int>(type));
 }
 
+QVariantList AbstractInspectorProxyModel::models()
+{
+    QVariantList objects;
+
+    for (AbstractInspectorModel* model : m_modelsHash.values()) {
+        objects << QVariant::fromValue(qobject_cast<QObject*>(model));
+    }
+
+    return objects;
+}
+
+bool AbstractInspectorProxyModel::isMultiModel() const
+{
+    return m_modelsHash.count() > 1;
+}
+
+QObject* AbstractInspectorProxyModel::firstModel()
+{
+    if (m_modelsHash.empty()) {
+        return nullptr;
+    }
+
+    return m_modelsHash.values().first();
+}
+
 void AbstractInspectorProxyModel::requestResetToDefaults()
 {
     for (AbstractInspectorModel* model : m_modelsHash.values()) {

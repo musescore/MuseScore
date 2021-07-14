@@ -28,7 +28,6 @@ using namespace mu::inspector;
 ChordSymbolSettingsModel::ChordSymbolSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_CHORD_SYMBOL);
     setTitle(qtrc("inspector", "Chord symbol"));
     createProperties();

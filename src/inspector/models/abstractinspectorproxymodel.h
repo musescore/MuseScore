@@ -37,6 +37,10 @@ public:
     explicit AbstractInspectorProxyModel(QObject* parent, InspectorModelType subModelType = InspectorModelType::TYPE_UNDEFINED);
 
     Q_INVOKABLE QObject* modelByType(const InspectorModelType type);
+    Q_INVOKABLE QVariantList models();
+
+    Q_INVOKABLE bool isMultiModel() const;
+    Q_INVOKABLE QObject* firstModel();
 
     void createProperties() override {}
     void requestElements() override {}

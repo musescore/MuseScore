@@ -28,7 +28,6 @@ using namespace mu::inspector;
 KeySignatureSettingsModel::KeySignatureSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_KEYSIGNATURE);
     setTitle(qtrc("inspector", "Key signature"));
     createProperties();

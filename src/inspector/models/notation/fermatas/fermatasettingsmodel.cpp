@@ -28,7 +28,6 @@ using namespace mu::inspector;
 FermataSettingsModel::FermataSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_FERMATA);
     setTitle(qtrc("inspector", "Fermata"));
     createProperties();

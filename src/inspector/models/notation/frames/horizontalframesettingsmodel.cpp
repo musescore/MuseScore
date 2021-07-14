@@ -29,7 +29,6 @@ using namespace mu::inspector;
 HorizontalFrameSettingsModel::HorizontalFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_HORIZONTAL_FRAME);
     setTitle(qtrc("inspector", "Horizontal frame"));
     createProperties();

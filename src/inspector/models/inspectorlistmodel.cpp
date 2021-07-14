@@ -49,59 +49,23 @@ void InspectorListModel::buildModelsForSelectedElements(const QSet<Ms::ElementTy
     removeUnusedModels(selectedElementSet, persistentSectionList);
 
     QList<AbstractInspectorModel::InspectorSectionType> buildingSectionTypeList(persistentSectionList);
-
-    AbstractInspectorModel::InspectorModelType notationSingleElementModelType = this->notationSingleElementModelType(selectedElementSet);
-
-    if (notationSingleElementModelType != AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED) {
-        buildingSectionTypeList << AbstractInspectorModel::InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT;
-        removeModels(AbstractInspectorModel::InspectorSectionType::SECTION_NOTATION_MULTI_ELEMENTS);
-    } else {
-        for (const Ms::ElementType elementType : selectedElementSet) {
-            AbstractInspectorModel::InspectorSectionType sectionType = AbstractInspectorModel::sectionTypeFromElementType(elementType);
-            if (sectionType == AbstractInspectorModel::InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT) {
-                buildingSectionTypeList << AbstractInspectorModel::InspectorSectionType::SECTION_NOTATION_MULTI_ELEMENTS;
-            } else {
-                buildingSectionTypeList << sectionType;
+    bool isNotationSectionAdded = false;
+    for (const Ms::ElementType elementType : selectedElementSet) {
+        bool isNotationSection = AbstractInspectorModel::notationElementModelType(elementType)
+                                 != AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
+        if (isNotationSection) {
+            if (!isNotationSectionAdded) {
+                buildingSectionTypeList << AbstractInspectorModel::sectionTypeFromElementType(elementType);
+                isNotationSectionAdded = true;
             }
+        } else {
+            buildingSectionTypeList << AbstractInspectorModel::sectionTypeFromElementType(elementType);
         }
     }
 
-    createModelsBySectionType(buildingSectionTypeList, notationSingleElementModelType);
+    createModelsBySectionType(buildingSectionTypeList, selectedElementSet);
 
     sortModels();
-}
-
-AbstractInspectorModel::InspectorModelType InspectorListModel::notationSingleElementModelType(const QSet<Ms::ElementType>& elements) const
-{
-    static QList<AbstractInspectorModel::InspectorModelType> notePartTypes {
-        AbstractInspectorModel::InspectorModelType::TYPE_NOTE,
-        AbstractInspectorModel::InspectorModelType::TYPE_NOTEHEAD,
-        AbstractInspectorModel::InspectorModelType::TYPE_STEM,
-        AbstractInspectorModel::InspectorModelType::TYPE_HOOK,
-        AbstractInspectorModel::InspectorModelType::TYPE_BEAM
-    };
-
-    AbstractInspectorModel::InspectorModelType notationModelType = AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
-    for (const Ms::ElementType elementType : elements) {
-        AbstractInspectorModel::InspectorModelType modelType = AbstractInspectorModel::notationElementModelType(elementType);
-        if (modelType == AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED) {
-            continue;
-        }
-
-        if (notationModelType != AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED && notationModelType != modelType) {
-            if (notePartTypes.contains(modelType) && notePartTypes.contains(notationModelType)) {
-                notationModelType = AbstractInspectorModel::InspectorModelType::TYPE_NOTE;
-                continue;
-            }
-
-            notationModelType = AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
-            break;
-        }
-
-        notationModelType = modelType;
-    }
-
-    return notationModelType;
 }
 
 void InspectorListModel::buildModelsForEmptySelection(const QSet<Ms::ElementType>& selectedElementSet)
@@ -164,7 +128,7 @@ int InspectorListModel::columnCount(const QModelIndex&) const
 }
 
 void InspectorListModel::createModelsBySectionType(const QList<AbstractInspectorModel::InspectorSectionType>& sectionTypeList,
-                                                   AbstractInspectorModel::InspectorModelType notationSingleModelType)
+                                                   const QSet<Ms::ElementType>& selectedElementSet)
 {
     using SectionType = AbstractInspectorModel::InspectorSectionType;
 
@@ -186,11 +150,8 @@ void InspectorListModel::createModelsBySectionType(const QList<AbstractInspector
         case AbstractInspectorModel::InspectorSectionType::SECTION_TEXT:
             m_modelList << new TextSettingsModel(this, m_repository);
             break;
-        case AbstractInspectorModel::InspectorSectionType::SECTION_NOTATION_MULTI_ELEMENTS:
-            m_modelList << new NotationSettingsProxyModel(this, m_repository);
-            break;
-        case AbstractInspectorModel::InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT:
-            m_modelList << inspectorModelCreator()->newInspectorModel(notationSingleModelType, this, m_repository);
+        case AbstractInspectorModel::InspectorSectionType::SECTION_NOTATION:
+            m_modelList << new NotationSettingsProxyModel(this, m_repository, selectedElementSet);
             break;
         case AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_DISPLAY:
             m_modelList << new ScoreSettingsModel(this, m_repository);
@@ -216,7 +177,19 @@ void InspectorListModel::removeUnusedModels(const QSet<Ms::ElementType>& newElem
             continue;
         }
 
-        auto supportedElementTypes = AbstractInspectorModel::supportedElementTypesBySectionType(model->sectionType());
+        QList<Ms::ElementType> supportedElementTypes;
+        AbstractInspectorProxyModel* proxyModel = dynamic_cast<AbstractInspectorProxyModel*>(model);
+        if (proxyModel) {
+            for (const QVariant& modelVar : proxyModel->models()) {
+                AbstractInspectorModel* prModel = qobject_cast<AbstractInspectorModel*>(modelVar.value<QObject*>());
+                if (prModel) {
+                    supportedElementTypes << AbstractInspectorModel::notationElementType(prModel->modelType());
+                }
+            }
+        } else {
+            supportedElementTypes = AbstractInspectorModel::supportedElementTypesBySectionType(model->sectionType());
+        }
+
         QSet<Ms::ElementType> supportedElementTypesSet(supportedElementTypes.begin(), supportedElementTypes.end());
         supportedElementTypesSet.intersect(newElementTypeSet);
 
