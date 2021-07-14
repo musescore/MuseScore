@@ -30,19 +30,24 @@
 #include "notation.h"
 #include "retval.h"
 
+#include "project/projecttypes.h"
+
 namespace Ms {
 class MasterScore;
 }
 
-namespace mu::notation {
+namespace mu::project {
 class NotationProject;
+}
+
+namespace mu::notation {
 class MasterNotation : public IMasterNotation, public Notation, public std::enable_shared_from_this<MasterNotation>
 {
 public:
     ~MasterNotation();
 
     void setMasterScore(Ms::MasterScore* masterScore);
-    Ret setupNewScore(Ms::MasterScore* score, Ms::MasterScore* templateScore, const ScoreCreateOptions& scoreOptions);
+    Ret setupNewScore(Ms::MasterScore* score, Ms::MasterScore* templateScore, const project::ProjectCreateOptions& scoreOptions);
     void onSaveCopy();
 
     INotationPtr notation() override;
@@ -54,6 +59,7 @@ public:
 
     mu::ValNt<bool> needSave() const override;
 
+    IExcerptNotationPtr newExcerptNotation() const override;
     ValCh<ExcerptNotationList> excerpts() const override;
     void setExcerpts(const ExcerptNotationList& excerpts) override;
 
@@ -62,7 +68,7 @@ public:
 
 private:
 
-    friend class NotationProject;
+    friend class project::NotationProject;
     explicit MasterNotation();
 
     Ms::MasterScore* masterScore() const;

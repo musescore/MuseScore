@@ -19,24 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_PROJECT_NOTATIONREADERSREGISTER_H
+#define MU_PROJECT_NOTATIONREADERSREGISTER_H
 
-#include "notationwritersregister.h"
+#include <map>
+#include "../inotationreadersregister.h"
 
-using namespace mu::notation;
-
-void NotationWritersRegister::reg(const std::vector<std::string>& suffixes, INotationWriterPtr writer)
+namespace mu::project {
+class NotationReadersRegister : public INotationReadersRegister
 {
-    for (const std::string& suffix : suffixes) {
-        m_writers.insert({ suffix, writer });
-    }
+public:
+    void reg(const std::vector<std::string>& suffixes, INotationReaderPtr reader) override;
+    INotationReaderPtr reader(const std::string& suffix) override;
+
+private:
+    std::map<std::string, INotationReaderPtr> m_readers;
+};
 }
 
-INotationWriterPtr NotationWritersRegister::writer(const std::string& suffix) const
-{
-    auto it = m_writers.find(suffix);
-    if (it != m_writers.end()) {
-        return it->second;
-    }
-
-    return nullptr;
-}
+#endif // MU_PROJECT_NOTATIONREADERSREGISTER_H

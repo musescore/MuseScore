@@ -26,16 +26,13 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 #include "ui/iuiactionsregister.h"
+#include "project/inotationwritersregister.h"
 
-#include "internal/notationcreator.h"
 #include "internal/notation.h"
 #include "internal/notationactioncontroller.h"
 #include "internal/notationconfiguration.h"
 #include "internal/midiinputcontroller.h"
 #include "internal/notationuiactions.h"
-#include "internal/notationreadersregister.h"
-#include "internal/notationwritersregister.h"
-#include "internal/mscznotationreader.h"
 #include "internal/msczmetareader.h"
 #include "internal/positionswriter.h"
 #include "internal/instrumentsrepository.h"
@@ -92,21 +89,10 @@ std::string NotationModule::moduleName() const
 
 void NotationModule::registerExports()
 {
-    ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
     ioc()->registerExport<INotationConfiguration>(moduleName(), s_configuration);
     ioc()->registerExport<IInstrumentsRepository>(moduleName(), s_instrumentsRepository);
     ioc()->registerExport<IMsczMetaReader>(moduleName(), new MsczMetaReader());
     ioc()->registerExport<INotationContextMenu>(moduleName(), new NotationContextMenu());
-
-    std::shared_ptr<INotationReadersRegister> readers = std::make_shared<NotationReadersRegister>();
-    readers->reg({ "mscz", "mscx" }, std::make_shared<MsczNotationReader>());
-
-    std::shared_ptr<INotationWritersRegister> writers = std::make_shared<NotationWritersRegister>();
-    writers->reg({ "sposXML" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::SEGMENT));
-    writers->reg({ "mposXML" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE));
-
-    ioc()->registerExport<INotationReadersRegister>(moduleName(), readers);
-    ioc()->registerExport<INotationWritersRegister>(moduleName(), writers);
 }
 
 void NotationModule::resolveImports()
@@ -114,6 +100,12 @@ void NotationModule::resolveImports()
     auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(s_notationUiActions);
+    }
+
+    auto writers = modularity::ioc()->resolve<project::INotationWritersRegister>(moduleName());
+    if (writers) {
+        writers->reg({ "sposXML" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::SEGMENT));
+        writers->reg({ "mposXML" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE));
     }
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());

@@ -34,6 +34,7 @@ add_subdirectory(appshell)
 # Modules
 add_subdirectory(context)
 add_subdirectory(notation)
+add_subdirectory(project)
 
 if (BUILD_USERSCORES_MODULE)
     add_subdirectory(userscores)

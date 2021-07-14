@@ -22,13 +22,13 @@
 #ifndef MU_NOTATION_NOTATION_H
 #define MU_NOTATION_NOTATION_H
 
-#include "inotation.h"
+#include "../inotation.h"
 #include "igetscore.h"
 #include "inotationmidievents.h"
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "inotationconfiguration.h"
+#include "../inotationconfiguration.h"
 
 namespace Ms {
 class MScore;

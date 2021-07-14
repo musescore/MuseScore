@@ -19,17 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_MSCZNOTATIONREADER_H
-#define MU_NOTATION_MSCZNOTATIONREADER_H
+#ifndef MU_PROJECT_INOTATIONREADERSREGISTER_H
+#define MU_PROJECT_INOTATIONREADERSREGISTER_H
 
-#include "../inotationreader.h"
+#include <string>
+#include <vector>
 
-namespace mu::notation {
-class MsczNotationReader : public INotationReader
+#include "modularity/imoduleexport.h"
+#include "inotationreader.h"
+
+namespace mu::project {
+class INotationReadersRegister : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(INotationReadersRegister)
+
 public:
-    Ret read(Ms::MasterScore* score, const io::path& path, const Options& options = Options()) override;
+    virtual ~INotationReadersRegister() = default;
+
+    //! NOTE In the future, we need to replace the suffix with an enumerator
+    //! or a better structure describing the format.
+    virtual void reg(const std::vector<std::string>& suffixes, INotationReaderPtr reader) = 0;
+    virtual INotationReaderPtr reader(const std::string& suffix) = 0;
 };
 }
 
-#endif // MU_NOTATION_MSCZNOTATIONREADER_H
+#endif // MU_PROJECT_INOTATIONREADERSREGISTER_H

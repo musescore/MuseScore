@@ -22,10 +22,10 @@
 #ifndef MU_IEXBWW_NOTATIONBWWREADER_H
 #define MU_IEXBWW_NOTATIONBWWREADER_H
 
-#include "notation/inotationreader.h"
+#include "project/inotationreader.h"
 
 namespace mu::iex::bww {
-class NotationBwwReader : public notation::INotationReader
+class NotationBwwReader : public project::INotationReader
 {
 public:
     Ret read(Ms::MasterScore* score, const io::path& path, const Options& options = Options()) override;

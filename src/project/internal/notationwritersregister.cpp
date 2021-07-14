@@ -19,28 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONREADERSREGISTER_H
-#define MU_NOTATION_INOTATIONREADERSREGISTER_H
 
-#include <string>
-#include <vector>
+#include "notationwritersregister.h"
 
-#include "modularity/imoduleexport.h"
-#include "inotationreader.h"
+using namespace mu::project;
 
-namespace mu::notation {
-class INotationReadersRegister : MODULE_EXPORT_INTERFACE
+void NotationWritersRegister::reg(const std::vector<std::string>& suffixes, INotationWriterPtr writer)
 {
-    INTERFACE_ID(INotationReadersRegister)
-
-public:
-    virtual ~INotationReadersRegister() = default;
-
-    //! NOTE In the future, we need to replace the suffix with an enumerator
-    //! or a better structure describing the format.
-    virtual void reg(const std::vector<std::string>& suffixes, INotationReaderPtr reader) = 0;
-    virtual INotationReaderPtr reader(const std::string& suffix) = 0;
-};
+    for (const std::string& suffix : suffixes) {
+        m_writers.insert({ suffix, writer });
+    }
 }
 
-#endif // MU_NOTATION_INOTATIONREADERSREGISTER_H
+INotationWriterPtr NotationWritersRegister::writer(const std::string& suffix) const
+{
+    auto it = m_writers.find(suffix);
+    if (it != m_writers.end()) {
+        return it->second;
+    }
+
+    return nullptr;
+}

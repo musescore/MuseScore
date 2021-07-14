@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONPROJECT_H
-#define MU_NOTATION_NOTATIONPROJECT_H
+#ifndef MU_PROJECT_NOTATIONPROJECT_H
+#define MU_PROJECT_NOTATIONPROJECT_H
 
 #include "../inotationproject.h"
 
@@ -31,19 +31,19 @@
 
 #include "engraving/engravingproject.h"
 
-#include "masternotation.h"
+#include "notation/internal/masternotation.h"
 #include "projectaudiosettings.h"
 
 namespace mu::engraving {
 class MsczReader;
 }
 
-namespace mu::notation {
+namespace mu::project {
 class NotationProject : public INotationProject
 {
-    INJECT(notation, system::IFileSystem, fileSystem)
-    INJECT(notation, INotationReadersRegister, readers)
-    INJECT(notation, INotationWritersRegister, writers)
+    INJECT(project, system::IFileSystem, fileSystem)
+    INJECT(project, INotationReadersRegister, readers)
+    INJECT(project, INotationWritersRegister, writers)
 
 public:
     NotationProject();
@@ -51,7 +51,7 @@ public:
     io::path path() const override;
 
     Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false) override;
-    Ret createNew(const ScoreCreateOptions& scoreInfo) override;
+    Ret createNew(const ProjectCreateOptions& projectInfo) override;
 
     RetVal<bool> created() const override;
     ValNt<bool> needSave() const override;
@@ -59,10 +59,10 @@ public:
     Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) override;
     Ret writeToDevice(io::Device* device) override;
 
-    Meta metaInfo() const override;
-    void setMetaInfo(const Meta& meta) override;
+    notation::Meta metaInfo() const override;
+    void setMetaInfo(const notation::Meta& meta) override;
 
-    IMasterNotationPtr masterNotation() const override;
+    notation::IMasterNotationPtr masterNotation() const override;
     IProjectAudioSettingsPtr audioSettings() const override;
 
 private:
@@ -77,9 +77,9 @@ private:
     Ret writeProject(io::Device* device, bool onlySelection);
 
     mu::engraving::EngravingProjectPtr m_engravingProject = nullptr;
-    MasterNotationPtr m_masterNotation = nullptr;
+    notation::MasterNotationPtr m_masterNotation = nullptr;
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
 };
 }
 
-#endif // MU_NOTATION_NOTATIONPROJECT_H
+#endif // MU_PROJECT_NOTATIONPROJECT_H

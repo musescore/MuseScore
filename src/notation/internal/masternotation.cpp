@@ -20,14 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "masternotation.h"
+
+#include <QFileInfo>
+#include "translation.h"
+
 #include "excerptnotation.h"
 #include "masternotationparts.h"
 #include "scoreorderconverter.h"
-
-#include <QFileInfo>
-
-#include "log.h"
-#include "translation.h"
+#include "excerptnotation.h"
+#include "../notationerrors.h"
 
 #include "libmscore/score.h"
 #include "libmscore/part.h"
@@ -40,7 +41,7 @@
 #include "libmscore/tempotext.h"
 #include "libmscore/undo.h"
 
-#include "../notationerrors.h"
+#include "log.h"
 
 using namespace mu::notation;
 using namespace mu::async;
@@ -99,7 +100,8 @@ Ms::MasterScore* MasterNotation::masterScore() const
 
 //! NOTE: this method with all of its dependencies was copied from MU3
 //! source: file.cpp, MuseScore::getNewFile()
-mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* templateScore, const ScoreCreateOptions& scoreOptions)
+mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* templateScore,
+                                      const project::ProjectCreateOptions& scoreOptions)
 {
     int measures = scoreOptions.measures;
 
@@ -469,6 +471,11 @@ void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
 {
     m_excerpts.set(excerpts);
     static_cast<MasterNotationParts*>(m_parts.get())->setExcerpts(excerpts);
+}
+
+IExcerptNotationPtr MasterNotation::newExcerptNotation() const
+{
+    return std::make_shared<ExcerptNotation>();
 }
 
 mu::ValCh<ExcerptNotationList> MasterNotation::excerpts() const

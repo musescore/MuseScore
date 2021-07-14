@@ -29,12 +29,13 @@
 #include "engraving/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
 
-#include "notationerrors.h"
-#include "masternotation.h"
+#include "engraving/engravingerrors.h"
+#include "notation/notationerrors.h"
 #include "projectaudiosettings.h"
 
 #include "log.h"
 
+using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::engraving;
 
@@ -134,7 +135,7 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
     std::string syffix = io::syffix(path);
     INotationReaderPtr scoreReader = readers()->reader(syffix);
     if (!scoreReader) {
-        return make_ret(Err::FileUnknownType, path);
+        return make_ret(notation::Err::FileUnknownType, path);
     }
 
     // Create new engraving project
@@ -188,7 +189,7 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret NotationProject::createNew(const ScoreCreateOptions& scoreOptions)
+mu::Ret NotationProject::createNew(const ProjectCreateOptions& scoreOptions)
 {
     // Create new engraving project
     EngravingProjectPtr project = EngravingProject::create();
@@ -242,7 +243,7 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
         return saveScore(path);
     }
 
-    return make_ret(Err::UnknownError);
+    return make_ret(notation::Err::UnknownError);
 }
 
 mu::Ret NotationProject::writeToDevice(io::Device* device)
@@ -289,7 +290,7 @@ mu::Ret NotationProject::doSave(bool generateBackup)
     QFileInfo info(m_engravingProject->path());
     if (info.exists() && !info.isWritable()) {
         LOGE() << "failed save, not writable path: " << info.filePath();
-        return make_ret(Err::UnknownError);
+        return make_ret(notation::Err::UnknownError);
     }
 
     // Step 3: save into temporary buffer
@@ -318,14 +319,14 @@ mu::Ret NotationProject::writeProject(io::Device* device, bool onlySelection)
     bool ok = msczWriter.open();
     if (!ok) {
         LOGE() << "failed open writer";
-        return make_ret(Err::FileOpenError);
+        return make_ret(notation::Err::FileOpenError);
     }
 
     // Write engraving project
     ok = m_engravingProject->writeMscz(msczWriter, onlySelection, true);
     if (!ok) {
         LOGE() << "failed write engraving project to mscz";
-        return make_ret(Err::UnknownError);
+        return make_ret(notation::Err::UnknownError);
     }
 
     // Write other stuff
@@ -341,14 +342,14 @@ mu::Ret NotationProject::writeProject(io::Device* device, bool onlySelection)
 mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path& path)
 {
     IF_ASSERT_FAILED(path.toQString() != m_engravingProject->path()) {
-        return make_ret(Err::UnknownError);
+        return make_ret(notation::Err::UnknownError);
     }
 
     // Check writable
     QFileInfo info(path.toQString());
     if (info.exists() && !info.isWritable()) {
         LOGE() << "failed save, not writable path: " << info.filePath();
-        return make_ret(Err::UnknownError);
+        return make_ret(notation::Err::UnknownError);
     }
 
     // Write project to buffer

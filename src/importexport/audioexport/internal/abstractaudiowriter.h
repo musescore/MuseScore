@@ -19,21 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_IMPORTEXPORT_ABSTRACTAUDIOWRITER_H
+#define MU_IMPORTEXPORT_ABSTRACTAUDIOWRITER_H
 
-#ifndef MU_NOTATION_ABSTRACTNOTATIONWRITER_H
-#define MU_NOTATION_ABSTRACTNOTATIONWRITER_H
+#include "project/inotationwriter.h"
 
-#include "inotationwriter.h"
-
-namespace mu::notation {
-class AbstractNotationWriter : public INotationWriter
+namespace mu::iex::audioexport {
+class AbstractAudioWriter : public project::INotationWriter
 {
 public:
+    AbstractAudioWriter() = default;
+    virtual ~AbstractAudioWriter() = default;
+
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    virtual Ret write(INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
-    virtual Ret writeList(const INotationPtrList& notations, io::Device& destinationDevice, const Options& options = Options()) override;
+    Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
+    Ret writeList(const notation::INotationPtrList& notations, io::Device& destinationDevice, const Options& options = Options()) override;
 
     void abort() override;
     framework::ProgressChannel progress() const override;
@@ -44,4 +46,4 @@ protected:
 };
 }
 
-#endif // MU_NOTATION_NOTATIONWRITERSREGISTER_H
+#endif // MU_IMPORTEXPORT_ABSTRACTAUDIOWRITER_H

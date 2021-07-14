@@ -19,22 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONREADERSREGISTER_H
-#define MU_NOTATION_NOTATIONREADERSREGISTER_H
 
-#include <map>
-#include "../inotationreadersregister.h"
+#ifndef MU_PROJECT_NOTATIONWRITERSREGISTER_H
+#define MU_PROJECT_NOTATIONWRITERSREGISTER_H
 
-namespace mu::notation {
-class NotationReadersRegister : public INotationReadersRegister
+#include "../inotationwritersregister.h"
+
+namespace mu::project {
+class NotationWritersRegister : public INotationWritersRegister
 {
 public:
-    void reg(const std::vector<std::string>& suffixes, INotationReaderPtr reader) override;
-    INotationReaderPtr reader(const std::string& suffix) override;
+    void reg(const std::vector<std::string>& suffixes, INotationWriterPtr writer) override;
+    INotationWriterPtr writer(const std::string& suffix) const override;
 
 private:
-    std::map<std::string, INotationReaderPtr> m_readers;
+    std::map<std::string, INotationWriterPtr> m_writers;
 };
 }
 
-#endif // MU_NOTATION_NOTATIONREADERSREGISTER_H
+#endif // MU_PROJECT_NOTATIONWRITERSREGISTER_H

@@ -24,13 +24,13 @@
 #include "log.h"
 #include "modularity/ioc.h"
 
-#include "notation/inotationreadersregister.h"
+#include "project/inotationreadersregister.h"
 #include "internal/overeader.h"
 
 #include "internal/oveconfiguration.h"
 
 using namespace mu::iex::ove;
-using namespace mu::notation;
+using namespace mu::project;
 
 static std::shared_ptr<OveConfiguration> s_configuration = std::make_shared<OveConfiguration>();
 

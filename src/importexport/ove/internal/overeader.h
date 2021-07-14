@@ -22,10 +22,10 @@
 #ifndef MU_IMPORTEXPORT_OVEREADER_H
 #define MU_IMPORTEXPORT_OVEREADER_H
 
-#include "notation/inotationreader.h"
+#include "project/inotationreader.h"
 
 namespace mu::iex::ove {
-class OveReader : public notation::INotationReader
+class OveReader : public project::INotationReader
 {
 public:
     Ret read(Ms::MasterScore* score, const io::path& path, const Options& options = Options()) override;

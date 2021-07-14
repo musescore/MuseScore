@@ -22,10 +22,10 @@
 #ifndef MU_IMPORTEXPORT_GUITARPROREADER_H
 #define MU_IMPORTEXPORT_GUITARPROREADER_H
 
-#include "notation/inotationreader.h"
+#include "project/inotationreader.h"
 
 namespace mu::iex::guitarpro {
-class GuitarProReader : public notation::INotationReader
+class GuitarProReader : public project::INotationReader
 {
 public:
     Ret read(Ms::MasterScore* score, const io::path& path, const Options& options = Options()) override;
