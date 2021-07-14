@@ -142,14 +142,20 @@ public:
 #ifndef NO_QT_SUPPORT
     static QPen toQPen(const Pen& pen)
     {
-        return QPen(pen.m_color, pen.m_width, static_cast<Qt::PenStyle>(pen.m_style), static_cast<Qt::PenCapStyle>(pen.m_capStyle),
-                    static_cast<Qt::PenJoinStyle>(pen.m_joinStyle));
+        QPen p(pen.m_color, pen.m_width, static_cast<Qt::PenStyle>(pen.m_style),
+               static_cast<Qt::PenCapStyle>(pen.m_capStyle),
+               static_cast<Qt::PenJoinStyle>(pen.m_joinStyle));
+        p.setDashPattern(QVector<qreal>(pen.m_dashPattern.cbegin(), pen.m_dashPattern.cend()));
+        return p;
     }
 
     static Pen fromQPen(const QPen& pen)
     {
-        return Pen(pen.color(), pen.widthF(), static_cast<PenStyle>(pen.style()), static_cast<PenCapStyle>(pen.capStyle()),
-                   static_cast<PenJoinStyle>(pen.joinStyle()));
+        Pen p(pen.color(), pen.widthF(), static_cast<PenStyle>(pen.style()),
+              static_cast<PenCapStyle>(pen.capStyle()),
+              static_cast<PenJoinStyle>(pen.joinStyle()));
+        p.m_dashPattern = std::vector<double>(pen.dashPattern().cbegin(), pen.dashPattern().cend());
+        return p;
     }
 
 #endif
