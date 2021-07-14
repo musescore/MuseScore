@@ -1036,6 +1036,7 @@ class Score : public QObject, public ScoreElement {
 
       void connectTies(bool silent=false);
       void connectArpeggios();
+      void fixupLaissezVibrer();
 
       qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
