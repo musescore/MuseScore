@@ -38,6 +38,11 @@
 using namespace mu::engraving;
 using namespace mu::modularity;
 
+static void engraving_init_qrc()
+{
+    Q_INIT_RESOURCE(engraving);
+}
+
 std::string EngravingModule::moduleName() const
 {
     return "engraving";
@@ -56,6 +61,7 @@ void EngravingModule::resolveImports()
 
 void EngravingModule::registerResources()
 {
+    engraving_init_qrc();
 }
 
 void EngravingModule::registerUiTypes()

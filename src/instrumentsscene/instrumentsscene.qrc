@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="data/instruments.xml">../../share/instruments/instruments.xml</file>
-        <file alias="data/orders.xml">../../share/instruments/orders.xml</file>
         <file>qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml</file>
         <file>qml/MuseScore/InstrumentsScene/qmldir</file>
         <file>qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml</file>
