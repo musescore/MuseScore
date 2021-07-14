@@ -324,8 +324,8 @@ public:
     enum class OrnamentStyle : char {   /**.\{*/
         DEFAULT, BAROQUE                                          /**\}*/
     };
-    Q_ENUM(DirectionH);
-    Q_ENUM(OrnamentStyle);
+    Q_ENUM(DirectionH)
+    Q_ENUM(OrnamentStyle)
 
     static MsError _error;
     static std::vector<MScoreError> errorList;
@@ -334,7 +334,6 @@ public:
     static void registerUiTypes();
 
     static MStyle& baseStyle() { return _baseStyle; }
-    static void setBaseStyle(const MStyle& style) { _baseStyle = style; }
     static MStyle& defaultStyle() { return _defaultStyle; }
     static const MStyle* defaultStyleForParts() { return _defaultStyleForParts; }
 
