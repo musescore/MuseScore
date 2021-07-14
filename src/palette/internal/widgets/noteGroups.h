@@ -52,7 +52,7 @@ class NoteGroups : public QGroupBox, Ui::NoteGroups
 private slots:
     void resetClicked();
     void noteClicked(Note*);
-    void beamPropertyDropped(Chord*, Icon*);
+    void beamPropertyDropped(Chord*, ActionIcon*);
 
 public:
     NoteGroups(QWidget* parent);

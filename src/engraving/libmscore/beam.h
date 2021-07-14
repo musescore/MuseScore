@@ -34,7 +34,7 @@ class Chord;
 class System;
 class Skyline;
 
-enum class IconType : signed char;
+enum class ActionIconType;
 enum class SpannerSegmentType;
 
 struct BeamFragment;
@@ -186,7 +186,7 @@ public:
     Grip defaultGrip() const override { return Grip::MIDDLE; }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
-    static IconType iconType(Mode);
+    static ActionIconType actionIconTypeForBeamMode(Mode);
 
     mu::RectF drag(EditData&) override;
     bool isMovable() const override;

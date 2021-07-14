@@ -36,7 +36,7 @@
 
 #include "libmscore/articulation.h"
 #include "libmscore/fret.h"
-#include "libmscore/icon.h"
+#include "libmscore/actionicon.h"
 #include "libmscore/image.h"
 #include "libmscore/imageStore.h"
 #include "libmscore/mscore.h"
@@ -174,7 +174,7 @@ const char* PaletteCell::translationContext() const
         return "Ms";           // libmscore/chordline.cpp, scorelineNames[]
     case ElementType::NOTEHEAD:
         return "noteheadnames";           // libmscore/note.cpp, noteHeadGroupNames[]
-    case ElementType::ICON:
+    case ElementType::ACTION_ICON:
         return "action";           // mscore/shortcut.cpp, Shortcut::_sc[]
     default:
         break;
@@ -315,9 +315,9 @@ bool PaletteCell::read(XmlReader& e)
                 element->read(e);
                 element->styleChanged();
 
-                if (element->type() == ElementType::ICON) {
-                    Icon* icon = static_cast<Icon*>(element.get());
-                    const mu::ui::UiAction& action = adapter()->getAction(icon->actionCode());
+                if (element->type() == ElementType::ACTION_ICON) {
+                    ActionIcon* icon = static_cast<ActionIcon*>(element.get());
+                    const mu::ui::UiAction& action = actionsRegister()->action(icon->actionCode());
                     if (action.isValid()) {
                         icon->setAction(icon->actionCode(), static_cast<char16_t>(action.iconCode));
                     } else {
@@ -360,9 +360,9 @@ PaletteCellPtr PaletteCell::readElementMimeData(const QByteArray& data)
         element->setTrack(0);
     }
 
-    if (element->isIcon()) {
-        Icon* icon = toIcon(element.get());
-        const mu::ui::UiAction& action = adapter()->getAction(icon->actionCode());
+    if (element->isActionIcon()) {
+        ActionIcon* icon = toActionIcon(element.get());
+        const mu::ui::UiAction& action = actionsRegister()->action(icon->actionCode());
         if (action.isValid()) {
             icon->setAction(icon->actionCode(), static_cast<char16_t>(action.iconCode));
         }
@@ -920,8 +920,8 @@ PalettePanel::Type PalettePanel::guessType() const
         return Type::Layout;
     case ElementType::SYMBOL:
         return Type::Accordion;
-    case ElementType::ICON: {
-        const Icon* icon = toIcon(e);
+    case ElementType::ACTION_ICON: {
+        const ActionIcon* icon = toActionIcon(e);
         QString action = QString::fromStdString(icon->actionCode());
 
         if (action.contains("beam")) {
@@ -1070,21 +1070,21 @@ void PaletteTree::retranslate()
 
 static void paintIconElement(mu::draw::Painter& painter, const RectF& rect, Element* e)
 {
-    Q_ASSERT(e && e->isIcon());
-    painter.save();   // so we can restore it after we are done using it
+    Q_ASSERT(e && e->isActionIcon());
+    painter.save();
 
-    constexpr int margin = 4.0;
+    constexpr qreal margin = 4.0;
     qreal extent = qMin(rect.height(), rect.width()) - margin;
 
-    Icon* icon = toIcon(e);
-    icon->setExtent(extent);
+    ActionIcon* action = toActionIcon(e);
+    action->setExtent(extent);
 
     extent /= 2.0;
     PointF iconCenter(extent, extent);
 
-    painter.translate(rect.center() - iconCenter);   // change coordinates
-    icon->draw(&painter);
-    painter.restore();   // restore coordinates
+    painter.translate(rect.center() - iconCenter);
+    action->draw(&painter);
+    painter.restore();
 }
 
 //---------------------------------------------------------
@@ -1098,7 +1098,7 @@ static void paintIconElement(mu::draw::Painter& painter, const RectF& rect, Elem
 
 void PaletteCellIconEngine::paintScoreElement(mu::draw::Painter& painter, Element* element, qreal spatium, bool alignToStaff) const
 {
-    Q_ASSERT(element && !element->isIcon());
+    Q_ASSERT(element && !element->isActionIcon());
     painter.save(); // so we can restore painter after we are done using it
 
     const qreal sizeRatio = spatium / gscore->spatium();
@@ -1212,7 +1212,7 @@ void PaletteCellIconEngine::paintCell(mu::draw::Painter& painter, const RectF& r
         return;
     }
 
-    if (el->isIcon()) {
+    if (el->isActionIcon()) {
         paintIconElement(painter, rect, el);
         return;     // never draw staff for icon elements
     }
