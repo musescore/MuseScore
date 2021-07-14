@@ -45,7 +45,7 @@
 #include "libmscore/textframe.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/stafflines.h"
-#include "libmscore/icon.h"
+#include "libmscore/actionicon.h"
 #include "libmscore/undo.h"
 #include "libmscore/navigate.h"
 #include "libmscore/keysig.h"
@@ -824,7 +824,7 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::REHEARSAL_MARK:
     case ElementType::JUMP:
     case ElementType::MEASURE_REPEAT:
-    case ElementType::ICON:
+    case ElementType::ACTION_ICON:
     case ElementType::CHORD:
     case ElementType::SPACER:
     case ElementType::SLUR:
@@ -978,7 +978,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::REHEARSAL_MARK:
     case ElementType::JUMP:
     case ElementType::MEASURE_REPEAT:
-    case ElementType::ICON:
+    case ElementType::ACTION_ICON:
     case ElementType::NOTE:
     case ElementType::CHORD:
     case ElementType::SPACER:
@@ -1201,12 +1201,12 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
             || element->type() == ElementType::MEASURE
             || element->type() == ElementType::BRACKET
             || element->type() == ElementType::STAFFTYPE_CHANGE
-            || (element->type() == ElementType::ICON
-                && (toIcon(element)->iconType() == Ms::IconType::VFRAME
-                    || toIcon(element)->iconType() == Ms::IconType::HFRAME
-                    || toIcon(element)->iconType() == Ms::IconType::TFRAME
-                    || toIcon(element)->iconType() == Ms::IconType::MEASURE
-                    || toIcon(element)->iconType() == Ms::IconType::BRACKETS))) {
+            || (element->type() == ElementType::ACTION_ICON
+                && (toActionIcon(element)->actionType() == Ms::ActionIconType::VFRAME
+                    || toActionIcon(element)->actionType() == Ms::ActionIconType::HFRAME
+                    || toActionIcon(element)->actionType() == Ms::ActionIconType::TFRAME
+                    || toActionIcon(element)->actionType() == Ms::ActionIconType::MEASURE
+                    || toActionIcon(element)->actionType() == Ms::ActionIconType::BRACKETS))) {
             Measure* last = sel.endSegment() ? sel.endSegment()->measure() : nullptr;
             for (Measure* m = sel.startSegment()->measure(); m; m = m->nextMeasureMM()) {
                 RectF r = m->staffabbox(sel.staffStart());
@@ -1552,21 +1552,21 @@ mu::async::Notification NotationInteraction::dropChanged() const
 //! NOTE Copied from ScoreView::dropCanvas
 bool NotationInteraction::dropCanvas(Element* e)
 {
-    if (e->isIcon()) {
-        switch (Ms::toIcon(e)->iconType()) {
-        case Ms::IconType::VFRAME:
+    if (e->isActionIcon()) {
+        switch (Ms::toActionIcon(e)->actionType()) {
+        case Ms::ActionIconType::VFRAME:
             score()->insertMeasure(ElementType::VBOX, 0);
             break;
-        case Ms::IconType::HFRAME:
+        case Ms::ActionIconType::HFRAME:
             score()->insertMeasure(ElementType::HBOX, 0);
             break;
-        case Ms::IconType::TFRAME:
+        case Ms::ActionIconType::TFRAME:
             score()->insertMeasure(ElementType::TBOX, 0);
             break;
-        case Ms::IconType::FFRAME:
+        case Ms::ActionIconType::FFRAME:
             score()->insertMeasure(ElementType::FBOX, 0);
             break;
-        case Ms::IconType::MEASURE:
+        case Ms::ActionIconType::MEASURE:
             score()->insertMeasure(ElementType::MEASURE, 0);
             break;
         default:

@@ -26,7 +26,7 @@
 
 #include "libmscore/beam.h"
 #include "libmscore/chordrest.h"
-#include "libmscore/icon.h"
+#include "libmscore/actionicon.h"
 #include "libmscore/select.h"
 #include "palettetree.h"
 #include "palette/palette.h"
@@ -871,7 +871,7 @@ void PaletteTreeModel::updateCellsState(const Selection& sel)
 {
     const ChordRest* cr = sel.firstChordRest();
     const Beam::Mode bm = cr ? cr->beamMode() : Beam::Mode::NONE;
-    const IconType beamIconType = Beam::iconType(bm);
+    const ActionIconType beamActionType = Beam::actionIconTypeForBeamMode(bm);
     bool deactivateAll = !cr;
 
     for (Element* e : sel.elements()) {
@@ -897,9 +897,9 @@ void PaletteTreeModel::updateCellsState(const Selection& sel)
             PaletteCellPtr cell = palette->cell(ci);
             if (deactivateAll) {
                 cell->active = false;
-            } else if (cell->element && cell->element->isIcon()) {
-                const Icon* icon = toIcon(cell->element.get());
-                cell->active = (icon->iconType() == beamIconType);
+            } else if (cell->element && cell->element->isActionIcon()) {
+                const ActionIcon* action = toActionIcon(cell->element.get());
+                cell->active = (action->actionType() == beamActionType);
             }
         }
     }

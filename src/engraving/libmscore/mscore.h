@@ -251,17 +251,6 @@ constexpr bool operator&(BarLineType t1, BarLineType t2)
     return static_cast<int>(t1) & static_cast<int>(t2);
 }
 
-// Icon() subtypes
-enum class IconType : signed char {
-    NONE = -1,
-    ACCIACCATURA, APPOGGIATURA, GRACE4, GRACE16, GRACE32,
-    GRACE8_AFTER, GRACE16_AFTER, GRACE32_AFTER,
-    SBEAM, MBEAM, NBEAM, BEAM32, BEAM64, AUTOBEAM,
-    FBEAM1, FBEAM2,
-    VFRAME, HFRAME, TFRAME, FFRAME, MEASURE,
-    BRACKETS, PARENTHESES, BRACES,
-};
-
 //---------------------------------------------------------
 //   MScoreError
 //---------------------------------------------------------

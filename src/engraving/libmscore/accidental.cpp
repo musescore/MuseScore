@@ -26,7 +26,7 @@
 #include "sym.h"
 #include "score.h"
 #include "scorefont.h"
-#include "icon.h"
+#include "actionicon.h"
 #include "staff.h"
 #include "undo.h"
 #include "xml.h"
@@ -540,9 +540,15 @@ void Accidental::draw(mu::draw::Painter* painter) const
 bool Accidental::acceptDrop(EditData& data) const
 {
     Element* e = data.dropElement;
-    return e->isIcon()
-           && (toIcon(e)->iconType() == IconType::BRACKETS || toIcon(e)->iconType() == IconType::PARENTHESES
-               || toIcon(e)->iconType() == IconType::BRACES);
+
+    if (e->isActionIcon()) {
+        ActionIconType type = toActionIcon(e)->actionType();
+        return type == ActionIconType::BRACKETS
+               || type == ActionIconType::PARENTHESES
+               || type == ActionIconType::BRACES;
+    }
+
+    return false;
 }
 
 //---------------------------------------------------------
@@ -553,15 +559,15 @@ Element* Accidental::drop(EditData& data)
 {
     Element* e = data.dropElement;
     switch (e->type()) {
-    case ElementType::ICON:
-        switch (toIcon(e)->iconType()) {
-        case IconType::BRACKETS:
+    case ElementType::ACTION_ICON:
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::BRACKETS:
             undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACKET), PropertyFlags::NOSTYLE);
             break;
-        case IconType::PARENTHESES:
+        case ActionIconType::PARENTHESES:
             undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS), PropertyFlags::NOSTYLE);
             break;
-        case IconType::BRACES:
+        case ActionIconType::BRACES:
             undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACE), PropertyFlags::NOSTYLE);
             break;
         default:
@@ -573,7 +579,7 @@ Element* Accidental::drop(EditData& data)
         break;
     }
     delete e;
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
