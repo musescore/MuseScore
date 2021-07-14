@@ -22,28 +22,18 @@
 #ifndef MU_PALETTE_MU4PALETTEADAPTER_H
 #define MU_PALETTE_MU4PALETTEADAPTER_H
 
-#include <QHash>
-#include "../ipaletteadapter.h"
+#include "ipaletteadapter.h"
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
 #include "iinteractive.h"
 
 namespace mu::palette {
 class MU4PaletteAdapter : public IPaletteAdapter
 {
-    INJECT(palette, context::IGlobalContext, globalContext)
     INJECT(palette, framework::IInteractive, interactive)
 
 public:
     MU4PaletteAdapter();
-
-    void showMasterPalette(const QString& selectedPaletteName) override;
-    bool isSelected() const override;
-
-    // score view
-    bool applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers = {}) override;
-    // ---
 
     // qml
     Ms::PaletteWorkspace* paletteWorkspace() const override;
