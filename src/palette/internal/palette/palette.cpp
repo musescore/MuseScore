@@ -158,7 +158,7 @@ Palette::Palette(PalettePanelPtr palettePanel, QWidget* parent)
 
     if (moreElements()) {
         connect(this, &Palette::displayMore, [](const QString& arg) {
-            adapter()->showMasterPalette(arg);
+            dispatcher()->dispatch("masterpalette", ActionData::make_arg1(arg.toStdString()));
         });
     }
 }
@@ -599,7 +599,12 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
 
 bool Palette::applyPaletteElement(ElementPtr element, Qt::KeyboardModifiers modifiers)
 {
-    return adapter()->applyPaletteElement(element.get(), modifiers);
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return false;
+    }
+
+    return notation->interaction()->applyPaletteElement(element.get(), modifiers);
 }
 
 //---------------------------------------------------------
@@ -688,6 +693,16 @@ void Palette::mouseReleaseEvent(QMouseEvent* event)
     }
 }
 
+bool Palette::notationHasSelection() const
+{
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return false;
+    }
+
+    return !notation->interaction()->selection()->isNone();
+}
+
 void Palette::applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers)
 {
     if (m_disableElementsApply) {
@@ -700,7 +715,7 @@ void Palette::applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers
         return;
     }
 
-    if (!adapter()->isSelected()) {
+    if (!notationHasSelection()) {
         return;
     }
 
@@ -864,7 +879,7 @@ void Palette::prevPaletteElement()
 
 void Palette::applyPaletteElement()
 {
-    if (!adapter()->isSelected()) {
+    if (!notationHasSelection()) {
         return;
     }
 

@@ -71,6 +71,7 @@ public:
     const Params& params() const;
     Val param(const std::string& key, const Val& def = Val()) const;
     void addParam(const std::string& key, const Val& val);
+    UriQuery addingParam(const std::string& key, const Val& val) const;
 
     std::string toString() const;
 
