@@ -100,8 +100,7 @@ Ms::MasterScore* MasterNotation::masterScore() const
 
 //! NOTE: this method with all of its dependencies was copied from MU3
 //! source: file.cpp, MuseScore::getNewFile()
-mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* templateScore,
-                                      const project::ProjectCreateOptions& scoreOptions)
+mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* templateScore, const ScoreCreateOptions& scoreOptions)
 {
     int measures = scoreOptions.measures;
 
@@ -175,9 +174,6 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
     setScore(score);
 
     score->style().checkChordList();
-    if (!scoreOptions.title.isEmpty()) {
-        score->fileInfo()->setFile(scoreOptions.title);
-    }
 
     Ms::Fraction timesig(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
     score->sigmap()->add(0, timesig);
@@ -292,44 +288,46 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
         }
     }
 
-    if (!scoreOptions.title.isEmpty() || !scoreOptions.subtitle.isEmpty() || !scoreOptions.composer.isEmpty()
-        || !scoreOptions.lyricist.isEmpty()) {
-        Ms::MeasureBase* measure = score->measures()->first();
-        if (measure->type() != ElementType::VBOX) {
-            Ms::MeasureBase* nm = nvb ? nvb : new Ms::VBox(score);
-            nm->setTick(Ms::Fraction(0, 1));
-            nm->setNext(measure);
-            score->measures()->add(nm);
-            measure = nm;
+    {
+        QString title = score->metaTag("workTitle");
+        QString subtitle = score->metaTag("subtitle");
+        QString composer = score->metaTag("composer");
+        QString lyricist = score->metaTag("lyricist");
+
+        if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !lyricist.isEmpty()) {
+            Ms::MeasureBase* measure = score->measures()->first();
+            if (measure->type() != ElementType::VBOX) {
+                Ms::MeasureBase* nm = nvb ? nvb : new Ms::VBox(score);
+                nm->setTick(Ms::Fraction(0, 1));
+                nm->setNext(measure);
+                score->measures()->add(nm);
+                measure = nm;
+            } else if (nvb) {
+                delete nvb;
+            }
+            if (!title.isEmpty()) {
+                Ms::Text* s = new Ms::Text(score, Ms::Tid::TITLE);
+                s->setPlainText(title);
+                measure->add(s);
+            }
+            if (!subtitle.isEmpty()) {
+                Ms::Text* s = new Ms::Text(score, Ms::Tid::SUBTITLE);
+                s->setPlainText(subtitle);
+                measure->add(s);
+            }
+            if (!composer.isEmpty()) {
+                Ms::Text* s = new Ms::Text(score, Ms::Tid::COMPOSER);
+                s->setPlainText(composer);
+                measure->add(s);
+            }
+            if (!lyricist.isEmpty()) {
+                Ms::Text* s = new Ms::Text(score, Ms::Tid::POET);
+                s->setPlainText(lyricist);
+                measure->add(s);
+            }
         } else if (nvb) {
             delete nvb;
         }
-        if (!scoreOptions.title.isEmpty()) {
-            Ms::Text* s = new Ms::Text(score, Ms::Tid::TITLE);
-            s->setPlainText(scoreOptions.title);
-            measure->add(s);
-            score->setMetaTag("workTitle", scoreOptions.title);
-        }
-        if (!scoreOptions.subtitle.isEmpty()) {
-            Ms::Text* s = new Ms::Text(score, Ms::Tid::SUBTITLE);
-            s->setPlainText(scoreOptions.subtitle);
-            measure->add(s);
-            score->setMetaTag("subtitle", scoreOptions.subtitle);
-        }
-        if (!scoreOptions.composer.isEmpty()) {
-            Ms::Text* s = new Ms::Text(score, Ms::Tid::COMPOSER);
-            s->setPlainText(scoreOptions.composer);
-            measure->add(s);
-            score->setMetaTag("composer", scoreOptions.composer);
-        }
-        if (!scoreOptions.lyricist.isEmpty()) {
-            Ms::Text* s = new Ms::Text(score, Ms::Tid::POET);
-            s->setPlainText(scoreOptions.lyricist);
-            measure->add(s);
-            score->setMetaTag("lyricist", scoreOptions.lyricist);
-        }
-    } else if (nvb) {
-        delete nvb;
     }
 
     if (scoreOptions.withTempo) {
@@ -401,9 +399,6 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
         Ms::Segment* seg = score->firstMeasure()->first(Ms::SegmentType::ChordRest);
         seg->add(tt);
         score->setTempo(seg, tempo);
-    }
-    if (!scoreOptions.copyright.isEmpty()) {
-        score->setMetaTag("copyright", scoreOptions.copyright);
     }
 
     {

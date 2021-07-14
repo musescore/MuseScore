@@ -37,25 +37,9 @@ struct ProjectCreateOptions
     QString lyricist;
     QString copyright;
 
-    bool withTempo = false;
-    notation::Tempo tempo;
-
-    int timesigNumerator = 0;
-    int timesigDenominator = 1;
-    notation::TimeSigType timesigType = notation::TimeSigType::NORMAL;
-
-    notation::Key key = notation::Key::C;
-    notation::KeyMode keyMode = notation::KeyMode::UNKNOWN;
-
-    bool withPickupMeasure = false;
-    int measures = 0;
-    int measureTimesigNumerator = 0;
-    int measureTimesigDenominator = 0;
-
     io::path templatePath;
 
-    notation::PartInstrumentList parts;
-    notation::ScoreOrder order;
+    notation::ScoreCreateOptions scoreOptions;
 };
 
 enum class SaveMode
