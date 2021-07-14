@@ -22,10 +22,12 @@
 
 #include "testing/qtestsuite.h"
 #include "testbase.h"
+
+#include "engraving/style/style.h"
+
 #include "libmscore/chord.h"
 #include "libmscore/measure.h"
 #include "libmscore/score.h"
-#include "libmscore/style.h"
 #include "libmscore/undo.h"
 
 static const QString EARLYMUSIC_DATA_DIR("earlymusic_data/");

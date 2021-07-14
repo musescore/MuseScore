@@ -24,8 +24,11 @@
 
 #include <cmath>
 
+#include "draw/transform.h"
+#include "draw/pen.h"
+#include "style/style.h"
+
 #include "dynamichairpingroup.h"
-#include "style.h"
 #include "xml.h"
 #include "utils.h"
 #include "score.h"
@@ -37,9 +40,6 @@
 #include "mscore.h"
 #include "chord.h"
 #include "changeMap.h"
-
-#include "draw/transform.h"
-#include "draw/pen.h"
 
 using namespace mu;
 

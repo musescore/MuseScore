@@ -27,7 +27,7 @@
 
 #include <cmath>
 
-#include "log.h"
+#include "style/style.h"
 
 #include "measure.h"
 #include "accidental.h"
@@ -74,7 +74,6 @@
 #include "stafftext.h"
 #include "stafftype.h"
 #include "stringdata.h"
-#include "style.h"
 #include "system.h"
 #include "tempotext.h"
 #include "measurenumber.h"
@@ -94,6 +93,8 @@
 #include "stafftypechange.h"
 #include "stafflines.h"
 #include "bracketItem.h"
+
+#include "log.h"
 
 using namespace mu;
 

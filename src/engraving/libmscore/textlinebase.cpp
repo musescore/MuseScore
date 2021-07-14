@@ -24,7 +24,9 @@
 
 #include <cmath>
 
-#include "style.h"
+#include "draw/pen.h"
+#include "style/style.h"
+
 #include "system.h"
 #include "measure.h"
 #include "xml.h"
@@ -33,7 +35,6 @@
 #include "text.h"
 #include "mscore.h"
 #include "staff.h"
-#include "draw/pen.h"
 
 using namespace mu;
 

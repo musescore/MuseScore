@@ -26,6 +26,9 @@
 */
 
 #include "system.h"
+
+#include "style/style.h"
+
 #include "measure.h"
 #include "segment.h"
 #include "score.h"
@@ -39,7 +42,6 @@
 #include "staff.h"
 #include "part.h"
 #include "page.h"
-#include "style.h"
 #include "bracket.h"
 #include "mscore.h"
 #include "barline.h"
@@ -53,6 +55,7 @@
 #include "textframe.h"
 #include "stafflines.h"
 #include "bracketItem.h"
+
 #include "log.h"
 
 using namespace mu;

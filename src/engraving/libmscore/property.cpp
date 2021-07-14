@@ -21,6 +21,9 @@
  */
 
 #include "property.h"
+
+#include "style/style.h"
+
 #include "accidental.h"
 #include "bracket.h"
 #include "clef.h"
@@ -35,7 +38,6 @@
 #include "xml.h"
 #include "note.h"
 #include "barline.h"
-#include "style.h"
 #include "sym.h"
 #include "changeMap.h"
 #include "fret.h"

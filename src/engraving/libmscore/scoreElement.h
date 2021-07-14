@@ -24,9 +24,8 @@
 #define __SCORE_ELEMENT_H__
 
 #include "types.h"
-#include "style.h"
-
 #include "draw/geometry.h"
+#include "style/style.h"
 
 namespace Ms {
 class ScoreElement;

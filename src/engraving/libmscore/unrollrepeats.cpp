@@ -24,6 +24,8 @@
  File handling: loading and saving.
  */
 
+#include "style/style.h"
+
 #include "xml.h"
 #include "element.h"
 #include "note.h"
@@ -35,7 +37,6 @@
 #include "score.h"
 #include "page.h"
 #include "dynamic.h"
-#include "style.h"
 #include "tempo.h"
 #include "select.h"
 #include "staff.h"

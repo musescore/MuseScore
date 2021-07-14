@@ -24,6 +24,8 @@
 
 #include <QRegularExpression>
 
+#include "style/style.h"
+
 #include "barline.h"
 #include "beam.h"
 #include "box.h"
@@ -43,7 +45,6 @@
 #include "slur.h"
 #include "staff.h"
 #include "stafftype.h"
-#include "style.h"
 #include "tempo.h"
 #include "text.h"
 #include "textframe.h"

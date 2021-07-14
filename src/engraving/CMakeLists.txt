@@ -84,6 +84,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/compat/mscxcompat.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/mscxcompat.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/style/styledef.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/style/styledef.h
+    ${CMAKE_CURRENT_LIST_DIR}/style/style.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/style/style.h
     )
 
 if (NO_ENGRAVING_QFONTENGINE)

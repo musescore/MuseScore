@@ -24,9 +24,10 @@
 
 #include <cmath>
 
+#include "style/style.h"
+
 #include "score.h"
 #include "xml.h"
-#include "style.h"
 #include "utils.h"
 #include "tuplet.h"
 #include "symid.h"

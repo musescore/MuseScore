@@ -26,7 +26,7 @@
 #include <QPaintEngine>
 
 #include "config.h"
-#include "style.h"
+#include "style/style.h"
 
 namespace Ms {
 #define MSC_VERSION     "3.02"

@@ -295,8 +295,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/sticking.h
     ${CMAKE_CURRENT_LIST_DIR}/stringdata.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stringdata.h
-    ${CMAKE_CURRENT_LIST_DIR}/style.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/style.h
     ${CMAKE_CURRENT_LIST_DIR}/symbol.cpp
     ${CMAKE_CURRENT_LIST_DIR}/symbol.h
     ${CMAKE_CURRENT_LIST_DIR}/symid.h
