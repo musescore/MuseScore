@@ -25,8 +25,6 @@
 #include "engraving/engravingmodule.h"
 #include "framework/fonts/fontsmodule.h"
 
-#include "framework/uicomponents/uicomponentsmodule.h"
-
 #include "libmscore/score.h"
 #include "libmscore/musescoreCore.h"
 
@@ -35,8 +33,7 @@
 static mu::testing::SuiteEnvironment engraving_se(
 {
     new mu::fonts::FontsModule(),
-    new mu::engraving::EngravingModule(),
-    new mu::uicomponents::UiComponentsModule()
+    new mu::engraving::EngravingModule()
 },
     []() {
     LOGI() << "engraving tests suite post init";

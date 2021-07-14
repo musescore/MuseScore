@@ -740,10 +740,14 @@ InstrumentTemplate* searchTemplateForInstrNameList(const QList<QString>& nameLis
     for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
         for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
             for (const QString& name : nameList) {
+                if (name.isEmpty()) {
+                    continue;
+                }
+
                 int matchStrength = 0
-                                    + (4 * (it->trackName == name)) // most weight to track name since there are fewer duplicates
-                                    + (2 * it->longNames.contains(StaffName(name)))
-                                    + (1 * it->shortNames.contains(StaffName(name))); // least weight to short name
+                                    + (4 * (it->trackName == name ? 1 : 0)) // most weight to track name since there are fewer duplicates
+                                    + (2 * (it->longNames.contains(StaffName(name)) ? 1 : 0))
+                                    + (1 * (it->shortNames.contains(StaffName(name)) ? 1 : 0)); // least weight to short name
                 const int perfectMatchStrength = 7;
                 Q_ASSERT(matchStrength <= perfectMatchStrength);
                 if (matchStrength > bestMatchStrength) {

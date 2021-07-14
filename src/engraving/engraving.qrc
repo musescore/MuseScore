@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="data/instruments.xml">../../share/instruments/instruments.xml</file>
+        <file alias="data/orders.xml">../../share/instruments/orders.xml</file>
+    </qresource>
+</RCC>
