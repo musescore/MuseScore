@@ -30,7 +30,6 @@ using namespace mu::inspector;
 PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_PEDAL);
     setTitle(qtrc("inspector", "Pedal"));
     createProperties();

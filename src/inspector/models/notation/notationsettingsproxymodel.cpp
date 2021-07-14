@@ -21,81 +21,66 @@
  */
 #include "notationsettingsproxymodel.h"
 
-#include "notes/notesettingsproxymodel.h"
-#include "fermatas/fermatasettingsmodel.h"
-#include "tempos/temposettingsmodel.h"
-#include "glissandos/glissandosettingsmodel.h"
-#include "barlines/barlinesettingsproxymodel.h"
-#include "staffs/staffsettingsmodel.h"
-#include "sectionbreaks/sectionbreaksettingsmodel.h"
-#include "markers/markersettingsmodel.h"
-#include "jumps/jumpsettingsmodel.h"
-#include "keysignatures/keysignaturesettingsmodel.h"
-#include "accidentals/accidentalsettingsmodel.h"
-#include "fretdiagrams/fretdiagramsettingsmodel.h"
-#include "pedals/pedalsettingsmodel.h"
-#include "spacers/spacersettingsmodel.h"
-#include "clefs/clefsettingsmodel.h"
-#include "hairpins/hairpinsettingsmodel.h"
-#include "crescendos/crescendosettingsmodel.h"
-#include "stafftype/stafftypesettingsmodel.h"
-#include "frames/textframesettingsmodel.h"
-#include "frames/verticalframesettingsmodel.h"
-#include "frames/horizontalframesettingsmodel.h"
-#include "articulations/articulationsettingsmodel.h"
-#include "ornaments/ornamentsettingsmodel.h"
-#include "ambituses/ambitussettingsmodel.h"
-#include "images/imagesettingsmodel.h"
-#include "chordsymbols/chordsymbolsettingsmodel.h"
-#include "brackets/bracketsettingsmodel.h"
-#include "brackets/bracesettingsmodel.h"
-#include "timesignatures/timesignaturesettingsmodel.h"
-#include "mmrests/mmrestsettingsmodel.h"
-#include "bends/bendsettingsmodel.h"
-#include "tremolobars/tremolobarsettingsmodel.h"
-#include "tremolos/tremolosettingsmodel.h"
-#include "measurerepeats/measurerepeatsettingsmodel.h"
+#include "translation.h"
 
 using namespace mu::inspector;
 
-NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
+NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository,
+                                                       const QSet<Ms::ElementType>& elementSet)
     : AbstractInspectorProxyModel(parent)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION_MULTI_ELEMENTS);
-    setTitle(QStringLiteral("Notation"));
+    setSectionType(InspectorSectionType::SECTION_NOTATION);
 
-    addModel(new NoteSettingsProxyModel(this, repository));
-    addModel(new FermataSettingsModel(this, repository));
-    addModel(new TempoSettingsModel(this, repository));
-    addModel(new GlissandoSettingsModel(this, repository));
-    addModel(new BarlineSettingsProxyModel(this, repository));
-    addModel(new StaffSettingsModel(this, repository));
-    addModel(new SectionBreakSettingsModel(this, repository));
-    addModel(new MarkerSettingsModel(this, repository));
-    addModel(new JumpSettingsModel(this, repository));
-    addModel(new KeySignatureSettingsModel(this, repository));
-    addModel(new AccidentalSettingsModel(this, repository));
-    addModel(new FretDiagramSettingsModel(this, repository));
-    addModel(new PedalSettingsModel(this, repository));
-    addModel(new SpacerSettingsModel(this, repository));
-    addModel(new ClefSettingsModel(this, repository));
-    addModel(new HairpinSettingsModel(this, repository));
-    addModel(new CrescendoSettingsModel(this, repository));
-    addModel(new StaffTypeSettingsModel(this, repository));
-    addModel(new TextFrameSettingsModel(this, repository));
-    addModel(new VerticalFrameSettingsModel(this, repository));
-    addModel(new HorizontalFrameSettingsModel(this, repository));
-    addModel(new ArticulationSettingsModel(this, repository));
-    addModel(new OrnamentSettingsModel(this, repository));
-    addModel(new AmbitusSettingsModel(this, repository));
-    addModel(new ImageSettingsModel(this, repository));
-    addModel(new ChordSymbolSettingsModel(this, repository));
-    addModel(new BracketSettingsModel(this, repository));
-    addModel(new BraceSettingsModel(this, repository));
-    addModel(new TimeSignatureSettingsModel(this, repository));
-    addModel(new BendSettingsModel(this, repository));
-    addModel(new TremoloBarSettingsModel(this, repository));
-    addModel(new MMRestSettingsModel(this, repository));
-    addModel(new TremoloSettingsModel(this, repository));
-    addModel(new MeasureRepeatSettingsModel(this, repository));
+    AbstractInspectorModel::InspectorModelType notationSingleElementModelType = this->notationSingleElementModelType(elementSet);
+
+    if (notationSingleElementModelType != AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED) {
+        auto model = inspectorModelCreator()->newInspectorModel(notationSingleElementModelType, parent, repository);
+        setTitle(model->title());
+        addModel(model);
+    } else {
+        setTitle(qtrc("inspector", "Notation"));
+        for (const Ms::ElementType elementType : elementSet) {
+            AbstractInspectorModel::InspectorSectionType sectionType = AbstractInspectorModel::sectionTypeFromElementType(elementType);
+            if (sectionType != AbstractInspectorModel::InspectorSectionType::SECTION_UNDEFINED) {
+                continue;
+            }
+
+            AbstractInspectorModel::InspectorModelType modelType = AbstractInspectorModel::notationElementModelType(elementType);
+            addModel(inspectorModelCreator()->newInspectorModel(modelType, parent, repository));
+        }
+    }
+}
+
+AbstractInspectorModel::InspectorModelType NotationSettingsProxyModel::notationSingleElementModelType(const QSet<Ms::ElementType>& elements)
+const
+{
+    static QList<AbstractInspectorModel::InspectorModelType> notePartTypes {
+        AbstractInspectorModel::InspectorModelType::TYPE_NOTE,
+        AbstractInspectorModel::InspectorModelType::TYPE_NOTEHEAD,
+        AbstractInspectorModel::InspectorModelType::TYPE_STEM,
+        AbstractInspectorModel::InspectorModelType::TYPE_HOOK,
+        AbstractInspectorModel::InspectorModelType::TYPE_BEAM
+    };
+
+    AbstractInspectorModel::InspectorModelType notationModelType = AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
+    for (const Ms::ElementType elementType : elements) {
+        AbstractInspectorModel::InspectorModelType modelType = AbstractInspectorModel::notationElementModelType(elementType);
+        if (modelType == AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED) {
+            continue;
+        }
+
+        if (notationModelType != AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED && notationModelType != modelType) {
+            if (notePartTypes.contains(modelType) && notePartTypes.contains(notationModelType)) {
+                notationModelType = AbstractInspectorModel::InspectorModelType::TYPE_NOTE;
+                continue;
+            }
+
+            notationModelType = AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
+            break;
+        }
+
+        notationModelType = modelType;
+    }
+
+    return notationModelType;
 }

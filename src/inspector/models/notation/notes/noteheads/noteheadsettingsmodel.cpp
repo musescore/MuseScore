@@ -31,7 +31,6 @@ using namespace mu::inspector;
 NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setTitle(qtrc("inspector", "Head"));
     setModelType(InspectorModelType::TYPE_NOTEHEAD);
 

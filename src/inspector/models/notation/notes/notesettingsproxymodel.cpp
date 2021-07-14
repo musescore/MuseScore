@@ -33,7 +33,6 @@ using namespace mu::inspector;
 NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository, InspectorModelType subModelType)
     : AbstractInspectorProxyModel(parent, subModelType)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION_SINGLE_ELEMENT);
     setModelType(InspectorModelType::TYPE_NOTE);
     setTitle(qtrc("inspector", "Note"));
 
