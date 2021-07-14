@@ -40,7 +40,7 @@ using namespace mu::notation;
 
 static const Ms::Fraction DEFAULT_TICK = Ms::Fraction(0, 1);
 
-static QString formatInstrumentName(const QString& instrumentName, const Trait& trait, int instrumentNumber)
+static QString formatInstrumentTitleOnScore(const QString& instrumentName, const Trait& trait, int instrumentNumber)
 {
     QString numberPart = instrumentNumber > 0 ? " " + QString::number(instrumentNumber) : QString();
 
@@ -48,7 +48,7 @@ static QString formatInstrumentName(const QString& instrumentName, const Trait& 
         return instrumentName + numberPart;
     }
 
-    return qtrc("instruments", "%1 in %2%3").arg(instrumentName).arg(trait.name).arg(numberPart);
+    return qtrc("notation", "%1 in %2%3").arg(instrumentName).arg(trait.name).arg(numberPart);
 }
 
 NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
@@ -1432,17 +1432,18 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
         Part* part = new Part(score());
         const Instrument& instrument = pi.instrument;
 
-        part->setPartName(instrument.name);
         part->setSoloist(pi.isSoloist);
         part->setInstrument(InstrumentsConverter::convertInstrument(instrument));
 
         int instrumentNumber = resolveInstrumentNumber(newInstruments, instrument);
 
+        QString formattedPartName = formatInstrumentTitle(instrument, instrumentNumber);
         QString longName = !instrument.longNames.empty() ? instrument.longNames.first().name() : QString();
-        QString formattedLongName = formatInstrumentName(longName, instrument.trait, instrumentNumber);
+        QString formattedLongName = formatInstrumentTitleOnScore(longName, instrument.trait, instrumentNumber);
         QString shortName = !instrument.shortNames.empty() ? instrument.shortNames.first().name() : QString();
-        QString formattedShortName = formatInstrumentName(shortName, instrument.trait, instrumentNumber);
+        QString formattedShortName = formatInstrumentTitleOnScore(shortName, instrument.trait, instrumentNumber);
 
+        part->setPartName(formattedPartName);
         part->setLongName(formattedLongName);
         part->setShortName(formattedShortName);
 

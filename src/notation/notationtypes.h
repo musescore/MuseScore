@@ -400,6 +400,33 @@ struct Instrument
 
 using Instruments = QList<Instrument>;
 
+inline QString formatInstrumentTitle(const Instrument& instrument, int instrumentNumber = 0)
+{
+    const QString& traitName = instrument.trait.name;
+    const QString& instrumentName = instrument.name;
+    QString result = instrumentName;
+
+    switch (instrument.trait.type) {
+    case TraitType::Tuning:
+        result = mu::qtrc("notation", "%1 %2").arg(traitName).arg(instrumentName);
+        break;
+    case TraitType::Course:
+        result = mu::qtrc("notation", "%1 (%2)").arg(instrumentName).arg(traitName);
+        break;
+    case TraitType::Transposition:
+        result = mu::qtrc("notation", "%1 in %2").arg(instrumentName).arg(traitName);
+        break;
+    case TraitType::Unknown:
+        break;
+    }
+
+    if (!result.isEmpty() && instrumentNumber > 0) {
+        result += " " + QString::number(instrumentNumber);
+    }
+
+    return result;
+}
+
 struct PartInstrument
 {
     QString partId;
