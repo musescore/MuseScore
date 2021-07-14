@@ -76,16 +76,6 @@ void Painter::init()
     }
 }
 
-QPaintDevice* Painter::device() const
-{
-    return m_provider->device();
-}
-
-QPainter* Painter::qpainter() const
-{
-    return m_provider->qpainter();
-}
-
 IPaintProviderPtr Painter::provider() const
 {
     return m_provider;

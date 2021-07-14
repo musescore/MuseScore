@@ -41,9 +41,6 @@ public:
     BufferedPaintProvider();
     ~BufferedPaintProvider();
 
-    QPaintDevice* device() const override;
-    QPainter* qpainter() const override;
-
     bool isActive() const override;
     void beginTarget(const std::string& name) override;
     void beforeEndTargetHook(Painter* painter) override;

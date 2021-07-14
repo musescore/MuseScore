@@ -38,8 +38,7 @@ public:
     static IPaintProviderPtr make(QPaintDevice* dp);
     static IPaintProviderPtr make(QPainter* qp, bool overship = false);
 
-    QPaintDevice* device() const override;
-    QPainter* qpainter() const override;
+    QPainter* qpainter() const;
 
     void beginTarget(const std::string& name) override;
     void beforeEndTargetHook(Painter* painter) override;

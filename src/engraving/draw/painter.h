@@ -26,7 +26,6 @@
 #include <stack>
 
 #include <QColor>
-#include <QPainter>
 
 #include "config.h"
 #include "ipaintprovider.h"
@@ -56,8 +55,6 @@ public:
 
     ~Painter();
 
-    QPaintDevice* device() const;
-    QPainter* qpainter() const;
     IPaintProviderPtr provider() const;
 
     bool isActive() const;
