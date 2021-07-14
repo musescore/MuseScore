@@ -24,7 +24,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-using namespace mu::notation;
+using namespace mu::project;
 
 int ProjectAudioSettings::someValue() const
 {

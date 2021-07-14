@@ -26,6 +26,7 @@
 #include "ui/view/musicalsymbolcodes.h"
 
 using namespace mu::userscores;
+using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::ui;
 
@@ -48,7 +49,7 @@ QString NewScoreModel::preferredScoreCreationMode() const
 
 bool NewScoreModel::createScore(const QVariant& info)
 {
-    ScoreCreateOptions options = parseOptions(info.toMap());
+    ProjectCreateOptions options = parseOptions(info.toMap());
 
     auto project = notationCreator()->newNotationProject();
     Ret ret = project->createNew(options);
@@ -70,9 +71,9 @@ bool NewScoreModel::createScore(const QVariant& info)
     return true;
 }
 
-ScoreCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
+ProjectCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
 {
-    ScoreCreateOptions options;
+    ProjectCreateOptions options;
 
     options.title = info["title"].toString();
     options.subtitle = info["subtitle"].toString();

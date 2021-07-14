@@ -29,7 +29,7 @@
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
 #include "async/asyncable.h"
-#include "notation/inotationcreator.h"
+#include "project/inotationcreator.h"
 #include "context/iglobalcontext.h"
 #include "iplatformrecentfilescontroller.h"
 #include "multiinstances/imultiinstancesprovider.h"
@@ -40,7 +40,7 @@ class FileScoreController : public IFileScoreController, public actions::Actiona
 {
     INJECT(userscores, actions::IActionsDispatcher, dispatcher)
     INJECT(userscores, framework::IInteractive, interactive)
-    INJECT(userscores, notation::INotationCreator, notationCreator)
+    INJECT(userscores, project::INotationCreator, notationCreator)
     INJECT(userscores, context::IGlobalContext, globalContext)
     INJECT(userscores, IUserScoresConfiguration, configuration)
     INJECT(userscores, IPlatformRecentFilesController, platformRecentFilesController)
@@ -57,7 +57,7 @@ public:
 private:
     void setupConnections();
 
-    notation::INotationProjectPtr currentNotationProject() const;
+    project::INotationProjectPtr currentNotationProject() const;
     notation::IMasterNotationPtr currentMasterNotation() const;
     notation::INotationPtr currentNotation() const;
     notation::INotationInteractionPtr currentInteraction() const;
@@ -86,7 +86,7 @@ private:
     io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
 
     Ret doOpenProject(const io::path& filePath);
-    void doSaveScore(const io::path& filePath = io::path(), notation::SaveMode saveMode = notation::SaveMode::Save);
+    void doSaveScore(const io::path& filePath = io::path(), project::SaveMode saveMode = project::SaveMode::Save);
 
     void exportScore();
 

@@ -23,13 +23,21 @@
 #ifndef MU_IMPORTEXPORT_MUSICXMLWRITER_H
 #define MU_IMPORTEXPORT_MUSICXMLWRITER_H
 
-#include "notation/abstractnotationwriter.h"
+#include "project/inotationwriter.h"
 
 namespace mu::iex::musicxml {
-class MusicXmlWriter : public notation::AbstractNotationWriter
+class MusicXmlWriter : public project::INotationWriter
 {
 public:
+
+    std::vector<UnitType> supportedUnitTypes() const override;
+    bool supportsUnitType(UnitType unitType) const override;
+
     Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
+    Ret writeList(const notation::INotationPtrList& notations, io::Device& destinationDevice, const Options& options = Options()) override;
+
+    void abort() override;
+    framework::ProgressChannel progress() const override;
 };
 }
 

@@ -19,34 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONREADER_H
-#define MU_NOTATION_INOTATIONREADER_H
+#include "notationreadersregister.h"
 
-#include <memory>
+using namespace mu::project;
 
-#include "ret.h"
-#include "io/path.h"
-
-namespace Ms {
-class MasterScore;
-}
-
-namespace mu::notation {
-class INotationReader
+void NotationReadersRegister::reg(const std::vector<std::string>& suffixes, INotationReaderPtr reader)
 {
-public:
-    enum class OptionKey {
-        ForceMode // Ignore lower priority errors (like version errors)
-    };
-
-    using Options = QMap<OptionKey, QVariant>;
-
-    virtual ~INotationReader() = default;
-
-    virtual Ret read(Ms::MasterScore* score, const io::path& path, const Options& options = Options()) = 0;
-};
-
-using INotationReaderPtr = std::shared_ptr<INotationReader>;
+    for (const std::string& suffix : suffixes) {
+        m_readers.insert({ suffix, reader });
+    }
 }
 
-#endif // MU_NOTATION_INOTATIONREADER_H
+INotationReaderPtr NotationReadersRegister::reader(const std::string& suffix)
+{
+    auto it = m_readers.find(suffix);
+    if (it != m_readers.end()) {
+        return it->second;
+    }
+    return nullptr;
+}

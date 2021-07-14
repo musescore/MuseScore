@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_INOTATIONWRITER_H
-#define MU_NOTATION_INOTATIONWRITER_H
+#ifndef MU_PROJECT_INOTATIONWRITER_H
+#define MU_PROJECT_INOTATIONWRITER_H
 
 #include "ret.h"
 #include "val.h"
@@ -29,20 +29,20 @@
 #include "async/channel.h"
 #include "global/progress.h"
 #include "io/device.h"
-#include "inotation.h"
+#include "notation/inotation.h"
 
-namespace mu::notation {
+namespace mu::project {
 class INotationWriter
 {
 public:
+
+    virtual ~INotationWriter() = default;
+
     enum class UnitType {
         PER_PAGE,
         PER_PART,
         MULTI_PART
     };
-
-    virtual std::vector<UnitType> supportedUnitTypes() const = 0;
-    virtual bool supportsUnitType(UnitType unitType) const = 0;
 
     enum class OptionKey {
         UNIT_TYPE,
@@ -53,10 +53,11 @@ public:
 
     using Options = QMap<OptionKey, Val>;
 
-    virtual ~INotationWriter() = default;
+    virtual std::vector<UnitType> supportedUnitTypes() const = 0;
+    virtual bool supportsUnitType(UnitType unitType) const = 0;
 
-    virtual Ret write(INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) = 0;
-    virtual Ret writeList(const INotationPtrList& notations, io::Device& destinationDevice, const Options& options = Options()) = 0;
+    virtual Ret write(notation::INotationPtr notation, io::Device& device, const Options& options = Options()) = 0;
+    virtual Ret writeList(const notation::INotationPtrList& notations, io::Device& device, const Options& options = Options()) = 0;
     virtual void abort() = 0;
     virtual framework::ProgressChannel progress() const = 0;
 };
@@ -64,4 +65,4 @@ public:
 using INotationWriterPtr = std::shared_ptr<INotationWriter>;
 }
 
-#endif // MU_NOTATION_INOTATIONWRITER_H
+#endif // MU_PROJECT_INOTATIONWRITER_H

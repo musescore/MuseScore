@@ -22,10 +22,10 @@
 #ifndef MU_IEXCAPELLA_CAPELLAREADER_H
 #define MU_IEXCAPELLA_CAPELLAREADER_H
 
-#include "notation/inotationreader.h"
+#include "project/inotationreader.h"
 
 namespace mu::iex::capella {
-class CapellaReader : public notation::INotationReader
+class CapellaReader : public project::INotationReader
 {
 public:
     Ret read(Ms::MasterScore* score, const io::path& path, const Options& options = Options()) override;

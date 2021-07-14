@@ -23,7 +23,7 @@
 #define MU_CONTEXT_IGLOBALCONTEXT_H
 
 #include "modularity/imoduleexport.h"
-#include "notation/inotationproject.h"
+#include "project/inotationproject.h"
 #include "async/notification.h"
 #include "io/path.h"
 
@@ -35,13 +35,13 @@ class IGlobalContext : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IGlobalContext() = default;
 
-    virtual void addNotationProject(const notation::INotationProjectPtr& project) = 0;
-    virtual void removeNotationProject(const notation::INotationProjectPtr& project) = 0;
-    virtual const std::vector<notation::INotationProjectPtr>& notationProjects() const = 0;
+    virtual void addNotationProject(const project::INotationProjectPtr& project) = 0;
+    virtual void removeNotationProject(const project::INotationProjectPtr& project) = 0;
+    virtual const std::vector<project::INotationProjectPtr>& notationProjects() const = 0;
     virtual bool containsNotationProject(const io::path& path) const = 0;
 
-    virtual void setCurrentNotationProject(const notation::INotationProjectPtr& project) = 0;
-    virtual notation::INotationProjectPtr currentNotationProject() const = 0;
+    virtual void setCurrentNotationProject(const project::INotationProjectPtr& project) = 0;
+    virtual project::INotationProjectPtr currentNotationProject() const = 0;
     virtual async::Notification currentNotationProjectChanged() const = 0;
 
     virtual notation::IMasterNotationPtr currentMasterNotation() const = 0;

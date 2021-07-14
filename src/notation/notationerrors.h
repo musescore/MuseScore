@@ -28,6 +28,13 @@
 #include "libmscore/score.h"
 #include "engraving/engravingerrors.h"
 
+namespace mu {
+inline Ret make_ret(engraving::Err e)
+{
+    return Ret(static_cast<int>(e));
+}
+}
+
 namespace mu::notation {
 // 1000 - 1299
 enum class Err {
@@ -123,11 +130,6 @@ inline Ret make_ret(Err err, const io::path& filePath = "")
     }
 
     return Ret(code, text.toStdString());
-}
-
-inline Ret make_ret(engraving::Err e)
-{
-    return Ret(static_cast<int>(e));
 }
 
 inline Ret scoreFileErrorToRet(Ms::Score::FileError err, const io::path& filePath)

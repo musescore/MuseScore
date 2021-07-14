@@ -21,18 +21,19 @@
  */
 #include "midimodule.h"
 
-#include "log.h"
 #include "modularity/ioc.h"
 
-#include "notation/inotationreadersregister.h"
+#include "project/inotationreadersregister.h"
 #include "internal/notationmidireader.h"
-#include "notation/inotationwritersregister.h"
+#include "project/inotationwritersregister.h"
 #include "internal/notationmidiwriter.h"
 
 #include "internal/midiconfiguration.h"
 
+#include "log.h"
+
 using namespace mu::iex::midi;
-using namespace mu::notation;
+using namespace mu::project;
 
 static std::shared_ptr<MidiConfiguration> s_configuration = std::make_shared<MidiConfiguration>();
 

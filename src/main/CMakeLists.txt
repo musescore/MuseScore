@@ -154,6 +154,7 @@ set(LINK_LIB ${LINK_LIB}
     userscores
     learn
     notation
+    project
     commonscene
     palette
     inspector

@@ -22,8 +22,6 @@
 
 #include "svgwriter.h"
 
-#include "log.h"
-
 #include "svggenerator.h"
 
 #include "libmscore/score.h"
@@ -35,7 +33,10 @@
 
 #include "engraving/draw/qpainterprovider.h"
 
+#include "log.h"
+
 using namespace mu::iex::imagesexport;
+using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::io;
 

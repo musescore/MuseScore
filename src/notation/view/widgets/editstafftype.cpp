@@ -28,15 +28,16 @@
 #include "libmscore/stringdata.h"
 
 #include "engraving/scoreaccess.h"
+#include "engraving/compat/mscxcompat.h"
 
 #include "widgetstatestore.h"
-#include "internal/mscznotationreader.h"
 
 #include "notationerrors.h"
 
 #include "log.h"
 
 using namespace mu::notation;
+using namespace mu::engraving;
 
 const char* g_groupNames[Ms::STAFF_GROUP_MAX] = {
     QT_TRANSLATE_NOOP("staff group header name", "STANDARD STAFF"),
@@ -191,16 +192,13 @@ mu::Ret EditStaffType::loadScore(Ms::MasterScore* score, const mu::io::path& pat
 
 mu::Ret EditStaffType::doLoadScore(Ms::MasterScore* score, const mu::io::path& path) const
 {
-    MsczNotationReader reader;
-
     QFileInfo fi(path.toQString());
     score->setName(fi.completeBaseName());
     score->setImportedFilePath(fi.filePath());
     score->setMetaTag("originalFormat", fi.suffix().toLower());
 
-    Ret ret = reader.read(score, path);
-    if (!ret) {
-        return ret;
+    if (compat::loadMsczOrMscx(score, path.toQString()) != Ms::Score::FileError::FILE_NO_ERROR) {
+        return make_ret(Ret::Code::UnknownError);
     }
 
     score->connectTies();

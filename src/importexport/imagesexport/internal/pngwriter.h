@@ -23,18 +23,18 @@
 #ifndef MU_IMPORTEXPORT_PNGWRITER_H
 #define MU_IMPORTEXPORT_PNGWRITER_H
 
-#include "notation/abstractnotationwriter.h"
+#include "abstractimagewriter.h"
 
 #include "../iimagesexportconfiguration.h"
 #include "modularity/ioc.h"
 
 namespace mu::iex::imagesexport {
-class PngWriter : public notation::AbstractNotationWriter
+class PngWriter : public AbstractImageWriter
 {
     INJECT(iex_imagesexport, IImagesExportConfiguration, configuration)
 
 public:
-    std::vector<notation::INotationWriter::UnitType> supportedUnitTypes() const override;
+    std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;
     Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
 };
 }

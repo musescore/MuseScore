@@ -28,7 +28,7 @@
 #include "iinteractive.h"
 #include "context/iglobalcontext.h"
 #include "iuserscoresconfiguration.h"
-#include "notation/inotationwritersregister.h"
+#include "project/inotationwritersregister.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
@@ -42,10 +42,10 @@ class ExportDialogModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    INJECT(userscores, framework::IInteractive, interactive);
+    INJECT(userscores, framework::IInteractive, interactive)
     INJECT(userscores, context::IGlobalContext, context)
     INJECT(userscores, IUserScoresConfiguration, configuration)
-    INJECT(userscores, notation::INotationWritersRegister, writers)
+    INJECT(userscores, project::INotationWritersRegister, writers)
     INJECT(userscores, iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
     INJECT(userscores, iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
     INJECT(userscores, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
@@ -96,7 +96,7 @@ public:
     QVariantList availableUnitTypes() const;
     int selectedUnitType() const;
     void setUnitType(int unitType);
-    void setUnitType(notation::INotationWriter::UnitType unitType);
+    void setUnitType(project::INotationWriter::UnitType unitType);
 
     Q_INVOKABLE bool exportScores();
 
@@ -142,7 +142,7 @@ signals:
     void selectionChanged();
 
     void selectedExportTypeChanged(QVariantMap newExportType);
-    void selectedUnitTypeChanged(notation::INotationWriter::UnitType newUnitType);
+    void selectedUnitTypeChanged(project::INotationWriter::UnitType newUnitType);
 
     void pdfResolutionChanged(int resolution);
     void pngResolutionChanged(int resolution);
@@ -176,7 +176,7 @@ private:
 
     ExportTypeList m_exportTypeList {};
     ExportType m_selectedExportType = ExportType();
-    notation::INotationWriter::UnitType m_selectedUnitType = notation::INotationWriter::UnitType::PER_PART;
+    project::INotationWriter::UnitType m_selectedUnitType = project::INotationWriter::UnitType::PER_PART;
 };
 }
 

@@ -180,14 +180,6 @@ enum class NoteAddingMode
     InsertChord
 };
 
-enum class SaveMode
-{
-    Save,
-    SaveAs,
-    SaveCopy,
-    SaveSelection
-};
-
 enum class ResettableValueType
 {
     Stretch,
@@ -465,35 +457,6 @@ struct InstrumentsMeta
         articulations.clear();
         scoreOrders.clear();
     }
-};
-
-struct ScoreCreateOptions
-{
-    QString title;
-    QString subtitle;
-    QString composer;
-    QString lyricist;
-    QString copyright;
-
-    bool withTempo = false;
-    Tempo tempo;
-
-    int timesigNumerator = 0;
-    int timesigDenominator = 1;
-    TimeSigType timesigType = TimeSigType::NORMAL;
-
-    Key key = Key::C;
-    KeyMode keyMode = KeyMode::UNKNOWN;
-
-    bool withPickupMeasure = false;
-    int measures = 0;
-    int measureTimesigNumerator = 0;
-    int measureTimesigDenominator = 0;
-
-    io::path templatePath;
-
-    PartInstrumentList parts;
-    ScoreOrder order;
 };
 
 struct SearchCommand

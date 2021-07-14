@@ -21,15 +21,16 @@
  */
 #include "guitarpromodule.h"
 
-#include "log.h"
 #include "modularity/ioc.h"
 
-#include "notation/inotationreadersregister.h"
+#include "project/inotationreadersregister.h"
 #include "internal/guitarproreader.h"
 #include "internal/guitarproconfiguration.h"
 
+#include "log.h"
+
 using namespace mu::iex::guitarpro;
-using namespace mu::notation;
+using namespace mu::project;
 
 static std::shared_ptr<GuitarProConfiguration> s_configuration = std::make_shared<GuitarProConfiguration>();
 

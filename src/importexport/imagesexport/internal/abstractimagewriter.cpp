@@ -19,26 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#include "../abstractnotationwriter.h"
+#include "abstractimagewriter.h"
 
 #include "log.h"
 
+using namespace mu::iex::imagesexport;
+using namespace mu::project;
 using namespace mu::notation;
-using namespace mu::framework;
 
-std::vector<INotationWriter::UnitType> AbstractNotationWriter::supportedUnitTypes() const
+std::vector<INotationWriter::UnitType> AbstractImageWriter::supportedUnitTypes() const
 {
     return { UnitType::PER_PART };
 }
 
-bool AbstractNotationWriter::supportsUnitType(UnitType unitType) const
+bool AbstractImageWriter::supportsUnitType(UnitType unitType) const
 {
     std::vector<UnitType> unitTypes = supportedUnitTypes();
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret AbstractNotationWriter::write(INotationPtr, io::Device&, const Options& options)
+mu::Ret AbstractImageWriter::write(INotationPtr, io::Device&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) != UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
@@ -53,7 +53,7 @@ mu::Ret AbstractNotationWriter::write(INotationPtr, io::Device&, const Options& 
     return Ret(Ret::Code::NotSupported);
 }
 
-mu::Ret AbstractNotationWriter::writeList(const INotationPtrList&, io::Device&, const Options& options)
+mu::Ret AbstractImageWriter::writeList(const INotationPtrList&, io::Device&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) == UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
@@ -68,17 +68,17 @@ mu::Ret AbstractNotationWriter::writeList(const INotationPtrList&, io::Device&, 
     return Ret(Ret::Code::NotSupported);
 }
 
-void AbstractNotationWriter::abort()
+void AbstractImageWriter::abort()
 {
     NOT_IMPLEMENTED;
 }
 
-ProgressChannel AbstractNotationWriter::progress() const
+mu::framework::ProgressChannel AbstractImageWriter::progress() const
 {
     return m_progress;
 }
 
-INotationWriter::UnitType AbstractNotationWriter::unitTypeFromOptions(const Options& options) const
+INotationWriter::UnitType AbstractImageWriter::unitTypeFromOptions(const Options& options) const
 {
     std::vector<UnitType> supported = supportedUnitTypes();
     IF_ASSERT_FAILED(!supported.empty()) {
