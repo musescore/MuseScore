@@ -641,6 +641,27 @@ enum class BracketsType
     Parentheses
 };
 
+struct ScoreCreateOptions
+{
+    bool withTempo = false;
+    Tempo tempo;
+
+    int timesigNumerator = 0;
+    int timesigDenominator = 1;
+    TimeSigType timesigType = TimeSigType::NORMAL;
+
+    Key key = Key::C;
+    KeyMode keyMode = KeyMode::UNKNOWN;
+
+    bool withPickupMeasure = false;
+    int measures = 0;
+    int measureTimesigNumerator = 0;
+    int measureTimesigDenominator = 0;
+
+    PartInstrumentList parts;
+    ScoreOrder order;
+};
+
 static constexpr int MIN_NOTES_INTERVAL = -9;
 static constexpr int MAX_NOTES_INTERVAL = 9;
 

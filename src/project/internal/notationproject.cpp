@@ -189,13 +189,13 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret NotationProject::createNew(const ProjectCreateOptions& scoreOptions)
+mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
 {
     // Create new engraving project
     EngravingProjectPtr project = EngravingProject::create();
 
     // Load template if present
-    io::path templatePath = scoreOptions.templatePath;
+    io::path templatePath = projectOptions.templatePath;
     EngravingProjectPtr templateProject;
     if (!templatePath.empty()) {
         templateProject = EngravingProject::create(Ms::MScore::baseStyle());
@@ -212,10 +212,30 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& scoreOptions)
         }
     }
 
+    Ms::MasterScore* masterScore = project->masterScore();
+
+    // Setup project properties
+    if (!projectOptions.title.isEmpty()) {
+        masterScore->fileInfo()->setFile(projectOptions.title);
+        masterScore->setMetaTag("workTitle", projectOptions.title);
+    }
+    if (!projectOptions.subtitle.isEmpty()) {
+        masterScore->setMetaTag("subtitle", projectOptions.subtitle);
+    }
+    if (!projectOptions.composer.isEmpty()) {
+        masterScore->setMetaTag("composer", projectOptions.composer);
+    }
+    if (!projectOptions.lyricist.isEmpty()) {
+        masterScore->setMetaTag("lyricist", projectOptions.lyricist);
+    }
+    if (!projectOptions.copyright.isEmpty()) {
+        masterScore->setMetaTag("copyright", projectOptions.copyright);
+    }
+
     // Make new master score
     MasterNotationPtr masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
     Ms::MasterScore* templateScore = templateProject ? templateProject->masterScore() : nullptr;
-    Ret ret = masterNotation->setupNewScore(project->masterScore(), templateScore, scoreOptions);
+    Ret ret = masterNotation->setupNewScore(masterScore, templateScore, projectOptions.scoreOptions);
     if (!ret) {
         return ret;
     }
