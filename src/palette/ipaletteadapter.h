@@ -24,12 +24,9 @@
 
 #include "modularity/imoduleexport.h"
 
-#include <QString>
-
 #include "retval.h"
 
 #include "async/notification.h"
-#include "ui/uitypes.h"
 
 namespace Ms {
 class Element;
@@ -45,12 +42,6 @@ class IPaletteAdapter : MODULE_EXPORT_INTERFACE
 
 public:
     virtual ~IPaletteAdapter() = default;
-
-    virtual void showMasterPalette(const QString&) = 0;
-
-    // score
-    virtual bool isSelected() const = 0;
-    virtual bool applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers = {}) = 0;
 
     // qml
     virtual Ms::PaletteWorkspace* paletteWorkspace() const = 0;
