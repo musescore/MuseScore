@@ -59,12 +59,12 @@ FocusScope {
 
     objectName: root.text
 
-    height: contentLoader.item.height + 14
+    height: contentLoader.item.height + 11
     width: {
         if (narrowMargins) {
-            return (Boolean(text) ? Math.max(contentLoader.item.width + 12, prv.isVertical ? 24 : 0) : contentLoader.item.width + 16)
+            return (Boolean(text) ? Math.max(contentLoader.item.width + 12, prv.isVertical ? 24 : 0) : contentLoader.item.width + 12)
         } else {
-            return (Boolean(text) ? Math.max(contentLoader.item.width + 32, prv.isVertical ? 132 : 0) : contentLoader.item.width + 16)
+            return (Boolean(text) ? Math.max(contentLoader.item.width + 32, prv.isVertical ? 132 : 0) : contentLoader.item.width + 12)
         }
     }
 
