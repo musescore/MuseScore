@@ -19,23 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_INOTATIONCREATOR_H
-#define MU_PROJECT_INOTATIONCREATOR_H
+#ifndef MU_PROJECT_PROJECTCREATOR_H
+#define MU_PROJECT_PROJECTCREATOR_H
 
-#include "inotationproject.h"
-
-#include "modularity/imoduleexport.h"
+#include "../iprojectcreator.h"
 
 namespace mu::project {
-class INotationCreator : MODULE_EXPORT_INTERFACE
+class ProjectCreator : public IProjectCreator
 {
-    INTERFACE_ID(INotationCreator)
-
 public:
-    virtual ~INotationCreator() = default;
-
-    virtual INotationProjectPtr newNotationProject() const = 0;
+    INotationProjectPtr newNotationProject() const override;
 };
 }
 
-#endif // MU_PROJECT_INOTATIONCREATOR_H
+#endif // MU_PROJECT_PROJECTCREATOR_H

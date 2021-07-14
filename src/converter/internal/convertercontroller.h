@@ -27,7 +27,7 @@
 #include "../iconvertercontroller.h"
 
 #include "modularity/ioc.h"
-#include "project/inotationcreator.h"
+#include "project/iprojectcreator.h"
 #include "project/inotationwritersregister.h"
 
 #include "retval.h"
@@ -35,7 +35,7 @@
 namespace mu::converter {
 class ConverterController : public IConverterController
 {
-    INJECT(converter, project::INotationCreator, notationCreator)
+    INJECT(converter, project::IProjectCreator, notationCreator)
     INJECT(converter, project::INotationWritersRegister, writers)
 
 public:

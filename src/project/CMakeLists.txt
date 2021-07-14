@@ -33,7 +33,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/projectmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/projecttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationproject.h
-    ${CMAKE_CURRENT_LIST_DIR}/inotationcreator.h
+    ${CMAKE_CURRENT_LIST_DIR}/iprojectcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationreader.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationreadersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationwriter.h
@@ -42,8 +42,8 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationproject.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationproject.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectcreator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectaudiosettings.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectaudiosettings.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationreadersregister.cpp

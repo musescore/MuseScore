@@ -29,7 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "system/ifilesystem.h"
-#include "project/inotationcreator.h"
+#include "project/iprojectcreator.h"
 #include "project/inotationwritersregister.h"
 
 namespace Ms {
@@ -41,7 +41,7 @@ class BackendJsonWriter;
 class BackendApi
 {
     INJECT_STATIC(converter, system::IFileSystem, fileSystem)
-    INJECT_STATIC(converter, project::INotationCreator, notationCreator)
+    INJECT_STATIC(converter, project::IProjectCreator, notationCreator)
     INJECT_STATIC(converter, project::INotationWritersRegister, writers)
 
 public:
