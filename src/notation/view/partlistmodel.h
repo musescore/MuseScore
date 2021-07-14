@@ -25,7 +25,6 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "inotationcreator.h"
 #include "iinteractive.h"
 
 namespace mu::uicomponents {
@@ -38,7 +37,6 @@ class PartListModel : public QAbstractListModel
     Q_OBJECT
 
     INJECT(notation, context::IGlobalContext, context)
-    INJECT(notation, INotationCreator, notationCreator)
     INJECT(notation, framework::IInteractive, interactive)
 
     Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)

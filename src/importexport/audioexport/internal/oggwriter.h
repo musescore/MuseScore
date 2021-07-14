@@ -23,10 +23,10 @@
 #ifndef MU_IMPORTEXPORT_OGGWRITER_H
 #define MU_IMPORTEXPORT_OGGWRITER_H
 
-#include "notation/abstractnotationwriter.h"
+#include "abstractaudiowriter.h"
 
 namespace mu::iex::audioexport {
-class OggWriter : public notation::AbstractNotationWriter
+class OggWriter : public AbstractAudioWriter
 {
 public:
     Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;

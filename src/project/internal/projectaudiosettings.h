@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_PROJECTAUDIOSETTINGS_H
-#define MU_NOTATION_PROJECTAUDIOSETTINGS_H
+#ifndef MU_PROJECT_PROJECTAUDIOSETTINGS_H
+#define MU_PROJECT_PROJECTAUDIOSETTINGS_H
 
 #include <memory>
 
@@ -30,7 +30,7 @@
 #include "engraving/io/msczreader.h"
 #include "engraving/io/msczwriter.h"
 
-namespace mu::notation {
+namespace mu::project {
 class ProjectAudioSettings : public IProjectAudioSettings
 {
 public:
@@ -55,4 +55,4 @@ private:
 using ProjectAudioSettingsPtr = std::shared_ptr<ProjectAudioSettings>;
 }
 
-#endif // MU_NOTATION_PROJECTAUDIOSETTINGS_H
+#endif // MU_PROJECT_PROJECTAUDIOSETTINGS_H

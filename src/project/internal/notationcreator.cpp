@@ -19,23 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "notationcreator.h"
 
-#ifndef MU_NOTATION_IPROJECTAUDIOSETTINGS_H
-#define MU_NOTATION_IPROJECTAUDIOSETTINGS_H
+#include "notationproject.h"
 
-#include <memory>
+using namespace mu::project;
 
-namespace mu::notation {
-class IProjectAudioSettings
+INotationProjectPtr NotationCreator::newNotationProject() const
 {
-public:
-    virtual ~IProjectAudioSettings() = default;
-
-    virtual int someValue() const = 0;
-    virtual void setSomeValue(int val) = 0;
-};
-
-using IProjectAudioSettingsPtr = std::shared_ptr<IProjectAudioSettings>;
+    return std::make_shared<NotationProject>();
 }
-
-#endif // MU_NOTATION_IPROJECTAUDIOSETTINGS_H

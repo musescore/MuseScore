@@ -19,15 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONCREATOR_H
-#define MU_NOTATION_INOTATIONCREATOR_H
+#ifndef MU_PROJECT_INOTATIONCREATOR_H
+#define MU_PROJECT_INOTATIONCREATOR_H
 
 #include "inotationproject.h"
-#include "iexcerptnotation.h"
 
 #include "modularity/imoduleexport.h"
 
-namespace mu::notation {
+namespace mu::project {
 class INotationCreator : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(INotationCreator)
@@ -36,8 +35,7 @@ public:
     virtual ~INotationCreator() = default;
 
     virtual INotationProjectPtr newNotationProject() const = 0;
-    virtual IExcerptNotationPtr newExcerptNotation() const = 0;
 };
 }
 
-#endif // MU_NOTATION_INOTATIONCREATOR_H
+#endif // MU_PROJECT_INOTATIONCREATOR_H

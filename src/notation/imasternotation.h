@@ -43,6 +43,7 @@ public:
     virtual RetVal<bool> created() const = 0;
     virtual ValNt<bool> needSave() const = 0;
 
+    virtual IExcerptNotationPtr newExcerptNotation() const = 0;
     virtual ValCh<ExcerptNotationList> excerpts() const = 0;
     virtual void setExcerpts(const ExcerptNotationList& excerpts) = 0;
 

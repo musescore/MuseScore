@@ -19,22 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_PROJECT_PROJECTMODULE_H
+#define MU_PROJECT_PROJECTMODULE_H
 
-#ifndef MU_NOTATION_NOTATIONWRITERSREGISTER_H
-#define MU_NOTATION_NOTATIONWRITERSREGISTER_H
+#include "modularity/imodulesetup.h"
 
-#include "../inotationwritersregister.h"
-
-namespace mu::notation {
-class NotationWritersRegister : public INotationWritersRegister
+namespace mu::project {
+class ProjectModule : public modularity::IModuleSetup
 {
 public:
-    void reg(const std::vector<std::string>& suffixes, INotationWriterPtr writer) override;
-    INotationWriterPtr writer(const std::string& suffix) const override;
 
-private:
-    std::map<std::string, INotationWriterPtr> m_writers;
+    std::string moduleName() const override;
+    void registerExports() override;
+    void resolveImports() override;
+    void registerUiTypes() override;
+    void onInit(const framework::IApplication::RunMode& mode) override;
 };
 }
 
-#endif // MU_NOTATION_NOTATIONWRITERSREGISTER_H
+#endif // MU_PROJECT_PROJECTMODULE_H

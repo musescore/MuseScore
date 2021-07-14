@@ -19,22 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "notationreadersregister.h"
 
-using namespace mu::notation;
+#ifndef MU_PROJECT_IPROJECTAUDIOSETTINGS_H
+#define MU_PROJECT_IPROJECTAUDIOSETTINGS_H
 
-void NotationReadersRegister::reg(const std::vector<std::string>& suffixes, INotationReaderPtr reader)
+#include <memory>
+
+namespace mu::project {
+class IProjectAudioSettings
 {
-    for (const std::string& suffix : suffixes) {
-        m_readers.insert({ suffix, reader });
-    }
+public:
+    virtual ~IProjectAudioSettings() = default;
+
+    virtual int someValue() const = 0;
+    virtual void setSomeValue(int val) = 0;
+};
+
+using IProjectAudioSettingsPtr = std::shared_ptr<IProjectAudioSettings>;
 }
 
-INotationReaderPtr NotationReadersRegister::reader(const std::string& suffix)
-{
-    auto it = m_readers.find(suffix);
-    if (it != m_readers.end()) {
-        return it->second;
-    }
-    return nullptr;
-}
+#endif // MU_PROJECT_IPROJECTAUDIOSETTINGS_H

@@ -19,21 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "mscznotationreader.h"
+#ifndef MU_PROJECT_INOTATIONREADER_H
+#define MU_PROJECT_INOTATIONREADER_H
 
-#include <QFile>
-#include <QByteArray>
-#include <QBuffer>
+#include <memory>
 
-#include "libmscore/score.h"
-#include "notation/notationerrors.h"
-#include "engraving/compat/mscxcompat.h"
+#include "ret.h"
+#include "io/path.h"
 
-using namespace mu::notation;
-using namespace mu::engraving;
-
-mu::Ret MsczNotationReader::read(Ms::MasterScore* score, const io::path& path, const Options& options)
-{
-    Ms::Score::FileError err = compat::loadMsczOrMscx(score, path.toQString(), options.contains(OptionKey::ForceMode));
-    return mu::notation::scoreFileErrorToRet(err, path);
+namespace Ms {
+class MasterScore;
 }
+
+namespace mu::project {
+class INotationReader
+{
+public:
+    enum class OptionKey {
+        ForceMode // Ignore lower priority errors (like version errors)
+    };
+
+    using Options = QMap<OptionKey, QVariant>;
+
+    virtual ~INotationReader() = default;
+
+    virtual Ret read(Ms::MasterScore* score, const io::path& path, const Options& options = Options()) = 0;
+};
+
+using INotationReaderPtr = std::shared_ptr<INotationReader>;
+}
+
+#endif // MU_PROJECT_INOTATIONREADER_H

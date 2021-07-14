@@ -22,10 +22,10 @@
 #ifndef MU_IMPORTEXPORT_NOTATIONMIDIREADER_H
 #define MU_IMPORTEXPORT_NOTATIONMIDIREADER_H
 
-#include "notation/inotationreader.h"
+#include "project/inotationreader.h"
 
 namespace mu::iex::midi {
-class NotationMidiReader : public notation::INotationReader
+class NotationMidiReader : public project::INotationReader
 {
 public:
     Ret read(Ms::MasterScore* score, const io::path& path, const Options& options = Options()) override;

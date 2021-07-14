@@ -19,18 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_IMPORTEXPORT_ABSTRACTIMAGEWRITER_H
+#define MU_IMPORTEXPORT_ABSTRACTIMAGEWRITER_H
 
-#ifndef MU_IMPORTEXPORT_WAVEWRITER_H
-#define MU_IMPORTEXPORT_WAVEWRITER_H
+#include "project/inotationwriter.h"
 
-#include "abstractaudiowriter.h"
-
-namespace mu::iex::audioexport {
-class WaveWriter : public AbstractAudioWriter
+namespace mu::iex::imagesexport {
+class AbstractImageWriter : public project::INotationWriter
 {
 public:
+    AbstractImageWriter() = default;
+    virtual ~AbstractImageWriter() = default;
+
+    std::vector<UnitType> supportedUnitTypes() const override;
+    bool supportsUnitType(UnitType unitType) const override;
+
     Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
+    Ret writeList(const notation::INotationPtrList& notations, io::Device& destinationDevice, const Options& options = Options()) override;
+
+    void abort() override;
+    framework::ProgressChannel progress() const override;
+
+protected:
+    UnitType unitTypeFromOptions(const Options& options) const;
+    framework::ProgressChannel m_progress;
 };
 }
 
-#endif // MU_IMPORTEXPORT_WAVEWRITER_H
+#endif // MU_IMPORTEXPORT_ABSTRACTIMAGEWRITER_H

@@ -21,18 +21,19 @@
  */
 #include "imagesexportmodule.h"
 
-#include "log.h"
 #include "modularity/ioc.h"
 
-#include "notation/inotationwritersregister.h"
+#include "project/inotationwritersregister.h"
 #include "internal/pdfwriter.h"
 #include "internal/pngwriter.h"
 #include "internal/svgwriter.h"
 
 #include "internal/imagesexportconfiguration.h"
 
+#include "log.h"
+
 using namespace mu::iex::imagesexport;
-using namespace mu::notation;
+using namespace mu::project;
 
 static std::shared_ptr<ImagesExportConfiguration> s_configuration = std::make_shared<ImagesExportConfiguration>();
 

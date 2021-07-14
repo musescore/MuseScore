@@ -19,19 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "notationcreator.h"
+#ifndef MU_PROJECT_NOTATIONCREATOR_H
+#define MU_PROJECT_NOTATIONCREATOR_H
 
-#include "notationproject.h"
-#include "excerptnotation.h"
+#include "../inotationcreator.h"
 
-using namespace mu::notation;
-
-INotationProjectPtr NotationCreator::newNotationProject() const
+namespace mu::project {
+class NotationCreator : public INotationCreator
 {
-    return std::make_shared<NotationProject>();
+public:
+    INotationProjectPtr newNotationProject() const override;
+};
 }
 
-IExcerptNotationPtr NotationCreator::newExcerptNotation() const
-{
-    return std::make_shared<ExcerptNotation>();
-}
+#endif // MU_PROJECT_NOTATIONCREATOR_H

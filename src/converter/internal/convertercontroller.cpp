@@ -33,6 +33,7 @@
 #include "compat/backendapi.h"
 
 using namespace mu::converter;
+using namespace mu::project;
 using namespace mu::notation;
 
 static const std::string PDF_SUFFIX = "pdf";
@@ -170,7 +171,7 @@ bool ConverterController::isConvertPageByPage(const std::string& suffix) const
     return types.contains(suffix);
 }
 
-mu::Ret ConverterController::convertPageByPage(notation::INotationWriterPtr writer, INotationPtr notation, const mu::io::path& out) const
+mu::Ret ConverterController::convertPageByPage(INotationWriterPtr writer, INotationPtr notation, const mu::io::path& out) const
 {
     TRACEFUNC;
 
@@ -198,7 +199,7 @@ mu::Ret ConverterController::convertPageByPage(notation::INotationWriterPtr writ
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret ConverterController::convertFullNotation(notation::INotationWriterPtr writer, INotationPtr notation, const mu::io::path& out) const
+mu::Ret ConverterController::convertFullNotation(INotationWriterPtr writer, INotationPtr notation, const mu::io::path& out) const
 {
     QFile file(out.toQString());
     if (!file.open(QFile::WriteOnly)) {
@@ -216,8 +217,7 @@ mu::Ret ConverterController::convertFullNotation(notation::INotationWriterPtr wr
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret ConverterController::convertScorePartsToPdf(notation::INotationWriterPtr writer, IMasterNotationPtr masterNotation,
-                                                    const io::path& out) const
+mu::Ret ConverterController::convertScorePartsToPdf(INotationWriterPtr writer, IMasterNotationPtr masterNotation, const io::path& out) const
 {
     TRACEFUNC;
 
@@ -248,7 +248,7 @@ mu::Ret ConverterController::convertScorePartsToPdf(notation::INotationWriterPtr
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret ConverterController::convertScorePartsToPngs(notation::INotationWriterPtr writer, mu::notation::IMasterNotationPtr masterNotation,
+mu::Ret ConverterController::convertScorePartsToPngs(INotationWriterPtr writer, mu::notation::IMasterNotationPtr masterNotation,
                                                      const io::path& out) const
 {
     TRACEFUNC;

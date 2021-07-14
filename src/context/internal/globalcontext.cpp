@@ -24,6 +24,7 @@
 #include "notation/imasternotation.h"
 
 using namespace mu::context;
+using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::async;
 

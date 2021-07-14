@@ -76,19 +76,6 @@ static bool isEqual(const RectF& r1, const RectF& r2, double tolerance)
     return true;
 }
 
-static bool isEqual(const QSize& sz1, const QSize& sz2)
-{
-    if (sz1.width() != sz2.width()) {
-        return false;
-    }
-
-    if (sz1.height() != sz2.height()) {
-        return false;
-    }
-
-    return true;
-}
-
 static bool isEqual(const Size& sz1, const Size& sz2)
 {
     if (sz1.width() != sz2.width()) {

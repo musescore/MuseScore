@@ -24,14 +24,16 @@
 #include <QObject>
 #include <QBuffer>
 
-#include "log.h"
 #include "translation.h"
 #include "notation/notationerrors.h"
 
 #include "userscoresconfiguration.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::userscores;
+using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::actions;
@@ -415,7 +417,7 @@ Ret FileScoreController::doOpenProject(const io::path& filePath)
     return make_ret(Ret::Code::Ok);
 }
 
-void FileScoreController::doSaveScore(const io::path& filePath, SaveMode saveMode)
+void FileScoreController::doSaveScore(const io::path& filePath, project::SaveMode saveMode)
 {
     io::path oldPath = currentNotationProject()->metaInfo().filePath;
 

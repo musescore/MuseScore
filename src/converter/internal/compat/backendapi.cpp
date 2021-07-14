@@ -39,6 +39,7 @@
 
 using namespace mu;
 using namespace mu::converter;
+using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::io;
 
@@ -187,9 +188,9 @@ Ret BackendApi::openOutputFile(QFile& file, const io::path& out)
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-RetVal<notation::INotationProjectPtr> BackendApi::openProject(const io::path& path,
-                                                              const io::path& stylePath,
-                                                              bool forceMode)
+RetVal<project::INotationProjectPtr> BackendApi::openProject(const io::path& path,
+                                                             const io::path& stylePath,
+                                                             bool forceMode)
 {
     TRACEFUNC
 
@@ -211,18 +212,18 @@ RetVal<notation::INotationProjectPtr> BackendApi::openProject(const io::path& pa
 
     notation->setViewMode(ViewMode::PAGE);
 
-    return RetVal<notation::INotationProjectPtr>::make_ok(notationProject);
+    return RetVal<INotationProjectPtr>::make_ok(notationProject);
 }
 
 RetVal<notation::IMasterNotationPtr> BackendApi::openScore(const io::path& path, const io::path& stylePath, bool forceMode)
 {
     TRACEFUNC
-    RetVal<notation::INotationProjectPtr> prj = openProject(path, stylePath, forceMode);
+    RetVal<INotationProjectPtr> prj = openProject(path, stylePath, forceMode);
     if (!prj.ret) {
         return prj.ret;
     }
 
-    return RetVal<notation::IMasterNotationPtr>::make_ok(prj.val->masterNotation());
+    return RetVal<IMasterNotationPtr>::make_ok(prj.val->masterNotation());
 }
 
 PageList BackendApi::pages(const INotationPtr notation)

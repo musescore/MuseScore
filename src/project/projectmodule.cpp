@@ -19,26 +19,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "musedatamodule.h"
+#include "projectmodule.h"
 
-#include "log.h"
+#include <QQmlEngine>
+
 #include "modularity/ioc.h"
+#include "internal/notationcreator.h"
+#include "internal/notationreadersregister.h"
+#include "internal/notationwritersregister.h"
 
-#include "project/inotationreadersregister.h"
-#include "internal/musedatareader.h"
-
-using namespace mu::iex::musedata;
 using namespace mu::project;
+using namespace mu::modularity;
 
-std::string MuseDataModule::moduleName() const
+std::string ProjectModule::moduleName() const
 {
-    return "iex_musedata";
+    return "project";
 }
 
-void MuseDataModule::registerResources()
+void ProjectModule::registerExports()
 {
-    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
-    if (readers) {
-        readers->reg({ "md" }, std::make_shared<MuseDataReader>());
-    }
+    ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
+    ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());
+    ioc()->registerExport<INotationWritersRegister>(moduleName(), new NotationWritersRegister());
+}
+
+void ProjectModule::resolveImports()
+{
+}
+
+void ProjectModule::registerUiTypes()
+{
+}
+
+void ProjectModule::onInit(const framework::IApplication::RunMode&)
+{
 }
