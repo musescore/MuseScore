@@ -47,6 +47,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/mscore.h"
 #include "libmscore/note.h"
+#include "libmscore/page.h"
 #include "libmscore/part.h"
 #include "libmscore/pedal.h"
 #include "libmscore/rest.h"
@@ -54,6 +55,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/sym.h"
+#include "libmscore/system.h"
 #include "libmscore/tempo.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/tie.h"
@@ -1561,9 +1563,151 @@ static void cleanupUnterminatedTie(Tie*& tie)
  specifying print-object="no". This finds those.
  */
 
-static bool isLikelyIncorrectPartName(const QString& partName) {
+static bool isLikelyIncorrectPartName(const QString& partName)
+      {
       return partName.contains(QRegularExpression("^P[0-9]+$"));      
       } 
+
+//---------------------------------------------------------
+//   detectLayoutOverflow
+//---------------------------------------------------------
+
+static void detectLayoutOverflow(Score* score, bool& hasLineOverflow, bool& hasPageOverflow)
+      {
+      hasLineOverflow = false;
+      hasPageOverflow = false;
+      for (auto pp = score->pages().begin(); pp != score->pages().end() - 1; ++pp) {
+            Page* page = *pp;
+            Page* nextPage = *(pp + 1);
+            MeasureBase* lastMeasureOfPage = page->systems().back() ? page->systems().back()->lastMeasure() : 0;
+
+            if (!hasPageOverflow
+             && lastMeasureOfPage
+             && !lastMeasureOfPage->pageBreak()
+             && nextPage
+             && nextPage->systems().size() < 2)
+                  hasPageOverflow = true;
+
+            for (auto sp = page->systems().begin(); sp != page->systems().end() - 1; ++sp) {
+                  if (hasPageOverflow && hasLineOverflow)
+                        return;
+                  System* system = *sp;
+                  System* nextSystem = *(sp + 1);
+                  if (!hasLineOverflow
+                   && system->lastMeasure()
+                   && !system->lastMeasure()->lineBreak() && !system->lastMeasure()->pageBreak()
+                   && nextSystem
+                   && nextSystem->measures().size() < 2)
+                        hasLineOverflow = true;
+                 }
+            }
+      }
+
+//---------------------------------------------------------
+//   cleanUpLayoutBreaks
+//---------------------------------------------------------
+/**
+ Some scores may have explicit system or page breaks that don't
+ correctly lay out when rendered in MuseScore. This function detects
+ these scenarios and tweaks the layout, margin and font-size compromises
+ to incorrect system/page breaks. Returns whether changes have been made.
+ Currently, if this doesn't fix all line and page overflows it reverts
+ any changes it makes. Possible TODO: accept partial fixes
+ (i.e. count the *number* of overflows and accept the changes
+ if the number is reduced).
+ To consider: making this a member function of Score and moving it
+ to layout.cpp. It could be a nice utility for users.
+ */
+
+static bool cleanUpLayoutBreaks(Score* score, MxmlLogger* logger)
+      {
+      score->doLayout();
+      
+      bool hasExplicitLineBreaks = false;
+      bool hasExplicitPageBreaks = false;
+      bool hasLineOverflow;
+      bool hasPageOverflow;
+      
+      for (auto system : score->systems()) {
+            if (!system->lastMeasure())
+                  continue;
+            else if (system->lastMeasure()->lineBreak() && !hasExplicitLineBreaks)
+                  hasExplicitLineBreaks = true;
+            else if (system->lastMeasure()->pageBreak() && !hasExplicitPageBreaks)
+                  hasExplicitPageBreaks = true;
+            
+            if (hasExplicitLineBreaks && hasExplicitPageBreaks)
+                  break;
+            }
+
+      if (!hasExplicitLineBreaks || !hasExplicitPageBreaks) {
+            logger->logDebugInfo("No explicit layout breaks. Skipping layout break cleanup.");
+            return false;
+            }
+
+      detectLayoutOverflow(score, hasLineOverflow, hasPageOverflow);
+      if (!hasLineOverflow && !hasPageOverflow)
+            return false;
+      bool initialHasLineOverflow = hasLineOverflow;
+      bool initialHasPageOverflow = hasPageOverflow;
+
+      // First compromise margins: reduce to 80%
+      const qreal marginReductionFactor = 0.8;  // Possible TODO: make this incremental and customizable
+      std::map<Sid, QVariant> initialStyles;
+      if (hasLineOverflow) {
+            const std::vector<Sid> horizontalMarginSids({Sid::pageEvenLeftMargin, Sid::pageOddLeftMargin});
+            for (Sid marginSid : horizontalMarginSids) {
+                  qreal initialMargin = score->style().value(marginSid).toReal();
+                  initialStyles[marginSid] = initialMargin;
+                  score->style().set(marginSid, QVariant(initialMargin * marginReductionFactor));
+                  }
+            initialStyles[Sid::pagePrintableWidth] = score->styleD(Sid::pagePrintableWidth);
+            score->style().set(Sid::pagePrintableWidth, score->styleD(Sid::pageWidth) - (2 * score->styleD(Sid::pageEvenLeftMargin)));
+            score->styleChanged();
+            score->doLayout();
+            detectLayoutOverflow(score, hasLineOverflow, hasPageOverflow);
+            }
+      if (hasPageOverflow) {
+            const std::vector<Sid> verticalMarginSids({Sid::pageEvenTopMargin, Sid::pageOddTopMargin,
+                                                  Sid::pageEvenBottomMargin, Sid::pageOddBottomMargin});
+            for (Sid marginSid : verticalMarginSids) {
+                  qreal initialMargin = score->styleD(marginSid);
+                  initialStyles[marginSid] = initialMargin;
+                  score->style().set(marginSid, QVariant(initialMargin * marginReductionFactor));
+                  }
+            score->styleChanged();
+            score->doLayout();
+            detectLayoutOverflow(score, hasLineOverflow, hasPageOverflow);
+            }
+      
+      // If that doesn't fix it, compromise lyric font size: reduce by 95%
+      if (hasLineOverflow) {
+            const qreal lyricFontSizeReductionFactor = 0.95;
+            const std::vector<Sid> fontSizeSids({Sid::lyricsOddFontSize, Sid::lyricsEvenFontSize});
+            for (Sid fontSizeSid : fontSizeSids) {
+                  qreal initialFontSize = score->style().value(fontSizeSid).toReal();
+                  initialStyles[fontSizeSid] = initialFontSize;
+                  score->style().set(fontSizeSid, QVariant(initialFontSize * lyricFontSizeReductionFactor));
+                  }
+            score->styleChanged();
+            score->doLayout();
+            detectLayoutOverflow(score, hasLineOverflow, hasPageOverflow);
+            }
+      
+      // If neither fixed it, reset styles.
+      if (hasLineOverflow != initialHasLineOverflow
+       || hasPageOverflow != initialHasPageOverflow)
+            return true;
+      else {
+            for (auto initialStyle : initialStyles) {
+                  score->style().set(initialStyle.first, initialStyle.second);
+                  }
+            score->styleChanged();
+            score->doLayout();
+            logger->logDebugInfo("Attempts to cleanup layout breaks had no effect. Reverting.");
+            return false;
+            }
+      }
 
 //---------------------------------------------------------
 // multi-measure rest state handling
@@ -1710,8 +1854,9 @@ void MusicXMLParserPass2::scorePartwise()
             lm->setEndBarLineType(BarLineType::NORMAL, 0);
 
       _score->connectArpeggios();
+      _score->fixupLaissezVibrer();
       cleanFretDiagrams(_score->firstMeasure());
-      _score->fixupLaissezVibrer(); 
+      cleanUpLayoutBreaks(_score, _logger);
       }
 
 //---------------------------------------------------------
