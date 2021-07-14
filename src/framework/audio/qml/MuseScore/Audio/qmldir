@@ -2,6 +2,7 @@ module MuseScore.Audio
 Playback 1.0 DevTools/Playback.qml
 KnobControl 1.0 KnobControl.qml
 VolumePressureMeter 1.0 VolumePressureMeter.qml
+VolumeSlider 1.0 VolumeSlider.qml
 MidiPorts 1.0 DevTools/MidiPorts.qml
 SoundFontsPanel 1.0 DevTools/SoundFontsPanel.qml
 SynthSettings 1.0 DevTools/SynthSettings.qml
