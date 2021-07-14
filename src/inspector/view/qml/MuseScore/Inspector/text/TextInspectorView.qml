@@ -281,7 +281,6 @@ InspectorSectionView {
             visible: root.model ? root.model.isSpecialCharactersInsertionAvailable : false
 
             onClicked: {
-                console.log("charachters y: " + y)
                 if (root.model) {
                     root.model.insertSpecialCharacters()
                 }

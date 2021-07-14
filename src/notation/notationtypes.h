@@ -93,6 +93,7 @@ using AccidentalType = Ms::AccidentalType;
 using OttavaType = Ms::OttavaType;
 using HairpinType = Ms::HairpinType;
 using TextType = Ms::Tid;
+using TextBase = Ms::TextBase;
 using TupletNumberType = Ms::TupletNumberType;
 using TupletBracketType = Ms::TupletBracketType;
 using GraceNoteType = Ms::NoteType;
