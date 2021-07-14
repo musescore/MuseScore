@@ -38,37 +38,6 @@ MU4PaletteAdapter::MU4PaletteAdapter()
     m_paletteEnabled.val = true;
 }
 
-void MU4PaletteAdapter::showMasterPalette(const QString& selectedPaletteName)
-{
-    QStringList params {
-        "sync=false",
-        QString("selectedPaletteName=%1").arg(selectedPaletteName)
-    };
-
-    QString uri = QString("musescore://palette/masterpalette?%1").arg(params.join('&'));
-    interactive()->open(uri.toStdString());
-}
-
-bool MU4PaletteAdapter::isSelected() const
-{
-    auto notation = globalContext()->currentNotation();
-    if (!notation) {
-        return false;
-    }
-
-    return !notation->interaction()->selection()->isNone();
-}
-
-bool MU4PaletteAdapter::applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers)
-{
-    auto notation = globalContext()->currentNotation();
-    if (!notation) {
-        return false;
-    }
-
-    return notation->interaction()->applyPaletteElement(element, modifiers);
-}
-
 Ms::PaletteWorkspace* MU4PaletteAdapter::paletteWorkspace() const
 {
     if (!m_paletteWorkspace) {
