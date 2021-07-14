@@ -30,6 +30,9 @@
 #include <cmath>
 #include <QBuffer>
 
+#include "draw/pen.h"
+#include "style/style.h"
+
 #include "accidental.h"
 #include "ambitus.h"
 #include "arpeggio.h"
@@ -87,7 +90,6 @@
 #include "stafftype.h"
 #include "stem.h"
 #include "sticking.h"
-#include "style.h"
 #include "symbol.h"
 #include "system.h"
 #include "tempotext.h"
@@ -114,7 +116,6 @@
 #include "fermata.h"
 #include "shape.h"
 
-#include "draw/pen.h"
 //#include "musescoreCore.h"
 
 #include "config.h"

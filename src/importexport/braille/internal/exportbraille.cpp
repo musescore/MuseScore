@@ -23,6 +23,8 @@
 #include <QDebug>
 #include <QRegularExpression>
 
+#include "engraving/style/style.h"
+
 #include "libmscore/score.h"
 #include "libmscore/rest.h"
 #include "libmscore/chord.h"
@@ -33,7 +35,6 @@
 #include "libmscore/segment.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
-#include "libmscore/style.h"
 #include "libmscore/slur.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/dynamic.h"

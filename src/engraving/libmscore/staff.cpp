@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "style/style.h"
+
 #include "mscore.h"
 #include "staff.h"
 #include "part.h"
@@ -29,7 +31,6 @@
 #include "bracket.h"
 #include "keysig.h"
 #include "segment.h"
-#include "style.h"
 #include "measure.h"
 #include "stringdata.h"
 #include "stafftype.h"

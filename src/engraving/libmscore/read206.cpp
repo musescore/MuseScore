@@ -24,13 +24,14 @@
 
 #include <QRegularExpression>
 
+#include "style/style.h"
+
 #include "xml.h"
 #include "score.h"
 #include "staff.h"
 #include "revisions.h"
 #include "part.h"
 #include "page.h"
-#include "style.h"
 #include "sym.h"
 #include "scorefont.h"
 #include "arpeggio.h"

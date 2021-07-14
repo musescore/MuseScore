@@ -23,8 +23,9 @@
 #ifndef __TEXTLINEBASE_H__
 #define __TEXTLINEBASE_H__
 
+#include "style/style.h"
+
 #include "line.h"
-#include "style.h"
 #include "property.h"
 
 namespace Ms {

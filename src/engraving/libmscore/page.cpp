@@ -24,11 +24,12 @@
 
 #include <QDateTime>
 
+#include "style/style.h"
+
 #include "score.h"
 #include "text.h"
 #include "xml.h"
 #include "measure.h"
-#include "style.h"
 #include "chord.h"
 #include "beam.h"
 #include "tuplet.h"

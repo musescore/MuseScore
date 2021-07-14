@@ -21,12 +21,15 @@
  */
 
 #include "tuplet.h"
+
+#include "draw/pen.h"
+#include "style/style.h"
+
 #include "score.h"
 #include "chord.h"
 #include "note.h"
 #include "xml.h"
 #include "staff.h"
-#include "style.h"
 #include "text.h"
 #include "element.h"
 #include "undo.h"
@@ -34,7 +37,6 @@
 #include "beam.h"
 #include "measure.h"
 #include "system.h"
-#include "draw/pen.h"
 
 using namespace mu;
 

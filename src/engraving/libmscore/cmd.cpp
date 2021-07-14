@@ -30,6 +30,7 @@
 
 #include "translation.h"
 #include "interactive/messagebox.h"
+#include "style/style.h"
 
 #include "types.h"
 #include "musescoreCore.h"
@@ -47,7 +48,6 @@
 #include "sig.h"
 #include "staff.h"
 #include "part.h"
-#include "style.h"
 #include "page.h"
 #include "barline.h"
 #include "tuplet.h"

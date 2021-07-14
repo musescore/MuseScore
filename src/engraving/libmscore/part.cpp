@@ -21,10 +21,12 @@
  */
 
 #include "part.h"
+
+#include "style/style.h"
+
 #include "staff.h"
 #include "xml.h"
 #include "score.h"
-#include "style.h"
 #include "note.h"
 #include "drumset.h"
 #include "instrtemplate.h"

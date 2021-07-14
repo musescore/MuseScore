@@ -25,6 +25,8 @@
 #include <QTextDocument>
 #include <QTextDocumentFragment>
 
+#include "style/style.h"
+
 #include "score.h"
 #include "slur.h"
 #include "staff.h"
@@ -46,7 +48,6 @@
 #include "box.h"
 #include "dynamic.h"
 #include "drumset.h"
-#include "style.h"
 #include "symid.h"
 #include "xml.h"
 #include "stringdata.h"

@@ -22,12 +22,14 @@
 #ifndef MS_SCOREFONT_H
 #define MS_SCOREFONT_H
 
-#include "style.h"
-#include "symid.h"
+#include "style/style.h"
 
 #include "draw/geometry.h"
+
 #include "modularity/ioc.h"
 #include "draw/ifontprovider.h"
+
+#include "symid.h"
 
 namespace mu::draw {
 class Painter;

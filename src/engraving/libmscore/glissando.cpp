@@ -36,6 +36,7 @@ NICE-TO-HAVE TODO:
 #include "translation.h"
 #include "draw/fontmetrics.h"
 #include "draw/pen.h"
+#include "style/style.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -48,7 +49,6 @@ NICE-TO-HAVE TODO:
 #include "scorefont.h"
 #include "segment.h"
 #include "staff.h"
-#include "style.h"
 #include "system.h"
 #include "xml.h"
 

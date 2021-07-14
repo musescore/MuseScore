@@ -25,10 +25,13 @@
  render score into event list
 */
 
+#include "rendermidi.h"
+
 #include <set>
 #include <cmath>
 
-#include "rendermidi.h"
+#include "style/style.h"
+
 #include "score.h"
 #include "volta.h"
 #include "note.h"
@@ -38,7 +41,6 @@
 #include "chord.h"
 #include "trill.h"
 #include "vibrato.h"
-#include "style.h"
 #include "slur.h"
 #include "tie.h"
 #include "stafftext.h"

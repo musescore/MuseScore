@@ -22,17 +22,18 @@
 
 #include "volta.h"
 
+#include <algorithm>
+
+#include "style/style.h"
+
 #include "changeMap.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
-#include "style.h"
 #include "system.h"
 #include "tempo.h"
 #include "text.h"
 #include "xml.h"
-
-#include <algorithm>
 
 using namespace mu;
 

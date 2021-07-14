@@ -25,11 +25,14 @@
  Implementation of class Score (partial).
 */
 
+#include "score.h"
+
 #include <assert.h>
 #include <cmath>
 #include <QBuffer>
 
-#include "score.h"
+#include "style/style.h"
+
 #include "fermata.h"
 #include "imageStore.h"
 #include "key.h"
@@ -50,7 +53,6 @@
 #include "slur.h"
 #include "staff.h"
 #include "part.h"
-#include "style.h"
 #include "tuplet.h"
 #include "lyrics.h"
 #include "pitchspelling.h"
@@ -87,9 +89,9 @@
 #include "instrchange.h"
 #include "synthesizerstate.h"
 
-#include "config.h"
-
 #include "engravingproject.h"
+
+#include "config.h"
 
 #ifdef USE_SCORE_ACCESSIBLE_TREE
 #include "accessibility/accessiblescore.h"

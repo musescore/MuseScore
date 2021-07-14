@@ -25,13 +25,13 @@
 
 #include <QTextCursor>
 
-class QInputMethodEvent;
+#include "draw/fontmetrics.h"
 
 #include "element.h"
 #include "property.h"
-#include "style.h"
+#include "style/style.h"
 
-#include "draw/fontmetrics.h"
+class QInputMethodEvent;
 
 namespace Ms {
 class MuseScoreView;
