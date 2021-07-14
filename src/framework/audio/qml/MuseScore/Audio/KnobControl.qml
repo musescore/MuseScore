@@ -40,14 +40,14 @@ Dial {
     QtObject {
         id: internal
 
-        property real radius: 24
+        property real radius: 16
         readonly property bool reversed: root.angle < 0
 
         property real handlerHeight: 8
         property real handlerWidth: 2
 
-        property real outerArcLineWidth: 5
-        property real innerArcLineWidth: 3
+        property real outerArcLineWidth: 3
+        property real innerArcLineWidth: 2
 
         property color valueArcColor: ui.theme.accentColor
         property color outerArcColor: Utils.colorWithAlpha(ui.theme.buttonColor, 0.7)
@@ -61,8 +61,6 @@ Dial {
         height: width
 
         antialiasing: true
-        renderStrategy: Canvas.Threaded
-        renderTarget: Canvas.FramebufferObject
 
         onPaint: {
             var ctx = root.context
@@ -93,24 +91,18 @@ Dial {
         }
     }
 
-    handle: Item {
-        id: handleItem
-
-        x: internal.radius - internal.outerArcLineWidth - internal.innerArcLineWidth + internal.handlerWidth / 2
+    handle: Rectangle {
+        x: internal.radius - internal.handlerWidth / 2
         y: internal.outerArcLineWidth + internal.innerArcLineWidth + 2
 
-        height: internal.radius - internal.outerArcLineWidth - internal.innerArcLineWidth
+        height: internal.handlerHeight
         width: internal.handlerWidth
+        radius: internal.handlerWidth / 2
 
-        Rectangle {
-            height: internal.handlerHeight
-            width: internal.handlerWidth
-            radius: internal.handlerWidth / 2
+        color: ui.theme.fontPrimaryColor
+        antialiasing: true
 
-            color: ui.theme.fontPrimaryColor
-            antialiasing: true
-        }
-
+        transformOrigin: Item.Bottom
         rotation: root.angle
     }
 
