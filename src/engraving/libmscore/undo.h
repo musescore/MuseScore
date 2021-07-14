@@ -28,12 +28,13 @@
  Definition of undo-releated classes and structs.
 */
 
+#include "style/style.h"
+
 #include "spatium.h"
 #include "mscore.h"
 #include "sig.h"
 #include "tempo.h"
 #include "input.h"
-#include "style.h"
 #include "key.h"
 #include "select.h"
 #include "instrument.h"

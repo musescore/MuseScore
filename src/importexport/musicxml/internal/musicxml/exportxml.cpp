@@ -44,9 +44,9 @@
 #include <QDate>
 #include <QRegularExpression>
 
-#include "config.h"
-
 #include "thirdparty/qzip/qzipwriter_p.h"
+
+#include "engraving/style/style.h"
 
 #include "libmscore/score.h"
 #include "libmscore/rest.h"
@@ -62,7 +62,6 @@
 #include "libmscore/part.h"
 #include "libmscore/measure.h"
 #include "libmscore/measurerepeat.h"
-#include "libmscore/style.h"
 #include "libmscore/slur.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/dynamic.h"
@@ -118,6 +117,8 @@
 
 #include "../../imusicxmlconfiguration.h"
 #include "modularity/ioc.h"
+
+#include "config.h"
 
 using namespace mu::iex::musicxml;
 

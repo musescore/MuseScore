@@ -23,11 +23,10 @@
 #include <QDir>
 #include <QCoreApplication>
 
-#include "config.h"
 #include "translation.h"
+#include "style/style.h"
 
 #include "musescoreCore.h"
-#include "style.h"
 #include "mscore.h"
 #include "sequencer.h"
 #include "element.h"
@@ -72,6 +71,8 @@
 #include "barline.h"
 #include "skyline.h"
 #include "scorefont.h"
+
+#include "config.h"
 
 using namespace mu;
 

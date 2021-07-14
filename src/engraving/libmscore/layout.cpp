@@ -23,6 +23,8 @@
 #include <cmath>
 #include <QtMath>
 
+#include "style/style.h"
+
 #include "accidental.h"
 #include "barline.h"
 #include "beam.h"
@@ -58,7 +60,6 @@
 #include "stem.h"
 #include "stemslash.h"
 #include "sticking.h"
-#include "style.h"
 #include "sym.h"
 #include "system.h"
 #include "text.h"

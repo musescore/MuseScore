@@ -21,8 +21,11 @@
  */
 
 #include "bracket.h"
+
+#include "draw/brush.h"
+#include "style/style.h"
+
 #include "xml.h"
-#include "style.h"
 #include "utils.h"
 #include "measure.h"
 #include "staff.h"
@@ -31,7 +34,6 @@
 #include "system.h"
 #include "mscore.h"
 #include "bracketItem.h"
-#include "draw/brush.h"
 
 using namespace mu;
 using namespace mu::draw;

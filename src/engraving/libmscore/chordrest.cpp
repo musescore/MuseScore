@@ -24,9 +24,10 @@
 
 #include <QDebug>
 
+#include "style/style.h"
+
 #include "chord.h"
 #include "xml.h"
-#include "style.h"
 #include "system.h"
 #include "measure.h"
 #include "staff.h"

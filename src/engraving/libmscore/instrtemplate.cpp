@@ -23,11 +23,11 @@
 #include "instrtemplate.h"
 
 #include "translation.h"
+#include "style/style.h"
 
 #include "bracket.h"
 #include "drumset.h"
 #include "stafftype.h"
-#include "style.h"
 #include "stringdata.h"
 #include "utils.h"
 #include "xml.h"

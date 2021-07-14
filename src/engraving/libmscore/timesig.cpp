@@ -23,11 +23,11 @@
 #include "timesig.h"
 
 #include "translation.h"
+#include "style/style.h"
 
 #include "xml.h"
 #include "score.h"
 #include "scorefont.h"
-#include "style.h"
 #include "symbol.h"
 #include "staff.h"
 #include "stafftype.h"

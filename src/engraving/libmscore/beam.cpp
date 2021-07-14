@@ -24,11 +24,13 @@
 
 #include <cmath>
 
+#include "draw/brush.h"
+#include "style/style.h"
+
 #include "segment.h"
 #include "score.h"
 #include "chord.h"
 #include "sig.h"
-#include "style.h"
 #include "note.h"
 #include "tuplet.h"
 #include "system.h"
@@ -45,7 +47,6 @@
 #include "groups.h"
 #include "xml.h"
 #include "spanner.h"
-#include "draw/brush.h"
 
 using namespace mu;
 

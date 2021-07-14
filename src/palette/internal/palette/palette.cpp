@@ -36,8 +36,9 @@
 
 #include "actions/actiontypes.h"
 
+#include "engraving/style/style.h"
+
 #include "libmscore/element.h"
-#include "libmscore/style.h"
 #include "libmscore/symbol.h"
 #include "libmscore/score.h"
 #include "libmscore/image.h"

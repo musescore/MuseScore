@@ -22,6 +22,8 @@
 
 #include <QRegularExpression>
 
+#include "engraving/style/style.h"
+
 #include "libmscore/box.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/instrtemplate.h"
@@ -33,7 +35,6 @@
 #include "libmscore/stringdata.h"
 #include "libmscore/symbol.h"
 #include "libmscore/timesig.h"
-#include "libmscore/style.h"
 #include "libmscore/spanner.h"
 #include "libmscore/bracketItem.h"
 

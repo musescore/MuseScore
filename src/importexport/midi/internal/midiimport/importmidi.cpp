@@ -23,6 +23,8 @@
 #include <QMessageBox>
 
 #include "framework/midi_old/midifile.h"
+#include "engraving/style/style.h"
+
 #include "libmscore/score.h"
 #include "libmscore/key.h"
 #include "libmscore/clef.h"
@@ -38,7 +40,6 @@
 #include "libmscore/tie.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
-#include "libmscore/style.h"
 #include "libmscore/part.h"
 #include "libmscore/timesig.h"
 #include "libmscore/barline.h"
@@ -50,13 +51,14 @@
 #include "libmscore/box.h"
 #include "libmscore/symid.h"
 #include "libmscore/pitchspelling.h"
+#include "libmscore/tuplet.h"
+#include "libmscore/articulation.h"
+
 #include "importmidi_meter.h"
 #include "importmidi_chord.h"
 #include "importmidi_quant.h"
 #include "importmidi_tuplet.h"
 #include "importmidi_tuplet_tonotes.h"
-#include "libmscore/tuplet.h"
-#include "libmscore/articulation.h"
 #include "importmidi_swing.h"
 #include "importmidi_fraction.h"
 #include "importmidi_drum.h"

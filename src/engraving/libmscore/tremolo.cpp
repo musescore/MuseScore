@@ -26,10 +26,10 @@
 #include "draw/transform.h"
 #include "draw/pen.h"
 #include "draw/brush.h"
+#include "style/style.h"
 
 #include "score.h"
 #include "staff.h"
-#include "style.h"
 #include "chord.h"
 #include "note.h"
 #include "measure.h"

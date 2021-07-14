@@ -25,8 +25,8 @@
 #include <cmath>
 
 #include "translation.h"
+#include "style/style.h"
 
-#include "style.h"
 #include "system.h"
 #include "measure.h"
 #include "xml.h"

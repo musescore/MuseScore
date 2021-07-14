@@ -20,13 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "style/style.h"
+
 #include "xml.h"
 #include "score.h"
 #include "staff.h"
 #include "revisions.h"
 #include "part.h"
 #include "page.h"
-#include "style.h"
 #include "scorefont.h"
 #include "audio.h"
 #include "sig.h"
