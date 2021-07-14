@@ -97,6 +97,7 @@ public:
     Syllabic syllabic() const { return _syllabic; }
     void add(Element*) override;
     void remove(Element*) override;
+    bool edit(EditData&) override;
     void endEdit(EditData&) override;
 
     Fraction ticks() const { return _ticks; }

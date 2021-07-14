@@ -883,9 +883,37 @@
     <seq>Space</seq>
     </SC>
   <SC>
+    <key>next-lyric</key>
+    <seq>Right</seq>
+    </SC>
+  <SC>
     <key>prev-lyric</key>
     <seq>Shift+Space</seq>
     </SC>
+  <SC>
+    <key>prev-lyric</key>
+    <seq>Left</seq>
+  </SC>
+  <SC>
+    <key>next-syllable</key>
+    <seq>-</seq>
+  </SC>
+  <SC>
+    <key>add-melisma</key>
+    <seq>_</seq>
+  </SC>
+  <SC>
+    <key>next-lyric-verse</key>
+    <seq>Down</seq>
+  </SC>
+  <SC>
+    <key>prev-lyric-verse</key>
+    <seq>Up</seq>
+  </SC>
+  <SC>
+    <key>add-lyric-verse</key>
+    <seq>Return</seq>
+  </SC>
   <SC>
     <key>toggle-visible</key>
     <seq>V</seq>

@@ -182,6 +182,12 @@ public:
     void setScoreConfig(ScoreConfig config) override;
     async::Channel<ScoreConfigType> scoreConfigChanged() const override;
 
+    void nextLyrics(bool = false, bool = false, bool = true) override;
+    void nextLyricsVerse(bool = false) override;
+    void nextSyllable() override;
+    void addMelisma() override;
+    void addLyricsVerse() override;
+
 private:
     Ms::Score* score() const;
 
