@@ -33,14 +33,11 @@ Canvas {
     property real minDisplayedVolumePressure: -60.0
     property real maxDisplayedVolumePressure: 0.0
 
-    width: 24
+    width: 6
     height: 140
 
-    renderStrategy: Canvas.Cooperative
-    renderTarget: Canvas.FramebufferObject
-
     QtObject {
-        id: privateProperties
+        id: internals
 
         property var gradient: null
         property int overloadHeight: 4
@@ -59,21 +56,21 @@ Canvas {
         ctx.clearRect(0, 0, height, width)
 
         ctx.fillStyle = "#4D4D4D"
-        ctx.fillRect(0, 0, height - privateProperties.overloadHeight, width)
+        ctx.fillRect(0, 0, height - internals.overloadHeight, width)
 
         ctx.fillStyle = "#666666"
-        ctx.fillRect(height - privateProperties.overloadHeight, 0, height, width)
+        ctx.fillRect(height - internals.overloadHeight, 0, height, width)
 
-        if (!privateProperties.gradient) {
-            privateProperties.gradient = ctx.createLinearGradient(0, 0, height - privateProperties.overloadHeight, width)
-            privateProperties.gradient.addColorStop(0.0, "#26E386")
-            privateProperties.gradient.addColorStop(0.55, "#CBED41")
-            privateProperties.gradient.addColorStop(0.80, "#FC8226")
+        if (!internals.gradient) {
+            internals.gradient = ctx.createLinearGradient(0, 0, height - internals.overloadHeight, width)
+            internals.gradient.addColorStop(0.0, "#26E386")
+            internals.gradient.addColorStop(0.55, "#CBED41")
+            internals.gradient.addColorStop(0.80, "#FC8226")
         }
 
-        var value = height - (currentVolumePressure * privateProperties.pixelsPerUnit)
+        var value = height - (currentVolumePressure * internals.pixelsPerUnit)
 
-        ctx.fillStyle = privateProperties.gradient
+        ctx.fillStyle = internals.gradient
         ctx.fillRect(0, 0, value, width)
     }
 
