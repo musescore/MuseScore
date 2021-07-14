@@ -8,5 +8,6 @@
         <file>qml/MuseScore/Audio/DevTools/WaveFormView.qml</file>
         <file>qml/MuseScore/Audio/VolumePressureMeter.qml</file>
         <file>qml/MuseScore/Audio/KnobControl.qml</file>
+        <file>qml/MuseScore/Audio/VolumeSlider.qml</file>
     </qresource>
 </RCC>
