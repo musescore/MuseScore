@@ -1368,6 +1368,48 @@ const UiActionList NotationUiActions::m_scoreConfigActions = {
              QT_TRANSLATE_NOOP("action", "Documents Stacked"),
              QT_TRANSLATE_NOOP("action", "Display documents stacked"),
              Checkable::Yes
+             ),
+    UiAction("next-lyric",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Next lyric"),
+             QT_TRANSLATE_NOOP("action", "Move to lyric on next note"),
+             Checkable::Yes
+             ),
+    UiAction("prev-lyric",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Previous lyric"),
+             QT_TRANSLATE_NOOP("action", "Move to lyric on previous note"),
+             Checkable::Yes
+             ),
+    UiAction("next-lyric-verse",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Next lyric verse"),
+             QT_TRANSLATE_NOOP("action", "Move to lyric in the next verse"),
+             Checkable::Yes
+             ),
+    UiAction("prev-lyric-verse",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Previous lyric verse"),
+             QT_TRANSLATE_NOOP("action", "Move to lyric in the previous verse"),
+             Checkable::Yes
+             ),
+    UiAction("next-syllable",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Next syllable"),
+             QT_TRANSLATE_NOOP("action", "Add hyphen and move to lyric on next note"),
+             Checkable::Yes
+             ),
+    UiAction("add-melisma",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Add melisma"),
+             QT_TRANSLATE_NOOP("action", "Add melisma line and move to lyric on next note"),
+             Checkable::Yes
+             ),
+    UiAction("add-lyric-verse",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Add lyric verse"),
+             QT_TRANSLATE_NOOP("action", "Adds a new verse and starts editing"),
+             Checkable::Yes
              )
 };
 

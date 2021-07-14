@@ -73,7 +73,7 @@ int PlaybackController::currentTick() const
 
 bool PlaybackController::isPlayAllowed() const
 {
-    return m_notation != nullptr;
+    return m_notation != nullptr && !m_notation->interaction()->isTextEditingStarted();
 }
 
 Notification PlaybackController::isPlayAllowedChanged() const

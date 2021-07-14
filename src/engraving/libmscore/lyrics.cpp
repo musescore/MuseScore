@@ -505,6 +505,27 @@ Element* Lyrics::drop(EditData& data)
 }
 
 //---------------------------------------------------------
+//   edit
+//---------------------------------------------------------
+
+bool Lyrics::edit(EditData& ed)
+{
+    if (ed.modifiers == 0 || ed.modifiers == Qt::ShiftModifier) {
+        switch (ed.key) {
+        case Qt::Key_Space:
+        case Qt::Key_Underscore:
+        case Qt::Key_Minus:
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+            return false; // allow shortcut key controller to handle
+        }
+    }
+    return TextBase::edit(ed);
+}
+
+//---------------------------------------------------------
 //   endEdit
 //---------------------------------------------------------
 
