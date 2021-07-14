@@ -1301,17 +1301,24 @@ Shape ChordRest::shape() const
                   }
             else if (e->isFretDiagram()) {
                   FretDiagram* fd = toFretDiagram(e);
-                  if (fd->bbox().isEmpty()) fd->calculateBoundingRect();
                   qreal margin = styleP(Sid::fretMinDistance) * 0.5;
-                  x1 = qMin(x1, e->bbox().x() - margin + e->pos().x());
-                  x2 = qMax(x2, e->bbox().x() + e->bbox().width() + margin + e->pos().x());
+                  bool firstBeat = tick() == measure()->tick();
+                  if (fd->bbox().isEmpty())
+                        fd->calculateBoundingRect();
+                  qreal leftX = firstBeat ? 0 : e->bbox().x() - margin + e->pos().x();
+                  qreal rightX = e->bbox().x() + e->bbox().width() + margin + e->pos().x();
+                  x1 = qMin(x1, leftX);
+                  x2 = qMax(x2, rightX);
                   adjustWidth = true;
                   if (fd->harmony()) {
                         Harmony* h = fd->harmony();
-                        if (h->bbox().isEmpty()) h->layout1();
                         margin = styleP(Sid::minHarmonyDistance) * 0.5;
-                        x1 = qMin(x1, h->bbox().x() - margin + h->pos().x() + e->pos().x());
-                        x2 = qMax(x2, h->bbox().x() + h->bbox().width() + margin + h->pos().x() + e->pos().x());
+                        if (h->bbox().isEmpty())
+                              h->layout1();
+                        leftX = firstBeat ? 0 : h->bbox().x() - margin + h->pos().x() + e->pos().x();
+                        rightX = h->bbox().x() + h->bbox().width() + margin + h->pos().x() + e->pos().x();
+                        x1 = qMin(x1, leftX);
+                        x2 = qMax(x2, rightX);
                         adjustWidth = true;
                         }
                   }
