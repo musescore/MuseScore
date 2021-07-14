@@ -24,16 +24,12 @@
 #define __LAYOUTBREAK_H__
 
 #include "element.h"
-#include "draw/drawtypes.h"
 
 namespace Ms {
-// layout break subtypes:
-
 //---------------------------------------------------------
 //   @@ LayoutBreak
 ///    symbols for line break, page break etc.
 //---------------------------------------------------------
-
 class LayoutBreak final : public Element
 {
     Q_GADGET
@@ -47,8 +43,8 @@ private:
     Q_ENUM(Type);
 
     qreal lw;
-    mu::PainterPath path;
-    mu::PainterPath path2;
+    mu::RectF m_iconBorderRect;
+    mu::PainterPath m_iconPath;
     qreal _pause;
     bool _startWithLongNames;
     bool _startWithMeasureOne;
