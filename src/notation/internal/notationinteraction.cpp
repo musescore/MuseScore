@@ -52,6 +52,7 @@
 #include "libmscore/instrchange.h"
 #include "libmscore/lasso.h"
 #include "libmscore/textedit.h"
+#include "libmscore/lyrics.h"
 
 #include "masternotation.h"
 #include "scorecallbacks.h"
@@ -66,7 +67,7 @@ using namespace mu::notation;
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
     : m_notation(notation), m_undoStack(undoStack), m_gripEditData(&m_scoreCallbacks),
-    m_lasso(new Ms::Lasso(notation->score()))
+    m_lasso(new Ms::Lasso(notation->score())), m_textEditData(&m_scoreCallbacks)
 {
     m_noteInput = std::make_shared<NotationNoteInput>(notation, this, m_undoStack);
     m_selection = std::make_shared<NotationSelection>(notation);
@@ -79,6 +80,7 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
 
     m_dragData.ed = Ms::EditData(&m_scoreCallbacks);
     m_dropData.ed = Ms::EditData(&m_scoreCallbacks);
+    m_scoreCallbacks.setScore(notation->score());
 }
 
 NotationInteraction::~NotationInteraction()
@@ -702,15 +704,15 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
 
     notifyAboutDragChanged();
 
-    //    Element* e = _score->getSelectedElement();
+    //    Element* e = score()->getSelectedElement();
     //    if (e) {
-    //        if (_score->playNote()) {
+    //        if (score()->playNote()) {
     //            mscore->play(e);
-    //            _score->setPlayNote(false);
+    //            score()->setPlayNote(false);
     //        }
     //    }
     //    updateGrips();
-    //    _score->update();
+    //    score()->update();
 }
 
 void NotationInteraction::endDrag()
@@ -732,7 +734,7 @@ void NotationInteraction::endDrag()
     notifyAboutDragChanged();
     //    updateGrips();
     //    if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit
-    //        && _score->selection().element() == editData.element) {
+    //        && score()->selection().element() == editData.element) {
     //        startEdit(/* editMode */ false);
     //    }
 }
@@ -2988,4 +2990,428 @@ void NotationInteraction::resetShapesAndPosition()
     apply();
 
     notifyAboutNotationChanged();
+}
+
+void NotationInteraction::nextLyrics(bool back, bool moveOnly, bool end)
+{
+    if (!m_textEditData.element || !m_textEditData.element->isLyrics()) {
+        qWarning("nextLyric called with invalid current element");
+        return;
+    }
+    Ms::Lyrics* lyrics = toLyrics(m_textEditData.element);
+    int track = lyrics->track();
+    Ms::Segment* segment = lyrics->segment();
+    int verse = lyrics->no();
+    Ms::Placement placement = lyrics->placement();
+    Ms::PropertyFlags pFlags = lyrics->propertyFlags(Ms::Pid::PLACEMENT);
+
+    Ms::Segment* nextSegment = segment;
+    if (back) {
+        // search prev chord
+        while ((nextSegment = nextSegment->prev1(Ms::SegmentType::ChordRest))) {
+            Element* el = nextSegment->element(track);
+            if (el && el->isChord()) {
+                break;
+            }
+        }
+    } else {
+        // search next chord
+        while ((nextSegment = nextSegment->next1(Ms::SegmentType::ChordRest))) {
+            Element* el = nextSegment->element(track);
+            if (el && el->isChord()) {
+                break;
+            }
+        }
+    }
+    if (nextSegment == 0) {
+        return;
+    }
+
+    endEditText();
+
+    // look for the lyrics we are moving from; may be the current lyrics or a previous one
+    // if we are skipping several chords with spaces
+    Ms::Lyrics* fromLyrics = 0;
+    if (!back) {
+        while (segment) {
+            ChordRest* cr = toChordRest(segment->element(track));
+            if (cr) {
+                fromLyrics = cr->lyrics(verse, placement);
+                if (fromLyrics) {
+                    break;
+                }
+            }
+            segment = segment->prev1(Ms::SegmentType::ChordRest);
+        }
+    }
+
+    ChordRest* cr = toChordRest(nextSegment->element(track));
+    if (!cr) {
+        qDebug("no next lyrics list: %s", nextSegment->element(track)->name());
+        return;
+    }
+    Ms::Lyrics* nextLyrics = cr->lyrics(verse, placement);
+
+    bool newLyrics = false;
+    if (!nextLyrics) {
+        nextLyrics = new Ms::Lyrics(score());
+        nextLyrics->setTrack(track);
+        cr = toChordRest(nextSegment->element(track));
+        nextLyrics->setParent(cr);
+        nextLyrics->setNo(verse);
+        nextLyrics->setPlacement(placement);
+        nextLyrics->setPropertyFlags(Ms::Pid::PLACEMENT, pFlags);
+        nextLyrics->setSyllabic(Ms::Lyrics::Syllabic::SINGLE);
+        newLyrics = true;
+    }
+
+    score()->startCmd();
+    if (fromLyrics && !moveOnly) {
+        switch (nextLyrics->syllabic()) {
+        // as we arrived at nextLyrics by a [Space], it can be the beginning
+        // of a multi-syllable, but cannot have syllabic dashes before
+        case Ms::Lyrics::Syllabic::SINGLE:
+        case Ms::Lyrics::Syllabic::BEGIN:
+            break;
+        case Ms::Lyrics::Syllabic::END:
+            nextLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::SINGLE));
+            break;
+        case Ms::Lyrics::Syllabic::MIDDLE:
+            nextLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::BEGIN));
+            break;
+        }
+        // as we moved away from fromLyrics by a [Space], it can be
+        // the end of a multi-syllable, but cannot have syllabic dashes after
+        switch (fromLyrics->syllabic()) {
+        case Ms::Lyrics::Syllabic::SINGLE:
+        case Ms::Lyrics::Syllabic::END:
+            break;
+        case Ms::Lyrics::Syllabic::BEGIN:
+            fromLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::SINGLE));
+            break;
+        case Ms::Lyrics::Syllabic::MIDDLE:
+            fromLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::END));
+            break;
+        }
+        // for the same reason, it cannot have a melisma
+        fromLyrics->undoChangeProperty(Ms::Pid::LYRIC_TICKS, 0);
+    }
+
+    if (newLyrics) {
+        score()->undoAddElement(nextLyrics);
+    }
+    score()->endCmd();
+    score()->select(nextLyrics, SelectType::SINGLE, 0);
+    score()->setLayoutAll();
+
+    startEditText(nextLyrics, PointF());
+
+    Ms::TextCursor* cursor = nextLyrics->cursor();
+    if (end) {
+        nextLyrics->selectAll(cursor);
+    } else {
+        cursor->movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+        cursor->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
+    }
+}
+
+void NotationInteraction::nextSyllable()
+{
+    if (!m_textEditData.element || !m_textEditData.element->isLyrics()) {
+        qWarning("nextSyllable called with invalid current element");
+        return;
+    }
+    Ms::Lyrics* lyrics = toLyrics(m_textEditData.element);
+    int track = lyrics->track();
+    Ms::Segment* segment = lyrics->segment();
+    int verse = lyrics->no();
+    Ms::Placement placement = lyrics->placement();
+    Ms::PropertyFlags pFlags = lyrics->propertyFlags(Ms::Pid::PLACEMENT);
+
+    // search next chord
+    Ms::Segment* nextSegment = segment;
+    while ((nextSegment = nextSegment->next1(Ms::SegmentType::ChordRest))) {
+        Element* el = nextSegment->element(track);
+        if (el && el->isChord()) {
+            break;
+        }
+    }
+    if (nextSegment == 0) {
+        return;
+    }
+
+    // look for the lyrics we are moving from; may be the current lyrics or a previous one
+    // we are extending with several dashes
+    Ms::Lyrics* fromLyrics = 0;
+    while (segment) {
+        ChordRest* cr = toChordRest(segment->element(track));
+        if (!cr) {
+            segment = segment->prev1(Ms::SegmentType::ChordRest);
+            continue;
+        }
+        fromLyrics = cr->lyrics(verse, placement);
+        if (fromLyrics) {
+            break;
+        }
+        segment = segment->prev1(Ms::SegmentType::ChordRest);
+    }
+
+    endEditText();
+
+    score()->startCmd();
+    ChordRest* cr = toChordRest(nextSegment->element(track));
+    Ms::Lyrics* toLyrics = cr->lyrics(verse, placement);
+    bool newLyrics = (toLyrics == 0);
+    if (!toLyrics) {
+        toLyrics = new Ms::Lyrics(score());
+        toLyrics->setTrack(track);
+        toLyrics->setParent(nextSegment->element(track));
+        toLyrics->setNo(verse);
+        toLyrics->setPlacement(placement);
+        toLyrics->setPropertyFlags(Ms::Pid::PLACEMENT, pFlags);
+        toLyrics->setSyllabic(Ms::Lyrics::Syllabic::END);
+    } else {
+        // as we arrived at toLyrics by a dash, it cannot be initial or isolated
+        if (toLyrics->syllabic() == Ms::Lyrics::Syllabic::BEGIN) {
+            toLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::MIDDLE));
+        } else if (toLyrics->syllabic() == Ms::Lyrics::Syllabic::SINGLE) {
+            toLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::END));
+        }
+    }
+
+    if (fromLyrics) {
+        // as we moved away from fromLyrics by a dash,
+        // it can have syll. dashes before and after but cannot be isolated or terminal
+        switch (fromLyrics->syllabic()) {
+        case Ms::Lyrics::Syllabic::BEGIN:
+        case Ms::Lyrics::Syllabic::MIDDLE:
+            break;
+        case Ms::Lyrics::Syllabic::SINGLE:
+            fromLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::BEGIN));
+            break;
+        case Ms::Lyrics::Syllabic::END:
+            fromLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::MIDDLE));
+            break;
+        }
+        // for the same reason, it cannot have a melisma
+        fromLyrics->undoChangeProperty(Ms::Pid::LYRIC_TICKS, 0);
+    }
+
+    if (newLyrics) {
+        score()->undoAddElement(toLyrics);
+    }
+
+    score()->endCmd();
+    score()->select(toLyrics, SelectType::SINGLE, 0);
+    score()->setLayoutAll();
+
+    startEditText(toLyrics, PointF());
+
+    toLyrics->selectAll(toLyrics->cursor());
+}
+
+void NotationInteraction::nextLyricsVerse(bool back)
+{
+    if (!m_textEditData.element || !m_textEditData.element->isLyrics()) {
+        qWarning("nextLyricVerse called with invalid current element");
+        return;
+    }
+    Ms::Lyrics* lyrics = toLyrics(m_textEditData.element);
+    int track = lyrics->track();
+    ChordRest* cr = lyrics->chordRest();
+    int verse = lyrics->no();
+    Ms::Placement placement = lyrics->placement();
+    Ms::PropertyFlags pFlags = lyrics->propertyFlags(Ms::Pid::PLACEMENT);
+
+    if (back) {
+        if (verse == 0) {
+            return;
+        }
+        --verse;
+    } else {
+        ++verse;
+        if (verse > cr->lastVerse(placement)) {
+            return;
+        }
+    }
+
+    endEditText();
+
+    lyrics = cr->lyrics(verse, placement);
+    if (!lyrics) {
+        lyrics = new Ms::Lyrics(score());
+        lyrics->setTrack(track);
+        lyrics->setParent(cr);
+        lyrics->setNo(verse);
+        lyrics->setPlacement(placement);
+        lyrics->setPropertyFlags(Ms::Pid::PLACEMENT, pFlags);
+        score()->startCmd();
+        score()->undoAddElement(lyrics);
+        score()->endCmd();
+    }
+
+    score()->select(lyrics, SelectType::SINGLE, 0);
+    startEditText(lyrics, PointF());
+
+    lyrics = toLyrics(m_textEditData.element);
+
+    score()->setLayoutAll();
+    score()->update();
+
+    lyrics->selectAll(lyrics->cursor());
+}
+
+void NotationInteraction::addMelisma()
+{
+    if (!m_textEditData.element || !m_textEditData.element->isLyrics()) {
+        qWarning("addMelisma called with invalid current element");
+        return;
+    }
+    Ms::Lyrics* lyrics = toLyrics(m_textEditData.element);
+    int track = lyrics->track();
+    Ms::Segment* segment = lyrics->segment();
+    int verse = lyrics->no();
+    Ms::Placement placement = lyrics->placement();
+    Ms::PropertyFlags pFlags = lyrics->propertyFlags(Ms::Pid::PLACEMENT);
+    Fraction endTick = segment->tick(); // a previous melisma cannot extend beyond this point
+
+    endEditText();
+
+    // search next chord
+    Ms::Segment* nextSegment = segment;
+    while ((nextSegment = nextSegment->next1(Ms::SegmentType::ChordRest))) {
+        Element* el = nextSegment->element(track);
+        if (el && el->isChord()) {
+            break;
+        }
+    }
+
+    // look for the lyrics we are moving from; may be the current lyrics or a previous one
+    // we are extending with several underscores
+    Ms::Lyrics* fromLyrics = 0;
+    while (segment) {
+        ChordRest* cr = toChordRest(segment->element(track));
+        if (cr) {
+            fromLyrics = cr->lyrics(verse, placement);
+            if (fromLyrics) {
+                break;
+            }
+        }
+        segment = segment->prev1(Ms::SegmentType::ChordRest);
+        // if the segment has a rest in this track, stop going back
+        Element* e = segment ? segment->element(track) : 0;
+        if (e && !e->isChord()) {
+            break;
+        }
+    }
+
+    // one-chord melisma?
+    // if still at melisma initial chord and there is a valid next chord (if not,
+    // there will be no melisma anyway), set a temporary melisma duration
+    if (fromLyrics == lyrics && nextSegment) {
+        score()->startCmd();
+        lyrics->undoChangeProperty(Ms::Pid::LYRIC_TICKS, Fraction::fromTicks(Ms::Lyrics::TEMP_MELISMA_TICKS));
+        score()->setLayoutAll();
+        score()->endCmd();
+    }
+
+    if (nextSegment == 0) {
+        score()->startCmd();
+        if (fromLyrics) {
+            switch (fromLyrics->syllabic()) {
+            case Ms::Lyrics::Syllabic::SINGLE:
+            case Ms::Lyrics::Syllabic::END:
+                break;
+            default:
+                fromLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::END));
+                break;
+            }
+            if (fromLyrics->segment()->tick() < endTick) {
+                fromLyrics->undoChangeProperty(Ms::Pid::LYRIC_TICKS, endTick - fromLyrics->segment()->tick());
+            }
+        }
+
+        if (fromLyrics) {
+            score()->select(fromLyrics, SelectType::SINGLE, 0);
+        }
+        score()->setLayoutAll();
+        score()->endCmd();
+        return;
+    }
+
+    // if a place for a new lyrics has been found, create a lyrics there
+
+    score()->startCmd();
+    ChordRest* cr = toChordRest(nextSegment->element(track));
+    Ms::Lyrics* toLyrics = cr->lyrics(verse, placement);
+    bool newLyrics = (toLyrics == 0);
+    if (!toLyrics) {
+        toLyrics = new Ms::Lyrics(score());
+        toLyrics->setTrack(track);
+        toLyrics->setParent(nextSegment->element(track));
+        toLyrics->setNo(verse);
+        toLyrics->setPlacement(placement);
+        toLyrics->setPropertyFlags(Ms::Pid::PLACEMENT, pFlags);
+        toLyrics->setSyllabic(Ms::Lyrics::Syllabic::SINGLE);
+    }
+    // as we arrived at toLyrics by an underscore, it cannot have syllabic dashes before
+    else if (toLyrics->syllabic() == Ms::Lyrics::Syllabic::MIDDLE) {
+        toLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::BEGIN));
+    } else if (toLyrics->syllabic() == Ms::Lyrics::Syllabic::END) {
+        toLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::SINGLE));
+    }
+    if (fromLyrics) {
+        // as we moved away from fromLyrics by an underscore,
+        // it can be isolated or terminal but cannot have dashes after
+        switch (fromLyrics->syllabic()) {
+        case Ms::Lyrics::Syllabic::SINGLE:
+        case Ms::Lyrics::Syllabic::END:
+            break;
+        default:
+            fromLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::END));
+            break;
+        }
+        // for the same reason, if it has a melisma, this cannot extend beyond toLyrics
+        if (fromLyrics->segment()->tick() < endTick) {
+            fromLyrics->undoChangeProperty(Ms::Pid::LYRIC_TICKS, endTick - fromLyrics->segment()->tick());
+        }
+    }
+    if (newLyrics) {
+        score()->undoAddElement(toLyrics);
+    }
+    score()->endCmd();
+
+    score()->select(toLyrics, SelectType::SINGLE, 0);
+    startEditText(toLyrics, PointF());
+
+    toLyrics->selectAll(toLyrics->cursor());
+}
+
+void NotationInteraction::addLyricsVerse()
+{
+    if (!m_textEditData.element || !m_textEditData.element->isLyrics()) {
+        qWarning("nextLyricVerse called with invalid current element");
+        return;
+    }
+    Ms::Lyrics* lyrics = toLyrics(m_textEditData.element);
+
+    endEditText();
+
+    score()->startCmd();
+    int newVerse;
+    newVerse = lyrics->no() + 1;
+
+    Ms::Lyrics* oldLyrics = lyrics;
+    lyrics = new Ms::Lyrics(score());
+    lyrics->setTrack(oldLyrics->track());
+    lyrics->setParent(oldLyrics->segment()->element(oldLyrics->track()));
+    lyrics->setPlacement(oldLyrics->placement());
+    lyrics->setPropertyFlags(Ms::Pid::PLACEMENT, oldLyrics->propertyFlags(Ms::Pid::PLACEMENT));
+    lyrics->setNo(newVerse);
+
+    score()->undoAddElement(lyrics);
+    score()->endCmd();
+
+    score()->select(lyrics, SelectType::SINGLE, 0);
+    startEditText(lyrics, PointF());
 }
