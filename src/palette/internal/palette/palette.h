@@ -30,6 +30,7 @@
 #include "modularity/ioc.h"
 #include "ipaletteadapter.h"
 #include "ipaletteconfiguration.h"
+#include "ui/iuiactionsregister.h"
 
 #include "iinteractive.h"
 
@@ -70,6 +71,7 @@ class Palette : public QWidget
 
     INJECT_STATIC(palette, mu::palette::IPaletteAdapter, adapter)
     INJECT_STATIC(palette, mu::palette::IPaletteConfiguration, configuration)
+    INJECT_STATIC(palette, mu::ui::IUiActionsRegister, actionsRegister)
     INJECT(palette, mu::framework::IInteractive, interactive)
 
 signals:

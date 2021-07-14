@@ -46,8 +46,6 @@ class IPaletteAdapter : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPaletteAdapter() = default;
 
-    virtual const ui::UiAction& getAction(const actions::ActionCode& code) const = 0;
-
     virtual void showMasterPalette(const QString&) = 0;
 
     // score

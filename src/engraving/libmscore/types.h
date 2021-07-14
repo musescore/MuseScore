@@ -150,7 +150,7 @@ enum class ElementType {
     VBOX,
     TBOX,
     FBOX,
-    ICON,
+    ACTION_ICON,
     OSSIA,
     BAGPIPE_EMBELLISHMENT,
     STICKING,

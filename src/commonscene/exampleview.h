@@ -40,7 +40,7 @@ class Element;
 class Score;
 class Note;
 class Chord;
-class Icon;
+class ActionIcon;
 enum class Grip : int;
 
 //---------------------------------------------------------
@@ -82,7 +82,7 @@ class ExampleView : public QFrame, public MuseScoreView
 
 signals:
     void noteClicked(Note*);
-    void beamPropertyDropped(Chord*, Icon*);
+    void beamPropertyDropped(Chord*, ActionIcon*);
 
 public:
     ExampleView(QWidget* parent = 0);
