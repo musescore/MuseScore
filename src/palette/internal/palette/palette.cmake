@@ -1,7 +1,5 @@
 
 set(PALETTE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/palettelistview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/palettelistview.h
     ${CMAKE_CURRENT_LIST_DIR}/palettemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/palettemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/palettetree.cpp
