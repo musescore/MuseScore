@@ -1519,11 +1519,16 @@ void ParsedChord::checkQualitySymbolsLetterCase(const ChordList* cl)
 //---------------------------------------------------------
 void ParsedChord::addParentheses(const ChordList* cl)
 {
+    // The parentheses are not added in as separate tokens themselves
+    // They are associated to the tokens already present in _tokenList
     QStringList allModifiers = { "b", "bb", "#", "##", "natural", "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
     QStringList nonAlterationModifiers = { "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
     QStringList alterations = { "b", "bb", "#", "##", "natural" };
     QStringList addOmitSymbols = { "omit", "no", "add" };
     for (int index = 0; index < _tokenList.size(); index++) {
+        if (skipList.contains(index)) {
+            continue;
+        }
         const ChordToken& tok = _tokenList.at(index);
         if (tok.tokenClass == ChordTokenClass::MODIFIER) {
             if (tok.names.first() == "sus" && cl->suspensionsParentheses) {
@@ -1604,9 +1609,14 @@ void ParsedChord::addParentheses(const ChordList* cl)
 //---------------------------------------------------------
 void ParsedChord::sortModifiers()
 {
+    // This separate array is required for updating skipList and removeAfterRenderList correctly
+    QList<int> removeIndices;
+
     QStringList allModifiers = { "b", "bb", "#", "##", "natural", "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
 
     QList<ChordToken> alterations;
+    QList<bool> skip;
+    QList<bool> remove;
     QStringList alterationsList = { "b", "bb", "#", "##", "natural" };
 
     QList<ChordToken> suspension;
@@ -1630,7 +1640,8 @@ void ParsedChord::sortModifiers()
                 bool foundNextModifier = false;
                 while (!foundNextModifier) {
                     suspension.push_back(tok);
-                    _tokenList.removeAt(index);
+                    removeIndices.push_back(index);
+                    index++;
                     if (index >= _tokenList.size()) {
                         break;
                     }
@@ -1644,7 +1655,8 @@ void ParsedChord::sortModifiers()
                 bool foundNextModifier = false;
                 while (!foundNextModifier) {
                     maj7.push_back(tok);
-                    _tokenList.removeAt(index);
+                    removeIndices.push_back(index);
+                    index++;
                     if (index >= _tokenList.size()) {
                         break;
                     }
@@ -1655,14 +1667,17 @@ void ParsedChord::sortModifiers()
                 }
                 index--;
             } else if (addOmitList.contains(tok.names.first())) {
+                // To skip the immediate next accidental if any
                 addOmit.push_back(tok);
-                _tokenList.removeAt(index);
-                tok = _tokenList.at(index); // To skip the immediate next accidental if any
+                removeIndices.push_back(index);
+                index++;
+                tok = _tokenList.at(index);
 
                 bool foundNextModifier = false;
                 while (!foundNextModifier) {
                     addOmit.push_back(tok);
-                    _tokenList.removeAt(index);
+                    removeIndices.push_back(index);
+                    index++;
                     if (index >= _tokenList.size()) {
                         break;
                     }
@@ -1675,8 +1690,21 @@ void ParsedChord::sortModifiers()
             } else if (alterationsList.contains(tok.names.first())) {
                 bool foundNextModifier = false;
                 while (!foundNextModifier) {
+                    if (skipList.contains(index)) {
+                        skipList.removeAll(index);
+                        skip.push_back(true);
+                    } else {
+                        skip.push_back(false);
+                    }
+                    if (removeAfterRenderList.contains(index)) {
+                        removeAfterRenderList.removeAll(index);
+                        remove.push_back(true);
+                    } else {
+                        remove.push_back(false);
+                    }
                     alterations.push_back(tok);
-                    _tokenList.removeAt(index);
+                    removeIndices.push_back(index);
+                    index++;
                     if (index >= _tokenList.size()) {
                         break;
                     }
@@ -1690,7 +1718,8 @@ void ParsedChord::sortModifiers()
                 bool foundNextModifier = false;
                 while (!foundNextModifier) {
                     alt.push_back(tok);
-                    _tokenList.removeAt(index);
+                    removeIndices.push_back(index);
+                    index++;
                     if (index >= _tokenList.size()) {
                         break;
                     }
@@ -1703,6 +1732,11 @@ void ParsedChord::sortModifiers()
             }
         }
     }
+    // We remove all the modifiers here
+    std::sort(removeIndices.begin(), removeIndices.end());
+    for (int index = removeIndices.size() - 1; index >= 0; index--) {
+        _tokenList.removeAt(removeIndices.at(index));
+    }
     // Sort the alterations based on note numbers
     for (int i = 0; i < (alterations.size() / 2) - 1; i++) {
         for (int j = 0; j < (alterations.size() / 2) - i - 1; j++) {
@@ -1710,27 +1744,48 @@ void ParsedChord::sortModifiers()
             if (alterations.at(2 * j + 1).names.first().toInt() > alterations.at(2 * (j + 1) + 1).names.first().toInt()) {
                 // Swap accidentals
                 alterations.swapItemsAt(2 * j, 2 * (j + 1));
+                skip.swapItemsAt(2 * j, 2 * (j + 1));
+                remove.swapItemsAt(2 * j, 2 * (j + 1));
 
                 //Swap note numbers
                 alterations.swapItemsAt(2 * j + 1, 2 * (j + 1) + 1);
+                skip.swapItemsAt(2 * j + 1, 2 * (j + 1) + 1);
+                remove.swapItemsAt(2 * j + 1, 2 * (j + 1) + 1);
             }
         }
     }
     // Rebuild the list in the correct order
+    int addedIndex = 0;
     for (int index = alterations.size() - 1; index >= 0; index--) {
         _tokenList.insert(firstModifierIndex, alterations.at(index));
     }
     for (int index = addOmit.size() - 1; index >= 0; index--) {
         _tokenList.insert(firstModifierIndex, addOmit.at(index));
+        addedIndex++;
     }
     for (int index = alt.size() - 1; index >= 0; index--) {
         _tokenList.insert(firstModifierIndex, alt.at(index));
+        addedIndex++;
     }
     for (int index = suspension.size() - 1; index >= 0; index--) {
         _tokenList.insert(firstModifierIndex, suspension.at(index));
+        addedIndex++;
     }
     for (int index = maj7.size() - 1; index >= 0; index--) {
         _tokenList.insert(firstModifierIndex, maj7.at(index));
+        addedIndex++;
+    }
+    // Only preserves skipList and removeAfterRenderList for alterations
+    // Probably need to make it common(but is it needed though?...since only alterations are skipped)
+    for (int i = 0; i < skip.size(); i++) {
+        if (skip.at(i)) {
+            skipList.push_back(firstModifierIndex + addedIndex + i);
+        }
+    }
+    for (int i = 0; i < remove.size(); i++) {
+        if (remove.at(i)) {
+            removeAfterRenderList.push_back(firstModifierIndex + addedIndex + i);
+        }
     }
 }
 
@@ -1913,7 +1968,8 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
 
                 // Here depending on the quality symbols set,
                 // decide whether or not to skip the 7 and b5.
-                hasSeven = hasFlatFive = halfDiminishedTokens.size() > 1;
+                hasSeven = halfDiminishedTokens.contains("7");
+                hasFlatFive = halfDiminishedTokens.contains("b5");
             } else if (_quality == "half-diminished") {
                 // This part of code is encountered when the input is 0.
                 QStringList halfDiminishedTokens = cl->qualitySymbols.value("half-diminished").split(" ");
@@ -1924,14 +1980,15 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                 _tokenList.removeAt(index);
                 _tokenList.insert(index, hdTok);
 
-                if (halfDiminishedTokens.size() > 1) {
+                if (halfDiminishedTokens.contains("7")) {
                     // insert extension 7
                     ChordToken sevenToken;
                     sevenToken.names += "7";
                     sevenToken.tokenClass = ChordTokenClass::EXTENSION;
                     _tokenList.insert(index + 1, sevenToken);
                     removeAfterRenderList.push_back(index + 1);
-
+                }
+                if (halfDiminishedTokens.contains("b5")) {
                     // insert modifier flat
                     ChordToken flatToken;
                     flatToken.names += "b";
@@ -1957,7 +2014,7 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
 
                 // Here depending on the quality symbols set,
                 // decide whether or not to skip the  b5.
-                hasFlatFive = diminishedTokens.size() > 1;
+                hasFlatFive = diminishedTokens.contains("b5");
             } else if (_quality == "diminished") {
                 // This part of code is encountered when the input is dim or o.
                 QStringList diminishedTokens = cl->qualitySymbols.value("diminished").split(" ");
@@ -1967,7 +2024,7 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                 _tokenList.removeAt(index);
                 _tokenList.insert(index, dimTok);
 
-                if (diminishedTokens.size() > 1) {
+                if (diminishedTokens.contains("b5")) {
                     // insert modifier flat
                     ChordToken flatToken;
                     flatToken.names += "b";
@@ -2178,11 +2235,6 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
 
     int index = 0;
     for (const ChordToken& tok : qAsConst(_tokenList)) {
-        if (skipList.contains(index)) {
-            index++;
-            continue;
-        }
-
         QString n = tok.names.first();
         QList<RenderAction> rl;
         QList<ChordToken> definedTokens;
@@ -2279,13 +2331,18 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             }
         }
 
-        if (found) {
-            _renderList.append(rl);
-        } else {
-            // no definition for token, so render as literal
-            RenderAction a(RenderAction::RenderActionType::SET);
-            a.text = tok.names.first();
-            _renderList.append(a);
+        // Here only the "text" part of the token is skipped
+        // This means the parentheses still work alright if
+        // it is associated with a skipped token
+        if (!skipList.contains(index)) {
+            if (found) {
+                _renderList.append(rl);
+            } else {
+                // no definition for token, so render as literal
+                RenderAction a(RenderAction::RenderActionType::SET);
+                a.text = tok.names.first();
+                _renderList.append(a);
+            }
         }
 
         if (index == alterationStackingEnd && alterationStackIndices.size() > 1) {
@@ -2327,14 +2384,15 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         }
         index++;
     }
+    // Remove all the added parentheses
+    stripParentheses();
 
     // The items added in the respelling function are removed here
     // to prevent multiple occurrences
-    stripParentheses(); // remove from render list contains indices from when there were no parentheses
-    for (int index = _tokenList.size(); index >= 0; index--) {
-        if (removeAfterRenderList.contains(index)) {
-            _tokenList.removeAt(index);
-        }
+    // remove from render list contains chord tokens to be removed
+    std::sort(removeAfterRenderList.begin(), removeAfterRenderList.end());
+    for (int index = removeAfterRenderList.size() - 1; index >= 0; index--) {
+        _tokenList.removeAt(removeAfterRenderList.at(index));
     }
 
     return _renderList;
