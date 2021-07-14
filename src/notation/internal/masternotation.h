@@ -47,7 +47,7 @@ public:
     ~MasterNotation();
 
     void setMasterScore(Ms::MasterScore* masterScore);
-    Ret setupNewScore(Ms::MasterScore* score, Ms::MasterScore* templateScore, const project::ProjectCreateOptions& scoreOptions);
+    Ret setupNewScore(Ms::MasterScore* score, Ms::MasterScore* templateScore, const ScoreCreateOptions& scoreOptions);
     void onSaveCopy();
 
     INotationPtr notation() override;

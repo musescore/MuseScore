@@ -73,40 +73,42 @@ bool NewScoreModel::createScore(const QVariant& info)
 
 ProjectCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
 {
-    ProjectCreateOptions options;
+    ProjectCreateOptions projectOptions;
 
-    options.title = info["title"].toString();
-    options.subtitle = info["subtitle"].toString();
-    options.composer = info["composer"].toString();
-    options.lyricist = info["lyricist"].toString();
-    options.copyright = info["copyright"].toString();
+    projectOptions.title = info["title"].toString();
+    projectOptions.subtitle = info["subtitle"].toString();
+    projectOptions.composer = info["composer"].toString();
+    projectOptions.lyricist = info["lyricist"].toString();
+    projectOptions.copyright = info["copyright"].toString();
 
-    options.withTempo = info["withTempo"].toBool();
+    projectOptions.templatePath = info["templatePath"].toString();
+
+    ScoreCreateOptions& scoreOptions = projectOptions.scoreOptions;
+
+    scoreOptions.withTempo = info["withTempo"].toBool();
 
     QVariantMap tempo = info["tempo"].toMap();
-    options.tempo.valueBpm = tempo["value"].toInt();
-    options.tempo.duration = noteIconToDurationType(tempo["noteIcon"].toInt());
-    options.tempo.withDot = tempo["withDot"].toBool();
+    scoreOptions.tempo.valueBpm = tempo["value"].toInt();
+    scoreOptions.tempo.duration = noteIconToDurationType(tempo["noteIcon"].toInt());
+    scoreOptions.tempo.withDot = tempo["withDot"].toBool();
 
     QVariantMap timeSignature = info["timeSignature"].toMap();
-    options.timesigType = static_cast<TimeSigType>(info["timeSignatureType"].toInt());
-    options.timesigNumerator = timeSignature["numerator"].toInt();
-    options.timesigDenominator = timeSignature["denominator"].toInt();
+    scoreOptions.timesigType = static_cast<TimeSigType>(info["timeSignatureType"].toInt());
+    scoreOptions.timesigNumerator = timeSignature["numerator"].toInt();
+    scoreOptions.timesigDenominator = timeSignature["denominator"].toInt();
 
     QVariantMap keySignature = info["keySignature"].toMap();
-    options.key = static_cast<Key>(keySignature["key"].toInt());
-    options.keyMode = static_cast<KeyMode>(keySignature["mode"].toInt());
+    scoreOptions.key = static_cast<Key>(keySignature["key"].toInt());
+    scoreOptions.keyMode = static_cast<KeyMode>(keySignature["mode"].toInt());
 
     QVariantMap measuresPickup = info["pickupTimeSignature"].toMap();
-    options.withPickupMeasure = info["withPickupMeasure"].toBool();
-    options.measures = info["measureCount"].toInt();
-    options.measureTimesigNumerator = measuresPickup["numerator"].toInt();
-    options.measureTimesigDenominator = measuresPickup["denominator"].toInt();
-
-    options.templatePath = info["templatePath"].toString();
+    scoreOptions.withPickupMeasure = info["withPickupMeasure"].toBool();
+    scoreOptions.measures = info["measureCount"].toInt();
+    scoreOptions.measureTimesigNumerator = measuresPickup["numerator"].toInt();
+    scoreOptions.measureTimesigDenominator = measuresPickup["denominator"].toInt();
 
     QVariantMap partMap = info["parts"].toMap();
-    for (const QVariant& obj: partMap["instruments"].toList()) {
+    for (const QVariant& obj : partMap["instruments"].toList()) {
         QVariantMap objMap = obj.toMap();
         Q_ASSERT(!objMap["isExistingPart"].toBool());
 
@@ -117,12 +119,12 @@ ProjectCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
         pi.partId = QString();
         pi.instrument = objMap["instrument"].value<Instrument>();
 
-        options.parts << pi;
+        scoreOptions.parts << pi;
     }
 
-    options.order = info["scoreOrder"].value<ScoreOrder>();
+    scoreOptions.order = info["scoreOrder"].value<ScoreOrder>();
 
-    return options;
+    return projectOptions;
 }
 
 DurationType NewScoreModel::noteIconToDurationType(int noteIconCode) const

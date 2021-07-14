@@ -21,6 +21,8 @@
  */
 #include "notationuiactions.h"
 
+#include <unordered_map>
+
 #include "ui/view/iconcodes.h"
 
 using namespace mu::notation;
