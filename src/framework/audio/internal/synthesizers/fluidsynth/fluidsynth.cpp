@@ -112,7 +112,8 @@ Ret FluidSynth::init()
     fluid_settings_setint(m_fluid->settings, "synth.audio-channels", FLUID_AUDIO_CHANNELS_PAIR); // 1 pair of audio channels
     fluid_settings_setint(m_fluid->settings, "synth.lock-memory", 0);
     fluid_settings_setint(m_fluid->settings, "synth.threadsafe-api", 0);
-    fluid_settings_setint(m_fluid->settings, "synth.midi-channels", 80);
+    fluid_settings_setint(m_fluid->settings, "synth.midi-channels", 16);
+    fluid_settings_setint(m_fluid->settings, "synth.dynamic-sample-loading", 1);
 
     if (m_sampleRate > 0) {
         fluid_settings_setnum(m_fluid->settings, "synth.sample-rate", static_cast<double>(m_sampleRate));
@@ -121,7 +122,7 @@ Ret FluidSynth::init()
     //fluid_settings_setint(_fluid->settings, "synth.min-note-length", 50);
     //fluid_settings_setint(_fluid->settings, "synth.polyphony", conf.polyphony);
 
-    fluid_settings_setstr(m_fluid->settings, "synth.chorus.active", 0);
+    fluid_settings_setint(m_fluid->settings, "synth.chorus.active", 0);
 //    fluid_settings_setnum(m_fluid->settings, "synth.chorus.depth", 8);
 //    fluid_settings_setnum(m_fluid->settings, "synth.chorus.level", 10);
 //    fluid_settings_setint(m_fluid->settings, "synth.chorus.nr", 4);
