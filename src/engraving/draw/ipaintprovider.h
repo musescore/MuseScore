@@ -40,9 +40,6 @@ class IPaintProvider
 public:
     virtual ~IPaintProvider() = default;
 
-    virtual QPaintDevice* device() const = 0;
-    virtual QPainter* qpainter() const = 0;
-
     virtual bool isActive() const = 0;
     virtual void beginTarget(const std::string& name) = 0;
     virtual void beforeEndTargetHook(Painter* painter) = 0;
