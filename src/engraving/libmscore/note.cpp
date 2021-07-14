@@ -64,7 +64,7 @@
 #include "bend.h"
 #include "accidental.h"
 #include "page.h"
-#include "icon.h"
+#include "actionicon.h"
 #include "notedot.h"
 #include "spanner.h"
 #include "glissando.h"
@@ -1832,23 +1832,23 @@ bool Note::acceptDrop(EditData& data) const
            || type == ElementType::CHORD
            || type == ElementType::HARMONY
            || type == ElementType::DYNAMIC
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::ACCIACCATURA)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::APPOGGIATURA)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::GRACE4)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::GRACE16)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::GRACE32)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::GRACE8_AFTER)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::GRACE16_AFTER)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::GRACE32_AFTER)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::ACCIACCATURA)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::APPOGGIATURA)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE4)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE16)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE32)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE8_AFTER)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE16_AFTER)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE32_AFTER)
            || (noteType() == NoteType::NORMAL && type == ElementType::BAGPIPE_EMBELLISHMENT)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::SBEAM)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::MBEAM)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::NBEAM)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::BEAM32)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::BEAM64)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::AUTOBEAM)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::PARENTHESES)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::BRACES)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_START)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_MID)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_NONE)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BEGIN_32)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BEGIN_64)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_AUTO)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::PARENTHESES)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BRACES)
            || (type == ElementType::SYMBOL)
            || (type == ElementType::CLEF)
            || (type == ElementType::KEYSIG)
@@ -1951,42 +1951,42 @@ Element* Note::drop(EditData& data)
     }
     break;
 
-    case ElementType::ICON:
+    case ElementType::ACTION_ICON:
     {
-        switch (toIcon(e)->iconType()) {
-        case IconType::ACCIACCATURA:
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::ACCIACCATURA:
             score()->setGraceNote(ch, pitch(), NoteType::ACCIACCATURA, MScore::division / 2);
             break;
-        case IconType::APPOGGIATURA:
+        case ActionIconType::APPOGGIATURA:
             score()->setGraceNote(ch, pitch(), NoteType::APPOGGIATURA, MScore::division / 2);
             break;
-        case IconType::GRACE4:
+        case ActionIconType::GRACE4:
             score()->setGraceNote(ch, pitch(), NoteType::GRACE4, MScore::division);
             break;
-        case IconType::GRACE16:
+        case ActionIconType::GRACE16:
             score()->setGraceNote(ch, pitch(), NoteType::GRACE16,  MScore::division / 4);
             break;
-        case IconType::GRACE32:
+        case ActionIconType::GRACE32:
             score()->setGraceNote(ch, pitch(), NoteType::GRACE32, MScore::division / 8);
             break;
-        case IconType::GRACE8_AFTER:
+        case ActionIconType::GRACE8_AFTER:
             score()->setGraceNote(ch, pitch(), NoteType::GRACE8_AFTER, MScore::division / 2);
             break;
-        case IconType::GRACE16_AFTER:
+        case ActionIconType::GRACE16_AFTER:
             score()->setGraceNote(ch, pitch(), NoteType::GRACE16_AFTER, MScore::division / 4);
             break;
-        case IconType::GRACE32_AFTER:
+        case ActionIconType::GRACE32_AFTER:
             score()->setGraceNote(ch, pitch(), NoteType::GRACE32_AFTER, MScore::division / 8);
             break;
-        case IconType::SBEAM:
-        case IconType::MBEAM:
-        case IconType::NBEAM:
-        case IconType::BEAM32:
-        case IconType::BEAM64:
-        case IconType::AUTOBEAM:
+        case ActionIconType::BEAM_START:
+        case ActionIconType::BEAM_MID:
+        case ActionIconType::BEAM_NONE:
+        case ActionIconType::BEAM_BEGIN_32:
+        case ActionIconType::BEAM_BEGIN_64:
+        case ActionIconType::BEAM_AUTO:
             return ch->drop(data);
             break;
-        case IconType::PARENTHESES:
+        case ActionIconType::PARENTHESES:
             addParentheses();
             break;
         default:

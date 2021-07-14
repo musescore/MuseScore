@@ -365,7 +365,7 @@ enum class Pid {
     CLEF_TYPE_CONCERT,
     CLEF_TYPE_TRANSPOSING,
     KEY,
-    ACTION,   // for Icon
+    ACTION,   // for ActionIcon
     MIN_DISTANCE,
 
     ARPEGGIO_TYPE,

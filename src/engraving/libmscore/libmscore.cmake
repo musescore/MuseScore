@@ -21,6 +21,8 @@
 set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/accidental.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accidental.h
+    ${CMAKE_CURRENT_LIST_DIR}/actionicon.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/actionicon.h
     ${CMAKE_CURRENT_LIST_DIR}/ambitus.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ambitus.h
     ${CMAKE_CURRENT_LIST_DIR}/arpeggio.cpp
@@ -109,8 +111,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/harmony.h
     ${CMAKE_CURRENT_LIST_DIR}/hook.cpp
     ${CMAKE_CURRENT_LIST_DIR}/hook.h
-    ${CMAKE_CURRENT_LIST_DIR}/icon.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/icon.h
     ${CMAKE_CURRENT_LIST_DIR}/image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/image.h
     ${CMAKE_CURRENT_LIST_DIR}/imageStore.cpp

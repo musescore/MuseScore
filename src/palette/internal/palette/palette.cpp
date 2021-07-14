@@ -57,7 +57,7 @@
 #include "libmscore/part.h"
 #include "libmscore/textline.h"
 #include "libmscore/measure.h"
-#include "libmscore/icon.h"
+#include "libmscore/actionicon.h"
 #include "libmscore/mscore.h"
 #include "libmscore/imageStore.h"
 #include "thirdparty/qzip/qzipreader_p.h"
@@ -1096,8 +1096,8 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
         int column = idx % columns();
 
         qreal cellMag = currentCell->mag * mag;
-        if (el->isIcon()) {
-            toIcon(el.get())->setExtent((hhgrid < vgridM ? hhgrid : vgridM) - 4);
+        if (el->isActionIcon()) {
+            toActionIcon(el.get())->setExtent((hhgrid < vgridM ? hhgrid : vgridM) - 4);
             cellMag = 1.0;
         }
         el->layout();
@@ -1187,8 +1187,8 @@ QPixmap Palette::pixmap(int paletteIdx) const
     mu::draw::Painter painter(mu::draw::QPainterProvider::make(&pm), "palette");
     painter.setAntialiasing(true);
 
-    if (element->isIcon()) {
-        toIcon(element.get())->setExtent(w < h ? w : h);
+    if (element->isActionIcon()) {
+        toActionIcon(element.get())->setExtent(w < h ? w : h);
     }
     painter.scale(cellMag, cellMag);
 
@@ -1532,9 +1532,9 @@ void Palette::read(XmlReader& e)
                         cell->element->read(e);
                         cell->element->styleChanged();
 
-                        if (cell->element->type() == ElementType::ICON) {
-                            Icon* icon = static_cast<Icon*>(cell->element.get());
-                            const mu::ui::UiAction& actionItem = adapter()->getAction(icon->actionCode());
+                        if (cell->element->type() == ElementType::ACTION_ICON) {
+                            ActionIcon* icon = static_cast<ActionIcon*>(cell->element.get());
+                            const mu::ui::UiAction& actionItem = actionsRegister()->action(icon->actionCode());
                             if (actionItem.isValid()) {
                                 icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
                             } else {
@@ -1762,9 +1762,9 @@ void Palette::dropEvent(QDropEvent* event)
                 element->read(xml);
                 element->setTrack(0);
 
-                if (element->isIcon()) {
-                    Icon* icon = toIcon(element.get());
-                    const mu::ui::UiAction& actionItem = adapter()->getAction(icon->actionCode());
+                if (element->isActionIcon()) {
+                    ActionIcon* icon = toActionIcon(element.get());
+                    const mu::ui::UiAction& actionItem = actionsRegister()->action(icon->actionCode());
                     if (actionItem.isValid()) {
                         icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
                     }
