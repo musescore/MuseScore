@@ -43,7 +43,6 @@
 #include "view/aboutmodel.h"
 #include "view/preferences/preferencesmodel.h"
 #include "view/preferences/generalpreferencesmodel.h"
-#include "view/preferences/accessibilitypreferencesmodel.h"
 #include "view/preferences/updatepreferencesmodel.h"
 #include "view/preferences/appearancepreferencesmodel.h"
 #include "view/preferences/programmestartpreferencesmodel.h"
@@ -127,7 +126,6 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<PreferencesModel>("MuseScore.Preferences", 1, 0, "PreferencesModel");
     qmlRegisterType<GeneralPreferencesModel>("MuseScore.Preferences", 1, 0, "GeneralPreferencesModel");
     qmlRegisterType<UpdatePreferencesModel>("MuseScore.Preferences", 1, 0, "UpdatePreferencesModel");
-    qmlRegisterType<AccessibilityPreferencesModel>("MuseScore.Preferences", 1, 0, "AccessibilityPreferencesModel");
     qmlRegisterType<AppearancePreferencesModel>("MuseScore.Preferences", 1, 0, "AppearancePreferencesModel");
     qmlRegisterType<ProgrammeStartPreferencesModel>("MuseScore.Preferences", 1, 0, "ProgrammeStartPreferencesModel");
     qmlRegisterType<FoldersPreferencesModel>("MuseScore.Preferences", 1, 0, "FoldersPreferencesModel");

@@ -43,7 +43,11 @@ QString revision;
 
 static const std::string module_name("notation");
 
-static const Settings::Key BACKGROUND_COLOR(module_name, "ui/canvas/background/color");
+//static const Settings::Key BACKGROUND_COLOR(module_name, "ui/canvas/background/color");
+static const Settings::Key LIGHT_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/light_color");
+static const Settings::Key DARK_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/dark_color");
+static const Settings::Key HC_BLACK_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/hc_black_color");
+static const Settings::Key HC_WHITE_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/hc_white_color");
 static const Settings::Key BACKGROUND_WALLPAPER_PATH(module_name, "ui/canvas/background/wallpaper");
 static const Settings::Key BACKGROUND_USE_COLOR(module_name, "ui/canvas/background/useColor");
 
@@ -100,8 +104,28 @@ void NotationConfiguration::init()
         m_backgroundChanged.notify();
     });
 
-    settings()->setDefaultValue(BACKGROUND_COLOR, Val(QColor("#385f94")));
-    settings()->valueChanged(BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
+//    settings()->setDefaultValue(BACKGROUND_COLOR, Val(QColor("#385f94")));
+//    settings()->valueChanged(BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
+//        m_backgroundChanged.notify();
+//    });
+
+    settings()->setDefaultValue(LIGHT_SCORE_BACKGROUND_COLOR, Val(QColor("#385f94")));
+    settings()->valueChanged(LIGHT_SCORE_BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
+        m_backgroundChanged.notify();
+    });
+
+    settings()->setDefaultValue(DARK_SCORE_BACKGROUND_COLOR, Val(QColor("#385f94")));
+    settings()->valueChanged(DARK_SCORE_BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
+        m_backgroundChanged.notify();
+    });
+
+    settings()->setDefaultValue(HC_BLACK_SCORE_BACKGROUND_COLOR, Val(QColor("#000000")));
+    settings()->valueChanged(HC_BLACK_SCORE_BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
+        m_backgroundChanged.notify();
+    });
+
+    settings()->setDefaultValue(HC_WHITE_SCORE_BACKGROUND_COLOR, Val(QColor("#000000")));
+    settings()->valueChanged(HC_WHITE_SCORE_BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
         m_backgroundChanged.notify();
     });
 
@@ -209,12 +233,30 @@ QColor NotationConfiguration::anchorLineColor() const
 
 QColor NotationConfiguration::backgroundColor() const
 {
-    return settings()->value(BACKGROUND_COLOR).toQColor();
+    //return settings()->value(BACKGROUND_COLOR).toQColor();
+    if (uiConfiguration()->currentTheme().codeKey == LIGHT_THEME_CODE) {
+        return settings()->value(LIGHT_SCORE_BACKGROUND_COLOR).toQColor();
+    } else if (uiConfiguration()->currentTheme().codeKey == DARK_THEME_CODE) {
+        return settings()->value(DARK_SCORE_BACKGROUND_COLOR).toQColor();
+    } else if (uiConfiguration()->currentTheme().codeKey == HIGH_CONTRAST_BLACK_THEME_CODE) {
+        return settings()->value(HC_BLACK_SCORE_BACKGROUND_COLOR).toQColor();
+    } else {
+        return settings()->value(HC_WHITE_SCORE_BACKGROUND_COLOR).toQColor();
+    }
 }
 
 void NotationConfiguration::setBackgroundColor(const QColor& color)
 {
-    settings()->setSharedValue(BACKGROUND_COLOR, Val(color));
+    //settings()->setSharedValue(BACKGROUND_COLOR, Val(color));
+    if (uiConfiguration()->currentTheme().codeKey == LIGHT_THEME_CODE) {
+        settings()->setSharedValue(LIGHT_SCORE_BACKGROUND_COLOR, Val(color));
+    } else if (uiConfiguration()->currentTheme().codeKey == DARK_THEME_CODE) {
+        settings()->setSharedValue(DARK_SCORE_BACKGROUND_COLOR, Val(color));
+    } else if (uiConfiguration()->currentTheme().codeKey == HIGH_CONTRAST_BLACK_THEME_CODE) {
+        settings()->setSharedValue(HC_BLACK_SCORE_BACKGROUND_COLOR, Val(color));
+    } else {
+        settings()->setSharedValue(HC_WHITE_SCORE_BACKGROUND_COLOR, Val(color));
+    }
 }
 
 io::path NotationConfiguration::backgroundWallpaperPath() const
