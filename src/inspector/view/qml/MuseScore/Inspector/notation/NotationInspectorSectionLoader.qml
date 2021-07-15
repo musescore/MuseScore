@@ -121,166 +121,166 @@ Loader {
 
     Component {
         id: noteComp
-        NoteSettingsTabPanel { }
+        NoteSettings { }
     }
 
     Component {
         id: fermataComp
-        FermataSettingsPanel { }
+        FermataSettings { }
     }
 
     Component {
         id: glissandoComp
-        GlissandoSettingsPanel { }
+        GlissandoSettings { }
     }
 
     Component {
         id: tempoComp
-        TempoSettingsPanel { }
+        TempoSettings { }
     }
 
     Component {
         id: barlineComp
-        BarlineSettingsPanel { }
+        BarlineSettings { }
     }
 
     Component {
         id: sectionBreakComp
-        SectionBreakSettingsPanel { }
+        SectionBreakSettings { }
     }
 
     Component {
         id: markerComp
-        MarkerSettingsPanel { }
+        MarkerSettings { }
     }
 
     Component {
         id: jumpComp
-        JumpSettingsPanel { }
+        JumpSettings { }
     }
 
     Component {
         id: keySignatureComp
-        KeySignatureSettingsPanel { }
+        KeySignatureSettings { }
     }
 
     Component {
         id: accidentalComp
-        AccidentalSettingsPanel { }
+        AccidentalSettings { }
     }
 
     Component {
         id: fretDiagramComp
-        FretDiagramSettingsPanel { }
+        FretDiagramSettings { }
     }
 
     Component {
         id: pedalComp
-        PedalSettingsPanel { }
+        PedalSettings { }
     }
 
     Component {
         id: spacerComp
-        SpacerSettingsPanel { }
+        SpacerSettings { }
     }
 
     Component {
         id: clefComp
-        ClefSettingsPanel { }
+        ClefSettings { }
     }
 
     Component {
         id: hairpinComp
-        HairpinTabPanel { }
+        HairpinSettings { }
     }
 
     Component {
         id: crescendoComp
-        CrescendoTabPanel { }
+        CrescendoSettings { }
     }
 
     Component {
         id: staffTypeComp
-        StaffTypeSettingsPanel { }
+        StaffTypeSettings { }
     }
 
     Component {
         id: textFrameComp
-        TextFrameSettingsPanel { }
+        TextFrameSettings { }
     }
 
     Component {
         id: verticalFrameComp
-        VerticalFrameSettingsPanel { }
+        VerticalFrameSettings { }
     }
 
     Component {
         id: horizontalFrameComp
-        HorizontalFrameSettingsPanel { }
+        HorizontalFrameSettings { }
     }
 
     Component {
         id: articulationComp
-        ArticulationSettingsPanel { }
+        ArticulationSettings { }
     }
 
     Component {
         id: ornamentComp
-        OrnamentSettingsPanel { }
+        OrnamentSettings { }
     }
 
     Component {
         id: ambitusComp
-        AmbitusSettingsPanel { }
+        AmbitusSettings { }
     }
 
     Component {
         id: imageComp
-        ImageSettingsPanel { }
+        ImageSettings { }
     }
 
     Component {
         id: chordSymbolComp
-        ChordSymbolSettingsPanel { }
+        ChordSymbolSettings { }
     }
 
     Component {
         id: bracketComp
-        BracketSettingsPanel { }
+        BracketSettings { }
     }
 
     Component {
         id: braceComp
-        BraceSettingsPanel { }
+        BraceSettings { }
     }
 
     Component {
         id: timeSignatureComp
-        TimeSignatureSettingsPanel { }
+        TimeSignatureSettings { }
     }
 
     Component {
         id: mmRestComp
-        MMRestSettingsPanel { }
+        MMRestSettings { }
     }
 
     Component {
         id: bendComp
-        BendSettingsPanel { }
+        BendSettings { }
     }
 
     Component {
         id: tremoloBarComp
-        TremoloBarSettingsPanel { }
+        TremoloBarSettings { }
     }
 
     Component {
         id: tremoloComp
-        TremoloSettingsPanel { }
+        TremoloSettings { }
     }
 
     Component {
         id: measureRepeatComp
-        MeasureRepeatSettingsPanel { }
+        MeasureRepeatSettings { }
     }
 }

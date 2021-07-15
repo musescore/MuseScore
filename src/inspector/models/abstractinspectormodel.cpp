@@ -150,15 +150,6 @@ Ms::ElementType AbstractInspectorModel::elementType(const AbstractInspectorModel
     return Ms::ElementType::TEXT;
 }
 
-Ms::ElementType AbstractInspectorModel::notationElementType(const AbstractInspectorModel::InspectorModelType modelType)
-{
-    if (NOTATION_ELEMENT_MODEL_TYPES.values().contains(modelType)) {
-        return NOTATION_ELEMENT_MODEL_TYPES.key(modelType);
-    }
-
-    return Ms::ElementType::INVALID;
-}
-
 bool AbstractInspectorModel::isEmpty() const
 {
     return m_isEmpty;
