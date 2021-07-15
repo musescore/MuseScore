@@ -32,6 +32,8 @@ NoteheadTypesModel::NoteheadTypesModel(QObject* parent)
 
 void NoteheadTypesModel::load()
 {
+    beginResetModel();
+
     if (!m_noteheadTypeDataList.isEmpty()) {
         return;
     }
@@ -44,6 +46,8 @@ void NoteheadTypesModel::load()
 
         m_noteheadTypeDataList << headTypeData;
     }
+
+    endResetModel();
 }
 
 QHash<int, QByteArray> NoteheadTypesModel::roleNames() const

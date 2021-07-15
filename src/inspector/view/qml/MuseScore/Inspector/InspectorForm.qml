@@ -134,7 +134,12 @@ Rectangle {
                         switch (inspectorData.sectionType) {
                         case Inspector.SECTION_GENERAL: return generalInspector
                         case Inspector.SECTION_TEXT: return textInspector
-                        case Inspector.SECTION_NOTATION: return notationInspector
+                        case Inspector.SECTION_NOTATION:
+                            if (inspectorData.isMultiModel()) {
+                                return notationInspectorMultiElements
+                            } else {
+                                return notationInspectorSingleElement
+                            }
                         case Inspector.SECTION_SCORE_DISPLAY: return scoreInspector
                         case Inspector.SECTION_SCORE_APPEARANCE: return scoreAppearanceInspector
                         }
@@ -169,15 +174,29 @@ Rectangle {
                             onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
+
                     Component {
-                        id: notationInspector
-                        NotationInspectorView {
+                        id: notationInspectorMultiElements
+
+                        NotationMultiElementView {
                             model: inspectorData
                             navigationPanel: navPanel
                             navigationRowOffset: expandableDelegate.navigation.row + 1
                             onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
+
+                    Component {
+                        id: notationInspectorSingleElement
+
+                        NotationSingleElementView {
+                            model: inspectorData
+                            navigationPanel: navPanel
+                            navigationRowOffset: expandableDelegate.navigation.row + 1
+                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
+                        }
+                    }
+
                     Component {
                         id: scoreInspector
 

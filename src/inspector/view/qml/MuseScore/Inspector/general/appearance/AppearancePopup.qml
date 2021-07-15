@@ -28,7 +28,7 @@ import "internal"
 StyledPopupView {
     id: root
 
-    property QtObject model: undefined
+    property QtObject model: null
 
     contentHeight: contentColumn.implicitHeight
 

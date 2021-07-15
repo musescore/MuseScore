@@ -30,6 +30,7 @@ MMRestSettingsModel::MMRestSettingsModel(QObject* parent, IElementRepositoryServ
 {
     setModelType(InspectorModelType::TYPE_MMREST);
     setTitle(qtrc("inspector", "Multimeasure rest"));
+    setIcon(ui::IconCode::Code::MULTIMEASURE_REST);
     createProperties();
 }
 

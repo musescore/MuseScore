@@ -19,24 +19,77 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Ui 1.0
 import "../../common"
 
-PopupViewButton {
+Column {
     id: root
 
-    property alias model: jumpPopup.model
+    property QtObject model: null
 
-    icon: IconCode.JUMP
-    text: qsTrc("inspector", "Jumps")
+    objectName: "JumpSettings"
 
-    visible: root.model ? !root.model.isEmpty : false
+    spacing: 12
 
-    JumpPopup {
-        id: jumpPopup
+    InspectorPropertyView {
+        titleText: qsTrc("inspector", "Jump to")
+        propertyItem: root.model ? root.model.jumpTo : null
+
+        TextInputField {
+            isIndeterminate: root.model ? root.model.jumpTo.isUndefined : false
+            currentText: root.model ? root.model.jumpTo.value : ""
+            enabled: root.model ? root.model.jumpTo.isEnabled : false
+
+            onCurrentTextEdited: {
+                if (!root.model) {
+                    return
+                }
+
+                root.model.jumpTo.value = newTextValue
+            }
+        }
+    }
+
+    InspectorPropertyView {
+
+        titleText: qsTrc("inspector", "Play until")
+        propertyItem: root.model ? root.model.playUntil : null
+
+        TextInputField {
+            isIndeterminate: root.model ? root.model.playUntil.isUndefined : false
+            currentText: root.model ? root.model.playUntil.value : ""
+            enabled: root.model ? root.model.playUntil.isEnabled : false
+
+            onCurrentTextEdited: {
+                if (!root.model) {
+                    return
+                }
+
+                root.model.playUntil.value = newTextValue
+            }
+        }
+    }
+
+    InspectorPropertyView {
+        titleText: qsTrc("inspector", "Continue at")
+        propertyItem: root.model ? root.model.continueAt : null
+
+        TextInputField {
+            isIndeterminate: root.model ? root.model.continueAt.isUndefined : false
+            currentText: root.model ? root.model.continueAt.value : ""
+            enabled: root.model ? root.model.continueAt.isEnabled : false
+        }
+    }
+
+    CheckBox {
+        isIndeterminate: root.model ? root.model.hasToPlayRepeats.isUndefined : false
+        checked: root.model && !isIndeterminate ? root.model.hasToPlayRepeats.value : false
+        text: qsTrc("inspector", "Play repeats")
+
+        onClicked: { root.model.hasToPlayRepeats.value = !checked }
     }
 }

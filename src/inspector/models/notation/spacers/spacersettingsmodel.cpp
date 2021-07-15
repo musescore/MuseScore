@@ -32,6 +32,7 @@ SpacerSettingsModel::SpacerSettingsModel(QObject* parent, IElementRepositoryServ
 {
     setModelType(InspectorModelType::TYPE_SPACER);
     setTitle(qtrc("inspector", "Spacer"));
+    setIcon(ui::IconCode::Code::SPACER);
     createProperties();
 }
 

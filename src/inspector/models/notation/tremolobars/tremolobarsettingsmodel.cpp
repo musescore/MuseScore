@@ -33,6 +33,7 @@ TremoloBarSettingsModel::TremoloBarSettingsModel(QObject* parent, IElementReposi
 {
     setModelType(InspectorModelType::TYPE_TREMOLOBAR);
     setTitle(qtrc("inspector", "Tremolo bar"));
+    setIcon(ui::IconCode::Code::GUITAR_TREMOLO_BAR);
     createProperties();
 }
 

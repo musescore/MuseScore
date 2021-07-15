@@ -154,7 +154,8 @@ void NoteheadSettingsModel::setNoteheadTypesModel(NoteheadTypesModel* noteheadTy
         } else {
             m_noteheadTypesModel->init(static_cast<Ms::NoteHead::Group>(noteHeadGroup.toInt()));
         }
+        emit noteheadTypesModelChanged();
     });
 
-    emit noteheadTypesModelChanged(m_noteheadTypesModel);
+    emit noteheadTypesModelChanged();
 }

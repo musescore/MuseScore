@@ -32,6 +32,7 @@ PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryServic
 {
     setModelType(InspectorModelType::TYPE_PEDAL);
     setTitle(qtrc("inspector", "Pedal"));
+    setIcon(ui::IconCode::Code::PEDAL_MARKING);
     createProperties();
 }
 

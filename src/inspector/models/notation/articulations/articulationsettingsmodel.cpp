@@ -33,6 +33,7 @@ ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRe
 {
     setModelType(InspectorModelType::TYPE_ARTICULATION);
     setTitle(qtrc("inspector", "Articulation"));
+    setIcon(ui::IconCode::Code::ARTICULATION);
     createProperties();
 }
 

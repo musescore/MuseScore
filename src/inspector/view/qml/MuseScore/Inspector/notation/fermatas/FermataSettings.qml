@@ -19,24 +19,52 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.UiComponents 1.0
-import MuseScore.Ui 1.0
+import MuseScore.Inspector 1.0
 import "../../common"
 
-PopupViewButton {
+InspectorPropertyView {
     id: root
 
-    property alias model: fermataPopup.model
+    property QtObject model: null
 
-    icon: IconCode.FERMATA
-    text: qsTrc("inspector", "Fermatas")
+    objectName: "FermataSettings"
 
-    visible: root.model ? !root.model.isEmpty : false
+    titleText: qsTrc("inspector", "Placement on staff")
+    propertyItem: root.model ? root.model.placementType : null
 
-    FermataPopup {
-        id: fermataPopup
+    RadioButtonGroup {
+        id: radioButtonList
+
+        height: 30
+        width: parent.width
+
+        model: [
+            { textRole: "Above", valueRole: FermataTypes.ABOVE },
+            { textRole: "Below", valueRole: FermataTypes.BELOW }
+        ]
+
+        delegate: FlatRadioButton {
+            id: radioButtonDelegate
+
+            ButtonGroup.group: radioButtonList.radioButtonGroup
+
+            checked: root.model && !root.model.placementType.isUndefined ? root.model.placementType.value === modelData["valueRole"]
+                                                                         : false
+            onToggled: {
+                root.model.placementType.value = modelData["valueRole"]
+            }
+
+            StyledTextLabel {
+                text: modelData["textRole"]
+
+                elide: Text.ElideRight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+        }
     }
 }

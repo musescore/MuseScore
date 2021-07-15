@@ -32,6 +32,7 @@ BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService*
 {
     setModelType(InspectorModelType::TYPE_BEND);
     setTitle(qtrc("inspector", "Bend"));
+    setIcon(ui::IconCode::Code::GUITAR_BEND);
     createProperties();
 }
 

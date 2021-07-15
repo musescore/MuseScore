@@ -45,9 +45,16 @@ InspectorPropertyView {
         }
 
         isIndeterminate: intBracketProperty ? intBracketProperty.isUndefined : false
-        currentValue: intBracketProperty ? intBracketProperty.value : 0
+        currentValue: intBracketProperty ? intBracketProperty.value : -1
 
-        onValueEdited: { intBracketProperty.value = newValue }
+        onValueEdited: {
+            if (newValue === -1) {
+                return
+            }
+
+            intBracketProperty.value = newValue
+        }
+
     }
 }
 

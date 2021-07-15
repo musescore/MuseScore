@@ -30,6 +30,7 @@ AccidentalSettingsModel::AccidentalSettingsModel(QObject* parent, IElementReposi
 {
     setModelType(InspectorModelType::TYPE_ACCIDENTAL);
     setTitle(qtrc("inspector", "Accidental"));
+    setIcon(ui::IconCode::Code::ACCIDENTAL_SHARP);
     createProperties();
 }
 

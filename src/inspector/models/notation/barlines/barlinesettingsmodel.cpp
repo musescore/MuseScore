@@ -32,6 +32,7 @@ BarlineSettingsModel::BarlineSettingsModel(QObject* parent, IElementRepositorySe
 {
     setModelType(InspectorModelType::TYPE_BARLINE);
     setTitle(qtrc("inspector", "Barline"));
+    setIcon(ui::IconCode::Code::SECTION_BREAK);
     createProperties();
 }
 
@@ -77,12 +78,6 @@ void BarlineSettingsModel::resetProperties()
     m_spanFrom->resetToDefault();
     m_spanTo->resetToDefault();
     m_hasToShowTips->resetToDefault();
-}
-
-void BarlineSettingsModel::applyToAllStaffs()
-{
-    onPropertyValueChanged(Ms::Pid::STAFF_BARLINE_SPAN_FROM, m_spanFrom->value());
-    onPropertyValueChanged(Ms::Pid::STAFF_BARLINE_SPAN_TO, m_spanTo->value());
 }
 
 void BarlineSettingsModel::applySpanPreset(const int presetType)

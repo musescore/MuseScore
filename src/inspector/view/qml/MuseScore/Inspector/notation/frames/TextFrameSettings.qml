@@ -19,23 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
-import MuseScore.Ui 1.0
-import "../../common"
+import QtQuick 2.15
 
-PopupViewButton {
+import MuseScore.UiComponents 1.0
+import "internal"
+
+Column {
     id: root
 
-    property alias model: textFramePopup.model
+    property QtObject model: null
 
-    icon: IconCode.TEXT_FRAME
-    text: qsTrc("inspector", "Text frames")
+    objectName: "TextFrameSettings"
 
-    visible: root.model ? !root.model.isEmpty : false
+    spacing: 16
 
-    TextFramePopup {
-        id: textFramePopup
+    VerticalGapsSection {
+        gapAbove: root.model ? root.model.gapAbove : null
+        gapBelow: root.model ? root.model.gapBelow : null
+    }
+
+    SeparatorLine { anchors.margins: -10 }
+
+    HorizontalMarginsSection {
+        frameLeftMargin: root.model ? root.model.frameLeftMargin : null
+        frameRightMargin: root.model ? root.model.frameRightMargin : null
+    }
+
+    VerticalMarginsSection {
+        frameTopMargin: root.model ? root.model.frameTopMargin : null
+        frameBottomMargin: root.model ? root.model.frameBottomMargin : null
     }
 }

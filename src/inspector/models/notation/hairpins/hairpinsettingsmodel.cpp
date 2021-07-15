@@ -36,6 +36,7 @@ HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositorySe
 {
     setModelType(InspectorModelType::TYPE_HAIRPIN);
     setTitle(qtrc("inspector", "Hairpin"));
+    setIcon(ui::IconCode::Code::HAIRPIN);
     createProperties();
 }
 

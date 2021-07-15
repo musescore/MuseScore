@@ -19,32 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
-import "../../common"
+import QtQuick 2.15
 
-StyledPopupView {
+import "../common"
+
+InspectorSectionView {
     id: root
 
-    property QtObject model: null
+    implicitHeight: loader.implicitHeight
 
-    contentHeight: contentColumn.implicitHeight
-
-    Column {
-        id: contentColumn
+    NotationInspectorSectionLoader {
+        id: loader
 
         width: parent.width
 
-        spacing: 12
-
-        CheckBox {
-            isIndeterminate: model ? model.shouldShowCourtesy.isUndefined : false
-            checked: model && !isIndeterminate ? model.shouldShowCourtesy.value : false
-            text: qsTrc("inspector", "Show courtesy clef on previous measure")
-
-            onClicked: { model.shouldShowCourtesy.value = !checked }
-        }
+        model: root.model ? root.model.firstModel() : null
     }
 }

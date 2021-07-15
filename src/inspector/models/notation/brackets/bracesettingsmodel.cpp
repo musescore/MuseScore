@@ -33,6 +33,7 @@ BraceSettingsModel::BraceSettingsModel(QObject* parent, IElementRepositoryServic
 {
     setModelType(InspectorModelType::TYPE_BRACE);
     setTitle(qtrc("inspector", "Brace"));
+    setIcon(ui::IconCode::Code::BRACE);
     createProperties();
 }
 

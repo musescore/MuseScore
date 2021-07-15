@@ -32,6 +32,7 @@ TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryServic
 {
     setModelType(InspectorModelType::TYPE_TEMPO);
     setTitle(qtrc("inspector", "Tempo"));
+    setIcon(ui::IconCode::Code::METRONOME);
     createProperties();
 }
 

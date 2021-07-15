@@ -38,7 +38,6 @@ class BarlineSettingsModel : public AbstractInspectorModel
 public:
     explicit BarlineSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    Q_INVOKABLE void applyToAllStaffs();
     Q_INVOKABLE void applySpanPreset(const int presetType);
 
     void createProperties() override;
