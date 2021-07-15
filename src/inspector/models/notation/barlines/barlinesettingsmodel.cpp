@@ -80,12 +80,6 @@ void BarlineSettingsModel::resetProperties()
     m_hasToShowTips->resetToDefault();
 }
 
-void BarlineSettingsModel::applyToAllStaffs()
-{
-    onPropertyValueChanged(Ms::Pid::STAFF_BARLINE_SPAN_FROM, m_spanFrom->value());
-    onPropertyValueChanged(Ms::Pid::STAFF_BARLINE_SPAN_TO, m_spanTo->value());
-}
-
 void BarlineSettingsModel::applySpanPreset(const int presetType)
 {
     BarlineTypes::SpanPreset type = static_cast<BarlineTypes::SpanPreset>(presetType);
