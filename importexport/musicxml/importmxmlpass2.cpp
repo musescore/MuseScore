@@ -3915,6 +3915,21 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
       }
 
 //---------------------------------------------------------
+//   findRedundantVolta
+//---------------------------------------------------------
+
+static Volta* findRedundantVolta(const int track, const Measure* measure) 
+      {
+      auto spanners = measure->score()->spannerMap().findOverlapping(measure->tick().ticks(), measure->endTick().ticks());
+      for (auto spanner : spanners) {
+            if (spanner.value->isVolta()
+             && track2staff(spanner.value->track()) != track2staff(track))
+                  return toVolta(spanner.value);
+            } 
+      return 0;
+      }
+      
+//---------------------------------------------------------
 //   doEnding
 //---------------------------------------------------------
 
@@ -3942,7 +3957,11 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure, cons
                   if (unsupported)
                         _logger->logError(QString("unsupported ending number '%1'").arg(number), &_e);
                   else {
-                        if (type == "start") {
+                        // Ignore if it is hidden and redundant
+                        Volta* redundantVolta = findRedundantVolta(_pass1.trackForPart(partId), measure);
+                        if (!print && redundantVolta) 
+                              _logger->logDebugInfo("Ignoring redundant hidden Volta", &_e);
+                        else if (type == "start") {
                               Volta* volta = new Volta(_score);
                               volta->setTrack(_pass1.trackForPart(partId));
                               volta->setText(text.isEmpty() ? number : text);
@@ -3961,7 +3980,7 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure, cons
                                     // Assume print-object was handled at the start
                                     _lastVolta = 0;
                                     }
-                              else
+                              else if (!redundantVolta)
                                     _logger->logError("ending stop without start", &_e);
                               }
                         else if (type == "discontinue") {
@@ -3971,11 +3990,18 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure, cons
                                     // Assume print-object was handled at the start
                                     _lastVolta = 0;
                                     }
-                              else
+                              else if (!redundantVolta)
                                     _logger->logError("ending discontinue without start", &_e);
                               }
                         else
                               _logger->logError(QString("unsupported ending type '%1'").arg(type), &_e);
+
+                        // Delete any hidden redundant voltas before
+                        while (redundantVolta && !redundantVolta->visible()) {
+                              _score->removeElement(redundantVolta);
+                              delete redundantVolta;
+                              redundantVolta = findRedundantVolta(_pass1.trackForPart(partId), measure);                             
+                              }
                         }
                   }
             }
