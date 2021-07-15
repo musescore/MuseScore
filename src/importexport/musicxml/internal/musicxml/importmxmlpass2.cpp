@@ -3586,6 +3586,7 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
     QString endingText;
     QString repeat;
     QString count;
+    bool printEnding = true;
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "bar-style") {
@@ -3593,6 +3594,7 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
         } else if (_e.name() == "ending") {
             endingNumber = _e.attributes().value("number").toString();
             endingType   = _e.attributes().value("type").toString();
+            printEnding = _e.attributes().value("print-object").toString() != "no";
             endingText = _e.readElementText();
         } else if (_e.name() == "repeat") {
             repeat = _e.attributes().value("direction").toString();
@@ -3640,15 +3642,15 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
         }
     }
 
-    doEnding(partId, measure, endingNumber, endingType, endingText);
+    doEnding(partId, measure, endingNumber, endingType, endingText, printEnding);
 }
 
 //---------------------------------------------------------
 //   doEnding
 //---------------------------------------------------------
 
-void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure,
-                                   const QString& number, const QString& type, const QString& text)
+void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure, const QString& number,
+                                   const QString& type, const QString& text, const bool print)
 {
     if (!(number.isEmpty() && type.isEmpty())) {
         if (number.isEmpty()) {
@@ -3681,10 +3683,12 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure,
                     volta->setTick(measure->tick());
                     _score->addElement(volta);
                     _lastVolta = volta;
+                    volta->setVisible(print);
                 } else if (type == "stop") {
                     if (_lastVolta) {
                         _lastVolta->setVoltaType(Volta::Type::CLOSED);
                         _lastVolta->setTick2(measure->tick() + measure->ticks());
+                        // Assume print-object was handled at the start
                         _lastVolta = 0;
                     } else {
                         _logger->logError("ending stop without start", &_e);
@@ -3693,6 +3697,7 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure,
                     if (_lastVolta) {
                         _lastVolta->setVoltaType(Volta::Type::OPEN);
                         _lastVolta->setTick2(measure->tick() + measure->ticks());
+                        // Assume print-object was handled at the start
                         _lastVolta = 0;
                     } else {
                         _logger->logError("ending discontinue without start", &_e);
