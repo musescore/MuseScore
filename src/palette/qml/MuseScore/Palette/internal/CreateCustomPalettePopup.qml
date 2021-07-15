@@ -32,8 +32,12 @@ StyledPopup {
     width: parent.width
     height: contentColumn.implicitHeight + topPadding + bottomPadding
 
+    navigation.direction: NavigationPanel.Both
+    navigation.name: "CreateCustomPalettePopup"
+
     onOpened: {
         paletteNameField.forceActiveFocus()
+        paletteNameField.navigation.requestActive()
     }
 
     Column {
@@ -51,6 +55,10 @@ StyledPopup {
         TextInputField {
             id: paletteNameField
             width: parent.width
+
+            navigation.panel: root.navigation
+            navigation.row: 1
+            navigation.column: 1
 
             property string name: ""
 
@@ -73,6 +81,10 @@ StyledPopup {
                 width: (parent.width - parent.spacing) / 2
                 accentButton: !createButton.enabled
 
+                navigation.panel: root.navigation
+                navigation.row: 2
+                navigation.column: 1
+
                 onClicked: {
                     parent.close()
                 }
@@ -84,6 +96,10 @@ StyledPopup {
                 width: (parent.width - parent.spacing) / 2
                 enabled: Boolean(paletteNameField.name)
                 accentButton: enabled
+
+                navigation.panel: root.navigation
+                navigation.row: 2
+                navigation.column: 2
 
                 onClicked: {
                     root.addCustomPaletteRequested(paletteNameField.name)
