@@ -1578,9 +1578,6 @@
         </note>
       </measure>
     <measure number="14">
-      <barline location="left">
-        <ending number="1" type="start" print-object="no"/>
-        </barline>
       <note>
         <pitch>
           <step>C</step>
@@ -1862,14 +1859,10 @@
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
-        <ending number="1" type="stop" print-object="no"/>
         <repeat direction="backward"/>
         </barline>
       </measure>
     <measure number="21">
-      <barline location="left">
-        <ending number="2" type="start" print-object="no"/>
-        </barline>
       <note>
         <pitch>
           <step>B</step>
@@ -1957,9 +1950,6 @@
         <stem>down</stem>
         <staff>2</staff>
         </note>
-      <barline location="right">
-        <ending number="2" type="discontinue" print-object="no"/>
-        </barline>
       </measure>
     <measure number="22">
       <note>
