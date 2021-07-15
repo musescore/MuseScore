@@ -3297,11 +3297,19 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track, c
                         _wordsText = "";
                         }
                   else tb->setVisible(false);
-                  // Some Markers and Jumps align to the right of a measure.
-                  // These may be recorded in the XML as occurring at the beginning
-                  // of the following measure. This fixes that.
-                  if (tb->tid() == Tid::REPEAT_RIGHT && tick == measure->tick())
+
+                  // Sometimes Jumps and Markers are exported on the incorrect side
+                  // of the barline (i.e. end of mm. 29 vs. beginning of mm. 30).
+                  // This fixes that.
+                  bool closerToLeft = tick - measure->tick() < measure->endTick() - tick;
+                  if (tb->tid() == Tid::REPEAT_RIGHT
+                   && closerToLeft
+                   && measure->prevMeasure())
                         measure = measure->prevMeasure();
+                  else if (tb->tid() == Tid::REPEAT_LEFT
+                        && !closerToLeft
+                        && measure->nextMeasure())
+                        measure = measure->nextMeasure();
                   measure->add(tb);
                   }
             }
