@@ -27,8 +27,6 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/palettestubmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/palettestubmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/paletteadapterstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/paletteadapterstub.h
     ${CMAKE_CURRENT_LIST_DIR}/paletteconfigurationstub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/paletteconfigurationstub.h
     )

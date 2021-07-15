@@ -639,6 +639,7 @@ GridView {
                 }
             }
 
+            /* TODO?
             Connections {
                 // force not hiding palette cell if it is being dragged to a score
                 enabled: paletteCell.paletteDrag
@@ -648,6 +649,7 @@ GridView {
                     paletteCell.paletteDrag = false;
                 }
             }
+            */
         } // end ListItemBlank
     } // end DelegateModel
 }

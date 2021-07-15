@@ -32,7 +32,7 @@ import "utils.js" as Utils
 Item {
     id: header
 
-    property PaletteWorkspace paletteWorkspace: null
+    property PaletteProvider paletteProvider: null
     property string searchText: searchTextInput.searchText
     readonly property bool searching: searchTextInput.activeFocus
     property bool searchOpened: searchTextInput.visible
@@ -170,7 +170,7 @@ Item {
 
     PalettesListPopup {
         id: palettePopup
-        paletteWorkspace: header.paletteWorkspace
+        paletteProvider: header.paletteProvider
 
         visible: false
 
