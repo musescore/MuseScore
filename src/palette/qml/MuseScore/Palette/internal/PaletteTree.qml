@@ -33,9 +33,9 @@ import "utils.js" as Utils
 ListView {
     id: paletteTree
 
-    property PaletteWorkspace paletteWorkspace
-    property var paletteModel: Boolean(paletteWorkspace) ? paletteWorkspace.mainPaletteModel : null
-    property PaletteController paletteController: paletteWorkspace ? paletteWorkspace.mainPaletteController : null
+    property PaletteProvider paletteProvider
+    property var paletteModel: Boolean(paletteProvider) ? paletteProvider.mainPaletteModel : null
+    property PaletteController paletteController: paletteProvider ? paletteProvider.mainPaletteController : null
 
     property alias navigation: keynavTree
 
@@ -71,8 +71,8 @@ ListView {
     }
 
     onSearchOpenedChanged: {
-        if (paletteWorkspace) {
-            paletteWorkspace.setSearching(searchOpened)
+        if (paletteProvider) {
+            paletteProvider.setSearching(searchOpened)
         }
     }
 
@@ -476,7 +476,7 @@ ListView {
                     onInsertNewPaletteRequested: paletteTree.insertCustomPalette(control.rowIndex);
                     onHidePaletteRequested: control.hidePalette();
 
-                    paletteWorkspace: paletteTree.paletteWorkspace
+                    paletteProvider: paletteTree.paletteProvider
                     modelIndex: control.modelIndex
 
                     onEditPalettePropertiesRequested: {
@@ -553,13 +553,13 @@ ListView {
                     onIsOpenedChanged: {
                         // build pool model on first popup appearance
                         if (visible && !poolPalette) {
-                            poolPalette = paletteTree.paletteWorkspace.poolPaletteModel(control.modelIndex);
-                            poolPaletteRootIndex = paletteTree.paletteWorkspace.poolPaletteIndex(control.modelIndex, poolPalette);
-                            poolPaletteController = paletteTree.paletteWorkspace.poolPaletteController(poolPalette, control.modelIndex);
+                            poolPalette = paletteTree.paletteProvider.poolPaletteModel(control.modelIndex);
+                            poolPaletteRootIndex = paletteTree.paletteProvider.poolPaletteIndex(control.modelIndex, poolPalette);
+                            poolPaletteController = paletteTree.paletteProvider.poolPaletteController(poolPalette, control.modelIndex);
 
-                            customPalette = paletteTree.paletteWorkspace.customElementsPaletteModel
-                            customPaletteRootIndex = paletteTree.paletteWorkspace.customElementsPaletteIndex(control.modelIndex) // TODO: make a property binding? (but that works incorrectly)
-                            customPaletteController = paletteTree.paletteWorkspace.customElementsPaletteController
+                            customPalette = paletteTree.paletteProvider.customElementsPaletteModel
+                            customPaletteRootIndex = paletteTree.paletteProvider.customElementsPaletteIndex(control.modelIndex) // TODO: make a property binding? (but that works incorrectly)
+                            customPaletteController = paletteTree.paletteProvider.customElementsPaletteController
                         }
                     }
 
