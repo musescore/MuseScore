@@ -29,6 +29,8 @@
 
 #include <QSignalMapper>
 
+using namespace mu::notation;
+
 static const QString STAFF_TEXT_PROPERTIES_DIALOG_NAME("StaffTextPropertiesDialog");
 
 namespace Ms {
@@ -59,8 +61,16 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     setObjectName(STAFF_TEXT_PROPERTIES_DIALOG_NAME);
     setupUi(this);
 
-    //! FIXME
-    StaffTextBase* st = new StaffText();
+    const INotationPtr notation = globalContext()->currentNotation();
+    const INotationSelectionPtr selection = notation ? notation->interaction()->selection() : nullptr;
+    Element* selectedElement = selection ? selection->element() : nullptr;
+    StaffTextBase* st = selectedElement && selectedElement->isStaffTextBase() ? Ms::toStaffTextBase(selectedElement) : nullptr;
+
+    if (!st) {
+        return;
+    }
+
+    m_originStaffText = st;
 
     if (st->systemFlag()) {
         setWindowTitle(tr("System Text Properties"));
@@ -507,5 +517,14 @@ void StaffTextPropertiesDialog::saveValues()
     } else {
         m_staffText->setCapo(0);
     }
+
+    Score* score = m_originStaffText->score();
+    StaffTextBase* nt = toStaffTextBase(m_staffText->clone());
+    nt->setScore(score);
+    score->undoChangeElement(m_originStaffText, nt);
+    score->masterScore()->updateChannel();
+    score->updateCapo();
+    score->updateSwing();
+    score->setPlaylistDirty();
 }
 }
