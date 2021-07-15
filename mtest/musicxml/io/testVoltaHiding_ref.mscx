@@ -1015,31 +1015,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="Volta">
-            <Volta>
-              <endHookType>1</endHookType>
-              <beginText>1</beginText>
-              <visible>0</visible>
-              <Segment>
-                <subtype>1</subtype>
-                <offset x="0" y="-3"/>
-                <off2 x="0" y="0"/>
-                <visible>0</visible>
-                </Segment>
-              <Segment>
-                <subtype>3</subtype>
-                <offset x="0" y="-3"/>
-                <off2 x="0" y="0"/>
-                <visible>0</visible>
-                </Segment>
-              <endings>1</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>7</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
@@ -1139,31 +1114,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-7</measures>
-                </location>
-              </prev>
-            </Spanner>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>2</beginText>
-              <visible>0</visible>
-              <Segment>
-                <subtype>0</subtype>
-                <offset x="0" y="-3"/>
-                <off2 x="0" y="0"/>
-                <visible>0</visible>
-                </Segment>
-              <endings>2</endings>
-              </Volta>
-            <next>
-              <location>
-                <measures>1</measures>
-                </location>
-              </next>
-            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
@@ -1195,13 +1145,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
             <durationType>measure</durationType>
             <duration>1/1</duration>
