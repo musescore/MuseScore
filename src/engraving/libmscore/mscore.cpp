@@ -304,6 +304,7 @@ void MScore::init()
     //  initialize styles
     //
     _baseStyle.precomputeValues();
+    _defaultStyle.precomputeValues();
 
     ScoreFont::initScoreFonts();
     StaffType::initStaffTypes();

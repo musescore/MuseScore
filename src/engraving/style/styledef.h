@@ -30,7 +30,6 @@
 #include "config.h"
 
 namespace Ms {
-
 enum class Pid : int;
 
 // Needs to be duplicated here and in sym.h since moc doesn't handle macros from #include'd files
