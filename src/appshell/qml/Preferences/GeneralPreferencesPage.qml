@@ -72,7 +72,7 @@ PreferencesPage {
                 }
 
                 FlatButton {
-                    text: qsTrc("appshell", "Update Translations")
+                    text: qsTrc("appshell", "Update translations")
 
                     onClicked: {
                         root.hideRequested()
@@ -116,7 +116,7 @@ PreferencesPage {
             spacing: 18
 
             StyledTextLabel {
-                text: qsTrc("appshell", "Auto Save")
+                text: qsTrc("appshell", "Auto save")
                 font: ui.theme.bodyBoldFont
             }
 
@@ -164,7 +164,7 @@ PreferencesPage {
             spacing: 18
 
             StyledTextLabel {
-                text: qsTrc("appshell", "OSC Remote Control")
+                text: qsTrc("appshell", "OSC remote control")
                 font: ui.theme.bodyBoldFont
             }
 

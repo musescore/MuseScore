@@ -262,22 +262,22 @@ QString ScorePreferencesModel::stylePathFilter() const
 
 QString ScorePreferencesModel::instrumentChooseTitle() const
 {
-    return qtrc("appshell", "Choose Instrument List");
+    return qtrc("appshell", "Choose instrument list");
 }
 
 QString ScorePreferencesModel::scoreOrderChooseTitle() const
 {
-    return qtrc("appshell", "Choose Score Order List");
+    return qtrc("appshell", "Choose score order list");
 }
 
 QString ScorePreferencesModel::styleChooseTitle() const
 {
-    return qtrc("appshell", "Choose Default Style");
+    return qtrc("appshell", "Choose default style");
 }
 
 QString ScorePreferencesModel::partStyleChooseTitle() const
 {
-    return qtrc("appshell", "Choose Default Style for Parts");
+    return qtrc("appshell", "Choose default style for parts");
 }
 
 void ScorePreferencesModel::setPath(ScorePreferencesModel::DefaultFileType fileType, const QString& path)

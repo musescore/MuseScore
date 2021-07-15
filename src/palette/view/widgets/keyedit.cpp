@@ -283,7 +283,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
 {
     setupUi(this);
-    setWindowTitle(mu::qtrc("palette", "Key Signatures"));
+    setWindowTitle(mu::qtrc("palette", "Key signatures"));
 
     // create key signature palette
 

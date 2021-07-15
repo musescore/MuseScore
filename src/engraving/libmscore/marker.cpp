@@ -48,8 +48,8 @@ const MarkerTypeItem markerTypeTable[] = {
     { Marker::Type::VARCODA, QT_TRANSLATE_NOOP("markerType", "Varied coda") },
     { Marker::Type::CODETTA, QT_TRANSLATE_NOOP("markerType", "Codetta") },
     { Marker::Type::FINE, QT_TRANSLATE_NOOP("markerType", "Fine") },
-    { Marker::Type::TOCODA, QT_TRANSLATE_NOOP("markerType", "To Coda") },
-    { Marker::Type::TOCODASYM, QT_TRANSLATE_NOOP("markerType", "To Coda (Symbol)") },
+    { Marker::Type::TOCODA, QT_TRANSLATE_NOOP("markerType", "To coda") },
+    { Marker::Type::TOCODASYM, QT_TRANSLATE_NOOP("markerType", "To coda (symbol)") },
     { Marker::Type::USER, QT_TRANSLATE_NOOP("markerType", "Custom") }
 };
 

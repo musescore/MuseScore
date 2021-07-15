@@ -294,10 +294,10 @@ struct NoteHeadName {
 static NoteHeadName noteHeadSchemeNames[] = {
     { "auto",                QT_TRANSLATE_NOOP("noteheadschemes", "Auto") },
     { "normal",              QT_TRANSLATE_NOOP("noteheadschemes", "Normal") },
-    { "name-pitch",          QT_TRANSLATE_NOOP("noteheadschemes", "Pitch Names") },
-    { "name-pitch-german",   QT_TRANSLATE_NOOP("noteheadschemes", "German Pitch Names") },
-    { "solfege-movable",     QT_TRANSLATE_NOOP("noteheadschemes", "Solf\u00e8ge Movable Do") },  // &egrave;
-    { "solfege-fixed",       QT_TRANSLATE_NOOP("noteheadschemes", "Solf\u00e8ge Fixed Do") },    // &egrave;
+    { "name-pitch",          QT_TRANSLATE_NOOP("noteheadschemes", "Pitch names") },
+    { "name-pitch-german",   QT_TRANSLATE_NOOP("noteheadschemes", "German Pitch names") },
+    { "solfege-movable",     QT_TRANSLATE_NOOP("noteheadschemes", "Solf\u00e8ge movable Do") },  // &egrave;
+    { "solfege-fixed",       QT_TRANSLATE_NOOP("noteheadschemes", "Solf\u00e8ge fixed Do") },    // &egrave;
     { "shape-4",             QT_TRANSLATE_NOOP("noteheadschemes", "4-shape (Walker)") },
     { "shape-7-aikin",       QT_TRANSLATE_NOOP("noteheadschemes", "7-shape (Aikin)") },
     { "shape-7-funk",        QT_TRANSLATE_NOOP("noteheadschemes", "7-shape (Funk)") },
@@ -311,16 +311,16 @@ static NoteHeadName noteHeadGroupNames[] = {
     { "plus",           QT_TRANSLATE_NOOP("noteheadnames", "Plus") },
     { "xcircle",        QT_TRANSLATE_NOOP("noteheadnames", "XCircle") },
     { "withx",          QT_TRANSLATE_NOOP("noteheadnames", "With X") },
-    { "triangle-up",    QT_TRANSLATE_NOOP("noteheadnames", "Triangle Up") },
-    { "triangle-down",  QT_TRANSLATE_NOOP("noteheadnames", "Triangle Down") },
-    { "slashed1",       QT_TRANSLATE_NOOP("noteheadnames", "Slashed (Forwards)") },
-    { "slashed2",       QT_TRANSLATE_NOOP("noteheadnames", "Slashed (Backwards)") },
+    { "triangle-up",    QT_TRANSLATE_NOOP("noteheadnames", "Triangle up") },
+    { "triangle-down",  QT_TRANSLATE_NOOP("noteheadnames", "Triangle down") },
+    { "slashed1",       QT_TRANSLATE_NOOP("noteheadnames", "Slashed (forwards)") },
+    { "slashed2",       QT_TRANSLATE_NOOP("noteheadnames", "Slashed (backwards)") },
     { "diamond",        QT_TRANSLATE_NOOP("noteheadnames", "Diamond") },
-    { "diamond-old",    QT_TRANSLATE_NOOP("noteheadnames", "Diamond (Old)") },
+    { "diamond-old",    QT_TRANSLATE_NOOP("noteheadnames", "Diamond (old)") },
     { "circled",        QT_TRANSLATE_NOOP("noteheadnames", "Circled") },
-    { "circled-large",  QT_TRANSLATE_NOOP("noteheadnames", "Circled Large") },
-    { "large-arrow",    QT_TRANSLATE_NOOP("noteheadnames", "Large Arrow") },
-    { "altbrevis",      QT_TRANSLATE_NOOP("noteheadnames", "Alt. Brevis") },
+    { "circled-large",  QT_TRANSLATE_NOOP("noteheadnames", "Circled large") },
+    { "large-arrow",    QT_TRANSLATE_NOOP("noteheadnames", "Large arrow") },
+    { "altbrevis",      QT_TRANSLATE_NOOP("noteheadnames", "Alt. brevis") },
 
     { "slash",     QT_TRANSLATE_NOOP("noteheadnames", "Slash") },
 

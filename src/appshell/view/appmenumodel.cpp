@@ -124,7 +124,7 @@ MenuItem AppMenuModel::fileItem() const
     MenuItemList fileItems {
         makeMenuItem("file-new"),
         makeMenuItem("file-open"),
-        makeMenu(qtrc("appshell", "Open &Recent"), recentScoresList, openRecentEnabled, "menu-file-open"),
+        makeMenu(qtrc("appshell", "Open &recent"), recentScoresList, openRecentEnabled, "menu-file-open"),
         makeSeparator(),
         makeMenuItem("file-close"),
         makeMenuItem("file-save"),
