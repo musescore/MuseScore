@@ -56,10 +56,11 @@ private slots:
     void populateUnicode();
 
 private:
+    void hideEvent(QHideEvent*) override;
+
     void setFont(const mu::draw::Font& font);
     void populateCommon();
 
-    TextBase* m_textElement = nullptr;
     mu::draw::Font m_font;
     Palette* m_pCommon = nullptr;
     Palette* m_pSmufl = nullptr;

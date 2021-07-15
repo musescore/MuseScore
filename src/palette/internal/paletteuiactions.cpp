@@ -39,6 +39,11 @@ const UiActionList PaletteUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Palette Search")
              ),
+    UiAction("time-signature-properties",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Time Signature Properties…"),
+             QT_TRANSLATE_NOOP("action", "Time signature properties")
+             )
 };
 
 PaletteUiActions::PaletteUiActions(std::shared_ptr<PaletteActionsController> controller)

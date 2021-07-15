@@ -46,6 +46,7 @@ class TimeSignaturePropertiesDialog : public QDialog, public Ui::TimeSigProperti
 public:
     TimeSignaturePropertiesDialog(QWidget* parent = nullptr);
     TimeSignaturePropertiesDialog(const TimeSignaturePropertiesDialog& other);
+    ~TimeSignaturePropertiesDialog() override;
 
     static int static_metaTypeId();
 
@@ -53,7 +54,12 @@ private slots:
     void accept() override;
 
 private:
-    TimeSig* m_timesig = nullptr;
+    void hideEvent(QHideEvent*) override;
+
+    mu::notation::INotationPtr notation() const;
+
+    TimeSig* m_originTimeSig = nullptr;
+    TimeSig* m_editedTimeSig = nullptr;
 };
 }
 

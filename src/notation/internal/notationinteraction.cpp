@@ -2029,7 +2029,7 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
     notifyAboutTextEditingChanged();
 }
 
-TextBase* NotationInteraction::editedText() const
+const TextBase* NotationInteraction::editedText() const
 {
     return Ms::toTextBase(m_textEditData.element);
 }
@@ -2718,6 +2718,15 @@ void NotationInteraction::addStretch(qreal value)
 {
     startEdit();
     score()->cmdAddStretch(value);
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::addTimeSignature(Measure* measure, int staffIndex, TimeSignature* timeSignature)
+{
+    startEdit();
+    score()->cmdAddTimeSig(measure, staffIndex, timeSignature, true);
     apply();
 
     notifyAboutNotationChanged();
