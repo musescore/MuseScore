@@ -9,6 +9,8 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/noteGroups.cpp
     ${CMAKE_CURRENT_LIST_DIR}/symboldialog.h
     ${CMAKE_CURRENT_LIST_DIR}/symboldialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/specialcharactersdialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/specialcharactersdialog.h
     )
 
 set (WIDGETS_UI
@@ -16,5 +18,6 @@ set (WIDGETS_UI
     ${CMAKE_CURRENT_LIST_DIR}/keyedit.ui
     ${CMAKE_CURRENT_LIST_DIR}/note_groups.ui
     ${CMAKE_CURRENT_LIST_DIR}/symboldialog.ui
+    ${CMAKE_CURRENT_LIST_DIR}/specialcharactersdialog.ui
     )
 

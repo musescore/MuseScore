@@ -34,6 +34,7 @@
 #include "internal/mu4paletteadapter.h"
 #include "internal/paletteconfiguration.h"
 #include "internal/palette/masterpalette.h"
+#include "internal/widgets/specialcharactersdialog.h"
 #include "internal/paletteactionscontroller.h"
 #include "internal/paletteuiactions.h"
 
@@ -81,6 +82,9 @@ void PaletteModule::resolveImports()
         ir->registerUri(Uri("musescore://palette/masterpalette"),
                         ContainerMeta(ContainerType::QWidgetDialog, Ms::MasterPalette::static_metaTypeId()));
 
+        ir->registerUri(Uri("musescore://palette/specialcharacters"),
+                        ContainerMeta(ContainerType::QWidgetDialog, Ms::SpecialCharactersDialog::static_metaTypeId()));
+
         ir->registerUri(Uri("musescore://palette/properties"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Palette/PalettePropertiesDialog.qml"));
 
@@ -107,6 +111,8 @@ void PaletteModule::registerUiTypes()
     qmlRegisterType<PaletteRootModel>("MuseScore.Palette", 1, 0, "PaletteRootModel");
     qmlRegisterType<PalettePropertiesModel>("MuseScore.Palette", 1, 0, "PalettePropertiesModel");
     qmlRegisterType<PaletteCellPropertiesModel>("MuseScore.Palette", 1, 0, "PaletteCellPropertiesModel");
+
+    qRegisterMetaType<SpecialCharactersDialog>("SpecialCharactersDialog");
 
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
 }

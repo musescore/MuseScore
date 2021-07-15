@@ -1370,13 +1370,19 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
                                                   Qt::KeyboardModifiers modifiers,
                                                   PointF pt, bool pasteMode)
 {
-    Ms::EditData dropData(&m_scoreCallbacks);
-    dropData.pos         = pt.isNull() ? target->pagePos() : pt;
-    dropData.dragOffset  = QPointF();
-    dropData.modifiers   = modifiers;
-    dropData.dropElement = e;
+    Ms::EditData newData(&m_scoreCallbacks);
+    Ms::EditData* dropData = &newData;
 
-    if (target->acceptDrop(dropData)) {
+    if (isTextEditingStarted()) {
+        dropData = &m_textEditData;
+    }
+
+    dropData->pos         = pt.isNull() ? target->pagePos() : pt;
+    dropData->dragOffset  = QPointF();
+    dropData->modifiers   = modifiers;
+    dropData->dropElement = e;
+
+    if (target->acceptDrop(*dropData)) {
         // use same code path as drag&drop
 
         QByteArray a = e->mimeData(PointF());
@@ -1386,12 +1392,12 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
         Fraction duration;      // dummy
         PointF dragOffset;
         ElementType type = Element::readType(n, &dragOffset, &duration);
-        dropData.dropElement = Element::create(type, score);
+        dropData->dropElement = Element::create(type, score);
 
-        dropData.dropElement->read(n);
-        dropData.dropElement->styleChanged();       // update to local style
+        dropData->dropElement->read(n);
+        dropData->dropElement->styleChanged();       // update to local style
 
-        Ms::Element* el = target->drop(dropData);
+        Ms::Element* el = target->drop(*dropData);
         if (el && el->isInstrumentChange()) {
             selectInstrument(toInstrumentChange(el));
         }
@@ -1399,7 +1405,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
         if (el && !score->inputState().noteEntryMode()) {
             select({ el }, Ms::SelectType::SINGLE, 0);
         }
-        dropData.dropElement = 0;
+        dropData->dropElement = nullptr;
 
         m_notifyAboutDropChanged = true;
     }
@@ -2013,6 +2019,11 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
     }
 
     notifyAboutTextEditingChanged();
+}
+
+TextBase* NotationInteraction::editedText() const
+{
+    return Ms::toTextBase(m_textEditData.element);
 }
 
 void NotationInteraction::undo()

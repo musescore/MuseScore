@@ -110,6 +110,7 @@ public:
     void editText(QKeyEvent* event) override;
     void endEditText() override;
     void changeTextCursorPosition(const PointF& newCursorPos) override;
+    TextBase* editedText() const override;
     async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
 

@@ -43,6 +43,7 @@ public:
 
 private:
     void toggleMasterPalette();
+    void openSpecialCharactersDialog();
 
     ValCh<bool> m_masterPaletteOpened;
     async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
