@@ -24,11 +24,15 @@
 #define MU_ENGRAVING_STYLEDEF_H
 
 #include <array>
+#include <vector>
 #include <QVariant>
 
 #include "config.h"
 
 namespace Ms {
+
+enum class Pid : int;
+
 // Needs to be duplicated here and in sym.h since moc doesn't handle macros from #include'd files
 #ifdef SCRIPT_INTERFACE
 #define BEGIN_QT_REGISTERED_ENUM(Name) \
@@ -1456,6 +1460,21 @@ inline uint qHash(Sid id)
     return static_cast<uint>(id);
 }
 
+//---------------------------------------------------------
+//   StyledProperty
+///   \cond PLUGIN_API \private \endcond
+//---------------------------------------------------------
+struct StyledProperty {
+    Sid sid;
+    Pid pid;
+};
+
+typedef std::vector<StyledProperty> ElementStyle;
+
+//---------------------------------------------------------
+//   StyleDef
+///   \cond PLUGIN_API \private \endcond
+//---------------------------------------------------------
 struct StyleDef
 {
 private:

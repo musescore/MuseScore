@@ -86,6 +86,8 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/style/styledef.cpp
     ${CMAKE_CURRENT_LIST_DIR}/style/styledef.h
+    ${CMAKE_CURRENT_LIST_DIR}/style/textstyle.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/style/textstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/style/style.cpp
     ${CMAKE_CURRENT_LIST_DIR}/style/style.h
     )
