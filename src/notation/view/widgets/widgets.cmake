@@ -17,6 +17,7 @@ set (WIDGETS_UI
     ${CMAKE_CURRENT_LIST_DIR}/selectdialog.ui
     ${CMAKE_CURRENT_LIST_DIR}/tupletdialog.ui
     ${CMAKE_CURRENT_LIST_DIR}/voicing_select.ui
+    ${CMAKE_CURRENT_LIST_DIR}/stafftextpropertiesdialog.ui
     )
 
 set(WIDGETS_SRC
@@ -56,4 +57,6 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tupletdialog.h
     ${CMAKE_CURRENT_LIST_DIR}/voicingSelect.cpp
     ${CMAKE_CURRENT_LIST_DIR}/voicingSelect.h
+    ${CMAKE_CURRENT_LIST_DIR}/stafftextpropertiesdialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stafftextpropertiesdialog.h
     )

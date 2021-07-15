@@ -37,6 +37,8 @@ private:
     ui::MenuItemList pageItems() const;
     ui::MenuItemList defaultCopyPasteItems() const;
     ui::MenuItemList measureItems() const;
+    ui::MenuItemList staffTextItems() const;
+    ui::MenuItemList systemTextItems() const;
     ui::MenuItemList selectItems() const;
     ui::MenuItemList elementItems() const;
 };

@@ -194,6 +194,8 @@ void NotationActionController::init()
     dispatcher()->reg(this, "edit-info", this, &NotationActionController::openScoreProperties);
     dispatcher()->reg(this, "transpose", this, &NotationActionController::openTransposeDialog);
     dispatcher()->reg(this, "parts", this, &NotationActionController::openPartsDialog);
+    dispatcher()->reg(this, "staff-text-properties", this, &NotationActionController::openStaffTextPropertiesDialog);
+    dispatcher()->reg(this, "system-text-properties", this, &NotationActionController::openStaffTextPropertiesDialog);
 
     dispatcher()->reg(this, "voice-x12", [this]() { swapVoices(0, 1); });
     dispatcher()->reg(this, "voice-x13", [this]() { swapVoices(0, 2); });
@@ -1507,6 +1509,11 @@ bool NotationActionController::isTextEditing() const
 void NotationActionController::openTupletOtherDialog()
 {
     interactive()->open("musescore://notation/othertupletdialog");
+}
+
+void NotationActionController::openStaffTextPropertiesDialog()
+{
+    interactive()->open("musescore://notation/stafftextproperties");
 }
 
 void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
