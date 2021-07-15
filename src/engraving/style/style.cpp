@@ -22,37 +22,15 @@
 
 #include "style.h"
 
-#include <QDebug>
-
-#include "translation.h"
-
-#include "libmscore/mscore.h"
-#include "libmscore/xml.h"
-#include "libmscore/score.h"
-#include "libmscore/articulation.h"
-#include "libmscore/harmony.h"
-#include "libmscore/chordlist.h"
-#include "libmscore/page.h"
-#include "libmscore/mscore.h"
-#include "libmscore/clef.h"
-#include "libmscore/textlinebase.h"
-#include "libmscore/tuplet.h"
-#include "libmscore/layout.h"
-#include "libmscore/property.h"
-#include "libmscore/read206.h"
-#include "libmscore/undo.h"
-
 //! NOTE It is necessary that `StyleDef::styleTypes` is initialized before static `MStyle` is initialized
 #include "styledef.cpp"
 
+#include "compat/pageformat.h"
+
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
-//  20 points        font design size
-//  72 points/inch   point size
-// 120 dpi           screen resolution
-//  spatium = 20/4 points
-
 static const int LEGACY_MSC_VERSION_V3 = 301;
 static const int LEGACY_MSC_VERSION_V2 = 206;
 static const int LEGACY_MSC_VERSION_V1 = 114;
@@ -66,7 +44,7 @@ MStyle MScore::_defaultStyle;
 
 const char* MStyle::valueType(const Sid i)
 {
-    return StyleDef::styleTypes[int(i)].valueType();
+    return StyleDef::styleValues[int(i)].valueType();
 }
 
 //---------------------------------------------------------
@@ -93,7 +71,7 @@ const char* MStyle::valueName(const Sid i)
     if (i == Sid::NOSTYLE) {
         return "no style";
     }
-    return StyleDef::styleTypes[int(i)].name();
+    return StyleDef::styleValues[int(i)].name();
 }
 
 //---------------------------------------------------------
@@ -102,7 +80,7 @@ const char* MStyle::valueName(const Sid i)
 
 Sid MStyle::styleIdx(const QString& name)
 {
-    for (StyleDef::StyleType st : StyleDef::styleTypes) {
+    for (StyleDef::StyleValue st : StyleDef::styleValues) {
         if (st.name() == name) {
             return st.styleIdx();
         }
@@ -132,7 +110,7 @@ MStyle::MStyle()
 {
     _defaultStyleVersion = MSCVERSION;
     _customChordList = false;
-    for (const StyleDef::StyleType& t : StyleDef::styleTypes) {
+    for (const StyleDef::StyleValue& t : StyleDef::styleValues) {
         _values[t.idx()] = t.defaultValue();
     }
 }
@@ -144,7 +122,7 @@ MStyle::MStyle()
 void MStyle::precomputeValues()
 {
     qreal _spatium = value(Sid::spatium).toDouble();
-    for (const StyleDef::StyleType& t : StyleDef::styleTypes) {
+    for (const StyleDef::StyleValue& t : StyleDef::styleValues) {
         if (!strcmp(t.valueType(), "Ms::Spatium")) {
             _precomputedValues[t.idx()] = _values[t.idx()].value<Spatium>().val() * _spatium;
         }
@@ -214,7 +192,7 @@ void MStyle::set(const Sid t, const QVariant& val)
     if (t == Sid::spatium) {
         precomputeValues();
     } else {
-        if (!strcmp(StyleDef::styleTypes[idx].valueType(), "Ms::Spatium")) {
+        if (!strcmp(StyleDef::styleValues[idx].valueType(), "Ms::Spatium")) {
             qreal _spatium = value(Sid::spatium).toDouble();
             _precomputedValues[idx] = _values[idx].value<Spatium>().val() * _spatium;
         }
@@ -229,7 +207,7 @@ bool MStyle::readProperties(XmlReader& e)
 {
     const QStringRef& tag(e.name());
 
-    for (const StyleDef::StyleType& t : StyleDef::styleTypes) {
+    for (const StyleDef::StyleValue& t : StyleDef::styleValues) {
         Sid idx = t.styleIdx();
         if (t.name() == tag) {
             const char* type = t.valueType();
@@ -432,7 +410,7 @@ void MStyle::load(XmlReader& e)
         } else if (tag == "Spatium") {
             set(Sid::spatium, e.readDouble() * DPMM);
         } else if (tag == "page-layout") {      // obsolete
-            readPageFormat(this, e);            // from read206.cpp
+            compat::readPageFormat206(this, e);
         } else if (tag == "displayInConcertPitch") {
             set(Sid::concertPitch, QVariant(bool(e.readInt())));
         } else if (tag == "ChordList") {
@@ -479,7 +457,7 @@ void MStyle::applyNewDefaults(const MStyle& other, const int defaultsVersion)
 {
     _defaultStyleVersion = defaultsVersion;
 
-    for (StyleDef::StyleType st : StyleDef::styleTypes) {
+    for (StyleDef::StyleValue st : StyleDef::styleValues) {
         if (isDefault(st.styleIdx())) {
             st._defaultValue = other.value(st.styleIdx());
             _values.at(st.idx()) = other.value(st.styleIdx());
@@ -495,7 +473,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
 {
     xml.stag("Style");
 
-    for (const StyleDef::StyleType& st : StyleDef::styleTypes) {
+    for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
         Sid idx = st.styleIdx();
         if (idx == Sid::spatium) {         // special handling for spatium
             continue;
@@ -542,27 +520,5 @@ void MStyle::save(XmlWriter& xml, bool optimize)
     }
     xml.tag("Spatium", value(Sid::spatium).toDouble() / DPMM);
     xml.etag();
-}
-
-//---------------------------------------------------------
-//   reset
-//---------------------------------------------------------
-
-void MStyle::resetAllStyles(Score* score, const QSet<Sid>& ignoredStyles)
-{
-    for (const StyleDef::StyleType& st : StyleDef::styleTypes) {
-        if (ignoredStyles.isEmpty() || !ignoredStyles.contains(st.styleIdx())) {
-            score->undo(new ChangeStyleVal(score, st.styleIdx(), MScore::defaultStyle().value(st.styleIdx())));
-        }
-    }
-}
-
-void MStyle::resetStyles(Score* score, const QSet<Sid>& stylesToReset)
-{
-    for (const StyleDef::StyleType& st : StyleDef::styleTypes) {
-        if (stylesToReset.contains(st.styleIdx())) {
-            score->undo(new ChangeStyleVal(score, st.styleIdx(), MScore::defaultStyle().value(st.styleIdx())));
-        }
-    }
 }
 }

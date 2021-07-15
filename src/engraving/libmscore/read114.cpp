@@ -26,6 +26,7 @@
 #include <QTextDocumentFragment>
 
 #include "style/style.h"
+#include "compat/pageformat.h"
 
 #include "score.h"
 #include "slur.h"
@@ -77,6 +78,7 @@
 #include "pedal.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static int g_guitarStrings[] = { 40, 45, 50, 55, 59, 64 };
@@ -2653,7 +2655,7 @@ static void readPart(Part* part, XmlReader& e)
 //   readPageFormat
 //---------------------------------------------------------
 
-static void readPageFormat(PageFormat* pf, XmlReader& e)
+static void readPageFormat(compat::PageFormat* pf, XmlReader& e)
 {
     qreal _oddRightMargin  = 0.0;
     qreal _evenRightMargin = 0.0;
@@ -2763,10 +2765,7 @@ static void readStyle(MStyle* style, XmlReader& e)
         } else if (tag == "Spatium") {
             style->set(Sid::spatium, e.readDouble() * DPMM);
         } else if (tag == "page-layout") {
-            PageFormat pf;
-            initPageFormat(style, &pf);
-            pf.read(e);
-            setPageFormat(style, pf);
+            compat::readPageFormat206(style, e);
         } else if (tag == "displayInConcertPitch") {
             style->set(Sid::concertPitch, QVariant(bool(e.readInt())));
         } else if (tag == "ChordList") {
@@ -2995,7 +2994,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
             style().setTextStyle(s);
 #endif
         } else if (tag == "page-layout") {
-            PageFormat pf;
+            compat::PageFormat pf;
             readPageFormat(&pf, e);
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = new Text(this);
