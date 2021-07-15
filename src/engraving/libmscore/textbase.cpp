@@ -1668,7 +1668,7 @@ TextBase::TextBase(Score* s, ElementFlags f)
 TextBase::TextBase(const TextBase& st)
     : Element(st)
 {
-    _cursor                      = st._cursor;
+    _cursor                      = new TextCursor(this);
     _text                        = st._text;
     _layout                      = st._layout;
     textInvalid                  = st.textInvalid;
