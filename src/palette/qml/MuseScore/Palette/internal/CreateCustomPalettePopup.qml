@@ -29,37 +29,39 @@ StyledPopup {
 
     signal addCustomPaletteRequested(var paletteName)
 
-    height: contentColumn.implicitHeight + topPadding + bottomPadding
     width: parent.width
+    height: contentColumn.implicitHeight + topPadding + bottomPadding
+
+    onOpened: {
+        paletteNameField.forceActiveFocus()
+    }
 
     Column {
         id: contentColumn
-
         width: parent.width
-
-        spacing: 14
+        spacing: 12
 
         StyledTextLabel {
+            width: parent.width
             text: qsTrc("palette", "Name your custom palette")
+            wrapMode: Text.WordWrap
+            horizontalAlignment: Text.AlignLeft
         }
 
         TextInputField {
             id: paletteNameField
-
             width: parent.width
 
             property string name: ""
 
-            onCurrentTextEdited: {
+            onCurrentTextEdited: function (newTextValue) {
                 name = newTextValue
             }
         }
 
         Row {
             width: parent.width
-            height: childrenRect.height
-
-            spacing: 4
+            spacing: 12
 
             function close() {
                 paletteNameField.clear()
@@ -68,8 +70,8 @@ StyledPopup {
 
             FlatButton {
                 text: qsTrc("global", "Cancel")
-
-                width: parent.width / 2
+                width: (parent.width - parent.spacing) / 2
+                accentButton: !createButton.enabled
 
                 onClicked: {
                     parent.close()
@@ -77,11 +79,11 @@ StyledPopup {
             }
 
             FlatButton {
-                text: qsTrc("pallette", "Create")
-
-                width: parent.width / 2
-
+                id: createButton
+                text: qsTrc("palette", "Create")
+                width: (parent.width - parent.spacing) / 2
                 enabled: Boolean(paletteNameField.name)
+                accentButton: enabled
 
                 onClicked: {
                     root.addCustomPaletteRequested(paletteNameField.name)

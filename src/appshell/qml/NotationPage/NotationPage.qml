@@ -183,7 +183,7 @@ DockPage {
 
             tabifyPanel: instrumentsPanel
 
-            PalettesWidget {
+            PalettesPanel {
                 navigationSection: palettePanel.navigationSection
             }
         },

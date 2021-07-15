@@ -36,7 +36,7 @@ Rectangle {
 
     readonly property PaletteProvider paletteProvider: paletteRootModel.paletteProvider
 
-    implicitHeight: 4 * palettesWidgetHeader.implicitHeight
+    implicitHeight: 4 * palettesPanelHeader.implicitHeight
     implicitWidth: paletteTree.implicitWidth
 
     enabled: paletteRootModel.paletteEnabled
@@ -51,24 +51,22 @@ Rectangle {
         id: paletteRootModel
 
         onPaletteSearchRequested: {
-            palettesWidgetHeader.searchSelectAll()
+            palettesPanelHeader.startSearch()
         }
     }
 
-    PalettesWidgetHeader {
-        id: palettesWidgetHeader
+    PalettesPanelHeader {
+        id: palettesPanelHeader
 
         paletteProvider: root.paletteProvider
 
-        popupMaxHeight: root.height * 0.8
+        popupMaxHeight: root.height - palettesPanelHeader.height
 
-        anchors {
-            top: parent.top
-            left: parent.left
-            leftMargin: 12
-            right: parent.right
-            rightMargin: 12
-        }
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.leftMargin: 12
+        anchors.right: parent.right
+        anchors.rightMargin: 12
 
         navigation.section: root.navigationSection
         navigation.enabled: root.visible
@@ -80,13 +78,13 @@ Rectangle {
     StyledTextLabel {
         id: searchHint
 
-        anchors.top: palettesWidgetHeader.bottom
+        anchors.top: palettesPanelHeader.bottom
         anchors.topMargin: 26
         anchors.horizontalCenter: parent.horizontalCenter
 
         text: qsTrc("palette", "Start typing to search all palettes")
 
-        visible: palettesWidgetHeader.searchOpened && !Boolean(palettesWidgetHeader.searchText)
+        visible: palettesPanelHeader.isSearchOpened && !Boolean(palettesPanelHeader.searchText)
     }
 
     PaletteTree {
@@ -99,12 +97,12 @@ Rectangle {
         navigation.enabled: root.visible
         navigation.order: 5
 
-        filter: palettesWidgetHeader.searchText
-        enableAnimations: !palettesWidgetHeader.searching
-        searchOpened: palettesWidgetHeader.searchOpened
+        filter: palettesPanelHeader.searchText
+        enableAnimations: !palettesPanelHeader.isSearchFieldFocused
+        searchOpened: palettesPanelHeader.isSearchOpened
 
         anchors {
-            top: palettesWidgetHeader.bottom
+            top: palettesPanelHeader.bottom
             topMargin: 3
             bottom: parent.bottom
             left: parent.left
