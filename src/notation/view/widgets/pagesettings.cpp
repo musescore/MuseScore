@@ -23,7 +23,7 @@
 
 #include <QPageSize>
 
-#include "engraving/style/style.h"
+#include "engraving/style/pagestyle.h"
 
 #include "widgetstatestore.h"
 #include "libmscore/page.h"
