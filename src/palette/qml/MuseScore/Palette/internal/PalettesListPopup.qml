@@ -31,7 +31,7 @@ import MuseScore.Ui 1.0
 StyledPopup {
     id: palettesListPopup
 
-    property PaletteWorkspace paletteWorkspace: null
+    property PaletteProvider paletteProvider: null
     property int maxHeight: 400
 
     height: column.implicitHeight + topPadding + bottomPadding
@@ -88,7 +88,7 @@ StyledPopup {
 
             onVisibleChanged: {
                 if (visible) {
-                    extraPalettesModel = paletteWorkspace.availableExtraPalettesModel();
+                    extraPalettesModel = paletteProvider.availableExtraPalettesModel();
                 }
             }
 
@@ -133,7 +133,7 @@ StyledPopup {
                         Accessible.description: ToolTip.text
 
                         onClicked: {
-                            if (paletteWorkspace.addPalette(model.paletteIndex)) {
+                            if (paletteProvider.addPalette(model.paletteIndex)) {
                                 morePalettesDelegate.added = true
                             }
                         }
