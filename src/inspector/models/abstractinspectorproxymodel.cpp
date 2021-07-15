@@ -23,8 +23,8 @@
 
 using namespace mu::inspector;
 
-AbstractInspectorProxyModel::AbstractInspectorProxyModel(QObject* parent, InspectorModelType subModelType)
-    : AbstractInspectorModel(parent), m_subModelType(subModelType)
+AbstractInspectorProxyModel::AbstractInspectorProxyModel(QObject* parent, InspectorModelType preferedSubModelType)
+    : AbstractInspectorModel(parent), m_preferedSubModelType(preferedSubModelType)
 {
 }
 
@@ -76,9 +76,9 @@ bool AbstractInspectorProxyModel::hasAcceptableElements() const
     return result;
 }
 
-AbstractInspectorModel::InspectorModelType AbstractInspectorProxyModel::subModelType() const
+AbstractInspectorModel::InspectorModelType AbstractInspectorProxyModel::preferedSubModelType() const
 {
-    return m_subModelType;
+    return m_preferedSubModelType;
 }
 
 void AbstractInspectorProxyModel::addModel(AbstractInspectorModel* model)

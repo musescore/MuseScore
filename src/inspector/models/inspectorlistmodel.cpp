@@ -235,24 +235,6 @@ void InspectorListModel::removeUnusedModels(const QSet<Ms::ElementType>& newElem
     }
 }
 
-void InspectorListModel::removeModels(AbstractInspectorModel::InspectorSectionType sectionType)
-{
-    for (AbstractInspectorModel* model : m_modelList) {
-        if (model->sectionType() != sectionType) {
-            continue;
-        }
-
-        int index = m_modelList.indexOf(model);
-
-        beginRemoveRows(QModelIndex(), index, index);
-
-        delete model;
-        m_modelList.removeAt(index);
-
-        endRemoveRows();
-    }
-}
-
 void InspectorListModel::sortModels()
 {
     QList<AbstractInspectorModel*> sortedModelList = m_modelList;

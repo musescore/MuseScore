@@ -66,7 +66,6 @@ private:
                                    const QSet<Ms::ElementType>& selectedElementSet = {});
     void removeUnusedModels(const QSet<Ms::ElementType>& newElementTypeSet,
                             const QList<AbstractInspectorModel::InspectorSectionType>& exclusions = QList<AbstractInspectorModel::InspectorSectionType>());
-    void removeModels(AbstractInspectorModel::InspectorSectionType sectionType);
 
     void sortModels();
 
