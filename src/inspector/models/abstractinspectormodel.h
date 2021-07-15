@@ -122,7 +122,6 @@ public:
     static InspectorSectionType sectionTypeFromElementType(const Ms::ElementType elementType);
     static InspectorModelType notationElementModelType(const Ms::ElementType elementType);
     static Ms::ElementType elementType(const InspectorModelType modelType);
-    static Ms::ElementType notationElementType(const InspectorModelType modelType);
 
     virtual bool hasAcceptableElements() const;
 

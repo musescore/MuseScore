@@ -19,24 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
+import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
-import MuseScore.Ui 1.0
+import MuseScore.Inspector 1.0
 import "../../common"
 
-PopupViewButton {
+Column {
     id: root
 
-    property alias model: spacerPopup.model
+    property QtObject model: null
 
-    icon: IconCode.SPACER
-    text: qsTrc("inspector", "Spacers")
+    objectName: "SpacerSettings"
 
-    visible: root.model ? !root.model.isEmpty : false
+    spacing: 12
 
-    SpacerPopup {
-        id: spacerPopup
+    InspectorPropertyView {
+        titleText: qsTrc("inspector", "Height")
+        propertyItem: root.model ? root.model.spacerHeight : null
+
+        IncrementalPropertyControl {
+            isIndeterminate: root.model ? root.model.spacerHeight.isUndefined : false
+            currentValue: root.model ? root.model.spacerHeight.value : 0
+            iconMode: iconModeEnum.hidden
+            maxValue: 999
+            minValue: 0
+            step: 0.5
+
+            onValueEdited: { root.model.spacerHeight.value = newValue }
+        }
     }
 }

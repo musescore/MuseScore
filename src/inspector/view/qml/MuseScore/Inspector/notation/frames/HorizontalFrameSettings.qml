@@ -19,23 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
-import MuseScore.Ui 1.0
-import "../../common"
+import QtQuick 2.15
 
-PopupViewButton {
+import MuseScore.UiComponents 1.0
+import "internal"
+
+Column {
     id: root
 
-    property alias model: horizontalFramePopup.model
+    property QtObject model: null
 
-    icon: IconCode.HORIZONTAL_FRAME
-    text: qsTrc("inspector", "Horizontal frames")
+    objectName: "HorizontalFrameSettings"
 
-    visible: root.model ? !root.model.isEmpty : false
+    height: implicitHeight
+    spacing: 16
 
-    HorizontalFramePopup {
-        id: horizontalFramePopup
+    WidthSection {
+        widthProperty: root.model ? root.model.frameWidth : null
+    }
+
+    SeparatorLine { anchors.margins: -10 }
+
+    HorizontalGapsSection {
+        leftGap: root.model ? root.model.leftGap : null
+        rightGap: root.model ? root.model.rightGap: null
+    }
+
+    SeparatorLine { anchors.margins: -10 }
+
+    CheckBox {
+        isIndeterminate: root.model ? root.model.shouldDisplayKeysAndBrackets.isUndefined : false
+        checked: root.model && !isIndeterminate ? root.model.shouldDisplayKeysAndBrackets.value : false
+        text: qsTrc("inspector", "Display key, brackets and braces")
+
+        onClicked: { root.model.shouldDisplayKeysAndBrackets.value = !checked }
     }
 }
