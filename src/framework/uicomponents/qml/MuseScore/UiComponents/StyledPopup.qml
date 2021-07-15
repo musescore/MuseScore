@@ -34,6 +34,9 @@ Popup {
     property Item anchorItem: null
     property real arrowX: Boolean(anchorItem) ? anchorItem.x - x + anchorItem.width / 2 : width / 2
 
+    property alias navigation: navPanel
+    property bool isDoActiveParentOnClose: true
+
     QtObject {
         id: prv
 
@@ -50,6 +53,46 @@ Popup {
         onBorderColorChanged: { arrow.requestPaint() }
     }
 
+    NavigationPopupPanel {
+        id: navPanel
+        enabled: root.visible && root.enabled
+        order: {
+            if (parentControl && parentControl.panel) {
+                return parentControl.panel.order + 1
+            }
+            return -1
+        }
+
+        section: {
+            if (parentControl && parentControl.panel) {
+                return parentControl.panel.section
+            }
+            return null
+        }
+
+        parentControl: {
+            if (root.anchorItem && root.anchorItem.navigation
+                    && root.anchorItem.navigation instanceof NavigationControl) {
+                return root.anchorItem.navigation
+            }
+            return null
+        }
+
+        onActiveChanged: {
+            if (navPanel.active) {
+                root.forceActiveFocus()
+            } else {
+                root.close()
+            }
+        }
+
+        onNavigationEvent: {
+            if (event.type === NavigationEvent.Escape) {
+                root.close()
+            }
+        }
+    }
+
     x: Boolean(anchorItem) ? Math.max(anchorItem.x + (anchorItem.width - width) / 2, 0) : 0
     y: Boolean(anchorItem) ? (opensUpward ? anchorItem.y - height : anchorItem.y + anchorItem.height) : 0
 
@@ -58,8 +101,15 @@ Popup {
     leftPadding: prv.padding
     rightPadding: prv.padding
 
-    onOpened: { prv.isOpened = true }
-    onClosed: { prv.isOpened = false }
+    onOpened: {
+        prv.isOpened = true
+    }
+    onClosed: {
+        prv.isOpened = false
+        if (root.isDoActiveParentOnClose && navigation.parentControl) {
+            navigation.parentControl.requestActive()
+        }
+    }
 
     closePolicy: Popup.CloseOnPressOutsideParent | Popup.CloseOnPressOutside | Popup.CloseOnEscape
 

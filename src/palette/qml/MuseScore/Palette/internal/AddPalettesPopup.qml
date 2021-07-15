@@ -36,8 +36,15 @@ StyledPopup {
 
     height: contentColumn.implicitHeight + topPadding + bottomPadding
 
+    navigation.direction: NavigationPanel.Vertical
+    navigation.name: "AddPalettesPopup"
+
     onAboutToShow: {
         palettesList.model = paletteProvider.availableExtraPalettesModel()
+    }
+
+    onOpened: {
+        createCustomPaletteButton.navigation.requestActive()
     }
 
     onClosed: {
@@ -61,9 +68,13 @@ StyledPopup {
             id: createCustomPaletteButton
             width: parent.width
             text: qsTrc("palette", "Create custom palette")
+
+            navigation.panel: root.navigation
+            navigation.row: 0
+
             onClicked: {
-                root.addCustomPaletteRequested();
                 root.close();
+                root.addCustomPaletteRequested();
             }
         }
 
@@ -120,14 +131,21 @@ StyledPopup {
 
                     FlatButton {
                         id: addButton
-
                         Layout.alignment: Qt.AlignRight
                         Layout.preferredWidth: width
 
                         icon: IconCode.PLUS
-
                         toolTipTitle: qsTrc("palette", "Add %1 palette").arg(model.display)
-                        Accessible.description: ToolTip.text
+
+                        navigation.panel: root.navigation
+                        navigation.row: model.index + 1
+                        navigation.onActiveChanged: {
+                            if (navigation.active) {
+                                palettesList.positionViewAtIndex(model.index, ListView.Contain)
+                            }
+                        }
+
+                        accessible.name: toolTipTitle
 
                         onClicked: {
                             if (root.paletteProvider.addPalette(model.paletteIndex)) {
