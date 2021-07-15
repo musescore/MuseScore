@@ -117,8 +117,7 @@ AbstractInspectorModel::InspectorModelType AbstractInspectorModel::modelType() c
     return m_modelType;
 }
 
-AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionTypeFromElementType(
-    const Ms::ElementType elementType)
+AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionTypeFromElementType(const Ms::ElementType elementType)
 {
     if (NOTATION_ELEMENT_MODEL_TYPES.keys().contains(elementType)) {
         return InspectorSectionType::SECTION_NOTATION;
@@ -136,6 +135,19 @@ AbstractInspectorModel::InspectorModelType AbstractInspectorModel::notationEleme
     }
 
     return InspectorModelType::TYPE_UNDEFINED;
+}
+
+Ms::ElementType AbstractInspectorModel::elementType(const AbstractInspectorModel::InspectorModelType modelType)
+{
+    if (modelType == InspectorModelType::TYPE_UNDEFINED) {
+        return Ms::ElementType::INVALID;
+    }
+
+    if (NOTATION_ELEMENT_MODEL_TYPES.values().contains(modelType)) {
+        return NOTATION_ELEMENT_MODEL_TYPES.key(modelType);
+    }
+
+    return Ms::ElementType::TEXT;
 }
 
 Ms::ElementType AbstractInspectorModel::notationElementType(const AbstractInspectorModel::InspectorModelType modelType)

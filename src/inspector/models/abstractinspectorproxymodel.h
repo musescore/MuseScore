@@ -50,6 +50,8 @@ public:
     void requestResetToDefaults() override;
     bool hasAcceptableElements() const override;
 
+    virtual bool canContains(Ms::ElementType) const { return false; }
+
     InspectorModelType subModelType() const;
 
 protected:

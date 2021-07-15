@@ -180,21 +180,46 @@ void InspectorListModel::removeUnusedModels(const QSet<Ms::ElementType>& newElem
         QList<Ms::ElementType> supportedElementTypes;
         AbstractInspectorProxyModel* proxyModel = dynamic_cast<AbstractInspectorProxyModel*>(model);
         if (proxyModel) {
+            QList<Ms::ElementType> proxyElementTypes;
             for (const QVariant& modelVar : proxyModel->models()) {
                 AbstractInspectorModel* prModel = qobject_cast<AbstractInspectorModel*>(modelVar.value<QObject*>());
                 if (prModel) {
-                    supportedElementTypes << AbstractInspectorModel::notationElementType(prModel->modelType());
+                    proxyElementTypes << AbstractInspectorModel::elementType(prModel->modelType());
                 }
+            }
+
+            bool needRemove = false;
+            for (Ms::ElementType elementType: proxyElementTypes) {
+                if (!newElementTypeSet.contains(elementType)) {
+                    needRemove = true;
+                    break;
+                }
+            }
+
+            if (!needRemove) {
+                for (Ms::ElementType elementType: newElementTypeSet) {
+                    if (!proxyModel->canContains(elementType)) {
+                        continue;
+                    }
+
+                    if (!proxyElementTypes.contains(elementType)) {
+                        needRemove = true;
+                        break;
+                    }
+                }
+            }
+
+            if (needRemove) {
+                modelsToRemove << model;
             }
         } else {
             supportedElementTypes = AbstractInspectorModel::supportedElementTypesBySectionType(model->sectionType());
-        }
+            QSet<Ms::ElementType> supportedElementTypesSet(supportedElementTypes.begin(), supportedElementTypes.end());
+            supportedElementTypesSet.intersect(newElementTypeSet);
 
-        QSet<Ms::ElementType> supportedElementTypesSet(supportedElementTypes.begin(), supportedElementTypes.end());
-        supportedElementTypesSet.intersect(newElementTypeSet);
-
-        if (supportedElementTypesSet.isEmpty()) {
-            modelsToRemove << model;
+            if (supportedElementTypesSet.isEmpty()) {
+                modelsToRemove << model;
+            }
         }
     }
 

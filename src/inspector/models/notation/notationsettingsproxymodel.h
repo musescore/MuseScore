@@ -35,6 +35,8 @@ class NotationSettingsProxyModel : public AbstractInspectorProxyModel
 public:
     explicit NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository, const QSet<Ms::ElementType>& elementSet);
 
+    bool canContains(Ms::ElementType elementType) const override;
+
 private:
     AbstractInspectorModel::InspectorModelType notationSingleElementModelType(const QSet<Ms::ElementType>& elements) const;
 };

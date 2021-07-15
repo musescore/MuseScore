@@ -41,7 +41,7 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
         setTitle(qtrc("inspector", "Notation"));
         for (const Ms::ElementType elementType : elementSet) {
             AbstractInspectorModel::InspectorSectionType sectionType = AbstractInspectorModel::sectionTypeFromElementType(elementType);
-            if (sectionType != AbstractInspectorModel::InspectorSectionType::SECTION_UNDEFINED) {
+            if (sectionType == AbstractInspectorModel::InspectorSectionType::SECTION_UNDEFINED) {
                 continue;
             }
 
@@ -49,6 +49,11 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
             addModel(inspectorModelCreator()->newInspectorModel(modelType, parent, repository));
         }
     }
+}
+
+bool NotationSettingsProxyModel::canContains(Ms::ElementType elementType) const
+{
+    return AbstractInspectorModel::notationElementModelType(elementType) != AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
 }
 
 AbstractInspectorModel::InspectorModelType NotationSettingsProxyModel::notationSingleElementModelType(const QSet<Ms::ElementType>& elements)
