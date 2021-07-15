@@ -31,10 +31,6 @@ PreferencesPage {
 
     contentHeight: content.height
 
-    Component.onCompleted: {
-        appearanceModel.load()
-    }
-
     AppearancePreferencesModel {
         id: appearanceModel
     }
@@ -53,27 +49,83 @@ PreferencesPage {
 
         readonly property int firstColumnWidth: 212
 
-        ThemesSection {
-            width: parent.width
+        StyledTextLabel {
+            text: highContrastEnable.checked ? qsTrc("appshell", "High Contrast Themes") : qsTrc("appshell", "Themes")
+            font: ui.theme.bodyBoldFont
+        }
 
-            titleText: qsTrc("appshell", "Themes")
-            themes: appearanceModel.generalThemes
-            currentThemeCode: appearanceModel.currentThemeCode
+        CheckBox {
+            id: highContrastEnable
+            width: 200
 
-            onThemeChangeRequested: {
-                appearanceModel.currentThemeCode = newThemeCode
+            text: "Enable High-Contrast"
+            onClicked: {
+                checked = !checked
             }
         }
 
-        AccentColorsSection {
-            width: parent.width
+        Loader {
+            sourceComponent: highContrastEnable.checked ? highContrastThemesModel : generalThemesModel
+        }
 
-            colors: appearanceModel.accentColors
-            currentColorIndex: appearanceModel.currentAccentColorIndex
-            firstColumnWidth: parent.firstColumnWidth
+        Component {
+            id: generalThemesModel
 
-            onAccentColorChangeRequested: {
-                appearanceModel.currentAccentColorIndex = newColorIndex
+            Column {
+                spacing: 24
+
+                ThemesSection {
+                    width: content.width
+
+                    themes: appearanceModel.generalThemes
+                    currentThemeCode: appearanceModel.currentThemeCode
+
+                    onThemeChangeRequested: {
+                        appearanceModel.currentThemeCode = newThemeCode
+                    }
+                }
+
+                AccentColorsSection {
+                    width: content.width
+
+                    colors: appearanceModel.accentColors
+                    currentColorIndex: appearanceModel.currentAccentColorIndex
+                    firstColumnWidth: content.firstColumnWidth
+
+                    onAccentColorChangeRequested: {
+                        appearanceModel.currentAccentColorIndex = newColorIndex
+                    }
+                }
+            }
+        }
+
+        Component {
+            id: highContrastThemesModel
+
+            Column {
+                spacing: 24
+
+                ThemesSection {
+                    width: content.width
+
+                    themes: appearanceModel.highContrastThemes
+                    currentThemeCode: appearanceModel.currentThemeCode
+
+                    onThemeChangeRequested: {
+                        appearanceModel.currentThemeCode = newThemeCode
+                    }
+                }
+
+                SeparatorLine {}
+
+                UiColorsSection {
+                    width: content.width
+                    firstColumnWidth: content.firstColumnWidth
+
+                    onColorChangeRequested: {
+                        appearanceModel.setNewColor(newColor, propertyName)
+                    }
+                }
             }
         }
 
@@ -146,6 +198,15 @@ PreferencesPage {
             onWallpaperPathChangeRequested: {
                 appearanceModel.foregroundWallpaperPath = newWallpaperPath
             }
+        }
+
+        FlatButton {
+            text: qsTrc("appshell", "Reset Theme to Default")
+
+            onClicked: {
+                appearanceModel.resetThemeToDefault()
+            }
+
         }
     }
 }

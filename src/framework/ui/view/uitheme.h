@@ -182,6 +182,7 @@ private:
     QColor m_linkColor;
     QColor m_focusColor;
 
+    qreal m_borderWidth = 0;
     qreal m_accentOpacityNormal = 0;
     qreal m_accentOpacityHover = 0;
     qreal m_accentOpacityHit = 0;

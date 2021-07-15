@@ -104,7 +104,7 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_BLACK_THEME_VALUES {
     { ACCENT_COLOR, "#0071DA" },
     { STROKE_COLOR, "#FFFFFF" },
     { BUTTON_COLOR, "#000000" },
-    { BORDER_WIDTH, 2.0 },
+    { BORDER_WIDTH, 5.0 },
     { FONT_PRIMARY_COLOR, "#FFFD38" },
     { FONT_SECONDARY_COLOR, "#BDBDBD" },
     { LINK_COLOR, "#70AFEA" },
@@ -129,7 +129,7 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_WHITE_THEME_VALUES {
     { ACCENT_COLOR, "#00D87D" },
     { STROKE_COLOR, "#000000" },
     { BUTTON_COLOR, "#FFFFFF" },
-    { BORDER_WIDTH, 2.0 },
+    { BORDER_WIDTH, 5.0 },
     { FONT_PRIMARY_COLOR, "#1E0073" },
     { FONT_SECONDARY_COLOR, "#000000" },
     { LINK_COLOR, "#70AFEA" },
@@ -381,6 +381,24 @@ QStringList UiConfiguration::possibleAccentColors() const
     }
 
     return lightAccentColors;
+}
+
+void UiConfiguration::resetCurrentThemeToDefault(const ThemeCode& codeKey)
+{
+    for (ThemeInfo& theme : m_themes) {
+        if (theme.codeKey != codeKey) {
+            continue;
+        }
+
+        theme = makeStandardTheme(codeKey);
+        writeThemes(m_themes);
+
+        if (theme.codeKey == currentThemeCodeKey()) {
+            notifyAboutCurrentThemeChanged();
+        }
+
+        return;
+    }
 }
 
 const ThemeInfo& UiConfiguration::currentTheme() const

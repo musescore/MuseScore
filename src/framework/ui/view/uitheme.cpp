@@ -123,6 +123,7 @@ void UiTheme::initThemeValues()
     m_linkColor = themeValues[LINK_COLOR].toString();
     m_focusColor = themeValues[FOCUS_COLOR].toString();
 
+    m_borderWidth = themeValues[BORDER_WIDTH].toReal();
     m_accentOpacityNormal = themeValues[ACCENT_OPACITY_NORMAL].toReal();
     m_accentOpacityHover = themeValues[ACCENT_OPACITY_HOVER].toReal();
     m_accentOpacityHit = themeValues[ACCENT_OPACITY_HIT].toReal();
@@ -256,7 +257,7 @@ QFont UiTheme::musicalFont() const
 
 qreal UiTheme::borderWidth() const
 {
-    return realByKey(BORDER_WIDTH);
+    return m_borderWidth;
 }
 
 qreal UiTheme::accentOpacityNormal() const
@@ -710,7 +711,8 @@ void UiTheme::drawButtonBackground(QPainter* painter, const QRect& rect, bool en
                               : !flat ? buttonOpacityNormal()
                               : 0);
 
-    drawRoundedRect(painter, rect, 3, backgroundColor);
+    //drawRoundedRect(painter, rect, 3, backgroundColor);
+    drawRoundedRect(painter, rect, 3, backgroundColor, QPen(strokeColor(), borderWidth()));
 }
 
 void UiTheme::drawCheckboxIndicator(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool checked,
@@ -728,8 +730,9 @@ void UiTheme::drawCheckboxIndicator(QPainter* painter, const QRect& rect, bool e
                               : enabled && hovered ? buttonOpacityHover()
                               : 0);
 
-        const int borderWidth = enabled && (hovered || pressed) ? 1 : 0;
-        drawRoundedRect(painter, rect, 2, backgroundColor, QPen(borderColor, borderWidth));
+        //const int borderWidth = enabled && (hovered || pressed) ? 1 : 0;
+        //drawRoundedRect(painter, rect, 2, backgroundColor, QPen(borderColor, borderWidth));
+        drawRoundedRect(painter, rect, 2, backgroundColor, QPen(strokeColor(), borderWidth()));
     }
 
     if (checked || indeterminate) {
