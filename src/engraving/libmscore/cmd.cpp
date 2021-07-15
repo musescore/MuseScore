@@ -2176,7 +2176,7 @@ void Score::cmdResetBeamMode()
 
 void Score::cmdResetAllStyle()
 {
-    style().resetAllStyles(this);
+    resetAllStyle();
 }
 
 void Score::cmdResetTextStyleOverrides()
@@ -2196,7 +2196,7 @@ void Score::cmdResetTextStyleOverrides()
         Pid::ALIGN
     };
 
-    for (Page* page : pages()) {
+    for (Page* page : qAsConst(pages())) {
         auto elements = page->elements();
 
         for (Element* element : elements) {

@@ -60,7 +60,7 @@ void NotationStyle::setStyleValue(const StyleId& styleId, const QVariant& newVal
 
 void NotationStyle::resetStyleValue(const StyleId& styleId)
 {
-    m_getScore->score()->style().resetStyles(m_getScore->score(), { styleId });
+    m_getScore->score()->resetStyles({ styleId });
     m_styleChanged.notify();
 }
 
