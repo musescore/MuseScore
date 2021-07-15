@@ -5211,6 +5211,24 @@ QVariant Score::propertyDefault(Pid /*id*/) const
     return QVariant();
 }
 
+void Score::resetAllStyle()
+{
+    const MStyle& defStyle = MScore::defaultStyle();
+    int beginIdx = int(Sid::NOSTYLE) + 1;
+    int endIdx = int(Sid::STYLES);
+    for (int idx = beginIdx; idx < endIdx; ++idx) {
+        undo(new ChangeStyleVal(this, Sid(idx), defStyle.value(Sid(idx))));
+    }
+}
+
+void Score::resetStyles(const QSet<Sid>& stylesToReset)
+{
+    const MStyle& defStyle = MScore::defaultStyle();
+    for (const Sid& idx : stylesToReset) {
+        undo(new ChangeStyleVal(this, idx, defStyle.value(idx)));
+    }
+}
+
 //---------------------------------------------------------
 //   setStyle
 //---------------------------------------------------------

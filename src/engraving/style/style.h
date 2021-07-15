@@ -37,8 +37,6 @@
 namespace Ms {
 class XmlWriter;
 struct ChordDescription;
-class Element;
-class Score;
 
 //---------------------------------------------------------
 //   MStyle
@@ -80,16 +78,15 @@ public:
     void applyNewDefaults(const MStyle& other, const int defaultsVersion);
     void save(XmlWriter& xml, bool optimize);
     bool readProperties(XmlReader&);
-    bool readStyleValCompat(XmlReader&);
-    bool readTextStyleValCompat(XmlReader&);
-
-    void resetAllStyles(Score* score, const QSet<Sid>& ignoredStyles = QSet<Sid>());
-    void resetStyles(Score* score, const QSet<Sid>& stylesToReset);
 
     static const char* valueType(const Sid);
     static const char* valueName(const Sid);
     static Sid styleIdx(const QString& name);
     static MStyle* resolveStyleDefaults(const int defaultsVersion);
+
+private:
+    bool readStyleValCompat(XmlReader&);
+    bool readTextStyleValCompat(XmlReader&);
 };
 }     // namespace Ms
 

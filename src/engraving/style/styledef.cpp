@@ -52,7 +52,7 @@ using namespace Ms;
 //    Keep in sync with sid in style.h
 //---------------------------------------------------------
 
-const StyleDef::StyleType StyleDef::styleTypes[int(Sid::STYLES)] = {
+const StyleDef::StyleValue StyleDef::styleValues[int(Sid::STYLES)] = {
     { Sid::pageWidth,               "pageWidth",               210.0 / INCH },
     { Sid::pageHeight,              "pageHeight",              297.0 / INCH }, // A4
     { Sid::pagePrintableWidth,      "pagePrintableWidth",      180.0 / INCH },

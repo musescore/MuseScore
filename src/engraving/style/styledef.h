@@ -1481,7 +1481,7 @@ private:
 
     friend class MStyle;
 
-    struct StyleType {
+    struct StyleValue {
         Sid _idx;
         const char* _name;         // xml name for read()/write()
         QVariant _defaultValue;
@@ -1494,7 +1494,7 @@ private:
         const QVariant& defaultValue() const { return _defaultValue; }
     };
 
-    static const StyleType styleTypes[int(Sid::STYLES)];
+    static const StyleValue styleValues[int(Sid::STYLES)];
 };
 }
 

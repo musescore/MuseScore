@@ -947,6 +947,9 @@ public:
     virtual MStyle& style() { return _style; }
     virtual const MStyle& style() const { return _style; }
 
+    void resetAllStyle();
+    void resetStyles(const QSet<Sid>& stylesToReset);
+
     void setStyle(const MStyle& s, const bool overlap = false);
     bool loadStyle(const QString&, bool ign = false, const bool overlap = false);
     bool saveStyle(const QString&);

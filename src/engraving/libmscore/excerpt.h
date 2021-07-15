@@ -35,6 +35,7 @@ class Measure;
 class XmlWriter;
 class Staff;
 class XmlReader;
+class Element;
 
 //---------------------------------------------------------
 //   @@ Excerpt
