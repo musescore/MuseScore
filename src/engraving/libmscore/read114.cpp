@@ -2772,6 +2772,7 @@ static void readStyle(MStyle* style, XmlReader& e)
         } else if (tag == "ChordList") {
             style->chordList()->clear();
             style->chordList()->read(e);
+            //! TODO Look like a bug, changes just the local variable
             for (ChordFont f : style->chordList()->fonts) {
                 if (f.family == "MuseJazz") {
                     f.family = "MuseJazz Text";
