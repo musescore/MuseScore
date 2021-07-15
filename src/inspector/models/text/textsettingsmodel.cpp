@@ -174,7 +174,7 @@ void TextSettingsModel::insertSpecialCharacters()
 
 void TextSettingsModel::showStaffTextProperties()
 {
-    NOT_IMPLEMENTED;
+    dispatcher()->dispatch("st-props");
 }
 
 PropertyItem* TextSettingsModel::fontFamily() const
