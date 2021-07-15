@@ -502,7 +502,7 @@ constexpr bool operator&(const SegmentType t1, const SegmentType t2)
 //   Tid
 ///   Enumerates the list of built-in text substyles
 ///   \internal
-///   Must be in sync with textStyles array (in style.cpp)
+///   Must be in sync with textStyles array (in textstyle.cpp)
 //-------------------------------------------------------------------
 
 enum class Tid {

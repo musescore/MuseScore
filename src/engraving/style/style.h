@@ -35,7 +35,6 @@
 #include "styledef.h"
 
 namespace Ms {
-enum class Pid : int;
 class XmlWriter;
 struct ChordDescription;
 class Element;
@@ -72,7 +71,7 @@ public:
 
     const ChordDescription* chordDescription(int id) const;
     ChordList* chordList() { return &_chordList; }
-    void setChordList(ChordList*, bool custom = true);      // Style gets ownership of ChordList
+
     void setCustomChordList(bool t) { _customChordList = t; }
     void checkChordList();
 
@@ -92,32 +91,6 @@ public:
     static Sid styleIdx(const QString& name);
     static MStyle* resolveStyleDefaults(const int defaultsVersion);
 };
-
-//---------------------------------------------------------
-//   StyledProperty
-///   \cond PLUGIN_API \private \endcond
-//---------------------------------------------------------
-
-struct StyledProperty {
-    Sid sid;
-    Pid pid;
-};
-
-typedef std::vector<StyledProperty> ElementStyle;
-
-#define TEXT_STYLE_SIZE 14
-
-typedef std::array<StyledProperty, TEXT_STYLE_SIZE> TextStyle;
-
-const TextStyle* textStyle(Tid);
-const TextStyle* textStyle(const char*);
-
-const char* textStyleName(Tid);
-QString textStyleUserName(Tid);
-Tid textStyleFromName(const QString&);
-
-const std::vector<Tid>& allTextStyles();
-const std::vector<Tid>& primaryTextStyles();
 
 QSet<Sid> pageStyles();
 }     // namespace Ms

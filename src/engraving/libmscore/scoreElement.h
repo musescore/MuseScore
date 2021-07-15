@@ -25,12 +25,14 @@
 
 #include "types.h"
 #include "draw/geometry.h"
-#include "style/style.h"
+#include "style/styledef.h"
+#include "style/textstyle.h"
 
 namespace Ms {
 class ScoreElement;
 class MasterScore;
 class XmlWriter;
+class XmlReader;
 class ConnectorInfoReader;
 class Measure;
 class Staff;
