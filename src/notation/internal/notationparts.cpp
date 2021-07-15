@@ -1432,7 +1432,6 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
         Part* part = new Part(score());
         const Instrument& instrument = pi.instrument;
 
-        part->setPartName(instrument.name);
         part->setSoloist(pi.isSoloist);
         part->setInstrument(InstrumentsConverter::convertInstrument(instrument));
 
@@ -1443,6 +1442,7 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
         QString shortName = !instrument.shortNames.empty() ? instrument.shortNames.first().name() : QString();
         QString formattedShortName = formatInstrumentName(shortName, instrument.trait, instrumentNumber);
 
+        part->setPartName(formattedLongName);
         part->setLongName(formattedLongName);
         part->setShortName(formattedShortName);
 
