@@ -76,7 +76,7 @@ QString ImportPreferencesModel::stylePathFilter() const
 
 QString ImportPreferencesModel::styleChooseTitle() const
 {
-    return qtrc("appshell", "Choose Default Style for Imports");
+    return qtrc("appshell", "Choose default style for imports");
 }
 
 QString ImportPreferencesModel::fileDirectory(const QString& filePath) const

@@ -32,11 +32,11 @@ BeamModeListModel::BeamModeListModel(QObject* parent)
     m_roleNames.insert(HintRole, "hintRole");
 
     m_beamTypesDataList = { { BeamTypes::Mode::MODE_AUTO, "auto" },
-        { BeamTypes::Mode::MODE_BEGIN, qtrc("inspector", "Beam Start") },
-        { BeamTypes::Mode::MODE_MID, qtrc("inspector", "Beam Middle") },
-        { BeamTypes::Mode::MODE_NONE, qtrc("inspector", "No Beam") },
-        { BeamTypes::Mode::MODE_BEGIN32, qtrc("inspector", "Beam 16th Sub") },
-        { BeamTypes::Mode::MODE_BEGIN64, qtrc("inspector", "Beam 32nd Sub") } };
+        { BeamTypes::Mode::MODE_BEGIN, qtrc("inspector", "Beam start") },
+        { BeamTypes::Mode::MODE_MID, qtrc("inspector", "Beam middle") },
+        { BeamTypes::Mode::MODE_NONE, qtrc("inspector", "No beam") },
+        { BeamTypes::Mode::MODE_BEGIN32, qtrc("inspector", "Beam 11th sub") },
+        { BeamTypes::Mode::MODE_BEGIN64, qtrc("inspector", "Beam 32nd sub") } };
 }
 
 int BeamModeListModel::rowCount(const QModelIndex&) const

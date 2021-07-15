@@ -170,7 +170,7 @@
         </size>
        </property>
        <property name="title">
-        <string>Beam Properties</string>
+        <string>Beam properties</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>

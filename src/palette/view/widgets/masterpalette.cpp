@@ -176,8 +176,8 @@ int MasterPalette::metaTypeId() const
 
 void MasterPalette::retranslate(bool firstTime)
 {
-    m_keyItem->setText(0, mu::qtrc("palette", "Key Signatures"));
-    m_timeItem->setText(0, mu::qtrc("palette", "Time Signatures"));
+    m_keyItem->setText(0, mu::qtrc("palette", "Key signatures"));
+    m_timeItem->setText(0, mu::qtrc("palette", "Time signatures"));
     m_symbolItem->setText(0, mu::qtrc("palette", "Symbols"));
     if (!firstTime) {
         retranslateUi(this);

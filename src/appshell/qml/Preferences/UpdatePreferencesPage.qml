@@ -38,7 +38,7 @@ PreferencesPage {
         spacing: 18
 
         StyledTextLabel {
-            text: qsTrc("appshell", "Automatic Update Check")
+            text: qsTrc("appshell", "Automatic update check")
             font: ui.theme.bodyBoldFont
         }
 

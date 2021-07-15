@@ -49,7 +49,7 @@ PreferencesPage {
             spacing: 18
 
             StyledTextLabel {
-                text: qsTrc("appshell", "Default Files")
+                text: qsTrc("appshell", "Default files")
                 font: ui.theme.bodyBoldFont
             }
 

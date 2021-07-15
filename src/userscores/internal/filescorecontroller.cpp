@@ -187,7 +187,7 @@ void FileScoreController::saveScore()
 
     io::path defaultFilePath = defaultSavingFilePath();
 
-    io::path filePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save Score"));
+    io::path filePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save score"));
     if (filePath.empty()) {
         return;
     }
@@ -202,7 +202,7 @@ void FileScoreController::saveScore()
 void FileScoreController::saveScoreAs()
 {
     io::path defaultFilePath = defaultSavingFilePath();
-    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save Score"));
+    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save score"));
     if (selectedFilePath.empty()) {
         return;
     }
@@ -213,7 +213,7 @@ void FileScoreController::saveScoreAs()
 void FileScoreController::saveScoreCopy()
 {
     io::path defaultFilePath = defaultSavingFilePath();
-    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save a Copy"));
+    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save a copy"));
     if (selectedFilePath.empty()) {
         return;
     }
@@ -224,7 +224,7 @@ void FileScoreController::saveScoreCopy()
 void FileScoreController::saveSelection()
 {
     io::path defaultFilePath = defaultSavingFilePath();
-    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save Selection"));
+    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save selection"));
     if (selectedFilePath.empty()) {
         return;
     }

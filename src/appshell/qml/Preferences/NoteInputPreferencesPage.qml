@@ -41,7 +41,7 @@ PreferencesPage {
         spacing: 22
 
         StyledTextLabel {
-            text: qsTrc("appshell", "Note Input")
+            text: qsTrc("appshell", "Note input")
             font: ui.theme.bodyBoldFont
         }
 
@@ -83,7 +83,7 @@ PreferencesPage {
         SeparatorLine {}
 
         CheckBox {
-            text: qsTrc("appshell", "Play Notes When Editing")
+            text: qsTrc("appshell", "Play notes when editing")
             font: ui.theme.bodyBoldFont
 
             checked: noteInputModel.playNotesWhenEditing

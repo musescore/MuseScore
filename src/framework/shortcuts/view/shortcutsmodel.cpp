@@ -167,7 +167,7 @@ void ShortcutsModel::setSelection(const QItemSelection& selection)
 void ShortcutsModel::importShortcutsFromFile()
 {
     io::path path = interactive()->selectOpeningFile(
-        qtrc("shortcuts", "Import Shortcuts"),
+        qtrc("shortcuts", "Import shortcuts"),
         globalConfiguration()->homePath(),
         shorcutsFileFilter());
 
@@ -179,7 +179,7 @@ void ShortcutsModel::importShortcutsFromFile()
 void ShortcutsModel::exportShortcutsToFile()
 {
     io::path path = interactive()->selectSavingFile(
-        qtrc("shortcuts", "Export Shortcuts"),
+        qtrc("shortcuts", "Export shortcuts"),
         globalConfiguration()->homePath(),
         shorcutsFileFilter());
 
