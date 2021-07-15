@@ -25,25 +25,26 @@
 
 #include <QAbstractItemModel>
 #include "palettemodel.h"
-#include "modularity/ioc.h"
-#include "framework/ui/imainwindow.h"
-#include "framework/global/iinteractive.h"
-#include "../ipaletteconfiguration.h"
+
+#include "ipaletteprovider.h"
 #include "async/asyncable.h"
+
+#include "modularity/ioc.h"
+#include "iinteractive.h"
+#include "ipaletteconfiguration.h"
 
 namespace Ms {
 class AbstractPaletteController;
-class PaletteWorkspace;
+class PaletteProvider;
 
-//---------------------------------------------------------
+// ========================================================
 //   PaletteElementEditor
-//---------------------------------------------------------
+// ========================================================
 
 class PaletteElementEditor : public QObject
 {
     Q_OBJECT
 
-    INJECT(palette, mu::ui::IMainWindow, mainWindow)
     INJECT(palette, mu::framework::IInteractive, interactive)
 
     AbstractPaletteController* _controller = nullptr;
@@ -51,7 +52,7 @@ class PaletteElementEditor : public QObject
     PalettePanel::Type _type = PalettePanel::Type::Unknown;
 
     Q_PROPERTY(bool valid READ valid CONSTANT)
-    Q_PROPERTY(QString actionName READ actionName CONSTANT)   // TODO: make NOTIFY instead of CONSTANT for retranslations
+    Q_PROPERTY(QString actionName READ actionName CONSTANT) // TODO: make NOTIFY instead of CONSTANT for retranslations
 
 private slots:
     void onElementAdded(const ElementPtr element);
@@ -69,9 +70,9 @@ public:
     Q_INVOKABLE void open();
 };
 
-//---------------------------------------------------------
+// ========================================================
 //   AbstractPaletteController
-//---------------------------------------------------------
+// ========================================================
 
 class AbstractPaletteController : public QObject
 {
@@ -125,15 +126,14 @@ public:
     Q_INVOKABLE Ms::PaletteElementEditor* elementEditor(const QModelIndex& index);
 };
 
-//---------------------------------------------------------
+// ========================================================
 //   UserPaletteController
-//---------------------------------------------------------
+// ========================================================
 
 class UserPaletteController : public AbstractPaletteController, public mu::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(palette, mu::ui::IMainWindow, mainWindow)
     INJECT(palette, mu::framework::IInteractive, interactive)
     INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
@@ -192,70 +192,40 @@ public:
     bool applyPaletteElement(const QModelIndex& index, Qt::KeyboardModifiers modifiers) override;
 };
 
-//---------------------------------------------------------
-//   PaletteWorkspace
-//---------------------------------------------------------
+// ========================================================
+//   PaletteProvider
+// ========================================================
 
-class PaletteWorkspace : public QObject
+class PaletteProvider : public QObject, public mu::palette::IPaletteProvider
 {
     Q_OBJECT
 
-    INJECT(palette, mu::ui::IMainWindow, mainWindow)
     INJECT(palette, mu::framework::IInteractive, interactive)
 
-    PaletteTreeModel* userPalette;
-    PaletteTreeModel* masterPalette;
-    PaletteTreeModel* defaultPalette;   // palette used by "Reset palette" action
-
-    bool m_searching = false;
-
-    QSortFilterProxyModel* m_visibilityFilterModel = nullptr;
-    QSortFilterProxyModel* m_searchFilterModel = nullptr;
-
-    QAbstractItemModel* mainPalette = nullptr;              ///< visible userPalette entries
-//       PaletteTreeModel* poolPalette;               ///< masterPalette entries not yet added to mainPalette
-    FilterPaletteTreeModel* customPoolPalette = nullptr;    ///< invisible userPalette entries that do not belong to masterPalette
-
-    UserPaletteController* mainPaletteController = nullptr;
-//       PaletteController* masterPaletteController;
-    UserPaletteController* customElementsPaletteController = nullptr;
-
     Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel NOTIFY mainPaletteChanged)
-    Q_PROPERTY(Ms::AbstractPaletteController* mainPaletteController READ getMainPaletteController NOTIFY mainPaletteChanged)
+    Q_PROPERTY(Ms::AbstractPaletteController* mainPaletteController READ mainPaletteController NOTIFY mainPaletteChanged)
 
     Q_PROPERTY(Ms::FilterPaletteTreeModel* customElementsPaletteModel READ customElementsPaletteModel CONSTANT)
     Q_PROPERTY(
-        Ms::AbstractPaletteController* customElementsPaletteController READ getCustomElementsPaletteController CONSTANT)
-
-    QAbstractItemModel* mainPaletteModel();
-    AbstractPaletteController* getMainPaletteController();
-
-    FilterPaletteTreeModel* customElementsPaletteModel();
-    AbstractPaletteController* getCustomElementsPaletteController();
-
-    enum PalettesModelRoles {
-        CustomRole = Qt::UserRole + 1,
-        PaletteIndexRole
-    };
-
-    QString getPaletteFilename(bool open, const QString& name = "");
-
-signals:
-    void userPaletteChanged();
-    void mainPaletteChanged();
+        Ms::AbstractPaletteController* customElementsPaletteController READ customElementsPaletteController CONSTANT)
 
 public:
-    explicit PaletteWorkspace(PaletteTreeModel* user, PaletteTreeModel* master = nullptr, QObject* parent = nullptr);
+    void init() override;
 
-    Q_INVOKABLE QModelIndex poolPaletteIndex(const QModelIndex& index, Ms::FilterPaletteTreeModel* poolPalette);
+    PaletteTreeModel* userPaletteModel() const { return m_userPaletteModel; }
+    PaletteTreePtr userPaletteTree() const override { return m_userPaletteModel->paletteTreePtr(); }
+    mu::async::Notification userPaletteTreeChanged() const override { return m_userPaletteChanged; }
+    void setUserPaletteTree(PaletteTreePtr tree) override;
+
+    void setDefaultPaletteTree(PaletteTreePtr tree) override;
+
+    Q_INVOKABLE QModelIndex poolPaletteIndex(const QModelIndex& index, Ms::FilterPaletteTreeModel* poolPalette) const;
     Q_INVOKABLE QModelIndex customElementsPaletteIndex(const QModelIndex& index);
 
-    Q_INVOKABLE Ms::FilterPaletteTreeModel* poolPaletteModel(const QModelIndex& index);
-    Q_INVOKABLE Ms::AbstractPaletteController* poolPaletteController(Ms::FilterPaletteTreeModel*, const QModelIndex& rootIndex);
+    Q_INVOKABLE Ms::FilterPaletteTreeModel* poolPaletteModel(const QModelIndex& index) const;
+    Q_INVOKABLE Ms::AbstractPaletteController* poolPaletteController(Ms::FilterPaletteTreeModel*, const QModelIndex& rootIndex) const;
 
-    PaletteTreeModel* userPaletteModel() { return userPalette; }
-
-    Q_INVOKABLE QAbstractItemModel* availableExtraPalettesModel();
+    Q_INVOKABLE QAbstractItemModel* availableExtraPalettesModel() const;
     Q_INVOKABLE bool addPalette(const QPersistentModelIndex&);
     Q_INVOKABLE bool removeCustomPalette(const QPersistentModelIndex&);
 
@@ -266,15 +236,62 @@ public:
 
     Q_INVOKABLE void setSearching(bool searching);
 
-    bool paletteChanged() const { return userPalette->paletteTreeChanged(); }
+    bool paletteChanged() const { return m_userPaletteModel->paletteTreeChanged(); }
 
-    void setUserPaletteTree(PaletteTreePtr tree);
-    void setDefaultPaletteTree(PaletteTreePtr tree);
     void write(XmlWriter&) const;
     bool read(XmlReader&);
 
-    void updateCellsState(const Selection& sel) { userPalette->updateCellsState(sel); }
-    void retranslate() { userPalette->retranslate(); masterPalette->retranslate(); defaultPalette->retranslate(); }
+    void updateCellsState(const Selection& sel) { m_userPaletteModel->updateCellsState(sel); }
+    void retranslate()
+    {
+        m_userPaletteModel->retranslate();
+        m_masterPaletteModel->retranslate();
+        m_defaultPaletteModel->retranslate();
+    }
+
+signals:
+    void userPaletteChanged();
+    void mainPaletteChanged();
+
+private slots:
+    void notifyAboutUserPaletteChanged()
+    {
+        m_userPaletteChanged.notify();
+        emit userPaletteChanged();
+    }
+
+private:
+    enum PalettesModelRoles {
+        CustomRole = Qt::UserRole + 1,
+        PaletteIndexRole
+    };
+
+    QAbstractItemModel* mainPaletteModel();
+    AbstractPaletteController* mainPaletteController();
+
+    FilterPaletteTreeModel* customElementsPaletteModel();
+    AbstractPaletteController* customElementsPaletteController();
+
+    QString getPaletteFilename(bool open, const QString& name = "") const;
+
+    PaletteTreeModel* m_userPaletteModel;
+    PaletteTreeModel* m_masterPaletteModel;
+    PaletteTreeModel* m_defaultPaletteModel; // palette used by "Reset palette" action
+
+    mu::async::Notification m_userPaletteChanged;
+
+    bool m_isSearching = false;
+
+    QSortFilterProxyModel* m_visibilityFilterModel = nullptr;
+    QSortFilterProxyModel* m_searchFilterModel = nullptr;
+
+    QAbstractItemModel* m_mainPalette = nullptr; // visible userPalette entries
+    // PaletteTreeModel* poolPalette; // masterPalette entries not yet added to mainPalette
+    FilterPaletteTreeModel* m_customPoolPalette = nullptr; // invisible userPalette entries that do not belong to masterPalette
+
+    UserPaletteController* m_mainPaletteController = nullptr;
+    // PaletteController* m_masterPaletteController = nullptr;
+    UserPaletteController* m_customElementsPaletteController = nullptr;
 };
 } // namespace Ms
 

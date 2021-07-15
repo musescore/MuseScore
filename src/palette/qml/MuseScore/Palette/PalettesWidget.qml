@@ -21,8 +21,8 @@
  */
 
 import QtQuick 2.15
-import QtQuick.Controls 2.1
-import QtQuick.Window 2.2
+import QtQuick.Controls 2.15
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Palette 1.0
@@ -30,12 +30,11 @@ import MuseScore.Palette 1.0
 import "internal"
 
 Rectangle {
-
     id: root
 
     property NavigationSection navigationSection: null
 
-    readonly property PaletteWorkspace paletteWorkspace: paletteRootModel.paletteWorkspace
+    readonly property PaletteProvider paletteProvider: paletteRootModel.paletteProvider
 
     implicitHeight: 4 * palettesWidgetHeader.implicitHeight
     implicitWidth: paletteTree.implicitWidth
@@ -59,7 +58,7 @@ Rectangle {
     PalettesWidgetHeader {
         id: palettesWidgetHeader
 
-        paletteWorkspace: root.paletteWorkspace
+        paletteProvider: root.paletteProvider
 
         popupMaxHeight: root.height * 0.8
 
@@ -93,7 +92,7 @@ Rectangle {
     PaletteTree {
         id: paletteTree
         clip: true
-        paletteWorkspace: root.paletteWorkspace
+        paletteProvider: root.paletteProvider
         backgroundColor: root.color
 
         navigation.section: root.navigationSection
@@ -118,7 +117,7 @@ Rectangle {
     Rectangle {
         // Shadow overlay for Tours. The usual overlay doesn't cover palettes
         // as they reside in a window container above the main MuseScore window.
-        visible: paletteRootModel.shadowOverlay
+        visible: paletteRootModel.needShowShadowOverlay
         anchors.fill: parent
         z: 1000
 

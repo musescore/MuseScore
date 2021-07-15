@@ -23,7 +23,7 @@
 
 #include <QBuffer>
 
-#include "palette/paletteworkspace.h"
+#include "palette/paletteprovider.h"
 #include "palette/palettecreator.h"
 
 #include "log.h"
@@ -67,10 +67,8 @@ void PaletteWorkspaceSetup::setup()
         return;
     }
 
-    Ms::PaletteWorkspace* paletteWorkspace = adapter()->paletteWorkspace();
-    QObject::connect(paletteWorkspace, &Ms::PaletteWorkspace::userPaletteChanged, [this, paletteWorkspace]() {
-        Ms::PaletteTreeModel* treeModel = paletteWorkspace->userPaletteModel();
-        Ms::PaletteTreePtr tree = treeModel->paletteTreePtr();
+    paletteProvider()->userPaletteTreeChanged().onNotify(this, [this]() {
+        Ms::PaletteTreePtr tree = paletteProvider()->userPaletteTree();
 
         QByteArray newData;
         writePalette(tree, newData);
@@ -78,7 +76,7 @@ void PaletteWorkspaceSetup::setup()
         workspacesDataProvider()->setRawData(DataKey::Palettes, newData);
     });
 
-    auto loadData = [this, paletteWorkspace]() {
+    auto loadData = [this]() {
         RetVal<QByteArray> data = workspacesDataProvider()->rawData(DataKey::Palettes);
         Ms::PaletteTreePtr tree;
         if (data.ret) {
@@ -86,11 +84,11 @@ void PaletteWorkspaceSetup::setup()
             tree = readPalette(data.val);
         } else {
             LOGD() << "no palette data in workspace, will use default";
-            tree = std::shared_ptr<Ms::PaletteTree>(Ms::PaletteCreator::newDefaultPaletteTree());
+            tree = Ms::PaletteTreePtr(Ms::PaletteCreator::newDefaultPaletteTree());
         }
 
-        paletteWorkspace->setDefaultPaletteTree(tree);
-        paletteWorkspace->setUserPaletteTree(tree);
+        paletteProvider()->setDefaultPaletteTree(tree);
+        paletteProvider()->setUserPaletteTree(tree);
     };
 
     workspacesDataProvider()->workspaceChanged().onNotify(this, loadData);

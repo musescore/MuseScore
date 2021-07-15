@@ -19,39 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PALETTE_IPALETTEADAPTER_H
-#define MU_PALETTE_IPALETTEADAPTER_H
+
+#ifndef MU_PALETTE_IPALETTEPROVIDER_H
+#define MU_PALETTE_IPALETTEPROVIDER_H
 
 #include "modularity/imoduleexport.h"
 
-#include "retval.h"
-
 #include "async/notification.h"
 
-namespace Ms {
-class Element;
-class PaletteWorkspace;
-}
+#include "palettetree.h"
 
 namespace mu::palette {
-//! NOTE This is an adapter for the palette,
-//! that to use the palette in the MU3 and MU4 build.
-class IPaletteAdapter : MODULE_EXPORT_INTERFACE
+class IPaletteProvider : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IPaletteAdapter)
 
 public:
-    virtual ~IPaletteAdapter() = default;
+    virtual ~IPaletteProvider() = default;
 
-    // qml
-    virtual Ms::PaletteWorkspace* paletteWorkspace() const = 0;
-    virtual mu::ValCh<bool> paletteEnabled() const = 0;
-    virtual void setPaletteEnabled(bool arg) = 0;
-    virtual void requestPaletteSearch() = 0;
-    virtual async::Notification paletteSearchRequested() const = 0;
-    virtual void notifyElementDraggedToScoreView() = 0;
-    virtual async::Notification elementDraggedToScoreView() const = 0;
+    virtual void init() = 0;
+
+    virtual Ms::PaletteTreePtr userPaletteTree() const = 0;
+    virtual async::Notification userPaletteTreeChanged() const = 0;
+    virtual void setUserPaletteTree(Ms::PaletteTreePtr tree) = 0;
+    virtual void setDefaultPaletteTree(Ms::PaletteTreePtr tree) = 0;
 };
 }
 
-#endif // MU_PALETTE_IPALETTEADAPTER_H
+#endif // MU_PALETTE_IPALETTEPROVIDER_H

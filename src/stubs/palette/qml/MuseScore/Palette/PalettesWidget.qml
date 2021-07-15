@@ -21,11 +21,11 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Rectangle {
-    readonly property QtObject paletteWorkspace: null
-    readonly property bool hasFocus: false
+    property NavigationSection navigationSection: null
 
     color: ui.theme.backgroundPrimaryColor
 
