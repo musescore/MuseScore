@@ -62,7 +62,7 @@ Column {
             implicitWidth: root.firstColumnWidth
 
             checked: root.useColor
-            text: qsTrc("appshell", "Colour:")
+            text: qsTrc("appshell", "Color:")
 
             onClicked: {
                 root.useColorChangeRequested(true)

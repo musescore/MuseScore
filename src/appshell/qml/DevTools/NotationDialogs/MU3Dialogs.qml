@@ -86,7 +86,7 @@ Item {
         FlatButton {
             width: 220
 
-            text: "Staff/Part Properties"
+            text: "Staff/part properties"
 
             onClicked: {
                 api.launcher.open("musescore://notation/staffproperties?staffIdx=0")

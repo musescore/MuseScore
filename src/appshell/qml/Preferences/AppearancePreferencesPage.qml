@@ -95,7 +95,7 @@ PreferencesPage {
             width: parent.width
 
             title: qsTrc("appshell", "Background")
-            wallpaperDialogTitle: qsTrc("appshell", "Choose Background Wallpaper")
+            wallpaperDialogTitle: qsTrc("appshell", "Choose background wallpaper")
             useColor: appearanceModel.backgroundUseColor
             color: appearanceModel.backgroundColor
             wallpaperPath: appearanceModel.backgroundWallpaperPath

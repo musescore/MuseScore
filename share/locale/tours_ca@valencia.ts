@@ -17,7 +17,7 @@
         <translation>La barra d&apos;eines d&apos;entrada de notes us permet introduir notes i silencis en la partitura.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>Les paletes us permeten afegir la majoria dels altres d&apos;elements de notació a la partitura.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Cada paleta conté elements que es poden afegir a la partitura.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Benvingut al mode Paletes on podreu afegir diversos elements a la partitura: Premeu &quot;Següent&quot; per saber-ne més.</translation>
     </message>

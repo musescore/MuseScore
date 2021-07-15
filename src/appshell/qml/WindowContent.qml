@@ -57,7 +57,7 @@ DockWindow {
             id: mainToolBar
 
             objectName: "mainToolBar"
-            title: qsTrc("appshell", "Main Toolbar")
+            title: qsTrc("appshell", "Main toolbar")
 
             width: root.width / 2
             minimumWidth: 304

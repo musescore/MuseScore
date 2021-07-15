@@ -17,7 +17,7 @@
         <translation>Met de noteninvoer werkbalk kunt u de noten en rusten in de partituur invoeren.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>Met de paletten kunt u de meeste andere notatie elementen aan de partituur toevoegen.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Ieder palet bevat elementen die kunnen worden toegevoegd aan de partituur.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Welkom bij de paletten. Hiermee kunt u verschillende elementen aan uw partituur toevoegen. Klik op &quot;Volgende&quot; om hier meer over te weten te komen.</translation>
     </message>

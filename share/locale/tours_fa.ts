@@ -17,7 +17,7 @@
         <translation>نوارابزار &quot;ورودی نت&quot; اجازه نوشتن نت‌ها و سکوت‌ها را به شما می‌دهد.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>&quot;جعبه ابزار نت&quot; امکان اضافه کردن علامت‌های نت‌نویسی را به شما می‌دهد.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>هر جعبه ابزار شامل علامت‌هایی است که می‌توانید به صفحه‌ی نت خود بیفزایید.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>به جعبه ابزار خوش آمدید! در اینجا می‌توانید علامت‌های گوناگون نت‌نویسی را به صفحه‌ی نت خود اضافه کنید. برای آشنایی بیشتر دکمه &quot;بعدی&quot; را بزنید.</translation>
     </message>

@@ -32,12 +32,12 @@ Column {
     spacing: 18
 
     StyledTextLabel {
-        text: qsTrc("appshell", "Audio Engine")
+        text: qsTrc("appshell", "Audio engine")
         font: ui.theme.bodyBoldFont
     }
 
     FlatButton {
-        text: qsTrc("appshell", "Restart audio and MIDI Devices")
+        text: qsTrc("appshell", "Restart audio and MIDI devices")
 
         onClicked: {
             root.restartAudioAndMidiDevicesRequested()

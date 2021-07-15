@@ -17,7 +17,7 @@
         <translation>Verktygslisten Notinmatning låter dig mata in noter och pauser i ditt partitur.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>Paletterna låter dig lägga till de flesta övriga notationselement i ditt partitur.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Varje palett innehåller objekt som kan läggas till i partituret.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Välkommen till Paletterna, där du kommer lägga till diverse objekt i ditt partitur. Klicka på &quot;Nästa&quot; för mer information.</translation>
     </message>

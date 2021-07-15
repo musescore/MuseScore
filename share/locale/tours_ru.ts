@@ -17,7 +17,7 @@
         <translation>Панель ввода нот позволяет добавлять в партитуру ноты и паузы.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>С помощью палитр можно добавить в партитуру большинство других элементов нотации.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Каждая палитра содержит элементы, которые можно добавить в партитуру.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Это палитры. С их помощью вы можете добавить различные элементы в партитуру. Щёлкните «Продолжить» для получения дополнительной информации.</translation>
     </message>

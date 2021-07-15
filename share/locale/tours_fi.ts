@@ -17,7 +17,7 @@
         <translation>Nuotinsyötön työkalupalkki sallii sinun syöttää nuotteja ja taukoja partituuriisi.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>Paletit sallii sinun lisätä useimpia muita nuottikirjoituksen elementtejä partituuriisi.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Jokainen paletti sisältää nimikkeitä, joita voi lisätä partituuriisi.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Tervetula Paletteihin, jossa voit lisätä eri elementtejä partituuriisi. Klikkaa &quot;Seuraava&quot; opetellaksesi lisää.</translation>
     </message>

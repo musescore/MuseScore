@@ -38,7 +38,7 @@ PreferencesPage {
         spacing: 20
 
         StyledTextLabel {
-            text: qsTrc("appshell", "Programme Start")
+            text: qsTrc("appshell", "Programme start")
             font: ui.theme.bodyBoldFont
         }
 
@@ -69,7 +69,7 @@ PreferencesPage {
                 FilePicker {
                     width: 240
 
-                    dialogTitle: qsTrc("appshell", "Choose Starting Score")
+                    dialogTitle: qsTrc("appshell", "Choose starting score")
                     filter: programmeStartModel.scorePathFilter()
 
                     visible: modelData.canSelectScorePath

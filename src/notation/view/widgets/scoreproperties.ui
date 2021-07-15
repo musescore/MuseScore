@@ -14,7 +14,7 @@
    <enum>Qt::NoFocus</enum>
   </property>
   <property name="windowTitle">
-   <string>Score Properties</string>
+   <string>Score properties</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

@@ -164,7 +164,7 @@
     <name>ArticulationProperties</name>
     <message>
         <location filename="../../mscore/articulation.ui" line="14"/>
-        <source>Articulation Properties</source>
+        <source>Articulation properties</source>
         <translation>Thuộc tính diễn tấu</translation>
     </message>
     <message>
@@ -706,12 +706,12 @@
     <name>EditInstrumentBase</name>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="14"/>
-        <source>Edit Instrument Properties</source>
+        <source>Edit Instrument properties</source>
         <translation>Chỉnh thuộc tính nhạc cụ</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="20"/>
-        <source>Instrument Properties</source>
+        <source>Instrument properties</source>
         <translation>Đặc tính Nhạc cụ</translation>
     </message>
     <message>
@@ -1563,7 +1563,7 @@
     <name>EditStaffBase</name>
     <message>
         <location filename="../../mscore/editstaff.ui" line="315"/>
-        <source>Part Properties</source>
+        <source>Part properties</source>
         <translation>Thuộc tính Bè</translation>
     </message>
     <message>
@@ -1593,7 +1593,7 @@
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="26"/>
-        <source>Staff/Part Properties</source>
+        <source>Staff/part properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1834,12 +1834,12 @@
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="44"/>
-        <source>Staff Properties</source>
+        <source>Staff properties</source>
         <translation>Đặc tính khuông nhạc</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="135"/>
-        <source>Advanced Style Properties…</source>
+        <source>Advanced Style properties…</source>
         <translation>Đặc tính định kiểu chi tiết…</translation>
     </message>
     <message>
@@ -4260,7 +4260,7 @@ cho trang chẵn &amp;&amp; trang lẻ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2553"/>
-        <source>♮ in Key Signatures</source>
+        <source>♮ in Key signatures</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -7361,12 +7361,12 @@ cho trang chẵn &amp;&amp; trang lẻ</translation>
     <name>InspectorKeySig</name>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="14"/>
-        <source>Key Signature Inspector</source>
+        <source>Key signature Inspector</source>
         <translation>Bảng kiểm soát Hóa biểu</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="57"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>Hóa biểu</translation>
     </message>
     <message>
@@ -9317,12 +9317,12 @@ cho trang chẵn &amp;&amp; trang lẻ</translation>
     <name>InspectorTimeSig</name>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="14"/>
-        <source>Time Signature Inspector</source>
+        <source>Time signature Inspector</source>
         <translation>Bảng kiểm soát  khóa nhịp</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="60"/>
-        <source>Time Signature</source>
+        <source>Time signature</source>
         <translation>Khóa nhịp</translation>
     </message>
     <message>
@@ -10180,7 +10180,7 @@ cho trang chẵn &amp;&amp; trang lẻ</translation>
     <name>KeyEdit</name>
     <message>
         <location filename="../../mscore/keyedit.ui" line="38"/>
-        <source>Create Key Signature</source>
+        <source>Create Key signature</source>
         <translation>Tạo Hóa biểu</translation>
     </message>
     <message>
@@ -10609,7 +10609,7 @@ tuplet would cross measure</source>
     <name>MeasurePropertiesBase</name>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="17"/>
-        <source>Measure Properties</source>
+        <source>Measure properties</source>
         <translation>Thuộc tính ô nhịp</translation>
     </message>
     <message>
@@ -10849,7 +10849,7 @@ tuplet would cross measure</source>
     <name>MetaEditDialog</name>
     <message>
         <location filename="../../mscore/metaedit.ui" line="14"/>
-        <source>Score Properties</source>
+        <source>Score properties</source>
         <translation>Thuộc tính bản nhạc</translation>
     </message>
     <message>
@@ -11536,7 +11536,7 @@ báo lỗi: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="464"/>
-        <source>(in File &gt; Score Properties…):</source>
+        <source>(in File &gt; Score properties…):</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -11882,7 +11882,7 @@ failed: %2</source>
     <name>Ms::KeyEditor</name>
     <message>
         <location filename="../../mscore/keyedit.cpp" line="271"/>
-        <source>Key Signatures</source>
+        <source>Key signatures</source>
         <translation>Hóa biểu</translation>
     </message>
 </context>
@@ -12022,7 +12022,7 @@ bị lỗi: %2</translation>
     <name>Ms::MeasureProperties</name>
     <message>
         <location filename="../../mscore/measureproperties.cpp" line="123"/>
-        <source>Measure Properties for Measure %1</source>
+        <source>Measure properties for Measure %1</source>
         <translation>Thuộc tính ô nhịp cho ô %1</translation>
     </message>
     <message>
@@ -12404,18 +12404,18 @@ trước khi đóng?</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1348"/>
-        <source>Load Palette</source>
+        <source>Load palette</source>
         <translation>Nạp bản công cụ</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1349"/>
         <location filename="../../mscore/file.cpp" line="1353"/>
-        <source>MuseScore Palette</source>
+        <source>MuseScore palette</source>
         <translation>Bảng công cụ MuseScore</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1352"/>
-        <source>Save Palette</source>
+        <source>Save palette</source>
         <translation>Lưu bảng công cụ</translation>
     </message>
     <message>
@@ -12744,7 +12744,7 @@ Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2019"/>
-        <source>Playback Controls</source>
+        <source>Playback controls</source>
         <translation>Khung phát nhạc</translation>
     </message>
     <message>
@@ -12759,7 +12759,7 @@ Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2022"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>Nhập nốt</translation>
     </message>
     <message>
@@ -13181,7 +13181,7 @@ kết nối mạng</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="383"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>Hóa biểu</translation>
     </message>
     <message>
@@ -13191,7 +13191,7 @@ kết nối mạng</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="396"/>
-        <source>Key Signature: %1</source>
+        <source>Key signature: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13291,7 +13291,7 @@ kết nối mạng</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/palettewidget.cpp" line="121"/>
-        <source>Single Palette</source>
+        <source>Single palette</source>
         <translation>Mở 1 bảng 1 lần</translation>
     </message>
 </context>
@@ -13312,12 +13312,12 @@ kết nối mạng</translation>
     <name>Ms::PaletteElementEditor</name>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="62"/>
-        <source>Create Key Signature</source>
+        <source>Create Key signature</source>
         <translation>Tạo Hóa biểu</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="64"/>
-        <source>Create Time Signature</source>
+        <source>Create Time signature</source>
         <translation>Tạo khóa nhịp</translation>
     </message>
     <message>
@@ -13821,7 +13821,7 @@ This plugin requires an open score to run.
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="768"/>
-        <source>Choose Background Wallpaper</source>
+        <source>Choose background wallpaper</source>
         <translation>Chọn ảnh nền (phía sau)</translation>
     </message>
     <message>
@@ -14308,12 +14308,12 @@ lỗi: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="127"/>
-        <source>Articulation Properties…</source>
+        <source>Articulation properties…</source>
         <translation>Thuộc tính Dấu diễn đạt…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="137"/>
-        <source>Tremolo Bar Properties…</source>
+        <source>Tremolo Bar properties…</source>
         <translation>Thuộc tính Thanh vê…</translation>
     </message>
     <message>
@@ -14325,17 +14325,17 @@ lỗi: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="170"/>
-        <source>Hide Courtesy Time Signature</source>
+        <source>Hide Courtesy Time signature</source>
         <translation>Ẩn Ô báo chuyển Khóa nhịp</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="171"/>
-        <source>Show Courtesy Time Signature</source>
+        <source>Show Courtesy Time signature</source>
         <translation>Hiện Ô báo chuyển Khóa nhịp</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="176"/>
-        <source>Time Signature Properties…</source>
+        <source>Time signature properties…</source>
         <translation>Đặc tính Khóa nhịp…</translation>
     </message>
     <message>
@@ -14350,7 +14350,7 @@ lỗi: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="196"/>
-        <source>System Text Properties…</source>
+        <source>System Text properties…</source>
         <translation>Thuộc tính Chữ viết cho Dòng nhạc…</translation>
     </message>
     <message>
@@ -14358,27 +14358,27 @@ lỗi: %2</translation>
         <location filename="../../mscore/propertymenu.cpp" line="249"/>
         <location filename="../../mscore/propertymenu.cpp" line="274"/>
         <location filename="../../mscore/scoreview.cpp" line="394"/>
-        <source>Staff/Part Properties…</source>
+        <source>Staff/part properties…</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="192"/>
-        <source>Staff Text Properties…</source>
+        <source>Staff Text properties…</source>
         <translation>Đặc tính chữ viết của khuông nhạc…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="216"/>
-        <source>Hide Courtesy Key Signature</source>
+        <source>Hide Courtesy Key signature</source>
         <translation>Ẩn Ô báo chuyển Hóa biểu</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="217"/>
-        <source>Show Courtesy Key Signature</source>
+        <source>Show Courtesy Key signature</source>
         <translation>Hiện Ô báo chuyển Hóa biểu</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="222"/>
-        <source>Change Instrument Properties…</source>
+        <source>Change Instrument properties…</source>
         <translation>Thuộc tính của &quot;Chữ báo đổi nhạc cụ&quot;…</translation>
     </message>
     <message>
@@ -14399,7 +14399,7 @@ lỗi: %2</translation>
         <location filename="../../mscore/propertymenu.cpp" line="237"/>
         <location filename="../../mscore/propertymenu.cpp" line="255"/>
         <location filename="../../mscore/scoreview.cpp" line="419"/>
-        <source>Measure Properties…</source>
+        <source>Measure properties…</source>
         <translation>Đặc tính ô nhịp…</translation>
     </message>
     <message>
@@ -14581,12 +14581,12 @@ Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
     <name>Ms::StaffTextProperties</name>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="58"/>
-        <source>System Text Properties</source>
+        <source>System Text properties</source>
         <translation>Thuộc tính chữ của hệ thống</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="65"/>
-        <source>Staff Text Properties</source>
+        <source>Staff Text properties</source>
         <translation>Thuộc tính chữ khuông nhạc</translation>
     </message>
 </context>
@@ -14800,7 +14800,7 @@ Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
     <name>Ms::TimeDialog</name>
     <message>
         <location filename="../../mscore/timedialog.cpp" line="41"/>
-        <source>Time Signatures</source>
+        <source>Time signatures</source>
         <translation>Khóa nhịp</translation>
     </message>
 </context>
@@ -14815,7 +14815,7 @@ Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
     <message>
         <location filename="../../mscore/timeline.cpp" line="753"/>
         <location filename="../../mscore/timeline.cpp" line="1053"/>
-        <source>Time Signature</source>
+        <source>Time signature</source>
         <translation>Khóa nhịp</translation>
     </message>
     <message>
@@ -14829,7 +14829,7 @@ Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
         <location filename="../../mscore/timeline.cpp" line="967"/>
         <location filename="../../mscore/timeline.cpp" line="971"/>
         <location filename="../../mscore/timeline.cpp" line="1118"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>Hóa biểu</translation>
     </message>
     <message>
@@ -14862,7 +14862,7 @@ Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
     </message>
     <message>
         <location filename="../../mscore/timeline.cpp" line="1188"/>
-        <source>Custom Key Signature</source>
+        <source>Custom Key signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -15099,17 +15099,17 @@ Vui lòng chọn một ô nhịp và thử lại lần nữa</translation>
     <name>Ms::WorkspaceDialog</name>
     <message>
         <location filename="../../mscore/workspacedialog.cpp" line="81"/>
-        <source>Edit Workspace</source>
+        <source>Edit workspace</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/workspacedialog.cpp" line="89"/>
-        <source>Create New Workspace</source>
+        <source>Create New workspace</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/workspacedialog.cpp" line="117"/>
-        <source>Read Workspace Name</source>
+        <source>Read workspace Name</source>
         <translation>Đọc tên kh/gian làm việc</translation>
     </message>
     <message>
@@ -15365,7 +15365,7 @@ vui lòng chọn một tên khác:</translation>
     </message>
     <message>
         <location filename="../../mscore/note_groups.ui" line="173"/>
-        <source>Beam Properties</source>
+        <source>Beam properties</source>
         <translation>Kiểu nối cờ nốt</translation>
     </message>
 </context>
@@ -15602,7 +15602,7 @@ vui lòng chọn một tên khác:</translation>
     <message>
         <location filename="../../mscore/menus.cpp" line="445"/>
         <location filename="../../mscore/noteGroups.cpp" line="89"/>
-        <source>Beam Properties</source>
+        <source>Beam properties</source>
         <translation>Kiểu nối cờ nốt</translation>
     </message>
     <message>
@@ -15614,7 +15614,7 @@ vui lòng chọn một tên khác:</translation>
         <location filename="../../mscore/masterpalette.cpp" line="227"/>
         <location filename="../../mscore/menus.cpp" line="551"/>
         <location filename="../../mscore/musescore.cpp" line="5983"/>
-        <source>Key Signatures</source>
+        <source>Key signatures</source>
         <translation>Hóa biểu</translation>
     </message>
     <message>
@@ -16094,7 +16094,7 @@ trong bản nhạc Thánh ca.</translation>
         <location filename="../../mscore/masterpalette.cpp" line="228"/>
         <location filename="../../mscore/menus.cpp" line="1673"/>
         <location filename="../../mscore/musescore.cpp" line="5985"/>
-        <source>Time Signatures</source>
+        <source>Time signatures</source>
         <translation>Khóa nhịp</translation>
     </message>
     <message>
@@ -16154,12 +16154,12 @@ báo lỗi:</translation>
     <name>PaletteCellProperties</name>
     <message>
         <location filename="../../mscore/paletteCellProperties.ui" line="14"/>
-        <source>Cell Properties</source>
+        <source>Cell properties</source>
         <translation>Thuộc tính công cụ</translation>
     </message>
     <message>
         <location filename="../../mscore/paletteCellProperties.ui" line="20"/>
-        <source>Palette Cell Properties</source>
+        <source>Palette cell properties</source>
         <translation>Bảng thuộc tính công cụ</translation>
     </message>
     <message>
@@ -16203,7 +16203,7 @@ báo lỗi:</translation>
     <name>PaletteProperties</name>
     <message>
         <location filename="../../mscore/paletteProperties.ui" line="14"/>
-        <source>Palette Properties</source>
+        <source>Palette properties</source>
         <translation>Đặc tính của bảng danh sách</translation>
     </message>
     <message>
@@ -16738,7 +16738,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="524"/>
-        <source>Update Translations</source>
+        <source>Update translations</source>
         <translation>Cập nhập ngôn ngữ</translation>
     </message>
     <message>
@@ -16982,7 +16982,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="534"/>
-        <source>OSC Remote Control</source>
+        <source>OSC remote control</source>
         <translation>OSC điều khiển từ xa</translation>
     </message>
     <message>
@@ -17109,7 +17109,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="891"/>
-        <source>Choose Background wallpaper file</source>
+        <source>Choose background wallpaper file</source>
         <translation>Chọn tập tin ảnh nền</translation>
     </message>
     <message>
@@ -17208,7 +17208,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1198"/>
         <location filename="../../mscore/prefsdialog.ui" line="1204"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>Nhập nốt</translation>
     </message>
     <message>
@@ -17246,7 +17246,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1339"/>
-        <source>MIDI Remote Control</source>
+        <source>MIDI remote control</source>
         <translation>Điều khiển MIDI từ xa</translation>
     </message>
     <message>
@@ -17599,7 +17599,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3198"/>
-        <source>Audio Engine</source>
+        <source>Audio engine</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -17609,7 +17609,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2465"/>
-        <source>Default Files</source>
+        <source>Default files</source>
         <translation>Các tập tin mặc định</translation>
     </message>
     <message>
@@ -17840,7 +17840,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3250"/>
-        <source>Style Used for Import</source>
+        <source>Style used for import</source>
         <translation>Định kiểu được dùng khi Nhập liệu</translation>
     </message>
     <message>
@@ -17875,7 +17875,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1062"/>
-        <source>Scroll Pages</source>
+        <source>Scroll pages</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -17916,7 +17916,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1272"/>
-        <source>Play Notes When Editing</source>
+        <source>Play notes when editing</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -18012,7 +18012,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3304"/>
-        <source>Character Set Used When Importing Binary Files</source>
+        <source>Character set used when importing binary files</source>
         <translation>Bộ ký tự sử dụng khi nhập dữ liệu từ tập tin nhị phân</translation>
     </message>
     <message>
@@ -18322,7 +18322,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4042"/>
         <location filename="../../mscore/prefsdialog.ui" line="4045"/>
-        <source>Automatic Update Check</source>
+        <source>Automatic update check</source>
         <translation>Tự động Kiểm tra Cập nhật</translation>
     </message>
     <message>
@@ -19717,7 +19717,7 @@ Bạn muốn ghi đè không?</translation>
     <name>ShortcutCaptureDialogBase</name>
     <message>
         <location filename="../../mscore/shortcutcapturedialog.ui" line="14"/>
-        <source>Enter Shortcut Sequence</source>
+        <source>Enter shortcut sequence</source>
         <translation>Nhập dãy phím tắt</translation>
     </message>
     <message>
@@ -20650,7 +20650,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     <name>TimeDialogBase</name>
     <message>
         <location filename="../../mscore/timedialog.ui" line="41"/>
-        <source>Create Time Signature</source>
+        <source>Create Time signature</source>
         <translation>Tạo khóa nhịp</translation>
     </message>
     <message>
@@ -20722,7 +20722,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     <message>
         <location filename="../../mscore/timesigproperties.ui" line="14"/>
         <location filename="../../mscore/timesigproperties.ui" line="34"/>
-        <source>Time Signature Properties</source>
+        <source>Time signature properties</source>
         <translation>Đặc tính khóa nhịp</translation>
     </message>
     <message>
@@ -20772,7 +20772,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     <name>TimesigWizard</name>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="17"/>
-        <source>Time Signature Wizard</source>
+        <source>Time signature Wizard</source>
         <translation>Trình tạo khóa nhịp</translation>
     </message>
     <message>
@@ -20782,7 +20782,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="32"/>
-        <source>Enter Time Signature:</source>
+        <source>Enter Time signature:</source>
         <translation>Nhập khóa nhịp:</translation>
     </message>
     <message>
@@ -21335,42 +21335,42 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="160"/>
-        <source>Hide/Delete Palette</source>
+        <source>Hide/delete palette</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="160"/>
-        <source>Hide Palette</source>
+        <source>Hide palette</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="164"/>
-        <source>Insert New Palette</source>
+        <source>Insert new palette</source>
         <translation>Chêm vào bảng danh sách mới</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="169"/>
-        <source>Enable Editing</source>
+        <source>Enable editing</source>
         <translation>Cho phép điều chỉnh</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="176"/>
-        <source>Reset Palette</source>
+        <source>Reset palette</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="180"/>
-        <source>Save Palette…</source>
+        <source>Save palette…</source>
         <translation>Lưu bảng công cụ…</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="184"/>
-        <source>Load Palette…</source>
+        <source>Load palette…</source>
         <translation>Nạp bảng cộng cụ…</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="189"/>
-        <source>Palette Properties…</source>
+        <source>Palette properties…</source>
         <translation>Thuộc tính bảng công cụ…</translation>
     </message>
 </context>
@@ -21426,7 +21426,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     <name>TremoloBarDialog</name>
     <message>
         <location filename="../../mscore/tremolobar.ui" line="14"/>
-        <source>Tremolo Bar Properties</source>
+        <source>Tremolo Bar properties</source>
         <translation>Thuộc tính ô nhịp Tremolo</translation>
     </message>
     <message>
@@ -21569,7 +21569,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     <name>Workspace</name>
     <message>
         <location filename="../../mscore/workspace.cpp" line="298"/>
-        <source>Writing Workspace File
+        <source>Writing workspace File
 %1
 failed: </source>
         <translation>Ghi Tập tin kh/gian làm việc
@@ -21578,7 +21578,7 @@ bị lỗi:</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="299"/>
-        <source>Writing Workspace File</source>
+        <source>Writing workspace File</source>
         <translation>Đang khi tập tin kh/gian làm việc</translation>
     </message>
 </context>
@@ -21900,7 +21900,7 @@ trong chuỗi thao tác đã làm
     <message>
         <location filename="../../mscore/shortcut.cpp" line="268"/>
         <location filename="../../mscore/shortcut.cpp" line="1965"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>Nhập nốt</translation>
     </message>
     <message>
@@ -22600,7 +22600,7 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="946"/>
-        <source>Apply Current Palette Element</source>
+        <source>Apply Current palette Element</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -23471,7 +23471,7 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1945"/>
-        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
+        <source>Toggle &apos;Playback controls&apos; toolbar</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -24228,7 +24228,7 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1944"/>
-        <source>Playback Controls</source>
+        <source>Playback controls</source>
         <translation>Khung phát nhạc</translation>
     </message>
     <message>
@@ -24245,7 +24245,7 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1966"/>
-        <source>Toggle &apos;Note Input&apos; toolbar</source>
+        <source>Toggle &apos;Note input&apos; toolbar</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -24687,7 +24687,7 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2395"/>
-        <source>Score Properties…</source>
+        <source>Score properties…</source>
         <translation>Thuộc tính bản nhạc…</translation>
     </message>
     <message>
@@ -25263,7 +25263,7 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3042"/>
-        <source>Key Signatures…</source>
+        <source>Key signatures…</source>
         <translation>Các Hóa biểu…</translation>
     </message>
     <message>
@@ -25273,7 +25273,7 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3052"/>
-        <source>Time Signatures…</source>
+        <source>Time signatures…</source>
         <translation>Khóa nhịp…</translation>
     </message>
     <message>
@@ -27701,7 +27701,7 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="52"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>Hóa biểu</translation>
     </message>
     <message>
@@ -27711,7 +27711,7 @@ trong chuỗi thao tác đã làm
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="54"/>
-        <source>Time Signature</source>
+        <source>Time signature</source>
         <translation>Khóa nhịp</translation>
     </message>
     <message>
@@ -31644,7 +31644,7 @@ Measure is not empty</source>
     <name>toolbar</name>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="21"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>Nhập nốt</translation>
     </message>
     <message>
@@ -31654,7 +31654,7 @@ Measure is not empty</source>
     </message>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="23"/>
-        <source>Playback Controls</source>
+        <source>Playback controls</source>
         <translation>Khung phát nhạc</translation>
     </message>
 </context>

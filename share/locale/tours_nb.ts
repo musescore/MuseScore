@@ -17,7 +17,7 @@
         <translation>Noteskrivings-verktøylinjen lar deg legge inn noter og pauser i partituret.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>I palettene finner du de fleste notasjonselementene du trenger.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Hver palett inneholder elementer som kan legges til i partituret.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Velkommen til Paletter, hvor du kan finne diverse elementer å legge til partituret ditt. Trykk &quot;Neste&quot; for å lære mer.</translation>
     </message>

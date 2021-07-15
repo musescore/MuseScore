@@ -17,7 +17,7 @@
         <translation>Noodisisestuse tööriistariba lubab sul oma partituuri noote ja pause sisestada.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>Paletid võimaldavad sul lisada enamikke teisi märke elemente oma partituuri.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Iga palett sisaldab partituurile lisatavaid elemente.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Tere tulemast palettide vaatesse, kus saad lisada erinevaid elemente oma partituuri. Lisainfo saamiseks vajuta &quot;Edasi&quot;.</translation>
     </message>

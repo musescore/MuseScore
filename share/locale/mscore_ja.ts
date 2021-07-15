@@ -164,7 +164,7 @@
     <name>ArticulationProperties</name>
     <message>
         <location filename="../../mscore/articulation.ui" line="14"/>
-        <source>Articulation Properties</source>
+        <source>Articulation properties</source>
         <translation>アーティキュレーション プロパティ</translation>
     </message>
     <message>
@@ -706,12 +706,12 @@
     <name>EditInstrumentBase</name>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="14"/>
-        <source>Edit Instrument Properties</source>
+        <source>Edit Instrument properties</source>
         <translation>楽器のプロパティを編集</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="20"/>
-        <source>Instrument Properties</source>
+        <source>Instrument properties</source>
         <translation>楽器のプロパティ</translation>
     </message>
     <message>
@@ -1563,7 +1563,7 @@
     <name>EditStaffBase</name>
     <message>
         <location filename="../../mscore/editstaff.ui" line="315"/>
-        <source>Part Properties</source>
+        <source>Part properties</source>
         <translation>パートのプロパティ</translation>
     </message>
     <message>
@@ -1593,7 +1593,7 @@
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="26"/>
-        <source>Staff/Part Properties</source>
+        <source>Staff/part properties</source>
         <translation>譜表 / パート のプロパティ</translation>
     </message>
     <message>
@@ -1834,12 +1834,12 @@
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="44"/>
-        <source>Staff Properties</source>
+        <source>Staff properties</source>
         <translation>譜表のプロパティ</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="135"/>
-        <source>Advanced Style Properties…</source>
+        <source>Advanced Style properties…</source>
         <translation>高度なスタイルのプロパティ…</translation>
     </message>
     <message>
@@ -4258,7 +4258,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2553"/>
-        <source>♮ in Key Signatures</source>
+        <source>♮ in Key signatures</source>
         <translation>調号を変更した場合のナチュラルの配置</translation>
     </message>
     <message>
@@ -7359,12 +7359,12 @@ space unit</extracomment>
     <name>InspectorKeySig</name>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="14"/>
-        <source>Key Signature Inspector</source>
+        <source>Key signature Inspector</source>
         <translation>調号 インスペクタ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="57"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>調号</translation>
     </message>
     <message>
@@ -9315,12 +9315,12 @@ space unit</extracomment>
     <name>InspectorTimeSig</name>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="14"/>
-        <source>Time Signature Inspector</source>
+        <source>Time signature Inspector</source>
         <translation>拍子記号 インスペクタ</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="60"/>
-        <source>Time Signature</source>
+        <source>Time signature</source>
         <translation>拍子記号</translation>
     </message>
     <message>
@@ -10178,7 +10178,7 @@ space unit</extracomment>
     <name>KeyEdit</name>
     <message>
         <location filename="../../mscore/keyedit.ui" line="38"/>
-        <source>Create Key Signature</source>
+        <source>Create Key signature</source>
         <translation>調号作成</translation>
     </message>
     <message>
@@ -10609,7 +10609,7 @@ tuplet would cross measure</source>
     <name>MeasurePropertiesBase</name>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="17"/>
-        <source>Measure Properties</source>
+        <source>Measure properties</source>
         <translation>小節のプロパティ</translation>
     </message>
     <message>
@@ -10849,7 +10849,7 @@ tuplet would cross measure</source>
     <name>MetaEditDialog</name>
     <message>
         <location filename="../../mscore/metaedit.ui" line="14"/>
-        <source>Score Properties</source>
+        <source>Score properties</source>
         <translation>スコアのプロパティ</translation>
     </message>
     <message>
@@ -11546,7 +11546,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="464"/>
-        <source>(in File &gt; Score Properties…):</source>
+        <source>(in File &gt; Score properties…):</source>
         <translation>(ファイル &gt; スコアのプロパティ…):</translation>
     </message>
     <message>
@@ -11894,7 +11894,7 @@ failed: %2</source>
     <name>Ms::KeyEditor</name>
     <message>
         <location filename="../../mscore/keyedit.cpp" line="271"/>
-        <source>Key Signatures</source>
+        <source>Key signatures</source>
         <translation>調号</translation>
     </message>
 </context>
@@ -12035,7 +12035,7 @@ failed: %2</source>
     <name>Ms::MeasureProperties</name>
     <message>
         <location filename="../../mscore/measureproperties.cpp" line="123"/>
-        <source>Measure Properties for Measure %1</source>
+        <source>Measure properties for Measure %1</source>
         <translation>%1 小節目のプロパティ</translation>
     </message>
     <message>
@@ -12427,18 +12427,18 @@ before closing?</source>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1348"/>
-        <source>Load Palette</source>
+        <source>Load palette</source>
         <translation>パレットの読み込み</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1349"/>
         <location filename="../../mscore/file.cpp" line="1353"/>
-        <source>MuseScore Palette</source>
+        <source>MuseScore palette</source>
         <translation>MuseScore パレット</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1352"/>
-        <source>Save Palette</source>
+        <source>Save palette</source>
         <translation>パレットの保存</translation>
     </message>
     <message>
@@ -12767,7 +12767,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2019"/>
-        <source>Playback Controls</source>
+        <source>Playback controls</source>
         <translation>再生コントロール</translation>
     </message>
     <message>
@@ -12782,7 +12782,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2022"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>音符入力モード</translation>
     </message>
     <message>
@@ -13201,7 +13201,7 @@ connection enabled</source>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="383"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>調号</translation>
     </message>
     <message>
@@ -13211,7 +13211,7 @@ connection enabled</source>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="396"/>
-        <source>Key Signature: %1</source>
+        <source>Key signature: %1</source>
         <translation>調号: %1</translation>
     </message>
     <message>
@@ -13311,7 +13311,7 @@ connection enabled</source>
     </message>
     <message>
         <location filename="../../mscore/palette/palettewidget.cpp" line="121"/>
-        <source>Single Palette</source>
+        <source>Single palette</source>
         <translation>シングルパレット</translation>
     </message>
 </context>
@@ -13332,12 +13332,12 @@ connection enabled</source>
     <name>Ms::PaletteElementEditor</name>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="62"/>
-        <source>Create Key Signature</source>
+        <source>Create Key signature</source>
         <translation>調号作成</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="64"/>
-        <source>Create Time Signature</source>
+        <source>Create Time signature</source>
         <translation>拍子記号を作成します</translation>
     </message>
     <message>
@@ -13856,7 +13856,7 @@ This plugin requires an open score to run.
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="768"/>
-        <source>Choose Background Wallpaper</source>
+        <source>Choose background wallpaper</source>
         <translation>背景を選択してください</translation>
     </message>
     <message>
@@ -14344,12 +14344,12 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="127"/>
-        <source>Articulation Properties…</source>
+        <source>Articulation properties…</source>
         <translation>アーティキュレーションのプロパティ…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="137"/>
-        <source>Tremolo Bar Properties…</source>
+        <source>Tremolo Bar properties…</source>
         <translation>トレモロバーのプロパティ…</translation>
     </message>
     <message>
@@ -14361,17 +14361,17 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="170"/>
-        <source>Hide Courtesy Time Signature</source>
+        <source>Hide Courtesy Time signature</source>
         <translation>慣例の拍子記号を非表示にする</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="171"/>
-        <source>Show Courtesy Time Signature</source>
+        <source>Show Courtesy Time signature</source>
         <translation>慣例の拍子記号を表示する</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="176"/>
-        <source>Time Signature Properties…</source>
+        <source>Time signature properties…</source>
         <translation>拍子記号のプロパティ…</translation>
     </message>
     <message>
@@ -14386,7 +14386,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="196"/>
-        <source>System Text Properties…</source>
+        <source>System Text properties…</source>
         <translation> 段テキストのプロパティ…</translation>
     </message>
     <message>
@@ -14394,27 +14394,27 @@ failed: %2</source>
         <location filename="../../mscore/propertymenu.cpp" line="249"/>
         <location filename="../../mscore/propertymenu.cpp" line="274"/>
         <location filename="../../mscore/scoreview.cpp" line="394"/>
-        <source>Staff/Part Properties…</source>
+        <source>Staff/part properties…</source>
         <translation>譜表 / パート のプロパティ…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="192"/>
-        <source>Staff Text Properties…</source>
+        <source>Staff Text properties…</source>
         <translation>譜表テキストのプロパティ…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="216"/>
-        <source>Hide Courtesy Key Signature</source>
+        <source>Hide Courtesy Key signature</source>
         <translation>慣例の調号を非表示にする</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="217"/>
-        <source>Show Courtesy Key Signature</source>
+        <source>Show Courtesy Key signature</source>
         <translation>慣例の調号を表示する</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="222"/>
-        <source>Change Instrument Properties…</source>
+        <source>Change Instrument properties…</source>
         <translation>楽器プロパティの変更…</translation>
     </message>
     <message>
@@ -14435,7 +14435,7 @@ failed: %2</source>
         <location filename="../../mscore/propertymenu.cpp" line="237"/>
         <location filename="../../mscore/propertymenu.cpp" line="255"/>
         <location filename="../../mscore/scoreview.cpp" line="419"/>
-        <source>Measure Properties…</source>
+        <source>Measure properties…</source>
         <translation>小節のプロパティ…</translation>
     </message>
     <message>
@@ -14616,12 +14616,12 @@ Please select a measure and try again</source>
     <name>Ms::StaffTextProperties</name>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="58"/>
-        <source>System Text Properties</source>
+        <source>System Text properties</source>
         <translation>段テキストプロパティ</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="65"/>
-        <source>Staff Text Properties</source>
+        <source>Staff Text properties</source>
         <translation>譜表テキストのプロパティ</translation>
     </message>
 </context>
@@ -14838,7 +14838,7 @@ Please select a measure and try again</source>
     <name>Ms::TimeDialog</name>
     <message>
         <location filename="../../mscore/timedialog.cpp" line="41"/>
-        <source>Time Signatures</source>
+        <source>Time signatures</source>
         <translation>拍子記号</translation>
     </message>
 </context>
@@ -14853,7 +14853,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/timeline.cpp" line="753"/>
         <location filename="../../mscore/timeline.cpp" line="1053"/>
-        <source>Time Signature</source>
+        <source>Time signature</source>
         <translation>拍子記号</translation>
     </message>
     <message>
@@ -14867,7 +14867,7 @@ Please select a measure and try again</source>
         <location filename="../../mscore/timeline.cpp" line="967"/>
         <location filename="../../mscore/timeline.cpp" line="971"/>
         <location filename="../../mscore/timeline.cpp" line="1118"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>調号</translation>
     </message>
     <message>
@@ -14900,7 +14900,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <location filename="../../mscore/timeline.cpp" line="1188"/>
-        <source>Custom Key Signature</source>
+        <source>Custom Key signature</source>
         <translation>カスタム調号</translation>
     </message>
     <message>
@@ -15139,17 +15139,17 @@ Please select a measure and try again</source>
     <name>Ms::WorkspaceDialog</name>
     <message>
         <location filename="../../mscore/workspacedialog.cpp" line="81"/>
-        <source>Edit Workspace</source>
+        <source>Edit workspace</source>
         <translation>ワークスペースの編集</translation>
     </message>
     <message>
         <location filename="../../mscore/workspacedialog.cpp" line="89"/>
-        <source>Create New Workspace</source>
+        <source>Create New workspace</source>
         <translation>新しいワークスペースの作成</translation>
     </message>
     <message>
         <location filename="../../mscore/workspacedialog.cpp" line="117"/>
-        <source>Read Workspace Name</source>
+        <source>Read workspace Name</source>
         <translation>ワークスペース名の読み込み</translation>
     </message>
     <message>
@@ -15405,7 +15405,7 @@ please choose a different name:</source>
     </message>
     <message>
         <location filename="../../mscore/note_groups.ui" line="173"/>
-        <source>Beam Properties</source>
+        <source>Beam properties</source>
         <translation>連桁のプロパティ</translation>
     </message>
 </context>
@@ -15642,7 +15642,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="445"/>
         <location filename="../../mscore/noteGroups.cpp" line="89"/>
-        <source>Beam Properties</source>
+        <source>Beam properties</source>
         <translation>連桁のプロパティ</translation>
     </message>
     <message>
@@ -15654,7 +15654,7 @@ please choose a different name:</source>
         <location filename="../../mscore/masterpalette.cpp" line="227"/>
         <location filename="../../mscore/menus.cpp" line="551"/>
         <location filename="../../mscore/musescore.cpp" line="5983"/>
-        <source>Key Signatures</source>
+        <source>Key signatures</source>
         <translation>調号</translation>
     </message>
     <message>
@@ -16130,7 +16130,7 @@ please choose a different name:</source>
         <location filename="../../mscore/masterpalette.cpp" line="228"/>
         <location filename="../../mscore/menus.cpp" line="1673"/>
         <location filename="../../mscore/musescore.cpp" line="5985"/>
-        <source>Time Signatures</source>
+        <source>Time signatures</source>
         <translation>拍子記号</translation>
     </message>
     <message>
@@ -16191,12 +16191,12 @@ failed: </source>
     <name>PaletteCellProperties</name>
     <message>
         <location filename="../../mscore/paletteCellProperties.ui" line="14"/>
-        <source>Cell Properties</source>
+        <source>Cell properties</source>
         <translation>セルのプロパティ</translation>
     </message>
     <message>
         <location filename="../../mscore/paletteCellProperties.ui" line="20"/>
-        <source>Palette Cell Properties</source>
+        <source>Palette cell properties</source>
         <translation>パレットの詳細設定</translation>
     </message>
     <message>
@@ -16240,7 +16240,7 @@ failed: </source>
     <name>PaletteProperties</name>
     <message>
         <location filename="../../mscore/paletteProperties.ui" line="14"/>
-        <source>Palette Properties</source>
+        <source>Palette properties</source>
         <translation>パレットのプロパティ</translation>
     </message>
     <message>
@@ -16776,7 +16776,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="524"/>
-        <source>Update Translations</source>
+        <source>Update translations</source>
         <translation>翻訳の更新</translation>
     </message>
     <message>
@@ -17020,7 +17020,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="534"/>
-        <source>OSC Remote Control</source>
+        <source>OSC remote control</source>
         <translation>OSC リモートコントロール</translation>
     </message>
     <message>
@@ -17147,7 +17147,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="891"/>
-        <source>Choose Background wallpaper file</source>
+        <source>Choose background wallpaper file</source>
         <translation>背景画像を選択してください</translation>
     </message>
     <message>
@@ -17246,7 +17246,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1198"/>
         <location filename="../../mscore/prefsdialog.ui" line="1204"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>音符入力モード</translation>
     </message>
     <message>
@@ -17284,7 +17284,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1339"/>
-        <source>MIDI Remote Control</source>
+        <source>MIDI remote control</source>
         <translation>MIDI リモートコントロール</translation>
     </message>
     <message>
@@ -17637,7 +17637,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3198"/>
-        <source>Audio Engine</source>
+        <source>Audio engine</source>
         <translation>オーディオエンジン</translation>
     </message>
     <message>
@@ -17647,7 +17647,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2465"/>
-        <source>Default Files</source>
+        <source>Default files</source>
         <translation>既定のファイル</translation>
     </message>
     <message>
@@ -17919,7 +17919,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1062"/>
-        <source>Scroll Pages</source>
+        <source>Scroll pages</source>
         <translation>スクロール ページ</translation>
     </message>
     <message>
@@ -17960,7 +17960,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1272"/>
-        <source>Play Notes When Editing</source>
+        <source>Play notes when editing</source>
         <translation>編集時に音を鳴らす</translation>
     </message>
     <message>
@@ -18056,7 +18056,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3304"/>
-        <source>Character Set Used When Importing Binary Files</source>
+        <source>Character set used when importing binary files</source>
         <translation>バイナリファイルをインポートするときに使用する文字セット</translation>
     </message>
     <message>
@@ -18366,7 +18366,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4042"/>
         <location filename="../../mscore/prefsdialog.ui" line="4045"/>
-        <source>Automatic Update Check</source>
+        <source>Automatic update check</source>
         <translation>自動アップデートチェック</translation>
     </message>
     <message>
@@ -19769,7 +19769,7 @@ Do you want to overwrite it?</source>
     <name>ShortcutCaptureDialogBase</name>
     <message>
         <location filename="../../mscore/shortcutcapturedialog.ui" line="14"/>
-        <source>Enter Shortcut Sequence</source>
+        <source>Enter shortcut sequence</source>
         <translation>ショートカットキーの組み合わせを入力</translation>
     </message>
     <message>
@@ -20706,7 +20706,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     <name>TimeDialogBase</name>
     <message>
         <location filename="../../mscore/timedialog.ui" line="41"/>
-        <source>Create Time Signature</source>
+        <source>Create Time signature</source>
         <translation>拍子記号を作成</translation>
     </message>
     <message>
@@ -20778,7 +20778,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     <message>
         <location filename="../../mscore/timesigproperties.ui" line="14"/>
         <location filename="../../mscore/timesigproperties.ui" line="34"/>
-        <source>Time Signature Properties</source>
+        <source>Time signature properties</source>
         <translation>拍子記号のプロパティ</translation>
     </message>
     <message>
@@ -20828,7 +20828,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     <name>TimesigWizard</name>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="17"/>
-        <source>Time Signature Wizard</source>
+        <source>Time signature Wizard</source>
         <translation>拍子ウィザード</translation>
     </message>
     <message>
@@ -20838,7 +20838,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="32"/>
-        <source>Enter Time Signature:</source>
+        <source>Enter Time signature:</source>
         <translation>拍子の設定:</translation>
     </message>
     <message>
@@ -21391,42 +21391,42 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="160"/>
-        <source>Hide/Delete Palette</source>
+        <source>Hide/delete palette</source>
         <translation>パレットを隠す/削除</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="160"/>
-        <source>Hide Palette</source>
+        <source>Hide palette</source>
         <translation>パレットを隠す</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="164"/>
-        <source>Insert New Palette</source>
+        <source>Insert new palette</source>
         <translation>新しいパレットの挿入</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="169"/>
-        <source>Enable Editing</source>
+        <source>Enable editing</source>
         <translation>編集可能</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="176"/>
-        <source>Reset Palette</source>
+        <source>Reset palette</source>
         <translation>パレットをリセット</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="180"/>
-        <source>Save Palette…</source>
+        <source>Save palette…</source>
         <translation>パレットの保存…</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="184"/>
-        <source>Load Palette…</source>
+        <source>Load palette…</source>
         <translation>パレットの読み込み…</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="189"/>
-        <source>Palette Properties…</source>
+        <source>Palette properties…</source>
         <translation>パレットのプロパティ…</translation>
     </message>
 </context>
@@ -21482,7 +21482,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     <name>TremoloBarDialog</name>
     <message>
         <location filename="../../mscore/tremolobar.ui" line="14"/>
-        <source>Tremolo Bar Properties</source>
+        <source>Tremolo Bar properties</source>
         <translation>トレモロバーのプロパティ</translation>
     </message>
     <message>
@@ -21625,7 +21625,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     <name>Workspace</name>
     <message>
         <location filename="../../mscore/workspace.cpp" line="298"/>
-        <source>Writing Workspace File
+        <source>Writing workspace File
 %1
 failed: </source>
         <translation>ワーキングスペースファイル
@@ -21634,7 +21634,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="299"/>
-        <source>Writing Workspace File</source>
+        <source>Writing workspace File</source>
         <translation>ワークスペースファイルを書き込み中</translation>
     </message>
 </context>
@@ -21952,7 +21952,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="268"/>
         <location filename="../../mscore/shortcut.cpp" line="1965"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>音符入力モード</translation>
     </message>
     <message>
@@ -22651,7 +22651,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="946"/>
-        <source>Apply Current Palette Element</source>
+        <source>Apply Current palette Element</source>
         <translation>現在のパレットの要素を適用</translation>
     </message>
     <message>
@@ -23522,7 +23522,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1945"/>
-        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
+        <source>Toggle &apos;Playback controls&apos; toolbar</source>
         <translation>再生コントロール ツールバー 切替</translation>
     </message>
     <message>
@@ -24279,7 +24279,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1944"/>
-        <source>Playback Controls</source>
+        <source>Playback controls</source>
         <translation>再生コントロール</translation>
     </message>
     <message>
@@ -24296,7 +24296,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1966"/>
-        <source>Toggle &apos;Note Input&apos; toolbar</source>
+        <source>Toggle &apos;Note input&apos; toolbar</source>
         <translation>音符入力ツールバー 切替</translation>
     </message>
     <message>
@@ -24737,7 +24737,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2395"/>
-        <source>Score Properties…</source>
+        <source>Score properties…</source>
         <translation>スコアのプロパティ…</translation>
     </message>
     <message>
@@ -25313,7 +25313,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3042"/>
-        <source>Key Signatures…</source>
+        <source>Key signatures…</source>
         <translation>調号…</translation>
     </message>
     <message>
@@ -25323,7 +25323,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3052"/>
-        <source>Time Signatures…</source>
+        <source>Time signatures…</source>
         <translation>拍子記号…</translation>
     </message>
     <message>
@@ -27751,7 +27751,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="52"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>調号</translation>
     </message>
     <message>
@@ -27761,7 +27761,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="54"/>
-        <source>Time Signature</source>
+        <source>Time signature</source>
         <translation>拍子記号</translation>
     </message>
     <message>
@@ -31695,7 +31695,7 @@ Measure is not empty</source>
     <name>toolbar</name>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="21"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>音符入力モード</translation>
     </message>
     <message>
@@ -31705,7 +31705,7 @@ Measure is not empty</source>
     </message>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="23"/>
-        <source>Playback Controls</source>
+        <source>Playback controls</source>
         <translation>再生コントロール</translation>
     </message>
 </context>

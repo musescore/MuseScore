@@ -17,7 +17,7 @@
         <translation>La barra degli strumenti Inserimento note consente di inserire note e pause nella partitura.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>Le tavolozze permettono di aggiungere la maggior parte degli altri elementi di notazione alla partitura.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Ogni tavolozza contiene elementi che possono essere aggiunti alla partitura.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Benvenuto nella sezione Tavolozze, dove si potranno aggiungere vari elementi alla partitura. Clic su &quot;Avanti&quot; per saperne di più.</translation>
     </message>

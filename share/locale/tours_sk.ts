@@ -17,7 +17,7 @@
         <translation>Pomocou panela nástrojov vkladnia nôt môžete zapisovať noty a pomlčky do notovej osnovy.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>Prostredníctvom paliet mlžete pridať ďalšie prvky do notácie.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Každá paleta obsahuje položky, ktoré môžete pridávať do partitúry.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Vitajte pri paletách, pomocou ktorých môžete pridávať rôzne prvky do vášho notového zápisu. Kliknite na &quot;Ďalej&quot; a dozviete sa viac.</translation>
     </message>

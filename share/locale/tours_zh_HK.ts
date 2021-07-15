@@ -17,7 +17,7 @@
         <translation>音符輸入欄幫助您在樂譜中輸入音符與休止符。</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>符號面板幫助您在樂譜中插入大多數沒有展示在主面板中的符號。</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>每個面板中都有可插入樂譜的記號。</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>歡迎來到工作面板，在這裡您可以在樂譜中加入各種元素。點擊「下一个」以詳細瞭解。</translation>
     </message>

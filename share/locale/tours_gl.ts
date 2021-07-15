@@ -17,7 +17,7 @@
         <translation>A barra de tarefas de Entrada de Notas permite escribir notas e silencios na partitura. </translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>As Paletas permiten agregar moitos outros elementos de notación á partitura.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Cada paleta contén elementos que se poden engadir á partitura.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Benvida a Paletas, desde onde pode engadir distintos elementos á partitura. Prema en «Seguinte» para saber máis.</translation>
     </message>

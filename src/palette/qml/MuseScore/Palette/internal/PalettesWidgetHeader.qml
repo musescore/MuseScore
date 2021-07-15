@@ -79,7 +79,7 @@ Item {
         navigation.panel: keynavSub
         navigation.order: 1
         enabled: !searchTextInput.visible
-        text: qsTrc("palette", "Add Palettes")
+        text: qsTrc("palette", "Add palettes")
         onClicked: {
             palettePopup.visible = !palettePopup.visible
         }

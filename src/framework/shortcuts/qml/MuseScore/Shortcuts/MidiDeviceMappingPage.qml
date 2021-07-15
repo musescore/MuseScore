@@ -61,7 +61,7 @@ Item {
         spacing: 20
 
         CheckBox {
-            text: qsTrc("shortcuts", "MIDI Remote Control")
+            text: qsTrc("shortcuts", "MIDI remote control")
             font: ui.theme.bodyBoldFont
 
             checked: mappingsModel.useRemoteControl

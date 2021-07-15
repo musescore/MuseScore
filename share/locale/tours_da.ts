@@ -17,7 +17,7 @@
         <translation>Værktøjslinjen Nodeindtastning bruger du til at indsætte noder og pauser i nodearket.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>Paletterne giver dig mulighed for, at tilføje de fleste andre notationssymboler til nodearket.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Hver palet indeholder elementer, som du kan tilføje nodearket.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Velkommen til Paletter, hvor du kan tilføje forskellige elementer til dit nodeark. Tryk &quot;Næste&quot; for at lære mere.</translation>
     </message>
