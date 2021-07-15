@@ -42,6 +42,7 @@ void AppearancePreferencesModel::init()
 {
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         emit themesChanged();
+        emit backgroundColorChanged();
     });
 
     uiConfiguration()->fontChanged().onNotify(this, [this]() {
@@ -62,12 +63,27 @@ void AppearancePreferencesModel::init()
     });
 }
 
-QVariantList AppearancePreferencesModel::themes() const
+QVariantList AppearancePreferencesModel::generalThemes() const
 {
     QVariantList result;
 
     for (const ThemeInfo& theme: allThemes()) {
-        result << ThemeConverter::toMap(theme);
+        if (theme.codeKey == LIGHT_THEME_CODE || theme.codeKey == DARK_THEME_CODE) {
+            result << ThemeConverter::toMap(theme);
+        }
+    }
+
+    return result;
+}
+
+QVariantList AppearancePreferencesModel::highContrastThemes() const
+{
+    QVariantList result;
+
+    for (const ThemeInfo& theme : allThemes()) {
+        if (theme.codeKey == HIGH_CONTRAST_BLACK_THEME_CODE || theme.codeKey == HIGH_CONTRAST_WHITE_THEME_CODE) {
+            result << ThemeConverter::toMap(theme);
+        }
     }
 
     return result;
@@ -76,6 +92,37 @@ QVariantList AppearancePreferencesModel::themes() const
 QStringList AppearancePreferencesModel::accentColors() const
 {
     return uiConfiguration()->possibleAccentColors();
+}
+
+//void AppearancePreferencesModel::load()
+//{
+//    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
+//        emit themesChanged();
+//    });
+//}
+
+void AppearancePreferencesModel::resetThemeToDefault()
+{
+    uiConfiguration()->resetCurrentThemeToDefault(currentTheme().codeKey);
+    emit themesChanged();
+}
+
+void AppearancePreferencesModel::setNewColor(const QColor& newColor, const QString& propertyName)
+{
+    //! NOTE: Considered using a "switch()" statement here, but it would require a type conversion
+    //! from std::string to some form of a primitive literal. This has a workaround by implementing
+    //! a hash function, but I went for the "if/else if" ladder instead since we don't have that many cases anyway.
+
+    if (propertyName.toStdString() == "Accent Color:") {
+        uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(newColor));
+    } else if (propertyName.toStdString() == "Text and Icons:") {
+        uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::FONT_PRIMARY_COLOR, Val(newColor));
+    } else if (propertyName.toStdString() == "Disabled Text:") {
+        return;
+    } else if (propertyName.toStdString() == "Border Color:") {
+        uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::STROKE_COLOR, Val(newColor));
+    }
+    emit themesChanged();
 }
 
 QStringList AppearancePreferencesModel::allFonts() const
@@ -94,17 +141,9 @@ QString AppearancePreferencesModel::wallpapersDir() const
     return notationConfiguration()->wallpapersDefaultDirPath().toQString();
 }
 
-int AppearancePreferencesModel::currentThemeIndex() const
+QString AppearancePreferencesModel::currentThemeCode() const
 {
-    ThemeList themes = allThemes();
-
-    for (int i = 0; i < static_cast<int>(themes.size()); ++i) {
-        if (themes[i].codeKey == currentTheme().codeKey) {
-            return i;
-        }
-    }
-
-    return INVALID_INDEX;
+    return QString::fromStdString(currentTheme().codeKey);
 }
 
 int AppearancePreferencesModel::currentAccentColorIndex() const
@@ -172,19 +211,31 @@ QString AppearancePreferencesModel::foregroundWallpaperPath() const
     return notationConfiguration()->foregroundWallpaperPath().toQString();
 }
 
-void AppearancePreferencesModel::setCurrentThemeIndex(int index)
+void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
 {
-    ThemeList themes = allThemes();
-
-    if (index < 0 || index >= static_cast<int>(themes.size())) {
+    if (themeCode == currentThemeCode()) {
         return;
     }
 
-    if (index == currentThemeIndex()) {
-        return;
-    }
+//    ThemeList genThemes;
 
-    uiConfiguration()->setCurrentTheme(themes[index].codeKey);
+//    for (const ThemeInfo& theme : allThemes()) {
+//        if (theme.codeKey == LIGHT_THEME_CODE || theme.codeKey == DARK_THEME_CODE) {
+//            genThemes.push_back(theme);
+//        }
+//    }
+
+//    for (const ThemeInfo& theme : genThemes) {
+//        if (themeCode == QString::fromStdString(theme.codeKey)) {
+//            uiConfiguration()->setCurrentTheme(theme.codeKey);
+//        }
+//    }
+
+    for (const ThemeInfo& theme : allThemes()) {
+        if (themeCode == QString::fromStdString(theme.codeKey)) {
+            uiConfiguration()->setCurrentTheme(theme.codeKey);
+        }
+    }
     emit themesChanged();
 }
 

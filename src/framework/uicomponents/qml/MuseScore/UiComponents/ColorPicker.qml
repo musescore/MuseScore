@@ -83,7 +83,7 @@ Rectangle {
             name: "NORMAL"
             when: !clickableArea.containsMouse && !colorDialog.visible
 
-            PropertyChanges { target: root; border.color: ui.theme.buttonColor }
+            PropertyChanges { target: root; border.color: ui.theme.strokeColor }
         },
 
         State {

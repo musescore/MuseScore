@@ -84,7 +84,7 @@ bool WindowsPlatformTheme::isFollowSystemThemeAvailable() const
 ThemeCode WindowsPlatformTheme::themeCode() const
 {
     if (isSystemHighContrast()) {
-        return HIGH_CONTRAST_THEME_CODE;
+        return HIGH_CONTRAST_BLACK_THEME_CODE;
     }
 
     if (isSystemDarkMode()) {

@@ -54,6 +54,7 @@ static const QMap<ThemeStyleKey, QVariant> LIGHT_THEME_VALUES {
     { ACCENT_COLOR, "#70AFEA" },
     { STROKE_COLOR, "#CED1D4" },
     { BUTTON_COLOR, "#CFD5DD" },
+    { BORDER_WIDTH, 0 },
     { FONT_PRIMARY_COLOR, "#111132" },
     { FONT_SECONDARY_COLOR, "#FFFFFF" },
     { LINK_COLOR, "#70AFEA" },
@@ -78,6 +79,7 @@ static const QMap<ThemeStyleKey, QVariant> DARK_THEME_VALUES {
     { ACCENT_COLOR, "#FF4848" },
     { STROKE_COLOR, "#1E1E1E" },
     { BUTTON_COLOR, "#595959" },
+    { BORDER_WIDTH, 0 },
     { FONT_PRIMARY_COLOR, "#EBEBEB" },
     { FONT_SECONDARY_COLOR, "#BDBDBD" },
     { LINK_COLOR, "#70AFEA" },
@@ -94,16 +96,42 @@ static const QMap<ThemeStyleKey, QVariant> DARK_THEME_VALUES {
     { ITEM_OPACITY_DISABLED, 0.3 }
 };
 
-static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_THEME_VALUES {
+static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_BLACK_THEME_VALUES {
     { BACKGROUND_PRIMARY_COLOR, "#000000" },
     { BACKGROUND_SECONDARY_COLOR, "#000000" },
+    { POPUP_BACKGROUND_COLOR, "#000000" },
+    { TEXT_FIELD_COLOR, "#000000" },
+    { ACCENT_COLOR, "#0071DA" },
+    { STROKE_COLOR, "#FFFFFF" },
+    { BUTTON_COLOR, "#000000" },
+    { BORDER_WIDTH, 5.0 },
+    { FONT_PRIMARY_COLOR, "#FFFD38" },
+    { FONT_SECONDARY_COLOR, "#BDBDBD" },
+    { LINK_COLOR, "#70AFEA" },
+    { FOCUS_COLOR, "#75507b" },
+
+    { ACCENT_OPACITY_NORMAL, 0.3 },
+    { ACCENT_OPACITY_HOVER, 0.15 },
+    { ACCENT_OPACITY_HIT, 0.5 },
+
+    { BUTTON_OPACITY_NORMAL, 0.7 },
+    { BUTTON_OPACITY_HOVER, 0.5 },
+    { BUTTON_OPACITY_HIT, 1.0 },
+
+    { ITEM_OPACITY_DISABLED, 0.3 }
+};
+
+static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_WHITE_THEME_VALUES {
+    { BACKGROUND_PRIMARY_COLOR, "#FFFFFF" },
+    { BACKGROUND_SECONDARY_COLOR, "#FFFFFF" },
     { POPUP_BACKGROUND_COLOR, "#FFFFFF" },
     { TEXT_FIELD_COLOR, "#FFFFFF" },
-    { ACCENT_COLOR, "#19EBFF" },
-    { STROKE_COLOR, "#FFFFFF" },
+    { ACCENT_COLOR, "#00D87D" },
+    { STROKE_COLOR, "#000000" },
     { BUTTON_COLOR, "#FFFFFF" },
-    { FONT_PRIMARY_COLOR, "#FFFFFF" },
-    { FONT_SECONDARY_COLOR, "#FFFFFF" },
+    { BORDER_WIDTH, 5.0 },
+    { FONT_PRIMARY_COLOR, "#1E0073" },
+    { FONT_SECONDARY_COLOR, "#000000" },
     { LINK_COLOR, "#70AFEA" },
     { FOCUS_COLOR, "#75507b" },
 
@@ -257,9 +285,12 @@ ThemeInfo UiConfiguration::makeStandardTheme(const ThemeCode& codeKey) const
     } else if (codeKey == DARK_THEME_CODE) {
         theme.title = trc("ui", "Dark");
         theme.values = DARK_THEME_VALUES;
-    } else if (codeKey == HIGH_CONTRAST_THEME_CODE) {
-        theme.title = trc("ui", "High contrast");
-        theme.values = HIGH_CONTRAST_THEME_VALUES;
+    } else if (codeKey == HIGH_CONTRAST_BLACK_THEME_CODE) {
+        theme.title = trc("ui", "Black");
+        theme.values = HIGH_CONTRAST_BLACK_THEME_VALUES;
+    } else if (codeKey == HIGH_CONTRAST_WHITE_THEME_CODE) {
+        theme.title = trc("ui", "White");
+        theme.values = HIGH_CONTRAST_WHITE_THEME_VALUES;
     }
 
     return theme;
@@ -350,6 +381,24 @@ QStringList UiConfiguration::possibleAccentColors() const
     }
 
     return lightAccentColors;
+}
+
+void UiConfiguration::resetCurrentThemeToDefault(const ThemeCode& codeKey)
+{
+    for (ThemeInfo& theme : m_themes) {
+        if (theme.codeKey != codeKey) {
+            continue;
+        }
+
+        theme = makeStandardTheme(codeKey);
+        writeThemes(m_themes);
+
+        if (theme.codeKey == currentThemeCodeKey()) {
+            notifyAboutCurrentThemeChanged();
+        }
+
+        return;
+    }
 }
 
 const ThemeInfo& UiConfiguration::currentTheme() const

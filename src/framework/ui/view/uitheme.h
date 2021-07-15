@@ -44,6 +44,7 @@ class UiTheme : public QProxyStyle, public async::Asyncable
     Q_PROPERTY(QColor strokeColor READ strokeColor NOTIFY themeChanged)
     Q_PROPERTY(QColor accentColor READ accentColor NOTIFY themeChanged)
     Q_PROPERTY(QColor buttonColor READ buttonColor NOTIFY themeChanged)
+    Q_PROPERTY(qreal borderWidth READ borderWidth NOTIFY themeChanged)
     Q_PROPERTY(QColor fontPrimaryColor READ fontPrimaryColor NOTIFY themeChanged)
     Q_PROPERTY(QColor fontSecondaryColor READ fontSecondaryColor NOTIFY themeChanged)
     Q_PROPERTY(QColor linkColor READ linkColor NOTIFY themeChanged)
@@ -106,6 +107,7 @@ public:
     QFont toolbarIconsFont() const;
     QFont musicalFont() const;
 
+    qreal borderWidth() const;
     qreal accentOpacityNormal() const;
     qreal accentOpacityHover() const;
     qreal accentOpacityHit() const;
@@ -180,6 +182,7 @@ private:
     QColor m_linkColor;
     QColor m_focusColor;
 
+    qreal m_borderWidth = 0;
     qreal m_accentOpacityNormal = 0;
     qreal m_accentOpacityHover = 0;
     qreal m_accentOpacityHit = 0;
