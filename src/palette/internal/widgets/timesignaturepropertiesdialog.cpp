@@ -22,17 +22,18 @@
 
 #include "timesignaturepropertiesdialog.h"
 
-#include "libmscore/timesig.h"
-#include "libmscore/mcursor.h"
-#include "libmscore/durationtype.h"
-#include "libmscore/score.h"
-#include "libmscore/chord.h"
-#include "libmscore/measure.h"
-#include "libmscore/part.h"
-#include "libmscore/scorefont.h"
+#include "engraving/libmscore/timesig.h"
+#include "engraving/libmscore/mcursor.h"
+#include "engraving/libmscore/durationtype.h"
+#include "engraving/libmscore/score.h"
+#include "engraving/libmscore/chord.h"
+#include "engraving/libmscore/measure.h"
+#include "engraving/libmscore/part.h"
+#include "engraving/libmscore/scorefont.h"
 
 #include "commonscene/exampleview.h"
 #include "ui/view/musicalsymbolcodes.h"
+#include "global/widgetstatestore.h"
 
 static QString TIME_SIGNATURE_PROPERTIES_DIALOG_NAME("TimeSignaturePropertiesDialog");
 
@@ -50,20 +51,35 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     setObjectName(TIME_SIGNATURE_PROPERTIES_DIALOG_NAME);
     setupUi(this);
 
-    QFont musicalFont = QFont(QString::fromStdString(uiConfiguration()->musicalFontFamily()));
+    QString musicalFontFamily = QString::fromStdString(uiConfiguration()->musicalFontFamily());
+    int musicalFontSize = uiConfiguration()->musicalFontSize();
 
-    fourfourButton->setFont(musicalFont);
-    fourfourButton->setText(noteIconToString(MusicalSymbolCodes::Code::TIMESIG_COMMON));
-    allaBreveButton->setFont(musicalFont);
-    allaBreveButton->setText(noteIconToString(MusicalSymbolCodes::Code::TIMESIG_CUT));
+    QString radioButtonStyle = QString("QRadioButton { font-family: %1; font-size: %2pt }")
+                               .arg(musicalFontFamily)
+                               .arg(musicalFontSize);
+
+    fourfourButton->setStyleSheet(radioButtonStyle);
+    fourfourButton->setText(musicalSymbolToString(MusicalSymbolCodes::Code::TIMESIG_COMMON));
+    fourfourButton->setMaximumHeight(30);
+    allaBreveButton->setStyleSheet(radioButtonStyle);
+    allaBreveButton->setText(musicalSymbolToString(MusicalSymbolCodes::Code::TIMESIG_CUT));
+    allaBreveButton->setMaximumHeight(30);
 
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    //! FIXME
-    m_timesig = new TimeSig();
+    const INotationInteractionPtr interaction = notation() ? notation()->interaction() : nullptr;
+    const INotationSelectionPtr selection = interaction ? interaction->selection() : nullptr;
+    Element* selectedElement = selection ? selection->element() : nullptr;
+    m_originTimeSig = selectedElement ? toTimeSig(selectedElement) : nullptr;
 
-    zText->setText(m_timesig->numeratorString());
-    nText->setText(m_timesig->denominatorString());
+    if (!m_originTimeSig) {
+        return;
+    }
+
+    m_editedTimeSig = m_originTimeSig->clone();
+
+    zText->setText(m_editedTimeSig->numeratorString());
+    nText->setText(m_editedTimeSig->denominatorString());
     // set validators for numerator and denominator strings
     // which only accept '+', '(', ')', digits and some time symb conventional representations
     QRegExp rx("[0-9+CO()\\x00A2\\x00D8\\x00BD\\x00BC]*");
@@ -71,11 +87,11 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     zText->setValidator(validator);
     nText->setValidator(validator);
 
-    Fraction nominal = m_timesig->sig() / m_timesig->stretch();
+    Fraction nominal = m_editedTimeSig->sig() / m_editedTimeSig->stretch();
     nominal.reduce();
     zNominal->setValue(nominal.numerator());
     nNominal->setValue(nominal.denominator());
-    Fraction sig(m_timesig->sig());
+    Fraction sig(m_editedTimeSig->sig());
     zActual->setValue(sig.numerator());
     nActual->setValue(sig.denominator());
     zNominal->setEnabled(false);
@@ -87,7 +103,7 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     // and not normally the right way to add 7/4 to a score
     zActual->setEnabled(false);
     nActual->setEnabled(false);
-    switch (m_timesig->timeSigType()) {
+    switch (m_editedTimeSig->timeSigType()) {
     case TimeSigType::NORMAL:
         textButton->setChecked(true);
         break;
@@ -128,16 +144,15 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     int idx = 0;
 
     otherCombo->clear();
-    otherCombo->setFont(musicalFont);
 
     for (ProlatioTable pt : prolatioList) {
         const QString& str = scoreFont->toString(pt.id);
         if (str.size() > 0) {
-            otherCombo->addItem(noteIconToString(pt.icon), int(pt.id));
+            otherCombo->addItem(musicalSymbolToString(pt.icon), int(pt.id));
             // if time sig matches this symbol string, set as selected
 
-            if (m_timesig->timeSigType() == TimeSigType::NORMAL && m_timesig->denominatorString().isEmpty()
-                && m_timesig->numeratorString() == str) {
+            if (m_editedTimeSig->timeSigType() == TimeSigType::NORMAL && m_editedTimeSig->denominatorString().isEmpty()
+                && m_editedTimeSig->numeratorString() == str) {
                 textButton->setChecked(false);
                 otherButton->setChecked(true);
                 otherCombo->setCurrentIndex(idx);
@@ -150,11 +165,13 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
         idx++;
     }
 
-    Groups g = m_timesig->groups();
+    Groups g = m_editedTimeSig->groups();
     if (g.empty()) {
-        g = Groups::endings(m_timesig->sig());         // initialize with default
+        g = Groups::endings(m_editedTimeSig->sig());         // initialize with default
     }
-    groups->setSig(m_timesig->sig(), g, m_timesig->numeratorString(), m_timesig->denominatorString());
+    groups->setSig(m_editedTimeSig->sig(), g, m_editedTimeSig->numeratorString(), m_editedTimeSig->denominatorString());
+
+    WidgetStateStore::restoreGeometry(this);
 }
 
 TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(const TimeSignaturePropertiesDialog& other)
@@ -162,11 +179,21 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(const TimeSignature
 {
 }
 
+TimeSignaturePropertiesDialog::~TimeSignaturePropertiesDialog()
+{
+    delete m_editedTimeSig;
+}
+
+void TimeSignaturePropertiesDialog::hideEvent(QHideEvent* event)
+{
+    WidgetStateStore::saveGeometry(this);
+    QDialog::hideEvent(event);
+}
+
 int TimeSignaturePropertiesDialog::static_metaTypeId()
 {
     return QMetaType::type(TIME_SIGNATURE_PROPERTIES_DIALOG_NAME.toStdString().c_str());
 }
-
 
 //---------------------------------------------------------
 //   accept
@@ -174,6 +201,11 @@ int TimeSignaturePropertiesDialog::static_metaTypeId()
 
 void TimeSignaturePropertiesDialog::accept()
 {
+    auto notation = this->notation();
+    if (!notation || !m_editedTimeSig || !m_originTimeSig) {
+        return;
+    }
+
     TimeSigType ts = TimeSigType::NORMAL;
     if (textButton->isChecked() || otherButton->isChecked()) {
         ts = TimeSigType::NORMAL;
@@ -185,26 +217,48 @@ void TimeSignaturePropertiesDialog::accept()
 
     Fraction actual(zActual->value(), nActual->value());
     Fraction nominal(zNominal->value(), nNominal->value());
-    m_timesig->setSig(actual, ts);
-    m_timesig->setStretch(nominal / actual);
+    m_editedTimeSig->setSig(actual, ts);
+    m_editedTimeSig->setStretch(nominal / actual);
 
-    if (zText->text() != m_timesig->numeratorString()) {
-        m_timesig->setNumeratorString(zText->text());
+    if (zText->text() != m_editedTimeSig->numeratorString()) {
+        m_editedTimeSig->setNumeratorString(zText->text());
     }
-    if (nText->text() != m_timesig->denominatorString()) {
-        m_timesig->setDenominatorString(nText->text());
+    if (nText->text() != m_editedTimeSig->denominatorString()) {
+        m_editedTimeSig->setDenominatorString(nText->text());
     }
 
     if (otherButton->isChecked()) {
-        ScoreFont* scoreFont = m_timesig->score()->scoreFont();
+        ScoreFont* scoreFont = m_editedTimeSig->score()->scoreFont();
         SymId symId = (SymId)(otherCombo->itemData(otherCombo->currentIndex()).toInt());
         // ...and set numerator to font string for symbol and denominator to empty string
-        m_timesig->setNumeratorString(scoreFont->toString(symId));
-        m_timesig->setDenominatorString(QString());
+        m_editedTimeSig->setNumeratorString(scoreFont->toString(symId));
+        m_editedTimeSig->setDenominatorString(QString());
     }
 
     Groups g = groups->groups();
-    m_timesig->setGroups(g);
+    m_editedTimeSig->setGroups(g);
+
+    notation->undoStack()->prepareChanges();
+
+    m_originTimeSig->undoChangeProperty(Pid::TIMESIG_TYPE, int(m_editedTimeSig->timeSigType()));
+    m_originTimeSig->undoChangeProperty(Pid::SHOW_COURTESY, m_editedTimeSig->showCourtesySig());
+    m_originTimeSig->undoChangeProperty(Pid::NUMERATOR_STRING, m_editedTimeSig->numeratorString());
+    m_originTimeSig->undoChangeProperty(Pid::DENOMINATOR_STRING, m_editedTimeSig->denominatorString());
+    m_originTimeSig->undoChangeProperty(Pid::GROUPS, QVariant::fromValue<Groups>(g));
+
+    if (m_editedTimeSig->sig() != m_originTimeSig->sig()) {
+        notation->interaction()->addTimeSignature(m_originTimeSig->measure(), m_originTimeSig->staffIdx(), m_editedTimeSig);
+    }
+
+    m_originTimeSig->triggerLayoutAll();
+    notation->undoStack()->commitChanges();
+    notation->notationChanged().notify();
+
     QDialog::accept();
+}
+
+INotationPtr TimeSignaturePropertiesDialog::notation() const
+{
+    return globalContext()->currentNotation();
 }
 }

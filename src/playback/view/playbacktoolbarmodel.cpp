@@ -291,7 +291,7 @@ QVariant PlaybackToolBarModel::tempo() const
     MusicalSymbolCodes::Code noteIcon = tempoDurationToNoteIcon(tempo.duration);
 
     QVariantMap obj;
-    obj["noteSymbol"] = noteIconToString(noteIcon, tempo.withDot);
+    obj["noteSymbol"] = musicalSymbolToString(noteIcon, tempo.withDot);
     obj["value"] = tempo.valueBpm;
 
     return obj;

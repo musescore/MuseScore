@@ -93,7 +93,7 @@ public:
     virtual void editText(QKeyEvent* event) = 0;
     virtual void endEditText() = 0;
     virtual void changeTextCursorPosition(const PointF& newCursorPos) = 0;
-    virtual TextBase* editedText() const = 0;
+    virtual const TextBase* editedText() const = 0;
     virtual async::Notification textEditingStarted() const = 0;
     virtual async::Notification textEditingChanged() const = 0;
 
@@ -146,6 +146,8 @@ public:
     virtual void addFiguredBass() = 0;
 
     virtual void addStretch(qreal value) = 0;
+
+    virtual void addTimeSignature(Measure* measure, int staffIndex, TimeSignature* timeSignature) = 0;
 
     virtual void explodeSelectedStaff() = 0;
     virtual void implodeSelectedStaff() = 0;

@@ -83,7 +83,7 @@ QVariantMap AdditionalInfoModel::Tempo::toMap() const
         { VALUE_KEY, value },
         { NOTE_ICON_KEY, static_cast<int>(noteIcon) },
         { WITH_DOT_KEY, withDot },
-        { NOTE_SYMBOL_KEY, noteIconToString(noteIcon, withDot) }
+        { NOTE_SYMBOL_KEY, musicalSymbolToString(noteIcon, withDot) }
     };
 }
 
@@ -235,7 +235,7 @@ QVariantMap AdditionalInfoModel::tempo() const
 
 int AdditionalInfoModel::currentTempoNoteIndex() const
 {
-    QString selectedNoteSymbol = noteIconToString(m_tempo.noteIcon, m_tempo.withDot);
+    QString selectedNoteSymbol = musicalSymbolToString(m_tempo.noteIcon, m_tempo.withDot);
     QVariantList notes = tempoNotes();
 
     for (int i = 0; i < notes.size(); ++i) {
@@ -259,7 +259,7 @@ QVariantList AdditionalInfoModel::tempoNotes() const
     auto makeNote = [](MusicalSymbolCodes::Code icon, bool withDot = false) {
         QVariantMap note;
         note[NOTE_ICON_KEY] = static_cast<int>(icon);
-        note[NOTE_SYMBOL_KEY] = noteIconToString(icon, withDot);
+        note[NOTE_SYMBOL_KEY] = musicalSymbolToString(icon, withDot);
 
         if (withDot) {
             note[WITH_DOT_KEY] = withDot;

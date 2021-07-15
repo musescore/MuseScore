@@ -110,7 +110,7 @@ public:
     void editText(QKeyEvent* event) override;
     void endEditText() override;
     void changeTextCursorPosition(const PointF& newCursorPos) override;
-    TextBase* editedText() const override;
+    const TextBase* editedText() const override;
     async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
 
@@ -161,6 +161,8 @@ public:
     void addFiguredBass() override;
 
     void addStretch(qreal value) override;
+
+    void addTimeSignature(Measure* measure, int staffIndex, TimeSignature* timeSignature) override;
 
     void explodeSelectedStaff() override;
     void implodeSelectedStaff() override;
