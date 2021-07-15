@@ -38,7 +38,7 @@ TabPanel {
                              stemTab.visible ? stemTab.implicitHeight : 0) + tabBarHeight + 24
     width: parent ? parent.width : 0
 
-    currentIndex: root.model ? indexByType(root.model.subModelType) : 0 // todo: not work for notehead
+    currentIndex: root.model ? indexByType(root.model.preferedSubModelType) : 0
 
     function indexByType(modelType) {
         switch (modelType) {

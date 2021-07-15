@@ -31,7 +31,7 @@ class NoteSettingsProxyModel : public AbstractInspectorProxyModel
 
 public:
     explicit NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository,
-                                    InspectorModelType subModelType = InspectorModelType::TYPE_UNDEFINED);
+                                    InspectorModelType preferedSubModelType = InspectorModelType::TYPE_UNDEFINED);
 };
 }
 
