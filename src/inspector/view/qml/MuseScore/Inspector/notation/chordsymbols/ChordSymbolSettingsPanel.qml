@@ -31,6 +31,8 @@ Column {
 
     property QtObject model: null
 
+    objectName: "ChordSymbolSettings"
+
     spacing: 16
 
     InspectorPropertyView {

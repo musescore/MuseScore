@@ -27,7 +27,9 @@ import "internal"
 Column {
     id: root
 
-    property QtObject model: undefined
+    property QtObject model: null
+
+    objectName: "HorizontalFrameSettings"
 
     height: implicitHeight
     spacing: 16

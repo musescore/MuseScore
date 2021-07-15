@@ -32,6 +32,8 @@ InspectorPropertyView {
 
     property QtObject model: null
 
+    objectName: "TremoloSettings"
+
     titleText: qsTrc("inspector", "Style (between notes)")
     propertyItem: root.model ? root.model.style : null
 

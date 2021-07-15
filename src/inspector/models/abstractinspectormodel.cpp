@@ -102,6 +102,11 @@ QString AbstractInspectorModel::title() const
     return m_title;
 }
 
+int AbstractInspectorModel::icon() const
+{
+    return static_cast<int>(m_icon);
+}
+
 AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionType() const
 {
     return m_sectionType;
@@ -171,6 +176,11 @@ void AbstractInspectorModel::setTitle(QString title)
     }
 
     m_title = title;
+}
+
+void AbstractInspectorModel::setIcon(mu::ui::IconCode::Code icon)
+{
+    m_icon = icon;
 }
 
 void AbstractInspectorModel::setSectionType(AbstractInspectorModel::InspectorSectionType sectionType)

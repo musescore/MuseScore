@@ -31,6 +31,8 @@ Column {
 
     property QtObject model: null
 
+    objectName: "ImageSettings"
+
     spacing: 12
 
     Item {

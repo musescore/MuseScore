@@ -29,6 +29,8 @@ Column {
 
     property QtObject model: null
 
+    objectName: "ClefSettings"
+
     spacing: 12
 
     CheckBox {

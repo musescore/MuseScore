@@ -30,6 +30,7 @@ ClefSettingsModel::ClefSettingsModel(QObject* parent, IElementRepositoryService*
 {
     setModelType(InspectorModelType::TYPE_CLEF);
     setTitle(qtrc("inspector", "Clef"));
+    setIcon(ui::IconCode::Code::CLEF_BASS);
     createProperties();
 }
 

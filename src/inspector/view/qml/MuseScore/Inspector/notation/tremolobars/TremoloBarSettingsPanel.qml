@@ -30,6 +30,8 @@ Item {
 
     property QtObject model: null
 
+    objectName: "TremoloBarSettings"
+
     height: content.implicitHeight
 
     Column {

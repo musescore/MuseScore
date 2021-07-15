@@ -33,6 +33,8 @@ Column {
 
     property QtObject model: null
 
+    objectName: "BarlineSettings"
+
     property QtObject barlineSettingsModel: root.model ? root.model.modelByType(Inspector.TYPE_BARLINE) : null
     property QtObject staffSettingsModel: root.model ? root.model.modelByType(Inspector.TYPE_STAFF) : null
 

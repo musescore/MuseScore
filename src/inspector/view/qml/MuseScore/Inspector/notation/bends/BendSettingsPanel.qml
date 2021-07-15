@@ -30,6 +30,8 @@ Column {
 
     property QtObject model: null
 
+    objectName: "BendSettings"
+
     spacing: 12
 
     InspectorPropertyView {

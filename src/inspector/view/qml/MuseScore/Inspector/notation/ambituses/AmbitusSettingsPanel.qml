@@ -33,6 +33,8 @@ Column {
 
     property QtObject model: null
 
+    objectName: "AmbitusSettings"
+
     spacing: 12
 
     function tpcListModel() {

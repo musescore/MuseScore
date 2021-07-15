@@ -30,7 +30,9 @@ import "internal"
 TabPanel {
     id: root
 
-    property QtObject model: undefined
+    property QtObject model: null
+
+    objectName: "HairpinSettings"
 
     implicitHeight: Math.max(styleTab.visible ? styleTab.implicitHeight : 0,
                              textTab.visible ? textTab.implicitHeight : 0) + tabBarHeight + 24

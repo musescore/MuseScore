@@ -67,6 +67,10 @@ ExpandableBlank {
             currentIndex: root.model && !root.model.styleType.isUndefined ? gstyles.indexOfValue(root.model.styleType.value) : -1
 
             onCurrentValueChanged: {
+                if (currentIndex === -1) {
+                    return
+                }
+
                 root.model.styleType.value = gstyles.currentValue
             }
         }

@@ -31,6 +31,8 @@ Column {
 
     property QtObject model: null
 
+    objectName: "JumpSettings"
+
     spacing: 12
 
     InspectorPropertyView {

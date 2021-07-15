@@ -33,6 +33,7 @@ BarlineSettingsProxyModel::BarlineSettingsProxyModel(QObject* parent, IElementRe
 {
     setModelType(InspectorModelType::TYPE_BARLINE);
     setTitle(qtrc("inspector", "Barline"));
+    setIcon(ui::IconCode::Code::SECTION_BREAK);
 
     addModel(new BarlineSettingsModel(this, repository));
     addModel(new StaffSettingsModel(this, repository));
