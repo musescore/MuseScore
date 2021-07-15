@@ -42,6 +42,7 @@ void AppearancePreferencesModel::init()
 {
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         emit themesChanged();
+        emit backgroundColorChanged();
     });
 
     uiConfiguration()->fontChanged().onNotify(this, [this]() {
@@ -75,16 +76,53 @@ QVariantList AppearancePreferencesModel::generalThemes() const
     return result;
 }
 
+QVariantList AppearancePreferencesModel::highContrastThemes() const
+{
+    QVariantList result;
+
+    for (const ThemeInfo& theme : allThemes()) {
+        if (theme.codeKey == HIGH_CONTRAST_BLACK_THEME_CODE || theme.codeKey == HIGH_CONTRAST_WHITE_THEME_CODE) {
+            result << ThemeConverter::toMap(theme);
+        }
+    }
+
+    return result;
+}
+
 QStringList AppearancePreferencesModel::accentColors() const
 {
     return uiConfiguration()->possibleAccentColors();
 }
 
-void AppearancePreferencesModel::load()
+//void AppearancePreferencesModel::load()
+//{
+//    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
+//        emit themesChanged();
+//    });
+//}
+
+void AppearancePreferencesModel::resetThemeToDefault()
 {
-    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
-        emit themesChanged();
-    });
+    uiConfiguration()->resetCurrentThemeToDefault(currentTheme().codeKey);
+    emit themesChanged();
+}
+
+void AppearancePreferencesModel::setNewColor(const QColor& newColor, const QString& propertyName)
+{
+    //! NOTE: Considered using a "switch()" statement here, but it would require a type conversion
+    //! from std::string to some form of a primitive literal. This has a workaround by implementing
+    //! a hash function, but I went for the "if/else if" ladder instead since we don't have that many cases anyway.
+
+    if (propertyName.toStdString() == "Accent Color:") {
+        uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(newColor));
+    } else if (propertyName.toStdString() == "Text and Icons:") {
+        uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::FONT_PRIMARY_COLOR, Val(newColor));
+    } else if (propertyName.toStdString() == "Disabled Text:") {
+        return;
+    } else if (propertyName.toStdString() == "Border Color:") {
+        uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::STROKE_COLOR, Val(newColor));
+    }
+    emit themesChanged();
 }
 
 QStringList AppearancePreferencesModel::allFonts() const
@@ -179,15 +217,21 @@ void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
         return;
     }
 
-    ThemeList genThemes;
+//    ThemeList genThemes;
+
+//    for (const ThemeInfo& theme : allThemes()) {
+//        if (theme.codeKey == LIGHT_THEME_CODE || theme.codeKey == DARK_THEME_CODE) {
+//            genThemes.push_back(theme);
+//        }
+//    }
+
+//    for (const ThemeInfo& theme : genThemes) {
+//        if (themeCode == QString::fromStdString(theme.codeKey)) {
+//            uiConfiguration()->setCurrentTheme(theme.codeKey);
+//        }
+//    }
 
     for (const ThemeInfo& theme : allThemes()) {
-        if (theme.codeKey == LIGHT_THEME_CODE || theme.codeKey == DARK_THEME_CODE) {
-            genThemes.push_back(theme);
-        }
-    }
-
-    for (const ThemeInfo& theme : genThemes) {
         if (themeCode == QString::fromStdString(theme.codeKey)) {
             uiConfiguration()->setCurrentTheme(theme.codeKey);
         }

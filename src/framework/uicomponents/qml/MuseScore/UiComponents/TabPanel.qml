@@ -82,8 +82,8 @@ TabView {
                 color:  ui.theme.backgroundPrimaryColor
                 radius: 4
                 anchors.margins: 1
-                border.width: (tab.tabItem.navigation && tab.tabItem.navigation.active) ? 2 : 0
-                border.color: ui.theme.focusColor
+                border.width: (tab.tabItem.navigation && tab.tabItem.navigation.active) ? 2 : ui.theme.borderWidth
+                border.color: (tab.tabItem.navigation && tab.tabItem.navigation.active) ? ui.theme.focusColor : ui.theme.strokeColor
                 opacity: styleData.selected ? ui.theme.buttonOpacityHit : ui.theme.buttonOpacityNormal
 
                 StyledTextLabel {

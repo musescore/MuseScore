@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.3
 
 import MuseScore.UiComponents 1.0
 
@@ -36,12 +37,12 @@ Column {
         font: ui.theme.bodyBoldFont
     }
 
-    Column {
-        width: parent.width
-        spacing: 12
 
+    GridLayout {
+        columnSpacing: parent.width/8
+        rowSpacing: 20
+        columns: 2
         Repeater {
-            width: parent.width
 
             model: [
                 { textRole: "Accent Color:", colorRole: ui.theme.accentColor},
@@ -51,13 +52,11 @@ Column {
             ]
 
             delegate: Row {
-                anchors.left: parent.left
-                anchors.right: parent.right
 
                 StyledTextLabel {
                     anchors.verticalCenter: parent.verticalCenter
                     text: modelData["textRole"]
-                    width: root.firstColumnWidth
+                    width: root.firstColumnWidth/2
                     horizontalAlignment: Text.AlignLeft
                 }
 

@@ -38,6 +38,7 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
 
     Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)
+    Q_PROPERTY(QVariantList highContrastThemes READ highContrastThemes NOTIFY themesChanged)
     Q_PROPERTY(QStringList accentColors READ accentColors NOTIFY themesChanged)
 
     Q_PROPERTY(QString currentThemeCode READ currentThemeCode WRITE setCurrentThemeCode NOTIFY themesChanged)
@@ -62,6 +63,7 @@ public:
     Q_INVOKABLE void init();
 
     QVariantList generalThemes() const;
+    QVariantList highContrastThemes() const;
 
     QStringList accentColors() const;
 
@@ -79,7 +81,9 @@ public:
     QColor foregroundColor() const;
     QString foregroundWallpaperPath() const;
 
-    Q_INVOKABLE void load();
+    //Q_INVOKABLE void load();
+    Q_INVOKABLE void resetThemeToDefault();
+    Q_INVOKABLE void setNewColor(const QColor& newColor, const QString& propertyName);
     Q_INVOKABLE QStringList allFonts() const;
     Q_INVOKABLE QString wallpaperPathFilter() const;
     Q_INVOKABLE QString wallpapersDir() const;
