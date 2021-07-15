@@ -60,25 +60,6 @@ static const int LEGACY_MSC_VERSION_V1 = 114;
 MStyle MScore::_baseStyle;
 MStyle MScore::_defaultStyle;
 
-QSet<Sid> pageStyles()
-{
-    static const QSet<Sid> styles {
-        Sid::pageWidth,
-        Sid::pageHeight,
-        Sid::pagePrintableWidth,
-        Sid::pageEvenTopMargin,
-        Sid::pageEvenBottomMargin,
-        Sid::pageEvenLeftMargin,
-        Sid::pageOddTopMargin,
-        Sid::pageOddBottomMargin,
-        Sid::pageOddLeftMargin,
-        Sid::pageTwosided,
-        Sid::spatium
-    };
-
-    return styles;
-}
-
 //---------------------------------------------------------
 //   valueType
 //---------------------------------------------------------

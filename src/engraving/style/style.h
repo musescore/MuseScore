@@ -91,8 +91,6 @@ public:
     static Sid styleIdx(const QString& name);
     static MStyle* resolveStyleDefaults(const int defaultsVersion);
 };
-
-QSet<Sid> pageStyles();
 }     // namespace Ms
 
 #endif // MU_ENGRAVING_STYLE_H
