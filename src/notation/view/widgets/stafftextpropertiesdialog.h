@@ -24,6 +24,9 @@
 
 #include "ui_stafftextpropertiesdialog.h"
 
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
+
 class QPushButton;
 class QToolButton;
 class QComboBox;
@@ -35,6 +38,8 @@ class StaffTextBase;
 class StaffTextPropertiesDialog : public QDialog, public Ui::StaffTextPropertiesDialog
 {
     Q_OBJECT
+
+    INJECT(Ms, mu::context::IGlobalContext, globalContext)
 
 public:
     StaffTextPropertiesDialog(QWidget* parent = nullptr);
@@ -53,6 +58,7 @@ private slots:
 private:
     void saveChannel(int channel);
 
+    StaffTextBase* m_originStaffText = nullptr;
     StaffTextBase* m_staffText = nullptr;
     QToolButton* m_vb[4][4];
     QComboBox* m_channelCombo[4];
