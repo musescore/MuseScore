@@ -41,7 +41,7 @@ Dialog {
     height: 240
     width: 538
 
-    title: qsTrc("shortcuts", "Enter Shortcut Sequence")
+    title: qsTrc("shortcuts", "Enter shortcut sequence")
 
     standardButtons: Dialog.NoButton
 

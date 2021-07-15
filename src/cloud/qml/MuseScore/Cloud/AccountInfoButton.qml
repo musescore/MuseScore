@@ -40,7 +40,7 @@ GradientTabButton {
     spacing: Boolean(avatarUrl) ? 18 : 30
     leftPadding: spacing
 
-    title: Boolean(userName) ? userName : qsTrc("cloud", "My Account")
+    title: Boolean(userName) ? userName : qsTrc("cloud", "My account")
     iconComponent: Boolean(avatarUrl) ? avatarComp : stubAvatarComp
 
     AccountModel {

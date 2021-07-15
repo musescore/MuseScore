@@ -67,9 +67,9 @@ QString PaletteElementEditor::actionName() const
     using Type = Palette::Type;
     switch (_type) {
     case Type::KeySig:
-        return mu::qtrc("palette", "Create Key Signature");
+        return mu::qtrc("palette", "Create key signature");
     case Type::TimeSig:
-        return mu::qtrc("palette", "Create Time Signature");
+        return mu::qtrc("palette", "Create time signature");
     default:
         break;
     }
@@ -854,11 +854,11 @@ QString PaletteProvider::getPaletteFilename(bool open, const QString& name) cons
                  .arg(QCoreApplication::applicationName());
 #endif
     if (open) {
-        title  = mu::qtrc("palette", "Load Palette");
+        title  = mu::qtrc("palette", "Load palette");
         filter = mu::qtrc("palette", "MuseScore Palette") + " (*.mpal)";
     } else {
         title  = mu::qtrc("palette", "Save Palette");
-        filter = mu::qtrc("palette", "MuseScore Palette") + " (*.mpal)";
+        filter = mu::qtrc("palette", "MuseScore palette") + " (*.mpal)";
     }
 
     QFileInfo myPalettes(wd);

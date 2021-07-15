@@ -114,7 +114,7 @@ QVariantList NotationStatusBarModel::availableViewModeList() const
             return title;
         case ViewMode::LINE:
         case ViewMode::SYSTEM:
-            return qtrc("appshell", "Continuous View");
+            return qtrc("appshell", "Continuous view");
         default:
             return title;
         }

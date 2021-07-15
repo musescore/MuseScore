@@ -76,7 +76,7 @@ StyledDialogView {
             Layout.topMargin: 24
             Layout.fillWidth: true
 
-            text: qsTrc("workspace", "Select the options you want remembered in your new Workspace")
+            text: qsTrc("workspace", "Select the options you want remembered in your new workspace")
 
             horizontalAlignment: Qt.AlignLeft
         }
@@ -123,7 +123,7 @@ StyledDialogView {
             CheckBox {
                 checked: workspaceModel.useToolbarCustomization
 
-                text: qsTrc("workspace", "Toolbar customisations")
+                text: qsTrc("workspace", "Toolbar customizations")
 
                 onClicked: {
                     workspaceModel.useToolbarCustomization = !checked

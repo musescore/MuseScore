@@ -28,7 +28,7 @@ using namespace mu::inspector;
 HairpinPlaybackModel::HairpinPlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(qtrc("inspector", "Hairpins, Crescendo & Diminuendo"));
+    setTitle(qtrc("inspector", "Hairpins, crescendos & diminuendos"));
 
     createProperties();
 }

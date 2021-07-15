@@ -77,7 +77,7 @@ PreferencesPage {
                     Layout.preferredWidth: 380
 
                     pickerType: FilePicker.PickerType.Directory
-                    dialogTitle: qsTrc("appshell", "Choose %1 Folder").arg(model.title)
+                    dialogTitle: qsTrc("appshell", "Choose %1 folder").arg(model.title)
                     dir: model.path
 
                     path: model.path

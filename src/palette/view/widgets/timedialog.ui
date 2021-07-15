@@ -38,7 +38,7 @@
        <bool>true</bool>
       </property>
       <property name="title">
-       <string>Create Time Signature</string>
+       <string>Create time signature</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>

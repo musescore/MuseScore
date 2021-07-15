@@ -42,6 +42,6 @@ Rectangle {
 
     StyledTextLabel {
         anchors.centerIn: parent
-        text: "Choose Instruments Page Stub"
+        text: "Choose instruments Page Stub"
     }
 }
