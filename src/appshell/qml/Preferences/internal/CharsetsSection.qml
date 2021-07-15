@@ -30,7 +30,7 @@ Column {
     property var preferencesModel: null
 
     StyledTextLabel {
-        text: qsTrc("appshell", "Character Set Used When Importing Binary Files")
+        text: qsTrc("appshell", "Character set used when importing binary files")
         font: ui.theme.bodyBoldFont
     }
 

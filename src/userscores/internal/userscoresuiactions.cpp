@@ -53,17 +53,17 @@ const UiActionList UserScoresUiActions::m_actions = {
              ),
     UiAction("file-save-as",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Save As..."),
+             QT_TRANSLATE_NOOP("action", "Save as..."),
              QT_TRANSLATE_NOOP("action", "Save score under a new file name")
              ),
     UiAction("file-save-a-copy",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Save a Copy..."),
+             QT_TRANSLATE_NOOP("action", "Save a copy..."),
              QT_TRANSLATE_NOOP("action", "Save a copy of the score in addition to the current file")
              ),
     UiAction("file-save-selection",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Save Selection..."),
+             QT_TRANSLATE_NOOP("action", "Save selection..."),
              QT_TRANSLATE_NOOP("action", "Save current selection as new score")
              ),
     UiAction("file-export",
@@ -84,7 +84,7 @@ const UiActionList UserScoresUiActions::m_actions = {
              ),
     UiAction("clear-recent",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Clear Recent Files")
+             QT_TRANSLATE_NOOP("action", "Clear recent files")
              )
 };
 

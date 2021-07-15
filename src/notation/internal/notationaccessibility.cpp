@@ -98,7 +98,7 @@ QString NotationAccessibility::rangeAccessibilityInfo() const
         endSegment = endSegment->prev1MM();
     }
 
-    return qtrc("notation", "Range Selection %1 %2")
+    return qtrc("notation", "Range selection %1 %2")
            .arg(formatStartBarsAndBeats(selection()->startSegment()))
            .arg(formatEndBarsAndBeats(endSegment));
 }
@@ -176,7 +176,7 @@ QString NotationAccessibility::formatStartBarsAndBeats(const Element* element) c
 {
     std::pair<int, float> barbeat = this->barbeat(element);
 
-    return qtrc("notation", "Start Measure: %1; Start Beat: %2")
+    return qtrc("notation", "Start measure: %1; Start beat: %2")
            .arg(QString::number(barbeat.first))
            .arg(QString::number(barbeat.second));
 }
@@ -185,7 +185,7 @@ QString NotationAccessibility::formatEndBarsAndBeats(const Element* element) con
 {
     std::pair<int, float> barbeat = this->barbeat(element);
 
-    return qtrc("notation", "End Measure: %1; End Beat: %2")
+    return qtrc("notation", "End measure: %1; End beat: %2")
            .arg(QString::number(barbeat.first))
            .arg(QString::number(barbeat.second));
 }

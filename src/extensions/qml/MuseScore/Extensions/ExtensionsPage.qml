@@ -166,7 +166,7 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
 
-                title: qsTrc("extensions", "Not Installed")
+                title: qsTrc("extensions", "Not installed")
 
                 model: extensionListModel
                 visible: count > 0

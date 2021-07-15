@@ -151,7 +151,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
 PalettePtr PaletteCreator::newBeamPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Beam);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Beam Properties"));
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Beam properties"));
     sp->setGridSize(27, 40);
     sp->setDrawGrid(true);
 
@@ -201,7 +201,7 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
 PalettePtr PaletteCreator::newKeySigPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::KeySig);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Key Signatures"));
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Key signatures"));
     sp->setMag(1.0);
     sp->setGridSize(56, 55);
     sp->setYOffset(1.0);
@@ -302,7 +302,7 @@ PalettePtr PaletteCreator::newBarLinePalette()
 PalettePtr PaletteCreator::newRepeatsPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Repeat);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Repeats & Jumps"));
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Repeats & jumps"));
     sp->setMag(0.65);
     sp->setGridSize(75, 28);
     sp->setDrawGrid(true);
@@ -447,14 +447,14 @@ PalettePtr PaletteCreator::newFingeringPalette()
         auto f = makeElement<Fingering>(gscore);
         f->setTid(Tid::RH_GUITAR_FINGERING);
         f->setXmlText(QString(finger[i]));
-        sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "RH Guitar Fingering %1"));
+        sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "RH guitar fingering %1"));
     }
     finger = "012345T";
     for (unsigned i = 0; i < strlen(finger); ++i) {
         auto f = makeElement<Fingering>(gscore);
         f->setTid(Tid::LH_GUITAR_FINGERING);
         f->setXmlText(QString(finger[i]));
-        sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "LH Guitar Fingering %1"));
+        sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "LH guitar fingering %1"));
     }
     finger = "0123456";
     for (unsigned i = 0; i < strlen(finger); ++i) {
@@ -734,7 +734,7 @@ PalettePtr PaletteCreator::newBracketsPalette()
 PalettePtr PaletteCreator::newBreathPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Breath);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Breaths & Pauses"));
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Breaths & pauses"));
     sp->setGridSize(42, 40);
     sp->setDrawGrid(true);
     sp->setVisible(false);
@@ -768,7 +768,7 @@ PalettePtr PaletteCreator::newBreathPalette()
 PalettePtr PaletteCreator::newArpeggioPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Arpeggio);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Arpeggios & Glissandi"));
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Arpeggios & glissandi"));
     sp->setGridSize(27, 50);
     sp->setDrawGrid(true);
     sp->setVisible(false);
@@ -862,7 +862,7 @@ PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
 PalettePtr PaletteCreator::newGraceNotePalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::GraceNote);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Grace Notes"));
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Grace notes"));
     sp->setGridSize(32, 40);
     sp->setDrawGrid(true);
     sp->setVisible(false);
@@ -882,7 +882,7 @@ PalettePtr PaletteCreator::newGraceNotePalette()
 PalettePtr PaletteCreator::newBagpipeEmbellishmentPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::BagpipeEmbellishment);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Bagpipe Embellishments"));
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Bagpipe embellishments"));
     sp->setMag(0.8);
     sp->setYOffset(2.0);
     sp->setGridSize(55, 55);
@@ -1076,7 +1076,7 @@ PalettePtr PaletteCreator::newLinesPalette()
 
     auto letRing = makeElement<LetRing>(gscore);
     letRing->setLen(w);
-    sp->appendElement(letRing, QT_TRANSLATE_NOOP("palette", "Let Ring"));
+    sp->appendElement(letRing, QT_TRANSLATE_NOOP("palette", "Let ring"));
 
     for (int i = 0; i < vibratoTableSize(); i++) {
         auto vibrato = makeElement<Vibrato>(gscore);
@@ -1087,7 +1087,7 @@ PalettePtr PaletteCreator::newLinesPalette()
 
     auto pm = makeElement<PalmMute>(gscore);
     pm->setLen(w);
-    sp->appendElement(pm, QT_TRANSLATE_NOOP("palette", "Palm Mute"));
+    sp->appendElement(pm, QT_TRANSLATE_NOOP("palette", "Palm mute"));
 
     return sp;
 }
@@ -1210,7 +1210,7 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     sp->setDrawGrid(true);
 
     auto st = makeElement<StaffText>(gscore);
-    st->setXmlText(QT_TRANSLATE_NOOP("palette", "Staff Text"));
+    st->setXmlText(QT_TRANSLATE_NOOP("palette", "Staff text"));
     sp->appendElement(st, QT_TRANSLATE_NOOP("palette", "Staff text"))->setElementTranslated(true);
 
     st = makeElement<StaffText>(gscore);
@@ -1221,7 +1221,7 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     sp->appendElement(st, QT_TRANSLATE_NOOP("palette", "Expression text"))->setElementTranslated(true);
 
     auto is = makeElement<InstrumentChange>(gscore);
-    is->setXmlText(QT_TRANSLATE_NOOP("palette", "Change Instr."));
+    is->setXmlText(QT_TRANSLATE_NOOP("palette", "Change instr."));
     sp->appendElement(is, QT_TRANSLATE_NOOP("palette", "Instrument change"))->setElementTranslated(true);
 
     auto rhm = makeElement<RehearsalMark>(gscore);
@@ -1240,7 +1240,7 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     sp->appendElement(stxt, QT_TRANSLATE_NOOP("palette", "Straight"))->setElementTranslated(true);
 
     stxt = makeElement<SystemText>(gscore);
-    stxt->setXmlText(QT_TRANSLATE_NOOP("palette", "System Text"));
+    stxt->setXmlText(QT_TRANSLATE_NOOP("palette", "System text"));
     sp->appendElement(stxt, QT_TRANSLATE_NOOP("palette", "System text"))->setElementTranslated(true);
 
     // Measure numbers, unlike other elements (but like most text elements),
@@ -1249,8 +1249,8 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     // Because of that, the element shown in the palettes does not have to have any particular formatting.
     auto meaNum = makeElement<MeasureNumber>(gscore);
     meaNum->setProperty(Pid::SUB_STYLE, int(Tid::STAFF));   // Make the element bigger in the palettes (using the default measure number style makes it too small)
-    meaNum->setXmlText(QT_TRANSLATE_NOOP("palette", "Measure Number"));
-    sp->appendElement(meaNum, QT_TRANSLATE_NOOP("palette", "Measure Number"))->setElementTranslated(true);
+    meaNum->setXmlText(QT_TRANSLATE_NOOP("palette", "Measure number"));
+    sp->appendElement(meaNum, QT_TRANSLATE_NOOP("palette", "Measure number"))->setElementTranslated(true);
 
     if (!defaultPalette) {
         auto pz = makeElement<StaffText>(gscore);
@@ -1368,7 +1368,7 @@ PalettePtr PaletteCreator::newTimePalette()
     };
 
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::TimeSig);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Time Signatures"));
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Time signatures"));
     sp->setMag(.8);
     sp->setGridSize(42, 38);
 
@@ -1383,7 +1383,7 @@ PalettePtr PaletteCreator::newTimePalette()
 PalettePtr PaletteCreator::newFretboardDiagramPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::FretboardDiagram);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Fretboard Diagrams"));
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Fretboard diagrams"));
     sp->setGridSize(42, 45);
     sp->setDrawGrid(true);
     sp->setVisible(false);

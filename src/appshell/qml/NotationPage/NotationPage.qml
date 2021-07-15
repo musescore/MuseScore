@@ -96,7 +96,7 @@ DockPage {
             id: notationToolBar
 
             objectName: "notationToolBar"
-            title: qsTrc("appshell", "Notation Toolbar")
+            title: qsTrc("appshell", "Notation toolbar")
 
             minimumWidth: 198
 
@@ -116,7 +116,7 @@ DockPage {
             id: playbackToolBar
 
             objectName: "playbackToolBar"
-            title: qsTrc("appshell", "Playback Controls")
+            title: qsTrc("appshell", "Playback controls")
 
             width: root.width / 3
             minimumWidth: floating ? 526 : 452
@@ -134,7 +134,7 @@ DockPage {
             id: undoRedoToolBar
 
             objectName: "undoRedoToolBar"
-            title: qsTrc("appshell", "Undo/Redo Toolbar")
+            title: qsTrc("appshell", "Undo/redo toolbar")
 
             minimumWidth: 74
             maximumWidth: 74
@@ -153,7 +153,7 @@ DockPage {
             id: noteInputBar
 
             objectName: "noteInputBar"
-            title: qsTrc("appshell", "Note Input")
+            title: qsTrc("appshell", "Note input")
 
             horizontalPreferredSize: Qt.size(720, root.toolBarHeight)
             verticalPreferredSize: Qt.size(root.toolBarHeight, 400)

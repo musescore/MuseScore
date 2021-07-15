@@ -45,7 +45,7 @@ FocusScope {
 
     NavigationSection {
         id: navSec
-        name: "Addons"
+        name: "Add-ons"
         enabled: root.visible
         order: 3
         onActiveChanged: {
@@ -85,7 +85,7 @@ FocusScope {
             name: "AddonsSearch"
             section: navSec
             order: 1
-            accessible.name: qsTrc("appshell", "Addons")
+            accessible.name: qsTrc("appshell", "Add-ons")
         }
 
         StyledTextLabel {
@@ -112,7 +112,7 @@ FocusScope {
                 navigation.name: "AddonsSearch"
                 navigation.panel: navSearchPanel
                 navigation.order: 1
-                accessible.name: qsTrc("appshell", "Addons search")
+                accessible.name: qsTrc("appshell", "Add-ons search")
 
                 onSearchTextChanged: {
                     categoryComboBox.selectedCategory = ""
@@ -198,7 +198,7 @@ FocusScope {
             name: "AddonsTabs"
             section: navSec
             order: 2
-            accessible.name: qsTrc("appshell", "Addons tabs")
+            accessible.name: qsTrc("appshell", "Add-ons tabs")
 
             onNavigationEvent: {
                 if (event.type === NavigationEvent.AboutActive) {

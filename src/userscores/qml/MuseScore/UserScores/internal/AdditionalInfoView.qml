@@ -73,7 +73,7 @@ Row {
 
             font: ui.theme.bodyBoldFont
             horizontalAlignment: Text.AlignLeft
-            text: qsTrc("userscores", "Key Signature")
+            text: qsTrc("userscores", "Key signature")
         }
 
         KeySignatureSettings {
@@ -100,7 +100,7 @@ Row {
 
             font: ui.theme.bodyBoldFont
             horizontalAlignment: Text.AlignLeft
-            text: qsTrc("userscores", "Time Signature")
+            text: qsTrc("userscores", "Time signature")
         }
 
         TimeSignatureSettings {

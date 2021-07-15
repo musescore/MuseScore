@@ -36,7 +36,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("fullscreen",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Full Screen"),
+             QT_TRANSLATE_NOOP("action", "Full screen"),
              QT_TRANSLATE_NOOP("action", "Full screen"),
              Checkable::Yes
              ),
@@ -54,15 +54,15 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("online-handbook",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Online Handbook")
+             QT_TRANSLATE_NOOP("action", "Online handbook")
              ),
     UiAction("ask-help",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Ask for Help")
+             QT_TRANSLATE_NOOP("action", "Ask for help")
              ),
     UiAction("report-bug",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Report a Bug"),
+             QT_TRANSLATE_NOOP("action", "Report a bug"),
              QT_TRANSLATE_NOOP("action", "Report a bug")
              ),
     UiAction("leave-feedback",
@@ -72,7 +72,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("revert-factory",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Revert to Factory Settings"),
+             QT_TRANSLATE_NOOP("action", "Revert to factory settings"),
              QT_TRANSLATE_NOOP("action", "Revert to factory settings")
              ),
     UiAction("toggle-mixer",
@@ -108,8 +108,8 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("toggle-statusbar",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Status Bar"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Status Bar'"),
+             QT_TRANSLATE_NOOP("action", "Status bar"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Status bar'"),
              Checkable::Yes
              ),
     UiAction("toggle-noteinput",
@@ -120,13 +120,13 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("toggle-notationtoolbar",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Notation Toolbar"),
+             QT_TRANSLATE_NOOP("action", "Notation toolbar"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Notation' toolbar"),
              Checkable::Yes
              ),
     UiAction("toggle-undoredo",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Undo/Redo Toolbar"),
+             QT_TRANSLATE_NOOP("action", "Undo/redo toolbar"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Undo/Redo' toolbar"),
              Checkable::Yes
              ),
@@ -156,7 +156,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("toggle-scorecmp-tool",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Score Comparison Tool"),
+             QT_TRANSLATE_NOOP("action", "Score comparison tool"),
              QT_TRANSLATE_NOOP("action", "Toggle score comparison tool"),
              Checkable::Yes
              ),
@@ -167,7 +167,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("check-update",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Check for Updates"),
+             QT_TRANSLATE_NOOP("action", "Check for updates"),
              QT_TRANSLATE_NOOP("action", "Check for updates")
              )
 };

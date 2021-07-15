@@ -121,7 +121,7 @@ void RecentScoresModel::updateRecentScores(const MetaList& recentScoresList)
     }
 
     QVariantMap obj;
-    obj[SCORE_TITLE_KEY] = qtrc("userscores", "New Score");
+    obj[SCORE_TITLE_KEY] = qtrc("userscores", "New score");
     obj[SCORE_ADD_NEW_KEY] = true;
 
     recentScores.prepend(QVariant::fromValue(obj));

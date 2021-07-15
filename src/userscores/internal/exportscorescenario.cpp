@@ -231,9 +231,9 @@ bool ExportScoreScenario::shouldReplaceFile(const QString& filename) const
             qtrc("userscores", "A file already exists with the filename %1. Do you want to replace it?")
             .arg(filename).toStdString(), {
                 IInteractive::ButtonData(Replace, trc("userscores", "Replace")),
-                IInteractive::ButtonData(ReplaceAll, trc("userscores", "Replace All")),
+                IInteractive::ButtonData(ReplaceAll, trc("userscores", "Replace all")),
                 IInteractive::ButtonData(Skip, trc("userscores", "Skip")),
-                IInteractive::ButtonData(SkipAll, trc("userscores", "Skip All"))
+                IInteractive::ButtonData(SkipAll, trc("userscores", "Skip all"))
             });
 
         switch (result.button()) {

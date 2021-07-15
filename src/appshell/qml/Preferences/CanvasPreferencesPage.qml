@@ -123,7 +123,7 @@ PreferencesPage {
             spacing: 18
 
             StyledTextLabel {
-                text: qsTrc("appshell", "Scroll Pages")
+                text: qsTrc("appshell", "Scroll pages")
                 font: ui.theme.bodyBoldFont
             }
 
