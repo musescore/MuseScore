@@ -30,6 +30,8 @@ Item {
 
     property alias model: fretDiagramTabPanel.model
 
+    objectName: "FretDiagramSettings"
+
     height: content.implicitHeight
 
     Column {

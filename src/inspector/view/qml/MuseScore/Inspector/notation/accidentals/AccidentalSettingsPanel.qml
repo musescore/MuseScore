@@ -31,6 +31,8 @@ InspectorPropertyView {
 
     property QtObject model: null
 
+    objectName: "AccidentalSettings"
+
     titleText: qsTrc("inspector", "Bracket type")
     propertyItem: root.model ? root.model.bracketType : null
 

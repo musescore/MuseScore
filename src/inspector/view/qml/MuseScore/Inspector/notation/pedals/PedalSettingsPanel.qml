@@ -32,6 +32,8 @@ Column {
 
     property QtObject model: null
 
+    objectName: "PedalSettings"
+
     spacing: 12
 
     InspectorPropertyView {

@@ -35,6 +35,7 @@ NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementReposito
 {
     setModelType(InspectorModelType::TYPE_NOTE);
     setTitle(qtrc("inspector", "Note"));
+    setIcon(ui::IconCode::Code::MUSIC_NOTES);
 
     addModel(new StemSettingsModel(this, repository));
     addModel(new NoteheadSettingsModel(this, repository));

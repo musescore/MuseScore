@@ -31,6 +31,8 @@ TabPanel {
 
     property QtObject model: null
 
+    objectName: "NoteSettings"
+
     implicitHeight: Math.max(beamTab.visible ? beamTab.implicitHeight : 0,
                              headTab.visible ? headTab.implicitHeight : 0,
                              stemTab.visible ? stemTab.implicitHeight : 0) + tabBarHeight + 24

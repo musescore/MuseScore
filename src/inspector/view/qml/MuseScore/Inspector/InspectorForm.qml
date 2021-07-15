@@ -178,7 +178,7 @@ Rectangle {
                     Component {
                         id: notationInspectorMultiElements
 
-                        NotationInspectorView {
+                        NotationMultiElementView {
                             model: inspectorData
                             navigationPanel: navPanel
                             navigationRowOffset: expandableDelegate.navigation.row + 1
@@ -189,8 +189,8 @@ Rectangle {
                     Component {
                         id: notationInspectorSingleElement
 
-                        NotationInspectorViewLoader {
-                            model: inspectorData.firstModel()
+                        NotationSingleElementView {
+                            model: inspectorData
                             navigationPanel: navPanel
                             navigationRowOffset: expandableDelegate.navigation.row + 1
                             onContentExtended: expandableDelegate.updateContentHeight(contentHeight)

@@ -29,6 +29,8 @@ Column {
 
     property QtObject model: null
 
+    objectName: "VerticalFrameSettings"
+
     height: implicitHeight
     spacing: 16
 

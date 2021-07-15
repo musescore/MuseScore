@@ -32,6 +32,8 @@ Column {
 
     property QtObject model: null
 
+    objectName: "StaffTypeSettings"
+
     spacing: 12
 
     CheckBox {

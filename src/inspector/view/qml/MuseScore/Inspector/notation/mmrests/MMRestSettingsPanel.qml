@@ -31,6 +31,8 @@ Column {
 
     property QtObject model: null
 
+    objectName: "MMRestSettings"
+
     spacing: 12
 
     Column {

@@ -31,6 +31,8 @@ InspectorPropertyView {
 
     property QtObject model: null
 
+    objectName: "FermataSettings"
+
     titleText: qsTrc("inspector", "Placement on staff")
     propertyItem: root.model ? root.model.placementType : null
 

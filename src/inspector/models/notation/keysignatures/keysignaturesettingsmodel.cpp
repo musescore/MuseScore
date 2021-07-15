@@ -30,6 +30,7 @@ KeySignatureSettingsModel::KeySignatureSettingsModel(QObject* parent, IElementRe
 {
     setModelType(InspectorModelType::TYPE_KEYSIGNATURE);
     setTitle(qtrc("inspector", "Key signature"));
+    setIcon(ui::IconCode::Code::KEY_SIGNATURE);
     createProperties();
 }
 

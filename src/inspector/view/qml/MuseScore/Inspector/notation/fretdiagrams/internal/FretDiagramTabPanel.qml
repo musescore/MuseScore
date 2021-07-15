@@ -28,7 +28,7 @@ import "../../../common"
 TabPanel {
     id: root
 
-    property QtObject model: undefined
+    property QtObject model: null
 
     implicitHeight: Math.max(generalTab.visible ? generalTab.implicitHeight : 0,
                              advancedTab.visible ? advancedTab.implicitHeight : 0) + tabBarHeight + 24

@@ -2,7 +2,7 @@
     <qresource prefix="/">
         <file>qml/MuseScore/Inspector/general/GeneralInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/InspectorForm.qml</file>
-        <file>qml/MuseScore/Inspector/notation/NotationInspectorView.qml</file>
+        <file>qml/MuseScore/Inspector/notation/NotationMultiElementView.qml</file>
         <file>qml/MuseScore/Inspector/notation/notes/StemSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/notes/NoteSettingsTabPanel.qml</file>
         <file>qml/MuseScore/Inspector/notation/notes/HeadSettings.qml</file>
@@ -157,7 +157,7 @@
         <file>qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatPopup.qml</file>
         <file>qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml</file>
         <file>qml/MuseScore/Inspector/common/ColorSection.qml</file>
-        <file>qml/MuseScore/Inspector/notation/NotationInspectorViewLoader.qml</file>
+        <file>qml/MuseScore/Inspector/notation/NotationInspectorSectionLoader.qml</file>
         <file>qml/MuseScore/Inspector/notation/fermatas/FermataSettingsPanel.qml</file>
         <file>qml/MuseScore/Inspector/notation/glissandos/GlissandoSettingsPanel.qml</file>
         <file>qml/MuseScore/Inspector/notation/tempos/TempoSettingsPanel.qml</file>
@@ -190,5 +190,6 @@
         <file>qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettingsPanel.qml</file>
         <file>qml/MuseScore/Inspector/notation/brackets/BraceSettingsPanel.qml</file>
         <file>qml/MuseScore/Inspector/notation/barlines/BarlineSettingsPanel.qml</file>
+        <file>qml/MuseScore/Inspector/notation/NotationSingleElementView.qml</file>
     </qresource>
 </RCC>

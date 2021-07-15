@@ -30,6 +30,8 @@ Column {
 
     property QtObject model: null
 
+    objectName: "KeySignatureSettings"
+
     spacing: 16
 
     CheckBox {

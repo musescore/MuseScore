@@ -31,6 +31,8 @@ InspectorPropertyView {
 
     property QtObject model: null
 
+    objectName: "GlissandoSettings"
+
     titleText: qsTrc("inspector", "Glissando line")
     propertyItem: root.model ? root.model.lineType : null
 

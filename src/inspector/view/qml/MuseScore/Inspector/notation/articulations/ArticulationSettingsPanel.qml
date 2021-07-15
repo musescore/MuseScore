@@ -32,6 +32,8 @@ Column {
 
     property QtObject model: null
 
+    objectName: "ArticulationSettings"
+
     spacing: 12
 
     InspectorPropertyView {

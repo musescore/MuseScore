@@ -31,6 +31,8 @@ Column {
 
     property QtObject model: null
 
+    objectName: "BraceSettings"
+
     spacing: 12
 
     BracketPopupSection {
