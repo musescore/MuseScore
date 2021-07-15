@@ -79,11 +79,14 @@ Item {
                     spacing: 2
 
                     VolumePressureMeter {
+                        id: leftPressure
                         currentVolumePressure: item.leftChannelPressure
                     }
 
                     VolumePressureMeter {
+                        id: rightPressure
                         currentVolumePressure: item.rightChannelPressure
+                        showRuler: true
                     }
                 }
             }
