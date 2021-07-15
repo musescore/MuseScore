@@ -29,7 +29,11 @@ static const volume_dbfs_t MAX_DISPLAYED_DBFS = 0.f; // 100%
 static const volume_dbfs_t MIN_DISPLAYED_DBFS = -60.f; // 0%
 
 MixerChannelItem::MixerChannelItem(QObject* parent, const audio::TrackId id, const bool isMaster)
-    : QObject(parent), m_id(id), m_isMaster(isMaster)
+    : QObject(parent),
+    m_id(id),
+    m_isMaster(isMaster),
+    m_leftChannelPressure(MIN_DISPLAYED_DBFS),
+    m_rightChannelPressure(MIN_DISPLAYED_DBFS)
 {
 }
 

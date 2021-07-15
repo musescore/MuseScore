@@ -28,8 +28,8 @@ import MuseScore.UiComponents 1.0
 Slider {
     id: root
 
-    height: 140 + internals.handleHeight
-    width: 32 + internals.unitsTextWidth
+    height: 140 + prv.handleHeight
+    width: 32 + prv.unitsTextWidth
 
     from: -48
     to: 12
@@ -38,18 +38,18 @@ Slider {
     orientation: Qt.Vertical
 
     QtObject {
-        id: internals
+        id: prv
 
         property real rulerLineWidth: 2
-        property real rulerLineHeight: root.height - internals.handleHeight
+        property real rulerLineHeight: root.height - prv.handleHeight
 
         // value ranges
         property real lowAccuracyEdge: -12
-        property real lowAccuracyDivisionPixels: (internals.rulerLineHeight / 2) / internals.lowAccuracyRange
-        property real lowAccuracyRange: Math.abs(root.from) - Math.abs(internals.lowAccuracyEdge)
+        property real lowAccuracyDivisionPixels: (prv.rulerLineHeight / 2) / prv.lowAccuracyRange
+        property real lowAccuracyRange: Math.abs(root.from) - Math.abs(prv.lowAccuracyEdge)
 
-        property real highAccuracyRange: Math.abs(internals.lowAccuracyEdge) + Math.abs(root.to)
-        property real highAccuracyDivisionPixels: (internals.rulerLineHeight / 2) / highAccuracyRange
+        property real highAccuracyRange: Math.abs(prv.lowAccuracyEdge) + Math.abs(root.to)
+        property real highAccuracyDivisionPixels: (prv.rulerLineHeight / 2) / highAccuracyRange
 
         property int fullValueRangeLength: Math.abs(root.from) + Math.abs(root.to)
 
@@ -84,13 +84,13 @@ Slider {
         function drawRuler(ctx, originVPos, originHPos, fullStep, smallStep, strokeHeight, strokeWidth) {
             var currentStrokeVPos = 0
 
-            for (var i = 0; i <= internals.fullValueRangeLength; i+=smallStep) {
+            for (var i = 0; i <= prv.fullValueRangeLength; i+=smallStep) {
 
                 var division = 0
-                if (i <= internals.lowAccuracyRange) {
-                    division = internals.lowAccuracyDivisionPixels
+                if (i <= prv.lowAccuracyRange) {
+                    division = prv.lowAccuracyDivisionPixels
                 } else {
-                    division = internals.highAccuracyDivisionPixels
+                    division = prv.highAccuracyDivisionPixels
                 }
 
                 if (i == 0) {
@@ -100,25 +100,25 @@ Slider {
                 }
 
                 if (i % fullStep) {
-                    ctx.fillStyle = internals.shortStrokeColor
+                    ctx.fillStyle = prv.shortStrokeColor
                     ctx.fillRect(currentStrokeVPos,
-                                 originHPos - internals.shortStrokeWidth,
-                                 internals.shortStrokeHeight,
-                                 internals.shortStrokeWidth)
+                                 originHPos - prv.shortStrokeWidth,
+                                 prv.shortStrokeHeight,
+                                 prv.shortStrokeWidth)
 
                 } else {
-                    ctx.fillStyle = internals.longStrokeColor
+                    ctx.fillStyle = prv.longStrokeColor
 
                     ctx.fillRect(currentStrokeVPos,
-                                 originHPos - internals.longStrokeWidth,
-                                 internals.longStrokeHeight,
-                                 internals.longStrokeWidth)
+                                 originHPos - prv.longStrokeWidth,
+                                 prv.longStrokeHeight,
+                                 prv.longStrokeWidth)
 
                     ctx.save()
 
                     ctx.rotate(Math.PI/2)
-                    ctx.fillStyle = internals.unitTextColor
-                    ctx.fillText(textByDbValue(root.from + i), internals.unitsTextWidth + internals.unitsTextWidth/2, -currentStrokeVPos + 2)
+                    ctx.fillStyle = prv.unitTextColor
+                    ctx.fillText(textByDbValue(root.from + i), prv.unitsTextWidth + prv.unitsTextWidth/2, -currentStrokeVPos + 2)
 
                     ctx.restore()
                 }
@@ -142,18 +142,18 @@ Slider {
                 ctx.rotate(3 * (Math.PI/2))
 
                 ctx.textAlign = "end"
-                ctx.font = internals.unitTextFont
+                ctx.font = prv.unitTextFont
             }
 
             ctx.fillStyle = Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
 
-            ctx.fillRect(internals.handleHeight/2, // vertical pos
-                         bgCanvas.width - internals.handleWidth/2 - internals.rulerLineWidth/2, // horizontal pos
-                         internals.rulerLineHeight,
-                         internals.rulerLineWidth)
+            ctx.fillRect(prv.handleHeight/2, // vertical pos
+                         bgCanvas.width - prv.handleWidth/2 - prv.rulerLineWidth/2, // horizontal pos
+                         prv.rulerLineHeight,
+                         prv.rulerLineWidth)
 
-            var originVPos = internals.handleHeight / 2
-            var originHPos = bgCanvas.width - internals.handleWidth/2 - internals.rulerLineWidth - internals.strokeHorizontalMargin - 2
+            var originVPos = prv.handleHeight / 2
+            var originHPos = bgCanvas.width - prv.handleWidth/2 - prv.rulerLineWidth - prv.strokeHorizontalMargin - 2
 
             drawRuler(ctx, originVPos, originHPos, 6/*fullStep*/, 2/*smallStep*/)
         }
@@ -162,10 +162,10 @@ Slider {
     handle: Rectangle {
         id: handleItem
 
-        x: root.width - internals.handleWidth
-        y: (1 - root.position) * internals.rulerLineHeight
-        implicitWidth: internals.handleWidth
-        implicitHeight: internals.handleHeight
+        x: root.width - prv.handleWidth
+        y: (1 - root.position) * prv.rulerLineHeight
+        implicitWidth: prv.handleWidth
+        implicitHeight: prv.handleHeight
         radius: 2
         color: ui.theme.fontPrimaryColor
         border.color: "#00000075"
@@ -180,7 +180,7 @@ Slider {
             }
 
             height: 1
-            radius: internals.handleHeight / 2
+            radius: prv.handleHeight / 2
             color: "#000000"
         }
     }
