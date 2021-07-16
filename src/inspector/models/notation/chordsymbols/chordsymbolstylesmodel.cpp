@@ -163,25 +163,25 @@ void ChordSymbolStylesModel::setQualitySymbolsOnStyleChange()
     } else {
         // Get quality symbols
         QString descriptionFile = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordDescriptionFile).toString();
-        QHash<QString, QStringList> qualitySymbols = styleManager->getQualitySymbols(descriptionFile);
+        QHash<QString, QList<QualitySymbol> > qualitySymbols = styleManager->getQualitySymbols(descriptionFile);
 
         //set the default
-        QString defaultSymbol = qualitySymbols.value("major7th").at(0);
+        QString defaultSymbol = qualitySymbols.value("major7th").at(0).qualitySymbol;
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMajorSeventh, defaultSymbol);
 
-        defaultSymbol = qualitySymbols.value("half-diminished").at(0);
+        defaultSymbol = qualitySymbols.value("half-diminished").at(0).qualitySymbol;
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityHalfDiminished, defaultSymbol);
 
-        defaultSymbol = qualitySymbols.value("minor").at(0);
+        defaultSymbol = qualitySymbols.value("minor").at(0).qualitySymbol;
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMinor, defaultSymbol);
 
-        defaultSymbol = qualitySymbols.value("augmented").at(0);
+        defaultSymbol = qualitySymbols.value("augmented").at(0).qualitySymbol;
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityAugmented, defaultSymbol);
 
-        defaultSymbol = qualitySymbols.value("diminished").at(0);
+        defaultSymbol = qualitySymbols.value("diminished").at(0).qualitySymbol;
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished, defaultSymbol);
 
-        defaultSymbol = qualitySymbols.value("omit").at(0);
+        defaultSymbol = qualitySymbols.value("omit").at(0).qualitySymbol;
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit, defaultSymbol);
     }
 }
@@ -275,6 +275,9 @@ void ChordSymbolStylesModel::setChordSpelling(QString newSpelling)
 
 void ChordSymbolStylesModel::extractSelectionHistory(QString selectionHistory)
 {
+    if (selectionHistory == "") {
+        return;
+    }
     m_selectionHistory.clear();
     QStringList selectionHistoryList = selectionHistory.split("\n");
     for (auto style: selectionHistoryList) {

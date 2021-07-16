@@ -136,6 +136,7 @@ public:
     void setQualitySymbolsOnStyleChange();
     void setPropertiesOnStyleChange();
     void setQualitySymbolsLists();
+    void setPropertiesOfQualitySymbol(QualitySymbol qS);
     void stringifyAndSaveSelectionHistory();
     void extractSelectionHistory(QString selectionHistory);
     void updateSelectionHistory(QString currentStyle);
@@ -200,16 +201,16 @@ private:
 
     QList<ChordSymbolStyle> m_styles;
     ChordSymbolStyleManager* styleManager;
-    QHash<QString, QStringList> m_qualitySymbols;
+    QHash<QString, QList<QualitySymbol>> m_qualitySymbols;
     QHash<QString, QHash<QString, QVariant> > m_selectionHistory;
 
     QStringList m_chordSpellingList;
-    QStringList m_majorSeventhList;
-    QStringList m_halfDiminishedList;
-    QStringList m_minorList;
-    QStringList m_augmentedList;
-    QStringList m_diminishedList;
-    QStringList m_omitList;
+    QList<QualitySymbol> m_majorSeventhList;
+    QList<QualitySymbol> m_halfDiminishedList;
+    QList<QualitySymbol> m_minorList;
+    QList<QualitySymbol> m_augmentedList;
+    QList<QualitySymbol> m_diminishedList;
+    QList<QualitySymbol> m_omitList;
 
     int m_chordSpellingIndex;
     int m_currentStyleIndex;

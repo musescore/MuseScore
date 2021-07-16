@@ -30,7 +30,16 @@ namespace mu::notation {
 struct ChordSymbolStyle {
     QString styleName;
     QString fileName;
-    QHash<QString, QHash<QString, bool>> styleDefaults;
+};
+
+struct QualitySymbol {
+    QString qualitySymbol = "";
+    qreal qualMag = -1;
+    qreal qualAdjust = 999;
+    qreal extMag = -1;
+    qreal extAdjust = 999;
+    qreal modMag = -1;
+    qreal modAdjust = 999;
 };
 
 class ChordSymbolStyleManager
@@ -46,7 +55,7 @@ public:
     void extractChordStyleInfo(mu::io::path& f);
 
     QList<ChordSymbolStyle> getChordStyles();
-    QHash<QString, QStringList> getQualitySymbols(QString path);
+    QHash<QString, QList<QualitySymbol>> getQualitySymbols(QString path);
 
 private:
     QList<ChordSymbolStyle> _chordStyles;

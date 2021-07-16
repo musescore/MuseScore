@@ -132,9 +132,9 @@ void ChordSymbolStyleManager::extractChordStyleInfo(mu::io::path& f)
 }
 
 // TODO: Rewrite the XML format
-QHash<QString, QStringList> ChordSymbolStyleManager::getQualitySymbols(QString path)
+QHash<QString, QList<QualitySymbol> > ChordSymbolStyleManager::getQualitySymbols(QString path)
 {
-    QHash<QString, QStringList> qualitySymbols;
+    QHash<QString, QList<QualitySymbol> > qualitySymbols;
 
     QFileInfo ftest(path);
     if (!ftest.isAbsolute()) {
@@ -161,10 +161,18 @@ QHash<QString, QStringList> ChordSymbolStyleManager::getQualitySymbols(QString p
                 while (e.readNextStartElement()) {
                     if (e.name() == "quality") {
                         QString qual = e.attribute("q");
-                        QStringList rep;
+                        QList<QualitySymbol> rep;
                         while (e.readNextStartElement()) {
                             if (e.name() == "sym") {
-                                rep << e.readElementText();
+                                QualitySymbol qualSym;
+                                qualSym.qualMag = e.hasAttribute("qMag") ? e.doubleAttribute("qMag") : qualSym.qualMag;
+                                qualSym.qualAdjust = e.hasAttribute("qAdj") ? e.doubleAttribute("qAdj") : qualSym.qualAdjust;
+                                qualSym.extMag = e.hasAttribute("eMag") ? e.doubleAttribute("eMag") : qualSym.extMag;
+                                qualSym.extAdjust = e.hasAttribute("eAdj") ? e.doubleAttribute("eAdj") : qualSym.extAdjust;
+                                qualSym.modMag = e.hasAttribute("mMag") ? e.doubleAttribute("mMag") : qualSym.modMag;
+                                qualSym.modAdjust = e.hasAttribute("mAdj") ? e.doubleAttribute("mAdj") : qualSym.modAdjust;
+                                qualSym.qualitySymbol = e.readElementText();
+                                rep << qualSym;
                             }
                         }
                         qualitySymbols.insert(qual, rep);
@@ -172,10 +180,18 @@ QHash<QString, QStringList> ChordSymbolStyleManager::getQualitySymbols(QString p
                         // Created a separate tag for omit just in case
                         // in the future, if modifiers are handled differently
                         QString mod = e.attribute("m");
-                        QStringList rep;
+                        QList<QualitySymbol> rep;
                         while (e.readNextStartElement()) {
                             if (e.name() == "sym") {
-                                rep << e.readElementText();
+                                QualitySymbol modSym;
+                                modSym.qualMag = e.hasAttribute("qMag") ? e.doubleAttribute("qMag") : modSym.qualMag;
+                                modSym.qualAdjust = e.hasAttribute("qAdj") ? e.doubleAttribute("qAdj") : modSym.qualAdjust;
+                                modSym.extMag = e.hasAttribute("eMag") ? e.doubleAttribute("eMag") : modSym.extMag;
+                                modSym.extAdjust = e.hasAttribute("eAdj") ? e.doubleAttribute("eAdj") : modSym.extAdjust;
+                                modSym.modMag = e.hasAttribute("mMag") ? e.doubleAttribute("mMag") : modSym.modMag;
+                                modSym.modAdjust = e.hasAttribute("mAdj") ? e.doubleAttribute("mAdj") : modSym.modAdjust;
+                                modSym.qualitySymbol = e.readElementText();
+                                rep << modSym;
                             }
                         }
                         qualitySymbols.insert(mod, rep);

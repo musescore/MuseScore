@@ -431,9 +431,7 @@ const StyleDef::StyleValue StyleDef::styleValues[int(Sid::STYLES)] = {
     { Sid::chordAddOmitParentheses, "chordAddOmitParentheses", QVariant(true) },
 
     // Atleast one item in the selection history is required
-    { Sid::chordQualitySelectionHistory, "chordQualitySelectionHistory",
-      QVariant(QString(
-                   "Standard|maj7th:maj 7,half-dim:m 7 b5,min:mi,aug:aug,dim:dim,omit:omit,chrdSpell:0,stkMod:1.0,qualMag:1.0,qualAdj:0.0,extMag:1.0,extAdj:0.0,modMag:1.0,modAdj:0.0,hFretDist:1.0,mnHDist:0.5,mxHBarDist:3.0,mxSftAbv:0.0,mxSftBlw:0.0,cpFretPos:0.0,autoCap:1.0,minRtCap:1.0,qualCap:1.0,bsNtCap:1.0,solNtCap:0.0,altParen:1.0,susParen:1.0,minMajParen:1.0,addOmitParen:1.0")) },
+    { Sid::chordQualitySelectionHistory, "chordQualitySelectionHistory", QVariant(QString("")) },
     { Sid::chordQualityMajorSeventh, "chordQualityMajorSeventh", QVariant(QString("maj 7")) },
     { Sid::chordQualityHalfDiminished, "chordQualityHalfDiminished", QVariant(QString("m 7 b5")) },
     { Sid::chordQualityMinor,       "chordQualityMinor",       QVariant(QString("mi")) },
