@@ -62,6 +62,7 @@
 #include "instrumentsconverter.h"
 
 #include "draw/pen.h"
+#include "draw/painterpath.h"
 
 using namespace mu::notation;
 
@@ -1744,8 +1745,8 @@ void NotationInteraction::drawSelectionRange(draw::Painter* painter)
 
     std::vector<RectF> rangeArea = m_selection->range()->boundingArea();
     for (const RectF& rect: rangeArea) {
-        QPainterPath path;
-        path.addRoundedRect(rect.toQRectF(), 6, 6);
+        mu::PainterPath path;
+        path.addRoundedRect(rect, 6, 6);
 
         QColor fillColor = selectionColor;
         fillColor.setAlpha(10);

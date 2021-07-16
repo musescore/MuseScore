@@ -21,9 +21,7 @@
  */
 #include "painter.h"
 #include "brush.h"
-
-#include <QPainterPath>
-
+#include "painterpath.h"
 #include "log.h"
 
 #ifndef NO_QT_SUPPORT
@@ -204,7 +202,7 @@ void Painter::restore()
     }
 }
 
-void Painter::setWorldTransform(const QTransform& matrix, bool combine)
+void Painter::setWorldTransform(const Transform& matrix, bool combine)
 {
     State& st = editableState();
     if (combine) {
@@ -216,7 +214,7 @@ void Painter::setWorldTransform(const QTransform& matrix, bool combine)
     updateMatrix();
 }
 
-const QTransform& Painter::worldTransform() const
+const Transform& Painter::worldTransform() const
 {
     return state().worldTransform;
 }
@@ -273,7 +271,7 @@ void Painter::setViewport(const RectF& viewport)
 
 // drawing functions
 
-void Painter::fillPath(const QPainterPath& path, const Brush& brush)
+void Painter::fillPath(const PainterPath& path, const Brush& brush)
 {
     Pen oldPen = this->pen();
     Brush oldBrush = this->brush();
@@ -286,7 +284,7 @@ void Painter::fillPath(const QPainterPath& path, const Brush& brush)
     setBrush(oldBrush);
 }
 
-void Painter::strokePath(const QPainterPath& path, const Pen& pen)
+void Painter::strokePath(const PainterPath& path, const Pen& pen)
 {
     Pen oldPen = this->pen();
     Brush oldBrush = this->brush();
@@ -299,7 +297,7 @@ void Painter::strokePath(const QPainterPath& path, const Pen& pen)
     setBrush(oldBrush);
 }
 
-void Painter::drawPath(const QPainterPath& path)
+void Painter::drawPath(const PainterPath& path)
 {
     m_provider->drawPath(path);
     if (extended) {
@@ -328,8 +326,8 @@ void Painter::drawLines(const PointF* pointPairs, size_t lineCount)
 void Painter::drawRects(const RectF* rects, size_t rectCount)
 {
     for (size_t i = 0; i < rectCount; ++i) {
-        QPainterPath path;
-        path.addRect(rects[i].toQRectF());
+        PainterPath path;
+        path.addRect(rects[i]);
         if (path.isEmpty()) {
             continue;
         }
@@ -339,8 +337,8 @@ void Painter::drawRects(const RectF* rects, size_t rectCount)
 
 void Painter::drawEllipse(const RectF& rect)
 {
-    QPainterPath path;
-    path.addEllipse(rect.toQRectF());
+    PainterPath path;
+    path.addEllipse(rect);
     m_provider->drawPath(path);
     if (extended) {
         extended->drawPath(path);
@@ -376,23 +374,23 @@ void Painter::drawArc(const RectF& r, int a, int alen)
 {
     //! NOTE Copied from QPainter source code
 
-    QRectF rect = r.toQRectF().normalized();
+    RectF rect = r.normalized();
 
-    QPainterPath path;
+    PainterPath path;
     path.arcMoveTo(rect, a / 16.0);
     path.arcTo(rect, a / 16.0, alen / 16.0);
     strokePath(path, pen());
 }
 
-void Painter::drawRoundedRect(const RectF& rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode)
+void Painter::drawRoundedRect(const RectF& rect, qreal xRadius, qreal yRadius)
 {
     if (xRadius <= 0 || yRadius <= 0) {             // draw normal rectangle
         drawRect(rect);
         return;
     }
 
-    QPainterPath path;
-    path.addRoundedRect(rect.toQRectF(), xRadius, yRadius, mode);
+    PainterPath path;
+    path.addRoundedRect(rect, xRadius, yRadius);
     drawPath(path);
 }
 
@@ -486,18 +484,18 @@ const Painter::State& Painter::state() const
     return m_states.top();
 }
 
-QTransform Painter::makeViewTransform() const
+Transform Painter::makeViewTransform() const
 {
     const State& st = state();
     qreal scaleW = qreal(st.viewport.width()) / qreal(st.window.width());
     qreal scaleH = qreal(st.viewport.height()) / qreal(st.window.height());
-    return QTransform(scaleW, 0, 0, scaleH, st.viewport.x() - st.window.x() * scaleW, st.viewport.y() - st.window.y() * scaleH);
+    return Transform(scaleW, 0, 0, scaleH, st.viewport.x() - st.window.x() * scaleW, st.viewport.y() - st.window.y() * scaleH);
 }
 
 void Painter::updateMatrix()
 {
     Painter::State& st = editableState();
-    st.transform = st.isWxF ? st.worldTransform : QTransform();
+    st.transform = st.isWxF ? st.worldTransform : Transform();
     if (st.isVxF) {
         st.transform *= st.viewTransform;
     }

@@ -22,7 +22,6 @@
 #ifndef MU_DRAW_DRAWTYPES_H
 #define MU_DRAW_DRAWTYPES_H
 
-#include <QPainterPath>
 #include <QVariant>
 #include "geometry.h"
 

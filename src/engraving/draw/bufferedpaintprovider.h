@@ -65,11 +65,11 @@ public:
     void save() override;
     void restore() override;
 
-    void setTransform(const QTransform& transform) override;
-    const QTransform& transform() const override;
+    void setTransform(const Transform& transform) override;
+    const Transform& transform() const override;
 
     // drawing functions
-    void drawPath(const QPainterPath& path) override;
+    void drawPath(const PainterPath& path) override;
     void drawPolygon(const PointF* points, size_t pointCount, PolygonMode mode) override;
 
     void drawText(const PointF& point, const QString& text) override;

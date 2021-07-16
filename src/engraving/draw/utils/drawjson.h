@@ -23,6 +23,7 @@
 #define MU_DRAW_DRAWJSON_H
 
 #include <QByteArray>
+#include <QJsonObject>
 #include "../buffereddrawtypes.h"
 #include "retval.h"
 
@@ -33,6 +34,11 @@ public:
 
     static QByteArray toJson(const DrawData& buf);
     static RetVal<DrawDataPtr> fromJson(const QByteArray& json);
+    static QJsonObject painterPathToObj(const PainterPath& path);
+
+#ifndef NO_QT_SUPPORT
+    static void qPainterPathfromObj(const QJsonObject& obj, QPainterPath& path);
+#endif
 };
 }
 #endif // MU_DRAW_DRAWJSON_H

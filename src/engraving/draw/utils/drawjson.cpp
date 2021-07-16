@@ -27,6 +27,10 @@
 #include <QJsonValue>
 #include <QJsonParseError>
 
+#ifndef NO_QT_SUPPORT
+#include <QPainterPath>
+#endif
+
 #include "realfn.h"
 #include "log.h"
 
@@ -91,14 +95,14 @@ static void fromObj(const QJsonObject& obj, Font& font)
     font.setItalic(obj["italic"].toBool());
 }
 
-static QJsonArray toArr(const QTransform& t)
+static QJsonArray toArr(const Transform& t)
 {
     return QJsonArray({ rtoi(t.m11()), rtoi(t.m12()), rtoi(t.m13()),
                         rtoi(t.m21()), rtoi(t.m22()), rtoi(t.m23()),
                         rtoi(t.m31()), rtoi(t.m32()), rtoi(t.m33()) });
 }
 
-static void fromArr(const QJsonArray& arr, QTransform& t)
+static void fromArr(const QJsonArray& arr, Transform& t)
 {
     IF_ASSERT_FAILED(arr.size() == 9) {
         return;
@@ -171,6 +175,7 @@ static void fromObj(const QJsonObject& obj, DrawData::State& st)
     st.compositionMode = static_cast<CompositionMode>(obj["compositionMode"].toInt());
 }
 
+#ifndef NO_QT_SUPPORT
 static QJsonObject toObj(const QPainterPath& path)
 {
     QJsonObject obj;
@@ -179,6 +184,22 @@ static QJsonObject toObj(const QPainterPath& path)
     QJsonArray elsArr;
     for (int i = 0; i < path.elementCount(); ++i) {
         QPainterPath::Element e = path.elementAt(i);
+        elsArr.append(QJsonArray({ static_cast<int>(e.type), rtoi(e.x), rtoi(e.y) }));
+    }
+    obj["elements"] = elsArr;
+    return obj;
+}
+
+#endif
+
+static QJsonObject toObj(const PainterPath& path)
+{
+    QJsonObject obj;
+    obj["fillRule"] = static_cast<int>(path.fillRule());
+
+    QJsonArray elsArr;
+    for (int i = 0; i < path.elementCount(); ++i) {
+        PainterPath::Element e = path.elementAt(i);
         elsArr.append(QJsonArray({ static_cast<int>(e.type), rtoi(e.x), rtoi(e.y) }));
     }
     obj["elements"] = elsArr;
@@ -195,6 +216,7 @@ static QJsonObject toObj(const DrawPath& path)
     return obj;
 }
 
+#ifndef NO_QT_SUPPORT
 static void fromObj(const QJsonObject& obj, QPainterPath& path)
 {
     path.setFillRule(static_cast<Qt::FillRule>(obj["fillRule"].toInt()));
@@ -231,6 +253,63 @@ static void fromObj(const QJsonObject& obj, QPainterPath& path)
         case QPainterPath::CurveToDataElement: {
             if (curveEls.size() == 1) { // only CurveToElement
                 QPainterPath::Element e;
+                e.type = type;
+                e.x = x;
+                e.y = y;
+                curveEls.push_back(std::move(e));
+                continue;
+            }
+
+            IF_ASSERT_FAILED(curveEls.size() == 2) { // must be CurveToElement and one CurveToDataElement
+                curveEls.clear();
+                continue;
+            }
+
+            path.cubicTo(curveEls.at(0).x, curveEls.at(0).y, curveEls.at(1).x, curveEls.at(1).y, x, y);
+            curveEls.clear();
+        } break;
+        }
+    }
+}
+
+#endif
+
+static void fromObj(const QJsonObject& obj, PainterPath& path)
+{
+    path.setFillRule(static_cast<PainterPath::FillRule>(obj["fillRule"].toInt()));
+
+    QJsonArray elsArr = obj["elements"].toArray();
+    std::vector<PainterPath::Element> curveEls;
+    for (const QJsonValue elVal : elsArr) {
+        QJsonArray elArr = elVal.toArray();
+        IF_ASSERT_FAILED(elArr.size() == 3) {
+            continue;
+        }
+
+        PainterPath::ElementType type = static_cast<PainterPath::ElementType>(elArr.at(0).toInt());
+        qreal x = itor(elArr.at(1).toInt());
+        qreal y = itor(elArr.at(2).toInt());
+
+        switch (type) {
+        case PainterPath::ElementType::MoveToElement: {
+            path.moveTo(x, y);
+        } break;
+        case PainterPath::ElementType::LineToElement: {
+            path.lineTo(x, y);
+        } break;
+        case PainterPath::ElementType::CurveToElement: {
+            IF_ASSERT_FAILED(curveEls.empty()) {
+                continue;
+            }
+            PainterPath::Element e;
+            e.type = type;
+            e.x = x;
+            e.y = y;
+            curveEls.push_back(std::move(e));
+        } break;
+        case PainterPath::ElementType::CurveToDataElement: {
+            if (curveEls.size() == 1) { // only CurveToElement
+                PainterPath::Element e;
                 e.type = type;
                 e.x = x;
                 e.y = y;
@@ -456,3 +535,16 @@ mu::RetVal<DrawDataPtr> DrawBufferJson::fromJson(const QByteArray& json)
 
     return RetVal<DrawDataPtr>::make_ok(buf);
 }
+
+QJsonObject DrawBufferJson::painterPathToObj(const PainterPath& path)
+{
+    return toObj(path);
+}
+
+#ifndef NO_QT_SUPPORT
+void DrawBufferJson::qPainterPathfromObj(const QJsonObject& obj, QPainterPath& path)
+{
+    fromObj(obj, path);
+}
+
+#endif

@@ -361,7 +361,7 @@ void NotationPaintView::paint(QPainter* qp)
     RectF rect(0.0, 0.0, width(), height());
     paintBackground(rect, painter);
 
-    painter->setWorldTransform(m_matrix);
+    painter->setWorldTransform(mu::Transform::fromQTransform(m_matrix));
 
     notation()->paint(painter, toLogical(rect.toQRect()));
 
