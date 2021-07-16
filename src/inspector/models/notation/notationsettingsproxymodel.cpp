@@ -31,10 +31,10 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
 {
     setSectionType(InspectorSectionType::SECTION_NOTATION);
 
-    AbstractInspectorModel::InspectorModelType notationSingleElementModelType = this->notationSingleElementModelType(elementSet);
+    QList<AbstractInspectorModel::InspectorModelType> modelTypes = this->modelTypes(elementSet);
 
-    if (notationSingleElementModelType != AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED) {
-        auto model = inspectorModelCreator()->newInspectorModel(notationSingleElementModelType, parent, repository);
+    if (modelTypes.count() == 1) {
+        auto model = inspectorModelCreator()->newInspectorModel(modelTypes.first(), parent, repository);
         setTitle(model->title());
         addModel(model);
     } else {
@@ -51,12 +51,12 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     }
 }
 
-bool NotationSettingsProxyModel::canContains(Ms::ElementType elementType) const
+bool NotationSettingsProxyModel::isTypeSupported(Ms::ElementType elementType) const
 {
     return AbstractInspectorModel::notationElementModelType(elementType) != AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
 }
 
-AbstractInspectorModel::InspectorModelType NotationSettingsProxyModel::notationSingleElementModelType(const QSet<Ms::ElementType>& elements)
+QList<AbstractInspectorModel::InspectorModelType> NotationSettingsProxyModel::modelTypes(const QSet<Ms::ElementType>& elements)
 const
 {
     static QList<AbstractInspectorModel::InspectorModelType> notePartTypes {
@@ -67,25 +67,36 @@ const
         AbstractInspectorModel::InspectorModelType::TYPE_BEAM
     };
 
-    AbstractInspectorModel::InspectorModelType notationModelType = AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
+    QList<AbstractInspectorModel::InspectorModelType> types;
+
+    AbstractInspectorModel::InspectorModelType noteModelType = AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
     for (const Ms::ElementType elementType : elements) {
         AbstractInspectorModel::InspectorModelType modelType = AbstractInspectorModel::notationElementModelType(elementType);
         if (modelType == AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED) {
             continue;
         }
 
-        if (notationModelType != AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED && notationModelType != modelType) {
-            if (notePartTypes.contains(modelType) && notePartTypes.contains(notationModelType)) {
-                notationModelType = AbstractInspectorModel::InspectorModelType::TYPE_NOTE;
+        if (types.contains(modelType)) {
+            continue;
+        }
+
+        if (!types.isEmpty() && notePartTypes.contains(modelType)) { // if element is a part of the note
+            if (noteModelType == AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED) { // if element is the first element of the parts of the note
+                types << modelType;
                 continue;
             }
 
-            notationModelType = AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
-            break;
+            if (noteModelType == modelType) { // if such model has already been added
+                continue;
+            }
+
+            // if the element is another part of the note, then there will be one note model
+            types.removeAll(noteModelType);
+            modelType = AbstractInspectorModel::InspectorModelType::TYPE_NOTE;
         }
 
-        notationModelType = modelType;
+        types << modelType;
     }
 
-    return notationModelType;
+    return types;
 }

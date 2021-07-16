@@ -198,7 +198,7 @@ void InspectorListModel::removeUnusedModels(const QSet<Ms::ElementType>& newElem
 
             if (!needRemove) {
                 for (Ms::ElementType elementType: newElementTypeSet) {
-                    if (!proxyModel->canContains(elementType)) {
+                    if (!proxyModel->isTypeSupported(elementType)) {
                         continue;
                     }
 
