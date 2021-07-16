@@ -495,10 +495,15 @@ void FretDiagram::calculateBoundingRect()
       }
 
 //---------------------------------------------------------
-//   layout
+//   layoutHorizontal
+//    Do initial setPos().
+//    This takes place before autoplaceSegmentElement() but
+//    reliably sets the x-value before the system has been
+//    created. This is useful for creating a horizontal
+//    spacer in ChordRest::shape().
 //---------------------------------------------------------
 
-void FretDiagram::layout()
+void FretDiagram::layoutHorizontal()
       {
       calculateBoundingRect();
       if (!parent() || !parent()->isSegment()) {
@@ -531,7 +536,15 @@ void FretDiagram::layout()
       else if (_orientation == Orientation::HORIZONTAL)
             mainWidth = fretDist * (_frets + 0.5);
       setPos((noteheadWidth - mainWidth)/2, -(bbox().height() + styleP(Sid::fretY)));
+      }
 
+//---------------------------------------------------------
+//   layout
+//---------------------------------------------------------
+
+void FretDiagram::layout()
+      {
+      layoutHorizontal();
       autoplaceSegmentElement();
 
       // don't display harmony in palette
