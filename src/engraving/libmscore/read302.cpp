@@ -183,7 +183,7 @@ bool Score::read(XmlReader& e)
                 MasterScore* m = masterScore();
                 Score* s = m->createScore();
                 int defaultsVersion = m->style().defaultStyleVersion();
-                s->setStyle(*DefaultStyle::resolveStyleDefaults(defaultsVersion));
+                s->setStyle(DefaultStyle::resolveStyleDefaults(defaultsVersion));
                 s->style().setDefaultStyleVersion(defaultsVersion);
                 Excerpt* ex = new Excerpt(m);
 

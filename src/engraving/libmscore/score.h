@@ -957,13 +957,13 @@ public:
     bool loadStyle(const QString&, bool ign = false, const bool overlap = false);
     bool saveStyle(const QString&);
 
-    QVariant styleV(Sid idx) const { return style().value(idx); }
-    Spatium  styleS(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "Ms::Spatium")); return style().value(idx).value<Spatium>(); }
-    qreal    styleP(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "Ms::Spatium")); return style().pvalue(idx); }
-    QString  styleSt(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "QString")); return style().value(idx).toString(); }
-    bool     styleB(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "bool")); return style().value(idx).toBool(); }
-    qreal    styleD(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "double")); return style().value(idx).toDouble(); }
-    int      styleI(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "int")); return style().value(idx).toInt(); }
+    const QVariant& styleV(Sid idx) const { return style().styleV(idx); }
+    Spatium  styleS(Sid idx) const { return style().styleS(idx); }
+    qreal styleP(Sid idx) const { return style().styleP(idx); }
+    QString styleSt(Sid idx) const { return style().styleSt(idx); }
+    bool styleB(Sid idx) const { return style().styleB(idx); }
+    qreal styleD(Sid idx) const { return style().styleD(idx); }
+    int styleI(Sid idx) const { return style().styleI(idx); }
 
     void setStyleValue(Sid sid, QVariant value) { style().set(sid, value); }
     QString getTextStyleUserName(Tid tid);

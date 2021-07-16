@@ -33,20 +33,19 @@ public:
 
     void init(const QString& defaultSyleFilePath, const QString& partStyleFilePath);
 
-    static inline const Ms::MStyle& baseStyle() { return instance()->m_baseStyle; }
-    static inline const Ms::MStyle& defaultStyle() { return instance()->m_defaultStyle; }
-    static inline const Ms::MStyle* defaultStyleForParts() { return instance()->m_defaultStyleForParts; }
+    static const Ms::MStyle& baseStyle();
+    static const Ms::MStyle& defaultStyle();
+    static const Ms::MStyle* defaultStyleForParts();
 
-    static const Ms::MStyle* resolveStyleDefaults(const int defaultsVersion);
+    static const Ms::MStyle& resolveStyleDefaults(const int defaultsVersion);
 
 private:
     DefaultStyle() = default;
 
-    bool readDefaultStyle(QString file);
-    bool readPartStyle(QString filePath);
+    static bool doLoadStyle(Ms::MStyle* style, const QString& filePath);
 
     Ms::MStyle m_baseStyle; // buildin initial style
-    Ms::MStyle m_defaultStyle; // buildin modified by preferences
+    Ms::MStyle* m_defaultStyle; // buildin modified by preferences
     Ms::MStyle* m_defaultStyleForParts = nullptr;
 };
 }

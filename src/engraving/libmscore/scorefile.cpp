@@ -741,7 +741,7 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, const
                 }
                 int defaultsVersion = getStyleDefaultsVersion();
 
-                setStyle(*DefaultStyle::resolveStyleDefaults(defaultsVersion));
+                setStyle(DefaultStyle::resolveStyleDefaults(defaultsVersion));
                 style().setDefaultStyleVersion(defaultsVersion);
             }
 
