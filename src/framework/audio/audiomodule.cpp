@@ -206,7 +206,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
     //! --- Diagnostics ---
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        std::vector<io::path> paths = s_audioConfiguration->soundFontPaths();
+        std::vector<io::path> paths = s_audioConfiguration->soundFontDirectories();
         for (const io::path& p : paths) {
             pr->reg("soundfonts", p);
         }

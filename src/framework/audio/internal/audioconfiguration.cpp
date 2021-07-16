@@ -95,10 +95,10 @@ unsigned int AudioConfiguration::driverBufferSize() const
     return settings()->value(AUDIO_BUFFER_SIZE).toInt();
 }
 
-std::vector<io::path> AudioConfiguration::soundFontPaths() const
+SoundFontPaths AudioConfiguration::soundFontDirectories() const
 {
     std::string pathsStr = settings()->value(USER_SOUNDFONTS_PATH).toString();
-    std::vector<io::path> paths = io::path::pathsFromString(pathsStr, ";");
+    SoundFontPaths paths = io::path::pathsFromString(pathsStr, ";");
     paths.push_back(globalConfiguration()->appDataPath());
 
     //! TODO Implement me
