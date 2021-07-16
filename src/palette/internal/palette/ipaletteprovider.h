@@ -19,18 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import MuseScore.UiComponents 1.0
+#ifndef MU_PALETTE_IPALETTEPROVIDER_H
+#define MU_PALETTE_IPALETTEPROVIDER_H
 
-Rectangle {
-    readonly property QtObject paletteWorkspace: null
-    readonly property bool hasFocus: false
+#include "modularity/imoduleexport.h"
 
-    color: ui.theme.backgroundPrimaryColor
+#include "async/notification.h"
 
-    StyledTextLabel {
-        anchors.centerIn: parent
-        text: "Palette Panel Stub"
-    }
+#include "palettetree.h"
+
+namespace mu::palette {
+class IPaletteProvider : MODULE_EXPORT_INTERFACE
+{
+    INTERFACE_ID(IPaletteAdapter)
+
+public:
+    virtual ~IPaletteProvider() = default;
+
+    virtual void init() = 0;
+
+    virtual Ms::PaletteTreePtr userPaletteTree() const = 0;
+    virtual async::Notification userPaletteTreeChanged() const = 0;
+    virtual void setUserPaletteTree(Ms::PaletteTreePtr tree) = 0;
+    virtual void setDefaultPaletteTree(Ms::PaletteTreePtr tree) = 0;
+};
 }
+
+#endif // MU_PALETTE_IPALETTEPROVIDER_H

@@ -77,7 +77,7 @@ void TestElement::testIds()
         ElementType::MARKER,
         ElementType::JUMP,
         ElementType::MEASURE_REPEAT,
-        ElementType::ICON,
+        ElementType::ACTION_ICON,
         ElementType::NOTE,
         ElementType::SYMBOL,
         ElementType::FSYMBOL,

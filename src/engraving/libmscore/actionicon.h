@@ -24,28 +24,59 @@
 #define __ICON_H__
 
 #include "element.h"
-#include "mscore.h"
 
 namespace Ms {
-//---------------------------------------------------------
-//   Icon
-//    dummy element, used for drag&drop
-//---------------------------------------------------------
+enum class ActionIconType {
+    UNDEFINED = -1,
 
-class Icon final : public Element
+    ACCIACCATURA,
+    APPOGGIATURA,
+    GRACE4,
+    GRACE16,
+    GRACE32,
+    GRACE8_AFTER,
+    GRACE16_AFTER,
+    GRACE32_AFTER,
+
+    BEAM_START,
+    BEAM_MID,
+    BEAM_NONE,
+    BEAM_BEGIN_32,
+    BEAM_BEGIN_64,
+    BEAM_AUTO,
+
+    BEAM_FEATHERED_SLOWER,
+    BEAM_FEATHERED_FASTER,
+
+    VFRAME,
+    HFRAME,
+    TFRAME,
+    FFRAME,
+    MEASURE,
+
+    BRACKETS,
+    PARENTHESES,
+    BRACES,
+};
+
+//! Dummy element, used for drag&drop
+class ActionIcon final : public Element
 {
 public:
-    Icon(Score* score);
-    ~Icon() override = default;
+    ActionIcon(Score* score);
+    ~ActionIcon() override = default;
 
-    Icon* clone() const override;
+    ActionIcon* clone() const override;
     ElementType type() const override;
-    IconType iconType() const;
+
+    ActionIconType actionType() const;
     const std::string& actionCode() const;
 
-    void setIconType(IconType val);
+    void setActionType(ActionIconType val);
     void setAction(const std::string& actionCode, char16_t icon);
-    void setExtent(int extent);
+
+    qreal extent() const;
+    void setExtent(qreal extent);
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
@@ -58,10 +89,10 @@ public:
 private:
     mu::RectF boundingBox() const;
 
-    IconType _iconType { IconType::NONE };
-    std::string _actionCode;
-    char16_t _icon = 0;
-    int _extent { 40 };
+    ActionIconType m_actionType { ActionIconType::UNDEFINED };
+    std::string m_actionCode;
+    char16_t m_icon = 0;
+    qreal m_extent { 40 };
 };
 }     // namespace Ms
 #endif

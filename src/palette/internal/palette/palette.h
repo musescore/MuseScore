@@ -28,9 +28,10 @@
 #include "palettetree.h"
 
 #include "modularity/ioc.h"
-#include "ipaletteadapter.h"
 #include "ipaletteconfiguration.h"
-
+#include "ui/iuiactionsregister.h"
+#include "actions/iactionsdispatcher.h"
+#include "context/iglobalcontext.h"
 #include "iinteractive.h"
 
 namespace Ms {
@@ -68,8 +69,10 @@ class Palette : public QWidget
 {
     Q_OBJECT
 
-    INJECT_STATIC(palette, mu::palette::IPaletteAdapter, adapter)
     INJECT_STATIC(palette, mu::palette::IPaletteConfiguration, configuration)
+    INJECT_STATIC(palette, mu::ui::IUiActionsRegister, actionsRegister)
+    INJECT_STATIC(palette, mu::actions::IActionsDispatcher, dispatcher)
+    INJECT_STATIC(palette, mu::context::IGlobalContext, globalContext)
     INJECT(palette, mu::framework::IInteractive, interactive)
 
 signals:
@@ -167,6 +170,7 @@ private:
     const QList<PaletteCellPtr>& ccp() const;
     QPixmap pixmap(int cellIdx) const;
 
+    bool notationHasSelection() const;
     void applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers);
 
     QString m_name;

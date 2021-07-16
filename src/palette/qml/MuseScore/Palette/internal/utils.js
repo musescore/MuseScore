@@ -21,10 +21,6 @@
  */
 .pragma library
 
-var style = {
-    popupMargin: 3
-}
-
 function stretched(cw, w) {
     return cw + (w % cw) / Math.floor(w / cw);
 }

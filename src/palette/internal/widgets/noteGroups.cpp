@@ -28,7 +28,7 @@
 #include "libmscore/score.h"
 #include "libmscore/part.h"
 #include "libmscore/key.h"
-#include "libmscore/icon.h"
+#include "libmscore/actionicon.h"
 #include "libmscore/staff.h"
 #include "palette/palettecreator.h"
 
@@ -88,12 +88,13 @@ NoteGroups::NoteGroups(QWidget* parent)
     : QGroupBox(parent)
 {
     setupUi(this);
-    static const IconAction bpa[] = {
-        { IconType::SBEAM,    "beam-start" },
-        { IconType::MBEAM,    "beam-mid" },
-        { IconType::BEAM32,   "beam32" },
-        { IconType::BEAM64,   "beam64" },
-        { IconType::NONE,     "" }
+
+    static const PaletteActionIconList actions {
+        { ActionIconType::BEAM_START, "beam-start" },
+        { ActionIconType::BEAM_MID, "beam-mid" },
+        { ActionIconType::BEAM_BEGIN_32, "beam32" },
+        { ActionIconType::BEAM_BEGIN_64, "beam64" },
+        { ActionIconType::UNDEFINED, "" }
     };
 
     iconPalette->setName(QT_TRANSLATE_NOOP("palette", "Beam Properties"));
@@ -101,7 +102,7 @@ NoteGroups::NoteGroups(QWidget* parent)
     iconPalette->setGrid(27, 40);
     iconPalette->setMinimumWidth(27 * 4 * Palette::paletteScaling() + 1);       // enough room for all icons, with roundoff
     iconPalette->setDrawGrid(true);
-    populateIconPalette(iconPalette, bpa);
+    PaletteCreator::populateIconPalette(iconPalette, actions);
     iconPalette->setReadOnly(true);
     iconPalette->setFixedHeight(iconPalette->heightForWidth(iconPalette->width()));
     iconPalette->updateGeometry();
@@ -186,19 +187,19 @@ void NoteGroups::noteClicked(Note* note)
 //   beamPropertyDropped
 //---------------------------------------------------------
 
-void NoteGroups::beamPropertyDropped(Chord* chord, Icon* icon)
+void NoteGroups::beamPropertyDropped(Chord* chord, ActionIcon* icon)
 {
-    switch (icon->iconType()) {
-    case IconType::SBEAM:
+    switch (icon->actionType()) {
+    case ActionIconType::BEAM_START:
         updateBeams(chord, Beam::Mode::BEGIN);
         break;
-    case IconType::MBEAM:
+    case ActionIconType::BEAM_MID:
         updateBeams(chord, Beam::Mode::AUTO);
         break;
-    case IconType::BEAM32:
+    case ActionIconType::BEAM_BEGIN_32:
         updateBeams(chord, Beam::Mode::BEGIN32);
         break;
-    case IconType::BEAM64:
+    case ActionIconType::BEAM_BEGIN_64:
         updateBeams(chord, Beam::Mode::BEGIN64);
         break;
     default:

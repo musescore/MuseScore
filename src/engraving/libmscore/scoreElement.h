@@ -108,7 +108,7 @@ class TextLineSegment;
 class Pedal;
 class PedalSegment;
 class LedgerLine;
-class Icon;
+class ActionIcon;
 class VoltaSegment;
 class NoteLine;
 class Trill;
@@ -376,7 +376,7 @@ public:
     CONVERT(PedalSegment,  PEDAL_SEGMENT)
     CONVERT(OttavaSegment, OTTAVA_SEGMENT)
     CONVERT(LedgerLine,    LEDGER_LINE)
-    CONVERT(Icon,          ICON)
+    CONVERT(ActionIcon,    ACTION_ICON)
     CONVERT(VoltaSegment,  VOLTA_SEGMENT)
     CONVERT(NoteLine,      NOTELINE)
     CONVERT(Trill,         TRILL)
@@ -686,7 +686,7 @@ CONVERT(Pedal)
 CONVERT(PedalSegment)
 CONVERT(OttavaSegment)
 CONVERT(LedgerLine)
-CONVERT(Icon)
+CONVERT(ActionIcon)
 CONVERT(VoltaSegment)
 CONVERT(NoteLine)
 CONVERT(Trill)

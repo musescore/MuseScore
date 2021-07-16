@@ -35,6 +35,10 @@ const UiActionList PaletteUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Master Palette"),
              Checkable::Yes
              ),
+    UiAction("palette-search",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Palette Search")
+             ),
 };
 
 PaletteUiActions::PaletteUiActions(std::shared_ptr<PaletteActionsController> controller)

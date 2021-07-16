@@ -37,7 +37,7 @@ Item {
     property bool custom: false
     property bool unresolved: false
 
-    property PaletteWorkspace paletteWorkspace
+    property PaletteProvider paletteProvider
     property var modelIndex: null
 
     property NavigationPanel navigationPanel: null
@@ -152,9 +152,9 @@ Item {
             case "hide": root.hidePaletteRequested(); break
             case "new": root.insertNewPaletteRequested(); break
             case "edit": root.enableEditingToggled(!root.editingEnabled); break
-            case "reset": root.paletteWorkspace.resetPalette(root.modelIndex); break
-            case "save": root.paletteWorkspace.savePalette(root.modelIndex); break
-            case "load": root.paletteWorkspace.loadPalette(root.modelIndex); break
+            case "reset": root.paletteProvider.resetPalette(root.modelIndex); break
+            case "save": root.paletteProvider.savePalette(root.modelIndex); break
+            case "load": root.paletteProvider.loadPalette(root.modelIndex); break
             case "properties": Qt.callLater(root.editPalettePropertiesRequested); break
             }
         }

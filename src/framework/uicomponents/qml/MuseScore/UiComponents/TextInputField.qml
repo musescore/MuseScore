@@ -45,6 +45,8 @@ FocusScope {
     property alias navigation: navCtrl
     property alias accessible: navCtrl.accessible
 
+    property alias clearTextButton: clearTextButtonItem
+
     signal currentTextEdited(var newTextValue)
     signal textCleared()
 
@@ -175,7 +177,7 @@ FocusScope {
         }
 
         FlatButton {
-            id: clearTextButton
+            id: clearTextButtonItem
 
             Layout.fillHeight: true
             Layout.preferredWidth: height
@@ -191,6 +193,9 @@ FocusScope {
             normalStateColor: background.color
             hoveredStateColor: ui.theme.accentColor
             pressedStateColor: ui.theme.accentColor
+
+            navigation.panel: navCtrl.panel
+            navigation.order: navCtrl.order + 1
 
             onClicked: {
                 root.clear()
@@ -235,7 +240,7 @@ FocusScope {
         anchors.left: parent.left
 
         height: parent.height
-        width: clearTextButton.visible ? parent.width - clearTextButton.width : parent.width
+        width: clearTextButtonItem.visible ? parent.width - clearTextButtonItem.width : parent.width
 
         propagateComposedEvents: true
         hoverEnabled: true

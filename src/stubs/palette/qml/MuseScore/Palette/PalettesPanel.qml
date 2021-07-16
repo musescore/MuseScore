@@ -19,23 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PALETTE_PALETTEWORKSPACESETUP_H
-#define MU_PALETTE_PALETTEWORKSPACESETUP_H
+import QtQuick 2.15
 
-#include "modularity/ioc.h"
-#include "workspace/iworkspacesdataprovider.h"
-#include "palette/ipaletteprovider.h"
-#include "async/asyncable.h"
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
-namespace mu::palette {
-class PaletteWorkspaceSetup : public async::Asyncable
-{
-    INJECT(palette, workspace::IWorkspacesDataProvider, workspacesDataProvider)
-    INJECT(palette, IPaletteProvider, paletteProvider)
+Rectangle {
+    property NavigationSection navigationSection: null
 
-public:
-    void setup();
-};
+    color: ui.theme.backgroundPrimaryColor
+
+    StyledTextLabel {
+        anchors.centerIn: parent
+        text: "Palette Panel Stub"
+    }
 }
-
-#endif // MU_PALETTE_PALETTEWORKSPACESETUP_H

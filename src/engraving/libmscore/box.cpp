@@ -36,7 +36,7 @@
 #include "fret.h"
 #include "mscore.h"
 #include "stafftext.h"
-#include "icon.h"
+#include "actionicon.h"
 #include "xml.h"
 #include "measure.h"
 #include "undo.h"
@@ -533,13 +533,13 @@ bool Box::acceptDrop(EditData& data) const
     case ElementType::IMAGE:
     case ElementType::SYMBOL:
         return true;
-    case ElementType::ICON:
-        switch (toIcon(data.dropElement)->iconType()) {
-        case IconType::VFRAME:
-        case IconType::TFRAME:
-        case IconType::FFRAME:
-        case IconType::HFRAME:
-        case IconType::MEASURE:
+    case ElementType::ACTION_ICON:
+        switch (toActionIcon(data.dropElement)->actionType()) {
+        case ActionIconType::VFRAME:
+        case ActionIconType::TFRAME:
+        case ActionIconType::FFRAME:
+        case ActionIconType::HFRAME:
+        case ActionIconType::MEASURE:
             return true;
         default:
             break;
@@ -606,21 +606,21 @@ Element* Box::drop(EditData& data)
         return text;
     }
 
-    case ElementType::ICON:
-        switch (toIcon(e)->iconType()) {
-        case IconType::VFRAME:
+    case ElementType::ACTION_ICON:
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::VFRAME:
             score()->insertMeasure(ElementType::VBOX, this);
             break;
-        case IconType::TFRAME:
+        case ActionIconType::TFRAME:
             score()->insertMeasure(ElementType::TBOX, this);
             break;
-        case IconType::FFRAME:
+        case ActionIconType::FFRAME:
             score()->insertMeasure(ElementType::FBOX, this);
             break;
-        case IconType::HFRAME:
+        case ActionIconType::HFRAME:
             score()->insertMeasure(ElementType::HBOX, this);
             break;
-        case IconType::MEASURE:
+        case ActionIconType::MEASURE:
             score()->insertMeasure(ElementType::MEASURE, this);
             break;
         default:

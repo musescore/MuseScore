@@ -23,32 +23,30 @@
 #ifndef __PALETTECREATER_H__
 #define __PALETTECREATER_H__
 
-#include "libmscore/mscore.h"
-
-#include "palettetree.h"
+#include "libmscore/actionicon.h"
 
 #include "modularity/ioc.h"
-#include "ipaletteadapter.h"
 #include "ipaletteconfiguration.h"
+#include "ui/iuiactionsregister.h"
 
 namespace Ms {
 class Palette;
 class PalettePanel;
 struct PaletteTree;
 
-struct IconAction
+struct PaletteActionIcon
 {
-    IconType subtype = IconType::NONE;
-    const char* action = nullptr;
+    ActionIconType actionType = ActionIconType::UNDEFINED;
+    mu::actions::ActionCode actionCode;
 };
+using PaletteActionIconList = std::vector<PaletteActionIcon>;
 
 class PaletteCreator
 {
-    INJECT_STATIC(palette, mu::palette::IPaletteAdapter, adapter)
     INJECT_STATIC(palette, mu::palette::IPaletteConfiguration, configuration)
+    INJECT_STATIC(palette, mu::ui::IUiActionsRegister, actionsRegister)
 
 public:
-
     static Palette* newTempoPalette(bool defaultPalette = false);
     static Palette* newTextPalette(bool defaultPalette = false);
     static Palette* newTimePalette();
@@ -98,11 +96,15 @@ public:
     static PalettePanel* newBarLinePalettePanel();
     static PalettePanel* newLinesPalettePanel();
     static PalettePanel* newFretboardDiagramPalettePanel();
+
     static Ms::PaletteTreePtr newMasterPaletteTree();
     static PaletteTree* newDefaultPaletteTree();
-};
 
-extern void populateIconPalette(Palette* p, const IconAction* a);
+    static void populateIconPalettePanel(PalettePanel* palettePanel, const PaletteActionIconList& actions);
+
+    // Used in NoteGroups widget
+    static void populateIconPalette(Palette* palette, const PaletteActionIconList& actions);
+};
 } // namespace Ms
 
 #endif
