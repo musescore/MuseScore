@@ -20,8 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PAINTERPATH_H
-#define MU_PAINTERPATH_H
+#ifndef MU_DRAW_PAINTERPATH_H
+#define MU_DRAW_PAINTERPATH_H
+
+#include <cmath>
+
+#ifndef NO_QT_SUPPORT
+#include <QPainterPath>
+#endif
 
 #include "geometry.h"
 #include "bezier.h"
@@ -115,6 +121,10 @@ public:
     PainterPath::FillRule fillRule() const;
     void setFillRule(PainterPath::FillRule fillRule);
 
+#ifndef NO_QT_SUPPORT
+    static QPainterPath toQPainterPath(const PainterPath& path);
+#endif
+
 private:
 
     void ensureData();
@@ -166,4 +176,4 @@ private:
 
 Q_DECLARE_METATYPE(mu::PainterPath)
 
-#endif // MU_PAINTERPATH_H
+#endif // MU_DRAW_PAINTERPATH_H

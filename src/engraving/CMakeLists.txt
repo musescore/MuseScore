@@ -39,7 +39,15 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/draw/geometry.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/transform.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/transform.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/draw/matrix.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/painterpath.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/painterpath.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/draw/bezier.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/bezier.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/drawtypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/pen.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/brush.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/pixmap.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/painter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/painter.h
