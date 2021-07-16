@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_TRANSFORM_H
-#define MU_TRANSFORM_H
+#ifndef MU_DRAW_TRANSFORM_H
+#define MU_DRAW_TRANSFORM_H
 
 #include "matrix.h"
 #include "geometry.h"
@@ -169,4 +169,4 @@ inline Transform operator/(const Transform& a, double n)
 }
 }
 
-#endif // MU_TRANSFORM_H
+#endif // MU_DRAW_TRANSFORM_H

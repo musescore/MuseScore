@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MATRIX_H
-#define MU_MATRIX_H
+#ifndef MU_DRAW_MATRIX_H
+#define MU_DRAW_MATRIX_H
 
 namespace mu {
 class Matrix
@@ -81,4 +81,4 @@ private:
 };
 }
 
-#endif // MU_MATRIX_H
+#endif // MU_DRAW_MATRIX_H

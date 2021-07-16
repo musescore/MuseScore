@@ -32,9 +32,9 @@
 
 #include "fontcompat.h"
 #include "utils/drawlogger.h"
-#include "utils/drawjson.h"
 #include "log.h"
 #include "transform.h"
+#include "painterpath.h"
 
 using namespace mu::draw;
 
@@ -188,9 +188,7 @@ const mu::Transform& QPainterProvider::transform() const
 
 void QPainterProvider::drawPath(const PainterPath& path)
 {
-    QPainterPath qpath;
-    DrawBufferJson::qPainterPathfromObj(DrawBufferJson::painterPathToObj(path), qpath);
-    m_painter->drawPath(qpath);
+    m_painter->drawPath(PainterPath::toQPainterPath(path));
 }
 
 void QPainterProvider::drawPolygon(const PointF* points, size_t pointCount, PolygonMode mode)

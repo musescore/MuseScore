@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_BEZIER_H
-#define MU_BEZIER_H
+#ifndef MU_DRAW_BEZIER_H
+#define MU_DRAW_BEZIER_H
 
 #include "geometry.h"
 
