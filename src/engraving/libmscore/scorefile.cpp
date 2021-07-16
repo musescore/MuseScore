@@ -28,6 +28,8 @@
 #include "draw/qpainterprovider.h"
 #include "style/defaultstyle.h"
 
+#include "compat/chordlist.h"
+
 #include "config.h"
 #include "score.h"
 #include "xml.h"
@@ -178,7 +180,8 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
     xml.setCurTrack(-1);
 
     if (isTopScore()) {                    // only top score
-        style().save(xml, true);           // save only differences to buildin style
+        compat::WriteChordListHook clhook(this);
+        style().save(xml, true, &clhook);           // save only differences to buildin style
     }
     xml.tag("showInvisible",   _showInvisible);
     xml.tag("showUnprintable", _showUnprintable);
@@ -529,7 +532,8 @@ bool Score::saveStyle(const QString& name)
     XmlWriter xml(this, &f);
     xml.header();
     xml.stag("museScore version=\"" MSC_VERSION "\"");
-    style().save(xml, false);       // save complete style
+    compat::WriteChordListHook clhook(this);
+    style().save(xml, false, &clhook);       // save complete style
     xml.etag();
     if (f.error() != QFile::NoError) {
         MScore::lastError = QObject::tr("Write Style failed: %1").arg(f.errorString());

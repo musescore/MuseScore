@@ -28,6 +28,7 @@
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "compat/pageformat.h"
+#include "compat/chordlist.h"
 
 #include "score.h"
 #include "slur.h"
@@ -2723,10 +2724,8 @@ static void readPageFormat(compat::PageFormat* pf, XmlReader& e)
 //   readStyle
 //---------------------------------------------------------
 
-static void readStyle(MStyle* style, XmlReader& e)
+static void readStyle(MStyle* style, XmlReader& e, compat::ReadChordListHook& readChordListHook)
 {
-    QString oldChordDescriptionFile = style->value(Sid::chordDescriptionFile).toString();
-    bool chordListTag = false;
     while (e.readNextStartElement()) {
         QString tag = e.name().toString();
 
@@ -2750,16 +2749,7 @@ static void readStyle(MStyle* style, XmlReader& e)
         } else if (tag == "displayInConcertPitch") {
             style->set(Sid::concertPitch, QVariant(bool(e.readInt())));
         } else if (tag == "ChordList") {
-            style->chordList()->clear();
-            style->chordList()->read(e);
-            //! TODO Look like a bug, changes just the local variable
-            for (ChordFont f : style->chordList()->fonts) {
-                if (f.family == "MuseJazz") {
-                    f.family = "MuseJazz Text";
-                }
-            }
-            style->setCustomChordList(true);
-            chordListTag = true;
+            readChordListHook.read(e);
         } else if (tag == "pageFillLimit" || tag == "genTimesig" || tag == "FixMeasureNumbers" || tag == "FixMeasureWidth") {   // obsolete
             e.skipCurrentElement();
         } else if (tag == "systemDistance") {  // obsolete
@@ -2823,31 +2813,8 @@ static void readStyle(MStyle* style, XmlReader& e)
         style->set(Sid::harmonyPlay, false);
     }
 
-    // if we just specified a new chord description file
-    // and didn't encounter a ChordList tag
-    // then load the chord description file
+    readChordListHook.validate();
 
-    QString newChordDescriptionFile = style->value(Sid::chordDescriptionFile).toString();
-    if (newChordDescriptionFile != oldChordDescriptionFile && !chordListTag) {
-        if (!newChordDescriptionFile.startsWith("chords_") && style->value(Sid::chordStyle).toString() == "std") {
-            // should not normally happen,
-            // but treat as "old" (114) score just in case
-            style->set(Sid::chordStyle, QVariant(QString("custom")));
-            style->set(Sid::chordsXmlFile, QVariant(true));
-            qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
-        }
-        if (style->value(Sid::chordStyle).toString() == "custom") {
-            style->setCustomChordList(true);
-        } else {
-            style->setCustomChordList(false);
-        }
-        style->chordList()->unload();
-    }
-
-    // make sure we have a chordlist
-    if (!chordListTag) {
-        style->checkChordList();
-    }
 #if 0 // TODO
       //
       //  Compatibility with old scores/styles:
@@ -2936,7 +2903,8 @@ Score::FileError MasterScore::read114(XmlReader& e)
             setShowPageborders(e.readInt());
         } else if (tag == "Style") {
             qreal sp = spatium();
-            readStyle(&style(), e);
+            compat::ReadChordListHook clhook(this);
+            readStyle(&style(), e, clhook);
             //style()->load(e);
             // adjust this now so chords render properly on read
             // other style adjustments can wait until reading is finished

@@ -23,6 +23,8 @@
 #include "style/style.h"
 #include "style/defaultstyle.h"
 
+#include "compat/chordlist.h"
+
 #include "xml.h"
 #include "score.h"
 #include "staff.h"
@@ -109,7 +111,8 @@ bool Score::read(XmlReader& e)
             _markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
             qreal sp = style().value(Sid::spatium).toDouble();
-            style().load(e);
+            compat::ReadChordListHook clhook(this);
+            style().load(e, &clhook);
             // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
             if (_layoutMode == LayoutMode::FLOAT) {
                 // style should not change spatium in

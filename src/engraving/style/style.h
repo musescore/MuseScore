@@ -23,11 +23,12 @@
 #ifndef MU_ENGRAVING_STYLE_H
 #define MU_ENGRAVING_STYLE_H
 
+#include <functional>
+
 #include <array>
 #include <QFile>
 #include <QSet>
 
-#include "libmscore/chordlist.h"
 #include "libmscore/types.h"
 #include "libmscore/spatium.h"
 
@@ -35,9 +36,14 @@
 
 #include "styledef.h"
 
+namespace mu::engraving::compat {
+struct ReadChordListHook;
+struct WriteChordListHook;
+}
+
 namespace Ms {
+class XmlReader;
 class XmlWriter;
-struct ChordDescription;
 
 class MStyle
 {
@@ -63,14 +69,9 @@ public:
     void setDefaultStyleVersion(const int defaultsVersion);
     int defaultStyleVersion() const;
 
-    const ChordDescription* chordDescription(int id) const;
-    ChordList* chordList() { return &m_chordList; }
-    void setCustomChordList(bool t) { m_customChordList = t; }
-    void checkChordList();
-
     bool load(QFile* qf, bool ign = false);
-    void load(XmlReader& e);
-    void save(XmlWriter& xml, bool optimize);
+    void load(XmlReader& e, mu::engraving::compat::ReadChordListHook* readChordListHook);
+    void save(XmlWriter& xml, bool optimize, mu::engraving::compat::WriteChordListHook* writeChordListHook);
     bool readProperties(XmlReader&);
 
     void precomputeValues();
@@ -86,8 +87,6 @@ private:
     std::array<QVariant, int(Sid::STYLES)> m_values;
     std::array<qreal, int(Sid::STYLES)> m_precomputedValues;
 
-    ChordList m_chordList;
-    bool m_customChordList = false;           // if true, chordlist will be saved as part of score
     int m_defaultStyleVersion = -1;
 };
 }     // namespace Ms

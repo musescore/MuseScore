@@ -2017,6 +2017,31 @@ void ChordList::unload()
     _autoAdjust = false;
 }
 
+const ChordDescription* ChordList::description(int id) const
+{
+    auto it = this->find(id);
+    if (it == this->end()) {
+        return nullptr;
+    }
+    return &it.value();
+}
+
+void ChordList::checkChordList(const MStyle& style)
+{
+    // make sure we have a chordlist
+    if (!loaded()) {
+        qreal emag = style.value(Sid::chordExtensionMag).toDouble();
+        qreal eadjust = style.value(Sid::chordExtensionAdjust).toDouble();
+        qreal mmag = style.value(Sid::chordModifierMag).toDouble();
+        qreal madjust = style.value(Sid::chordModifierAdjust).toDouble();
+        configureAutoAdjust(emag, eadjust, mmag, madjust);
+        if (style.value(Sid::chordsXmlFile).toBool()) {
+            read("chords.xml");
+        }
+        read(style.value(Sid::chordDescriptionFile).toString());
+    }
+}
+
 //---------------------------------------------------------
 //   print
 //    only for debugging

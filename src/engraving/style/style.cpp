@@ -23,6 +23,8 @@
 #include "style.h"
 
 #include "compat/pageformat.h"
+#include "compat/chordlist.h"
+
 #include "defaultstyle.h"
 
 #include "libmscore/xml.h"
@@ -96,30 +98,6 @@ void MStyle::setDefaultStyleVersion(const int defaultsVersion)
 int MStyle::defaultStyleVersion() const
 {
     return m_defaultStyleVersion;
-}
-
-const ChordDescription* MStyle::chordDescription(int id) const
-{
-    if (!m_chordList.contains(id)) {
-        return 0;
-    }
-    return &*m_chordList.find(id);
-}
-
-void MStyle::checkChordList()
-{
-    // make sure we have a chordlist
-    if (!m_chordList.loaded()) {
-        qreal emag = value(Sid::chordExtensionMag).toDouble();
-        qreal eadjust = value(Sid::chordExtensionAdjust).toDouble();
-        qreal mmag = value(Sid::chordModifierMag).toDouble();
-        qreal madjust = value(Sid::chordModifierAdjust).toDouble();
-        m_chordList.configureAutoAdjust(emag, eadjust, mmag, madjust);
-        if (value(Sid::chordsXmlFile).toBool()) {
-            m_chordList.read("chords.xml");
-        }
-        m_chordList.read(value(Sid::chordDescriptionFile).toString());
-    }
 }
 
 bool MStyle::readProperties(XmlReader& e)
@@ -296,7 +274,7 @@ bool MStyle::load(QFile* qf, bool ign)
             }
             while (e.readNextStartElement()) {
                 if (e.name() == "Style") {
-                    load(e);
+                    load(e, nullptr);
                 } else {
                     e.unknown();
                 }
@@ -306,11 +284,10 @@ bool MStyle::load(QFile* qf, bool ign)
     return true;
 }
 
-void MStyle::load(XmlReader& e)
+void MStyle::load(XmlReader& e, compat::ReadChordListHook* readChordListHook)
 {
     TRACEFUNC;
-    QString oldChordDescriptionFile = value(Sid::chordDescriptionFile).toString();
-    bool chordListTag = false;
+
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
 
@@ -328,10 +305,9 @@ void MStyle::load(XmlReader& e)
         } else if (tag == "displayInConcertPitch") {
             set(Sid::concertPitch, QVariant(bool(e.readInt())));
         } else if (tag == "ChordList") {
-            m_chordList.unload();
-            m_chordList.read(e);
-            m_customChordList = true;
-            chordListTag = true;
+            if (readChordListHook) {
+                readChordListHook->read(e);
+            }
         } else if (tag == "lyricsDashMaxLegth") { // pre-3.6 typo
             set(Sid::lyricsDashMaxLength, e.readDouble());
         } else if (tag == "dontHidStavesInFirstSystm") { // pre-3.6.3/4.0 typo
@@ -341,33 +317,12 @@ void MStyle::load(XmlReader& e)
         }
     }
 
-    // if we just specified a new chord description file
-    // and didn't encounter a ChordList tag
-    // then load the chord description file
-
-    QString newChordDescriptionFile = value(Sid::chordDescriptionFile).toString();
-    if (newChordDescriptionFile != oldChordDescriptionFile && !chordListTag) {
-        if (!newChordDescriptionFile.startsWith("chords_") && value(Sid::chordStyle).toString() == "std") {
-            // should not normally happen,
-            // but treat as "old" (114) score just in case
-            set(Sid::chordStyle, QVariant(QString("custom")));
-            set(Sid::chordsXmlFile, QVariant(true));
-            qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
-        }
-        if (value(Sid::chordStyle).toString() == "custom") {
-            m_customChordList = true;
-        } else {
-            m_customChordList = false;
-        }
-        m_chordList.unload();
-    }
-
-    if (!chordListTag) {
-        checkChordList();
+    if (readChordListHook) {
+        readChordListHook->validate();
     }
 }
 
-void MStyle::save(XmlWriter& xml, bool optimize)
+void MStyle::save(XmlWriter& xml, bool optimize, compat::WriteChordListHook* writeChordListHook)
 {
     xml.stag("Style");
 
@@ -411,11 +366,11 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.name(), value(idx));
         }
     }
-    if (m_customChordList && !m_chordList.empty()) {
-        xml.stag("ChordList");
-        m_chordList.write(xml);
-        xml.etag();
+
+    if (writeChordListHook) {
+        writeChordListHook->write(xml);
     }
+
     xml.tag("Spatium", value(Sid::spatium).toDouble() / DPMM);
     xml.etag();
 }
