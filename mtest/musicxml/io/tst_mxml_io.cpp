@@ -154,6 +154,7 @@ private slots:
       void lines2() { mxmlIoTest("testLines2"); }
       void lines3() { mxmlIoTest("testLines3"); }
       void lines4() { mxmlMscxExportTestRef("testLines4"); }
+      void lyricBracket() { mxmlImportTestRef("testLyricBracket"); }
       void lyricColor() { mxmlIoTest("testLyricColor"); }
       void lyrics1() { mxmlIoTestRef("testLyrics1"); }
       void lyricExtensions1() { mxmlIoTest("testLyricExtensions"); }
