@@ -173,9 +173,6 @@ void Notation::init()
     for (int i = 0; i < VOICES; ++i) {
         Ms::MScore::selectColor[i] = configuration()->selectionColor(i);
     }
-
-    Ms::MScore::readDefaultStyle(configuration()->defaultStyleFilePath().toQString());
-    Ms::MScore::readPartStyle(configuration()->partStyleFilePath().toQString());
 }
 
 void Notation::setScore(Ms::Score* score)

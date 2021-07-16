@@ -27,7 +27,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/stringdata.h"
 
-#include "engraving/scoreaccess.h"
+#include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
 
 #include "widgetstatestore.h"
@@ -89,7 +89,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     }
 
     // load a sample standard score in preview
-    Ms::MasterScore* sc = mu::engraving::ScoreAccess::createMasterScore(Ms::MScore::defaultStyle());
+    Ms::MasterScore* sc = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
     if (loadScore(sc, ":/view/resources/data/std_sample.mscx")) {
         standardPreview->setScore(sc);
     } else {
@@ -97,7 +97,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     }
 
     // load a sample tabulature score in preview
-    sc = mu::engraving::ScoreAccess::createMasterScore(Ms::MScore::defaultStyle());
+    sc = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
     if (loadScore(sc, ":/view/resources/data/tab_sample.mscx")) {
         tabPreview->setScore(sc);
     } else {

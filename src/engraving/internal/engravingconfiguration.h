@@ -19,24 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SCOREACCESS_H
-#define MU_ENGRAVING_SCOREACCESS_H
+#ifndef MU_ENGRAVING_ENGRAVINGCONFIGURATION_H
+#define MU_ENGRAVING_ENGRAVINGCONFIGURATION_H
 
-#include "libmscore/score.h"
-
-//! NOTE This is a temporary class for controlling (master)score access
-//! See Project class description for detail
+#include "../iengravingconfiguration.h"
 
 namespace mu::engraving {
-class ScoreAccess
+class EngravingConfiguration : public IEngravingConfiguration
 {
 public:
+    EngravingConfiguration() = default;
 
-    static Ms::MasterScore* createMasterScore();
-    static Ms::MasterScore* createMasterScore(const Ms::MStyle& style);
+    QString defaultStyleFilePath() const override;
+    void setDefaultStyleFilePath(const QString& path) override;
 
-    static Ms::Score::FileError loadMscz(Ms::MasterScore* masterScore, mu::engraving::MsczReader& msczFile, bool ignoreVersionError);
+    QString partStyleFilePath() const override;
+    void setPartStyleFilePath(const QString& path) override;
 };
 }
 
-#endif // MU_ENGRAVING_SCOREACCESS_H
+#endif // MU_ENGRAVING_ENGRAVINGCONFIGURATION_H

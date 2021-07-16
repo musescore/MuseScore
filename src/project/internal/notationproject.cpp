@@ -26,10 +26,11 @@
 #include <QFile>
 
 #include "engraving/engravingproject.h"
-#include "engraving/scoreaccess.h"
+#include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
-
 #include "engraving/engravingerrors.h"
+#include "engraving/style/defaultstyle.h"
+
 #include "notation/notationerrors.h"
 #include "projectaudiosettings.h"
 
@@ -198,7 +199,7 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     io::path templatePath = projectOptions.templatePath;
     EngravingProjectPtr templateProject;
     if (!templatePath.empty()) {
-        templateProject = EngravingProject::create(Ms::MScore::baseStyle());
+        templateProject = EngravingProject::create(DefaultStyle::baseStyle());
         engraving::Err err = engraving::compat::loadMsczOrMscx(templateProject, templatePath.toQString());
         if (err != engraving::Err::NoError) {
             LOGE() << "failed load template";

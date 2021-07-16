@@ -29,6 +29,12 @@
 #include <QTextDocument>
 #include <QRegularExpression>
 
+#include "draw/fontmetrics.h"
+#include "draw/fontcompat.h"
+#include "draw/pen.h"
+#include "draw/brush.h"
+#include "style/defaultstyle.h"
+
 #include "text.h"
 #include "textedit.h"
 #include "jump.h"
@@ -46,12 +52,8 @@
 #include "undo.h"
 #include "mscore.h"
 
-#include "draw/fontmetrics.h"
-#include "draw/fontcompat.h"
-#include "draw/pen.h"
-#include "draw/brush.h"
-
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 #ifdef Q_OS_MAC
@@ -3279,7 +3281,7 @@ void TextBase::draw(mu::draw::Painter* painter) const
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
     if (hasFrame()) {
-        qreal baseSpatium = MScore::baseStyle().value(Sid::spatium).toDouble();
+        qreal baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toDouble();
         if (frameWidth().val() != 0.0) {
             QColor fColor = curColor(visible(), frameColor());
             qreal frameWidthVal = frameWidth().val() * (sizeIsSpatiumDependent() ? spatium() : baseSpatium);

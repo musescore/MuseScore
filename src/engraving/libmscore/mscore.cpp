@@ -95,8 +95,6 @@ bool MScore::useFallbackFont       = true;
 bool MScore::saveTemplateMode = false;
 bool MScore::noGui = false;
 
-MStyle* MScore::_defaultStyleForParts;
-
 QString MScore::_globalShare;
 int MScore::_vRaster;
 int MScore::_hRaster;
@@ -303,8 +301,6 @@ void MScore::init()
     //
     //  initialize styles
     //
-    _baseStyle.precomputeValues();
-    _defaultStyle.precomputeValues();
 
     ScoreFont::initScoreFonts();
     StaffType::initStaffTypes();
@@ -360,55 +356,6 @@ void MScore::registerUiTypes()
     if (!QMetaType::registerConverter<Fraction, QString>(&Fraction::toString)) {
         qFatal("registerConverter Fraction::toString failed");
     }
-}
-
-//---------------------------------------------------------
-//   readDefaultStyle
-//---------------------------------------------------------
-
-bool MScore::readDefaultStyle(QString file)
-{
-    if (file.isEmpty()) {
-        return false;
-    }
-    MStyle style = defaultStyle();
-    QFile f(file);
-    if (!f.open(QIODevice::ReadOnly)) {
-        return false;
-    }
-    bool rv = style.load(&f, true);
-    if (rv) {
-        setDefaultStyle(style);
-    }
-    f.close();
-    return rv;
-}
-
-bool MScore::readPartStyle(QString filePath)
-{
-    QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly)) {
-        return false;
-    }
-
-    _defaultStyleForParts = new MStyle(_defaultStyle);
-    bool rv = _defaultStyleForParts->load(&file, true);
-    if (rv) {
-        _defaultStyleForParts->precomputeValues();
-    }
-    file.close();
-    return rv;
-}
-
-//---------------------------------------------------------
-//   defaultStyleForPartsHasChanged
-//---------------------------------------------------------
-
-void MScore::defaultStyleForPartsHasChanged()
-{
-// TODO what is needed here?
-//      delete _defaultStyleForParts;
-//      _defaultStyleForParts = 0;
 }
 
 //---------------------------------------------------------

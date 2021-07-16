@@ -21,6 +21,7 @@
  */
 
 #include "style/style.h"
+#include "style/defaultstyle.h"
 
 #include "xml.h"
 #include "score.h"
@@ -38,6 +39,7 @@
 #include "measurebase.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -179,11 +181,11 @@ bool Score::read(XmlReader& e)
             } else {
                 e.tracks().clear();             // ???
                 MasterScore* m = masterScore();
-                Score* s       = new Score(m, MScore::baseStyle());
+                Score* s = m->createScore();
                 int defaultsVersion = m->style().defaultStyleVersion();
-                s->setStyle(*MStyle::resolveStyleDefaults(defaultsVersion));
+                s->setStyle(*DefaultStyle::resolveStyleDefaults(defaultsVersion));
                 s->style().setDefaultStyleVersion(defaultsVersion);
-                Excerpt* ex    = new Excerpt(m);
+                Excerpt* ex = new Excerpt(m);
 
                 ex->setPartScore(s);
                 e.setLastMeasure(nullptr);
@@ -402,26 +404,5 @@ Score::FileError MasterScore::read302(XmlReader& e)
         }
     }
     return FileError::FILE_NO_ERROR;
-}
-
-MStyle* styleDefaults301()
-{
-    static MStyle* result = nullptr;
-
-    if (result) {
-        return result;
-    }
-
-    result = new MStyle();
-
-    QFile baseDefaults(":/styles/legacy-style-defaults-v3.mss");
-
-    if (!baseDefaults.open(QIODevice::ReadOnly)) {
-        return result;
-    }
-
-    result->load(&baseDefaults);
-
-    return result;
 }
 }

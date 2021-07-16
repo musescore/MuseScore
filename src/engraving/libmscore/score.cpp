@@ -32,6 +32,7 @@
 #include <QBuffer>
 
 #include "style/style.h"
+#include "style/defaultstyle.h"
 
 #include "fermata.h"
 #include "imageStore.h"
@@ -98,6 +99,7 @@
 #endif
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 MasterScore* gscore;                 ///< system score, used for palettes etc.
@@ -319,7 +321,7 @@ Score::Score()
     _scoreFont = ScoreFont::fontByName("Leland");
 
     _fileDivision           = MScore::division;
-    _style  = MScore::defaultStyle();
+    _style  = DefaultStyle::defaultStyle();
 //      accInfo = tr("No selection");     // ??
     accInfo = "No selection";
 
@@ -333,8 +335,8 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
 {
     Score::validScores.insert(this);
     _masterScore = parent;
-    if (MScore::defaultStyleForParts()) {
-        _style = *MScore::defaultStyleForParts();
+    if (DefaultStyle::defaultStyleForParts()) {
+        _style = *DefaultStyle::defaultStyleForParts();
     } else {
         // inherit most style settings from parent
         _style = parent->style();
@@ -354,7 +356,7 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
         };
         // but borrow defaultStyle page layout settings
         for (auto i : styles) {
-            _style.set(i, MScore::defaultStyle().value(i));
+            _style.set(i, DefaultStyle::defaultStyle().value(i));
         }
         // and force some style settings that just make sense for parts
         if (forcePartStyle) {
@@ -2142,7 +2144,7 @@ MasterScore* MasterScore::clone()
 
 Score* MasterScore::createScore()
 {
-    return new Score(this, MScore::baseStyle());
+    return new Score(this, DefaultStyle::baseStyle());
 }
 
 Score* MasterScore::createScore(const MStyle& s)
@@ -5213,7 +5215,7 @@ QVariant Score::propertyDefault(Pid /*id*/) const
 
 void Score::resetAllStyle()
 {
-    const MStyle& defStyle = MScore::defaultStyle();
+    const MStyle& defStyle = DefaultStyle::defaultStyle();
     int beginIdx = int(Sid::NOSTYLE) + 1;
     int endIdx = int(Sid::STYLES);
     for (int idx = beginIdx; idx < endIdx; ++idx) {
@@ -5223,7 +5225,7 @@ void Score::resetAllStyle()
 
 void Score::resetStyles(const QSet<Sid>& stylesToReset)
 {
-    const MStyle& defStyle = MScore::defaultStyle();
+    const MStyle& defStyle = DefaultStyle::defaultStyle();
     for (const Sid& idx : stylesToReset) {
         undo(new ChangeStyleVal(this, idx, defStyle.value(idx)));
     }
