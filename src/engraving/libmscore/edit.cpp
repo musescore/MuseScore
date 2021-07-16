@@ -1981,10 +1981,10 @@ void Score::addNoteLine()
     TextLine* line = new TextLine(this);
     line->setParent(firstNote);
     line->setStartElement(firstNote);
-    line->setEndElement(lastNote);
     line->setDiagonal(true);
     line->setAnchor(Spanner::Anchor::NOTE);
     line->setTick(firstNote->chord()->tick());
+    line->setEndElement(lastNote);
 
     undoAddElement(line);
 }

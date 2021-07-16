@@ -385,6 +385,11 @@ Spanner::Spanner(const Spanner& s)
     _tick         = s._tick;
     _ticks        = s._ticks;
     _track2       = s._track2;
+    if (!s.startElement() && !spannerSegments().size()) {
+        for (auto* segment : s.spannerSegments()) {
+            add(segment->clone());
+        }
+    }
 }
 
 Spanner::~Spanner()
@@ -754,9 +759,14 @@ void Spanner::computeEndElement()
             _endElement = score()->lastMeasure();
         }
         break;
-
-    case Anchor::CHORD:
     case Anchor::NOTE:
+        if (!_endElement) {
+            ChordRest* cr = score()->findCR(tick2(), track2());
+            if (cr && cr->isChord()) {
+                _endElement = toChord(cr)->upNote();
+            }
+        }
+    case Anchor::CHORD:
         break;
     }
 }
@@ -1069,6 +1079,9 @@ void Spanner::setEndElement(Element* e)
     }
 #endif
     _endElement = e;
+    if (e && ticks() == Fraction() && _tick >= Fraction()) {
+        setTicks(e->tick() - _tick);
+    }
 }
 
 //---------------------------------------------------------
