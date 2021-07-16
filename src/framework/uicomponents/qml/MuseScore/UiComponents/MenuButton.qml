@@ -29,6 +29,10 @@ FlatButton {
     property var menuModel
     property alias isMenuOpened: menuLoader.isMenuOpened
 
+    property int menuOffsetX
+    property int menuOffsetY
+    property int menuAlign
+
     signal handleAction(string actionCode, int actionIndex)
 
     function toggleMenu(item, x, y) {
@@ -53,6 +57,6 @@ FlatButton {
 
     onClicked: {
         menuLoader.parent = root
-        menuLoader.toggleOpened(root.menuModel, root.navigation)
+        menuLoader.toggleOpened(root.menuModel, root.navigation, root.menuOffsetX, root.menuOffsetY, root.menuAlign)
     }
 }
