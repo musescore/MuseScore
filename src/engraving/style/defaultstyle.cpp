@@ -21,6 +21,8 @@
  */
 #include "defaultstyle.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 using namespace Ms;
 
@@ -28,126 +30,102 @@ static const int LEGACY_MSC_VERSION_V3 = 301;
 static const int LEGACY_MSC_VERSION_V2 = 206;
 static const int LEGACY_MSC_VERSION_V1 = 114;
 
+static const QString LEGACY_MSS_V1_PATH(":/styles/legacy-style-defaults-v1.mss");
+static const QString LEGACY_MSS_V2_PATH(":/styles/legacy-style-defaults-v2.mss");
+static const QString LEGACY_MSS_V3_PATH(":/styles/legacy-style-defaults-v3.mss");
+
 DefaultStyle* DefaultStyle::instance()
 {
     static DefaultStyle s;
     return &s;
 }
 
-const MStyle* styleDefaults301()
-{
-    static MStyle* result = nullptr;
-
-    if (result) {
-        return result;
-    }
-
-    result = new MStyle();
-
-    QFile baseDefaults(":/styles/legacy-style-defaults-v3.mss");
-
-    if (!baseDefaults.open(QIODevice::ReadOnly)) {
-        return result;
-    }
-
-    result->load(&baseDefaults);
-
-    return result;
-}
-
-const MStyle* styleDefaults206()
-{
-    static MStyle* result = nullptr;
-
-    if (result) {
-        return result;
-    }
-
-    result = new MStyle();
-    QFile baseDefaults(":/styles/legacy-style-defaults-v2.mss");
-
-    if (!baseDefaults.open(QIODevice::ReadOnly)) {
-        return result;
-    }
-
-    result->load(&baseDefaults);
-
-    return result;
-}
-
-const MStyle* styleDefaults114()
-{
-    static MStyle* result = nullptr;
-
-    if (result) {
-        return result;
-    }
-
-    result = new MStyle();
-    QFile baseDefaults(":/styles/legacy-style-defaults-v1.mss");
-
-    if (!baseDefaults.open(QIODevice::ReadOnly)) {
-        return result;
-    }
-
-    result->load(&baseDefaults);
-
-    return result;
-}
-
 void DefaultStyle::init(const QString& defaultSyleFilePath, const QString& partStyleFilePath)
 {
     m_baseStyle.precomputeValues();
-    m_defaultStyle.precomputeValues();
 
-    readDefaultStyle(defaultSyleFilePath);
-    readPartStyle(partStyleFilePath);
+    if (!defaultSyleFilePath.isEmpty()) {
+        m_defaultStyle = new MStyle();
+        bool ok = doLoadStyle(m_defaultStyle, defaultSyleFilePath);
+        if (!ok) {
+            delete m_defaultStyle;
+            m_defaultStyle = nullptr;
+        } else {
+            m_defaultStyle->precomputeValues();
+        }
+    }
+
+    if (!partStyleFilePath.isEmpty()) {
+        m_defaultStyleForParts = new MStyle();
+        bool ok = doLoadStyle(m_defaultStyleForParts, defaultSyleFilePath);
+        if (!ok) {
+            delete m_defaultStyleForParts;
+            m_defaultStyleForParts = nullptr;
+        } else {
+            m_defaultStyleForParts->precomputeValues();
+        }
+    }
 }
 
-bool DefaultStyle::readDefaultStyle(QString file)
-{
-    if (file.isEmpty()) {
-        return false;
-    }
-    MStyle style = defaultStyle();
-    QFile f(file);
-    if (!f.open(QIODevice::ReadOnly)) {
-        return false;
-    }
-    bool rv = style.load(&f, true);
-    if (rv) {
-        m_defaultStyle = style;
-    }
-    f.close();
-    return rv;
-}
-
-bool DefaultStyle::readPartStyle(QString filePath)
+bool DefaultStyle::doLoadStyle(Ms::MStyle* style, const QString& filePath)
 {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
+        LOGE() << "failed load style: " << filePath;
         return false;
     }
 
-    m_defaultStyleForParts = new MStyle(m_defaultStyle);
-    bool rv = m_defaultStyleForParts->load(&file, true);
-    if (rv) {
-        m_defaultStyleForParts->precomputeValues();
-    }
-    file.close();
-    return rv;
+    return style->load(&file);
 }
 
-const MStyle* DefaultStyle::resolveStyleDefaults(const int defaultsVersion)
+// Static
+
+const Ms::MStyle& DefaultStyle::baseStyle()
 {
+    return instance()->m_baseStyle;
+}
+
+const Ms::MStyle& DefaultStyle::defaultStyle()
+{
+    if (instance()->m_defaultStyle) {
+        return *instance()->m_defaultStyle;
+    }
+    return instance()->m_baseStyle;
+}
+
+const MStyle* DefaultStyle::defaultStyleForParts()
+{
+    return instance()->m_defaultStyleForParts;
+}
+
+const MStyle& DefaultStyle::resolveStyleDefaults(const int defaultsVersion)
+{
+    static auto loadedStyle = [](MStyle& style, const QString& path, bool& loaded_flag) -> const MStyle&
+    {
+        if (loaded_flag) {
+            return style;
+        }
+        loaded_flag = doLoadStyle(&style, path);
+        return style;
+    };
+
     switch (defaultsVersion) {
-    case LEGACY_MSC_VERSION_V3:
-        return styleDefaults301();
-    case LEGACY_MSC_VERSION_V2:
-        return styleDefaults206();
-    case LEGACY_MSC_VERSION_V1:
-        return styleDefaults114();
+    case LEGACY_MSC_VERSION_V3: {
+        static MStyle style_v3;
+        static bool loaded_v3 = false;
+        return loadedStyle(style_v3, LEGACY_MSS_V3_PATH, loaded_v3);
+    } break;
+    case LEGACY_MSC_VERSION_V2: {
+        static MStyle style_v2;
+        static bool loaded_v2 = false;
+        return loadedStyle(style_v2, LEGACY_MSS_V2_PATH, loaded_v2);
+    } break;
+    case LEGACY_MSC_VERSION_V1: {
+        static MStyle style_v1;
+        static bool loaded_v1 = false;
+        return loadedStyle(style_v1, LEGACY_MSS_V1_PATH, loaded_v1);
+    } break;
     default:
-        return &baseStyle();
+        return baseStyle();
     }
 }

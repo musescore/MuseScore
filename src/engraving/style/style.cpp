@@ -22,30 +22,22 @@
 
 #include "style.h"
 
-//! NOTE It is necessary that `StyleDef::styleTypes` is initialized before static `MStyle` is initialized
-#include "styledef.cpp"
-
 #include "compat/pageformat.h"
 #include "defaultstyle.h"
+
+#include "libmscore/xml.h"
+#include "libmscore/mscore.h"
 
 #include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace Ms;
 
-namespace Ms {
-//---------------------------------------------------------
-//   valueType
-//---------------------------------------------------------
-
-const char* MStyle::valueType(const Sid i)
+MStyle::MStyle()
 {
-    return StyleDef::styleValues[int(i)].valueType();
+    m_defaultStyleVersion = MSCVERSION;
 }
-
-//---------------------------------------------------------
-//   value
-//---------------------------------------------------------
 
 const QVariant& MStyle::value(Sid idx) const
 {
@@ -62,107 +54,6 @@ qreal MStyle::pvalue(Sid idx) const
     return m_precomputedValues[int(idx)];
 }
 
-//---------------------------------------------------------
-//   valueName
-//---------------------------------------------------------
-
-const char* MStyle::valueName(const Sid i)
-{
-    if (i == Sid::NOSTYLE) {
-        return "no style";
-    }
-    return StyleDef::styleValues[int(i)].name();
-}
-
-//---------------------------------------------------------
-//   styleIdx
-//---------------------------------------------------------
-
-Sid MStyle::styleIdx(const QString& name)
-{
-    for (StyleDef::StyleValue st : StyleDef::styleValues) {
-        if (st.name() == name) {
-            return st.styleIdx();
-        }
-    }
-    return Sid::NOSTYLE;
-}
-
-//---------------------------------------------------------
-//   Style
-//---------------------------------------------------------
-
-MStyle::MStyle()
-{
-    m_defaultStyleVersion = MSCVERSION;
-    m_customChordList = false;
-}
-
-//---------------------------------------------------------
-//   precomputeValues
-//---------------------------------------------------------
-
-void MStyle::precomputeValues()
-{
-    qreal _spatium = value(Sid::spatium).toDouble();
-    for (const StyleDef::StyleValue& t : StyleDef::styleValues) {
-        if (!strcmp(t.valueType(), "Ms::Spatium")) {
-            m_precomputedValues[t.idx()] = value(t.styleIdx()).value<Spatium>().val() * _spatium;
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   isDefault
-//    caution: custom types need to register comparison operator
-//          to make this work
-//---------------------------------------------------------
-
-bool MStyle::isDefault(Sid idx) const
-{
-    return value(idx) == DefaultStyle::resolveStyleDefaults(m_defaultStyleVersion)->value(idx);
-}
-
-void MStyle::setDefaultStyleVersion(const int defaultsVersion)
-{
-    m_defaultStyleVersion = defaultsVersion;
-}
-
-//---------------------------------------------------------
-//   chordDescription
-//---------------------------------------------------------
-
-const ChordDescription* MStyle::chordDescription(int id) const
-{
-    if (!m_chordList.contains(id)) {
-        return 0;
-    }
-    return &*m_chordList.find(id);
-}
-
-//---------------------------------------------------------
-//   checkChordList
-//---------------------------------------------------------
-
-void MStyle::checkChordList()
-{
-    // make sure we have a chordlist
-    if (!m_chordList.loaded()) {
-        qreal emag = value(Sid::chordExtensionMag).toDouble();
-        qreal eadjust = value(Sid::chordExtensionAdjust).toDouble();
-        qreal mmag = value(Sid::chordModifierMag).toDouble();
-        qreal madjust = value(Sid::chordModifierAdjust).toDouble();
-        m_chordList.configureAutoAdjust(emag, eadjust, mmag, madjust);
-        if (value(Sid::chordsXmlFile).toBool()) {
-            m_chordList.read("chords.xml");
-        }
-        m_chordList.read(value(Sid::chordDescriptionFile).toString());
-    }
-}
-
-//---------------------------------------------------------
-//   set
-//---------------------------------------------------------
 void MStyle::set(Sid idx, const mu::PointF& v)
 {
     set(idx, QVariant::fromValue(v));
@@ -182,9 +73,54 @@ void MStyle::set(const Sid t, const QVariant& val)
     }
 }
 
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
+void MStyle::precomputeValues()
+{
+    qreal _spatium = value(Sid::spatium).toDouble();
+    for (const StyleDef::StyleValue& t : StyleDef::styleValues) {
+        if (!strcmp(t.valueType(), "Ms::Spatium")) {
+            m_precomputedValues[t.idx()] = value(t.styleIdx()).value<Spatium>().val() * _spatium;
+        }
+    }
+}
+
+bool MStyle::isDefault(Sid idx) const
+{
+    return value(idx) == DefaultStyle::resolveStyleDefaults(m_defaultStyleVersion).value(idx);
+}
+
+void MStyle::setDefaultStyleVersion(const int defaultsVersion)
+{
+    m_defaultStyleVersion = defaultsVersion;
+}
+
+int MStyle::defaultStyleVersion() const
+{
+    return m_defaultStyleVersion;
+}
+
+const ChordDescription* MStyle::chordDescription(int id) const
+{
+    if (!m_chordList.contains(id)) {
+        return 0;
+    }
+    return &*m_chordList.find(id);
+}
+
+void MStyle::checkChordList()
+{
+    // make sure we have a chordlist
+    if (!m_chordList.loaded()) {
+        qreal emag = value(Sid::chordExtensionMag).toDouble();
+        qreal eadjust = value(Sid::chordExtensionAdjust).toDouble();
+        qreal mmag = value(Sid::chordModifierMag).toDouble();
+        qreal madjust = value(Sid::chordModifierAdjust).toDouble();
+        m_chordList.configureAutoAdjust(emag, eadjust, mmag, madjust);
+        if (value(Sid::chordsXmlFile).toBool()) {
+            m_chordList.read("chords.xml");
+        }
+        m_chordList.read(value(Sid::chordDescriptionFile).toString());
+    }
+}
 
 bool MStyle::readProperties(XmlReader& e)
 {
@@ -347,10 +283,6 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
     return true;
 }
 
-//---------------------------------------------------------
-//   load
-//---------------------------------------------------------
-
 bool MStyle::load(QFile* qf, bool ign)
 {
     XmlReader e(qf);
@@ -435,22 +367,6 @@ void MStyle::load(XmlReader& e)
     }
 }
 
-void MStyle::applyNewDefaults(const MStyle& other, const int defaultsVersion)
-{
-    m_defaultStyleVersion = defaultsVersion;
-
-    for (StyleDef::StyleValue st : StyleDef::styleValues) {
-        if (isDefault(st.styleIdx())) {
-            st._defaultValue = other.value(st.styleIdx());
-            m_values.at(st.idx()) = other.value(st.styleIdx());
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   save
-//---------------------------------------------------------
-
 void MStyle::save(XmlWriter& xml, bool optimize)
 {
     xml.stag("Style");
@@ -503,4 +419,31 @@ void MStyle::save(XmlWriter& xml, bool optimize)
     xml.tag("Spatium", value(Sid::spatium).toDouble() / DPMM);
     xml.etag();
 }
+
+// ====================================================
+// Static
+// ====================================================
+
+const char* MStyle::valueType(const Sid i)
+{
+    return StyleDef::styleValues[int(i)].valueType();
+}
+
+const char* MStyle::valueName(const Sid i)
+{
+    if (i == Sid::NOSTYLE) {
+        static const char* no_style = "no style";
+        return no_style;
+    }
+    return StyleDef::styleValues[int(i)].name();
+}
+
+Sid MStyle::styleIdx(const QString& name)
+{
+    for (StyleDef::StyleValue st : StyleDef::styleValues) {
+        if (st.name() == name) {
+            return st.styleIdx();
+        }
+    }
+    return Sid::NOSTYLE;
 }

@@ -29,6 +29,7 @@
 
 #include "libmscore/chordlist.h"
 #include "libmscore/types.h"
+#include "libmscore/spatium.h"
 
 #include "draw/geometry.h"
 
@@ -38,19 +39,20 @@ namespace Ms {
 class XmlWriter;
 struct ChordDescription;
 
-//---------------------------------------------------------
-//   MStyle
-///   \cond PLUGIN_API \private \endcond
-//    the name "Style" gives problems with some microsoft
-//    header files...
-//---------------------------------------------------------
-
 class MStyle
 {
 public:
     MStyle();
 
-    void precomputeValues();
+    //! TODO Can be optimized
+    const QVariant& styleV(Sid idx) const { return value(idx); }
+    Spatium  styleS(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "Ms::Spatium")); return value(idx).value<Spatium>(); }
+    qreal    styleP(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "Ms::Spatium")); return pvalue(idx); }
+    QString  styleSt(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "QString")); return value(idx).toString(); }
+    bool     styleB(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "bool")); return value(idx).toBool(); }
+    qreal    styleD(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "double")); return value(idx).toDouble(); }
+    int      styleI(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "int")); return value(idx).toInt(); }
+
     const QVariant& value(Sid idx) const;
     qreal pvalue(Sid idx) const;
 
@@ -59,19 +61,19 @@ public:
 
     bool isDefault(Sid idx) const;
     void setDefaultStyleVersion(const int defaultsVersion);
-    int defaultStyleVersion() const { return m_defaultStyleVersion; }
+    int defaultStyleVersion() const;
 
     const ChordDescription* chordDescription(int id) const;
     ChordList* chordList() { return &m_chordList; }
-
     void setCustomChordList(bool t) { m_customChordList = t; }
     void checkChordList();
 
     bool load(QFile* qf, bool ign = false);
     void load(XmlReader& e);
-    void applyNewDefaults(const MStyle& other, const int defaultsVersion);
     void save(XmlWriter& xml, bool optimize);
     bool readProperties(XmlReader&);
+
+    void precomputeValues();
 
     static const char* valueType(const Sid);
     static const char* valueName(const Sid);
@@ -85,7 +87,7 @@ private:
     std::array<qreal, int(Sid::STYLES)> m_precomputedValues;
 
     ChordList m_chordList;
-    bool m_customChordList;          // if true, chordlist will be saved as part of score
+    bool m_customChordList = false;           // if true, chordlist will be saved as part of score
     int m_defaultStyleVersion = -1;
 };
 }     // namespace Ms
