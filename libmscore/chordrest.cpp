@@ -1303,7 +1303,9 @@ Shape ChordRest::shape() const
                   FretDiagram* fd = toFretDiagram(e);
                   qreal margin = styleP(Sid::fretMinDistance) * 0.5;
                   bool firstBeat = tick() == measure()->tick();
-                  if (fd->bbox().isEmpty())
+                  if (fd->pos().x() == 0)
+                        fd->layoutHorizontal();
+                  else if (fd->bbox().isEmpty())
                         fd->calculateBoundingRect();
                   qreal leftX = firstBeat ? 0 : e->bbox().x() - margin + e->pos().x();
                   qreal rightX = e->bbox().x() + e->bbox().width() + margin + e->pos().x();
