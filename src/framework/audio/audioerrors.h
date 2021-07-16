@@ -40,21 +40,22 @@ enum class Err {
     AudioStreamNotPresent = 320,
 
     // synth
-    SynthNotInited = 331,
-    SoundFontNotLoaded = 332,
-    SoundFontFailedLoad = 333,
-    SoundFontFailedUnload = 334,
+    SynthNotInited = 330,
+    NoLoadedSoundFonts = 331,
+    SoundFontFailedLoad = 332,
+    SoundFontFailedUnload = 333,
+    UndefinedSoundFontFormat = 334,
 
     //common
-    InvalidTrackId = 335,
-    InvalidMixerChannelId = 336,
-    InvalidSequenceId = 337,
-    InvalidMidiMapping = 338,
-    InvalidAudioSource = 339,
-    InvalidAudioFilePath = 340,
+    InvalidTrackId = 340,
+    InvalidMixerChannelId = 341,
+    InvalidSequenceId = 342,
+    InvalidMidiMapping = 343,
+    InvalidAudioSource = 344,
+    InvalidAudioFilePath = 345,
 
     // clock
-    InvalidTimeLoop = 341,
+    InvalidTimeLoop = 350,
 };
 
 inline Ret make_ret(Err e)

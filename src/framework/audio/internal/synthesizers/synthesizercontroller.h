@@ -35,8 +35,6 @@ public:
     void init();
 
 private:
-    void reloadSoundFonts(ISynthesizerPtr synth);
-
     ISynthesizersRegisterPtr m_synthRegister;
     ISoundFontsProviderPtr m_soundFontProvider;
 };

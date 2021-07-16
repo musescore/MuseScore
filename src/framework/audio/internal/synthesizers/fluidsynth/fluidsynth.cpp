@@ -218,7 +218,7 @@ Ret FluidSynth::setupMidiChannels(const std::vector<Event>& events)
 
     if (m_soundFonts.empty()) {
         LOGE() << "sound fonts not loaded";
-        return make_ret(Err::SoundFontNotLoaded);
+        return make_ret(Err::NoLoadedSoundFonts);
     }
 
     fluid_synth_program_reset(m_fluid->synth);

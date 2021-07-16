@@ -59,15 +59,3 @@ void SynthesizerController::init()
         });*/
     }
 }
-
-void SynthesizerController::reloadSoundFonts(std::shared_ptr<ISynthesizer> synth)
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    Ret ret = synth->removeSoundFonts();
-    if (!ret) {
-        LOGE() << "failed remove sound font, synth: " << synth->name();
-    }
-
-    std::vector<io::path> sfonts = m_soundFontProvider->soundFontPathsForSynth(synth->name());
-    synth->addSoundFonts(sfonts);
-}

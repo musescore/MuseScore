@@ -23,34 +23,30 @@
 #define MU_AUDIO_SOUNDFONTSPROVIDER_H
 
 #include <map>
-#include <mutex>
-
-#include "isoundfontsprovider.h"
 
 #include "modularity/ioc.h"
-#include "iaudioconfiguration.h"
-#include "isynthesizersregister.h"
-#include "iglobalconfiguration.h"
 #include "system/ifilesystem.h"
 #include "async/asyncable.h"
+#include "iglobalconfiguration.h"
+
+#include "iaudioconfiguration.h"
+#include "isoundfontsprovider.h"
+#include "synthtypes.h"
 
 namespace mu::audio::synth {
 class SoundFontsProvider : public ISoundFontsProvider, public async::Asyncable
 {
     INJECT(audio, IAudioConfiguration, configuration)
-    INJECT(audio, ISynthesizersRegister, synthRegister)
     INJECT(audio, system::IFileSystem, fileSystem)
 
 public:
-
-    std::vector<io::path> soundFontPathsForSynth(const SynthName& synthName) const override;
-    async::Notification soundFontPathsForSynthChanged(const SynthName& synth) const override;
-
-    std::vector<io::path> soundFontPaths(SoundFontFormats formats) const override;
+    void refreshPaths() override;
+    async::Promise<SoundFontPaths> soundFontPaths(SoundFontFormats formats) const override;
 
 private:
-    mutable std::mutex m_mutex;
-    mutable std::map<SynthName, async::Notification > m_soundFontPathsForSynthChangedMap;
+    void updateCaches(const io::paths& dirPaths, const SoundFontFormat& format);
+
+    mutable std::multimap<SoundFontFormat, SoundFontPath> m_soundFontPathsCache;
 };
 }
 

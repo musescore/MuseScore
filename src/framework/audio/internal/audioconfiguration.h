@@ -43,7 +43,7 @@ public:
     audioch_t audioChannelsCount() const override;
     unsigned int driverBufferSize() const override;
 
-    std::vector<io::path> soundFontPaths() const override;
+    synth::SoundFontPaths soundFontDirectories() const override;
 
     bool isShowControlsInMixer() const override;
     void setIsShowControlsInMixer(bool show) override;
