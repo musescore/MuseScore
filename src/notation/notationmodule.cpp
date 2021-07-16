@@ -60,6 +60,7 @@
 #include "view/widgets/selectnotedialog.h"
 #include "view/widgets/selectdialog.h"
 #include "view/widgets/tupletdialog.h"
+#include "view/widgets/stafftextpropertiesdialog.h"
 #include "view/notationcontextmenu.h"
 #include "view/internal/undoredomodel.h"
 
@@ -140,6 +141,9 @@ void NotationModule::resolveImports()
         ir->registerUri(Uri("musescore://notation/othertupletdialog"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<TupletDialog>("TupletDialog")));
 
+        ir->registerUri(Uri("musescore://notation/stafftextproperties"),
+                        ContainerMeta(ContainerType::QWidgetDialog, Ms::StaffTextPropertiesDialog::static_metaTypeId()));
+
         ir->registerUri(Uri("musescore://notation/parts"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/PartsDialog.qml"));
 
@@ -173,6 +177,7 @@ void NotationModule::registerUiTypes()
     qRegisterMetaType<EditStaff>("EditStaff");
     qRegisterMetaType<SelectNoteDialog>("SelectNoteDialog");
     qRegisterMetaType<SelectDialog>("SelectDialog");
+    qRegisterMetaType<Ms::StaffTextPropertiesDialog>("StaffTextPropertiesDialog");
 
     auto ui = ioc()->resolve<IUiEngine>(moduleName());
     if (ui) {
