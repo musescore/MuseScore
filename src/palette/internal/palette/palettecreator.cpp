@@ -1427,6 +1427,7 @@ PalettePanel* PaletteCreator::newLinesPalettePanel()
 
     ottava = makeElement<Ottava>(gscore);
     ottava->setOttavaType(OttavaType::OTTAVA_22MB);
+    ottava->setPlacement(Placement::BELOW);
     ottava->setLen(w);
     ottava->styleChanged();
     sp->append(ottava, QT_TRANSLATE_NOOP("palette", "22ma bassa"));
