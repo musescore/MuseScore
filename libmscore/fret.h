@@ -172,6 +172,7 @@ class FretDiagram final : public Element {
       static FretDiagram* fromString(Score* score, const QString &s);
 
       ElementType type() const override { return ElementType::FRET_DIAGRAM; }
+      void layoutHorizontal();
       void layout() override;
       void calculateBoundingRect();
       void write(XmlWriter& xml) const override;
