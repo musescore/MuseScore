@@ -32,6 +32,7 @@
 #include "font.h"
 #include "pen.h"
 #include "pixmap.h"
+#include "transform.h"
 
 namespace mu::draw {
 class Painter;
@@ -63,11 +64,11 @@ public:
     virtual void save() = 0;
     virtual void restore() = 0;
 
-    virtual void setTransform(const QTransform& transform) = 0;
-    virtual const QTransform& transform() const = 0;
+    virtual void setTransform(const Transform& transform) = 0;
+    virtual const Transform& transform() const = 0;
 
     // drawing functions
-    virtual void drawPath(const QPainterPath& path) = 0;
+    virtual void drawPath(const PainterPath& path) = 0;
     virtual void drawPolygon(const PointF* points, size_t pointCount, PolygonMode mode) = 0;
 
     virtual void drawText(const PointF& point, const QString& text) = 0;

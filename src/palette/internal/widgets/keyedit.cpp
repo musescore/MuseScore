@@ -123,7 +123,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     qreal x = 3;
     qreal w = ww - 6;
 
-    painter.setWorldTransform(_matrix);
+    painter.setWorldTransform(mu::Transform::fromQTransform(_matrix));
 
     QRectF r = imatrix.mapRect(QRectF(x, y, w, wh));
 

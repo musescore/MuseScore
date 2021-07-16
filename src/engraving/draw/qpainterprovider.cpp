@@ -28,10 +28,13 @@
 #include <QGlyphRun>
 #include <QPixmapCache>
 #include <QStaticText>
+#include <QPainterPath>
 
 #include "fontcompat.h"
 #include "utils/drawlogger.h"
+#include "utils/drawjson.h"
 #include "log.h"
+#include "transform.h"
 
 using namespace mu::draw;
 
@@ -170,22 +173,24 @@ void QPainterProvider::restore()
     m_brush = Brush::fromQBrush(m_painter->brush());
 }
 
-void QPainterProvider::setTransform(const QTransform& transform)
+void QPainterProvider::setTransform(const Transform& transform)
 {
     m_transform = transform;
-    m_painter->setTransform(transform);
+    m_painter->setTransform(Transform::toQTransform(m_transform));
 }
 
-const QTransform& QPainterProvider::transform() const
+const mu::Transform& QPainterProvider::transform() const
 {
-    return m_painter->transform();
+    return m_transform;
 }
 
 // drawing functions
 
-void QPainterProvider::drawPath(const QPainterPath& path)
+void QPainterProvider::drawPath(const PainterPath& path)
 {
-    m_painter->drawPath(path);
+    QPainterPath qpath;
+    DrawBufferJson::qPainterPathfromObj(DrawBufferJson::painterPathToObj(path), qpath);
+    m_painter->drawPath(qpath);
 }
 
 void QPainterProvider::drawPolygon(const PointF* points, size_t pointCount, PolygonMode mode)

@@ -34,8 +34,6 @@
 #include <QSizeF>
 #endif
 
-#include <QPainterPath>
-
 namespace mu {
 inline bool isEqual(qreal a1, qreal a2) { return qFuzzyCompare(a1, a2); }
 inline bool isEqual(int a1, int a2) { return a1 == a2; }
@@ -438,33 +436,6 @@ public:
 using PolygonF = PolygonX<qreal>;
 using Polygon = PolygonX<int>;
 
-//! NOTE Temporary implementation
-class PainterPath : public QPainterPath
-{
-public:
-    PainterPath() = default;
-    PainterPath(const QPainterPath& p)
-        : QPainterPath(p) {}
-
-    void moveTo(const PointF& p) { QPainterPath::moveTo(p.toQPointF()); }
-    inline void moveTo(qreal x, qreal y) { moveTo(PointF(x, y)); }
-
-    void cubicTo(const PointF& ctrlPt1, const PointF& ctrlPt2, const PointF& endPt)
-    {
-        QPainterPath::cubicTo(ctrlPt1.toQPointF(), ctrlPt2.toQPointF(), endPt.toQPointF());
-    }
-
-    inline void cubicTo(qreal ctrlPt1x, qreal ctrlPt1y, qreal ctrlPt2x, qreal ctrlPt2y, qreal endPtx, qreal endPty)
-    {
-        cubicTo(PointF(ctrlPt1x, ctrlPt1y), PointF(ctrlPt2x, ctrlPt2y), PointF(endPtx, endPty));
-    }
-
-    void translate(const PointF& offset) { QPainterPath::translate(offset.toQPointF()); }
-    inline void translate(qreal dx, qreal dy) { translate(PointF(dx, dy)); }
-
-    RectF boundingRect() const { return RectF::fromQRectF(QPainterPath::boundingRect()); }
-};
-
 // Impelemtation ==========================================
 template<typename T>
 RectX<T> RectX<T>::united(const RectX<T>& r) const
@@ -722,8 +693,5 @@ Q_DECLARE_METATYPE(mu::PointF)
 Q_DECLARE_METATYPE(mu::SizeF)
 Q_DECLARE_METATYPE(mu::RectF)
 Q_DECLARE_METATYPE(mu::Rect)
-
-Q_DECLARE_METATYPE(QPainterPath)
-Q_DECLARE_METATYPE(mu::PainterPath)
 
 #endif // MU_GEOMETRY_H
