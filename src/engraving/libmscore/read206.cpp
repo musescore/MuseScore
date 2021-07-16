@@ -3543,7 +3543,7 @@ static bool readScore(Score* score, XmlReader& e)
                 MasterScore* m = score->masterScore();
                 Score* s = m->createScore();
                 int defaultsVersion = m->style().defaultStyleVersion();
-                s->setStyle(*DefaultStyle::resolveStyleDefaults(defaultsVersion));
+                s->setStyle(DefaultStyle::resolveStyleDefaults(defaultsVersion));
                 s->style().setDefaultStyleVersion(defaultsVersion);
                 s->setEnableVerticalSpread(false);
                 Excerpt* ex = new Excerpt(m);
