@@ -29,12 +29,14 @@
 #include "iglobalconfiguration.h"
 #include "settings.h"
 #include "system/ifilesystem.h"
+#include "engraving/iengravingconfiguration.h"
 
 namespace mu::notation {
 class NotationConfiguration : public INotationConfiguration, public async::Asyncable
 {
     INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
     INJECT(notation, system::IFileSystem, fileSystem)
 
 public:

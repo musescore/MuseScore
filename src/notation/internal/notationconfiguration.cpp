@@ -61,8 +61,6 @@ static const Settings::Key KEYBOARD_ZOOM_PRECISION(module_name, "ui/canvas/zoomP
 static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionMouse");
 
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
-static const Settings::Key DEFAULT_STYLE_FILE_PATH(module_name, "score/style/defaultStyleFile");
-static const Settings::Key PART_STYLE_FILE_PATH(module_name, "score/style/partStyleFile");
 
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
 static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
@@ -430,23 +428,22 @@ async::Channel<io::path> NotationConfiguration::userStylesPathChanged() const
 
 io::path NotationConfiguration::defaultStyleFilePath() const
 {
-    return settings()->value(DEFAULT_STYLE_FILE_PATH).toString();
+    return engravingConfiguration()->defaultStyleFilePath();
 }
 
 void NotationConfiguration::setDefaultStyleFilePath(const io::path& path)
 {
-    preferences().setDefaultStyleFilePath(path.toQString());
-    settings()->setSharedValue(DEFAULT_STYLE_FILE_PATH, Val(path.toStdString()));
+    engravingConfiguration()->setDefaultStyleFilePath(path.toQString());
 }
 
 io::path NotationConfiguration::partStyleFilePath() const
 {
-    return settings()->value(PART_STYLE_FILE_PATH).toString();
+    return engravingConfiguration()->partStyleFilePath();
 }
 
 void NotationConfiguration::setPartStyleFilePath(const io::path& path)
 {
-    settings()->setSharedValue(PART_STYLE_FILE_PATH, Val(path.toStdString()));
+    engravingConfiguration()->setPartStyleFilePath(path.toQString());
 }
 
 bool NotationConfiguration::isMidiInputEnabled() const

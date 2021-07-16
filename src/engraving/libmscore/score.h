@@ -50,8 +50,11 @@
 class QMimeData;
 
 namespace mu::engraving {
-class ScoreAccess;
 class EngravingProject;
+}
+
+namespace mu::engraving::compat {
+class ScoreAccess;
 }
 
 namespace mu::score {
@@ -1400,7 +1403,7 @@ class MasterScore : public Score
     void setPrev(MasterScore* s) { _prev = s; }
     void setNext(MasterScore* s) { _next = s; }
 
-    friend class mu::engraving::ScoreAccess;
+    friend class mu::engraving::compat::ScoreAccess;
     friend class mu::engraving::EngravingProject;
     MasterScore(std::shared_ptr<mu::engraving::EngravingProject> project);
     MasterScore(const MStyle&, std::shared_ptr<mu::engraving::EngravingProject> project);
@@ -1572,10 +1575,6 @@ inline Fraction Score::pos(POS pos) const { return _masterScore->pos(pos); }
 inline void Score::setPos(POS pos, Fraction tick) { _masterScore->setPos(pos, tick); }
 
 extern Ms::MasterScore* gscore;
-
-extern MStyle* styleDefaults114();
-extern MStyle* styleDefaults206();
-extern MStyle* styleDefaults301();
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags);
 }     // namespace Ms

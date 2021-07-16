@@ -25,6 +25,7 @@
 #include <QRegularExpression>
 
 #include "style/style.h"
+#include "style/defaultstyle.h"
 #include "compat/pageformat.h"
 
 #include "xml.h"
@@ -3540,9 +3541,9 @@ static bool readScore(Score* score, XmlReader& e)
                 e.tracks().clear();
                 e.clearUserTextStyles();
                 MasterScore* m = score->masterScore();
-                Score* s = m->createScore(MScore::baseStyle());
+                Score* s = m->createScore();
                 int defaultsVersion = m->style().defaultStyleVersion();
-                s->setStyle(*MStyle::resolveStyleDefaults(defaultsVersion));
+                s->setStyle(*DefaultStyle::resolveStyleDefaults(defaultsVersion));
                 s->style().setDefaultStyleVersion(defaultsVersion);
                 s->setEnableVerticalSpread(false);
                 Excerpt* ex = new Excerpt(m);
@@ -3749,25 +3750,5 @@ Score::FileError MasterScore::read206(XmlReader& e)
     setAutosaveDirty(false);
 
     return FileError::FILE_NO_ERROR;
-}
-
-MStyle* styleDefaults206()
-{
-    static MStyle* result = nullptr;
-
-    if (result) {
-        return result;
-    }
-
-    result = new MStyle();
-    QFile baseDefaults(":/styles/legacy-style-defaults-v2.mss");
-
-    if (!baseDefaults.open(QIODevice::ReadOnly)) {
-        return result;
-    }
-
-    result->load(&baseDefaults);
-
-    return result;
 }
 }

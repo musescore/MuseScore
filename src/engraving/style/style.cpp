@@ -26,18 +26,14 @@
 #include "styledef.cpp"
 
 #include "compat/pageformat.h"
+#include "defaultstyle.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
-static const int LEGACY_MSC_VERSION_V3 = 301;
-static const int LEGACY_MSC_VERSION_V2 = 206;
-static const int LEGACY_MSC_VERSION_V1 = 114;
-
-MStyle MScore::_baseStyle;
-MStyle MScore::_defaultStyle;
-
 //---------------------------------------------------------
 //   valueType
 //---------------------------------------------------------
@@ -53,13 +49,17 @@ const char* MStyle::valueType(const Sid i)
 
 const QVariant& MStyle::value(Sid idx) const
 {
-    const QVariant& val = _values[int(idx)];
-    if (!val.isValid()) {
-        qDebug("invalid style value %d %s", int(idx), MStyle::valueName(idx));
-        static QVariant emptyVal;
-        return emptyVal;
+    const QVariant& val = m_values[int(idx)];
+    if (val.isValid()) {
+        return val;
     }
-    return val;
+
+    return StyleDef::styleValues[int(idx)].defaultValue();
+}
+
+qreal MStyle::pvalue(Sid idx) const
+{
+    return m_precomputedValues[int(idx)];
 }
 
 //---------------------------------------------------------
@@ -88,31 +88,14 @@ Sid MStyle::styleIdx(const QString& name)
     return Sid::NOSTYLE;
 }
 
-MStyle* MStyle::resolveStyleDefaults(const int defaultsVersion)
-{
-    switch (defaultsVersion) {
-    case LEGACY_MSC_VERSION_V3:
-        return styleDefaults301();
-    case LEGACY_MSC_VERSION_V2:
-        return styleDefaults206();
-    case LEGACY_MSC_VERSION_V1:
-        return styleDefaults114();
-    default:
-        return &MScore::baseStyle();
-    }
-}
-
 //---------------------------------------------------------
 //   Style
 //---------------------------------------------------------
 
 MStyle::MStyle()
 {
-    _defaultStyleVersion = MSCVERSION;
-    _customChordList = false;
-    for (const StyleDef::StyleValue& t : StyleDef::styleValues) {
-        _values[t.idx()] = t.defaultValue();
-    }
+    m_defaultStyleVersion = MSCVERSION;
+    m_customChordList = false;
 }
 
 //---------------------------------------------------------
@@ -124,7 +107,7 @@ void MStyle::precomputeValues()
     qreal _spatium = value(Sid::spatium).toDouble();
     for (const StyleDef::StyleValue& t : StyleDef::styleValues) {
         if (!strcmp(t.valueType(), "Ms::Spatium")) {
-            _precomputedValues[t.idx()] = _values[t.idx()].value<Spatium>().val() * _spatium;
+            m_precomputedValues[t.idx()] = value(t.styleIdx()).value<Spatium>().val() * _spatium;
         }
     }
 }
@@ -137,12 +120,12 @@ void MStyle::precomputeValues()
 
 bool MStyle::isDefault(Sid idx) const
 {
-    return value(idx) == resolveStyleDefaults(_defaultStyleVersion)->value(idx);
+    return value(idx) == DefaultStyle::resolveStyleDefaults(m_defaultStyleVersion)->value(idx);
 }
 
 void MStyle::setDefaultStyleVersion(const int defaultsVersion)
 {
-    _defaultStyleVersion = defaultsVersion;
+    m_defaultStyleVersion = defaultsVersion;
 }
 
 //---------------------------------------------------------
@@ -151,10 +134,10 @@ void MStyle::setDefaultStyleVersion(const int defaultsVersion)
 
 const ChordDescription* MStyle::chordDescription(int id) const
 {
-    if (!_chordList.contains(id)) {
+    if (!m_chordList.contains(id)) {
         return 0;
     }
-    return &*_chordList.find(id);
+    return &*m_chordList.find(id);
 }
 
 //---------------------------------------------------------
@@ -164,16 +147,16 @@ const ChordDescription* MStyle::chordDescription(int id) const
 void MStyle::checkChordList()
 {
     // make sure we have a chordlist
-    if (!_chordList.loaded()) {
+    if (!m_chordList.loaded()) {
         qreal emag = value(Sid::chordExtensionMag).toDouble();
         qreal eadjust = value(Sid::chordExtensionAdjust).toDouble();
         qreal mmag = value(Sid::chordModifierMag).toDouble();
         qreal madjust = value(Sid::chordModifierAdjust).toDouble();
-        _chordList.configureAutoAdjust(emag, eadjust, mmag, madjust);
+        m_chordList.configureAutoAdjust(emag, eadjust, mmag, madjust);
         if (value(Sid::chordsXmlFile).toBool()) {
-            _chordList.read("chords.xml");
+            m_chordList.read("chords.xml");
         }
-        _chordList.read(value(Sid::chordDescriptionFile).toString());
+        m_chordList.read(value(Sid::chordDescriptionFile).toString());
     }
 }
 
@@ -188,13 +171,13 @@ void MStyle::set(Sid idx, const mu::PointF& v)
 void MStyle::set(const Sid t, const QVariant& val)
 {
     const int idx = int(t);
-    _values[idx] = val;
+    m_values[idx] = val;
     if (t == Sid::spatium) {
         precomputeValues();
     } else {
         if (!strcmp(StyleDef::styleValues[idx].valueType(), "Ms::Spatium")) {
             qreal _spatium = value(Sid::spatium).toDouble();
-            _precomputedValues[idx] = _values[idx].value<Spatium>().val() * _spatium;
+            m_precomputedValues[idx] = m_values[idx].value<Spatium>().val() * _spatium;
         }
     }
 }
@@ -391,10 +374,9 @@ bool MStyle::load(QFile* qf, bool ign)
     return true;
 }
 
-extern void readPageFormat(MStyle* style, XmlReader& e);
-
 void MStyle::load(XmlReader& e)
 {
+    TRACEFUNC;
     QString oldChordDescriptionFile = value(Sid::chordDescriptionFile).toString();
     bool chordListTag = false;
     while (e.readNextStartElement()) {
@@ -414,9 +396,9 @@ void MStyle::load(XmlReader& e)
         } else if (tag == "displayInConcertPitch") {
             set(Sid::concertPitch, QVariant(bool(e.readInt())));
         } else if (tag == "ChordList") {
-            _chordList.unload();
-            _chordList.read(e);
-            _customChordList = true;
+            m_chordList.unload();
+            m_chordList.read(e);
+            m_customChordList = true;
             chordListTag = true;
         } else if (tag == "lyricsDashMaxLegth") { // pre-3.6 typo
             set(Sid::lyricsDashMaxLength, e.readDouble());
@@ -441,11 +423,11 @@ void MStyle::load(XmlReader& e)
             qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
         }
         if (value(Sid::chordStyle).toString() == "custom") {
-            _customChordList = true;
+            m_customChordList = true;
         } else {
-            _customChordList = false;
+            m_customChordList = false;
         }
-        _chordList.unload();
+        m_chordList.unload();
     }
 
     if (!chordListTag) {
@@ -455,12 +437,12 @@ void MStyle::load(XmlReader& e)
 
 void MStyle::applyNewDefaults(const MStyle& other, const int defaultsVersion)
 {
-    _defaultStyleVersion = defaultsVersion;
+    m_defaultStyleVersion = defaultsVersion;
 
     for (StyleDef::StyleValue st : StyleDef::styleValues) {
         if (isDefault(st.styleIdx())) {
             st._defaultValue = other.value(st.styleIdx());
-            _values.at(st.idx()) = other.value(st.styleIdx());
+            m_values.at(st.idx()) = other.value(st.styleIdx());
         }
     }
 }
@@ -513,9 +495,9 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.name(), value(idx));
         }
     }
-    if (_customChordList && !_chordList.empty()) {
+    if (m_customChordList && !m_chordList.empty()) {
         xml.stag("ChordList");
-        _chordList.write(xml);
+        m_chordList.write(xml);
         xml.etag();
     }
     xml.tag("Spatium", value(Sid::spatium).toDouble() / DPMM);

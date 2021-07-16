@@ -47,30 +47,24 @@ struct ChordDescription;
 
 class MStyle
 {
-    std::array<QVariant, int(Sid::STYLES)> _values;
-    std::array<qreal, int(Sid::STYLES)> _precomputedValues;
-
-    ChordList _chordList;
-    bool _customChordList;          // if true, chordlist will be saved as part of score
-    int _defaultStyleVersion = -1;
-
 public:
     MStyle();
 
     void precomputeValues();
     const QVariant& value(Sid idx) const;
-    qreal pvalue(Sid idx) const { return _precomputedValues[int(idx)]; }
+    qreal pvalue(Sid idx) const;
+
     void set(Sid idx, const QVariant& v);
     void set(Sid idx, const mu::PointF& v);
 
     bool isDefault(Sid idx) const;
     void setDefaultStyleVersion(const int defaultsVersion);
-    int defaultStyleVersion() const { return _defaultStyleVersion; }
+    int defaultStyleVersion() const { return m_defaultStyleVersion; }
 
     const ChordDescription* chordDescription(int id) const;
-    ChordList* chordList() { return &_chordList; }
+    ChordList* chordList() { return &m_chordList; }
 
-    void setCustomChordList(bool t) { _customChordList = t; }
+    void setCustomChordList(bool t) { m_customChordList = t; }
     void checkChordList();
 
     bool load(QFile* qf, bool ign = false);
@@ -82,11 +76,17 @@ public:
     static const char* valueType(const Sid);
     static const char* valueName(const Sid);
     static Sid styleIdx(const QString& name);
-    static MStyle* resolveStyleDefaults(const int defaultsVersion);
 
 private:
     bool readStyleValCompat(XmlReader&);
     bool readTextStyleValCompat(XmlReader&);
+
+    std::array<QVariant, int(Sid::STYLES)> m_values;
+    std::array<qreal, int(Sid::STYLES)> m_precomputedValues;
+
+    ChordList m_chordList;
+    bool m_customChordList;          // if true, chordlist will be saved as part of score
+    int m_defaultStyleVersion = -1;
 };
 }     // namespace Ms
 

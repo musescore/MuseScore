@@ -37,6 +37,7 @@
 #include "actions/actiontypes.h"
 
 #include "engraving/style/style.h"
+#include "engraving/style/defaultstyle.h"
 
 #include "libmscore/element.h"
 #include "libmscore/symbol.h"
@@ -1043,8 +1044,8 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
     //
     // draw symbols
     //
-    Pen pen(configuration()->elementsColor());
-    pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * magS);
+    draw::Pen pen(configuration()->elementsColor());
+    pen.setWidthF(engraving::DefaultStyle::defaultStyle().value(Sid::staffLineWidth).toDouble() * magS);
 
     for (int idx = 0; idx < ccp().size(); ++idx) {
         int yoffset  = gscore->spatium() * m_yOffsetSpatium;
