@@ -28,12 +28,14 @@ using namespace mu::ui;
 static const mu::UriQuery MASTER_PALETTE_URI("musescore://palette/masterpalette?sync=false");
 static const mu::UriQuery SPECIAL_CHARACTERS_URI("musescore://palette/specialcharacters?sync=false");
 static const mu::UriQuery TIME_SIGNATURE_PROPERTIES_URI("musescore://palette/timesignatureproperties");
+static const mu::UriQuery EDIT_DRUMSET_URI("musescore://palette/editdrumset");
 
 void PaletteActionsController::init()
 {
     dispatcher()->reg(this, "masterpalette", this, &PaletteActionsController::toggleMasterPalette);
     dispatcher()->reg(this, "show-keys", this, &PaletteActionsController::openSpecialCharactersDialog);
     dispatcher()->reg(this, "time-signature-properties", this, &PaletteActionsController::openTimeSignaturePropertiesDialog);
+    dispatcher()->reg(this, "edit-drumset", this, &PaletteActionsController::openEditDrumsetDialog);
 
     interactive()->currentUri().ch.onReceive(this, [this](const Uri& uri) {
         //! NOTE If MasterPalette are not open, then it is reasonably to compare with the current uri,
@@ -81,4 +83,9 @@ void PaletteActionsController::openSpecialCharactersDialog()
 void PaletteActionsController::openTimeSignaturePropertiesDialog()
 {
     interactive()->open(TIME_SIGNATURE_PROPERTIES_URI);
+}
+
+void PaletteActionsController::openEditDrumsetDialog()
+{
+    interactive()->open(EDIT_DRUMSET_URI);
 }

@@ -67,9 +67,9 @@ public:
     Q_ENUM(Code)
 };
 
-inline QString musicalSymbolToString(MusicalSymbolCodes::Code noteIcon, bool withDot = false)
+inline QString musicalSymbolToString(MusicalSymbolCodes::Code symbolCode, bool withDot = false)
 {
-    QString noteSymbol = QString(QChar(static_cast<char16_t>(noteIcon)));
+    QString noteSymbol = QString(QChar(static_cast<char16_t>(symbolCode)));
 
     if (withDot) {
         noteSymbol += QChar(static_cast<char16_t>(MusicalSymbolCodes::Code::DOT));

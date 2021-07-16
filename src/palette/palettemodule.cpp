@@ -37,6 +37,7 @@
 #include "internal/paletteactionscontroller.h"
 #include "internal/paletteuiactions.h"
 #include "internal/palette/paletteprovider.h"
+#include "internal/widgets/editdrumsetdialog.h"
 
 #include "view/paletterootmodel.h"
 #include "view/palettepropertiesmodel.h"
@@ -89,6 +90,9 @@ void PaletteModule::resolveImports()
         ir->registerUri(Uri("musescore://palette/timesignatureproperties"),
                         ContainerMeta(ContainerType::QWidgetDialog, Ms::TimeSignaturePropertiesDialog::static_metaTypeId()));
 
+        ir->registerUri(Uri("musescore://palette/editdrumset"),
+                        ContainerMeta(ContainerType::QWidgetDialog, Ms::EditDrumsetDialog::static_metaTypeId()));
+
         ir->registerUri(Uri("musescore://palette/properties"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Palette/PalettePropertiesDialog.qml"));
 
@@ -118,6 +122,7 @@ void PaletteModule::registerUiTypes()
 
     qRegisterMetaType<SpecialCharactersDialog>("SpecialCharactersDialog");
     qRegisterMetaType<TimeSignaturePropertiesDialog>("TimeSignaturePropertiesDialog");
+    qRegisterMetaType<Ms::EditDrumsetDialog>("EditDrumsetDialog");
 
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
 }

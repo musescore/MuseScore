@@ -15,6 +15,8 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/symboldialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/specialcharactersdialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/specialcharactersdialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/editdrumsetdialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/editdrumsetdialog.cpp
     )
 
 set (WIDGETS_UI
@@ -25,5 +27,6 @@ set (WIDGETS_UI
     ${CMAKE_CURRENT_LIST_DIR}/note_groups.ui
     ${CMAKE_CURRENT_LIST_DIR}/symboldialog.ui
     ${CMAKE_CURRENT_LIST_DIR}/specialcharactersdialog.ui
+    ${CMAKE_CURRENT_LIST_DIR}/editdrumsetdialog.ui
     )
 
