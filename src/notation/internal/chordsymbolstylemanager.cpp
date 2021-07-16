@@ -114,6 +114,7 @@ void ChordSymbolStyleManager::extractChordStyleInfo(mu::io::path& f)
     Ms::XmlReader e(&file);
     QFileInfo fi(path);
     QString styleName = "";
+    bool usePresets = false;
 
     if (!file.open(QIODevice::ReadOnly)) {
         return;
@@ -123,12 +124,13 @@ void ChordSymbolStyleManager::extractChordStyleInfo(mu::io::path& f)
         if (e.name() == "museScore") {
             if (e.attribute("type") == "chordStyle") {
                 styleName = e.attribute("styleName");
+                usePresets = (e.attribute("usePresets") == "true");
                 break;
             }
         }
     }
 
-    _chordStyles.push_back({ styleName, fi.fileName() });
+    _chordStyles.push_back({ styleName, fi.fileName(), usePresets });
 }
 
 // TODO: Rewrite the XML format

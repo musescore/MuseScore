@@ -4957,6 +4957,7 @@ void Score::updateChordList()
     _chordList.qualitySymbols.insert("augmented", style().value(Sid::chordQualityAugmented).toString());
     _chordList.qualitySymbols.insert("omit", style().value(Sid::chordModifierOmit).toString());
 
+    _chordList.usePresets = style().value(Sid::useChordSymbolPresets).toBool();
     _chordList.stackModifiers = style().value(Sid::stackModifiers).toBool();
     _chordList.autoCapitalization = style().value(Sid::automaticCapitalization).toBool();
     _chordList.lowerCaseQualitySymbols = style().value(Sid::lowerCaseQualitySymbols).toBool();

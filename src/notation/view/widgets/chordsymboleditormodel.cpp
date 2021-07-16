@@ -29,8 +29,8 @@ ChordSymbolEditorModel::ChordSymbolEditorModel(QObject* parent)
     m_chordSpellingList << "Standard" << "German" << "German Full" << "Solfege" << "French";
     styleManager = new ChordSymbolStyleManager();
     m_styles = styleManager->getChordStyles();
-    setQualitySymbolsLists();
     initCurrentStyleIndex();
+    setQualitySymbolsLists();
     setQualitySymbolsOnStyleChange();
     setPropertiesOnStyleChange();
     updateSelectionHistory(m_styles[m_currentStyleIndex].styleName);
@@ -45,7 +45,8 @@ QHash<int, QByteArray> ChordSymbolEditorModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
         { StyleNameRole, "styleName" },
-        { FileRole, "fileName" }
+        { FileRole, "fileName" },
+        { UsePresetsRole, "usePresets" }
     };
 
     return roles;
@@ -64,6 +65,8 @@ QVariant ChordSymbolEditorModel::data(const QModelIndex& index, int role) const
         return chordSymbolStyle.styleName;
     case FileRole:
         return chordSymbolStyle.fileName;
+    case UsePresetsRole:
+        return chordSymbolStyle.usePresets;
     default:
         break;
     }
@@ -311,6 +314,8 @@ void ChordSymbolEditorModel::initCurrentStyleIndex()
         setChordStyle(m_styles[0].styleName);
     }
 
+    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::useChordSymbolPresets, m_styles.at(m_currentStyleIndex).usePresets);
+
     // Get and extract the selection History
     QString selectionHistory = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualitySelectionHistory).toString();
     extractSelectionHistory(selectionHistory);
@@ -320,6 +325,9 @@ void ChordSymbolEditorModel::initCurrentStyleIndex()
 
 void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
 {
+    if (!m_styles[m_currentStyleIndex].usePresets) {
+        return;
+    }
     // Do not worry about the quality, extension and modifier settings here
     QString currentStyle = m_styles[m_currentStyleIndex].styleName;
 
@@ -548,17 +556,25 @@ void ChordSymbolEditorModel::setPropertiesOnStyleChange()
 
 void ChordSymbolEditorModel::setQualitySymbolsLists()
 {
-    // Get the symbols from the file
-    QString descriptionFile = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordDescriptionFile).toString();
-    m_qualitySymbols = styleManager->getQualitySymbols(descriptionFile);
-
-    // Set the respective lists
-    m_majorSeventhList = m_qualitySymbols["major7th"];
-    m_halfDiminishedList = m_qualitySymbols["half-diminished"];
-    m_minorList = m_qualitySymbols["minor"];
-    m_augmentedList = m_qualitySymbols["augmented"];
-    m_diminishedList = m_qualitySymbols["diminished"];
-    m_omitList = m_qualitySymbols["omit"];
+    if (m_styles.at(m_currentStyleIndex).usePresets) {
+        // Get the symbols from the file
+        m_qualitySymbols = styleManager->getQualitySymbols(m_styles.at(m_currentStyleIndex).fileName);
+        // Set the respective lists
+        m_majorSeventhList = m_qualitySymbols["major7th"];
+        m_halfDiminishedList = m_qualitySymbols["half-diminished"];
+        m_minorList = m_qualitySymbols["minor"];
+        m_augmentedList = m_qualitySymbols["augmented"];
+        m_diminishedList = m_qualitySymbols["diminished"];
+        m_omitList = m_qualitySymbols["omit"];
+    } else {
+        // Set empty lists
+        m_majorSeventhList = {};
+        m_halfDiminishedList = {};
+        m_minorList = {};
+        m_augmentedList = {};
+        m_diminishedList = {};
+        m_omitList = {};
+    }
 
     // Notify QML ListViews about the change
 
@@ -696,6 +712,7 @@ void ChordSymbolEditorModel::setChordStyle(QString styleName)
     }
 
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, descriptionFileName);
+    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::useChordSymbolPresets, m_styles.at(m_currentStyleIndex).usePresets);
 
     // Get and extract the selection History
     QString selectionHistory = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualitySelectionHistory).toString();
@@ -871,12 +888,21 @@ void ChordSymbolEditorModel::updateSelectionHistory(QString currentStyle)
     m_selectionHistory.remove(currentStyle);
     QHash<QString, QVariant> propMap;
     // Chord Symbols
-    propMap.insert("maj7th", QVariant(m_majorSeventhList.at(m_majorSeventhIndex).qualitySymbol));
-    propMap.insert("half-dim", QVariant(m_halfDiminishedList.at(m_halfDiminishedIndex).qualitySymbol));
-    propMap.insert("min", QVariant(m_minorList.at(m_minorIndex).qualitySymbol));
-    propMap.insert("aug", QVariant(m_augmentedList.at(m_augmentedIndex).qualitySymbol));
-    propMap.insert("dim", QVariant(m_diminishedList.at(m_diminishedIndex).qualitySymbol));
-    propMap.insert("omit", QVariant(m_omitList.at(m_omitIndex).qualitySymbol));
+    if (m_styles[m_currentStyleIndex].usePresets) {
+        propMap.insert("maj7th", QVariant(m_majorSeventhList.at(m_majorSeventhIndex).qualitySymbol));
+        propMap.insert("half-dim", QVariant(m_halfDiminishedList.at(m_halfDiminishedIndex).qualitySymbol));
+        propMap.insert("min", QVariant(m_minorList.at(m_minorIndex).qualitySymbol));
+        propMap.insert("aug", QVariant(m_augmentedList.at(m_augmentedIndex).qualitySymbol));
+        propMap.insert("dim", QVariant(m_diminishedList.at(m_diminishedIndex).qualitySymbol));
+        propMap.insert("omit", QVariant(m_omitList.at(m_omitIndex).qualitySymbol));
+    } else {
+        propMap.insert("maj7th", QVariant(""));
+        propMap.insert("half-dim", QVariant(""));
+        propMap.insert("min", QVariant(""));
+        propMap.insert("aug", QVariant(""));
+        propMap.insert("dim", QVariant(""));
+        propMap.insert("omit", QVariant(""));
+    }
 
     // Properties
     propMap.insert("chrdSpell", QVariant(m_chordSpellingIndex));

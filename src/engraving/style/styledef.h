@@ -421,6 +421,7 @@ enum class Sid {
     stackModifiers,
     chordStyle,
     chordsXmlFile,
+    useChordSymbolPresets,
     chordDescriptionFile,
     chordQualityMag,
     chordQualityAdjust,

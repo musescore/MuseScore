@@ -194,8 +194,6 @@ private:
     QString _xmlParens;
     QStringList _xmlDegrees;
     QStringList major, minor, diminished, augmented, lower, raise, mod1, mod2, symbols;
-    QList<int> skipList; // Indices to be skipped while rendering. (useful in cases like <minor>7b5 --> oslash)
-    QList<int> removeAfterRenderList; // Indices of items that were added by respelling function. To be removed after rendering.
     QList<int> alterationStackIndices; // Starting indices of alterations for stacking
     QList<int> addOmitStackIndices; // Starting indices of add/omit for stacking
     QList<int> openParenthesesIndices;
@@ -290,6 +288,7 @@ public:
     QHash<QString, QString> qualitySymbols;
     static int privateID;
 
+    bool usePresets = false;
     bool stackModifiers = false;
     bool autoCapitalization = false;
     bool lowerCaseQualitySymbols = false;

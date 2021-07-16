@@ -196,7 +196,8 @@ signals:
 private:
     enum RoleNames {
         StyleNameRole = Qt::UserRole + 1,
-        FileRole
+        FileRole,
+        UsePresetsRole
     };
 
     QList<ChordSymbolStyle> m_styles;

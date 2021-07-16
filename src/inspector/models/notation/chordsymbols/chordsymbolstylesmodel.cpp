@@ -104,6 +104,8 @@ void ChordSymbolStylesModel::initCurrentStyleIndex()
         setChordStyle(m_styles[0].styleName);
     }
 
+    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::useChordSymbolPresets, m_styles.at(m_currentStyleIndex).usePresets);
+
     // Extract the selection history everytime because it could have been changed
     QString selectionHistory = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualitySelectionHistory).toString();
     extractSelectionHistory(selectionHistory);
@@ -126,6 +128,7 @@ void ChordSymbolStylesModel::setChordStyle(QString styleName)
     }
 
     globalContext()->currentNotation()->style()->setStyleValue(StyleId::chordDescriptionFile, descriptionFileName);
+    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::useChordSymbolPresets, m_styles.at(m_currentStyleIndex).usePresets);
 
     // Extract the selection history everytime because it could have been changed
     QString selectionHistory = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualitySelectionHistory).toString();
@@ -139,6 +142,9 @@ void ChordSymbolStylesModel::setChordStyle(QString styleName)
 
 void ChordSymbolStylesModel::setQualitySymbolsOnStyleChange()
 {
+    if (!m_styles[m_currentStyleIndex].usePresets) {
+        return;
+    }
     QString currentStyle = m_styles[m_currentStyleIndex].styleName;
 
     if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {

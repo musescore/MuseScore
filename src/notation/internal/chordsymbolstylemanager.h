@@ -30,6 +30,7 @@ namespace mu::notation {
 struct ChordSymbolStyle {
     QString styleName;
     QString fileName;
+    bool usePresets = false;
 };
 
 struct QualitySymbol {
