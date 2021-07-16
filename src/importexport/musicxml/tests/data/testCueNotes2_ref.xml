@@ -76,7 +76,7 @@
           </notations>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>grace</text>
+          <text font-family="Edwin">grace</text>
           </lyric>
         </note>
       <note>
@@ -106,7 +106,7 @@
           </notations>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>smallgrace</text>
+          <text font-family="Edwin">smallgrace</text>
           </lyric>
         </note>
       </measure>
@@ -127,7 +127,7 @@
           </notations>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>tiedcue</text>
+          <text font-family="Edwin">tiedcue</text>
           </lyric>
         </note>
       <note>
@@ -157,7 +157,7 @@
         <stem>up</stem>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>cue</text>
+          <text font-family="Edwin">cue</text>
           </lyric>
         </note>
       <note>
@@ -212,7 +212,7 @@
           </notations>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>tiedsmall</text>
+          <text font-family="Edwin">tiedsmall</text>
           </lyric>
         </note>
       <note>
@@ -241,7 +241,7 @@
         <stem>up</stem>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>small</text>
+          <text font-family="Edwin">small</text>
           </lyric>
         </note>
       <note>

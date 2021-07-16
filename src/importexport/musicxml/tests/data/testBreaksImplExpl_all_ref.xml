@@ -134,7 +134,7 @@
       <print new-page="yes"/>
       <direction>
         <direction-type>
-          <words>After system break</words>
+          <words font-family="Edwin">After system break</words>
           </direction-type>
         </direction>
       <note>
