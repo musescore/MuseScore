@@ -25,11 +25,13 @@
 #include <string>
 #include <map>
 
+#include "io/path.h"
 #include "midi/miditypes.h"
 
 namespace mu::audio::synth {
 using SynthName = midi::SynthName;
-using SynthMap = midi::SynthMap;
+using SoundFontPath = io::path;
+using SoundFontPaths = std::vector<SoundFontPath>;
 
 enum class SoundFontFormat {
     Undefined = 0,

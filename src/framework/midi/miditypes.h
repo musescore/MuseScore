@@ -44,7 +44,6 @@ using tempo_t = uint32_t;
 using TempoMap = std::map<tick_t, tempo_t>;
 
 using SynthName = std::string;
-using SynthMap = std::map<midi::channel_t, SynthName>;
 
 using EventType = Ms::EventType;
 using CntrType = Ms::CntrType;
