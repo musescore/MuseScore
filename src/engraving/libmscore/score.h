@@ -43,6 +43,7 @@
 #include "spannermap.h"
 #include "layoutbreak.h"
 #include "property.h"
+#include "chordlist.h"
 
 #include "io/msczwriter.h"
 #include "io/msczreader.h"
@@ -493,6 +494,7 @@ private:
 
     InputState _is;
     MStyle _style;
+    ChordList _chordList;
 
     bool _created { false };            ///< file is never saved, has generated name
     bool _startedEmpty { false };       ///< The score was created from an empty template (typically ":/data/My_First_Score.mscx")
@@ -946,6 +948,10 @@ public:
     void spell(int startStaff, int endStaff, Segment* startSegment, Segment* endSegment);
     void spell(Note*);
     Fraction nextSeg(const Fraction& tick, int track);
+
+    ChordList* chordList() { return &_chordList; }
+    const ChordList* chordList() const { return &_chordList; }
+    void checkChordList() { _chordList.checkChordList(style()); }
 
     virtual MStyle& style() { return _style; }
     virtual const MStyle& style() const { return _style; }
