@@ -425,7 +425,7 @@ void LyricsLineSegment::layout()
         }
     } else {                              // dash(es)
         // set conventional dash Y pos
-        rypos() -= MScore::pixelRatio * lyr->fontMetrics().xHeight() * score()->styleD(Sid::lyricsDashYposRatio);
+        rypos() -= lyr->fontMetrics().xHeight() * score()->styleD(Sid::lyricsDashYposRatio);
         _dashLength = score()->styleP(Sid::lyricsDashMaxLength) * mag();      // and dash length
         qreal len         = pos2().x();
         qreal minDashLen  = score()->styleS(Sid::lyricsDashMinLength).val() * sp;
