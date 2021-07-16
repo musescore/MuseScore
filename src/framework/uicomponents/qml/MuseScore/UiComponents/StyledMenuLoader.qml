@@ -32,7 +32,7 @@ Loader {
 
     property bool isMenuOpened: Boolean(loader.menu) && loader.menu.isOpened
 
-    function toggleOpened(model, navigationParentControl, x = 0, y = 0) {
+    function toggleOpened(model, navigationParentControl, x = 0, y = 0, align = undefined) {
         if (!loader.sourceComponent) {
             loader.sourceComponent = itemMenuComp
         }
@@ -57,6 +57,10 @@ Loader {
 
         if (y !== 0) {
             menu.y = y
+        }
+
+        if (align !== undefined) {
+            menu.preferedAlign = align
         }
 
         menu.open()
