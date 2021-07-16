@@ -62,75 +62,38 @@ Column {
                 horizontalAlignment: Text.AlignLeft
             }
 
-            FlatButton {
+            MenuButton {
                 id: menuButton
 
-                icon: IconCode.MENU_THREE_DOTS
-                normalStateColor: "transparent"
+                menuModel: {
+                    var result = []
 
-                onClicked: {
-                    menu.open()
+                    result.push({ title: qsTrc("inspector", "Reset"), enabled: root.isModified, icon: IconCode.NONE, code: "reset" })
+
+                    if (root.isStyled) {
+                        if (root.isModified) {
+                            result.push({ title: qsTrc("inspector", "Save as default style for this score"), enabled: true, icon: IconCode.SAVE, code: "save" })
+                        } else {
+                            result.push({ title: qsTrc("inspector", "This is set as the default style for this score"), enabled: false, icon: IconCode.TICK_RIGHT_ANGLE })
+                        }
+                    }
+
+                    return result
                 }
-            }
-        }
 
-        ContextMenu {
-            id: menu
+                menuAlign: Qt.AlignHCenter
 
-            width: parent.width
-
-            y: menuButton.y + menuButton.height
-
-            StyledContextMenuItem {
-                id: resetToDefaultItem
-
-                text: root.isStyled ? qsTrc("inspector", "Reset to style default") : qsTrc("inspector", "Reset to default")
-                checkable: false
-                enabled: root.isModified
-
-                onTriggered: {
-                    if (propertyItem) {
+                onHandleAction: {
+                    switch (actionCode) {
+                    case "reset":
                         propertyItem.resetToDefault()
-                    }
-                }
-            }
-
-            StyledContextMenuItem {
-                id: applyToStyleItem
-
-                text: qsTrc("inspector", "Set as style")
-                checkable: true
-                checked: !root.isModified
-                enabled: root.isModified
-
-                onTriggered: {
-                    if (propertyItem) {
+                        break
+                    case "save":
                         propertyItem.applyToStyle()
+                        break
                     }
                 }
             }
-
-            function updateMenuModel() {
-                menu.clear()
-
-                menu.addItem(resetToDefaultItem)
-
-                if (root.isStyled) {
-                    menu.addItem(applyToStyleItem)
-                }
-            }
-        }
-    }
-
-    onPropertyItemChanged: {
-        if (propertyItem) {
-            menu.updateMenuModel()
-        }
-    }
-
-    onIsStyledChanged: {
-        if (propertyItem) {
-            menu.updateMenuModel()
         }
     }
 }
