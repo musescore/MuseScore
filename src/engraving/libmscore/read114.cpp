@@ -26,6 +26,7 @@
 #include <QTextDocumentFragment>
 
 #include "style/style.h"
+#include "style/defaultstyle.h"
 #include "compat/pageformat.h"
 
 #include "score.h"
@@ -2718,26 +2719,6 @@ static void readPageFormat(compat::PageFormat* pf, XmlReader& e)
     pf->setPrintableWidth(qMin(w1, w2));       // silently adjust right margins
 }
 
-MStyle* styleDefaults114()
-{
-    static MStyle* result = nullptr;
-
-    if (result) {
-        return result;
-    }
-
-    result = new MStyle();
-    QFile baseDefaults(":/styles/legacy-style-defaults-v1.mss");
-
-    if (!baseDefaults.open(QIODevice::ReadOnly)) {
-        return result;
-    }
-
-    result->load(&baseDefaults);
-
-    return result;
-}
-
 //---------------------------------------------------------
 //   readStyle
 //---------------------------------------------------------
@@ -3333,7 +3314,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
     // we'll force this and live with it for the score
     // but we wait until now to do it so parts don't have this issue
 
-    if (styleV(Sid::voltaPosAbove) == MScore::baseStyle().value(Sid::voltaPosAbove)) {
+    if (styleV(Sid::voltaPosAbove) == DefaultStyle::baseStyle().value(Sid::voltaPosAbove)) {
         style().set(Sid::voltaPosAbove, PointF(0.0, -2.0f));
     }
 

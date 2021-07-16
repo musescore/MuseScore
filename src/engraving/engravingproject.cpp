@@ -23,6 +23,8 @@
 
 #include <QFileInfo>
 
+#include "style/defaultstyle.h"
+
 #include "libmscore/score.h"
 #include "libmscore/part.h"
 #include "libmscore/undo.h"
@@ -34,7 +36,7 @@ using namespace mu::engraving;
 std::shared_ptr<EngravingProject> EngravingProject::create()
 {
     std::shared_ptr<EngravingProject> p = std::shared_ptr<EngravingProject>(new EngravingProject());
-    p->init(Ms::MScore::defaultStyle());
+    p->init(DefaultStyle::defaultStyle());
     return p;
 }
 

@@ -30,8 +30,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/engravingerrors.h
     ${CMAKE_CURRENT_LIST_DIR}/engravingproject.cpp
     ${CMAKE_CURRENT_LIST_DIR}/engravingproject.h
-    ${CMAKE_CURRENT_LIST_DIR}/scoreaccess.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/scoreaccess.h
+    ${CMAKE_CURRENT_LIST_DIR}/iengravingconfiguration.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingconfiguration.h
 
     ${LIBMSCORE_SRC}
 
@@ -81,6 +83,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/msczwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/msczwriter.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/compat/scoreaccess.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat/scoreaccess.h
     ${CMAKE_CURRENT_LIST_DIR}/compat/mscxcompat.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/mscxcompat.h
     ${CMAKE_CURRENT_LIST_DIR}/compat/pageformat.cpp
@@ -94,6 +98,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/style/pagestyle.h
     ${CMAKE_CURRENT_LIST_DIR}/style/style.cpp
     ${CMAKE_CURRENT_LIST_DIR}/style/style.h
+    ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.h
     )
 
 if (NO_ENGRAVING_QFONTENGINE)

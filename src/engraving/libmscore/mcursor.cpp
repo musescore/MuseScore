@@ -22,7 +22,7 @@
 
 #include "libmscore/mcursor.h"
 
-#include "engraving/scoreaccess.h"
+#include "engraving/compat/scoreaccess.h"
 
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
@@ -146,7 +146,7 @@ TimeSig* MCursor::addTimeSig(const Fraction& f)
 void MCursor::createScore(const QString& name)
 {
     delete _score;
-    _score = mu::engraving::ScoreAccess::createMasterScore(mscore->baseStyle());
+    _score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
     _score->setName(name);
     move(0, Fraction(0, 1));
 }

@@ -19,21 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "scoreaccess.h"
+#ifndef MU_ENGRAVING_IENGRAVINGCONFIGURATION_H
+#define MU_ENGRAVING_IENGRAVINGCONFIGURATION_H
 
-using namespace mu::engraving;
+#include <QString>
 
-Ms::MasterScore* ScoreAccess::createMasterScore()
+#include "modularity/imoduleexport.h"
+
+namespace mu::engraving {
+class IEngravingConfiguration : MODULE_EXPORT_INTERFACE
 {
-    return new Ms::MasterScore(nullptr);
+    INTERFACE_ID(IEngravingConfiguration)
+public:
+    virtual ~IEngravingConfiguration() = default;
+
+    virtual QString defaultStyleFilePath() const = 0;
+    virtual void setDefaultStyleFilePath(const QString& path) = 0;
+
+    virtual QString partStyleFilePath() const = 0;
+    virtual void setPartStyleFilePath(const QString& path) = 0;
+};
 }
 
-Ms::MasterScore* ScoreAccess::createMasterScore(const Ms::MStyle& style)
-{
-    return new Ms::MasterScore(style, nullptr);
-}
-
-Ms::Score::FileError ScoreAccess::loadMscz(Ms::MasterScore* masterScore, mu::engraving::MsczReader& msczFile, bool ignoreVersionError)
-{
-    return masterScore->loadMscz(msczFile, ignoreVersionError);
-}
+#endif // MU_ENGRAVING_IENGRAVINGCONFIGURATION_H

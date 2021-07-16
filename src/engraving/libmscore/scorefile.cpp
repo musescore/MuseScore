@@ -25,6 +25,9 @@
 #include <QBuffer>
 #include <QRegularExpression>
 
+#include "draw/qpainterprovider.h"
+#include "style/defaultstyle.h"
+
 #include "config.h"
 #include "score.h"
 #include "xml.h"
@@ -66,11 +69,10 @@
 #include <windows.h>
 #endif
 
-#include "draw/qpainterprovider.h"
-
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -732,14 +734,14 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, const
             }
 
             if (created() && !preferences().defaultStyleFilePath().isEmpty()) {
-                setStyle(MScore::defaultStyle());
+                setStyle(DefaultStyle::defaultStyle());
             } else {
                 IF_ASSERT_FAILED(getStyleDefaultsVersion) {
                     return Score::FileError::FILE_ERROR;
                 }
                 int defaultsVersion = getStyleDefaultsVersion();
 
-                setStyle(*MStyle::resolveStyleDefaults(defaultsVersion));
+                setStyle(*DefaultStyle::resolveStyleDefaults(defaultsVersion));
                 style().setDefaultStyleVersion(defaultsVersion);
             }
 

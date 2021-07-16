@@ -27,7 +27,12 @@
 #include "palette.h"
 #include "palettetree.h"
 
+#include "translation.h"
+#include "modularity/ioc.h"
 #include "actions/actiontypes.h"
+#include "engraving/draw/pen.h"
+#include "engraving/draw/qpainterprovider.h"
+#include "engraving/style/defaultstyle.h"
 
 #include "libmscore/articulation.h"
 #include "libmscore/fret.h"
@@ -40,17 +45,10 @@
 #include "libmscore/element.h"
 #include "libmscore/bracket.h"
 
-#include "engraving/draw/qpainterprovider.h"
-
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "thirdparty/qzip/qzipwriter_p.h"
 
-#include "modularity/ioc.h"
-
-#include "translation.h"
-
 #include "../palette_config.h"
-#include "draw/pen.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -1132,7 +1130,7 @@ qreal PaletteCellIconEngine::paintStaff(Painter& painter, const RectF& rect, qre
 {
     painter.save(); // so we can restore painter after we are done using it
     Pen pen(configuration()->elementsColor());
-    pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * spatium);
+    pen.setWidthF(engraving::DefaultStyle::defaultStyle().value(Sid::staffLineWidth).toDouble() * spatium);
     painter.setPen(pen);
 
     constexpr int numStaffLines = 5;
