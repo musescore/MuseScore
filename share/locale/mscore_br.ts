@@ -176,7 +176,7 @@
     <name>ArticulationProperties</name>
     <message>
         <location filename="../../mscore/articulation.ui" line="14"/>
-        <source>Articulation Properties</source>
+        <source>Articulation properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -257,7 +257,7 @@
     <name>BendDialog</name>
     <message>
         <location filename="../../mscore/bend.ui" line="14"/>
-        <source>Bend Properties</source>
+        <source>Bend properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -645,12 +645,12 @@
     <name>EditInstrumentBase</name>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="14"/>
-        <source>Edit Instrument Properties</source>
+        <source>Edit Instrument properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="20"/>
-        <source>Instrument Properties</source>
+        <source>Instrument properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1512,12 +1512,12 @@
     <name>EditStaffBase</name>
     <message>
         <location filename="../../mscore/editstaff.ui" line="26"/>
-        <source>Edit Staff/Part Properties</source>
+        <source>Edit Staff/part properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="38"/>
-        <source>Part Properties</source>
+        <source>Part properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1722,12 +1722,12 @@
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="660"/>
-        <source>Staff Properties</source>
+        <source>Staff properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="671"/>
-        <source>Advanced Style Properties...</source>
+        <source>Advanced Style properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3281,7 +3281,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5182"/>
-        <source>Naturals in Key Signatures</source>
+        <source>Naturals in Key signatures</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3479,7 +3479,7 @@ space unit</extracomment>
     <name>FretDiagramProperties</name>
     <message>
         <location filename="../../mscore/fretdprops.ui" line="14"/>
-        <source>Fretboard Diagram Properties</source>
+        <source>Fretboard Diagram properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3497,7 +3497,7 @@ space unit</extracomment>
     <name>GlissandoProperties</name>
     <message>
         <location filename="../../mscore/glissandoprop.ui" line="14"/>
-        <source>Glissando Properties</source>
+        <source>Glissando properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -5468,12 +5468,12 @@ space unit</extracomment>
     <name>InspectorKeySig</name>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="17"/>
-        <source>Key Signature Inspector</source>
+        <source>Key signature Inspector</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="44"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -6522,12 +6522,12 @@ space unit</extracomment>
     <name>InspectorTimeSig</name>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="17"/>
-        <source>Time Signature Inspector</source>
+        <source>Time signature Inspector</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="44"/>
-        <source>Time Signature</source>
+        <source>Time signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -7184,7 +7184,7 @@ space unit</extracomment>
     <name>KeyEdit</name>
     <message>
         <location filename="../../mscore/keyedit.ui" line="41"/>
-        <source>Create Key Signature</source>
+        <source>Create Key signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -7257,7 +7257,7 @@ space unit</extracomment>
     <name>LinePropertiesDialog</name>
     <message>
         <location filename="../../mscore/lineproperties.ui" line="14"/>
-        <source>Line Properties</source>
+        <source>Line properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -7676,12 +7676,12 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="40"/>
-        <source>Key Signatures</source>
+        <source>Key signatures</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="45"/>
-        <source>Time Signatures</source>
+        <source>Time signatures</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -7766,7 +7766,7 @@ Would you like to locate %2 now?</source>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.ui" line="130"/>
-        <source>Beam Properties</source>
+        <source>Beam properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -7798,7 +7798,7 @@ tuplet would cross measure</source>
     <name>MeasurePropertiesBase</name>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="17"/>
-        <source>Measure Properties</source>
+        <source>Measure properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -8046,7 +8046,7 @@ tuplet would cross measure</source>
     <name>MetaEditDialog</name>
     <message>
         <location filename="../../mscore/metaedit.ui" line="14"/>
-        <source>Score Properties</source>
+        <source>Score properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -8800,7 +8800,7 @@ failed: </source>
     <name>Ms::KeyEditor</name>
     <message>
         <location filename="../../mscore/keyedit.cpp" line="273"/>
-        <source>Key Signatures</source>
+        <source>Key signatures</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -8971,7 +8971,7 @@ failed: </source>
     <name>Ms::MeasureProperties</name>
     <message>
         <location filename="../../mscore/measureproperties.cpp" line="119"/>
-        <source>Measure Properties for Measure %1</source>
+        <source>Measure properties for Measure %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -9248,18 +9248,18 @@ before closing?</source>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1268"/>
-        <source>Load Palette</source>
+        <source>Load palette</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1269"/>
         <location filename="../../mscore/file.cpp" line="1273"/>
-        <source>MuseScore Palette</source>
+        <source>MuseScore palette</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1272"/>
-        <source>Save Palette</source>
+        <source>Save palette</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -9762,7 +9762,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="613"/>
-        <source>Playback Controls</source>
+        <source>Playback controls</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -9777,7 +9777,7 @@ Please select a measure and try again</source>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="644"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -10024,12 +10024,12 @@ Restore session?</source>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4500"/>
-        <source>Key Signatures</source>
+        <source>Key signatures</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="4502"/>
-        <source>Time Signatures</source>
+        <source>Time signatures</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -10085,7 +10085,7 @@ Restore session?</source>
     <message>
         <location filename="../../mscore/workspace.cpp" line="107"/>
         <location filename="../../mscore/workspace.cpp" line="123"/>
-        <source>Read Workspace Name</source>
+        <source>Read workspace Name</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -10205,7 +10205,7 @@ connection enabled</source>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="360"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -10336,7 +10336,7 @@ connection enabled</source>
     </message>
     <message>
         <location filename="../../mscore/palettebox.cpp" line="35"/>
-        <source>Single Palette</source>
+        <source>Single palette</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -10364,42 +10364,42 @@ connection enabled</source>
     <name>Ms::PaletteBoxButton</name>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="47"/>
-        <source>Palette Properties...</source>
+        <source>Palette properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="48"/>
-        <source>Insert New Palette...</source>
+        <source>Insert new palette...</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="49"/>
-        <source>Move Palette Up</source>
+        <source>Move palette Up</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="50"/>
-        <source>Move Palette Down</source>
+        <source>Move palette Down</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="51"/>
-        <source>Enable Editing</source>
+        <source>Enable editing</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="63"/>
-        <source>Save Palette...</source>
+        <source>Save palette...</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="64"/>
-        <source>Load Palette...</source>
+        <source>Load palette...</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/paletteBoxButton.cpp" line="68"/>
-        <source>Delete Palette</source>
+        <source>Delete palette</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -10740,7 +10740,7 @@ Save before closing?</source>
     </message>
     <message>
         <location filename="../../mscore/preferences.cpp" line="1223"/>
-        <source>Choose Background Wallpaper</source>
+        <source>Choose background wallpaper</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -11133,22 +11133,22 @@ failed: %2</source>
         <location filename="../../mscore/propertymenu.cpp" line="243"/>
         <location filename="../../mscore/propertymenu.cpp" line="257"/>
         <location filename="../../mscore/propertymenu.cpp" line="313"/>
-        <source>Text Properties...</source>
+        <source>Text properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="135"/>
-        <source>Articulation Properties...</source>
+        <source>Articulation properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="148"/>
-        <source>Bend Properties...</source>
+        <source>Bend properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="152"/>
-        <source>Tremolo Bar Properties...</source>
+        <source>Tremolo Bar properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -11160,27 +11160,27 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="176"/>
         <location filename="../../mscore/propertymenu.cpp" line="217"/>
-        <source>Line Properties...</source>
+        <source>Line properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="177"/>
-        <source>Volta Properties...</source>
+        <source>Volta properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="188"/>
-        <source>Hide Courtesy Time Signature</source>
+        <source>Hide Courtesy Time signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="189"/>
-        <source>Show Courtesy Time Signature</source>
+        <source>Show Courtesy Time signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="194"/>
-        <source>Time Signature Properties...</source>
+        <source>Time signature properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -11195,27 +11195,27 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="223"/>
-        <source>System Text Properties...</source>
+        <source>System Text properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="225"/>
-        <source>Staff Text Properties...</source>
+        <source>Staff Text properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="250"/>
-        <source>Hide Courtesy Key Signature</source>
+        <source>Hide Courtesy Key signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="251"/>
-        <source>Show Courtesy Key Signature</source>
+        <source>Show Courtesy Key signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="258"/>
-        <source>Change Instrument Properties...</source>
+        <source>Change Instrument properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -11230,7 +11230,7 @@ failed: %2</source>
         <location filename="../../mscore/propertymenu.cpp" line="287"/>
         <location filename="../../mscore/propertymenu.cpp" line="325"/>
         <location filename="../../mscore/scoreview.cpp" line="1142"/>
-        <source>Staff Properties...</source>
+        <source>Staff properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -11244,7 +11244,7 @@ failed: %2</source>
         <location filename="../../mscore/propertymenu.cpp" line="274"/>
         <location filename="../../mscore/propertymenu.cpp" line="293"/>
         <location filename="../../mscore/scoreview.cpp" line="1158"/>
-        <source>Measure Properties...</source>
+        <source>Measure properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -11259,7 +11259,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="308"/>
-        <source>Section Break Properties...</source>
+        <source>Section Break properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -11269,12 +11269,12 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="317"/>
-        <source>Fretboard Diagram Properties...</source>
+        <source>Fretboard Diagram properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="321"/>
-        <source>Glissando Properties...</source>
+        <source>Glissando properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -11477,12 +11477,12 @@ Please select a measure and try again</source>
     <name>Ms::StaffTextProperties</name>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="58"/>
-        <source>System Text Properties</source>
+        <source>System Text properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="64"/>
-        <source>Staff Text Properties</source>
+        <source>Staff Text properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -11570,7 +11570,7 @@ Please select a measure and try again</source>
     <name>Ms::TextProperties</name>
     <message>
         <location filename="../../mscore/textproperties.cpp" line="54"/>
-        <source>Text Properties</source>
+        <source>Text properties</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -11641,7 +11641,7 @@ please choose a different name:</source>
     <name>Ms::TimeDialog</name>
     <message>
         <location filename="../../mscore/timedialog.cpp" line="42"/>
-        <source>Time Signatures</source>
+        <source>Time signatures</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -12199,7 +12199,7 @@ please choose a different name:</source>
     <message>
         <location filename="../../mscore/menus.cpp" line="108"/>
         <location filename="../../mscore/noteGroups.cpp" line="75"/>
-        <source>Beam Properties</source>
+        <source>Beam properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12214,7 +12214,7 @@ please choose a different name:</source>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="234"/>
-        <source>Key Signatures</source>
+        <source>Key signatures</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12409,7 +12409,7 @@ please choose a different name:</source>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="1116"/>
-        <source>Time Signatures</source>
+        <source>Time signatures</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12439,12 +12439,12 @@ failed: </source>
     <name>PaletteCellProperties</name>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="14"/>
-        <source>Cell Properties</source>
+        <source>Cell properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/cellproperties.ui" line="20"/>
-        <source>Palette Cell Properties</source>
+        <source>Palette cell properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12488,7 +12488,7 @@ failed: </source>
     <name>PaletteProperties</name>
     <message>
         <location filename="../../mscore/palette.ui" line="14"/>
-        <source>Palette Properties</source>
+        <source>Palette properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -12920,7 +12920,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="158"/>
-        <source>Update Translations</source>
+        <source>Update translations</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13171,7 +13171,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="660"/>
-        <source>OSC Remote Control</source>
+        <source>OSC remote control</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13279,7 +13279,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="927"/>
-        <source>Choose Background wallpaper file</source>
+        <source>Choose background wallpaper file</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13394,13 +13394,13 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1216"/>
-        <source>Note Input Tab</source>
+        <source>Note input Tab</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1219"/>
         <location filename="../../mscore/prefsdialog.ui" line="1225"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13471,7 +13471,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1375"/>
-        <source>MIDI Remote Control</source>
+        <source>MIDI remote control</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -13821,7 +13821,7 @@ This will re-evaluate all plugins, picking up any changes that may have occurred
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2419"/>
-        <source>Default Files</source>
+        <source>Default files</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14139,7 +14139,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3258"/>
-        <source>Style Used for Import</source>
+        <source>Style used for import</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14161,7 +14161,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3318"/>
-        <source>Character Set Used When Importing Binary Files</source>
+        <source>Character set used when importing binary files</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -14462,7 +14462,7 @@ Adjusting latency can help synchronize your MIDI hardware with MuseScore&apos;s 
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4074"/>
         <location filename="../../mscore/prefsdialog.ui" line="4077"/>
-        <source>Automatic Update Check</source>
+        <source>Automatic update check</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -15071,7 +15071,7 @@ Do you want to overwrite it?</source>
     <name>SectionBreakProperties</name>
     <message>
         <location filename="../../mscore/sectionbreak.ui" line="14"/>
-        <source>Section Break Properties</source>
+        <source>Section Break properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -15300,7 +15300,7 @@ Do you want to overwrite it?</source>
     <name>ShortcutCaptureDialogBase</name>
     <message>
         <location filename="../../mscore/shortcutcapturedialog.ui" line="14"/>
-        <source>Enter Shortcut Sequence</source>
+        <source>Enter shortcut sequence</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -15368,7 +15368,7 @@ Do you want to overwrite it?</source>
     <name>SplitStaff</name>
     <message>
         <location filename="../../mscore/splitstaff.ui" line="20"/>
-        <source>Edit Staff/Part Properties</source>
+        <source>Edit Staff/part properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -16186,7 +16186,7 @@ Do you want to overwrite it?</source>
     <name>TimeDialogBase</name>
     <message>
         <location filename="../../mscore/timedialog.ui" line="41"/>
-        <source>Create Time Signature</source>
+        <source>Create Time signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -16258,7 +16258,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/timesigproperties.ui" line="14"/>
         <location filename="../../mscore/timesigproperties.ui" line="34"/>
-        <source>Time Signature Properties</source>
+        <source>Time signature properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -16308,12 +16308,12 @@ Do you want to overwrite it?</source>
     <name>TimesigWizard</name>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="17"/>
-        <source>Time Signature Wizard</source>
+        <source>Time signature Wizard</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="29"/>
-        <source>Enter Time Signature:</source>
+        <source>Enter Time signature:</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -16793,7 +16793,7 @@ Do you want to overwrite it?</source>
     <name>TremoloBarDialog</name>
     <message>
         <location filename="../../mscore/tremolobar.ui" line="14"/>
-        <source>Tremolo Bar Properties</source>
+        <source>Tremolo Bar properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -16961,7 +16961,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/voltaproperties.ui" line="14"/>
         <location filename="../../mscore/voltaproperties.ui" line="22"/>
-        <source>Volta Properties</source>
+        <source>Volta properties</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -16979,14 +16979,14 @@ Do you want to overwrite it?</source>
     <name>Workspace</name>
     <message>
         <location filename="../../mscore/workspace.cpp" line="239"/>
-        <source>Writing Workspace File
+        <source>Writing workspace File
 %1
 failed: </source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="240"/>
-        <source>Writing Workspace File</source>
+        <source>Writing workspace File</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -17533,7 +17533,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="239"/>
         <location filename="../../mscore/shortcut.cpp" line="1853"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -19260,7 +19260,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1833"/>
-        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
+        <source>Toggle &apos;Playback controls&apos; toolbar</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -19270,7 +19270,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1854"/>
-        <source>Toogle &apos;Note Input&apos; toolbar</source>
+        <source>Toogle &apos;Note input&apos; toolbar</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -19570,7 +19570,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1832"/>
-        <source>Playback Controls</source>
+        <source>Playback controls</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -19971,7 +19971,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2244"/>
-        <source>Score Properties...</source>
+        <source>Score properties...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -20617,7 +20617,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2893"/>
-        <source>Key Signatures...</source>
+        <source>Key signatures...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -20627,7 +20627,7 @@ failed: </source>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2903"/>
-        <source>Time Signatures...</source>
+        <source>Time signatures...</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -23180,7 +23180,7 @@ Measure is not empty</source>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="111"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -23190,7 +23190,7 @@ Measure is not empty</source>
     </message>
     <message>
         <location filename="../../libmscore/element.cpp" line="113"/>
-        <source>Time Signature</source>
+        <source>Time signature</source>
         <translation type="unfinished"/>
     </message>
     <message>

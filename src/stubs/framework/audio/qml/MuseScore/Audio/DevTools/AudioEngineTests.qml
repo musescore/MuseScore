@@ -28,6 +28,6 @@ Rectangle {
 
     StyledTextLabel {
         anchors.centerIn: parent
-        text: "Audio Engine Page Stub"
+        text: "Audio engine Page Stub"
     }
 }

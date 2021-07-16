@@ -164,7 +164,7 @@
     <name>ArticulationProperties</name>
     <message>
         <location filename="../../mscore/articulation.ui" line="14"/>
-        <source>Articulation Properties</source>
+        <source>Articulation properties</source>
         <translation>Artikulasie-eienskappe</translation>
     </message>
     <message>
@@ -706,12 +706,12 @@
     <name>EditInstrumentBase</name>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="14"/>
-        <source>Edit Instrument Properties</source>
+        <source>Edit Instrument properties</source>
         <translation>Wysig instrument-eienskappe</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="20"/>
-        <source>Instrument Properties</source>
+        <source>Instrument properties</source>
         <translation>Instrument-eienskappe</translation>
     </message>
     <message>
@@ -1563,7 +1563,7 @@
     <name>EditStaffBase</name>
     <message>
         <location filename="../../mscore/editstaff.ui" line="315"/>
-        <source>Part Properties</source>
+        <source>Part properties</source>
         <translation>Party-eienskappe</translation>
     </message>
     <message>
@@ -1593,7 +1593,7 @@
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="26"/>
-        <source>Staff/Part Properties</source>
+        <source>Staff/part properties</source>
         <translation>Notebalk/party-eienskappe</translation>
     </message>
     <message>
@@ -1834,12 +1834,12 @@
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="44"/>
-        <source>Staff Properties</source>
+        <source>Staff properties</source>
         <translation>Notebalk-eienskappe</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="135"/>
-        <source>Advanced Style Properties…</source>
+        <source>Advanced Style properties…</source>
         <translation>Gevorderde styleienskappe…</translation>
     </message>
     <message>
@@ -4258,7 +4258,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2553"/>
-        <source>♮ in Key Signatures</source>
+        <source>♮ in Key signatures</source>
         <translation>♮ in toonsoorttekens</translation>
     </message>
     <message>
@@ -7359,12 +7359,12 @@ space unit</extracomment>
     <name>InspectorKeySig</name>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="14"/>
-        <source>Key Signature Inspector</source>
+        <source>Key signature Inspector</source>
         <translation>Toonsoortteken-inspekteur</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="57"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>Toonsoortteken</translation>
     </message>
     <message>
@@ -9315,12 +9315,12 @@ space unit</extracomment>
     <name>InspectorTimeSig</name>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="14"/>
-        <source>Time Signature Inspector</source>
+        <source>Time signature Inspector</source>
         <translation>Tydmaatteken-inspekteur</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="60"/>
-        <source>Time Signature</source>
+        <source>Time signature</source>
         <translation>Tydmaatteken</translation>
     </message>
     <message>
@@ -10178,7 +10178,7 @@ space unit</extracomment>
     <name>KeyEdit</name>
     <message>
         <location filename="../../mscore/keyedit.ui" line="38"/>
-        <source>Create Key Signature</source>
+        <source>Create Key signature</source>
         <translation>Skep toonsoortteken</translation>
     </message>
     <message>
@@ -10609,7 +10609,7 @@ onreëlmatige nootgroep sou maat oorsteek</translation>
     <name>MeasurePropertiesBase</name>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="17"/>
-        <source>Measure Properties</source>
+        <source>Measure properties</source>
         <translation>Maateienskappe</translation>
     </message>
     <message>
@@ -10849,7 +10849,7 @@ onreëlmatige nootgroep sou maat oorsteek</translation>
     <name>MetaEditDialog</name>
     <message>
         <location filename="../../mscore/metaedit.ui" line="14"/>
-        <source>Score Properties</source>
+        <source>Score properties</source>
         <translation>Partituur-eienskappe</translation>
     </message>
     <message>
@@ -11547,7 +11547,7 @@ oop te maak, het misluk: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="464"/>
-        <source>(in File &gt; Score Properties…):</source>
+        <source>(in File &gt; Score properties…):</source>
         <translation>(in Lêer &gt; Partituur-eienskappe…):</translation>
     </message>
     <message>
@@ -11895,7 +11895,7 @@ oop te maak, het misluk: %2</translation>
     <name>Ms::KeyEditor</name>
     <message>
         <location filename="../../mscore/keyedit.cpp" line="271"/>
-        <source>Key Signatures</source>
+        <source>Key signatures</source>
         <translation>Toonsoorttekens</translation>
     </message>
 </context>
@@ -12036,7 +12036,7 @@ oop te maak, het misluk: %2</translation>
     <name>Ms::MeasureProperties</name>
     <message>
         <location filename="../../mscore/measureproperties.cpp" line="123"/>
-        <source>Measure Properties for Measure %1</source>
+        <source>Measure properties for Measure %1</source>
         <translation>Maateienskappe vir maat %1</translation>
     </message>
     <message>
@@ -12427,18 +12427,18 @@ voor jy toemaak?</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1348"/>
-        <source>Load Palette</source>
+        <source>Load palette</source>
         <translation>Laai palet</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1349"/>
         <location filename="../../mscore/file.cpp" line="1353"/>
-        <source>MuseScore Palette</source>
+        <source>MuseScore palette</source>
         <translation>MuseScore-palet</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1352"/>
-        <source>Save Palette</source>
+        <source>Save palette</source>
         <translation>Stoor palet</translation>
     </message>
     <message>
@@ -12767,7 +12767,7 @@ Selekteer asseblief &apos;n maat en probeer weer</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2019"/>
-        <source>Playback Controls</source>
+        <source>Playback controls</source>
         <translation>Terugspeel-kontroles</translation>
     </message>
     <message>
@@ -12782,7 +12782,7 @@ Selekteer asseblief &apos;n maat en probeer weer</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2022"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>Noottoevoer</translation>
     </message>
     <message>
@@ -13204,7 +13204,7 @@ nodig</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="383"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>Toonsoortteken</translation>
     </message>
     <message>
@@ -13214,7 +13214,7 @@ nodig</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="396"/>
-        <source>Key Signature: %1</source>
+        <source>Key signature: %1</source>
         <translation>Toonsoortteken: %1</translation>
     </message>
     <message>
@@ -13314,7 +13314,7 @@ nodig</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/palettewidget.cpp" line="121"/>
-        <source>Single Palette</source>
+        <source>Single palette</source>
         <translation>Enkele palet</translation>
     </message>
 </context>
@@ -13335,12 +13335,12 @@ nodig</translation>
     <name>Ms::PaletteElementEditor</name>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="62"/>
-        <source>Create Key Signature</source>
+        <source>Create Key signature</source>
         <translation>Skep toonsoortteken</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="64"/>
-        <source>Create Time Signature</source>
+        <source>Create Time signature</source>
         <translation>Skep tydmaatteken</translation>
     </message>
     <message>
@@ -13859,7 +13859,7 @@ Hierdie inprop vereis &apos;n oop partituur om te loop.
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="768"/>
-        <source>Choose Background Wallpaper</source>
+        <source>Choose background wallpaper</source>
         <translation>Kies agtergrondmuurpapier</translation>
     </message>
     <message>
@@ -14347,12 +14347,12 @@ oop te maak, het misluk: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="127"/>
-        <source>Articulation Properties…</source>
+        <source>Articulation properties…</source>
         <translation>Artikulasie-eienskappe…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="137"/>
-        <source>Tremolo Bar Properties…</source>
+        <source>Tremolo Bar properties…</source>
         <translation>Tremolobalk-eienskappe…</translation>
     </message>
     <message>
@@ -14364,17 +14364,17 @@ oop te maak, het misluk: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="170"/>
-        <source>Hide Courtesy Time Signature</source>
+        <source>Hide Courtesy Time signature</source>
         <translation>Versteek hulptydmaatteken</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="171"/>
-        <source>Show Courtesy Time Signature</source>
+        <source>Show Courtesy Time signature</source>
         <translation>Wys hulptydmaatteken</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="176"/>
-        <source>Time Signature Properties…</source>
+        <source>Time signature properties…</source>
         <translation>Tydmaatteken-eienskappe…</translation>
     </message>
     <message>
@@ -14389,7 +14389,7 @@ oop te maak, het misluk: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="196"/>
-        <source>System Text Properties…</source>
+        <source>System Text properties…</source>
         <translation>Stelselteks-eienskappe…</translation>
     </message>
     <message>
@@ -14397,27 +14397,27 @@ oop te maak, het misluk: %2</translation>
         <location filename="../../mscore/propertymenu.cpp" line="249"/>
         <location filename="../../mscore/propertymenu.cpp" line="274"/>
         <location filename="../../mscore/scoreview.cpp" line="394"/>
-        <source>Staff/Part Properties…</source>
+        <source>Staff/part properties…</source>
         <translation>Notebalk/party-eienskappe…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="192"/>
-        <source>Staff Text Properties…</source>
+        <source>Staff Text properties…</source>
         <translation>Notebalkteks-eienskappe…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="216"/>
-        <source>Hide Courtesy Key Signature</source>
+        <source>Hide Courtesy Key signature</source>
         <translation>Versteek hulptoonsoortteken</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="217"/>
-        <source>Show Courtesy Key Signature</source>
+        <source>Show Courtesy Key signature</source>
         <translation>Wys hulptoonsoortteken</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="222"/>
-        <source>Change Instrument Properties…</source>
+        <source>Change Instrument properties…</source>
         <translation>Instrumentverandering-eienskappe…</translation>
     </message>
     <message>
@@ -14438,7 +14438,7 @@ oop te maak, het misluk: %2</translation>
         <location filename="../../mscore/propertymenu.cpp" line="237"/>
         <location filename="../../mscore/propertymenu.cpp" line="255"/>
         <location filename="../../mscore/scoreview.cpp" line="419"/>
-        <source>Measure Properties…</source>
+        <source>Measure properties…</source>
         <translation>Maat-eienskappe…</translation>
     </message>
     <message>
@@ -14620,12 +14620,12 @@ Kies asseblief &apos;n maat en probeer weer</translation>
     <name>Ms::StaffTextProperties</name>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="58"/>
-        <source>System Text Properties</source>
+        <source>System Text properties</source>
         <translation>Stelselteks-eienskappe</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="65"/>
-        <source>Staff Text Properties</source>
+        <source>Staff Text properties</source>
         <translation>Notebalkteks-eienskappe</translation>
     </message>
 </context>
@@ -14842,7 +14842,7 @@ Wil jy hierdie toere sien?</translation>
     <name>Ms::TimeDialog</name>
     <message>
         <location filename="../../mscore/timedialog.cpp" line="41"/>
-        <source>Time Signatures</source>
+        <source>Time signatures</source>
         <translation>Tydmaattekens</translation>
     </message>
 </context>
@@ -14857,7 +14857,7 @@ Wil jy hierdie toere sien?</translation>
     <message>
         <location filename="../../mscore/timeline.cpp" line="753"/>
         <location filename="../../mscore/timeline.cpp" line="1053"/>
-        <source>Time Signature</source>
+        <source>Time signature</source>
         <translation>Tydmaatteken</translation>
     </message>
     <message>
@@ -14871,7 +14871,7 @@ Wil jy hierdie toere sien?</translation>
         <location filename="../../mscore/timeline.cpp" line="967"/>
         <location filename="../../mscore/timeline.cpp" line="971"/>
         <location filename="../../mscore/timeline.cpp" line="1118"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>Toonsoortteken</translation>
     </message>
     <message>
@@ -14904,7 +14904,7 @@ Wil jy hierdie toere sien?</translation>
     </message>
     <message>
         <location filename="../../mscore/timeline.cpp" line="1188"/>
-        <source>Custom Key Signature</source>
+        <source>Custom Key signature</source>
         <translation>Pasgemaakte toonsoortteken</translation>
     </message>
     <message>
@@ -15141,17 +15141,17 @@ Wil jy hierdie toere sien?</translation>
     <name>Ms::WorkspaceDialog</name>
     <message>
         <location filename="../../mscore/workspacedialog.cpp" line="81"/>
-        <source>Edit Workspace</source>
+        <source>Edit workspace</source>
         <translation>Redigeer werkruimte</translation>
     </message>
     <message>
         <location filename="../../mscore/workspacedialog.cpp" line="89"/>
-        <source>Create New Workspace</source>
+        <source>Create New workspace</source>
         <translation>Skep nuwe werkruimte</translation>
     </message>
     <message>
         <location filename="../../mscore/workspacedialog.cpp" line="117"/>
-        <source>Read Workspace Name</source>
+        <source>Read workspace Name</source>
         <translation>Lees werkruimtenaam</translation>
     </message>
     <message>
@@ -15407,7 +15407,7 @@ kies asseblief &apos;n ander naam:</translation>
     </message>
     <message>
         <location filename="../../mscore/note_groups.ui" line="173"/>
-        <source>Beam Properties</source>
+        <source>Beam properties</source>
         <translation>Dwarsbalk-eienskappe</translation>
     </message>
 </context>
@@ -15644,7 +15644,7 @@ kies asseblief &apos;n ander naam:</translation>
     <message>
         <location filename="../../mscore/menus.cpp" line="445"/>
         <location filename="../../mscore/noteGroups.cpp" line="89"/>
-        <source>Beam Properties</source>
+        <source>Beam properties</source>
         <translation>Dwarsbalk-eienskappe</translation>
     </message>
     <message>
@@ -15656,7 +15656,7 @@ kies asseblief &apos;n ander naam:</translation>
         <location filename="../../mscore/masterpalette.cpp" line="227"/>
         <location filename="../../mscore/menus.cpp" line="551"/>
         <location filename="../../mscore/musescore.cpp" line="5983"/>
-        <source>Key Signatures</source>
+        <source>Key signatures</source>
         <translation>Toonsoorttekens</translation>
     </message>
     <message>
@@ -16132,7 +16132,7 @@ kies asseblief &apos;n ander naam:</translation>
         <location filename="../../mscore/masterpalette.cpp" line="228"/>
         <location filename="../../mscore/menus.cpp" line="1673"/>
         <location filename="../../mscore/musescore.cpp" line="5985"/>
-        <source>Time Signatures</source>
+        <source>Time signatures</source>
         <translation>Tydmaattekens</translation>
     </message>
     <message>
@@ -16193,12 +16193,12 @@ het misluk: </translation>
     <name>PaletteCellProperties</name>
     <message>
         <location filename="../../mscore/paletteCellProperties.ui" line="14"/>
-        <source>Cell Properties</source>
+        <source>Cell properties</source>
         <translation>Sel-eienskappe</translation>
     </message>
     <message>
         <location filename="../../mscore/paletteCellProperties.ui" line="20"/>
-        <source>Palette Cell Properties</source>
+        <source>Palette cell properties</source>
         <translation>Paletsel-eienskappe</translation>
     </message>
     <message>
@@ -16242,7 +16242,7 @@ het misluk: </translation>
     <name>PaletteProperties</name>
     <message>
         <location filename="../../mscore/paletteProperties.ui" line="14"/>
-        <source>Palette Properties</source>
+        <source>Palette properties</source>
         <translation>Palet-eienskappe</translation>
     </message>
     <message>
@@ -16778,7 +16778,7 @@ Dit sal alle inproppe herevalueer, enige wysigings wat mag plaasgevind het, opte
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="524"/>
-        <source>Update Translations</source>
+        <source>Update translations</source>
         <translation>Dateer vertalings op</translation>
     </message>
     <message>
@@ -17022,7 +17022,7 @@ Dit sal alle inproppe herevalueer, enige wysigings wat mag plaasgevind het, opte
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="534"/>
-        <source>OSC Remote Control</source>
+        <source>OSC remote control</source>
         <translation>OSC-afstandsbeheer</translation>
     </message>
     <message>
@@ -17149,7 +17149,7 @@ Dit sal alle inproppe herevalueer, enige wysigings wat mag plaasgevind het, opte
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="891"/>
-        <source>Choose Background wallpaper file</source>
+        <source>Choose background wallpaper file</source>
         <translation>Kies agtergrondmuurpapier-lêer</translation>
     </message>
     <message>
@@ -17248,7 +17248,7 @@ Dit sal alle inproppe herevalueer, enige wysigings wat mag plaasgevind het, opte
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1198"/>
         <location filename="../../mscore/prefsdialog.ui" line="1204"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>Noottoevoer</translation>
     </message>
     <message>
@@ -17286,7 +17286,7 @@ Dit sal alle inproppe herevalueer, enige wysigings wat mag plaasgevind het, opte
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1339"/>
-        <source>MIDI Remote Control</source>
+        <source>MIDI remote control</source>
         <translation>MIDI-afstandsbeheer</translation>
     </message>
     <message>
@@ -17639,7 +17639,7 @@ Dit sal alle inproppe herevalueer, enige wysigings wat mag plaasgevind het, opte
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3198"/>
-        <source>Audio Engine</source>
+        <source>Audio engine</source>
         <translation>Oudio-enjin</translation>
     </message>
     <message>
@@ -17649,7 +17649,7 @@ Dit sal alle inproppe herevalueer, enige wysigings wat mag plaasgevind het, opte
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2465"/>
-        <source>Default Files</source>
+        <source>Default files</source>
         <translation>Verstek-lêers</translation>
     </message>
     <message>
@@ -17886,7 +17886,7 @@ Deur latensie te wysig kan dit help om jou MIDI-hardeware met MuseScore se inter
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3250"/>
-        <source>Style Used for Import</source>
+        <source>Style used for import</source>
         <translation>Style om te gebruik vir invoer</translation>
     </message>
     <message>
@@ -17921,7 +17921,7 @@ Deur latensie te wysig kan dit help om jou MIDI-hardeware met MuseScore se inter
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1062"/>
-        <source>Scroll Pages</source>
+        <source>Scroll pages</source>
         <translation>Rol bladsye</translation>
     </message>
     <message>
@@ -17962,7 +17962,7 @@ Deur latensie te wysig kan dit help om jou MIDI-hardeware met MuseScore se inter
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1272"/>
-        <source>Play Notes When Editing</source>
+        <source>Play notes when editing</source>
         <translation>Speel note gedurende wysiging</translation>
     </message>
     <message>
@@ -18058,7 +18058,7 @@ Deur latensie te wysig kan dit help om jou MIDI-hardeware met MuseScore se inter
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3304"/>
-        <source>Character Set Used When Importing Binary Files</source>
+        <source>Character set used when importing binary files</source>
         <translation>Karakterstel om te gebruik wanneer binêre lêers ingevoer word</translation>
     </message>
     <message>
@@ -18368,7 +18368,7 @@ Deur latensie te wysig kan dit help om jou MIDI-hardeware met MuseScore se inter
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4042"/>
         <location filename="../../mscore/prefsdialog.ui" line="4045"/>
-        <source>Automatic Update Check</source>
+        <source>Automatic update check</source>
         <translation>Kyk outomaties vir opdaterings</translation>
     </message>
     <message>
@@ -19771,7 +19771,7 @@ Wil jy dit oorskryf?</translation>
     <name>ShortcutCaptureDialogBase</name>
     <message>
         <location filename="../../mscore/shortcutcapturedialog.ui" line="14"/>
-        <source>Enter Shortcut Sequence</source>
+        <source>Enter shortcut sequence</source>
         <translation>Voer die sneltoetsvolgorde in</translation>
     </message>
     <message>
@@ -20708,7 +20708,7 @@ Let wel: &quot;Ctrl+Shift+1&quot; is een sleutelkombinasie.</translation>
     <name>TimeDialogBase</name>
     <message>
         <location filename="../../mscore/timedialog.ui" line="41"/>
-        <source>Create Time Signature</source>
+        <source>Create Time signature</source>
         <translation>Skep tydmaatteken</translation>
     </message>
     <message>
@@ -20780,7 +20780,7 @@ Let wel: &quot;Ctrl+Shift+1&quot; is een sleutelkombinasie.</translation>
     <message>
         <location filename="../../mscore/timesigproperties.ui" line="14"/>
         <location filename="../../mscore/timesigproperties.ui" line="34"/>
-        <source>Time Signature Properties</source>
+        <source>Time signature properties</source>
         <translation>Tydmaatteken-eienskappe</translation>
     </message>
     <message>
@@ -20830,7 +20830,7 @@ Let wel: &quot;Ctrl+Shift+1&quot; is een sleutelkombinasie.</translation>
     <name>TimesigWizard</name>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="17"/>
-        <source>Time Signature Wizard</source>
+        <source>Time signature Wizard</source>
         <translation>Tydmaatteken-slimmerd</translation>
     </message>
     <message>
@@ -20840,7 +20840,7 @@ Let wel: &quot;Ctrl+Shift+1&quot; is een sleutelkombinasie.</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="32"/>
-        <source>Enter Time Signature:</source>
+        <source>Enter Time signature:</source>
         <translation>Voer tydmaatteken in:</translation>
     </message>
     <message>
@@ -21393,42 +21393,42 @@ Let wel: &quot;Ctrl+Shift+1&quot; is een sleutelkombinasie.</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="160"/>
-        <source>Hide/Delete Palette</source>
+        <source>Hide/delete palette</source>
         <translation>Versteek/skrap palet</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="160"/>
-        <source>Hide Palette</source>
+        <source>Hide palette</source>
         <translation>Versteek palet</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="164"/>
-        <source>Insert New Palette</source>
+        <source>Insert new palette</source>
         <translation>Voeg nuwe palet in</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="169"/>
-        <source>Enable Editing</source>
+        <source>Enable editing</source>
         <translation>Laat wysiging toe</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="176"/>
-        <source>Reset Palette</source>
+        <source>Reset palette</source>
         <translation>Stel palet terug</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="180"/>
-        <source>Save Palette…</source>
+        <source>Save palette…</source>
         <translation>Stoor palet…</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="184"/>
-        <source>Load Palette…</source>
+        <source>Load palette…</source>
         <translation>Laai palet…</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="189"/>
-        <source>Palette Properties…</source>
+        <source>Palette properties…</source>
         <translation>Palet-eienskappe…</translation>
     </message>
 </context>
@@ -21484,7 +21484,7 @@ Let wel: &quot;Ctrl+Shift+1&quot; is een sleutelkombinasie.</translation>
     <name>TremoloBarDialog</name>
     <message>
         <location filename="../../mscore/tremolobar.ui" line="14"/>
-        <source>Tremolo Bar Properties</source>
+        <source>Tremolo Bar properties</source>
         <translation>Tremolobalk-eienskappe</translation>
     </message>
     <message>
@@ -21627,7 +21627,7 @@ Let wel: &quot;Ctrl+Shift+1&quot; is een sleutelkombinasie.</translation>
     <name>Workspace</name>
     <message>
         <location filename="../../mscore/workspace.cpp" line="298"/>
-        <source>Writing Workspace File
+        <source>Writing workspace File
 %1
 failed: </source>
         <translation>Skryf van werkruimtelêer
@@ -21636,7 +21636,7 @@ het misluk: </translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="299"/>
-        <source>Writing Workspace File</source>
+        <source>Writing workspace File</source>
         <translation>Besig om werkruimtelêer te skryf</translation>
     </message>
 </context>
@@ -21954,7 +21954,7 @@ het misluk: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="268"/>
         <location filename="../../mscore/shortcut.cpp" line="1965"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>Noottoevoer</translation>
     </message>
     <message>
@@ -22653,7 +22653,7 @@ het misluk: </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="946"/>
-        <source>Apply Current Palette Element</source>
+        <source>Apply Current palette Element</source>
         <translation>Pas huidige paletelement toe</translation>
     </message>
     <message>
@@ -23524,7 +23524,7 @@ het misluk: </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1945"/>
-        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
+        <source>Toggle &apos;Playback controls&apos; toolbar</source>
         <translation>Wissel &apos;Terugspel-kontroles&apos;-nutsbalk</translation>
     </message>
     <message>
@@ -24281,7 +24281,7 @@ het misluk: </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1944"/>
-        <source>Playback Controls</source>
+        <source>Playback controls</source>
         <translation>Terugspeel-kontroles</translation>
     </message>
     <message>
@@ -24298,7 +24298,7 @@ het misluk: </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1966"/>
-        <source>Toggle &apos;Note Input&apos; toolbar</source>
+        <source>Toggle &apos;Note input&apos; toolbar</source>
         <translation>Wissel &apos;Noottoevoer&apos;-nutsbalk</translation>
     </message>
     <message>
@@ -24739,7 +24739,7 @@ het misluk: </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2395"/>
-        <source>Score Properties…</source>
+        <source>Score properties…</source>
         <translation>Partituur-eienskappe…</translation>
     </message>
     <message>
@@ -25315,7 +25315,7 @@ het misluk: </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3042"/>
-        <source>Key Signatures…</source>
+        <source>Key signatures…</source>
         <translation>Toonsoorttekens…</translation>
     </message>
     <message>
@@ -25325,7 +25325,7 @@ het misluk: </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3052"/>
-        <source>Time Signatures…</source>
+        <source>Time signatures…</source>
         <translation>Tydmaattekens…</translation>
     </message>
     <message>
@@ -27753,7 +27753,7 @@ het misluk: </translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="52"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>Toonsoortteken</translation>
     </message>
     <message>
@@ -27763,7 +27763,7 @@ het misluk: </translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="54"/>
-        <source>Time Signature</source>
+        <source>Time signature</source>
         <translation>Tydmaatteken</translation>
     </message>
     <message>
@@ -31703,7 +31703,7 @@ Maat is nie leeg nie</translation>
     <name>toolbar</name>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="21"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>Noottoevoer</translation>
     </message>
     <message>
@@ -31713,7 +31713,7 @@ Maat is nie leeg nie</translation>
     </message>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="23"/>
-        <source>Playback Controls</source>
+        <source>Playback controls</source>
         <translation>Terugspeel-kontroles</translation>
     </message>
 </context>

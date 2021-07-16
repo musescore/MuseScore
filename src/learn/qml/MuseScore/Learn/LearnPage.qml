@@ -166,12 +166,12 @@ FocusScope {
         }
 
         StyledTabButton {
-            text: qsTrc("learn", "Get Started")
+            text: qsTrc("learn", "Get started")
             sideMargin: bar.itemSideMargin
             isCurrent: bar.currentIndex === 0
             backgroundColor: root.color
 
-            navigation.name: "Get Started"
+            navigation.name: "Get started"
             navigation.panel: navTabPanel
             navigation.order: 1
             onNavigationTriggered: bar.currentIndex = 0
@@ -220,7 +220,7 @@ FocusScope {
             navigation.section: navSec
             navigation.order: 3
             navigation.name: "LearnGetStarted"
-            navigation.accessible.name: qsTrc("learn", "Get Started") + navigation.directionInfo
+            navigation.accessible.name: qsTrc("learn", "Get started") + navigation.directionInfo
 
             sideMargin: prv.sideMargin
 

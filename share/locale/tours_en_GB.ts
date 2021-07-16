@@ -17,9 +17,9 @@
         <translation>The Note Input toolbar allows you to enter notes and rests into your score.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
-        <translation>The Palettes allow you to add most other notation elements to your score.</translation>
+        <translation>The palettes allow you to add most other notation elements to your score.</translation>
     </message>
     <message>
         <source>Each palette contains items that can be added to the score.</source>
@@ -27,9 +27,9 @@
         <translation>Each palette contains items that can be added to the score.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</translation>
+        <translation>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.

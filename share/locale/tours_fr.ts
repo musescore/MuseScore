@@ -17,7 +17,7 @@
         <translation>La barre d&apos;outils de Saisie de note vous permet d&apos;ajouter des notes et des silences dans votre partition.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>Les Palettes vous permettent d&apos;ajouter la majorité des autres éléments de notation à votre partition.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Chaque palette contient des éléments pouvant être ajoutés à la partition.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Voici les Palettes, où vous pouvez ajouter différents éléments à votre partition. Cliquez sur &quot;Suivant&quot; pour en apprendre plus.</translation>
     </message>

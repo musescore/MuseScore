@@ -17,7 +17,7 @@
         <translation>음표 입력 툴바는 음표를 악보에 입력할 수 있게 해줍니다.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>팔레트는 다른 많은 악상 기호들을 입력할 수 있게 해줍니다.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>각 팔레트에는 악보에 입력할 수 있는 악상 기호가 있습니다.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>팔레트에 오신 것을 환영합니다. 팔레트에서는 많은 작업들을 할 수 있습니다. [다음]을 클릭하여 더 알아보기...</translation>
     </message>

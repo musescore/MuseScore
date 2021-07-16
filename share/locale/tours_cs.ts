@@ -17,7 +17,7 @@
         <translation>Panel Vkládání not vám umožní zadávat do notového zápisu noty a pomlky.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>Palety vám umožní přidávat do notového zápisu další notační prvky.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Každá paleta obsahuje prvky, které lze přidávat do notového zápisu.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Vítejte v Paletách, kde můžete přidávat různé notační prvky do svého notového zápisu. Chcete-li se dozvědět více, klepněte na „Další”.</translation>
     </message>

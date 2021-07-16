@@ -18,7 +18,7 @@
         <translation>音符入力ツールバーでは音符と休符を入力できます。</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>パレットを使用すると、ほとんどの音楽記号を楽譜に追加できます。</translation>
     </message>
@@ -28,7 +28,7 @@
         <translation>それぞれの欄には、楽譜に追加できる音楽記号が含まれています。</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>パレットへようこそ。パレットを使って様々な要素を加えることができます。詳細は &quot; 次へ &quot; をクリックしてください。</translation>
     </message>

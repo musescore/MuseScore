@@ -17,7 +17,7 @@
         <translation>音符輸入工具列讓您在五線譜上輸入音符和休止符。</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>記號面板讓您為五線譜加入大部分其他的記譜符號。</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>每一個面板都含有可以加入到樂譜的項目。</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>歡迎來到記號面板！您將會從這裡為您的樂譜加入各式各樣的元件。請按一下「下一頁」以了解更多。</translation>
     </message>

@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Staff/Part Properties</string>
+   <string>Staff/part properties</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="2">
@@ -41,7 +41,7 @@
       </size>
      </property>
      <property name="title">
-      <string>Staff Properties</string>
+      <string>Staff properties</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -324,7 +324,7 @@
         <item row="5" column="4">
          <widget class="QPushButton" name="changeStaffType">
           <property name="text">
-           <string>Advanced Style Properties…</string>
+           <string>Advanced style properties…</string>
           </property>
          </widget>
         </item>
@@ -355,7 +355,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Part Properties</string>
+      <string>Part properties</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0,0,0,0,0">
       <item>

@@ -17,7 +17,7 @@
         <translation>Pasek narzędziowy &quot;Wprowadzanie nut&quot; umożliwia wprowadzanie nut i pauz do Twojej partytury.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>Paleta umożliwia dodawanie większości elementów notacji do Twojej partytury.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Każda zakładka palety zawiera elementy, które można dodać do partytury.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Witaj w Palecie, za pomocą której dodasz różne elementy do partytury. Kliknij &quot;Dalej&quot;, aby dowiedzieć się więcej.</translation>
     </message>

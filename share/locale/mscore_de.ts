@@ -164,7 +164,7 @@
     <name>ArticulationProperties</name>
     <message>
         <location filename="../../mscore/articulation.ui" line="14"/>
-        <source>Articulation Properties</source>
+        <source>Articulation properties</source>
         <translation>Artikulationseigenschaften</translation>
     </message>
     <message>
@@ -547,7 +547,7 @@
     <message>
         <location filename="../../mscore/palette/createPalette.ui" line="20"/>
         <source>Name your new custom palette</source>
-        <translation>Neue Palette benennen</translation>
+        <translation>Neue palette benennen</translation>
     </message>
 </context>
 <context>
@@ -706,12 +706,12 @@
     <name>EditInstrumentBase</name>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="14"/>
-        <source>Edit Instrument Properties</source>
+        <source>Edit Instrument properties</source>
         <translation>Instrumenteneigenschaften ändern</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="20"/>
-        <source>Instrument Properties</source>
+        <source>Instrument properties</source>
         <translation>Eigenschaften Instrument</translation>
     </message>
     <message>
@@ -1563,7 +1563,7 @@
     <name>EditStaffBase</name>
     <message>
         <location filename="../../mscore/editstaff.ui" line="315"/>
-        <source>Part Properties</source>
+        <source>Part properties</source>
         <translation>Eigenschaften Instrument</translation>
     </message>
     <message>
@@ -1593,7 +1593,7 @@
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="26"/>
-        <source>Staff/Part Properties</source>
+        <source>Staff/part properties</source>
         <translation>Eigenschaften Notenzeile/Instrument</translation>
     </message>
     <message>
@@ -1834,12 +1834,12 @@
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="44"/>
-        <source>Staff Properties</source>
+        <source>Staff properties</source>
         <translation>Eigenschaften Notenzeile</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="135"/>
-        <source>Advanced Style Properties…</source>
+        <source>Advanced Style properties…</source>
         <translation>Erweiterte Stileigenschaften…</translation>
     </message>
     <message>
@@ -4258,7 +4258,7 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="2553"/>
-        <source>♮ in Key Signatures</source>
+        <source>♮ in Key signatures</source>
         <translation>♮ in Tonartangaben</translation>
     </message>
     <message>
@@ -7359,12 +7359,12 @@ space unit</extracomment>
     <name>InspectorKeySig</name>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="14"/>
-        <source>Key Signature Inspector</source>
+        <source>Key signature Inspector</source>
         <translation>Inspekteur Tonart</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_keysig.ui" line="57"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>Tonart</translation>
     </message>
     <message>
@@ -9315,12 +9315,12 @@ space unit</extracomment>
     <name>InspectorTimeSig</name>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="14"/>
-        <source>Time Signature Inspector</source>
+        <source>Time signature Inspector</source>
         <translation>Inspekteur Taktart</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector_timesig.ui" line="60"/>
-        <source>Time Signature</source>
+        <source>Time signature</source>
         <translation>Taktart</translation>
     </message>
     <message>
@@ -10178,7 +10178,7 @@ space unit</extracomment>
     <name>KeyEdit</name>
     <message>
         <location filename="../../mscore/keyedit.ui" line="38"/>
-        <source>Create Key Signature</source>
+        <source>Create Key signature</source>
         <translation>Tonart erstellen</translation>
     </message>
     <message>
@@ -10609,7 +10609,7 @@ N-Tole würde Taktgrenze überschreiten</translation>
     <name>MeasurePropertiesBase</name>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="17"/>
-        <source>Measure Properties</source>
+        <source>Measure properties</source>
         <translation>Eigenschaften Takt</translation>
     </message>
     <message>
@@ -10849,7 +10849,7 @@ N-Tole würde Taktgrenze überschreiten</translation>
     <name>MetaEditDialog</name>
     <message>
         <location filename="../../mscore/metaedit.ui" line="14"/>
-        <source>Score Properties</source>
+        <source>Score properties</source>
         <translation>Eigenschaften Partitur</translation>
     </message>
     <message>
@@ -11093,7 +11093,7 @@ N-Tole würde Taktgrenze überschreiten</translation>
     <message>
         <location filename="../../mscore/qml/palettes/MoreElementsPopup.qml" line="272"/>
         <source>Drag items to the palette or directly on your score</source>
-        <translation>Elemente in die Palette oder direkt in die Partitur ziehen</translation>
+        <translation>Elemente in die palette oder direkt in die Partitur ziehen</translation>
     </message>
 </context>
 <context>
@@ -11547,7 +11547,7 @@ fehlgeschlagen: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="464"/>
-        <source>(in File &gt; Score Properties…):</source>
+        <source>(in File &gt; Score properties…):</source>
         <translation>(unter Datei &gt; Partitureigenschaften…):</translation>
     </message>
     <message>
@@ -11895,7 +11895,7 @@ fehlgeschlagen: %2</translation>
     <name>Ms::KeyEditor</name>
     <message>
         <location filename="../../mscore/keyedit.cpp" line="271"/>
-        <source>Key Signatures</source>
+        <source>Key signatures</source>
         <translation>Tonarten</translation>
     </message>
 </context>
@@ -12036,7 +12036,7 @@ fehlgeschlagen: %2</translation>
     <name>Ms::MeasureProperties</name>
     <message>
         <location filename="../../mscore/measureproperties.cpp" line="123"/>
-        <source>Measure Properties for Measure %1</source>
+        <source>Measure properties for Measure %1</source>
         <translation>Eigenschaften für Takt %1</translation>
     </message>
     <message>
@@ -12427,18 +12427,18 @@ vor dem Schließen speichern?</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1348"/>
-        <source>Load Palette</source>
+        <source>Load palette</source>
         <translation>Palette laden</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1349"/>
         <location filename="../../mscore/file.cpp" line="1353"/>
-        <source>MuseScore Palette</source>
-        <translation>MuseScore Palette</translation>
+        <source>MuseScore palette</source>
+        <translation>MuseScore palette</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="1352"/>
-        <source>Save Palette</source>
+        <source>Save palette</source>
         <translation>Palette speichern</translation>
     </message>
     <message>
@@ -12767,7 +12767,7 @@ Bitte zuerst Takt wählen und dann nochmal versuchen</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2019"/>
-        <source>Playback Controls</source>
+        <source>Playback controls</source>
         <translation>Wiedergabe-Werkzeuge</translation>
     </message>
     <message>
@@ -12782,7 +12782,7 @@ Bitte zuerst Takt wählen und dann nochmal versuchen</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2022"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>Noteneingabe</translation>
     </message>
     <message>
@@ -12970,7 +12970,7 @@ Custom palettes, custom shortcuts, and the list of recent scores will be deleted
 Reverting will not remove any scores from your computer.
 Are you sure you want to proceed?</source>
         <translation>Dies wird alle Ihre Voreinstellungen zurücksetzen.
-Benutzerdefinierte Paletten, angepasste Tastenkürzel und die Liste der zuletzt geöffneten Partituren werden gelöscht. MuseScore wird mit seinen ursprünglichen Voreinstellungen neu gestartet.
+Benutzerdefinierte paletten, angepasste Tastenkürzel und die Liste der zuletzt geöffneten Partituren werden gelöscht. MuseScore wird mit seinen ursprünglichen Voreinstellungen neu gestartet.
 Es werden dabei keine Partituren von Ihrem Computer entfernt.
 Sind Sie sicher, dass Sie weiter machen wollen?</translation>
     </message>
@@ -13204,7 +13204,7 @@ um sie zur Liste auf der rechten Seite hinzuzufügen:</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="383"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>Tonart</translation>
     </message>
     <message>
@@ -13214,7 +13214,7 @@ um sie zur Liste auf der rechten Seite hinzuzufügen:</translation>
     </message>
     <message>
         <location filename="../../mscore/newwizard.cpp" line="396"/>
-        <source>Key Signature: %1</source>
+        <source>Key signature: %1</source>
         <translation>Tonart: %1</translation>
     </message>
     <message>
@@ -13314,8 +13314,8 @@ um sie zur Liste auf der rechten Seite hinzuzufügen:</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/palettewidget.cpp" line="121"/>
-        <source>Single Palette</source>
-        <translation>Einzelne Palette</translation>
+        <source>Single palette</source>
+        <translation>Einzelne palette</translation>
     </message>
 </context>
 <context>
@@ -13335,18 +13335,18 @@ um sie zur Liste auf der rechten Seite hinzuzufügen:</translation>
     <name>Ms::PaletteElementEditor</name>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="62"/>
-        <source>Create Key Signature</source>
+        <source>Create Key signature</source>
         <translation>Tonart erstellen</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="64"/>
-        <source>Create Time Signature</source>
+        <source>Create Time signature</source>
         <translation>Taktart erstellen</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="79"/>
         <source>The palette was hidden or changed</source>
-        <translation>Die Palette wurde versteckt oder geändert</translation>
+        <translation>Die palette wurde versteckt oder geändert</translation>
     </message>
 </context>
 <context>
@@ -13354,7 +13354,7 @@ um sie zur Liste auf der rechten Seite hinzuzufügen:</translation>
     <message>
         <location filename="../../mscore/palette/palettedialog.cpp" line="146"/>
         <source>The palette properties have been modified.</source>
-        <translation>Die Paletteneigenschaften wurden geändert.</translation>
+        <translation>Die paletteneigenschaften wurden geändert.</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/palettedialog.cpp" line="147"/>
@@ -13367,12 +13367,12 @@ um sie zur Liste auf der rechten Seite hinzuzufügen:</translation>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="814"/>
         <source>Do you want to permanently delete this custom palette?</source>
-        <translation>Soll diese Benutzerdefinierte Palette dauerhaft gelöscht werden?</translation>
+        <translation>Soll diese Benutzerdefinierte palette dauerhaft gelöscht werden?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="841"/>
         <source>Do you want to restore this palette to its default state? All changes to this palette will be lost.</source>
-        <translation>Soll diese Palette auf ihre Standardeinstellungen zurückgesetzt werden? Alle Änderungen an diese Palette gehen damit verloren.</translation>
+        <translation>Soll diese palette auf ihre Standardeinstellungen zurückgesetzt werden? Alle Änderungen an diese palette gehen damit verloren.</translation>
     </message>
 </context>
 <context>
@@ -13859,7 +13859,7 @@ Diese Plug-In benötigt eine geöffnete Partitur, um zu laufen.
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="768"/>
-        <source>Choose Background Wallpaper</source>
+        <source>Choose background wallpaper</source>
         <translation>Struktur für Hintergrund wählen</translation>
     </message>
     <message>
@@ -14348,12 +14348,12 @@ fehlgeschlagen: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="127"/>
-        <source>Articulation Properties…</source>
+        <source>Articulation properties…</source>
         <translation>Eigenschaften Artikulationen…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="137"/>
-        <source>Tremolo Bar Properties…</source>
+        <source>Tremolo Bar properties…</source>
         <translation>Eigenschaften Tremolohebel…</translation>
     </message>
     <message>
@@ -14365,17 +14365,17 @@ fehlgeschlagen: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="170"/>
-        <source>Hide Courtesy Time Signature</source>
+        <source>Hide Courtesy Time signature</source>
         <translation>Taktartwechselankündigung verstecken</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="171"/>
-        <source>Show Courtesy Time Signature</source>
+        <source>Show Courtesy Time signature</source>
         <translation>Taktartwechselankündigung anzeigen</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="176"/>
-        <source>Time Signature Properties…</source>
+        <source>Time signature properties…</source>
         <translation>Eigenschaften Taktart…</translation>
     </message>
     <message>
@@ -14390,7 +14390,7 @@ fehlgeschlagen: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="196"/>
-        <source>System Text Properties…</source>
+        <source>System Text properties…</source>
         <translation>Eigenschaften Systemtext…</translation>
     </message>
     <message>
@@ -14398,27 +14398,27 @@ fehlgeschlagen: %2</translation>
         <location filename="../../mscore/propertymenu.cpp" line="249"/>
         <location filename="../../mscore/propertymenu.cpp" line="274"/>
         <location filename="../../mscore/scoreview.cpp" line="394"/>
-        <source>Staff/Part Properties…</source>
+        <source>Staff/part properties…</source>
         <translation>Eigenschaften Notenzeile/Instrument…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="192"/>
-        <source>Staff Text Properties…</source>
+        <source>Staff Text properties…</source>
         <translation>Eigenschaften Notenzeilentext…</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="216"/>
-        <source>Hide Courtesy Key Signature</source>
+        <source>Hide Courtesy Key signature</source>
         <translation>Tonartwechselankündigung verstecken</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="217"/>
-        <source>Show Courtesy Key Signature</source>
+        <source>Show Courtesy Key signature</source>
         <translation>Tonartwechselankündigung anzeigen</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="222"/>
-        <source>Change Instrument Properties…</source>
+        <source>Change Instrument properties…</source>
         <translation>Eigenschaften Instrument ändern…</translation>
     </message>
     <message>
@@ -14439,7 +14439,7 @@ fehlgeschlagen: %2</translation>
         <location filename="../../mscore/propertymenu.cpp" line="237"/>
         <location filename="../../mscore/propertymenu.cpp" line="255"/>
         <location filename="../../mscore/scoreview.cpp" line="419"/>
-        <source>Measure Properties…</source>
+        <source>Measure properties…</source>
         <translation>Eigenschaften Takt…</translation>
     </message>
     <message>
@@ -14621,12 +14621,12 @@ Bitte zuerst Takt auswählen und dann nochmal versuchen</translation>
     <name>Ms::StaffTextProperties</name>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="58"/>
-        <source>System Text Properties</source>
+        <source>System Text properties</source>
         <translation>Eigenschaften Systemtext</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftextproperties.cpp" line="65"/>
-        <source>Staff Text Properties</source>
+        <source>Staff Text properties</source>
         <translation>Eigenschaften Notenzeilentext</translation>
     </message>
 </context>
@@ -14844,7 +14844,7 @@ Möchten Sie jetzt damit beginnen ?</translation>
     <name>Ms::TimeDialog</name>
     <message>
         <location filename="../../mscore/timedialog.cpp" line="41"/>
-        <source>Time Signatures</source>
+        <source>Time signatures</source>
         <translation>Taktarten</translation>
     </message>
 </context>
@@ -14859,7 +14859,7 @@ Möchten Sie jetzt damit beginnen ?</translation>
     <message>
         <location filename="../../mscore/timeline.cpp" line="753"/>
         <location filename="../../mscore/timeline.cpp" line="1053"/>
-        <source>Time Signature</source>
+        <source>Time signature</source>
         <translation>Taktart</translation>
     </message>
     <message>
@@ -14873,7 +14873,7 @@ Möchten Sie jetzt damit beginnen ?</translation>
         <location filename="../../mscore/timeline.cpp" line="967"/>
         <location filename="../../mscore/timeline.cpp" line="971"/>
         <location filename="../../mscore/timeline.cpp" line="1118"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>Tonart</translation>
     </message>
     <message>
@@ -14906,7 +14906,7 @@ Möchten Sie jetzt damit beginnen ?</translation>
     </message>
     <message>
         <location filename="../../mscore/timeline.cpp" line="1188"/>
-        <source>Custom Key Signature</source>
+        <source>Custom Key signature</source>
         <translation>Benutzerdefinierte Tonart</translation>
     </message>
     <message>
@@ -15041,7 +15041,7 @@ Möchten Sie jetzt damit beginnen ?</translation>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="364"/>
         <source>Do you want to hide this custom palette cell or permanently delete it?</source>
-        <translation>Soll diese Benutzerdefinierte Palettenzelle versteckt oder dauerhaft gelöscht werden?</translation>
+        <translation>Soll diese Benutzerdefinierte palettenzelle versteckt oder dauerhaft gelöscht werden?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="364"/>
@@ -15051,7 +15051,7 @@ Möchten Sie jetzt damit beginnen ?</translation>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="373"/>
         <source>Do you want to permanently delete this custom palette cell?</source>
-        <translation>Soll diese Benutzerdefinierte Palettenzelle dauerhaft gelöscht werden?</translation>
+        <translation>Soll diese Benutzerdefinierte palettenzelle dauerhaft gelöscht werden?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="373"/>
@@ -15061,7 +15061,7 @@ Möchten Sie jetzt damit beginnen ?</translation>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="393"/>
         <source>Do you want to hide this custom palette or permanently delete it?</source>
-        <translation>Soll diese Benutzerdefinierte Palette versteckt oder dauerhaft gelöscht werden?</translation>
+        <translation>Soll diese Benutzerdefinierte palette versteckt oder dauerhaft gelöscht werden?</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/paletteworkspace.cpp" line="393"/>
@@ -15143,17 +15143,17 @@ Möchten Sie jetzt damit beginnen ?</translation>
     <name>Ms::WorkspaceDialog</name>
     <message>
         <location filename="../../mscore/workspacedialog.cpp" line="81"/>
-        <source>Edit Workspace</source>
+        <source>Edit workspace</source>
         <translation>Arbeitsplatz bearbeiten</translation>
     </message>
     <message>
         <location filename="../../mscore/workspacedialog.cpp" line="89"/>
-        <source>Create New Workspace</source>
+        <source>Create New workspace</source>
         <translation>Neuen Arbeitsplatz erstellen</translation>
     </message>
     <message>
         <location filename="../../mscore/workspacedialog.cpp" line="117"/>
-        <source>Read Workspace Name</source>
+        <source>Read workspace Name</source>
         <translation>Arbeitsplatzname lesen</translation>
     </message>
     <message>
@@ -15409,7 +15409,7 @@ bitte wählen Sie einen anderen Namen:</translation>
     </message>
     <message>
         <location filename="../../mscore/note_groups.ui" line="173"/>
-        <source>Beam Properties</source>
+        <source>Beam properties</source>
         <translation>Balkeneigenschaften</translation>
     </message>
 </context>
@@ -15646,7 +15646,7 @@ bitte wählen Sie einen anderen Namen:</translation>
     <message>
         <location filename="../../mscore/menus.cpp" line="445"/>
         <location filename="../../mscore/noteGroups.cpp" line="89"/>
-        <source>Beam Properties</source>
+        <source>Beam properties</source>
         <translation>Balkeneigenschaften</translation>
     </message>
     <message>
@@ -15658,7 +15658,7 @@ bitte wählen Sie einen anderen Namen:</translation>
         <location filename="../../mscore/masterpalette.cpp" line="227"/>
         <location filename="../../mscore/menus.cpp" line="551"/>
         <location filename="../../mscore/musescore.cpp" line="5983"/>
-        <source>Key Signatures</source>
+        <source>Key signatures</source>
         <translation>Tonarten</translation>
     </message>
     <message>
@@ -16135,7 +16135,7 @@ mit Cresc./Dim.-Gabel</translation>
         <location filename="../../mscore/masterpalette.cpp" line="228"/>
         <location filename="../../mscore/menus.cpp" line="1673"/>
         <location filename="../../mscore/musescore.cpp" line="5985"/>
-        <source>Time Signatures</source>
+        <source>Time signatures</source>
         <translation>Taktarten</translation>
     </message>
     <message>
@@ -16196,12 +16196,12 @@ fehlgeschlagen: </translation>
     <name>PaletteCellProperties</name>
     <message>
         <location filename="../../mscore/paletteCellProperties.ui" line="14"/>
-        <source>Cell Properties</source>
+        <source>Cell properties</source>
         <translation>Eigenschaften Zelle</translation>
     </message>
     <message>
         <location filename="../../mscore/paletteCellProperties.ui" line="20"/>
-        <source>Palette Cell Properties</source>
+        <source>Palette cell properties</source>
         <translation>Eigenschaften Palettenzelle</translation>
     </message>
     <message>
@@ -16245,7 +16245,7 @@ fehlgeschlagen: </translation>
     <name>PaletteProperties</name>
     <message>
         <location filename="../../mscore/paletteProperties.ui" line="14"/>
-        <source>Palette Properties</source>
+        <source>Palette properties</source>
         <translation>Eigenschaften Palette</translation>
     </message>
     <message>
@@ -16294,17 +16294,17 @@ fehlgeschlagen: </translation>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="43"/>
         <source>More palettes</source>
-        <translation>Weitere Paletten</translation>
+        <translation>Weitere paletten</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="52"/>
         <source>Create custom palette</source>
-        <translation>Benutzerdefinierte Palette erstellen</translation>
+        <translation>Benutzerdefinierte palette erstellen</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="68"/>
         <source>All palettes were added</source>
-        <translation>Alle Paletten wurden hinzugefügt</translation>
+        <translation>Alle paletten wurden hinzugefügt</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="132"/>
@@ -16781,7 +16781,7 @@ Dies überprüft alle Plugins neu und nimmt alle möglicherweise aufgetretenen �
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="524"/>
-        <source>Update Translations</source>
+        <source>Update translations</source>
         <translation>Übersetzungen aktualisieren</translation>
     </message>
     <message>
@@ -17025,7 +17025,7 @@ Dies überprüft alle Plugins neu und nimmt alle möglicherweise aufgetretenen �
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="534"/>
-        <source>OSC Remote Control</source>
+        <source>OSC remote control</source>
         <translation>OSC Fernbedienung</translation>
     </message>
     <message>
@@ -17152,7 +17152,7 @@ Dies überprüft alle Plugins neu und nimmt alle möglicherweise aufgetretenen �
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="891"/>
-        <source>Choose Background wallpaper file</source>
+        <source>Choose background wallpaper file</source>
         <translation>Hintergrundstrukturdateien auswählen</translation>
     </message>
     <message>
@@ -17251,7 +17251,7 @@ Dies überprüft alle Plugins neu und nimmt alle möglicherweise aufgetretenen �
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1198"/>
         <location filename="../../mscore/prefsdialog.ui" line="1204"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>Noteneingabe</translation>
     </message>
     <message>
@@ -17289,7 +17289,7 @@ Dies überprüft alle Plugins neu und nimmt alle möglicherweise aufgetretenen �
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1339"/>
-        <source>MIDI Remote Control</source>
+        <source>MIDI remote control</source>
         <translation>MIDI Fernbedienung</translation>
     </message>
     <message>
@@ -17642,7 +17642,7 @@ Dies überprüft alle Plugins neu und nimmt alle möglicherweise aufgetretenen �
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3198"/>
-        <source>Audio Engine</source>
+        <source>Audio engine</source>
         <translation>Audio Treiber</translation>
     </message>
     <message>
@@ -17652,7 +17652,7 @@ Dies überprüft alle Plugins neu und nimmt alle möglicherweise aufgetretenen �
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="2465"/>
-        <source>Default Files</source>
+        <source>Default files</source>
         <translation>Standard Dateien</translation>
     </message>
     <message>
@@ -17889,7 +17889,7 @@ Die Latenz azupassen kann helfen die MIDI Hardware mit MuseScores internem Audio
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3250"/>
-        <source>Style Used for Import</source>
+        <source>Style used for import</source>
         <translation>Für Import verwendeter Stil</translation>
     </message>
     <message>
@@ -17924,7 +17924,7 @@ Die Latenz azupassen kann helfen die MIDI Hardware mit MuseScores internem Audio
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1062"/>
-        <source>Scroll Pages</source>
+        <source>Scroll pages</source>
         <translation>Seitendurchlauf</translation>
     </message>
     <message>
@@ -17965,7 +17965,7 @@ Die Latenz azupassen kann helfen die MIDI Hardware mit MuseScores internem Audio
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="1272"/>
-        <source>Play Notes When Editing</source>
+        <source>Play notes when editing</source>
         <translation>Noten bei der Eingabe wiedergeben</translation>
     </message>
     <message>
@@ -18061,7 +18061,7 @@ Die Latenz azupassen kann helfen die MIDI Hardware mit MuseScores internem Audio
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3304"/>
-        <source>Character Set Used When Importing Binary Files</source>
+        <source>Character set used when importing binary files</source>
         <translation>Verwendeter Zeichensatz beim Import von Binär Dateien</translation>
     </message>
     <message>
@@ -18371,7 +18371,7 @@ Die Latenz azupassen kann helfen die MIDI Hardware mit MuseScores internem Audio
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="4042"/>
         <location filename="../../mscore/prefsdialog.ui" line="4045"/>
-        <source>Automatic Update Check</source>
+        <source>Automatic update check</source>
         <translation>Automatisch nach Aktualisierungen suchen</translation>
     </message>
     <message>
@@ -19293,7 +19293,7 @@ Soll sie überschrieben werden?</translation>
     <message>
         <location filename="../../mscore/palette.cpp" line="297"/>
         <source>Are you sure you want to delete palette cell &quot;%1&quot;?</source>
-        <translation>Sind Sie sicher, dass Sie die Palettenzelle &quot;%1&quot; löschen wollen?</translation>
+        <translation>Sind Sie sicher, dass Sie die palettenzelle &quot;%1&quot; löschen wollen?</translation>
     </message>
     <message>
         <location filename="../../omr/omr.cpp" line="57"/>
@@ -19773,7 +19773,7 @@ Soll sie überschrieben werden?</translation>
     <name>ShortcutCaptureDialogBase</name>
     <message>
         <location filename="../../mscore/shortcutcapturedialog.ui" line="14"/>
-        <source>Enter Shortcut Sequence</source>
+        <source>Enter shortcut sequence</source>
         <translation>Tastenkürzel eingeben</translation>
     </message>
     <message>
@@ -20710,7 +20710,7 @@ Hinweis: &quot;Strg+Umschalt+1&quot; ist eine Tastenkombination.</translation>
     <name>TimeDialogBase</name>
     <message>
         <location filename="../../mscore/timedialog.ui" line="41"/>
-        <source>Create Time Signature</source>
+        <source>Create Time signature</source>
         <translation>Taktart erstellen</translation>
     </message>
     <message>
@@ -20782,7 +20782,7 @@ Hinweis: &quot;Strg+Umschalt+1&quot; ist eine Tastenkombination.</translation>
     <message>
         <location filename="../../mscore/timesigproperties.ui" line="14"/>
         <location filename="../../mscore/timesigproperties.ui" line="34"/>
-        <source>Time Signature Properties</source>
+        <source>Time signature properties</source>
         <translation>Eigenschaften Taktart</translation>
     </message>
     <message>
@@ -20832,7 +20832,7 @@ Hinweis: &quot;Strg+Umschalt+1&quot; ist eine Tastenkombination.</translation>
     <name>TimesigWizard</name>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="17"/>
-        <source>Time Signature Wizard</source>
+        <source>Time signature Wizard</source>
         <translation>Taktartassistent</translation>
     </message>
     <message>
@@ -20842,7 +20842,7 @@ Hinweis: &quot;Strg+Umschalt+1&quot; ist eine Tastenkombination.</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="32"/>
-        <source>Enter Time Signature:</source>
+        <source>Enter Time signature:</source>
         <translation>Taktart eingeben:</translation>
     </message>
     <message>
@@ -21395,42 +21395,42 @@ Hinweis: &quot;Strg+Umschalt+1&quot; ist eine Tastenkombination.</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="160"/>
-        <source>Hide/Delete Palette</source>
+        <source>Hide/delete palette</source>
         <translation>Palette verstecken/löschen</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="160"/>
-        <source>Hide Palette</source>
+        <source>Hide palette</source>
         <translation>Palette verstecken</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="164"/>
-        <source>Insert New Palette</source>
-        <translation>Neue Palette einfügen</translation>
+        <source>Insert new palette</source>
+        <translation>Neue palette einfügen</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="169"/>
-        <source>Enable Editing</source>
+        <source>Enable editing</source>
         <translation>Bearbeitung erlauben</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="176"/>
-        <source>Reset Palette</source>
+        <source>Reset palette</source>
         <translation>Palette zurücksetzen</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="180"/>
-        <source>Save Palette…</source>
+        <source>Save palette…</source>
         <translation>Palette speichern…</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="184"/>
-        <source>Load Palette…</source>
+        <source>Load palette…</source>
         <translation>Palette laden…</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/TreePaletteHeader.qml" line="189"/>
-        <source>Palette Properties…</source>
+        <source>Palette properties…</source>
         <translation>Eigenschaften Palette…</translation>
     </message>
 </context>
@@ -21486,7 +21486,7 @@ Hinweis: &quot;Strg+Umschalt+1&quot; ist eine Tastenkombination.</translation>
     <name>TremoloBarDialog</name>
     <message>
         <location filename="../../mscore/tremolobar.ui" line="14"/>
-        <source>Tremolo Bar Properties</source>
+        <source>Tremolo Bar properties</source>
         <translation>Eigenschaften Tremolohebel</translation>
     </message>
     <message>
@@ -21629,7 +21629,7 @@ Hinweis: &quot;Strg+Umschalt+1&quot; ist eine Tastenkombination.</translation>
     <name>Workspace</name>
     <message>
         <location filename="../../mscore/workspace.cpp" line="298"/>
-        <source>Writing Workspace File
+        <source>Writing workspace File
 %1
 failed: </source>
         <translation>Schreiben der Arbeitsplatzdatei
@@ -21638,7 +21638,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="299"/>
-        <source>Writing Workspace File</source>
+        <source>Writing workspace File</source>
         <translation>Arbeitsplatz Datei schreiben</translation>
     </message>
 </context>
@@ -21956,7 +21956,7 @@ fehlgeschlagen: </translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="268"/>
         <location filename="../../mscore/shortcut.cpp" line="1965"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>Noteneingabe</translation>
     </message>
     <message>
@@ -22655,7 +22655,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="946"/>
-        <source>Apply Current Palette Element</source>
+        <source>Apply Current palette Element</source>
         <translation>Aktuelles Palettenelement anwenden</translation>
     </message>
     <message>
@@ -23526,7 +23526,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1945"/>
-        <source>Toggle &apos;Playback Controls&apos; toolbar</source>
+        <source>Toggle &apos;Playback controls&apos; toolbar</source>
         <translation>Werkzeugleiste &apos;Wiedergabesteuerung&apos; umschalten</translation>
     </message>
     <message>
@@ -24283,7 +24283,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1944"/>
-        <source>Playback Controls</source>
+        <source>Playback controls</source>
         <translation>Wiedergabe-Werkzeuge</translation>
     </message>
     <message>
@@ -24300,7 +24300,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1966"/>
-        <source>Toggle &apos;Note Input&apos; toolbar</source>
+        <source>Toggle &apos;Note input&apos; toolbar</source>
         <translation>Werkzeugleiste &apos;Noteneingabe&apos; umschalten</translation>
     </message>
     <message>
@@ -24741,7 +24741,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2395"/>
-        <source>Score Properties…</source>
+        <source>Score properties…</source>
         <translation>Eigenschaften Partitur…</translation>
     </message>
     <message>
@@ -25317,7 +25317,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3042"/>
-        <source>Key Signatures…</source>
+        <source>Key signatures…</source>
         <translation>Vorzeichen (Tonart)…</translation>
     </message>
     <message>
@@ -25327,7 +25327,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3052"/>
-        <source>Time Signatures…</source>
+        <source>Time signatures…</source>
         <translation>Taktarten…</translation>
     </message>
     <message>
@@ -27756,7 +27756,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="52"/>
-        <source>Key Signature</source>
+        <source>Key signature</source>
         <translation>Tonart</translation>
     </message>
     <message>
@@ -27766,7 +27766,7 @@ fehlgeschlagen: </translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="54"/>
-        <source>Time Signature</source>
+        <source>Time signature</source>
         <translation>Taktart</translation>
     </message>
     <message>
@@ -31709,7 +31709,7 @@ Takt ist nicht leer</translation>
     <name>toolbar</name>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="21"/>
-        <source>Note Input</source>
+        <source>Note input</source>
         <translation>Noteneingabe</translation>
     </message>
     <message>
@@ -31719,7 +31719,7 @@ Takt ist nicht leer</translation>
     </message>
     <message>
         <location filename="../../mscore/toolbarEditor.cpp" line="23"/>
-        <source>Playback Controls</source>
+        <source>Playback controls</source>
         <translation>Wiedergabe-Werkzeuge</translation>
     </message>
 </context>

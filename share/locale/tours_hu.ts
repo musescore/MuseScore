@@ -17,7 +17,7 @@
         <translation>A Hangjegybevitel eszköztár segítségével tud hangjegyeket és szüneteket írni a kottába.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>A Palettákon szerepel a legtöbb további zenei jel.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Minden palettán olyan elemek vannak, melyek beírhatók a kottába.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Íme, a Paletták, ahol különféle elemeket tud a kottába írni. Nyomja meg a „Tovább” gombot, ha többet szeretne tudni.</translation>
     </message>

@@ -17,7 +17,7 @@
         <translation>Amboðsbjálkin til nóta inntøku loyvir tær at seta nótar og íhald á nótablaðið.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>Palettirnar loyva tær at seta onnur tekin á nótablaðið.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Hvør palettin fevnir um ymisk tekin, sum kunnu setast inn á nótablaðið.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Vælkomin til palettirnar, har til ber at leggja ymisk tekin inn á nótablaðið. Trýst &quot;Víðari&quot; og lær meira.</translation>
     </message>

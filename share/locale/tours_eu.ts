@@ -17,7 +17,7 @@
         <translation>Nota sarrera-ren tresna-barrak partituran notak eta isiluneak sartzeko balio du.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>Paleten bidez ia gainerako notazio elementu guztiak gehitu ahalko dizkiozu zure partiturari.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Paleta bakoitzak partiturari gehi dakizkioken elementuak ditu.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Ongi etorri paletetara, non partiturari hainbat elementu gehitu ahalko dizkiozun. Gehiago jakiteko, &quot;Hurrengoa&quot; sakatu.</translation>
     </message>

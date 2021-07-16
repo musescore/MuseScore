@@ -17,17 +17,17 @@
         <translation>Die Werkzeugleiste &quot;Noteneingabe&quot; ermöglicht Noten und Pausen in die Partitur einzugeben. </translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>Mithilfe der Paletten lassen sich die meisten anderen Elemente zu Ihrer Partitur hinzufügen. </translation>
     </message>
     <message>
         <source>Each palette contains items that can be added to the score.</source>
         <comment>show-palette</comment>
-        <translation>Jede Palette enthält Elemente, die zur Partitur hinzugefügt werden können.</translation>
+        <translation>Jede palette enthält Elemente, die zur Partitur hinzugefügt werden können.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Willkommen bei den Paletten. Mit diesen lassen sich verschiedene Elemente zu Ihrer Partitur hinzufügen. Klicken Sie auf &quot;Weiter&quot;, um mehr zu erfahren.</translation>
     </message>

@@ -28,7 +28,7 @@ import MuseScore.Palette 1.0
 StyledDialogView {
     id: root
 
-    title: qsTrc("palette", "Palette Properties")
+    title: qsTrc("palette", "Palette properties")
 
     contentWidth: 280
     contentHeight: 370

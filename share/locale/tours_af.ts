@@ -17,7 +17,7 @@
         <translation>Die noottoevoer-nutsbalk laat jou toe om note en rustekens in jou partituur in te voer.</translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>Die palette laat jou toe om meeste ander notasie-elemente by jou partituur te voeg.</translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Elke palet bevat items wat by die partituur gevoeg kan word.</translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Welkom by die palette, waar jy verskeie elemente by jou partituur kan byvoeg. Klik &quot;Volgende&quot; om meer te leer.</translation>
     </message>

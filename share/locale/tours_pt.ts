@@ -17,7 +17,7 @@
         <translation>A barra de ferramentas de Escrita de Notas permite-lhe inserir notas e pausas na sua partitura. </translation>
     </message>
     <message>
-        <source>The Palettes allow you to add most other notation elements to your score.</source>
+        <source>The palettes allow you to add most other notation elements to your score.</source>
         <comment>welcome</comment>
         <translation>A Palete permite-lhe adicionar outros elementos de notação à sua partitura. </translation>
     </message>
@@ -27,7 +27,7 @@
         <translation>Cada Palete contém items que podem ser adicionados à partitura. </translation>
     </message>
     <message>
-        <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
+        <source>Welcome to the palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
         <translation>Bem-vindo às Paletes, onde poderá adicionar vários elementos à sua partitura. Carregue em &quot;Seguinte&quot; para saber mais. </translation>
     </message>
