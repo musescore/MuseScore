@@ -2100,7 +2100,7 @@ void TextBase::layoutFrame()
 
 qreal TextBase::lineSpacing() const
 {
-    return fontMetrics().lineSpacing() * MScore::pixelRatio;
+    return fontMetrics().lineSpacing();
 }
 
 //---------------------------------------------------------
