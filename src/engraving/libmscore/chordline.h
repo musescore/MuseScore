@@ -24,6 +24,7 @@
 #define __CHORDLINE_H__
 
 #include "element.h"
+#include "draw/painterpath.h"
 
 namespace Ms {
 class Chord;

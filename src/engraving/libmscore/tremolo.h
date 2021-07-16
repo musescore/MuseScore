@@ -25,6 +25,7 @@
 
 #include "durationtype.h"
 #include "symbol.h"
+#include "draw/painterpath.h"
 
 namespace Ms {
 class Chord;

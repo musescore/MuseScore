@@ -79,8 +79,8 @@ public:
     void setBrush(const Brush& brush);
     const Brush& brush() const;
 
-    void setWorldTransform(const QTransform& matrix, bool combine = false);
-    const QTransform& worldTransform() const;
+    void setWorldTransform(const Transform& matrix, bool combine = false);
+    const Transform& worldTransform() const;
     void scale(qreal sx, qreal sy);
     void rotate(qreal angle);
     void translate(qreal dx, qreal dy);
@@ -95,9 +95,9 @@ public:
     void restore();
 
     // drawing
-    void fillPath(const QPainterPath& path, const Brush& brush);
-    void drawPath(const QPainterPath& path);
-    void strokePath(const QPainterPath& path, const Pen& pen);
+    void fillPath(const PainterPath& path, const Brush& brush);
+    void drawPath(const PainterPath& path);
+    void strokePath(const PainterPath& path, const Pen& pen);
 
     void drawLines(const LineF* lines, size_t lineCount);
     void drawLines(const PointF* pointPairs, size_t lineCount);
@@ -119,7 +119,7 @@ public:
 
     void drawRects(const RectF* rects, size_t rectCount);
 
-    void drawRoundedRect(const RectF& rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = Qt::AbsoluteSize);
+    void drawRoundedRect(const RectF& rect, qreal xRadius, qreal yRadius);
 
     void drawEllipse(const RectF& rect);
     inline void drawEllipse(const PointF& center, qreal rx, qreal ry);
@@ -179,16 +179,16 @@ private:
         RectF window;
         RectF viewport;
         bool isVxF = false;
-        QTransform viewTransform;
+        Transform viewTransform;
         bool isWxF = false;
-        QTransform worldTransform;       // World transformation matrix, not window and viewport
-        QTransform transform;            // Complete transformation matrix
+        Transform worldTransform;       // World transformation matrix, not window and viewport
+        Transform transform;            // Complete transformation matrix
     };
 
     void init();
     State& editableState();
     const State& state() const;
-    QTransform makeViewTransform() const;
+    Transform makeViewTransform() const;
     void updateMatrix();
 
     bool endTarget(bool endDraw);

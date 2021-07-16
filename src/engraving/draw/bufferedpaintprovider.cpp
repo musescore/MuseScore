@@ -181,20 +181,20 @@ void BufferedPaintProvider::restore()
 {
 }
 
-void BufferedPaintProvider::setTransform(const QTransform& transform)
+void BufferedPaintProvider::setTransform(const Transform& transform)
 {
     DrawData::State& st = editableState();
     st.transform = transform;
 }
 
-const QTransform& BufferedPaintProvider::transform() const
+const Transform& BufferedPaintProvider::transform() const
 {
     return currentState().transform;
 }
 
 // drawing functions
 
-void BufferedPaintProvider::drawPath(const QPainterPath& path)
+void BufferedPaintProvider::drawPath(const PainterPath& path)
 {
     const DrawData::State& st = currentState();
     DrawMode mode = DrawMode::StrokeAndFill;

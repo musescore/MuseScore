@@ -3374,7 +3374,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
         p->drawRect(cursor->cursorRect());
     }
 
-    QTransform transform = p->worldTransform();
+    Transform transform = p->worldTransform();
     p->translate(-pos);
     p->setPen(Pen(Qt::lightGray, 4.0 / transform.m11()));    // 4 pixel pen size
     p->setBrush(BrushStyle::NoBrush);
