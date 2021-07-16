@@ -51,7 +51,7 @@
         </attributes>
       <direction placement="above">
         <direction-type>
-          <words>LetRing</words>
+          <words font-family="Edwin">LetRing</words>
           </direction-type>
         </direction>
       <direction placement="below">
@@ -76,7 +76,7 @@
     <measure number="2">
       <direction placement="above">
         <direction-type>
-          <words>PalmMute</words>
+          <words font-family="Edwin">PalmMute</words>
           </direction-type>
         </direction>
       <direction placement="below">

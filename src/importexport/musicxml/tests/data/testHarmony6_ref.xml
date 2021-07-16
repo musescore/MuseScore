@@ -68,7 +68,7 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
         <type>whole</type>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>Normal</text>
+          <text font-family="Edwin">Normal</text>
           </lyric>
         </note>
       </measure>
@@ -87,7 +87,7 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
         <type>whole</type>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>Roman</text>
+          <text font-family="Edwin">Roman</text>
           </lyric>
         </note>
       </measure>
@@ -106,7 +106,7 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
         <type>whole</type>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>Nashville</text>
+          <text font-family="Edwin">Nashville</text>
           </lyric>
         </note>
       </measure>
@@ -128,7 +128,7 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
         <type>whole</type>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>Normal</text>
+          <text font-family="Edwin">Normal</text>
           </lyric>
         </note>
       </measure>
@@ -147,7 +147,7 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
         <type>whole</type>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>Roman</text>
+          <text font-family="Edwin">Roman</text>
           </lyric>
         </note>
       </measure>
@@ -166,7 +166,7 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
         <type>whole</type>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>Nashville</text>
+          <text font-family="Edwin">Nashville</text>
           </lyric>
         </note>
       </measure>
@@ -188,7 +188,7 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
         <type>whole</type>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>Normal</text>
+          <text font-family="Edwin">Normal</text>
           </lyric>
         </note>
       </measure>
@@ -207,7 +207,7 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
         <type>whole</type>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>Roman</text>
+          <text font-family="Edwin">Roman</text>
           </lyric>
         </note>
       </measure>
@@ -226,7 +226,7 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
         <type>whole</type>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text>Nashville</text>
+          <text font-family="Edwin">Nashville</text>
           </lyric>
         </note>
       <barline location="right">
