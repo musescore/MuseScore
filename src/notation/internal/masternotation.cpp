@@ -173,7 +173,7 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
 
     setScore(score);
 
-    score->style().checkChordList();
+    score->checkChordList();
 
     Ms::Fraction timesig(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
     score->sigmap()->add(0, timesig);

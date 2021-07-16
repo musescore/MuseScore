@@ -24,6 +24,7 @@
 #define __CHORDLIST_H__
 
 #include <QMap>
+#include "style/style.h"
 
 namespace Ms {
 class XmlWriter;
@@ -259,6 +260,8 @@ class ChordList : public QMap<int, ChordDescription>
     qreal _emag = 1.0, _eadjust = 0.0;
     qreal _mmag = 1.0, _madjust = 0.0;
 
+    bool _customChordList = false; // if true, chordlist will be saved as part of score
+
 public:
     QList<ChordFont> fonts;
     QList<RenderAction> renderListRoot;
@@ -279,7 +282,14 @@ public:
     bool write(const QString&) const;
     bool loaded() const;
     void unload();
+
+    const ChordDescription* description(int id) const;
     ChordSymbol symbol(const QString& s) const { return symbols.value(s); }
+
+    void setCustomChordList(bool t) { _customChordList = t; }
+    bool customChordList() const { return _customChordList; }
+
+    void checkChordList(const MStyle& style);
 };
 }     // namespace Ms
 #endif

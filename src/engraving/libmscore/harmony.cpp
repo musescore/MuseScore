@@ -77,7 +77,7 @@ QString Harmony::harmonyName() const
         hc.add(_degreeList);
         // try to find the chord in chordList
         const ChordDescription* newExtension = 0;
-        const ChordList* cl = score()->style().chordList();
+        const ChordList* cl = score()->chordList();
         for (const ChordDescription& cd : *cl) {
             if (cd.chord == hc && !cd.names.empty()) {
                 newExtension = &cd;
@@ -157,7 +157,7 @@ void Harmony::resolveDegreeList()
 // _descr->chord.print();
 
     // try to find the chord in chordList
-    const ChordList* cl = score()->style().chordList();
+    const ChordList* cl = score()->chordList();
     for (const ChordDescription& cd : *cl) {
         if ((cd.chord == hc) && !cd.names.empty()) {
             qDebug("ResolveDegreeList: found in table as %s", qPrintable(cd.names.front()));
@@ -782,7 +782,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
     }
 
     _userName = s;
-    const ChordList* cl = score()->style().chordList();
+    const ChordList* cl = score()->chordList();
     const ChordDescription* cd = 0;
     if (useLiteral) {
         cd = descr(s);
@@ -1185,7 +1185,7 @@ const ChordDescription* Harmony::fromXml(const QString& kind, const QList<HDegre
     }
 
     QString lowerCaseKind = kind.toLower();
-    const ChordList* cl = score()->style().chordList();
+    const ChordList* cl = score()->chordList();
     for (const ChordDescription& cd : *cl) {
         QString k     = cd.xmlKind;
         QString lowerCaseK = k.toLower();     // required for xmlKind Tristan
@@ -1207,7 +1207,7 @@ const ChordDescription* Harmony::fromXml(const QString& kind, const QList<HDegre
 const ChordDescription* Harmony::fromXml(const QString& kind)
 {
     QString lowerCaseKind = kind.toLower();
-    const ChordList* cl = score()->style().chordList();
+    const ChordList* cl = score()->chordList();
     for (const ChordDescription& cd : *cl) {
         if (lowerCaseKind == cd.xmlKind) {
             return &cd;
@@ -1227,7 +1227,7 @@ const ChordDescription* Harmony::fromXml(const QString& kind, const QString& kin
                                          const QList<HDegree>& dl)
 {
     ParsedChord* pc = new ParsedChord;
-    _textName = pc->fromXml(kind, kindText, symbols, parens, dl, score()->style().chordList());
+    _textName = pc->fromXml(kind, kindText, symbols, parens, dl, score()->chordList());
     _parsedForm = pc;
     const ChordDescription* cd = getDescription(_textName, pc);
     return cd;
@@ -1241,7 +1241,7 @@ const ChordDescription* Harmony::fromXml(const QString& kind, const QString& kin
 
 const ChordDescription* Harmony::descr() const
 {
-    return score()->style().chordDescription(_id);
+    return score()->chordList()->description(_id);
 }
 
 //---------------------------------------------------------
@@ -1253,7 +1253,7 @@ const ChordDescription* Harmony::descr() const
 
 const ChordDescription* Harmony::descr(const QString& name, const ParsedChord* pc) const
 {
-    const ChordList* cl = score()->style().chordList();
+    const ChordList* cl = score()->chordList();
     const ChordDescription* match = 0;
     if (cl) {
         for (const ChordDescription& cd : *cl) {
@@ -1372,7 +1372,7 @@ RealizedHarmony& Harmony::realizedHarmony()
 
 const ChordDescription* Harmony::generateDescription()
 {
-    ChordList* cl = score()->style().chordList();
+    ChordList* cl = score()->chordList();
     ChordDescription cd(_textName);
     cd.complete(_parsedForm, cl);
     // remove parsed chord from description
@@ -1681,7 +1681,7 @@ void Harmony::render(const QString& s, qreal& x, qreal& y)
 void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, int tpc, NoteSpellingType noteSpelling,
                      NoteCaseType noteCase)
 {
-    ChordList* chordList = score()->style().chordList();
+    ChordList* chordList = score()->chordList();
     QStack<PointF> stack;
     int fontIdx    = 0;
     qreal _spatium = spatium();
@@ -1785,7 +1785,7 @@ void Harmony::render()
 {
     int capo = score()->styleI(Sid::capoPosition);
 
-    ChordList* chordList = score()->style().chordList();
+    ChordList* chordList = score()->chordList();
 
     fontList.clear();
     for (const ChordFont& cf : qAsConst(chordList->fonts)) {
@@ -2015,7 +2015,7 @@ const QList<HDegree>& Harmony::degreeList() const
 const ParsedChord* Harmony::parsedForm()
 {
     if (!_parsedForm) {
-        ChordList* cl = score()->style().chordList();
+        ChordList* cl = score()->chordList();
         _parsedForm = new ParsedChord();
         _parsedForm->parse(_textName, cl, false);
     }
