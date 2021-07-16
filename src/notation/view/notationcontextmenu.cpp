@@ -33,6 +33,10 @@ MenuItemList NotationContextMenu::items(const ElementType& elementType) const
         return measureItems();
     case ElementType::PAGE:
         return pageItems();
+    case ElementType::STAFF_TEXT:
+        return staffTextItems();
+    case ElementType::SYSTEM_TEXT:
+        return systemTextItems();
     default:
         break;
     }
@@ -68,6 +72,24 @@ MenuItemList NotationContextMenu::measureItems() const
 {
     MenuItemList items = defaultCopyPasteItems();
     items << makeMenuItem("staff-properties");
+
+    return items;
+}
+
+MenuItemList NotationContextMenu::staffTextItems() const
+{
+    MenuItemList items = elementItems();
+    items << makeSeparator();
+    items << makeMenuItem("staff-text-properties");
+
+    return items;
+}
+
+MenuItemList NotationContextMenu::systemTextItems() const
+{
+    MenuItemList items = elementItems();
+    items << makeSeparator();
+    items << makeMenuItem("system-text-properties");
 
     return items;
 }

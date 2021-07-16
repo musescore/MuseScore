@@ -175,6 +175,7 @@ private:
     void openTransposeDialog();
     void openPartsDialog();
     void openTupletOtherDialog();
+    void openStaffTextPropertiesDialog();
 
     void toggleScoreConfig(ScoreConfigType configType);
     void toggleNavigator();
