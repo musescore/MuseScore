@@ -240,6 +240,7 @@ private slots:
       void tempoTextSpace2() { mxmlImportTestRef("testTempoTextSpace2"); }
       void textLines() { mxmlMscxExportTestRef("testTextLines"); }
       void textOrder() { mxmlImportTestRef("testTextOrder"); }
+      void textQuirkInference() { mxmlImportTestRef("testTextQuirkInference"); }
       void timesig1() { mxmlIoTest("testTimesig1"); }
       void timesig3() { mxmlIoTest("testTimesig3"); }
       void trackHandling() { mxmlIoTest("testTrackHandling"); }
