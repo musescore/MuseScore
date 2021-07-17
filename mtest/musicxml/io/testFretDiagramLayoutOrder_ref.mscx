@@ -145,11 +145,6 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Tempo>
-            <tempo>4</tempo>
-            <followText>1</followText>
-            <text><sym>metNoteHalfUp</sym> <sym>metAugmentationDot</sym> = 80</text>
-            </Tempo>
           <FretDiagram>
             <fretOffset>2</fretOffset>
             <frets>4</frets>
@@ -186,6 +181,11 @@
               <dot>2</dot>
               </string>
             </FretDiagram>
+          <Tempo>
+            <tempo>4</tempo>
+            <followText>1</followText>
+            <text><sym>metNoteHalfUp</sym> <sym>metAugmentationDot</sym> = 80</text>
+            </Tempo>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
