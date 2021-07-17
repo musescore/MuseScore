@@ -5140,7 +5140,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             else if (_e.name() == "stem")
                   stem(stemDir, noStem);
             else if (_e.name() == "type") {
-                  small = _e.attributes().value("size") == "cue" | _e.attributes().value("size") == "grace-cue";
+                  small = (_e.attributes().value("size") == "cue") || (_e.attributes().value("size") == "grace-cue");
                   type = _e.readElementText();
                   }
             else if (_e.name() == "voice")
