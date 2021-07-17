@@ -329,6 +329,11 @@
           </voice>
         </Measure>
       <Measure>
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>segno</sym></text>
+          <label>segno</label>
+          </Marker>
         <voice>
           <Harmony>
             <name>N.C.</name>
@@ -405,6 +410,13 @@
           </voice>
         </Measure>
       <Measure>
+        <Jump>
+          <style>Repeat Text Right</style>
+          <text><b>D.<sym>segno</sym>. al Coda</b></text>
+          <jumpTo>segno</jumpTo>
+          <playUntil>coda</playUntil>
+          <continueAt>codab</continueAt>
+          </Jump>
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -602,6 +614,11 @@
           </voice>
         </Measure>
       <Measure>
+        <Marker>
+          <style>Repeat Text Right</style>
+          <text><b>To Coda <sym>coda</sym></b></text>
+          <label>coda</label>
+          </Marker>
         <voice>
           <Beam>
             <StemDirection>up</StemDirection>
@@ -662,6 +679,11 @@
           </voice>
         </Measure>
       <Measure>
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><b><sym>coda</sym> Coda</b></text>
+          <label>codab</label>
+          </Marker>
         <voice>
           <Chord>
             <BeamMode>no</BeamMode>
