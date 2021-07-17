@@ -2907,6 +2907,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
 
       handleRepeats(measure, track, tick + _offset);
+      handleNmiCmi(measure, track, tick + _offset, delayedDirections);
 
       // fix for Sibelius 7.1.3 (direct export) which creates metronomes without <sound tempo="..."/>:
       // if necessary, use the value calculated by metronome()
@@ -3699,6 +3700,26 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track, c
                   measure->add(tb);
                   }
             }
+      }
+
+//---------------------------------------------------------
+//   handleNmiCmi
+//    Dolet strangely exports N.C. chord symbols as the
+//    text direction "NmiCmi".
+//---------------------------------------------------------
+
+void MusicXMLParserDirection::handleNmiCmi(Measure* measure, const int track, const Fraction tick, DelayedDirectionsList& delayedDirections)
+      {
+            if (!_wordsText.contains("NmiCmi"))
+                  return;
+            Harmony* ha = new Harmony(_score);
+            ha->setRootTpc(Tpc::TPC_INVALID);
+            ha->setId(-1);
+            ha->setTextName("N.C.");
+            ha->setTrack(track);
+            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), ha, track, "above", measure, tick, _isBold);
+            delayedDirections.push_back(delayedDirection);
+            _wordsText.replace("NmiCmi", "");      
       }
 
 //---------------------------------------------------------
