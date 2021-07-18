@@ -269,8 +269,11 @@ public:
 class TextBase : public Element
 {
     // sorted by size to allow for most compact memory layout
+    M_PROPERTY(FontStyle,  fontStyle,              setFontStyle)
     M_PROPERTY(Align,      align,                  setAlign)
     M_PROPERTY(FrameType,  frameType,              setFrameType)
+    M_PROPERTY(QString,    family,                 setFamily)
+    M_PROPERTY(qreal,      size,                   setSize)
     M_PROPERTY(qreal,      textLineSpacing,        setTextLineSpacing)
     M_PROPERTY(mu::draw::Color,      bgColor,                setBgColor)
     M_PROPERTY(mu::draw::Color,      frameColor,             setFrameColor)
@@ -349,14 +352,6 @@ public:
 
     bool empty() const { return xmlText().isEmpty(); }
     void clear() { setXmlText(QString()); }
-
-    FontStyle fontStyle() const;
-    QString family() const;
-    qreal size() const;
-
-    void setFontStyle(const FontStyle& val);
-    void setFamily(const QString& val);
-    void setSize(const qreal& val);
 
     bool layoutToParentWidth() const { return _layoutToParentWidth; }
     void setLayoutToParentWidth(bool v) { _layoutToParentWidth = v; }

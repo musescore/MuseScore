@@ -196,9 +196,9 @@ void TextCursor::clearSelection()
 
 void TextCursor::init()
 {
-    _format.setFontFamily("Edwin");
-    _format.setFontSize(12.0);
-    _format.setStyle(FontStyle::Normal);
+    _format.setFontFamily(_text->family());
+    _format.setFontSize(_text->size());
+    _format.setStyle(_text->fontStyle());
     _format.setPreedit(false);
     _format.setValign(VerticalAlignment::AlignNormal);
 }
@@ -1645,6 +1645,7 @@ TextBase::TextBase(Score* s, Tid tid, ElementFlags f)
     setFamily("Edwin");
     setSize(10.0);
     setFontStyle(FontStyle::Normal);
+    _cursor->init();
     _textLineSpacing        = 1.0;
 
     _tid                    = tid;
@@ -1675,6 +1676,9 @@ TextBase::TextBase(const TextBase& st)
     hexState                     = -1;
 
     _tid                         = st._tid;
+    _family                      = st._family;
+    _size                        = st._size;
+    _fontStyle                   = st._fontStyle;
     _textLineSpacing             = st._textLineSpacing;
     _bgColor                     = st._bgColor;
     _frameColor                  = st._frameColor;
@@ -1785,6 +1789,7 @@ void TextBase::createLayout()
 {
     _layout.clear();  // deletes the text fragments so we lose all formatting information
     TextCursor cursor = *_cursor;
+    cursor.init();
 
     int state = 0;
     QString token;
@@ -2119,38 +2124,6 @@ qreal TextBase::lineHeight() const
 qreal TextBase::baseLine() const
 {
     return fontMetrics().ascent();
-}
-
-FontStyle TextBase::fontStyle() const
-{
-    return _cursor->format()->style();
-}
-
-QString TextBase::family() const
-{
-    return _cursor->format()->fontFamily();
-}
-
-qreal TextBase::size() const
-{
-    return _cursor->format()->fontSize();
-}
-
-void TextBase::setFontStyle(const FontStyle& val)
-{
-    _cursor->setFormat(FormatId::Bold, val & FontStyle::Bold);
-    _cursor->setFormat(FormatId::Italic, val & FontStyle::Italic);
-    _cursor->setFormat(FormatId::Underline, val & FontStyle::Underline);
-}
-
-void TextBase::setFamily(const QString& val)
-{
-    _cursor->setFormat(FormatId::FontFamily, val);
-}
-
-void TextBase::setSize(const qreal& val)
-{
-    _cursor->setFormat(FormatId::FontSize, val);
 }
 
 //---------------------------------------------------------
@@ -2978,7 +2951,7 @@ bool TextBase::setProperty(Pid pid, const QVariant& v)
         rv = Element::setProperty(pid, v);
         break;
     }
-
+    layoutInvalid = true;
     triggerLayout();
 
     return rv;
