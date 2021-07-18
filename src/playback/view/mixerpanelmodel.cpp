@@ -191,7 +191,7 @@ MixerChannelItem* MixerPanelModel::buildChannelItem(const audio::TrackSequenceId
 
 MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
 {
-    MixerChannelItem* item = new MixerChannelItem(this, /*isMaster*/ true);
+    MixerChannelItem* item = new MixerChannelItem(this, /*trackId*/ -1, /*isMaster*/ true);
 
     item->setTitle(qtrc("playback", "Master"));
 
