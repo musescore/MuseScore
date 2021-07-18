@@ -30,7 +30,7 @@ Dial {
 
     property int valueScale: 100
 
-    width: internal.radius * 2
+    width: prv.radius * 2
     height: width
 
     from: -root.valueScale
@@ -38,32 +38,36 @@ Dial {
     value: 0
 
     QtObject {
-        id: internal
+        id: prv
 
-        property real radius: 16
+        readonly property real radius: 16
         readonly property bool reversed: root.angle < 0
 
-        property real handlerHeight: 8
-        property real handlerWidth: 2
+        readonly property real handlerHeight: 8
+        readonly property real handlerWidth: 2
 
-        property real outerArcLineWidth: 3
-        property real innerArcLineWidth: 2
+        readonly property real outerArcLineWidth: 3
+        readonly property real innerArcLineWidth: 2
 
-        property color valueArcColor: ui.theme.accentColor
-        property color outerArcColor: Utils.colorWithAlpha(ui.theme.buttonColor, 0.7)
-        property color innerArcColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
+        readonly property color valueArcColor: ui.theme.accentColor
+        readonly property color outerArcColor: Utils.colorWithAlpha(ui.theme.buttonColor, 0.7)
+        readonly property color innerArcColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
+
+        onValueArcColorChanged: { backgroundCanvas.requestPaint() }
+        onOuterArcColorChanged: { backgroundCanvas.requestPaint() }
+        onInnerArcColorChanged: { backgroundCanvas.requestPaint() }
     }
 
     background: Canvas {
         id: backgroundCanvas
 
-        width: internal.radius * 2
+        width: prv.radius * 2
         height: width
 
         antialiasing: true
 
         onPaint: {
-            var ctx = root.context
+            var ctx = backgroundCanvas.context
 
             if (!ctx) {
                 ctx = getContext("2d")
@@ -71,33 +75,33 @@ Dial {
             }
 
             ctx.clearRect(0, 0, canvasSize.width, canvasSize.height)
-            ctx.lineWidth = internal.outerArcLineWidth
+            ctx.lineWidth = prv.outerArcLineWidth
 
-            ctx.strokeStyle = internal.outerArcColor
+            ctx.strokeStyle = prv.outerArcColor
             ctx.beginPath()
-            ctx.arc(width/2, height/2, internal.radius - internal.outerArcLineWidth, -140 * (Math.PI/180) - Math.PI/2, 140 * (Math.PI/180) - Math.PI/2, false)
+            ctx.arc(width/2, height/2, prv.radius - prv.outerArcLineWidth, -140 * (Math.PI/180) - Math.PI/2, 140 * (Math.PI/180) - Math.PI/2, false)
             ctx.stroke()
 
-            ctx.strokeStyle = internal.valueArcColor
+            ctx.strokeStyle = prv.valueArcColor
             ctx.beginPath()
-            ctx.arc(width/2, height/2, internal.radius - internal.outerArcLineWidth, -Math.PI/2, angle * (Math.PI/180) - Math.PI/2, internal.reversed)
+            ctx.arc(width/2, height/2, prv.radius - prv.outerArcLineWidth, -Math.PI/2, root.angle * (Math.PI/180) - Math.PI/2, prv.reversed)
             ctx.stroke()
 
-            ctx.lineWidth = internal.innerArcLineWidth
-            ctx.strokeStyle = internal.innerArcColor
+            ctx.lineWidth = prv.innerArcLineWidth
+            ctx.strokeStyle = prv.innerArcColor
             ctx.beginPath()
-            ctx.arc(width/2, height/2, internal.radius - (internal.outerArcLineWidth + internal.innerArcLineWidth), 0, Math.PI * 2, false)
+            ctx.arc(width/2, height/2, prv.radius - (prv.outerArcLineWidth + prv.innerArcLineWidth), 0, Math.PI * 2, false)
             ctx.stroke()
         }
     }
 
     handle: Rectangle {
-        x: internal.radius - internal.handlerWidth / 2
-        y: internal.outerArcLineWidth + internal.innerArcLineWidth + 2
+        x: prv.radius - prv.handlerWidth / 2
+        y: prv.outerArcLineWidth + prv.innerArcLineWidth + 2
 
-        height: internal.handlerHeight
-        width: internal.handlerWidth
-        radius: internal.handlerWidth / 2
+        height: prv.handlerHeight
+        width: prv.handlerWidth
+        radius: prv.handlerWidth / 2
 
         color: ui.theme.fontPrimaryColor
         antialiasing: true
