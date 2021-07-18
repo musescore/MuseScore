@@ -40,39 +40,45 @@ Slider {
     QtObject {
         id: prv
 
-        property real rulerLineWidth: 2
-        property real rulerLineHeight: root.height - prv.handleHeight
+        readonly property real rulerLineWidth: 2
+        readonly property real rulerLineHeight: root.height - prv.handleHeight
 
         // value ranges
-        property real lowAccuracyEdge: -12
-        property real lowAccuracyDivisionPixels: (prv.rulerLineHeight / 2) / prv.lowAccuracyRange
-        property real lowAccuracyRange: Math.abs(root.from) - Math.abs(prv.lowAccuracyEdge)
+        readonly property real lowAccuracyEdge: -12
+        readonly property real lowAccuracyDivisionPixels: (prv.rulerLineHeight / 2) / prv.lowAccuracyRange
+        readonly property real lowAccuracyRange: Math.abs(root.from) - Math.abs(prv.lowAccuracyEdge)
 
-        property real highAccuracyRange: Math.abs(prv.lowAccuracyEdge) + Math.abs(root.to)
-        property real highAccuracyDivisionPixels: (prv.rulerLineHeight / 2) / highAccuracyRange
+        readonly property real highAccuracyRange: Math.abs(prv.lowAccuracyEdge) + Math.abs(root.to)
+        readonly property real highAccuracyDivisionPixels: (prv.rulerLineHeight / 2) / highAccuracyRange
 
-        property int fullValueRangeLength: Math.abs(root.from) + Math.abs(root.to)
+        readonly property int fullValueRangeLength: Math.abs(root.from) + Math.abs(root.to)
 
-        property real unitsTextWidth: 12
-        property color unitTextColor: ui.theme.fontPrimaryColor
-        property string unitTextFont: {
+        readonly property real unitsTextWidth: 12
+        readonly property color unitTextColor: ui.theme.fontPrimaryColor
+        readonly property string unitTextFont: {
             var pxSize = String('8px')
             var family = String('\'' + ui.theme.bodyFont.family + '\'')
 
             return pxSize + ' ' + family
         }
 
-        // strokes
-        property real strokeHorizontalMargin: 2
-        property real longStrokeHeight: 1
-        property real longStrokeWidth: 8
-        property color longStrokeColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
-        property real shortStrokeHeight: 1
-        property real shortStrokeWidth: 4
-        property color shortStrokeColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.3)
+        onUnitTextColorChanged: { bgCanvas.requestPaint() }
+        onUnitTextFontChanged: { bgCanvas.requestPaint() }
 
-        property real handleWidth: 16
-        property real handleHeight: 32
+        // strokes
+        readonly property real strokeHorizontalMargin: 2
+        readonly property real longStrokeHeight: 1
+        readonly property real longStrokeWidth: 8
+        readonly property color longStrokeColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
+        readonly property real shortStrokeHeight: 1
+        readonly property real shortStrokeWidth: 4
+        readonly property color shortStrokeColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.3)
+
+        onLongStrokeColorChanged: { bgCanvas.requestPaint() }
+        onShortStrokeColorChanged: { bgCanvas.requestPaint() }
+
+        readonly property real handleWidth: 16
+        readonly property real handleHeight: 32
     }
 
     background: Canvas {
@@ -134,19 +140,21 @@ Slider {
         }
 
         onPaint: {
-            var ctx = root.context
+            var ctx = bgCanvas.context
 
             if (!ctx) {
                 ctx = getContext("2d")
+
                 ctx.translate(0, height)
                 ctx.rotate(3 * (Math.PI/2))
 
                 ctx.textAlign = "end"
-                ctx.font = prv.unitTextFont
             }
 
-            ctx.fillStyle = Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
+            ctx.clearRect(0, 0, bgCanvas.width, bgCanvas.height)
+            ctx.font = prv.unitTextFont
 
+            ctx.fillStyle = Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
             ctx.fillRect(prv.handleHeight/2, // vertical pos
                          bgCanvas.width - prv.handleWidth/2 - prv.rulerLineWidth/2, // horizontal pos
                          prv.rulerLineHeight,
