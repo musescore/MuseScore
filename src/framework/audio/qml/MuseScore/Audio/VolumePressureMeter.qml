@@ -42,45 +42,53 @@ Canvas {
         id: prv
 
         property var gradient: null
-        property int overloadHeight: 4
+        readonly property int overloadHeight: 4
 
-        property real indicatorHeight: 140
-        property real indicatorWidth: 6
+        readonly property real indicatorHeight: 140
+        readonly property real indicatorWidth: 6
 
         // value ranges
-        property int fullValueRangeLength: Math.abs(root.minDisplayedVolumePressure) + Math.abs(root.maxDisplayedVolumePressure)
-        property real divisionPixels: (prv.indicatorHeight - prv.overloadHeight) / fullValueRangeLength
+        readonly property int fullValueRangeLength: Math.abs(root.minDisplayedVolumePressure) + Math.abs(root.maxDisplayedVolumePressure)
+        readonly property real divisionPixels: (prv.indicatorHeight - prv.overloadHeight) / fullValueRangeLength
 
-        property real unitsTextWidth: 12
-        property color unitTextColor: ui.theme.fontPrimaryColor
-        property string unitTextFont: {
+        readonly property real unitsTextWidth: 12
+        readonly property color unitTextColor: ui.theme.fontPrimaryColor
+        readonly property string unitTextFont: {
             var pxSize = String('8px')
             var family = String('\'' + ui.theme.bodyFont.family + '\'')
 
             return pxSize + ' ' + family
         }
 
+        onUnitTextColorChanged: { prv.rulerNeedsPaint = true; root.requestPaint() }
+        onUnitTextFontChanged: { prv.rulerNeedsPaint = true; root.requestPaint() }
+
         // strokes
-        property real strokeHorizontalMargin: 2
-        property real longStrokeHeight: 1
-        property real longStrokeWidth: 5
-        property color longStrokeColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
-        property real shortStrokeHeight: 1
-        property real shortStrokeWidth: 2
-        property color shortStrokeColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.3)
+        readonly property real strokeHorizontalMargin: 2
+        readonly property real longStrokeHeight: 1
+        readonly property real longStrokeWidth: 5
+        readonly property color longStrokeColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
+        readonly property real shortStrokeHeight: 1
+        readonly property real shortStrokeWidth: 2
+        readonly property color shortStrokeColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.3)
+
+        onLongStrokeColorChanged: { prv.rulerNeedsPaint = true; root.requestPaint() }
+        onShortStrokeColorChanged: { prv.rulerNeedsPaint = true; root.requestPaint() }
+
+        property bool rulerNeedsPaint: true
     }
 
     function drawRuler(ctx, originVPos, originHPos, fullStep, smallStep, strokeHeight, strokeWidth) {
+        ctx.clearRect(0, prv.indicatorWidth, root.height, root.width - prv.indicatorWidth)
+        ctx.font = prv.unitTextFont
+
         var currentStrokeVPos = 0
 
         for (var i = 0; i <= prv.fullValueRangeLength; i+=smallStep) {
-
-            var division = prv.divisionPixels
-
             if (i == 0) {
                 currentStrokeVPos = originVPos
             } else {
-                currentStrokeVPos += division * smallStep
+                currentStrokeVPos += prv.divisionPixels * smallStep
             }
 
             if (i % fullStep) {
@@ -92,7 +100,6 @@ Canvas {
 
             } else {
                 ctx.fillStyle = prv.longStrokeColor
-
                 ctx.fillRect(currentStrokeVPos,
                              originHPos,
                              prv.longStrokeHeight,
@@ -107,6 +114,8 @@ Canvas {
                 ctx.restore()
             }
         }
+
+        prv.rulerNeedsPaint = false
     }
 
     onPaint: {
@@ -118,12 +127,6 @@ Canvas {
             ctx.rotate(3 * (Math.PI/2))
 
             ctx.textAlign = "start"
-            ctx.font = prv.unitTextFont
-
-            var originVPos = prv.overloadHeight
-            var originHPos = prv.indicatorWidth + prv.strokeHorizontalMargin
-
-            drawRuler(ctx, originVPos, originHPos, 6/*fullStep*/, 3/*smallStep*/)
         }
 
         ctx.clearRect(0, 0, root.height, prv.indicatorWidth)
@@ -143,6 +146,13 @@ Canvas {
 
         ctx.fillStyle = prv.gradient
         ctx.fillRect(prv.overloadHeight, 0, prv.divisionPixels * (prv.fullValueRangeLength - Math.abs(root.currentVolumePressure)), prv.indicatorWidth)
+
+        if (prv.rulerNeedsPaint) {
+            var originVPos = prv.overloadHeight
+            var originHPos = prv.indicatorWidth + prv.strokeHorizontalMargin
+
+            drawRuler(ctx, originVPos, originHPos, 6/*fullStep*/, 3/*smallStep*/)
+        }
     }
 
     onCurrentVolumePressureChanged: {
@@ -150,6 +160,7 @@ Canvas {
     }
 
     Component.onCompleted: {
+        prv.rulerNeedsPaint = true
         requestPaint()
     }
 }
