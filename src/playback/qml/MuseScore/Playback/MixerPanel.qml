@@ -90,6 +90,20 @@ Item {
                     }
                 }
             }
+
+            Rectangle {
+                width: parent.width
+                height: 22
+
+                color: Utils.colorWithAlpha(ui.theme.accentColor, 0.5)
+                border.color: ui.theme.accentColor
+                border.width: 1
+
+                StyledTextLabel {
+                    anchors.centerIn: parent
+                    text: item.title
+                }
+            }
         }
     }
 }
