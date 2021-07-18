@@ -167,21 +167,27 @@ Slider {
         implicitWidth: prv.handleWidth
         implicitHeight: prv.handleHeight
         radius: 2
-        color: ui.theme.fontPrimaryColor
-        border.color: "#00000075"
+        color: "white"
 
         Rectangle {
-            anchors {
-                verticalCenter: parent.verticalCenter
-                left: parent.left
-                right: parent.right
-                leftMargin: 2
-                rightMargin: 2
-            }
+            anchors.fill: parent
+            radius: 2
 
-            height: 1
-            radius: prv.handleHeight / 2
-            color: "#000000"
+            color: Utils.colorWithAlpha(ui.theme.popupBackgroundColor, 0.1)
+            border.color: Qt.rgba(0, 0, 0, 0.7)
+            border.width: 1
+
+            Rectangle {
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.leftMargin: 3
+                anchors.rightMargin: 3
+
+                height: 1
+                radius: height / 2
+                color: "#000000"
+            }
         }
     }
 
