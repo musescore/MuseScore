@@ -143,7 +143,7 @@ bool MTest::saveScore(Score* score, const QString& name) const
     if (!file.open(QIODevice::ReadWrite)) {
         return false;
     }
-    return score->Score::writeScore(&file, false);
+    return score->writeScore(&file, false);
 }
 
 //---------------------------------------------------------

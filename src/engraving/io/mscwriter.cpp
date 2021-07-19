@@ -119,6 +119,11 @@ bool MscWriter::addFileData(const QString& fileName, const QByteArray& data)
     return true;
 }
 
+void MscWriter::writeStyleFile(const QByteArray& data)
+{
+    addFileData("score_style.mss", data);
+}
+
 void MscWriter::writeScoreFile(const QByteArray& data)
 {
     QString completeBaseName = QFileInfo(m_params.filePath).completeBaseName();
@@ -127,6 +132,11 @@ void MscWriter::writeScoreFile(const QByteArray& data)
     }
     QString fileName = completeBaseName + ".mscx";
     addFileData(fileName, data);
+}
+
+void MscWriter::writeChordListFile(const QByteArray& data)
+{
+    addFileData("chordlist.xml", data);
 }
 
 void MscWriter::writeThumbnailFile(const QByteArray& data)

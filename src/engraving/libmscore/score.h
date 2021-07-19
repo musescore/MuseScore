@@ -706,6 +706,8 @@ public:
     void write(XmlWriter&, bool onlySelection);
     void writeMovement(XmlWriter&, bool onlySelection);
 
+    bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection = false);
+
     QList<Staff*>& staves() { return _staves; }
     const QList<Staff*>& staves() const { return _staves; }
     int nstaves() const { return _staves.size(); }
@@ -876,7 +878,6 @@ public:
     void setShowInstrumentNames(bool v) { _showInstrumentNames = v; }
     void setShowVBox(bool v) { _showVBox = v; }
 
-    bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection = false);
     bool writeMscz(mu::engraving::MscWriter& msczWriter, bool onlySelection = false, bool createThumbnail = true);
 
     void print(mu::draw::Painter* printer, int page);
@@ -1414,7 +1415,8 @@ class MasterScore : public Score
     MasterScore(std::shared_ptr<mu::engraving::EngravingProject> project);
     MasterScore(const MStyle&, std::shared_ptr<mu::engraving::EngravingProject> project);
 
-    FileError loadMscz(const mu::engraving::MscReader& msczFile, bool ignoreVersionError);
+    FileError loadMscz(const mu::engraving::MscReader& mscReader, bool ignoreVersionError);
+    bool writeMscz(mu::engraving::MscWriter& mscWriter, bool onlySelection = false, bool createThumbnail = true);
 
 public:
 

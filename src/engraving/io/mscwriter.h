@@ -54,7 +54,9 @@ public:
     void close();
     bool isOpened() const;
 
+    void writeStyleFile(const QByteArray& data);
     void writeScoreFile(const QByteArray& data);
+    void writeChordListFile(const QByteArray& data);
     void writeThumbnailFile(const QByteArray& data);
     void addImageFile(const QString& fileName, const QByteArray& data);
     void writeAudioFile(const QByteArray& data);
