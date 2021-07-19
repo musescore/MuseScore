@@ -60,7 +60,6 @@ StyledPopupView {
 
     signal addElementsRequested(var mimeDataList)
 
-
     navigation.name: "MoreElementsPopup"
     navigation.direction: NavigationPanel.Both
 
