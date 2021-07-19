@@ -8,6 +8,8 @@
       <durationType>quarter</durationType>
       <Spanner type="Slur">
         <Slur>
+          <stemArr>0</stemArr>
+          <ticks_f>1/4</ticks_f>
           </Slur>
         <next>
           <location>
@@ -38,6 +40,8 @@
       <durationType>quarter</durationType>
       <Spanner type="Slur">
         <Slur>
+          <stemArr>0</stemArr>
+          <ticks_f>1/4</ticks_f>
           </Slur>
         <next>
           <location>

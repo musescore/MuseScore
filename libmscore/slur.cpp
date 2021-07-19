@@ -460,6 +460,12 @@ bool SlurSegment::isEdited() const
       return false;
       }
 
+Slur::Slur(const Slur& s)
+   : SlurTie(s)
+      {
+      _sourceStemArrangement = s._sourceStemArrangement;
+      }
+
 //---------------------------------------------------------
 //   fixArticulations
 //---------------------------------------------------------
@@ -936,6 +942,16 @@ Slur::Slur(Score* s)
       }
 
 //---------------------------------------------------------
+//   calcStemArrangement
+//---------------------------------------------------------
+
+int calcStemArrangement(Element* start, Element* end)
+      {
+      return (start && toChord(start)->stem() && toChord(start)->stem()->up() ? 2 : 0)
+           + (end && end->isChord() && toChord(end)->stem() && toChord(end)->stem()->up() ? 4 : 0);
+      }
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -948,8 +964,24 @@ void Slur::write(XmlWriter& xml) const
       if (!xml.canWrite(this))
             return;
       xml.stag(this);
+      if (xml.clipboardmode())
+            xml.tag("stemArr", calcStemArrangement(startElement(), endElement()));
       SlurTie::writeProperties(xml);
       xml.etag();
+      }
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Slur::readProperties(XmlReader& e)
+      {
+      const QStringRef& tag(e.name());
+      if (tag == "stemArr") {
+            _sourceStemArrangement = e.readInt();
+            return true;
+            }
+      return SlurTie::readProperties(e);
       }
 
 //---------------------------------------------------------
@@ -1039,6 +1071,15 @@ SpannerSegment* Slur::layoutSystem(System* system)
                               }
                         Chord* c1 = startCR()->isChord() ? toChord(startCR()) : 0;
                         Chord* c2 = endCR()->isChord()   ? toChord(endCR())   : 0;
+
+                        if (_sourceStemArrangement != -1) {
+                              if (_sourceStemArrangement != calcStemArrangement(c1, c2)) {
+                                    // copy & paste from incompatible stem arrangement, so reset bezier points
+                                    for (int g = 0; g < (int)Ms::Grip::GRIPS; ++g) {
+                                          slurSegment->ups((Ms::Grip)g) = UP();
+                                          }
+                                    }
+                              }
 
                         if (c1 && c1->beam() && c1->beam()->cross()) {
                               // TODO: stem direction is not finalized, so we cannot use it here

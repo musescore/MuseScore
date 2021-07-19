@@ -626,17 +626,15 @@ Element* ChordRest::drop(EditData& data)
                   }
                   break;
 
-            case ElementType::HAIRPIN:
-                  {
-                  Hairpin* hairpin = toHairpin(e);
-                  hairpin->setTick(tick());
-                  hairpin->setTrack(track());
-                  hairpin->setTrack2(track());
-                  score()->undoAddElement(hairpin);
-                  }
-                  return e;
-
             default:
+                  if (e->isSpanner()) {
+                        Spanner* spanner = toSpanner(e);
+                        spanner->setTick(tick());
+                        spanner->setTrack(track());
+                        spanner->setTrack2(track());
+                        score()->undoAddElement(spanner);
+                        return e;
+                        }
                   qDebug("cannot drop %s", e->name());
                   delete e;
                   return 0;
