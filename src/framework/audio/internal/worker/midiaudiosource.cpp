@@ -255,9 +255,7 @@ void MidiAudioSource::resolveSynth(const SynthName& synthName)
         return;
     }
 
-    m_synth = std::make_shared<FluidSynth>();
-    m_synth->init();
-    //m_synth->addSoundFonts(soundFontsProvider()->soundFontPathsForSynth(synthName));
+    m_synth = synthFactory()->createDefault();
 }
 
 void MidiAudioSource::seek(const msecs_t newPositionMsecs)

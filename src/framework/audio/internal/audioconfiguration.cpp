@@ -46,8 +46,7 @@ static const Settings::Key USER_SOUNDFONTS_PATH("midi", "application/paths/mySou
 
 static const Settings::Key SHOW_CONTROLS_IN_MIXER("midi", "io/midi/showControlsInMixer");
 
-//! FIXME Temporary for tests
-static const std::string DEFAULT_FLUID_SOUNDFONT = "MuseScore_General.sf3";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
+static const std::string DEFAULT_SOUND_FONT_NAME = "sound/MuseScore_General.sf3";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
 
 void AudioConfiguration::init()
 {
@@ -118,13 +117,18 @@ void AudioConfiguration::setIsShowControlsInMixer(bool show)
     settings()->setSharedValue(SHOW_CONTROLS_IN_MIXER, Val(show));
 }
 
+SoundFontPath AudioConfiguration::defaultSoundFontPath() const
+{
+    return globalConfiguration()->appDataPath() + DEFAULT_SOUND_FONT_NAME;
+}
+
 const SynthesizerState& AudioConfiguration::defaultSynthesizerState() const
 {
     static SynthesizerState state;
     if (state.isNull()) {
         SynthesizerState::Group gf;
         gf.name = "Fluid";
-        gf.vals.push_back(SynthesizerState::Val(SynthesizerState::ValID::SoundFontID, DEFAULT_FLUID_SOUNDFONT));
+        gf.vals.push_back(SynthesizerState::Val(SynthesizerState::ValID::SoundFontID, DEFAULT_SOUND_FONT_NAME));
         state.groups.insert({ gf.name, std::move(gf) });
     }
 

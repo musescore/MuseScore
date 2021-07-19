@@ -66,9 +66,6 @@ mu::Ret AudioEngine::init(IAudioBufferPtr bufferPtr)
     m_buffer = std::move(bufferPtr);
     m_buffer->setSource(m_mixer->mixedSource());
 
-    m_synthesizerController = std::make_shared<SynthesizerController>(synthesizersRegister(), soundFontsProvider());
-    m_synthesizerController->init();
-
     m_inited = true;
 
     return make_ret(Ret::Code::Ok);

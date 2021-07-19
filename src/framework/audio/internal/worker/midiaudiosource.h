@@ -31,16 +31,15 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "isynthesizersregister.h"
-#include "isoundfontsprovider.h"
 #include "midi/imidioutport.h"
+
+#include "isynthfactory.h"
 #include "audiotypes.h"
 
 namespace mu::audio {
 class MidiAudioSource : public IAudioSource, public async::Asyncable
 {
-    INJECT(audio, synth::ISynthesizersRegister, synthesizersRegister)
-    INJECT(audio, synth::ISoundFontsProvider, soundFontsProvider)
+    INJECT(audio, synth::ISynthFactory, synthFactory)
     INJECT(audio, midi::IMidiOutPort, midiOutPort)
 
 public:
