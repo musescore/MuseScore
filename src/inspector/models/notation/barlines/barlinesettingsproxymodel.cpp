@@ -19,35 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+#include "barlinesettingsproxymodel.h"
 
-import "../../common"
-import "internal"
+#include "translation.h"
 
-StyledPopupView {
-    id: root
+#include "barlinesettingsmodel.h"
+#include "../staffs/staffsettingsmodel.h"
 
-    property QtObject model: null
+using namespace mu::inspector;
 
-    contentHeight: contentColumn.implicitHeight
+BarlineSettingsProxyModel::BarlineSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorProxyModel(parent)
+{
+    setModelType(InspectorModelType::TYPE_BARLINE);
+    setTitle(qtrc("inspector", "Barline"));
+    setIcon(ui::IconCode::Code::SECTION_BREAK);
 
-    Column {
-        id: contentColumn
-
-        width: parent.width
-
-        spacing: 12
-
-        BracketPopupSection {
-             intBracketProperty: model ? model.bracketColumnPosition : null
-             titleText: qsTrc("inspector", "Column")
-        }
-
-        BracketPopupSection {
-             intBracketProperty: model ? model.bracketSpanStaves : null
-             titleText: qsTrc("inspector", "Span")
-        }
-    }
+    addModel(new BarlineSettingsModel(this, repository));
+    addModel(new StaffSettingsModel(this, repository));
 }

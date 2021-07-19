@@ -30,7 +30,8 @@ class NoteSettingsProxyModel : public AbstractInspectorProxyModel
     Q_OBJECT
 
 public:
-    explicit NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository);
+    explicit NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository,
+                                    InspectorModelType preferedSubModelType = InspectorModelType::TYPE_UNDEFINED);
 };
 }
 

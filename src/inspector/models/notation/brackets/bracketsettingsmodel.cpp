@@ -33,6 +33,7 @@ BracketSettingsModel::BracketSettingsModel(QObject* parent, IElementRepositorySe
 {
     setModelType(InspectorModelType::TYPE_BRACKET);
     setTitle(qtrc("inspector", "Bracket"));
+    setIcon(ui::IconCode::Code::BRACKET);
     createProperties();
 }
 

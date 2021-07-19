@@ -26,6 +26,7 @@
 
 #include "models/abstractinspectormodel.h"
 #include "models/inspectorlistmodel.h"
+#include "models/inspectormodelcreator.h"
 
 #include "view/widgets/fretcanvas.h"
 #include "view/widgets/gridcanvas.h"
@@ -55,6 +56,9 @@
 #include "types/tremolotypes.h"
 
 using namespace mu::inspector;
+using namespace mu::modularity;
+
+static std::shared_ptr<InspectorModelCreator> s_inspectorModelCreator = std::make_shared<InspectorModelCreator>();
 
 static void inspector_init_qrc()
 {
@@ -64,6 +68,11 @@ static void inspector_init_qrc()
 std::string InspectorModule::moduleName() const
 {
     return "inspector";
+}
+
+void InspectorModule::registerExports()
+{
+    ioc()->registerExport<IInspectorModelCreator>(moduleName(), s_inspectorModelCreator);
 }
 
 void InspectorModule::registerResources()

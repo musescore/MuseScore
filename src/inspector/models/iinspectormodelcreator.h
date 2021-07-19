@@ -19,23 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import QtQuick.Controls 1.5
-import MuseScore.UiComponents 1.0
-import "../../common"
-import "internal"
+#ifndef MU_INSPECTOR_IINSPECTORMODELCREATOR_H
+#define MU_INSPECTOR_IINSPECTORMODELCREATOR_H
 
-StyledPopupView {
-    id: root
+#include "modularity/imoduleexport.h"
 
-    property alias model: crescendoTabPanel.model
+#include "abstractinspectormodel.h"
 
-    contentHeight: crescendoTabPanel.implicitHeight
+namespace mu::inspector {
+class IInspectorModelCreator : MODULE_EXPORT_INTERFACE
+{
+    INTERFACE_ID(IInspectorModelCreator)
 
-    CrescendoTabPanel {
-        id: crescendoTabPanel
+public:
+    virtual ~IInspectorModelCreator() = default;
 
-        width: parent.width
-    }
+    virtual AbstractInspectorModel* newInspectorModel(AbstractInspectorModel::InspectorModelType modelType, QObject* parent,
+                                                      IElementRepositoryService* repository) const = 0;
+};
 }
+
+#endif // MU_INSPECTOR_IINSPECTORMODELCREATOR_H

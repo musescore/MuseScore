@@ -31,6 +31,7 @@ FretDiagramSettingsModel::FretDiagramSettingsModel(QObject* parent, IElementRepo
 {
     setModelType(InspectorModelType::TYPE_FRET_DIAGRAM);
     setTitle(qtrc("inspector", "Fretboard Diagram"));
+    setIcon(ui::IconCode::Code::FRETBOARD_DIAGRAM);
     createProperties();
 }
 

@@ -30,12 +30,13 @@
 
 using namespace mu::inspector;
 
-NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorProxyModel(parent)
+NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository,
+                                               InspectorModelType preferedSubModelType)
+    : AbstractInspectorProxyModel(parent, preferedSubModelType)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION);
     setModelType(InspectorModelType::TYPE_NOTE);
     setTitle(qtrc("inspector", "Note"));
+    setIcon(ui::IconCode::Code::MUSIC_NOTES);
 
     addModel(new StemSettingsModel(this, repository));
     addModel(new NoteheadSettingsModel(this, repository));
