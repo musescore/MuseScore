@@ -1154,7 +1154,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
         if (idx != m_selectedIdx) {
             // show voice colors for notes
             if (el->isChord()) {
-                color = el->curColor();
+                color = el->curColor().toQColor();
             } else {
                 color = palette().color(QPalette::Normal, QPalette::Text);
             }
@@ -1218,7 +1218,7 @@ QPixmap Palette::pixmap(int paletteIdx) const
         for (Note* note : chord->notes()) {
             note->setSelected(true);
         }
-        color = element->curColor();
+        color = element->curColor().toQColor();
     } else {
         color = palette().color(QPalette::Normal, QPalette::Text);
     }

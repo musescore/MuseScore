@@ -2816,12 +2816,12 @@ Element* Chord::drop(EditData& data)
 //   dotPosX
 //---------------------------------------------------------
 
-void Chord::setColor(const QColor& color)
+void Chord::setColor(const mu::draw::Color& color)
 {
     ChordRest::setColor(color);
 
     for (Note* note : _notes) {
-        note->undoChangeProperty(Pid::COLOR, color);
+        note->undoChangeProperty(Pid::COLOR, QVariant::fromValue(color));
     }
 }
 

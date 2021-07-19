@@ -489,14 +489,14 @@ void HairpinSegment::draw(mu::draw::Painter* painter) const
     TextLineBaseSegment::draw(painter);
 
 #if 0
-    QColor color;
+    Color color;
     if ((selected() && !(score() && score()->printing())) || !hairpin()->visible()) {
         color = curColor();
     } else {
         color = hairpin()->lineColor();
     }
 #endif
-    QColor color = curColor(hairpin()->visible(), hairpin()->lineColor());
+    Color color = curColor(hairpin()->visible(), hairpin()->lineColor());
     qreal w = hairpin()->lineWidth();
     if (staff()) {
         w *= staff()->staffMag(hairpin()->tick());

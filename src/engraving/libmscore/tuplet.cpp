@@ -717,7 +717,7 @@ void Tuplet::draw(mu::draw::Painter* painter) const
         return;
     }
 
-    QColor color(curColor());
+    Color color(curColor());
     if (_number) {
         painter->setPen(color);
         PointF pos(_number->pos());

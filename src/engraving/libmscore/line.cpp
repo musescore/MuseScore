@@ -1443,7 +1443,7 @@ QVariant SLine::getProperty(Pid id) const
     case Pid::DIAGONAL:
         return _diagonal;
     case Pid::COLOR:
-        return _lineColor;
+        return QVariant::fromValue(_lineColor);
     case Pid::LINE_WIDTH:
         return _lineWidth;
     case Pid::LINE_STYLE:
@@ -1468,7 +1468,7 @@ bool SLine::setProperty(Pid id, const QVariant& v)
         _diagonal = v.toBool();
         break;
     case Pid::COLOR:
-        _lineColor = v.value<QColor>();
+        _lineColor = v.value<mu::draw::Color>();
         break;
     case Pid::LINE_WIDTH:
         _lineWidth = v.toReal();
@@ -1499,7 +1499,7 @@ QVariant SLine::propertyDefault(Pid pid) const
     case Pid::DIAGONAL:
         return false;
     case Pid::COLOR:
-        return MScore::defaultColor;
+        return QVariant::fromValue(MScore::defaultColor);
     case Pid::LINE_WIDTH:
         if (propertyFlags(pid) != PropertyFlags::NOSTYLE) {
             return Spanner::propertyDefault(pid);

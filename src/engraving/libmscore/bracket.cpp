@@ -489,7 +489,7 @@ QVariant Bracket::propertyDefault(Pid id) const
 void Bracket::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
 {
     if (id == Pid::COLOR) {
-        setColor(v.value<QColor>());
+        setColor(v.value<mu::draw::Color>());
     }
 
     // brackets do not survive layout() and therefore cannot be on

@@ -306,7 +306,7 @@ void SpannerSegment::setVisible(bool f)
 //   setColor
 //---------------------------------------------------------
 
-void SpannerSegment::setColor(const QColor& col)
+void SpannerSegment::setColor(const mu::draw::Color& col)
 {
     if (_spanner) {
         for (SpannerSegment* ss : _spanner->spannerSegments()) {
@@ -1045,7 +1045,7 @@ void Spanner::setAutoplace(bool f)
 //   setColor
 //---------------------------------------------------------
 
-void Spanner::setColor(const QColor& col)
+void Spanner::setColor(const mu::draw::Color& col)
 {
     for (SpannerSegment* ss : spannerSegments()) {
         ss->setColor(col);

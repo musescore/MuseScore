@@ -244,7 +244,7 @@ void XmlWriter::tag(const QString& name, QVariant data)
         break;
     case QVariant::Color:
     {
-        QColor color(data.value<QColor>());
+        mu::draw::Color color(data.value<mu::draw::Color>());
         *this << QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"/>\n")
             .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
     }
