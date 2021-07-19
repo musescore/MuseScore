@@ -24,7 +24,6 @@
 #include <QQmlEngine>
 
 #include "ui/iinteractiveuriregister.h"
-#include "audio/isynthesizersregister.h"
 #include "ui/iuiengine.h"
 #include "log.h"
 #include "settings.h"

@@ -30,8 +30,6 @@
 
 #include "isoundfontsprovider.h"
 #include "iaudiodriver.h"
-#include "isynthesizersregister.h"
-#include "internal/synthesizers/synthesizercontroller.h"
 #include "internal/worker/mixer.h"
 #include "internal/iaudiobuffer.h"
 
@@ -39,7 +37,6 @@ namespace mu::audio {
 class AudioEngine : public async::Asyncable
 {
     INJECT(audio, synth::ISoundFontsProvider, soundFontsProvider)
-    INJECT(audio, synth::ISynthesizersRegister, synthesizersRegister)
 public:
     ~AudioEngine();
 
@@ -61,9 +58,6 @@ private:
 
     MixerPtr m_mixer = nullptr;
     IAudioBufferPtr m_buffer = nullptr;
-
-    // synthesizers
-    std::shared_ptr<synth::SynthesizerController> m_synthesizerController = nullptr;
 };
 }
 
