@@ -124,6 +124,11 @@ void PopupWindow_QQuickView::show(QPoint p)
     });
 }
 
+void PopupWindow_QQuickView::setPosition(QPoint p)
+{
+    m_view->setPosition(p);
+}
+
 void PopupWindow_QQuickView::hide()
 {
     mainWindow()->popWindow(m_view);

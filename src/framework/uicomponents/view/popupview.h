@@ -184,7 +184,6 @@ protected:
     virtual void onHidden();
 
     void repositionWindowIfNeed();
-    void showWindow();
 
     void setErrCode(Ret::Code code);
 

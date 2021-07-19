@@ -154,7 +154,9 @@ void PopupView::open()
         }
     }
 
-    showWindow();
+    m_window->show(m_globalPos.toPoint());
+
+    m_globalPos = QPointF(); // invalidate
 
     if (!m_navigationParentControl) {
         ui::INavigationControl* ctrl = navigationController()->activeControl();
@@ -171,13 +173,6 @@ void PopupView::onHidden()
 {
     emit isOpenedChanged();
     emit closed();
-}
-
-void PopupView::showWindow()
-{
-    m_window->show(m_globalPos.toPoint());
-
-    m_globalPos = QPointF(); // invalidate
 }
 
 void PopupView::close()
@@ -285,7 +280,8 @@ void PopupView::repositionWindowIfNeed()
 {
     if (isOpened()) {
         updatePosition();
-        showWindow();
+        m_window->setPosition(m_globalPos.toPoint());
+        m_globalPos = QPoint();
     }
 }
 
