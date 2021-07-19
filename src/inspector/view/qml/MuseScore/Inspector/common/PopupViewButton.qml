@@ -28,9 +28,9 @@ FlatButton {
 
     default property StyledPopupView popup
 
-    property var popupPositionX
-    property var popupPositionY: height
-    property var popupAvailableWidth
+    property int popupPositionX: 0
+    property int popupPositionY: height
+    property int popupAvailableWidth: 0
     readonly property int popupContentHeight: popup.isOpened ? popup.contentHeight + popup.arrowHeight : 0
 
     Layout.fillWidth: true
