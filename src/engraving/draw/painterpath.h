@@ -52,9 +52,13 @@ public:
     class Element
     {
     public:
-        double x;
-        double y;
-        ElementType type;
+        double x = 0.0;
+        double y = 0.0;
+        ElementType type = ElementType::MoveToElement;
+
+        Element() {}
+        Element(double x, double y, ElementType type)
+            : x(x), y(y), type(type) {}
         bool isMoveTo() const { return type == ElementType::MoveToElement; }
         bool isLineTo() const { return type == ElementType::LineToElement; }
         bool isCurveTo() const { return type == ElementType::CurveToElement; }
@@ -166,7 +170,7 @@ private:
     bool m_requireMoveTo = false;
     mutable bool m_dirtyBounds = false;
     bool m_convex = false;
-    FillRule m_fillRule;
+    FillRule m_fillRule = FillRule::OddEvenFill;
 
     std::vector<Element> m_elements;
 

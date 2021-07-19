@@ -222,18 +222,12 @@ static void fromObj(const QJsonObject& obj, PainterPath& path)
             IF_ASSERT_FAILED(curveEls.empty()) {
                 continue;
             }
-            PainterPath::Element e;
-            e.type = type;
-            e.x = x;
-            e.y = y;
+            PainterPath::Element e(x, y, type);
             curveEls.push_back(std::move(e));
         } break;
         case PainterPath::ElementType::CurveToDataElement: {
             if (curveEls.size() == 1) { // only CurveToElement
-                PainterPath::Element e;
-                e.type = type;
-                e.x = x;
-                e.y = y;
+                PainterPath::Element e(x, y, type);
                 curveEls.push_back(std::move(e));
                 continue;
             }

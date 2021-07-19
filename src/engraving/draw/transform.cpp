@@ -209,7 +209,7 @@ void Transform::setMatrix(double m11, double m12, double m13,
 void Transform::reset()
 {
     m_affine.m_11 = m_affine.m_22 = m_33 = 1.0;
-    m_affine.m_12 = m_13 = m_affine.m_21 = m_23 = m_affine.m_dx = m_affine.m_dy = 0;
+    m_affine.m_12 = m_13 = m_affine.m_21 = m_23 = m_affine.m_dx = m_affine.m_dy = 0.0;
 }
 
 Transform Transform::adjoint() const
@@ -279,7 +279,7 @@ PointF Transform::map(const PointF& p) const
 {
     double fx = p.x();
     double fy = p.y();
-    double x = 0, y = 0;
+    double x = 0.0, y = 0.0;
     TransformationType t = inline_type();
     switch (t) {
     case TransformationType::None:
@@ -314,7 +314,7 @@ LineF Transform::map(const LineF& l) const
     double fy1 = l.y1();
     double fx2 = l.x2();
     double fy2 = l.y2();
-    double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+    double x1 = 0.0, y1 = 0.0, x2 = 0.0, y2 = 0.0;
     TransformationType t = inline_type();
     switch (t) {
     case TransformationType::None:
@@ -380,23 +380,23 @@ Transform& Transform::rotate(double a)
 {
     const double deg2rad = double(0.017453292519943295769);        // pi/180
 
-    if (a == 0) {
+    if (qFuzzyIsNull(a)) {
         return *this;
     }
-#ifdef DEBUG
+#ifdef TRACE_DRAW_OBJ_ENABLED
     if (std::isnan(a)) {
         nanWarning("rotate");
         return *this;
     }
 #endif
 
-    double sina = 0;
-    double cosa = 0;
-    if (a == 90. || a == -270.) {
+    double sina = 0.0;
+    double cosa = 0.0;
+    if (qFuzzyCompare(a, 90.) || qFuzzyCompare(a, -270.)) {
         sina = 1.;
-    } else if (a == 270. || a == -90.) {
+    } else if (qFuzzyCompare(a, 270.) || qFuzzyCompare(a, -90.)) {
         sina = -1.;
-    } else if (a == 180.) {
+    } else if (qFuzzyCompare(a, 180.)) {
         cosa = -1.;
     } else {
         double b = deg2rad * a;
@@ -451,7 +451,7 @@ Transform& Transform::rotate(double a)
 
 Transform& Transform::rotateRadians(double a)
 {
-#ifdef DEBUG
+#ifdef TRACE_DRAW_OBJ_ENABLED
     if (std::isnan(a)) {
         nanWarning("rotateRadians");
         return *this;
@@ -507,10 +507,10 @@ Transform& Transform::rotateRadians(double a)
 
 Transform& Transform::translate(double dx, double dy)
 {
-    if (dx == 0 && dy == 0) {
+    if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
         return *this;
     }
-#ifdef DEBUG
+#ifdef TRACE_DRAW_OBJ_ENABLED
     if (std::isnan(dx) | td::isnan(dy)) {
         nanWarning("translate");
         return *this;
@@ -546,10 +546,10 @@ Transform& Transform::translate(double dx, double dy)
 
 Transform& Transform::scale(double sx, double sy)
 {
-    if (sx == 1 && sy == 1) {
+    if (qFuzzyCompare(sx, 1) && qFuzzyCompare(sy, 1)) {
         return *this;
     }
-#ifdef DEBUG
+#ifdef TRACE_DRAW_OBJ_ENABLED
     if (std::isnan(sx) | td::isnan(sy)) {
         nanWarning("scale");
         return *this;
@@ -582,10 +582,10 @@ Transform& Transform::scale(double sx, double sy)
 
 Transform& Transform::shear(double sh, double sv)
 {
-    if (sh == 0 && sv == 0) {
+    if (qFuzzyIsNull(sh) && qFuzzyIsNull(sv)) {
         return *this;
     }
-#ifdef DEBUG
+#ifdef TRACE_DRAW_OBJ_ENABLED
     if (std::isnan(sh) | std::isnan(sv)) {
         nanWarning("shear");
         return *this;
@@ -718,6 +718,14 @@ Transform Transform::fromQTransform(const QTransform& transform)
 {
     return Transform(transform.m11(), transform.m12(), transform.m13(), transform.m21(), transform.m22(), transform.m23(),
                      transform.m31(), transform.m32(), transform.m33());
+}
+
+#endif
+
+#ifdef TRACE_DRAW_OBJ_ENABLED
+void Transform::nanWarning(const std::string& func)
+{
+    LOGW() << "Transform:: " << func << " with NaN called";
 }
 
 #endif
