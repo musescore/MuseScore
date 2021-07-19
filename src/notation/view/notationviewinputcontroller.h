@@ -58,6 +58,7 @@ public:
     virtual void showShadowNote(const PointF& pos) = 0;
 
     virtual void showContextMenu(const ElementType& elementType, const QPoint& pos) = 0;
+    virtual void hideContextMenu() = 0;
 
     virtual INotationInteractionPtr notationInteraction() const = 0;
     virtual INotationPlaybackPtr notationPlayback() const = 0;
