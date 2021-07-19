@@ -34,7 +34,10 @@ public:
     void init(const QString& defaultSyleFilePath, const QString& partStyleFilePath);
 
     static const Ms::MStyle& baseStyle();
+
+    static bool isHasDefaultStyle();
     static const Ms::MStyle& defaultStyle();
+
     static const Ms::MStyle* defaultStyleForParts();
 
     static const Ms::MStyle& resolveStyleDefaults(const int defaultsVersion);

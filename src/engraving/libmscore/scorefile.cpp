@@ -58,7 +58,6 @@
 #include "sym.h"
 #include "scoreorder.h"
 
-#include "preferences.h"
 #include "utils.h"
 
 #include "sig.h"

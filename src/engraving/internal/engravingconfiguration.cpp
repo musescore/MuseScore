@@ -23,8 +23,6 @@
 
 #include "global/settings.h"
 
-#include "libmscore/preferences.h"
-
 using namespace mu::engraving;
 using namespace mu::framework;
 
@@ -38,7 +36,6 @@ QString EngravingConfiguration::defaultStyleFilePath() const
 
 void EngravingConfiguration::setDefaultStyleFilePath(const QString& path)
 {
-    preferences().setDefaultStyleFilePath(path);
     settings()->setSharedValue(DEFAULT_STYLE_FILE_PATH, Val(path.toStdString()));
 }
 

@@ -210,8 +210,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/pitchvalue.h
     ${CMAKE_CURRENT_LIST_DIR}/pos.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pos.h
-    ${CMAKE_CURRENT_LIST_DIR}/preferences.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/preferences.h
     ${CMAKE_CURRENT_LIST_DIR}/property.cpp
     ${CMAKE_CURRENT_LIST_DIR}/property.h
     ${CMAKE_CURRENT_LIST_DIR}/range.cpp

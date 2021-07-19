@@ -85,6 +85,14 @@ const Ms::MStyle& DefaultStyle::baseStyle()
     return instance()->m_baseStyle;
 }
 
+bool DefaultStyle::isHasDefaultStyle()
+{
+    if (instance()->m_defaultStyle) {
+        return true;
+    }
+    return false;
+}
+
 const Ms::MStyle& DefaultStyle::defaultStyle()
 {
     if (instance()->m_defaultStyle) {
