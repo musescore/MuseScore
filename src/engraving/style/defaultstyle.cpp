@@ -75,7 +75,7 @@ bool DefaultStyle::doLoadStyle(Ms::MStyle* style, const QString& filePath)
         return false;
     }
 
-    return style->load(&file);
+    return style->read(&file);
 }
 
 // Static

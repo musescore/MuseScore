@@ -27,7 +27,6 @@
 
 namespace Ms {
 class XmlReader;
-class XmlWriter;
 class Score;
 }
 
@@ -43,16 +42,6 @@ private:
     Ms::Score* m_score = nullptr;
     bool m_chordListTag = false;
     QString m_oldChordDescriptionFile;
-};
-
-struct WriteChordListHook
-{
-    WriteChordListHook(Ms::Score* score);
-
-    void write(Ms::XmlWriter& xml);
-
-private:
-    Ms::Score* m_score = nullptr;
 };
 }
 

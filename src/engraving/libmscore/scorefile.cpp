@@ -179,10 +179,6 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
     xml.tag("Division", MScore::division);
     xml.setCurTrack(-1);
 
-    if (isTopScore()) {                    // only top score
-        compat::WriteChordListHook clhook(this);
-        style().save(xml, true, &clhook);           // save only differences to buildin style
-    }
     xml.tag("showInvisible",   _showInvisible);
     xml.tag("showUnprintable", _showUnprintable);
     xml.tag("showFrames",      _showFrames);
@@ -406,6 +402,15 @@ bool Score::writeMscz(engraving::MscWriter& msczWriter, bool onlySelection, bool
         return false;
     }
 
+    // Write style
+    {
+        QByteArray styleData;
+        QBuffer styleBuf(&styleData);
+        styleBuf.open(QIODevice::WriteOnly);
+        style().write(&styleBuf);
+        msczWriter.writeStyleFile(styleData);
+    }
+
     // Write score
     {
         QByteArray scoreData;
@@ -414,6 +419,18 @@ bool Score::writeMscz(engraving::MscWriter& msczWriter, bool onlySelection, bool
         Score::writeScore(&scoreBuf, onlySelection);
 
         msczWriter.writeScoreFile(scoreData);
+    }
+
+    // Write ChordList
+    {
+        ChordList* chordList = this->chordList();
+        if (chordList->customChordList() && !chordList->empty()) {
+            QByteArray chlData;
+            QBuffer chlBuf(&chlData);
+            chlBuf.open(QIODevice::WriteOnly);
+            chordList->write(&chlBuf);
+            msczWriter.writeChordListFile(chlData);
+        }
     }
 
     // Write images
@@ -499,7 +516,7 @@ bool Score::loadStyle(const QString& fn, bool ign, const bool overlap)
     QFile f(fn);
     if (f.open(QIODevice::ReadOnly)) {
         MStyle st = style();
-        if (st.load(&f, ign)) {
+        if (st.read(&f, ign)) {
             undo(new ChangeStyle(this, st, overlap));
             return true;
         } else {
@@ -529,16 +546,12 @@ bool Score::saveStyle(const QString& name)
         return false;
     }
 
-    XmlWriter xml(this, &f);
-    xml.header();
-    xml.stag("museScore version=\"" MSC_VERSION "\"");
-    compat::WriteChordListHook clhook(this);
-    style().save(xml, false, &clhook);       // save complete style
-    xml.etag();
-    if (f.error() != QFile::NoError) {
+    bool ok = style().write(&f);
+    if (!ok) {
         MScore::lastError = QObject::tr("Write Style failed: %1").arg(f.errorString());
         return false;
     }
+
     return true;
 }
 
@@ -594,7 +607,7 @@ Score::FileError MasterScore::loadMscz(const mu::engraving::MscReader& msczReade
         QByteArray styleData = msczReader.readStyleFile();
         QBuffer buf(&styleData);
         buf.open(QIODevice::ReadOnly);
-        style().load(&buf);
+        style().read(&buf);
     }
 
     // Read score
@@ -608,6 +621,14 @@ Score::FileError MasterScore::loadMscz(const mu::engraving::MscReader& msczReade
         hooks.readStyle = std::make_shared<compat::ReadStyleHook>(this, scoreData, completeBaseName);
 
         retval = read1(e, ignoreVersionError, hooks);
+    }
+
+    // Read ChordList
+    {
+        QByteArray styleData = msczReader.readChordListFile();
+        QBuffer buf(&styleData);
+        buf.open(QIODevice::ReadOnly);
+        chordList()->read(&buf);
     }
 
     // Read images

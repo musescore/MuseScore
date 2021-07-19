@@ -86,26 +86,3 @@ void ReadChordListHook::validate()
         chordList->checkChordList(style);
     }
 }
-
-// ==========================================================
-// WriteChordListHook
-// ==========================================================
-
-WriteChordListHook::WriteChordListHook(Ms::Score* score)
-    : m_score(score)
-{
-}
-
-void WriteChordListHook::write(Ms::XmlWriter& xml)
-{
-    if (!m_score) {
-        return;
-    }
-
-    ChordList* chordList = m_score->chordList();
-    if (chordList->customChordList() && !chordList->empty()) {
-        xml.stag("ChordList");
-        chordList->write(xml);
-        xml.etag();
-    }
-}

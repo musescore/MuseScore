@@ -1942,7 +1942,13 @@ bool ChordList::read(const QString& name)
         qDebug("ChordList::read failed: <%s>", qPrintable(path));
         return false;
     }
-    XmlReader e(&f);
+
+    return read(&f);
+}
+
+bool ChordList::read(QIODevice* device)
+{
+    XmlReader e(device);
 
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -1977,15 +1983,24 @@ bool ChordList::write(const QString& name) const
         return false;
     }
 
-    XmlWriter xml(0, &f);
+    write(&f);
+
+    if (f.error() != QFile::NoError) {
+        MScore::lastError = QObject::tr("Write chord description failed: %1").arg(f.errorString());
+    }
+
+    return true;
+}
+
+bool ChordList::write(QIODevice* device) const
+{
+    XmlWriter xml(0, device);
     xml.header();
     xml.stag("museScore version=\"" MSC_VERSION "\"");
 
     write(xml);
     xml.etag();
-    if (f.error() != QFile::NoError) {
-        MScore::lastError = QObject::tr("Write chord description failed: %1").arg(f.errorString());
-    }
+
     return true;
 }
 
