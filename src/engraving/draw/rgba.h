@@ -20,44 +20,44 @@
   * along with this program.  If not, see <https://www.gnu.org/licenses/>.
   */
 
-#ifndef MU_DRAW_RGB_H
-#define MU_DRAW_RGB_H
+#ifndef MU_DRAW_RGBA_H
+#define MU_DRAW_RGBA_H
 
 namespace mu::draw {
-typedef unsigned int Rgb;
+using Rgba = unsigned int;
 
 // non-namespaced global variable
-inline constexpr Rgb RGB_MASK = 0x00ffffff;     // masks RGB values
+inline constexpr Rgba RGB_MASK = 0x00ffffff;     // masks RGB values
 
-inline constexpr Rgb rgb(int r, int g, int b)         // set RGB value
+inline constexpr Rgba rgb(int r, int g, int b)         // set RGB value
 {
     return (0xffu << 24) | ((r & 0xffu) << 16) | ((g & 0xffu) << 8) | (b & 0xffu);
 }
 
-inline constexpr Rgb rgba(int r, int g, int b, int a) // set RGBA value
+inline constexpr Rgba rgba(int r, int g, int b, int a) // set RGBA value
 {
     return ((a & 0xffu) << 24) | ((r & 0xffu) << 16) | ((g & 0xffu) << 8) | (b & 0xffu);
 }
 
-inline constexpr int getRed(Rgb rgb)                     // get red part of RGB
+inline constexpr int getRed(Rgba rgba)                     // get red part of RGB
 {
-    return (rgb >> 16) & 0xff;
+    return (rgba >> 16) & 0xff;
 }
 
-inline constexpr int getGreen(Rgb rgb)                   // get green part of RGB
+inline constexpr int getGreen(Rgba rgba)                   // get green part of RGB
 {
-    return (rgb >> 8) & 0xff;
+    return (rgba >> 8) & 0xff;
 }
 
-inline constexpr int getBlue(Rgb rgb)                    // get blue part of RGB
+inline constexpr int getBlue(Rgba rgba)                    // get blue part of RGB
 {
-    return rgb & 0xff;
+    return rgba & 0xff;
 }
 
-inline constexpr int getAlpha(Rgb rgb)                   // get alpha part of RGBA
+inline constexpr int getAlpha(Rgba rgba)                   // get alpha part of RGBA
 {
-    return rgb >> 24;
+    return rgba >> 24;
 }
 }
 
-#endif // MU_DRAW_RGB_H
+#endif // MU_DRAW_RGBA_H

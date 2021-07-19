@@ -32,6 +32,9 @@
 #include "property.h"
 #include "style/style.h"
 
+#include "iengravingconfiguration.h"
+#include "modularity/ioc.h"
+
 class QInputMethodEvent;
 
 namespace Ms {
@@ -259,6 +262,8 @@ class TextBase : public Element
     M_PROPERTY(Spatium,    frameWidth,             setFrameWidth)
     M_PROPERTY(Spatium,    paddingWidth,           setPaddingWidth)
     M_PROPERTY(int,        frameRound,             setFrameRound)
+
+    INJECT(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
 
     // there are two representations of text; only one
     // might be valid and the other can be constructed from it

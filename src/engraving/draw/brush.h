@@ -24,6 +24,7 @@
 
 #include "color.h"
 #include "drawtypes.h"
+#include "libmscore/mscore.h"
 
 namespace mu::draw {
 class Brush
@@ -34,13 +35,9 @@ public:
         : m_style(style) {}
     Brush(const Color& color)
         : m_color(color) {}
-    Brush(mu::draw::GlobalColor color)
-        : m_color(color) {}
 
 #ifndef NO_QT_SUPPORT
     Brush(const QColor& color)
-        : m_color(Color::fromQColor(color)) {}
-    Brush(const Qt::GlobalColor color)
         : m_color(Color::fromQColor(color)) {}
 #endif
 
@@ -48,7 +45,6 @@ public:
     void setStyle(BrushStyle style) { m_style = style; }
     inline const Color& color() const { return m_color; }
     void setColor(const Color& color) { m_color = color; }
-    inline void setColor(mu::draw::GlobalColor color) { m_color = color; }
 
 #ifndef NO_QT_SUPPORT
     static QBrush toQBrush(const Brush& brush)
@@ -66,7 +62,7 @@ public:
 #endif
 
 private:
-    Color m_color = mu::draw::black;
+    Color m_color = Ms::MScore::defaultColor;
     BrushStyle m_style = BrushStyle::SolidPattern;
 };
 } // namespace mu::draw

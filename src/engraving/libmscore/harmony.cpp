@@ -1584,7 +1584,7 @@ void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed)
 
     mu::draw::Color originalColor = color();
     if (showSpell) {
-        setColor(mu::draw::Color(mu::draw::red));
+        setColor(mu::draw::Color(engravingConfiguration()->harmonyColor()));
         setSelected(false);
     }
     PointF pos(canvasPos());

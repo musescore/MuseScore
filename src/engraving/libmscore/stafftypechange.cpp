@@ -300,7 +300,7 @@ QVariant StaffTypeChange::propertyDefault(Pid id) const
     case Pid::STAFF_INVISIBLE:
         return false;
     case Pid::STAFF_COLOR:
-        return QVariant::fromValue(mu::draw::Color(mu::draw::black));
+        return QVariant::fromValue(MScore::defaultColor);
     case Pid::STAFF_YOFFSET:
         return Spatium(0.0);
     default:

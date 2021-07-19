@@ -104,7 +104,6 @@ qreal MScore::horizontalPageGapEven = 1.0;
 qreal MScore::horizontalPageGapOdd = 50.0;
 
 mu::draw::Color MScore::selectColor[VOICES];
-mu::draw::Color MScore::shadowNoteColor;
 mu::draw::Color MScore::defaultColor;
 mu::draw::Color MScore::layoutBreakColor;
 mu::draw::Color MScore::frameMarginColor;
@@ -284,7 +283,7 @@ void MScore::init()
     }
 #endif
 
-    defaultColor        = mu::draw::black;
+    defaultColor        = mu::draw::Color("#000000");
     dropColor           = mu::draw::Color("#1778db");
     defaultPlayDuration = 300;        // ms
     warnPitchRange      = true;

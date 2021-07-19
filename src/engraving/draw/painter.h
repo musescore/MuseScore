@@ -73,7 +73,7 @@ public:
     const Font& font() const;
 
     void setPen(const Pen& pen);
-    inline void setPen(const mu::draw::Color& color);
+    inline void setPen(const Color& color);
     void setNoPen();
     const Pen& pen() const;
 
@@ -199,9 +199,9 @@ private:
     std::stack<State> m_states;
 };
 
-inline void Painter::setPen(const mu::draw::Color& color)
+inline void Painter::setPen(const Color& color)
 {
-    setPen(Pen(color.isValid() ? color : Color(mu::draw::black)));
+    setPen(Pen(color.isValid() ? color : Ms::MScore::defaultColor));
 }
 
 inline void Painter::translate(const PointF& offset)

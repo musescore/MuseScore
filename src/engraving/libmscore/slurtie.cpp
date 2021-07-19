@@ -337,7 +337,7 @@ void SlurTieSegment::undoChangeProperty(Pid pid, const QVariant& val, PropertyFl
 void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
 {
     if (visible() && autoplace()
-        && (color() == mu::draw::black)
+        && (color() == Ms::MScore::defaultColor)
         && offset().isNull()
         && ups(Grip::START).off.isNull()
         && ups(Grip::BEZIER1).off.isNull()
