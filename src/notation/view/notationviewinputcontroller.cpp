@@ -314,20 +314,16 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         return;
     }
 
-    if (m_interactData.hitElement) {
-        if (!m_interactData.hitElement->selected()) {
-            if (event->button() != Qt::MouseButton::RightButton) {
-                SelectType selectType = SelectType::SINGLE;
-                if (keyState == Qt::NoModifier) {
-                    selectType = SelectType::SINGLE;
-                } else if (keyState & Qt::ShiftModifier) {
-                    selectType = SelectType::RANGE;
-                } else if (keyState & Qt::ControlModifier) {
-                    selectType = SelectType::ADD;
-                }
-                m_view->notationInteraction()->select({ m_interactData.hitElement }, selectType, m_interactData.hitStaffIndex);
-            }
+    if (m_interactData.hitElement && !m_interactData.hitElement->selected()) {
+        SelectType selectType = SelectType::SINGLE;
+        if (keyState == Qt::NoModifier) {
+            selectType = SelectType::SINGLE;
+        } else if (keyState & Qt::ShiftModifier) {
+            selectType = SelectType::RANGE;
+        } else if (keyState & Qt::ControlModifier) {
+            selectType = SelectType::ADD;
         }
+        m_view->notationInteraction()->select({ m_interactData.hitElement }, selectType, m_interactData.hitStaffIndex);
     }
 
     if (m_view->notationInteraction()->isHitGrip(logicPos)) {
