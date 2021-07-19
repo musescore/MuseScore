@@ -101,7 +101,7 @@ void ReadStyleHook::readStyleTag(Ms::XmlReader& e)
 void ReadStyleHook::readStyleTag(Ms::Score* score, Ms::XmlReader& e)
 {
     ReadChordListHook clhook(score);
-    score->style().load(e, &clhook);
+    score->style().read(e, &clhook);
 }
 
 bool ReadStyleHook::readStyleProperties(Ms::MStyle* style, Ms::XmlReader& e)

@@ -19,17 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_MSCZREADER_H
-#define MU_ENGRAVING_MSCZREADER_H
+#ifndef MU_ENGRAVING_MSCZWRITER_H
+#define MU_ENGRAVING_MSCZWRITER_H
 
 #include <QString>
 #include <QByteArray>
 #include <QIODevice>
 
-class MQZipReader;
+class MQZipWriter;
 
 namespace mu::engraving {
-class MsczReader
+class MsczWriter
 {
 public:
     enum class Mode {
@@ -37,9 +37,9 @@ public:
         Dir
     };
 
-    MsczReader(const QString& filePath = QString(), Mode mode = Mode::Zip);
-    MsczReader(QIODevice* device);
-    ~MsczReader();
+    MsczWriter(const QString& filePath = QString(), Mode mode = Mode::Zip);
+    MsczWriter(QIODevice* device);
+    ~MsczWriter();
 
     void setDevice(QIODevice* device);
     void setFilePath(const QString& filePath);
@@ -51,36 +51,51 @@ public:
     void close();
     bool isOpened() const;
 
-    QByteArray readStyleFile() const;
-    QByteArray readScoreFile() const;
-    QByteArray readChordListFile() const;
-    QByteArray readThumbnailFile() const;
-    QByteArray readImageFile(const QString& fileName) const;
-    std::vector<QString> imageFileNames() const;
-    QByteArray readAudioFile() const;
-    QByteArray readAudioSettingsJsonFile() const;
+    void writeStyleFile(const QByteArray& data);
+    void writeScoreFile(const QByteArray& data);
+    void writeChordListFile(const QByteArray& data);
+    void writeThumbnailFile(const QByteArray& data);
+    void addImageFile(const QString& fileName, const QByteArray& data);
+    void writeAudioFile(const QByteArray& data);
+    void writeAudioSettingsJsonFile(const QByteArray& data);
 
 private:
 
     struct Meta {
-        QString mscxFileName;
-        std::vector<QString> imageFilePaths;
+        std::vector<QString> files;
+        bool isWrited = false;
 
-        bool isValid() const { return !mscxFileName.isEmpty(); }
+        bool contains(const QString& file) const
+        {
+            if (std::find(files.begin(), files.end(), file) != files.end()) {
+                return true;
+            }
+            return false;
+        }
+
+        void addFile(const QString& file)
+        {
+            if (!contains(file)) {
+                files.push_back(file);
+            }
+        }
     };
 
     QString rootPath() const;
-    MQZipReader* reader() const;
-    const Meta& meta() const;
-    QByteArray fileData(const QString& fileName) const;
+
+    MQZipWriter* writer() const;
+    bool addFileData(const QString& fileName, const QByteArray& data);
+
+    void writeMeta();
+    void writeContainer(const std::vector<QString>& paths);
 
     QString m_filePath;
     Mode m_mode = Mode::Zip;
     QIODevice* m_device = nullptr;
     bool m_selfDeviceOwner = false;
-    mutable MQZipReader* m_reader = nullptr;
-    mutable Meta m_meta;
+    mutable MQZipWriter* m_writer = nullptr;
+    Meta m_meta;
 };
 }
 
-#endif // MU_ENGRAVING_MSCZREADER_H
+#endif // MU_ENGRAVING_MSCZWRITER_H

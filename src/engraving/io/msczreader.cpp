@@ -260,6 +260,11 @@ QByteArray MsczReader::readScoreFile() const
     return fileData(meta().mscxFileName);
 }
 
+QByteArray MsczReader::readChordListFile() const
+{
+    return fileData("chordlist.xml");
+}
+
 QByteArray MsczReader::readThumbnailFile() const
 {
     return fileData("Thumbnails/thumbnail.png");
