@@ -31,9 +31,8 @@
 #include "rgb.h"
 
 namespace mu::draw {
-
-class Color {
-
+class Color
+{
 public:
     Color() {}
     Color(const Color& other);
@@ -62,10 +61,10 @@ public:
     void setBlue(int value) noexcept;
     void setAlpha(int value) noexcept;
 
-    bool operator== (const Color& other) const noexcept;
-    bool operator!= (const Color& other) const noexcept;
-    bool operator== (const GlobalColor& color) const noexcept;
-    bool operator!= (const GlobalColor& color) const noexcept;
+    bool operator==(const Color& other) const noexcept;
+    bool operator!=(const Color& other) const noexcept;
+    bool operator==(const GlobalColor& color) const noexcept;
+    bool operator!=(const GlobalColor& color) const noexcept;
 
     bool isValid() const noexcept;
 
@@ -76,31 +75,24 @@ public:
 
     std::string name() const noexcept;
 
-    Color lighter(int factor = 150) const noexcept;
-
 #ifndef NO_QT_SUPPORT
     static Color fromQColor(const QColor& color);
     QColor toQColor() const;
 #endif
 
 private:
-    Rgb _rgb = 0;
-    struct {
-        ushort alpha;
-        ushort red;
-        ushort green;
-        ushort blue;
-        ushort pad;
-    } argb;
-    std::string _name;
-    bool _isValid = true;
 
-    static constexpr bool isRgbaValid(int r, int g, int b, int a = 255) noexcept {
+    static constexpr bool isRgbaValid(int r, int g, int b, int a = 255) noexcept
+    {
         return uint(r) <= 255 && uint(g) <= 255 && uint(b) <= 255 && uint(a) <= 255;
     }
 
     void setRgb(int r, int g, int b, int a);
     void setRgb(Rgb rgb);
+
+    Rgb m_rgb = 0;
+    std::string m_name;
+    bool m_isValid = true;
 };
 }
 

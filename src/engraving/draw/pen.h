@@ -39,7 +39,8 @@ public:
     {
     }
 
-    Pen(const mu::draw::Color& color = mu::draw::black, double width = 1, PenStyle s = PenStyle::SolidLine, PenCapStyle c = PenCapStyle::SquareCap, PenJoinStyle j = PenJoinStyle::BevelJoin)
+    Pen(const mu::draw::Color& color = mu::draw::black, double width = 1, PenStyle s = PenStyle::SolidLine,
+        PenCapStyle c = PenCapStyle::SquareCap, PenJoinStyle j = PenJoinStyle::BevelJoin)
         : m_color(color), m_width(width), m_style(s), m_capStyle(c), m_joinStyle(j)
     {
     }

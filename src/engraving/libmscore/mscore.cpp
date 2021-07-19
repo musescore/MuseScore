@@ -104,6 +104,7 @@ qreal MScore::horizontalPageGapEven = 1.0;
 qreal MScore::horizontalPageGapOdd = 50.0;
 
 mu::draw::Color MScore::selectColor[VOICES];
+mu::draw::Color MScore::shadowNoteColor;
 mu::draw::Color MScore::defaultColor;
 mu::draw::Color MScore::layoutBreakColor;
 mu::draw::Color MScore::frameMarginColor;
