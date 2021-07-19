@@ -56,6 +56,10 @@ PopupView::PopupView(QQuickItem* parent)
 
 QQuickItem* PopupView::parentItem() const
 {
+    if (!parent()) {
+        return nullptr;
+    }
+
     return qobject_cast<QQuickItem*>(parent());
 }
 
@@ -98,6 +102,12 @@ void PopupView::componentComplete()
     m_window->setOnHidden([this]() { onHidden(); });
     m_window->setContent(m_contentItem);
 
+    connect(parentItem(), &QQuickItem::visibleChanged, this, [this]() {
+        if (!parentItem() || !parentItem()->isVisible()) {
+            close();
+        }
+    });
+
     m_contentItem->setObjectName(POPUP_VIEW_CONTENT_OBJECT_NAME);
 }
 
@@ -109,6 +119,8 @@ bool PopupView::eventFilter(QObject* watched, QEvent* event)
         mouseReleaseEvent(static_cast<QMouseEvent*>(event));
     } else if (QEvent::Close == event->type() && watched == mainWindow()->qWindow()) {
         close();
+    } else if (QEvent::UpdateRequest == event->type()) {
+        updateView();
     }
 
     return QObject::eventFilter(watched, event);
@@ -137,6 +149,7 @@ void PopupView::open()
 
     if (!isDialog()) {
         updatePosition();
+        updateContentPosition();
     }
 
     if (isDialog()) {
@@ -195,6 +208,17 @@ void PopupView::toggleOpened()
     } else {
         open();
     }
+}
+
+void PopupView::updateView()
+{
+    if (!isOpened()) {
+        return;
+    }
+
+    m_globalPos = QPointF(); // invalidate
+    updatePosition();
+    m_window->setPosition(m_globalPos.toPoint());
 }
 
 bool PopupView::isOpened() const
@@ -590,10 +614,23 @@ void PopupView::updatePosition()
         }
     }
 
+    if (!showArrow()) {
+        movePos(m_globalPos.x() - padding(), m_globalPos.y());
+    }
+}
+
+void PopupView::updateContentPosition()
+{
     if (showArrow()) {
+        const QQuickItem* parent = parentItem();
+        IF_ASSERT_FAILED(parent) {
+            return;
+        }
+
+        QPointF parentTopLeft = parent->mapToGlobal(QPoint(0, 0));
+
         setArrowX(parentTopLeft.x() + (parent->width() / 2) - m_globalPos.x());
     } else {
-        movePos(m_globalPos.x() - padding(), m_globalPos.y());
         if (opensUpward()) {
             contentItem()->setY(padding());
         } else {

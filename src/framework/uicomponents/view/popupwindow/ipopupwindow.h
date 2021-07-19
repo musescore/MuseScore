@@ -44,6 +44,8 @@ public:
     virtual bool isVisible() const = 0;
     virtual QRect geometry() const = 0;
 
+    virtual void setPosition(const QPoint& position) const = 0;
+
     virtual void forceActiveFocus() = 0;
 
     virtual void setOnHidden(const std::function<void()>& callback) = 0;
