@@ -26,7 +26,7 @@
 #include <functional>
 
 #include <array>
-#include <QFile>
+#include <QIODevice>
 #include <QSet>
 
 #include "libmscore/types.h"
@@ -39,6 +39,7 @@
 namespace mu::engraving::compat {
 struct ReadChordListHook;
 struct WriteChordListHook;
+struct ReadStyleHook;
 }
 
 namespace Ms {
@@ -69,10 +70,8 @@ public:
     void setDefaultStyleVersion(const int defaultsVersion);
     int defaultStyleVersion() const;
 
-    bool load(QFile* qf, bool ign = false);
-    void load(XmlReader& e, mu::engraving::compat::ReadChordListHook* readChordListHook);
+    bool load(QIODevice* device, bool ign = false);
     void save(XmlWriter& xml, bool optimize, mu::engraving::compat::WriteChordListHook* writeChordListHook);
-    bool readProperties(XmlReader&);
 
     void precomputeValues();
 
@@ -81,6 +80,12 @@ public:
     static Sid styleIdx(const QString& name);
 
 private:
+
+    friend class mu::engraving::compat::ReadStyleHook;
+
+    void load(XmlReader& e, mu::engraving::compat::ReadChordListHook* readChordListHook);
+
+    bool readProperties(XmlReader&);
     bool readStyleValCompat(XmlReader&);
     bool readTextStyleValCompat(XmlReader&);
 

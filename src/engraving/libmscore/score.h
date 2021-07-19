@@ -56,6 +56,7 @@ class EngravingProject;
 
 namespace mu::engraving::compat {
 class ScoreAccess;
+struct ReadScoreHooks;
 }
 
 namespace mu::score {
@@ -648,7 +649,7 @@ public:
     void removeStaff(Staff*);
     void addMeasure(MeasureBase*, MeasureBase*);
     void readStaff(XmlReader&);
-    bool read(XmlReader&);
+    bool read(XmlReader&, const mu::engraving::compat::ReadScoreHooks& hooks);
     void linkMeasures(Score* score);
 
     Excerpt* excerpt() { return _excerpt; }
@@ -1400,11 +1401,10 @@ class MasterScore : public Score
     QFileInfo _sessionStartBackupInfo;
     QFileInfo info;
 
-    bool read(XmlReader&);
-    FileError read1(XmlReader&, bool ignoreVersionError, const std::function<int()>& readStyleDefaultsVersion);
+    FileError read1(XmlReader&, bool ignoreVersionError, const mu::engraving::compat::ReadScoreHooks& hooks);
     FileError read114(XmlReader&);
     FileError read206(XmlReader&);
-    FileError read302(XmlReader&);
+    FileError read302(XmlReader&, const mu::engraving::compat::ReadScoreHooks& hooks);
 
     void setPrev(MasterScore* s) { _prev = s; }
     void setNext(MasterScore* s) { _next = s; }
@@ -1471,9 +1471,6 @@ public:
 
     bool isSavable() const;
     void setTempomap(TempoMap* tm);
-
-    int readStyleDefaultsVersion(const QByteArray& scoreData, const QString& completeBaseName);
-    int styleDefaultByMscVersion(const int mscVer) const;
 
     Omr* omr() const { return _omr; }
     void setOmr(Omr* o) { _omr = o; }

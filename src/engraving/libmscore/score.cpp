@@ -34,6 +34,8 @@
 #include "style/style.h"
 #include "style/defaultstyle.h"
 
+#include "compat/readscore.h"
+
 #include "fermata.h"
 #include "imageStore.h"
 #include "key.h"
@@ -2129,13 +2131,12 @@ MasterScore* MasterScore::clone()
     QByteArray scoreData = buffer.buffer();
     QString completeBaseName = masterScore()->fileInfo()->completeBaseName();
 
-    auto getStyleDefaultsVersion = [this, &scoreData, &completeBaseName]() {
-        return readStyleDefaultsVersion(scoreData, completeBaseName);
-    };
+    compat::ReadScoreHooks hooks;
+    hooks.readStyle = std::make_shared<compat::ReadStyleHook>(this, scoreData, completeBaseName);
 
     XmlReader r(scoreData);
     MasterScore* score = new MasterScore(style(), m_project);
-    score->read1(r, true, getStyleDefaultsVersion);
+    score->read1(r, true, hooks);
 
     score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();
