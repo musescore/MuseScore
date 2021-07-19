@@ -47,7 +47,7 @@ static QJsonObject toObj(const Pen& pen)
 {
     QJsonObject obj;
     obj["style"] = static_cast<int>(pen.style());
-    obj["color"] = pen.color().name().c_str();
+    obj["color"] = pen.color().toString().c_str();
     obj["width"] = pen.widthF();
     return obj;
 }
@@ -63,7 +63,7 @@ static QJsonObject toObj(const Brush& brush)
 {
     QJsonObject obj;
     obj["style"] = static_cast<int>(brush.style());
-    obj["color"] = QString::fromStdString(brush.color().name());
+    obj["color"] = QString::fromStdString(brush.color().toString());
     return obj;
 }
 

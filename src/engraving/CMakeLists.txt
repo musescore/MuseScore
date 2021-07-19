@@ -40,7 +40,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/draw/color.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/color.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/geometry.h
-    ${CMAKE_CURRENT_LIST_DIR}/draw/globalcolor.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/transform.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/transform.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/matrix.h
@@ -72,7 +71,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontmetrics.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontcompat.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontcompat.h
-    ${CMAKE_CURRENT_LIST_DIR}/draw/rgb.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/rgba.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/utils/drawlogger.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/utils/drawlogger.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/utils/drawjson.cpp

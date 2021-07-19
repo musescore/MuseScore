@@ -28,6 +28,7 @@
 
 #include "color.h"
 #include "drawtypes.h"
+#include "libmscore/mscore.h"
 
 namespace mu::draw {
 class Pen
@@ -39,7 +40,7 @@ public:
     {
     }
 
-    Pen(const mu::draw::Color& color = mu::draw::black, double width = 1, PenStyle s = PenStyle::SolidLine,
+    Pen(const Color& color = Ms::MScore::defaultColor, double width = 1, PenStyle s = PenStyle::SolidLine,
         PenCapStyle c = PenCapStyle::SquareCap, PenJoinStyle j = PenJoinStyle::BevelJoin)
         : m_color(color), m_width(width), m_style(s), m_capStyle(c), m_joinStyle(j)
     {
@@ -162,8 +163,8 @@ public:
 
 private:
 
-    mu::draw::Color m_color = GlobalColor::black;
-    double m_width = 1;
+    Color m_color = Ms::MScore::defaultColor;
+    double m_width = 1.0;
     PenStyle m_style = PenStyle::SolidLine;
     PenCapStyle m_capStyle = PenCapStyle::SquareCap;
     PenJoinStyle m_joinStyle = PenJoinStyle::BevelJoin;

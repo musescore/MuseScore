@@ -38,6 +38,25 @@ public:
 
     virtual QString partStyleFilePath() const = 0;
     virtual void setPartStyleFilePath(const QString& path) = 0;
+
+    virtual QString defaultColor() const = 0;
+    virtual QString blackColor() const = 0;
+    virtual QString whiteColor() const = 0;
+    virtual QString redColor() const = 0;
+    virtual QString invisibleColor() const = 0;
+    virtual QString lassoColor() const = 0;
+    virtual QString keysigColor() const = 0;
+    virtual QString figuredBassColor() const = 0;
+    virtual QString selectionColor() const = 0;
+    virtual QString warningColor() const = 0;
+    virtual QString warningSelectedColor() const = 0;
+    virtual QString criticalColor() const = 0;
+    virtual QString criticalSelectedColor() const = 0;
+    virtual QString editColor() const = 0;
+    virtual QString harmonyColor() const = 0;
+    virtual QString textBaseFrameColor() const = 0;
+    virtual QString textBaseBgColor() const = 0;
+    virtual QString shadowNoteColor() const = 0;
 };
 }
 

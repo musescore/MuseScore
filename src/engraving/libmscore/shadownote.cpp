@@ -150,7 +150,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
     PointF ap(pagePos());
     painter->translate(ap);
     qreal lw = score()->styleP(Sid::stemWidth);
-    Pen pen(MScore::shadowNoteColor, lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
+    Pen pen(mu::draw::Color(engravingConfiguration()->shadowNoteColor()), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
 
     // Draw the accidental

@@ -27,71 +27,60 @@
 #include <QColor>
 #endif
 
-#include "globalcolor.h"
-#include "rgb.h"
+#include "rgba.h"
 
 namespace mu::draw {
 class Color
 {
 public:
-    Color() {}
+    Color();
     Color(const Color& other);
-    Color(int red, int green, int blue, int alpha = 255);
-    Color(GlobalColor color);
+    Color(int red, int green, int blue, int alpha = m_defaultAlpha);
     Color(const char* color);
 
 #ifndef NO_QT_SUPPORT
     Color(const QColor& color);
-    Color(Qt::GlobalColor color);
 #endif
 
     ~Color() = default;
 
     Color& operator=(const Color& other);
-    Color& operator=(GlobalColor color);
 #ifndef NO_QT_SUPPORT
     Color& operator=(const QColor& other);
-    Color& operator=(Qt::GlobalColor color);
 #endif
 
-    void setNamedColor(const std::string& color) noexcept;
-    void setNamedColor(const char* color) noexcept;
-    void setRed(int value) noexcept;
-    void setGreen(int value) noexcept;
-    void setBlue(int value) noexcept;
-    void setAlpha(int value) noexcept;
+    std::string toString() const;
 
-    bool operator==(const Color& other) const noexcept;
-    bool operator!=(const Color& other) const noexcept;
-    bool operator==(const GlobalColor& color) const noexcept;
-    bool operator!=(const GlobalColor& color) const noexcept;
+    void setNamedColor(const std::string& color);
+    void setNamedColor(const char* color);
+    void setRed(int value);
+    void setGreen(int value);
+    void setBlue(int value);
+    void setAlpha(int value);
 
-    bool isValid() const noexcept;
+    bool operator==(const Color& other) const;
+    bool operator!=(const Color& other) const;
 
-    int red() const noexcept;
-    int green() const noexcept;
-    int blue() const noexcept;
-    int alpha() const noexcept;
+    bool isValid() const;
 
-    std::string name() const noexcept;
+    int red() const;
+    int green() const;
+    int blue() const;
+    int alpha() const;
 
 #ifndef NO_QT_SUPPORT
     static Color fromQColor(const QColor& color);
     QColor toQColor() const;
 #endif
 
+    static constexpr int m_defaultAlpha = 255;
+
 private:
 
-    static constexpr bool isRgbaValid(int r, int g, int b, int a = 255) noexcept
-    {
-        return uint(r) <= 255 && uint(g) <= 255 && uint(b) <= 255 && uint(a) <= 255;
-    }
+    void setRgba(int r, int g, int b, int a);
+    void setRgba(Rgba rgb);
 
-    void setRgb(int r, int g, int b, int a);
-    void setRgb(Rgb rgb);
-
-    Rgb m_rgb = 0;
-    std::string m_name;
+    Rgba m_rgba = 0;
     bool m_isValid = true;
 };
 }

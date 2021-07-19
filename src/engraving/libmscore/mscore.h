@@ -337,7 +337,6 @@ public:
     static void setVerticalOrientation(bool val) { _verticalOrientation = val; }
 
     static mu::draw::Color selectColor[VOICES];
-    static mu::draw::Color shadowNoteColor;
     static mu::draw::Color defaultColor;
     static mu::draw::Color dropColor;
     static mu::draw::Color layoutBreakColor;

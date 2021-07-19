@@ -1600,7 +1600,7 @@ QVariant Staff::propertyDefault(Pid id) const
     case Pid::MAG:
         return 1.0;
     case Pid::STAFF_COLOR:
-        return QVariant::fromValue(mu::draw::Color(mu::draw::black));
+        return QVariant::fromValue(MScore::defaultColor);
     case Pid::PLAYBACK_VOICE1:
     case Pid::PLAYBACK_VOICE2:
     case Pid::PLAYBACK_VOICE3:

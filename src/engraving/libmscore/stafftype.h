@@ -198,7 +198,7 @@ class StaffType
     Spatium _yoffset         { 0.0 };
     bool _small              { false };
     bool _invisible          { false };
-    mu::draw::Color _color            { mu::draw::Color(mu::draw::black) };
+    mu::draw::Color _color   { MScore::defaultColor };
 
     int _lines            = 5;
     int _stepOffset       = 0;
